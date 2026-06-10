@@ -140,6 +140,27 @@ function composeBrief({ bot, pathConfig, sharedDNA, vibeDirective, picker }) {
     }
   }
 
+  // 4b. Independent conditional layers (probability-gated, each rolled
+  //     SEPARATELY). Shape: conditionalLayers: [ { slot, gate }, ... ].
+  //     Lets a path carry several unrelated "a chance for X" layers that
+  //     fire independently (e.g. impossible-sky: a 40% sky-event AND an
+  //     independent 30% tiny-witness-figure). Purely additive — guarded by
+  //     Array.isArray so no existing single-conditionalLayer path is touched.
+  if (Array.isArray(arch.conditionalLayers)) {
+    for (const layer of arch.conditionalLayers) {
+      if (!layer || typeof layer.gate !== 'number') continue;
+      if (Math.random() >= layer.gate) continue;
+      const slot = layer.slot;
+      const spec = pathConfig.pools?.[slot];
+      if (!spec) continue;
+      const rawPool = resolveSpecPoolRaw(spec, bot, rolledMeta);
+      if (rawPool && rawPool.length > 0) {
+        const stringPool = rawPool.map((e) => (typeof e === 'string' ? e : e.description));
+        slots[slot] = picker.pickWithRecency(stringPool, slot);
+      }
+    }
+  }
+
   // 5. Framing modes (if archetype declares them)
   if (arch.framingModes) {
     slots._framingMode = rollFromWeights(arch.framingModes.modes, arch.framingModes.weights);

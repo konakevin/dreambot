@@ -26,6 +26,11 @@ const pathBuilders = {
   megastructure: require('./paths/megastructure'),
   'space-femme': require('./paths/space-femme'),
   spacewalk: require('./paths/spacewalk'),
+  'ring-habitat': require('./paths/ring-habitat'),
+  'impossible-sky': require('./paths/impossible-sky'),
+  'crystalline-world': require('./paths/crystalline-world'),
+  derelict: require('./paths/derelict'),
+  leviathan: require('./paths/leviathan'),
 };
 
 module.exports = {
@@ -347,8 +352,23 @@ module.exports = {
     'megastructure',
     'space-femme',
     // NEW 2026-06-09 — zero-G EVA spacewalk (figure + void co-heroes).
-    // MVP-25 pools; default starbot_hyperreal medium. Seed-test-then-scale.
+    // Pools scaled to production after Kevin's heart-review.
     'spacewalk',
+    // NEW 2026-06-09 — ring-habitat: O'Neill cylinder interior, land
+    // curving up + overhead. Pools scaled after Kevin's heart-review.
+    'ring-habitat',
+    // NEW 2026-06-09 — impossible-sky: colossal ringed giant over an alien
+    // horizon, the wallpaper money-shot. MVP-25 pools. Seed-test-then-scale.
+    'impossible-sky',
+    // NEW 2026-06-09 — crystalline-world: titanic crystal prisms fracturing
+    // starlight into rainbow caustics. MVP-25 pools. Seed-test-then-scale.
+    'crystalline-world',
+    // NEW 2026-06-09 — derelict: dead abandoned ship + lone explorer's beam,
+    // Alien/Dead-Space awe-horror. MVP-25 pools. Seed-test-then-scale.
+    'derelict',
+    // NEW 2026-06-09 — leviathan: colossal living alien, first contact. Purely
+    // alien biology (no space whales). MVP-25 pools. Seed-test-then-scale.
+    'leviathan',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
@@ -365,9 +385,15 @@ module.exports = {
   // (silhouette/echo distortions).
   chaos: {
     enabled: true,
-    // spacewalk skips chaos for the MVP — protect the hero figure + clean
-    // void composition from silhouette/echo distortion while we validate it.
-    skipPaths: ['spacewalk'],
+    // new MVP paths skip chaos — protect the hero composition while validating.
+    skipPaths: [
+      'spacewalk',
+      'ring-habitat',
+      'impossible-sky',
+      'crystalline-world',
+      'derelict',
+      'leviathan',
+    ],
     allowSubjectChaosPaths: [
       'cosmic-vista',
       'alien-landscape',
@@ -396,9 +422,17 @@ module.exports = {
     // space-femme is a declarative axis-system path — Haiku polish strips its
     // load-bearing curated language (push-to-11 stack, biome, background drama,
     // props, poster framing). Axis-system paths default to polish OFF.
-    // (feedback_axis_system_skip_polish). spacewalk same — keep its rich suit /
-    // visor-reflection / void-backdrop language intact (MVP 2026-06-09).
-    skipPaths: ['space-femme', 'spacewalk'],
+    // (feedback_axis_system_skip_polish). spacewalk + ring-habitat same — keep
+    // their rich curated language (suit/visor/void; world-curve) intact.
+    skipPaths: [
+      'space-femme',
+      'spacewalk',
+      'ring-habitat',
+      'impossible-sky',
+      'crystalline-world',
+      'derelict',
+      'leviathan',
+    ],
     conceptWords: 150,
     polishedWords: '65-90',
     polishedWordsByPath: {
@@ -462,6 +496,17 @@ module.exports = {
       megastructure: 'scene',
       'space-femme': 'explorer-female',
       spacewalk: 'spacewalk',
+      // ring-habitat is a HABITABLE interior (air, weather, spin-gravity) —
+      // the scene sensory context (air/weight/temperature) fits here.
+      'ring-habitat': 'scene',
+      // impossible-sky is a grounded alien-world vista (has air/ground) — scene.
+      'impossible-sky': 'scene',
+      // crystalline-world is a grounded alien-world vista — scene.
+      'crystalline-world': 'scene',
+      // derelict has a pressurized-but-dead interior + an explorer — scene.
+      derelict: 'scene',
+      // leviathan is a deep-space encounter (vacuum) — scene.
+      leviathan: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

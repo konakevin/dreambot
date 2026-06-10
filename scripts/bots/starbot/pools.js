@@ -42,6 +42,49 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── derelict path (2026-06-09, NEW) — dead ship + explorer's beam. ───
+  DERELICT_SETTING: load('derelict_setting'),
+  DERELICT_DECAY: load('derelict_decay'),
+  DERELICT_EXPLORER: load('derelict_explorer'),
+  DERELICT_REVEAL: load('derelict_reveal'),
+  DERELICT_ATMOSPHERE: load('derelict_atmosphere'),
+  DERELICT_THREAT: load('derelict_threat'),
+
+  // ─── leviathan / first-contact path (2026-06-09, NEW) — colossal alien. ───
+  LEVIATHAN_FORM: load('leviathan_form'),
+  LEVIATHAN_DETAIL: load('leviathan_detail'),
+  LEVIATHAN_BEHAVIOR: load('leviathan_behavior'),
+  LEVIATHAN_SETTING: load('leviathan_setting'),
+  LEVIATHAN_SCALE_ANCHOR: load('leviathan_scale_anchor'),
+  LEVIATHAN_CONTACT_EVENT: load('leviathan_contact_event'),
+
+  // ─── crystalline-world path (2026-06-09, NEW) — crystal prisms + refraction. ───
+  CRYSTALLINE_WORLD_COMPOSITION: load('crystalline_world_composition'),
+  CRYSTALLINE_WORLD_FORMATION: load('crystalline_world_formation'),
+  CRYSTALLINE_WORLD_MATERIAL: load('crystalline_world_material'),
+  CRYSTALLINE_WORLD_REFRACTION: load('crystalline_world_refraction'),
+  CRYSTALLINE_WORLD_GROUND: load('crystalline_world_ground'),
+  CRYSTALLINE_WORLD_SKY: load('crystalline_world_sky'),
+  CRYSTALLINE_WORLD_EVENT: load('crystalline_world_event'),
+
+  // ─── impossible-sky path (2026-06-09, NEW) — ringed giant over a horizon. ───
+  IMPOSSIBLE_SKY_RINGED_GIANT: load('impossible_sky_ringed_giant'),
+  IMPOSSIBLE_SKY_COMPANIONS: load('impossible_sky_companions'),
+  IMPOSSIBLE_SKY_FOREGROUND: load('impossible_sky_foreground'),
+  IMPOSSIBLE_SKY_HORIZON: load('impossible_sky_horizon'),
+  IMPOSSIBLE_SKY_ATMOSPHERE: load('impossible_sky_atmosphere'),
+  IMPOSSIBLE_SKY_EVENT: load('impossible_sky_event'),
+  IMPOSSIBLE_SKY_WITNESS: load('impossible_sky_witness'), // 40% gated tiny figure
+
+  // ─── ring-habitat path (2026-06-09, NEW) — O'Neill cylinder interior. ───
+  RING_HABITAT_ZONE: load('ring_habitat_zone'),
+  RING_HABITAT_CURVE: load('ring_habitat_curve'),
+  RING_HABITAT_AXIS_LIGHT: load('ring_habitat_axis_light'),
+  RING_HABITAT_ENDCAP: load('ring_habitat_endcap'),
+  RING_HABITAT_DETAIL: load('ring_habitat_detail'),
+  RING_HABITAT_SCALE_PROVER: load('ring_habitat_scale_prover'),
+  RING_HABITAT_EVENT: load('ring_habitat_event'),
+
   // ─── spacewalk path (2026-06-09, NEW) — zero-G EVA shot. MVP-25 pools. ───
   SPACEWALK_SUIT: load('spacewalk_suit'),
   SPACEWALK_EVA_ACTION: load('spacewalk_eva_action'),

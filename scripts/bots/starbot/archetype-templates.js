@@ -900,6 +900,362 @@ Every entry you pull from the axes above must be NAMED IN THE PROMPT with a coun
 Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
   },
 
+  DERELICT: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      derelict_setting,
+      decay_detail,
+      explorer_light,
+      ominous_reveal,
+      light_atmosphere,
+      threat_hint,
+    } = slots;
+
+    const threatSection = threat_hint
+      ? `
+━━━ A HINT OF THREAT — a beat of dread (subtle, in the dark, NOT a monster reveal) ━━━
+${threat_hint}
+
+Keep this SUBTLE and distant — a wrongness at the edge of the light, not a clear monster in frame. The dread is in the suggestion.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing an eerie DERELICT-SPACECRAFT scene for StarBot — a lone explorer drifting through a dead, abandoned ship or station, flashlight cutting the dark. Alien / Dead-Space / Event-Horizon awe-horror. Silent, cold, tense, with a "what happened here?" mystery. Output wraps with style prefix + suffix.
+
+━━━ DEAD + ABANDONED — ABSOLUTE FIRST RULE ━━━
+This place is DEAD — powered-down, frozen, long-abandoned, silent. No bustling crew, no clean working ship. Cold, derelict, eerie. The only life is the lone explorer.
+
+━━━ THE DERELICT (the hero setting) ━━━
+${derelict_setting}
+
+━━━ SIGNS OF DEATH + ABANDONMENT ━━━
+${decay_detail}
+
+━━━ THE LONE EXPLORER + THEIR LIGHT (the narrative anchor + key light) ━━━
+${explorer_light}
+
+EXACTLY ONE explorer, small in the vast dead space, their flashlight/helmet-lamp beam the primary light cutting the dark and catching drifting dust and frost. Seen from behind or in silhouette.
+
+━━━ WHAT THE BEAM REVEALS (the mystery) ━━━
+${ominous_reveal}
+
+━━━ THE LIGHT + MOOD ━━━
+${light_atmosphere}
+${threatSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic film-still, deep shadow and a single hard light source (the explorer's beam or a failing emergency light). High contrast, volumetric dust in the beam, deep blacks. The explorer is small — dwarfed by the dead structure. Tense, lonely, awe-horror. NEVER brightly-lit, NEVER a clean working ship, NEVER a crowd.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a lone suited explorer small in a dead abandoned [derelict setting], flashlight beam cutting the dark — the dead place + the light lead], [the decay and abandonment detail], [what the beam reveals], [the eerie light and mood], [deep shadow, volumetric dust, high contrast], [palette and tense lonely mood]
+
+CRITICAL — render the EXACT slot-pool details above. Dead, cold, abandoned, ONE small explorer with a beam in the dark. Do NOT render a clean lit working ship or a crowd.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  LEVIATHAN: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature_form,
+      creature_detail,
+      creature_behavior,
+      cosmic_setting,
+      scale_anchor,
+      contact_event,
+    } = slots;
+
+    const eventSection = contact_event
+      ? `
+━━━ FIRST-CONTACT EVENT — a dramatic beat ━━━
+${contact_event}
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a FIRST-CONTACT scene for StarBot — a tiny human ship encountering a COLOSSAL LIVING ALIEN ENTITY in deep space. Pure sense-of-wonder awe. Think Arrival / 2001 / Annihilation — the encounter with something vast, alive, and utterly alien. Output wraps with style prefix + suffix.
+
+━━━ A LIVING CREATURE — ABSOLUTE FIRST RULE ━━━
+This is a COLOSSAL LIVING ANIMAL drifting ALONE in open space — a discrete, free-floating organism of SOFT TRANSLUCENT FLESH, MEMBRANE, and BIOLUMINESCENCE, like a vast deep-sea creature adrift in the void. It is ALIVE and ORGANIC. It is NOT a machine, NOT a ring, NOT a station, NOT crystal terrain, NOT architecture, NOT a structure of any kind — those are the failure mode. It is also NOT a recognizable Earth mammal (no whale/dolphin/shark/fish-face/bird). Soft, glowing, gelatinous, tentacled, membranous — a wondrous alien sea-creature of space.
+
+━━━ THE CREATURE — ITS FORM (the hero) ━━━
+${creature_form}
+
+Render this colossal SOFT LIVING creature drifting free in open space, filling much of the frame — translucent flesh, glowing organs, trailing tendrils or fronds, unmistakably ALIVE and organic. A discrete floating animal, NOT a wall, NOT terrain, NOT a tunnel, NOT a structure.
+
+━━━ THE CREATURE — ALIEN SURFACE + ANATOMY ━━━
+${creature_detail}
+
+Bioluminescence, translucency, energy, crystalline or living-metal texture — alien, never Earth-animal fur/scales/feathers.
+
+━━━ THE MOMENT — what it is doing (first contact) ━━━
+${creature_behavior}
+
+━━━ THE COSMIC SETTING ━━━
+${cosmic_setting}
+
+━━━ SCALE ANCHOR — the tiny thing proving its colossal size ━━━
+${scale_anchor}
+
+This must be TINY against the creature — a ship or figure dwarfed to a speck, selling the overwhelming scale of the encounter.
+${eventSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide shot, the colossal alien dominating the frame, the tiny ship/figure dwarfed to a speck for scale. Deep space setting with atmospheric/nebula depth. Awe, wonder, the sublime. The creature is alive and alien. NEVER a recognizable Earth animal; NEVER the creature small or the ship large.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a tiny ship encountering a COLOSSAL LIVING ALIEN entity (the specific alien form) in deep space — the alien creature leads], [its alien surface + anatomy + bioluminescence], [what it is doing — the first-contact moment], [the cosmic setting around it], [the tiny ship/figure dwarfed for scale], [palette and awestruck sublime mood]
+
+CRITICAL — render the EXACT alien form above; it is colossal, alive, and NON-EARTH (no whale/mammal/fish silhouette). The scale anchor is TINY.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  CRYSTALLINE_WORLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      composition,
+      crystal_formation,
+      crystal_material,
+      light_refraction,
+      ground_detail,
+      sky_above,
+      crystal_event,
+    } = slots;
+
+    const eventSection = crystal_event
+      ? `
+━━━ CRYSTAL EVENT — a phenomenon animating the crystal world ━━━
+${crystal_event}
+
+Weave this in as a secondary wonder — the crystal terrain + refracted light stay the hero.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping ALIEN CRYSTALLINE-WORLD vista for StarBot — a world of titanic glowing crystal prisms with a star's light fracturing through them into rainbow caustics. Same universe as our cosmic vistas and alien landscapes. Pure jewel-like spectacle. Output wraps with style prefix + suffix.
+
+━━━ THE JEWEL WORLD — ABSOLUTE FIRST RULE ━━━
+The terrain is made of COLOSSAL TRANSLUCENT CRYSTAL. A star's light passes THROUGH it and FRACTURES into visible rainbow caustics, prismatic light-shafts, and internal glow. Saturated, luminous, gem-like. This is the unmistakable subject — never a normal rock landscape.
+
+━━━ THE COMPOSITION — THE SHOT THAT LEADS THIS RENDER (honor it exactly) ━━━
+${composition}
+
+This is the camera framing and scene-shape for THIS render. Open your prompt with it. The crystalline architecture is DIFFERENT every render — a wide canyon, an enclosing cavern, an aerial field, a distant vista, an overhead arch, a mirror-reflection. DO NOT default to a centered glowing vertical crystal tower/column/spiral — render the EXACT composition above, varied and distinct.
+
+━━━ THE CRYSTAL FORMATION (the hero terrain, framed by the composition above) ━━━
+${crystal_formation}
+
+Render this crystalline terrain as the composition above frames it — translucent, faceted, catching and bending the light. Fit the formation to the shot type; do not collapse it into a single central tower.
+
+━━━ THE CRYSTAL MATERIAL (color + clarity) ━━━
+${crystal_material}
+
+This is the crystal's color, clarity, and gem-type — it sets the palette of the whole world.
+
+━━━ THE LIGHT REFRACTION (the signature money-shot) ━━━
+${light_refraction}
+
+This is the soul of the image — render the fractured, split, prismatic light in breathtaking detail: rainbow caustics splashed across surfaces, shafts of separated spectrum, glow trapped inside the crystal.
+
+━━━ THE GROUND (foreground floor) ━━━
+${ground_detail}
+
+━━━ THE SKY + LIGHT SOURCE ━━━
+${sky_above}
+
+The star or sky above is what fractures through the crystal — render the light source and how its rays enter the formation.
+${eventSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide vista. Colossal crystal formations dominating the frame, translucent and glowing, light fracturing through them into rainbow shafts and caustics. Deep atmospheric perspective with prismatic haze. Any figure or ship is a TINY scale-speck dwarfed by the crystal. Breathtaking, saturated, jewel-like — a world made of light and gemstone. NEVER a dull grey rock scene — the crystal is luminous and the light is fractured into visible color.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — establish the COMPOSITION/shot from the composition slot (wide canyon / enclosing cavern / aerial field / distant vista / overhead arch / reflection) rendered in colossal translucent crystal with light fracturing into rainbow caustics — the composition + crystal lead], [the crystal type + color + clarity], [the prismatic split light, caustics and internal glow], [the foreground crystal floor], [the sky and light source above], [prismatic atmospheric depth], [palette and luminous awestruck mood]
+
+CRITICAL — the OPENING tokens establish the SPECIFIC composition + "translucent crystal world, light fracturing into rainbow caustics". Render the EXACT slot-pool details above — DO NOT substitute a generic rocky landscape, and DO NOT default to a centered glowing vertical crystal tower (vary the architecture per the composition). The crystal must be translucent + glowing and the light visibly fractured.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  IMPOSSIBLE_SKY: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      ringed_giant,
+      sky_companions,
+      foreground,
+      horizon_detail,
+      atmosphere,
+      sky_event,
+      witness_figure,
+    } = slots;
+
+    const eventSection = sky_event
+      ? `
+━━━ SKY EVENT — a dramatic celestial beat (in the sky, not the foreground) ━━━
+${sky_event}
+
+Place this in the sky as a secondary wonder — the ringed giant stays the hero.
+
+`
+      : '';
+
+    const witnessSection = witness_figure
+      ? `
+━━━ A TINY WITNESS — a lone figure gazing up at the impossible sky (epic-tiny composition) ━━━
+${witness_figure}
+
+Place this single figure SMALL in the foreground — a speck dwarfed by the colossal sky — seen from BEHIND or in silhouette, gazing UP at the ringed giant. This is an emotional + scale anchor: the awe of one small being beneath an overwhelming sky. The figure is TINY (a few percent of frame height); the sky is still the hero. EXACTLY ONE figure.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping ALIEN-SKY wallpaper vista for StarBot — a colossal ringed gas giant looming over the horizon of an alien world, the kind of breathtaking sky people set as their wallpaper. Same universe as our cosmic vistas. The SKY is the entire show. Output wraps with style prefix + suffix.
+
+━━━ THE SKY IS THE HERO — ABSOLUTE FIRST RULE ━━━
+The horizon sits LOW in the frame. The SKY fills 60-70% of the image and a colossal ringed planet DOMINATES it. The land below is only a thin anchoring foreground strip. This is an awe-at-the-sky image — the viewer's eye goes UP. NEVER a normal landscape with a small sky.
+
+━━━ THE RINGED GIANT (the hero of the sky) ━━━
+${ringed_giant}
+
+This colossal ringed planet hangs ENORMOUS over the horizon, filling much of the sky. Its rings slice across the frame at a dramatic tilt, casting banded shadows. Render its cloud-banding, color, and ring system in breathtaking detail — it is the unmistakable subject.
+
+━━━ THE REST OF THE SKY (companions) ━━━
+${sky_companions}
+
+Arrange these across the sky around the ringed giant — moons, distant suns, aurora, the galaxy band — filling the sky with layered wonder so it never feels empty.
+
+━━━ THE FOREGROUND (a thin anchor that MIRRORS the sky) ━━━
+${foreground}
+
+Keep this a LOW, thin foreground strip at the bottom of the frame. If it is water, ice, or glass, it MIRRORS the ringed giant and the sky — a stunning reflection doubling the spectacle. The land is the stage; the sky is the star.
+
+━━━ THE HORIZON (midground detail) ━━━
+${horizon_detail}
+
+Sits along the low horizon line where land meets sky — adds depth and, where it includes a tiny structure or figure, a sense of human scale against the immense sky.
+
+━━━ ATMOSPHERE + LIGHT ━━━
+${atmosphere}
+
+This sets the sky's color, light, and air — ring-shadow bands, aurora glow, twilight gradient, the terminator, golden-hour wash. It is the mood of the whole image.
+${eventSection}${witnessSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide landscape, LOW horizon (bottom third), the ringed giant dominating the upper sky, rings slicing diagonally across the frame. Foreground a thin mirroring strip. Deep atmospheric perspective. Breathtaking, serene, wallpaper-worthy. NEVER a centered small planet in a big empty black sky — the giant is HUGE and close, hanging over a real alien world with air and light. NO figure dominating — any figure is a tiny scale-speck on the horizon.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a breathtaking alien vista with a colossal ringed gas giant looming huge over a low horizon, rings slicing across the sky — the ringed giant leads], [its banding + color + ring system in detail], [the moons / suns / aurora filling the rest of the sky], [the thin foreground land or sea mirroring the sky], [the horizon detail], [atmosphere, ring-shadow bands, color and light], [palette and serene awestruck mood]
+
+CRITICAL — the OPENING tokens establish "[colossal ringed planet looming over an alien horizon, rings across the sky]" — the giant leads. The sky fills 60-70% of frame; the land is a thin mirroring anchor. Render the EXACT slot-pool details above — DO NOT substitute a generic small-planet-in-black-space.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  RING_HABITAT: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      habitat_zone,
+      curve_overhead,
+      axis_light,
+      endcap,
+      habitat_detail,
+      scale_prover,
+      habitat_event,
+    } = slots;
+
+    const eventSection = habitat_event
+      ? `
+━━━ HABITAT EVENT — a moment of life woven into the world (mid/deep distance) ━━━
+${habitat_event}
+
+Place this within the curved world — it adds life and scale but the WORLD-CURVE stays the hero.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping INTERIOR VISTA of a colossal rotating space habitat for StarBot — an O'Neill cylinder / ring-world interior where an entire enclosed world wraps around the inside of a spinning drum. Same universe as our cosmic vistas and megastructures. The "the ground is the sky" gut-punch is the whole point. Output wraps with style prefix + suffix.
+
+━━━ THE CURVE — ABSOLUTE FIRST RULE ━━━
+This is the INSIDE of a giant rotating cylinder. The land does NOT lie flat under an open sky — it CURVES UP both side walls and ARCS OVER THE TOP, so the far side of the world hangs UPSIDE-DOWN overhead like a ceiling of terrain. The horizon CURVES UPWARD on both sides, not down. Looking up, you see more land — cities, fields, rivers — hanging in the sky above. This upward-wrapping world-curve is the HERO of the image and MUST be unmistakable.
+
+━━━ THE WORLD-CURVE FRAMING ━━━
+${curve_overhead}
+
+━━━ THE LANDSCAPE INSIDE (the terrain wrapping the drum) ━━━
+${habitat_zone}
+
+Render this terrain wrapping the full interior — in the foreground at the bottom, sweeping up both curved walls, and continuing overhead on the far side. It is ONE continuous enclosed world seen from within.
+
+━━━ THE AXIAL SUN (the world's light source) ━━━
+${axis_light}
+
+This runs down the central long axis of the cylinder and lights the whole interior — it is the sun of this world. Light falls from the centerline outward onto the curved land.
+
+━━━ THE FAR ENDCAP ━━━
+${endcap}
+
+The cylinder is closed at the far end by this colossal endcap, far in the distance, with atmospheric haze between here and there conveying the immense length of the world.
+
+━━━ INTERIOR WONDER — mid-scale detail ━━━
+${habitat_detail}
+
+━━━ SCALE PROOF — tiny human-scale detail that sells the impossible size ━━━
+${scale_prover}
+
+These must be TINY against the world-curve — towns, fields, vehicles, or a lone figure dwarfed to specks. They prove the habitat is kilometers across. Without them the scale reads flat.
+${eventSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ ATMOSPHERE + DEPTH ━━━
+This is a HABITABLE interior — it has air, weather, and atmospheric haze. Build deep atmospheric perspective: crisp detail near, softening to luminous haze along the axis toward the distant endcap. Clouds may drift at the weightless centerline. The air gives the colossal interior its sense of scale and depth.
+
+━━━ COMPOSITION ━━━
+Cinematic wide vista. Camera INSIDE the cylinder, looking along or across its length so the UPWARD-CURVING horizon and the overhead far-side terrain are both clearly visible. Foreground terrain detail at the bottom, the world sweeping up and over, the axial sun blazing down the center, the endcap hazed in the deep distance. NEVER a flat-ground-under-open-sky landscape — the world ALWAYS wraps overhead. NO single object centered and dominating — the WORLD is the subject.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a breathtaking wide interior vista inside a colossal rotating space habitat, the landscape curving up the walls and arcing overhead — the world-curve leads], [the terrain wrapping the drum — foreground, up the walls, overhead], [the glowing axial sun down the centerline], [the distant endcap hazed far away], [tiny towns / fields / vehicles proving the kilometer scale], [atmospheric depth and haze], [color palette and awestruck mood]
+
+CRITICAL — the OPENING tokens establish "[interior of a giant rotating habitat, land curving up and overhead]" — the world-curve leads. Render the EXACT slot-pool details above — DO NOT substitute generic flat landscapes. The upward-wrapping curve is non-negotiable.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   SPACEWALK: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

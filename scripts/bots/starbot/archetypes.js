@@ -281,6 +281,149 @@ ZERO-G MANDATE — the figure FLOATS. No "feet on ground", no standing pose, no 
     anchorScaleRange: null,
   },
 
+  DERELICT: {
+    description: `PATH-BESPOKE — StarBot derelict-exploration path (2026-06-09, new). A drifting abandoned/dead spacecraft or station, a lone explorer's flashlight beam cutting the dark, eerie awe-horror in the Alien / Dead-Space / Event-Horizon tradition. Adds a DARKER tonal register StarBot lacks, with built-in narrative ("what happened here?"). The dead structure + the explorer's light are the show.
+
+5 bespoke slots + 1 conditional threat (40%-gated). Fully path-bespoke (its own cold dead light):
+  • derelict_setting — THE hero: the abandoned place (dead capital-ship hull adrift / silent station corridor / ghost bridge / wrecked hangar / cold reactor chamber / cargo hold of frozen containers / crashed wreck on an asteroid). VARY interior vs exterior, wide vs tight, to avoid repetition.
+  • decay_detail     — signs of death (frost on dead consoles / hull breaches & scorch / drifting debris & frozen droplets / tangled swaying cables / ice-sheeted walls / scattered effects / a thin dust layer)
+  • explorer_light   — the lone suited explorer + their light (helmet-lamp / flashlight beam cutting the dark, catching dust and frost), a small silhouette against the vast dead space — the narrative anchor + key light
+  • ominous_reveal   — what the beam finds / the mystery (a half-open blast door / a powered-down console with one blinking light / a breach to the stars / an embedded alien artifact / a strange symbol / claw-scoured walls)
+  • light_atmosphere — the eerie mood-light (cold blue emergency glow / a failing red alert light / shafts of starlight through a breach / the flashlight as the only light / pitch dark with rim-light)
+
+  • CONDITIONAL (40% gate): threat_hint — a beat of dread (a distant silhouette in the dark / a far pair of glowing points down a corridor / an alien growth pulsing on the wall / a shadow that shouldn't be there / a flickering distress hologram)
+
+DREAD MANDATE — silent, cold, abandoned, tense. Photoreal cinematic film-still on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['derelict_setting', 'decay_detail', 'explorer_light', 'ominous_reveal', 'light_atmosphere'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'threat_hint', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  LEVIATHAN: {
+    description: `PATH-BESPOKE — StarBot leviathan / first-contact path (2026-06-09, new). A COLOSSAL LIVING alien entity encountered in space — the creature-as-hero shot StarBot has zero of. Pure sense-of-wonder first-contact awe, with a tiny ship/figure for scale.
+
+⚠️ HARD RULE — NO "EARTH-MAMMAL IN SPACE" CLICHÉ (Kevin 2026-06-09: "no space whales"; but clarified that squid / jellyfish / octopus — the genuinely ALIEN-LOOKING deep-sea forms — ARE fine). So: NEVER a whale / cetacean / dolphin / shark / fish-with-a-face / bird / horse / recognizable land-mammal silhouette. ENCOURAGED — the weird, alien-reading register: cephalopod tentacle-masses, cnidarian medusa-bells, deep-sea bizarre bioluminescent forms, AND non-biological alien forms: geometric/crystalline entities, energy-and-light beings, segmented ring-organisms, fractal branching structures, non-bilateral radial forms, living-metal lattices, translucent gas-bodies with internal light-organs, impossible folded geometry. The test: does it read as a wondrous ALIEN, not a recognizable Earth mammal?
+
+5 bespoke slots + 1 conditional contact event (40%-gated). Fully path-bespoke:
+  • creature_form     — THE hero body-plan, PURELY ALIEN (see hard rule). No Earth-animal silhouette.
+  • creature_detail   — alien surface/anatomy (bioluminescent veins / chitinous plating / translucent membranes over glowing organs / arcing energy / crystalline growths / shifting light-patterns / eye-clusters / tendril-fields / glowing vents). No fur/scales/feathers as Earth analogs.
+  • creature_behavior — the first-contact MOMENT (drifting past a ship / uncoiling / emitting a communication pulse of light / turning an eye-cluster toward the viewer / feeding on a star or nebula / releasing smaller forms / reaching a tendril toward a tiny craft)
+  • cosmic_setting    — where contact happens (deep void + nebula / among planetary rings / a planet's upper atmosphere / near a star / a dense star-field / a dust cloud / eclipsing a sun)
+  • scale_anchor      — the tiny thing proving its colossal size (a fighter/shuttle dwarfed beside it / a capital ship tiny against its bulk / a station / a lone EVA figure)
+
+  • CONDITIONAL (40% gate): contact_event — a dramatic first-contact beat (it emits a beam/pulse of communication light / bioluminescent patterns ripple across it / it releases a cloud of glowing spores or smaller entities / energy arcs between it and a ship / it opens a vast eye / a wave of light passes through it)
+
+WONDER MANDATE — awe, scale, first-contact. The alien is colossal and unmistakably ALIVE and NON-EARTH. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['creature_form', 'creature_detail', 'creature_behavior', 'cosmic_setting', 'scale_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'contact_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  CRYSTALLINE_WORLD: {
+    description: `PATH-BESPOKE — StarBot crystalline-world path (2026-06-09, new). An alien world of titanic crystal prisms — towering quartz spires, canyons of giant gem-blades, fields of glowing facets — with a star's light FRACTURING through them into rainbow caustics splashed across everything. Pure jewel-like spectacle, unlike anything else in the feed. The CRYSTAL TERRAIN + the refracted light are the show.
+
+6 bespoke slots + 1 conditional event (40%-gated). Fully path-bespoke (self-lit jewel world):
+  • composition      — THE SHOT TYPE that LEADS the render (wide canyon / enclosing cavern / aerial field / distant / overhead arch / reflection). #1 anti-repetition lever — forces a different architecture every render so the crystal world stops collapsing into a central glowing tower (Kevin 2026-06-09).
+  • crystal_formation — THE hero terrain (towering prism spires / a canyon of giant gem-blades / a geode cavern / a field of shards / a crystal forest / hexagonal gem-columns / a crystal mountain)
+  • crystal_material  — the crystal's color + clarity (clear quartz / amethyst / rose / emerald / sapphire / smoky / opalescent-iridescent / citrine-gold / obsidian-glass / rainbow-fluorite)
+  • light_refraction  — THE signature money-shot: how the star's light fractures through the crystal (rainbow caustics across the ground / split prismatic light-shafts / internal glow / spectra dancing / lens-flare through a prism)
+  • ground_detail     — the foreground floor (scattered smaller crystals & geodes / a mirror crystal-pool / shards underfoot / mineral sand / a tiny figure or ship dwarfed for scale)
+  • sky_above         — the light source + sky (a low sun fracturing through the spires / binary suns / a nebula / aurora / twin moons / crystal-dust haze)
+
+  • CONDITIONAL (40% gate): crystal_event — a phenomenon (a crystal resonating with inner energy / a beam refracting skyward / bioluminescent pulse through the lattice / a light-storm of spectra / a slow crystal-growth cascade)
+
+JEWEL MANDATE — the crystals are colossal and translucent, the light fractures into VISIBLE rainbow caustics and prismatic shafts. Saturated, luminous, gem-like. Photoreal cinematic vista on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'composition',
+        'crystal_formation',
+        'crystal_material',
+        'light_refraction',
+        'ground_detail',
+        'sky_above',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'crystal_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  IMPOSSIBLE_SKY: {
+    description: `PATH-BESPOKE — StarBot impossible-sky path (2026-06-09, new). The WALLPAPER money-shot: a colossal ringed gas giant hanging ENORMOUS over the horizon of an alien world, its rings slicing across the entire sky at a dramatic tilt, moons strung along the ring-plane, aurora and a distant sun — all mirrored in the alien land or sea below. The scene is grounded (a thin foreground anchor) but the SKY is the entire show — the kind of image people set as a wallpaper.
+
+5 bespoke slots + 1 conditional sky event (40%-gated). Fully path-bespoke (the sky is its own self-lit world):
+  • ringed_giant   — THE hero: the colossal ringed planet over the horizon (banding + color + ring tilt/shadow-banding/gaps + how huge it looms)
+  • sky_companions pickN:2 — the rest of the sky (moons in a row / a second planet / binary suns / aurora curtains / the galaxy band / a comet) — stacked to fill the sky
+  • foreground     — the alien land/sea anchoring the bottom (glassy sea reflecting the rings / ice flat / dunes / crystal field / still mirror-lake / bioluminescent ocean)
+  • horizon_detail — the midground on the horizon line (alien rock spires / a distant ridge / sea-stacks / a lone tiny structure or figure for scale / dunes)
+  • atmosphere     — the sky's light + air treatment (ring-shadow bands across the sky / aurora glow / twilight gradient / the terminator / dust haze / golden-hour wash)
+
+  • CONDITIONAL (40% gate): sky_event — a dramatic beat (a meteor streaking / a moon eclipsing the sun / a comet blazing / an aurora storm / a ring-shadow eclipse crossing the land)
+  • INDEPENDENT CONDITIONAL (40% gate): witness_figure — a tiny lone astronaut/character in the foreground GAZING UP at the impossible sky, dwarfed to a speck (Kevin 2026-06-09: "an epic tiny-style render of a character looking toward the sky has cool impact"). Fires independently of sky_event.
+
+SKY-IS-HERO MANDATE — the horizon sits LOW; the sky fills 60-70% of the frame and the ringed giant dominates it. The land is a thin anchoring foreground, ideally MIRRORING the sky. Photoreal cinematic vista on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['ringed_giant', 'sky_companions', 'foreground', 'horizon_detail', 'atmosphere'],
+    },
+    pickN: { sky_companions: 2 },
+    // Two INDEPENDENT gated layers (composer rolls each separately).
+    conditionalLayers: [
+      { slot: 'sky_event', gate: 0.4 },
+      { slot: 'witness_figure', gate: 0.4 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  RING_HABITAT: {
+    description: `PATH-BESPOKE — StarBot ring-habitat path (2026-06-09, new). The INTERIOR of a colossal rotating space habitat (O'Neill cylinder / ring-world / Stanford-torus tradition) — the jaw-dropping shot where the LANDSCAPE CURVES UP both walls and arcs OVER the sky, so the far side of the world hangs upside-down overhead. A glowing axial sun-line lights an entire enclosed world of cities, farms, rivers and forests wrapped around the inside of a spinning drum. The HABITAT is the hero; tiny human-scale detail proves the impossible scale.
+
+6 bespoke slots + 1 conditional event (40%-gated). Fully path-bespoke (no universal axes — the interior is its own self-lit world):
+  • habitat_zone   — the terrain wrapping the interior (terraced farmland patchwork / dense green arcology city / forested river valley / lake-and-meadow parkland / mixed garden-suburb sprawl)
+  • curve_overhead — THE signature mind-bend: how the land sweeps up the curved walls and arcs overhead — the upside-down far side hanging in the sky, the upward-curving horizon
+  • axis_light     — the central light source running the long axis (glowing fusion sun-line / mirror-strip daylight / axial day-night terminator / hub star) — the world's sun
+  • endcap         — the colossal far endcap closing the cylinder (city built into the curved wall / docking hub / mountain-ringed window / vast bulkhead) far in the distance
+  • habitat_detail — mid-scale interior wonder (clouds floating at the weightless axis / a river curving up the wall / suspended lakes / a monorail spiralling the drum / weather forming along the centerline)
+  • scale_prover pickN:2 — tiny human-scale proof (a town with lit windows / farm fields / a transit pod / a lone figure on a ridge / drifting aircraft) dwarfed by the scale
+
+  • CONDITIONAL (40% gate): habitat_event — a drama beat (a flock of birds/drones along the axis / a storm cloud knotting at the centerline / a festival of lights / an aurora-like glow / a transit pod streaking past)
+
+CURVE MANDATE — the horizon CURVES UP, never down. The far landscape rises up the walls and hangs overhead. This "the ground is the sky" gut-punch is the whole point. Photoreal cinematic vista on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'habitat_zone',
+        'curve_overhead',
+        'axis_light',
+        'endcap',
+        'habitat_detail',
+        'scale_prover',
+      ],
+    },
+    pickN: { scale_prover: 2 },
+    conditionalLayer: { slot: 'habitat_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PHOTOREAL_ASTRO: {
     description: `NASA-grade photoreal astrophotography — Hubble / JWST / Chandra / ALMA / EHT cranked-to-11 framing.
 

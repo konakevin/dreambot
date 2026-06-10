@@ -60,6 +60,546 @@ if (!POOL) {
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // DERELICT PATH (2026-06-09 — new StarBot path)
+  // Dead abandoned ship/station, lone explorer's flashlight.
+  // Alien / Dead-Space awe-horror. Darker tonal register.
+  // ════════════════════════════════════════════════════════
+
+  derelict_setting: {
+    format: 'simple',
+    theme: `STARBOT DERELICT SETTING — the abandoned, dead spacecraft or station that is the hero of the scene. Each entry 25-45 words. VARY interior vs exterior, wide vs tight, to avoid repetition.
+
+VARIETY MANDATE — ~25 distinct dead places: a colossal dead capital-ship hull drifting in space, dark and scarred; a silent station corridor choked with floating debris; a ghostly command bridge, consoles dark, chairs empty; a vast wrecked hangar, a broken shuttle inside; a cold reactor chamber, the core dead and frosted; a cargo hold of frozen containers and drifting crates; a crashed wreck half-buried on a grey asteroid; a flooded-with-cabling engineering deck; a medical bay with empty gurneys; an observation dome cracked open to the stars; a spiral stairwell in zero-g; a docking ring with a derelict ship still berthed; the exterior of a snapped-in-half cruiser. Each MUST read as DEAD, cold, long-abandoned — never lit, working, or crewed.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dead/abandoned setting in 25-45 words. Span interior + exterior, wide + tight. DEAD, cold, silent. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The interior of a silent station corridor, lit panels long dead, ribbed bulkheads streaked with frost, a tangle of severed cables drifting across the passage, a hatch hanging half-open at the far end.
+2. A colossal dead capital-ship hull drifts in deep space, its kilometers of hull dark and scarred, weapon batteries cold, a great jagged breach torn through its midsection venting nothing.
+3. A ghostly command bridge, every console dark and dusted, the captain's chair empty and turned away, a cracked main viewport showing a slow-wheeling starfield.
+4. A vast wrecked hangar bay, a snapped shuttle nose-down across the deck, debris and a single drifting helmet hanging in the still air, the great bay doors frozen half-shut.`,
+  },
+
+  derelict_decay: {
+    format: 'simple',
+    theme: `STARBOT DERELICT DECAY — the signs of death and long abandonment in the scene. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct decay signs: thick frost rimming dead consoles; scorch marks and a hull breach; drifting debris and frozen droplets hanging in zero-g; tangled cables swaying slowly; ice sheeting the walls; scattered personal effects (a drifting boot, a photo, a mug); a thin grey dust layer over everything; claw-scoured or impact-cracked panels; a dead body-shaped frost-void on a chair (subtle, not gory); flickering dead screens; rust-bloom and corrosion; a snapped strut; emergency foam frozen mid-spray. Cold, still, abandoned.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE decay/abandonment detail in 15-30 words. Cold + still + abandoned (eerie, not gory). Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Thick white frost rims every dead console and creeps up the walls, the air so cold it hangs visible and still.
+2. Drifting debris and tiny frozen droplets hang motionless in the zero-g dark, slowly turning where the explorer's movement disturbed them.
+3. Scattered personal effects drift slowly — a single boot, a cracked photo-frame, a mug — the small human traces of a vanished crew.
+4. A long scorch-streak and a jagged hull breach scar one wall, the metal peeled outward, frost feathering the torn edges.`,
+  },
+
+  derelict_explorer: {
+    format: 'simple',
+    theme: `STARBOT DERELICT EXPLORER — the lone suited explorer and their light, the narrative anchor + key light of the scene. Each entry 15-30 words. ALWAYS exactly one, small, seen from behind or in silhouette, their beam the primary light.
+
+VARIETY MANDATE — ~25 distinct explorer-with-light moments: a suited figure from behind, helmet-lamp beam cutting the dark down a corridor; a small silhouette in a doorway, flashlight raised; a figure drifting in zero-g, beam sweeping across a dead console; a explorer crouched, light pooled on something on the floor; a tiny figure at the foot of a vast dead machine, beam craning up; a salvager with a handheld lamp, shadow thrown huge on a wall; a figure floating through a breach, beam catching drifting dust; an explorer's beam raking across rows of frozen pods. The figure is small; the beam catches dust and frost.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lone-explorer-with-light moment in 15-30 words. One figure, small, beam as key light, from behind/silhouette. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A lone suited figure seen from behind, helmet-lamp throwing a single hard beam down the dark corridor, dust and frost glittering in the cone of light.
+2. A small silhouette pauses in a doorway, handheld flashlight raised, their long shadow thrown huge across the dead bridge beyond.
+3. A figure drifts weightless through the dark, beam sweeping slowly across a bank of dead consoles, dust motes wheeling in the light.
+4. A tiny explorer crouches at the foot of a vast dead machine, their light pooled on the floor, the structure craning up into blackness above.`,
+  },
+
+  derelict_reveal: {
+    format: 'simple',
+    theme: `STARBOT DERELICT REVEAL — what the explorer's beam finds; the mystery / "what happened here" hook. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct reveals: a half-open blast door jammed mid-cycle; a single console with one light still blinking; a breach opening onto a field of stars; an alien artifact embedded in the hull; a strange glyph or warning scrawled on a wall; claw-scoured gouges raking the panels; a sealed containment pod fogged from within; a wall of dead screens all frozen on one image; an open airlock with the void beyond; a strange crystalline growth spreading from a vent; a logbook or data-slate drifting; a frozen spray of foam around a breach; a vast dead engine glimpsed through a gap. The hook of a story.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE reveal/mystery in 15-30 words — what the beam finds. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The beam finds a single console where one amber light still blinks slowly in the dark, the only thing left alive on the dead ship.
+2. The light catches a jagged breach in the hull opening onto a slow-wheeling field of brilliant stars, the void silent beyond.
+3. Long parallel gouges rake the wall panels, scored deep into the metal, curving away into the dark beyond the beam.
+4. A strange angular glyph is scrawled across a bulkhead, half-lit by the beam, its meaning unknown, frost gathering in its grooves.`,
+  },
+
+  derelict_atmosphere: {
+    format: 'simple',
+    theme: `STARBOT DERELICT ATMOSPHERE — the eerie mood-light of the dead scene. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct moods: cold blue residual emergency glow; a single failing red alert light pulsing slowly; shafts of hard starlight lancing through a breach; the explorer's beam as the ONLY light in total black; a sickly green chemical glow from a leak; near-total darkness with faint rim-light on edges; a flickering dying overhead strip; cold white light from one surviving panel; an amber gloom of dust-filtered light; the deep blue of reflected starlight; a strobing short-circuit throwing stutters of light. High contrast, deep shadow, volumetric dust.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE eerie light/mood in 15-30 words — high contrast, deep shadow. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A cold blue residual emergency glow seeps from dying floor-strips, deep shadow swallowing everything above, the air thick with drifting dust.
+2. A single failing red alert light pulses slowly in the dark, throwing the corridor into stuttering crimson and black.
+3. Hard shafts of starlight lance through a hull breach into the gloom, cutting bright blades through the floating dust.
+4. Total blackness but for the explorer's beam, a single hard cone of light with deep void pressing in on every side.`,
+  },
+
+  derelict_threat: {
+    format: 'simple',
+    theme: `STARBOT DERELICT THREAT — a subtle beat of dread that fires on ~40% of renders. Keep it SUBTLE and distant — a wrongness at the edge of the light, NOT a clear monster in frame. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct dread-beats: a distant humanoid-ish silhouette standing motionless at the far end of a corridor; a far pair of faint glowing points in the dark like eyes; a strange growth pulsing faintly on a wall; a shadow falling across a doorway from an unseen source; a flickering distress hologram of a screaming face; a smear of something dark trailing into the dark; a half-seen shape just outside the beam; an open pod that should be sealed; a single drifting alien spore glowing; claw-marks that are fresh. The dread is in the SUGGESTION — never a full clear creature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE SUBTLE dread-beat in 15-30 words — a wrongness at the edge of the dark, not a clear monster. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. At the very far end of the corridor, just beyond the beam, a tall motionless silhouette stands in the dark — there, and wrong.
+2. Two faint points of light hang in the blackness down the passage, paired and low, like eyes that have not yet moved.
+3. A strange dark growth spreads across a far wall, pulsing faintly with its own sick light, veins threading the metal.
+4. A shadow falls across a distant doorway, cast by something out of frame, stretching and gone again in the gloom.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // LEVIATHAN / FIRST-CONTACT PATH (2026-06-09 — new StarBot path)
+  // Colossal LIVING alien entity. PURELY ALIEN biology — no
+  // whale/mammal/fish; cephalopod/medusa/geometric/energy OK.
+  // ════════════════════════════════════════════════════════
+
+  leviathan_form: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN FORM — the body-plan of a COLOSSAL LIVING ALIEN CREATURE drifting ALONE in open space, the hero of a first-contact render. Each entry 25-45 words. The single biggest failure mode is the render coming back as a TECH MEGASTRUCTURE / ring / station / crystal terrain instead of a living animal — so every entry must read as UNMISTAKABLY ALIVE, ORGANIC, SOFT, and a DISCRETE FREE-FLOATING CREATURE.
+
+⚠️ ORGANIC-CREATURE ONLY. Each form is a living animal of SOFT translucent FLESH, MEMBRANE, and BIOLUMINESCENCE — like a colossal deep-sea creature adrift in the void. STRONGLY FAVOR: giant medusa/jellyfish-bells with trailing tendrils; cephalopod tentacle-masses (octopus/squid-like); soft translucent gas-flesh bodies with glowing organs inside; drifting eel-or-ribbon bodies of living membrane (alien, NOT a fish); colossal anemone/coral-fleshed blooms of waving fronds; pulsing soft-bodied organisms with bioluminescent skin. DO NOT write hard-edged, faceted, geometric, crystalline, ring, lattice, metallic, mechanical, or architectural forms — those render as machines, not creatures. Also NO Earth-mammal silhouette (no whale/dolphin/shark/fish-face/bird). The test: a soft, glowing, ALIVE sea-creature-of-the-void — never a structure.
+
+VARIETY MANDATE — ~25 DRAMATICALLY different colossal SOFT LIVING creatures: a translucent medusa-bell trailing kilometers of luminous tendrils; a writhing mass of soft glowing tentacles; a vast amorphous gas-flesh body with organ-clusters glowing inside; a drifting ribbon-creature of rippling living membrane; a colossal anemone-bloom of waving bioluminescent fronds; a soft segmented organism pulsing along its length; a translucent sac-body with a glowing heart-organ suspended inside; a many-tendrilled drifting medusa with a domed translucent crown; a coiling eel-of-light wrapped in soft membrane; a cloud-soft organism studded with glowing eye-spots; a colossal flower-like creature of fleshy luminous petals. Each is ONE distinct SOFT LIVING free-floating creature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal SOFT LIVING free-floating alien creature in 25-45 words. Soft translucent flesh + membrane + bioluminescence. Medusa / tentacle / gas-flesh / ribbon / anemone register. NEVER geometric/crystalline/ring/lattice/metallic/mechanical/structure (those render as machines). NO whale/mammal/fish-face. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A colossal translucent medusa-bell the size of a city, soft and glowing, kilometers of luminous filament-tendrils trailing beneath it, the gelatinous bell pulsing with slow waves of internal blue-violet light as it drifts.
+2. A vast writhing mass of soft glowing tentacles, dozens of translucent fleshy limbs unfurling from a central pulpy body, each lined with rows of bioluminescent suckers casting cyan light.
+3. A soft amorphous gas-flesh body, cloud-like and translucent, bright organ-clusters and a glowing heart suspended deep inside its drifting membranous mass, slowly reshaping as it moves.
+4. A colossal anemone-bloom of thousands of waving fleshy fronds, soft and luminous, rooted to a central translucent stalk, the whole creature rippling with travelling waves of pink-gold light.`,
+  },
+
+  leviathan_detail: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN DETAIL — the alien surface, texture and anatomy of the colossal creature. Each entry 15-30 words. Alien only — NEVER Earth fur/scales/feathers.
+
+VARIETY MANDATE — ~25 distinct alien surface details: bioluminescent veins pulsing under translucent skin; interlocking chitinous plating; membranes stretched over glowing internal organs; arcs of energy crackling across the surface; crystalline growths studding the body; shifting patterns of light rippling across the skin like communication; clusters of glassy eyes; fields of waving cilia or fronds; glowing vents exhaling luminous gas; a surface of living metal etched with circuit-like lines; iridescent oil-slick translucency; pores leaking light; a lattice of light-filaments. Pure alien.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alien surface/anatomy detail in 15-30 words. No Earth fur/scales/feathers. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Bioluminescent veins pulse slowly beneath its translucent skin, blue light travelling along them in waves toward a bright core deep within.
+2. Its surface shifts with rippling patterns of colored light, bands of cyan and gold travelling across it like a silent language.
+3. Clusters of glassy faceted eyes stud its flanks, each catching and refracting the distant starlight into points of cold fire.
+4. Arcs of pale energy crackle continuously across its living-metal surface, etched all over with faint glowing circuit-like lines.`,
+  },
+
+  leviathan_behavior: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN BEHAVIOR — what the colossal alien is DOING; the first-contact moment. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct moments: drifting serenely past a tiny ship; slowly uncoiling or unfurling; emitting a pulse of communication light; turning a cluster of eyes toward the viewer/ship; feeding on the light of a star or nebula; releasing a cloud of smaller glowing forms; reaching a single tendril toward a tiny craft; rotating slowly to face the camera; passing through planetary rings; rising out of a planet's cloud-tops; curling protectively around something; pulsing in rhythm as if breathing; threading between debris. The candid moment of contact.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE first-contact behavior in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. It drifts serenely past the tiny ship, vast and unhurried, paying the speck of metal no mind as it continues into the dark.
+2. A single immense tendril reaches slowly toward the tiny craft, its tip glowing brighter, the moment of contact held and breathless.
+3. It turns a cluster of glassy eyes toward the viewer, light blooming across its surface as if noticing, for the first time, that it is seen.
+4. It feeds on a nearby star, ribbons of stellar light drawn into its translucent body and pooling in its glowing core.`,
+  },
+
+  leviathan_setting: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN SETTING — the cosmic environment where the first-contact encounter happens. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct settings: deep void against a glowing nebula wall; among the banded rings of a gas giant; rising through a planet's upper cloud-tops; silhouetted against a blazing sun; in a dense brilliant star-field; within a glowing dust cloud; eclipsing a sun so its light blazes around the creature's edge; against the curve of a planet seen from orbit; in the green glow of an aurora-lit upper atmosphere; among drifting asteroid debris; before a distant galaxy band; in the colored haze of a stellar nursery. The stage for the encounter.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cosmic setting in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Deep void against a towering nebula wall of magenta and teal, the creature's translucent body glowing softly in the nebula's light.
+2. Among the broad banded rings of a gas giant, the creature drifting through the ice and dust, the planet looming huge behind.
+3. Silhouetted against a blazing sun, the star's light blazing around the dark edge of its colossal form in a fiery halo.
+4. Rising slowly through a planet's upper cloud-tops, the creature breaching a sea of golden cloud into the black above.`,
+  },
+
+  leviathan_scale_anchor: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN SCALE ANCHOR — the tiny human-made thing that proves the creature's colossal size. Each entry 12-25 words. It must read as a SPECK against the creature.
+
+VARIETY MANDATE — ~25 distinct anchors: a tiny single-seat fighter dwarfed beside a tendril; a capital ship rendered ant-sized against its bulk; a research vessel hanging cautiously at a distance; a lone EVA figure floating before it; a small shuttle banking away; a station tiny in the foreground; a swarm of drones like gnats around it; a ship's running-lights a pinprick against the creature; a probe drifting toward it; a fleet reduced to specks. Always TINY — the smaller the better for scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny scale-anchor in 12-25 words. It reads as a SPECK against the colossal creature. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A tiny single-seat fighter hangs dwarfed beside one of its tendrils, no bigger than a mote against the immense alien.
+2. A kilometer-long capital ship is rendered ant-sized against the creature's bulk, its running-lights a faint string of pinpricks.
+3. A lone EVA figure floats motionless before it, a single human speck facing the colossal alien across the dark.
+4. A small research vessel hangs cautiously at a distance, thrusters glowing faintly, dwarfed to a toy beneath the creature.`,
+  },
+
+  leviathan_contact_event: {
+    format: 'simple',
+    theme: `STARBOT LEVIATHAN CONTACT EVENT — a dramatic first-contact beat that fires on ~40% of renders. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct events: it emits a focused beam or pulse of communication light toward the ship; bioluminescent patterns ripple across it in a clear response; it releases a vast cloud of glowing spores or smaller drifting entities; arcs of energy leap between it and the tiny ship; it opens a single vast eye; a wave of light passes visibly through its whole body; it unfurls a structure never seen before; the space around it warps and shimmers; it sheds a shower of glowing motes; a low pulse visibly rings outward through the dust. Awe-inducing.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE first-contact event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. It emits a focused pulse of golden light toward the tiny ship, a slow beam reaching across the dark like a greeting or a question.
+2. Bioluminescent patterns ripple across its entire body in a clear, deliberate sequence, colors answering the ship's signal lights.
+3. It releases a vast slow cloud of glowing spores that drift outward and englobe the tiny craft in a haze of soft light.
+4. A single vast eye opens across its flank, iris blooming with light, fixing on the speck of the ship.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // CRYSTALLINE-WORLD PATH (2026-06-09 — new StarBot path)
+  // Titanic crystal prisms fracturing starlight into rainbow
+  // caustics. Pure jewel-like spectacle.
+  // ════════════════════════════════════════════════════════
+
+  crystalline_world_formation: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD FORMATION — the colossal crystal terrain that is the hero of the scene. Each entry 25-45 words: ONE distinct crystalline landform, translucent and faceted, dominating the frame.
+
+VARIETY MANDATE — invent ~25 distinct crystal landforms: a forest of towering hexagonal prism-spires kilometers tall; a deep canyon walled with giant gem-blades; a vast cavern of clustered geodes; a plain bristling with tilted shard-monoliths; a crystal mountain with terraced facets; a frozen "crystal forest" of branching mineral trees; a cathedral of fused quartz arches; a field of giant floating crystal shards; a spiral of crystal columns winding skyward; a shattered crystal sea of jagged frozen waves; a colonnade of basalt-like crystal pillars; an amphitheater ringed by gem-spires. Each MUST read as colossal, translucent, faceted crystal — never opaque rock.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal crystalline landform in 25-45 words, comma-separated prose. Translucent + faceted + huge. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A forest of towering hexagonal prism-spires kilometers tall, translucent and sharp-edged, packed in clusters that march to the horizon, their facets catching and splitting the light into a haze of color.
+2. A deep canyon walled on both sides with giant tilted gem-blades, translucent slabs the size of skyscrapers leaning over a narrow floor, light pouring through the gaps in fractured shafts.
+3. A vast cavern of clustered geodes, the ceiling and walls bristling with house-sized crystal points glowing from within, a cathedral of mineral light.
+4. A crystal mountain rising in terraced facets, each tier a different translucent plane, the whole peak glowing like a cut gemstone lit from inside.`,
+  },
+
+  crystalline_world_composition: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD COMPOSITION — the SHOT TYPE / scene-composition that LEADS the render. This is the #1 anti-repetition lever: the crystal world keeps collapsing into "a central glowing vertical tower" — this axis forces a DIFFERENT framing every time. Each entry 15-30 words: a complete distinct camera composition.
+
+VARIETY MANDATE — ~25 DRAMATICALLY different compositions, deliberately spanning so no two renders share an architecture:
+  • Wide HORIZONTAL canyon vista, camera low looking down the length between crystal walls
+  • Inside an ENCLOSING crystal cavern, camera looking UP at a glowing faceted ceiling
+  • AERIAL top-down / high-angle over a vast field of crystals spreading to the horizon
+  • GROUND-LEVEL among scattered shards, looking up between them at the sky
+  • DISTANT wide establishing shot, the crystal formation small across an open plain
+  • Looking UP at a colossal OVERHEAD crystal arch or bridge spanning the frame
+  • REFLECTION-dominant, the crystal mirrored in a still pool filling the lower half
+  • A PANORAMIC horizon-line of low crystals stretching left-to-right, big sky
+  • Looking THROUGH a gap/window in the crystal to a second vista beyond
+  • A tight intimate FOREGROUND cluster of crystals with the world receding behind
+  • A DOWNWARD view into a crystal sinkhole / canyon from its rim
+  • A SIDE-PROFILE of a long crystal ridge crossing the frame horizontally
+EXPLICITLY AVOID making every entry a centered vertical column. Favor HORIZONTAL, ENCLOSING, AERIAL, DISTANT, and REFLECTION compositions to counter the tower default. Each names a CAMERA POSITION + a SCENE SHAPE (horizontal / enclosing / aerial / distant / overhead / reflection).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE camera composition / shot type in 15-30 words. It LEADS the render and defines the architecture's framing. SPAN the types — most should NOT be a centered vertical tower. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A wide horizontal canyon vista, camera low on the canyon floor looking down its length between two towering crystal walls receding to a bright vanishing point.
+2. Inside an enclosing crystal cavern, the camera tilted up at a vast glowing faceted ceiling, the formation wrapping overhead and down all sides around the viewer.
+3. A high aerial view looking down over a vast field of crystals spreading flat to the horizon, their facets a glittering quilt of refracted color.
+4. A reflection-dominant composition, a mirror-still pool filling the lower half of the frame perfectly doubling a low crystal ridge and the sky above it.`,
+  },
+
+  crystalline_world_material: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD MATERIAL — the crystal's color, clarity and gem-type; it sets the palette of the whole world. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct crystal materials: clear colorless quartz with rainbow internal fire; deep purple amethyst; blush rose-quartz; vivid emerald green; sapphire blue; smoky grey-brown; milky opalescent with iridescent sheen; golden citrine; black obsidian-glass shot with light; banded agate; rainbow fluorite zones; aquamarine teal; ruby red; prismatic clear with oil-slick iridescence; frosted translucent white; honey-amber; deep indigo; pale ice-blue. Name the COLOR + the CLARITY (clear / translucent / milky / iridescent) + any internal fire or inclusions.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE crystal material in 15-30 words — color + clarity + internal quality. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Deep amethyst purple, translucent and glassy, darker at the core and fading to pale lilac at the tips, with internal fractures catching the light.
+2. Clear colorless quartz of flawless clarity, throwing rainbow fire from every facet, faint feathery inclusions suspended deep inside.
+3. Milky opalescent crystal with a shifting iridescent sheen, soft blue-green-pink play-of-color rippling across the surfaces.
+4. Black obsidian-glass shot through with veins of trapped light, glossy and sharp, the edges glowing where the sun grazes them.`,
+  },
+
+  crystalline_world_refraction: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD LIGHT REFRACTION — the SIGNATURE money-shot: how the star's light fractures, splits and glows through the crystal. The soul of the image. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct refraction effects: rainbow caustics splashed across the ground and walls; shafts of separated spectrum lancing through gaps; the crystal glowing from within as light is trapped; prismatic rays fanning from a single sun-struck facet; dancing spectra rippling as light passes through; a lens-flare burst where the sun aligns with a prism; pooled colored light on a reflective floor; light bending around a curved crystal face; a halo of refracted color ringing a spire; scattered glitter of a thousand internal reflections; a beam split into a fan of colors across the scene; soft chromatic bloom hazing the air.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE light-refraction effect in 20-40 words. The light is visibly split / fractured / glowing through crystal. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The low sun strikes a wall of prisms and shatters into rainbow caustics that splash across the crystal floor and ripple up the surrounding spires in bands of pure color.
+2. Shafts of separated spectrum lance through the gaps between gem-blades, red, gold and violet beams crossing the canyon in the prismatic haze.
+3. Light is trapped inside the crystal and glows from within, every spire lit from its core, the whole formation luminous like cooling embers of colored fire.
+4. A single sun-struck facet fans a burst of prismatic rays across the scene, a star-shaped flare of split color hanging in the dusty air.`,
+  },
+
+  crystalline_world_ground: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD GROUND — the foreground floor of the crystal world. Each entry 15-35 words. Often includes a TINY figure or ship dwarfed for scale.
+
+VARIETY MANDATE — ~25 distinct grounds: a field of scattered smaller crystals and broken geodes underfoot; a mirror-flat crystal pool reflecting the spires; loose glittering mineral sand; a reflective sheet of polished crystal; shards crunching underfoot; a still pool of liquid catching the colored light; a tiny lone figure in an EVA suit dwarfed at the base of a spire; a small landed ship beside a crystal; a path winding between gem-blades; pooled rainbow light on a glassy floor; a dusting of crystal frost. Mostly let any figure/ship be a tiny speck for scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE foreground floor detail in 15-35 words. Any figure/ship is a tiny scale-speck. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A field of scattered smaller crystals and broken geodes covers the foreground floor, each glinting with trapped color, crunching shards leading toward the giant spires.
+2. A mirror-flat crystal pool spreads across the foreground, perfectly reflecting the towering prisms and the fractured light above in a flawless inverted double.
+3. A tiny lone figure in an EVA suit stands dwarfed at the base of a colossal spire, helmet tilted up, a speck against the glowing crystal.
+4. Loose glittering mineral sand drifts across a glassy floor pooled with rainbow caustics, a small landed ship parked at the edge of the frame.`,
+  },
+
+  crystalline_world_sky: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD SKY — the light source + sky above that fractures through the crystal. Each entry 15-35 words.
+
+VARIETY MANDATE — ~25 distinct skies: a low blazing sun aligned to lance through the spires; binary suns casting double-colored light; a vivid nebula glowing magenta and teal; rippling aurora curtains overhead; twin moons in a clear violet sky; a star-dense night with the crystal self-glowing; a dusty prismatic haze sky; a deep sapphire twilight; a sun low on the horizon haloed by refraction; a banded gas-giant looming behind the spires; a clear cold sky with a small brilliant sun; a stormy sky with light breaking through. Name the LIGHT SOURCE + sky color.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE sky + light source in 15-35 words. It fractures through the crystal. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A low blazing white sun sits perfectly aligned behind the tallest spires, its light lancing through them and exploding into fractured color across the scene.
+2. Twin suns, one amber and one rose, hang in a clear violet sky, casting double-colored light that splits twice through the crystal.
+3. A vivid nebula glows magenta and teal across the whole sky, its soft light filtering down and glowing within the translucent spires.
+4. Rippling green aurora curtains hang overhead in a deep twilight, their shifting light caught and scattered through the crystal forest.`,
+  },
+
+  crystalline_world_event: {
+    format: 'simple',
+    theme: `STARBOT CRYSTALLINE-WORLD EVENT — a phenomenon animating the crystal world, firing on ~40% of renders. Adds magic but the crystal + refracted light stay the hero. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct events: a single crystal resonating with pulsing inner energy; a beam of light refracting up out of a spire into the sky; bioluminescent light pulsing through the crystal lattice in waves; a slow crystal-growth cascade as new spires form; a light-storm of dancing spectra filling the air; a crystal shattering in a burst of shards and light; a low hum visualized as rippling light-rings; a meteor of crystal streaking down; a flock of light-refracting creatures; static-like sparks arcing between spires; a colored fog rolling through glowing from within.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE phenomenon in 20-40 words, animating the crystal world. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A single colossal crystal resonates with pulsing inner energy, light surging up its core in slow waves and spilling out across the surrounding spires.
+2. A beam of concentrated light refracts up out of the tallest spire and lances into the sky, a brilliant column of split color against the dusk.
+3. Bioluminescent light pulses through the crystal lattice in slow travelling waves, the whole formation breathing color from one horizon to the other.
+4. A light-storm of dancing spectra fills the air between the spires, ribbons of pure refracted color drifting and weaving like the aurora come to ground.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // IMPOSSIBLE-SKY PATH (2026-06-09 — new StarBot path)
+  // Colossal ringed gas giant over an alien horizon. The
+  // wallpaper money-shot — the SKY is the whole show.
+  // ════════════════════════════════════════════════════════
+
+  impossible_sky_ringed_giant: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY RINGED GIANT — the colossal ringed gas giant that hangs ENORMOUS over an alien horizon and dominates the sky. This is the hero of the whole image. Each entry 30-50 words.
+
+VARIETY MANDATE — invent ~25 distinct ringed giants: a banded amber-and-cream giant with broad icy rings tilted steeply; a deep cobalt giant streaked with white storm-bands and thin razor rings; a swirling rust-and-gold world with chunky shadowed ring-gaps; a pale mint-green giant with shimmering rings edge-on as a bright line; a striped peach-and-violet giant with multiple ring bands and shepherd-moon gaps; a stormy crimson giant with a great oval cyclone and dusty rings; a luminous turquoise ice-giant with bright concentric rings; a half-lit giant on the terminator with rings catching the sun; a banded ochre giant filling half the sky with rings arcing overhead. Each MUST name: the planet's COLOR + cloud-banding, the RING system (tilt / banding / gaps / shadow on the planet), and how HUGE + CLOSE it looms over the horizon.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal ringed gas giant in 30-50 words, comma-separated prose. Name color + banding + ring system + how huge it looms. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A colossal banded amber-and-cream gas giant fills the upper sky, churning storm-bands and a great pale cyclone, its broad icy rings tilted steeply across the frame casting hard banded shadows over its equator, looming impossibly close above the horizon.
+2. A deep cobalt-blue giant streaked with bright white storm-bands hangs huge and low, razor-thin silver rings slicing edge-on across the sky as a brilliant line, a faint ring-shadow banding its cloud-tops.
+3. A swirling rust-and-gold world dominates the sky, dusty ochre rings broken by dark shepherd-moon gaps arcing overhead, the planet's shadow falling across the inner rings, its limb haloed by a thin atmosphere glow.
+4. A pale mint-green ice-giant looms over the horizon, bright concentric rings tilted at a dramatic angle, delicate cloud-banding in turquoise and white, the rings throwing soft striped shadows down onto the glowing crescent.`,
+  },
+
+  impossible_sky_companions: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY COMPANIONS — the OTHER sky elements arranged around the ringed giant to fill the sky with layered wonder (two are picked and combined per render). Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct sky companions: a row of three or four moons strung along the ring-plane at different phases; a single huge cratered moon close and low; a second smaller ringed planet in the distance; twin suns low on the horizon; a small blue-white sun with sharp diffraction spikes; green-and-violet aurora curtains rippling across the sky; the bright band of the galaxy core arching overhead; a blazing comet with a long ion tail; a meteor shower of streaks; a dense star-field with nebula haze; a thin crescent moon beside the giant; an eclipse where a moon crosses the sun. Each is ONE sky element that layers into the scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE sky companion element in 15-30 words. It layers around the ringed giant. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A row of four moons strung along the ring-plane at different phases, from thin crescent to full, marching toward the horizon.
+2. Green-and-violet aurora curtains ripple across the upper sky behind the rings, their light reflected faintly in the land below.
+3. Twin suns hang low near the horizon, one amber and one white, casting double shadows and a warm gradient across the sky.
+4. The bright band of the galaxy core arches overhead behind the giant, dense with stars and dark dust-lanes, a faint comet hanging beside it.`,
+  },
+
+  impossible_sky_foreground: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY FOREGROUND — the thin alien land or sea strip at the bottom of the frame that anchors the scene and, where reflective, MIRRORS the sky to double the spectacle. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct foregrounds: a glassy still alien sea mirroring the ringed giant; a vast salt-flat sheened with a thin film of water reflecting the sky; a mirror-smooth ice plain; a field of dark volcanic glass catching the giant's light; rolling dunes rippled with the sky's color; a bioluminescent ocean glowing teal under the rings; a still mountain lake doubling the planet; a wet tidal beach with the giant reflected in the sheen; a crystalline plain refracting the ringlight; a misty marsh with mirror-pools; a frozen fjord; a obsidian desert under colored light. Keep it LOW and thin — a stage for the sky. Reflective surfaces strongly preferred (they double the wow).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE thin low foreground in 20-40 words. Reflective where possible (mirrors the sky). It anchors the bottom; the sky is the star. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A glassy, dead-still alien sea stretches to the horizon, mirroring the colossal ringed giant and its rings in a flawless inverted double, broken only by faint ripples near the shore.
+2. A vast salt-flat sheened with a thin film of water reflects the entire sky, the giant and moons doubled beneath a low cracked-mineral crust glowing at the edges.
+3. A bioluminescent ocean glows soft teal under the rings, gentle swells catching the giant's amber light, the reflection smeared and shimmering across the water.
+4. A mirror-smooth blue ice plain stretches into the distance, the ringed giant and aurora reflected across it, thin pressure-ridges casting long colored shadows.`,
+  },
+
+  impossible_sky_horizon: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY HORIZON DETAIL — the midground detail along the low horizon line where land meets sky; adds depth and, often, a tiny structure or figure for human scale against the immense sky. Each entry 15-35 words.
+
+VARIETY MANDATE — ~25 distinct horizon details: a cluster of slender alien rock spires silhouetted against the giant; a distant jagged ridge-line; sea-stacks rising from the mirror-sea; a lone tiny observatory dome on a bluff; a single small silhouetted figure standing at the shore gazing up; a far-off settlement of pinprick lights; a thin line of dunes; a crashed ship half-buried on the horizon; a lone wind-bent alien tree; a distant arch of natural stone; a small pier reaching into the reflective sea; an empty flat horizon (clean, sky-dominant). Mostly tiny + silhouetted — they prove scale without stealing from the sky.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE horizon midground detail in 15-35 words. Tiny + silhouetted; proves scale. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A cluster of slender alien rock spires rises along the horizon, silhouetted black against the glowing ringed giant, their reflections spearing across the mirror-sea.
+2. A single tiny figure stands at the water's edge in silhouette, gazing up at the colossal ringed sky, dwarfed to a speck.
+3. A lone observatory dome perches on a distant bluff, a pinprick of warm light at its base, the immense rings arcing above it.
+4. Sea-stacks rise from the still water in the middle distance, eroded into arches, the giant's light rimming their edges.`,
+  },
+
+  impossible_sky_atmosphere: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY ATMOSPHERE — the sky's light, color and air treatment that sets the mood of the whole image. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct atmospheres: broad ring-shadow bands striping the sky and land; an aurora-lit twilight with the giant glowing through; a golden-hour wash with the giant low and warm; the day-night terminator sweeping across the world; a dusty rose haze softening the giant's limb; a crisp cold clear sky with razor-sharp stars; a stormy band of cloud drifting under the giant; a misty dawn with the giant rising; deep indigo night with the giant lit only by its sun; a hazy amber dusk with long shadows; a clear blue alien afternoon with the giant pale and high. It is the COLOR + LIGHT + air of the scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE sky atmosphere/light treatment in 20-40 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Broad ring-shadow bands stripe the entire sky and the land below in alternating light and shade, the air crystal-clear, the giant's colors vivid and saturated.
+2. An aurora-lit twilight, the sky deep indigo bleeding to violet at the horizon, the ringed giant glowing softly through rippling green curtains.
+3. A warm golden-hour wash, the giant hanging low and amber over the horizon, long soft shadows reaching across the foreground, the air hazed with gold.
+4. The day-night terminator sweeps across the world, half the foreground in warm light and half in cool dusk, the giant catching the last sun along its rings.`,
+  },
+
+  impossible_sky_witness: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY WITNESS — a tiny lone figure standing in the foreground GAZING UP at the impossible sky, dwarfed to a speck. This is an "epic-tiny" emotional + scale anchor. Each entry 15-30 words. Seen from BEHIND or in silhouette; the figure is TINY (a few percent of frame); the sky stays the hero.
+
+VARIETY MANDATE — ~25 distinct tiny witnesses: a lone astronaut in an EVA suit standing on a ridge, helmet tilted up; a robed figure on a dune with a staff, arms slightly raised; an explorer sitting on a rock at the shore, knees up, gazing; a small silhouette at the end of a pier over the mirror-sea; a figure standing beside a tiny parked rover; two tiny figures side by side on a bluff; a lone traveler with a pack cresting a ridge; a figure kneeling at the water's edge; a person on a balcony of a tiny structure; a child-sized silhouette on a hill; a figure with a long shadow reaching toward the giant; a suited figure floating just above the ground in low-g, looking up. ALWAYS tiny, always gazing up, always ONE (or rarely two).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny foreground witness figure in 15-30 words, gazing UP at the sky, dwarfed to a speck, seen from behind or in silhouette. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A lone astronaut in an EVA suit stands on a low ridge in the foreground, seen from behind, helmet tilted up toward the colossal ringed giant, a tiny silhouette against the sky.
+2. A small robed figure stands on a dune with a long staff, arms slightly lifted, gazing up at the rings, dwarfed to a speck with a long shadow trailing behind.
+3. A lone explorer sits on a rock at the water's edge, knees drawn up, a tiny silhouette watching the giant and its reflection, utterly small beneath the sky.
+4. A single figure stands at the end of a thin pier reaching into the mirror-sea, arms at their sides, gazing up at the impossible sky doubled in the water below.`,
+  },
+
+  impossible_sky_event: {
+    format: 'simple',
+    theme: `STARBOT IMPOSSIBLE-SKY EVENT — a dramatic celestial beat in the SKY that fires on ~40% of renders. It adds drama but the ringed giant stays the hero. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct sky events: a meteor streaking across the rings trailing fire; a blazing comet sweeping past with a long ion tail; a moon crossing in front of the sun in a partial eclipse; an aurora storm erupting in violent curtains; a ring-shadow eclipse darkening a band of the land; a moon passing into the giant's shadow and dimming; a shower of shooting stars; a distant flash of a far-off storm on the giant; a satellite or ship catching the sun in a brilliant glint; a falling star burning up low over the horizon. Sky-bound, distant, awe-inducing.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dramatic sky event in 20-40 words, in the sky (not the foreground). Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A meteor streaks across the rings trailing a line of white fire, its light briefly doubled in the mirror-sea below.
+2. A blazing comet sweeps past beside the giant, its long blue ion tail and white dust tail fanning across a third of the sky.
+3. A moon crosses in front of the low sun in a partial eclipse, a bright crescent of light flaring around its dark disc.
+4. An aurora storm erupts overhead in violent green-and-magenta curtains, rippling fast across the sky and shimmering in the still water below.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // RING-HABITAT PATH (2026-06-09 — new StarBot path)
+  // Interior of a rotating O'Neill cylinder — land curves up
+  // and over the sky. "The ground is the sky" gut-punch.
+  // ════════════════════════════════════════════════════════
+
+  ring_habitat_zone: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT ZONE — the terrain / land-use that wraps the inside of a colossal rotating space-habitat cylinder. This terrain covers the foreground floor, sweeps up both curved walls, and continues overhead on the far side. Each entry 25-45 words: ONE continuous interior landscape type.
+
+VARIETY MANDATE — invent ~25 distinct enclosed-world landscapes: terraced farmland patchwork of green and gold fields; a dense vertical green-arcology city of plant-draped towers; a broad forested river valley with lakes; rolling parkland meadows dotted with groves and ponds; a garden-suburb sprawl of low white buildings and tree-lined avenues; rice-paddy terraces stepping up the curve; a wine-country of vineyards and villas; a tropical zone of palms and turquoise lagoons; an alpine band of pine forest and snow patches; a mixed mosaic of city-core ringed by farms and wild forest. Always lush, habitable, LIVED-IN — this is a world people farm and live in. Each entry MUST read as a continuous land-cover that could wrap a cylinder interior.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE continuous interior landscape in 25-45 words, comma-separated prose. Lush, habitable, lived-in. It wraps the whole drum (floor + walls + overhead). Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A patchwork of terraced farmland — green and gold field-strips, irrigation channels glinting, scattered red-roofed farmhouses and silos, hedgerows dividing the plots, the whole quilt sweeping unbroken up the curved walls and overhead.
+2. A dense green-arcology city, slender towers wrapped in hanging gardens and vertical farms, skybridges threading between them, plazas and canals at their feet, the city climbing the curve in tiers of glass and foliage.
+3. A broad forested river valley, a silver river meandering through deep pine and broadleaf forest, mirror-lakes catching the axial light, meadow clearings with tiny settlements, the forest carpet rolling up both walls.
+4. Rolling green parkland of meadows and groves, ponds and winding gravel paths, clusters of low pavilions, flower-meadows in bloom, the gentle countryside sweeping up and arcing overhead in a continuous green band.`,
+  },
+
+  ring_habitat_curve: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT CURVE — the SIGNATURE mind-bend framing of how the interior landscape curves UP the walls and ARCS OVER the sky so the far side hangs upside-down overhead. This is the hero of the whole path. Each entry 20-40 words describing the WORLD-CURVE as seen in this render.
+
+VARIETY MANDATE — ~25 distinct framings of the upward-wrapping curve: the horizon curving up on both sides into a continuous ring of land overhead; the far side of the world hanging upside-down as a luminous ceiling of fields and cities; the land sweeping up the right wall, over the top, and back down the left; a near-vertical wall of terrain rising beside the camera; the overhead terrain softened by atmospheric haze and drifting cloud; the upward-curve catching the axial sun so the overhead land glows; a dizzying view straight up the curve to the city directly above; the gentle bowl of the world rising on all sides. Always make the UPWARD wrap unmistakable — never flat ground under open sky.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE framing of the upward-curving world in 20-40 words. The horizon curves UP; terrain hangs overhead. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The horizon curves upward on both sides into a continuous ring, the far side of the world a luminous ceiling of patchwork fields and glinting towns hanging upside-down directly overhead through a veil of haze.
+2. The land sweeps up the right-hand wall, arcs across the top of the frame as an inverted landscape, and descends the left wall — one unbroken world bent into a tube around the viewer.
+3. A near-vertical wall of forested terrain rises beside the camera and bends overhead, rivers running impossibly up the slope, the overhead land glowing where the axial sun strikes it.
+4. Looking straight up the curve, the city directly overhead reads clear and inverted, its streets and rooftops hanging from the sky, softened into blue atmospheric haze toward the distant axis.`,
+  },
+
+  ring_habitat_axis_light: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT AXIAL LIGHT — the central light source running down the long axis of the rotating cylinder; it is the SUN of this enclosed world and lights the whole curved interior from the centerline outward. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct axial light sources: a blazing white fusion sun-line running the full length; a glowing golden light-rod at warm "afternoon"; a string of mirror-reflected sunlight strips; an axial day-night terminator where one half is lit and the other dusk; a soft pink "dawn" glow creeping along the centerline; a cool blue artificial daylight bar; a pulsing hub-star at the far endcap throwing rays down the cylinder; a thin line of brilliant light haloed by lens-flare and cloud; a warm amber "golden hour" axis casting long shadows up the curve; a stormy axis where the light filters through cloud knotted at the centerline.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE axial light source in 20-40 words. It runs the centerline and lights the curved world. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A blazing white fusion sun-line runs the full length of the axis, haloed in lens-flare, casting hard noon light and crisp shadows that fan outward across the curved land.
+2. A warm amber golden-hour light-rod glows along the centerline, throwing long soft shadows up the walls, the overhead terrain bathed in honeyed late-day light.
+3. An axial day-night terminator splits the world — one half in cool blue daylight, the other sliding into dusk with town-lights beginning to glitter on the dark curve.
+4. A soft rose dawn-glow creeps along the axis behind drifting centerline cloud, gentle pink light spilling onto dew-lit fields curving overhead.`,
+  },
+
+  ring_habitat_endcap: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT ENDCAP — the colossal far end that closes the cylinder, seen far in the distance through atmospheric haze, conveying the immense LENGTH of the world. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct endcaps: a vast curved wall with a city built into its inner face climbing toward the axis; a central docking hub where the axial sun meets a spoke-and-hub spaceport; a ring of snow-capped mountains around a great circular window to the stars; a tiered amphitheater of terraced gardens curving up to the hub; a colossal bulkhead of riveted metal with glowing access lights; a waterfall pouring from the high endcap into a basin; a cathedral-like endcap of arches and stained light; a forested endcap rising to a misty hub; a sun-gate aperture blazing where the axis exits; a cloud-wreathed endcap lost in haze.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE distant endcap in 20-40 words, seen far away through haze. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The far endcap is a vast curved wall with a tiered city built into its inner face, streets and terraces climbing toward the central hub, lights twinkling through the blue distance-haze.
+2. A central docking hub crowns the far end where the axial sun meets a spoke-and-ring spaceport, tiny ships drifting in to berth, the structure hazed and luminous miles away.
+3. A ring of snow-capped mountains encircles the distant endcap around a great circular window to the open starfield, the black of space and a planet visible beyond.
+4. A colossal waterfall pours from high on the far endcap into a misty basin, the cliff-wall terraced with greenery, the whole end softened into pale atmospheric haze.`,
+  },
+
+  ring_habitat_detail: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT DETAIL — a mid-scale interior wonder that adds magic to the enclosed world. Each entry 15-35 words.
+
+VARIETY MANDATE — ~25 distinct interior wonders: clouds floating in a flat layer at the weightless central axis; a river that runs impossibly UP the curving wall; a chain of suspended lakes terraced up the slope; a monorail spiralling around the inside of the drum; weather knotting into a spiral storm along the centerline; flocks of birds wheeling near the axis where gravity fades; a rainbow arcing across the curved sky; bridges spanning a canyon that bends overhead; airships and gliders drifting in the low-gravity centerline; hanging gardens cascading down a tower; mist pooling in the curved valleys at dawn.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE mid-scale interior wonder in 15-35 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A flat layer of fair-weather clouds floats at the weightless central axis, lit gold along the sun-line, casting dappled shadows on the curved land far below and above.
+2. A silver river runs impossibly up the curving wall, threading through fields, before dissolving into the haze of the overhead terrain.
+3. A slender monorail spirals around the inside of the drum on delicate pylons, a transit pod gliding along it, tiny against the wrapping world.
+4. Gliders and a slow airship drift near the low-gravity centerline, wings catching the axial light, dwarfed by the curve of the world behind them.`,
+  },
+
+  ring_habitat_scale_prover: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT SCALE PROVER — tiny human-scale detail that proves the habitat is kilometers across (two are picked and combined per render). Each entry 12-25 words. These must read as SPECKS dwarfed by the world-curve.
+
+VARIETY MANDATE — ~25 distinct scale-proofs: a town of lit windows nestled in a valley; a grid of farm fields with a single tractor; a transit pod streaking along a rail; a lone figure standing on a ridge looking up at the overhead land; a cluster of white villas by a lake; a sailboat on a curving river; a flock of grazing animals; a stadium or plaza full of tiny crowds; a road with crawling vehicle-lights; a wind-farm of tiny turbines; a bridge with ant-sized pedestrians; a parked airship at a tiny mooring.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny scale-prover in 12-25 words. It must read as SPECKS against the kilometer-scale curve. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A town of warmly lit windows nestled in a curved valley, streets and rooftops shrunk to a glittering smudge against the sweep of land.
+2. A lone figure standing on a high ridge, tilted head silhouetted, gazing up at the inverted cities hanging overhead.
+3. A transit pod streaking along an elevated rail, a bright dash of motion no bigger than a grain against the world-curve.
+4. A grid of farm fields with a single tractor crawling along a furrow, a thread of dust trailing behind it.`,
+  },
+
+  ring_habitat_event: {
+    format: 'simple',
+    theme: `STARBOT RING-HABITAT EVENT — a moment of life or drama woven into the enclosed world, firing on ~40% of renders. It adds story but the world-curve stays the hero. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct events: a flock of birds or drones streaming along the bright axis; a spiral storm cloud knotting at the centerline with rain veiling one zone; a festival of floating lanterns and fireworks over a city; an aurora-like shimmer rippling along the axial light; a transit pod streaking the length of the world trailing light; a great migration of airships crossing the interior; a rainbow arcing across the curved sky after rain; the sun-line dimming to dusk as ten thousand town-lights bloom across the curve; a sky-diver tumbling through the low-gravity axis.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE event in 20-40 words, woven into the curved world without stealing from the world-curve. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A vast flock of birds streams along the bright axis in a shifting ribbon, tiny silhouettes catching the sun-line light against the overhead land.
+2. A spiral storm knots at the centerline, grey rain veiling one curved zone while the rest of the world stays sunlit, a rainbow forming at the boundary.
+3. Dusk falls as the sun-line dims to amber and ten thousand town-lights bloom across the curve, the overhead cities becoming a galaxy of windows hanging in the sky.
+4. A festival of floating lanterns and silent fireworks rises over a city in the curve, sparks drifting up toward the weightless axis.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // SPACEWALK PATH (2026-06-09 — new StarBot path)
   // The iconic zero-G EVA shot. Figure + void are co-heroes.
   // Gravity / 2001 / Interstellar film-still tradition.
