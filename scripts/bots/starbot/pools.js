@@ -42,6 +42,46 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── orbital-descent path (2026-06-10, NEW) — world from orbit. ───
+  ORBITAL_DESCENT_PLANET: load('orbital_descent_planet'),
+  ORBITAL_DESCENT_SURFACE: load('orbital_descent_surface'),
+  ORBITAL_DESCENT_ATMOSPHERE: load('orbital_descent_atmosphere'),
+  ORBITAL_DESCENT_CRAFT: load('orbital_descent_craft'),
+  ORBITAL_DESCENT_BACKDROP: load('orbital_descent_backdrop'),
+  ORBITAL_DESCENT_EVENT: load('orbital_descent_event'),
+
+  // ─── asteroid-mining path (2026-06-10, NEW) — gritty industrial. ───
+  ASTEROID_MINING_SETTING: load('asteroid_mining_setting'),
+  ASTEROID_MINING_DETAIL: load('asteroid_mining_detail'),
+  ASTEROID_MINING_ACTION: load('asteroid_mining_action'),
+  ASTEROID_MINING_WORKER: load('asteroid_mining_worker'),
+  ASTEROID_MINING_BELT: load('asteroid_mining_belt'),
+  ASTEROID_MINING_HAZARD: load('asteroid_mining_hazard'),
+
+  // ─── cockpit-view path (2026-06-10, NEW) — first-person pilot POV. ───
+  COCKPIT_VIEW_COCKPIT: load('cockpit_view_cockpit'),
+  COCKPIT_VIEW_HUD: load('cockpit_view_hud'),
+  COCKPIT_VIEW_BEYOND: load('cockpit_view_beyond'),
+  COCKPIT_VIEW_DETAIL: load('cockpit_view_detail'),
+  COCKPIT_VIEW_ALERT: load('cockpit_view_alert'),
+  COCKPIT_VIEW_COMBAT: load('cockpit_view_combat'),
+
+  // ─── ship-graveyard path (2026-06-10, NEW) — fleet-scale boneyard. ───
+  SHIP_GRAVEYARD_SETTING: load('ship_graveyard_setting'),
+  SHIP_GRAVEYARD_WRECK: load('ship_graveyard_wreck'),
+  SHIP_GRAVEYARD_SCALE: load('ship_graveyard_scale'),
+  SHIP_GRAVEYARD_EXPLORER: load('ship_graveyard_explorer'),
+  SHIP_GRAVEYARD_COSMIC: load('ship_graveyard_cosmic'),
+  SHIP_GRAVEYARD_EERIE: load('ship_graveyard_eerie'),
+
+  // ─── terraforming path (2026-06-10, NEW) — a world being born. ───
+  TERRAFORMING_STAGE: load('terraforming_stage'),
+  TERRAFORMING_TECH: load('terraforming_tech'),
+  TERRAFORMING_CLIMATE: load('terraforming_climate'),
+  TERRAFORMING_SETTLEMENT: load('terraforming_settlement'),
+  TERRAFORMING_BACKDROP: load('terraforming_backdrop'),
+  TERRAFORMING_MILESTONE: load('terraforming_milestone'),
+
   // ─── derelict path (2026-06-09, NEW) — dead ship + explorer's beam. ───
   DERELICT_SETTING: load('derelict_setting'),
   DERELICT_DECAY: load('derelict_decay'),

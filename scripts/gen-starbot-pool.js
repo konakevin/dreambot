@@ -60,6 +60,451 @@ if (!POOL) {
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // ORBITAL-DESCENT PATH (2026-06-10 — new StarBot path)
+  // A world seen from orbit, a tiny craft on approach.
+  // ════════════════════════════════════════════════════════
+
+  orbital_descent_planet: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT PLANET — the alien world seen as a whole curved globe FROM ORBIT, the hero of the render. Each entry 25-45 words. The planet fills the frame as a colossal sphere seen from above.
+
+VARIETY MANDATE — ~25 distinct worlds-from-orbit: a blue ocean world wrapped in white storm-swirls; a red desert world streaked with canyons; a frozen white ice world; a lava world veined with glowing magma; a banded gas-giant-like cloud world; a green-and-blue terraformed earthlike world; a city-covered ecumenopolis glowing with lights; a ringed planet seen from above the rings; a purple toxic-cloud world; a cracked volcanic world; a half-shadowed world on the terminator; a moon pocked with craters. Each MUST read as a CURVED WORLD seen from space, not a flat landscape.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alien world seen from orbit in 25-45 words — a curved globe from above. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast blue ocean world fills the frame, wrapped in great white spiral storm-systems, deep cobalt seas glinting with sun, scattered green archipelagos and a thin bright atmosphere haloing its curve.
+2. A red desert world seen from orbit, its rust-and-ochre surface scored by enormous branching canyons and dust-storm swirls, the curve of the planet sharp against the black of space.
+3. A city-covered ecumenopolis world glowing from horizon to horizon with the gold web of endless city-lights on its night side, the day side a grey lattice of megastructure.`,
+  },
+
+  orbital_descent_surface: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT SURFACE DETAIL — the features visible on the planet's surface from orbit. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct surface details: vast swirling cyclones and storm-systems; mountain ranges casting long shadows at the terminator; a continent-spanning canyon; bright polar ice caps; glowing rivers of lava; the gold web of city-lights on the night side; aurora rings around the poles; a great circular impact crater; turquoise shallow seas and reefs; dust-storm fronts; a vast volcano plume; cloud-bands; river deltas branching to a sea. Visible from high above.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE from-orbit surface detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Vast spiral cyclones wheel across the surface, their eyes deep wells of shadow, white cloud-arms trailing thousands of kilometers across the ocean below.
+2. The gold web of countless city-lights blankets the night side, rivers of brighter light marking the great arteries between glowing urban sprawls.
+3. Glowing rivers of orange lava branch across the dark surface like cracks in cooling glass, volcanic plumes smudging the thin atmosphere above them.`,
+  },
+
+  orbital_descent_atmosphere: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT ATMOSPHERE GLOW — the thin bright arc of atmosphere on the planet's curve + the day/night terminator. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct atmosphere/terminator effects: a razor-thin blue atmosphere line rimming the curve; a brilliant sunrise breaking over the limb in a blaze of gold; the day-night terminator sweeping across the surface; a glowing green auroral ring on the night side; storm-lightning flickering in the cloud-tops; a sunset-orange band along the terminator; a hazy purple atmosphere glow; the bright crescent of a sunlit limb against black; a thick banded atmosphere; airglow shimmering green above the dark side.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE atmosphere-glow / terminator effect in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A razor-thin line of brilliant blue atmosphere rims the planet's curve, glowing against the black of space, fading to a soft haze toward the terminator.
+2. A blazing sunrise breaks over the planet's limb in a fan of gold and white light, the terminator a sharp line between glowing day and dark night.
+3. A glowing green auroral ring crowns the night-side pole, rippling curtains of light visible from orbit against the dark curve of the world.`,
+  },
+
+  orbital_descent_craft: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT CRAFT — the small ship/capsule on approach that sells the descent + scale. Each entry 15-30 words. SMALL against the colossal planet.
+
+VARIETY MANDATE — ~25 distinct craft: a re-entry capsule trailing a plasma streak; a sleek shuttle banking against the planet; a boxy colony lander descending; a fleet of ships entering orbit in formation; a dropship with a glowing heat-shield; an orbital station drifting in the foreground; a single fighter on patrol; a cargo hauler with a tug; a sail-ship furling; a probe; a damaged ship limping in. Always SMALL — a craft dwarfed by the world below.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small approaching craft in 15-30 words, dwarfed by the planet. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small re-entry capsule arcs toward the atmosphere trailing a long streak of orange plasma, a tiny spark against the immense curve of the world.
+2. A sleek shuttle banks slowly across the planet's face, its hull catching the sun, dwarfed to a glinting mote above the swirling clouds.
+3. A boxy colony lander descends on glowing thrusters toward the surface, a fragile speck against the colossal world filling the frame below.`,
+  },
+
+  orbital_descent_backdrop: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT BACKDROP — the space above and around the planet. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct backdrops: the deep black of space dense with stars; a large cratered moon nearby; a distant brilliant sun; a glowing nebula beyond; the planet's own rings arcing past; the bright band of the galaxy; a second planet in the distance; a cluster of stars; a comet hanging far off; a dim red dwarf sun; a starfield with diffraction spikes. The space context around the world.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE space backdrop in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The deep black of space stretches above the planet's curve, dense with pinpoint stars and the faint band of a distant galaxy.
+2. A large cratered moon hangs nearby in the black, its grey pocked surface lit by the same sun warming the planet below.
+3. A glowing magenta-and-teal nebula spreads across the background beyond the world, its soft light tinting the edge of space.`,
+  },
+
+  orbital_descent_event: {
+    format: 'simple',
+    theme: `STARBOT ORBITAL-DESCENT EVENT — a beat (sky/approach), fires ~40% of renders. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct events: a re-entry plasma trail blazing as a craft hits atmosphere; a meteor burning up in the atmosphere far below; an orbital sunrise flaring over the limb; a second ship passing; a satellite catching the sun in a brilliant glint; a missile/booster separating; a docking with a station; a solar flare in the distance; a piece of debris tumbling past; a comm-laser pulse.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE descent event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A craft ahead hits the upper atmosphere and blazes into a long trail of orange-white plasma, streaking down toward the surface.
+2. Far below, a meteor burns up in the atmosphere, a brief bright scratch of light against the dark curve of the night side.
+3. A satellite catches the sun and flares in a brilliant point of light as it drifts across the planet's face.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ASTEROID-MINING PATH (2026-06-10 — new StarBot path)
+  // Gritty blue-collar industrial space.
+  // ════════════════════════════════════════════════════════
+
+  asteroid_mining_setting: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING SETTING — the gritty industrial mining operation that is the hero. Each entry 25-45 words. WORN, scarred, blue-collar — heavy industry in space, NOT a sleek starship.
+
+VARIETY MANDATE — ~25 distinct operations: a colossal asteroid being carved open, terraces cut into its face; a strip-mined rock with a refinery platform bolted on; a hollowed-out asteroid interior packed with machinery and gantries; a drill-rig boring a deep shaft; a processing station clamped to a spinning rock; a swarm of mining drones working a face; an ore-loading dock with battered haulers; a smelter-platform glowing orange; a quarry-pit gouged into a rock; a scaffolded mine-head. Each WORN + industrial + floodlit.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gritty industrial mining setting in 25-45 words. Worn, scarred, floodlit — NOT sleek. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal dark asteroid carved open into stepped terraces, floodlight towers blazing across the scarred rock face, ore conveyors and gantries bolted into the stone, dust hanging in the harsh beams.
+2. A grimy refinery platform clamped to a slowly spinning rock, its tangle of pipework, smelters and fuel tanks glowing orange, battered ore-haulers docked at scaffolded berths.
+3. The hollowed-out interior of a mined asteroid, a cathedral-sized cavern of bare rock laced with catwalks, cabling and machinery, floodlights throwing long shadows across the dusty void.`,
+  },
+
+  asteroid_mining_detail: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING DETAIL — the gritty machinery + equipment. Each entry 15-30 words. Worn, industrial, blue-collar.
+
+VARIETY MANDATE — ~25 distinct industrial details: rusted scaffolding and gantries; ore conveyor belts; glowing orange smelters; venting exhaust plumes; floodlight towers on cranes; bulging fuel tanks; docked battered haulers; tangled pipework and cabling; yellow-black hazard stripes; scarred drill-heads; sparking welders; stacked cargo containers; warning beacons; grime and oil streaks; a crane swinging a load. Worn and functional.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gritty industrial detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Rusted scaffolding and gantries cling to the rock face, draped with tangled cabling and pipework, hazard-striped and streaked with grime.
+2. A bank of smelters glows molten orange behind grimy heat-shields, venting plumes of exhaust that drift and freeze in the vacuum.
+3. Floodlight towers on hydraulic cranes blaze harsh white over the worksite, their beams thick with floating rock-dust and debris.`,
+  },
+
+  asteroid_mining_action: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING ACTION — what's happening in the mining operation right now. Each entry 15-30 words. The verb leads.
+
+VARIETY MANDATE — ~25 distinct actions: a laser-cutter carving the rock in a shower of sparks; a hauler loading ore from a conveyor; a blast charge detonating in a silent burst of debris; a drill boring deep into the face; a crane swinging a cargo container; a swarm of drones chewing at a seam; a tug towing a chunk of rock; workers wrestling a pipe into place; a bucket-wheel grinding ore; molten slag pouring from a smelter.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE mining action in 15-30 words, verb-led. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A massive laser-cutter carves a glowing trench across the rock face, throwing a fan of white-hot sparks that drift and die in the vacuum.
+2. A battered ore-hauler hangs at a conveyor, its hold yawning open as crushed rock pours in under floodlights thick with dust.
+3. A blast charge detonates deep in the rock in a silent flowering of debris, a shockwave of dust expanding slowly in the dark.`,
+  },
+
+  asteroid_mining_worker: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING WORKER — the small, grubby human presence for scale. Each entry 12-25 words. Small + blue-collar against the industrial scale.
+
+VARIETY MANDATE — ~25 distinct worker beats: a tiny suited miner with a cutting-tool on the rock face; a crew of figures on a gantry; a foreman silhouette in a floodlit doorway; an EVA team hauling a cable; a worker riding a maintenance pod; a figure waving a hauler in with light-wands; a pair tightening a valve; a lone miner trudging a catwalk; a suited figure dwarfed at a drill-head. Small, grubby, real.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small worker beat in 12-25 words — grubby, for scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tiny suited miner braces against the rock face with a cutting-tool, sparks washing over their scarred orange suit, dwarfed by the floodlit cliff.
+2. A crew of small figures works along a gantry high on the structure, their helmet-lamps a string of sparks against the dark machinery.
+3. A foreman stands silhouetted in a floodlit hatchway, waving a hauler in with glowing light-wands, tiny against the looming rig.`,
+  },
+
+  asteroid_mining_belt: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING BELT SETTING — the surroundings of the operation. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct belt settings: an asteroid belt of drifting rocks receding to the dark; a harsh small distant sun casting hard shadows; a gas giant looming huge behind the rock; the deep black of space and stars; a distant refinery fleet glowing; a haze of dust and debris; other mining rigs as far lights; a ringed planet beyond; a cluster of tumbling rocks; a cold blue starfield. The industrial frontier.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE belt setting in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An asteroid belt of countless drifting rocks recedes into the dark behind the rig, each a faint tumbling silhouette against the stars.
+2. A vast banded gas giant looms huge behind the mined asteroid, its stormy light washing cold color across the worksite.
+3. A harsh small sun hangs distant and white, casting long hard-edged shadows across the scarred rock and machinery.`,
+  },
+
+  asteroid_mining_hazard: {
+    format: 'simple',
+    theme: `STARBOT ASTEROID-MINING HAZARD — a beat of industrial danger, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct hazards: a blowout venting a jet of gas and debris; a small rockslide off the face; a red warning-klaxon glow washing the site; a near-miss as a rock tumbles past; a flare of a cutting-laser gone wide; a hauler firing thrusters in a tight space; a snapped cable whipping; a smelter overpressure venting flame; sparks raining from a failing weld; a dust-blast obscuring the scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE industrial hazard beat in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A breach blows out a jet of pressurized gas and tumbling debris, the white plume freezing instantly into glittering crystals in the vacuum.
+2. A red warning klaxon-light pulses across the whole worksite, washing the dust and machinery in stuttering crimson.
+3. A chunk of rock breaks free of the face and tumbles slowly past a gantry, missing the working crew by meters.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // COCKPIT-VIEW PATH (2026-06-10 — new StarBot path)
+  // First-person pilot POV through a canopy + HUD.
+  // ════════════════════════════════════════════════════════
+
+  cockpit_view_cockpit: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW COCKPIT — the cockpit interior that FRAMES the first-person shot (foreground). Each entry 20-40 words. The canopy + dash are the foreground frame.
+
+VARIETY MANDATE — ~25 distinct cockpits: a fighter canopy with a curved glass bubble and a glowing angular dashboard; a freighter bridge with a wide flat viewport and worn control banks; a mech cockpit with a wraparound curved screen and exposed mechanics; a helmet visor interior with the HUD on the inside of the glass; a shuttle cockpit with twin seats and soft instrument glow; a capital-ship bridge window with rows of stations behind; a racing-pod's tight reclined cockpit; a salvaged patchwork cockpit. The foreground frame of a first-person view.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cockpit interior (foreground frame) in 20-40 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A fighter's curved glass canopy arcs overhead, the angular dashboard below it glowing with banks of switches and dials, the frame of the bubble dark against the bright view beyond.
+2. A worn freighter bridge with a wide flat viewport, scuffed control banks and overhead toggle-rows framing the foreground, a coffee-stained console in the near dark.
+3. The inside of a pilot's helmet visor, the curved glass close to the camera with the HUD glowing on its inner surface, the view beyond seen through it.`,
+  },
+
+  cockpit_view_hud: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW HUD — the holographic HUD glowing on the canopy glass. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct HUDs: a targeting reticle with lock-on brackets tracking a target; a nav-map with glowing waypoint markers and a course-line; rows of system readouts and warning lights; a velocity-and-altitude ladder; scrolling comms text; a damage-status ship-schematic glowing; alien-glyph translation overlays; a horizon/attitude indicator; range-finder numerals; a radar blip-cluster; a crosshair with leading-pip; throttle and shield bars. Glowing on the glass.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE HUD overlay in 15-30 words, glowing on the glass. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A glowing green targeting reticle tracks across the glass with lock-on brackets snapping onto a distant ship, range numerals ticking down beside it.
+2. A holographic nav-map glows in one corner of the canopy, a course-line threading glowing waypoint markers toward a distant planet.
+3. Rows of amber system-readouts and a damage-schematic of the ship hover on the inside of the glass, one warning light pulsing red.`,
+  },
+
+  cockpit_view_beyond: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW BEYOND — the SCENE seen OUTSIDE through the canopy glass (the bright focal point). Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct views: a dogfight of enemy ships streaking past with tracer fire and explosions; a planet looming large on approach; a docking bay's lit mouth opening ahead; a glowing nebula filling the view; an asteroid field to thread; a colossal capital ship sliding past; a jump-point swirling ahead; a blazing sun low ahead; a fleet in formation; a station ahead; a star-field with a distant world; a debris field. The world beyond the glass.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE view beyond the glass in 20-40 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Beyond the glass a dogfight rages — enemy fighters streak past trailing tracer fire, a ship erupting in a silent blossom of flame against the starfield.
+2. Beyond the canopy a colossal banded planet looms huge on approach, its atmosphere glowing along the limb, a moon hanging beyond it.
+3. Beyond the glass the lit mouth of a docking bay yawns open ahead, guide-lights strobing, the dark hull of a station filling the view around it.`,
+  },
+
+  cockpit_view_detail: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW DETAIL — the foreground cockpit interior detail. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct details: gloved hands gripping the flight stick and throttle; glowing switches and panels along the dash; a dashboard of analog dials; a hanging trinket swaying; the pilot's faint reflection in the canopy; a coffee cup in a holder; scuffed control yokes; a glowing map-slate; toggle rows overhead; a worn seat-edge; a dangling oxygen line; a sticker on the dash. Foreground interior touches.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE foreground cockpit detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Gloved hands grip the flight stick and throttle in the lower foreground, knuckles tight, the controls lit by the glow of the dash.
+2. A small trinket hangs from the canopy frame, swaying gently, catching the colored light of the HUD and the view beyond.
+3. The pilot's faint reflection ghosts across the inside of the canopy glass, overlaid on the bright scene outside.`,
+  },
+
+  cockpit_view_alert: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW ALERT — the alert-state + mood-lighting of the cockpit. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct states: calm blue cruise-lighting; a red-alert klaxon glow washing the cockpit; the warm amber glow of instruments at night; a master-caution light pulsing; the white flash of weapons fire lighting the interior; the colored glow of a planet filling the canopy; a green all-clear; a strobing collision-warning; the soft glow of a nebula tinting the cockpit; near-dark with only HUD glow. The mood-light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alert-state / mood-light in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A red-alert klaxon light pulses through the cockpit, washing the dash and the pilot's hands in stuttering crimson.
+2. The warm amber glow of the instruments lights the dark cockpit softly, the only light but the stars beyond the glass.
+3. The white flash of weapons fire outside strobes through the canopy, throwing hard shifting light across the interior.`,
+  },
+
+  cockpit_view_combat: {
+    format: 'simple',
+    theme: `STARBOT COCKPIT-VIEW COMBAT — a combat/danger beat beyond or around the cockpit, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct beats: an incoming missile-lock warning flashing on the HUD; an explosion blooming outside the canopy; an enemy ship streaking past close; a near-collision swerve; a hull-hit shaking the cockpit with sparks; a wingman's ship erupting; tracer fire crossing the view; a shield-impact flaring on the glass; a target exploding in the reticle; a debris-strike cracking the canopy.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE combat beat in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A missile-lock warning flashes red across the HUD, the reticle strobing as a threat-bracket snaps onto an enemy closing fast beyond the glass.
+2. An explosion blooms just outside the canopy, a silent flower of fire and debris that floods the cockpit with orange light.
+3. An enemy fighter streaks past close beyond the glass, its engines a blur of blue, tracer fire chasing it across the starfield.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SHIP-GRAVEYARD PATH (2026-06-10 — new StarBot path)
+  // Fleet-scale boneyard of dead warships. Melancholy.
+  // ════════════════════════════════════════════════════════
+
+  ship_graveyard_setting: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD SETTING — the fleet-scale boneyard of dead drifting warships that is the hero. Each entry 25-45 words. DEAD, silent, vast — NEVER a working fleet or active battle.
+
+VARIETY MANDATE — ~25 distinct boneyards: hundreds of dead warship hulls drifting in the loose formation they died in; a tangled mass of two wrecked fleets fused together; broken hulls slowly orbiting a dead planet; a vast debris-ring of shattered ships around a moon; rows of snapped cruisers and gutted carriers; a fog-bank of wreckage and frozen debris; a colossal flagship hull split open, smaller wrecks around it; a drifting reef of dead ships caught in a gravity-well. Each silent + dead + fleet-scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE fleet-scale dead boneyard in 25-45 words. Silent + dead — never a working fleet. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Hundreds of dead warship hulls drift in the loose, scattered formation they died in, dark and silent against the stars, hull-breaches gaping, running-lights long dead, debris glittering between them.
+2. Two wrecked fleets lie fused together in a vast tangled mass, hulls speared through one another and frozen in the silent moment of a battle ages over.
+3. Broken hulls orbit a dead grey planet in a slow drifting ring, snapped cruisers and gutted carriers tumbling end over end in the cold light.`,
+  },
+
+  ship_graveyard_wreck: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD WRECK DETAIL — the dead ships up close. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct wreck details: a hull snapped clean in half, decks exposed; a gutted superstructure of twisted girders; frozen explosion-scars blackening the hull; drifting hull-plates and debris; dead running-lights and dark windows; a cracked-open hangar spilling dead fighters; cold silent weapon-batteries; a breach venting frozen vapor; a hull pocked with weapon-impacts; a bridge tower sheared off; a reactor-section blown out; rows of dark portholes. The dead detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE wreck detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great warship hull lies snapped clean in half, its severed decks exposed to the void, girders and cabling trailing from the wound.
+2. A gutted carrier spills its dead fighters from a cracked-open hangar, the little hulls drifting out in a slow frozen stream.
+3. Frozen explosion-scars blacken the flank of a dead cruiser, its hull pocked with weapon-impacts, every window dark and cold.`,
+  },
+
+  ship_graveyard_scale: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD SCALE — the sense of overwhelming vastness. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct scale-cues: wrecks receding rank on rank to the horizon; a colossal flagship hull dominating, smaller wrecks like minnows around it; layers of debris fading into atmospheric haze; the field stretching past a dead moon; thousands of hulls dwindling to specks; a wreck so large it curves away like terrain; a canyon of debris; the boneyard filling the frame edge to edge; depth layers of drifting dead. Overwhelming scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vastness/scale cue in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The wrecks recede rank on rank into the distance, the nearer hulls sharp and the far ones dissolving into a grey haze of countless drifting dead.
+2. A colossal flagship hull dominates the field, kilometers long, smaller wrecks drifting around its broken bulk like minnows around a dead whale of steel.
+3. The boneyard stretches past a dead grey moon, thousands of hulls dwindling to a glittering band of specks against the stars.`,
+  },
+
+  ship_graveyard_explorer: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD EXPLORER — the lone tiny visitor threading the dead fleet. Each entry 12-25 words. TINY against the wrecks.
+
+VARIETY MANDATE — ~25 distinct visitors: a small salvage ship threading the hulls with floodlights; a single EVA figure drifting among the wreckage; a scavenger tug hauling a piece of debris; a survey probe drifting; a lone fighter on patrol; a ship's running-lights tiny in the field; a salvager cutting into a hull; a drone swarm picking the wrecks; a tug pulling a salvaged hull. Always TINY — one small living thing among the dead.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny lone visitor in 12-25 words, dwarfed by the wrecks. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small salvage ship threads slowly between the dead hulls, its floodlights sweeping across the wreckage, a single living mote in the boneyard.
+2. A lone EVA figure drifts among the wreckage, helmet-lamp a tiny spark against the vast dark flank of a dead cruiser.
+3. A scavenger tug hauls a salvaged hull-plate away through the field, dwarfed to a speck beneath the broken ships.`,
+  },
+
+  ship_graveyard_cosmic: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD COSMIC SETTING — the cold backdrop. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct backdrops: a dead grey planet below; a cold distant white sun; a glowing nebula behind the wrecks; a debris-dimmed starfield; the aftermath-cloud of the battle still hanging; a ringed planet beyond; a blood-red dying star; a black void with sparse stars; a green nebula tinting the dead hulls; a far moon; a faint galaxy band. Cold and lonely.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cold cosmic backdrop in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A dead grey planet hangs below the boneyard, cratered and lifeless, its cold light washing weakly over the drifting hulls.
+2. A glowing crimson nebula spreads behind the wrecks, its red light catching their broken edges like the last embers of the battle.
+3. A cold distant sun hangs small and white, casting long hard shadows through the field of dead ships.`,
+  },
+
+  ship_graveyard_eerie: {
+    format: 'simple',
+    theme: `STARBOT SHIP-GRAVEYARD EERIE DETAIL — a haunting beat among the dead, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct beats: a single light still blinking on a dead hull; a slow-tumbling severed bridge-tower; a reactor still faintly glowing in a gutted hull; a drifting insignia-flag or banner; a ghostly distress-signal visualized as a faint pulse; an open airlock with a dark interior; a frozen escape-pod that never launched; a slowly spinning gun-turret; a field of frozen debris like snow; a name still legible on a hull.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE haunting eerie beat in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A single navigation light still blinks slowly on a dead hull, the last flicker of life on a ship that died ages ago.
+2. A severed bridge-tower tumbles slowly end over end through the field, its dark windows catching the cold light as it turns.
+3. Deep in a gutted hull a reactor still glows faintly, a dying ember of heat in the frozen dark of the wreck.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // TERRAFORMING PATH (2026-06-10 — new StarBot path)
+  // A world being born — barren meets living.
+  // ════════════════════════════════════════════════════════
+
+  terraforming_stage: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING STAGE — the world's state of transformation, the hero. Each entry 25-45 words. The drama is the CONTRAST of barren rock meeting new life.
+
+VARIETY MANDATE — ~25 distinct stages: red barren rock with the first patches of green moss; a half-and-half world, green spreading in a tide from the domes; oceans newly filled and still steaming; a sharp storm-front where new atmosphere meets old desert; lichen and moss creeping over bare stone; the first young forests under a thickening hazy sky; rivers cutting fresh channels across the dust; a valley greening while the ridges stay red; tundra giving way to grassland; a coastline where new sea laps red sand. Each shows barren-meets-living.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE terraforming stage in 25-45 words — barren-meets-living contrast. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast red-rock plain freckled with the first spreading patches of green moss and lichen, the living color pooling in the low ground while the high ridges stay barren and rust-colored.
+2. A half-transformed world seen wide — green spreading in a great tide outward from cluster of domes, fading into the old red desert at its edges where the two worlds meet.
+3. Newly filled oceans steam under a young sun, pale mist rising off the fresh seas, raw coastlines of red rock just beginning to green at the waterline.`,
+  },
+
+  terraforming_tech: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING TECH — the machinery remaking the world. Each entry 20-40 words.
+
+VARIETY MANDATE — ~25 distinct terraforming machines: colossal atmosphere-processor towers venting plumes of cloud; a constellation of orbital mirrors beaming concentrated light; clustered domed habitat-colonies; sky-cranes seeding the clouds; vast green-glass greenhouses; weather-control spires crackling; a network of pipelines snaking across the land; water-reclamation plants; ground-based cloud-factories; a ring of climate-towers on the horizon; ice-melting orbital lasers; soil-processor crawlers. Monumental, hopeful tech.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE piece of terraforming machinery in 20-40 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Colossal atmosphere-processor towers rise across the plain, each venting a continuous churning plume of white cloud into the thickening sky, their bases ringed with glowing vents.
+2. A constellation of vast orbital mirrors hangs in the sky, beaming concentrated sunlight down onto the world in shafts that warm the spreading green.
+3. Clusters of green-glass greenhouses and domed habitats glint across the new grassland, pipelines snaking between them carrying water to the raw young soil.`,
+  },
+
+  terraforming_climate: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING CLIMATE DRAMA — the dramatic sky/weather of a world being born. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct climate dramas: a wall of new storm-clouds rolling over the old desert; the first rain falling on red rock; lightning flickering in a thickening atmosphere; a green processing-aurora rippling overhead; a double rainbow arcing over new lakes; dust-haze giving way to blue sky; a sharp line between storm and clear; the first snow on new mountains; a golden dawn through fresh cloud; a tornado of seeded cloud; mist rolling off new seas. The sky of transformation.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE climate/sky drama in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A towering wall of new storm-clouds rolls across the old red desert, the first true weather this world has known, trailing curtains of rain.
+2. The first rain falls on the red rock in silver sheets, pooling in the dust, steam rising where it meets the warm bare stone.
+3. A green processing-aurora ripples across the thickening sky, the visible signature of the new atmosphere being woven overhead.`,
+  },
+
+  terraforming_settlement: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING SETTLEMENT — the human presence, for scale + story. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct settlements: a glinting dome-city on the new grassland; terraced farms climbing a greening slope; a frontier town of prefab buildings; transport-lines threading the land; rows of greenhouses; tiny figures planting saplings; a launch-pad with a waiting ship; a riverside settlement; a wind-farm on a ridge; a colony beneath a dome; a road of crawling vehicle-lights. Small, hopeful, for scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE settlement/human-presence beat in 12-25 words, small for scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A glinting dome-city sits small on the new grassland, its glass catching the sun, transport-lines radiating out across the greening land.
+2. Terraced farms climb a greening slope in neat green steps, tiny figures working the rows, a settlement nestled at the valley floor.
+3. A frontier town of prefab buildings clusters by a new river, its lights warm against the dusk, a launch-pad glowing at its edge.`,
+  },
+
+  terraforming_backdrop: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING BACKDROP — the planetary/cosmic context. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct backdrops: a warming young sun low on the horizon; a large moon in a bluing sky; the curve of the planet seen from a high vantage; orbital mirrors glinting in the sky; a partner-planet hanging large beyond; the old red desert stretching to one horizon; new green to the other; a ringed planet in the sky; a comet; a distant mountain range; a sky shifting from dust-pink to blue. The context of a changing world.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE planetary/cosmic backdrop in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A warming young sun hangs low and gold on the horizon, its light spilling across the new green and the old red rock alike.
+2. A large pale moon hangs in a sky that is just beginning to blue, orbital mirrors glinting like new stars beside it.
+3. A great partner-planet hangs huge in the sky beyond the terraformed valley, banded and serene above the spreading green.`,
+  },
+
+  terraforming_milestone: {
+    format: 'simple',
+    theme: `STARBOT TERRAFORMING MILESTONE — a beat of a world being born, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct milestones: the first rainfall sweeping across the land; an ocean filling a great basin; a forest reaching a ridgeline; an atmosphere-processor igniting in a plume; a green dawn breaking over the new world; a storm breaking to reveal clear blue sky; the first river reaching the sea; a flock of seeded birds rising; ice melting into a new lake; a rainbow over the first harvest. A hopeful turning-point.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE hopeful milestone beat in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The first rainfall sweeps across the new land in a glittering curtain, the long-dead dust drinking it in as the watching settlement looks on.
+2. A new ocean finishes filling a great basin, its surface catching the dawn, raw coastlines greening at its edge for the first time.
+3. An atmosphere-processor ignites for the first time in a towering plume of cloud, a milestone marked by the distant settlement's lights.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DERELICT PATH (2026-06-09 — new StarBot path)
   // Dead abandoned ship/station, lone explorer's flashlight.
   // Alien / Dead-Space awe-horror. Darker tonal register.

@@ -31,6 +31,11 @@ const pathBuilders = {
   'crystalline-world': require('./paths/crystalline-world'),
   derelict: require('./paths/derelict'),
   leviathan: require('./paths/leviathan'),
+  'orbital-descent': require('./paths/orbital-descent'),
+  'asteroid-mining': require('./paths/asteroid-mining'),
+  'cockpit-view': require('./paths/cockpit-view'),
+  'ship-graveyard': require('./paths/ship-graveyard'),
+  terraforming: require('./paths/terraforming'),
 };
 
 module.exports = {
@@ -369,6 +374,12 @@ module.exports = {
     // NEW 2026-06-09 — leviathan: colossal living alien, first contact. Purely
     // organic biology (no space whales). Pools scaled to 200 (Kevin-approved).
     'leviathan',
+    // NEW 2026-06-10 — second wave (MVP-25, seed-test-then-scale):
+    'orbital-descent', // world from orbit, tiny craft on approach
+    'asteroid-mining', // gritty blue-collar industrial space
+    'cockpit-view', // first-person pilot POV through canopy + HUD
+    'ship-graveyard', // fleet-scale boneyard of dead warships
+    'terraforming', // a world being born — barren meets living
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
@@ -393,6 +404,11 @@ module.exports = {
       'crystalline-world',
       'derelict',
       'leviathan',
+      'orbital-descent',
+      'asteroid-mining',
+      'cockpit-view',
+      'ship-graveyard',
+      'terraforming',
     ],
     allowSubjectChaosPaths: [
       'cosmic-vista',
@@ -432,6 +448,11 @@ module.exports = {
       'crystalline-world',
       'derelict',
       'leviathan',
+      'orbital-descent',
+      'asteroid-mining',
+      'cockpit-view',
+      'ship-graveyard',
+      'terraforming',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -507,6 +528,13 @@ module.exports = {
       derelict: 'scene',
       // leviathan is a deep-space encounter (vacuum) — scene.
       leviathan: 'scene',
+      // 2nd wave: vacuum/space paths use the lightcolor-only spacewalk context
+      // (no gravity/air anchors); terraforming has atmosphere → scene.
+      'orbital-descent': 'spacewalk',
+      'asteroid-mining': 'spacewalk',
+      'cockpit-view': 'spacewalk',
+      'ship-graveyard': 'spacewalk',
+      terraforming: 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

@@ -281,6 +281,126 @@ ZERO-G MANDATE — the figure FLOATS. No "feet on ground", no standing pose, no 
     anchorScaleRange: null,
   },
 
+  ORBITAL_DESCENT: {
+    description: `PATH-BESPOKE — StarBot orbital-descent path (2026-06-10, new). A world seen from ORBIT — the great curve of an alien planet filling the frame, its terminator line, city-lights on the night side, a razor-thin atmosphere glow, a ship/capsule on approach. "Looking down at a world from space." The PLANET-FROM-ORBIT is the hero; a tiny craft sells the descent.
+
+5 bespoke slots + 1 conditional event (40%-gated). Fully path-bespoke (vacuum vista):
+  • planet_type     — THE hero world from orbit (ice world / ocean world / lava world / ringed / terraformed-green / banded cloud world / desert / storm-wracked / ecumenopolis city-world / cracked volcanic)
+  • surface_detail  — what's visible on the surface (swirling cyclones / shadowed mountain ranges / a vast canyon / polar caps / glowing lava rivers / city-light webs on the night side / a great impact crater)
+  • atmosphere_glow — the bright thin atmosphere arc + terminator (a razor blue atmosphere line / sunrise breaking over the limb / the day-night terminator / a glowing auroral ring / storm-lightning in the clouds)
+  • approach_craft  — the descending ship/capsule for scale + narrative (a re-entry capsule trailing plasma / a sleek shuttle banking / a colony lander / a fleet entering orbit / a dropship with glowing heat-shield / an orbital station in foreground)
+  • space_backdrop  — above/around the planet (black of space + stars / a moon / a distant sun / a nebula / rings / the galaxy band)
+
+  • CONDITIONAL (40% gate): descent_event — a beat (re-entry plasma trail / a meteor burning in the atmosphere below / an orbital sunrise flare / a second ship / a satellite glinting)
+
+ORBIT MANDATE — the planet's CURVE fills the frame, seen from above in vacuum; the craft is small. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['planet_type', 'surface_detail', 'atmosphere_glow', 'approach_craft', 'space_backdrop'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'descent_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  ASTEROID_MINING: {
+    description: `PATH-BESPOKE — StarBot asteroid-mining path (2026-06-10, new). Gritty BLUE-COLLAR industrial sci-fi — a mining rig carving an asteroid, refineries, ore-haulers, floodlights, sparks. The Nostromo / Expanse working-class-space register StarBot completely lacks. Worn, lived-in, industrial.
+
+5 bespoke slots + 1 conditional hazard (40%-gated). Fully path-bespoke (gritty vacuum industry):
+  • mining_setting   — THE hero operation (a colossal asteroid being carved open / a strip-mined rock face / a refinery platform bolted to a rock / a hollowed-out asteroid interior packed with machinery / a drill-rig boring a shaft / a processing station)
+  • industrial_detail — the gritty machinery (scaffolding & gantries / ore conveyors / glowing smelters / venting exhaust / floodlight towers / fuel tanks / docked battered haulers / pipework & cabling / hazard stripes / worn scarred equipment)
+  • mining_action    — what's happening (a laser-cutter carving rock with a shower of sparks / a hauler loading ore / a blast charge detonating / a drill boring / a crane swinging cargo / a swarm of mining drones)
+  • worker_presence  — the human scale (a tiny suited miner with a tool / a crew on a gantry / a foreman silhouette / an EVA team — small + grubby against the industrial scale)
+  • belt_setting     — the surroundings (an asteroid belt of drifting rocks / a harsh small distant sun / a gas giant looming / the black of space / a distant refinery fleet / dust & debris)
+
+  • CONDITIONAL (40% gate): hazard_event — a beat (a blowout venting gas / a rockslide / a warning-klaxon glow / a near-miss with debris / a flare of cutting-laser / a hauler thruster burn)
+
+GRITTY MANDATE — worn, industrial, blue-collar, scarred metal and floodlit dust — NOT a sleek clean starship. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['mining_setting', 'industrial_detail', 'mining_action', 'worker_presence', 'belt_setting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'hazard_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  COCKPIT_VIEW: {
+    description: `PATH-BESPOKE — StarBot cockpit-view path (2026-06-10, new). FIRST-PERSON from INSIDE a cockpit/canopy/helmet — HUD overlays on the glass, the dashboard and hands in the foreground, looking OUT at space / a dogfight / a docking. The immersive "you are the pilot" framing none of the other paths use.
+
+5 bespoke slots + 1 conditional event (40%-gated). Fully path-bespoke:
+  • cockpit_type   — the cockpit interior framing the shot (a fighter canopy with a glowing dash / a freighter bridge viewport / a mech cockpit wraparound screen / a helmet visor interior / a shuttle cockpit / a capital-ship bridge window)
+  • hud_overlay    — the holographic HUD on the glass (targeting reticle & lock-on brackets / nav-map & waypoints / system readouts & warning lights / a velocity ladder / comms text / a damage schematic / alien-glyph translations)
+  • view_beyond    — what's OUTSIDE the glass — the scene (a dogfight with enemy ships & tracer fire / a planet on approach / a docking bay opening / a nebula / an asteroid field to thread / a capital ship looming / a jump-point / a star)
+  • cockpit_detail — the foreground interior (gloved hands on the stick/throttle / glowing switches & panels / a dashboard of dials / a trinket / reflections on the glass / the pilot's faint reflection)
+  • alert_state    — the mood-light (calm blue cruise / red-alert klaxon glow / warm instrument night-glow / amber master-caution / the white flash of weapons fire outside / a planet's glow filling the canopy)
+
+  • CONDITIONAL (40% gate): combat_event — a beat (an incoming missile-lock warning / an explosion outside the canopy / an enemy ship streaking past / a near-collision / a hull-hit shaking the cockpit)
+
+FIRST-PERSON MANDATE — the camera is INSIDE the cockpit; the canopy frame + HUD + dash are the foreground, looking OUT. NEVER a third-person shot of a ship. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['cockpit_type', 'hud_overlay', 'view_beyond', 'cockpit_detail', 'alert_state'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'combat_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  SHIP_GRAVEYARD: {
+    description: `PATH-BESPOKE — StarBot ship-graveyard path (2026-06-10, new). A vast boneyard of dead warships drifting from a battle long over, a lone explorer threading the silent hulls. Derelict's eerie tone but FLEET-scale — hundreds of wrecks, melancholy and awe.
+
+5 bespoke slots + 1 conditional event (40%-gated). Fully path-bespoke (silent vacuum):
+  • graveyard_setting — THE hero boneyard (hundreds of dead warship hulls drifting / a tangled mass of wrecked fleets / broken hulls around a dead planet / a debris-ring of shattered ships / snapped cruisers & gutted carriers / a fog of wreckage)
+  • wreck_detail      — the dead ships up close (snapped-in-half hulls / gutted superstructures / frozen explosion-scars / drifting hull-plates / dead running-lights / a cracked hangar spilling fighters / cold weapon-batteries / venting breaches)
+  • graveyard_scale   — the vastness (wrecks receding to the horizon / a colossal flagship hull dominating / layers of debris in haze / the field past a dead moon / thousands of hulls)
+  • explorer_craft    — the lone visitor (a small salvage ship threading the hulls with floodlights / a single EVA figure drifting among wreckage / a scavenger tug / a survey probe — tiny against the dead fleet)
+  • cosmic_setting    — the backdrop (a dead grey planet below / a cold distant sun / a nebula glowing behind the wrecks / a debris-dimmed starfield / a ringed planet)
+
+  • CONDITIONAL (40% gate): eerie_detail — a beat (a single light still blinking on a dead hull / a slow-tumbling severed bridge / a reactor still faintly glowing / a drifting insignia-flag / a ghostly distress signal)
+
+GRAVEYARD MANDATE — silent, vast, cold, melancholy — a field of the dead at fleet scale, the visitor tiny. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['graveyard_setting', 'wreck_detail', 'graveyard_scale', 'explorer_craft', 'cosmic_setting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'eerie_detail', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  TERRAFORMING: {
+    description: `PATH-BESPOKE — StarBot terraforming path (2026-06-10, new). A half-remade world being born — atmosphere processors venting, domes, green creeping across red rock, a storm-wall where the new climate fights the old. Hopeful, epic-scale transformation.
+
+5 bespoke slots + 1 conditional milestone (40%-gated):
+  • terraform_stage — THE world's state (red barren rock with first green patches / half-and-half, green spreading from domes / oceans newly filled and steaming / a storm-front where new atmosphere meets old desert / lichen creeping over stone / the first forests under a thickening sky)
+  • terraform_tech  — the machinery doing it (colossal atmosphere-processor towers venting clouds / orbital mirrors beaming light / domed habitat colonies / sky-cranes seeding clouds / vast greenhouses / weather-control spires / pipelines)
+  • climate_drama   — the sky/weather of a world being born (a wall of new storm-clouds rolling over desert / the first rain on red rock / lightning in a thickening atmosphere / a green processing-aurora / a rainbow over new lakes / dust giving way to cloud)
+  • settlement      — the human presence (a glinting dome-city / terraced farms on new soil / a frontier town / transport lines / greenhouses / tiny figures planting / a launch-pad)
+  • world_backdrop  — the planetary/cosmic context (a warming sun / a moon / the planet's curve / orbital mirrors glinting / a partner-planet in the sky / old red desert vs new green)
+
+  • CONDITIONAL (40% gate): milestone_event — a beat (the first rainfall / an ocean filling a basin / a forest reaching a ridge / an atmosphere-processor igniting / a green dawn breaking / a storm breaking to clear sky)
+
+TRANSFORMATION MANDATE — a world MID-CHANGE: barren-meets-living, the machinery + the spreading green + the dramatic new-climate sky. Hopeful, epic. Photoreal cinematic on the bot's default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['terraform_stage', 'terraform_tech', 'climate_drama', 'settlement', 'world_backdrop'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'milestone_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DERELICT: {
     description: `PATH-BESPOKE — StarBot derelict-exploration path (2026-06-09, new). A drifting abandoned/dead spacecraft or station, a lone explorer's flashlight beam cutting the dark, eerie awe-horror in the Alien / Dead-Space / Event-Horizon tradition. Adds a DARKER tonal register StarBot lacks, with built-in narrative ("what happened here?"). The dead structure + the explorer's light are the show.
 

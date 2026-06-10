@@ -900,6 +900,234 @@ Every entry you pull from the axes above must be NAMED IN THE PROMPT with a coun
 Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the scene content.`;
   },
 
+  ORBITAL_DESCENT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { planet_type, surface_detail, atmosphere_glow, approach_craft, space_backdrop, descent_event } = slots;
+    const eventSection = descent_event
+      ? `\n━━━ DESCENT EVENT — a beat (in the sky / on approach) ━━━\n${descent_event}\n\n`
+      : '';
+    return `You are a sci-fi concept-art painter writing an ORBITAL VISTA for StarBot — a tiny craft descending toward an alien world seen from ORBIT, the planet's great curve filling the frame from above. Think the breathtaking "approaching a world from space" shot. Output wraps with style prefix + suffix.
+
+━━━ FROM ORBIT — ABSOLUTE FIRST RULE ━━━
+The camera is IN SPACE, high above the planet, looking DOWN. The world's CURVE fills most of the frame as a colossal sphere below; the black of space is above. NEVER a ground-level landscape — this is the view from orbit, the planet seen as a whole curved world.
+
+━━━ THE WORLD (the hero, seen from orbit) ━━━
+${planet_type}
+
+━━━ SURFACE DETAIL VISIBLE FROM ABOVE ━━━
+${surface_detail}
+
+━━━ ATMOSPHERE GLOW + TERMINATOR ━━━
+${atmosphere_glow}
+
+The thin bright arc of atmosphere rims the planet's curve; render the terminator/sunrise line where day meets night.
+
+━━━ THE APPROACHING CRAFT (a CLEAR readable accent — sells the descent + scale) ━━━
+${approach_craft}
+
+This craft MUST be clearly visible in the frame — a sharp readable silhouette catching the light (engine-glow, plasma-trail, or sun-glint making it pop). It is small against the colossal planet but a DISTINCT focal accent, not lost. Render it unmistakably.
+
+━━━ SPACE BACKDROP (above + around) ━━━
+${space_backdrop}
+${eventSection}━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide orbital shot, the planet's curve filling the lower/major portion of the frame, the thin atmosphere arc and terminator clear, the craft small on approach, the black of space and stars beyond. Breathtaking scale. NEVER a ground-level horizon landscape — always the curved world seen from orbit.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a breathtaking view from orbit of a tiny craft approaching a colossal alien world, the planet's curve filling the frame — the world-from-orbit leads], [the world's surface detail from above], [the thin atmosphere arc + terminator], [the small approaching craft], [the black of space + backdrop], [palette + awestruck mood]
+
+CRITICAL — render the EXACT slot-pool details above. The planet is seen FROM ORBIT (curved, from above), the craft is SMALL. Do NOT render a ground-level landscape.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  ASTEROID_MINING: ({ slots, sharedDNA, vibeDirective }) => {
+    const { mining_setting, industrial_detail, mining_action, worker_presence, belt_setting, hazard_event } = slots;
+    const eventSection = hazard_event
+      ? `\n━━━ HAZARD EVENT — a beat of industrial danger ━━━\n${hazard_event}\n\n`
+      : '';
+    return `You are a sci-fi concept-art painter writing a GRITTY INDUSTRIAL asteroid-mining scene for StarBot — blue-collar working-class space in the Nostromo / Expanse tradition. Worn, scarred, floodlit, lived-in machinery carving a rock in the void. NOT a sleek clean starship — this is a hard, dirty job. Output wraps with style prefix + suffix.
+
+━━━ GRITTY + INDUSTRIAL — ABSOLUTE FIRST RULE ━━━
+Everything is WORN, scarred, utilitarian, blue-collar — battered metal, floodlit dust, exposed pipework, hazard stripes, grime. This is heavy industry in space, not a gleaming spaceship. Functional, hard-used, real.
+
+━━━ THE MINING OPERATION (the hero) ━━━
+${mining_setting}
+
+━━━ INDUSTRIAL DETAIL (the gritty machinery) ━━━
+${industrial_detail}
+
+━━━ THE ACTION (mining happening now) ━━━
+${mining_action}
+
+━━━ THE WORKERS (small, grubby — human scale) ━━━
+${worker_presence}
+
+━━━ THE BELT SETTING (surroundings) ━━━
+${belt_setting}
+${eventSection}━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic industrial film-still — harsh floodlights cutting the dark, volumetric dust, deep shadow, scarred metal, sparks. The mining structure dominates; workers are small. Gritty, hard-used, atmospheric. NEVER a clean sleek spaceship, NEVER a pristine surface.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a gritty industrial mining operation carving an asteroid in deep space, floodlit and scarred — the industrial operation leads], [the worn machinery + gantries + pipework], [the mining action with sparks/dust], [tiny grubby workers for scale], [the asteroid belt setting], [harsh floodlight, dust, deep shadow], [palette + hard working mood]
+
+CRITICAL — render the EXACT slot-pool details above. WORN + INDUSTRIAL + blue-collar, NOT a sleek clean starship.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  COCKPIT_VIEW: ({ slots, sharedDNA, vibeDirective }) => {
+    const { cockpit_type, hud_overlay, view_beyond, cockpit_detail, alert_state, combat_event } = slots;
+    const eventSection = combat_event
+      ? `\n━━━ COMBAT EVENT — a beat beyond/around the cockpit ━━━\n${combat_event}\n\n`
+      : '';
+    return `You are a sci-fi concept-art painter writing a FIRST-PERSON COCKPIT POV for StarBot — the view from INSIDE a cockpit, canopy frame and glowing HUD in the foreground, looking OUT at space. Immersive "you are the pilot." Output wraps with style prefix + suffix.
+
+━━━ FIRST-PERSON COCKPIT POV — ABSOLUTE FIRST RULE ━━━
+The camera is INSIDE the cockpit, looking OUT through the canopy/viewport. The cockpit frame, dashboard, and holographic HUD are the FOREGROUND, framing the shot; the scene beyond is seen THROUGH the glass. This is a first-person pilot's-eye view — NEVER a third-person external shot of a ship.
+
+━━━ THE COCKPIT (foreground frame) ━━━
+${cockpit_type}
+
+━━━ THE HUD ON THE GLASS ━━━
+${hud_overlay}
+
+Render the holographic HUD glowing on the inside of the canopy — reticles, readouts, markers floating over the view.
+
+━━━ WHAT'S BEYOND THE GLASS (the scene outside) ━━━
+${view_beyond}
+
+━━━ COCKPIT INTERIOR DETAIL (foreground) ━━━
+${cockpit_detail}
+
+━━━ ALERT STATE + MOOD-LIGHT ━━━
+${alert_state}
+${eventSection}━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+First-person POV: the dark cockpit interior + canopy frame + glowing HUD fill the foreground edges, the scene beyond the glass is the bright focal point. Instrument-glow lighting on the foreground. Immersive, you-are-there. NEVER a third-person external view of the ship.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a first-person view from inside a cockpit looking out through the canopy, HUD glowing on the glass — the cockpit POV leads], [the HUD reticles + readouts on the glass], [the scene beyond the glass], [foreground cockpit interior — hands, dash, switches], [alert state + instrument-glow light], [palette + mood]
+
+CRITICAL — this is a FIRST-PERSON cockpit POV with the canopy + HUD in the foreground. Do NOT render an external third-person shot of a ship.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  SHIP_GRAVEYARD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { graveyard_setting, wreck_detail, graveyard_scale, explorer_craft, cosmic_setting, eerie_detail } = slots;
+    const eventSection = eerie_detail
+      ? `\n━━━ EERIE DETAIL — a haunting beat among the dead ships ━━━\n${eerie_detail}\n\n`
+      : '';
+    return `You are a sci-fi concept-art painter writing a SHIP-GRAVEYARD scene for StarBot — a vast silent boneyard of dead warships drifting from a battle long over, a lone explorer threading the wrecks. Melancholy, vast, cold, awe-inspiring. Output wraps with style prefix + suffix.
+
+━━━ A FIELD OF THE DEAD — ABSOLUTE FIRST RULE ━━━
+Hundreds of BROKEN, GUTTED, POWERLESS STARSHIP hulls drift weightless and silent in the airless black VACUUM of deep space — a fleet-scale graveyard. These are dead spacecraft: snapped in half, hull-breached, scorched, DARK with every light and engine cold and DEAD. They tumble at dead angles in zero gravity. NEVER lit, powered, or active; NEVER a working fleet or a battle in progress; NEVER floating on water or an ocean (this is the vacuum of space) — this is the silent aftermath of a battle long over. The only living thing is the tiny lone explorer.
+
+━━━ THE GRAVEYARD (the hero boneyard) ━━━
+${graveyard_setting}
+
+━━━ WRECK DETAIL (the dead ships up close) ━━━
+${wreck_detail}
+
+━━━ THE VAST SCALE ━━━
+${graveyard_scale}
+
+━━━ THE LONE EXPLORER (tiny — threads the dead fleet) ━━━
+${explorer_craft}
+
+Keep this TINY against the vast field of wrecks — a single small visitor among the dead.
+
+━━━ COSMIC SETTING (backdrop) ━━━
+${cosmic_setting}
+${eventSection}━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide vista, hundreds of dead hulls drifting in layers into atmospheric haze, the lone explorer tiny among them, cold low light, deep shadow. Silent, vast, melancholy, awe. NEVER a working fleet or an active battle.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a vast silent graveyard of dead drifting warships, a tiny explorer threading the wrecks — the boneyard leads], [the wrecked hull detail], [the vast fleet-scale receding into haze], [the tiny lone explorer], [the cold cosmic backdrop], [palette + melancholy awestruck mood]
+
+CRITICAL — render the EXACT slot-pool details above. DEAD wrecks, fleet-scale, a TINY explorer. Do NOT render a working fleet or an active battle.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  TERRAFORMING: ({ slots, sharedDNA, vibeDirective }) => {
+    const { terraform_stage, terraform_tech, climate_drama, settlement, world_backdrop, milestone_event } = slots;
+    const eventSection = milestone_event
+      ? `\n━━━ MILESTONE EVENT — a beat of a world being born ━━━\n${milestone_event}\n\n`
+      : '';
+    return `You are a sci-fi concept-art painter writing a TERRAFORMING vista for StarBot — a half-remade alien world being brought to life, machinery and spreading green fighting the old barren rock. Hopeful, epic-scale transformation. Output wraps with style prefix + suffix.
+
+━━━ A WORLD MID-TRANSFORMATION — ABSOLUTE FIRST RULE ━━━
+This world is BEING CHANGED — barren rock meets new life. The drama is the CONTRAST: red desert giving way to green, machinery remaking the sky, the old world and the new world visible in the same frame. Hopeful and epic.
+
+━━━ THE WORLD'S STAGE OF TRANSFORMATION (the hero) ━━━
+${terraform_stage}
+
+━━━ THE TERRAFORMING MACHINERY ━━━
+${terraform_tech}
+
+━━━ THE NEW-CLIMATE SKY + WEATHER ━━━
+${climate_drama}
+
+━━━ THE SETTLEMENT (human presence) ━━━
+${settlement}
+
+━━━ PLANETARY / COSMIC BACKDROP ━━━
+${world_backdrop}
+${eventSection}━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Cinematic epic-scale vista — the barren-meets-living contrast clear, terraforming machinery monumental, the spreading green and the dramatic new-climate sky, settlements small for scale. Hopeful, awe, transformation. Show BOTH the old barren world and the new living one in tension.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — an epic vista of a half-terraformed alien world, barren red rock giving way to spreading green, terraforming machinery remaking the sky — the transforming world leads], [the terraforming machinery], [the dramatic new-climate sky/weather], [small settlements for scale], [the planetary/cosmic backdrop], [palette + hopeful epic mood]
+
+CRITICAL — render the EXACT slot-pool details above. A world MID-CHANGE (barren-meets-living), with the machinery + green + dramatic sky.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DERELICT: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       derelict_setting,
