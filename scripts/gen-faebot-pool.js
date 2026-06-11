@@ -4176,26 +4176,29 @@ THE VIBE: a tiny fae and her cute animal friend together — sweet, gentle, char
 
 FAE + CRITTER INTERACTION — show them together: the fae riding on its back, nestled in its fur, petting its head, feeding it a berry, booping its nose, sharing a flower, napping against it, whispering to it, hugging it, offering it a dewdrop.
 
-CRITTER VARIETY (whole, adorable, gentle — wide range): robin / wren / bluebird / chickadee / hummingbird / owl-fledgling / duckling / red squirrel / chipmunk / bunny / baby rabbit / baby fawn / deer / hedgehog / dormouse / field-mouse / hamster / mole / red fox cub / tree-frog / green frog / spotted salamander / newt / turtle / a big friendly butterfly, moth or dragonfly she rides. Gentle, curious, sleepy or playful — never scary.
+CRITTER VARIETY — bias HEAVILY toward cute CUDDLY (furry) and FEATHERED critters; amphibians/reptiles are an OCCASIONAL MINORITY only (roughly 1 in 8 entries, no more).
+  MAIN (most entries — furry + feathered cuties): baby bunny / rabbit / baby fawn / deer / red squirrel / chipmunk / hedgehog / dormouse / field-mouse / hamster / red fox cub / mole / robin / wren / bluebird / chickadee / sparrow / hummingbird / owl-fledgling / duckling.
+  RARE / SPARING (only occasionally): a tree-frog / toad / spotted salamander / newt / turtle, or a big friendly butterfly or moth she rides.
+Gentle, curious, sleepy or playful — never scary.
 
 BANS: NO disembodied / cropped body parts; NO single body part (ear / eye / nose / paw) filling or dominating the frame — the WHOLE critter is always visible and makes anatomical sense. NO "dwarfing / looming / scary" framing. NO description of the fae herself (separate axis). NO extra fae. NO predators mid-hunt.
 
 EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae is WITH it + soft painted tactile detail (fur / feathers / smooth skin) + a cosy charming heartwarming mood.`,
     touchpoints: [
-      'A round red robin perched whole on a mossy log, plump orange breast and bright eye, the palm-sized fae sitting beside it gently petting its feathered chest, the two sharing a cosy moment, soft painted plumage, heartwarming and sweet',
-      'A fluffy baby rabbit sitting complete in the clover, soft grey fur and long ears, the palm-sized fae nestled against its warm side hugging it, the whole bunny calm and content, tender storybook charm',
+      'A fluffy grey baby rabbit sitting complete in the clover, soft velvet ears and a twitching nose, the palm-sized fae nestled against its warm side hugging it, the whole bunny calm and content, tender storybook charm',
       'A spotted baby fawn lying folded whole in the ferns, big gentle eyes and a soft dappled coat, the palm-sized fae perched on its back stroking its neck, the whole little deer dozing peacefully, adorable and warm',
-      'A tiny hummingbird hovering whole at a flower, iridescent green-and-ruby feathers, the palm-sized fae floating beside it eye-to-eye offering a dewdrop, the whole bird bright and quick, sweet and magical',
-      'A green tree-frog sitting complete on a lily-pad, round eyes and glistening skin, the palm-sized fae seated beside it on the same pad gently booping its nose, the whole frog calm and curious, charming and funny',
       'A red squirrel sitting whole on a stump nibbling an acorn, bright fur and a big bushy tail, the palm-sized fae perched beside it sharing a berry, the whole squirrel cheerful, cosy woodland friendship',
-      'A sleepy owl-fledgling perched whole on a branch, fluffy grey down and round half-closed eyes, the palm-sized fae snuggled against its soft chest, the whole little owl drowsy and content, tender and warm',
-      'A spotted salamander resting whole on a wet leaf, glossy black-and-yellow skin, the palm-sized fae crouched beside it tracing its spots in wonder, the whole salamander placid, sweet and curious',
+      'A plump red robin perched whole on a mossy log, round orange breast and a bright eye, the palm-sized fae sitting beside it gently petting its feathered chest, the two sharing a sweet moment, soft painted plumage',
+      'A tiny hummingbird hovering whole at a flower, iridescent green-and-ruby feathers, the palm-sized fae floating beside it eye-to-eye offering a dewdrop, the whole bird bright and quick, sweet and magical',
       'A plump hedgehog ambling whole across the moss, soft quills and a little pointed face, the palm-sized fae walking alongside holding its tiny paw, the whole hedgehog snuffling happily, adorable companionship',
-      'A fluffy yellow duckling paddling whole at the pond edge, downy and bright-eyed, the palm-sized fae riding gently on its back, the whole duckling cheerful in the ripples, charming and bright',
+      'A sleepy owl-fledgling perched whole on a branch, fluffy grey down and round half-closed eyes, the palm-sized fae snuggled against its soft chest, the whole little owl drowsy and content, tender and warm',
+      'A round golden hamster sitting whole stuffing its cheeks with a seed, soft fur and bright eyes, the palm-sized fae giggling beside it offering another seed, the whole hamster plump and adorable, cosy and funny',
       'A golden dormouse curled whole and asleep in a leafy hollow, full furry body and tail, the palm-sized fae nestled against its side napping too, the whole little mouse breathing softly, cosy and tender',
-      'A friendly swallowtail butterfly resting whole with wings open on a bloom, the palm-sized fae sitting on its back between the spread wings, the whole butterfly gentle, a sweet little garden ride',
-      'A tiny round hamster sitting whole stuffing its cheeks with a seed, soft golden fur, the palm-sized fae giggling beside it offering another seed, the whole hamster plump and adorable, cosy and funny',
-      'A little turtle ambling whole along the moss, patterned shell and gentle face, the palm-sized fae riding on its shell waving happily, the whole turtle slow and content, charming and sweet',
+      'A fluffy yellow duckling paddling whole at the pond edge, downy and bright-eyed, the palm-sized fae riding gently on its back, the whole duckling cheerful in the ripples, charming and bright',
+      'A chipmunk sitting whole on a stone holding an acorn, striped back and full bushy tail, the palm-sized fae standing beside it waving, the whole chipmunk cheeky and cute, sweet woodland friendship',
+      'A red fox cub curled whole and sleepy in the moss, soft russet fur and a white-tipped tail, the palm-sized fae nestled against its warm flank, the whole little fox dozing gently, tender and cosy',
+      'A little bluebird perched whole on a twig, bright blue feathers and a round chest, the palm-sized fae sitting beside it whispering, the whole bird cheerful and listening, sweet and warm',
+      'A green tree-frog sitting complete on a lily-pad, round eyes and glistening skin, the palm-sized fae seated beside it gently booping its nose, the whole frog calm and curious, charming and funny',
     ],
     instructions: `Each entry is ONE adorable WHOLE forest critter the fae is WITH as a friend, 30-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) a specific cute critter shown COMPLETE and recognizable (whole head + body, anatomically sensible), (b) the sweet way the fae is WITH it (petting / riding / cuddling / feeding / sitting beside / booping / napping against / hugging), (c) soft painted tactile detail, (d) a cosy charming heartwarming mood. HARD BAN: disembodied or cropped body parts; any single body part filling or dominating the frame; "dwarfing / looming / scary" framing. NO predators hunting. NO description of the fae. Output as a NUMBERED list (1. ... 2. ...), one entry per line, no internal newlines.`,
   },
