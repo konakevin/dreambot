@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── mythic-bestiary path (2026-06-10, NEW, Tier 2) — monster portraits. MVP-25. ───
+  BESTIARY_CREATURE: load('bestiary_creature'),
+  BESTIARY_ACTION: load('bestiary_action'),
+  BESTIARY_HABITAT: load('bestiary_habitat'),
+  BESTIARY_ENCOUNTER: load('bestiary_encounter'),
+  BESTIARY_DRAMA: load('bestiary_drama'),
+
   // ─── magic-unleashed path (2026-06-10, NEW, Tier 2) — colossal spell. MVP-25. ───
   MAGIC_SPELL_EVENT: load('magic_spell_event'),
   MAGIC_CASTER: load('magic_caster'),

@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  MYTHIC_BESTIARY: {
+    description:
+      'PATH-BESPOKE — DragonBot mythic-bestiary path (2026-06-10, Tier 2). A hero portrait of ONE great NON-DRAGON mythic creature (griffon, kraken, phoenix, hydra, treant, etc.) — the creature is the star. Path-bespoke: creature + creature_action + habitat + encounter + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['creature', 'creature_action', 'habitat', 'encounter'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MAGIC_UNLEASHED: {
     description:
       'PATH-BESPOKE — DragonBot magic-unleashed path (2026-06-10, Tier 2). A COLOSSAL spell event — a wizard/sorcerer unleashing world-shaking magic (summoning, portal-tear, wizard duel, forbidden ritual, meteor-call). Arcane spectacle the star. Path-bespoke: spell_event + caster + magic_effect + setting + drama (40% gated). Universal lighting + atmosphere reused.',

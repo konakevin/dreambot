@@ -29,7 +29,7 @@
 | 6 | 1 | dragon-breeds | ✅ | ✅ | ✅ | 0 | ✅ | scaling |
 | 7 | 2 | clash-of-armies | ✅ | ✅ | ✅ | 1 | ✅ | scaling |
 | 8 | 2 | magic-unleashed | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
-| 9 | 2 | mythic-bestiary | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 9 | 2 | mythic-bestiary | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 10 | 2 | fae-court | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 11 | 2 | dungeon-delve | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 12 | 2 | necromancer | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |

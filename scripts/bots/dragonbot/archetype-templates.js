@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MYTHIC_BESTIARY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, creature, creature_action, habitat, encounter, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a BESTIARY PORTRAIT of a great mythical CREATURE for DragonBot — a monster-manual hero shot of ONE legendary NON-DRAGON beast. Frank Frazetta + Brom + Michael Whelan painted-fantasy oil tradition. D&D / mythology / Warhammer creature spectacle. The scene should make the viewer GASP.
+
+━━━ ONE MAGNIFICENT CREATURE — ABSOLUTE FIRST RULE ━━━
+This is a HERO PORTRAIT of ONE single mythic creature — large in the frame, its anatomy and features rendered in crisp, loving detail. NOT a dragon (this path is for OTHER legendary beasts). NOT a flock — ONE creature, the unmistakable star.
+
+━━━ THE CREATURE (the species + its signature features) ━━━
+${creature}
+
+Render the creature's EXACT anatomy + texture + signature features in rich detail — this is what the portrait showcases. Make it majestic and believable.
+
+━━━ THE CREATURE'S ACTION / POSE ━━━
+${creature_action}
+
+A loaded, characterful pose — rearing, emerging, roaring, prowling, or regal — full of presence.
+
+━━━ THE HABITAT (its native biome, behind it) ━━━
+${habitat}
+
+Render the habitat with atmospheric depth behind the creature — it frames and identifies it without stealing focus.
+
+━━━ THE ENCOUNTER (a tiny figure for scale) ━━━
+${encounter}
+
+A small distant figure (adventurer / knight / traveller) gives scale — dwarfed by the creature, never competing with it.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood — it must NEVER warp the creature's anatomy or proportions.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, reverent. ONE magnificent mythic creature fills the frame as a hero portrait, its features crisp and detailed, the habitat receding behind with depth, a tiny figure for scale. A monster-manual hero shot. NEVER a dragon; NEVER a tiny distant creature.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — ONE magnificent mythic creature, DOING THE ACTION, in its habitat — the single hero creature leads], [the creature's exact anatomy + texture + signature features], [the pose], [the habitat behind with depth], [a tiny figure for scale], [lighting + atmosphere], [palette + reverent epic mood]
+
+CRITICAL — render ONE magnificent NON-DRAGON mythic creature as a detailed hero portrait. Do NOT render a dragon, a flock, or a tiny distant creature.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   MAGIC_UNLEASHED: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, spell_event, caster, magic_effect, setting, drama } = slots;
 

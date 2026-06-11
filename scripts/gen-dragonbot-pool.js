@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // MYTHIC-BESTIARY PATH (2026-06-10 — new, Tier 2). A portrait
+  // of ONE great non-dragon mythic creature.
+  // ════════════════════════════════════════════════════════
+
+  bestiary_creature: {
+    format: 'simple',
+    theme: `DRAGONBOT MYTHIC-BESTIARY — the great NON-DRAGON mythic CREATURE + its signature features (the STAR). Each entry 35-55 words. NOT a dragon — these are OTHER legendary beasts. Render majestic, believable anatomy.
+
+VARIETY MANDATE — ~25 distinct mythic creatures (NO dragons): a noble griffon (eagle head + wings + lion body); a colossal kraken with vast tentacles; a blazing phoenix of living fire; a many-headed hydra; a towering treant of living oak; a monstrous troll; a basilisk with a petrifying glare; a chimera (lion/goat/serpent); a hulking minotaur; a giant of the mountains; a sphinx; a manticore; a cyclops; a cerberus; a colossal sea-serpent/leviathan; a winged pegasus; a frost giant; a kelpie; a great owlbear; a wendigo; a stone gargoyle come alive; a hippogriff; a roc; a cockatrice; a banshee/wraith. Each names the creature + its exact anatomy + texture + the ONE signature feature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE non-dragon mythic creature in 35-55 words — anatomy + texture + signature feature. NO dragons. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A noble griffon — the fierce hooked-beak head and golden feathered wings of a giant eagle fused to the powerful tawny body, haunches and lashing tail of a lion, talons gripping the rock, amber eyes blazing.
+2. A colossal kraken heaving from the deep — a mountainous mottled-purple body and vast barnacled tentacles, each thicker than a ship's mast, lined with pale suckers, a single baleful eye the size of a wagon.
+3. A blazing phoenix of living fire — a great hawk-like bird wreathed in gold-and-crimson flame, feathers trailing embers, wings of pure fire spread wide, eyes like white-hot coals.`,
+  },
+
+  bestiary_action: {
+    format: 'simple',
+    theme: `DRAGONBOT MYTHIC-BESTIARY ACTION — the hero-portrait pose of the single creature. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct poses: rearing up with a roar; emerging from water/forest/shadow; spreading wings in display; prowling forward low and predatory; perched regally surveying; mid-lunge toward the viewer; coiled and alert; rising to full towering height; head lowered and snarling; taking flight in an explosion of movement; turning to face an intruder. Each defines body + head + limb position for ONE creature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE creature pose in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Rearing up to its full towering height, forelimbs raised and jaws open in a thunderous roar, wings or mane flaring wide.
+2. Emerging from the churning water, vast bulk streaming, head rising slowly to fix the viewer with a single baleful eye.
+3. Prowling forward low and predatory across the rocks, shoulders rolling, head lowered, eyes locked on its prey.`,
+  },
+
+  bestiary_habitat: {
+    format: 'simple',
+    theme: `DRAGONBOT MYTHIC-BESTIARY HABITAT — the native biome behind the creature. Each entry 20-40 words, with depth.
+
+VARIETY MANDATE — ~25 distinct habitats matched to mythic beasts: a windswept mountain crag; a storm-tossed open sea; an ancient deep forest; a volcanic wasteland; a misty moor; a ruined temple overgrown; a frozen tundra; a sun-baked desert canyon; a deep sea-cave; a labyrinthine cavern; a blighted swamp; a cliff over a churning ocean; a moonlit glade; a battlefield of old bones. Each sets biome + depth + light, behind the creature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE habitat in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A windswept mountain crag high above the clouds, jagged grey rock falling away into a sea of mist, distant snowy peaks catching the cold light.
+2. A storm-tossed open sea under a black sky, mountainous waves heaving, rain slashing sideways, a doomed ship tiny in the distance.
+3. An ancient deep forest of colossal moss-furred trunks, green light filtering through the high canopy, ferns and mist on the floor fading into gloom.`,
+  },
+
+  bestiary_encounter: {
+    format: 'simple',
+    theme: `DRAGONBOT MYTHIC-BESTIARY ENCOUNTER — a tiny figure giving scale (dwarfed by the creature). Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct tiny figures: a lone armored knight frozen in awe; a hooded adventurer with a lantern; a small mounted rider reining in; a fleeing villager; a hunter with a drawn bow; a robed traveller leaning on a staff; a fallen warrior on the ground; a tiny boat of sailors; a child watching from cover; a scout crouched on a ridge; a pilgrim kneeling. Each is small + distant + for scale only.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny scale-figure in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lone armored knight stands frozen far below, sword half-drawn, utterly dwarfed by the creature looming over him.
+2. A hooded adventurer with a raised lantern edges along a ledge in the foreground, tiny against the beast.
+3. A small fishing boat of terrified sailors rocks in the waves below, the size of a toy beside the creature.`,
+  },
+
+  bestiary_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT MYTHIC-BESTIARY DRAMA — a secondary detail adding awe, fires ~40%. Each entry 12-25 words. Does NOT eclipse the creature.
+
+VARIETY MANDATE — ~25 distinct dramas: scattered bones of past prey; a shaft of god-rays breaking through; a ruined structure half-buried; a storm rolling in; a flock of birds scattering; a shipwreck on the rocks; a glowing magical relic nearby; the moon huge behind it; a second smaller creature; lightning splitting the sky; a treasure-hoard glinting; a broken statue of a hero.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The picked-clean bones of past prey litter the ground at the base of its lair.
+2. A shaft of golden god-rays breaks through the cloud behind, backlighting the creature dramatically.
+3. A storm rolls in across the horizon behind it, lightning flickering in the bruised sky.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // MAGIC-UNLEASHED PATH (2026-06-10 — new, Tier 2). A colossal
   // spell event — wizard unleashing world-shaking magic.
   // ════════════════════════════════════════════════════════
