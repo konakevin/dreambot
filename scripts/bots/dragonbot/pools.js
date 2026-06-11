@@ -203,13 +203,6 @@ module.exports = {
   DUNGEON_THREAT: load('dungeon_threat'),
   DUNGEON_DRAMA: load('dungeon_drama'),
 
-  // ─── fae-court path (2026-06-10, NEW, Tier 2) — ethereal fae. MVP-25. ───
-  FAE_SUBJECT: load('fae_subject'),
-  FAE_SETTING: load('fae_setting'),
-  FAE_DETAIL: load('fae_detail'),
-  FAE_SURPRISE: load('fae_surprise'),
-  FAE_DRAMA: load('fae_drama'),
-
   // ─── mythic-bestiary path (2026-06-10, NEW, Tier 2) — monster portraits. MVP-25. ───
   BESTIARY_CREATURE: load('bestiary_creature'),
   BESTIARY_ACTION: load('bestiary_action'),

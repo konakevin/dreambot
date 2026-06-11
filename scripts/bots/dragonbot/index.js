@@ -27,7 +27,6 @@ const pathBuilders = {
   'clash-of-armies': require('./paths/clash-of-armies'),
   'magic-unleashed': require('./paths/magic-unleashed'),
   'mythic-bestiary': require('./paths/mythic-bestiary'),
-  'fae-court': require('./paths/fae-court'),
   'dungeon-delve': require('./paths/dungeon-delve'),
   necromancer: require('./paths/necromancer'),
   'wizard-tower': require('./paths/wizard-tower'),
@@ -144,9 +143,6 @@ module.exports = {
     // dungeon-delve: anchor the torch-lit fantasy dungeon crawl.
     'dungeon-delve':
       'Frank Frazetta + Brom + Larry Elmore painted-fantasy oil tradition, a TORCH-LIT FANTASY DUNGEON CRAWL — a small band of adventurers exploring a dark underground stone chamber, warm torchlight pooling around them and swallowed by deep shadow, a glinting discovery and a half-seen lurking threat, dramatic chiaroscuro light-vs-dark, tense atmospheric D&D dungeon depth (NOT modern NOT sci-fi), painterly grandeur, awe-inducing concept-art masterwork',
-    // fae-court: anchor the ethereal high-fae / enchanted-glade scene.
-    'fae-court':
-      'Brian Froud + Alan Lee + Michael Whelan painted-fantasy oil tradition, an ETHEREAL HIGH-FAE scene — graceful elven/fae beings in gossamer raiment within a luminous enchanted glade, soft moonlight and drifting motes of magical light, delicate otherworldly beauty, dreamlike and wondrous (NOT grim NOT sci-fi), painterly atmospheric depth into a glowing fae-world, LOTR-elf + faerie visual lineage, awe-inducing concept-art masterwork',
     // mythic-bestiary: anchor ONE non-dragon mythic creature portrait.
     'mythic-bestiary':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy oil tradition, a BESTIARY HERO PORTRAIT of ONE magnificent legendary NON-DRAGON creature (griffon / kraken / phoenix / hydra / treant / chimera / manticore / roc / etc.), the creature large and central with its anatomy + texture + signature features in crisp detail, a tiny figure for scale, its native habitat behind with depth, monster-manual showcase, painterly atmospheric grandeur, D&D + mythology + LOTR visual lineage, awe-inducing concept-art masterwork',
@@ -618,8 +614,7 @@ module.exports = {
     'magic-unleashed',
     // NEW 2026-06-10 — mythic-bestiary (non-dragon monster portraits, Tier 2). MVP-25.
     'mythic-bestiary',
-    // NEW 2026-06-10 — fae-court (ethereal fae/elven scene, Tier 2). MVP-25.
-    'fae-court',
+    // 2026-06-10 — fae-court MOVED to FaeBot (better home for fae content).
     // NEW 2026-06-10 — dungeon-delve (torch-lit dungeon crawl, Tier 2). MVP-25.
     'dungeon-delve',
     // NEW 2026-06-10 — necromancer (dark undead/lich, Tier 2). MVP-25.
@@ -667,7 +662,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'sky-castle', 'arcane-library'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'sky-castle', 'arcane-library'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -728,7 +723,6 @@ module.exports = {
       'clash-of-armies',
       'magic-unleashed',
       'mythic-bestiary',
-      'fae-court',
       'dungeon-delve',
       'necromancer',
       'wizard-tower',
@@ -776,7 +770,6 @@ module.exports = {
       'clash-of-armies': 'scene',
       'magic-unleashed': 'scene',
       'mythic-bestiary': 'creature',
-      'fae-court': 'scene',
       'dungeon-delve': 'scene',
       necromancer: 'scene',
       'wizard-tower': 'scene',
