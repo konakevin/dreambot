@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  ARCANE_LIBRARY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, library, arcane_detail, library_feature, occupant, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a GREAT ARCANE LIBRARY scene for DragonBot — a cathedral-vast hall of magical knowledge, towering with books and wonder. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Awe-inspiring, vertiginous, luminous with knowledge. The scene should make the viewer want to lose themselves in its stacks.
+
+━━━ CATHEDRAL-VAST KNOWLEDGE — ABSOLUTE FIRST RULE ━━━
+A COLOSSAL arcane library — towering shelves climbing into shadow, endless books, floating tomes and glowing knowledge. Vertiginous scale and magical wonder. Deep high-fantasy (NOT modern, NOT sci-fi). Warm candlelight and arcane glow against vast shadowed depth.
+
+━━━ THE LIBRARY (the great hall) ━━━
+${library}
+
+Render the vast library with overwhelming vertical scale and depth — towering stacks receding into glowing gloom.
+
+━━━ ARCANE DETAIL (the magic of knowledge) ━━━
+${arcane_detail}
+
+Render the magical knowledge richly — floating books, glowing tomes, drifting scrolls, candle-lit desks, runic light.
+
+━━━ A LIBRARY FEATURE (a focal wonder) ━━━
+${library_feature}
+
+Render this focal feature — a great window, an orrery, a forbidden vault, a knowledge-orb — anchoring the scene.
+
+━━━ THE OCCUPANT (a tiny scholar for scale) ━━━
+${occupant}
+
+A small figure — a scholar, librarian, or robed reader — gives life and scale, dwarfed by the towering stacks.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, vertiginous, wondrous. The cathedral-vast arcane library towering into shadow, floating books and glowing knowledge throughout, a focal feature, a tiny scholar for scale, warm candlelight against vast depth. Awe-inspiring. NEVER modern/sci-fi; NEVER small/empty.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a cathedral-vast arcane library of towering book-stacks and floating tomes — the great library leads], [the library's overwhelming vertical scale + depth], [arcane detail — floating books + glowing tomes + drifting scrolls], [a focal feature — great window/orrery/vault], [a tiny scholar for scale], [lighting + atmosphere], [palette + wondrous scholarly mood]
+
+CRITICAL — render a COLOSSAL high-fantasy arcane library of towering stacks, floating books and glowing knowledge, a tiny scholar for scale. Do NOT render anything modern/sci-fi, small, or empty.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   SKY_CASTLE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, sky_structure, structure_detail, sky_setting, scale_prover, drama } = slots;
 

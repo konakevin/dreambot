@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  ARCANE_LIBRARY: {
+    description:
+      'PATH-BESPOKE — DragonBot arcane-library path (2026-06-10, Tier 3). The great arcane library / cathedral-vast hall of knowledge — towering stacks, floating books, glowing tomes. Path-bespoke: library + arcane_detail + library_feature + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['library', 'arcane_detail', 'library_feature', 'occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   SKY_CASTLE: {
     description:
       'PATH-BESPOKE — DragonBot sky-castle path (2026-06-10, Tier 3). A floating castle / sky-kingdom among the clouds — airborne fortresses, sky-isles, waterfalls into the void. Path-bespoke: sky_structure + structure_detail + sky_setting + scale_prover + drama (40% gated). Universal lighting + atmosphere reused.',

@@ -37,7 +37,7 @@
 | 14 | 3 | dwarven-hold | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 15 | 3 | elven-city | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 16 | 3 | sky-castle | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
-| 17 | 3 | arcane-library | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 17 | 3 | arcane-library | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 
 ---
 

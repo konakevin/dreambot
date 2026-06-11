@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── arcane-library path (2026-06-10, NEW, Tier 3) — hall of knowledge. MVP-25. ───
+  ARCLIB_LIBRARY: load('arclib_library'),
+  ARCLIB_DETAIL: load('arclib_detail'),
+  ARCLIB_FEATURE: load('arclib_feature'),
+  ARCLIB_OCCUPANT: load('arclib_occupant'),
+  ARCLIB_DRAMA: load('arclib_drama'),
+
   // ─── sky-castle path (2026-06-10, NEW, Tier 3) — floating kingdom. MVP-25. ───
   SKYCASTLE_STRUCTURE: load('skycastle_structure'),
   SKYCASTLE_DETAIL: load('skycastle_detail'),

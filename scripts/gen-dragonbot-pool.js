@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // ARCANE-LIBRARY PATH (2026-06-10 — new, Tier 3). The great
+  // cathedral-vast hall of magical knowledge.
+  // ════════════════════════════════════════════════════════
+
+  arclib_library: {
+    format: 'simple',
+    theme: `DRAGONBOT ARCANE-LIBRARY — the great LIBRARY hall (the hero), cathedral-vast. Each entry 25-45 words, overwhelming vertical scale + depth.
+
+VARIETY MANDATE — ~25 distinct arcane libraries: a cathedral-vast hall of towering shelves climbing into shadow; an endless spiral-tower of book-stacks; a star-domed reading-room ringed with galleries; a forbidden archive of chained tomes; a sunlit hall with shelves between great pillars; a labyrinth of narrow towering stacks; a circular library around a central well dropping into dark; a hall of floating bookshelves; an ancient ruined library reclaimed by ivy; a gothic vaulted scriptorium; a crystal-walled library glowing within; a library carved into a cliff-cavern. Each names the library + colossal vertical scale + depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cathedral-vast arcane library in 25-45 words — vertical scale + depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A cathedral-vast hall of towering wooden shelves climbing dozens of stories into shadow, narrow galleries and spiral stairs winding between them, the ceiling lost in gloom far above.
+2. An endless spiral-tower of book-stacks winding up and out of sight, a dizzying central void dropping away below, warm lamplight glowing at every level.
+3. A grand star-domed reading-room ringed by tiers of book-galleries, a painted constellation ceiling glowing faintly above, long tables far below.`,
+  },
+
+  arclib_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT ARCANE-LIBRARY DETAIL — the magical knowledge filling the hall. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct arcane details: open tomes floating through the air; glowing books on the shelves; drifting scrolls and loose pages; a floating quill writing by itself; candle-lit reading desks; runes lifting off the pages as light; ladders rolling along the stacks; chained forbidden books; glowing bookmarks like fireflies; stacked towers of teetering volumes; a glowing index-orb; map-charts pinned between shelves. Each is a vivid arcane-knowledge detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE arcane-knowledge detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Open tomes drift slowly through the air between the stacks, their pages turning by themselves, glowing runes lifting off the parchment.
+2. Hundreds of books glow softly on the shelves in shifting colors, casting a gentle jewel-toned light across the gallery.
+3. Tall ladders roll silently along the towering shelves, and drifting scrolls float down through the lamplit air.`,
+  },
+
+  arclib_feature: {
+    format: 'simple',
+    theme: `DRAGONBOT ARCANE-LIBRARY FEATURE — a focal wonder anchoring the scene. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct focal features: a colossal arched stained-glass window pouring colored light; a great turning orrery suspended overhead; a forbidden vault-door deep in the stacks; a glowing knowledge-orb on a central pedestal; a vast central staircase spiralling up; a great reading-table strewn with maps; an ancient statue of a robed sage; a glowing portal-mirror; a pool reflecting the ceiling; a towering central pillar of carved lore; a hovering glowing tome on an altar; a great clockwork astrolabe. Each is a single focal wonder.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE focal library feature in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal arched stained-glass window pours shafts of colored light across the towering stacks, dust and motes drifting in the beams.
+2. A great brass orrery turns slowly suspended above the central hall, its planets casting moving shadows across the galleries.
+3. A glowing knowledge-orb hovers above a central pedestal, pulsing with soft light, ringed by the tallest stacks.`,
+  },
+
+  arclib_occupant: {
+    format: 'simple',
+    theme: `DRAGONBOT ARCANE-LIBRARY OCCUPANT — a tiny scholar for life + scale. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct occupants: a robed scholar bent over a tome at a desk; a librarian on a tall rolling ladder; a wizard reading by candlelight; a young apprentice carrying a stack of books; a hooded figure browsing the stacks; a cat curled on a reading-table; an old sage asleep among books; a scribe copying at a desk; a reader gazing up at the towering shelves; two scholars in quiet discussion; a robed figure ascending the central stair. Each is a small figure giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny scholar/occupant for scale in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A robed scholar sits bent over an open tome at a candle-lit desk, tiny beneath the towering shelves.
+2. A librarian balances atop a tall rolling ladder reaching for a high shelf, dwarfed by the stacks.
+3. A lone reader stands gazing up at the vertiginous towering shelves, a small figure in the vast hall.`,
+  },
+
+  arclib_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT ARCANE-LIBRARY DRAMA — a secondary focal point heightening the wonder, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a small book-dragon napping on a high shelf; a spell escaping a book in a burst of light; a ghostly apparition drifting between stacks; a shaft of divine light from above; a magical storm of loose pages whirling; a glowing summoned creature of light; a forbidden book glowing ominously; a constellation projected across the dome; a flock of paper-birds taking flight; a hidden door swinging open; an owl gliding between the galleries. Each adds a focal beat (does NOT replace the library).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small book-dragon, no bigger than a cat, naps curled on a high shelf among the tomes.
+2. A spell escapes an open book in a burst of light, pages and sparks whirling up into the dark.
+3. A swirling storm of loose glowing pages spirals up through the central void toward the distant ceiling.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // SKY-CASTLE PATH (2026-06-10 — new, Tier 3). A floating
   // castle / sky-kingdom among the clouds.
   // ════════════════════════════════════════════════════════
