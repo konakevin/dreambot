@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  ELVEN_CITY: {
+    description:
+      'PATH-BESPOKE — DragonBot elven-city path (2026-06-10, Tier 3). A graceful elven city — treetop / crystalline / waterfall haven, ethereal architecture. Path-bespoke: elven_city + elven_detail + city_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['elven_city', 'elven_detail', 'city_setting', 'occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DWARVEN_HOLD: {
     description:
       'PATH-BESPOKE — DragonBot dwarven-hold path (2026-06-10, Tier 3). A vast dwarven forge-hold / underground kingdom — colossal carved halls, forges, gold. Path-bespoke: hold + dwarven_detail + forge_activity + occupant + drama (40% gated). Universal lighting + atmosphere reused.',

@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  ELVEN_CITY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, elven_city, elven_detail, city_setting, occupant, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ELVEN CITY scene for DragonBot — a graceful, ethereal elven realm of living architecture and light. Alan Lee + John Howe + Michael Whelan painted-fantasy oil tradition. Rivendell / Lothlórien beauty — elegant, luminous, serene. The scene should make the viewer long to walk its bridges.
+
+━━━ ETHEREAL ELVEN BEAUTY — ABSOLUTE FIRST RULE ━━━
+A graceful elven city of flowing, organic, luminous architecture in harmony with nature — slender spires, living trees, delicate bridges, glowing light. Elegant and serene, deep high-fantasy (NOT modern, NOT sci-fi, NOT brutalist). Soft enchanted light and natural beauty.
+
+━━━ THE ELVEN CITY ━━━
+${elven_city}
+
+Render the elven city with grace and grandeur — its flowing architecture and harmony with the landscape dominating the scene.
+
+━━━ ELVEN DETAIL (the craft of the place) ━━━
+${elven_detail}
+
+Render the delicate elven craftsmanship — graceful arches, glowing trees, slender bridges, flowing carved stone and living wood.
+
+━━━ THE CITY SETTING ━━━
+${city_setting}
+
+Render the natural setting cradling the city with atmospheric depth.
+
+━━━ THE OCCUPANTS (tiny elves for life + scale) ━━━
+${occupant}
+
+Small graceful elf figures give life and scale, dwarfed by the city and its beauty.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, luminous, serene. The graceful elven city flowing through its natural setting, soft enchanted light, delicate architecture and glowing trees, tiny elves for scale, atmospheric depth. Elegant and beautiful. NEVER modern/sci-fi/brutalist; NEVER grim/empty.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a graceful elven city of flowing luminous architecture in its natural setting — the elven city leads], [the city's flowing architecture + grandeur], [elven detail — graceful arches + glowing trees + slender bridges], [the natural setting with depth], [tiny elves for scale], [lighting + atmosphere], [palette + serene luminous mood]
+
+CRITICAL — render a graceful, luminous high-fantasy elven city of flowing architecture and natural beauty. Do NOT render anything modern/sci-fi/brutalist, grim, or empty.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DWARVEN_HOLD: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, hold, dwarven_detail, forge_activity, occupant, drama } = slots;
 

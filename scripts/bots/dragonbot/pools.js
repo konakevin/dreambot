@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── elven-city path (2026-06-10, NEW, Tier 3) — elven realm. MVP-25. ───
+  ELVENCITY_CITY: load('elvencity_city'),
+  ELVENCITY_DETAIL: load('elvencity_detail'),
+  ELVENCITY_SETTING: load('elvencity_setting'),
+  ELVENCITY_OCCUPANT: load('elvencity_occupant'),
+  ELVENCITY_DRAMA: load('elvencity_drama'),
+
   // ─── dwarven-hold path (2026-06-10, NEW, Tier 3) — dwarf kingdom. MVP-25. ───
   DWARFHOLD_HALL: load('dwarfhold_hall'),
   DWARFHOLD_DETAIL: load('dwarfhold_detail'),

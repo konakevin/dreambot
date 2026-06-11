@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // ELVEN-CITY PATH (2026-06-10 — new, Tier 3). A graceful
+  // elven city — treetop / crystalline / waterfall haven.
+  // ════════════════════════════════════════════════════════
+
+  elvencity_city: {
+    format: 'simple',
+    theme: `DRAGONBOT ELVEN-CITY — the graceful elven CITY itself (the hero). Each entry 25-45 words, flowing + luminous + grand.
+
+VARIETY MANDATE — ~25 distinct elven cities: a treetop city of platforms and walkways woven through colossal ancient trees; a city of slender white spires beside a waterfall; a crystalline city refracting light; a moonlit haven of glowing domes; a cliffside city of cascading terraces; a city built into a great living tree; a lakeside city of arching bridges; a city of golden autumn-leaf canopies; a misty mountain-vale city; a city of flowering vine-wrapped towers; a coastal elven harbor of curved white ships; a city among floating waterfalls. Each names the elven city + its flowing architecture + grandeur.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE elven city in 25-45 words — flowing architecture + grandeur. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A treetop city of pale curved platforms and slender walkways woven through colossal ancient golden trees, glowing lanterns strung between the boughs, the canopy stretching away into mist.
+2. A city of slender white spires rising beside a thundering waterfall, graceful arched bridges spanning the gorge, the towers catching the gold evening light.
+3. A crystalline elven city of translucent towers refracting the light into soft rainbows, set on a still mirror-lake that doubles its glowing beauty.`,
+  },
+
+  elvencity_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT ELVEN-CITY DETAIL — the delicate elven craftsmanship. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct elven details: slender arched bridges; glowing lanterns of starlight; flowing carved-leaf stonework; living trees grown into architecture; delicate spiral stairs; gossamer banners; vine-wrapped balconies; glowing crystal lamps; reflecting pools and fountains; graceful statues of elf-lords; flowering creepers everywhere; thin elegant spires tipped with light; woven-branch archways. Each is a delicate elven craft detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE elven craft detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Slender arched bridges of pale carved stone span between the towers, their railings worked into flowing leaf-and-vine patterns.
+2. Glowing lanterns like captured starlight hang from the branches and balconies, casting soft silver light across the walkways.
+3. Living trees have been grown into the architecture itself, their boughs forming arches and their roots flowing stairs.`,
+  },
+
+  elvencity_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT ELVEN-CITY SETTING — the natural setting cradling the city. Each entry 20-40 words, with depth.
+
+VARIETY MANDATE — ~25 distinct settings: an ancient old-growth forest; cliffs above a still lake; a misty mountain vale; a golden autumn wood; a coastal cliff over a turquoise sea; a river-gorge with waterfalls; a flowering spring meadow; a snow-dusted alpine forest; a moonlit night-forest; a sunlit glade; an island in a vast lake; a valley of cherry blossom. Each sets the natural setting + depth + its soft light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE natural city setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An ancient old-growth forest cradling the city, colossal moss-draped trees stretching away into golden-green light, a river winding far below through the trees.
+2. High cliffs above a still mirror-lake, the city's towers reflected in the calm water, misty mountains rising in the hazy distance beyond.
+3. A misty mountain vale at dawn, the city nestled among the slopes, soft pink light spilling over the peaks and pooling in the valley.`,
+  },
+
+  elvencity_occupant: {
+    format: 'simple',
+    theme: `DRAGONBOT ELVEN-CITY OCCUPANT — tiny graceful elf figures for life + scale. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct elf occupants: a robed elf crossing a high bridge; an elven sentinel with a slender bow; two elves in quiet conversation; an elf-maiden by a fountain; a rider on a white horse; an elf playing a harp on a balcony; a group walking a tree-walkway; an elf-lord on a terrace gazing out; an elf tending a flowering garden; a child running along a path; a hooded traveller arriving. Each is small graceful elf figure(s) for scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny elf occupant for scale in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lone robed elf crosses a high arched bridge between two towers, tiny and graceful against the vast city.
+2. An elf-lord stands on a terrace gazing out over the city, dwarfed by the spires rising around him.
+3. Two elves pause in quiet conversation beside a glowing fountain, small figures among the flowing architecture.`,
+  },
+
+  elvencity_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT ELVEN-CITY DRAMA — a secondary focal point heightening the beauty, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a graceful dragon gliding over the spires; a flight of white swans/birds; a great moon low and luminous; an aurora over the city; a fall of cherry blossom or golden leaves; an elven ship sailing in; a shaft of divine light through the canopy; a unicorn in a garden below; a procession of lights along the bridges; a rainbow over the waterfall; a comet in the twilight sky. Each adds a beautiful focal beat (does NOT replace the city).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A graceful dragon glides silently over the city's spires, silhouetted against the glowing evening sky.
+2. A great luminous moon hangs low behind the towers, vast and silver, doubling in the lake below.
+3. A slow fall of golden leaves drifts down across the bridges and walkways, catching the light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DWARVEN-HOLD PATH (2026-06-10 — new, Tier 3). A vast
   // underground dwarven kingdom — halls, forges, gold.
   // ════════════════════════════════════════════════════════
