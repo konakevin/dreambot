@@ -27,6 +27,9 @@ export default function PhotoDetailScreen() {
   const { id, downloadReady } = useLocalSearchParams<{ id: string; downloadReady?: string }>();
   const user = useAuthStore((s) => s.user);
   const isPro = useAuthStore((s) => s.isPro);
+  const isBasic = useAuthStore((s) => s.isBasic);
+  // HD downloads are available to both paid tiers.
+  const canHd = isPro || isBasic;
   const albumIds = useAlbumStore((s) => s.ids);
   const queryClient = useQueryClient();
 
@@ -42,11 +45,11 @@ export default function PhotoDetailScreen() {
   // Guard with a ref so a re-render / param re-read can't double-fire it.
   const didAutoSaveHd = useRef(false);
   useEffect(() => {
-    if (downloadReady === '1' && isPro && id && !didAutoSaveHd.current) {
+    if (downloadReady === '1' && canHd && id && !didAutoSaveHd.current) {
       didAutoSaveHd.current = true;
       saveReadyHdDownload(id);
     }
-  }, [downloadReady, isPro, id]);
+  }, [downloadReady, canHd, id]);
 
   // Two modes:
   //  - Album mode (albumIds populated): bounded list, single useQuery

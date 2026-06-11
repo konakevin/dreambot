@@ -102,13 +102,16 @@ type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: (
  * upsell hint on its own.
  */
 function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
-  const { isPro } = useAuthStore.getState();
-  const cachedHqUrl = isPro ? (opts.imageUrlHq ?? null) : null;
+  const { isPro, isBasic } = useAuthStore.getState();
+  // HD downloads are a paid perk of BOTH tiers (Pro 100/mo, Basic 20/mo — the
+  // server enforces the per-tier cap). Any paid subscriber may HD-save.
+  const canHd = isPro || isBasic;
+  const cachedHqUrl = canHd ? (opts.imageUrlHq ?? null) : null;
   return [
     { text: 'Save to Photos', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) },
     {
-      text: isPro ? 'Save in HD' : 'Save in HD (Pro)',
-      onPress: () => (isPro ? saveHd(opts.id, cachedHqUrl) : router.push('/proStore')),
+      text: canHd ? 'Save in HD' : 'Save in HD (Pro)',
+      onPress: () => (canHd ? saveHd(opts.id, cachedHqUrl) : router.push('/subscribe')),
     },
   ];
 }

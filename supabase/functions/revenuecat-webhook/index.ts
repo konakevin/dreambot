@@ -2,9 +2,15 @@
 // Receives purchase + subscription events from RevenueCat. Routes by event
 // type + product ID:
 //   - Sparkle pack consumables → grant sparkles (NON_RENEWING_PURCHASE)
-//   - Pro subscription → flip users.pro_subscription + expires_at
+//   - Subscription tiers (Pro / Basic) → flip users.<tier>_subscription +
+//     expires_at + grant the tier's sparkle bundle
 //     (INITIAL_PURCHASE / RENEWAL / PRODUCT_CHANGE / CANCELLATION /
 //      UNCANCELLATION / EXPIRATION / BILLING_ISSUE)
+//
+// Pro and Basic share ONE App Store subscription group, so a user can hold at
+// most one at a time. A PRODUCT_CHANGE between tiers (upgrade Basic→Pro or
+// downgrade Pro→Basic) sets the new tier's flag AND clears the other tier's —
+// see the SUBSCRIPTION_TIERS handling below.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -39,63 +45,112 @@ async function resolvePackSparkles(
   return data ? Number(data.sparkles) : FALLBACK_SPARKLE_PACKS[productId];
 }
 
-// Pro subscription product IDs. Match these in App Store Connect /
-// Google Play and attach to the "pro" entitlement in RevenueCat.
-// Use radorbad prefix to match the app's actual bundle identifier
-// (com.konakevin.radorbad). Sparkles use the same prefix above —
-// Apple requires IAP product IDs to share the app's bundle prefix.
+// ── SUBSCRIPTION TIER PRODUCTS ───────────────────────────────────────────
+// Match these in App Store Connect / Google Play and attach to the matching
+// entitlement in RevenueCat ("pro" / "basic"). The radorbad prefix matches the
+// app's bundle identifier (com.konakevin.radorbad) — Apple requires IAP product
+// IDs to share the app's bundle prefix.
 const PRO_MONTHLY_PRODUCT = 'com.konakevin.radorbad.pro.monthly';
 const PRO_YEARLY_PRODUCT = 'com.konakevin.radorbad.pro.yearly';
-const PRO_SUBSCRIPTION_PRODUCTS = new Set([PRO_MONTHLY_PRODUCT, PRO_YEARLY_PRODUCT]);
+const BASIC_MONTHLY_PRODUCT = 'com.konakevin.radorbad.basic.monthly';
+const BASIC_YEARLY_PRODUCT = 'com.konakevin.radorbad.basic.yearly';
 
-// Pro monthly sparkle bundle FALLBACK. Source of truth is
-// engine_config.pro_monthly_sparkle_bundle (migration 255); yearly = 12× monthly.
+// Sparkle-bundle FALLBACKS. Source of truth is engine_config
+// (pro_monthly_sparkle_bundle / basic_monthly_sparkle_bundle); yearly = 12×.
 const FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE = 75;
+const FALLBACK_BASIC_MONTHLY_SPARKLE_BUNDLE = 20;
 
-async function resolveProMonthlyBundle(
+async function resolveMonthlyBundle(
   // deno-lint-ignore no-explicit-any
-  supabase: any
+  supabase: any,
+  column: string,
+  fallback: number
 ): Promise<number> {
-  const { data, error } = await supabase
-    .from('engine_config')
-    .select('pro_monthly_sparkle_bundle')
-    .eq('id', 1)
-    .single();
-  if (error || !data || data.pro_monthly_sparkle_bundle == null) {
-    return FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE;
+  const { data, error } = await supabase.from('engine_config').select(column).eq('id', 1).single();
+  if (error || !data || data[column] == null) {
+    return fallback;
   }
-  return Number(data.pro_monthly_sparkle_bundle);
+  return Number(data[column]);
 }
 
-/** The sparkle grant for a Pro product. Yearly subscribers receive 12× the
- *  monthly bundle in one lump sum at each billing cycle. */
-function proBundleSize(productId: string, monthly: number): number {
-  return productId === PRO_YEARLY_PRODUCT ? monthly * 12 : monthly;
+// Tier descriptors — Pro and Basic share identical subscription lifecycle
+// logic, differing only in product set, DB columns, bundle config, and the
+// sparkle-ledger reason prefix. Order doesn't matter; productId resolves the tier.
+interface TierConfig {
+  name: 'pro' | 'basic';
+  monthlyProduct: string;
+  yearlyProduct: string;
+  products: Set<string>;
+  flagColumn: 'pro_subscription' | 'basic_subscription';
+  expiresColumn: 'pro_subscription_expires_at' | 'basic_subscription_expires_at';
+  // will_renew is Pro-only for now (drives the "your Pro ends soon" reminders in
+  // nightly-dreams.js, migration 215). Basic has no such column yet → null.
+  willRenewColumn: 'pro_subscription_will_renew' | null;
+  bundleReasonPrefix: 'pro_bundle' | 'basic_bundle';
+  bundleColumn: 'pro_monthly_sparkle_bundle' | 'basic_monthly_sparkle_bundle';
+  bundleFallback: number;
+}
+
+const SUBSCRIPTION_TIERS: TierConfig[] = [
+  {
+    name: 'pro',
+    monthlyProduct: PRO_MONTHLY_PRODUCT,
+    yearlyProduct: PRO_YEARLY_PRODUCT,
+    products: new Set([PRO_MONTHLY_PRODUCT, PRO_YEARLY_PRODUCT]),
+    flagColumn: 'pro_subscription',
+    expiresColumn: 'pro_subscription_expires_at',
+    willRenewColumn: 'pro_subscription_will_renew',
+    bundleReasonPrefix: 'pro_bundle',
+    bundleColumn: 'pro_monthly_sparkle_bundle',
+    bundleFallback: FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE,
+  },
+  {
+    name: 'basic',
+    monthlyProduct: BASIC_MONTHLY_PRODUCT,
+    yearlyProduct: BASIC_YEARLY_PRODUCT,
+    products: new Set([BASIC_MONTHLY_PRODUCT, BASIC_YEARLY_PRODUCT]),
+    flagColumn: 'basic_subscription',
+    expiresColumn: 'basic_subscription_expires_at',
+    willRenewColumn: null,
+    bundleReasonPrefix: 'basic_bundle',
+    bundleColumn: 'basic_monthly_sparkle_bundle',
+    bundleFallback: FALLBACK_BASIC_MONTHLY_SPARKLE_BUNDLE,
+  },
+];
+
+function resolveTier(productId: string): TierConfig | undefined {
+  return SUBSCRIPTION_TIERS.find((t) => t.products.has(productId));
+}
+
+/** The sparkle grant for a subscription product. Yearly subscribers receive
+ *  12× the monthly bundle in one lump sum at each billing cycle. */
+function bundleSize(tier: TierConfig, productId: string, monthly: number): number {
+  return productId === tier.yearlyProduct ? monthly * 12 : monthly;
 }
 
 // Subscription events that should trigger the bundled-sparkle grant.
 // PRODUCT_CHANGE / UNCANCELLATION extend access but don't grant new sparkles —
 // only first purchase + each renewal does.
-const PRO_SPARKLE_GRANT_EVENTS = new Set(['INITIAL_PURCHASE', 'RENEWAL']);
+const SUB_SPARKLE_GRANT_EVENTS = new Set(['INITIAL_PURCHASE', 'RENEWAL']);
 
 // Sparkle-pack purchase events (one-time consumables)
 const SPARKLE_PURCHASE_EVENTS = new Set(['NON_RENEWING_PURCHASE']);
 
-// Subscription lifecycle events that grant or extend Pro access
-const PRO_GRANT_EVENTS = new Set([
+// Subscription lifecycle events that grant or extend tier access
+const SUB_GRANT_EVENTS = new Set([
   'INITIAL_PURCHASE', // first subscribe
   'RENEWAL', // auto-renew charged successfully
-  'PRODUCT_CHANGE', // upgrade/downgrade between monthly/yearly
+  'PRODUCT_CHANGE', // upgrade/downgrade (monthly↔yearly OR Basic↔Pro crossgrade)
   'UNCANCELLATION', // user changed mind before period ended
 ]);
 
-// Subscription lifecycle events that revoke Pro access
-const PRO_REVOKE_EVENTS = new Set([
+// Subscription lifecycle events that revoke tier access
+const SUB_REVOKE_EVENTS = new Set([
   'EXPIRATION', // grace period ended; access removed
 ]);
 
 // Subscription lifecycle events that are informational only (log + ack)
-const PRO_INFO_EVENTS = new Set([
+const SUB_INFO_EVENTS = new Set([
   'CANCELLATION', // user intent to cancel; access remains until EXPIRATION
   'BILLING_ISSUE', // card failed; Apple retries during grace
 ]);
@@ -132,7 +187,7 @@ Deno.serve(async (req) => {
     const transactionId: string = event.transaction_id ?? event.id;
     const environment: string = event.environment ?? 'PRODUCTION';
     // RevenueCat puts the entitlement expiration timestamp in expiration_at_ms
-    // for subscription events. Used to set users.pro_subscription_expires_at.
+    // for subscription events. Used to set users.<tier>_subscription_expires_at.
     const expirationAtMs: number | undefined = event.expiration_at_ms;
     // Cancel reason is set on CANCELLATION events. CUSTOMER_SUPPORT means
     // Apple processed a refund — we need to claw back any sparkles that
@@ -176,10 +231,11 @@ Deno.serve(async (req) => {
     }
 
     // ── ROUTING ────────────────────────────────────────────────────────
-    // Determine whether this event is for sparkle packs or Pro subscription.
+    // Determine whether this event is for sparkle packs or a subscription tier.
     const packSparkles = await resolvePackSparkles(supabase, productId);
     const isSparklePack = packSparkles !== undefined;
-    const isProSubscription = PRO_SUBSCRIPTION_PRODUCTS.has(productId);
+    const tier = resolveTier(productId);
+    const isSubscription = tier !== undefined;
 
     // ── APPLE REFUND CLAWBACK ──────────────────────────────────────────
     // When Apple Support refunds a purchase, RC sends CANCELLATION with
@@ -190,12 +246,12 @@ Deno.serve(async (req) => {
     // need to handle the sparkle-side clawback.
     //
     // Idempotent: if the same refund event is delivered twice, we only
-    // claw back once (checked via the `refund:pro_bundle:<txid>` or
+    // claw back once (checked via the `refund:<tier>_bundle:<txid>` or
     // `refund:purchase:<txid>` row in sparkle_transactions).
     if (eventType === 'CANCELLATION' && cancelReason === 'CUSTOMER_SUPPORT') {
       let originalReason: string | null = null;
-      if (isProSubscription) {
-        originalReason = `pro_bundle:${transactionId}`;
+      if (isSubscription) {
+        originalReason = `${tier.bundleReasonPrefix}:${transactionId}`;
       } else if (isSparklePack) {
         originalReason = `purchase:${transactionId}`;
       }
@@ -227,7 +283,7 @@ Deno.serve(async (req) => {
         const clawbackAmount = grantRow?.amount ?? 0;
 
         if (clawbackAmount > 0) {
-          // grant_sparkles accepts negative amounts — passing -75/-900 etc
+          // grant_sparkles accepts negative amounts — passing -75/-20 etc
           // subtracts from sparkle_balance and records a negative row in
           // sparkle_transactions for the audit trail. Users with positive
           // balance go down to (potentially) negative; spend_sparkles
@@ -253,18 +309,21 @@ Deno.serve(async (req) => {
           );
         }
 
-        // For Pro refunds, also flip pro_subscription off immediately.
+        // For subscription refunds, also flip the tier flag off immediately.
         // (Normal CANCELLATION leaves access until EXPIRATION; refunds
         // should be instant since the user got their money back.)
-        if (isProSubscription) {
-          await supabase.from('users').update({ pro_subscription: false }).eq('id', appUserId);
+        if (isSubscription) {
+          await supabase
+            .from('users')
+            .update({ [tier.flagColumn]: false })
+            .eq('id', appUserId);
         }
 
         return new Response(
           JSON.stringify({
             refunded: true,
             sparkles_revoked: clawbackAmount,
-            entitlement_revoked: isProSubscription,
+            entitlement_revoked: isSubscription ? tier.name : false,
           }),
           { status: 200 }
         );
@@ -302,47 +361,58 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ granted: sparkleAmount }), { status: 200 });
     }
 
-    // ── PRO SUBSCRIPTION EVENTS ────────────────────────────────────────
-    if (isProSubscription) {
-      // Grant or extend Pro access
-      if (PRO_GRANT_EVENTS.has(eventType)) {
+    // ── SUBSCRIPTION EVENTS (Pro / Basic) ──────────────────────────────
+    if (isSubscription) {
+      // Grant or extend tier access
+      if (SUB_GRANT_EVENTS.has(eventType)) {
         const expiresAt = expirationAtMs ? new Date(expirationAtMs).toISOString() : null;
+
         // INITIAL_PURCHASE / RENEWAL / PRODUCT_CHANGE / UNCANCELLATION all
-        // reset the cancellation flag — these events mean the user has an
-        // active, auto-renewing subscription right now (UNCANCELLATION is
-        // explicit; the others are implicit because cancelling, then
-        // RE-purchasing or renewing past expiry, would land here).
-        // Migration 215.
-        const { error } = await supabase
-          .from('users')
-          .update({
-            pro_subscription: true,
-            pro_subscription_expires_at: expiresAt,
-            pro_subscription_will_renew: true,
-          })
-          .eq('id', appUserId);
+        // mean the user has an active, auto-renewing subscription right now.
+        // Set THIS tier active + reset its will_renew (Pro only, migration 215),
+        // and CLEAR every other tier — Pro & Basic share one subscription
+        // group, so holding this tier means any other is no longer active
+        // (handles a Basic↔Pro crossgrade in a single update).
+        // deno-lint-ignore no-explicit-any
+        const updates: Record<string, any> = {
+          [tier.flagColumn]: true,
+          [tier.expiresColumn]: expiresAt,
+        };
+        if (tier.willRenewColumn) updates[tier.willRenewColumn] = true;
+        for (const other of SUBSCRIPTION_TIERS) {
+          if (other.name !== tier.name) updates[other.flagColumn] = false;
+        }
+
+        const { error } = await supabase.from('users').update(updates).eq('id', appUserId);
         if (error) {
-          console.error(`[RevenueCat] Pro grant failed for ${appUserId}:`, error);
+          console.error(`[RevenueCat] ${tier.name} grant failed for ${appUserId}:`, error);
           return new Response(JSON.stringify({ error: error.message }), { status: 500 });
         }
 
         // Grant the bundled sparkles on INITIAL_PURCHASE + each RENEWAL.
         // Monthly subscribers get the configured monthly bundle per billing
         // cycle; yearly subscribers get 12× in one lump sum per yearly cycle
-        // (engine_config.pro_monthly_sparkle_bundle).
+        // (engine_config.<tier>_monthly_sparkle_bundle).
         // Idempotent on transactionId — if the same event is delivered
         // twice, the second grant is skipped.
         let sparklesGranted = 0;
-        if (PRO_SPARKLE_GRANT_EVENTS.has(eventType)) {
-          const reason = `pro_bundle:${transactionId}`;
-          const bundleAmount = proBundleSize(productId, await resolveProMonthlyBundle(supabase));
+        if (SUB_SPARKLE_GRANT_EVENTS.has(eventType)) {
+          const reason = `${tier.bundleReasonPrefix}:${transactionId}`;
+          const monthly = await resolveMonthlyBundle(
+            supabase,
+            tier.bundleColumn,
+            tier.bundleFallback
+          );
+          const bundleAmount = bundleSize(tier, productId, monthly);
           const { data: existing } = await supabase
             .from('sparkle_transactions')
             .select('id')
             .eq('reason', reason)
             .limit(1);
           if (existing && existing.length > 0) {
-            console.log(`[RevenueCat] Duplicate Pro sparkle bundle, skipping: ${transactionId}`);
+            console.log(
+              `[RevenueCat] Duplicate ${tier.name} sparkle bundle, skipping: ${transactionId}`
+            );
           } else {
             const { error: grantError } = await supabase.rpc('grant_sparkles', {
               p_user_id: appUserId,
@@ -350,65 +420,79 @@ Deno.serve(async (req) => {
               p_reason: reason,
             });
             if (grantError) {
-              console.error(`[RevenueCat] Pro bundle grant failed for ${appUserId}:`, grantError);
+              console.error(
+                `[RevenueCat] ${tier.name} bundle grant failed for ${appUserId}:`,
+                grantError
+              );
               // Don't fail the whole webhook — entitlement already set,
               // sparkle grant retry can be handled separately.
             } else {
               sparklesGranted = bundleAmount;
               console.log(
-                `[RevenueCat] Granted ${bundleAmount} bundled sparkles to ${appUserId} (${productId === PRO_YEARLY_PRODUCT ? 'yearly' : 'monthly'})`
+                `[RevenueCat] Granted ${bundleAmount} bundled sparkles to ${appUserId} (${tier.name} ${productId === tier.yearlyProduct ? 'yearly' : 'monthly'})`
               );
             }
           }
         }
 
         console.log(
-          `[RevenueCat] Pro entitlement set for ${appUserId} (${eventType}, expires ${expiresAt}, sparkles ${sparklesGranted})`
+          `[RevenueCat] ${tier.name} entitlement set for ${appUserId} (${eventType}, expires ${expiresAt}, sparkles ${sparklesGranted})`
         );
         return new Response(
-          JSON.stringify({ pro: true, expires_at: expiresAt, sparkles_granted: sparklesGranted }),
+          JSON.stringify({
+            tier: tier.name,
+            active: true,
+            expires_at: expiresAt,
+            sparkles_granted: sparklesGranted,
+          }),
           { status: 200 }
         );
       }
 
-      // Revoke Pro access
-      if (PRO_REVOKE_EVENTS.has(eventType)) {
+      // Revoke tier access
+      if (SUB_REVOKE_EVENTS.has(eventType)) {
         const { error } = await supabase
           .from('users')
-          .update({ pro_subscription: false })
+          .update({ [tier.flagColumn]: false })
           .eq('id', appUserId);
         if (error) {
-          console.error(`[RevenueCat] Pro revoke failed for ${appUserId}:`, error);
+          console.error(`[RevenueCat] ${tier.name} revoke failed for ${appUserId}:`, error);
           return new Response(JSON.stringify({ error: error.message }), { status: 500 });
         }
-        console.log(`[RevenueCat] Pro entitlement revoked for ${appUserId} (${eventType})`);
-        return new Response(JSON.stringify({ pro: false }), { status: 200 });
+        console.log(
+          `[RevenueCat] ${tier.name} entitlement revoked for ${appUserId} (${eventType})`
+        );
+        return new Response(JSON.stringify({ tier: tier.name, active: false }), { status: 200 });
       }
 
       // Informational only — access state unchanged. CANCELLATION = user
       // tapped cancel but keeps access until EXPIRATION fires.
       // BILLING_ISSUE = card failed; Apple is retrying within grace period.
       //
-      // Migration 215: CANCELLATION flips pro_subscription_will_renew to
-      // false so nightly-dreams.js knows to send the "your Pro ends in 3
-      // days" + "tonight is your last Pro nightly dream" reminders. The
-      // user keeps access until pro_subscription_expires_at. BILLING_ISSUE
-      // is NOT a cancellation (Apple is retrying the charge) — don't flip
-      // the flag so we don't false-alarm a recoverable card issue.
-      if (PRO_INFO_EVENTS.has(eventType)) {
-        if (eventType === 'CANCELLATION') {
+      // Migration 215: for Pro, CANCELLATION flips pro_subscription_will_renew
+      // to false so nightly-dreams.js knows to send the "your Pro ends in 3
+      // days" + "tonight is your last Pro nightly dream" reminders. The user
+      // keeps access until expires_at. BILLING_ISSUE is NOT a cancellation
+      // (Apple is retrying the charge) — don't flip the flag so we don't
+      // false-alarm a recoverable card issue. Basic has no will_renew column
+      // yet (willRenewColumn null) → just log.
+      if (SUB_INFO_EVENTS.has(eventType)) {
+        if (eventType === 'CANCELLATION' && tier.willRenewColumn) {
           const { error } = await supabase
             .from('users')
-            .update({ pro_subscription_will_renew: false })
+            .update({ [tier.willRenewColumn]: false })
             .eq('id', appUserId);
           if (error) {
-            console.error(`[RevenueCat] will_renew=false failed for ${appUserId}:`, error);
+            console.error(
+              `[RevenueCat] ${tier.name} will_renew=false failed for ${appUserId}:`,
+              error
+            );
             // Don't fail the webhook — the cancel is acked at the source
             // of truth (RC); worst case we send one false-alarm reminder
             // next cron, which is recoverable.
           }
         }
-        console.log(`[RevenueCat] Pro info event for ${appUserId}: ${eventType}`);
+        console.log(`[RevenueCat] ${tier.name} info event for ${appUserId}: ${eventType}`);
         return new Response(JSON.stringify({ message: `Logged ${eventType}` }), { status: 200 });
       }
     }

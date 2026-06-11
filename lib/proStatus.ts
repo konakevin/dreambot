@@ -20,6 +20,10 @@ export interface EntitlementRow {
   pro_subscription?: boolean;
   pro_subscription_expires_at?: string | null;
   pro_trial_started_at?: string | null;
+  // DreamBot Basic (migration 257). No trial of its own — the free trial is the
+  // Pro-trial window above.
+  basic_subscription?: boolean;
+  basic_subscription_expires_at?: string | null;
 }
 
 // Default trial length. The AUTHORITATIVE window lives in engine_config.pro_trial_days
@@ -63,4 +67,26 @@ export function isProActive(
   trialDays: number = TRIAL_DURATION_DAYS
 ): boolean {
   return isPaidProActive(row, now) || isTrialActive(row, now, trialDays);
+}
+
+/** Active PAID Basic subscription right now? Basic has NO trial of its own (the
+ *  free trial is the Pro-trial window) — paid + unexpired only. Mirrors
+ *  is_basic_active() SQL + nightlyEligibility.js. */
+export function isBasicActive(row: EntitlementRow | null, now: number = Date.now()): boolean {
+  if (!row || !row.basic_subscription) return false;
+  const expiresAt = row.basic_subscription_expires_at;
+  if (!expiresAt) return true; // no expiry recorded = treat as active
+  return new Date(expiresAt).getTime() > now;
+}
+
+/** Eligible for NIGHTLY DREAMS: Pro (paid OR trial) OR Basic (paid). The shared
+ *  core perk of both paid tiers. Mirrors is_dream_eligible() SQL +
+ *  nightlyEligibility.js. Use this (NOT isProActive) to gate nightly dreams;
+ *  keep Pro-EXCLUSIVE perks (75✦ bundle, 100 HD) on isProActive. */
+export function isDreamEligible(
+  row: EntitlementRow | null,
+  now: number = Date.now(),
+  trialDays: number = TRIAL_DURATION_DAYS
+): boolean {
+  return isProActive(row, now, trialDays) || isBasicActive(row, now);
 }

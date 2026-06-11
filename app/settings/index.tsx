@@ -74,6 +74,7 @@ export default function SettingsScreen() {
   const signOut = useAuthStore((s) => s.signOut);
   const isPro = useAuthStore((s) => s.isPro);
   const isPaidPro = useAuthStore((s) => s.isPaidPro);
+  const isBasic = useAuthStore((s) => s.isBasic);
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
@@ -494,15 +495,25 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <SettingsRow
             icon="diamond"
-            label={isPaidPro ? 'Manage Pro' : isPro ? 'Lock in Pro' : 'Get Pro'}
+            label={
+              isPaidPro
+                ? 'Manage Pro'
+                : isBasic
+                  ? 'Manage plan'
+                  : isPro
+                    ? 'Choose a plan'
+                    : 'Get Premium'
+            }
             trailing={
               isPaidPro ? (
-                <Text style={styles.trailingSummary}>Active</Text>
+                <Text style={styles.trailingSummary}>Pro</Text>
+              ) : isBasic ? (
+                <Text style={styles.trailingSummary}>Basic</Text>
               ) : isPro && proTrialEndsAt ? (
                 <Text style={styles.trailingSummary}>{trialDaysLeftLabel(proTrialEndsAt)}</Text>
               ) : null
             }
-            onPress={() => nav.push('/proStore')}
+            onPress={() => nav.push('/subscribe')}
           />
         </View>
 

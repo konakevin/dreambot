@@ -15,6 +15,8 @@ const {
   isProActive,
   isPaidProActive,
   isTrialActive,
+  isBasicActive,
+  isDreamEligible,
   nightlyDreamedUserIds,
   hoursUntilTrialEnds,
   hoursUntilProSubscriptionEnds,
@@ -275,5 +277,58 @@ describe('configurable trial window (trialDays param — mirrors engine_config.p
     expect(hoursUntilTrialEnds(u, NOW, 30)).toBeCloseTo(240, 5);
     // default 14d window → already 6 days past (negative)
     expect(hoursUntilTrialEnds(u, NOW)).toBeCloseTo(-144, 5);
+  });
+});
+
+describe('nightlyEligibility — DreamBot Basic (the enqueue gate now includes Basic)', () => {
+  it('active paid Basic → isBasicActive + dream-eligible', () => {
+    const u = { basic_subscription: true, basic_subscription_expires_at: days(20) };
+    expect(isBasicActive(u, NOW)).toBe(true);
+    expect(isDreamEligible(u, NOW)).toBe(true);
+  });
+
+  it('Basic with no expiry → active', () => {
+    expect(
+      isBasicActive({ basic_subscription: true, basic_subscription_expires_at: null }, NOW)
+    ).toBe(true);
+  });
+
+  it('expired Basic → not active, not eligible (when no Pro/trial)', () => {
+    const u = { basic_subscription: true, basic_subscription_expires_at: days(-1) };
+    expect(isBasicActive(u, NOW)).toBe(false);
+    expect(isDreamEligible(u, NOW)).toBe(false);
+  });
+
+  it('Basic has NO trial of its own — a lapsed Pro trial does not confer Basic', () => {
+    expect(isBasicActive({ pro_trial_started_at: days(-1) }, NOW)).toBe(false);
+  });
+
+  it('dream-eligible = Pro OR trial OR Basic', () => {
+    // Pro paid
+    expect(
+      isDreamEligible({ pro_subscription: true, pro_subscription_expires_at: days(30) }, NOW)
+    ).toBe(true);
+    // Pro trial
+    expect(isDreamEligible({ pro_trial_started_at: days(-5) }, NOW)).toBe(true);
+    // Basic only (lapsed Pro trial, no Pro sub)
+    expect(
+      isDreamEligible(
+        {
+          basic_subscription: true,
+          basic_subscription_expires_at: days(10),
+          pro_trial_started_at: days(-40),
+        },
+        NOW
+      )
+    ).toBe(true);
+    // none
+    expect(isDreamEligible({}, NOW)).toBe(false);
+    expect(isDreamEligible(null, NOW)).toBe(false);
+  });
+
+  it('respects the configurable trial window for the Pro side of eligibility', () => {
+    const u = { pro_trial_started_at: days(-20) }; // lapsed at 14d
+    expect(isDreamEligible(u, NOW)).toBe(false);
+    expect(isDreamEligible(u, NOW, 30)).toBe(true); // widened trial → eligible again
   });
 });

@@ -812,6 +812,8 @@ export type Database = {
       engine_config: {
         Row: {
           base_sparkle_cost: number;
+          basic_hd_downloads_per_month: number;
+          basic_monthly_sparkle_bundle: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           embodied_mediums_high: string[];
@@ -845,6 +847,8 @@ export type Database = {
         };
         Insert: {
           base_sparkle_cost?: number;
+          basic_hd_downloads_per_month?: number;
+          basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           embodied_mediums_high?: string[];
@@ -878,6 +882,8 @@ export type Database = {
         };
         Update: {
           base_sparkle_cost?: number;
+          basic_hd_downloads_per_month?: number;
+          basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           embodied_mediums_high?: string[];
@@ -2144,6 +2150,8 @@ export type Database = {
         Row: {
           allow_reposts: boolean;
           avatar_url: string | null;
+          basic_subscription: boolean;
+          basic_subscription_expires_at: string | null;
           bio: string | null;
           created_at: string;
           display_name: string | null;
@@ -2168,6 +2176,8 @@ export type Database = {
         Insert: {
           allow_reposts?: boolean;
           avatar_url?: string | null;
+          basic_subscription?: boolean;
+          basic_subscription_expires_at?: string | null;
           bio?: string | null;
           created_at?: string;
           display_name?: string | null;
@@ -2192,6 +2202,8 @@ export type Database = {
         Update: {
           allow_reposts?: boolean;
           avatar_url?: string | null;
+          basic_subscription?: boolean;
+          basic_subscription_expires_at?: string | null;
           bio?: string | null;
           created_at?: string;
           display_name?: string | null;
@@ -2588,6 +2600,8 @@ export type Database = {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
       };
+      is_basic_active: { Args: { p_user_id: string }; Returns: boolean };
+      is_dream_eligible: { Args: { p_user_id: string }; Returns: boolean };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
       list_my_upload_paths: { Args: never; Returns: string[] };
       mark_group_seen: {

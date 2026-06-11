@@ -20,6 +20,8 @@
 const { createClient } = require('@supabase/supabase-js');
 const {
   isProActive,
+  isBasicActive,
+  isDreamEligible,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
   shouldSend3DayPaidProReminder,
@@ -88,7 +90,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     .from('user_recipes')
     .select(
       `user_id,
-       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, is_bot)`
+       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot)`
     )
     .eq('users.is_bot', false);
   if (cfg.nightlyRequireOnboarding) eligibleQuery = eligibleQuery.eq('onboarding_completed', true);
@@ -100,14 +102,20 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     process.exit(1);
   }
 
-  let pool = (users || []).filter((u) => isProActive(u.users, now, cfg.proTrialDays));
-  const proCount = pool.length;
+  // Dream-eligible = Pro (paid OR trial) OR Basic (paid). Nightly dreams are the
+  // shared core perk of both paid tiers.
+  let pool = (users || []).filter((u) => isDreamEligible(u.users, now, cfg.proTrialDays));
+  const eligibleCount = pool.length;
+  const proCount = pool.filter((u) => isProActive(u.users, now, cfg.proTrialDays)).length;
+  const basicCount = pool.filter(
+    (u) => isBasicActive(u.users, now) && !isProActive(u.users, now, cfg.proTrialDays)
+  ).length;
   if (pool.length > MAX_JOBS) {
     console.warn(`⚠️  ${pool.length} eligible exceeds MAX_JOBS=${MAX_JOBS} — capping this run.`);
     pool = pool.slice(0, MAX_JOBS);
   }
   console.log(
-    `Eligible Pro/trial users: ${proCount}${proCount !== pool.length ? ` (capped to ${pool.length})` : ''}`
+    `Eligible users: ${eligibleCount} (${proCount} pro/trial + ${basicCount} basic)${eligibleCount !== pool.length ? ` (capped to ${pool.length})` : ''}`
   );
 
   if (pool.length === 0) {
@@ -223,7 +231,10 @@ async function sendTrialReminders(sb, enqueuedPool) {
   for (const row of trialUsers || []) {
     const u = row.users;
     if (shouldSend3DayTrialReminder(u, now, cfg.proTrialDays)) need3Day.push(row.user_id);
-    if (shouldSendLastNightTrialReminder(u, now, cfg.proTrialDays) && enqueuedIds.has(row.user_id)) {
+    if (
+      shouldSendLastNightTrialReminder(u, now, cfg.proTrialDays) &&
+      enqueuedIds.has(row.user_id)
+    ) {
       needLast.push(row.user_id);
     }
   }

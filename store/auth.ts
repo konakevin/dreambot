@@ -3,7 +3,13 @@ import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { useFeedStore } from '@/store/feed';
 import { queryClient } from '@/lib/queryClient';
-import { isProActive, isPaidProActive, trialEndsAt } from '@/lib/proStatus';
+import {
+  isProActive,
+  isPaidProActive,
+  trialEndsAt,
+  isBasicActive,
+  isDreamEligible as computeDreamEligible,
+} from '@/lib/proStatus';
 
 interface AuthState {
   session: Session | null;
@@ -23,6 +29,13 @@ interface AuthState {
   /** ISO timestamp when the 14-day trial ends, or null if no trial set
    *  or already on paid. Use to render trial countdown copy. */
   proTrialEndsAt: string | null;
+  /** DreamBot Basic entitlement — true for an active (paid, unexpired) Basic
+   *  subscriber. Basic has no trial of its own. */
+  isBasic: boolean;
+  /** Eligible for nightly dreams: Pro (paid OR trial) OR Basic (paid). The
+   *  shared core perk of both paid tiers. Use to reflect "you get nightly
+   *  dreams" in UI; keep Pro-EXCLUSIVE perks on isPro. */
+  isDreamEligible: boolean;
   initialized: boolean;
   setSession: (session: Session | null) => void;
   signOut: () => Promise<void>;
@@ -37,6 +50,8 @@ interface EntitlementRow {
   pro_subscription?: boolean;
   pro_subscription_expires_at?: string | null;
   pro_trial_started_at?: string | null;
+  basic_subscription?: boolean;
+  basic_subscription_expires_at?: string | null;
 }
 
 // Pro-state logic (isPaidProActive / trialEndsAt / isProActive) lives in
@@ -45,7 +60,7 @@ interface EntitlementRow {
 // Imported above.
 
 const ENTITLEMENT_COLUMNS =
-  'is_admin, pro_subscription, pro_subscription_expires_at, pro_trial_started_at';
+  'is_admin, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at';
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
@@ -54,6 +69,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   isPro: false,
   isPaidPro: false,
   proTrialEndsAt: null,
+  isBasic: false,
+  isDreamEligible: false,
   initialized: false,
 
   setSession: (session) => {
@@ -72,10 +89,19 @@ export const useAuthStore = create<AuthState>((set) => ({
             isPro: isProActive(row),
             isPaidPro: isPaidProActive(row),
             proTrialEndsAt: trialEndsAt(row),
+            isBasic: isBasicActive(row),
+            isDreamEligible: computeDreamEligible(row),
           });
         });
     } else {
-      set({ isAdmin: false, isPro: false, isPaidPro: false, proTrialEndsAt: null });
+      set({
+        isAdmin: false,
+        isPro: false,
+        isPaidPro: false,
+        proTrialEndsAt: null,
+        isBasic: false,
+        isDreamEligible: false,
+      });
     }
   },
 
@@ -102,6 +128,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       isPro: isProActive(row),
       isPaidPro: isPaidProActive(row),
       proTrialEndsAt: trialEndsAt(row),
+      isBasic: isBasicActive(row),
+      isDreamEligible: computeDreamEligible(row),
     });
   },
 
@@ -119,6 +147,8 @@ export const useAuthStore = create<AuthState>((set) => ({
             isPro: isProActive(row),
             isPaidPro: isPaidProActive(row),
             proTrialEndsAt: trialEndsAt(row),
+            isBasic: isBasicActive(row),
+            isDreamEligible: computeDreamEligible(row),
           });
         });
     };
@@ -161,7 +191,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     } = supabase.auth.onAuthStateChange((_event, session) => {
       set({ session, user: session?.user ?? null, initialized: true });
       if (session?.user) checkEntitlements(session.user.id);
-      else set({ isAdmin: false, isPro: false, isPaidPro: false, proTrialEndsAt: null });
+      else
+        set({
+          isAdmin: false,
+          isPro: false,
+          isPaidPro: false,
+          proTrialEndsAt: null,
+          isBasic: false,
+          isDreamEligible: false,
+        });
     });
 
     return () => subscription.unsubscribe();

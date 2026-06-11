@@ -9,9 +9,15 @@ import { Platform } from 'react-native';
  *  entitlement name configured in the RevenueCat dashboard. */
 export const PRO_ENTITLEMENT = 'pro';
 
-/** Offering identifier for the Pro subscription packages (monthly + yearly).
- *  Must match the offering name in the RevenueCat dashboard. */
-export const PRO_OFFERING = 'pro';
+/** RevenueCat entitlement identifier for DreamBot Basic. Separate from Pro so
+ *  the app grants the right (lighter) perks. Must match the dashboard entitlement. */
+export const BASIC_ENTITLEMENT = 'basic';
+
+/** Offering identifier holding ALL subscription packages (Basic + Pro,
+ *  monthly + yearly). Renamed from 'pro' → 'subscriptions' (2026-06-11) when
+ *  Basic was added — one offering now feeds the whole Free/Basic/Pro paywall.
+ *  Must match the offering identifier in the RevenueCat dashboard. */
+export const SUBSCRIPTIONS_OFFERING = 'subscriptions';
 
 const RC_IOS_KEY = 'appl_gDwFXEmOsQLWUTUndcldpmruekW';
 const RC_ANDROID_KEY = 'YOUR_REVENUECAT_ANDROID_API_KEY';
@@ -77,9 +83,9 @@ export async function restorePurchases() {
 export async function getProPackages(): Promise<PurchasesPackage[]> {
   if (!configured) return [];
   const offerings = await Purchases.getOfferings();
-  const pro = offerings.all[PRO_OFFERING];
-  if (!pro) return [];
-  return pro.availablePackages;
+  const subs = offerings.all[SUBSCRIPTIONS_OFFERING];
+  if (!subs) return [];
+  return subs.availablePackages;
 }
 
 /**

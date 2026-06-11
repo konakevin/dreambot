@@ -83,10 +83,54 @@ describe('migration 151: users RLS lockdown + sparkle RPC auth', () => {
 });
 
 // ────────────────────────────────────────────────────────────────────────────
+// Migration 257 — DreamBot Basic columns + freeze extension + eligibility fns
+// ────────────────────────────────────────────────────────────────────────────
+
+describe('migration 257: DreamBot Basic columns + freeze extension + eligibility fns', () => {
+  const sql = read('supabase/migrations/257_dreambot_basic.sql');
+
+  it('adds the basic_subscription columns to users', () => {
+    expect(sql).toContain('basic_subscription boolean');
+    expect(sql).toContain('basic_subscription_expires_at timestamptz');
+  });
+
+  it('re-creates the freeze trigger covering the new Basic columns AND every prior frozen column', () => {
+    // CREATE OR REPLACE must list ALL frozen columns or it silently drops
+    // protection on the omitted ones (the reason this guard exists).
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION public.freeze_user_columns_on_update');
+    for (const col of [
+      'is_admin',
+      'sparkle_balance',
+      'pro_subscription',
+      'pro_subscription_expires_at',
+      'basic_subscription',
+      'basic_subscription_expires_at',
+      'id',
+      'email',
+      'created_at',
+    ]) {
+      expect(sql).toContain(`NEW.${col}`);
+      expect(sql).toContain(`OLD.${col}`);
+    }
+  });
+
+  it('defines is_basic_active (no trial) + is_dream_eligible (pro OR basic)', () => {
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION public.is_basic_active');
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION public.is_dream_eligible');
+    expect(sql).toMatch(/is_dream_eligible[\s\S]+?is_pro_active[\s\S]+?is_basic_active/);
+  });
+
+  it('adds the Basic perk amounts to engine_config', () => {
+    expect(sql).toContain('basic_monthly_sparkle_bundle');
+    expect(sql).toContain('basic_hd_downloads_per_month');
+  });
+});
+
+// ────────────────────────────────────────────────────────────────────────────
 // revenuecat-webhook
 // ────────────────────────────────────────────────────────────────────────────
 
-describe('revenuecat-webhook: Pro state machine + sparkle bundle', () => {
+describe('revenuecat-webhook: subscription (Pro + Basic) state machine + sparkle bundle', () => {
   const fn = read('supabase/functions/revenuecat-webhook/index.ts');
 
   it('verifies the webhook secret on every request', () => {
@@ -99,9 +143,9 @@ describe('revenuecat-webhook: Pro state machine + sparkle bundle', () => {
     expect(fn).toMatch(/maybeSingle\(\)/);
   });
 
-  it('PRO_SPARKLE_GRANT_EVENTS is exactly INITIAL_PURCHASE and RENEWAL', () => {
+  it('SUB_SPARKLE_GRANT_EVENTS is exactly INITIAL_PURCHASE and RENEWAL', () => {
     // The bundle must NOT be re-granted on PRODUCT_CHANGE / UNCANCELLATION
-    const block = fn.match(/PRO_SPARKLE_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
+    const block = fn.match(/SUB_SPARKLE_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
     expect(block).not.toBeNull();
     const list = block![1];
     expect(list).toContain("'INITIAL_PURCHASE'");
@@ -112,8 +156,8 @@ describe('revenuecat-webhook: Pro state machine + sparkle bundle', () => {
     expect(list).not.toContain('EXPIRATION');
   });
 
-  it('PRO_GRANT_EVENTS includes upgrade/downgrade + uncancel paths', () => {
-    const block = fn.match(/PRO_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
+  it('SUB_GRANT_EVENTS includes upgrade/downgrade + uncancel paths', () => {
+    const block = fn.match(/SUB_GRANT_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
     expect(block).not.toBeNull();
     const list = block![1];
     for (const ev of ['INITIAL_PURCHASE', 'RENEWAL', 'PRODUCT_CHANGE', 'UNCANCELLATION']) {
@@ -121,8 +165,8 @@ describe('revenuecat-webhook: Pro state machine + sparkle bundle', () => {
     }
   });
 
-  it('PRO_REVOKE_EVENTS only fires on EXPIRATION (not on user CANCELLATION)', () => {
-    const block = fn.match(/PRO_REVOKE_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
+  it('SUB_REVOKE_EVENTS only fires on EXPIRATION (not on user CANCELLATION)', () => {
+    const block = fn.match(/SUB_REVOKE_EVENTS\s*=\s*new Set\(\[([^\]]+)\]/);
     expect(block).not.toBeNull();
     const list = block![1];
     expect(list).toContain("'EXPIRATION'");
@@ -131,15 +175,32 @@ describe('revenuecat-webhook: Pro state machine + sparkle bundle', () => {
     expect(list).not.toMatch(/'CANCELLATION'/);
   });
 
-  it('Pro bundle grant is idempotent on transactionId', () => {
-    expect(fn).toContain('pro_bundle:${transactionId}');
+  it('bundle grant is idempotent on transactionId, keyed by the tier reason prefix', () => {
+    // reason = `${tier.bundleReasonPrefix}:${transactionId}` (pro_bundle / basic_bundle)
+    expect(fn).toContain('${tier.bundleReasonPrefix}:${transactionId}');
     // Look up an existing transaction by reason before granting
     expect(fn).toMatch(/sparkle_transactions[\s\S]+?\.eq\('reason', reason\)/);
   });
 
-  it('Pro entitlement update writes both pro_subscription and expires_at', () => {
-    expect(fn).toMatch(/pro_subscription:\s*true/);
-    expect(fn).toMatch(/pro_subscription_expires_at:\s*expiresAt/);
+  it('grant writes the tier flag + expiry AND clears the other tier (Basic↔Pro crossgrade)', () => {
+    expect(fn).toMatch(/\[tier\.flagColumn\]:\s*true/);
+    expect(fn).toMatch(/\[tier\.expiresColumn\]:\s*expiresAt/);
+    // one subscription group → granting one tier clears the others
+    expect(fn).toMatch(/updates\[other\.flagColumn\]\s*=\s*false/);
+  });
+
+  it('defines both Pro and Basic tiers with their own columns + bundle reasons', () => {
+    expect(fn).toContain("flagColumn: 'pro_subscription'");
+    expect(fn).toContain("flagColumn: 'basic_subscription'");
+    expect(fn).toContain("bundleReasonPrefix: 'pro_bundle'");
+    expect(fn).toContain("bundleReasonPrefix: 'basic_bundle'");
+    expect(fn).toContain("bundleColumn: 'basic_monthly_sparkle_bundle'");
+  });
+
+  it('refund clawback handles both tiers + the sparkle-pack path', () => {
+    // originalReason resolves from the tier on a CUSTOMER_SUPPORT refund
+    expect(fn).toMatch(/\$\{tier\.bundleReasonPrefix\}:\$\{transactionId\}/);
+    expect(fn).toContain('refund:');
   });
 });
 

@@ -34,6 +34,21 @@ function isProActive(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
   return isPaidProActive(u, now) || isTrialActive(u, now, trialDays);
 }
 
+/** Active PAID Basic subscription right now? Basic has NO trial of its own (the
+ *  free trial is the Pro-trial window) — paid + unexpired only. */
+function isBasicActive(u, now = Date.now()) {
+  if (!u || u.basic_subscription !== true) return false;
+  if (!u.basic_subscription_expires_at) return true; // no expiry = active
+  return new Date(u.basic_subscription_expires_at).getTime() > now;
+}
+
+/** Eligible for a NIGHTLY DREAM: Pro (paid OR trial) OR Basic (paid). Mirrors
+ *  the is_dream_eligible() Postgres fn + lib/proStatus.ts isDreamEligible. This
+ *  is the enqueue gate. */
+function isDreamEligible(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  return isProActive(u, now, trialDays) || isBasicActive(u, now);
+}
+
 /**
  * From today's ai_generation_log rows, the set of user_ids that already got a
  * COMPLETED nightly dream today (rolled_axes.engine starts with 'nightly-').
@@ -138,6 +153,8 @@ module.exports = {
   isProActive,
   isPaidProActive,
   isTrialActive,
+  isBasicActive,
+  isDreamEligible,
   nightlyDreamedUserIds,
   hoursUntilTrialEnds,
   hoursUntilProSubscriptionEnds,

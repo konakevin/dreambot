@@ -26,6 +26,7 @@ const mockModalHide = jest.fn();
 const mockSaveUrlToPhotos = jest.fn().mockResolvedValue(undefined);
 const mockInvoke = jest.fn();
 let mockIsPro = true;
+let mockIsBasic = false;
 
 jest.mock('expo-haptics', () => ({
   impactAsync: (...args: unknown[]) => mockImpactAsync(...args),
@@ -46,7 +47,7 @@ jest.mock('@/components/UpscaleOverlay', () => ({
   },
 }));
 jest.mock('@/store/auth', () => ({
-  useAuthStore: { getState: () => ({ isPro: mockIsPro }) },
+  useAuthStore: { getState: () => ({ isPro: mockIsPro, isBasic: mockIsBasic }) },
 }));
 jest.mock('@/lib/savePhoto', () => ({
   saveUrlToPhotos: (...a: unknown[]) => mockSaveUrlToPhotos(...a),
@@ -70,6 +71,7 @@ function pressAlertButton(label: string) {
 beforeEach(() => {
   jest.clearAllMocks();
   mockIsPro = true;
+  mockIsBasic = false;
   mockSaveUrlToPhotos.mockResolvedValue(undefined);
 });
 
@@ -98,9 +100,23 @@ describe('handleImageLongPress — quality sheet + entitlement gating', () => {
     mockIsPro = false;
     handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
     pressAlertButton('Save in HD (Pro)');
-    expect(mockRouterPush).toHaveBeenCalledWith('/proStore');
+    expect(mockRouterPush).toHaveBeenCalledWith('/subscribe');
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
     expect(mockInvoke).not.toHaveBeenCalled();
+  });
+
+  it('BASIC user gets the unlocked "Save in HD" (HD is a paid perk of both tiers)', async () => {
+    mockIsPro = false;
+    mockIsBasic = true;
+    handleImageLongPress({
+      id: 'p1',
+      imageUrl: 'https://img/orig.jpg',
+      imageUrlHq: 'https://img/hq.png',
+    });
+    // Unlocked label (no "(Pro)" suffix) + saves from cache, not routed to paywall
+    await pressAlertButton('Save in HD');
+    expect(mockRouterPush).not.toHaveBeenCalled();
+    expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/hq.png', true);
   });
 
   it('Pro user can grab a quick native save (no server call, no cap burn)', async () => {

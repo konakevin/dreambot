@@ -14,6 +14,8 @@ import {
   isPaidProActive,
   isTrialActive,
   trialEndsAt,
+  isBasicActive,
+  isDreamEligible,
   TRIAL_DURATION_DAYS,
 } from '@/lib/proStatus';
 
@@ -132,5 +134,75 @@ describe('proStatus — configurable trial window (trialDays param)', () => {
     const start = days(0);
     expect(trialEndsAt({ pro_trial_started_at: start }, 30)).toBe(days(30));
     expect(trialEndsAt({ pro_trial_started_at: start }, 7)).toBe(days(7));
+  });
+});
+
+describe('proStatus — DreamBot Basic (isBasicActive)', () => {
+  it('is Basic when basic_subscription=true and expiry is in the future', () => {
+    expect(
+      isBasicActive({ basic_subscription: true, basic_subscription_expires_at: days(30) }, NOW)
+    ).toBe(true);
+  });
+
+  it('is Basic when basic_subscription=true and no expiry recorded', () => {
+    expect(
+      isBasicActive({ basic_subscription: true, basic_subscription_expires_at: null }, NOW)
+    ).toBe(true);
+  });
+
+  it('falls back to FREE when the Basic subscription has expired', () => {
+    expect(
+      isBasicActive({ basic_subscription: true, basic_subscription_expires_at: days(-1) }, NOW)
+    ).toBe(false);
+  });
+
+  it('is NOT Basic without the flag (no trial path — Basic has no trial)', () => {
+    expect(isBasicActive({ basic_subscription: false }, NOW)).toBe(false);
+    expect(isBasicActive({ pro_trial_started_at: days(-1) }, NOW)).toBe(false); // a Pro trial does NOT confer Basic
+    expect(isBasicActive({}, NOW)).toBe(false);
+    expect(isBasicActive(null, NOW)).toBe(false);
+  });
+});
+
+describe('proStatus — dream eligibility (Pro OR trial OR Basic)', () => {
+  it('active paid Pro → dream-eligible', () => {
+    expect(
+      isDreamEligible({ pro_subscription: true, pro_subscription_expires_at: days(30) }, NOW)
+    ).toBe(true);
+  });
+
+  it('within Pro trial → dream-eligible', () => {
+    expect(isDreamEligible({ pro_trial_started_at: days(-5) }, NOW)).toBe(true);
+  });
+
+  it('active paid Basic → dream-eligible (even with no Pro + lapsed trial)', () => {
+    expect(
+      isDreamEligible(
+        {
+          basic_subscription: true,
+          basic_subscription_expires_at: days(20),
+          pro_trial_started_at: days(-40),
+        },
+        NOW
+      )
+    ).toBe(true);
+  });
+
+  it('expired Basic + lapsed trial + no Pro → NOT eligible', () => {
+    expect(
+      isDreamEligible(
+        {
+          basic_subscription: true,
+          basic_subscription_expires_at: days(-1),
+          pro_trial_started_at: days(-40),
+        },
+        NOW
+      )
+    ).toBe(false);
+  });
+
+  it('nothing → NOT eligible', () => {
+    expect(isDreamEligible({}, NOW)).toBe(false);
+    expect(isDreamEligible(null, NOW)).toBe(false);
   });
 });

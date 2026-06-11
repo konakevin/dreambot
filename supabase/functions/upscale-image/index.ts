@@ -81,14 +81,14 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // Pro gate: only Pro users (paid OR trial) can call this. The
-  // is_pro_active() SQL function checks pro_subscription + expires_at +
-  // pro_trial_started_at in one shot.
-  const { data: proCheck } = await supabase.rpc('is_pro_active', {
-    p_user_id: user.id,
-  });
-  if (!proCheck) {
-    return json({ error: 'Pro subscription required' }, 403);
+  // Subscription gate: Pro (paid OR trial) and DreamBot Basic (paid) can both
+  // HD-download — at DIFFERENT monthly caps (Pro 100, Basic from config). Free
+  // users (and expired subs) get 403. is_pro_active() folds in the trial window;
+  // is_basic_active() is paid-only.
+  const { data: isPro } = await supabase.rpc('is_pro_active', { p_user_id: user.id });
+  const { data: isBasic } = await supabase.rpc('is_basic_active', { p_user_id: user.id });
+  if (!isPro && !isBasic) {
+    return json({ error: 'Subscription required' }, 403);
   }
 
   // Load the upload — we need the source image_url + need to check
@@ -132,7 +132,19 @@ Deno.serve(async (req) => {
     .eq('user_id', user.id)
     .gte('created_at', monthStart.toISOString());
 
-  const HQ_CAP_PER_MONTH = 100;
+  // Per-tier monthly cap: Pro = 100; Basic-only = engine_config
+  // basic_hd_downloads_per_month (default 20). A user who is both (shouldn't
+  // happen — mutually exclusive group) gets the Pro cap (Pro wins).
+  const PRO_HQ_CAP_PER_MONTH = 100;
+  let HQ_CAP_PER_MONTH = PRO_HQ_CAP_PER_MONTH;
+  if (!isPro && isBasic) {
+    const { data: ec } = await supabase
+      .from('engine_config')
+      .select('basic_hd_downloads_per_month')
+      .eq('id', 1)
+      .single();
+    HQ_CAP_PER_MONTH = Number(ec?.basic_hd_downloads_per_month ?? 20);
+  }
   if ((downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
     console.warn(
       `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HD cap (count=${downloadsThisMonth})`
