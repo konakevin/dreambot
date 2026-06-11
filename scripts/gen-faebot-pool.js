@@ -4053,7 +4053,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • ~4 HUMMINGBIRD — ruby-throated / iridescent green / mid-hover near bloom
   • ~4 BEE — honeybee / bumblebee / pollen-gathering bee
   • ~3 DRAGONFLY — iridescent dragonfly / damselfly / mid-flight
-  • ~3 LADYBUG / SMALL BEETLE — ladybug on petal / iridescent beetle
+  • ~3 LADYBUG — a ladybug on a petal / a ladybug cluster on a stem
   • ~2 GLOW-MOTH / FIREFLY — glowing-moth / single firefly orbit
   • ~2 SMALL FROG / TADPOLE — lily-frog / tiny tree-frog
   • ~1 BIRD (TINY) — tiny wren / small finch
@@ -4089,7 +4089,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'A painted damselfly mid-flight between painted blooms, painted thin elongated body with painted iridescent wings, painted intimate register',
       'A painted dragonfly mid-hover with painted iridescent wings spread, painted magical register',
       'A painted ladybug on a painted petal at her feet, painted bright red-and-black dotted painted shell, painted intimate scale',
-      'A painted iridescent beetle painted resting on a painted leaf near her, painted soft metallic-shimmer painted shell, painted intimate register',
+      'A painted red ladybug resting on a painted leaf near her, painted soft glossy spotted shell, painted intimate register',
       'A painted small painted bug on a painted bloom near her, painted intimate scale-contrast detail',
       'A painted glowing-moth circling her painted form in painted soft pearl-glow, painted magical wing-motion, painted fae register',
       'A painted firefly orbiting her painted cupped palm in painted soft warm-glow, painted intimate register',
@@ -4216,7 +4216,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
   • ~3 BRANCH / TWIG — moss-covered branch / hanging twig / fern-tip / vine-curl
   • ~2 NATURAL FOREST OBJECT — fallen-acorn / pine-cone / berry-cluster / pebble
   • ~2 DEWDROP / WATER — dewdrop-rim / lily-pad-edge / mushroom-cap-puddle / leaf-bowl-of-rain
-  • ~2 CREATURE-AS-MOUNT — riding a beetle / on a bird-back / on a butterfly / fawn-hoof
+  • ~2 CREATURE-AS-MOUNT — on a bird-back / on a butterfly / on a fawn / nestled on a snail-shell
   • ~3 MAGICAL OBJECT — glowing-mushroom / glowing-seed / lichen-cluster / spider-silk-thread
 
 ⚠️ EVERY entry MUST include:
@@ -4240,7 +4240,6 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
       'Standing on a moss-covered branch with painted velvety green-moss texture, the moss-strands are HER tall grass at hip-height',
       'Curled inside a single overturned poppy-petal with painted scarlet crinkled-silk texture, the petal is HER hammock, painted close-up detail',
       'Balanced on the rim of a giant dewdrop catching the canopy-light, painted refractive-clarity, the dewdrop is HER mirror, painted shimmer detail',
-      'Riding on the back of a stag-beetle with painted iridescent blue-green carapace, the beetle is HER mount, painted close-up shell-detail',
       'Perched on the curl of a giant fern-tendril unfurling, painted soft-green spiral-detail, the fern-tendril is HER playground-slide',
       'Seated on a pine-cone with painted brown-and-tan layered scales, the pine-cone is HER chair, painted gallery-tier macro detail',
       'Standing inside a pearl-glow mushroom cap with painted soft cyan inner-glow, the glowing mushroom is HER lantern-room, painted magical register',
@@ -4263,7 +4262,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
     format: 'simple',
     theme: `FOREST MICRO BIOME for FaeBot's tiny-fae path. Each entry describes ONE specific patch of enchanted forest rendered FROM the palm-sized fae's perspective — the world at HER scale. Each entry 25-50 words.
 
-⚠️ THE BAR: each biome is a macro-perspective forest setting where normal-sized forest features are RENDERED ENORMOUS — giant ferns at her height, towering moss-tufts, fallen-acorn-boulders, mushroom-groves at her scale, moss-canyons, beetle-roads through moss. The world is painted FROM her eye-level looking at her tiny world.
+⚠️ THE BAR: each biome is a macro-perspective forest setting where normal-sized forest features are RENDERED ENORMOUS — giant ferns at her height, towering moss-tufts, fallen-acorn-boulders, mushroom-groves at her scale, moss-canyons, winding pebble-paths through moss. The world is painted FROM her eye-level looking at her tiny world.
 
 ⚠️ BIOME CATEGORIES (across 25 entries):
   • ~4 GIANT FERN GROVES — fern-fronds towering like trees at her scale
@@ -4440,7 +4439,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
 ⚠️ ACTION CATEGORIES (across 25 entries):
   • ~5 NATURE INTERACTION — cradling a glowing seed / drinking from dewdrop / brushing companion-fur / picking pollen
   • ~5 COMPANION-INTERACTION — petting a sleeping bird / whispering to fox-cub / lifting a butterfly-wing / kissing a bee
-  • ~3 INSPECTING — examining a fallen petal / studying a beetle-carapace / inspecting a leaf-edge
+  • ~3 INSPECTING — examining a fallen petal / inspecting a leaf-edge / peering into a dewdrop
   • ~3 LISTENING / STILL — head tilted listening / motionless watching / pausing mid-step
   • ~3 RESTING — sleeping inside a flower-bell / curled on moss-tuft / leaning on mushroom-stem
   • ~3 MOVEMENT — mid-flight near a butterfly / mid-step across a leaf-bridge / drifting through the air
@@ -4472,7 +4471,6 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
       'Lifting a butterfly-wing edge with one painted finger in painted reverence, captured macro shot at her scale, fae and butterfly equal-scale, painted intimate register',
       'Whispering to a fox-cub close to its painted ear, captured intimate close-up on her hand near its painted whisker, fae 40% of frame, painted gentle moment',
       'Examining a single fallen petal in her painted cupped palms, captured extreme close-up macro perspective, fae fills 45% of frame, head bowed in concentration',
-      'Studying a beetle-carapace with painted reverent fingertips brushing its iridescent shell, captured intimate close-up, fae 40% of frame, painted gentle moment',
       'Inspecting a leaf-edge with one painted finger tracing its painted vein-pattern, captured macro shot at her scale, fae 35% of frame, painted dappled light',
       'Head tilted listening to a distant forest sound, captured side-profile macro shot, fae caught in a quiet moment, wings catching backlight, fae 35% of frame',
       'Motionless watching a passing dragonfly in the painted distance, captured three-quarter view of fae mid-perch, fae 30% of frame, painted candid register',
@@ -4486,7 +4484,6 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
       'Releasing painted golden pollen from her painted fingertips into the air, captured extreme close-up macro, fae fills 40% of frame, painted gentle magical register',
       'Cradling a single will-o-wisp in her painted cupped palms, captured extreme close-up macro, fae fills 45% of frame, head bowed over the painted glowing-light, magical register',
       'Fingertips trailing painted sparkle-light, captured side-profile macro shot, fae 35% of frame, wings catching backlight, painted magical register',
-      'Riding on the back of a stag-beetle with painted hands resting lightly on its carapace, captured three-quarter view of fae on the beetle, fae 30% of frame, painted journey register',
       'Over-the-shoulder framing past a giant painted petal in foreground, the fae visible beyond perched at her natural scale, painted depth showing her tiny size, fae 25% of frame',
     ],
     instructions: `Each entry is ONE specific candid action with composition spec baked in, 30-50 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific candid action, (b) composition spec, (c) fae % of frame, (d) face/posture detail. NO posing. NO eye-contact. NO violence/scared. NO creature description. NO biome description. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
