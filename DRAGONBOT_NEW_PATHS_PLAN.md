@@ -27,10 +27,10 @@
 | 4 | 1 | dragon-flight | ✅ | ✅ | (skip) | 0 | ✅ | ✅ |
 | 5 | 1 | dragon-brood | ✅ | ✅ | ✅ | 4 | ✅ | scaling |
 | 6 | 1 | dragon-breeds | ✅ | ✅ | ✅ | 0 | ✅ | scaling |
-| 7 | 2 | clash-of-armies | ✅ | ✅ | ✅ | 1 | ✅ | scaling |
+| 7 | 2 | clash-of-armies | ✅ | ✅ | ✅ | 1 | ✅ | ✅ |
 | 8 | 2 | magic-unleashed | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 9 | 2 | mythic-bestiary | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
-| 10 | 2 | fae-court | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 10 | 2 | fae-court | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 11 | 2 | dungeon-delve | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 12 | 2 | necromancer | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 13 | 3 | wizard-tower | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |

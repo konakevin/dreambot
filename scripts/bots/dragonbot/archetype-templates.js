@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, fae_subject, enchanted_setting, ethereal_detail, surprise, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ETHEREAL FAE scene for DragonBot — a vision of the high-fae / elven court / enchanted glade, gossamer and luminous and magical. Brian Froud + Alan Lee + Michael Whelan painted-fantasy oil tradition. Dreamlike, beautiful, otherworldly. The scene should make the viewer feel they have glimpsed a hidden magical world.
+
+━━━ ETHEREAL FAE BEAUTY — ABSOLUTE FIRST RULE ━━━
+This is a luminous, dreamlike high-fantasy fae scene — graceful elven/fae beings and enchanted nature bathed in magical light. Gossamer, delicate, otherworldly, NOT dark or grim, NOT sci-fi. A sense of hidden wonder and quiet magic.
+
+━━━ THE FAE SUBJECT (the being(s) of the court) ━━━
+${fae_subject}
+
+Render the fae/elven subject with ethereal grace — beauty, fine raiment, an otherworldly presence.
+
+━━━ THE ENCHANTED SETTING ━━━
+${enchanted_setting}
+
+Render the magical natural setting with depth and atmosphere — the heart of the fae world.
+
+━━━ ETHEREAL DETAIL (the magic in the air) ━━━
+${ethereal_detail}
+
+Render this delicate magical detail across the scene — it carries the enchantment.
+
+━━━ A SURPRISE (a small enchanting touch) ━━━
+${surprise}
+
+A small magical surprise tucked in the scene, rewarding a closer look.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, luminous, dreamlike. The fae subject set within the enchanted glade, magical light and ethereal detail filling the air, multi-layer depth into a glowing otherworld. Graceful and beautiful. NEVER grim/dark; NEVER mundane.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — an ethereal fae/elven subject in an enchanted glade — the luminous fae vision leads], [the fae subject — grace + raiment + presence], [the enchanted magical setting with depth], [ethereal detail in the air — motes, glow, gossamer], [a small magical surprise], [lighting + atmosphere], [palette + dreamlike magical mood]
+
+CRITICAL — render a luminous, ethereal high-fae scene of beauty and quiet magic. Do NOT render anything grim, dark, mundane, or sci-fi.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   MYTHIC_BESTIARY: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, creature, creature_action, habitat, encounter, drama } = slots;
 

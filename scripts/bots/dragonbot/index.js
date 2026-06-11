@@ -27,6 +27,7 @@ const pathBuilders = {
   'clash-of-armies': require('./paths/clash-of-armies'),
   'magic-unleashed': require('./paths/magic-unleashed'),
   'mythic-bestiary': require('./paths/mythic-bestiary'),
+  'fae-court': require('./paths/fae-court'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -115,6 +116,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // fae-court: anchor the ethereal high-fae / enchanted-glade scene.
+    'fae-court':
+      'Brian Froud + Alan Lee + Michael Whelan painted-fantasy oil tradition, an ETHEREAL HIGH-FAE scene — graceful elven/fae beings in gossamer raiment within a luminous enchanted glade, soft moonlight and drifting motes of magical light, delicate otherworldly beauty, dreamlike and wondrous (NOT grim NOT sci-fi), painterly atmospheric depth into a glowing fae-world, LOTR-elf + faerie visual lineage, awe-inducing concept-art masterwork',
     // mythic-bestiary: anchor ONE non-dragon mythic creature portrait.
     'mythic-bestiary':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy oil tradition, a BESTIARY HERO PORTRAIT of ONE magnificent legendary NON-DRAGON creature (griffon / kraken / phoenix / hydra / treant / chimera / manticore / roc / etc.), the creature large and central with its anatomy + texture + signature features in crisp detail, a tiny figure for scale, its native habitat behind with depth, monster-manual showcase, painterly atmospheric grandeur, D&D + mythology + LOTR visual lineage, awe-inducing concept-art masterwork',
@@ -586,6 +590,8 @@ module.exports = {
     'magic-unleashed',
     // NEW 2026-06-10 — mythic-bestiary (non-dragon monster portraits, Tier 2). MVP-25.
     'mythic-bestiary',
+    // NEW 2026-06-10 — fae-court (ethereal fae/elven scene, Tier 2). MVP-25.
+    'fae-court',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -619,7 +625,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -680,6 +686,7 @@ module.exports = {
       'clash-of-armies',
       'magic-unleashed',
       'mythic-bestiary',
+      'fae-court',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -720,6 +727,7 @@ module.exports = {
       'clash-of-armies': 'scene',
       'magic-unleashed': 'scene',
       'mythic-bestiary': 'creature',
+      'fae-court': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',
