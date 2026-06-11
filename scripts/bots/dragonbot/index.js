@@ -282,8 +282,6 @@ module.exports = {
     // banana isn't in cleanMediumByModel for DragonBot, so it renders the
     // full painted_fantasy medium directly (the version Kevin reviewed).
     'dragon-rider': [
-      'openai/gpt-image-2',
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -294,22 +292,18 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-adventurer': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-adventurer': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-explorer': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-explorer': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

@@ -23,6 +23,9 @@ const pathBuilders = {
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'the-dark-prince': require('./paths/the-dark-prince'),
+  'the-haunting': require('./paths/the-haunting'),
+  'the-coven': require('./paths/the-coven'),
+  'moonlit-maiden': require('./paths/moonlit-maiden'),
   'gothic-vista': require('./paths/gothic-vista'),
   'vampire-assassin-female': require('./paths/vampire-assassin-female'),
   'vampire-from-a-distance': require('./paths/vampire-from-a-distance'),
@@ -81,24 +84,17 @@ module.exports = {
     // ── inline per path. To unban: add the model id back.
     'goth-closeup': [
       // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux 2 Flex (2026-06-02)
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'goth-full-body': [
       // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02)
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'goth-male-full-body-axis': [
       // 2026-06-05: Banana re-enabled for character-path audit.
       // Mirror of goth-full-body. BAN: Flux Dev, Flux 2 Pro, Flux 2 Flex (2026-06-02).
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -106,38 +102,42 @@ module.exports = {
     // Vampire paths (female-coded subset gets the multi-model arrays)
     'vampire-girls-2': [
       // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux 2 Flex (2026-06-02)
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-dark-prince — male character lineup (mirror of vampire-girls-2, 2026-06-10 NEW).
     'the-dark-prince': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
-      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // the-haunting — ethereal ghost; scene-ish lineup (2026-06-10 NEW).
+    'the-haunting': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // the-coven — female witch character lineup (2026-06-10 NEW).
+    'the-coven': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    // moonlit-maiden — ethereal female figure (2026-06-11 NEW). Flux only (the
+    // hearted look came from flux-1.1-pro/ultra anime).
+    'moonlit-maiden': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'vampire-assassin-female': [
       // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux Dev, Flux 2 Flex
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'vampire-assassin-combat': [
       // 2026-06-05: Banana re-enabled for character-path audit (new entry).
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'vampire-hunter-in-action': [
       // 2026-06-05: Banana re-enabled for character-path audit (new entry).
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -147,65 +147,52 @@ module.exports = {
     // ── vampire-from-a-distance is classified non-character (distant figure,
     // ── cinematic scenery) per Kevin's confirmation 2026-05-31.
     'vampire-from-a-distance': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dark-landscape': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'gothic-architecture': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'castlevania-scene': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-sanctum — non-character scene lineup (2026-06-10 NEW).
     'the-sanctum': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-frost-garden — non-character scene lineup (2026-06-10 NEW).
     'the-frost-garden': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // twilight-gothic — non-character scene lineup (2026-06-10 NEW).
     'twilight-gothic': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'gothic-vista': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'monster-prowl': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'monster-prowl-victorian': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -225,6 +212,11 @@ module.exports = {
     'goth-full-body': ['dark', 'nightshade', 'macabre'],
     'vampire-girls-2': ['dark', 'nightshade', 'macabre'],
     'the-dark-prince': ['dark', 'nightshade', 'macabre'],
+    'the-haunting': ['dark', 'nightshade', 'macabre'],
+    // the-coven — weird-occult vibes (less pure-dark) for the ornate twisted-witch register.
+    'the-coven': ['arcane', 'arcane', 'macabre', 'nightshade', 'surreal', 'ancient', 'enchanted'],
+    // moonlit-maiden — cold-blue moonlit ethereal vibes (2026-06-11 NEW).
+    'moonlit-maiden': ['ethereal', 'nightshade', 'enchanted', 'dark', 'shimmer'],
     // Scene paths locked to the dark / nightshade / macabre triad for the trial.
     'dark-landscape': ['dark', 'nightshade', 'macabre'],
     'gothic-architecture': ['dark', 'nightshade', 'macabre'],
@@ -254,7 +246,7 @@ module.exports = {
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
   cleanMediumByModel: {
     'openai/gpt-image-2': { medium: 'gothbot_gpt_clean' },
-    'google/gemini-2-image': { medium: 'gothbot_gpt_clean' },
+    // google/gemini-2-image (Nano Banana) BANNED fleet-wide for gothbot 2026-06-10 (Kevin).
   },
 
   mediumByPath: {
@@ -265,7 +257,10 @@ module.exports = {
     // the-dark-prince: gothic_realistic (Frazetta/Royo/Vallejo masculine oil-painting)
     // — anime rendered bishonen pretty-boys (Kevin 2026-06-10 "a bit gay"); the painted
     // dark-fantasy-cover register renders a RUGGED, mature, menacing male dark-lord.
-    'the-dark-prince': 'gothic_realistic',
+    'the-dark-prince': 'anime',
+    'the-haunting': 'anime',
+    'the-coven': 'anime',
+    'moonlit-maiden': 'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
     'dark-landscape': 'anime',
     'gothic-architecture': 'gothbot_gothic_print',
@@ -482,7 +477,16 @@ module.exports = {
     enabled: true,
     // the-sanctum on skipPaths for the MVP (protect the deep-perspective interior
     // composition while validating — re-enable on scale per playbook Step 6).
-    skipPaths: ['goth-closeup', 'the-sanctum', 'the-frost-garden', 'twilight-gothic', 'the-dark-prince'],
+    skipPaths: [
+      'goth-closeup',
+      'the-sanctum',
+      'the-frost-garden',
+      'twilight-gothic',
+      'the-dark-prince',
+      'the-haunting',
+      'the-coven',
+      'moonlit-maiden',
+    ],
     allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body-axis'],
   },
 
@@ -515,6 +519,8 @@ module.exports = {
       'vampire-girls-2': 'female',
       'goth-closeup': 'female',
       'goth-full-body': 'female',
+      'the-coven': 'female',
+      'moonlit-maiden': 'female',
       'goth-male-full-body-axis': 'male',
       'vampire-hunter-in-action': 'male',
       'the-dark-prince': 'male',
@@ -523,6 +529,7 @@ module.exports = {
       'the-sanctum': 'scene',
       'the-frost-garden': 'scene',
       'twilight-gothic': 'scene',
+      'the-haunting': 'scene',
       'gothic-vista': 'scene',
       'castlevania-scene': 'scene',
       'cozy-goth': 'scene',
@@ -574,6 +581,9 @@ module.exports = {
       'the-sanctum',
       'the-frost-garden',
       'twilight-gothic',
+      'the-haunting',
+      'the-coven',
+      'moonlit-maiden',
       'castlevania-scene',
       'cozy-goth',
       'monster-prowl',
@@ -625,6 +635,9 @@ module.exports = {
     'cozy-goth',
     'vampire-girls-2',
     'the-dark-prince',
+    'the-haunting',
+    'the-coven',
+    'moonlit-maiden',
     'gothic-vista',
     'vampire-assassin-female',
     'vampire-from-a-distance',

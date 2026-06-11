@@ -67,6 +67,48 @@ module.exports = {
     anchorScaleRange: ['LARGE'],
   },
 
+  GOTHBOT_THE_HAUNTING: {
+    description:
+      'PATH-BESPOKE — GothBot the-haunting path (2026-06-10 NEW). A SOLO TRANSLUCENT GHOST / spectre (lady in white / weeping bride / drowned maiden / veiled mourner / spectral nun / phantom lord / ghostly knight) drifting an empty gothic place. Fills the "no ghosts" gap — sorrowful, beautiful, eerie (Crimson-Peak / The-Woman-in-Black / gothic-ghost-story). The TRANSLUCENCY (see-through, semi-transparent, edges-to-mist, feet faded) is the signature money-shot + the hard part. NOT a vampire, NOT a monster, NOT gore. 6 path-bespoke axes (spectre / visage / translucency / setting / light / composition) + 50%-gated manifestation. The VISAGE axis (hair colour/style + complexion + features) makes each ghost a DISTINCT woman, and her FACE always stays clear/defined (never blurred-out). universal:[] — the path self-lights via the cold ghost-light pool.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['spectre', 'visage', 'translucency', 'setting', 'light', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'manifestation', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GOTHBOT_THE_COVEN: {
+    description:
+      'PATH-BESPOKE — GothBot the-coven path (2026-06-10 NEW). A SOLO FEMALE WITCH / sorceress MID-SPELL — magic visibly erupting (glowing sigils / witchfire / conjured beasts / runes in the air). Every existing female path is a vampire/goth-beauty; none is a WITCH doing magic. The SPELL is the signature money-shot — magic ACTIVELY happening, never a static pose. Hocus-Pocus / The-Witch / Suspiria / dark-fairy-tale lineage. NOT a vampire, NOT a goth pin-up, NOT a cartoon-green hag. Solo. 5 path-bespoke axes (witch / spell / action / lair / composition) + 50%-gated familiar (a small animal companion). universal:[] — the path self-lights via her spell-glow.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['witch', 'spell', 'action', 'lair', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'familiar', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GOTHBOT_MOONLIT_MAIDEN: {
+    description:
+      'PATH-BESPOKE — GothBot moonlit-maiden path (2026-06-11 NEW). Preserves the SOFTER "R0" ghost look Kevin hearted: a LONE ETHEREAL BEAUTIFUL WOMAN in a GORGEOUS, atmospheric, moonlit gothic scene — dreamy, romantic-melancholic, cinematic, cold-blue. The grand haunting SCENE and the graceful woman are CO-EQUAL. NOT the strict see-through ghost-mechanics or caught-on-camera uncanny poses of the-haunting — this is sublime gothic beauty + melancholy. Anime/painterly medium. 5 path-bespoke axes (maiden / visage / scene / moonlight / composition) + 50%-gated accent (a soft atmospheric detail). The VISAGE axis keeps each woman distinct + her face always clear. universal:[] — the scene is self-lit by the moon.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['maiden', 'visage', 'scene', 'moonlight', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'accent', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_GOTH_CLOSEUP: {
     description:
       'PATH-BESPOKE — GothBot goth-closeup path (2026-05-15 migration). HAUNTINGLY BEAUTIFUL dark-seductress closeups — SEXY + SULTRY + EVIL + FEISTY gothic women in tight frame (face + throat + one shoulder). Castlevania / Crimson Peak / Bloodborne / Devil-May-Cry dark-beauty lineage. Gender-locked FEMALE. Solo only. Character at LARGE anchor (face fills upper half of frame). Candid-moment energy, not posed. NSFW-clean (no nipple/cleavage emphasis). 10 path-bespoke axes (archetype / skin / eyes / hair_color / hairstyle / makeup / wardrobe / accessory / candid_moment / camera_perspective) + universal lighting + atmosphere.',

@@ -3421,6 +3421,513 @@ Each entry MUST include: a HARD masculine face quality + GLOWING eyes (use "glow
     ],
     instructions: `Each entry is ONE bust/portrait framing, 12-22 words. Face-focused, bust 40-50%, composed + commanding. NO full-body, NO action. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
   },
+
+  // ════════════════════════════════════════════════════════════════
+  // the-haunting — NEW path (2026-06-10). A SOLO TRANSLUCENT GHOST / spectre
+  // drifting a gothic place. Fills the "no ghosts" gap. TRANSLUCENCY is the
+  // signature + the hard part. Sorrowful, beautiful, eerie. universal:[].
+  // ════════════════════════════════════════════════════════════════
+  gothbot_haunting_spectre: {
+    format: 'simple',
+    theme: `THE SPECTRE — the HERO axis. Each entry is ONE hauntingly beautiful, sorrowful FEMALE GHOST. 18-30 words. An elegant woman-ghost — a lady in white, a grey lady, a weeping bride, a drowned maiden, a veiled widow, a spectral nun, a phantom governess, a pale lady in a faded ball-gown. Crimson-Peak / The-Woman-in-Black / The-Others / gothic-ghost-story lineage.
+
+⚠️ THE BAR — a HAUNTINGLY BEAUTIFUL, sad, eerie WOMAN-spectre: corpse-pale, mournful, elegant, otherworldly, frozen in some old grief, faintly luminous with a cold corpse-blue light. She is the hero of the frame. (Kevin's hearted look: the elegant translucent lady-ghost.)
+
+🚫 ALWAYS a FEMALE ghost (this path is the beautiful lady-spectre — NO male lords/knights/soldiers/gallows-men). NOT a living solid person, NOT a vampire, NOT a monster/zombie, NOT a jump-scare gore-ghoul. SORROWFUL, beautiful, melancholy. NO modern / NO LOTR-Skyrim-Witcher vocabulary.
+
+✓ VARIETY MANDATE (~16), all ELEGANT WOMEN:
+  • LADY IN WHITE / grey lady (~4) — a pale mournful woman in a long trailing gown
+  • WEEPING BRIDE / jilted bride (~3) — a spectral bride in a decaying veil
+  • DROWNED MAIDEN (~2) — a water-soaked drifting spirit, hair like weed
+  • VEILED WIDOW / mourner (~2) — a black-veiled grieving lady-phantom
+  • SPECTRAL NUN / abbess (~1) — a hooded cloistered woman-ghost
+  • PHANTOM GOVERNESS / housekeeper (~2) — a stern grey lady-phantom (NO child as subject)
+  • PALE BALL-GOWN LADY (~1) — a young woman drifting a ballroom she never leaves
+  • DARK-HAIRED MELANCHOLY LADY (~1) — a brooding pale beauty at a window
+
+Each entry: the female-spectre archetype + her mournful identity / old grief + her corpse-pale, faintly cold-blue-luminous, elegant look. Faded, drained, spectral clothing (never rich color).`,
+    touchpoints: [
+      'a pale lady in a long trailing white gown, her face beautiful and grief-stricken, drifting with a sorrow centuries old, her form faintly cold-blue luminous',
+      'a spectral bride in a yellowed decaying veil and gown, frozen forever at an altar that never came, her eyes hollow with betrayal',
+      'a drowned maiden, her pale gown and long hair drifting as if still underwater, water beading and falling from her translucent form, mournful and slow',
+      'a black-veiled widow-phantom, her grief a palpable cold, gloved hands clasped, a spectral mourning-brooch at her throat, endlessly waiting',
+      'a hooded spectral nun gliding the cloister, her wimple grey and faded, her downturned face pale and sorrowful, lips moving in silent prayer',
+      'a grey lady in a high-collared Victorian dress, hands folded, her beautiful face cold and resigned, faintly luminous in the dark',
+      'a stern phantom governess in high-collared grey, hands clasped, watching an empty nursery with cold sorrow, her form semi-transparent',
+      'a wailing lady, her mouth open in a silent endless keen, her hair and tattered shroud streaming as if in a wind that is not there',
+      'a pale young woman in a faded ball-gown, a single spectral rose in her hand, drifting a ballroom she never wishes to leave',
+      'a melancholy dark-haired beauty in a trailing pale gown, gazing from a tall window, corpse-pale and faintly glowing',
+      'a drowned bride, her veil and gown sodden and trailing, pale hands lifted, water running endlessly from her translucent form',
+      'a serene veiled abbess-ghost, a faint cold halo of light about her downturned head, drifting the dark chapel aisle',
+    ],
+    instructions: `Each entry is ONE hauntingly beautiful sorrowful FEMALE ghost, 18-30 words. Always an elegant WOMAN, corpse-pale + faintly cold-blue luminous. NEVER male / living-solid / vampire / gore-ghoul. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_visage: {
+    format: 'simple',
+    theme: `THE VISAGE — her FACE + HAIR, making each ghost a DISTINCT woman. Each entry 14-24 words. ONE specific combination of hair COLOUR + hairstyle + complexion/ethnicity + a couple of facial features. The whole point is VARIETY — no two ghosts should look like the same woman. (Kevin: the renders all looked like the same girl; differentiate face / hair colour / style.)
+
+⚠️ Her FACE is always CLEAR + defined + beautiful (visible eyes, nose, sorrowful mouth) — NEVER blurred, smudged or erased. She is a ghost so corpse-pale/drained, but keep her ORIGINAL hair colour + ethnicity so she reads as a specific individual.
+
+✓ VARIETY MANDATE — span widely, do NOT default to dark-haired-pale-young-woman every time:
+  • HAIR COLOUR: raven-black, jet-black, silver-white, ash-blonde, platinum, honey-blonde, deep auburn, copper-red, chestnut, dark-brown, iron-grey, snow-white
+  • HAIRSTYLE: long loose waves, heavy Victorian updo, braided coronet, ringlets half-up, severe centre-part, wild unbound, plait over one shoulder, low chignon, finger-waved bob, tumbling curls, Edwardian pompadour
+  • COMPLEXION / FEATURES (all drained ghost-pale but varied undertone + bone-structure): sharp Slavic, soft round English, freckled Irish, porcelain East-Asian, olive Mediterranean, warm South-Asian, deep-brown, gaunt high-boned, delicate heart-shaped, lined-and-dignified-older
+  • AGE: mostly young women, but a few dignified older ladies.
+
+🚫 NO living-warm glow (she's drained), NO bright lipstick / modern makeup, NO blurred or faceless head.`,
+    touchpoints: [
+      'raven-black hair in a heavy Victorian updo, sharp Slavic cheekbones, dark sorrowful eyes, corpse-pale porcelain skin',
+      'long loose ash-blonde waves, a soft round English face, faint freckles gone grey, gentle grief-stricken eyes',
+      'deep auburn hair plaited over one shoulder, fair freckled Irish complexion, hollow-cheeked, mournful pale-green eyes',
+      'silver-white hair unbound and wild, a gaunt high-boned face, near-translucent skin, huge haunted pale eyes',
+      'sleek jet-black hair in a low chignon, porcelain East-Asian features, delicate, downturned dark eyes',
+      'honey-blonde ringlets pinned half-up, a delicate heart-shaped face, soft full lips, sorrowful hazel eyes',
+      'dark-brown hair coiled in a braided coronet, warm olive-Mediterranean skin drained ashen, deep-set grieving eyes',
+      'copper-red hair tumbling in loose curls, pale freckled skin, a sharp little chin, wide mournful eyes',
+      'iron-grey hair severely centre-parted, a lined dignified older face, hollow cheeks, cold pale eyes',
+      'black hair in a finger-waved 1920s bob, a sharp angular face, dark-lidded sorrowful eyes, porcelain skin',
+      'chestnut hair loose to the waist, warm South-Asian features drained ghost-pale, large dark grieving eyes',
+      'platinum hair in a soft Edwardian pompadour, fine aristocratic features, a thin sad mouth, pale grey eyes',
+    ],
+    instructions: `Each entry is ONE distinct hair-colour + hairstyle + complexion + features combination, 14-24 words. MAXIMIZE variety — never the same woman twice. Corpse-pale but keep original hair colour + ethnicity. Face always CLEAR (never blurred/erased). Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_translucency: {
+    format: 'simple',
+    theme: `THE TRANSLUCENCY — the SIGNATURE money-shot: the SEE-THROUGH spectral effect that makes her a GHOST. Each entry 12-24 words. This is the WHOLE POINT and the hard part — she must be SEMI-TRANSPARENT.
+
+⚠️ The spectre is TRANSLUCENT — you SEE THROUGH her to the wall / window / stairs behind. Render: the architecture visible through her body, edges dissolving into mist, the lower body / feet fading to nothing, a faint cold inner glow, a smoky semi-transparent form, light passing through her.
+
+🚫 She is NOT solid / NOT opaque / NOT a costumed living person. If you can't see through her, it has FAILED. NOT a heavy fog blob either — a READABLE translucent FIGURE.`,
+    touchpoints: [
+      'her body semi-transparent, the moonlit window and stone wall clearly visible THROUGH her pale form',
+      'translucent and smoky, the carved banister and stairs showing right through her drifting gown',
+      'her lower body and feet dissolving into a trailing wisp of cold mist, no longer touching the floor',
+      'a faint cold inner light glows through her, her edges feathering into the dark like smoke',
+      'so thin and spectral that the candle-flame behind her shines straight through her shoulder',
+      'her form a pale luminous haze you can see the portraits and panelling through, hands almost vanishing',
+      'translucent as breath on glass, the gothic arch and far doorway visible through her chest and trailing veil',
+      'her gown and hair streaming into dissolving threads of mist at every edge, the wall glowing faintly through her',
+      'a watery transparency, the cold blue light passing clean through her drowned drifting shape',
+      'half-there and half-gone, the floor and far columns clearly visible beneath and through her hovering form',
+      'her face and hands the most solid, the rest of her fading to a see-through luminous vapour',
+      'the spectral chains and her own arm semi-transparent, the firelight glowing through them onto the wall',
+    ],
+    instructions: `Each entry is ONE translucency effect, 12-24 words. She MUST read as SEE-THROUGH (architecture visible through her, edges to mist, feet faded). Never solid, never a fog-blob. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_setting: {
+    format: 'simple',
+    theme: `THE HAUNTED PLACE — the gothic INTERIOR she haunts (soft / atmospheric behind her). Each entry 18-30 words. ONE empty room or hall INSIDE a dark old manor or abbey. Crimson-Peak / gothic-manor / The-Woman-in-Black / The-Others lineage. (Kevin's hearted look: an atmospheric manor INTERIOR.)
+
+⚠️ ALWAYS AN INTERIOR — a grand staircase, a portrait gallery, a candlelit corridor, a derelict ballroom, a cold music room, a faded drawing room, an abandoned nursery, a vast library, a long servants' corridor, a chapel/abbey nave, a dining hall, a turret window-seat, a grand bedchamber. Still, empty, lonely — the emptiness makes the haunting land. A tall moonlit window or candle gives the cold light.
+
+🚫 ALWAYS INDOORS — NO graveyard, NO garden, NO moor, NO bridge, NO exterior. NO crowds / no other living people. NO modern / no daylight-cheerful.`,
+    touchpoints: [
+      'a grand sweeping staircase in a dark manor, moonlight falling through a tall window onto the worn carpet, the upper landing lost in gloom',
+      'a long portrait gallery, ancestral faces watching from the walls, a runner of carpet receding into candlelit shadow',
+      'a derelict grand ballroom, a cobwebbed chandelier above a dust-shrouded floor, tall arched windows leaking pale moonlight',
+      'a long candlelit corridor of closed doors, the wallpaper peeling, a cold draught stirring the curtains at the far end',
+      'a cold music room, a raised grand piano with open sheet-music, dust-sheeted chairs, moonlight through a tall draped window',
+      'a faded drawing room, Holland dust-covers over the furniture, a dead fireplace, damask wallpaper peeling in the gloom',
+      'a small abandoned nursery, a still rocking-horse and a closed music-box, moonlight on a dusty cradle and an empty child\'s bed',
+      'a vast cold library, towering shelves vanishing into the dark above, a single chair drawn up to a dead hearth',
+      'a long low servants\' corridor beneath the house, stone-vaulted ceiling, oil lamps spaced too far apart in pools of cold amber',
+      'a ruined abbey nave, ribbed stone arches soaring into shadow, moonlight falling through a great empty rose-window onto cold flags',
+      'a grand dining hall, a long table laid and abandoned under dust and cobwebs, tarnished candelabra down its length',
+      'a deep turret window-seat, rain streaking the diamond panes, faded velvet cushions, the storm-lit night beyond the glass',
+      'a grand bedchamber with a great carved four-poster, moth-eaten drapes drawn back, a cracked mirror catching the moonlight',
+      'an upper landing of a manor, tall shadowed doorways, a tarnished sconce, the great hall yawning dark below the banister',
+    ],
+    instructions: `Each entry is ONE empty atmospheric gothic INTERIOR room/hall, 18-30 words. ALWAYS indoors (manor/abbey). NO exterior/graveyard/garden/moor/bridge. NO crowds, NO modern, NO daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_light: {
+    format: 'simple',
+    theme: `THE PALE LIGHT + COLD AIR — the ghostly glow + atmosphere. Each entry 14-26 words. The lighting that makes a spectre eerie + the cold air around her. Crimson-Peak / ghost-story lineage.
+
+⚠️ Cold, pale, spectral light — moonlight through a tall window, a single guttering candle, a cold blue spectral glow emanating from her, a will-o-wisp, the grey light of pre-dawn, a faint corpse-light, mist catching the glow. Her own faint luminance is part of it.
+
+🚫 NO warm cosy daylight, NO bright color. Cold, dim, blue-grey-silver, eerie.`,
+    touchpoints: [
+      'a shaft of cold moonlight falls through a tall window, and the spectre glows faintly with her own pale corpse-light within it',
+      'a single guttering candle throws huge trembling shadows, the spectre lit cold blue against the warm flame',
+      'a cold spectral radiance emanates from the ghost herself, casting a faint blue glow on the floor and walls around her',
+      'pale grey pre-dawn light fills the room, colourless and cold, the spectre barely brighter than the gloom',
+      'a will-o-wisp of cold light drifts beside her, the only glow in the pitch dark, mist catching its pale shimmer',
+      'moonlight and a low cold mist combine into a silver haze, the ghost a paler shape within it',
+      'a faint corpse-light flickers along her form, blue-white and unsteady, throwing no warmth into the cold dark',
+      'storm-light flickers through the windows, each lightning-flash catching the spectre stark and pale before the dark returns',
+      'the dying embers of a hearth throw a faint red glow, against which the spectre stands cold and blue and out of place',
+      'a single oil-lamp burns low and amber, and the cold blue ghost-light beside it refuses to mix',
+      'pale moonlight floods a graveyard in silver-blue, the spectre a brighter pallor drifting between the dark stones',
+      'a thin luminous mist hangs at knee-height, glowing faintly where the spectre passes through it',
+    ],
+    instructions: `Each entry is ONE cold pale ghostly light + atmosphere, 14-26 words. Eerie, dim, blue-grey-silver, her own faint glow. NEVER warm daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_composition: {
+    format: 'simple',
+    theme: `THE "CAUGHT A GHOST ON CAMERA" MOMENT — the spectre caught in a STARTLING, CANDID, DYNAMIC instant, like a real paranormal photograph. Each entry 14-26 words. The "holy shit we actually caught a ghost on camera" feeling: she is MID-MOTION or seen from an UNCANNY vantage — NEVER a calm centered standing portrait. (Kevin: every render was the same static head-bowed pose — spice them up.)
+
+⚠️ A dynamic, candid, uncanny MOMENT — pick a striking action + an off-kilter camera vantage so it reads as "captured by accident, not posed":
+  • TURNING TO THE LENS — head/body snapping toward the camera as if she just noticed it; caught looking straight back at us
+  • DRIFTING AWAY — gliding fast down a corridor away from us, form streaking to mist, glancing back over her shoulder
+  • FLOATING / LEVITATING — hovering off the floor, body tilted at an impossible angle, gown hanging wrong against gravity
+  • REACHING — a translucent hand thrust toward the camera, her face looming behind it
+  • EMERGING — half-coming THROUGH a wall / out of a dark mirror / a doorway, mid-passage
+  • OFF-FRAME — slipping behind a doorway at the very edge of the shot, half-out of frame, as if avoiding the lens
+  • REFLECTION — present only in a mirror/window, the room empty in front of it
+  • WEIRD ANGLE — shot from the top of the stairs looking down, a low found-footage angle, foreshortened and wrong
+  • MOTION-STREAK — caught gliding, gown + hair streaming sideways, her form doubled / motion-blurred
+  • UNNATURAL — head turned too far / wrenched fully around, body still drifting the other way; rising vertically up a stairwell
+
+🚫 NO calm centered standing portrait. NO "head bowed, hands clasped, facing forward." NO tight face-crop (we still need her body + the place). NO crowd / no second figure. Keep it eerie-beautiful, NOT gore / jump-scare.`,
+    touchpoints: [
+      'caught mid-turn as if she just noticed the camera, head snapping toward the lens, veil and hair still swinging with the motion',
+      'drifting fast AWAY down a long corridor, her trailing form streaking to mist, glancing back over her shoulder straight at us',
+      'floating a full foot off the floor, her body tilted at an impossible angle, gown hanging wrong against the gravity',
+      'a translucent hand thrust toward the camera, her sorrowful face looming close behind it, the rest of her receding to mist',
+      'half-emerged THROUGH the wall, one shoulder and arm still sunk into the plaster, caught mid-passage between rooms',
+      'glimpsed off-center at the very edge of the frame, slipping behind a doorway, half out of shot as if avoiding the lens',
+      'present only in the tall dark mirror — the corridor empty in front of it, her pale form caught in the glass alone',
+      'shot from the top of the staircase looking DOWN, she drifts up toward the camera, foreshortened and unnaturally close',
+      'caught gliding across the hall mid-motion, gown and hair streaming sideways, her form doubled and motion-streaked',
+      'a low, off-kilter found-footage angle, she looms tall and close, head tilted too far, gazing down into the lens',
+      'rising vertically up the stairwell well, her trailing form impossibly long, head turned back down toward the camera',
+      'frozen three-quarters away mid-stride, but her head wrenched fully around to face us, her body still drifting off',
+    ],
+    instructions: `Each entry is ONE startling "caught on camera" moment — a dynamic action + an uncanny vantage, 14-26 words. NEVER a calm centered standing portrait / head-bowed-hands-clasped. Eerie-beautiful, not gore. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_haunting_manifestation: {
+    format: 'simple',
+    theme: `THE MANIFESTATION — a subtle hint of her story / death (50%-gated). Each entry 10-20 words. ONE quiet supernatural detail that tells WHY she haunts, without gore.
+
+⚠️ A subtle eerie tell — a spreading damp water-stain, a noose-shadow on the wall, cold breath-fog, a reaching translucent hand, a second fainter shape behind her, a clutched spectral letter or rose, a stopped clock, a music-box, scratch-marks, a portrait whose eyes match hers, candle-flames bending away from her.
+
+🚫 NO blood / no gore / no rot / no jump-scare. Quiet, sorrowful, uncanny.`,
+    touchpoints: [
+      'a dark damp water-stain spreading slowly across the floor beneath her drifting drowned form',
+      'the cold shadow of a noose thrown on the wall behind her, though nothing hangs there',
+      'her breath and the cold air fogging white, though she has not breathed in a hundred years',
+      'one translucent hand reaching toward the viewer in silent appeal, fingers dissolving to mist',
+      'a second, fainter shape standing just behind her in the dark, barely there',
+      'a yellowed spectral letter clutched to her chest, the ink long faded, never delivered',
+      'every candle-flame in the room bending away from her as she passes, guttering low',
+      'a stopped grandfather-clock behind her, its hands frozen at the hour she died',
+      'a closed music-box on the table beside her, its lid trembling as if about to open on its own',
+      'a portrait on the wall whose painted face is unmistakably hers, watching the room',
+      'faint scratch-marks scored into the inside of a closed door behind her',
+      'a single spectral rose drifting from her hand, dissolving to mist before it reaches the floor',
+    ],
+    instructions: `Each entry is ONE subtle supernatural manifestation, 10-20 words. Quiet, sorrowful, uncanny — NEVER gore/jump-scare. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // the-coven — NEW path (2026-06-10). A SOLO FEMALE WITCH / sorceress MID-SPELL —
+  // magic visibly erupting (sigils / witchfire / conjuring). Every female path is a
+  // vampire/goth-beauty; none is a WITCH doing magic. The SPELL is the money-shot.
+  // ════════════════════════════════════════════════════════════════
+  gothbot_coven_witch: {
+    format: 'simple',
+    theme: `THE WITCH — the HERO archetype: an ORNATE, WARPED, WEIRD witch. Each entry is ONE solo witch, elaborately adorned, with ONE uncanny TWIST that makes her strange-and-wonderful. 22-34 words. The-VVitch / Pan's-Labyrinth / Brian-&-Wendy-Froud / Leonora-Carrington / Remedios-Varo / alchemical-engraving / folk-horror-fairy-tale lineage. (Kevin: "witches are into weird shit — make it weird, but readable + cool/gothic.")
+
+⚠️ THE BAR — an OVER-THE-TOP ORNATE witch (baroque layered robes, antler/bone crowns, charm-strung adornments, masks, too many rings, embroidered sigils, dangling talismans) PLUS exactly ONE readable WEIRD TWIST: a third eye on her brow, fingers a touch too long, twig-and-root antlers growing from her hair, bark patches on her skin, a familiar fused to her shoulder, an extra pair of stitched-on hands, ink-black veins, a mouth sewn with thread she's loosening, a halo of orbiting teeth, eyes with goat-slit pupils, moths pouring from her sleeves. Strange, intricate, characterful.
+
+🌿 PULL BACK FROM DARK-VAMPIRE — she is a FOLK-HORROR / FAIRY-TALE OCCULT witch, NOT a sexy goth-vampire. Warmer, weirder, ornate, uncanny. Jewel-toned + earthy + strange, not just black. Readable + cool/gothic, never gory or cartoonish-green-hag.
+
+🚫 NO vampire fangs/glowing-vampire-eyes. NO generic goth pin-up. NO modern / NO LOTR-Skyrim-Witcher. NO body-horror gore — the weirdness is UNCANNY + ORNATE, not bloody.
+
+✓ VARIETY MANDATE (~16): antler-crowned forest-witch / mandrake-grower / bone-stitcher seamstress-witch / sea-witch barnacled-and-pearled / moth-witch / honey-and-bee witch / clockwork-and-curiosity witch / mirror-oracle / herbalist-crone (dignified, ornate) / spider-silk weaver-witch / mushroom-and-rot witch / star-charmer / toad-mother / tooth-collector / wax-and-poppet witch / shadow-tailor. Span ages + ethnicities. Always women, always ornate + ONE weird twist.`,
+    touchpoints: [
+      'an antler-crowned forest-witch in layered moss-green and embroidered shawls hung with bird-skulls and acorns, a small third eye blinking on her brow, twig-roots threading her wild hair',
+      'a bone-stitcher witch in a patchwork robe of a hundred embroidered eyes, a thimble on every long finger, a needle trailing red thread from her sewn-and-half-unpicked lips',
+      'a moth-witch draped in grey velvet furred with living luna-moths, a veil of wings over her face, antennae curling from her own brow, calm and uncanny',
+      'a honey-witch in amber-and-gold robes crusted with old wax, a crown of empty honeycomb, bees crawling her cheek and pouring from her wide sleeve',
+      'a barnacled sea-witch in salt-stiff teal silks studded with limpets and pearls, an extra pair of small webbed hands stitched at her ribs, seaweed-braided hair',
+      'a mushroom-witch in a ruffled cap-and-gill gown of bracket-fungus, pale spotted skin, bioluminescent fungus blooming along one arm, dreamy slit-pupil eyes',
+      'a tooth-collector witch in ivory-button robes, a slow halo of human teeth orbiting her head, a tiny key on a chain, a thin knowing smile a touch too wide',
+      'a clockwork-curiosity witch in a frock-coat of tiny drawers and brass charms, a monocle-lens grown into one eye-socket, mechanical beetles climbing her collar',
+      'a dignified herbalist-crone, silver-braided and richly ornate in layered talisman-strung shawls, her left hand sprouting tiny green seedlings from the fingertips',
+      'a spider-silk weaver-witch in a gown of grey gossamer and dewdrops, eight thin braids like legs, four calm eyes set above her two, spinning thread from her fingertips',
+      'a wax-and-poppet witch hung with little stitched dolls and dripping candle-stubs, wax sealing one eye shut, a half-made poppet cradled in her ringed hands',
+      'a star-charmer in deep indigo robes embroidered with constellations that faintly move, a tiny captured star orbiting her head, her irises full of drifting points of light',
+    ],
+    instructions: `Each entry is ONE ornate, warped, WEIRD witch, 22-34 words. Elaborately adorned + exactly ONE readable uncanny twist. Folk-horror occult (NOT dark-vampire / goth-pinup), uncanny not gory. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_coven_spell: {
+    format: 'simple',
+    theme: `THE MAGIC GLOW — the weird magical effect lighting the scene + accompanying her rite. Each entry 12-24 words. Varied + uncanny + characterful — sometimes a big effect, often a small strange one. It is the main light source. Alchemical-engraving / folk-magic / The-VVitch lineage.
+
+⚠️ A weird, glowing magical effect tied to her deed — floating runes, drifting motes of light, a small storm spinning over a cup, a jar full of caught light, witchfire, a glowing thread, a conjured wisp or spirit-shape, luminous spilled potion, a halo of light around an object, glowing sigils breathing on the floor, fireflies of soul-light.
+
+🚫 NO sci-fi / no neon-tech / no laser-beams. It is OLD, organic, candle-and-ember weird magic — uncanny, not flashy.`,
+    touchpoints: [
+      'a slow spiral of glowing motes lifts from her cupped hands, turning gently in the dark like drifting embers',
+      'a thumb-sized storm-cloud spins and flickers tiny lightning above the rim of her cup',
+      'witch-fire in soft green and violet pools in her palm, coiling without heat, lighting her face from below',
+      'a glowing thread of light unspools from her fingertip, faint sparks shedding where it turns',
+      'a bell-jar in her hands brims with caught light, a tiny glowing scene turning slowly inside the glass',
+      'pale rune-shapes hang and drift in the air around her, breathing soft light across the cluttered shelves',
+      'a captured will-o-wisp bobs at her shoulder, the only light, throwing her shadow huge on the wall',
+      'soft fireflies of soul-light rise from an open book, settling on the jars and her ringed hands',
+      'a luminous potion spills slow and glowing across the table, pooling in the carved grooves of a sigil',
+      'a half-formed spirit-wisp coils up from the cauldron-smoke, peering at her with two faint lights for eyes',
+      'a ring of little candle-flames lifts off their wicks and hovers, turning slowly around her head',
+      'the scrying-mirror glows from within, a different candlelit room faintly visible in its depths',
+    ],
+    instructions: `Each entry is ONE weird glowing magical effect, 12-24 words. Varied, uncanny, organic candle-ember magic (often small). NEVER sci-fi/neon. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_coven_action: {
+    format: 'simple',
+    theme: `THE WEIRD RITE — the SIGNATURE money-shot: the strange occult ACT she is caught performing (this TELLS THE STORY). Each entry 14-26 words. Witches are into weird shit — show her mid-WEIRD-DEED, a clear little narrative. The-VVitch / Pan's-Labyrinth / folk-horror / alchemical-engraving lineage.
+
+⚠️ ONE specific, weird, READABLE occult act in progress — you can tell exactly what strange thing she's doing. Uncanny and characterful, never gory.
+
+✓ VARIETY MANDATE (~18 weird deeds): stitching a little poppet shut / coaxing a screaming mandrake up out of the soil / growing a tiny homunculus in a bell-jar / reading a fortune in spilled entrail-coloured ribbons (clean) / scrying in a black mirror that shows a different room / charming a spiralling swarm of moths from her open mouth / spinning glowing thread of fate from her own fingertips / weighing a tiny glowing soul on jeweller's scales / bottling a captured scream / a star / in glass / feeding a dog-sized toad a ring / conducting a slow choir of floating candle-flames and skulls / planting teeth in a tray of soil that sprout tiny hands / unspooling her own long shadow like wool / whispering to a severed talking head sat calmly on a plate / pulling a long ribbon endlessly from a raven's beak / brewing a potion that has formed a tiny weather-storm above the cup / knitting with a strand drawn from a sleeping cat / tucking a captured will-o-wisp into a lantern.
+
+🚫 NO gore / no blood-horror. The weird is UNCANNY + WHIMSICAL-DARK + readable. NO modern objects.`,
+    touchpoints: [
+      'coaxing a tiny screaming mandrake-root up out of a soil-tray with both ringed hands, leaning in with tender curiosity',
+      'bent over a bell-jar where a thumb-sized homunculus floats and turns, tapping the glass with one long fingernail',
+      'a slow spiral of moths streaming up out of her open mouth into the dark, her eyes calm and half-closed',
+      'spinning a glowing thread of fate from her own fingertip onto a bone spindle, the thread shedding faint sparks',
+      'weighing a tiny glowing soul-light on a pair of jeweller\'s scales, head tilted, brow furrowed in judgement',
+      'whispering close to a severed head that sits calm and listening on a silver plate, one hand cupped to its ear',
+      'planting small teeth in a row in a tray of black soil, where the first ones have sprouted tiny grasping hands',
+      'easing a captured scream into a glass bottle, both hands cupped, her face wincing at the muffled wail',
+      'unspooling her own long shadow off the floor like grey wool, winding it slowly around her forearm',
+      'conducting a slow choir of floating candle-flames and little hovering skulls with both raised hands',
+      'feeding a gold ring to a dog-sized warty toad that gulps it down, patting its head fondly',
+      'stitching shut the seam of a small cloth poppet with red thread, biting the thread off between sharp teeth',
+    ],
+    instructions: `Each entry is ONE specific weird occult ACT in progress (it tells a story), 14-26 words. Uncanny, readable, characterful, NEVER gory. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_coven_lair: {
+    format: 'simple',
+    theme: `THE WITCH-HOUSE — a CLUTTERED, WEIRD, STORY-RICH occult interior crammed with strange stuff. Each entry 20-32 words. The space itself is full of little curiosities + tells you a witch lives here. The-VVitch / Pan's-Labyrinth / Baba-Yaga / cabinet-of-curiosities / alchemist's-overgrown-study lineage.
+
+⚠️ A WEIRD CLUTTERED occult interior STUFFED with detail — shelves of jarred eyes and floating things, hanging dried herbs and taxidermy, walls of tiny labelled drawers, candle-stubs, growing fungi, poppets and dolls, bottled storms, a bubbling cauldron, animal skulls, strings of teeth, curling charts, a black mirror, roots breaking through the floor. The viewer should want to STUDY every corner for weird treasures.
+
+🌿 WARM + WEIRD + ORNATE, not cold-crypt-empty — earthy and rich and strange (amber jar-glow, mossy green, candle-warmth, jewel-tone clutter), not a bare dark vault. Folk-horror cosy-uncanny.
+
+🚫 NO modern / no daylight-cheerful. NO bare empty dark crypt (this path is the OPPOSITE — packed with weird stuff).`,
+    touchpoints: [
+      'a crooked witch-cottage interior crammed floor-to-rafter with jarred eyes, dangling taxidermy crows, drying herb-bunches and dripping candle-stubs, a cauldron muttering in the hearth',
+      'a wall of hundreds of tiny labelled drawers and curiosity-shelves, bottled storms and floating things glowing faintly, a black scrying-mirror in an ornate frame',
+      'a root-cellar where pale homunculi turn slowly in rows of bell-jars on every shelf, soft amber light, soil and growing things crowding the corners',
+      'an alchemist\'s overgrown study, brass orreries furred with moss, towering grimoire-stacks, glassware bubbling, a fat toad on the desk among spilled charts',
+      'a hut on hen\'s legs lined with strung teeth, poppet-dolls, antlers and herb-braids, a stove glowing warm, the forest pressing dark at the round windows',
+      'a cabinet-of-curiosities chamber, specimen-jars and pinned moths and tiny skeletons in cases, a candelabra, a sigil rug, everything ornate and over-stuffed',
+      'a witch\'s greenhouse gone wild, mandrakes potted in rows, carnivorous flowers, hanging lanterns, glass jars of fireflies, vines swallowing the panes',
+      'a low beamed kitchen hung with bundled herbs, smoked things and copper pans, a vast cauldron, shelves of labelled potions, a cat-shaped warmth in the gloom',
+      'a spider-haunted weaving-room, looms strung with glowing thread, cocooned curiosities in the corners, dust-motes adrift in a single amber shaft',
+      'a bottle-witch\'s parlour, walls of stoppered glass each holding a tiny glowing scene — a storm, a star, a face — candlelight catching a thousand reflections',
+      'a forest-shrine interior of woven branches and bone-charms, fungi glowing soft along the walls, a stone basin, ribbons and offerings tied everywhere',
+      'an observatory-attic crammed with star-charts, hanging models of moons, jarred constellations and a great brass telescope, the domed roof open to the swirling night',
+    ],
+    instructions: `Each entry is ONE cluttered weird story-rich witch-interior, 20-32 words. Stuffed with curiosities, warm + ornate + strange (never a bare dark crypt). NO modern, NO daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_coven_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the witch mid-spell. Each entry 12-22 words. She is the focal figure (45-65% of frame), the magic and lair around her. Full or three-quarter to SHOW the casting gesture + the spell.
+
+⚠️ A dynamic figure-with-magic composition — a low-angle that makes her loom over a glowing circle, a wide shot showing her dwarfed by her own conjuration, a three-quarter mid-cast, a frontal hero-shot with the spell blazing toward the viewer, an over-the-circle view.
+
+🚫 NO tight face-crop (we must see her hands + the spell). NO crowd (she is solo). NO static portrait.`,
+    touchpoints: [
+      'a low-angle hero-shot, the witch looming over a blazing sigil-circle, the magic lighting her from below',
+      'a wide shot, the witch small before the towering conjuration she has summoned, dwarfed by her own power',
+      'a three-quarter figure mid-cast, arms wide, the spell-light wrapping around her and filling the frame',
+      'a frontal hero-shot, the witch facing the viewer, the spell blazing forward off her outstretched hands',
+      'an over-the-circle view looking down past her shoulders at the glowing runes on the floor',
+      'the witch centred and full-body, the lair receding around her, the magic the brightest thing in frame',
+      'a dramatic side-on, the witch bent over the cauldron, the rising luminous smoke filling the upper frame',
+      'a low wide shot, the witch silhouetted against the huge moon, the spell-light cupped in her raised hands',
+      'a three-quarter from below, the conjured beast of light rearing above her, the witch calm at its centre',
+      'the witch framed within her own sigil-circle, the burning runes ringing her, the chamber dark beyond',
+      'a kneeling figure at the circle\'s edge, the magic spreading away across the floor toward the viewer',
+      'a tall vertical composition, the column of her magic rising from her hands to fill the frame above',
+    ],
+    instructions: `Each entry is ONE composition for the witch mid-spell, 12-22 words. Figure 45-65%, the magic + lair around her. NO tight face-crop, NO crowd, NO static. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_coven_familiar: {
+    format: 'simple',
+    theme: `THE WEIRD FAMILIAR — the witch's uncanny companion (50%-gated). Each entry 10-20 words. ONE strange familiar near her or in her rite — slightly WRONG, readable + cool, never gory.
+
+⚠️ A WEIRD familiar — a cat with three eyes, a goat with too many curling horns, a thumb-sized homunculus, a two-headed raven, a hare with little human eyes, a toad the size of a dog, a taxidermy crow stitched-and-living, a moth-swarm that moves as one mind, a serpent with tiny hands, a doll-poppet that walks, an owl with a human face, a many-legged cat.
+
+🚫 NO large monster, NO second human, NO combat, NO gore. A small UNCANNY companion only — strange but charming.`,
+    touchpoints: [
+      'a sleek black cat with three calm eyes winding around her ankles, all six eyes reflecting the magic-light',
+      'a two-headed raven on her shoulder, both heads cocking to watch the rite with bead-bright interest',
+      'a thumb-sized homunculus perched on the rim of a jar, swinging its little legs and watching her work',
+      'a fat dog-sized toad squatting beside her, a gold ring glinting in its wide patient mouth',
+      'a hare sitting bolt upright beside her, its eyes uncannily human and far too knowing',
+      'a black goat with one too many curling horns and pale square-pupilled eyes, still as stone behind her',
+      'a stitched taxidermy crow, button-eyed and very much alive, hopping along the cluttered shelf',
+      'a slow swarm of luna-moths moving as a single mind, gathering into a vague shape at her shoulder',
+      'a green serpent with two tiny clawed hands coiled up her arm, gesturing as if helping her cast',
+      'a little cloth poppet-doll up and walking across the table on stubby legs, fetching her a pin',
+      'a small barn-owl with a faintly human face roosting on the curiosity-shelf, blinking slowly',
+      'a many-legged black cat picking its delicate way across the grimoire, far too many paws',
+    ],
+    instructions: `Each entry is ONE WEIRD familiar, 10-20 words. A small uncanny companion (slightly wrong, charming, never gory). NEVER a large monster / second human / combat. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // moonlit-maiden — NEW path (2026-06-11). The softer "R0" ghost look:
+  // a lone ethereal beautiful woman in a GORGEOUS moonlit gothic scene.
+  // Scene + maiden co-equal; dreamy, romantic-melancholy; anime/painterly.
+  // ════════════════════════════════════════════════════════════════
+  gothbot_moonlit_maiden: {
+    format: 'simple',
+    theme: `THE MAIDEN — the HERO: a lone, ETHEREALLY BEAUTIFUL woman, co-equal with her gorgeous moonlit gothic scene. Each entry 18-28 words. ONE graceful, melancholy, otherworldly beauty + her flowing gown + her quiet sorrow. Crimson-Peak / dark-romantic-fantasy / painterly lineage.
+
+⚠️ A LONE, lovely, dreamlike woman — solid-but-ethereal, luminous, graceful, achingly beautiful with a soft melancholy. Her flowing gown is half the figure. Span gown colours + moods.
+
+🚫 NOT a hard see-through ghost (that's the-haunting). NOT a fanged vampire, NOT gore, NOT a goth pin-up. Beautiful + sublime + sorrowful, never scary.
+
+✓ VARIETY: spectral lady / mourning noblewoman / moonlit maiden / pale enchantress / gothic bride / sorrowful aristocrat / ethereal wraith-beauty / barefoot waif. Gowns: pale gossamer white / luminous blue / trailing black silk / dove-grey / dark star-sewn velvet / opulent brocade.`,
+    touchpoints: [
+      'a pale ethereal beauty in a flowing gossamer-white gown, her grace otherworldly, a soft centuries-old sorrow in her bearing',
+      'a mourning noblewoman in trailing black silk and lace, exquisite and grief-stricken, moving like a slow sad dream',
+      'a spectral bride in a luminous veil and pale gown, beautiful and lost, drifting through the cold moonlight',
+      'a moonlit maiden in pale-blue gossamer that seems woven of mist and starlight, luminous, serene, sorrowful',
+      'a dark-haired beauty in a corseted midnight gown trailing gauze, regal and melancholy, pale as the moon',
+      'an ethereal lady in a tattered-elegant gown of grey silk, achingly lovely, a faded grandeur about her',
+      'a sorrowful enchantress in flowing dark velvet sewn with faint silver stars, beautiful, remote, luminous',
+      'a wraith-beauty in a near-sheer pale gown glowing soft blue, graceful and dreamlike, lovely beyond living',
+      'a pale gothic maiden in a high-collared dove-grey Victorian gown, delicate and quietly heartbroken',
+      'a luminous lady in a billowing gown that streams like water, her beauty serene and otherworldly',
+      'a gothic aristocrat in opulent dark brocade and a sheer trailing cloak, regal, pale, melancholy',
+      'an ethereal maiden barefoot in a simple flowing white shift, fragile and lovely in the cold moonlight',
+    ],
+    instructions: `Each entry is ONE lone ethereal beautiful woman + her flowing gown + melancholy grace, 18-28 words. Solid-but-dreamlike, luminous, NEVER a hard see-through ghost / fanged vampire / gore. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_moonlit_visage: {
+    format: 'simple',
+    theme: `THE VISAGE — her FACE + HAIR, making each maiden a DISTINCT woman. Each entry 14-24 words. ONE hair COLOUR + hairstyle + complexion + features combination. MAXIMIZE variety — no two should be the same woman.
+
+⚠️ Her face is always CLEAR + defined + lovely (visible eyes, nose, soft mouth) — NEVER blurred/erased. LUMINOUS-PALE + moonlit (NOT corpse-grey) — she is ethereal, not a rotting ghost. Keep her original hair colour + ethnicity so she reads as an individual.
+
+✓ Span widely — HAIR: raven-black / ash-blonde / deep auburn / silver-white / jet-black / honey-blonde / dark-brown / copper-red / platinum / chestnut / iron-grey. STYLE: soft updo / loose waves / braided coronet / unbound / chignon / ringlets / finger-waved bob / pompadour. FACE: sharp Slavic / soft English / freckled Irish / porcelain East-Asian / olive / South-Asian / fine aristocratic / dignified older.`,
+    touchpoints: [
+      'raven-black hair in a soft Victorian updo, pale luminous skin, dark sorrowful eyes, delicate features',
+      'long loose ash-blonde waves, a soft heart-shaped English face, fair moonlit skin, gentle grey eyes',
+      'deep auburn hair in a braided coronet, fair freckled skin, mournful green eyes, a fine straight nose',
+      'silver-white hair tumbling unbound, ethereal porcelain skin, large luminous pale eyes, fragile beauty',
+      'sleek black hair in a low chignon, porcelain East-Asian features, calm downturned dark eyes',
+      'honey-blonde ringlets half-pinned, a delicate face, soft full lips, dreamy hazel eyes',
+      'dark-brown hair loose to the waist, warm olive skin gone moonlit-pale, deep soulful eyes',
+      'copper-red hair in soft waves, pale freckled skin, a delicate chin, wide luminous green eyes',
+      'platinum hair in a soft Edwardian pompadour, fine aristocratic features, a soft sad mouth, pale eyes',
+      'jet-black hair in a finger-waved bob, a striking angular face, dark-lidded luminous eyes, pale skin',
+      'chestnut hair half-up with loose tendrils, warm South-Asian features moonlit-pale, large dark eyes',
+      'iron-grey hair softly waved, a dignified mature beauty, a fine lined face, calm pale eyes',
+    ],
+    instructions: `Each entry is ONE distinct hair-colour + hairstyle + complexion + features, 14-24 words. MAXIMIZE variety. Luminous-pale (moonlit, NOT corpse), face always CLEAR. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_moonlit_scene: {
+    format: 'simple',
+    theme: `THE GRAND MOONLIT SCENE — the GORGEOUS gothic environment (co-equal with the maiden — make it breathtaking). Each entry 18-30 words. ONE stunning, atmospheric gothic place, interior OR moonlit-exterior ruin, with scale + depth + beauty.
+
+⚠️ A breathtaking gothic environment — render it grand + atmospheric + cold-blue. Half the image. Span interiors + open-air ruins.
+
+✓ VARIETY: ruined cathedral nave / moonlit cloister open to the sky / derelict grand ballroom / overgrown abbey ruin / wild moonlit conservatory / grand derelict staircase hall / flooded crypt-chapel / cliff-top ruin / misty manor gallery / wild moonlit rose-garden / shattered domed rotunda / frozen gothic courtyard.
+
+🚫 NO modern / no daylight-cheerful / no crowds. Dim, cold, sublime, moonlit.`,
+    touchpoints: [
+      'a vast ruined cathedral nave, soaring shattered arches, moonlight pouring through a broken rose-window onto cold flags',
+      'a moonlit cloister open to the sky, mossy columns and broken arches ringing a misty courtyard beneath a huge moon',
+      'a derelict grand ballroom, a cobwebbed chandelier above a dust-pale floor, tall arched windows leaking blue moonlight',
+      'an overgrown abbey ruin, ivy swallowing the broken walls, a single great arch framing the cold star-strewn sky',
+      'a wild moonlit conservatory, shattered glass panes and skeletal vines, frost and moonlight pooling on the tiles',
+      'a grand sweeping staircase in a derelict manor, moonlight falling through a tall cracked window onto worn marble',
+      'a flooded crypt-chapel, still black water mirroring broken columns, moonlight through a collapsed ceiling',
+      'a cliff-top ruin beneath an enormous moon, broken battlements and the dark sea crashing far below',
+      'a long misty manor gallery, ancestral portraits watching from peeling walls, a runner receding into blue gloom',
+      'a wild moonlit rose-garden, dead arbors and a dry fountain, fog pooling silver between frostbitten beds',
+      'a vast rotunda with a shattered dome open to moon and stars, ivy spilling down the broken stonework',
+      'a frozen courtyard ringed by gothic spires, snow and moonlight, a single bare black tree against the sky',
+    ],
+    instructions: `Each entry is ONE breathtaking gothic environment (interior OR moonlit-exterior ruin), 18-30 words. Grand, atmospheric, cold-blue, depth + scale. NO modern, NO daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_moonlit_light: {
+    format: 'simple',
+    theme: `MOONLIGHT + ATMOSPHERE — the cold luminous light that sets the dreamy mood. Each entry 14-26 words. ONE moonlit lighting + atmosphere. Blue-silver, misty, sublime.
+
+⚠️ Cold moonlight — a vast moon, moonbeams + god-rays, drifting mist, cold haze, blue-silver glow. Dreamy + luminous, NEVER warm daylight.`,
+    touchpoints: [
+      'an enormous pale moon hanging low, flooding the scene in cold blue-silver light, mist drifting in slow veils',
+      'a single shaft of moonlight falling through a shattered window, god-rays cutting the cold haze',
+      'soft blue-silver moonglow suffusing everything, a low ground-mist curling, the air cold and still',
+      'a rose-pink moon haloed in cloud, its strange light bleeding across broken stone and pooling mist',
+      'cold moonbeams raking through skeletal arches, dust and frost-motes adrift in the still beams',
+      'a vast star-strewn sky, the moon casting long blue shadows, a glacial haze softening the ruin',
+      'pale moonlight reflecting off still black water, doubling the cold light, mist breathing off the surface',
+      'a frost-cyan moonglow with drifting snow, the cold light catching every falling flake',
+      'a wan silver moon behind thin cloud, a diffuse dreamlike glow, soft fog softening the stone',
+      'moonlight and one distant guttering candle, a single warm point against the cold blue, mist between',
+      'an aurora-tinged night, faint green-and-violet light above the moon, cold and otherworldly',
+      'a breaking storm-moon, ragged clouds racing, shafts of cold light strobing across the ruin',
+    ],
+    instructions: `Each entry is ONE cold moonlit lighting + atmosphere, 14-26 words. Blue-silver, dreamy, misty, luminous. NO warm daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_moonlit_composition: {
+    format: 'simple',
+    theme: `COMPOSITION — the graceful maiden placed beautifully within the grand moonlit scene. Each entry 14-26 words. Cinematic + painterly + balanced. She can be intimate-and-close OR a small lone figure dwarfed by the breathtaking space.
+
+⚠️ A graceful, painterly placement — walking away into the depth, small beneath a huge moon, at a tall window, descending a stair, on a balcony, silhouetted in an arch, intimate in the foreground. The gorgeous scene reads around her.
+
+🚫 NO tight face-crop. NO "caught-on-camera" uncanny/startle (that's the-haunting). NO crowd. Graceful + sublime, not eerie-wrong.`,
+    touchpoints: [
+      'she walks slowly away down the long cathedral aisle toward the moonlit window, small and graceful, the nave towering',
+      'a small lone figure beneath an enormous moon, dwarfed by the breathtaking ruin, the scale sublime',
+      'she stands at a tall arched window gazing out at the moonlit night, in profile, the cold light on her face',
+      'she descends the grand staircase slowly, one hand on the banister, the moonlit hall opening below her',
+      'centered and intimate, a three-quarter figure, the gorgeous moonlit ruin softening behind her',
+      'she stands on a broken balcony above the misty courtyard, the huge moon behind her, her gown streaming',
+      'a low painterly angle, she stands tall and serene amid the soaring arches, moonlight haloing her',
+      'she pauses mid-step in the long gallery, half-turned, gazing back softly, the portraits receding behind',
+      'seated gracefully on the rim of a dry moonlit fountain, gazing down, her gown pooling around her',
+      'silhouetted in a great broken archway against the moon, a lone graceful shape framed by the ruin',
+      'she drifts across the vast ballroom floor, small and luminous, the cobwebbed chandelier high above',
+      'an intimate framing low in the foreground, her sorrowful moonlit face near, the grand scene rising behind',
+    ],
+    instructions: `Each entry is ONE graceful figure-in-grand-scene composition, 14-26 words. Cinematic, painterly; intimate OR small-and-dwarfed. NOT caught-on-camera/uncanny, NO tight face-crop. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_moonlit_accent: {
+    format: 'simple',
+    theme: `A SOFT ATMOSPHERIC ACCENT — a single delicate, dreamlike detail (50%-gated). Each entry 8-18 words. Quiet + lovely, never busy, never gore.`,
+    touchpoints: [
+      'a slow drift of pale rose petals falling through the moonlight around her',
+      'a soft swirl of will-o-wisps, fireflies of cold blue light hovering near her',
+      'tendrils of ground-mist curling slowly around her feet and trailing hem',
+      'a scatter of dead leaves drifting down through the cold moonbeams',
+      'a few moonlit moths circling, their pale wings catching the silver light',
+      'her long sheer veil trailing and lifting on an unfelt draught',
+      'faint bioluminescent moss glowing soft blue along the broken stones',
+      'a single distant candle guttering on a ledge, one warm point in the cold',
+      'a slow fall of fine snow drifting through the moonlight',
+      'pale dust-motes adrift, turning slowly in the still moonbeams',
+      'a lone raven perched on a broken arch nearby, silhouetted against the moon',
+      'soft ripples spreading across still moonlit water at her feet',
+    ],
+    instructions: `Each entry is ONE soft atmospheric accent, 8-18 words. Delicate, dreamlike, quiet — never busy, never gore. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

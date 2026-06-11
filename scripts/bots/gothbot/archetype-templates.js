@@ -470,6 +470,220 @@ NO second figures, NO animals (except a single perched raven / coiled serpent IF
 Write 65-90 words, comma-separated phrases. The unified dark-prince description in section 2 is the primary face description — preserve the GLOWING EYES, FANGS / DEMONIC tell, DEAD-PALE skin, and masculine-aristocratic language unmistakably. The opulent gothic setting fills the rest of the frame. NO preamble, NO headers.`;
   },
 
+  GOTHBOT_THE_HAUNTING: ({ slots, sharedDNA, vibeDirective }) => {
+    const { spectre, visage, translucency, setting, light, composition, manifestation } = slots;
+
+    const visageSection = visage
+      ? `
+━━━ HER FACE + HAIR — make her a DISTINCT WOMAN (varies every render) ━━━
+${visage}
+
+Render her EXACT hair colour, hairstyle, complexion and features from above — a specific, individual woman, NOT the same generic pale beauty every render.
+
+`
+      : '';
+
+    const manifestSection = manifestation
+      ? `
+━━━ A QUIET MANIFESTATION (a subtle hint of her story — never gore) ━━━
+${manifestation}
+
+A subtle, sorrowful, uncanny detail — quiet, never a jump-scare, never gore.
+
+`
+      : '';
+
+    return `You are a gothic concept-art painter writing GHOST-STORY scenes for GothBot. A single sorrowful, TRANSLUCENT spectre haunts an empty gothic place — hauntingly beautiful, melancholy, eerie. Crimson-Peak / The-Woman-in-Black / The-Others / gothic-ghost-story visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ A TRANSLUCENT FEMALE GHOST — ABSOLUTE FIRST RULE ━━━
+The spectre is a hauntingly beautiful WOMAN, rendered SEE-THROUGH — SEMI-TRANSPARENT like a DOUBLE EXPOSURE: the gothic architecture (wall / window / stairs / portraits) clearly VISIBLE THROUGH her body and gown at the same time as her own form, her edges dissolving into cold mist, her lower body / feet FADING TO NOTHING before they reach the floor, a faint cold CORPSE-BLUE luminance glowing within her. She is a GHOST — an elegant, sorrowful lady-spirit, not a solid living person.
+
+🚫 NEVER a solid opaque figure — if you can't see THROUGH her (the room visible through her body), it has FAILED. ALWAYS a female lady-ghost (never male). NEVER a vampire / monster / zombie / gore-ghoul. NEVER a jump-scare. She is SORROWFUL, beautiful, melancholy, corpse-pale.
+
+💀 HER FACE STAYS CLEAR — ABSOLUTE: she ALWAYS has a defined, beautiful, sorrowful FACE with clearly visible eyes, nose and mouth. The translucency / mist / veil / double-exposure / fading apply to her GOWN, her HAIR-ENDS, her lower BODY and her EDGES — NEVER to her face. NEVER a blank, smudged, blurred, shadow-hidden, veil-erased, or faceless head. Even beneath a veil her grieving features read clearly. If her face is a featureless smudge, it has FAILED.
+
+━━━ THE SPECTRE (hero figure) ━━━
+${spectre}
+
+Render her pale, mournful, otherworldly — frozen in an old grief. Faded, drained, spectral clothing (never rich color).
+${visageSection}
+
+━━━ THE TRANSLUCENCY — the SIGNATURE money-shot (render this prominently) ━━━
+${translucency}
+
+This is the whole point. Render her as if SPUN FROM FROSTED GLASS or LAYERED GAUZE — the furniture / wall / window CLEARLY VISIBLE THROUGH HER TORSO and CHEST, her whole form a see-through wisp. She GENERATES HER OWN cold CORPSE-BLUE light from within (a faint glacial glow bleeding outward, the room's own lamps never quite reaching her). Her gown and long hair BILLOW and STREAM as though suspended in still water. Her lower body / feet TAPER TO NOTHING and dissolve to cold mist before they reach the floor. A readable translucent FIGURE — not a fog-blob, not solid.
+
+━━━ THE HAUNTED PLACE (empty, atmospheric, behind her for depth) ━━━
+${setting}
+
+A still, empty, lonely gothic place — its emptiness makes the haunting land. NO other living people.
+
+━━━ THE PALE LIGHT + COLD AIR ━━━
+${light}
+
+Cold, dim, blue-grey-silver, eerie — moonlight, a guttering candle, her own faint corpse-glow, cold mist. NEVER warm daylight.
+
+━━━ THE "CAUGHT ON CAMERA" MOMENT (compose for this — it's half the impact) ━━━
+${composition}
+
+Compose her exactly as above — a STARTLING, CANDID, DYNAMIC instant, like a real ghost accidentally caught on camera: she is MID-MOTION or seen from an uncanny, off-kilter vantage. She is the focal figure (35-55% of frame), the gothic place around her for depth.
+
+🚫 NEVER a calm, centered, posed standing portrait. NEVER "standing facing forward, head bowed, hands clasped" — that is the failure we are fixing. Give her a dynamic action + an off-kilter framing. NEVER a tight face-crop (we still need her translucent body + the place through her).
+${manifestSection}
+━━━ MOOD — SORROWFUL, BEAUTIFUL, EERIE ━━━
+MELANCHOLY + HAUNTING + STILL + COLD + OTHERWORLDLY. A held breath, an old grief, a beautiful sadness. Crimson-Peak ghost, a Victorian ghost-story plate, The-Woman-in-Black. NOT a horror jump-scare — quiet, sublime dread.
+
+━━━ TWILIGHT COLOR — COLD + DRAINED ━━━
+Cold blue-grey-silver dominant, the spectre palest of all, a single faint accent (moon-silver / candle-amber / corpse-blue / will-o-wisp green). DRAINED, desaturated, eerie. ONE cold dominant + ONE faint accent.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / neon
+🚫 NO solid opaque ghost (she MUST be see-through)
+🚫 NO vampire / monster / zombie / gore / jump-scare
+🚫 NO crowd (she is the only figure) / NO living people
+🚫 NO pentagrams / cheap gore / Jack-Skellington stylization
+✓ Crimson-Peak / The-Woman-in-Black / The-Others / gothic-ghost-story lineage
+
+DRAMATIC VISUALS: the TRANSLUCENT spectre is the hero. Render the EXACT spectre + translucency + setting + light from slots. SEE-THROUGH mandatory. Sorrowful eerie beauty.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_THE_COVEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { witch, spell, action, lair, composition, familiar } = slots;
+
+    const familiarSection = familiar
+      ? `
+━━━ HER FAMILIAR (a small animal companion — never competes) ━━━
+${familiar}
+
+A small dark familiar near her or in the magic — never a monster, never a second person.
+
+`
+      : '';
+
+    return `You are a folk-horror concept-art painter writing WEIRD WITCH scenes for GothBot. A single ORNATE, WARPED, wonderfully WEIRD witch is caught mid strange-occult-deed — and the scene TELLS A LITTLE STORY. Witches are into weird shit: make it weird, but readable + cool + gothic. The-VVitch / Pan's-Labyrinth / Brian-&-Wendy-Froud / Leonora-Carrington / Remedios-Varo / alchemical-engraving / dark-fairy-tale lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ AN ORNATE, WEIRD WITCH — TELLING A STORY — ABSOLUTE FIRST RULE ━━━
+She is an elaborately-adorned witch with ONE readable UNCANNY TWIST (a third eye, twig-antlers, too-long fingers, a familiar fused to her, moths pouring from a sleeve, a halo of orbiting teeth) — caught MID WEIRD-RITE, doing one specific strange occult thing you can read like a little story (coaxing up a screaming mandrake, growing a homunculus in a jar, whispering to a severed head, spinning fate-thread, weighing a soul). The DEED + her ornate weirdness are the show.
+
+🪄 LEAN INTO THE WEIRD — strange, intricate, characterful, uncanny, a bit funny-dark. But ALWAYS READABLE + COOL/GOTHIC — the viewer instantly gets what's happening. NOT abstract, NOT a mess.
+🌿 PULL BACK FROM DARK-VAMPIRE — this is FOLK-HORROR OCCULT, warm + earthy + jewel-toned + ornate, NOT a sexy goth-vampire in a black void. NOT grim — wondrous-strange.
+
+🚫 NEVER a vampire / fangs / goth pin-up / cartoon-green hag. NEVER gore or body-horror-blood (the weird is uncanny + ornate, not bloody). NO modern objects.
+
+━━━ THE WITCH (hero — ornate + one weird twist) ━━━
+${witch}
+
+Render her ELABORATELY adorned (layered robes, charms, headdress, rings) WITH her one readable uncanny twist. Intricate, strange, characterful.
+
+━━━ THE WEIRD RITE — the SIGNATURE money-shot (the STORY — render it clearly) ━━━
+${action}
+
+The specific strange occult deed she is caught performing. This is the heart of the image — make it READABLE so the viewer gets the little story at a glance.
+
+━━━ THE MAGIC GLOW (weird, organic, the main light) ━━━
+${spell}
+
+The uncanny glow accompanying her deed — old candle-and-ember weird magic, often small + strange. It lights the scene. Never sci-fi/neon, never a generic fire-column.
+
+━━━ THE WITCH-HOUSE (cluttered + weird + story-rich, around her) ━━━
+${lair}
+
+A weird interior STUFFED with curiosities — jars, taxidermy, herbs, drawers, growing things, poppets — that you want to study. Warm + ornate + strange, NOT a bare dark crypt. NO daylight, NO modern.
+
+━━━ COMPOSITION ━━━
+${composition}
+
+She is the focal figure (45-65% of frame) amid her weird rite + cluttered house. Full or three-quarter so we SEE her hands + what she's doing. NEVER a tight face-crop. She is solo.
+${familiarSection}
+━━━ MOOD — WONDROUS-STRANGE, ORNATE, UNCANNY, COOL ━━━
+WEIRD + WHIMSICAL-DARK + INTRICATE + CHARMING-UNCANNY. The delight and unease of stumbling on a real witch mid-weird-work. A folk-tale plate, an alchemical engraving brought to life, a Froud faerie-grotesque. Strange but cool, never grim-edgy.
+
+━━━ COLOR — RICH, JEWEL-TONED, EARTHY, WEIRD ━━━
+Warm + strange — amber jar-glow, moss and bottle-green, candle-gold, plum, teal, ochre, with the magic-glow's hue (witch-fire green / arcane violet / starlight) as an accent. RICH + ornate + a little uncanny, NOT a flat black void. ONE warm key + jewel-tones + the magic accent.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / neon-tech
+🚫 NO vampire / no fangs / no goth pin-up / no cartoon-green hag
+🚫 NO gore / no body-horror-blood (uncanny-weird, never bloody)
+🚫 NO crowd / no second human / no large monster (familiar = small uncanny companion)
+🚫 NO pentagrams as satanic iconography / no Jack-Skellington stylization
+✓ The-VVitch / Pan's-Labyrinth / Froud / Carrington / alchemical-engraving / dark-fairy-tale lineage
+
+DRAMATIC VISUALS: the ORNATE WEIRD WITCH mid weird-RITE is the hero, and the scene TELLS A STORY. Render the EXACT witch + rite + magic + house from slots. Weird but readable, ornate, cool, gothic.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_MOONLIT_MAIDEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { maiden, visage, scene, moonlight, composition, accent } = slots;
+
+    const accentSection = accent
+      ? `
+━━━ A SOFT ATMOSPHERIC ACCENT (a quiet beautiful detail) ━━━
+${accent}
+
+A single delicate, dreamlike touch — quiet and lovely, never busy, never gore.
+
+`
+      : '';
+
+    return `You are a gothic concept-art painter writing SUBLIME, DREAMLIKE gothic scenes for GothBot. A single ETHEREAL, BEAUTIFUL WOMAN graces a GORGEOUS, atmospheric, MOONLIT gothic place — romantic, melancholy, cinematic, achingly beautiful. The grand haunting SCENE and the graceful woman are CO-EQUAL — half the magic is the breathtaking gothic environment around her. Crimson-Peak / Pan's-Labyrinth-moonlight / dark-romantic-fantasy / painterly-anime visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ THE FEELING — ABSOLUTE FIRST RULE ━━━
+SUBLIME, DREAMY, ROMANTIC-MELANCHOLY beauty. A lone ethereal woman in a stunning moonlit gothic scene — like a still from a beautiful sad dream. Cold blue-silver moonlight, mist, grandeur, stillness, longing. The viewer should think "this is gorgeous and a little heartbreaking."
+
+🌙 NOT the-haunting: this is NOT a hard see-through ghost, NOT a "caught-on-camera" startle, NOT uncanny/wrong. She is solid-but-ethereal, graceful, beautiful. Soft, painterly, romantic — not eerie-startling.
+🚫 NEVER gore / horror / jump-scare. NEVER a vampire with fangs as the point. NEVER a busy or cluttered frame. NEVER warm daylight.
+
+━━━ THE MAIDEN (hero — co-equal with the scene) ━━━
+${maiden}
+
+A lone, graceful, ETHEREALLY BEAUTIFUL woman — her flowing gown, her quiet melancholy, her otherworldly grace. Solid-but-dreamlike, luminous, lovely.
+
+━━━ HER FACE + HAIR — a DISTINCT WOMAN (varies every render), face always CLEAR ━━━
+${visage}
+
+Render her EXACT hair colour, hairstyle, complexion and features — a specific, individual woman. Her FACE is always clear, defined and beautiful (visible eyes, nose, mouth) — NEVER blurred, smudged or erased. Not the same girl every time.
+
+━━━ THE GRAND MOONLIT SCENE (co-equal — make it breathtaking) ━━━
+${scene}
+
+A GORGEOUS, atmospheric, grand gothic environment — render it with depth, scale and beauty. This is HALF the image; the place should be as stunning as she is.
+
+━━━ MOONLIGHT + ATMOSPHERE ━━━
+${moonlight}
+
+Cold blue-silver moonlight, drifting mist, god-rays, a vast moon, soft cold haze — dreamy and luminous. The moon + cold light set the whole mood.
+${accentSection}
+━━━ COMPOSITION ━━━
+${composition}
+
+Place her gracefully within the grand scene — she can be intimate and close OR a small lone figure dwarfed by the breathtaking space. Cinematic, painterly, balanced. NEVER a tight face-crop — we need the gorgeous scene around her.
+
+━━━ MOOD — SUBLIME, ROMANTIC, MELANCHOLY, BEAUTIFUL ━━━
+ACHINGLY BEAUTIFUL + DREAMY + STILL + COLD + LONGING. A beautiful sad dream, a moonlit gothic reverie. Crimson-Peak romance, a dark-fairy-tale plate. Sublime, not scary.
+
+━━━ COLOR — COLD-BLUE MOONLIT + SILVER ━━━
+Cold blue / silver / moonlit-grey dominant, the maiden luminous and pale, a single soft accent (moon-silver / corpse-blue / pale-gold candle / will-o-wisp green / frost-cyan). Dreamy, desaturated-but-luminous. ONE cold dominant + ONE soft glow accent.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / neon
+🚫 NO gore / horror / jump-scare / hard see-through ghost-mechanics / uncanny-wrong poses
+🚫 NO crowd / no second figure / no living bystanders
+🚫 NO tight face-crop / NO busy cluttered frame / NO warm daylight
+🚫 NO pentagrams / cheap gore / Jack-Skellington stylization
+✓ Crimson-Peak / dark-romantic-fantasy / painterly-anime / moonlit-gothic lineage
+
+DRAMATIC VISUALS: a lone ETHEREAL BEAUTIFUL WOMAN in a BREATHTAKING moonlit gothic scene — scene + maiden CO-EQUAL. Render the EXACT maiden + visage + scene + moonlight from slots. Sublime, dreamy, romantic-melancholy beauty.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
   GOTHBOT_GOTH_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

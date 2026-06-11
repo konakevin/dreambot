@@ -130,6 +130,28 @@ module.exports = {
   DARKPRINCE_REGALIA: loadOptional('darkprince_regalia'),
   DARKPRINCE_SCENE: loadOptional('darkprince_scene'),
   DARKPRINCE_COMPOSITION: loadOptional('darkprince_composition'),
+  // ─── the-haunting path (2026-06-10 NEW — a SOLO translucent GHOST/spectre haunting a gothic place)
+  GOTHBOT_HAUNTING_SPECTRE: loadOptional('gothbot_haunting_spectre'),
+  GOTHBOT_HAUNTING_VISAGE: loadOptional('gothbot_haunting_visage'),
+  GOTHBOT_HAUNTING_TRANSLUCENCY: loadOptional('gothbot_haunting_translucency'),
+  GOTHBOT_HAUNTING_SETTING: loadOptional('gothbot_haunting_setting'),
+  GOTHBOT_HAUNTING_LIGHT: loadOptional('gothbot_haunting_light'),
+  GOTHBOT_HAUNTING_COMPOSITION: loadOptional('gothbot_haunting_composition'),
+  GOTHBOT_HAUNTING_MANIFESTATION: loadOptional('gothbot_haunting_manifestation'),
+  // ─── the-coven path (2026-06-10 NEW — a SOLO female WITCH/sorceress mid-spell; magic erupting)
+  GOTHBOT_COVEN_WITCH: loadOptional('gothbot_coven_witch'),
+  GOTHBOT_COVEN_SPELL: loadOptional('gothbot_coven_spell'),
+  GOTHBOT_COVEN_ACTION: loadOptional('gothbot_coven_action'),
+  GOTHBOT_COVEN_LAIR: loadOptional('gothbot_coven_lair'),
+  GOTHBOT_COVEN_COMPOSITION: loadOptional('gothbot_coven_composition'),
+  GOTHBOT_COVEN_FAMILIAR: loadOptional('gothbot_coven_familiar'),
+  // ─── moonlit-maiden path (2026-06-11 NEW — softer ethereal-beauty-in-grand-moonlit-scene)
+  GOTHBOT_MOONLIT_MAIDEN: loadOptional('gothbot_moonlit_maiden'),
+  GOTHBOT_MOONLIT_VISAGE: loadOptional('gothbot_moonlit_visage'),
+  GOTHBOT_MOONLIT_SCENE: loadOptional('gothbot_moonlit_scene'),
+  GOTHBOT_MOONLIT_LIGHT: loadOptional('gothbot_moonlit_light'),
+  GOTHBOT_MOONLIT_COMPOSITION: loadOptional('gothbot_moonlit_composition'),
+  GOTHBOT_MOONLIT_ACCENT: loadOptional('gothbot_moonlit_accent'),
   // ─── castlevania-scene path (2026-05-15 migration — Konami Castlevania, Ayami Kojima painted)
   GOTHBOT_CASTLEVANIA_SCENE_STRUCTURE: loadOptional('gothbot_castlevania_scene_structure'),
   GOTHBOT_CASTLEVANIA_SCENE_DETAIL: loadOptional('gothbot_castlevania_scene_detail'),

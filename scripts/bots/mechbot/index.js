@@ -347,17 +347,14 @@ module.exports = {
     // flux-dev BANNED from these robot/mech paths 2026-06-09 (Kevin) — it was
     // over-represented in the bland front-on renders + lowest Flux fidelity.
     'droid-assassin': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'mecha-pilots': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'humanoid-robots': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -367,7 +364,6 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'robot-moment': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

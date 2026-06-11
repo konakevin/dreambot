@@ -117,29 +117,21 @@ module.exports = {
     // ── (Kevin 2026-06-05 character-path audit). Bot-wide bans Banana,
     // ── these paths opt back in. Bot-wide 4 models + Banana = 5.
     'cosmic-oracle': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'female-explorer': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'male-explorer': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'space-femme': [
-      'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
