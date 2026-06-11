@@ -393,6 +393,83 @@ NO second figures, NO animals, NO blood splatter, NO bodies, NO clown-stripe pai
 Write 65-90 words, comma-separated phrases. The unified vampire description in section 2 is the primary face description — preserve the HEAVY MAKEUP, GLOWING EYE, DEAD-PALE skin, and DEMONIC tell language unmistakably. The gothic setting fills the rest of the frame as the dramatic painted backdrop. NO preamble, NO headers.`;
   },
 
+  GOTHBOT_THE_DARK_PRINCE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      atmosphere,
+      archetype,
+      ethnicity,
+      hair,
+      wardrobe,
+      menace_feature,
+      composition,
+      scene,
+      hero_element,
+      lighting,
+    } = slots;
+
+    const ethnicityClause = ethnicity ? `${ethnicity}, ` : '';
+    const unifiedPrince = `A commanding aristocratic vampire-lord — ${ethnicityClause}with ${hair}, ${menace_feature}. He wears ${wardrobe}. His eyes are visibly GLOWING with luminous unnatural inner light radiating outward — this glow is the most important visual element and must be unmistakably rendered, not a subtle tint.`;
+
+    return `You are writing ONE Flux prompt for a hauntingly beautiful, MENACING MALE dark-prince portrait — a vampire-lord / cursed-prince / dark-sorcerer. Output ONLY the prompt — comma-separated phrases, 65-90 words, no preamble, no headers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described, BEFORE wardrobe or setting. They are CENTER STAGE.
+
+1. GLOWING eyes — his eyes glow with inhuman color, light radiating outward from the iris. Words "glowing" + "radiating" (or "casting light") MUST appear.
+2. DEMONIC tell — visible FANGS (and/or a clawed fingertip / slit pupils), rendered theatrically, lit by the key-light. The fangs/tell MUST be unmistakably visible.
+
+Open your prompt with the eyes + demonic-tell in this format (or equivalent):
+"[color] glowing eyes radiating inhuman light, [fangs / slit pupils / clawed fingertip], pale cold aristocratic face, ..."
+
+THEN describe the rest (face, hair, wardrobe, setting). The glowing-eyes-and-fangs are the OPENER and focal point.
+
+HE IS A HARD, MASCULINE, HANDSOME MAN — chiselled and virile and commanding, a strong heavy brow and a square jaw, dangerous and imposing. Vampires are AGELESS — he can read from a hard man in his prime to timeless, but he must be MASCULINE and CHISELLED (light stubble or a trim beard optional). Think Gary-Oldman / Luke-Evans Dracula, a Frazetta dark-warlord. 🚫 ABSOLUTELY BANNED: NO pretty-boy / bishonen / fashion-model / smooth / slender-twink / androgynous / femboy / soft-delicate / feminine face. NO heavy makeup. NO elf ears / pointed ears. NO bare chest. NO forced-elderly grandpa either — virile and hard, not old. Masculine, terrifyingly IMPOSING — never pretty.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+━━━ 1. THE SCENE (opulent gothic backdrop behind him) ━━━
+${scene}
+Composition: ${composition}.
+Lighting: ${lighting}.
+
+━━━ 2. THE DARK PRINCE (one unified description — render him exactly this way) ━━━
+${unifiedPrince}
+
+He is a DEAD-PALE undead aristocrat — HARD, chiselled, MASCULINE bone structure (a heavy brow, a strong square jaw, sharp cheekbones), the skin corpse-pale / cursed (NOT alive-tan-pretty), the eyes GLOWING with inhuman color, FANGS and a DEMONIC tell marking him as not-human. Virile, imposing, masculine, regal, predatory STILLNESS. He is human-shaped — NO elf ears, NO pointed ears. He is IMPOSING and DAMNED — hard, cold, magnetic, lethal. Expression: imperious and quietly terrifying — ancient inhuman menace. NOT pretty, NOT a soft fashion-model, but NOT old either — virile and dangerous. His face is the focal point — bust framing 40-50% of frame.
+
+━━━ 3. THE REGALIA (the unforgettable focal piece on or near him) ━━━
+${hero_element}. Render this clearly and prominently.
+
+━━━ 4. HIS ARCHETYPE (informs his ENERGY) ━━━
+${archetype}
+
+━━━ 5. MOVIE-POSTER CRANK MANDATE — APPLY TO EVERY RENDER ━━━
+This is NOT a snapshot — this is a MOVIE POSTER selling the dark lord. Apply ALL of:
+
+  1. THEATRICAL RIM-LIGHTING — a single dramatic key-light (candle / fireplace / oil-lamp / single moonbeam) cuts through deep velvet darkness, carving his face into something mythic. Rim-light on cheekbone, jaw, hair-edge. The light has DIRECTION + EMOTION. NEVER flat illumination.
+  2. EVERY QUADRANT INTENTIONAL — each corner has atmospheric drama (drifting candle-smoke / a moonbeam ray / a hanging chandelier corner / an arched window / a candelabra / a goblet / a raven / a velvet drape). NEVER empty dark-void background.
+  3. OBSESSIVE MATERIAL DETAIL — every velvet has nap + weave, every gold-thread catches light, every jewel refracts, every clasp shows tarnish, every hair-strand is individually visible, the brocade reads as woven. The viewer should want to STUDY every square inch.
+  4. STORYTELLING BEAT — a mid-loaded moment: he just lowered a goblet (a dark droplet at his lip), just turned from the window (the curtain still settling), just looked up from a grimoire, just extended a ringed hand. NEVER static "he stands there."
+  5. ATMOSPHERIC HAZE — volumetric light catches dust-motes / candle-smoke / drifting embers. The AIR has depth and weight.
+  6. SATURATED JEWEL-TONE PALETTE WITH DEEP-SHADOW CONTRAST — rich oxblood / deep-violet / sapphire / amber / emerald / amethyst as accents. Deep-velvet black + corpse-pale as the canvas. ONE dominant accent per render. NEVER muted / desaturated / monochrome.
+  7. PAINTED-CANVAS RICHNESS — painterly with visible brush-texture in the shadows. Ayami-Kojima Castlevania painted concept-art / gothic-painting tradition. NOT smooth-digital, NOT photo-real.
+  8. HORROR-AS-BEAUTY DEMONIC RENDER — the fangs / clawed fingertip / slit-pupil rendered THEATRICALLY, lit by the rim-light, an obvious central focal accent. NOT subtle.
+
+━━━ 6. PALETTE & MOOD ━━━
+${sharedDNA.scenePalette}. ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 120)}
+
+The painting feels DARK, OMINOUS, REGAL, GOTHIC. Heavy shadow dominates. A single dramatic key-light cuts through deep velvet darkness. Atmosphere heavy with menace and grandeur.
+
+━━━ 7. ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ 8. HARD BANS ━━━
+NO second figures, NO animals (except a single perched raven / coiled serpent IF it is the regalia), NO blood splatter, NO bodies, NO bare chest, NO androgynous femboy face, NO modern clothing, NO photoreal/film-still aesthetic, NO bright cheerful colors, NO bare black-void background (the gothic setting MUST be visible), NO elf ears / pointed ears, NO child / teen, NO multiple figures, NO weapon-brandishing action pose.
+
+━━━ OUTPUT ━━━
+Write 65-90 words, comma-separated phrases. The unified dark-prince description in section 2 is the primary face description — preserve the GLOWING EYES, FANGS / DEMONIC tell, DEAD-PALE skin, and masculine-aristocratic language unmistakably. The opulent gothic setting fills the rest of the frame. NO preamble, NO headers.`;
+  },
+
   GOTHBOT_GOTH_CLOSEUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
@@ -1094,6 +1171,209 @@ Camera angle varies but the building DOMINATES. Inner-glow leaks through opening
 DRAMATIC VISUALS: the STRUCTURE is the hero. Render the EXACT architectural detail from slots. Inner-glow mandatory. Ornate detail porn. NO humans primary. NO interior shots. STRICT gothic dark-fantasy.
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_THE_SANCTUM: ({ slots, sharedDNA, vibeDirective }) => {
+    const { interior, detail, inner_light, focal_feature, atmosphere, accent } = slots;
+    const details = Array.isArray(detail) ? detail : [detail];
+
+    const accentSection = accent
+      ? `
+━━━ A SMALL ACCENT (life-sign / scale-prover — never competes) ━━━
+${accent}
+
+A SMALL accent, far back and tiny — a hooded figure dwarfed by the architecture (8-15% of frame, NEVER the subject) or dark interior wildlife. It proves the colossal scale and adds a breath of life. The INTERIOR remains the hero.
+
+`
+      : '';
+
+    return `You are a gothic concept-art painter writing GRAND INTERIOR scenes for GothBot. The viewer stands INSIDE a vast, cold, sacred gothic chamber — the SPACE itself is the show. Castlevania / Bloodborne / Crimson-Peak / Dark-Souls / Elden-Ring / Berserk visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ THE GRAND INTERIOR IS THE HERO — ABSOLUTE FIRST RULE ━━━
+We are INSIDE a colossal gothic interior that fills 80%+ of the frame. Towering ribbed vaults soar overhead, columns march into shadowed depth, the perspective recedes to a vanishing-point swallowed in darkness. The SPACE dwarfs everything. The camera looks DOWN the length of the chamber / UP into the vault / ACROSS the great hall. The viewer's eye lands on the vast architecture first, the dramatic light second, the focal centrepiece third.
+
+🚫 NEVER an exterior (no sky, no building-silhouette-from-outside — we are WITHIN).
+🚫 NEVER the warm, cluttered, treasure-filled cozy witch's-study register — this is COLD, VAST, REVERENT, awe-and-dread. Stone, height, echo, emptiness.
+🚫 NO humans as the subject (a tiny scale-prover figure is allowed, accent-only).
+
+━━━ THE INTERIOR (hero of the frame, 80%+ visual weight) ━━━
+${interior}
+
+The chamber is immense and architecturally complex — soaring vaults, deep colonnades, multi-tier galleries, a floor receding into gloom. Render the depth: foreground stone near the camera, the great space opening beyond, the far end lost in shadow.
+
+━━━ THE LIGHT WITHIN — the SIGNATURE money-shot (render this prominently) ━━━
+${inner_light}
+
+This is what makes the interior breathtaking. The light carves the volume of the space, throws long shadows, and pulls the eye into depth. Make it dramatic, directional, theatrical — gothic gloom pierced by a glorious source. NEVER flat daylight, NEVER modern light.
+
+━━━ THE FOCAL CENTREPIECE (the eye lands here at the end of the space) ━━━
+${focal_feature}
+
+A single arresting hero-object deep in the chamber or at its centre, anchoring the composition at the vanishing-point.
+
+━━━ ORNATE INTERIOR DETAIL — render ALL THREE visibly ━━━
+  • DETAIL 1: ${details[0] || ''}
+  • DETAIL 2: ${details[1] || ''}
+  • DETAIL 3: ${details[2] || ''}
+
+Every surface is obsessively carved — ribbed vaults, foliate capitals, tomb effigies, tracery, choir stalls, reliefs. The interior is a fractal of intricate gothic ornament the viewer wants to study.
+
+━━━ THE AIR WITHIN (volumetric atmosphere — makes the light visible) ━━━
+${atmosphere}
+
+Indoor volumetric atmosphere only — incense-smoke, dust-motes in the light-shafts, cold mist pooling, candle-haze. It makes the god-rays solid and the depth readable. NEVER outdoor weather.
+${accentSection}
+━━━ MOOD — COLD SACRED AWE ━━━
+HUSHED + VAST + REVERENT + WEATHERED + HAUNTED. Centuries-old, breath-fogging cold, beautiful and unsettling. The kind of interior that belongs in a Bloodborne cathedral, a Castlevania inner-sanctum, a Crimson-Peak grand hall. Operatic dark romance turned inward.
+
+━━━ TWILIGHT COLOR — WEAVE MULTIPLE HUES ━━━
+NOT gray-monochrome. The Nightshade spectrum: violet gloom, emerald witch-fire, sapphire-nocturne blue, candle-amber warmth, alchemist-gold, corpse-pale silver, with red as ACCENT only. ONE dominant atmosphere hue + ONE warm accent + ONE cool accent.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / cyberpunk / neon / electric light
+🚫 NO exterior / building-silhouette / sky-as-hero
+🚫 NO warm-cozy domestic clutter (that is a different path)
+🚫 NO pentagrams / satanic iconography / cheap gore / Jack-Skellington stylization
+✓ Castlevania / Bloodborne / Crimson-Peak / Dark-Souls / Elden-Ring / Berserk interior lineage
+
+DRAMATIC VISUALS: the SPACE is the hero. Render the EXACT interior + light + centrepiece + the THREE details from slots. Deep receding perspective mandatory. Cold sacred awe. INTERIOR only.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_THE_FROST_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { garden, flora, frost_feature, statuary, light_sky, accent } = slots;
+    const flowers = Array.isArray(flora) ? flora : [flora];
+
+    const accentSection = accent
+      ? `
+━━━ A SMALL ACCENT (life-sign / scale-prover — never competes) ━━━
+${accent}
+
+A SMALL accent — dark garden wildlife or a tiny distant figure dwarfed by the garden (8-15% of frame, NEVER the subject). Adds a breath of life. The GARDEN remains the hero.
+
+`
+      : '';
+
+    return `You are a gothic concept-art painter writing CURSED FROZEN GARDEN scenes for GothBot. A haunting, frost-bitten gothic garden or derelict conservatory is the show — mournful, beautiful, utterly still. Crimson-Peak / Sleepy-Hollow / Pan's-Labyrinth / gothic-fairy-tale visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ THE FROZEN GARDEN IS THE HERO — ABSOLUTE FIRST RULE ━━━
+A cursed, frost-touched gothic garden fills the frame — bare black trees, thorned rose-arbors, cracked stone paths, statuary furred with hoarfrost, everything silvered and silent. The GARDEN/CONSERVATORY is the hero. The mood is MOURNFUL BEAUTY + winter stillness + gentle decay.
+
+🚫 NEVER a cheerful bright spring garden — this is a CURSED WINTER garden (frost, thorns, decay, dead blooms).
+🚫 NO characters as the subject (a tiny scale-prover figure is allowed, accent-only).
+🚫 NO interior cathedral / no castle-architecture-as-hero — this is an outdoor garden / glass conservatory.
+
+━━━ THE GARDEN (hero of the frame) ━━━
+${garden}
+
+The garden fills the frame at layered depth — frozen foreground beds, the middle garden with its paths and arbors, the misty far end. Render the layout (paths, walls, arbors) and the frost-decay.
+
+━━━ THE FROST SIGNATURE — the money-shot (render this prominently) ━━━
+${frost_feature}
+
+This is what makes the garden magical and cold. The ice/frost effect should be gorgeous and central — caught water, glazed stone, feathered crystal, a frozen mirror. Cold, glittering, dreamlike — never a whiteout.
+
+━━━ THE CENTREPIECE (the eye lands here) ━━━
+${statuary}
+
+A single arresting stone feature anchoring the garden — statuary or stonework, still and frost-touched.
+
+━━━ DARK FROST-FLORA — weave BOTH visibly ━━━
+  • FLORA 1: ${flowers[0] || ''}
+  • FLORA 2: ${flowers[1] || ''}
+
+Dark gothic plants touched by frost — black roses, thornbriars, frozen lilies, ice-glazed ivy, pale moonflowers, withered wisteria. Beautiful and mournful, never cheerful.
+
+━━━ LIGHT, SKY + COLD AIR ━━━
+${light_sky}
+
+Cold gothic light — moonlight, frost-blue dawn, lavender twilight, witch-fire wisps, pale fog. Frost-mist and breath-cold fill the air. NEVER warm golden daylight. Lean toward CLEAN skies that let the garden read.
+${accentSection}
+━━━ MOOD — MOURNFUL FROZEN BEAUTY ━━━
+HUSHED + MELANCHOLY + GORGEOUS + WEATHERED + STILL. A garden caught in an enchanted winter, beautiful and sorrowful, time stopped. Crimson-Peak grounds, a fairy-tale garden under a curse, a conservatory gone to frost.
+
+━━━ TWILIGHT COLOR — WEAVE MULTIPLE HUES ━━━
+NOT gray-monochrome. The Nightshade winter spectrum: frost-silver, violet gloom, frost-blue, lavender twilight, sapphire shadow, pale moon-white, with a single warm accent (a far lantern, a blood-orange dusk, one red robin) and emerald witch-fire as an option. ONE dominant cold hue + ONE warm accent.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / neon
+🚫 NO cheerful spring / tropical / summer garden
+🚫 NO characters as primary subject (accent-only)
+🚫 NO pentagrams / satanic iconography / cheap gore / Jack-Skellington stylization
+✓ Crimson-Peak / Sleepy-Hollow / Pan's-Labyrinth / gothic-fairy-tale lineage
+
+DRAMATIC VISUALS: the GARDEN is the hero. Render the EXACT garden + frost-signature + centrepiece + the TWO flora from slots. Mournful frozen beauty. Outdoor garden / conservatory only.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  GOTHBOT_TWILIGHT_GOTHIC: ({ slots, sharedDNA, vibeDirective }) => {
+    const { scene, twilight_light, sky, atmosphere, foreground, accent } = slots;
+
+    const accentSection = accent
+      ? `
+━━━ A SMALL ACCENT (life-sign / scale-prover — never competes) ━━━
+${accent}
+
+A SMALL accent — wildlife or a tiny distant figure dwarfed by the scene (5-12% of frame, NEVER the subject). The SCENE + LIGHT remain the hero.
+
+`
+      : '';
+
+    return `You are a romantic gothic-landscape painter writing MAGIC-HOUR scenes for GothBot. A gothic landscape caught in the soft transitional light of dawn / dusk / twilight / foggy-morning is the show — melancholy, beautiful, still. Caspar-David-Friedrich / Sleepy-Hollow / Crimson-Peak / gothic-fairy-tale visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+
+━━━ THE MAGIC HOUR IS THE HERO — ABSOLUTE FIRST RULE ━━━
+This is the GOLDEN/ROSE/LAVENDER magic hour — dawn, dusk, golden-hour, blue-hour, or foggy-morning. The SOFT TRANSITIONAL LIGHT is the hero quality: low sun, long shadows, warm-and-cool colour, mist in the hollows. A gothic subject (castle / cemetery / abbey / church / village / bridge) sits within it.
+
+🚫 NEVER deep night, NEVER a full-dark moonlit scene (those are other paths). The light is SOFT and LOW and WARM-COOL — never black.
+🚫 NEVER a high bright noon sun. NO characters as the subject (a tiny accent figure is allowed).
+🚫 NO modern / industrial / sci-fi.
+
+━━━ THE GOTHIC SCENE (hero subject, set within the light) ━━━
+${scene}
+
+The gothic subject sits in a wide romantic landscape composition — foreground, the subject in the middle distance, the sky and horizon beyond. Atmospheric depth, layered planes fading into mist.
+
+━━━ THE MAGIC-HOUR LIGHT — the SIGNATURE money-shot (render this prominently) ━━━
+${twilight_light}
+
+This is the soul of the path. The exact quality of the low transitional light — its colour, its long shadows, how it gilds the stone and pools cool in the hollows. Make it gorgeous and unmistakable.
+
+━━━ THE TWILIGHT SKY ━━━
+${sky}
+
+A magic-hour sky — streaked sunset, pastel dawn, layered violet cloud, a low burning sun. The sky is a major part of the frame and the mood. Dawn/dusk/twilight only.
+
+━━━ THE ATMOSPHERE (makes the low light visible) ━━━
+${atmosphere}
+
+Ground-fog, valley mist, woodsmoke, drifting leaves, golden haze, long dewy shadows. It catches the low light and gives the scene its romantic depth. Never night-dark, never whiteout.
+
+━━━ FOREGROUND ANCHOR (frames the scene + gives depth) ━━━
+${foreground}
+
+A near foreground element the composition opens from — a bare tree, a gate, a headstone, a winding road — silhouetted or rim-lit by the low sun.
+${accentSection}
+━━━ MOOD — MELANCHOLY ROMANTIC BEAUTY ━━━
+WISTFUL + GORGEOUS + STILL + ATMOSPHERIC. The quiet beauty of a gothic world at the edge of day — sublime, lonely, golden. A Friedrich painting, a Sleepy-Hollow dawn, a Crimson-Peak gloaming.
+
+━━━ TWILIGHT COLOR — WEAVE WARM + COOL ━━━
+The magic-hour spectrum: warm gold / rose / amber / blood-orange in the light, cool violet / blue / lavender / indigo in the shadow and distance. The warm-cool contrast IS the magic hour. ONE warm light-hue + ONE cool shadow-hue dominant.
+
+━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+🚫 NO LOTR / Skyrim / Witcher / Warcraft / Tolkien vocabulary
+🚫 NO modern / industrial / sci-fi / neon
+🚫 NO deep night / no full-dark moonlit scene / no noon sun
+🚫 NO characters as primary subject (accent-only)
+🚫 NO pentagrams / cheap gore / Jack-Skellington stylization
+✓ Caspar-David-Friedrich / Sleepy-Hollow / Crimson-Peak / gothic-fairy-tale lineage
+
+DRAMATIC VISUALS: the magic-hour LIGHT + the gothic SCENE are the hero. Render the EXACT scene + light + sky + atmosphere + foreground from slots. Soft transitional light, never deep night.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
   GOTHBOT_GOTHIC_VISTA: ({ slots, sharedDNA, vibeDirective }) => {

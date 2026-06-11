@@ -52,6 +52,21 @@ module.exports = {
     anchorScaleRange: ['LARGE'],
   },
 
+  GOTHBOT_THE_DARK_PRINCE: {
+    description:
+      'PATH-BESPOKE — GothBot the-dark-prince path (2026-06-10 NEW). The MALE counterpart to vampire-girls-2: STRICT MALE dark-aristocrat bust portraits — vampire-lord / cursed-prince / dark-sorcerer. Opulent, aristocratic, beautiful-but-EVIL, ancient menace. GLOWING inhuman eyes + a DEMONIC tell (fangs / clawed fingertip / slit pupil) + undead pallor. Distinct from the male HUNTER paths (goth-male-full-body / vampire-hunter-in-action) — this is the refined VILLAIN, not the hunter. Gender-locked MALE. Solo only. LARGE bust (40-50% of frame). 8 bespoke male pools + reused VAMPIRE_LIGHTING + universal atmosphere. Unique TEMPLATE: weaves ethnicity + hair + wardrobe + menace + glow into ONE UNIFIED dark-prince description (clone of vampire-girls-2 template, male-coded). 🚫 NEVER androgynous-pretty-boy, NEVER a hunter, NEVER bare-chested.',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      characterDnaAxes: ['archetype', 'ethnicity', 'hair', 'wardrobe', 'menace_feature'],
+      path: ['composition', 'scene', 'hero_element', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: ['LARGE'],
+  },
+
   GOTHBOT_GOTH_CLOSEUP: {
     description:
       'PATH-BESPOKE — GothBot goth-closeup path (2026-05-15 migration). HAUNTINGLY BEAUTIFUL dark-seductress closeups — SEXY + SULTRY + EVIL + FEISTY gothic women in tight frame (face + throat + one shoulder). Castlevania / Crimson Peak / Bloodborne / Devil-May-Cry dark-beauty lineage. Gender-locked FEMALE. Solo only. Character at LARGE anchor (face fills upper half of frame). Candid-moment energy, not posed. NSFW-clean (no nipple/cleavage emphasis). 10 path-bespoke axes (archetype / skin / eyes / hair_color / hairstyle / makeup / wardrobe / accessory / candid_moment / camera_perspective) + universal lighting + atmosphere.',
@@ -120,6 +135,48 @@ module.exports = {
     },
     pickN: { architectural_detail: 3 },
     conditionalLayer: { slot: 'accent_creature', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GOTHBOT_THE_SANCTUM: {
+    description:
+      'PATH-BESPOKE — GothBot the-sanctum path (2026-06-10 NEW). gothic-architecture turned INWARD: the GRAND COLD gothic INTERIOR is the hero (80%+ of frame) — cathedral nave / crypt of kings / catacomb ossuary / cursed library / throne hall / grand stairwell / mausoleum rotunda / flooded undercroft. The camera is INSIDE looking down the length / up the vault / across the chamber. Distinct from cozy-goth (WARM/cluttered/intimate) — this is VAST / COLD / REVERENT / awe-and-dread. The LIGHT WITHIN is the signature money-shot. Castlevania / Bloodborne / Crimson-Peak / Dark-Souls lineage. 5 path-bespoke axes (interior / detail pickN:3 / inner_light / focal_feature / atmosphere) + 70%-gated accent (tiny scale-prover figure or dark interior wildlife). universal:[] — the bot LIGHTING/ATMOSPHERES pools are exterior-weather-coded and would fight a sealed interior; the path supplies its own light + air.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['interior', 'detail', 'inner_light', 'focal_feature', 'atmosphere'],
+    },
+    pickN: { detail: 3 },
+    conditionalLayer: { slot: 'accent', gate: 0.7 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GOTHBOT_THE_FROST_GARDEN: {
+    description:
+      'PATH-BESPOKE — GothBot the-frost-garden path (2026-06-10 NEW). A CURSED FROZEN gothic GARDEN / CONSERVATORY is the hero — black-rose courts, frozen fountains, weeping statuary, derelict glass greenhouses, dead orchards, frost-glazed arbors, hedge mazes. Softer painterly scene register (anime medium). FROST/ICE is the signature money-shot. Mournful, beautiful, still. Crimson-Peak / Sleepy-Hollow / Pan\'s-Labyrinth / gothic-fairy-tale lineage. NO CHARACTERS as subject (tiny scale-prover accent only). 5 path-bespoke axes (garden / flora pickN:2 / frost_feature / statuary / light_sky) + 60%-gated accent (dark garden wildlife or tiny distant figure). universal:[] — the path self-lights via light_sky (the bot LIGHTING/ATMOSPHERES are castle-weather-coded).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['garden', 'flora', 'frost_feature', 'statuary', 'light_sky'],
+    },
+    pickN: { flora: 2 },
+    conditionalLayer: { slot: 'accent', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GOTHBOT_TWILIGHT_GOTHIC: {
+    description:
+      'PATH-BESPOKE — GothBot twilight-gothic path (2026-06-10 NEW). A gothic SCENE at the MAGIC HOUR — dawn / dusk / golden-hour / blue-hour / foggy-morning. Fills the "all-night" gap: the soft warm-cool transitional LIGHT is the hero quality (the signature money-shot). Castle ridges, hill-top cemeteries, foggy abbey ruins, moorland churches, cliff monasteries, misty villages, lone bridges, standing stones. Melancholy-beautiful, Caspar-David-Friedrich + Sleepy-Hollow + Crimson-Peak lineage. NOT deep night / NOT moonlit-dark (those are dark-landscape / gothic-vista). NO CHARACTERS as subject (tiny accent only). 5 path-bespoke axes (scene / twilight_light / sky / atmosphere / foreground) + 50%-gated accent. universal:[] — the path self-lights via twilight_light (the bot LIGHTING/ATMOSPHERES are night/castle-coded).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene', 'twilight_light', 'sky', 'atmosphere', 'foreground'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'accent', gate: 0.5 },
     framingModes: null,
     anchorScaleRange: null,
   },

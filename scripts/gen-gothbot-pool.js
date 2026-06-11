@@ -2707,6 +2707,720 @@ ABSOLUTELY BANNED:
     ],
     instructions: `Each entry is ONE prose sentence, 14-22 words. ONE stern weathered hunter face detail. NEVER smudgy / NEVER emo / NEVER smooth bishonen / NEVER pretty-boy. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
+
+  // ════════════════════════════════════════════════════════════════
+  // the-sanctum — NEW path (2026-06-10). GRAND COLD gothic INTERIOR as hero
+  // (80%+ of frame). gothic-architecture turned INWARD. Distinct from cozy-goth
+  // (warm/cluttered/intimate) — this is COLD / VAST / AWE-INSPIRING. universal:[].
+  // ════════════════════════════════════════════════════════════════
+  gothbot_sanctum_interior: {
+    format: 'simple',
+    theme: `THE GRAND GOTHIC INTERIOR — the HERO axis. Each entry is ONE vast, COLD, awe-inspiring gothic interior SPACE seen from INSIDE. 22-36 words. The viewer stands within an immense gothic chamber — towering vaulted ceilings, deep receding perspective, the space DWARFING everything. Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls / Elden-Ring lineage.
+
+⚠️ THE BAR — a MONUMENTAL gothic interior that fills the frame: soaring ribbed vaults overhead, columns marching into shadowed depth, a vanishing-point that pulls the eye into darkness. The SPACE is the hero — vast, cold, sacred, hushed.
+
+🚫 COLD + GRAND, NOT cozy (the overriding rule) — this is NOT the warm, cluttered, treasure-filled witch's-study register (that is a different path). NO warm domestic clutter, NO small intimate nook. The mood is VAST, COLD, REVERENT, awe-and-dread. Stone, height, echo, emptiness.
+
+✓ VARIETY MANDATE (~20):
+  • CATHEDRAL NAVE (~2) — towering columns, ribbed vault, receding aisle to a distant altar
+  • CRYPT OF KINGS (~2) — rows of stone sarcophagi + tomb effigies under low heavy vaults
+  • CATACOMB OSSUARY (~2) — bone-lined tunnels, skull-stacked walls, niches of the dead
+  • CURSED GRAND LIBRARY (~2) — towering bookshelves, spiral iron stairs, chained tomes
+  • THRONE HALL (~2) — vast empty throne room, long approach, colonnade into gloom
+  • GRAND STAIRWELL (~2) — a vertiginous spiral / sweeping staircase descending into dark
+  • RELIQUARY or MAUSOLEUM ROTUNDA (~2) — domed sacred hall, central tomb, glass-cased relics
+  • VAULTED CHAPEL / CHAPTER HOUSE (~2) — central pillar fanning into a vaulted ceiling
+  • GREAT ORGAN LOFT / RUINED BALLROOM (~2) — vast pipe organ or a dust-shrouded ballroom + chandelier
+  • UNDERCROFT / FLOODED CRYPT (~2) — low heavy stone vaults, chains, or black water mirroring columns
+
+Each entry: the interior archetype + its vast architecture (vault / columns / depth) + a cold awe trait. The camera is INSIDE looking down the length / up into the vault / across the chamber.`,
+    touchpoints: [
+      'a vast cathedral nave, columns the girth of oaks marching into shadow, a ribbed vault soaring overhead, the aisle receding toward a distant pale altar',
+      'a crypt of forgotten kings, rows of carved stone sarcophagi with weathered effigies, low heavy groin-vaults pressing down, dust thick on every tomb',
+      'a catacomb ossuary, tunnels lined floor-to-vault with stacked skulls and arranged bone, dark niches receding endlessly into cold black depth',
+      'a cursed grand library, bookshelves climbing four storeys into gloom, a wrought-iron spiral stair spiralling up, chained tomes on slanted lecterns',
+      'a colossal throne hall, a long colonnade of black-marble pillars flanking an empty obsidian throne on a distant dais, banners rotting overhead',
+      'a vertiginous grand stairwell, a sweeping stone staircase coiling down into bottomless dark, carved balustrades and a hanging chain of dead lamps',
+      'a domed mausoleum rotunda, a ring of pale statuary encircling a central raised sarcophagus, the dome above pierced by a single oculus',
+      'a vaulted chapter house, a single slender central pillar fanning into a star-ribbed ceiling, stone benches ringing the cold circular chamber',
+      'a ruined grand ballroom, a vast dust-shrouded floor under a cobwebbed crystal chandelier, tall arched windows and a sweeping derelict staircase',
+      'a flooded undercroft, squat heavy romanesque vaults reflected in still black floodwater, drowned columns marching into the dripping dark',
+      'a great organ loft, a colossal wall of brass and blackwood pipes towering over empty choir stalls, the vault lost in shadow above',
+      'an immense gothic crossing beneath a lantern-tower, four great arches opening to dim transepts, the floor a worn labyrinth of inlaid stone',
+      'a long barrel-vaulted reliquary hall, glass-and-gilt cases of saintly relics lining both walls, the vault receding into incense-dim depth',
+      'a sunken chapel of the dead, tilted flagstones, leaning tomb-slabs, a collapsed section of vault open to blackness above',
+      'a vast vertical bell-tower interior, thick ropes hanging down through tiers of timber and stone, the great bronze bell a shadow far above',
+    ],
+    instructions: `Each entry is ONE grand cold gothic interior, 22-36 words. The SPACE is the hero (vast / cold / soaring / receding). NEVER warm-cozy-cluttered, NEVER an exterior, NEVER a small intimate room. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_sanctum_detail: {
+    format: 'simple',
+    theme: `INTERIOR ARCHITECTURAL DETAIL for a grand gothic interior. Each entry 10-20 words. ONE ornate INTERIOR feature, obsessively carved. The eye should want to study every surface. Castlevania / Bloodborne / Crimson-Peak lineage.
+
+⚠️ INTERIOR detail only — ribbed vaults, fan-tracery, carved capitals, tomb effigies, choir stalls, rood screens, stained-glass-from-within, chandeliers, carved misericords, bone-arrangements. NOT exterior (no flying buttresses / battlements / spires-as-silhouette).
+
+🚫 NO modern, NO sci-fi, NO LOTR/Skyrim/Witcher vocabulary.`,
+    touchpoints: [
+      'a ribbed groin-vault overhead, every rib carved with running scrollwork meeting at gilded boss-stones',
+      'towering clustered columns with foliate carved capitals, each leaf-and-grotesque different',
+      'a carved stone rood-screen of saints and wyrms dividing nave from choir, pierced like lace',
+      'rows of dark oak choir stalls with carved misericords and canopied seat-backs',
+      'tomb effigies of armoured lords recumbent on raised slabs, hands folded over carved swords',
+      'tall lancet stained-glass windows glowing from within, lead-tracery casting jewelled light',
+      'a hanging iron chandelier-wheel ringed with guttering candles, wax stalactites dripping',
+      'a carved stone pulpit on a spiralling foliate stem, reached by a curling stair',
+      'fan-vault tracery spreading across the ceiling like petrified frost',
+      'walls of stacked skulls and arranged long-bones set in patterned ossuary niches',
+      'a great carved reredos behind the altar, tier on tier of niched saints and demons',
+      'worn inlaid floor-brasses and a labyrinth pattern set into the flagstones',
+      'a wrought-iron spiral staircase climbing the library wall, treads worn concave',
+      'carved stone angels with folded wings flanking every pier, faces eroded smooth',
+      'a colossal pipe-organ facade of blackened brass ranks rising into the vault',
+    ],
+    instructions: `Each entry is ONE ornate INTERIOR architectural detail, 10-20 words. Carved, intricate, study-worthy. Interior only. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_sanctum_inner_light: {
+    format: 'simple',
+    theme: `THE LIGHT WITHIN — the SIGNATURE money-shot for a grand interior: the dramatic light source + how it falls. Each entry 14-26 words. The single thing that makes a vast gothic interior breathtaking is HOW it is lit. Castlevania / Bloodborne / Crimson-Peak lineage.
+
+⚠️ DRAMATIC INTERIOR LIGHTING — god-rays through high windows, a thousand candles, witch-fire braziers, a glowing reliquary, moonlight through an oculus, fel-green spell-light. The light carves the volume of the space and pulls the eye into depth.
+
+🚫 NO sunlight-as-warm-daylight (this is gothic gloom pierced by dramatic light). NO modern/electric light.
+
+✓ SOURCES: shafts of pale moonlight through tall lancet windows / thousands of candle-flames / witch-fire-green braziers / a single oculus beam / a glowing reliquary or altar / sapphire arcane glow / fel-green spell-light / amber torch-rows / corpse-pale luminescence / stained-glass jewelled god-rays`,
+    touchpoints: [
+      'great slanting shafts of pale moonlight stab down through tall lancet windows, carving bright bars across the dark nave floor',
+      'a thousand candle-flames terraced up the chamber in iron stands, a galaxy of small warm lights swallowed by the vast cold dark',
+      'a single blade of silver light falls from the dome oculus onto the central sarcophagus, the rest of the rotunda drowned in shadow',
+      'witch-fire-green braziers line the colonnade, throwing acid-green light up the columns and pooling poison-bright on the flagstones',
+      'jewelled god-rays pour through a great stained-glass window, scattering red-and-violet light across the choir in drifting motes',
+      'a glowing reliquary on the distant altar throws a cold sapphire radiance down the length of the nave, the source tiny but blinding',
+      'fel-green spell-light seeps up between the flagstones and around the tomb-slabs, lighting the crypt from below like a drowned moon',
+      'rows of amber torches recede down the catacomb tunnel, each smaller and dimmer, the last lost in absolute black',
+      'corpse-pale luminescence breathes from the bone-walls themselves, the ossuary lit by the cold glow of its own dead',
+      'a shaft of stormlight flickers through a collapsed section of vault, lightning strobing the ruined ballroom white then black',
+      'candlelight from a hundred guttering tapers on the altar throws monstrous shifting shadows of the statuary up the apse wall',
+      'moonlight floods the flooded undercroft through a broken grille, the black water throwing rippling silver up across the vaults',
+    ],
+    instructions: `Each entry is ONE dramatic interior light-source + how it falls, 14-26 words. The light carves the space and leads the eye. NEVER warm daylight, NEVER modern light. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_sanctum_focal_feature: {
+    format: 'simple',
+    theme: `THE FOCAL CENTREPIECE — the one dramatic interior feature the eye lands on at the end of the space. Each entry 12-24 words. Deep in the grand interior sits ONE arresting centrepiece that anchors the composition. Castlevania / Bloodborne / Crimson-Peak lineage.
+
+⚠️ A single hero-object at the vanishing point or chamber-centre — a towering altar, a raised sarcophagus, a great throne, a vast organ, a hanging chandelier-cluster, a rose-window seen from inside, a grand staircase, a draped catafalque, an arcane summoning-circle inlaid in the floor.
+
+🚫 NO living monster as the centrepiece (this is an empty sacred space). NO modern objects.`,
+    touchpoints: [
+      'a towering carved altar at the end of the nave, candelabra blazing across its tiers, a dark reredos rising behind into shadow',
+      'a single raised sarcophagus on a stepped dais at the chamber-centre, its effigy crowned, fresh black roses laid upon the stone',
+      'an obsidian throne on a high distant dais, empty, a tattered canopy of banners hanging in shreds above it',
+      'a colossal pipe-organ filling the far wall, its blackened ranks soaring into the vault, a single candle lit at the keyboard',
+      'an immense crystal chandelier hanging in the dark above the ruined ballroom floor, half its candles guttering, cobweb-draped',
+      'a great rose-window seen from within, its jewelled tracery glowing, casting a wheel of coloured light onto the floor below',
+      'a sweeping grand staircase coiling up into gloom, a single pale figure-statue at its newel post holding a dead lamp',
+      'an arcane summoning-circle inlaid in silver and bone across the chamber floor, faint runes glowing cold around its rim',
+      'a draped black catafalque at the crossing, tall candles at its four corners, the bier waiting and empty',
+      'a vast standing reliquary cabinet of gilt and glass, a single relic within throwing cold light across the hall',
+      'a colossal cracked bronze bell hung in the tower-shaft above, its rope falling away into the dark below',
+      'a leaning tomb-slab thrown open at the crypt-centre, the dark mouth of the grave gaping, dust still settling',
+    ],
+    instructions: `Each entry is ONE arresting interior centrepiece, 12-24 words. A single hero-object anchoring the deep space. NO living monster, NO modern objects. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_sanctum_atmosphere: {
+    format: 'simple',
+    theme: `THE AIR WITHIN — the volumetric atmosphere + depth cue inside the grand interior. Each entry 12-22 words. What fills the vast cold air of the chamber and makes the light visible + the depth felt. Castlevania / Bloodborne / Crimson-Peak lineage.
+
+⚠️ Volumetric interior atmosphere — drifting incense-smoke, dust-motes swimming in light-shafts, cold mist pooling on the floor, candle-smoke haze, falling dust from the vault, cobwebs, a chill fog seeping between columns. It makes the god-rays VISIBLE and the depth READABLE.
+
+🚫 NO outdoor weather (no rain / no snow / no wind-blown leaves — we are INSIDE).`,
+    touchpoints: [
+      'drifting incense-smoke hangs in the still air, turning every shaft of light into a solid pale blade',
+      'dust-motes swim slowly through the moonlight bars, the only movement in the dead-still chamber',
+      'a low cold mist pools across the crypt floor, lapping at the foot of every sarcophagus',
+      'candle-smoke haze gathers under the vault, softening the far columns into grey silhouettes',
+      'fine dust sifts down endlessly from the cracked vault, catching the light like slow ash',
+      'cobwebs hang in vast grey sheets between the chandelier and the gallery, stirring faintly',
+      'a chill fog seeps up between the flagstones and threads between the columns into depth',
+      'frankincense smoke coils up from a swinging censer, ribboning through the coloured god-rays',
+      'the air is thick and cold and utterly still, sound deadened, breath fogging in the candlelight',
+      'pale damp mist breathes off the black floodwater, blurring the drowned columns into ghosts',
+      'motes of bone-dust drift through the ossuary air, settling pale on the stacked skulls',
+      'a faint luminous haze clings around the arcane circle, the cold light fogging the nearby air',
+    ],
+    instructions: `Each entry is ONE interior volumetric atmosphere, 12-22 words. Makes light visible + depth felt. Indoors only — never outdoor weather. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_sanctum_accent: {
+    format: 'simple',
+    theme: `THE ACCENT — a small life-sign or scale-prover deep in the grand interior (70%-gated). Each entry 10-20 words. ONE small element that adds life + proves the colossal scale without competing with the space. Castlevania / Bloodborne / Crimson-Peak lineage.
+
+⚠️ SMALL accent only — a tiny hooded figure dwarfed by the architecture (8-15% of frame, scale-prover, NEVER the subject), OR dark interior wildlife (roosting bats, a raven on a tomb, a black cat on the altar steps, moths around the candles, rats among the bones).
+
+🚫 The accent NEVER dominates — the INTERIOR is the hero. NO large monster, NO combat, NO group of figures.`,
+    touchpoints: [
+      'a single tiny hooded figure stands far down the nave, dwarfed to nothing by the soaring columns',
+      'a lone cloaked figure ascends the grand staircase, a small dark shape against the vast stone sweep',
+      'bats roost in clusters high in the ribbed vault, a few wheeling through the moonlight shafts',
+      'a single raven perches on the crowned effigy of the central tomb, utterly still',
+      'a black cat sits on the lowest altar step, eyes catching the candlelight, watching the empty hall',
+      'pale moths circle the chandelier candles in a slow spiral high above the ballroom floor',
+      'a small kneeling figure before the distant altar, candle in hand, lost in the immense gloom',
+      'rats move among the stacked bones of the ossuary, small shapes in the corpse-pale glow',
+      'a tiny figure with a lantern stands at the crypt entrance, the light a pinprick in the dark',
+      'a single white owl sits in a high window-arch, silhouetted against the moonlit glass',
+      'a small acolyte in robes crosses the far end of the colonnade, dwarfed by the black pillars',
+      'a coiled serpent rests on the warm flagstones beside a fallen candle, scales gleaming faintly',
+    ],
+    instructions: `Each entry is ONE small accent (tiny scale-prover figure OR dark interior wildlife), 10-20 words. NEVER dominates the space. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // the-frost-garden — NEW path (2026-06-10). A CURSED FROZEN gothic GARDEN /
+  // CONSERVATORY as hero — black-rose courts, frozen fountains, weeping statuary,
+  // glass greenhouses, ice-glazed arbors. Softer painterly scene register. FROST
+  // is the signature. NO CHARACTERS as subject. universal:[].
+  // ════════════════════════════════════════════════════════════════
+  gothbot_frostgarden_garden: {
+    format: 'simple',
+    theme: `THE CURSED FROZEN GARDEN — the HERO axis. Each entry is ONE haunting gothic GARDEN or CONSERVATORY space, frost-touched and overgrown. 22-36 words. A walled black-rose garden, a frozen fountain court, a weeping-statuary garden, a derelict glass greenhouse, a dead orchard, a topiary maze under frost, an ice-glazed arbor walk, a sunken grotto. Crimson-Peak / Sleepy-Hollow / gothic-fairy-tale / Pan's-Labyrinth lineage.
+
+⚠️ THE BAR — a gorgeous, melancholy, frost-bitten gothic garden that fills the frame: bare black trees, thorned rose-arbors, cracked stone paths, statuary furred with frost, everything still and silver-cold. The GARDEN is the hero. Beautiful and mournful.
+
+🚫 NO CHARACTERS as subject (tiny scale-prover accent only). NO bright cheerful spring garden — this is a CURSED WINTER garden: frost, decay, thorns, mournful beauty. NO modern / NO sci-fi / NO LOTR-Skyrim-Witcher vocabulary.
+
+✓ VARIETY MANDATE (~18):
+  • BLACK-ROSE WALLED GARDEN (~2) — thorned arbors of frost-rimed black roses
+  • FROZEN FOUNTAIN COURT (~2) — a great fountain caught mid-cascade in ice
+  • WEEPING-STATUARY GARDEN (~2) — mourning angels + draped figures furred with frost
+  • DERELICT GLASS CONSERVATORY (~2) — frost-feathered greenhouse, dead exotic flora within
+  • DEAD ORCHARD (~2) — rows of bare black fruit-trees, frost on every branch
+  • TOPIARY / HEDGE MAZE (~2) — frost-dusted topiary beasts, a maze of bare hedges
+  • ICE-GLAZED ARBOR / PERGOLA WALK (~2) — a long tunnel of frozen climbing vines
+  • SUNKEN GROTTO / GRAVEYARD GARDEN (~2) — a mossy grotto or tomb-studded garden under frost
+  • WINTER CLOISTER GARTH (~1) — a frozen courtyard garden ringed by an arcade
+  • FROZEN LILY-POND GARDEN (~1) — a black pond glazed with ice, dead reeds, a stone bridge
+
+Each entry: the garden archetype + its frost/decay + its layout (paths / arbors / walls) + a mournful beauty trait.`,
+    touchpoints: [
+      'a walled black-rose garden, arbors of thorned roses rimed white with frost, cracked flagstone paths winding between frozen beds under a bruised sky',
+      'a frozen fountain court, a great tiered fountain caught mid-cascade in glassy ice, frost-furred cherubs, a ring of dead topiary around it',
+      'a garden of weeping statuary, mourning stone angels and draped figures furred with hoarfrost, bare black trees clawing above the frozen lawns',
+      'a derelict glass conservatory, its panes frost-feathered and cracked, dead exotic palms and black orchids withered inside, vines frozen to the iron ribs',
+      'a dead orchard, rows of bare black fruit-trees heavy with frost, a stone bench, a low silver mist creeping between the trunks',
+      'a topiary maze under frost, hedge-beasts dusted white and losing their shapes, narrow paths of frozen gravel turning into shadow',
+      'a long ice-glazed pergola walk, climbing roses and wisteria frozen solid over the arches, a tunnel of glittering thorned ice receding into mist',
+      'a sunken grotto garden, a mossy shell-lined alcove glazed with ice, a trickle frozen mid-fall, ferns turned to frost-lace',
+      'a graveyard garden, leaning frost-furred headstones among bare rose-briars, a wrought-iron gate hanging open, mist pooling between the graves',
+      'a winter cloister garth, a square frozen lawn ringed by a stone arcade, a frost-cracked sundial at its centre, bare vines on every column',
+      'a frozen lily-pond garden, a black pond glazed with clouded ice, dead reeds standing stiff, a humpbacked stone bridge furred with frost',
+      'a ruined formal parterre, geometric beds of dead black hedging outlined in frost, a toppled urn spilling frozen earth, gravel paths cracked',
+      'an overgrown rose conservatory gone to ruin, a glass dome half-collapsed, a single frozen rose-tree filling the space, frost on every shard',
+      'a thorn-choked secret garden behind a frost-split stone wall, a rusted gate, black briars swallowing a forgotten stone bench and birdbath',
+    ],
+    instructions: `Each entry is ONE cursed frozen gothic garden, 22-36 words. The GARDEN is the hero (frost / thorns / statuary / decay / mournful beauty). NEVER a character-subject, NEVER a cheerful spring garden. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_frostgarden_flora: {
+    format: 'simple',
+    theme: `THE DARK FROST-FLORA — the plants of a cursed winter garden. Each entry 10-20 words. ONE haunting frozen/dark plant detail. Crimson-Peak / gothic-fairy-tale lineage.
+
+⚠️ Dark gothic flora touched by frost — black roses, frost-flowers, thornbriars, withered wisteria, pale moonflowers, frozen lilies, ice-glazed ivy, dead foxglove, hoarfrost ferns, blue-glowing nightbloom, brittle nightshade.
+
+🚫 NO bright cheerful spring blooms. NO tropical jungle. NO modern garden plants.`,
+    touchpoints: [
+      'black roses rimed in white frost, petals stiff and glittering, thorned canes arching over a path',
+      'delicate frost-flowers blooming across the cold ground in feathery white crystal fans',
+      'tangled thornbriars choking a stone bench, every barb tipped with a bead of clear ice',
+      'withered wisteria hanging in frozen lavender cascades from an iron arbor',
+      'pale luminous moonflowers half-open in the frost, glowing faintly blue in the gloom',
+      'frozen lilies standing stiff on a glazed black pond, their petals sheathed in ice',
+      'ice-glazed ivy climbing a frost-split wall, each leaf a perfect glass replica of itself',
+      'dead foxglove and brittle nightshade standing tall and black against the silver frost',
+      'hoarfrost ferns unfurling in feathered white along the shaded edge of the path',
+      'a single frozen rose-tree, its black blooms encased in clear ice like glass ornaments',
+      'brittle dried hydrangea-heads furred with frost, drooping over a cracked urn',
+      'creeping blue-glowing nightbloom threading luminous through the frozen undergrowth',
+    ],
+    instructions: `Each entry is ONE dark frost-flora detail, 10-20 words. Frozen, gothic, mournful. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_frostgarden_frost_feature: {
+    format: 'simple',
+    theme: `THE FROST SIGNATURE — the SIGNATURE money-shot: the ICE/frost effect that makes the garden magical and cold. Each entry 12-24 words. The single frozen detail that makes the shot iconic. Crimson-Peak / Frozen-fairy-tale lineage.
+
+⚠️ A gorgeous ICE/FROST hero-effect — a fountain frozen mid-cascade, ice-glazed statuary, frost-feathered glass panes, a frozen pond mirror, icicles draping an arbor, snow dusting topiary, a frost-rimed spiderweb, hoarfrost furring every surface, breath-fog hanging in the cold air.
+
+🚫 NO heavy blizzard whiteout (the garden must stay readable). NO warm sun melting it.`,
+    touchpoints: [
+      'a great fountain frozen mid-cascade, its falling water caught as glassy blue-white ice sheets and dripping icicle-curtains',
+      'every statue glazed in a skin of clear ice, frost furring their carved faces and outstretched stone hands',
+      'frost-feathered conservatory glass, the panes ferned white with crystal patterns glowing in the moonlight',
+      'a black pond frozen to a perfect clouded mirror, reflecting the bare trees and the pale moon above',
+      'long crystalline icicles draping the arbor in a glittering curtain, the path beneath glazed slick',
+      'fine snow dusting the topiary beasts, softening their shapes, the gravel paths powdered white',
+      'a vast frost-rimed spiderweb strung between two thorned arbors, every strand beaded with ice',
+      'thick hoarfrost furring every twig, thorn and railing in feathery white, the whole garden silvered',
+      'breath-fog and frost-mist hanging low over the frozen beds, lit silver-blue by the moon',
+      'a frozen rivulet winding through the garden caught mid-flow as ribboned blue ice over the stones',
+      'ice-sheathed rose-arbors arching overhead, the black blooms encased like jewels in clear glass',
+      'a sundial encased in a dome of clear ice, its frozen shadow stopped forever at midnight',
+    ],
+    instructions: `Each entry is ONE iconic frost/ice effect, 12-24 words. Gorgeous, cold, magical, readable. NEVER a whiteout, NEVER melting. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_frostgarden_statuary: {
+    format: 'simple',
+    theme: `THE GARDEN CENTREPIECE — the stone feature the eye lands on. Each entry 12-24 words. ONE arresting garden centrepiece (usually statuary or stonework). Crimson-Peak / gothic-fairy-tale lineage.
+
+⚠️ A single hero stone-feature anchoring the garden — a weeping angel statue, a draped mourner, a cracked sundial, a fountain-figure, a moss-eaten cherub, an armless goddess, a gothic gazebo, an iron-and-glass folly, a tomb among the roses, a stone archway.
+
+🚫 NO living monster as centrepiece (this is a still, empty garden). NO modern objects.`,
+    touchpoints: [
+      'a weeping stone angel kneeling at the garden centre, frost on her folded wings, face buried in carved hands',
+      'a draped marble mourner standing among the black roses, her stone veil furred with hoarfrost',
+      'a cracked stone sundial on a frost-split plinth, its gnomon hung with a single icicle',
+      'a moss-eaten cherub fountain-figure, its basin frozen, ivy and ice climbing its pitted stone',
+      'an armless weathered goddess on a pedestal, frost outlining every fold of her carved robe',
+      'a wrought-iron-and-glass garden folly at the path-end, its panes frost-feathered, dark within',
+      'a single ivy-wrapped tomb among the rose-briars, its stone lid carved with a sleeping figure',
+      'a crumbling stone archway hung with frozen climbing roses, framing the misty depth beyond',
+      'a great frost-furred urn on a balustrade, dead trailing plants spilling stiff over its rim',
+      'a pale statue of a robed maiden holding a frozen stone lantern, frost glittering on her face',
+      'a tiered stone birdbath cracked and frozen solid, a single black feather frozen into the ice',
+      'a stone gazebo at the maze-heart, its dome laced with icicles, a frozen bench within',
+    ],
+    instructions: `Each entry is ONE arresting garden stone-centrepiece, 12-24 words. Still, gothic, frost-touched. NO living monster, NO modern objects. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_frostgarden_light_sky: {
+    format: 'simple',
+    theme: `THE LIGHT + SKY + COLD AIR over the frozen garden. Each entry 14-26 words. The lighting, the sky overhead, and the cold atmosphere together. Crimson-Peak / gothic-fairy-tale lineage.
+
+⚠️ Cold gothic light + sky + frost-air — pale moonlight silvering the frost, frost-blue pre-dawn, lavender twilight, a low pale sun through fog, witch-fire wisps drifting, mist pooling, a single moon through bare branches, aurora-thin light at the horizon. Frost-mist and breath-cold are part of it.
+
+🚫 NO warm golden daylight, NO bright blue summer sky. NO modern light. Keep it cold, dim, dreamlike — Nightshade palette.
+
+✓ Lean toward CLEAN skies (deep violet, single moon, pale fog) that let the garden read.`,
+    touchpoints: [
+      'pale moonlight pours over the garden, silvering every frost-furred surface, the sky a deep clear violet-black above bare branches',
+      'frost-blue pre-dawn light, the eastern sky a cold pale rose, the garden hushed and silver-grey in the half-light',
+      'soft lavender twilight settling over the beds, the first stars pricking a violet sky, mist rising off the frozen lawns',
+      'a low pale sun smothered in fog, casting no warmth, the garden flat and silver under a colourless winter sky',
+      'witch-fire wisps drift between the frozen arbors, casting drifting green light on the hoarfrost, the sky deep indigo above',
+      'a single huge pale moon hangs through the bare black branches, its cold light glazing the frozen pond to a mirror',
+      'thin aurora-light shimmers green-violet low at the horizon, the garden silvered beneath, frost-mist pooling along the paths',
+      'heavy frost-fog fills the garden, the statuary looming as grey shapes, a diffuse silver glow with no visible source',
+      'storm-light flickers behind racing clouds, lightning briefly silvering the frozen fountain, the sky a churning slate-violet',
+      'a clear cold star-field arcs over the walled garden, the milky band faint, the frost glittering back like an answering sky',
+      'sickly amber lantern-light glows from a distant conservatory, warm against the cold blue frost of the foreground beds',
+      'a blood-orange dusk burns low and cold behind the bare orchard, the long shadows of the trees barred across the frost',
+    ],
+    instructions: `Each entry is ONE cold light + sky + frost-air over the garden, 14-26 words. Cold, dim, dreamlike, Nightshade. NEVER warm daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_frostgarden_accent: {
+    format: 'simple',
+    theme: `THE ACCENT — a small life-sign in the frozen garden (60%-gated). Each entry 10-20 words. ONE small element of life or a tiny scale-prover. Crimson-Peak / gothic-fairy-tale lineage.
+
+⚠️ SMALL accent — dark garden wildlife (a raven on a statue, a white fox in the snow, crows in the dead orchard, a black cat on a frozen bench, a robin on a thorn, moths) OR a tiny distant figure (a small cloaked figure on a far path, dwarfed by the garden — NEVER the subject, 8-15%).
+
+🚫 NEVER dominates — the GARDEN is the hero. NO large monster, NO combat, NO group.`,
+    touchpoints: [
+      'a single raven perched on the weeping angel statue, black against the white frost, utterly still',
+      'a white fox picks its way across the frozen lawn, leaving a thread of small prints in the hoarfrost',
+      'a scatter of crows roosting in the bare black orchard, a few lifting into the cold sky',
+      'a black cat curled on a frost-furred stone bench, watching the silent garden',
+      'a small red robin on a thorned rose-cane, the one spot of warm colour in the frozen grey',
+      'pale moths drifting around a distant conservatory window, lit faintly from within',
+      'a tiny cloaked figure stands far down a frozen path, dwarfed by the towering bare arbors',
+      'a single white owl on the frozen fountain rim, silhouetted against the pale moon',
+      'a deer stands frozen-still among the dead trees, breath fogging, ready to bolt',
+      'a small distant figure with a lantern moves through the hedge-maze, the light a warm pinprick',
+      'a swan, white and motionless, sits on the frozen black pond as if caught in the ice',
+      'a hare crouches beneath a frosted hedge, ears flat, eyes catching the moonlight',
+    ],
+    instructions: `Each entry is ONE small accent (dark garden wildlife OR tiny distant figure), 10-20 words. NEVER dominates the garden. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // twilight-gothic — NEW path (2026-06-10). A gothic SCENE at the MAGIC HOUR —
+  // dawn / dusk / golden-hour / blue-hour / foggy-morning. Fills the "all-night"
+  // gap: soft warm-cool transitional LIGHT is the hero quality. NO deep night.
+  // NO CHARACTERS as subject. universal:[].
+  // ════════════════════════════════════════════════════════════════
+  gothbot_twilight_scene: {
+    format: 'simple',
+    theme: `THE GOTHIC SCENE AT TWILIGHT — the HERO axis. Each entry is ONE gothic landscape/subject seen at the MAGIC HOUR (dawn / dusk / twilight / foggy-morning). 22-36 words. A castle on a ridge, a hill-top cemetery, a foggy abbey ruin, a moorland church, a cliff monastery, a misty village, a lone gothic bridge, a manor on a hill, a crossroads gibbet, standing stones, a drowned causeway, a lighthouse on a black cape. Sleepy-Hollow / Crimson-Peak / gothic-fairy-tale / Caspar-David-Friedrich lineage.
+
+⚠️ THE BAR — a gorgeous gothic scene bathed in SOFT TRANSITIONAL LIGHT: long shadows, a low sun or pale dawn, mist in the hollows, warm-and-cool colour. Melancholy and beautiful and still. The SCENE + its LIGHT are the hero.
+
+🚫 NOT DEEP NIGHT, NOT full moonlit-dark (those are other paths) — this is the magic hour: dawn, dusk, golden-hour, blue-hour, fog-morning. NO characters as subject (tiny accent only). NO modern / NO sci-fi / NO LOTR-Skyrim-Witcher vocabulary.
+
+✓ VARIETY MANDATE (~18):
+  • CASTLE / KEEP on a ridge (~2) — silhouetted against the dawn or dusk
+  • HILL-TOP CEMETERY (~2) — leaning headstones, long shadows, mist
+  • FOGGY ABBEY / CATHEDRAL RUIN (~2) — broken arches in golden mist
+  • MOORLAND CHURCH / CHAPEL (~2) — a lone church on the heath at gloaming
+  • CLIFF MONASTERY / SEA-STACK (~2) — a monastery on a black cape over a dawn sea
+  • MISTY VILLAGE / HAMLET (~2) — gabled rooftops + woodsmoke in the valley fog
+  • LONE GOTHIC BRIDGE / CAUSEWAY (~2) — an old bridge over a misted river at dusk
+  • MANOR / MANSION on a hill (~1) — a dark mansion against a burning sunset
+  • CROSSROADS GIBBET / STANDING STONES (~1) — a gibbet or stone-ring on the dusk moor
+  • WINDING ROAD / AVENUE (~1) — a bare-tree avenue or hollow-way at golden last-light
+  • HARBOUR / LIGHTHOUSE (~1) — a black harbour or lighthouse at cold dawn
+
+Each entry: the gothic subject + the magic-hour time + the landscape setting + a melancholy-beautiful trait. The LIGHT and TIME are felt.`,
+    touchpoints: [
+      'a vast gothic castle silhouetted black on a ridge against a burning blood-orange dusk, its towers sharp, the valley below sinking into blue shadow',
+      'a hill-top cemetery at golden last-light, leaning frost-furred headstones casting long shadows across the dewy grass, a bare oak black against the sky',
+      'a ruined gothic abbey at dawn, broken pointed arches rising from a sea of pale golden mist, the rising sun glowing through the empty rose-window',
+      'a lone moorland church at gloaming, its squat tower dark on the empty heath, the last violet light draining from a vast lavender sky',
+      'a cliff-top monastery on a black sea-cape, the cold rose dawn breaking over a misted ocean, gulls wheeling far below the broken walls',
+      'a misty village in a valley at dusk, gabled rooftops and a gothic spire rising from woodsmoke and golden fog, lamps just beginning to glow',
+      'an old humpbacked gothic bridge over a misted river at dusk, its arches doubled in the still water, bare willows trailing into the gold-grey haze',
+      'a dark gothic manor on a low hill against a furious sunset, its many windows catching the last red fire, black cypress flanking the drive',
+      'a crossroads gibbet-cage on the open dusk moor, the empty cage creaking, a single bare thorn-tree leaning beside it under a bruised lavender sky',
+      'a ring of standing stones on a heather moor at first light, long blue shadows reaching west, a low pearl mist clinging to the ground between them',
+      'a bare-tree avenue receding to a distant gothic gatehouse, the low golden sun firing through the trunks, leaves drifting down through the warm light',
+      'a black lighthouse on a storm-worn cape at cold dawn, the sea a sheet of pewter and rose, the sky streaked with the first pale fire',
+      'a gothic cathedral town across a river at blue-hour, spires and rooftops a layered silhouette, the water mirroring a deep indigo-and-amber sky',
+      'a windswept clifftop graveyard above a dawn sea, crosses and angels leaning into the wind, the horizon a thin band of cold rose fire',
+    ],
+    instructions: `Each entry is ONE gothic scene at the magic hour, 22-36 words. The SCENE + soft transitional LIGHT are the hero. NEVER deep night, NEVER a character-subject. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_twilight_light: {
+    format: 'simple',
+    theme: `THE MAGIC-HOUR LIGHT — the SIGNATURE money-shot: the exact quality of transitional light. Each entry 14-26 words. The single thing that defines this path is the LIGHT of dawn/dusk/twilight. Caspar-David-Friedrich / Sleepy-Hollow / golden-hour-cinematography lineage.
+
+⚠️ SOFT TRANSITIONAL LIGHT — rose dawn, blood-orange dusk, lavender blue-hour, golden last-light, pale foggy morning, amber gloaming, silver pre-dawn, a low sun through mist, god-rays through fog, the green flash, alpenglow on stone. Long warm shadows + cool blue shade.
+
+🚫 NOT deep night, NOT a high bright noon sun, NOT moonlight-as-primary. NO modern/electric light.`,
+    touchpoints: [
+      'a low blood-orange sun sits on the horizon, raking long gold shadows across the ground and firing the stone edges molten',
+      'cold rose-and-violet dawn light spreads from the east, the world still blue-grey, the first warmth just touching the highest towers',
+      'deep lavender blue-hour glow after sunset, the sky a gradient of indigo to amber, every shape softened to silhouette',
+      'golden last-light pours low and warm through mist, turning the haze to luminous gold and gilding every wet leaf and stone',
+      'pale foggy-morning light, flat and silver and sourceless, the sun a soft white disc smothered in the mist',
+      'amber gloaming, the warm dying light glowing on west-facing stone while cool blue shadow pools in every hollow',
+      'silver pre-dawn light, the sky pearl-grey shading to faint rose, mist sheeting low and luminous across the ground',
+      'god-rays fan down through a broken sky and drifting fog, solid golden shafts striking the ruin below',
+      'the sun a swollen red disc setting through haze, the whole scene drenched in a deep smouldering crimson-gold',
+      'a thin band of cold green-and-rose fire on the horizon, the last of the light, the land above it sinking to violet-black',
+      'warm sodium-gold dusk afterglow on the underside of low cloud, reflected soft onto the misted fields below',
+      'alpenglow firing the upper stonework pink-gold while the base of the scene drowns in cool blue twilight shade',
+    ],
+    instructions: `Each entry is ONE magic-hour light quality, 14-26 words. Soft, transitional, warm-and-cool. NEVER deep night, noon, or moonlight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_twilight_sky: {
+    format: 'simple',
+    theme: `THE TWILIGHT SKY — the sky at the magic hour. Each entry 12-24 words. ONE gorgeous dawn/dusk/twilight sky. Caspar-David-Friedrich / romantic-landscape lineage.
+
+⚠️ A magic-hour sky — streaked sunset, pastel dawn, layered violet cloud, a low burning sun, a thin crescent at dusk, a fog-bank rolling in, a flock crossing the gloaming, mackerel cloud lit from below, the first stars in an indigo east.
+
+🚫 NOT a black night sky, NOT a high blue noon sky. The sky is part of the magic hour.`,
+    touchpoints: [
+      'a streaked sunset of crimson, gold and violet banding the western sky, the clouds underlit in fire',
+      'a soft pastel dawn, the sky shading from pale rose at the horizon up through peach to faint lavender',
+      'layered violet-and-amber cloud rolling slow across a deepening dusk sky, the light draining warm to cold',
+      'a low burning sun half-sunk into a bank of indigo cloud, its last rays spoking up across the sky',
+      'a thin pale crescent moon hanging in a still-lit lavender dusk sky, one bright planet beside it',
+      'a wall of pearl-grey fog rolling in low under a pale colourless dawn sky, swallowing the far distance',
+      'a great ragged flock of crows crossing the burning gloaming sky, scattering black against the gold',
+      'a mackerel sky of small clouds lit pink-and-gold from below by the set sun, fading to blue overhead',
+      'the first faint stars pricking a deep indigo eastern sky while the west still burns amber',
+      'storm-cloud breaking at dusk, a single shaft of gold light spearing through onto the dark land',
+      'a vast empty dawn sky of palest eggshell-blue and rose, a single high contrail catching the early sun',
+      'sodium-orange afterglow smouldering along the whole horizon under a heavy lid of deep blue cloud',
+    ],
+    instructions: `Each entry is ONE magic-hour sky, 12-24 words. Dawn/dusk/twilight only — never black night or noon-blue. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_twilight_atmosphere: {
+    format: 'simple',
+    theme: `THE TWILIGHT ATMOSPHERE — the air + weather effect at the magic hour. Each entry 12-22 words. What fills the air and catches the low light. Sleepy-Hollow / romantic-landscape lineage.
+
+⚠️ Magic-hour atmosphere — ground-fog pooling in the hollows, valley mist, drifting woodsmoke, long dewy shadows, drifting autumn leaves, a chill golden haze, dust-gold in the sunbeams, sea-spray haze, the breath of cattle, midges dancing in a sunbeam.
+
+🚫 NO heavy night-darkness, NO whiteout. The atmosphere makes the low light VISIBLE.`,
+    touchpoints: [
+      'low ground-fog pools white in every hollow and ditch, the tops of stones and trees rising clear above it',
+      'valley mist fills the whole low ground, the gothic spire and hill-tops floating as islands above a golden sea',
+      'drifting woodsmoke from unseen chimneys hangs blue in the still dusk air, catching the last warm light',
+      'long dew-silvered shadows stretch east across the grass, every blade catching a bead of golden light',
+      'drifting autumn leaves spin slowly down through a slanting golden sunbeam, the air thick with warm light',
+      'a chill golden haze softens all the distance, the far hills fading to flat lavender silhouettes',
+      'dust-gold motes hang in the low god-rays, drifting slow through the warm slanted light',
+      'cold sea-spray haze blurs the base of the cliffs, the upper rocks catching the rose dawn clear above it',
+      'the breath of unseen cattle fogs in the cold gloaming air, the field sinking into blue shadow',
+      'a thin luminous river-mist threads along the water, glowing where the low sun strikes it',
+      'midges dance in a single slanting amber sunbeam between the dark trees, the rest in cool shadow',
+      'frost-smoke rises off the dew as the first sun touches the cold ground, glowing pale gold',
+    ],
+    instructions: `Each entry is ONE magic-hour atmosphere, 12-22 words. Makes the low light visible. Never night-dark, never whiteout. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_twilight_foreground: {
+    format: 'simple',
+    theme: `THE FOREGROUND ANCHOR — a near element that frames the twilight scene + gives depth. Each entry 10-20 words. ONE foreground object the composition opens from. Romantic-landscape / Friedrich repoussoir lineage.
+
+⚠️ A foreground anchor — a lone bare tree, a wrought-iron gate, a leaning headstone, a weathered stone cross, a flock of crows on a fence, a winding road, a milestone, dead reeds, a broken wall, a roadside shrine, a gnarled root, a wayside bench.
+
+🚫 NO modern objects. NO living human as the anchor (a tiny figure is a separate accent axis).`,
+    touchpoints: [
+      'a lone gnarled bare tree in the near foreground, its black branches clawing across the burning sky',
+      'a rusted wrought-iron gate hanging open in the foreground, framing the misted scene beyond',
+      'a single leaning lichen-furred headstone close to the camera, the cemetery receding behind it',
+      'a weathered stone wayside cross in the foreground, its arms catching the last gold light',
+      'a row of crows perched on a foreground fence-rail, black silhouettes against the gloaming',
+      'a pale winding road or hollow-way leading the eye from the foreground into the misted distance',
+      'a mossy milestone half-swallowed by grass in the foreground, the road curving away behind',
+      'dead reeds and rushes in the near foreground, black against the glowing water beyond',
+      'a tumbled drystone wall in the foreground, its gap framing the distant dusk-lit church',
+      'a small roadside shrine with a guttered candle in the foreground, the moor stretching beyond',
+      'a gnarled exposed tree-root and a scatter of bracken framing the lower edge of the frame',
+      'an old wayside bench under a bare tree, empty, facing the burning sunset across the valley',
+    ],
+    instructions: `Each entry is ONE foreground anchor, 10-20 words. Frames the scene + gives depth. No modern objects, no human anchor. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  gothbot_twilight_accent: {
+    format: 'simple',
+    theme: `THE ACCENT — a small life-sign in the twilight scene (50%-gated). Each entry 10-20 words. ONE small element of life or a tiny distant figure. Sleepy-Hollow / romantic-landscape lineage.
+
+⚠️ SMALL accent — wildlife (a flock of crows, a lone rider, a deer at the wood-edge, an owl, a fox, wheeling rooks, sheep on the moor) OR a tiny distant figure (a hooded traveller on the road, a shepherd, a distant funeral procession, a lone figure at a grave — NEVER the subject, 5-12%).
+
+🚫 NEVER dominates — the SCENE + LIGHT are the hero. NO large monster, NO combat, NO close-up figure.`,
+    touchpoints: [
+      'a ragged flock of crows lifts from the bare trees, scattering black across the burning dusk sky',
+      'a single hooded traveller on the winding road far below, tiny against the vast misted valley',
+      'a lone rider on a dark horse crests the distant ridge, silhouetted on the gold horizon',
+      'a deer stands at the edge of the misted wood, head up, caught in the last gold light',
+      'a tiny distant funeral procession winds toward the hill-top church, small black shapes in the gloaming',
+      'rooks wheel and call around the abbey ruin, a slow black spiral against the rose dawn',
+      'a single shepherd and his dog move a scatter of pale sheep across the dusk-blue moor',
+      'a lone figure stands at a distant grave on the cemetery hill, dwarfed by the burning sky',
+      'a white owl glides low and silent across the misted field toward the dark wood',
+      'a fox trots along the foreground wall, pausing to look back, its coat lit gold by the low sun',
+      'a horse-drawn cart crawls along the far causeway, a small dark shape on the misted road',
+      'a flock of starlings ripples in a murmuration over the village rooftops at dusk',
+    ],
+    instructions: `Each entry is ONE small accent (wildlife OR tiny distant figure), 10-20 words. NEVER dominates the scene. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  // ════════════════════════════════════════════════════════════════
+  // the-dark-prince — NEW path (2026-06-10). MALE dark-beauty/menace BUST portrait
+  // — vampire-lord / cursed-prince / dark-sorcerer. The male counterpart to
+  // vampire-girls-2. Opulent, aristocratic, beautiful-but-evil — NOT a hunter
+  // (the other male paths are all hunters). Gender-locked MALE, solo, LARGE bust.
+  // ════════════════════════════════════════════════════════════════
+  darkprince_archetype: {
+    format: 'simple',
+    theme: `THE DARK PRINCE — the HERO archetype (his ROLE + energy). Each entry 15-26 words. ONE elegant, menacing, beautiful MALE dark-aristocrat. Castlevania-Dracula / Alucard / Lestat / Crimson-Peak-Thomas-Sharpe / Hellsing-Alucard / byronic-dark-lord lineage.
+
+⚠️ An opulent, dangerous, gorgeous-but-EVIL male aristocrat — a vampire lord, a cursed prince, a dark sorcerer. Cold elegance + ancient menace. NOT a hunter, NOT a warrior-in-armor, NOT a scruffy rogue — a REFINED, powerful, damned nobleman.
+
+🚫 NO hunter / inquisitor / Belmont / Van-Helsing (that is a different path). NO scruffy / no peasant. NO femboy / androgynous-pretty-boy — he is MALE, commanding, masculine-elegant.
+
+✓ VARIETY MANDATE (~16): vampire-count / vampire-progenitor-elder / cursed crown-prince / dark sorcerer-lord / byronic revenant / blood-king / demon-prince / undying emperor / gothic archduke / nosferatu-but-elegant / shadow-bishop / opera-phantom-lord / damned cardinal / warlock-duke / lich-lord (elegant, not skeletal) / fallen-angel prince.`,
+    touchpoints: [
+      'an ancient vampire count, cold and courteous and utterly lethal, centuries of cruelty behind a beautiful aristocratic stillness',
+      'a cursed crown-prince, young and gorgeous and damned, bearing the weight of an undying bloodline with bitter elegance',
+      'a dark sorcerer-lord, arcane power coiling around him, eyes that have read forbidden things, serene and terrifying',
+      'a byronic revenant nobleman, romantic and doomed and dangerous, beauty sharpened by grief and centuries of hunger',
+      'a blood-king upon his ancient line, imperious and magnetic, the kind of monster others kneel to willingly',
+      'a demon-prince in human-elegant form, otherworldly and seductive, an old god wearing a beautiful man like a glove',
+      'an undying gothic emperor, regal and weary and pitiless, his court long dust, his power undimmed',
+      'a nosferatu elder rendered ELEGANT, ancient and predatory but draped in dark refinement, not a feral ghoul',
+      'a shadow-bishop of a fallen faith, robed and ringed and damned, holy beauty turned to something unholy',
+      'an opera-phantom dark-lord, theatrical and obsessive and brilliant, half-masked, magnetic and unstable',
+      'a warlock-duke, urbane and amused and deadly, trading in pacts and ruin from behind a charming smile',
+      'a fallen-angel prince, unbearably beautiful and cold, the memory of grace curdled into proud damnation',
+      'a vampire-progenitor, the first of a line, primordial and serene, his hunger a calm and bottomless thing',
+      'a damned cardinal-prince, scarlet and gold and corrupt, sanctity rotted into exquisite cruelty',
+      'a gothic archduke of a dead kingdom, melancholy and grand, ruling a court of ghosts with perfect manners',
+      'a lich-lord kept ELEGANT and whole, not skeletal — a sorcerer-king who cheated death and kept his beauty',
+    ],
+    instructions: `Each entry is ONE elegant menacing male dark-aristocrat archetype, 15-26 words. Refined + powerful + damned. NEVER a hunter, NEVER androgynous-pretty-boy. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_ethnicity: {
+    format: 'simple',
+    theme: `THE LOOK + UNDEAD PALLOR — his ethnicity/heritage rendered with a dark-aristocrat's cast. Each entry 12-22 words. ONE masculine face-heritage + its pale, refined, dangerous quality. Span world ethnicities.
+
+⚠️ A handsome, severe, aristocratic MALE face of a specific heritage, touched with undead or cursed pallor — pale, cold, beautiful, masculine. Sharp bone structure, commanding presence.
+
+🚫 NO soft/cute/boyish. NO real-world ethnic stereotypes or slurs — describe features + pallor with dignity. He is human-shaped (NO elf/pointed ears).
+
+✓ Span: pale Slavic / Nordic-fair / Mediterranean-olive / Spanish / Persian / South-Asian / East-Asian / West-African / Levantine / Roma / Romanian-noble / Latin-American — each with refined masculine bone structure + cursed pallor.`,
+    touchpoints: [
+      'a pale Slavic nobleman, high broad cheekbones and a hard jaw, ice-grey undertone beneath corpse-pale skin',
+      'a Nordic-fair lord, sharp pale features and a strong brow, frost-white skin and a cold severe beauty',
+      'a Mediterranean-olive aristocrat, dark brows and an aquiline nose, the olive skin drained to a sallow marble pallor',
+      'a Persian prince, deep-set dark eyes and an elegant straight nose, warm-bronze skin gone cold and ashen',
+      'a South-Asian dark-lord, rich brown skin dulled to a grey undertone, strong handsome features and a regal bearing',
+      'an East-Asian nobleman, refined angular features and a smooth jaw, porcelain skin with a corpse-cold cast',
+      'a West-African prince, deep dark skin with an ashen undertone, proud sculptural features and a commanding brow',
+      'a Levantine aristocrat, golden-tan skin gone wan and grey, dark expressive eyes and a fine straight nose',
+      'a Spanish grandee, sharp dark Iberian features, sallow ivory skin and a thin cruel-elegant mouth',
+      'a Romanian boyar, gaunt pale features and heavy dark brows, the classic Carpathian undead pallor',
+      'a Roma lord, dark soulful eyes and rich features drained pale, a wild and dangerous masculine beauty',
+      'a Latin-American dark-noble, warm-brown skin gone cold-grey, strong handsome features and a proud jaw',
+    ],
+    instructions: `Each entry is ONE masculine aristocratic face-heritage + undead pallor, 12-22 words. Handsome, severe, dignified. Human-shaped. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_hair: {
+    format: 'simple',
+    theme: `THE HAIR — his dark-aristocrat hair. Each entry 10-20 words. ONE masculine gothic hairstyle. Castlevania / Interview-with-the-Vampire / Crimson-Peak lineage.
+
+⚠️ Masculine dark gothic hair — long raven mane, slicked-back with a widow's peak, shoulder-length waves, silver-streaked, wild and tousled, a sleek dark ponytail, close-cropped with a sharp widow's-peak, long silver-white, severe and elegant.
+
+🚫 NO cute/boyish/modern-trendy cuts. NO colorful dye-jobs. Dark, refined, dangerous.`,
+    touchpoints: [
+      'a long raven-black mane falling past the shoulders in loose dark waves, framing a pale severe face',
+      'slicked-back black hair with a sharp widow\'s peak, severe and aristocratic, not a strand out of place',
+      'shoulder-length dark waves swept back from a high pale brow, faintly silvered at the temples',
+      'a long silver-white mane, ancient and elegant, flowing over a high black collar',
+      'wild tousled black hair, romantic and unkempt, falling across burning eyes',
+      'a sleek low black ponytail bound in dark ribbon, a few loose strands at a sharp jaw',
+      'close-cropped black hair with a pronounced widow\'s peak, a hard masculine elegance',
+      'long dark hair streaked with grey, half pulled back, the rest falling about a gaunt handsome face',
+      'jet-black hair pushed straight back, glossy and severe, baring a pale aristocratic forehead',
+      'chin-length dark hair parted in the centre, curtaining a cold beautiful face, Byronic and brooding',
+      'a leonine mane of dark hair shot through with white, regal and untamed, a fallen king\'s crown',
+      'short dark hair with sharp sideburns and a neat widow\'s peak, precise and dangerous',
+    ],
+    instructions: `Each entry is ONE masculine dark gothic hairstyle, 10-20 words. Dark, refined, dangerous. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_wardrobe: {
+    format: 'simple',
+    theme: `THE WARDROBE — his opulent male gothic attire. Each entry 16-30 words. ONE richly-detailed masculine dark-aristocrat outfit. Dracula / Crimson-Peak / Castlevania / Baroque-noble lineage.
+
+⚠️ Opulent masculine gothic attire — a high-collared black cloak, a brocade frock-coat, an ornate cravat + embroidered waistcoat, a fur-trimmed mantle, a gilded breastplate over black silk, a great-coat with silver clasps, a damask doublet, jeweled rings, a ruffled high collar. Layered, rich, textured.
+
+🚫 NO modern clothing. NO armor-only (he is a courtier, not just a warrior). NO bare-chested. NO scruffy/peasant. Refined, layered, expensive.`,
+    touchpoints: [
+      'a high-collared floor-length black cloak over an embroidered oxblood-and-gold brocade frock-coat, a silver wolf-head clasp at the throat',
+      'an ornate black velvet frock-coat with silver-thread embroidery, a ruffled white cravat gone ivory with age, jeweled rings on pale fingers',
+      'a fur-trimmed deep-violet mantle over a black damask doublet, a heavy ancient signet ring, tarnished-gold buttons in a long row',
+      'a gilded ceremonial breastplate worn over black silk, a tattered crimson half-cape, a single shoulder-pauldron carved with a wyrm',
+      'a sweeping charcoal great-coat with double rows of silver clasps, a black silk scarf, a brocade waistcoat of midnight-and-amethyst',
+      'a scarlet-and-gold cardinal\'s robe corrupted with dark embroidery, a heavy pectoral chain, rings of black stone',
+      'a Baroque black-and-silver doublet with slashed sleeves showing oxblood silk beneath, a stiff ruffled collar framing a pale face',
+      'a long high-collared coat of black-on-black damask, frogged with jet buttons, a sapphire stickpin in a grey cravat',
+      'an emerald-and-black brocade frock-coat with a fur collar, lace at the cuffs, a cane-head of carved bone visible at the edge',
+      'a sorcerer\'s robe of deep indigo sewn with faint silver constellations, a high collar, an amulet heavy on the chest',
+      'a tattered imperial mantle of moth-eaten purple over ancient gilded finery, the grandeur of a dead empire worn with pride',
+      'a sleek black military-cut greatcoat with silver epaulettes and a blood-red sash, severe, predatory, immaculate',
+    ],
+    instructions: `Each entry is ONE opulent masculine gothic outfit, 16-30 words. Layered, rich, textured, expensive. NEVER modern, bare-chested, or scruffy. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_menace: {
+    format: 'simple',
+    theme: `THE FACE + GLOWING EYES + DEMONIC TELL — the unified menace (the most important axis). Each entry 18-30 words. His HARD, MATURE, MASCULINE face + GLOWING inhuman eyes + a DEMONIC tell, woven together. This is the focal point.
+
+⚠️ A HARD, MASCULINE, HANDSOME man's face — a strong heavy brow, a square or angular chiselled jaw, sharp cheekbones, a firm cruel mouth, a commanding dangerous bearing — with GLOWING inhuman eyes (light radiating outward) and a DEMONIC tell (bared fangs / a clawed fingertip at the jaw / slit pupils / dark veins at the temple). HANDSOME in a HARD, virile, dangerous way — masculine, not pretty.
+
+🚫 ABSOLUTELY NO pretty-boy / bishonen / fashion-model / soft / smooth / delicate / androgynous / feminine / twink face. NO heavy makeup. NO elf ears / pointed ears. Vampires are AGELESS — he can read anywhere from a hard man in his prime to timeless, but he must be MASCULINE and CHISELLED — NOT a soft youth AND NOT forced-elderly. Light stubble or a trim beard is optional, not required. Think Gary-Oldman / Luke-Evans Dracula, a Frazetta dark-warlord — virile, severe, commanding.
+
+Each entry MUST include: a HARD masculine face quality + GLOWING eyes (use "glowing" + "radiating") + a demonic tell.`,
+    touchpoints: [
+      'a hard chiselled face, a strong heavy brow and a square cruel jaw, deep-set eyes GLOWING blood-crimson and radiating light, fangs bared in a grim snarl',
+      'a severe handsome face of cold marble, a firm square jaw and a hard mouth, pale-gold eyes GLOWING and casting light across sharp cheekbones, two fangs visible',
+      'a commanding virile face, a strong straight nose and a heavy brow, ice-grey eyes GLOWING with cold radiating light, slit pupils, a clawed fingertip at his jaw',
+      'a battle-hard predator\'s face, a thick brow and a firm set mouth, emerald eyes GLOWING and radiating witch-light, sharp fangs bared, imposing and still',
+      'a sharp imperious face, strong angular features and a hard jaw, violet eyes GLOWING and pouring light into the gloom, a clawed black-nailed hand raised, fangs gleaming',
+      'a rugged frost-pale face, a strong nose and a grim firm mouth, light stubble on a hard jaw, pale-blue eyes GLOWING and casting light, slit pupils, two needle fangs',
+      'a magnetic hard-cut face, a square jaw and a thin dangerous mouth, amber eyes GLOWING like coals and radiating into the dark, a fang catching the light, a slow cruel half-smile',
+      'a commanding chiselled face, a heavy brow over eyes that GLOW silver-white and radiate cold light, fangs bared, a clawed thumb dragging slow along his own jaw, predatory',
+      'a regal hard face of cold stone, a strong clean jaw, eyes GLOWING fel-green and casting acid light, slit pupils, a fanged mouth set in imperious contempt',
+      'a brutal handsome face drawn taut over a strong skull, dark eyes GLOWING with a deep red radiance, a long fang at the lip, an old scar splitting one heavy brow',
+      'a grim virile face half in shadow, a strong jaw and hard cheekbones, one eye GLOWING gold and radiating light, fangs bared, a clawed finger raised, a trim severe beard',
+      'a powerful granite-cut face, a massive brow and a broad hard jaw, bottomless eyes GLOWING pale and radiating light, long elegant fangs, skin like cold scarred marble',
+    ],
+    instructions: `Each entry is ONE unified HARD MASCULINE handsome male face + GLOWING eyes + demonic tell, 18-30 words. Chiselled, virile, commanding, dangerous — masculine NOT pretty, but NOT forced-old either (vampires are ageless). NEVER bishonen / smooth / soft / pointed-ears. MUST include "glowing"+"radiating" + a demonic tell. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_regalia: {
+    format: 'simple',
+    theme: `THE REGALIA — the SIGNATURE money-shot: the unforgettable focal piece marking him a dark prince. Each entry 12-22 words. ONE iconic object on or near him.
+
+⚠️ A single arresting prince-detail — a black-iron crown, a goblet of dark wine/blood, a great ancient signet ring, a raven perched on his shoulder, a glowing amulet, a jeweled sceptre, an ornate skull-topped cane, a half-mask, a coiled serpent, a pocket-watch on a chain, a bound grimoire.
+
+🚫 NO modern objects. NO weapon-as-hero (he is a lord, not a fighter — a blade may be sheathed at most). NO gore.`,
+    touchpoints: [
+      'a thorned black-iron crown resting low on his brow, set with a single bleeding-red ruby',
+      'a tall ornate goblet of dark wine raised in a pale ringed hand, the surface catching the candlelight',
+      'a great ancient signet ring of black gold on his forefinger, carved with a wyrm devouring its tail',
+      'a sleek raven perched on his shoulder, head tilted, its eye a bead of black glass beside his pale jaw',
+      'a glowing amulet at his throat, a captured ember of cold light pulsing slowly against the dark silk',
+      'a jewelled sceptre of tarnished silver held loosely across his lap, its head a snarling stag-skull',
+      'an ornate ebony cane topped with a carved silver skull, his pale hand resting upon it',
+      'a fine porcelain half-mask pushed up onto his brow, the other half of his beautiful face bare',
+      'a black serpent coiled lazily about his wrist and forearm, scales gleaming oil-dark',
+      'an ancient pocket-watch on a long silver chain, stopped, swinging slow from his ringed fingers',
+      'a bound grimoire clasped with black iron held against his chest, faint runes glowing along its edge',
+      'a withered single black rose held to his lips, its petals frost-rimed, his eyes watching over it',
+    ],
+    instructions: `Each entry is ONE iconic prince-regalia detail, 12-22 words. A single arresting object. NO modern items, NO weapon-as-hero, NO gore. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_scene: {
+    format: 'simple',
+    theme: `THE SETTING — the lordly dark backdrop behind him (soft / blurred — he stays the focus). Each entry 15-28 words. ONE opulent gothic setting. Castlevania / Crimson-Peak / Dracula lineage.
+
+⚠️ A rich gothic backdrop, thrown soft behind the bust — a candlelit throne room, a balcony over a moonlit gothic city, a great library, a crypt of his ancestors, a derelict ballroom, a war-council chamber, a cathedral nave, a fire-lit study. The setting frames him; it never competes.
+
+🚫 NO modern / no daylight-bright. Keep it dim, opulent, dramatic — the gothic world of a dark lord.`,
+    touchpoints: [
+      'a candlelit throne room behind him, a great carved obsidian throne and tattered banners receding into warm gloom',
+      'a high balcony over a moonlit gothic city, spires and rooftops falling away into blue mist below',
+      'a vast ancestral library, towering shelves and a spiral stair lost in shadow, a single candelabra burning',
+      'a crypt of his bloodline, carved sarcophagi and guttering candles ranged behind him in the cold dark',
+      'a derelict grand ballroom, a cobwebbed chandelier and a dust-shrouded floor stretching away behind him',
+      'a fire-lit study of dark wood and red leather, a great hearth throwing warm unsteady light across the gloom',
+      'a cathedral nave at night, moonlight falling in coloured shafts through a great rose-window far behind',
+      'a war-council chamber, a vast dark map-table and the banners of conquered houses hung above the panelling',
+      'a moonlit conservatory of black glass, frost-feathered panes and dead exotic flora dim behind him',
+      'an opulent dining hall, a long table set for a feast none will eat, candelabra blazing down its length',
+      'a tower chamber of arcane instruments, an orrery and glowing alembics turning slow in the violet dark',
+      'a rain-streaked gothic window at his back, the storm-lit city beyond blurred to silver and indigo',
+    ],
+    instructions: `Each entry is ONE opulent gothic backdrop, 15-28 words. Dim, rich, dramatic, soft behind him. NO modern, NO daylight. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  darkprince_composition: {
+    format: 'simple',
+    theme: `COMPOSITION + FRAMING for the dark-prince bust portrait. Each entry 12-22 words. ONE bust/portrait framing. He fills 40-50% of the frame, the gothic setting around him.
+
+⚠️ A BUST / chest-up portrait composition — three-quarter turn, a cold gaze down at the viewer, an over-the-shoulder glance, a low-angle that makes him loom, a near-profile, a head-on commanding stare. Always face-focused, bust 40-50%.
+
+🚫 NO full-body / no wide shot (a different path does those). NO tight-crop losing the face. NO action pose. He is composed, still, commanding.`,
+    touchpoints: [
+      'a chest-up three-quarter portrait, his face turned slightly, eyes cutting back to the viewer, the hall soft behind',
+      'a commanding head-on bust, looking straight down the lens with cold authority, the setting framing him symmetrically',
+      'a low-angle bust that makes him loom and tower, chin lifted, the vaulted gloom rising behind',
+      'an over-the-shoulder portrait, his face half-turned back toward the viewer, candlelight raking one cheekbone',
+      'a near-profile bust, the elegant line of brow, nose and jaw against the dim opulent backdrop',
+      'a tight chest-up portrait with one ringed hand raised near his jaw, the glowing eyes the focal point',
+      'a slightly high-three-quarter bust, his eyes lifted to the viewer from beneath his brow, predatory and calm',
+      'a centred bust framed by an arch or throne-back behind him, regal and symmetrical, face dead-centre',
+      'a portrait turned to give a cold sidelong glance, the raven or goblet just entering the lower frame',
+      'a head-and-shoulders portrait leaning subtly toward the viewer, intimate and threatening, eyes aglow',
+      'a bust with the shoulder forward and face turned back, the cloak sweeping across the lower frame',
+      'a still commanding chest-up portrait, hands folded, the dark prince regarding the viewer like a subject',
+    ],
+    instructions: `Each entry is ONE bust/portrait framing, 12-22 words. Face-focused, bust 40-50%, composed + commanding. NO full-body, NO action. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];
