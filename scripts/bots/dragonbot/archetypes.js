@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DWARVEN_HOLD: {
+    description:
+      'PATH-BESPOKE — DragonBot dwarven-hold path (2026-06-10, Tier 3). A vast dwarven forge-hold / underground kingdom — colossal carved halls, forges, gold. Path-bespoke: hold + dwarven_detail + forge_activity + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['hold', 'dwarven_detail', 'forge_activity', 'occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   WIZARD_TOWER: {
     description:
       'PATH-BESPOKE — DragonBot wizard-tower path (2026-06-10, Tier 3). A wizard\'s tower dense with arcana — interior or exterior, magical wonder. Path-bespoke: tower + arcane_detail + tower_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',

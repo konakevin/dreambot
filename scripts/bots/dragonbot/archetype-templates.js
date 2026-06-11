@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DWARVEN_HOLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, hold, dwarven_detail, forge_activity, occupant, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DWARVEN HOLD scene for DragonBot — a vast underground dwarven kingdom of colossal carved halls, forges and gold. Frank Frazetta + John Howe + Alan Lee painted-fantasy oil tradition. Moria / Erebor grandeur — monumental, warm-lit, awe-inspiring. The scene should make the viewer GASP at the scale of dwarven craft.
+
+━━━ MONUMENTAL DWARVEN SCALE — ABSOLUTE FIRST RULE ━━━
+A COLOSSAL underground dwarven hall — vast carved stone, towering pillars, lit by forge-fire and lava-glow. The architecture is the hero: monumental, geometric, hand-carved, immense. Deep high-fantasy (NOT modern, NOT sci-fi). Warm orange forge-light against deep stone shadow.
+
+━━━ THE HOLD (the great hall/forge/mine) ━━━
+${hold}
+
+Render the vast dwarven space with overwhelming scale and depth — colossal carved stone receding into glowing gloom.
+
+━━━ DWARVEN DETAIL (the craft of the place) ━━━
+${dwarven_detail}
+
+Render the dwarven craftsmanship — runed pillars, gold veins, great statues, anvils, lava channels — rich and monumental.
+
+━━━ FORGE ACTIVITY (the living work) ━━━
+${forge_activity}
+
+Render the forge at work — molten metal, sparks, glowing furnaces — bringing the hold to life.
+
+━━━ THE OCCUPANTS (tiny dwarves for scale) ━━━
+${occupant}
+
+Small dwarf figures give scale — dwarfed by the colossal hall around them.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, monumental. The colossal dwarven hall dominating the frame, warm forge/lava light against deep stone, tiny dwarves for scale, vast depth into glowing gloom. Awe-inspiring craft and scale. NEVER modern/sci-fi; NEVER small/empty.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a vast colossal dwarven hall/forge lit by lava and forge-fire — the monumental dwarven hold leads], [the hold's overwhelming carved scale + depth], [dwarven detail — runed pillars + gold + statues + anvils], [the forge at work — molten metal + sparks], [tiny dwarves for scale], [lighting + atmosphere], [palette + warm monumental mood]
+
+CRITICAL — render a COLOSSAL high-fantasy dwarven hall of carved stone, forge-fire and gold, tiny dwarves for scale. Do NOT render anything modern/sci-fi, small, or empty.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   WIZARD_TOWER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, tower, arcane_detail, tower_setting, occupant, drama } = slots;
 

@@ -34,7 +34,7 @@
 | 11 | 2 | dungeon-delve | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 12 | 2 | necromancer | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 13 | 3 | wizard-tower | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
-| 14 | 3 | dwarven-hold | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 14 | 3 | dwarven-hold | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 15 | 3 | elven-city | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 16 | 3 | sky-castle | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 17 | 3 | arcane-library | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |

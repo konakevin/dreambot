@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── dwarven-hold path (2026-06-10, NEW, Tier 3) — dwarf kingdom. MVP-25. ───
+  DWARFHOLD_HALL: load('dwarfhold_hall'),
+  DWARFHOLD_DETAIL: load('dwarfhold_detail'),
+  DWARFHOLD_FORGE: load('dwarfhold_forge'),
+  DWARFHOLD_OCCUPANT: load('dwarfhold_occupant'),
+  DWARFHOLD_DRAMA: load('dwarfhold_drama'),
+
   // ─── wizard-tower path (2026-06-10, NEW, Tier 3) — mage tower. MVP-25. ───
   WIZTOWER_TOWER: load('wiztower_tower'),
   WIZTOWER_ARCANA: load('wiztower_arcana'),

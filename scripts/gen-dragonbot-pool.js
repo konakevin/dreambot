@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DWARVEN-HOLD PATH (2026-06-10 — new, Tier 3). A vast
+  // underground dwarven kingdom — halls, forges, gold.
+  // ════════════════════════════════════════════════════════
+
+  dwarfhold_hall: {
+    format: 'simple',
+    theme: `DRAGONBOT DWARVEN-HOLD — the vast underground HALL/forge/mine (the hero). Each entry 25-45 words, overwhelming scale + depth.
+
+VARIETY MANDATE — ~25 distinct dwarven spaces: a colossal pillared throne-hall carved from living rock; a vast forge-cavern with lava channels; a deep mine-shaft descending into glowing dark; a grand hall of giant carved dwarf-king statues; a great underground market-cavern; a bridge over a bottomless chasm; a treasure-vault piled with gold; a cathedral-vast hall of geometric stonework; a flooded lower deep with stone causeways; a furnace-hall of roaring forges; a rune-carved gate-hall; a stalactite cavern built into a city. Each names the dwarven space + colossal scale + depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vast dwarven hall/forge/mine in 25-45 words — colossal scale + depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal pillared throne-hall carved from living black rock, rows of immense rune-stamped columns marching away into glowing gloom, the vaulted ceiling lost in darkness far above.
+2. A vast forge-cavern split by rivers of molten lava, great stone furnaces roaring along the walls, the orange glow flickering across endless carved stone.
+3. A grand hall flanked by colossal carved statues of ancient dwarf-kings, each a hundred feet tall, hewn from the mountain's heart, receding into shadow.`,
+  },
+
+  dwarfhold_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DWARVEN-HOLD DETAIL — the dwarven craftsmanship filling the hold. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct dwarven details: rune-stamped stone pillars; veins of gold glinting in the walls; great iron-bound doors; piled treasure-hoards; massive anvils and hammers; carved geometric friezes; brass and iron machinery of cogs; hanging braziers and chains; a great stone king's throne; mine-cart rails; gem-studded archways; carved beard-knot motifs everywhere; colossal chained gates. Each is a rich dwarven craft detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dwarven craft detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Veins of bright gold glint through the dark carved stone of the walls, catching the forge-light in glittering rivers.
+2. Colossal iron-bound stone doors stand at the hall's end, their surfaces carved with deep interlocking rune-knots.
+3. Great black anvils and hammers stand along the forge floor, sparks scattered across the carved stone around them.`,
+  },
+
+  dwarfhold_forge: {
+    format: 'simple',
+    theme: `DRAGONBOT DWARVEN-HOLD FORGE — the living forge activity. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct forge activities: molten metal pouring from a crucible; sparks showering from a struck anvil; a furnace roaring white-hot; a blade being quenched in steam; bellows pumping; lava channels glowing across the floor; a great waterwheel-driven hammer falling; smiths hammering in rhythm; molten gold being cast; embers drifting up through the dark; a river of lava lighting the cavern. Each is a vivid forge-at-work detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE forge-activity detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A stream of molten metal pours glowing-white from a great tilting crucible into a stone mould, light flooding the cavern.
+2. Sparks shower in a bright fan from a hammer striking glowing metal on a massive black anvil.
+3. Rivers of molten lava glow orange across the forge floor, channeled between carved stone banks, lighting everything from below.`,
+  },
+
+  dwarfhold_occupant: {
+    format: 'simple',
+    theme: `DRAGONBOT DWARVEN-HOLD OCCUPANT — tiny dwarf figures for scale. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dwarf occupants: a stout bearded smith at an anvil; a dwarf king on a great throne; miners with picks and lanterns; a line of armored dwarf guards; a dwarf crossing a vast bridge; a merchant amid his wares; an old dwarf lorekeeper with a tome; dwarves hauling a gold-laden cart; a dwarf hammering at a forge; a pair of dwarves in conversation; a dwarf gazing up at a statue. Each is small dwarf figure(s) giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny dwarf occupant for scale in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A stout bearded dwarf smith hammers at a glowing blade on his anvil, tiny against the vast forge-hall around him.
+2. A line of armored dwarf guards stands at the hall's gate, dwarfed by the colossal carved doors behind them.
+3. Miners with picks and swinging lanterns make their way along a ledge, specks against the immense dark cavern.`,
+  },
+
+  dwarfhold_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DWARVEN-HOLD DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a small dragon coiled on a treasure-hoard deep in the hold; a great forge-spirit/fire-elemental rising; a vein of glowing crystal just uncovered; a cave-in's dust drifting; a colossal golem standing guard; a balrog-like glow in the deepest dark; a vast underground waterfall; a procession with banners; a dragon-shaped statue with glowing eyes; a hoard of legendary weapons on a wall; a chasm bridge under threat. Each adds a focal beat (does NOT replace the hold).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small dragon lies coiled on a glittering treasure-hoard in a side-vault deep in the hold.
+2. A colossal stone golem stands sentinel at the hall's far end, runes glowing faintly on its chest.
+3. A vast underground waterfall pours from a high opening into the dark far below the bridge.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // WIZARD-TOWER PATH (2026-06-10 — new, Tier 3). A mage's tower
   // dense with arcana — interior or exterior.
   // ════════════════════════════════════════════════════════
