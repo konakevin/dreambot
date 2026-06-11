@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── clash-of-armies path (2026-06-10, NEW, Tier 2) — massed battle. MVP-25. ───
+  CLASH_ARMIES: load('clash_armies'),
+  CLASH_ACTION: load('clash_action'),
+  CLASH_BATTLEFIELD: load('clash_battlefield'),
+  CLASH_SPECTACLE: load('clash_spectacle'),
+  CLASH_DRAMA: load('clash_drama'),
+
   // ─── dragon-breeds path (2026-06-10, NEW) — bestiary portraits. MVP-25. ───
   DRAGON_BREEDS_BREED: load('dragon_breeds_breed'),
   DRAGON_BREEDS_HABITAT: load('dragon_breeds_habitat'),

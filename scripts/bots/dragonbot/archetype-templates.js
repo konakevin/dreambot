@@ -1920,6 +1920,75 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  CLASH_OF_ARMIES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, armies, battle_action, battlefield, war_spectacle, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point heightening the battle (does NOT replace the massed clash).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an EPIC MASSED HIGH-FANTASY BATTLE for DragonBot — two great fantasy armies clashing on a vast scale, the war spectacle of LOTR's Pelennor Fields / Helm's Deep / Dungeons & Dragons / Warhammer. Frank Frazetta + Brom + John Howe + Alan Lee painted-fantasy oil tradition. The scene should make the viewer GASP at the SCALE of the war.
+
+━━━ HIGH FANTASY, NOT HISTORICAL — ABSOLUTE RULE ━━━
+This is a DEEP HIGH-FANTASY battle (LOTR / D&D / Warhammer), NEVER a Roman, Greco-Roman, medieval-historical, or real-world battle. The soldiers wear ORNATE FANTASTICAL plate armor with horned helms, winged crests, and fantasy heraldry; they wield magical and oversized fantasy weapons (runed greatswords, war-hammers, glaives, enchanted bows). Include FANTASY RACES (armored fantasy-kingdom knights, orcs, elves, dwarves, trolls, goblins, the undead). Siege engines are FANTASTICAL — colossal trebuchets, beast-drawn war-engines, monstrous battering rams. ABSOLUTELY NO Roman legionaries, lorica/segmented armor, Greco-Roman shields/galea helmets, gladius swords, or historical-realism uniforms.
+
+━━━ DRAGONS AT WAR — include them ━━━
+These wars feature great WESTERN DRAGONS — render at least one (often several) colossal four-legged winged dragon sweeping over or fighting in the battle, breathing fire across the ranks (chunky four-legged Western dragon, NOT a serpent/wyvern), unless the rolled scene is explicitly dragon-free.
+
+━━━ EPIC MASSED SCALE — ABSOLUTE FIRST RULE ━━━
+This is a HUGE battle: THOUSANDS of soldiers, two armies filling the field to the horizon. The foreground shows individual fighters locked in combat (readable, detailed); the midground and distance dissolve into vast ranks, banners, dust and smoke stretching away. Convey OVERWHELMING numbers + cinematic depth — a sweeping war panorama, not a small skirmish of a few figures.
+
+━━━ THE ARMIES (the two clashing factions) ━━━
+${armies}
+
+Render BOTH forces meeting — their distinct races, armor, weapons, banners. The clash between them is the heart of the image.
+
+━━━ THE BATTLE ACTION (the clash moment) ━━━
+${battle_action}
+
+A LOADED INSTANT of the battle — the collision, charge, breakthrough, or last stand — full of motion, impact, and chaos.
+
+━━━ THE BATTLEFIELD (the stage) ━━━
+${battlefield}
+
+Render the setting with vast depth — the field/siege/terrain stretching to a hazy horizon, conveying the battle's enormous scale.
+
+━━━ WAR SPECTACLE (magic, arrows, siege, banners) ━━━
+${war_spectacle}
+
+Render this spectacle across the battle — it adds drama and scale.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood — it must not shrink the battle's scale or turn it into a small or surreal scene.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, epic. A sweeping battle panorama — detailed individual combat in the foreground, vast clashing armies receding into dust and smoke, banners and war-magic punctuating the chaos. A high vantage or dramatic ground-level angle. Overwhelming scale, motion, and drama. NEVER a few figures; NEVER an empty field — this is a MASSIVE war.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — two vast HIGH-FANTASY armies clashing (THE BATTLE ACTION) on the battlefield, a great Western dragon over the field — the epic massed fantasy battle leads], [the two armies — fantasy races + ornate fantastical armor + magical weapons + heraldry], [a Western dragon breathing fire across the ranks], [foreground individual combat, detailed], [the vast ranks + fantastical siege engines receding to the horizon], [war-magic + arrows + spell-blasts], [lighting + smoke + atmosphere], [palette + thunderous epic mood]
+
+CRITICAL — render a HUGE massed HIGH-FANTASY battle (LOTR / D&D / Warhammer) of THOUSANDS across a vast field, two clashing fantasy-race armies in ornate fantastical armor, a great chunky four-legged Western dragon in the war, cinematic depth. Do NOT render Roman/Greco-Roman/historical legions, a small skirmish, or an empty field.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_BREEDS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, breed, habitat, breed_pose, element_effect, drama } = slots;
 

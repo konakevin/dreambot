@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // CLASH-OF-ARMIES PATH (2026-06-10 — new, Tier 2). Epic
+  // massed fantasy battle — two armies, siege, war-magic.
+  // ════════════════════════════════════════════════════════
+
+  clash_armies: {
+    format: 'simple',
+    theme: `DRAGONBOT CLASH-OF-ARMIES — the TWO clashing factions in this epic HIGH-FANTASY battle (LOTR / D&D / Warhammer). Each entry 30-50 words. Names BOTH armies + their FANTASY RACE + ORNATE FANTASTICAL armor + magical weapons + heraldry. NEVER Roman / Greco-Roman / historical-realistic armies — these are deep-fantasy hosts with horned helms, winged crests, runed weapons, fantastical plate.
+
+VARIETY MANDATE — ~25 distinct high-fantasy army match-ups: a fantasy kingdom's ornate-plate knights vs a horde of green orcs; an elven host of silver filigree armor vs a goblin-and-warg swarm; dwarven warriors in rune-etched gold plate vs cave-trolls; a paladin order in winged helms vs an undead skeleton legion; high elves vs shadow-armored dark elves; a dragon-riding kingdom vs an orc warhost; men of the north in fur-and-iron vs a demon legion; a wizard-led host with battle-mages vs a necromancer's risen dead; a fae-elven cavalry vs goblin wolf-riders; a besieged fantasy garrison vs a vast monstrous invading host. Each names both sides + their FANTASTICAL armor (horned/winged helms, ornate plate, runed shields), magical/oversized weapons, and fantasy heraldry — never historical/Roman gear.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE high-fantasy army match-up in 30-50 words — BOTH factions, fantasy race + ORNATE FANTASTICAL armor + magical weapons + heraldry. NO Roman/historical gear. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A fantasy kingdom's knights in ornate silver-and-blue fluted plate with winged helms, under lion banners, slamming into a vast horde of green-skinned orcs in jagged black iron with crude red bone-standards and brutal cleavers.
+2. An elven host in flowing silver filigree armor and antlered helms, wielding glowing runed longbows and slender blades under white tree-banners, meeting a shrieking tide of goblins and fanged wargs.
+3. A dwarven shield-wall in rune-etched gold plate and horned helms, braced behind great axes, against towering cave-trolls swinging stone clubs and orcs pouring down a torch-lit pass.`,
+  },
+
+  clash_action: {
+    format: 'simple',
+    theme: `DRAGONBOT CLASH-OF-ARMIES ACTION — the loaded battle MOMENT. Each entry 15-30 words. Motion, impact, chaos.
+
+VARIETY MANDATE — ~25 distinct battle moments: a cavalry charge smashing into a spear-wall; two front lines colliding in a thunderous crash; a siege-ladder assault swarming a wall; a shield-wall buckling under a charge; a desperate last stand in a shrinking ring; a breakthrough punching through the enemy center; a rout as one side breaks and flees; a clash at a breached gate; a counter-charge turning the tide; massed infantry grinding in the melee; a flanking ambush hitting the rear. Each is a loaded instant of impact + motion.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE battle-action moment in 15-30 words, full of motion + impact. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A thunderous cavalry charge smashing headlong into a braced spear-wall, lances shattering, horses rearing, the front rank exploding into chaos and dust.
+2. Two great front lines colliding in a single deafening crash of steel and shields, the impact rippling down the ranks, men and beasts buckling.
+3. A desperate last stand — a shrinking ring of battered defenders back-to-back, hemmed in on all sides by a closing enemy tide.`,
+  },
+
+  clash_battlefield: {
+    format: 'simple',
+    theme: `DRAGONBOT CLASH-OF-ARMIES BATTLEFIELD — the vast setting that holds the battle. Each entry 25-45 words, with depth + scale.
+
+VARIETY MANDATE — ~25 distinct battlefields: before the walls of a great besieged castle; a vast open plain under a brooding sky; a narrow mountain pass choked with fighters; the burning streets of a sacked city; a muddy river-crossing; a snow-covered field of war; the breached gate of a fortress; a hilltop and its slopes; an ash-strewn volcanic plain; a misty moor; the courtyard of a vast keep; a desert battlefield of dust and dunes. Each conveys the terrain + vast scale + atmospheric depth to the horizon.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vast battlefield in 25-45 words with depth + scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Before the towering walls of a great besieged castle, siege-towers and ladders against the ramparts, the battle spilling across the field below, banners and smoke rising to a leaden sky.
+2. A vast open plain stretching to a hazy horizon under a brooding storm-sky, the two armies' lines running away to either side, churned mud and trampled grass underfoot.
+3. A narrow mountain pass choked wall-to-wall with struggling fighters, sheer cliffs rising on both sides, the press of bodies receding into shadow and dust.`,
+  },
+
+  clash_spectacle: {
+    format: 'simple',
+    theme: `DRAGONBOT CLASH-OF-ARMIES SPECTACLE — the war-magic / arrows / siege spectacle across the battle. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct spectacles: a battle-mage's fireball bursting over the ranks; a sky black with a volley of arrows; catapult-stones smashing into the lines; war-banners streaming above the melee; a wall of magical fire splitting the field; trebuchets hurling flaming payloads; a glowing magical ward flaring under impact; explosions of dirt and bodies; lightning called down by a sorcerer; burning oil pouring from the walls; a holy radiance breaking over the line; ballista bolts streaking across. Each is a battle-scale spectacle.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE war spectacle in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A battle-mage's fireball bursting in a roiling orange bloom over the enemy ranks, bodies flung outward, the blast lighting the smoke.
+2. The sky momentarily black with a massed volley of arrows arcing over the lines before falling like deadly rain.
+3. Catapult-stones smashing down into the packed front line, throwing up gouts of dirt, splintered shields and tumbling figures.`,
+  },
+
+  clash_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT CLASH-OF-ARMIES DRAMA — a secondary focal point heightening the battle, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a great Western dragon sweeping low over the battle breathing fire; a lone hero on a rise rallying the line with a raised sword; a king's banner falling as its bearer is cut down; a giant wading into the melee; a war-elephant/mammoth crashing through; a breaking line beginning to rout; a wizard duel raging above the troops; a griffon-rider diving into the fray; a collapsing siege-tower; the enemy general on a black horse; reinforcements cresting a distant hill. Each adds a heroic or terrible focal beat (does NOT replace the massed clash).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama focal point in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great Western dragon sweeps low over the battle, four legs tucked and wings wide, unleashing a torrent of fire across the enemy ranks.
+2. A lone hero stands on a rise above the melee, sword raised high, rallying the wavering line as fighters surge up behind him.
+3. A massive armored war-mammoth crashes through the front ranks, tower swaying on its back, scattering soldiers like leaves.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-BREEDS PATH (2026-06-10 — new). A bestiary portrait
   // of ONE dragon of a distinct breed — features are the star.
   // ════════════════════════════════════════════════════════

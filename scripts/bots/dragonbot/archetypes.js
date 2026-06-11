@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  CLASH_OF_ARMIES: {
+    description:
+      'PATH-BESPOKE — DragonBot clash-of-armies path (2026-06-10, Tier 2). A vast epic fantasy BATTLE — two massed armies clashing, siege + war-magic + banners, cinematic scale. Path-bespoke: armies (the factions) + battle_action (the clash moment) + battlefield (the stage) + war_spectacle (magic/arrows/siege) + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['armies', 'battle_action', 'battlefield', 'war_spectacle'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_BREEDS: {
     description:
       'PATH-BESPOKE — DragonBot dragon-breeds path (2026-06-10). A BESTIARY portrait of ONE magnificent dragon of a distinct BREED/species — the breeds signature features are the star (a monster-manual hero shot). All Western anatomy (4 legs + 2 wings), varied by element/biome/color/feature. Path-bespoke: breed + habitat + breed_pose + element_effect + drama (40% gated). Universal lighting + atmosphere reused.',
