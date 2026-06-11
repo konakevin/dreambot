@@ -1920,6 +1920,70 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_BROOD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, brood_subject, setting, dominant_dragon, brood_activity, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a scene of a GROUP OF DRAGONS for DragonBot — several Western dragons together, spaced across the scene. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP at a majestic group of distinct dragons.
+
+━━━ FEW, DISTINCT, WELL-SEPARATED DRAGONS — ABSOLUTE FIRST RULE ━━━
+This scene shows a SMALL GROUP of dragons (roughly 3-7 clearly visible, a few more small in the deep distance) — each one a SEPARATE, COMPLETE, READABLE individual with CLEAR SKY / OPEN SPACE around it. They are SPREAD apart at varied distances: some near and large, others mid and smaller, a few tiny and far — like individual birds spaced across a sky, each AIRBORNE or perched on its OWN spot with visible GAPS between them.
+
+ABSOLUTELY FORBIDDEN — do NOT describe or render the dragons as: heaped, piled, sprawled, stacked, coiled together, writhing, a mass, a knot, a tangle, a swarm, overlapping, intertwined, in "communal warmth", or "overwhelming the sky". Their bodies, wings, necks and tails must NEVER touch, cross, or merge into one another. NO clump. If you cannot fit them with space between, render FEWER dragons. A readable SCATTER of separate dragons, never a writhing pile.
+
+━━━ TRADITIONAL WESTERN DRAGONS, CHUNKY BUILD — NON-NEGOTIABLE ━━━
+EVERY dragon is a TRADITIONAL WESTERN dragon with a CHUNKY, HEAVY, COMPACT four-legged body — four legs + two membrane wings (always visible) + horned reptilian skull + scaled body + a tail of NORMAL length. NEVER a long, elongated, spindly, snaky, serpentine, or noodle-like body — a long serpentine body is exactly what tangles into a clump. NEVER Eastern wingless serpents, snakes, wyrms, or wingless/two-legged wyverns. Compact, muscular, four-legged winged dragons — like flying bulls/lions with wings, NOT snakes.
+
+━━━ THE BROOD — the group of many dragons ━━━
+${brood_subject}
+
+Render MANY dragons here — the group is the subject. Vary their colors and sizes so the brood feels alive and individual.
+
+━━━ ONE OF THE DRAGONS (just another in the group) ━━━
+${dominant_dragon}
+
+This is simply one of the dragons in the group — render it among the others, not singled out as a ruler or focal point. The group as a whole is the subject; no single dragon dominates.
+
+━━━ WHAT THE BROOD IS DOING ━━━
+${brood_activity}
+
+━━━ THE SETTING (the stage) ━━━
+${setting}
+
+Multi-layer depth — near dragons large in the foreground, the rest of the brood receding into atmospheric distance, the setting wrapping around them.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood. It must NEVER change the dragons' anatomy, proportions, or spacing — IGNORE any instruction to elongate, stretch, warp, distort, make spindly/whimsical, or pile/crowd the dragons. The dragons stay chunky four-legged Western dragons, spaced apart, no matter the mood.
+
+━━━ COMPOSITION — SPREAD THEM OUT, KEEP THEM READABLE ━━━
+Cinematic, painterly, epic. A GROUP of dragons SPACED across the scene at different distances and heights, each a distinct readable silhouette with sky/air around it — like a flock of birds where you can count individuals, not a smeared cloud. The dragons are distributed through the space with breathing room between them, getting smaller with distance — a group of peers, no single dragon dominating. Sense of number AND clarity. NEVER one or two dragons; NEVER a dense overlapping pile/tangle/swarm where the dragons merge into an unreadable mass.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a GROUP of Western dragons (a flock/roost/brood) DOING THE ACTIVITY in the setting — the group of dragons leads], [the group — several dragons of varied colors at varied distances], [one of the dragons among the others], [the setting with depth], [lighting + atmosphere], [palette + awestruck epic mood]
+
+CRITICAL — render a GROUP of 3-7 dragons clearly visible (a few more small in the distance), each SEPARATE with open space around it, ALL chunky four-legged Western dragons (4 legs + 2 wings + horns + NORMAL-length body/tail). Do NOT render just one dragon; do NOT render serpents/wyverns or elongated snaky bodies; do NOT heap/pile/overlap them into a tangled clump.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_FLIGHT: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dragon, flight_pose, vista_below, sky, drama } = slots;
 

@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_BROOD: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-brood path (2026-06-10). MANY Western dragons together — a wheeling flock, a cliff roost, a brood with its mother, a migration. The spectacle of NUMEROUS dragons (not one). Path-bespoke: brood_subject (the group) + setting + dominant_dragon (the leader/largest) + brood_activity + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['brood_subject', 'setting', 'dominant_dragon', 'brood_activity'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_FLIGHT: {
     description:
       'PATH-BESPOKE — DragonBot dragon-flight path (2026-06-10). A majestic Western dragon in dynamic FLIGHT (soaring / banking / diving) over an epic fantasy vista seen from on high, wings spread, full of MOTION. NO rider/characters. Distinct from dragon-scene (grounded/perched subject). Path-bespoke: dragon + flight_pose + vista_below + sky + drama (40% gated). Universal lighting + atmosphere reused.',

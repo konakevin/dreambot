@@ -22,6 +22,7 @@ const pathBuilders = {
   'dragon-hoard': require('./paths/dragon-hoard'),
   'dragon-battle': require('./paths/dragon-battle'),
   'dragon-flight': require('./paths/dragon-flight'),
+  'dragon-brood': require('./paths/dragon-brood'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -110,6 +111,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // dragon-brood: anchor MANY Western dragons (a flock/roost/brood).
+    'dragon-brood':
+      'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, MANY traditional Western DRAGONS spread across the scene — roughly 3-7 DISTINCT, READABLE dragons spaced apart at varied distances and heights (like birds across a sky), a few more small in the deep distance, each a separate complete dragon with clear air around it, NOT a dense overlapping swarm or merged tangle, every one with four legs + two membrane wings + horned reptilian skull + scaled body + long tail (NOT serpents NOT wyverns), a group of dragons with no single one dominating, painterly atmospheric grandeur, LOTR + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
     // dragon-flight: anchor the Western dragon soaring with prominent wings.
     'dragon-flight':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — SOARING in dynamic FLIGHT, wings fully spread and the STAR of the shot, high over an epic fantasy vista, NO rider, sense of altitude motion and grace, painterly atmospheric grandeur, LOTR + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
@@ -556,6 +560,8 @@ module.exports = {
     'dragon-battle',
     // NEW 2026-06-10 — dragon-flight (dragon soaring over a vista). MVP-25.
     'dragon-flight',
+    // NEW 2026-06-10 — dragon-brood (many dragons / flock / roost). MVP-25.
+    'dragon-brood',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -589,7 +595,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -645,6 +651,7 @@ module.exports = {
       'dragon-hoard',
       'dragon-battle',
       'dragon-flight',
+      'dragon-brood',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -680,6 +687,7 @@ module.exports = {
       'dragon-hoard': 'creature',
       'dragon-battle': 'creature',
       'dragon-flight': 'creature',
+      'dragon-brood': 'creature',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

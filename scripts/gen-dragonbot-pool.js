@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DRAGON-BROOD PATH (2026-06-10 — new). MANY dragons — a
+  // flock / roost / brood. The spectacle is the NUMBER.
+  // ════════════════════════════════════════════════════════
+
+  dragon_brood_subject: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BROOD — the GROUP of Western dragons (the hero subject). The point is a small group of dragons (3-7 clearly visible) — each one DISTINCT and READABLE, SPREAD across the scene with space between them (like birds spaced across a sky), with a few more small in the distance — NEVER a dense overlapping clump/swarm/tangle where they merge into a blob. Each entry 30-50 words. ALL traditional Western dragons (4 legs + 2 wings + horns), NEVER Eastern serpents/wyverns.
+
+VARIETY MANDATE — ~25 distinct dragon-gatherings, each emphasizing SPACED, DISTINCT, COUNTABLE dragons: a few dragons soaring spread across a wide sky at different heights; dragons perched apart on the separate ledges of a great cliff, each on its own crag; dragons circling a volcano with clear air between them; a loose migration of dragons strung out across the horizon with gaps between each; a brood where adults perch apart and a few hatchlings play between them; dragons gliding in a loose V like geese; dragons scattered across a mountainside, one per outcrop; a handful of dragons launching from a cliff, spaced out as they climb. Each = 3-7 distinct, separated, readable dragons of varied size/color, with more small in the distance — NOT a packed tangle.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gathering of 3-7 DISTINCT, SPACED, READABLE Western dragons (with more small in the distance) in 30-50 words — separated individuals at varied distances, NOT a merged swarm/clump. NOT one dragon. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Four or five dragons soaring spread wide across a vast open sky at different heights, each a clear separate silhouette with air between them, a few more small and distinct in the far distance.
+2. Three dragons perched apart on the separate crags of a great cliff, each clearly its own dragon, a couple more gliding in with open sky between them.
+3. A few dragons cresting a ridge up close, the rest of the migration strung out as small distinct silhouettes to the horizon.`,
+  },
+
+  dragon_brood_dominant: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BROOD DOMINANT — the ONE larger/notable Western dragon that anchors the composition among the many. Each entry 25-40 words. Traditional Western dragon (4 legs + 2 wings + horns).
+
+VARIETY MANDATE — ~25 distinct dominant dragons by COLOR + SCALE + role: a colossal ancient crimson matriarch dwarfing the rest; a battle-scarred black alpha with broken horns; a gleaming gold patriarch leading the flight; a vast frost-white elder rimed in ice; a storm-grey sky-king crackling with lightning; a molten volcanic broodmother; a bronze war-leader; a regal purple monarch with a feathered crest; an immense green moss-scaled elder. Each names color + scale + horns + why it dominates (size / scars / regality), with the many smaller dragons around it.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dominant Western dragon (4 legs + 2 wings + horns) in 25-40 words that anchors the brood. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal ancient crimson matriarch at the heart of the flock, twice the size of the rest, vast tattered red wings spread, a great crown of horns, the lesser dragons wheeling around her.
+2. A battle-scarred black alpha with broken horns and a notched wing leading the migration, larger and darker than the others streaming in his wake.
+3. A vast frost-white elder rimed in ice perched at the roost's summit, broad pale wings mantled, dozens of smaller dragons clustered on the ledges below.`,
+  },
+
+  dragon_brood_activity: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BROOD ACTIVITY — what the multitude of dragons is DOING together. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct group activities: wheeling in a great spiral; taking flight all at once in an explosion of wings; roosting and grooming on the cliffs; squabbling and jostling for perches; the brood feeding on a kill; hatchlings tumbling and play-fighting around the adults; a coordinated hunting dive; circling a volcano riding the thermals; streaming in migration; clashing in a sky-battle; basking with wings spread to the sun; mobbing an intruder. Each conveys MANY dragons acting together.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE group activity of many dragons in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The whole flock wheels in a vast slow spiral, dragons at every height circling one another, wings catching the light as the spiral turns.
+2. The entire roost erupts into flight at once, hundreds of wings unfurling and beating in a thunderous explosion off the cliffs.
+3. Hatchlings and juveniles tumble and play-fight among the watchful adults on the nesting ledges, little wings flapping clumsily.`,
+  },
+
+  dragon_brood_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BROOD SETTING — the epic stage that holds the multitude of dragons. Each entry 25-45 words. Big enough for MANY dragons + depth.
+
+VARIETY MANDATE — ~25 distinct settings: a vast volcanic mountain range smoking under a red sky; towering sea-cliffs over a churning ocean; a colossal ancient dragon-mountain honeycombed with roosts; a stormy sky of thunderheads; a sunset sky over an endless landscape; a frozen peak-range of glaciers; a great canyon of spires; the skies above a besieged fantasy city; an ash-plain with bone-strewn nesting grounds; a misty valley of waterfalls; a desert of mesas at dawn. Each is vast enough for a whole flock + multi-layer depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vast setting in 25-45 words holding many dragons + depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast volcanic mountain range smoking beneath a blood-red sky, lava glowing in the valleys far below, the jagged peaks marching to a hazy horizon — ample sky for a whole flock.
+2. Towering sea-cliffs plunging into a churning grey ocean, the rock honeycombed with roost-ledges, sea-spray and mist rising, storm-clouds boiling overhead.
+3. A colossal ancient dragon-mountain honeycombed with cave-roosts, smoke and dragon-shapes pouring from its openings, the peak lost in cloud far above.`,
+  },
+
+  dragon_brood_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BROOD DRAMA — a secondary event adding awe, fires ~40%. Each entry 15-30 words. Does NOT eclipse the multitude.
+
+VARIETY MANDATE — ~25 distinct dramas: a volcano erupting beneath the flock; two dragons breaking off to clash mid-air; a shaft of god-rays lighting the wheeling swarm; a distant storm of lightning; a tiny army or castle far below; a comet streaking overhead; a great flame-burst as several dragons breathe fire at once; a flock of birds scattering before the dragons; a rival flock approaching on the horizon; the sun setting blood-red behind them.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama event in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The volcano below erupts in a fountain of fire and ash, the wheeling flock silhouetted against the glowing column.
+2. Two dragons break from the flock to clash mid-air, jaws locked, tumbling through the swarm wreathed in fire.
+3. A shaft of golden god-rays breaks through the cloud, lighting the wheeling swarm of dragons from the side.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-FLIGHT PATH (2026-06-10 — new). Majestic dragon
   // soaring over an epic vista, aerial, no rider.
   // ════════════════════════════════════════════════════════

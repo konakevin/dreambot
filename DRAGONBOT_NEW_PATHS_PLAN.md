@@ -25,7 +25,7 @@
 | 2 | 1 | ~~dragon-hoard~~ | ❌ KILLED | – | – | 2 | ✅ | – |
 | 3 | 1 | dragon-battle | ✅ | ✅ | ✅ | 0 | ✅ | ✅ |
 | 4 | 1 | dragon-flight | ✅ | ✅ | (skip) | 0 | ✅ | ✅ |
-| 5 | 1 | dragon-brood | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 5 | 1 | dragon-brood | ✅ | ✅ | ✅ | 4 | ✅ | scaling |
 | 6 | 1 | dragon-breeds | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 7 | 2 | clash-of-armies | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 8 | 2 | magic-unleashed | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
