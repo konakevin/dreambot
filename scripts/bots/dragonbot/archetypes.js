@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  WIZARD_TOWER: {
+    description:
+      'PATH-BESPOKE — DragonBot wizard-tower path (2026-06-10, Tier 3). A wizard\'s tower dense with arcana — interior or exterior, magical wonder. Path-bespoke: tower + arcane_detail + tower_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['tower', 'arcane_detail', 'tower_setting', 'occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   NECROMANCER: {
     description:
       'PATH-BESPOKE — DragonBot necromancer path (2026-06-10, Tier 2). Dark high-fantasy necromancy — a lich/death-knight/undead horde, soul-flame, raising the dead. Path-bespoke: undead_subject + dark_setting + necro_magic + undead_detail + drama (40% gated). Universal lighting + atmosphere reused.',

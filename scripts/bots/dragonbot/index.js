@@ -30,6 +30,7 @@ const pathBuilders = {
   'fae-court': require('./paths/fae-court'),
   'dungeon-delve': require('./paths/dungeon-delve'),
   necromancer: require('./paths/necromancer'),
+  'wizard-tower': require('./paths/wizard-tower'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -118,6 +119,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // wizard-tower: anchor the arcana-dense mage tower.
+    'wizard-tower':
+      'Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition, an iconic WIZARD\'S TOWER dense with ARCANA — a tall fantasy mage-spire (or its arcana-crammed interior) full of glowing magic: floating spellbooks, glowing orbs, a great orrery, bubbling alchemy, star-charts, a small wizard or apprentice for scale, atmospheric magical wonder, deep D&D + LOTR arcane architecture (NOT modern NOT sci-fi), painterly grandeur and depth, awe-inducing concept-art masterwork',
     // necromancer: anchor the dark high-fantasy undead scene.
     necromancer:
       'Frank Frazetta + Brom + Wayne Barlowe painted-fantasy oil tradition, a DARK HIGH-FANTASY NECROMANCY scene — an undead lord (lich / death-knight / wraith-lord / bone-dragon) commanding a risen host of skeletons and wraiths, sickly green soul-flame and dark runes, a cursed crypt/necropolis/blighted battlefield in decay, macabre grim majesty under a blood-moon (NOT modern NOT sci-fi NOT cheap gore), painterly ominous depth, D&D + Warhammer death-magic lineage, awe-inducing concept-art masterwork',
@@ -604,6 +608,8 @@ module.exports = {
     'dungeon-delve',
     // NEW 2026-06-10 — necromancer (dark undead/lich, Tier 2). MVP-25.
     'necromancer',
+    // NEW 2026-06-10 — wizard-tower (mage tower + arcana, Tier 3). MVP-25.
+    'wizard-tower',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -637,7 +643,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer', 'wizard-tower'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -701,6 +707,7 @@ module.exports = {
       'fae-court',
       'dungeon-delve',
       'necromancer',
+      'wizard-tower',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -744,6 +751,7 @@ module.exports = {
       'fae-court': 'scene',
       'dungeon-delve': 'scene',
       necromancer: 'scene',
+      'wizard-tower': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

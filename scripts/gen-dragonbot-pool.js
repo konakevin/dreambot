@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // WIZARD-TOWER PATH (2026-06-10 — new, Tier 3). A mage's tower
+  // dense with arcana — interior or exterior.
+  // ════════════════════════════════════════════════════════
+
+  wiztower_tower: {
+    format: 'simple',
+    theme: `DRAGONBOT WIZARD-TOWER — the TOWER itself (exterior spire OR arcana-filled interior). Each entry 25-45 words, with grandeur. Mix exteriors + interiors.
+
+VARIETY MANDATE — ~25 distinct wizard towers: a tall crooked spire of mismatched stone leaning against the sky; a floating tower hovering above its foundation; a cliffside tower clinging to a sheer rock face; a gnarled tower grown from a living tree; a ruined half-collapsed mage-tower; a crystal tower refracting light; the cluttered circular interior of a study crammed floor-to-ceiling with arcana; a vast multi-level library-tower interior with spiral stairs; an observatory-top with a great brass telescope; a tower of stacked impossible geometry; a black obsidian sorcerer's spire; a candle-lit alchemy lab interior. Each names the tower (or interior) + its shape + magical character.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE wizard tower (exterior OR interior) in 25-45 words — shape + grandeur + magical character. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tall crooked spire of mismatched grey stone leaning improbably against the sky, tiny glowing windows spiralling up its height, a conical slate roof topped with a glowing orb.
+2. The cluttered circular interior of a wizard's study, crammed floor-to-ceiling with leaning bookshelves, jars, scrolls and instruments, a worn desk buried in arcana at its heart.
+3. A slender crystal tower rising from a misty lake, its translucent walls refracting the light into drifting rainbows, arcane runes glowing faintly within.`,
+  },
+
+  wiztower_arcana: {
+    format: 'simple',
+    theme: `DRAGONBOT WIZARD-TOWER ARCANA — the magical details filling the tower. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct arcana: floating open spellbooks turning their own pages; a glowing orb of swirling light; bubbling alchemical apparatus; a great brass orrery turning; star-charts pinned across the walls; jars of glowing specimens; a crystal ball on a stand; a floating quill writing by itself; shelves of potion bottles glowing in colors; a summoning circle chalked on the floor; a telescope aimed at the stars; runes drifting in the air; a caged tiny elemental. Each is a vivid arcane detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE arcane detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Several open spellbooks float in the air, their pages turning by themselves, glowing runes lifting off the parchment and drifting away.
+2. A great brass orrery turns slowly in the center of the room, its planets and moons casting moving shadows across the walls.
+3. Shelves of potion bottles glow in a dozen colors, casting shifting jewel-toned light across the cluttered shelves.`,
+  },
+
+  wiztower_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT WIZARD-TOWER SETTING — the place around/below the tower (for exteriors) or the view from it. Each entry 20-40 words, with depth.
+
+VARIETY MANDATE — ~25 distinct settings: a stormy mountain peak; an enchanted misty forest; a floating sky-island among clouds; a rooftop above a fantasy city; a moonlit moor; a rocky island in a vast sea; a deep autumn wood; a snowy alpine valley; a cliff above a waterfall; a wasteland under a strange sky; a starlit night sky (from an observatory); a green hill under a sunset. Each sets the setting + depth + its light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tower setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A storm-lashed mountain peak, jagged crags falling away into churning cloud, lightning flickering on the horizon, the tower braced against the wind.
+2. An enchanted misty forest stretching to a hazy horizon far below, the tops of ancient trees catching the last gold light, fog pooling between them.
+3. A floating sky-island wreathed in cloud, other distant isles drifting beyond, a great sun low and golden behind them.`,
+  },
+
+  wiztower_occupant: {
+    format: 'simple',
+    theme: `DRAGONBOT WIZARD-TOWER OCCUPANT — a small figure for life + scale. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct occupants: an old robed wizard bent over a book; a young apprentice on a ladder; a wizard at a window gazing out; a cat-familiar curled on a stack of books; a raven perched on a skull; a tiny imp stirring a cauldron; a wizard mid-spell, hands glowing; an owl on the back of a chair; an apprentice sweeping up spilled reagents; a hooded figure ascending the stairs; a wizard asleep at the desk. Each is a small figure giving life + scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small occupant figure in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An old robed wizard sits bent over a massive open tome at the cluttered desk, tiny against the towering shelves around him.
+2. A young apprentice balances on a tall ladder reaching for a jar on a high shelf, dwarfed by the cluttered tower.
+3. A black cat-familiar curls asleep atop a precarious stack of spellbooks, one eye half-open.`,
+  },
+
+  wiztower_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT WIZARD-TOWER DRAMA — a secondary focal point heightening the wonder, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a small dragon circling the tower's peak; a spell going dramatically wrong in a burst of light; a magical storm swirling around the spire; a portal opening in mid-air; a flight of magical creatures passing; a beam of light lancing from the top into the sky; a floating island drifting past the window; an aurora over the tower; a great moon framed behind it; a summoned elemental looming; books and objects whirling in a magical vortex. Each adds a focal beat (does NOT replace the tower).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small dragon circles the tower's glowing peak, silhouetted against the evening sky.
+2. A spell goes wild in a burst of crackling light, papers and sparks flying across the study.
+3. A beam of brilliant arcane light lances up from the tower's top into the storm-clouds above.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // NECROMANCER PATH (2026-06-10 — new, Tier 2). Dark fantasy
   // necromancy — lich, undead host, soul-flame.
   // ════════════════════════════════════════════════════════

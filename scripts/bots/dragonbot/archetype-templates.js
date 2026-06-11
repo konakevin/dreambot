@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  WIZARD_TOWER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, tower, arcane_detail, tower_setting, occupant, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a WIZARD'S TOWER scene for DragonBot — the iconic mage's tower, dense with arcana and wonder. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Magical, atmospheric, awe-inspiring — D&D / LOTR arcane architecture. The scene should make the viewer want to climb its stairs.
+
+━━━ THE WIZARD'S TOWER — ABSOLUTE FIRST RULE ━━━
+A tall fantasy mage's tower (or its arcana-filled interior) is the hero of the scene — full of magical wonder, glowing arcana, and atmosphere. High-fantasy and enchanting (NOT modern, NOT sci-fi). Either a dramatic EXTERIOR of the spire in its setting OR a wondrous INTERIOR crammed with arcana.
+
+━━━ THE TOWER ━━━
+${tower}
+
+Render the tower with depth and grandeur — its shape, height, and magical character dominating the scene.
+
+━━━ ARCANE DETAIL (the magic of the place) ━━━
+${arcane_detail}
+
+Render the arcana richly — glowing orbs, floating books, star-charts, bubbling experiments — the magic that fills the tower.
+
+━━━ THE TOWER SETTING ━━━
+${tower_setting}
+
+Render the setting around/below the tower with atmospheric depth.
+
+━━━ THE OCCUPANT (a small figure for life + scale) ━━━
+${occupant}
+
+A small figure — a wizard, apprentice, or familiar — gives life and scale, dwarfed by the tower and its magic.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, wondrous. The wizard's tower — exterior spire or arcana-filled interior — dominating the frame, glowing magic throughout, a small figure for scale, atmospheric depth. Enchanting and grand. NEVER modern/sci-fi; NEVER mundane/empty.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a wizard's tower (spire exterior OR arcana-filled interior) — the magical tower leads], [the tower's shape + grandeur], [the arcana — glowing orbs + floating books + experiments], [the setting with depth], [a small wizard/apprentice/familiar for scale], [lighting + atmosphere], [palette + wondrous magical mood]
+
+CRITICAL — render an enchanting high-fantasy wizard's tower dense with glowing arcana. Do NOT render anything modern/sci-fi, mundane, or empty.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   NECROMANCER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, undead_subject, dark_setting, necro_magic, undead_detail, drama } = slots;
 

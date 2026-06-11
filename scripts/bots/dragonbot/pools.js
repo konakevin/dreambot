@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── wizard-tower path (2026-06-10, NEW, Tier 3) — mage tower. MVP-25. ───
+  WIZTOWER_TOWER: load('wiztower_tower'),
+  WIZTOWER_ARCANA: load('wiztower_arcana'),
+  WIZTOWER_SETTING: load('wiztower_setting'),
+  WIZTOWER_OCCUPANT: load('wiztower_occupant'),
+  WIZTOWER_DRAMA: load('wiztower_drama'),
+
   // ─── necromancer path (2026-06-10, NEW, Tier 2) — dark undead. MVP-25. ───
   NECRO_SUBJECT: load('necro_subject'),
   NECRO_SETTING: load('necro_setting'),
