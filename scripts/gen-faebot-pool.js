@@ -143,16 +143,26 @@ EXAMPLES (3):
 
   faebot_natural_village_lighting: {
     format: 'simple',
-    theme: `FAEBOT FAE-NATURAL-VILLAGE LIGHTING — the WARM, SOFT, dappled fairy-light + atmosphere + glow (combined). Each entry 15-30 words. Tender, cozy, magical — favor WARM golden/honey/rosy dappled light over cold blue. Drifting glowing motes throughout.
+    theme: `FAEBOT FAE-NATURAL-VILLAGE TIME-OF-DAY + WEATHER — the time of day, sky, light, and how the village is lit (combined lighting + atmosphere axis). Each entry 18-32 words. The POINT is VARIETY across the full day/night cycle, always soft + magical + storybook. In the DARK scenes (twilight/night), the village glows from WITHIN — warm lanterns, glowing windows, fae-lights, bioluminescence + drifting motes are the light source.
 
-VARIETY MANDATE — ~25 warm soft moods (mostly warm, a few gentle cool): warm golden-hour light dappling through the canopy with drifting fairy-motes; honey-gold afternoon glow on the mossy rocks; rosy blossom-tinted dawn with floating pollen-light; cozy amber glow from mushroom-windows at dusk; warm dappled green-gold light through the gorge with glowing motes; gentle candlelit petal-window glow against soft twilight; a tender pink-and-gold sunset; warm misty morning with golden haze in the canyon; soft violet-and-gold twilight with luminous pixies; firefly-lit blue evening with warm glowing windows; bioluminescent mushroom-glow at night. Each: a SOFT WARM light source + cozy air + drifting magical glow.`,
+VARIETY MANDATE — ~25 entries, an EVEN SPREAD across these times (≈3-4 each), each with its sky + light + how the village is lit:
+  • BRIGHT DAY — clear blue sky, warm sun, dappled light, drifting motes
+  • GOLDEN HOUR — low warm honey-gold sun, long light, glowing motes
+  • SUNSET — blazing pink-orange-gold sky, warm rim-light, first windows glowing
+  • PURPLE TWILIGHT — violet-and-blue dusk sky, the village starting to glow with warm lanterns + windows
+  • LANTERN-LIT NIGHT — deep blue/indigo night, stars/moon, the whole village aglow with warm lanterns, glowing windows, fae-lights, fireflies, bioluminescent mushrooms
+  • FIRST MORNING LIGHT — soft pale dawn, mist, pink first light, a few lanterns still lit
+  • RAINY / OVERCAST — soft grey rain, wet glistening surfaces, cozy glowing windows, dripping eaves, misty
+Each names the TIME + sky/light + how the village glows (sunlight by day; lanterns + windows + fae-light in the dark).`,
     touchpoints: [],
-    instructions: `Each entry is ONE warm soft dappled fairy-light + glow mood in 15-30 words (favor warm golden/honey/rosy). Output a NUMBERED list.
+    instructions: `Each entry is ONE time-of-day/weather mood in 18-32 words — sky + light + how the village is lit (lanterns + glowing windows light the dark scenes). Spread evenly across day/golden/sunset/twilight/night/dawn/rainy. Output a NUMBERED list.
 
-EXAMPLES (3):
-1. Warm golden-hour light dapples down into the mossy gorge, drifting fairy-motes glowing in the honeyed air, the mushroom-windows aglow amber.
-2. Soft bioluminescent mushroom-glow and amber petal-windows light the village at dusk, luminous pixies drifting in the cozy violet-and-gold air.
-3. A tender rosy-and-gold dawn washes the trees and rocks, floating glowing pollen drifting through the soft canyon mist.`,
+EXAMPLES (5):
+1. BRIGHT DAY — a clear blue sky and warm sun dapple golden light down into the mossy gorge, drifting fairy-motes glowing, the village fresh and luminous.
+2. SUNSET — a blazing pink-and-gold sky behind the rocks, warm rim-light on the mushroom-caps, the first amber windows beginning to glow.
+3. PURPLE TWILIGHT — a deep violet-and-blue dusk settles over the canyon, warm lanterns and glowing windows flickering on, luminous pixies drifting.
+4. LANTERN-LIT NIGHT — a deep indigo starlit night, the whole village aglow with warm hanging lanterns, glowing windows, fireflies and softly luminous mushrooms reflected in the dark water.
+5. RAINY — soft grey rain falls through the gorge, every surface wet and glistening, cozy amber windows glowing warmly through the misty drizzle, eaves dripping.`,
   },
 
   faebot_natural_village_drama: {
