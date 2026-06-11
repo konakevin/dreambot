@@ -517,6 +517,56 @@ Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dw
 Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_ELVEN_CITY: ({ slots, sharedDNA, vibeDirective }) => {
+    const { elven_city, elven_detail, city_setting, fae_inhabitants, fae_lighting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ETHEREAL ELVEN CITY scene in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a graceful white elven realm of soaring spires and living light, given an enchanted FAE touch. Rivendell / Lothlórien beauty crossed with FaeBot's glowing fairy-forest magic. The scene should make the viewer long to walk its bridges.
+
+━━━ ETHEREAL ELVEN BEAUTY + FAE MAGIC — ABSOLUTE FIRST RULE ━━━
+A graceful elven city of flowing, organic, luminous architecture — slender white spires, arched bridges, glowing windows — in harmony with an enchanted fairy-forest, alive with drifting magical light. Elegant, serene, and luminous, with a FAE sprinkle of glowing motes, fairy-lanterns and tiny sprites. Deep high-fantasy (NOT modern, NOT sci-fi, NOT brutalist). Soft enchanted light and natural beauty.
+
+━━━ THE ELVEN CITY ━━━
+${elven_city}
+
+Render the white elven city with grace and grandeur — soaring slender spires, arched bridges and glowing windows, flowing architecture in harmony with the landscape, dominating the scene.
+
+━━━ ELVEN + FAE DETAIL (the craft and magic of the place) ━━━
+${elven_detail}
+
+Render the delicate elven craftsmanship AND fae magic — graceful arches, slender bridges, glowing windows, living trees grown into the stone, fairy-lanterns and glowing vines.
+
+━━━ THE ENCHANTED SETTING ━━━
+${city_setting}
+
+Render the magical fairy-forest setting cradling the city with atmospheric depth — the enchanted land the elves and fae share.
+
+━━━ THE INHABITANTS (tiny elves + fae creatures for life + scale) ━━━
+${fae_inhabitants}
+
+Small graceful elf figures and tiny fae creatures give life and scale, dwarfed by the city and its beauty.
+
+━━━ LIGHT + ATMOSPHERE + FAE GLOW ━━━
+${fae_lighting}
+
+Render the soft enchanted light plus drifting fairy-motes and magical glow filling the air.
+${dramaSection}
+━━━ COLOR + MOOD ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, luminous, serene. The graceful white elven city flowing through its enchanted fairy-forest setting, soft light and drifting fae-motes, delicate architecture and glowing trees, tiny elves and fae for scale, multi-layer atmospheric depth. Elegant and beautiful. NEVER modern/sci-fi/brutalist; NEVER grim/empty.
+
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a graceful white elven city of soaring spires + arched bridges in an enchanted fairy-forest — the elven city leads], [the city's flowing white architecture + glowing windows + grandeur], [elven + fae detail — arches + bridges + fairy-lanterns + glowing vines], [the enchanted fairy-forest setting with depth], [tiny elves + fae creatures for scale], [soft light + drifting fae-motes + glow], [color palette + serene luminous fae mood].`;
+  },
+
   FAEBOT_FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
     const { fae_subject, enchanted_setting, ethereal_detail, surprise, fae_lighting, drama } = slots;
 

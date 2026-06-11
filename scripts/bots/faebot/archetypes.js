@@ -135,6 +135,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_ELVEN_CITY: {
+    description:
+      'PATH-BESPOKE — FaeBot elven-city (2026-06-10, recreated from DragonBot elven-city, Kevin hearted those white ethereal elven castles). A graceful white elven spired city — Rivendell/Lothlorien towers, arched bridges, glowing windows, water — with a FAE TOUCH (drifting fairy-motes, glowing fae-lanterns, tiny sprites/pixies among the elves, enchanted-forest integration) in FaeBot painterly register. Self-contained: elven_city + elven_detail + city_setting + fae_inhabitants + fae_lighting + drama (40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['elven_city', 'elven_detail', 'city_setting', 'fae_inhabitants', 'fae_lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_FAE_COURT: {
     description:
       'PATH-BESPOKE — FaeBot fae-court (2026-06-10, transplanted from DragonBot). Ethereal high-fae / elven-court / enchanted-glade scene — gossamer beauty, moonlight, magic. Self-contained: fae_subject + enchanted_setting + ethereal_detail + surprise + fae_lighting (light+atmosphere combined) + drama (40%-gated). No shared universal pools (FaeBot pattern).',

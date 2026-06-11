@@ -80,6 +80,96 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // ELVEN-CITY PATH (2026-06-10 — recreated from DragonBot's
+  // elven-city, Kevin hearted those white ethereal castles).
+  // White elven spired cities with a FAE touch.
+  // ════════════════════════════════════════════════════════
+
+  faebot_elven_city_city: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY — the graceful WHITE ELVEN CITY itself (the hero). Each entry 30-55 words, flowing + luminous + grand. Soaring slender white spires, arched bridges, glowing windows — Rivendell/Lothlorien beauty.
+
+VARIETY MANDATE — ~25 distinct white elven cities: a cluster of soaring slender white spires linked by graceful arched bridges over a turquoise river; a treetop city of pale curved platforms woven through colossal ancient trees; a tiered cliffside city of white terraces cascading to a lake; a city of white towers beside a thundering waterfall; a crystalline elven city refracting light over a mirror-lake; a city built into and around a great living tree; a snow-dusted winter elven city under spires of ice-white stone; a lakeside city of white domes and arching bridges; a city of golden-autumn-canopied white towers; a misty mountain-vale city of pale spires; a coastal elven harbor of curved white quays. Each names the white elven city + soaring spires + arched bridges + glowing windows + grandeur.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE white elven city in 30-55 words — soaring white spires + arched bridges + glowing windows + flowing architecture + grandeur. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A cluster of soaring slender white spires linked by graceful arched stone bridges, glowing amber windows dotting their tiers, rising from a turquoise river-gorge, the pale towers catching soft light against a misty backdrop.
+2. A tiered cliffside elven city of cascading white terraces and thin spires, delicate arched bridges spanning between them, warm glowing windows, descending gracefully to a still reflecting lake below.
+3. A crystalline white elven city of translucent towers and arching bridges rising from a mirror-lake, the spires refracting the light into soft rainbows, doubled in the calm water beneath.`,
+  },
+
+  faebot_elven_city_detail: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY DETAIL — the delicate elven craftsmanship AND fae magic. Each entry 15-30 words. Mix elven craft + a FAE sprinkle.
+
+VARIETY MANDATE — ~25 distinct details: slender arched bridges with leaf-and-vine railings; glowing fairy-lanterns strung between spires; flowing carved-leaf white stonework; living trees grown into the architecture; delicate spiral stairs; gossamer banners; glowing vines climbing the towers; warm amber windows; reflecting pools and fountains; graceful statues of elf-lords; flowering creepers everywhere; thin spires tipped with soft glowing light; glowing crystal lamps; woven-branch archways draped in motes. Each is a delicate elven craft OR fae-magic detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE elven-craft or fae-magic detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Slender arched bridges of pale carved stone span between the towers, their railings worked into flowing leaf-and-vine patterns.
+2. Glowing fairy-lanterns like captured starlight hang strung between the spires, casting soft silver light across the walkways.
+3. Living trees have been grown into the white architecture itself, their luminous boughs forming arches over the bridges.`,
+  },
+
+  faebot_elven_city_setting: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY SETTING — the enchanted fairy-forest setting cradling the city. Each entry 20-40 words, with depth.
+
+VARIETY MANDATE — ~25 distinct enchanted settings: an ancient old-growth fairy-forest; cliffs above a still turquoise lake; a misty mountain vale; a golden autumn enchanted wood; a river-gorge with waterfalls; a flowering spring meadow; a snow-dusted alpine fairy-forest under aurora; a moonlit night-forest; a sunlit glade; an island in a vast glowing lake; a valley of cherry blossom; a deep mossy ravine with hanging gardens. Each sets the enchanted natural setting + depth + its soft magical light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE enchanted fairy-forest setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An ancient old-growth fairy-forest cradling the city, colossal moss-draped trees stretching away into golden-green light, a glowing river winding far below through the trees.
+2. High cliffs above a still turquoise lake, the white towers reflected in the calm water, misty mountains rising in the hazy distance, snow dusting the pines.
+3. A snow-dusted alpine fairy-forest under a rippling green aurora, frosted evergreens framing the pale spires, the enchanted woods glowing softly in the cold.`,
+  },
+
+  faebot_elven_city_inhabitants: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY INHABITANTS — tiny elf figures AND fae creatures for life + scale (the fae touch). Each entry 12-28 words. Render figures fully and modestly clothed in flowing robes.
+
+VARIETY MANDATE — ~25 distinct inhabitants: a robed elf crossing a high bridge while glow-sprites drift past; two elves in quiet conversation as pixies dance overhead; an elf-maiden by a fountain with a tiny fae perched on her hand; a rider on a white horse with fairy-lights trailing; a group walking a tree-walkway among glow-moths; an elf-lord on a terrace as luminous sprites circle the spires; tiny winged fae flitting between the towers; an elf tending a glowing garden with pixies; a swan gliding the lake below; a child chasing fairy-motes; a fae procession of lights along a bridge. Each is small graceful elf figure(s) AND/OR tiny fae creatures for scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE set of tiny elf + fae inhabitants in 12-28 words, fully clothed. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lone robed elf crosses a high arched bridge between two towers, a few glowing sprites drifting past, tiny and graceful against the vast city.
+2. Two elves pause in quiet conversation beside a glowing fountain while a cluster of luminous pixies dances in the air above them.
+3. Tiny winged fae flit between the white spires like fireflies, and a single robed elf watches from a high terrace below.`,
+  },
+
+  faebot_elven_city_lighting: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY LIGHTING — the soft light + atmosphere + fae glow (combined). Each entry 15-30 words. Soft, magical, ethereal, with drifting motes.
+
+VARIETY MANDATE — ~25 distinct light+atmosphere+glow moods: soft golden-hour light with drifting fairy-motes; cool blue moonlight and glowing windows; a pearl-white misty dawn with floating pollen-light; magical violet twilight with luminous sprites; a rippling green aurora glow; warm amber fae-lantern light against dusk; dappled green forest light and glowing motes; rosy blossom-tinted dusk; a silver full-moon glow with mist; bioluminescent night with drifting lights; soft pink alpenglow on the spires; a gentle starlit dark studded with glowing windows and fae-lights. Each sets the light source + air quality + drifting magical glow.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE light+atmosphere+fae-glow mood in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Soft golden-hour light bathes the white spires, drifting fairy-motes glowing in the warm hazy air, the windows beginning to glow amber.
+2. Cool blue moonlight washes the city, the windows glowing warm against it, a faint silver mist and floating motes hanging in the still air.
+3. A rippling green aurora glows behind the spires, glowing pollen-light drifting through the cold clear air, the towers softly luminous.`,
+  },
+
+  faebot_elven_city_drama: {
+    format: 'simple',
+    theme: `FAEBOT ELVEN-CITY DRAMA — a secondary focal point heightening the beauty, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a small jewel-scaled fae dragon gliding over the spires; a flight of white swans; a great low luminous moon behind the towers; an aurora over the city; a slow fall of cherry blossom or golden leaves; an elven boat with a glowing lantern on the water; a shaft of divine light through the canopy; a unicorn in a garden below; a procession of fae lights along the bridges; a rainbow over the waterfall; a comet in the twilight; a phoenix-bird passing. Each adds a beautiful focal beat (does NOT replace the city).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small jewel-scaled fae dragon, no bigger than a deer, glides silently over the city's spires.
+2. A great low luminous moon hangs behind the towers, vast and silver, doubling in the lake below.
+3. A slow fall of cherry blossom drifts down across the white bridges and walkways, catching the light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-COURT PATH (2026-06-10 — transplanted from DragonBot).
   // Ethereal high-fae / elven-court / enchanted-glade scene.
   // ════════════════════════════════════════════════════════

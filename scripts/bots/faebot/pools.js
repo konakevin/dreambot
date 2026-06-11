@@ -32,6 +32,14 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── elven-city path (2026-06-10, recreated from DragonBot, fae touch). MVP-25. ───
+  FAEBOT_ELVEN_CITY_CITY: load('faebot_elven_city_city'),
+  FAEBOT_ELVEN_CITY_DETAIL: load('faebot_elven_city_detail'),
+  FAEBOT_ELVEN_CITY_SETTING: load('faebot_elven_city_setting'),
+  FAEBOT_ELVEN_CITY_INHABITANTS: load('faebot_elven_city_inhabitants'),
+  FAEBOT_ELVEN_CITY_LIGHTING: load('faebot_elven_city_lighting'),
+  FAEBOT_ELVEN_CITY_DRAMA: load('faebot_elven_city_drama'),
+
   // ─── fae-court path (2026-06-10, transplanted from DragonBot). MVP-25. ───
   FAEBOT_FAE_COURT_SUBJECT: load('faebot_fae_court_subject'),
   FAEBOT_FAE_COURT_SETTING: load('faebot_fae_court_setting'),
