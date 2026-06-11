@@ -32,6 +32,14 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── fae-court path (2026-06-10, transplanted from DragonBot). MVP-25. ───
+  FAEBOT_FAE_COURT_SUBJECT: load('faebot_fae_court_subject'),
+  FAEBOT_FAE_COURT_SETTING: load('faebot_fae_court_setting'),
+  FAEBOT_FAE_COURT_DETAIL: load('faebot_fae_court_detail'),
+  FAEBOT_FAE_COURT_SURPRISE: load('faebot_fae_court_surprise'),
+  FAEBOT_FAE_COURT_LIGHTING: load('faebot_fae_court_lighting'),
+  FAEBOT_FAE_COURT_DRAMA: load('faebot_fae_court_drama'),
+
   FOREST_FAIRY_SCENES: load('forest_fairy_scenes'),
   FOREST_CREATURES: load('forest_creatures'),
   DRYAD_PORTRAITS: load('dryad_portraits'),

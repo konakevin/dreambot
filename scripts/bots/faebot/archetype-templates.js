@@ -517,6 +517,54 @@ Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dw
 Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { fae_subject, enchanted_setting, ethereal_detail, surprise, fae_lighting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ETHEREAL FAE scene in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a vision of the high-fae / elven court / enchanted glade, gossamer and luminous and magical. Dreamlike, beautiful, otherworldly. The scene should make the viewer feel they have glimpsed a hidden magical world.
+
+━━━ ETHEREAL FAE BEAUTY — ABSOLUTE FIRST RULE ━━━
+This is a luminous, dreamlike high-fantasy fae scene — graceful elven/fae beings and enchanted nature bathed in magical light. Gossamer, delicate, otherworldly, NOT dark or grim, NOT sci-fi. A sense of hidden wonder and quiet magic.
+
+━━━ THE FAE SUBJECT (the being(s) of the court) ━━━
+${fae_subject}
+
+Render the fae/elven subject with ethereal grace — beauty, fine raiment, an otherworldly presence.
+
+━━━ THE ENCHANTED SETTING ━━━
+${enchanted_setting}
+
+Render the magical natural setting with depth and atmosphere — the heart of the fae world.
+
+━━━ ETHEREAL DETAIL (the magic in the air) ━━━
+${ethereal_detail}
+
+Render this delicate magical detail across the scene — it carries the enchantment.
+
+━━━ A SURPRISE (a small enchanting touch) ━━━
+${surprise}
+
+A small magical surprise tucked in the scene, rewarding a closer look.
+${dramaSection}
+━━━ LIGHT + ATMOSPHERE ━━━
+${fae_lighting}
+
+━━━ COLOR + MOOD ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, luminous, dreamlike. The fae subject set within the enchanted glade, magical light and ethereal detail filling the air, multi-layer depth into a glowing otherworld. Graceful and beautiful. NEVER grim/dark; NEVER mundane; NEVER sci-fi.
+
+Write ONE Flux prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [an ethereal fae/elven subject in an enchanted glade — the luminous fae vision leads], [the fae subject — grace + raiment + presence], [the enchanted magical setting with depth], [ethereal detail in the air — motes, glow, gossamer], [a small magical surprise], [light + atmosphere], [color palette + dreamlike magical mood].`;
+  },
+
   FAEBOT_ENCHANTED_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       biome,

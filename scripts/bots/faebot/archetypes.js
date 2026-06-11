@@ -135,6 +135,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_FAE_COURT: {
+    description:
+      'PATH-BESPOKE — FaeBot fae-court (2026-06-10, transplanted from DragonBot). Ethereal high-fae / elven-court / enchanted-glade scene — gossamer beauty, moonlight, magic. Self-contained: fae_subject + enchanted_setting + ethereal_detail + surprise + fae_lighting (light+atmosphere combined) + drama (40%-gated). No shared universal pools (FaeBot pattern).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['fae_subject', 'enchanted_setting', 'ethereal_detail', 'surprise', 'fae_lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_ENCHANTED_VISTA: {
     description:
       'PATH-BESPOKE — FaeBot enchanted-vista (2026-05-21 axis-system migration from legacy function-form). PURE FOREST LANDSCAPE — no figures, no creatures as focal subjects. The lush enchanted forest itself is the subject, the magical land where the other FaeBot creatures live and thrive. Multi-layer painterly richness (canopy + hero feature + floor + water + magic + light + depth + air + foreground). 11 axes: biome / hero_feature / floor_carpet / water_element / magical_ambient / composition / lighting / atmospheric_depth / weather / foreground_anchor + wildlife_distant (40%-gated). HARD BAN: never include "standing stones / stone circles / tomb / gravestone" (Flux renders these as cemetery imagery).',
