@@ -29,6 +29,7 @@ const pathBuilders = {
   'mythic-bestiary': require('./paths/mythic-bestiary'),
   'fae-court': require('./paths/fae-court'),
   'dungeon-delve': require('./paths/dungeon-delve'),
+  necromancer: require('./paths/necromancer'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -117,6 +118,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // necromancer: anchor the dark high-fantasy undead scene.
+    necromancer:
+      'Frank Frazetta + Brom + Wayne Barlowe painted-fantasy oil tradition, a DARK HIGH-FANTASY NECROMANCY scene — an undead lord (lich / death-knight / wraith-lord / bone-dragon) commanding a risen host of skeletons and wraiths, sickly green soul-flame and dark runes, a cursed crypt/necropolis/blighted battlefield in decay, macabre grim majesty under a blood-moon (NOT modern NOT sci-fi NOT cheap gore), painterly ominous depth, D&D + Warhammer death-magic lineage, awe-inducing concept-art masterwork',
     // dungeon-delve: anchor the torch-lit fantasy dungeon crawl.
     'dungeon-delve':
       'Frank Frazetta + Brom + Larry Elmore painted-fantasy oil tradition, a TORCH-LIT FANTASY DUNGEON CRAWL — a small band of adventurers exploring a dark underground stone chamber, warm torchlight pooling around them and swallowed by deep shadow, a glinting discovery and a half-seen lurking threat, dramatic chiaroscuro light-vs-dark, tense atmospheric D&D dungeon depth (NOT modern NOT sci-fi), painterly grandeur, awe-inducing concept-art masterwork',
@@ -598,6 +602,8 @@ module.exports = {
     'fae-court',
     // NEW 2026-06-10 — dungeon-delve (torch-lit dungeon crawl, Tier 2). MVP-25.
     'dungeon-delve',
+    // NEW 2026-06-10 — necromancer (dark undead/lich, Tier 2). MVP-25.
+    'necromancer',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -631,7 +637,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -694,6 +700,7 @@ module.exports = {
       'mythic-bestiary',
       'fae-court',
       'dungeon-delve',
+      'necromancer',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -736,6 +743,7 @@ module.exports = {
       'mythic-bestiary': 'creature',
       'fae-court': 'scene',
       'dungeon-delve': 'scene',
+      necromancer: 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

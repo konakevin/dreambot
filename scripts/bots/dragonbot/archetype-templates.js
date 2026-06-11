@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  NECROMANCER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, undead_subject, dark_setting, necro_magic, undead_detail, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DARK NECROMANCY scene for DragonBot — a lord of the dead and their undead host, grim high-fantasy horror. Frank Frazetta + Brom + Wayne Barlowe painted-fantasy oil tradition. Macabre, ominous, powerful — D&D / Warhammer death-magic. The scene should make the viewer feel dread and dark awe.
+
+━━━ DARK NECROMANCY — ABSOLUTE FIRST RULE ━━━
+A grim, powerful scene of death-magic — an undead lord and/or their risen host amid sickly necrotic light and decay. Ominous and macabre but EPIC (not gory schlock), deep high-fantasy (NOT modern, NOT sci-fi). The color of death — bone, ash, sickly green, cold blue, blood-shadow.
+
+━━━ THE UNDEAD SUBJECT (the lord of the dead) ━━━
+${undead_subject}
+
+Render the central undead figure or host with grim majesty — the master of this scene.
+
+━━━ THE DARK SETTING ━━━
+${dark_setting}
+
+Render the cursed setting with depth and dread — a place of death and decay.
+
+━━━ THE NECROMANTIC MAGIC ━━━
+${necro_magic}
+
+Render the death-magic visibly — soul-flame, dark runes, the dead rising — sickly and luminous.
+
+━━━ UNDEAD DETAIL (the host of the dead) ━━━
+${undead_detail}
+
+Render the undead detail — skeletons, wraiths, bone-banners — filling out the host of death.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, ominous. The undead lord and their host amid sickly necrotic light and decay, dark-magic glowing, multi-layer depth into shadowed dread. Macabre, grim, EPIC. NEVER bright/cheerful; NEVER modern/sci-fi; NEVER cheap gore.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — an undead lord and their risen host amid death-magic in a cursed setting — the dark necromancy leads], [the undead subject — grim majesty + decay], [the death-magic — soul-flame + dark runes + rising dead], [the cursed setting with depth], [undead host detail — skeletons + wraiths], [lighting + atmosphere], [palette + ominous macabre mood]
+
+CRITICAL — render a grim, EPIC high-fantasy necromancy scene of an undead lord + death-magic. Do NOT render anything modern/sci-fi, cheerful, or cheap-gore.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DUNGEON_DELVE: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, dungeon, party, dungeon_detail, lurking_threat, drama } = slots;
 

@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  NECROMANCER: {
+    description:
+      'PATH-BESPOKE — DragonBot necromancer path (2026-06-10, Tier 2). Dark high-fantasy necromancy — a lich/death-knight/undead horde, soul-flame, raising the dead. Path-bespoke: undead_subject + dark_setting + necro_magic + undead_detail + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['undead_subject', 'dark_setting', 'necro_magic', 'undead_detail'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DUNGEON_DELVE: {
     description:
       'PATH-BESPOKE — DragonBot dungeon-delve path (2026-06-10, Tier 2). Adventurers exploring torch-lit fantasy depths — treasure, bones, lurking monsters, D&D dungeon-crawl. Path-bespoke: dungeon + party + dungeon_detail + lurking_threat + drama (40% gated). Universal lighting + atmosphere reused.',

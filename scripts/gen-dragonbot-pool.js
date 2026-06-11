@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // NECROMANCER PATH (2026-06-10 — new, Tier 2). Dark fantasy
+  // necromancy — lich, undead host, soul-flame.
+  // ════════════════════════════════════════════════════════
+
+  necro_subject: {
+    format: 'simple',
+    theme: `DRAGONBOT NECROMANCER — the central UNDEAD lord/subject. Each entry 25-45 words. Grim majesty, decay, dark power. High-fantasy undead.
+
+VARIETY MANDATE — ~25 distinct undead lords: a skeletal lich in tattered finery clutching a glowing staff; an armored death-knight in black corroded plate; a wraith-lord of swirling shadow and a crown; a vampire lord in regal dark robes; a bone-dragon of fused skeletons (4 legs + wing-bones); a mummified pharaoh-king risen; a ghostly revenant knight; a necromancer in bone-trimmed black robes raising arms; a colossal flesh-golem of stitched dead; a banshee-queen of wailing mist; a skeletal warlord on a bone throne; an undead sorceress wreathed in soul-fire. Each names the undead figure + their decayed regalia + dark presence.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE undead lord/subject in 25-45 words — figure + decayed regalia + dark presence. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A skeletal lich in rotted royal finery, a crown fused to its bare skull, clutching a staff topped with a screaming soul-trapped skull, green light burning in its empty sockets.
+2. An armored death-knight in black corroded plate edged with frost, a notched runed greatsword wreathed in cold blue flame, a tattered cloak hanging from skeletal shoulders.
+3. A towering bone-dragon assembled from countless fused skeletons, four clawed legs and vast wings of stretched bone-membrane, eye-sockets glowing with necrotic green fire.`,
+  },
+
+  necro_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT NECROMANCER SETTING — the cursed dark setting. Each entry 25-45 words, with depth + dread.
+
+VARIETY MANDATE — ~25 distinct cursed settings: a vast crypt of opened tombs; a blighted battlefield of the dead under a blood-moon; a black necropolis of bone-towers; a ritual chamber of carved skulls; a fog-drowned graveyard; a ruined cathedral claimed by the dead; a swamp of sunken corpses; a throne-hall of bones; a cursed catacomb; an ash-wasteland of impaled banners; a haunted moor under a sickly sky; a tomb-pyramid interior. Each sets the place of death + depth + its grim light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cursed dark setting in 25-45 words with depth + dread. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast crypt of opened stone tombs receding into darkness, lids cast aside, bone-dust drifting in shafts of sickly green light, the far vaults lost in shadow.
+2. A blighted battlefield of the unburied dead under a swollen blood-moon, broken banners and bones half-sunk in black mud stretching to a smoking horizon.
+3. A black necropolis of jagged bone-towers clawing at a starless sky, narrow streets choked with fog, faint green fires flickering in the windows.`,
+  },
+
+  necro_magic: {
+    format: 'simple',
+    theme: `DRAGONBOT NECROMANCER MAGIC — the death-magic visible in the scene. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct necro-magic effects: green soul-flame pouring from raised hands; the dead clawing up out of the earth; swirling spectral wraiths streaming from a staff; a column of necrotic light raising a corpse; dark runes burning on the ground; ghostly souls drawn screaming into a vessel; a wave of black death-energy; skeletons reassembling from scattered bones; a glowing sigil-circle of bone; spirits torn loose and bound; a pulse of withering decay. Each is a vivid death-magic effect with sickly color + motion.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE death-magic effect in 15-30 words — sickly color + form + motion. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Green soul-flame pours from the lord's upraised hands, spiralling outward in ghostly tongues that light the whole crypt in a sickly glow.
+2. Skeletal hands claw up out of the cracked earth across the field, the dead dragging themselves into the air at the necromancer's command.
+3. A column of cold necrotic light lances down onto a corpse, jerking it upright as spectral threads bind its limbs.`,
+  },
+
+  necro_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT NECROMANCER DETAIL — the undead host filling out the scene. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct undead-host details: ranks of skeletal warriors with rusted weapons; a tide of shambling zombies; drifting wraiths of pale mist; bone-banners on jagged poles; piled skulls forming a wall; skeletal steeds; ghostly knights on spectral horses; crawling severed hands; a swarm of flying bone-things; tattered grave-shrouds blowing; impaled corpses lining the way; floating spectral skulls. Each is a detail of the host of the dead.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE undead-host detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Ranks of skeletal warriors stand in the gloom behind, rusted swords and shields raised, eye-sockets flickering with faint green fire.
+2. A tide of shambling rotted zombies presses forward through the fog, countless and mindless, fading into the dark.
+3. Drifting wraiths of pale luminous mist coil between the bone-towers, faces stretched in silent screams.`,
+  },
+
+  necro_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT NECROMANCER DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a lone paladin making a last stand against the host; a bone-dragon rising behind the lord; a captured soul writhing in a crystal; a hero's broken statue; a blood-moon huge and low; a flight of spectral ravens; a cracked sarcophagus disgorging more dead; a glowing phylactery on an altar; a living captive bound for sacrifice; a portal to the underworld opening; ghostly chains rising from the ground. Each adds a focal beat (does NOT replace the undead lord).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lone armored paladin makes a desperate last stand on a rise, his holy light a tiny defiance against the endless dead.
+2. A vast bone-dragon rears up behind the lich, wings of stretched bone unfurling against the blood-moon.
+3. A captured soul writhes and glows within a floating crystal at the necromancer's side.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DUNGEON-DELVE PATH (2026-06-10 — new, Tier 2). Adventurers
   // in torch-lit fantasy depths — treasure, lurking monsters.
   // ════════════════════════════════════════════════════════

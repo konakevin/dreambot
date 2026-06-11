@@ -32,7 +32,7 @@
 | 9 | 2 | mythic-bestiary | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 10 | 2 | fae-court | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 11 | 2 | dungeon-delve | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
-| 12 | 2 | necromancer | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
+| 12 | 2 | necromancer | ✅ | ✅ | ✅ | 0 | ✅ | (bulk) |
 | 13 | 3 | wizard-tower | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 14 | 3 | dwarven-hold | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |
 | 15 | 3 | elven-city | ⬜ | ⬜ | ⬜ | – | ⬜ | ⬜ |

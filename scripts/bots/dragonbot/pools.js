@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── necromancer path (2026-06-10, NEW, Tier 2) — dark undead. MVP-25. ───
+  NECRO_SUBJECT: load('necro_subject'),
+  NECRO_SETTING: load('necro_setting'),
+  NECRO_MAGIC: load('necro_magic'),
+  NECRO_DETAIL: load('necro_detail'),
+  NECRO_DRAMA: load('necro_drama'),
+
   // ─── dungeon-delve path (2026-06-10, NEW, Tier 2) — torch-lit crawl. MVP-25. ───
   DUNGEON_CHAMBER: load('dungeon_chamber'),
   DUNGEON_PARTY: load('dungeon_party'),
