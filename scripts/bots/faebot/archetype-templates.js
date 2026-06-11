@@ -61,6 +61,8 @@ This is the captured-on-camera moment. Caught-in-the-act candid, off-center via 
 ━━━ 4. LIGHTING (time-of-day + light drama) ━━━
 ${lighting}
 
+⚑ This rolled TIME OF DAY must OPEN the final prompt and DOMINATE the whole image — for night/twilight/rain the sky is genuinely DARK and the glow comes from the moon, fireflies, glowing pollen and luminous flora (plus warm windows/lanterns where dwellings stand); do NOT wash it to bright day.
+
 ━━━ 5. WEATHER (air condition + particle motion) ━━━
 ${weather}
 
@@ -86,7 +88,7 @@ A specific environmental feature that establishes her scale and the soaring or i
 ${companionSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
@@ -159,6 +161,8 @@ This is the captured-on-camera moment. Caught-in-the-act candid, off-center via 
 ━━━ 4. LIGHTING (time-of-day + light drama) ━━━
 ${lighting}
 
+⚑ Let this rolled lighting / time-of-day lead the mood and color of the portrait — commit to it (a twilight, blue-hour, soft-overcast or gentle-night portrait is lovely), while keeping the subject beautifully lit and readable.
+
 ━━━ 5. WEATHER (air condition + drifting accents) ━━━
 ${weather}
 
@@ -184,7 +188,7 @@ A specific giant-flower-as-home or scale-contrast element that establishes she i
 ${companionSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
@@ -271,6 +275,8 @@ A patch of the enchanted forest rendered FROM her perspective — giant ferns / 
 ━━━ 6. LIGHTING (time + light drama) ━━━
 ${lighting}
 
+⚑ Let this rolled lighting / time-of-day lead the mood and color of the portrait — commit to it (a twilight, blue-hour, soft-overcast or gentle-night portrait is lovely), while keeping the subject beautifully lit and readable.
+
 ━━━ 7. WEATHER (air condition + drifting accents) ━━━
 ${weather}
 
@@ -286,7 +292,7 @@ Tactile macro foreground bringing 3-tier depth — a giant petal-edge / dewdrop-
 ${botanicalSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painterly-real fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Brian Froud + Charles Vess + Greg Manchess + Donato Giancola + Paul Bonner + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT chibi, NOT anime, NOT Disney, NOT Tinkerbell, NOT CGI, NOT mascot, NOT cartoon. Painted gallery-tier illustration.
@@ -374,6 +380,8 @@ A specific enchanted-forest setting softly behind her — atmospheric haze sells
 ━━━ 7. LIGHTING (close-portrait light drama) ━━━
 ${lighting}
 
+⚑ Let this rolled lighting / time-of-day lead the mood and color of the portrait — commit to it (a twilight, blue-hour, soft-overcast or gentle-night portrait is lovely), while keeping the subject beautifully lit and readable.
+
 ━━━ 8. WEATHER (air condition close to her — drifting accents) ━━━
 ${weather}
 
@@ -384,7 +392,7 @@ A specific magical signature visible near her face or shoulders — glowing vein
 ${foregroundSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier portrait illustration.
@@ -478,6 +486,8 @@ The painted atmospheric forest wrapping the scene. Multi-tier depth.
 ━━━ 7. LIGHTING (time-of-day + register) ━━━
 ${lighting}
 
+⚑ This rolled TIME OF DAY must OPEN the final prompt and DOMINATE the whole image — for night/twilight/rain the sky is genuinely DARK and the glow comes from the moon, fireflies, glowing pollen and luminous flora (plus warm windows/lanterns where dwellings stand); do NOT wash it to bright day.
+
 ━━━ 8. ATMOSPHERIC DEPTH (god-rays / mist / dust-motes) ━━━
 ${atmospheric_depth}
 
@@ -498,7 +508,7 @@ A specific tactile element near the camera bringing 3-tier depth — overhanging
 ${waterSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dwelling walls, thatched roofs. Painted edges (one color stops, another begins, with a soft painted seam). Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind Earle painted-fantasy lineage. Saturated deep forest greens + warm umber bark-tones + mossy roof greens + glowing amber window-light + muted blue-grey atmospheric distance. NEVER black ink outlines, NEVER vector borders, NEVER animation-cel, NEVER 3D-CGI plastic, NEVER photoreal.
@@ -609,12 +619,12 @@ ${fae_lighting}
 Render the warm soft dappled fairy-light plus drifting glowing motes and pixies filling the air.
 ${dramaSection}
 ━━━ COLOR + MOOD ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ COMPOSITION ━━━
 Soft, painterly, luminous, tender, storybook. A charming little white elven castle-village built around a dramatic wild nature feature (stream/canyon/waterfall/rocks/cliffs/trees), the parts joined by creative bridges/arches/ropes/swings/walkways, warm dappled light and drifting fae-motes, flowering vines and blossom, lush mossy nature, tiny elves + fae + a cute critter for life and scale. Warm, whimsical, super pretty. NEVER one monumental castle; NEVER cold/grim/epic; NEVER modern/sci-fi.
 
-Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a charming little white elven castle-village built around a dramatic wild nature feature (the feature + village lead together)], [the dramatic nature feature — stream/canyon/waterfall/rocks/cliffs/trees], [the little white spired cottages clinging to / spanning / nestled into it], [creative connectors — arched bridges, stone arches, rope bridges, swinging vines, ladders, walkways, lift-baskets], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies + flowering vines], [warm storybook palette + tender whimsical fae mood].`;
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE ROLLED TIME OF DAY — its sky + light + overall mood come FIRST and dominate the WHOLE image: a deep dark indigo starry night / a fiery rose-orange sunset / a cool grey rainy dusk / a pale misty dawn / bright clear day. Commit fully — for night/twilight/rain the sky is genuinely DARK and the glow comes from windows, lanterns, fireflies and luminous flora; do NOT wash it to bright day], a charming little white elven castle-village built around a dramatic wild nature feature (the feature + village lead together)], [the dramatic nature feature — stream/canyon/waterfall/rocks/cliffs/trees], [the little white spired cottages clinging to / spanning / nestled into it], [creative connectors — arched bridges, stone arches, rope bridges, swinging vines, ladders, walkways, lift-baskets], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies + flowering vines], [warm storybook palette + tender whimsical fae mood].`;
   },
 
   FAEBOT_CASTLE_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
@@ -659,12 +669,12 @@ ${fae_lighting}
 Render the warm soft dappled fairy-light plus drifting glowing motes and pixies filling the air.
 ${dramaSection}
 ━━━ COLOR + MOOD ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ COMPOSITION ━━━
 Soft, painterly, luminous, tender, storybook. A charming cluster of little white elven-castle cottages linked by archways and arched bridges, nestled cozily in a lush enchanted fairy-forest, warm dappled light and drifting fae-motes, flowering vines and blossom, tiny elves + fae + a cute critter for life and scale, gentle intimate depth. Warm, whimsical, super pretty — a hidden fairy village. NEVER one monumental castle; NEVER cold/grim/epic; NEVER modern/sci-fi.
 
-Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a charming little fae village of many small white elven-castle cottages linked by archways + arched bridges, nestled in a lush enchanted forest — the cozy castle-village leads], [the cluster of little white spired dwellings + glowing windows, draped in wisteria + blossom], [little archways, arched bridges, fairy-lanterns, balconies, flowering vines], [the lush enchanted forest cradling it, warm + intimate, optional gentle stream], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook palette + tender whimsical fae mood].`;
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE ROLLED TIME OF DAY — its sky + light + overall mood come FIRST and dominate the WHOLE image: a deep dark indigo starry night / a fiery rose-orange sunset / a cool grey rainy dusk / a pale misty dawn / bright clear day. Commit fully — for night/twilight/rain the sky is genuinely DARK and the glow comes from windows, lanterns, fireflies and luminous flora; do NOT wash it to bright day], a charming little fae village of many small white elven-castle cottages linked by archways + arched bridges, nestled in a lush enchanted forest — the cozy castle-village leads], [the cluster of little white spired dwellings + glowing windows, draped in wisteria + blossom], [little archways, arched bridges, fairy-lanterns, balconies, flowering vines], [the lush enchanted forest cradling it, warm + intimate, optional gentle stream], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook palette + tender whimsical fae mood].`;
   },
 
   FAEBOT_ELVEN_CITY: ({ slots, sharedDNA, vibeDirective }) => {
@@ -709,12 +719,12 @@ ${fae_lighting}
 Render the soft enchanted light plus drifting fairy-motes and magical glow filling the air.
 ${dramaSection}
 ━━━ COLOR + MOOD ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ COMPOSITION ━━━
 Soft, painterly, luminous, tender, storybook. The graceful white Rivendell-style elven city as the hero, but nestled warmly into a lush enchanted fairy-forest — flowering wisteria and blossom draping the spires, warm dappled fairy-light, drifting glowing motes and pixies, mossy living nature woven through the stone, tiny elves and fae creatures for scale, gentle atmospheric depth. Intimate, warm, and whimsical — a hidden fairy realm. NEVER cold/grim/epic-monumental; NEVER modern/sci-fi; NEVER a DragonBot-style epic vista.
 
-Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a graceful white Rivendell-style elven city of soaring spires + arched bridges nestled in a lush enchanted fairy-forest — the elven city leads], [the city's white spires + glowing windows, SOFTENED by draping wisteria + blossom + mossy living nature], [elven + fae detail — arches + bridges + fairy-lanterns + glowing flowering vines], [the lush enchanted fairy-forest cradling it, warm and intimate], [tiny elves + fae creatures + a cute critter for scale], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook color palette + tender whimsical fae mood].`;
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE ROLLED TIME OF DAY — its sky + light + overall mood come FIRST and dominate the WHOLE image: a deep dark indigo starry night / a fiery rose-orange sunset / a cool grey rainy dusk / a pale misty dawn / bright clear day. Commit fully — for night/twilight/rain the sky is genuinely DARK and the glow comes from windows, lanterns, fireflies and luminous flora; do NOT wash it to bright day], a graceful white Rivendell-style elven city of soaring spires + arched bridges nestled in a lush enchanted fairy-forest — the elven city leads], [the city's white spires + glowing windows, SOFTENED by draping wisteria + blossom + mossy living nature], [elven + fae detail — arches + bridges + fairy-lanterns + glowing flowering vines], [the lush enchanted fairy-forest cradling it, warm and intimate], [tiny elves + fae creatures + a cute critter for scale], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook color palette + tender whimsical fae mood].`;
   },
 
   FAEBOT_FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
@@ -757,12 +767,12 @@ ${dramaSection}
 ${fae_lighting}
 
 ━━━ COLOR + MOOD ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ COMPOSITION ━━━
 Cinematic, painterly, luminous, dreamlike. The fae subject set within the enchanted glade, magical light and ethereal detail filling the air, multi-layer depth into a glowing otherworld. Graceful and beautiful. NEVER grim/dark; NEVER mundane; NEVER sci-fi.
 
-Write ONE Flux prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [an ethereal fae/elven subject in an enchanted glade — the luminous fae vision leads], [the fae subject — grace + raiment + presence], [the enchanted magical setting with depth], [ethereal detail in the air — motes, glow, gossamer], [a small magical surprise], [light + atmosphere], [color palette + dreamlike magical mood].`;
+Write ONE Flux prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE ROLLED TIME OF DAY — its sky + light + overall mood come FIRST and dominate the WHOLE image: a deep dark indigo starry night / a fiery rose-orange sunset / a cool grey rainy dusk / a pale misty dawn / bright clear day. Commit fully — for night/twilight/rain the sky is genuinely DARK and the glow comes from windows, lanterns, fireflies and luminous flora; do NOT wash it to bright day], an ethereal fae/elven subject in an enchanted glade — the luminous fae vision leads], [the fae subject — grace + raiment + presence], [the enchanted magical setting with depth], [ethereal detail in the air — motes, glow, gossamer], [a small magical surprise], [light + atmosphere], [color palette + dreamlike magical mood].`;
   },
 
   FAEBOT_ENCHANTED_VISTA: ({ slots, sharedDNA, vibeDirective }) => {
@@ -833,6 +843,8 @@ ${composition}
 ━━━ 7. LIGHTING (time-of-day + palette) ━━━
 ${lighting}
 
+⚑ This rolled TIME OF DAY must OPEN the final prompt and DOMINATE the whole image — for night/twilight/rain the sky is genuinely DARK and the glow comes from the moon, fireflies, glowing pollen and luminous flora (plus warm windows/lanterns where dwellings stand); do NOT wash it to bright day.
+
 ━━━ 8. ATMOSPHERIC DEPTH (depth technique — god-rays / mist-layers / dappled patches) ━━━
 ${atmospheric_depth}
 
@@ -846,7 +858,7 @@ A specific tactile element near the camera — hanging vine / fern-cluster / mus
 ${wildlifeSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Edmund Dulac + Brian Froud + Greg Rutkowski painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
@@ -929,6 +941,8 @@ A specific regal accessory or held object. Painted with mythic detail.
 ━━━ 6. LIGHTING (warm, ethereal register) ━━━
 ${lighting}
 
+⚑ Let this rolled lighting / time-of-day lead the mood and color of the portrait — commit to it (a twilight, blue-hour, soft-overcast or gentle-night portrait is lovely), while keeping the subject beautifully lit and readable.
+
 ━━━ 7. WEATHER (air condition + drifting accents) ━━━
 ${weather}
 
@@ -949,7 +963,7 @@ A specific tactile element near the camera bringing 3-tier depth — hanging vin
 ${lesserFaeSection}
 
 ━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
-${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
 
 ━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
 Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.

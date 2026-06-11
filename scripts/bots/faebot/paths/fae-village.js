@@ -43,10 +43,10 @@ ${dwelling}
 
 This unified description is THE dwelling. Preserve every architectural feature, every material, every natural-feature integration mentioned. The dwelling is GROWN from the forest (bark walls, mossy thatch, vine-bound timber, woven willow, hewn-stone steps) — never modern construction.
 
-━━━ 2. LIGHTING + WEATHER + ATMOSPHERE ━━━
+━━━ 2. TIME OF DAY + LIGHTING + WEATHER (render exactly this) ━━━
 ${lighting}
 
-Weave this lighting + weather + atmospheric treatment INTO the scene. Volumetric god-rays, sparkling magical motes, painted brushwork, multi-layer atmospheric depth — all of these come from this layer.
+This rolled TIME OF DAY leads and sets the sky, light and color of the whole scene — commit fully to it. Most are warm lovely daytime; but if it rolls sunset/twilight/night/rain, the sky genuinely changes (a fiery sunset, a deep dark night lit by glowing windows + lanterns + fireflies, a grey rainy day) — do NOT default to bright day or force daytime god-rays. Weave it in with sparkling magical motes, painted brushwork and multi-layer atmospheric depth.
 
 ━━━ 3. LUSH PAINTED FOREST DETAIL (NON-NEGOTIABLE LUSHNESS) ━━━
 ${forestDetail}
