@@ -28,6 +28,7 @@ const pathBuilders = {
   'magic-unleashed': require('./paths/magic-unleashed'),
   'mythic-bestiary': require('./paths/mythic-bestiary'),
   'fae-court': require('./paths/fae-court'),
+  'dungeon-delve': require('./paths/dungeon-delve'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -116,6 +117,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // dungeon-delve: anchor the torch-lit fantasy dungeon crawl.
+    'dungeon-delve':
+      'Frank Frazetta + Brom + Larry Elmore painted-fantasy oil tradition, a TORCH-LIT FANTASY DUNGEON CRAWL — a small band of adventurers exploring a dark underground stone chamber, warm torchlight pooling around them and swallowed by deep shadow, a glinting discovery and a half-seen lurking threat, dramatic chiaroscuro light-vs-dark, tense atmospheric D&D dungeon depth (NOT modern NOT sci-fi), painterly grandeur, awe-inducing concept-art masterwork',
     // fae-court: anchor the ethereal high-fae / enchanted-glade scene.
     'fae-court':
       'Brian Froud + Alan Lee + Michael Whelan painted-fantasy oil tradition, an ETHEREAL HIGH-FAE scene — graceful elven/fae beings in gossamer raiment within a luminous enchanted glade, soft moonlight and drifting motes of magical light, delicate otherworldly beauty, dreamlike and wondrous (NOT grim NOT sci-fi), painterly atmospheric depth into a glowing fae-world, LOTR-elf + faerie visual lineage, awe-inducing concept-art masterwork',
@@ -592,6 +596,8 @@ module.exports = {
     'mythic-bestiary',
     // NEW 2026-06-10 — fae-court (ethereal fae/elven scene, Tier 2). MVP-25.
     'fae-court',
+    // NEW 2026-06-10 — dungeon-delve (torch-lit dungeon crawl, Tier 2). MVP-25.
+    'dungeon-delve',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -625,7 +631,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -687,6 +693,7 @@ module.exports = {
       'magic-unleashed',
       'mythic-bestiary',
       'fae-court',
+      'dungeon-delve',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -728,6 +735,7 @@ module.exports = {
       'magic-unleashed': 'scene',
       'mythic-bestiary': 'creature',
       'fae-court': 'scene',
+      'dungeon-delve': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

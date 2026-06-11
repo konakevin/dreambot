@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DUNGEON_DELVE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, dungeon, party, dungeon_detail, lurking_threat, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DUNGEON-DELVE scene for DragonBot — a small band of adventurers exploring torch-lit fantasy depths, the classic D&D dungeon crawl. Frank Frazetta + Brom + Larry Elmore painted-fantasy oil tradition. Tense, atmospheric, shadowed. The scene should make the viewer feel the danger and wonder of the deep.
+
+━━━ THE DELVE — ABSOLUTE FIRST RULE ━━━
+A small adventuring party explores a dark, torch-lit underground fantasy chamber. The drama comes from LIGHT vs DARK — the warm pool of torchlight around the party, swallowed by deep shadow where danger lurks. Atmospheric, tense, high-fantasy (NOT modern, NOT sci-fi).
+
+━━━ THE DUNGEON (the chamber) ━━━
+${dungeon}
+
+Render the underground space with depth and scale — stone, shadow, and the unknown receding into darkness.
+
+━━━ THE PARTY (the adventurers) ━━━
+${party}
+
+Render a SMALL band (2-4) of fantasy adventurers exploring — torch/lantern raised, weapons ready, dwarfed by the dark space around them.
+
+━━━ DUNGEON DETAIL (what they find) ━━━
+${dungeon_detail}
+
+Render this discovery — treasure, bones, runes, a tomb — catching the torchlight as the focal point of their attention.
+
+━━━ THE LURKING THREAT (the danger in the dark) ━━━
+${lurking_threat}
+
+Render the threat half-seen in the shadows — glowing eyes, a looming shape, a guardian — building dread without fully revealing it.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, tense. A warm pool of torchlight around the small party, surrounded by deep shadow and the looming dungeon, a discovery catching the light, a threat lurking at the edge of vision. Dramatic chiaroscuro, multi-layer depth into darkness. NEVER bright/flat; NEVER empty — always the tension of the deep.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a small party of adventurers with a torch exploring a dark dungeon chamber — the torch-lit delve leads], [the dungeon chamber with depth into shadow], [the party — torchlight + weapons + small against the dark], [the discovery catching the light], [a threat half-seen in the shadows], [lighting + atmosphere], [palette + tense shadowed mood]
+
+CRITICAL — render a torch-lit underground fantasy dungeon with a small adventuring party, dramatic light-vs-dark. Do NOT render a modern/sci-fi setting, a bright flat scene, or an empty room.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, fae_subject, enchanted_setting, ethereal_detail, surprise, drama } = slots;
 

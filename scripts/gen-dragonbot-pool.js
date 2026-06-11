@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DUNGEON-DELVE PATH (2026-06-10 — new, Tier 2). Adventurers
+  // in torch-lit fantasy depths — treasure, lurking monsters.
+  // ════════════════════════════════════════════════════════
+
+  dungeon_chamber: {
+    format: 'simple',
+    theme: `DRAGONBOT DUNGEON-DELVE — the underground CHAMBER the party explores. Each entry 25-45 words, with depth into shadow.
+
+VARIETY MANDATE — ~25 distinct dungeon chambers: an ancient crypt of stone sarcophagi; a vast natural cavern with stalactites; a ruined dwarven vault; a flooded sewer-tunnel; a sunken temple half-underwater; a torch-lit catacomb of bone-lined walls; a collapsed mine-shaft; a forgotten throne-room deep underground; a pillared hall swallowed by dark; a spider-webbed tunnel network; a lava-lit volcanic chamber; a frozen ice-cave dungeon; a vault of carved demonic faces. Each sets the stone space + scale + depth into darkness.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE underground dungeon chamber in 25-45 words with depth into shadow. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An ancient crypt of carved stone sarcophagi receding into darkness, dust thick on the lids, cobwebbed pillars rising into shadow, a low arched ceiling pressing close.
+2. A vast natural cavern bristling with stalactites, a black underground lake reflecting faint light, the far walls lost in impenetrable dark.
+3. A ruined dwarven vault of colossal carved pillars and broken stone, gold-veined walls catching the torchlight, the great hall swallowed by shadow beyond.`,
+  },
+
+  dungeon_party: {
+    format: 'simple',
+    theme: `DRAGONBOT DUNGEON-DELVE PARTY — the small band of adventurers (2-4). Each entry 25-45 words. A classic D&D party mix.
+
+VARIETY MANDATE — ~25 distinct party compositions: a torch-bearing warrior leading a robed mage and a hooded rogue; a dwarf fighter and an elf ranger; a lone armored knight with a lantern; a cleric raising a glowing holy symbol with two companions; a barbarian and a halfling thief; a party of three mismatched mercenaries; a wizard and his apprentice; an elf, a dwarf and a human together; a rogue scouting ahead of the group; a paladin and a bard. Each names the small band + who holds the light + their gear, small against the dark.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small adventuring party (2-4) in 25-45 words — members + light-bearer + gear. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A torch-bearing warrior in worn plate leads the way, sword drawn, a robed mage and a hooded rogue close behind him, all three small against the looming dark.
+2. A stout dwarf fighter with a raised lantern and a great axe, beside a lithe elf ranger with an arrow nocked, peering warily into the shadows ahead.
+3. A cleric holding aloft a glowing holy symbol that lights the chamber, flanked by an armored fighter and a crouching rogue.`,
+  },
+
+  dungeon_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DUNGEON-DELVE DETAIL — the discovery catching the torchlight (the focal find). Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct discoveries: an open chest spilling gold and gems; a glowing magical sword on an altar; an ancient rune-carved door; a pile of bones and rusted armor; a stone sarcophagus cracking open; a glowing crystal embedded in the wall; a treasure-hoard heaped in a corner; a mysterious glowing orb on a pedestal; an old map nailed to a beam; a fountain of strange liquid; a wall of carved warnings; a skeleton still clutching a key. Each is a focal find catching the light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dungeon discovery in 15-30 words, catching the torchlight. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An open iron-bound chest spilling a glittering cascade of gold coins and gems, catching the torchlight in the center of the chamber.
+2. A glowing rune-etched sword resting on a cracked stone altar, pulsing with faint blue light in the dark.
+3. A heavy stone sarcophagus, its lid grinding slowly aside, a pale glow seeping from the gap within.`,
+  },
+
+  dungeon_threat: {
+    format: 'simple',
+    theme: `DRAGONBOT DUNGEON-DELVE THREAT — the danger lurking in the shadows (half-seen). Each entry 15-30 words. Builds dread, not fully revealed.
+
+VARIETY MANDATE — ~25 distinct lurking threats: pairs of glowing eyes in the dark; a giant spider descending from above; a looming troll-shape in the gloom; a skeletal guardian rising; a coiled shadow-serpent; a horde of goblins creeping in; a tentacle sliding from the water; a wraith forming from mist; a stone golem stirring; a swarm of bats erupting; a hulking minotaur silhouette; a mimic disguised as a chest; a lich watching from a throne. Each is half-seen, ominous, at the edge of the light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lurking threat in 15-30 words, half-seen in shadow. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A dozen pairs of glowing eyes blink open in the blackness beyond the torchlight, low and many and closing in.
+2. A massive spider the size of a horse descends slowly on a thread from the dark ceiling above the party.
+3. A towering troll-shape looms half-seen in the gloom of the far archway, hunched and waiting.`,
+  },
+
+  dungeon_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DUNGEON-DELVE DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a small dragon stirring atop a hoard in the deep chamber; a trap springing (darts/spikes/collapsing floor); a magical glyph flaring on the floor; a previous victim's skeleton; a shaft of light from a crack above; a bridge over a bottomless chasm; a ghostly apparition; a rising flood of water; a portcullis slamming down; a statue's eyes glowing; a swarm pouring from a side-tunnel. Each adds a focal beat (does NOT replace the delve).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A small dragon stirs atop a glittering hoard deeper in the chamber, one eye cracking open.
+2. A pressure-plate clicks and a volley of darts streaks from holes in the wall.
+3. A magical glyph flares to life on the floor beneath the party's feet, glowing red.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-COURT PATH (2026-06-10 — new, Tier 2). Ethereal high-fae
   // / elven-court / enchanted-glade scene.
   // ════════════════════════════════════════════════════════

@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DUNGEON_DELVE: {
+    description:
+      'PATH-BESPOKE — DragonBot dungeon-delve path (2026-06-10, Tier 2). Adventurers exploring torch-lit fantasy depths — treasure, bones, lurking monsters, D&D dungeon-crawl. Path-bespoke: dungeon + party + dungeon_detail + lurking_threat + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['dungeon', 'party', 'dungeon_detail', 'lurking_threat'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAE_COURT: {
     description:
       'PATH-BESPOKE — DragonBot fae-court path (2026-06-10, Tier 2). Ethereal high-fae / elven-court / enchanted-glade scene — gossamer beauty, moonlight, magic. Path-bespoke: fae_subject + enchanted_setting + ethereal_detail + surprise + drama (40% gated). Universal lighting + atmosphere reused.',
