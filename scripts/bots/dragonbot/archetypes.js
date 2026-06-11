@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_BREEDS: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-breeds path (2026-06-10). A BESTIARY portrait of ONE magnificent dragon of a distinct BREED/species — the breeds signature features are the star (a monster-manual hero shot). All Western anatomy (4 legs + 2 wings), varied by element/biome/color/feature. Path-bespoke: breed + habitat + breed_pose + element_effect + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['breed', 'habitat', 'breed_pose', 'element_effect'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DRAGON_BROOD: {
     description:
       'PATH-BESPOKE — DragonBot dragon-brood path (2026-06-10). MANY Western dragons together — a wheeling flock, a cliff roost, a brood with its mother, a migration. The spectacle of NUMEROUS dragons (not one). Path-bespoke: brood_subject (the group) + setting + dominant_dragon (the leader/largest) + brood_activity + drama (40% gated). Universal lighting + atmosphere reused.',

@@ -23,6 +23,7 @@ const pathBuilders = {
   'dragon-battle': require('./paths/dragon-battle'),
   'dragon-flight': require('./paths/dragon-flight'),
   'dragon-brood': require('./paths/dragon-brood'),
+  'dragon-breeds': require('./paths/dragon-breeds'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -111,6 +112,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // dragon-breeds: anchor ONE chunky Western dragon as a breed-portrait.
+    'dragon-breeds':
+      'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a BESTIARY HERO PORTRAIT of ONE magnificent traditional Western DRAGON of a distinct breed — a CHUNKY heavy four-legged body + two massive membrane wings + horned reptilian skull + thick scaled body + normal-length tail (NOT a serpent NOT a wyvern NOT elongated), the dragon large in frame with its breed-defining scale-color, horns, and elemental signature in crisp detail, its native habitat behind with depth, monster-manual showcase, painterly atmospheric grandeur, LOTR + GoT + Elden Ring + D&D visual lineage, awe-inducing concept-art masterwork',
     // dragon-brood: anchor MANY Western dragons (a flock/roost/brood).
     'dragon-brood':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, MANY traditional Western DRAGONS spread across the scene — roughly 3-7 DISTINCT, READABLE dragons spaced apart at varied distances and heights (like birds across a sky), a few more small in the deep distance, each a separate complete dragon with clear air around it, NOT a dense overlapping swarm or merged tangle, every one with four legs + two membrane wings + horned reptilian skull + scaled body + long tail (NOT serpents NOT wyverns), a group of dragons with no single one dominating, painterly atmospheric grandeur, LOTR + GoT + Skyrim visual lineage, awe-inducing concept-art masterwork',
@@ -562,6 +566,8 @@ module.exports = {
     'dragon-flight',
     // NEW 2026-06-10 — dragon-brood (many dragons / flock / roost). MVP-25.
     'dragon-brood',
+    // NEW 2026-06-10 — dragon-breeds (bestiary breed-portraits). MVP-25.
+    'dragon-breeds',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -595,7 +601,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -652,6 +658,7 @@ module.exports = {
       'dragon-battle',
       'dragon-flight',
       'dragon-brood',
+      'dragon-breeds',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -688,6 +695,7 @@ module.exports = {
       'dragon-battle': 'creature',
       'dragon-flight': 'creature',
       'dragon-brood': 'creature',
+      'dragon-breeds': 'creature',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

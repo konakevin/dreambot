@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DRAGON-BREEDS PATH (2026-06-10 — new). A bestiary portrait
+  // of ONE dragon of a distinct breed — features are the star.
+  // ════════════════════════════════════════════════════════
+
+  dragon_breeds_breed: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BREEDS — the BREED/species of the single hero dragon + its signature features (the STAR of the portrait). Each entry 35-55 words. ALL traditional WESTERN dragons (4 legs + 2 wings + horned skull + CHUNKY body), distinguished by ELEMENT + biome + color + unique feature. NEVER serpentine/Eastern/wyvern bodies — these are all four-legged winged Western dragons of different TYPES.
+
+VARIETY MANDATE — ~25 distinct dragon BREEDS, each a four-legged Western dragon defined by element/material/biome: a fire-drake with molten-cracked obsidian scales and magma glowing between them; a frost-dragon of pale-blue ice-rimed scales and crystalline spines; a storm-dragon of slate scales crackling with caught lightning; a forest/moss-dragon overgrown with living vines, bark-scales and antler-horns; a volcanic dragon of cooling-lava hide shedding embers; a crystalline dragon of translucent gemstone scales refracting light; a shadow-dragon of void-black smoke-wreathed scales; a bone/death dragon of pale armored plates and exposed ribs; a gold-dragon of gleaming metallic scales; a swamp-dragon of mottled green algae-slick hide; a desert-dragon of sandstone scales and sun-bleached horns; a deep-sea dragon of bioluminescent fin-frilled scales; a copper/bronze dragon; a thunder-cloud dragon of misty grey hide. Each names the breed + scale-color/texture + horn shape + the ONE signature feature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE Western dragon breed (4 legs + 2 wings + horns, chunky) in 35-55 words — element + scale-color/texture + horns + signature feature. NOT serpentine. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A fire-drake breed — heavy obsidian-black scales cracked with glowing molten-orange seams, a crown of charred back-swept horns, smoke curling from its nostrils, wing-membranes lit deep red from within, embers drifting off its muscular four-legged frame.
+2. A frost-dragon breed — pale ice-blue armored scales rimed with frost, a row of translucent crystalline spines down its spine, curved white horns, breath fogging the air, a thick four-legged body dusted with snow.
+3. A forest/moss-dragon breed — bark-textured green-brown scales overgrown with living moss and tiny vines, branching antler-like horns, leaf-litter caught in its scaled hide, a sturdy four-legged body, amber eyes deep in a mossy brow.`,
+  },
+
+  dragon_breeds_habitat: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BREEDS HABITAT — the native biome behind the dragon (frames the breed, doesn't steal focus). Each entry 20-40 words, with atmospheric depth.
+
+VARIETY MANDATE — ~25 distinct habitats matched to dragon-breeds: a volcanic caldera of lava and black rock; a frozen glacier-field of blue ice; a storm-wracked mountain peak; an ancient mossy old-growth forest; a crystal cavern glowing within; a shadowed blighted moor under a blood-moon; a bone-strewn desert canyon; a golden treasure-cavern; a fetid mangrove swamp; a sun-baked dune-sea; a bioluminescent deep-sea trench; a misty thunderhead sky; a ruined overgrown temple; a windswept sea-cliff. Each sets the biome + depth + its light, behind the dragon.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE habitat biome in 20-40 words with depth, framing the dragon. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A volcanic caldera behind it, rivers of glowing lava threading black basalt, sulphurous haze rising, the jagged crater rim silhouetted against a smoke-darkened sky.
+2. A frozen glacier-field of deep-blue ice receding to white peaks, drifting snow, a pale cold sun glowing through high cloud, crevasses falling into shadow.
+3. An ancient old-growth forest of colossal moss-furred trunks, shafts of green light through the canopy, ferns and mist on the forest floor fading into deep-green gloom.`,
+  },
+
+  dragon_breeds_pose: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BREEDS POSE — the hero-portrait pose of the single dragon. Each entry 15-30 words. Showcases the breed, dynamic but composed.
+
+VARIETY MANDATE — ~25 distinct hero poses: rearing up on hind legs, wings flared wide; head lowered and roaring straight at the viewer; perched regally on a crag surveying; mid-launch, wings cracking open; coiled muscular and alert, head turned; spreading wings to full span in threat-display; prowling forward on all fours, low and predatory; head raised mid-roar to the sky; settled and watchful with one claw forward; wings half-mantled, glaring. Each defines body + head + wing position, ONE dragon.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE hero-portrait pose of a single dragon in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Rearing up on its hind legs, vast wings flared wide to fill the frame, head thrown back, chest exposed in a magnificent threat-display.
+2. Head lowered and roaring straight at the viewer, jaws wide and fanged, wings mantled, eyes blazing — a confrontational hero shot.
+3. Perched regally atop a crag, wings folded, head turned in profile surveying its domain, tail curled around the rock, utterly composed.`,
+  },
+
+  dragon_breeds_element: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BREEDS ELEMENT — the breed's signature elemental effect (breath, glow, aura, trailing effect). Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct element signatures: a torrent of orange fire from the jaws; a plume of white frost-breath; a crackle of lightning arcing across the horns; a glow of inner bioluminescence through the scales; a wreath of dark smoke; molten embers shedding from the body; a shimmer of refracted crystal light; a sickly green soul-flame; a cloud of toxic swamp-spores; a halo of golden radiance; a swirl of sand and wind; a drip of glowing acid. Each is the breed's visible elemental signature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE elemental signature effect in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A torrent of roaring orange fire erupting from its jaws, lighting the scene and casting hot light across its scales.
+2. A long plume of pale frost-breath fogging from its maw, ice-crystals glittering in the cold air around its head.
+3. Forks of blue lightning crackling across its horns and down its spine, electric light flickering over its scales.`,
+  },
+
+  dragon_breeds_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-BREEDS DRAMA — a secondary detail adding awe, fires ~40%. Each entry 12-25 words. Does NOT eclipse the dragon.
+
+VARIETY MANDATE — ~25 distinct dramas: a tiny knight/adventurer far below for scale; scattered bones of past prey; a shaft of god-rays breaking through; a distant erupting volcano; a flock of birds scattering; a ruined structure half-buried; a storm rolling in behind; a second dragon tiny on the far horizon; glowing eggs in a nest nearby; a shattered weapon at its feet; the moon huge behind it.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tiny armored knight stands frozen far below for scale, dwarfed by the dragon looming above.
+2. A shaft of golden god-rays breaks through the cloud behind, backlighting the dragon's spread wings.
+3. The scattered, picked-clean bones of past prey litter the rock at the base of its perch.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-BROOD PATH (2026-06-10 — new). MANY dragons — a
   // flock / roost / brood. The spectacle is the NUMBER.
   // ════════════════════════════════════════════════════════

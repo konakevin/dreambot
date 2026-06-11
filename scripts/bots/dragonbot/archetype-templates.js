@@ -1920,6 +1920,70 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_BREEDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, breed, habitat, breed_pose, element_effect, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point adding awe (NOT eclipsing the dragon).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a BESTIARY PORTRAIT of a single magnificent DRAGON for DragonBot — a monster-manual hero shot showcasing ONE dragon of a specific BREED, its distinctive features the star. Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition. The scene should make the viewer GASP and want to know everything about this creature.
+
+━━━ ONE MAGNIFICENT DRAGON — ABSOLUTE FIRST RULE ━━━
+This is a HERO PORTRAIT of ONE single dragon — large in the frame, its anatomy and breed-features rendered in loving, crisp detail. NOT a flock, NOT two dragons — ONE dragon, the unmistakable star of the image.
+
+━━━ TRADITIONAL WESTERN DRAGON, CHUNKY BUILD — NON-NEGOTIABLE ━━━
+A TRADITIONAL WESTERN dragon with a CHUNKY, HEAVY, MUSCULAR four-legged body — four legs + two membrane wings (always visible) + horned reptilian skull + thick scaled body + a tail of normal proportion. NEVER a long elongated/spindly/snaky/serpentine body, NEVER an Eastern wingless serpent, snake, wyrm, or wingless/two-legged wyvern. A compact, powerful four-legged winged dragon.
+
+━━━ THE BREED — the species + its signature features (the STAR) ━━━
+${breed}
+
+Render the breed's EXACT defining features in rich detail — scale-color + texture, horn shape, wing membrane, eyes, and the one signature trait that makes this breed unique. This is what the portrait is showcasing.
+
+━━━ THE BREED'S POSE ━━━
+${breed_pose}
+
+━━━ THE ELEMENT / SIGNATURE EFFECT ━━━
+${element_effect}
+
+Render the breed's elemental signature visibly (breath, glow, aura, or trailing effect) — a key part of its identity.
+
+━━━ THE HABITAT (the breed's native biome, behind it) ━━━
+${habitat}
+
+Render the habitat with atmospheric depth behind the dragon — it frames and identifies the breed without stealing focus.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood. It must NEVER change the dragon's anatomy or proportions — IGNORE any instruction to elongate, stretch, warp, or make the dragon spindly/serpentine. The dragon stays a chunky four-legged Western dragon.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, reverent. ONE magnificent dragon fills the frame as a hero portrait, its breed-features and elemental signature crisp and detailed, the habitat receding behind it with depth. A monster-manual / trading-card hero shot. NEVER a flock; NEVER a tiny distant dragon; NEVER an elongated serpent.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — ONE magnificent Western dragon of the BREED, DOING THE POSE, in its habitat — the single hero dragon leads], [the breed's exact features — scale-color + texture + horns + wings + signature trait], [the pose], [the elemental signature effect], [the habitat behind with depth], [lighting + atmosphere], [palette + reverent epic mood]
+
+CRITICAL — render ONE chunky four-legged Western dragon (4 legs + 2 wings + horns, NOT a serpent/wyvern, NOT elongated) as a detailed hero portrait. Do NOT render a flock or a tiny distant dragon.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   DRAGON_BROOD: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, brood_subject, setting, dominant_dragon, brood_activity, drama } = slots;
 
