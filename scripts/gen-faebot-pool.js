@@ -80,6 +80,95 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // FAE-WILDS-VILLAGE PATH (2026-06-10). Elven castle-village
+  // BUILT AROUND a wild nature feature + creative connectors.
+  // ════════════════════════════════════════════════════════
+
+  faebot_wilds_village_feature: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE — the dramatic NATURE LANDSCAPE FEATURE the village is built around (the organizing stage). MANDATORY: every entry centers on a strong natural feature. Each entry 25-45 words, with depth + soft beauty.
+
+VARIETY MANDATE — ~25 distinct dramatic nature features: a deep mossy CANYON / gorge; a tumbling multi-tier WATERFALL; a glowing winding STREAM with rapids and pools; a cluster of COLOSSAL MOSSY BOULDERS; a sheer mossy CLIFF-FACE; a grove of COLOSSAL ANCIENT TREES; a rocky river-ISLAND; a misty RAVINE with hanging gardens; a SEA-CLIFF over turquoise water; a tumbled ROCK-SCREE slope; a CAVE-MOUTH / grotto; a chain of rocky ISLETS in a lake; terraced HOT-SPRING pools; a fern-choked rocky CREEK-BED; a forested rocky OUTCROP / pinnacle; a deep glowing SINKHOLE garden. Each names the feature + scale + soft enchanted beauty. (Streams/water optional overall — rocks, canyons, cliffs, trees all count.)`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dramatic natural landscape feature (canyon/waterfall/stream/rocks/cliffs/trees/etc.) in 25-45 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A deep mossy canyon split by a glowing turquoise stream far below, the green-furred walls dropping in ferny ledges, soft mist rising between the cliffs.
+2. A tumbling three-tier waterfall pouring down a fern-draped rock-face into a still pool, spray drifting in the dappled light, mossy boulders strewn at its foot.
+3. A cluster of colossal moss-furred boulders bigger than houses, leaning together to form sheltered hollows and gaps, wildflowers and ferns sprouting from every crevice.`,
+  },
+
+  faebot_wilds_village_built: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE BUILT — HOW the little white elven castle-cottages are built around / into the nature feature. Each entry 25-45 words. Many small charming dwellings adapting to the terrain.
+
+VARIETY MANDATE — ~25 distinct ways the village is built into the land: little white spired cottages clinging to the canyon walls in tiers; cottages perched on ledges beside the waterfall; dwellings nestled among and built into the giant boulders; houses cantilevered out over the stream; cottages tucked into hollows in the cliff-face; dwellings built into and around the colossal tree-trunks; little towers rising from the rocky islets; houses spilling down the ravine sides; cottages straddling the creek on stilts; dwellings carved into the rock pinnacle. Each: many small white elven spired cottages CLINGING TO / SPANNING / NESTLED INTO the feature, with glowing windows, at cozy scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE way the white elven cottages are built around/into the feature in 25-45 words — many small dwellings adapting to terrain, glowing windows, cozy scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Little white spired cottages cling to the canyon walls in stacked tiers, their balconies cantilevered over the drop, glowing windows dotting the green-furred cliffs from rim to river.
+2. Charming white turreted dwellings perch on the wet ledges beside the waterfall, half-wreathed in its spray and rainbows, warm windows glowing through the mist.
+3. Cozy white cottages are nestled into and built among the colossal mossy boulders, doorways set into the rock, little spires rising from the gaps between the stones.`,
+  },
+
+  faebot_wilds_village_connectors: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE CONNECTORS — the CREATIVE ways the village parts join across the terrain (a key charming feature). Each entry 15-35 words. Mix MULTIPLE connector types per entry.
+
+VARIETY MANDATE — ~25 distinct creative connector combos drawing from: graceful arched stone bridges; ivy-draped stone archways; swaying rope bridges; rope-and-plank walkways; swinging vines; rope swings; rope-and-pulley lift-baskets; hanging gondola-baskets on lines; ladders up the rock; spiral stairs carved in stone; woven-branch walkways; stepping-stones across the water; little ferries / rope-pulled boats; ziplines; suspended catwalks; flower-draped footbridges. Each entry names 2-4 DIFFERENT creative connectors joining the village parts across the canyon/cliffs/stream/rocks.`,
+    touchpoints: [],
+    instructions: `Each entry names 2-4 DIFFERENT creative connectors (bridges/arches/ropes/swings/ladders/walkways/lifts) joining the village across the terrain, in 15-35 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Swaying rope bridges and graceful arched stone spans cross the gorge between the cottages, while rope-and-pulley lift-baskets carry baskets up the canyon wall.
+2. Ivy-draped stone archways link the lower houses, ladders and carved rock-stairs climb to the upper dwellings, and a single long rope bridge leaps the stream.
+3. Woven-branch walkways wind between the boulder-cottages, swinging vines and a little rope swing bridge the gaps, stepping-stones crossing the shallow pool below.`,
+  },
+
+  faebot_wilds_village_inhabitants: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE INHABITANTS — tiny elves + fae + cute critters in village life across the terrain. Each entry 12-28 words. Render figures fully and modestly clothed in flowing robes.
+
+VARIETY MANDATE — ~25 distinct inhabitants: an elf crossing a swaying rope bridge while glow-sprites drift past; a child on a rope swing over the stream; an elf hauling a lift-basket up the cliff; two elves chatting on a ledge as pixies flit; an elf fishing from a cantilevered balcony; a fox picking along the rocks; a hedgehog by a glowing door; an elf-maiden on a stepping-stone with a tiny fae on her hand; a heron in the stream below; an elf climbing a ladder; glow-moths drifting through a gorge; a deer drinking at the pool. Each is small elf figure(s) + fae creatures + a cute critter in terrain village life.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE set of tiny elf + fae + critter inhabitants in terrain village life, 12-28 words, fully clothed. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An elf crosses a swaying rope bridge over the gorge while a few glowing sprites drift past, a fox watching from the mossy rocks below.
+2. A child swings on a rope swing out over the glowing stream, laughing, as tiny pixies flit around the fairy-lanterns.
+3. An elf hauls a rope-and-pulley lift-basket up the canyon wall while a heron stands in the shallows far below.`,
+  },
+
+  faebot_wilds_village_lighting: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE LIGHTING — the WARM, SOFT, dappled fairy-light + atmosphere + glow (combined). Each entry 15-30 words. Tender, cozy, magical — favor WARM golden/honey/rosy dappled light over cold blue. Drifting glowing motes throughout.
+
+VARIETY MANDATE — ~25 warm soft moods (mostly warm, a few gentle cool): warm golden-hour light dappling through the canopy with drifting fairy-motes; honey-gold afternoon glow on the cliffs; rosy blossom-tinted dawn with floating pollen-light; cozy amber fae-lantern warmth at dusk; warm dappled green-gold light through the gorge with glowing motes; gentle candlelit-window glow against soft twilight; a tender pink-and-gold sunset on the rocks; warm misty morning with golden haze in the canyon; soft violet-and-gold twilight with luminous pixies; firefly-lit blue evening with warm glowing windows; rainbow-misted waterfall light. Each: a SOFT WARM light source + cozy air + drifting magical glow.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE warm soft dappled fairy-light + glow mood in 15-30 words (favor warm golden/honey/rosy). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Warm golden-hour light dapples down into the mossy gorge, drifting fairy-motes glowing in the honeyed air, the cottage windows aglow amber.
+2. Soft amber fae-lantern warmth lines the rope bridges at dusk, luminous pixies drifting in the cozy violet-and-gold air above the stream.
+3. A tender rosy-and-gold dawn washes the cliffs and spires, floating glowing pollen drifting through the soft canyon mist.`,
+  },
+
+  faebot_wilds_village_drama: {
+    format: 'simple',
+    theme: `FAEBOT FAE-WILDS-VILLAGE DRAMA — a gentle, soft fairy-tale focal point, fires ~40%. Each entry 12-25 words. TENDER and whimsical (NO dragons, NO epic creatures).
+
+VARIETY MANDATE — ~25 gentle fae beats: a white fawn on a rocky ledge; a flight of white swans on the stream; a pure-white unicorn at the water's edge; a fall of cherry-blossom petals down the gorge; a procession of soft fae-lights along a rope bridge; glowing pixies swirling up a waterfall; a great gentle low moon over the canyon rim; a fox or otter on the rocks; a little rope-pulled boat with a lantern; glow-moths rising in a soft cloud; a rainbow in the waterfall-mist; a white owl gliding the gorge. Each adds a tender fairy-tale beat (NO dragons; does NOT replace the village).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle, soft fairy-tale drama detail in 12-25 words (NO dragons). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A pure-white fawn steps onto a mossy ledge above the stream, unafraid.
+2. A soft swirl of glowing pixies rises alongside the waterfall like living light.
+3. A slow fall of cherry-blossom petals drifts down through the gorge, catching the warm light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-CASTLE-VILLAGE PATH (2026-06-10). HYBRID of elven-city
   // + fae-village — an ethereal castle-like fae village.
   // ════════════════════════════════════════════════════════

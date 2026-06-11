@@ -517,6 +517,56 @@ Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dw
 Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_WILDS_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ETHEREAL FAE VILLAGE BUILT INTO WILD NATURE in FaeBot's SOFT painted-fairy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a charming little village of white elven-castle cottages built around and into a dramatic natural landscape. Rivendell-style elven architecture at cozy village scale, fused with wild nature, soft and warm and storybook. The scene should make the viewer marvel at how the fae built into the land.
+
+━━━ THE VILLAGE IS BUILT AROUND A WILD NATURE FEATURE — ABSOLUTE FIRST RULE ━━━
+A dramatic NATURAL LANDSCAPE FEATURE (a stream, canyon, waterfall, giant rocks, cliffs, ancient trees) is the ORGANIZING ELEMENT — the little white elven castle-cottages CLING TO, SPAN, NESTLE INTO and grow around it. The terrain leads; the village adapts to it. Because of the dramatic terrain, different parts of the village are joined by CREATIVE CONNECTORS — arched bridges, stone archways, rope bridges, rope-and-plank walkways, swinging vines, ladders, ziplines, hanging lift-baskets, stepping stones, carved rock-stairs. Soften everything with FaeBot's fairy vibe: warm dappled fairy-light, flowering wisteria and blossom, glowing windows and fairy-lanterns, drifting motes and pixies, lush mossy nature. Tender, warm, whimsical, super pretty — NOT cold, NOT epic, NOT one monumental castle.
+
+━━━ THE NATURE FEATURE (the landscape the village is built around) ━━━
+${landscape_feature}
+
+Render this dramatic natural feature prominently — it is the stage the whole village is built around.
+
+━━━ HOW THE VILLAGE IS BUILT INTO IT ━━━
+${village_built}
+
+Render the little white elven castle-cottages clinging to / spanning / nestled into the feature — many small charming dwellings adapting to the terrain.
+
+━━━ THE CREATIVE CONNECTORS (how the village parts join) ━━━
+${connectors}
+
+Render the creative ways the village parts connect across the terrain — bridges, arches, ropes, swings, ladders, walkways, lifts — a key charming feature.
+
+━━━ THE INHABITANTS (tiny elves + fae + critters, village life) ━━━
+${inhabitants}
+
+Small graceful elves, tiny fae creatures and cute critters give warmth, life and scale.
+
+━━━ LIGHT + ATMOSPHERE + FAE GLOW ━━━
+${fae_lighting}
+
+Render the warm soft dappled fairy-light plus drifting glowing motes and pixies filling the air.
+${dramaSection}
+━━━ COLOR + MOOD ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Soft, painterly, luminous, tender, storybook. A charming little white elven castle-village built around a dramatic wild nature feature (stream/canyon/waterfall/rocks/cliffs/trees), the parts joined by creative bridges/arches/ropes/swings/walkways, warm dappled light and drifting fae-motes, flowering vines and blossom, lush mossy nature, tiny elves + fae + a cute critter for life and scale. Warm, whimsical, super pretty. NEVER one monumental castle; NEVER cold/grim/epic; NEVER modern/sci-fi.
+
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a charming little white elven castle-village built around a dramatic wild nature feature (the feature + village lead together)], [the dramatic nature feature — stream/canyon/waterfall/rocks/cliffs/trees], [the little white spired cottages clinging to / spanning / nestled into it], [creative connectors — arched bridges, stone arches, rope bridges, swinging vines, ladders, walkways, lift-baskets], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies + flowering vines], [warm storybook palette + tender whimsical fae mood].`;
+  },
+
   FAEBOT_CASTLE_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
     const { village_layout, village_detail, setting, inhabitants, fae_lighting, drama } = slots;
 

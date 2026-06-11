@@ -32,6 +32,14 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── fae-wilds-village path (2026-06-10, village built around a nature feature). MVP-25. ───
+  FAEBOT_WILDS_VILLAGE_FEATURE: load('faebot_wilds_village_feature'),
+  FAEBOT_WILDS_VILLAGE_BUILT: load('faebot_wilds_village_built'),
+  FAEBOT_WILDS_VILLAGE_CONNECTORS: load('faebot_wilds_village_connectors'),
+  FAEBOT_WILDS_VILLAGE_INHABITANTS: load('faebot_wilds_village_inhabitants'),
+  FAEBOT_WILDS_VILLAGE_LIGHTING: load('faebot_wilds_village_lighting'),
+  FAEBOT_WILDS_VILLAGE_DRAMA: load('faebot_wilds_village_drama'),
+
   // ─── fae-castle-village path (2026-06-10, hybrid of elven-city + fae-village). MVP-25. ───
   FAEBOT_CASTLE_VILLAGE_LAYOUT: load('faebot_castle_village_layout'),
   FAEBOT_CASTLE_VILLAGE_DETAIL: load('faebot_castle_village_detail'),

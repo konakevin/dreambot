@@ -135,6 +135,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_WILDS_VILLAGE: {
+    description:
+      'PATH-BESPOKE — FaeBot fae-wilds-village (2026-06-10). Sibling of fae-castle-village, but the village is BUILT AROUND a mandated dramatic NATURE LANDSCAPE FEATURE — a stream / canyon / waterfall / giant rocks / cliffs / ancient trees. The landscape leads; the elven castle-cottages cling to / span / nestle into it, with parts joined by CREATIVE CONNECTORS (arched bridges, stone arches, rope bridges, swinging vines, ladders, ziplines, hanging lift-baskets, walkways). Soft FaeBot fairy register. Self-contained: landscape_feature + village_built + connectors + inhabitants + fae_lighting + drama (40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['landscape_feature', 'village_built', 'connectors', 'inhabitants', 'fae_lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_CASTLE_VILLAGE: {
     description:
       'PATH-BESPOKE — FaeBot fae-castle-village (2026-06-10). A HYBRID of elven-city (white elven architecture + soft fairy touches) and fae-village (cozy village layout) — an ethereal, castle-like FAE VILLAGE: a cluster of little white elven spired cottages/towers linked by archways + bridges, nestled in lush forest, optional stream, super pretty + intimate. Self-contained: village_layout + village_detail + setting + inhabitants + fae_lighting + drama (40%-gated).',
