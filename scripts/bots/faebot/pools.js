@@ -32,6 +32,14 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── fae-castle-village path (2026-06-10, hybrid of elven-city + fae-village). MVP-25. ───
+  FAEBOT_CASTLE_VILLAGE_LAYOUT: load('faebot_castle_village_layout'),
+  FAEBOT_CASTLE_VILLAGE_DETAIL: load('faebot_castle_village_detail'),
+  FAEBOT_CASTLE_VILLAGE_SETTING: load('faebot_castle_village_setting'),
+  FAEBOT_CASTLE_VILLAGE_INHABITANTS: load('faebot_castle_village_inhabitants'),
+  FAEBOT_CASTLE_VILLAGE_LIGHTING: load('faebot_castle_village_lighting'),
+  FAEBOT_CASTLE_VILLAGE_DRAMA: load('faebot_castle_village_drama'),
+
   // ─── elven-city path (2026-06-10, recreated from DragonBot, fae touch). MVP-25. ───
   FAEBOT_ELVEN_CITY_CITY: load('faebot_elven_city_city'),
   FAEBOT_ELVEN_CITY_DETAIL: load('faebot_elven_city_detail'),

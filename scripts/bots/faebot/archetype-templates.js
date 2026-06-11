@@ -517,6 +517,56 @@ Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dw
 Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_CASTLE_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { village_layout, village_detail, setting, inhabitants, fae_lighting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ETHEREAL CASTLE-LIKE FAE VILLAGE scene in FaeBot's SOFT painted-fairy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a charming little village of white elven-castle cottages nestled in a lush enchanted forest. Rivendell-style elven architecture at COZY VILLAGE scale, soft and warm and storybook. The scene should feel like a hidden fairy village you'd love to live in.
+
+━━━ A CASTLE-LIKE FAE VILLAGE — ABSOLUTE FIRST RULE ━━━
+This is a VILLAGE, not one grand city — a cluster of MANY little white elven-style dwellings (charming small spired cottages, turreted houses, towers) with the same beautiful Rivendell architecture as an elven city but at INTIMATE, cozy, lived-in scale, linked by little stone ARCHWAYS and arched BRIDGES, winding paths, with a gentle stream optional. Soften it with FaeBot's fairy vibe: warm dappled fairy-light, flowering wisteria and blossom draping the eaves, glowing windows and fairy-lanterns, drifting motes and pixies, mossy living nature woven through, lush forest all around. Tender, warm, whimsical, super pretty — NOT cold, NOT one monumental castle, NOT epic.
+
+━━━ THE VILLAGE LAYOUT (the castle-cottage cluster) ━━━
+${village_layout}
+
+Render a charming cluster of MANY little white elven-castle dwellings at cozy village scale, linked by archways and arched bridges — the layout is the hero.
+
+━━━ VILLAGE DETAIL (the elven craft + fae magic) ━━━
+${village_detail}
+
+Render the little archways, arched bridges, glowing windows, balconies, flowering vines, fairy-lanterns and mushroom-tucked corners — charming and cozy.
+
+━━━ THE ENCHANTED SETTING ━━━
+${setting}
+
+Render the lush enchanted fairy-forest cradling the village with warm intimate depth.
+
+━━━ THE INHABITANTS (tiny elves + fae + critters, village life) ━━━
+${inhabitants}
+
+Small graceful elves, tiny fae creatures and cute critters going about village life give warmth, life and scale.
+
+━━━ LIGHT + ATMOSPHERE + FAE GLOW ━━━
+${fae_lighting}
+
+Render the warm soft dappled fairy-light plus drifting glowing motes and pixies filling the air.
+${dramaSection}
+━━━ COLOR + MOOD ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Soft, painterly, luminous, tender, storybook. A charming cluster of little white elven-castle cottages linked by archways and arched bridges, nestled cozily in a lush enchanted fairy-forest, warm dappled light and drifting fae-motes, flowering vines and blossom, tiny elves + fae + a cute critter for life and scale, gentle intimate depth. Warm, whimsical, super pretty — a hidden fairy village. NEVER one monumental castle; NEVER cold/grim/epic; NEVER modern/sci-fi.
+
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a charming little fae village of many small white elven-castle cottages linked by archways + arched bridges, nestled in a lush enchanted forest — the cozy castle-village leads], [the cluster of little white spired dwellings + glowing windows, draped in wisteria + blossom], [little archways, arched bridges, fairy-lanterns, balconies, flowering vines], [the lush enchanted forest cradling it, warm + intimate, optional gentle stream], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook palette + tender whimsical fae mood].`;
+  },
+
   FAEBOT_ELVEN_CITY: ({ slots, sharedDNA, vibeDirective }) => {
     const { elven_city, elven_detail, city_setting, fae_inhabitants, fae_lighting, drama } = slots;
 
@@ -528,15 +578,15 @@ ${drama}
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing an ETHEREAL ELVEN CITY scene in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a graceful white elven realm of soaring spires and living light, given an enchanted FAE touch. Rivendell / Lothlórien beauty crossed with FaeBot's glowing fairy-forest magic. The scene should make the viewer long to walk its bridges.
+    return `You are a fantasy concept-art painter writing an ETHEREAL ELVEN CITY scene in FaeBot's SOFT painted-fairy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a graceful white Rivendell-style elven city, but rendered with FaeBot's tender, warm, dreamy fairy-tale softness. The scene should feel like a hidden fairy realm you've stumbled upon, not a grand epic fortress.
 
-━━━ ETHEREAL ELVEN BEAUTY + FAE MAGIC — ABSOLUTE FIRST RULE ━━━
-A graceful elven city of flowing, organic, luminous architecture — slender white spires, arched bridges, glowing windows — in harmony with an enchanted fairy-forest, alive with drifting magical light. Elegant, serene, and luminous, with a FAE sprinkle of glowing motes, fairy-lanterns and tiny sprites. Deep high-fantasy (NOT modern, NOT sci-fi, NOT brutalist). Soft enchanted light and natural beauty.
+━━━ KEEP THE RIVENDELL ELVEN CITY — BUT SOFTEN IT INTO A FAIRY REALM — ABSOLUTE FIRST RULE ━━━
+The white elven city of slender spires + arched bridges + glowing windows IS the hero — keep that Rivendell beauty. BUT soften it with FaeBot's fairy vibe: bathe it in WARM, soft, dappled fairy-light (not cold epic blue); WEAVE living nature THROUGH the architecture — flowering wisteria and glowing vines draping the towers, mossy stone, blossoming trees nestled among the spires; fill the air with drifting fairy-motes, glowing pixies and soft pollen-light; make the scale INTIMATE and tender rather than vast and monumental. A gentle, storybook, enchanted fairy-tale feeling — NOT a grim epic stone fortress, NOT cold, NOT a DragonBot-style epic vista. Tender, warm, whimsical, luminous.
 
 ━━━ THE ELVEN CITY ━━━
 ${elven_city}
 
-Render the white elven city with grace and grandeur — soaring slender spires, arched bridges and glowing windows, flowing architecture in harmony with the landscape, dominating the scene.
+Render the white elven city — soaring slender spires, arched bridges, glowing windows — as the graceful hero, BUT softened: draped in flowering vines and blossom, nestled tenderly into the enchanted forest, warm and storybook rather than cold and monumental.
 
 ━━━ ELVEN + FAE DETAIL (the craft and magic of the place) ━━━
 ${elven_detail}
@@ -562,9 +612,9 @@ ${dramaSection}
 ${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
-Cinematic, painterly, luminous, serene. The graceful white elven city flowing through its enchanted fairy-forest setting, soft light and drifting fae-motes, delicate architecture and glowing trees, tiny elves and fae for scale, multi-layer atmospheric depth. Elegant and beautiful. NEVER modern/sci-fi/brutalist; NEVER grim/empty.
+Soft, painterly, luminous, tender, storybook. The graceful white Rivendell-style elven city as the hero, but nestled warmly into a lush enchanted fairy-forest — flowering wisteria and blossom draping the spires, warm dappled fairy-light, drifting glowing motes and pixies, mossy living nature woven through the stone, tiny elves and fae creatures for scale, gentle atmospheric depth. Intimate, warm, and whimsical — a hidden fairy realm. NEVER cold/grim/epic-monumental; NEVER modern/sci-fi; NEVER a DragonBot-style epic vista.
 
-Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a graceful white elven city of soaring spires + arched bridges in an enchanted fairy-forest — the elven city leads], [the city's flowing white architecture + glowing windows + grandeur], [elven + fae detail — arches + bridges + fairy-lanterns + glowing vines], [the enchanted fairy-forest setting with depth], [tiny elves + fae creatures for scale], [soft light + drifting fae-motes + glow], [color palette + serene luminous fae mood].`;
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a graceful white Rivendell-style elven city of soaring spires + arched bridges nestled in a lush enchanted fairy-forest — the elven city leads], [the city's white spires + glowing windows, SOFTENED by draping wisteria + blossom + mossy living nature], [elven + fae detail — arches + bridges + fairy-lanterns + glowing flowering vines], [the lush enchanted fairy-forest cradling it, warm and intimate], [tiny elves + fae creatures + a cute critter for scale], [warm soft dappled fairy-light + drifting glowing motes + pixies], [warm storybook color palette + tender whimsical fae mood].`;
   },
 
   FAEBOT_FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {

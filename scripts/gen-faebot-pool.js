@@ -80,6 +80,95 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // FAE-CASTLE-VILLAGE PATH (2026-06-10). HYBRID of elven-city
+  // + fae-village — an ethereal castle-like fae village.
+  // ════════════════════════════════════════════════════════
+
+  faebot_castle_village_layout: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE — the castle-VILLAGE LAYOUT (the hero): a charming cluster of MANY little white elven-castle dwellings at cozy village scale, linked by archways + arched bridges. Each entry 30-55 words. Rivendell architecture but VILLAGE-scale + intimate, NOT one grand castle.
+
+VARIETY MANDATE — ~25 distinct cozy castle-village layouts: a cluster of little white spired cottages winding up a mossy hillside, linked by arched stone bridges; a ring of turreted white houses around a central glade and fountain; a riverside village of little white towers joined by arched footbridges over a gentle stream; a village of small spired dwellings tucked among giant tree-roots; a stack of cozy white castle-cottages cascading down to a pond; a hamlet of white turreted houses on little islands linked by bridges; a village winding along a forest ravine with archways between the houses; a cluster nestled in a flowering hollow; a tiered village of small white towers and stairs up a glen. Each: MANY little white elven-style dwellings (small spired cottages/turreted houses) + archways + arched bridges, cozy village scale, intimate.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cozy castle-village layout in 30-55 words — a cluster of MANY little white elven spired cottages + archways + arched bridges at intimate village scale (NOT one grand castle). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A charming cluster of little white spired cottages winding up a mossy hillside, linked by small arched stone bridges and ivy-draped archways, glowing windows dotting the tiers, tucked among ancient trees.
+2. A cozy riverside village of little white turreted houses joined by graceful arched footbridges over a gentle glowing stream, flower-boxes and lanterns at every door.
+3. A hamlet of small white elven cottages perched on little mossy islands, linked by delicate arched bridges, glowing windows reflected in the calm water between them.`,
+  },
+
+  faebot_castle_village_detail: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE DETAIL — the charming elven craft + fae magic of the village. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: little ivy-draped stone archways; arched footbridges with leaf-carved railings; warm glowing leaded windows; flower-boxes and hanging baskets; wisteria cascading over the eaves; fairy-lanterns strung between cottages; mushroom-tucked doorsteps; spiral stairs and tiny balconies; glowing vines climbing the turrets; cobbled paths winding between houses; little waterwheels; mossy roofs and chimneys with curling smoke; wind-chimes of glass. Each is a charming cozy village detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE charming village detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Little ivy-draped stone archways connect the cottages, their keystones carved with leaf-and-vine patterns, fairy-lanterns hanging beneath.
+2. Warm glowing leaded windows and flower-boxes spilling blossoms line the little white houses, cobbled paths winding between them.
+3. Cascading wisteria drapes the eaves and turrets, and tiny balconies with potted ferns overlook the arched bridges below.`,
+  },
+
+  faebot_castle_village_setting: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE SETTING — the lush enchanted fairy-forest cradling the village (warm + intimate). Each entry 20-40 words, with soft depth. Optional gentle stream (NOT mandatory).
+
+VARIETY MANDATE — ~25 distinct lush intimate settings: a colossal moss-draped old-growth fairy-forest closing warmly around the village; flowering trees and ferns framing the cottages; a gentle glowing stream winding through; a soft mossy hollow strewn with wildflowers; a sunlit blossom-filled clearing; a wildflower meadow at the village edge; warm dappled woods of giant wisteria-draped trees; a fern-and-mushroom glade; a cozy ravine with hanging flower-gardens; a spring wood thick with bluebells; a forested hillside under dappled gold light. Each cradles the village in LUSH, CLOSE, warm enchanted forest + soft depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lush, intimate, warm enchanted fairy-forest cradling the village in 20-40 words (stream optional). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal moss-draped old-growth fairy-forest closes warmly around the cottages, blossoming boughs and ferns framing the rooftops, dappled gold light filtering through.
+2. A sunlit blossom-filled clearing holds the little village, bluebells and toadstools carpeting the mossy floor, ancient trees rising softly all around.
+3. Flowering wisteria-draped trees and ferny banks cradle the cottages, a gentle glowing stream winding between the houses, the warm woods glowing beyond.`,
+  },
+
+  faebot_castle_village_inhabitants: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE INHABITANTS — tiny elves + fae + cute critters in village life. Each entry 12-28 words. Render figures fully and modestly clothed in flowing robes.
+
+VARIETY MANDATE — ~25 distinct village-life inhabitants: a robed elf crossing an arched bridge while glow-sprites drift past; two elves chatting at a cottage door as pixies flit; an elf tending a window flower-box; a little market stall under a glowing lantern; a child chasing fairy-motes down a path; a fox or rabbit on a doorstep; a hedgehog curled by a glowing window; an elf-maiden with a tiny fae on her hand; a cat on a mossy roof; an elf rowing a tiny boat; glow-moths drifting between the cottages; a deer at the village edge. Each is small elf figure(s) + fae creatures + a cute critter in cozy village life.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE set of tiny elf + fae + critter village-life inhabitants in 12-28 words, fully clothed. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A robed elf crosses a little arched bridge while a few glowing sprites drift past, a fox watching from a mossy doorstep nearby.
+2. Two elves chat at a glowing cottage door as tiny pixies flit around the fairy-lanterns above them.
+3. A small hedgehog curls asleep beneath a glowing window, and a child chases drifting fairy-motes down the cobbled path.`,
+  },
+
+  faebot_castle_village_lighting: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE LIGHTING — the WARM, SOFT, dappled fairy-light + atmosphere + glow (combined). Each entry 15-30 words. Tender, cozy, magical — favor WARM golden/honey/rosy dappled light over cold blue. Drifting glowing motes throughout.
+
+VARIETY MANDATE — ~25 warm soft moods (mostly warm, a few gentle cool): warm golden-hour light dappling through the canopy with drifting fairy-motes; honey-gold afternoon glow between blossoming trees; rosy blossom-tinted dawn with floating pollen-light; cozy amber fae-lantern warmth at dusk; warm dappled green-gold forest light and glowing motes; gentle candlelit-window glow against soft twilight; a tender pink-and-gold sunset; warm misty morning with golden haze; soft violet-and-gold twilight with luminous pixies; firefly-lit blue evening with warm glowing windows; pearly dawn with drifting pollen. Each: a SOFT WARM light source + cozy air + drifting magical glow.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE warm soft dappled fairy-light + glow mood in 15-30 words (favor warm golden/honey/rosy). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Warm golden-hour light dapples through the blossoming canopy onto the little white cottages, drifting fairy-motes glowing in the honeyed air, windows aglow amber.
+2. Cozy amber fae-lantern warmth lines the arched bridges at dusk, the windows glowing, luminous pixies drifting in the soft violet-and-gold air.
+3. A tender rosy-and-gold dawn washes the rooftops, floating glowing pollen drifting through gentle mist, everything soft and warm.`,
+  },
+
+  faebot_castle_village_drama: {
+    format: 'simple',
+    theme: `FAEBOT FAE-CASTLE-VILLAGE DRAMA — a gentle, soft fairy-tale focal point, fires ~40%. Each entry 12-25 words. TENDER and whimsical (NO dragons, NO epic creatures).
+
+VARIETY MANDATE — ~25 gentle fae beats: a white fawn stepping onto a path; a flight of white swans on the stream; a pure-white unicorn at the village edge; a fall of cherry-blossom petals across the bridges; a procession of soft fae-lights along a path; glowing fireflies/pixies swirling around a turret; a great gentle low moon behind the rooftops; a fox or rabbit on a doorstep; a tiny boat with a lantern on the stream; glow-moths rising in a soft cloud; a rainbow in the mist; a white owl gliding between cottages. Each adds a tender fairy-tale beat (NO dragons; does NOT replace the village).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle, soft fairy-tale drama detail in 12-25 words (NO dragons). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A pure-white fawn steps delicately onto the cobbled path between the cottages, unafraid.
+2. A slow fall of cherry-blossom petals drifts across the little arched bridges, catching the warm light.
+3. A soft swirl of glowing pixies and fireflies winds up around a turret like living light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // ELVEN-CITY PATH (2026-06-10 — recreated from DragonBot's
   // elven-city, Kevin hearted those white ethereal castles).
   // White elven spired cities with a FAE touch.
@@ -87,16 +176,16 @@ const POOL_RECIPES = {
 
   faebot_elven_city_city: {
     format: 'simple',
-    theme: `FAEBOT ELVEN-CITY — the graceful WHITE ELVEN CITY itself (the hero). Each entry 30-55 words, flowing + luminous + grand. Soaring slender white spires, arched bridges, glowing windows — Rivendell/Lothlorien beauty.
+    theme: `FAEBOT ELVEN-CITY — the graceful WHITE ELVEN CITY itself (the hero), KEEP the Rivendell look but SOFTEN it into a tender fairy realm. Each entry 30-55 words. Soaring slender white spires + arched bridges + glowing windows (Rivendell/Lothlorien), BUT draped in flowering wisteria + blossom + glowing vines + soft moss, nestled warmly into the enchanted forest, intimate and storybook rather than cold and monumental.
 
-VARIETY MANDATE — ~25 distinct white elven cities: a cluster of soaring slender white spires linked by graceful arched bridges over a turquoise river; a treetop city of pale curved platforms woven through colossal ancient trees; a tiered cliffside city of white terraces cascading to a lake; a city of white towers beside a thundering waterfall; a crystalline elven city refracting light over a mirror-lake; a city built into and around a great living tree; a snow-dusted winter elven city under spires of ice-white stone; a lakeside city of white domes and arching bridges; a city of golden-autumn-canopied white towers; a misty mountain-vale city of pale spires; a coastal elven harbor of curved white quays. Each names the white elven city + soaring spires + arched bridges + glowing windows + grandeur.`,
+VARIETY MANDATE — ~25 distinct softened white elven cities: slender white spires draped in cascading wisteria, linked by mossy arched bridges over a gentle glowing stream; a treetop white city woven through colossal blossoming trees; tiered white terraces spilling with flowering vines down to a soft lake; pale towers nestled beside a gentle waterfall and ferny pools; a white city half-grown into ancient flowering trees; a cherry-blossom-canopied city of warm-lit white spires; a cozy white village-city of domes and bridges tucked in a mossy glade; a golden-autumn elven city of vine-wrapped towers; a misty spring-vale city of pale spires among blooming meadows. Each: white spires + arched bridges + glowing warm windows, SOFTENED by draping blossom/wisteria/moss + nestled tenderly in lush forest.`,
     touchpoints: [],
-    instructions: `Each entry is ONE white elven city in 30-55 words — soaring white spires + arched bridges + glowing windows + flowing architecture + grandeur. Output a NUMBERED list.
+    instructions: `Each entry is ONE softened white elven city in 30-55 words — white spires + arched bridges + glowing windows, draped in wisteria/blossom/glowing vines + moss, nestled warmly in enchanted forest, intimate + storybook (NOT cold/monumental/epic). Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A cluster of soaring slender white spires linked by graceful arched stone bridges, glowing amber windows dotting their tiers, rising from a turquoise river-gorge, the pale towers catching soft light against a misty backdrop.
-2. A tiered cliffside elven city of cascading white terraces and thin spires, delicate arched bridges spanning between them, warm glowing windows, descending gracefully to a still reflecting lake below.
-3. A crystalline white elven city of translucent towers and arching bridges rising from a mirror-lake, the spires refracting the light into soft rainbows, doubled in the calm water beneath.`,
+1. A cluster of slender white elven spires draped in cascading lavender wisteria, linked by mossy arched bridges over a gentle glowing stream, warm amber windows aglow, the pale towers nestled tenderly among ancient blossoming trees.
+2. A tiered white elven city spilling with flowering vines and soft moss down to a calm fern-fringed pool, delicate arched bridges between the spires, warm windows glowing, cradled in a lush enchanted wood.
+3. A cozy white elven city of domes and slender spires half-grown into colossal cherry-blossom trees, petal-strewn arched bridges, warm-lit windows, tucked snugly into a glowing mossy glade.`,
   },
 
   faebot_elven_city_detail: {
@@ -115,16 +204,16 @@ EXAMPLES (3):
 
   faebot_elven_city_setting: {
     format: 'simple',
-    theme: `FAEBOT ELVEN-CITY SETTING — the enchanted fairy-forest setting cradling the city. Each entry 20-40 words, with depth.
+    theme: `FAEBOT ELVEN-CITY SETTING — the lush enchanted fairy-forest CRADLING the city (warm + intimate, co-stars with the spires). Each entry 20-40 words, with depth. Nature is rich and close, framing the city tenderly.
 
-VARIETY MANDATE — ~25 distinct enchanted settings: an ancient old-growth fairy-forest; cliffs above a still turquoise lake; a misty mountain vale; a golden autumn enchanted wood; a river-gorge with waterfalls; a flowering spring meadow; a snow-dusted alpine fairy-forest under aurora; a moonlit night-forest; a sunlit glade; an island in a vast glowing lake; a valley of cherry blossom; a deep mossy ravine with hanging gardens. Each sets the enchanted natural setting + depth + its soft magical light.`,
+VARIETY MANDATE — ~25 distinct lush intimate settings: a colossal moss-draped old-growth fairy-forest closing warmly around the spires; flowering trees and ferns framing the towers; a gentle glowing stream winding through the glade; a soft mossy ravine with hanging flower-gardens; a sunlit blossom-filled clearing; a wildflower meadow lapping at the city's feet; warm dappled woods of giant wisteria-draped trees; a fern-and-mushroom forest floor; a cozy glade ringed by ancient trees; a spring wood thick with bluebells; a mossy waterfall grotto. Each sets a LUSH, CLOSE, warm enchanted forest cradling the city + soft depth (avoid cold epic gorges; leave room for the white city as hero).`,
     touchpoints: [],
-    instructions: `Each entry is ONE enchanted fairy-forest setting in 20-40 words with depth. Output a NUMBERED list.
+    instructions: `Each entry is ONE lush, intimate, warm enchanted fairy-forest cradling the city in 20-40 words with soft depth. Output a NUMBERED list.
 
 EXAMPLES (3):
-1. An ancient old-growth fairy-forest cradling the city, colossal moss-draped trees stretching away into golden-green light, a glowing river winding far below through the trees.
-2. High cliffs above a still turquoise lake, the white towers reflected in the calm water, misty mountains rising in the hazy distance, snow dusting the pines.
-3. A snow-dusted alpine fairy-forest under a rippling green aurora, frosted evergreens framing the pale spires, the enchanted woods glowing softly in the cold.`,
+1. A colossal moss-draped old-growth fairy-forest closes warmly around the spires, blossoming boughs and ferns framing the towers, a gentle glowing stream winding through the dappled glade.
+2. Flowering trees heavy with wisteria and ferny banks cradle the white city, a soft mossy clearing strewn with wildflowers and mushrooms at its feet, the warm woods glowing beyond.
+3. A sunlit blossom-filled clearing ringed by giant ancient trees holds the elven spires, bluebells and toadstools carpeting the mossy floor, soft golden light filtering through the canopy.`,
   },
 
   faebot_elven_city_inhabitants: {
@@ -143,30 +232,30 @@ EXAMPLES (3):
 
   faebot_elven_city_lighting: {
     format: 'simple',
-    theme: `FAEBOT ELVEN-CITY LIGHTING — the soft light + atmosphere + fae glow (combined). Each entry 15-30 words. Soft, magical, ethereal, with drifting motes.
+    theme: `FAEBOT ELVEN-CITY LIGHTING — the WARM, SOFT, dappled fairy-light + atmosphere + glow (combined). Each entry 15-30 words. Tender, cozy, magical — favor WARM golden/honey/rosy dappled light over cold epic blue. Drifting glowing motes throughout.
 
-VARIETY MANDATE — ~25 distinct light+atmosphere+glow moods: soft golden-hour light with drifting fairy-motes; cool blue moonlight and glowing windows; a pearl-white misty dawn with floating pollen-light; magical violet twilight with luminous sprites; a rippling green aurora glow; warm amber fae-lantern light against dusk; dappled green forest light and glowing motes; rosy blossom-tinted dusk; a silver full-moon glow with mist; bioluminescent night with drifting lights; soft pink alpenglow on the spires; a gentle starlit dark studded with glowing windows and fae-lights. Each sets the light source + air quality + drifting magical glow.`,
+VARIETY MANDATE — ~25 warm soft light+glow moods (mostly warm, a few gentle cool): warm golden-hour light dappling through the canopy with drifting fairy-motes; honey-gold afternoon glow filtering between blossoming trees; rosy blossom-tinted dawn with floating pollen-light; soft amber fae-lantern warmth at dusk; warm dappled green-gold forest light and glowing motes; gentle candlelit-window glow against soft twilight; a tender pink-and-gold sunset on the spires; warm misty morning with luminous golden haze; soft magical violet-and-gold twilight with luminous pixies; cozy firefly-lit blue evening with warm glowing windows; pearly dawn with drifting glowing pollen. Each sets a SOFT WARM light source + cozy air + drifting magical glow.`,
     touchpoints: [],
-    instructions: `Each entry is ONE light+atmosphere+fae-glow mood in 15-30 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE warm soft dappled fairy-light + glow mood in 15-30 words (favor warm golden/honey/rosy over cold blue). Output a NUMBERED list.
 
 EXAMPLES (3):
-1. Soft golden-hour light bathes the white spires, drifting fairy-motes glowing in the warm hazy air, the windows beginning to glow amber.
-2. Cool blue moonlight washes the city, the windows glowing warm against it, a faint silver mist and floating motes hanging in the still air.
-3. A rippling green aurora glows behind the spires, glowing pollen-light drifting through the cold clear air, the towers softly luminous.`,
+1. Warm golden-hour light dapples through the blossoming canopy onto the white spires, drifting fairy-motes glowing in the soft honeyed air, the windows warm amber.
+2. A tender rosy-and-gold dawn washes the spires, floating glowing pollen drifting through the gentle mist, everything soft and warm and luminous.
+3. Soft amber fae-lantern warmth glows along the bridges at dusk, the windows aglow, luminous pixies drifting in the cozy violet-and-gold air.`,
   },
 
   faebot_elven_city_drama: {
     format: 'simple',
-    theme: `FAEBOT ELVEN-CITY DRAMA — a secondary focal point heightening the beauty, fires ~40%. Each entry 12-25 words.
+    theme: `FAEBOT ELVEN-CITY DRAMA — a gentle, soft fairy-tale focal point heightening the beauty, fires ~40%. Each entry 12-25 words. Keep it TENDER and whimsical (NO dragons, NO epic creatures — this is FaeBot's gentle fae world).
 
-VARIETY MANDATE — ~25 distinct dramas: a small jewel-scaled fae dragon gliding over the spires; a flight of white swans; a great low luminous moon behind the towers; an aurora over the city; a slow fall of cherry blossom or golden leaves; an elven boat with a glowing lantern on the water; a shaft of divine light through the canopy; a unicorn in a garden below; a procession of fae lights along the bridges; a rainbow over the waterfall; a comet in the twilight; a phoenix-bird passing. Each adds a beautiful focal beat (does NOT replace the city).`,
+VARIETY MANDATE — ~25 gentle fae beats: a white deer or fawn stepping into the glade below; a flight of white swans gliding the stream; a pure-white unicorn at the water's edge; a slow fall of cherry-blossom petals across the bridges; a procession of soft fae-lights winding along a walkway; glowing fireflies/pixies swirling around a spire; a great gentle low moon behind the towers; a fox or rabbit watching from the ferns; a little elven boat with a lantern on the stream; glow-moths rising in a soft cloud; a rainbow in the waterfall-mist; a single white owl gliding between spires. Each adds a tender fairy-tale beat (NO dragons; does NOT replace the city).`,
     touchpoints: [],
-    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE gentle, soft fairy-tale drama detail in 12-25 words (NO dragons). Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A small jewel-scaled fae dragon, no bigger than a deer, glides silently over the city's spires.
-2. A great low luminous moon hangs behind the towers, vast and silver, doubling in the lake below.
-3. A slow fall of cherry blossom drifts down across the white bridges and walkways, catching the light.`,
+1. A pure-white fawn steps delicately into the mossy glade below the bridges, unafraid.
+2. A slow fall of cherry-blossom petals drifts down across the white bridges, catching the warm light.
+3. A soft swirl of glowing pixies and fireflies winds up around the nearest spire like living light.`,
   },
 
   // ════════════════════════════════════════════════════════

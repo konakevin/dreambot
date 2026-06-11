@@ -135,6 +135,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_CASTLE_VILLAGE: {
+    description:
+      'PATH-BESPOKE — FaeBot fae-castle-village (2026-06-10). A HYBRID of elven-city (white elven architecture + soft fairy touches) and fae-village (cozy village layout) — an ethereal, castle-like FAE VILLAGE: a cluster of little white elven spired cottages/towers linked by archways + bridges, nestled in lush forest, optional stream, super pretty + intimate. Self-contained: village_layout + village_detail + setting + inhabitants + fae_lighting + drama (40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['village_layout', 'village_detail', 'setting', 'inhabitants', 'fae_lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_ELVEN_CITY: {
     description:
       'PATH-BESPOKE — FaeBot elven-city (2026-06-10, recreated from DragonBot elven-city, Kevin hearted those white ethereal elven castles). A graceful white elven spired city — Rivendell/Lothlorien towers, arched bridges, glowing windows, water — with a FAE TOUCH (drifting fairy-motes, glowing fae-lanterns, tiny sprites/pixies among the elves, enchanted-forest integration) in FaeBot painterly register. Self-contained: elven_city + elven_detail + city_setting + fae_inhabitants + fae_lighting + drama (40%-gated).',
