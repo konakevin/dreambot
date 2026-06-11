@@ -236,11 +236,11 @@ ABSOLUTE NON-NEGOTIABLE MANDATES — these MUST be the FIRST visual elements des
 
 1. THE FAE IS PALM-SIZED — 3 to 8 inches tall. NOT a regular-sized fairy. NOT a child-fairy. PALM-SIZED.
 
-2. THE SCALE-ANCHOR COMPANION IS MANDATORY — every render INCLUDES a normal-sized forest creature IN THE SAME FRAME that DWARFS her. This is the SCALE-PROOF. Without it, Flux renders a regular-sized fairy by default. The scale-anchor creature MUST be visibly LARGER than the fae.
+2. A CUTE ANIMAL FRIEND IS MANDATORY — every render includes an adorable WHOLE forest critter (robin, bunny, squirrel, baby fawn, hummingbird, owl-fledgling, hedgehog, duckling, frog, salamander, hamster, etc.) that the tiny fae is WITH as a friend — petting, riding, cuddling, feeding, or sitting cosily beside it. The critter is rendered COMPLETE and recognizable (whole head + body). Sweet, charming, heartwarming companionship.
 
 3. PAINTERLY-REAL rendering. NEVER chibi, NEVER anime, NEVER Disney, NEVER Tinkerbell, NEVER mascot. Brian Froud + Charles Vess + painted-fantasy-novel-cover lineage. Slender beautiful elegant proportions, painterly oil-brushwork register.
 
-4. The fae fills 30-50% of the frame and the scale-anchor creature establishes her tininess unambiguously.
+4. The fae and her cute animal friend share the frame as the heartwarming focal pair; she is small and fairy-scaled, the critter whole and adorable.
 
 5. NEVER posing for camera. NEVER looking at viewer. NEVER human-model beauty.
 
@@ -252,10 +252,10 @@ ${creature}
 
 Preserve every exotic feature unmistakably. She HAS WINGS. Painterly-real beauty at FAIRY-SCALE — 3 to 8 inches tall. NEVER posing, NEVER cartoon, NEVER mascot.
 
-━━━ 2. SCALE-ANCHOR COMPANION (mandatory — proves her tininess) ━━━
+━━━ 2. CUTE ANIMAL FRIEND (mandatory) ━━━
 ${scale_anchor_companion}
 
-This companion creature is THE SCALE PROOF — render it BIG IN THE FRAME and the fae SMALL. The fae must be PERCHED ON / DWARFED BY / UNDER THE LOOMING FACE of the companion — NEVER "beside it" or "holding it in her arms" or "at her shoulder". The companion's body / face / ear / paw / nose / wing must dominate a significant portion of the frame; the fae fits inside or perches on a single feature. Without dramatic dwarfing, the render reads as "regular-sized fairy" — Flux defaults that way. The size-contrast MUST be visually unmistakable.
+Render this critter as a WHOLE, adorable, COMPLETE animal — whole head AND body, anatomically sensible — and the tiny fae WITH it as a friend: riding on its back, nestled in its fur, petting it, feeding it, booping its nose, or sitting cosily beside it. The critter is clearly bigger than the little fae (she rides/nestles bigger ones, sits eye-to-eye with small ones), but the feeling is FRIENDSHIP and CUTENESS. ABSOLUTELY NEVER a giant disembodied ear / eye / nose / paw, and NEVER a single body part filling or dominating the frame — the WHOLE critter must be visible. NEVER looming / scary / dwarfing.
 
 ━━━ 3. MACRO PERCH (what she's on / in / riding) ━━━
 ${macro_perch}
@@ -310,7 +310,7 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Brian Froud +
 - NO additional fae beyond the focal one + the scale-anchor companion (no extra fae figures)
 
 ━━━ OUTPUT ━━━
-Write 80-110 words, comma-separated phrases. LEAD WITH THE PALM-SIZED FAE — preserve her stacked features unmistakably (including wings + 3-to-8-inch scale). Then the scale-anchor companion that DWARFS her. Then her macro perch. Then the captured action. Then forest at her scale. Then lighting + weather. Then magical flavor + foreground anchor.${botanical_accent ? ' Then botanical accent at her scale.' : ''} Painterly-real oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+Write 80-110 words, comma-separated phrases. LEAD WITH THE PALM-SIZED FAE — preserve her stacked features unmistakably (including wings + 3-to-8-inch scale). Then her cute WHOLE animal friend that she's with (riding/petting/cuddling/sitting beside it). Then her macro perch. Then the captured action. Then forest at her scale. Then lighting + weather. Then magical flavor + foreground anchor.${botanical_accent ? ' Then botanical accent at her scale.' : ''} Painterly-real oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
   FAEBOT_DRYAD_PORTRAIT: ({ slots, sharedDNA, vibeDirective }) => {

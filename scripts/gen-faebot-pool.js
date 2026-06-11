@@ -4170,69 +4170,34 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
 
   faebot_tiny_fae_scale_anchor_companion: {
     format: 'simple',
-    theme: `SCALE-ANCHOR COMPANION (DWARFING) for FaeBot's tiny-fae path. Each entry describes ONE specific normal-sized forest creature that DRAMATICALLY DWARFS the palm-sized fae in the same frame. Each entry 30-55 words.
+    theme: `CUTE ANIMAL FRIEND for FaeBot's tiny-fae path. Each entry describes ONE adorable WHOLE forest critter that the palm-sized fae is WITH as a friend/companion — petting it, riding it, cuddling, feeding it, playing, or sitting cosily beside it. Heartwarming Cinderella / Snow-White woodland-friend charm. Each entry 30-55 words.
 
-⚠️ THE BAR: each entry MUST show the fae UNDER / DWARFED-BY / FITTING-ON-A-SINGLE-FEATURE of a creature that is MUCH LARGER than her. This is the PATH IDENTITY — without dramatic dwarfing, Flux renders a regular-sized fairy and the path fails.
+THE VIBE: a tiny fae and her cute animal friend together — sweet, gentle, charming, full of personality. The critter is a COMPLETE, recognizable, adorable animal (whole head AND body, anatomically sensible). The fae is small, so with bigger critters (bunny, fawn, owl) she rides or nestles against them, and with smaller ones (mouse, hummingbird, frog) she sits eye-to-eye — but it is always FRIENDSHIP + cuteness, never being "dwarfed" or scared.
 
-⚠️ DWARFING POSITIONS — every entry MUST use ONE of these (NEVER "beside" / "equal-scale"):
-  - The fae stands UNDER the looming face of the creature, the creature's NOSE / SNOUT / BEAK fills half the frame above her
-  - The fae perches ON a single feature (on the creature's NOSE / SNOUT / BACK / PAW / EAR / ANTLER / WING / HORN), the creature's body fills the rest of the frame
-  - The fae mid-flight near the creature's MASSIVE HEAD, the creature fills most of the frame
-  - The fae fits INSIDE a single body-part curl (cupped in a paw / cradled in the curve of a folded foreleg / curled in an ear)
-  - The creature LOOMS OVER her from above (looking down at her from massive face)
+FAE + CRITTER INTERACTION — show them together: the fae riding on its back, nestled in its fur, petting its head, feeding it a berry, booping its nose, sharing a flower, napping against it, whispering to it, hugging it, offering it a dewdrop.
 
-⚠️ COMPANION CATEGORIES (bias toward LARGER creatures that dwarf better):
-  • ~5 LARGER MAMMALS — fox (adult) / deer / fawn / rabbit (adult) / hare / wolf-pup / bear-cub
-  • ~4 MEDIUM MAMMALS — squirrel / chipmunk / hedgehog / dormouse / pine-marten / mole
-  • ~4 BIRDS — robin / wren / chickadee / blue-tit / sparrow / hummingbird / owl-fledgling
-  • ~3 LARGE INSECTS — stag-beetle / large-dragonfly / large-moth (she rides ON them, dwarfed)
-  • ~3 BUTTERFLY — monarch / swallowtail (she rides ON the back, butterfly LARGER than her)
-  • ~2 AMPHIBIANS — large-toad / tree-frog / salamander (only positions where she's CLEARLY smaller)
-  • ~2 OWLS — small-owl / barn-owl-juvenile (she fits in a talon-curl)
-  • ~1 RARE LARGE — stag-with-antlers / great-horned-owl (dramatic dwarfing)
-  • ~1 RARE GENTLE — small-hare-doe / vixen
+CRITTER VARIETY (whole, adorable, gentle — wide range): robin / wren / bluebird / chickadee / hummingbird / owl-fledgling / duckling / red squirrel / chipmunk / bunny / baby rabbit / baby fawn / deer / hedgehog / dormouse / field-mouse / hamster / mole / red fox cub / tree-frog / green frog / spotted salamander / newt / turtle / a big friendly butterfly, moth or dragonfly she rides. Gentle, curious, sleepy or playful — never scary.
 
-⚠️ EVERY entry MUST include:
-  - SPECIFIC ANIMAL SPECIES
-  - DWARFING POSITION (under its looming face / perched on its nose / fits in its paw / etc.)
-  - PAINTED TACTILE DETAIL (fur / feathers / whisker / breath-mist / etc.)
-  - EXPLICIT SCALE-CONTRAST PHRASE ("the fae is half the length of its whisker" / "the fae fits in the curl of its tail" / "the creature's nose is wider than her entire body" / "she would fit in its closed paw")
-  - The fae is SMALL relative to the creature in the frame
+BANS: NO disembodied / cropped body parts; NO single body part (ear / eye / nose / paw) filling or dominating the frame — the WHOLE critter is always visible and makes anatomical sense. NO "dwarfing / looming / scary" framing. NO description of the fae herself (separate axis). NO extra fae. NO predators mid-hunt.
 
-🚫 STRICT BANS:
-  • NO "beside it" / "next to" / "equal scale" — only DWARFING positions
-  • NO creature description of the fae (separate axis)
-  • NO additional fae figures
-  • NO predatory / aggressive postures (creature is gentle / sleeping / curious / playful)
-  • NO oversized cartoonish proportions on the companion`,
+EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae is WITH it + soft painted tactile detail (fur / feathers / smooth skin) + a cosy charming heartwarming mood.`,
     touchpoints: [
-      "A massive sleeping fox-cub curled in moss with soft russet fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its snout no taller than the bridge of its painted nose, the cub's nose alone wider than her body, dramatic dwarfing scale",
-      "A spotted fawn lying gentle in moss with saturated chocolate-brown fur and crisp white spots filling the painted frame edge-to-edge, painted long-lashed gentle eyes half-closed, the palm-sized fae perched candidly on the curve of its raised hoof, dense painterly velvet-fur texture surrounding her, dramatic scale-dwarf register",
-      'A red squirrel pausing on a thick branch with painted bright orange fur, its bushy tail curled forward like an enormous painted plume, the palm-sized fae sitting in the curve of its tail no taller than the tail-tuft itself, dramatic dwarfing scale',
-      'A large hedgehog pauses on the moss with painted spiked-quill detail dominating the frame, the palm-sized fae balanced on the curve of its back atop the quills, fae barely as tall as a single quill, painted dramatic scale-proof',
-      "A massive sleeping bear-cub curled in painted soft brown fur filling the painted frame, painted gentle breathing, the palm-sized fae perched on its paw between two toes, fae would fit inside the cub's closed paw, dramatic dwarfing register",
-      "A hare-doe sitting motionless with painted soft brown-and-grey fur and tall ears upright dominating the painted frame, the palm-sized fae sitting on the curve of its back between the painted ears, the hare's ear alone twice her height, dramatic dwarfing scale",
-      "A red-fox kit pausing curious with painted soft russet fur, its massive face filling the painted upper frame, the palm-sized fae standing on its outstretched paw at the bottom of the frame, the kit's eye alone larger than her entire body",
-      "A wolf-pup lying playful with painted soft grey-and-cream fur dominating the painted frame, painted gentle eyes lowered, the palm-sized fae perched on its painted ear-tuft, the ear alone twice the fae's height, dramatic dwarfing scale",
-      "A massive painted red robin perched dominating the frame with painted feathered orange-red breast, the palm-sized fae fits on its back like a saddle her body half the length of a single wing, the robin's eye larger than her face",
-      "A painted chickadee on a fern-frond with painted black-and-white feather-pattern, the painted chickadee dominating the frame at its scale, the palm-sized fae standing on the bird's painted back her body fitting between two feathers, dramatic dwarfing scale",
-      "A wren mid-pause on a twig dominating the frame with painted soft brown plumage and bright eye, the palm-sized fae sitting on its painted shoulder, fae no taller than the wren's beak, painted intimate dwarfing register",
-      "A blue-tit perched on a hanging vine dominating the frame with painted soft-blue and yellow feathers, the palm-sized fae perched on its back her body the length of a single feather, the bird's eye larger than her face, dramatic dwarfing register",
-      'A hummingbird mid-hover with painted iridescent green-and-ruby plumage dominating the painted frame, the palm-sized fae mid-flight beneath its painted belly, the hummingbird three times her height, dramatic dwarfing scale',
-      'A massive painted sparrow on a fern-frond, painted soft brown plumage dominating the frame, the palm-sized fae standing on its painted talon, fae the size of a single sparrow-toe, dramatic scale-dwarf',
-      'A chipmunk crouched in painted leaves with painted brown-and-cream stripes dominating the frame, the palm-sized fae sitting in the curve of its tail, fae no taller than its painted tail-tuft, dramatic dwarfing scale',
-      'A dormouse curled asleep in a painted hollow with painted soft golden-fur filling the painted frame, painted gentle breathing, the palm-sized fae sitting beside its closed eye almost touching its painted whisker, the whisker thicker than her arm',
-      'An owl-fledgling perched on a thick branch dominating the painted frame with painted fluffy gray-down feathers, painted large round eyes half-closed, the palm-sized fae standing on its talons her body fitting inside one painted talon-curl',
-      'A pine-marten pausing on a branch with painted soft brown fur dominating the painted frame, the palm-sized fae perched on its painted shoulder her body the size of a single painted ear, dramatic dwarfing scale',
-      'A massive stag-beetle climbing a fallen-log with painted iridescent-blue carapace dominating the painted frame, the palm-sized fae riding on its back her body the length of a single painted mandible-tooth, dramatic dwarfing register',
-      'A large dragonfly hovering with painted iridescent green-and-blue wing-detail dominating the painted frame, the palm-sized fae mid-flight at its painted abdomen-base her body the length of a single painted wing-vein, dramatic dwarfing',
-      'A monarch butterfly with painted orange-and-black wing-detail spread filling the painted frame, the palm-sized fae riding on its painted thorax between the wings, fae the length of a single painted wing-cell, dramatic scale-dwarf register',
-      'A swallowtail butterfly hovering near a bloom with painted yellow-and-black wing-pattern dominating the painted frame, the palm-sized fae riding on its painted back her body fitting between two wing-veins, dramatic dwarfing',
-      "A large luna-moth perched on a leaf with painted iridescent green-and-pearl wing-pattern dominating the painted frame, the palm-sized fae standing on the moth's back her body the length of a single painted wing-tip, dramatic dwarfing",
-      'A painted barn-owl-juvenile perched on a branch dominating the painted frame with painted pale heart-shaped face and dark eyes, the palm-sized fae standing on its talons her body fitting inside one painted talon-curl, dramatic dwarfing scale',
-      'A great-horned-owl looms over her from above with painted tufted ears and massive yellow eyes filling the painted upper frame, the palm-sized fae standing on the moss below dwarfed by its painted face, dramatic dwarfing register',
+      'A round red robin perched whole on a mossy log, plump orange breast and bright eye, the palm-sized fae sitting beside it gently petting its feathered chest, the two sharing a cosy moment, soft painted plumage, heartwarming and sweet',
+      'A fluffy baby rabbit sitting complete in the clover, soft grey fur and long ears, the palm-sized fae nestled against its warm side hugging it, the whole bunny calm and content, tender storybook charm',
+      'A spotted baby fawn lying folded whole in the ferns, big gentle eyes and a soft dappled coat, the palm-sized fae perched on its back stroking its neck, the whole little deer dozing peacefully, adorable and warm',
+      'A tiny hummingbird hovering whole at a flower, iridescent green-and-ruby feathers, the palm-sized fae floating beside it eye-to-eye offering a dewdrop, the whole bird bright and quick, sweet and magical',
+      'A green tree-frog sitting complete on a lily-pad, round eyes and glistening skin, the palm-sized fae seated beside it on the same pad gently booping its nose, the whole frog calm and curious, charming and funny',
+      'A red squirrel sitting whole on a stump nibbling an acorn, bright fur and a big bushy tail, the palm-sized fae perched beside it sharing a berry, the whole squirrel cheerful, cosy woodland friendship',
+      'A sleepy owl-fledgling perched whole on a branch, fluffy grey down and round half-closed eyes, the palm-sized fae snuggled against its soft chest, the whole little owl drowsy and content, tender and warm',
+      'A spotted salamander resting whole on a wet leaf, glossy black-and-yellow skin, the palm-sized fae crouched beside it tracing its spots in wonder, the whole salamander placid, sweet and curious',
+      'A plump hedgehog ambling whole across the moss, soft quills and a little pointed face, the palm-sized fae walking alongside holding its tiny paw, the whole hedgehog snuffling happily, adorable companionship',
+      'A fluffy yellow duckling paddling whole at the pond edge, downy and bright-eyed, the palm-sized fae riding gently on its back, the whole duckling cheerful in the ripples, charming and bright',
+      'A golden dormouse curled whole and asleep in a leafy hollow, full furry body and tail, the palm-sized fae nestled against its side napping too, the whole little mouse breathing softly, cosy and tender',
+      'A friendly swallowtail butterfly resting whole with wings open on a bloom, the palm-sized fae sitting on its back between the spread wings, the whole butterfly gentle, a sweet little garden ride',
+      'A tiny round hamster sitting whole stuffing its cheeks with a seed, soft golden fur, the palm-sized fae giggling beside it offering another seed, the whole hamster plump and adorable, cosy and funny',
+      'A little turtle ambling whole along the moss, patterned shell and gentle face, the palm-sized fae riding on its shell waving happily, the whole turtle slow and content, charming and sweet',
     ],
-    instructions: `Each entry is ONE specific DWARFING SCALE-ANCHOR COMPANION, 30-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) specific animal species, (b) DWARFING position (perched ON a single feature / under its looming face / fits inside a single body-part / etc.), (c) painted tactile detail, (d) explicit scale-contrast phrase ("fae no taller than the X" / "fits inside Y" / "Z alone wider than her body"). NO "beside" / "equal scale". NO creature description of fae. NO predatory aggression. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
+    instructions: `Each entry is ONE adorable WHOLE forest critter the fae is WITH as a friend, 30-55 words. Format: prose, comma-separated phrases. MANDATORY — (a) a specific cute critter shown COMPLETE and recognizable (whole head + body, anatomically sensible), (b) the sweet way the fae is WITH it (petting / riding / cuddling / feeding / sitting beside / booping / napping against / hugging), (c) soft painted tactile detail, (d) a cosy charming heartwarming mood. HARD BAN: disembodied or cropped body parts; any single body part filling or dominating the frame; "dwarfing / looming / scary" framing. NO predators hunting. NO description of the fae. Output as a NUMBERED list (1. ... 2. ...), one entry per line, no internal newlines.`,
   },
 
   faebot_tiny_fae_macro_perch: {
