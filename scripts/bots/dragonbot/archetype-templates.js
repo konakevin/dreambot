@@ -1920,6 +1920,67 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  SKY_CASTLE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, sky_structure, structure_detail, sky_setting, scale_prover, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a FLOATING SKY-CASTLE scene for DragonBot — a castle or kingdom adrift among the clouds, soaring high-fantasy wonder. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Soaring, luminous, vertiginous — the dream of a kingdom in the sky. The scene should make the viewer GASP at the impossible majesty.
+
+━━━ FLOATING IN THE SKY — ABSOLUTE FIRST RULE ━━━
+The castle/structure FLOATS in the open sky, high above a vast sea of cloud — nothing supporting it but magic, the void falling away below. Soaring scale, altitude, and wonder. Deep high-fantasy (NOT modern, NOT sci-fi). A breathtaking impossible kingdom of the air.
+
+━━━ THE SKY STRUCTURE ━━━
+${sky_structure}
+
+Render the floating castle/structure with grandeur, clearly AIRBORNE in open sky with the void below — the hero of the scene.
+
+━━━ STRUCTURE DETAIL (the magic of the place) ━━━
+${structure_detail}
+
+Render the wondrous detail — waterfalls pouring off the edge into cloud, hanging chains, sky-bridges, glowing spires.
+
+━━━ THE SKY SETTING ━━━
+${sky_setting}
+
+Render the vast sky around and below with overwhelming atmospheric depth — sea of cloud, distant isles, dramatic heavens.
+
+━━━ SCALE PROVER (what shows the immense scale) ━━━
+${scale_prover}
+
+A tiny element — airships, distant dragons, small figures — proves the breathtaking scale.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, soaring, vertiginous. The floating castle adrift in vast open sky above a sea of cloud, the void below, dramatic heavens around it, a tiny scale-prover, overwhelming altitude and wonder. NEVER ground-bound; NEVER modern/sci-fi; NEVER small.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a floating castle adrift in open sky high above a sea of cloud — the airborne sky-castle leads], [the floating structure's grandeur, clearly airborne with void below], [structure detail — waterfalls into cloud + sky-bridges + spires], [the vast sky setting with depth], [a tiny scale-prover — airships/dragons/figures], [lighting + atmosphere], [palette + soaring wondrous mood]
+
+CRITICAL — render an impossible FLOATING high-fantasy castle clearly airborne in open sky above the clouds. Do NOT render it ground-bound, modern/sci-fi, or small.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   ELVEN_CITY: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, elven_city, elven_detail, city_setting, occupant, drama } = slots;
 

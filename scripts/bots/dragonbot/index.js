@@ -33,6 +33,7 @@ const pathBuilders = {
   'wizard-tower': require('./paths/wizard-tower'),
   'dwarven-hold': require('./paths/dwarven-hold'),
   'elven-city': require('./paths/elven-city'),
+  'sky-castle': require('./paths/sky-castle'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -121,6 +122,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // sky-castle: anchor the floating sky-kingdom among the clouds.
+    'sky-castle':
+      'Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition, an impossible FLOATING SKY-CASTLE — a great fantasy castle adrift high in open sky atop a floating chunk of mountain, waterfalls pouring off its edge into a vast sea of cloud far below, sky-bridges and glowing spires, tiny airships and distant dragons for scale, soaring vertiginous altitude and wonder (NOT ground-bound NOT modern NOT sci-fi), painterly atmospheric grandeur, awe-inducing concept-art masterwork',
     // elven-city: anchor the graceful luminous elven realm.
     'elven-city':
       'Alan Lee + John Howe + Michael Whelan painted-fantasy oil tradition, a graceful ETHEREAL ELVEN CITY — flowing organic luminous architecture of slender white spires, living trees, delicate arched bridges and glowing lanterns in harmony with the natural landscape, soft enchanted light, tiny elves for scale, Rivendell + Lothlorien elegance and serenity (NOT modern NOT sci-fi NOT brutalist), painterly atmospheric depth, awe-inducing concept-art masterwork',
@@ -622,6 +626,8 @@ module.exports = {
     'dwarven-hold',
     // NEW 2026-06-10 — elven-city (graceful elven realm, Tier 3). MVP-25.
     'elven-city',
+    // NEW 2026-06-10 — sky-castle (floating sky-kingdom, Tier 3). MVP-25.
+    'sky-castle',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -655,7 +661,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'fae-court', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'sky-castle'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -722,6 +728,7 @@ module.exports = {
       'wizard-tower',
       'dwarven-hold',
       'elven-city',
+      'sky-castle',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -768,6 +775,7 @@ module.exports = {
       'wizard-tower': 'scene',
       'dwarven-hold': 'scene',
       'elven-city': 'scene',
+      'sky-castle': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

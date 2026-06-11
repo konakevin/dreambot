@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── sky-castle path (2026-06-10, NEW, Tier 3) — floating kingdom. MVP-25. ───
+  SKYCASTLE_STRUCTURE: load('skycastle_structure'),
+  SKYCASTLE_DETAIL: load('skycastle_detail'),
+  SKYCASTLE_SETTING: load('skycastle_setting'),
+  SKYCASTLE_SCALE: load('skycastle_scale'),
+  SKYCASTLE_DRAMA: load('skycastle_drama'),
+
   // ─── elven-city path (2026-06-10, NEW, Tier 3) — elven realm. MVP-25. ───
   ELVENCITY_CITY: load('elvencity_city'),
   ELVENCITY_DETAIL: load('elvencity_detail'),

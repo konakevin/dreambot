@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // SKY-CASTLE PATH (2026-06-10 — new, Tier 3). A floating
+  // castle / sky-kingdom among the clouds.
+  // ════════════════════════════════════════════════════════
+
+  skycastle_structure: {
+    format: 'simple',
+    theme: `DRAGONBOT SKY-CASTLE — the floating STRUCTURE itself (the hero), clearly airborne. Each entry 25-45 words, grand + impossible.
+
+VARIETY MANDATE — ~25 distinct sky structures: a great castle on a floating chunk of mountain; a chain of linked floating sky-isles with bridges; a cloud-borne city of white towers; an airborne fortress bristling with spires; a castle atop an upside-down floating peak; a palace on a disc of rock trailing roots; an archipelago of tiny floating islets crowned with a keep; a citadel inside a hollow floating crag; a ring-shaped sky-fortress; a temple on a single soaring spire of rock; a castle wreathed in its own storm; a golden sky-palace on a sunlit cloud-isle. Each names the floating structure + grandeur, clearly airborne.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE floating sky-structure in 25-45 words — grand, impossible, clearly airborne. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great stone castle perched atop a vast floating chunk of mountain, its underside trailing roots and broken rock, drifting alone in the open sky with cloud far below.
+2. A chain of linked floating sky-isles, each crowned with white towers, joined by long arching bridges, strung across the open heavens.
+3. An airborne fortress of dark spires bristling from a floating crag, banners streaming in the high wind, the void falling away beneath it.`,
+  },
+
+  skycastle_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT SKY-CASTLE DETAIL — the wondrous detail of the floating place. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: waterfalls pouring off the edge into empty cloud; great hanging chains trailing into the void; long arching sky-bridges; glowing crystal anchors; banners streaming in the high wind; gardens cascading over the edges; floating lesser rocks orbiting; glowing runes holding it aloft; spiral stairs winding the underside; docks for airships; a beam of light tethering it down; vines and roots hanging far below. Each is a wondrous sky-structure detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE sky-structure detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Waterfalls pour off the floating island's edge in long ribbons, dissolving into mist as they fall into the empty cloud far below.
+2. Great rusted chains hang from the castle's underside, trailing down into the void, anchored to nothing.
+3. Smaller chunks of rock drift slowly around the main island, each trailing its own tiny garden of hanging vines.`,
+  },
+
+  skycastle_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT SKY-CASTLE SETTING — the vast sky around and below. Each entry 20-40 words, with overwhelming depth.
+
+VARIETY MANDATE — ~25 distinct sky settings: above an endless sea of golden sunset cloud; among other distant floating isles; under a rippling aurora; a clear cobalt sky with towering thunderheads; a misty dawn breaking over the cloud-sea; a star-strewn twilight with a huge moon; a storm churning far below; a sky of dramatic god-rays; a blood-red sunset over the cloud; a serene high-altitude blue; a sky lit by a vast nebula. Each sets the heavens + cloud-sea + overwhelming depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vast sky setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An endless sea of golden sunset cloud stretching to the curved horizon far below, the sun a molten disc, the cloud-tops gilded amber and rose.
+2. A sky dotted with other distant floating isles drifting in the haze, each a tiny silhouette, the cloud-sea rolling away beneath them all.
+3. A rippling green-and-violet aurora draped across the night sky behind the castle, stars scattered above the dark cloud-sea below.`,
+  },
+
+  skycastle_scale: {
+    format: 'simple',
+    theme: `DRAGONBOT SKY-CASTLE SCALE-PROVER — a tiny element proving the immense scale. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct scale-provers: a tiny airship sailing toward the castle; distant dragons circling the spires; small figures on a bridge; a flock of birds wheeling far below; a lone winged rider approaching; tiny boats moored at a sky-dock; a balloon drifting past; specks of people on the battlements; a small griffon-rider; a distant second sky-isle with its own keep. Each is a tiny element giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny scale-prover in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tiny airship with billowing sails drifts toward the floating castle, dwarfed to a speck against its vast bulk.
+2. A pair of distant dragons circle the highest spires, tiny silhouettes against the glowing sky.
+3. Specks of tiny figures stand on a long sky-bridge, giving dizzying scale to the structure.`,
+  },
+
+  skycastle_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT SKY-CASTLE DRAMA — a secondary focal point heightening the wonder, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a great dragon rising past the castle's edge; a fleet of airships approaching; a storm-front rolling in below; a shaft of divine light breaking through cloud onto the castle; a comet streaking past; a second island colliding/breaking; a rainbow arcing between isles; a vast moon rising behind; a flight of pegasi; a waterfall catching the sun in a blaze; lightning lacing the cloud below. Each adds a focal beat (does NOT replace the castle).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great dragon rises past the castle's edge on slow wingbeats, briefly dwarfing the towers.
+2. A shaft of divine golden light breaks through the cloud and falls across the floating castle.
+3. A small fleet of airships sails up out of the cloud-sea toward the castle's docks.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // ELVEN-CITY PATH (2026-06-10 — new, Tier 3). A graceful
   // elven city — treetop / crystalline / waterfall haven.
   // ════════════════════════════════════════════════════════

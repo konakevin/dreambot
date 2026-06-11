@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  SKY_CASTLE: {
+    description:
+      'PATH-BESPOKE — DragonBot sky-castle path (2026-06-10, Tier 3). A floating castle / sky-kingdom among the clouds — airborne fortresses, sky-isles, waterfalls into the void. Path-bespoke: sky_structure + structure_detail + sky_setting + scale_prover + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['sky_structure', 'structure_detail', 'sky_setting', 'scale_prover'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   ELVEN_CITY: {
     description:
       'PATH-BESPOKE — DragonBot elven-city path (2026-06-10, Tier 3). A graceful elven city — treetop / crystalline / waterfall haven, ethereal architecture. Path-bespoke: elven_city + elven_detail + city_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
