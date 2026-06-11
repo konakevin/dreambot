@@ -24,6 +24,7 @@ const pathBuilders = {
   'elven-city': require('./paths/elven-city'),
   'fae-castle-village': require('./paths/fae-castle-village'),
   'fae-wilds-village': require('./paths/fae-wilds-village'),
+  'fae-natural-village': require('./paths/fae-natural-village'),
 };
 
 module.exports = {
@@ -88,6 +89,7 @@ module.exports = {
     'elven-city',
     'fae-castle-village',
     'fae-wilds-village',
+    'fae-natural-village',
   ],
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -162,6 +164,7 @@ module.exports = {
       'elven-city',
       'fae-castle-village',
       'fae-wilds-village',
+      'fae-natural-village',
     ],
   },
 

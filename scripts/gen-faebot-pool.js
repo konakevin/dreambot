@@ -80,6 +80,96 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // FAE-NATURAL-VILLAGE PATH (2026-06-10). Clone of wilds-
+  // village but dwellings made of ORGANIC EARTHY nature stuff
+  // (wood / mushrooms / giant flowers / logs / woven branches).
+  // ════════════════════════════════════════════════════════
+
+  faebot_natural_village_feature: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE — the dramatic NATURE LANDSCAPE FEATURE the village is built around (the organizing stage). MANDATORY: every entry centers on a strong natural feature. Each entry 25-45 words, with depth + soft beauty.
+
+VARIETY MANDATE — ~25 distinct dramatic nature features: a deep mossy CANYON / gorge; a tumbling multi-tier WATERFALL; a glowing winding STREAM with pools; a cluster of COLOSSAL MOSSY BOULDERS; a sheer mossy CLIFF-FACE; a grove of COLOSSAL ANCIENT TREES; a rocky river-ISLAND; a misty RAVINE with hanging gardens; a SEA-CLIFF over turquoise water; a tumbled ROCK-SCREE slope; a CAVE-MOUTH / grotto; a chain of rocky ISLETS; terraced HOT-SPRING pools; a fern-choked rocky CREEK-BED; a forested rocky OUTCROP; a deep glowing SINKHOLE garden. Each names the feature + scale + soft enchanted beauty. (Water optional — rocks, canyons, cliffs, trees all count.)`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dramatic natural landscape feature (canyon/waterfall/stream/rocks/cliffs/trees/etc.) in 25-45 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A deep mossy canyon split by a glowing turquoise stream far below, the green-furred walls dropping in ferny ledges, soft mist rising between the cliffs.
+2. A tumbling three-tier waterfall pouring down a fern-draped rock-face into a still pool, spray drifting in the dappled light, mossy boulders strewn at its foot.
+3. A grove of colossal ancient trees with trunks wider than houses, gnarled roots arching over a glowing brook, the canopy a vast green vault far above.`,
+  },
+
+  faebot_natural_village_built: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE BUILT — HOW the little EARTHY ORGANIC fairy dwellings are built around / into the nature feature. The dwellings are MADE OF NATURE — NOT stone. Each entry 25-45 words. Many small charming nature-grown homes adapting to the terrain. Can be WEIRD + FUN.
+
+VARIETY MANDATE — ~25 distinct organic earthy villages built into the land, drawing materials from: giant MUSHROOM-cap houses; homes carved into HOLLOW LOGS and living tree-trunks; dwellings built inside HUGE BLOOMING FLOWERS; woven-BRANCH and twig huts; BARK-AND-MOSS cottages; GOURD and seed-pod houses; acorn-cap and walnut-shell roofs; TOADSTOOL turrets; leaf-thatched roofs; ROOT-WOVEN walls; pumpkin and berry houses; nests of woven reeds. Each entry: many small EARTHY ORGANIC dwellings (name 2-4 material types) clinging to / nestled into / grown from the canyon/cliff/boulders/trees/stream, with warm glowing windows, at cozy scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE organic earthy village (name 2-4 of: mushroom / hollow-log / giant-flower / woven-branch / bark-moss / gourd / toadstool / root-woven dwellings) built around/into the feature, 25-45 words, glowing windows, cozy scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Plump glowing mushroom-cap houses and hollow-log homes cling to the canyon ledges in clusters, toadstool turrets and woven-branch huts tucked between them, warm windows glowing from every cap and trunk.
+2. Dwellings built inside huge blooming flowers and bark-and-moss cottages nestle among the colossal boulders, gourd-houses hanging from the branches above, soft light spilling from petal-windows.
+3. Cozy homes carved into the hollow trunks of the ancient trees, with toadstool roofs and woven-reed balconies, little mushroom-houses sprouting from the arching roots below.`,
+  },
+
+  faebot_natural_village_connectors: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE CONNECTORS — the CREATIVE NATURAL ways the village parts join across the terrain (a key charming feature). Each entry 15-35 words. Mix MULTIPLE natural connector types per entry — earthy + organic.
+
+VARIETY MANDATE — ~25 distinct natural connector combos drawing from: arching ROOT-bridges; BRANCH-walkways; swinging VINE ropes; vine SWINGS; MUSHROOM-step stairs; woven-REED bridges; LILY-PAD stepping-stones; bark-and-rope LIFT-baskets; ladders of twisted roots; carved log-stairs; suspended woven-grass catwalks; toadstool stepping-caps; a hollow-log tunnel-bridge; flower-stem rope-bridges; spider-silk lines. Each entry names 2-4 DIFFERENT creative NATURAL connectors joining the village parts across the canyon/cliffs/stream/rocks/trees.`,
+    touchpoints: [],
+    instructions: `Each entry names 2-4 DIFFERENT creative NATURAL connectors (root-bridges/branch-walkways/vine-ropes/swings/mushroom-steps/reed-bridges/lily-pads/bark-lifts) joining the village across the terrain, in 15-35 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Arching root-bridges and swinging vine ropes cross the gorge between the mushroom-houses, while a bark-and-rope lift-basket carries goods up the canyon wall.
+2. Woven-reed bridges and branch-walkways wind between the tree-trunk homes, twisted-root ladders climbing to the upper dwellings, lily-pads stepping across the brook below.
+3. Mushroom-step stairs and a hollow-log tunnel-bridge join the boulder-cottages, swinging vines and a flower-stem rope-bridge leaping the gaps above the stream.`,
+  },
+
+  faebot_natural_village_inhabitants: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE INHABITANTS — tiny elves + fae + cute critters in village life across the terrain. Each entry 12-28 words. Render figures fully and modestly clothed in leaf/petal/flowing garments.
+
+VARIETY MANDATE — ~25 distinct inhabitants: an elf crossing a root-bridge while glow-sprites drift past; a child on a vine swing over the stream; a fae hauling a bark lift-basket up the cliff; two elves chatting on a mushroom-step as pixies flit; a fae fishing from a petal-balcony; a fox picking along the rocks; a hedgehog by a glowing mushroom-door; a fae-maiden on a lily-pad with a tiny sprite on her hand; a frog on a log; an elf climbing a root-ladder; glow-moths drifting through a gorge; a deer drinking at the pool; a snail on a giant flower. Each is small elf/fae figure(s) + a cute critter in earthy village life.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE set of tiny elf/fae + critter inhabitants in earthy village life, 12-28 words, fully clothed. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A leaf-clad fae crosses an arching root-bridge while a few glowing sprites drift past, a frog watching from a lily-pad below.
+2. A child swings on a vine out over the glowing stream, laughing, as tiny pixies flit around the mushroom-houses.
+3. A fae hauls a bark-and-rope lift-basket up the cliff while a hedgehog dozes by a glowing mushroom-door.`,
+  },
+
+  faebot_natural_village_lighting: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE LIGHTING — the WARM, SOFT, dappled fairy-light + atmosphere + glow (combined). Each entry 15-30 words. Tender, cozy, magical — favor WARM golden/honey/rosy dappled light over cold blue. Drifting glowing motes throughout.
+
+VARIETY MANDATE — ~25 warm soft moods (mostly warm, a few gentle cool): warm golden-hour light dappling through the canopy with drifting fairy-motes; honey-gold afternoon glow on the mossy rocks; rosy blossom-tinted dawn with floating pollen-light; cozy amber glow from mushroom-windows at dusk; warm dappled green-gold light through the gorge with glowing motes; gentle candlelit petal-window glow against soft twilight; a tender pink-and-gold sunset; warm misty morning with golden haze in the canyon; soft violet-and-gold twilight with luminous pixies; firefly-lit blue evening with warm glowing windows; bioluminescent mushroom-glow at night. Each: a SOFT WARM light source + cozy air + drifting magical glow.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE warm soft dappled fairy-light + glow mood in 15-30 words (favor warm golden/honey/rosy). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Warm golden-hour light dapples down into the mossy gorge, drifting fairy-motes glowing in the honeyed air, the mushroom-windows aglow amber.
+2. Soft bioluminescent mushroom-glow and amber petal-windows light the village at dusk, luminous pixies drifting in the cozy violet-and-gold air.
+3. A tender rosy-and-gold dawn washes the trees and rocks, floating glowing pollen drifting through the soft canyon mist.`,
+  },
+
+  faebot_natural_village_drama: {
+    format: 'simple',
+    theme: `FAEBOT FAE-NATURAL-VILLAGE DRAMA — a gentle, soft fairy-tale focal point, fires ~40%. Each entry 12-25 words. TENDER and whimsical (NO dragons, NO epic creatures).
+
+VARIETY MANDATE — ~25 gentle fae beats: a white fawn on a rocky ledge; a flight of white swans on the stream; a pure-white unicorn at the water's edge; a fall of cherry-blossom petals down the gorge; a procession of soft fae-lights along a root-bridge; glowing pixies swirling up a waterfall; a great gentle low moon over the canyon rim; a fox or otter on the rocks; a giant friendly snail crossing a path; glow-moths rising in a soft cloud; a rainbow in the waterfall-mist; a white owl gliding the gorge; a huge butterfly drifting between the flowers. Each adds a tender fairy-tale beat (NO dragons; does NOT replace the village).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle, soft fairy-tale drama detail in 12-25 words (NO dragons). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A pure-white fawn steps onto a mossy ledge above the stream, unafraid.
+2. A soft swirl of glowing pixies rises alongside the waterfall like living light.
+3. A huge jewel-winged butterfly drifts slowly between the giant blooming flower-houses.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-WILDS-VILLAGE PATH (2026-06-10). Elven castle-village
   // BUILT AROUND a wild nature feature + creative connectors.
   // ════════════════════════════════════════════════════════

@@ -32,6 +32,14 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // ─── fae-natural-village path (2026-06-10, organic earthy dwellings in the wilds). MVP-25. ───
+  FAEBOT_NATURAL_VILLAGE_FEATURE: load('faebot_natural_village_feature'),
+  FAEBOT_NATURAL_VILLAGE_BUILT: load('faebot_natural_village_built'),
+  FAEBOT_NATURAL_VILLAGE_CONNECTORS: load('faebot_natural_village_connectors'),
+  FAEBOT_NATURAL_VILLAGE_INHABITANTS: load('faebot_natural_village_inhabitants'),
+  FAEBOT_NATURAL_VILLAGE_LIGHTING: load('faebot_natural_village_lighting'),
+  FAEBOT_NATURAL_VILLAGE_DRAMA: load('faebot_natural_village_drama'),
+
   // ─── fae-wilds-village path (2026-06-10, village built around a nature feature). MVP-25. ───
   FAEBOT_WILDS_VILLAGE_FEATURE: load('faebot_wilds_village_feature'),
   FAEBOT_WILDS_VILLAGE_BUILT: load('faebot_wilds_village_built'),

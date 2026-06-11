@@ -517,6 +517,56 @@ Visible thick oil-brushwork on every surface — bark, foliage, rocks, water, dw
 Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WOVEN TOGETHER — load-bearing first 30-45 words establishing the dwelling architecture AND its arrangement. Then lived-in signs (amber windows + smoke + lanterns). Then approach pathway + dwelling garden + forest setting. Then lighting + atmospheric depth. Then wildlife (the 3-5 specific critters listed). Then floral carpet + foreground anchor.${water_or_feature ? ' Then water/special feature woven in naturally.' : ''} Painted-fantasy thick-brushwork register throughout. NEVER modern construction. NEVER grave-trigger words. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_NATURAL_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ORGANIC EARTHY FAE VILLAGE BUILT INTO WILD NATURE in FaeBot's SOFT painted-fairy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Edmund Dulac painted-fantasy lineage) — a charming, weird, wonderful little village whose dwellings are MADE OF NATURE ITSELF, built around a dramatic natural landscape. Earthy, organic, whimsical, soft and warm and storybook. The scene should feel like a hidden fairy village grown straight out of the wild.
+
+━━━ DWELLINGS MADE OF NATURE + BUILT AROUND A WILD FEATURE — ABSOLUTE FIRST RULE ━━━
+The little fairy dwellings are made of ORGANIC, OF-THE-EARTH materials — NOT stone castles. Houses carved from living wood and hollow logs, giant MUSHROOM-cap homes, dwellings built inside HUGE BLOOMING FLOWERS, woven-branch and twig huts, bark-and-moss cottages, gourd and seed-pod houses, acorn-cap roofs, toadstool turrets, leaf-thatched roofs, root-woven walls. It can be a little WEIRD and FUN — wonderfully organic and earthy. AND a dramatic NATURAL FEATURE (stream, canyon, waterfall, giant rocks, cliffs, ancient trees) is the stage the whole village is built around — the dwellings CLING TO, SPAN, NESTLE INTO and grow from it. Parts join by CREATIVE NATURAL CONNECTORS — root-bridges, branch-walkways, vine ropes and swings, mushroom-step stairs, woven-reed bridges, lily-pad steppingstones, rope-and-bark lifts. Soften it all with FaeBot's fairy vibe: warm dappled fairy-light, glowing windows and fairy-lanterns, drifting motes and pixies, lush mossy nature. Tender, warm, whimsical, super pretty — NOT cold, NOT epic, NOT a stone castle.
+
+━━━ THE NATURE FEATURE (the landscape the village is built around) ━━━
+${landscape_feature}
+
+Render this dramatic natural feature prominently — it is the stage the whole village is built around.
+
+━━━ HOW THE ORGANIC VILLAGE IS BUILT INTO IT ━━━
+${village_built}
+
+Render the little EARTHY ORGANIC dwellings (wood / mushroom / flower / log / gourd / woven-branch) clinging to / spanning / nestled into the feature — many small charming nature-grown homes adapting to the terrain.
+
+━━━ THE CREATIVE NATURAL CONNECTORS (how the village parts join) ━━━
+${connectors}
+
+Render the creative natural ways the village parts connect — root-bridges, branch-walkways, vine ropes/swings, mushroom-steps, woven-reed bridges, lily-pad stepping-stones, bark lifts — a key charming feature.
+
+━━━ THE INHABITANTS (tiny elves + fae + critters, village life) ━━━
+${inhabitants}
+
+Small graceful elves, tiny fae creatures and cute critters give warmth, life and scale.
+
+━━━ LIGHT + ATMOSPHERE + FAE GLOW ━━━
+${fae_lighting}
+
+Render the warm soft dappled fairy-light plus drifting glowing motes and pixies filling the air.
+${dramaSection}
+━━━ COLOR + MOOD ━━━
+${sharedDNA.colorPalette}. ${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Soft, painterly, luminous, tender, storybook, whimsically organic. A charming little fairy village of EARTHY ORGANIC dwellings (wood, giant mushrooms, huge flowers, hollow logs, woven branches) built around a dramatic wild nature feature, parts joined by creative natural connectors (root-bridges, vine-swings, branch-walkways, mushroom-steps), warm dappled light and drifting fae-motes, lush mossy nature, tiny elves + fae + a cute critter for life and scale. Warm, weird, wonderful, super pretty. NEVER a stone castle; NEVER cold/grim/epic; NEVER modern/sci-fi.
+
+Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [a charming organic fairy village of earthy nature-grown dwellings built around a dramatic wild nature feature], [the dramatic nature feature — stream/canyon/waterfall/rocks/cliffs/trees], [the little EARTHY dwellings — carved wood, giant mushrooms, huge blooming flowers, hollow logs, woven branches, gourds — clinging to / nestled into it], [creative natural connectors — root-bridges, branch-walkways, vine ropes + swings, mushroom-steps, woven-reed bridges], [tiny elves + fae + a cute critter in village life], [warm soft dappled fairy-light + drifting glowing motes + pixies + lush moss], [warm storybook palette + tender whimsical earthy fae mood].`;
+  },
+
   FAEBOT_WILDS_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
     const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } = slots;
 

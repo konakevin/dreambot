@@ -135,6 +135,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_NATURAL_VILLAGE: {
+    description:
+      'PATH-BESPOKE — FaeBot fae-natural-village (2026-06-10). Clone of fae-wilds-village (built around a mandated nature feature + creative connectors), BUT the dwellings are made of ORGANIC, EARTHY, of-the-earth materials — carved wood, giant mushrooms, huge blooming flowers, woven branches, hollow logs, gourds. Weird, fun, very organic. Soft FaeBot fairy register. Self-contained: landscape_feature + village_built + connectors + inhabitants + fae_lighting + drama (40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['landscape_feature', 'village_built', 'connectors', 'inhabitants', 'fae_lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_WILDS_VILLAGE: {
     description:
       'PATH-BESPOKE — FaeBot fae-wilds-village (2026-06-10). Sibling of fae-castle-village, but the village is BUILT AROUND a mandated dramatic NATURE LANDSCAPE FEATURE — a stream / canyon / waterfall / giant rocks / cliffs / ancient trees. The landscape leads; the elven castle-cottages cling to / span / nestle into it, with parts joined by CREATIVE CONNECTORS (arched bridges, stone arches, rope bridges, swinging vines, ladders, ziplines, hanging lift-baskets, walkways). Soft FaeBot fairy register. Self-contained: landscape_feature + village_built + connectors + inhabitants + fae_lighting + drama (40%-gated).',
