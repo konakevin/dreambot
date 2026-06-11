@@ -154,6 +154,13 @@ module.exports = {
   ARTSY_GIRL_SURPRISE_ELEMENT: load('artsy_girl_surprise_element'),
   // Path-bespoke pools for dragon-scene (2026-05-14 — applying new biome+axes
   // system to DragonBot as a fresh-test on a new bot per Kevin).
+  // ─── magic-unleashed path (2026-06-10, NEW, Tier 2) — colossal spell. MVP-25. ───
+  MAGIC_SPELL_EVENT: load('magic_spell_event'),
+  MAGIC_CASTER: load('magic_caster'),
+  MAGIC_EFFECT: load('magic_effect'),
+  MAGIC_SETTING: load('magic_setting'),
+  MAGIC_DRAMA: load('magic_drama'),
+
   // ─── clash-of-armies path (2026-06-10, NEW, Tier 2) — massed battle. MVP-25. ───
   CLASH_ARMIES: load('clash_armies'),
   CLASH_ACTION: load('clash_action'),

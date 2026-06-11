@@ -25,6 +25,7 @@ const pathBuilders = {
   'dragon-brood': require('./paths/dragon-brood'),
   'dragon-breeds': require('./paths/dragon-breeds'),
   'clash-of-armies': require('./paths/clash-of-armies'),
+  'magic-unleashed': require('./paths/magic-unleashed'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -113,6 +114,9 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'Frank Frazetta + Brom + Michael Whelan painted-fantasy-novel-cover oil tradition, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail (NOT a serpent NOT a wyvern) — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, LOTR + GoT + D&D visual lineage, awe-inducing concept-art masterwork',
+    // magic-unleashed: anchor the colossal high-fantasy spell event.
+    'magic-unleashed':
+      'Frank Frazetta + Brom + Michael Whelan painted-fantasy oil tradition, a COLOSSAL HIGH-FANTASY SPELL being UNLEASHED — overwhelming arcane energy, glowing runes, swirling magical power and light filling and dominating the frame, a SMALL robed wizard/sorcerer figure dwarfed below as they channel it, deep Dungeons & Dragons + LOTR sorcery (NOT sci-fi tech), the setting transformed and lit by the magic, cinematic painterly grandeur, awe-inducing concept-art masterwork',
     // clash-of-armies: anchor the epic HIGH-FANTASY battle + dragons (not Roman).
     'clash-of-armies':
       'John Howe + Alan Lee + Frank Frazetta painted-fantasy oil tradition, an EPIC MASSED HIGH-FANTASY BATTLE in the world of LORD OF THE RINGS + DUNGEONS & DRAGONS + WARHAMMER — two vast armies of fantasy races (armored fantasy knights, orcs, elves, dwarves, trolls, undead) in ORNATE FANTASTICAL plate armor with magical weapons and fantasy heraldry, great WESTERN DRAGONS sweeping over the battle breathing fire, towering fantastical siege engines, war-magic and spell-blasts, banners and dust receding to the horizon, Pelennor-Fields + Helms-Deep scale and grandeur — NOT a Roman / Greco-Roman / historical legion battle, cinematic painterly depth, thunderous chaos, awe-inducing concept-art masterwork',
@@ -574,6 +578,8 @@ module.exports = {
     'dragon-breeds',
     // NEW 2026-06-10 — clash-of-armies (massed fantasy battle, Tier 2). MVP-25.
     'clash-of-armies',
+    // NEW 2026-06-10 — magic-unleashed (colossal spell event, Tier 2). MVP-25.
+    'magic-unleashed',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -607,7 +613,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -666,6 +672,7 @@ module.exports = {
       'dragon-brood',
       'dragon-breeds',
       'clash-of-armies',
+      'magic-unleashed',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -704,6 +711,7 @@ module.exports = {
       'dragon-brood': 'creature',
       'dragon-breeds': 'creature',
       'clash-of-armies': 'scene',
+      'magic-unleashed': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

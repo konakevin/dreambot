@@ -360,6 +360,20 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  MAGIC_UNLEASHED: {
+    description:
+      'PATH-BESPOKE — DragonBot magic-unleashed path (2026-06-10, Tier 2). A COLOSSAL spell event — a wizard/sorcerer unleashing world-shaking magic (summoning, portal-tear, wizard duel, forbidden ritual, meteor-call). Arcane spectacle the star. Path-bespoke: spell_event + caster + magic_effect + setting + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['spell_event', 'caster', 'magic_effect', 'setting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   CLASH_OF_ARMIES: {
     description:
       'PATH-BESPOKE — DragonBot clash-of-armies path (2026-06-10, Tier 2). A vast epic fantasy BATTLE — two massed armies clashing, siege + war-magic + banners, cinematic scale. Path-bespoke: armies (the factions) + battle_action (the clash moment) + battlefield (the stage) + war_spectacle (magic/arrows/siege) + drama (40% gated). Universal lighting + atmosphere reused.',

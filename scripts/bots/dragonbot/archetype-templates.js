@@ -1920,6 +1920,69 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  MAGIC_UNLEASHED: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, spell_event, caster, magic_effect, setting, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+A secondary focal point heightening the spell (does NOT replace it).
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a COLOSSAL MAGIC moment for DragonBot — a wizard or sorcerer UNLEASHING world-shaking high-fantasy magic. Frank Frazetta + Brom + Michael Whelan painted-fantasy oil tradition. D&D / LOTR / Warhammer arcane spectacle. The scene should make the viewer GASP at the raw POWER of the magic.
+
+━━━ THE MAGIC IS THE HERO — ABSOLUTE FIRST RULE ━━━
+The colossal SPELL EFFECT dominates the frame — overwhelming arcane energy, light, and scale. The caster is present but SMALL against the magic they have unleashed. This is a moment of immense, reality-bending power, deep high fantasy (NOT sci-fi, NOT a small parlor trick).
+
+━━━ THE SPELL EVENT (what is being cast) ━━━
+${spell_event}
+
+The defining magical event — render its scale and drama as the centerpiece.
+
+━━━ THE CASTER (the figure wielding it — small against the magic) ━━━
+${caster}
+
+Render the caster mid-incantation — robes/armor, staff/hands raised, dwarfed by the power they channel. ONE caster (or two duelists if the event is a duel).
+
+━━━ THE MAGIC EFFECT (how the magic looks) ━━━
+${magic_effect}
+
+Render the arcane energy in rich detail — color, form, glowing runes, swirling power, light spilling across the scene.
+
+━━━ THE SETTING (where it happens) ━━━
+${setting}
+
+Render the setting with depth, lit and transformed by the magic.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, awe-struck. The colossal magic dominates — light and arcane energy filling the frame, the small caster a focal anchor, the setting transformed by the power. Deep high-fantasy spell-craft. NEVER a small or mundane scene; NEVER sci-fi tech.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a wizard UNLEASHING a colossal spell (THE SPELL EVENT) in the setting — the overwhelming magic leads], [the magic effect — arcane energy + color + glowing runes + scale], [the small caster mid-incantation, dwarfed by the power], [the setting transformed + lit by the magic], [lighting + atmosphere], [palette + awe-struck epic mood]
+
+CRITICAL — render a COLOSSAL high-fantasy spell effect dominating the frame, with a small caster. Do NOT render sci-fi tech, a mundane scene, or a caster bigger than the magic.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   CLASH_OF_ARMIES: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, armies, battle_action, battlefield, war_spectacle, drama } = slots;
 

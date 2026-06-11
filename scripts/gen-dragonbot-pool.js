@@ -149,6 +149,81 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // MAGIC-UNLEASHED PATH (2026-06-10 — new, Tier 2). A colossal
+  // spell event — wizard unleashing world-shaking magic.
+  // ════════════════════════════════════════════════════════
+
+  magic_spell_event: {
+    format: 'simple',
+    theme: `DRAGONBOT MAGIC-UNLEASHED — the colossal SPELL EVENT being cast (the centerpiece). Each entry 25-45 words. World-shaking high-fantasy magic, NOT sci-fi.
+
+VARIETY MANDATE — ~25 distinct colossal spell events: a vast summoning circle tearing open to call forth a titanic entity; a swirling portal-rift ripping through reality; a meteor called down in a pillar of fire; a wizards' duel with clashing beams of raw power; a forbidden necromantic ritual raising the dead; a city-sized protective ward flaring to life; a storm conjured into a sky-filling vortex; a phoenix/elemental being summoned in flame; time fracturing in a spreading crystalline freeze; a leyline eruption splitting the ground with light; a colossal rune-array igniting; a soul drawn screaming from a vessel. Each names the event + its overwhelming scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal high-fantasy spell event in 25-45 words, world-shaking scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast glowing summoning-circle cracking open mid-air, a titanic horned entity dragging itself through the searing rift, energy lashing outward across the scene in arcs of violet fire.
+2. A swirling portal-rift torn through reality itself, edges burning white-hot, an impossible starry void churning within, debris and light spiralling into its maw.
+3. A meteor called screaming down from the heavens in a colossal pillar of fire and smoke, the sky split with red light, the horizon braced for impact.`,
+  },
+
+  magic_caster: {
+    format: 'simple',
+    theme: `DRAGONBOT MAGIC-UNLEASHED CASTER — the figure wielding the magic (SMALL against the spell). Each entry 18-32 words. Varied fantasy spellcaster types + genders.
+
+VARIETY MANDATE — ~25 distinct casters: a robed grey wizard with a glowing staff raised high; a sorceress in flowing dark robes, arcane fire wreathing both hands; an armored battle-mage channeling power through a runed blade; a hooded warlock with an eldritch tome floating open; a horned tiefling conjurer; an ancient lich-mage in tattered finery; an elven archmage in silver robes; a druid calling the storm with antlered staff; a blood-mage with glowing sigils carved in the air; two rival wizards mid-duel; a young apprentice overwhelmed by power they unleashed; a crowned sorcerer-king. Each: garb + how they channel the spell, dwarfed by it.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE spellcaster figure in 18-32 words — garb + channeling pose, small against the magic. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A robed grey wizard atop a rocky outcrop, gnarled staff thrust high, both arms spread wide, his cloak whipping as the colossal spell erupts above and dwarfs him.
+2. A sorceress in flowing black-and-violet robes, arcane fire spiralling from both upraised hands, head thrown back, a tiny figure against the storm of power she conjures.
+3. An armored battle-mage on one knee, a glowing runed greatsword driven into the ground, channeling a torrent of energy upward through the blade.`,
+  },
+
+  magic_effect: {
+    format: 'simple',
+    theme: `DRAGONBOT MAGIC-UNLEASHED EFFECT — how the arcane energy LOOKS (the visual signature). Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct magic-effect looks: swirling violet arcane energy laced with glowing runes; a vortex of blue-white lightning; rivers of molten-gold light; spiralling green soul-flame; a lattice of fractured crystalline light; storm-clouds shot through with power; a halo of concentric glowing sigils; ribbons of liquid starlight; black tendrils of void-energy; a blinding column of pure white radiance; shattering shards of frozen light; coiling fire-serpents of spell-flame. Each is a vivid arcane visual signature with color + form + motion.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE arcane-energy visual signature in 15-30 words — color + form + motion. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Swirling violet arcane energy laced with thousands of tiny glowing runes, spiralling outward in great ribbons that light the whole scene.
+2. A roaring vortex of blue-white lightning coiling upward, forks lashing out to scorch the ground, the air crackling and ionized.
+3. Spiralling green soul-flame rising in ghostly tongues, wisps of pale spirits twisting within the cold fire.`,
+  },
+
+  magic_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT MAGIC-UNLEASHED SETTING — where the spell is cast (transformed by the magic). Each entry 20-40 words, with depth.
+
+VARIETY MANDATE — ~25 distinct settings: the top of a high wizard's tower; an ancient stone ritual-circle on a moor; a vast arcane library; a ruined temple sanctum; a mountain peak under a torn sky; a dungeon ritual-chamber; a battlefield at the moment of a war-spell; a crystal cavern; a standing-stone henge; a throne-room as a king casts; a blasted crater; a moonlit cliff over a churning sea. Each sets the place + depth + how the magic transforms/lights it.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE setting in 20-40 words with depth, transformed by the magic. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The storm-lashed summit of a high wizard's tower, parapet stones cracking, the torn sky churning above, the land falling away into darkness far below.
+2. An ancient stone ritual-circle on a windswept moor, weathered standing stones blazing with light, fog rolling between them, the horizon lost in gloom.
+3. A vast arcane library of towering shelves, books and scrolls whipped into the air by the unleashed power, shafts of magical light lancing between the stacks.`,
+  },
+
+  magic_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT MAGIC-UNLEASHED DRAMA — a secondary focal point heightening the spell, fires ~40%. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a Western dragon erupting from the summoned portal; a rival caster hurling a counter-spell; tiny onlookers fleeing the blast; a creature half-formed in the energy; the caster's familiar at their side; shattered debris frozen mid-air; a second figure shielding their eyes; spirits streaming from the rift; the ground splitting beneath; a kingdom's skyline lit by the spell on the horizon; an artifact glowing as it powers the spell. Each adds a focal beat (does NOT replace the magic).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great Western dragon erupts from the summoned portal, four legs and wings unfurling, roaring into being amid the arcane fire.
+2. A rival caster on the far side hurls a blazing counter-spell, the two torrents of power colliding in a blinding clash.
+3. Tiny robed onlookers flee the blast in the foreground, dwarfed and silhouetted against the wall of unleashed light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // CLASH-OF-ARMIES PATH (2026-06-10 — new, Tier 2). Epic
   // massed fantasy battle — two armies, siege, war-magic.
   // ════════════════════════════════════════════════════════
