@@ -391,6 +391,25 @@ A bot only goes live via its **`bot_schedules`** row (the DB-driven dispatcher r
 
 ---
 
+## Spinning off a NEW bot from an existing one — the xerox-clone procedure (2026-06-11, DreamBot from ChibiBot)
+
+When a single PATH on an existing bot earns its own identity (Kevin: "set up a new bot named X and move this path to it as its first path"), the safe way to guarantee the new bot renders **bit-for-bit identically** is a full directory xerox, not a hand-rebuilt lean module. (Kevin, verbatim: "do not rebuild it based on this, literally copy it (move it) bit for bit over to the new bot — do not try and paraphrase it. xerox copy it.") A paraphrased rebuild silently drops some load-bearing layer (a medium override, a skipPaths entry, a sensory wiring) and the look drifts.
+
+**Procedure:**
+1. **`cp -r scripts/bots/<source> scripts/bots/<new>`** — full clone (paths, pools, seeds, archetypes, shared-blocks). The new bot inherits the source's whole machinery; only the moved path is "active."
+2. **Edit `<new>/index.js`:** `username`/`displayName` → the new identity; `paths: [...]` → ONLY the moved path(s). Everything else (mediums, mediumByPath, modelByPath, lookRegister, skipPaths, count-block exemptions) stays byte-identical so the path renders the same. The other source paths' files stay on disk but dormant (not in `paths`). Prune-to-lean later if wanted; correctness first.
+3. **Revert the source bot** to remove the moved path: pull it from `paths`, `mediumByPath`, `modelByPath`, look-path filters, chaos/polish `skipPaths`, the char-count exemption, and the `pools.js` loader lines; delete the path file + its seed JSONs from the source `seeds/`. Verify both modules load: `node -e "require('./scripts/bots/<name>')"` for each. (If the path was never committed, the source reverts produce an empty git diff — expected.)
+4. **`.bak` editor backups** ride along in a `cp -r` (e.g. `*.json.bak-<ts>`) — delete them from the clone before committing; they're junk, not seeds.
+
+**DB side (the new bot is a `users` row + a `bot_schedules` row):**
+- **User account:** either create one or **convert an existing human test account** (Kevin reused the squatted `dreambot@…` account: `is_bot=true`, `display_name`, `is_public=true`, `avatar_url` ← one of the new path's renders). `lookupBotUserId` matches `ilike('username', bot.username)`, so the DB `username` must equal the module `username` (case-insensitive). Any pre-existing `is_posted=false` private dreams on a converted account stay invisible (feed shows posted only) — fine to leave.
+- **Reassign posts** (Kevin wanted his liked test renders moved onto the new bot): `uploads.update({user_id: <newbot>}).in('id', [...])`. The `freeze_upload_columns_on_update` trigger freezes `user_id` for normal callers but **bypasses for `service_role`**, so the service client reassigns cleanly (image files don't move — `image_url` is absolute and still resolves from the source's storage folder; comments/likes stay attached by `upload_id`).
+- **Schedule:** follow "Enabling / reactivating a bot" above — set `active=true` AND a **non-null `last_posted_at`** (a brand-new row with `last_posted_at=null` gets auto-killed by the never-posted guard once it's >6h old; `iter-bot` posts do NOT set it).
+
+**GOTCHA — find "the post Kevin means" by COMMENT, not by your notes.** Kevin's "user ID" in CLAUDE.md (`kevin`/admin) is NOT necessarily the account he's tapping in the app — he also runs a `sunnysteph` test account, and app likes/saves land under whichever is signed in. When his described saves don't appear under the id you expect, the writes aren't lost — they're under the other account. Fastest disambiguation: ask him to **comment** on the exact posts, then query `comments` by his id ordered by `created_at desc` — the comment ties his intent to a concrete `upload_id` with zero ambiguity.
+
+---
+
 ## Per-bot AI model lineups (which models each bot rolls from)
 
 Set 2026-05-30 from Kevin's review of the 17×8×3 matrix (logged in `BOT_MODEL_TALLY.md`). Each bot picks at random from its `allowedModels` per render; `modelByPath` overrides per-path locks are preserved on top (kept where they pin a hearted-look, like ChibiBot `creature-world → flux-dev`). Per-render model is captured to `uploads.model` and displayed as a badge above the username on DreamCard.

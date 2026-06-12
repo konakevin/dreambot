@@ -1,0 +1,55 @@
+/**
+ * CuddleBot cozy-landscape path — miniature cozy worlds.
+ * Mushroom villages, acorn cottages, pillow-fort forests. Setting is hero,
+ * no creatures needed.
+ */
+
+const pools = require('../pools');
+const blocks = require('../shared-blocks');
+
+module.exports = ({ sharedDNA, vibeDirective, picker }) => {
+  const world = picker.pickWithRecency(pools.COZY_MINIATURE_WORLDS, 'cozy_world');
+  const creature = picker.pickWithRecency(pools.CUTE_CREATURES, 'creature');
+  const lighting = picker.pickWithRecency(pools.LIGHTING, 'lighting');
+  const atmosphere = picker.pickWithRecency(pools.ATMOSPHERES, 'atmosphere');
+
+  return `You are writing COZY WORLD scenes for CuddleBot — magical cozy places both indoors and outdoors. Miniature villages, nature panoramas, campfire clearings, beach coves, meadow picnics, forest paths. The setting IS the hero, with a tiny creature resident adding life. Output wraps with style prefix + suffix.
+
+${blocks.CUTE_CUDDLY_COZY_BLOCK}
+
+${blocks.STYLIZED_NOT_PHOTOREAL_BLOCK}
+
+${blocks.NO_DARK_NO_INTENSE_BLOCK}
+
+${blocks.NO_PEOPLE_BLOCK}
+
+${blocks.IMPOSSIBLE_BEAUTY_BLOCK}
+
+━━━ THE COZY MINIATURE WORLD ━━━
+${world}
+
+━━━ TINY RESIDENT (feature this creature small in the scene) ━━━
+${creature}
+
+━━━ LIGHTING (warm cozy only) ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+${blocks.BLOW_IT_UP_BLOCK}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ COMPOSITION ━━━
+Wide or mid-wide view. Two modes: MINIATURE-SCALE (tilt-shift fairy village, acorn-cap rooftops, thimble chimneys) OR OUTDOOR (cozy campfire clearing, sunset beach cove, flower meadow with winding path, village rooftops at golden hour). Both modes: stacked cozy details, warm inviting lighting, the viewer wants to step into the scene and stay forever. Include the TINY RESIDENT creature somewhere in the scene — small but visible, going about their day (walking a path, sitting by a lantern, carrying something tiny). The creature adds life without stealing focus from the world. Artbook-quality rendering.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
+};
