@@ -158,6 +158,21 @@ VARIETY MANDATE — spread WIDELY (never cluster on sunset-ocean):
 
 🚫 BANS: NO bubble-bot / character (separate axis). NO humans. NO scary / dark. Spread across A-K. OMIT negation. Never exceed 20 words.`,
     instructions: `Generate NEW bold imaginative dream worlds extending the variety across families A-K — colorful, dynamic, with a scale hook + named elements + signature feature. 12-20 word terse fragments, ONE line each. World ONLY.`,
+    // Production scale: one Sonnet phase per family so cross-batch dedup can't
+    // starve a family (Kevin's equal-share-per-subtheme hard rule).
+    subThemes: [
+      'GOLDEN-HOUR OCEAN / COAST — sunset seas, sun-glazed piers, palm archways, tide pools, lagoon sandbars, sea-caves, coastal cliffs, coral atolls, shell beaches, glowing harbors',
+      'COSMIC / SPACE — giant pastel planets, ringed worlds, galaxy bands, the moon, comet trails, nebula clouds, asteroid gardens, star-fields, twin suns, drifting space-stations of light',
+      'CANDY-LAND / SWEETS — lollipop trees, gumdrop hills, marshmallow clouds, ice-cream mountains, soda seas, chocolate rivers, peppermint forests, cookie cliffs, candy-cane groves, frosting dunes',
+      'SKY KINGDOM — floating cloud-islands, rainbow roads, sky-castles, balloon festivals, drifting soap-bubble skies, cloud staircases, floating archipelagos with waterfalls, airship gardens, sky-bridges',
+      'UNDERWATER — iridescent coral bubble-cities, kelp groves, jellyfish drifts, sunken pastel ruins, anemone carnivals, pearl caverns, glowing trenches, seahorse meadows, shipwreck gardens',
+      'CRYSTAL / GEM — glittering grottos, geode caverns, prism-spire forests, gem fields, amethyst canyons, quartz cathedrals, opal lakes, crystalline ice-palaces, mirror-gem mazes',
+      'OVERSIZED NATURE / MACRO — giant flower gardens, lotus ponds, mushroom villages, dewy fern hollows, towering dandelions, giant clover meadows, oversized berry bushes, leaf-canopy worlds',
+      'AURORA / SNOW / SNOWGLOBE — snow-pastel tundra under aurora ribbons, frosted glades, snowglobe villages, frozen-waterfall palaces, ice-flower fields, glittering glacier caves, winter lantern-paths',
+      'SOFT NEON / DREAM-TECH — pastel dream-arcades, glowing holographic plazas, gentle cyber gardens, clockwork garden, music-box ballrooms, neon koi-pools, light-grid meadows, hologram bazaars',
+      'ZEN / STORYBOOK — sakura islands, paper-lantern koi courtyards, tea-house terraces, miniature villages, bamboo groves, torii-gate paths, library-canyons, cottage hamlets, lantern-festival rivers',
+      'WHIMSICAL SURREAL — a tea party drifting among the stars, surfing a giant bubble, a glitter-volcano, a liquid-rainbow waterfall, a windmill-pinwheel hill, a rainbow-geyser plain, a hot-air-balloon sky, an upside-down floating pond',
+    ],
   },
 
   // ── WORLD DETAIL (secondary elements that fill + animate the world) ───────
@@ -172,6 +187,13 @@ Spread across: foreground props (fat dewdrops on petals, mushrooms clustered alo
 ✅ GOOD: "schools of luminous koi gliding slowly past"
 ✅ GOOD: "smaller sky-islands drifting in the soft distance"`,
     instructions: `Generate NEW single secondary world ELEMENTS — props / motion / life / depth-builders that animate any dream world. 5-14 words, ONE line. One element each, no full world, no bot.`,
+    subThemes: [
+      'FOREGROUND PROPS — fat dewdrops on oversized petals/leaves, clustered glowing mushrooms, gumdrop bushes, mossy stones, candy-striped tall grass, scattered seashells, glowing pebbles, toadstool rings',
+      'MOTION — tiny waterfalls cascading off crags, petals/leaves streaming on the breeze, lanterns floating up, ribbon-streamers drifting, spinning pinwheels, rising bubbles, swirling light-trails, falling spar_dust',
+      'LIFE — schools of luminous koi gliding, fireflies spiraling, drifting jellyfish, butterfly-gears fluttering, glowing moths, tiny sky-whales, hummingbirds of light, drifting glow-sprites, clockwork dragonflies',
+      'DEPTH-BUILDERS — smaller sky-islands drifting beyond, distant glowing spires, a faraway ringed planet, layered pastel mountains, far waterfalls into cloud-pools, distant windmills, receding archways, far city-glow',
+      'SKY / WEATHER DRIFTS — pale aurora ribbons rippling, drifting dandelion-seed clouds, soap bubbles passing, slow falling snow-sparkle, drifting petals overhead, wisps of glowing mist, comet streaks, light-rain shimmer',
+    ],
   },
 
   // ── LIGHT + PALETTE ──────────────────────────────────────────────────────
@@ -207,12 +229,16 @@ if (!POOL || !POOL_RECIPES[POOL]) {
 }
 const recipe = POOL_RECIPES[POOL];
 
-function buildPrompt(count, recipe, touchpoints) {
+function buildPrompt(count, recipe, touchpoints, featured) {
   const tp = touchpoints.length
     ? `\n━━━ TOUCHPOINTS — match this EXACT style, voice, length, and quality (these are the curated reference set; generate NEW entries that EXTEND the variety, never duplicate or lightly reword these) ━━━\n${touchpoints.map((t) => '  • ' + t).join('\n')}\n`
     : '';
+  const ft = featured
+    ? `\n━━━ FEATURED FAMILY (this batch ONLY — every entry must belong to THIS family; go DEEP and specific, find fresh distinct ideas within it) ━━━\n${featured}\n`
+    : '';
 
   return `You are authoring entries for the DreamBot "${recipe.label}" pool. DreamBot renders a beloved glossy iridescent "bubble-bot" designer-toy in dreamy, frame-worthy magical-wallpaper worlds.
+${ft}
 
 ━━━ POOL THEME ━━━
 ${recipe.theme}
@@ -328,9 +354,9 @@ function dedupe(entries) {
   return { kept, dropped };
 }
 
-async function generateBatch(batchCount, touchpoints) {
+async function generateBatch(batchCount, touchpoints, featured) {
   const t0 = Date.now();
-  const text = await callSonnet(buildPrompt(batchCount, recipe, touchpoints));
+  const text = await callSonnet(buildPrompt(batchCount, recipe, touchpoints, featured));
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   let arr;
   try {
@@ -373,31 +399,62 @@ async function generateBatch(batchCount, touchpoints) {
   );
 
   let pool = [...preExisting];
-  let iteration = 0;
-  while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
-    iteration++;
-    const stillNeeded = finalTarget - pool.length;
-    const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(
-      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded}, gen ${batchSize}`
-    );
-    const fresh = await generateBatch(batchSize, touchpoints);
-    if (fresh.length === 0) {
-      console.warn('  ⚠ empty Sonnet response — stopping');
-      break;
-    }
+
+  // One gen+dedup batch: gen `batchSize` (optionally for a FEATURED family),
+  // drop within-batch dups + entries already in the pool, add up to `cap` more.
+  // Returns the number actually added.
+  async function addBatch(batchSize, featured, cap) {
+    const fresh = await generateBatch(batchSize, touchpoints, featured);
+    if (fresh.length === 0) return 0;
     const within = dedupe(fresh);
-    if (within.dropped.length) console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+    if (within.dropped.length) console.log(`     • within-batch dropped ${within.dropped.length}`);
     const existingSigs = new Set(pool.map(signatureOf));
     const newUnique = within.kept.filter((e) => !existingSigs.has(signatureOf(e)));
     const crossDropped = within.kept.length - newUnique.length;
-    if (crossDropped) console.log(`  • cross-batch dedup dropped ${crossDropped}`);
-    const toAdd = newUnique.slice(0, finalTarget - pool.length);
+    if (crossDropped) console.log(`     • cross-batch dropped ${crossDropped}`);
+    const toAdd = newUnique.slice(0, Math.max(0, cap));
     pool = [...pool, ...toAdd];
-    console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0) {
-      console.warn('  ⚠ batch added nothing new — Sonnet may be exhausted on theme, stopping');
-      break;
+    return toAdd.length;
+  }
+
+  if (recipe.subThemes && TARGET !== null) {
+    // PRODUCTION SCALE — equal share per family, one Sonnet phase each, so
+    // cross-batch dedup can't starve a family (the equal-share-per-subtheme rule).
+    const subs = recipe.subThemes;
+    const need = Math.max(0, finalTarget - startCount);
+    const perSub = Math.ceil(need / subs.length);
+    console.log(`\nPer-family target: ~${perSub} new across ${subs.length} families`);
+    for (let s = 0; s < subs.length; s++) {
+      const featured = subs[s];
+      const label = featured.split(/[—-]/)[0].trim().slice(0, 42);
+      let added = 0;
+      let stall = 0;
+      console.log(`\n── Family ${s + 1}/${subs.length}: ${label} (+${perSub}) ──`);
+      while (added < perSub && stall < 3 && pool.length < finalTarget) {
+        const remainingSub = perSub - added;
+        const batchSize = Math.min(25, Math.max(8, Math.ceil(remainingSub * 1.5)));
+        const cap = Math.min(remainingSub, finalTarget - pool.length);
+        const n = await addBatch(batchSize, featured, cap);
+        added += n;
+        stall = n === 0 ? stall + 1 : 0;
+        console.log(`   +${n} → family ${added}/${perSub} | pool ${pool.length}/${finalTarget}`);
+      }
+      if (added < perSub) console.log(`   (family topped out at ${added} — semantic ceiling)`);
+    }
+  } else {
+    // Single-recipe iterative loop (no sub-themes).
+    let iteration = 0;
+    while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
+      iteration++;
+      const stillNeeded = finalTarget - pool.length;
+      const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
+      console.log(`\nIteration ${iteration}: pool ${pool.length}/${finalTarget}, gen ${batchSize}`);
+      const n = await addBatch(batchSize, undefined, finalTarget - pool.length);
+      console.log(`  ✓ Added ${n} → pool ${pool.length}/${finalTarget}`);
+      if (n === 0) {
+        console.warn('  ⚠ batch added nothing new — Sonnet exhausted on theme, stopping');
+        break;
+      }
     }
   }
 
