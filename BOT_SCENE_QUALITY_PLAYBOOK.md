@@ -234,6 +234,33 @@ Post a batch (`--post`) for his heart-review, OR show inline. On sign-off, scale
 
 ---
 
+## "Same person every time" — the homogenization trap (2026-06-11, FaeBot forest-elder)
+
+**Symptom:** the creature pool clearly varies (different skin tones, species, etc.) but renders all look like the SAME individual. Kevin: "90% still look like the same person."
+
+**How to diagnose — READ THE PROMPTS, not just the images.** Pull the actual Flux prompts from the DB (`uploads.ai_prompt` for the bot's recent posts) and look for a word/feature that appears in **6 of 6**. On forest-elder the smoking gun: every prompt opened with "**Ancient**", and every one had "**glowing amber eyes**" + "**branching antlers**" + "**weathered long beard**" + a solemn-old-wisdom expression. The skin tone varied; the face/age/eyes/crown/expression were identical → same guy in a different wash.
+
+**Root cause = identity hard-coded OUTSIDE the varied pool:**
+1. **The TEMPLATE injects blanket adjectives into EVERY prompt.** forest-elder's template literally said "an ANCIENT MALE FOREST-ELDER … He is ancient, weathered, powerful." That overrode the ~40% "vital prime" seeds — Sonnet wrote "Ancient" anyway. **Fix: strip age/identity adjectives from the template; let the seed drive them.** ("a MALE FOREST-SPIRIT … his age/build/crown/eyes are whatever his entry specifies.")
+2. **A feature mandated on EVERY creature entry.** Antlers + glowing-amber-eyes were in the recipe's required-feature list, so all 200 had them. **Fix: make signature features OPTIONAL/varied in the recipe** — "antlers NOT mandatory, ~half have none (leaf-crown / circlet / bare scalp / wild hair)"; "eyes vary — most ordinary, only SOME glow." Antlers dropped from ~all → ~half, glowing eyes 25/25 → 3/25.
+3. **A same-register satellite axis.** The expression pool was 100% old-coded ("centuries", "old forest-wisdom", "solemn downward gaze") — two entries shared a verbatim line. **Fix: rebuild it age-neutral + emotionally varied** (fierce / playful / tender / focused / wondering).
+
+**Litmus:** if a pool varies but renders don't, the culprit is almost always (a) the template prepending a fixed adjective, or (b) a "mandatory on every entry" feature. The variety mandate in the SEED can't beat a constant injected downstream.
+
+**Bonus rendering quirk:** "a beard **OF** moss/lichen" renders **pale** regardless of the named color — moss + forest light reads light, and the material noun beats the color word. To get dark beards, **lead with the color and make the material an accent**: "a thick **jet-black** beard with a little moss woven in," not "a beard of moss."
+
+## Gender-locked character paths — ship a SEPARATE male path, never one neutral template (2026-06-11)
+
+Reinforces the gender-lock rule. FaeBot's feminine dryad-portrait pool had ~14 male "Leshy" seeds; the template was hard-feminine ("render **her** … **She** is …"). A male Leshy seed in a "she" template rendered "a girl with a beard" — androgynous mush. **Fix that worked:** (1) extract the male seeds out, (2) make the feminine recipes feminine-ONLY with explicit male bans, (3) build a NEW male-locked path (`forest-elder`) with its own he/his template. Don't try to make one path serve both genders. NOTE: the male gender-lock is **load-bearing**, so that path **skips two-pass polish** — Haiku compression strips "he/his/bearded" and androgyny returns.
+
+## Weighted `subThemes` — guaranteeing a distribution at scale (2026-06-11, gen-faebot-pool.js)
+
+When a pool must hold a DISTRIBUTION at 200 (e.g. even species spread, or "X% of variant A"), a single "mix evenly" instruction in one big call does NOT survive cross-batch dedup (it unevenly starves sub-themes — see [[feedback_production_seed_equal_share_per_subtheme]]). The mechanism added to `gen-faebot-pool.js`: a recipe can declare `subThemes: [{aspect, weight}, …]`; the gen loop runs **one focused Sonnet phase per aspect**, each filling a weight-proportional share (`FEATURED_SUBTHEME` is injected into the prompt). The shared base aesthetic lives in `recipe.theme` (every entry); the aspect just sets what's featured for that phase. Scales 28→200 by changing one number; spread is guaranteed (forest-elder: Leshy 38 / Green-Man 38 / horned-god 29 / … exactly the weights). Also the safe way to express "occasional spice" — give the rare variant a small weight.
+
+**Two cross-bot taste rules locked this session:** (a) NO real-world cultural/ethnic diversity in a fantasy world — diversify within the world's own native palette (wood-tone skin, beard color, age, species), never real nationalities (see [[feedback_no_realworld_diversity_in_fantasy_worlds]]); (b) NO animal-hybrid / beast-man creatures on FaeBot forest-elder — Kevin: "they look stupid." Animals appear only as scene COMPANIONS via the story_beat axis, never fused onto the elder's body.
+
+---
+
 ## ⚠️ ADDING A BOT MEDIUM? You MUST also add a "cleaned medium" for DLT (2026-05-25)
 
 When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` row), you **must also create a corresponding row in `dlt_clean_mediums`**. This is not optional — skipping it silently breaks "Dream Like This."
