@@ -135,6 +135,18 @@ module.exports = {
   FAEBOT_DRYAD_PORTRAIT_WEATHER: loadIfExists('faebot_dryad_portrait_weather'),
   FAEBOT_DRYAD_PORTRAIT_MAGICAL_FLAVOR: loadIfExists('faebot_dryad_portrait_magical_flavor'),
   FAEBOT_DRYAD_PORTRAIT_FOREGROUND_ANCHOR: loadIfExists('faebot_dryad_portrait_foreground_anchor'),
+  // ─── forest-elder axis-system pools (2026-06-11) — MALE woodland spirits, counterpart to dryad-portrait ───
+  // All bespoke-male EXCEPT lighting, which reuses the genderless FAEBOT_DRYAD_PORTRAIT_LIGHTING set.
+  FAEBOT_FOREST_ELDER_CREATURE: loadIfExists('faebot_forest_elder_creature'),
+  FAEBOT_FOREST_ELDER_EXPRESSION: loadIfExists('faebot_forest_elder_expression'),
+  FAEBOT_FOREST_ELDER_GESTURE: loadIfExists('faebot_forest_elder_gesture'), // legacy — replaced by STORY_BEAT (kept for revert)
+  FAEBOT_FOREST_ELDER_STORY_BEAT: loadIfExists('faebot_forest_elder_story_beat'),
+  FAEBOT_FOREST_ELDER_FRAMING: loadIfExists('faebot_forest_elder_framing'),
+  FAEBOT_FOREST_ELDER_DOMAIN: loadIfExists('faebot_forest_elder_domain'),
+  FAEBOT_FOREST_ELDER_ADORNMENT: loadIfExists('faebot_forest_elder_adornment'),
+  FAEBOT_FOREST_ELDER_WEATHER: loadIfExists('faebot_forest_elder_weather'),
+  FAEBOT_FOREST_ELDER_MAGICAL: loadIfExists('faebot_forest_elder_magical'),
+  FAEBOT_FOREST_ELDER_FOREGROUND: loadIfExists('faebot_forest_elder_foreground'),
   // ─── fae-village axis-system pools (2026-05-21 migration from legacy) ───
   FAEBOT_FAE_VILLAGE_DWELLING_TYPE: loadIfExists('faebot_fae_village_dwelling_type'),
   FAEBOT_FAE_VILLAGE_LAYOUT: loadIfExists('faebot_fae_village_layout'),

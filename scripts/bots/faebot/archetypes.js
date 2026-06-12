@@ -87,7 +87,7 @@ module.exports = {
 
   FAEBOT_DRYAD_PORTRAIT: {
     description:
-      'PATH-BESPOKE — FaeBot dryad-portrait (2026-05-21 axis-system migration). TIGHT close-up portrait (face 35-60% of frame) of an adult-scale tree-bound dryad / hamadryad / naiad / meliae / moss-maiden / Leshy. Intimate STILLNESS register — face turned 3/4 or profile, eyes lowered, NEVER eye-contact. Painted-fantasy register (Manchess + Giancola + Bonner + Froud). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / gesture_pose / portrait_composition / adornment / forest_backdrop / lighting / weather / magical_flavor + foreground_anchor (40%-gated). Decomposed creature pool to features-only (no posture), with expression / gesture / adornment broken out as separate axes for ~10^9 combinations.',
+      'PATH-BESPOKE — FaeBot dryad-portrait (2026-05-21 axis-system migration). TIGHT close-up portrait (face 35-60% of frame) of an adult-scale tree-bound dryad / hamadryad / naiad / meliae / moss-maiden (ALL FEMININE — male forest-elders live in the forest-elder path). Intimate STILLNESS register — face turned 3/4 or profile, eyes lowered, NEVER eye-contact. Painted-fantasy register (Manchess + Giancola + Bonner + Froud). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / gesture_pose / portrait_composition / adornment / forest_backdrop / lighting / weather / magical_flavor + foreground_anchor (40%-gated). Decomposed creature pool to features-only (no posture), with expression / gesture / adornment broken out as separate axes for ~10^9 combinations.',
     slots: {
       universal: [],
       bot: [],
@@ -98,6 +98,30 @@ module.exports = {
         'portrait_composition',
         'adornment',
         'forest_backdrop',
+        'lighting',
+        'weather',
+        'magical_flavor',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'foreground_anchor', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_FOREST_ELDER: {
+    description:
+      'PATH-BESPOKE — FaeBot forest-elder (2026-06-11). The MASCULINE counterpart to dryad-portrait — an ANCIENT MALE woodland spirit (Leshy / Green-Man / horned forest-god / woodwose / bark-druid elder / antlered forest-king / mossy treant-elder / root-warden). HARD GENDER-LOCK: every figure is unmistakably MALE (he/his, a moss-beard, masculine brow) — built to house the male forest-spirit DNA that was causing "girl with a beard" androgyny inside the feminine dryad-portrait path. MIX framing (Kevin: "Both") — ~half intimate bust-portraits, ~half fuller forest-scenes of the elder in his domain, driven by the framing axis. Painted-fantasy register (Manchess + Giancola + Bonner + Froud + Frazetta). ALL pools bespoke-male EXCEPT lighting (reuses genderless dryad time-of-day set). STORYTELLING register (2026-06-11): the story_beat axis (verb-led narrative moment with woodland-creature participants + stakes) replaced the small-bore gesture_pose axis, and the template was un-locked from "intimate stillness" to a front-loaded CAPTURED STORY MOMENT — the elder mid-act (healing a bird, raising a fallen tree, sheltering fawns from rain). 10 axes (9 always-on + 1 gated foreground_anchor): creature / expression_moment / story_beat / framing / domain / adornment / lighting / weather / magical_flavor + foreground_anchor (40%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'creature',
+        'expression_moment',
+        'story_beat',
+        'framing',
+        'domain',
+        'adornment',
         'lighting',
         'weather',
         'magical_flavor',

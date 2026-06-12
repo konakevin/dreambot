@@ -2940,12 +2940,12 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   // ─── forest-fairy-scene path (2026-05-20 axis-system migration, 10 axes) ───
   faebot_forest_fairy_scene_creature: {
     format: 'simple',
-    theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / Leshy / kodama / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / green-man / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature.
+    theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / kodama / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature.
 
 ⚠️ THE BAR: each creature reads as a SINGLE coherent mythic being. NOT a list — a unified painted-fantasy character description. Otherworldly mythic-creature beauty, NEVER human-model beauty. Hidden-camera candid posture — NEVER posing, NEVER eye-contact, NEVER pinup.
 
 ⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories:
-  - SPECIES LINEAGE — dryad / naiad / Leshy / kodama / hamadryad / pixie-sprite / fae queen / nymph / fox-spirit / glow-moth-fae / vine-nymph / green-man / meliae / sidhe / banshee-spirit / etc.
+  - SPECIES LINEAGE — dryad / naiad / kodama / hamadryad / pixie-sprite / fae queen / nymph / fox-spirit / glow-moth-fae / vine-nymph / meliae / sidhe / banshee-spirit / etc.
   - SKIN TREATMENT — translucent with constellations / bark-textured / moss-tinted olive / bioluminescent-freckled / mottled green-flecked / luminous pearl / silver-bark patches / lichen-detail / pale-jade / etc.
   - PLANT-MERGED HAIR — living vines woven with blooms / river-water flowing / pale willow-fronds / wisteria-petals cascading / moss tendrils with asphodel / dark pine-needles crowned with antlers / silver-leaf cascade / cherry-blossom braided / autumn-leaf flowing / etc.
   - PLANT-MERGED GARMENT — petal-shawl / leaf-bodice woven of ferns / vine-skirt / silk-petal wrap / overlapping rose-petals / moss-skirt with woven ivy / cape of willow-leaves / draped garland of clematis / birch-bark tunic / overlapping calla-lily / etc.
@@ -2956,7 +2956,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
 ⚠️ SPECIES DISTRIBUTION (across 25 entries):
   • ~5 DRYADS (oak / birch / rowan / willow / ash / cherry-blossom / pine)
   • ~3 NAIADS (river / pond / waterfall / brook / spring)
-  • ~3 LESHY / GREEN-MAN (forest-spirit elders, masculine register OK)
+  • ~3 BLOSSOM / HERB-NYMPH (foxglove / hellebore / asphodel / lily — feminine)
   • ~3 NYMPHS (moonlight / vine / flower / forest)
   • ~3 PIXIE / FAE-COURT (queen / sidhe / Tylwyth Teg)
   • ~3 ANIMAL-MERGED SPIRITS (fox-spirit / owl-fae / deer-spirit / swan-maiden)
@@ -2971,11 +2971,12 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • NO scared / angry / edgy / dark moods (peaceful-fairy register only)
   • NO "small figure in distance" — she's the focal subject
   • NO ethnic-codes from real-world cultures — fantasy-canon only
-  • NO closed-eyes (she's awake and present in the moment)`,
+  • NO closed-eyes (she's awake and present in the moment)
+  • ALL FEMININE — NO male / Leshy / Green-Man / forest-elder / beards / masculine "his/he" subjects (those live in the forest-elder path)`,
     touchpoints: [
       'An oak-dryad with bark-textured shoulders fading to smooth moss-tinted skin and long hair of living vines woven with tiny yellow blossoms, leaf-petal bodice and moss-skirt of woven ferns, small antlers branching with fresh oak-leaves, kneeling with one palm pressed to ancient roots as soft amber light filters from her veins, glowing-amber eyes lowered to the earth in quiet blessing',
       'A naiad with translucent skin showing tiny constellations beneath and hair of river-water flowing slowly past her waist, draped petal-shawl over a band of folded leaves, softly glowing pearl-iris eyes radiating gentle light, standing waist-deep in a moonlit pool with cupped palms holding liquid starlight, delicate gills along her neck shimmering faintly',
-      'A Leshy lord with bark-textured skin showing faint glowing vein-patterns and hair of dark pine-needles crowned with branching antlers sprouting tiny oak-leaves, loose tunic woven of birch-bark strips, eyes like deep forest amber, half-emerged from an ancient trunk with one shoulder merged into bark, weathered face turned in profile',
+      'A rowan-dryad with bark-textured shoulders fading to moss-tinted skin and hair of living vines woven with crimson rowan-berries, draped garland of ivy across her collarbone, small antlers branching with autumn leaves, glowing-amber eyes lowered, half-emerged from an ancient trunk with one shoulder merged into bark',
       'A fox-spirit with mottled green-flecked skin like dappled forest light and hair of pale willow-fronds threaded with foxglove blooms, thin wrap of silk-petal across chest with vine-skirt, three fox-tails tipped in silver, luminous amber eyes with vertical-slit pupils, crouched over a tiny mushroom-cluster in candid examination',
       'A moonlight nymph with bioluminescent freckles tracing her collarbone and hair of moss tendrils with white asphodel buds, shoulder-strap of woven vine and skirt of overlapping calla-lily petals, third eye glowing softly on her forehead, perched on moss-covered stone with a will-o-wisp hovering above her cupped hand',
       'A glow-moth fairy with pale luminescent pearl skin and wisteria-petal hair cascading past her waist, translucent luna-moth wings folded against shoulder-blades, snug bodice of overlapping rose-petals fading to gauzy mist below hip, sitting cross-legged on a fern-cushion with softly glowing pollen-motes drifting from her fingertips',
@@ -2988,7 +2989,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'A pixie-sprite of small stature with translucent dragonfly wings veined with sap-gold, hair of pale silk threaded with dewdrop-pearls, leaf-petal bodice and moss-skirt of woven ferns, softly glowing amber eyes, perched on a toadstool rim within a fairy-circle, fingertips trailing tiny sparkles',
       'A fae queen with skin like luminous pearl and subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals with long trailing fern-fronds at the hem, regal cape of fern-fronds and antler-crown woven with honeysuckle, seated upon a moss-throne, gaze cast downward in benediction',
       'A sidhe noblewoman with porcelain-pale skin with bioluminescent freckles tracing her collarbone, elaborate braided hair of dark moss with violet wisteria flowing past her waist, regal cloak of fern-fronds over a layered robe of overlapping willow-leaves, vine-belted waist, walking slowly through a sacred stone-circle at twilight',
-      'A green-man with face composed entirely of overlapping oak leaves and moss-beard cascading to his chest, bark-textured shoulders fading into moss-tinted skin, half-hidden among a fern-grotto wall, tiny white wildflowers blooming from his temples, luminescent moss glow emanating from his eye-hollows, lichen detail covering his skin',
+      'A moss-maiden with deep moss-tinted gold-olive skin and hair of moss tendrils with white asphodel buds, petal-shawl over folded leaves, tall pointed down-feathered ears, half-hidden among a fern-grotto wall, tiny white wildflowers blooming at her temples, soft luminescent moss-glow about her, lichen detail tracing her shoulders',
       'A meliae ash-tree nymph with silver-bark patches on her arms and small sprouting leaves emerging from her cheekbones, hair of dark moss with violet wisteria, draped garland of ash-leaves, crouched over a tiny seedling to whisper blessing as soft violet-twilight magic glows from her hands, wisteria draping her shoulders',
       'An owl-fae with mottled bark-textured skin and feathered hair of pale willow-fronds with single white moonflowers, owl-feather cape draped across shoulders, large pearl-iris eyes with horizontal-slit pupils, sitting motionless on a high mossy branch in profile, weathered face turned to one side listening to forest sounds',
       'A deer-spirit with mottled green-flecked skin and hair of dark moss threaded with autumn-leaves, draped cape of overlapping willow-leaves, large branching deer-antlers crowning her head, soft fawn-marks dotting her shoulders, kneeling at the edge of a forest-pool with one hand brushing the water',
@@ -4656,6 +4657,194 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
   },
 
   // ─── dryad-portrait path (2026-05-21 axis-system migration, 10 axes) ───
+  // ════════ FOREST-ELDER path (2026-06-11) — ancient MALE woodland spirits (Leshy/Green-Man/horned-god/woodwose/bark-druid). Counterpart to dryad-portrait. ALL MALE (gender-lock). ════════
+  faebot_forest_elder_creature: {
+    format: 'simple',
+    theme: `FOREST-ELDER CREATURE (features-only, NO posture) for FaeBot's forest-elder path — a MALE woodland spirit. ONE unified description of a single male forest-elder: species + wood/bark skin + BEARD & hair + plant-mantle + antlers/extras + magical signature. NO posture/action/expression (separate axes). 40-70 words. ALL MALE (he/his).
+
+THE BAR: every forest-elder is a bearded male WOODLAND-SPIRIT of bark & moss — a CLASSIC PLANT-SPIRIT: a Leshy / Green-Man / horned forest-god / woodwose / bark-druid / treant / forest-king. Bark, wood or leaf skin; a beard & hair of moss / leaves / pine / roots; often antlers or a leaf-crown; a robe or mantle of bark & overlapping leaves fully covering his torso; glowing or ordinary forest eyes. A PURE spirit of the trees — NO animal features, NO animal-hybrid, NO beast-man, NO muzzle/fur/gills/tail. (Woodland animals appear only as COMPANIONS in the scene via other axes — NEVER fused into his body.) The FEATURED ASPECT below says which species this entry is. AGE varies (many in their vital prime, only some ancient). ALWAYS unmistakably MALE — a beard, a masculine face. NEVER feminine, NEVER a young pretty nymph, NEVER human-model. Painterly-real (Manchess + Giancola + Bonner + Froud).
+
+⚠️ ANTI-SAMENESS (the whole point): these MUST NOT all look like the same wise old white-bearded antlered amber-eyed wizard. Each entry varies AGE, beard color/length, head/crown (half WITHOUT antlers), eye color (most NOT glowing), and species. Make them feel like genuinely DIFFERENT individuals.
+
+⚠️ FAE-WORLD VARIETY MANDATE (CRITICAL — break the "every one is an identical ancient white-bearded wizard" sameness, using ONLY the forest's own native palette — NO real-world nationalities/ethnicities, this is a fae world):
+  - WOOD/BARK SKIN TONE — vary WIDELY across the forest's own range: pale silver-birch / weathered driftwood-grey / warm amber-heartwood / deep walnut-brown / dark bog-oak (near-black) / mossy green-grey / ruddy redwood / ashen lichen-pale. Spread them evenly — do NOT make most of them the same pale tone.
+  - BEARD + HAIR COLOR — vary: jet-black pine-needle / dark bracken-brown / russet autumn-leaf / iron-grey / mossy green / silver-lichen / streaked. NOT mostly white/grey.
+  - AGE — vary: some GENUINELY ANCIENT (deep-lined, long white/silver beard), but MANY in their POWERFUL PRIME (a full dark beard, vital weathered strength, fewer lines) — NOT all decrepit elders.
+  - SPECIES SPREAD — lean across the whole range; do NOT let the wise-old-druid archetype dominate every entry.
+
+EVERY ENTRY = 5+ stacked features:
+  - SPECIES — Leshy-spirit / Green-Man (foliate head, face of leaves) / horned forest-god (Cernunnos) / woodwose (wild-man) / bark-druid elder / antlered forest-king / oak-father / mossy treant-elder / lichen-sage / root-warden
+  - WOOD/BARK SKIN — a NAMED wood-tone (per the VARIETY MANDATE: silver-birch / driftwood-grey / amber-heartwood / walnut-brown / bog-oak / mossy green-grey / redwood-ruddy / lichen-pale), bark-textured or moss-covered or craggy oak-grain
+  - BEARD + HAIR (core to the male look) — a beard of a NAMED color (jet-black / bracken-brown / russet / iron-grey / mossy-green / silver — NOT defaulting to white) AND a NAMED length/style (VARY: short cropped / thick bushy / long flowing / braided / forked / wild-tangled), woven through with moss / lichen / pine-needles / leaves / roots
+  - HEAD / CROWN (⚠️ VARY HARD — antlers are NOT mandatory; roughly HALF have NO antlers): branching antlers OR curved ram/goat horns OR a foliate leaf-crown OR a simple circlet of twigs & mushrooms OR a bare mossy scalp OR just a wild mane of leaf-matted hair
+  - EYES (⚠️ VARY — NOT always glowing-amber): warm brown / deep forest-green / mossy gold / pale river-grey / acorn-dark — only SOME faintly glowing amber or green; most are ordinary forest-creature eyes
+  - MANTLE / GARMENT (torso ALWAYS FULLY COVERED) — a robe or mantle of birch-bark / fern-fronds / shelf-fungus / woven-willow / moss covering his chest AND shoulders completely
+  - OPTIONAL MAGICAL SIGNATURE (NOT every entry) — heartwood-veins pulsing beneath the skin / a slow root-glow at the fingertips / fireflies caught in his beard / faint moss-light — leave it OUT of some entries entirely
+
+⚠️ THE FEATURED ASPECT for this batch is supplied ABOVE (one classic plant-spirit SPECIES). Build EVERY entry as that species, keeping ALL the base + variety rules, and vary everything else (skin/wood-tone, beard color & length, age, crown, eyes) so the entries are distinct individuals of the same species. DIGNIFIED tree-spirits — NOT animal hybrids, NOT cute mascots, NOT scary beasts.
+
+(NOTE: antlers/horns are NOT mandatory — only the horned-god, forest-king and some Leshy have them by nature; give the others NON-antlered heads as often as not — leaf-crowns, circlets, bare mossy scalps, wild leaf-matted hair.)
+
+STRICT BANS:
+  - ALL MALE — he/his, masculine register; NO feminine / nymph / maiden / "she/her" subjects
+  - NO ANIMAL HYBRIDS / beast-men — NO muzzle, snout, fur, pelt, gills, tail, paws, claws, animal-ears, whiskers or slit-pupil eyes. This is a PLANT-spirit of bark, moss & leaves, not an animal-person. (Animals appear only as separate scene COMPANIONS, never as his body.)
+  - NO identical-old-white-wizard sameness — HONOR the VARIETY MANDATE (wood-tone skin, beard color, age, species all varied)
+  - NO real-world nationalities / ethnicities / heritages — this is a fae world; vary ONLY within the forest's native palette
+  - NO human-model beauty / NO pin-up / NO sexualized framing
+  - NO bare chest, NO oiled / chiseled / sculpted / sweat-gleaming / muscular pecs (torso ALWAYS fully covered by a robe or mantle — those words trigger shirtless rendering in Flux)
+  - NO posture / action / expression (separate axes)
+  - NO modern attire / NO scared / angry / edgy / dark moods (sacred, mythic, dignified register)`,
+    touchpoints: [
+      'A Leshy-spirit in his powerful prime with deep walnut-brown bark-skin, a full jet-black SHORT-cropped beard woven with pine-needles, curved ram-horns of dark wood (no antlers), warm brown eyes, a mantle of layered birch-bark fully covering his shoulders and chest, vital strength and few lines on his face',
+      'A Green-Man with mossy green-grey skin and a face framed in overlapping oak-leaves, a thick bracken-brown bushy beard, a foliate leaf-crown of fresh leaves (no antlers), deep forest-green eyes, tiny white wildflowers at his temples, a robe of fern covering his torso',
+      'A horned forest-god with warm amber-heartwood skin and great branching stag-antlers, a long iron-grey beard of moss and lichen, a heavy robe of fern-fronds and shelf-fungus fully covering his chest, faintly glowing amber eyes, heartwood-veins pulsing green beneath',
+      'A woodwose wild-man with dark bog-oak skin shaggy with moss and bracken, a russet wild-tangled beard of dried oak-leaves and ivy, a bare mossy scalp matted with leaves (no horns, no antlers), acorn-dark eyes beneath a heavy brow, a full cloak of woven willow closed across his chest',
+      'A bark-druid in his vital prime with ruddy redwood-toned skin and a dark-brown braided beard streaked with lichen, a simple circlet of twigs and tiny mushrooms (no antlers), pale river-grey eyes, a robe of woven willow and fern covering him completely, a strong unlined face',
+      'A treant-spirit, half man half tree, with dark oak-grain bark over deep-brown skin and a forked green-moss beard, antler-like boughs crowned with sprouting leaves, a cloak of shelf-fungus and ivy wrapped close, deep shadowed eye-hollows with a faint inner glow',
+      'A forest-king of mature years with driftwood-grey bark skin and a long iron-and-moss beard, a great crown of branching antlers hung with oak-leaves, a heavy mantle of birch-bark and fern fully covering his shoulders, mossy-gold eyes, warm gold heartwood-veins beneath',
+      'An oak-father of broad weathered redwood-ruddy bark skin and a vast brown-and-grey bushy beard, a wild mane of leaf-matted hair with a simple acorn-twig circlet (no antlers), warm brown eyes, a mantle of layered birch-bark covering his torso, lichen on his jaw',
+      'A lichen-sage of great age with pale silver-birch skin deeply lined and a long wispy white beard of hanging lichen, a bare moss-furred scalp, pale grey eyes with a faint moss-light, a hood and robe of fern and willow-bark, gentle root-glow at his fingertips',
+    ],
+    instructions: `Each entry is ONE bark-bearded woodland PLANT-SPIRIT elder, built as the FEATURED SPECIES for this batch (features ONLY), 40-70 words. Prose, comma-separated phrases. A PURE spirit of the trees — NO animal features whatsoever. MANDATORY — 5+ stacked features (bark/wood skin + moss/leaf beard & hair + FULLY-COVERED robe/mantle + head/crown + eyes), unmistakably MALE (he/his, a beard). HONOR THE VARIETY MANDATE — vary wood-tone/coloring, beard color & length, age, head/crown (≈half NO antlers) and eyes widely (no more than ~1 in 4 pale-toned, no more than ~1 in 3 long-white-beard, several in their vital prime not ancient). Use ONLY the forest's native palette — NO real-world nationalities/ethnicities. Dignified elder-spirits, NOT cute mascots, NOT scary beasts. NO posture/action/expression. NO human-model beauty. NO bare chest / oiled / chiseled / sculpted / muscular. NO feminine subjects. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    // WEIGHTED aspects: CLASSIC PLANT-SPIRIT SPECIES ONLY (the R0/R1 look).
+    // No animal hybrids. The subTheme phases guarantee an even species spread at
+    // scale; weight = relative share. Animals appear only as scene companions
+    // (handled by the story_beat axis), never fused onto the elder.
+    subThemes: [
+      { aspect: 'LESHY — bark skin with glowing sap-vein patterns, branching antlers hung with oak-leaves, hair & beard of dark pine-needles and hanging moss, a bark/leaf mantle. A PURE plant-spirit, NO animal features.', weight: 4 },
+      { aspect: 'GREEN-MAN — a foliate face and full beard of overlapping green oak-leaves, a leaf-crown, bark-and-moss shoulders, a fern robe. A PURE plant-spirit, NO animal features.', weight: 4 },
+      { aspect: 'HORNED FOREST-GOD — great branching stag-antlers, weathered bark skin, a long moss-and-lichen beard, a heavy robe of fern and shelf-fungus. A PURE plant-spirit, NO animal features.', weight: 3 },
+      { aspect: 'WOODWOSE WILD-MAN — shaggy all over with moss and tangled bracken, a wild beard of dried oak-leaves and ivy, a bare mossy scalp or wild leaf-matted hair, a cloak of woven willow. A PURE plant-spirit, NO animal features.', weight: 3 },
+      { aspect: 'BARK-DRUID / LICHEN-SAGE — weathered bark or silver-birch skin, a long beard of lichen and moss, a circlet of twigs and mushrooms, a robe of woven willow and fern. A PURE plant-spirit, NO animal features.', weight: 3 },
+      { aspect: 'TREANT / ROOT-WARDEN — half man half ancient tree, deep oak-grain bark skin, a beard of green moss and bracken, antler-like boughs or a root-crown, a cloak of shelf-fungus and ivy. A PURE plant-spirit, NO animal features.', weight: 2 },
+      { aspect: 'FOREST-KING / OAK-FATHER — regal weathered bark skin, a great crown of branching antlers or oak-boughs heavy with acorns, a long moss-beard, a heavy birch-bark and fern mantle. A PURE plant-spirit, NO animal features.', weight: 2 },
+    ],
+  },
+
+  faebot_forest_elder_framing: {
+    format: 'simple',
+    theme: `FOREST-ELDER FRAMING — the SHOT for FaeBot's forest-elder path. MIX of intimate bust-portraits AND fuller forest-scenes of the elder in his woodland domain. Each entry 15-35 words. Roughly half intimate, half fuller scene.
+
+VARIETY MANDATE (~25):
+  • ~12 INTIMATE BUST-PORTRAIT — tight close-up of his face and shoulders (face 35-55% of frame), contemplative stillness, three-quarter or profile, the deep forest soft-focus behind him
+  • ~13 FULLER FOREST-SCENE — medium or full-figure of the elder amid his woodland realm (figure 25-45%), the ancient forest detailed and lush around him, an "old guardian in his domain" register — he stands among / emerges from / sits within his grove
+Each names the SHOT type + camera distance + how much of him vs the forest fills the frame.`,
+    touchpoints: [
+      'Intimate bust-portrait — his weathered face and antlered crown fill the frame in three-quarter profile, eyes lowered, the deep forest dissolving softly into amber bokeh behind him',
+      'Tight close portrait of his moss-bearded face and shoulders, head turned in quiet profile, ancient stillness, the woodland a soft blur of green and gold behind',
+      'A fuller forest-scene — the elder stands amid his ancient grove, full-figure and dwarfed by colossal moss-draped trunks, the woodland lush and detailed around him, a shaft of light on his bark-crown',
+      'Medium-shot of the elder seated within a root-cathedral hollow, his domain rich around him — ferns, fungi and hanging moss filling the frame, he rooted at its heart',
+      'A wide woodland scene, the forest-elder emerging half-merged from a colossal ancient trunk, the deep grove receding in layers behind him, a tiny deer at the treeline for scale',
+      'Close bust-portrait, his foliate-leaf face and beard filling the frame, eyes closed in serene contentment, soft-focus fern-grotto behind dissolving into green shadow',
+    ],
+    instructions: `Each entry is ONE shot/framing in 15-35 words — name the SHOT (intimate bust-portrait OR fuller forest-scene), camera distance, and the figure-vs-forest balance. Mix ~half intimate, ~half fuller scene. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_domain: {
+    format: 'simple',
+    theme: `FOREST-ELDER DOMAIN — the ancient woodland setting around/behind the elder. Each entry 20-45 words, with depth. Soft-focus when a portrait, lush + detailed when a fuller scene.
+
+VARIETY MANDATE (~25 ancient sacred woodland realms): a colossal old-growth grove of moss-draped trunks; a root-cathedral of arching ancient roots; a fern-grotto wall hung with ferns and fungi; a misty primeval forest of towering pines; a sacred oak-clearing ringed by standing stones; a mushroom-circle hollow glowing with fungi; a moss-canyon ravine with hanging gardens; a deep autumn wood of russet-gold canopy; a willow-draped riverbank; a hollow inside a colossal living tree; a frost-rimed winter wood; a bog of sunken roots and will-o-wisps; a bluebell-carpeted spring wood. Each conveys ancient, sacred, lush forest depth.`,
+    touchpoints: [
+      'A colossal old-growth grove of moss-draped trunks wider than towers receding into green-gold gloom, shafts of light falling between them, the sacred forest hushed and ancient',
+      'A root-cathedral of vast arching ancient roots overhead, ferns and glowing fungi clustered along them, a soft underground-forest light, deep and reverent',
+      'A sacred oak-clearing ringed by weathered standing stones, the great oak rising at its heart, dappled light on the mossy floor, the deep wood beyond',
+      'A fern-grotto wall thick with unfurling ferns, hanging moss and shelf-fungus, tiny white wildflowers, a soft green half-light, deep and intimate',
+      'A misty primeval forest of towering ancient pines marching into fog, bracken and fallen logs furred with moss, a cathedral hush among the trunks',
+    ],
+    instructions: `Each entry is ONE ancient sacred woodland domain in 20-45 words with depth. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_adornment: {
+    format: 'simple',
+    theme: `FOREST-ELDER ADORNMENT — the male woodland regalia woven into the elder (crown / mantle / beard / staff detail). Each entry 12-28 words. Masculine, ancient, natural.
+
+VARIETY MANDATE (~25): a great branching antler-crown hung with oak-leaves; a foliate crown of overlapping green leaves; a circlet of sprouting twigs and tiny mushrooms; shelf-fungus pauldrons on his shoulders; a mantle of layered birch-bark; a cloak of fern-fronds; a beard threaded with fireflies; acorns and oak-galls woven in his beard; a gnarled root-staff in the crook of his arm; hanging lichen-tendrils framing his face; a necklace of carved acorns and amber; ivy climbing one antler; a crown of autumn leaves; moss-epaulettes; a circlet of woven willow. Each is one masculine natural adornment detail.`,
+    touchpoints: [
+      'A great branching antler-crown hung with oak-leaves and trailing ivy, rising tall above his weathered brow',
+      'Shoulder pauldrons of layered amber shelf-fungus and a mantle of overlapping birch-bark strips',
+      'His long moss-beard threaded with tiny glowing fireflies and a few woven acorns',
+      'A foliate crown of overlapping fresh green oak-leaves framing his bark-textured face',
+      'A gnarled root-staff held in the crook of one arm, hung with a single carved-amber charm',
+    ],
+    instructions: `Each entry is ONE masculine woodland adornment detail in 12-28 words. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_expression: {
+    format: 'simple',
+    theme: `FOREST-ELDER EXPRESSION (face + eyes — ancient stillness) for the forest-elder path. Each entry 12-26 words, MALE. The captured intimate moment of his weathered face: contemplative, watchful, wise, sacred. NEVER eye-contact with viewer, NEVER posing. NEVER feminine.
+
+VARIETY (~25): eyes closed in deep ancient calm; a slow watchful amber gaze into the wood; eyes half-lowered in contemplation; a faint knowing weathered smile beneath his beard; listening to the forest with head slightly bowed; a far-off timeless stare; serene blessing stillness; brow furrowed in old wisdom; eyes glowing soft moss-green, unfocused; quiet reverence. Every entry MALE (his face, his eyes, his beard).`,
+    touchpoints: [
+      'His weathered face still and contemplative, deep-set amber eyes lowered, lost in the slow thought of centuries',
+      'A slow watchful gaze from glowing forest-amber eyes, his bearded face turned three-quarter into the wood, never toward the viewer',
+      'Eyes closed beneath heavy bark-ridged brows, an expression of ancient calm, his moss-beard catching the light',
+      'A faint knowing smile half-hidden in his lichen-beard, eyes crinkled with old forest-wisdom, gaze drifting past the frame',
+      'Head slightly bowed, eye-hollows glowing soft moss-green, listening to something deep in the trees',
+    ],
+    instructions: `Each entry is ONE male facial-expression moment in 12-26 words — his face, his eyes, contemplative/watchful/sacred. NO eye-contact, NO posing, NO feminine. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_gesture: {
+    format: 'simple',
+    theme: `FOREST-ELDER GESTURE / POSE (hand + shoulder posture) for the forest-elder path. Each entry 12-26 words, MALE. A specific candid hand/shoulder/posture moment anchoring his ancient stillness — never tense, never posed, never sexualized.
+
+VARIETY (~25): a gnarled bark-textured hand resting on a mossy staff; one hand raised, a tiny sprout growing from his palm; fingers trailing through hanging moss; a hand pressed to an ancient trunk in communion; arms crossed slow over his birch-bark mantle; cupping a glowing seed in his palm; one weathered hand outstretched, a butterfly settling on a knuckle; broad shoulders settled in stillness; a hand smoothing his long moss-beard. Every entry MALE (his hand, his shoulders). Torso ALWAYS covered.`,
+    touchpoints: [
+      'A gnarled bark-textured hand resting on the head of a mossy root-staff, knuckles knotted like old wood',
+      'One weathered hand raised palm-up, a tiny green sprout uncurling from the center of it',
+      'Bark-skinned fingers trailing slowly through a curtain of hanging moss at his shoulder',
+      'A broad hand pressed flat to an ancient trunk, heartwood-veins glowing where he touches it',
+      'One hand outstretched and still, a luna-moth settling on a knotted knuckle',
+    ],
+    instructions: `Each entry is ONE male hand/shoulder/posture moment in 12-26 words — candid, still, ancient. Torso covered, never sexualized, never posed, never feminine. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_magical: {
+    format: 'simple',
+    theme: `FOREST-ELDER MAGICAL FLAVOR — the visible forest-magic signature near the elder. Each entry 12-26 words. Gender-neutral / male register. Painted as luminous detail, never crude particle-effect.
+
+VARIETY (~25): heartwood-veins pulsing warm gold beneath his bark; drifting luminous spores rising around him; fireflies caught glowing in his beard; soft moss-light leaking from his eye-hollows; will-o-wisps hovering at his shoulder; a slow root-glow trailing from his fingertips; floating motes of green pollen-light; tiny mushrooms glowing faint blue at his collar; a soft sacred halo of forest-light behind his antlers; dust of golden light sifting through the canopy onto him. Never feminine-coded.`,
+    touchpoints: [
+      'Heartwood-veins pulsing a slow warm gold beneath the cracks of his weathered bark',
+      'Luminous green spores drifting up around him, catching the light like slow embers',
+      'A soft moss-green glow leaking from his deep eye-hollows into the gloom',
+      'Will-o-wisps hovering pale-blue at his shoulder, lighting the underside of his antlers',
+      'A faint sacred halo of forest-light gathered behind his branching antler-crown',
+    ],
+    instructions: `Each entry is ONE luminous forest-magic signature in 12-26 words near the elder. Painted, not particle-effect. Gender-neutral/male, never feminine. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_weather: {
+    format: 'simple',
+    theme: `FOREST-ELDER WEATHER — air condition + particle motion around the elder. Each entry 10-22 words. Gender-neutral. Drifting atmospheric accents that read in the air around him.
+
+VARIETY (~25): drifting motes of golden pollen; thin curls of morning mist between the trunks; soft falling oak-leaves; a slow drizzle beading on his bark; shafts of dust-laden light; floating seed-down on still air; a light dusting of frost on his antlers; warm humid forest-haze; gentle snowfall settling on his shoulders; rising ground-fog at dusk; a few drifting blossom-petals; still clear air with hanging spores. Vary across seasons + times. Never feminine-coded.`,
+    touchpoints: [
+      'Drifting motes of golden pollen hanging in the still forest air around him',
+      'Thin curls of morning mist threading between the ancient trunks',
+      'Soft oak-leaves falling slowly past his shoulders on a windless afternoon',
+      'A fine drizzle beading silver on his weathered bark and antlers',
+      'A light dusting of frost rimed along his antler-crown in the cold air',
+    ],
+    instructions: `Each entry is ONE air/weather/particle condition in 10-22 words around the elder. Gender-neutral, vary seasons. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  faebot_forest_elder_foreground: {
+    format: 'simple',
+    theme: `FOREST-ELDER FOREGROUND ANCHOR — the closest depth element bringing 3-tier depth, softly out-of-focus between camera and elder. Each entry 10-22 words. Gender-neutral.
+
+VARIETY (~25): a hanging fern-frond; a cluster of glowing toadstools; a draped curtain of moss; a gnarled root arching across the lower frame; a spray of unfurling bracken; a low branch heavy with acorns; a soft-focus cluster of bluebells; a spiderweb beaded with dew; a fallen mossy log; drifting seed-down close to the lens; a low cluster of red amanita; a hanging vine. Softly out-of-focus, framing him without blocking. Never feminine-coded.`,
+    touchpoints: [
+      'A hanging fern-frond drooping softly out-of-focus across the lower corner of the frame',
+      'A cluster of glowing amber toadstools close to the lens, blurred into warm light',
+      'A gnarled mossy root arching across the foreground, framing the elder beyond it',
+      'A draped curtain of hanging moss softly blurred at the frame edge',
+      'A low branch heavy with acorns crossing the foreground out-of-focus',
+    ],
+    instructions: `Each entry is ONE close foreground depth element in 10-22 words, softly out-of-focus. Gender-neutral, frames without blocking. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
   faebot_dryad_portrait_creature: {
     format: 'simple',
     theme: `DRYAD CREATURE (features-only, NO posture) for FaeBot's dryad-portrait path. Each entry is ONE unified description of a single adult-scale tree-bound mythic dryad — species + skin treatment + plant-merged hair + plant-garment + anatomical extras + magical signature. NO posture / action / expression (those are separate axes). Each entry 40-70 words.
@@ -4663,7 +4852,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
 ⚠️ THE BAR: each dryad reads as a SINGLE coherent adult-scale mythic plant-merged feminine spirit. Mythic-creature beauty, NEVER human-model beauty. 5+ stacked exotic features per dryad. Painterly-real (Manchess + Giancola + Bonner + Froud lineage).
 
 ⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories (and OMIT posture/action — those are separate):
-  - SPECIES LINEAGE — dryad / hamadryad / naiad / meliae / moss-maiden / Leshy-spirit / Forest Queen / sidhe / Tylwyth Teg / fox-spirit / swan-maiden / vine-nymph / hellebore-nymph / etc.
+  - SPECIES LINEAGE — dryad / hamadryad / naiad / meliae / moss-maiden / Forest Queen / sidhe / Tylwyth Teg / fox-spirit / swan-maiden / vine-nymph / hellebore-nymph / etc.
   - SKIN TREATMENT — translucent with constellations / bark-textured / moss-tinted olive / bioluminescent-freckled / mottled green-flecked / luminous porcelain / silver-bark patches / lichen-detail / pale-jade
   - PLANT-MERGED HAIR — living vines woven with blooms / river-water flowing / pale willow-fronds / wisteria-petals cascading / moss tendrils with asphodel / dark pine-needles crowned with antlers / silver-leaf cascade / autumn-leaf flowing / cherry-blossom braided
   - PLANT-MERGED GARMENT — petal-shawl / leaf-bodice woven of ferns / vine-skirt / silk-petal wrap / overlapping rose-petals / moss-skirt with woven ivy / cape of willow-leaves / draped garland of clematis / birch-bark tunic / overlapping calla-lily
@@ -4676,7 +4865,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
   • ~3 NYMPHS (moonlight / vine / flower / forest)
   • ~3 ANIMAL-MERGED (fox-spirit / owl-fae / deer-spirit / swan-maiden / hare-spirit)
   • ~3 PIXIE / FAE-COURT (queen / sidhe / Tylwyth Teg)
-  • ~2 LESHY / GREEN-MAN (forest-spirit elders, masculine register OK)
+  • ~2 BLOSSOM / HERB-NYMPH (foxglove / hellebore / asphodel / lily — feminine)
   • ~2 INSECT-FAE (glow-moth / dragonfly-fae / firefly-fae)
   • ~2 RARE / OTHERWORLDLY (Meliae / hamadryad / banshee-spirit / hellebore-nymph)
   • ~2 KODAMA / WOODLAND-SPRITE (smaller mythic beings still adult-scale)
@@ -4686,7 +4875,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
   • NO human-model beauty / NO pin-up / NO sexualized framing
   • NO modern attire / NO contemporary references
   • NO scared / angry / edgy / dark moods
-  • NO bare chest, NO nipples, NO topless`,
+  • ALL FEMININE — NO male / NO Leshy / Green-Man / forest-elder / NO beards / NO masculine "his/he" subjects (those live in the forest-elder path)`,
     touchpoints: [
       'A rowan-dryad with bark-textured shoulders fading to smooth moss-tinted skin, hair of living vines woven with tiny crimson rowan berries, draped garland of ivy across collarbone, small antlers branching with autumn leaves, softly glowing amber eyes radiating gentle light, lichen-detail on her temples',
       'A birch-hamadryad with mottled green-flecked skin like dappled forest light, waist-long hair of pale willow-fronds threaded with white moonflowers, thin wrap of pale silk-petal across her chest, a third eye glowing softly on her forehead, bioluminescent freckles tracing her collarbone',
@@ -4711,7 +4900,7 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
       'A swan-maiden with translucent skin showing tiny constellations, hair of pale willow-fronds woven with single white moonflowers, cape of overlapping willow-leaves draped across shoulders, delicate gills along her graceful neck, luminous pearl-iris eyes, soft white-feather aura',
       'A fae queen with skin like luminous pearl and subtle vine-pattern marks, floor-length hair of living vines woven with hundreds of tiny white flowers, flowing gown of woven petals at her shoulders, regal antler-crown woven with honeysuckle, soft glowing-violet eyes',
       'A Tylwyth Teg sidhe with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves at her shoulders, porcelain skin with faint constellation freckles, delicate pointed ears, soft glowing-violet eyes',
-      'A Leshy-spirit with bark-textured skin showing faint glowing vein-patterns, hair of dark pine-needles crowned with branching antlers sprouting tiny oak-leaves, loose tunic of birch-bark strips at his shoulders, eyes like deep forest amber, weathered face',
+      'An asphodel-nymph with luminous pale-jade skin, hair of moss tendrils woven with white asphodel buds cascading past her waist, draped petal-shawl over a band of folded ferns, small antlers branching with tiny leaves, soft glowing-amber eyes, lichen-detail tracing her collarbone',
       'A hellebore-nymph with translucent pale-cream skin showing faint green undertones, hair of cascading nodding hellebore-blooms threaded with green leaves, draped petal-shawl of overlapping hellebore-blooms with green-leaf bodice, glowing-violet eyes, soft bioluminescent collarbone freckles',
     ],
     instructions: `Each entry is ONE unified mythic adult-scale dryad description (features ONLY), 40-70 words. Format: prose, comma-separated phrases. MANDATORY — 5+ stacked exotic features (species + skin + plant-merged hair + plant-garment + anatomical extras + magical signature). NO posture / action / expression. NO human-model beauty. NO modern attire. NO scared/edgy moods. NO bare chest. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line, no internal newlines.`,
@@ -7917,6 +8106,11 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
 };
 
 const recipe = POOL_RECIPES[POOL];
+// When a recipe declares `subThemes`, generation rotates through them in EQUAL
+// shares (one focused Sonnet batch per aspect) so the spread can't drift at
+// scale — the production equal-share-per-sub-theme pattern. buildPrompt injects
+// the current aspect. NULL = normal single-theme generation.
+let FEATURED_SUBTHEME = null;
 if (!recipe) {
   console.error(`No recipe for pool "${POOL}". Add it to POOL_RECIPES.`);
   process.exit(1);
@@ -7924,7 +8118,10 @@ if (!recipe) {
 
 function buildPrompt(count, recipe) {
   if (recipe.format === 'simple') {
-    return `${recipe.theme}
+    const featuredBlock = FEATURED_SUBTHEME
+      ? `\n\n⚠️⚠️ FEATURED ASPECT FOR THIS ENTIRE BATCH: ${FEATURED_SUBTHEME}\nEVERY single entry in this batch is built as THIS exact aspect — follow exactly what it specifies (a PURE plant-spirit with NO animal features, OR a specific animal-touched elder). Do NOT mix in any OTHER animal. Vary everything else (skin/wood tone, beard color & length, age, crown, eyes) so the entries are distinct individuals of this same aspect.`
+      : '';
+    return `${recipe.theme}${featuredBlock}
 
 ━━━ TOUCHPOINT EXAMPLES (draw aesthetic from these — same caliber, same vocabulary register) ━━━
 ${recipe.touchpoints.map((t) => '  • ' + t).join('\n')}
@@ -8190,40 +8387,70 @@ async function generateBatch(batchCount) {
   else
     console.log(`Pool "${POOL}": gen ${COUNT} new (start ${startCount})${DRY ? ' (dry-run)' : ''}`);
   let pool = [...preExisting];
-  let iteration = 0;
-  while (pool.length < finalTarget && iteration < MAX_ITERATIONS) {
-    iteration++;
-    const stillNeeded = finalTarget - pool.length;
-    const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
-    console.log(
-      `\nIteration ${iteration}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more, gen ${batchSize}`
+
+  // Generate until pool reaches `limit` (or Sonnet exhausts the theme).
+  // Shared by the normal path and each sub-theme phase.
+  async function fillTo(limit) {
+    let iteration = 0;
+    while (pool.length < limit && iteration < MAX_ITERATIONS) {
+      iteration++;
+      const stillNeeded = limit - pool.length;
+      const batchSize = Math.min(25, Math.ceil(stillNeeded * 1.5));
+      console.log(
+        `\nIteration ${iteration}${FEATURED_SUBTHEME ? ` [${FEATURED_SUBTHEME}]` : ''}: pool at ${pool.length}/${finalTarget}, need ${stillNeeded} more (this phase → ${limit}), gen ${batchSize}`
+      );
+      const fresh = await generateBatch(batchSize);
+      if (fresh.length === 0) {
+        console.warn('  ⚠ empty Sonnet response — stopping this phase');
+        break;
+      }
+      const within = dedupe(fresh);
+      if (within.dropped.length > 0)
+        console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
+      const existingSigs = new Set(pool.map((e) => signatureOf(e)));
+      const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
+      const newUnique = within.kept.filter((e) => {
+        if (existingSigs.has(signatureOf(e))) return false;
+        const t = titleOf(e);
+        if (t && existingTitles.has(t)) return false;
+        return true;
+      });
+      const crossDropped = within.kept.length - newUnique.length;
+      if (crossDropped > 0) console.log(`  • cross-batch dedup dropped ${crossDropped}`);
+      const room = limit - pool.length;
+      const toAdd = newUnique.slice(0, room);
+      pool = [...pool, ...toAdd];
+      console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
+      if (toAdd.length === 0 && newUnique.length === 0) {
+        console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on this aspect, moving on');
+        break;
+      }
+    }
+  }
+
+  if (recipe.subThemes && recipe.subThemes.length) {
+    // WEIGHTED-SHARE per aspect: one focused phase per sub-theme, each filling a
+    // share proportional to its weight — so the distribution is guaranteed at
+    // scale (cross-batch dedup can't unevenly starve aspects). Entries default
+    // to string (weight 1) or {aspect, weight} for a larger share.
+    const subs = recipe.subThemes.map((s) =>
+      typeof s === 'string' ? { aspect: s, weight: 1 } : { aspect: s.aspect, weight: s.weight || 1 }
     );
-    const fresh = await generateBatch(batchSize);
-    if (fresh.length === 0) {
-      console.warn('  ⚠ empty Sonnet response — stopping iteration');
-      break;
+    const totalW = subs.reduce((a, s) => a + s.weight, 0);
+    const need = finalTarget - pool.length;
+    console.log(
+      `\nWeighted sub-theme generation: ${subs.length} aspects (total weight ${totalW}) → ${finalTarget}`
+    );
+    for (const sub of subs) {
+      FEATURED_SUBTHEME = sub.aspect;
+      const share = Math.max(1, Math.round((need * sub.weight) / totalW));
+      await fillTo(Math.min(finalTarget, pool.length + share));
     }
-    const within = dedupe(fresh);
-    if (within.dropped.length > 0)
-      console.log(`  • within-batch dedup dropped ${within.dropped.length}`);
-    const existingSigs = new Set(pool.map((e) => signatureOf(e)));
-    const existingTitles = new Set(pool.map((e) => titleOf(e)).filter(Boolean));
-    const newUnique = within.kept.filter((e) => {
-      if (existingSigs.has(signatureOf(e))) return false;
-      const t = titleOf(e);
-      if (t && existingTitles.has(t)) return false;
-      return true;
-    });
-    const crossDropped = within.kept.length - newUnique.length;
-    if (crossDropped > 0) console.log(`  • cross-batch dedup dropped ${crossDropped}`);
-    const room = finalTarget - pool.length;
-    const toAdd = newUnique.slice(0, room);
-    pool = [...pool, ...toAdd];
-    console.log(`  ✓ Added ${toAdd.length} unique → pool at ${pool.length}/${finalTarget}`);
-    if (toAdd.length === 0 && newUnique.length === 0) {
-      console.warn('  ⚠ batch added nothing — Sonnet may be exhausted on theme, stopping');
-      break;
-    }
+    FEATURED_SUBTHEME = null;
+    // mop up any rounding shortfall with a final unfocused pass
+    if (pool.length < finalTarget) await fillTo(finalTarget);
+  } else {
+    await fillTo(finalTarget);
   }
   console.log(
     `\n━━━ Final: ${pool.length}/${finalTarget} entries (${pool.length - startCount} new)`

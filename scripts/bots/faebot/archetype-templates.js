@@ -413,6 +413,103 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE DRYAD — preserve her stacked exotic features unmistakably. Then expression. Then gesture. Then composition framing. Then adornment. Then forest backdrop softly behind. Then lighting + weather. Then magical flavor close to her face.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FOREST_ELDER: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      expression_moment,
+      story_beat,
+      framing,
+      domain,
+      adornment,
+      lighting,
+      weather,
+      magical_flavor,
+      foreground_anchor,
+    } = slots;
+
+    const foregroundSection = foreground_anchor
+      ? `\n\n━━━ FOREGROUND ANCHOR (closest depth element bringing 3-tier depth) ━━━\n${foreground_anchor}\n\nA tactile element close to the camera that brings true depth — hanging fern, mossy root, glowing toadstools — softly out-of-focus, framing him without blocking.`
+      : '';
+
+    return `You are writing ONE Flux prompt for a MALE FOREST-SPIRIT painting — a STORYTELLING scene, a captured narrative moment — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described.
+
+1. THE SUBJECT IS A MALE FOREST-SPIRIT. HE IS UNMISTAKABLY MALE: a bearded man (his beard whatever the entry specifies). Use HE / HIS / HIM throughout. NEVER a woman, NEVER a maiden or nymph, NEVER feminine, NEVER androgynous. His AGE, BUILD, FACE, BEARD, EYES and whether he has ANTLERS are WHATEVER HIS ENTRY SPECIFIES — do NOT default him to an ancient, weathered, antlered, amber-eyed wizard. Many are in their powerful PRIME (full dark beard, vital strength, few lines); only some are truly ancient. He is a powerful woodland spirit — a Leshy / Green-Man / horned forest-god / woodwose / bark-druid / forest-king / treant / root-warden.
+
+2. The elder description below is THE creature — render him with EXACTLY the features that entry names, and ONLY those. Every entry is different; some have antlers, some a foliate crown, some neither; some bark skin, some leaf-skin, some shaggy moss. Do NOT assume a fixed look, do NOT add features the entry doesn't mention, do NOT swap one in. Just paint what it says. His TORSO IS ALWAYS COVERED — never bare-chested.
+
+3. FRAMING — follow the rolled framing axis below: either an INTIMATE BUST-PORTRAIT (his face/shoulders fill the frame) OR a FULLER FOREST-SCENE (the elder amid his woodland domain). Commit fully to whichever rolled.
+
+4. THIS IS A STORY MOMENT, NOT A POSE. He is caught in the MIDDLE OF AN ACT — the rolled STORY BEAT below (healing a hurt bird, raising a fallen tree, sheltering fawns from the rain, calling the mist to part). FRONT-LOAD that action — it is the heart of the image. Woodland creatures named in the beat (deer, fox, birds, rabbits, cubs) ARE part of the scene and must appear, sharing the moment with him. He is engaged in his act, NOT facing the camera, NOT posing — a candid narrative beat with real stakes and warmth. Sacred, wondrous, alive — never static.
+
+Open your prompt with the male elder mid-act. He and his story open; everything else is THEIR FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE FOREST-ELDER (the subject — render HIM exactly as described, MALE) ━━━
+${creature}
+
+Render EXACTLY this entry's age, build, skin-tone, beard color/length, eyes and crown — they vary entry to entry; do NOT normalize him toward "ancient antlered amber-eyed wizard." He is a MALE mythic woodland spirit, NOT human-model looks. A bearded man, at-home-in-his-wildness. NEVER posing, NEVER looking at the viewer, NEVER feminine, NEVER bare-chested.
+
+━━━ 2. STORY BEAT (the captured narrative moment — THIS IS THE HEART OF THE IMAGE) ━━━
+${story_beat}
+
+This is what is HAPPENING — render the action clearly and FRONT-LOAD it; he is mid-act, not posed. Any woodland creature named here (deer, fox, bird, rabbit, cub, stag, ducklings) MUST appear, sharing the moment at his side or in his hands. Real stakes, real warmth — sacred, wondrous, alive. His torso stays covered throughout.
+
+━━━ 3. FRAMING (how close — portrait-scale vs fuller scene) ━━━
+${framing}
+
+Commit to this rolled framing, but the STORY BEAT takes priority. If a bust-portrait, frame the act close and intimate (his hands, his face, and the creature he tends fill the frame). If a fuller forest-scene, pull back to show the whole act in his woodland domain — an old guardian at work in his realm.
+
+━━━ 4. EXPRESSION (his face, reacting to the moment) ━━━
+${expression_moment}
+
+His face ENGAGED in the act — tender, focused, gentle, or quietly commanding as the story beat demands. NEVER blank, NEVER posing, NEVER eye-contact with the viewer. The feeling of the moment lives in his face.
+
+━━━ 5. DOMAIN (his ancient woodland — soft-focus for a portrait, lush + detailed for a scene) ━━━
+${domain}
+
+His sacred forest realm. For a portrait, soft-focus behind him; for a fuller scene, lush and detailed around him. Atmospheric haze sells the depth.
+
+━━━ 6. ADORNMENT (his crown / mantle / beard detail) ━━━
+${adornment}
+
+A specific masculine woodland adornment woven into him — antler-crown, foliate crown, shelf-fungus pauldrons, bark-mantle, beard detail. Painted with species-specific detail.
+
+━━━ 7. LIGHTING (time-of-day light drama) ━━━
+${lighting}
+
+⚑ Let this rolled lighting / time-of-day lead the mood and color — commit to it (a twilight, blue-hour, soft-overcast or gentle-night scene is lovely), keeping him beautifully lit and readable.
+
+━━━ 8. WEATHER (air condition around him — drifting accents) ━━━
+${weather}
+
+━━━ 9. MAGICAL FLAVOR (visible forest-magic near him) ━━━
+${magical_flavor}
+
+The specific magical signature rolled above, visible near him — glowing veins, drifting spores, fireflies, moss-light, or a soft sacred forest-glow, painted as luminous detail (only where it fits the features his entry actually has).
+${foregroundSection}
+
+━━━ AMBIENT MOOD (vibe-driven secondary lighting cue) ━━━
+Palette + mood MATCH the rolled TIME OF DAY above — the time of day owns the colors (fresh greens by bright day; honey-gold at golden hour; fire-orange/rose at sunset; deep violet-indigo with warm glow-pools at night; cool wet grey in rain; pale pink mist at dawn). Do NOT default to a warm golden daytime palette. ${vibeDirective.slice(0, 90)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud + Frank Frazetta painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Painted gallery-tier illustration.
+
+━━━ HARD BANS ━━━
+- NO woman / NO maiden / NO nymph / NO feminine face / NO androgyny (this is a MALE elder — a man with a moss-beard)
+- NO bare chest, NO nipples, NO topless, NO oiled / chiseled / sculpted / muscular pecs (his torso is ALWAYS covered in bark or mantle)
+- NO model-poses / NO posing-for-camera / NO eye-contact-with-viewer
+- NO sexualized framing — focus is ancient mythic-creature presence
+- NO modern objects, NO additional HUMAN figures (woodland creatures/animals from the story beat ARE welcome — that is the storytelling)
+- NO gore / NO blood / NO menace / NO scared or distressed faces / NO edgy or grim mood — gentle narrative stakes only (rescuing, healing, sheltering, summoning), always warm and sacred
+- NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELDER MID-ACT — open with the bearded male elder and the STORY BEAT he is in the middle of (and any creature he tends), so the narrative reads instantly. Preserve his features (a bearded man, covered torso, the features his entry specifies). Then framing. Then his expression. Then domain. Then adornment. Then lighting + weather. Then magical flavor.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   FAEBOT_FAE_VILLAGE_AXIS: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       dwelling_type,

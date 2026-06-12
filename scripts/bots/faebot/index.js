@@ -14,6 +14,7 @@ const blocks = require('./shared-blocks');
 const pathBuilders = {
   'forest-fairy-scene': require('./paths/forest-fairy-scene'),
   'dryad-portrait': require('./paths/dryad-portrait'),
+  'forest-elder': require('./paths/forest-elder'),
   'tiny-fae': require('./paths/tiny-fae'),
   'queen-of-the-forest': require('./paths/queen-of-the-forest'),
   'enchanted-vista': require('./paths/enchanted-vista'),
@@ -79,6 +80,7 @@ module.exports = {
   paths: [
     'forest-fairy-scene',
     'dryad-portrait',
+    'forest-elder',
     'tiny-fae',
     'queen-of-the-forest',
     'enchanted-vista',
@@ -134,6 +136,7 @@ module.exports = {
     maxRetries: 2,
     paths: [
       'dryad-portrait',
+      'forest-elder',
       'flower-fairy',
       'forest-fairy-scene',
       'queen-of-the-forest',
@@ -154,7 +157,10 @@ module.exports = {
     // enchanted-vista: multi-layer richness (canopy + hero + floor + water + magic + depth).
     // fae-village + fae-village-axis: both skip polish — Kevin's legacy comparison
     // batches were polish-skipped, that's the look he approved for both paths.
+    // forest-elder: skip polish — the male GENDER-LOCK (he/his/bearded) is the
+    // load-bearing element; Haiku compression strips it and androgyny returns.
     skipPaths: [
+      'forest-elder',
       'tiny-fae',
       'queen-of-the-forest',
       'enchanted-vista',
