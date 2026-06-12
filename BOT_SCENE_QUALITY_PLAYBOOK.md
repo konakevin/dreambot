@@ -52,6 +52,7 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 4. **`promptPrefixByMedium` + `promptSuffixByMedium` overrides** — engine line 1314 reads `(bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix`. Set tight short anchors (e.g. `'kawaii illustration'`) for the neutral medium so it REPLACES the bot's locked prefix. GOTCHA: empty string is falsy in JS and falls through to `bot.promptPrefix` — set a 2-4 word anchor instead. ANOTHER GOTCHA: duplicate `promptPrefixByMedium` keys in `index.js` silently overwrite each other (JS later-key-wins) — merge into one map.
 
 5. **Template injection** — each path's archetype template opens its return string with:
+
    ```js
    ${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
    ${sharedDNA.lookRegister}
@@ -60,6 +61,7 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
    ` : ''}
    ```
+
    Falls through gracefully if a template doesn't include it (existing paths keep working).
 
 **How it CLIP-anchors:** Sonnet writes a Flux prompt that opens with the rolled look-register tokens (because the template tells it to). The neutral medium's `mediumStyle` follows. Bot's `PROMPT_PREFIX` is bypassed by `promptPrefixByMedium`. Net Flux prompt order: `[neutral-prefix] [neutral medium fragment — character only] [Sonnet output starting with rolled look-register] [Sonnet's scene body] [neutral suffix]`. CLIP attention anchors on the rolled look register at the front of Sonnet's output.
@@ -82,12 +84,13 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 **Don't apply to bots whose identity IS a single medium:** BrickBot is locked to LEGO photography — there's no value in giving it a "cute" look register because LEGO MOC photography IS its identity. EarthBot is locked to hyperreal Nat-Geo photography — same reason. The pattern is for bots whose CAST is the identity (kawaii food / kawaii pets / chibi characters / etc.) and whose visual treatment is the variable that's gone monotone.
 
 **Architecture file references** (YumBot — clone for the next bot):
+
 - Look-register gen script: `scripts/gen-seeds/yumbot/gen-look-register.js`
 - Pool load: `scripts/bots/yumbot/pools.js` line `YUMBOT_LOOK_REGISTER`
 - rollSharedDNA injection: `scripts/bots/yumbot/index.js` rollSharedDNA function
 - Neutral medium fragment: `scripts/bots/yumbot/shared-blocks.js` `YUMBOT_FOOD_NEUTRAL`
 - mediumByPath + promptPrefixByMedium + promptSuffixByMedium: `scripts/bots/yumbot/index.js`
-- Template injection example: `scripts/bots/yumbot/archetype-templates.js` — every YUMBOT_* archetype template
+- Template injection example: `scripts/bots/yumbot/archetype-templates.js` — every YUMBOT\_\* archetype template
 
 ---
 
@@ -98,6 +101,7 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 **The key generalization — the pattern works for STYLE-identity bots, not just CAST-identity bots.** YumBot's identity is a CAST (kawaii food) and the look varied the surface treatment. MangaBot's identity IS ALREADY A MEDIUM (anime) — so the look varies the **anime SUB-STYLE** (Studio Ghibli watercolor / Makoto Shinkai / 90s OVA cel / KyoAni / shonen battle-ink / Trigger-Edgerunners neon / ufotable painterly / loose watercolor-ink / flat gouache poster / pastel dreamy / glossy manga-cover / modern digital TV) while a neutral medium locks "it's anime." **Refines the YumBot caveat** ("don't apply to bots whose identity IS a single medium"): you CAN apply it to a style-identity bot **as long as every look stays inside that identity's family** — all-cute for YumBot, all-anime for MangaBot. The looks are sub-registers of the bot's own identity, never foreign media. (Still don't do it where the medium is the literal product and has no meaningful sub-registers — BrickBot LEGO photography, EarthBot Nat-Geo.)
 
 **The MVP files (clone for the next style-identity bot):**
+
 - Look pool (hand-authored, NOT gen'd): `scripts/bots/mangabot/seeds/mangabot_look_register.json` (12 entries)
 - Neutral medium: `scripts/bots/mangabot/shared-blocks.js` `ANIME_NEUTRAL`
 - Wiring: `scripts/bots/mangabot/index.js` (`mediumStyles` + `mediumByPath` + `promptPrefixByMedium`/`promptSuffixByMedium` + `rollSharedDNA.lookRegister`)
@@ -113,7 +117,7 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 **3. BOLD looks dominate; SUBTLE looks get smothered on CHARACTER paths — audit the TEMPLATE, not just the look.** The single biggest hands-on lesson. Bold-graphic looks (flat gouache poster / shonen battle-ink / Trigger neon / Shinkai) rendered unmistakably distinct on EVERY path. Subtle looks (Ghibli watercolor / KyoAni / pastel) differentiated cleanly on SCENE paths but got partly absorbed on CHARACTER paths — `anime-character-female` rolled "Ghibli watercolor" and rendered as polished digital, because the character templates carry strong baked "clean cel-shaded portrait" rendering language that out-votes a soft look. The override block (lesson 4) wins for bold looks; for subtle looks on character paths you must ALSO surgically soften the template's hard-coded style phrases ("cel-shaded clean linework", "painterly register"). Same family as "Template mandates silently override pool variety — audit the template, not just the pool."
 
-**4. The override block needs explicit STYLE-AUTHORITY language (YumBot's wording was too weak for a bot with baked style phrases).** YumBot's templates were stylistically neutral, so "translate every surface into THIS medium" sufficed. MangaBot's templates open with "painterly hand-drawn anime cel-shaded register" and enforce it in HARD RULES — so the look block had to explicitly claim authority: *"This is the AUTHORITY on rendering style. It OVERRIDES any other art-style / medium / finish wording anywhere below (e.g. 'cel-shaded', 'painterly', 'watercolor'). Keep the scene content, characters, composition, and EVERY hard rule exactly as written — but render all of it in THIS look."* The "keep content + composition + hard rules, override only STYLE" split is what let the look lead WITHOUT breaking culture-canon / anti-back-to-camera. **Test the toughest path first** — the path with the strongest baked style language (isekai-fantasy here) is the litmus; if the override wins there, it wins everywhere.
+**4. The override block needs explicit STYLE-AUTHORITY language (YumBot's wording was too weak for a bot with baked style phrases).** YumBot's templates were stylistically neutral, so "translate every surface into THIS medium" sufficed. MangaBot's templates open with "painterly hand-drawn anime cel-shaded register" and enforce it in HARD RULES — so the look block had to explicitly claim authority: _"This is the AUTHORITY on rendering style. It OVERRIDES any other art-style / medium / finish wording anywhere below (e.g. 'cel-shaded', 'painterly', 'watercolor'). Keep the scene content, characters, composition, and EVERY hard rule exactly as written — but render all of it in THIS look."_ The "keep content + composition + hard rules, override only STYLE" split is what let the look lead WITHOUT breaking culture-canon / anti-back-to-camera. **Test the toughest path first** — the path with the strongest baked style language (isekai-fantasy here) is the litmus; if the override wins there, it wins everywhere.
 
 **5. Reusable `lookOverride(sharedDNA)` helper > YumBot's repeated inline ternary.** Define one helper at the top of `archetype-templates.js` that returns the override header (or `''` when no look rolled), then prepend `${lookOverride(sharedDNA)}` to each look-enabled template's `return` string. Cleaner than copy-pasting the block into every template, and the `''`-when-absent fallthrough keeps non-look paths working untouched.
 
@@ -133,16 +137,17 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 ### LESSON 1 (the big one) — for a HYBRID bot, the neutral medium must be COMPOSITION-NEUTRAL
 
-YumBot (food) and MangaBot (anime) are single-disposition: the cast/subject is the same kind of thing on every path. **ChibiBot is HYBRID** — some paths are **creature-led** (a creature IS the subject: creature-portrait, cuddly-aquatic, sleepy-naptime) and some are **scene-led** (a *place* is the hero, with critters living in it: the 6 villages, cozy-landscape, interiors). My first neutral medium opened *"The subject is an adorable CHIBI CREATURE…"* — copied straight from YumBot's cast-locked pattern. It **collapsed every scene-led path into a creature close-up**: villages rendered as one critter with a single cottage as a blurry backdrop, NOT a village. Kevin caught it ("none looked like a village scene").
+YumBot (food) and MangaBot (anime) are single-disposition: the cast/subject is the same kind of thing on every path. **ChibiBot is HYBRID** — some paths are **creature-led** (a creature IS the subject: creature-portrait, cuddly-aquatic, sleepy-naptime) and some are **scene-led** (a _place_ is the hero, with critters living in it: the 6 villages, cozy-landscape, interiors). My first neutral medium opened _"The subject is an adorable CHIBI CREATURE…"_ — copied straight from YumBot's cast-locked pattern. It **collapsed every scene-led path into a creature close-up**: villages rendered as one critter with a single cottage as a blurry backdrop, NOT a village. Kevin caught it ("none looked like a village scene").
 
-**Diagnostic that nailed it:** read the actual `ai_prompt`. It opened `"cute chibi creature, The subject is a CHIBI CREATURE … every character in frame is a creature, [scene]"` — ~60 words of *subject-assertion* front-loading CLIP onto the creature before the scene was ever described. (The old `chibibot_pixar` medium was style-only, so the village templates' composition led — that's why villages worked before the looks change.)
+**Diagnostic that nailed it:** read the actual `ai_prompt`. It opened `"cute chibi creature, The subject is a CHIBI CREATURE … every character in frame is a creature, [scene]"` — ~60 words of _subject-assertion_ front-loading CLIP onto the creature before the scene was ever described. (The old `chibibot_pixar` medium was style-only, so the village templates' composition led — that's why villages worked before the looks change.)
 
 **The fix — lock the CAST, defer the COMPOSITION:**
-- Neutral medium reworded to: *"Every figure in frame is an adorable chibi CREATURE … NEVER a human. Keep the composition the scene below describes — a hero creature OR a village/landscape/interior populated by chibi creatures."* It still hard-locks creatures-only + chibi-proportions + no-humans, but does NOT assert the creature is the subject.
+
+- Neutral medium reworded to: _"Every figure in frame is an adorable chibi CREATURE … NEVER a human. Keep the composition the scene below describes — a hero creature OR a village/landscape/interior populated by chibi creatures."_ It still hard-locks creatures-only + chibi-proportions + no-humans, but does NOT assert the creature is the subject.
 - Prefix `'cute chibi creature'` → `'cute chibi'` (dropping "creature" — that one word front-loaded creature-as-subject).
 - Override block reworded from "render the chibi CREATURE + scene" → "describe **the scene** below … keep the scene's composition (a hero creature OR a village/landscape with creatures in it)."
 
-After the fix, villages came back as **the places critters live** — multiple cottages, market stalls, lit windows, *other resident critters* (a jungle-village with a tapir at a curry stall + raccoon + tree-frog; a snowy harbor with ice-fishing huts). **Litmus for any hybrid bot: if a scene-led path renders subject-dominant, read the `ai_prompt` opener — a subject-asserting medium fragment is front-loading CLIP onto the subject. Lock the cast, defer the composition.**
+After the fix, villages came back as **the places critters live** — multiple cottages, market stalls, lit windows, _other resident critters_ (a jungle-village with a tapir at a curry stall + raccoon + tree-frog; a snowy harbor with ice-fishing huts). **Litmus for any hybrid bot: if a scene-led path renders subject-dominant, read the `ai_prompt` opener — a subject-asserting medium fragment is front-loading CLIP onto the subject. Lock the cast, defer the composition.**
 
 ### LESSON 1b — look entries must be PURE rendering-style (reinforces MangaBot)
 
@@ -150,13 +155,15 @@ The same regression had a second cause: my look entries were **creature-coded** 
 
 ### LESSON 2 — gpt-2 + nano-banana CAN render WITH the looks (skipPaths bypass)
 
-The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_clean` medium that **ignores the rolled look** (a guard against those models going abstract on stylized bot mediums). On YumBot/MangaBot we kept them OUT of the look paths for this reason. On ChibiBot we tested the other option: **add the look paths to `cleanMediumByModel[model].skipPaths`** so gpt-2/banana use the `chibibot_neutral` medium + the rolled look directly. **Verified: zero abstract drift** — gpt-2 produced one of the best village renders in the batch (the curry-stall jungle village), banana produced clean cute creatures. The abstract-drift risk was the old *painterly-fusion* mediums, NOT concrete style tags like "Pixar-style 3D render" / "Ghibli watercolor" — those two models know those styles cold. **So for the looks system, a clean style register + skipPaths lets gpt-2/banana into the look lineup.** This also unlocked opening ChibiBot's model lineup from flux-1.1-pro-ultra-only (a lock that protected the OLD Pop-Mart-vinyl medium, which the film looks don't need) to the full 7-model set.
+The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_clean` medium that **ignores the rolled look** (a guard against those models going abstract on stylized bot mediums). On YumBot/MangaBot we kept them OUT of the look paths for this reason. On ChibiBot we tested the other option: **add the look paths to `cleanMediumByModel[model].skipPaths`** so gpt-2/banana use the `chibibot_neutral` medium + the rolled look directly. **Verified: zero abstract drift** — gpt-2 produced one of the best village renders in the batch (the curry-stall jungle village), banana produced clean cute creatures. The abstract-drift risk was the old _painterly-fusion_ mediums, NOT concrete style tags like "Pixar-style 3D render" / "Ghibli watercolor" — those two models know those styles cold. **So for the looks system, a clean style register + skipPaths lets gpt-2/banana into the look lineup.** This also unlocked opening ChibiBot's model lineup from flux-1.1-pro-ultra-only (a lock that protected the OLD Pop-Mart-vinyl medium, which the film looks don't need) to the full 7-model set.
 
 ### ChibiBot-specific guards that held
+
 - **Creatures-only / no-human-child:** ChibiBot has a documented human-children purge, and the film looks (Pixar/Disney/Tangled/Frozen) are human-saturated. The composition-neutral medium STILL hard-locks "NEVER a human" + the override reinforces it — 0 human leaks across 20 renders incl. the high-risk gpt-2 village renders.
 - **Short override block:** ChibiBot's known failure mode is verbose prompt-top blocks pushing Flux to its generic "chibi-toy" centroid. The look-override is deliberately terse (3 lines) — keep it that way on this bot.
 
 ### Files (ChibiBot — clone for the next hybrid bot)
+
 - Look pool: `scripts/bots/chibibot/seeds/chibibot_look_register.json` (13, pure-style)
 - Neutral medium: `scripts/bots/chibibot/shared-blocks.js` `CHIBI_NEUTRAL` (composition-neutral)
 - Wiring: `scripts/bots/chibibot/index.js` (`CHIBI_LOOK_PATHS` derived const → `mediumByPath` + `cleanMediumByModel.skipPaths`; `rollSharedDNA.lookRegister`; buildBrief routes `chibibot_neutral` through the style-agnostic `_PIXAR` block swaps)
@@ -182,6 +189,7 @@ The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_c
 **Nano Banana: looks WORK on it, but Kevin chose to keep it on the clean prompt.** Banana routes to `bloombot_gpt_clean` via `cleanMediumByModel` (no look) — so ~45% of a 3-model batch comes back look-less. We tried removing `google/gemini-2-image` from `cleanMediumByModel` so it renders `bloom_hyperreal_cgi` (neutral) + the rolled look directly, and verified on a 6-render Banana-forced pass (`iter-bot --model google/gemini-2-image`): **zero abstract-plate drift**, several Banana renders (ink-linework storybook / botanical-illustration registers) were the prettiest of the session — re-confirming ChibiBot LESSON 2 that gpt-2/banana handle CONCRETE style tags (oil / watercolor / woodblock / stained-glass) cleanly (the old abstract-plate risk was the painterly-FUSION mediums, not concrete looks). **But Kevin preferred Banana on its clean editorial-floral register, so we reverted** — Banana stays mapped to `bloombot_gpt_clean`, the looks ride the 2 Flux models (ultra + 1.1-pro). Decision recorded so we don't re-litigate: the looks-on-Banana option is proven viable if ever wanted again — just drop the `google/gemini-2-image` entry from `cleanMediumByModel`.
 
 **Files (BloomBot — clone for the next cast-identity bot with a central brief point):**
+
 - Look pool: `scripts/bots/bloombot/seeds/bloom_look_register.json` (13, pure-rendering-style)
 - Neutral fragment: `scripts/bots/bloombot/shared-blocks.js` `BLOOM_NEUTRAL`
 - Wiring: `scripts/bots/bloombot/index.js` (`mediumStyles['bloom_hyperreal_cgi']` override + `rollSharedDNA.lookRegister` + the `lookOverride` block prepended in `buildBrief`)
@@ -195,17 +203,22 @@ The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_c
 A bot's path roster is its content range. When a bot "feels samey" or a theme is under-served (Kevin on StarBot: "push the vibe more sci-fi / out in space"), the move is to **invent new paths that fill the gap**, not retune the existing ones. This section is the end-to-end method, proven by adding 3 paths to StarBot (`spacewalk`, `ring-habitat`, `impossible-sky`) in one session — all called "really good" / "absolute bangers" on the FIRST MVP render batch. **Replicate this on any bot.**
 
 ### Step 1 — AUDIT the bot against the playbook FIRST (non-negotiable)
+
 Re-read this playbook in full, then map the bot's CURRENT paths. Spawn an Explore agent to read every `paths/*.js` + README and report, per path: (1) the core scene it renders, (2) its medium + model locks, (3) its axes/pools, (4) whether it leans CHARACTER / SCENE / OBJECT and how strongly it already hits the target vibe. The output is a one-screen map of what the bot already covers. **You cannot find the gap without the map.**
 
 ### Step 2 — GAP ANALYSIS → tiered idea list
+
 Cluster the existing paths by what they cover, then name what's MISSING relative to the target vibe. On StarBot the 12 paths clustered into alien-surfaces / deep-space-phenomena / ships+megastructures / interiors — and the diagnosis was: **almost every path is GROUNDED** (characters stand on planets, vistas seen from a surface). The "out in space" gap was the actual VOID — figures floating in it, worlds seen from orbit, the inside of impossible structures. Present ideas in **tiers**:
+
 - **Tier 1** = biggest vibe-pushers that fill the core gap (StarBot: spacewalk/EVA, orbital descent, ring-habitat interior — put us IN the void / in orbit / inside the structure).
 - **Tier 2** = fresh tone or subject variety the bot lacks (derelict-horror, a living creature hero).
 - **Tier 3** = adjacent / lower-distinctness.
-Also keep a **pure-spectacle tier** ("wow that's fucking cool" — black-hole close-pass, FTL-jump moment, ringed-giant sky, crystalline world). Let Kevin pick from the menu; he steers which get built.
+  Also keep a **pure-spectacle tier** ("wow that's fucking cool" — black-hole close-pass, FTL-jump moment, ringed-giant sky, crystalline world). Let Kevin pick from the menu; he steers which get built.
 
 ### Step 3 — DESIGN THE AXES (this is the craft — where the quality lives)
+
 Each new path is a fresh `{ archetype, pools }`. Design a bespoke axis set so EVERY render is rich and varied. The axis-design principles that worked:
+
 - **Name 5-7 bespoke axes** that decompose the scene into independently-varying parts. For a CHARACTER-in-environment path: split FIGURE axes from ENVIRONMENT axes so BOTH are detailed (Kevin's bar: "the figure AND the scenery should all look really well detailed and filled out"). Spacewalk = `suit` / `eva_action` / `visor_reflection` (figure) + `void_backdrop` / `nearby_structure` (environment) + `suit_detail` (×2 stacked).
 - **Give every path ONE signature money-shot axis** — the detail that makes the shot iconic. Spacewalk's is `visor_reflection` (the cosmos mirrored in the faceplate). Find the one detail a great example of this shot is famous for and make it its own axis.
 - **Encode the load-bearing constraint as a NON-NEGOTIABLE template mandate**, not just a pool. The path's whole identity is one hard rule: spacewalk = ZERO-G FREE-FLOAT (never grounded); ring-habitat = the horizon CURVES UP and overhead; impossible-sky = the SKY is 60-70% of frame and the giant DOMINATES it. State it as the ABSOLUTE FIRST RULE in the template.
@@ -215,19 +228,24 @@ Each new path is a fresh `{ archetype, pools }`. Design a bespoke axis set so EV
 - Mirror an existing close-analog archetype's slot SHAPE (spacewalk cloned FEMALE_EXPLORER's character+environment structure; ring-habitat/impossible-sky cloned the scene-vista shape) so the composer + template wiring is known-good.
 
 ### Step 4 — WRITE archetype + template + path file
+
 1. Add the archetype to `scripts/bots/<bot>/archetypes.js` (slots: universal/bot/path + pickN + conditionalLayer + anchorScaleRange). A rich `description` documents the path for future-you.
 2. Add the template fn to `scripts/bots/<bot>/archetype-templates.js` — interpolate the resolved slots into a Sonnet brief. Lead with the action/hero; state the NON-NEGOTIABLE mandate first; give an explicit STRUCTURE block ("write the prompt in this order") so the hero leads CLIP. Handle the conditional slot with a `${slot ? section : ''}` ternary. End with "Output ONLY the raw 90-120 word scene description…".
 3. Add the path file `paths/<name>.js` = `{ archetype, pools: { slot: 'POOL_KEY' } }`.
 
 ### Step 5 — GENERATE bespoke pools with the gen script (NEVER hand-author at scale)
+
 Add one recipe per pool to `gen-starbot-pool.js` `POOL_RECIPES` (`{ format:'simple', theme, touchpoints:[], instructions }`). The `theme` carries a **VARIETY MANDATE** listing ~14-25 distinct archetypes to span; `instructions` gives the word-count + 4 concrete EXAMPLES. Then `node scripts/gen-starbot-pool.js --pool <name> --count 25` per pool. **MVP-25 only** — never gen 200 on an unproven recipe (Kevin's hard rule [[feedback_always_seed_25_to_test_then_scale]]). The gen script's **programmatic signature-based dedup** (within-batch + cross-batch, `signatureOf`/`dedupe`, NOT Sonnet-trust) is mandatory — see "Pool generation MUST have dedup".
 
 ### Step 6 — RENDER-TEST the MVP (no post), READ the JPEGs, fix the failure mode
+
 `node scripts/iter-bot.js --bot <bot> --mode <path> --count 6` (no `--post` → saves to /tmp). Read every image. Grade for: does it hit the mandate? Are figure AND scene detailed? What drifts? On spacewalk, 2/8 drifted to a terrestrial canyon — diagnosis: (a) a `weight` sensory anchor injecting gravity into a zero-G scene, (b) the tether reading as a climbing rope. Fix with a POSITIVE anchor (never a negation cascade): added an "OPEN SPACE — always the airless void" template block + a path-specific lightcolor-only sensory context. Retest → 0 drift. **One change per round; re-read the images.**
+
 - GOTCHA — sensory anchors: channel SELECTION is global, so a vacuum/space path still rolls `weight`/`air`; give it its own `SENSORY_POOLS` context with only the safe channels and map `sensoryAnchors.pathContext[path]` to it.
 - New axis-system paths: add to `twoPassPolish.skipPaths` (Haiku strips curated language) AND `chaos.skipPaths` for the MVP (protect the hero composition while validating).
 
 ### Step 7 — SHOW Kevin → on approval, SCALE pools 25→200, then move on
+
 Post a batch (`--post`) for his heart-review, OR show inline. On sign-off, scale each pool: `node scripts/gen-starbot-pool.js --pool <name> --target 200` (iterative gen+dedup loop, appends to the 25, overgens ~40%/iter). Pools settle 130-200 at the semantic ceiling — **take what's unique, don't fight it**. Run scale-ups as background tasks and build the NEXT path's code while they grind (gen is the only API-bound step; archetype/template/wiring is free). Commit per path.
 
 **Why this works:** the bot already has the engine (composer, sensory, chaos, model-picker, two-pass); a new path is just (archetype shape) + (rich template with a hard mandate) + (5-7 bespoke deduped pools). The leverage is entirely in **axis design** (step 3) and **reading the renders** (step 6). MVP-25 keeps the cost of a wrong recipe at ~$0.30 + 40s instead of ~$6. Three StarBot paths landed as first-batch bangers using exactly this.
@@ -241,6 +259,7 @@ Post a batch (`--post`) for his heart-review, OR show inline. On sign-off, scale
 **How to diagnose — READ THE PROMPTS, not just the images.** Pull the actual Flux prompts from the DB (`uploads.ai_prompt` for the bot's recent posts) and look for a word/feature that appears in **6 of 6**. On forest-elder the smoking gun: every prompt opened with "**Ancient**", and every one had "**glowing amber eyes**" + "**branching antlers**" + "**weathered long beard**" + a solemn-old-wisdom expression. The skin tone varied; the face/age/eyes/crown/expression were identical → same guy in a different wash.
 
 **Root cause = identity hard-coded OUTSIDE the varied pool:**
+
 1. **The TEMPLATE injects blanket adjectives into EVERY prompt.** forest-elder's template literally said "an ANCIENT MALE FOREST-ELDER … He is ancient, weathered, powerful." That overrode the ~40% "vital prime" seeds — Sonnet wrote "Ancient" anyway. **Fix: strip age/identity adjectives from the template; let the seed drive them.** ("a MALE FOREST-SPIRIT … his age/build/crown/eyes are whatever his entry specifies.")
 2. **A feature mandated on EVERY creature entry.** Antlers + glowing-amber-eyes were in the recipe's required-feature list, so all 200 had them. **Fix: make signature features OPTIONAL/varied in the recipe** — "antlers NOT mandatory, ~half have none (leaf-crown / circlet / bare scalp / wild hair)"; "eyes vary — most ordinary, only SOME glow." Antlers dropped from ~all → ~half, glowing eyes 25/25 → 3/25.
 3. **A same-register satellite axis.** The expression pool was 100% old-coded ("centuries", "old forest-wisdom", "solemn downward gaze") — two entries shared a verbatim line. **Fix: rebuild it age-neutral + emotionally varied** (fierce / playful / tender / focused / wondering).
@@ -258,6 +277,25 @@ Reinforces the gender-lock rule. FaeBot's feminine dryad-portrait pool had ~14 m
 When a pool must hold a DISTRIBUTION at 200 (e.g. even species spread, or "X% of variant A"), a single "mix evenly" instruction in one big call does NOT survive cross-batch dedup (it unevenly starves sub-themes — see [[feedback_production_seed_equal_share_per_subtheme]]). The mechanism added to `gen-faebot-pool.js`: a recipe can declare `subThemes: [{aspect, weight}, …]`; the gen loop runs **one focused Sonnet phase per aspect**, each filling a weight-proportional share (`FEATURED_SUBTHEME` is injected into the prompt). The shared base aesthetic lives in `recipe.theme` (every entry); the aspect just sets what's featured for that phase. Scales 28→200 by changing one number; spread is guaranteed (forest-elder: Leshy 38 / Green-Man 38 / horned-god 29 / … exactly the weights). Also the safe way to express "occasional spice" — give the rare variant a small weight.
 
 **Two cross-bot taste rules locked this session:** (a) NO real-world cultural/ethnic diversity in a fantasy world — diversify within the world's own native palette (wood-tone skin, beard color, age, species), never real nationalities (see [[feedback_no_realworld_diversity_in_fantasy_worlds]]); (b) NO animal-hybrid / beast-man creatures on FaeBot forest-elder — Kevin: "they look stupid." Animals appear only as scene COMPANIONS via the story_beat axis, never fused onto the elder's body.
+
+---
+
+## Multi-path character FAMILY — build the cheap way (2026-06-11, FaeBot druids)
+
+Building a set of related character paths (e.g. {female, male} × {intimate, adventure} = 4) does NOT mean 4× the pools. The efficient decomposition:
+
+- **Character pool per GENDER, shared across that gender's modes.** The same druid appears in both her intimate and adventure paths — one `female_druid` pool, one `male_druid`. Generate it via the weighted `subThemes` mechanism (here: 6 elven lineages) so race variety is guaranteed at scale and the "same person" trap is avoided for free.
+- **Scene axes are GENDER-NEUTRAL → shared across both adventure paths.** `adventure_setting` / `adventure_action` / `adventure_composition` / `druid_magic` are written with "the druid" (no pronoun) and reused by male + female adventure. Only the CHARACTER pool + the TEMPLATE are gender-locked.
+- **One gated, per-animal-capped companion axis** shared by all four (the "girl with a bird" compounding lesson — never spread a companion across multiple pools).
+- **Mode = the template + a couple axes, not a new everything.** INTIMATE = posed half-body/bust + soft-focus backdrop (mirror dryad-portrait). ADVENTURE = full/3-4 figure in environment, candid action FRONT-LOADED (mirror the DragonBot adventurer), with the action's body-position distribution. The character/magic/companion/lighting are identical; the framing-and-action is the whole difference.
+
+Net: 4 paths off ~2 character pools + ~5 shared axes. Validate the make-or-break CHARACTER look on ONE path first (here female intimate — Kevin: "perfect"), then the other three are mostly wiring.
+
+## Biome drift — a broad setting theme wanders out of the intended world (2026-06-11)
+
+A setting/landscape recipe themed loosely ("the wild place the druid is out in… exploring the world… high vantage points") let Sonnet riff **out of the forest** into coast / alpine-above-treeline / sandstone-canyon / moor / lava-coast — 6 of 25 at MVP, which would be ~48 of 200 at scale. **Fixes:** (1) name the REQUIRED biome explicitly in the theme ("ALWAYS forest / forest-edge — trees present or immediately adjacent") AND list the BANNED off-biome set (no sea/coast, no above-treeline, no desert/canyon, no moor, no lava-coast, no city); a cliff is fine ONLY if it overlooks the intended biome. (2) **Audit the pool with a regex before scaling** — biome drift multiplies at 200, so catch it at MVP. (3) Surgically drop the drifted entries + `--target` refill (keeps the good ones). Generalizes: any "wild setting / explore" pool needs the home-biome mandated or it wanders.
+
+**NSFW coverage MIX held both genders** (lean-covered): female armored/high-necked bust caught 1 cheesecake drift at MVP → tightened the ARMOR line to "armored or high-necked bust, NO low-cut/cleavage-window"; male chest-always-named-covered + FACE-only skin held 0 shirtless at 200. **Infra note:** `iter-bot.js` renders produce NOTHING in a `run_in_background` shell (env/TTY) — run render batches in the FOREGROUND (timeout 600000); background is fine for the GEN script.
 
 ---
 
@@ -411,6 +449,7 @@ cleanMediumByModel: {
 **Why this matters going forward:** once a bot has a clean medium, **enabling gpt-2 or nano-banana on it is just an `allowedModels` line** — the clean override guarantees a readable result.
 
 **Fleet status (2026-06-07): every bot that uses either model has a clean medium for it.**
+
 - gpt-2 **and** nano-banana: bloombot, gothbot, mechbot, starbot, steambot, brickbot, oceanbot, yumbot, chibibot, dinobot, pixelbot, retrobot.
 - gpt-2 only (no banana in lineup): dragonbot.
 - nano-banana only (no gpt-2 in lineup): faebot, mangabot (mangabot keeps its gpt-2 ban — the clean medium is ready if it's ever re-enabled, since the ban was caused by the dirty anime medium this fixes).
@@ -458,9 +497,9 @@ The script (`scripts/qa-bot-model-matrix.js`) does the whole thing: records the 
 
 | Bot path count | Models | Cells (1×) | Cost (avg) |
 | -------------- | -----: | ---------: | ---------: |
-| 5              |      4 |         20 |    ~$1.00 |
-| 12             |      6 |         72 |    ~$3.50 |
-| 18             |      8 |        144 |    ~$7.00 |
+| 5              |      4 |         20 |     ~$1.00 |
+| 12             |      6 |         72 |     ~$3.50 |
+| 18             |      8 |        144 |     ~$7.00 |
 
 Sonnet brief composition adds ~$1; Haiku polish (where enabled) negligible.
 
@@ -1445,13 +1484,13 @@ A SPECIFIC sub-case of "stuffed wrappers" with its own failure signature on Eart
 
 ```js
 // WRONG — every path render locks to the FIRST-named biome
-'African landscape, savanna grass plain or Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar baobab forest, sharp detail, gallery-quality, masterpiece'
+'African landscape, savanna grass plain or Okavango Delta or Sahara dune sea or Congo Basin canopy or Madagascar baobab forest, sharp detail, gallery-quality, masterpiece';
 
 // WRONG — same trap with materials
-'South American raw nature, Andes Patagonia Altiplano Amazon, granite spires and glacier ice and salt-pan flats and emerald canopy, sharp detail, gallery-quality, masterpiece'
+'South American raw nature, Andes Patagonia Altiplano Amazon, granite spires and glacier ice and salt-pan flats and emerald canopy, sharp detail, gallery-quality, masterpiece';
 
 // WRONG — same trap with materials on Iceland
-'Iceland raw nature, basalt and black volcanic sand and glacier ice and Icelandic moss, sharp detail, gallery-quality, masterpiece'
+'Iceland raw nature, basalt and black volcanic sand and glacier ice and Icelandic moss, sharp detail, gallery-quality, masterpiece';
 ```
 
 **What happens:** CLIP attends most to the FIRST-named noun. Every render gets locked to that biome/material regardless of what subject Sonnet's body wrote. The pool is varied; the renders are not. Bit:
@@ -1463,9 +1502,9 @@ A SPECIFIC sub-case of "stuffed wrappers" with its own failure signature on Eart
 
 ```js
 // RIGHT — name the REGION only, let the SCENE content carry the biome
-'African raw nature, sharp detail, gallery-quality, masterpiece'
-'South American raw nature, sharp detail, gallery-quality, masterpiece'
-'Iceland raw nature, sharp detail, gallery-quality, masterpiece'
+'African raw nature, sharp detail, gallery-quality, masterpiece';
+'South American raw nature, sharp detail, gallery-quality, masterpiece';
+'Iceland raw nature, sharp detail, gallery-quality, masterpiece';
 ```
 
 The subject pool entries (each one toponym-led — "Reynisfjara black-sand beach...", "Salar de Uyuni mirror flat...", "Okavango Delta papyrus channel...") then carry full attention because no biome noun is already locked in.
@@ -1490,15 +1529,15 @@ Mediums and prefixes accumulate tokens over time. Each agent / dev who works on 
 
 **Token categories that accumulate cruft and what they pull toward in Flux's prior:**
 
-| Cruft category | Example tokens | Pulls render toward |
-|---|---|---|
-| **Negation cascades** | `NOT golden hour`, `NOT HDR`, `NOT cartoon`, `NOT mobile-phone photography` | The negated noun is rendered anyway (CLIP/T5 ignores "no") |
-| **Camera-brand stuffing** | `Hasselblad H6D-100c + Phase One IQ4 150MP + Carl Zeiss + Velvia 50 + Lightroom touch-up` | Over-processed CGI sheen, AI-photo aesthetic, luxury commercial register |
-| **Tech-spec adjectives** | `8K`, `100MP`, `razor-sharp tack-sharp`, `ultra-detailed`, `hyper detailed` | AI-generated-photo tells; reads as "this is an AI render trying to look photographic" |
-| **Travel-magazine register** | `wallpaper-worthy`, `postcard-worthy`, `magazine-cover framing`, `Pulitzer-Prize editorial gravitas` | Conde Nast / Architectural Digest / Travel & Leisure prior — **prominently features hotels, resorts, infinity pools** |
-| **Mountain-photographer tropes** | `deep tonal depth`, `dramatic atmospheric perspective`, photographer name-drops (Ansel Adams / Marc Adamus / Peter Lik / Iurie Belegurschi) | Wide-vista alpine mountain landscapes — fights any non-mountain biome |
-| **Resort-coded aesthetics** | `hyperreal rendering`, `wallpaper-worthy`, `pristine`, `dream destination` | Luxury hospitality photography (hotel marketing, resort brochures) |
-| **Generic intensifiers** | `masterpiece`, `breathtaking`, `stunning`, `epic`, `cinematic` | Each one is fine alone; stacking 5+ at the open just burns attention budget on no semantic content |
+| Cruft category                   | Example tokens                                                                                                                              | Pulls render toward                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Negation cascades**            | `NOT golden hour`, `NOT HDR`, `NOT cartoon`, `NOT mobile-phone photography`                                                                 | The negated noun is rendered anyway (CLIP/T5 ignores "no")                                                            |
+| **Camera-brand stuffing**        | `Hasselblad H6D-100c + Phase One IQ4 150MP + Carl Zeiss + Velvia 50 + Lightroom touch-up`                                                   | Over-processed CGI sheen, AI-photo aesthetic, luxury commercial register                                              |
+| **Tech-spec adjectives**         | `8K`, `100MP`, `razor-sharp tack-sharp`, `ultra-detailed`, `hyper detailed`                                                                 | AI-generated-photo tells; reads as "this is an AI render trying to look photographic"                                 |
+| **Travel-magazine register**     | `wallpaper-worthy`, `postcard-worthy`, `magazine-cover framing`, `Pulitzer-Prize editorial gravitas`                                        | Conde Nast / Architectural Digest / Travel & Leisure prior — **prominently features hotels, resorts, infinity pools** |
+| **Mountain-photographer tropes** | `deep tonal depth`, `dramatic atmospheric perspective`, photographer name-drops (Ansel Adams / Marc Adamus / Peter Lik / Iurie Belegurschi) | Wide-vista alpine mountain landscapes — fights any non-mountain biome                                                 |
+| **Resort-coded aesthetics**      | `hyperreal rendering`, `wallpaper-worthy`, `pristine`, `dream destination`                                                                  | Luxury hospitality photography (hotel marketing, resort brochures)                                                    |
+| **Generic intensifiers**         | `masterpiece`, `breathtaking`, `stunning`, `epic`, `cinematic`                                                                              | Each one is fine alone; stacking 5+ at the open just burns attention budget on no semantic content                    |
 
 **The audit method** — apply periodically (every ~3 months per bot, or whenever a bot's renders "feel off"):
 
@@ -1956,12 +1995,13 @@ Per-bot subsections live below. Each bot's path-by-path iteration history is her
 
 **Symptom (Kevin):** every MechBot render of a human-scale single robot was "characters standing around, or walking towards the camera" — front-on, symmetric, centered hero turnarounds. Hearted 6 (`humanoid-robots` / `droid-assassin` / `power-armor-infantry` / `robot-moment` / `mecha-pilots`) to find them.
 
-**The trap — it was NOT the pools.** The composition pool (200 entries) was rich with off-axis angles (worm's-eye / over-the-shoulder / side-profile-mid-stride / god's-eye); the action pool (150) was full of kinetic verbs (mid-leap / predator-stalk / mid-rappel / mid-charge). The pools were *great* and the renders ignored them. Two downstream causes buried them:
+**The trap — it was NOT the pools.** The composition pool (200 entries) was rich with off-axis angles (worm's-eye / over-the-shoulder / side-profile-mid-stride / god's-eye); the action pool (150) was full of kinetic verbs (mid-leap / predator-stalk / mid-rappel / mid-charge). The pools were _great_ and the renders ignored them. Two downstream causes buried them:
 
-1. **The TEMPLATE engineered a static beauty shot.** The `MECHBOT_HUMANOID_ROBOTS` template's `STRUCTURE` instruction told Sonnet to *open* with "camera + robot context" and its example showed a robot *"standing… contemplative still pose"*; a separate line said *"Both contemplative-still AND mid-action poses are valid"*; and the movie-poster / vertigo / emotional-DNA mandates all described a posed hero-in-a-vista (`AWE — contemplative robot facing vista`, `robot in midground-center`). The action axis was ONE buried, *optional* block ~500 words deep. This is the playbook's "verbose template mandates override pool variety / push Flux to its generic centroid" — applied to pose.
-2. **Cruft render-prefix front-loaded the hero-portrait centroid.** `promptPrefix` + `mediumStyles.render` = ~334 chars / ~45 words of pure VFX tech-spec ("production-art polish, feature-film VFX quality, PBR, subsurface-scatter, raytraced reflections, practical-plus-digital, volumetric depth, cinematic lighting precision") BEFORE any scene. For a human-scale single robot, "high-end render of a cool robot" = an ArtStation front-on hero turnaround. (Why migrated *scale/vehicle* paths — titan-war / mech-skyships — don't have this: the colossal subject forces environment + scale-provers, which breaks the portrait. Human-scale single-bot has no such counter-pull.)
+1. **The TEMPLATE engineered a static beauty shot.** The `MECHBOT_HUMANOID_ROBOTS` template's `STRUCTURE` instruction told Sonnet to _open_ with "camera + robot context" and its example showed a robot _"standing… contemplative still pose"_; a separate line said _"Both contemplative-still AND mid-action poses are valid"_; and the movie-poster / vertigo / emotional-DNA mandates all described a posed hero-in-a-vista (`AWE — contemplative robot facing vista`, `robot in midground-center`). The action axis was ONE buried, _optional_ block ~500 words deep. This is the playbook's "verbose template mandates override pool variety / push Flux to its generic centroid" — applied to pose.
+2. **Cruft render-prefix front-loaded the hero-portrait centroid.** `promptPrefix` + `mediumStyles.render` = ~334 chars / ~45 words of pure VFX tech-spec ("production-art polish, feature-film VFX quality, PBR, subsurface-scatter, raytraced reflections, practical-plus-digital, volumetric depth, cinematic lighting precision") BEFORE any scene. For a human-scale single robot, "high-end render of a cool robot" = an ArtStation front-on hero turnaround. (Why migrated _scale/vehicle_ paths — titan-war / mech-skyships — don't have this: the colossal subject forces environment + scale-provers, which breaks the portrait. Human-scale single-bot has no such counter-pull.)
 
 **The fix (validated — pools untouched, only template + prefix changed):**
+
 - **Front-load the ACTION at the TOP of the template** (a "CANDID ACTION LEADS — START HERE" block above the subject-DNA wall), and tell Sonnet to OPEN its prompt with the action verb + a dynamic off-axis angle.
 - **Kill the still-pose permission** — delete "contemplative-still poses are valid"; rewrite the STRUCTURE example from "standing… contemplative still" to "MID-VAULT… body twisting through the air".
 - **Explicit anti-centroid ban** — "THE #1 FAILURE: a robot standing front-on / walking-at-the-lens like a posed hero turnaround. BANNED. Catch it mid-motion from an off-axis angle."
