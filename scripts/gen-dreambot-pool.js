@@ -124,15 +124,20 @@ Spread across: big glowing neon-pink concentric-ring eyes / small bright white d
   // ── POSE (gesture) ───────────────────────────────────────────────────────
   bubble_bot_pose: {
     label: 'bot pose',
-    maxWords: 12,
-    theme: `Each entry is ONE simple, cute POSE/gesture for the little bubble-bot — serene and charming. NOT the appearance, NOT the scene.
+    maxWords: 14,
+    theme: `Each entry is ONE cute POSE/ACTION for the little bubble-bot — a MIX of serene poses AND dynamic, in-action/adventuring poses (so the bot feels alive — sometimes calm, sometimes mid-adventure). NOT the appearance, NOT the scene.
 
-Spread across: sitting serenely with stubby legs out front / sitting cross-legged with paws on knees / standing tall and proud / giving a tiny wave / both stubby arms raised in joy / mid happy little bounce / a small joyful twirl / floating serenely just off the ground / hugging its own knees / peeking with one paw up / gazing up in wonder / reaching toward something off-frame.
+SERENE: sitting cross-legged with paws on knees, standing tall and proud, a tiny shy wave, both arms raised in joy, floating gently, hugging its knees, gazing up in wonder, peeking with one paw.
+DYNAMIC ACTION (adventuring, full of energy): running forward eagerly mid-stride, mid-leap jumping with arms flung up, striding ahead exploring, scrambling up a ledge, reaching out to grab something, pointing ahead leading the way, a determined adventure-crouch ready to spring, sliding/riding with arms out, tip-toeing curiously forward, fist-pumping mid-cheer, tumbling playfully, dashing with arms streaming back.
 
-✅ GOOD: "sitting serenely with stubby legs out front"
-✅ GOOD: "both stubby arms raised in pure joy"
-✅ GOOD: "floating serenely just off the ground"`,
-    instructions: `Generate distinct cute POSES/gestures. 4-12 words, ONE line. Pose ONLY — no appearance, no scene.`,
+✅ GOOD (serene): "sitting cross-legged with tiny paws on its knees"
+✅ GOOD (action): "running forward eagerly, arms pumping, one foot lifted mid-stride"
+✅ GOOD (action): "mid-leap jumping with both arms thrown up in delight"`,
+    instructions: `Generate distinct cute POSES — both serene AND dynamic in-action/adventuring. 4-14 words, ONE line. Pose ONLY — no appearance, no scene.`,
+    subThemes: [
+      'SERENE POSES — sitting, standing proud, gazing up, a tiny wave, floating, hugging knees, peeking, arms-raised joy',
+      'DYNAMIC ACTION POSES — running mid-stride, mid-leap jumping, striding/exploring ahead, climbing/scrambling, reaching to grab, pointing-ahead leading, adventure-crouch, sliding/riding, tip-toe-curious, dashing, tumbling, fist-pump cheer',
+    ],
   },
 
   // ════════════════ ENVIRONMENT AXES — the dream world (co-star) ═════════════
@@ -551,20 +556,22 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
   bubble_world_toybot: {
     label: 'toybot world',
     maxWords: 22,
-    theme: `Each entry is ONE playful TOY-WORLD scene in the spirit of ToyBot — the bubble-bot among OTHER toys on real-world surfaces and handcrafted sets (claymation villages, army-men, hot-wheels cities, plush picnics, model trains, tabletop minis) — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, captured mid-moment. Describe ONLY the world/toy-scene (other toys are scenery + companions).
-  ✅ "a hot-wheels die-cast city on a real bedroom floor, orange track loops, tiny cars mid-race, building-block towers rising around"
-  ✅ "a claymation thumb-printed clay village on a tabletop, sculpted clay cottages + rolling clay hills, warm lamp-glow from doorways"
+    theme: `Each entry is ONE scene of a TINY TOY on a FLAT real-world surface, surrounded by GIANT everyday human OBJECTS and OTHER TOYS — the "toys on the floor / on the desk" diorama in the spirit of ToyBot. THREE things MUST be in every seed: (1) a FLAT real surface named plainly — a wooden desktop, a living-room floor/carpet, a tabletop, a bedsheet, a picnic blanket; (2) GIANT recognizable human objects standing for scale — a giant open storybook, stacked wooden building-blocks, crayons, a coffee mug, an alarm clock, a cereal box, a TV remote (named as the OBJECT, NOT as a cliff/canyon/mountain); (3) OTHER TOYS as companions/scenery — wooden blocks, hot-wheels cars, plush animals, army-men, a toy train, action figures. Glossy-dreamy register. Describe ONLY the scene.
 
-🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep playful + cute + cozy. ≤22 words.`,
-    instructions: `Generate NEW toy-world scenes across families — terse 12-22 word fragments, a toy-scene on a real/handcrafted set + companion toys + depth cue, glossy-dreamy. World ONLY.`,
+⚠️ CRITICAL: NEVER use "cliff / canyon / ledge / hillside / mountain / rock" — Flux renders those as real NATURE and the toy-room is lost. The giant things are clearly BOOKS, BLOCKS, CRAYONS, MUGS, CEREAL BOXES standing upright — recognizable human objects, not landforms.
+  ✅ "on a sunny wooden desktop, a giant open storybook standing upright, stacked building-blocks, crayons and hot-wheels cars scattered around"
+  ✅ "on a checkered picnic blanket, oversized plush friends, a giant felt sandwich and a huge strawberry, wooden blocks piled nearby"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. NO cliff/canyon/landform words. ≤22 words.`,
+    instructions: `Generate NEW "tiny toy on a flat surface among giant human objects + other toys" scenes — terse 12-22 word fragments. Name the FLAT surface + giant OBJECTS (books/blocks/crayons/mug/cereal, NOT landforms) + other toys. World ONLY.`,
     subThemes: [
-      'TOYS ON A DESK / RUG — building-block towers + scattered toys on a sunny desk or living-room rug, soft warm task-light',
-      'CLAYMATION VILLAGES — thumb-printed clay cottages, sculpted clay hills + trees, visible fingerprint texture, lamp-glow',
-      'ARMY-MEN ADVENTURES (cute) — friendly olive-green plastic soldiers on a pillow-fort battlefield, no menace, playful standoff',
-      'HOT-WHEELS CITIES — orange die-cast track loops on a real floor, tiny cars mid-race, block-tower skyline, dust-puff charm',
-      'PLUSH PICNICS — oversized soft plush friends on a checkered blanket, felt food, button-eyes, cozy sunny meadow set',
-      'MODEL-TRAIN WORLDS — a tiny locomotive on twin rails through a model-scenery landscape, little stations, painted hills',
-      'TABLETOP-MINI DUNGEONS — painted fantasy minis on a flocked terrain board, tiny dungeon tiles, treasure, soft lamp-light',
+      'WOODEN DESKTOP — a giant open storybook standing upright, stacked building-blocks, crayons + pencils, a coffee mug, hot-wheels cars',
+      'LIVING-ROOM FLOOR — flat carpet, a giant TV remote + board-game box standing, a toy train looping on plastic track, action figures, blocks',
+      'TABLETOP BREAKFAST — a giant cereal box + bowl + spoon standing tall, scattered cereal pieces, a milk-carton, toy cars parked nearby',
+      'BEDSHEET PILLOW-FORT — soft rumpled bedsheet, a pillow fort of giant cushions, army-men posed mid-charge, a giant alarm clock + book standing',
+      'PICNIC BLANKET — flat checkered blanket, oversized plush friends, a giant felt sandwich + huge strawberry, button-eyed companions, blocks',
+      'BOOK-STACK PLAYSET — towering stacked giant books like a wall, a globe + pencil-cup standing, toy soldiers + a toy car on the cover, soft window light',
+      'HOT-WHEELS TRACK FLOOR — orange die-cast track loops on a flat wooden floor, tiny cars mid-race, a building-block tower skyline, a toy train',
     ],
   },
 

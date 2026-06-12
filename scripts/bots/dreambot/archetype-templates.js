@@ -31,7 +31,7 @@ A small round chibi designer-toy bubble-bot — assemble it from EXACTLY these p
 • head: ${bot_dome}
 • eyes: ${bot_eyes}
 • pose: ${bot_pose}
-Chibi proportions (big rounded domed head, soft stubby body). Small-to-medium in the lower-center of the frame — never filling it, never a close-up. Serene and charming.
+Chibi proportions (big rounded domed head, soft stubby body). Small-to-medium in the lower-center of the frame — never filling it, never a close-up. Render its POSE with full life and energy — if the pose is an action (running, jumping, climbing, reaching, exploring), make it dynamic and mid-motion; if serene, calm and charming. Always expressive and full of personality.
 
 ━━━ THE DREAM WORLD (the CO-STAR — build it bold, dense, sharp, and CREATIVE) ━━━
 ${dream_world}
