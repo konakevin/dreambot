@@ -77,8 +77,8 @@ export async function restorePurchases() {
 }
 
 /**
- * Fetch the Pro subscription packages (monthly + yearly).
- * Returns the packages from the "pro" offering configured in RevenueCat.
+ * Fetch all subscription packages (Basic + Pro, monthly + yearly) from the
+ * "subscriptions" offering configured in RevenueCat.
  */
 export async function getProPackages(): Promise<PurchasesPackage[]> {
   if (!configured) return [];

@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
@@ -22,6 +24,16 @@ import {
 import { useSparklePacks } from '@/hooks/useSparklePacks';
 import { trackSparkleStoreOpened, trackSparklePurchaseTapped } from '@/lib/analytics';
 import { verticalScale, fontScale } from '@/lib/responsive';
+
+// The DreamBot logo gradient (purple→pink→teal) — same as the 'DreamBot'
+// wordmark on the login/splash screen and the Plans paywall title.
+const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+
+// ONE purple for the whole screen — the app's accent token. Everything
+// interactive/accented (icons, selected border, radio, CTA) uses it, so the
+// design stays calm + matches the Plans screen. The brand rainbow gradient is
+// reserved for a SINGLE moment: the title.
+const ACCENT = colors.accent;
 
 /** Flavor copy per sparkle pack — appears under the grid when selected.
  *  Uses the actual sparkle count so the copy never gets out of sync with
@@ -62,7 +74,6 @@ function PackCard({
   };
   const isBestValue = info.label === 'Best Value';
   const isPopular = info.label === 'Popular';
-  const badgeLabel = isBestValue ? 'BEST VALUE' : isPopular ? 'POPULAR' : null;
 
   return (
     <TouchableOpacity
@@ -70,12 +81,12 @@ function PackCard({
       onPress={() => onSelect(pkg)}
       activeOpacity={0.85}
     >
-      {/* Left: icon */}
+      {/* Left: icon chip */}
       <View style={s.packIcon}>
         <Ionicons
           name={info.icon as keyof typeof Ionicons.glyphMap}
-          size={22}
-          color={colors.accent}
+          size={fontScale(20)}
+          color={ACCENT}
         />
       </View>
 
@@ -84,17 +95,23 @@ function PackCard({
         <View style={s.packTitleRow}>
           <Text style={s.packSparkles}>{info.sparkles}</Text>
           <Text style={s.packSparklesLabel}> sparkles</Text>
-          {badgeLabel && (
-            <View
-              style={[
-                s.inlineBadge,
-                { backgroundColor: isBestValue ? colors.accent : colors.warning },
-              ]}
-            >
-              <Text style={[s.inlineBadgeText, !isBestValue && { color: '#000' }]}>
-                {badgeLabel}
-              </Text>
+          {/* BEST VALUE → solid accent pill (matches the Plans "Best value"
+              badge). POPULAR → little golden sticker (matches the "Save 33%"
+              sticker on the Plans toggle). */}
+          {isBestValue && (
+            <View style={s.bestValueBadge}>
+              <Text style={s.bestValueText}>BEST VALUE</Text>
             </View>
+          )}
+          {isPopular && (
+            <LinearGradient
+              colors={['#FFE08A', '#F2A93B']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={s.popularBadge}
+            >
+              <Text style={s.popularText}>POPULAR</Text>
+            </LinearGradient>
           )}
         </View>
         <Text style={s.packPrice}>{product.priceString}</Text>
@@ -195,20 +212,29 @@ export default function SparkleStoreScreen() {
   }
 
   return (
-    <ScreenLayout header="back" title="Get Sparkles">
+    <ScreenLayout
+      header="back"
+      title="Sparkles"
+      centerTitle
+      rightAction={
+        <View style={s.balancePill}>
+          <Ionicons name="sparkles" size={fontScale(13)} color={ACCENT} />
+          <Text style={s.balancePillAmount}>{balance.toLocaleString()}</Text>
+        </View>
+      }
+    >
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Balance — compact inline "✨ {N} sparkles" header. The big
-              circle-icon + 44pt count was eating ~140px of vertical
-              real-estate for no informational gain. */}
-          <View style={s.balanceRow}>
-            <Ionicons name="sparkles" size={18} color={colors.accent} />
-            <Text style={s.balanceAmount}>{balance}</Text>
-            <Text style={s.balanceLabel}>sparkles available</Text>
+          {/* Hero — gradient wordmark title (same MaskedView treatment as the
+              'DreamBot' logo + the Plans paywall). The balance lives in the
+              header's rightAction slot, opposite the back button. */}
+          <View style={s.hero}>
+            <MaskedView maskElement={<Text style={s.heroTitle}>Choose a pack</Text>}>
+              <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                <Text style={[s.heroTitle, { opacity: 0 }]}>Choose a pack</Text>
+              </LinearGradient>
+            </MaskedView>
           </View>
-
-          {/* Section header */}
-          <Text style={s.sectionTitle}>Choose a Pack</Text>
 
           {isLoading ? (
             <ActivityIndicator
@@ -247,7 +273,7 @@ export default function SparkleStoreScreen() {
             activeOpacity={0.7}
             disabled={restoring}
           >
-            <Text style={s.restoreText}>{restoring ? 'Restoring...' : 'Restore Purchases'}</Text>
+            <Text style={s.restoreText}>{restoring ? 'Restoring…' : 'Restore purchases'}</Text>
           </TouchableOpacity>
         </ScrollView>
 
@@ -256,23 +282,24 @@ export default function SparkleStoreScreen() {
           <View style={s.stickyFooter}>
             {selectedInfo && <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>}
             <TouchableOpacity
-              style={[s.primaryCta, (!selectedPkg || purchasing) && s.primaryCtaDisabled]}
-              activeOpacity={0.85}
-              disabled={!selectedPkg || purchasing}
               onPress={handlePurchase}
+              disabled={!selectedPkg || purchasing}
+              activeOpacity={0.85}
             >
-              {purchasing ? (
-                <View style={s.ctaConnecting}>
-                  <ActivityIndicator color="#FFFFFF" />
-                  <Text style={s.primaryCtaText}>Connecting to App Store…</Text>
-                </View>
-              ) : (
-                <Text style={s.primaryCtaText}>
-                  {selectedPkg
-                    ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles — ${selectedPkg.product.priceString}`
-                    : 'Select a pack'}
-                </Text>
-              )}
+              <View style={[s.cta, (!selectedPkg || purchasing) && s.ctaDim]}>
+                {purchasing ? (
+                  <View style={s.ctaConnecting}>
+                    <ActivityIndicator color="#FFFFFF" />
+                    <Text style={s.ctaText}>Connecting to App Store…</Text>
+                  </View>
+                ) : (
+                  <Text style={s.ctaText}>
+                    {selectedPkg
+                      ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles — ${selectedPkg.product.priceString}`
+                      : 'Select a pack'}
+                  </Text>
+                )}
+              </View>
             </TouchableOpacity>
           </View>
         )}
@@ -282,94 +309,77 @@ export default function SparkleStoreScreen() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
   // Bottom padding sized for the sticky footer height (helper line +
   // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link
   // can still be scrolled into view above the footer.
-  scroll: { paddingHorizontal: 16, paddingBottom: verticalScale(180) },
-
-  // Pinned footer — selection copy + primary CTA, always visible
-  // above the keyboard / fold regardless of scroll position.
-  // paddingBottom 32 clears the home indicator on notched phones so
-  // the CTA's bottom corners don't get truncated.
-  stickyFooter: {
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(10),
-    paddingBottom: verticalScale(32),
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    backgroundColor: colors.background,
+  scroll: {
+    paddingHorizontal: verticalScale(20),
+    paddingBottom: verticalScale(180),
   },
-  ctaConnecting: {
-    flexDirection: 'row',
+
+  // Hero — gradient title + balance pill (mirrors the Plans paywall hero).
+  hero: {
     alignItems: 'center',
-    gap: 12,
+    marginTop: verticalScale(8),
+    marginBottom: verticalScale(20),
   },
-
-  // Balance — inline single-line row showing "✨ {N} sparkles available"
-  balanceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: verticalScale(14),
-    marginBottom: verticalScale(4),
-  },
-  balanceAmount: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
+  heroTitle: {
+    fontSize: fontScale(26),
     fontWeight: '800',
-    letterSpacing: -0.3,
-  },
-  balanceLabel: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    fontWeight: '600',
-  },
-
-  // Section
-  sectionTitle: {
     color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '800',
     textAlign: 'center',
-    marginTop: verticalScale(4),
-    marginBottom: verticalScale(16),
+  },
+  // Balance — a compact surface pill in the header's rightAction slot,
+  // opposite the back button (the sparkle icon doubles as the "available" cue).
+  balancePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: verticalScale(4),
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: ACCENT + '33',
+    borderRadius: verticalScale(14),
+    paddingHorizontal: verticalScale(10),
+    paddingVertical: verticalScale(5),
+  },
+  balancePillAmount: {
+    color: colors.textPrimary,
+    fontSize: fontScale(13),
+    fontWeight: '800',
+    letterSpacing: -0.2,
   },
 
-  // Pack list — vertical stack of compact pack cards (matches proStore's
-  // tier list pattern). Each card is a single row: icon + sparkle count
-  // + price + radio. Fits 4 packs comfortably above the sticky footer.
+  // Pack list — vertical stack of compact pack cards. Each card is a single
+  // row: icon chip + sparkle count + price + radio (matches the Plans cards).
   packGrid: {
-    gap: 10,
+    gap: verticalScale(12),
   },
   packCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    gap: verticalScale(14),
     backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    paddingVertical: verticalScale(14),
-    paddingHorizontal: 16,
+    borderRadius: verticalScale(18),
+    borderWidth: 1,
+    borderColor: ACCENT + '22',
+    paddingVertical: verticalScale(16),
+    paddingHorizontal: verticalScale(16),
   },
   packCardSelected: {
-    borderColor: colors.accent,
+    borderColor: ACCENT,
     backgroundColor: 'rgba(139,123,238,0.08)',
   },
   packIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: 'rgba(139,123,238,0.10)',
+    width: verticalScale(40),
+    height: verticalScale(40),
+    borderRadius: verticalScale(10),
+    backgroundColor: ACCENT + '22',
     alignItems: 'center',
     justifyContent: 'center',
   },
   packTitleRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 0,
     flexWrap: 'wrap',
   },
   packSparkles: {
@@ -383,74 +393,102 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     fontWeight: '600',
   },
-  // Inline badge — replaces the old absolute-positioned overlay badge
-  // so it lays out within the row flow.
-  inlineBadge: {
-    marginLeft: 8,
-    borderRadius: 6,
-    paddingHorizontal: 7,
-    paddingVertical: verticalScale(2),
+  // BEST VALUE — solid accent pill, dark text (matches the Plans "Best value").
+  bestValueBadge: {
+    marginLeft: verticalScale(8),
+    backgroundColor: ACCENT,
+    borderRadius: verticalScale(7),
+    paddingHorizontal: verticalScale(8),
+    paddingVertical: verticalScale(3),
   },
-  inlineBadgeText: {
-    color: '#FFFFFF',
+  bestValueText: {
+    color: '#1A1A24',
+    fontSize: fontScale(9),
+    fontWeight: '800',
+    letterSpacing: 0.6,
+  },
+  // POPULAR — little golden sticker (gold gradient + darker gold rim + dark
+  // gold text), the same sticker treatment as the Plans "Save 33%" badge.
+  popularBadge: {
+    marginLeft: verticalScale(8),
+    borderRadius: verticalScale(7),
+    paddingHorizontal: verticalScale(8),
+    paddingVertical: verticalScale(3),
+    borderWidth: 1,
+    borderColor: '#C98A1E',
+  },
+  popularText: {
+    color: '#5A3A00',
     fontSize: fontScale(9),
     fontWeight: '800',
     letterSpacing: 0.6,
   },
   packPrice: {
-    color: colors.textSecondary,
+    color: colors.textMuted,
     fontSize: fontScale(13),
     fontWeight: '600',
     marginTop: verticalScale(2),
   },
   // Right-edge selection radio
   packRadio: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: verticalScale(22),
+    height: verticalScale(22),
+    borderRadius: verticalScale(11),
     borderWidth: 2,
     borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   packRadioSelected: {
-    borderColor: colors.accent,
+    borderColor: ACCENT,
   },
   packRadioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: colors.accent,
+    width: verticalScale(10),
+    height: verticalScale(10),
+    borderRadius: verticalScale(5),
+    backgroundColor: ACCENT,
   },
 
-  // Selected-pack flavor copy
+  // Pinned footer — selection copy + primary CTA, always visible above the
+  // fold. paddingBottom clears the home indicator on notched phones.
+  stickyFooter: {
+    paddingHorizontal: verticalScale(20),
+    paddingTop: verticalScale(10),
+    paddingBottom: verticalScale(32),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
   packDetail: {
-    color: colors.textSecondary,
+    color: colors.textMuted,
     fontSize: fontScale(13),
     lineHeight: fontScale(18),
     textAlign: 'center',
-    marginTop: verticalScale(18),
+    marginTop: verticalScale(6),
     marginBottom: verticalScale(14),
-    paddingHorizontal: 12,
+    paddingHorizontal: verticalScale(12),
   },
 
-  // Primary CTA
-  primaryCta: {
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: verticalScale(16),
+  // Primary CTA — same shape as the Plans paywall CTA.
+  cta: {
+    backgroundColor: ACCENT,
+    borderRadius: verticalScale(12),
+    paddingVertical: verticalScale(14),
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: verticalScale(4),
   },
-  primaryCtaDisabled: {
-    opacity: 0.5,
+  ctaDim: {
+    opacity: 0.4,
   },
-  primaryCtaText: {
+  ctaText: {
     color: '#FFFFFF',
-    fontSize: fontScale(16),
+    fontSize: fontScale(15),
     fontWeight: '800',
-    letterSpacing: 0.2,
+  },
+  ctaConnecting: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: verticalScale(12),
   },
 
   // Empty
@@ -460,5 +498,10 @@ const s = StyleSheet.create({
 
   // Restore
   restoreButton: { alignItems: 'center', paddingVertical: verticalScale(28) },
-  restoreText: { color: colors.textSecondary, fontSize: fontScale(14), fontWeight: '600' },
+  restoreText: {
+    color: colors.textMuted,
+    fontSize: fontScale(14),
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
 });

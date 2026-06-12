@@ -55,12 +55,13 @@ export const PRO_NIGHTLY_DREAMS_PER_MONTH = 30;
 export const PRO_HQ_DOWNLOADS_PER_MONTH = 100;
 
 /** Pro perk list — surface in the Get Pro screen + any "what is Pro?" copy.
- *  Ordered by what users care about most. */
+ *  Order MATCHES BASIC_PERKS (nightly dream → sparkles → HD) so the two paywall
+ *  cards line up perk-for-perk by position. */
 export const PRO_PERKS = [
   {
-    icon: 'download-outline',
-    title: '100 HD downloads a month',
-    sub: 'Save any dream — yours, bots, or other creators — to your photos in crisp HD.',
+    icon: 'moon',
+    title: 'A new dream every night',
+    sub: 'Personalized AI dreams generated for you while you sleep — every single night.',
   },
   {
     icon: 'sparkles',
@@ -68,9 +69,9 @@ export const PRO_PERKS = [
     sub: 'Spend on any model — Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
   },
   {
-    icon: 'moon',
-    title: 'A new dream every night',
-    sub: 'Personalized AI dreams generated for you while you sleep — every single night.',
+    icon: 'download-outline',
+    title: '100 HD downloads a month',
+    sub: 'Save any dream — yours, bots, or other creators — to your photos in crisp HD.',
   },
 ] as const;
 

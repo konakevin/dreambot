@@ -114,6 +114,28 @@ describe('migration 257: DreamBot Basic columns + freeze extension + eligibility
     }
   });
 
+  it('257a hotfix: freeze function KEEPS the service-role bypass + var bypass + all 9 columns', () => {
+    // Regression guard: 257 rewrote the freeze fn and dropped the service-role
+    // bypass, which silently broke webhook entitlement writes. 257a restored it.
+    // The freeze fn MUST let the service role through or no subscription works.
+    const fix = read('supabase/migrations/257a_fix_freeze_service_role_bypass.sql');
+    expect(fix).toContain("current_setting('role', true) = 'service_role'");
+    expect(fix).toContain("current_setting('app.bypass_user_freeze', true) = 'true'");
+    for (const col of [
+      'is_admin',
+      'sparkle_balance',
+      'pro_subscription',
+      'pro_subscription_expires_at',
+      'basic_subscription',
+      'basic_subscription_expires_at',
+      'id',
+      'email',
+      'created_at',
+    ]) {
+      expect(fix).toContain(`NEW.${col}`);
+    }
+  });
+
   it('defines is_basic_active (no trial) + is_dream_eligible (pro OR basic)', () => {
     expect(sql).toContain('CREATE OR REPLACE FUNCTION public.is_basic_active');
     expect(sql).toContain('CREATE OR REPLACE FUNCTION public.is_dream_eligible');

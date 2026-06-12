@@ -37,6 +37,9 @@ interface ScreenLayoutProps {
   title?: string;
   /** Optional action element on the opposite side of the back/close button */
   rightAction?: React.ReactNode;
+  /** Absolutely center the title on-screen regardless of side widths. Use when
+   *  a wide `rightAction` would otherwise push the flex-centered title off-center. */
+  centerTitle?: boolean;
   /** Optional left action (replaces the default back/close button) */
   leftAction?: React.ReactNode;
   /** Whether to enable swipe-right-to-dismiss (default: true for 'back', false for others) */
@@ -52,6 +55,7 @@ export function ScreenLayout({
   header = 'back',
   title,
   rightAction,
+  centerTitle = false,
   leftAction,
   swipeBack,
   edges = ['top'],
@@ -79,7 +83,7 @@ export function ScreenLayout({
               </TouchableOpacity>
             )}
           </View>
-          {title ? (
+          {title && !centerTitle ? (
             <Text style={s.title} numberOfLines={1}>
               {title}
             </Text>
@@ -89,6 +93,16 @@ export function ScreenLayout({
           <View style={s.headerSideRight}>
             {rightAction ?? <View style={{ width: NAV_ICON_SIZE }} />}
           </View>
+          {/* Absolutely-centered title overlay — sits on the true screen center
+              regardless of how wide the side actions are. pointerEvents="none"
+              so taps still reach the back button / rightAction underneath. */}
+          {title && centerTitle && (
+            <View pointerEvents="none" style={s.centerTitleOverlay}>
+              <Text style={s.centerTitleText} numberOfLines={1}>
+                {title}
+              </Text>
+            </View>
+          )}
         </View>
       )}
       {children}
@@ -131,4 +145,18 @@ const s = StyleSheet.create({
     fontWeight: '700',
   },
   titleSpacer: { flex: 1 },
+  // Overlay that centers the title on the true header center. Horizontal
+  // padding keeps a long title from running under the side buttons/actions.
+  centerTitleOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 60,
+  },
+  centerTitleText: {
+    textAlign: 'center',
+    color: colors.textPrimary,
+    fontSize: fontScale(17),
+    fontWeight: '700',
+  },
 });

@@ -21,6 +21,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
@@ -35,38 +37,68 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 
 type Period = 'month' | 'year';
 
+// The DreamBot logo gradient (purple→pink→teal) — same as the 'DreamBot'
+// wordmark on the login/splash screen (app/(auth)/index.tsx).
+const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+
 interface Plan {
   key: 'basic' | 'pro';
   name: string;
-  blurb: string;
   tiers: ProPlanTier[];
   perks: readonly { icon: string; title: string; sub: string }[];
   highlight: boolean;
   badge?: string;
+  /** Dreamy tier motif (moon for Basic's nightly dream, sparkles for Pro). */
+  icon: keyof typeof Ionicons.glyphMap;
+  /** The tier's signature purple — used for the tier NAME so it matches its CTA
+   *  button (Basic lighter, Pro darker). */
+  tierColor: string;
+  /** CTA fill. The brand logo gradient is reserved for ONE premium moment
+   *  (the Pro CTA, matching the title); Basic is a calm solid purple. */
+  cta: { gradient: readonly [string, string, ...string[]] } | { solid: string };
+  /** Subtle dark purple tint behind the Pro card (the "elevated" feel). */
+  cardBg?: [string, string];
 }
+
+// ONE purple for the whole screen — the app's accent token. Everything
+// interactive/accented (toggle, both CTAs, names, icons, checks, borders, badge)
+// uses it, so the design stays calm + matches the rest of the app. The brand
+// rainbow gradient is reserved for a SINGLE moment: the title.
+const ACCENT = colors.accent;
 
 const PLANS: Plan[] = [
   {
     key: 'basic',
     name: 'DreamBot Basic',
-    blurb: 'Your nightly dreams, on.',
     tiers: BASIC_TIERS,
     perks: BASIC_PERKS,
     highlight: false,
+    icon: 'moon',
+    tierColor: colors.accent,
+    cta: { solid: colors.accent },
   },
   {
     key: 'pro',
     name: 'DreamBot Pro',
-    blurb: 'Everything, supercharged.',
     tiers: PRO_TIERS,
     perks: PRO_PERKS,
     highlight: true,
     badge: 'Best value',
+    icon: 'sparkles',
+    tierColor: colors.accentDark,
+    // Pro = the darker "Following" purple (colors.accentDark); Basic = the
+    // lighter "Follow" purple (colors.accent). Same hue, subtly differentiated,
+    // reusing the app's existing follow-button shades.
+    cta: { solid: colors.accentDark },
+    cardBg: ['#211B36', '#15131F'],
   },
 ];
 
-function findPackage(packages: PurchasesPackage[], packageId: string) {
-  return packages.find((p) => p.identifier === packageId);
+/** Match by the underlying StoreKit product id (the App Store Connect contract,
+ *  guaranteed to match) rather than the RevenueCat package identifier, which is
+ *  an arbitrary dashboard label that may differ from our constants. */
+function findPackage(packages: PurchasesPackage[], productId: string) {
+  return packages.find((p) => p.product.identifier === productId);
 }
 
 /** Days remaining in the trial, floored. Null if no trial / ended. */
@@ -83,15 +115,16 @@ export default function SubscribeScreen() {
   const isBasic = useAuthStore((s) => s.isBasic);
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   const { data: packages = [], isLoading } = useProPackages();
-  const { mutate: purchase, isPending: purchasing } = usePurchasePro();
+  const { mutate: purchase } = usePurchasePro();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
 
   // Default to yearly (better deal). Tap the toggle to switch.
   const [period, setPeriod] = useState<Period>('year');
+  // Which plan's purchase is in flight — so ONLY that card's CTA spins (not both).
+  const [purchasingPlan, setPurchasingPlan] = useState<'basic' | 'pro' | null>(null);
 
   const isOnTrial = isPro && !isPaidPro;
   const daysLeft = isOnTrial ? trialDaysLeft(proTrialEndsAt) : null;
-  const trialExpired = !isPro && !isBasic && !isPaidPro && proTrialEndsAt !== null;
 
   useEffect(() => {
     trackProStoreOpened();
@@ -99,13 +132,14 @@ export default function SubscribeScreen() {
 
   function handleSubscribe(plan: Plan) {
     const tier = plan.tiers.find((t) => t.period === period) ?? plan.tiers[0];
-    const pkg = findPackage(packages, tier.packageId);
+    const pkg = findPackage(packages, tier.productId);
     if (!pkg) {
       Toast.show('Plan unavailable — try again in a moment', 'close-circle');
       return;
     }
     trackProSubscribeTapped({ period: tier.period });
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setPurchasingPlan(plan.key);
     purchase(pkg, {
       onSuccess: () => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -115,6 +149,7 @@ export default function SubscribeScreen() {
         if (err.message === 'cancelled') return;
         Toast.show('Purchase failed — try again', 'close-circle');
       },
+      onSettled: () => setPurchasingPlan(null),
     });
   }
 
@@ -125,23 +160,32 @@ export default function SubscribeScreen() {
     return false;
   }
 
+  /** CTA inner content — spinner while this plan is purchasing, else the label. */
+  function ctaContent(plan: Plan) {
+    if (purchasingPlan === plan.key) return <ActivityIndicator color="#fff" />;
+    const label =
+      plan.key === 'pro' && isBasic
+        ? 'Upgrade to Pro'
+        : `Get ${plan.name.replace('DreamBot ', '')}`;
+    return <Text style={[s.ctaText, s.ctaTextLit]}>{label}</Text>;
+  }
+
   return (
     <ScreenLayout header="back" title="Plans">
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Hero */}
+          {/* Hero — gradient wordmark title (same MaskedView treatment as the
+              'DreamBot' logo on the login/splash screen) */}
           <View style={s.hero}>
-            <Text style={s.heroTitle}>Choose your plan</Text>
+            <MaskedView maskElement={<Text style={s.heroTitle}>Choose your plan</Text>}>
+              <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                <Text style={[s.heroTitle, { opacity: 0 }]}>Choose your plan</Text>
+              </LinearGradient>
+            </MaskedView>
             <Text style={s.heroSub}>
-              {isPaidPro
-                ? "You're on Pro. Thanks for supporting DreamBot."
-                : isBasic
-                  ? "You're on Basic. Upgrade to Pro for more."
-                  : isOnTrial
-                    ? "You're on the free trial — pick a plan to keep your dreams."
-                    : trialExpired
-                      ? 'Your trial ended. Subscribe to keep your nightly dreams.'
-                      : 'Keep your nightly dreams coming.'}
+              {isOnTrial
+                ? 'Enjoying the free trial? Keep it all going.'
+                : 'Unlock the full DreamBot magic.'}
             </Text>
           </View>
 
@@ -182,9 +226,14 @@ export default function SubscribeScreen() {
                   {p === 'month' ? 'Monthly' : 'Yearly'}
                 </Text>
                 {p === 'year' && (
-                  <View style={s.toggleSaveBadge}>
+                  <LinearGradient
+                    colors={['#FFE08A', '#F2A93B']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={s.toggleSaveBadge}
+                  >
                     <Text style={s.toggleSaveText}>Save 33%</Text>
-                  </View>
+                  </LinearGradient>
                 )}
               </TouchableOpacity>
             ))}
@@ -200,22 +249,37 @@ export default function SubscribeScreen() {
             <View style={s.cards}>
               {PLANS.map((plan) => {
                 const tier = plan.tiers.find((t) => t.period === period) ?? plan.tiers[0];
-                const pkg = findPackage(packages, tier.packageId);
+                const pkg = findPackage(packages, tier.productId);
                 const price = pkg?.product.priceString ?? tier.displayPrice;
                 const current = isCurrentPlan(plan);
                 return (
                   <View
                     key={plan.key}
-                    style={[s.card, plan.highlight && s.cardHighlight, current && s.cardCurrent]}
+                    style={[s.card, { borderColor: ACCENT + '33' }, current && s.cardCurrent]}
                   >
+                    {/* Pro only: a subtle dark-purple tint = quietly "elevated" */}
+                    {plan.cardBg && (
+                      <LinearGradient
+                        colors={plan.cardBg}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={s.cardBgFill}
+                      />
+                    )}
                     {plan.badge && !current && (
-                      <View style={s.cardBadge}>
+                      <View style={[s.cardBadge, { backgroundColor: ACCENT }]}>
                         <Text style={s.cardBadgeText}>{plan.badge}</Text>
                       </View>
                     )}
                     <View style={s.cardHead}>
-                      <Text style={s.cardName}>{plan.name.replace('DreamBot ', '')}</Text>
-                      <Text style={s.cardBlurb}>{plan.blurb}</Text>
+                      <View style={s.cardNameRow}>
+                        <View style={[s.cardIcon, { backgroundColor: plan.tierColor + '22' }]}>
+                          <Ionicons name={plan.icon} size={fontScale(16)} color={plan.tierColor} />
+                        </View>
+                        <Text style={[s.cardName, { color: plan.tierColor }]}>
+                          {plan.name.replace('DreamBot ', '')}
+                        </Text>
+                      </View>
                     </View>
 
                     <View style={s.priceRow}>
@@ -226,39 +290,47 @@ export default function SubscribeScreen() {
                     <View style={s.cardPerks}>
                       {plan.perks.map((perk) => (
                         <View key={perk.title} style={s.cardPerkRow}>
-                          <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
+                          <Ionicons name="checkmark-circle" size={16} color={ACCENT} />
                           <Text style={s.cardPerkText}>{perk.title}</Text>
                         </View>
                       ))}
                     </View>
 
-                    <TouchableOpacity
-                      style={[
-                        s.cta,
-                        plan.highlight ? s.ctaPrimary : s.ctaSecondary,
-                        current && s.ctaDisabled,
-                      ]}
-                      onPress={() => handleSubscribe(plan)}
-                      disabled={current || purchasing}
-                      activeOpacity={0.85}
-                    >
-                      {purchasing ? (
-                        <ActivityIndicator color={plan.highlight ? '#000' : colors.textPrimary} />
-                      ) : (
-                        <Text
-                          style={[
-                            s.ctaText,
-                            plan.highlight ? s.ctaTextPrimary : s.ctaTextSecondary,
-                          ]}
-                        >
-                          {current
-                            ? 'Current plan'
-                            : plan.key === 'pro' && isBasic
-                              ? 'Upgrade to Pro'
-                              : `Get ${plan.name.replace('DreamBot ', '')}`}
-                        </Text>
-                      )}
-                    </TouchableOpacity>
+                    {current ? (
+                      <View style={[s.cta, s.ctaDisabled]}>
+                        <Text style={[s.ctaText, { color: colors.textMuted }]}>Current plan</Text>
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() => handleSubscribe(plan)}
+                        disabled={purchasingPlan !== null}
+                        activeOpacity={0.85}
+                      >
+                        {'gradient' in plan.cta ? (
+                          <LinearGradient
+                            colors={plan.cta.gradient}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={[
+                              s.cta,
+                              purchasingPlan !== null && purchasingPlan !== plan.key && s.ctaDim,
+                            ]}
+                          >
+                            {ctaContent(plan)}
+                          </LinearGradient>
+                        ) : (
+                          <View
+                            style={[
+                              s.cta,
+                              { backgroundColor: plan.cta.solid },
+                              purchasingPlan !== null && purchasingPlan !== plan.key && s.ctaDim,
+                            ]}
+                          >
+                            {ctaContent(plan)}
+                          </View>
+                        )}
+                      </TouchableOpacity>
+                    )}
                   </View>
                 );
               })}
@@ -344,6 +416,7 @@ const s = StyleSheet.create({
     borderRadius: verticalScale(12),
     padding: verticalScale(4),
     marginBottom: verticalScale(20),
+    gap: verticalScale(4),
   },
   toggleBtn: {
     flex: 1,
@@ -353,6 +426,9 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(10),
     borderRadius: verticalScale(9),
     gap: verticalScale(6),
+    // Subtle fill so the INACTIVE segment reads as a real button (and the
+    // "Save 33%" badge sits inside it instead of floating in empty space).
+    backgroundColor: colors.card,
   },
   toggleBtnActive: {
     backgroundColor: colors.accent,
@@ -366,15 +442,18 @@ const s = StyleSheet.create({
     color: '#000',
   },
   toggleSaveBadge: {
-    backgroundColor: '#00000022',
-    borderRadius: verticalScale(6),
-    paddingHorizontal: verticalScale(6),
-    paddingVertical: verticalScale(2),
+    // Little golden sticker — a gold gradient pill with a darker gold rim,
+    // reads on both the active (purple) and inactive (dark) toggle states.
+    borderRadius: verticalScale(7),
+    paddingHorizontal: verticalScale(7),
+    paddingVertical: verticalScale(3),
+    borderWidth: 1,
+    borderColor: '#C98A1E',
   },
   toggleSaveText: {
     fontSize: fontScale(10),
     fontWeight: '800',
-    color: '#000',
+    color: '#5A3A00',
   },
   cards: {
     gap: verticalScale(16),
@@ -386,9 +465,11 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  cardHighlight: {
-    borderColor: colors.accent,
-    borderWidth: 2,
+  // Subtle dark gradient tint behind the Pro card — rounded to match the card
+  // (its own borderRadius instead of overflow:hidden, so the badge isn't clipped).
+  cardBgFill: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: verticalScale(18),
   },
   cardCurrent: {
     opacity: 0.75,
@@ -401,24 +482,32 @@ const s = StyleSheet.create({
     borderRadius: verticalScale(8),
     paddingHorizontal: verticalScale(10),
     paddingVertical: verticalScale(3),
+    zIndex: 2,
   },
   cardBadgeText: {
     fontSize: fontScale(11),
     fontWeight: '800',
-    color: '#000',
+    color: '#1A1A24',
   },
   cardHead: {
     marginBottom: verticalScale(10),
+  },
+  cardNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: verticalScale(8),
+  },
+  cardIcon: {
+    width: verticalScale(28),
+    height: verticalScale(28),
+    borderRadius: verticalScale(8),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardName: {
     fontSize: fontScale(20),
     fontWeight: '800',
     color: colors.textPrimary,
-  },
-  cardBlurb: {
-    fontSize: fontScale(13),
-    color: colors.textMuted,
-    marginTop: verticalScale(2),
   },
   priceRow: {
     flexDirection: 'row',
@@ -453,28 +542,21 @@ const s = StyleSheet.create({
     borderRadius: verticalScale(12),
     paddingVertical: verticalScale(14),
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  ctaPrimary: {
-    backgroundColor: colors.accent,
-  },
-  ctaSecondary: {
-    backgroundColor: 'transparent',
-    borderWidth: 1.5,
-    borderColor: colors.accent,
+  // Dim a card's CTA while the OTHER card's purchase is in flight.
+  ctaDim: {
+    opacity: 0.4,
   },
   ctaDisabled: {
     backgroundColor: colors.border,
-    borderColor: colors.border,
   },
   ctaText: {
     fontSize: fontScale(15),
     fontWeight: '800',
   },
-  ctaTextPrimary: {
-    color: '#000',
-  },
-  ctaTextSecondary: {
-    color: colors.accent,
+  ctaTextLit: {
+    color: '#FFFFFF',
   },
   restore: {
     alignItems: 'center',
