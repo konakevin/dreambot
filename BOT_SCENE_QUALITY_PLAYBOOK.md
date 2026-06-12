@@ -1560,6 +1560,23 @@ The subject pool entries (each one toponym-led — "Reynisfjara black-sand beach
 
 ---
 
+## TEMPLATE / archetype INSTRUCTION-BLOAT — the brief teaches Sonnet to cram, so it writes 250-350 word prompts (CRITICAL — 2026-06-12)
+
+Sibling failure mode to medium/prefix cruft, but it lives in the **archetype-templates.js brief**, not the medium. Over months, every path's template accumulates instruction-bloat: each agent adds another `━━━ X IS THE SHOW — NON-NEGOTIABLE ━━━` block, another `OBSESSIVE detail` mandate, another `FORBIDDEN VOCABULARY` list, another `ALLOWED VOCABULARY` word-dump, another `render ALL THREE / EVERY one must be visible / STACK 3+ ELEMENTS / MINIMUM 4 GLOW COLORS / TWO HEROES` cram directive, plus triplicated STRUCTURE + COMPOSITION + HARD-BANS saying the same thing three ways. Sonnet reads the whole 800-word brief and faithfully tries to honor all of it → it outputs a 250-350 word prompt that enumerates everything → Flux gets a flat list with no hero and renders a crammed, unreadable mess.
+
+**Source case study — SteamBot 2026-06-12:** all 11 paths produced 240-354 word prompts (Kevin flagged a hearted render: "wtf is that supposed to be?"). The templates were 100+ lines each of the patterns above. The fix (mean 158 → all coherent, one clear hero each):
+
+- **Cut the teach-the-ban lists.** `FORBIDDEN VOCABULARY — DO NOT WRITE: sexy, seductive, shirtless…` and `NO crowns, NO tiaras, NO clocks…` SEED the very nouns (stateless-Sonnet / no-anti-pattern-baggage lesson). Replace with ONE positive line ("tasteful — beauty through couture and poise"; "always a mechanical creature, never an ornamental object").
+- **Cut the ALLOWED-VOCABULARY dumps.** A 30-word adjective list teaches Sonnet to write adjective lists.
+- **Kill the cram mandates.** `render ALL THREE flora / MINIMUM 4 GLOW COLORS / STACK 3+ ELEMENTS / TWO HEROES side-by-side` → "ONE dominant hero + a couple of supporting accents, don't fill the frame." Make secondary axes SUBORDINATE ("if it fits"), not mandatory.
+- **De-duplicate the style preamble.** PROMPT_PREFIX + the medium were BOTH leading with "gorgeous steampunk illustration, warm gaslit" — ~30 redundant words on every prompt. The medium should carry render-QUALITY only; the prefix carries identity.
+- **Make the word cap loud and last.** A soft "~100-120 words" buried mid-brief is ignored. A firm closing rule ("LENGTH IS THE #1 RULE — 85-110 words, count them, a tight 100-word scene beats a crammed 250-word one, name the hero and STOP") is the single highest-leverage line.
+- **Skip chaos on already-dense paths.** Chaos was injecting extra subjects + surreal geometry ("stairs that resolve into nothing", "a shadow of a pose not yet taken") onto paths that already have rich built-in identity (labs' multi-color glow, spectacle's crowd-event) → reads as crammed/confusing. `chaos.skipPaths` for those; keep chaos where a single surprise element adds welcome variety.
+
+Litmus before shipping a template: if Sonnet's output `ai_prompt` is >160 words, the brief is over-instructing — audit it, don't audit Flux. Keep the LOAD-BEARING guards (gender/ethnicity locks, automaton-not-animal, never-seductive, multi-color identity) but in ONE compressed positive sentence each, not a 40-line block.
+
+---
+
 ## Medium + prefix CRUFT ACCUMULATION — the slow drift toward AI-CGI / luxury-resort / mountain-photographer priors (CRITICAL — 2026-06-02)
 
 Mediums and prefixes accumulate tokens over time. Each agent / dev who works on a bot adds language they think will help, but **tokens are rarely removed even after they cause harm**. After months of this, a medium that started as a clean 200-char anchor balloons to 800+ chars of competing aesthetic priors. Every render gets prepended/appended with this cruft. Symptoms compound:

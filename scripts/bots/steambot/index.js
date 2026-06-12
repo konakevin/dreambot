@@ -34,8 +34,11 @@ const pathBuilders = {
 // language because those words trigger Flux 1.1 Pro's locked beautiful-woman
 // face prior and produce same-girl-every-render. Aiming for rich, vivid,
 // cinematic illustration that FEELS real without invoking photorealism.
+// Render-quality only — the steampunk/gaslit identity comes from PROMPT_PREFIX,
+// so this fragment must NOT repeat it (the two were doubling ~30 words of
+// "gorgeous steampunk illustration, warm gaslit" onto every prompt).
 const STEAMBOT_HYPERREAL_STYLE =
-  'crisp vivid cinematic rendering, rich saturated color, sharp focused detail across all depth layers, dramatic feature-film production design, painterly-rich character illustration with photographic clarity';
+  'cinematic painted depth, crisp readable detail across the frame, rich warm color';
 
 // Bespoke medium for sexy-steampunk-woman — vivid painted character
 // illustration. Modern digital painted character art lineage (Artgerm / WLOP
@@ -46,7 +49,7 @@ const STEAMBOT_HYPERREAL_STYLE =
 // NOT anime. Painted character art with idealized proportions + ornate
 // detail + saturated jewel-tones + dramatic cinematic light.
 const STEAMBOT_PAINTED_WOMAN_STYLE =
-  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroines, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
+  'lush oil-painted character illustration, visible painterly brushwork, saturated jewel-toned pigment, dramatic cinematic light with golden rim-light, painted-fantasy-cover finish';
 
 // Bespoke medium for steampunk-man — same oil-painted-illustration register
 // as the female path but with its own named medium so the male path stays
@@ -54,7 +57,7 @@ const STEAMBOT_PAINTED_WOMAN_STYLE =
 // painted-fantasy-cover lineage; tuned for handsome / dashing / rugged
 // gentleman portraits, never seductive.
 const STEAMBOT_PAINTED_MAN_STYLE =
-  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, traditional painted character illustration in the style of Frazetta and Brom and Boris Vallejo painted-fantasy-cover heroes, lush saturated jewel-toned oil pigment, dramatic cinematic lighting with golden-hour rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT art-nouveau decorative border';
+  'lush oil-painted character illustration, visible painterly brushwork, saturated jewel-toned pigment, dramatic cinematic light with golden rim-light, painted-fantasy-cover finish';
 
 // Bespoke medium for cozy-steampunk path — same lush painted-illustration
 // register as the painted-woman medium, but tuned for INTERIORS not
@@ -65,89 +68,54 @@ const STEAMBOT_PAINTED_MAN_STYLE =
 // of fantasy interiors and architecture), James Christensen (ornate
 // intricate fantasy detail), N.C. Wyeth (classic illustration depth).
 const STEAMBOT_PAINTED_INTERIOR_STYLE =
-  'oil-painted illustration on canvas, visible painterly brushwork and brush texture, lush painted-interior illustration in the style of Maxfield Parrish (golden atmospheric beauty) and James Gurney Dinotopia (lush painted worldbuilding) and James Christensen (ornate intricate fantasy detail) and N.C. Wyeth (classic illustration depth), saturated jewel-toned oil pigment, dramatic cinematic lighting with directional rim light, every surface PAINTED not photographed, painted-illustration finish, NOT a photograph, NOT photorealistic, NOT hyperreal CGI, NOT watercolor on paper, NOT anime, NOT a pin-up cover, NOT a cheesecake-cover heroine';
+  'lush oil-painted steampunk-interior illustration, visible painterly brushwork, golden atmospheric warmth, saturated jewel-toned pigment, ornate brass-and-clockwork detail, painted-worldbuilding depth';
 
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
 
   useModelPicker: true,
-  // flux-2-pro BANNED bot-wide 2026-06-07 (Kevin) — removed from allowedModels
-  // and every modelByPath entry below.
+  // flux-2-pro BANNED bot-wide 2026-06-07 (Kevin).
+  // nano-banana (google/gemini-2-image) + flux-2-flex BANNED bot-wide
+  // 2026-06-12 (Kevin). Lineup is now Flux 1.1 Pro / Pro Ultra + GPT-Image-2.
   allowedModels: [
-    'google/gemini-2-image',
     'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-2-flex',
   ],
 
-  // modelByPath: per-path bans (2026-05-31 — Kevin's uniform non-character
-  // lineup). Non-character paths get the same 4-model lineup:
-  // Banana, GPT-2, F1.1 Pro, F1.1 Ultra. Character paths (airship-female,
-  // airship-male, sexy-steampunk-woman, steampunk-man) get the same lineup
-  // MINUS Banana per Kevin's 2026-06-05 character-path ban.
+  // modelByPath: per-path bans. Character paths (airship-female/male,
+  // sexy-steampunk-woman, steampunk-man) are Flux-only (GPT-2 dropped there
+  // historically); non-character paths get GPT-2 + the Flux 1.1 family.
   modelByPath: {
-    // ── Character paths — bot-wide MINUS Banana (Kevin 2026-06-05).
-    'airship-female': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-    ],
-    'airship-male': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-    ],
-    'sexy-steampunk-woman': [
-      // Banana BANNED 2026-06-05 — 50% safety-filter refusal rate in audit
-      // (4 attempts: 2 refused with finishReason: NO_IMAGE). Headache to
-      // recover in production. F1.1 family + GPT-2 + F2 family carry it.
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-    ],
-    'steampunk-man': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-2-flex',
-    ],
+    // ── Character paths — Flux 1.1 family only.
+    'airship-female': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'airship-male': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'sexy-steampunk-woman': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'steampunk-man': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-scene': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'airship-skies': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'airship-skies': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-curio': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'steampunk-spectacle': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'steampunk-spectacle': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steam-transport': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'steampunk-labs': [
-      'google/gemini-2-image',
       'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'cozy-steampunk': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'cozy-steampunk': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -155,13 +123,12 @@ module.exports = {
   // steambot-painted-woman (painterly-photographic character portraiture).
   mediums: ['steambot-hyperreal'],
 
-  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
-  // 'steambot_gpt_clean' medium + minimal prefix. Strips the "impossibly-
-  // detailed" anchor that pulls these models into abstract ornamental plates.
-  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
+  // cleanMediumByModel: gpt-image-2 renders the bot-only 'steambot_gpt_clean'
+  // medium + minimal prefix. Strips the "impossibly-detailed" anchor that pulls
+  // it into abstract ornamental plates. (nano-banana entry removed 2026-06-12
+  // when the model was banned bot-wide.)
   cleanMediumByModel: {
     'openai/gpt-image-2': { medium: 'steambot_gpt_clean' },
-    'google/gemini-2-image': { medium: 'steambot_gpt_clean' },
   },
 
   mediumByPath: {
@@ -308,15 +275,12 @@ module.exports = {
 
   chaos: {
     enabled: true,
-    skipPaths: [],
-    allowSubjectChaosPaths: [
-      'steampunk-scene',
-      'airship-skies',
-      'steampunk-curio',
-      'steampunk-spectacle',
-      'steam-transport',
-      'steampunk-labs',
-    ],
+    // 2026-06-12 cleanup — labs + spectacle are already maximally dense with
+    // their own built-in identity (multi-color glow / crowd-event). Chaos was
+    // injecting extra subjects + surreal geometry ("stairs that resolve into
+    // nothing") that read as crammed/confusing. Skip chaos on those two.
+    skipPaths: ['steampunk-labs', 'steampunk-spectacle'],
+    allowSubjectChaosPaths: ['steampunk-scene', 'airship-skies', 'steampunk-curio', 'steam-transport'],
   },
   twoPassPolish: {
     enabled: true,
