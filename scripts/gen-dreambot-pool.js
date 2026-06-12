@@ -451,20 +451,20 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
   bubble_world_pixelbot: {
     label: 'pixelbot world',
     maxWords: 22,
-    theme: `Each entry is ONE video-game adventure world in the spirit of PixelBot — RPG market towns, glowing dungeons, boss arenas, JRPG battlefields, cozy farm life, sci-fi action corridors — written as a DreamBot wallpaper WORLD in the glossy-dreamy register (the GAME SCENE content rendered glossy-dreamy, NOT literal pixel-art). Grand game-world scale so a small bubble-bot reads tiny. Describe ONLY the world.
-  ✅ "a cozy RPG market town at twilight, half-timbered shops under glowing lanterns, a clock tower, cobblestone paths winding uphill"
-  ✅ "a glowing dungeon chamber of mossy stone arches, treasure chests + floating runes, bioluminescent fungi lighting the dark"
+    theme: `Each entry is ONE unmistakable VIDEO-GAME LEVEL in the spirit of PixelBot — a scene that instantly reads "this is a screenshot from a fantasy/adventure GAME": RPG towns, dungeons, boss arenas, sci-fi bases, haunted levels. Written as a DreamBot wallpaper WORLD in the glossy-dreamy register, BUT every entry MUST be packed with RECOGNIZABLE GAME ELEMENTS so the game-ness is obvious even without pixel-art: shop signs + market stalls, glowing treasure chests, floating coins/gems, save-point crystals, health-potion bottles, glowing runes/portals, a clear boss-creature, a quest-marker glow, cobblestone game-paths. The GAME PROPS are the identity — load every seed with them. Describe ONLY the world.
+  ✅ "a cobblestone RPG town square, half-timbered shops with hanging signs, a glowing treasure chest, floating gold coins, a quest-marker beam"
+  ✅ "a stone dungeon chamber, glowing rune-circles, an open treasure chest spilling gems, save-point crystal pulsing, torchlit arches receding"
 
-🚫 BANS: NO bubble-bot detail (separate axis). NO humans (the bot is the only character). Keep wholesome + adventurous. ≤22 words.`,
-    instructions: `Generate NEW game-adventure worlds across families — terse 12-22 word fragments, game-scene place + signature feature + depth cue, glossy-dreamy. World ONLY.`,
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans (the bot is the hero). NO open empty meadows/battlefields (too generic) — always a BUILT game-level packed with game props. ≤22 words.`,
+    instructions: `Generate NEW recognizable game-LEVEL worlds across families — terse 12-22 word fragments, a built game scene LOADED with game props (chests/coins/runes/save-crystals/signs/boss) + depth cue, glossy-dreamy. World ONLY. Game-ness must be obvious.`,
     subThemes: [
-      'RPG MARKET TOWNS — half-timbered shops, glowing lanterns, clock towers, cobblestone lanes, market stalls, cozy twilight',
-      'GLOWING DUNGEONS — mossy stone-arch chambers, treasure chests, floating runes, bioluminescent fungi, lava/ice variants',
-      'BOSS ARENAS — colossal gladiator pits, spotlight on the floor, tiered seating, a friendly giant boss-creature, banners',
-      'JRPG BATTLEFIELDS — wide grassland/desert/forest vistas with distant mountains, magic-sparkle effects, hero-party stance feel',
-      'COZY FARM LIFE — meadow farms, orchard rows, water-mills, greenhouses, fireflies, cherry-blossom petal-fall, lantern-glow',
-      'SCI-FI ACTION CORRIDORS — neon spaceship corridors, alien-planet outposts, glowing consoles, force-field shimmer, star-windows',
-      'GAME CRYPTS / GOTHIC LEVELS — pretty haunted manors, candle-lit catacombs, cobweb-lace, glowing gothic props, friendly spooky',
+      'RPG TOWN — cobblestone squares, shop signs + market stalls, fountain, inn lanterns, a glowing treasure chest, floating coins, quest-marker beam',
+      'DUNGEON — torchlit stone chambers, glowing rune-circles + portals, open chests spilling gems, save-point crystals, skeleton-pile props, lava/ice variants',
+      'BOSS ARENA — a colossal friendly boss-creature center-stage, spotlight floor, tiered crowd silhouettes, health-bar-glow banners, scattered loot',
+      'SCI-FI BASE — neon spaceship corridors, glowing consoles + holo-maps, force-field doors, ammo/energy-cell crates, star-window, alien-outpost props',
+      'HAUNTED LEVEL — pretty candle-lit catacombs, cobweb-lace, glowing ghost-wisps, treasure coffins, jack-o-lantern props, save-point crystal',
+      'ITEM SHOP / SAVE ROOM — cozy game-shop interior, shelves of glowing potions + weapons + maps, a save-point crystal, warm lantern glow, coin-pile counter',
+      'OVERWORLD MAP NODE — a tiny game-map island with a castle + dungeon icon + treasure marker, winding dotted path, sparkle quest-glows, sea around',
     ],
   },
 
