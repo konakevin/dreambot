@@ -9,6 +9,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { useAlbumStore } from '@/store/album';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { showPremiumGate } from '@/lib/premiumGate';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumPosts } from '@/hooks/useAlbumPosts';
 import { useUserContextFeed } from '@/hooks/useUserContextFeed';
@@ -45,9 +46,15 @@ export default function PhotoDetailScreen() {
   // Guard with a ref so a re-render / param re-read can't double-fire it.
   const didAutoSaveHd = useRef(false);
   useEffect(() => {
-    if (downloadReady === '1' && canHd && id && !didAutoSaveHd.current) {
-      didAutoSaveHd.current = true;
+    if (downloadReady !== '1' || !id || didAutoSaveHd.current) return;
+    didAutoSaveHd.current = true;
+    if (canHd) {
       saveReadyHdDownload(id);
+    } else {
+      // Subscription lapsed between requesting the upscale and the HD landing —
+      // the file is prepared but locked. Surface the gate instead of silently
+      // doing nothing when the notification is tapped.
+      showPremiumGate({ kind: 'hd_premium' });
     }
   }, [downloadReady, canHd, id]);
 

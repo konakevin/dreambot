@@ -149,10 +149,23 @@ Deno.serve(async (req) => {
     console.warn(
       `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HD cap (count=${downloadsThisMonth})`
     );
+    // Structured fields (cap / tier / resets_on) so the client can render an
+    // accurate premium gate — the message alone was previously unreachable
+    // (supabase-js delivers non-2xx as `error`, which the old client swallowed).
+    const reset = new Date(monthStart);
+    reset.setUTCMonth(reset.getUTCMonth() + 1);
+    const resetsOn = reset.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    });
     return json(
       {
         error: 'monthly_cap_reached',
-        message: `You've hit the ${HQ_CAP_PER_MONTH}/month HD download limit. Resets the 1st of next month.`,
+        message: `You've hit the ${HQ_CAP_PER_MONTH}/month HD download limit. Resets ${resetsOn}.`,
+        cap: HQ_CAP_PER_MONTH,
+        tier: isPro ? 'pro' : 'basic',
+        resets_on: resetsOn,
       },
       429
     );

@@ -25,6 +25,7 @@ const mockModalSetProcessing = jest.fn();
 const mockModalHide = jest.fn();
 const mockSaveUrlToPhotos = jest.fn().mockResolvedValue(undefined);
 const mockInvoke = jest.fn();
+const mockShowPremiumGate = jest.fn();
 let mockIsPro = true;
 let mockIsBasic = false;
 
@@ -54,6 +55,9 @@ jest.mock('@/lib/savePhoto', () => ({
 }));
 jest.mock('@/lib/supabase', () => ({
   supabase: { functions: { invoke: (...a: unknown[]) => mockInvoke(...a) } },
+}));
+jest.mock('@/lib/premiumGate', () => ({
+  showPremiumGate: (...a: unknown[]) => mockShowPremiumGate(...a),
 }));
 
 import { handleImageLongPress } from '@/lib/imageLongPress';
@@ -96,11 +100,11 @@ describe('handleImageLongPress — quality sheet + entitlement gating', () => {
     expect(mockInvoke).not.toHaveBeenCalled();
   });
 
-  it('free user: "Save in HD" routes to the paywall (the upsell)', () => {
+  it('free user: "Save in HD (Premium)" opens the premium gate (the upsell)', () => {
     mockIsPro = false;
     handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    pressAlertButton('Save in HD (Pro)');
-    expect(mockRouterPush).toHaveBeenCalledWith('/subscribe');
+    pressAlertButton('Save in HD (Premium)');
+    expect(mockShowPremiumGate).toHaveBeenCalledWith({ kind: 'hd_premium' });
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
     expect(mockInvoke).not.toHaveBeenCalled();
   });
@@ -172,24 +176,52 @@ describe('saveHd — on-demand upscale (server resolve)', () => {
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
   });
 
-  it('monthly_cap_reached → tears the modal back down and shows the cap toast', async () => {
+  it('429 monthly cap (delivered as a FunctionsHttpError) → modal down + HD-cap gate', async () => {
+    // supabase-js delivers non-2xx as `error` with the Response on `.context`.
     await triggerHdSave({
-      data: { error: 'monthly_cap_reached', message: 'cap hit' },
-      error: null,
+      data: null,
+      error: {
+        message: 'cap',
+        context: {
+          status: 429,
+          json: async () => ({
+            error: 'monthly_cap_reached',
+            cap: 100,
+            tier: 'pro',
+            resets_on: 'July 1',
+          }),
+        },
+      },
     });
     expect(mockModalShow).toHaveBeenCalledWith('p9'); // opened optimistically
-    expect(mockModalHide).toHaveBeenCalled(); // then closed once we learn the cap is hit
-    expect(mockToastShow).toHaveBeenCalledWith('cap hit', 'close-circle');
+    expect(mockModalHide).toHaveBeenCalled(); // closed once we learn the cap is hit
+    expect(mockShowPremiumGate).toHaveBeenCalledWith({
+      kind: 'hd_cap',
+      cap: 100,
+      resetsOn: 'July 1',
+      tier: 'pro',
+    });
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
   });
 
-  it('transport error → tears the modal down + user-facing error toast, never a silent failure', async () => {
+  it('403 lapsed subscription → modal down + HD premium gate (not a "try again" toast)', async () => {
+    await triggerHdSave({
+      data: null,
+      error: { message: 'sub', context: { status: 403, json: async () => ({ error: 'x' }) } },
+    });
+    expect(mockModalHide).toHaveBeenCalled();
+    expect(mockShowPremiumGate).toHaveBeenCalledWith({ kind: 'hd_premium' });
+    expect(mockToastShow).not.toHaveBeenCalled();
+  });
+
+  it('transport error (no Response context) → modal down + user-facing error toast', async () => {
     await triggerHdSave({ data: null, error: { message: 'network down' } });
     expect(mockModalHide).toHaveBeenCalled();
     expect(mockToastShow).toHaveBeenCalledWith(
       expect.stringContaining('Couldn’t prepare your HD download'),
       'close-circle'
     );
+    expect(mockShowPremiumGate).not.toHaveBeenCalled();
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
   });
 });

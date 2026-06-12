@@ -20,6 +20,7 @@ import { routeFromNotification } from '@/lib/notificationRouting';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
+import { PremiumGateProvider } from '@/components/PremiumGateSheet';
 import { ToastHost } from '@/components/Toast';
 import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 
@@ -454,49 +455,54 @@ function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <AppErrorBoundary>
             <AlertProvider>
-              <AuthInitializer />
-              <AnalyticsIdentity />
-              <ScreenTracker />
-              <PushRegistrar />
-              <PendingNotificationReplayer />
-              <RevenueCatInitializer />
-              <RealtimeSubscriber />
-              <DataPrefetcher />
-              <Stack
-                screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#000000' } }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="(auth)" />
-                <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
-                <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                <Stack.Screen
-                  name="user/[userId]"
-                  options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
-                />
-                <Stack.Screen
-                  name="sharePost"
-                  options={{
-                    ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
-                    contentStyle: { backgroundColor: 'transparent' },
+              <PremiumGateProvider>
+                <AuthInitializer />
+                <AnalyticsIdentity />
+                <ScreenTracker />
+                <PushRegistrar />
+                <PendingNotificationReplayer />
+                <RevenueCatInitializer />
+                <RealtimeSubscriber />
+                <DataPrefetcher />
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: '#000000' },
                   }}
-                />
-                <Stack.Screen
-                  name="comments"
-                  options={{
-                    ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
-                    contentStyle: { backgroundColor: '#0F0F1A' },
-                  }}
-                />
-                <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-              </Stack>
-              <StatusBar style="light" />
-              <ToastHost />
-              <UpscaleModalHost />
+                >
+                  <Stack.Screen name="index" />
+                  <Stack.Screen name="(tabs)" />
+                  <Stack.Screen name="(auth)" />
+                  <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
+                  <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  <Stack.Screen
+                    name="user/[userId]"
+                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
+                  />
+                  <Stack.Screen
+                    name="sharePost"
+                    options={{
+                      ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
+                      contentStyle: { backgroundColor: 'transparent' },
+                    }}
+                  />
+                  <Stack.Screen
+                    name="comments"
+                    options={{
+                      ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
+                      contentStyle: { backgroundColor: '#0F0F1A' },
+                    }}
+                  />
+                  <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                  <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                  <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                </Stack>
+                <StatusBar style="light" />
+                <ToastHost />
+                <UpscaleModalHost />
+              </PremiumGateProvider>
             </AlertProvider>
           </AppErrorBoundary>
         </QueryClientProvider>

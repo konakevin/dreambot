@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback, useMemo, useDeferredValue } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
+import { showPremiumGate } from '@/lib/premiumGate';
 import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
@@ -107,11 +108,16 @@ function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedT
 }
 
 function EmptyFeed({ tab }: { tab: FeedTab }) {
+  const isDreamEligible = useAuthStore((state) => state.isDreamEligible);
+  // Only paid/trial users actually GET a nightly dream — don't promise it to a
+  // free/lapsed user. For them, the empty state is a soft upsell instead.
   const msgs: Record<FeedTab, { icon: string; title: string; sub: string }> = {
     forYou: {
       icon: 'moon-outline',
       title: 'Your feed is warming up',
-      sub: 'Your nightly dreams will land here every morning. Check back tomorrow.',
+      sub: isDreamEligible
+        ? 'Your nightly dreams will land here every morning. Check back tomorrow.'
+        : 'Get a personalized dream delivered every morning with Basic or Pro.',
     },
     following: {
       icon: 'people-outline',
@@ -120,6 +126,7 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
     },
   };
   const m = msgs[tab];
+  const showNightlyCta = tab === 'forYou' && !isDreamEligible;
   return (
     <View style={s.emptyWrap}>
       <Ionicons
@@ -129,6 +136,15 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
       />
       <Text style={s.emptyTitle}>{m.title}</Text>
       <Text style={s.emptySub}>{m.sub}</Text>
+      {showNightlyCta ? (
+        <TouchableOpacity
+          style={s.emptyCta}
+          onPress={() => showPremiumGate({ kind: 'nightly_premium' })}
+          activeOpacity={0.85}
+        >
+          <Text style={s.emptyCtaText}>Get nightly dreams</Text>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
@@ -302,6 +318,14 @@ const s = StyleSheet.create({
   },
   emptyTitle: { color: colors.textPrimary, fontSize: fontScale(20), fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  emptyCta: {
+    marginTop: verticalScale(8),
+    backgroundColor: colors.accent,
+    paddingVertical: verticalScale(11),
+    paddingHorizontal: verticalScale(22),
+    borderRadius: verticalScale(14),
+  },
+  emptyCtaText: { color: '#FFFFFF', fontSize: fontScale(15), fontWeight: '700' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
   topRow: {
     flexDirection: 'row',

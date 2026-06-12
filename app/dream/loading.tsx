@@ -133,6 +133,10 @@ export default function DreamLoadingScreen() {
       } else if (status === 'cancelled') {
         // User cancelled at classification modal — back to Create, no charge
         router.back();
+      } else if (status === 'insufficient') {
+        // Not enough sparkles — the premium gate is already showing; return to
+        // Create so the user isn't stranded on the loading spinner.
+        router.back();
       }
       // status === 'error' → stay on this screen and let the failure card
       // (driven by activeJobFailure in the store) take over. The user can

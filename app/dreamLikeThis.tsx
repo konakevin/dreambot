@@ -33,6 +33,7 @@ import * as nav from '@/lib/navigate';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
 import { sparkleCostFrom } from '@/constants/imageModels';
+import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -228,6 +229,14 @@ export default function DreamLikeThisScreen() {
       return;
     }
     Keyboard.dismiss();
+
+    // Gate on insufficient sparkles before navigating (premium gate on this
+    // screen, never strand the user in the loading flow). Server charge backstops.
+    const cost = sparkleCostFrom(imageModels, refModelUsed);
+    if (sparkleBalance < cost) {
+      showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
+      return;
+    }
 
     // DLT with style reference = always reimagine (flux-dev + face swap) so style actually transfers
     // Without style ref: prompt entered = reimagine, no prompt = restyle

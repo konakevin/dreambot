@@ -48,6 +48,7 @@ import { ModelPicker } from '@/components/ModelPicker';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
+import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 
@@ -366,6 +367,14 @@ export default function CreateScreen() {
 
   function handleDream() {
     Keyboard.dismiss();
+    // Gate on insufficient sparkles HERE (before navigating) so the user gets the
+    // premium gate on this screen and never enters the loading flow on a dream
+    // they can't afford. The server charge stays authoritative as a backstop.
+    const cost = sparkleCostFrom(imageModels, selectedModelId);
+    if (sparkleBalance < cost) {
+      showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     nav.push('/dream/loading');
   }

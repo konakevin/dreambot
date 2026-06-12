@@ -64,7 +64,7 @@ function FeatureRow({ emoji, text }: { emoji: string; text: string }) {
 
 export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
-  const { welcomeSparkleBonus } = useEngineConfig();
+  const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
 
   function handleStart() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -124,11 +124,10 @@ export default function WelcomeGiftScreen() {
           <FeatureRow emoji="🌙" text="Cast yourself in dream worlds" />
         </View>
 
-        {/* Pro trial footnote — static (we're not changing the 14-day
-            trial structure anytime soon, so no need to gate on user
-            state). */}
+        {/* Pro trial footnote — trial length from engine_config (the same
+            admin-tunable window the entitlement gates read). */}
         <Text style={s.footnote}>
-          Nightly dreams land every morning during your 14-day Pro trial.
+          Nightly dreams land every morning during your {proTrialDays}-day Pro trial.
         </Text>
       </ScrollView>
 

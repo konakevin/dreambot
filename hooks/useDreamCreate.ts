@@ -21,7 +21,7 @@ import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useImageModels } from '@/hooks/useImageModels';
 import { sparkleCostFrom } from '@/constants/imageModels';
-import { showAlert } from '@/components/CustomAlert';
+import { showPremiumGate } from '@/lib/premiumGate';
 import { Toast } from '@/components/Toast';
 import { moderateText } from '@/lib/moderation';
 import { isVibeProfile } from '@/types/vibeProfile';
@@ -35,9 +35,8 @@ import {
   type PhotoClassification,
 } from '@/lib/dreamApi';
 import type { DreamMedium } from '@/hooks/useDreamStyles';
-import { router } from 'expo-router';
 
-type GenerateStatus = 'idle' | 'generating' | 'done' | 'error' | 'cancelled';
+type GenerateStatus = 'idle' | 'generating' | 'done' | 'error' | 'cancelled' | 'insufficient';
 
 /**
  * Called BEFORE sparkle is spent when a photo classifies as 'group' or 'unclear'.
@@ -74,15 +73,7 @@ export function useDreamCreate() {
     (modelId: string | null): boolean => {
       const cost = sparkleCostFrom(models, modelId);
       if (sparkleBalance < cost) {
-        const sparkleWord = cost === 1 ? 'sparkle' : 'sparkles';
-        showAlert(
-          'Not enough sparkles',
-          `You need ${cost} ${sparkleWord} to dream with this model. Get more sparkles to keep dreaming!`,
-          [
-            { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
-            { text: 'Cancel', style: 'cancel' },
-          ]
-        );
+        showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
         return false;
       }
       return true;
@@ -161,7 +152,10 @@ export function useDreamCreate() {
       });
       useDreamStore.getState().setActiveJobId(jobId);
 
-      if (!canAffordDream(config.forceModel)) return 'error';
+      // Backstop pre-check (the create/DLT buttons gate before navigating here).
+      // Returns 'insufficient' so the Loading screen routes back instead of
+      // sitting on a spinner; canAffordDream already surfaced the premium gate.
+      if (!canAffordDream(config.forceModel)) return 'insufficient';
       busy.current = true;
       trackDreamCreateStarted({ mode: config.mode });
 
@@ -283,24 +277,18 @@ export function useDreamCreate() {
         // client pre-check. Nothing was charged. Surface the paywall, refresh
         // balance, and fail cleanly (no refund needed — no debit happened).
         if (msg.includes('insufficient_sparkles')) {
+          // Balance race: the client pre-check passed on a stale balance but the
+          // server (authoritative) rejected it. Nothing was charged. Surface the
+          // premium gate and return 'insufficient' so the Loading screen routes
+          // back to Create — NOT a failure card (this isn't a render failure, and
+          // claiming a "refund" would be wrong since nothing was debited).
           if (user) queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-          showAlert(
-            'Not enough sparkles',
-            'You ran out of sparkles for this dream. Get more to keep dreaming!',
-            [
-              { text: 'Get Sparkles', onPress: () => router.push('/sparkleStore') },
-              { text: 'Cancel', style: 'cancel' },
-            ]
-          );
-          useDreamStore.getState().setActiveJobFailure({
-            jobId,
-            message: 'insufficient_sparkles',
-            refunded: true,
-            refundReason: null,
-            isNsfw: false,
-            isPreFlightModeration: false,
+          showPremiumGate({
+            kind: 'sparkles',
+            needed: sparkleCostFrom(models, config.forceModel),
+            balance: sparkleBalance,
           });
-          return 'error';
+          return 'insufficient';
         }
 
         // The server signals refund status via either a structured response

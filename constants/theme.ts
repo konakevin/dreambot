@@ -42,6 +42,9 @@ export const gradients = {
   dream: ['#FFD700', '#FF8C00', '#FF4500'] as [string, string, ...string[]],
   bot: ['#44DDCC', '#6699EE', '#BB88EE'] as [string, string, ...string[]],
   accent: ['#8B7BEE', '#6B5DC4'] as [string, string],
+  // The signature purple→pink→teal brand gradient (hero headings, premium CTAs).
+  // Was redeclared per-screen; centralized here.
+  brand: ['#A78BFA', '#F9A8D4', '#5EEAD4'] as [string, string, string],
 };
 
 // ── Animation ───────────────────────────────────────────────────────────────
