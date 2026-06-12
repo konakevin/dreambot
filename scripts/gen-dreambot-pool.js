@@ -287,6 +287,306 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
       'FANTASY WILDS + FRIENDLY DRAGONS — enchanted forests, glowing mushroom glades, a gentle dragon at a mountain roost, mossy ruins, crystal caverns',
     ],
   },
+
+  bubble_world_bloombot: {
+    label: 'bloombot world',
+    maxWords: 22,
+    theme: `Each entry is ONE lush, flower-overflowing world in the spirit of BloomBot — MONUMENTAL blooms and dense floral abundance fill the frame (building-sized flowers, petal-carpets, jewel-tone foliage), written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering floral scale so a small bubble-bot reads tiny. Describe ONLY the world. NEVER sparse — overflowing with blooms.
+  ✅ "a towering jungle of giant exotic blooms in jewel-violet and gold, petals raining through golden god-rays, ferns carpeting below"
+  ✅ "a flower-tunnel archway of clustered cream-and-rose petals, glowing inner-light, monstera leaves draping the entrance"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. NEVER sparse/barren — blooms must dominate. ≤22 words.`,
+    instructions: `Generate NEW flower-overflowing worlds across families — terse 12-22 word fragments, monumental blooms dominating + named flora + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'TROPICAL BLOOM-JUNGLE — giant exotic flowers, monstera/elephant-ear canopy, petal-carpet floors, dense understory',
+      'FLOWER TUNNELS / ARCHWAYS — vine-arches of clustered petals, blossom-draped colonnades, glowing flower-passages',
+      'LAGOON / WATER BLOOMS — lily-pad lagoons, lotus ponds, bloom-reflections on still water, waterfall flower-gardens',
+      'VOLCANIC / LAVA-ROCK BLOOMS — deep-indigo blooms rising from black lava rock, flowers in volcanic crevices, glowing cave-blooms',
+      'GIANT SINGLE-BLOOM FIELDS — endless fields of one colossal flower-type, monochrome bloom-seas (all-rose, all-violet, all-gold)',
+      'CONSERVATORY / GARDEN — glass-house bloom cathedrals, rose-garden arches, wisteria courtyards bursting with flowers',
+      'DESERT / MEADOW WILDFLOWERS — wildflower super-blooms, desert flower explosions, alpine flower meadows under soft light',
+    ],
+  },
+
+  bubble_world_chibibot: {
+    label: 'chibibot world',
+    maxWords: 22,
+    theme: `Each entry is ONE cozy storybook CREATURE-VILLAGE or habitat in the spirit of ChibiBot — whimsical little settlements where cute creatures live (treehouse villages, mushroom-cap hamlets, stilt-villages, cottagecore clusters, cozy interiors), written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Warm, wholesome, precious. Describe ONLY the world.
+  ✅ "a treehouse village strung between giant ceiba trunks, woven rope-bridges, lantern-flower porches glowing amber under leafy canopy"
+  ✅ "a mushroom-cap village on a moss meadow, each toadstool cottage a cheerful color, twig bridges over a pebble stream"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep cozy + wholesome + storybook. ≤22 words.`,
+    instructions: `Generate NEW cozy creature-village worlds across families — terse 12-22 word fragments, whimsical settlement + signature cozy detail + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'TREEHOUSE VILLAGES — platforms in giant trunks, vine rope-bridges, lantern-flower porches, woven canopy markets',
+      'MUSHROOM-CAP HAMLETS — toadstool cottages, fairy-ring squares, twig bridges over pebble streams, moss meadows',
+      'COTTAGECORE VILLAGES — cobblestone lanes, flower-box cottages, market wells, stone arch bridges, warm window-glow',
+      'AQUATIC STILT-VILLAGES — bamboo huts on jade streams, plank walkways, clay oil-lamps, bioluminescent water accents',
+      'ARCTIC / SNOW VILLAGES — snow-roofed compact huts, ice-fishing harbors, lantern-lit drifts, cozy chimney smoke',
+      'COZY INTERIORS — warm cottage parlors by stone fireplaces, plant-filled greenhouse nooks, rainy-window reading dens',
+      'MEADOW / FOREST CLEARINGS — moonlit meadows, dappled forest paths, mossy stone-arch bridges, fern-edged glades',
+    ],
+  },
+
+  bubble_world_dinobot: {
+    label: 'dinobot world',
+    maxWords: 22,
+    theme: `Each entry is ONE prehistoric Mesozoic world in the spirit of DinoBot — lush ancient landscapes (fern glades, primordial swamps, volcanic highlands, amber forests, pterosaur cliffs) where FRIENDLY giant dinosaurs roam as gentle scale-giants — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering ancient flora so a small bubble-bot reads tiny. Describe ONLY the world. Keep it wholesome — dinos are gentle giants, never menacing.
+  ✅ "a Cretaceous fern glade with towering cycad fronds, a gentle long-necked dino grazing distant, golden light dappling the mist"
+  ✅ "an amber forest of resin-dripping trunks glowing honey-gold, soft ferns below, a friendly dino silhouette through the haze"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Dinos gentle/friendly, never scary. Keep pastel-dreamy. ≤22 words.`,
+    instructions: `Generate NEW prehistoric worlds across families — terse 12-22 word fragments, ancient flora/feature + a gentle dino + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'FERN / CYCAD GLADES — towering cycad fronds, giant tree-ferns, dappled humid light, gentle grazing dinos distant',
+      'PRIMORDIAL SWAMPS — giant horsetails in tannin-dark water, drifting mist, dragonflies, a wading gentle dino',
+      'VOLCANIC HIGHLANDS — glowing lava rivers, steaming fumaroles, ash plains, distant smoking peaks (soft, not threatening)',
+      'AMBER FORESTS — resin-dripping trunks glowing honey-gold, insects in golden sap, soft fern floor',
+      'PTEROSAUR CLIFFS — chalk sea-cliffs with nesting ledges, pterosaurs wheeling overhead, inland sea below at sunset',
+      'CRETACEOUS RIVER DELTAS — braided channels through mudflats, flowering primitive blooms, a gentle dino at the water',
+      'MISTY PRIMORDIAL JUNGLE — humid twilight canopy, hanging vines, glowing primitive flowers, a gentle dino in the haze',
+    ],
+  },
+
+  bubble_world_faebot: {
+    label: 'faebot world',
+    maxWords: 22,
+    theme: `Each entry is ONE enchanted FAE FOREST in the spirit of FaeBot — peaceful magical woodlands (ancient oaks, bluebell clearings, mushroom rings, willow-stream archways, fern grottoes) glowing with soft phosphorescent magic — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering ancient trees so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a grove of towering ancient oaks woven with phosphorescent moss, dewdrops glowing on standing stones, golden light breaking through"
+  ✅ "a bluebell clearing ringed with glowing mushrooms, a willow's leaf-curtain over a moonlit stream, fireflies drifting"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep peaceful + magical + wholesome. ≤22 words.`,
+    instructions: `Generate NEW enchanted fae-forest worlds across families — terse 12-22 word fragments, magical woodland + glowing detail + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'ANCIENT OAK GROVES — towering moss-woven oaks, root-cathedral arches, phosphorescent lichen, golden dappled shafts',
+      'BLUEBELL / MUSHROOM CLEARINGS — bluebell carpets, glowing mushroom rings, fairy-circle meadows, drifting pollen-motes',
+      'WILLOW-STREAM ARCHWAYS — willow leaf-curtains over moonlit streams, root archways, lily-dotted brooks, firefly glow',
+      'FERN GROTTOES — fern-draped hollows, mossy boulder caves, dripping pearlescent dewdrops, soft inner-glow',
+      'STANDING-STONE RINGS — ancient moss-covered standing stones, rune-glow, mist pooling, twilight forest beyond',
+      'MOONLIT GLADES — silver-lit clearings, glowing seed-spores drifting up, a will-o-wisp orb, deep navy canopy shadow',
+      'PHOSPHORESCENT FUNGUS HOLLOWS — glowing fungus cathedrals, bioluminescent toadstools, fairy-light pools in the dark',
+    ],
+  },
+
+  bubble_world_gothbot: {
+    label: 'gothbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE PRETTY-SPOOKY gothic world in the spirit of GothBot — but made CUTE and wholesome (think cozy-Halloween / pastel-goth / friendly-haunted, NEVER scary or grim): pastel gothic castles, softly-glowing crypts, friendly overgrown carnivals, gargoyle ledges under a big moon, pumpkin-lantern courtyards — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering gothic architecture so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a pastel-stone gothic castle courtyard under a huge friendly moon, glowing pumpkin-lanterns, soft violet mist curling low"
+  ✅ "a softly-glowing crypt garden of mossy arches and candle-lit niches, witch-fire glowing gentle green, fireflies drifting"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans, NO gore, NO real horror/menace — cute spooky ONLY. Keep it charming + pretty. ≤22 words.`,
+    instructions: `Generate NEW cute-spooky gothic worlds across families — terse 12-22 word fragments, charming-gothic place + soft glow + depth cue, glossy-dreamy + wholesome. World ONLY.`,
+    subThemes: [
+      'PASTEL GOTHIC CASTLES — moonlit pastel-stone castles, arched courtyards, pennant towers, soft violet mist, big friendly moon',
+      'GLOWING CRYPTS / CATACOMBS — mossy arch crypts, candle-lit niches, gentle green witch-fire glow, firefly drifts',
+      'FRIENDLY OVERGROWN CARNIVALS — rusted-but-charming ferris wheel in blackthorn-vine, glowing booths, twilight cotton-candy mist',
+      'GARGOYLE CATHEDRAL LEDGES — friendly gargoyles on cathedral spires, stained-glass glow, a huge moon, bats like little kites',
+      'PUMPKIN-LANTERN COURTYARDS — jack-o-lantern paths, autumn-leaf swirls, cozy candle-glow, cobweb-lace twinkling with dew',
+      'MOONLIT GRAVEYARD GARDENS — pretty mossy headstones among flowers, glowing wisps, weeping-willow arches, soft silver light',
+      'WITCH-COTTAGE GLOW — cozy crooked witch-cottages, bubbling cauldron-glow, hanging herbs + lanterns, misty enchanted woods',
+    ],
+  },
+
+  bubble_world_mangabot: {
+    label: 'mangabot world',
+    maxWords: 22,
+    theme: `Each entry is ONE anime-style world in the spirit of MangaBot — spanning neon Neo-Tokyo, Ghibli countryside, sakura temple gardens, magical-girl rooftops, isekai fantasy realms — written as a DreamBot wallpaper WORLD in the glossy-dreamy register (the anime SCENE content, rendered glossy-dreamy). Grand/atmospheric scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a neon Shibuya scramble crossing under towering holographic ad-columns, signage blazing, crowds blurring past in soft rain-glow"
+  ✅ "a misty Ghibli countryside valley of rice-terraces and ancient forest, a stone bridge over a brook, mountains fading in haze"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans (the bot is the only character). Keep wholesome. ≤22 words.`,
+    instructions: `Generate NEW anime-style worlds across families — terse 12-22 word fragments, the anime place + signature feature + depth/haze cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'NEON NEO-TOKYO — holographic ad-columns, neon-kanji canyons, rain-slick streets glowing, maglev lines, rooftop shanty-towns',
+      'GHIBLI COUNTRYSIDE — rice-terrace valleys, ancient forests, stone bridges, rural shrines, mountains in soft haze',
+      'SAKURA TEMPLE GARDENS — cherry-blossom courtyards, torii gates, stone lanterns, koi ponds, petals drifting through mist',
+      'MAGICAL-GIRL ROOFTOPS — pastel city rooftops at dusk, moonlit gardens, cherry-blossom skylines, dreamy pastel color-wash',
+      'ISEKAI FANTASY REALMS — castles carved into living rock, floating islands, glowing crystal formations, enchanted forest villages',
+      'SAMURAI-ERA VILLAGES — mountain temples, misty bamboo groves, pagodas, tea-house gardens, snow-dusted castle towns',
+      'SPIRIT-WORLD SHRINES — Mononoke spirit groves, glowing torii paths, mossy forest shrines, impossible-color twilight',
+    ],
+  },
+
+  bubble_world_mechbot: {
+    label: 'mechbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE sci-fi MECHA or deep-sea world in the spirit of MechBot — colossal FRIENDLY giant robots/sentinels, glowing deep-sea bot-cities, mech arenas, mossy dormant guardians — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Towering mecha scale so a small bubble-bot reads tiny. Describe ONLY the world. Mechs are GENTLE giants, never menacing/war-like.
+  ✅ "a colossal mossy dormant sentinel mech slumped in a jungle ruin, ferns sprouting from its shoulders, god-rays through the canopy"
+  ✅ "a glowing deep-sea bot-city of chrome domes and floodlit towers, bioluminescent fish threading the dark, soft blue glow everywhere"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans, NO weapons/war/menace — friendly + wondrous. ≤22 words.`,
+    instructions: `Generate NEW friendly-mecha + deep-sea worlds across families — terse 12-22 word fragments, gentle-giant mech or glowing tech-place + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'FRIENDLY GIANT MECHS / SENTINELS — colossal gentle mechs at rest, a sleeping guardian-robot, soft glowing joints, towering chrome forms',
+      'DEEP-SEA BOT-CITIES — chrome-dome undersea cities, floodlit towers, glowing portholes, bioluminescent fish in the dark',
+      'HADAL TRENCH GLOW — abyssal plains pulsing soft blue light, marine snow drifting, a mech floodlight piercing the dark',
+      'MOSSY DORMANT GUARDIANS — ancient overgrown sentinel mechs in jungle-temple ruins, ferns + vines, green god-ray shafts',
+      'CHROME TECH-ARENAS — soft-lit futuristic arenas, glowing tiered seating, polished chrome floors reflecting pastel lights',
+      'UNDERSEA MEGASTRUCTURES — colossal sunken structures emerging from the murk, glowing dome-glass, slow drifting currents',
+      'ZERO-G ORBITAL — gentle mechs drifting in soft orbit, a pastel planet below, glowing station-rings, star-field haze',
+    ],
+  },
+
+  bubble_world_oceanbot: {
+    label: 'oceanbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE maritime or deep-sea wonder world in the spirit of OceanBot — coral-crusted shipwrecks, sunken cities, reef carnivals, whale/manta encounters, bioluminescent abyss — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Grand undersea scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a coral-crusted sunken galleon on a white-sand seabed, barnacled rigging draped in anemones, god-rays slanting down through teal water"
+  ✅ "a glowing bioluminescent abyss garden of soft pulsing creatures, drifting jellyfish like paper lanterns, cold blue light blooming"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep wondrous + wholesome. ≤22 words.`,
+    instructions: `Generate NEW ocean/deep-sea worlds across families — terse 12-22 word fragments, undersea place + marine life/feature + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'CORAL-CRUSTED SHIPWRECKS — sunken galleons draped in coral + anemones, barnacled masts, god-rays through teal water',
+      'SUNKEN CITIES — coral-reclaimed stone ruins, broken columns + archways, mosaic plazas, fish schooling through corridors',
+      'CORAL-REEF CARNIVALS — vibrant coral gardens, neon anemones, schooling fish in confetti color, sea-fans swaying',
+      'WHALE / MANTA ENCOUNTERS — a gentle giant whale or manta gliding through god-rays, plankton sparkling, vast soft blue',
+      'BIOLUMINESCENT ABYSS — glowing deep-sea creatures, drifting jellyfish-lanterns, soft pulsing light in absolute blue dark',
+      'KELP FORESTS — towering kelp groves swaying in caustic light, dappled green-gold beams, drifting motes, fish darting',
+      'PIRATE-ISLAND BAYS — turquoise lagoon bays, half-sunken wooden ships, palm-fringed cove, golden-hour maritime calm',
+    ],
+  },
+
+  bubble_world_pixelbot: {
+    label: 'pixelbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE video-game adventure world in the spirit of PixelBot — RPG market towns, glowing dungeons, boss arenas, JRPG battlefields, cozy farm life, sci-fi action corridors — written as a DreamBot wallpaper WORLD in the glossy-dreamy register (the GAME SCENE content rendered glossy-dreamy, NOT literal pixel-art). Grand game-world scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a cozy RPG market town at twilight, half-timbered shops under glowing lanterns, a clock tower, cobblestone paths winding uphill"
+  ✅ "a glowing dungeon chamber of mossy stone arches, treasure chests + floating runes, bioluminescent fungi lighting the dark"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans (the bot is the only character). Keep wholesome + adventurous. ≤22 words.`,
+    instructions: `Generate NEW game-adventure worlds across families — terse 12-22 word fragments, game-scene place + signature feature + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'RPG MARKET TOWNS — half-timbered shops, glowing lanterns, clock towers, cobblestone lanes, market stalls, cozy twilight',
+      'GLOWING DUNGEONS — mossy stone-arch chambers, treasure chests, floating runes, bioluminescent fungi, lava/ice variants',
+      'BOSS ARENAS — colossal gladiator pits, spotlight on the floor, tiered seating, a friendly giant boss-creature, banners',
+      'JRPG BATTLEFIELDS — wide grassland/desert/forest vistas with distant mountains, magic-sparkle effects, hero-party stance feel',
+      'COZY FARM LIFE — meadow farms, orchard rows, water-mills, greenhouses, fireflies, cherry-blossom petal-fall, lantern-glow',
+      'SCI-FI ACTION CORRIDORS — neon spaceship corridors, alien-planet outposts, glowing consoles, force-field shimmer, star-windows',
+      'GAME CRYPTS / GOTHIC LEVELS — pretty haunted manors, candle-lit catacombs, cobweb-lace, glowing gothic props, friendly spooky',
+    ],
+  },
+
+  bubble_world_retrobot: {
+    label: 'retrobot world',
+    maxWords: 22,
+    theme: `Each entry is ONE warm 1980s/90s nostalgia INTERIOR or suburban scene in the spirit of RetroBot — Saturday-morning living rooms, mall food courts, bedroom forts, video stores, arcades, summer yards — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, glowing with cozy Kodachrome warmth. Describe ONLY the world (the bubble-bot is placed by the renderer, small among the everyday objects).
+  ✅ "a sun-striped 80s living room, wood-console TV glowing cartoons, cereal bowls on brown shag carpet, dust motes in golden light"
+  ✅ "a neon-lit 80s mall food court, glowing signage, plastic orange trays, potted ferns, an arcade entrance glowing past the threshold"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO people. Keep warm + cozy + nostalgic. ≤22 words.`,
+    instructions: `Generate NEW retro-nostalgia worlds across families — terse 12-22 word fragments, 80s/90s scene + period objects + warm-light cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'SATURDAY-MORNING LIVING ROOMS — wood-console TVs glowing cartoons, cereal bowls, shag carpet, afghan blankets, golden window-stripes',
+      'MALL FOOD COURTS — neon signage, plastic trays, potted ferns, fountain, arcade-entrance glow, 80s tile floors',
+      'BEDROOM FORTS — couch-cushion forts, flashlight glow through blankets, poster-covered wood-paneled walls, toy-strewn floor',
+      'VIDEO STORES — wall of VHS cases, listening-station booths, neon OPEN sign, carpet aisles, glowing new-release displays',
+      'NEON ARCADES — rows of glowing arcade cabinets, CRT-glow, dark room lit by screens, prize-counter, carpet patterns',
+      'SUMMER SUBURBAN YARDS — sprinklers casting rainbows, bikes in wet grass, above-ground pool, ice-cream-truck glow at dusk',
+      'HOLIDAY LIVING ROOMS — twinkling multicolor Christmas lights, tinsel tree, wrapping-paper scraps, warm hearth, cozy glow',
+    ],
+  },
+
+  bubble_world_starbot: {
+    label: 'starbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE epic deep-space / alien world in the spirit of StarBot — crystal canyons, bioluminescent tide pools, ringed-giant skies, spore forests, nebula vistas, space-opera orbitals — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Impossible cosmic scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "twin suns igniting a canyon of 200-meter resonant quartz spires, three moons catching pink-blue light, wind-carved hollows"
+  ✅ "a colossal ringed gas-giant filling half the sky over an obsidian plain, drifting moons, soft star-dusted violet space beyond"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep wondrous + awe-scale. ≤22 words.`,
+    instructions: `Generate NEW cosmic / alien worlds across families — terse 12-22 word fragments, awe-scale cosmic place + signature feature + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'CRYSTAL CANYONS — towering resonant quartz spires, prism-refracting twin-sun light, three moons, wind-carved hollows',
+      'BIOLUMINESCENT TIDE POOLS — obsidian-rimmed glowing pools green-to-violet, phosphorescent alien fauna, soft cosmic dusk',
+      'RINGED-GIANT SKIES — a colossal ringed gas-giant over an alien plain, drifting moons, banded ochre-cream skies',
+      'SPORE FORESTS — 500-meter glowing fungal towers refracting amber light, violet mycelial mats, spores drifting like snow',
+      'NEBULA VISTAS — rose-and-lavender nebula clouds, infant-star clusters, comet arcs with tri-color tails, deep starfields',
+      'ALIEN GLASS FLATS — hexagonal basalt columns, mirror-still methane seas, geometric crystalline plateaus under twin suns',
+      'SPACE-OPERA ORBITALS — gentle drifting starships, glowing ring-habitats, station domes, a pastel planet + nebula backdrop',
+    ],
+  },
+
+  bubble_world_steambot: {
+    label: 'steambot world',
+    maxWords: 22,
+    theme: `Each entry is ONE steampunk world in the spirit of SteamBot — brass spire cities, airship harbors, gear-bridges, mechanical gardens, gaslit foundries, cozy brass interiors — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, warm with amber gaslight + copper patina. Towering brass scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "brass spires piercing soft storm clouds, copper domes catching amber light, steam spiraling between gothic gear-towers"
+  ✅ "an airship harbor of tethered dirigibles on concentric brass dock-rings, propellers gleaming, gangways over a soft misty drop"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep warm + wondrous + tactile. ≤22 words.`,
+    instructions: `Generate NEW steampunk worlds across families — terse 12-22 word fragments, brass/clockwork place + signature mechanism + warm-light cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'BRASS SPIRE CITIES — brass spires + copper domes piercing soft clouds, steam vents, gear-towers, gaslit amber windows',
+      'AIRSHIP HARBORS — tethered dirigibles on concentric dock-rings, gleaming propellers, gangways, floating platforms in mist',
+      'GEAR-BRIDGES / CHASMS — colossal interlocking brass gears turning, rail-cars on mechanical spines, cliff-cities opposing',
+      'MECHANICAL GARDENS — brass pipe-trees with copper-leaf canopies, gear-flowers opening, steam-sap hissing, gaslight glow',
+      'GASLIT FOUNDRIES — molten-brass rivers in copper channels, overhead ladle-rails, furnace-glow, heat-shimmer haze',
+      'COZY BRASS INTERIORS — mahogany + brass reading-nooks, golden lamplight, Parrish-warm windows, intricate clockwork detail',
+      'CLOCKWORK TOWERS — giant exposed-gear clock towers, swinging brass pendulums, glowing dials, steam drifting past windows',
+    ],
+  },
+
+  bubble_world_tinybot: {
+    label: 'tinybot world',
+    maxWords: 22,
+    theme: `Each entry is ONE handcrafted MINIATURE-DIORAMA world in the spirit of TinyBot — obsessively-detailed tiny model villages, alpine chalets, zen gardens, farms, coastal scenes — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, with a cozy tabletop-model charm (countable little props, handcrafted feel). Describe ONLY the world (the bubble-bot fits right in at toy scale).
+  ✅ "a handcrafted miniature stone village, cobblestone lanes between thatched cottages, lamp-lit doorways glowing, mossy slate roofs"
+  ✅ "a tiny terraced rice-paddy hillside, geometric emerald pools stepping down, a little wooden footbridge, morning mist clinging"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO people. Keep cozy + handcrafted + charming. ≤22 words.`,
+    instructions: `Generate NEW miniature-diorama worlds across families — terse 12-22 word fragments, tiny handcrafted scene + countable details + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'MINI COTTAGE VILLAGES — cobblestone lanes, thatched cottages, lamp-lit doorways, mossy roofs, little stone bridges',
+      'ALPINE CHALET DIORAMAS — timber chalets, tiny pine forests, microballoon snow, distant model peaks, ski-slope charm',
+      'ZEN GARDEN DIORAMAS — raked gravel, smooth stones, a tiny pagoda, bonsai, bamboo fences, koi pond, soft calm light',
+      'FARM DIORAMAS — red barns, split-rail fences, tiny grazing cows, windmills, orchard rows, harvest-basket details',
+      'COASTAL LIGHTHOUSE DIORAMAS — striped lighthouses, foam-carved waves, keeper cottages, tiny suspended seagulls, cliff edges',
+      'TERRACED RICE-PADDIES — stepped emerald pools, wooden footbridges, morning mist, tiny shoots, hillside curves',
+      'MINI EUROPEAN TOWNS — Parisian zinc-roof streets, Tuscan cypress villas, café chairs, cobbles, tiny shutters + flower-boxes',
+    ],
+  },
+
+  bubble_world_toybot: {
+    label: 'toybot world',
+    maxWords: 22,
+    theme: `Each entry is ONE playful TOY-WORLD scene in the spirit of ToyBot — the bubble-bot among OTHER toys on real-world surfaces and handcrafted sets (claymation villages, army-men, hot-wheels cities, plush picnics, model trains, tabletop minis) — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, captured mid-moment. Describe ONLY the world/toy-scene (other toys are scenery + companions).
+  ✅ "a hot-wheels die-cast city on a real bedroom floor, orange track loops, tiny cars mid-race, building-block towers rising around"
+  ✅ "a claymation thumb-printed clay village on a tabletop, sculpted clay cottages + rolling clay hills, warm lamp-glow from doorways"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep playful + cute + cozy. ≤22 words.`,
+    instructions: `Generate NEW toy-world scenes across families — terse 12-22 word fragments, a toy-scene on a real/handcrafted set + companion toys + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'TOYS ON A DESK / RUG — building-block towers + scattered toys on a sunny desk or living-room rug, soft warm task-light',
+      'CLAYMATION VILLAGES — thumb-printed clay cottages, sculpted clay hills + trees, visible fingerprint texture, lamp-glow',
+      'ARMY-MEN ADVENTURES (cute) — friendly olive-green plastic soldiers on a pillow-fort battlefield, no menace, playful standoff',
+      'HOT-WHEELS CITIES — orange die-cast track loops on a real floor, tiny cars mid-race, block-tower skyline, dust-puff charm',
+      'PLUSH PICNICS — oversized soft plush friends on a checkered blanket, felt food, button-eyes, cozy sunny meadow set',
+      'MODEL-TRAIN WORLDS — a tiny locomotive on twin rails through a model-scenery landscape, little stations, painted hills',
+      'TABLETOP-MINI DUNGEONS — painted fantasy minis on a flocked terrain board, tiny dungeon tiles, treasure, soft lamp-light',
+    ],
+  },
+
+  bubble_world_yumbot: {
+    label: 'yumbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE kawaii FOOD / candy world in the spirit of YumBot — sugar-rush candy lands, lollipop forests, food-festival stalls, dessert tea-parties, giant food-vessels, with smiling kawaii food-friends as scenery — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Sweet, soft, pastel candy scale. Describe ONLY the world.
+  ✅ "a candy-land of frosted-cake mountains and lollipop trees, gumdrop bushes, a chocolate river winding under cotton-candy clouds"
+  ✅ "a giant glass cookie-jar world where smiling kawaii treats perch on tiered stands, warm golden light pooling inside the curved glass"
+
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep sweet + cute + wholesome. ≤22 words.`,
+    instructions: `Generate NEW kawaii-food / candy worlds across families — terse 12-22 word fragments, candy/food place + smiling-food friends + depth cue, glossy-dreamy. World ONLY.`,
+    subThemes: [
+      'CANDY MOUNTAINS / SUGAR-RUSH — frosted-cake mountains, gumdrop hills, candy-cane bridges, soda seas, cotton-candy skies',
+      'LOLLIPOP FORESTS — swirled lollipop trees, peppermint-trunk groves, gummy-vine canopies, sprinkle-dusted paths',
+      'FOOD-FESTIVAL STALLS — kawaii food-stall markets, paper-lantern glow, smiling food-friends at counters, festival banners',
+      'DESSERT TEA-PARTIES — tiered dessert stands, teacup ponds, macaron stepping-stones, smiling cake-friends gathered',
+      'GIANT FOOD-VESSELS — a colossal teacup or cookie-jar world, ramen-bowl lagoons, donut archways, warm interior glow',
+      'ICE-CREAM / SODA SEAS — swirled ice-cream mountains, fizzing soda oceans, whipped-cream cloud islands, cherry suns',
+      'KAWAII FOOD-FRIEND GATHERINGS — meadows of smiling fruit + dessert friends in a circle, picnic of tiny treats, soft watercolor light',
+    ],
+  },
 };
 
 if (!POOL || !POOL_RECIPES[POOL]) {

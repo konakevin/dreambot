@@ -42,6 +42,21 @@ module.exports = {
   BUBBLE_WORLD_EARTHBOT: load('bubble_world_earthbot'),
   BUBBLE_WORLD_BRICKBOT: load('bubble_world_brickbot'),
   BUBBLE_WORLD_DRAGONBOT: load('bubble_world_dragonbot'),
+  BUBBLE_WORLD_BLOOMBOT: load('bubble_world_bloombot'),
+  BUBBLE_WORLD_CHIBIBOT: load('bubble_world_chibibot'),
+  BUBBLE_WORLD_DINOBOT: load('bubble_world_dinobot'),
+  BUBBLE_WORLD_FAEBOT: load('bubble_world_faebot'),
+  BUBBLE_WORLD_GOTHBOT: load('bubble_world_gothbot'),
+  BUBBLE_WORLD_MANGABOT: load('bubble_world_mangabot'),
+  BUBBLE_WORLD_MECHBOT: load('bubble_world_mechbot'),
+  BUBBLE_WORLD_OCEANBOT: load('bubble_world_oceanbot'),
+  BUBBLE_WORLD_PIXELBOT: load('bubble_world_pixelbot'),
+  BUBBLE_WORLD_RETROBOT: load('bubble_world_retrobot'),
+  BUBBLE_WORLD_STARBOT: load('bubble_world_starbot'),
+  BUBBLE_WORLD_STEAMBOT: load('bubble_world_steambot'),
+  BUBBLE_WORLD_TINYBOT: load('bubble_world_tinybot'),
+  BUBBLE_WORLD_TOYBOT: load('bubble_world_toybot'),
+  BUBBLE_WORLD_YUMBOT: load('bubble_world_yumbot'),
   // Bot-wide "look register" (2026-06-07) — 12 cute film/storybook rendering
   // styles rolled per render via rollSharedDNA on look-enabled paths, so the
   // same path renders in a different animation look each time (Pixar / Disney
