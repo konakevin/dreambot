@@ -184,13 +184,29 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
         '✨ All eligible users already have a nightly job today — nothing new to enqueue.'
       );
     } else {
-      // upsert + ignoreDuplicates (audit L8): a single dedup_key collision (a
-      // concurrent run, or a manual run racing the cron) is silently skipped
-      // instead of failing the ENTIRE batch and enqueuing nobody after it.
-      const { data: inserted, error: insErr } = await sb
+      // Resilient enqueue. PREFER the upsert (audit L8): a dedup_key collision (a
+      // concurrent run / manual run racing the cron) is silently skipped instead
+      // of failing the ENTIRE batch and enqueuing nobody after it. This needs
+      // dedup_key to be a NON-PARTIAL unique index so PostgREST's onConflict can
+      // infer it (migration 259). If that index isn't present yet (42P10 — the bug
+      // that crashed the cron 2026-06-12, when only the PARTIAL idx_dream_queue_dedup
+      // from migration 192 existed), FALL BACK to a plain insert: the pre-filter
+      // above already gives per-user-per-day idempotency, so the batch is correct
+      // either way and the cron can never crash on this regardless of migration state.
+      let inserted, insErr;
+      ({ data: inserted, error: insErr } = await sb
         .from('dream_queue')
         .upsert(newRows, { onConflict: 'dedup_key', ignoreDuplicates: true })
-        .select('id');
+        .select('id'));
+      if (insErr && /on conflict|no unique or exclusion|42P10/i.test(insErr.message)) {
+        console.warn(
+          `⚠️  upsert onConflict not supported (apply migration 259); falling back to plain insert: ${insErr.message}`
+        );
+        ({ data: inserted, error: insErr } = await sb
+          .from('dream_queue')
+          .insert(newRows)
+          .select('id'));
+      }
       if (insErr) {
         console.error('Enqueue failed:', insErr.message);
         process.exit(1);
