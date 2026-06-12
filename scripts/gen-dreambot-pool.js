@@ -495,20 +495,20 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
   bubble_world_starbot: {
     label: 'starbot world',
     maxWords: 22,
-    theme: `Each entry is ONE epic deep-space / alien world in the spirit of StarBot — crystal canyons, bioluminescent tide pools, ringed-giant skies, spore forests, nebula vistas, space-opera orbitals — written as a DreamBot wallpaper WORLD in the glossy-dreamy register. Impossible cosmic scale so a small bubble-bot reads tiny. Describe ONLY the world.
-  ✅ "twin suns igniting a canyon of 200-meter resonant quartz spires, three moons catching pink-blue light, wind-carved hollows"
-  ✅ "a colossal ringed gas-giant filling half the sky over an obsidian plain, drifting moons, soft star-dusted violet space beyond"
+    theme: `Each entry is ONE epic ALIEN / deep-space world in the spirit of StarBot — and a GRAND COSMIC STRUCTURE must DOMINATE every seed (a soft nebula sky alone reads generic — there must be a towering/colossal structural HERO): a colossal RINGED GAS-GIANT filling half the sky, a canyon of 200-meter glowing CRYSTAL SPIRES, giant glowing SPORE-TOWERS, a hexagonal BASALT-COLUMN flat, a vast SPACE-STATION RING, an alien MEGASTRUCTURE. Nebulae/starfields are BACKDROP only. Written as a DreamBot wallpaper WORLD in the glossy-dreamy register, awe-scale so a small bubble-bot reads tiny. Describe ONLY the world.
+  ✅ "a colossal ringed gas-giant filling half the sky over an obsidian plain, drifting moons, towering crystal needle-spires below"
+  ✅ "a canyon of 200-meter glowing quartz spires under twin suns, three moons above, prism-light refracting across the chasm"
 
-🚫 BANS: NO bubble-bot detail (separate axis). NO humans. Keep wondrous + awe-scale. ≤22 words.`,
-    instructions: `Generate NEW cosmic / alien worlds across families — terse 12-22 word fragments, awe-scale cosmic place + signature feature + depth cue, glossy-dreamy. World ONLY.`,
+🚫 BANS: NO bubble-bot detail (separate axis). NO humans. NEVER just a soft nebula sky over clouds (too generic) — a colossal STRUCTURE must dominate. ≤22 words.`,
+    instructions: `Generate NEW alien/space worlds — terse 12-22 word fragments, each with a COLOSSAL structural HERO (ringed-giant / crystal spires / spore-towers / megastructure) dominating + cosmic backdrop + depth cue, glossy-dreamy. World ONLY.`,
     subThemes: [
-      'CRYSTAL CANYONS — towering resonant quartz spires, prism-refracting twin-sun light, three moons, wind-carved hollows',
-      'BIOLUMINESCENT TIDE POOLS — obsidian-rimmed glowing pools green-to-violet, phosphorescent alien fauna, soft cosmic dusk',
-      'RINGED-GIANT SKIES — a colossal ringed gas-giant over an alien plain, drifting moons, banded ochre-cream skies',
-      'SPORE FORESTS — 500-meter glowing fungal towers refracting amber light, violet mycelial mats, spores drifting like snow',
-      'NEBULA VISTAS — rose-and-lavender nebula clouds, infant-star clusters, comet arcs with tri-color tails, deep starfields',
-      'ALIEN GLASS FLATS — hexagonal basalt columns, mirror-still methane seas, geometric crystalline plateaus under twin suns',
-      'SPACE-OPERA ORBITALS — gentle drifting starships, glowing ring-habitats, station domes, a pastel planet + nebula backdrop',
+      'RINGED-GIANT SKIES — a colossal ringed gas-giant filling half the sky, drifting moons, banded ochre skies, alien spires below',
+      'CRYSTAL SPIRE CANYONS — towering 200-meter resonant quartz spires, twin-sun prism-light, three moons, deep refracting chasm',
+      'SPORE-TOWER FORESTS — 500-meter glowing fungal towers refracting amber light, violet mycelial mats, drifting spores, alien canopy',
+      'ALIEN MEGASTRUCTURES — a vast space-station ring curving overhead, a dyson-arc, glowing orbital habitats, a colossal hull rising',
+      'BASALT-COLUMN GLASS FLATS — hexagonal basalt-column plateaus, mirror-still methane seas, geometric crystalline mesas under twin suns',
+      'CRYSTALLINE COMET / AURORA OVER STRUCTURE — a tri-tail comet or aurora-cyclone above a towering crystal/spire landscape, deep starfield',
+      'ALIEN DESERT + RINGED MOONS — vast alien dunes under multiple ringed moons, distant crystal mesa-spires, a colossal planet on the horizon',
     ],
   },
 
