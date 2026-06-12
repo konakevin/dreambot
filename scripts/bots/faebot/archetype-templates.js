@@ -510,6 +510,264 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELDER MID-ACT — open with the bearded male elder and the STORY BEAT he is in the middle of (and any creature he tends), so the narrative reads instantly. Preserve his features (a bearded man, covered torso, the features his entry specifies). Then framing. Then his expression. Then domain. Then adornment. Then lighting + weather. Then magical flavor.${foreground_anchor ? ' Then foreground anchor.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  FAEBOT_FEMALE_DRUID: ({ slots, sharedDNA, vibeDirective }) => {
+    const { character, backdrop, lighting, companion } = slots;
+
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single spirit-animal sharing the moment) ━━━\n${companion}\n\nWoven naturally beside her — a loyal spirit-animal, never a competing focal subject. The eye lands on HER first.`
+      : '';
+
+    return `You are writing ONE Flux prompt for an INTIMATE PORTRAIT of a FEMALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described.
+
+1. THE SUBJECT IS A FEMALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. SHE is unmistakably a striking female elf: long pointed ears, glowing/luminous eyes, otherworldly elven skin, vivid hair, nature war-paint. Use SHE / HER throughout. NOT a gentle fairy, NOT a tiny pixie, NOT a tree-spirit — a powerful elven druid.
+
+2. Render her EXACTLY as the character entry describes — her lineage skin-tone, glowing eyes, hair, war-paint, her leaf-and-gold ARMOR, her druidic STAFF/weapon, and her nature-magic. 5+ stacked features must land. Her TORSO IS COVERED (leaf-motif cuirass / breastplate / tabard) — capable and tasteful, NEVER cheesecake, NEVER chainmail-bikini, NEVER cleavage-as-focus, NEVER sultry/seductive.
+
+3. INTIMATE POSED FRAMING — a half-body or bust portrait (head, shoulders, upper body, her staff visible), she carries herself with poise and quiet power, a slight three-quarter turn, a confident or watchful gaze. Beautiful, magical, composed. NOT a stiff ID-photo, NOT a sexualized pin-up pose.
+
+Open your prompt with the female elf druid. She opens; everything else is HER FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE DRUID (the subject — render HER exactly as described) ━━━
+${character}
+
+Preserve every feature unmistakably — lineage skin & glowing eyes, hair, war-paint, leaf-and-gold covered armor, her staff/weapon, her nature-magic. A capable warrior-mage, mythic-elf beauty, NOT a human pin-up.
+
+━━━ 2. POSE + EXPRESSION (intimate, poised, powerful) ━━━
+A composed half-body/bust pose — a slight three-quarter turn, her staff or a curl of nature-magic visible, a confident, watchful, or serene expression. Quiet power and poise. NEVER a sultry/seductive pose, NEVER eye-contact-as-come-on; she can meet or avert the gaze with calm command.
+
+━━━ 3. FOREST BACKDROP (softly out-of-focus behind her) ━━━
+${backdrop}
+
+A deep enchanted forest softly behind her — atmospheric haze sells the depth; never let the backdrop compete with her presence.
+
+━━━ 4. LIGHTING (portrait light + time of day) ━━━
+${lighting}
+
+⚑ Let this rolled lighting / time-of-day lead the mood and color — moonlit blue-teal night, twilight, dawn or soft day all work; keep her beautifully lit and readable.
+${companionSection}
+
+━━━ AMBIENT MOOD ━━━
+Palette + mood match the rolled time of day. ${vibeDirective.slice(0, 90)}
+
+━━━ STYLE REGISTER (painted-fantasy lineage) ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI, NOT digital-polished. Gallery-tier painted character illustration.
+
+━━━ HARD BANS ━━━
+- NO cheesecake / NO chainmail-bikini / NO battle-bra / NO cleavage-as-focus / NO plunging neckline / NO bare-thigh pin-up / NO bondage-harness / NO sultry / sensual / seductive / alluring framing (she is COVERED & capable; tasteful bare arms/shoulders are fine)
+- NO tiny-fairy / NO pixie-wings / NO gentle-fae register, NO tree-spirit / NO bark-skin (she is an ELF, not a plant-spirit)
+- NO modern objects, NO additional human figures, NO gore / menace / grim mood
+- NO artist name-drops, NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE FEMALE ELF DRUID — her lineage features, war-paint, covered leaf-and-gold armor, staff and nature-magic. Then her poised pose + expression. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then her spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
+  FAEBOT_FEMALE_DRUID_ADVENTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      character,
+      adventure_setting,
+      adventure_action,
+      adventure_composition,
+      druid_magic,
+      lighting,
+      companion,
+    } = slots;
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single spirit-animal with her) ━━━\n${companion}\n\nWoven naturally into the scene at her side — never a competing focal subject.`
+      : '';
+    return `You are writing ONE Flux prompt for a FULL-SCENE ADVENTURE render of a FEMALE ELF DRUID — the forest's defender out in the wild — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — FIRST visual elements.
+
+1. THE SUBJECT IS A FEMALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE out adventuring in the wild. SHE is unmistakably a striking female elf: long pointed ears, glowing eyes, otherworldly elven skin, vivid hair, nature war-paint, leaf-and-gold COVERED armor, a druidic staff. Use SHE / HER. NOT a gentle fairy, NOT a tree-spirit.
+
+2. THIS IS A CANDID ACTION SCENE, NOT A PORTRAIT, NOT A POSE. FRONT-LOAD what she is DOING (the rolled action) in her wild setting. She is a FULL or 3/4 figure IN the environment (~30-50% of frame) — exploring, traversing, surveying, resting in the wild. Caught candidly, NEVER posing for camera, NEVER a sexualized pose.
+
+3. Her TORSO IS COVERED (leaf-motif cuirass / breastplate / tabard) — capable & tasteful, NEVER cheesecake, NEVER chainmail-bikini, NEVER cleavage-as-focus, NEVER sultry.
+
+Open with the druid mid-action in her setting.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE DRUID (render HER exactly as described) ━━━
+${character}
+
+Preserve her lineage skin & glowing eyes, hair, war-paint, COVERED leaf-and-gold armor, staff/weapon. A capable warrior-mage, mythic-elf beauty, NOT a pin-up.
+
+━━━ 2. ACTION (what she is DOING — front-load this) ━━━
+${adventure_action}
+
+The candid captured moment — caught-in-the-act, never posing.
+
+━━━ 3. SETTING (the wild place around her) ━━━
+${adventure_setting}
+
+Her environment, rich and atmospheric, with real depth. If the action names its own venue (creek / ledge), that wins.
+
+━━━ 4. COMPOSITION (the shot) ━━━
+${adventure_composition}
+
+Full or 3/4 figure in the scene (~30-50% of frame). Cinematic, dynamic — NOT a tight portrait.
+
+━━━ 5. NATURE-MAGIC (her visible magic, where it fits the action) ━━━
+${druid_magic}
+
+━━━ 6. LIGHTING (time of day) ━━━
+${lighting}
+
+⚑ Let the rolled lighting / time-of-day lead the mood — moonlit night, twilight, dawn, soft day all work.
+${companionSection}
+
+━━━ AMBIENT MOOD ━━━
+${vibeDirective.slice(0, 90)}
+
+━━━ STYLE REGISTER ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI. Gallery-tier painted illustration.
+
+━━━ HARD BANS ━━━
+- NO cheesecake / chainmail-bikini / battle-bra / cleavage-as-focus / plunging / bare-thigh pin-up / bondage / sultry / seductive (COVERED & capable; tasteful bare arms/shoulders OK)
+- NO tiny-fairy / pixie-wings / gentle-fae register, NO tree-spirit / bark-skin (she is an ELF)
+- NO tight portrait / NO posing-for-camera (this is a candid full SCENE)
+- NO modern objects, NO additional human figures, NO gore / menace
+- NO artist name-drops, NO smooth illustration / airbrushed / modern-anime / Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE DRUID MID-ACTION in her wild setting (full/3-4 figure). Then her covered armor + features. Then the setting depth. Then composition. Then her nature-magic. Then lighting.${companion ? ' Then her companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
+  FAEBOT_MALE_DRUID: ({ slots, sharedDNA, vibeDirective }) => {
+    const { character, backdrop, lighting, companion } = slots;
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single spirit-animal sharing the moment) ━━━\n${companion}\n\nWoven naturally beside him — never a competing focal subject. The eye lands on HIM first.`
+      : '';
+    return `You are writing ONE Flux prompt for an INTIMATE PORTRAIT of a MALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — FIRST visual elements.
+
+1. THE SUBJECT IS A MALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. HE is unmistakably a striking male elf: long pointed ears, glowing eyes, otherworldly elven skin, vivid hair (optionally a short trimmed beard), nature war-paint. Use HE / HIS. NEVER a woman, NEVER feminine, NEVER androgynous. NOT a gentle fairy, NOT a tree-spirit.
+
+2. Render him EXACTLY as the character entry describes — lineage skin-tone, glowing eyes, hair, war-paint, leaf-and-gold ARMOR, druidic STAFF, nature-magic. His CHEST IS COVERED (named armor piece) — NEVER shirtless, NEVER bare-chested, NEVER oiled/sculpted/muscular-pecs. Describe skin on the FACE only.
+
+3. INTIMATE POSED FRAMING — a half-body or bust portrait (head, shoulders, upper body, staff visible), poise and quiet power, a slight three-quarter turn, a confident or watchful gaze. NOT a stiff ID-photo, NOT a beefcake glamour pose.
+
+Open with the male elf druid. He opens; everything else is HIS FRAME.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE DRUID (render HIM exactly as described, MALE) ━━━
+${character}
+
+Preserve lineage skin & glowing eyes, hair, war-paint, COVERED leaf-and-gold armor, staff, nature-magic. A capable warrior-mage, mythic-elf, NOT a beefcake. Chest covered, skin described on the FACE only.
+
+━━━ 2. POSE + EXPRESSION (intimate, poised, powerful) ━━━
+A composed half-body/bust pose — slight three-quarter turn, staff or a curl of nature-magic visible, a confident, watchful, or serene expression. Quiet power. NEVER a smoldering/glamour pose, NEVER shirtless.
+
+━━━ 3. FOREST BACKDROP (softly out-of-focus behind him) ━━━
+${backdrop}
+
+A deep enchanted forest softly behind him — atmospheric haze sells depth; never let it compete with his presence.
+
+━━━ 4. LIGHTING (portrait light + time of day) ━━━
+${lighting}
+
+⚑ Let the rolled lighting / time-of-day lead the mood — moonlit, twilight, dawn or soft day all work.
+${companionSection}
+
+━━━ AMBIENT MOOD ━━━
+${vibeDirective.slice(0, 90)}
+
+━━━ STYLE REGISTER ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI. Gallery-tier painted character illustration.
+
+━━━ HARD BANS ━━━
+- NO shirtless / bare-chested / oiled / sculpted / chiseled / muscular-pecs / loincloth (chest ALWAYS covered; describe skin on the FACE only)
+- NO woman / feminine / androgynous (this is a MALE elf)
+- NO tiny-fairy / pixie / gentle-fae register, NO tree-spirit / bark-skin (he is an ELF)
+- NO modern objects, NO additional human figures, NO gore / menace
+- NO artist name-drops, NO smooth illustration / airbrushed / modern-anime / Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELF DRUID — lineage features, war-paint, COVERED leaf-and-gold armor, staff, nature-magic. Then his poised pose + expression. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then his spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
+  FAEBOT_MALE_DRUID_ADVENTURE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      character,
+      adventure_setting,
+      adventure_action,
+      adventure_composition,
+      druid_magic,
+      lighting,
+      companion,
+    } = slots;
+    const companionSection = companion
+      ? `\n\n━━━ COMPANION (a single spirit-animal with him) ━━━\n${companion}\n\nWoven naturally into the scene at his side — never a competing focal subject.`
+      : '';
+    return `You are writing ONE Flux prompt for a FULL-SCENE ADVENTURE render of a MALE ELF DRUID — the forest's defender out in the wild — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATE — FIRST visual elements.
+
+1. THE SUBJECT IS A MALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE out adventuring. HE is unmistakably a striking male elf: long pointed ears, glowing eyes, otherworldly elven skin, vivid hair (optionally short beard), nature war-paint, leaf-and-gold COVERED armor, a druidic staff. Use HE / HIS. NEVER feminine. NOT a tree-spirit.
+
+2. THIS IS A CANDID ACTION SCENE, NOT A PORTRAIT. FRONT-LOAD what he is DOING (the rolled action) in his wild setting. He is a FULL or 3/4 figure IN the environment (~30-50% of frame) — exploring, traversing, surveying, resting. Caught candidly, NEVER posing.
+
+3. His CHEST IS COVERED (named armor piece) — NEVER shirtless, NEVER bare-chested, NEVER oiled/sculpted/muscular-pecs. Skin on the FACE only.
+
+Open with the druid mid-action in his setting.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE DRUID (render HIM exactly as described, MALE) ━━━
+${character}
+
+Lineage skin & glowing eyes, hair, war-paint, COVERED leaf-and-gold armor, staff. A capable warrior-mage. Chest covered, skin on the FACE only.
+
+━━━ 2. ACTION (what he is DOING — front-load this) ━━━
+${adventure_action}
+
+The candid captured moment — caught-in-the-act, never posing.
+
+━━━ 3. SETTING (the wild place around him) ━━━
+${adventure_setting}
+
+His environment, rich and atmospheric, with depth. If the action names its own venue, that wins.
+
+━━━ 4. COMPOSITION (the shot) ━━━
+${adventure_composition}
+
+Full or 3/4 figure in the scene (~30-50% of frame). Cinematic, dynamic — NOT a tight portrait.
+
+━━━ 5. NATURE-MAGIC (where it fits the action) ━━━
+${druid_magic}
+
+━━━ 6. LIGHTING (time of day) ━━━
+${lighting}
+
+⚑ Let the rolled lighting / time-of-day lead the mood.
+${companionSection}
+
+━━━ AMBIENT MOOD ━━━
+${vibeDirective.slice(0, 90)}
+
+━━━ STYLE REGISTER ━━━
+Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy concept-art lineage. NOT photoreal, NOT ink-outlined, NOT animation, NOT CGI. Gallery-tier painted illustration.
+
+━━━ HARD BANS ━━━
+- NO shirtless / bare-chested / oiled / sculpted / muscular-pecs / loincloth (chest ALWAYS covered; skin on the FACE only)
+- NO woman / feminine / androgynous (MALE elf)
+- NO tiny-fairy / pixie / gentle-fae, NO tree-spirit / bark-skin (he is an ELF)
+- NO tight portrait / NO posing-for-camera (candid full SCENE)
+- NO modern objects, NO additional human figures, NO gore / menace
+- NO artist name-drops, NO smooth illustration / airbrushed / modern-anime / Pixar-3D
+
+━━━ OUTPUT ━━━
+Write 80-110 words, comma-separated phrases. LEAD WITH THE DRUID MID-ACTION in his wild setting (full/3-4 figure). Then his COVERED armor + features. Then setting depth. Then composition. Then nature-magic. Then lighting.${companion ? ' Then his companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+  },
+
   FAEBOT_FAE_VILLAGE_AXIS: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       dwelling_type,
@@ -625,7 +883,8 @@ Write 100-130 words, comma-separated phrases. OPEN WITH THE DWELLING + LAYOUT WO
   },
 
   FAEBOT_NATURAL_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } = slots;
+    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } =
+      slots;
 
     const dramaSection = drama
       ? `
@@ -675,7 +934,8 @@ Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no
   },
 
   FAEBOT_WILDS_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } = slots;
+    const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } =
+      slots;
 
     const dramaSection = drama
       ? `
@@ -825,7 +1085,8 @@ Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no
   },
 
   FAEBOT_FAE_COURT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { fae_subject, enchanted_setting, ethereal_detail, surprise, fae_lighting, drama } = slots;
+    const { fae_subject, enchanted_setting, ethereal_detail, surprise, fae_lighting, drama } =
+      slots;
 
     const dramaSection = drama
       ? `

@@ -133,6 +133,76 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_FEMALE_DRUID: {
+    description:
+      "PATH-BESPOKE — FaeBot female-druid INTIMATE (2026-06-11, MVP). The forest's DEFENDER — a female ELF nature-warrior-mage (night-elf / wood-elf / high-elf / blood-elf / dusk-elf / LOTR-silvan lineages via subThemes). Capable, agile, magical, stylish — distinct from gentle faes + ancient bark elders. Intimate posed half-body/bust register (the counterpart to dryad-portrait but a warrior-mage, not a tree-spirit). Lean-COVERED tasteful armor (no cheesecake). MVP wiring reuses dryad backdrop + lighting; bespoke druid scene axes come after the character look is approved. Companion (spirit-animal) 40%-gated.",
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['character', 'backdrop', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_FEMALE_DRUID_ADVENTURE: {
+    description:
+      'PATH-BESPOKE — FaeBot female-druid-adventure (2026-06-11). The ADVENTURE/candid sibling of female-druid: the elf druid OUT IN THE WORLD — exploring the forest, at a creek/lake edge, surveying from a ledge over the canopy. Full-scene, full/3-4-body figure in environment (NOT a tight portrait), candid action front-loaded. Shares the female_druid character pool + druid_magic + companion. Lean-covered. 6 axes + companion (40%-gated): character / adventure_setting / adventure_action / adventure_composition / druid_magic / lighting + companion.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'character',
+        'adventure_setting',
+        'adventure_action',
+        'adventure_composition',
+        'druid_magic',
+        'lighting',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_MALE_DRUID: {
+    description:
+      'PATH-BESPOKE — FaeBot male-druid INTIMATE (2026-06-11). Male counterpart to female-druid: a male ELF nature-warrior-mage (same lineages via subThemes). HARD GENDER-LOCK (he/his). Intimate posed half-body/bust register. Male NSFW guard: chest ALWAYS named-covered, FACE-only skin (anti-beefcake). MVP reuses dryad backdrop + lighting. Companion 40%-gated.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['character', 'backdrop', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_MALE_DRUID_ADVENTURE: {
+    description:
+      'PATH-BESPOKE — FaeBot male-druid-adventure (2026-06-11). ADVENTURE/candid sibling of male-druid: the male elf druid out exploring (forest path / creek / ledge vista). Full-scene candid. HARD GENDER-LOCK (he/his) + male NSFW guard (chest covered). Shares male_druid character + the gender-neutral adventure axes + druid_magic + companion. 6 axes + companion (40%-gated): character / adventure_setting / adventure_action / adventure_composition / druid_magic / lighting + companion.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'character',
+        'adventure_setting',
+        'adventure_action',
+        'adventure_composition',
+        'druid_magic',
+        'lighting',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_FAE_VILLAGE_AXIS: {
     description:
       'PATH-BESPOKE — FaeBot fae-village (2026-05-21 axis-system migration). One of FaeBot most popular paths. Enchanted fae dwellings grown from forest (acorn / eggshell / mushroom / treehouse / hollow-trunk / bramble-nest / stone-ruin-overgrown / cliff-ledge / spider-silk-hammock / etc.) as primary subject (40-55% of frame). Amber-glowing windows + chimney smoke + lanterns + lush wildflower carpet + critters bring scene to life. 12 axes (11 always-on + 1 gated water_or_feature): dwelling_type / village_layout / lived_in_signs / approach_pathway / dwelling_garden / forest_setting / lighting / atmospheric_depth / wildlife_lived_in / floral_carpet / foreground_anchor + water_or_feature (40%-gated). village_layout covers 9 legacy layout types (SINGLE / PAIR / CLUSTER / CANOPY-NETWORK / VERTICAL-STACK / OVER-WATER / CLIFF-LEDGE / FAIRY-RING-COURTYARD / HANGING-INVERTED) and reconciles with dwelling_type via Sonnet composition.',

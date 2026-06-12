@@ -147,6 +147,15 @@ module.exports = {
   FAEBOT_FOREST_ELDER_WEATHER: loadIfExists('faebot_forest_elder_weather'),
   FAEBOT_FOREST_ELDER_MAGICAL: loadIfExists('faebot_forest_elder_magical'),
   FAEBOT_FOREST_ELDER_FOREGROUND: loadIfExists('faebot_forest_elder_foreground'),
+
+  // ─── druid paths (2026-06-11) — elven nature-warrior-mages (shared across the 4 druid paths) ───
+  FAEBOT_FEMALE_DRUID: loadIfExists('faebot_female_druid'),
+  FAEBOT_MALE_DRUID: loadIfExists('faebot_male_druid'),
+  FAEBOT_DRUID_COMPANION: loadIfExists('faebot_druid_companion'),
+  FAEBOT_DRUID_ADVENTURE_SETTING: loadIfExists('faebot_druid_adventure_setting'),
+  FAEBOT_DRUID_ADVENTURE_ACTION: loadIfExists('faebot_druid_adventure_action'),
+  FAEBOT_DRUID_ADVENTURE_COMPOSITION: loadIfExists('faebot_druid_adventure_composition'),
+  FAEBOT_DRUID_MAGIC: loadIfExists('faebot_druid_magic'),
   // ─── fae-village axis-system pools (2026-05-21 migration from legacy) ───
   FAEBOT_FAE_VILLAGE_DWELLING_TYPE: loadIfExists('faebot_fae_village_dwelling_type'),
   FAEBOT_FAE_VILLAGE_LAYOUT: loadIfExists('faebot_fae_village_layout'),
