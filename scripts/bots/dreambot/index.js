@@ -37,6 +37,10 @@ const pathBuilders = {
   'creature-world': require('./paths/creature-world'),
   'bubble-bot-dreams': require('./paths/bubble-bot-dreams'),
   'bubble-bot-dreams-warm': require('./paths/bubble-bot-dreams-warm'),
+  // Crossover paths — the bubble-bot visits other bots' worlds (glossy-dreamy).
+  'bubble-bot-dreams-earthbot': require('./paths/bubble-bot-dreams-earthbot'),
+  'bubble-bot-dreams-brickbot': require('./paths/bubble-bot-dreams-brickbot'),
+  'bubble-bot-dreams-dragonbot': require('./paths/bubble-bot-dreams-dragonbot'),
   'sleepy-naptime': require('./paths/sleepy-naptime'),
   'rainy-day-cozy': require('./paths/rainy-day-cozy'),
   'bath-time': require('./paths/bath-time'),
@@ -57,10 +61,20 @@ const pathBuilders = {
 // hearted chibibot_creature recipe). Drives mediumByPath routing + the
 // cleanMediumByModel skipPaths (so gpt-2/banana render WITH the look). Derived
 // so a new path is look-enabled by default — exclude one by name here.
+// All bubble-bot-dreams* paths (base + warm + crossovers) are NON-look paths:
+// locked to the glossy designer-vinyl medium, excluded from the look rotation.
 const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
-  (p) =>
-    p !== 'creature-world' && p !== 'bubble-bot-dreams' && p !== 'bubble-bot-dreams-warm'
+  (p) => p !== 'creature-world' && !p.startsWith('bubble-bot-dreams')
 );
+
+// Crossover paths (the bubble-bot in other bots' worlds). All share the
+// bubble-bot-dreams config (glossy-dreamy medium + flux-ultra + skip chaos/polish);
+// only their dream_world pool differs. Listed once here, spread into the maps below.
+const CROSSOVER_PATHS = [
+  'bubble-bot-dreams-earthbot',
+  'bubble-bot-dreams-brickbot',
+  'bubble-bot-dreams-dragonbot',
+];
 
 module.exports = {
   username: 'dreambot',
@@ -140,6 +154,8 @@ module.exports = {
     'bubble-bot-dreams': 'chibibot_render',
     // bubble-bot-dreams-warm: the R2 warmer designer-collectible medium.
     'bubble-bot-dreams-warm': 'dreambot_render_warm',
+    // crossover paths use the sharp glossy-dreamy medium (the R4 look).
+    ...Object.fromEntries(CROSSOVER_PATHS.map((p) => [p, 'chibibot_render'])),
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -215,7 +231,7 @@ module.exports = {
   // DreamBot's active paths. First path: bubble-bot-dreams (xerox-copied from
   // ChibiBot 2026-06-12). The rest of the ChibiBot machinery is inherited
   // (dormant) so future DreamBot paths are easy — only listed paths post.
-  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm'],
+  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -247,6 +263,9 @@ module.exports = {
     // Lock to pro-ultra (no gpt-2 bounce) — the glossy iridescent reference look.
     'bubble-bot-dreams': 'black-forest-labs/flux-1.1-pro-ultra',
     'bubble-bot-dreams-warm': 'black-forest-labs/flux-1.1-pro-ultra',
+    ...Object.fromEntries(
+      CROSSOVER_PATHS.map((p) => [p, 'black-forest-labs/flux-1.1-pro-ultra'])
+    ),
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -257,7 +276,7 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm'],
+    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -282,6 +301,7 @@ module.exports = {
       'bath-time',
       'bubble-bot-dreams',
       'bubble-bot-dreams-warm',
+      ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',
       'cozy-landscape',
@@ -393,8 +413,7 @@ module.exports = {
       medium === 'chibibot_render' &&
       path !== 'creature-world' &&
       path !== 'bath-time' &&
-      path !== 'bubble-bot-dreams' &&
-      path !== 'bubble-bot-dreams-warm'
+      !path.startsWith('bubble-bot-dreams')
     ) {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);

@@ -220,6 +220,73 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
 ✅ GOOD: "warm god-rays beaming through with a soft cinematic lens-bloom"`,
     instructions: `Generate NEW single-layer atmospheric touches in the dreamy register — each stands alone, could float in any world. 6-16 words, ONE line.`,
   },
+
+  // ════════════════ CROSSOVER WORLDS — the bubble-bot visits other bots ═══════
+  // Each = a themed dream_world pool (the bot's scenes), rendered in DreamBot's
+  // glossy-dreamy register. World-focused voice (no bot detail; the renderer
+  // places the bubble-bot small-to-medium). See DREAMBOT_CROSSOVER_PLAN.md.
+
+  bubble_world_earthbot: {
+    label: 'earthbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE breathtaking real-Earth NATURE landscape in the spirit of EarthBot — monumental, awe-scale natural places (epic peaks, turquoise atolls, glaciers, canyons, waterfalls, savannas, sea-cliffs) — written as a DreamBot wallpaper WORLD: soft, luminous, pastel-tinted, frame-worthy, with TOWERING / VAST natural scale so a small bubble-bot placed in it reads tiny. Describe ONLY the world (the bot is placed by the renderer). Keep it WHOLESOME + dreamy — gentle pastel-natural light, never gritty/documentary/harsh.
+
+⚠️ TERSE 12-22 word fragment: the natural place + its monumental-scale feature + a depth/horizon cue, then STOP.
+  ✅ "a vast snow-capped granite peak rising over a glacial valley, scattered boulders in the foreground, soft mist filling the depths"
+  ✅ "a white-sand atoll tideline, turquoise-to-cobalt lagoon stretching to a distant palm-fringed reef under a soft pastel sky"
+
+🚫 BANS: NO bubble-bot/character detail (separate axis). NO people, NO buildings or cities — wild untouched nature only. Keep pastel-dreamy. ≤22 words.`,
+    instructions: `Generate NEW epic Earth-nature worlds across the families — terse 12-22 word fragments, monumental natural feature + named elements + depth cue, pastel-dreamy. World ONLY.`,
+    subThemes: [
+      'ALPINE PEAKS — granite summits, snow-capped massifs, jagged ridgelines, glacial valleys, alpine mountain lakes, scree slopes',
+      'TROPICAL ATOLLS / BEACHES — turquoise lagoons, white-sand motus, coral reefs, palm-fringed coves, sandbars, sea-stacks',
+      'GLACIERS / ICE / POLAR — blue crevassed glaciers, ice caves, frozen fjords, aurora over snowfields, iceberg bays, drift-ice plains',
+      'CANYONS / DESERT ROCK — sandstone hoodoos, red-rock arches, slot canyons, mesa plateaus, painted-desert dunes, monument buttes',
+      'WATERFALLS / RIVERS / LAKES — plunging cascades, braided river deltas, mirror lakes, jungle streams over smooth stones, fjord waterfalls',
+      'SAVANNA / GRASSLAND / FOREST — golden-hour savanna, wildflower meadows, redwood groves, autumn-gold valleys, misty rainforest canopy',
+      'COASTAL CLIFFS / SEA — towering sea-cliffs, basalt columns, crashing-wave coves, tide pools, headland arches, lighthouse promontories',
+    ],
+  },
+
+  bubble_world_brickbot: {
+    label: 'brickbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE world BUILT ENTIRELY FROM LEGO BRICKS in the spirit of BrickBot — every structure, terrain, and prop is studded brick-built (color-blocked plastic bricks, visible studs + seams, minifig-scale, baseplate ground). Written as a DreamBot wallpaper WORLD in the glossy register: the whole scene is unmistakably LEGO. Describe ONLY the world (the bubble-bot is placed by the renderer). Cheerful + colorful.
+
+⚠️ Every entry MUST read as LEGO — use "brick-built / LEGO / studded / minifig / baseplate" so the scenery IS bricks. Terse 12-22 word fragment: the brick-built place + a signature build + a depth cue.
+  ✅ "a brick-built LEGO pirate galleon moored in a studded sapphire-baseplate harbor, palm-brick shore, minifig crew on deck"
+  ✅ "a brick-built LEGO castle courtyard of grey studded walls and pennant towers, minifig guards, a green-baseplate hill beyond"
+
+🚫 BANS: NO bubble-bot/character detail (separate axis). NO non-LEGO photoreal scenery — EVERYTHING is brick-built. Keep cheerful. ≤22 words.`,
+    instructions: `Generate NEW all-LEGO brick-built worlds across the families — terse 12-22 word fragments, every scene unmistakably studded-brick (say brick-built/LEGO/minifig) + a signature build + depth cue. World ONLY.`,
+    subThemes: [
+      'PIRATE — brick-built galleons, harbor docks, treasure coves, island lagoons, shipwreck reefs, fort ramparts',
+      'CASTLE / FANTASY — brick-built castles, wizard towers, dragon lairs, elven treetop villages, throne halls, siege walls',
+      'MODERN CITY / VEHICLES — brick-built city streets, train yards, harbors with cranes, race tracks, fire stations, skyscraper blocks',
+      'SPACE / SCI-FI — brick-built space docks, moon bases, rocket gantries, rover plains, alien-planet outposts',
+      'NATURE / ADVENTURE DIORAMA — brick-built jungle temples, arctic research bases, volcano labs, safari plains, mountain ski villages',
+    ],
+  },
+
+  bubble_world_dragonbot: {
+    label: 'dragonbot world',
+    maxWords: 22,
+    theme: `Each entry is ONE epic HIGH-FANTASY world in the spirit of DragonBot — painted-fantasy realms of castles, arcane libraries, floating sky-castles, elven cities, enchanted wilds, and FRIENDLY dragons — written as a DreamBot wallpaper WORLD in the glossy-dreamy register (soft luminous pastel, frame-worthy), with grand/towering scale so a small bubble-bot reads tiny. Describe ONLY the world. WHOLESOME + wondrous — any dragon is gentle/friendly, never menacing.
+
+⚠️ TERSE 12-22 word fragment: the fantasy place + a grand signature feature + a depth/light cue, then STOP.
+  ✅ "a vast castle great-hall with soaring arched windows over a misty valley, banners hanging, warm light shafts crossing the stone"
+  ✅ "a floating sky-castle terrace above an endless cloud-sea, stone sky-bridges arching to distant spires, sun breaking through"
+
+🚫 BANS: NO bubble-bot/character detail (separate axis). NO humans (the bubble-bot is the only character). Dragons gentle + friendly. NO gore/menace — wondrous, not grim. ≤22 words.`,
+    instructions: `Generate NEW high-fantasy worlds across the families — terse 12-22 word fragments, grand fantasy place + signature feature + depth/light cue, glossy-dreamy + wholesome. World ONLY.`,
+    subThemes: [
+      'CASTLES / FORTRESSES — great-halls, throne rooms, rampart courtyards, tower libraries, banner-hung corridors, drawbridge gates',
+      'ARCANE / MAGIC HALLS — vaulted spell-libraries with floating tomes + glowing orbs, alchemist sanctums, rune-circle chambers, crystal vaults',
+      'SKY-CASTLES / FLOATING REALMS — floating islands, cloud-sea terraces, stone sky-bridges, drifting spire-cities, aurora skies',
+      'ELVEN / ENCHANTED CITIES — luminous white-stone spires woven with living trees, glowing garden-bridges, waterfall palaces, moonlit courtyards',
+      'FANTASY WILDS + FRIENDLY DRAGONS — enchanted forests, glowing mushroom glades, a gentle dragon at a mountain roost, mossy ruins, crystal caverns',
+    ],
+  },
 };
 
 if (!POOL || !POOL_RECIPES[POOL]) {

@@ -37,6 +37,11 @@ module.exports = {
   BUBBLE_WORLD_DETAIL: load('bubble_world_detail'),
   BUBBLE_LIGHT_MOOD: load('bubble_light_mood'),
   BUBBLE_ATMOSPHERE: load('bubble_atmosphere'),
+  // Crossover worlds (2026-06-12) — the bubble-bot visits other bots' universes;
+  // each is a themed dream_world pool, same everything else (DREAMBOT_CROSSOVER_PLAN.md).
+  BUBBLE_WORLD_EARTHBOT: load('bubble_world_earthbot'),
+  BUBBLE_WORLD_BRICKBOT: load('bubble_world_brickbot'),
+  BUBBLE_WORLD_DRAGONBOT: load('bubble_world_dragonbot'),
   // Bot-wide "look register" (2026-06-07) — 12 cute film/storybook rendering
   // styles rolled per render via rollSharedDNA on look-enabled paths, so the
   // same path renders in a different animation look each time (Pixar / Disney
