@@ -9,6 +9,7 @@ import {
   getModelTier,
   MODEL_SPARKLE_COSTS,
 } from '@engine/modelPricing';
+import { IMAGE_MODELS, sparkleCostFrom } from '@/constants/imageModels';
 
 describe('getSparkleCost', () => {
   it('prices the default model (Flux 1.1 Pro) at 1', () => {
@@ -53,6 +54,26 @@ describe('getCostCents', () => {
   });
   it('falls back to the default for unknown models', () => {
     expect(getCostCents('totally-made-up/model')).toBe(5);
+  });
+});
+
+// L12: the cost the create screen DISPLAYS must equal the cost the server
+// CHARGES for the same model. The live path already shares image_models (the
+// client's useImageModels + the server's loadModelCosts both read it), and the
+// create screen always forces the selected model. This locks the OFFLINE
+// FALLBACK too: the client IMAGE_MODELS catalog must price every model the same
+// as the server MODEL_SPARKLE_COSTS, so a DB-unavailable render still charges
+// exactly what was shown.
+describe('client/server sparkle-cost parity (display == charge)', () => {
+  it('every client IMAGE_MODELS cost matches the server charge for that model', () => {
+    for (const m of IMAGE_MODELS) {
+      // client display cost (offline fallback) === server charged cost (offline fallback)
+      expect(getSparkleCost(m.id)).toBe(m.sparkleCost);
+      expect(sparkleCostFrom(IMAGE_MODELS, m.id)).toBe(m.sparkleCost);
+      if (m.id in MODEL_SPARKLE_COSTS) {
+        expect(MODEL_SPARKLE_COSTS[m.id]).toBe(m.sparkleCost);
+      }
+    }
   });
 });
 

@@ -54,6 +54,9 @@ const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
+// --force overrides the engine_config.nightly_enabled kill-switch (manual/QA).
+// A plain --max-jobs run no longer bypasses the pause (audit L10).
+const FORCE = args.includes('--force');
 const MAX_JOBS_ARG = args.find((_, i, a) => a[i - 1] === '--max-jobs');
 // Cost guardrail — cap the number of nightly jobs enqueued in one run. An explicit
 // --max-jobs wins; otherwise the default comes from engine_config.nightly_max_jobs
@@ -72,14 +75,22 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 (async () => {
   console.log('\n🌙 Nightly Dream Enqueue');
   const cfg = await fetchEngineConfig(sb);
-  // Master kill-switch — pause nightly enqueues from the dashboard without touching
-  // the cron. Explicit --max-jobs (a manual/QA run) bypasses the switch.
-  if (!cfg.nightlyEnabled && MAX_JOBS_OVERRIDE == null) {
-    console.log('⏸  Nightly disabled via engine_config.nightly_enabled — skipping enqueue.\n');
+  // Master kill-switch — pause nightly enqueues from the dashboard without
+  // touching the cron. Only --force overrides it (audit L10): a plain --max-jobs
+  // run no longer bypasses an admin pause.
+  if (!cfg.nightlyEnabled && !FORCE) {
+    console.log(
+      '⏸  Nightly disabled via engine_config.nightly_enabled — skipping enqueue (use --force to override).\n'
+    );
     return;
   }
-  const MAX_JOBS = MAX_JOBS_OVERRIDE != null ? MAX_JOBS_OVERRIDE : cfg.nightlyMaxJobs;
-  console.log(`   Max jobs: ${MAX_JOBS} | Dry run: ${DRY_RUN}\n`);
+  // nightly_max_jobs is a SAFETY CEILING (an alert threshold), NOT a per-night
+  // cap — every eligible user is enqueued and the queue/worker drain the backlog.
+  // An explicit --max-jobs is a HARD limit, used for manual/QA runs only.
+  const HARD_LIMIT = MAX_JOBS_OVERRIDE; // null on the normal cron path
+  console.log(
+    `   Ceiling: ${cfg.nightlyMaxJobs}${HARD_LIMIT != null ? ` | Hard limit: ${HARD_LIMIT}` : ''} | Dry run: ${DRY_RUN}\n`
+  );
 
   const today = new Date().toISOString().slice(0, 10); // UTC day
   const now = Date.now();
@@ -110,12 +121,27 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
   const basicCount = pool.filter(
     (u) => isBasicActive(u.users, now) && !isProActive(u.users, now, cfg.proTrialDays)
   ).length;
-  if (pool.length > MAX_JOBS) {
-    console.warn(`⚠️  ${pool.length} eligible exceeds MAX_JOBS=${MAX_JOBS} — capping this run.`);
-    pool = pool.slice(0, MAX_JOBS);
+  // ROBUSTNESS (audit M4): never silently drop eligible subscribers. On the
+  // normal cron path enqueue ALL of them — the queue + worker drain the backlog
+  // (FIFO, idempotent, retry/backoff). If the eligible population outgrows the
+  // configured ceiling, ALERT LOUDLY (so we scale worker throughput) instead of
+  // denying a paid perk to the tail.
+  if (HARD_LIMIT != null && pool.length > HARD_LIMIT) {
+    // Manual/QA run explicitly limited via --max-jobs.
+    console.warn(
+      `⚠️  --max-jobs=${HARD_LIMIT}: limiting this run to ${HARD_LIMIT} of ${pool.length} eligible.`
+    );
+    pool = pool.slice(0, HARD_LIMIT);
+  } else if (pool.length > cfg.nightlyMaxJobs) {
+    console.error(
+      `🚨 NIGHTLY CEILING EXCEEDED: ${pool.length} eligible users > nightly_max_jobs=${cfg.nightlyMaxJobs}. ` +
+        `Enqueueing ALL of them (the queue drains the backlog over the day), but the eligible population has ` +
+        `outgrown the ceiling — raise worker throughput (dream-queue-worker MAX_JOBS_PER_TICK) and/or ` +
+        `nightly_max_jobs, and watch dream-queue-monitor for backlog.`
+    );
   }
   console.log(
-    `Eligible users: ${eligibleCount} (${proCount} pro/trial + ${basicCount} basic)${eligibleCount !== pool.length ? ` (capped to ${pool.length})` : ''}`
+    `Eligible users: ${eligibleCount} (${proCount} pro/trial + ${basicCount} basic)${eligibleCount !== pool.length ? ` (limited to ${pool.length})` : ' — enqueueing all'}`
   );
 
   if (pool.length === 0) {
@@ -158,9 +184,12 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
         '✨ All eligible users already have a nightly job today — nothing new to enqueue.'
       );
     } else {
+      // upsert + ignoreDuplicates (audit L8): a single dedup_key collision (a
+      // concurrent run, or a manual run racing the cron) is silently skipped
+      // instead of failing the ENTIRE batch and enqueuing nobody after it.
       const { data: inserted, error: insErr } = await sb
         .from('dream_queue')
-        .insert(newRows)
+        .upsert(newRows, { onConflict: 'dedup_key', ignoreDuplicates: true })
         .select('id');
       if (insErr) {
         console.error('Enqueue failed:', insErr.message);

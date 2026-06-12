@@ -27,6 +27,15 @@ const {
   TRIAL_DURATION_DAYS,
 } = require('../../scripts/lib/nightlyEligibility');
 
+// The client TS source of truth, for the cross-runtime parity block below.
+import {
+  isProActive as tsIsProActive,
+  isPaidProActive as tsIsPaidProActive,
+  isTrialActive as tsIsTrialActive,
+  isBasicActive as tsIsBasicActive,
+  isDreamEligible as tsIsDreamEligible,
+} from '@/lib/proStatus';
+
 const NOW = Date.UTC(2026, 4, 26, 12, 0, 0);
 const days = (d: number) => new Date(NOW + d * 86_400_000).toISOString();
 
@@ -331,4 +340,52 @@ describe('nightlyEligibility — DreamBot Basic (the enqueue gate now includes B
     expect(isDreamEligible(u, NOW)).toBe(false);
     expect(isDreamEligible(u, NOW, 30)).toBe(true); // widened trial → eligible again
   });
+});
+
+// L11: the cron re-implements the Pro/Basic/trial rule in JS rather than calling
+// the SQL is_dream_eligible(). This locks the cron JS to the client TS source of
+// truth on a fixture battery; combined with isProActive.dbspec.ts (SQL === TS),
+// all THREE runtimes (client, cron, Postgres) are pinned to the same verdict.
+describe('nightlyEligibility ⇆ proStatus parity (cron JS === client TS)', () => {
+  const FIXTURES: [string, Record<string, unknown>][] = [
+    [
+      'paid active (future expiry)',
+      { pro_subscription: true, pro_subscription_expires_at: days(30) },
+    ],
+    ['paid expired', { pro_subscription: true, pro_subscription_expires_at: days(-1) }],
+    ['paid null-expiry', { pro_subscription: true, pro_subscription_expires_at: null }],
+    ['trial active (5d old)', { pro_trial_started_at: days(-5) }],
+    ['trial lapsed (20d old)', { pro_trial_started_at: days(-20) }],
+    ['basic active', { basic_subscription: true, basic_subscription_expires_at: days(30) }],
+    ['basic expired', { basic_subscription: true, basic_subscription_expires_at: days(-1) }],
+    [
+      'basic + lapsed trial',
+      {
+        basic_subscription: true,
+        basic_subscription_expires_at: days(30),
+        pro_trial_started_at: days(-40),
+      },
+    ],
+    [
+      'paid + lapsed trial',
+      {
+        pro_subscription: true,
+        pro_subscription_expires_at: days(30),
+        pro_trial_started_at: days(-40),
+      },
+    ],
+    ['nothing', {}],
+  ];
+
+  for (const trialDays of [7, 14, 30]) {
+    for (const [label, row] of FIXTURES) {
+      it(`${label} @ ${trialDays}d window agrees`, () => {
+        expect(isPaidProActive(row, NOW)).toBe(tsIsPaidProActive(row, NOW));
+        expect(isTrialActive(row, NOW, trialDays)).toBe(tsIsTrialActive(row, NOW, trialDays));
+        expect(isProActive(row, NOW, trialDays)).toBe(tsIsProActive(row, NOW, trialDays));
+        expect(isBasicActive(row, NOW)).toBe(tsIsBasicActive(row, NOW));
+        expect(isDreamEligible(row, NOW, trialDays)).toBe(tsIsDreamEligible(row, NOW, trialDays));
+      });
+    }
+  }
 });

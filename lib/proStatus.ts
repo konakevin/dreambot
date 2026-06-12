@@ -33,6 +33,20 @@ export interface EntitlementRow {
 export const TRIAL_DURATION_DAYS = 14;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+// Live trial window, updated from engine_config.pro_trial_days when the client
+// loads remote config (see hooks/useEngineConfig). Every `trialDays` param below
+// DEFAULTS to this, so the whole client honors the admin-tunable window without
+// threading it through each call site — matching the SQL is_pro_active() + the
+// nightly cron, both of which read pro_trial_days. Starts at the 14-day default
+// until config loads.
+let _configuredTrialDays = TRIAL_DURATION_DAYS;
+export function setConfiguredTrialDays(days: number): void {
+  if (Number.isFinite(days) && days > 0) _configuredTrialDays = Math.floor(days);
+}
+export function getConfiguredTrialDays(): number {
+  return _configuredTrialDays;
+}
+
 /** Active PAID subscription right now? (false for trial-only users.) */
 export function isPaidProActive(row: EntitlementRow | null, now: number = Date.now()): boolean {
   if (!row || !row.pro_subscription) return false;
@@ -44,7 +58,7 @@ export function isPaidProActive(row: EntitlementRow | null, now: number = Date.n
 /** Absolute moment the trial ends, or null if no trial was started. */
 export function trialEndsAt(
   row: EntitlementRow | null,
-  trialDays: number = TRIAL_DURATION_DAYS
+  trialDays: number = _configuredTrialDays
 ): string | null {
   if (!row || !row.pro_trial_started_at) return null;
   return new Date(new Date(row.pro_trial_started_at).getTime() + trialDays * DAY_MS).toISOString();
@@ -54,7 +68,7 @@ export function trialEndsAt(
 export function isTrialActive(
   row: EntitlementRow | null,
   now: number = Date.now(),
-  trialDays: number = TRIAL_DURATION_DAYS
+  trialDays: number = _configuredTrialDays
 ): boolean {
   const end = trialEndsAt(row, trialDays);
   return end != null && new Date(end).getTime() > now;
@@ -64,7 +78,7 @@ export function isTrialActive(
 export function isProActive(
   row: EntitlementRow | null,
   now: number = Date.now(),
-  trialDays: number = TRIAL_DURATION_DAYS
+  trialDays: number = _configuredTrialDays
 ): boolean {
   return isPaidProActive(row, now) || isTrialActive(row, now, trialDays);
 }
@@ -86,7 +100,7 @@ export function isBasicActive(row: EntitlementRow | null, now: number = Date.now
 export function isDreamEligible(
   row: EntitlementRow | null,
   now: number = Date.now(),
-  trialDays: number = TRIAL_DURATION_DAYS
+  trialDays: number = _configuredTrialDays
 ): boolean {
   return isProActive(row, now, trialDays) || isBasicActive(row, now);
 }

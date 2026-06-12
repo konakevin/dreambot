@@ -144,6 +144,19 @@ Deno.serve(async (req) => {
     }
     userId = user.id;
     vibe_profile = body.vibe_profile as VibeProfile | undefined;
+
+    // L7: the user-JWT path is the onboarding first-dream (and QA). Every new
+    // user is auto-enrolled in the trial at signup (migration 176 trigger), so a
+    // legitimate first dream is always dream-eligible. Gate on the same nightly
+    // eligibility so a lapsed/free user can't farm free (uncharged) renders by
+    // invoking this render function directly.
+    const { data: eligible } = await supabase.rpc('is_dream_eligible', { p_user_id: userId });
+    if (eligible === false) {
+      return new Response(JSON.stringify({ error: 'not_dream_eligible' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   }
 
   // Preserve explicit null — caller passes null to mean "force scene-only,
@@ -2000,7 +2013,7 @@ Output ONLY the prompt.`;
         )
         .then(
           () => {},
-          () => {}
+          (e: unknown) => console.error('[nightly-dreams] ai_generation_budget upsert failed:', e)
         ),
     ]);
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;

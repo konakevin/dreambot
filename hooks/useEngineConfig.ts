@@ -9,8 +9,10 @@
  * is harmless — the hook always returns a usable config.
  */
 
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { setConfiguredTrialDays } from '@/lib/proStatus';
 
 export interface EngineConfig {
   baseSparkleCost: number;
@@ -88,5 +90,12 @@ export function useEngineConfig(): EngineConfig {
     },
     staleTime: 5 * 60_000,
   });
-  return data ?? DEFAULT_ENGINE_CONFIG;
+  const cfg = data ?? DEFAULT_ENGINE_CONFIG;
+  // Keep the proStatus trial-window cache in sync with the admin config so the
+  // client's Pro/trial computation honors engine_config.pro_trial_days (M5),
+  // matching the SQL is_pro_active() + the nightly cron.
+  useEffect(() => {
+    setConfiguredTrialDays(cfg.proTrialDays);
+  }, [cfg.proTrialDays]);
+  return cfg;
 }

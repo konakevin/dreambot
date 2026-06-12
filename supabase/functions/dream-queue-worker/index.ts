@@ -119,9 +119,32 @@ Deno.serve(async (req) => {
           `[worker:${workerId}] Processing job ${job.id} source=${job.source} attempt=${job.attempt_count + 1}`
         );
         try {
-          let uploadId: string;
+          let uploadId: string | null;
           switch (job.source) {
-            case 'nightly':
+            case 'nightly': {
+              // Re-validate entitlement at render time. Eligibility was checked
+              // at enqueue (08:00 UTC), but a job can be claimed minutes-to-hours
+              // later (and retried for up to 2h on backoff), during which a trial
+              // can lapse or a subscription be cancelled/refunded. Don't burn a
+              // render on a user who is no longer Pro/Basic/in-trial. A null
+              // uploadId marks the job completed (no render, no retry).
+              const { data: stillEligible, error: eligErr } = await supabase.rpc(
+                'is_dream_eligible',
+                { p_user_id: job.user_id }
+              );
+              if (eligErr) {
+                console.error(
+                  `[worker:${workerId}] job ${job.id}: is_dream_eligible check failed:`,
+                  eligErr.message
+                );
+              }
+              if (stillEligible === false) {
+                console.log(
+                  `[worker:${workerId}] job ${job.id}: user ${job.user_id} no longer dream-eligible at render time — skipping`
+                );
+                uploadId = null;
+                break;
+              }
               uploadId = await processNightlyJob({
                 supabase,
                 supabaseUrl,
@@ -131,6 +154,7 @@ Deno.serve(async (req) => {
                 payload: job.payload,
               });
               break;
+            }
             case 'create':
             case 'dlt':
               throw new Error(`dispatcher_not_implemented:${job.source}`);

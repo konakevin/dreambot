@@ -17,6 +17,8 @@ import {
   isBasicActive,
   isDreamEligible,
   TRIAL_DURATION_DAYS,
+  setConfiguredTrialDays,
+  getConfiguredTrialDays,
 } from '@/lib/proStatus';
 
 const NOW = Date.UTC(2026, 4, 26, 12, 0, 0); // 2026-05-26T12:00:00Z
@@ -204,5 +206,45 @@ describe('proStatus — dream eligibility (Pro OR trial OR Basic)', () => {
   it('nothing → NOT eligible', () => {
     expect(isDreamEligible({}, NOW)).toBe(false);
     expect(isDreamEligible(null, NOW)).toBe(false);
+  });
+});
+
+// M5: the client must honor engine_config.pro_trial_days (the admin-tunable
+// window the SQL is_pro_active() + nightly cron read), not a hardcoded 14. The
+// engine-config hook calls setConfiguredTrialDays(); the default trialDays of
+// every proStatus fn then reflects it, so the auth store's plain isProActive(row)
+// calls pick up the configured window with no call-site change.
+describe('proStatus — configurable trial window (engine_config.pro_trial_days)', () => {
+  afterEach(() => setConfiguredTrialDays(TRIAL_DURATION_DAYS)); // reset to default
+
+  it('defaults to the 14-day window', () => {
+    expect(getConfiguredTrialDays()).toBe(TRIAL_DURATION_DAYS);
+  });
+
+  it('a 20-day-old trial is FREE at 14 days but Pro after the window widens to 30', () => {
+    const row = { pro_trial_started_at: days(-20) };
+    // default 14-day window → lapsed
+    expect(isProActive(row, NOW)).toBe(false);
+    expect(isDreamEligible(row, NOW)).toBe(false);
+    // admin widens the trial → the plain (no-arg) calls now reflect it
+    setConfiguredTrialDays(30);
+    expect(isProActive(row, NOW)).toBe(true);
+    expect(isDreamEligible(row, NOW)).toBe(true);
+    expect(new Date(trialEndsAt(row)!).getTime()).toBe(NOW + 10 * 86_400_000); // 30d - 20d
+  });
+
+  it('a shortened window expires a trial that the 14-day default still allowed', () => {
+    const row = { pro_trial_started_at: days(-10) };
+    expect(isProActive(row, NOW)).toBe(true); // active at 14d
+    setConfiguredTrialDays(7); // admin shortens
+    expect(isProActive(row, NOW)).toBe(false); // 10d-old trial now lapsed
+  });
+
+  it('ignores non-positive / non-finite values (keeps the last good window)', () => {
+    setConfiguredTrialDays(30);
+    setConfiguredTrialDays(0);
+    setConfiguredTrialDays(-5);
+    setConfiguredTrialDays(NaN);
+    expect(getConfiguredTrialDays()).toBe(30);
   });
 });

@@ -14,6 +14,18 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+// Constant-time string comparison for the webhook bearer secret, so a timing
+// side-channel can't be used to recover it byte-by-byte.
+function timingSafeEqualStr(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const ab = enc.encode(a);
+  const bb = enc.encode(b);
+  if (ab.length !== bb.length) return false;
+  let diff = 0;
+  for (let i = 0; i < ab.length; i++) diff |= ab[i] ^ bb[i];
+  return diff === 0;
+}
+
 // Product ID → sparkle amount FALLBACK. Source of truth is the sparkle_packs DB
 // table (migration 255), loaded per-request below; this fallback only kicks in if
 // that lookup fails/returns nothing, so a grant is never silently zero.
@@ -161,14 +173,12 @@ Deno.serve(async (req) => {
     return new Response('Method not allowed', { status: 405 });
   }
 
-  // Verify authorization header matches our webhook secret
-  const authHeader = req.headers.get('authorization');
+  // Verify authorization header matches our webhook secret (constant-time).
+  const authHeader = req.headers.get('authorization') ?? '';
   const webhookSecret = Deno.env.get('REVENUECAT_WEBHOOK_SECRET');
+  const providedToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
-  if (
-    !webhookSecret ||
-    (authHeader !== `Bearer ${webhookSecret}` && authHeader !== webhookSecret)
-  ) {
+  if (!webhookSecret || !timingSafeEqualStr(providedToken, webhookSecret)) {
     console.error('[RevenueCat] Unauthorized request');
     return new Response('Unauthorized', { status: 401 });
   }
@@ -365,7 +375,22 @@ Deno.serve(async (req) => {
     if (isSubscription) {
       // Grant or extend tier access
       if (SUB_GRANT_EVENTS.has(eventType)) {
-        const expiresAt = expirationAtMs ? new Date(expirationAtMs).toISOString() : null;
+        // A subscription grant MUST carry an expiration. A missing
+        // expiration_at_ms would set expires_at = null → permanent entitlement
+        // with no time-based revalidation backstop (all three Pro readers treat
+        // null expiry as active). RevenueCat always sends it for subscription
+        // events, so a missing value is a malformed payload — reject rather than
+        // mint indefinite access.
+        if (!expirationAtMs) {
+          console.error(
+            `[RevenueCat] ${tier.name} ${eventType} for ${appUserId} missing expiration_at_ms — rejecting to avoid permanent entitlement`
+          );
+          return new Response(
+            JSON.stringify({ error: 'missing expiration_at_ms on subscription grant' }),
+            { status: 400, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+        const expiresAt = new Date(expirationAtMs).toISOString();
 
         // INITIAL_PURCHASE / RENEWAL / PRODUCT_CHANGE / UNCANCELLATION all
         // mean the user has an active, auto-renewing subscription right now.
