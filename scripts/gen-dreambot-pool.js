@@ -476,20 +476,19 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
   bubble_world_retrobot: {
     label: 'retrobot world',
     maxWords: 22,
-    theme: `Each entry is ONE warm 1980s/90s nostalgia INTERIOR or suburban scene in the spirit of RetroBot — Saturday-morning living rooms, mall food courts, bedroom forts, video stores, arcades, summer yards — written as a DreamBot wallpaper WORLD in the glossy-dreamy register, glowing with cozy Kodachrome warmth. Describe ONLY the world (the bubble-bot is placed by the renderer, small among the everyday objects).
-  ✅ "a sun-striped 80s living room, wood-console TV glowing cartoons, cereal bowls on brown shag carpet, dust motes in golden light"
-  ✅ "a neon-lit 80s mall food court, glowing signage, plastic orange trays, potted ferns, an arcade entrance glowing past the threshold"
+    theme: `Each entry is ONE cozy 1980s/90s nostalgia scene in the spirit of RetroBot — and the IDENTITY is the SPECIFIC PERIOD OBJECTS, so every seed MUST be packed with nameable retro stuff: a wood-console CRT TV glowing cartoons, brown shag carpet, cereal bowls, a VCR with a blinking red 12:00, stacked VHS tapes, a boombox, cassette tapes, a rotary phone, arcade cabinets, a tube TV, an Atari joystick, roller skates, a lava lamp, wood-paneled walls, a tinsel Christmas tree. Written as a DreamBot wallpaper WORLD in the glossy-dreamy register, glowing with warm Kodachrome light, dusty sunbeams through blinds. Cozy nostalgia. Describe ONLY the scene (small everyday-object scale around the tiny bot).
+  ✅ "a sun-striped 80s living room, wood-console CRT glowing cartoons, cereal bowls on brown shag carpet, a VCR blinking red 12:00"
+  ✅ "a dim 80s arcade row, glowing cabinet screens, an Atari joystick, sticky patterned carpet lit electric-blue, a prize counter beyond"
 
-🚫 BANS: NO bubble-bot detail (separate axis). NO people. Keep warm + cozy + nostalgic. ≤22 words.`,
-    instructions: `Generate NEW retro-nostalgia worlds across families — terse 12-22 word fragments, 80s/90s scene + period objects + warm-light cue, glossy-dreamy. World ONLY.`,
+🚫 BANS: NO bubble-bot detail (separate axis). NO people. Pack in SPECIFIC retro objects every time. Keep warm + cozy + nostalgic. ≤22 words.`,
+    instructions: `Generate NEW retro-nostalgia INTERIORS — terse 12-22 word fragments. A GIANT GLOWING old TV (wood-console CRT) or ARCADE CABINET is the HERO of MOST seeds — it instantly reads "the 80s". Pack in more period objects (shag carpet / VCR / VHS / boombox / rotary phone / Atari). Warm Kodachrome light. INDOORS only. World ONLY.`,
     subThemes: [
-      'SATURDAY-MORNING LIVING ROOMS — wood-console TVs glowing cartoons, cereal bowls, shag carpet, afghan blankets, golden window-stripes',
-      'MALL FOOD COURTS — neon signage, plastic trays, potted ferns, fountain, arcade-entrance glow, 80s tile floors',
-      'BEDROOM FORTS — couch-cushion forts, flashlight glow through blankets, poster-covered wood-paneled walls, toy-strewn floor',
-      'VIDEO STORES — wall of VHS cases, listening-station booths, neon OPEN sign, carpet aisles, glowing new-release displays',
-      'NEON ARCADES — rows of glowing arcade cabinets, CRT-glow, dark room lit by screens, prize-counter, carpet patterns',
-      'SUMMER SUBURBAN YARDS — sprinklers casting rainbows, bikes in wet grass, above-ground pool, ice-cream-truck glow at dusk',
-      'HOLIDAY LIVING ROOMS — twinkling multicolor Christmas lights, tinsel tree, wrapping-paper scraps, warm hearth, cozy glow',
+      'LIVING ROOM + GIANT GLOWING CRT TV (hero) — a big wood-console CRT glowing Saturday cartoons, brown shag carpet, cereal bowls, afghan, golden blinds',
+      'BEDROOM — poster-covered wood-paneled walls, a boombox, a tube TV glowing, cassette tapes, scattered action figures, string-light glow',
+      'NEON ARCADE — a row of glowing arcade cabinets towering, an Atari joystick, dark room lit electric-blue by CRT screens, patterned carpet',
+      'DEN / TV ROOM — a big tube TV with rabbit-ears glowing static-blue, a VCR blinking red 12:00, stacked VHS tapes, a rotary phone, wood paneling',
+      'HOLIDAY LIVING ROOM — a tinsel Christmas tree blazing multicolor lights, a wood-console TV glowing, wrapped gifts, shag carpet, warm hearth',
+      'RUMPUS / GAME ROOM — a pinball machine + an arcade cabinet glowing, wood paneling, a tube TV, bean-bag chairs, a neon wall-clock',
     ],
   },
 
