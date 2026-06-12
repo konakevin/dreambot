@@ -76,21 +76,32 @@ export function usePurchasePro() {
 
   return useMutation({
     mutationFn: async (pkg: PurchasesPackage) => {
-      const success = await purchaseProPackage(pkg);
-      if (!success) throw new Error('cancelled');
-      return success;
+      const tier = await purchaseProPackage(pkg);
+      if (!tier) throw new Error('cancelled');
+      return tier;
     },
-    onSuccess: () => {
+    onSuccess: (tier) => {
       const userId = useAuthStore.getState().user?.id;
-      // Webhook is what authoritatively flips pro_subscription + grants the
-      // bundled sparkles. Refresh both after a short delay (typical webhook
-      // latency is sub-second), and again immediately for an optimistic feel.
-      const refresh = () => {
-        useAuthStore.getState().refreshEntitlements();
-        queryClient.invalidateQueries({ queryKey: ['sparkleBalance', userId] });
+      // The revenuecat-webhook authoritatively flips the entitlement column +
+      // grants the bundled sparkles, and its latency is variable (usually
+      // sub-second, occasionally several seconds). A single fixed-delay refresh
+      // can read the DB before the webhook lands — leaving the paywall showing
+      // "Get Basic"/"Get Pro" until the next app launch. So POLL refreshEntitlements
+      // until the store reflects the purchased tier (or we hit the cap ~9s).
+      const reflected = () => {
+        const st = useAuthStore.getState();
+        return tier === 'pro' ? st.isPaidPro : st.isBasic;
       };
-      refresh();
-      setTimeout(refresh, 2000);
+      let attempts = 0;
+      const poll = async () => {
+        await useAuthStore.getState().refreshEntitlements();
+        queryClient.invalidateQueries({ queryKey: ['sparkleBalance', userId] });
+        attempts += 1;
+        if (!reflected() && attempts < 6) {
+          setTimeout(poll, 1500);
+        }
+      };
+      void poll();
     },
   });
 }

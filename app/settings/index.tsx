@@ -495,15 +495,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <SettingsRow
             icon="diamond"
-            label={
-              isPaidPro
-                ? 'Manage Pro'
-                : isBasic
-                  ? 'Manage plan'
-                  : isPro
-                    ? 'Choose a plan'
-                    : 'Get Premium'
-            }
+            label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
             trailing={
               isPaidPro ? (
                 <Text style={styles.trailingSummary}>Pro</Text>

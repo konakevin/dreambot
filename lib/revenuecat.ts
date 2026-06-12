@@ -90,16 +90,22 @@ export async function getProPackages(): Promise<PurchasesPackage[]> {
 
 /**
  * Purchase a Pro subscription package.
- * Returns true on successful purchase, false on user cancel.
- * Throws on real errors (network, billing failure, etc.).
+ * Returns which entitlement the purchase activated ('pro' | 'basic'), or null
+ * on user cancel. Throws on real errors (network, billing failure, etc.).
+ *
+ * IMPORTANT: a Basic purchase activates the 'basic' entitlement, NOT 'pro' —
+ * so we check BOTH. (Checking only 'pro' made Basic purchases look cancelled,
+ * which skipped the post-purchase entitlement refresh.)
  */
-export async function purchaseProPackage(pkg: PurchasesPackage): Promise<boolean> {
+export async function purchaseProPackage(pkg: PurchasesPackage): Promise<'pro' | 'basic' | null> {
   try {
     const { customerInfo } = await Purchases.purchasePackage(pkg);
-    return !!customerInfo.entitlements.active[PRO_ENTITLEMENT];
+    if (customerInfo.entitlements.active[PRO_ENTITLEMENT]) return 'pro';
+    if (customerInfo.entitlements.active[BASIC_ENTITLEMENT]) return 'basic';
+    return null;
   } catch (err: unknown) {
     const rcErr = err as { userCancelled?: boolean };
-    if (rcErr.userCancelled) return false;
+    if (rcErr.userCancelled) return null;
     throw err;
   }
 }
