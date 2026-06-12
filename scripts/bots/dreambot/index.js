@@ -36,6 +36,7 @@ const pathBuilders = {
   'creature-portrait': require('./paths/creature-portrait'),
   'creature-world': require('./paths/creature-world'),
   'bubble-bot-dreams': require('./paths/bubble-bot-dreams'),
+  'bubble-bot-dreams-warm': require('./paths/bubble-bot-dreams-warm'),
   'sleepy-naptime': require('./paths/sleepy-naptime'),
   'rainy-day-cozy': require('./paths/rainy-day-cozy'),
   'bath-time': require('./paths/bath-time'),
@@ -57,7 +58,8 @@ const pathBuilders = {
 // cleanMediumByModel skipPaths (so gpt-2/banana render WITH the look). Derived
 // so a new path is look-enabled by default — exclude one by name here.
 const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
-  (p) => p !== 'creature-world' && p !== 'bubble-bot-dreams'
+  (p) =>
+    p !== 'creature-world' && p !== 'bubble-bot-dreams' && p !== 'bubble-bot-dreams-warm'
 );
 
 module.exports = {
@@ -78,6 +80,10 @@ module.exports = {
     // figure axes own that now). Keeps the glossy CGI vinyl polish; adds deep-focus.
     chibibot_render:
       'polished glossy 3D CGI render, ultra-clean subsurface-scattering vinyl materials, crisp dewy highlights, luminous pastel magical-wallpaper finish, deep focus, richly detailed throughout',
+    // bubble-bot-dreams-WARM (R2 look): the original Pop-Mart designer-collectible
+    // vinyl medium — softer, warmer, shallower DOF "toy-on-a-diorama" register. A
+    // distinct second feed look vs the sharp chibibot_render lean medium above.
+    dreambot_render_warm: blocks.CHIBI_RENDER_MEDIUM,
     chibibot_pixar: blocks.CHIBI_PIXAR_MEDIUM,
     // creature-world only — the verbatim 05-07 medium that produced Kevin's
     // hearted ornate single-hero creatures (recovered from render recipes;
@@ -132,6 +138,8 @@ module.exports = {
     'creature-world': 'chibibot_creature',
     // bubble-bot-dreams locks the glossy designer-vinyl render (the reference look).
     'bubble-bot-dreams': 'chibibot_render',
+    // bubble-bot-dreams-warm: the R2 warmer designer-collectible medium.
+    'bubble-bot-dreams-warm': 'dreambot_render_warm',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -207,7 +215,7 @@ module.exports = {
   // DreamBot's active paths. First path: bubble-bot-dreams (xerox-copied from
   // ChibiBot 2026-06-12). The rest of the ChibiBot machinery is inherited
   // (dormant) so future DreamBot paths are easy — only listed paths post.
-  paths: ['bubble-bot-dreams'],
+  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm'],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -238,6 +246,7 @@ module.exports = {
     'creature-world': 'black-forest-labs/flux-dev',
     // Lock to pro-ultra (no gpt-2 bounce) — the glossy iridescent reference look.
     'bubble-bot-dreams': 'black-forest-labs/flux-1.1-pro-ultra',
+    'bubble-bot-dreams-warm': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -248,7 +257,7 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time', 'bubble-bot-dreams'],
+    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm'],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -272,6 +281,7 @@ module.exports = {
     skipPaths: [
       'bath-time',
       'bubble-bot-dreams',
+      'bubble-bot-dreams-warm',
       'cuddly-aquatic',
       'night-meadow',
       'cozy-landscape',
@@ -383,7 +393,8 @@ module.exports = {
       medium === 'chibibot_render' &&
       path !== 'creature-world' &&
       path !== 'bath-time' &&
-      path !== 'bubble-bot-dreams'
+      path !== 'bubble-bot-dreams' &&
+      path !== 'bubble-bot-dreams-warm'
     ) {
       const append = (str) => str + '\n\n' + blocks.CHIBI_CHARACTER_COUNT_BLOCK;
       if (typeof result === 'string') return append(result);
