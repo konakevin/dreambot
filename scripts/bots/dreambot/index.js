@@ -71,7 +71,13 @@ module.exports = {
   mediums: ['chibibot_render', 'chibibot_pixar'],
 
   mediumStyles: {
-    chibibot_render: blocks.CHIBI_RENDER_MEDIUM,
+    // bubble-bot-dreams (2026-06-12 QA R3): lean DreamBot override of the shared
+    // CHIBI_RENDER_MEDIUM. Drops the product-shot cues ("designer-collectible",
+    // "Pop Mart designer-toy register") that prime Flux for a shallow-DOF studio
+    // product shot with a blurred backdrop, and the redundant figure language (the
+    // figure axes own that now). Keeps the glossy CGI vinyl polish; adds deep-focus.
+    chibibot_render:
+      'polished glossy 3D CGI render, ultra-clean subsurface-scattering vinyl materials, crisp dewy highlights, luminous pastel magical-wallpaper finish, deep focus, richly detailed throughout',
     chibibot_pixar: blocks.CHIBI_PIXAR_MEDIUM,
     // creature-world only — the verbatim 05-07 medium that produced Kevin's
     // hearted ornate single-hero creatures (recovered from render recipes;
@@ -134,6 +140,12 @@ module.exports = {
   // chibibot_pixar uses the original (pre-rewrite) prefix verbatim.
   // chibibot_render falls through to bot.promptPrefix above.
   promptPrefixByMedium: {
+    // bubble-bot-dreams (2026-06-12 QA R3): override the bot's product-shot
+    // PROMPT_PREFIX ("designer collectible quality") for the render medium, and
+    // LEAD with the WORLD so CLIP doesn't collapse the scene into a product-shot
+    // bokeh backdrop. Only bubble-bot-dreams uses chibibot_render on DreamBot.
+    chibibot_render:
+      'lush richly-detailed magical dream-world wallpaper, deep focus crisp throughout, glossy luminous pastel finish',
     chibibot_pixar: blocks.PROMPT_PREFIX_PIXAR,
     chibibot_gpt_clean: '',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
@@ -170,6 +182,11 @@ module.exports = {
   promptPrefixByPath: {
     'aquatic-village':
       'aquatic ocean scene with VISIBLE WATER, cool aquatic palette, water-caustic light dappling every surface, drifting bubble-streams, swirling fish-schools in background, bioluminescent coral-glow accents, water-reflection on architecture',
+    // bubble-bot-dreams: NO prefix (2026-06-12 axis rebuild, QA R2). A front
+    // prefix front-loads the bot-as-product on CLIP and collapses the dream world
+    // into a blurred bokeh backdrop (the briefs describe rich worlds; Flux renders
+    // a product shot). The figure axes + template already lock the hero, so the
+    // prefix is redundant AND harmful to the environment. Let the world breathe.
   },
 
   // Cute-forward vibes (banned: dark, fierce, macabre, nightshade,

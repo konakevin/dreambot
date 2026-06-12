@@ -26,12 +26,17 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
-  // bubble-bot-dreams path (2026-06-12) — glossy iridescent bubble-bot in a
-  // wide variety of fun, dreamy magical-wallpaper scenes (Kevin's sunset refs).
-  BUBBLE_BOT_SUBJECT: load('chibibot_bubble_bot_subject'),
-  BUBBLE_BOT_SCENE: load('chibibot_bubble_bot_scene'),
-  BUBBLE_BOT_MOOD: load('chibibot_bubble_bot_mood'),
-  BUBBLE_BOT_ATMOSPHERE: load('chibibot_bubble_bot_atmosphere'),
+  // bubble-bot-dreams AXIS SYSTEM (2026-06-12 canonical rebuild) — figure axes
+  // (body/dome/eyes/pose) split from environment axes (world/detail/mood/atmo)
+  // so BOTH the hero and the dream world get their own bespoke creative seed.
+  BUBBLE_BOT_BODY: load('bubble_bot_body'),
+  BUBBLE_BOT_DOME: load('bubble_bot_dome'),
+  BUBBLE_BOT_EYES: load('bubble_bot_eyes'),
+  BUBBLE_BOT_POSE: load('bubble_bot_pose'),
+  BUBBLE_DREAM_WORLD: load('bubble_dream_world'),
+  BUBBLE_WORLD_DETAIL: load('bubble_world_detail'),
+  BUBBLE_LIGHT_MOOD: load('bubble_light_mood'),
+  BUBBLE_ATMOSPHERE: load('bubble_atmosphere'),
   // Bot-wide "look register" (2026-06-07) — 12 cute film/storybook rendering
   // styles rolled per render via rollSharedDNA on look-enabled paths, so the
   // same path renders in a different animation look each time (Pixar / Disney

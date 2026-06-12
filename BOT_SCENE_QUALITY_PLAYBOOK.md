@@ -252,6 +252,32 @@ Post a batch (`--post`) for his heart-review, OR show inline. On sign-off, scale
 
 ---
 
+## The "bot-as-product" environment collapse — a front-loaded SUBJECT bokeh-blurs the WORLD (2026-06-12, DreamBot bubble-bot-dreams)
+
+**The single most expensive lesson of the DreamBot rebuild.** A character-in-environment path where the renders came back as a gorgeous, consistent hero on a **blurred bokeh / empty backdrop** — even though the Sonnet brief described a rich, detailed world (floating crags, liquid-rainbow waterfalls, crystalline spires). The world was in the prompt; Flux rendered a product shot.
+
+**Root cause = the SUBJECT (and product-shot style words) front-load CLIP.** Read the `ai_prompt`: the first ~60 tokens were all hero + medium — `glossy designer-toy bubble-bot …, 3D CGI render, designer collectible quality, Pop Mart designer-toy register, creature subjects rendered with chibi proportions …` — *then* the world. CLIP anchors on "designer collectible / Pop Mart product / chibi toy" and renders a **studio product shot with a shallow-DOF blurred background**. The rich world, arriving 80 words in, gets no attention budget and collapses to bokeh.
+
+**Three compounding front-loads, all fixed:**
+1. A path **`promptPrefixByPath`** that named the hero ("glossy designer-toy bubble-bot with a dome-visor face") — a *second* subject front-load. **Removed entirely** — the axis system + template already lock the hero, so the prefix was pure harm. The world came back sharp immediately.
+2. The **medium** carried product-photography cues — `designer collectible quality`, `Pop Mart designer-toy register` — which prime shallow-DOF studio framing. **Leaned out** (DreamBot override of `mediumStyles[medium]` + `promptPrefixByMedium[medium]`): kept the glossy-CGI-vinyl polish, dropped the product-shot words, added `deep focus, richly detailed throughout`, and made the *prefix lead with the WORLD* ("lush richly-detailed magical dream-world wallpaper, deep focus") so CLIP gets a scene cue first.
+3. The **template** needed an explicit anti-bokeh mandate: "render the WHOLE WORLD in SHARP focus, crisp and fully visible to the horizon — NOT a studio product shot, NOT shallow depth-of-field, NOT a blurred/empty background."
+
+**Litmus:** if briefs describe rich worlds but renders show hero-on-bokeh, the cause is almost always SUBJECT/product-style tokens front-loading CLIP — not the scene pool. Don't enrich the scene pool (it's already rich); **de-front-load the subject** and strip product-shot/DOF cues from prefix + medium. (Cross-refs the ChibiBot HYBRID lesson — a subject-asserting medium fragment front-loads CLIP onto the subject — and the prefix-noun-lock rule.)
+
+## Canonical axis rebuild of a one-off path — split FIGURE from ENVIRONMENT (2026-06-12, DreamBot bubble-bot-dreams)
+
+bubble-bot-dreams started as a hand-written function-path with prefix-lock band-aids and hours of prompt-thrashing (consistency-vs-variety, environment collapse) that the axis system solves structurally. Kevin: *"you are trying to prompt your way into good renders — it never works; you have to use the axis system + quality seed pools all the way around, combined with the right prefix/medium."* The rebuild followed "Inventing NEW PATHS" exactly and hit **all-6 ≥4/5 in a 4-round QA loop** (vs. the original-10 reference). The decomposition that worked for a consistent-character-in-a-varied-world path:
+
+- **FIGURE axes (4)** — the character split into pure-appearance parts so it's the SAME character with varied finish, no "same render twice": `bot_body` (material/color/trim) · `bot_dome` (visor finish + inner detail — the #1 variety lever) · `bot_eyes` (color/shape/size — vary size too, not all "big glowing") · `bot_pose`. Kevin's framing: "the character axis should just be the *adjectives* — materials, colors, eyes." Pose is its own axis; identity is NOT hard-coded in the template (that's the homogenization trap).
+- **ENVIRONMENT axes (4)** — `dream_world` (the bold creative biome, the big axis) · `world_detail` (pickN 2 — density/motion/life that fills it) · `light_mood` · `atmosphere` (pickN 2). The template tells Flux the world is a **co-star** rendered sharp + deep, "a place you'd want to step inside."
+- **Money-shot as a template MANDATE, not an axis** — "the dome mirrors the dream world" derives from `dream_world`, so it never mismatches (a fixed `visor_reflection` pool would clash: visor reflects "stars" while the world is a flower garden).
+- **Xerox-clone gotcha:** a bot cloned from another (DreamBot ← ChibiBot) ships duplicate `CHIBIBOT_*` archetype/template names; the cross-bot `archetypeRegistry` throws "Duplicate archetype names across bots." Strip the dormant archetypes/templates from the clone's `archetypes.js` + `archetype-templates.js` so it exports ONLY its own.
+
+QA-loop knobs that moved the needle, in order: (1) axis system → robot consistency+variety solved; (2) de-front-load subject (prefix removed, medium leaned) → environment un-collapsed; (3) cull flat "uniform texture" worlds (a bubble-sea renders as a pink blur, not a place) from the dream_world pool.
+
+---
+
 ## "Same person every time" — the homogenization trap (2026-06-11, FaeBot forest-elder)
 
 **Symptom:** the creature pool clearly varies (different skin tones, species, etc.) but renders all look like the SAME individual. Kevin: "90% still look like the same person."
