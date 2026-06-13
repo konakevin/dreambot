@@ -27,6 +27,8 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
+import { resetCreateIntro } from '@/components/CreateIntroSheet';
+import { resetMediumsIntro } from '@/components/MediumsIntroSheet';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -621,10 +623,14 @@ export default function SettingsScreen() {
           )}
           <SettingsRow
             icon="trash-outline"
-            label="Reset DreamBot Profile"
+            label="Reset Profile + Tutorials (test)"
             onPress={async () => {
               await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
               await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+              // Also clear the first-run intro flags so the Create-tab tutorials
+              // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
+              // would skip them. Non-fatal if storage hiccups.
+              await Promise.all([resetCreateIntro(), resetMediumsIntro()]).catch(() => {});
               useOnboardingStore.getState().reset();
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               router.replace('/(onboarding)');

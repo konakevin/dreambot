@@ -39,6 +39,12 @@ export async function hasSeenMediumsIntro(): Promise<boolean> {
   }
 }
 
+/** Clear the "seen" flag so the intro shows again — used by the admin
+ *  Reset-Profile tool to re-test the first-run experience. */
+export async function resetMediumsIntro(): Promise<void> {
+  await AsyncStorage.removeItem(SEEN_MEDIUMS_INTRO_KEY);
+}
+
 interface Props {
   visible: boolean;
   onClose: () => void;
