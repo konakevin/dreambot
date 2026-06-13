@@ -2440,6 +2440,7 @@ export type Database = {
         Returns: {
           ai_concept: Json;
           ai_prompt: string;
+          allow_reposts: boolean;
           avatar_url: string;
           bot_message: string;
           caption: string;

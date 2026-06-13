@@ -13,7 +13,7 @@ import type { DreamPostItem } from '@/components/DreamCard';
  * Uses `*` to avoid TypeScript errors from columns not yet in generated types
  * (dream_medium, dream_vibe, is_posted, visibility were added by later migrations).
  */
-export const POST_SELECT = '*, users!inner(username, avatar_url)' as const;
+export const POST_SELECT = '*, users!inner(username, avatar_url, allow_reposts)' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {
@@ -38,6 +38,9 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     caption: (row.caption as string | null) ?? null,
     username: u.username as string,
     avatar_url: (u.avatar_url as string | null) ?? null,
+    // Author's repost opt-out (users.allow_reposts). Default TRUE when absent so
+    // a surface that doesn't return it never wrongly hides the repost button.
+    allow_reposts: (u.allow_reposts as boolean | undefined) ?? true,
     created_at: row.created_at as string,
     comment_count: (row.comment_count as number) ?? 0,
     like_count: (row.like_count as number) ?? 0,
@@ -75,6 +78,8 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     caption: (row.caption as string | null) ?? null,
     username: row.username as string,
     avatar_url: (row.avatar_url as string | null) ?? null,
+    // Author's repost opt-out (flat get_feed column). Default TRUE when absent.
+    allow_reposts: (row.allow_reposts as boolean | undefined) ?? true,
     created_at: row.created_at as string,
     comment_count: (row.comment_count as number) ?? 0,
     like_count: (row.like_count as number) ?? 0,
