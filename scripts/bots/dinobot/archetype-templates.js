@@ -141,7 +141,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — WIDE EPIC ESTABLISHING SHOT ━━━
 Every render is an IMAX-WIDE establishing shot of the prehistoric world. The landscape is the show. Multi-tier depth packed with mega-flora. Distant dinosaur silhouettes optional but never the focus. Every inch of the frame dripping with primordial life.
@@ -150,8 +150,6 @@ Every render is an IMAX-WIDE establishing shot of the prehistoric world. The lan
 [OPENING: name the CANDID DINOSAUR (from surprise_element) doing its natural-behavior in the SPECIFIC alien-Mesozoic biome (palm-cycad rust-plain / mushroom-tree grove / karst-tower / mega-tree outlook / etc.) — the dino + the signature biome together, in the FIRST 30-40 words], [the megaflora packed around / framing the dinosaur — impossible-scale specific], [the phenomenon if rolled — volcano / storm / god-rays / etc.], [the Mesozoic sky overhead — saturated warm], [foreground tactile detail], [lighting + atmospheric layer], [color palette and mood]
 
 CRITICAL — the OPENING ESTABLISHES DINOSAUR-IN-MESOZOIC-BIOME together. Both must be visible to the viewer immediately. Front-load both in the first 30-40 words so Flux doesn't drop either.
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID DINOSAUR (20-30% of frame) in a SIGNATURE ALIEN-MESOZOIC LANDSCAPE (60-70% of frame) with impossible mega-flora, saturated warm-earth Mesozoic sky, atmospheric haze. 35mm-film clarity throughout.
 
 ${SPECIES_ANCHOR}
 
@@ -231,7 +229,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — WIDE WATERWAY ESTABLISHING SHOT WITH CANDID DINO ━━━
 Wide cinematic establishing-shot of a Mesozoic waterway with a candid dinosaur mid-water-behavior at midground. The water is the setting; the dino is the focal action. Multi-tier depth packed with mega-flora at the banks. Atmospheric haze receding into deep distance.
@@ -240,8 +238,6 @@ Wide cinematic establishing-shot of a Mesozoic waterway with a candid dinosaur m
 [OPENING: name the SEMI-AQUATIC DINOSAUR mid-water-behavior (fishing / wading / drinking / floating / breaching) in the SPECIFIC water scene (tannin-river / foggy swamp / lily-marsh / mud-bank / etc.) — the dino + the water-setting together in the FIRST 30-40 words], [the water-scene details — banks with mega-flora / water surface quality / mist / atmospheric depth], [the atmospheric phenomenon if rolled — fog / rain / god-rays / steam], [the secondary accent — dragonfly / fish-jump / pterosaur / etc.], [foreground tactile water-edge detail], [lighting + atmospheric layer], [color palette + mood]
 
 CRITICAL — the OPENING ESTABLISHES DINO-WATER-INTERACTION + MESOZOIC WATER SETTING together in the first 30-40 words. Front-load both so Flux doesn't drop either.
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID SEMI-AQUATIC DINOSAUR (25-40% of frame) mid-water-behavior in a SIGNATURE MESOZOIC WATERWAY (55-65% of frame) with Mesozoic mega-flora at the banks, atmospheric haze, 35mm-film clarity.
 
 ${SPECIES_ANCHOR}
 
@@ -342,7 +338,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — UNDERWATER / SURFACE-BREAK / OPEN-OCEAN ━━━
 Wide cinematic ocean-coded establishing-shot with a candid DINOSAUR mid-water-behavior at midground. Multi-tier depth with fading-blue distance. Atmospheric water-particulate. NEVER a river framing. NEVER a swamp framing. ALWAYS marine open-ocean / underwater / surface-break.
@@ -351,8 +347,6 @@ Wide cinematic ocean-coded establishing-shot with a candid DINOSAUR mid-water-be
 [OPENING: name the OCEAN DINOSAUR (T-rex / Spinosaurus / sauropod / hadrosaur / Triceratops / Stegosaurus / raptor / Allosaurus / etc.) mid-ocean-behavior (wading / swimming / breaching / fully-submerged / on sea-cliff / mid-stride through surf / fishing in surf) in the SPECIFIC ocean setting (surface-break / underwater open-ocean / deep abyss / coral reef / coastal surf / sea-cliff / etc.) — the dinosaur + the ocean-setting together in the FIRST 30-40 words], [ocean-water quality + atmospheric depth], [the atmospheric phenomenon if rolled — sun-shafts / storm / breach / etc.], [the secondary marine accent — school of fish / ammonite / pterosaur-skim / etc.], [foreground water-detail], [lighting + atmospheric layer], [color palette + mood]
 
 CRITICAL — OPENING ESTABLISHES OCEAN-DINOSAUR + OCEAN-SETTING together. Front-load both in first 30-40 words. The dinosaur must be a RECOGNIZABLE iconic dinosaur form (T-rex / sauropod / Spinosaurus / etc.), NOT a marine reptile or turtle or crocodile.
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC SHOT — a CANDID MESOZOIC DINOSAUR (25-40% of frame) mid-ocean-behavior in a STRICT OPEN-OCEAN SETTING (55-65% of frame) — underwater / surface-break / deep abyss / coastal-surf / sea-cliff — never a river, never a swamp. Iconic recognizable DINOSAUR form, NOT marine-reptile / turtle / crocodile.
 
 ${SPECIES_ANCHOR}
 
@@ -433,7 +427,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC FAMILY MOMENT ━━━
 Wildlife-documentary cinematic framing of a tender Mesozoic family-life moment. Multiple dinosaurs interacting. Alien-Mesozoic biome around them. Atmospheric depth into golden distance.
@@ -444,8 +438,6 @@ Wildlife-documentary cinematic framing of a tender Mesozoic family-life moment. 
 CRITICAL — OPENING tokens explicitly count the dinosaurs (TWO theropods / a parent and three hatchlings / four sibling juveniles / a family of five) so Flux can't drop them. The family activity REQUIRES multiple dinosaurs interacting.
 
 ⚠️ FAILURE CONDITION: if the rendered image shows only ONE dinosaur, the render has FAILED. Multi-dinosaur multiplicity is mandatory for this path.
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC FAMILY MOMENT with MULTIPLE DINOSAURS INTERACTING (parent + juveniles, siblings, family group), in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged.
 
 ${SPECIES_ANCHOR}
 
@@ -550,7 +542,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC MIGRATION ━━━
 Wildlife-documentary cinematic framing of a colossal Mesozoic dinosaur migration. Hero foreground dinosaurs (35-55% frame) + 100+ same-species dinosaurs spread behind them. Alien-Mesozoic biome around. Atmospheric haze into pale distance.
@@ -563,8 +555,6 @@ CRITICAL — OPENING tokens explicitly name the species (Triceratops / Parasauro
 ⚠️ FAILURE CONDITIONS:
 • If the rendered image shows wildebeest / bison / buffalo / cattle silhouettes → FAILED. Dinosaur identity must be unmistakable.
 • If the output contains the word "herd" → REJECTED. Use species-count phrasing instead (a hundred [species] / 100+ [species] / a gathering of [species] / etc.)
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a COLOSSAL DINOSAUR MIGRATION (1-3 hero dinosaurs in front + 100+ same-species moving behind), in an alien-Mesozoic biome, with atmospheric haze into pale distance. National-Geographic real, never cartoon, never staged, never modern-mammalian.
 
 ${SPECIES_ANCHOR}
 
@@ -655,7 +645,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC TWO-DINOSAUR CONFRONTATION ━━━
 Wildlife-documentary cinematic framing of two Mesozoic dinosaurs in mid-confrontation. Alien-Mesozoic biome around. Atmospheric depth into golden distance. Tension without gore.
@@ -670,8 +660,6 @@ CRITICAL — OPENING tokens explicitly count "TWO" and name the species. Both di
 • If THREE OR MORE dinosaurs visible as primary subjects → FAILED (the path is TWO dinosaurs; bystanders only at 2-5% accent)
 • If gore / blood / carcass / wound is visible → FAILED (territorial display, not kill)
 • If close-up portrait of single head → FAILED (the confrontation is the subject)
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — TWO MESOZOIC DINOSAURS in mid-confrontation, in an alien-Mesozoic biome, with atmospheric depth. National-Geographic real, never cartoon, never staged, never gore.
 
 ${SPECIES_ANCHOR}
 
@@ -782,7 +770,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — FINE-ART CINEMATIC DINOSAUR SILHOUETTE ━━━
 Fine-art wildlife photography framing of a PURE BLACK Mesozoic dinosaur silhouette against a dramatic prehistoric sky. The SHAPE tells the story. Atmospheric haze. Saturated sky. Distant mega-flora horizon. Dinosaur is BACKLIT — solid dark shape, no surface detail.
@@ -798,8 +786,6 @@ CRITICAL — OPENING tokens lead with "silhouette" / "silhouetted" / "pure black
 • If close-up portrait of single head → FAILED (the whole-animal shape is the subject)
 • If dinosaur is FRONT-LIT instead of backlit → FAILED
 • If the output contains the word "herd" → REJECTED
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC FINE-ART SHOT — a PURE BLACK DINOSAUR SILHOUETTE against a dramatic prehistoric sky, in an alien-Mesozoic horizon. National-Geographic real, never cartoon, never staged, never modern. Backlit composition — sky is bright, dinosaur is BLACK.
 
 ${SPECIES_ANCHOR}
 
@@ -911,7 +897,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — INTIMATE WILDLIFE-DOCUMENTARY COZY MOMENT ━━━
 Wildlife-documentary cinematic framing of a tender Mesozoic dinosaur cozy moment. Warm. Soft. Gentle. Alien-Mesozoic biome around in soft warm light. Bokeh haze.
@@ -926,8 +912,6 @@ CRITICAL — OPENING tokens explicitly name the species AND the cozy action. The
 • If predation / violence / fear / threat / fleeing visible → FAILED (cozy is GENTLE)
 • If close-up portrait of single head with no cozy action → FAILED (the cozy MOMENT is the subject)
 • If harsh / cold / dramatic lighting → FAILED (cozy needs warm soft light)
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a TENDER MESOZOIC DINOSAUR COZY MOMENT — nesting / grooming / nursing / playing / nuzzling — in an alien-Mesozoic biome bathed in soft warm light. National-Geographic real, never cartoon, never staged, never threatening.
 
 ${SPECIES_ANCHOR}
 
@@ -1054,7 +1038,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC PACK ━━━
 Wildlife-documentary cinematic framing of a Mesozoic dinosaur same-species group in mid-action. Hero foreground dinosaurs (30-45% frame) + same-species individuals scattered behind. Alien-Mesozoic biome around. Atmospheric haze pulling distance pale.
@@ -1071,8 +1055,6 @@ CRITICAL — OPENING tokens lead with a bold action phrase + species name + scal
 • If the back group is aligned in formation (long line, single file, ranks, wing-to-wing, parade) → REJECTED. Scatter naturally
 • If a non-pterosaur dinosaur is floating / suspended / levitating in mid-air with no ground-contact → FAILED. Every grounded dinosaur has feet on mud / rock / soil / water / log
 • If a pterosaur is grounded in formation → FAILED. Pterosaurs render aerial flock-in-flight
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC WILDLIFE-DOCUMENTARY SHOT — a HERO + SAME-SPECIES DINOSAUR GROUP in mid-action, in an alien-Mesozoic biome, with atmospheric haze. Poster-grade composition. National-Geographic real, captured naturally.
 
 ${SPECIES_ANCHOR}
 
@@ -1184,7 +1166,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — HIGH-ALTITUDE PALEO-CINEMATIC AERIAL ━━━
 The camera is HIGH UP. Pterosaur fills 35-55% of frame (Mode A) OR ground-dinosaurs anchor the eye from above (Mode B). Atmospheric haze. Saturated sky. Distant Mesozoic horizon.
@@ -1201,8 +1183,6 @@ CRITICAL — OPENING tokens name the pterosaur species + flight action OR the gr
 • If close-up portrait of a single dinosaur head at the dinosaur's own eye-level → FAILED
 • If MODE A is rolled and the wing-membrane shows feathers or bat-wings → FAILED. Pterosaur 4th-finger wing-membrane only.
 • If render reads as "competent wildlife photo" not poster-grade → FAILED
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PALEO-AERIAL SHOT — pterosaur-in-flight (Mode A) OR aerial-camera view of ground-dinosaurs (Mode B), in alien-Mesozoic sky/landscape, with atmospheric depth. Poster-grade composition. National-Geographic real, never cartoon, never dragon-coded, never modern.
 
 ${SPECIES_ANCHOR}
 
@@ -1311,7 +1291,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — TELEPHOTO PALEO-WILDLIFE-PORTRAIT ━━━
 Telephoto cinematic wildlife portrait of a single Mesozoic dinosaur. Hero fills 50-70% of frame. Bokeh-soft alien-Mesozoic biome behind. Rim-light. Candid mid-existing-moment.
@@ -1327,8 +1307,6 @@ CRITICAL — OPENING tokens explicitly name the species AND a CANDID action verb
 • If close-up of one eye filling frame → FAILED (micro-detail path territory)
 • If render reads as "competent wildlife photo" not poster-grade → FAILED
 • If modern wildlife / mammal / bird → FAILED
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC TELEPHOTO WILDLIFE-PORTRAIT — a single hero Mesozoic dinosaur in a candid mid-existing-moment, in an alien-Mesozoic biome bokeh-soft, with rim-lit cinematic light. Poster-grade composition. National-Geographic real, never staged, never roaring at camera.
 
 ${SPECIES_ANCHOR}
 
@@ -1458,7 +1436,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC PEAK ACTION ━━━
 Dynamic frozen peak-action of a single Mesozoic dinosaur. Hero fills 35-55% of frame. Alien-Mesozoic biome around. Motion-implied atmosphere. Grounded — feet on / just-leaving / impacting ground.
@@ -1475,8 +1453,6 @@ CRITICAL — OPENING tokens lead with the action verb-phrase + species. Peak-act
 • If frontal-mouth-wide-roar facing camera → FAILED (cheesy stock)
 • If render reads as "competent wildlife photo" not poster-grade → FAILED
 • If lush green jungle for every render → FAILED (biome variety mandate — render the SPECIFIC biome named)
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC PEAK-ACTION SHOT — a single hero Mesozoic dinosaur frozen at the apex of motion, in an alien-Mesozoic biome, with atmospheric energy. Poster-grade composition. Grounded. National-Geographic real, never staged, never gore.
 
 ${SPECIES_ANCHOR}
 
@@ -1608,7 +1584,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DOCUMENTARY-CINEMATIC EXTINCTION MOMENT ━━━
 Apocalyptic-cinematic framing of a Mesozoic dinosaur in the K-Pg extinction moment. Sky dominates (60-70%) with the apocalyptic event. Dinosaur as dignified silhouette anchor (25-35%). Alien-Mesozoic biome at horizon, atmospheric tint. Epic tragedy + beautiful devastation.
@@ -1625,8 +1601,6 @@ CRITICAL — OPENING tokens explicitly name the species AND the apocalyptic sky 
 • If output contains "herd" → REJECTED (use species-count phrasing)
 • If render reads as modern volcanic eruption / wildfire → FAILED (Mesozoic-locked)
 • If dinosaur floating mid-air with no ground contact → FAILED (grounded mandate)
-
-DRAMATIC VISUALS: render a PHOTOREAL CINEMATIC APOCALYPTIC SHOT — a single Mesozoic dinosaur in DIGNIFIED endurance under an EXPLICIT apocalyptic sky (asteroid streak / impact flash / firestorm glow / ash-winter darkness), in an alien-Mesozoic biome with apocalyptic tint. Poster-grade composition. National-Geographic real, never panicked, never gore.
 
 ${SPECIES_ANCHOR}
 

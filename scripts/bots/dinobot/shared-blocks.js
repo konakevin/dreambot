@@ -110,31 +110,9 @@ const SCALE_AND_ATMOSPHERE_BLOCK = `━━━ SCALE + ATMOSPHERE ━━━
 
 Emphasize SCALE — tiny foreground plants dwarf by massive animals. Volumetric fog, drifting dust, pollen clouds, humid air haze. Wet reflections in rivers and swamps. Wind-blown ferns. Atmospheric perspective — distant mountains fade to blue. The prehistoric world feels VAST and ALIVE.`;
 
-const VOLUMETRIC_LIGHT_BLOCK = `━━━ DRAMATIC LIGHTING — VOLUMETRIC OR CRISP, NOT ALWAYS FOGGY ━━━
+const VOLUMETRIC_LIGHT_BLOCK = `━━━ DRAMATIC LIGHTING ━━━
 
-Light is a CHARACTER in every frame, but it does NOT mean every render is hazy. Pick ONE of two modes per render and commit to it:
-
-MODE A — VOLUMETRIC (~40% of renders, when the scene calls for it):
-- God-rays / sun-shafts piercing dense canopy (cathedral-of-light through tree-fern tops)
-- Visible particulates in beams (dust motes, pollen, spore-cloud, insects backlit)
-- Mist columns rising from water at dawn
-- Rain-curtain blowing diagonally through golden backlight
-- Heavy humid-jungle haze diffusing distant silhouettes
-Use when: jungle understory, mist-canyon, dawn-fog, stormlight, backlit canopy.
-
-MODE B — CRISP, CLEAR, RAY-TRACED (~60% of renders, the default):
-- Razor-sharp specular highlights on wet hide and water (Unreal Engine 5 PBR)
-- Crisp shadows with hard edges, full saturation, no haze diffusion
-- Mirror-flat water doubling sky / clouds / dinosaur in perfect reflection
-- Bright midday sun with chrome-bright wet-scale reflections
-- Post-rain CRYSTALLINE air (clearer than usual, every detail razor-sharp)
-- Storm-cleared aftermath with rainbow + still-wet-everything sparkle
-- Cold-blue arctic clarity with sharp mountain silhouettes
-- Dry-desert hard-light with stark shadows
-- Golden hour with crisp edges, no haze, just rich color
-Use when: open landscapes, water-reflection scenes, post-rain freshness, midday clarity, dramatic chiaroscuro contrast.
-
-LIGHT STILL DOES THE WORK in MODE B — through specular highlights, reflections, shadow-architecture, color contrast — but the AIR IS CLEAR. Don't default to foggy. The world has bright crisp days too.`;
+Cinematic lighting with specular highlights + ray-traced reflections. Light is a character — but the world has crisp clear days too, not just haze. Commit per render to ONE register: volumetric (god-rays through canopy, mist columns, backlit particulates) OR crisp ray-traced (razor specular on wet hide, mirror-flat water reflections, hard saturated midday light).`;
 
 const WET_WORLD_BLOCK = `━━━ WET, REFLECTIVE WORLD — UNREAL ENGINE 5 KILLED-IT QUALITY ━━━
 
@@ -184,22 +162,11 @@ The plants are MASSIVE, OVERGROWN, IMPOSSIBLE. This is a lost world overflowing 
 
 ABSOLUTE BAN: NO HUMANS, NO documentary-savanna, NO open ground, NO sparse cover, NO clean negative space. The dinosaur thrives in DENSE Mesozoic jungle.
 
-Push WAY past documentary restraint. Examples (use these as inspiration, invent your own):
-- Mile-high gnarled trees with twisting trunks the diameter of buildings, branches arching into living cathedrals
+Push WAY past documentary restraint. A few anchors (invent your own past these):
+- Mile-high gnarled trees with trunks the diameter of buildings, branches arching into living cathedrals
 - Megaferns spanning entire clearings, fronds the size of small islands
-- Cycads and tree-ferns the size of houses, with showy fluorescent cone-flowers
-- Towering horsetail-spires hundreds of meters tall, glowing at the joints
-- Vine-curtains hanging like waterfalls of green from impossible heights
-- Hanging mosses dripping water-films like luminous beaded curtains
-- Fungi the size of vehicles — bracket-fungi staircases climbing tree-trunks, mushroom canopies forming their own undergrowth
-- Bioluminescent plants pulsing slow at dawn and dusk, lighting up the understory
-- Trees with bark that ripples, weeps sap, glistens like obsidian
-- Strangler-vine networks knotting whole groves into single super-organisms
-- Rainbow flowering plants the size of cars erupting from canopy
-- Spiral-growing trees that twist like corkscrews, branches forking impossibly
-- Carnivorous mega-pitcher plants tall as elephants
-- Gnarled twisted ancient survivors, hollows large enough to walk through
-- Floating-spore plants releasing huge translucent seed-balloons
+- Vine-curtains hanging like waterfalls of green from impossible heights, mosses dripping water-films
+- Fungi the size of vehicles, bioluminescent plants pulsing slow in the understory
 
 DISTRIBUTION through the frame — non-negotiable, every render:
 - WIDE FRAMING is the default. The dinosaur is full-body visible at distance, in dense jungle context, NOT a close-up framed by leaves at the camera lens.
@@ -224,42 +191,23 @@ Avoid flat documentary framing. Avoid empty negative space. Every pixel earns it
 
 const VAST_TERRAIN_BLOCK = `━━━ VAST TERRAIN — THE LANDSCAPE IS BIGGER THAN LIFE ━━━
 
-The terrain itself is mythic. Nobody has ever seen this world. CREATIVE LICENSE encouraged — invent landforms that surprise. Stack at least one major terrain feature per render:
+The terrain itself is mythic. Nobody has ever seen this world. CREATIVE LICENSE encouraged — invent landforms that surprise. Render at least ONE major terrain feature per render. A few anchors (invent your own past these):
 
-- Vast canyons plunging into mist — bottomless, miles wide, dwarfing the dinosaurs walking the rim
+- Vast canyons plunging into mist, bottomless and miles wide, dwarfing the dinosaurs at the rim
 - Thousand-meter waterfalls thundering off cliff-edges, mist-curtains rising hundreds of meters
-- Sky-piercing mountain ranges in the background — jagged peaks higher than the Himalayas
-- Mesa-and-spire towers like Monument Valley × 10, eroded into impossible shapes
-- Ravines carved by primordial rivers, walls layered in rust-orange + ochre + chalk-white strata
-- Glacial valleys with sheer ice-walls, crevasses glowing turquoise from within
-- Volcanic chains with smoking cones marching to the horizon, lava-rivers visible in the dark
-- Coastal sea-cliffs hundreds of meters tall, waves shattering at the base far below
-- Inland sea bays with limestone arches and stacks rising from blue water
-- Salt-flat plains stretching to vanishing point with mineral-blue sky and distant rain-curtains
-- Karst-tower forests (limestone megaspires) covered in jungle, rising out of mist
-- Lava-tube cave networks with bioluminescent ceilings, scale visible only by glow
+- Sky-piercing mountain ranges or Monument-Valley-×-10 mesa-and-spire towers eroded into impossible shapes
+- Karst-tower jungle megaspires rising out of mist, or volcanic chains marching to the horizon
 
 The TERRAIN is a co-star. It dwarfs everything in it. Skull Island × Pandora × Land of the Lost × Avatar-floating-mountains energy. Make the viewer's jaw drop at the WORLD, not just the animals.`;
 
 const SURPRISING_WEATHER_BLOCK = `━━━ SURPRISING WEATHER — BIBLICAL SCALE ━━━
 
-Weather is dramatic and bigger-than-life. Stack atmospheric drama at world-scale, not local:
+Weather is dramatic and bigger-than-life. Render ONE major weather moment per frame at world-scale, not local. A few anchors (invent your own past these):
 
 - Mile-wide rain-walls visibly approaching across a plain, sun on one side, dark on the other
-- Supercell thunderheads with their own internal weather (cloud-stair structure, anvil-spread, sub-storm rotation)
-- Lightning striking miles away, illuminating an entire valley for one frame
-- Aurora-bands rippling across a daytime sky (impossible but THIS world allows it)
-- Double rainbows arching over a herd, prismatic
-- Sun-pillars / parhelion / sun-dogs visible in cold air
-- Pyrocumulus cloud rising from a distant volcano, lit from below by lava
-- Mist-rivers flowing through a canyon system, dinosaurs wading through them
-- Hail-storm at edge of frame, ice-stones bouncing off broad megaleaves
-- Snow-squall slicing across a valley, half-visible dinosaur silhouettes
-- Tornado on the horizon, dust-funnel kissing a primordial plain
-- Sand-storm wall sweeping across desert, herd silhouetted in front
-- Comet visible in the daytime sky (Cretaceous-extinction omen energy)
-- Rare cloud formations — lenticular clouds capping mountains, undulatus asperitas wave-clouds
-- Sheet-lightning lighting up the whole sky cyclically (impossible storm)
+- Supercell thunderheads with their own internal weather, lightning illuminating a whole valley
+- Pyrocumulus rising from a distant volcano lit from below by lava, or mist-rivers flowing through a canyon
+- Double rainbow over a herd, or a comet in the daytime sky (Cretaceous-extinction omen energy)
 
 The weather is a CHARACTER. Don't settle for "cloudy" — give us weather we've never seen happen on Earth.`;
 

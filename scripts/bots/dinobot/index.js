@@ -57,9 +57,12 @@ module.exports = {
   // before humans existed" positive anchor + "REAL LIVING ANIMAL"
   // identity carry the no-humans rule downstream through every path's
   // template + the bot-wide PROMPT_PREFIX which already states it.
+  // Medium owns RENDER-QUALITY only; the primordial-era anchor lives ONCE in
+  // PROMPT_PREFIX (de-duped 2026-06-12 cruft-audit — both used to state
+  // "66 million years before humans" + the ray-traced/IMAX stack).
   mediumStyles: {
     render:
-      'this world is 66 million years before humans existed, cinematic 35mm film still, photoreal living animal with leathery scarred biological hide, hyperreal organic textures, ray-traced reflections, PBR materials, IMAX cinematic precision',
+      'cinematic 35mm film still, photoreal living animal with leathery scarred biological hide, hyperreal organic textures, ray-traced reflections, PBR materials, IMAX cinematic precision',
     dinobot_gpt_clean: blocks.GPT_CLEAN,
   },
   promptSuffixByMedium: {
@@ -95,13 +98,18 @@ module.exports = {
   // 2026-06-02 cruft-audit micro-strip — dropped `8K detail` tech-spec
   // tail from all 3 jungle wrappers. IMAX cinematic precision already
   // carries the precision register.
+  // 2026-06-12 cruft-audit — these are PREPENDED to the global PROMPT_PREFIX
+  // (botEngine pathPrefix + prefix), so each used to RE-state the era +
+  // ray-traced/hyperreal/IMAX stack that PROMPT_PREFIX already carries.
+  // Cut to the JUNGLE DELTA only — the region these paths add on top of the
+  // global setting-neutral wrapper.
   promptPrefixByPath: {
     'dino-cozy':
-      '66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision',
+      'dense Mesozoic jungle, massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees)',
     'nesting-ground':
-      '66 million years before humans evolved, cinematic primordial overgrown lost-world wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle, ray-traced reflections, hyperreal textures, IMAX cinematic precision',
+      'dense Mesozoic jungle, massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees)',
     'swamp-river':
-      '66 million years before humans evolved, cinematic primordial overgrown lost-world riparian wilderness with absolutely unhinged massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees), dense Mesozoic jungle along tannin-dark waters, ray-traced reflections, hyperreal textures, IMAX cinematic precision',
+      'dense Mesozoic jungle along tannin-dark waters, massive overgrown flora (mega-leaves the size of cars, vines hanging from impossible heights, gnarled mile-high trees)',
     // dino-portrait wrapper REMOVED 2026-05-17 — the legacy stuffed wrapper
     // forced every render to "dense Mesozoic jungle" overriding the biome
     // pool's variety. Portrait now inherits the global setting-neutral
