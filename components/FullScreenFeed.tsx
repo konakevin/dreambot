@@ -16,6 +16,7 @@ import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { supabase } from '@/lib/supabase';
 import { trackDltStarted } from '@/lib/analytics';
+import { DLT_ENABLED } from '@/constants/features';
 import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -154,17 +155,24 @@ const FeedCard = memo(function FeedCard({
       disableSwipeToProfile={disableSwipeToProfile}
       onDelete={canDelete ? () => onDelete(item.id) : undefined}
       onAdminDeleteImmediate={isAdmin && showAdminDelete ? () => onAdminDelete(item.id) : undefined}
-      onDreamLikeThis={() => {
-        const params = new URLSearchParams({
-          postId: item.id,
-          imageUrl: item.image_url,
-          username: item.username,
-          userId: item.user_id,
-          ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
-        });
-        trackDltStarted({ source_post_id: item.id });
-        nav.push(`/dreamLikeThis?${params.toString()}`);
-      }}
+      // DLT is hidden from the UI for now (DLT_ENABLED=false): passing undefined
+      // here removes BOTH the card's color-wand button and the long-press
+      // "Dream like this" item (both gate on this callback). Code/route intact.
+      onDreamLikeThis={
+        DLT_ENABLED
+          ? () => {
+              const params = new URLSearchParams({
+                postId: item.id,
+                imageUrl: item.image_url,
+                username: item.username,
+                userId: item.user_id,
+                ...(item.ai_prompt ? { prompt: item.ai_prompt } : {}),
+              });
+              trackDltStarted({ source_post_id: item.id });
+              nav.push(`/dreamLikeThis?${params.toString()}`);
+            }
+          : undefined
+      }
       onLikesPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         onLikesPress(item.id);
