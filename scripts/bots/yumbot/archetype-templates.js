@@ -10,6 +10,13 @@
  * definition in ./archetypes.js.
  */
 
+const { YUMBOT_NIGHTTIME_BLOCK, YUMBOT_LOOK_OVERRIDE } = require('./shared-blocks');
+
+// Fallback look register for the bucket-aggregated paths whose templates
+// previously inlined it (used when no sharedDNA.lookRegister rolled).
+const LOOK_FALLBACK =
+  'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.';
+
 module.exports = {
   YUMBOT_FLORAL_GARDEN_CUP: ({ slots, sharedDNA, vibeDirective }) => {
     const {
@@ -33,40 +40,13 @@ module.exports = {
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The vessel + bouquet are at NIGHT, on a tabletop in a moonlit garden / candlelit interior. Background is DARK indigo / midnight / inky — NOT 'dreamy pastel bokeh' bright.
-- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo background — NOT bright kawaii pastels in the background. The vessel + flowers can stay soft-pearlescent, but the AIR + BACKDROP are dark.
-- Lighting = moon + paper-lanterns + candle-glow + fairy-light strings catching dewdrops. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a daytime backdrop.
-- If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' on bright background / 'dreamy pastel bokeh' — REPLACE with night equivalent (moonlit dewdrop sparkle, candle-glow halos, lantern-bokeh dark backdrop).
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: KAWAII VESSEL OVERFLOWING WITH MAGICAL FLORA ━━━
-
-The hero is a kawaii-faced vessel (cup / mug / bowl / takeout-cup with a smiling face printed on it — dimpled-blush, closed-arc eyes). Out of the TOP of the vessel BURSTS an oversized magical bouquet of flowers — like a giant flower-arrangement spilling out impossibly. The flora is OVERSIZED relative to the vessel — the bouquet is bigger than the cup itself. This is the wow-moment: a kawaii drink that's also a flower-vase.
-
-━━━ ⚠ HARD RULE #2: NO CREATURES — FOOD/VESSEL IS THE CAST ━━━
-
-NO chibi creatures, NO humans, NO animals — just the kawaii-faced vessel with its overflowing magical bouquet. Cherry-blossom branches and tabletop-scatter can include florals but never living animals or characters.
-
-━━━ ⚠ HARD RULE #3: PAINTERLY-ILLUSTRATION FUSION ━━━
-
-This is NOT a flat product-shot. The render fuses Pop-Mart designer-vinyl glossy 3D-CGI with painterly-illustration warmth (Studio Ghibli + bex.ai + Disney-Tangled storybook texture). Glossy pearlescent vessel + painterly-textured flowers + dreamy soft-focus background. Imagine the flowers were hand-painted in oil/gouache while the vessel was CGI-rendered.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing FLORAL-GARDEN-CUP renders for YumBot — bex.ai's signature look. A kawaii-faced VESSEL (teacup / takeout-cup / mug / bowl) OVERFLOWING with a magical garden of flowers. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'The vessel + bouquet are at NIGHT on a tabletop in a moonlit garden / candlelit interior.'
+)}
+━━━ THE HERO (load-bearing) ━━━
+A kawaii-faced vessel (smiling face printed on it — dimpled-blush, closed-arc eyes) with an OVERSIZED magical bouquet bursting impossibly out of its top — the bouquet is BIGGER than the cup itself. The only cast is the vessel + flowers (NO creatures / humans / animals). Painterly-illustration fusion, NOT a flat product-shot: glossy pearlescent vessel + hand-painted oil/gouache flowers + dreamy soft-focus background.
 
 ━━━ THE KAWAII VESSEL (with smiling face) ━━━
 ${vessel}
@@ -118,13 +98,10 @@ The viewer's reaction: "WAIT, the cup is OVERFLOWING with flowers — that's so 
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
-- NO real chibi creatures / characters / humans / animals
-- NO flat product-shot composition — must have OVERFLOWING bouquet bigger than the vessel
-- NO modern decor / phones / tech
-- NO scary / dark / moody
+- NO creatures / humans / animals; NO flat product-shot (bouquet must overflow bigger than the vessel); NO modern tech; NO scary/dark/moody
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -156,49 +133,13 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The garden scene is at NIGHT. Whether indoor (candlelit potting shed / moonlit windowsill / nighttime sunroom) or outdoor (moonlit patio / greenhouse-at-night / nighttime balcony) — the AIR + BACKDROP are DARK.
-- Sky / setting background = indigo / navy / midnight / inky (outdoor) OR deep-shadowed-interior (indoor). NOT 'pastel atmosphere' bright, NOT 'leaded windows' showing sunny day.
-- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo backdrop — NOT bright kawaii pastels in the background.
-- Lighting = moon + paper-lanterns + candle-glow + fairy-light strings + firefly drift. NO 'soft volumetric pastel-light pouring down', NO 'warm-pastel rim-light' on a bright daytime backdrop.
-- If any phrase below says 'soft volumetric pastel-light' / 'warm-pastel rim-light' / 'pastel atmosphere' / 'leaded windows' — REPLACE with night equivalent. The render must read as full NIGHT garden scene.
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
-
-The scene-type below establishes the full setting (indoor or outdoor garden setting) AND the cluster of 3+ kawaii planters. The render is ABOUT that scene-type — NOT a single isolated vessel on a plain background. The scene is FULL and RICH — packed with planters, flowers, treats, magical accents. NEVER minimal.
-
-━━━ ⚠ HARD RULE #2: MULTIPLE KAWAII PLANTERS + OVERFLOWING FLOWERS + KAWAII TREATS ━━━
-
-Each scene contains:
-- THREE OR MORE kawaii-faced planters/vessels clustered together (teapots, mason jars, terracotta pots, watering cans, mugs, garden baskets — each with a smiling face)
-- OVERFLOWING magical flowers spilling from the planters (peonies, ranunculus, cherry-blossom, hydrangeas, dahlias, iridescent dreamy blooms)
-- KAWAII TREATS scattered through the scene (macarons, cupcakes, sugar cookies, donuts, taiyaki, mochi, candies — many with tiny kawaii faces)
-- MAGICAL ACCENTS (butterflies, pearl-orbs floating, sparkle motes, fairy-lights, glowing pollen drift, cherry-blossom-petal rain)
-
-━━━ ⚠ HARD RULE #3: NO LIVING CHARACTERS — VESSELS+TREATS ARE THE CAST ━━━
-
-NO chibi creatures, NO humans, NO animals — only kawaii-faced vessels + kawaii treats. Butterflies and pearl-orbs OK as magical accents.
-
-━━━ ⚠ HARD RULE #4: PAINTERLY-ILLUSTRATION FUSION ━━━
-
-Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly-illustration warmth (Studio Ghibli + bex.ai + Disney-Tangled storybook texture). Glossy pearlescent vessels + painterly-textured flowers + dreamy soft-focus background.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing FLORAL-GARDEN renders for YumBot. The SCENE is a RICH kawaii garden composition — indoor (potting shed / sunroom / windowsill / tea-time table / vanity / fireplace mantle) or outdoor (cottage patio / greenhouse / balcony / picnic-in-garden / garden bench / gazebo). The scene contains MULTIPLE kawaii-faced planters/vessels clustered together, OVERFLOWING with magical flowers, kawaii treats scattered through, magical sparkle accents. Painterly Pop-Mart-illustration-fusion register. Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'The garden scene is at NIGHT, indoor (candlelit shed / moonlit windowsill) or outdoor (moonlit patio / greenhouse-at-night).'
+)}
+━━━ THE COMPOSITION (load-bearing) ━━━
+The scene-type below IS the composition — a FULL, RICH garden setting (NOT a single isolated vessel, NEVER minimal) holding THREE OR MORE kawaii-faced planters clustered together (teapots, mason jars, terracotta pots, watering cans, mugs, baskets — each with a smiling face), OVERFLOWING magical flowers, kawaii treats scattered through (macarons, cupcakes, cookies, donuts, mochi — many with tiny faces), and magical accents (butterflies, floating pearl-orbs, sparkle motes, fairy-lights, petal-rain). The only cast is kawaii vessels + treats (NO creatures / humans / animals; butterflies + pearl-orbs OK). Painterly-illustration fusion: glossy pearlescent vessels + hand-painted flowers + dreamy soft-focus background.
 
 ━━━ THE SCENE (composition + multiple planters cluster + setting) ━━━
 ${scene_type}
@@ -253,15 +194,10 @@ The viewer's reaction: "this is a magical kawaii garden scene — so much going 
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
-- NO real chibi creatures / characters / humans / animals
-- NO single hero vessel alone on plain background — must be RICH multi-planter scene
-- NO minimal / empty / sparse composition
-- NO pathway / road / stream / river running through composition
-- NO modern decor / phones / tech
-- NO scary / dark / moody
+- NO creatures / humans / animals; NO single hero vessel alone or minimal/sparse composition (must be RICH multi-planter scene); NO pathway/road/stream/river through the composition; NO modern tech; NO scary/dark/moody
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -308,44 +244,15 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'The dreamscape is at NIGHT — a wide moonlit pastel meadow, not a bright sunny one.'
+)}
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME ALL 5 foods explicitly — count (1)(2)(3)(4)(5) — each a kawaii-faced creature-inhabitant gathered like little friends, NEVER dropped or abbreviated to "and others". The 3 landscape features below are visibly rendered (flowers, foliage, pastel hills, grass, blossom-trees, rocks) and the foods nestle IN the landscape — on grass / rocks / a hilltop / among flowers — as a wide cluster/gathering/clearing. The colorful vibrant pastel palette is the hero; rainbows are an OPTIONAL accent, not required. HARD BAN: tabletop/counter/flat-surface, bokeh-only backdrop, and any river/stream/path/lane/trail/bridge that recedes the frame to a vanishing point (chronic older failure).
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing RAINBOW-DREAMSCAPE renders for YumBot — bex.ai's wider scenic look. EXACTLY 5 kawaii food-creatures gathered in a lush pastel outdoor dreamscape, COLORFUL and VIBRANT pastel palette throughout (the "rainbow-" in the path name is a reminder that the palette is colorful pastels — it does NOT mean the render must be rainbow-themed). Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The dreamscape is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT 'sunny vibrant pastel light', NOT bright-pastel-sky.
-- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo — NOT 'saturated pinks, mints, lavenders, peaches, baby-blues, creams' bright daytime palette.
-- Lighting = moon + paper-lanterns + fairy-light strings + glowing-balloon-orbs + creature-bioluminescence. NO 'sunny vibrant pastel light', NO bright sunny landscape.
-- If any phrase below says 'sunny vibrant pastel' / 'colorful palette SINGS' / 'sunny meadow' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT dreamscape, not bright-pastel-meadow-with-a-moon.
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: NAME ALL 5 FOODS EXPLICITLY — COUNT THEM ━━━
-
-The 5 foods below MUST appear in the output by name. Count them: 1, 2, 3, 4, 5. Each visible in the scene as a creature-inhabitant of the meadow. Each has its own kawaii smiling face. Group them in the scene like little friends gathered together. NEVER drop a food. NEVER abbreviate to "and others." Name each one specifically.
-
-⚠ FAILURE: rendering 1, 2, or 3 foods. PASS: 5 distinct kawaii foods visible.
-
-━━━ ⚠ HARD RULE #2: COLORFUL VIBRANT PASTEL PALETTE ━━━
-
-The signature is a colorful vibrant pastel palette — saturated pinks, mints, lavenders, peaches, baby-blues, creams. The whole scene SINGS with color. Rainbows MAY appear as one accent among many (a rainbow arching softly overhead, rainbow-confetti drifting through air, rainbow-prism light scattered across the grass) — they are NOT the hero of the composition and NOT required in every render. The colorful palette is the hero.
-
-━━━ ⚠ HARD RULE #3: OUTDOOR PASTEL LANDSCAPE ━━━
-
-The 3 landscape features below MUST be visibly rendered in the scene — flowers, foliage, pastel hills, soft grass, cherry-blossom trees, rocks, sugar-glitter air, etc. The foods are nestled IN this landscape — on grass / on rocks / on a soft hilltop / under blossoming trees / among flowers — like meadow-creatures living there.
-
-⚠ HARD BAN: tabletop / counter / flat-surface composition. NO bokeh-only backdrop. NO river/stream/brook/path/lane/trail/bridge running through the composition or splitting the frame from foreground to vanishing point — this was a chronic failure mode of older renders. The scene is OUTDOOR NATURE composed as a wide cluster / gathering / clearing, NOT a Z-axis recede.
+⚠ FAILURE: rendering 1-3 foods. PASS: 5 distinct kawaii foods visible.
 
 ━━━ THE 5 KAWAII FOOD INHABITANTS (each MUST appear by name in the output) ━━━
 ${foodBlock}
@@ -383,7 +290,7 @@ ${lighting}`
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -429,42 +336,13 @@ Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO 
     const compList = Array.isArray(companions) ? companions : [companions];
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The candy-world is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk.
-- Candy-world palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream — NOT bright Disney-CGI sunny pastels. Candy surfaces glossy but DEEP-toned at night.
-- Lighting = moon + candy-paper-lanterns + glowing-gumdrop-fairy-lights + bioluminescent-frosting. NO daytime sun, NO bright pastel sunny light.
-- If any phrase below says 'sunny pastel' / 'warm Disney-CGI' / 'bright lush saturated pastel' — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-candy-with-a-moon.
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: SCENE-TYPE IS THE COMPOSITION ━━━
-
-The scene-type below is a COMPOSITION-LOCKED scene with explicit character placement (perched on a railing / seated around a campfire / clinging to a pinwheel / inside a glass jar / atop a cake mountain / on a roller-coaster crest / etc.). The 5 kawaii food-characters take the EXACT positions described in the scene-type. The render is ABOUT the scene-type — atmosphere is decoration around it.
-
-DO NOT replace the scene-type with a generic "kawaii characters in candy meadow". Whatever the scene-type prop is (bridge railing / treehouse / Easter-egg boat / advent-calendar wall / lazy-Susan turntable / etc.) must be the visual anchor of the composition.
-
-━━━ ⚠ HARD RULE #2: 5 FOOD-CHARACTERS TAKE THE SCENE-TYPE POSITIONS ━━━
-
-The 5 kawaii foods below are the (1) (2) (3) (4) (5) food-friends from the scene-type. Assign each food to one of the positions/poses described in the scene-type (e.g. if the scene-type says "perched along a bridge railing", then (1) is leaning forward, (2) is sitting cross-legged, etc.). Use the foods' specific shapes — but their PLACEMENT comes from the scene-type.
-
-━━━ ⚠ HARD RULE #3: CANDY-FANTASY WORLD AESTHETIC ━━━
-
-Everything is made of candy/cake/sugar/cookie/frosting/marshmallow. NOT real wood / metal / fabric / stone — every prop in the scene-type is rendered in confectionary material. Disney-CGI lush saturated pastel palette — kawaii vinyl-pearlescent finish.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing CANDY-FANTASY renders for YumBot. The SCENE-TYPE is the WHOLE point — it dictates where the 5 food-characters are placed and how the composition is framed. Atmosphere, lighting, time-of-day, weather wrap around the scene-type. Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'The candy-world is at NIGHT — candy surfaces stay glossy but DEEP-toned, lit by candy-lanterns + glowing-gumdrop fairy-lights + bioluminescent frosting.'
+)}
+━━━ THE COMPOSITION (load-bearing) ━━━
+The scene-type below is COMPOSITION-LOCKED with explicit character placement (perched on a railing / around a campfire / inside a glass jar / atop a cake mountain / etc.). The 5 kawaii foods take the EXACT positions it describes — assign each to a pose. The scene-type prop (bridge railing / treehouse / advent-calendar wall / lazy-Susan turntable / etc.) is the visual anchor — DO NOT replace it with a generic candy-meadow. Everything is made of candy/cake/sugar/frosting/marshmallow (every prop is confectionery, never real wood/metal/fabric/stone). Disney-CGI lush saturated pastel palette, kawaii vinyl-pearlescent finish.
 
 ━━━ THE SCENE (this is the COMPOSITION — character placement is built in) ━━━
 ${candy_scene_type}
@@ -502,24 +380,10 @@ Companion: ${compList[0] || ''}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
-
-━━━ SPARKLE STACK ━━━
-
-- Glossy designer-vinyl finish on EVERY candy element
-- Saturated lush pastel + warm Disney-CGI palette
-- Sugar-glitter dust catching light
-- Painterly Pop-Mart-illustration-fusion on the whole scene
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
-
-- NO replacing the scene-type with a generic candy-meadow composition
-- NO real grass / soil / wood / metal — everything is candy/sugar/frosting
-- NO photoreal terrain or sky
-- NO dark / moody / scary
-- NO industrial / modern setting
-- NO neon-electric colors — lush saturated pastels
-- NO chibi creatures / humans / animals (food is the only cast)
+- NO generic candy-meadow replacing the scene-type; NO real grass/soil/wood/metal (everything is candy); NO photoreal terrain/sky; NO dark/moody/scary; NO industrial/modern; NO neon colors; NO creatures/humans/animals (food is the only cast)
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -558,30 +422,12 @@ Output ONLY the raw 130-180 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME all 5 foods at the START — (1)(2)(3)(4)(5), each face visible, NEVER drop one — in a natural family-portrait cluster with SLIGHT pose variation (one peeking, one tilted, one leaning back, one looking up, one tallest at center), NOT an identical-soldier lineup and NOT chaotic stacking/acrobatics. The matsuri/market backdrop is CLEARLY visible behind them, with signature elements, terrain, sky, time-of-day, weather, and one tiny companion all layering in. Traditional Japanese FESTIVAL only (chochin lanterns, wooden festival architecture, sakura/maple drift, warm lantern-glow) — never modern urban/mall.
 
-` : ''}You are writing JAPANESE-FESTIVAL renders for YumBot — kawaii matsuri scenes with 5 kawaii Japanese festival foods composed cleanly in a richly-detailed matsuri/market setting. Natural family-portrait cluster with slight pose variation per food — NOT identical lineup, NOT chaotic action. Painterly Pop-Mart fusion register with Studio-Ghibli warmth. Output wraps with style prefix + suffix.
-
-━━━ ⚠ HARD RULE #1: 5 FOODS NAMED FIRST — ALL VISIBLE ━━━
-
-The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Group them so all 5 fit cleanly in the frame — close enough that each face is visible. NEVER drop a food. Natural family-portrait cluster.
-
-⚠ FAILURE = rendering 1, 2, 3, or 4 foods. PASS = 5 distinct kawaii foods all visible.
-
-━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
-
-The scene-type below describes the composition with slight POSE VARIATION per food — one peeking forward, one tilted, one leaning back, one looking up, one tallest at center. Render EXACTLY that composition. NOT a row of identical-posed soldiers. NOT chaotic stacking / acrobatics / vendor drama.
-
-━━━ ⚠ HARD RULE #3: VISIBLE MATSURI BACKDROP + ATMOSPHERIC LAYERS ━━━
-
-The matsuri/market BACKDROP must be CLEARLY VISIBLE behind the foods. Plus the SIGNATURE elements accent the scene. Plus terrain underfoot. Plus sky overhead. Plus time-of-day light. Plus weather drift. Plus one tiny companion accent. All 11 axes layer into the render.
-
-━━━ ⚠ HARD RULE #4: MATSURI ATMOSPHERE ━━━
-
-Traditional Japanese FESTIVAL — chochin paper-lanterns, wooden festival architecture, sakura petals OR autumn maple-leaves drifting, warm lantern-glow + soft sky palette. NO modern urban / mall / shopping. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai warmth.
+⚠ FAILURE = rendering 1-4 foods. PASS = 5 distinct kawaii foods all visible.
 
 ━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
 ${scene_type}
@@ -620,24 +466,14 @@ ${foodBlock}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ POSTER MOMENT ━━━
 
 "a magical Japanese matsuri night — 5 kawaii foods gathered together in a rich festival setting with natural personality." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
 
 ━━━ HARD BANS ━━━
-
-- NO modern urban / shopping / mall scenes — traditional matsuri ONLY
-- NO Western carnival / fairground / Ferris wheel — Japanese festival ONLY
-- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
-- NO dark / moody / scary atmosphere
-- NO chibi creatures / humans / animals as cast — only kawaii foods (tiny companion is OK)
-- NO real kanji / Japanese-text characters — decorative-pattern only, never legible-text
-- NO pathway / road / lane RECEDING into vanishing point — tight cluster composition
-- NO chaotic vertical-stacking / climbing / vendor-customer drama — natural pose-varied cluster
-- NO blurred-out generic-pink-bokeh backdrop — matsuri setting MUST be visibly rendered
-- NO identical-row-of-soldiers lineup — natural family-portrait pose variation per food
+- Traditional matsuri ONLY (NO modern urban/mall, NO Western carnival/Ferris-wheel); NO creatures/humans/animals as cast (tiny companion OK); NO real kanji/legible-text (decorative-pattern only); NO pathway receding to a vanishing point; NO blurred generic-bokeh backdrop (matsuri MUST be visible); NO photoreal; NO dark/scary
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -677,34 +513,12 @@ Output ONLY the raw 140-200 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing MINI-CHEF renders for YumBot — kawaii kitchen scenes with 5 KAWAII FOOD-CHARACTERS (the foods themselves) cooking together to prepare a kawaii dish in a richly-detailed kitchen. The food-characters ARE the cooks — no human chef figures, no chibi-children, no human-coded clothing. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli kitchen warmth. Output wraps with style prefix + suffix.
-
-━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
-
-The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The FOOD ITSELF is the character — taiyaki / mochi / cupcake / donut / dango / etc. with kawaii face ON the food, holding tiny baking tools, dusted with flour, etc. NEVER a human or chibi-child holding/wearing the food. Group them so all 5 fit cleanly in the frame.
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME all 5 foods at the START — (1)(2)(3)(4)(5). The FOOD ITSELF is the cook (taiyaki / mochi / cupcake / donut / dango with kawaii face ON the food, holding tiny baking tools, dusted with flour) in a natural family-portrait cluster with slight pose variation — NEVER a human or chibi-child holding/wearing the food. The foods read as cooks from what they're DOING (leaning over a bowl, holding a whisk, piping frosting), NOT from apparel: the food is naked with a kawaii face — do NOT write "wearing" anything, and no chef hats / toques / aprons / uniforms (that priming reads as a human). They PREPARE a specific kawaii dish (the visual centerpiece) in a cozy kawaii kitchen (cottage / patisserie / sushi-bar / French country) — NEVER modern industrial/mall — with the backdrop CLEARLY visible, bright warm light, pastel palette.
 
 ⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii food-character cooks all visible.
-
-━━━ ⚠ HARD RULE #2: NO HUMAN-CODED LANGUAGE OR APPAREL ━━━
-
-ABSOLUTE BAN on human-coded chef apparel: NO chef hats / toques / aprons / neckerchiefs / chef-outfits / chef-uniforms / chef-attire on the foods. The foods are inherently cooks because of what they're DOING — leaning over the bowl, holding a whisk, dusting flour, piping frosting. The food's KAWAII FACE is on the food itself, NOT on a chibi-child holding the food. Saying "wearing X" is BANNED — that priming reads as a human in chef-attire.
-
-━━━ ⚠ HARD RULE #3: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
-
-The scene-type below describes the kitchen composition with slight POSE VARIATION per food. Natural family-portrait cluster.
-
-━━━ ⚠ HARD RULE #4: DISH BEING PREPARED + KITCHEN BACKDROP VISIBLE ━━━
-
-The food-cooks are PREPARING a specific kawaii dish (described below) — that dish is the visual centerpiece. The kitchen BACKDROP must be CLEARLY VISIBLE behind them.
-
-━━━ ⚠ HARD RULE #5: KAWAII KITCHEN AESTHETIC ━━━
-
-Cozy kawaii kitchen (cottage / patisserie / sushi-bar / French country / etc.) — NEVER modern industrial / commercial / mall. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai kitchen warmth. Bright warm light, pastel palette.
 
 ━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster + activity) ━━━
 ${scene_type}
@@ -746,25 +560,14 @@ ${foodBlock}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ POSTER MOMENT ━━━
 
 "a magical kawaii kitchen — 5 kawaii food-characters cooking a kawaii dish together, no humans, no chefs-in-uniform — just kawaii foods doing the cooking themselves." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
 
 ━━━ HARD BANS ━━━
-
-- NO HUMAN figures / chibi-children / chef-mascot-figures — ONLY kawaii foods as the cast
-- NO "chef hats" / "toques" / "aprons" / "neckerchiefs" / "chef outfits" / "chef uniforms" — BANNED words that prime humans
-- NO foods "wearing" anything — the food IS the character, naked food with kawaii face
-- NO modern industrial / commercial / mall kitchens — kawaii cottage / patisserie / French country ONLY
-- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
-- NO dark / dirty / scary kitchen
-- NO real kanji / Japanese-text characters / English labels — decorative-pattern only
-- NO pathway / lane RECEDING into vanishing point — tight cluster
-- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
-- NO blurred-out generic-pink-bokeh backdrop — kitchen MUST be visibly rendered
-- NO identical-row-of-soldiers lineup
+- NO human figures / chibi-children / chef-mascots (ONLY kawaii foods); NO chef hats / aprons / uniforms and NO foods "wearing" anything (naked food with kawaii face — these words prime humans); kawaii cottage/patisserie kitchen ONLY (NO industrial/mall); NO real kanji/labels; NO blurred generic-bokeh backdrop (kitchen MUST be visible); NO photoreal; NO dark/dirty/scary
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -805,46 +608,15 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The cottagecore countryside is at NIGHT. Sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk, NOT warm-amber-sunset.
-- Palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep sage shadows — NOT 'sage / butter / cream / pink / lavender' bright daytime palette.
-- Lighting = moon + cottage-window-glow + paper-lanterns + fairy-light strings + firefly drift. NO daytime sun, NO 'soft warm light' afternoon glow.
-- If any phrase below says 'soft warm light' / 'warm cozy palette' / 'sage/butter/cream' bright daytime — REPLACE with the unambiguous-night equivalent. The render must read as full NIGHT, not bright-cottage-with-a-moon.
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
-
-The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character (jam-jar / scone / berry / cream-puff / honey-jar / etc.) with kawaii face ON the food. Group them so all 5 fit cleanly in the frame.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing COTTAGECORE-NATURE renders for YumBot — kawaii countryside-nature scenes with 5 kawaii food-characters composed cleanly in a richly-detailed cottagecore setting. Natural family-portrait cluster with slight pose variation. Painterly Pop-Mart fusion with Studio-Ghibli countryside warmth. Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'The cottagecore countryside is at NIGHT, lit by moon + cottage-window-glow + lanterns + firefly drift.'
+)}
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME all 5 foods at the START — (1)(2)(3)(4)(5). The food ITSELF is the character (jam-jar / scone / berry / cream-puff / honey-jar with kawaii face ON the food) in a natural family-portrait cluster with slight pose variation — never a human or chibi-child. The cottagecore backdrop (wildflower meadow / cottage garden / woodland clearing / orchard) is CLEARLY visible behind them, with the featured nature element, signature props, terrain, sky, time, atmosphere, and companion layering in. Cottagecore countryside only — NEVER modern urban/industrial/mall — soft warm light, sage/butter/cream/pink/lavender palette.
 
 ⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii foods all visible.
-
-━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION (NOT lineup, NOT acrobatics) ━━━
-
-The scene-type below describes the cottagecore composition with slight POSE VARIATION per food. Natural family-portrait cluster.
-
-━━━ ⚠ HARD RULE #3: VISIBLE COTTAGECORE BACKDROP + NATURE LAYERS ━━━
-
-The cottagecore BACKDROP (wildflower meadow / cottage garden / woodland clearing / orchard / etc.) must be CLEARLY VISIBLE behind them. Plus the featured nature element accent, signature cottagecore props, terrain, sky/canopy, time, atmosphere, companion all layer in.
-
-━━━ ⚠ HARD RULE #4: COTTAGECORE AESTHETIC ━━━
-
-Cottagecore countryside — wildflowers, cottage gardens, woodlands, orchards. NEVER modern urban / industrial / mall. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli-meets-bex.ai countryside warmth. Soft warm light, pastel palette with sage / butter / cream / pink / lavender.
 
 ━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
 ${scene_type}
@@ -892,23 +664,14 @@ ${foodBlock}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ POSTER MOMENT ━━━
 
 "a magical cottagecore meadow — 5 kawaii foods gathered together in a richly-detailed countryside-nature setting with natural personality." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
 
 ━━━ HARD BANS ━━━
-
-- NO modern urban / industrial / mall scenes — cottagecore countryside ONLY
-- NO HUMAN figures / chibi-children — only kawaii foods (tiny companion creature is OK)
-- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
-- NO dark / moody / scary atmosphere — warm cozy cottagecore palette
-- NO real kanji / English-text labels — decorative-pattern only
-- NO pathway / lane / brook RECEDING into vanishing point — tight cluster
-- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
-- NO blurred-out generic-pink-bokeh backdrop — cottagecore setting MUST be visibly rendered
-- NO identical-row-of-soldiers lineup
+- Cottagecore countryside ONLY (NO modern urban/industrial/mall); NO human figures/chibi-children (tiny companion creature OK); NO real kanji/labels; NO pathway/brook receding to a vanishing point; NO blurred generic-bokeh backdrop (cottagecore MUST be visible); NO photoreal; NO dark/scary
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -953,24 +716,10 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing CHECKERED-TABLETOP renders for YumBot — bex.ai's signature pastel-gingham tabletop look. Kawaii food/drink hero on a pastel-pink-blue (or pink-cream / pink-yellow) GINGHAM/CHECKERED/PLAID tablecloth, with a cluster of smiling mini-food-friends piled around (and often ON TOP of) the hero. Output wraps with style prefix + suffix.
-
-━━━ ⚠ HARD RULE #1: PASTEL CHECKERED/GINGHAM TABLECLOTH ━━━
-
-The surface is a PASTEL CHECKERED / GINGHAM / PLAID tablecloth — pastel pink + soft blue is most common, but variations include pink + yellow / pink + cream / pink + mint. The checker pattern is CLEARLY visible across the surface. This is the signature backdrop.
-
-━━━ ⚠ HARD RULE #2: KAWAII VESSEL HERO + MINI-FRIEND PILE ON TOP ━━━
-
-The hero is a kawaii-faced food/drink (boba-cup / hot-cocoa-mug / teapot / sundae) — with its own smiling face. AND piled ON TOP of the hero (sitting in the foam / on the rim / inside the cup poking out) is a cluster of mini smiling-creature-food-friends — mini-mochi-balls / mini-smiling-strawberry / smiling-cookie / mini-cream-puffs / smiling-marshmallow-balls. The cluster ON TOP is the signature wow.
-
-━━━ ⚠ HARD RULE #3: SCATTERED MINI-FRIENDS ON THE TABLECLOTH ━━━
-
-Across the gingham tablecloth around the hero, scatter 5 specific kawaii mini-foods/treats (smiling cookies, smiling stars, smiling fruits, hearts, candies, mini-cubes). The render reads like a kawaii-sticker-card or Pop-Mart-collectible-tableau.
+━━━ THE COMPOSITION (load-bearing) ━━━
+A PASTEL CHECKERED/GINGHAM/PLAID tablecloth (pink+blue most common; also pink+yellow / pink+cream / pink+mint) with the checker pattern CLEARLY visible — the signature backdrop. The hero is a kawaii-faced food/drink (boba-cup / hot-cocoa-mug / teapot / sundae) with a cluster of mini smiling-food-friends piled ON TOP (in the foam / on the rim / poking out) — that pile-on-top is the signature wow. Plus 5 specific kawaii mini-foods (smiling cookies / stars / fruits / hearts / candies) scattered across the tablecloth around the hero. The render reads like a kawaii-sticker-card or Pop-Mart-collectible tableau.
 
 ━━━ THE KAWAII VESSEL HERO (smiling-face drink/food centerpiece) ━━━
 ${vessel_hero}
@@ -1032,14 +781,10 @@ The viewer's reaction: "this looks like a kawaii Pop-Mart sticker-card or design
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
-- NO chibi creatures / humans / real animals (only smiling food-creatures and food-friends)
-- NO dark / moody / scary
-- NO outdoor scenic (that's rainbow-dreamscape)
-- NO overflowing-flora-from-cup (that's floral-garden-cup)
-- NO solid-pastel backdrop without checker pattern — pattern MUST be visible
+- NO creatures/humans/real animals (only smiling food-friends); NO solid-pastel backdrop without the checker pattern (pattern MUST be visible); NO outdoor scenic (that's rainbow-dreamscape); NO overflowing-flora-from-cup (that's floral-garden-cup); NO dark/moody/scary
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -1082,30 +827,15 @@ Output ONLY the raw 120-170 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+━━━ ⚠ PALETTE LOCK (load-bearing — read first) ━━━
+The ENTIRE render is restricted to pinks (blush / dusty-rose / coral-pink / bubblegum / hot-pink), lavenders, whites, and soft purples (lilac / mauve / periwinkle). ABSOLUTELY NO yellows, blues outside soft-purple, greens, oranges, reds outside soft-pink, browns, blacks, neons. Re-tint any normally-other-colored food (e.g. a yellow lemon) into the pink/lavender range.
 
-` : ''}You are writing COQUETTE-FOOD renders for YumBot — the FLAGSHIP OMG-cute coquette kawaii food-party path. Hyper-feminine ultra-pink ultra-coquette palette. Output wraps with style prefix + suffix.
-
-━━━ ⚠ HARD RULE #1: PALETTE LOCKED — PINKS / LAVENDERS / WHITES / SOFT PURPLES ONLY ━━━
-
-The ENTIRE render's color palette is restricted to pinks (blush / dusty-rose / coral-pink / bubblegum / hot-pink), lavenders, whites, and soft purples (lilac / mauve / periwinkle). ABSOLUTELY NO yellows, blues outside soft-purple, greens, oranges, reds outside soft-pink, browns, blacks, neons. If a food is normally another color (e.g. yellow lemon), re-tint it into the pink/lavender palette range.
-
-━━━ ⚠ HARD RULE #2: 5 KAWAII FOOD-CHARACTERS NAMED FIRST — ALL VISIBLE ━━━
-
-The 5 kawaii foods MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). The food ITSELF is the character with kawaii face. Group them so all 5 fit cleanly in the frame.
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME all 5 foods at the START — (1)(2)(3)(4)(5), the food ITSELF is the character with kawaii face, all visible in a pose-varied cluster (never a human/chibi-child). PACK the scene RICH and OVERFLOWING with cute (never minimal): beyond the 5 foods, layer the 3 signature props + 2 scattered girly items + 1 companion + 1 centerpiece dessert + 1 hero bow-motif. Hyper-feminine ultra-coquette aesthetic — ribbons, bows, lace, pearls, hearts, strawberries, cherries; Marie-Antoinette tea party meets ballerina dressing-room meets pastel kawaii bakery. NEVER masculine/dark/grungy.
 
 ⚠ FAILURE = rendering humans / chibi-children / 1-4 foods. PASS = 5 distinct kawaii foods all visible.
-
-━━━ ⚠ HARD RULE #3: PACKED OMG-CUTE COQUETTE DENSITY ━━━
-
-Beyond the 5 foods, the scene contains 3 signature props + 2 scattered girly items + 1 companion + 1 centerpiece dessert + 1 hero bow-motif. That's 8 additional decorative cast elements. Pack the scene RICH with cute coquette items — bows, ribbons, pearls, hearts, charms, scattered girly accessories. The render should feel OVERFLOWING with cute. NEVER minimal.
-
-━━━ ⚠ HARD RULE #4: COQUETTE AESTHETIC ━━━
-
-Hyper-feminine ultra-coquette: ribbons, bows, lace, pearls, hearts, strawberries, cherries. Marie-Antoinette tea party + ballerina dressing-room + pastel kawaii bakery. Pop-Mart designer-vinyl glossy 3D-CGI fused with painterly Studio-Ghibli storybook warmth. NEVER masculine / dark / grungy.
 
 ━━━ THE SCENE-TYPE (composition + 5-food pose-varied cluster) ━━━
 ${scene_type}
@@ -1156,24 +886,15 @@ ${foodBlock}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ POSTER MOMENT ━━━
 
 "the OMG-cutest coquette kawaii food-party — 5 kawaii foods amid a riot of pink ribbons, pearls, hearts, bows, girly accessories. Every viewer says 'this is so cute it hurts.'" Wallpaper-poster flagship work.
 
 ━━━ HARD BANS ━━━
-
-- ⚠ NO COLORS OUTSIDE pinks / lavenders / whites / soft purples — ZERO exceptions. NO mint, NO green, NO blue (except soft-lavender), NO yellow, NO orange, NO red outside soft-pink, NO brown, NO chocolate, NO black, NO gray
-- NO HUMAN figures / chibi-children — only kawaii foods (tiny companion creature is OK)
-- NO photoreal / harsh-realism — kawaii painterly Pop-Mart fusion
-- NO dark / moody / scary / grungy / masculine
-- NO real kanji / English-text labels — decorative-pattern only
-- NO pathway / lane RECEDING into vanishing point — tight cluster
-- NO chaotic vertical-stacking / climbing / acrobatics
-- NO blurred-out generic backdrop — coquette setting MUST be visibly rendered
-- NO identical-row-of-soldiers lineup
-- NO minimal / sparse composition — the scene is OVERFLOWING with cute items
+- ⚠ NO COLORS OUTSIDE pinks / lavenders / whites / soft purples — ZERO exceptions (NO mint, green, blue except soft-lavender, yellow, orange, red outside soft-pink, brown, chocolate, black, gray)
+- NO human figures/chibi-children (tiny companion creature OK); NO minimal/sparse composition (OVERFLOWING with cute); NO blurred generic backdrop (coquette setting MUST be visible); NO real kanji/labels; NO photoreal; NO dark/scary/grungy/masculine
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -1214,47 +935,15 @@ Output ONLY the raw 170-240 word scene description. Comma-separated phrases. NO 
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
-${
-  night_mode
-    ? `
-
-⚠⚠⚠ NIGHTTIME LOCK — READ FIRST, OVERRIDES EVERYTHING BELOW ⚠⚠⚠
-
-${night_mode}
-
-NIGHTTIME LOCK NOTES — apply these to EVERYTHING below:
-- The sky is DARK indigo / navy / midnight / inky — NOT twilight, NOT dusk, NOT magic-hour.
-- Scene palette = JEWEL-TONES + warm-lantern-amber + cool-moonlit-blue + pearl-cream + deep-indigo. NOT bright kawaii pastels.
-- Lighting = moon + paper-lanterns + lotus-lanterns + creature-bioluminescence + firefly-drift. NO daytime sun, NO bright pastel sunny light.
-- The kawaii cast itself can keep soft cream-pink-blush faces, but the WORLD around them is DARK.
-- If any phrase below says 'twilight register' / 'warm sunny' / 'pink magic-hour' / 'bright pastel sky' / 'rose-silver moonlight on bright pastels' — REPLACE it with the unambiguously-night equivalent. The render must read as full NIGHT, not twilight-with-a-moon.
-
-`
-    : ''
-}
-━━━ ⚠ HARD RULE #1: 5 KAWAII POND-CREATURES NAMED FIRST — ALL VISIBLE ━━━
-
-The 5 kawaii creatures MUST appear with explicit names at the START of the output: (1) (2) (3) (4) (5). Each is a kawaii pond-creature with kawaii face (closed-arc-eyes, blush cheeks, tiny mouth) — NOT a food. Half-submerged or floating in the pond water.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing KAWAII-KOI-POND renders for YumBot — a tranquil Japanese koi-pond scene with 5 kawaii pond-creatures (smiling koi-fish, axolotls, cloud-mochi-spirits, lily-frogs, pearl-blobs) half-submerged in/around the pond. Painterly Studio-Ghibli meets bex.ai Pop-Mart kawaii register. Output wraps with style prefix + suffix.
+${YUMBOT_NIGHTTIME_BLOCK(
+  night_mode,
+  'This scene is at NIGHT — the kawaii cast keeps soft cream-pink-blush faces, but the WORLD around them is DARK (lit by moon + lotus-lanterns + creature-bioluminescence + firefly drift, NOT twilight/magic-hour).'
+)}
+━━━ THE COMPOSITION (load-bearing) ━━━
+NAME all 5 at the START — (1)(2)(3)(4)(5). Each is a kawaii POND-CREATURE (closed-arc-eyes, blush cheeks, tiny mouth) — NOT a food — half-submerged or floating, in a natural pose-varied cluster (one peeking from water, one tilted, one nestled, one tallest at back, one floating). The Japanese garden backdrop (pagoda / wisteria-grove / temple-courtyard / teahouse / zen-rock-garden) is CLEARLY visible behind the pond, and the featured water-element centerpiece (lotus-lantern / glowing-lily / floating-paper-crane) anchors it. Painterly Studio-Ghibli register: twilight/dusk-heavy, glowing lotus-lanterns, soft mist, cherry-blossom + wisteria petals drifting — cinematic and atmospheric.
 
 ⚠ FAILURE = rendering humans / chibi-children / 1-4 creatures. PASS = 5 distinct kawaii pond-creatures all visible.
-
-━━━ ⚠ HARD RULE #2: SLIGHT POSE VARIATION ━━━
-
-The scene-type below describes the pond composition with slight POSE VARIATION per creature (one peeking from water, one tilted, one nestled close, one tallest at the back, one floating). Natural family-portrait cluster.
-
-━━━ ⚠ HARD RULE #3: JAPANESE GARDEN BACKDROP + WATER-ELEMENT CENTERPIECE ━━━
-
-The Japanese garden BACKDROP (pagoda / wisteria-grove / temple-courtyard / teahouse / zen-rock-garden / etc.) must be CLEARLY VISIBLE behind the pond. The featured WATER-ELEMENT centerpiece (lotus-lantern / glowing-lily / floating-paper-crane / etc.) anchors the pond.
-
-━━━ ⚠ HARD RULE #4: TWILIGHT / DUSK CINEMATIC PAINTERLY REGISTER ━━━
-
-bex.ai reference register: painterly Studio-Ghibli warmth, twilight/dusk-heavy, glowing lotus-lanterns, soft mist, cherry-blossom + wisteria petals drifting. Cinematic and atmospheric.
 
 ━━━ THE SCENE-TYPE (composition + 5-creature pose-varied cluster in pond) ━━━
 ${scene_type}
@@ -1302,24 +991,14 @@ ${creatureBlock}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ POSTER MOMENT ━━━
 
 "a tranquil kawaii Japanese koi-pond at twilight — 5 kawaii pond-creatures gathered around a glowing lotus-lantern under wisteria canopy with cherry-blossom petals drifting." Wallpaper-poster bex.ai-meets-Studio-Ghibli register.
 
 ━━━ HARD BANS ━━━
-
-- NO foods as cast — this path uses kawaii POND-CREATURES (koi / axolotl / mochi-spirit / etc.)
-- NO HUMAN figures / chibi-children — kawaii pond-creatures only
-- NO photoreal / harsh-realism — kawaii painterly Studio-Ghibli fusion
-- NO dark / scary / moody atmosphere — peaceful twilight register
-- NO modern urban / industrial / mall scenes — traditional Japanese garden ONLY
-- NO real kanji / Japanese-text characters — decorative-pattern only
-- NO pathway / lane RECEDING into vanishing point — pond composition is clustered/wide
-- NO chaotic vertical-stacking / climbing / acrobatics — natural pose-varied cluster
-- NO blurred-out generic backdrop — Japanese garden MUST be visibly rendered
-- NO identical-row-of-soldiers lineup
+- NO foods as cast (this path uses kawaii POND-CREATURES — koi / axolotl / mochi-spirit); NO human figures/chibi-children; traditional Japanese garden ONLY (NO modern urban/mall); NO real kanji/text; NO pathway receding to a vanishing point; NO blurred generic backdrop (garden MUST be visible); NO photoreal; NO dark/scary (peaceful twilight register)
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -1334,15 +1013,22 @@ Output ONLY the raw 150-220 word scene description. Comma-separated phrases. NO 
   },
 
   YUMBOT_FAST_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene, camera_framing, lighting, palette, time_of_day, companion, decor_accents, atmospheric_accent } = slots;
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
-    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium.
-
-` : ''}You are writing FAST-FOOD renders for YumBot — 1-3 kawaii fast-food items in a fast-food context. Visual treatment is set by the LOOK REGISTER above.
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing FAST-FOOD renders for YumBot — 1-3 kawaii fast-food items in a fast-food context. Visual treatment is set by the LOOK REGISTER above.
 
 ━━━ THE SCENE ━━━
 ${scene}
@@ -1369,7 +1055,7 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
 1. The 1-3 kawaii fast-food items appear by name with kawaii face features.
@@ -1384,15 +1070,22 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
   },
 
   YUMBOT_CARNIVAL_FOOD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { scene, camera_framing, lighting, palette, time_of_day, companion, decor_accents, atmospheric_accent } = slots;
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
     const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
-    const decorBlock = decorList.filter(Boolean).map((d, i) => `${i + 1}. ${d}`).join('\n');
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium.
-
-` : ''}You are writing CARNIVAL-FOOD renders for YumBot — 1-3 kawaii carnival foods at a carnival / fairground context. Visual treatment is set by the LOOK REGISTER above.
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing CARNIVAL-FOOD renders for YumBot — 1-3 kawaii carnival foods at a carnival / fairground context. Visual treatment is set by the LOOK REGISTER above.
 
 ━━━ THE SCENE ━━━
 ${scene}
@@ -1419,7 +1112,7 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
 1. The 1-3 kawaii carnival-foods appear by name with kawaii face features.
@@ -1451,24 +1144,18 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
-
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing FRUITS-AND-VEGGIES renders for YumBot — 2-3 kawaii fruits and/or vegetables hanging out together in an organic outdoor setting. The cast is PURELY fruits and vegetables. Visual treatment is set by the LOOK REGISTER above.
+    return `${YUMBOT_LOOK_OVERRIDE(sharedDNA)}You are writing FRUITS-AND-VEGGIES renders for YumBot — 2-3 kawaii fruits and/or vegetables hanging out together in an organic outdoor setting. The cast is PURELY fruits and vegetables. Visual treatment is set by the LOOK REGISTER above.
 
 ━━━ THE SCENE (2-3 kawaii fruits and/or vegetables + organic environment) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME ━━━
 ${decorBlock}
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii produce) ━━━
 ${companion}
-Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii produce.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME ━━━
 ${atmospheric_accent}
 
 ━━━ CAMERA + FRAMING ━━━
@@ -1484,20 +1171,13 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The 2-3 kawaii FRUITS / VEGETABLES from THE SCENE appear in the prompt by name with kawaii face features.
-2. The organic environment reads instantly (soil / branch / vine / wicker basket / mossy forest floor / market crate).
-3. ALL 3 decor items appear BY NAME.
-4. The COMPANION appears BY NAME.
-5. The ATMOSPHERIC ACCENT appears BY NAME.
+The 2-3 kawaii fruits/veggies (with kawaii faces) + the organic environment (soil / branch / vine / wicker basket / mossy floor / market crate) + all 3 decor items + the companion + the atmospheric accent ALL appear by name.
 
 ━━━ HARD BANS ━━━
-- NO desserts, NO pastries, NO sweets, NO cookies, NO cakes, NO macarons, NO cupcakes, NO donuts, NO mochi, NO chocolate, NO breads — the cast is PURELY fruits and vegetables.
-- NO human faces (the cast is all produce / critter).
-- NO photoreal tokens.
-- NO swapping the organic setting for a generic kawaii meadow.
+- Cast is PURELY fruits and vegetables — NO desserts/pastries/sweets/cakes/mochi/chocolate/breads; NO human faces; NO photoreal tokens; NO swapping the organic setting for a generic kawaii meadow.
 
 ━━━ OUTPUT ━━━
 The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then the kawaii fruits/veggies + organic environment, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
@@ -1521,29 +1201,25 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing NARRATIVE-ACTION renders for YumBot — a kawaii food vignette CAUGHT MID-STORY (baking-in-progress, garden harvest, pastry-shop-window peek, food parade, food tea-party, bakery delivery). The kawaii food is DOING something or playing a role in a story moment. The VISUAL TREATMENT is locked by the LOOK REGISTER below.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface is rendered in THIS medium.
+`
+    }You are writing NARRATIVE-ACTION renders for YumBot — a kawaii food vignette CAUGHT MID-STORY (baking-in-progress, garden harvest, pastry-shop-window peek, food parade, food tea-party, bakery delivery). The kawaii food is DOING something or playing a role in a story moment. The VISUAL TREATMENT is locked by the LOOK REGISTER above.
 
 ━━━ THE SCENE (kawaii subject mid-action + narrative moment + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME ━━━
 ${decorBlock}
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME ━━━
 ${atmospheric_accent}
 
 ━━━ CAMERA + FRAMING ━━━
@@ -1559,21 +1235,13 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
-2. The NARRATIVE MOMENT reads instantly — the food IS DOING SOMETHING (mid-action, mid-story).
-3. ALL 3 decor items appear BY NAME.
-4. The COMPANION appears BY NAME.
-5. The ATMOSPHERIC ACCENT appears BY NAME.
-6. Kawaii register — LOOK REGISTER carries the medium.
+The kawaii food (with kawaii face) is the HERO and the actor, caught MID-ACTION so the narrative moment reads instantly. All 3 decor items + the companion + the atmospheric accent appear by name.
 
 ━━━ HARD BANS ━━━
-- NO human faces / NO human hands / NO human characters. The food IS the cast and the actor.
-- NO photoreal tokens.
-- NO swapping the narrative moment for a static still-life.
-- NO dropping decor or companion.
+- NO human faces/hands/characters (the food IS the cast and actor); NO photoreal tokens; NO swapping the narrative moment for a static still-life.
 
 ━━━ OUTPUT ━━━
 The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then the kawaii hero MID-ACTION + the narrative moment, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
@@ -1597,29 +1265,25 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
-
-` : ''}You are writing UNEXPECTED-PLACES renders for YumBot — a kawaii food vignette placed in a real-world venue where food doesn't usually live (greenhouse / library / vintage train / amusement park / aquarium / rooftop garden). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface is rendered in THIS medium.
+`
+    }You are writing UNEXPECTED-PLACES renders for YumBot — a kawaii food vignette placed in a real-world venue where food doesn't usually live (greenhouse / library / vintage train / amusement park / aquarium / rooftop garden). The VISUAL TREATMENT is locked by the LOOK REGISTER above.
 
 ━━━ THE SCENE (kawaii subject + venue + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME ━━━
 ${decorBlock}
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME ━━━
 ${atmospheric_accent}
 
 ━━━ CAMERA + FRAMING ━━━
@@ -1635,21 +1299,13 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
-2. The VENUE reads instantly — the scene names a culturally-coded venue element. Keep it.
-3. ALL 3 decor items appear BY NAME.
-4. The COMPANION appears BY NAME.
-5. The ATMOSPHERIC ACCENT appears BY NAME.
-6. Kawaii register — LOOK REGISTER carries the medium.
+The kawaii food (with kawaii face) is the HERO, in a venue that reads instantly (keep the culturally-coded venue element the scene names). All 3 decor items + the companion + the atmospheric accent appear by name.
 
 ━━━ HARD BANS ━━━
-- NO human faces (food is the cast).
-- NO photoreal tokens.
-- NO swapping the venue for a generic kawaii meadow.
-- NO dropping decor or companion.
+- NO human faces (food is the cast); NO photoreal tokens; NO swapping the venue for a generic kawaii meadow.
 
 ━━━ OUTPUT ━━━
 The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then hero + venue, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
@@ -1673,32 +1329,26 @@ The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, th
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+`
+    }You are writing SCALE-TWIST renders for YumBot — a kawaii food vignette at an UNUSUAL SCALE or setting (colossal in a real city / microscopic at ant-scale / an entire island made of food / a chocolate-river world / undersea pastry kingdom / deep cosmic space). The VISUAL TREATMENT is locked by the LOOK REGISTER above.
 
-` : ''}You are writing SCALE-TWIST renders for YumBot — a kawaii food vignette at an UNUSUAL SCALE or setting (colossal in a real city / microscopic at ant-scale / an entire island made of food / a chocolate-river world / undersea pastry kingdom / deep cosmic space). The VISUAL TREATMENT is locked by the LOOK REGISTER below.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens. Every surface in the scene is rendered in THIS medium.
-
-━━━ THE SCENE (kawaii subject + scale twist + composition — rendered in the LOOK REGISTER) ━━━
+━━━ THE SCENE (kawaii subject + scale twist + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME, each in its own zone (not stacked) ━━━
 ${decorBlock}
-Each appears explicitly. Each occupies its own zone — not stacked, each visible.
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-Named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME (small, understated) ━━━
 ${atmospheric_accent}
-Named. Small / understated, adds life.
 
 ━━━ CAMERA + FRAMING ━━━
 ${camera_framing}
@@ -1713,31 +1363,16 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The kawaii hero from THE SCENE is the HERO with kawaii face features.
-2. The SCALE TWIST reads instantly — colossal city / micro ant-world / cake-island / chocolate-river / undersea / cosmic. Keep what the scene names.
-3. ALL 3 decor items appear BY NAME.
-4. The COMPANION appears BY NAME.
-5. The ATMOSPHERIC ACCENT appears BY NAME.
-6. Kawaii register — the LOOK REGISTER carries the medium.
+The kawaii food (with kawaii face) is the HERO, and the SCALE TWIST reads instantly (keep what the scene names — colossal city / micro ant-world / cake-island / chocolate-river / undersea / cosmic). All 3 decor items + the companion + the atmospheric accent appear by name.
 
 ━━━ HARD BANS ━━━
-- NO human-character cast (food is the cast).
-- NO photoreal tokens ("photograph" / "DSLR" / "f/2.8").
-- NO swapping the scale twist for a default tabletop kawaii scene.
-- NO dropping decor or companion.
+- NO human-character cast (food is the cast); NO photoreal tokens ("photograph" / "DSLR" / "f/2.8"); NO swapping the scale twist for a default tabletop kawaii scene.
 
 ━━━ OUTPUT ━━━
-The raw Flux prompt, 160-220 words, comma-separated. STRUCTURE:
-1. OPEN with the LOOK REGISTER tokens.
-2. The kawaii hero + the scale twist.
-3. The 3 decor items by name.
-4. The companion by name.
-5. The atmospheric accent.
-6. Camera + lighting + time + palette + vibe.
-NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+The raw Flux prompt, 160-220 words, comma-separated. Open with the LOOK REGISTER tokens, then the kawaii hero + scale twist, then the 3 decor items + companion + atmospheric accent by name, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
   },
 
   YUMBOT_CUISINE: ({ slots, sharedDNA, vibeDirective }) => {
@@ -1758,32 +1393,26 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+`
+    }You are writing CUISINE renders for YumBot — a kawaii food vignette anchored in one of 7 global cuisine cultures (French / Italian / Mexican / Korean / Indian / Middle-Eastern / Nordic). The VISUAL TREATMENT is locked by the LOOK REGISTER above — render the whole scene in THAT medium.
 
-` : ''}You are writing CUISINE renders for YumBot — a kawaii food vignette anchored in one of 7 global cuisine cultures (French / Italian / Mexican / Korean / Indian / Middle-Eastern / Nordic). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents). Every surface in the scene below is rendered in THIS medium.
-
-━━━ THE SCENE (kawaii subject + cuisine setting + composition — rendered in the LOOK REGISTER above) ━━━
+━━━ THE SCENE (kawaii subject + cuisine setting + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME, each in its own zone (not stacked) ━━━
 ${decorBlock}
-Each of these 3 decor items must be named explicitly. Each occupies its own zone in the scene around the kawaii hero — not stacked on top, each visible.
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-This companion must be named explicitly. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME (small, understated) ━━━
 ${atmospheric_accent}
-Name this atmospheric flourish in your output. Small / understated, adds life.
 
 ━━━ CAMERA + FRAMING ━━━
 ${camera_framing}
@@ -1798,31 +1427,16 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
-2. The CUISINE setting reads instantly — the scene names a culturally-coded setting element. Keep it.
-3. ALL 3 decor items appear in the prompt BY NAME. Count them as you write.
-4. The COMPANION appears in the prompt BY NAME.
-5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
-6. Kawaii register — NOT photoreal, NOT a literal product photo. The LOOK REGISTER carries the medium.
+The kawaii food (with kawaii face) is the HERO, and the CUISINE setting reads instantly (keep the culturally-coded element the scene names). All 3 decor items + the companion + the atmospheric accent appear by name. Kawaii register, NOT photoreal.
 
 ━━━ HARD BANS ━━━
-- NO human faces, NO chefs / customers / vendors as people (food is the cast).
-- NO photoreal tokens ("photograph" / "DSLR" / "f/2.8").
-- NO swapping the cuisine for a generic kawaii meadow.
-- NO dropping decor items or the companion.
+- NO human faces, NO chefs/customers/vendors as people (food is the cast); NO photoreal tokens ("photograph" / "DSLR" / "f/2.8"); NO swapping the cuisine for a generic kawaii meadow.
 
 ━━━ OUTPUT ━━━
-The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
-1. OPEN with the LOOK REGISTER tokens — the CLIP anchor.
-2. The kawaii hero from THE SCENE + the cuisine setting.
-3. The 3 decor items by name.
-4. The companion by name.
-5. The atmospheric accent.
-6. Camera framing + lighting + time of day + palette + vibe mood.
-NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+The raw Flux prompt, 160-220 words, comma-separated. Open with the LOOK REGISTER tokens, then the kawaii hero + cuisine setting, then the 3 decor items + companion + atmospheric accent by name, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
   },
 
   YUMBOT_WHIMSICAL: ({ slots, sharedDNA, vibeDirective }) => {
@@ -1843,32 +1457,26 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pur
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+`
+    }You are writing WHIMSICAL renders for YumBot — a kawaii food vignette caught in an unexpected concept (modeling on a runway, relaxing at a spa, playing in an orchestra, attending school, hanging with pets / toys). The VISUAL TREATMENT is locked by the LOOK REGISTER above — render the whole scene in THAT medium.
 
-` : ''}You are writing WHIMSICAL renders for YumBot — a kawaii food vignette caught in an unexpected concept (modeling on a runway, relaxing at a spa, playing in an orchestra, attending school, hanging with pets / toys). The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents) so Flux locks onto this visual treatment. Every surface in the scene below is rendered in THIS medium.
-
-━━━ THE SCENE (kawaii subject + whimsical concept + composition — rendered in the LOOK REGISTER above) ━━━
+━━━ THE SCENE (kawaii subject + whimsical concept + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME, each in its own zone (not stacked) ━━━
 ${decorBlock}
-Each of these 3 decor items must be named explicitly in your output. They occupy their own zones in the scene around the kawaii hero — not stacked on top, each visible.
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-This companion must be named explicitly in your output. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending. A tiny visible delight.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME (small, understated) ━━━
 ${atmospheric_accent}
-Name this atmospheric flourish in your output. Small / understated, adds life.
 
 ━━━ CAMERA + FRAMING ━━━
 ${camera_framing}
@@ -1883,31 +1491,16 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD MANDATES ━━━
-1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
-2. The whimsical concept reads instantly — runway / spa / orchestra / school / pets / toys — keep what the scene names.
-3. ALL 3 decor items above appear in the prompt BY NAME. Count them as you write. Do not drop any.
-4. The COMPANION appears in the prompt BY NAME.
-5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
-6. Kawaii register — NOT photoreal, NOT a literal product photo. The LOOK REGISTER above carries the medium.
+The kawaii food (with kawaii face) is the HERO, and the whimsical concept reads instantly (keep what the scene names — runway / spa / orchestra / school / pets / toys). All 3 decor items + the companion + the atmospheric accent appear by name. Kawaii register, NOT photoreal.
 
 ━━━ HARD BANS ━━━
-- NO human faces, NO human models / students / spa-goers (food is the cast).
-- NO photoreal-coded register ("photograph" / "DSLR" / "f/2.8").
-- NO swapping the whimsical concept for a generic kawaii meadow.
-- NO dropping decor items or the companion.
+- NO human faces, NO human models/students/spa-goers (food is the cast); NO photoreal tokens ("photograph" / "DSLR" / "f/2.8"); NO swapping the whimsical concept for a generic kawaii meadow.
 
 ━━━ OUTPUT ━━━
-The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
-1. OPEN with the LOOK REGISTER tokens — they're the CLIP anchor.
-2. The kawaii hero from THE SCENE + the whimsical concept setup.
-3. The 3 decor items by name.
-4. The companion by name.
-5. The atmospheric accent.
-6. Camera framing + lighting + time of day + palette + vibe mood.
-NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+The raw Flux prompt, 160-220 words, comma-separated. Open with the LOOK REGISTER tokens, then the kawaii hero + whimsical concept, then the 3 decor items + companion + atmospheric accent by name, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
   },
 
   YUMBOT_MEAL_TYPES: ({ slots, sharedDNA, vibeDirective }) => {
@@ -1928,32 +1521,26 @@ NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pur
       .map((d, i) => `${i + 1}. ${d}`)
       .join('\n');
 
-    return `${sharedDNA && sharedDNA.lookRegister ? `━━━ LOOK REGISTER OVERRIDE (NON-NEGOTIABLE — open your Flux prompt with this medium) ━━━
-${sharedDNA.lookRegister}
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
 
-This medium leads the CLIP anchor. Translate every surface in the scene below into THIS medium. Open your Flux prompt with these tokens.
+`
+    }You are writing MEAL-TYPES renders for YumBot — a kawaii food vignette in a specific meal-occasion setting, populated with multiple props + a tiny companion + an atmospheric flourish. The VISUAL TREATMENT is locked by the LOOK REGISTER above — render the whole scene in THAT medium.
 
-` : ''}You are writing MEAL-TYPES renders for YumBot — a kawaii food vignette in a specific meal-occasion setting, populated with multiple props + a tiny companion + an atmospheric flourish. The VISUAL TREATMENT is locked by the LOOK REGISTER below — render the whole scene in THAT medium.
-
-━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium, every surface in the scene rendered in it) ━━━
-${sharedDNA && sharedDNA.lookRegister ? sharedDNA.lookRegister : 'Soft warm watercolor kawaii illustration — visible paper texture, gentle pigment washes, hand-drawn pencil-line outline, cozy picture-book register.'}
-
-This medium is the CLIP anchor — your Flux prompt MUST open with these tokens (or near-equivalents) so Flux locks onto this visual treatment. Every surface in the scene below is rendered in THIS medium.
-
-━━━ THE SCENE (kawaii subject + meal-occasion setting + composition — rendered in the LOOK REGISTER above) ━━━
+━━━ THE SCENE (kawaii subject + meal-occasion setting + composition) ━━━
 ${scene}
 
-━━━ DECOR ACCENTS — ALL 3 MUST APPEAR BY NAME IN YOUR PROMPT (NON-NEGOTIABLE) ━━━
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME, each in its own zone (not stacked) ━━━
 ${decorBlock}
-Each of these 3 decor items must be named explicitly in your output. They occupy their own zones in the scene around the kawaii hero — not stacked on top, each visible.
 
-━━━ COMPANION — MUST APPEAR BY NAME (NON-NEGOTIABLE) ━━━
+━━━ COMPANION — APPEARS BY NAME (small, 5-10% of frame, NEAR the kawaii hero) ━━━
 ${companion}
-This companion must be named explicitly in your output. Small (5-10% of frame), positioned NEAR the kawaii hero — not on top, not blending. A tiny visible delight.
 
-━━━ ATMOSPHERIC ACCENT — MUST APPEAR BY NAME ━━━
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME (small, understated) ━━━
 ${atmospheric_accent}
-Name this atmospheric flourish in your output. Small / understated, adds life.
 
 ━━━ CAMERA + FRAMING ━━━
 ${camera_framing}
@@ -1968,30 +1555,15 @@ ${time_of_day}
 ${palette}
 
 ━━━ VIBE MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
-━━━ HARD MANDATES (read in order, each one matters) ━━━
-1. The kawaii hero from THE SCENE is the HERO — visible, readable, charming, with kawaii face features.
-2. The meal-occasion setting reads instantly (windowsill / tiered china stand / checker blanket / cafe counter / neon food truck / dim kitchen — keep what the scene names).
-3. ALL 3 decor items above appear in the prompt BY NAME. Count them as you write. Do not drop any.
-4. The COMPANION appears in the prompt BY NAME.
-5. The ATMOSPHERIC ACCENT appears in the prompt BY NAME.
-6. Painterly kawaii illustration register — NOT photoreal, NOT a literal product photo. Soft brushwork, warm charm.
+━━━ HARD MANDATES ━━━
+The kawaii food (with kawaii face) is the HERO, and the meal-occasion setting reads instantly (keep what the scene names — windowsill / tiered china stand / checker blanket / cafe counter / neon food truck / dim kitchen). All 3 decor items + the companion + the atmospheric accent appear by name. Kawaii register, NOT photoreal.
 
 ━━━ HARD BANS ━━━
-- NO human faces, NO chef hats / aprons / uniforms.
-- NO photoreal-coded register ("photograph" / "DSLR" / "f/2.8").
-- NO replacing the named meal-occasion setting with a generic kawaii meadow.
-- NO dropping decor items or the companion — they're load-bearing for variety.
+- NO human faces, NO chef hats/aprons/uniforms; NO photoreal tokens ("photograph" / "DSLR" / "f/2.8"); NO replacing the meal-occasion setting with a generic kawaii meadow.
 
 ━━━ OUTPUT ━━━
-The raw Flux prompt, 160-220 words, comma-separated phrases. STRUCTURE:
-1. OPEN with the LOOK REGISTER tokens — they're the CLIP anchor for the medium.
-2. The kawaii hero from THE SCENE + the meal-occasion setting.
-3. The 3 decor items by name.
-4. The companion by name.
-5. The atmospheric accent.
-6. Camera framing + lighting + time of day + palette + vibe mood.
-NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists. Pure comma-separated Flux prompt.`;
+The raw Flux prompt, 160-220 words, comma-separated. Open with the LOOK REGISTER tokens, then the kawaii hero + meal-occasion setting, then the 3 decor items + companion + atmospheric accent by name, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
   },
 };

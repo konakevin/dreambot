@@ -1575,6 +1575,15 @@ Sibling failure mode to medium/prefix cruft, but it lives in the **archetype-tem
 
 Litmus before shipping a template: if Sonnet's output `ai_prompt` is >160 words, the brief is over-instructing — audit it, don't audit Flux. Keep the LOAD-BEARING guards (gender/ethnicity locks, automaton-not-animal, never-seductive, multi-color identity) but in ONE compressed positive sentence each, not a 40-line block.
 
+**Follow-up — ChibiBot + SteamBot + YumBot de-cruft sweep (2026-06-12).** Same lesson, three more bots. YumBot was the fleet's worst: 39 `NON-NEGOTIABLE` blocks, the ~400-char `NIGHTTIME LOCK` paragraph inlined verbatim in 6 templates, the 4-line `LOOK REGISTER OVERRIDE` boilerplate inlined in all 19, several bucket paths carrying the look block TWICE (override-at-top + a redundant `LOOK REGISTER (NON-NEGOTIABLE)` body block with fallback), and `vibeDirective.slice(0,250)` fleet-high. Reusable de-cruft moves proven here:
+
+- **Extract verbatim-repeated paragraphs into shared-blocks.js helpers, reference once.** YumBot: `YUMBOT_NIGHTTIME_BLOCK(night_mode, sceneLine)` (one scene-specific line per template + a shared palette/lighting/replace tail) and `YUMBOT_LOOK_OVERRIDE(sharedDNA)` (terse 2-line block, returns '' when no look). Killed ~2.4 KB of duplicated prose. A repeated block is cruft the moment it appears in a 2nd template.
+- **Collapse the triplicated HARD RULE #1-5 + HARD BANS + 6-point HARD MANDATES + STRUCTURE lists.** Each path had 3-5 `━━━ ⚠ HARD RULE #N ━━━` paragraphs saying the composition three ways, then a 10-item `HARD BANS`, then a numbered MANDATES list re-asserting "decor appears by name" (already on each slot label). Collapsed to ONE `THE COMPOSITION (load-bearing)` positive paragraph + ONE comma-joined HARD BANS line. **Preserve the genuinely load-bearing locks compressed, not deleted:** YumBot's mini-chef "no chef hats/aprons, food doesn't WEAR anything" (a documented human-leak guard), koi-pond "creatures NOT foods", coquette palette-lock, "food IS the character / kawaii face baked in".
+- **De-duplicate the style preamble across PROMPT_PREFIX + medium.** Both led with "3D CGI + painterly fusion, Pop-Mart designer-vinyl, glossy dewy pearlescent, pastel palette" (~150 redundant chars/render). Split: medium owns the food-is-character IDENTITY, prefix owns the render-QUALITY register. Also dropped the enumerated pastel-color list (blush/lavender/mint/peach/cream/baby-blue) from the medium — a palette axis + `sharedDNA.scenePalette` already roll color.
+- **`vibeDirective.slice(0,250)` → `slice(0,150)` everywhere** (one `perl -pi` sweep after the manual edits; verify 0 remain at 200/250).
+
+YumBot files: `scripts/bots/yumbot/shared-blocks.js` (new `YUMBOT_NIGHTTIME_BLOCK` + `YUMBOT_LOOK_OVERRIDE` + de-duped medium/prefix), `scripts/bots/yumbot/archetype-templates.js` (all 19 templates). Loads clean; not yet render-validated (Kevin's call from the feed).
+
 ---
 
 ## Medium + prefix CRUFT ACCUMULATION — the slow drift toward AI-CGI / luxury-resort / mountain-photographer priors (CRITICAL — 2026-06-02)
