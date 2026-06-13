@@ -823,6 +823,7 @@ export type Database = {
           face_swap_dual_rate: number;
           face_swap_self_rate: number;
           face_swap_share: number;
+          face_swap_share_with_plus_one: number;
           id: number;
           nightly_enabled: boolean;
           nightly_max_jobs: number;
@@ -858,6 +859,7 @@ export type Database = {
           face_swap_dual_rate?: number;
           face_swap_self_rate?: number;
           face_swap_share?: number;
+          face_swap_share_with_plus_one?: number;
           id?: number;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;
@@ -893,6 +895,7 @@ export type Database = {
           face_swap_dual_rate?: number;
           face_swap_self_rate?: number;
           face_swap_share?: number;
+          face_swap_share_with_plus_one?: number;
           id?: number;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;

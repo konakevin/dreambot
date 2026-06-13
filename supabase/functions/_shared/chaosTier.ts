@@ -10,10 +10,12 @@
  *
  * Within the scene-territory the embodied roll fires first; if it misses
  * the remaining share splits 50/50 pure_scene vs epic_tiny. Face-swap
- * portion is 70% (60% dual / 20% self / 20% +1; collapses to 100% self
- * when no +1). No cast at all → full 100% scene-territory.
+ * portion is 70% self-only, bumped to 90% when the user has BOTH a self
+ * and a +1 (the showcase case — 60% dual / 20% self / 20% +1 of that 90%,
+ * i.e. 54% / 18% / 18% of all dreams; collapses to 100% self when no +1).
+ * No cast at all → full 100% scene-territory.
  *
- * All knobs live on engine_config (singleton id=1) — see migration 239.
+ * All knobs live on engine_config (singleton id=1) — see migrations 239 + 260.
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -39,6 +41,9 @@ export interface ChaosConfig {
   extra_models_mid: string[];
   extra_models_high: string[];
   face_swap_share: number;
+  // Higher face-swap share when the user has BOTH self + a +1 — the
+  // dual-cast showcase case. Falls back to face_swap_share when no +1.
+  face_swap_share_with_plus_one: number;
   face_swap_dual_rate: number;
   face_swap_self_rate: number;
 }
@@ -58,6 +63,7 @@ const DEFAULT_CONFIG: ChaosConfig = {
     'black-forest-labs/flux-2-max',
   ],
   face_swap_share: 0.7,
+  face_swap_share_with_plus_one: 0.9,
   face_swap_dual_rate: 0.6,
   face_swap_self_rate: 0.2,
 };
@@ -70,7 +76,7 @@ export async function fetchChaosConfig(sb: SupabaseClient): Promise<ChaosConfig>
   const { data, error } = await sb
     .from('engine_config')
     .select(
-      'chaos_low_threshold, chaos_high_threshold, scene_embodied_rate_low, scene_embodied_rate_mid, scene_embodied_rate_high, embodied_mediums_mid, embodied_mediums_high, extra_models_mid, extra_models_high, face_swap_share, face_swap_dual_rate, face_swap_self_rate'
+      'chaos_low_threshold, chaos_high_threshold, scene_embodied_rate_low, scene_embodied_rate_mid, scene_embodied_rate_high, embodied_mediums_mid, embodied_mediums_high, extra_models_mid, extra_models_high, face_swap_share, face_swap_share_with_plus_one, face_swap_dual_rate, face_swap_self_rate'
     )
     .eq('id', 1)
     .single();
@@ -92,6 +98,9 @@ export async function fetchChaosConfig(sb: SupabaseClient): Promise<ChaosConfig>
     extra_models_mid: (data.extra_models_mid as string[]) ?? DEFAULT_CONFIG.extra_models_mid,
     extra_models_high: (data.extra_models_high as string[]) ?? DEFAULT_CONFIG.extra_models_high,
     face_swap_share: Number(data.face_swap_share ?? DEFAULT_CONFIG.face_swap_share),
+    face_swap_share_with_plus_one: Number(
+      data.face_swap_share_with_plus_one ?? DEFAULT_CONFIG.face_swap_share_with_plus_one
+    ),
     face_swap_dual_rate: Number(data.face_swap_dual_rate ?? DEFAULT_CONFIG.face_swap_dual_rate),
     face_swap_self_rate: Number(data.face_swap_self_rate ?? DEFAULT_CONFIG.face_swap_self_rate),
   };
@@ -131,10 +140,11 @@ export function extraModelsForTier(tier: ChaosTier, cfg: ChaosConfig): string[] 
  * Roll the nightly dream type given the user's cast availability + chaos tier.
  *
  * Distribution:
- *   - 70% face-swap (when hasSelf):
- *       - hasPlus1:  60% dual / 20% self / 20% +1
- *       - no +1:     100% self (the 60% dual share folds into self)
- *   - 30% scene-territory:
+ *   - face-swap (when hasSelf):
+ *       - hasPlus1:  90% share, split 60% dual / 20% self / 20% +1
+ *                    (= 54% / 18% / 18% of all dreams)
+ *       - no +1:     70% share, 100% self (the dual share folds into self)
+ *   - scene-territory (10% with +1, 30% self-only):
  *       - embodied roll (rate from chaos tier)
  *       - else 50/50 pure_scene vs epic_tiny (epic_tiny needs hasSelf, else pure_scene)
  *   - hasSelf=false: 100% scene-territory. Embodied roll fires; otherwise
@@ -176,8 +186,12 @@ export function rollNightlyDreamType({
     return Math.random() < embRate ? 'embodied' : 'pure_scene';
   }
 
-  // Face-swap branch
-  if (Math.random() < cfg.face_swap_share) {
+  // Face-swap branch. With both self + a +1 the showcase share is higher
+  // (face_swap_share_with_plus_one, default 0.9); self-only uses the base
+  // face_swap_share (default 0.7). The dual/self/+1 split is unchanged —
+  // it just scales to the larger share.
+  const faceSwapShare = hasPlusOne ? cfg.face_swap_share_with_plus_one : cfg.face_swap_share;
+  if (Math.random() < faceSwapShare) {
     if (!hasPlusOne) return 'face_swap_self';
     const r = Math.random();
     if (r < cfg.face_swap_dual_rate) return 'face_swap_dual';

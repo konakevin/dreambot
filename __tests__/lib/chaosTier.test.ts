@@ -40,6 +40,7 @@ const CFG: ChaosConfig = {
     'black-forest-labs/flux-2-max',
   ],
   face_swap_share: 0.7,
+  face_swap_share_with_plus_one: 0.9,
   face_swap_dual_rate: 0.6,
   face_swap_self_rate: 0.2,
 };
@@ -130,6 +131,20 @@ describe('rollNightlyDreamType (regular flow)', () => {
     seq(0.0); // face-swap roll lands
     expect(rollNightlyDreamType({ hasSelf: true, hasPlusOne: false, tier: 'mid', cfg: CFG })).toBe(
       'face_swap_self'
+    );
+  });
+
+  it('conditional share boundary: a 0.85 roll lands face-swap WITH a +1 (0.85 < 0.9)', () => {
+    seq(0.85, 0.0); // 0.85 < 0.9 face-swap (with +1), then 0.0 < 0.6 dual
+    expect(rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'low', cfg: CFG })).toBe(
+      'face_swap_dual'
+    );
+  });
+
+  it('conditional share boundary: the same 0.85 roll lands SCENE for self-only (0.85 > 0.7)', () => {
+    seq(0.85, 0.0, 0.0); // 0.85 > 0.7 → scene branch, embodied=no (low), 0.0 < 0.5 pure_scene
+    expect(rollNightlyDreamType({ hasSelf: true, hasPlusOne: false, tier: 'low', cfg: CFG })).toBe(
+      'pure_scene'
     );
   });
 
@@ -278,7 +293,7 @@ describe('mapDreamTypeToInputs', () => {
 });
 
 describe('distribution sanity (statistical, 5000 samples)', () => {
-  it('hasSelf + hasPlusOne at low tier: ~70% face-swap (60/20/20 split) / 30% scene (50/50 pure/tiny)', () => {
+  it('hasSelf + hasPlusOne at low tier: ~90% face-swap (54/18/18 split) / 10% scene (50/50 pure/tiny)', () => {
     const counts: Record<NightlyDreamType, number> = {
       face_swap_dual: 0,
       face_swap_self: 0,
@@ -292,22 +307,22 @@ describe('distribution sanity (statistical, 5000 samples)', () => {
       counts[t]++;
     }
     expect(counts.embodied).toBe(0);
-    // 60% of 70% = 42% dual; allow 3pp margin
-    expect(counts.face_swap_dual / 5000).toBeGreaterThan(0.38);
-    expect(counts.face_swap_dual / 5000).toBeLessThan(0.46);
-    // 20% of 70% = 14% each self and +1
-    expect(counts.face_swap_self / 5000).toBeGreaterThan(0.1);
-    expect(counts.face_swap_self / 5000).toBeLessThan(0.18);
-    expect(counts.face_swap_plus_one / 5000).toBeGreaterThan(0.1);
-    expect(counts.face_swap_plus_one / 5000).toBeLessThan(0.18);
-    // 30% scene split 50/50 = 15% each pure_scene and epic_tiny
-    expect(counts.pure_scene / 5000).toBeGreaterThan(0.11);
-    expect(counts.pure_scene / 5000).toBeLessThan(0.19);
-    expect(counts.epic_tiny / 5000).toBeGreaterThan(0.11);
-    expect(counts.epic_tiny / 5000).toBeLessThan(0.19);
+    // 60% of 90% = 54% dual; allow ~4pp margin
+    expect(counts.face_swap_dual / 5000).toBeGreaterThan(0.5);
+    expect(counts.face_swap_dual / 5000).toBeLessThan(0.58);
+    // 20% of 90% = 18% each self and +1
+    expect(counts.face_swap_self / 5000).toBeGreaterThan(0.14);
+    expect(counts.face_swap_self / 5000).toBeLessThan(0.22);
+    expect(counts.face_swap_plus_one / 5000).toBeGreaterThan(0.14);
+    expect(counts.face_swap_plus_one / 5000).toBeLessThan(0.22);
+    // 10% scene split 50/50 = 5% each pure_scene and epic_tiny
+    expect(counts.pure_scene / 5000).toBeGreaterThan(0.02);
+    expect(counts.pure_scene / 5000).toBeLessThan(0.08);
+    expect(counts.epic_tiny / 5000).toBeGreaterThan(0.02);
+    expect(counts.epic_tiny / 5000).toBeLessThan(0.08);
   });
 
-  it('hasSelf + hasPlusOne at high tier: ~15% embodied (15% of all dreams)', () => {
+  it('hasSelf + hasPlusOne at high tier: ~5% embodied (10% scene * 50% rate), ~90% face-swap', () => {
     let embodied = 0;
     let faceSwap = 0;
     for (let i = 0; i < 5000; i++) {
@@ -315,10 +330,20 @@ describe('distribution sanity (statistical, 5000 samples)', () => {
       if (t === 'embodied') embodied++;
       if (t.startsWith('face_swap')) faceSwap++;
     }
-    // 30% scene * 50% embodied rate = 15%
-    expect(embodied / 5000).toBeGreaterThan(0.11);
-    expect(embodied / 5000).toBeLessThan(0.19);
-    // 70% face-swap still
+    // 10% scene * 50% embodied rate = 5%
+    expect(embodied / 5000).toBeGreaterThan(0.02);
+    expect(embodied / 5000).toBeLessThan(0.08);
+    // 90% face-swap now (the +1 showcase bump)
+    expect(faceSwap / 5000).toBeGreaterThan(0.86);
+    expect(faceSwap / 5000).toBeLessThan(0.94);
+  });
+
+  it('hasSelf only (no +1) is unaffected: still ~70% face-swap (all self)', () => {
+    let faceSwap = 0;
+    for (let i = 0; i < 5000; i++) {
+      const t = rollNightlyDreamType({ hasSelf: true, hasPlusOne: false, tier: 'low', cfg: CFG });
+      if (t.startsWith('face_swap')) faceSwap++;
+    }
     expect(faceSwap / 5000).toBeGreaterThan(0.65);
     expect(faceSwap / 5000).toBeLessThan(0.75);
   });
