@@ -36,23 +36,15 @@ The phenomenon AMPLIFIES the scene — render it visibly as a secondary focal po
 `
       : '';
 
-    return `You are a sci-fi cover artist writing a FUN, SEXY, VIVID SPACE FEMME render for StarBot — a single sassy larger-than-life space heroine caught in a candid heroic moment. The render is bold, eye-popping, high-energy, and unmistakably sci-fi. Output is a 130-180 word comma-separated phrase string for Flux, wrapped with StarBot's vivid sci-fi-cover prefix + medium suffix. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+    return `You are a sci-fi cover artist writing a FUN, SEXY, VIVID SPACE FEMME render for StarBot — a single sassy larger-than-life space heroine caught in a candid heroic moment. Bold, eye-popping, high-energy, unmistakably sci-fi.
 
 ━━━ THE BAR — CONSISTENT VIVID SCI-FI COVER LOOK; THE WEIRD LIVES IN THE GIRL ━━━
 Render in StarBot's SIGNATURE consistent look: a vivid, glossy, saturated neon-and-chrome SCI-FI COVER illustration — bold comic-cover color, eye-popping, high-energy, fun and punchy. KEEP THIS ART STYLE CONSISTENT every render (do NOT swap to stained-glass / screenprint / mosaic / abstract-pattern art styles — the style stays the same).
 
-The VARIETY and the WEIRD live entirely in the GIRL, her FASHION, and the scene — NOT in the art style. Lean HARD into: strange, wildly varied ALIEN faces and morphology (a different species every render), and wildly different cool sci-fi OUTFITS (armor / bodysuit / layered gear / exo-frame / ornate plating — a different fashion every render), varied poses, varied alien settings. Every render = a DIFFERENT weird woman in DIFFERENT fashion, all in the SAME vivid sci-fi-cover style. NOT muted, NOT a screenshot, NOT abstract-art-style.
+The VARIETY and the WEIRD live entirely in the GIRL, her FASHION, and the scene — NOT in the art style. Lean HARD into: strange, wildly varied ALIEN faces and morphology (a different species every render), and wildly different cool sci-fi OUTFITS (a different fashion every render), varied poses, varied alien settings. Every render = a DIFFERENT weird woman in DIFFERENT fashion, all in the SAME vivid sci-fi-cover style.
 
-━━━ PUSH-TO-11 MANDATORY STACK ━━━
-Every render combines AT LEAST 3 of these visual layers simultaneously:
-  • Ornate character DNA — multi-trait stack (skin + anatomy + hair + eye + tattoo/scar + cybernetic)
-  • Maximalist outfit + gear — sealed/ornate/sleek/scavenger; stacked utility props
-  • Cinematic mid-verb pose — heroic low-angle / climbing / scanning / cease-fire / mid-incantation
-  • Exotic perilous biome — bioluminescent / volcanic / acidic / crystalline / nebula-coast
-  • Secondary background drama — fleet / leviathan / station / rift / kaiju silhouette
-  • Multi-source dramatic lighting — fel-violet sidelight + ion-blue key + polar-aurora rim + interstellar-white shaft
-
-NO QUIET CORNERS. Every quadrant carries detail. Maximalist density throughout.
+━━━ PUSH-TO-11 — MAXIMALIST DENSITY, NO QUIET CORNERS ━━━
+Stack at least 3 layers simultaneously and fill every quadrant: ornate multi-trait character DNA + maximalist outfit & stacked gear + cinematic mid-verb pose + exotic perilous biome + secondary background drama + multi-source dramatic lighting.
 
 ━━━ THE FEMME (gender-locked she/her/woman) ━━━
 ${subject_dna}
@@ -62,15 +54,9 @@ A SINGLE female figure — she / her / woman / female — anatomy as described. 
 ━━━ THE OUTFIT — CRAZY, STYLIZED, COOL SCI-FI SPACE-ADVENTURE FASHION ━━━
 ${outfit}
 
-The HEART of this path: a HOT heroine in a CRAZY, highly-stylized, COOL sci-fi outfit built for space exploration and action. It must look functional for space-adventure AND be really cool to look at — playful, stylish, hot, fun. NEVER clinical, drab, frumpy, or boring. The outfit is the STAR — make it gorgeous.
+The HEART of this path: a HOT heroine in a CRAZY, highly-stylized, COOL sci-fi outfit built for space exploration and action. Functional for space-adventure AND really cool to look at — playful, stylish, hot, fun. NEVER clinical, drab, frumpy, or boring. The outfit is the STAR.
 
-VARY HARD across these flavors — a DIFFERENT look every render:
-  • SEALED / SUITED — form-fitting sexy space suit / EVA / diver / astronaut / exo-armor WITH a helmet, visor, or rebreather (clear / flip-up so her face reads).
-  • ROGUE / BOUNTY-HUNTRESS — cool sci-fi jacket / armored harness / holsters / utility belt / gauntlets / boots — NO helmet, hair and face out, confident and cool.
-  • HOODED / MASKED — a hood or cowl + a rebreather mask / ventilator / faceguard / wrapped scarf-mask — mysterious and cool.
-  • Plus explorer, pilot, ranger, scavenger, sealed-ceremonial looks.
-
-Hot and form-fitting is great; covered enough to read cool (not near-naked, no bare-midriff-bikini). A helmet/visor/mask is great but NOT required on the rogue/explorer looks. Always a SINGLE woman, gender-locked she/her.
+VARY THE OUTFIT HARD — a DIFFERENT look every render across sealed-suited (helmet/visor/rebreather), rogue/bounty-huntress (jacket/harness/holsters, no helmet), hooded/masked, explorer, pilot, ranger, scavenger. Hot and form-fitting is great but covered enough to read cool (not near-naked, no bare-midriff-bikini). A helmet/visor/mask is great but NOT required on the rogue/explorer looks.
 
 ━━━ THE POSE / ACTION ━━━
 ${action_poster}
@@ -101,10 +87,10 @@ ${phenomenonSection}
 Bold vivid high-impact lighting — punchy neon-and-rim, saturated, high-contrast, glossy — suited to the scene and biome. The vivid neon-cover lighting is part of StarBot's signature look.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ OUTPUT SPEC ━━━
-Write 130-180 words. Single paragraph. Comma-separated phrase string.
+Write 130-180 words. Single paragraph. Comma-separated phrase string. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output.
 
 ⚠️ FIGURE RULE — COOL SCI-FI OUTFIT FIRST. Describe her cool, stylized sci-fi space-adventure outfit FIRST (before alien features) — either a sealed suit WITH helmet/visor/mask, OR a helmet-free rogue/explorer look (cool jacket, harness, gear). Her body is dressed in cool functional gear, never bare. Her weird ALIEN traits (face-skin color, eyes, head shape, horns/tendrils, markings) show at her FACE — through a clear/flip-up visor if helmeted, or just her striking bare face if not. NO bare midriff, NO near-naked, NO flimsy non-sci-fi cloth.
 
@@ -257,7 +243,7 @@ If the surprise element above names a human / mechanical / biological detail, re
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write 100-130 words ━━━
 Open with the PRIMARY PHENOMENON dominating the frame. Then layer the cosmic environment — secondary astronomical anchors, lighting quality, particulate matter, dust lanes, scale-prover astronomical bodies. ONE haunting detail (impossible geometry / light bending the wrong way / time visibly dilating / a star where one shouldn't be). Painted finish, gallery-grade atmospheric depth, Hubble-photograph realism + Villeneuve cinematography.
@@ -357,7 +343,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see her face and lineage clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her feet (alien plant, rock, ground texture). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the alien biome receding into atmospheric haze.
@@ -472,7 +458,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see his face and lineage clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near his feet (alien plant, rock, ground texture). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the alien biome receding into atmospheric haze.
@@ -582,7 +568,7 @@ ${surprise_element}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write 110-140 words ━━━
 OPEN WITH THE CHARACTER. The first 25-30 words name the figure (species / gear / wardrobe / face partially visible) and the action they are mid-performing.
@@ -720,7 +706,7 @@ The city is ALIVE. Tiny ships threading between towers, light glowing from windo
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE (write the prompt in this order — anchor entity LAST so it stays small) ━━━
 [wide cinematic shot of the vast alien city — multi-tier density emphasized as the OPENING], [the specific city type and architecture style — dozens of supporting structures named], [hundreds of lit details, bridges between elevations, smaller buildings at the bases], [the sky layer and atmospheric depth], [lighting and the world reacting — ships, lights, particles, holographic signage], [scale provers visible — tiny ships threading gaps / lit-window-grain / etc.], [color palette and mood], [FINALLY: by the way, a tiny anchor-entity silhouette is at midground doing the story moment — described as a small element, never foreground centered]
@@ -887,7 +873,7 @@ ${surprise_element}
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — CRITICAL ━━━
 Write ONE LONG DENSE FLOWING comma-separated composition. Do NOT separate elements into sections or bullet points — every axis above must be WOVEN INTO the single flowing scene description with SPECIFIC NUMBERS and COUNTS naming each element.
@@ -935,7 +921,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic wide orbital shot, the planet's curve filling the lower/major portion of the frame, the thin atmosphere arc and terminator clear, the craft small on approach, the black of space and stars beyond. Breathtaking scale. NEVER a ground-level horizon landscape — always the curved world seen from orbit.
@@ -979,7 +965,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic industrial film-still — harsh floodlights cutting the dark, volumetric dust, deep shadow, scarred metal, sparks. The mining structure dominates; workers are small. Gritty, hard-used, atmospheric. NEVER a clean sleek spaceship, NEVER a pristine surface.
@@ -1025,7 +1011,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 First-person POV: the dark cockpit interior + canopy frame + glowing HUD fill the foreground edges, the scene beyond the glass is the bright focal point. Instrument-glow lighting on the foreground. Immersive, you-are-there. NEVER a third-person external view of the ship.
@@ -1071,7 +1057,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic wide vista, hundreds of dead hulls drifting in layers into atmospheric haze, the lone explorer tiny among them, cold low light, deep shadow. Silent, vast, melancholy, awe. NEVER a working fleet or an active battle.
@@ -1115,7 +1101,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic epic-scale vista — the barren-meets-living contrast clear, terraforming machinery monumental, the spreading green and the dramatic new-climate sky, settlements small for scale. Hopeful, awe, transformation. Show BOTH the old barren world and the new living one in tension.
@@ -1177,7 +1163,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic film-still, deep shadow and a single hard light source (the explorer's beam or a failing emergency light). High contrast, volumetric dust in the beam, deep blacks. The explorer is small — dwarfed by the dead structure. Tense, lonely, awe-horror. NEVER brightly-lit, NEVER a clean working ship, NEVER a crowd.
@@ -1241,7 +1227,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic wide shot, the colossal alien dominating the frame, the tiny ship/figure dwarfed to a speck for scale. Deep space setting with atmospheric/nebula depth. Awe, wonder, the sublime. The creature is alive and alien. NEVER a recognizable Earth animal; NEVER the creature small or the ship large.
@@ -1315,7 +1301,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic wide vista. Colossal crystal formations dominating the frame, translucent and glowing, light fracturing through them into rainbow shafts and caustics. Deep atmospheric perspective with prismatic haze. Any figure or ship is a TINY scale-speck dwarfed by the crystal. Breathtaking, saturated, jewel-like — a world made of light and gemstone. NEVER a dull grey rock scene — the crystal is luminous and the light is fractured into visible color.
@@ -1396,7 +1382,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic wide landscape, LOW horizon (bottom third), the ringed giant dominating the upper sky, rings slicing diagonally across the frame. Foreground a thin mirroring strip. Deep atmospheric perspective. Breathtaking, serene, wallpaper-worthy. NEVER a centered small planet in a big empty black sky — the giant is HUGE and close, hanging over a real alien world with air and light. NO figure dominating — any figure is a tiny scale-speck on the horizon.
@@ -1468,7 +1454,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ ATMOSPHERE + DEPTH ━━━
 This is a HABITABLE interior — it has air, weather, and atmospheric haze. Build deep atmospheric perspective: crisp detail near, softening to luminous haze along the axis toward the distant endcap. Clouds may drift at the weightless centerline. The air gives the colossal interior its sense of scale and depth.
@@ -1559,7 +1545,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ SOLO FIGURE ONLY ━━━
 EXACTLY ONE suited figure (a distant second EVA figure is allowed ONLY if the cosmic-event slot above named one). No crowds. This astronaut ALONE in the silence.
@@ -1723,7 +1709,7 @@ This is the far-back layer punching up depth — render it visibly behind/beyond
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write 100-130 words IN THIS ORDER ━━━
 1. **OPEN with the FOREGROUND city anchor** — the railing / balcony / vegetation / adjacent-tower-edge / shadowed pedestrian / vehicle-passing that puts the camera physically inside the city. First 15 words. This is the viewer's "I am standing here" moment.
@@ -1809,7 +1795,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HOW TO COMPOSE ━━━
 Weave EVERY rolled axis into a single coherent 120-180 word scene description. The BIOME defines what world we're on (it is the HERO of the frame). The ANCHOR ENTITY at the ANCHOR SCALE proves the scale and gives the story a witness. The STORY BEAT is the moment captured. The COMPOSITION FRAME is the camera. The SKY LAYER is overhead. WEATHER and LIGHTING shape the atmosphere. SCALE PROVERS appear as named visible elements. EMOTIONAL DNA dictates light and tone.
@@ -1968,7 +1954,7 @@ The real universe is more awe-inspiring than any fiction. Crank EVERYTHING — l
 ${sharedDNA.scenePalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write 100-130 words ━━━
 Open with the SUBJECT and its named instrument/wavelength. Layer in: spectral / color details (saturated multi-wavelength composite), composition framing, atmospheric/instrumental glow effects, scale-prover positioning, the secondary surprise element. ONE haunting detail (impossible color, time-dilated light, gravitational lensing arc, X-ray jet at relativistic speed). Photoreal astrophotography finish, cranked saturation, glowing depth.

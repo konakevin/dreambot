@@ -261,11 +261,11 @@ module.exports = {
     // production-art mediums trigger. Mirrors mystical-mermaid (2026-06-05).
     starbot_gpt_clean: blocks.GPT_CLEAN,
     photography:
-      '35mm cinematic sci-fi film-still — Denis-Villeneuve Blade-Runner-2049 / Dune / Arrival visual family, Roger-Deakins cinematography, anamorphic widescreen with characteristic horizontal lens-flare, shallow-DOF practical-effects scale, physical-model + miniature-photography authenticity, subdued naturalistic color-grade with shadow-heavy low-key lighting, Kubrick-2001-style precision framing, atmospheric haze, photographic grain',
+      '35mm cinematic sci-fi film-still — anamorphic widescreen with characteristic horizontal lens-flare, shallow-DOF practical-effects scale, physical-model + miniature-photography authenticity, subdued naturalistic color-grade with shadow-heavy low-key lighting, precision framing, atmospheric haze, photographic grain',
     vaporwave:
-      'late-80s / early-90s retrofuturism — Syd-Mead + Moebius painted chrome-and-neon-pink-cyan palette, gridded-horizon vanishing-point perspective, synthwave-cosmos sunset, tropical-palm-silhouette against gradient-sky, VHS-glitch scanlines, Miami-Vice-in-space mood, Blade-Runner-original-era neon-signage, pastel-gradient nebula backdrop',
+      'late-80s / early-90s retrofuturism — painted chrome-and-neon-pink-cyan palette, gridded-horizon vanishing-point perspective, synthwave-cosmos sunset, tropical-palm-silhouette against gradient-sky, VHS-glitch scanlines, neon-signage, pastel-gradient nebula backdrop',
     canvas:
-      'painted sci-fi-paperback-cover oil-on-canvas — Chesley-Bonestell / Syd-Mead / John-Harris / Michael-Whelan / Bruce-Pennington / Frank-Kelly-Freas Analog-SF-magazine tradition, heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
+      'painted sci-fi-paperback-cover oil-on-canvas — heavy-impasto painted brushwork, painterly atmospheric cosmic depth, dramatic painted-chiaroscuro with nebula-hued ambient shadow, pulp-sci-fi paperback polish, museum-painted masterwork quality',
     // space-femme bespoke medium (2026-05-23) — FUN / SEXY / VIVID sci-fi cover
     // look. NO artist names (Kevin: artist refs read muted + serious). Describes
     // the LOOK directly: bold saturated color, glossy, neon-and-chrome space gear,
@@ -285,24 +285,23 @@ module.exports = {
     // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 7-stack
     // NOT tail (NOT painted / NOT illustration / NOT drawing / NOT cartoon /
     // NOT stylized / NOT toy / NOT videogame). The "hyperrealistic photoreal
-    // / Denis Villeneuve sci-fi film still" positive anchors carry the
-    // photoreal-cinematic register.
+    // cinematic sci-fi film still" positive anchors carry the photoreal-
+    // cinematic register.
     starbot_hyperreal:
-      'hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech and alien-world surfaces, slight bloom and lens flare, film-still precision, mythic epic scale, like a still from a Denis Villeneuve sci-fi film',
+      'hyperrealistic photoreal cinematic sci-fi concept art, ray-traced volumetric lighting, atmospheric depth haze, photoreal future-tech and alien-world surfaces, slight bloom and lens flare, film-still precision, mythic epic scale, like a still from a live-action cinematic sci-fi film',
     // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail
-    // (NOT cute-watercolor / NOT children-book / NOT flowers). The 2-artist
-    // lineage + "NASA concept-art / aerospace-concept-art / muted cosmic
-    // palette" anchors carry the muted-cosmic-watercolor register.
+    // (NOT cute-watercolor / NOT children-book / NOT flowers). The "NASA
+    // concept-art / aerospace-concept-art / muted cosmic palette" anchors
+    // carry the muted-cosmic-watercolor register.
     watercolor:
-      'NASA concept-art watercolor wash — Robert-McCall painted-space-tradition + Jean-Giraud-Moebius watercolor-sci-fi, soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel',
+      'NASA concept-art watercolor wash — soft pigment-bleed on cold-press paper, delicate astronaut-sketch washes, muted cosmic palette (pale blues / dusty rose / sepia star-fields), atmospheric color-field abstraction, painterly aerospace-concept-art feel',
     pencil:
-      'Ralph-McQuarrie Star-Wars-concept-art graphite + Syd-Mead architectural-pencil-rendering + NASA engineering-blueprint-cross-hatch + Moebius pencil-and-ink sci-fi concept sketch — tight cross-hatched shadow, technical-drafting precision, silver-graphite-on-toned-paper tradition, dramatic value range, architectural-scale cosmic machinery, pre-production-concept-sketch authority',
+      'sci-fi concept-art graphite + architectural-pencil-rendering + engineering-blueprint cross-hatch — tight cross-hatched shadow, technical-drafting precision, silver-graphite-on-toned-paper tradition, dramatic value range, architectural-scale cosmic machinery, pre-production-concept-sketch authority',
     // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail (NOT
-    // superhero-comic / NOT manga / NOT cartoon). The 5-artist Heavy-Metal
-    // lineage + "European bande-dessinée / Arzach-Incal visual family /
-    // dream-logic cosmic surrealism" anchors carry the BD register.
+    // superhero-comic / NOT manga / NOT cartoon). The "European bande-
+    // dessinée / dream-logic cosmic surrealism" anchors carry the BD register.
     illustration:
-      'Moebius / Jean-Giraud / Philippe-Druillet / Enki-Bilal / Jodorowsky Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, Arzach / Incal / The-Airtight-Garage visual family, dream-logic cosmic surrealism',
+      'Heavy-Metal-magazine ink-and-color sci-fi BD tradition, clean-ink linework + flat-color-wash with gradient-field cosmic backgrounds, European bande-dessinée science-fiction craftsmanship, dream-logic cosmic surrealism',
     // Bot-only custom medium for cosmic-oracle path — sci-fi adaptation of
     // gothbot's gothic_oil_garden. Full-scene painted cosmic oil-canvas where
     // a figure lives WITHIN the environment (NOT a centered portrait).
@@ -317,11 +316,13 @@ module.exports = {
     // Cosmic-void mediumStyle — kilometer-class capital spaceships in pure
     // vacuum, ship-as-subject.
     // 2026-06-02 cruft-audit micro-strip — dropped tech-spec `8K` + 4-stack
-    // NOT tail (NOT planetary surface / NOT canyon / NOT ground / NOT
-    // atmospheric). The "deep space vacuum / pure vacuum context / nebula
-    // haze in deep space" anchors hold the vacuum-only framing.
+    // NOT tail. The "deep space vacuum / nebula haze in deep space" anchors
+    // hold the vacuum-only framing.
+    // 2026-06-12 de-cruft — de-repeated the triple "spaceship in vacuum",
+    // collapsed the enumerated scale-prover catalog, stripped the director
+    // name-drop. The cosmic_void PREFIX/SUFFIX already carry ship-as-subject.
     starbot_cosmic_void:
-      'hyperrealistic photoreal cinematic sci-fi concept art of a kilometer-class capital spaceship in deep space vacuum, ray-traced volumetric lighting from nebulae and distant stars, photoreal hull materials with weapon batteries lit-window grids and hangar bays visible, surrounded by smaller fighter wings cargo trains and satellites as scale provers, atmospheric nebula haze in deep space, film-still precision, like a still from a Denis Villeneuve cosmic sci-fi film — pure vacuum context throughout',
+      'hyperrealistic photoreal cinematic sci-fi concept art of a kilometer-class capital spaceship in deep space vacuum, ray-traced volumetric lighting from nebulae and distant stars, photoreal hull materials with readable surface detail, smaller craft nearby as scale provers, atmospheric nebula haze, film-still precision',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
