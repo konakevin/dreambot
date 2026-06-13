@@ -376,10 +376,11 @@ export default function PublicProfileScreen() {
           {(
             [
               { key: 'posts', label: 'Posts', icon: 'grid-outline', activeIcon: 'grid' },
-              { key: 'reposts', label: 'Reposts', icon: 'repeat-outline', activeIcon: 'repeat' },
+              { key: 'reposts', label: 'Reposts', icon: 'sync-outline', activeIcon: 'sync' },
             ] as const
           ).map((t) => {
             const active = gridView === t.key;
+            const tint = active ? colors.textPrimary : colors.textSecondary;
             return (
               <TouchableOpacity
                 key={t.key}
@@ -388,11 +389,7 @@ export default function PublicProfileScreen() {
                 activeOpacity={0.7}
                 accessibilityLabel={t.label}
               >
-                <Ionicons
-                  name={active ? t.activeIcon : t.icon}
-                  size={23}
-                  color={active ? colors.textPrimary : colors.textSecondary}
-                />
+                <Ionicons name={active ? t.activeIcon : t.icon} size={23} color={tint} />
                 {active && <View style={styles.gridToggleUnderline} />}
               </TouchableOpacity>
             );

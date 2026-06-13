@@ -17,7 +17,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { timeAgo } from '@/lib/timeAgo';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -37,6 +37,7 @@ import { handleImageLongPress } from '@/lib/imageLongPress';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
+import { useAdminShowModelBadge } from '@/lib/adminPrefs';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useRepostIds } from '@/hooks/useRepostIds';
@@ -71,6 +72,9 @@ export interface DreamPostItem {
   comment_count?: number;
   like_count?: number;
   repost_count?: number;
+  /** Author's repost opt-out (users.allow_reposts). false = this author disabled
+   *  reposts → hide the repost button. Defaults to true (allow) when absent. */
+  allow_reposts?: boolean;
   recipe_id?: string | null;
   bot_message?: string | null;
   dream_medium?: string | null;
@@ -155,6 +159,8 @@ export const DreamCard = memo(function DreamCard({
   showBottomScrim,
 }: Props) {
   const currentUser = useAuthStore((s) => s.user);
+  const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
+  const [showModelBadge] = useAdminShowModelBadge();
   const isOwnPost = currentUser?.id === item.user_id;
   // Inline "Follow" on the card (IG-style) — lets the user follow this account
   // without drilling into the profile. Only shown once the following set has
@@ -165,12 +171,14 @@ export const DreamCard = memo(function DreamCard({
   const toggleFollow = useToggleFollow();
   const showFollow = !isOwnPost && followingSet !== undefined && !followingSet.has(item.user_id);
   // Repost — self-contained (membership Set is one shared cached query; the
-  // mutation toggles via the toggle_repost RPC). Hidden on own posts; a post
-  // whose author opted out is rejected server-side (optimistic state rolls back).
+  // mutation toggles via the toggle_repost RPC). Hidden on own posts AND on posts
+  // whose author opted out (allow_reposts === false) — the server also rejects
+  // those, but hiding the button is the correct UX. `!== false` so a surface that
+  // hasn't wired the flag through (undefined) still shows it.
   const { data: repostIdsSet } = useRepostIds();
   const toggleRepost = useToggleRepost();
   const isReposted = repostIdsSet?.has(item.id) ?? false;
-  const canRepost = !isOwnPost;
+  const canRepost = !isOwnPost && item.allow_reposts !== false;
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -419,8 +427,11 @@ export const DreamCard = memo(function DreamCard({
                 (album viewer opts in unconditionally). */}
             {(showBottomScrim || !!item.description) && (
               <LinearGradient
-                colors={['transparent', 'rgba(0,0,0,0.55)']}
-                locations={[0, 1]}
+                // Fade in over the top, then HOLD a solid rgba(0,0,0,0.6) through
+                // the bottom so the footer matches the active feed pill exactly
+                // (OverlayPill.pillActive). Lets the icons read against the pill color.
+                colors={['transparent', 'rgba(0,0,0,0.6)', 'rgba(0,0,0,0.6)']}
+                locations={[0, 0.6, 1]}
                 style={s.bottomScrim}
                 pointerEvents="none"
               />
@@ -431,7 +442,7 @@ export const DreamCard = memo(function DreamCard({
                   credits the ORIGINAL author below; this line credits the reposter. */}
               {item.surface_type === 'repost' && item.reposter_name && (
                 <View style={s.repostAttribRow}>
-                  <Ionicons name="repeat" size={13} color={colors.success} />
+                  <Ionicons name="sync" size={14} color={colors.success} />
                   <Text style={s.repostAttribText} numberOfLines={1}>
                     Reposted by @{item.reposter_name}
                     {(item.reposters_more ?? 0) > 0
@@ -440,11 +451,11 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </View>
               )}
-              {/* Model badge — sits ABOVE the username so Kevin (and users)
-                  can see which AI rendered the image at a glance. Friendly
-                  name from constants/imageModels; hidden when model is null
-                  (legacy posts + user dreams not yet wired through). */}
-              {item.model && (
+              {/* Model badge — owner-only debug chip showing which AI rendered
+                  the image. Requires BOTH the supreme-admin designation AND the
+                  Settings → ADMIN toggle (so the owner shows/hides it at will).
+                  Hidden when model is null (legacy posts + un-wired user dreams). */}
+              {isSuperAdmin && showModelBadge && item.model && (
                 <View style={s.modelBadgeWrap}>
                   <View style={s.modelBadge}>
                     <Ionicons name="sparkles" size={10} color="#FFFFFF" />
@@ -452,29 +463,8 @@ export const DreamCard = memo(function DreamCard({
                   </View>
                 </View>
               )}
-              {/* Repost button — sits directly above the username (model badge,
-                  being debug-only, is bumped up above it). Reposting resurfaces
-                  this dream into the user's followers' feed + Explore. Hidden on
-                  own posts; works on bot dreams (bots are repost targets). */}
-              {canRepost && (
-                <View style={s.repostBtnWrap}>
-                  <TouchableOpacity
-                    style={[s.repostBtn, isReposted && s.repostBtnActive]}
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      toggleRepost.mutate({ uploadId: item.id, currentlyReposted: isReposted });
-                    }}
-                    activeOpacity={0.7}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  >
-                    <Ionicons name="repeat" size={15} color="#FFFFFF" />
-                    <Text style={[s.repostBtnText, isReposted && s.repostBtnTextActive]}>
-                      {isReposted ? 'Reposted' : 'Repost'}
-                      {(item.repost_count ?? 0) > 0 ? `  ${item.repost_count}` : ''}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+              {/* Repost moved to the right-side icon rail (between bookmark and
+                  share). The attribution line above still credits a reposter. */}
               <TouchableOpacity
                 style={s.usernameRow}
                 onPress={() =>
@@ -601,6 +591,34 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </TouchableOpacity>
               )}
+              {/* Repost — above bookmark. Hidden on own posts. No count. Stays
+                  white in both states; the reposted state is signalled by a bold
+                  white checkmark dropped into the icon's center (MCI check-bold —
+                  Ionicons has no bold check). */}
+              {canRepost && (
+                <TouchableOpacity
+                  style={ui.sideButton}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    toggleRepost.mutate({ uploadId: item.id, currentlyReposted: isReposted });
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View style={s.repostStack}>
+                    <Ionicons name="sync" size={26} color="#FFFFFF" style={ui.sideIcon} />
+                    {isReposted && (
+                      <View style={s.repostCheck} pointerEvents="none">
+                        <MaterialCommunityIcons
+                          name="check-bold"
+                          size={11}
+                          color="#FFFFFF"
+                          style={ui.sideIcon}
+                        />
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              )}
               {onToggleSave && (
                 <TouchableOpacity style={ui.sideButton} onPress={onToggleSave} activeOpacity={0.7}>
                   <Ionicons
@@ -725,6 +743,13 @@ const s = StyleSheet.create({
     borderColor: '#FFFFFF',
   },
   sideActions: { position: 'absolute', right: 12, alignItems: 'center', gap: 16 },
+  // Repost icon + centered checkmark overlay for the reposted state.
+  repostStack: { alignItems: 'center', justifyContent: 'center' },
+  repostCheck: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   visibilityCircle: {
     width: 36,
     height: 36,
@@ -777,38 +802,6 @@ const s = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.2,
   },
-  // Repost button — a pill above the username. flex-start wrap hugs its label.
-  // Dark translucent when inactive; success-green tint + border when reposted.
-  repostBtnWrap: { flexDirection: 'row', marginBottom: verticalScale(2) },
-  repostBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 11,
-    paddingVertical: verticalScale(5),
-    borderRadius: 999,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.25)',
-    // Drop shadow so the pill reads on bright backgrounds in either state.
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    shadowOffset: { width: 0, height: 1 },
-  },
-  // Reposted state: SOLID accent fill + white text/icon — readable on any image
-  // AND on-brand (green clashed with the app's lavender accent palette).
-  repostBtnActive: {
-    backgroundColor: colors.accent,
-    borderColor: 'rgba(255,255,255,0.35)',
-  },
-  repostBtnText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 0.2,
-  },
-  repostBtnTextActive: { color: '#FFFFFF' },
   // Repost attribution line ("♻ Reposted by @x") at the top of the post info.
   repostAttribRow: {
     flexDirection: 'row',

@@ -190,8 +190,13 @@ export const ui = StyleSheet.create({
   sideCount: {
     color: '#FFFFFF',
     fontSize: 11,
+    lineHeight: 13,
     fontWeight: '700' as const,
     marginTop: 1,
+    // The count overlaps DOWN into the rail's gap instead of reserving vertical
+    // height, so every icon stays evenly spaced whether or not a count shows.
+    // (Was: always-rendered slot that made counted buttons taller than the rest.)
+    marginBottom: -14,
     textShadowColor: 'rgba(0,0,0,0.8)',
     textShadowRadius: 6,
     textShadowOffset: { width: 0, height: 1 },

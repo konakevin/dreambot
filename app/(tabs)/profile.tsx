@@ -329,7 +329,7 @@ export default function ProfileScreen() {
               { key: 'posts', label: 'Posts', icon: 'grid-outline', activeIcon: 'grid' },
               { key: 'dreams', label: 'Dreams', icon: 'moon-outline', activeIcon: 'moon' },
               { key: 'saved', label: 'Saved', icon: 'bookmark-outline', activeIcon: 'bookmark' },
-              { key: 'reposts', label: 'Reposts', icon: 'repeat-outline', activeIcon: 'repeat' },
+              { key: 'reposts', label: 'Reposts', icon: 'sync-outline', activeIcon: 'sync' },
             ] as const
           ).map((t) => {
             const active = activeTab === t.key;
