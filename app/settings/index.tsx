@@ -31,7 +31,7 @@ import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { moderateText } from '@/lib/moderation';
-import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
+import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
 function SettingsRow({
   icon,
@@ -80,6 +80,8 @@ export default function SettingsScreen() {
   const [isPublic, setIsPublic] = useState(false);
   const [allowReposts, setAllowReposts] = useState(true);
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
+  const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
+  const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
   useEffect(() => {
     if (!user) return;
     supabase
@@ -376,7 +378,7 @@ export default function SettingsScreen() {
   const initial = (profile?.username || user?.user_metadata?.username || '?')[0].toUpperCase();
 
   return (
-    <ScreenLayout header="back" title="Settings" swipeBack={false}>
+    <ScreenLayout header="back" title="Settings" titleGradient swipeBack={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Avatar hero */}
         <TouchableOpacity style={styles.avatarHero} onPress={handleChangePhoto} activeOpacity={0.8}>
@@ -567,6 +569,36 @@ export default function SettingsScreen() {
                   thumbColor="#FFFFFF"
                 />
               </View>
+              {/* AI model badge — supreme-admin only (not regular admins). The
+                  badge is double-gated: isSuperAdmin AND this toggle. */}
+              {isSuperAdmin && (
+                <View style={styles.row}>
+                  <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.rowLabel}>AI model badge</Text>
+                    <Text
+                      style={{
+                        color: colors.textSecondary,
+                        fontSize: fontScale(12),
+                        marginTop: verticalScale(2),
+                      }}
+                    >
+                      {showModelBadge
+                        ? 'Shown on every card — which AI rendered it'
+                        : 'Hidden — flip on to see the render model'}
+                    </Text>
+                  </View>
+                  <Switch
+                    value={showModelBadge}
+                    onValueChange={(val) => {
+                      setShowModelBadge(val);
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
+                    trackColor={{ false: colors.border, true: colors.accent }}
+                    thumbColor="#FFFFFF"
+                  />
+                </View>
+              )}
               {/* Debug escape hatch — clears all query cache + reshuffles the
                   feed + resets scroll. Admin-only (was a vague user-facing row). */}
               <SettingsRow

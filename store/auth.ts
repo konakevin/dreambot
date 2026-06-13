@@ -10,11 +10,17 @@ import {
   isBasicActive,
   isDreamEligible as computeDreamEligible,
 } from '@/lib/proStatus';
+import { isSupremeAdmin } from '@/lib/superAdmin';
 
 interface AuthState {
   session: Session | null;
   user: User | null;
   isAdmin: boolean;
+  /** Supreme-admin ("super user") — the owner-only designation, held by exactly
+   *  one account. Stricter than isAdmin (a broader moderator role). Gates
+   *  owner-only debug UI (e.g. the AI model badge). Derived from the user id, so
+   *  it resolves SYNCHRONOUSLY with `user` (no DB round-trip like isAdmin). */
+  isSuperAdmin: boolean;
   /** Pro-subscription entitlement — true when the user has Pro perks
    *  RIGHT NOW. Covers both paid subscribers (active+unexpired) AND new
    *  users within their 14-day trial. Gates long-press Save-to-Photos +
@@ -66,6 +72,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   session: null,
   user: null,
   isAdmin: false,
+  isSuperAdmin: false,
   isPro: false,
   isPaidPro: false,
   proTrialEndsAt: null,
@@ -74,7 +81,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   initialized: false,
 
   setSession: (session) => {
-    set({ session, user: session?.user ?? null });
+    set({
+      session,
+      user: session?.user ?? null,
+      isSuperAdmin: isSupremeAdmin(session?.user?.id),
+    });
     // Check admin + pro status
     if (session?.user) {
       supabase
@@ -107,7 +118,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signOut: async () => {
     await supabase.auth.signOut();
-    set({ session: null, user: null });
+    set({ session: null, user: null, isSuperAdmin: false });
     // Clear all cached data from previous session
     useFeedStore.getState().bumpReset();
     // Clear TanStack Query cache
@@ -176,10 +187,15 @@ export const useAuthStore = create<AuthState>((set) => ({
           await supabase.auth.signOut({ scope: 'local' }).catch((e) => {
             if (__DEV__) console.warn('[auth] local signOut on stale refresh token failed', e);
           });
-          set({ session: null, user: null, initialized: true });
+          set({ session: null, user: null, initialized: true, isSuperAdmin: false });
           return;
         }
-        set({ session, user: session?.user ?? null, initialized: true });
+        set({
+          session,
+          user: session?.user ?? null,
+          initialized: true,
+          isSuperAdmin: isSupremeAdmin(session?.user?.id),
+        });
         if (session?.user) checkEntitlements(session.user.id);
       })
       .finally(() => {
@@ -189,7 +205,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      set({ session, user: session?.user ?? null, initialized: true });
+      set({
+        session,
+        user: session?.user ?? null,
+        initialized: true,
+        isSuperAdmin: isSupremeAdmin(session?.user?.id),
+      });
       if (session?.user) checkEntitlements(session.user.id);
       else
         set({
