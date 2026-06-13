@@ -538,11 +538,13 @@ export type Database = {
       };
       dream_jobs: {
         Row: {
+          attempt_count: number;
           completed_at: string | null;
           created_at: string;
           error: string | null;
           id: string;
           notify_on_complete: boolean;
+          payload: Json | null;
           result_image_url: string | null;
           result_medium: string | null;
           result_prompt: string | null;
@@ -552,11 +554,13 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
           error?: string | null;
           id: string;
           notify_on_complete?: boolean;
+          payload?: Json | null;
           result_image_url?: string | null;
           result_medium?: string | null;
           result_prompt?: string | null;
@@ -566,11 +570,13 @@ export type Database = {
           user_id: string;
         };
         Update: {
+          attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
           error?: string | null;
           id?: string;
           notify_on_complete?: boolean;
+          payload?: Json | null;
           result_image_url?: string | null;
           result_medium?: string | null;
           result_prompt?: string | null;
@@ -816,6 +822,8 @@ export type Database = {
           basic_monthly_sparkle_bundle: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
+          dream_queue_max_concurrent: number;
+          dream_queue_max_jobs_per_tick: number;
           embodied_mediums_high: string[];
           embodied_mediums_mid: string[];
           extra_models_high: string[];
@@ -852,6 +860,8 @@ export type Database = {
           basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          dream_queue_max_concurrent?: number;
+          dream_queue_max_jobs_per_tick?: number;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
           extra_models_high?: string[];
@@ -888,6 +898,8 @@ export type Database = {
           basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          dream_queue_max_concurrent?: number;
+          dream_queue_max_jobs_per_tick?: number;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
           extra_models_high?: string[];
