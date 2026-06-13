@@ -20,8 +20,9 @@ export interface GenerateDreamOpts {
   hint?: string;
   /** Base64 data URL for flux-kontext (photo reimagine) */
   input_image?: string;
-  /** Photo style: 'reimagine' keeps composition, 'new_scene' invents scene with face-swap */
-  photo_style?: 'reimagine' | 'new_scene';
+  /** Photo style: 'reimagine' keeps composition, 'new_scene' invents scene with
+   *  face-swap, 'restyle' = Kontext transform (routes to restyle-photo). */
+  photo_style?: 'reimagine' | 'new_scene' | 'restyle';
   /** Vibe Profile v2 — provides dream_cast for self-insert detection */
   vibe_profile?: VibeProfile;
   /** V4 engine — curated medium key */

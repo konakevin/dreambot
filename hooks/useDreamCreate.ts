@@ -226,6 +226,19 @@ export function useDreamCreate() {
             // Restyle is intentionally medium+vibe only — no `hint` so the user
             // can't accidentally prompt-engineer a transform; the UI hides the
             // prompt box in this state to make the contract obvious.
+            if (DREAM_QUEUE_ENABLED) {
+              // photo_style:'restyle' routes the queue dispatcher to restyle-photo.
+              await enqueueDream({
+                mode: 'flux-kontext',
+                photo_style: 'restyle',
+                input_image: refUrl,
+                medium_key: resolvedMediumKey ?? 'photography',
+                vibe_key: config.selectedVibe ?? 'cinematic',
+                vibe_profile: vibeProfile ?? undefined,
+                job_id: jobId,
+              });
+              return 'queued';
+            }
             result = await restylePhoto({
               inputImageBase64: refUrl,
               mediumKey: resolvedMediumKey ?? 'photography',

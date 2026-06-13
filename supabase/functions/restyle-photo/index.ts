@@ -72,40 +72,64 @@ async function handleRequest(req: Request): Promise<Response> {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-  // ── Auth ────────────────────────────────────────────────────────────────
-  const authHeader = req.headers.get('authorization') ?? '';
-  const supabaseUser = createClient(
-    supabaseUrl,
-    Deno.env.get('SUPABASE_ANON_KEY') ?? serviceRoleKey,
-    {
-      global: { headers: { Authorization: authHeader } },
-    }
-  );
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseUser.auth.getUser();
-  if (authError || !user) {
-    console.error(
-      '[restyle-photo] Auth failed:',
-      authError && authError.message ? authError.message : 'no user',
-      'header:',
-      authHeader.slice(0, 30)
-    );
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
-  }
-  const userId = user.id;
-
   // Service role client for database operations (bypasses RLS)
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // ── Parse request body ──────────────────────────────────────────────────
+  // ── Parse request body (before auth — the queue path needs job_id) ────────
   let body: RestyleRequest;
   try {
     body = await req.json();
     console.log('[restyle-photo] BODY KEYS:', Object.keys(body), 'force_model:', body.force_model);
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
+  }
+
+  // ── Auth ────────────────────────────────────────────────────────────────
+  // Normal path: the user's JWT. Queue path: dream-queue-worker dispatches this
+  // server-side (x-dream-queue:1 + service-role) and AWAITS the result; resolve
+  // the user from the dream_jobs row by job_id, render synchronously, and let
+  // the WORKER own retry/dead-letter/refund (skip the in-function refund).
+  const authHeader = req.headers.get('authorization') ?? '';
+  const isQueue = req.headers.get('x-dream-queue') === '1';
+  let userId: string;
+  if (isQueue) {
+    if (authHeader !== `Bearer ${serviceRoleKey}`) {
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    }
+    const qJobId = typeof body.job_id === 'string' ? body.job_id : null;
+    if (!qJobId) {
+      return new Response(JSON.stringify({ error: 'queue requires job_id' }), { status: 400 });
+    }
+    const { data: jobRow } = await supabase
+      .from('dream_jobs')
+      .select('user_id')
+      .eq('id', qJobId)
+      .single();
+    if (!jobRow) {
+      return new Response(JSON.stringify({ error: 'job not found' }), { status: 404 });
+    }
+    userId = jobRow.user_id as string;
+    console.log(`[restyle-photo] QUEUE render for job ${qJobId} (user ${userId})`);
+  } else {
+    const supabaseUser = createClient(
+      supabaseUrl,
+      Deno.env.get('SUPABASE_ANON_KEY') ?? serviceRoleKey,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseUser.auth.getUser();
+    if (authError || !user) {
+      console.error(
+        '[restyle-photo] Auth failed:',
+        authError && authError.message ? authError.message : 'no user',
+        'header:',
+        authHeader.slice(0, 30)
+      );
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    }
+    userId = user.id;
   }
 
   const {
@@ -543,8 +567,11 @@ async function handleRequest(req: Request): Promise<Response> {
 
     // Server-side refund — only fires when we have a jobId. Without a jobId,
     // refund_sparkles can't enforce idempotency, so fall back to legacy NSFW path.
+    // QUEUE path: do NOT refund here — the worker owns retry/dead-letter and
+    // refunds once exhausted (refunding on a transient fail it will retry hands
+    // the user a free dream).
     let sparkleRefunded = false;
-    if (jobId) {
+    if (jobId && !isQueue) {
       try {
         const { data: refunded } = await supabase.rpc('refund_sparkles', {
           p_user_id: userId,
@@ -559,7 +586,7 @@ async function handleRequest(req: Request): Promise<Response> {
       } catch (refundErr) {
         console.error('[restyle-photo] Refund FAILED:', (refundErr as Error).message);
       }
-    } else if (isNsfw) {
+    } else if (isNsfw && !isQueue) {
       try {
         await supabase.rpc('grant_sparkles', {
           p_user_id: userId,
@@ -572,8 +599,10 @@ async function handleRequest(req: Request): Promise<Response> {
       }
     }
 
-    // Update dream_jobs status (best-effort)
-    if (jobId) {
+    // Update dream_jobs status (best-effort). Skip for the QUEUE path — a
+    // transient attempt the worker will retry shouldn't fail the client or
+    // spam the inbox; the worker owns the final dead-letter state + notify.
+    if (jobId && !isQueue) {
       try {
         await supabase
           .from('dream_jobs')

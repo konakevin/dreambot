@@ -25,7 +25,12 @@ export interface CreateDispatcherArgs {
 export async function processCreateJob(args: CreateDispatcherArgs): Promise<string> {
   const { supabaseUrl, serviceRoleKey, payload } = args;
 
-  const res = await fetch(`${supabaseUrl}/functions/v1/generate-dream`, {
+  // Restyle dreams render via restyle-photo (Kontext transform); everything
+  // else (create / DLT) via generate-dream. The client marks restyle payloads
+  // with photo_style:'restyle'. Both share the x-dream-queue service contract.
+  const fn = payload.photo_style === 'restyle' ? 'restyle-photo' : 'generate-dream';
+
+  const res = await fetch(`${supabaseUrl}/functions/v1/${fn}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
