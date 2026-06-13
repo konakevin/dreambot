@@ -1,0 +1,128 @@
+/**
+ * dream_queue lifecycle — terminal-state transitions for a queued render.
+ *
+ * Moved out of dream-queue-worker so the RENDER functions (generate-dream /
+ * restyle-photo, x-dream-queue path) can own their own outcome. The worker
+ * dispatches create/dlt jobs FIRE-AND-FORGET (the render acks 202 + finishes in
+ * EdgeRuntime.waitUntil), then the render calls completeQueueJob / failQueueJob
+ * itself. This eliminates the worker synchronously awaiting a long render and
+ * gateway-timing-out (HTTP 504) on a render that actually SUCCEEDED — which was
+ * re-queueing completed dreams under dual-face-swap load.
+ *
+ * The stale-recovery sweep in the worker still catches a render isolate that
+ * dies before reaching either of these (in_progress > 5 min → re-queue).
+ */
+
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
+const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
+
+/** Mark a queued job completed + attach its upload. */
+export async function completeQueueJob(
+  sb: SupabaseClient,
+  jobId: string,
+  uploadId: string
+): Promise<void> {
+  await sb
+    .from('dream_queue')
+    .update({
+      status: 'completed',
+      completed_at: new Date().toISOString(),
+      upload_id: uploadId,
+      last_error: null,
+    })
+    .eq('id', jobId);
+}
+
+/**
+ * Handle a failed queued render: retry with backoff, or dead-letter (refund +
+ * notify) once retries are exhausted / on a terminal NSFW rejection. Idempotent
+ * refund keyed on jobId. `userId` is needed for the refund + notification.
+ */
+export async function failQueueJob(
+  sb: SupabaseClient,
+  jobId: string,
+  userId: string,
+  errMsg: string,
+  isNsfw: boolean
+): Promise<void> {
+  const message = (errMsg || 'unknown').slice(0, 1000);
+  const { data: job } = await sb
+    .from('dream_queue')
+    .select('attempt_count')
+    .eq('id', jobId)
+    .single();
+  const nextAttempt = (job?.attempt_count ?? 0) + 1;
+  const isDead = isNsfw || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+
+  if (!isDead) {
+    // Exponential backoff: created_at into the future so the claim RPC's
+    // `created_at <= now()` gate holds the job until the delay elapses.
+    const backoffMs = BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)];
+    await sb
+      .from('dream_queue')
+      .update({
+        status: 'queued',
+        attempt_count: nextAttempt,
+        last_error: message,
+        started_at: null,
+        worker_id: null,
+        created_at: new Date(Date.now() + backoffMs).toISOString(),
+      })
+      .eq('id', jobId);
+    return;
+  }
+
+  // Dead-letter: terminal. Refund the paid sparkle (idempotent on jobId;
+  // refund_sparkles returns the ACTUAL debited amount) + mark dream_jobs failed
+  // (resolves the client's polling fallback) + inbox notification.
+  await sb
+    .from('dream_queue')
+    .update({
+      status: 'dead_letter',
+      attempt_count: nextAttempt,
+      last_error: message,
+      completed_at: new Date().toISOString(),
+    })
+    .eq('id', jobId);
+
+  await sb
+    .rpc('refund_sparkles', {
+      p_user_id: userId,
+      p_amount: 1,
+      p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+      p_reference_id: jobId,
+    })
+    .then(
+      () => {},
+      () => {}
+    );
+  await sb
+    .from('dream_jobs')
+    .update({
+      status: isNsfw ? 'nsfw' : 'failed',
+      error: message,
+      completed_at: new Date().toISOString(),
+    })
+    .eq('id', jobId)
+    .then(
+      () => {},
+      () => {}
+    );
+  await sb
+    .from('notifications')
+    .insert({
+      recipient_id: userId,
+      actor_id: userId,
+      type: 'dream_failed',
+      subtype: 'failed',
+      body: isNsfw
+        ? "Your dream couldn't be created — sparkle refunded"
+        : "Your dream couldn't render — sparkle refunded",
+    })
+    .then(
+      () => {},
+      () => {}
+    );
+}

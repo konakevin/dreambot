@@ -23,6 +23,7 @@ import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
+import { completeQueueJob, failQueueJob } from '../_shared/dreamQueueLifecycle.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
@@ -524,6 +525,11 @@ async function handleRequest(req: Request): Promise<Response> {
     lap('total');
     console.log(`[restyle-photo] ✅ Done in ${Date.now() - t0}ms for user ${userId}`);
 
+    // QUEUE path: fire-and-forget dispatch, so WE mark dream_queue completed.
+    if (isQueue && jobId && uploadId) {
+      await completeQueueJob(supabase, jobId, uploadId);
+    }
+
     return new Response(
       JSON.stringify({
         image_url: imageUrl,
@@ -564,6 +570,16 @@ async function handleRequest(req: Request): Promise<Response> {
     // ── Classify the failure for refund + UI messaging ──
     const refundClass = classifyFailure(errMsg);
     const isNsfw = refundClass === 'nsfw';
+
+    // QUEUE path: WE own the dream_queue terminal state (retry/backoff or
+    // dead-letter + refund + notify). The worker is fire-and-forget.
+    if (isQueue && jobId) {
+      await failQueueJob(supabase, jobId, userId, errMsg, isNsfw);
+      return new Response(JSON.stringify({ error: errMsg, queued: true }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     // Server-side refund — only fires when we have a jobId. Without a jobId,
     // refund_sparkles can't enforce idempotency, so fall back to legacy NSFW path.
@@ -675,6 +691,15 @@ Deno.serve((req) => {
   ).EdgeRuntime;
   if (edgeRuntime && edgeRuntime.waitUntil) {
     edgeRuntime.waitUntil(task.catch(() => {}));
+  }
+  // QUEUE dispatch (dream-queue-worker): ack 202 immediately + render in the
+  // background; handleRequest updates dream_queue itself, so the worker never
+  // awaits the long render (no gateway-504 false-fails).
+  if (req.headers.get('x-dream-queue') === '1') {
+    return new Response(JSON.stringify({ ok: true, accepted: true }), {
+      status: 202,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
   return task;
 });

@@ -23,7 +23,7 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { processNightlyJob } from './dispatchers/nightly.ts';
-import { processCreateJob } from './dispatchers/create.ts';
+import { dispatchCreateJob } from './dispatchers/create.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
@@ -44,6 +44,7 @@ interface QueueRow {
   // The switch below treats it as unknown_source so any sneak-in retries
   // dead-letter cleanly.
   source: 'first_dream' | 'nightly' | 'create' | 'dlt';
+  weight: 'light' | 'heavy';
   payload: Record<string, unknown>;
   status: string;
   attempt_count: number;
@@ -103,38 +104,53 @@ Deno.serve(async (req) => {
       console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
     }
 
-    // ── Global concurrency cap (the anti-546 lever) ────────────────────────
-    // Bound the number of SIMULTANEOUSLY-rendering jobs across all workers, so
-    // a 500-user burst drains at a controlled rate instead of all at once
-    // (which exhausts Supabase's isolate pool + busts per-render budgets).
-    // Claim only up to (cap − in_progress); a saturated cap claims 0 and the
-    // jobs wait. Both knobs are live-tunable via engine_config (no deploy).
+    // ── Per-WEIGHT concurrency caps (the anti-546 lever) ───────────────────
+    // LIGHT (text, no-swap) dreams are fast + have no Fly.io dependency, so they
+    // run on a wide cap; HEAVY (face-swap / dual) dreams hit the Fly.io swap
+    // service and stay bounded. Each pool claims only up to (its cap − its
+    // in_progress); a saturated pool claims 0 and those jobs wait. Both caps are
+    // live-tunable via engine_config (no deploy). Splitting the cap means a flood
+    // of heavy dual dreams can never throttle light text dreams (and vice versa).
     const cfg = await fetchEngineConfig(supabase).catch(() => null);
-    const maxConcurrent = cfg?.dreamQueueMaxConcurrent ?? 40;
+    const lightCap = cfg?.dreamQueueMaxConcurrent ?? 40;
+    const heavyCap = cfg?.dreamQueueMaxConcurrentHeavy ?? 15;
     const maxPerTick = cfg?.dreamQueueMaxJobsPerTick ?? MAX_JOBS_PER_TICK;
-    const { count: inProgress } = await supabase
+
+    const { data: ipRows } = await supabase
       .from('dream_queue')
-      .select('id', { count: 'exact', head: true })
+      .select('weight')
       .eq('status', 'in_progress');
-    const headroom = Math.max(0, maxConcurrent - (inProgress ?? 0));
-    const claimLimit = Math.min(maxPerTick, headroom);
-    if (claimLimit <= 0) {
+    let lightIP = 0;
+    let heavyIP = 0;
+    for (const r of ipRows ?? []) r.weight === 'heavy' ? heavyIP++ : lightIP++;
+    const lightLimit = Math.min(maxPerTick, Math.max(0, lightCap - lightIP));
+    const heavyLimit = Math.min(maxPerTick, Math.max(0, heavyCap - heavyIP));
+
+    if (lightLimit <= 0 && heavyLimit <= 0) {
       console.log(
-        `[worker:${workerId}] concurrency cap saturated (in_progress=${inProgress ?? 0}/${maxConcurrent}) — skipping claim`
+        `[worker:${workerId}] both caps saturated (light=${lightIP}/${lightCap} heavy=${heavyIP}/${heavyCap}) — skipping claim`
       );
       return;
     }
 
-    // ── Batch claim + parallel dispatch ────────────────────────────────────
-    const { data: claimedRows, error: claimErr } = await supabase.rpc('claim_dream_queue_jobs', {
-      p_worker_id: workerId,
-      p_limit: claimLimit,
-    });
-    if (claimErr) {
-      console.error(`[worker:${workerId}] Batch claim error:`, claimErr.message);
-      return;
-    }
-    const jobs = (claimedRows ?? []) as QueueRow[];
+    // ── Claim each weight pool + parallel dispatch ─────────────────────────
+    const claimWeight = async (weight: 'light' | 'heavy', limit: number): Promise<QueueRow[]> => {
+      if (limit <= 0) return [];
+      const { data, error } = await supabase.rpc('claim_dream_queue_jobs_by_weight', {
+        p_worker_id: workerId,
+        p_weight: weight,
+        p_limit: limit,
+      });
+      if (error) {
+        console.error(`[worker:${workerId}] ${weight} claim error:`, error.message);
+        return [];
+      }
+      return (data ?? []) as QueueRow[];
+    };
+    const jobs = [
+      ...(await claimWeight('light', lightLimit)),
+      ...(await claimWeight('heavy', heavyLimit)),
+    ];
 
     const results = await Promise.all(
       jobs.map(async (job) => {
@@ -143,7 +159,10 @@ Deno.serve(async (req) => {
           `[worker:${workerId}] Processing job ${job.id} source=${job.source} attempt=${job.attempt_count + 1}`
         );
         try {
-          let uploadId: string | null;
+          let uploadId: string | null = null;
+          // create/dlt are FIRE-AND-FORGET: the render owns the dream_queue
+          // terminal state. Only nightly is awaited + marked completed here.
+          let ownedByRender = false;
           switch (job.source) {
             case 'nightly': {
               // Re-validate entitlement at render time. Eligibility was checked
@@ -181,20 +200,26 @@ Deno.serve(async (req) => {
             }
             case 'create':
             case 'dlt': {
-              // User-initiated dream (paid). Render in its own isolate via
-              // generate-dream's x-dream-queue path; the payload IS the full
-              // RequestBody the client built (with job_id = this row's id).
-              uploadId = await processCreateJob({
-                supabaseUrl,
-                serviceRoleKey,
-                payload: job.payload,
-              });
+              // User-initiated dream (paid). FIRE-AND-FORGET: generate-dream's
+              // x-dream-queue path acks 202, renders in waitUntil, and updates
+              // dream_queue itself on completion/failure. We only confirm the
+              // dispatch was accepted (a throw here = render never started →
+              // worker re-queues). The job stays 'in_progress' (set by claim)
+              // until the render flips it — which also keeps the concurrency
+              // cap honest without the worker holding a long HTTP await.
+              await dispatchCreateJob({ supabaseUrl, serviceRoleKey, payload: job.payload });
+              ownedByRender = true;
               break;
             }
             default:
               // Also catches the vestigial 'first_dream' source value
               // (dispatcher removed 2026-06-02).
               throw new Error(`unknown_source:${job.source}`);
+          }
+
+          if (ownedByRender) {
+            // The render owns the terminal state; nothing more to do.
+            return { id: job.id, status: 'dispatched', ms: Date.now() - jobT0 };
           }
 
           await supabase

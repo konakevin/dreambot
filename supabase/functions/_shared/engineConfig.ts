@@ -32,7 +32,8 @@ export interface EngineConfig {
   // GLOBAL cap on simultaneously-rendering jobs — the real anti-546 lever; the
   // worker claims only up to (cap − in_progress) per tick. Tunable live so we
   // can dial it against the load test with no deploy.
-  dreamQueueMaxConcurrent: number;
+  dreamQueueMaxConcurrent: number; // LIGHT (text, no-swap) cap
+  dreamQueueMaxConcurrentHeavy: number; // HEAVY (face-swap / dual) cap
   dreamQueueMaxJobsPerTick: number;
 }
 
@@ -50,6 +51,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
   petWords: DEFAULT_PET_WORDS,
   dreamQueueMaxConcurrent: 40,
+  dreamQueueMaxConcurrentHeavy: 15,
   dreamQueueMaxJobsPerTick: 10,
 };
 
@@ -89,6 +91,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     petWords: (data.pet_words as string | null) || DEFAULT_ENGINE_CONFIG.petWords,
     dreamQueueMaxConcurrent: Number(
       data.dream_queue_max_concurrent ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxConcurrent
+    ),
+    dreamQueueMaxConcurrentHeavy: Number(
+      data.dream_queue_max_concurrent_heavy ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxConcurrentHeavy
     ),
     dreamQueueMaxJobsPerTick: Number(
       data.dream_queue_max_jobs_per_tick ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxJobsPerTick

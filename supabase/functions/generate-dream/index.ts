@@ -40,6 +40,7 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { completeQueueJob, failQueueJob } from '../_shared/dreamQueueLifecycle.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
@@ -1702,6 +1703,13 @@ Output ONLY the prompt.`;
     lap('total');
     console.log(`[generate-dream] ✅ Done in ${Date.now() - t0}ms for user ${userId}`);
 
+    // QUEUE path: the worker dispatched fire-and-forget, so WE own marking the
+    // dream_queue row completed (the client's realtime wait keys off it). The
+    // 200 below is discarded (the worker already got its 202 ack).
+    if (isQueue && jobId && uploadId) {
+      await completeQueueJob(supabase, jobId, uploadId);
+    }
+
     return new Response(
       JSON.stringify({
         image_url: imageUrl,
@@ -1730,6 +1738,36 @@ Output ONLY the prompt.`;
     // return 200, so they never reach this catch.
     const refundClass = classifyFailure(errMsg);
     const isNsfw = refundClass === 'nsfw';
+
+    // QUEUE path: WE own the dream_queue terminal state (retry/backoff or
+    // dead-letter + refund + notify). The worker is fire-and-forget. Do this
+    // FIRST and return — the synchronous-path refund/notify below is skipped.
+    if (isQueue && jobId) {
+      await failQueueJob(supabase, jobId, userId, errMsg, isNsfw);
+      // Best-effort audit log (mirrors the synchronous path's failure log).
+      try {
+        await insertGenerationLog(supabase, {
+          user_id: userId,
+          recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+          rolled_axes: { ...logAxes, error: errMsg, refundClass, queued: true },
+          enhanced_prompt: finalPrompt,
+          model_used: force_model || 'unknown',
+          cost_cents: 0,
+          status: 'failed',
+          sonnet_brief: sonnetBrief,
+          sonnet_raw_response: sonnetRawResponse,
+          vision_description: visionDescription,
+          fallback_reasons: [...fallbackReasons, `hard_fail:${refundClass}`],
+          replicate_prediction_id: replicatePredictionId,
+        });
+      } catch {
+        /* best-effort */
+      }
+      return new Response(JSON.stringify({ error: errMsg, queued: true }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     // Server-side refund — only fires when we have a jobId (reference for
     // idempotency). Refunds without a jobId fall back to the legacy
@@ -1869,12 +1907,14 @@ Deno.serve((req) => {
   if (edgeRuntime && edgeRuntime.waitUntil) {
     edgeRuntime.waitUntil(task.catch(() => {}));
   }
-  // Server-triggered RETRY (refund-stuck-jobs replaying a dead render): the
-  // caller must NOT block on the multi-second render, so ack immediately. The
-  // waitUntil above keeps the isolate alive to finish the render + fire the
-  // completion notification in the background.
-  if (req.headers.get('x-dream-retry') === '1') {
-    return new Response(JSON.stringify({ ok: true, retrying: true }), {
+  // Server-triggered RETRY (refund-stuck-jobs) and QUEUE dispatch (dream-queue-
+  // worker) must NOT block on the multi-second render — ack immediately. The
+  // waitUntil above keeps the isolate alive to finish the render in the
+  // background; the QUEUE path then updates dream_queue itself (completeQueueJob
+  // / failQueueJob inside handleRequest), so a slow render can never gateway-
+  // time-out the worker and false-fail a render that actually succeeds.
+  if (req.headers.get('x-dream-retry') === '1' || req.headers.get('x-dream-queue') === '1') {
+    return new Response(JSON.stringify({ ok: true, accepted: true }), {
       status: 202,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -1,19 +1,16 @@
 /**
- * Create / DLT dispatcher — processes one queued user-initiated dream.
+ * Create / DLT dispatcher — FIRE-AND-FORGET dispatch of one queued user dream.
  *
- * Routes the job to the generate-dream renderer via its `x-dream-queue: 1`
- * service path, which renders in its OWN isolate (escaping THIS worker isolate's
- * budget) and returns the upload_id synchronously. The worker awaits this in its
- * long background budget, so a ~24s render is fine. The payload IS the full
- * generate-dream RequestBody the client built (incl. `job_id` = the dream_queue
- * row id), so the renderer resolves the user + reuses the same idempotency key.
+ * Routes the job to generate-dream (or restyle-photo for restyle payloads) via
+ * the x-dream-queue service path. That path ACKS 202 immediately and finishes
+ * the render in EdgeRuntime.waitUntil, then updates dream_queue ITSELF
+ * (completeQueueJob / failQueueJob in _shared/dreamQueueLifecycle.ts).
  *
- * Unlike nightly there's no bot-message / finalize / dreamer-notification step:
- * the row is a PRIVATE draft the user reveals + posts themselves (reveal flow).
- *
- * Returns the upload_id; the worker sets dream_queue.status based on whether
- * this throws. Throws 'nsfw:...' for a safety rejection so the worker
- * dead-letters immediately instead of retrying a doomed render 5×.
+ * So the worker does NOT await the multi-second render — it only confirms the
+ * dispatch was accepted. This eliminates the worker gateway-timing-out (HTTP
+ * 504) on a long render and false-failing one that actually succeeded (the bug
+ * the dual-face-swap load test surfaced). A non-2xx here means the render never
+ * started → throw so the worker re-queues with backoff.
  */
 
 export interface CreateDispatcherArgs {
@@ -22,7 +19,7 @@ export interface CreateDispatcherArgs {
   payload: Record<string, unknown>;
 }
 
-export async function processCreateJob(args: CreateDispatcherArgs): Promise<string> {
+export async function dispatchCreateJob(args: CreateDispatcherArgs): Promise<void> {
   const { supabaseUrl, serviceRoleKey, payload } = args;
 
   // Restyle dreams render via restyle-photo (Kontext transform); everything
@@ -41,27 +38,15 @@ export async function processCreateJob(args: CreateDispatcherArgs): Promise<stri
     body: JSON.stringify(payload),
   });
 
-  let data: Record<string, unknown> = {};
-  try {
-    data = await res.json();
-  } catch {
-    data = {};
-  }
-
+  // We expect a fast 202 ack. Any non-2xx means the render never started.
   if (!res.ok) {
-    const errMsg =
-      (data.error as string) ||
-      (data.refund_reason as string) ||
-      `create_render_http_${res.status}`;
-    // generate-dream returns { nsfw:true, refund_reason:'nsfw' } on a safety
-    // block — terminal, won't pass on retry. Dead-letter immediately.
-    if (data.nsfw === true || /nsfw|safety/i.test(errMsg)) {
-      throw new Error(`nsfw:${errMsg}`);
+    let msg = `dispatch_http_${res.status}`;
+    try {
+      const d = await res.json();
+      if (d && typeof d.error === 'string') msg = d.error;
+    } catch {
+      /* keep the http_<status> message */
     }
-    throw new Error(errMsg);
+    throw new Error(msg);
   }
-
-  const uploadId = data.upload_id as string | undefined;
-  if (!uploadId) throw new Error('create_render_no_upload_id');
-  return uploadId;
 }

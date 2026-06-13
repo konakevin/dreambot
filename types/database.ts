@@ -706,6 +706,7 @@ export type Database = {
           status: string;
           upload_id: string | null;
           user_id: string;
+          weight: string;
           worker_id: string | null;
         };
         Insert: {
@@ -721,6 +722,7 @@ export type Database = {
           status?: string;
           upload_id?: string | null;
           user_id: string;
+          weight?: string;
           worker_id?: string | null;
         };
         Update: {
@@ -736,6 +738,7 @@ export type Database = {
           status?: string;
           upload_id?: string | null;
           user_id?: string;
+          weight?: string;
           worker_id?: string | null;
         };
         Relationships: [
@@ -823,6 +826,7 @@ export type Database = {
           chaos_high_threshold: number;
           chaos_low_threshold: number;
           dream_queue_max_concurrent: number;
+          dream_queue_max_concurrent_heavy: number;
           dream_queue_max_jobs_per_tick: number;
           embodied_mediums_high: string[];
           embodied_mediums_mid: string[];
@@ -861,6 +865,7 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_queue_max_concurrent?: number;
+          dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
@@ -899,6 +904,7 @@ export type Database = {
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
           dream_queue_max_concurrent?: number;
+          dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
           embodied_mediums_high?: string[];
           embodied_mediums_mid?: string[];
@@ -2301,6 +2307,7 @@ export type Database = {
           status: string;
           upload_id: string | null;
           user_id: string;
+          weight: string;
           worker_id: string | null;
         };
         SetofOptions: {
@@ -2325,6 +2332,32 @@ export type Database = {
           status: string;
           upload_id: string | null;
           user_id: string;
+          weight: string;
+          worker_id: string | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'dream_queue';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
+      claim_dream_queue_jobs_by_weight: {
+        Args: { p_limit?: number; p_weight: string; p_worker_id: string };
+        Returns: {
+          attempt_count: number;
+          completed_at: string | null;
+          created_at: string;
+          dedup_key: string | null;
+          id: string;
+          last_error: string | null;
+          payload: Json;
+          source: string;
+          started_at: string | null;
+          status: string;
+          upload_id: string | null;
+          user_id: string;
+          weight: string;
           worker_id: string | null;
         }[];
         SetofOptions: {

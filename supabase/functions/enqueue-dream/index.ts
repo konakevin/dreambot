@@ -19,6 +19,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
+import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -94,6 +95,26 @@ Deno.serve(async (req) => {
   // x-dream-queue render path resolves the user + reuses the idempotency key.
   const payload = { ...body, job_id: jobId };
 
+  // Classify render WEIGHT for the per-weight concurrency cap. HEAVY = likely a
+  // face swap (hits the Fly.io swap service, must stay bounded): an uploaded
+  // photo for a NEW scene, a forced cast role, or a self-referential prompt
+  // with a cast (the prompt will pull the user in). LIGHT = plain text scene
+  // dreams + restyle (Kontext transform, no swap) — these run on the wide cap.
+  // Bias toward heavy when unsure (never floods the swap service).
+  const cast = (body.vibe_profile as { dream_cast?: unknown[] } | undefined)?.dream_cast ?? [];
+  const hasCast = Array.isArray(cast) && cast.length > 0;
+  const hint = typeof body.hint === 'string' ? body.hint : '';
+  const isPhotoSwap = !!body.input_image && body.photo_style !== 'restyle';
+  const selfRef =
+    hasCast &&
+    (!hint.trim() ||
+      detectSelfInsert(hint, {
+        relationshipWords: cfg.relationshipWords,
+        petWords: cfg.petWords,
+        selfRefRegex: cfg.selfRefRegex,
+      }).isSelfInsert);
+  const weight = isPhotoSwap || !!body.force_cast_role || selfRef ? 'heavy' : 'light';
+
   // Seed dream_jobs (renderer resolves the user from here; also keeps the
   // client's dream_jobs polling/realtime fallback working).
   await supabase
@@ -108,6 +129,7 @@ Deno.serve(async (req) => {
     id: jobId,
     user_id: userId,
     source: isDlt ? 'dlt' : 'create',
+    weight,
     payload,
     status: 'queued',
     dedup_key: `create:${jobId}`,
