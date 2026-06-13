@@ -1606,6 +1606,18 @@ Litmus before shipping a template: if Sonnet's output `ai_prompt` is >160 words,
 
 YumBot files: `scripts/bots/yumbot/shared-blocks.js` (new `YUMBOT_NIGHTTIME_BLOCK` + `YUMBOT_LOOK_OVERRIDE` + de-duped medium/prefix), `scripts/bots/yumbot/archetype-templates.js` (all 19 templates). Loads clean; not yet render-validated (Kevin's call from the feed).
 
+### RENDER-DISASTER POSES — gravity-ambiguous / inverted human action seeds (CRITICAL — 2026-06-13, DragonBot)
+
+Kevin hearted a DragonBot render that was a contorted floating blob — a barbarian "descending a fraying rope into a sinkhole." Two compounding causes, both worth a fleet check:
+
+1. **A few action-pool seeds describe poses Flux physically cannot render** — a human **suspended on a rope** (rope-descent / rappel / "lowering himself" / "dangling mid-rope"), **inverted / upside-down** ("body inverted and twisted", aerial-spinning-kick), **wall-running / "defying gravity"**, or **limbs-splayed contortions**. A human with no clear gravity/weight renders as floating mush. (The SAME poses on a **dragon** — barrel rolls, inverted dives, upside-down cliff-cling — render FINE; a big winged creature reads as dynamic flight. Don't cull dragon aerobatics.) Prevalence was low (~73 of ~2300 human action entries) but each reliably fails when rolled — worst was the rope-descent cluster.
+2. **Sonnet riffs impossible-physics onto the BODY.** The literal "axe tilting at an angle gravity should not allow" / "light it has no source for" that broke the render was in **ZERO seeds** — Sonnet generated it, primed by DragonBot's pervasive "impossible" register (97 files). The dreamy/surreal treatment leaked from the world onto the figure's anatomy + gear.
+
+**Fix is three layers (a seed cull alone is insufficient — it won't stop #2):**
+- **Seeds:** *rewrite, don't cull* — keep the scene/loot/era/format, change only the body to feet-planted / crouched-at-the-edge / hauling-up-over-the-rim / low fighting stance. Audit regex: `rappel|abseil|lowering (?:him|her)self|mid-grip on .*rope|dangling mid-rope|body inverted|defying gravity|wall-run|limbs splayed`. SKIP false positives: objects suspended on a cord, desecrated "inverted" symbols, ghost/genasi levitation, dragon aerobatics.
+- **Gen scripts:** add "NO UNRENDERABLE POSES — clear, grounded, readable, believable weight; surreal treatment applies to light/sky/world only, never the body or gear" to every human action recipe, AND fix example touchpoints that demonstrate the banned poses (a banned-pose example next to the ban re-teaches it).
+- **Templates:** add a compressed POSE-CLARITY LOCK to the character archetypes. (DragonBot commit e17586ca: 63 seeds rewritten → 0 disasters; 6/6 canary renders grounded.)
+
 ---
 
 ## Medium + prefix CRUFT ACCUMULATION — the slow drift toward AI-CGI / luxury-resort / mountain-photographer priors (CRITICAL — 2026-06-02)
