@@ -49,6 +49,31 @@ async function cleanup() {
     .select('id, upload_id')
     .like('dedup_key', `${TAG}:%`);
   const uploadIds = (rows ?? []).map((r) => r.upload_id).filter(Boolean);
+
+  // Delete the Storage BLOBS first (deleting the uploads row does NOT remove the
+  // file from the bucket — that's how the first run orphaned ~1k images). Pull
+  // the image_url + image_url_display, derive the object paths, and remove them.
+  let storageDeleted = 0;
+  for (let i = 0; i < uploadIds.length; i += 500) {
+    const chunk = uploadIds.slice(i, i + 500);
+    const { data: ups } = await sb
+      .from('uploads')
+      .select('image_url, image_url_display')
+      .in('id', chunk);
+    const paths = [];
+    for (const u of ups ?? []) {
+      for (const url of [u.image_url, u.image_url_display]) {
+        if (!url) continue;
+        const m = url.match(/\/uploads\/(.+)$/); // .../object/public/uploads/<userId>/<file>
+        if (m) paths.push(m[1]);
+      }
+    }
+    for (let j = 0; j < paths.length; j += 100) {
+      const { error } = await sb.storage.from('uploads').remove(paths.slice(j, j + 100));
+      if (!error) storageDeleted += Math.min(100, paths.length - j);
+    }
+  }
+
   if (uploadIds.length) await sb.from('uploads').delete().in('id', uploadIds);
   await sb.from('dream_queue').delete().like('dedup_key', `${TAG}:%`);
   await sb
@@ -58,7 +83,9 @@ async function cleanup() {
       'id',
       (rows ?? []).map((r) => r.id)
     );
-  console.log(`Cleaned ${rows?.length ?? 0} load-test queue rows + ${uploadIds.length} uploads.`);
+  console.log(
+    `Cleaned ${rows?.length ?? 0} queue rows + ${uploadIds.length} upload rows + ${storageDeleted} storage blobs.`
+  );
 }
 
 async function main() {
@@ -89,12 +116,10 @@ async function main() {
   // Seed dream_jobs + insert dream_queue rows (chunked).
   for (let i = 0; i < jobs.length; i += 200) {
     const chunk = jobs.slice(i, i + 200);
-    await sb
-      .from('dream_jobs')
-      .upsert(
-        chunk.map((j) => ({ id: j.id, user_id: USER, status: 'processing', payload: j.payload })),
-        { onConflict: 'id', ignoreDuplicates: true }
-      );
+    await sb.from('dream_jobs').upsert(
+      chunk.map((j) => ({ id: j.id, user_id: USER, status: 'processing', payload: j.payload })),
+      { onConflict: 'id', ignoreDuplicates: true }
+    );
     const { error } = await sb.from('dream_queue').insert(
       chunk.map((j) => ({
         id: j.id,
@@ -157,23 +182,29 @@ async function main() {
   }
 
   // Report.
-  const { data: final } = await sb
-    .from('dream_queue')
-    .select('status, last_error')
-    .in('id', ids);
+  const { data: final } = await sb.from('dream_queue').select('status, last_error').in('id', ids);
   const completed = final.filter((r) => r.status === 'completed').length;
   const dead = final.filter((r) => r.status === 'dead_letter');
-  const resourceFails = dead.filter((r) => /546|resource|compute|worker_limit/i.test(r.last_error || ''));
+  const resourceFails = dead.filter((r) =>
+    /546|resource|compute|worker_limit/i.test(r.last_error || '')
+  );
   const lats = [...doneAt.values()].sort((a, b) => a - b);
   const p = (q) => (lats.length ? Math.round(lats[Math.floor(lats.length * q)] / 1000) : 0);
 
   console.log('\n\n━━━ RESULT ━━━');
   console.log(`completed:        ${completed}/${COUNT}`);
   console.log(`dead_letter:      ${dead.length}`);
-  console.log(`546/resource fails: ${resourceFails.length}  ${resourceFails.length === 0 ? '✅' : '❌'}`);
-  console.log(`peak in_progress: ${maxInProgress} / cap ${cap}  ${maxInProgress <= cap ? '✅ cap held' : '❌ CAP EXCEEDED'}`);
+  console.log(
+    `546/resource fails: ${resourceFails.length}  ${resourceFails.length === 0 ? '✅' : '❌'}`
+  );
+  console.log(
+    `peak in_progress: ${maxInProgress} / cap ${cap}  ${maxInProgress <= cap ? '✅ cap held' : '❌ CAP EXCEEDED'}`
+  );
   console.log(`latency p50/p95:  ${p(0.5)}s / ${p(0.95)}s`);
-  if (dead.length) console.log('\ndead-letter errors:', [...new Set(dead.map((r) => (r.last_error || '').slice(0, 80)))]);
+  if (dead.length)
+    console.log('\ndead-letter errors:', [
+      ...new Set(dead.map((r) => (r.last_error || '').slice(0, 80))),
+    ]);
   console.log('\nRun with --cleanup to delete the test uploads + queue rows.');
 }
 
