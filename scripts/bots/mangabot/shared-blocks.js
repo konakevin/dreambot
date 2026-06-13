@@ -58,29 +58,15 @@ const PROMPT_SUFFIX =
 // the rolled camera_framing axis + preserves the depth-on-depth mandate.
 const KEYFRAME_COMPOSITION_BLOCK = `━━━ KEYFRAME COMPOSITION ━━━
 
-This frame is a POSTER-QUALITY ANIME KEYFRAME — frame-worthy, wallpaper-worthy. The reaction goal is "I want to live in this world" + "instant save."
-
-The CAMERA FRAMING axis (rolled per render — see below) DRIVES the composition. Apply it exactly. The framing may be a low-angle hero shot, a tight medium-shot of the character mid-action, a profile dynamic-action shot, a forward three-quarter, an over-the-shoulder, a Dutch tilt, a high-angle, an aerial sweep — whatever was rolled, honor it.
-
-DEPTH ON DEPTH — three planes minimum: foreground (tactile detail near camera), midground (subject + immediate scene), background (vista / horizon / atmospheric thinning). This is non-negotiable; composition variety is non-negotiable too.
-
-NEVER an iPhone-snapshot deadpan. The camera is intentional and storytelling.`;
+A poster-quality anime keyframe driven by the rolled camera_framing axis, with three depth planes minimum — foreground tactile detail, midground subject, background vista thinning into atmosphere.`;
 
 // ━━━ THE DENSITY MANDATE ━━━
 //
 // Quality-floor count rules. Every prompt must hit these counts or
 // the render reads as flat / empty / generic. (Unchanged 2026-05-29.)
-const DENSITY_BLOCK = `━━━ DENSITY MANDATE — NO EMPTY SPACE (NON-NEGOTIABLE) ━━━
+const DENSITY_BLOCK = `━━━ DENSITY MANDATE — NO EMPTY SPACE ━━━
 
-Every render must include AT MINIMUM:
-
-1) **2+ ATMOSPHERE EFFECTS** weaving through the frame (rain / fog / drifting cherry petals / falling snow / dust motes / volumetric god rays / steam / smoke haze / fireworks sparks / glowing embers / fireflies / leaves drifting / mist rolling / starlit haze). Atmospheric particles MUST be present and visible.
-
-2) **2+ LIGHTING DESCRIPTORS** sculpting the scene (golden-hour glow / neon reflections / lantern light / moonlight rim light / soft bloom highlights / volumetric god rays / dramatic high-contrast chiaroscuro / firelight glow / late-afternoon amber / cool-blue blue-hour / harsh stadium lighting / signage glow on wet pavement). Light is the EMOTIONAL DRIVER.
-
-3) **8+ ENVIRONMENTAL MICRO-DETAILS** populating the frame (signage / lanterns / torii gates / shrine charms / power lines / vending machines / wet pavement reflections / train tracks / paper talismans / market stalls / rooftop fences / sakura trees / stone steps / stained glass / castle spires / floating islands / mech scaffolding / magical runes / banners / posters / bicycles / hanging laundry / kerosene heaters / kotatsu / shoji screens / bell-charms / neon signs / coffee cups / record sleeves / hanging plants / wires / ramen bowls / chopsticks / hand-painted signs / etc.). Pull from this bank or invent kindred details. EVERY surface and corner has SOMETHING specific.
-
-DENSE LAYERED BACKGROUND DETAIL — NO EMPTY SPACE. The background is as carefully composed as the foreground.`;
+Layer the frame densely: 2+ atmosphere effects weaving through (rain / petals / snow / dust motes / god rays / steam / embers / fireflies / mist), 2+ lighting descriptors sculpting the scene as emotional driver, and 8+ specific environmental micro-details populating every surface and corner. The background is composed as carefully as the foreground — no empty space.`;
 
 // ━━━ STORY MOMENT — dynamic engagement (REWRITTEN 2026-05-29) ━━━
 //
@@ -93,18 +79,7 @@ DENSE LAYERED BACKGROUND DETAIL — NO EMPTY SPACE. The background is as careful
 // positive dynamic-engagement language.
 const STORY_MOMENT_BLOCK = `━━━ STORY MOMENT — ENVIRONMENTAL STORYTELLING ━━━
 
-This is a STORY MOMENT, not a posed product-shot. The frame implies a moment with weight:
-- Someone just left (a half-empty cup / an open door / a fading footprint / a still-swaying lantern)
-- Something is about to happen (gathering storm / lit fuse / approaching figure in distance / first petal falling)
-- The world has a history (worn-stone steps / patina on metal / faded posters / cracked screens / trodden paths)
-
-If a CHARACTER is present:
-- They are ENGAGED — mid-step / mid-strike / mid-laugh / mid-cast / mid-turn / mid-reach. Body weight shifted. A limb in motion. Hair / clothing caught in air.
-- Their eyes are WHERE THE ACTION IS — toward the viewer if the camera frames them forward, into the scene if they're focused on an event, sideways if mid-turn. Eye direction is dictated by the rolled camera_framing + the action_moment, not by a default "looking off-frame" rule.
-- They occupy 30-60% of the frame depending on the rolled framing — a low-angle hero shot may fill 50-60%; a wide establishing may show them at 25-30%; a tight medium-shot may put them at 45-55%. The rolled camera_framing decides.
-- They are INSIDE the action, not a posed model. CANDID inside their world.
-
-If NO character — the environment itself tells the story.`;
+This is a story moment with weight, not a posed product-shot — someone just left, something is about to happen, or the world carries its history. Any character is ENGAGED (mid-step / strike / laugh / cast / turn), body weight shifted and a limb in motion, eyes wherever the rolled camera_framing + action point them, occupying 30-60% of the frame per the framing — candid inside their world, not a posed model. If no character, the environment tells the story.`;
 
 // ━━━ ANIME ILLUSTRATION MEDIUM (LOCKED) ━━━ — unchanged
 const ANIME_ILLUSTRATION_BLOCK = `━━━ ANIME ILLUSTRATION MEDIUM (LOCKED) ━━━
@@ -126,9 +101,7 @@ Describe characters by role / archetype: "young warrior", "schoolgirl at window"
 // (the actual failure mode) without prohibiting eye contact.
 const NO_GENERIC_POSE_BLOCK = `━━━ NO STATIC POSED THUMBNAIL (CRITICAL) ━━━
 
-ABSOLUTELY NO "beautiful anime girl standing." NO "anime guy in arms-crossed swagger pose." NO runway stance. NO neutral standing portrait. NO product-shot framing where the character is centered like a video game character-select screen.
-
-Every character is DOING something — mid-step / mid-strike / mid-laugh / mid-cast / mid-reach / mid-turn. Body weight shifted, a limb in motion, fabric or hair caught in air. Eye direction is whatever fits the rolled camera + action — eye contact is FINE for forward-facing framings, eyes-into-scene is FINE for environmental framings. The ban is on STATIC POSED, not on eye contact.`;
+No neutral standing portrait or centered character-select pose. Every character is DOING something — mid-step / strike / laugh / cast / reach / turn — body weight shifted, a limb in motion, fabric or hair caught in air. Eye direction is whatever fits the rolled camera + action; the ban is on STATIC POSED, not on eye contact.`;
 
 // ━━━ CAMERA FRAMING — MANDATORY DRIVING AXIS (NEW 2026-05-29) ━━━
 //
@@ -143,19 +116,7 @@ Every character is DOING something — mid-step / mid-strike / mid-laugh / mid-c
 // wide so every path benefits.
 const CAMERA_FRAMING_MANDATORY_BLOCK = `━━━ CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
 
-⚠️ NON-NEGOTIABLE — the rolled camera_framing axis above DRIVES the composition. Apply the exact camera position + character orientation it describes. Flux's "anime keyframe + cinematic + atmospheric" training prior wants to default to "back-of-character silhouette looking out at lush scenery" — OVERRIDE THAT BIAS HARD.
-
-⚠️ CHARACTER ORIENTATION VARIETY MANDATE — match the rolled camera_framing:
-  • LOW-ANGLE HERO / UP-SHOT — character is ABOVE the camera, three-quarter forward or full-front, face visible and engaged
-  • OVER-THE-SHOULDER — over the character's shoulder TOWARD what they're seeing (not the character's back as the subject)
-  • FORWARD THREE-QUARTER — character angled toward viewer at 3/4, face readable, eyes engaged with action
-  • TIGHT MEDIUM-SHOT — waist-up or shoulders-up, face dominant, dynamic expression
-  • PROFILE DYNAMIC-ACTION — side-on full silhouette caught mid-action (strike / leap / cast), face visible in profile
-  • DUTCH TILT / CANTED — character mid-action with frame rotated; face still readable
-  • HIGH-ANGLE / BIRD'S-EYE — character below camera, face turned upward toward something, still engaged
-  • WIDE ESTABLISHING — only ONE composition out of MANY — character may be smaller in frame but must still be ENGAGED (mid-action, dynamic pose, NOT a tiny back-silhouette)
-
-The DEFAULT failure mode is "tiny dark figure from behind looking out at lush scenery." Reject that composition unless the rolled camera_framing explicitly calls for it.`;
+⚠️ NON-NEGOTIABLE — the rolled camera_framing axis above DRIVES the composition. Apply the exact camera position + character orientation it describes, and match the character's facing/engagement to it (low-angle hero = face visible above camera, over-the-shoulder = toward what they see, profile = side-on mid-action, etc.). Flux's "anime keyframe + cinematic + atmospheric" training prior wants to default to "back-of-character silhouette looking out at lush scenery" — OVERRIDE THAT BIAS HARD. Reject that tiny-back-silhouette default unless the rolled camera_framing explicitly calls for it.`;
 
 // ━━━ CULTURAL RESPECT ━━━ — unchanged
 const CULTURAL_RESPECT_BLOCK = `━━━ CULTURAL RESPECT ━━━

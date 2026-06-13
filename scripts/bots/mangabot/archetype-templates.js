@@ -64,29 +64,13 @@ ${blocks.NO_NAMED_CHARACTERS_BLOCK}
 
 ${blocks.NO_GENERIC_POSE_BLOCK}
 
-━━━ ⚠ HARD RULE #1: ANIME ISEKAI AESTHETIC — NOT WESTERN MEDIEVAL FANTASY ━━━
+━━━ ⚠ HARD RULE #1: STRICT ANIME ISEKAI REGISTER ━━━
 
-This is JAPANESE ANIME ISEKAI — painterly cel-shaded anime keyframe register. NOT Western photoreal fantasy (Witcher / Skyrim / D&D / Pathfinder / Game of Thrones / Lord of the Rings / Dragon Age / Baldur's Gate).
-
-Anime isekai signatures:
-- Painterly anime backgrounds (Frieren-style Studio Madhouse, Bones, A-1)
-- Saturated anime palette (sky-blues / sunset-pinks / Konosuba-vivid)
-- Cel-shaded character armor / outfits
-- RPG-game-coded elements (floating status-windows, level-up effects, mana-glow)
-- Anime-coded fantasy creatures (slimes / fairy companions / cute dragons)
-- Modern protagonist often in fantasy world (school uniform / hoodie / jersey)
-- Heroine archetypes (sword-girl / mage-girl / cleric / dragon-girl / slime-girl)
-
-BANNED:
-- Western photoreal medieval (gritty / desaturated / Witcher-style)
-- Bearded gritty Western-fantasy protagonist
-- Game of Thrones grim register
-- D&D illustration register
-- Photoreal CGI
+Strict anime isekai register — Frieren / Re:Zero / SAO / Konosuba painterly cel-shaded keyframe. Saturated anime palette, RPG-coded elements (floating status-windows, level-up effects, mana-glow), anime-coded fantasy creatures (slimes / fairy companions / cute dragons), heroine archetypes (sword-girl / mage / cleric), modern protagonist often dropped into the fantasy world (school uniform / hoodie / jersey).
 
 ━━━ ⚠ HARD RULE #2: COMPLETE SCENE COHERENCE ━━━
 
-All axes below combine into ONE coherent anime-isekai moment. Character + setting + magic + creature + atmosphere + story-prop all weave together as a single scene from an anime episode. Render the COMPLETE scene, not disconnected elements.
+All axes below combine into ONE coherent anime-isekai moment — character + setting + magic + creature + atmosphere + story-prop weave together as a single scene from an anime episode.
 
 ━━━ THE SCENE TYPE (composition lead) ━━━
 ${scene_type}
@@ -139,19 +123,11 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION CLOSER ━━━
 
-Studio Madhouse / Studio Bones / A-1 Pictures painterly anime-isekai keyframe. Saturated cel-shaded palette. RPG-coded mid-moment. Character + creature + setting + magic + atmosphere ALL combined into one coherent anime scene.
-
-━━━ HARD BANS ━━━
-
-- NO Western photoreal medieval (Witcher / Skyrim / D&D / GoT / LotR)
-- NO bearded gritty Western-fantasy protagonist
-- NO photoreal CGI
-- NO STATIC POSED THUMBNAIL (character must be ENGAGED in dynamic action)
-- NO gore
+Studio Madhouse / Bones / A-1 painterly anime-isekai keyframe, saturated cel-shaded palette, RPG-coded mid-moment. NO photoreal CGI, NO static posed thumbnail (character ENGAGED in dynamic action), NO gore.
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -212,36 +188,17 @@ The wildflower_garden axis below specifies the SIGNATURE NATURE LAYER for this r
 
 If the spirit_element axis fires (40% of renders), magic is IMPLIED — a small kodama peeking from a tree-hollow, a firefly-cluster drifting, a glowing-mushroom patch, a distant spirit-orb. Subtle, never explicit. The world feels alive without being a fantasy-render. If the spirit_element doesn't fire, the scene is pure pastoral and that's OK — Ghibli has both registers.
 
-━━━ ⚠ HARD RULE #6: STORY PROP — FOREGROUND NARRATIVE ━━━
+━━━ ⚠ HARD RULE #6: STORY PROP + DEEP-DISTANCE DETAIL ━━━
 
-A story-implying foreground prop (woven basket of vegetables, bicycle leaning on fence, picnic tea-set, laundry on line, wooden bucket of well-water) MUST be visible in the foreground/midground. Tells the viewer "someone lives here, someone was just here, someone is about to return."
+A story-implying foreground prop (woven basket of vegetables, bicycle on fence, picnic tea-set, laundry on line, well-bucket) MUST be visible, telling "someone lives here." A deep-distance secondary detail (distant farmer, far cattle, village rooftops at horizon, far chimney smoke) proves the world extends beyond the frame.
 
-━━━ ⚠ HARD RULE #7: BACKGROUND DETAIL — DEEP DISTANCE ━━━
+━━━ ⚠ HARD RULE #7: 4-TIER DEPTH + RURAL TASK ━━━
 
-A deep-distance secondary detail (a farmer in a distant field, cattle grazing far off, village rooftops at horizon, smoke from a far chimney, distant flying bird) proves the world extends beyond the frame.
+Four depth tiers: (1) foreground prop + flora + character, (2) midground anchor + wildflower-garden, (3) deep-distance landscape + background-detail, (4) sky with time-of-day + weather motion. The character is ENGAGED in a rural task (hanging laundry, picking flowers, cycling, tea), never posing — fabric/hair caught in air.
 
-━━━ ⚠ HARD RULE #8: 4-TIER DEPTH ━━━
+━━━ ⚠ HARD RULE #8: DRAMATIC STORYBOOK POSTER — WOW FACTOR ━━━
 
-(1) foreground prop + flora + character, (2) midground architectural anchor + wildflower-garden, (3) deep-distance landscape (hills/mountains/valley/sea) + background-detail, (4) sky with time-of-day register + weather motion. NO flat single-tier compositions.
-
-━━━ ⚠ HARD RULE #9: CANDID ACTION — RURAL TASK ━━━
-
-The character below is ENGAGED in a rural task — hanging laundry, picking flowers, drinking tea, sketching, cycling, walking through grass. Never STATIC posing for a thumbnail. Their eye direction is whatever fits the rolled camera_framing + action — eye contact with viewer is FINE for forward-facing framings, eyes-on-the-task is FINE for environmental framings. Body engaged in the moment, fabric/hair caught in air.
-
-━━━ ⚠ HARD RULE #10: COMPOSITION VARIETY ━━━
-
-The scene_type and camera_framing axes specify TODAY'S composition. Honor them strictly — do NOT default to "wandering girl on hilltop with windswept tree" or "tiny back-silhouette looking out over valley." Those are ONE composition out of many. Mix doorstep-cottage close-up / through-grass forward / cycling-toward-camera / inside-a-room medium-shot / bridge-crossing profile / well-tending three-quarter / boat-on-stream low-angle. The rolled camera_framing axis decides; honor it.
-
-━━━ ⚠ HARD RULE #11: DRAMATIC POSTER MOMENT — WOW FACTOR ━━━
-
-This render is a STORYBOOK POSTER, not a neutral pastoral background. Lean into the WOW:
-- The light source from the light_quality axis should HIT DRAMATICALLY — long honey-shadows from golden-hour, defined god-rays piercing canopy, dappled-warm patches dancing across surfaces.
-- The wildflower/garden density should READ AS ABUNDANT — overflowing baskets, packed foliage, gardens bursting with multiple specific bloomed plants, not single sparse stems.
-- The story-prop should be cluster-rich — multiple lived-in objects together telling a richer story.
-- The sky should have DEFINED CHARACTER — towering cumulus, color gradient horizon, drifting cherry-blossom rain, low rising mist — not flat blank blue.
-- The architectural anchor should feel MATERIAL — moss-grown stone, weathered thatch, kettle-steam visible from chimney — not sketched in.
-- The viewer's reaction: "I want to walk into this picture and live there for a while."
-This is what distinguishes Studio Ghibli from generic painterly anime — every frame is a poster moment. Reject any composition that reads as "fine but bland."
+Every frame is a storybook poster, not a neutral background. The light hits dramatically (long honey-shadows, god-rays piercing canopy), the wildflower density reads ABUNDANT (overflowing baskets, packed foliage), the sky has defined character (towering cumulus, gradient horizon, low mist), and the architecture feels material (moss-grown stone, weathered thatch, kettle-steam). Reject any composition that reads as "fine but bland."
 
 ━━━ THE SCENE TYPE (composition lead) ━━━
 ${scene_type}
@@ -278,10 +235,10 @@ ${camera_framing}
 
 ${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
 
-━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #6) ━━━
+━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY ━━━
 ${story_prop}
 
-━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE (HARD RULE #7) ━━━
+━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE ━━━
 ${background_detail}
 ${
   spirit_element
@@ -299,7 +256,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION CLOSER ━━━
 
@@ -307,14 +264,7 @@ Studio Ghibli hand-painted pastoral keyframe. Kazuo Oga sky brushwork. Soft warm
 
 ━━━ HARD BANS ━━━
 
-- NO neon / cyberpunk palette / saturated electric colors
-- NO cities / skyscrapers / modern infrastructure
-- NO armor / weapons / military / cybernetics
-- NO photoreal — hand-painted oil-watercolor only
-- NO STATIC POSED THUMBNAIL — character must be ENGAGED in their rural task
-- NO English text / modern signage / kanji storefronts
-- NO dramatic apocalyptic skies (no red-orb suns / no lightning-storm hero-shots)
-- NO empty composition — nature density mandate applies
+NO neon / cyberpunk palette, NO cities / skyscrapers / modern infrastructure, NO armor / weapons / military, NO English text / modern signage, NO dramatic apocalyptic skies (red-orb suns / lightning-storm hero-shots).
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -376,25 +326,13 @@ The sky / overhead space is FILLED. Power-lines, fire-escape staircases, hanging
 
 Vending machines / drones / arcade-pachinko / holographic vendors / cyber-deck terminals / charging stations / mechanical street-bots are visible in the frame as the lived-in tech of this world. The tech_artifacts axis below specifies the signature element — render it with material truth (LED glow, mechanical wear, cable nests).
 
-━━━ ⚠ HARD RULE #6: STORY PROP — FOREGROUND NARRATIVE ━━━
+━━━ ⚠ HARD RULE #6: STORY PROP + DEEP-DISTANCE SCALE PROVER ━━━
 
-A story-implying foreground prop (smoldering noodle bowl, dropped umbrella, sparking neon-sign, spilled energy-drink, glowing data-chip, broken motorcycle helmet) MUST be visible in the foreground/midground. The viewer's eye finds it and wonders "what happened?"
+A story-implying foreground prop (smoldering noodle bowl, dropped umbrella, sparking sign, glowing data-chip, broken helmet) makes the eye wonder "what happened?" A deep-distance detail (hovering drone, ad-blimp, hovercar arc, faint maglev) proves the city stretches beyond the frame, across a 4-tier depth (foreground prop → midground signage + tech → deep-distance landmark + city → sky vertical clutter).
 
-━━━ ⚠ HARD RULE #7: BACKGROUND DETAIL — DEEP DISTANCE SCALE PROVER ━━━
+━━━ ⚠ HARD RULE #7: COMPOSITION MATCHES THE AXES ━━━
 
-A deep-distance secondary detail (hovering drone, ad-blimp, hovercar arc through far buildings, distant rooftop figure, faint maglev train passing) proves the city stretches beyond the frame.
-
-━━━ ⚠ HARD RULE #8: 4-TIER DEPTH ━━━
-
-(1) foreground prop + character, (2) midground signage + tech + landmark base, (3) deep-distance landmark + city, (4) sky with vertical clutter + landmark tops. NO flat compositions.
-
-━━━ ⚠ HARD RULE #9: CANDID ACTION, NEVER POSED ━━━
-
-Character is CAUGHT mid-beat. Not looking at viewer. Not modeling.
-
-━━━ ⚠ HARD RULE #10: COMPOSITION VARIETY — NO DEFAULT SHOT ━━━
-
-Do NOT default to "solo figure centered in wet alley, vertical tower behind, worm's-eye looking up." That ONE composition has been overused. The scene_type and camera_framing axes below specify a DIFFERENT composition — honor them strictly. If the camera_framing says "high-angle drone-down" then the figure is BELOW the camera and the landmark is NOT a vertical tower above. If scene_type says "ramen-counter interior" then we are INDOORS and the figure fills the foreground, NOT a tiny figure in a corridor. The figure's relationship to the landmark must MATCH whatever the scene_type + camera_framing dictate — not the genre-default standing-and-looking-at-tower shot.
+The figure's relationship to the landmark MATCHES whatever the rolled scene_type + camera_framing dictate. If camera_framing says "high-angle drone-down" the figure is BELOW the camera; if scene_type says "ramen-counter interior" we are INDOORS with the figure filling the foreground. Honor the rolled axes strictly.
 
 ━━━ THE SCENE TYPE (composition lead) ━━━
 ${scene_type}
@@ -437,10 +375,10 @@ ${camera_framing}
 
 ${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
 
-━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #6) ━━━
+━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY ━━━
 ${story_prop}
 
-━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE (HARD RULE #7) ━━━
+━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE ━━━
 ${background_detail}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
@@ -450,21 +388,15 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION CLOSER ━━━
 
-Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo painterly cyberpunk-anime keyframe. Hot-pink + cyan + magenta neon palette dominant. Wet pavement reflections. Kanji at maximum density. Vertical clutter overhead. One isolated figure mid-action in a dense, busy, saturated, layered cyberpunk Tokyo. Akira-grade color saturation, Ghost-in-the-Shell-grade detail density.
+Akira / Ghost-in-the-Shell / Blade-Runner-Tokyo painterly cyberpunk-anime keyframe. Hot-pink + cyan + magenta neon palette dominant. Wet pavement reflections. Kanji at maximum density. Vertical clutter overhead. One isolated figure mid-action in a dense, busy, saturated, layered cyberpunk Tokyo.
 
 ━━━ HARD BANS ━━━
 
-- NO pastel / warm-amber / golden-hour / sunny register — neon-night ONLY
-- NO historical Japan elements (torii / pagoda / katana / haori belong to samurai-era)
-- NO empty sky — vertical clutter mandate
-- NO empty street — wet-pavement-with-reflections mandate
-- NO real corporate logos / IP brands (Nike / Coca-Cola / etc.) — fictional kanji + fake-brand signage only
-- NO STATIC POSED THUMBNAIL — character must be ENGAGED in dynamic mid-action
-- NO photoreal — painterly cyberpunk-anime keyframe register
+NO pastel / warm-amber / golden-hour register (neon-night ONLY), NO historical Japan elements (torii / pagoda / katana belong to samurai-era), NO empty sky (vertical clutter mandate), NO empty street (wet-pavement mandate), NO real corporate logos / IP brands (fictional kanji + fake-brand signage only).
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -505,25 +437,13 @@ ${blocks.NO_GENERIC_POSE_BLOCK}
 
 ${blocks.CULTURAL_RESPECT_BLOCK}
 
-━━━ ⚠ HARD RULE #1: SHOW THE STORY PROP — NON-NEGOTIABLE ━━━
+━━━ ⚠ HARD RULE #1: SHOW THE STORY PROP + BACKGROUND DETAIL ━━━
 
-The single most important element. The story-prop below MUST appear, visibly rendered, in the foreground or midground of this frame. The render is BLAND WITHOUT IT. The eye must see the prop and instantly wonder "what happened here?" — burning wheel, fallen banner, smoldering campfire, katana-as-grave-marker, etc. Render it with material truth (smoke / char / mud / weathered patina).
+The story-prop below MUST appear, visibly rendered in foreground/midground with material truth (smoke / char / mud / patina) — the eye sees it and wonders "what happened here?" (burning wheel, fallen banner, katana-as-grave-marker). The deep-distance background detail (distant watcher, retreating banner-army on a far ridge, circling ravens) MUST also appear as a third readable narrative layer.
 
-━━━ ⚠ HARD RULE #2: SHOW THE BACKGROUND DETAIL ━━━
+━━━ ⚠ HARD RULE #2: 4-TIER DEPTH, MONUMENTAL ANCHOR ━━━
 
-The deep-distance background detail below MUST also appear in the frame — a distant watcher silhouette, retreating banner-army on a far ridge, ravens circling far away. Third readable narrative layer beyond the foreground prop and the midground character.
-
-━━━ ⚠ HARD RULE #3: 4-TIER DEPTH ━━━
-
-The keyframe MUST visibly contain four distinct depth layers: (1) foreground prop / character / silhouette, (2) midground architectural anchor (torii / pagoda / temple / castle / Buddha), (3) deep-distance landscape (Mt-Fuji / cliffs / ridges / castle silhouette), (4) sky / canopy with time-of-day register. NO flat single-tier compositions.
-
-━━━ ⚠ HARD RULE #4: MONUMENTAL ANCHOR ━━━
-
-The architectural anchor must DWARF the human figure(s). Towering, massive, scale-proving.
-
-━━━ ⚠ HARD RULE #5: ENGAGED ACTION ━━━
-
-Character is ENGAGED in a mid-beat (mid-step / mid-draw / mid-prayer / mid-strike). Body weight shifted, fabric/hair caught in air, weapon in motion. Eye direction follows the rolled camera_framing + action — eye contact with viewer is FINE for forward-facing framings (low-angle hero / forward three-quarter / medium close-up); eyes-on-the-opponent is FINE for combat / profile-action framings. The ban is on STATIC POSED, not on eye contact.
+Four distinct depth layers: (1) foreground prop / character, (2) midground architectural anchor (torii / pagoda / temple / castle) that DWARFS the human figure, (3) deep-distance landscape (Mt-Fuji / cliffs / ridges), (4) sky / canopy with time-of-day. The anchor is towering, massive, scale-proving.
 
 ━━━ THE SCENE TYPE (composition lead) ━━━
 ${scene_type}
@@ -557,10 +477,10 @@ ${camera_framing}
 
 ${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
 
-━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY (HARD RULE #1) ━━━
+━━━ ⚠ STORY PROP — MUST APPEAR VISIBLY ━━━
 ${story_prop}
 
-━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE (HARD RULE #2) ━━━
+━━━ ⚠ BACKGROUND DETAIL — MUST APPEAR IN DEEP DISTANCE ━━━
 ${background_detail}
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
@@ -570,21 +490,15 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION CLOSER ━━━
 
-Mononoke / Demon-Slayer / Rurouni-Kenshin painterly keyframe quality. Falling cherry-blossom petals / drifting snow / mist / rain streaks / fireflies / falling maple leaves wherever the atmospheric element calls for them. Bamboo / shrine / lantern / pagoda / castle / wooden-architecture density. Multi-tier depth visibly layered front-to-back. The architectural anchor TOWERS above the character figure to prove the scale of the world.
+Mononoke / Demon-Slayer / Rurouni-Kenshin painterly keyframe. Atmospheric motion (petals / snow / mist / rain / fireflies / maple leaves) where the atmospheric element calls for it. Bamboo / shrine / lantern / pagoda / castle density, multi-tier depth front-to-back, the anchor towering above the figure.
 
 ━━━ HARD BANS ━━━
 
-- NO flat single-character-portrait composition with blurred background
-- NO modern dress / contemporary clothing — historical jidaigeki ONLY
-- NO real samurai names / historical-person names — role-coded only (ronin / sensei / clan-retainer / wandering-monk / etc.)
-- NO photoreal — painterly hand-drawn anime keyframe
-- NO posed model-shot — character is CAUGHT mid-action
-- NO empty centered composition — density mandate applies
-- NO modern cars / electronics / signage / English text — historical period clean
+NO modern dress / contemporary clothing (historical jidaigeki ONLY), NO real samurai / historical-person names (role-coded: ronin / sensei / wandering-monk), NO modern cars / electronics / signage / English text.
 
 ━━━ OUTPUT FORMAT (MANDATORY) ━━━
 
@@ -659,7 +573,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [tender action] in [setting]"], [tender outfit], [DNA], [romantic-accessory], [setting with petal-cascade], [drama if fired], [camera_framing exactly], [pink palette + mood].
@@ -734,7 +648,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [rooftop action] on [rooftop setting]"], [casual evening outfit], [DNA], [rooftop accessory at hand], [rooftop with city-vista BEHIND not as focal-point], [drama if fired], [camera_framing exactly], [sunset palette + mood].
@@ -823,7 +737,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [everyday action] in [setting]"], [casual outfit], [DNA], [everyday accessory at hand], [setting wrapping with mundane warmth], [drama if fired], [camera_framing exactly], [palette + mood].
@@ -919,7 +833,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} WOMAN [doing cute action] in [setting]"], [frilly outfit detail], [DNA: skin + eyes + hair], [cute accessory in hand], [setting with sparkle-stack], [drama if fired], [camera_framing exactly], [pastel palette + mood].
@@ -970,13 +884,9 @@ Every render STACKS 3+ SIMULTANEOUS visible dynamic elements:
 THE SCALE-THE-MAGIC-UP rule: not a wisp, a MAELSTROM. Not a fireball, a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not a spirit-fox, a spirit-fox CRACKING REALITY with creatures emerging.
 
 ━━━ ABSOLUTE BANS — MALE-SPECIFIC ━━━
-• NO shirtless / bare-chested / oiled-pecs / loincloth / sleeveless-revealing-torso
-• Outfit MUST explicitly name a chest-covering item (gi / haori / coat / school-uniform / cuirass / robe / cape)
-• Skin pool stays FACE-FOCUSED (cheekbones / jaw / brow) — NEVER torso / chest
-• NO visible enemy blood / wounded foe — enemy is silhouette / off-frame / shadowy
-• NO posing for camera as runway thumbnail
-• NO pirate-rigging / shipboarding-with-cutlass tropes
-• NO eyes-locked-blankly — eye direction = camera_framing-decided
+• Outfit MUST explicitly name a chest-covering item (gi / haori / coat / school-uniform / cuirass / robe / cape) — fully clothed, never shirtless / bare-chested / oiled-pecs.
+• Skin descriptors stay FACE-FOCUSED (cheekbones / jaw / brow) — never torso / chest.
+• Enemy is silhouette / off-frame / shadowy — no visible enemy blood / wounded foe.
 
 ━━━ SOLO HERO ONLY ━━━
 ONE shonen hero. Enemy may be implied as silhouette / shadow / off-frame at midground. NEVER a co-character.
@@ -1028,7 +938,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} shonen hero MAN [doing exact peak-combat action] in [battlefield]"], [he wears [outfit] chest-covered], [DNA: skin + eyes + hair], [weapon mid-arc + power_signature], [battlefield wrapping with depth + drama + debris-shockwave-active-background], [camera_framing exactly], [lighting + atmosphere], [mood]
@@ -1133,7 +1043,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} magical-girl WOMAN [doing exact action] in [setting]"], [her outfit with frilly magical detail], [DNA: skin + eyes + hair], [wand/accessory wielded], [magical setting wrapping with sparkle-stack], [drama if fired], [camera_framing exactly], [pastel palette + sparkle effects + mood].
@@ -1195,14 +1105,10 @@ Per the painted-medium ethnicity-noun lesson: the ethnicity-NOUN ("a Japanese ma
 Hand-drawn anime illustration. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer / Akira / Madhouse tradition. Cel-shaded clean linework with painterly atmospheric backgrounds. Vibrant saturated palette. NEVER photoreal. NEVER 3D-render. NEVER Disney-Pixar.
 
 ━━━ ABSOLUTE BANS — MALE-SPECIFIC NSFW-CLEAN + COMBAT-CLEAN ━━━
-• NO shirtless / NO bare-chested / NO oiled-pecs / NO loincloth / NO sleeveless-with-bare-arms-and-implied-bare-torso
-• NO leather shorts / NO single-piece-only outfits / NO "open vest revealing chest" / NO "strategically torn" / NO "tunic torn from action"
-• NO "rugged hero pose" alone (pose itself fine, but never with "gleaming like polished stone" / "sweat-gleaming" / "oiled" / "sculpted" / "chiseled" / "muscular neck" — these in the skin pool trigger bare-chest rendering even with covered outfits)
-• Outfit MUST explicitly name a chest-covering item (tunic / cuirass / breastplate / gambeson / scale-armor / robe / coat / surcoat / mail hauberk / brigandine / chest-plate / jacket / haori / kimono / hakama-top / school blazer / uniform top)
-• Skin pool stays FACE-FOCUSED — cheekbones / forehead / jaw / temples / brow. NEVER torso / chest / shoulders / arms / muscular-body
-• NO pirate-trope action (swinging from rigging / boarding-skyship-with-cutlass — Flux trains "dynamic male action" as shirtless pirate)
-• NO combat with visible enemies and blood / wounded character
-• NO pretty-boy register (avoid bishounen-only) — mix rugged jawlines / weathered character / dignified-handsome alongside softer registers; male variety MUST include lined faces, scars, beards (where culturally appropriate), age-marked features
+• His outfit MUST explicitly name a chest-covering item (tunic / cuirass / breastplate / gambeson / scale-armor / robe / coat / haori / kimono / hakama-top / school blazer / uniform top) — fully clothed, never shirtless / bare-chested / oiled-pecs / sleeveless-revealing-torso.
+• Skin descriptors stay FACE-FOCUSED (cheekbones / forehead / jaw / temples / brow) — never torso / chest / shoulders / muscular-body, which trigger bare-chest rendering even under a covered outfit.
+• NO combat with visible enemies and blood / wounded character.
+• Mix male registers BEYOND pretty-boy bishounen — rugged jawlines, weathered and dignified-handsome faces, lined features, scars, beards (where culturally appropriate), age-marked variety.
 
 ━━━ SOLO CHARACTER ONLY ━━━
 ONE man. No companions, no crowds. He is ALONE in his moment.
@@ -1251,7 +1157,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Rolled camera_framing axis DECIDES the shot. He fills 35-50% of frame; setting wraps at 50-65%. FOREGROUND: tactile detail near his action. MIDGROUND: HIM mid-action. BACKGROUND: setting + surprise + drama hints.
@@ -1313,11 +1219,8 @@ Per the painted-medium memory: ethnicity-NOUN ("a Japanese woman" / "a Filipina 
 Render as HAND-DRAWN ANIME ILLUSTRATION. Studio Ghibli / Makoto Shinkai / Kyoto Animation / Demon Slayer (ufotable) / Akira (Otomo) / Mononoke (Studio Ghibli) tradition. Cel-shaded clean linework with painterly atmospheric backgrounds. Vibrant saturated palette. Visible brushwork in skies and atmosphere; crisp ink linework on subjects. NEVER photoreal. NEVER 3D-render. NEVER Disney-Pixar CGI. NEVER Western cartoon.
 
 ━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
-• NO combat with visible enemies, NO mid-strike-against-foe with blood, NO wounded character, NO fallen body
-• Weapons may be drawn / mid-cast / mid-swing — but in stance / training / display / training-spar, NOT in active blood-combat
-• NO cheesecake: NO "minimal coverage" / "bare midriff" / "exposed cleavage" / "form-fitting" / "skin-tight" / "harness across torso" / "sultry" / "sensual" / "alluring" / "seductive"
-• Her outfit reads FUNCTIONAL + COVERED — sleek anime gear, never sexualized
-• NO posing for the camera as a runway thumbnail — she is INSIDE the action
+• Her outfit reads FUNCTIONAL + COVERED — sleek anime gear, never sexualized (no bare midriff / cleavage / skin-tight / sultry register).
+• Weapons may be drawn / mid-cast / mid-swing in stance / training / display — never active blood-combat with visible enemies, wounded character, or fallen body.
 
 ━━━ SOLO CHARACTER ONLY (this path) ━━━
 ONE character. No companions, no crowds, no enemies. She is ALONE in her moment. Surprise elements are tiny background details, not co-characters.
@@ -1366,7 +1269,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 The rolled camera_framing axis DECIDES the shot. Three-quarter forward, low-angle hero, profile dynamic action, tight medium-shot — whatever was rolled. She fills 35-50% of frame; setting wraps around her at 50-65%; surprise element + atmospheric drama at deep midground or background. FOREGROUND: tactile detail near her action (shrine paper / mecha cable / vending-machine glow / desk surface / spell-circle stones). MIDGROUND: HER, engaged in mid-action. BACKGROUND: setting receding into atmospheric haze with surprise-element + drama hints.
@@ -1449,7 +1352,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [occult action] in [Tokyo setting]"], [modern urban outfit], [DNA], [occult prop], [setting with supernatural energy], [drama if fired], [camera_framing exactly], [neon-occult palette + mood].
@@ -1527,7 +1430,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} wanderer [post-apoc action] in [ruin setting]"], [scavenged outfit], [DNA], [survival accessory], [ruined setting with nature reclaiming], [drama if fired], [camera_framing exactly], [rust-moss-dusk palette + mood].
@@ -1604,7 +1507,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [beach action] at [beach setting]"], [modest beachwear], [DNA], [beach-prop accessory], [seaside with ocean horizon], [drama if fired], [camera_framing exactly], [summer palette + mood].
@@ -1683,7 +1586,7 @@ ${require('./shared-blocks').CAMERA_FRAMING_MANDATORY_BLOCK}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "a ${ethnicity.split(/[,:]/)[0]} character [festival action] at [matsuri setting]"], [yukata or jinbei outfit], [DNA], [festival prop / food at hand], [matsuri with lanterns and stalls], [drama if fired], [camera_framing exactly], [lantern palette + mood].
@@ -1734,15 +1637,12 @@ This path produces TWO equally valid aesthetic registers. Per render, lean into 
 The rolled color_palette axis below tells you which register to lean into. Honor it.
 
 ━━━ ANIME MEDIUM ━━━
-Hand-drawn anime, Ghibli / Shinkai / Mononoke painterly tradition. Cel-shaded soft architectural linework, painterly atmospheric backgrounds with brush-stroke texture, Ghibli storybook quality. NOT photoreal. NOT CGI. NOT hyper-detailed concept-art.
+Hand-drawn anime, Ghibli / Shinkai / Mononoke painterly tradition. Cel-shaded soft architectural linework, painterly backgrounds with brush-stroke texture, storybook quality. NOT photoreal. NOT CGI.
 
 ━━━ BANS ━━━
-• NO hero-character portrait — architecture is HERO, figure is tiny scale-prover or absent
-• NO Mt-Fuji-postcard with tiny anchor — anchor fills 50-70% of frame
-• NO photoreal / NO western-CGI / NO Pixar 3D-render
-• NO modern western architecture — Ghibli-coded sky-island / shrine / cathedral / pagoda / mossy-ruin register only
-• NO overcrowded maximalist concept-art — let the architecture breathe
-• NO tight digital illustration — embrace LOOSE HAND-PAINTED brushwork
+• Architecture is HERO filling 50-70% of frame — figure is a tiny scale-prover or absent, never a hero-character portrait or a Mt-Fuji-postcard with a tiny anchor.
+• Ghibli-coded architecture only (sky-island / shrine / cathedral / pagoda / mossy-ruin) — not modern western buildings.
+• Let the architecture breathe — loose hand-painted brushwork, not overcrowded maximalist concept-art or tight digital illustration.
 
 ━━━ ARCHITECTURE IS HERO ━━━
 The monumental anchor fills 50-70% of the frame. Scale-provers (stairs / bridges / archways) prove the scale. Optional tiny figure (5-10%) makes scale visceral. Depth flows naturally from foreground through architectural mass to atmospheric distance — NOT forced multi-tier maximalism.
@@ -1789,7 +1689,7 @@ ${camera_framing}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR SECONDARY ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "[monumental_anchor] in [setting_type] with [scale_provers]"], [foreground per axis], [tiny figure for scale OR absent], [atmospheric light], [color palette — match its register], [optional motion if it fits], [weather + air], [drama if fired], [camera_framing], [hand-painted Ghibli mood].
@@ -1829,9 +1729,9 @@ Mystical-spirit palette. Painterly atmospheric aura. Shimenawa rope, ofuda, fox-
 Hand-drawn anime, Ghibli / Studio-Bones / Madhouse yokai tradition. Cel-shaded crisp creature linework, painterly atmospheric backgrounds.
 
 ━━━ BANS ━━━
-• NO western dragon / NO European fairy / NO Cthulhu
-• NO STATIC PORTRAIT — creature is at LOADED instant
-• NO hero-human-character — human is OPTIONAL tiny witness for scale only
+• Strictly Japanese yokai lineage (kitsune / tengu / ryujin / oni / kappa) — not western dragon / European fairy.
+• NO STATIC PORTRAIT — creature is at LOADED instant.
+• NO hero-human-character — human is OPTIONAL tiny witness for scale only.
 
 ━━━ YOKAI IS HERO ━━━
 Creature fills 40-70% of frame. Optional human witness tiny (5-15%) for scale.
@@ -1867,7 +1767,7 @@ ${camera_framing}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "[creature_type] [creature_pose] at [shrine/setting]"], [creature surface detail], [aura/magic], [human witness tiny for scale], [foreground], [drama if fired], [camera_framing exactly], [spirit palette + mood].
@@ -1941,7 +1841,7 @@ ${camera_framing}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "[ship_class] [engine_or_signal] in [cosmic_setting]"], [scale provers], [foreground artifact], [stellar phenomenon], [lighting signature], [drama if fired], [camera_framing exactly], [space-opera palette + mood].
@@ -2032,7 +1932,7 @@ ${camera_framing}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "[mech_class] [mech_posture] in [hangar_setting], [scale_provers visible]"], [mech surface detail], [weaponry/tool at hand or holstered], [steam/spark atmospheric], [light signature], [drama if fired], [camera_framing exactly], [industrial palette + mood].
@@ -2109,7 +2009,7 @@ ${camera_framing}
 ━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
 ━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
 ━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
-━━━ MOOD ━━━ ${vibeDirective.slice(0, 200)}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE ━━━
 [OPENING: "[village_anchor] with [architecture] under [light_quality]"], [foreground detail with depth], [midground streetscape activity], [tiny inhabitant for scale], [wildlife/object], [weather + atmospheric haze], [drama if fired], [camera_framing exactly], [village palette + mood].
