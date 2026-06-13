@@ -69,7 +69,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Wide-to-medium epic battle frame. Boss looms huge against 2-4 small hero toys mid-counter-attack. Real-world setting as the battlefield. Action freeze-frame energy — explosion / energy-blast / claw-strike / fire-breath captured mid-event. Cinematic movie-still composition.

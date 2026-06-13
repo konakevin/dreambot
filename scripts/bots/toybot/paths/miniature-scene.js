@@ -49,7 +49,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Cinematic in-world frame, figures living inside a deep immersive location. Multi-tier depth — layered foreground, midground, far distance, and sky or ceiling overhead. One clear hero figure the eye lands on, mid-action, with the world telling the rest of the story. Painted-miniature material truth throughout; macro shallow depth of field.

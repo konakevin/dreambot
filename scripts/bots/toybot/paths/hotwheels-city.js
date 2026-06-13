@@ -77,7 +77,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Low macro track-side frame with toy car mid-stunt — loop-de-loop midair, jump arc, tunnel-burst, sharp-curve drift. Speed-blur on wheels, light-streak on chrome. Practical real-world surface (kitchen counter, bookshelf, garage floor) blown up to "epic" scale by extreme low-angle camera. Bright die-cast-car-commercial energy.

@@ -63,7 +63,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Mid-close 80s-toy-catalog frame. Scented-doll figurine mid-wholesome-activity in oversized-scale pastel playset. Warm golden-hour or lamp-glow lighting, faded-catalog color grade. Nostalgic candy-palette.

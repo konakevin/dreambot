@@ -21,23 +21,23 @@ const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
 const TOY_PHOTOGRAPHY_BLOCK = `━━━ TOY PHOTOGRAPHY (NON-NEGOTIABLE) ━━━
 
-Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting. Toy-ness IS the art — never render as "real" version. If it's LEGO, bricks are visible. If it's clay, fingerprints + paint-strokes visible. If it's vinyl, glossy-sheen + oversized-head visible. If it's action-figure, joint-articulation visible. If it's stitched, fabric/felt/yarn/button-eyes visible.`;
+Render as a REAL PHYSICAL TOY photographed in a handcrafted set with dramatic cinematic lighting — its material signature visible (clay fingerprints, vinyl glossy oversized-head, action-figure joints, stitched fabric/yarn/button-eyes), never the "real" version.`;
 
 const CINEMATIC_STORY_BLOCK = `━━━ CINEMATIC STORY — EVERY RENDER IS A MOVIE STILL ━━━
 
-Something IS HAPPENING. Action mid-charge, explosion frozen, mid-leap, spell-casting, ambush peak-moment. NEVER "toy-on-shelf" static. Narrative + tension + dynamic composition. The viewer should feel they stumbled into minute 47 of a stop-motion film.`;
+Something IS HAPPENING — mid-charge, mid-leap, frozen explosion, ambush peak-moment with narrative tension and dynamic composition; NEVER a static "toy-on-shelf."`;
 
 const DRAMATIC_LIGHTING_MAKES_CHEAP_LOOK_EPIC_BLOCK = `━━━ LIGHTING ELEVATES THE MEDIUM ━━━
 
-Lighting is the multiplier that makes plastic / clay / fabric feel like it belongs in a museum. The exact palette comes from the LIGHTING and VIBE-COLOR sections below — do NOT default to teal-and-orange, do NOT add warm-key-cool-fill unless the pool pick explicitly says so. Respect the specified palette (monochrome / high-key / low-key / noon-flat / noir-hard / golden-hour / blue-hour / neon / sodium / emergency-red / underwater / overcast / catalog-soft / whatever the pool specifies) and build the scene around IT. Atmospheric depth via smoke / haze / dust / steam / rain / snow / pollen / backlight-only is welcome, but the color temperature must follow the pool's call, not a generic cinematic default.`;
+Lighting makes plastic / clay / fabric feel museum-worthy — but build the scene around the EXACT palette named in the LIGHTING and VIBE-COLOR sections below (not a default teal-and-orange / warm-key-cool-fill). Atmospheric depth (smoke / haze / dust / backlight) is welcome, but the color temperature must follow the pool's call.`;
 
 const PATH_MEDIUM_LOCK_BLOCK = `━━━ PATH MEDIUM LOCK — NEVER MIX ━━━
 
-Each path is locked to its medium. NEVER mix LEGO pieces in a claymation scene. NEVER put vinyl figures beside action-figures. NEVER have stitched characters in a LEGO setting. The path's medium is absolute — stay true.`;
+The path's medium is absolute — never mix mediums in one scene (no LEGO in a claymation scene, no vinyl figures beside action-figures, no stitched characters in a LEGO setting).`;
 
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — TOY AMPLIFICATION ━━━
 
-Stack medium-signature detail to the max: LEGO studs + printed minifig faces + transparent brick-water; clay fingerprints + painted-eyes + subtle thumb-marks; vinyl glossy sheen + oversized head + matte-paint panel-lines; action-figure joint-articulation + weathered paint + explosion effects; stitched fabric textures + button-eyes + yarn-hair + visible stitching-seams. Every render is obsessive medium-craft.`;
+Stack the medium's signature detail to the max (clay fingerprints + painted eyes; vinyl glossy sheen + oversized head; action-figure joints + weathered paint; stitched fabric + button-eyes + visible seams) — every render is obsessive medium-craft.`;
 
 // Anti-human-leak rule for action-figure paths. Sonnet/Flux otherwise read
 // archetype words ("priestess", "warrior", "ninja") + skin/flesh language
@@ -97,22 +97,8 @@ The camera framing block above is the WHO-IS-IN-THE-FRAME control. The staging b
 // night-meadow R3 lesson (PASS/FAIL examples + active-verb mandate + implied
 // before/after) ported into ToyBot's multi-medium register.
 const STORY_BEAT_MANDATE_BLOCK = `━━━ STORY BEAT — THE SCENE IS A SINGLE FRAME OF AN EVENT ━━━
-Render the story_beat below as a single frame of an event mid-action — NOT a portrait, NOT a lineup, NOT a "characters posing in the setting." The viewer reads in 2 seconds: who is doing what to whom, why, and what's about to happen next.
-
-REQUIRED in every render:
-  • An ACTIVE VERB mid-motion for the protagonist — charging / hurling / dragging / climbing / firing / dodging / leaping / hauling / lunging / mid-tumble / mid-cast / mid-shout / mid-rescue (NEVER "standing" / "posing" / "looking at" / "gazing" / "watching")
-  • Named SUPPORTING CAST also mid-verb — each reacting (helping, opposing, fleeing, cheering, hiding, witnessing) — never just present
-  • A SHARED OBJECT or EVENT all the toys are reacting to (a tipping tower, a stolen prize, a launching rocket, a roaring boss, a collapsing bridge, an arriving package)
-  • An IMPLIED before/after — discarded gear / footprints / smoke / a falling hat / a half-eaten cookie / a tipped chair hints at what came two seconds ago and what will happen two seconds from now
-
-BAD (figurine portrait): "vinyl Funko bear, action figure soldier, and plush rabbit arranged on a wooden table"
-BAD (lineup): "three toys standing on a kitchen counter looking heroic"
-BAD (pose): "a Barbie holding a hot-glue gun while a G.I. Joe poses next to her"
-
-GOOD (story beat): "a Funko Pop judge mid-slamming the gavel so hard it launches off the bench while the defendant teddy bear flinches, a G.I. Joe attorney jabbing a paperclip at the jury of three Calico Critters, real attic floorboards"
-GOOD (story beat): "vinyl explorer mid-rappel down a real coffee-mug cliff toward a tiny glowing dropped earring, a plastic army-soldier belaying from the rim with the rope tied off on a real fork, a discarded canteen at the lip above"
-
-The story_beat is the EVENT — render it as a moment of motion the viewer just caught.`;
+Render the story_beat below as one mid-action frame of an event (not a portrait, lineup, or "characters posing"): the protagonist on an ACTIVE VERB mid-motion (charging / hurling / climbing / firing / leaping / mid-cast — never standing / posing / watching), the named supporting cast each mid-verb reacting (helping, opposing, fleeing, cheering), all of them reacting to a SHARED object or event (a tipping tower, a launching rocket, a roaring boss).
+Add an IMPLIED before/after — discarded gear, smoke, a falling hat — so the viewer reads in 2 seconds who is doing what to whom and what happens next.`;
 
 // World-mode injection — the scenario + real-world staging axis. Returns
 // empty string in classic mode so path-builders render with just the path's

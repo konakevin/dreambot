@@ -76,7 +76,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Mid-close articulated-mech-toy diorama frame. Mech mid-action — sword-clash, energy-cannon blast, transformation-mid-leap, kaiju-takedown, formation-flight, wreckage-stomp. Chrome reflections, cockpit-glow, sparks-flying, missile-trail haze. Practical commercial-toy lighting + low-angle hero composition. Mecha-anime-toy-line dramatic energy.

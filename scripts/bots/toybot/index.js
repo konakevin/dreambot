@@ -359,7 +359,7 @@ module.exports = {
     // toys, then locks the surrounding world to sculpted clay. Overrides the
     // bot-only DB flux_fragment.
     dino_diorama:
-      'REAL plastic toy dinosaurs as the cast — glossy injection-molded plastic / soft-vinyl dinosaur figures with visible mold-seams, hard-plastic sheen and slightly-scuffed factory paint at toy scale — staged inside a HANDMADE STOP-MOTION CLAYMATION PREHISTORIC WORLD where the environment is sculpted Plasticine clay: a clay volcano and clay terrain with visible thumbprints and sculpting-tool marks, matte-clay rocks, glossy-clay rivers, hand-rolled clay ferns and clay clouds (Aardman / Laika / Coraline miniature-set craft). The DINOSAURS are real hard-plastic toys; the WORLD around them is sculpted clay — a deliberate mixed-media contrast. Practical tabletop diorama photography in DEEP FOCUS — the entire handmade set crisp and sharp from foreground to background (large depth of field, everything in focus, photographed straight-on like a real life-size set), warm practical set-lighting throughout',
+      'real plastic toy dinosaurs (visible mold-seams, toy-scale factory paint) staged in a sculpted-clay claymation environment (Aardman / Laika aesthetic, visible thumbprints, matte clay, glossy-clay rivers), mixed-media contrast, tabletop macro photography, deep focus, warm set-lighting',
     // 2026-05-24 giant-toys — photoreal SURREAL: ONE ordinary toy scaled to
     // COLOSSAL architectural size in a REAL real-world place. The toy's true
     // material is supplied by the giant_toy_subject pool; this medium locks the

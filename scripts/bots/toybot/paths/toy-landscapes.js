@@ -75,7 +75,7 @@ ${sharedDNA.camera}
 Wide tilt-shift diorama framing — show the craft world at landscape scale, the place's identity legible, the tiny toy accents discoverable on a second look.
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY the 80-110 word Flux prompt, comma-separated. NO preamble, NO headers, NO ━━━ markers, NO "render as" suffixes. Start immediately with the scene description. End with: no text, no words, no letters, no watermarks, masterwork composition, hyper detailed.`;
 };

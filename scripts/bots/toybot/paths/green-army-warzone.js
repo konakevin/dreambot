@@ -75,7 +75,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 Multiple single-pose molded-plastic soldiers mid-action on a handcrafted battlefield diorama or oversized real-world backyard-epic set. Practical cotton-ball smoke / flash-bulb explosion-burst / dramatic spotlight lighting. Visible mold-seam + oval-base on every figure. (Camera + framing direction above sets the lens.)
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

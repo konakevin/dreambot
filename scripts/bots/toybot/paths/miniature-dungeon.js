@@ -39,7 +39,7 @@ ${scene}
 ━━━ STORY BEAT — the QUEST MOMENT this render is showing ━━━
 ${storyBeat}
 
-Render every named cast role as a 28-32mm hand-painted pewter-or-plastic tabletop miniature performing the verb-led action above. 3-5 minis mid-action together on the terrain diorama. NO single hero figure centered.
+Render every named cast role as a 28-32mm hand-painted pewter-or-plastic tabletop miniature performing the verb-led action above.
 
 ${blocks.STORY_BEAT_MANDATE_BLOCK}
 
@@ -58,7 +58,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Mid-close terrain-diorama frame. Painted miniatures mid-battle-or-narrative on handcrafted terrain. Dramatic display-cabinet lighting. Visible brush-strokes + flocked-base texture. Collector-grade pro-painter showcase.

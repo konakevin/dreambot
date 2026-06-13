@@ -348,7 +348,7 @@ ${sharedDNA.colorPalette}
 Ballast, weathered rail-tops, panel-line wash, brake-shoes, knuckle-couplers, grab-irons, sand-domes, headlight glow, exhaust steam, marker-lights, lit depot windows. Obsessive railroad-hobbyist craft.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Wide diorama frame — tiny model-train in sweeping handcrafted terrain. Track-side or aerial-quarter angle. Lit windows, smoke, atmospheric haze. NO PEOPLE.
@@ -445,7 +445,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION RULES ━━━
 - Cinematic FRAMING — wide establishing shot, rule-of-thirds, leading lines, dramatic foreground-anchor
@@ -531,7 +531,7 @@ ${lighting}
 ${atmosphere}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 220)}
+${vibeDirective.slice(0, 150)}
 ${
   surprise
     ? `
@@ -605,7 +605,7 @@ ${lighting}
 ${atmosphere}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
 - NO static lineup / collection-shelf / toys-posed-in-a-row — they MUST interact
@@ -675,7 +675,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 220)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
 - NO mixing toy lines — every figure + the centerpiece are the SAME toy universe
@@ -752,7 +752,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 220)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ HARD BANS ━━━
 - A BATTLE is HAPPENING — the boss toy and little toys are mid-fight, never just standing or posing

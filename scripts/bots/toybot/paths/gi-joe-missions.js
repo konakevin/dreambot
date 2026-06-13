@@ -63,7 +63,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 Mid-close articulated-action-figure-diorama frame. Code-name commando(s) mid-action against terror-organization figures in a fully-dressed playset. Practical commercial-toy lighting, cotton-ball smoke / flash-bulb explosion-burst / dramatic spotlight. 80s cartoon-serial cinematic energy.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
 };

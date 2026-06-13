@@ -37,7 +37,7 @@ ${scene}
 ━━━ STORY BEAT — the EVENT this render is showing ━━━
 ${storyBeat}
 
-Render every named cast role as a clay-everything stop-motion figure performing the verb-led action above. 3-5 clay characters mid-action together. NO single hero centered.
+Render every named cast role as a clay-everything stop-motion figure performing the verb-led action above.
 
 ${blocks.STORY_BEAT_MANDATE_BLOCK}
 
@@ -64,7 +64,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Mid-close stop-motion frame. Clay-characters mid-action. Handcrafted feel. Cinematic stop-motion lighting.

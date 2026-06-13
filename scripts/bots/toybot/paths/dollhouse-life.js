@@ -92,7 +92,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Mid-close dollhouse-diorama frame. Figurine(s) mid-cozy-activity in a fully-appointed miniature room. Warm window-glow, lamp-glow, fireplace-glow per pool palette. Shallow-depth-of-field miniature-photography. Dense scale-accurate household detail. Wholesome storybook warmth.
