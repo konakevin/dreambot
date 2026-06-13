@@ -47,7 +47,7 @@ ${blocks.NO_PEOPLE_BLOCK}
 ${blocks.ANTI_DRIFT_BLOCK}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ OUTPUT ━━━
 70-100 words. Comma-separated phrase string. Lead with the SCENE structure, weave in 3-4 named species + palette colors, finish with the lighting. NO preamble, NO ━━━ markers, NO **bold**, NO numbered or bulleted output, NO "render as" trailer. Just the prose.`;

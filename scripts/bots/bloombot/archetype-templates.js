@@ -42,48 +42,24 @@ THE COMPOSITION — ENGULFED IN A FLOWER WORMHOLE:
 
 The viewer is INSIDE a wormhole made ENTIRELY of flowers and green vines / leaves. Flower-mass wraps 360° around the viewer — flowers above, below, left, right, ahead. No architecture, no buildings, no archways, no walls, no columns, no cathedral, no stone, no rock, no cave. Just dense overlapping flowers, climbing vines, and green leaves forming the entire enclosed wormhole around the viewer.
 
-  - The viewer feels ENGULFED by the flowers — wrapped, surrounded, immersed in bloom-mass on every side
-  - Walls, ceiling, floor of the wormhole are ALL made of flowers + climbing-vines + green leaves
-  - Foreground is densely packed flowers close to the camera (within arm's reach)
-  - Midground is more flowers receding deeper, still wrapping 360° around
-  - Deep distance recedes into MORE FLOWERS (dimmer, smaller, dense) — NOT into a bright light, NOT into a destination-glow, NOT into a portal-flash
-  - The FLOWERS are the entire focal subject — the wormhole structure itself is bloom-mass, the vanishing-point is more bloom-mass
+  - The viewer feels ENGULFED — walls, ceiling, floor of the wormhole all made of flowers + climbing-vines + green leaves, no bare sections
+  - Foreground flowers close to the camera (within arm's reach); midground recedes deeper, still wrapping 360°; deep distance recedes into MORE FLOWERS (dimmer, smaller), not a bright destination-glow
+  - The FLOWERS are the entire focal subject — the wormhole structure itself is bloom-mass. No architecture (archways / vaults / columns / stone / brick), just dense bloom-mass + vines
   - Every flower has a glowing warm-amber bulb-core making it a switched-on flower-lamp
 
-🚫 NO architecture (NO archways / cathedral / vault / columns / cobblestone path / stone walls / rock / brick / wood structure)
-🚫 NO bright destination-light at the vanishing-point — the wormhole recedes into MORE FLOWERS
-🚫 NO empty wall sections — every square inch of the visible 360° wraparound is flowers + vines + green leaves
-🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO ROBED FIGURE WALKING AWAY, NO PEDESTRIAN, NO TRAVELER, NO EXPLORER, NO HUMANOID ANYWHERE. The wormhole is COMPLETELY empty of human presence. Flowers only 🚫🚫🚫
+🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS / FIGURES / SILHOUETTES anywhere. The wormhole is completely empty of human presence. Flowers only 🚫🚫🚫
 
 ━━━ HARD MANDATES (every render, BOTH registers) ━━━
 
-1. **EVERY FLOWER IS A SWITCHED-ON FLOWER-LAMP** — describe each species AS A LIT LAMP IN THE SHAPE OF THAT FLOWER: marigold-lamp with warm-amber lit bulb-core making petals translucent and backlit from within, foxglove-bell-LAMP with warm-amber lit bulb glowing through the translucent bell like a paper-lantern, rose-LAMP with warm-pink-amber lit core making layered petals glow translucent from within, dahlia-LAMP with warm-gold lit center making the petal-spiral backlit and glowing, hibiscus-LAMP with warm-orange lit core making the petals translucent and luminous, lily-LAMP with warm-amber lit throat-bulb making the trumpet-shape glow from inside. The flower IS the lamp. The flower IS the bulb. EVERY bloom in the frame is clearly a self-illuminated bloom-lamp with translucent backlit petals — not a flower 'with glow,' but a flower THAT IS A GLOWING LAMP.
+1. **EVERY FLOWER IS A SWITCHED-ON FLOWER-LAMP** — describe each species AS A LIT LAMP IN THE SHAPE OF THAT FLOWER with a warm-amber/gold/pink lit bulb-core making its petals translucent and backlit from within (foxglove-bell glowing like a paper-lantern, rose-lamp's layered petals glowing translucent, lily-lamp's lit throat-bulb glowing through the trumpet). The flower IS the bulb — not a flower 'with glow,' but a flower THAT IS A GLOWING LAMP.
 
-2. **FOREGROUND FLOWERS BRILLIANTLY LIT** — the closest blooms to the camera are vivid saturated bright with visibly glowing cores. The foreground is the brightest area of the render.
+2. **FOREGROUND BRILLIANTLY LIT** — the closest blooms to the camera are vivid saturated bright with visibly glowing cores; the foreground is the brightest area.
 
-3. **FLOWERS PACKED DENSE ON EVERY VISIBLE SURFACE** — walls / ceiling / floor / archway all overflowing with flowers (no bare cave-wall sections, no bare bark sections, no empty surfaces — flowers blanket EVERYTHING in the foreground and midground).
+3. **POV DOWN THE TUNNEL** — viewer inside the tunnel looking toward a vanishing point, walls converging into the deep distance, every surface packed dense with flowers.
 
-4. **POV INSIDE / DOWN THE TUNNEL** — viewer standing inside the tunnel looking toward a vanishing point. Tunnel walls converge into the deep distance.
+4. **CHANDELIER + WALL-SCONCE + FLOOR-CANDLE DISTRIBUTION** — flower-lanterns distributed like a real lighting installation: ceiling hanging-cluster chandelier-flowers (trumpet-vine / wisteria), wall flower-cluster sconces (foxglove / fuchsia), floor-edge candle-cluster flowers along the path (marigold / dahlia / poppy).
 
-5. **CHANDELIER + WALL-SCONCE + FLOOR-CANDLE DISTRIBUTION** — flower-lanterns distributed like a real lighting installation:
-   - Ceiling: hanging-cluster chandelier-flowers (trumpet-vine / brugmansia / wisteria / hanging dahlias)
-   - Walls: flower-cluster sconces at intervals (foxglove / hollyhock / fuchsia / lupine)
-   - Floor-edge: candle-cluster flowers along the path (marigold / dahlia / zinnia / hibiscus / poppy)
-
-🚫 ABSOLUTE BANS (these break the aesthetic):
-  • NO 'flowers with a subtle glow' — every flower MUST be visibly a switched-on flower-lamp
-  • NO opaque-petaled flowers — petals must be TRANSLUCENT and backlit from a bright core
-  • NO 'flowers with a small bright center' — the entire flower must read as a lit-up lamp shaped like that flower, not a flower with a tiny glow-spot
-  • NO 'pretty flowers in pretty light' — these are LAMPS not lit flowers
-  • NO bright sun-shaft / god-rays / sci-fi exit-glow at vanishing point (warm-magical glow OR deep-dark recession — NEVER a bright sun-beam or magic-portal-flash)
-  • NO scary / ominous / threatening / foreboding mood (Register B is DRAMATIC not SCARY — flowers FIGHT and WIN against the dark)
-  • NO bioluminescent magical / electric-cyan / will-o-wisps / fairy-dust / sci-fi-glow
-  • NO actual lamps / electric-lights / candles visible — FLOWER-CORES are the only lights
-  • NO real-world tourist-tunnels (no cobblestone Tuscan / Parisian)
-  • NO bright midday daylight / overcast / clear noon
-  • NO empty tunnel surfaces — every surface packed with flowers
-  • NO flat / dull / non-glowing flowers — every visible flower has a glowing core
-  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO PEDESTRIANS, NO TRAVELERS, NO EXPLORERS, NO ROBED FIGURE WALKING AWAY, NO CHARACTER ANYWHERE IN THE FRAME, NO ANTHROPOMORPHIC SHAPE — under NO circumstances. The FLOWERS are the entire subject. The wormhole is empty of any human presence. If you describe any humanoid form, the render fails 🚫🚫🚫
+ONE positive guard: the vanishing-point is a warm-magical glow OR deep-dark recession (never a bright sun-shaft / god-ray / magic-portal-flash); Register B is DRAMATIC not scary — flowers fight and WIN against the dark; the only lights are FLOWER-CORES (no electric lamps / candles / bioluminescent sci-fi-glow).
 
 ━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
 Every render is an EPIC CINEMATIC MOVIE POSTER / GALLERY-PIECE FRAME — the kind of magical-garden establishing-shot that opens a Studio Ghibli film, the cover of a Tolkien-illustrated fairytale edition, the centerpiece of a Pinterest 'magical flower tunnel' board. EVERY QUADRANT of the frame carries weight — no empty quadrants, no quiet corners.
@@ -131,20 +107,11 @@ ${sharedDNA.roster}
 
 Pick 3-5 species from the roster. EVERY species rendered with a clearly glowing warm-amber / warm-orange / warm-gold / warm-pink CENTER lit like a candle-flame, petals backlit / catching the glow.
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO bright sun-shaft / god-rays / sci-fi exit-glow / magic-portal-flash at vanishing-point
-- 🚫 NO scary / ominous / foreboding mood (Register B is dramatic-magical, NOT threatening)
-- 🚫 NO bioluminescent / electric-cyan / will-o-wisps / fairy-dust effects
-- 🚫 NO actual lamps / electric-lights / candles — FLOWER-CORES are the lights
-- 🚫 NO real-world tourist tunnels
-- 🚫 NO bright daylight / clear noon
-- 🚫 NO empty tunnel surfaces — every surface packed with flowers
-- 🚫 NO flat / dull / non-glowing flowers — every visible flower has a glowing core
-- 🚫 NO species outside the roster
-- 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO ROBED FIGURES, NO PEDESTRIANS — the FLOWERS are the entire subject. NEVER include a humanoid form anywhere in the frame, foreground or distance. The wormhole is empty of any human presence 🚫🚫🚫
+━━━ DEFAULTS TO RESIST ━━━
+Warm-magical glow OR deep-dark recession at the vanishing-point (never a bright sun-shaft / portal-flash); FLOWER-CORES are the only lights (no bioluminescent / electric-cyan / fairy-dust); every surface packed with glowing flowers; only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes anywhere.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [POV-down-flower-tunnel composition with NO HUMAN PRESENCE], [the specific tunnel setting + 3-5 specific flower species packing every surface], [GLOWING WARM-AMBER FLOWER-CORES as the entire light source — explicitly describe each species' center glowing like a candle / paper-lantern / ember-core], [flower-lantern constellation distribution — ceiling chandelier + wall sconces + floor candles], [REGISTER A or B ambient — warm enchanted whimsical OR dramatic-dark with brilliant foreground bloom-pop]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the lit-flowers aesthetic]' : ''}, [vanishing-point — soft warm-magical destination-glow OR deep dark recession]
@@ -222,17 +189,10 @@ NEVER bias toward pink/purple/red. The full spectrum is in play, soft-pastel reg
 
 7. **ENCHANTED HAPPY MOOD** — fairytale storybook joy. Soft pastel magical light bathing everything. Happy, peaceful, welcoming, magical-pretty. NEVER moody / dark / dramatic / harsh / scary.
 
-🚫 ABSOLUTE BANS:
-  • 🚫 NO single-flower-with-single-insect macro — MULTIPLE flowers + MULTIPLE insects mandatory
-  • 🚫 NO extreme macro / single-petal framing — pulled-back garden vignette
-  • 🚫 NO ugly / creepy / menacing / scary / aggressive / realistic-creepy-detailed insects — cute storybook-charming only
-  • 🚫 NO ugly insect species — NO spiders / wasps / hornets / flies / mosquitoes / centipedes / earwigs / cockroaches / beetles-other-than-ladybugs / anything creepy-crawly
-  • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
-  • 🚫 NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
-  • 🚫 NO ruins / abandoned structures / urban architecture
-  • 🚫 NO archways / tunnels / passages / engulfment
-  • 🚫 NO epic-landscape wide / dramatic-sunset (sunset-flowers' territory)
-  • 🚫 NO harsh / moody / dark / dramatic lighting — soft enchanted magical-pretty only
+🚫 KEY GUARDS:
+  • MULTIPLE flowers + MULTIPLE cute storybook insects — never a single-flower-single-insect macro, never realistic-creepy bugs (no spiders / wasps / flies)
+  • Flowers growing in the wild — never interior / vase / cut-flower
+  • Soft enchanted magical-pretty light — never harsh / moody / dark
   • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS anywhere in frame 🚫🚫🚫
 
 ━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hero flowers + supporting cluster) ━━━
@@ -265,21 +225,11 @@ ${sharedDNA.roster}
 
 Pick 3-5 species from the roster as multi-hero blooming together. Mix shapes (large bloom + medium bloom + delicate bloom) and colors freely for whimsical floral abundance.
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO single-flower-with-single-insect — MULTI mandatory
-- 🚫 NO macro / extreme closeup
-- 🚫 NO ugly / creepy / menacing / realistic-creepy insects — cute storybook-charming only
-- 🚫 NO ugly insect species (no spiders / wasps / hornets / flies / mosquitoes / etc.)
-- 🚫 NO interior / vase / cut-flower
-- 🚫 NO surreal / impossible / floating
-- 🚫 NO urban / ruins / archways
-- 🚫 NO epic-landscape / dramatic-sunset
-- 🚫 NO harsh / moody / dark lighting
-- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts
-- 🚫 NO species outside the roster (for flowers)
+━━━ DEFAULTS TO RESIST ━━━
+MULTI flowers + MULTI cute insects (not single-flower-single-insect, not realistic-creepy bugs); pulled-back vignette not macro; soft-pastel light; only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes / hands.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [WHIMSICAL ENCHANTED garden vignette PULLED-BACK composition with 3-5+ multi-species flowers blooming together filling lower 50-65% of frame], [the 3-6+ cute pollinator cast at different positions throughout the scene — landed / hovering / flying / perched — explicit species + positions], [supporting crisp sharp-layered background of more soft blooms / pastel sky-wash]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [soft enchanted magical pastel ambient light bathing the scene], [storybook-cute insect rendering — friendly charming NOT realistic-creepy], [shallow DOF, tack-sharp detail, fairytale-storybook aesthetic — Studio Ghibli / Disney secret-garden / IG vivid-magical-hour]
@@ -337,36 +287,9 @@ THE LOOK — Audubon-meets-Studio-Ghibli enchanted garden / National-Geographic 
 
 8. **NATURAL VIBRANT LIGHT** — warm sunlight / dappled light / golden-hour ambient with rich saturated color. Pretty and magical but NOT soft-pastel.
 
-🚫 ABSOLUTE BANS:
-  • 🚫 NO single-flower-with-single-hummingbird macro — MULTI mandatory
-  • 🚫 NO extreme macro / single-petal framing — pulled-back garden vignette
-  • 🚫 NO soft-pastel color register — vibrant saturated jewel-tone for this path
-  • 🚫 NO insects (that's flower-friends' territory) — HUMMINGBIRDS ONLY for this path
-  • 🚫 NO other birds (no songbirds / no doves / no birds-of-paradise / no parrots) — HUMMINGBIRDS specifically
-  • 🚫 NO interior / vase / cut-flower framing — flowers growing in the wild
-  • 🚫 NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
-  • 🚫 NO ruins / abandoned structures / urban architecture
-  • 🚫 NO archways / tunnels / passages / engulfment
-  • 🚫 NO epic-landscape wide / dramatic-sunset (sunset-flowers' territory)
-  • 🚫 NO harsh / moody / dark / dramatic lighting — pretty enchanted vibrant only
-  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES, NO WOMEN, NO MEN, NO CHILDREN, NO FAIRY-PRINCESS-PORTRAIT, NO TIARA-CROWN-WEARING-FIGURE, NO BUST-PORTRAIT — the garden is COMPLETELY empty of any human presence. If a face appears in the frame, the render FAILS 🚫🚫🚫
+🚨 HUMMINGBIRD-PRESENCE — THIS IS THE WHOLE POINT: every render contains AT LEAST 2 LARGE clearly-visible iridescent hummingbirds, ONE focal hummingbird LARGE + FRONT-AND-CENTER as the primary hero (never a tiny dot lost in the flowers), the others populating the scene. The hummingbirds MUST be NATURALISTIC real-world species (Audubon-level anatomy + iridescent plumage) — never fantasy crowns / tiaras / cartoony rendering, never insects, never other birds (songbird / parrot / bird-of-paradise).
 
-━━━ 🚨 HUMMINGBIRD-PRESENCE MANDATE — THIS IS THE WHOLE POINT 🚨 ━━━
-
-Every render MUST contain AT LEAST 2 LARGE clearly-visible iridescent hummingbirds. ONE focal hummingbird is the PRIMARY hero of the frame — LARGE, FRONT-AND-CENTER, sharply rendered with crisp iridescent jewel-tone plumage detail visible. The viewer's eye lands on this focal hummingbird FIRST. The other 1-3 hummingbirds populate the scene at different positions.
-
-FAILURE CONDITIONS (render fails the brief if ANY of these):
-  🚨 NO visible hummingbird → render FAILS
-  🚨 Hummingbird is a tiny dot lost in the flowers → render FAILS (must be LARGE focal subject)
-  🚨 Insects rendered instead (bee, butterfly, dragonfly) → render FAILS
-  🚨 Fantasy bird with crown / tiara / non-naturalistic plumage → render FAILS (must be NATURALISTIC hummingbird species)
-  🚨 Other birds (parrot, kingfisher, songbird, bird-of-paradise) → render FAILS
-
-THE HUMMINGBIRD IS THE PRIMARY SUBJECT. The flowers are the supporting garden context. EVERY render leads with the hummingbird.
-
-━━━ NATURALISTIC HUMMINGBIRD MANDATE ━━━
-
-The hummingbird MUST be a recognizable real-world hummingbird species — naturalistic anatomy, naturalistic iridescent plumage, naturalistic proportions. NO fantasy crowns / NO oversized tail / NO unrealistic color combos / NO stylized cartoony rendering. Audubon-illustration level naturalism with painterly enchantment.
+🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS / FIGURES / SILHOUETTES / FACES / BUST-PORTRAITS anywhere; the garden is empty of any human presence 🚫🚫🚫
 
 ━━━ THE MULTI-FLOWER FOCAL SCENE (3-5+ hummingbird-attracting blooms) ━━━
 ${flower_focal_cluster}
@@ -398,22 +321,11 @@ ${sharedDNA.roster}
 
 Pick 3-5 hummingbird-attracting species from the roster as multi-hero blooming together. Vibrant saturated jewel-tone colors.
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO single-flower-with-single-hummingbird — MULTI mandatory
-- 🚫 NO macro / extreme closeup
-- 🚫 NO soft-pastel register (vibrant saturated jewel-tone for this path)
-- 🚫 NO insects (that's flower-friends)
-- 🚫 NO other birds (HUMMINGBIRDS only)
-- 🚫 NO interior / vase / cut-flower
-- 🚫 NO surreal / impossible / floating
-- 🚫 NO urban / ruins / archways
-- 🚫 NO epic-landscape / dramatic-sunset
-- 🚫 NO harsh / moody / dark lighting
-- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts
-- 🚫 NO species outside the roster (for flowers)
+━━━ DEFAULTS TO RESIST ━━━
+2+ hummingbirds (not single) in a pulled-back garden vignette (not macro); vibrant saturated jewel-tone (not soft-pastel); hummingbirds only (no insects / other birds); flowers growing in the wild; pretty enchanted vibrant light (not harsh / moody / dark); only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order (HUMMINGBIRDS LEAD) ━━━
 [the LARGE FOCAL HUMMINGBIRD front-and-center — primary hero of the frame — explicit species + iridescent jewel-tone plumage + dynamic pose (hovering / sipping / mid-flight) + wings in motion-blur + beak-to-flower or beak-extended detail — VIEWER'S EYE LANDS HERE FIRST], [the 1-3 supporting hummingbirds at different positions throughout the scene — hovering at other blooms / mid-flight in midground / banking sideways in sharp-layered depth — also with iridescent plumage], [the vibrant saturated jewel-tone hummingbird-attracting flowers as garden BACKDROP — 3-5+ species blooming together filling foreground/midground as supporting context (NOT competing with the hummingbirds)], [crisp sharp-layered background of soft vibrant blooms / leaves]${magical_particles ? ', [magical particles drifting in the air]' : ''}, [vibrant warm natural ambient light bathing the scene — golden-hour or dappled sunshine], [shallow DOF with hummingbirds in sharpest focus, tack-sharp detail, Audubon-meets-Studio-Ghibli aesthetic]
@@ -464,20 +376,11 @@ THE LOOK — surreal-magical-realism / Studio Ghibli + Salvador Dali botanical +
 
 5. **vivid PASTEL DEPTH** — soft pastel background with gentle depth-falloff. Smaller versions of the hero form often visible in the deep distance (e.g., 3-4 smaller flower-mushrooms soft on the horizon implying a whole forest of them) — this reinforces the surreal-magical-realism that this is a WORLD of these flower-forms, not just one anomaly.
 
-6. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — natural landscape forms only (trees, mushrooms, hills, mountains, rivers, waterfalls, valleys, glades, meadows). NEVER include animals (no flower-deer, no flower-rabbit), humans, or manmade objects (no flower-houses, no flower-clocks, no flower-cathedrals).
+6. **NATURAL FORMS ONLY** — natural landscape forms only (trees, mushrooms, hills, mountains, rivers, waterfalls, valleys, glades, meadows). NEVER animals (no flower-deer / flower-rabbit), humans, or manmade objects (no flower-houses / flower-clocks / flower-cathedrals).
 
-7. **SOFT SURREAL-vivid LIGHT** — warm pastel ambient, soft pastel light, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
+7. **SOFT SURREAL-vivid LIGHT** — warm pastel ambient, golden-hour glow, surreal-magical-realism register. NOT harsh / dramatic / moody.
 
-🚫 ABSOLUTE BANS:
-  • 🚫 NO ANIMALS in any form — no flower-deer / flower-rabbit / flower-fox / flower-bear / NO wildlife (no real animals either)
-  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES, NO WOMEN, NO MEN, NO CHILDREN, NO ROBED FIGURE WALKING DOWN A PATH, NO LONE TRAVELER, NO EXPLORER, NO HUMANOID ANYWHERE in foreground, midground, OR background. The flower-fantasy landscape is COMPLETELY empty of any human presence. If a figure / face / silhouette appears in the frame, the render FAILS — even a tiny distant figure walking on the path. NO HUMANS EVER 🚫🚫🚫
-  • 🚫 NO MANMADE OBJECTS — no flower-houses / no flower-arches / no flower-cathedrals / no flower-clocks / no flower-vases / no flower-vehicles / no buildings of any kind
-  • 🚫 NO RUINS / no archways / no urban / no interior
-  • 🚫 NO macro / extreme closeup — the scale-inversion needs LANDSCAPE SCALE to read
-  • 🚫 NO single-bloom-without-supporting-meadow — the floor-carpet of smaller flowers is mandatory
-  • 🚫 NO harsh / moody / dark / dramatic lighting — soft surreal-vivid only
-  • 🚫 NO sci-fi / cyberpunk / electric / neon
-  • 🚫 NO clearly-photorealistic register — this is surreal-magical-realism / painterly
+🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS / FIGURES / SILHOUETTES / FACES anywhere (even a tiny distant figure on a path); the flower-fantasy landscape is empty of any human presence 🚫🚫🚫
 
 ━━━ THE HERO SURREAL FLOWER-FORM ━━━
 ${scale_form}
@@ -511,18 +414,11 @@ ${sharedDNA.roster}
 
 Pick 2-4 species from the roster — ONE primary species that makes up the hero form + 1-3 supporting species for the floor-carpet.
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO ANIMALS in any form
-- 🚫 NO humans / people / figures / silhouettes / hands / body parts / faces
-- 🚫 NO manmade objects (houses / arches / cathedrals / clocks / vehicles)
-- 🚫 NO ruins / urban / interior
-- 🚫 NO macro / extreme closeup — landscape scale needed
-- 🚫 NO sci-fi / cyberpunk / electric / neon
-- 🚫 NO harsh / moody / dark lighting
-- 🚫 NO species outside the roster (for flowers)
+━━━ DEFAULTS TO RESIST ━━━
+Natural landscape forms only (no animals / manmade objects / ruins / urban / interior); landscape scale needed (not macro); the floor-carpet of smaller flowers is mandatory; soft surreal-vivid painterly light (not harsh / moody / sci-fi / neon); only roster species; ABSOLUTE HARD BAN on humans / figures / faces.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [the HERO SURREAL FLOWER-FORM dominating the frame — explicit scale-inversion or flower-construction (giant flower-mushroom / forest-of-flower-trees / river-of-petals / etc.) + made-from-flowers detail], [the natural-world landscape context (forest / valley / meadow / glade / riverbed / hillside) the form lives in], [the floor-carpet of smaller wildflowers carpeting the ground around it], [crisp pastel background with smaller versions of the hero form receding in crisp sharp overlapping layers, implying a whole world of these surreal flower-forms]${atmospheric_magic ? ', [atmospheric magic detail amplifying the surreal mood]' : ''}, [soft surreal-magical-realism pastel ambient light], [Studio Ghibli + Salvador Dali botanical + Yayoi Kusama meadow + Pinterest-magical-dreamscape aesthetic register]
@@ -558,16 +454,9 @@ A Dr-Seuss / Lorax-style whimsical grove where the "trees" are giant FLUFFY POM-
 4. **WEIRD IS THE POINT** — push HARD into odd, gravity-defying, impossible, surreal, unhinged territory: bend physics, flip gravity, float things, loop the trees, scale gone wild, full Dr-Seuss-on-a-bender. The crazier + more delightful, the better — tame = failure.
 5. **VIVID SATURATED REAL-FLOWER COLOR** — rich saturated jewel-tone flower color in the scene's chosen theme. Soft FLUFFY TEXTURE only — NOT candy / cotton-candy / sugary / confectionery. These are REAL flowers, just oversized and fluffy.
 6. **LUSH + FLOWER-FILLED** — flowers fill the whole frame, no empty space; background hills dotted with more fluffy flower-trees receding in crisp sharp layers under a clean clear sky.
-7. **NO ANIMALS / NO HUMANS / NO MANMADE OBJECTS** — a pure flower-world of trees, hills, and blooms only.
+7. **PURE FLOWER-WORLD** — trees, hills, and blooms only: no animals (or flower-animals), no humans, no manmade objects.
 
-🚫 ABSOLUTE BANS:
-  • 🚫🚫 NO HUMANS / people / figures / silhouettes / faces / hands anywhere (foreground, midground, OR background)
-  • 🚫 NO animals / wildlife (and no flower-animals)
-  • 🚫 NO manmade objects (houses / arches / vehicles / clocks)
-  • 🚫 NO candy / cotton-candy / sugary / lollipop color language — fluffy TEXTURE only, real-flower COLOR
-  • 🚫 NO macro / extreme closeup — whimsical LANDSCAPE scale
-  • 🚫 NO monochrome-fuzz canopy — individual flowers always visible
-  • 🚫 NO sci-fi / neon / dark / moody / hazy
+ONE positive guard: fluffy TEXTURE with real-flower COLOR (never candy / cotton-candy / lollipop language); whimsical LANDSCAPE scale (not macro); individual flowers always visible (no monochrome-fuzz canopy); no sci-fi / neon / dark / hazy. 🚫🚫 ABSOLUTE HARD BAN on humans / figures / silhouettes anywhere.
 
 ━━━ THE HERO FLOWER-GROVE (fluffy Truffula flower-forms) ━━━
 ${grove}
@@ -597,7 +486,7 @@ ${sharedDNA.roster}
 Build the fluffy flower-tree canopies + oversized blooms FROM these exact species in these theme colors.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -629,13 +518,7 @@ A Dr-Seuss-meets-Hawaii tropical paradise where GIANT oversized tropical flowers
 6. **VIVID SATURATED TROPICAL COLOR** — rich hot saturated jewel-tone tropical color in the scene's chosen theme. Real flowers, just oversized and lush — NOT candy / cotton-candy / sugary.
 7. **LUSH + FRAME-FILLING** — flowers + foliage fill the whole frame, packed and exotic, receding in crisp sharp layers under a clean clear tropical sky.
 
-🚫 ABSOLUTE BANS:
-  • 🚫🚫 NO HUMANS / people / figures / silhouettes / faces / hands anywhere
-  • 🚫 NO animals / birds / wildlife
-  • 🚫 NO candy / cotton-candy / sugary / lollipop color language — real-flower COLOR, lush TEXTURE
-  • 🚫 NO macro / extreme closeup — whimsical jungle LANDSCAPE scale
-  • 🚫 NO monochrome-fuzz blooms — individual flowers always visible
-  • 🚫 NO temperate flower-fields / rolling pom-pom hills (that's the flower-grove path) / NO sci-fi / neon / dark / moody
+ONE positive guard: real-flower COLOR with lush TEXTURE (never candy / cotton-candy / lollipop language); whimsical jungle LANDSCAPE scale (not macro); individual flowers always visible (no monochrome-fuzz); tropical not temperate (no rolling pom-pom hills — that's flower-grove); no sci-fi / neon / dark. 🚫🚫 ABSOLUTE HARD BAN on humans / figures / silhouettes; no animals / birds.
 
 ━━━ THE HERO GIANT TROPICAL FLOWER-FORMS ━━━
 ${canopy}
@@ -671,7 +554,7 @@ ${sharedDNA.roster}
 Build the giant tropical flower-forms FROM these exact species in these theme colors (green foliage is the framing context).
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -725,13 +608,7 @@ ${bgMandate}
 5. **VIVID SATURATED REAL-FLOWER COLOR** — rich jewel-tone color strictly in the scene's chosen theme; ornate, beautiful, full.
 6. **LUSH + FRAME-FILLING** — no empty/barren space; the arrangement overflowing and abundant, the garden dense behind, a clean clear sky/light above.
 
-🚫 ABSOLUTE BANS:
-  • 🚫🚫 NO HUMANS / people / faces / hands anywhere (foreground, midground, OR background)
-  • 🚫 NO animals / wildlife / insects
-  • 🚫 NO sparse, thin, or minimal arrangement — always lush and abundant
-  • 🚫 NO macro of just 2-3 blooms — show the WHOLE ornate arrangement in its garden setting
-  • 🚫 NO sci-fi / neon / dark / moody / hazy
-  (the vessel + a table / pedestal / bench / garden wall are REQUIRED and allowed — they are not "manmade objects" to avoid here)
+ONE positive guard: always lush and abundant (never sparse / thin / minimal); show the WHOLE ornate arrangement in its garden setting (not a macro of 2-3 blooms); no sci-fi / neon / dark. 🚫🚫 ABSOLUTE HARD BAN on humans / faces; no animals / insects. (The vessel + a table / pedestal / bench / garden wall are REQUIRED and allowed — not "manmade objects" to avoid here.)
 
 ━━━ THE VESSEL ━━━
 ${vessel}
@@ -763,7 +640,7 @@ ${sharedDNA.roster}
 ${bgBuildLine}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -809,16 +686,7 @@ THE LOOK — Sonoran-superbloom / Arizona-after-spring-rain / IG-magical-desert-
 
 6. **VIVID NATURAL LIGHT** — bright southwest sun, golden-hour amber, or warm midday. NOT moody / dark / soft-pastel.
 
-🚫 ABSOLUTE BANS:
-  • 🚫 NO soft-pastel color register — vibrant saturated southwest jewel-tone for this path
-  • 🚫 NO lush-temperate-meadow setting — desert MUST be recognizable as desert (cacti / red-rock / sand)
-  • 🚫 NO interior / urban / ruins / manmade architecture
-  • 🚫 NO surreal flower-construction or scale-inversion (that's flower-fantasy's territory) — desert anchors stay desert
-  • 🚫 NO insects-as-focal / hummingbirds-as-focal (those are flower-friends / flower-humming-birds paths)
-  • 🚫 NO macro / extreme closeup — landscape scale needed
-  • 🚫 NO moody / dark / dramatic-storm lighting — vivid southwest sun only
-  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO HANDS, NO BODY PARTS, NO FACES anywhere in frame 🚫🚫🚫
-  • 🚫 NO animals (no real animals — distant bird silhouette in atmospheric pool OK)
+ONE positive guard: vibrant saturated southwest jewel-tone (not soft-pastel); desert stays recognizable desert — cacti / red-rock / sand (not a lush-temperate-meadow, not surreal flower-construction); landscape scale (not macro); vivid southwest sun (not moody / dark / storm). 🚫🚫🚫 ABSOLUTE HARD BAN on humans / figures / faces; no animals (distant bird silhouette OK).
 
 ━━━ THE DESERT ANCHOR ━━━
 ${desert_anchor}
@@ -851,18 +719,11 @@ ${sharedDNA.roster}
 
 Pick 3-5 species from the roster — vivid saturated colors. Combine roster species with desert-specific bloom-types (desert-marigold / Indian-paintbrush / lupine / poppy / penstemon / cactus-blooms).
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO soft-pastel register
-- 🚫 NO lush-temperate-meadow setting
-- 🚫 NO interior / urban / ruins / manmade architecture
-- 🚫 NO surreal flower-construction or scale-inversion (flower-fantasy)
-- 🚫 NO macro / extreme closeup
-- 🚫 NO moody / dark / dramatic-storm lighting
-- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / hands / body parts / faces
-- 🚫 NO species outside the roster (for flowers)
+━━━ DEFAULTS TO RESIST ━━━
+Vibrant southwest jewel-tone (not soft-pastel); recognizable desert (not temperate-meadow / surreal scale-inversion / urban / ruins); landscape scale (not macro); vivid southwest sun (not moody / dark / storm); only roster species; ABSOLUTE HARD BAN on humans / figures / faces.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [the RECOGNIZABLE southwest desert anchor (saguaro / joshua-tree / agave / red-rock / mesa / dunes) dominating the midground — explicit dry-desert texture + species + features], [the DRAMATIC WILDFLOWER EXPLOSION carpeting the foreground around / between / through the desert anchor — specific desert-bloom species in vivid saturated jewel-tone colors], [multi-tier depth with distant mesa silhouettes / mountain ridges receding in soft depth, deep cobalt desert sky above]${atmospheric_magic ? ', [atmospheric magic detail amplifying the southwest mood]' : ''}, [vivid bright southwest natural light bathing the scene — bright sun / golden-hour amber / warm desert glow], [vibrant Sonoran-superbloom / Arizona-magical-desert aesthetic — bold saturated southwest palette]
@@ -909,20 +770,11 @@ THE LOOK — soft naturalistic golden-hour / pretty-sunset photograph:
 The upper 30-45% of every render is a pretty golden-hour / sunset sky — warm, atmospheric, naturalistic. SOFT and PRETTY, not burning-fiery-competition-grade. The flowers are the hero; the sky is the pretty warm light source that makes them glow.
 
 RIGHT register:
-  - Soft warm cloud-bands (warm amber / soft pink / peach / coral / pale lavender / cream)
-  - Gentle cumulus or cirrus catching the warm light
-  - The sun-disc visibly present but SOFT — glowing soft, not a sharp burning sphere
-  - Subtle warm golden-hour rays + lens-flare are nice, not blazing god-rays
-  - Pretty, calm, atmospheric, "actual sunset photograph" feel
-  - The light WRAPS the scene in warm-gold ambient — petals glow softly, everything bathed in warm light
+  - Soft warm cloud-bands (warm amber / soft pink / peach / coral / pale lavender / cream), gentle cumulus or cirrus catching the warm light
+  - The sun-disc visibly present but SOFT — glowing soft, not a sharp burning sphere; subtle warm golden-hour rays + lens-flare, not blazing god-rays
+  - Pretty, calm, atmospheric, "actual sunset photograph" feel — the light WRAPS the scene in warm-gold ambient, petals glow softly
 
-WRONG register (what to avoid):
-  - 🚫 Fiery burning apocalyptic-beauty sunsets
-  - 🚫 Hot-pink-and-magenta saturated drama
-  - 🚫 Storm-clouds boiling, blood-orange burning, intense fire-red
-  - 🚫 Skies that compete with or dominate the flowers
-  - 🚫 Caribbean-cruise-ship-promo level drama
-  - 🚫 Dark / moody / heavy / overwrought / cinematic-apocalyptic
+ONE guard: keep it soft and pretty — NEVER fiery / apocalyptic / blood-orange burning, hot-pink-magenta drama, storm-boiling, or a sky that competes with the flowers.
 
 Think: pretty golden-hour photograph from a hike / Instagram nature-feed soft-sunset / the moment 30-60 minutes before actual sundown when the warm light is just right and the flowers glow.
 
@@ -938,18 +790,7 @@ Think: pretty golden-hour photograph from a hike / Instagram nature-feed soft-su
 
 5. **NATURALISTIC REAL-WORLD REGISTER** — this is naturalistic nature-photography aesthetic, NOT surreal / magical-portal / sci-fi / cartoony. National Geographic golden-hour landscape photography meets Pinterest-magical-hour Instagram. Real flowers, real mountains, real sun.
 
-🚫 ABSOLUTE BANS:
-  • NO surreal / impossible / floating / gravity-defying (dreamscape's territory)
-  • NO interior / cozy / room (cozy's territory)
-  • NO archways / tunnels / passages / engulfment (flower-tunnels' + garden-walk's territory)
-  • NO city streets / urban architecture (city-flowers' territory)
-  • NO ruins / abandoned structures (reclaim's territory)
-  • NO macro / closeup / extreme tight framing (closeup's territory)
-  • NO plain blue sky / overcast / clear midday noon — sunset sky mandatory
-  • NO flat featureless backdrop — wide gorgeous landscape mandatory
-  • NO flowers without visible sun-backlight — the sun MUST be lighting through the petals
-  • NO sci-fi bloom-glow / bioluminescent / fairy-dust / will-o-wisps
-  • 🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS, NO PEOPLE, NO FIGURES, NO SILHOUETTES, NO PEDESTRIANS, NO TRAVELERS, NO EXPLORERS, NO HUMANOIDS anywhere in frame 🚫🚫🚫
+ONE positive guard: naturalistic real-world golden-hour scene — sunset sky + wide gorgeous landscape mandatory (no plain blue / overcast / midday, no flat backdrop); the sun MUST be lighting through the petals (no flowers without visible sun-backlight); no surreal / interior / archways / city / ruins / macro / sci-fi bloom-glow. 🚫🚫🚫 ABSOLUTE HARD BAN on humans / figures / silhouettes anywhere.
 
 ━━━ THE HERO FLOWER (foreground / midground) ━━━
 ${hero_flower}
@@ -988,22 +829,11 @@ ${sharedDNA.roster}
 
 Pick 1-2 species from the roster for the hero foreground — describe each with PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the sun behind/beside, naturalistic golden-hour photographic backlight (NOT internally-glowing bulbs).
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO surreal / floating / impossible
-- 🚫 NO interior / cozy / room
-- 🚫 NO archways / tunnels / passages / engulfment
-- 🚫 NO city / urban architecture
-- 🚫 NO ruins
-- 🚫 NO macro / closeup
-- 🚫 NO plain blue sky / overcast / clear midday
-- 🚫 NO flat featureless backdrop
-- 🚫 NO flowers without visible sun-backlight
-- 🚫 NO sci-fi / bioluminescent / fairy-dust
-- 🚫 ABSOLUTE HARD BAN — NO humans / people / figures / silhouettes / pedestrians
-- 🚫 NO species outside the roster
+━━━ DEFAULTS TO RESIST ━━━
+Sunset sky + wide landscape mandatory (no plain blue / overcast / midday / flat backdrop); the sun MUST backlight the petals; no surreal / interior / archways / city / ruins / macro / sci-fi-glow; only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [the hero foreground flower-cluster + PETAL EDGES CATCHING WARM SUN-RIM-LIGHT from the visible sun behind/beside — naturalistic photographic backlight, NOT internally-glowing bulb petals], [the wide gorgeous landscape recession behind — mountains / hills / forest / lake / coast], [the visible sun-disc position in frame — soft and gently glowing], [soft pretty golden-hour sky in upper 30-45% — gentle cumulus / cirrus in warm-amber / soft-pink / peach / coral / pale-lavender], [warm golden-hour ambient wrapping the entire scene]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the soft-golden-hour aesthetic]' : ''}, [naturalistic real-world register — pretty golden-hour photograph, NOT cinematic-apocalyptic-burning-sunset, NOT bulb-glowing-flowers]
@@ -1047,7 +877,7 @@ ${sharedDNA.roster}
 ${sharedDNA.lighting}
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 Output 70-100 words. Comma-separated phrases. NO headers, NO bullets. Just the prose.`;
   },
@@ -1065,15 +895,8 @@ ${macro_phenomenon}
 
     return `You are a fine-art floral macro painter writing JEWEL-TONE CLOSEUP scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
 
-━━━ ABSOLUTELY FORBIDDEN ━━━
-• cut flowers, bouquet, arrangement, vase, basket
-• dark studio backdrop, neutral backdrop, "on a wooden surface"
-• still-life, florist composition, table-top
-• picked flowers, gathered stems, harvested blooms, freshly-cut
-• humans, figures, faces, silhouettes, hands holding flowers
-
-━━━ REQUIRED — MACRO VIEW pressing INTO living blooms GROWING IN PLACE ━━━
-A macro closeup pressing INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT. Stand close enough to count petals on the front-most blooms; shallow focal plane; bloom-mass fills frame edge-to-edge receding into softly-blurred sharp-layered depth. NEVER a dark photo studio.
+━━━ MACRO VIEW pressing INTO living blooms GROWING IN PLACE ━━━
+A macro closeup pressing INTO a dense bloom wall in its NATURAL OUTDOOR ENVIRONMENT — the blooms are growing on the plant, never cut/picked/arranged. Stand close enough to count petals on the front-most blooms; shallow focal plane; bloom-mass fills frame edge-to-edge receding into softly-blurred sharp-layered depth. No dark studio backdrop.
 
 ━━━ HERO BLOOM AMONGST MANY — NON-NEGOTIABLE COMPOSITION ━━━
 ONE specific HERO species DOMINATES the frame at its OWN natural form and scale. Hero silhouette is whatever the rolled species naturally is — broad face, deep cup, pompom dome, hanging raceme, umbel, trumpet, ruffled rosette, daisy-face, or tall spike. The hero pushes into the foreground focal plane. The other 2-3 species act as SUPPORTING CAST at SMALLER visual weight — carpeting gaps, threading through, drifting in midground softness — NEVER competing with the hero.
@@ -1091,17 +914,7 @@ ONE specific HERO species DOMINATES the frame at its OWN natural form and scale.
 SINGLE DOMINANT light source catches HERO blooms WARM in foreground; supporting cast and receding bloom-mass sit COOLER ambient or BLUE-SHADOW. NEVER flat even illumination. NEVER cool-on-cool or warm-on-warm.
 
 ━━━ MOVIE-POSTER COMPOSITION — POSTER-GRADE FRAMING ━━━
-Every render is POSTER-GRADE. Every quadrant earns its space, eye lands on 4+ striking details, framing feels INTENTIONAL. NEVER a flat eye-level center snapshot.
-
-Pick ONE framing mode per render (vary):
-  A. LOW-ANGLE HERO — hero blooms rising into upper frame from strong lower anchor
-  B. OVERHEAD CANOPY — looking UP at hanging blooms, pendant clusters at viewer level
-  C. THROUGH-THE-ARCHWAY — natural archway from bloom-wall structure framing the opening
-  D. DIAGONAL LEAD-LINE — supporting threads as diagonal lead-line to hero at rule-of-thirds
-  E. RIM-LIGHT SILHOUETTE-EDGE — hero back-lit at frame edge with translucent petal-glow
-  F. SHALLOW DEPTH TUNNEL — front hero in razor focus, mass receding into deep sharp-layered depth
-  G. OFF-CENTER HERO + NEGATIVE SPACE — hero at rule-of-thirds, opposite quadrant sharp-layered-quiet
-  H. DAPPLED LIGHT-DRAMA — broken light through canopy, hero catching sun-spots
+Poster-grade framing — every quadrant earns its space, the framing feels INTENTIONAL, not a flat eye-level center snapshot. Pick ONE framing mode per render and vary across renders: LOW-ANGLE HERO (blooms rising into upper frame from a strong lower anchor) / OVERHEAD CANOPY (looking up at hanging pendant clusters at viewer level) / DIAGONAL LEAD-LINE (supporting threads leading to the hero at rule-of-thirds).
 
 ━━━ MATERIAL POETRY at petal-scale ━━━
 "Petals countable and cold to the touch", "waxy surfaces catching slanted light", "pollen-dust on the anthers", "fine fuzz on stems", "dew-beads on leaves", "stamen-shadows on petals", "translucent veining lit from behind".
@@ -1123,18 +936,15 @@ Pick 3-4 species from the roster — ONE as HERO, others as SUPPORTING CAST. Mas
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- NO pink/rose/blush/coral as dominant palette unless palette names it
-- NO roses/peonies/hydrangeas/lavender unless in the roster
-- NO "studio backdrop", "dark background", "isolated against"
-- NO equal-weight species — there IS a hero
+No dark studio backdrop; no pink/rose unless the palette names it.
 
 ━━━ MOOD ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [poster-grade composition mode], [macro closeup pressing INTO [bloom-wall type] where [HERO SPECIES] dominates at its OWN natural silhouette], [supporting species carpeting/threading], [growing context implied through blur], [warm-hero/cool-background lighting]${macro_phenomenon ? ', [the macro magic moment as a specific small detail]' : ''}, [material poetry at petal-scale]
 
-CRITICAL — establish POSTER-COMPOSITION + HERO + SUPPORTING CAST. NEVER "a bouquet of" or "an arrangement". NEVER a flat eye-level garden photo. Hero shape follows the rolled species — DO NOT default to tall spires.
+CRITICAL — POSTER-COMPOSITION + HERO + SUPPORTING CAST. Hero shape follows the rolled species — DO NOT default to tall spires.
 
 Output ONLY 85-115 words. Comma-separated. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
@@ -1214,14 +1024,10 @@ Use the actual species names. Pick 3-4 species that fit the palette — ONE as H
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- Do NOT default to pink / rose / blush as the dominant palette unless the palette names it.
-- Do NOT default to "soft pastels" / "cottagecore" / "english garden" — this is JUNGLE.
-- Do NOT show people, hands, figures, silhouettes.
-- Do NOT use temperate / alpine / desert / arctic vocabulary.
-- Let depth recede naturally; humid haze only when the specific scene genuinely calls for it (NOT a default).
+This is JUNGLE — no "soft pastels" / cottagecore / english-garden, no temperate / alpine / desert / arctic vocabulary; no pink/rose/blush dominance unless the palette names it; let depth recede naturally (humid haze only when the scene genuinely calls for it); NO people / figures / silhouettes.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [wide cinematic framing mode (canopy-shafts / pool-reflection / vine-archway / banyan-tunnel / cliff-lagoon / waterfall / mangrove / broad-leaf-overhead)], [the tropical setting + vegetation anchor establishing the dense jungle], [3-4 named tropical species in the palette colors with HERO + SUPPORTING distribution], [natural depth perspective with foreground saturated and deep distance softening]${surprise_creature ? ', [surprise creature at peripheral scale]' : ''}, [lighting bringing the canopy + bloom-mass to life]
@@ -1300,15 +1106,10 @@ Use the actual species names. Pick 3-4 species from the roster — ONE as HERO a
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- Do NOT default to palace / ballroom / grand interior / cathedral / commercial — this is HUMBLE DOMESTIC.
-- Do NOT default to pink / rose / blush / coral as the dominant palette unless the palette names it.
-- Do NOT default to roses / peonies / hydrangeas / lavender unless they appear in the roster.
-- Do NOT default to "cottagecore" / "shabby chic" / "tea garden" as descriptors — the cozy register is more soulful, more weathered, more lived-in.
-- Do NOT render every species at equal weight — there IS a hero.
-- Do NOT flatten the warm/cool light hierarchy — single dominant warm source + cool ambient.
+HUMBLE DOMESTIC, not palace / ballroom / grand / cathedral / commercial; soulful weathered lived-in, not "cottagecore" / shabby-chic; no pink/rose/blush dominance unless the palette names it; only roster species; there IS a hero (not equal-weight); keep the warm-hero/cool-interior light hierarchy.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [postcard / gallery framing mode], [interior setting + furniture anchor establishing the warm humble domestic space], [HERO species dominating the foreground focal plane at its natural silhouette + supporting cascade cascading / threading / filling], [warm window-light catching the hero blooms in the foreground, supporting and room beyond in cooler ambient]${atmospheric_moment ? ', [the atmospheric moment as a specific small detail]' : ''}, [material poetry — sun-warmed wood, faded quilt, fragrant tea steam, worn leather]
@@ -1385,14 +1186,10 @@ Use the actual species names. Pick 3-4 species from the roster — ONE as HERO, 
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- Do NOT render alien / glowing-bioluminescent / fictional flowers — only real species in impossible arrangement.
-- Do NOT default to pink/rose/blush as dominant palette unless palette names it.
-- Do NOT default to roses/peonies/hydrangeas/lavender unless in the roster.
-- Do NOT add cartoon / sticker / glitch visual effects — the impossibility is COMPOSITIONAL only, the render technique is photoreal-painting.
-- Do NOT render every species at equal weight — there IS a hero.
+Real species in impossible arrangement (no alien / bioluminescent / fictional flowers); the impossibility is COMPOSITIONAL only — photoreal-painting technique, no cartoon / sticker / glitch effects; no pink/rose/blush dominance unless the palette names it; only roster species; there IS a hero (not equal-weight).
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [postcard composition mode appropriate to the impossibility — Magritte-symmetric or Dali-off-center], [the impossibility type + world element being broken — described with hyperreal precision], [HERO species dominating the foreground at its natural silhouette + supporting cast woven into the impossible composition], [hyperreal material poetry — real textures rendered with impossible physics]${atmospheric_halo ? ', [the atmospheric halo / surreal-light element]' : ''}, [warm hero light / cool surreal ambient]
@@ -1477,15 +1274,10 @@ Use the actual species names. Pick 3-4 species from the roster — ONE as HERO a
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- NO off-center hero or landscape framing — the composition IS symmetric portrait, full stop.
-- NO blank backdrop beyond the arch — destination must imply a continuing bloom-world.
-- NO modern / commercial / corporate architecture for the arch — natural / weathered / handmade only.
-- NO pink/rose/blush dominance unless palette names it.
-- NO roses/peonies/hydrangeas/lavender unless in the roster.
-- NO equal-weight species — there IS a hero.
+The composition IS symmetric portrait, full stop (no off-center / landscape framing); the destination beyond the arch implies a continuing bloom-world (no blank backdrop); natural / weathered / handmade arch only (no modern / corporate); no pink/rose/blush dominance unless the palette names it; only roster species; there IS a hero.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [symmetric portrait composition with centered archway and dead-center path], [the archway type at midground center half-consumed by climbing blooms], [HERO species dominating the foreground bloom-mass at its natural silhouette + supporting cast cascading from arch], [the path material leading dead-center into the frame], [warm destination glow through the arch — the doorway-to-somewhere-magical light], [destination glimpse beyond the arch implying a continuing bloom-world]${atmospheric_phenomenon ? ', [the atmospheric phenomenon as a visible element within the passage]' : ''}, [material poetry at archway + path]
@@ -1577,15 +1369,10 @@ Use the actual species names. Pick 3-4 species from the roster — ONE as HERO, 
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- NO modern glass building / plastic greenhouse / IKEA conservatory — Victorian glass-and-iron ONLY.
-- NO wooden-frame garden room (that's cozy).
-- NO outdoor scene (this is INTERIOR with glass roof).
-- NO pink/rose dominance unless palette names it.
-- NO roses/peonies/hydrangeas/lavender unless in the roster.
-- NO equal-weight species — there IS a hero.
+Victorian glass-and-iron ONLY (no modern glass building / plastic greenhouse / wooden-frame garden room — that's cozy); INTERIOR with glass roof (no outdoor scene); no pink/rose dominance unless the palette names it; only roster species; distributed bloom-mass across every surface (architecture is the structural hero, not a single bloom).
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [wide-interior composition mode], [Victorian glass-and-iron conservatory architecture established — dome / framework / leaded-glass / flagstone floor barely visible THROUGH the bloom-curtain], [conservatory-type detail + structural anchor at the focal point], [OBSESSIVE distributed bloom-mass — 3-4 named species massed in EQUAL WEIGHT across every iron column, every arch, every rafter, every flagstone, every planter — NOT a single hero, a FLORAL EXPLOSION], [petal-carpet covering the floor wall-to-wall / pendant cascades from rafters to head-height / climbing-bloom spirals wrapping every column], [warm sun-shafts diagonal through the glass]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — rust-patina iron glints through the bloom-curtain, leaded-glass scattering geometric light onto the petal-carpet, weathered terracotta overflowing]
@@ -1614,18 +1401,7 @@ A magical atmospheric detail that elevates the scene — render as a specific el
 
 EVERY render is OVERWHELMINGLY FLOWERS — scale, density, color, amount, variety. Flowers do ALL the heavy lifting. The flowers ARE the city. Architecture is barely visible scaffolding, dwarfed and consumed by the bloom-mass.
 
-🚫 ABSOLUTELY BANNED — NO compensating with light spectacles / sci-fi effects:
-  • NO glowing power-cores / radiating bloom-cores / pulsing magical inner-glow
-  • NO bioluminescent blooms / bioluminescent moss / bioluminescent anything
-  • NO will-o-wisps / faerie-lights / floating magical orbs / drifting light-particles
-  • NO sci-fi god-rays / theatrical sun-shafts cutting through scenes
-  • NO crystalline-prismatic refraction / rainbow-light arcs / spectrum effects
-  • NO aurora-curtains / aurora-bloom megacities
-  • NO impossible double-suns / fantasy twin-moons / starflower-skies
-  • NO floating pollen-motes / magical fairy-dust / glowing seed-floats
-  • NO magic-mist / iridescent volumetric haze / glowing rune-bark
-  • NO neon-bloom / electric-cyan / glowing-magenta accents
-  • NO sci-fi underwater coral-cities (too techy/glowing)
+🚫 The flowers do the work through SCALE + DENSITY — never through light-spectacle / sci-fi compensation (no glowing bloom-cores / bioluminescence / will-o-wisps / god-rays / prismatic-refraction / aurora / impossible double-suns / fairy-dust / neon accents).
 
 ✓ LET THE FLOWERS DO THE WORK — the heavy lifting comes from:
   • SCALE — kilometer-tall flower-walls, building-sized single blossoms, hundred-meter rose-cascades
@@ -1657,13 +1433,7 @@ USE THE FULL LIGHTING SPECTRUM (the lighting axis rotates across these — RENDE
   • Magic-hour painted glow — warm late-afternoon backlight (the OLD default — use SPARINGLY, 1-in-5 max)
   • Crystalline clarity — exceptionally clear sharp air, every depth layer crisp edge-to-edge, vivid saturated detail to the far distance
 
-⚠️ Render whatever the lighting axis ROLLED. Do NOT default to atmospheric haze / painted-gold mist / soft natural light EVERY render. Use the FULL spectrum — across a batch of 5 renders we should see at least 3-4 distinct lighting/weather/time-of-day modes.
-
-🚫 BANNED FALLBACK LANGUAGE in your output prompt (these are the homogenization defaults):
-  • "atmospheric haze" / "painted-gold mist" / "soft painted glow" / "golden-hour mist drifting"
-  • "atmospheric depth-haze" / "soft natural side-light"
-  • Defaulting EVERY scene to magic-hour / golden-hour painted-gold
-  • Defaulting EVERY scene to "soft mist drifting between spires"
+⚠️ Render whatever the lighting axis ROLLED. Do NOT default to atmospheric haze / painted-gold mist / soft natural light EVERY render (the homogenization trap) — use the FULL spectrum, so across a batch of 5 we see at least 3-4 distinct lighting/weather/time-of-day modes.
 
 ✓ FANTASY FLOWER-CITY LINEAGE — but the FLOWERS dominate, not the architecture:
   • Mountains of cascading flowers with fantasy spires barely poking through
@@ -1750,38 +1520,11 @@ Use the actual species names. Pick 3-4 species from the roster — mass them at 
 ━━━ LIGHTING ━━━
 ${sharedDNA.lighting}
 
-━━━ DEFAULTS TO RESIST — HARD BANS ━━━
-- 🚫 NO real-world tourist cities (Mediterranean / Parisian / Lisbon / Marrakech / Tokyo / Venetian / Cinque Terre / Cuban / Tuscan / Pueblo / Indian / Vietnamese / Kyoto)
-- 🚫 NO real-world historic architecture (Haussmann / azulejo / adobe / canal-palazzo / colonial / half-timber)
-- 🚫 NO "postcard with extra flowers" energy
-- 🚫 NO pedestrian-level tourist-eye POV
-- 🚫 NO cobblestone / weathered-plaster / chipped-paint pedestrian textures
-- 🚫 NO modern / contemporary / corporate architecture
-- 🚫 NO people / pedestrians / bicycles / vespas / vintage-cars / market-stalls
-
-🚫 NO SCI-FI / MAGIC-LIGHT EFFECTS COMPENSATING FOR THE SCENE:
-- 🚫 NO glowing power-cores / pulsing inner-bloom-glow / radiating cores
-- 🚫 NO bioluminescent blooms / bioluminescent moss / bioluminescent ANYTHING
-- 🚫 NO will-o-wisps / faerie-lights / floating magical orbs / drifting light-particles
-- 🚫 NO theatrical god-rays as the main impact / sun-shafts as the wow-element
-- 🚫 NO crystalline-prismatic refraction / rainbow-light arcs / spectrum effects
-- 🚫 NO aurora-curtains / aurora-bloom megacities
-- 🚫 NO double-suns / twin-moons / starflower-skies / impossible celestial bodies
-- 🚫 NO floating pollen-motes / fairy-dust / glowing seeds-floats
-- 🚫 NO magic-mist / iridescent volumetric haze / glowing rune-bark
-- 🚫 NO neon-bloom / electric-cyan / glowing-magenta accents
-- 🚫 NO underwater bloom-cities (too sci-fi-glowing)
-
-🚫 ARCHITECTURE-DECORATION TRAP:
-- 🚫 NO architectural HERO with blooms-as-decoration — FLOWERS are 80-90% of frame, fantasy-architecture is BARELY VISIBLE scaffolding glimpsed through bloom-mass
-- 🚫 NO well-defined fantasy-spire as the focal subject — flowers should dwarf and consume the architecture
-
-OTHER:
-- 🚫 NO pink/rose/blush dominance unless palette names it
-- 🚫 NO species outside the roster
+━━━ DEFAULTS TO RESIST ━━━
+NO real-world tourist cities / historic architecture (Mediterranean / Parisian / Tokyo / Venetian / colonial / half-timber etc.) — this is FANTASY; no "postcard with extra flowers" energy, no pedestrian tourist-eye POV / cobblestone textures, no modern / corporate architecture. The FLOWERS dominate (80-90% of frame) — fantasy-architecture is barely-visible scaffolding, never the focal subject (the architecture-decoration trap). Natural cinematic light only — no sci-fi / magic-light compensation (glowing cores / bioluminescence / god-rays / aurora / neon). No pink/rose/blush dominance unless the palette names it; only roster species; no people / vehicles / market-stalls.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [cinematic fantasy-bloom-city composition mode], [specific fantasy bloom-city setting + signature fantasy architectural detail rendered with painterly precision], [OVERWHELMING bloom-mass at fantasy scale — building-scale cascades, sky-filling petal-storms, vine-bridges, multi-species in equal weight, 60-70% of frame], [cinematic establishing POV with multi-tier depth into fantasy distance], [dramatic fantasy sky + magical atmospheric layer]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible magical detail]' : ''}, [material poetry — mallorn-bark / crystalline bloom / bioluminescent moss / vine-grown rampart]
@@ -1869,16 +1612,10 @@ Use the actual species names. Pick 3-4 species, mass them in EQUAL WEIGHT consum
 ${sharedDNA.lighting}
 
 ━━━ DEFAULTS TO RESIST ━━━
-- NEVER horror / ominous / spooky / haunted / creepy / dark-fantasy mood.
-- NO modern / corporate / contemporary buildings — historic / ancient / classical ruins only.
-- NO people / ghosts / figures.
-- NO pink/rose dominance unless palette names it.
-- NO roses/peonies/hydrangeas/lavender unless in the roster.
-- NO single hero bloom — DISTRIBUTE the bloom-mass.
-- The ruin must remain RECOGNIZABLE (don't let blooms hide what it was).
+AWE + MELANCHOLY + TRIUMPHANT-NATURE — NEVER horror / ominous / spooky / dark-fantasy; historic / ancient / classical ruins only (no modern / corporate); the ruin stays RECOGNIZABLE (don't let blooms hide what it was); distribute the bloom-mass (no single hero bloom); no pink/rose dominance unless the palette names it; only roster species; no people / figures.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
 [wide cinematic composition mode], [specific ruin type + decay anchor rendered with hyperreal time-worn precision — the structure is recognizable but in deep disrepair], [bloom-mass DISTRIBUTED across every column / fallen stone / broken arch — 3-4 species in equal weight consuming the ruin], [sun-shafts pouring through broken roof / wall / window]${atmospheric_phenomenon ? ', [atmospheric phenomenon as visible element]' : ''}, [material poetry — moss-patina, weathered stone, vine-cracked masonry, petal-carpet], [AWE + MELANCHOLY + TRIUMPHANT-NATURE mood — reverent not ominous]

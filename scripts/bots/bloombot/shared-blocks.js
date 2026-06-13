@@ -58,11 +58,7 @@ const ARRANGEMENT_BLOCK = `━━━ ARRANGEMENT — CURATED, NOT RANDOM ━━�
 3-4 species, repeated and MASSED into thick clusters. Patchwork clumps of contrasting species, not uniform fields, not random salad. The selection is INTENTIONAL — picture a high-end florist's masterpiece blown up to landscape scale. The 4-5 colors of the palette are balanced across the frame so no single color dominates more than its share.`;
 
 const ANTI_DRIFT_BLOCK = `━━━ DEFAULTS TO RESIST ━━━
-- Do NOT default to orange/marigold/amber/coral/copper as the dominant warm palette. BALANCE warm with EQUAL cool — blues, purples, violets, indigos, whites carry equal weight across the frame. Orange is one accent among many, never the scene's overall mood. (EXCEPTION: a sunset or desert scene is legitimately warm — let those stay warm; everywhere else, balance.)
-- Do NOT default to pink/rose/blush/coral as the dominant palette unless the palette explicitly names it. Pink is one accent color among many, never the scene's overall mood.
-- Do NOT default to roses, peonies, hydrangeas, or lavender unless they appear in the species roster for this render's region. Use the exact species named in the roster.
-- Do NOT default to "soft pastels", "cottagecore", "feminine", "cottage garden", "english garden" descriptors.
-- Do NOT make the scene minimalist — density rules above are absolute.`;
+Balance warm with equal cool across the frame — orange/amber/coral is one accent among many, never the scene's overall mood (EXCEPTION: a sunset or desert scene is legitimately warm). No pink/rose dominance unless the palette names it. Use the exact species named in the roster.`;
 
 module.exports = {
   PROMPT_PREFIX,
