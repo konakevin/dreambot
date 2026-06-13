@@ -1,6 +1,6 @@
 # Queue + Workers Refactor — Plan
 
-**Status:** PARTIALLY SHIPPED. Async queue (`dream_queue` + `dream-queue-worker`) is live; **nightly migrated onto it 2026-05-26** (fan-out worker, batch-claim, `EdgeRuntime.waitUntil`, pg_cron trigger via migration 193, dedup + health monitor). `first_dream` dispatcher built (its onboarding enqueue path is feature-flagged off). `create`/`dlt` still pending. **Current state of record: CLAUDE.md "Scaling Initiative" + `NIGHTLY_DREAM_ENGINE.md`.** (Originally proposed 2026-05-09.)
+**Status:** SHIPPED 2026-06-13 — **create / dlt / restyle now route through the queue** behind `EXPO_PUBLIC_DREAM_QUEUE_ENABLED` (off until ramped). Nightly migrated 2026-05-26. See the "## SHIPPED — user dreams on the queue (2026-06-13)" section at the bottom for the final architecture, the load-test results, and the tuning knobs — that section supersedes Phases 2-5 below (kept for history). (Originally proposed 2026-05-09.)
 **Trigger:** dual face-swap WORKER_RESOURCE_LIMIT errors persist despite Phase 2 fanout
 **Goal:** rock-solid dream generation pipeline ready for launch
 
@@ -205,3 +205,62 @@ That's a 3-day vertical slice that proves the architecture before committing to 
 - Replacing Sonnet (same)
 - Storage migration (Supabase Storage stays)
 - New dream features (this is purely reliability work)
+
+---
+
+## SHIPPED — user dreams on the queue (2026-06-13)
+
+This supersedes Phases 2–5 above. Create / DLT / restyle now route through `dream_queue` exactly like nightly, behind `EXPO_PUBLIC_DREAM_QUEUE_ENABLED` (off until ramped). The synchronous `generate-dream` invoke path stays live when the flag is off; rollback = flip the flag.
+
+### Architecture
+
+```
+client → enqueue-dream  (JWT auth → charge[idempotent on job_id] → classify weight
+                         → INSERT dream_queue + seed dream_jobs → kick worker)  →  {dream_id} in <500ms
+client → subscribe dream_queue realtime(id=dream_id)            [dream_jobs poll = fallback]
+dream-queue-worker (pg_cron 1min + per-enqueue kick):
+   stale-recovery (in_progress >5min → re-queue)
+   per-weight claim: light up to (lightCap − lightInProgress), heavy up to (heavyCap − heavyInProgress)
+   FIRE-AND-FORGET dispatch → generate-dream / restyle-photo (x-dream-queue:1)
+generate-dream / restyle-photo (x-dream-queue): ack 202 → render in waitUntil →
+   completeQueueJob(upload_id) on success / failQueueJob(retry|dead-letter+refund+notify) on failure
+client on dream_queue.status=completed → fetch uploads → reveal;  dead_letter → failure card (refunded)
+```
+
+One UUID is `dream_queue.id == dream_jobs.id == job_id == sparkle ledger reference_id`.
+
+### The two load-bearing design decisions (and WHY)
+
+1. **The RENDER owns the `dream_queue` terminal state; the worker is FIRE-AND-FORGET.** First attempt had the worker synchronously `await` the render and set the queue row. Under dual-face-swap load the renders ran long, the Supabase gateway **504'd the worker's HTTP call**, and the worker re-queued renders that had **actually succeeded** (`waitUntil` finished them) — re-rendering completed dreams + orphaning uploads (load test: 22/100 completed, ~20 orphans). Fix: render acks 202, finishes in `waitUntil`, and calls `completeQueueJob`/`failQueueJob` itself (`_shared/dreamQueueLifecycle.ts`). Re-test: 30/30, 0 orphans. **NEVER reintroduce a worker that awaits a long render.**
+
+2. **PER-WEIGHT concurrency caps (migration 265), not one global cap.** A global cap throttled fast text dreams to the slow dual path's safe limit. `dream_queue.weight` ('light'|'heavy') is set at enqueue (`enqueue-dream`): heavy = photo `new_scene` / `force_cast_role` / self-referential-prompt-with-cast (i.e. likely a face swap → hits Fly.io); light = plain text + restyle (Kontext, no swap). The worker claims each pool separately (`claim_dream_queue_jobs_by_weight`) up to its own cap. Bias unknown → heavy (never floods the swap service). Mixed load test: **light 150/150 at peak 40, heavy 24/24 at peak 10, fully independent, 0 × 546.**
+
+### The knobs (all live-tunable in `engine_config`, no deploy)
+
+| Knob | Default | What it does |
+| --- | --- | --- |
+| `dream_queue_max_concurrent` | 40 | LIGHT (text/restyle) simultaneous renders. Fast + no Fly.io dep → wide. |
+| `dream_queue_max_concurrent_heavy` | 10 | HEAVY (face-swap/dual) simultaneous renders. **Bounded by the Fly.io `face-swap-dual` service.** |
+| `dream_queue_max_jobs_per_tick` | 10 | Per-tick claim ceiling per pool. |
+
+`_shared/engineConfig.ts` mirrors them with code fallbacks (40 / 10 / 10) so a missing row never breaks the worker.
+
+### The real ceiling + how to scale heavy
+
+The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase. Tested: heavy=10 → all dual swaps succeed; heavy=15 → `dual cast face swap exhausted (face-swap-dual@fly)` under combined load. To support more concurrent interactive dual dreams: **scale the Fly.io service (instances / machine size) FIRST, then raise `dream_queue_max_concurrent_heavy`.** Beyond the cap, jobs queue + drain (never fail) — concurrency is bounded, throughput/total-users is not. Nightly is `weight='heavy'` (the column default) but non-interactive, so a multi-hour overnight drain is invisible.
+
+### Validation / tuning tools
+
+- `scripts/loadtest-create-queue.js` — LIGHT burst (`--count N`, `--cleanup`).
+- `scripts/loadtest-dual-swap.js` — HEAVY dual burst (needs a dual-ready cast).
+- `scripts/loadtest-mixed.js` — both lanes at once (`--light N --heavy M`), asserts each cap holds + no orphans + no 546.
+- ⚠️ Each spends real render $ and creates private-draft uploads. `--cleanup` deletes the queue rows **and the storage blobs** (deleting an `uploads` row does NOT remove the file — that orphans it).
+
+### Edge functions touched
+
+`enqueue-dream` (new), `generate-dream` + `restyle-photo` (x-dream-queue path + render-owned lifecycle + Phase-0 deferred display-variant), `dream-queue-worker` (per-weight claim + fire-and-forget create/dlt), `_shared/dreamQueueLifecycle.ts` (new), `_shared/engineConfig.ts`. Migrations 264 (concurrency config) + 265 (weight split + by-weight claim RPC).
+
+### Still TODO before 100% ramp
+
+- Single-face-swap path wasn't load-tested in isolation (it's on Replicate, not Fly.io — lower risk).
+- Scale the Fly.io dual-swap service to lift the heavy ceiling for big simultaneous-dual bursts.
