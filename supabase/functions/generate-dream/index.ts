@@ -160,25 +160,36 @@ async function handleRequest(req: Request): Promise<Response> {
   // charge + job upsert are idempotent no-ops (never a double charge).
   const authHeader = req.headers.get('authorization') ?? '';
   const isRetry = req.headers.get('x-dream-retry') === '1';
+  // Queue path: dream-queue-worker dispatches the render server-side and AWAITS
+  // the result (it has a long background budget). Same service-role auth +
+  // resolve-user-from-job as retry, but it does NOT 202-detach (the worker needs
+  // the upload_id back) and does NOT refund in-function (the worker owns retry /
+  // dead-letter / refund). The charge already happened at enqueue.
+  const isQueue = req.headers.get('x-dream-queue') === '1';
+  const isServerInvoked = isRetry || isQueue;
   let userId: string;
-  if (isRetry) {
+  if (isServerInvoked) {
     if (authHeader !== `Bearer ${serviceRoleKey}`) {
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }
-    const retryJobId = typeof body.job_id === 'string' ? body.job_id : null;
-    if (!retryJobId) {
-      return new Response(JSON.stringify({ error: 'retry requires job_id' }), { status: 400 });
+    const srvJobId = typeof body.job_id === 'string' ? body.job_id : null;
+    if (!srvJobId) {
+      return new Response(JSON.stringify({ error: 'server invoke requires job_id' }), {
+        status: 400,
+      });
     }
     const { data: jobRow } = await supabase
       .from('dream_jobs')
       .select('user_id')
-      .eq('id', retryJobId)
+      .eq('id', srvJobId)
       .single();
     if (!jobRow) {
-      return new Response(JSON.stringify({ error: 'retry job not found' }), { status: 404 });
+      return new Response(JSON.stringify({ error: 'job not found' }), { status: 404 });
     }
     userId = jobRow.user_id as string;
-    console.log(`[generate-dream] RETRY render for job ${retryJobId} (user ${userId})`);
+    console.log(
+      `[generate-dream] ${isRetry ? 'RETRY' : 'QUEUE'} render for job ${srvJobId} (user ${userId})`
+    );
   } else {
     // The Supabase gateway already validated the JWT before invoking us, so we
     // can trust the token to identify the user.
@@ -334,9 +345,10 @@ async function handleRequest(req: Request): Promise<Response> {
 
   // Persist the request so a dead render can be REPLAYED by refund-stuck-jobs
   // (migration 263). UPDATE (not the ignoreDuplicates upsert above) so we don't
-  // clobber a "Queue This" notify_on_complete flag. Skip on a retry — the payload
-  // is already stored and the sweeper owns attempt_count.
-  if (jobId && !isRetry) {
+  // clobber a "Queue This" notify_on_complete flag. Skip when server-invoked —
+  // the payload is already stored (retry sweeper / enqueue) and the owner has
+  // the attempt_count.
+  if (jobId && !isServerInvoked) {
     try {
       await supabase
         .from('dream_jobs')
@@ -615,12 +627,12 @@ async function handleRequest(req: Request): Promise<Response> {
       try {
         const photoDescription =
           subject_description ??
-          (await describeWithVision(
-            input_image!,
-            VISION_PROMPTS.photoSubject,
-            REPLICATE_TOKEN,
-            200
-          ));
+          // Fallback when the client didn't pre-classify: describe with the SAME
+          // high-quality clothing-free dreamcast prompt as stored cast members, so
+          // uploaded-photo dreams get cast-grade resemblance and no outfit bleed.
+          stripCastMeta(
+            await describeWithVision(input_image!, VISION_PROMPTS.castPerson, REPLICATE_TOKEN, 300)
+          );
         visionDescription = photoDescription;
         lap('new-scene-vision');
         console.log(
@@ -736,11 +748,10 @@ async function handleRequest(req: Request): Promise<Response> {
       // ── REIMAGINE (solo): vision describe → medium template or generic brief → flux-dev ──
       console.log('[generate-dream] ⏱ REIMAGINE: starting vision...');
       try {
-        const photoDescription = await describeWithVision(
-          input_image!,
-          VISION_PROMPTS.photoSubject,
-          REPLICATE_TOKEN,
-          100
+        const photoDescription = stripCastMeta(
+          // Same high-quality clothing-free dreamcast prompt — reimagine re-renders
+          // the person in a new medium, so the uploaded outfit shouldn't carry over.
+          await describeWithVision(input_image!, VISION_PROMPTS.castPerson, REPLICATE_TOKEN, 300)
         );
         visionDescription = photoDescription;
         lap('reimagine-vision');
@@ -1532,15 +1543,22 @@ Output ONLY the prompt.`;
       );
 
     if (persist) {
-      const { url: displayUrl, thumbhash } = await buildDisplayVariant(imageUrl, userId, supabase);
+      // Insert the row immediately with the full image and a NULL display
+      // variant. The display variant (decode + JPEG re-encode + thumbhash) is
+      // the heaviest in-isolate pixel work and was busting the 2s/150MB
+      // per-invocation budget mid-render → 546. We defer it to a background
+      // task and patch the row a moment later: the dream EXISTS the instant
+      // this row lands, and a CPU bust in the deferred task can't fail the
+      // dream (best-effort; the feed/DreamCard fall back to image_url when the
+      // display variant is null).
       const [uploadResult] = await Promise.all([
         supabase
           .from('uploads')
           .insert({
             user_id: userId,
             image_url: imageUrl,
-            image_url_display: displayUrl,
-            thumbhash,
+            image_url_display: null,
+            thumbhash: null,
             caption,
             ai_prompt: finalPrompt,
             ai_concept: conceptJson,
@@ -1569,6 +1587,19 @@ Output ONLY the prompt.`;
           `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
         );
       }
+
+      // Background: build the display variant + thumbhash off the render's
+      // critical budget, then patch the row. (The 546 fix.)
+      const displayUploadId = uploadId;
+      scheduleBackground(
+        buildDisplayVariant(imageUrl, userId, supabase).then(({ url, thumbhash }) => {
+          if (!url && !thumbhash) return undefined;
+          return supabase
+            .from('uploads')
+            .update({ image_url_display: url, thumbhash })
+            .eq('id', displayUploadId);
+        })
+      );
     } else {
       // persist:false — no uploads row (caller persists it themselves). uploadId
       // stays undefined; the downstream style/notify/job steps all no-op on it.
@@ -1703,8 +1734,12 @@ Output ONLY the prompt.`;
     // Server-side refund — only fires when we have a jobId (reference for
     // idempotency). Refunds without a jobId fall back to the legacy
     // grant_sparkles path for NSFW so existing behavior is preserved.
+    // QUEUE path: do NOT refund here — the worker owns retry/dead-letter and
+    // only refunds once retries are exhausted. Refunding on a transient fail
+    // here while the worker still intends to retry would hand the user a free
+    // dream (charge stays, refund lands, retry succeeds).
     let sparkleRefunded = false;
-    if (jobId) {
+    if (jobId && !isQueue) {
       try {
         // p_amount is only a FALLBACK — refund_sparkles refunds the actual
         // amount debited under this jobId (migration 183), so an advanced-model
@@ -1724,7 +1759,7 @@ Output ONLY the prompt.`;
       } catch (refundErr) {
         console.error('[generate-dream] Refund FAILED:', (refundErr as Error).message);
       }
-    } else if (isNsfw) {
+    } else if (isNsfw && !isQueue) {
       // Legacy fallback for callers that didn't send a jobId
       try {
         await supabase.rpc('grant_sparkles', {
@@ -1761,8 +1796,12 @@ Output ONLY the prompt.`;
       /* logging is best-effort */
     }
 
-    // Update dream_jobs status (best-effort)
-    if (jobId) {
+    // Update dream_jobs status (best-effort). Skip for the QUEUE path: this fail
+    // may be a transient attempt the worker will retry, so marking the job
+    // failed (and notifying) here would prematurely fail the client + spam the
+    // inbox on every attempt. The worker owns the final dead-letter state +
+    // notification once retries are exhausted.
+    if (jobId && !isQueue) {
       try {
         await supabase
           .from('dream_jobs')
@@ -1864,6 +1903,27 @@ function classifyFailure(errMsg: string): string {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
+
+// Run a best-effort task in the background without blocking the response.
+// Uses EdgeRuntime.waitUntil so the isolate stays alive to finish it (the
+// top-level durability wrapper only keeps the isolate alive for handleRequest
+// itself, not for detached promises spawned inside it). Used to move the
+// CPU-heavy display-variant build OFF the render's critical 2s/150MB budget —
+// the work that intermittently busted the isolate → 546 WORKER_RESOURCE_LIMIT.
+function scheduleBackground(p: Promise<unknown>): void {
+  const er = (globalThis as { EdgeRuntime?: { waitUntil?: (q: Promise<unknown>) => void } })
+    .EdgeRuntime;
+  if (er && er.waitUntil) er.waitUntil(p.catch(() => {}));
+}
+
+// The dreamcast `castPerson` prompt returns "<prose>\nAGE: N\nTRAITS: ...", with
+// an optional leading "Male:/Female:" gender token. For an uploaded-photo dream
+// we only want the prose identity description (the AGE/TRAITS lines are for
+// stored-cast age-lock). Keep just the prose, drop the gender parse-token.
+function stripCastMeta(raw: string): string {
+  const beforeMeta = raw.split(/\n+\s*(?:AGE|TRAITS)\s*:/i)[0].trim();
+  return beforeMeta.replace(/^\s*(male|female)\s*:\s*/i, '').trim();
+}
 
 // haikuJson deleted Phase 3.2 — was only used by legacy recipe path.
 

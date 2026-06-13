@@ -27,7 +27,7 @@ import { describeWithVision } from '../_shared/vision.ts';
 const CLASSIFY_PROMPT = `Classify the primary subject of this photo and describe it.
 
 Return ONLY a JSON object matching this exact shape (no markdown, no code fences, no preamble):
-{"type":"<TYPE>","description":"<visual description, 15-50 words>"}
+{"type":"<TYPE>","description":"<visual description, 20-60 words>"}
 
 TYPE values:
 - "person"  — one person is the clear dominant subject
@@ -37,11 +37,11 @@ TYPE values:
 - "scenery" — landscape or place without people as the subject
 - "unclear" — too blurry/small/abstract/collage/meme to read confidently
 
-Description requirements — describe like a painter needs to render it (physical features, colors, pose, expression, distinguishing marks). Be specific and flattering.
+Description requirements — describe like a painter needs to render the subject from memory, with enough detail for a strong likeness. For PEOPLE and GROUPS be EXTREMELY specific about IDENTITY: face shape, eye color, exact hair color (e.g. sandy brown, chestnut) + length + texture + style, skin tone, build, approximate age, and distinguishing features (glasses, freckles, jewelry, tattoos). For facial hair be precise — clean-shaven, light stubble, heavy stubble, short beard, medium beard, or full long beard — do NOT exaggerate (stubble is NOT a beard). Be flattering: skip under-eye bags, dark circles, blemishes, wrinkles. Do NOT describe clothing, outfits, shirt patterns, logos, or accessories — these dreams place the person in a brand-new scene and the generator dresses them to match it; describing the uploaded outfit makes it bleed into the render. (Objects and scenery: describe fully — materials, colors, condition.)
 
 Examples:
-{"type":"person","description":"A woman in her 30s with shoulder-length chestnut brown wavy hair, warm genuine smile, wearing a gray knit sweater"}
-{"type":"group","description":"Three people outdoors: a woman with curly brown hair in a red dress, a man with a beard in a blue button-down, and a teenage girl with long blonde hair in a denim jacket"}
+{"type":"person","description":"A woman in her early 30s with an oval face, warm hazel eyes, shoulder-length chestnut-brown wavy hair, fair lightly-freckled skin, slim build, and a warm genuine smile"}
+{"type":"group","description":"Three people outdoors: a woman in her 20s with curly brown hair and green eyes, a man in his 30s with a short dark beard and olive skin, and a teenage girl with long straight blonde hair and blue eyes"}
 {"type":"animal","description":"A fluffy golden retriever with floppy ears and a bright happy expression, sitting on green grass"}
 {"type":"object","description":"A vintage cherry-red convertible sports car with chrome trim and leather seats, parked on cobblestones"}
 {"type":"scenery","description":"A snowy alpine mountain peak at dusk with dramatic orange-pink clouds catching the light"}

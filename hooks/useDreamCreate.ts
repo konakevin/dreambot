@@ -32,11 +32,21 @@ import {
   generateFromVibeProfile,
   restylePhoto,
   classifyPhoto,
+  enqueueDream,
   type PhotoClassification,
+  type GenerateDreamOpts,
 } from '@/lib/dreamApi';
+import { DREAM_QUEUE_ENABLED } from '@/constants/features';
 import type { DreamMedium } from '@/hooks/useDreamStyles';
 
-type GenerateStatus = 'idle' | 'generating' | 'done' | 'error' | 'cancelled' | 'insufficient';
+type GenerateStatus =
+  | 'idle'
+  | 'generating'
+  | 'done'
+  | 'queued'
+  | 'error'
+  | 'cancelled'
+  | 'insufficient';
 
 /**
  * Called BEFORE sparkle is spent when a photo classifies as 'group' or 'unclear'.
@@ -186,7 +196,7 @@ export function useDreamCreate() {
           if (config.photoStyle === 'new_scene') {
             // New Scene: Flux + face-swap (for persons) OR description route (group/animal/object/scenery)
             // Pass pre-classification to skip redundant server-side vision.
-            result = await generateDream({
+            const newSceneOpts: GenerateDreamOpts = {
               mode: 'flux-kontext',
               vibe_profile: vibeProfile ?? undefined,
               medium_key: resolvedMediumKey,
@@ -203,7 +213,14 @@ export function useDreamCreate() {
               style_prompt: config.stylePrompt || undefined,
               dlt_recipe: config.dltRecipe ?? undefined,
               force_model: config.forceModel ?? undefined,
-            });
+            };
+            // Queue path: enqueue + let the loading screen wait on the
+            // dream_queue realtime channel (jobId == activeJobId == queue row).
+            if (DREAM_QUEUE_ENABLED) {
+              await enqueueDream(newSceneOpts);
+              return 'queued';
+            }
+            result = await generateDream(newSceneOpts);
           } else {
             // Restyle: Kontext transform via dedicated restyle-photo endpoint (keeps pose/composition).
             // Restyle is intentionally medium+vibe only — no `hint` so the user
@@ -224,6 +241,22 @@ export function useDreamCreate() {
             if (!modResult.passed) throw new Error(modResult.reason ?? 'Prompt flagged');
           }
 
+          const textOpts: GenerateDreamOpts = {
+            mode: 'flux-dev',
+            vibe_profile: vibeProfile ?? ({} as VibeProfile),
+            medium_key: resolvedMediumKey,
+            vibe_key: config.selectedVibe,
+            hint: config.userPrompt.trim() || undefined,
+            job_id: jobId,
+            style_prompt: config.stylePrompt || undefined,
+            dlt_recipe: config.dltRecipe ?? undefined,
+            use_exact_prompt: config.useExactPrompt,
+            force_model: config.forceModel ?? undefined,
+          };
+          if (DREAM_QUEUE_ENABLED) {
+            await enqueueDream(textOpts);
+            return 'queued';
+          }
           result = await generateFromVibeProfile(vibeProfile ?? ({} as VibeProfile), {
             mediumKey: resolvedMediumKey,
             vibeKey: config.selectedVibe,

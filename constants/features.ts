@@ -13,3 +13,14 @@
  * and the gated button JSX all remain. Set to true to re-expose the entry points.
  */
 export const DLT_ENABLED = false;
+
+/**
+ * Route user "Create" / "DLT" dreams through the async dream_queue worker
+ * instead of awaiting the synchronous generate-dream render. The queue caps
+ * global render concurrency + retries on failure, which is what escapes the
+ * Supabase Edge 546 WORKER_RESOURCE_LIMIT bursts at scale (see
+ * QUEUE_WORKERS_REFACTOR.md). When off, the client uses the legacy synchronous
+ * invoke path (unchanged). Gated by the EXPO_PUBLIC_DREAM_QUEUE_ENABLED env so
+ * we can ramp + roll back without a code change.
+ */
+export const DREAM_QUEUE_ENABLED = process.env.EXPO_PUBLIC_DREAM_QUEUE_ENABLED === 'true';

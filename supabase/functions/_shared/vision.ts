@@ -116,11 +116,16 @@ export async function classifyDualGenders(
 
 /** Standard prompts for common description tasks */
 export const VISION_PROMPTS = {
-  /** One-sentence summary for restyle/reimagine photo paths */
+  /** One-sentence summary for the RESTYLE path — KEEPS the actual outfit, since
+   *  restyle transforms the real photo (pose + clothing preserved). */
   photoSubject:
     'Describe the main subject of this photo in one sentence for an AI image generator. Include skin tone, hair color/style/length, clothing, and distinguishing features. For facial hair, be PRECISE about length and thickness — distinguish between clean-shaven, light stubble, heavy stubble, short beard, medium beard, and full long beard. Do NOT exaggerate — stubble is not a beard. Skip any unflattering details like under-eye bags, dark circles, blemishes, or wrinkles — describe them at their best. Be factual and concise.',
 
-  /** Detailed description for dream cast (onboarding) */
+  /** Detailed person description for dream cast (onboarding) AND uploaded-photo
+   *  face-swap dreams (new_scene / reimagine) — ONE high-quality standard for
+   *  both. Clothing-free (the generator dresses them for the scene) + detailed
+   *  for resemblance. Returns a prose description, then AGE: and TRAITS: lines;
+   *  the upload path keeps only the prose via stripCastMeta(). */
   castPerson:
     'FIRST WORD of your response MUST be either "Male:" or "Female:" — identify the gender of this person, then describe them for an AI artist creating a flattering stylized character. Include: exact age estimate, face shape, eye color, hair (exact color like sandy brown or chestnut, length, texture, style), skin tone, build, any distinguishing features (glasses, freckles, jewelry, tattoos). Do NOT describe clothing or accessories that change — the art generator will dress them in the scene style. For facial hair be EXTREMELY precise: clean-shaven, light stubble, heavy stubble, short trimmed beard, medium beard, or full long beard — do NOT exaggerate length or thickness, stubble is NOT a beard. Skip unflattering details (under-eye bags, dark circles, blemishes, wrinkles) — describe their best version. 3 sentences max. Be EXTREMELY specific — the more detail, the better the resemblance.\n\nAfter the description, add a NEW LINE starting with "AGE:" followed by your best numeric age estimate as an integer only (no words, no qualifiers, no range). Example: "AGE: 34". Lean YOUNGER if uncertain — image gen drifts older by default.\n\nAfter the AGE line, add a NEW LINE starting with "TRAITS:" followed by a single concise sentence listing ONLY the non-negotiable physical traits: hair color and length, facial hair (if any), skin tone, approximate age, build, and eye color. Example: "TRAITS: Short dark brown hair, full beard, olive skin, mid-30s, athletic build, brown eyes." This line must be factual and compact — no adjectives beyond what\'s needed to identify the trait. IMPORTANT: never use negative phrasing like "no facial hair" or "no glasses" — AI generators interpret negatives as positives. If a trait is absent, simply omit it. For clean-shaven MALE faces, say "clean-shaven" instead of "no beard." For females, do NOT mention facial hair at all. Output ONLY the description, AGE line, and TRAITS line.',
 

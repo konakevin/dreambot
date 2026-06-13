@@ -370,15 +370,17 @@ async function handleRequest(req: Request): Promise<Response> {
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
     let uploadId: string | undefined;
 
-    const { url: displayUrl, thumbhash } = await buildDisplayVariant(imageUrl, userId, supabase);
+    // Insert immediately with a NULL display variant; build it in the
+    // background (off the render's 2s/150MB budget — the 546 fix). The feed
+    // falls back to image_url until the variant is patched in a moment later.
     const [uploadResult] = await Promise.all([
       supabase
         .from('uploads')
         .insert({
           user_id: userId,
           image_url: imageUrl,
-          image_url_display: displayUrl,
-          thumbhash,
+          image_url_display: null,
+          thumbhash: null,
           caption,
           ai_prompt: finalPrompt,
           ai_concept: null,
@@ -413,6 +415,21 @@ async function handleRequest(req: Request): Promise<Response> {
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
     if (uploadResult.error) {
       console.error('[restyle-photo] Failed to create draft upload:', uploadResult.error.message);
+    }
+
+    // Background: build the display variant + thumbhash off the render's
+    // critical budget, then patch the row. (The 546 fix.)
+    if (uploadId) {
+      const displayUploadId = uploadId;
+      scheduleBackground(
+        buildDisplayVariant(imageUrl, userId, supabase).then(({ url, thumbhash }) => {
+          if (!url && !thumbhash) return undefined;
+          return supabase
+            .from('uploads')
+            .update({ image_url_display: url, thumbhash })
+            .eq('id', displayUploadId);
+        })
+      );
     }
 
     // NO auto-upscale (2026-05-25) — HD upscale is on-demand only via
@@ -603,6 +620,16 @@ async function handleRequest(req: Request): Promise<Response> {
       { status: 500 }
     );
   }
+}
+
+// Run a best-effort task in the background without blocking the response, off
+// the render's critical 2s/150MB budget (the 546 fix — used to defer the
+// CPU-heavy display-variant build). The top-level wrapper only keeps the
+// isolate alive for handleRequest itself, so re-register the detached promise.
+function scheduleBackground(p: Promise<unknown>): void {
+  const er = (globalThis as { EdgeRuntime?: { waitUntil?: (q: Promise<unknown>) => void } })
+    .EdgeRuntime;
+  if (er && er.waitUntil) er.waitUntil(p.catch(() => {}));
 }
 
 // Durability wrapper: register the in-flight request with EdgeRuntime.waitUntil

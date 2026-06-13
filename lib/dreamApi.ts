@@ -11,7 +11,7 @@
 import { supabase } from '@/lib/supabase';
 import type { VibeProfile } from '@/types/vibeProfile';
 
-interface GenerateDreamOpts {
+export interface GenerateDreamOpts {
   /** Which Flux model to use */
   mode: 'flux-dev' | 'flux-kontext';
   /** Pre-built prompt */
@@ -128,6 +128,48 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
     job_id: data.job_id,
     upload_id: data.upload_id,
   };
+}
+
+/** Extract a human error message from a supabase.functions.invoke error
+ *  (FunctionsHttpError exposes the response body via `context`). Shared by
+ *  generateDream + enqueueDream so the 402 `insufficient_sparkles` etc. surface. */
+async function functionsInvokeError(error: unknown): Promise<string> {
+  if (typeof error === 'object' && error !== null) {
+    const ctx = (error as Record<string, unknown>).context;
+    if (ctx && typeof ctx === 'object' && 'json' in (ctx as Record<string, unknown>)) {
+      try {
+        const body = await (ctx as Response).json();
+        return body?.error ?? body?.message ?? String(error);
+      } catch {
+        return (error as { message?: string }).message ?? String(error);
+      }
+    }
+    return (error as { message?: string }).message ?? String(error);
+  }
+  return String(error);
+}
+
+export interface EnqueueDreamResult {
+  dream_id: string;
+}
+
+/**
+ * Enqueue a user dream onto the async dream_queue instead of awaiting the
+ * synchronous render — escapes Supabase 546 at scale. Same body shape as
+ * generateDream (the worker replays it to the renderer). Returns a `dream_id`
+ * the caller waits on via the dream_queue realtime channel. Throws on 402
+ * (insufficient_sparkles) exactly like generateDream so existing handling works.
+ */
+export async function enqueueDream(opts: GenerateDreamOpts): Promise<EnqueueDreamResult> {
+  const { data, error } = await supabase.functions.invoke('enqueue-dream', { body: opts });
+  if (error) {
+    if (__DEV__) console.error('[dreamApi] enqueue-dream error:', JSON.stringify(error));
+    throw new Error(await functionsInvokeError(error));
+  }
+  if (!data || !data.dream_id) {
+    throw new Error(data?.error ?? 'enqueue failed');
+  }
+  return { dream_id: data.dream_id };
 }
 
 /**

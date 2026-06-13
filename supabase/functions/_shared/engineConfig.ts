@@ -28,6 +28,12 @@ export interface EngineConfig {
   // canonical constants in selfInsertDetector.ts when the DB value is missing.
   relationshipWords: string;
   petWords: string;
+  // Queue worker concurrency (migration 264). dreamQueueMaxConcurrent is the
+  // GLOBAL cap on simultaneously-rendering jobs — the real anti-546 lever; the
+  // worker claims only up to (cap − in_progress) per tick. Tunable live so we
+  // can dial it against the load test with no deploy.
+  dreamQueueMaxConcurrent: number;
+  dreamQueueMaxJobsPerTick: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -43,6 +49,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipRegex: null,
   relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
   petWords: DEFAULT_PET_WORDS,
+  dreamQueueMaxConcurrent: 40,
+  dreamQueueMaxJobsPerTick: 10,
 };
 
 let cached: EngineConfig | null = null;
@@ -79,6 +87,12 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     relationshipWords:
       (data.relationship_words as string | null) || DEFAULT_ENGINE_CONFIG.relationshipWords,
     petWords: (data.pet_words as string | null) || DEFAULT_ENGINE_CONFIG.petWords,
+    dreamQueueMaxConcurrent: Number(
+      data.dream_queue_max_concurrent ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxConcurrent
+    ),
+    dreamQueueMaxJobsPerTick: Number(
+      data.dream_queue_max_jobs_per_tick ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxJobsPerTick
+    ),
   };
   return cached;
 }

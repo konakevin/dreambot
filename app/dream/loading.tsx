@@ -52,6 +52,9 @@ export default function DreamLoadingScreen() {
   // full 90s. 0 = not in recovery.
   const recoveryStartedAt = useRef(0);
   const [showQueue, setShowQueue] = useState(false);
+  // Set to the dream_queue job id when a dream is ENQUEUED (DREAM_QUEUE_ENABLED).
+  // Drives the realtime-wait effect below. Null on the synchronous path.
+  const [queueWaitId, setQueueWaitId] = useState<string | null>(null);
 
   // Decide once on mount whether the longer-wait subline applies. We
   // can't know exact render time (Replicate variance is large), so the
@@ -130,6 +133,10 @@ export default function DreamLoadingScreen() {
 
       if (status === 'done') {
         router.replace('/dream/reveal');
+      } else if (status === 'queued') {
+        // Enqueued onto dream_queue — don't navigate; wait on its realtime
+        // channel (effect below) while the spinner keeps showing.
+        setQueueWaitId(useDreamStore.getState().activeJobId);
       } else if (status === 'cancelled') {
         // User cancelled at classification modal — back to Create, no charge
         router.back();
@@ -143,6 +150,94 @@ export default function DreamLoadingScreen() {
       // tap "Try Again" or "Back to Dream" from there.
     });
   }, [generate, setActiveJobFailure]);
+
+  // ── Queue path: wait on the dream_queue realtime channel ──────────────────
+  // The worker renders the job (globally-capped concurrency + retry) and flips
+  // its status. On 'completed' we hydrate the result from the uploads row +
+  // reveal; on 'dead_letter' we show the failure card (the worker already
+  // refunded). Robust against the render finishing before we subscribe (initial
+  // catch-up fetch) and against a realtime drop (periodic poll backstop).
+  useEffect(() => {
+    if (!queueWaitId) return;
+    let settled = false;
+
+    const finishCompleted = async (uploadId: string | null | undefined) => {
+      if (settled || queued.current || !uploadId) return;
+      const { data: up } = await supabase
+        .from('uploads')
+        .select('id, image_url, ai_prompt, dream_medium, dream_vibe')
+        .eq('id', uploadId)
+        .maybeSingle();
+      if (!up || settled || queued.current) return;
+      settled = true;
+      setResult({
+        imageUrl: up.image_url,
+        prompt: up.ai_prompt ?? '',
+        aiConcept: null,
+        dreamMode: null,
+        archetype: null,
+        resolvedMedium: up.dream_medium ?? null,
+        resolvedVibe: up.dream_vibe ?? null,
+        uploadId: up.id,
+      });
+      router.replace('/dream/reveal');
+    };
+
+    const handleRow = (row: { status?: string; upload_id?: string | null }) => {
+      if (settled || queued.current) return;
+      if (row.status === 'completed') {
+        void finishCompleted(row.upload_id);
+      } else if (row.status === 'dead_letter') {
+        settled = true;
+        setActiveJobFailure({
+          jobId: queueWaitId,
+          message: "Your dream couldn't render",
+          refunded: true,
+          refundReason: null,
+          isNsfw: false,
+          isPreFlightModeration: false,
+        });
+      }
+    };
+
+    const channel = supabase
+      .channel(`dream_queue:${queueWaitId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'dream_queue', filter: `id=eq.${queueWaitId}` },
+        (payload) => handleRow(payload.new as { status?: string; upload_id?: string | null })
+      )
+      .subscribe();
+
+    // Catch-up: the render may have finished in the gap before we subscribed.
+    void supabase
+      .from('dream_queue')
+      .select('status, upload_id')
+      .eq('id', queueWaitId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) handleRow(data);
+      });
+
+    // Backstop poll in case realtime drops mid-wait (no hard timeout — the user
+    // is watching and can "Queue This" to leave).
+    const poll = setInterval(() => {
+      if (settled || queued.current) return;
+      void supabase
+        .from('dream_queue')
+        .select('status, upload_id')
+        .eq('id', queueWaitId)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data) handleRow(data);
+        });
+    }, 6000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(poll);
+    };
+  }, [queueWaitId, setResult, setActiveJobFailure]);
 
   function handleRetry() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -422,7 +517,7 @@ export default function DreamLoadingScreen() {
             </Text>
             <Text style={s.modalBody}>
               {pendingConfirm?.type === 'group'
-                ? 'Face-swap only works for single-subject photos. We’ll describe everyone and include them in the scene — but it won’t be an exact likeness.'
+                ? 'Adding your likeness only works for single-subject photos. We’ll describe everyone and include them in the scene — but it won’t be an exact match.'
                 : 'We had trouble identifying the subject. Results may surprise you.'}
             </Text>
             <View style={s.modalActions}>

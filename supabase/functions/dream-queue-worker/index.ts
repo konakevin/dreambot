@@ -23,6 +23,8 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { processNightlyJob } from './dispatchers/nightly.ts';
+import { processCreateJob } from './dispatchers/create.ts';
+import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -101,10 +103,32 @@ Deno.serve(async (req) => {
       console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
     }
 
+    // ── Global concurrency cap (the anti-546 lever) ────────────────────────
+    // Bound the number of SIMULTANEOUSLY-rendering jobs across all workers, so
+    // a 500-user burst drains at a controlled rate instead of all at once
+    // (which exhausts Supabase's isolate pool + busts per-render budgets).
+    // Claim only up to (cap − in_progress); a saturated cap claims 0 and the
+    // jobs wait. Both knobs are live-tunable via engine_config (no deploy).
+    const cfg = await fetchEngineConfig(supabase).catch(() => null);
+    const maxConcurrent = cfg?.dreamQueueMaxConcurrent ?? 40;
+    const maxPerTick = cfg?.dreamQueueMaxJobsPerTick ?? MAX_JOBS_PER_TICK;
+    const { count: inProgress } = await supabase
+      .from('dream_queue')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'in_progress');
+    const headroom = Math.max(0, maxConcurrent - (inProgress ?? 0));
+    const claimLimit = Math.min(maxPerTick, headroom);
+    if (claimLimit <= 0) {
+      console.log(
+        `[worker:${workerId}] concurrency cap saturated (in_progress=${inProgress ?? 0}/${maxConcurrent}) — skipping claim`
+      );
+      return;
+    }
+
     // ── Batch claim + parallel dispatch ────────────────────────────────────
     const { data: claimedRows, error: claimErr } = await supabase.rpc('claim_dream_queue_jobs', {
       p_worker_id: workerId,
-      p_limit: MAX_JOBS_PER_TICK,
+      p_limit: claimLimit,
     });
     if (claimErr) {
       console.error(`[worker:${workerId}] Batch claim error:`, claimErr.message);
@@ -156,8 +180,17 @@ Deno.serve(async (req) => {
               break;
             }
             case 'create':
-            case 'dlt':
-              throw new Error(`dispatcher_not_implemented:${job.source}`);
+            case 'dlt': {
+              // User-initiated dream (paid). Render in its own isolate via
+              // generate-dream's x-dream-queue path; the payload IS the full
+              // RequestBody the client built (with job_id = this row's id).
+              uploadId = await processCreateJob({
+                supabaseUrl,
+                serviceRoleKey,
+                payload: job.payload,
+              });
+              break;
+            }
             default:
               // Also catches the vestigial 'first_dream' source value
               // (dispatcher removed 2026-06-02).
@@ -226,6 +259,52 @@ Deno.serve(async (req) => {
                   notifErr.message
                 );
               }
+            } else if (job.source === 'create' || job.source === 'dlt') {
+              // Paid user dream is dead (retries exhausted OR a safety block).
+              // The render did NOT refund in-function for queued jobs (the
+              // worker owns it), so refund now — idempotent on the job id, and
+              // refund_sparkles returns the ACTUAL amount debited (1/2/3/5 by
+              // model), not the fallback. Then mark dream_jobs failed (resolves
+              // the client's polling fallback) + inbox notification.
+              const { error: refundErr } = await supabase.rpc('refund_sparkles', {
+                p_user_id: job.user_id,
+                p_amount: 1,
+                p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+                p_reference_id: job.id,
+              });
+              if (refundErr) {
+                console.error(
+                  `[worker:${workerId}] create dead-letter refund failed:`,
+                  refundErr.message
+                );
+              }
+              await supabase
+                .from('dream_jobs')
+                .update({
+                  status: isNsfw ? 'nsfw' : 'failed',
+                  error: message,
+                  completed_at: new Date().toISOString(),
+                })
+                .eq('id', job.id)
+                .then(
+                  () => {},
+                  () => {}
+                );
+              await supabase
+                .from('notifications')
+                .insert({
+                  recipient_id: job.user_id,
+                  actor_id: job.user_id,
+                  type: 'dream_failed',
+                  subtype: 'failed',
+                  body: isNsfw
+                    ? "Your dream couldn't be created — sparkle refunded"
+                    : "Your dream couldn't render — sparkle refunded",
+                })
+                .then(
+                  () => {},
+                  () => {}
+                );
             }
             return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };
           }
