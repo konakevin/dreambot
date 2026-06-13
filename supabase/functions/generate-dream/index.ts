@@ -142,41 +142,65 @@ async function handleRequest(req: Request): Promise<Response> {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-  // Create a user-scoped client from the request's Authorization header.
-  // The Supabase gateway already validates the JWT before invoking the function,
-  // so we can trust the token and use it to identify the user.
-  const authHeader = req.headers.get('authorization') ?? '';
-  const supabaseUser = createClient(
-    supabaseUrl,
-    Deno.env.get('SUPABASE_ANON_KEY') ?? serviceRoleKey,
-    {
-      global: { headers: { Authorization: authHeader } },
-    }
-  );
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseUser.auth.getUser();
-  if (authError || !user) {
-    console.error(
-      '[generate-dream] Auth failed:',
-      authError?.message,
-      'header:',
-      authHeader.slice(0, 30)
-    );
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
-  }
-  const userId = user.id;
-
   // Service role client for database operations (bypasses RLS)
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // Parse request body
+  // Parse request body BEFORE auth — the retry path below reads job_id from it.
   let body: RequestBody;
   try {
     body = await req.json();
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
+  }
+
+  // Auth. Normal path: the user's JWT (the gateway already validated it). Retry
+  // path: refund-stuck-jobs re-invokes this function to REPLAY a dead render — it
+  // has no user JWT, so it sends `x-dream-retry: 1` + the service-role key and we
+  // resolve the user from the existing job. Retries reuse the same job_id, so the
+  // charge + job upsert are idempotent no-ops (never a double charge).
+  const authHeader = req.headers.get('authorization') ?? '';
+  const isRetry = req.headers.get('x-dream-retry') === '1';
+  let userId: string;
+  if (isRetry) {
+    if (authHeader !== `Bearer ${serviceRoleKey}`) {
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    }
+    const retryJobId = typeof body.job_id === 'string' ? body.job_id : null;
+    if (!retryJobId) {
+      return new Response(JSON.stringify({ error: 'retry requires job_id' }), { status: 400 });
+    }
+    const { data: jobRow } = await supabase
+      .from('dream_jobs')
+      .select('user_id')
+      .eq('id', retryJobId)
+      .single();
+    if (!jobRow) {
+      return new Response(JSON.stringify({ error: 'retry job not found' }), { status: 404 });
+    }
+    userId = jobRow.user_id as string;
+    console.log(`[generate-dream] RETRY render for job ${retryJobId} (user ${userId})`);
+  } else {
+    // The Supabase gateway already validated the JWT before invoking us, so we
+    // can trust the token to identify the user.
+    const supabaseUser = createClient(
+      supabaseUrl,
+      Deno.env.get('SUPABASE_ANON_KEY') ?? serviceRoleKey,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseUser.auth.getUser();
+    if (authError || !user) {
+      console.error(
+        '[generate-dream] Auth failed:',
+        authError?.message,
+        'header:',
+        authHeader.slice(0, 30)
+      );
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    }
+    userId = user.id;
   }
 
   // Pull body fields. medium_key / vibe_key / force_model are mutable so we
@@ -305,6 +329,24 @@ async function handleRequest(req: Request): Promise<Response> {
         );
     } catch (err) {
       console.warn('[generate-dream] Job upsert failed (non-critical):', (err as Error).message);
+    }
+  }
+
+  // Persist the request so a dead render can be REPLAYED by refund-stuck-jobs
+  // (migration 263). UPDATE (not the ignoreDuplicates upsert above) so we don't
+  // clobber a "Queue This" notify_on_complete flag. Skip on a retry — the payload
+  // is already stored and the sweeper owns attempt_count.
+  if (jobId && !isRetry) {
+    try {
+      await supabase
+        .from('dream_jobs')
+        .update({ payload: body, status: 'processing' })
+        .eq('id', jobId);
+    } catch (err) {
+      console.warn(
+        '[generate-dream] payload persist failed (non-critical):',
+        (err as Error).message
+      );
     }
   }
 
@@ -1787,6 +1829,16 @@ Deno.serve((req) => {
   ).EdgeRuntime;
   if (edgeRuntime && edgeRuntime.waitUntil) {
     edgeRuntime.waitUntil(task.catch(() => {}));
+  }
+  // Server-triggered RETRY (refund-stuck-jobs replaying a dead render): the
+  // caller must NOT block on the multi-second render, so ack immediately. The
+  // waitUntil above keeps the isolate alive to finish the render + fire the
+  // completion notification in the background.
+  if (req.headers.get('x-dream-retry') === '1') {
+    return new Response(JSON.stringify({ ok: true, retrying: true }), {
+      status: 202,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
   return task;
 });
