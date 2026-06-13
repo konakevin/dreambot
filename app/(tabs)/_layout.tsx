@@ -89,7 +89,9 @@ export default function TabLayout() {
           paddingBottom: tabBarBottomPad,
         },
         tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
+        // Lighter than the old 0.5 so unselected tabs stay readable over busy
+        // images at the bottom of the feed (still clearly dimmer than active).
+        tabBarInactiveTintColor: 'rgba(255,255,255,0.7)',
         tabBarShowLabel: false,
       }}
     >
