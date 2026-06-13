@@ -197,6 +197,7 @@ EXAMPLES (3):
 
   arclib_occupant: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT ARCANE-LIBRARY OCCUPANT — a tiny scholar for life + scale. Each entry 12-25 words.
 
 VARIETY MANDATE — ~25 distinct occupants: a robed scholar bent over a tome at a desk; a librarian on a tall rolling ladder; a wizard reading by candlelight; a young apprentice carrying a stack of books; a hooded figure browsing the stacks; a cat curled on a reading-table; an old sage asleep among books; a scribe copying at a desk; a reader gazing up at the towering shelves; two scholars in quiet discussion; a robed figure ascending the central stair. Each is a small figure giving scale.`,
@@ -347,6 +348,7 @@ EXAMPLES (3):
 
   elvencity_occupant: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT ELVEN-CITY OCCUPANT — tiny graceful elf figures for life + scale. Each entry 12-25 words.
 
 VARIETY MANDATE — ~25 distinct elf occupants: a robed elf crossing a high bridge; an elven sentinel with a slender bow; two elves in quiet conversation; an elf-maiden by a fountain; a rider on a white horse; an elf playing a harp on a balcony; a group walking a tree-walkway; an elf-lord on a terrace gazing out; an elf tending a flowering garden; a child running along a path; a hooded traveller arriving. Each is small graceful elf figure(s) for scale.`,
@@ -422,6 +424,7 @@ EXAMPLES (3):
 
   dwarfhold_occupant: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT DWARVEN-HOLD OCCUPANT — tiny dwarf figures for scale. Each entry 12-25 words.
 
 VARIETY MANDATE — ~25 distinct dwarf occupants: a stout bearded smith at an anvil; a dwarf king on a great throne; miners with picks and lanterns; a line of armored dwarf guards; a dwarf crossing a vast bridge; a merchant amid his wares; an old dwarf lorekeeper with a tome; dwarves hauling a gold-laden cart; a dwarf hammering at a forge; a pair of dwarves in conversation; a dwarf gazing up at a statue. Each is small dwarf figure(s) giving scale.`,
@@ -497,6 +500,7 @@ EXAMPLES (3):
 
   wiztower_occupant: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT WIZARD-TOWER OCCUPANT — a small figure for life + scale. Each entry 12-25 words.
 
 VARIETY MANDATE — ~25 distinct occupants: an old robed wizard bent over a book; a young apprentice on a ladder; a wizard at a window gazing out; a cat-familiar curled on a stack of books; a raven perched on a skull; a tiny imp stirring a cauldron; a wizard mid-spell, hands glowing; an owl on the back of a chair; an apprentice sweeping up spilled reagents; a hooded figure ascending the stairs; a wizard asleep at the desk. Each is a small figure giving life + scale.`,
@@ -530,6 +534,7 @@ EXAMPLES (3):
 
   necro_subject: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT NECROMANCER — the central UNDEAD lord/subject. Each entry 25-45 words. Grim majesty, decay, dark power. High-fantasy undead.
 
 VARIETY MANDATE — ~25 distinct undead lords: a skeletal lich in tattered finery clutching a glowing staff; an armored death-knight in black corroded plate; a wraith-lord of swirling shadow and a crown; a vampire lord in regal dark robes; a bone-dragon of fused skeletons (4 legs + wing-bones); a mummified pharaoh-king risen; a ghostly revenant knight; a necromancer in bone-trimmed black robes raising arms; a colossal flesh-golem of stitched dead; a banshee-queen of wailing mist; a skeletal warlord on a bone throne; an undead sorceress wreathed in soul-fire. Each names the undead figure + their decayed regalia + dark presence.`,
@@ -619,6 +624,7 @@ EXAMPLES (3):
 
   dungeon_party: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT DUNGEON-DELVE PARTY — the small band of adventurers (2-4). Each entry 25-45 words. A classic D&D party mix.
 
 VARIETY MANDATE — ~25 distinct party compositions: a torch-bearing warrior leading a robed mage and a hooded rogue; a dwarf fighter and an elf ranger; a lone armored knight with a lantern; a cleric raising a glowing holy symbol with two companions; a barbarian and a halfling thief; a party of three mismatched mercenaries; a wizard and his apprentice; an elf, a dwarf and a human together; a rogue scouting ahead of the group; a paladin and a bard. Each names the small band + who holds the light + their gear, small against the dark.`,
@@ -769,6 +775,7 @@ EXAMPLES (3):
 
   magic_caster: {
     format: 'simple',
+    banHumanLanguage: true,
     theme: `DRAGONBOT MAGIC-UNLEASHED CASTER — the figure wielding the magic (SMALL against the spell). Each entry 18-32 words. Varied fantasy spellcaster types + genders.
 
 VARIETY MANDATE — ~25 distinct casters: a robed grey wizard with a glowing staff raised high; a sorceress in flowing dark robes, arcane fire wreathing both hands; an armored battle-mage channeling power through a runed blade; a hooded warlock with an eldritch tome floating open; a horned tiefling conjurer; an ancient lich-mage in tattered finery; an elven archmage in silver robes; a druid calling the storm with antlered staff; a blood-mage with glowing sigils carved in the air; two rival wizards mid-duel; a young apprentice overwhelmed by power they unleashed; a crowned sorcerer-king. Each: garb + how they channel the spell, dwarfed by it.`,
@@ -1629,35 +1636,78 @@ EXAMPLES (3):
 
   arcane_caster: {
     format: 'simple',
-    theme: `SPELLCASTER CHARACTERS for DragonBot's arcane-halls path. Each entry is ONE specific magical practitioner caught mid-spell inside a grand magical interior, 30-60 words. STRICT WESTERN HIGH FANTASY.\n\n⚠️ RACE-FIRST OPENING — every entry MUST OPEN with the fantasy race + class noun, NOT with "An elderly..." or "A middle-aged male...". Flux's early-token weighting collapses "elderly male" → "old white-bearded wizard" — race must lead. Use the exact opening pattern:\n\n   "A [RACE] [CLASS], [gender + age], [outfit + accessory + body specifics]..."\n\nExamples:\n   • "A Drow sorceress, mid-thirties, in obsidian-black velvet robes..."\n   • "A Tiefling warlock, mid-twenties man, in black-and-violet pact-bound robes..."\n   • "An Aasimar cleric, fifties woman, in cream-and-gold ceremonial robes..."\n\n⚠️ NEVER lead with "elderly" / "ancient" / "old" / "middle-aged male" / "young female" — those tokens dominate Flux. Race FIRST.\n\n⚠️ AGE DISTRIBUTION (cap elder share at 15% — too much "elder" triggers the wizard-default):\n   • Young (twenties): ~30%\n   • Mid-life (thirties / forties): ~50%\n   • Mid-elder (fifties / sixties): ~15%\n   • Ancient (seventies+): ~5%\n\n⚠️ Every entry is a SPELLCASTER — mage / sorceress / cleric / druid / warlock / archmage / necromancer / runic-scribe / spirit-medium / battle-mage / illusionist / hedgewitch / elementalist / etc. NOT warriors / rangers / rogues without magic.\n\n⚠️ GENDER BALANCED — split roughly 50/50.\n\n⚠️ DIVERSE FANTASY RACES — every entry must specify a NON-DEFAULT-HUMAN race (drow / tiefling / dragonborn / dwarf / gnome / wood elf / high elf / half-orc / genasi / aasimar / firbolg / tabaxi / shadar-kai / dunmer / goliath / orc / halfling / forest gnome / sea elf / etc.). Humans only ~15% of pool.\n\n🚫 NO "old white-bearded wizard" defaults\n🚫 NO real-world ethnic-coded outfits (no Bedouin / Persian / samurai / Aztec / Polynesian)\n🚫 NO modern / sci-fi / cyberpunk\n🚫 NO cheesecake / NSFW — functional fantasy outfits, full coverage\n\nCASTER CLASS VARIETY — distribute roughly equal:\n\n  A. **MAGE / ARCHMAGE** (~20%): embroidered velvet mage-robes / silver constellation embroidery / glowing-rune cuffs / gemmed staff\n  B. **SORCERER / SORCERESS** (~15%): dark-velvet robes with crystal harness / glowing tattoos visible / wild-magic-aura\n  C. **CLERIC / PRIEST** (~10%): ceremonial robes with holy symbols / radiance-glow / blessed-cord-bound regalia\n  D. **DRUID** (~10%): leaf-and-fur layered druid-robes / glowing-green aura / staff bound with living vines / animal-pelt cloak\n  E. **WARLOCK** (~10%): black-and-violet pact-bound robes / glowing-rune-tattoos / fel-pact amulet / dark-velvet cape\n  F. **NECROMANCER (good or neutral aligned)** (~10%): bone-buttoned dark-grey scholar-robes / skull-pendant / glowing-rune-stones in pouches\n  G. **RUNIC-SCRIBE / LOREKEEPER** (~5%): scribe-coat with deep pockets / brass-rim spectacles / ink-stained fingers / leather satchel of scrolls\n  H. **ELEMENTALIST** (~10%): elemental-themed robes (fire / water / earth / air) / matching elemental-glow at hands / element-bound staff\n  I. **HEDGEWITCH / FOREST-WITCH** (~5%): layered shawl-and-tunic of dyed wool / bone-and-crystal necklaces / herb-pouches / witch-amulet\n  J. **BATTLE-MAGE / SPELLSWORD** (~5%): armored caster with sigil-engraved breastplate / glowing-runic-blade / casting-hand free of glove`,
+    banHumanLanguage: true,
+    theme: `SPELLCASTER CHARACTERS for DragonBot's arcane-halls path. Each entry is ONE specific magical practitioner caught mid-spell inside a grand magical interior, 30-60 words. STRICT WESTERN HIGH FANTASY.
+
+⚠️ RACE + NON-HUMAN ANATOMY FIRST — THE #1 RULE. Every entry OPENS with the fantasy RACE and IMMEDIATELY names 2-3 of that race's UNMISTAKABLE non-human physical features (skin/scale/fur color + ears/horns/tusks/snout + stature/build), so Flux renders the SPECIES — never a costumed human. The race's body is the hero of the description.
+
+   Pattern: "A [RACE] [class] — [2-3 distinctive non-human features] — [robes + accessory], [casting pose + spell]."
+
+⛔ BANNED LANGUAGE — this is exactly what makes Flux render a generic modern human in a Halloween costume. NEVER use it:
+   • NO age words or numbers — NO "twenties / thirties / forties / fifties / sixties / seventies", NO "young / old / elderly / middle-aged / teenage / ancient / X-year-old". Show age ONLY through physical signs ON THE RACE (a Dwarf's iron-grey forked beard and deep-carved laugh-lines; a Dragonborn's smooth unworn scales) — never the abstract word.
+   • NO "man / woman / male / female / boy / girl / lady / person." A Gnome is a GNOME, not a "woman." Gender is carried ONLY by the class-noun (sorceress / enchantress / priestess / witch vs. warlock / sorcerer / archmage) and by pronouns (he / she / they) — NEVER by "man/woman."
+
+⚠️ NAIL THE RACE ANATOMY — each non-human race MUST be visually unmistakable as a CREATURE:
+   • Gnome = knee-high (barely 3 ft), oversized head, long crooked/bulbous nose, big pointed ears, leathery weathered skin, wild colorful hair — NOT a petite human with dyed hair
+   • Halfling = child-height, round cheerful face, curly hair, big bare feet — NOT a small human adult
+   • Dwarf = stout barrel-chest, broad, massive braided beard, ruddy/bronze skin
+   • Drow = obsidian-charcoal/grey skin, white-silver hair, glowing violet eyes, tapered ears
+   • Tiefling = curling horns + slit-pupil eyes + red/violet/blue skin + pointed tail
+   • Dragonborn = full draconic scaled head, blunt reptilian snout, horns/frills, no hair, clawed hands
+   • Tabaxi = full feline fur + markings, cat muzzle, whiskers, slit-pupil eyes, tail
+   • Half-Orc / Orc = green-grey skin, jutting lower tusks, heavy brow, broad jaw
+   • Aasimar = alabaster skin lit from within, faint halo, luminous eyes
+   • Genasi = elemental-tinted skin (sky-blue / ember-red / earth-bronze) + element trait (drifting hair / ember veins / gill-slits)
+   • Firbolg = blue-grey skin, long pointed ears, broad bovine nose, towering
+   • Goliath = 8-foot ash-grey stone-textured skin, glowing mountain-clan markings
+   • Shadar-kai = bone-pale ashen gaunt skin, silver pupil-less eyes
+   • Wood / High Elf / Dunmer = pointed ears + the race's specific eye/skin + ageless sharp features
+   ...render the race so a viewer instantly NAMES the species.
+
+⚠️ DIVERSE FANTASY RACES — lean heavily NON-HUMAN (drow / tiefling / dragonborn / gnome / halfling / tabaxi / firbolg / goliath / genasi / aasimar / half-orc / shadar-kai / dwarf / wood elf / high elf / dunmer / etc.). Humans only ~10%, and a human entry must be richly SPECIFIC (a raven-haired court enchanter with kohl-rimmed eyes and a cold-iron circlet) — never a generic "person."
+
+⚠️ Every entry is a SPELLCASTER — mage / sorceress / cleric / druid / warlock / archmage / necromancer / runic-scribe / illusionist / hedgewitch / elementalist / battle-mage / etc. NOT warriors / rangers / rogues without magic.
+
+⚠️ GENDER VARIETY — roughly balanced across the pool, carried by class-noun + pronoun ONLY (NEVER "man/woman").
+
+🚫 NO "old white-bearded human wizard" default (Flux's strongest prior — actively reject it)
+🚫 NO real-world ethnic-coded outfits or features (no Bedouin / Persian / samurai / Aztec / Polynesian)
+🚫 NO modern / sci-fi / cyberpunk
+🚫 NO cheesecake / NSFW — functional fantasy robes, full coverage
+
+CASTER CLASS VARIETY — distribute roughly equal:
+
+  A. **MAGE / ARCHMAGE** (~20%): embroidered velvet mage-robes / silver constellation embroidery / glowing-rune cuffs / gemmed staff
+  B. **SORCERER / SORCERESS** (~15%): dark-velvet robes with crystal harness / glowing tattoos visible / wild-magic-aura
+  C. **CLERIC / PRIEST** (~10%): ceremonial robes with holy symbols / radiance-glow / blessed-cord-bound regalia
+  D. **DRUID** (~10%): leaf-and-fur layered druid-robes / glowing-green aura / staff bound with living vines / animal-pelt cloak
+  E. **WARLOCK** (~10%): black-and-violet pact-bound robes / glowing-rune-tattoos / fel-pact amulet / dark-velvet cape
+  F. **NECROMANCER (good or neutral aligned)** (~10%): bone-buttoned dark-grey scholar-robes / skull-pendant / glowing-rune-stones in pouches
+  G. **RUNIC-SCRIBE / LOREKEEPER** (~5%): scribe-coat with deep pockets / brass-rim spectacles / ink-stained fingers / leather satchel of scrolls
+  H. **ELEMENTALIST** (~10%): elemental-themed robes (fire / water / earth / air) / matching elemental-glow at hands / element-bound staff
+  I. **HEDGEWITCH / FOREST-WITCH** (~5%): layered shawl-and-tunic of dyed wool / bone-and-crystal necklaces / herb-pouches / witch-amulet
+  J. **BATTLE-MAGE / SPELLSWORD** (~5%): armored caster with sigil-engraved breastplate / glowing-runic-blade / casting-hand free of glove`,
     touchpoints: [
-      'A Drow sorceress, mid-thirties, in obsidian-black velvet robes with silver-constellation embroidery, white platinum hair coiled loose, crystal-cluster harness across the chest with glowing-violet tattoos visible on collarbone, gemmed staff held in one hand',
-      'A Hill Dwarf archmage, ancient seventies man, massive forked grey beard threaded with iron rings, leather-tanned skin, weathered embroidered crimson mage-robes, glowing-rune cuffs, a gem-topped staff planted in the floor before him',
-      'A Wood Elf druid, mid-thirties man, bronze sun-warmed skin, leaf-green eyes, layered leaf-and-fur robes with living-vine accents, glowing-green aura crackling along his outstretched fingertips, antler-staff bound with growing flowers',
-      'A Tiefling sorceress, early-twenties woman, crimson-red skin with ember-vein patterns, slit-pupil eyes, black-and-violet velvet robes smoking at hems, fire-orange fingertips glowing, curling horns visible above wild dark hair',
-      'a middle-aged Aasimar cleric, radiant bronze skin with golden shimmer, pale gold eyes, cream-and-gold ceremonial robes with wing-pattern embroidery, blessed-cord bindings, holy radiance glowing from cupped palms',
-      'an elderly Genasi air-touched mage in her seventies, pale sky-blue skin, white cloud-drift hair lifting in unfelt wind, electric-silver eyes, indigo silk robes with silver storm-cloud embroidery, weather-rune amulet at the throat',
-      'a Half-Orc warlock in his forties, green-grey skin with tusks, scarred face, black-and-violet pact-bound robes, glowing fel-green pact-mark at throat, runic tattoos crawling up forearms and neck',
-      'a Forest Gnome elementalist (fire-aligned), mid-thirties, sun-warmed bronze skin, wild colorful hair, bright emerald eyes, deep-crimson elemental robes with phoenix-feather trim, fire-orange palms cupping a growing flame',
-      'a Dragonborn battle-mage in his thirties, copper-scaled face and snout, ember-orange eyes, sigil-engraved bronze breastplate over scholar-robes, glowing-runic-blade in one hand and free casting-hand wreathed in golden-light',
-      'a Shadar-kai necromancer in her forties, bone-pale ashen skin, piercing silver eyes, bone-buttoned dark-grey scholar-robes, glowing-rune-stones spilling from a pouch at her belt, skull-pendant at the throat',
-      'a Sea Elf scrying-mage in mid-forties, pale-blue skin with gill-marks at the throat, pointed ears, deep ocean-blue robes catching moonbeam shaft, glowing-rune-script reflected in dark eyes, webbed fingers tracing a sigil mid-air',
-      'an elderly Halfling hedgewitch in her seventies, copper-brown weathered skin, one milky-blind eye one sharp hazel, steel-grey braids coiled atop head, layered patchwork hedgewitch shawls, glowing-green rune-marks on palms',
-      'a Zandalari Troll alchemist in his thirties, bronze-gold skin, prominent tusks with gold bands, ink-blackened fingertips, leather alchemy-apron stained, glowing-amber potion bottle held mid-pour',
-      'a young Wood Elf battle-mage in her twenties, sage-leather armor etched with branch patterns, leaf-vein face tattoos, intricate compact bow at hip, free hand crackling with luminous spell-energy',
-      'an Aasimar holy-mage in her thirties, alabaster skin with faint inner glow, pale gold eyes, white-and-gold ceremonial robes with halo-embroidery, holy-light arc descending from upraised palms',
-      'a middle-aged Tabaxi illusionist, tawny fur with darker stripes, slit-pupil amber eyes, deep-violet robes with star-pattern embroidery, mirror-bright pendant at throat, scattering of glowing illusion-motes around outstretched fingers',
-      'a young Drow male necromancer in his late twenties, obsidian-grey skin, white-silver hair short and slicked, violet glowing eyes, dark-grey scholar-robes with bone-buttons, glowing-rune-stones orbiting his head',
-      'an elderly High Elf archmage in his ancient seventies, alabaster skin, sharply pointed ears, aristocratic features, deep-violet velvet robes with silver constellation embroidery across shoulders, gemmed-staff held with both hands',
-      'a Firbolg druid in his mid-forties, blue-grey skin, pointed ears, leaf-green eyes, layered nature-robes with living moss and lichen growing on the shoulders, antler-crown of twisted branches, glowing-green palms',
-      'a mid-twenties Goliath storm-cleric, ash-grey skin mapped with mountain-clan markings, glowing pale eyes, blue-and-silver storm-themed robes, crackling electric-arc visible at his palm-tips',
-      'a Dunmer warlock-scholar in his fifties, ash-grey skin, blood-red eyes, sharply pointed ears, deep charcoal velvet robes with silver constellation stitching, sigil-branded leather holster at his hip',
-      'a Half-Elf cleric in her thirties, pointed ears, hazel eyes, ink-stained fingers, cream-and-blue ceremonial robes with celestial embroidery, prayer-symbol pendant glowing softly at the throat',
-      'a mid-forties Mountain Dwarf woman runic-scribe, heavily-braided russet beard, ruddy weathered skin, steely grey eyes, simple linen robes with leather rune-belt, glowing arcane marks crawling up muscular forearms',
-      'an Uruk-hai elder mage in his sixties, weathered black-grey skin, jagged yellowed tusks, bone-painted fierce face, embroidered velvet mage-robes with glowing-rune cuffs, gem-topped staff in hand',
-      'a young Aquatic Half-elf hydromancer in her late twenties, faintly-scaled pale-blue skin, pointed ears, sea-green eyes, blue-and-silver flowing robes that look almost like water, glowing-water orb floating between her palms',
+      'A Gnome illusionist — knee-high with an oversized head, a long crooked nose and big pointed ears, leathery walnut-brown skin creased around bright eyes, a wild shock of dandelion-white hair under a sideways star-stitched hat, in patched amethyst robes, spinning a swirl of mirror-shards between tiny outstretched hands',
+      'A Drow sorceress, obsidian-charcoal skin and waist-length silver-white hair, glowing violet eyes above sharply tapered ears, in obsidian-velvet robes with a crystal chest-harness, glowing-violet runes spiraling up bared forearms, releasing a bolt of raw arcane force',
+      'A Dragonborn archmage with a full bronze-scaled draconic head, a blunt reptilian snout and back-swept horns, ember-orange eyes and no hair, in deep-teal rune-embroidered robes, conjuring a lattice of arcane light overhead while scrolls spiral around clawed hands',
+      'A Tabaxi enchanter covered in tawny black-striped fur with a feline muzzle, slit-pupil amber eyes and twitching whiskers, a long tail curling behind, in star-pattern violet robes, scattering glowing illusion-motes from velvet-padded fingertips',
+      'A Halfling hedgewitch, child-height with a round weathered face, curly chestnut hair and big bare feet, in layered patchwork shawls hung with bone-and-crystal charms, green rune-marks glowing on upturned palms above a bubbling iron pot',
+      'A Hill Dwarf archmage, stout and barrel-chested with a waist-length iron-grey beard forked and ringed in silver, ruddy weathered skin and deep laugh-lines, in crimson mage-robes with glowing-rune cuffs, a gem-topped staff planted before him',
+      'A Tiefling warlock with curling ram horns and a barbed tail, crimson skin mapped by faintly-glowing ember veins and slit-pupil gold eyes, in black-and-violet pact robes smoking at the hem, fel-green light pooling in cupped clawed hands',
+      'A Firbolg druid, towering and broad with blue-grey skin, long pointed ears and a wide bovine nose, moss and lichen growing across the shoulders of layered nature-robes, an antler-crown of living branches, emerald light crackling along thick fingers',
+      'A Goliath storm-cleric, eight feet of ash-grey stone-textured skin mapped with glowing mountain-clan markings, pale pupil-less eyes, in blue-and-silver storm robes, crackling electric arcs leaping between raised palms',
+      'A Genasi hydromancer, skin the shifting blue-green of moonlit ocean with faint scale-shimmer and gill-slits at the throat, hair drifting as if underwater, in flowing water-like robes, a perfect crescent of conjured water arcing around them',
+      'An Aasimar priestess, alabaster skin lit softly from within beneath a faint golden halo, luminous pale-gold eyes, in cream-and-gold ceremonial robes with wing-pattern embroidery, holy radiance spilling in arcs from upraised palms',
+      'A Shadar-kai necromancer, bone-pale ashen skin stretched gaunt over sharp features, silver pupil-less eyes and black thorn-tattoos, in bone-buttoned charcoal scholar-robes, pale soul-light orbs orbiting slowly around the head',
+      'A Half-Orc battle-mage, green-grey skin with jutting lower tusks and a heavy scarred brow, black hair in war-braids, a sigil-engraved iron breastplate over caster-robes, one bare casting-hand blazing amber rune-light, a glowing-runic blade slung at the back',
+      'A Wood Elf druid, sun-bronzed skin and long leaf-green eyes above sharply pointed ears, leaf-vein tattoos tracing one cheek, in leaf-and-fur layered robes with living-vine accents, an antler-staff blooming flowers, green aura crackling at the fingertips',
+      'A Dunmer warlock-scholar, ash-grey skin and smoldering blood-red eyes above tapered ears, a shaved scalp with a single dark topknot, in charcoal velvet robes with silver constellation stitching, a sigil-branded holster at the hip, violet pact-light at the palm',
+      'A High Elf archmage, ageless alabaster features and sharply pointed ears, luminous silver eyes and a jeweled clasp binding pale hair, in deep-indigo velvet robes with silver constellation embroidery, levitating above mosaic tiles as sigils orbit a raised staff',
+      'A human court enchanter with raven-black hair, kohl-rimmed dark eyes and a cold-iron circlet, an embroidered midnight scholar-coat with ink-stained cuffs, a glowing-rune ledger floating open at one shoulder as a sigil traces itself in the air',
+      'A Genasi air-mage, pale sky-blue skin and white cloud-drift hair lifting in an unfelt wind, electric-silver eyes, in indigo silk robes stitched with storm-cloud thread, a weather-rune amulet sparking at the throat, static crackling between spread fingers',
     ],
-    instructions: `Each entry is ONE spellcaster character, 30-60 words. **OPEN WITH RACE + CLASS** ("A Drow sorceress" / "A Tiefling warlock" / "An Aasimar cleric") — NEVER lead with "elderly" or "middle-aged male." Race FIRST. Age share: 30% young / 50% mid-life / 15% mid-elder / 5% ancient. GENDER-BALANCED (~50/50). DIVERSE fantasy races (humans only ~15%). STRICT Western high fantasy. NO "old white-bearded wizard" defaults. NO real-world ethnic / modern / sci-fi / cheesecake. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+    instructions: `Each entry is ONE spellcaster, 30-60 words. **OPEN WITH RACE + 2-3 UNMISTAKABLE NON-HUMAN FEATURES** (skin/scale/fur + ears/horns/tusks/snout + stature), THEN class, robes, and the spell — render the SPECIES, not a costumed human. ZERO age words/numbers (no twenties/thirties/elderly/young/ancient — show age only via physical signs on the race). ZERO "man / woman / male / female / boy / girl / person" — gender is carried by the class-noun (sorceress/enchantress/witch vs warlock/sorcerer) and pronouns ONLY. Lean heavily NON-HUMAN (humans <=10%, and richly specific). STRICT Western high fantasy. NO "old white-bearded human wizard" default. NO real-world ethnic / modern / sci-fi / cheesecake. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
   arcane_spell_moment: {
@@ -6123,6 +6173,7 @@ Output 25 numbered list entries.`,
   },
   cozy_arcane_race: {
     format: 'simple',
+    banHumanLanguage: true,
     theme:
       'Fantasy race entries skewed toward COZY-SANCTUM-APPROPRIATE races for the cozy-arcane scholar/wizard inhabitant — human / elven / halfling / gnome / firbolg / aasimar / tiefling-scholar / dwarven-loremaster / etc. Replaces the shared FANTASY_RACE pool for this path because that pool was 28% orc/tusks/grey-skin which (a) Flux amplified into dominant green-orc renders and (b) read off-genre for the cozy register. AT MOST 2 orc-coded entries permitted in this pool.',
     touchpoints: [],
@@ -6131,7 +6182,7 @@ Output 25 numbered list entries.`,
 THE BAR: each entry must read instantly as a DIFFERENT person Flux can render distinctively. The variety lives in COLOR + ANATOMY + BEARING — not in genre register (all stay cozy-scholar register, NOT war-painted-battler).
 
 LINEUP MANDATE (target distribution across the 25):
-  • 6-8 HUMAN VARIETIES — different ethnicities + regions (Mediterranean / Northern-pale / Saharan-warm-brown / East-Asian / Polynesian / South-Asian / Pacific-Northwest / Andean / Persian / Nordic / Slavic — all with cozy-scholar bearing)
+  • 6-8 HUMAN VARIETIES — vary skin tone, hair and eyes across the FANTASY world's OWN native palette (umber / bronze / warm-olive / sun-warmed / ash-fair / freckled-pale / golden-brown), each with cozy-scholar bearing. Describe with in-world / nature descriptors ONLY — NEVER a real-world nationality, ethnicity or region (no "Mediterranean / Saharan / East-Asian / Nordic / Persian / Polynesian / Slavic / etc.")
   • 4-5 ELVEN VARIETIES — high-elf / wood-elf / moon-elf / sun-elf / wild-elf / mossy-druid-elf / ice-elf / Tolkienesque Sindarin — each with distinct skin / hair / eye combo
   • 2-3 HALFLING / HOBBIT / GNOME varieties — different ages and clans
   • 2-3 DWARVEN-LOREMASTER varieties — mountain-dwarf / hill-dwarf / forge-scholar / book-scribe-dwarf (NOT war-coded — scholarly cozy)
@@ -6143,15 +6194,15 @@ LINEUP MANDATE (target distribution across the 25):
   • AT MOST 1-2 ORC-coded — half-orc-scholar or peaceful-orc-loremaster ONLY (no battle-painted / no war-forged language)
 
 Each entry must:
-(a) NAME the race (e.g. "Tolkienesque Sindar Elf" / "Mediterranean Human" / "Mountain-Dwarven Loremaster")
+(a) NAME the race / lineage (e.g. "Tolkienesque Sindar Elf" / "Umber-skinned scholar-human" / "Mountain-Dwarven Loremaster") — for humans use a descriptive or fantasy-world lineage name, NEVER a real-world nationality
 (b) NAME 2-3 visible features with COLOR (skin tone / hair / eyes / horn-color if applicable / ear shape if applicable)
 (c) NAME a distinguishing bearing detail (poised / weathered / serene / cautious / kind / bookish — not aggressive)
 
 Examples (DO NOT copy verbatim — write 25 new entries):
 1. Tolkienesque Sindar Elf: porcelain skin, long platinum-silver hair, pale grey eyes, swept-back leaf-shaped ears, ancient-bookish poise carrying centuries of quiet learning.
-2. Mediterranean human: warm olive-tan skin, dark curling hair worn loose at the shoulders, dark hazel eyes, broad scholarly hands, contemplative measured bearing.
+2. Olive-skinned scholar-human: warm olive-tan skin, dark curling hair worn loose at the shoulders, dark hazel eyes, broad scholarly hands, contemplative measured bearing.
 3. Mountain-dwarven loremaster: ruddy weathered skin, braided iron-grey beard with bookmarks woven through, deep amber eyes, broad ink-stained hands, calm patient bearing.
-4. Pacific-island human: deep golden-brown skin, long black hair pulled back with a wooden pin, dark warm eyes, gentle steady bearing of inherited oral traditions.
+4. Golden-brown scholar-human: deep golden-brown skin, long black hair pulled back with a wooden pin, dark warm eyes, gentle steady bearing of inherited lore-keeping.
 
 CRITICAL — register restrictions:
 - NO battle-paint, NO war-forged language, NO "fierce" / "savage" / "brutal" features
@@ -6204,38 +6255,34 @@ Output 25 numbered list entries.`,
   },
   cozy_arcane_inhabitant_age: {
     format: 'simple',
+    banHumanLanguage: true,
     theme:
-      'Age / life-stage descriptors for a cozy-arcane sanctum inhabitant. Extracted + expanded from the legacy inline AGES array (10 entries → 25). Each entry pairs an age range with a STAGE WORD (apprentice / scholar / sage / elder / etc.) for variety in body language and authority level.',
+      'Role + demeanor descriptors for a cozy-arcane sanctum inhabitant. The RACE and GENDER are set by SEPARATE axes, so these convey life-stage and authority ONLY through ROLE word + bearing + activity — NEVER an age number and NEVER a "man/woman" noun.',
     touchpoints: [],
-    instructions: `Write 25 age + life-stage descriptors for the cozy-arcane sanctum inhabitant. Each entry is 5-12 words, a compact phrase pairing an AGE range with a STAGE word. Reads naturally before a gender + race noun (e.g. "young apprentice in their early twenties woman, race: dwarf").
+    instructions: `Write 25 role + demeanor descriptors for the cozy-arcane sanctum inhabitant. Each entry is 5-14 words: a STAGE/ROLE word paired with a vivid bearing or small activity. It reads naturally before a race noun set by another axis.
 
-Mix across the life arc:
-- Young apprentice / acolyte (early-to-mid twenties)
-- Journeyman scholar (late twenties to early thirties)
-- Maturing practitioner (mid thirties to forties)
-- Established sage (mid forties to fifties)
-- Elder sage / loremaster (sixties)
-- Ancient venerable (seventies-plus)
+⛔ BANNED: NO age words or numbers (no "twenties / thirties / forties / fifties / sixties / seventies", no "young / old / elderly / middle-aged / ancient"). NO "man / woman / male / female / boy / girl / person." Convey seniority ONLY through the ROLE word + demeanor, never age or gender.
 
-Include some variety in TONE:
-- Bookish (scholarly emphasis)
-- Practical / hedge (rural / wise-craft emphasis)
-- Eccentric / wandering (oddball flavor)
-- Stoic / monastic (quiet austerity)
-- Bright-eyed / earnest (apprentice energy)
-- World-weary / fatigued (over-burdened scholar)
+Mix across the authority arc using ROLE WORDS (not ages):
+- Apprentice / acolyte (eager, still-learning energy)
+- Journeyman / adept (competent, finding their craft)
+- Practitioner / scholar (settled mastery)
+- Sage / loremaster / master (deep authority — show via bearing, not "old")
+- Archivist / hermit-scholar / hedge-adept (eccentric flavor)
+
+Include variety in TONE: bookish / practical-hedge / eccentric-wandering / stoic-monastic / bright-eyed-earnest / world-weary-over-burdened.
 
 Each entry must specify:
-(a) THE AGE RANGE — early-twenties / mid-thirties / late-fifties / ancient-seventies
-(b) THE STAGE WORD — apprentice / scholar / sage / elder / loremaster / acolyte / hermit-scholar / mature-practitioner
+(a) THE ROLE WORD — apprentice / acolyte / journeyman / adept / scholar / sage / loremaster / archivist / master / hermit-scholar
+(b) A DEMEANOR or small ACTIVITY that conveys their stage WITHOUT naming an age — "ink-stained and eager", "unhurried and exact", "buried in half-read volumes"
 
 Examples (DO NOT copy verbatim — write 25 new entries):
-1. young apprentice in their early twenties
-2. earnest mid-twenties acolyte
-3. mid-thirties journeyman scholar
-4. world-weary forties practitioner
-5. mid-fifties established sage with grey at the temples
-6. sixties elder loremaster with deep-lined face
+1. bright-eyed apprentice still ink-stained from copying
+2. earnest acolyte deep in first independent study
+3. unhurried journeyman scholar between two schools of thought
+4. world-weary practitioner surrounded by half-finished experiments
+5. quietly exacting sage who answers only in riddles
+6. eccentric hermit-loremaster muttering over a chained tome
 
 Output 25 numbered list entries.`,
   },
@@ -6506,6 +6553,16 @@ async function callSonnet(prompt) {
 // Numbered-list parser. Each entry starts with "<number>. ". Lines that
 // don't start with a number are treated as continuations of the previous
 // entry (in case Sonnet ignores the "one line per entry" rule and wraps).
+// Tokens that make Flux render a generic modern HUMAN instead of the fantasy
+// race — age framing + man/woman/male/female nouns. Recipes with
+// `banHumanLanguage: true` reject any generated entry containing these. Guards
+// against the arcane_caster "A Gnome illusionist, late-twenties woman" regression
+// (2026-06-13) reappearing. NOTE: bare "human" does NOT match (no \bman\b
+// boundary inside it), so humans-as-a-race stay allowed; only the age/gender
+// framing is rejected.
+const HUMAN_LANGUAGE_RE =
+  /\b(teens?|teenaged?|twenties|thirties|forties|fifties|sixties|seventies|eighties|nineties|year-old|years?\s+old|middle-aged|middle\s+aged|elderly|man|woman|men|women|male|female|boy|girl|lady|ladies|gentleman|gentlemen|person|people|husband|wife)\b/i;
+
 function parseArray(text) {
   const body = text
     .replace(/```[a-z]*\n?/gi, '')
@@ -6749,8 +6806,18 @@ async function generateBatch(batchCount) {
       return i > 0 ? e.slice(0, i).trim() : e;
     })
     .filter(Boolean);
-  console.log(`  • Sonnet returned ${stripped.length} entries in ${elapsed}s`);
-  return stripped;
+  // Human-language gate (character pools with banHumanLanguage) — reject any
+  // entry smuggling in age words or man/woman/male/female, which make Flux
+  // render a generic modern human instead of the fantasy race. The recipe
+  // directives forbid it; this is the hard backstop so it can't regress.
+  let kept = stripped;
+  if (recipe.banHumanLanguage) {
+    kept = stripped.filter((e) => !HUMAN_LANGUAGE_RE.test(e));
+    const dropped = stripped.length - kept.length;
+    if (dropped > 0) console.log(`  • human-language filter rejected ${dropped} (age / man-woman)`);
+  }
+  console.log(`  • Sonnet returned ${kept.length} usable entries in ${elapsed}s`);
+  return kept;
 }
 
 (async () => {

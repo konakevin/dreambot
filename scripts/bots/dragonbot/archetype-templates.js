@@ -944,22 +944,22 @@ Honor the SPECIFIC interior type from the slot — throne room / courtyard / sta
 ━━━ THE CASTER (render exactly — RACE IS THE HERO) ━━━
 ${caster}
 
-🚫 NEVER DEFAULT TO "OLD WHITE-BEARDED HUMAN WIZARD." This is Flux's strongest fantasy-caster prior and must be actively rejected. If the slot says "Drow sorceress in her thirties" — render obsidian-grey-skinned drow woman, NOT bearded-old-white-man. If the slot says "Half-orc cleric" — render green-grey-skinned half-orc with tusks, NOT bearded-old-white-man. The race + gender + age in the slot is NON-NEGOTIABLE.
+🚫 NEVER DEFAULT TO "OLD WHITE-BEARDED HUMAN WIZARD." This is Flux's strongest fantasy-caster prior and must be actively rejected. A [race] is a CREATURE, never a costumed human — render its non-human anatomy as the unmistakable hero of the figure. If the slot says "Drow sorceress" — render obsidian-grey-skinned drow with white-silver hair + violet eyes + tapered ears, NOT a human in a robe. If the slot says "Gnome illusionist" — render a knee-high, big-nosed, big-eared gnome, NOT a petite human with dyed hair. The race + its non-human anatomy in the slot is NON-NEGOTIABLE.
 
-Race anatomy UNMISTAKABLE:
-• Drow = obsidian-grey skin + white-silver hair + violet eyes
-• Tiefling = horns curling from forehead + slit-pupil eyes + red-or-violet skin
-• Half-orc = green-grey skin + tusks visible
-• Dragonborn = scaled face + reptilian snout
-• Aasimar = alabaster skin + inner-glow + halo
-• Genasi = elemental-tinted skin (sky-blue / ember-red / earth-bronze / etc.)
-• Gnome = small stature + wild colorful hair
-• Tabaxi = furred face + slit-pupil eyes
-• Wood Elf = pointed ears + leaf-green eyes
-• Firbolg = blue-grey skin + pointed ears
-• Goliath = ash-grey skin + clan-markings
-• Shadar-kai = bone-pale ashen skin + silver eyes
-• Halfling = small stature + youthful round face
+Race anatomy UNMISTAKABLE (render the SPECIES, not a human in costume):
+• Drow = obsidian-grey skin + white-silver hair + glowing violet eyes + tapered ears
+• Tiefling = horns curling from forehead + slit-pupil eyes + red-or-violet skin + pointed tail
+• Half-orc / Orc = green-grey skin + jutting lower tusks + heavy brow + broad jaw
+• Dragonborn = full scaled draconic head + blunt reptilian snout + horns + no hair + clawed hands
+• Aasimar = alabaster skin + inner-glow + faint halo
+• Genasi = elemental-tinted skin (sky-blue / ember-red / earth-bronze) + element trait (drifting hair / ember veins / gill-slits)
+• Gnome = KNEE-HIGH (barely 3ft) + oversized head + long crooked nose + big pointed ears + leathery skin + wild colorful hair — NOT a petite human
+• Tabaxi = full feline fur + markings + cat muzzle + whiskers + slit-pupil eyes + tail
+• Wood / High Elf = pointed ears + the race's eye/skin + ageless sharp features
+• Firbolg = blue-grey skin + long pointed ears + broad bovine nose + towering
+• Goliath = 8-foot ash-grey stone-textured skin + glowing clan-markings
+• Shadar-kai = bone-pale ashen gaunt skin + silver pupil-less eyes
+• Halfling = CHILD-HEIGHT + round face + curly hair + big bare feet — NOT a small human adult
 
 The character is the visual hook at 25-35% of frame, off-center.
 
@@ -1868,7 +1868,8 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   ARCANE_LIBRARY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, library, arcane_detail, library_feature, occupant, drama } = slots;
+    const { lighting, atmosphere, library, arcane_detail, library_feature, occupant, drama } =
+      slots;
 
     const dramaSection = drama
       ? `
@@ -1929,7 +1930,15 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
   SKY_CASTLE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, sky_structure, structure_detail, sky_setting, scale_prover, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      sky_structure,
+      structure_detail,
+      sky_setting,
+      scale_prover,
+      drama,
+    } = slots;
 
     const dramaSection = drama
       ? `
@@ -2173,7 +2182,15 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
   NECROMANCER: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, undead_subject, dark_setting, necro_magic, undead_detail, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      undead_subject,
+      dark_setting,
+      necro_magic,
+      undead_detail,
+      drama,
+    } = slots;
 
     const dramaSection = drama
       ? `
@@ -2419,7 +2436,8 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
   CLASH_OF_ARMIES: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, armies, battle_action, battlefield, war_spectacle, drama } = slots;
+    const { lighting, atmosphere, armies, battle_action, battlefield, war_spectacle, drama } =
+      slots;
 
     const dramaSection = drama
       ? `
@@ -2552,7 +2570,8 @@ Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO p
   },
 
   DRAGON_BROOD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, brood_subject, setting, dominant_dragon, brood_activity, drama } = slots;
+    const { lighting, atmosphere, brood_subject, setting, dominant_dragon, brood_activity, drama } =
+      slots;
 
     const dramaSection = drama
       ? `

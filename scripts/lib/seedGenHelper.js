@@ -30,6 +30,14 @@ const fs = require('fs');
 const path = require('path');
 const { SONNET } = require('./models');
 
+// Tokens that make Flux render a generic modern HUMAN instead of the fantasy
+// race (age framing + man/woman/male/female nouns). Pools passing
+// `banHumanLanguage: true` reject any generated entry containing these. Bare
+// "human" does NOT match (no \bman\b boundary inside it) so humans-as-a-race
+// stay allowed. Mirrors the same guard in gen-dragonbot-pool.js.
+const HUMAN_LANGUAGE_RE =
+  /\b(teens?|teenaged?|twenties|thirties|forties|fifties|sixties|seventies|eighties|nineties|year-old|years?\s+old|middle-aged|middle\s+aged|elderly|man|woman|men|women|male|female|boy|girl|lady|ladies|gentleman|gentlemen|person|people|husband|wife)\b/i;
+
 // ─────────────────────────────────────────────────────────────
 // Dedup helpers — playbook line 333-349 (2026-06-05)
 // ─────────────────────────────────────────────────────────────
@@ -38,14 +46,76 @@ const { SONNET } = require('./models');
 // Stripped before signature hashing so two entries differing only in filler
 // words collapse to the same signature.
 const STOPWORDS = new Set([
-  'the', 'and', 'with', 'from', 'into', 'onto', 'over', 'under', 'above',
-  'their', 'them', 'they', 'this', 'that', 'these', 'those', 'a', 'an',
-  'of', 'in', 'on', 'at', 'to', 'for', 'is', 'are', 'was', 'were', 'be',
-  'been', 'being', 'as', 'it', 'its', 'has', 'have', 'had', 'his', 'her',
-  'she', 'he', 'him', 'one', 'two', 'three', 'across', 'beside', 'before',
-  'after', 'while', 'mid', 'tiny', 'small', 'large', 'huge', 'soft', 'slow',
-  'still', 'just', 'around', 'beyond', 'between', 'against', 'through',
-  'render', 'rendered', 'painted', 'wrapped', 'curled', 'piled',
+  'the',
+  'and',
+  'with',
+  'from',
+  'into',
+  'onto',
+  'over',
+  'under',
+  'above',
+  'their',
+  'them',
+  'they',
+  'this',
+  'that',
+  'these',
+  'those',
+  'a',
+  'an',
+  'of',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'as',
+  'it',
+  'its',
+  'has',
+  'have',
+  'had',
+  'his',
+  'her',
+  'she',
+  'he',
+  'him',
+  'one',
+  'two',
+  'three',
+  'across',
+  'beside',
+  'before',
+  'after',
+  'while',
+  'mid',
+  'tiny',
+  'small',
+  'large',
+  'huge',
+  'soft',
+  'slow',
+  'still',
+  'just',
+  'around',
+  'beyond',
+  'between',
+  'against',
+  'through',
+  'render',
+  'rendered',
+  'painted',
+  'wrapped',
+  'curled',
+  'piled',
 ]);
 
 // Normalize an entry for exact-match dedup.
@@ -96,7 +166,9 @@ async function callWithRetry(body, anthropicKey) {
       // Retry like a 5xx — Anthropic's streaming-long-response endpoint can
       // hiccup on very large outputs.
       if (i < delays.length) {
-        console.log(`  ⏳ fetch error (${err.message}) — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`);
+        console.log(
+          `  ⏳ fetch error (${err.message}) — retry ${i + 1}/${delays.length} in ${delays[i] / 1000}s`
+        );
         await new Promise((r) => setTimeout(r, delays[i]));
         continue;
       }
@@ -140,6 +212,7 @@ async function generatePool({
   maxTokens = 8000,
   model = SONNET,
   append = false,
+  banHumanLanguage = false,
 }) {
   const ENV = loadEnv();
   const anthropicKey = process.env.ANTHROPIC_API_KEY || ENV.ANTHROPIC_API_KEY;
@@ -160,7 +233,9 @@ async function generatePool({
       all.push(...existing);
       console.log(`📂 Append mode: loaded ${existing.length} existing entries from ${outPath}`);
     } catch (err) {
-      console.warn(`⚠ Append mode: could not read existing ${outPath} (${err.code}); starting fresh`);
+      console.warn(
+        `⚠ Append mode: could not read existing ${outPath} (${err.code}); starting fresh`
+      );
     }
   }
   if (all.length >= total) {
@@ -187,9 +262,10 @@ async function generatePool({
     const base = metaPrompt(overgenSize);
     let newEntries = null;
     for (let parseAttempt = 0; parseAttempt < 3 && !newEntries; parseAttempt++) {
-      const strictNote = parseAttempt > 0
-        ? '\n\n━━━ CRITICAL: OUTPUT A VALID JSON ARRAY ONLY — no preamble, no explanation after, no unescaped quotes inside entries ━━━'
-        : '';
+      const strictNote =
+        parseAttempt > 0
+          ? '\n\n━━━ CRITICAL: OUTPUT A VALID JSON ARRAY ONLY — no preamble, no explanation after, no unescaped quotes inside entries ━━━'
+          : '';
       const data = await callWithRetry(
         {
           model,
@@ -205,12 +281,17 @@ async function generatePool({
         try {
           newEntries = JSON.parse(match[0]);
         } catch (err) {
-          console.warn(`  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)})`);
+          console.warn(
+            `  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: JSON.parse failed (${err.message.slice(0, 80)})`
+          );
         }
       }
       // Fallback: numbered-list parse
       if (!newEntries) {
-        const body = raw.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+        const body = raw
+          .replace(/```[a-z]*\n?/gi, '')
+          .replace(/```/g, '')
+          .trim();
         const lines = body.split('\n');
         const entries = [];
         let current = null;
@@ -225,12 +306,19 @@ async function generatePool({
         }
         if (current) entries.push(current.trim());
         const cleaned = entries
-          .map((e) => e.replace(/^["']|["']$/g, '').replace(/^[-•*]\s*/, '').trim())
+          .map((e) =>
+            e
+              .replace(/^["']|["']$/g, '')
+              .replace(/^[-•*]\s*/, '')
+              .trim()
+          )
           .filter((e) => e.length > 10);
         if (cleaned.length > 0) {
           newEntries = cleaned;
         } else {
-          console.warn(`  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: neither JSON nor numbered-list parsed, retrying...`);
+          console.warn(
+            `  ⚠ iter ${iteration} attempt ${parseAttempt + 1}: neither JSON nor numbered-list parsed, retrying...`
+          );
         }
       }
     }
@@ -246,10 +334,24 @@ async function generatePool({
         if (Array.isArray(e.tags) && e.tags.length > 0 && typeof e.description === 'string') {
           return e;
         }
-        return e.description || e.text || e.composition || e.entry || e.content || JSON.stringify(e);
+        return (
+          e.description || e.text || e.composition || e.entry || e.content || JSON.stringify(e)
+        );
       }
       return String(e);
     });
+    // Human-language gate — reject entries with age/man/woman framing that make
+    // Flux render a generic modern human instead of the fantasy race.
+    if (banHumanLanguage) {
+      const before = newEntries.length;
+      newEntries = newEntries.filter((e) => {
+        const text = typeof e === 'string' ? e : e.description || '';
+        return !HUMAN_LANGUAGE_RE.test(text);
+      });
+      const dropped = before - newEntries.length;
+      if (dropped > 0)
+        console.log(`  • human-language filter rejected ${dropped} (age / man-woman)`);
+    }
     // Programmatic dedup (2026-06-05 per playbook line 333-349):
     //   (a) exact-string drop against running pool (case-insensitive trim)
     //   (b) signature-hash drop against running pool (first 12 non-stopword
@@ -293,10 +395,13 @@ async function generatePool({
     if (all.length + newEntries.length > total) {
       newEntries = newEntries.slice(0, total - all.length);
     }
-    const dropMsg = droppedExact.length + droppedSig.length > 0
-      ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig)`
-      : '';
-    console.log(`  ✓ iter ${iteration}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`);
+    const dropMsg =
+      droppedExact.length + droppedSig.length > 0
+        ? ` (dedup: -${droppedExact.length} exact, -${droppedSig.length} sig)`
+        : '';
+    console.log(
+      `  ✓ iter ${iteration}: +${newEntries.length}${dropMsg} (total: ${all.length + newEntries.length}/${total})`
+    );
     all.push(...newEntries);
     // Semantic-ceiling stop — if Sonnet produces 0 new uniques twice in a
     // row, the recipe has exhausted its variety. Stop fighting it (playbook
@@ -304,7 +409,9 @@ async function generatePool({
     if (newEntries.length === 0) {
       consecutiveEmpty++;
       if (consecutiveEmpty >= 2) {
-        console.log(`  ⚠ Semantic ceiling reached — ${consecutiveEmpty} consecutive empty iterations, stopping at ${all.length}/${total}`);
+        console.log(
+          `  ⚠ Semantic ceiling reached — ${consecutiveEmpty} consecutive empty iterations, stopping at ${all.length}/${total}`
+        );
         break;
       }
     } else {
@@ -318,9 +425,13 @@ async function generatePool({
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(all, null, 2));
   console.log(`\n✅ Saved ${all.length} entries to ${outPath}\n`);
-  all.slice(0, 4).forEach((s, i) =>
-    console.log(`#${i + 1}: ${typeof s === 'string' ? s.slice(0, 140) : JSON.stringify(s).slice(0, 140)}`)
-  );
+  all
+    .slice(0, 4)
+    .forEach((s, i) =>
+      console.log(
+        `#${i + 1}: ${typeof s === 'string' ? s.slice(0, 140) : JSON.stringify(s).slice(0, 140)}`
+      )
+    );
   console.log(`... (${all.length - 4} more)`);
   return all;
 }

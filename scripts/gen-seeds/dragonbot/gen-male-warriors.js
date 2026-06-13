@@ -4,48 +4,46 @@ generatePool({
   outPath: 'scripts/bots/dragonbot/seeds/male_warriors.json',
   total: 200,
   batch: 50,
+  banHumanLanguage: true,
   metaPrompt: (
     n
-  ) => `You are writing ${n} descriptions of EPIC MALE fantasy warriors for DragonBot. Each is a powerful, awe-inspiring MAN in ornate battle gear. 25-40 words. Start every entry with "A powerful male" or "A massive male" or "A rugged male" — the image model MUST know he is a man.
+  ) => `You are writing ${n} descriptions of EPIC fantasy WARRIORS for DragonBot — masculine, powerful, awe-inspiring war-heroes in ornate battle gear. 25-40 words each.
 
-━━━ WHO THESE MEN ARE ━━━
-These are the most badass, awe-inspiring warrior men in all of high fantasy. When you see one, you think "holy fuck" — not just because he's dangerous, but because he radiates raw power, battle-forged authority, and legendary presence. He looks like he's conquered kingdoms and walked through hellfire to get here.
+⚠️ RACE + ANATOMY FIRST. Open EACH entry with the fantasy RACE and 2-3 of that race's UNMISTAKABLE features (skin/scale/fur + tusks/horns/ears + build), so the image model renders the SPECIES, not a generic human. For a human warrior, give richly specific fantasy detail.
 
-Think: Aragorn at the Black Gate, Geralt of Rivia, Kratos, the Mountain, a Warhammer Space Marine but medieval. Gritty, ornate, breathtaking.
+⛔ BANNED LANGUAGE (it makes the model render a generic modern human):
+• NO age words/numbers (no "twenties/thirties/elderly/young/ancient/X-year-old"). Show seniority through grey-streaked beard, scars, weathered skin.
+• NO "man / male / woman / female / boy / girl / person." Keep him unmistakably MASCULINE through BUILD (broad shoulders, barrel chest, heavy muscle), BEARD/jaw, war-braids, and the pronoun "he / his" — never the word "male" or "man".
+• NO real-world nationality/ethnicity (no "Northern / desert / East-Asian / Mediterranean / Nordic"). Vary skin in the fantasy world's own palette: ebony, bronze, umber, olive, ash-grey, obsidian, crimson, scaled, iron-grey.
 
 ━━━ WHAT MAKES THEM EPIC ━━━
-- ORNATE battle gear — intricate plate armor with engravings, gilded war-pauldrons, masterwork chainmail, elaborate weapon harnesses, enchanted bracers with runic inlays, battle-cloaks clasped with gem-studded brooches, layered armor showing wealth and rank
-- Faces that tell a STORY — battle scars, broken noses healed wrong, ritual tattoos, war paint, weathered skin, piercing intense eyes, strong jawlines, braided beards with metal rings
-- Hair that says WARRIOR — war-braids with metal clasps, shaved with tattoos, wild manes streaked with grey, mohawks, long and battle-matted, cropped military with scars showing through
-- Powerful masculine bodies — massive arms, broad shoulders, battle-hardened physiques under ornate armor
-- Presence and authority — he doesn't need to prove anything, the scars and gear speak for themselves
+- ORNATE battle gear — intricate engraved plate, gilded war-pauldrons, masterwork chainmail, runic-inlay bracers, gem-clasped battle-cloaks, layered armor showing rank
+- Faces that tell a STORY — battle scars, broken-and-healed noses, ritual tattoos, war paint, piercing intense eyes, strong jaw, braided beards with metal rings
+- WARRIOR hair — war-braids with metal clasps, shaved-with-tattoos, wild grey-streaked manes, long battle-matted, cropped with scars showing through
+- Powerful masculine build — massive arms, broad shoulders, battle-hardened physique under ornate armor
+- Presence and authority — the scars and gear speak for themselves; "holy fuck" energy
 
-━━━ ARMOR & OUTFIT ORNAMENT LEVEL ━━━
-These outfits should look like they were forged by LEGENDARY smiths. Intricate metalwork, runic engravings, gemstone accents, layered textures (plate + chain + leather + fur + cloak). Battle-worn but clearly MASTERWORK — dented but magnificent, scratched but priceless. NOT generic steel and leather — these are king-slayer-tier war gear.
+━━━ ARMOR ORNAMENT LEVEL ━━━
+Forged by LEGENDARY smiths — intricate metalwork, runic engravings, gemstone accents, layered textures (plate + chain + leather + fur + cloak). Battle-worn but clearly MASTERWORK. NOT generic steel-and-leather.
 
 ━━━ RACE DIVERSITY (spread across all ${n}) ━━━
-- Human (varied ethnicities — dark-skinned warlords, pale Northern berserkers, bronze desert warriors, East Asian-inspired swordmasters, Mediterranean paladins)
-- Elf (tall, angular, ancient eyes, lean but deadly, ageless elegance with lethal edge)
-- Drow/Dark Elf (obsidian or ash-grey skin, white/silver hair, predatory dangerous grace)
-- Dwarf (compact, massively muscled, ornate braided beards with metal and gems, stocky power)
-- Half-Orc (hulking, tusked, green/grey skin, brutal intelligence, terrifying presence)
-- Tiefling (horns, crimson/purple/blue skin, infernal menace, otherworldly intensity)
-- Dragonborn (scaled, draconic, commanding, terrifying in an alien powerful way)
+- Human (richly specific fantasy look, varied fantasy-palette skin — NO real-world nationality)
+- Elf (tall, angular, pointed ears, luminous eyes, lean but deadly, ageless lethal edge)
+- Drow / Dark Elf (obsidian or ash-grey skin, white-silver hair, predatory grace)
+- Dwarf (compact, massively muscled, ornate braided beards with metal and gems)
+- Half-Orc / Orc (hulking, jutting tusks, green-grey skin, heavy brow, brutal presence)
+- Tiefling (curling horns, crimson/violet/blue skin, pointed tail, infernal menace)
+- Dragonborn (full scaled draconic head, reptilian snout, clawed, alien power)
+- Goliath / Firbolg / Shadar-kai (stone-grey, towering, ashen — vary it)
 
 ━━━ DEDUP: APPEARANCE ━━━
-No two characters should share race + build + hair style. Vary broadly:
-- SKIN: ebony, bronze, porcelain, olive, ash-grey, obsidian, crimson, emerald-scaled, iron-grey
-- HAIR: shaved with tattoos, wild black mane, braided grey war-knots, copper mohawk, silver streaked, bald scarred, auburn warrior-braids with iron rings
-- EYES: steel-grey, amber, ice-blue, molten gold, dark brown, heterochromia, blood-red, emerald
-- FEATURES: scar across eye, broken nose, ritual face tattoos, war paint, braided beard with rings, missing ear, branded cheek, pierced brow
-- ARMOR STYLE: ornate plate with filigree, runed chainmail over leather, fur-collared war-plate, dark assassin leather with silver, gilded paladin armor, dragon-bone pauldrons, enchanted battle-robes
-- WEAPONS: enchanted greatsword, massive war hammer, dual battle-axes, runed halberd, flame-wreathed blade, crystalline mace, ancient spear
+No two share race + build + hair. Vary SKIN (ebony / bronze / porcelain / olive / ash-grey / obsidian / crimson / emerald-scaled / iron-grey), HAIR (shaved-tattooed / wild mane / braided war-knots / mohawk / silver-streaked / bald-scarred), EYES (steel-grey / amber / ice-blue / molten-gold / blood-red / emerald), FEATURES (scar across eye / broken nose / face tattoos / war paint / ringed beard / branded cheek), ARMOR (filigree plate / runed chainmail / fur-collared war-plate / dark assassin leather / gilded paladin / dragon-bone pauldrons), WEAPONS (greatsword / war hammer / dual axes / runed halberd / flame-blade / mace / spear).
 
 ━━━ RULES ━━━
-- EVERY entry MUST start with "A powerful male..." or "A massive male..." or "A rugged male..." — MANDATORY for the image model
+- Open with the RACE + its anatomy (see RACE-FIRST rule above)
 - Describe the CHARACTER only — no setting, no pose, no action (separate pools)
 - Each is a unique individual you could recognize in a lineup
-- Badass, ornate, awe-inspiring — "holy fuck" energy in every description
+- Badass, ornate, awe-inspiring; clearly masculine via build + beard + "he"; no banned words
 - No named IP characters
 
 ━━━ OUTPUT ━━━
