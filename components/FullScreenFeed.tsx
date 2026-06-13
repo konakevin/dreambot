@@ -8,8 +8,7 @@
 
 import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { Dimensions, RefreshControl, InteractionManager, AppState } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { Dimensions, InteractionManager, AppState, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
@@ -29,6 +28,7 @@ import { useDeletePost } from '@/hooks/useDeletePost';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
 import { LikesSheet } from '@/components/LikesSheet';
+import { VerticalPager, type VerticalPagerHandle } from '@/components/VerticalPager';
 import { colors } from '@/constants/theme';
 
 const FALLBACK_HEIGHT = Dimensions.get('window').height;
@@ -36,23 +36,16 @@ const FALLBACK_HEIGHT = Dimensions.get('window').height;
 interface Props {
   posts: DreamPostItem[];
   isLoading?: boolean;
-  /**
-   * Pull-to-refresh handler. The spinner is owned internally and only shows
-   * while the user-initiated pull resolves — programmatic refetches (e.g.,
-   * from AppState resume invalidation) never trigger the spinner. Decoupling
-   * RefreshControl from `isRefetching` is what fixes the post-background
-   * "scrolled down ~60px until tap" bug: iOS only auto-resets contentOffset
-   * after a gesture-driven refresh, so flipping `refreshing` programmatically
-   * left the contentInset shift in place.
-   */
+  /** Pull-down-at-top to refresh. The pager owns the spinner; this just runs
+   *  the refetch (and jumps to the top once it lands). */
   onRefresh?: () => void | Promise<unknown>;
   onEndReached?: () => void;
   /** Index to scroll to on mount (for album deep links) */
   initialIndex?: number;
   /** Called when the visible card changes */
   onIndexChange?: (index: number) => void;
-  /** Ref to control the FlatList externally */
-  listRef?: React.RefObject<FlatList>;
+  /** Imperative handle to control the pager externally (scrollToIndex/Offset). */
+  listRef?: React.RefObject<VerticalPagerHandle | null>;
   /** Content rendered above the feed (absolute positioned overlays go in parent) */
   ListEmptyComponent?: React.ReactElement;
   /** Disable swipe-left-to-profile on cards (for album/detail views) */
@@ -198,24 +191,28 @@ export function FullScreenFeed({
   showBottomScrim,
 }: Props) {
   const insets = useSafeAreaInsets();
-  const internalRef = useRef<FlatList>(null);
-  const ref = listRef ?? internalRef;
+  const internalPagerRef = useRef<VerticalPagerHandle>(null);
+  const pagerRef = listRef ?? internalPagerRef;
+
+  // Imperative scroll helpers used by the re-snap (focus/resume) + tap-to-top effects.
+  const scrollToIndexImpl = useCallback((index: number, animated: boolean) => {
+    pagerRef.current?.scrollToIndex(index, animated);
+  }, []);
+  const scrollToTopImpl = useCallback((animated: boolean) => {
+    pagerRef.current?.scrollToOffset(0, animated);
+  }, []);
   // Seed with initialIndex so the post-interaction re-snap below doesn't yank
-  // to index 0 on first mount when image-cache cold delays onViewableItemsChanged
-  // past the navigation transition. Bug: tapping a non-first album tile loaded
-  // the latest post on the first navigation; subsequent navigations worked because
-  // image cache was warm and the viewability event fired in time.
+  // to index 0 on first mount before the pager reports its first active index.
   const currentIndex = useRef(initialIndex);
   const impressionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recordedImpressions = useRef<Set<string>>(new Set());
   const isFocused = useIsFocused();
 
-  // Id of the currently-viewable card. Passed down so each card knows if it's
+  // Id of the currently-active card. Passed down so each card knows if it's
   // active (item.id === activeId) and resets its HUD when it becomes active —
-  // including when FlatList recycles a previously-tapped instance back into
-  // view. A per-card boolean (vs the old global token) means a swipe only
-  // re-renders the two cards involved (outgoing + incoming), not every
-  // windowed card. (Perf fix 2026-05-25.)
+  // including when the pager re-mounts a card back into its window. A per-card
+  // boolean (vs the old global token) means a swipe only re-renders the two
+  // cards involved (outgoing + incoming), not every windowed card.
   const [activeId, setActiveId] = useState<string | null>(null);
 
   // Measure the actual container height — this is the true page size
@@ -224,9 +221,8 @@ export function FullScreenFeed({
 
   const handleLayout = useCallback(
     (e: { nativeEvent: { layout: { height: number } } }) => {
-      // Round: pageHeight is the snapToInterval, and fractional intervals
-      // accumulate snap drift across pages (unlike pagingEnabled, which
-      // snaps to view bounds).
+      // Round: pageHeight is the per-page size the pager positions cards by;
+      // fractional values would accumulate drift across pages.
       const h = Math.round(e.nativeEvent.layout.height);
       if (h > 0 && Math.abs(h - containerHeight) > 1) {
         setContainerHeight(h);
@@ -235,21 +231,14 @@ export function FullScreenFeed({
     [containerHeight]
   );
 
-  // Re-snap scroll position when posts change (delete, refetch) or screen regains focus.
-  // Uses scrollToIndex (which calls getItemLayout for the exact offset) instead of manual
-  // offset math. Waits for InteractionManager so the navigation transition and onLayout
-  // have both completed — otherwise pageHeight may be stale and the card shows ~100px off.
+  // Re-snap scroll position when posts SHRINK (delete, refetch) or screen regains
+  // focus. Waits for InteractionManager so the navigation transition + onLayout
+  // have both completed — otherwise pageHeight may be stale and the card shows off.
   //
-  // CRITICAL: skip the re-snap on pure pagination grow. FlatList already preserves
-  // visible position when items are appended at the end; calling scrollToIndex during
-  // a fetchNextPage append fires AFTER the user's swipe via runAfterInteractions and
-  // snaps to a stale currentIndex.current (onViewableItemsChanged hadn't fired yet),
-  // visually "popping" the view mid-swipe. This regression surfaced after commit
-  // 8f77f7b0 ("Fix premature feed stalls") made pagination actually advance —
-  // before that fix, fetchNextPage usually stalled so posts.length didn't change
-  // and this effect didn't fire. Same family as the May 2026 af4cb949 fix:
-  // render-side reordering / re-snap that fires on data-grow when it should only
-  // fire on data-shrink or focus.
+  // CRITICAL: skip the re-snap on pure pagination GROW. The pager already holds
+  // its position when items are appended at the end; re-snapping on a
+  // fetchNextPage append would "pop" the view mid-swipe. So fire only on shrink
+  // or focus, never on data-grow.
   const prevLength = useRef(posts.length);
   useEffect(() => {
     if (!isFocused || posts.length === 0) {
@@ -262,16 +251,16 @@ export function FullScreenFeed({
     const handle = InteractionManager.runAfterInteractions(() => {
       const idx = currentIndex.current;
       if (idx >= 0 && idx < posts.length) {
-        ref.current?.scrollToIndex({ index: idx, animated: false });
+        scrollToIndexImpl(idx, false);
       }
     });
     return () => handle.cancel();
-  }, [isFocused, posts.length, pageHeight, ref]);
+  }, [isFocused, posts.length, pageHeight, scrollToIndexImpl]);
 
   // Also re-snap when the APP returns from background. useIsFocused only tracks
   // navigation-stack focus, not app foreground/background — so on minimize+reopen,
   // isFocused doesn't change but the layout often shifts (safe-area inset recalc,
-  // status bar visibility, etc.) and the FlatList ends up off by ~50-100px. The
+  // status bar visibility, etc.) and the feed ends up off by ~50-100px. The
   // user sees the post shifted down until they tap something that triggers a
   // navigation event. AppState listener catches the resume and re-snaps.
   useEffect(() => {
@@ -280,13 +269,13 @@ export function FullScreenFeed({
         InteractionManager.runAfterInteractions(() => {
           const idx = currentIndex.current;
           if (idx >= 0 && idx < posts.length) {
-            ref.current?.scrollToIndex({ index: idx, animated: false });
+            scrollToIndexImpl(idx, false);
           }
         });
       }
     });
     return () => sub.remove();
-  }, [posts.length, ref]);
+  }, [posts.length, scrollToIndexImpl]);
 
   // Clean up impression timer on unmount
   useEffect(() => {
@@ -305,25 +294,16 @@ export function FullScreenFeed({
       return;
     }
     currentIndex.current = 0;
-    ref.current?.scrollToOffset({ offset: 0, animated: true });
-  }, [scrollToTopToken, ref]);
+    scrollToTopImpl(true);
+  }, [scrollToTopToken, scrollToTopImpl]);
 
-  // Spinner state owned here, not driven from parent's `isRefetching`. iOS only
-  // auto-resets contentOffset after a gesture-driven RefreshControl cycle —
-  // flipping `refreshing` programmatically (e.g., from AppState resume
-  // invalidation) leaves the contentInset shift in place, which is the
-  // post-background "scrolled down ~60px until tap" bug.
-  const [isPulling, setIsPulling] = useState(false);
+  // Pull-to-refresh: the pager owns the spinner, so we just run the refetch
+  // and jump back to the top once it lands.
   const handleRefresh = useCallback(async () => {
     if (!onRefreshProp) return;
-    setIsPulling(true);
-    try {
-      await onRefreshProp();
-    } finally {
-      setIsPulling(false);
-    }
-    setTimeout(() => ref.current?.scrollToOffset({ offset: 0, animated: true }), 300);
-  }, [onRefreshProp, ref]);
+    await onRefreshProp();
+    setTimeout(() => scrollToTopImpl(true), 300);
+  }, [onRefreshProp, scrollToTopImpl]);
 
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin);
@@ -355,12 +335,11 @@ export function FullScreenFeed({
     [deletePost, posts.length]
   );
 
-  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-
-  const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: { index: number | null }[] }) => {
-      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-        const idx = viewableItems[0].index;
+  // Shared "a new card became active" logic, called by the VerticalPager's
+  // onActiveIndexChange.
+  const handleActiveIndex = useCallback(
+    (idx: number) => {
+      {
         currentIndex.current = idx;
         onIndexChange?.(idx);
         // Reset HUD to visible when scrolling to a new card
@@ -463,51 +442,21 @@ export function FullScreenFeed({
 
   return (
     <>
-      <FlatList
-        ref={ref}
-        data={posts}
-        keyExtractor={(item) => item.id}
-        onLayout={handleLayout}
-        // snapToInterval instead of pagingEnabled: iOS runs the pagingEnabled
-        // settle as a special deceleration that IGNORES new touches until it
-        // finishes — rapid successive swipes go dead mid-snap (the "clunky"
-        // feel). snapToInterval snaps via normal, catchable deceleration, so
-        // a new touch can interrupt the snap and fling again immediately.
-        // disableIntervalMomentum keeps it to one card per fling. 2026-06-12.
-        snapToInterval={pageHeight}
-        snapToAlignment="start"
-        disableIntervalMomentum
-        showsVerticalScrollIndicator={false}
-        decelerationRate="fast"
-        windowSize={7}
-        maxToRenderPerBatch={5}
-        initialNumToRender={3}
-        // removeClippedSubviews was set to true on 2026-04-08 but aggressive
-        // cell recycling caused the "duplicate post every ~10 scrolls" visual
-        // glitch. Flipping back to false. If the feed starts flickering again
-        // in-practice, re-enable and investigate the underlying issue instead.
-        removeClippedSubviews={false}
-        initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
-        getItemLayout={(_, index) => ({
-          length: pageHeight,
-          offset: pageHeight * index,
-          index,
-        })}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={2}
-        refreshControl={
-          onRefreshProp ? (
-            <RefreshControl
-              refreshing={isPulling}
-              onRefresh={handleRefresh}
-              tintColor={colors.textPrimary}
-            />
-          ) : undefined
-        }
-        renderItem={renderItem}
-      />
+      <View style={{ flex: 1 }} onLayout={handleLayout}>
+        <VerticalPager
+          ref={pagerRef}
+          data={posts}
+          keyExtractor={(item) => item.id}
+          pageHeight={pageHeight}
+          initialIndex={initialIndex}
+          renderItem={renderItem}
+          onActiveIndexChange={handleActiveIndex}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={2}
+          onRefresh={onRefreshProp ? handleRefresh : undefined}
+          refreshTint={colors.textPrimary}
+        />
+      </View>
       {commentPost && (
         <CommentOverlay
           post={commentPost}

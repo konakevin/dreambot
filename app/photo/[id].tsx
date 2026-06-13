@@ -1,8 +1,9 @@
 import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { FlatList } from 'react-native-gesture-handler';
+import { GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -144,6 +145,11 @@ export default function PhotoDetailScreen() {
     }
   }, [isAlbum, sourceQuery, contextQuery]);
 
+  // Axis-lock back-swipe (locks to vertical the instant you swipe up, so the
+  // album scroll is free and an up-swipe never boots back). Native gesture is
+  // disabled for this route in app/_layout.tsx.
+  const { gesture: backGesture, animatedStyle: backStyle } = useAxisLockSwipeBack();
+
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
     opacity: overlayOpacity.value,
@@ -172,8 +178,6 @@ export default function PhotoDetailScreen() {
     const idx = posts.findIndex((p) => p.id === id);
     return idx >= 0 ? idx : 0;
   }, [posts, id]);
-
-  const photoListRef = useRef<FlatList | null>(null);
 
   const handleTogglePosted = useCallback(
     async (postId: string) => {
@@ -260,13 +264,34 @@ export default function PhotoDetailScreen() {
     [user, posts, queryClient, albumIds, id]
   );
 
-  // Swipe-right-to-back handled by React Navigation's native gesture
-  // (fullScreenGestureEnabled: true in SCREEN_PRESETS.MODAL_SWIPEABLE).
-  // No custom GestureDetector needed — native gesture coordinates with
-  // FlatList scroll automatically.
   if (targetUnavailable) {
     return (
-      <View style={s.root}>
+      <GestureDetector gesture={backGesture}>
+        <Animated.View style={[s.root, backStyle]}>
+          <StatusBar hidden />
+          <Animated.View style={[s.backButton, overlayStyle]}>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+              <View style={s.backCircle}>
+                <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+          <View style={s.unavailable}>
+            <Ionicons name="lock-closed" size={40} color="#9CA3AF" />
+            <Text style={s.unavailableTitle}>Post unavailable</Text>
+            <Text style={s.unavailableBody}>This dream is private or no longer available.</Text>
+            <TouchableOpacity style={s.unavailableBtn} onPress={() => router.back()}>
+              <Text style={s.unavailableBtnText}>Go back</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </GestureDetector>
+    );
+  }
+
+  return (
+    <GestureDetector gesture={backGesture}>
+      <Animated.View style={[s.root, backStyle]}>
         <StatusBar hidden />
         <Animated.View style={[s.backButton, overlayStyle]}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
@@ -275,45 +300,23 @@ export default function PhotoDetailScreen() {
             </View>
           </TouchableOpacity>
         </Animated.View>
-        <View style={s.unavailable}>
-          <Ionicons name="lock-closed" size={40} color="#9CA3AF" />
-          <Text style={s.unavailableTitle}>Post unavailable</Text>
-          <Text style={s.unavailableBody}>This dream is private or no longer available.</Text>
-          <TouchableOpacity style={s.unavailableBtn} onPress={() => router.back()}>
-            <Text style={s.unavailableBtnText}>Go back</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
 
-  return (
-    <View style={s.root}>
-      <StatusBar hidden />
-      <Animated.View style={[s.backButton, overlayStyle]}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <View style={s.backCircle}>
-            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-          </View>
-        </TouchableOpacity>
+        <FullScreenFeed
+          posts={posts}
+          isLoading={isLoading}
+          onRefresh={() => refetch()}
+          initialIndex={initialIndex}
+          onIndexChange={handleIndexChange}
+          disableSwipeToProfile
+          hideTabBar
+          showVisibilityToggle
+          showBottomScrim
+          onTogglePosted={handleTogglePosted}
+          onHudToggle={handleHudToggle}
+          onEndReached={handleEndReached}
+        />
       </Animated.View>
-
-      <FullScreenFeed
-        posts={posts}
-        isLoading={isLoading}
-        onRefresh={() => refetch()}
-        initialIndex={initialIndex}
-        onIndexChange={handleIndexChange}
-        listRef={photoListRef as React.RefObject<FlatList>}
-        disableSwipeToProfile
-        hideTabBar
-        showVisibilityToggle
-        showBottomScrim
-        onTogglePosted={handleTogglePosted}
-        onHudToggle={handleHudToggle}
-        onEndReached={handleEndReached}
-      />
-    </View>
+    </GestureDetector>
   );
 }
 

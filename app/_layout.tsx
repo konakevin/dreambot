@@ -475,10 +475,25 @@ function RootLayout() {
                   <Stack.Screen name="(auth)" />
                   <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                   <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  {/* photo/[id] album uses the custom pager + useAxisLockSwipeBack
+                      (locks to vertical on scroll). Native full-screen back is off
+                      so it can't fight the pager / boot back on an up-swipe. */}
+                  <Stack.Screen
+                    name="photo/[id]"
+                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, gestureEnabled: false }}
+                  />
+                  {/* user/[userId] is a full-screen posts GRID. The native
+                      full-screen back gesture fought the grid scroll (locked it +
+                      booted back on up-swipes), so it's disabled here; the screen
+                      uses useAxisLockSwipeBack instead, which locks to vertical the
+                      moment you scroll. 2026-06-12. */}
                   <Stack.Screen
                     name="user/[userId]"
-                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
+                    options={{
+                      ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                      animation: 'simple_push',
+                      gestureEnabled: false,
+                    }}
                   />
                   <Stack.Screen
                     name="sharePost"

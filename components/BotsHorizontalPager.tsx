@@ -132,7 +132,7 @@ export function BotsHorizontalPager({
   // be cleared on tab blur via useFocusEffect — leaving + returning to
   // the Bots tab resets every bot to index 0. Within a single tab visit,
   // swiping between bots preserves each bot's last visible CARD INDEX
-  // (FullScreenFeed is paging-enabled, 1 card per screen).
+  // (FullScreenFeed shows one card per screen).
   const keyForBot = (botId: string | null) => botId ?? '__all__';
 
   const renderItem = useCallback(

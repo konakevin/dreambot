@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo, useDeferredValue } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import type { VerticalPagerHandle } from '@/components/VerticalPager';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -208,7 +208,7 @@ export default function HomeScreen() {
       return true;
     });
   }, [data]);
-  const listRef = useRef<FlatList>(null) as React.RefObject<FlatList>;
+  const listRef = useRef<VerticalPagerHandle>(null);
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
     opacity: overlayOpacity.value,
@@ -251,13 +251,13 @@ export default function HomeScreen() {
   // Scroll to top when a pinned post appears
   useEffect(() => {
     if (pinnedPost) {
-      setTimeout(() => listRef.current?.scrollToOffset({ offset: 0, animated: false }), 100);
+      setTimeout(() => listRef.current?.scrollToOffset(0, false), 100);
     }
   }, [pinnedPost]);
 
   function handleTabChange(tab: FeedTab) {
     setActiveTab(tab);
-    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    listRef.current?.scrollToOffset(0, false);
     if (pinnedPost) setPinnedPost(null);
   }
 
