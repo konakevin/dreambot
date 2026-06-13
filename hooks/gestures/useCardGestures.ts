@@ -40,13 +40,12 @@ import { useWindowDimensions } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import { useAnimatedStyle, useSharedValue, withTiming, runOnJS } from 'react-native-reanimated';
 import {
+  ACTIVE_OFFSET,
+  FAIL_OFFSET,
   PINCH_MAX_SCALE,
   PINCH_MIN_SCALE,
   PINCH_RESET_DURATION,
-  SWIPE_DOMINANCE_RATIO,
-  SWIPE_MIN_ACTIVATION,
 } from '@/constants/gestures';
-import { horizontalSwipeDecision } from '@/hooks/gestures/horizontalSwipeDecision';
 
 export interface UseCardGesturesOptions {
   /** Called when user swipes left past the activation threshold (and not zoomed). */
@@ -67,9 +66,6 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
   const isZoomed = useSharedValue(false);
-  // Gesture-start touch position (screen coords) for the ratio-based swipe.
-  const swipeStartX = useSharedValue(0);
-  const swipeStartY = useSharedValue(0);
 
   function triggerSwipeLeft() {
     if (options?.onSwipeLeft) options.onSwipeLeft();
@@ -77,60 +73,37 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
 
   // Swipe-left to profile — only active when not zoomed, not disabled.
   //
-  // Ratio-based manual activation (2026-06-12): instead of absolute
-  // activeOffsetX/failOffsetY (which can't be both "easy deliberate swipe" and
-  // "ignore vertical drift" at once), we decide by which axis DOMINATES — the
-  // swipe activates only when horizontal clearly out-paces vertical, and fails
-  // (handing the drag to the vertical feed scroll) the moment vertical wins.
-  // See hooks/gestures/horizontalSwipeDecision.ts.
+  // Snappy-by-design: nav.push fires on `onStart` (gesture activation at
+  // ~8px of leftward travel, ~50ms after touch). The user sees the profile
+  // begin sliding in within that frame instead of waiting for finger-up.
   //
-  // Snappy-by-design: nav.push fires on `onStart` (gesture activation), so the
-  // profile begins sliding in mid-swipe instead of waiting for finger-up.
+  // maxPointers(1) is critical: when the user begins a pinch, the first
+  // finger lands milliseconds before the second. Without this constraint,
+  // any incidental leftward drift on finger #1 before finger #2 arrives
+  // would trip the 8px activation threshold and navigate away before the
+  // pinch even starts. Restricting to one finger makes the swipe FAIL as
+  // soon as a 2nd pointer touches down, handing control to the pinch.
   //
-  // maxPointers(1) + the explicit 2-finger fail below hand control to the pinch
-  // the instant a 2nd finger lands, so incidental drift on finger #1 never
-  // navigates away before a pinch starts.
-  //
-  // No card translation: tracking the finger with a shared value fought UIKit's
-  // native push animation (compositing hitches). The profile sliding in IS the
-  // feedback.
+  // No card translation: we tried tracking the finger with a Reanimated
+  // shared value, but UIKit's native push animation snapshotted the home
+  // hierarchy while Reanimated was actively transforming it — concurrent
+  // animations on the same view caused compositing hitches. The profile
+  // sliding in within ~50ms IS the feedback; we don't need a second motion
+  // competing with it.
   const swipeGesture = Gesture.Pan()
     .minPointers(1)
     .maxPointers(1)
+    // Require a clear leftward swipe before navigating to profile, and fail
+    // fast on vertical movement — at the old -8 / ±15 a vertical flick with a
+    // little left drift would trip profile-nav. Aligned to the shared offsets
+    // (ACTIVE_OFFSET ~2× FAIL_OFFSET) so horizontal must dominate. 2026-06-07.
+    .activeOffsetX(-ACTIVE_OFFSET)
+    .failOffsetX(FAIL_OFFSET)
+    .failOffsetY([-FAIL_OFFSET, FAIL_OFFSET])
     .enabled(!options?.disableSwipeLeft)
-    .manualActivation(true)
-    .onTouchesDown((e, manager) => {
-      'worklet';
-      if (e.numberOfTouches > 1 || savedScale.value > 1) {
-        manager.fail(); // 2nd finger (pinch) or already zoomed → not a profile swipe
-        return;
-      }
-      const t = e.allTouches[0];
-      if (t) {
-        swipeStartX.value = t.absoluteX;
-        swipeStartY.value = t.absoluteY;
-      }
-    })
-    .onTouchesMove((e, manager) => {
-      'worklet';
-      if (e.numberOfTouches > 1 || savedScale.value > 1) {
-        manager.fail();
-        return;
-      }
-      const t = e.allTouches[0];
-      if (!t) return;
-      const decision = horizontalSwipeDecision({
-        dx: t.absoluteX - swipeStartX.value,
-        dy: t.absoluteY - swipeStartY.value,
-        minDistance: SWIPE_MIN_ACTIVATION,
-        ratio: SWIPE_DOMINANCE_RATIO,
-        direction: 'left',
-      });
-      if (decision === 'activate') manager.activate();
-      else if (decision === 'fail') manager.fail();
-    })
     .onStart(() => {
       'worklet';
+      if (savedScale.value > 1) return; // suppress while zoomed
       runOnJS(triggerSwipeLeft)();
     });
 
