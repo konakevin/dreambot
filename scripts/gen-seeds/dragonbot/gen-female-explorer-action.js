@@ -52,13 +52,14 @@ WATCH / OBSERVATION: studying a valley / reading the wind / watching a herd cros
 STEALTH: drawn-blade stalk / crouched advance / pressed-to-trunk / shadow-stepping / silent climb / breath-held watch / bow-drawn aim at distant target / waiting in ambush-stillness (target out of frame)
 INTERACTION: examining a rune-stone / hand on a horse's neck / pressing palm to a temple gate / lighting a torch in a cavern / placing a coin on a cairn / kneeling at a fallen marker / sketching in a field journal
 WATER: standing in a shallow lake / crossing stepping stones / wading a river / pulling herself onto a wet bank / rinsing her face / drinking from a stream / pulling a rope-bridge taut
-HEIGHT: bracing on a cliff-edge / pulling herself onto a ledge / mid-rope on a chasm / inching across a stone bridge / steadying on a wind-scoured spire / hand-jam in a crack / dangling mid-rappel
+HEIGHT: bracing on a cliff-edge / hauling herself onto a ledge / crouched at a chasm rim gripping an anchored rope (GROUNDED, never dangling) / inching across a stone bridge / steadying on a wind-scoured spire / hand-jam in a crack
 INTERIOR (tavern / temple / inn / wayhouse): elbows on a tavern table / cleaning a mug / studying a map by candlelight / drying her cloak by a fire / counting coins / writing a letter / paying an innkeeper / reading a contract
 WEATHER-ENGAGED: leaning into wind / cresting a snow-drift / sheltering under an overhang / cloak pulled tight against sleet / running for thin shelter / shielding eyes from sandstorm / drenched and pushing on
 ANIMAL: hand on her horse's flank / leading a packhorse through scree / steadying a spooked mount / offering hand to a sniffing wolf / feeding a hawk on her glove / passing a sleeping bear at a distance
 
 ━━━ BANS — these are the failures we are guarding against ━━━
 
+- 🚫 NO UNRENDERABLE POSES — never rope-descents / rappelling / abseiling / "lowering herself" or "dangling" on a rope / mid-rope-on-a-chasm / hanging-inverted / upside-down / wall-running / ceiling-running / "body inverted" / "body horizontal" / "defying gravity" / "gravity-defying" / limbs-splayed contortions / "impossible angle". Flux renders a human suspended-on-a-rope or inverted as a CONTORTED FLOATING BLOB. EVERY pose must be CLEAR, GROUNDED and READABLE with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched at a rim gripping an anchored rope / kneeling). For a height/descent beat, place her GROUNDED at the edge — never suspended in the air. Surreal/dreamy/"impossible" treatment applies to LIGHT, SKY and WORLD only — NEVER to the body or gear.
 - NO mid-strike, NO mid-swing, NO weapon-in-an-enemy, NO visible foe, NO fallen body, NO blood-spray, NO combat moment. Drawn-blade STEALTH is fine. Wary advance is fine.
 - NO "posing" / "smoldering" / "looking cool for the camera". Candid only.
 - NO "shirtless" / "bare midriff" / "low-cut" / "skin-tight" / "sultry" — even when describing rest/water beats, she stays armored or in functional travel layers.

@@ -68,6 +68,8 @@ ${action}
 
 GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
 
+POSE-CLARITY LOCK — her pose MUST be clear, grounded and readable with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched / kneeling); NEVER suspended on a rope, dangling, inverted, upside-down, wall-running, "body horizontal", or contorted at an impossible angle — Flux renders those as a floating blob. Any "impossible"/dreamy treatment applies to LIGHT, SKY and WORLD only, never to her body or gear.
+
 ━━━ THE LANDSCAPE (the wild stage — fantasy biome) ━━━
 ${landscape}
 
@@ -165,6 +167,8 @@ All seven DNA elements (race / class / eyes / hair color / hairstyle / outfit / 
 ${action}
 
 GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
+
+POSE-CLARITY LOCK — her pose MUST be clear, grounded and readable with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched / kneeling); NEVER suspended on a rope, dangling, inverted, upside-down, wall-running, "body horizontal", or contorted at an impossible angle — Flux renders those as a floating blob. Any "impossible"/dreamy treatment applies to LIGHT, SKY and WORLD only, never to her body or gear.
 
 ━━━ THE LANDSCAPE (the stage) ━━━
 ${landscape}
@@ -274,6 +278,8 @@ ${action}
 
 Render at the LOADED INSTANT — body in motion, motion-blur where appropriate, effects in full bloom, the moment the camera caught her in. NOT before, NOT after — AT IT. Effects-rich, lit by the magic / fire / energy she is wielding.
 
+POSE-CLARITY LOCK — even at peak action her body MUST be clear, grounded and readable with believable weight and gravity (feet planted / deep braced stance or lunge / grounded mid-stride / hard sprint / a grounded leap with feet visible and clearly falling-or-landing); NEVER wall-running, mid-air spinning-kicks, "body inverted/horizontal", upside-down, dangling on a rope, or contorted at an impossible angle — Flux renders those as a floating blob. The "maelstrom" and "impossible" energy lives in the MAGIC, EFFECTS, LIGHT and WORLD — never in her body or gear.
+
 ━━━ THE LANDSCAPE (the stage — action-scene context) ━━━
 ${landscape}
 
@@ -368,6 +374,8 @@ All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / ou
 ${action}
 
 GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
+
+POSE-CLARITY LOCK — his pose MUST be clear, grounded and readable with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched / kneeling); NEVER suspended on a rope, dangling, inverted, upside-down, wall-running, "body horizontal", or contorted at an impossible angle — Flux renders those as a floating blob. Any "impossible"/dreamy treatment applies to LIGHT, SKY and WORLD only, never to his body or gear.
 
 ━━━ THE LANDSCAPE (the wild stage — fantasy biome) ━━━
 ${landscape}
@@ -471,6 +479,8 @@ All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / ou
 ${action}
 
 GROUNDED — feet on the ground or interacting with terrain. The action defines body position. Render it EXACTLY — body weight visible, captured at a loaded instant. Purposeful, capable, mid-motion — never staged.
+
+POSE-CLARITY LOCK — his pose MUST be clear, grounded and readable with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched / kneeling); NEVER suspended on a rope, dangling, inverted, upside-down, wall-running, "body horizontal", or contorted at an impossible angle — Flux renders those as a floating blob. Any "impossible"/dreamy treatment applies to LIGHT, SKY and WORLD only, never to his body or gear.
 
 ━━━ THE LANDSCAPE (the stage) ━━━
 ${landscape}
@@ -582,6 +592,8 @@ All eight DNA elements (race / class / skin / eyes / hair color / hairstyle / ou
 ${action}
 
 Render at the LOADED INSTANT — body in motion, motion-blur where appropriate, effects in full bloom, the moment the camera caught him in. NOT before, NOT after — AT IT. Effects-rich, lit by the magic / fire / energy he is wielding.
+
+POSE-CLARITY LOCK — even at peak action his body MUST be clear, grounded and readable with believable weight and gravity (feet planted / deep braced stance or lunge / grounded mid-stride / hard sprint / a grounded leap with feet visible and clearly falling-or-landing); NEVER wall-running, mid-air spinning-kicks, "body inverted/horizontal", upside-down, dangling on a rope, or contorted at an impossible angle — Flux renders those as a floating blob. The "maelstrom" and "impossible" energy lives in the MAGIC, EFFECTS, LIGHT and WORLD — never in his body or gear.
 
 ━━━ THE LANDSCAPE (the stage — action-scene context) ━━━
 ${landscape}

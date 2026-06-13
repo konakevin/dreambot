@@ -46,6 +46,7 @@ Candid, natural moments caught mid-action. NOT posing, NOT fighting. The charact
 No two entries should have the same primary verb or body position. Every action produces a visually DISTINCT silhouette.
 
 ━━━ RULES ━━━
+- 🚫 NO UNRENDERABLE POSES — never rope-descents / rappelling / abseiling / "lowering oneself" or "dangling" on a rope / hanging-inverted / upside-down / wall-running / ceiling-running / "body inverted" / "body horizontal" / "defying gravity" / "gravity-defying" / limbs-splayed contortions / "impossible angle". Flux renders a human suspended-on-a-rope or inverted as a CONTORTED FLOATING BLOB. EVERY pose must be CLEAR, GROUNDED and READABLE with believable weight and gravity (feet planted / clear stance / grounded mid-stride / upright and moving). For a height/descent beat, place the character GROUNDED at the edge gripping an anchored rope — never suspended in the air. Surreal/dreamy/"impossible" treatment applies to LIGHT, SKY and WORLD only — NEVER to the body or gear.
 - NO combat, NO fighting, NO battle
 - NO sitting still, NO standing still, NO posing
 - NO looking at the camera

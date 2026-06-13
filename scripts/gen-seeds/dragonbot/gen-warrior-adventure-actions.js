@@ -18,7 +18,7 @@ HIKING / TRAVELING (5-6) — on the road / in the wild:
 - cresting a mountain ridge at dawn, breath visible, gazing at the valley below
 - wading across a shallow stream with boots laced high and a walking-stick for balance
 - pausing on a forest trail to drink from a leather waterskin, sun dappling through canopy
-- climbing a rope ladder up a cliffside, focused on the next handhold
+- climbing a rope ladder up a cliffside, both feet on the rungs, focused on the next handhold
 - fording a snowy mountain pass with cloak drawn tight, footprints behind in fresh powder
 - standing at a crossroads signpost, reading carved directions in three languages
 
@@ -55,6 +55,7 @@ CRAFTING / TENDING (3-4) — quiet adventurer work:
 - writing in a leather-bound journal at a small wooden desk, ink-pot at hand
 
 ━━━ RULES ━━━
+- 🚫 NO UNRENDERABLE POSES — never rope-descents / rappelling / abseiling / "lowering oneself" or "dangling" on a rope / hanging-inverted / upside-down / wall-running / ceiling-running / "body inverted" / "body horizontal" / "defying gravity" / "gravity-defying" / limbs-splayed contortions / "impossible angle". Flux renders a human suspended-on-a-rope or inverted as a CONTORTED FLOATING BLOB. EVERY pose must be CLEAR, GROUNDED and READABLE with believable weight and gravity (feet planted / clear stance / grounded mid-stride / crouched / kneeling). For a height/descent beat, place the warrior GROUNDED at the edge — never suspended in the air. Surreal/dreamy/"impossible" treatment applies to LIGHT, SKY and WORLD only — NEVER to the body or gear.
 - Each entry is a CANDID, PEACEFUL moment — adventure-life, not war-life
 - 12-22 words — vivid, paintable, specific
 - ABSOLUTELY NO battle / combat / dying / wounded / mid-strike / weapon-aimed-at-foe
