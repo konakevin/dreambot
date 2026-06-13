@@ -475,10 +475,22 @@ function RootLayout() {
                   <Stack.Screen name="(auth)" />
                   <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                   <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  <Stack.Screen name="photo/[id]" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  {/* photo/[id] + user/[userId] own a full-screen vertical feed/grid,
+                      so back-swipe is the RNGH ratio-based useStandardSwipeBack gesture
+                      (coordinates with the scroll) instead of the native pop, which
+                      fought the scroll and felt stuck. gestureEnabled:false disables the
+                      native gesture so only the RNGH one runs. */}
+                  <Stack.Screen
+                    name="photo/[id]"
+                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, gestureEnabled: false }}
+                  />
                   <Stack.Screen
                     name="user/[userId]"
-                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, animation: 'simple_push' }}
+                    options={{
+                      ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                      animation: 'simple_push',
+                      gestureEnabled: false,
+                    }}
                   />
                   <Stack.Screen
                     name="sharePost"

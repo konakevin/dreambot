@@ -22,11 +22,14 @@
  *     const composed = Gesture.Simultaneous(backGesture, cardGesture);
  *
  * NOTES
- *   - Gesture activates only on a clear right-swipe (activeOffsetX [ACTIVE_OFFSET,
- *     Infinity], ~2× FAIL_OFFSET so horizontal must dominate vertical).
- *   - Fails early if vertical drag exceeds FAIL_OFFSET — lets FlatLists scroll.
- *   - Fires router.back() via runOnJS after slide-off animation.
- *   - If gesture is cancelled mid-way, translation is sprung back to 0.
+ *   - Ratio-based manual activation (2026-06-12): activates only when a
+ *     rightward drag clearly out-paces vertical, and fails the instant vertical
+ *     wins — handing the drag to an underlying FlatList. This is what makes the
+ *     back-swipe reliable over a vertical feed instead of "stuck" (the native
+ *     fullScreenGestureEnabled pop it replaces fought the scroll). See
+ *     hooks/gestures/horizontalSwipeDecision.ts.
+ *   - Fires router.back() via runOnJS after the slide-off animation.
+ *   - If the gesture is cancelled mid-way, translation is sprung back to 0.
  */
 
 import { router } from 'expo-router';
@@ -40,13 +43,14 @@ import {
   runOnJS,
 } from 'react-native-reanimated';
 import {
-  ACTIVE_OFFSET,
-  FAIL_OFFSET,
   SLIDE_OFF_DURATION,
   SNAP_SPRING,
   SWIPE_BACK_DISTANCE,
+  SWIPE_DOMINANCE_RATIO,
+  SWIPE_MIN_ACTIVATION,
   VELOCITY_THRESHOLD,
 } from '@/constants/gestures';
+import { horizontalSwipeDecision } from '@/hooks/gestures/horizontalSwipeDecision';
 
 export interface UseStandardSwipeBackOptions {
   /** Called instead of router.back() on dismiss. Useful for custom teardown. */
@@ -58,6 +62,11 @@ export interface UseStandardSwipeBackOptions {
 export function useStandardSwipeBack(options?: UseStandardSwipeBackOptions) {
   const { width: screenWidth } = useWindowDimensions();
   const translateX = useSharedValue(0);
+  // Gesture-start touch position + the translation captured at activation, so
+  // the content tracks the finger from the activation point with no snap-jump.
+  const startX = useSharedValue(0);
+  const startY = useSharedValue(0);
+  const activationTranslateX = useSharedValue(0);
 
   function dismiss() {
     if (options?.onDismiss) options.onDismiss();
@@ -66,12 +75,40 @@ export function useStandardSwipeBack(options?: UseStandardSwipeBackOptions) {
 
   const gesture = Gesture.Pan()
     .enabled(!options?.disabled)
-    .activeOffsetX([ACTIVE_OFFSET, Infinity])
-    .failOffsetY([-FAIL_OFFSET, FAIL_OFFSET])
+    .manualActivation(true)
+    .onTouchesDown((e) => {
+      'worklet';
+      const t = e.allTouches[0];
+      if (t) {
+        startX.value = t.absoluteX;
+        startY.value = t.absoluteY;
+      }
+    })
+    .onTouchesMove((e, manager) => {
+      'worklet';
+      const t = e.allTouches[0];
+      if (!t) return;
+      const decision = horizontalSwipeDecision({
+        dx: t.absoluteX - startX.value,
+        dy: t.absoluteY - startY.value,
+        minDistance: SWIPE_MIN_ACTIVATION,
+        ratio: SWIPE_DOMINANCE_RATIO,
+        direction: 'right',
+      });
+      if (decision === 'activate') manager.activate();
+      else if (decision === 'fail') manager.fail();
+    })
+    .onStart((e) => {
+      'worklet';
+      // Subtract the travel already accumulated at activation so onUpdate
+      // doesn't jump the content by ~minDistance px.
+      activationTranslateX.value = e.translationX;
+    })
     .onUpdate((e) => {
       'worklet';
       // Only honor rightward drag. Negative doesn't move the view.
-      if (e.translationX > 0) translateX.value = e.translationX;
+      const tx = e.translationX - activationTranslateX.value;
+      if (tx > 0) translateX.value = tx;
     })
     .onEnd((e) => {
       'worklet';

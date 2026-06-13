@@ -11,7 +11,7 @@
  *   index 1..N   → bots[0..N-1] (botUserId = bots[i-1].id)
  *
  * The first/last edge bounce-back is handled natively by FlatList's
- * pagingEnabled + iOS bounce. No custom edge logic needed.
+ * snap-to-interval paging + iOS bounce. No custom edge logic needed.
  *
  * Page virtualization: windowSize=3 + maxToRenderPerBatch=1 means only the
  * visible page + one on each side is mounted, so memory is bounded
@@ -165,7 +165,13 @@ export function BotsHorizontalPager({
       data={pages}
       keyExtractor={(item) => item.key}
       horizontal
-      pagingEnabled
+      // snapToInterval instead of pagingEnabled: the iOS paging settle
+      // ignores new touches until it completes, killing rapid swipes.
+      // snapToInterval decelerates normally (catchable mid-snap);
+      // disableIntervalMomentum preserves one page per fling. 2026-06-12.
+      snapToInterval={SCREEN_WIDTH}
+      snapToAlignment="start"
+      disableIntervalMomentum
       showsHorizontalScrollIndicator={false}
       initialScrollIndex={initialIndex}
       getItemLayout={getItemLayout}

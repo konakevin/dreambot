@@ -224,7 +224,10 @@ export function FullScreenFeed({
 
   const handleLayout = useCallback(
     (e: { nativeEvent: { layout: { height: number } } }) => {
-      const h = e.nativeEvent.layout.height;
+      // Round: pageHeight is the snapToInterval, and fractional intervals
+      // accumulate snap drift across pages (unlike pagingEnabled, which
+      // snaps to view bounds).
+      const h = Math.round(e.nativeEvent.layout.height);
       if (h > 0 && Math.abs(h - containerHeight) > 1) {
         setContainerHeight(h);
       }
@@ -465,7 +468,14 @@ export function FullScreenFeed({
         data={posts}
         keyExtractor={(item) => item.id}
         onLayout={handleLayout}
-        pagingEnabled
+        // snapToInterval instead of pagingEnabled: iOS runs the pagingEnabled
+        // settle as a special deceleration that IGNORES new touches until it
+        // finishes — rapid successive swipes go dead mid-snap (the "clunky"
+        // feel). snapToInterval snaps via normal, catchable deceleration, so
+        // a new touch can interrupt the snap and fling again immediately.
+        // disableIntervalMomentum keeps it to one card per fling. 2026-06-12.
+        snapToInterval={pageHeight}
+        snapToAlignment="start"
         disableIntervalMomentum
         showsVerticalScrollIndicator={false}
         decelerationRate="fast"

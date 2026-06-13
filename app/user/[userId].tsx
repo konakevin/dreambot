@@ -11,7 +11,9 @@ import {
   Dimensions,
 } from 'react-native';
 import { Image } from 'expo-image';
+import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -264,20 +266,31 @@ export default function PublicProfileScreen() {
   // 'other' variant now derives the label internally from isFollowing +
   // hasRequest.
 
+  // RNGH swipe-right-to-back (ratio-based), replacing the native
+  // fullScreenGestureEnabled pop that fought the grid scroll. gestureEnabled is
+  // disabled for this route in app/_layout.tsx so only this gesture owns back.
+  const { gesture: backGesture, animatedStyle: backStyle } = useStandardSwipeBack();
+
   if (profileLoading || !profile) {
     return (
-      <View style={styles.root}>
-        <SafeAreaView style={styles.root}>
-          <View style={styles.backRow}>
-            <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-              <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.center}>
-            <ActivityIndicator color={colors.textSecondary} />
-          </View>
-        </SafeAreaView>
-      </View>
+      <GestureDetector gesture={backGesture}>
+        <Animated.View style={[styles.root, backStyle]}>
+          <SafeAreaView style={styles.root}>
+            <View style={styles.backRow}>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                hitSlop={12}
+                style={styles.backButton}
+              >
+                <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.center}>
+              <ActivityIndicator color={colors.textSecondary} />
+            </View>
+          </SafeAreaView>
+        </Animated.View>
+      </GestureDetector>
     );
   }
 
@@ -477,48 +490,54 @@ export default function PublicProfileScreen() {
 
   if (activeTab === 'posts') {
     return (
-      <View style={styles.root}>
-        <SafeAreaView style={styles.root}>
-          {backButton}
-          {avatarModal}
-          {stickyTopBar}
-          {canSeePosts ? (
-            <PostGrid
-              source={
-                gridView === 'reposts' && isOwnProfile
-                  ? { type: 'reposts', userId }
-                  : { type: 'user', userId }
-              }
-              emptyText={gridView === 'reposts' && isOwnProfile ? 'No reposts yet' : 'No posts yet'}
-              ListHeaderComponent={header}
-              highlightPostId={viewedPost}
-              onScrollProgress={handleScrollProgress}
-              scrollToTopToken={scrollToTopBump}
-            />
-          ) : (
-            <ScrollView
-              onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
-              scrollEventThrottle={16}
-            >
-              {header}
-              <View style={styles.lockedState}>
-                <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
-                <Text style={styles.lockedTitle}>This account is private</Text>
-                <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
-                <TouchableOpacity
-                  style={[styles.followButton, hasRequest && styles.followingButton]}
-                  onPress={handleFollow}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.followButtonText, hasRequest && styles.followingButtonText]}>
-                    {hasRequest ? 'Requested' : 'Follow'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          )}
-        </SafeAreaView>
-      </View>
+      <GestureDetector gesture={backGesture}>
+        <Animated.View style={[styles.root, backStyle]}>
+          <SafeAreaView style={styles.root}>
+            {backButton}
+            {avatarModal}
+            {stickyTopBar}
+            {canSeePosts ? (
+              <PostGrid
+                source={
+                  gridView === 'reposts' && isOwnProfile
+                    ? { type: 'reposts', userId }
+                    : { type: 'user', userId }
+                }
+                emptyText={
+                  gridView === 'reposts' && isOwnProfile ? 'No reposts yet' : 'No posts yet'
+                }
+                ListHeaderComponent={header}
+                highlightPostId={viewedPost}
+                onScrollProgress={handleScrollProgress}
+                scrollToTopToken={scrollToTopBump}
+              />
+            ) : (
+              <ScrollView
+                onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
+                scrollEventThrottle={16}
+              >
+                {header}
+                <View style={styles.lockedState}>
+                  <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
+                  <Text style={styles.lockedTitle}>This account is private</Text>
+                  <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
+                  <TouchableOpacity
+                    style={[styles.followButton, hasRequest && styles.followingButton]}
+                    onPress={handleFollow}
+                    activeOpacity={0.8}
+                  >
+                    <Text
+                      style={[styles.followButtonText, hasRequest && styles.followingButtonText]}
+                    >
+                      {hasRequest ? 'Requested' : 'Follow'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            )}
+          </SafeAreaView>
+        </Animated.View>
+      </GestureDetector>
     );
   }
 

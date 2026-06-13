@@ -96,7 +96,14 @@ export function BotImageViewer({
               data={urls}
               keyExtractor={(url, idx) => `${idx}-${url}`}
               horizontal
-              pagingEnabled
+              // snapToInterval instead of pagingEnabled: the iOS paging settle
+              // ignores new touches until it completes, killing rapid swipes.
+              // decelerationRate="fast" restores the quick page-settle feel
+              // pagingEnabled provided implicitly. 2026-06-12.
+              snapToInterval={SCREEN_W}
+              snapToAlignment="start"
+              disableIntervalMomentum
+              decelerationRate="fast"
               showsHorizontalScrollIndicator={false}
               initialScrollIndex={initialIndex}
               getItemLayout={(_, index) => ({
