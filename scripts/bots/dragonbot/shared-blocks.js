@@ -22,31 +22,31 @@ const GPT_CLEAN =
 
 const EPIC_FANTASY_BLOCK = `━━━ EPIC FANTASY AESTHETIC (NON-NEGOTIABLE) ━━━
 
-LOTR / Game-of-Thrones / Harry-Potter film-still energy. Concept-art movie quality — think Peter Jackson / John Howe / Alan Lee / Frank Frazetta / Iain McCaig visual DNA. Warhammer-painterly-scale mythic. Never cartoon, never generic-RPG-art, never cheap-stock-fantasy. Every render could be a chapter-opener painting in an illustrated edition of a great fantasy novel.`;
+Concept-art movie-still quality — every render could be a chapter-opener painting in an illustrated edition of a great fantasy novel, never cartoon, never cheap-stock-fantasy.`;
 
 const MAGICAL_ATMOSPHERE_EVERYWHERE_BLOCK = `━━━ MAGIC IS EVERYWHERE ━━━
 
-Every render — regardless of path — has rich magical feeling. Theatrical lighting. Mystical atmosphere. Arcane energy integrated. Even landscape-path castles feel charged with presence. Dragons, magic, and wonder are baseline. The ordinary is never drawn; only the mythic.`;
+Every render has rich magical feeling — theatrical lighting, mystical atmosphere, arcane energy integrated; the ordinary is never drawn, only the mythic.`;
 
 const PAINTERLY_ILLUSTRATION_BLOCK = `━━━ PAINTERLY ILLUSTRATION ONLY ━━━
 
-Canvas / watercolor / illustration / pencil aesthetic ONLY. NEVER photoreal, NEVER 3D-render, NEVER cheap-CGI. Brushwork visible, painterly edges, warm-handmade quality. Fantasy-novel-cover style or concept-art-book style.`;
+Painterly illustration with visible brushwork and warm-handmade quality — fantasy-novel-cover or concept-art-book style, never cheap-CGI.`;
 
 const NO_NAMED_CHARACTERS_BLOCK = `━━━ CHARACTERS BY ROLE ONLY ━━━
 
-Describe characters by archetype: "hooded wizard", "elf ranger in cloak", "dwarf smith at forge", "mage mid-ritual", "young paladin at altar", "crone-witch in herb-cottage". NEVER named IP characters — no "Gandalf", no "Aragorn", no "Harry Potter", no "Geralt", no "Daenerys". Our own mythic archetypes.`;
+Describe characters by archetype (hooded wizard, elf ranger, dwarf smith, mage mid-ritual) — NEVER named IP characters; use our own mythic archetypes.`;
 
 const CINEMATIC_COMPOSITION_BLOCK = `━━━ CINEMATIC COMPOSITION ━━━
 
-Framing, lighting, and depth chosen for MOVIE-SHOT quality. Wide establishing vistas, tight character moments, dramatic low-angle hero shots, impossible aerial sweeps. Every frame could be a still from a great fantasy epic.`;
+Framing, lighting, and depth chosen for MOVIE-SHOT quality — every frame could be a still from a great fantasy epic.`;
 
 const IMPOSSIBLE_BEAUTY_BLOCK = `━━━ IMPOSSIBLE BEAUTY — EPIC FANTASY EDITION ━━━
 
-Book-cover / concept-art-painting / Peter-Jackson-preproduction × 10. Wall-poster quality. The kind of image a fantasy reader would frame. Dense detail, impossible atmospheric stacking, masterful composition.`;
+Wall-poster quality — the kind of image a fantasy reader would frame, with dense detail, impossible atmospheric stacking, and masterful composition.`;
 
 const BLOW_IT_UP_BLOCK = `━━━ BLOW IT UP — EPIC FANTASY AMPLIFICATION ━━━
 
-Epic-fantasy is the canvas, not the ceiling. Stack: mythic scale + dramatic lighting + multiple atmospheric layers + architectural wonder + magical phenomena + cinematic depth. If it looks like a fantasy poster, dial it up until it looks like the BEST frame in the movie. Peter-Jackson-concept-art-book × 10.`;
+Stack mythic scale + dramatic lighting + multiple atmospheric layers + architectural wonder + magical phenomena + cinematic depth until it looks like the BEST frame in the movie.`;
 
 const ARCANE_MAXIMALISM_BLOCK = `━━━ ARCANE MAXIMALISM (magic-moment path only) ━━━
 
@@ -61,43 +61,14 @@ Tame peaceful magic. PLACES + ATMOSPHERE + magical wildlife at rest. Inhabited: 
 // Never settle for "here's a building" or "here's a vista."
 const BLOWN_UP_LANDSCAPE_BLOCK = `━━━ BLOWN UP — AI-CRAZY LANDSCAPE (NON-NEGOTIABLE, OVER THE TOP) ━━━
 
-This is an AI render. The point is IMPOSSIBLE, JAW-DROPPING, OVER-THE-TOP visuals — never "here's a pic of a castle." Stack 5+ of these EPIC LANDSCAPE FEATURES per render so every frame is a stop-and-stare masterpiece:
+IMPOSSIBLE, JAW-DROPPING, OVER-THE-TOP visuals — never "here's a pic of a castle." Stack 5+ of these so every frame is a stop-and-stare masterpiece:
 
-EPIC SCALE / IMPOSSIBLE GEOMETRY (mandatory ≥1):
-- Massive floating islands suspended in the sky, waterfalls cascading off their edges into the void below
-- Cathedral-mountains carved into towering spires with thousands of windows lit from within
-- A colossal ancient dragon-skeleton mountain with vines and ruins growing through its ribs
-- A sky-piercing tree taller than mountains, branches lit from within
-- A continent-spanning canyon cracked open to reveal a glowing world below
-- A frozen tidal wave the size of a city wall, suspended forever
-- An infinite staircase carved into a cliff disappearing into clouds
-- A city-scale crystal jutting from the earth, refracting light into rainbow shafts
-- Concentric ring-mountains around a central spell-circle valley
-
-MULTIPLE STACKED LIGHT SOURCES (mandatory ≥3 in same frame):
-- Massive god-rays piercing through dramatic clouds
-- Magical aurora rippling across the sky in impossible colors (violet / emerald / rose-magenta)
-- Multiple moons / suns visible at once (twin suns, three moons, eclipsed sun-and-moon)
-- Bioluminescent moss / lichen / fungi glowing from below
-- Distant city lights or magical fires dotting the horizon
-- Crackling magical lightning between distant peaks
-- Floating glowing wisps / orbs suspended throughout the air at scale
-- Lava-crack-lines glowing through cracked stone
-
-LIVING SKY / MAGICAL WEATHER (mandatory ≥1):
-- An aurora-storm with magical lightning in the distance
-- Floating petals / leaves / embers / snowflakes drifting across the entire scene
-- A spell-storm rotating slowly over the horizon, runes lightning-flashing inside it
-- Migrating cloud-leviathans (whales / dragons / serpentine creatures) drifting across the sky
-- An eclipsed sun bleeding rays of light around the moon
-- Pillars of light descending from the heavens onto the landscape
-- Ash from a distant volcano / glowing snow / phosphorescent rain
-
-DENSE FOREGROUND DETAIL (mandatory): every plant, every rock, every dewdrop, every leaf rendered. Ferns / flowers / mossy boulders / gnarled roots / fallen logs in tactile detail anchoring the foreground. The foreground should be ALIVE with specific micro-detail.
-
-SATURATED IMPOSSIBLE COLOR — multiple saturated colors coexisting in the frame at once (violet sunset + emerald aurora + amber lightning + rose-magenta clouds + cyan glowing moss). Heaven-tier saturation — never restrained, never tasteful-quiet. CRANK EVERYTHING TO 11.
-
-ATMOSPHERIC PARTICLES THICK IN THE FRAME: drifting magical pollen, sparks, embers, glowing motes, snow, petals, ash, spell-particles. The air itself should be ALIVE.`;
+- IMPOSSIBLE GEOMETRY (≥1): floating islands with waterfalls into the void / cathedral-mountains of spires / a sky-piercing tree taller than mountains
+- MULTIPLE LIGHT SOURCES (≥3): god-rays through clouds / impossible-color aurora / multiple moons or suns / bioluminescent glow from below
+- LIVING SKY (≥1): spell-storm with lightning-flashing runes / drifting petals-embers-snow across the scene / pillars of light descending
+- DENSE FOREGROUND: ferns, flowers, mossy boulders, roots in tactile micro-detail anchoring the frame
+- SATURATED IMPOSSIBLE COLOR: multiple saturated colors coexisting (violet sunset + emerald aurora + cyan glowing moss). CRANK EVERYTHING TO 11
+- ATMOSPHERIC PARTICLES: drifting pollen, sparks, embers, motes, ash — the air itself is ALIVE`;
 
 module.exports = {
   PROMPT_PREFIX,

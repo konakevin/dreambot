@@ -42,25 +42,18 @@ An atmospheric event happening in the world around her — render as a visible s
     return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single WOMAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing her adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. She is ALIVE, CAPABLE, road-tested, in a story-rich candid moment.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [race-coded] WOMAN [doing action] in [landscape]..." — "woman" comes BEFORE any class noun. Use she/her/hers throughout. The class slot describes her ROLE, not her gendered noun — append role AFTER "woman" appears.
+The word "woman" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (rogue / ranger / mage / paladin). Opening reads: "a [race-coded] WOMAN [doing action] in [landscape]..." She/her throughout; the class slot is her ROLE, appended after "woman".
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
-• NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
-• Weapons stay holstered / sheathed / slung / carried — NEVER in active combat use
-• NO cheesecake: NO "minimal coverage" / "bare midriff" / "exposed cleavage" / "form-fitting" / "skin-tight" / "harness across torso" / "sultry" / "sensual" / "alluring" / "low-cut" / "seductive" / "curves emphasized"
-• Her outfit reads FUNCTIONAL + COVERED — sleek adventuring gear, not sexualized
-• NO posing for the camera. NEVER staged. Candid moment, body in motion or charged stillness
+━━━ KEEP IT CLEAN + CANDID ━━━
+Functional, covered adventuring gear (never cheesecake / sexualized). Weapons holstered, sheathed, slung, or carried — never in active combat, no enemy in frame. A candid moment in motion or charged stillness — never posing for the camera.
 
-━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. She is ALONE in her moment.
-
-━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
-The adventurer is the MAIN SUBJECT. Her face, gear, race, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+━━━ SOLO — SHE IS THE SHOW ━━━
+ONE character, alone. She is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait.
 
 ━━━ HER RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair, NOT default-blonde human. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair, NOT default-blonde human. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
 
 ━━━ HER CLASS (her role / energy — informs how she carries herself) ━━━
 ${charClass}
@@ -95,7 +88,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see her face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
@@ -142,37 +135,23 @@ An atmospheric event happening in the world around her — render as a visible s
     return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single WOMAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing her adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. She is ALIVE, CAPABLE, road-tested, in a story-rich candid moment.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [race-coded] WOMAN [doing action] in [landscape]..." — "woman" comes BEFORE any class noun. Use she/her/hers throughout. The class slot describes her ROLE, not her gendered noun — append role AFTER "woman" appears.
+The word "woman" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (rogue / ranger / mage / paladin). Opening reads: "a [race-coded] WOMAN [doing action] in [landscape]..." She/her throughout; the class slot is her ROLE, appended after "woman".
 
-━━━ ABSOLUTE BANS — COMBAT-CLEAN ━━━
-• NO active combat, NO mid-strike, NO weapon-aimed-at-a-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
-• A DRAWN weapon held ready in stealth or wary advance IS allowed (creeping low with sword/dagger drawn, stalking something just out of frame) — but NEVER mid-swing, NEVER a visible enemy, NEVER an actual strike. Otherwise weapons stay holstered / sheathed / slung / carried.
-• NO posing for the camera. NEVER staged. Candid moment, body in motion or charged stillness
-• Her gear is COOL FITTED ORNATE ARMOR (plate / cuirass / scale / chitin / battle-leather) — render the OUTFIT SLOT exactly. Two things to AVOID: frumpy drapes (loose robes / shapeless hooded coats / billowing gowns) AND glamour (slit skirts / off-shoulder / bare-midriff-as-look / pin-up). Bare arms are fine when it reads warrior. STILL banned: chainmail bikini / battle-bra / cleavage-as-focus / bondage-harness / sexualized posing.
+━━━ KEEP IT CANDID ━━━
+A candid moment in motion or charged stillness — never posing for the camera, never an actual combat strike or a visible enemy. Weapons holstered, sheathed, slung, or carried; a DRAWN weapon held ready in wary advance is fine (creeping low, stalking something just out of frame), but never mid-swing.
 
 ━━━ HER OUTFIT — COOL FITTED ORNATE ARMOR (render the slot exactly) ━━━
-Her gear is BADASS FITTED ORNATE ARMOR — Witcher / Elden Ring / Dragon Age / GoT-cover caliber: articulated plate / cuirass with pauldrons + vambraces + greaves, scale or chitin-and-hide, or fitted battle-leather with a shoulder-harness. Hand-engraved, brass-riveted, runic-etched, blackened-steel, travel-worn. Fitted to her form, a cloak or half-cape only as an ACCENT over the armor.
-Render whatever the OUTFIT SLOT specifies exactly. AVOID the two failure modes: (1) FRUMPY — loose flowing robes / shapeless hooded coats / billowing gowns / bulky drapes that hide her form; (2) GLAMOUR — slit skirts / off-shoulder bodices / bare-midriff-as-the-look / pin-up styling. Bare or partial arms are fine when the look reads WARRIOR (fitted leather, tattoos, harness), never glamour.
-Reference: Éowyn shieldmaiden plate / Tauriel fitted scout leathers / Witcher-school steel-and-leather cuirass / the hearted silver-blue articulated plate + grey-gold cuirass + dark chitin-and-dagger-harness looks. Fitted to flatter the form, NEVER loose drapes, NEVER cheesecake.
+BADASS FITTED ORNATE ARMOR — Witcher / Elden Ring / Dragon Age / GoT-cover caliber: articulated plate / cuirass with pauldrons + vambraces + greaves, scale or chitin-and-hide, or fitted battle-leather with a shoulder-harness. Hand-engraved, brass-riveted, runic-etched, blackened-steel, travel-worn. Fitted to her form, a cloak or half-cape only as an ACCENT. Render the OUTFIT SLOT exactly. AVOID two failure modes: FRUMPY (loose robes / shapeless hooded coats / billowing gowns that hide her form) and GLAMOUR (slit skirts / off-shoulder / bare-midriff-as-look / pin-up / chainmail-bikini). Bare arms are fine when the look reads WARRIOR. Reference: Éowyn shieldmaiden plate / Tauriel fitted scout leathers / Witcher-school steel-and-leather cuirass.
 
-━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. She is ALONE in her moment.
+━━━ SOLO — SHE IS THE SHOW ━━━
+ONE character, alone. She is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait. FACE always visible — never back-to-viewer / rear-view, never a hooded face-hidden figure.
 
-━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
-The adventurer is the MAIN SUBJECT. Her face, gear, race, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
-
-⚠️ FRAMING BANS — NEVER:
-• "back to viewer" / "from behind" / "rear view" — her FACE must be visible (three-quarter or side profile)
-• "tiny silhouette in distance" / "small in distant landscape" / "dwarfed by"
-• "hooded figure" with face not visible — even with hood, face must show
-• "lone figure on horizon" / "distant figure approaching"
-
-⚠️ FEMININE ANATOMY LOCK — render her UNMISTAKABLY as a woman regardless of class. Classes like BARBARIAN / WARRIOR / MONK / RANGER / PALADIN have a strong Flux bias toward male defaults. Counter that with explicit feminine cues: visible breast contour beneath fitted armor, narrower waist than shoulders, feminine jawline, female facial structure. Her cool fitted armor flatters a female form — ALWAYS unmistakably female anatomy, NEVER cheesecake or sexualized posing. No bare-chested, no battle-bikini. No moustache or beard EVEN on dwarven women (dwarven-women in this lineage are beardless).
+⚠️ FEMININE ANATOMY LOCK — render her UNMISTAKABLY as a woman regardless of class. Classes like BARBARIAN / WARRIOR / MONK / RANGER / PALADIN have a strong Flux bias toward male defaults — counter with explicit feminine cues: visible breast contour beneath fitted armor, narrower waist than shoulders, feminine jawline, female facial structure. Never bare-chested, never battle-bikini. No moustache or beard even on dwarven women (beardless in this lineage).
 
 ━━━ HER RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair, NOT default-blonde human. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair, NOT default-blonde human. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
 
 ━━━ HER CLASS (her role / energy — informs how she carries herself) ━━━
 ${charClass}
@@ -209,7 +188,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see her face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near her feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HER, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
@@ -255,13 +234,10 @@ A magical / atmospheric event amplifying the action — render as a visible seco
     return `You are a fantasy concept-art painter writing a PEAK-ACTION CINEMATIC MOMENT for DragonBot — a WOMAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, captured at the apex of dynamic action. LOTR / GoT / Elden Ring / Skyrim / Witcher / Warcraft visual lineage. She is ALIVE, mid-motion, RIPPING with cinematic energy.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a WOMAN. The word "woman" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "mage", "rogue", "ranger", "paladin", "warrior" or any other gender-ambiguous noun for "woman" in the opening. Opening MUST read: "a [race-coded] WOMAN [doing action] in [landscape]..." — "woman" comes BEFORE any class noun. Use she/her/hers throughout. The class slot describes her ROLE, not her gendered noun — append role AFTER "woman" appears.
+The word "woman" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (mage / rogue / ranger / paladin). Opening reads: "a [race-coded] WOMAN [doing action] in [landscape]..." She/her throughout; the class slot is her ROLE, appended after "woman".
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN ━━━
-• NO cheesecake: NO "minimal coverage" / "bare midriff" / "exposed cleavage" / "form-fitting" / "skin-tight" / "harness across torso" / "sultry" / "sensual" / "alluring" / "low-cut" / "curves emphasized"
-• Her outfit reads FUNCTIONAL + COVERED — sleek action gear, not sexualized
-• NO posing for the camera. NEVER staged. Captured at a cinematic loaded INSTANT
-• NO real-world ethnic / historical costume codes (no Bedouin / Persian / samurai / Aztec / Polynesian / etc.) — STRICT WESTERN HIGH FANTASY ONLY
+━━━ KEEP IT CLEAN, WESTERN, UNSTAGED ━━━
+Functional, covered action gear (never cheesecake / sexualized). Captured at a cinematic loaded INSTANT — never posing for the camera. Strict Western high fantasy — no real-world ethnic / historical costume codes (Bedouin / Persian / samurai / Aztec / Polynesian).
 
 ━━━ THIS IS PEAK ACTION — NOT A CANDID MOMENT ━━━
 The action axis describes a CINEMATIC MID-ACTION BEAT — mid-spell at the apex of a fireball, mid-loose with arrow streaking from her bow, mid-leap from a rooftop in a chase, the moment of summoning, the second a paladin's hammer crashes down, the instant a rogue's blade reverses for a kill.
@@ -277,16 +253,13 @@ The frame should be ALIVE with chaos / motion / magic — not just her with one 
 ━━━ SCALE THE MAGIC UP ━━━
 If the action involves magic, don't render a wisp — render a MAELSTROM. Not just a fireball — a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not just lightning — lightning forking down WITH an arcane storm circle radiating from her feet. Not just a portal — a portal CRACKING REALITY with creatures emerging and the air rippling. The magic should DOMINATE its quadrant of the frame.
 
-━━━ SOLO PROTAGONIST ━━━
-ONE character — she is the focus. Enemies / targets / mooks may exist in the scene but as scale-provers / context, NEVER eclipsing her. No fallen-body gore. No fights between two equally-prominent figures. SHE is the show.
-
-━━━ SHE IS THE SHOW — NON-NEGOTIABLE ━━━
-Her face, gear, race, action, and pose are the DRAW. She occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+━━━ SOLO — SHE IS THE SHOW ━━━
+ONE character is the focus. Enemies / targets / mooks may exist as scale-provers / context, never eclipsing her, no fallen-body gore. She is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait.
 
 ━━━ HER RACE (LOCKED — render her unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features. Drow = obsidian-grey skin and white-silver hair. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout. Half-orc = green-grey skin and tusks. Wood elf = pointed ears and forest features. Race is the HERO of identity.
 
 ━━━ HER CLASS (her role / energy — informs HOW the action reads) ━━━
 ${charClass}
@@ -324,7 +297,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DYNAMIC ANGLES ━━━
 Action shots benefit from DYNAMIC camera angles. Mix across renders: three-quarter / dutch-tilt / low-angle hero / over-shoulder / sweeping pursuit / dramatic upshot. NEVER head-on at the camera. NEVER posing. FOREGROUND: tactile action detail (rubble / sparks / motion-blur / spell-residue). MIDGROUND: HER, full body, AT THE PEAK INSTANT, 25-40% of frame. BACKGROUND: the action-scene landscape with stakes visible.
@@ -370,25 +343,18 @@ An atmospheric event happening in the world around him — render as a visible s
     return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing his adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. He is ALIVE, CAPABLE, road-tested, in a story-rich candid moment.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+The word "man" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (rogue / ranger / mage / paladin). Opening reads: "a [race-coded] MAN [doing action] in [landscape]..." He/him throughout; the class slot is his ROLE, appended after "man".
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
-• NO combat, NO mid-strike, NO weapon-aimed-at-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
-• Weapons stay holstered / sheathed / slung / carried — NEVER in active combat use
-• NO male-cheesecake: NO "shirtless" / "bare-chested" / "oiled pecs" / "strategically torn" / "rugged hero pose" / "smoldering" / "form-fitting" / "skin-tight"
-• His outfit reads FUNCTIONAL + COVERED — sleek adventuring gear, not sexualized
-• NO posing for the camera. NEVER staged. Candid moment, body in motion or charged stillness
+━━━ KEEP IT CLEAN + CANDID ━━━
+Functional, covered adventuring gear (never male-cheesecake — no shirtless / bare-chested / oiled-pecs / "rugged hero pose"). Weapons holstered, sheathed, slung, or carried — never in active combat, no enemy in frame. A candid moment in motion or charged stillness — never posing for the camera.
 
-━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. He is ALONE in his moment.
-
-━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
-The adventurer is the MAIN SUBJECT. His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+━━━ SOLO — HE IS THE SHOW ━━━
+ONE character, alone. He is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait.
 
 ━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Rohirrim = golden-blond braided beard. Nord = blond braided beard. Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Rohirrim / Nord = blond braided beard. Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
 
 ━━━ HIS CLASS (his role / energy — informs how he carries himself) ━━━
 ${charClass}
@@ -426,7 +392,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see his face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near his feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
@@ -475,36 +441,23 @@ An atmospheric event happening in the world around him — render as a visible s
     return `You are a fantasy concept-art painter writing a CANDID ADVENTURING scene for DragonBot — a single MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, doing his adventurer thing out in the wild. LOTR / GoT / Elden Ring / Skyrim / Witcher tradition. He is ALIVE, CAPABLE, sure-handed, road-tested, in a story-rich candid moment. His AGE varies naturally (young, prime, or seasoned per the race slot) — do NOT default to an old grey-bearded elder.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "adventurer", "rogue", "ranger", "mage", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+The word "man" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (rogue / ranger / mage / paladin). Opening reads: "a [race-coded] MAN [doing action] in [landscape]..." He/him throughout; the class slot is his ROLE, appended after "man".
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN, COMBAT-CLEAN ━━━
-• NO active combat, NO mid-strike, NO weapon-aimed-at-a-foe, NO enemy in frame, NO fallen body, NO wounded character, NO blood-fight
-• A DRAWN weapon held ready in stealth or wary advance IS allowed (creeping low with sword/axe/dagger drawn, stalking something just out of frame) — but NEVER mid-swing, NEVER a visible enemy, NEVER an actual strike. Otherwise weapons stay holstered / sheathed / slung / carried.
-• NO male-cheesecake: NEVER "shirtless" / "bare-chested" / "oiled pecs" / "exposed torso" / "open shirt revealing chest" / "strategically torn" / "loincloth". His CHEST is ALWAYS covered by armor or layers.
-• NO "rugged hero pose" / "smoldering" / posing for the camera. Candid moment, body in motion or charged stillness.
+━━━ KEEP IT CANDID ━━━
+A candid moment in motion or charged stillness — never a "rugged hero pose" or posing for the camera, never an actual combat strike or a visible enemy. Weapons holstered, sheathed, slung, or carried; a DRAWN weapon held ready in wary advance is fine (creeping low, stalking something out of frame), but never mid-swing.
 
 ━━━ HIS OUTFIT — COOL GRITTY MASCULINE ARMOR (render the slot exactly) ━━━
-His gear is BADASS FITTED GRITTY ARMOR — Witcher / Elden Ring / Dragon Age / GoT-cover caliber: articulated plate / cuirass with pauldrons + vambraces + greaves, scale or chitin-and-hide, or reinforced battle-leather with a shoulder-harness. Weathered, battle-worn, brass-riveted, runic-etched, blackened-steel, road-grimed. His CHEST is ALWAYS covered (cuirass / breastplate / gambeson / hauberk / brigandine / scale / coat). A cloak or half-cape only as an ACCENT over the armor.
-Render whatever the OUTFIT SLOT specifies exactly. AVOID frumpy drapes (loose flowing robes / shapeless hooded coats / billowing) AND any cheesecake (no shirtless, no exposed torso, no skin-tight bodysuit). He looks rugged, capable, and battle-hardened — NEVER glamour, NEVER bare-chested.
-Reference: Geralt's weathered Witcher armor / Aragorn's road-worn plate-and-leather / an Elden Ring tarnished knight / a gritty Dragon-Age warrior. Fitted and functional, NEVER loose drapes.
+BADASS FITTED GRITTY ARMOR — Witcher / Elden Ring / Dragon Age / GoT-cover caliber: articulated plate / cuirass with pauldrons + vambraces + greaves, scale or chitin-and-hide, or reinforced battle-leather with a shoulder-harness. Weathered, battle-worn, brass-riveted, runic-etched, blackened-steel, road-grimed. His CHEST is ALWAYS covered (cuirass / breastplate / gambeson / hauberk / brigandine / scale / coat); cloak or half-cape only as an ACCENT. Render the OUTFIT SLOT exactly. AVOID frumpy drapes (loose robes / shapeless hooded coats / billowing) and any cheesecake (no shirtless, no exposed torso, no skin-tight bodysuit). Reference: Geralt's weathered Witcher armor / Aragorn's road-worn plate-and-leather / an Elden Ring tarnished knight.
 
-━━━ SOLO CHARACTER ONLY ━━━
-ONE character. No companions, no enemies, no crowds. He is ALONE in his moment.
+━━━ SOLO — HE IS THE SHOW ━━━
+ONE character, alone. He is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait. FACE always visible — never back-to-viewer / rear-view.
 
-━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
-The adventurer is the MAIN SUBJECT. His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
-
-⚠️ FRAMING BANS — NEVER:
-• "back to viewer" / "from behind" / "rear view" — his FACE must be visible (three-quarter or side profile)
-• "tiny silhouette in distance" / "small in distant landscape" / "dwarfed by"
-• "lone figure on horizon" / "distant figure approaching"
-
-⚠️ MASCULINE ANATOMY — render him UNMISTAKABLY as a man: broad shoulders wider than waist, masculine jawline, male facial structure, facial hair + AGE exactly per the race slot (clean-shaven / stubble / short or full beard / beardless; young, prime, or seasoned). Render the outfit slot's coverage exactly — chest ALWAYS covered, NEVER bare-chested, NEVER cheesecake.
+⚠️ MASCULINE ANATOMY — render him UNMISTAKABLY as a man: broad shoulders wider than waist, masculine jawline, male facial structure, facial hair + AGE exactly per the race slot (clean-shaven / stubble / short or full beard / beardless; young, prime, or seasoned). Chest ALWAYS covered, never bare-chested.
 
 ━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Facial hair VARIES per the race entry — clean-shaven / light stubble / short trimmed beard / full beard / beardless (elves, dragonborn, drow). Render EXACTLY what the race entry specifies; do NOT add a full grey beard unless the entry calls for it. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Drow = obsidian-grey skin and white-silver hair, beardless. Tiefling = horns and slit-pupil eyes. Dragonborn = scaled face and draconic snout, beardless. Half-orc = green-grey skin and tusks. Mountain dwarf = heavily-braided beard with iron clan-rings. Facial hair VARIES per the race entry — render EXACTLY what it specifies; do NOT add a full grey beard unless the entry calls for it. Race is the HERO of identity.
 
 ━━━ HIS CLASS (his role / energy — informs how he carries himself) ━━━
 ${charClass}
@@ -544,7 +497,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION ━━━
 Three-quarter angle or side profile so we see his face and race clearly. NEVER walking head-on toward camera. NEVER posing for the camera. Full-body or wide mid-shot. FOREGROUND: tactile detail near his feet (gear, rocks, vegetation, trail-edge). MIDGROUND: HIM, full body, mid-action, 25-40% of frame. BACKGROUND: the landscape receding into atmospheric haze.
@@ -590,13 +543,10 @@ A magical / atmospheric event amplifying the action — render as a visible seco
     return `You are a fantasy concept-art painter writing a PEAK-ACTION CINEMATIC MOMENT for DragonBot — a MAN of a SPECIFIC D&D × LOTR fantasy race, of a specific class, captured at the apex of dynamic action. LOTR / GoT / Elden Ring / Skyrim / Witcher / Warcraft visual lineage. He is ALIVE, mid-motion, RIPPING with cinematic energy.
 
 ━━━ GENDER LOCK — ABSOLUTE FIRST RULE ━━━
-The subject is a MAN. The word "man" MUST appear in the FIRST 8 TOKENS of your prompt. Do NOT substitute "mage", "rogue", "ranger", "paladin", "warrior" or any other gender-ambiguous noun for "man" in the opening. Opening MUST read: "a [race-coded] MAN [doing action] in [landscape]..." — "man" comes BEFORE any class noun. Use he/him/his throughout. The class slot describes his ROLE, not his gendered noun — append role AFTER "man" appears.
+The word "man" MUST lead — in the FIRST 8 TOKENS, BEFORE any class noun (mage / rogue / ranger / paladin). Opening reads: "a [race-coded] MAN [doing action] in [landscape]..." He/him throughout; the class slot is his ROLE, appended after "man".
 
-━━━ ABSOLUTE BANS — NSFW-CLEAN ━━━
-• NO male-cheesecake: NO "shirtless" / "bare-chested" / "oiled" / "strategically torn" / "rugged hero pose" / "smoldering" / "form-fitting" / "skin-tight"
-• His outfit reads FUNCTIONAL + COVERED — sleek action gear, not sexualized
-• NO posing for the camera. NEVER staged. Captured at a cinematic loaded INSTANT
-• NO real-world ethnic / historical costume codes — STRICT WESTERN HIGH FANTASY ONLY
+━━━ KEEP IT CLEAN, WESTERN, UNSTAGED ━━━
+Functional, covered action gear (never male-cheesecake — no shirtless / bare-chested / oiled / "rugged hero pose"). Captured at a cinematic loaded INSTANT — never posing for the camera. Strict Western high fantasy — no real-world ethnic / historical costume codes.
 
 ━━━ THIS IS PEAK ACTION — NOT A CANDID MOMENT ━━━
 The action axis describes a CINEMATIC MID-ACTION BEAT — mid-spell at the apex of a fireball, mid-loose with arrow streaking from his bow, mid-leap from a rooftop in a chase, the moment of summoning, the second a paladin's hammer crashes down, the instant a rogue's blade reverses for a kill.
@@ -612,16 +562,13 @@ The frame should be ALIVE with chaos / motion / magic — not just him with one 
 ━━━ SCALE THE MAGIC UP ━━━
 If the action involves magic, don't render a wisp — render a MAELSTROM. Not just a fireball — a fireball amid arcing tendrils of secondary flame and glowing-rune wake. Not just lightning — lightning forking down WITH an arcane storm circle radiating from his feet. Not just a portal — a portal CRACKING REALITY with creatures emerging and the air rippling. The magic should DOMINATE its quadrant of the frame.
 
-━━━ SOLO PROTAGONIST ━━━
-ONE character — he is the focus. Enemies / targets / mooks may exist in the scene but as scale-provers / context, NEVER eclipsing him. No fallen-body gore. No fights between two equally-prominent figures. HE is the show.
-
-━━━ HE IS THE SHOW — NON-NEGOTIABLE ━━━
-His face, gear, race, action, and pose are the DRAW. He occupies 25-40% of the frame vertically — FULL BODY head-to-toe visible, head no larger than 10% of frame. NOT a tiny silhouette in distant landscape. NOT a centered portrait. MEDIUM scale where outfit / accessory / face / race-anatomy all CLEARLY READABLE.
+━━━ SOLO — HE IS THE SHOW ━━━
+ONE character is the focus. Enemies / targets / mooks may exist as scale-provers / context, never eclipsing him, no fallen-body gore. He is the main subject at 25-40% of frame vertically, FULL BODY head-to-toe (head ≤10% of frame), outfit / accessory / face / race-anatomy all clearly readable — not a tiny distant silhouette, not a centered portrait.
 
 ━━━ HIS RACE (LOCKED — render him unmistakably as THIS lineage) ━━━
 ${race}
 
-Race is NON-NEGOTIABLE. Render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
+Race is NON-NEGOTIABLE — render the EXACT anatomy, skin/scale tone, ears, eyes, distinguishing features, and beard (where the race entry specifies one). Beards are male-coded for many races — RENDER THEM if the race entry calls for them. Race is the HERO of identity.
 
 ━━━ HIS CLASS (his role / energy — informs HOW the action reads) ━━━
 ${charClass}
@@ -659,7 +606,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — DYNAMIC ANGLES ━━━
 Action shots benefit from DYNAMIC camera angles. Mix across renders: three-quarter / dutch-tilt / low-angle hero / over-shoulder / sweeping pursuit / dramatic upshot. NEVER head-on at the camera. NEVER posing. FOREGROUND: tactile action detail (rubble / sparks / motion-blur / spell-residue). MIDGROUND: HIM, full body, AT THE PEAK INSTANT, 25-40% of frame. BACKGROUND: the action-scene landscape with stakes visible.
