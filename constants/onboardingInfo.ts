@@ -37,30 +37,29 @@ export const MOOD_INFO: InfoStepConfig = {
 // config — its own footer copy is hard-coded ("Got it, let's create")
 // since it's NOT an onboarding step, so no ctaLabel here either.
 export const CREATE_INFO: InfoStepConfig = {
-  eyebrow: 'on demand, anytime',
-  imageSource: require('@/assets/images/onboarding/create-studio.png'),
+  eyebrow: 'how create works',
   headline: 'A full AI image studio',
-  body: 'Type a prompt, pick a model (Flux 2, Nano Banana, GPT Image 2, and more), tap Dream. Each render costs a sparkle or two, and we’ll drop 25 ✨ in your account when you finish setup. Four ways to use it:',
+  body: 'Enter your prompt, pick an AI model, and tap Dream. There are four ways to create:',
   subFeatures: [
     {
-      emoji: '🌙',
+      icon: 'sparkles-outline',
       title: 'DreamBot mode',
-      body: 'Adds your taste to any prompt. Face-swaps you in too, if you’ve set up Dream Cast.',
+      body: 'Supports personalized renders using your Dream Cast photos — just mention “me” or “my +1” in your prompt. Also provides custom mediums and vibes for epic dream creations.',
     },
     {
-      emoji: '🎯',
+      icon: 'flash-outline',
       title: 'Direct mode',
-      body: 'Sends your exact prompt straight to the AI model. No styling, no face swap.',
+      body: 'Sends your prompt directly to your AI model of choice. No personalization, medium, or vibe applied.',
     },
     {
-      emoji: '📸',
+      icon: 'color-palette-outline',
       title: 'Restyle a photo',
-      body: 'Upload one and pick a medium. We’ll transform it.',
+      body: 'Upload a photo, pick a look, and transform your photo into a work of art.',
     },
     {
-      emoji: '👤',
-      title: 'Drop your face in',
-      body: 'Upload any reference image and we’ll put you in it.',
+      icon: 'people-outline',
+      title: 'Cast any photo',
+      body: 'Upload any reference photo to cast someone new in a dream.',
     },
   ],
 };

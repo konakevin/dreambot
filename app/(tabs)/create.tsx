@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 import {
   View,
@@ -155,34 +156,43 @@ export default function CreateScreen() {
   // didn't actually explain how Create works. Once-per-device-per-install
   // (persistence handled inside the sheet on its own mount).
   const [introVisible, setIntroVisible] = useState(false);
-  useEffect(() => {
-    let cancelled = false;
-    hasSeenCreateIntro().then((seen) => {
-      if (cancelled || seen) return;
-      // Wait a tick so the sheet doesn't fight the screen mount animation.
-      setTimeout(() => {
-        if (!cancelled) setIntroVisible(true);
-      }, 350);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Re-check on every focus (not just mount) so the admin "Reset First-Run
+  // Tutorials" tool re-shows this without an app restart — the Create tab stays
+  // mounted, so a mount-only effect would never re-fire after the flag clears.
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      hasSeenCreateIntro().then((seen) => {
+        if (cancelled || seen) return;
+        // Wait a tick so the sheet doesn't fight the screen mount animation.
+        setTimeout(() => {
+          if (!cancelled) setIntroVisible(true);
+        }, 350);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [])
+  );
 
   // First time the user opens the medium picker, teach the face-vs-art
   // distinction (MediumsIntroSheet) before the picker opens. Default the ref to
   // `true` (don't show) until the async flag loads, so a fast tap before load
   // never re-traps a user who's already seen it.
   const mediumsIntroSeen = useRef(true);
-  useEffect(() => {
-    let cancelled = false;
-    hasSeenMediumsIntro().then((seen) => {
-      if (!cancelled) mediumsIntroSeen.current = seen;
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Re-read on focus too, so the admin tutorials-reset re-arms this without an
+  // app restart.
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      hasSeenMediumsIntro().then((seen) => {
+        if (!cancelled) mediumsIntroSeen.current = seen;
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [])
+  );
   const [mediumsIntroVisible, setMediumsIntroVisible] = useState(false);
 
   // Open the medium picker, but the first time gate it behind the intro sheet.
@@ -694,8 +704,8 @@ export default function CreateScreen() {
                   style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: fontScale(16) }}
                 >
                   {config.useExactPrompt
-                    ? 'Your exact prompt goes straight to the AI model you pick — no DreamBot styling, polish, or face swap.'
-                    : 'Custom mediums & vibes, prompt polish, and your cast photos swapped into the scene.'}
+                    ? 'Your exact prompt goes straight to the AI model you pick — no DreamBot styling, polish, or likeness.'
+                    : 'Custom mediums & vibes, prompt polish, and your saved Dream Cast likeness when you mention yourself.'}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setShowProModeInfo(true)}
@@ -944,9 +954,10 @@ export default function CreateScreen() {
                 lineHeight: fontScale(21),
               }}
             >
-              Our engine. It polishes your prompt, styles your dream with a hand-picked set of
-              mediums & vibes, and swaps your cast photos into the scene — mention yourself to
-              appear solo, or you and your +1 to include both.
+              Our engine. It polishes your prompt, styles your dream with hand-picked mediums &
+              vibes, and adds your saved Dream Cast likeness to the scene. Just mention yourself
+              (“me”) or your +1 (“my wife”, “my friend”) and we’ll place you in — no need to upload
+              a photo each time.
             </Text>
 
             <View className="flex-row items-center mb-1.5" style={{ marginTop: verticalScale(16) }}>
@@ -969,7 +980,7 @@ export default function CreateScreen() {
                 lineHeight: fontScale(21),
               }}
             >
-              Sends your exact words straight to the AI model — no mediums, polish, or face swap.
+              Sends your exact words straight to the AI model — no mediums, polish, or likeness.
               Best when you want full control over the prompt.
             </Text>
             <Text

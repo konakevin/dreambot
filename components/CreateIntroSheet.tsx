@@ -14,7 +14,6 @@
  */
 
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -87,12 +86,6 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
         </View>
 
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-          {CREATE_INFO.imageSource && (
-            <View style={s.screenshotWrap}>
-              <Image source={CREATE_INFO.imageSource} style={s.screenshot} contentFit="contain" />
-            </View>
-          )}
-
           <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
           {/* Gradient headline — same MaskedView+LinearGradient pattern as
@@ -100,12 +93,20 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
           <MaskedView
             maskElement={
               <View style={s.headlineMaskWrap}>
-                <Text style={s.headlineMask}>{CREATE_INFO.headline}</Text>
+                <Text style={s.headlineMask} numberOfLines={1} adjustsFontSizeToFit>
+                  {CREATE_INFO.headline}
+                </Text>
               </View>
             }
           >
             <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text style={[s.headlineMask, s.headlineGhost]}>{CREATE_INFO.headline}</Text>
+              <Text
+                style={[s.headlineMask, s.headlineGhost]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
+                {CREATE_INFO.headline}
+              </Text>
             </LinearGradient>
           </MaskedView>
 
@@ -115,10 +116,27 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
             <View style={s.subFeatures}>
               {CREATE_INFO.subFeatures.map((f) => (
                 <View key={f.title} style={s.subFeature}>
-                  <Text style={s.subFeatureEmoji}>{f.emoji}</Text>
+                  <View style={s.subFeatureIcon}>
+                    {f.icon ? (
+                      <Ionicons name={f.icon} size={20} color={colors.accentLight} />
+                    ) : (
+                      <Text style={s.subFeatureEmoji}>{f.emoji}</Text>
+                    )}
+                  </View>
                   <View style={s.subFeatureText}>
                     <Text style={s.subFeatureTitle}>{f.title}</Text>
-                    <Text style={s.subFeatureBody}>{f.body}</Text>
+                    {f.bullets ? (
+                      <View style={s.bulletList}>
+                        {f.bullets.map((b, i) => (
+                          <View key={i} style={s.bulletRow}>
+                            <Text style={s.bulletDot}>•</Text>
+                            <Text style={s.bulletText}>{b}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text style={s.subFeatureBody}>{f.body}</Text>
+                    )}
                   </View>
                 </View>
               ))}
@@ -161,22 +179,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
 
-  screenshotWrap: {
-    width: 220,
-    aspectRatio: 4 / 5,
-    borderRadius: 18,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: verticalScale(20),
-    backgroundColor: colors.surface,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-  },
-  screenshot: { width: '100%', height: '100%' },
-
   eyebrow: {
     color: colors.accentLight,
     fontSize: fontScale(12),
@@ -193,7 +195,9 @@ const s = StyleSheet.create({
     textAlign: 'center',
     lineHeight: fontScale(36),
     color: '#FFFFFF',
-    maxWidth: 320,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    maxWidth: 300,
   },
   headlineGhost: { opacity: 0 },
   body: {
@@ -216,15 +220,35 @@ const s = StyleSheet.create({
     borderRadius: 16,
     padding: 14,
   },
+  subFeatureIcon: {
+    width: verticalScale(38),
+    height: verticalScale(38),
+    borderRadius: 11,
+    backgroundColor: 'rgba(167,139,250,0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   subFeatureEmoji: {
-    fontSize: fontScale(24),
-    lineHeight: fontScale(28),
-    width: 28,
+    fontSize: fontScale(22),
+    lineHeight: fontScale(26),
     textAlign: 'center',
   },
   subFeatureText: { flex: 1, gap: 4 },
   subFeatureTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   subFeatureBody: {
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(19),
+  },
+  bulletList: { gap: verticalScale(3), marginTop: verticalScale(2) },
+  bulletRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 7 },
+  bulletDot: {
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(19),
+  },
+  bulletText: {
+    flex: 1,
     color: colors.textSecondary,
     fontSize: fontScale(13),
     lineHeight: fontScale(19),

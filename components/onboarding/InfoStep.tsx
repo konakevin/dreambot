@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '@/constants/theme';
@@ -20,9 +21,13 @@ const SCREENSHOT_WIDTH = verticalScaleClamped(220, 180, 240);
 // body copy, optional sub-feature cards, full-width Next button.
 
 export interface InfoSubFeature {
-  emoji: string;
+  /** Ionicons name — preferred (renders reliably). Falls back to `emoji`. */
+  icon?: keyof typeof Ionicons.glyphMap;
+  emoji?: string;
   title: string;
-  body: string;
+  /** Either a paragraph `body` OR a list of `bullets` (bullets take priority). */
+  body?: string;
+  bullets?: string[];
 }
 
 export interface InfoStepConfig {
