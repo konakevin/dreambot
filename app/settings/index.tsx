@@ -638,6 +638,22 @@ export default function SettingsScreen() {
             destructive
             trailing={null}
           />
+          <SettingsRow
+            icon="refresh-outline"
+            label="Reset First-Run Tutorials (test)"
+            onPress={async () => {
+              // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
+              // so those tutorial sheets re-show next time — without re-onboarding.
+              // Lets us replay the first-run flows over and over.
+              await Promise.all([resetCreateIntro(), resetMediumsIntro()]).catch(() => {});
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+              showAlert(
+                'Tutorials reset',
+                'First-run tutorials will show again — reopen the Create tab to see them.'
+              );
+            }}
+            trailing={null}
+          />
         </View>
 
         {/* Account section */}
