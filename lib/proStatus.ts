@@ -24,6 +24,10 @@ export interface EntitlementRow {
   // Pro-trial window above.
   basic_subscription?: boolean;
   basic_subscription_expires_at?: string | null;
+  // Admins (incl. the super-admin) are always nightly-eligible regardless of
+  // subscription — see isDreamEligible. Mirrors is_dream_eligible() (migration
+  // 262) + nightlyEligibility.js.
+  is_admin?: boolean;
 }
 
 // Default trial length. The AUTHORITATIVE window lives in engine_config.pro_trial_days
@@ -102,5 +106,6 @@ export function isDreamEligible(
   now: number = Date.now(),
   trialDays: number = _configuredTrialDays
 ): boolean {
+  if (row?.is_admin === true) return true;
   return isProActive(row, now, trialDays) || isBasicActive(row, now);
 }

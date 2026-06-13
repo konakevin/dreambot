@@ -46,6 +46,11 @@ function isBasicActive(u, now = Date.now()) {
  *  the is_dream_eligible() Postgres fn + lib/proStatus.ts isDreamEligible. This
  *  is the enqueue gate. */
 function isDreamEligible(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  // Admins (incl. the super-admin, who is also is_admin) ALWAYS get nightly
+  // dreams, regardless of subscription state — they test in RevenueCat sandbox
+  // where the webhook keeps resetting paid entitlement. Mirrors the is_admin
+  // bypass in is_dream_eligible() (migration 262) + proStatus.isDreamEligible.
+  if (u && u.is_admin === true) return true;
   return isProActive(u, now, trialDays) || isBasicActive(u, now);
 }
 

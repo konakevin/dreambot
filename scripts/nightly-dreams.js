@@ -101,7 +101,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     .from('user_recipes')
     .select(
       `user_id,
-       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot)`
+       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot, is_admin)`
     )
     .eq('users.is_bot', false);
   if (cfg.nightlyRequireOnboarding) eligibleQuery = eligibleQuery.eq('onboarding_completed', true);
