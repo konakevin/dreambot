@@ -102,11 +102,15 @@ export function useToggleFollow() {
       qc.invalidateQueries({ queryKey: ['followingList', user?.id] });
       qc.invalidateQueries({ queryKey: ['followingIds', user?.id] });
       qc.invalidateQueries({ queryKey: ['outgoingFollowRequests', user?.id] });
-      // Following a bot changes who appears in the feed — invalidate ALL feed
-      // tabs (forYou / following / bots) so the feed reflects the new following
-      // state. Without this, the feed served stale follow content (prefix-match
-      // invalidates every ['dreamFeed', tab, userId, seed, botUserId] entry).
-      qc.invalidateQueries({ queryKey: ['dreamFeed'] });
+      // Following changes who appears in the feed — mark ALL feed tabs (forYou /
+      // following / bots) stale so they reflect the new follow state on their
+      // NEXT refetch (focus / pull-to-refresh / remount). refetchType:'none' is
+      // critical: a live refetch here re-scores + re-orders get_feed mid-scroll
+      // (the followed author gets the is_following boost, surface_type flips),
+      // which yanked/dropped the card under the user's thumb the moment they
+      // tapped Follow. The optimistic followingIds update already flips the
+      // button instantly, so there's nothing to refetch eagerly for.
+      qc.invalidateQueries({ queryKey: ['dreamFeed'], refetchType: 'none' });
     },
   });
 }
