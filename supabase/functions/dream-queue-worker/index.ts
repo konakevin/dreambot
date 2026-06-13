@@ -197,6 +197,26 @@ Deno.serve(async (req) => {
                 completed_at: new Date().toISOString(),
               })
               .eq('id', job.id);
+            // Tell the user their FREE, membership-included nightly dream couldn't
+            // render — distinct, NO-SPARKLE wording vs the paid generate-dream
+            // path (refund-stuck-jobs / generate-dream say "sparkle refunded";
+            // nightly is included, so that would be wrong here). Stay silent on
+            // NSFW dead-letters — no point flagging a safety block on an
+            // auto-generated dream the user never explicitly asked for.
+            if (job.source === 'nightly' && !isNsfw) {
+              const { error: notifErr } = await supabase.from('notifications').insert({
+                recipient_id: job.user_id,
+                type: 'dream_failed',
+                subtype: 'nightly_failed',
+                body: "Your nightly dream couldn't render tonight — it's included with your membership, no sparkles charged. We'll try again tomorrow night.",
+              });
+              if (notifErr) {
+                console.error(
+                  `[worker:${workerId}] nightly dream_failed notify insert failed:`,
+                  notifErr.message
+                );
+              }
+            }
             return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };
           }
 

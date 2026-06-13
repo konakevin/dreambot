@@ -123,9 +123,16 @@ function getNotificationContent(
       return { title: NIGHTLY_DREAM_PUSH_TITLE, body: 'Tap to step inside' };
     case 'dream_failed':
       // A render failed. The stored `body` is the inbox copy and already leads
-      // with "Your dream couldn't render…", so don't echo it as the push body
-      // (redundant with the title). Surface the refund outcome instead — the
-      // one thing the user actually wants to know.
+      // with "…couldn't render…", so don't echo it as the push body. Surface the
+      // key outcome instead.
+      if (subtype === 'nightly_failed') {
+        // Free, membership-included nightly dream — no sparkle to mention, and it
+        // auto-retries tomorrow night, so no "tap to try again". Just reassure.
+        return {
+          title: "Tonight's dream couldn't render",
+          body: "It's on us — we'll try again tomorrow night",
+        };
+      }
       return {
         title: "Your dream couldn't render",
         body: body && body.includes('refunded') ? 'Your sparkle was refunded' : 'Tap to try again',

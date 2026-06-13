@@ -53,8 +53,9 @@ export interface InboxGroup {
    * Fine-grained discriminator (migration 206). Replaces the legacy body-prefix
    * hack — e.g. `dream_generated` with `subtype === 'wish'` is a wish-fulfilled
    * dream, `'welcome'` is the onboarding first-dream ping, `null` is a plain
-   * nightly dream. `dream_failed` is always `'failed'`; `download_ready` is
-   * always `'download'`. Most rows are `null`.
+   * nightly dream. `dream_failed` is `'failed'` (paid generate-dream) or
+   * `'nightly_failed'` (free nightly — different copy, no sparkle mention);
+   * `download_ready` is always `'download'`. Most rows are `null`.
    */
   subtype: string | null;
   category: NotificationCategory;
