@@ -283,7 +283,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ VAMPIRE-LORD / MAN-OF-THE-NIGHT MANDATE — APPLY TO EVERY RENDER ━━━
 Every render leans VAMPIRE-LORD / DARK-PRINCE / DEADLY-ARISTOCRAT — mysterious-corrupted aristocrat of the gothic night. Even if his archetype reads as warlock or assassin, the AESTHETIC is vampire-lord:
@@ -757,7 +757,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ VAMPIRESS / WOMAN-OF-THE-NIGHT MANDATE — APPLY TO EVERY RENDER ━━━
 Every render leans VAMPIRESS / DARK-SEDUCTRESS / WOMAN-OF-THE-NIGHT — corrupted-beauty aristocrat of the gothic night. Even if her archetype reads as witch or sorceress, the AESTHETIC is vampiress:
@@ -889,7 +889,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — INTIMATE MID-CLOSE, DENSELY LAYERED ━━━
 MID or MID-CLOSE intimate frame. Looking INTO a corner/alcove/shelf-cluster — never wide empty hall. 5+ depth layers from foreground tabletop / shelf-edge through midground shelves of stuff / deeper shelves and walls / back wall with hanging items / ambient air with dust-motes and candle-smoke. Curio-cabinet density throughout.
@@ -1006,7 +1006,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — CASTLEVANIA ESTABLISHING SHOT ━━━
 The Castlevania structure FILLS THE FRAME at 80% visual weight. Multi-tier depth:
@@ -1064,7 +1064,7 @@ Layered depth — foreground particles (mist / ash / embers / drifting snow) cau
 Render in RICH, FULL, NATURALISTIC color like a fantasy-novel-cover painting — deep full-bodied saturated hues with warm and cool tones in believable balance (earthy stone-greys, deep forest and moss greens, warm torch-amber and gold, cold moon-silver and blue, deep crimson and bruise-violet accents). Saturated and luminous but NATURAL and grounded, with real depth and atmosphere — a varied true-to-life palette, never a single-hue wash.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 🚫 NO hunter / NO human protagonist / NO second figure / NO combat partner — the monster is SOLO
 🚫 NO gore / NO blood-spatter / NO open wounds / NO mid-bite-on-victim — implied menace only
@@ -1114,7 +1114,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 🚫 NO hunter / NO human protagonist / NO second figure / NO combat partner — the monster is SOLO
 🚫 NO gore / NO blood-spatter / NO open wounds / NO mid-bite-on-victim — implied menace only
@@ -1171,7 +1171,7 @@ Layered depth — foreground particles (mist / ash / embers / drifting snow) cau
 Render in BOLD, FULLY-SATURATED, HIGH-CHROMA comic color — rich varied luminous hues across the spectrum (emerald and witch-green, blood-crimson, electric teal and cyan, gold and candle-amber, royal violet, hot magenta, bone-ivory) set against deep inky blacks. Bright, punchy, and richly colorful like a Castlevania promotional poster — vivid and saturated throughout.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 🚫 NO hunter / NO human protagonist / NO second figure — the monster is SOLO
 🚫 NO gore / NO blood-spatter / NO mid-bite-on-victim — implied menace only
@@ -1231,7 +1231,7 @@ Layered depth — foreground particles (mist / ash / embers / drifting snow) cau
 The entire scene is ${scene_color}. COMMIT FULLY to this specific vivid dominant color — flood the lighting, glow, fog, and atmosphere with it so it saturates the whole frame and lights the grey stone gargoyle from rim to shadow. Bold, vivid, and luminous, held against deep ominous inky-black shadow for a DARK, dramatic, ominous mood — a creature-feature film lit with bold colored gels.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 200)}
+${vibeDirective.slice(0, 150)}
 
 🚫 NO hunter / NO human protagonist / NO second figure — the monster is SOLO
 🚫 NO gore / NO blood-spatter / NO mid-bite-on-victim — implied menace only
@@ -1368,7 +1368,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — STRUCTURE-DOMINATES, MULTI-TIER DEPTH ━━━
 The structure FILLS THE FRAME (80%+ visual weight). Multi-tier depth mandatory:
@@ -1694,7 +1694,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — EPIC WIDE-VISTA THAT WATCHES YOU ━━━
 WIDE LANDSCAPE VISTA — the camera is PULLED BACK. Show the FULL biome with architectural anchor at midground or deep distance, the surrounding terrain stretching to atmospheric horizon. Think Castlevania-stage establishing-shot / Bloodborne-area-intro-card. The ARCHITECTURE is a distant focal landmark with visible inner-glow, the LANDSCAPE is the hero, the DARK-WILDLIFE makes it alive.
@@ -1810,7 +1810,7 @@ ${sharedDNA.scenePalette}
 ${sharedDNA.colorPalette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ COMPOSITION — EPIC WIDE-VISTA ━━━
 WIDE LANDSCAPE VISTA — the camera is PULLED BACK. Show the FULL biome with architectural anchor at midground or deep distance, the surrounding terrain stretching to atmospheric horizon. Think John-Howe / Alan-Lee / Ted-Nasmith epic-fantasy concept-landscape painting (but rendered as Castlevania-stage / Bloodborne-area). The ARCHITECTURE is a distant focal landmark, the LANDSCAPE is the hero.

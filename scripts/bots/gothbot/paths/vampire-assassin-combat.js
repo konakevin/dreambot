@@ -209,7 +209,7 @@ This is NOT a still image — this is a MOVIE POSTER establishing-shot. Render a
   8. CINEMATIC BOSS-FIGHT FEEL — like the freeze-frame of a Castlevania boss-fight or Bloodborne hunter-vs-beast climax.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE (write the prompt in this order — fight-first, world-last) ━━━
 [OPEN with the DUEL ENGAGEMENT — name the exact weapon-to-vampire contact (blade-tip clashing with vampire's parrying-blade / bolt mid-flight inches from vampire's chest / whip wrapping vampire's neck / pistol-muzzle flashing at vampire's face / stake mid-thrust toward vampire's heart)], [the HUMANOID VAMPIRE-FOE mid-counter-attack — specific vampire-archetype with full aristocratic-vampire detail (fangs, glowing eyes, velvet coat or obsidian gown, ornate finery)], [the assassin (gender-locked ${gender}) mid-strike, body in motion against the vampire-foe], [the period-accurate weapon described in full material detail], [gothic stage at the combatants' feet — minimal, the floor/ground only], [tiny distant backdrop and atmospheric depth — last and smallest]

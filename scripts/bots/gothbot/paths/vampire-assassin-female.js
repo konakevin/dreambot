@@ -155,7 +155,7 @@ This is NOT a still image — this is a MOVIE POSTER establishing-shot. Render h
   8. HOT + DEADLY SILHOUETTE — her silhouette is the hero. The gothic-tactical outfit reads as ornate-deadly-predator from the silhouette alone. Sleek + agile + threatening posture frozen mid-action.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE (write the prompt in this order for best results) ━━━
 [the female vampire-huntress filling 60-75% of frame in her ornate stylized fun outfit, mid-action], [her body language / pose / weapon clearly visible], [her face + hair + makeup readable], [the gothic setting as softly-blurred background atmosphere behind her], [foreground props at her feet adding mood], [theatrical rim-light carving her silhouette], [saturated gothic palette + painted-canvas richness]

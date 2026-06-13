@@ -106,26 +106,14 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-dark-prince — male character lineup (mirror of vampire-girls-2, 2026-06-10 NEW).
-    'the-dark-prince': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'the-dark-prince': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // the-haunting — ethereal ghost; scene-ish lineup (2026-06-10 NEW).
-    'the-haunting': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'the-haunting': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // the-coven — female witch character lineup (2026-06-10 NEW).
-    'the-coven': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'the-coven': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // moonlit-maiden — ethereal female figure (2026-06-11 NEW). Flux only (the
     // hearted look came from flux-1.1-pro/ultra anime).
-    'moonlit-maiden': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'moonlit-maiden': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'vampire-assassin-female': [
       // 2026-06-05: Banana re-enabled for character-path audit. BAN: Flux Dev, Flux 2 Flex
       'black-forest-labs/flux-1.1-pro',
@@ -188,10 +176,7 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'monster-prowl': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'monster-prowl': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'monster-prowl-victorian': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -371,7 +356,7 @@ module.exports = {
     // illustration / sharp linework / high-def gallery-print" positive
     // anchors carry the illustration register.
     gothbot_gothic_print:
-      'Castlevania-promotional-art finish, sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks',
+      'dark gothic-action-horror promotional-art finish, sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
@@ -389,9 +374,9 @@ module.exports = {
     // / Bloodborne polish / Berserk-manga ink" positive anchors carry the
     // dark gothic-horror illustration register without the leak.
     gothbot_gothic_print:
-      'Castlevania-illustration concept-art, Symphony-of-the-Night promotional-art lineage, Devil-May-Cry environment-art tradition, Bloodborne concept-illustration polish, Berserk-manga Kentaro-Miura ink-detail stylization but painted-not-flat, sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity, dark gothic-horror action-game promotional-art quality',
+      'dark gothic-horror action-game concept-art, painted ink-detail stylization (painted-not-flat), sharp clean linework, every architectural ornament rendered crisp at every readable scale, theatrical high-contrast lighting, rich tonal depth, high-def gallery-print fidelity',
     gothic_architecture:
-      'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, Castlevania-environment concept-art, moonlit stone and stained-glass atmosphere',
+      'dark gothic-horror illustration, heavy-ink shadow, hyper-baroque ornate architectural detail, high-contrast chiaroscuro, dark-fantasy environment concept-art, moonlit stone and stained-glass atmosphere',
     // Subject-agnostic rewrite — stripped all character/face/makeup/expression
     // language that was leaking into landscape + architecture paths. Medium now
     // describes ONLY the rendering style (painted oil-on-canvas dark-fantasy
@@ -403,7 +388,7 @@ module.exports = {
     // 5-painter lineage + "semi-realistic painterly rendering with visible
     // brushwork and heavy impasto oil texture" anchors lock the register.
     gothic_realistic:
-      '1980s-1990s dark-fantasy paperback oil-painting cover art, Luis-Royo + Boris-Vallejo + Julie-Bell + Frank-Frazetta + Ken-Kelly painted-cover tradition, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture, strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere, dark-fantasy-paperback-cover craft quality',
+      'dark-fantasy painted-cover oil painting, semi-realistic painterly rendering with visible brushwork and heavy impasto oil texture, strong chiaroscuro with warm amber candle / torch / moonlit key-light against cool violet-blue shadow, dramatic painted-polish dark-fantasy atmosphere',
     // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `WALLPAPER-
     // WORTHY` + 7-stack NOT tail (NOT photoreal / NOT cinematic film-still /
     // NOT magazine editorial / NOT plastic-skin / NOT smooth-digital-art /
@@ -411,15 +396,15 @@ module.exports = {
     // "operatic gothic-theatrical / old-master-oil-painting tradition /
     // visible painterly brushwork" anchors carry the painted register.
     vampire_portrait:
-      'GALLERY-PRINT operatic gothic-theatrical painting fusing old-master-oil-painting tradition with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy',
+      'operatic gothic-theatrical oil painting with painted-fantasy-poster drama, visible painterly brushwork, punchy jewel-tone palette anchored by deep velvet shadow, theatrical chiaroscuro pushed to operatic extreme, dramatic single-source key-light cutting through gloom, frame-worthy gallery-painting composition, dark gothic horror character energy',
     // 2026-06-02 cruft-audit micro-strip — dropped 3-stack NOT tail (NOT
     // cute-anime / NOT shonen / NOT moe). "Berserk-Kentaro-Miura ink
     // stylization / Devil-May-Cry character-art / heavy-shadow anime-
     // horror" anchors carry the mature-dark-anime register.
     anime:
-      'dark-anime horror illustration, Berserk-manga Kentaro-Miura ink stylization, Devil-May-Cry character-art, heavy-shadow anime-horror aesthetic',
+      'inked dark-anime horror illustration, bold contour, flat cel-shade, heavy black shadow, mature heavy-shadow anime-horror aesthetic',
     comics:
-      'gothic-horror comic-panel illustration, Mike-Mignola-Hellboy inked shadow, Hellblazer vertigo-horror comic stylization, bold black ink, dramatic chiaroscuro panels',
+      'gothic-horror comic-panel illustration, heavy inked shadow, vertigo-horror comic stylization, bold black ink, dramatic chiaroscuro panels',
     pencil:
       'heavy graphite gothic-horror sketch, cross-hatched shadow, dark-fantasy concept-sketch linework, inked-over-pencil stylization, dramatic gothic illustration drawn in pencil-and-ink',
     illustration:
@@ -433,7 +418,7 @@ module.exports = {
     // The 3-painter lineage + "painterly brushwork / oil painting on canvas"
     // anchors carry the classical oil register.
     canvas_victorian:
-      'lush classical oil painting on canvas, vivid luminous dark-fantasy oil in the tradition of Frank Frazetta + Brom + Caravaggio, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting',
+      'lush classical oil painting on canvas, vivid luminous dark-fantasy oil, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting',
     // monster-prowl bespoke (Kevin 2026-05-25) — inked dark-anime / comic-horror.
     // monster-prowl — ULTRA-HIGH-DEF HYPERREAL cinematic render (Kevin 2026-05-25).
     hyperreal:
@@ -443,7 +428,7 @@ module.exports = {
     // monster-prowl-inked — BOLD RICH DETAILED COMIC (matches the hearted vivid look);
     // palette from the color_mood spectrum axis. No Berserk (tree-fusion); solid-creature guard.
     inked_spectrum:
-      'inked dark-anime gothic-horror illustration, bold hard black contour outlines wrapping every form, flat graphic cel-shaded color blocks, VIVID FULLY-SATURATED high-chroma color, richly detailed and intricate rendering, crisp clean drawn linework, heavy solid-black shadow shapes, Berserk-manga Kentaro-Miura ink stylization, Castlevania promotional-art lineage, Mike-Mignola-Hellboy inked-comic finish, dramatic graphic chiaroscuro, lush detailed backgrounds, mature gritty comic-horror, NOT cute-anime NOT shonen NOT moe',
+      'inked dark-anime gothic-horror illustration, bold hard black contour outlines wrapping every form, flat graphic cel-shaded color blocks, VIVID FULLY-SATURATED high-chroma color, richly detailed and intricate rendering, crisp clean drawn linework, heavy solid-black shadow shapes, dramatic graphic chiaroscuro, lush detailed backgrounds, mature gritty comic-horror',
     // monster-prowl-weta — COMBINED hyperreal (UE5) + Weta-Workshop realistic render (Kevin 2026-05-25).
     weta_render:
       'hyperreal cinematic 3D render, Weta-Workshop practical-effects realism fused with Unreal Engine 5 + Octane physically-based rendering, ultra-high-definition lifelike textures (believable skin, scales, fur, wet membrane, sinew, weathered stone), ray-traced cinematic lighting in RICH FULL-SPECTRUM SATURATED color — bold colored light and glow in vivid emerald, blood-crimson, electric teal, gold-amber, royal violet, hot magenta — against deep ominous inky-black shadow, ultra-detailed 8K materials, sharp focus, dark dramatic cinematic depth',

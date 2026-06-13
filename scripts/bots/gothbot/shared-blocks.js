@@ -30,8 +30,7 @@ const PROMPT_PREFIX =
   'Dark gothic fantasy, hauntingly beautiful, operatic dark romance with vampire-hunter danger';
 
 // 2026-06-02 cruft-audit micro-strip — dropped `hyper-detailed` tech-spec.
-const PROMPT_SUFFIX =
-  'no text no words no watermarks, frame-worthy dark-fantasy art';
+const PROMPT_SUFFIX = 'no text no words no watermarks, frame-worthy dark-fantasy art';
 
 // gpt-image-2 medium directive (routed via mediumByModel in index.js).
 // GPT-Image-2 reads the bot's normal mediums + painterly anchors as "go
@@ -42,32 +41,35 @@ const PROMPT_SUFFIX =
 const GPT_CLEAN =
   'Cinematic gothic fantasy illustration, clean editorial-poster render with clearly readable figures and recognizable gothic architecture, deep moody jewel-tone palette with atmospheric depth, dark fantasy register';
 
-const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
-
-Dark fantasy at its most stylish — the aesthetic world of vampire hunters, gothic action cinema, supernatural adventure. Moonlit baroque architecture, candlelit crypts, foggy graveyards, cathedral ruins with broken stained glass, moss-covered gargoyles, velvet-lined interiors, Victorian finery. Rich varied palette — DEEP PURPLES + MIDNIGHT BLUES + VELVET BLACKS + POISON GREENS + WITCH-FIRE GREEN + FEL-VIOLET + BLACKLIGHT + MOONLIT SILVER + TWILIGHT LAVENDER + CANDLE-AMBER + TORCH-ORANGE + FORGE-EMBER + ALCHEMIST-GOLD. WEAVE MULTIPLE ACCENT COLORS INTO EACH SCENE — a scene might have a violet twilight sky + witch-fire green glow in a window + warm amber candle in the foreground + crimson accents on a banner. Avoid single-hue monochrome clustering. Red/crimson stays as accent only — never coloring whole windows/buildings/moons. Supernatural tension hangs in the air — something ancient stirs in shadows, candles flicker at unseen currents, fog curls low across flagstones. Dramatic Victorian-era styling — ornate fabric, silver jewelry, baroque weapons.
-
-Reference DNA: Castlevania, Van Helsing, Devil May Cry, Hellboy, Bloodborne, Bram Stoker's Dracula. Ayami-Kojima-dark-manga stylization, heavy-ink sharp-angular lines, high-contrast baroque detail. NOT whimsical-gothic, NOT quiet-dread-dark, NOT fantasy-book-cover, NOT YA-fantasy, NOT Artgerm-smooth-digital-art. Operatic dark romance with a hint of danger. BEAUTIFUL, DANGEROUS, ALIVE. The kind of art that belongs on a Castlevania-game cover, a Hellboy-Mignola comic panel, or a Van-Helsing movie poster.`;
-
+// The single canonical dark-palette block (consolidated 2026-06-12 cruft-audit
+// — was previously stated twice, in ELEGANT_DARKNESS_BLOCK and a separate
+// TWILIGHT_COLOR_BLOCK). Multi-hue accents, never single-hue monochrome,
+// never red-dominant. ELEGANT_DARKNESS now references this instead of
+// re-stating the palette.
 const TWILIGHT_COLOR_BLOCK = `━━━ TWILIGHT COLOR — WEAVE MULTIPLE HUES ━━━
 
-The night is NOT gray-monochrome, and NOT red-monochrome. Every scene weaves MULTIPLE accent hues. Pull from the full Nightshade spectrum: violet-twilight skies, emerald-occult witch-fire, sapphire-nocturne deep-blues, rose-dusk horizons, fel-green warlock glow, necro-pale-blue, nightshade-indigo, witch-green, plus warm accents — candle-amber, torch-orange, forge-ember, alchemist-gold. Stained glass saturates the scene in colored light. Candles throw amber, forges throw orange. Moonlight paints silver-violet. Witch-fire throws poison green. A typical render has ONE dominant atmosphere hue (violet twilight, sapphire moonlight, or emerald ritual-glow) + ONE warm secondary accent (amber candle, orange torch, gold alchemist-gleam) + ONE cool accent. Darkness with VARIED COLOR. No red-red-red.`;
+The night is NOT gray-monochrome and NOT red-monochrome — every scene weaves MULTIPLE accent hues. A typical render has ONE dominant atmosphere hue (violet twilight, sapphire moonlight, or emerald ritual-glow) + ONE warm secondary accent (amber candle, orange torch, gold alchemist-gleam) + ONE cool accent. Pull from the Nightshade spectrum: violet, midnight-blue, velvet-black, poison/witch-fire green, fel-violet, moonlit silver, twilight lavender — plus warm candle-amber, torch-orange, forge-ember, alchemist-gold. Stained glass throws colored light, candles throw amber, witch-fire throws poison green, moonlight paints silver-violet. Darkness with VARIED COLOR. Red/crimson is accent ONLY — never coloring whole windows/buildings/moons/fog.`;
+
+const ELEGANT_DARKNESS_BLOCK = `━━━ NIGHTSHADE — BEAUTIFUL, DANGEROUS, ALIVE ━━━
+
+Dark fantasy at its most stylish — the aesthetic world of vampire hunters, gothic action cinema, supernatural adventure. Moonlit baroque architecture, candlelit crypts, foggy graveyards, cathedral ruins with broken stained glass, moss-covered gargoyles, velvet-lined interiors, Victorian finery. Use the dark palette (see TWILIGHT COLOR) — multi-hue accents woven into each scene, never single-hue monochrome. Supernatural tension hangs in the air — something ancient stirs in shadows, candles flicker at unseen currents, fog curls low across flagstones. Dramatic Victorian-era styling — ornate fabric, silver jewelry, baroque weapons. Heavy-ink sharp-angular lines, high-contrast baroque detail. Operatic dark romance with a hint of danger. BEAUTIFUL, DANGEROUS, ALIVE.`;
 
 const ALLURING_BEAUTY_BLOCK = `━━━ EVIL + CORRUPTED + ALLURING + HAUNTINGLY BEAUTIFUL ━━━
 
-Female characters are HAUNTINGLY BEAUTIFUL supernatural horrors — gorgeous and terrifying inseparable. Vampire queens mid-prey, succubi with slitted pupils, corrupted priestesses dripping dark magic, occult seductresses, fel-warlock sorceresses, corrupted-noble countesses, witch-queens with inhuman auras. NOT "moody-pretty-goth-girl" — the viewer should feel UNSETTLED first, magnetized second, but every frame is GORGEOUS.
+Female characters are HAUNTINGLY BEAUTIFUL supernatural horrors — gorgeous and terrifying inseparable (vampire queens, succubi, corrupted priestesses, occult seductresses, witch-queens). NOT "moody-pretty-goth-girl" — UNSETTLED first, magnetized second, every frame GORGEOUS.
 
 MANDATORY character details per female render:
-- GLOWING EYES — crimson / fel-green / void-violet / necrotic-white / ember-gold / ice-blue pupils or fully-luminous irises
-- BOLD MAKEUP — heavy smokey-eye with dramatic wing, blood-red or oxblood or obsidian-black lips, sharp contour, pallid porcelain or ash-grey or blue-tinted skin
-- CORRUPTION MARKINGS — ink-black veins tracing neck/arms, ritual-sigil scar on throat or brow, faint spell-tattoos glowing beneath skin, crack-lines as if stone
-- WARDROBE of danger — bustier + leather pauldrons + thigh-holsters (Van-Helsing-huntress), corseted-gown with blood-crimson accents, sheer-black-lace with ritual-sigils exposed, torn-silk + chains, obsidian-scale armor-bodice
-- POSTURE of menace — mid-hunt, mid-cast, mid-summon, mid-drain, mid-lunge — never static pretty-pose
+- GLOWING EYES — luminous crimson / fel-green / void-violet / necrotic-white / ember-gold / ice-blue irises or pupils
+- BOLD MAKEUP — heavy winged smokey-eye, blood-red or oxblood or obsidian lips, sharp contour, pallid porcelain or ash-grey or blue-tinted skin
+- CORRUPTION MARKINGS — ink-black veins, a ritual-sigil scar, faint spell-tattoos glowing beneath skin, stone-like crack-lines
+- WARDROBE of danger — corseted-gown with crimson accents, sheer-black-lace, torn-silk + chains, leather pauldrons + thigh-holsters, obsidian-scale armor-bodice
+- POSTURE of menace — mid-hunt / mid-cast / mid-summon / mid-drain / mid-lunge, never a static pretty-pose
 
-Sex appeal is through DANGER + CORRUPTION + UNHUMAN-BEAUTY, never through nudity or fanservice. These women are terrifying and gorgeous, not cute-moody.`;
+Sex appeal is through DANGER + CORRUPTION + INHUMAN-BEAUTY, never nudity or fanservice. Terrifying and gorgeous, not cute-moody.`;
 
 const DYNAMIC_POSE_BLOCK = `━━━ DYNAMIC POSE — NO STANDING-STILL ━━━
 
-Characters are MID-ACTION, never just-standing-there posing for a portrait. Mid-stalk through graveyard mist, mid-cast with spell-sigil igniting, mid-turn with cloak flaring, mid-drawing-blade over shoulder, mid-pounce from rafter, mid-levitation above ritual circle, mid-howl at blood-moon, mid-whisper to familiar, mid-step onto gothic balcony, mid-raise-goblet at throne, mid-crouch on cathedral spire. Creatures are mid-leap, mid-lunge, mid-unfurl-wings, mid-shriek, mid-transform. Every figure has a VERB in the scene — the picture captures a MOMENT, not a portrait-pose.`;
+Every figure is MID-ACTION, never standing still posing for a portrait — e.g. mid-stalk through graveyard mist, mid-cast with spell-sigil igniting, mid-turn with cloak flaring. Every figure has a VERB in the scene — the picture captures a MOMENT, not a portrait-pose. Mid-action, not static.`;
 
 const EXTERIOR_PREFERRED_BLOCK = `━━━ EXTERIOR PREFERRED (for character-scene paths) ━━━
 
@@ -81,15 +83,19 @@ const NO_CHEAP_GORE_BLOCK = `━━━ IMPLIED DREAD, NOT CHEAP GORE ━━━
 
 Never cheap-horror, never slasher-splatter, never clown-horror. Implied blood OK for drama (crimson on lips, single-drop on lace collar, pooling-shadow on flagstones, blood-moon reflecting in puddle) — but never splattered, never visceral, never ugly. Dread comes from ATMOSPHERE: fog, shadow, chiaroscuro, unsettling composition, candle-flicker, distant howl, curling smoke, decaying elegance. Beauty-over-shock always.`;
 
-const NO_SATANIC_BLOCK = `━━━ NO SATANIC ICONOGRAPHY — NO RED-RED-RED ━━━
+// Rewritten POSITIVE 2026-06-12 — the old version enumerated 12 banned
+// religious symbols (pentagrams / inverted crosses / 666 / baphomet…),
+// which only seeds them in a stateless Sonnet/Flux prompt. Corruption now
+// reads entirely through character + atmosphere; no symbol is named.
+const NO_SATANIC_BLOCK = `━━━ CORRUPTION THROUGH CHARACTER + ATMOSPHERE ━━━
 
-ABSOLUTELY BANNED: pentagrams (5-pointed stars inside circles), inverted crosses, 666 imagery, baphomet, satanic sigils carved or drawn on floors/walls/skin, devil-horn hand gestures, explicit demonic-worship iconography. Our bot is GOTHIC-VAMPIRE-HUNTER stylish dark-fantasy — NOT satanic-metal-album-cover cheese. Corruption and dark magic read through CHARACTER design (fangs, horns, glowing eyes, corseted silhouette), WEAPON (silver crossbow, thin blade, ornate scythe), and ATMOSPHERE (moonlit graveyard, fog, cathedral) — NEVER through on-the-nose satanic symbols.
+Our gothic is stylish vampire-hunter dark-fantasy. Corruption and dark magic read through CHARACTER design (fangs, horns, glowing eyes, corrupted skin, corseted silhouette), WEAPON (silver crossbow, thin blade, ornate scythe), and ATMOSPHERE (moonlit graveyard, fog, cathedral, candle-flicker) — never through explicit religious or occult-worship imagery.
 
-ALSO BANNED: red/crimson windows or doorways glowing from inside buildings, blood-moon dominating the sky, red-stained-glass casting the whole scene crimson, red-fog or red-mist. The palette is DEEP PURPLES + MIDNIGHT BLUES + VELVET BLACKS + POISON GREENS + WITCH-FIRE GREEN + FEL-VIOLET + BLACKLIGHT + MOONLIT SILVER + TWILIGHT LAVENDER. Red is rare — a single lipstick, a single vial, a sole petal — never a dominant hue, never coloring windows/buildings/moons/fog.`;
+Keep the dark palette (see TWILIGHT COLOR): red/crimson is a rare accent (a single lipstick, a single vial, a sole petal), never a dominant hue and never coloring whole windows, buildings, moons, or fog.`;
 
 const STYLIZED_MANGA_BLOCK = `━━━ STYLIZED DARK-MANGA ILLUSTRATION ━━━
 
-Heavy-ink shadow, sharp-angular line-art, high-contrast baroque detail. Ayami-Kojima-Castlevania / Kentaro-Miura-Berserk / Devil-May-Cry character-art / WoW-undead-warlock concept-art stylization. NOT painterly, NOT smooth-digital-art, NOT Artgerm, NOT fantasy-book-cover, NOT photoreal, NOT 3D-render. Stylized dark-manga-horror illustration — the kind of art that belongs on a PS2-era dark-fantasy-game cover or a Devil-May-Cry manga-adaptation volume. Chiaroscuro-driven with TWILIGHT COLOR saturation. WoW-undead/warlock art DNA welcome (silhouettes, occult glow, runic detail) — aesthetic only, never IP.`;
+Heavy-ink shadow, sharp-angular line-art, high-contrast baroque detail. Inked dark-manga-horror illustration — stylized, not painterly, not photoreal. Chiaroscuro-driven with TWILIGHT COLOR saturation. Occult-glow, runic detail, dramatic undead/warlock silhouettes welcome.`;
 
 const NO_NAMED_CHARACTERS_BLOCK = `━━━ CHARACTERS BY ROLE ONLY ━━━
 
@@ -130,7 +136,7 @@ const PROMPT_PREFIX_PAINTED_GOTHIC_FANTASY = '';
 const PAINTED_GOTHIC_FANTASY_MEDIUM = 'gothic dark-fantasy concept art, painterly';
 
 const PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY =
-  'painted dark-fantasy concept art, atmospheric gothic illustration, dramatic chiaroscuro, oil-painted brushwork, deep saturated jewel-tones with painted shadow, Frank Frazetta + Brom + Wayne Barlowe + Luis Royo + dark-paperback-cover lineage, no text, no watermarks';
+  'painted dark-fantasy concept art, atmospheric gothic illustration, dramatic chiaroscuro, oil-painted brushwork, deep saturated jewel-tones with painted shadow, dark-fantasy painted-cover craft, no text, no watermarks';
 
 module.exports = {
   PROMPT_PREFIX,

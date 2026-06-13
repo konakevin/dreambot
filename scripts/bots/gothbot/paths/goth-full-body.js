@@ -89,7 +89,7 @@ ${sharedDNA.colorPalette}
 ${blocks.BLOW_IT_UP_BLOCK}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ FRAMING — THREE-QUARTER / MID-SHOT (WAIST-UP TO THIGH-UP) ━━━
 Frame her from WAIST-UP to THIGH-UP. NEVER pull back to full silhouette. NEVER show her full legs or feet. The background is IMPLIED / PARTIAL — a suggestion of gothic environment at the edges (gargoyle ledge, cathedral stone, misted forest, graveyard marker half-visible). She FILLS 60-75% of the vertical frame.

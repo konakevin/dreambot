@@ -143,7 +143,7 @@ This is NOT a still image — this is a MOVIE POSTER establishing-shot. Render h
   8. HOT + DEADLY SILHOUETTE — her silhouette is the hero. The gothic-tactical outfit reads as ornate-deadly-predator from the silhouette alone. Sleek + agile + threatening posture frozen mid-action.
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE (write the prompt in this order for best results) ━━━
 [the scene as a whole — gothic wild wide shot], [the epic backdrop dominating], [the gothic stage surrounding], [the assassin in her ornate outfit at full-body scale, visibly armed], [her body action / pose], [atmospheric depth and lighting], [color palette and mood]
