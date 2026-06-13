@@ -197,18 +197,28 @@ Deno.serve(async (req) => {
                 completed_at: new Date().toISOString(),
               })
               .eq('id', job.id);
-            // Tell the user their FREE, membership-included nightly dream couldn't
-            // render — distinct, NO-SPARKLE wording vs the paid generate-dream
-            // path (refund-stuck-jobs / generate-dream say "sparkle refunded";
-            // nightly is included, so that would be wrong here). Stay silent on
-            // NSFW dead-letters — no point flagging a safety block on an
-            // auto-generated dream the user never explicitly asked for.
+            // Nightly dream exhausted all retries. It's free (membership-included),
+            // so there's no sparkle to refund — instead CREDIT a goodwill sparkle
+            // for the trouble, and say so. Idempotent on the job id so a re-run
+            // can't double-grant. Stay silent on NSFW dead-letters (no point
+            // flagging a safety block on an auto-generated dream).
             if (job.source === 'nightly' && !isNsfw) {
+              const { error: grantErr } = await supabase.rpc('grant_sparkles', {
+                p_user_id: job.user_id,
+                p_amount: 1,
+                p_reason: `nightly_fail_credit:${job.id}`,
+              });
+              if (grantErr) {
+                console.error(
+                  `[worker:${workerId}] nightly fail sparkle credit failed:`,
+                  grantErr.message
+                );
+              }
               const { error: notifErr } = await supabase.from('notifications').insert({
                 recipient_id: job.user_id,
                 type: 'dream_failed',
                 subtype: 'nightly_failed',
-                body: "Your nightly dream couldn't render tonight — it's included with your membership, no sparkles charged. We'll try again tomorrow night.",
+                body: "Your nightly dream couldn't render tonight — we've added a sparkle to your balance to make up for it.",
               });
               if (notifErr) {
                 console.error(

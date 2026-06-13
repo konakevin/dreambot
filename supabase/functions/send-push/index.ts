@@ -126,11 +126,11 @@ function getNotificationContent(
       // with "…couldn't render…", so don't echo it as the push body. Surface the
       // key outcome instead.
       if (subtype === 'nightly_failed') {
-        // Free, membership-included nightly dream — no sparkle to mention, and it
-        // auto-retries tomorrow night, so no "tap to try again". Just reassure.
+        // Free, membership-included nightly dream — we credit a goodwill sparkle
+        // on failure (no charge to refund). One clear point: the credit.
         return {
           title: "Tonight's dream couldn't render",
-          body: "It's on us — we'll try again tomorrow night",
+          body: 'We added a sparkle to your balance to make up for it',
         };
       }
       return {
