@@ -36,19 +36,10 @@ Render this integrated INTO the build IN BRICK (trans-bolt lightning / trans-fla
     return `You are a LEGO MOC photographer + LEGO Masters finale judge writing a DRAMATIC SHOWCASE STORY-BUILD description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
 ━━━ THE BAR — LEGO MASTERS FINALE WINNER ━━━
-This is a single dramatic NARRATIVE hero build of the kind that WINS a LEGO Masters TV finale — a jaw-dropping story-build frozen at its climactic moment, presented with theatrical finale-reveal lighting on a turntable. The judges gasp. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a photoreal CGI render. ONE showcase build, high drama, masterful technique, a story told in brick at its peak moment.
+ONE dramatic NARRATIVE hero build that wins a LEGO Masters TV finale — a jaw-dropping story-build frozen at its climactic moment, presented with theatrical finale-reveal lighting on a turntable display-base.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every character is a LEGO minifigure mid-action telling the story. NEVER a real human face.
-
-━━━ EVERYTHING IS BRICK — THE WHOLE DRAMATIC BUILD IS LEGO ━━━
-EVERY element is built from real LEGO bricks — including the dramatic effects. NO photoreal anything. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. It's a competition showcase build on a turntable display-base.
-  • Structures / terrain / creatures = brick + slope + Technic + trans-element (per concept) — NEVER photoreal
-  • Fire / water / lightning / smoke / magic = trans-flame / trans-blue+foam / trans-bolt / cotton / trans-vortex elements — NEVER photoreal effects
-  • Cross-sections = honestly cut-open brick interiors with visible floors/levels
-  • Sky / backdrop = brick or studio-black for the theatrical reveal — NEVER photoreal sky
-
-━━━ BANNED VOCABULARY: "photoreal", "CGI", "real [material]", "lifelike", "rendered". A masterful BRICK build, theatrically lit — never a CGI movie still.
+━━━ EVERYTHING IS BRICK — including the dramatic effects ━━━
+Every element brick-built: visible studs, molded plastic, connection seams. Fire = trans-flame, water = trans-blue plate + white-stud foam, lightning = trans-bolt, smoke = cotton-element, magic = trans-vortex. Cross-sections show honestly cut-open brick interiors with visible floors. Sky/backdrop = brick or studio-black for the reveal. A masterful brick build, theatrically lit — never photoreal/CGI. ZERO REAL HUMANS: every character is a LEGO minifigure mid-action; never a real hand, face, or skin.
 
 ━━━ THE NARRATIVE CONCEPT — the story-build premise ━━━
 ${narrative_concept}
@@ -68,12 +59,7 @@ The masterful technique that wins the finale — render it visibly (cross-sectio
 ━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
 ${camera_framing}
 
-⚠️ NON-NEGOTIABLE — finale-reveal framing. Apply the exact angle.
-  • TURNTABLE HERO THREE-QUARTER — the classic showcase reveal angle, the build proud on its turntable
-  • DRAMATIC LOW LOOKING-UP — low angle making the build tower theatrically
-  • CROSS-SECTION STRAIGHT-ON / DOWN-INTO-THE-CUTAWAY — square to the cut face showing all the interior story-levels
-  • SPOTLIT ISOLATED-ON-BLACK — the build floating in theatrical darkness, spotlit
-  • SLOW-ORBIT / DUTCH-ANGLE — dynamic reveal energy
+⚠️ Apply the exact finale-reveal angle: turntable hero three-quarter / dramatic low looking-up / cross-section straight-on into the cutaway / spotlit isolated-on-black / slow-orbit dutch-angle.
 
 ━━━ THE CENTERPIECE SUBJECT — the dramatic focal element ━━━
 ${centerpiece_subject}
@@ -94,9 +80,7 @@ This theatrical lighting IS a core part of the path's identity — render it bol
 ${palette}
 
 ━━━ CROSS-AXIS COMPATIBILITY ━━━
-• ALL elements + effects are brick — never let the drama pull an effect photoreal; fire is trans-flame, water is trans-blue plate, lightning is a trans-bolt element.
-• The theatrical finale-reveal lighting + turntable/spotlit presentation are ALWAYS present — that's the path identity (vs the documentary lighting of the themed paths).
-• This path may re-use motifs from other paths (dragons, krakens, volcanoes) — the identity is the THEATRICAL FINALE PRESENTATION, not the theme.
+• The theatrical finale-reveal lighting + turntable/spotlit presentation are ALWAYS present — that's the path identity (vs the documentary lighting of the themed paths). This path may re-use motifs from other paths (dragons, krakens, volcanoes) — the identity is the THEATRICAL FINALE PRESENTATION, not the theme.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 200)}
@@ -134,22 +118,11 @@ Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-clear sparkle
 
     return `You are a LEGO MOC photographer + AFOL convention judge writing a PASTEL / ULTRA-CUTE / WHIMSICAL diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
-━━━ THE BAR — AFOL CONVENTION TIER SWEET-AND-SPARKLY IN LEGO BRICKS ━━━
-This is a Bricklink AFOL champion's pastel-whimsy diorama, photographed at a LEGO World convention — a candy-bright, obsessively-cute brick build. Could win a Best-of-Show in the whimsy/Friends category. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. NOT a photoreal CGI pink scene. The mood is JOYFUL, SWEET, SPARKLY, ultra-cute. Visual canon: LEGO Friends (Heartlake mini-doll cast) + LEGO DOTS (heart/star craft-tiles) + LEGO Elves (Elvendale fairy-pastel) + DUPLO Princess + generic LEGO fairytale-castle. Mini-doll-style figures welcome alongside minifigs. NEVER licensed Disney princesses/characters — generic fairytale only.
+━━━ THE BAR — AFOL CONVENTION-TIER SWEET-AND-SPARKLY ━━━
+A candy-bright, obsessively-cute pastel-whimsy brick diorama. The mood is JOYFUL, SWEET, SPARKLY, ultra-cute. Visual canon: LEGO Friends (Heartlake mini-doll cast) + LEGO DOTS (heart/star craft-tiles) + LEGO Elves (Elvendale fairy-pastel) + DUPLO Princess + generic LEGO fairytale-castle. Mini-doll-style figures welcome alongside minifigs. NEVER licensed Disney princesses/characters — generic fairytale only.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every character is a LEGO minifigure or a LEGO Friends mini-doll (C-shaped/curved hands + printed plastic face). NEVER a real human face. NEVER a licensed named character.
-
-━━━ EVERYTHING IS BRICK — SWEET BUT STILL ALL LEGO ━━━
-EVERY element is built from real LEGO bricks. NO photoreal frosting, NO photoreal fabric, NO photoreal fur, NO photoreal flowers, NO photoreal sky. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-  • Castle / boutique / structures = pastel brick + SNOT-curved turrets + scalloped slope-edges — NEVER photoreal
-  • Sweets / cupcakes = brick dome + cone + round-tile builds — NEVER photoreal frosting
-  • Flowers / petals = plant-element + round-plate blooms — NEVER photoreal flowers
-  • Unicorn / pony / mermaid = brick-built or LEGO animal-element with a brick-horn / brick-tail — NEVER photoreal fur or a real animal
-  • Sparkle / fairy-dust = trans-clear + trans-pink round-plates — NEVER photoreal glitter
-  • Sky = brick sky-baseplate (often pastel) — NEVER photoreal sky
-
-━━━ BANNED VOCABULARY: "photoreal", "real fabric/fur/frosting/flowers", "glittery-real", "lifelike". Sweet + pastel, but unmistakably LEGO brick.
+━━━ EVERYTHING IS BRICK — sweet but unmistakably LEGO ━━━
+Every element brick-built: visible studs, molded plastic, connection seams. Frosting, fabric, fur, flowers, glitter, sky — all rendered in brick (pastel brick + SNOT-curved turrets / round-tile cupcake-domes / plant-element blooms / trans-clear + trans-pink sparkle-plates / pastel sky-baseplate). Unicorns/ponies/mermaids are brick-built (brick horn/tail), never photoreal fur or a real animal. ZERO REAL HUMANS: every character is a LEGO minifigure or LEGO Friends mini-doll (C-shaped hands + printed plastic face); never a real face or a licensed named character.
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -167,21 +140,16 @@ Makes the build read as AFOL champion + unmistakably all-brick. Render it visibl
 ━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
 ${camera_framing}
 
-⚠️ NON-NEGOTIABLE — the rolled framing DRIVES the composition. Apply the exact angle, even if Flux wants a centered front-facing figure. Override hard.
-  • CASTLE-TOWER-UP / SPARKLE-TOWER — vertical, the sweet structure towering
-  • BOUTIQUE-WINDOW-DISPLAY / PARLOR-COUNTER-OVER — framed through a display or over a counter
-  • GARDEN-ARCHWAY-THROUGH / DOLLHOUSE-CUTAWAY — framed by an arch / cutaway showing furnished rooms
-  • RUNWAY-DOWN-THE-AISLE / SPIRAL-STAIRCASE-DOWN — receding perspective with figures along it
-  • Avoid centered eye-level front-facing as default — that's the Flux-bias trap.
+⚠️ The rolled framing DRIVES the composition — apply the exact angle, override Flux's centered front-facing default: castle-tower-up / sparkle-tower vertical / boutique-window or parlor-counter-over / garden-archway-through / dollhouse-cutaway showing furnished rooms / runway-down-the-aisle / spiral-staircase-down receding.
 
 ━━━ THE SUBJECT-FOCUS (silhouette anchor OR no-vehicle scene-focus) ━━━
 ${subject_focus}
 
 ⚠️ HARD BIFURCATION:
-• STRUCTURE (candy-castle / boutique / parlor / sparkle-tower / dollhouse / gazebo) — render the pastel brick structure as DOMINANT, 50%+ of frame; figure action AT it.
-• MOUNT/CREATURE (unicorn / winged-pony / mermaid / fluffy-cat / butterfly-steed / swan) — render the brick-built creature as DOMINANT; horn/wings/tail are brick elements, fur is brick, NEVER photoreal.
-• NO-VEHICLE INTERIOR (boutique / parlor / pastel-bedroom / dance-studio / spa / tea-room) — the cute brick interior is the SETTING, the figure action the SUBJECT; pack it with sweet brick detail.
-• NO-VEHICLE LANDSCAPE (heart-garden / rainbow-meadow / candy-land / blossom-field / cloud-kingdom) — the pastel brick landscape is the SETTING with figure action as the focal beat; LUSH + densely cute, never sparse.
+• STRUCTURE (candy-castle / boutique / sparkle-tower) — render the pastel brick structure as DOMINANT, 50%+ of frame; figure action AT it.
+• MOUNT/CREATURE (unicorn / winged-pony / mermaid) — render the brick-built creature as DOMINANT; horn/wings/tail/fur are brick elements, NEVER photoreal.
+• NO-VEHICLE INTERIOR (boutique / pastel-bedroom / tea-room) — the cute brick interior is the SETTING, the figure action the SUBJECT; pack it with sweet brick detail.
+• NO-VEHICLE LANDSCAPE (heart-garden / rainbow-meadow / blossom-field) — the pastel brick landscape is the SETTING with figure action as the focal beat; LUSH + densely cute, never sparse.
 
 ━━━ THE REGISTER (girly heritage lock) ━━━
 ${register}
@@ -199,11 +167,10 @@ ${lighting}
 ${palette}
 
 ━━━ CROSS-AXIS COMPATIBILITY ━━━
-• If register is FRIENDS-HEARTLAKE — mini-doll cast, pastel pink+lavender+mint, modern-cute boutiques + cafes + flower-shops.
+• If register is FRIENDS-HEARTLAKE — mini-doll cast, pastel pink+lavender+mint, modern-cute boutiques + cafes.
 • If register is ELVES-ELVENDALE — fairy/elf mini-dolls with translucent-wing pieces, teal+lavender+gold, ornate treetop/crystal builds.
-• If register is DOTS-CRAFT — heavy heart/star/flower DOTS-tile mosaic detailing on every surface, bright craft-multi palette.
+• If register is DOTS-CRAFT — heavy heart/star/flower DOTS-tile mosaic detailing, bright craft-multi palette.
 • If register is GENERIC-FAIRYTALE-CASTLE — gold+rose+white, a princess-castle + a generic crown (no named character).
-• Unicorns/ponies/mermaids are ALWAYS brick-built (brick horn/tail/wings), never photoreal animals.
 • Whatever palette rolls, the register's signature WINS if they conflict.
 
 ━━━ MOOD CONTEXT ━━━
@@ -228,15 +195,7 @@ Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with 
 This is BrickBot's most PLAYFUL path — a Bricklink AFOL champion's tropical-ISLAND diorama with a fun, funny, surreal, or downright CRAZY thing going on (and sometimes just a gorgeous serene island view). The energy: a wild island HAPPENING that makes you grin — volcano hijinks, castaway contraptions, pirate & kraken mishaps, monkey heists, runaway sandcastles, seaplane splashdowns, luau chaos, surf spectacle, tiki magic, a giant brick creature (ONE idea among many) — OR a breathtaking calm lagoon/dock view. It is a LEGO brick model on a tabletop, full of charm. NOT a stock catalog shot, NOT a kid's playset.
 
 ━━━ #1 RULE — IT IS 100% LEGO BRICK. THIS OVERRIDES EVERYTHING ELSE ━━━
-This MUST read INSTANTLY as a LEGO build — a model made of plastic LEGO bricks, every surface clearly assembled from pieces. EVERY element (the island AND the hero idea) is built from LEGO bricks, plates, slopes, and tiles with STUDS CLEARLY VISIBLE, glossy injection-molded plastic, brick seams everywhere. If ANYTHING looks smooth, organic, or computer-rendered, the image has FAILED. When in doubt, make it MORE obviously plastic-brick — blockier, more stud-covered.
-The hard cases — these MUST be brick too, never photoreal:
-  • Giant creatures / animals / sea-monsters = blocky LEGO BRICK SCULPTURES, stepped + studded + clearly assembled — NEVER smooth organic CGI creatures
-  • Water / sea / lagoon / waves / splashes = trans-blue + trans-cyan round-plates + tiles in stepped brick layers — NEVER photoreal water
-  • Volcano lava / fire = stacked trans-orange + trans-red + trans-yellow LEGO flame pieces — NEVER photoreal fire
-  • Smoke / steam / ash / clouds = grey + white bricks, round plates, or cotton-ball puffs — NEVER photoreal vapor
-  • Palms / foliage / sand = LEGO plant-elements + tan plates + slopes — NEVER photoreal foliage
-  • Crowds = many tiny LEGO minifigures, studded torsos + cylinder heads — NEVER photoreal people, NEVER real hands or faces
-  • Sky = brick sky-baseplate or plain studio backdrop
+This MUST read INSTANTLY as a LEGO build — every element (the island AND the hero idea) brick-built from plates/slopes/tiles with STUDS CLEARLY VISIBLE, glossy molded plastic, brick seams everywhere. Render the hard cases as brick too (e.g. giant creatures = blocky stepped + studded brick sculptures, water = trans-blue round-plates in stepped layers, lava/fire = stacked trans-flame pieces, smoke/clouds = grey + white round-plates + cotton-puffs, palms/sand = plant-elements + tan plates, sky = brick baseplate). When in doubt, make it MORE obviously plastic-brick — blockier, more stud-covered. Never photoreal/organic/CGI, and no real humans: crowds are many tiny LEGO minifigures.
 
 ━━━ THE ISLAND SCENE — the hero idea (the heart of this path) ━━━
 ${island_scene}
@@ -310,17 +269,8 @@ This is a Bricklink AFOL champion's COMPLETE display diorama, photographed at a 
 ━━━ THIS IS THE WHOLE-BUILD VIEW — completeness is the point ━━━
 Frame the ENTIRE diorama in one shot — foreground to background, edge to edge. The viewer should read it as a complete WORLD on a tabletop, not a close-up of one subject. ⚠️ DEEP FOCUS — the WHOLE build is tack-sharp edge-to-edge, front-to-back; NOT tilt-shift, NOT a shallow miniature-blur (Kevin's call for this path). Every zone crisp + detailed; no empty baseplate, no blurred foreground/background.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Every figure is a tiny LEGO minifigure populating the build. NEVER a real human face.
-
 ━━━ EVERYTHING IS BRICK — THE WHOLE WORLD IS LEGO ━━━
-EVERY element across the whole diorama is built from real LEGO bricks. NO photoreal anything. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. It sits on a tabletop convention display — and that's a FEATURE, not a flaw.
-  • Terrain / rock / water / snow / foliage = brick + slope + trans-plate + plant-element (per theme) — NEVER photoreal
-  • Buildings / structures = brick-built with visible studs + technique — NEVER photoreal
-  • Crowds / vehicles = many tiny minifigs + brick vehicles — NEVER photoreal
-  • Sky = brick sky-baseplate or studio backdrop — NEVER photoreal
-
-━━━ BANNED VOCABULARY: "photoreal", "real [material]", "lifelike", "realistic miniature" (it's a LEGO build, say "brick-built"). ALSO BANNED for this path: "tilt-shift", "miniature blur", "shallow depth of field", "bokeh", "selective focus" — render DEEP-FOCUS, the whole build sharp.
+Every element across the whole diorama is brick-built (visible studs, molded plastic, connection seams): terrain/water/snow/foliage in slope-bricks + trans-plates + plant-elements, structures with visible build technique, crowds + vehicles as tiny minifigs + brick vehicles, sky as a brick baseplate or studio backdrop. It sits on a tabletop convention display — a FEATURE, not a flaw. Never photoreal/CGI, and no real humans: every figure is a tiny LEGO minifigure.
 
 ━━━ THE DIORAMA THEME — the complete world depicted ━━━
 ${diorama_theme}
@@ -405,21 +355,10 @@ Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-orange + tran
     return `You are a LEGO MOC photographer + AFOL convention judge writing a GIANT-ROBOT / MECH diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
 ━━━ THE BAR — AFOL CONVENTION TIER MECH IN LEGO BRICKS ━━━
-This is a Bricklink AFOL champion's mech diorama, photographed at a LEGO World convention — a posed, articulated, greebled brick titan that wins hard-suit category. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a photoreal CGI war-machine still. The mech is OBSESSIVELY detailed — ball-jointed in a dynamic pose, panel-lined, power-core lit. Visual canon: LEGO Bionicle (bio-mechanical CCBS) + Hero Factory (hero-bots) + Exo-Force (anime-mech blue/gold vs robots) + Ninjago mechs + Technic mech-suits + AFOL hard-suit MOCs. INSPIRED BY mecha-anime + Pacific-Rim-scale, but NEVER named franchises (no Gundam model-numbers / Transformers names / named Jaegers).
-
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Any pilot/crew is a LEGO minifigure with C-shaped hands + printed plastic face (in a cockpit, or tiny at the mech's foot for scale). The MECH itself is a brick-built robot — never a real-metal CGI mech.
+This is a Bricklink AFOL champion's mech diorama, photographed at a LEGO World convention — a posed, articulated, greebled brick titan that wins hard-suit category. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a photoreal CGI war-machine still. The mech is OBSESSIVELY detailed — ball-jointed in a dynamic pose, panel-lined, power-core lit. Visual canon: LEGO Bionicle (bio-mechanical CCBS) + Hero Factory (hero-bots) + Exo-Force (anime-mech blue/gold vs robots) + Ninjago mechs + Technic mech-suits + AFOL hard-suit MOCs. INSPIRED BY mecha-anime + Pacific-Rim-scale, but no licensed/IP mechs — generic only.
 
 ━━━ EVERYTHING IS BRICK — THE MECH AND ITS WORLD ARE ALL LEGO ━━━
-EVERY element is built from real LEGO bricks. NO photoreal metal, NO photoreal CGI mech, NO photoreal explosions, NO photoreal sky. Studs + Technic-holes + ball-joints CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-  • Mech body = brick + Technic-beam frame with ball-joint + ratchet articulation, SNOT armor-plating, panel-line greebles — NEVER photoreal metal
-  • Power-core / energy = trans-cyan + trans-blue + trans-orange elements + light-piping — NEVER photoreal glow
-  • Weapons-fire / explosions = trans-orange + trans-yellow flame elements + scattered tiles — NEVER photoreal pyro
-  • Terrain (battlefield / hangar floor) = brick plates + slope-bricks + Technic-panel flooring — NEVER photoreal ground
-  • Smoke = cotton-elements + grey 1×1 round-plates — NEVER photoreal smoke
-  • Sky = brick sky-baseplate — NEVER photoreal sky
-
-━━━ BANNED VOCABULARY (pull Flux to photoreal CGI — NEVER use): "photoreal", "real metal/steel", "CGI", "rendered metal", "glistening chrome", "motion-blur", "blurred". Render the mech as a posed brick MOC, never a cinematic CGI render.
+Every element is brick-built (visible studs + Technic-holes + ball-joints, molded plastic, connection seams): the mech body a Technic-beam frame with ball-joint articulation + SNOT armor-plating + greebles, power-core/energy in trans-cyan + trans-orange + light-piping, weapons-fire in trans-flame elements + scattered tiles, terrain in brick plates + slope-bricks, sky a brick baseplate. The diorama sits on a tabletop convention display. Never photoreal metal/CGI/pyro, and no real humans: any pilot/crew is a LEGO minifigure (in a cockpit, or tiny at the mech's foot for scale).
 
 ━━━ THE MECH — the hero subject ━━━
 ${mech_class}
@@ -514,22 +453,8 @@ Weave this in as a SECONDARY focal point, rendered IN BRICK (cotton-element + ta
 ━━━ THE BAR — AFOL CONVENTION TIER WILD-WEST IN LEGO BRICKS ━━━
 This is a Bricklink AFOL champion's wild-west frontier diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real western-movie still. The mood is dusty, sun-baked, high-noon-tense or campfire-warm. Visual canon: classic LEGO Western (Cowboys sheriff-vs-outlaw / Fort Legoredo cavalry / Gold City Junction prospectors / Bandit's Hideout) + spaghetti-western + gold-rush boom-town + transcontinental-railroad. RESPECTFUL frontier framing — cowboys, outlaws, sheriffs, prospectors, railroad crews, cavalry; NEVER a dated "cowboys-vs-Indians" caricature or stereotyped Native characters.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Every character is a LEGO minifigure with C-shaped hands + printed plastic face. Cowboy / sheriff / outlaw / prospector / cavalry / railroad-worker minifig variants (cowboy-hat + bandana + revolver / sheriff-star-torso / poncho / suspenders-and-pickaxe / blue-cavalry-kepi / engineer-cap) are LEGO minifigure variants. NEVER a real human face.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING DESERT, ROCK, WOOD, WATER, AND DUST ━━━
-EVERY element is built from real LEGO bricks. NO photoreal desert, NO photoreal rock/sandstone, NO photoreal wood, NO photoreal sky, NO real western-set photo. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR DESERT TERRAIN (shared with the landscape path's photoreal pull) — translate EVERY natural element into NAMED BRICK PARTS:
-  • Mesa / butte / canyon = stacked tan + orange + red plates + slope-bricks showing sedimentary courses with visible brick-edges — NEVER photoreal sandstone
-  • Desert ground = tan + dark-tan plates + slopes with offset-tile ripple — NEVER photoreal sand
-  • Buildings = clapboard timber facades built from brown + tan tiles + plates with false-front profiles — NEVER photoreal weathered wood
-  • Cactus = brick-built green saguaro arms + barrel-cactus domes — NEVER photoreal cactus
-  • River-ford = trans-blue + trans-light-blue plates — NEVER photoreal water
-  • Sky = brick sky-baseplate with 1×1 white round-plate clouds — NEVER photoreal sky
-  • Dust / gunsmoke = cotton-elements + white/tan 1×1 round-plates — NEVER photoreal dust
-
-━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real wood/sand/rock/sandstone", "weathered-real", "rugged texture", "dusty haze" as real air, "rushing water". ALSO BANNED — non-rigid motion verbs (render as static built moment): "billowing dust", "swirling", "galloping-blur". Terrain + dust are STATIC brick builds.
+Every element is brick-built (visible studs, molded plastic, connection seams), sitting on a tabletop convention display. The desert terrain shares the landscape path's strong photoreal pull, so render natural elements as named brick parts (e.g. mesa/canyon = stacked tan + red plates + slope-bricks in sedimentary courses, ground = tan plates with offset-tile ripple, cactus = brick saguaro arms, river-ford = trans-blue plates, dust = cotton-elements + 1×1 round-plates). Terrain + dust are STATIC brick builds, never billowing or blurred. Never photoreal, and no real humans: every character is a LEGO minifigure (cowboy / sheriff / outlaw / prospector / cavalry / railroad-worker variants).
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -622,22 +547,10 @@ Weave this in as a SECONDARY focal point, rendered IN BRICK (trans-element firew
     return `You are a LEGO MOC photographer + AFOL convention judge writing an AMUSEMENT-PARK / CARNIVAL diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
 ━━━ THE BAR — AFOL CONVENTION TIER FAIRGROUND IN LEGO BRICKS ━━━
-This is a Bricklink AFOL champion's working-fairground diorama, photographed at a LEGO World convention — the kind with motorized rides and thousands of parts. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real theme-park photo. The mood is KINETIC, BRIGHT, JOYFUL — big brick rides in motion, crowds of tiny minifigs, neon ablaze. Visual canon: LEGO Creator Expert Fairground Collection (the ornate motorized Ferris Wheel / Carousel / Roller Coaster / Loop Coaster / Haunted House / Pirate-ship Mixer) + LEGO City amusement + Friends amusement-park + AFOL Great-Ball-Contraption fairground MOCs. NEVER licensed-park IP (no Disney / Universal named lands, castles-as-trademarks, or franchise characters).
-
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, fingers, skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Every person is a LEGO minifigure with C-shaped hands + printed plastic face — and there are CROWDS of them (riders, families, vendors), tiny and many. NEVER a real human face.
+This is a Bricklink AFOL champion's working-fairground diorama, photographed at a LEGO World convention — the kind with motorized rides and thousands of parts. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset. NOT a real theme-park photo. The mood is KINETIC, BRIGHT, JOYFUL — big brick rides in motion, crowds of tiny minifigs, neon ablaze. Visual canon: LEGO Creator Expert Fairground Collection (the ornate motorized Ferris Wheel / Carousel / Roller Coaster / Loop Coaster / Haunted House / Pirate-ship Mixer) + LEGO City amusement + Friends amusement-park + AFOL Great-Ball-Contraption fairground MOCs. No licensed-park IP — generic only.
 
 ━━━ EVERYTHING IS BRICK — INCLUDING RIDES, LIGHTS, WATER, AND FIREWORKS ━━━
-EVERY element is built from real LEGO bricks. NO photoreal rides, NO photoreal lights, NO photoreal water, NO photoreal sky, NO real fairground photo. Studs CLEARLY VISIBLE. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-  • Ride structures = brick-built with visible Technic-beam framework, SNOT curves, and connection points — NEVER photoreal steel
-  • Neon / ride-lights = trans-red + trans-blue + trans-yellow + trans-orange elements + 1×1 round-plate bulb-strings — NEVER photoreal neon-glow
-  • Coaster track = Technic / brick-built rail with cars of slope-bricks + minifig riders — NEVER photoreal track
-  • Water (flume / fountain / water-slide) = trans-blue + trans-light-blue layered plates with white round-plate foam — NEVER photoreal water
-  • Crowds = many small standard minifigs massed at varied positions — NEVER photoreal people
-  • Sky = brick sky-baseplate (or studio backdrop) — NEVER photoreal sky
-  • Fireworks = trans-element star-bursts on clear rods — NEVER photoreal fireworks
-
-━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real steel/metal", "real neon", "glistening", "rushing water", "blurred motion / motion-blur". Render motion as a FROZEN brick moment (a coaster mid-drop is a static built car on a built track), never blurred.
+Every element is brick-built (visible studs, molded plastic, connection seams), sitting on a tabletop convention display: ride structures with visible Technic-beam framework + SNOT curves, neon/ride-lights in trans-element + 1×1 round-plate bulb-strings, coaster track of Technic rail + slope-brick cars, water in trans-blue plates + white-foam, fireworks as trans-element star-bursts on clear rods, sky a brick baseplate. Render motion as a FROZEN brick moment (a coaster mid-drop is a static built car on a built track), never blurred. Never photoreal, and no real humans: every person is a LEGO minifigure, and there are CROWDS of them (riders, families, vendors), tiny and many.
 
 ━━━ THE ATTRACTION — the hero ride/structure ━━━
 ${attraction}
@@ -727,25 +640,8 @@ This is a Bricklink AFOL champion's all-brick NATURAL-LANDSCAPE diorama, photogr
 ━━━ THE LANDSCAPE IS THE HERO — minifigs are TINY SCALE-PROVERS ONLY ━━━
 The natural vista is the SUBJECT and fills the frame. Minifigs, if present, are DWARFED scale-references at a distance (a lone hiker on a ridge, two climbers on a cliff, a photographer at an overlook) — NEVER the focus, NEVER close-up, NEVER centered-and-large. The whole point is the monumental scale of the brick terrain against a tiny human figure.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand, real fingers, real skin, photoreal faces, or claymation-blend. Flux's "LEGO photo" training data is contaminated with hand-placing-brick + claymation hero shots. OVERRIDE HARD. Any figure is a standard LEGO minifigure (hiker / climber / photographer with C-shaped hands + printed plastic face), rendered TINY for scale. NEVER a real human face.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING ROCK, WATER, SNOW, CLOUDS, TREES, AND SKY ━━━
-EVERY element is built from real LEGO bricks. NO photoreal rock, NO photoreal water, NO photoreal snow, NO photoreal clouds, NO photoreal foliage, NO photoreal sky, NO real terrain texture. Studs CLEARLY VISIBLE where not snow/grass-covered. Authentic plastic texture, molded seams, visible brick-edges and panel-lines in the terrain. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR NATURAL VISTAS — Flux's "epic landscape" + "mountain vista" + "canyon" + "redwood forest" + "glacier" training priors are its SINGLE STRONGEST photoreal pull. OVERRIDE THAT BIAS HARD — translate EVERY natural element into NAMED BRICK PARTS:
-  • Mountains / cliffs / rock = light-bley + dark-bley + tan slope-bricks + BURP/LURP rock-pieces in stepped strata with VISIBLE brick-edges — NEVER photoreal rock-face, NEVER real stone texture
-  • Rock striations / canyon layers = stacked plates in graduated tan/orange/red showing each sedimentary band as a distinct plate-course — NEVER photoreal strata
-  • Water (river / lake / waterfall / surf) = trans-blue + trans-light-blue layered plates with white 1×1 round-plate foam — NEVER photoreal water
-  • Snow-caps = white slope-bricks + white plates + white-stud caps on the peaks — NEVER photoreal snow
-  • Clouds / cloud-sea = banks of white 1×1 round-plates + cotton-elements massed at a level — NEVER photoreal clouds
-  • Forest canopy (from above/distance) = a textured carpet of green + olive plant-elements + green slope-bricks — NEVER photoreal treetops
-  • Trees (near) = brown round-brick trunks + green plant-element + slope-brick boughs — NEVER photoreal trees
-  • Meadow / grass = green + sand-green plates with plant-element + round-plate wildflowers — NEVER photoreal grass
-  • Sky = brick sky-baseplate (or seamless studio backdrop) with brick cloud-elements — NEVER photoreal sky-gradient with real clouds
-  • Desert sand / dunes = tan + dark-tan slope-bricks + plates with offset-tile ripple — NEVER photoreal sand
-
-━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real rock/stone/water/snow", "rugged texture", "rocky texture", "craggy" (use "stepped slope-brick"), "rushing water", "misty" applied to real air. ALSO BANNED — non-rigid material-motion verbs: "rushing", "cascading" as fluid (render as built stepped trans-plates), "rolling fog" (render as static cotton-elements), "billowing". Terrain + water are STATIC brick builds.
+Every element is brick-built (visible studs where not snow/grass-covered, molded plastic, brick-edges + panel-lines in the terrain), sitting on a tabletop convention display. Flux's "epic landscape / mountain vista / canyon / redwood / glacier" priors are its SINGLE STRONGEST photoreal pull — OVERRIDE HARD by translating natural elements into named brick parts (e.g. mountains/cliffs = light-bley + tan slope-bricks + BURP/LURP rock-pieces in stepped strata, canyon layers = stacked graduated plate-courses, water = trans-blue plates + white round-plate foam, snow-caps = white slope-bricks, clouds = banks of white round-plates + cotton-elements, forest canopy = green plant-element + slope-brick carpet, sky = brick baseplate). Terrain + water are STATIC brick builds, never rushing/cascading/rolling/billowing. Never photoreal, and no real humans: any figure is a TINY LEGO minifigure (hiker / climber / photographer) for scale.
 
 ━━━ THE BIOME VISTA — the hero subject (fills the frame) ━━━
 ${biome_vista}
@@ -830,24 +726,8 @@ Weave this in as a SECONDARY focal point, rendered IN BRICK (white 1×1 round-pl
 ━━━ THE BAR — AFOL CONVENTION TIER COZY-WINTER STORYTELLING IN LEGO BRICKS ━━━
 This is a Bricklink AFOL champion's WINTER diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. NOT a real ski-resort or snow photo. The mood ranges cozy-festive (Winter Village warmth) to crisp-adventurous (Arctic expedition) — always charming. The build is OBSESSIVELY detailed — every brick intentional, every minifig mid-action, every snowdrift deliberately built. Visual canon: LEGO Winter Village (Ideas Toy Shop / Bakery / Market / Holiday Train / Gingerbread House) + LEGO City Arctic Explorers (orange-white icebreakers + snowcats) + Friends winter resort + Creator winter cabin + classic alpine. NOT Ice Planet / sci-fi ice (that's the space path).
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers, skin, photoreal faces, or claymation-blend faces. Flux's "LEGO photo" training data is contaminated with hand-placing-brick + Lego.com claymation hero shots. OVERRIDE HARD. Every character is a LEGO minifigure with C-shaped hands + printed plastic face. Skier / villager / Arctic-explorer / ice-fisher / sledder minifig variants (knit-cap + scarf print / parka-hood / goggles + ski-poles / fur-lined Arctic hood) are LEGO minifigure variants. NEVER a real human face.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING SNOW, ICE, FROZEN WATER, ICICLES, AND BLIZZARD ━━━
-EVERY element is built from real LEGO bricks. NO photoreal snow, NO photoreal ice, NO photoreal frost, NO photoreal frozen water, NO photoreal sky. Studs CLEARLY VISIBLE where not snow-covered. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR SNOW + ICE SCENES — Flux's "ski resort" + "winter wonderland" + "frozen lake" + "snowy village" training priors are HEAVILY photoreal-contaminated. OVERRIDE THAT BIAS HARD — translate EVERY wintry element into NAMED BRICK PARTS:
-  • Snow cover / drifts = white slope-bricks + white plates + white-stud rounded mounds capping every roof, branch, and ledge — NEVER photoreal snow, NEVER soft real powder
-  • Ice castle / ice structures = SNOT-curved trans-light-blue + trans-clear slope-bricks with crisp brick-edges — NEVER photoreal ice
-  • Frozen lake / ice sheet = a smooth surface of trans-light-blue + white tiles (tiled = smooth ice) — NEVER photoreal frozen water
-  • Icicles = trans-clear + trans-light-blue bar-elements / cone-elements hanging in rows — NEVER photoreal icicles
-  • Snow flurry / falling snow = scattered white 1×1 round-plates on clear bar-rods + cotton-elements — NEVER photoreal snowfall
-  • Pine trees = brown round-brick trunks + dark-green plant-element + slope-brick boughs with white-plate snow-load — NEVER photoreal pines
-  • Rock / mountain = light-bley + dark-bley slope-bricks with white-plate snow-caps — NEVER photoreal rock
-  • Sky = brick sky-baseplate with scattered 1×1 white round-plate clouds — NEVER photoreal sky
-  • Window-glow / fire = trans-orange + trans-yellow elements behind brick window-frames — warm brick light
-
-━━━ BANNED VOCABULARY (pull Flux to real photography — NEVER use): "photoreal", "real snow/ice", "soft powder", "glistening snow", "sparkling frost", "drifting snow". ALSO BANNED — non-rigid-material motion verbs: "drifting", "swirling snow" (render as static white-round-plates on rods), "billowing", "flowing". Snow + ice are STATIC brick builds.
+Every element is brick-built (visible studs where not snow-covered, molded plastic, connection seams), sitting on a tabletop convention display. Flux's "ski resort / winter wonderland / frozen lake / snowy village" priors are HEAVILY photoreal-contaminated — OVERRIDE HARD by translating wintry elements into named brick parts (e.g. snow cover/drifts = white slope-bricks + plates capping roofs, branches, ledges, ice structures = SNOT-curved trans-light-blue slope-bricks, frozen lake = smooth trans-light-blue + white tiles, icicles = trans-clear bar/cone-elements in rows, snow flurry = white round-plates on clear rods + cotton-elements, pines = brown round-brick trunks + plant-element + snow-load, window-glow = trans-orange behind brick window-frames). Snow + ice are STATIC brick builds, never drifting/swirling/billowing. Never photoreal, and no real humans: every character is a LEGO minifigure (skier / villager / Arctic-explorer / ice-fisher / sledder variants).
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -949,23 +829,8 @@ This is a Bricklink AFOL champion's AQUATIC diorama, photographed at a LEGO Worl
 • SURFACE (beach / coast / boardwalk / tide-pool / surf / bonfire): air above, tan-plate sand + slope-brick dunes, trans-blue plate shallows lapping the shore, palm-tree builds (brown round-brick trunks + green plant-element fronds), bright tropical sky-baseplate.
 • SUBMERGED (reef / kelp / trench / shipwreck / grotto): the WHOLE frame is underwater — a trans-blue + trans-light-blue plate water-column tints everything, brick coral + kelp, drifting trans-clear bubble-strings, caustic light dapple, marine life suspended on clear rods, NO open sky.
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers, skin, photoreal faces, or claymation-blend faces. Flux's "LEGO photo" training data is contaminated with hand-placing-brick + Lego.com claymation hero shots. OVERRIDE HARD. Every character is a LEGO minifigure with C-shaped hands + printed plastic face. Diver / snorkeler / surfer / lifeguard / beachgoer / Aquanaut / mermaid minifig variants (scuba-helmet + flippers / wetsuit-print / swim-print + flower-lei / yellow-black Aquanaut airtank-element / mermaid-tail brick-build) are LEGO minifigure variants. NEVER a real human face.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING WATER, WAVES, CORAL, KELP, SAND, BUBBLES, AND MARINE LIFE ━━━
-EVERY element is built from real LEGO bricks. NO photoreal water, NO photoreal ocean, NO photoreal sand, NO photoreal coral, NO photoreal fish, NO photoreal sky. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture, molded seams. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR WATER + MARINE SCENES — Flux's "underwater reef" + "tropical beach" + "ocean wave" training priors are HEAVILY photoreal-contaminated. OVERRIDE THAT BIAS HARD — translate EVERY fluid/organic element into NAMED BRICK PARTS:
-  • Open water / underwater column = trans-blue + trans-light-blue + trans-clear layered plates tinting the whole frame — NEVER photoreal water
-  • Waves / surf = SNOT-curled trans-light-blue slope-pieces with white 1×1 round-plate + white-stud foam crests — NEVER photoreal wave
-  • Coral = brick-built from modified-plant elements, horn/tooth pieces, 1×4 fence elements, and bright slope-bricks in pink/orange/purple — NEVER photoreal coral
-  • Kelp / seagrass = stacked green + olive plant-stem elements rising on bar armatures — NEVER photoreal kelp
-  • Sand / seafloor = tan + dark-tan plates and slope-bricks, ripple-texture from offset tiles — NEVER photoreal sand
-  • Bubbles = trans-clear + white 1×1 round-plates threaded on clear bar-rods in rising strings — NEVER photoreal bubbles
-  • Sky (surface scenes) = brick sky-baseplate with scattered 1×1 white round-plate clouds — NEVER photoreal sky
-  • Caustic light = scattered trans-clear + trans-light-blue tiles catching the light — NEVER a photoreal caustic overlay
-
-⚠️ BANNED VOCABULARY (pull Flux to real photography — NEVER use, even descriptively): "photoreal", "real water/ocean/sand/coral", "rippling water", "crystal-clear water", "sun-dappled" applied to real water. ALSO BANNED — fluid-MOTION verbs implying non-rigid material: "rippling", "flowing", "swaying" (kelp is rigid brick), "lapping" (render as static trans-plate edge), "crashing" (render as a built frozen wave-curl). Water + creatures are STATIC brick builds frozen mid-moment.
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), sitting on a tabletop convention display. Flux's "underwater reef / tropical beach / ocean wave" priors are HEAVILY photoreal-contaminated — OVERRIDE HARD by translating fluid/organic elements into named brick parts (e.g. water column = trans-blue + trans-clear layered plates tinting the frame, waves = SNOT-curled trans-light-blue slopes + white-foam crests, coral = modified-plant + horn/tooth + bright slope-bricks, kelp = plant-stem elements on bar armatures, sand = tan plates with offset-tile ripple, bubbles = trans-clear round-plates on clear rods, caustic light = scattered trans tiles). Water + creatures are STATIC brick builds frozen mid-moment, never rippling/flowing/swaying/lapping/crashing. Never photoreal, and no real humans: every character is a LEGO minifigure (diver / snorkeler / surfer / lifeguard / Aquanaut / brick-built-mermaid variants).
 
 ━━━ THE SCENE STAGE (surface or submerged) ━━━
 ${scene_type}
@@ -1080,29 +945,10 @@ The fantasy archetypes the build celebrates:
   • Adventurer parties (fighter+rogue+wizard+cleric ensemble at campsite / dungeon-delve / quest-hire tavern)
   • Tournament & ceremony (jousting lists / coronation / royal wedding / knighting / sword-in-stone)
 
-NEVER name specific movies, books, TV shows, video games, or specific LEGO set numbers. NEVER LotR / Hobbit / Tolkien / Smaug / Mordor / Helm's Deep / Rivendell / Witcher / Skyrim / Elder Scrolls / Game of Thrones / Harry Potter / Hogwarts / Warhammer / Frazetta / Vallejo / Brom / specific D&D campaign names. NEVER specific LEGO faction names (Crusaders / Forestmen / Black Knights / Royal Knights / Dragon Knights / Lion Kingdom / Dragon Kingdom / Skeleton King / LEGO Elves) — describe by VISUAL SIGNATURE (knight-color-and-emblem-and-attire) instead. Goal: high-fantasy storytelling that reads as a Bricklink AFOL custom MOC, not a movie still or a Lego.com hero shot.
-
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers in frame. NEVER real human skin, photoreal faces, or hybrid claymation-faces. Flux's "LEGO photo" training data is HEAVILY contaminated with hand-placing-brick stock shots and Lego.com hero shots with claymation-blend. OVERRIDE THAT BIAS HARD. Every character is a LEGO minifigure with C-shaped hands, printed plastic face, standard minifig torso/legs articulation. Knight / wizard / elf / dwarf / skeleton / faerie / orc minifig variants — described by VISUAL SIGNATURE (heraldic-tabard-color + emblem / robe-color + staff / long-hair-piece + bow / bearded-head + plate-armor / skeleton-torso + tattered-cape) — are LEGO minifigure variants with C-shaped hands, printed plastic faces, helmet molded plastic visors. NEVER a real human face inside. NEVER name specific characters from movies / books / video games.
+No licensed/IP characters or named factions — describe knights, wizards, elves, etc. by VISUAL SIGNATURE (knight-color + emblem + attire) so it reads as a Bricklink AFOL custom MOC, not a movie still.
 
 ━━━ EVERYTHING IS BRICK — INCLUDING DRAGON-FIRE, MAGIC, FOLIAGE, STONE, WATER, TERRAIN, SKY ━━━
-EVERY element is built from real LEGO bricks. NO photoreal rock, NO photoreal water, NO photoreal sky, NO photoreal foliage. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture. Molded seams. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR OUTDOOR / NATURE-HEAVY SCENES — Flux's "fantasy castle on cliff" + "battlefield landscape" + "ruined castle in jungle" + "forest scene" training priors are HEAVILY Hollywood-photoreal contaminated. OVERRIDE THAT BIAS HARD:
-  • Cliffs / mountains = light-bley + dark-bley slope-bricks with visible brick-edges, NEVER photoreal rock-strata
-  • Water = trans-blue + trans-light-blue layered plates with white-stud foam crests, NEVER photoreal ocean waves
-  • Sky = brick-built sky-baseplate behind with scattered 1×1 white round-plates as cloud-elements, NEVER photoreal cloudscape
-  • Grass / ground = green plates or olive-green textured plates for grass, dark-tan plates for dirt — NEVER photoreal grass texture
-  • Forest foliage = brick-built tree-trunks (brown round-bricks) + leaf-elements in olive/dark-green/autumn-orange, NEVER photoreal leaves
-  • Battlefield terrain = mix of grass-green + dark-tan + light-bley slope-bricks, NEVER photoreal mud or grass
-  • Castle stone walls = light-bley + dark-bley slope-bricks with brick-edge cracks, NEVER photoreal masonry
-  • Banner cloth = printed flag-element tiles, NEVER photoreal fabric
-
-Build materials cheat-sheet:
-  • Castle towers = SNOT-bracket-curved cylindrical sections with crenellated battlement plates
-  • Dragon-fire = trans-orange + trans-red + trans-yellow flame elements clustered at draconic muzzle
-  • Magical effects = trans-purple + trans-cyan + trans-magenta + trans-clear bar/rod/plate elements stacked in vortex patterns
-  • Fire-pit = trans-orange flame cluster on light-bley hearth-stones
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), sitting on a tabletop convention display. Flux's "fantasy castle on cliff / battlefield / ruined castle in jungle / forest" priors are HEAVILY Hollywood-photoreal contaminated — OVERRIDE HARD by translating elements into named brick parts (e.g. cliffs = light-bley slope-bricks with brick-edges, water = trans-blue plates + white-foam crests, sky = brick baseplate + round-plate clouds, foliage = brown round-brick trunks + leaf-elements, castle walls = light-bley slope-bricks with brick-edge cracks, castle towers = SNOT-curved cylinders + crenellated plates, dragon-fire = trans-flame at the muzzle, magic = trans-purple/cyan bar/rod/plate vortex, banners = printed flag-tiles). Never photoreal, and no real humans: every character is a LEGO minifigure (knight / wizard / elf / dwarf / skeleton / faerie / orc variants by visual signature).
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -1213,24 +1059,8 @@ The woodland archetypes the build celebrates:
   • Forest campers + foragers (minifigs at brick-built campfires, mushroom + berry harvest, lantern-lighting)
   • Grotto pools + stream-bridges (trans-blue layered-plate water, brick-arch bridges)
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers in frame. NEVER real human skin, photoreal faces, or hybrid claymation-faces. Flux's "LEGO photo" training data is HEAVILY contaminated with hand-placing-brick stock shots and Lego.com hero shots with claymation-blend. OVERRIDE THAT BIAS HARD. Every character is a LEGO minifigure with C-shaped hands, printed plastic face, standard minifig torso/legs articulation. Fairy / forager / camper / woodland-ranger minifig variants (translucent-wing-element + flower-crown-hair / green-hood + brown-tunic / lantern-and-satchel) are LEGO minifigure variants with C-shaped hands and printed plastic faces. NEVER a real human face. Woodland creatures are brick-built or LEGO animal-figure elements — NEVER photoreal animals.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING TREES, FOLIAGE, MUSHROOMS, MOSS, WATER, TERRAIN, SKY ━━━
-EVERY element is built from real LEGO bricks. NO photoreal bark, NO photoreal leaves, NO photoreal moss, NO photoreal water, NO photoreal sky, NO photoreal mushrooms, NO photoreal fungus. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture. Molded seams. The diorama sits on a tabletop convention display.
-
-⚠️ EXTRA-STRONG LEGO MANDATE FOR FOREST / NATURE SCENES — Flux's "magical forest" + "fairy woodland" + "autumn forest floor" + "enchanted glade" training priors are the MOST photoreal-contaminated of any subject. This path FAILED before by rendering real birch trunks + real leaf-litter. OVERRIDE THAT BIAS HARD — translate EVERY organic element into a NAMED BRICK PART:
-  • Tree trunks = stacked brown round-bricks / cylinder-bricks / 2×2 round-bricks with bark-texture from 1×1 cheese-slopes — NEVER photoreal bark, NEVER birch/aspen bark, NEVER a real tree
-  • Foliage / canopy = green + olive-green + autumn-orange plant-elements + leaf-element pieces + plate-stacked clusters — NEVER photoreal leaves, NEVER real foliage
-  • Mushrooms = SNOT inverted-dish + dome caps on round-brick stems (red-cap-white-spot from printed/placed round-tiles) — NEVER photoreal fungus
-  • Moss = textured green / olive plates + 1×1 round-plate clusters — NEVER photoreal moss texture
-  • Water (stream / grotto pool) = trans-blue + trans-light-blue layered plates with white-stud foam — NEVER photoreal water
-  • Ground / forest floor = green + dark-tan + olive plates, leaf-element + 1×1 round-plate scatter — NEVER photoreal leaf-litter or dirt
-  • Rocks / boulders = light-bley + dark-bley slope-bricks + BURP/LURP rock-pieces — NEVER photoreal stone
-  • Sky = brick-built sky-baseplate behind with scattered 1×1 white round-plate clouds — NEVER photoreal sky
-  • Fairy-glow / fireflies = trans-cyan + trans-yellow round-plates + trans-clear rods — NEVER photoreal glow-bokeh
-
-⚠️ BANNED VOCABULARY (these tokens pull Flux to real-forest photography — NEVER use, even descriptively): "birch", "aspen", "bark", "leaf litter", "foxfire", "real moss", "canopy" (use "brick-built tree-tops"), "rotting", "photoreal", "dappled" applied to real leaves. ALSO BANNED — organic-MOTION verbs (LEGO is rigid plastic): "bending", "swaying", "in dynamic motion", "rustling", "fluttering leaves", "growing", "blowing". Trees + plants are STATIC brick builds.
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), sitting on a tabletop convention display. Flux's "magical forest / fairy woodland / autumn forest floor / enchanted glade" priors are the MOST photoreal-contaminated of any subject (this path FAILED before by rendering real birch trunks + leaf-litter) — OVERRIDE HARD by translating organic elements into named brick parts (e.g. tree trunks = stacked brown round-bricks with cheese-slope bark, foliage/tree-tops = green + autumn-orange plant-elements + leaf-pieces, mushrooms = SNOT dome-caps on round-brick stems, moss = textured green plates + round-plate clusters, water = trans-blue plates + white-foam, forest floor = green/olive plates + leaf-scatter, rocks = light-bley slope-bricks + BURP/LURP pieces, fairy-glow/fireflies = trans round-plates + clear rods). Trees + plants are STATIC brick builds, never bending/swaying/rustling/growing. Never photoreal, and no real humans: every character is a LEGO minifigure (fairy / forager / camper / woodland-ranger variants); woodland creatures are brick-built or LEGO animal-figure elements.
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -1329,13 +1159,10 @@ Weave this into the diorama as a SECONDARY focal point — render it visibly (br
     return `You are a LEGO MOC photographer + AFOL convention judge writing a SPACE diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
 
 ━━━ THE BAR — AFOL CONVENTION TIER, NOT OFFICIAL SET PHOTO ━━━
-This is a Bricklink AFOL champion's space diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. The build is OBSESSIVELY detailed — every brick is intentional, every minifig is mid-action, every prop tells a story. Visual canon: Classic LEGO Space (1978-87 — 6970 Beta-1 Command Base, 6985 Cosmic Fleet Voyager) + Blacktron I+II (6986 Mission Commander, 6981 Aerial Intruder) + M-Tron (6989 Mega Core Magnetizer) + Space Police + Ice Planet + Galaxy Squad + Insectoids + Mars Mission + Bricklink AFOL space community. Hard-SF + retro-future canon: Mass Effect Normandy, Expanse Rocinante, 2001 ASO Discovery, Interstellar Endurance, Foundation, Tintin Destination Moon, Star Citizen. NEVER LEGO Star Wars (no X-wings / TIEs / Falcon / Star Destroyer / stormtroopers / Mandalorian / Imperial / Jedi / Rebels).
-
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers in frame. NEVER real human skin, photoreal faces, or hybrid claymation-faces. Flux's "LEGO photo" training data is HEAVILY contaminated with hand-placing-brick stock shots and Lego.com hero shots with claymation-blend. OVERRIDE THAT BIAS HARD. Every character in the frame is a LEGO minifigure with C-shaped hands, printed plastic face, standard minifig torso/legs articulation. Spacesuit-helmet minifig variants (Classic Space yellow / Blacktron black / M-Tron red / Space Police white-blue / Ice Planet white-orange / Mars Mission white-orange / Mass Effect hardsuit / Apollo retro-white) are LEGO minifigure variants — visor down, helmet molded plastic, never a real human face inside.
+This is a Bricklink AFOL champion's space diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. The build is OBSESSIVELY detailed — every brick is intentional, every minifig is mid-action, every prop tells a story. Visual canon: Classic LEGO Space (1978-87 — 6970 Beta-1 Command Base, 6985 Cosmic Fleet Voyager) + Blacktron I+II (6986 Mission Commander, 6981 Aerial Intruder) + M-Tron (6989 Mega Core Magnetizer) + Space Police + Ice Planet + Galaxy Squad + Insectoids + Mars Mission + Bricklink AFOL space community. Hard-SF + retro-future canon: Mass Effect Normandy, Expanse Rocinante, 2001 ASO Discovery, Interstellar Endurance, Foundation, Tintin Destination Moon, Star Citizen. No licensed/IP ships or characters — generic only.
 
 ━━━ EVERYTHING IS BRICK — INCLUDING STARS, NEBULAE, ENGINE FLARE, ALIEN FLORA ━━━
-Every element is built from real LEGO bricks. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture. Molded seams. Starfields = scattered 1×1 white round-plates on a dark-bley baseplate. Nebulae = layered trans-magenta + trans-cyan + trans-purple plates with cotton-batting white round-plate haze. Engine flare = trans-orange + trans-yellow flame elements + trans-clear thruster cone. Planet surfaces = dark-bley / dark-red / tan slope-bricks. Alien flora = trans-green + trans-purple modified-plant pieces. Lunar terrain = light-bley slope bricks with crater-tile insets. Asteroid fields = scattered dark-bley round-bricks.
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), sitting on a tabletop convention display: starfields = scattered white round-plates on a dark-bley baseplate, nebulae = layered trans-magenta + trans-cyan plates + cotton-batting haze, engine flare = trans-flame elements + trans-clear thruster cone, planet surfaces = dark-bley / tan slope-bricks, alien flora = trans modified-plant pieces, lunar terrain = light-bley slopes + crater-tile insets, asteroids = scattered dark-bley round-bricks. Never photoreal, and no real humans: every character is a spacesuit-helmet LEGO minifigure (Classic Space yellow / Blacktron black / M-Tron red / Space Police / Ice Planet / Mass Effect hardsuit / Apollo variants), visor down, molded-plastic helmet.
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
@@ -1445,11 +1272,8 @@ Weave this into the diorama as a SECONDARY focal point — render it visibly (br
 ━━━ THE BAR — AFOL CONVENTION TIER, NOT OFFICIAL SET PHOTO ━━━
 This is a Bricklink AFOL champion's pirate diorama, photographed at a LEGO World convention. Could win a Brickworld Best-of-Show. NOT a stock photo from Lego.com. NOT a kid's playset arrangement. The build is OBSESSIVELY detailed — every brick is intentional, every minifig is mid-action, every prop tells a story. Visual canon: Pirates of the Caribbean LEGO sets (6271 Imperial Flagship / 6285 Black Seas Barracuda / 70413 Brick Bounty) + the high-tier Bricklink AFOL pirate community + vintage LEGO Pirates (6285 Black Seas Barracuda / 6286 Skull's Eye Schooner / 6243 Brickbeard's Bounty).
 
-━━━ ZERO REAL HUMANS, ZERO REAL HANDS — HOISTED ABSOLUTE ━━━
-NEVER a real human hand placing a brick. NEVER real human fingers in frame. NEVER real human skin, photoreal faces, or hybrid claymation-faces. Flux's "LEGO photo" training data is HEAVILY contaminated with hand-placing-brick stock shots and Lego.com hero shots with claymation-blend. OVERRIDE THAT BIAS HARD. Every character in the frame is a LEGO minifigure with C-shaped hands, printed plastic face, yellow / dark-tan / bricklink-flesh head, and standard minifig torso/legs articulation. No painted skin. No melted plastic. No smooth-sculpt faces.
-
 ━━━ EVERYTHING IS BRICK — INCLUDING WATER, FIRE, SAILS, ROCKS, SKY ELEMENTS ━━━
-Every element is built from real LEGO bricks. Studs CLEARLY VISIBLE on flat surfaces. Authentic plastic texture. Molded seams. Water = transparent-blue + trans-light-blue plates layered with white-stud foam crests. Fire = trans-orange + trans-red + trans-yellow flame elements. Sails = printed/curved white + tan cloth-or-brick-built panels with rigging from black antennas. Rocks = light-bley + dark-bley slope bricks. Sky elements (clouds / smoke / rain / lightning) = white plates + trans-clear bricks + lightsaber-blade lightning bolts.
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), sitting on a tabletop convention display: water = trans-blue plates + white-foam crests, fire = trans-flame elements, sails = printed/curved white + tan panels with black-antenna rigging, rocks = light-bley slope-bricks, sky elements (clouds / smoke / rain / lightning) = white plates + trans-clear bricks + lightsaber-blade bolts. Never photoreal, and no real humans: every character is a LEGO minifigure (yellow / dark-tan / bricklink-flesh head, C-shaped hands, printed plastic face).
 
 ━━━ THE SCENE STAGE ━━━
 ${scene_type}
