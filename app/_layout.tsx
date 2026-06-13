@@ -475,12 +475,18 @@ function RootLayout() {
                   <Stack.Screen name="(auth)" />
                   <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                   <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  {/* photo/[id] album uses the custom pager + useAxisLockSwipeBack
-                      (locks to vertical on scroll). Native full-screen back is off
-                      so it can't fight the pager / boot back on an up-swipe. */}
+                  {/* photo/[id] album: NATIVE back gesture off — it intermittently
+                      swallowed the start of a vertical swipe (proven). The screen
+                      uses useAxisLockSwipeBack instead, composed
+                      simultaneousWithExternalGesture against the pager's Pan so it
+                      can't block scroll activation. */}
                   <Stack.Screen
                     name="photo/[id]"
-                    options={{ ...SCREEN_PRESETS.MODAL_SWIPEABLE, gestureEnabled: false }}
+                    options={{
+                      ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                      gestureEnabled: false,
+                      fullScreenGestureEnabled: false,
+                    }}
                   />
                   {/* user/[userId] is a full-screen posts GRID. The native
                       full-screen back gesture fought the grid scroll (locked it +

@@ -19,9 +19,10 @@
  * Disable the native gesture for the route (gestureEnabled:false) so only this runs.
  */
 
+import { useRef } from 'react';
 import { router } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
-import { Gesture } from 'react-native-gesture-handler';
+import { Gesture, type GestureType } from 'react-native-gesture-handler';
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -40,6 +41,15 @@ const SNAP_SPRING = { damping: 20, stiffness: 220 } as const;
 export interface UseAxisLockSwipeBackOptions {
   onDismiss?: () => void;
   disabled?: boolean;
+  /**
+   * A gesture (e.g. a vertical pager's Pan) this back-swipe must be allowed to
+   * recognize SIMULTANEOUSLY with. Without this, a manualActivation back gesture
+   * sitting over a pager holds the touch "undecided" and intermittently blocks
+   * the pager from activating — a dropped vertical swipe. Declaring them
+   * simultaneous lets the pager activate independently while this gesture's
+   * axis-lock still keeps it from driving a back on a vertical swipe.
+   */
+  simultaneousWith?: React.RefObject<GestureType | undefined>;
 }
 
 export function useAxisLockSwipeBack(options?: UseAxisLockSwipeBackOptions) {
@@ -49,15 +59,19 @@ export function useAxisLockSwipeBack(options?: UseAxisLockSwipeBackOptions) {
   const startY = useSharedValue(0);
   const lockedAxis = useSharedValue(0); // 0 none, 1 horizontal (back), 2 vertical
   const activationTX = useSharedValue(0);
+  const ref = useRef<GestureType | undefined>(undefined);
 
   function dismiss() {
     if (options?.onDismiss) options.onDismiss();
     else router.back();
   }
 
-  const gesture = Gesture.Pan()
-    .enabled(!options?.disabled)
-    .manualActivation(true)
+  let pan = Gesture.Pan().enabled(!options?.disabled).manualActivation(true).withRef(ref);
+  if (options?.simultaneousWith) {
+    pan = pan.simultaneousWithExternalGesture(options.simultaneousWith);
+  }
+
+  const gesture = pan
     .onTouchesDown((e) => {
       'worklet';
       const t = e.allTouches[0];
@@ -121,5 +135,5 @@ export function useAxisLockSwipeBack(options?: UseAxisLockSwipeBackOptions) {
     transform: [{ translateX: translateX.value }],
   }));
 
-  return { gesture, animatedStyle };
+  return { gesture, animatedStyle, ref };
 }

@@ -1,20 +1,19 @@
 /**
  * VerticalPager — TikTok-style vertical pager with a FAST, custom snap.
  *
- * Drop-in scroll container (FlatList-ish API) used by FullScreenFeed behind a
- * flag. The native FlatList can only give you EITHER a fast non-interruptible
- * snap (pagingEnabled) OR a slow interruptible one (snapToInterval) — never
- * both. This drives the page position with a Reanimated value, so the snap is:
+ * Drop-in scroll container (FlatList-ish API) used by FullScreenFeed. The native
+ * FlatList can only give you EITHER a fast non-interruptible snap (pagingEnabled)
+ * OR a slow interruptible one (snapToInterval) — never both. This drives the page
+ * position with a Reanimated value, so the snap is:
  *   - FAST: a short withTiming (no long native ease-out tail), and
  *   - INTERRUPTIBLE: a new touch cancels the in-flight snap and takes over.
  *
- * Gesture composition: the vertical Pan uses failOffsetX so a horizontal drag
- * (a card's swipe-to-profile) and taps/pinch fall through to the card's own
- * gestures; only a clear vertical drag drives the pager.
+ * Gesture composition: only a clear vertical drag drives the pager. `horizontalFailOffset`
+ * lets a horizontal drag (a card's swipe-to-profile) fall through; `simultaneousRef`
+ * lets a screen swipe-back recognize alongside it without blocking activation.
  *
- * v1 scope: paging + snap + virtualization + index tracking + onEndReached +
- * imperative scrollToIndex. (No pull-to-refresh yet — added once the FEEL is
- * confirmed.) Isolated behind FullScreenFeed's `experimentalPager` flag.
+ * Features: paging + snap + virtualization + index tracking + onEndReached +
+ * imperative scrollToIndex/scrollToOffset + pull-to-refresh.
  */
 
 import {
@@ -27,7 +26,7 @@ import {
   useState,
 } from 'react';
 import { ActivityIndicator, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
   Easing,
@@ -70,6 +69,19 @@ interface VerticalPagerProps<T> {
   onRefresh?: () => void | Promise<unknown>;
   /** Spinner color. */
   refreshTint?: string;
+  /**
+   * Horizontal travel (px) at which a vertical drag FAILS so a horizontal
+   * gesture under it (swipe-left-to-profile) can take over. `null` disables it
+   * entirely — use that when nothing horizontal needs the touch (album views),
+   * so a fast up-swipe's thumb-arc drift can never drop the scroll.
+   */
+  horizontalFailOffset?: number | null;
+  /** Receives the pager's Pan gesture so a sibling (a screen swipe-back) can
+   *  declare itself simultaneous with it. */
+  panRef?: React.MutableRefObject<GestureType | undefined>;
+  /** A sibling gesture (screen swipe-back) the Pan may recognize simultaneously
+   *  with — so it can never block the pager from activating. */
+  simultaneousRef?: React.RefObject<GestureType | undefined>;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -87,6 +99,9 @@ function VerticalPagerInner<T>(
     onScrollActiveChange,
     onRefresh,
     refreshTint = '#FFFFFF',
+    horizontalFailOffset = 16,
+    panRef,
+    simultaneousRef,
     style,
   }: VerticalPagerProps<T>,
   ref: React.Ref<VerticalPagerHandle>
@@ -121,15 +136,21 @@ function VerticalPagerInner<T>(
   const onScrollActiveRef = useRef(onScrollActiveChange);
   onScrollActiveRef.current = onScrollActiveChange;
 
+  // Read count from the shared value (stable ref) — NOT the `count` closure —
+  // so this callback stays identity-stable when posts grow on pagination.
+  // Otherwise it changes on every data-grow, which rebuilds the Pan's useMemo
+  // and makes GestureDetector needlessly re-attach the gesture mid-scroll.
+  const onEndReachedThresholdRef = useRef(onEndReachedThreshold);
+  onEndReachedThresholdRef.current = onEndReachedThreshold;
   const commitIndex = useCallback(
     (i: number) => {
       setActiveIndex(i);
       onActiveIndexChangeRef.current?.(i);
-      if (onEndReachedRef.current && i >= count - 1 - onEndReachedThreshold) {
+      if (onEndReachedRef.current && i >= countSV.value - 1 - onEndReachedThresholdRef.current) {
         onEndReachedRef.current();
       }
     },
-    [count, onEndReachedThreshold]
+    [countSV]
   );
 
   const setActive = useCallback((active: boolean) => {
@@ -180,70 +201,80 @@ function VerticalPagerInner<T>(
     [count, pageHeight, indexSV, translateY]
   );
 
-  const pan = useMemo(
-    () =>
-      Gesture.Pan()
-        // Only a clear vertical drag drives the pager; horizontal drags + taps
-        // fall through to the card's own gestures.
-        .activeOffsetY([-12, 12])
-        .failOffsetX([-16, 16])
-        .onStart(() => {
-          'worklet';
-          // Cancel any in-flight snap and take over from where it is — this is
-          // what makes the snap interruptible.
-          cancelAnimation(translateY);
-          startTranslateY.value = translateY.value;
-          runOnJS(setActive)(true);
-        })
-        .onUpdate((e) => {
-          'worklet';
-          const ph = pageHeightSV.value;
-          const minY = -(countSV.value - 1) * ph;
-          let y = startTranslateY.value + e.translationY;
-          if (y > 0)
-            y = y * EDGE_RESISTANCE; // before first page
-          else if (y < minY) y = minY + (y - minY) * EDGE_RESISTANCE; // past last
-          translateY.value = y;
-        })
-        .onEnd((e) => {
-          'worklet';
-          const ph = pageHeightSV.value;
-          const base = indexSV.value;
-          // Pull-to-refresh: at the very top, pulled down past the trigger.
-          if (base === 0 && hasRefreshSV.value && translateY.value > PULL_TRIGGER) {
-            translateY.value = withTiming(PULL_REST, { duration: 140, easing: SNAP_EASING });
-            runOnJS(startRefresh)();
-            runOnJS(setActive)(false);
-            return;
-          }
-          let target = base;
-          if (e.velocityY < -FLICK_VELOCITY || e.translationY < -ph * DISTANCE_FRACTION) {
-            target = base + 1;
-          } else if (e.velocityY > FLICK_VELOCITY || e.translationY > ph * DISTANCE_FRACTION) {
-            target = base - 1;
-          }
-          if (target < 0) target = 0;
-          const maxI = countSV.value - 1;
-          if (target > maxI) target = maxI;
-          translateY.value = withTiming(-target * ph, { duration: SNAP_MS, easing: SNAP_EASING });
-          if (target !== base) {
-            indexSV.value = target;
-            runOnJS(commitIndex)(target);
-          }
+  const pan = useMemo(() => {
+    let g = Gesture.Pan()
+      // Only a clear vertical drag drives the pager.
+      .activeOffsetY([-12, 12]);
+    if (panRef) g = g.withRef(panRef);
+    // Let a sibling screen swipe-back recognize simultaneously, so it can never
+    // hold the touch "undecided" and block the pager from activating.
+    if (simultaneousRef) g = g.simultaneousWithExternalGesture(simultaneousRef);
+    // Fail on horizontal travel ONLY when something horizontal needs the touch
+    // (swipe-left-to-profile). On album views (null) we skip this, so a fast
+    // up-swipe's sideways thumb-arc can never fail the scroll.
+    if (horizontalFailOffset != null) {
+      g = g.failOffsetX([-horizontalFailOffset, horizontalFailOffset]);
+    }
+    return g
+      .onStart(() => {
+        'worklet';
+        // Cancel any in-flight snap and take over from where it is — this is
+        // what makes the snap interruptible.
+        cancelAnimation(translateY);
+        startTranslateY.value = translateY.value;
+        runOnJS(setActive)(true);
+      })
+      .onUpdate((e) => {
+        'worklet';
+        const ph = pageHeightSV.value;
+        const minY = -(countSV.value - 1) * ph;
+        let y = startTranslateY.value + e.translationY;
+        if (y > 0)
+          y = y * EDGE_RESISTANCE; // before first page
+        else if (y < minY) y = minY + (y - minY) * EDGE_RESISTANCE; // past last
+        translateY.value = y;
+      })
+      .onEnd((e) => {
+        'worklet';
+        const ph = pageHeightSV.value;
+        const base = indexSV.value;
+        // Pull-to-refresh: at the very top, pulled down past the trigger.
+        if (base === 0 && hasRefreshSV.value && translateY.value > PULL_TRIGGER) {
+          translateY.value = withTiming(PULL_REST, { duration: 140, easing: SNAP_EASING });
+          runOnJS(startRefresh)();
           runOnJS(setActive)(false);
-        }),
-    [
-      commitIndex,
-      countSV,
-      hasRefreshSV,
-      indexSV,
-      pageHeightSV,
-      setActive,
-      startRefresh,
-      startTranslateY,
-      translateY,
-    ]
-  );
+          return;
+        }
+        let target = base;
+        if (e.velocityY < -FLICK_VELOCITY || e.translationY < -ph * DISTANCE_FRACTION) {
+          target = base + 1;
+        } else if (e.velocityY > FLICK_VELOCITY || e.translationY > ph * DISTANCE_FRACTION) {
+          target = base - 1;
+        }
+        if (target < 0) target = 0;
+        const maxI = countSV.value - 1;
+        if (target > maxI) target = maxI;
+        translateY.value = withTiming(-target * ph, { duration: SNAP_MS, easing: SNAP_EASING });
+        if (target !== base) {
+          indexSV.value = target;
+          runOnJS(commitIndex)(target);
+        }
+        runOnJS(setActive)(false);
+      });
+  }, [
+    commitIndex,
+    countSV,
+    hasRefreshSV,
+    horizontalFailOffset,
+    indexSV,
+    pageHeightSV,
+    panRef,
+    setActive,
+    simultaneousRef,
+    startRefresh,
+    startTranslateY,
+    translateY,
+  ]);
 
   const stripStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],

@@ -29,6 +29,7 @@ import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
 import { LikesSheet } from '@/components/LikesSheet';
 import { VerticalPager, type VerticalPagerHandle } from '@/components/VerticalPager';
+import type { GestureType } from 'react-native-gesture-handler';
 import { colors } from '@/constants/theme';
 
 const FALLBACK_HEIGHT = Dimensions.get('window').height;
@@ -46,6 +47,10 @@ interface Props {
   onIndexChange?: (index: number) => void;
   /** Imperative handle to control the pager externally (scrollToIndex/Offset). */
   listRef?: React.RefObject<VerticalPagerHandle | null>;
+  /** Receives the pager's Pan gesture (for a screen swipe-back to compose with). */
+  panRef?: React.MutableRefObject<GestureType | undefined>;
+  /** A screen swipe-back gesture the pager Pan may recognize simultaneously with. */
+  simultaneousRef?: React.RefObject<GestureType | undefined>;
   /** Content rendered above the feed (absolute positioned overlays go in parent) */
   ListEmptyComponent?: React.ReactElement;
   /** Disable swipe-left-to-profile on cards (for album/detail views) */
@@ -181,6 +186,8 @@ export function FullScreenFeed({
   initialIndex = 0,
   onIndexChange,
   listRef,
+  panRef,
+  simultaneousRef,
   ListEmptyComponent,
   disableSwipeToProfile,
   hideTabBar,
@@ -452,7 +459,16 @@ export function FullScreenFeed({
           renderItem={renderItem}
           onActiveIndexChange={handleActiveIndex}
           onEndReached={onEndReached}
-          onEndReachedThreshold={2}
+          // Prefetch the next page a few cards early so a fast swiper doesn't
+          // reach the last loaded card (and the edge rubber-band) before the
+          // next page lands.
+          onEndReachedThreshold={5}
+          // Album/detail views disable swipe-left-to-profile, so nothing
+          // horizontal needs the touch — drop the failOffsetX guard so a fast
+          // up-swipe's thumb-arc drift can never fail the scroll.
+          horizontalFailOffset={disableSwipeToProfile ? null : 16}
+          panRef={panRef}
+          simultaneousRef={simultaneousRef}
           onRefresh={onRefreshProp ? handleRefresh : undefined}
           refreshTint={colors.textPrimary}
         />

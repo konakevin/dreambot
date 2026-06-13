@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { GestureDetector } from 'react-native-gesture-handler';
+import { GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
 import { Ionicons } from '@expo/vector-icons';
@@ -145,10 +145,19 @@ export default function PhotoDetailScreen() {
     }
   }, [isAlbum, sourceQuery, contextQuery]);
 
-  // Axis-lock back-swipe (locks to vertical the instant you swipe up, so the
-  // album scroll is free and an up-swipe never boots back). Native gesture is
-  // disabled for this route in app/_layout.tsx.
-  const { gesture: backGesture, animatedStyle: backStyle } = useAxisLockSwipeBack();
+  // Axis-lock swipe-back, composed SIMULTANEOUSLY with the pager's Pan (the
+  // pagerPanRef wired below). A screen back gesture over the pager otherwise
+  // holds the touch "undecided" and intermittently blocks a vertical swipe from
+  // activating (proven root cause of the dropped swipes). Declaring them
+  // simultaneous lets the pager activate independently while this gesture's
+  // axis-lock still keeps a vertical swipe from triggering a back. Native
+  // full-screen back is disabled for this route in app/_layout.tsx.
+  const pagerPanRef = useRef<GestureType | undefined>(undefined);
+  const {
+    gesture: backGesture,
+    animatedStyle: backStyle,
+    ref: backRef,
+  } = useAxisLockSwipeBack({ simultaneousWith: pagerPanRef });
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
@@ -314,6 +323,8 @@ export default function PhotoDetailScreen() {
           onTogglePosted={handleTogglePosted}
           onHudToggle={handleHudToggle}
           onEndReached={handleEndReached}
+          panRef={pagerPanRef}
+          simultaneousRef={backRef}
         />
       </Animated.View>
     </GestureDetector>
