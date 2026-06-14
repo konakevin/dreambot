@@ -790,6 +790,7 @@ export default function CreateScreen() {
         }}
         onClose={() => setPickerType(null)}
         options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
+        mediumIsFace={mediumFaceSwaps}
       />
 
       {/* Photo fullscreen preview */}

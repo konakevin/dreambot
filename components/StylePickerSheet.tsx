@@ -41,6 +41,12 @@ interface Props {
   onClose: () => void;
   /** Full list of available options (from DB) */
   options: StyleOption[];
+  /**
+   * Whether the currently-selected MEDIUM face-swaps (real face) vs is artistic.
+   * The Vibe sheet has no face/art split of its own, so it inherits this to
+   * match the selected medium's color (purple = Real Face, pink = Dream Art).
+   */
+  mediumIsFace?: boolean;
 }
 
 export function StylePickerSheet({
@@ -50,6 +56,7 @@ export function StylePickerSheet({
   onSelect,
   onClose,
   options: allAvailable,
+  mediumIsFace = true,
 }: Props) {
   const insets = useSafeAreaInsets();
   const progress = useSharedValue(0);
@@ -75,21 +82,13 @@ export function StylePickerSheet({
     selectedIsFace ? 'face' : 'art'
   );
 
-  // Color-code the sheet toward the active medium tab: Real Face = brand purple,
-  // Dream Art = brand teal (the two MEDIUM_BADGE ends). The vibe sheet has no
-  // face/art split, so it keeps the default purple accent.
-  const accentColor =
-    type === 'medium'
-      ? mediumSegment === 'face'
-        ? MEDIUM_BADGE.face.color
-        : MEDIUM_BADGE.art.color
-      : colors.accent;
-  const accentBg =
-    type === 'medium'
-      ? mediumSegment === 'face'
-        ? MEDIUM_BADGE.face.bg
-        : MEDIUM_BADGE.art.bg
-      : 'rgba(139, 92, 246, 0.15)';
+  // Color-code the sheet toward the relevant medium mode: Real Face = brand
+  // purple, Dream Art = brand pink (the two MEDIUM_BADGE ends). The medium sheet
+  // keys off its active tab; the Vibe sheet (no split) inherits the selected
+  // medium's mode via `mediumIsFace` so it matches whatever medium is chosen.
+  const accentIsFace = type === 'medium' ? mediumSegment === 'face' : mediumIsFace;
+  const accentColor = accentIsFace ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
+  const accentBg = accentIsFace ? MEDIUM_BADGE.face.bg : MEDIUM_BADGE.art.bg;
 
   // Sticky per-tab selections — each tab remembers the last medium picked on it
   const [lastFace, setLastFace] = useState<string>('surprise_me_face');
