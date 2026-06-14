@@ -69,7 +69,7 @@ const CARDS: CardSpec[] = [
     color: FACE_COLOR,
     bg: FACE_BG,
     icon: 'person',
-    title: 'Real face',
+    title: 'Real Face',
     body: 'Your real face appears in the dream. Think photography, cinematic, watercolor, and other true-to-life styles.',
   },
   {
@@ -77,7 +77,7 @@ const CARDS: CardSpec[] = [
     color: ART_COLOR,
     bg: ART_BG,
     icon: 'color-palette',
-    title: 'Dream art style',
+    title: 'Dream Art',
     body: 'The dream captures the likeness of you and conjures a fun look-alike, reimagined in the style. Think LEGO, pixel art, anime, claymation, and loads more.',
   },
 ];
