@@ -22,6 +22,7 @@
 import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
+import { GradientTitle } from '@/components/GradientTitle';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -256,24 +257,18 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
           <View style={[styles.modalSheet, { backgroundColor: colors.background }]}>
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
-              <Text
-                style={{ color: colors.textPrimary, fontSize: fontScale(17), fontWeight: '700' }}
+              <GradientTitle size={20}>Choose your AI model</GradientTitle>
+              <TouchableOpacity
+                style={styles.modalClose}
+                onPress={() => setModalOpen(false)}
+                hitSlop={10}
               >
-                Choose your AI model
-              </Text>
-              <TouchableOpacity onPress={() => setModalOpen(false)} hitSlop={10}>
                 <Ionicons name="close" size={22} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: fontScale(12),
-                lineHeight: fontScale(17),
-                marginBottom: verticalScale(4),
-              }}
-            >
-              Each one gives your dream a slightly different look. Pick one and try it out.
+            <Text style={styles.modalSubtitle}>
+              Each one gives your dream a slightly different look. The cost varies by model
+              depending on compute.
             </Text>
             <ScrollView
               style={{ maxHeight: 460 }}
@@ -389,9 +384,22 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(12),
   },
   modalHeader: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     marginBottom: verticalScale(8),
+  },
+  modalClose: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  modalSubtitle: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    lineHeight: fontScale(17),
+    textAlign: 'center',
+    marginBottom: verticalScale(4),
   },
 });
