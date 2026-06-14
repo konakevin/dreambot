@@ -23,10 +23,27 @@ interface Props {
   onPress: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
   disabled?: boolean;
+  /**
+   * 'gradient' (default) = brand-gradient pill with near-black text.
+   * 'solid' = flat soft-purple (the gradient's left end) with white text — a
+   * quieter primary used where the full gradient feels too loud (Dream button).
+   */
+  variant?: 'gradient' | 'solid';
   style?: StyleProp<ViewStyle>;
 }
 
-export function GradientButton({ label, onPress, icon, disabled = false, style }: Props) {
+// The soft purple at the left of the brand gradient — used for the solid variant.
+const SOLID_BG = BRAND_GRADIENT[0];
+
+export function GradientButton({
+  label,
+  onPress,
+  icon,
+  disabled = false,
+  variant = 'gradient',
+  style,
+}: Props) {
+  const solid = variant === 'solid';
   return (
     <TouchableOpacity
       onPress={disabled ? undefined : onPress}
@@ -38,6 +55,11 @@ export function GradientButton({ label, onPress, icon, disabled = false, style }
         <View style={[s.cta, s.ctaDisabled]}>
           <Text style={[s.label, s.labelDisabled]}>{label}</Text>
           {icon ? <Ionicons name={icon} size={18} color={colors.textSecondary} /> : null}
+        </View>
+      ) : solid ? (
+        <View style={[s.cta, { backgroundColor: SOLID_BG }]}>
+          <Text style={[s.label, s.labelSolid]}>{label}</Text>
+          {icon ? <Ionicons name={icon} size={18} color="#FFFFFF" /> : null}
         </View>
       ) : (
         <LinearGradient
@@ -78,5 +100,6 @@ const s = StyleSheet.create({
     elevation: 0,
   },
   label: { color: CTA_TEXT_COLOR, fontSize: fontScale(17), fontFamily: DISPLAY_FONT.semibold },
+  labelSolid: { color: '#FFFFFF' },
   labelDisabled: { color: colors.textSecondary },
 });
