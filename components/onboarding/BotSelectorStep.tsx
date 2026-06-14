@@ -24,7 +24,7 @@ import { GradientTitle } from '@/components/GradientTitle';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
-const TITLE_TEXT = 'BUILD YOUR DREAM TEAM';
+const TITLE_TEXT = 'Build your dream team';
 
 interface Props {
   onNext: () => void;
