@@ -29,7 +29,7 @@ import {
 } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
 
@@ -103,14 +103,14 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
         <MaskedView
           maskElement={
             <View style={s.headlineMaskWrap}>
-              <Text style={s.headlineMask} numberOfLines={1}>
+              <Text style={s.headlineMask} numberOfLines={2}>
                 {FEED_INTRO.headline}
               </Text>
             </View>
           }
         >
           <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.headlineMask, s.headlineGhost]} numberOfLines={1}>
+            <Text style={[s.headlineMask, s.headlineGhost]} numberOfLines={2}>
               {FEED_INTRO.headline}
             </Text>
           </LinearGradient>
@@ -183,8 +183,11 @@ const s = StyleSheet.create({
   headlineMask: {
     // FIXED font size, no adjustsFontSizeToFit — auto-fit races the Modal's
     // SafeAreaProvider layout and intermittently collapses the gradient text
-    // to min size on re-mount. fontScale(24) fits "WELCOME TO YOUR FEED" on
-    // one line at the iPhone-14 base and scales down proportionally.
+    // to min size on re-mount. Instead the headline is width-constrained to the
+    // content column and allowed to wrap to a 2nd line, so it stays responsive
+    // (never clips) across device widths without auto-fit. fontScale keys off
+    // HEIGHT, so the width cap is what keeps wide strings from overflowing.
+    maxWidth: screen.width - 56, // content paddingHorizontal (28) on both sides
     fontSize: fontScale(24),
     fontWeight: '800',
     textAlign: 'center',
