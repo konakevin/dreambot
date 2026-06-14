@@ -20,7 +20,7 @@ import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -28,11 +28,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const SEEN_MEDIUMS_INTRO_KEY = 'dreambot.seenMediumsIntro.v1';
 
-// Matches the face/art badge tints on the Create medium row.
-const FACE_COLOR = '#60A5FA';
-const FACE_BG = 'rgba(96,165,250,0.15)';
-const ART_COLOR = '#F59E0B';
-const ART_BG = 'rgba(245,158,11,0.15)';
+// Matches the face/art badge tints on the Create medium row (single source of
+// truth in constants/theme.ts → MEDIUM_BADGE, the two ends of the brand gradient).
+const FACE_COLOR = MEDIUM_BADGE.face.color;
+const FACE_BG = MEDIUM_BADGE.face.bg;
+const ART_COLOR = MEDIUM_BADGE.art.color;
+const ART_BG = MEDIUM_BADGE.art.bg;
 
 /** Has the user already seen the mediums intro? Gate rendering with this. */
 export async function hasSeenMediumsIntro(): Promise<boolean> {

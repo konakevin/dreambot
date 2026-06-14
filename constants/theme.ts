@@ -47,6 +47,15 @@ export const gradients = {
   brand: ['#A78BFA', '#F9A8D4', '#5EEAD4'] as [string, string, string],
 };
 
+// ── Medium "face / art" badge colors ─────────────────────────────────────────
+// The two ends of the brand gradient: Real Face = moon purple, Dream Art = star
+// teal. Mirrored on the Create medium row (app/(tabs)/create.tsx) AND the
+// MediumsIntroSheet teaching cards — import from here so they never drift.
+export const MEDIUM_BADGE = {
+  face: { color: '#A78BFA', bg: 'rgba(167,139,250,0.15)' },
+  art: { color: '#5EEAD4', bg: 'rgba(94,234,212,0.15)' },
+} as const;
+
 // ── Animation ───────────────────────────────────────────────────────────────
 
 export const ANIM = {

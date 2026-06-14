@@ -33,7 +33,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -705,15 +705,17 @@ export default function CreateScreen() {
                           paddingVertical: verticalScale(1),
                           borderRadius: 5,
                           backgroundColor: mediumFaceSwaps
-                            ? 'rgba(96,165,250,0.15)'
-                            : 'rgba(245,158,11,0.15)',
+                            ? MEDIUM_BADGE.face.bg
+                            : MEDIUM_BADGE.art.bg,
                         }}
                       >
                         <Text
                           style={{
                             fontSize: fontScale(8),
                             fontWeight: '700',
-                            color: mediumFaceSwaps ? '#60A5FA' : '#F59E0B',
+                            color: mediumFaceSwaps
+                              ? MEDIUM_BADGE.face.color
+                              : MEDIUM_BADGE.art.color,
                             textTransform: 'uppercase',
                             letterSpacing: 0.5,
                           }}
