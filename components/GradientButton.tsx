@@ -57,7 +57,7 @@ export function GradientButton({
           {icon ? <Ionicons name={icon} size={18} color={colors.textSecondary} /> : null}
         </View>
       ) : solid ? (
-        <View style={[s.cta, { backgroundColor: SOLID_BG }]}>
+        <View style={[s.cta, s.ctaSolid, { backgroundColor: SOLID_BG }]}>
           <Text style={[s.label, s.labelSolid]}>{label}</Text>
           {icon ? <Ionicons name={icon} size={18} color="#FFFFFF" /> : null}
         </View>
@@ -91,6 +91,14 @@ const s = StyleSheet.create({
     shadowOpacity: 0.45,
     shadowRadius: 16,
     elevation: 8,
+  },
+  // Solid variant — softer, tighter glow so it reads as a clean button, not a
+  // glowing one (the gradient's 0.45/16 shadow is too heavy on a flat fill).
+  ctaSolid: {
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 10,
+    elevation: 4,
   },
   ctaDisabled: {
     backgroundColor: colors.surface,
