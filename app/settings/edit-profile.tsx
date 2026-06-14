@@ -11,7 +11,7 @@
  * Routed via the profile screen's [Edit Profile] action pill.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,6 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
@@ -84,63 +83,84 @@ export default function EditProfileScreen() {
 
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
-  const [saving, setSaving] = useState(false);
 
-  // Hydrate inputs from the loaded profile. Effect (not useState init) so
-  // that the inputs update when the query resolves AFTER first render —
-  // initial render shows blanks, then fills in once the RPC returns.
+  // Display name + bio AUTO-SAVE on blur (and on unmount), matching the rest of
+  // the screen (photos / locations / vibes already auto-save). No Save button.
+  // `savedRef` holds the last-persisted values so a blur with no real change is
+  // a no-op, and so we don't rely on the publicProfile refetch landing first.
+  const savedRef = useRef({ name: '', bio: '' });
+  const hydratedRef = useRef(false);
+  const savingTextRef = useRef(false);
+
+  // Hydrate inputs once, when the query first resolves (initial render shows
+  // blanks). Only once — re-hydrating on every profile change would clobber
+  // in-progress edits when our own save invalidates + refetches.
   useEffect(() => {
-    if (profile) {
-      setDisplayName(profile.display_name ?? '');
-      setBio(profile.bio ?? '');
+    if (profile && !hydratedRef.current) {
+      hydratedRef.current = true;
+      const n = profile.display_name ?? '';
+      const b = profile.bio ?? '';
+      setDisplayName(n);
+      setBio(b);
+      savedRef.current = { name: n, bio: b };
     }
   }, [profile]);
 
-  const dirty =
-    !!profile && (displayName !== (profile.display_name ?? '') || bio !== (profile.bio ?? ''));
+  // Moderate (changed fields only) then persist name + bio. Called on blur.
+  const commitProfileText = useCallback(async () => {
+    if (!user || savingTextRef.current) return;
+    const trimmedName = displayName.trim();
+    const trimmedBio = bio.trim();
+    const nameChanged = trimmedName !== savedRef.current.name;
+    const bioChanged = trimmedBio !== savedRef.current.bio;
+    if (!nameChanged && !bioChanged) return;
 
-  async function handleSave() {
-    if (!user || saving) return;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setSaving(true);
+    savingTextRef.current = true;
     try {
-      // Null-out empty strings so the DB row stores NULL when the user
-      // clears the field (UI then shows the @username fallback).
-      const trimmedDisplayName = displayName.trim();
-      const trimmedBio = bio.trim();
-
-      // Moderate both user-facing free-text fields BEFORE the DB write.
-      // Without this, profanity / harassment in display_name + bio ships
-      // straight to the public profile. (Architect audit 2026-06-06.)
-      if (trimmedDisplayName) {
-        const modName = await moderateText(trimmedDisplayName);
+      // Moderate the free-text fields BEFORE the DB write so profanity /
+      // harassment never reaches the public profile. (Architect audit
+      // 2026-06-06.) Only re-moderate a field that actually changed.
+      if (nameChanged && trimmedName) {
+        const modName = await moderateText(trimmedName);
         if (!modName.passed) {
           throw new Error(modName.reason ?? 'Display name contains inappropriate language');
         }
       }
-      if (trimmedBio) {
+      if (bioChanged && trimmedBio) {
         const modBio = await moderateText(trimmedBio);
         if (!modBio.passed) {
           throw new Error(modBio.reason ?? 'Bio contains inappropriate language');
         }
       }
 
+      // Null-out empty strings so the DB stores NULL when cleared (UI then
+      // shows the @username fallback).
       const payload = {
-        display_name: trimmedDisplayName ? trimmedDisplayName.slice(0, DISPLAY_NAME_MAX) : null,
+        display_name: trimmedName ? trimmedName.slice(0, DISPLAY_NAME_MAX) : null,
         bio: trimmedBio ? trimmedBio.slice(0, BIO_MAX) : null,
       };
       const { error } = await supabase.from('users').update(payload).eq('id', user.id);
       if (error) throw error;
-      // Refresh profile data wherever it's consumed.
+      savedRef.current = { name: trimmedName, bio: trimmedBio };
       await queryClient.invalidateQueries({ queryKey: ['publicProfile', user.id] });
-      Toast.show('Profile saved', 'checkmark-circle');
-      router.back();
+      Toast.show('Saved', 'checkmark-circle');
     } catch (e) {
-      showAlert('Save failed', (e as Error).message ?? 'Try again in a moment.');
+      // Keep the user's text so they can fix it; surface why it didn't save.
+      showAlert('Couldn’t save', (e as Error).message ?? 'Try again in a moment.');
     } finally {
-      setSaving(false);
+      savingTextRef.current = false;
     }
-  }
+  }, [user, displayName, bio, queryClient]);
+
+  // Safety net: also commit on unmount in case they navigate away without the
+  // field blurring first. Ref keeps the latest closure.
+  const commitRef = useRef(commitProfileText);
+  commitRef.current = commitProfileText;
+  useEffect(() => {
+    return () => {
+      void commitRef.current();
+    };
+  }, []);
 
   function handleChangePhoto() {
     showAlert('Profile picture', '', [
@@ -187,22 +207,15 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView style={styles.root}>
-      {/* Top bar — back / title / Save */}
+      {/* Top bar — back / title. Everything auto-saves (name + bio on blur,
+          photos/locations/vibes via useAutoSaveProfile), so there's no Save
+          button; the right spacer keeps the title centered. */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.topBarIcon}>
           <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <GradientTitle>Edit Profile</GradientTitle>
-        <TouchableOpacity
-          onPress={handleSave}
-          disabled={!dirty || saving}
-          hitSlop={12}
-          style={styles.topBarIcon}
-        >
-          <Text style={[styles.saveText, (!dirty || saving) && styles.saveTextDisabled]}>
-            {saving ? '…' : 'Save'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.topBarIcon} />
       </View>
 
       <KeyboardAvoidingView
@@ -247,6 +260,7 @@ export default function EditProfileScreen() {
               style={styles.input}
               value={displayName}
               onChangeText={(t) => setDisplayName(t.slice(0, DISPLAY_NAME_MAX))}
+              onBlur={commitProfileText}
               placeholder={profile?.username ?? 'your name'}
               placeholderTextColor={colors.textSecondary}
               maxLength={DISPLAY_NAME_MAX}
@@ -264,6 +278,7 @@ export default function EditProfileScreen() {
               style={[styles.input, styles.inputMultiline]}
               value={bio}
               onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
+              onBlur={commitProfileText}
               placeholder="Say something dreamy…"
               placeholderTextColor={colors.textSecondary}
               multiline
@@ -329,14 +344,6 @@ const styles = StyleSheet.create({
   topBarIcon: {
     minWidth: 56,
     alignItems: 'center',
-  },
-  saveText: {
-    color: colors.accent,
-    fontSize: fontScale(16),
-    fontWeight: '700',
-  },
-  saveTextDisabled: {
-    color: colors.textSecondary,
   },
   scrollContent: {
     padding: 16,
