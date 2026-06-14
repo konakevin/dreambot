@@ -18,7 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -74,6 +74,22 @@ export function StylePickerSheet({
   const [mediumSegment, setMediumSegment] = useState<'face' | 'art'>(
     selectedIsFace ? 'face' : 'art'
   );
+
+  // Color-code the sheet toward the active medium tab: Real Face = brand purple,
+  // Dream Art = brand teal (the two MEDIUM_BADGE ends). The vibe sheet has no
+  // face/art split, so it keeps the default purple accent.
+  const accentColor =
+    type === 'medium'
+      ? mediumSegment === 'face'
+        ? MEDIUM_BADGE.face.color
+        : MEDIUM_BADGE.art.color
+      : colors.accent;
+  const accentBg =
+    type === 'medium'
+      ? mediumSegment === 'face'
+        ? MEDIUM_BADGE.face.bg
+        : MEDIUM_BADGE.art.bg
+      : 'rgba(139, 92, 246, 0.15)';
 
   // Sticky per-tab selections — each tab remembers the last medium picked on it
   const [lastFace, setLastFace] = useState<string>('surprise_me_face');
@@ -178,9 +194,9 @@ export function StylePickerSheet({
         key={opt.key}
         className="flex-row items-center justify-between py-3.5 px-4 mb-1.5 rounded-xl"
         style={{
-          backgroundColor: isSelected ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+          backgroundColor: isSelected ? accentBg : 'transparent',
           borderWidth: isSelected ? 1 : 0,
-          borderColor: isSelected ? colors.accent : 'transparent',
+          borderColor: isSelected ? accentColor : 'transparent',
         }}
         onPress={() => handleSelect(opt.key)}
         activeOpacity={0.7}
@@ -188,13 +204,13 @@ export function StylePickerSheet({
         <Text
           className="text-base"
           style={{
-            color: isSelected ? colors.accent : colors.textPrimary,
+            color: isSelected ? accentColor : colors.textPrimary,
             fontWeight: isSelected ? '700' : '500',
           }}
         >
           {opt.label}
         </Text>
-        {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.accent} />}
+        {isSelected && <Ionicons name="checkmark-circle" size={20} color={accentColor} />}
       </TouchableOpacity>
     );
   }
@@ -245,6 +261,10 @@ export function StylePickerSheet({
         >
           {segments.map((seg) => {
             const active = mediumSegment === seg.key;
+            // Each tab carries its own brand color when active: Real Face = purple,
+            // Dream Art = turquoise (the two MEDIUM_BADGE ends).
+            const segColor = seg.key === 'face' ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
+            const segBg = seg.key === 'face' ? MEDIUM_BADGE.face.bg : MEDIUM_BADGE.art.bg;
             return (
               <TouchableOpacity
                 key={seg.key}
@@ -253,9 +273,9 @@ export function StylePickerSheet({
                   paddingVertical: verticalScale(8),
                   borderRadius: 8,
                   alignItems: 'center',
-                  backgroundColor: active ? colors.surface : 'transparent',
+                  backgroundColor: active ? segBg : 'transparent',
                   borderWidth: active ? 1 : 0,
-                  borderColor: active ? colors.border : 'transparent',
+                  borderColor: active ? segColor : 'transparent',
                 }}
                 onPress={() => {
                   if (seg.key === mediumSegment) return;
@@ -274,7 +294,7 @@ export function StylePickerSheet({
                   style={{
                     fontSize: fontScale(13),
                     fontWeight: active ? '700' : '500',
-                    color: active ? colors.textPrimary : colors.textSecondary,
+                    color: active ? segColor : colors.textSecondary,
                   }}
                 >
                   {seg.label}
@@ -286,7 +306,7 @@ export function StylePickerSheet({
         <Text
           style={{
             fontSize: fontScale(11),
-            color: colors.textMuted,
+            color: accentColor,
             textAlign: 'center',
             marginTop: verticalScale(6),
           }}
