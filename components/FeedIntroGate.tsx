@@ -98,8 +98,6 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
   return (
     <SafeAreaView style={s.root} edges={['top']}>
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-        <Text style={s.eyebrow}>{FEED_INTRO.eyebrow}</Text>
-
         <MaskedView
           maskElement={
             <View style={s.headlineMaskWrap}>
@@ -170,15 +168,6 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(24),
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  eyebrow: {
-    color: colors.accentLight,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    marginBottom: verticalScale(12),
-    textAlign: 'center',
   },
   headlineMaskWrap: { alignItems: 'center' },
   headlineMask: {
