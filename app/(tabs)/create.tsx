@@ -44,38 +44,13 @@ import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { ModelPicker } from '@/components/ModelPicker';
 import { GradientTitle } from '@/components/GradientTitle';
+import { showAlert } from '@/components/CustomAlert';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
-
-// Cast-detection patterns (defaults). The LIVE source is engine_config
-// (relationship_words / pet_words, migration 256) — the same word lists the
-// server detector uses, so editing them in the dashboard fixes BOTH the render
-// and this helper text with no deploy. These constants are the bundled fallback
-// for when the DB value is null/offline; keep them in sync with
-// DEFAULT_RELATIONSHIP_WORDS / DEFAULT_PET_WORDS in selfInsertDetector.ts.
-const DEFAULT_SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
-const DEFAULT_RELATIONSHIP_WORDS =
-  'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
-const DEFAULT_PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';
-const DEFAULT_RELATIONSHIP_REGEX = new RegExp(
-  `\\bmy\\s+(${DEFAULT_RELATIONSHIP_WORDS}|${DEFAULT_PET_WORDS})\\b`,
-  'i'
-);
-
-/** Build a case-insensitive RegExp from an admin-provided string; fall back to
- *  `fallback` when the pattern is null/empty or invalid (never throws in render). */
-function safeRegex(pattern: string | null, fallback: RegExp): RegExp {
-  if (!pattern) return fallback;
-  try {
-    return new RegExp(pattern, 'i');
-  } catch {
-    return fallback;
-  }
-}
 
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
@@ -228,6 +203,21 @@ export default function CreateScreen() {
     showMediumsIntro(false);
   }, [showMediumsIntro]);
 
+  // The (i) next to the Mode label is contextual: in DreamBot mode it opens the
+  // face-vs-art medium sheet; in Direct mode it explains what Direct does.
+  const handleModeInfo = useCallback(() => {
+    if (config.useExactPrompt) {
+      Keyboard.dismiss();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      showAlert(
+        'Direct mode',
+        'Your prompt goes straight to the AI model you pick. No mediums, vibes, polish, or face likeness. Best when you want full control over the prompt.'
+      );
+    } else {
+      openMediumsIntroInfo();
+    }
+  }, [config.useExactPrompt, openMediumsIntroInfo]);
+
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
     const s1 = Keyboard.addListener('keyboardDidShow', () => {
@@ -264,22 +254,6 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
 
-  // Self-reference + relationship detection. The relationship/pet patterns are
-  // built from engine_config word lists (relationship_words / pet_words) — the
-  // SAME live source the server detector uses, so the helper + the render stay
-  // in sync from one dashboard edit. safeRegex falls back to the bundled
-  // constants if the DB value is null or an admin saves an invalid pattern.
-  const SELF_REF_REGEX = safeRegex(engineConfig.selfRefRegex, DEFAULT_SELF_REF_REGEX);
-  const mentionsSelf = hasPrompt && !hasPhoto && SELF_REF_REGEX.test(config.userPrompt);
-
-  const relWords = engineConfig.relationshipWords || DEFAULT_RELATIONSHIP_WORDS;
-  const petWords = engineConfig.petWords || DEFAULT_PET_WORDS;
-  const RELATIONSHIP_REGEX = safeRegex(
-    `\\bmy\\s+(${relWords}|${petWords})\\b`,
-    DEFAULT_RELATIONSHIP_REGEX
-  );
-  const mentionsOther = hasPrompt && !hasPhoto && RELATIONSHIP_REGEX.test(config.userPrompt);
-
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -304,38 +278,6 @@ export default function CreateScreen() {
     : hasPrompt
       ? 'Generate from your prompt'
       : 'Leave blank for a surprise';
-
-  // ── Face indicator (footer) ───────────────────────────────────────────────
-  // One face icon that answers "will you be in this dream?" It glows green when
-  // a self / relationship reference (or a new-scene photo) puts you in the
-  // scene, and stays gray with a nudge otherwise. The medium's face/art badge
-  // says HOW you'd appear (real face vs look-alike); this says WHETHER you do.
-  const selfPresent =
-    mentionsSelf || mentionsOther || (hasPhoto && config.photoStyle === 'new_scene');
-  const faceActive = selfPresent && !effectiveExactPrompt;
-  // Show the face line whenever you're (or could be) in the scene; otherwise
-  // fall back to contextHint (blank surprise / plain prompt / photo restyle).
-  const showFaceHint = selfPresent || (hasPrompt && !hasPhoto);
-  const faceHint: { icon: keyof typeof Ionicons.glyphMap; color: string; text: string } =
-    effectiveExactPrompt && selfPresent
-      ? {
-          icon: 'warning-outline',
-          color: '#F59E0B',
-          text: 'Exact prompt’s on, so you’ll sit this one out',
-        }
-      : faceActive
-        ? {
-            icon: 'happy',
-            color: '#34D399',
-            text: mediumFaceSwaps
-              ? 'Your real face stars in this dream'
-              : 'You’ll pop in as a look-alike',
-          }
-        : {
-            icon: 'happy-outline',
-            color: 'rgba(255,255,255,0.5)',
-            text: 'Add “me” to hop into the dream',
-          };
 
   // Placeholder text
   const placeholder = hasPhoto
@@ -647,6 +589,25 @@ export default function CreateScreen() {
               text-only). */}
           {!hasPhoto && (
             <View className="mb-4">
+              {/* Mode label + contextual info icon (DreamBot → medium sheet,
+                  Direct → Direct explainer). */}
+              <View className="flex-row items-center mb-1.5 ml-1">
+                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                  Mode
+                </Text>
+                <TouchableOpacity
+                  onPress={handleModeInfo}
+                  activeOpacity={0.6}
+                  hitSlop={10}
+                  className="ml-1.5"
+                >
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={14}
+                    color={colors.textSecondary}
+                  />
+                </TouchableOpacity>
+              </View>
               <View
                 className="flex-row rounded-xl p-1"
                 style={{
@@ -692,28 +653,6 @@ export default function CreateScreen() {
                   >
                     Direct
                   </Text>
-                </TouchableOpacity>
-              </View>
-              <View className="flex-row items-start mt-1.5 px-1">
-                <Text
-                  className="flex-1 text-xs"
-                  style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: fontScale(16) }}
-                >
-                  {config.useExactPrompt
-                    ? 'Your exact prompt goes straight to the AI model you pick. No DreamBot styling, polish, or likeness.'
-                    : 'Custom mediums & vibes, prompt polish, and your saved Dream Cast likeness when you mention yourself.'}
-                </Text>
-                <TouchableOpacity
-                  onPress={openMediumsIntroInfo}
-                  activeOpacity={0.6}
-                  hitSlop={10}
-                  style={{ marginLeft: 8, marginTop: verticalScale(1) }}
-                >
-                  <Ionicons
-                    name="information-circle-outline"
-                    size={16}
-                    color={colors.textSecondary}
-                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -822,27 +761,14 @@ export default function CreateScreen() {
               the keyboard appears, and the dead space below the Medium/Vibe row
               is gone. */}
           <View style={{ marginTop: verticalScale(28) }}>
-            {/* Contextual hint — face indicator (will you be in this dream?) when
-                you're in the scene, otherwise the generic mode hint. */}
-            <View className="flex-row items-center justify-center gap-1.5 mb-2">
-              {showFaceHint ? (
-                <>
-                  <Ionicons name={faceHint.icon} size={15} color={faceHint.color} />
-                  <Text
-                    className="text-center text-sm font-medium"
-                    style={{ color: faceHint.color }}
-                  >
-                    {faceHint.text}
-                  </Text>
-                </>
-              ) : (
-                <Text
-                  className="text-center text-sm font-medium"
-                  style={{ color: 'rgba(255,255,255,0.5)' }}
-                >
-                  {contextHint}
-                </Text>
-              )}
+            {/* Simple mode hint (blank surprise / from-prompt / photo). */}
+            <View className="flex-row items-center justify-center mb-2">
+              <Text
+                className="text-center text-sm font-medium"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+              >
+                {contextHint}
+              </Text>
             </View>
 
             {/* Dream button */}
