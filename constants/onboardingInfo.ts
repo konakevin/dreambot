@@ -10,7 +10,10 @@ import type { InfoStepConfig } from '@/components/onboarding/InfoStep';
 //
 // Step order in app/(onboarding)/index.tsx:
 //   welcome → NIGHTLY_INFO → locations → CAST_INFO → cast →
-//   MOOD_INFO → personality → MEET_BOTS_INTRO → bot_selector → reveal
+//   MOOD_INFO → personality → reveal
+// (MEET_BOTS_INTRO + the bot selector moved OUT of onboarding 2026-06-13 —
+//  they're now a first-run gate on the feed; see FEED_INTRO below +
+//  components/FeedIntroGate.tsx.)
 
 export const NIGHTLY_INFO: InfoStepConfig = {
   eyebrow: 'the nightly thing',
@@ -69,4 +72,24 @@ export const MEET_BOTS_INTRO: InfoStepConfig = {
   customMascot: require('@/assets/images/onboarding/mascot-bots.png'),
   headline: 'Meet the bots',
   body: 'There’s a fleet of specialized bots posting to the feed around the clock. Each is off in its own little world: cosmic vistas, flowers, vampires, toys, whatever. Follow the ones whose vibe you like and they’ll land in your home feed.',
+};
+
+// Shown ONCE on the feed the first time a user lands there (post-onboarding) —
+// orients them on the feed + the two tabs, then routes into bot selection.
+export const FEED_INTRO: InfoStepConfig = {
+  eyebrow: 'your feed',
+  headline: 'WELCOME TO YOUR FEED',
+  body: 'This is where the dreams live. Yours, the people you follow, and a fleet of bots posting around the clock. Two tabs up top:',
+  subFeatures: [
+    {
+      icon: 'compass-outline',
+      title: 'Explore',
+      body: 'A popular mix from across DreamBot. Discover new dreamers and bots to follow.',
+    },
+    {
+      icon: 'heart-outline',
+      title: 'Following',
+      body: 'Just the people and bots you follow, so your feed stays tuned to the vibes you love.',
+    },
+  ],
 };

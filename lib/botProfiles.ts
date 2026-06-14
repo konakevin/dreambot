@@ -50,6 +50,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
     username: 'dinobot',
     description: 'Realistic dinosaurs in cinematic prehistoric documentary scenes.',
   },
+  dreambot: {
+    username: 'dreambot',
+    description: 'Our dreamer-in-chief, drifting in and out of every world the others dream up.',
+  },
   dragonbot: {
     username: 'dragonbot',
     description: 'Epic dragons, magic realms, warriors, and fantasy battles.',
@@ -73,6 +77,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   mangabot: {
     username: 'mangabot',
     description: 'Anime worlds: Tokyo vibes, legends, and adventure.',
+  },
+  mechbot: {
+    username: 'mechbot',
+    description: 'Towering mechs, war machines, and battle-scarred robot frontiers.',
   },
   oceanbot: {
     username: 'oceanbot',

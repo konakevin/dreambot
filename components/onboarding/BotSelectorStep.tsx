@@ -12,6 +12,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import { useFeedStore } from '@/store/feed';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
@@ -22,12 +24,18 @@ import { BotImageViewer } from '@/components/BotImageViewer';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
+const TITLE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+const TITLE_TEXT = 'BUILD YOUR DREAM TEAM';
+
 interface Props {
   onNext: () => void;
   onBack: () => void;
+  /** Footer button label — defaults to 'Next' (onboarding pager). The first-run
+   *  feed gate passes 'Go to my feed' since this is the last step before the feed. */
+  nextLabel?: string;
 }
 
-export function BotSelectorStep({ onNext, onBack }: Props) {
+export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
   const { data: allBots = [], isLoading: botsLoading } = useBotUsers();
   const { data: thumbnails } = useBotThumbnails(3);
   const { data: followingIds = [] } = useFollowingIds();
@@ -47,6 +55,15 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
     [allBots]
   );
 
+  // Count ONLY the bots followed — `followingSet` also contains real-user
+  // follows, which must not count toward the "pick at least one bot" gate
+  // or the footer counter (the user could already follow people and that
+  // would wrongly satisfy the requirement / inflate the number).
+  const followedBotCount = useMemo(
+    () => orderedBots.reduce((n, bot) => (followingSet.has(bot.id) ? n + 1 : n), 0),
+    [orderedBots, followingSet]
+  );
+
   function handleNext() {
     // The user just (possibly) followed bots. Regen the feed seed so the
     // Explore tab's first fetch uses a fresh query key — otherwise it can
@@ -60,10 +77,22 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
       <View style={s.header}>
-        <Text style={s.title}>What do you want to see?</Text>
+        <MaskedView
+          maskElement={
+            <Text style={s.title} numberOfLines={1}>
+              {TITLE_TEXT}
+            </Text>
+          }
+        >
+          <LinearGradient colors={TITLE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+            <Text style={[s.title, s.titleGhost]} numberOfLines={1}>
+              {TITLE_TEXT}
+            </Text>
+          </LinearGradient>
+        </MaskedView>
         <Text style={s.subtitle}>
-          Pick at least one bot for your Following tab. The home feed always shows a popular mix
-          from everyone, and you can change who you follow anytime in settings.
+          Every bot dreams in its own little world. Tap Follow on any that spark a little joy and
+          they’ll start drifting into your feed.
         </Text>
       </View>
 
@@ -95,11 +124,11 @@ export function BotSelectorStep({ onNext, onBack }: Props) {
       <OnboardingFooter
         onNext={handleNext}
         onBack={onBack}
-        disabled={followingSet.size === 0}
-        counter={
-          followingSet.size === 0 ? 'Pick at least one bot' : `${followingSet.size} following`
-        }
-        counterMet={followingSet.size > 0}
+        hideBack
+        nextLabel={nextLabel}
+        disabled={followedBotCount === 0}
+        counter={followedBotCount === 0 ? 'Pick at least one bot' : `${followedBotCount} following`}
+        counterMet={followedBotCount > 0}
       />
 
       {viewer && (
@@ -117,19 +146,28 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: 24,
-    paddingTop: verticalScale(8),
+    paddingTop: verticalScale(20),
     paddingBottom: verticalScale(16),
+    alignItems: 'center',
   },
   title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(28),
+    color: '#FFFFFF',
+    // FIXED font size, no adjustsFontSizeToFit — auto-fit races the Modal's
+    // SafeAreaProvider layout and intermittently collapses the gradient text
+    // to min size on re-mount. fontScale(22) fits "BUILD YOUR DREAM TEAM" on
+    // one line at the iPhone-14 base. See FeedIntroGate headlineMask.
+    fontSize: fontScale(22),
     fontWeight: '800',
-    marginBottom: verticalScale(8),
+    letterSpacing: 0.5,
+    marginBottom: verticalScale(10),
+    textAlign: 'center',
   },
+  titleGhost: { opacity: 0 },
   subtitle: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
+    textAlign: 'center',
   },
   loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   // Footer is now in-flow (was absolute) — only a small tail buffer needed.

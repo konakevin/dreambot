@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { FeedIntroGate, hasSeenFeedIntro } from '@/components/FeedIntroGate';
 import { OverlayPill } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -156,6 +157,14 @@ export default function HomeScreen() {
   const feedSeed = useFeedStore((s) => s.feedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const { data: botUsers } = useBotUsers();
+
+  // First-run feed gate — orientation (feed + tabs) then mandatory bot selection.
+  // null = still reading the AsyncStorage flag; true = show; false = seen/dismissed.
+  const [showFeedIntro, setShowFeedIntro] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    hasSeenFeedIntro().then((seen) => setShowFeedIntro(!seen));
+  }, [user]);
 
   // Prebuffer the two home-screen feeds on mount: warms the TanStack
   // cache for tab-switch latency, then prefetches the first 5 image bytes
@@ -303,6 +312,10 @@ export default function HomeScreen() {
           <View style={{ flex: 1, minWidth: 42 }} />
         </View>
       </Animated.View>
+
+      {/* First-run gate: feed orientation → mandatory bot selection. Full-screen
+          modal, shown once (dreambot.seenFeedIntro.v1). */}
+      {showFeedIntro === true && <FeedIntroGate onDone={() => setShowFeedIntro(false)} />}
     </View>
   );
 }

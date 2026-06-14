@@ -28,6 +28,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
 import { resetCreateIntro } from '@/components/CreateIntroSheet';
+import { resetFeedIntro } from '@/components/FeedIntroGate';
 import { resetMediumsIntro } from '@/components/MediumsIntroSheet';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
@@ -630,7 +631,9 @@ export default function SettingsScreen() {
               // Also clear the first-run intro flags so the Create-tab tutorials
               // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
               // would skip them. Non-fatal if storage hiccups.
-              await Promise.all([resetCreateIntro(), resetMediumsIntro()]).catch(() => {});
+              await Promise.all([resetCreateIntro(), resetMediumsIntro(), resetFeedIntro()]).catch(
+                () => {}
+              );
               useOnboardingStore.getState().reset();
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               router.replace('/(onboarding)');
@@ -645,7 +648,9 @@ export default function SettingsScreen() {
               // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
               // so those tutorial sheets re-show next time — without re-onboarding.
               // Lets us replay the first-run flows over and over.
-              await Promise.all([resetCreateIntro(), resetMediumsIntro()]).catch(() => {});
+              await Promise.all([resetCreateIntro(), resetMediumsIntro(), resetFeedIntro()]).catch(
+                () => {}
+              );
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               showAlert(
                 'Tutorials reset',

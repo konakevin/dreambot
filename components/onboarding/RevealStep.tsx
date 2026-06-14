@@ -312,8 +312,9 @@ export function RevealStep({ onBack }: Props) {
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       trackOnboardingCompleted();
-      // Bot-selector moved INTO the onboarding pager (2026-06-03) so the
-      // user already picked bots to follow before they got here.
+      // Bot intro + selection now happen AFTER this, as a first-run gate on the
+      // feed (FeedIntroGate, 2026-06-14) — so we route straight to the feed here
+      // and the gate fires there.
       //
       // Post → reset + go straight to the feed.
       // Skip → drop the reveal overlay + pager chrome (chromeHidden) and

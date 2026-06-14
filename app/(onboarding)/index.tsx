@@ -17,12 +17,11 @@ import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 import { InfoStep } from '@/components/onboarding/InfoStep';
-import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
 // CREATE_INFO is intentionally NOT imported here — the Create-screen intro
 // was pulled out of onboarding 2026-06-03 and is now shown as a one-time
 // sheet the first time the user opens the Create tab (CreateIntroSheet,
 // which reuses the same CREATE_INFO config).
-import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO, MEET_BOTS_INTRO } from '@/constants/onboardingInfo';
+import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO } from '@/constants/onboardingInfo';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -67,12 +66,8 @@ const STEPS: StepConfig[] = [
     skipInEdit: true,
   },
   { key: 'personality', component: MoodSlidersStep },
-  {
-    key: 'info_meet_bots',
-    component: (p) => <InfoStep {...MEET_BOTS_INTRO} {...p} />,
-    skipInEdit: true,
-  },
-  { key: 'bot_selector', component: BotSelectorStep, skipInEdit: true },
+  // Bot intro + selection moved OUT of onboarding (2026-06-14) — now a first-run
+  // gate on the feed (components/FeedIntroGate), shown after "Go to my feed".
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 

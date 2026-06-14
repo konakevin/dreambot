@@ -234,7 +234,6 @@ export default function CreateScreen() {
 
   // Derived state
   const hasPhoto = !!config.photoUri;
-  const hasPrompt = config.userPrompt.trim().length > 0;
   // A photo dream ALWAYS runs through the DreamBot engine (the submit path in
   // useDreamCreate ignores use_exact_prompt for photos), so Direct mode never
   // applies when a photo is attached. Drive all the engine-dependent UI off
@@ -268,16 +267,6 @@ export default function CreateScreen() {
     const rec = selectedMediumRow?.client_meta?.recommended_models;
     return Array.isArray(rec) ? rec.filter((m): m is string => typeof m === 'string') : undefined;
   })();
-
-  // Generic mode hint (shown when the face indicator doesn't apply — blank
-  // surprise, plain prompt, or photo restyle).
-  const contextHint = hasPhoto
-    ? config.photoStyle === 'new_scene'
-      ? 'Put your photo in a new scene'
-      : 'Restyle your photo in this medium'
-    : hasPrompt
-      ? 'Generate from your prompt'
-      : 'Leave blank for a surprise';
 
   // Placeholder text
   const placeholder = hasPhoto
@@ -371,7 +360,7 @@ export default function CreateScreen() {
         <View className="flex-row items-center px-5 py-3">
           <View className="flex-1" />
           <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
-            <GradientTitle style={{ fontSize: fontScale(20) }}>Create</GradientTitle>
+            <GradientTitle style={{ fontSize: fontScale(24) }}>Create</GradientTitle>
           </View>
           <View className="flex-row items-center gap-2">
             <TouchableOpacity
@@ -761,16 +750,6 @@ export default function CreateScreen() {
               the keyboard appears, and the dead space below the Medium/Vibe row
               is gone. */}
           <View style={{ marginTop: verticalScale(28) }}>
-            {/* Simple mode hint (blank surprise / from-prompt / photo). */}
-            <View className="flex-row items-center justify-center mb-2">
-              <Text
-                className="text-center text-sm font-medium"
-                style={{ color: 'rgba(255,255,255,0.5)' }}
-              >
-                {contextHint}
-              </Text>
-            </View>
-
             {/* Dream button */}
             <TouchableOpacity
               className="items-center justify-center py-4 rounded-2xl"
