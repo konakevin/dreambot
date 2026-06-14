@@ -333,6 +333,11 @@ export default function CreateScreen() {
     setPhotoSourceOpen(true);
   }
 
+  function startDream() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    nav.push('/dream/loading');
+  }
+
   function handleDream() {
     Keyboard.dismiss();
     // Gate on insufficient sparkles HERE (before navigating) so the user gets the
@@ -343,8 +348,27 @@ export default function CreateScreen() {
       showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
       return;
     }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    nav.push('/dream/loading');
+    // Empty-prompt confirmation: when the prompt box is shown but blank, the
+    // dream is fully random — either a totally surprise scene, or (with a photo
+    // in New Scene mode) a random scene invented around the person. Restyle has
+    // no prompt box (it just transforms the photo into the medium), so it's
+    // exempt. Confirm the random intent before spending sparkles.
+    const promptEmpty = !config.userPrompt.trim();
+    const promptBoxShown = !(hasPhoto && config.photoStyle === 'restyle');
+    if (promptEmpty && promptBoxShown) {
+      showAlert(
+        'Surprise dream?',
+        hasPhoto
+          ? "You haven't described a scene, so we'll dream up a random one and place you right in it."
+          : "You haven't described a dream, so we'll dream up something completely random for you.",
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Surprise me', onPress: startDream },
+        ]
+      );
+      return;
+    }
+    startDream();
   }
 
   return (
