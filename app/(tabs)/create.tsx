@@ -379,17 +379,18 @@ export default function CreateScreen() {
           <View className="flex-row items-center gap-2">
             <TouchableOpacity
               onPress={() => nav.push('/sparkleStore')}
-              className="flex-row items-center gap-1 px-2.5 py-1.5 rounded-2xl"
+              className="flex-row items-center gap-1 px-3 py-1.5 rounded-2xl"
               style={{
-                backgroundColor: colors.surface,
+                backgroundColor: 'rgba(167,139,250,0.18)',
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: 'rgba(167,139,250,0.55)',
               }}
             >
-              <Ionicons name="sparkles" size={14} color={colors.accent} />
-              <Text className="text-xs font-bold" style={{ color: colors.accent }}>
+              <Ionicons name="sparkles" size={15} color="#A78BFA" />
+              <Text className="text-sm font-extrabold" style={{ color: '#A78BFA' }}>
                 {formatCompact(sparkleBalance)}
               </Text>
+              <Ionicons name="add" size={15} color="#A78BFA" style={{ marginLeft: 1 }} />
             </TouchableOpacity>
             {/* Photo upload — only in DreamBot mode (photos always use the
                 DreamBot engine; Direct mode is text-only, so hide it there). */}
