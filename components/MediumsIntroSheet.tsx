@@ -161,8 +161,8 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
                 </View>
               </View>
               <Text style={s.cardBody}>
-                Skip the engine and send your prompt straight to the AI model. No medium, vibe, or
-                face, just full control over the prompt.
+                Skip the engine and send your prompt straight to the AI model of choice. No medium,
+                vibe, or face rendering. Your prompt has full control over the scene and style.
               </Text>
             </View>
           </View>
