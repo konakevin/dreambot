@@ -78,7 +78,7 @@ export const MEET_BOTS_INTRO: InfoStepConfig = {
 // orients them on the feed + the two tabs, then routes into bot selection.
 export const FEED_INTRO: InfoStepConfig = {
   eyebrow: 'your feed',
-  headline: 'WELCOME TO YOUR FEED',
+  headline: 'Welcome to your feed',
   body: 'This is where the dreams live. Yours, the people you follow, and a whole neighborhood of wonderfully weird Bots posting around the clock.',
   subFeatures: [
     {
