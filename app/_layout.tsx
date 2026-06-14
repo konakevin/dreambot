@@ -11,7 +11,14 @@ import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { Quicksand_700Bold, Quicksand_600SemiBold } from '@expo-google-fonts/quicksand';
+import {
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+} from '@expo-google-fonts/dm-sans';
 import { Ionicons } from '@expo/vector-icons';
+import { applyGlobalBodyFont } from '@/lib/applyGlobalBodyFont';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
@@ -42,6 +49,9 @@ import {
 
 // Crash reporting — must init as early as possible. No-op without a DSN.
 initSentry();
+
+// Make DM Sans the default body font app-wide (must run before any Text renders).
+applyGlobalBodyFont();
 
 SplashScreen.preventAutoHideAsync();
 
@@ -475,7 +485,15 @@ function AnalyticsIdentity() {
 }
 
 function RootLayout() {
-  const [fontsLoaded] = useFonts({ ...Ionicons.font, Quicksand_700Bold, Quicksand_600SemiBold });
+  const [fontsLoaded] = useFonts({
+    ...Ionicons.font,
+    Quicksand_700Bold,
+    Quicksand_600SemiBold,
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold,
+  });
 
   useEffect(() => {
     if (fontsLoaded) SplashScreen.hideAsync();
