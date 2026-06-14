@@ -79,7 +79,7 @@ export const MEET_BOTS_INTRO: InfoStepConfig = {
 export const FEED_INTRO: InfoStepConfig = {
   eyebrow: 'your feed',
   headline: 'WELCOME TO YOUR FEED',
-  body: 'This is where the dreams live. Yours, the people you follow, and a whole neighborhood of dream bots posting around the clock.',
+  body: 'This is where the dreams live. Yours, the people you follow, and a whole neighborhood of wonderfully weird Bots posting around the clock.',
   subFeatures: [
     {
       icon: 'compass-outline',
