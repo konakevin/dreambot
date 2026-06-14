@@ -359,8 +359,8 @@ export default function CreateScreen() {
       showAlert(
         'Surprise dream?',
         hasPhoto
-          ? "You haven't described a scene, so we'll dream up a random one and place you right in it."
-          : "You haven't described a dream, so we'll dream up something completely random for you.",
+          ? "You haven't described a scene, so DreamBot will dream up a random one and place you right in it."
+          : "You haven't described a dream, so DreamBot will dream up something completely random for you.",
         [
           { text: 'Cancel', style: 'cancel' },
           { text: 'Surprise me', onPress: startDream },
