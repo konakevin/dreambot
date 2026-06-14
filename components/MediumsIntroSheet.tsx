@@ -125,18 +125,26 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
           <MaskedView
             maskElement={
               <View style={s.headlineMaskWrap}>
-                <Text style={s.headlineMask}>Real face or dream art?</Text>
+                <Text style={s.headlineMask} numberOfLines={1} adjustsFontSizeToFit>
+                  Real face or dream art?
+                </Text>
               </View>
             }
           >
             <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text style={[s.headlineMask, s.headlineGhost]}>Real face or dream art?</Text>
+              <Text
+                style={[s.headlineMask, s.headlineGhost]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
+                Real face or dream art?
+              </Text>
             </LinearGradient>
           </MaskedView>
 
           <Text style={s.body}>
             Some mediums drop your real face right into the scene. Others capture the likeness of
-            you and dream up a playful look-alike. Peek at the badge on each one.
+            you and dream up a playful look-alike.
           </Text>
 
           <View style={s.cards}>
