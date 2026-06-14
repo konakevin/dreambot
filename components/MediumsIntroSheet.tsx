@@ -78,7 +78,7 @@ const CARDS: CardSpec[] = [
     bg: ART_BG,
     icon: 'color-palette',
     title: 'Dream Art',
-    body: 'A fun look-alike of you reimagined in the art style is placed in the dream. Think LEGO, pixel art, claymation, etc.',
+    body: 'A fun look-alike of you, reimagined in the art style, appears in the dream. Think LEGO, pixel art, claymation, etc.',
   },
 ];
 
