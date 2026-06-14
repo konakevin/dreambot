@@ -198,6 +198,9 @@ function buildCharacterBlock(
         `THE CHARACTER — transform this person into ${mediumStyle} style (use the medium's aesthetic, NOT photorealistic):`
       );
       parts.push(c.promptDesc);
+      if (c.physicalTraits) {
+        parts.push(`MUST keep these defining traits: ${c.physicalTraits}.`);
+      }
     } else {
       parts.push('THE MAIN CHARACTER:');
       parts.push(c.promptDesc);
@@ -249,11 +252,16 @@ function buildCharacterBlock(
     parts.push(`Render ALL ${cast.length} characters as ${mediumStyle} style. Show them TOGETHER.`);
   }
 
-  // Gender lock (skipped when dual face swap handles it inline)
+  // Gender lock (skipped when dual face swap handles it inline). Cover EVERY
+  // cast member — a one-member lock let the +1's gender drift on dual embodied.
   if (!genderLockHandled) {
-    const genderCast = cast.find((c) => c.genderLock);
-    if (genderCast && genderCast.genderLock) {
-      parts.push(`\nGENDER — NON-NEGOTIABLE: ${genderCast.genderLock}`);
+    const locks = cast.filter((c) => c.genderLock);
+    if (locks.length === 1) {
+      parts.push(`\nGENDER — NON-NEGOTIABLE: ${locks[0].genderLock}`);
+    } else if (locks.length > 1) {
+      parts.push(
+        `\nGENDER — NON-NEGOTIABLE:\n${locks.map((c) => `${c.role.toUpperCase()}: ${c.genderLock}`).join('\n')}`
+      );
     }
   }
 
@@ -395,6 +403,9 @@ Recast the user's subject INTO this exact format and scale. If the reference rea
     ? `You are an anime character designer. Write danbooru-style tags for an anime image.
 
 OUTPUT FORMAT: comma-separated danbooru tags, NOT natural language sentences.
+CHARACTER TAGS ARE MANDATORY whenever a CHARACTER section is present — encode each person as danbooru tags, NEVER as "solo figure" or "person":
+- FIRST a count + gender tag that MATCHES the GENDER lock exactly (1boy, 1girl, 1other; two people: "1boy, 1girl", "2girls", etc.). NEVER default to a girl when the gender says male.
+- THEN their appearance, pulled from the CHARACTER traits: hair color + length, facial hair if any (beard / stubble / goatee / mustache), eye color, approximate age, build. These likeness tags MUST appear.
 Include a framing tag (randomly pick ONE: full_body, upper_body, cowboy_shot, or wide_shot).
 Start with: ${medium.fluxFragment}
 End with: masterpiece, best quality, detailed background, no text, no watermark, single image, no collage, no split screen
