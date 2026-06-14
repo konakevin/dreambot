@@ -133,6 +133,7 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
             capture your likeness in a playful look-alike.
           </Text>
 
+          <Text style={s.sectionLabel}>DreamBot mode</Text>
           <View style={s.cards}>
             {CARDS.map((c) => (
               <View key={c.badge} style={s.card}>
@@ -148,6 +149,27 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
                 <Text style={s.cardBody}>{c.body}</Text>
               </View>
             ))}
+          </View>
+
+          {/* Direct mode — the other Mode option, explained here so the Mode (i)
+              sheet covers both modes. Neutral treatment (no face/art color). */}
+          <Text style={s.sectionLabel}>Direct mode</Text>
+          <View style={s.cards}>
+            <View style={s.card}>
+              <View style={s.cardHead}>
+                <View style={[s.cardIcon, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
+                  <Ionicons name="flash" size={20} color={colors.textSecondary} />
+                </View>
+                <Text style={s.cardTitle}>Direct</Text>
+                <View style={[s.badge, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
+                  <Text style={[s.badgeText, { color: colors.textSecondary }]}>direct</Text>
+                </View>
+              </View>
+              <Text style={s.cardBody}>
+                Skip the engine and send your prompt straight to the AI model. No medium, vibe, or
+                face, just full control over the prompt.
+              </Text>
+            </View>
           </View>
         </ScrollView>
 
@@ -198,7 +220,16 @@ const s = StyleSheet.create({
     alignSelf: 'center',
     maxWidth: 340,
   },
-  cards: { marginTop: verticalScale(28), gap: 14 },
+  cards: { gap: 14 },
+  sectionLabel: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    fontWeight: '700',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    marginTop: verticalScale(26),
+    marginBottom: verticalScale(10),
+  },
   card: {
     backgroundColor: colors.surface,
     borderWidth: 1,

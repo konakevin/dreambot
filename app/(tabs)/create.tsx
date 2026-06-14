@@ -203,20 +203,12 @@ export default function CreateScreen() {
     showMediumsIntro(false);
   }, [showMediumsIntro]);
 
-  // The (i) next to the Mode label is contextual: in DreamBot mode it opens the
-  // face-vs-art medium sheet; in Direct mode it explains what Direct does.
+  // The (i) next to the Mode label opens the teaching sheet, which explains BOTH
+  // modes (DreamBot's Real Face / Dream Art looks + Direct), so it's the same in
+  // either mode.
   const handleModeInfo = useCallback(() => {
-    if (config.useExactPrompt) {
-      Keyboard.dismiss();
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      showAlert(
-        'Direct mode',
-        'Your prompt goes straight to the AI model you pick. No mediums, vibes, polish, or face likeness. Best when you want full control over the prompt.'
-      );
-    } else {
-      openMediumsIntroInfo();
-    }
-  }, [config.useExactPrompt, openMediumsIntroInfo]);
+    openMediumsIntroInfo();
+  }, [openMediumsIntroInfo]);
 
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
