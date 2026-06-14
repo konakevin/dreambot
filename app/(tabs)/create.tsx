@@ -358,7 +358,7 @@ export default function CreateScreen() {
     if (promptEmpty && promptBoxShown) {
       showAlert(
         'Surprise dream?',
-        'No prompt, no problem — DreamBot will dream up something wild and totally unexpected. Ready?',
+        'No prompt, no problem! DreamBot will dream up something wild and totally unexpected. Ready?',
         [
           { text: 'Cancel', style: 'cancel' },
           { text: 'Surprise me', onPress: startDream },
