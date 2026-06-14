@@ -178,9 +178,13 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: verticalScale(8),
     borderRadius: 18,
-    // Tonal (soft purple tint), not solid — a quiet secondary action so the
-    // repeated Follow buttons don't compete with the gradient primary CTA.
-    backgroundColor: colors.accent + '22',
+    // Tonal, not solid — quiet secondary vs the gradient primary CTA. Uses the
+    // gradient's OWN moon-purple (#A78BFA) so it matches the brand palette (the
+    // theme accent #8B7BEE is a different, bluer purple), with a border so the
+    // soft fill still reads on the dark card.
+    backgroundColor: 'rgba(167,139,250,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.55)',
   },
   followBtnActive: {
     backgroundColor: 'transparent',
@@ -188,7 +192,7 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   followBtnText: {
-    color: colors.accent,
+    color: '#A78BFA',
     fontSize: fontScale(13),
     fontWeight: '700',
   },
