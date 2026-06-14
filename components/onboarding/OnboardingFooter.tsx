@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { onboardingStyles as shared } from './sharedStyles';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientButton } from '@/components/GradientButton';
 import { colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 
@@ -13,11 +13,14 @@ interface Props {
   onBack: () => void;
   nextLabel?: string;
   disabled?: boolean;
+  /** Label shown on the primary button while it's disabled (e.g. a "(pick at
+   *  least one)" prompt). Falls back to nextLabel. The arrow is hidden for it. */
+  disabledLabel?: string;
   counter?: string;
   counterMet?: boolean;
-  /** Render the not-yet-met counter prompt in the brand gradient. */
-  counterGradient?: boolean;
   counterRight?: React.ReactNode;
+  /** 'gradient' renders the primary CTA as the brand gradient pill (GradientButton). */
+  nextVariant?: 'default' | 'gradient';
   /** Hide the Back button (used on the first onboarding screen — nowhere to go back to). */
   hideBack?: boolean;
 }
@@ -35,28 +38,32 @@ export function OnboardingFooter({
   onBack,
   nextLabel = 'Next',
   disabled = false,
+  disabledLabel,
   counter,
   counterMet = false,
-  counterGradient = false,
   counterRight,
+  nextVariant = 'default',
   hideBack = false,
 }: Props) {
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, verticalScale(16));
+  const handleNext = () => {
+    if (disabled) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    onNext();
+  };
+  // While disabled, show the prompt label (no arrow); otherwise the action label.
+  const isPrompt = disabled && disabledLabel !== undefined;
+  const buttonLabel = isPrompt ? disabledLabel : nextLabel;
   return (
     <View style={[shared.footer, { paddingBottom: bottomPad }]}>
       {(counter !== undefined || counterRight) && (
         <View style={shared.counterRow}>
-          {counter !== undefined &&
-            (counterGradient && !counterMet ? (
-              <GradientTitle size={13} weight={600}>
-                {counter}
-              </GradientTitle>
-            ) : (
-              <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
-                {counter}
-              </Text>
-            ))}
+          {counter !== undefined && (
+            <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
+              {counter}
+            </Text>
+          )}
           {counterRight}
         </View>
       )}
@@ -67,25 +74,33 @@ export function OnboardingFooter({
             <Text style={shared.backBtnText}>Back</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity
-          style={[shared.continueBtn, disabled && shared.continueBtnDisabled]}
-          onPress={() => {
-            if (disabled) return;
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onNext();
-          }}
-          disabled={disabled}
-          activeOpacity={0.7}
-        >
-          <Text style={[shared.continueBtnText, disabled && shared.continueBtnTextDisabled]}>
-            {nextLabel}
-          </Text>
-          <Ionicons
-            name="arrow-forward"
-            size={18}
-            color={disabled ? colors.textSecondary : '#FFFFFF'}
+        {nextVariant === 'gradient' ? (
+          <GradientButton
+            label={buttonLabel}
+            icon={isPrompt ? undefined : 'arrow-forward'}
+            disabled={disabled}
+            onPress={handleNext}
+            style={{ flex: 1 }}
           />
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[shared.continueBtn, disabled && shared.continueBtnDisabled]}
+            onPress={handleNext}
+            disabled={disabled}
+            activeOpacity={0.7}
+          >
+            <Text style={[shared.continueBtnText, disabled && shared.continueBtnTextDisabled]}>
+              {buttonLabel}
+            </Text>
+            {!isPrompt && (
+              <Ionicons
+                name="arrow-forward"
+                size={18}
+                color={disabled ? colors.textSecondary : '#FFFFFF'}
+              />
+            )}
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

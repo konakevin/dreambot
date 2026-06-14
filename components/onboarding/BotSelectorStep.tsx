@@ -116,9 +116,10 @@ export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
         hideBack
         nextLabel={nextLabel}
         disabled={followedBotCount === 0}
-        counter={followedBotCount === 0 ? 'Pick at least one bot' : `${followedBotCount} following`}
+        disabledLabel="(pick at least one)"
+        counter={followedBotCount > 0 ? `${followedBotCount} following` : undefined}
         counterMet={followedBotCount > 0}
-        counterGradient
+        nextVariant="gradient"
       />
 
       {viewer && (
