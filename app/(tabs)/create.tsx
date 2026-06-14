@@ -358,9 +358,7 @@ export default function CreateScreen() {
     if (promptEmpty && promptBoxShown) {
       showAlert(
         'Surprise dream?',
-        hasPhoto
-          ? "You haven't described a scene, so DreamBot will dream up a random one and place you right in it."
-          : "You haven't described a dream, so DreamBot will dream up something completely random for you.",
+        'No prompt, no problem — DreamBot will dream up something wild and totally unexpected. Ready?',
         [
           { text: 'Cancel', style: 'cancel' },
           { text: 'Surprise me', onPress: startDream },
