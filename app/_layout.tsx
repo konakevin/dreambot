@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
+import { Quicksand_700Bold, Quicksand_600SemiBold } from '@expo-google-fonts/quicksand';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
@@ -474,7 +475,7 @@ function AnalyticsIdentity() {
 }
 
 function RootLayout() {
-  const [fontsLoaded] = useFonts({ ...Ionicons.font });
+  const [fontsLoaded] = useFonts({ ...Ionicons.font, Quicksand_700Bold, Quicksand_600SemiBold });
 
   useEffect(() => {
     if (fontsLoaded) SplashScreen.hideAsync();

@@ -178,8 +178,11 @@ const s = StyleSheet.create({
     // (never clips) across device widths without auto-fit. fontScale keys off
     // HEIGHT, so the width cap is what keeps wide strings from overflowing.
     maxWidth: screen.width - 56, // content paddingHorizontal (28) on both sides
+    // Quicksand — the same rounded display font as the dreambotapp.com wordmark
+    // (loaded in app/_layout.tsx). The weight is baked into the font file, so
+    // fontWeight is a no-op here.
+    fontFamily: 'Quicksand_700Bold',
     fontSize: fontScale(24),
-    fontWeight: '800',
     textAlign: 'center',
     lineHeight: fontScale(30),
     color: '#FFFFFF',
