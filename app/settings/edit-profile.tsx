@@ -263,7 +263,7 @@ export default function EditProfileScreen() {
               style={[styles.input, styles.inputMultiline]}
               value={bio}
               onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
-              placeholder="One line about you ✨"
+              placeholder="One line about you"
               placeholderTextColor={colors.textSecondary}
               multiline
               numberOfLines={3}
