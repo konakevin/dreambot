@@ -226,6 +226,16 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
         </Text>
         {current && (
           <View style={styles.pillCost}>
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: fontScale(14),
+                fontWeight: '600',
+                marginRight: 5,
+              }}
+            >
+              Cost:
+            </Text>
             <Ionicons name="sparkles" size={13} color="#A78BFA" />
             <Text
               style={{
