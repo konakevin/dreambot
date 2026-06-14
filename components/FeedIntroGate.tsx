@@ -30,7 +30,7 @@ import {
 } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, horizontalScale, screen } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
 import { GradientTitle, BRAND_GRADIENT } from '@/components/GradientTitle';
@@ -40,6 +40,13 @@ import { DISPLAY_FONT } from '@/constants/fonts';
 // the brand gradient as the fill, near-black text, Quicksand semibold, and a
 // purple glow. (bg-gradient-cta + text-bg-deeper #08080F.)
 const CTA_TEXT_COLOR = '#08080F';
+
+// Party-banner size — driven by HEIGHT (a fraction of the screen, with a ceiling)
+// so it stays a comfortable medium banner on big phones and shrinks on short
+// ones instead of overflowing the footer. Width follows from the 3:2 ratio,
+// capped to the content column so it never runs edge-to-edge.
+const PARTY_IMG_HEIGHT = Math.min((screen.width - 56) / 1.5, screen.height * 0.24, 220);
+const PARTY_IMG_WIDTH = PARTY_IMG_HEIGHT * 1.5;
 
 const SEEN_FEED_INTRO_KEY = 'dreambot.seenFeedIntro.v1';
 
@@ -104,7 +111,11 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
   const bottomPad = Math.max(insets.bottom, verticalScale(16));
   return (
     <SafeAreaView style={s.root} edges={['top']}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={s.scroll}
+        contentContainerStyle={s.content}
+        showsVerticalScrollIndicator={false}
+      >
         <GradientTitle
           size={24}
           numberOfLines={2}
@@ -175,6 +186,7 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   botWrap: { flex: 1, backgroundColor: colors.background },
+  scroll: { flex: 1 },
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
@@ -223,8 +235,8 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(8),
   },
   partyImg: {
-    width: horizontalScale(240),
-    aspectRatio: 3 / 2,
+    width: PARTY_IMG_WIDTH,
+    height: PARTY_IMG_HEIGHT,
     borderRadius: 18,
     alignSelf: 'center',
     marginBottom: verticalScale(14),
@@ -239,8 +251,7 @@ const s = StyleSheet.create({
     fontSize: fontScale(15),
     lineHeight: fontScale(22),
     textAlign: 'center',
-    // Extra gap below lifts the text/title higher (button stays bottom-pinned).
-    marginBottom: verticalScale(48),
+    marginBottom: verticalScale(24),
     paddingHorizontal: 8,
   },
   cta: {
