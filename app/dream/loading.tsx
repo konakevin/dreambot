@@ -21,13 +21,6 @@ import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 
-// Self / relationship detection — kept in sync with the matching regexes
-// on the Create screen. Used once at mount to decide whether to surface
-// the longer-wait subline (face-swap renders take noticeably more time).
-const SELF_REF_REGEX = /\b(I|I'm|I'll|I'd|I've|me|myself|mine|selfie)\b/i;
-const RELATIONSHIP_REGEX =
-  /\bmy\s+(partner|wife|husband|girlfriend|boyfriend|spouse|fiancée?|friend|bestie|buddy|bff|pal|mom|dad|mother|father|brother|sister|son|daughter|family|hubby|wifey|dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo)\b/i;
-
 // How long recovery polls without ever seeing a dream_jobs row before
 // concluding the Edge Function never started (connect/boot failure) and failing
 // fast. Generous enough to cover the upsert race + cold start, far short of the
@@ -62,18 +55,6 @@ export default function DreamLoadingScreen() {
   // Drives the realtime-wait effect below. Null on the synchronous path.
   const [queueWaitId, setQueueWaitId] = useState<string | null>(null);
 
-  // Decide once on mount whether the longer-wait subline applies. We
-  // can't know exact render time (Replicate variance is large), so the
-  // copy stays static — but face-swap paths add a real per-render step
-  // worth flagging so the user doesn't feel like the app is stuck.
-  const isFaceSwap = useRef(
-    (() => {
-      const { config } = useDreamStore.getState();
-      if (config.photoBase64 && config.photoStyle === 'new_scene') return true;
-      const prompt = config.userPrompt ?? '';
-      return SELF_REF_REGEX.test(prompt) || RELATIONSHIP_REGEX.test(prompt);
-    })()
-  ).current;
   // Failure state set by useDreamCreate's catch block. When non-null, the
   // failure card is rendered and the spinner is hidden — UNLESS isRecovering
   // is true, in which case we re-show the spinner (render likely still in
@@ -489,7 +470,7 @@ export default function DreamLoadingScreen() {
     <View style={s.container}>
       {showSpinner ? (
         // Single centered column: mascot + wave loader + "Dreaming" +
-        // (face-swap subtip) + queue hint + Queue This button. All one
+        // the wait/queue hint + Queue This button. All one
         // unit — no floating title up top with a disconnected CTA at
         // the bottom. SafeAreaView keeps the bottom of the stack clear
         // of the home indicator since the button is no longer absolutely
@@ -497,13 +478,10 @@ export default function DreamLoadingScreen() {
         <SafeAreaView style={s.scene} edges={['bottom']}>
           <MagicalLoadingStage />
           <View style={s.cta}>
-            {isFaceSwap && (
-              <Text style={s.subtip}>Dreams with you in them take a little extra magic.</Text>
-            )}
             {showQueue && (
               <>
                 <Text style={s.queueHint}>
-                  Don’t want to wait? Queue it and we’ll notify you when it’s done.
+                  This may take a moment. Feel free to queue it and we’ll notify you when it’s done.
                 </Text>
                 <TouchableOpacity style={s.queueBtn} onPress={handleQueue} activeOpacity={0.7}>
                   <Ionicons name="time-outline" size={16} color="#FFFFFF" />
@@ -574,8 +552,8 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  // Bottom overlay: floats over the magical stage so the face-swap
-  // subtip + Queue This button sit safely above the home indicator
+  // Bottom overlay: floats over the magical stage so the wait hint +
+  // Queue This button sit safely above the home indicator
   // without painting a backdrop over the sparkle field.
   // Single centered column for the loading state. The MagicalLoadingStage
   // sits above the CTA cluster with a generous gap so the upper "what's
@@ -610,12 +588,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
-  },
-  subtip: {
-    color: 'rgba(196,181,253,0.85)', // muted purple, matches the sparkle palette
-    fontSize: fontScale(13),
-    textAlign: 'center',
-    paddingHorizontal: 8,
   },
   queueBtn: {
     flexDirection: 'row',
