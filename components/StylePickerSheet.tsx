@@ -303,18 +303,6 @@ export function StylePickerSheet({
             );
           })}
         </View>
-        <Text
-          style={{
-            fontSize: fontScale(11),
-            color: accentColor,
-            textAlign: 'center',
-            marginTop: verticalScale(6),
-          }}
-        >
-          {mediumSegment === 'face'
-            ? 'Your real face composited onto the image'
-            : 'You rendered artistically in the style'}
-        </Text>
       </View>
     );
   }
