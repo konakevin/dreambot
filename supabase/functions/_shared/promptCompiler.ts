@@ -250,6 +250,21 @@ function buildCharacterBlock(
       }
     });
     parts.push(`Render ALL ${cast.length} characters as ${mediumStyle} style. Show them TOGETHER.`);
+    // Relationship gate for embodied multi-cast. The isolated face-swap dual
+    // brief gates romantic vs platonic posing via pickDualAction; embodied dual
+    // (e.g. anime) falls through here instead, so apply the same gate so a
+    // non-partner +1 (friend, parent, sibling, kid, pet, coworker…) is never
+    // posed romantically.
+    const plusOne = cast.find((c) => c.role === 'plus_one');
+    if (plusOne) {
+      const isPartner =
+        plusOne.relationship === 'partner' || plusOne.relationship === 'significant_other';
+      if (!isPartner) {
+        parts.push(
+          `RELATIONSHIP GATE — the plus-one is "${plusOne.relationship ?? 'unspecified'}", which is NOT partner / significant_other. Pose with PLATONIC, friendly body language ONLY: NO romantic posing — no holding hands, no embrace, no leaning heads together, no romantic gaze. Relaxed side-by-side with friendly warmth.`
+        );
+      }
+    }
   }
 
   // Gender lock (skipped when dual face swap handles it inline). Cover EVERY
