@@ -21,8 +21,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
+import { GradientButton } from '@/components/GradientButton';
 
 const SEEN_MEDIUMS_INTRO_KEY = 'dreambot.seenMediumsIntro.v1';
 
@@ -116,18 +117,20 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <Text style={s.eyebrow}>Two ways to dream</Text>
 
-          {/* Gradient headline — shared brand wordmark primitive. */}
-          <GradientTitle
-            size={28}
-            uppercase
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            maxWidth={340}
-            letterSpacing={0.5}
-            lineHeight={34}
-          >
-            Real face or dream art?
-          </GradientTitle>
+          {/* Gradient headline — centered + width-constrained so it wraps
+              responsively (no adjustsFontSizeToFit, which races the Modal). */}
+          <View style={s.headlineWrap}>
+            <GradientTitle
+              size={26}
+              uppercase
+              numberOfLines={2}
+              maxWidth={screen.width - 56}
+              letterSpacing={0.5}
+              lineHeight={32}
+            >
+              Real face or dream art?
+            </GradientTitle>
+          </View>
 
           <Text style={s.body}>
             Some mediums drop your real face right into the scene. Others capture the likeness of
@@ -153,9 +156,7 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
         </ScrollView>
 
         <View style={s.footer}>
-          <TouchableOpacity style={s.cta} onPress={handleClose} activeOpacity={0.85}>
-            <Text style={s.ctaText}>Got it, let’s dream</Text>
-          </TouchableOpacity>
+          <GradientButton label="Got it, let’s dream" onPress={handleClose} />
         </View>
       </SafeAreaView>
     </Modal>
@@ -237,12 +238,5 @@ const s = StyleSheet.create({
     marginTop: verticalScale(12),
   },
   footer: { paddingHorizontal: 20, paddingBottom: verticalScale(8), paddingTop: verticalScale(8) },
-  cta: {
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: verticalScale(16),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ctaText: { color: '#FFFFFF', fontSize: fontScale(17), fontWeight: '700' },
+  headlineWrap: { alignItems: 'center' },
 });

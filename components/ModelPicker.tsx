@@ -225,13 +225,13 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
         </Text>
         {current && (
           <View style={styles.pillCost}>
-            <Ionicons name="sparkles" size={12} color="#A78BFA" />
+            <Ionicons name="sparkles" size={13} color="#A78BFA" />
             <Text
               style={{
                 color: '#A78BFA',
-                fontSize: fontScale(13),
+                fontSize: fontScale(15),
                 fontWeight: '700',
-                marginLeft: 3,
+                marginLeft: 4,
               }}
             >
               {current.sparkleCost}
@@ -362,15 +362,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   pillCost: {
+    // Inline value (sparkle + count), NOT a button — no fill/border, so it
+    // doesn't read like the tappable mode tabs. The whole row is the tap target.
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(167,139,250,0.18)',
-    borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.4)',
-    paddingHorizontal: 8,
-    paddingVertical: verticalScale(3),
-    borderRadius: 9,
-    marginRight: 8,
+    marginRight: 10,
   },
   modalRoot: {
     flex: 1,

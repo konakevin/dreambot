@@ -386,7 +386,16 @@ export default function CreateScreen() {
                 style={{ backgroundColor: '#A78BFA' }}
                 hitSlop={6}
               >
-                <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={16} color="#fff" />
+                <Ionicons
+                  name={hasPhoto ? 'image' : 'camera'}
+                  size={16}
+                  color="#fff"
+                  style={{
+                    textShadowColor: 'rgba(0,0,0,0.35)',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 2,
+                  }}
+                />
               </TouchableOpacity>
             )}
           </View>
