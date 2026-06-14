@@ -141,7 +141,8 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
 
       <View style={[s.footer, { paddingBottom: bottomPad }]}>
         <Text style={s.footnote}>
-          Take a wander through our emporium of wonderfully weird Bots, and find a few to follow.
+          First, meet your neighbors. Take a wander through our emporium of wonderfully weird Bots,
+          and find a few to follow.
         </Text>
         <TouchableOpacity
           style={s.cta}
