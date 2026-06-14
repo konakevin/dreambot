@@ -128,14 +128,7 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
             </GradientTitle>
           </View>
 
-          <Text style={s.body}>Two ways to make a dream. Here’s how each one works.</Text>
-
           <Text style={s.sectionLabel}>DreamBot mode</Text>
-          <Text style={s.sectionHeading}>Real face or dream art?</Text>
-          <Text style={s.sectionBody}>
-            Some mediums (Real Face) render your actual face into the scene. Others (Dream Art)
-            capture your likeness in a playful look-alike.
-          </Text>
           <View style={s.cards}>
             {CARDS.map((c) => (
               <View key={c.badge} style={s.card}>
@@ -213,15 +206,6 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(10),
     textAlign: 'center',
   },
-  body: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    lineHeight: fontScale(22),
-    textAlign: 'center',
-    marginTop: verticalScale(14),
-    alignSelf: 'center',
-    maxWidth: 340,
-  },
   cards: { gap: 14 },
   sectionLabel: {
     color: colors.textSecondary,
@@ -231,18 +215,6 @@ const s = StyleSheet.create({
     textTransform: 'uppercase',
     marginTop: verticalScale(26),
     marginBottom: verticalScale(8),
-  },
-  sectionHeading: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '700',
-    marginBottom: verticalScale(6),
-  },
-  sectionBody: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    lineHeight: fontScale(20),
-    marginBottom: verticalScale(14),
   },
   card: {
     backgroundColor: colors.surface,
