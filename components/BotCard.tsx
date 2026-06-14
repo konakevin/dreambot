@@ -178,7 +178,9 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: verticalScale(8),
     borderRadius: 18,
-    backgroundColor: colors.accent,
+    // Tonal (soft purple tint), not solid — a quiet secondary action so the
+    // repeated Follow buttons don't compete with the gradient primary CTA.
+    backgroundColor: colors.accent + '22',
   },
   followBtnActive: {
     backgroundColor: 'transparent',
@@ -186,7 +188,7 @@ const s = StyleSheet.create({
     borderColor: colors.border,
   },
   followBtnText: {
-    color: '#FFFFFF',
+    color: colors.accent,
     fontSize: fontScale(13),
     fontWeight: '700',
   },
