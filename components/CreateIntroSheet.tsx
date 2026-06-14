@@ -13,7 +13,7 @@
  * re-trapped on next launch.
  */
 
-import { View, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -21,7 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -73,30 +73,20 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
       onRequestClose={onClose}
     >
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
-        {/* Top bar — X close button only (no progress chrome, this is a one-shot sheet) */}
-        <View style={s.topBar}>
-          <TouchableOpacity
-            onPress={handleClose}
-            style={s.closeBtn}
-            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="close" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-
+        {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
-          {/* Gradient headline — shared brand wordmark primitive. */}
+          {/* Gradient headline — wraps to 2 lines + width-constrained so it stays
+              responsive on small phones (no adjustsFontSizeToFit, which races the Modal). */}
           <GradientTitle
             size={30}
             uppercase
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            maxWidth={300}
+            numberOfLines={2}
+            maxWidth={screen.width - 56}
             letterSpacing={0.5}
             lineHeight={36}
+            align="center"
           >
             {CREATE_INFO.headline}
           </GradientTitle>
@@ -145,25 +135,11 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(4),
-  },
-  closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: verticalScale(8),
+    paddingTop: verticalScale(28),
     paddingBottom: verticalScale(24),
     alignItems: 'center',
   },
