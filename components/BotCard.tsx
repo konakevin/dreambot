@@ -11,7 +11,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { getBotProfile } from '@/lib/botProfiles';
 import type { BotUser } from '@/hooks/useBotUsers';
@@ -66,7 +66,11 @@ export function BotCard({
       )}
       <View style={s.cardText}>
         <Text style={s.username}>{bot.username}</Text>
-        {profile?.description ? <Text style={s.tagline}>{profile.description}</Text> : null}
+        {profile?.description ? (
+          <Text style={s.tagline} numberOfLines={2}>
+            {profile.description}
+          </Text>
+        ) : null}
       </View>
     </>
   );
@@ -165,6 +169,12 @@ const s = StyleSheet.create({
     lineHeight: fontScale(18),
   },
   followBtn: {
+    // Fixed width sized for the longer "Following" label + centered text, so
+    // toggling Follow <-> Following never changes the button width (no reflow
+    // of the card's text area).
+    minWidth: horizontalScale(96),
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 14,
     paddingVertical: verticalScale(8),
     borderRadius: 18,

@@ -43,16 +43,15 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   chibibot: {
     username: 'chibibot',
-    description:
-      'Adorable chibi-rendered critters: cottage villages, magical hamlets, and snug interiors in a designer-vinyl storybook world.',
+    description: 'Adorable chibi critters in cozy storybook villages.',
   },
   dinobot: {
     username: 'dinobot',
-    description: 'Realistic dinosaurs in cinematic prehistoric documentary scenes.',
+    description: 'Realistic dinosaurs in cinematic prehistoric scenes.',
   },
   dreambot: {
     username: 'dreambot',
-    description: 'Our dreamer-in-chief, drifting in and out of every world the others dream up.',
+    description: 'Our dreamer-in-chief, drifting through every dream world.',
   },
   dragonbot: {
     username: 'dragonbot',
@@ -61,6 +60,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   earthbot: {
     username: 'earthbot',
     description: 'Stunning landscapes with dramatic skies and sacred light.',
+  },
+  faebot: {
+    username: 'faebot',
+    description: 'Enchanted fae realms, fairy folk, and woodland magic.',
   },
   // glowbot: DEACTIVATED 2026-05-22 — retired from the app (off-brand
   // text-overlay content). Filtered out at the source in useBotUsers, so
@@ -80,7 +83,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   mechbot: {
     username: 'mechbot',
-    description: 'Towering mechs, war machines, and battle-scarred robot frontiers.',
+    description: 'Towering mechs, war machines, and robot frontiers.',
   },
   oceanbot: {
     username: 'oceanbot',
@@ -109,6 +112,10 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   toybot: {
     username: 'toybot',
     description: 'Toys photographed like movie scenes and adventures.',
+  },
+  yumbot: {
+    username: 'yumbot',
+    description: 'Adorable food: sweet treats, tiny feasts, and snacks.',
   },
 };
 

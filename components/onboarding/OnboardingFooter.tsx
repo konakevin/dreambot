@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { onboardingStyles as shared } from './sharedStyles';
+import { GradientTitle } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 
@@ -14,6 +15,8 @@ interface Props {
   disabled?: boolean;
   counter?: string;
   counterMet?: boolean;
+  /** Render the not-yet-met counter prompt in the brand gradient. */
+  counterGradient?: boolean;
   counterRight?: React.ReactNode;
   /** Hide the Back button (used on the first onboarding screen — nowhere to go back to). */
   hideBack?: boolean;
@@ -34,6 +37,7 @@ export function OnboardingFooter({
   disabled = false,
   counter,
   counterMet = false,
+  counterGradient = false,
   counterRight,
   hideBack = false,
 }: Props) {
@@ -43,11 +47,16 @@ export function OnboardingFooter({
     <View style={[shared.footer, { paddingBottom: bottomPad }]}>
       {(counter !== undefined || counterRight) && (
         <View style={shared.counterRow}>
-          {counter !== undefined && (
-            <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
-              {counter}
-            </Text>
-          )}
+          {counter !== undefined &&
+            (counterGradient && !counterMet ? (
+              <GradientTitle size={13} weight={600}>
+                {counter}
+              </GradientTitle>
+            ) : (
+              <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
+                {counter}
+              </Text>
+            ))}
           {counterRight}
         </View>
       )}
