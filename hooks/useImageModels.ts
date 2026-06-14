@@ -24,6 +24,9 @@ export function useImageModels(): ImageModel[] {
         family: r.family as ModelFamily,
         sparkleCost: r.sparkle_cost,
         description: r.description,
+        // Hidden from the DreamBot-mode picker when false (migration 267).
+        // Tolerate older RPC payloads that don't carry the column yet.
+        dreamBotEnabled: (r as { dreambot_enabled?: boolean }).dreambot_enabled ?? true,
       }));
     },
     staleTime: 5 * 60_000,

@@ -40,11 +40,26 @@ import { useImageModels } from '@/hooks/useImageModels';
 interface Props {
   /** Fires after the initial DB load and on each selection. */
   onChange?: (modelId: string) => void;
+  /**
+   * Model ids that render the currently-selected medium well (face swap +
+   * style). Surfaced as a "Best for this look" group at the top of the picker.
+   * Sourced from the selected medium's client_meta.recommended_models. When
+   * empty/absent the picker falls back to the single global RECOMMENDED_MODEL_ID.
+   */
+  recommendedModelIds?: string[];
+  /**
+   * True when the Create screen is in DreamBot mode (the face-swap engine).
+   * In that mode models flagged dreamBotEnabled=false (e.g. flux-schnell, which
+   * breaks the swap — 2026-06-13 audit) are hidden. Direct mode shows them all.
+   */
+  dreamBotMode?: boolean;
 }
 
-export function ModelPicker({ onChange }: Props) {
+export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
+  // In DreamBot mode, drop models that aren't swap-quality from the picker.
+  const visibleModels = dreamBotMode ? models.filter((m) => m.dreamBotEnabled !== false) : models;
   const [selected, setSelected] = useState<string>(DEFAULT_MODEL_ID);
   const [saving, setSaving] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,10 +105,29 @@ export function ModelPicker({ onChange }: Props) {
   };
 
   // Two tiers in explicit curated order: Standard (1✦) + Premium (2✦+).
+  // Draws from visibleModels so DreamBot-hidden models (flux-schnell) drop out.
   const order = (ids: string[]) =>
-    ids.map((id) => models.find((m) => m.id === id)).filter((m): m is ImageModel => !!m);
+    ids.map((id) => visibleModels.find((m) => m.id === id)).filter((m): m is ImageModel => !!m);
   const standard = order(STANDARD_MODEL_IDS);
   const premium = order(PREMIUM_MODEL_IDS);
+  // Per-medium recommended models (picker hint). When present they get their
+  // own "Best for this look" group at the top and are removed from the
+  // Standard/Premium tiers so they aren't listed twice.
+  const recSet = new Set(recommendedModelIds ?? []);
+  const recommended = order(recommendedModelIds ?? []);
+  const standardRest = recSet.size ? standard.filter((m) => !recSet.has(m.id)) : standard;
+  const premiumRest = recSet.size ? premium.filter((m) => !recSet.has(m.id)) : premium;
+
+  // If the saved pick is hidden in DreamBot mode (e.g. a Direct-mode flux-schnell
+  // choice), fall back to the default for face-swap dreams WITHOUT overwriting
+  // the saved column — so switching back to Direct restores their pick.
+  const savedHidden =
+    dreamBotMode && models.find((m) => m.id === selected)?.dreamBotEnabled === false;
+  const effectiveSelected = savedHidden ? DEFAULT_MODEL_ID : selected;
+  useEffect(() => {
+    if (savedHidden) onChange?.(effectiveSelected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedHidden, effectiveSelected]);
   // Lowest cost in each tier → shown in the group header ("1 ✦", "2 ✦ +").
   const minCost = (list: ImageModel[]) =>
     list.length ? Math.min(...list.map((m) => m.sparkleCost)) : 0;
@@ -112,7 +146,7 @@ export function ModelPicker({ onChange }: Props) {
   );
 
   const renderRow = (opt: ImageModel) => {
-    const isSelected = opt.id === selected;
+    const isSelected = opt.id === effectiveSelected;
     return (
       <TouchableOpacity
         key={opt.id}
@@ -131,7 +165,7 @@ export function ModelPicker({ onChange }: Props) {
             <Text style={{ color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' }}>
               {opt.label}
             </Text>
-            {opt.id === RECOMMENDED_MODEL_ID && (
+            {(recSet.size ? recSet.has(opt.id) : opt.id === RECOMMENDED_MODEL_ID) && (
               <Text style={[styles.recLabel, { color: colors.accent }]}>Recommended</Text>
             )}
           </View>
@@ -169,7 +203,7 @@ export function ModelPicker({ onChange }: Props) {
     );
   };
 
-  const current = models.find((m) => m.id === selected);
+  const current = models.find((m) => m.id === effectiveSelected);
 
   return (
     <View>
@@ -245,16 +279,26 @@ export function ModelPicker({ onChange }: Props) {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: verticalScale(24) }}
             >
-              {standard.length > 0 && (
+              {recommended.length > 0 && (
                 <View style={{ marginTop: verticalScale(12) }}>
-                  {renderTierHeader('Standard', minCost(standard), false)}
-                  {standard.map(renderRow)}
+                  <View style={styles.groupHeader}>
+                    <Text style={[styles.groupLabel, { color: colors.accent }]}>
+                      Best for this look
+                    </Text>
+                  </View>
+                  {recommended.map(renderRow)}
                 </View>
               )}
-              {premium.length > 0 && (
+              {standardRest.length > 0 && (
+                <View style={{ marginTop: verticalScale(12) }}>
+                  {renderTierHeader('Standard', minCost(standardRest), false)}
+                  {standardRest.map(renderRow)}
+                </View>
+              )}
+              {premiumRest.length > 0 && (
                 <View style={{ marginTop: verticalScale(8) }}>
-                  {renderTierHeader('Premium', minCost(premium), true)}
-                  {premium.map(renderRow)}
+                  {renderTierHeader('Premium', minCost(premiumRest), true)}
+                  {premiumRest.map(renderRow)}
                 </View>
               )}
             </ScrollView>

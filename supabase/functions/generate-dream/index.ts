@@ -50,6 +50,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
+import { pickCreateFaceSwapOverride } from '../_shared/createFaceSwapOverrides.ts';
 
 interface RequestBody {
   /** Which Flux model to use */
@@ -935,6 +936,34 @@ Output ONLY the prompt.`;
           ? expanded.expansion
           : applyChaos(expanded.expansion, chaosProfile);
         const focalAnchor = deriveFocalAnchor(resolvedCast, { userPrompt: cleanedPrompt });
+
+        // Per-(model × medium) curated face-swap fragment override (migration
+        // 266). Some models render photoreal when a stylized medium is asked
+        // for (flux-1.1-pro on anime); a curated fragment they actually obey
+        // for THIS medium fixes that. Obedient models + an empty table → no-op.
+        // Keyed by (model, medium) because create renders the user's chosen
+        // medium (unlike nightly, which rolls + can swap style freely). Sets
+        // faceSwapFluxFragment (consumed by the face-swap brief builders) +
+        // fluxFragment to keep them in parity.
+        if (isFaceSwapEligible && force_model) {
+          const createOverride = await pickCreateFaceSwapOverride(
+            supabase,
+            force_model,
+            medium.key,
+            vibe.key
+          );
+          if (createOverride) {
+            medium = {
+              ...medium,
+              faceSwapFluxFragment: createOverride,
+              fluxFragment: createOverride,
+            };
+            fallbackReasons.push(`create_face_swap_override:${force_model}/${medium.key}`);
+            console.log(
+              `[generate-dream] create face-swap override applied: ${force_model} / ${medium.key}`
+            );
+          }
+        }
 
         const compiled = compilePrompt({
           inputType: 'self_insert',

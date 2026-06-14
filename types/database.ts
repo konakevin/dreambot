@@ -938,6 +938,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      face_swap_model_overrides: {
+        Row: {
+          banned_vibes: string[];
+          created_at: string;
+          fragment: string;
+          id: number;
+          is_active: boolean;
+          medium_key: string;
+          model: string;
+          note: string | null;
+        };
+        Insert: {
+          banned_vibes?: string[];
+          created_at?: string;
+          fragment: string;
+          id?: never;
+          is_active?: boolean;
+          medium_key: string;
+          model: string;
+          note?: string | null;
+        };
+        Update: {
+          banned_vibes?: string[];
+          created_at?: string;
+          fragment?: string;
+          id?: never;
+          is_active?: boolean;
+          medium_key?: string;
+          model?: string;
+          note?: string | null;
+        };
+        Relationships: [];
+      };
       favorites: {
         Row: {
           created_at: string;
@@ -1101,6 +1134,7 @@ export type Database = {
         Row: {
           cost_cents: number;
           description: string;
+          dreambot_enabled: boolean;
           family: string;
           id: string;
           is_active: boolean;
@@ -1113,6 +1147,7 @@ export type Database = {
         Insert: {
           cost_cents?: number;
           description?: string;
+          dreambot_enabled?: boolean;
           family: string;
           id: string;
           is_active?: boolean;
@@ -1125,6 +1160,7 @@ export type Database = {
         Update: {
           cost_cents?: number;
           description?: string;
+          dreambot_enabled?: boolean;
           family?: string;
           id?: string;
           is_active?: boolean;
@@ -2534,6 +2570,7 @@ export type Database = {
         Returns: {
           cost_cents: number;
           description: string;
+          dreambot_enabled: boolean;
           family: string;
           id: string;
           is_active: boolean;

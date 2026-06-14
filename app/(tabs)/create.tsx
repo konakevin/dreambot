@@ -24,7 +24,6 @@ import {
   InteractionManager,
   Platform,
   Modal,
-  ActionSheetIOS,
   Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -104,6 +103,7 @@ export default function CreateScreen() {
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [showProModeInfo, setShowProModeInfo] = useState(false);
+  const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
   // Unified AI model — the single top-level model choice shared by BOTH routes
   // (DreamBot engine + Direct). Synced from <ModelPicker> (persisted to
   // users.pro_mode_flux_model, cross-device). Drives force_model + the Dream
@@ -224,6 +224,11 @@ export default function CreateScreen() {
   // Derived state
   const hasPhoto = !!config.photoUri;
   const hasPrompt = config.userPrompt.trim().length > 0;
+  // A photo dream ALWAYS runs through the DreamBot engine (the submit path in
+  // useDreamCreate ignores use_exact_prompt for photos), so Direct mode never
+  // applies when a photo is attached. Drive all the engine-dependent UI off
+  // this so the picker/medium/face-swap UI matches what actually renders.
+  const effectiveExactPrompt = config.useExactPrompt && !hasPhoto;
 
   // Find labels for selected medium/vibe
   // Build options lists with Surprise Me prepended
@@ -260,6 +265,15 @@ export default function CreateScreen() {
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
 
+  // Models that render the selected medium well (good face swap + on-style),
+  // from the medium's client_meta.recommended_models (migration 266). Drives
+  // the "Best for this look" group in the ModelPicker so users are steered
+  // toward models that don't drift photoreal on stylized mediums.
+  const recommendedModelIds = ((): string[] | undefined => {
+    const rec = selectedMediumRow?.client_meta?.recommended_models;
+    return Array.isArray(rec) ? rec.filter((m): m is string => typeof m === 'string') : undefined;
+  })();
+
   // Generic mode hint (shown when the face indicator doesn't apply — blank
   // surprise, plain prompt, or photo restyle).
   const contextHint = hasPhoto
@@ -277,12 +291,12 @@ export default function CreateScreen() {
   // says HOW you'd appear (real face vs look-alike); this says WHETHER you do.
   const selfPresent =
     mentionsSelf || mentionsOther || (hasPhoto && config.photoStyle === 'new_scene');
-  const faceActive = selfPresent && !config.useExactPrompt;
+  const faceActive = selfPresent && !effectiveExactPrompt;
   // Show the face line whenever you're (or could be) in the scene; otherwise
   // fall back to contextHint (blank surprise / plain prompt / photo restyle).
   const showFaceHint = selfPresent || (hasPrompt && !hasPhoto);
   const faceHint: { icon: keyof typeof Ionicons.glyphMap; color: string; text: string } =
-    config.useExactPrompt && selfPresent
+    effectiveExactPrompt && selfPresent
       ? {
           icon: 'warning-outline',
           color: '#F59E0B',
@@ -360,19 +374,11 @@ export default function CreateScreen() {
     }
   }
 
-  // Photo picker — action sheet to choose camera or library
+  // Photo picker — opens a themed bottom sheet (camera / library). Replaces the
+  // native grey iOS action sheet so it matches the app's dark aesthetic.
   function handlePickPhoto() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Take Photo', 'Choose from Library', 'Cancel'],
-        cancelButtonIndex: 2,
-      },
-      (index) => {
-        if (index === 0) launchCamera();
-        else if (index === 1) launchLibrary();
-      }
-    );
+    setPhotoSourceOpen(true);
   }
 
   function handleDream() {
@@ -429,14 +435,18 @@ export default function CreateScreen() {
                 {formatCompact(sparkleBalance)}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handlePickPhoto}
-              className="w-8 h-8 rounded-full items-center justify-center"
-              style={{ backgroundColor: colors.accent }}
-              hitSlop={6}
-            >
-              <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={16} color="#fff" />
-            </TouchableOpacity>
+            {/* Photo upload — only in DreamBot mode (photos always use the
+                DreamBot engine; Direct mode is text-only, so hide it there). */}
+            {!effectiveExactPrompt && (
+              <TouchableOpacity
+                onPress={handlePickPhoto}
+                className="w-8 h-8 rounded-full items-center justify-center"
+                style={{ backgroundColor: colors.accent }}
+                hitSlop={6}
+              >
+                <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={16} color="#fff" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -484,35 +494,6 @@ export default function CreateScreen() {
               >
                 <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
               </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Advanced Mode + photo notice — Advanced Mode is text-only, so
-              when a photo is attached the toggle is hidden but the user's
-              preference (config.useExactPrompt) is preserved for when the
-              photo is removed. Surface a one-line note so the override
-              isn't silent. */}
-          {hasPhoto && config.useExactPrompt && (
-            <View
-              className="flex-row items-start gap-2 px-3 py-2 mb-3 rounded-xl"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <Ionicons
-                name="information-circle-outline"
-                size={16}
-                color={colors.textSecondary}
-                style={{ marginTop: verticalScale(1) }}
-              />
-              <Text
-                className="flex-1 text-xs"
-                style={{ color: colors.textSecondary, lineHeight: fontScale(16) }}
-              >
-                Photo dreams use the DreamBot engine — Direct mode is for text-only dreams.
-              </Text>
             </View>
           )}
 
@@ -637,7 +618,11 @@ export default function CreateScreen() {
               transform of the photo itself and needs an edit-capable model. */}
           {(!hasPhoto || config.photoStyle === 'new_scene') && (
             <View className="mb-4">
-              <ModelPicker onChange={setSelectedModelId} />
+              <ModelPicker
+                onChange={setSelectedModelId}
+                recommendedModelIds={recommendedModelIds}
+                dreamBotMode={!config.useExactPrompt}
+              />
             </View>
           )}
 
@@ -723,10 +708,11 @@ export default function CreateScreen() {
             </View>
           )}
 
-          {/* DreamBot route → Medium/Vibe pills (engine directives). Direct route
-              bypasses these (raw prompt), so they're hidden. The model picker is
-              top-level above, shared by both routes. */}
-          {!config.useExactPrompt && (
+          {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
+              AND whenever a photo is attached (photo dreams always use the
+              engine). Vibe is hidden for Restyle — that path is a Kontext img2img
+              edit driven by the medium only. Direct text dreams hide both. */}
+          {!effectiveExactPrompt && (
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <Text
@@ -782,37 +768,40 @@ export default function CreateScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View className="flex-1">
-                <Text
-                  className="text-xs font-medium mb-1.5 ml-1"
-                  style={{ color: colors.textSecondary }}
-                >
-                  Vibe
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                  style={{
-                    backgroundColor: colors.surface,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                  }}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setPickerType('vibe');
-                  }}
-                  activeOpacity={0.7}
-                >
+              {/* Vibe — hidden for Restyle (medium-only Kontext edit). */}
+              {!(hasPhoto && config.photoStyle === 'restyle') && (
+                <View className="flex-1">
                   <Text
-                    className="text-sm font-semibold"
-                    style={{ color: colors.textPrimary }}
-                    numberOfLines={1}
+                    className="text-xs font-medium mb-1.5 ml-1"
+                    style={{ color: colors.textSecondary }}
                   >
-                    {vibeLabel}
+                    Vibe
                   </Text>
-                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </TouchableOpacity>
-              </View>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setPickerType('vibe');
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: colors.textPrimary }}
+                      numberOfLines={1}
+                    >
+                      {vibeLabel}
+                    </Text>
+                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           )}
         </ScrollView>
@@ -1018,6 +1007,88 @@ export default function CreateScreen() {
           setPickerType('medium');
         }}
       />
+
+      {/* Photo source sheet — themed replacement for the native iOS action
+          sheet (Take Photo / Choose from Library), matching the dark app UI. */}
+      <Modal
+        visible={photoSourceOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPhotoSourceOpen(false)}
+      >
+        <TouchableOpacity
+          className="flex-1 justify-end"
+          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+          activeOpacity={1}
+          onPress={() => setPhotoSourceOpen(false)}
+        >
+          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <View
+              className="rounded-t-3xl px-5 pt-3"
+              style={{
+                backgroundColor: colors.background,
+                paddingBottom: verticalScale(40),
+                borderTopWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <View
+                className="self-center rounded-full mb-4"
+                style={{
+                  width: 40,
+                  height: 4,
+                  backgroundColor: colors.border,
+                  marginTop: verticalScale(2),
+                }}
+              />
+              <Text className="text-base font-bold mb-3 ml-1" style={{ color: colors.textPrimary }}>
+                Add a photo
+              </Text>
+              {(
+                [
+                  { icon: 'camera', label: 'Take Photo', action: launchCamera },
+                  { icon: 'images', label: 'Choose from Library', action: launchLibrary },
+                ] as const
+              ).map((opt) => (
+                <TouchableOpacity
+                  key={opt.label}
+                  className="flex-row items-center gap-3 px-4 py-3.5 rounded-xl mb-2.5"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPhotoSourceOpen(false);
+                    opt.action();
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View
+                    className="w-9 h-9 rounded-full items-center justify-center"
+                    style={{ backgroundColor: colors.accent + '22' }}
+                  >
+                    <Ionicons name={opt.icon} size={18} color={colors.accent} />
+                  </View>
+                  <Text className="text-base font-semibold" style={{ color: colors.textPrimary }}>
+                    {opt.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity
+                className="items-center py-3.5 rounded-xl mt-1"
+                onPress={() => setPhotoSourceOpen(false)}
+                activeOpacity={0.7}
+              >
+                <Text className="text-base font-semibold" style={{ color: colors.textSecondary }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }

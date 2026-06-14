@@ -36,6 +36,10 @@ export interface ImageModel {
   sparkleCost: number;
   /** One-line description shown under the picker option. */
   description: string;
+  /** When false, hidden from the DreamBot-mode (face-swap) picker; still shown
+   *  in Direct mode. Sourced from image_models.dreambot_enabled (migration 267).
+   *  Undefined = enabled (the common case). */
+  dreamBotEnabled?: boolean;
 }
 
 export const IMAGE_MODELS: ImageModel[] = [
@@ -47,6 +51,10 @@ export const IMAGE_MODELS: ImageModel[] = [
     family: 'flux-1',
     sparkleCost: 1,
     description: 'Fastest render — under 15 seconds.',
+    // Hidden in DreamBot mode: the 2026-06-13 face-swap audit found it produces
+    // broken pasted-cutout collages on stylized mediums + the weakest faces.
+    // Still available in Direct mode (raw prompt, no swap).
+    dreamBotEnabled: false,
   },
   {
     id: 'black-forest-labs/flux-krea-dev',
