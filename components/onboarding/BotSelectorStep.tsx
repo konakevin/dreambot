@@ -80,7 +80,7 @@ export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
-          Every bot dreams in its own little world. Tap Follow on any that spark a little joy and
+          Every bot dreams in its own little world. Tap Follow on any that catch your eye and
           they’ll start drifting into your feed.
         </Text>
       </View>
