@@ -131,9 +131,11 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
       </ScrollView>
 
       <View style={[s.footer, { paddingBottom: bottomPad }]}>
+        <View style={s.footnoteTitleWrap}>
+          <GradientTitle size={18}>First, meet your neighbors!</GradientTitle>
+        </View>
         <Text style={s.footnote}>
-          First, meet your neighbors!{'\n'}Take a stroll through our emporium of Bots who live and
-          dream alongside you.
+          Take a stroll through our emporium of Bots who live and dream alongside you.
         </Text>
         <TouchableOpacity
           style={s.cta}
@@ -200,6 +202,10 @@ const s = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     paddingTop: verticalScale(8),
+  },
+  footnoteTitleWrap: {
+    alignItems: 'center',
+    marginBottom: verticalScale(10),
   },
   footnote: {
     // Same typography as `body` so the two gray paragraphs read uniform.
