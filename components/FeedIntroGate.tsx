@@ -213,7 +213,8 @@ const s = StyleSheet.create({
     fontSize: fontScale(15),
     lineHeight: fontScale(22),
     textAlign: 'center',
-    marginBottom: verticalScale(28),
+    // Extra gap below lifts the text/title higher (button stays bottom-pinned).
+    marginBottom: verticalScale(48),
     paddingHorizontal: 8,
   },
   cta: {
