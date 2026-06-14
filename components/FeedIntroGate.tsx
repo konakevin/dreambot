@@ -18,6 +18,7 @@
 import { useCallback, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import {
@@ -31,7 +32,13 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, BRAND_GRADIENT } from '@/components/GradientTitle';
+import { DISPLAY_FONT } from '@/constants/fonts';
+
+// CTA styling ported from the dreambotapp.com "Download on the App Store" button:
+// the brand gradient as the fill, near-black text, Quicksand semibold, and a
+// purple glow. (bg-gradient-cta + text-bg-deeper #08080F.)
+const CTA_TEXT_COLOR = '#08080F';
 
 const SEEN_FEED_INTRO_KEY = 'dreambot.seenFeedIntro.v1';
 
@@ -138,15 +145,21 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
           Take a stroll through the emporium of Bots who live and dream alongside you.
         </Text>
         <TouchableOpacity
-          style={s.cta}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             onSeeBots();
           }}
-          activeOpacity={0.85}
+          activeOpacity={0.9}
         >
-          <Text style={s.ctaText}>Meet the Bots</Text>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+          <LinearGradient
+            colors={BRAND_GRADIENT}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={s.cta}
+          >
+            <Text style={s.ctaText}>Meet the Bots</Text>
+            <Ionicons name="arrow-forward" size={18} color={CTA_TEXT_COLOR} />
+          </LinearGradient>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -220,11 +233,16 @@ const s = StyleSheet.create({
   cta: {
     flexDirection: 'row',
     gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
+    borderRadius: 999, // pill (rounded-full)
     paddingVertical: verticalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
+    // Purple glow — matches the web CTA's shadow-[0_8px_32px_rgba(167,139,250,0.45)].
+    shadowColor: '#A78BFA',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    elevation: 8,
   },
-  ctaText: { color: '#FFFFFF', fontSize: fontScale(17), fontWeight: '700' },
+  ctaText: { color: CTA_TEXT_COLOR, fontSize: fontScale(17), fontFamily: DISPLAY_FONT.semibold },
 });
