@@ -15,8 +15,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import ReanimatedSwipeable, {
   type SwipeableMethods,
@@ -30,6 +28,7 @@ import { useDeleteGroup } from '@/hooks/useDeleteGroup';
 import { useMarkInboxViewed } from '@/hooks/useMarkInboxViewed';
 import { useGroupActors } from '@/hooks/useGroupActors';
 import { InboxSkeleton } from '@/components/Skeleton';
+import { GradientTitle } from '@/components/GradientTitle';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import {
   useApproveFollowRequest,
@@ -38,10 +37,6 @@ import {
 } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
-
-// Same brand gradient the Create wordmark uses (moon purple → cloud pink →
-// star teal). Applied to the "Inbox" header title via MaskedView.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 function formatTimeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -679,16 +674,8 @@ export default function InboxScreen() {
             >
               <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
             </TouchableOpacity>
-            {/* Gradient wordmark — same MaskedView + LinearGradient pattern as
-                the Create title. White Text defines the shape; the gradient
-                fills it. */}
-            <MaskedView
-              maskElement={<Text style={[styles.headerTitle, { color: '#FFFFFF' }]}>Inbox</Text>}
-            >
-              <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                <Text style={[styles.headerTitle, { opacity: 0 }]}>Inbox</Text>
-              </LinearGradient>
-            </MaskedView>
+            {/* Shared gradient nav title (matches Create/Settings/Edit Profile). */}
+            <GradientTitle>Inbox</GradientTitle>
             <View style={styles.headerActions}>
               {hasAny && (
                 <TouchableOpacity

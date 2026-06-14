@@ -39,6 +39,7 @@ import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
+import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { moderateText } from '@/lib/moderation';
@@ -191,7 +192,7 @@ export default function EditProfileScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.topBarIcon}>
           <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Edit Profile</Text>
+        <GradientTitle>Edit Profile</GradientTitle>
         <TouchableOpacity
           onPress={handleSave}
           disabled={!dirty || saving}
@@ -328,11 +329,6 @@ const styles = StyleSheet.create({
   topBarIcon: {
     minWidth: 56,
     alignItems: 'center',
-  },
-  topBarTitle: {
-    color: colors.textPrimary,
-    fontSize: fontScale(16),
-    fontWeight: '700',
   },
   saveText: {
     color: colors.accent,

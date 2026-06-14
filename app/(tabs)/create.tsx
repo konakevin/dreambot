@@ -28,8 +28,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
@@ -45,18 +43,13 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { ModelPicker } from '@/components/ModelPicker';
+import { GradientTitle } from '@/components/GradientTitle';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
-
-// Same brand gradient used by the homepage wordmark, brochure Hero, and the
-// onboarding info-step headlines: moon purple → cloud pink → star teal.
-// Applied to the "Create" title at the top of the screen so the tab reads
-// as part of the same brand surface.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // Cast-detection patterns (defaults). The LIVE source is engine_config
 // (relationship_words / pet_words, migration 256) — the same word lists the
@@ -430,24 +423,14 @@ export default function CreateScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={0}
       >
-        {/* Header */}
-        <View className="flex-row items-center justify-between px-5 py-3">
-          {/* Gradient wordmark — same MaskedView + LinearGradient pattern used
-              by the onboarding WelcomeStep/InfoStep titles. White Text inside
-              the mask defines the SHAPE; the LinearGradient fills it. */}
-          <MaskedView
-            maskElement={
-              <Text className="text-2xl font-extrabold" style={{ color: '#FFFFFF' }}>
-                Create
-              </Text>
-            }
-          >
-            <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text className="text-2xl font-extrabold" style={{ opacity: 0 }}>
-                Create
-              </Text>
-            </LinearGradient>
-          </MaskedView>
+        {/* Header — centered gradient title (absolutely centered so the
+            right-side actions don't push it off-center), matching the shared
+            nav-title treatment used across Settings/Inbox/Edit Profile. */}
+        <View className="flex-row items-center px-5 py-3">
+          <View className="flex-1" />
+          <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
+            <GradientTitle>Create</GradientTitle>
+          </View>
           <View className="flex-row items-center gap-2">
             <TouchableOpacity
               onPress={() => nav.push('/sparkleStore')}
