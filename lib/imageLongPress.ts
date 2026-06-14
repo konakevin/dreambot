@@ -108,7 +108,7 @@ async function saveHd(id: string, cachedHqUrl: string | null) {
     showPremiumGate({ kind: 'hd_premium' });
     return;
   }
-  Toast.show('Couldn’t prepare your HD download — try again.', 'close-circle');
+  Toast.show('Couldn’t prepare your HD download. Try again.', 'close-circle');
 }
 
 interface SaveOpts {

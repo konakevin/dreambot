@@ -51,7 +51,7 @@ export function gateContent(reason: GateReason): GateContent {
       return {
         icon: 'sparkles',
         title: 'Not enough sparkles',
-        body: `This dream costs ${reason.needed} ${sparklesWord(reason.needed)} — you have ${reason.balance}.`,
+        body: `This dream costs ${reason.needed} ${sparklesWord(reason.needed)}. You have ${reason.balance}.`,
         balance: { have: reason.balance, need: reason.needed },
         buttons: [
           { label: 'Get Sparkles', route: '/sparkleStore', variant: 'primary' },
@@ -62,7 +62,7 @@ export function gateContent(reason: GateReason): GateContent {
       return {
         icon: 'arrow-down-circle',
         title: 'HD downloads are Premium',
-        body: 'Save full-resolution, watermark-free images — included with Basic and Pro.',
+        body: 'Save full-resolution, watermark-free images, included with Basic and Pro.',
         buttons: [
           { label: 'See Plans', route: '/subscribe', variant: 'primary' },
           { label: 'Not now', variant: 'secondary' },
@@ -88,7 +88,7 @@ export function gateContent(reason: GateReason): GateContent {
       return {
         icon: 'moon',
         title: 'Nightly dreams are Premium',
-        body: 'Get a personalized dream every morning — included with Basic and Pro.',
+        body: 'Get a personalized dream every morning, included with Basic and Pro.',
         buttons: [
           { label: 'See Plans', route: '/subscribe', variant: 'primary' },
           { label: 'Not now', variant: 'secondary' },

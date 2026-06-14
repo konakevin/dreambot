@@ -307,7 +307,7 @@ export default function DreamTestScreen() {
               Test the nightly dream pipeline
             </Text>
             <Text className="text-gray-400 text-sm text-center mb-6">
-              Uses your saved profile — same path as nightly cron.
+              Uses your saved profile. Same path as nightly cron.
             </Text>
             <MediumVibeSelector
               selectedMedium={selectedMedium}
@@ -380,7 +380,7 @@ export default function DreamTestScreen() {
           <>
             {/* Medium/Vibe badge */}
             <Text className="text-gray-400 text-xs mb-2">
-              {activeDream.medium ?? '?'} / {activeDream.vibe ?? '?'} — dream {activeIndex + 1} of{' '}
+              {activeDream.medium ?? '?'} / {activeDream.vibe ?? '?'} · dream {activeIndex + 1} of{' '}
               {dreams.length}
             </Text>
 

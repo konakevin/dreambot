@@ -574,7 +574,7 @@ export default function CreateScreen() {
                 style={{ color: colors.textSecondary, opacity: 0.7 }}
               >
                 {config.photoStyle === 'new_scene'
-                  ? 'We’ll invent a fresh scene around you — works best with a clear single-subject photo.'
+                  ? 'We’ll invent a fresh scene around you. Works best with a clear single-subject photo.'
                   : 'We’ll keep your pose and restyle it in this medium. Restyle uses one model built for accurate edits, so the model picker doesn’t apply here.'}
               </Text>
             </View>
@@ -697,7 +697,7 @@ export default function CreateScreen() {
                   style={{ color: colors.textSecondary, opacity: 0.7, lineHeight: fontScale(16) }}
                 >
                   {config.useExactPrompt
-                    ? 'Your exact prompt goes straight to the AI model you pick — no DreamBot styling, polish, or likeness.'
+                    ? 'Your exact prompt goes straight to the AI model you pick. No DreamBot styling, polish, or likeness.'
                     : 'Custom mediums & vibes, prompt polish, and your saved Dream Cast likeness when you mention yourself.'}
                 </Text>
                 <TouchableOpacity
@@ -960,8 +960,8 @@ export default function CreateScreen() {
             >
               Our engine. It polishes your prompt, styles your dream with hand-picked mediums &
               vibes, and adds your saved Dream Cast likeness to the scene. Just mention yourself
-              (“me”) or your +1 (“my wife”, “my friend”) and we’ll place you in — no need to upload
-              a photo each time.
+              (“me”) or your +1 (“my wife”, “my friend”) and we’ll place you in. No need to upload a
+              photo each time.
             </Text>
 
             <View className="flex-row items-center mb-1.5" style={{ marginTop: verticalScale(16) }}>
@@ -984,8 +984,8 @@ export default function CreateScreen() {
                 lineHeight: fontScale(21),
               }}
             >
-              Sends your exact words straight to the AI model — no mediums, polish, or likeness.
-              Best when you want full control over the prompt.
+              Sends your exact words straight to the AI model: no mediums, polish, or likeness. Best
+              when you want full control over the prompt.
             </Text>
             <Text
               style={{
@@ -995,7 +995,7 @@ export default function CreateScreen() {
                 marginTop: verticalScale(14),
               }}
             >
-              Either way, pick your AI model up top — its sparkle cost shows on the Dream button.
+              Either way, pick your AI model up top. Its sparkle cost shows on the Dream button.
             </Text>
             <TouchableOpacity
               onPress={() => setShowProModeInfo(false)}

@@ -103,7 +103,7 @@ export default function AcknowledgementsScreen() {
               )}
               <Text style={styles.licenseText} selectable>
                 {licenseTextFor(item) ??
-                  `License: ${item.license}\n(Full license text not bundled — see the package's source repository.)`}
+                  `License: ${item.license}\n(Full license text not bundled. See the package's source repository.)`}
               </Text>
             </View>
           )}
@@ -119,7 +119,7 @@ export default function AcknowledgementsScreen() {
         <Text style={styles.introTitle}>Open-source love 💜</Text>
         <Text style={styles.introBody}>
           DreamBot stands on the shoulders of {PACKAGES.length} open-source packages. Tap any
-          package to read its license. Every contributor gets credit here — they made this app
+          package to read its license. Every contributor gets credit here. They made this app
           possible.
         </Text>
       </View>

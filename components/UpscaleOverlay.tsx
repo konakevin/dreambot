@@ -34,7 +34,7 @@ const WAITING_MESSAGES = [
   'Dusting on the HD sparkle…',
   'Making it poster-worthy…',
 ];
-const WAITING_SUB = "Keep browsing — we'll save it to your Photos the moment it's ready.";
+const WAITING_SUB = "Keep browsing. We'll save it to your Photos the moment it's ready.";
 
 type Phase = 'requesting' | 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
@@ -154,7 +154,7 @@ export function UpscaleModalHost() {
     timeout: {
       icon: 'time' as const,
       title: 'Still polishing your HD…',
-      sub: "Taking longer than usual — we'll notify you the moment it's ready to grab.",
+      sub: "Taking longer than usual. We'll notify you the moment it's ready to grab.",
       showDismiss: true,
     },
   }[phase];

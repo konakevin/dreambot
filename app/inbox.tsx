@@ -586,7 +586,7 @@ export default function InboxScreen() {
       showAlert(
         "Your dream couldn't render",
         wasRefunded
-          ? "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle has been refunded — give it another try whenever you like."
+          ? "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle has been refunded. Give it another try whenever you like."
           : "Something hiccuped while rendering, so this dream didn't make it through. If a sparkle was spent, it'll be refunded automatically within a few minutes.",
         [{ text: 'OK' }]
       );

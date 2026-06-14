@@ -17,7 +17,7 @@ describe('gateContent — sparkles', () => {
     const c = gateContent({ kind: 'sparkles', needed: 3, balance: 1 });
     expect(c.title).toBe('Not enough sparkles');
     expect(c.body).toContain('3 sparkles');
-    expect(c.body).toContain('you have 1');
+    expect(c.body).toContain('You have 1');
     expect(c.balance).toEqual({ have: 1, need: 3 });
     expect(c.buttons[0]).toEqual({
       label: 'Get Sparkles',
@@ -30,7 +30,7 @@ describe('gateContent — sparkles', () => {
 
   it('pluralizes correctly for a 1-sparkle cost', () => {
     const c = gateContent({ kind: 'sparkles', needed: 1, balance: 0 });
-    expect(c.body).toContain('1 sparkle —');
+    expect(c.body).toContain('1 sparkle.');
     expect(c.body).not.toContain('1 sparkles');
   });
 });

@@ -134,7 +134,7 @@ export default function SubscribeScreen() {
     const tier = plan.tiers.find((t) => t.period === period) ?? plan.tiers[0];
     const pkg = findPackage(packages, tier.productId);
     if (!pkg) {
-      Toast.show('Plan unavailable — try again in a moment', 'close-circle');
+      Toast.show('Plan unavailable. Try again in a moment.', 'close-circle');
       return;
     }
     trackProSubscribeTapped({ period: tier.period });
@@ -147,7 +147,7 @@ export default function SubscribeScreen() {
       },
       onError: (err) => {
         if (err.message === 'cancelled') return;
-        Toast.show('Purchase failed — try again', 'close-circle');
+        Toast.show('Purchase failed. Try again.', 'close-circle');
       },
       onSettled: () => setPurchasingPlan(null),
     });
@@ -185,7 +185,7 @@ export default function SubscribeScreen() {
             <Text style={s.heroSub}>
               {isOnTrial
                 ? 'Enjoying the free trial? Keep it all going.'
-                : 'Unlock the full DreamBot magic.'}
+                : 'Get the full DreamBot magic.'}
             </Text>
           </View>
 

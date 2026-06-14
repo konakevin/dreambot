@@ -543,7 +543,7 @@ export default function DreamLoadingScreen() {
             </Text>
             <Text style={s.modalBody}>
               {pendingConfirm?.type === 'group'
-                ? 'Adding your likeness only works for single-subject photos. We’ll describe everyone and include them in the scene — but it won’t be an exact match.'
+                ? 'Adding your likeness only works for single-subject photos. We’ll describe everyone and include them in the scene, but it won’t be an exact match.'
                 : 'We had trouble identifying the subject. Results may surprise you.'}
             </Text>
             <View style={s.modalActions}>

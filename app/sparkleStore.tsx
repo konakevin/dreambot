@@ -42,18 +42,18 @@ const ACCENT = colors.accent;
 function getPackCopy(sparkles: number): string {
   const premium = Math.floor(sparkles / 3);
   if (sparkles <= 20) {
-    return `A quick top-up — ${sparkles} standard renders or ${premium} premium.`;
+    return `A quick top-up. ${sparkles} standard renders or ${premium} premium.`;
   }
   if (sparkles <= 50) {
-    return `Casual use — ${sparkles} standard renders or ${premium} premium. A couple weeks of dreaming.`;
+    return `Casual use: ${sparkles} standard renders or ${premium} premium. A couple weeks of dreaming.`;
   }
   if (sparkles <= 100) {
-    return `Most popular — about a month of regular renders. ${sparkles} standard or ${premium} premium.`;
+    return `Most popular. About a month of regular renders. ${sparkles} standard or ${premium} premium.`;
   }
   if (sparkles <= 250) {
-    return `Best value — months of renders with room for premium models. ${sparkles} standard or ${premium} premium.`;
+    return `Best value: months of renders with room for premium models. ${sparkles} standard or ${premium} premium.`;
   }
-  return `Power user — half a year of renders, plenty for premium models. ${sparkles} standard or ${premium} premium.`;
+  return `Power user: half a year of renders, plenty for premium models. ${sparkles} standard or ${premium} premium.`;
 }
 
 function PackCard({
@@ -206,7 +206,7 @@ export default function SparkleStoreScreen() {
       },
       onError: (err) => {
         if (err.message === 'cancelled') return;
-        Toast.show('Purchase failed — try again', 'close-circle');
+        Toast.show('Purchase failed. Try again.', 'close-circle');
       },
     });
   }
@@ -295,7 +295,7 @@ export default function SparkleStoreScreen() {
                 ) : (
                   <Text style={s.ctaText}>
                     {selectedPkg
-                      ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles — ${selectedPkg.product.priceString}`
+                      ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles (${selectedPkg.product.priceString})`
                       : 'Select a pack'}
                   </Text>
                 )}

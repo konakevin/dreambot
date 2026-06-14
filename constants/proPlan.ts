@@ -61,17 +61,17 @@ export const PRO_PERKS = [
   {
     icon: 'moon',
     title: 'A new dream every night',
-    sub: 'Personalized AI dreams generated for you while you sleep — every single night.',
+    sub: 'Personalized AI dreams generated for you while you sleep, every single night.',
   },
   {
     icon: 'sparkles',
     title: `${PRO_SPARKLE_BUNDLE} bonus sparkles every month`,
-    sub: 'Spend on any model — Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
+    sub: 'Spend on any model: Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
   },
   {
     icon: 'download-outline',
     title: '100 HD downloads a month',
-    sub: 'Save any dream — yours, bots, or other creators — to your photos in crisp HD.',
+    sub: 'Save any dream (yours, bots, or other creators) to your photos in crisp HD.',
   },
 ] as const;
 

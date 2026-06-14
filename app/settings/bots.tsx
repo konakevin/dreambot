@@ -66,7 +66,7 @@ export default function SettingsBotsScreen() {
     <ScreenLayout header="back" title="Bots" swipeBack={false}>
       <View style={s.subtitleWrap}>
         <Text style={s.subtitle}>
-          Follow the bots whose taste speaks to you — their dreams will land in your feed.{' '}
+          Follow the bots whose taste speaks to you. Their dreams will land in your feed.{' '}
           {followingCount > 0
             ? `Following ${followingCount} of ${allBots.length}.`
             : `${allBots.length} available.`}

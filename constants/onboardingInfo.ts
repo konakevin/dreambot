@@ -44,7 +44,7 @@ export const CREATE_INFO: InfoStepConfig = {
     {
       icon: 'sparkles-outline',
       title: 'DreamBot mode',
-      body: 'Supports personalized renders using your Dream Cast photos — just mention “me” or “my +1” in your prompt. Also provides custom mediums and vibes for epic dream creations.',
+      body: 'Supports personalized renders using your Dream Cast photos. Just mention yourself (“me,” “I”…) or your +1 (“my partner,” “my friend”…) and we’ll cast them in. Plus custom mediums and vibes for epic dreams.',
     },
     {
       icon: 'flash-outline',
@@ -68,5 +68,5 @@ export const MEET_BOTS_INTRO: InfoStepConfig = {
   eyebrow: 'the dream team',
   customMascot: require('@/assets/images/onboarding/mascot-bots.png'),
   headline: 'Meet the bots',
-  body: 'There’s a fleet of specialized bots posting to the feed around the clock. Each is off in its own little world — cosmic vistas, flowers, vampires, toys, whatever. Follow the ones whose vibe you like and they’ll land in your home feed.',
+  body: 'There’s a fleet of specialized bots posting to the feed around the clock. Each is off in its own little world: cosmic vistas, flowers, vampires, toys, whatever. Follow the ones whose vibe you like and they’ll land in your home feed.',
 };

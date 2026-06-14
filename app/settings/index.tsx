@@ -557,8 +557,8 @@ export default function SettingsScreen() {
                     }}
                   >
                     {showAdminDelete
-                      ? 'Red X visible above heart — single tap deletes (no confirm)'
-                      : 'Hidden — enable for bulk cleanup'}
+                      ? 'Red X visible above heart. Single tap deletes (no confirm).'
+                      : 'Hidden. Enable for bulk cleanup.'}
                   </Text>
                 </View>
                 <Switch
@@ -586,8 +586,8 @@ export default function SettingsScreen() {
                       }}
                     >
                       {showModelBadge
-                        ? 'Shown on every card — which AI rendered it'
-                        : 'Hidden — flip on to see the render model'}
+                        ? 'Shown on every card: which AI rendered it'
+                        : 'Hidden. Flip on to see the render model.'}
                     </Text>
                   </View>
                   <Switch
@@ -649,7 +649,7 @@ export default function SettingsScreen() {
               Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               showAlert(
                 'Tutorials reset',
-                'First-run tutorials will show again — reopen the Create tab to see them.'
+                'First-run tutorials will show again. Reopen the Create tab to see them.'
               );
             }}
             trailing={null}

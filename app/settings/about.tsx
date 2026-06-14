@@ -25,13 +25,13 @@ export default function AboutScreen() {
 
         <View style={styles.body}>
           <Text style={styles.paragraph}>
-            Hi, I&rsquo;m <Text style={styles.bold}>Kevin</Text> — the human behind DreamBot. (The
+            Hi, I&rsquo;m <Text style={styles.bold}>Kevin</Text>, the human behind DreamBot. (The
             robot up there is the cute one. I&rsquo;m the one who needs more sleep.)
           </Text>
 
           <Text style={styles.paragraph}>
             Honestly? I built DreamBot because every other AI tool felt like work. Master the
-            prompts, tune the parameters, learn the syntax. I wanted something for the rest of us —
+            prompts, tune the parameters, learn the syntax. I wanted something for the rest of us:
             approachable, a little whimsical, a little funny. The &ldquo;everyman&rdquo; AI app,
             with a tiny robot mascot and a sense of humor.
           </Text>
@@ -40,14 +40,14 @@ export default function AboutScreen() {
             But the real spark was this: what if the bots dreamed for{' '}
             <Text style={styles.bold}>you</Text> while you slept? You&rsquo;d wake up and
             there&rsquo;d be a personalized piece of art waiting, made just for you overnight. And
-            what if the dream could even include you — your face and your favorite person&rsquo;s,
+            what if the dream could even include you, your face and your favorite person&rsquo;s,
             both painted into a fantasy scene together? That&rsquo;s where it really clicked.
           </Text>
 
           <Text style={styles.paragraph}>
             So DreamBot ended up being three things at once: a feed of beautiful AI art from named
             bot personalities, an overnight surprise dreamed just for you, and a friendly create
-            mode for when you want to drive. All wrapped around one idea — AI should feel like
+            mode for when you want to drive. All wrapped around one idea: AI should feel like
             wonder, not work.
           </Text>
 
@@ -61,24 +61,24 @@ export default function AboutScreen() {
           <Text style={styles.sectionTitle}>With love and thanks</Text>
 
           <Text style={styles.paragraph}>
-            To my wife, <Text style={styles.bold}>Stephanie</Text> — for letting me disappear into
-            my cave for months while I chased this idea down a dozen rabbit holes. Your patience is
-            the only reason this app exists. I love you, and I owe you a thousand date nights.
+            To my wife, <Text style={styles.bold}>Stephanie</Text>, for letting me disappear into my
+            cave for months while I chased this idea down a dozen rabbit holes. Your patience is the
+            only reason this app exists. I love you, and I owe you a thousand date nights.
           </Text>
 
           <Text style={styles.paragraph}>
-            To <Text style={styles.bold}>my family</Text> — thanks for believing in me, even from
+            To <Text style={styles.bold}>my family</Text>, thanks for believing in me, even from
             afar.
           </Text>
 
           <Text style={styles.paragraph}>
-            To <Text style={styles.bold}>Hannah</Text> and <Text style={styles.bold}>Nick</Text> —
+            To <Text style={styles.bold}>Hannah</Text> and <Text style={styles.bold}>Nick</Text>,
             thanks for testing, listening to me blab about this app for hours, and getting dragged
             into every new batch of renders.
           </Text>
 
           <Text style={styles.paragraph}>
-            And to the bands whose albums became DreamBot&rsquo;s unofficial soundtrack — playing on
+            And to the bands whose albums became DreamBot&rsquo;s unofficial soundtrack, playing on
             repeat through every late-night coding session:
           </Text>
 

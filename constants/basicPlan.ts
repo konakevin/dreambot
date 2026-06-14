@@ -41,7 +41,7 @@ export const BASIC_PERKS = [
   {
     icon: 'moon',
     title: 'A new dream every night',
-    sub: 'Personalized AI dreams generated for you while you sleep — every single night.',
+    sub: 'Personalized AI dreams generated for you while you sleep, every single night.',
   },
   {
     icon: 'sparkles',

@@ -225,7 +225,7 @@ export default function DreamLikeThisScreen() {
     if (!refMedium) {
       // The reference style failed to load — never leave the button silently
       // dead (this is exactly how the model_used fetch bug hid for so long).
-      Toast.show('Style still loading — try again in a moment', 'close-circle');
+      Toast.show('Style still loading. Try again in a moment.', 'close-circle');
       return;
     }
     Keyboard.dismiss();
@@ -347,7 +347,7 @@ export default function DreamLikeThisScreen() {
           {/* Style info */}
           <View style={s.styleInfo}>
             <Text style={s.styleInfoTitle}>Dream in this style</Text>
-            <Text style={s.styleInfoSubtext}>Style only — your prompt sets the subject.</Text>
+            <Text style={s.styleInfoSubtext}>Style only. Your prompt sets the subject.</Text>
           </View>
 
           {/* Prompt input — always visible */}
@@ -357,7 +357,7 @@ export default function DreamLikeThisScreen() {
               style={s.promptInput}
               placeholder={
                 hasPhoto
-                  ? 'Describe a scene — your likeness will be woven in...'
+                  ? 'Describe a scene, your likeness will be woven in...'
                   : 'Describe your dream, or tap the camera to upload a photo...'
               }
               placeholderTextColor={colors.textMuted}
@@ -378,7 +378,7 @@ export default function DreamLikeThisScreen() {
               <Text style={s.likenessHintText}>
                 {mediumFaceSwaps
                   ? 'Your face will be added into the dream.'
-                  : "This medium can't use your face — you'll be drawn from your Cast description."}
+                  : "This medium can't use your face, so you'll be drawn from your Cast description."}
               </Text>
             </View>
           )}

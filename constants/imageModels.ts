@@ -50,7 +50,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-1',
     sparkleCost: 1,
-    description: 'Fastest render — under 15 seconds.',
+    description: 'Fastest render, under 15 seconds.',
     // Hidden in DreamBot mode: the 2026-06-13 face-swap audit found it produces
     // broken pasted-cutout collages on stylized mediums + the weakest faces.
     // Still available in Direct mode (raw prompt, no swap).
@@ -62,7 +62,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-1',
     sparkleCost: 1,
-    description: 'Artistic diffusion — natural aesthetic.',
+    description: 'Artistic diffusion with a natural aesthetic.',
   },
   {
     id: 'black-forest-labs/flux-dev',
@@ -70,7 +70,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-1',
     sparkleCost: 1,
-    description: 'Open-weight Flux 1 — artistic, expressive.',
+    description: 'Open-weight Flux 1, artistic and expressive.',
   },
   {
     id: 'black-forest-labs/flux-1.1-pro',
@@ -78,7 +78,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-1',
     sparkleCost: 1,
-    description: 'Recommended — fast, balanced, reliable quality.',
+    description: 'Recommended. Fast, balanced, reliable quality.',
   },
   {
     id: 'black-forest-labs/flux-1.1-pro-ultra',
@@ -86,7 +86,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-1',
     sparkleCost: 2,
-    description: 'Photoreal 2K — raw mode, natural aesthetics.',
+    description: 'Photoreal 2K, raw mode with natural aesthetics.',
   },
 
   // ── Flux 2 ────────────────────────────────────────────────────────────
@@ -96,7 +96,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-2',
     sparkleCost: 1,
-    description: 'Flux 2 open-weight — improved fidelity, low cost.',
+    description: 'Flux 2 open-weight, improved fidelity at low cost.',
   },
   {
     id: 'black-forest-labs/flux-2-pro',
@@ -104,7 +104,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-2',
     sparkleCost: 1,
-    description: 'Flux 2 — strong quality, balanced cost.',
+    description: 'Flux 2 with strong quality and balanced cost.',
   },
   {
     id: 'black-forest-labs/flux-2-flex',
@@ -112,7 +112,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-2',
     sparkleCost: 2,
-    description: 'Flux 2 high-detail tier — slower, richer renders.',
+    description: 'Flux 2 high-detail tier with slower, richer renders.',
   },
   {
     id: 'black-forest-labs/flux-2-max',
@@ -120,7 +120,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'replicate',
     family: 'flux-2',
     sparkleCost: 3,
-    description: 'Flux 2 flagship — top prompt fidelity & style.',
+    description: 'Flux 2 flagship with top prompt fidelity & style.',
   },
 
   // ── OpenAI (version order) ────────────────────────────────────────────
@@ -148,7 +148,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'gemini',
     family: 'google',
     sparkleCost: 1,
-    description: 'Fast and vivid — punchy color, crisp detail.',
+    description: 'Fast and vivid, with punchy color and crisp detail.',
   },
   {
     id: 'google/gemini-3-image-preview',
@@ -156,7 +156,7 @@ export const IMAGE_MODELS: ImageModel[] = [
     provider: 'gemini',
     family: 'google',
     sparkleCost: 5,
-    description: 'Flagship quality — accurate text + fine detail.',
+    description: 'Flagship quality, with accurate text + fine detail.',
   },
 ];
 
@@ -222,10 +222,10 @@ export const FAMILY_LABELS: Record<ModelFamily, string> = {
  */
 export const MODEL_BLURBS: Record<string, string> = {
   'black-forest-labs/flux-1.1-pro': 'Reliable all-rounder',
-  'black-forest-labs/flux-2-pro': 'Newest — crisp and detailed',
+  'black-forest-labs/flux-2-pro': 'Newest, crisp and detailed',
   'google/gemini-2-image': 'Bright, bold colors',
   'black-forest-labs/flux-dev': 'Soft and artistic',
-  'black-forest-labs/flux-schnell': 'Fastest — quick ideas',
+  'black-forest-labs/flux-schnell': 'Fastest, for quick ideas',
   'black-forest-labs/flux-krea-dev': 'Natural, painterly feel',
   'black-forest-labs/flux-2-dev': 'Newer, well-rounded',
   'black-forest-labs/flux-1.1-pro-ultra': 'Extra sharp and realistic',

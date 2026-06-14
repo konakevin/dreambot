@@ -164,7 +164,7 @@ export default function NotificationsSettingsScreen() {
                       ? 'Turn on in iOS Settings to receive push'
                       : pushAllowed
                         ? 'Banners appear when the app is closed'
-                        : 'All pushes paused — inbox still works'}
+                        : 'All pushes paused. Inbox still works.'}
                   </Text>
                 </View>
                 <Switch
@@ -191,7 +191,7 @@ export default function NotificationsSettingsScreen() {
             </View>
 
             <Text style={styles.footerCopy}>
-              Everything still lands in your inbox — these control the push banners only.
+              Everything still lands in your inbox. These control the push banners only.
             </Text>
           </>
         )}

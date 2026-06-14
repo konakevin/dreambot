@@ -43,7 +43,7 @@ type AlbumTab = 'posts' | 'dreams' | 'saved' | 'reposts';
 // so a single explainer line sits under the active icon.
 const ALBUM_INFO: Record<AlbumTab, string> = {
   posts: 'Your public dreams, shared to the feed',
-  dreams: 'All your dreams — public and private',
+  dreams: 'All your dreams, public and private',
   saved: "Dreams you've saved",
   reposts: "Dreams you've reposted to your followers",
 };

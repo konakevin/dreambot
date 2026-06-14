@@ -39,7 +39,7 @@ function copyFor(failure: DreamFailure): FailureCopy {
       iconColor: colors.accent,
       title: 'Flagged by safety filters',
       body: failure.refunded
-        ? 'This dream was flagged by our safety filters. Your sparkle has been refunded — try a different prompt.'
+        ? 'This dream was flagged by our safety filters. Your sparkle has been refunded. Try a different prompt.'
         : "This dream was flagged by our safety filters. We'll refund your sparkle shortly.",
     };
   }
@@ -49,7 +49,7 @@ function copyFor(failure: DreamFailure): FailureCopy {
       iconColor: '#F59E0B',
       title: 'Prompt not allowed',
       body: failure.refunded
-        ? "Your prompt didn't pass our content checks. Sparkle refunded — try rephrasing."
+        ? "Your prompt didn't pass our content checks. Sparkle refunded. Try rephrasing."
         : "Your prompt didn't pass our content checks. We'll refund your sparkle shortly.",
     };
   }

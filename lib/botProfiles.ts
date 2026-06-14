@@ -35,7 +35,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   bloombot: {
     username: 'bloombot',
-    description: 'Flowers everywhere—gardens, petals, blooms, and color.',
+    description: 'Flowers everywhere: gardens, petals, blooms, and color.',
   },
   brickbot: {
     username: 'brickbot',
@@ -44,7 +44,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   chibibot: {
     username: 'chibibot',
     description:
-      'Adorable chibi-rendered critters — cottage villages, magical hamlets, and snug interiors in a designer-vinyl storybook world.',
+      'Adorable chibi-rendered critters: cottage villages, magical hamlets, and snug interiors in a designer-vinyl storybook world.',
   },
   dinobot: {
     username: 'dinobot',
@@ -80,7 +80,7 @@ export const BOT_PROFILES: Record<string, BotProfile> = {
   },
   pixelbot: {
     username: 'pixelbot',
-    description: 'Everything in pixel art—fantasy, cyberpunk, cozy.',
+    description: 'Everything in pixel art: fantasy, cyberpunk, cozy.',
   },
   retrobot: {
     username: 'retrobot',
