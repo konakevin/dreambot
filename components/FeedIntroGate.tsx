@@ -141,7 +141,8 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
 
       <View style={[s.footer, { paddingBottom: bottomPad }]}>
         <Text style={s.footnote}>
-          First, let’s pick a few bots to follow so your feed has something to dream about.
+          First, come meet the bots — a fleet of dreamers posting around the clock. Follow the ones
+          whose vibe you love and your feed comes alive.
         </Text>
         <TouchableOpacity
           style={s.cta}
@@ -151,7 +152,7 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
           }}
           activeOpacity={0.85}
         >
-          <Text style={s.ctaText}>See Bots</Text>
+          <Text style={s.ctaText}>Meet the Bots</Text>
           <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
