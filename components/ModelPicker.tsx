@@ -130,20 +130,11 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
     if (savedHidden) onChange?.(effectiveSelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedHidden, effectiveSelected]);
-  // Lowest cost in each tier → shown in the group header ("1 ✦", "2 ✦ +").
-  const minCost = (list: ImageModel[]) =>
-    list.length ? Math.min(...list.map((m) => m.sparkleCost)) : 0;
-
-  const renderTierHeader = (title: string, cost: number, plus: boolean) => (
+  // Tier header is just the label — each row already shows its own cost, so the
+  // group-level cost indicator was redundant.
+  const renderTierHeader = (title: string) => (
     <View style={styles.groupHeader}>
       <Text style={[styles.groupLabel, { color: colors.textSecondary }]}>{title}</Text>
-      <View style={styles.groupCost}>
-        <Text style={[styles.groupCostText, { color: colors.textSecondary }]}>
-          {cost}
-          {plus ? '+' : ''}
-        </Text>
-        <Ionicons name="sparkles" size={11} color={colors.accent} style={{ marginLeft: 3 }} />
-      </View>
     </View>
   );
 
@@ -177,7 +168,7 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
               {opt.label}
             </Text>
             {(recSet.size ? recSet.has(opt.id) : opt.id === RECOMMENDED_MODEL_ID) && (
-              <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Recommended</Text>
+              <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Default</Text>
             )}
           </View>
           <Text
@@ -293,13 +284,13 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
               )}
               {standardRest.length > 0 && (
                 <View style={{ marginTop: verticalScale(12) }}>
-                  {renderTierHeader('Standard', minCost(standardRest), false)}
+                  {renderTierHeader('Standard')}
                   {standardRest.map(renderRow)}
                 </View>
               )}
               {premiumRest.length > 0 && (
                 <View style={{ marginTop: verticalScale(8) }}>
-                  {renderTierHeader('Premium', minCost(premiumRest), true)}
+                  {renderTierHeader('Premium')}
                   {premiumRest.map(renderRow)}
                 </View>
               )}
@@ -325,8 +316,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     textTransform: 'uppercase',
   },
-  groupCost: { flexDirection: 'row', alignItems: 'center' },
-  groupCostText: { fontSize: fontScale(12), fontWeight: '700' },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   recLabel: { fontSize: fontScale(11), fontWeight: '700' },
   option: {
