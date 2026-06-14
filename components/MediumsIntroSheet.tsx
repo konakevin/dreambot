@@ -24,6 +24,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SEEN_MEDIUMS_INTRO_KEY = 'dreambot.seenMediumsIntro.v1';
 
@@ -104,7 +105,11 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
     >
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
         {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
-        <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={s.scroll}
+          contentContainerStyle={s.content}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={s.eyebrow}>Two ways to dream</Text>
 
           {/* Standardized hero title — size 24, sentence case, 2-line wrap
@@ -144,7 +149,15 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
           </View>
         </ScrollView>
 
-        <View style={s.footer}>
+        {/* Floating CTA — pinned over the scroll so it's ALWAYS visible; the
+            content scrolls beneath it and fades out under a gradient scrim.
+            Identical to CreateIntroSheet so the button sits in the same place. */}
+        <View style={s.footer} pointerEvents="box-none">
+          <LinearGradient
+            colors={['transparent', colors.background]}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
           <GradientButton label="Got it, let’s dream" onPress={handleClose} />
         </View>
       </SafeAreaView>
@@ -154,11 +167,13 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  scroll: { flex: 1 },
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
     paddingTop: verticalScale(28),
-    paddingBottom: verticalScale(24),
+    // Leave room for the floating CTA so the last card can scroll clear of it.
+    paddingBottom: verticalScale(96),
   },
   eyebrow: {
     color: colors.accentLight,
@@ -212,6 +227,14 @@ const s = StyleSheet.create({
     lineHeight: fontScale(20),
     marginTop: verticalScale(12),
   },
-  footer: { paddingHorizontal: 20, paddingBottom: verticalScale(8), paddingTop: verticalScale(8) },
+  footer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 20,
+    paddingBottom: verticalScale(8),
+    paddingTop: verticalScale(28),
+  },
   headlineWrap: { alignItems: 'center' },
 });
