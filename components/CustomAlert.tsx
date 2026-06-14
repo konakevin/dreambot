@@ -1,8 +1,14 @@
 import { useState, useCallback } from 'react';
 import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
+import { BRAND_GRADIENT } from '@/components/GradientTitle';
+import { DISPLAY_FONT } from '@/constants/fonts';
 import { verticalScale, fontScale } from '@/lib/responsive';
+
+// Near-black text on the brand-gradient primary button (matches GradientButton).
+const CTA_TEXT_COLOR = '#08080F';
 
 interface AlertButton {
   text: string;
@@ -82,30 +88,49 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
             {alert.title ? <Text style={styles.title}>{alert.title}</Text> : null}
             {alert.message ? <Text style={styles.message}>{alert.message}</Text> : null}
             <View style={isStacked ? styles.buttonCol : styles.buttonRow}>
-              {sortedButtons.map((btn, i) => (
-                <TouchableOpacity
-                  key={i}
-                  style={[
-                    styles.button,
-                    !isStacked && styles.buttonFlex,
-                    btn.style === 'destructive' && styles.buttonDestructive,
-                    btn.style === 'cancel' && styles.buttonCancel,
-                    btn.style !== 'cancel' && btn.style !== 'destructive' && styles.buttonDefault,
-                  ]}
-                  onPress={() => handlePress(btn)}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      btn.style === 'destructive' && styles.buttonTextDestructive,
-                      btn.style === 'cancel' && styles.buttonTextCancel,
-                    ]}
+              {sortedButtons.map((btn, i) => {
+                const isDefault = btn.style !== 'cancel' && btn.style !== 'destructive';
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={[styles.button, !isStacked && styles.buttonFlex]}
+                    onPress={() => handlePress(btn)}
+                    activeOpacity={0.85}
                   >
-                    {btn.text}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    {isDefault ? (
+                      // Primary action = brand-gradient pill (matches GradientButton).
+                      <LinearGradient
+                        colors={BRAND_GRADIENT}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={styles.fill}
+                      >
+                        <Text style={[styles.buttonText, styles.buttonTextDefault]}>
+                          {btn.text}
+                        </Text>
+                      </LinearGradient>
+                    ) : (
+                      <View
+                        style={[
+                          styles.fill,
+                          btn.style === 'destructive'
+                            ? styles.buttonDestructive
+                            : styles.buttonCancel,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.buttonText,
+                            btn.style === 'cancel' && styles.buttonTextCancel,
+                          ]}
+                        >
+                          {btn.text}
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </Pressable>
         </Pressable>
@@ -153,20 +178,23 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: verticalScale(8),
   },
+  // Touch wrapper — owns the pill shape; clips the gradient/fill child.
   button: {
-    paddingVertical: verticalScale(13),
-    paddingHorizontal: 16,
     borderRadius: 14,
-    alignItems: 'center',
+    overflow: 'hidden',
   },
   buttonFlex: {
     flex: 1,
   },
-  buttonDefault: {
-    backgroundColor: colors.accent,
+  // Inner fill (gradient or solid) — owns the padding + centering.
+  fill: {
+    paddingVertical: verticalScale(13),
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonDestructive: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.error,
   },
   buttonCancel: {
     backgroundColor: colors.card,
@@ -178,8 +206,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
   },
-  buttonTextDestructive: {
-    color: '#FFFFFF',
+  buttonTextDefault: {
+    color: CTA_TEXT_COLOR,
+    fontFamily: DISPLAY_FONT.semibold,
   },
   buttonTextCancel: {
     color: colors.textSecondary,
