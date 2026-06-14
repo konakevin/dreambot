@@ -21,7 +21,7 @@ import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
 import { GradientTitle } from '@/components/GradientTitle';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
 const TITLE_TEXT = 'Build your dream team';
@@ -76,7 +76,15 @@ export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
   return (
     <View style={s.root}>
       <View style={s.header}>
-        <GradientTitle size={22} weight={700} letterSpacing={0.5} numberOfLines={1} style={s.title}>
+        <GradientTitle
+          size={24}
+          weight={700}
+          letterSpacing={0.5}
+          numberOfLines={2}
+          lineHeight={30}
+          maxWidth={screen.width - 56}
+          style={s.title}
+        >
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
@@ -139,11 +147,11 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(16),
     alignItems: 'center',
   },
-  // FIXED font size (no adjustsFontSizeToFit) — auto-fit races the Modal's
-  // SafeAreaProvider layout and intermittently collapses the gradient text to
-  // min size on re-mount. size={22} fits "BUILD YOUR DREAM TEAM" on one line at
-  // the iPhone-14 base. Only the spacing lives here; the font + gradient come
-  // from GradientTitle. See FeedIntroGate headlineMask.
+  // Standardized hero title: size 24, sentence case, 2-line wrap fallback —
+  // shared across all intro screens (FeedIntroGate / CreateIntroSheet /
+  // MediumsIntroSheet). FIXED size (no adjustsFontSizeToFit) — auto-fit races
+  // the Modal's SafeAreaProvider layout and collapses the gradient to min size
+  // on re-mount. Only spacing lives here; font + gradient come from GradientTitle.
   title: {
     marginBottom: verticalScale(10),
   },

@@ -82,16 +82,14 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
         >
           <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
-          {/* Gradient headline — ONE line, shrink-to-fit. maxWidth tracks the
-              real screen width so it scales down on small phones instead of
-              overflowing (the old fixed 300 was wider than a small phone's column). */}
+          {/* Standardized hero title — size 24, sentence case, 2-line wrap
+              fallback, width-constrained (shared across all intro screens). */}
           <GradientTitle
-            size={30}
-            numberOfLines={1}
-            adjustsFontSizeToFit
+            size={24}
+            numberOfLines={2}
             maxWidth={screen.width - 56}
             letterSpacing={0.5}
-            lineHeight={36}
+            lineHeight={30}
             align="center"
           >
             {CREATE_INFO.headline}

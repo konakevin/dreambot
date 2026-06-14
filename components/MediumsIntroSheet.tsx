@@ -13,7 +13,7 @@
  * The badge chip colors here match the face/art badge on the Create medium row.
  */
 
-import { View, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -103,30 +103,19 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
       onRequestClose={onClose}
     >
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
-        <View style={s.topBar}>
-          <TouchableOpacity
-            onPress={handleClose}
-            style={s.closeBtn}
-            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="close" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-
+        {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <Text style={s.eyebrow}>Two ways to dream</Text>
 
-          {/* Gradient headline — centered + width-constrained so it wraps
-              responsively (no adjustsFontSizeToFit, which races the Modal). */}
+          {/* Standardized hero title — size 24, sentence case, 2-line wrap
+              fallback, width-constrained (shared across all intro screens). */}
           <View style={s.headlineWrap}>
             <GradientTitle
-              size={26}
-              uppercase
+              size={24}
               numberOfLines={2}
               maxWidth={screen.width - 56}
               letterSpacing={0.5}
-              lineHeight={32}
+              lineHeight={30}
             >
               Real face or dream art?
             </GradientTitle>
@@ -165,24 +154,10 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(4),
-  },
-  closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: verticalScale(16),
+    paddingTop: verticalScale(28),
     paddingBottom: verticalScale(24),
   },
   eyebrow: {
