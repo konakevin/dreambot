@@ -85,7 +85,7 @@ export function FeedIntroGate({ onDone }: Props) {
         ) : (
           <SafeAreaView style={s.botWrap} edges={['top']}>
             <BotSelectorStep
-              nextLabel="Save and go to my feed"
+              nextLabel="Go to my feed"
               onNext={complete}
               onBack={() => setPane('intro')}
             />
