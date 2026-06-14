@@ -24,6 +24,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 import { GradientTitle } from '@/components/GradientTitle';
+import { GradientButton } from '@/components/GradientButton';
 
 const SEEN_CREATE_INTRO_KEY = 'dreambot.seenCreateIntro.v1';
 
@@ -135,9 +136,7 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
         </ScrollView>
 
         <View style={s.footer}>
-          <TouchableOpacity style={s.cta} onPress={handleClose} activeOpacity={0.85}>
-            <Text style={s.ctaText}>Got it, let’s create</Text>
-          </TouchableOpacity>
+          <GradientButton label="Got it, let’s create" onPress={handleClose} />
         </View>
       </SafeAreaView>
     </Modal>
@@ -233,12 +232,4 @@ const s = StyleSheet.create({
   },
 
   footer: { paddingHorizontal: 20, paddingBottom: verticalScale(8), paddingTop: verticalScale(8) },
-  cta: {
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: verticalScale(16),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ctaText: { color: '#FFFFFF', fontSize: fontScale(17), fontWeight: '700' },
 });
