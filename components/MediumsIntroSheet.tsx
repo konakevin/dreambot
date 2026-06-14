@@ -17,7 +17,7 @@ import { View, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
@@ -83,6 +83,7 @@ const CARDS: CardSpec[] = [
 ];
 
 export function MediumsIntroSheet({ visible, onClose }: Props) {
+  const insets = useSafeAreaInsets();
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
     if (!visible) return;
@@ -103,7 +104,7 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={s.root} edges={['top', 'bottom']}>
+      <SafeAreaView style={s.root} edges={['top']}>
         {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
         <ScrollView
           style={s.scroll}
@@ -152,7 +153,10 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
         {/* Floating CTA — pinned over the scroll so it's ALWAYS visible; the
             content scrolls beneath it and fades out under a gradient scrim.
             Identical to CreateIntroSheet so the button sits in the same place. */}
-        <View style={s.footer} pointerEvents="box-none">
+        <View
+          style={[s.footer, { paddingBottom: Math.max(insets.bottom, verticalScale(16)) }]}
+          pointerEvents="box-none"
+        >
           <LinearGradient
             colors={['transparent', colors.background]}
             style={StyleSheet.absoluteFill}
@@ -233,8 +237,9 @@ const s = StyleSheet.create({
     right: 0,
     bottom: 0,
     paddingHorizontal: 20,
-    paddingBottom: verticalScale(8),
     paddingTop: verticalScale(28),
+    // paddingBottom is applied inline from safe-area insets (footer owns the
+    // bottom inset, edges={['top']}) so the CTA matches the onboarding buttons.
   },
   headlineWrap: { alignItems: 'center' },
 });
