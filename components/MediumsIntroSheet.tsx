@@ -15,6 +15,8 @@
 
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
@@ -23,6 +25,10 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 const SEEN_MEDIUMS_INTRO_KEY = 'dreambot.seenMediumsIntro.v1';
+
+// Brand gradient (moon purple → cloud pink → star teal) — matches the
+// CreateIntroSheet first-run headline and the Create-tab wordmark.
+const HEADLINE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // Matches the face/art badge tints on the Create medium row.
 const FACE_COLOR = '#60A5FA';
@@ -113,7 +119,21 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
 
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <Text style={s.eyebrow}>Two ways to dream</Text>
-          <Text style={s.headline}>Real face or dream art?</Text>
+
+          {/* Gradient headline — same MaskedView+LinearGradient treatment as the
+              CreateIntroSheet first-run dialog. */}
+          <MaskedView
+            maskElement={
+              <View style={s.headlineMaskWrap}>
+                <Text style={s.headlineMask}>Real face or dream art?</Text>
+              </View>
+            }
+          >
+            <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <Text style={[s.headlineMask, s.headlineGhost]}>Real face or dream art?</Text>
+            </LinearGradient>
+          </MaskedView>
+
           <Text style={s.body}>
             Some mediums drop your real face right into the scene. Others capture the likeness of
             you and dream up a playful look-alike. Peek at the badge on each one.
@@ -178,13 +198,18 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(10),
     textAlign: 'center',
   },
-  headline: {
-    color: colors.textPrimary,
+  headlineMaskWrap: { alignItems: 'center' },
+  headlineMask: {
     fontSize: fontScale(28),
     fontWeight: '800',
     textAlign: 'center',
     lineHeight: fontScale(34),
+    color: '#FFFFFF',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    maxWidth: 340,
   },
+  headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
     fontSize: fontScale(15),
