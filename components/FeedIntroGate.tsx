@@ -135,7 +135,7 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
           <GradientTitle size={18}>First, meet your neighbors!</GradientTitle>
         </View>
         <Text style={s.footnote}>
-          Take a stroll through our emporium of Bots who live and dream alongside you.
+          Take a stroll through the emporium of Bots who live and dream alongside you.
         </Text>
         <TouchableOpacity
           style={s.cta}
