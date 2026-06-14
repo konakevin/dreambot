@@ -16,8 +16,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -29,10 +27,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-
-// Same brand gradient as the Create + Inbox wordmarks (moon purple → cloud
-// pink → star teal), applied to the "Dreaming" title.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+import { GradientTitle } from '@/components/GradientTitle';
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
 // lavender/cloud/star scene, different painting poses (standing
@@ -132,13 +127,10 @@ export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) 
     <View style={styles.stage}>
       <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
       <WaveLoader />
-      {/* Gradient wordmark — same MaskedView + LinearGradient pattern as the
-          Create / Inbox titles. White Text defines the shape; gradient fills. */}
-      <MaskedView maskElement={<Text style={[styles.title, { color: '#FFFFFF' }]}>Dreaming</Text>}>
-        <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-          <Text style={[styles.title, { opacity: 0 }]}>Dreaming</Text>
-        </LinearGradient>
-      </MaskedView>
+      {/* Gradient wordmark — same brand title treatment as the Create / Inbox titles. */}
+      <GradientTitle size={24} weight={700} letterSpacing={0.3}>
+        Dreaming
+      </GradientTitle>
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );
@@ -182,12 +174,6 @@ const styles = StyleSheet.create({
     height: DOT_SIZE,
     borderRadius: DOT_SIZE / 2,
     backgroundColor: colors.accent,
-  },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(24),
-    fontWeight: '700',
-    letterSpacing: 0.3,
   },
   // Optional wait-hint shown when the caller passes `subtext`. Muted vs.
   // the title so it reads as supporting info, not a competing headline.

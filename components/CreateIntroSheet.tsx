@@ -15,8 +15,6 @@
 
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
@@ -24,9 +22,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
+import { GradientTitle } from '@/components/GradientTitle';
 
 const SEEN_CREATE_INTRO_KEY = 'dreambot.seenCreateIntro.v1';
-const HEADLINE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 /**
  * Async check — has the user already seen the intro? Use this on the
@@ -88,27 +86,18 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
-          {/* Gradient headline — same MaskedView+LinearGradient pattern as
-              the onboarding InfoStep / brochure wordmark. */}
-          <MaskedView
-            maskElement={
-              <View style={s.headlineMaskWrap}>
-                <Text style={s.headlineMask} numberOfLines={1} adjustsFontSizeToFit>
-                  {CREATE_INFO.headline}
-                </Text>
-              </View>
-            }
+          {/* Gradient headline — shared brand wordmark primitive. */}
+          <GradientTitle
+            size={30}
+            uppercase
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            maxWidth={300}
+            letterSpacing={0.5}
+            lineHeight={36}
           >
-            <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-              <Text
-                style={[s.headlineMask, s.headlineGhost]}
-                numberOfLines={1}
-                adjustsFontSizeToFit
-              >
-                {CREATE_INFO.headline}
-              </Text>
-            </LinearGradient>
-          </MaskedView>
+            {CREATE_INFO.headline}
+          </GradientTitle>
 
           <Text style={s.body}>{CREATE_INFO.body}</Text>
 
@@ -188,18 +177,6 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
     textAlign: 'center',
   },
-  headlineMaskWrap: { alignItems: 'center' },
-  headlineMask: {
-    fontSize: fontScale(30),
-    fontWeight: '800',
-    textAlign: 'center',
-    lineHeight: fontScale(36),
-    color: '#FFFFFF',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    maxWidth: 300,
-  },
-  headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
     fontSize: fontScale(15),

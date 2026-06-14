@@ -18,8 +18,6 @@
 import { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import {
   SafeAreaView,
@@ -32,9 +30,9 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
+import { GradientTitle } from '@/components/GradientTitle';
 
 const SEEN_FEED_INTRO_KEY = 'dreambot.seenFeedIntro.v1';
-const HEADLINE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 /** Has the user already completed the first-run feed intro? Gate the feed on this. */
 export async function hasSeenFeedIntro(): Promise<boolean> {
@@ -98,21 +96,15 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
   return (
     <SafeAreaView style={s.root} edges={['top']}>
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
-        <MaskedView
-          maskElement={
-            <View style={s.headlineMaskWrap}>
-              <Text style={s.headlineMask} numberOfLines={2}>
-                {FEED_INTRO.headline}
-              </Text>
-            </View>
-          }
+        <GradientTitle
+          size={24}
+          numberOfLines={2}
+          maxWidth={screen.width - 56}
+          letterSpacing={0.5}
+          lineHeight={30}
         >
-          <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.headlineMask, s.headlineGhost]} numberOfLines={2}>
-              {FEED_INTRO.headline}
-            </Text>
-          </LinearGradient>
-        </MaskedView>
+          {FEED_INTRO.headline}
+        </GradientTitle>
 
         <Text style={s.body}>{FEED_INTRO.body}</Text>
 
@@ -169,26 +161,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headlineMaskWrap: { alignItems: 'center' },
-  headlineMask: {
-    // FIXED font size, no adjustsFontSizeToFit — auto-fit races the Modal's
-    // SafeAreaProvider layout and intermittently collapses the gradient text
-    // to min size on re-mount. Instead the headline is width-constrained to the
-    // content column and allowed to wrap to a 2nd line, so it stays responsive
-    // (never clips) across device widths without auto-fit. fontScale keys off
-    // HEIGHT, so the width cap is what keeps wide strings from overflowing.
-    maxWidth: screen.width - 56, // content paddingHorizontal (28) on both sides
-    // Quicksand — the same rounded display font as the dreambotapp.com wordmark
-    // (loaded in app/_layout.tsx). The weight is baked into the font file, so
-    // fontWeight is a no-op here.
-    fontFamily: 'Quicksand_700Bold',
-    fontSize: fontScale(24),
-    textAlign: 'center',
-    lineHeight: fontScale(30),
-    color: '#FFFFFF',
-    letterSpacing: 0.5,
-  },
-  headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
     fontSize: fontScale(15),

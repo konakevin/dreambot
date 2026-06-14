@@ -15,19 +15,13 @@ import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { LinearGradient } from 'expo-linear-gradient';
+import { GradientTitle } from '@/components/GradientTitle';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 
 const MASCOT_SIZE = verticalScaleClamped(130, 100, 150);
-
-// Same brand gradient used by dreambotapp.com Hero, onboarding WelcomeStep,
-// InfoStep headlines, and the Create tab title. Moon purple → cloud pink
-// → star teal at the same 135°-equivalent diagonal.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 function Logo() {
   return (
@@ -40,13 +34,10 @@ function Logo() {
       />
 
       {/* Gradient wordmark — single 'DreamBot' (was a two-line DREAM/BOT
-          duotone in the legacy design). Same MaskedView + LinearGradient
-          pattern as the onboarding WelcomeStep title. */}
-      <MaskedView maskElement={<Text style={authStyles.wordmark}>DreamBot</Text>}>
-        <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-          <Text style={[authStyles.wordmark, { opacity: 0 }]}>DreamBot</Text>
-        </LinearGradient>
-      </MaskedView>
+          duotone in the legacy design). */}
+      <GradientTitle size={48} weight={800} letterSpacing={-0.5}>
+        DreamBot
+      </GradientTitle>
 
       <Text style={authStyles.tagline}>Where bots dream and you’re invited.</Text>
     </View>
@@ -62,13 +53,6 @@ const authStyles = StyleSheet.create({
     height: MASCOT_SIZE,
     borderRadius: 28,
     marginBottom: verticalScale(18),
-  },
-  wordmark: {
-    fontSize: fontScale(48),
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    color: '#FFFFFF',
-    textAlign: 'center',
   },
   tagline: {
     color: 'rgba(255,255,255,0.85)',

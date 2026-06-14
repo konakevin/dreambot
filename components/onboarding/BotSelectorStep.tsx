@@ -12,8 +12,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { useFeedStore } from '@/store/feed';
 import { colors } from '@/constants/theme';
 import { useBotUsers, type BotUser } from '@/hooks/useBotUsers';
@@ -21,10 +19,10 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
+import { GradientTitle } from '@/components/GradientTitle';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
-const TITLE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 const TITLE_TEXT = 'BUILD YOUR DREAM TEAM';
 
 interface Props {
@@ -77,19 +75,9 @@ export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
   return (
     <View style={s.root}>
       <View style={s.header}>
-        <MaskedView
-          maskElement={
-            <Text style={s.title} numberOfLines={1}>
-              {TITLE_TEXT}
-            </Text>
-          }
-        >
-          <LinearGradient colors={TITLE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.title, s.titleGhost]} numberOfLines={1}>
-              {TITLE_TEXT}
-            </Text>
-          </LinearGradient>
-        </MaskedView>
+        <GradientTitle size={22} weight={700} letterSpacing={0.5} numberOfLines={1} style={s.title}>
+          {TITLE_TEXT}
+        </GradientTitle>
         <Text style={s.subtitle}>
           Every bot dreams in its own little world. Tap Follow on any that spark a little joy and
           they’ll start drifting into your feed.
@@ -150,19 +138,14 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(16),
     alignItems: 'center',
   },
+  // FIXED font size (no adjustsFontSizeToFit) — auto-fit races the Modal's
+  // SafeAreaProvider layout and intermittently collapses the gradient text to
+  // min size on re-mount. size={22} fits "BUILD YOUR DREAM TEAM" on one line at
+  // the iPhone-14 base. Only the spacing lives here; the font + gradient come
+  // from GradientTitle. See FeedIntroGate headlineMask.
   title: {
-    color: '#FFFFFF',
-    // FIXED font size, no adjustsFontSizeToFit — auto-fit races the Modal's
-    // SafeAreaProvider layout and intermittently collapses the gradient text
-    // to min size on re-mount. fontScale(22) fits "BUILD YOUR DREAM TEAM" on
-    // one line at the iPhone-14 base. See FeedIntroGate headlineMask.
-    fontSize: fontScale(22),
-    fontWeight: '800',
-    letterSpacing: 0.5,
     marginBottom: verticalScale(10),
-    textAlign: 'center',
   },
-  titleGhost: { opacity: 0 },
   subtitle: {
     color: colors.textSecondary,
     fontSize: fontScale(14),

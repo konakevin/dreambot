@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
+import { GradientTitle } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 
 const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
@@ -54,10 +53,6 @@ export interface InfoStepConfig {
   ctaLabel?: string;
 }
 
-// Brand gradient — matches the homepage Hero wordmark + the 404 page's
-// "404" headline + CTA buttons on the web brochure.
-const HEADLINE_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
-
 interface Props extends InfoStepConfig {
   onNext: () => void;
   onBack: () => void;
@@ -101,20 +96,11 @@ export function InfoStep({
 
         <Text style={s.eyebrow}>{eyebrow}</Text>
 
-        {/* Gradient headline — MaskedView + LinearGradient is the standard
-            RN trick for gradient-filled text. Same pattern used by
-            GradientUsername. */}
-        <MaskedView
-          maskElement={
-            <View style={s.headlineMaskWrap}>
-              <Text style={s.headlineMask}>{headline}</Text>
-            </View>
-          }
-        >
-          <LinearGradient colors={HEADLINE_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.headlineMask, s.headlineGhost]}>{headline}</Text>
-          </LinearGradient>
-        </MaskedView>
+        {/* Gradient headline — wraps freely (0 = unlimited lines), matching
+            the prior unbounded Text. */}
+        <GradientTitle size={32} weight={800} lineHeight={38} maxWidth={340} numberOfLines={0}>
+          {headline}
+        </GradientTitle>
 
         <Text style={s.body}>{body}</Text>
 
@@ -181,16 +167,6 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
     textAlign: 'center',
   },
-  headlineMaskWrap: { alignItems: 'center' },
-  headlineMask: {
-    fontSize: fontScale(32),
-    fontWeight: '800',
-    textAlign: 'center',
-    lineHeight: fontScale(38),
-    color: '#FFFFFF', // fills the mask shape; LinearGradient supplies the color
-    maxWidth: 340,
-  },
-  headlineGhost: { opacity: 0 },
   body: {
     color: colors.textSecondary,
     fontSize: fontScale(16),

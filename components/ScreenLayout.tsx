@@ -21,20 +21,15 @@
 
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { LinearGradient } from 'expo-linear-gradient';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
+import { GradientTitle } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { fontScale } from '@/lib/responsive';
 import { HEADER_H_PAD, HEADER_V_PAD, NAV_ICON_SIZE, NAV_HIT_SLOP } from '@/constants/layout';
-
-// Brand wordmark gradient — same colors + diagonal as the login screen title
-// (app/(auth)/index.tsx), dreambotapp.com Hero, and the Create tab title.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 interface ScreenLayoutProps {
   /** Header type: 'back' for pushed screens, 'close' for modals, 'none' for fullscreen */
@@ -96,23 +91,7 @@ export function ScreenLayout({
           {title && !centerTitle ? (
             titleGradient ? (
               <View style={s.titleGradientWrap}>
-                <MaskedView
-                  maskElement={
-                    <Text style={s.titleGradientText} numberOfLines={1}>
-                      {title}
-                    </Text>
-                  }
-                >
-                  <LinearGradient
-                    colors={BRAND_GRADIENT}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                  >
-                    <Text style={[s.titleGradientText, { opacity: 0 }]} numberOfLines={1}>
-                      {title}
-                    </Text>
-                  </LinearGradient>
-                </MaskedView>
+                <GradientTitle size={17}>{title}</GradientTitle>
               </View>
             ) : (
               <Text style={s.title} numberOfLines={1}>
@@ -177,15 +156,9 @@ const s = StyleSheet.create({
     fontWeight: '700',
   },
   titleSpacer: { flex: 1 },
-  // Gradient title: a flex-centered wrapper holds a MaskedView sized to the
+  // Gradient title: a flex-centered wrapper holds the GradientTitle sized to the
   // text (so the brand gradient fills the glyphs, centered like the plain title).
   titleGradientWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  titleGradientText: {
-    textAlign: 'center',
-    color: colors.textPrimary,
-    fontSize: fontScale(17),
-    fontWeight: '700',
-  },
   // Overlay that centers the title on the true header center. Horizontal
   // padding keeps a long title from running under the side buttons/actions.
   centerTitleOverlay: {

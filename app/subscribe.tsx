@@ -22,10 +22,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
+import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { PRO_PERKS, PRO_TIERS, type ProPlanTier } from '@/constants/proPlan';
@@ -36,10 +36,6 @@ import { trackProStoreOpened, trackProSubscribeTapped } from '@/lib/analytics';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 type Period = 'month' | 'year';
-
-// The DreamBot logo gradient (purple→pink→teal) — same as the 'DreamBot'
-// wordmark on the login/splash screen (app/(auth)/index.tsx).
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 interface Plan {
   key: 'basic' | 'pro';
@@ -174,14 +170,12 @@ export default function SubscribeScreen() {
     <ScreenLayout header="back" title="Plans">
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Hero — gradient wordmark title (same MaskedView treatment as the
-              'DreamBot' logo on the login/splash screen) */}
+          {/* Hero — gradient wordmark title (brand display font + gradient via
+              the shared GradientTitle primitive) */}
           <View style={s.hero}>
-            <MaskedView maskElement={<Text style={s.heroTitle}>Choose your plan</Text>}>
-              <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                <Text style={[s.heroTitle, { opacity: 0 }]}>Choose your plan</Text>
-              </LinearGradient>
-            </MaskedView>
+            <GradientTitle size={26} weight={700}>
+              Choose your plan
+            </GradientTitle>
             <Text style={s.heroSub}>
               {isOnTrial
                 ? 'Enjoying the free trial? Keep it all going.'
@@ -366,12 +360,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     marginTop: verticalScale(8),
     marginBottom: verticalScale(20),
-  },
-  heroTitle: {
-    fontSize: fontScale(26),
-    fontWeight: '800',
-    color: colors.textPrimary,
-    textAlign: 'center',
   },
   heroSub: {
     fontSize: fontScale(14),

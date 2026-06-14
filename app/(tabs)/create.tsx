@@ -360,7 +360,7 @@ export default function CreateScreen() {
         <View className="flex-row items-center px-5 py-3">
           <View className="flex-1" />
           <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
-            <GradientTitle style={{ fontSize: fontScale(24) }}>Create</GradientTitle>
+            <GradientTitle size={24}>Create</GradientTitle>
           </View>
           <View className="flex-row items-center gap-2">
             <TouchableOpacity

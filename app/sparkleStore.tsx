@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { ScreenLayout } from '@/components/ScreenLayout';
+import { GradientTitle } from '@/components/GradientTitle';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { colors } from '@/constants/theme';
@@ -24,10 +24,6 @@ import {
 import { useSparklePacks } from '@/hooks/useSparklePacks';
 import { trackSparkleStoreOpened, trackSparklePurchaseTapped } from '@/lib/analytics';
 import { verticalScale, fontScale } from '@/lib/responsive';
-
-// The DreamBot logo gradient (purple→pink→teal) — same as the 'DreamBot'
-// wordmark on the login/splash screen and the Plans paywall title.
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // ONE purple for the whole screen — the app's accent token. Everything
 // interactive/accented (icons, selected border, radio, CTA) uses it, so the
@@ -225,15 +221,13 @@ export default function SparkleStoreScreen() {
     >
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Hero — gradient wordmark title (same MaskedView treatment as the
-              'DreamBot' logo + the Plans paywall). The balance lives in the
+          {/* Hero — gradient wordmark title (brand display font + gradient via
+              the shared GradientTitle primitive). The balance lives in the
               header's rightAction slot, opposite the back button. */}
           <View style={s.hero}>
-            <MaskedView maskElement={<Text style={s.heroTitle}>Choose a pack</Text>}>
-              <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                <Text style={[s.heroTitle, { opacity: 0 }]}>Choose a pack</Text>
-              </LinearGradient>
-            </MaskedView>
+            <GradientTitle size={26} weight={700}>
+              Choose a pack
+            </GradientTitle>
           </View>
 
           {isLoading ? (
@@ -322,12 +316,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     marginTop: verticalScale(8),
     marginBottom: verticalScale(20),
-  },
-  heroTitle: {
-    fontSize: fontScale(26),
-    fontWeight: '800',
-    color: colors.textPrimary,
-    textAlign: 'center',
   },
   // Balance — a compact surface pill in the header's rightAction slot,
   // opposite the back button (the sparkle icon doubles as the "available" cue).

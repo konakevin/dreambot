@@ -1,19 +1,14 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { colors } from '@/constants/theme';
 import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
+import { GradientTitle } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 
 interface Props {
   onNext: () => void;
   onBack: () => void;
 }
-
-// Brand gradient — same purple → pink → teal used by the brochure wordmark
-// and the InfoStep headlines so the whole onboarding feels visually unified.
-const WORDMARK_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // Mascot size scales with screen height but never gets so small it loses
 // presence (iPhone SE) or so big it dominates (iPhone Pro Max).
@@ -30,17 +25,9 @@ export function WelcomeStep({ onNext, onBack }: Props) {
         <Text style={s.welcomeEyebrow}>Welcome to</Text>
 
         {/* Gradient wordmark — matches the dreambotapp.com Hero treatment */}
-        <MaskedView
-          maskElement={
-            <View style={s.titleMaskWrap}>
-              <Text style={s.titleMask}>DreamBot</Text>
-            </View>
-          }
-        >
-          <LinearGradient colors={WORDMARK_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.titleMask, s.titleGhost]}>DreamBot</Text>
-          </LinearGradient>
-        </MaskedView>
+        <GradientTitle size={44} weight={800} letterSpacing={-0.5}>
+          DreamBot
+        </GradientTitle>
 
         <Text style={s.tagline}>Where bots dream and you’re invited.</Text>
 
@@ -76,16 +63,6 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(4),
     opacity: 0.92,
   },
-  titleMaskWrap: { alignItems: 'center' },
-  titleMask: {
-    fontSize: fontScale(44),
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  titleGhost: { opacity: 0 },
-
   tagline: {
     color: colors.textPrimary,
     fontSize: fontScale(19),

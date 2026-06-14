@@ -1,50 +1,91 @@
 /**
- * GradientTitle — the canonical screen-header title treatment: the DreamBot
- * brand gradient (moon purple → cloud pink → star teal) masked over the title
- * text at the shared nav size. Use this in every screen header so Create,
- * Inbox, Settings, Edit Profile, etc. all read identically.
+ * GradientTitle — THE brand title / wordmark primitive: the DreamBot brand
+ * gradient masked over text in the brand display font (Quicksand). Use this for
+ * EVERY gradient title + wordmark so the look + font stay consistent and flip in
+ * one place:
+ *   • font   → constants/fonts.ts (displayFontFamily)
+ *   • colors → BRAND_GRADIENT below
  *
- * Matches ScreenLayout's `titleGradient` rendering (fontScale(17), weight 700),
- * so screens on ScreenLayout and screens with custom headers stay in sync.
+ * Props tune size / weight / wrap per surface without re-implementing the
+ * MaskedView + LinearGradient dance. `style` is an escape hatch for one-offs.
  */
 
-import { Text, StyleSheet, type StyleProp, type TextStyle } from 'react-native';
+import { Text, type StyleProp, type TextStyle } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 import { fontScale } from '@/lib/responsive';
+import { displayFontFamily } from '@/constants/fonts';
 
-const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
+/** Brand gradient (moon purple → cloud pink → star teal). */
+export const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 interface Props {
   children: string;
-  /** Optional style override (e.g. a larger size for a specific surface). */
+  /** Design point size, run through fontScale. Default 17 (nav-title size). */
+  size?: number;
+  /** Design weight; selects the display face (>= 700 → bold). Default 700. */
+  weight?: number;
+  /** Gradient colors. Default brand gradient. */
+  gradient?: [string, string, string];
+  /** Line height in design points (fontScale applied). Default round(size * 1.25). */
+  lineHeight?: number;
+  uppercase?: boolean;
+  letterSpacing?: number;
+  numberOfLines?: number;
+  adjustsFontSizeToFit?: boolean;
+  maxWidth?: number;
+  align?: 'left' | 'center' | 'right';
+  /** Escape hatch for one-off overrides (applied after the computed base). */
   style?: StyleProp<TextStyle>;
 }
 
-export function GradientTitle({ children, style }: Props) {
+export function GradientTitle({
+  children,
+  size = 17,
+  weight = 700,
+  gradient = BRAND_GRADIENT,
+  lineHeight,
+  uppercase = false,
+  letterSpacing,
+  numberOfLines = 1,
+  adjustsFontSizeToFit = false,
+  maxWidth,
+  align = 'center',
+  style,
+}: Props) {
+  const base: TextStyle = {
+    color: colors.textPrimary,
+    fontFamily: displayFontFamily(weight),
+    fontSize: fontScale(size),
+    lineHeight: fontScale(lineHeight ?? Math.round(size * 1.25)),
+    textAlign: align,
+  };
+  if (uppercase) base.textTransform = 'uppercase';
+  if (letterSpacing != null) base.letterSpacing = letterSpacing;
+  if (maxWidth != null) base.maxWidth = maxWidth;
+
   return (
     <MaskedView
       maskElement={
-        <Text style={[s.text, style, { color: '#FFFFFF' }]} numberOfLines={1}>
+        <Text
+          style={[base, style, { color: '#FFFFFF' }]}
+          numberOfLines={numberOfLines}
+          adjustsFontSizeToFit={adjustsFontSizeToFit}
+        >
           {children}
         </Text>
       }
     >
-      <LinearGradient colors={BRAND_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-        <Text style={[s.text, style, { opacity: 0 }]} numberOfLines={1}>
+      <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+        <Text
+          style={[base, style, { opacity: 0 }]}
+          numberOfLines={numberOfLines}
+          adjustsFontSizeToFit={adjustsFontSizeToFit}
+        >
           {children}
         </Text>
       </LinearGradient>
     </MaskedView>
   );
 }
-
-const s = StyleSheet.create({
-  text: {
-    color: colors.textPrimary,
-    fontSize: fontScale(17),
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-});

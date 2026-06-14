@@ -10,8 +10,8 @@
  * truncated inbox preview form.
  *
  * Visual style mirrors components/onboarding/WelcomeStep.tsx:
- *   - Same WORDMARK_GRADIENT for the "You're in ✨" hero
- *   - Same MaskedView + LinearGradient pattern
+ *   - Same brand gradient wordmark for the "Welcome ✨" hero (via the
+ *     shared GradientTitle primitive)
  *   - Same responsive sizing (vs / vsClamp / fs)
  *   - Same DreamBot mascot — but rotates one of the 5 painter variants
  *     per mount (so a returning user sees a different mascot each visit;
@@ -25,8 +25,6 @@
 import { useMemo } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -34,11 +32,8 @@ import * as nav from '@/lib/navigate';
 import { router } from 'expo-router';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
+import { GradientTitle } from '@/components/GradientTitle';
 import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
-
-// Same gradient as onboarding WelcomeStep — keeps the brand wordmark
-// consistent across the two welcome surfaces.
-const WORDMARK_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
 // 5 rotating painter mascots (same set the loading screen uses). Pick
 // one stable per mount via useMemo — different each visit. Local require
@@ -96,17 +91,9 @@ export default function WelcomeGiftScreen() {
 
         {/* Gradient wordmark hero — matches onboarding's brand treatment. */}
         <Text style={s.eyebrow}>You&rsquo;re in</Text>
-        <MaskedView
-          maskElement={
-            <View style={s.titleMaskWrap}>
-              <Text style={s.titleMask}>Welcome ✨</Text>
-            </View>
-          }
-        >
-          <LinearGradient colors={WORDMARK_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-            <Text style={[s.titleMask, s.titleGhost]}>Welcome ✨</Text>
-          </LinearGradient>
-        </MaskedView>
+        <GradientTitle size={40} weight={700} letterSpacing={-0.5}>
+          Welcome ✨
+        </GradientTitle>
 
         {/* Gift card — the headline moment. Accent-bordered pill so the
             "25 sparkles" reads as a discrete artifact, not buried prose. */}
@@ -180,21 +167,6 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(4),
     opacity: 0.92,
   },
-  titleMaskWrap: { alignItems: 'center' },
-  // Gradient wordmark — same masking trick as WelcomeStep so the brand
-  // hero reads the same on both surfaces. The mask is the bold text;
-  // the gradient is the underlying paint.
-  titleMask: {
-    fontSize: fontScale(40),
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  titleGhost: {
-    opacity: 0, // gradient paints through the mask; the underlying text is invisible
-  },
-
   giftCard: {
     marginTop: verticalScale(28),
     paddingHorizontal: 24,
