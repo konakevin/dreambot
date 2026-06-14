@@ -87,7 +87,6 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
               overflowing (the old fixed 300 was wider than a small phone's column). */}
           <GradientTitle
             size={30}
-            uppercase
             numberOfLines={1}
             adjustsFontSizeToFit
             maxWidth={screen.width - 56}
