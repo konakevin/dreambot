@@ -104,6 +104,14 @@ export default function CreateScreen() {
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [showProModeInfo, setShowProModeInfo] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
+  // The image picker can't present while this Modal is still dismissing (iOS),
+  // so stash the chosen action and fire it AFTER the modal is gone.
+  const pendingPhotoAction = useRef<null | (() => void)>(null);
+  const runPendingPhotoAction = () => {
+    const action = pendingPhotoAction.current;
+    pendingPhotoAction.current = null;
+    action?.();
+  };
   // Unified AI model — the single top-level model choice shared by BOTH routes
   // (DreamBot engine + Direct). Synced from <ModelPicker> (persisted to
   // users.pro_mode_flux_model, cross-device). Drives force_model + the Dream
@@ -456,7 +464,7 @@ export default function CreateScreen() {
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: verticalScale(20) }}
+          contentContainerStyle={{ paddingBottom: verticalScale(96) }}
         >
           {/* Photo attachment card */}
           {/* Photo attachment card */}
@@ -804,45 +812,52 @@ export default function CreateScreen() {
               )}
             </View>
           )}
-        </ScrollView>
 
-        {/* Fixed footer — always visible above keyboard */}
-        <View className="px-5" style={{ paddingBottom: kbOpen ? 8 : verticalScale(96) }}>
-          {/* Contextual hint — face indicator (will you be in this dream?) when
-              you're in the scene, otherwise the generic mode hint. */}
-          <View className="flex-row items-center justify-center gap-1.5 mb-2">
-            {showFaceHint ? (
-              <>
-                <Ionicons name={faceHint.icon} size={15} color={faceHint.color} />
-                <Text className="text-center text-sm font-medium" style={{ color: faceHint.color }}>
-                  {faceHint.text}
+          {/* Helper hint + Dream button — flow directly under the controls
+              (no longer bottom-pinned). This makes the resting layout match the
+              keyboard-open position, so the button no longer jumps up/down when
+              the keyboard appears, and the dead space below the Medium/Vibe row
+              is gone. */}
+          <View style={{ marginTop: verticalScale(28) }}>
+            {/* Contextual hint — face indicator (will you be in this dream?) when
+                you're in the scene, otherwise the generic mode hint. */}
+            <View className="flex-row items-center justify-center gap-1.5 mb-2">
+              {showFaceHint ? (
+                <>
+                  <Ionicons name={faceHint.icon} size={15} color={faceHint.color} />
+                  <Text
+                    className="text-center text-sm font-medium"
+                    style={{ color: faceHint.color }}
+                  >
+                    {faceHint.text}
+                  </Text>
+                </>
+              ) : (
+                <Text
+                  className="text-center text-sm font-medium"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  {contextHint}
                 </Text>
-              </>
-            ) : (
-              <Text
-                className="text-center text-sm font-medium"
-                style={{ color: 'rgba(255,255,255,0.5)' }}
-              >
-                {contextHint}
-              </Text>
-            )}
-          </View>
-
-          {/* Dream button */}
-          <TouchableOpacity
-            className="items-center justify-center py-4 rounded-2xl"
-            style={{ backgroundColor: colors.accent }}
-            onPress={handleDream}
-            activeOpacity={0.7}
-          >
-            <View className="flex-row items-center gap-2">
-              <Text className="text-white text-base font-bold">
-                Dream · {sparkleCostFrom(imageModels, selectedModelId)}
-              </Text>
-              <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+              )}
             </View>
-          </TouchableOpacity>
-        </View>
+
+            {/* Dream button */}
+            <TouchableOpacity
+              className="items-center justify-center py-4 rounded-2xl"
+              style={{ backgroundColor: colors.accent }}
+              onPress={handleDream}
+              activeOpacity={0.7}
+            >
+              <View className="flex-row items-center gap-2">
+                <Text className="text-white text-base font-bold">
+                  Dream · {sparkleCostFrom(imageModels, selectedModelId)}
+                </Text>
+                <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
 
       {/* Style picker bottom sheet */}
@@ -1015,6 +1030,7 @@ export default function CreateScreen() {
         transparent
         animationType="slide"
         onRequestClose={() => setPhotoSourceOpen(false)}
+        onDismiss={runPendingPhotoAction}
       >
         <TouchableOpacity
           className="flex-1 justify-end"
@@ -1060,8 +1076,16 @@ export default function CreateScreen() {
                   }}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setPhotoSourceOpen(false);
-                    opt.action();
+                    if (Platform.OS === 'ios') {
+                      // iOS: the picker can't present while the modal is still
+                      // dismissing — launch from the Modal's onDismiss instead.
+                      pendingPhotoAction.current = opt.action;
+                      setPhotoSourceOpen(false);
+                    } else {
+                      // Android has no presentation collision; launch directly.
+                      setPhotoSourceOpen(false);
+                      opt.action();
+                    }
                   }}
                   activeOpacity={0.7}
                 >
