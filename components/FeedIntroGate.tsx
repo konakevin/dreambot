@@ -18,6 +18,7 @@
 import { useCallback, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -29,7 +30,7 @@ import {
 } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, screen } from '@/lib/responsive';
+import { verticalScale, fontScale, horizontalScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
 import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
 import { GradientTitle, BRAND_GRADIENT } from '@/components/GradientTitle';
@@ -138,6 +139,11 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
       </ScrollView>
 
       <View style={[s.footer, { paddingBottom: bottomPad }]}>
+        <Image
+          source={require('@/assets/images/onboarding/bots-party.jpg')}
+          style={s.partyImg}
+          contentFit="cover"
+        />
         <View style={s.footnoteTitleWrap}>
           <GradientTitle size={18}>First, meet your neighbors!</GradientTitle>
         </View>
@@ -215,6 +221,13 @@ const s = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     paddingTop: verticalScale(8),
+  },
+  partyImg: {
+    width: horizontalScale(240),
+    aspectRatio: 3 / 2,
+    borderRadius: 18,
+    alignSelf: 'center',
+    marginBottom: verticalScale(14),
   },
   footnoteTitleWrap: {
     alignItems: 'center',
