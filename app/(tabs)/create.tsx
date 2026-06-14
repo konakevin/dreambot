@@ -102,7 +102,6 @@ export default function CreateScreen() {
   const [kbOpen, setKbOpen] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
-  const [showProModeInfo, setShowProModeInfo] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
   // The image picker can't present while this Modal is still dismissing (iOS),
   // so stash the chosen action and fire it AFTER the modal is gone.
@@ -202,18 +201,39 @@ export default function CreateScreen() {
     }, [])
   );
   const [mediumsIntroVisible, setMediumsIntroVisible] = useState(false);
+  // Whether dismissing the intro sheet should fall through to the medium picker.
+  // True when the sheet was triggered BY tapping Medium (teach → then pick);
+  // false when opened from the (i) for a re-read (just close).
+  const openPickerAfterIntro = useRef(false);
+
+  // Show the face-vs-art teaching sheet. Marks it seen so it never auto-pops
+  // again (the sheet also persists the flag), and records whether to open the
+  // picker on dismiss.
+  const showMediumsIntro = useCallback((thenOpenPicker: boolean) => {
+    mediumsIntroSeen.current = true;
+    openPickerAfterIntro.current = thenOpenPicker;
+    setMediumsIntroVisible(true);
+  }, []);
 
   // Open the medium picker, but the first time gate it behind the intro sheet.
   const openMediumPicker = useCallback(() => {
     Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!mediumsIntroSeen.current) {
-      mediumsIntroSeen.current = true; // dedupe; the sheet persists the flag itself
-      setMediumsIntroVisible(true);
+      showMediumsIntro(true);
     } else {
       setPickerType('medium');
     }
-  }, []);
+  }, [showMediumsIntro]);
+
+  // The (i) next to the engine row re-opens that same teaching sheet. If the
+  // user taps it before ever opening Medium, marking it seen here means it
+  // won't auto-pop a second time on their first Medium tap.
+  const openMediumsIntroInfo = useCallback(() => {
+    Keyboard.dismiss();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    showMediumsIntro(false);
+  }, [showMediumsIntro]);
 
   // Keyboard tracking — delay state update until after keyboard animation
   useEffect(() => {
@@ -701,7 +721,7 @@ export default function CreateScreen() {
                     : 'Custom mediums & vibes, prompt polish, and your saved Dream Cast likeness when you mention yourself.'}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => setShowProModeInfo(true)}
+                  onPress={openMediumsIntroInfo}
                   activeOpacity={0.6}
                   hitSlop={10}
                   style={{ marginLeft: 8, marginTop: verticalScale(1) }}
@@ -898,128 +918,20 @@ export default function CreateScreen() {
         </TouchableOpacity>
       </Modal>
 
-      {/* Engine info modal — centered card explaining the two engines
-          (DreamBot vs Direct), opened from the (i) next to the engine
-          selector. Floats above the keyboard so the user can read it without
-          dismissing input. */}
-      <Modal
-        visible={showProModeInfo}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowProModeInfo(false)}
-      >
-        <TouchableOpacity
-          className="flex-1 items-center justify-center px-6"
-          style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
-          onPress={() => setShowProModeInfo(false)}
-          activeOpacity={1}
-        >
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => {}}
-            style={{
-              backgroundColor: colors.surface,
-              borderRadius: 16,
-              borderWidth: 1,
-              borderColor: colors.border,
-              padding: 22,
-              width: '100%',
-              maxWidth: 360,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.textPrimary,
-                fontSize: fontScale(17),
-                fontWeight: '700',
-                marginBottom: verticalScale(14),
-              }}
-            >
-              Two ways to dream
-            </Text>
-
-            <View className="flex-row items-center mb-1.5">
-              <Ionicons name="sparkles" size={16} color={colors.accent} />
-              <Text
-                style={{
-                  color: colors.textPrimary,
-                  fontSize: fontScale(15),
-                  fontWeight: '700',
-                  marginLeft: 7,
-                }}
-              >
-                DreamBot
-              </Text>
-            </View>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: fontScale(14),
-                lineHeight: fontScale(21),
-              }}
-            >
-              Our engine. It polishes your prompt, styles your dream with hand-picked mediums &
-              vibes, and adds your saved Dream Cast likeness to the scene. Just mention yourself
-              (“me”) or your +1 (“my wife”, “my friend”) and we’ll place you in. No need to upload a
-              photo each time.
-            </Text>
-
-            <View className="flex-row items-center mb-1.5" style={{ marginTop: verticalScale(16) }}>
-              <Ionicons name="flash" size={16} color={colors.accent} />
-              <Text
-                style={{
-                  color: colors.textPrimary,
-                  fontSize: fontScale(15),
-                  fontWeight: '700',
-                  marginLeft: 7,
-                }}
-              >
-                Direct
-              </Text>
-            </View>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: fontScale(14),
-                lineHeight: fontScale(21),
-              }}
-            >
-              Sends your exact words straight to the AI model: no mediums, polish, or likeness. Best
-              when you want full control over the prompt.
-            </Text>
-            <Text
-              style={{
-                color: colors.textMuted ?? colors.textSecondary,
-                fontSize: fontScale(12),
-                lineHeight: fontScale(18),
-                marginTop: verticalScale(14),
-              }}
-            >
-              Either way, pick your AI model up top. Its sparkle cost shows on the Dream button.
-            </Text>
-            <TouchableOpacity
-              onPress={() => setShowProModeInfo(false)}
-              activeOpacity={0.7}
-              className="self-end mt-5 py-2 px-4 rounded-lg"
-              style={{ backgroundColor: colors.accent }}
-            >
-              <Text style={{ color: '#fff', fontSize: fontScale(14), fontWeight: '600' }}>
-                Got it
-              </Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
-
       {/* First-Create-tap teaching sheet — see effect above. */}
       <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
 
-      {/* First-time face-vs-art tutorial → opens the medium picker on dismiss. */}
+      {/* Face-vs-art teaching sheet. Auto-shown the first time Medium is tapped
+          (falls through to the picker on dismiss), and re-openable from the (i)
+          next to the engine row (just closes on dismiss). */}
       <MediumsIntroSheet
         visible={mediumsIntroVisible}
         onClose={() => {
           setMediumsIntroVisible(false);
-          setPickerType('medium');
+          if (openPickerAfterIntro.current) {
+            openPickerAfterIntro.current = false;
+            setPickerType('medium');
+          }
         }}
       />
 
