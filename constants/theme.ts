@@ -48,14 +48,15 @@ export const gradients = {
 };
 
 // ── Medium "face / art" badge colors ─────────────────────────────────────────
-// Two brand-gradient tones: Real Face = moon purple, Dream Art = cloud pink.
-// (Dream Art was the teal end, but bright mint as an isolated solid border/text
-// read neon/Tron — the gradient's warm pink stays on-brand without the glow.)
-// Mirrored on the Create medium row (app/(tabs)/create.tsx), the StylePickerSheet
-// tabs, AND the MediumsIntroSheet cards — import from here so they never drift.
+// The two ends of the brand gradient: Real Face = moon purple, Dream Art = star
+// teal. (The teal once read neon/Tron as a saturated border, but the picker now
+// carries the color only in the text/checkmark over a neutral outline, so the
+// bright end is calm again.) Mirrored on the Create medium row
+// (app/(tabs)/create.tsx), the StylePickerSheet tabs, AND the MediumsIntroSheet
+// cards — import from here so they never drift.
 export const MEDIUM_BADGE = {
   face: { color: '#A78BFA', bg: 'rgba(167,139,250,0.15)' },
-  art: { color: '#F9A8D4', bg: 'rgba(249,168,212,0.15)' },
+  art: { color: '#5EEAD4', bg: 'rgba(94,234,212,0.15)' },
 } as const;
 
 // ── Animation ───────────────────────────────────────────────────────────────
