@@ -11,6 +11,7 @@ import {
   isDreamEligible as computeDreamEligible,
 } from '@/lib/proStatus';
 import { isSupremeAdmin } from '@/lib/superAdmin';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 
 interface AuthState {
   session: Session | null;
@@ -123,6 +124,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     useFeedStore.getState().bumpReset();
     // Clear TanStack Query cache
     queryClient.clear();
+    // Drop any in-flight dream marker so the next user on this device can't
+    // resume the previous user's render.
+    void clearDreamInFlight();
   },
 
   refreshEntitlements: async () => {

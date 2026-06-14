@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, AppState } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -19,6 +19,7 @@ import type { PhotoClassification } from '@/lib/dreamApi';
 import { DreamFailureCard } from '@/components/DreamFailureCard';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 
 // Self / relationship detection — kept in sync with the matching regexes
 // on the Create screen. Used once at mount to decide whether to surface
@@ -35,6 +36,11 @@ const NO_JOB_GRACE_MS = 12_000;
 
 export default function DreamLoadingScreen() {
   const { generate } = useDreamCreate();
+  // resume=1 — entered from a COLD-START recovery (resumeInFlightDream), NOT a
+  // fresh create. The render is already in flight server-side; we must POLL it,
+  // never call generate() again (that would charge + render a second time).
+  const { resume } = useLocalSearchParams<{ resume?: string }>();
+  const isResume = resume === '1';
   const started = useRef(false);
   // queued = user EXPLICITLY tapped "Queue This" and left the loading screen.
   // When true, the recovery flow short-circuits ('noop') so a finished render
@@ -118,6 +124,10 @@ export default function DreamLoadingScreen() {
 
   useEffect(() => {
     if (started.current) return;
+    // Cold-start resume: the render is already in flight (or done) server-side.
+    // Do NOT call generate() — that would double-charge + double-render. Just
+    // mark started and let the recovery poll (effect below) drive to reveal.
+    if (isResume) return;
     started.current = true;
 
     // Reset any prior failure state when a new generation starts
@@ -149,7 +159,7 @@ export default function DreamLoadingScreen() {
       // (driven by activeJobFailure in the store) take over. The user can
       // tap "Try Again" or "Back to Dream" from there.
     });
-  }, [generate, setActiveJobFailure]);
+  }, [generate, setActiveJobFailure, isResume]);
 
   // ── Queue path: wait on the dream_queue realtime channel ──────────────────
   // The worker renders the job (globally-capped concurrency + retry) and flips
@@ -253,6 +263,7 @@ export default function DreamLoadingScreen() {
 
   function handleDismissFailure() {
     setActiveJobFailure(null);
+    void clearDreamInFlight();
     router.back();
   }
 
@@ -318,6 +329,18 @@ export default function DreamLoadingScreen() {
       if (__DEV__) console.warn('[loading] tryRecover failed', e);
     }
   }, [setResult, setActiveJobFailure]);
+
+  // Cold-start resume kickoff: entered via /dream/loading?resume=1 from
+  // resumeInFlightDream. The render is already in flight server-side, so enter
+  // recovery immediately — the poll effect drives us to reveal once done (or
+  // keeps the spinner while still processing). generate() was already skipped.
+  useEffect(() => {
+    if (!isResume || started.current) return;
+    started.current = true;
+    recoveryStartedAt.current = Date.now();
+    setIsRecovering(true);
+    void tryRecover();
+  }, [isResume, tryRecover]);
 
   // AppState foreground recovery: when the user tabs back to the app, check
   // if the render completed while we were backgrounded. ALSO auto-opt-in to
@@ -404,6 +427,9 @@ export default function DreamLoadingScreen() {
 
   function handleQueue() {
     queued.current = true;
+    // User chose to leave + be pinged — they'll deep-link via the completion
+    // push, so drop the resume marker (don't also pop reveal on next launch).
+    void clearDreamInFlight();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Opt this job into a completion notification. Dreams default to NO ping
     // (migration 191) so a user who WAITS here isn't double-notified — but a

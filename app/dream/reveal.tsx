@@ -5,7 +5,7 @@
  * over the bottom with a subtle gradient backdrop.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { saveDream } from '@/lib/dreamSave';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { Toast } from '@/components/Toast';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -39,6 +40,13 @@ export default function DreamRevealScreen() {
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
+
+  // Reaching reveal means the user has seen this render (normal flow OR a
+  // cold-start resume) — drop the in-flight marker so the next launch won't
+  // re-pop it.
+  useEffect(() => {
+    void clearDreamInFlight();
+  }, []);
 
   if (!result) {
     return (

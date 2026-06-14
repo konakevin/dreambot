@@ -23,6 +23,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import * as nav from '@/lib/navigate';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 
 export interface NotificationRouteData {
   /** notification.type — 'dream_generated' / 'download_ready' / 'friend_request' / etc. */
@@ -170,6 +171,12 @@ export function routeFromNotification(
   // inbox tap path runs (kept here so push + inbox stay aligned).
   if (target.startsWith('/photo/')) {
     useAlbumStore.getState().clearAlbum();
+  }
+
+  // A completion-push tap means the user reached this dream — drop any in-flight
+  // resume marker so a later cold start won't re-pop the reveal for it.
+  if (data.type === 'dream_generated') {
+    void clearDreamInFlight();
   }
 
   if (opts.markSeen) {

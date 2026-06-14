@@ -37,6 +37,7 @@ import {
   type GenerateDreamOpts,
 } from '@/lib/dreamApi';
 import { DREAM_QUEUE_ENABLED } from '@/constants/features';
+import { markDreamInFlight } from '@/lib/dreamInFlightMarker';
 import type { DreamMedium } from '@/hooks/useDreamStyles';
 
 type GenerateStatus =
@@ -167,6 +168,10 @@ export function useDreamCreate() {
       // sitting on a spinner; canAffordDream already surfaced the premium gate.
       if (!canAffordDream(config.forceModel)) return 'insufficient';
       busy.current = true;
+      // Persist a tiny in-flight marker so an app KILL mid-render can be
+      // recovered on the next cold start (resumeInFlightDream). Fire-and-forget;
+      // cleared on reveal / queue / failure-dismiss / sign-out.
+      void markDreamInFlight(jobId);
       trackDreamCreateStarted({ mode: config.mode });
 
       try {

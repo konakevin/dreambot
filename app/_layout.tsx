@@ -17,6 +17,8 @@ import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
 import { routeFromNotification } from '@/lib/notificationRouting';
+import { resumeInFlightDream } from '@/lib/dreamResumeStore';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
@@ -133,6 +135,37 @@ function PendingNotificationReplayer() {
     // once we replay it.
     routeFromNotification(pending, { deferUntilReady: true, markSeen: true });
   }, [user, pending]);
+  return null;
+}
+
+// Cold-start dream recovery — if the app was KILLED while a user-initiated
+// render was in flight, get the user back to it on the next launch: reveal if it
+// finished, loading-poll if still rendering. Runs once after auth + interactions.
+// Yields to a notification cold-tap (which already deep-links to /photo/{id}).
+function DreamResumer() {
+  const user = useAuthStore((s) => s.user);
+  const ran = useRef(false);
+
+  useEffect(() => {
+    if (!user?.id || ran.current) return;
+    ran.current = true;
+    const task = InteractionManager.runAfterInteractions(async () => {
+      try {
+        const resp = await Notifications.getLastNotificationResponseAsync();
+        if (resp) {
+          // Launched by tapping a push — usePushNotifications owns navigation
+          // (→ /photo/{uploadId}). Drop the marker so we don't double-route.
+          await clearDreamInFlight();
+          return;
+        }
+      } catch {
+        /* fall through to normal resume */
+      }
+      await resumeInFlightDream();
+    });
+    return () => task.cancel?.();
+  }, [user?.id]);
+
   return null;
 }
 
@@ -464,6 +497,7 @@ function RootLayout() {
                 <RevenueCatInitializer />
                 <RealtimeSubscriber />
                 <DataPrefetcher />
+                <DreamResumer />
                 <Stack
                   screenOptions={{
                     headerShown: false,
