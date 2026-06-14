@@ -226,10 +226,10 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(8),
   },
   footnote: {
-    color: 'rgba(255,255,255,0.82)',
-    fontSize: fontScale(14),
-    fontWeight: '600',
-    lineHeight: fontScale(20),
+    // Same typography as `body` so the two gray paragraphs read uniform.
+    color: colors.textSecondary,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     textAlign: 'center',
     marginBottom: verticalScale(28),
     paddingHorizontal: 8,
