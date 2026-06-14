@@ -462,8 +462,13 @@ export default function CreateScreen() {
                 <TouchableOpacity
                   className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
                   style={{
+                    // Tonal moon-purple when active — matches the DreamBot/Direct
+                    // mode tabs so it doesn't compete with the gradient Dream CTA.
                     backgroundColor:
-                      config.photoStyle === 'new_scene' ? colors.accent : 'transparent',
+                      config.photoStyle === 'new_scene' ? 'rgba(167,139,250,0.18)' : 'transparent',
+                    borderWidth: 1,
+                    borderColor:
+                      config.photoStyle === 'new_scene' ? 'rgba(167,139,250,0.55)' : 'transparent',
                   }}
                   onPress={() => {
                     Haptics.selectionAsync();
@@ -474,12 +479,12 @@ export default function CreateScreen() {
                   <Ionicons
                     name="sparkles-outline"
                     size={14}
-                    color={config.photoStyle === 'new_scene' ? '#fff' : colors.textSecondary}
+                    color={config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary}
                   />
                   <Text
                     className="text-xs font-semibold"
                     style={{
-                      color: config.photoStyle === 'new_scene' ? '#fff' : colors.textSecondary,
+                      color: config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary,
                     }}
                   >
                     New Scene
@@ -489,7 +494,10 @@ export default function CreateScreen() {
                   className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
                   style={{
                     backgroundColor:
-                      config.photoStyle === 'restyle' ? colors.accent : 'transparent',
+                      config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.18)' : 'transparent',
+                    borderWidth: 1,
+                    borderColor:
+                      config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.55)' : 'transparent',
                   }}
                   onPress={() => {
                     Haptics.selectionAsync();
@@ -500,12 +508,12 @@ export default function CreateScreen() {
                   <Ionicons
                     name="color-palette-outline"
                     size={14}
-                    color={config.photoStyle === 'restyle' ? '#fff' : colors.textSecondary}
+                    color={config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary}
                   />
                   <Text
                     className="text-xs font-semibold"
                     style={{
-                      color: config.photoStyle === 'restyle' ? '#fff' : colors.textSecondary,
+                      color: config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary,
                     }}
                   >
                     Restyle
