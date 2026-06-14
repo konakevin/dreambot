@@ -141,8 +141,7 @@ function FeedOrientation({ onSeeBots }: { onSeeBots: () => void }) {
 
       <View style={[s.footer, { paddingBottom: bottomPad }]}>
         <Text style={s.footnote}>
-          First, come meet the bots — a fleet of dreamers posting around the clock. Follow the ones
-          whose vibe you love and your feed comes alive.
+          Say hi to the bots first. They dream up fresh posts all day, so follow a few favorites.
         </Text>
         <TouchableOpacity
           style={s.cta}
@@ -237,11 +236,12 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(8),
   },
   footnote: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
     fontSize: fontScale(14),
+    fontWeight: '600',
     lineHeight: fontScale(20),
     textAlign: 'center',
-    marginBottom: verticalScale(14),
+    marginBottom: verticalScale(28),
     paddingHorizontal: 8,
   },
   cta: {
