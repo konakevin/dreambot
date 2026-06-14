@@ -15,6 +15,7 @@
 
 import { View, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Text } from '@/components/AppText';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -74,15 +75,21 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
     >
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
         {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
-        <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={s.scroll}
+          contentContainerStyle={s.content}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
-          {/* Gradient headline — wraps to 2 lines + width-constrained so it stays
-              responsive on small phones (no adjustsFontSizeToFit, which races the Modal). */}
+          {/* Gradient headline — ONE line, shrink-to-fit. maxWidth tracks the
+              real screen width so it scales down on small phones instead of
+              overflowing (the old fixed 300 was wider than a small phone's column). */}
           <GradientTitle
             size={30}
             uppercase
-            numberOfLines={2}
+            numberOfLines={1}
+            adjustsFontSizeToFit
             maxWidth={screen.width - 56}
             letterSpacing={0.5}
             lineHeight={36}
@@ -125,7 +132,14 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
           )}
         </ScrollView>
 
-        <View style={s.footer}>
+        {/* Floating CTA — pinned over the scroll so it's ALWAYS visible; the
+            content scrolls beneath it and fades out under a gradient scrim. */}
+        <View style={s.footer} pointerEvents="box-none">
+          <LinearGradient
+            colors={['transparent', colors.background]}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
           <GradientButton label="Got it, let’s create" onPress={handleClose} />
         </View>
       </SafeAreaView>
@@ -135,12 +149,14 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  scroll: { flex: 1 },
 
   content: {
     flexGrow: 1,
     paddingHorizontal: 28,
     paddingTop: verticalScale(28),
-    paddingBottom: verticalScale(24),
+    // Leave room for the floating CTA so the last card can scroll clear of it.
+    paddingBottom: verticalScale(96),
     alignItems: 'center',
   },
 
@@ -207,5 +223,13 @@ const s = StyleSheet.create({
     lineHeight: fontScale(19),
   },
 
-  footer: { paddingHorizontal: 20, paddingBottom: verticalScale(8), paddingTop: verticalScale(8) },
+  footer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 20,
+    paddingBottom: verticalScale(8),
+    paddingTop: verticalScale(28),
+  },
 });
