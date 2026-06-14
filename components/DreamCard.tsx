@@ -45,30 +45,11 @@ import { useToggleRepost } from '@/hooks/useToggleRepost';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-// Off-ratio renders: when filling the card would crop away more than this fraction
-// of the image (device-aware, from the REAL card + image dims), it auto-letterboxes
-// (contentFit 'contain') with a BLURRED, zoomed copy of the same image filling the
-// top/bottom bars instead of black — the polished IG-style fill. 9:16 and near-9:16
-// renders stay full-bleed. Tune this one number.
-const AUTOFIT_WHEN_CROP_OVER = 0.2;
+// Blur strength for the letterbox fill. When the user taps resize → 'contain', a
+// blurred, zoomed copy of the same image fills the top/bottom bars instead of
+// black. (No auto-fit — every render shows full-bleed by default; letterboxing is
+// opt-in via the expand button.)
 const LETTERBOX_BLUR_RADIUS = 38;
-
-// Canonical aspect ratio (width / height) the render pipeline REQUESTS per model.
-// The DB width/height are unreliable, but the model implies the aspect — so we can
-// pick the right fit on the FIRST paint (no cover→contain snap on load). onLoad
-// still refines from the real decoded dims for anything not mapped here.
-function modelAspectRatio(model: string | null | undefined): number | null {
-  if (!model) return null;
-  if (model === 'openai/gpt-image-2') return 2 / 3; // 1024×1536
-  if (model.startsWith('black-forest-labs/flux')) return 9 / 16;
-  if (model === 'google/gemini-2-image' || model === 'google/nano-banana') return 9 / 16;
-  return null; // unknown — let onLoad decide (rare)
-}
-
-// Fraction of the image that filling (cover) would crop off, given the card.
-function coverCropFraction(imgAspect: number, cardAspect: number): number {
-  return 1 - Math.min(cardAspect, imgAspect) / Math.max(cardAspect, imgAspect);
-}
 
 export interface DreamPostItem {
   id: string;
@@ -207,11 +188,12 @@ export const DreamCard = memo(function DreamCard({
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
-  // Image fill mode — every render fills the card edge-to-edge regardless
-  // of the source model's aspect ratio. Off-ratio renders (GPT 2:3, square
-  // Gemini, etc.) crop instead of letterboxing — the feed reads as one
-  // consistent full-bleed stage. (Previously we measured on load and flipped
-  // wider-than-9:16 to `contain`; reverted 2026-05-30 per Kevin.)
+  // Image fill mode — every render fills the card edge-to-edge by default
+  // regardless of source aspect, so the feed reads as one consistent full-bleed
+  // stage. Off-ratio renders (GPT 2:3, square Gemini) crop rather than letterbox
+  // unless the user taps the expand button → 'contain' (whole image + blurred
+  // fill in the bars). (Auto-letterboxing on load was tried + reverted 2026-05-30
+  // and again 2026-06-14 — Kevin prefers full-bleed default, letterbox opt-in.)
   // Image load resilience: a failed load (transient network / decode hiccup)
   // used to leave a permanent BLACK card. AUTO-retry silently — cache-busted,
   // with backoff, capped at MAX_IMG_RETRIES. After those, surface a
@@ -224,20 +206,10 @@ export const DreamCard = memo(function DreamCard({
   const [retryNonce, setRetryNonce] = useState(0);
   const [showRetryUi, setShowRetryUi] = useState(false);
 
-  // Image fit. Seeded on FIRST paint from the model's known aspect ratio so an
-  // off-ratio render (e.g. GPT 2:3) opens already letterboxed — NO cover→contain
-  // snap on load. onLoad refines from the real decoded dims for unmapped models.
-  // 'contain' → whole image + blurred fill in the bars; 'cover' → full-bleed.
-  // Per-card local state (resets on FlatList recycle). User can tap to toggle.
-  const [fitMode, setFitMode] = useState<'cover' | 'contain'>(() => {
-    const a = modelAspectRatio(item.model);
-    if (a == null) return 'cover';
-    const cardA = SCREEN_WIDTH / (cardHeight ?? SCREEN_HEIGHT);
-    return coverCropFraction(a, cardA) > AUTOFIT_WHEN_CROP_OVER ? 'contain' : 'cover';
-  });
-  // userToggledFit pins a manual tap so the auto-letterbox (onLoad) won't override
-  // it on a re-load. Per-card; resets on FlatList recycle.
-  const userToggledFit = useRef(false);
+  // Image fit toggle (side-rail expand button). Defaults to 'cover' (full-bleed)
+  // for every render; tapping flips to 'contain' — whole image + blurred fill in
+  // the top/bottom bars. Per-card local state; resets on FlatList recycle.
+  const [fitMode, setFitMode] = useState<'cover' | 'contain'>('cover');
   useEffect(
     () => () => {
       if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
@@ -380,10 +352,10 @@ export const DreamCard = memo(function DreamCard({
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
-            {/* 9:16 renders fill the card edge-to-edge (full-bleed). Off-ratio
-                renders (GPT 2:3, square Gemini) auto-letterbox on load (contentFit
-                'contain'); a blurred, zoomed copy of the same image fills the
-                top/bottom bars instead of black — the IG-style fill. */}
+            {/* Default 'cover' fills the card full-bleed. When the user taps the
+                expand button → 'contain' (whole image), a blurred zoomed copy of
+                the same image fills the top/bottom bars instead of black — the
+                IG-style fill. */}
             {fitMode === 'contain' && (
               <Image
                 source={{ uri: heroUrl }}
@@ -429,21 +401,9 @@ export const DreamCard = memo(function DreamCard({
                   600 * retryCountRef.current
                 );
               }}
-              onLoad={(e) => {
+              onLoad={() => {
                 retryCountRef.current = 0;
                 if (showRetryUi) setShowRetryUi(false);
-                // Auto-letterbox heavily-cropped renders. Use the REAL decoded
-                // dims (the DB width/height can be wrong) + REAL card dims, so the
-                // call is device-aware. Honor a manual toggle.
-                if (!userToggledFit.current) {
-                  const w = e.source?.width ?? 0;
-                  const h = e.source?.height ?? 0;
-                  if (w > 0 && h > 0) {
-                    const cardA = SCREEN_WIDTH / (cardHeight ?? SCREEN_HEIGHT);
-                    const cropped = coverCropFraction(w / h, cardA);
-                    setFitMode(cropped > AUTOFIT_WHEN_CROP_OVER ? 'contain' : 'cover');
-                  }
-                }
               }}
             />
             {/* Tap-to-retry overlay — only shown after the silent auto-retry
@@ -734,7 +694,6 @@ export const DreamCard = memo(function DreamCard({
                 style={ui.sideButton}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  userToggledFit.current = true; // pin choice over auto-letterbox
                   setFitMode((m) => (m === 'cover' ? 'contain' : 'cover'));
                 }}
                 activeOpacity={0.7}
