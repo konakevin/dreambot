@@ -1,4 +1,5 @@
-import { Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';

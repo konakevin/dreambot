@@ -2,13 +2,13 @@ import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   ActivityIndicator,
   Platform,
   StyleSheet,
   Linking,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';

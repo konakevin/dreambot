@@ -19,7 +19,8 @@
  *   </ScreenLayout>
  */
 
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';

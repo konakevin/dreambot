@@ -10,7 +10,8 @@
  */
 
 import { useCallback, useMemo, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { useFeedStore } from '@/store/feed';
 import { colors } from '@/constants/theme';

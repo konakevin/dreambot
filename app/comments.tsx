@@ -1,10 +1,8 @@
 import { useState, useRef, useMemo } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
-  TextInput,
   ActivityIndicator,
   StyleSheet,
   Dimensions,
@@ -12,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useLocalSearchParams, router } from 'expo-router';

@@ -20,7 +20,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';

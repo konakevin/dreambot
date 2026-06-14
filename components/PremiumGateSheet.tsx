@@ -7,7 +7,8 @@
 
 import { useState, useCallback } from 'react';
 import type { ComponentProps } from 'react';
-import { View, Text, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, gradients } from '@/constants/theme';

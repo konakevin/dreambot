@@ -8,16 +8,15 @@
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
-  TextInput,
   ActivityIndicator,
   StyleSheet,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';

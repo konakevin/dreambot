@@ -6,15 +6,8 @@
  */
 
 import { useMemo, useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Linking } from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';

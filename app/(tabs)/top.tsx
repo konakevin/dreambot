@@ -13,10 +13,8 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -24,6 +22,7 @@ import {
   FlatList as RNFlatList,
   RefreshControl,
 } from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';

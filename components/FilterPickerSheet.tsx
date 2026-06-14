@@ -9,7 +9,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   Pressable,
   StyleSheet,
@@ -18,6 +17,7 @@ import {
   Animated,
   PanResponder,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

@@ -3,7 +3,6 @@ import { Toast } from '@/components/Toast';
 import { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   ScrollView,
   Alert,
@@ -12,6 +11,7 @@ import {
   Switch,
   Linking,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';

@@ -18,7 +18,6 @@ import {
   DMSans_700Bold,
 } from '@expo-google-fonts/dm-sans';
 import { Ionicons } from '@expo/vector-icons';
-import { applyGlobalBodyFont } from '@/lib/applyGlobalBodyFont';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
@@ -49,9 +48,6 @@ import {
 
 // Crash reporting — must init as early as possible. No-op without a DSN.
 initSentry();
-
-// Make DM Sans the default body font app-wide (must run before any Text renders).
-applyGlobalBodyFont();
 
 SplashScreen.preventAutoHideAsync();
 

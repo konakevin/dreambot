@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import type { TextStyle } from 'react-native';
 import { Image } from 'expo-image';
 import MaskedView from '@react-native-masked-view/masked-view';

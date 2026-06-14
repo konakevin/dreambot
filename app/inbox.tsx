@@ -3,7 +3,6 @@ import { useState, useMemo, useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
@@ -12,6 +11,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';

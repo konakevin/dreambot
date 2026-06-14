@@ -3,7 +3,8 @@
  * Used for feed tabs, category chips, and any overlay selectors.
  */
 
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import * as Haptics from 'expo-haptics';
 

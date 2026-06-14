@@ -20,7 +20,6 @@
 import { useCallback, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
@@ -28,6 +27,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { Ionicons } from '@expo/vector-icons';

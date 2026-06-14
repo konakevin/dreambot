@@ -2,7 +2,8 @@
  * Horizontal category filter chips — tap to filter the grid below.
  */
 
-import { TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
+import { TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';

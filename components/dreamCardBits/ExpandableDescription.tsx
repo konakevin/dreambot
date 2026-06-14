@@ -4,7 +4,8 @@
  */
 
 import { useState } from 'react';
-import { Text, type TextStyle, type StyleProp } from 'react-native';
+import { type TextStyle, type StyleProp } from 'react-native';
+import { Text } from '@/components/AppText';
 
 interface Props {
   text: string;

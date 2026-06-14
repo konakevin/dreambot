@@ -5,7 +5,8 @@
  * without the mascot voice taking over.
  */
 
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { colors } from '@/constants/theme';

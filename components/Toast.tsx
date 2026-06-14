@@ -15,7 +15,8 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { Text } from '@/components/AppText';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

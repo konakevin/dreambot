@@ -2,15 +2,14 @@ import { showAlert } from '@/components/CustomAlert';
 import { useState, useMemo } from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   FlatList,
-  TextInput,
   ActivityIndicator,
   StyleSheet,
   Dimensions,
   Pressable,
 } from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
 import * as Clipboard from 'expo-clipboard';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';

@@ -5,7 +5,8 @@
  */
 
 import { useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { colors } from '@/constants/theme';

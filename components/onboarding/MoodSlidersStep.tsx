@@ -6,7 +6,6 @@
 import { useRef } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   findNodeHandle,
   UIManager,
@@ -14,6 +13,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useMoodAxes } from '@/hooks/useMoodAxes';

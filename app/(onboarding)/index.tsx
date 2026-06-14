@@ -1,5 +1,6 @@
 import { useRef, useCallback, useMemo, useEffect } from 'react';
-import { View, Text, FlatList, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';

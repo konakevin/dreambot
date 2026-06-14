@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/components/AppText';
 import { router } from 'expo-router';
 
 export default function ModalScreen() {

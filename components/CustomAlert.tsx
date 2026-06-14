@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 

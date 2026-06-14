@@ -1,13 +1,13 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import {
   View,
-  Text,
   FlatList,
   ActivityIndicator,
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
+import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
