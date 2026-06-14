@@ -27,6 +27,12 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 // — they have plenty of headroom.
 const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.6 : SCREEN_HEIGHT * 0.5;
 
+// Subtle, mode-agnostic highlight for the selected row + active tab. The COLOR
+// meaning (purple = Real Face, pink = Dream Art) lives only in the text +
+// checkmark; the outline/fill stay quiet and identical across both modes.
+const HILITE_BG = 'rgba(255,255,255,0.05)';
+const HILITE_BORDER = 'rgba(255,255,255,0.16)';
+
 interface StyleOption {
   key: string;
   label: string;
@@ -88,7 +94,6 @@ export function StylePickerSheet({
   // medium's mode via `mediumIsFace` so it matches whatever medium is chosen.
   const accentIsFace = type === 'medium' ? mediumSegment === 'face' : mediumIsFace;
   const accentColor = accentIsFace ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
-  const accentBg = accentIsFace ? MEDIUM_BADGE.face.bg : MEDIUM_BADGE.art.bg;
 
   // Sticky per-tab selections — each tab remembers the last medium picked on it
   const [lastFace, setLastFace] = useState<string>('surprise_me_face');
@@ -193,9 +198,9 @@ export function StylePickerSheet({
         key={opt.key}
         className="flex-row items-center justify-between py-3.5 px-4 mb-1.5 rounded-xl"
         style={{
-          backgroundColor: isSelected ? accentBg : 'transparent',
-          borderWidth: isSelected ? 1 : 0,
-          borderColor: isSelected ? accentColor : 'transparent',
+          backgroundColor: isSelected ? HILITE_BG : 'transparent',
+          borderWidth: 1,
+          borderColor: isSelected ? HILITE_BORDER : 'transparent',
         }}
         onPress={() => handleSelect(opt.key)}
         activeOpacity={0.7}
@@ -260,10 +265,9 @@ export function StylePickerSheet({
         >
           {segments.map((seg) => {
             const active = mediumSegment === seg.key;
-            // Each tab carries its own brand color when active: Real Face = purple,
-            // Dream Art = turquoise (the two MEDIUM_BADGE ends).
+            // Only the active tab's TEXT carries its brand color (Real Face =
+            // purple, Dream Art = pink); the outline/fill stay subtle + common.
             const segColor = seg.key === 'face' ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
-            const segBg = seg.key === 'face' ? MEDIUM_BADGE.face.bg : MEDIUM_BADGE.art.bg;
             return (
               <TouchableOpacity
                 key={seg.key}
@@ -272,9 +276,9 @@ export function StylePickerSheet({
                   paddingVertical: verticalScale(8),
                   borderRadius: 8,
                   alignItems: 'center',
-                  backgroundColor: active ? segBg : 'transparent',
-                  borderWidth: active ? 1 : 0,
-                  borderColor: active ? segColor : 'transparent',
+                  backgroundColor: active ? HILITE_BG : 'transparent',
+                  borderWidth: 1,
+                  borderColor: active ? HILITE_BORDER : 'transparent',
                 }}
                 onPress={() => {
                   if (seg.key === mediumSegment) return;
