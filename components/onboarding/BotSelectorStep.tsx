@@ -117,8 +117,6 @@ export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
         nextLabel={nextLabel}
         disabled={followedBotCount === 0}
         disabledLabel="(pick at least one)"
-        counter={followedBotCount > 0 ? `${followedBotCount} following` : undefined}
-        counterMet={followedBotCount > 0}
         nextVariant="gradient"
       />
 
