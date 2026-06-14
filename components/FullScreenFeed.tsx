@@ -210,12 +210,18 @@ export function FullScreenFeed({
   const pagerRef = listRef ?? internalPagerRef;
 
   // Imperative scroll helpers used by the re-snap (focus/resume) + tap-to-top effects.
-  const scrollToIndexImpl = useCallback((index: number, animated: boolean) => {
-    pagerRef.current?.scrollToIndex(index, animated);
-  }, []);
-  const scrollToTopImpl = useCallback((animated: boolean) => {
-    pagerRef.current?.scrollToOffset(0, animated);
-  }, []);
+  const scrollToIndexImpl = useCallback(
+    (index: number, animated: boolean) => {
+      pagerRef.current?.scrollToIndex(index, animated);
+    },
+    [pagerRef]
+  );
+  const scrollToTopImpl = useCallback(
+    (animated: boolean) => {
+      pagerRef.current?.scrollToOffset(0, animated);
+    },
+    [pagerRef]
+  );
   // Seed with initialIndex so the post-interaction re-snap below doesn't yank
   // to index 0 on first mount before the pager reports its first active index.
   const currentIndex = useRef(initialIndex);
