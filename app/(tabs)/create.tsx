@@ -804,7 +804,7 @@ export default function CreateScreen() {
           <View style={{ marginTop: verticalScale(28) }}>
             {/* Dream button — the primary gradient CTA. Cost lives in the model
                 selector now, so the CTA stays clean. */}
-            <GradientButton label="Dream" icon="sparkles" onPress={handleDream} />
+            <GradientButton label="Dream" onPress={handleDream} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
