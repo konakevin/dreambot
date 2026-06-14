@@ -10,7 +10,7 @@ A medium is an art style (anime, photography, gothic, lego, etc.). The `dream_me
 |------|---------|----------|
 | `is_scene_only` | Pure environment, no people | canvas, watercolor, vaporwave, pixels |
 | `is_character_only` | Always forces character composition | claymation, lego, vinyl |
-| `face_swaps` | Face-swap composite works on this style | photography, anime, pencil, neon, shimmer, twilight, surreal, comics |
+| `face_swaps` | Face-swap composite works on this style | photography, pencil, neon, shimmer, twilight, surreal, comics |
 | `character_render_mode` | How characters are represented | `natural` (real human) or `embodied` (medium-native avatar) |
 | `nightly_skip` | Re-rolled if picked for nightly dreams | watercolor |
 | `is_public` | Shown in user-facing UI | Most mediums; some are bot-only |
@@ -122,14 +122,15 @@ Duplicate keys in a TypeScript Record silently let the LATER definition win. Thi
 - Full character description sent to Sonnet
 - Face-lock system active (if `face_swaps = true`)
 - Face swap composite fires after rendering
-- Examples: photography, anime, pencil, comics, neon, shimmer, twilight, surreal
+- Examples: photography, pencil, comics, neon, shimmer, twilight, surreal
 
 ### Embodied (`character_render_mode = 'embodied'`)
-- Character is pre-transformed into a medium-native avatar by `buildRenderEntity()`
-- Sonnet receives the transformed entity (e.g., "LEGO minifigure with sandy brown hair") and just places it
-- NO face lock, NO face swap, full creative freedom
-- Uses ACTIONS_WIDE pool (any composition)
-- Examples: lego, claymation, vinyl, animation, storybook, pixels, vaporwave, handcrafted
+- NO face lock, NO face swap — the user's LIKENESS is described into the prompt instead
+- `castResolver` passes the full cast description to Sonnet; the medium's `directive` ("TRANSFORM EVERYTHING into this style") + Sonnet do the stylization. (Historical note: the old `buildRenderEntity()` / `CHARACTER_TEMPLATES` trait-templating is dead — the description now goes straight to Sonnet, which is better at translating traits into medium-native terms.)
+- Relationship gating still applies: a non-partner +1 is posed platonically (ported into `buildCharacterBlock` so embodied dual matches the face-swap dual gate)
+- Examples: lego, claymation, vinyl, animation, storybook, pixels, vaporwave, handcrafted, **anime**
+
+> **Anime → embodied (2026-06-14).** Anime was `natural` + `face_swaps=true`, but compositing a real face onto an anime scene needed a "photorealistic adult face, NOT anime eyes" `face_swap_directive` that fought the style and consistently mangled eyes. Switched to `embodied` + `face_swaps=false` (the `face_swap_directive`/`face_swap_flux_fragment` are now NULL) so anime renders a native anime look-alike from the user's described traits — clean anime eyes, no swap. The anime brief uses danbooru tag format and now emits a count+gender tag (matching the gender lock) + appearance tags so the likeness + gender carry. DB-only change for the medium row; the brief logic lives in `promptCompiler.ts`.
 
 ## File Quick Reference
 
