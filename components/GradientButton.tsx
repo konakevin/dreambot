@@ -71,6 +71,8 @@ const s = StyleSheet.create({
   },
   ctaDisabled: {
     backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
     shadowOpacity: 0,
     elevation: 0,
   },
