@@ -45,12 +45,6 @@ import { useToggleRepost } from '@/hooks/useToggleRepost';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-// Blur strength for the letterbox fill. When the user taps resize → 'contain', a
-// blurred, zoomed copy of the same image fills the top/bottom bars instead of
-// black. (No auto-fit — every render shows full-bleed by default; letterboxing is
-// opt-in via the expand button.)
-const LETTERBOX_BLUR_RADIUS = 38;
-
 export interface DreamPostItem {
   id: string;
   user_id: string;
@@ -188,12 +182,11 @@ export const DreamCard = memo(function DreamCard({
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
-  // Image fill mode — every render fills the card edge-to-edge by default
-  // regardless of source aspect, so the feed reads as one consistent full-bleed
-  // stage. Off-ratio renders (GPT 2:3, square Gemini) crop rather than letterbox
-  // unless the user taps the expand button → 'contain' (whole image + blurred
-  // fill in the bars). (Auto-letterboxing on load was tried + reverted 2026-05-30
-  // and again 2026-06-14 — Kevin prefers full-bleed default, letterbox opt-in.)
+  // Image fill mode — every render fills the card edge-to-edge regardless
+  // of the source model's aspect ratio. Off-ratio renders (GPT 2:3, square
+  // Gemini, etc.) crop instead of letterboxing — the feed reads as one
+  // consistent full-bleed stage. (Previously we measured on load and flipped
+  // wider-than-9:16 to `contain`; reverted 2026-05-30 per Kevin.)
   // Image load resilience: a failed load (transient network / decode hiccup)
   // used to leave a permanent BLACK card. AUTO-retry silently — cache-busted,
   // with backoff, capped at MAX_IMG_RETRIES. After those, surface a
@@ -206,9 +199,11 @@ export const DreamCard = memo(function DreamCard({
   const [retryNonce, setRetryNonce] = useState(0);
   const [showRetryUi, setShowRetryUi] = useState(false);
 
-  // Image fit toggle (side-rail expand button). Defaults to 'cover' (full-bleed)
-  // for every render; tapping flips to 'contain' — whole image + blurred fill in
-  // the top/bottom bars. Per-card local state; resets on FlatList recycle.
+  // Per-card image fit toggle (top-right HUD button). 'cover' is the default
+  // (full-bleed, may crop the sides of off-ratio renders); 'contain'
+  // letterboxes so the user can see the full image when something was cropped
+  // out. Per-card local state — fresh on every scroll (FlatList recycler
+  // unmounts the card → state resets), matches IG-style "tap to peek".
   const [fitMode, setFitMode] = useState<'cover' | 'contain'>('cover');
   useEffect(
     () => () => {
@@ -352,28 +347,13 @@ export const DreamCard = memo(function DreamCard({
           delayLongPress={500}
         >
           <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
-            {/* Default 'cover' fills the card full-bleed. When the user taps the
-                expand button → 'contain' (whole image), a blurred zoomed copy of
-                the same image fills the top/bottom bars instead of black — the
-                IG-style fill. */}
-            {fitMode === 'contain' && (
-              <Image
-                source={{ uri: heroUrl }}
-                style={StyleSheet.absoluteFill}
-                contentFit="cover"
-                blurRadius={LETTERBOX_BLUR_RADIUS}
-                cachePolicy="memory-disk"
-                recyclingKey={`${item.id}-bg`}
-                transition={150}
-                // Same thumbhash so the blurred bars fill instantly (no black flash).
-                placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
-                placeholderContentFit="cover"
-                pointerEvents="none"
-              />
-            )}
+            {/* All renders fill the card edge-to-edge regardless of source
+                aspect — Flux 9:16, GPT 2:3, square Gemini, etc. all crop to
+                fit. Keeps the feed reading as one consistent full-bleed stage
+                rather than a mix of full-bleed + letterboxed cards. */}
             <Image
               source={{ uri: heroUrl }}
-              style={[s.fullImage, fitMode === 'contain' && s.fullImageOnBlur]}
+              style={s.fullImage}
               contentFit={fitMode}
               cachePolicy="memory-disk"
               recyclingKey={item.id}
@@ -722,9 +702,6 @@ const s = StyleSheet.create({
   // load that takes a beat reads as intentional dim placeholder, not
   // "is this card broken?".
   fullImage: { ...StyleSheet.absoluteFillObject, backgroundColor: colors.surface },
-  // In letterbox (contain) mode the surface-tinted background would hide the
-  // blurred fill in the bars — make it transparent so the blur layer shows.
-  fullImageOnBlur: { backgroundColor: 'transparent' },
   // Tap-to-retry overlay — covers the failed-Image area, centered pill.
   // Only shown after silent auto-retries are exhausted.
   retryOverlay: {
