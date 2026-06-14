@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import type { ReactNode, ErrorInfo } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
+import { GradientButton } from '@/components/GradientButton';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -46,9 +47,11 @@ export class AppErrorBoundary extends Component<Props, State> {
             <Text style={s.message}>
               The app ran into an unexpected error. This has been logged and we{"'"}ll look into it.
             </Text>
-            <TouchableOpacity style={s.button} onPress={this.handleRetry} activeOpacity={0.7}>
-              <Text style={s.buttonText}>Try Again</Text>
-            </TouchableOpacity>
+            <GradientButton
+              label="Try Again"
+              onPress={this.handleRetry}
+              style={{ marginTop: verticalScale(8), alignSelf: 'center' }}
+            />
           </View>
         </View>
       );
@@ -81,21 +84,5 @@ const s = StyleSheet.create({
     fontSize: fontScale(15),
     textAlign: 'center',
     lineHeight: fontScale(22),
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: verticalScale(16),
-    paddingHorizontal: 32,
-    marginTop: verticalScale(8),
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(17),
-    fontWeight: '700',
   },
 });

@@ -43,6 +43,7 @@ import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { ModelPicker } from '@/components/ModelPicker';
 import { GradientTitle } from '@/components/GradientTitle';
+import { GradientButton } from '@/components/GradientButton';
 import { showAlert } from '@/components/CustomAlert';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
@@ -382,7 +383,7 @@ export default function CreateScreen() {
               <TouchableOpacity
                 onPress={handlePickPhoto}
                 className="w-8 h-8 rounded-full items-center justify-center"
-                style={{ backgroundColor: colors.accent }}
+                style={{ backgroundColor: '#A78BFA' }}
                 hitSlop={6}
               >
                 <Ionicons name={hasPhoto ? 'image' : 'camera-outline'} size={16} color="#fff" />
@@ -608,7 +609,14 @@ export default function CreateScreen() {
                   className="flex-row items-center justify-center py-2 rounded-lg"
                   style={{
                     flex: 1,
-                    backgroundColor: !config.useExactPrompt ? colors.accent : 'transparent',
+                    // Tonal moon-purple when active (selected) — a quiet selector,
+                    // so it doesn't compete with the gradient Dream CTA. Border on
+                    // both (transparent when inactive) to avoid a 1px toggle shift.
+                    backgroundColor: !config.useExactPrompt
+                      ? 'rgba(167,139,250,0.18)'
+                      : 'transparent',
+                    borderWidth: 1,
+                    borderColor: !config.useExactPrompt ? 'rgba(167,139,250,0.55)' : 'transparent',
                   }}
                   onPress={() => {
                     Haptics.selectionAsync();
@@ -618,7 +626,7 @@ export default function CreateScreen() {
                 >
                   <Text
                     className="text-sm font-semibold"
-                    style={{ color: !config.useExactPrompt ? '#fff' : colors.textSecondary }}
+                    style={{ color: !config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
                   >
                     DreamBot
                   </Text>
@@ -627,7 +635,11 @@ export default function CreateScreen() {
                   className="flex-row items-center justify-center py-2 rounded-lg"
                   style={{
                     flex: 1,
-                    backgroundColor: config.useExactPrompt ? colors.accent : 'transparent',
+                    backgroundColor: config.useExactPrompt
+                      ? 'rgba(167,139,250,0.18)'
+                      : 'transparent',
+                    borderWidth: 1,
+                    borderColor: config.useExactPrompt ? 'rgba(167,139,250,0.55)' : 'transparent',
                   }}
                   onPress={() => {
                     Haptics.selectionAsync();
@@ -637,7 +649,7 @@ export default function CreateScreen() {
                 >
                   <Text
                     className="text-sm font-semibold"
-                    style={{ color: config.useExactPrompt ? '#fff' : colors.textSecondary }}
+                    style={{ color: config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
                   >
                     Direct
                   </Text>
@@ -749,20 +761,9 @@ export default function CreateScreen() {
               the keyboard appears, and the dead space below the Medium/Vibe row
               is gone. */}
           <View style={{ marginTop: verticalScale(28) }}>
-            {/* Dream button */}
-            <TouchableOpacity
-              className="items-center justify-center py-4 rounded-2xl"
-              style={{ backgroundColor: colors.accent }}
-              onPress={handleDream}
-              activeOpacity={0.7}
-            >
-              <View className="flex-row items-center gap-2">
-                <Text className="text-white text-base font-bold">
-                  Dream · {sparkleCostFrom(imageModels, selectedModelId)}
-                </Text>
-                <Ionicons name="sparkles" size={16} color="#FFFFFF" />
-              </View>
-            </TouchableOpacity>
+            {/* Dream button — the primary gradient CTA. Cost lives in the model
+                selector now, so the CTA stays clean. */}
+            <GradientButton label="Dream" icon="sparkles" onPress={handleDream} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -890,9 +891,9 @@ export default function CreateScreen() {
                 >
                   <View
                     className="w-9 h-9 rounded-full items-center justify-center"
-                    style={{ backgroundColor: colors.accent + '22' }}
+                    style={{ backgroundColor: 'rgba(167,139,250,0.18)' }}
                   >
-                    <Ionicons name={opt.icon} size={18} color={colors.accent} />
+                    <Ionicons name={opt.icon} size={18} color="#A78BFA" />
                   </View>
                   <Text className="text-base font-semibold" style={{ color: colors.textPrimary }}>
                     {opt.label}

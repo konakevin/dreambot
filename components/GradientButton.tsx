@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
 import { DISPLAY_FONT } from '@/constants/fonts';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 
 const CTA_TEXT_COLOR = '#08080F';
 
@@ -61,6 +61,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: verticalScale(16),
+    paddingHorizontal: horizontalScale(28), // gives content-width uses breathing room
     borderRadius: 999, // pill
     // Purple glow — matches the web shadow-[0_8px_32px_rgba(167,139,250,0.45)].
     shadowColor: '#A78BFA',

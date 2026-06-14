@@ -225,17 +225,17 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
         </Text>
         {current && (
           <View style={styles.pillCost}>
+            <Ionicons name="sparkles" size={12} color="#A78BFA" />
             <Text
               style={{
-                color: colors.textSecondary,
-                fontSize: fontScale(11),
-                fontWeight: '600',
-                marginRight: 3,
+                color: '#A78BFA',
+                fontSize: fontScale(13),
+                fontWeight: '700',
+                marginLeft: 3,
               }}
             >
               {current.sparkleCost}
             </Text>
-            <Ionicons name="sparkles" size={11} color={colors.accent} />
           </View>
         )}
         <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
@@ -364,9 +364,12 @@ const styles = StyleSheet.create({
   pillCost: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 7,
-    paddingVertical: verticalScale(2),
-    borderRadius: 6,
+    backgroundColor: 'rgba(167,139,250,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.4)',
+    paddingHorizontal: 8,
+    paddingVertical: verticalScale(3),
+    borderRadius: 9,
     marginRight: 8,
   },
   modalRoot: {
