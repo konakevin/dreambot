@@ -179,9 +179,8 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(8),
     borderRadius: 18,
     // Tonal, not solid — quiet secondary vs the gradient primary CTA. Uses the
-    // gradient's OWN moon-purple (#A78BFA) so it matches the brand palette (the
-    // theme accent #8B7BEE is a different, bluer purple), with a border so the
-    // soft fill still reads on the dark card.
+    // gradient's moon-purple (#A78BFA, now also the theme accent), with a border
+    // so the soft fill still reads on the dark card.
     backgroundColor: 'rgba(167,139,250,0.18)',
     borderWidth: 1,
     borderColor: 'rgba(167,139,250,0.55)',

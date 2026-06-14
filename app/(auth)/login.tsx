@@ -98,11 +98,11 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity className="self-end mb-8">
-              <Text className="text-[#8B7BEE] text-sm">Forgot password?</Text>
+              <Text className="text-[#A78BFA] text-sm">Forgot password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className={`bg-[#8B7BEE] rounded-full py-4 items-center ${loading ? 'opacity-70' : ''}`}
+              className={`bg-[#A78BFA] rounded-full py-4 items-center ${loading ? 'opacity-70' : ''}`}
               onPress={handleLogin}
               disabled={loading}
               activeOpacity={0.8}
@@ -209,7 +209,7 @@ export default function LoginScreen() {
             <View className="flex-row justify-center mt-6">
               <Text className="text-text-secondary">Don{"'"}t have an account? </Text>
               <Link href="/(auth)/signup">
-                <Text className="text-[#8B7BEE] font-semibold">Sign up</Text>
+                <Text className="text-[#A78BFA] font-semibold">Sign up</Text>
               </Link>
             </View>
           </View>

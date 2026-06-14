@@ -10,12 +10,12 @@ export const colors = {
   card: '#1A1A24',
   border: '#2A2A3A',
 
-  // Accent
-  accent: '#8B7BEE',
-  accentLight: '#A99BF5',
-  accentDark: '#6B5DC4',
-  accentBg: 'rgba(139,123,238,0.1)',
-  accentBorder: 'rgba(139,123,238,0.2)',
+  // Accent — the brand gradient's soft base purple (was the bluer #8B7BEE).
+  accent: '#A78BFA',
+  accentLight: '#C4B5FD',
+  accentDark: '#7C5CD8',
+  accentBg: 'rgba(167,139,250,0.1)',
+  accentBorder: 'rgba(167,139,250,0.2)',
 
   // Semantic
   like: '#E8485F',
@@ -41,7 +41,7 @@ export const colors = {
 export const gradients = {
   dream: ['#FFD700', '#FF8C00', '#FF4500'] as [string, string, ...string[]],
   bot: ['#44DDCC', '#6699EE', '#BB88EE'] as [string, string, ...string[]],
-  accent: ['#8B7BEE', '#6B5DC4'] as [string, string],
+  accent: ['#A78BFA', '#7C5CD8'] as [string, string],
   // The signature purple→pink→teal brand gradient (hero headings, premium CTAs).
   // Was redeclared per-screen; centralized here.
   brand: ['#A78BFA', '#F9A8D4', '#5EEAD4'] as [string, string, string],

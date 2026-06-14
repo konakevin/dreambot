@@ -349,7 +349,7 @@ const s = StyleSheet.create({
   },
   packCardSelected: {
     borderColor: ACCENT,
-    backgroundColor: 'rgba(139,123,238,0.08)',
+    backgroundColor: 'rgba(167,139,250,0.08)',
   },
   packIcon: {
     width: verticalScale(40),

@@ -7,7 +7,7 @@ export default function ModalScreen() {
     <View className="flex-1 items-center justify-center bg-background">
       <Text className="text-text-primary text-xl font-bold">Modal</Text>
       <TouchableOpacity onPress={() => router.back()} className="mt-4">
-        <Text className="text-[#8B7BEE] font-semibold">Close</Text>
+        <Text className="text-[#A78BFA] font-semibold">Close</Text>
       </TouchableOpacity>
     </View>
   );
