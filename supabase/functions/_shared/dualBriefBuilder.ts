@@ -123,7 +123,7 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their N
   const faceRealismRule = '';
 
   const faceLockPhrase =
-    'two people, three-quarter view, person on left side, person on right side, clear gap between them';
+    'two people, three-quarter view, person on left side, person on right side, a clear band of background visible between their two separated heads';
 
   // ── Swap-breaking action reframe ──
   // The face swap pipeline crops the frame in half (left 55% / right 55%) and runs
@@ -145,11 +145,11 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their N
     plusOneRelationship === 'partner' || plusOneRelationship === 'significant_other';
   const reframeBullets = isPartner
     ? `   • side hug (arms around each other's shoulders FROM THE SIDE, both facing camera)
-   • shoulder-to-shoulder leaning, romantic glance held across the gap toward camera
+   • standing close shoulder-to-shoulder but UPRIGHT with heads apart, romantic glance held across the gap toward camera
    • one resting a hand on the other's arm/shoulder, both still facing forward
    • playful side-by-side pose with intimate energy in posture and expression`
     : `   • standing close side-by-side, both facing camera with relaxed friendly body language
-   • shoulder-to-shoulder leaning casually, both looking toward camera with warm friendly energy (NOT romantic)
+   • standing close shoulder-to-shoulder but UPRIGHT with heads apart, both looking toward camera with warm friendly energy (NOT romantic)
    • one with a brief casual hand on the other's shoulder (platonic only — quick contact, not an embrace)
    • side-by-side pose with PLATONIC warmth — friendly grins toward camera, no romantic gaze, no lingering contact`;
   const relationshipNote = isPartner
@@ -184,9 +184,9 @@ MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 
 COMPOSITION RULES:
 - Character 1 in LEFT half, Character 2 in RIGHT half. Clear gap between them. No back-of-head views, no full profiles.
-- Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.
+- Medium shot — both characters waist-up. NOT a wide establishing shot (characters must NOT be dwarfed by scenery), but also NOT a tight close-up: do NOT render the faces large or filling the frame. A clear band of background must stay visible BETWEEN THEIR TWO HEADS — both heads upright and fully separated, never touching, overlapping, or cheek-to-cheek. The face swap crops the frame at the vertical midline; if the two heads meet there it cannot work. If the medium has soft or bleeding edges (watercolor, ink, pastel), widen that head gap so the two faces never blur together.
 - Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera.
-- Characters default to STATIONARY (standing, sitting, leaning) UNLESS the user prompt specifies an action verb — see ACTION/POSE RULE below for the override.
+- Characters default to STATIONARY (standing or sitting, both upright with heads apart) UNLESS the user prompt specifies an action verb — see ACTION/POSE RULE below for the override.
 - Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.
 - Both characters should feel CONNECTED — sharing the same moment, reacting to the same world. Not doing separate isolated activities.
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
