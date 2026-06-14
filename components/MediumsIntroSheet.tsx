@@ -72,7 +72,7 @@ const CARDS: CardSpec[] = [
     bg: FACE_BG,
     icon: 'person',
     title: 'Real face',
-    body: 'Your real photo goes in, so the dream looks just like you. Think photography, cinematic, watercolor, and other true-to-life styles.',
+    body: 'Your real face appears in dreams. Think photography, cinematic, watercolor, and other true-to-life styles.',
   },
   {
     badge: 'art',
