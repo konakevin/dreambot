@@ -127,8 +127,8 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
           </View>
 
           <Text style={s.body}>
-            Some mediums drop your real face right into the scene. Others capture the likeness of
-            you and dream up a playful look-alike.
+            Some mediums (Real Face) render your actual face into the scene. Others (Dream Art)
+            capture your likeness in a playful look-alike.
           </Text>
 
           <View style={s.cards}>
