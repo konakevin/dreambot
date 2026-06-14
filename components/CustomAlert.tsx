@@ -1,14 +1,14 @@
 import { useState, useCallback } from 'react';
 import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
-import { DISPLAY_FONT } from '@/constants/fonts';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
-// Near-black text on the brand-gradient primary button (matches GradientButton).
-const CTA_TEXT_COLOR = '#08080F';
+// Primary dialog button = the soft purple at the gradient's left end (matches the
+// solid Dream button). The full brand gradient is reserved for one-shot
+// onboarding/education sheets, not recurring utility dialogs like this.
+const PRIMARY_BG = BRAND_GRADIENT[0];
 
 interface AlertButton {
   text: string;
@@ -98,17 +98,12 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                     activeOpacity={0.85}
                   >
                     {isDefault ? (
-                      // Primary action = brand-gradient pill (matches GradientButton).
-                      <LinearGradient
-                        colors={BRAND_GRADIENT}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                        style={styles.fill}
-                      >
+                      // Primary action = solid soft-purple (matches the Dream button).
+                      <View style={[styles.fill, styles.buttonDefault]}>
                         <Text style={[styles.buttonText, styles.buttonTextDefault]}>
                           {btn.text}
                         </Text>
-                      </LinearGradient>
+                      </View>
                     ) : (
                       <View
                         style={[
@@ -193,6 +188,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonDefault: {
+    backgroundColor: PRIMARY_BG,
+  },
   buttonDestructive: {
     backgroundColor: colors.error,
   },
@@ -207,8 +205,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   buttonTextDefault: {
-    color: CTA_TEXT_COLOR,
-    fontFamily: DISPLAY_FONT.semibold,
+    color: '#FFFFFF',
   },
   buttonTextCancel: {
     color: colors.textSecondary,
