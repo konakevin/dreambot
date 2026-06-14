@@ -157,18 +157,27 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
         style={[
           styles.option,
           {
-            backgroundColor: isSelected ? colors.accent + '22' : colors.surface,
-            borderColor: isSelected ? colors.accent : colors.border,
+            // Active state matches the Create mode tabs: tonal moon-purple fill +
+            // border, purple label. The outline + highlight is the selection cue
+            // (no radio needed).
+            backgroundColor: isSelected ? 'rgba(167,139,250,0.18)' : colors.surface,
+            borderColor: isSelected ? 'rgba(167,139,250,0.55)' : colors.border,
           },
         ]}
       >
         <View style={{ flex: 1, marginRight: 12 }}>
           <View style={styles.titleRow}>
-            <Text style={{ color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' }}>
+            <Text
+              style={{
+                color: isSelected ? '#A78BFA' : colors.textPrimary,
+                fontSize: fontScale(15),
+                fontWeight: '600',
+              }}
+            >
               {opt.label}
             </Text>
             {(recSet.size ? recSet.has(opt.id) : opt.id === RECOMMENDED_MODEL_ID) && (
-              <Text style={[styles.recLabel, { color: colors.accent }]}>Recommended</Text>
+              <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Recommended</Text>
             )}
           </View>
           <Text
@@ -186,20 +195,7 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
           <Text style={[styles.costBadgeText, { color: colors.textPrimary }]}>
             {opt.sparkleCost}
           </Text>
-          <Ionicons name="sparkles" size={11} color={colors.accent} style={{ marginLeft: 3 }} />
-        </View>
-        <View
-          style={{
-            width: 22,
-            height: 22,
-            borderRadius: 11,
-            borderWidth: 2,
-            borderColor: isSelected ? colors.accent : colors.border,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {isSelected && <Ionicons name="checkmark" size={14} color={colors.accent} />}
+          <Ionicons name="sparkles" size={11} color="#A78BFA" style={{ marginLeft: 3 }} />
         </View>
       </TouchableOpacity>
     );
