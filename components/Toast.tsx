@@ -58,7 +58,7 @@ interface ToastOptions {
 }
 
 export const Toast = {
-  show(message: string, icon?: string, duration = 3200, opts?: ToastOptions) {
+  show(message: string, icon?: string, duration = 3000, opts?: ToastOptions) {
     listener?.({ message, icon, duration, onPress: opts?.onPress });
   },
 };
@@ -105,7 +105,7 @@ export function ToastHost() {
           scale.value = 0.94;
           runOnJS(dismiss)();
         }, 260);
-      }, incoming.duration ?? 3200);
+      }, incoming.duration ?? 3000);
     };
     return () => {
       listener = null;
