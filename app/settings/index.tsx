@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Alert,
   StyleSheet,
   ActivityIndicator,
   Switch,
@@ -33,7 +32,6 @@ import { resetMediumsIntro } from '@/components/MediumsIntroSheet';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { moderateText } from '@/lib/moderation';
 import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
 function SettingsRow({
@@ -108,7 +106,6 @@ export default function SettingsScreen() {
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const { data: profile } = usePublicProfile(user?.id ?? '');
   const { mutate: uploadAvatar, isPending: uploading } = useAvatarUpload();
-  const [changingUsername, setChangingUsername] = useState(false);
 
   // Load vibe profile into onboarding store for settings sub-screens.
   // Set isEditing once on mount, clear on unmount — NOT on focus/blur,
@@ -209,52 +206,6 @@ export default function SettingsScreen() {
         : []),
       { text: 'Cancel', style: 'cancel' as const },
     ]);
-  }
-
-  function handleChangeUsername() {
-    Alert.prompt(
-      'Change username',
-      'Enter your new username',
-      async (newUsername: string) => {
-        const trimmed = newUsername.trim().toLowerCase();
-        if (!trimmed || trimmed.length < 3) {
-          showAlert('Too short', 'Username must be at least 3 characters.');
-          return;
-        }
-        setChangingUsername(true);
-        try {
-          const modResult = await moderateText(trimmed);
-          if (!modResult.passed) {
-            showAlert(
-              'Invalid username',
-              modResult.reason ?? 'Username contains inappropriate content'
-            );
-            return;
-          }
-          const { error } = await supabase
-            .from('users')
-            .update({ username: trimmed })
-            .eq('id', user!.id);
-          if (error) {
-            if (error.message.includes('unique') || error.message.includes('duplicate')) {
-              showAlert('Taken', 'That username is already in use.');
-            } else {
-              showAlert('Error', error.message);
-            }
-            return;
-          }
-          await supabase.auth.updateUser({ data: { username: trimmed } });
-          queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        } catch (err: unknown) {
-          showAlert('Error', (err as Error).message);
-        } finally {
-          setChangingUsername(false);
-        }
-      },
-      'plain-text',
-      profile?.username ?? ''
-    );
   }
 
   function handleChangePassword() {
@@ -410,21 +361,8 @@ export default function SettingsScreen() {
             label="Edit Profile"
             onPress={() => nav.push('/settings/edit-profile')}
           />
-          <SettingsRow
-            icon="person-outline"
-            label="Username"
-            onPress={handleChangeUsername}
-            trailing={
-              changingUsername ? (
-                <ActivityIndicator size="small" color={colors.textSecondary} />
-              ) : (
-                <View style={styles.rowTrailing}>
-                  <Text style={styles.rowValue}>{profile?.username ?? ''}</Text>
-                  <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
-                </View>
-              )
-            }
-          />
+          {/* Username is fixed once set — only the display name is editable
+              (Edit Profile), so it isn't surfaced here as a changeable row. */}
           {/* Email is the account identity (often owned by an OAuth provider —
               Apple/Google/Facebook), so it's read-only: a static row, not a
               TouchableOpacity, with no chevron, so it doesn't read as tappable. */}
