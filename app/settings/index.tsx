@@ -410,7 +410,6 @@ export default function SettingsScreen() {
             label="Edit Profile"
             onPress={() => nav.push('/settings/edit-profile')}
           />
-          <SettingsRow icon="camera-outline" label="Profile picture" onPress={handleChangePhoto} />
           <SettingsRow
             icon="person-outline"
             label="Username"
