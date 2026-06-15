@@ -671,7 +671,7 @@ export default function SettingsScreen() {
           />
           <SettingsRow
             icon="notifications-outline"
-            label="Notifications"
+            label="Push Notifications"
             onPress={() => nav.push('/settings/notifications')}
           />
           <SettingsRow

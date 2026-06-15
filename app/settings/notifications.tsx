@@ -128,7 +128,7 @@ export default function NotificationsSettingsScreen() {
   );
 
   return (
-    <ScreenLayout header="back" title="Notifications">
+    <ScreenLayout header="back" title="Push Notifications">
       <ScrollView contentContainerStyle={styles.scroll}>
         {isLoading && !settings ? (
           <View style={styles.center}>
