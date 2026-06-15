@@ -53,6 +53,9 @@ export async function resetMediumsIntro(): Promise<void> {
 interface Props {
   visible: boolean;
   onClose: () => void;
+  /** Footer CTA label. Defaults to the first-run "Got it…" copy; when shown
+   *  as a reference sheet from Settings, pass "Ok" (just dismisses). */
+  ctaLabel?: string;
 }
 
 interface CardSpec {
@@ -83,7 +86,7 @@ const CARDS: CardSpec[] = [
   },
 ];
 
-export function MediumsIntroSheet({ visible, onClose }: Props) {
+export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s dream' }: Props) {
   const insets = useSafeAreaInsets();
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
@@ -180,7 +183,7 @@ export function MediumsIntroSheet({ visible, onClose }: Props) {
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
-          <GradientButton label="Got it, let’s dream" onPress={handleClose} />
+          <GradientButton label={ctaLabel} onPress={handleClose} />
         </View>
       </SafeAreaView>
     </Modal>

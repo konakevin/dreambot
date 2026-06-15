@@ -16,9 +16,9 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
-import { resetCreateIntro } from '@/components/CreateIntroSheet';
+import { CreateIntroSheet, resetCreateIntro } from '@/components/CreateIntroSheet';
 import { resetFeedIntro } from '@/components/FeedIntroGate';
-import { resetMediumsIntro } from '@/components/MediumsIntroSheet';
+import { MediumsIntroSheet, resetMediumsIntro } from '@/components/MediumsIntroSheet';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -106,6 +106,10 @@ export default function SettingsScreen() {
   // Username is editable ONCE (while unconfirmed) then locked read-only. The
   // picker modal is the same component the home claim-nudge uses.
   const [showUsernameModal, setShowUsernameModal] = useState(false);
+  // Support-section tutorial sheets — shown directly over Settings (no jump
+  // into the Create tab).
+  const [showCreateIntro, setShowCreateIntro] = useState(false);
+  const [showMediumsIntro, setShowMediumsIntro] = useState(false);
   const usernameUnconfirmed = usernameStatus != null && !usernameStatus.confirmed;
   const handleAt = usernameStatus?.username ?? profile?.username ?? '';
 
@@ -570,12 +574,12 @@ export default function SettingsScreen() {
           <SettingsRow
             icon="help-circle-outline"
             label="How Create works"
-            onPress={async () => {
-              // Re-arm the Create-tab teaching sheet, then jump to Create — its
-              // useFocusEffect re-checks the seen flag on focus and re-shows it.
-              await resetCreateIntro().catch(() => {});
-              router.replace('/(tabs)/create');
-            }}
+            onPress={() => setShowCreateIntro(true)}
+          />
+          <SettingsRow
+            icon="color-wand-outline"
+            label="Dream modes"
+            onPress={() => setShowMediumsIntro(true)}
           />
           <SettingsRow
             icon="information-circle-outline"
@@ -611,6 +615,19 @@ export default function SettingsScreen() {
           onSaved={() => setShowUsernameModal(false)}
         />
       )}
+
+      {/* Reference tutorial sheets, shown directly over Settings — CTA is just
+          "Ok" since there's no Create flow to continue into. */}
+      <CreateIntroSheet
+        visible={showCreateIntro}
+        onClose={() => setShowCreateIntro(false)}
+        ctaLabel="Ok"
+      />
+      <MediumsIntroSheet
+        visible={showMediumsIntro}
+        onClose={() => setShowMediumsIntro(false)}
+        ctaLabel="Ok"
+      />
     </ScreenLayout>
   );
 }

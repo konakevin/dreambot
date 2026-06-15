@@ -50,9 +50,12 @@ export async function resetCreateIntro(): Promise<void> {
 interface Props {
   visible: boolean;
   onClose: () => void;
+  /** Footer CTA label. Defaults to the first-run "Got it…" copy; when shown
+   *  as a reference sheet from Settings, pass "Ok" (just dismisses). */
+  ctaLabel?: string;
 }
 
-export function CreateIntroSheet({ visible, onClose }: Props) {
+export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s create' }: Props) {
   const insets = useSafeAreaInsets();
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
@@ -141,7 +144,7 @@ export function CreateIntroSheet({ visible, onClose }: Props) {
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
-          <GradientButton label="Got it, let’s create" onPress={handleClose} />
+          <GradientButton label={ctaLabel} onPress={handleClose} />
         </View>
       </SafeAreaView>
     </Modal>
