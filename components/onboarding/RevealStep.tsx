@@ -14,6 +14,7 @@ import { GradientButton } from '@/components/GradientButton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
+import { grantWelcomeBonus } from '@/lib/welcomeBonus';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { enqueueFirstDream, awaitFirstDream } from '@/lib/firstDreamQueue';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
@@ -260,7 +261,9 @@ export function RevealStep({ onBack }: Props) {
   // End-of-onboarding bookkeeping — fired ONCE from generateImage before the
   // dream renders, so the reveal has nothing left to persist. All best-effort +
   // timeout-guarded; a failure here never blocks the user or the dream.
-  //   • welcome sparkles (balance-checked → no double-grant on a retry)
+  //   • welcome sparkles — the grant is idempotent (migration 258), so no
+  //     balance-check is needed; a missed grant here is rescued by
+  //     reconcileWelcomeBonus on the feed.
   //   • completion analytics
   //   • welcome-gift notification (no upload_id — it routes to /welcome-gift by
   //     TYPE and the screen doesn't display a dream, so the id was vestigial)
@@ -268,21 +271,7 @@ export function RevealStep({ onBack }: Props) {
     if (!user) return;
     trackOnboardingCompleted();
     try {
-      const welcomeBonus = engineConfig.welcomeSparkleBonus;
-      const { data: balanceCheck } = await withTimeout(
-        supabase.from('users').select('sparkle_balance').eq('id', user.id).single(),
-        10000
-      );
-      if ((balanceCheck?.sparkle_balance ?? 0) < welcomeBonus) {
-        await withTimeout(
-          supabase.rpc('grant_sparkles', {
-            p_user_id: user.id,
-            p_amount: welcomeBonus,
-            p_reason: 'welcome_bonus',
-          }),
-          10000
-        );
-      }
+      await withTimeout(grantWelcomeBonus(user.id, engineConfig.welcomeSparkleBonus), 10000);
       await withTimeout(
         supabase.from('notifications').insert({
           recipient_id: user.id,

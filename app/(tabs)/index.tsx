@@ -14,6 +14,8 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { reconcileWelcomeBonus } from '@/lib/welcomeBonus';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
@@ -174,6 +176,15 @@ export default function HomeScreen() {
     if (!user) return;
     hasSeenFeedIntro().then((seen) => setShowFeedIntro(!seen));
   }, [user]);
+
+  // Safety net for the welcome sparkle bonus: if the at-onboarding grant was
+  // missed (a network blip during finalizeOnboarding), credit it now. The grant
+  // is idempotent server-side AND this runs at most once per device per user, so
+  // it's a cheap no-op for everyone who already received it. (lib/welcomeBonus.ts)
+  const engineConfig = useEngineConfig();
+  useEffect(() => {
+    if (user) reconcileWelcomeBonus(user.id, engineConfig.welcomeSparkleBonus);
+  }, [user, engineConfig.welcomeSparkleBonus]);
 
   // One-time "claim your @username" nudge — shown to users still on an auto-
   // assigned handle (username_confirmed=false). Dismissible: "Maybe later"
