@@ -571,12 +571,11 @@ const s = StyleSheet.create({
   },
   cta: {
     alignItems: 'center',
-    gap: 12,
+    gap: verticalScale(24),
   },
-  // Casual queue prompt right above the Queue This button — muted gray
-  // so it doesn't compete with the lavender pill. Tight 12px gap to the
-  // button below so the eye reads "this sentence + this button" as one
-  // CTA group.
+  // Casual queue prompt above the Queue This button — muted gray so it
+  // doesn't compete with the lavender pill, with breathing room to the
+  // button below.
   queueHint: {
     color: colors.textSecondary,
     fontSize: fontScale(13),

@@ -127,11 +127,12 @@ export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) 
   return (
     <View style={styles.stage}>
       <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
-      <WaveLoader />
       {/* Gradient wordmark — same brand title treatment as the Create / Inbox titles. */}
       <GradientTitle size={24} weight={700} letterSpacing={0.3}>
         Dreaming
       </GradientTitle>
+      {/* Loading dots sit below the title. */}
+      <WaveLoader />
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );
