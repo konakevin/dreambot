@@ -70,7 +70,9 @@ function WaveDot({ index, t }: { index: number; t: SharedValue<number> }) {
   const offset = (index * DOT_PHASE_MS) / DOT_CYCLE_MS;
 
   const animatedStyle = useAnimatedStyle(() => {
-    const phase = (t.value + offset) % 1;
+    // Subtract the offset (+1 to stay non-negative) so higher-index dots peak
+    // LATER — the wave travels left→right, matching the original direction.
+    const phase = (t.value - offset + 1) % 1;
     // Sin-shaped pulse: peaks mid-cycle then falls back. Continuous at the
     // 0/1 wrap (both ends map to 0), so the modulo seam is invisible.
     const pulse = interpolate(phase, [0, 0.5, 1], [0, 1, 0]);
