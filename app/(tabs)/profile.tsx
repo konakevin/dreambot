@@ -28,6 +28,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useFocusEffect } from '@react-navigation/native';
@@ -167,6 +168,15 @@ export default function ProfileScreen() {
   // (which ALSO resets the active tab + invalidates queries — too
   // heavy for a simple scroll-to-top intent).
   const [scrollToTopBump, setScrollToTopBump] = useState(0);
+  const [showAvatarPreview, setShowAvatarPreview] = useState(false);
+  const avatarPreview = (
+    <AvatarPreviewModal
+      visible={showAvatarPreview}
+      avatarUrl={profile?.avatar_url ?? null}
+      username={user?.user_metadata?.username ?? null}
+      onClose={() => setShowAvatarPreview(false)}
+    />
+  );
   const userListRef = useRef<FlatList<FollowUser>>(null);
   const handleTopBarTap = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -296,6 +306,7 @@ export default function ProfileScreen() {
       <ProfileHeader
         variant="own"
         avatar_url={profile?.avatar_url ?? null}
+        onAvatarPress={() => setShowAvatarPreview(true)}
         username={user?.user_metadata?.username ?? 'you'}
         display_name={profile?.display_name ?? null}
         bio={profile?.bio ?? null}
@@ -437,6 +448,7 @@ export default function ProfileScreen() {
     };
     return (
       <SafeAreaView style={styles.root}>
+        {avatarPreview}
         {stickyTopBar}
         <PostGrid
           source={sourceMap[activeTab]}
@@ -458,6 +470,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.root}>
+      {avatarPreview}
       {stickyTopBar}
       <FlatList<FollowUser>
         key="users"
