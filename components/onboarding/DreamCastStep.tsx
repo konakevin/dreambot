@@ -528,11 +528,8 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           Who&apos;s coming along?
         </GradientTitle>
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Upload your face and we&apos;ll put YOU into your nightly dreams. Add a +1 and you&apos;ll
-          get scenes of you two together.
-        </Text>
-        <Text style={[shared.heroSubtitle, { marginTop: verticalScale(10), textAlign: 'center' }]}>
-          Optional, but highly recommended! It makes your dreams more personalized, and FUN!
+          Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream
+          together — optional, but it’s the fun part.
         </Text>
         <View style={{ height: verticalScale(16) }} />
         {innerSlots}
