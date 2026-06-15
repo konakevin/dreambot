@@ -5,6 +5,7 @@ import { View, TouchableOpacity, ScrollView, StyleSheet, Switch } from 'react-na
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import * as Linking from 'expo-linking';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
@@ -23,11 +24,6 @@ import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
-
-// TEMP (preview): flip to `false` to restore the admin / dev rows. While `true`,
-// every admin-only item is hidden so Settings can be eyeballed exactly as a
-// regular user sees it. Revert before shipping.
-const HIDE_ADMIN_FOR_PREVIEW = true;
 
 function SettingsRow({
   icon,
@@ -78,8 +74,23 @@ export default function SettingsScreen() {
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
-  // Effective admin visibility (honors the HIDE_ADMIN_FOR_PREVIEW override).
-  const showAdmin = isAdmin && !HIDE_ADMIN_FOR_PREVIEW;
+
+  // Which auth providers back this account. OAuth-only users (Google/Apple/
+  // Facebook) have no email/password identity — "Change password" is
+  // meaningless for them, so we show a read-only "managed by" row instead.
+  const authProviders: string[] =
+    user?.identities?.map((i) => i.provider) ??
+    (user?.app_metadata?.providers as string[] | undefined) ??
+    (user?.app_metadata?.provider ? [user.app_metadata.provider as string] : []);
+  const hasPasswordLogin = authProviders.includes('email');
+  const oauthLabel = (() => {
+    const p = authProviders.find((x) => x !== 'email');
+    if (p === 'google') return 'Google';
+    if (p === 'apple') return 'Apple';
+    if (p === 'facebook') return 'Facebook';
+    return p ? p.charAt(0).toUpperCase() + p.slice(1) : 'your sign-in provider';
+  })();
+  const showAdmin = isAdmin;
   useEffect(() => {
     if (!user) return;
     supabase
@@ -146,7 +157,16 @@ export default function SettingsScreen() {
       {
         text: 'Send link',
         onPress: async () => {
-          await supabase.auth.resetPasswordForEmail(user!.email!);
+          // redirectTo deep-links the recovery email back into the app
+          // (dreambot://reset-password) where the user actually sets the new
+          // password. Without it the link dead-ends on Supabase's Site URL.
+          const { error } = await supabase.auth.resetPasswordForEmail(user!.email!, {
+            redirectTo: Linking.createURL('reset-password'),
+          });
+          if (error) {
+            showAlert('Couldn’t send link', error.message);
+            return;
+          }
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           showAlert('Sent', 'Check your email for the reset link.');
         },
@@ -264,6 +284,129 @@ export default function SettingsScreen() {
   return (
     <ScreenLayout header="back" title="Settings" titleGradient swipeBack={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
+        {showAdmin && (
+          <>
+            <Text style={styles.sectionHeader}>ADMIN</Text>
+            <View style={styles.section}>
+              <View style={styles.row}>
+                <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.rowLabel}>One-tap delete button</Text>
+                  <Text
+                    style={{
+                      color: colors.textSecondary,
+                      fontSize: fontScale(12),
+                      marginTop: verticalScale(2),
+                    }}
+                  >
+                    {showAdminDelete
+                      ? 'Red X visible above heart. Single tap deletes (no confirm).'
+                      : 'Hidden. Enable for bulk cleanup.'}
+                  </Text>
+                </View>
+                <Switch
+                  value={showAdminDelete}
+                  onValueChange={(val) => {
+                    setShowAdminDelete(val);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
+                  trackColor={{ false: colors.border, true: colors.accent }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+              {/* AI model badge — supreme-admin only (not regular admins). The
+                  badge is double-gated: isSuperAdmin AND this toggle. */}
+              {isSuperAdmin && (
+                <View style={styles.row}>
+                  <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.rowLabel}>AI model badge</Text>
+                    <Text
+                      style={{
+                        color: colors.textSecondary,
+                        fontSize: fontScale(12),
+                        marginTop: verticalScale(2),
+                      }}
+                    >
+                      {showModelBadge
+                        ? 'Shown on every card: which AI rendered it'
+                        : 'Hidden. Flip on to see the render model.'}
+                    </Text>
+                  </View>
+                  <Switch
+                    value={showModelBadge}
+                    onValueChange={(val) => {
+                      setShowModelBadge(val);
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
+                    trackColor={{ false: colors.border, true: colors.accent }}
+                    thumbColor="#FFFFFF"
+                  />
+                </View>
+              )}
+              {/* Debug escape hatch — clears all query cache + reshuffles the
+                  feed + resets scroll. Admin-only (was a vague user-facing row). */}
+              <SettingsRow
+                icon="refresh-outline"
+                label="Refresh App"
+                onPress={handleRefreshAll}
+                trailing={null}
+              />
+            </View>
+          </>
+        )}
+
+        {showAdmin && (
+          <View style={styles.section}>
+            <SettingsRow
+              icon="flask"
+              label="Run Dream Generator"
+              onPress={() => nav.push('/dreamTest')}
+            />
+            <SettingsRow
+              icon="trash-outline"
+              label="Reset Profile + Tutorials (test)"
+              onPress={async () => {
+                await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
+                await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+                // Also clear the first-run intro flags so the Create-tab tutorials
+                // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
+                // would skip them. Non-fatal if storage hiccups.
+                await Promise.all([
+                  resetCreateIntro(),
+                  resetMediumsIntro(),
+                  resetFeedIntro(),
+                ]).catch(() => {});
+                useOnboardingStore.getState().reset();
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                router.replace('/(onboarding)');
+              }}
+              destructive
+              trailing={null}
+            />
+            <SettingsRow
+              icon="refresh-outline"
+              label="Reset First-Run Tutorials (test)"
+              onPress={async () => {
+                // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
+                // so those tutorial sheets re-show next time — without re-onboarding.
+                // Lets us replay the first-run flows over and over.
+                await Promise.all([
+                  resetCreateIntro(),
+                  resetMediumsIntro(),
+                  resetFeedIntro(),
+                ]).catch(() => {});
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                showAlert(
+                  'Tutorials reset',
+                  'First-run tutorials will show again. Reopen the Create tab to see them.'
+                );
+              }}
+              trailing={null}
+            />
+          </View>
+        )}
+
         {/* Avatar + "Change photo" moved to the Profile screen (under the
             avatar) — it doesn't belong in Settings. Edit Profile is the
             canonical home for avatar / display name / bio drill-ins. */}
@@ -430,137 +573,28 @@ export default function SettingsScreen() {
             screen (toggle Advanced Mode → AI Model pill), so the settings
             entry point + /settings/advanced-mode screen were removed. */}
 
-        {showAdmin && (
-          <>
-            <Text style={styles.sectionHeader}>ADMIN</Text>
-            <View style={styles.section}>
-              <View style={styles.row}>
-                <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.rowLabel}>One-tap delete button</Text>
-                  <Text
-                    style={{
-                      color: colors.textSecondary,
-                      fontSize: fontScale(12),
-                      marginTop: verticalScale(2),
-                    }}
-                  >
-                    {showAdminDelete
-                      ? 'Red X visible above heart. Single tap deletes (no confirm).'
-                      : 'Hidden. Enable for bulk cleanup.'}
-                  </Text>
-                </View>
-                <Switch
-                  value={showAdminDelete}
-                  onValueChange={(val) => {
-                    setShowAdminDelete(val);
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  }}
-                  trackColor={{ false: colors.border, true: colors.accent }}
-                  thumbColor="#FFFFFF"
-                />
-              </View>
-              {/* AI model badge — supreme-admin only (not regular admins). The
-                  badge is double-gated: isSuperAdmin AND this toggle. */}
-              {isSuperAdmin && (
-                <View style={styles.row}>
-                  <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.rowLabel}>AI model badge</Text>
-                    <Text
-                      style={{
-                        color: colors.textSecondary,
-                        fontSize: fontScale(12),
-                        marginTop: verticalScale(2),
-                      }}
-                    >
-                      {showModelBadge
-                        ? 'Shown on every card: which AI rendered it'
-                        : 'Hidden. Flip on to see the render model.'}
-                    </Text>
-                  </View>
-                  <Switch
-                    value={showModelBadge}
-                    onValueChange={(val) => {
-                      setShowModelBadge(val);
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    }}
-                    trackColor={{ false: colors.border, true: colors.accent }}
-                    thumbColor="#FFFFFF"
-                  />
-                </View>
-              )}
-              {/* Debug escape hatch — clears all query cache + reshuffles the
-                  feed + resets scroll. Admin-only (was a vague user-facing row). */}
-              <SettingsRow
-                icon="refresh-outline"
-                label="Refresh App"
-                onPress={handleRefreshAll}
-                trailing={null}
-              />
-            </View>
-          </>
-        )}
-
-        {showAdmin && (
-          <View style={styles.section}>
-            <SettingsRow
-              icon="flask"
-              label="Run Dream Generator"
-              onPress={() => nav.push('/dreamTest')}
-            />
-            <SettingsRow
-              icon="trash-outline"
-              label="Reset Profile + Tutorials (test)"
-              onPress={async () => {
-                await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
-                await supabase.from('user_recipes').delete().eq('user_id', user!.id);
-                // Also clear the first-run intro flags so the Create-tab tutorials
-                // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
-                // would skip them. Non-fatal if storage hiccups.
-                await Promise.all([
-                  resetCreateIntro(),
-                  resetMediumsIntro(),
-                  resetFeedIntro(),
-                ]).catch(() => {});
-                useOnboardingStore.getState().reset();
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                router.replace('/(onboarding)');
-              }}
-              destructive
-              trailing={null}
-            />
-            <SettingsRow
-              icon="refresh-outline"
-              label="Reset First-Run Tutorials (test)"
-              onPress={async () => {
-                // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
-                // so those tutorial sheets re-show next time — without re-onboarding.
-                // Lets us replay the first-run flows over and over.
-                await Promise.all([
-                  resetCreateIntro(),
-                  resetMediumsIntro(),
-                  resetFeedIntro(),
-                ]).catch(() => {});
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                showAlert(
-                  'Tutorials reset',
-                  'First-run tutorials will show again. Reopen the Create tab to see them.'
-                );
-              }}
-              trailing={null}
-            />
-          </View>
-        )}
-
         {/* Account — non-destructive account controls. */}
         <Text style={styles.sectionHeader}>ACCOUNT</Text>
         <View style={styles.section}>
-          <SettingsRow
-            icon="lock-closed-outline"
-            label="Change password"
-            onPress={handleChangePassword}
-          />
+          {hasPasswordLogin ? (
+            <SettingsRow
+              icon="lock-closed-outline"
+              label="Change password"
+              onPress={handleChangePassword}
+            />
+          ) : (
+            <SettingsRow
+              icon="lock-closed-outline"
+              label="Password"
+              trailing={<Text style={styles.rowValue}>{`Via ${oauthLabel}`}</Text>}
+              onPress={() =>
+                showAlert(
+                  `Managed by ${oauthLabel}`,
+                  `You sign in with ${oauthLabel}, so there’s no DreamBot password to change. Manage your login from your ${oauthLabel} account.`
+                )
+              }
+            />
+          )}
           <SettingsRow
             icon="notifications-outline"
             label="Push Notifications"
