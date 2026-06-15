@@ -58,8 +58,8 @@ interface DrillRow {
 // swap face photos directly on this screen instead of pushing a separate
 // route.
 const DREAM_IDENTITY_ROWS: DrillRow[] = [
-  { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
   { icon: 'location-outline', label: 'Locations', route: '/settings/locations' },
+  { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
 ];
 
 export default function EditProfileScreen() {
@@ -292,14 +292,14 @@ export default function EditProfileScreen() {
             </Text>
           </View>
 
-          {/* All dream settings grouped under ONE header: the inline Dream Cast
-              editor (embedded=true skips DreamCastStep's outer ScrollView +
-              onboarding chrome; auto-saves via useAutoSaveProfile above) followed
-              by the Mood / Locations drill-ins. */}
+          {/* All dream settings grouped under ONE header. Compact drill-ins
+              (Locations / Mood) first so every option is visible above the fold,
+              then the taller inline Dream Cast editor (embedded=true skips
+              DreamCastStep's outer ScrollView + onboarding chrome; auto-saves via
+              useAutoSaveProfile above). */}
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>DREAM SETTINGS</Text>
-            <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
-            <View style={[styles.sectionCard, { marginTop: verticalScale(8) }]}>
+            <View style={styles.sectionCard}>
               {DREAM_IDENTITY_ROWS.map((row, i) => (
                 <TouchableOpacity
                   key={row.label}
@@ -315,6 +315,9 @@ export default function EditProfileScreen() {
                   <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
                 </TouchableOpacity>
               ))}
+            </View>
+            <View style={{ marginTop: verticalScale(8) }}>
+              <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
             </View>
           </View>
         </ScrollView>
