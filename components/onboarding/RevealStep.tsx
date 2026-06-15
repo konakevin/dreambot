@@ -17,6 +17,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useFeedStore } from '@/store/feed';
+import { GradientButton } from '@/components/GradientButton';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { generateFirstDreamCascade } from '@/lib/firstDreamCascade';
@@ -395,14 +396,12 @@ export function RevealStep({ onBack }: Props) {
           <Text style={s.centeredSub}>
             Your DreamBot knows what you like. Tap below to see what it dreams up!
           </Text>
-          <TouchableOpacity
-            style={[s.createButton, { alignSelf: 'stretch', marginTop: verticalScale(8) }]}
+          <GradientButton
+            label="Let’s go!"
+            icon="sparkles"
             onPress={() => generateImage()}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="sparkles" size={18} color="#FFFFFF" />
-            <Text style={s.createButtonText}>Let’s go!</Text>
-          </TouchableOpacity>
+            style={{ alignSelf: 'stretch', marginTop: verticalScale(8) }}
+          />
           <TouchableOpacity
             style={{ marginTop: verticalScale(12) }}
             onPress={onBack}
