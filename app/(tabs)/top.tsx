@@ -506,7 +506,7 @@ export default function SearchExploreScreen() {
           {/* Search bar */}
           <View style={s.searchBarRow}>
             <View style={s.searchBarWrap}>
-              <Ionicons name="search" size={16} color={colors.textSecondary} style={s.searchIcon} />
+              <Ionicons name="search" size={16} color={colors.accent} style={s.searchIcon} />
               <TextInput
                 ref={searchInputRef}
                 style={s.searchInput}
@@ -633,7 +633,11 @@ const s = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    // Lighter fill + a 1px border so the field reads as a tappable input
+    // instead of blending into the black background.
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 12,
     height: 40,
