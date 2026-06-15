@@ -12,9 +12,14 @@ primary_region = 'iad'
 [http_service]
   internal_port = 8080
   force_https = true
+  # Keep ONE machine always warm. At low traffic (late night) the dual face-swap
+  # machine used to scale to zero (min=0), and the next request paid a ~9s Fly
+  # cold-start that blew the swap deadline budget → "Face swap timed out" on
+  # every dual-cast render until daytime traffic warmed it again (2026-06-15).
+  # auto_start still spins up EXTRA machines under load; this just floors it at 1.
   auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
   [[http_service.checks]]
