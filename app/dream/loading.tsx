@@ -567,11 +567,13 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
     paddingBottom: verticalScale(16),
-    gap: 40,
+    // One uniform gap down the whole column (matches stage + cta) so the
+    // spacing reads even instead of grouped-then-jumpy.
+    gap: verticalScale(26),
   },
   cta: {
     alignItems: 'center',
-    gap: verticalScale(24),
+    gap: verticalScale(26),
   },
   // Casual queue prompt above the Queue This button — muted gray so it
   // doesn't compete with the lavender pill, with breathing room to the

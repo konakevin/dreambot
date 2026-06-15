@@ -22,9 +22,9 @@ import Animated, {
   useAnimatedStyle,
   withRepeat,
   withTiming,
-  withDelay,
   Easing,
   interpolate,
+  type SharedValue,
 } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -60,25 +60,20 @@ const DOT_CYCLE_MS = 1400;
 const DOT_PHASE_MS = 140;
 const DOT_SIZE = 9;
 
-function WaveDot({ index }: { index: number }) {
-  const t = useSharedValue(0);
-
-  useEffect(() => {
-    t.value = withDelay(
-      index * DOT_PHASE_MS,
-      withRepeat(
-        withTiming(1, { duration: DOT_CYCLE_MS, easing: Easing.inOut(Easing.sin) }),
-        -1,
-        false
-      )
-    );
-  }, [index, t]);
+// Phase offset is STRUCTURAL (derived from the dot's index in the worklet),
+// not a one-time start delay. A single shared clock `t` (0→1 looping) drives
+// every dot, and each dot reads `(t + index*phaseFraction) % 1`. This survives
+// app background/foreground: when Reanimated pauses & resumes the clock, the
+// per-dot offset is recomputed every frame, so the wave never collapses into a
+// synchronized bulge (the old withDelay stagger was lost on resume).
+function WaveDot({ index, t }: { index: number; t: SharedValue<number> }) {
+  const offset = (index * DOT_PHASE_MS) / DOT_CYCLE_MS;
 
   const animatedStyle = useAnimatedStyle(() => {
-    // t goes 0→1 once per cycle; map a "pulse" curve onto it so the
-    // dot peaks in the middle of its cycle then falls back. Using a
-    // simple sin-shaped pulse via two interpolations.
-    const pulse = interpolate(t.value, [0, 0.5, 1], [0, 1, 0]);
+    const phase = (t.value + offset) % 1;
+    // Sin-shaped pulse: peaks mid-cycle then falls back. Continuous at the
+    // 0/1 wrap (both ends map to 0), so the modulo seam is invisible.
+    const pulse = interpolate(phase, [0, 0.5, 1], [0, 1, 0]);
     return {
       opacity: interpolate(pulse, [0, 1], [0.35, 1]),
       transform: [
@@ -92,10 +87,20 @@ function WaveDot({ index }: { index: number }) {
 }
 
 function WaveLoader() {
+  // One linear clock for all dots — no per-dot start stagger to lose.
+  const t = useSharedValue(0);
+  useEffect(() => {
+    t.value = withRepeat(
+      withTiming(1, { duration: DOT_CYCLE_MS, easing: Easing.linear }),
+      -1,
+      false
+    );
+  }, [t]);
+
   return (
     <View style={styles.waveRow}>
       {Array.from({ length: DOT_COUNT }).map((_, i) => (
-        <WaveDot key={i} index={i} />
+        <WaveDot key={i} index={i} t={t} />
       ))}
     </View>
   );
@@ -146,7 +151,9 @@ const styles = StyleSheet.create({
     // it dominate the screen and float its title in dead space.
     alignItems: 'center',
     paddingHorizontal: 32,
-    gap: 24,
+    // Uniform with the scene + CTA gaps so the whole column (mascot →
+    // Dreaming → dots → hint → button) has one consistent vertical rhythm.
+    gap: verticalScale(26),
   },
   mascot: {
     // Bumped 140 → 180 now that the mascot has its own whimsy scene
