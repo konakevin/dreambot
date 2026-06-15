@@ -39,16 +39,6 @@ import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
-type AlbumTab = 'posts' | 'dreams' | 'saved' | 'reposts';
-
-// Per-album subheader copy — the icon tabs alone don't say what each album is,
-// so a single explainer line sits under the active icon.
-const ALBUM_INFO: Record<AlbumTab, string> = {
-  posts: 'Your public dreams, shared to the feed',
-  dreams: 'All your dreams, public and private',
-  saved: "Dreams you've saved",
-  reposts: "Dreams you've reposted to your followers",
-};
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -91,6 +81,25 @@ export default function ProfileScreen() {
         if (data) setPrivateOnly(data.dreams_private_only ?? false);
       });
   }, [user]);
+
+  // Flip the Dreams All/Private filter — optimistic, then persist.
+  const applyPrivateOnly = useCallback(
+    (next: boolean) => {
+      if (next === privateOnly) return;
+      Haptics.selectionAsync();
+      setPrivateOnly(next);
+      if (user) {
+        supabase
+          .from('users')
+          .update({ dreams_private_only: next })
+          .eq('id', user.id)
+          .then(({ error }) => {
+            if (error && __DEV__) console.warn('persist dreams_private_only failed', error);
+          });
+      }
+    },
+    [privateOnly, user]
+  );
 
   // Reset to posts tab only when profile tab icon is re-tapped
   useEffect(() => {
@@ -379,44 +388,32 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Per-album explainer — one line under the icon tabs. The Dreams tab
-          also carries a "Private only" filter toggle on the right. */}
-      {activeTab === 'dreams' ? (
-        <View style={styles.dreamsSubheaderRow}>
-          <Text style={styles.albumSubheaderInline}>
-            {privateOnly ? 'Your private (unposted) dreams' : ALBUM_INFO.dreams}
-          </Text>
-          <TouchableOpacity
-            style={[styles.dreamsFilter, privateOnly && styles.dreamsFilterActive]}
-            onPress={() => {
-              const next = !privateOnly;
-              setPrivateOnly(next); // optimistic
-              if (user) {
-                supabase
-                  .from('users')
-                  .update({ dreams_private_only: next })
-                  .eq('id', user.id)
-                  .then(({ error }) => {
-                    if (error && __DEV__) console.warn('persist dreams_private_only failed', error);
-                  });
-              }
-            }}
-            activeOpacity={0.7}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Ionicons
-              name={privateOnly ? 'checkbox' : 'square-outline'}
-              size={14}
-              color={privateOnly ? '#FFFFFF' : colors.textSecondary}
-            />
-            <Text style={[styles.dreamsFilterText, privateOnly && styles.dreamsFilterTextActive]}>
-              Private only
-            </Text>
-          </TouchableOpacity>
+      {/* Dreams album: a slim right-aligned All / Private segmented filter.
+          The other albums show no subheader — the icons speak for themselves. */}
+      {activeTab === 'dreams' && (
+        <View style={styles.dreamsFilterRow}>
+          <View style={styles.segmented}>
+            <TouchableOpacity
+              style={[styles.segment, !privateOnly && styles.segmentActive]}
+              onPress={() => applyPrivateOnly(false)}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.segmentText, !privateOnly && styles.segmentTextActive]}>
+                All
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.segment, privateOnly && styles.segmentActive]}
+              onPress={() => applyPrivateOnly(true)}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.segmentText, privateOnly && styles.segmentTextActive]}>
+                Private
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      ) : activeTab === 'posts' || activeTab === 'saved' || activeTab === 'reposts' ? (
-        <Text style={styles.albumSubheader}>{ALBUM_INFO[activeTab as AlbumTab]}</Text>
-      ) : null}
+      )}
 
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
@@ -540,51 +537,39 @@ const styles = StyleSheet.create({
     fontSize: fontScale(15),
     fontWeight: '700',
   },
-  // Per-album explainer line under the icon tab row (single line, no count).
-  albumSubheader: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
+  // Dreams tab: slim row holding the right-aligned All / Private segmented
+  // filter. The other albums carry no subheader now.
+  dreamsFilterRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     paddingHorizontal: 16,
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(8),
   },
-  // Dreams tab: explainer (left) + "Private only" filter toggle (right).
-  dreamsSubheaderRow: {
+  // Segmented All | Private control — a pill-shaped track with two segments;
+  // the active one fills with the accent.
+  segmented: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(8),
+    borderRadius: 999,
+    padding: 2,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  albumSubheaderInline: {
-    flex: 1,
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-  },
-  dreamsFilter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
+  segment: {
+    paddingHorizontal: 14,
     paddingVertical: verticalScale(5),
     borderRadius: 999,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
-    backgroundColor: 'rgba(255,255,255,0.06)',
   },
-  // Active = the standard purple CTA (the Public badge is now neutral dark, so
-  // the accent is free to mean "this filter is on").
-  dreamsFilterActive: {
+  segmentActive: {
     backgroundColor: colors.accent,
-    borderColor: colors.accent,
   },
-  dreamsFilterText: {
+  segmentText: {
     color: colors.textSecondary,
     fontSize: fontScale(12),
     fontWeight: '600',
   },
-  dreamsFilterTextActive: { color: '#FFFFFF' },
+  segmentTextActive: { color: '#FFFFFF' },
   listSectionCount: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
