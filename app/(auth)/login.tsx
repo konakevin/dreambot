@@ -135,7 +135,11 @@ export default function LoginScreen() {
                       setLoading(true);
                       await signInWithApple();
                       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                      router.replace('/');
+                      // Resolve onboarding-vs-tabs BEFORE navigating (like the
+                      // email path) so a fresh user goes straight to onboarding
+                      // — replace('/') bounced through app/index's async gate and
+                      // flashed the tabs/FeedIntroGate first.
+                      router.replace(await getPostAuthRoute());
                     } catch (err: unknown) {
                       const msg = (err as Error).message;
                       if (
@@ -164,7 +168,7 @@ export default function LoginScreen() {
                     setLoading(true);
                     await signInWithGoogle();
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                    router.replace('/');
+                    router.replace(await getPostAuthRoute());
                   } catch (err: unknown) {
                     const msg = (err as Error).message;
                     if (!msg.includes('canceled') && !msg.includes('cancelled')) {
@@ -188,7 +192,7 @@ export default function LoginScreen() {
                     setLoading(true);
                     await signInWithFacebook();
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                    router.replace('/');
+                    router.replace(await getPostAuthRoute());
                   } catch (err: unknown) {
                     const msg = (err as Error).message;
                     if (!msg.includes('canceled') && !msg.includes('cancelled')) {
