@@ -695,6 +695,21 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* Help */}
+        <Text style={styles.sectionHeader}>HELP</Text>
+        <View style={styles.section}>
+          <SettingsRow
+            icon="help-circle-outline"
+            label="How Create works"
+            onPress={async () => {
+              // Re-arm the Create-tab teaching sheet, then jump to Create — its
+              // useFocusEffect re-checks the seen flag on focus and re-shows it.
+              await resetCreateIntro().catch(() => {});
+              router.replace('/(tabs)/create');
+            }}
+          />
+        </View>
+
         {/* About / Legal */}
         <Text style={styles.sectionHeader}>ABOUT</Text>
         <View style={styles.section}>
