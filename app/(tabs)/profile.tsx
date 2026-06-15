@@ -332,14 +332,11 @@ export default function ProfileScreen() {
         followerCount={profile?.followerCount ?? 0}
         followingCount={profile?.followingCount ?? 0}
         createdAt={profile?.created_at ?? null}
-        // Only one of the three StatsTab values maps directly to the stats
-        // row; 'dreams' / 'saved' live on the album tab row below it and
-        // don't highlight any stats slot.
-        activeStat={
-          activeTab === 'posts' || activeTab === 'followers' || activeTab === 'following'
-            ? activeTab
-            : undefined
-        }
+        // Only the social stats (Followers / Following) highlight in the stats
+        // row. The album tabs — Posts, Dreams, Saved, Reposts — live on the
+        // icon row below and don't light up any stat slot (Posts is an album
+        // tab like the others, so it shouldn't be the odd one out).
+        activeStat={activeTab === 'followers' || activeTab === 'following' ? activeTab : undefined}
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
