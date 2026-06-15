@@ -18,7 +18,8 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useMoodAxes } from '@/hooks/useMoodAxes';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
+import { verticalScale, fontScale, verticalScaleClamped, screen } from '@/lib/responsive';
+import { GradientTitle } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 
@@ -140,8 +141,19 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
           scroll underneath it (matches BotSelectorStep / Locations).
           Title kept to one line so all 4 sliders fit above the fold. */}
       <View style={s.stickyHeader}>
-        <Text style={shared.heroTitle}>What kind of dreams?</Text>
-        <Text style={shared.heroSubtitle}>Slide them however feels right.</Text>
+        <GradientTitle
+          size={24}
+          numberOfLines={1}
+          align="center"
+          maxWidth={screen.width - 40}
+          lineHeight={30}
+          style={{ marginBottom: verticalScale(6) }}
+        >
+          What kind of dreams?
+        </GradientTitle>
+        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
+          Slide them however feels right.
+        </Text>
       </View>
 
       <ScrollView

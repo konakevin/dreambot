@@ -17,7 +17,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, screen } from '@/lib/responsive';
+import { GradientTitle } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
@@ -516,12 +517,21 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
   return (
     <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={shared.heroTitle}>Who&apos;s coming along?</Text>
-        <Text style={shared.heroSubtitle}>
+        <GradientTitle
+          size={24}
+          numberOfLines={2}
+          align="center"
+          maxWidth={screen.width - 40}
+          lineHeight={30}
+          style={{ marginBottom: verticalScale(6) }}
+        >
+          Who&apos;s coming along?
+        </GradientTitle>
+        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
           Upload your face and we&apos;ll put YOU into your nightly dreams. Add a +1 and you&apos;ll
           get scenes of you two together.
         </Text>
-        <Text style={[shared.heroSubtitle, { marginTop: verticalScale(10) }]}>
+        <Text style={[shared.heroSubtitle, { marginTop: verticalScale(10), textAlign: 'center' }]}>
           Optional, but highly recommended! It makes your dreams more personalized, and FUN!
         </Text>
         <View style={{ height: verticalScale(16) }} />
