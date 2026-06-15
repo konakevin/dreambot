@@ -71,6 +71,7 @@ export function RevealStep({ onBack }: Props) {
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const reset = useOnboardingStore((s) => s.reset);
   const setChromeHidden = useOnboardingStore((s) => s.setChromeHidden);
+  const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
   const user = useAuthStore((s) => s.user);
   const engineConfig = useEngineConfig();
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -103,7 +104,11 @@ export function RevealStep({ onBack }: Props) {
       phase === 'creating' ||
       phase === 'finished';
     setChromeHidden(hidden);
-  }, [phase, setChromeHidden]);
+    // Also LOCK the pager swipe for these phases — once the dream is
+    // generating/revealed there's no going back through onboarding; the only
+    // way out is the "Go to feed" CTA (which calls reset() → clears this).
+    setScrollLocked(hidden);
+  }, [phase, setChromeHidden, setScrollLocked]);
 
   async function runBootSequence() {
     await new Promise((r) => setTimeout(r, 1500));
