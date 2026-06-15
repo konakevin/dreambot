@@ -19,7 +19,6 @@ import Animated, {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { VIBE_BLURBS } from '@/constants/vibeBlurbs';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -38,6 +37,8 @@ interface StyleOption {
   key: string;
   label: string;
   face_swaps?: boolean;
+  /** Short DB-authored blurb (dream_vibes.description) shown in the vibe sheet. */
+  description?: string;
 }
 
 interface Props {
@@ -194,8 +195,13 @@ export function StylePickerSheet({
     const isSelected = isSurpriseRow
       ? selected === 'surprise_me_face' || selected === 'surprise_me_art'
       : opt.key === selected;
-    // Fun couple-word blurb to the right of vibe labels (vibe sheet only).
-    const blurb = type === 'vibe' ? VIBE_BLURBS[opt.key] : undefined;
+    // Accurate DB-authored blurb to the right of vibe labels (vibe sheet only) —
+    // sourced from dream_vibes.description so it matches what the vibe actually
+    // does to renders. Surprise Me has no DB row, so give it a fun fallback.
+    const blurb =
+      type === 'vibe'
+        ? (opt.description ?? (opt.key === 'surprise_me' ? 'Roll the dice' : undefined))
+        : undefined;
     return (
       <TouchableOpacity
         key={opt.key}
