@@ -122,10 +122,19 @@ export function RevealStep({ onBack }: Props) {
   }
 
   async function describeCastPhotos(): Promise<typeof profile.dream_cast> {
-    const {
+    let {
       data: { session },
     } = await supabase.auth.getSession();
     if (!session?.access_token) return profile.dream_cast;
+    // Proactively refresh a stale/near-expiry token before the parallel
+    // describe-photo calls — on a real device the RN auto-refresh timer pauses
+    // in the background, and getSession() can hand back an expired token that
+    // these hand-rolled fetches would 401 on (the cast-upload 401 bug).
+    if ((session.expires_at ?? 0) * 1000 - Date.now() < 60_000) {
+      const { data: refreshed } = await supabase.auth.refreshSession();
+      if (refreshed.session) session = refreshed.session;
+    }
+    const accessToken = session.access_token;
 
     const described = await Promise.all(
       profile.dream_cast.map(async (member) => {
@@ -140,7 +149,7 @@ export function RevealStep({ onBack }: Props) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.access_token}`,
+                Authorization: `Bearer ${accessToken}`,
               },
               body: JSON.stringify({
                 image_url: member.thumb_url,
