@@ -61,8 +61,8 @@ const SLOTS: SlotConfig[] = [
 ];
 
 const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [
-  { key: 'partner', label: 'Partner' },
   { key: 'friend', label: 'Friend' },
+  { key: 'partner', label: 'Partner' },
 ];
 
 function CastSlot({
@@ -342,12 +342,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
       }
 
       // Show the photo immediately (spinner stays on until describe completes).
-      // plus_one always carries a relationship — default to 'partner' so the
-      // user doesn't have to actively select one. They can switch via the
-      // pill row below if Friend fits better.
+      // plus_one always carries a relationship — default to 'friend' (the
+      // engine's own fallback) so the user doesn't have to actively select one.
+      // They can switch via the pill row below if Partner fits better.
       const existing = getMember(role);
       const plusOneRel: CastRelationship | undefined =
-        role === 'plus_one' ? (existing?.relationship ?? 'partner') : existing?.relationship;
+        role === 'plus_one' ? (existing?.relationship ?? 'friend') : existing?.relationship;
       setCastMember({
         role,
         thumb_url: publicUrl,
@@ -400,11 +400,11 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
       }
 
       // Re-read current member from store (user may have set relationship
-      // while describe was running). plus_one keeps the 'partner' default
+      // while describe was running). plus_one keeps the 'friend' default
       // applied on upload above unless the user changed it.
       const current = useOnboardingStore.getState().profile.dream_cast.find((m) => m.role === role);
       const plusOneRelFinal: CastRelationship | undefined =
-        role === 'plus_one' ? (current?.relationship ?? 'partner') : current?.relationship;
+        role === 'plus_one' ? (current?.relationship ?? 'friend') : current?.relationship;
       setCastMember({
         role,
         thumb_url: publicUrl,
