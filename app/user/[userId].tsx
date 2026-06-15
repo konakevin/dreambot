@@ -14,7 +14,7 @@ import { Image } from 'expo-image';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { safeBack } from '@/lib/navigate';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -272,6 +272,14 @@ export default function PublicProfileScreen() {
   // native full-screen back gesture (which fought the grid scroll) is disabled
   // for this route in app/_layout.tsx.
   const { gesture: backGesture, animatedStyle: backStyle } = useAxisLockSwipeBack();
+
+  // Your own shared link routes here (/user/<me>) — e.g. a profile link you
+  // sent a friend, opened on your own device. The public view only shows
+  // public posts; send yourself to the real profile tab, which has your full
+  // albums (Dreams / Saved / Reposts + private dreams).
+  if (isOwnProfile) {
+    return <Redirect href="/(tabs)/profile" />;
+  }
 
   if (profileLoading || !profile) {
     return (
