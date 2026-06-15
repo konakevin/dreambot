@@ -52,6 +52,15 @@ import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 
+// Sticky medium/vibe — last explicit Create-tab pick, remembered across app
+// launches (local, like the useExactPrompt toggle; the model has its own DB
+// stickiness). AsyncStorage is the source of truth for the PREFERENCE: it's
+// written only on a deliberate pick here, and re-applied on every Create focus
+// — so the per-dream reset() and a DLT look-replay (which mutate the shared
+// dream store transiently) never overwrite the user's remembered choice.
+const SELECTED_MEDIUM_KEY = 'create.selectedMedium.v1';
+const SELECTED_VIBE_KEY = 'create.selectedVibe.v1';
+
 export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
   const setPhoto = useDreamStore((s) => s.setPhoto);
@@ -123,6 +132,53 @@ export default function CreateScreen() {
       });
     },
     [setUseExactPrompt]
+  );
+
+  // Persisting setters for medium/vibe — store the deliberate pick so it
+  // survives app relaunches + the per-dream reset(). Used by the picker below.
+  const persistMedium = useCallback(
+    (key: string) => {
+      setMedium(key);
+      AsyncStorage.setItem(SELECTED_MEDIUM_KEY, key).catch((e) => {
+        if (__DEV__) console.warn('[create] medium persist failed', e);
+      });
+    },
+    [setMedium]
+  );
+  const persistVibe = useCallback(
+    (key: string) => {
+      setVibe(key);
+      AsyncStorage.setItem(SELECTED_VIBE_KEY, key).catch((e) => {
+        if (__DEV__) console.warn('[create] vibe persist failed', e);
+      });
+    },
+    [setVibe]
+  );
+
+  // Re-apply the remembered medium/vibe on every Create focus. Runs on mount
+  // (cross-session restore) AND whenever the user returns to the tab — so a
+  // reset() after a dream, or a DLT replay that changed the shared store, is
+  // overridden back to the user's sticky choice. No-op on first run (no keys).
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        try {
+          const [m, v] = await Promise.all([
+            AsyncStorage.getItem(SELECTED_MEDIUM_KEY),
+            AsyncStorage.getItem(SELECTED_VIBE_KEY),
+          ]);
+          if (cancelled) return;
+          if (m) setMedium(m);
+          if (v) setVibe(v);
+        } catch (e) {
+          if (__DEV__) console.warn('[create] medium/vibe rehydrate failed', e);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, [setMedium, setVibe])
   );
 
   // First-Create-tap teaching sheet — explains the modes + sparkles via a
@@ -850,8 +906,8 @@ export default function CreateScreen() {
         type={pickerType ?? 'medium'}
         selected={pickerType === 'vibe' ? config.selectedVibe : config.selectedMedium}
         onSelect={(key) => {
-          if (pickerType === 'vibe') setVibe(key);
-          else setMedium(key);
+          if (pickerType === 'vibe') persistVibe(key);
+          else persistMedium(key);
         }}
         onClose={() => setPickerType(null)}
         options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
