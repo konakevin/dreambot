@@ -65,6 +65,39 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
+  // ── Retry branch ──
+  // Re-run a previously FAILED dream by re-enqueuing its stored payload (the
+  // exact RequestBody → reproduces prompt/model/medium/vibe/photo verbatim).
+  // Charged fresh (the failure already refunded). Guards: must belong to the
+  // caller, must be a terminal failure, and must NOT be a content/NSFW
+  // rejection (re-running the same prompt just re-fails — the client routes
+  // those to Create instead, but defend server-side too).
+  const retryJobId = typeof body.retry_job_id === 'string' ? body.retry_job_id : null;
+  if (retryJobId) {
+    const { data: prior } = await supabase
+      .from('dream_queue')
+      .select('payload, user_id, status')
+      .eq('id', retryJobId)
+      .maybeSingle();
+    if (!prior || prior.user_id !== userId || !prior.payload) {
+      return json({ error: 'retry_not_found' }, 404);
+    }
+    if (prior.status !== 'dead_letter' && prior.status !== 'failed') {
+      return json({ error: 'retry_not_failed' }, 409);
+    }
+    const { data: priorJob } = await supabase
+      .from('dream_jobs')
+      .select('status')
+      .eq('id', retryJobId)
+      .maybeSingle();
+    if (priorJob?.status === 'nsfw') {
+      return json({ error: 'retry_not_allowed_nsfw' }, 409);
+    }
+    // Reproduce from the stored payload with a FRESH job id (strip the old one).
+    body = { ...(prior.payload as Record<string, unknown>) };
+    delete body.job_id;
+  }
+
   // One UUID across dream_queue / dream_jobs / sparkle ledger. Prefer the
   // client's job_id (it already set it as activeJobId for the loading screen +
   // recovery polling), so dream_queue.id == activeJobId and the client can

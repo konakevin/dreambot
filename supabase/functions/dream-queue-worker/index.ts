@@ -25,6 +25,7 @@ import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-
 import { processNightlyJob } from './dispatchers/nightly.ts';
 import { dispatchCreateJob } from './dispatchers/create.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
+import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -317,15 +318,7 @@ Deno.serve(async (req) => {
                 );
               await supabase
                 .from('notifications')
-                .insert({
-                  recipient_id: job.user_id,
-                  actor_id: job.user_id,
-                  type: 'dream_failed',
-                  subtype: 'failed',
-                  body: isNsfw
-                    ? "Your dream couldn't be created — sparkle refunded"
-                    : "Your dream couldn't render — sparkle refunded",
-                })
+                .insert(dreamFailedNotification(job.id, job.user_id, isNsfw))
                 .then(
                   () => {},
                   () => {}

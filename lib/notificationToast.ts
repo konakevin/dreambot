@@ -25,7 +25,9 @@ export interface NotificationRowLike {
 /** What a toast tap should do — resolved to real navigation by the host. */
 export type ToastAction =
   | { kind: 'route'; data: { type?: string; uploadId?: string } }
-  | { kind: 'inbox' };
+  | { kind: 'inbox' }
+  | { kind: 'retry'; jobId: string }
+  | { kind: 'create' };
 
 export interface ToastSpec {
   message: string;
@@ -57,15 +59,25 @@ export function toastForNotification(row: NotificationRowLike): ToastSpec | null
         action: { kind: 'route', data: { type, uploadId } },
       };
 
-    case 'dream_failed':
-      // Phase 1: surface the failure + open the inbox (its focus marks viewed).
-      // Phase 2 upgrades the tap to retry (subtype 'failed') /
-      // tweak-in-create (subtype 'rejected').
-      return {
-        message: row.body || "Your dream couldn't be finished",
-        icon: 'alert-circle',
-        action: { kind: 'inbox' },
-      };
+    case 'dream_failed': {
+      const message = row.body || "Your dream couldn't be finished";
+      const subtype = row.subtype ?? undefined;
+      // Content/NSFW rejection — re-running the same prompt just re-fails, so
+      // send them to Create to tweak it (never a futile retry, never a scold).
+      if (subtype === 'rejected') {
+        return { message, icon: 'color-wand', action: { kind: 'create' } };
+      }
+      // Nightly auto-dream failure — system dream, not retryable; just inform.
+      if (subtype === 'nightly_failed') {
+        return { message, icon: 'moon', action: { kind: 'inbox' } };
+      }
+      // Render/infra failure → retry the EXACT job (reference_id) if we have it;
+      // older rows (pre-reference_id) fall back to opening the inbox.
+      if (row.reference_id) {
+        return { message, icon: 'refresh', action: { kind: 'retry', jobId: row.reference_id } };
+      }
+      return { message, icon: 'alert-circle', action: { kind: 'inbox' } };
+    }
 
     default:
       return null;

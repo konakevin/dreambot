@@ -30,6 +30,7 @@ import {
   type NotificationRowLike,
 } from '@/lib/notificationToast';
 import * as nav from '@/lib/navigate';
+import { retryDream } from '@/lib/retryDream';
 import { resumeInFlightDream } from '@/lib/dreamResumeStore';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { useFeedStore } from '@/store/feed';
@@ -207,6 +208,13 @@ function runToastAction(action: ToastAction): void {
       break;
     case 'inbox':
       nav.push('/inbox');
+      break;
+    case 'retry':
+      void retryDream(action.jobId);
+      break;
+    case 'create':
+      // Content/NSFW rejection → go tweak the prompt.
+      nav.push('/(tabs)/create');
       break;
   }
 }

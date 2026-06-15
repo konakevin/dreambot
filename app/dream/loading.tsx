@@ -33,7 +33,7 @@ export default function DreamLoadingScreen() {
   // resume=1 — entered from a COLD-START recovery (resumeInFlightDream), NOT a
   // fresh create. The render is already in flight server-side; we must POLL it,
   // never call generate() again (that would charge + render a second time).
-  const { resume } = useLocalSearchParams<{ resume?: string }>();
+  const { resume, watch } = useLocalSearchParams<{ resume?: string; watch?: string }>();
   const isResume = resume === '1';
   const started = useRef(false);
   // queued = user EXPLICITLY tapped "Queue This" and left the loading screen.
@@ -110,6 +110,15 @@ export default function DreamLoadingScreen() {
     // Do NOT call generate() — that would double-charge + double-render. Just
     // mark started and let the recovery poll (effect below) drive to reveal.
     if (isResume) return;
+    // Watch path: a dream was already enqueued elsewhere (e.g. a failed-dream
+    // RETRY re-enqueued server-side). Just subscribe to its queue row — never
+    // re-generate (that would double-charge).
+    if (watch) {
+      started.current = true;
+      setActiveJobFailure(null);
+      setQueueWaitId(watch);
+      return;
+    }
     started.current = true;
 
     // Reset any prior failure state when a new generation starts
@@ -141,7 +150,7 @@ export default function DreamLoadingScreen() {
       // (driven by activeJobFailure in the store) take over. The user can
       // tap "Try Again" or "Back to Dream" from there.
     });
-  }, [generate, setActiveJobFailure, isResume]);
+  }, [generate, setActiveJobFailure, isResume, watch]);
 
   // ── Queue path: wait on the dream_queue realtime channel ──────────────────
   // The worker renders the job (globally-capped concurrency + retry) and flips

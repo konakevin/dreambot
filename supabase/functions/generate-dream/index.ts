@@ -40,7 +40,11 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
-import { completeQueueJob, failQueueJob } from '../_shared/dreamQueueLifecycle.ts';
+import {
+  completeQueueJob,
+  failQueueJob,
+  dreamFailedNotification,
+} from '../_shared/dreamQueueLifecycle.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
@@ -1886,15 +1890,7 @@ Output ONLY the prompt.`;
       // failure in their inbox even if the loading screen got abandoned.
       // actor_id = userId (self-actor pattern, mirrors dream_generated).
       try {
-        await supabase.from('notifications').insert({
-          recipient_id: userId,
-          actor_id: userId,
-          type: 'dream_failed',
-          subtype: 'failed',
-          body: sparkleRefunded
-            ? `Your dream couldn't render — sparkle refunded (${refundClass})`
-            : `Your dream couldn't render (${refundClass})`,
-        });
+        await supabase.from('notifications').insert(dreamFailedNotification(jobId, userId, isNsfw));
       } catch (notifyErr) {
         // No longer silent: this is the user's only signal their dream failed
         // (and was refunded) if they abandoned the loading screen.

@@ -23,7 +23,11 @@ import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
-import { completeQueueJob, failQueueJob } from '../_shared/dreamQueueLifecycle.ts';
+import {
+  completeQueueJob,
+  failQueueJob,
+  dreamFailedNotification,
+} from '../_shared/dreamQueueLifecycle.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
@@ -634,15 +638,7 @@ async function handleRequest(req: Request): Promise<Response> {
 
       // Phase 4: write a `dream_failed` notification
       try {
-        await supabase.from('notifications').insert({
-          recipient_id: userId,
-          actor_id: userId,
-          type: 'dream_failed',
-          subtype: 'failed',
-          body: sparkleRefunded
-            ? `Your dream couldn't render — sparkle refunded (${refundClass})`
-            : `Your dream couldn't render (${refundClass})`,
-        });
+        await supabase.from('notifications').insert(dreamFailedNotification(jobId, userId, isNsfw));
       } catch (notifyErr) {
         // No longer silent: the user's only signal their dream failed + was
         // refunded if they left the loading screen.

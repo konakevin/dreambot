@@ -1476,6 +1476,7 @@ export type Database = {
           group_key: string | null;
           id: string;
           recipient_id: string;
+          reference_id: string | null;
           seen_at: string | null;
           subtype: string | null;
           type: string;
@@ -1489,6 +1490,7 @@ export type Database = {
           group_key?: string | null;
           id?: string;
           recipient_id: string;
+          reference_id?: string | null;
           seen_at?: string | null;
           subtype?: string | null;
           type: string;
@@ -1502,6 +1504,7 @@ export type Database = {
           group_key?: string | null;
           id?: string;
           recipient_id?: string;
+          reference_id?: string | null;
           seen_at?: string | null;
           subtype?: string | null;
           type?: string;

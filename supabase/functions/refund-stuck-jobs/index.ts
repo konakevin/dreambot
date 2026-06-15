@@ -23,6 +23,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -153,15 +154,10 @@ Deno.serve(async (req) => {
       // them to see it on next inbox visit. actor_id = recipient (self-actor
       // pattern, mirrors dream_generated notifications).
       try {
-        await supabase.from('notifications').insert({
-          recipient_id: job.user_id,
-          actor_id: job.user_id,
-          type: 'dream_failed',
-          subtype: 'failed',
-          body: didRefund
-            ? `Your dream couldn't render — sparkle refunded (timeout)`
-            : `Your dream couldn't render (timeout)`,
-        });
+        // Timeout sweep = infra failure → always retryable (isNsfw = false).
+        await supabase
+          .from('notifications')
+          .insert(dreamFailedNotification(job.id, job.user_id, false));
       } catch {
         // Non-critical — refund already landed
       }

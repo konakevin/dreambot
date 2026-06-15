@@ -18,6 +18,30 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 
+// ── dream_failed notification — shared shape across every fail site ──
+// Keep the copy LIGHT and non-judgey, and consistent across push + in-app
+// toast + inbox. Two outcomes, two behaviors in the client:
+//   • content/NSFW rejection → subtype 'rejected' (NOT retryable — re-running
+//     the same prompt just re-fails; the client routes to Create to tweak it).
+//   • render/infra failure   → subtype 'failed'   (retryable — the client
+//     re-enqueues the stored payload as a fresh job).
+// `reference_id = jobId` lets the failure toast/inbox retry the EXACT dream.
+const NSFW_REJECT_BODY =
+  'Looks like that one tipped the NSFW scale — sparkle refunded, tweak the prompt and try again';
+const RENDER_FAIL_BODY = "Your dream couldn't render — sparkle refunded";
+
+/** Build the dream_failed notification row (consistent everywhere). */
+export function dreamFailedNotification(jobId: string, userId: string, isNsfw: boolean) {
+  return {
+    recipient_id: userId,
+    actor_id: userId,
+    type: 'dream_failed',
+    subtype: isNsfw ? 'rejected' : 'failed',
+    reference_id: jobId,
+    body: isNsfw ? NSFW_REJECT_BODY : RENDER_FAIL_BODY,
+  };
+}
+
 /** Mark a queued job completed + attach its upload. */
 export async function completeQueueJob(
   sb: SupabaseClient,
@@ -112,15 +136,7 @@ export async function failQueueJob(
     );
   await sb
     .from('notifications')
-    .insert({
-      recipient_id: userId,
-      actor_id: userId,
-      type: 'dream_failed',
-      subtype: 'failed',
-      body: isNsfw
-        ? "Your dream couldn't be created — sparkle refunded"
-        : "Your dream couldn't render — sparkle refunded",
-    })
+    .insert(dreamFailedNotification(jobId, userId, isNsfw))
     .then(
       () => {},
       () => {}

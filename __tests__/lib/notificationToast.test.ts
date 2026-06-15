@@ -37,16 +37,40 @@ describe('toastForNotification', () => {
       id: 'n3',
       type: 'dream_failed',
       subtype: 'failed',
+      reference_id: 'job1',
       body: "Your dream couldn't render — sparkle refunded",
     });
     expect(spec).not.toBeNull();
     expect(spec!.message).toMatch(/refunded/i);
+    expect(spec!.action).toEqual({ kind: 'retry', jobId: 'job1' });
+  });
+
+  it('routes a content/NSFW rejection to Create (no futile retry)', () => {
+    const spec = toastForNotification({
+      id: 'n3b',
+      type: 'dream_failed',
+      subtype: 'rejected',
+      reference_id: 'job2',
+      body: 'Looks like that one tipped the NSFW scale — tweak the prompt and try again',
+    });
+    expect(spec!.message).toMatch(/nsfw/i);
+    expect(spec!.action).toEqual({ kind: 'create' });
+  });
+
+  it('treats a nightly auto-dream failure as informational (inbox, no retry)', () => {
+    const spec = toastForNotification({
+      id: 'n3c',
+      type: 'dream_failed',
+      subtype: 'nightly_failed',
+      body: "Your nightly dream couldn't render tonight",
+    });
     expect(spec!.action).toEqual({ kind: 'inbox' });
   });
 
-  it('falls back to default copy when a failed dream has no body', () => {
-    const spec = toastForNotification({ id: 'n4', type: 'dream_failed' });
+  it('falls back to inbox + default copy when a failed dream has no reference_id', () => {
+    const spec = toastForNotification({ id: 'n4', type: 'dream_failed', subtype: 'failed' });
     expect(spec!.message).toMatch(/couldn.t be finished/i);
+    expect(spec!.action).toEqual({ kind: 'inbox' });
   });
 
   it('does NOT toast passive social events (purple dot only)', () => {
