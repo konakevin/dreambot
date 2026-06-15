@@ -86,11 +86,12 @@ export default function SharePostScreen() {
   // longer consumed here — was previously used in the Share.share() copy
   // label ("View kevin's dream"). Kept on the type so the navigate call
   // doesn't have to change.
-  const { uploadId, imageUrl, imageUrlHq } = useLocalSearchParams<{
+  const { uploadId, imageUrl, imageUrlHq, isOwn } = useLocalSearchParams<{
     uploadId: string;
     username?: string;
     imageUrl?: string;
     imageUrlHq?: string;
+    isOwn?: string;
   }>();
   const { data: vibers = [], isLoading } = useShareableVibers();
   const { mutate: sendShare, isPending } = useSendShare();
@@ -158,6 +159,7 @@ export default function SharePostScreen() {
         id: uploadId!,
         imageUrl,
         imageUrlHq: imageUrlHq ?? null,
+        isOwn: isOwn === '1',
       });
     }, 220);
   }

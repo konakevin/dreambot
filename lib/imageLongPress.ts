@@ -117,6 +117,10 @@ interface SaveOpts {
   /** Cached HD url from the post object — present only when a prior downloader
    *  already upscaled it (then HD is an instant cache hit). */
   imageUrlHq?: string | null;
+  /** True when this dream belongs to the current user. Owners can ALWAYS
+   *  HD-download their own dreams (nightly or created), free + uncapped —
+   *  no subscription required. The server (upscale-image) enforces the same. */
+  isOwn?: boolean;
 }
 interface LongPressOpts extends SaveOpts {
   onDelete?: () => void;
@@ -138,8 +142,9 @@ type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: (
 function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
   const { isPro, isBasic } = useAuthStore.getState();
   // HD downloads are a paid perk of BOTH tiers (Pro 100/mo, Basic 20/mo — the
-  // server enforces the per-tier cap). Any paid subscriber may HD-save.
-  const canHd = isPro || isBasic;
+  // server enforces the per-tier cap). Any paid subscriber may HD-save ANY
+  // dream; additionally, ANYONE may HD-save their OWN dreams free + uncapped.
+  const canHd = isPro || isBasic || !!opts.isOwn;
   const cachedHqUrl = canHd ? (opts.imageUrlHq ?? null) : null;
   return [
     { text: 'Save to Photos', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) },

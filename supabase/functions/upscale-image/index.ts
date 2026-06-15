@@ -81,25 +81,28 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-  // Subscription gate: Pro (paid OR trial) and DreamBot Basic (paid) can both
-  // HD-download — at DIFFERENT monthly caps (Pro 100, Basic from config). Free
-  // users (and expired subs) get 403. is_pro_active() folds in the trial window;
-  // is_basic_active() is paid-only.
-  const { data: isPro } = await supabase.rpc('is_pro_active', { p_user_id: user.id });
-  const { data: isBasic } = await supabase.rpc('is_basic_active', { p_user_id: user.id });
-  if (!isPro && !isBasic) {
-    return json({ error: 'Subscription required' }, 403);
-  }
-
-  // Load the upload — we need the source image_url + need to check
-  // whether image_url_hq is already populated (cache hit).
+  // Load the upload FIRST — we need the owner (a user can ALWAYS HD-download
+  // their OWN dream, free + uncapped), the source image_url, and whether
+  // image_url_hq is already populated (cache hit).
   const { data: uploadRow, error: uploadErr } = await supabase
     .from('uploads')
-    .select('id, image_url, image_url_hq')
+    .select('id, user_id, image_url, image_url_hq')
     .eq('id', body.upload_id)
     .maybeSingle();
   if (uploadErr || !uploadRow) {
     return json({ error: 'Upload not found' }, 404);
+  }
+  const isOwn = uploadRow.user_id === user.id;
+
+  // Subscription gate: Pro (paid OR trial) and DreamBot Basic (paid) can HD-
+  // download ANY dream (at per-tier monthly caps). Everyone — including free /
+  // expired-sub users — can always HD-download their OWN dreams, so owners skip
+  // the gate (and the cap below). is_pro_active() folds in the trial window;
+  // is_basic_active() is paid-only.
+  const { data: isPro } = await supabase.rpc('is_pro_active', { p_user_id: user.id });
+  const { data: isBasic } = await supabase.rpc('is_basic_active', { p_user_id: user.id });
+  if (!isPro && !isBasic && !isOwn) {
+    return json({ error: 'Subscription required' }, 403);
   }
 
   // Cache hit — already upscaled (a prior downloader did the work). Instant.
@@ -145,7 +148,8 @@ Deno.serve(async (req) => {
       .single();
     HQ_CAP_PER_MONTH = Number(ec?.basic_hd_downloads_per_month ?? 20);
   }
-  if ((downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
+  // Own dreams are always free + uncapped — only meter downloads of OTHERS'.
+  if (!isOwn && (downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
     console.warn(
       `[upscale-image] user=${user.id.slice(0, 8)} hit ${HQ_CAP_PER_MONTH}/mo HD cap (count=${downloadsThisMonth})`
     );
@@ -198,14 +202,18 @@ Deno.serve(async (req) => {
     console.warn(`[upscale-image] upscale_requests insert failed: ${insertRes.error.message}`);
     return json({ error: 'Failed to record request' }, 500);
   }
-  await supabase
-    .from('pro_hq_downloads_log')
-    .insert({ user_id: user.id, upload_id: body.upload_id })
-    .then(
-      () => {},
-      (err: { message?: string }) =>
-        console.warn(`[upscale-image] cap log failed: ${err?.message ?? 'unknown'}`)
-    );
+  // Only count downloads of OTHERS' dreams toward the monthly cap — own dreams
+  // are uncapped, so they must not consume a paid user's cap slots.
+  if (!isOwn) {
+    await supabase
+      .from('pro_hq_downloads_log')
+      .insert({ user_id: user.id, upload_id: body.upload_id })
+      .then(
+        () => {},
+        (err: { message?: string }) =>
+          console.warn(`[upscale-image] cap log failed: ${err?.message ?? 'unknown'}`)
+      );
+  }
 
   // Atomically claim the work. Only the caller that gets the upload_id back
   // KICKS the upscale (one Replicate run per upload, even with concurrent

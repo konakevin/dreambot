@@ -56,6 +56,7 @@ export const PostTile = memo(function PostTile({
       id: item.id,
       imageUrl: item.image_url,
       imageUrlHq: item.image_url_hq ?? null,
+      isOwn,
       onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
     });
   }

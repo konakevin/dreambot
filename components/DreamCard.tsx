@@ -324,6 +324,7 @@ export const DreamCard = memo(function DreamCard({
       id: item.id,
       imageUrl: item.image_url,
       imageUrlHq: item.image_url_hq ?? null,
+      isOwn: isOwnPost,
       onDelete,
     });
   }
@@ -633,7 +634,7 @@ export const DreamCard = memo(function DreamCard({
                       // header (2026-06-06) so the user reaches Copy + Save
                       // from the same surface; thread the image URLs through
                       // as route params so the sheet has what it needs.
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}`
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
                     ))
                 }
                 activeOpacity={0.7}
