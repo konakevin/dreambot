@@ -99,7 +99,7 @@ export function InfoStep({
 
         {/* Gradient headline — wraps freely (0 = unlimited lines), matching
             the prior unbounded Text. */}
-        <GradientTitle size={32} weight={800} lineHeight={38} maxWidth={340} numberOfLines={0}>
+        <GradientTitle size={22} weight={800} lineHeight={28} maxWidth={340} numberOfLines={0}>
           {headline}
         </GradientTitle>
 

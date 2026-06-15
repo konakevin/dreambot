@@ -393,7 +393,7 @@ export function RevealStep({ onBack }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
-          <GradientTitle size={22} numberOfLines={2}>
+          <GradientTitle size={22} weight={800} lineHeight={28} numberOfLines={2}>
             Time for your first dream!
           </GradientTitle>
           <Text style={s.centeredSub}>
