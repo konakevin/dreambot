@@ -78,6 +78,10 @@ interface OtherVariant extends BaseProps {
   /** Hide Message + ellipsis controls for bot profiles — users can't DM
    *  bots and don't need to block/report them (unfollow is enough). */
   isBot?: boolean;
+  /** Hide Message + ellipsis on your OWN profile (reached via /user/[me] from
+   *  a feed/comment tap) — the ⋯ menu is report/block, which is nonsensical
+   *  on yourself, and you don't DM yourself either. */
+  isSelf?: boolean;
   onFollowPress: () => void;
   onMessagePress: () => void;
   onMorePress: () => void;
@@ -273,7 +277,7 @@ export function ProfileHeader(props: Props) {
               {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
             </Text>
           </TouchableOpacity>
-          {!props.isBot && (
+          {!props.isBot && !props.isSelf && (
             <>
               <TouchableOpacity
                 style={[styles.actionPill, styles.actionPillSecondary]}

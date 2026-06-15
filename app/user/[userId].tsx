@@ -356,6 +356,7 @@ export default function PublicProfileScreen() {
         hasRequest={hasRequest}
         isPrivate={!isTargetPublic}
         isBot={isBot}
+        isSelf={isOwnProfile}
         activeStat={activeTab}
         onStatsPress={(tab) => setActiveTab(tab as Tab)}
         onAvatarPress={() => setShowAvatarPreview(true)}
