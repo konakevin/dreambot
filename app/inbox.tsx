@@ -21,6 +21,7 @@ import ReanimatedSwipeable, {
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
+import { retryLatestFailedDream } from '@/lib/retryDream';
 import { routeFromNotification } from '@/lib/notificationRouting';
 import * as Haptics from 'expo-haptics';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
@@ -600,13 +601,37 @@ export default function InboxScreen() {
     //   "Your dream couldn't render — sparkle refunded (<class>)"
     //   "Your dream couldn't render (<class>)"  (refund pending / none)
     if (g.type === 'dream_failed') {
-      const wasRefunded = (g.body ?? '').toLowerCase().includes('refund');
+      // Content/NSFW rejection — re-running won't help; offer to tweak it.
+      if (g.subtype === 'rejected') {
+        showAlert(
+          'Tipped the NSFW scale',
+          g.body ||
+            'Looks like that one tipped the NSFW scale — your sparkle was refunded. Tweak the prompt and give it another go.',
+          [
+            { text: 'Not now', style: 'cancel' },
+            { text: 'Tweak it', onPress: () => nav.push('/(tabs)/create') },
+          ]
+        );
+        return;
+      }
+      // Nightly auto-dream — system dream, not retryable; just inform.
+      if (g.subtype === 'nightly_failed') {
+        showAlert(
+          'Nightly dream hiccuped',
+          g.body ||
+            "Your nightly dream couldn't render tonight — we added a sparkle to your balance to make up for it.",
+          [{ text: 'OK' }]
+        );
+        return;
+      }
+      // Render/infra failure → offer a one-tap retry of the exact dream.
       showAlert(
         "Your dream couldn't render",
-        wasRefunded
-          ? "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle has been refunded. Give it another try whenever you like."
-          : "Something hiccuped while rendering, so this dream didn't make it through. If a sparkle was spent, it'll be refunded automatically within a few minutes.",
-        [{ text: 'OK' }]
+        "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle was refunded — want to try that dream again?",
+        [
+          { text: 'Not now', style: 'cancel' },
+          { text: 'Retry', onPress: () => void retryLatestFailedDream() },
+        ]
       );
       return;
     }

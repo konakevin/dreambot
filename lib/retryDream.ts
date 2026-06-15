@@ -11,6 +11,7 @@
  */
 import { supabase } from '@/lib/supabase';
 import { useDreamStore } from '@/store/dream';
+import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
 import * as nav from '@/lib/navigate';
 
@@ -30,5 +31,30 @@ export async function retryDream(jobId: string): Promise<void> {
   } catch (e) {
     Toast.show("Couldn't retry that dream — try again from Create", 'close-circle');
     if (__DEV__) console.warn('[retryDream]', (e as Error).message);
+  }
+}
+
+/**
+ * Retry from the INBOX, where the row doesn't carry the job id: resolve the
+ * user's most-recent failed dream that has a job reference, then retry it.
+ * (The live failure toast is precise — it has reference_id at the moment of
+ * failure; this is the catch-up path for a failure found later in the inbox.)
+ */
+export async function retryLatestFailedDream(): Promise<void> {
+  const userId = useAuthStore.getState().user?.id;
+  if (!userId) return;
+  const { data } = await supabase
+    .from('notifications')
+    .select('reference_id')
+    .eq('recipient_id', userId)
+    .eq('type', 'dream_failed')
+    .not('reference_id', 'is', null)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (data?.reference_id) {
+    await retryDream(data.reference_id);
+  } else {
+    Toast.show("Couldn't find that dream to retry", 'close-circle');
   }
 }
