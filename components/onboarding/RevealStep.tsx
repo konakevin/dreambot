@@ -74,7 +74,7 @@ export function RevealStep({ onBack }: Props) {
   const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
   const user = useAuthStore((s) => s.user);
   const engineConfig = useEngineConfig();
-  const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
+  const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const insets = useSafeAreaInsets();
   // Bottom inset for the overlay buttons: respect the home indicator when
   // present (insets.bottom > 0), otherwise use a sensible floor so the
@@ -267,20 +267,15 @@ export function RevealStep({ onBack }: Props) {
         uploadId = insertedRow?.id ?? null;
       }
 
-      // Pin to the home feed only when shared publicly — a private dream lives
-      // in the album, not the feed. Guard on a real UUID (pinning a synthetic
-      // id used to crash the home feed's record_impression RPC).
+      // Pin the just-posted first dream to the top of the home feed only when
+      // shared publicly (a private dream lives in the album, not the feed).
+      // We hand the home screen the upload id, not a hand-built item: its
+      // pendingPostId effect fetches the FULL persisted row (real storage URL,
+      // like/repost state, dimensions, etc.) so the pinned card renders cleanly
+      // — the old partial item used the temp render URL and the post survives
+      // through the post-onboarding FeedIntroGate (bot selection) underneath.
       if (makePublic && uploadId) {
-        setPinnedPost({
-          id: uploadId,
-          user_id: user.id,
-          image_url: activeDream.url,
-          caption: null,
-          username: user.user_metadata?.username ?? '',
-          avatar_url: user.user_metadata?.avatar_url ?? null,
-          created_at: new Date().toISOString(),
-          comment_count: 0,
-        });
+        setPendingPostId(uploadId);
       }
 
       trackFirstDreamGenerated({ medium: activeDream.medium, vibe: activeDream.vibe });
