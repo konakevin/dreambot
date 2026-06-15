@@ -28,6 +28,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { Toast } from '@/components/Toast';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -146,9 +147,17 @@ export default function ProfileScreen() {
     if (!user) return;
     const handle = user.user_metadata?.username ?? 'someone';
     try {
-      await Share.share({
+      const result = await Share.share({
         message: `Check out @${handle} on DreamBot ✨ https://dreambotapp.com/user/${user.id}`,
       });
+      // The iOS share sheet's "Copy" is silent — surface our own confirmation
+      // so the user knows the link made it to the clipboard.
+      if (
+        result.action === Share.sharedAction &&
+        result.activityType === 'com.apple.UIKit.activity.CopyToPasteboard'
+      ) {
+        Toast.show('Link copied', 'checkmark-circle');
+      }
     } catch {
       /* user cancelled — no-op */
     }
