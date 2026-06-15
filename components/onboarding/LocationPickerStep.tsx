@@ -219,17 +219,18 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           scrolls underneath it (matches BotSelectorStep's pattern). */}
       <View style={s.stickyHeader}>
         <GradientTitle
-          size={26}
-          weight={800}
+          size={24}
           numberOfLines={2}
-          align="left"
+          align="center"
           maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
-          lineHeight={32}
+          lineHeight={30}
           style={{ marginBottom: verticalScale(6) }}
         >
           Where do you want to dream?
         </GradientTitle>
-        <Text style={shared.heroSubtitle}>Places you love, or anywhere you’d love to go.</Text>
+        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
+          Places you love, or anywhere you’d love to go.
+        </Text>
       </View>
 
       <ScrollView
