@@ -548,28 +548,37 @@ const styles = StyleSheet.create({
   },
   // Segmented All | Private control — a pill-shaped track with two segments;
   // the active one fills with the accent.
+  // Mirrors the Create-screen Mode tabs (DreamBot / Direct): a `surface`
+  // track with rounded-lg segments; the active one fills with tonal moon-
+  // purple + a purple border + purple text (not a solid accent pill).
   segmented: {
     flexDirection: 'row',
-    borderRadius: 999,
-    padding: 2,
+    borderRadius: 12,
+    padding: 4,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
   segment: {
+    minWidth: 64,
     paddingHorizontal: 14,
-    paddingVertical: verticalScale(5),
-    borderRadius: 999,
+    paddingVertical: verticalScale(6),
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   segmentActive: {
-    backgroundColor: colors.accent,
+    backgroundColor: 'rgba(167,139,250,0.18)',
+    borderColor: 'rgba(167,139,250,0.55)',
   },
   segmentText: {
     color: colors.textSecondary,
-    fontSize: fontScale(12),
+    fontSize: fontScale(13),
     fontWeight: '600',
   },
-  segmentTextActive: { color: '#FFFFFF' },
+  segmentTextActive: { color: '#A78BFA' },
   listSectionCount: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
