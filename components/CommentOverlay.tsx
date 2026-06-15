@@ -277,10 +277,17 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         <Animated.View style={imageStyle}>
           <TouchableOpacity onPress={dismiss} activeOpacity={0.9} style={{ flex: 1 }}>
             <Image
-              source={{ uri: post.image_url }}
+              // Use the SAME display variant the feed card rendered (not the
+              // full image_url) so it's already in the memory-disk cache and
+              // appears instantly — requesting the larger image_url here was a
+              // cache miss → black flash + re-fetch as the overlay opened. The
+              // thumbhash covers any genuine miss so it never goes black.
+              source={{ uri: post.image_url_display ?? post.image_url }}
               style={{ width: '100%', height: '100%', borderRadius: 12 }}
               contentFit="cover"
               cachePolicy="memory-disk"
+              placeholder={post.thumbhash ? { thumbhash: post.thumbhash } : null}
+              placeholderContentFit="cover"
             />
           </TouchableOpacity>
         </Animated.View>
