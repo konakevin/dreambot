@@ -29,6 +29,16 @@ const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
 const IDLE_MASCOT_SIZE = verticalScaleClamped(140, 110, 160);
 
+// Race a promise against a timeout so a stalled network call can never trap the
+// user on the reveal. The underlying request keeps running in the background if
+// it loses the race — we just stop waiting on it.
+function withTimeout<T>(p: PromiseLike<T>, ms: number): Promise<T> {
+  return Promise.race([
+    Promise.resolve(p),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ]);
+}
+
 type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles' | 'finished';
 /**
  * Reveal overlay: the user already saw the nightly-dream pitch on the
@@ -85,7 +95,9 @@ export function RevealStep({ onBack }: Props) {
   const [preview, setPreview] = useState(false);
   // Which CTA is in flight ('post' vs 'skip') — both set phase='creating', so
   // this is what keeps the Post button from reading "Posting…" during a Skip.
-  const [busyAction, setBusyAction] = useState<'post' | 'skip' | null>(null);
+  // Only POST has an in-flight state now (the publish flip) — SKIP is an instant
+  // redirect, so it never enters a busy state.
+  const [busyAction, setBusyAction] = useState<'post' | null>(null);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
   // Aborts the first-dream poll loop on unmount / retry so a stale poll never
@@ -187,18 +199,37 @@ export function RevealStep({ onBack }: Props) {
     const bootPromise = runBootSequence();
 
     try {
-      // Describe cast photos (one-time AI vision call per photo)
-      const describedCast = await describeCastPhotos();
+      // Describe cast photos (one-time AI vision call per photo). Timeout-
+      // guarded so a stalled vision call can never trap the loading screen — if
+      // it doesn't finish in time we proceed with the cast we already have.
+      let describedCast = profile.dream_cast;
+      try {
+        describedCast = await withTimeout(describeCastPhotos(), 45000);
+      } catch (err) {
+        if (__DEV__) console.warn('[Reveal] describe cast timed out/failed, proceeding:', err);
+      }
       const profileWithDescriptions = {
         ...profile,
         dream_cast: describedCast,
       };
       describedProfile.current = profileWithDescriptions;
 
-      // Save the profile with descriptions so they persist in the database
+      // Persist the profile (timeout-guarded — never trap the user before their
+      // dream if the write stalls; it's idempotent and re-saved on edit anyway).
       if (user) {
-        await saveVibeProfile(user.id, profileWithDescriptions);
+        try {
+          await withTimeout(saveVibeProfile(user.id, profileWithDescriptions), 15000);
+        } catch (err) {
+          if (__DEV__) console.warn('[Reveal] profile save timed out/failed:', err);
+        }
       }
+
+      // END OF ONBOARDING — persist all remaining bookkeeping NOW, before the
+      // dream generates (welcome sparkles + completion + welcome-gift
+      // notification). Fire-and-forget so it never blocks generation OR the
+      // reveal: by the time the dream lands and the reveal shows, everything is
+      // already saved, so Post/Skip is a pure instant redirect.
+      void finalizeOnboarding();
 
       await bootPromise;
       setPhase('generating');
@@ -234,6 +265,10 @@ export function RevealStep({ onBack }: Props) {
       });
       setPhase('reveal');
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      // Non-network analytics about the rendered dream (medium/vibe only known
+      // now). Onboarding-completion + persistence already fired in
+      // finalizeOnboarding before generation.
+      trackFirstDreamGenerated({ medium: result.medium, vibe: result.vibe });
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Generation failed:', err);
       setError('We couldn’t finish your first dream just now.');
@@ -243,116 +278,83 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
+  // End-of-onboarding bookkeeping — fired ONCE from generateImage before the
+  // dream renders, so the reveal has nothing left to persist. All best-effort +
+  // timeout-guarded; a failure here never blocks the user or the dream.
+  //   • welcome sparkles (balance-checked → no double-grant on a retry)
+  //   • completion analytics
+  //   • welcome-gift notification (no upload_id — it routes to /welcome-gift by
+  //     TYPE and the screen doesn't display a dream, so the id was vestigial)
+  async function finalizeOnboarding() {
+    if (!user) return;
+    trackOnboardingCompleted();
+    try {
+      const welcomeBonus = engineConfig.welcomeSparkleBonus;
+      const { data: balanceCheck } = await withTimeout(
+        supabase.from('users').select('sparkle_balance').eq('id', user.id).single(),
+        10000
+      );
+      if ((balanceCheck?.sparkle_balance ?? 0) < welcomeBonus) {
+        await withTimeout(
+          supabase.rpc('grant_sparkles', {
+            p_user_id: user.id,
+            p_amount: welcomeBonus,
+            p_reason: 'welcome_bonus',
+          }),
+          10000
+        );
+      }
+      await withTimeout(
+        supabase.from('notifications').insert({
+          recipient_id: user.id,
+          actor_id: user.id,
+          type: 'welcome_gift',
+        }),
+        10000
+      );
+    } catch (err) {
+      if (__DEV__) console.warn('[Reveal] onboarding finalize failed:', err);
+    }
+  }
+
   async function handleCreateBot(makePublic: boolean) {
     if (!user || !activeDream) return;
-    setPhase('creating');
-    setBusyAction(makePublic ? 'post' : 'skip');
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-    try {
-      // Use describedProfile if available (has AI-generated cast descriptions),
-      // otherwise fall back to raw profile. NEVER save profile with empty cast descriptions
-      // over one that already has them.
-      const profileToSave = describedProfile.current ?? profile;
-      await saveVibeProfile(user.id, profileToSave);
-
-      // The render engine (nightly-dreams) already persisted the first dream as
-      // a PRIVATE uploads row and returned its id. Posting just flips that SAME
-      // row public — we never insert a second row (that was the old double-post
-      // bug). Only the legacy / first-dream-engine path (no uploadId) still
-      // inserts here as a fallback.
-      let uploadId: string | null = activeDream.uploadId ?? null;
-      if (uploadId) {
-        if (makePublic) {
-          const { error: pubError } = await supabase
+    // Profile, welcome sparkles, welcome-gift notification, and completion all
+    // already persisted at the END of onboarding (finalizeOnboarding, before the
+    // dream generated). So there is NOTHING left to save here:
+    //   • SKIP  → instant redirect, zero awaits, can't get stuck.
+    //   • POST  → ONE timeout-guarded write (flip the private draft public) +
+    //             pin it to the feed, then go. The render already persisted the
+    //             dream, so we never insert a second row.
+    const uploadId: string | null = activeDream.uploadId ?? null;
+    if (makePublic && uploadId) {
+      setBusyAction('post');
+      setPhase('creating');
+      try {
+        await withTimeout(
+          supabase
             .from('uploads')
-            // Clear the prompt-derived caption so the feed post reads clean
-            // (the engine seeds caption with the raw prompt for nightly).
+            // Clear the prompt-derived caption so the feed post reads clean.
             .update({ is_public: true, posted_at: new Date().toISOString(), caption: null })
-            .eq('id', uploadId);
-          if (pubError && __DEV__) console.warn('[Reveal] Publish error:', pubError);
-        }
-      } else {
-        const { data: insertedRow, error: uploadError } = await supabase
-          .from('uploads')
-          .insert({
-            user_id: user.id,
-            image_url: activeDream.url,
-            caption: null,
-            ai_prompt: activeDream.prompt || null,
-            // Schema uses dream_medium / dream_vibe (not medium / vibe).
-            dream_medium: activeDream.medium || null,
-            dream_vibe: activeDream.vibe || null,
-            is_public: makePublic,
-            ...(makePublic ? { posted_at: new Date().toISOString() } : {}),
-          })
-          .select('id')
-          .single();
-        if (uploadError && __DEV__) console.warn('[Reveal] Upload error:', uploadError);
-        uploadId = insertedRow?.id ?? null;
-      }
-
-      // Pin the just-posted first dream to the top of the home feed only when
-      // shared publicly (a private dream lives in the album, not the feed).
-      // We hand the home screen the upload id, not a hand-built item: its
-      // pendingPostId effect fetches the FULL persisted row (real storage URL,
-      // like/repost state, dimensions, etc.) so the pinned card renders cleanly
-      // — the old partial item used the temp render URL and the post survives
-      // through the post-onboarding FeedIntroGate (bot selection) underneath.
-      if (makePublic && uploadId) {
+            .eq('id', uploadId),
+          4000
+        );
+        // Pin the just-posted dream to the top of the home feed. The home screen
+        // fetches the FULL persisted row from this id (real storage URL, like
+        // state, dimensions) so the pinned card renders cleanly, and it survives
+        // the post-onboarding FeedIntroGate (bot selection) underneath.
         setPendingPostId(uploadId);
+      } catch (err) {
+        // Publish stalled/failed — the dream still lives privately in the album.
+        // Don't trap the user on the reveal; head to the feed regardless.
+        if (__DEV__) console.warn('[Reveal] publish flip failed/timed out:', err);
       }
-
-      trackFirstDreamGenerated({ medium: activeDream.medium, vibe: activeDream.vibe });
-
-      // Grant welcome sparkles (engine_config.welcome_sparkle_bonus, default 25).
-      // Check balance first to avoid double-grant on retry.
-      const welcomeBonus = engineConfig.welcomeSparkleBonus;
-      const { data: balanceCheck } = await supabase
-        .from('users')
-        .select('sparkle_balance')
-        .eq('id', user.id)
-        .single();
-      if ((balanceCheck?.sparkle_balance ?? 0) < welcomeBonus) {
-        await supabase.rpc('grant_sparkles', {
-          p_user_id: user.id,
-          p_amount: welcomeBonus,
-          p_reason: 'welcome_bonus',
-        });
-      }
-
-      // Send welcome-gift notification. Routes to /welcome-gift on tap —
-      // a celebratory screen that introduces DreamBot, calls out the 25
-      // sparkles, and gives a brief feature tour. Subject-only (no body
-      // shown in the inbox row); the screen carries the full message.
-      // Migration 223 added 'welcome_gift' as a top-level type. Replaces
-      // the legacy dream_generated/subtype='welcome' insert that pointed
-      // at the first-dream upload.
-      await supabase.from('notifications').insert({
-        recipient_id: user.id,
-        actor_id: user.id,
-        type: 'welcome_gift',
-        upload_id: uploadId,
-      });
-
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      trackOnboardingCompleted();
-      // Bot intro + selection now happen AFTER this, as a first-run gate on the
-      // feed (FeedIntroGate, 2026-06-14) — so we route straight to the feed here
-      // and the gate fires there.
-      //
-      // Both Post and Skip now route straight to the main feed (Kevin
-      // 2026-06-15). Skip no longer collapses into a "finished" edge-to-edge
-      // preview with a separate "Go to feed" CTA — the dream is already saved
-      // privately to the Dreams album, so there's nothing to confirm.
-      reset();
-      router.replace('/(tabs)');
-    } catch (err) {
-      if (__DEV__) console.warn('[Reveal] Create error:', err);
-      setPhase('reveal');
-      setBusyAction(null);
-      Toast.show('Something went wrong', 'close-circle');
     }
+
+    reset();
+    router.replace('/(tabs)');
   }
 
   // ── Sparkles welcome (legacy — now skipped, goes straight to home) ──
@@ -564,9 +566,7 @@ export function RevealStep({ onBack }: Props) {
                 disabled={phase === 'creating'}
                 activeOpacity={0.7}
               >
-                <Text style={s.secondaryButtonText}>
-                  {busyAction === 'skip' ? 'Going to feed…' : 'Skip and go to feed'}
-                </Text>
+                <Text style={s.secondaryButtonText}>Skip and go to feed</Text>
               </TouchableOpacity>
             </View>
           )}
