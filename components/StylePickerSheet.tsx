@@ -19,6 +19,7 @@ import Animated, {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
+import { VIBE_BLURBS } from '@/constants/vibeBlurbs';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -193,6 +194,8 @@ export function StylePickerSheet({
     const isSelected = isSurpriseRow
       ? selected === 'surprise_me_face' || selected === 'surprise_me_art'
       : opt.key === selected;
+    // Fun couple-word blurb to the right of vibe labels (vibe sheet only).
+    const blurb = type === 'vibe' ? VIBE_BLURBS[opt.key] : undefined;
     return (
       <TouchableOpacity
         key={opt.key}
@@ -214,7 +217,17 @@ export function StylePickerSheet({
         >
           {opt.label}
         </Text>
-        {isSelected && <Ionicons name="checkmark-circle" size={20} color={accentColor} />}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 }}>
+          {blurb ? (
+            <Text
+              numberOfLines={1}
+              style={{ color: colors.textMuted, fontSize: fontScale(13), flexShrink: 1 }}
+            >
+              {blurb}
+            </Text>
+          ) : null}
+          {isSelected && <Ionicons name="checkmark-circle" size={20} color={accentColor} />}
+        </View>
       </TouchableOpacity>
     );
   }
