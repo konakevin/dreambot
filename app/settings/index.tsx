@@ -22,6 +22,11 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
+// TEMP (preview): flip to `false` to restore the admin / dev rows. While `true`,
+// every admin-only item is hidden so Settings can be eyeballed exactly as a
+// regular user sees it. Revert before shipping.
+const HIDE_ADMIN_FOR_PREVIEW = true;
+
 function SettingsRow({
   icon,
   label,
@@ -71,6 +76,8 @@ export default function SettingsScreen() {
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
+  // Effective admin visibility (honors the HIDE_ADMIN_FOR_PREVIEW override).
+  const showAdmin = isAdmin && !HIDE_ADMIN_FOR_PREVIEW;
   useEffect(() => {
     if (!user) return;
     supabase
@@ -324,10 +331,15 @@ export default function SettingsScreen() {
               thumbColor="#FFFFFF"
             />
           </View>
+          <SettingsRow
+            icon="ban-outline"
+            label="Blocked Users"
+            onPress={() => nav.push('/settings/blocked-users')}
+          />
         </View>
 
-        {/* Sparkles */}
-        <Text style={styles.sectionHeader}>SUBSCRIPTION</Text>
+        {/* Premium — plan + sparkles, the two money/upgrade rows together. */}
+        <Text style={styles.sectionHeader}>PREMIUM</Text>
         <View style={styles.section}>
           <SettingsRow
             icon="diamond"
@@ -343,10 +355,6 @@ export default function SettingsScreen() {
             }
             onPress={() => nav.push('/subscribe')}
           />
-        </View>
-
-        <Text style={styles.sectionHeader}>SPARKLES</Text>
-        <View style={styles.section}>
           <SettingsRow
             icon="sparkles"
             label="Get Sparkles"
@@ -373,7 +381,7 @@ export default function SettingsScreen() {
             screen (toggle Advanced Mode → AI Model pill), so the settings
             entry point + /settings/advanced-mode screen were removed. */}
 
-        {isAdmin && (
+        {showAdmin && (
           <>
             <Text style={styles.sectionHeader}>ADMIN</Text>
             <View style={styles.section}>
@@ -445,54 +453,58 @@ export default function SettingsScreen() {
           </>
         )}
 
-        <View style={styles.section}>
-          {isAdmin && (
+        {showAdmin && (
+          <View style={styles.section}>
             <SettingsRow
               icon="flask"
               label="Run Dream Generator"
               onPress={() => nav.push('/dreamTest')}
             />
-          )}
-          <SettingsRow
-            icon="trash-outline"
-            label="Reset Profile + Tutorials (test)"
-            onPress={async () => {
-              await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
-              await supabase.from('user_recipes').delete().eq('user_id', user!.id);
-              // Also clear the first-run intro flags so the Create-tab tutorials
-              // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
-              // would skip them. Non-fatal if storage hiccups.
-              await Promise.all([resetCreateIntro(), resetMediumsIntro(), resetFeedIntro()]).catch(
-                () => {}
-              );
-              useOnboardingStore.getState().reset();
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-              router.replace('/(onboarding)');
-            }}
-            destructive
-            trailing={null}
-          />
-          <SettingsRow
-            icon="refresh-outline"
-            label="Reset First-Run Tutorials (test)"
-            onPress={async () => {
-              // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
-              // so those tutorial sheets re-show next time — without re-onboarding.
-              // Lets us replay the first-run flows over and over.
-              await Promise.all([resetCreateIntro(), resetMediumsIntro(), resetFeedIntro()]).catch(
-                () => {}
-              );
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-              showAlert(
-                'Tutorials reset',
-                'First-run tutorials will show again. Reopen the Create tab to see them.'
-              );
-            }}
-            trailing={null}
-          />
-        </View>
+            <SettingsRow
+              icon="trash-outline"
+              label="Reset Profile + Tutorials (test)"
+              onPress={async () => {
+                await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
+                await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+                // Also clear the first-run intro flags so the Create-tab tutorials
+                // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
+                // would skip them. Non-fatal if storage hiccups.
+                await Promise.all([
+                  resetCreateIntro(),
+                  resetMediumsIntro(),
+                  resetFeedIntro(),
+                ]).catch(() => {});
+                useOnboardingStore.getState().reset();
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                router.replace('/(onboarding)');
+              }}
+              destructive
+              trailing={null}
+            />
+            <SettingsRow
+              icon="refresh-outline"
+              label="Reset First-Run Tutorials (test)"
+              onPress={async () => {
+                // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
+                // so those tutorial sheets re-show next time — without re-onboarding.
+                // Lets us replay the first-run flows over and over.
+                await Promise.all([
+                  resetCreateIntro(),
+                  resetMediumsIntro(),
+                  resetFeedIntro(),
+                ]).catch(() => {});
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                showAlert(
+                  'Tutorials reset',
+                  'First-run tutorials will show again. Reopen the Create tab to see them.'
+                );
+              }}
+              trailing={null}
+            />
+          </View>
+        )}
 
-        {/* Account section */}
+        {/* Account — non-destructive account controls. */}
         <Text style={styles.sectionHeader}>ACCOUNT</Text>
         <View style={styles.section}>
           <SettingsRow
@@ -505,11 +517,30 @@ export default function SettingsScreen() {
             label="Push Notifications"
             onPress={() => nav.push('/settings/notifications')}
           />
+        </View>
+
+        {/* Support — help + the about/legal sub-menu. */}
+        <Text style={styles.sectionHeader}>SUPPORT</Text>
+        <View style={styles.section}>
           <SettingsRow
-            icon="ban-outline"
-            label="Blocked Users"
-            onPress={() => nav.push('/settings/blocked-users')}
+            icon="help-circle-outline"
+            label="How Create works"
+            onPress={async () => {
+              // Re-arm the Create-tab teaching sheet, then jump to Create — its
+              // useFocusEffect re-checks the seen flag on focus and re-shows it.
+              await resetCreateIntro().catch(() => {});
+              router.replace('/(tabs)/create');
+            }}
           />
+          <SettingsRow
+            icon="information-circle-outline"
+            label="About"
+            onPress={() => nav.push('/settings/about')}
+          />
+        </View>
+
+        {/* Destructive — sign out + delete, dead last. */}
+        <View style={styles.section}>
           <SettingsRow
             icon="log-out-outline"
             label="Sign out"
@@ -523,32 +554,6 @@ export default function SettingsScreen() {
             onPress={handleDeleteAccount}
             destructive
             trailing={null}
-          />
-        </View>
-
-        {/* Help */}
-        <Text style={styles.sectionHeader}>HELP</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="help-circle-outline"
-            label="How Create works"
-            onPress={async () => {
-              // Re-arm the Create-tab teaching sheet, then jump to Create — its
-              // useFocusEffect re-checks the seen flag on focus and re-shows it.
-              await resetCreateIntro().catch(() => {});
-              router.replace('/(tabs)/create');
-            }}
-          />
-        </View>
-
-        {/* About — folds acknowledgements / privacy / terms / version into a
-            single sub-settings menu (app/settings/about.tsx). */}
-        <Text style={styles.sectionHeader}>ABOUT</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="information-circle-outline"
-            label="About"
-            onPress={() => nav.push('/settings/about')}
           />
         </View>
       </ScrollView>
