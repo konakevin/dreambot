@@ -632,7 +632,10 @@ export default function CreateScreen() {
                   {modelLabel}
                 </Text>
                 <Text className="text-xs" style={{ color: colors.textSecondary }} numberOfLines={1}>
-                  {mediumLabel} · {vibeLabel}
+                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Medium: </Text>
+                  {mediumLabel} ·{' '}
+                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Vibe: </Text>
+                  {vibeLabel}
                 </Text>
               </View>
               <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
