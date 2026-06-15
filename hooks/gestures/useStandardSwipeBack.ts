@@ -25,12 +25,13 @@
  *   - Gesture activates only on a clear right-swipe (activeOffsetX [ACTIVE_OFFSET,
  *     Infinity], ~2× FAIL_OFFSET so horizontal must dominate vertical).
  *   - Fails early if vertical drag exceeds FAIL_OFFSET — lets FlatLists scroll.
- *   - Fires router.back() via runOnJS after slide-off animation.
+ *   - Fires safeBack() via runOnJS after slide-off animation (falls back to
+ *     the home tab when there's no in-app history — see lib/navigate).
  *   - If gesture is cancelled mid-way, translation is sprung back to 0.
  */
 
-import { router } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
+import { safeBack } from '@/lib/navigate';
 import { Gesture } from 'react-native-gesture-handler';
 import {
   useAnimatedStyle,
@@ -60,8 +61,10 @@ export function useStandardSwipeBack(options?: UseStandardSwipeBackOptions) {
   const translateX = useSharedValue(0);
 
   function dismiss() {
+    // safeBack falls back to the home tab when there's no in-app history
+    // (cold-start deep link), instead of router.back()'s silent no-op.
     if (options?.onDismiss) options.onDismiss();
-    else router.back();
+    else safeBack();
   }
 
   const gesture = Gesture.Pan()

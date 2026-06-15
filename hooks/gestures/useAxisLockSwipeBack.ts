@@ -20,8 +20,8 @@
  */
 
 import { useRef } from 'react';
-import { router } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
+import { safeBack } from '@/lib/navigate';
 import { Gesture, type GestureType } from 'react-native-gesture-handler';
 import {
   useAnimatedStyle,
@@ -62,8 +62,10 @@ export function useAxisLockSwipeBack(options?: UseAxisLockSwipeBackOptions) {
   const ref = useRef<GestureType | undefined>(undefined);
 
   function dismiss() {
+    // safeBack falls back to the home tab when there's no in-app history
+    // (cold-start deep link), instead of router.back()'s silent no-op.
     if (options?.onDismiss) options.onDismiss();
-    else router.back();
+    else safeBack();
   }
 
   let pan = Gesture.Pan().enabled(!options?.disabled).manualActivation(true).withRef(ref);

@@ -15,6 +15,7 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
 import { useLocalSearchParams, router } from 'expo-router';
+import { safeBack } from '@/lib/navigate';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -278,11 +279,7 @@ export default function PublicProfileScreen() {
         <Animated.View style={[styles.root, backStyle]}>
           <SafeAreaView style={styles.root}>
             <View style={styles.backRow}>
-              <TouchableOpacity
-                onPress={() => router.back()}
-                hitSlop={12}
-                style={styles.backButton}
-              >
+              <TouchableOpacity onPress={() => safeBack()} hitSlop={12} style={styles.backButton}>
                 <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
@@ -309,7 +306,7 @@ export default function PublicProfileScreen() {
 
   const stickyTopBar = (
     <Animated.View style={styles.topBar}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.iconButton} hitSlop={12}>
+      <TouchableOpacity onPress={() => safeBack()} style={styles.iconButton} hitSlop={12}>
         <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       {/* Tap-to-top target — covers the collapsed avatar + name slot.

@@ -27,6 +27,7 @@ import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
+import { safeBack } from '@/lib/navigate';
 import { GradientTitle } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { fontScale } from '@/lib/responsive';
@@ -78,7 +79,7 @@ export function ScreenLayout({
           <View style={s.headerSide}>
             {leftAction ?? (
               <TouchableOpacity
-                onPress={() => (header === 'close' ? router.dismiss() : router.back())}
+                onPress={() => (header === 'close' ? router.dismiss() : safeBack())}
                 hitSlop={NAV_HIT_SLOP}
               >
                 <Ionicons

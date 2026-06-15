@@ -8,6 +8,7 @@ import { useAxisLockSwipeBack } from '@/hooks/gestures/useAxisLockSwipeBack';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, router } from 'expo-router';
+import { safeBack } from '@/lib/navigate';
 import { useAlbumStore } from '@/store/album';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -280,7 +281,7 @@ export default function PhotoDetailScreen() {
         <Animated.View style={[s.root, backStyle]}>
           <StatusBar hidden />
           <Animated.View style={[s.backButton, overlayStyle]}>
-            <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+            <TouchableOpacity onPress={() => safeBack()} hitSlop={12}>
               <View style={s.backCircle}>
                 <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
               </View>
@@ -290,7 +291,7 @@ export default function PhotoDetailScreen() {
             <Ionicons name="lock-closed" size={40} color="#9CA3AF" />
             <Text style={s.unavailableTitle}>Post unavailable</Text>
             <Text style={s.unavailableBody}>This dream is private or no longer available.</Text>
-            <TouchableOpacity style={s.unavailableBtn} onPress={() => router.back()}>
+            <TouchableOpacity style={s.unavailableBtn} onPress={() => safeBack()}>
               <Text style={s.unavailableBtnText}>Go back</Text>
             </TouchableOpacity>
           </View>
@@ -304,7 +305,7 @@ export default function PhotoDetailScreen() {
       <Animated.View style={[s.root, backStyle]}>
         <StatusBar hidden />
         <Animated.View style={[s.backButton, overlayStyle]}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+          <TouchableOpacity onPress={() => safeBack()} hitSlop={12}>
             <View style={s.backCircle}>
               <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </View>
