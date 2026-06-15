@@ -371,6 +371,28 @@ export default function SettingsScreen() {
           <SettingsRow icon="planet" label="Bots" onPress={() => nav.push('/settings/bots')} />
         </View>
 
+        {/* Dream Settings — also reachable from Edit Profile, surfaced here too.
+            Drill-ins to the same standalone editor screens (NOT a duplicated
+            inline editor), so there's only ever one live editor component. */}
+        <Text style={styles.sectionHeader}>DREAM SETTINGS</Text>
+        <View style={styles.section}>
+          <SettingsRow
+            icon="people-outline"
+            label="Dream Cast"
+            onPress={() => nav.push('/settings/dream-cast')}
+          />
+          <SettingsRow
+            icon="location-outline"
+            label="Locations"
+            onPress={() => nav.push('/settings/locations')}
+          />
+          <SettingsRow
+            icon="options-outline"
+            label="Mood"
+            onPress={() => nav.push('/settings/mood')}
+          />
+        </View>
+
         {/* Dream Engine drill-ins (Art Styles / Vibes / Mood / Locations /
             Objects / Dream Cast) used to live here; moved to the Edit
             Profile screen so all identity-shaping rows live in one place.
