@@ -40,7 +40,7 @@ export function WelcomeStep({ onNext, onBack }: Props) {
       </View>
 
       {/* First step — no previous screen to go back to. */}
-      <OnboardingFooter onNext={onNext} onBack={onBack} hideBack />
+      <OnboardingFooter onNext={onNext} onBack={onBack} hideBack nextVariant="gradient" />
     </View>
   );
 }
