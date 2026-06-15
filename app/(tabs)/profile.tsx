@@ -28,6 +28,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import { Toast } from '@/components/Toast';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
@@ -113,6 +114,8 @@ export default function ProfileScreen() {
   // Only fetch what's needed for the active tab — avoids 6+ parallel queries on mount
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
+  // Change-avatar action sheet (under the avatar) — moved here from Settings.
+  const { changePhoto } = useChangeAvatar(profile?.avatar_url);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -340,6 +343,7 @@ export default function ProfileScreen() {
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
+        onChangePhoto={changePhoto}
       />
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;

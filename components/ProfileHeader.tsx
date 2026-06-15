@@ -68,6 +68,8 @@ interface OwnVariant extends BaseProps {
   variant: 'own';
   onEditPress: () => void;
   onSharePress: () => void;
+  /** Tapping the "Change photo" link under the avatar (own profile only). */
+  onChangePhoto?: () => void;
 }
 
 interface OtherVariant extends BaseProps {
@@ -157,6 +159,14 @@ export function ProfileHeader(props: Props) {
       <View style={styles.topRow}>
         <AvatarBlock avatar_url={avatar_url} username={username} onPress={onAvatarPress} />
       </View>
+
+      {/* "Change photo" — own profile only. Changing your picture lives here
+          (under the avatar), not in Settings. */}
+      {props.variant === 'own' && props.onChangePhoto && (
+        <Pressable onPress={props.onChangePhoto} hitSlop={6} style={styles.changePhotoBtn}>
+          <Text style={styles.changePhotoText}>Change photo</Text>
+        </Pressable>
+      )}
 
       {/* Row 2 — display name / handle / bio (left-aligned, beneath avatar) */}
       <View style={styles.identityBlock}>
@@ -307,6 +317,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(12),
+  },
+  changePhotoBtn: {
+    alignSelf: 'center',
+    marginTop: verticalScale(8),
+  },
+  changePhotoText: {
+    color: colors.accent,
+    fontSize: fontScale(14),
+    fontWeight: '700',
   },
   topRow: {
     flexDirection: 'row',

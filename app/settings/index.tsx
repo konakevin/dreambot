@@ -1,27 +1,16 @@
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import { useState, useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  Switch,
-  Linking,
-} from 'react-native';
+import { View, TouchableOpacity, ScrollView, StyleSheet, Switch, Linking } from 'react-native';
 import { Text } from '@/components/AppText';
 import Constants from 'expo-constants';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import * as ImagePicker from 'expo-image-picker';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
@@ -105,7 +94,6 @@ export default function SettingsScreen() {
   const bumpReset = useFeedStore((s) => s.bumpReset);
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const { data: profile } = usePublicProfile(user?.id ?? '');
-  const { mutate: uploadAvatar, isPending: uploading } = useAvatarUpload();
 
   // Load vibe profile into onboarding store for settings sub-screens.
   // Set isEditing once on mount, clear on unmount — NOT on focus/blur,
@@ -133,80 +121,6 @@ export default function SettingsScreen() {
   // locationCount, objectCount, castSummary) used to live here for the
   // inline DREAM ENGINE rows; those rows moved to the Edit Profile
   // screen so the summaries went with them.
-
-  function handleChangePhoto() {
-    showAlert('Profile picture', '', [
-      {
-        text: 'Choose from library',
-        onPress: async () => {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== 'granted') {
-            showAlert('Permission needed', 'Allow photo library access in Settings.');
-            return;
-          }
-          const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images'],
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          });
-          if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
-          }
-        },
-      },
-      {
-        text: 'Take photo',
-        onPress: async () => {
-          const { status } = await ImagePicker.requestCameraPermissionsAsync();
-          if (status !== 'granted') {
-            showAlert('Permission needed', 'Allow camera access in Settings.');
-            return;
-          }
-          const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          });
-          if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
-          }
-        },
-      },
-      ...(profile?.avatar_url
-        ? [
-            {
-              text: 'Delete Photo',
-              style: 'destructive' as const,
-              onPress: () => {
-                showAlert('Delete Photo', 'Are you sure you want to remove your profile picture?', [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: async () => {
-                      // Clean up the avatar file in storage too — otherwise
-                      // every "Delete Photo" leaves the JPEG orphaned in
-                      // the avatars bucket. Path is fixed: <userId>/avatar.jpg.
-                      supabase.storage
-                        .from('avatars')
-                        .remove([`${user!.id}/avatar.jpg`])
-                        .catch((e) => {
-                          if (__DEV__) console.warn('[settings] storage cleanup failed', e);
-                        });
-                      await supabase.from('users').update({ avatar_url: null }).eq('id', user!.id);
-                      await supabase.auth.updateUser({ data: { avatar_url: null } });
-                      queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-                    },
-                  },
-                ]);
-              },
-            },
-          ]
-        : []),
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
-  }
 
   function handleChangePassword() {
     showAlert('Reset password', `We'll send a reset link to ${user?.email}`, [
@@ -329,31 +243,12 @@ export default function SettingsScreen() {
     );
   }
 
-  const initial = (profile?.username || user?.user_metadata?.username || '?')[0].toUpperCase();
-
   return (
     <ScreenLayout header="back" title="Settings" titleGradient swipeBack={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Avatar hero */}
-        <TouchableOpacity style={styles.avatarHero} onPress={handleChangePhoto} activeOpacity={0.8}>
-          {uploading ? (
-            <View style={styles.avatarLarge}>
-              <ActivityIndicator color="#FFFFFF" />
-            </View>
-          ) : profile?.avatar_url ? (
-            <Image source={{ uri: profile.avatar_url }} style={styles.avatarLarge} />
-          ) : (
-            <View style={styles.avatarLarge}>
-              <Text style={styles.avatarLargeText}>{initial}</Text>
-            </View>
-          )}
-          <Text style={styles.changePhotoLabel}>Change photo</Text>
-        </TouchableOpacity>
-
-        {/* Profile section — the new Edit Profile screen is the canonical
-            home for avatar / display name / bio / dream-identity drill-ins.
-            Profile-picture quick-row kept for the muscle-memory path; the
-            two converge on the same useAvatarUpload mutation. */}
+        {/* Avatar + "Change photo" moved to the Profile screen (under the
+            avatar) — it doesn't belong in Settings. Edit Profile is the
+            canonical home for avatar / display name / bio drill-ins. */}
         <Text style={styles.sectionHeader}>PROFILE</Text>
         <View style={styles.section}>
           <SettingsRow
