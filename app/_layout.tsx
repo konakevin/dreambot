@@ -24,13 +24,19 @@ import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
 import { routeFromNotification } from '@/lib/notificationRouting';
+import {
+  toastForNotification,
+  type ToastAction,
+  type NotificationRowLike,
+} from '@/lib/notificationToast';
+import * as nav from '@/lib/navigate';
 import { resumeInFlightDream } from '@/lib/dreamResumeStore';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { PremiumGateProvider } from '@/components/PremiumGateSheet';
-import { ToastHost } from '@/components/Toast';
+import { Toast, ToastHost } from '@/components/Toast';
 import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 
 import { queryClient } from '@/lib/queryClient';
@@ -188,6 +194,33 @@ function RevenueCatInitializer() {
   return null;
 }
 
+// In-app toast for a new notification (the foreground equivalent of the push,
+// which is suppressed while the app is active). Only the high-signal
+// "your-content-ready" events toast — see lib/notificationToast.ts. De-duped
+// by notification id so a double realtime delivery never double-toasts.
+let lastToastedNotifId: string | undefined;
+
+function runToastAction(action: ToastAction): void {
+  switch (action.kind) {
+    case 'route':
+      routeFromNotification(action.data, { markSeen: true });
+      break;
+    case 'inbox':
+      nav.push('/inbox');
+      break;
+  }
+}
+
+function maybeShowNotificationToast(row: NotificationRowLike | null | undefined): void {
+  if (!row) return;
+  if (row.id && row.id === lastToastedNotifId) return;
+  const spec = toastForNotification(row);
+  if (!spec) return;
+  lastToastedNotifId = row.id;
+  // A touch longer than the default so there's comfortable time to tap.
+  Toast.show(spec.message, spec.icon, 4500, { onPress: () => runToastAction(spec.action) });
+}
+
 function RealtimeSubscriber() {
   const user = useAuthStore((s) => s.user);
 
@@ -204,10 +237,13 @@ function RealtimeSubscriber() {
           table: 'notifications',
           filter: `recipient_id=eq.${user.id}`,
         },
-        () => {
+        (payload) => {
           // New notification — refresh grouped inbox + distinct-group badge.
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
           queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
+          // ...and, for high-signal "your-content" events, a tappable in-app
+          // toast (the foreground stand-in for the suppressed OS push).
+          maybeShowNotificationToast(payload.new as NotificationRowLike);
         }
       )
       .on(

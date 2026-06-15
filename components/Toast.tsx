@@ -43,15 +43,23 @@ interface ToastData {
   message: string;
   icon?: string;
   duration?: number;
+  /** Optional tap action — when set, tapping fires this THEN dismisses
+   *  (instead of plain dismiss). Used to make a toast open the thing it's
+   *  about (e.g. a finished dream). Swipe-up still dismisses with no action. */
+  onPress?: () => void;
 }
 
 type Listener = (data: ToastData) => void;
 
 let listener: Listener | null = null;
 
+interface ToastOptions {
+  onPress?: () => void;
+}
+
 export const Toast = {
-  show(message: string, icon?: string, duration = 3200) {
-    listener?.({ message, icon, duration });
+  show(message: string, icon?: string, duration = 3200, opts?: ToastOptions) {
+    listener?.({ message, icon, duration, onPress: opts?.onPress });
   },
 };
 
@@ -64,6 +72,9 @@ export function ToastHost() {
   const opacity = useSharedValue(0);
   const scale = useSharedValue(0.94);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // Current toast's tap action, kept in a ref so handleTap (a stable callback)
+  // always reads the latest one without re-subscribing the gesture.
+  const onPressRef = useRef<(() => void) | undefined>(undefined);
   const insets = useSafeAreaInsets();
 
   const dismiss = useCallback(() => {
@@ -73,6 +84,7 @@ export function ToastHost() {
   useEffect(() => {
     listener = (incoming) => {
       if (timer.current) clearTimeout(timer.current);
+      onPressRef.current = incoming.onPress;
       setData(incoming);
       // Spring entry — slight overshoot reads as the "cute" beat Kevin asked
       // for without ever crossing into wiggly / clown-y territory.
@@ -110,8 +122,11 @@ export function ToastHost() {
   }, []);
 
   const handleTap = useCallback(() => {
-    // Tap-to-dismiss: clear the timer, fast-fade out. Mirrors iOS/IG
-    // notification banner UX — the user got the message, free up the slot.
+    // Tap: fire the optional action (e.g. open the finished dream) THEN
+    // dismiss. Without an action it's plain tap-to-dismiss (iOS/IG banner UX).
+    const action = onPressRef.current;
+    onPressRef.current = undefined;
+    if (action) action();
     clearTimer();
     translateY.value = withTiming(-40, { duration: 180, easing: Easing.in(Easing.cubic) });
     opacity.value = withTiming(0, { duration: 180, easing: Easing.in(Easing.cubic) });
