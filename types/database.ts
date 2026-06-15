@@ -2232,6 +2232,7 @@ export type Database = {
           pro_trial_started_at: string | null;
           sparkle_balance: number;
           username: string;
+          username_confirmed: boolean;
         };
         Insert: {
           allow_reposts?: boolean;
@@ -2258,6 +2259,7 @@ export type Database = {
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username: string;
+          username_confirmed?: boolean;
         };
         Update: {
           allow_reposts?: boolean;
@@ -2284,6 +2286,7 @@ export type Database = {
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
           username?: string;
+          username_confirmed?: boolean;
         };
         Relationships: [];
       };

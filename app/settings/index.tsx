@@ -10,6 +10,8 @@ import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
+import { useUsernameStatus } from '@/hooks/useUsernameStatus';
+import { UsernameNudge } from '@/components/UsernameNudge';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
@@ -100,6 +102,12 @@ export default function SettingsScreen() {
   const bumpReset = useFeedStore((s) => s.bumpReset);
   const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const { data: profile } = usePublicProfile(user?.id ?? '');
+  const { data: usernameStatus } = useUsernameStatus();
+  // Username is editable ONCE (while unconfirmed) then locked read-only. The
+  // picker modal is the same component the home claim-nudge uses.
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
+  const usernameUnconfirmed = usernameStatus != null && !usernameStatus.confirmed;
+  const handleAt = usernameStatus?.username ?? profile?.username ?? '';
 
   // Load vibe profile into onboarding store for settings sub-screens.
   // Set isEditing once on mount, clear on unmount — NOT on focus/blur,
@@ -262,8 +270,23 @@ export default function SettingsScreen() {
             label="Edit Profile"
             onPress={() => nav.push('/settings/edit-profile')}
           />
-          {/* Username is fixed once set — only the display name is editable
-              (Edit Profile), so it isn't surfaced here as a changeable row. */}
+          {/* Username — editable ONCE while unconfirmed (auto-assigned OAuth
+              handles), then locked to a read-only @handle. Email signups land
+              confirmed (they typed it), so they only ever see the locked row. */}
+          {usernameUnconfirmed ? (
+            <SettingsRow
+              icon="at-outline"
+              label="Username"
+              onPress={() => setShowUsernameModal(true)}
+              trailing={<Text style={styles.rowValue}>@{handleAt}</Text>}
+            />
+          ) : (
+            <View style={styles.row}>
+              <Ionicons name="at-outline" size={20} color={colors.accent} />
+              <Text style={styles.rowLabel}>Username</Text>
+              <Text style={styles.rowValue}>@{handleAt}</Text>
+            </View>
+          )}
           {/* Email is the account identity (often owned by an OAuth provider —
               Apple/Google/Facebook), so it's read-only: a static row, not a
               TouchableOpacity, with no chevron, so it doesn't read as tappable. */}
@@ -579,6 +602,15 @@ export default function SettingsScreen() {
           />
         </View>
       </ScrollView>
+
+      {showUsernameModal && usernameStatus && (
+        <UsernameNudge
+          currentUsername={usernameStatus.username}
+          secondaryLabel="Cancel"
+          onSecondary={() => setShowUsernameModal(false)}
+          onSaved={() => setShowUsernameModal(false)}
+        />
+      )}
     </ScreenLayout>
   );
 }

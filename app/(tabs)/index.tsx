@@ -18,6 +18,9 @@ import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { FeedIntroGate, hasSeenFeedIntro } from '@/components/FeedIntroGate';
+import { UsernameNudge } from '@/components/UsernameNudge';
+import { useUsernameStatus } from '@/hooks/useUsernameStatus';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OverlayPill } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -151,6 +154,11 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
   );
 }
 
+// "Maybe later" on the username nudge snoozes it for a week so it isn't shown
+// every launch (the DB username_confirmed flag is the real source of truth).
+const USERNAME_SNOOZE_KEY = 'dreambot.usernameNudge.snoozedAt.v1';
+const USERNAME_SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
+
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((s) => s.user);
@@ -166,6 +174,30 @@ export default function HomeScreen() {
     if (!user) return;
     hasSeenFeedIntro().then((seen) => setShowFeedIntro(!seen));
   }, [user]);
+
+  // One-time "claim your @username" nudge — shown to users still on an auto-
+  // assigned handle (username_confirmed=false). Dismissible: "Maybe later"
+  // snoozes it (AsyncStorage) for a week so it isn't every-launch. Shows after
+  // the feed intro is done so a brand-new OAuth user never sees two at once.
+  const { data: usernameStatus } = useUsernameStatus();
+  const [usernameSnoozed, setUsernameSnoozed] = useState<boolean | null>(null);
+  const [usernameDone, setUsernameDone] = useState(false);
+  useEffect(() => {
+    AsyncStorage.getItem(USERNAME_SNOOZE_KEY).then((v) => {
+      const at = v ? parseInt(v, 10) : 0;
+      setUsernameSnoozed(Date.now() - at < USERNAME_SNOOZE_MS);
+    });
+  }, []);
+  const snoozeUsername = useCallback(() => {
+    AsyncStorage.setItem(USERNAME_SNOOZE_KEY, String(Date.now())).catch(() => {});
+    setUsernameSnoozed(true);
+  }, []);
+  const showUsernameNudge =
+    showFeedIntro === false &&
+    usernameSnoozed === false &&
+    !usernameDone &&
+    usernameStatus != null &&
+    !usernameStatus.confirmed;
 
   // Prebuffer the two home-screen feeds on mount: warms the TanStack
   // cache for tab-switch latency, then prefetches the first 5 image bytes
@@ -317,6 +349,16 @@ export default function HomeScreen() {
       {/* First-run gate: feed orientation → mandatory bot selection. Full-screen
           modal, shown once (dreambot.seenFeedIntro.v1). */}
       {showFeedIntro === true && <FeedIntroGate onDone={() => setShowFeedIntro(false)} />}
+
+      {/* One-time "claim your @username" nudge (dismissible). */}
+      {showUsernameNudge && usernameStatus && (
+        <UsernameNudge
+          currentUsername={usernameStatus.username}
+          secondaryLabel="Maybe later"
+          onSecondary={snoozeUsername}
+          onSaved={() => setUsernameDone(true)}
+        />
+      )}
     </View>
   );
 }
