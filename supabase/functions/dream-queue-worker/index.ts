@@ -11,12 +11,10 @@
  * Auth: worker token (Authorization: Bearer <DREAM_QUEUE_WORKER_TOKEN>).
  *
  * Implemented dispatchers: nightly (fans out — invokes the nightly-dreams
- * render Edge Function per job, each in its own isolate, then finalizes).
- * create / dlt still pending. The first_dream dispatcher was removed
- * 2026-06-02 with the rip-out of the experimental generate-first-dream
- * engine — onboarding now uses the production nightly engine with forced
- * cast face swap (see RevealStep.tsx + memory:
- * project_first_dream_via_nightly_engine).
+ * render Edge Function per job, each in its own isolate, then finalizes);
+ * create / dlt (fire-and-forget to generate-dream / restyle-photo, render owns
+ * lifecycle); first_dream (fire-and-forget to first-dream-render, which renders
+ * the onboarding cascade one tier per isolate and owns its lifecycle).
  *
  * See QUEUE_WORKERS_REFACTOR.md.
  */
@@ -24,6 +22,7 @@
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { processNightlyJob } from './dispatchers/nightly.ts';
 import { dispatchCreateJob } from './dispatchers/create.ts';
+import { dispatchFirstDreamJob } from './dispatchers/first_dream.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 
@@ -40,10 +39,8 @@ const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 interface QueueRow {
   id: string;
   user_id: string;
-  // 'first_dream' value kept for back-compat with pre-2026-06-02 dead-
-  // letter rows in dream_queue (the DB CHECK constraint still allows it).
-  // The switch below treats it as unknown_source so any sneak-in retries
-  // dead-letter cleanly.
+  // 'first_dream' is the onboarding first-dream cascade (re-activated
+  // 2026-06-15) — dispatched fire-and-forget to first-dream-render.
   source: 'first_dream' | 'nightly' | 'create' | 'dlt';
   weight: 'light' | 'heavy';
   payload: Record<string, unknown>;
@@ -212,9 +209,22 @@ Deno.serve(async (req) => {
               ownedByRender = true;
               break;
             }
+            case 'first_dream': {
+              // Onboarding first dream (free). FIRE-AND-FORGET to the
+              // first-dream-render orchestrator: it acks 202, renders ONE
+              // cascade tier in waitUntil, then owns the dream_queue terminal
+              // state (complete / advance-tier-and-re-queue / dead_letter). Same
+              // render-owns-lifecycle reasoning as create/dlt — the worker never
+              // awaits the multi-second render.
+              await dispatchFirstDreamJob({
+                supabaseUrl,
+                workerToken: expectedToken,
+                jobId: job.id,
+              });
+              ownedByRender = true;
+              break;
+            }
             default:
-              // Also catches the vestigial 'first_dream' source value
-              // (dispatcher removed 2026-06-02).
               throw new Error(`unknown_source:${job.source}`);
           }
 

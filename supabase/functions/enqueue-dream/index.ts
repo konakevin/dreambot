@@ -20,6 +20,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
+import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -64,6 +65,55 @@ Deno.serve(async (req) => {
   const userId = user.id;
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+  // ── First-dream branch (onboarding reveal) ──
+  // The first dream is FREE (no sparkle charge) and routes through the
+  // first_dream cascade: dual → single → scene, each tier its own isolate via
+  // first-dream-render. We build the tier LIST here from the cast and stash it
+  // in the payload; the orchestrator advances tier_index + re-queues per tier.
+  // nightly-dreams loads the recipe from user_recipes by user_id at render time
+  // (saved just before this call in RevealStep), so the payload carries only the
+  // cascade state — not the whole vibe_profile.
+  if (body.first_dream === true) {
+    const fdJobId = crypto.randomUUID();
+    const vp = body.vibe_profile as { dream_cast?: CastMemberLike[] } | undefined;
+    const tiers = buildFirstDreamTiers(vp?.dream_cast ?? []);
+    const fdPayload = { tiers, tier_index: 0 };
+
+    await supabase
+      .from('dream_jobs')
+      .upsert(
+        { id: fdJobId, user_id: userId, status: 'processing', payload: fdPayload },
+        { onConflict: 'id', ignoreDuplicates: true }
+      );
+
+    const { error: fdEnqErr } = await supabase.from('dream_queue').insert({
+      id: fdJobId,
+      user_id: userId,
+      source: 'first_dream',
+      weight: 'heavy', // forced cast face swap → Fly swap service → heavy cap
+      payload: fdPayload,
+      status: 'queued',
+      dedup_key: `first_dream:${fdJobId}`,
+    });
+    if (fdEnqErr) {
+      return json({ error: `enqueue_failed: ${fdEnqErr.message}` }, 500);
+    }
+
+    const fdWorkerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
+    if (fdWorkerToken) {
+      await fetch(`${supabaseUrl}/functions/v1/dream-queue-worker`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${fdWorkerToken}` },
+        body: '{}',
+      }).then(
+        () => {},
+        () => {}
+      );
+    }
+
+    return json({ dream_id: fdJobId, status: 'queued' }, 200);
+  }
 
   // ── Retry branch ──
   // Re-run a previously FAILED dream by re-enqueuing its stored payload (the
