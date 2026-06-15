@@ -106,8 +106,13 @@ export default function AcknowledgementsScreen() {
     [expanded, handleToggle]
   );
 
+  // swipeBack={false}: this is a long scroll list, and ScreenLayout's custom
+  // full-screen horizontal swipe-back fights the FlatList's vertical scroll
+  // (janky / dropped swipes, esp. after expanding a license). The `settings`
+  // stack is MODAL_SWIPEABLE, so the native edge-swipe — which coordinates with
+  // scroll natively — still goes back. Matches bots.tsx + settings/index.tsx.
   return (
-    <ScreenLayout header="back" title="Acknowledgements">
+    <ScreenLayout header="back" title="Acknowledgements" swipeBack={false}>
       <View style={styles.intro}>
         <Text style={styles.introTitle}>Open-source love 💜</Text>
         <Text style={styles.introBody}>
