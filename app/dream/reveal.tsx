@@ -13,8 +13,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
+import { GestureDetector } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
@@ -34,6 +37,12 @@ export default function DreamRevealScreen() {
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
+
+  // Pinch-to-zoom (focal-aware) + two-finger pan while zoomed, springing back
+  // to identity on release — same Instagram-peek behavior as the feed / photo
+  // detail. Swipe-left-to-profile is off; there's no author to navigate to on
+  // an unposted reveal.
+  const { gesture, imageTransformStyle } = useCardGestures({ disableSwipeLeft: true });
 
   // Reaching reveal means the user has seen this render (normal flow OR a
   // cold-start resume) — drop the in-flight marker so the next launch won't
@@ -121,13 +130,18 @@ export default function DreamRevealScreen() {
 
   return (
     <View style={s.container}>
-      {/* Full-bleed image */}
-      <Image
-        source={{ uri: result.imageUrl }}
-        style={s.fullImage}
-        contentFit="cover"
-        transition={600}
-      />
+      {/* Full-bleed image — pinch to zoom (the transform rides the wrapper so
+          expo-image keeps its decode/transition). */}
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[s.fullImage, imageTransformStyle]}>
+          <Image
+            source={{ uri: result.imageUrl }}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={600}
+          />
+        </Animated.View>
+      </GestureDetector>
 
       {/* Bottom gradient for readability */}
       <LinearGradient
