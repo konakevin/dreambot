@@ -799,8 +799,7 @@ export default function InboxScreen() {
                   <Ionicons name="sparkles" size={fontScale(18)} color={colors.accent} />
                 </View>
                 <Text style={styles.emptySubtitle}>
-                  Your DreamBot&rsquo;s snoozing. Hearts, comments, follows, and fresh dreams will
-                  land right here.
+                  Hearts, comments, follows, and fresh dreams will land right here.
                 </Text>
               </>
             )}
