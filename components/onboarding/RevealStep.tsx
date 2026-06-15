@@ -398,7 +398,6 @@ export function RevealStep({ onBack }: Props) {
           </Text>
           <GradientButton
             label="Let’s go!"
-            icon="sparkles"
             onPress={() => generateImage()}
             style={{ alignSelf: 'stretch', marginTop: verticalScale(8) }}
           />
