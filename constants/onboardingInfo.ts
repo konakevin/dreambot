@@ -62,7 +62,7 @@ export const CREATE_INFO: InfoStepConfig = {
     {
       icon: 'people-outline',
       title: 'Cast any photo',
-      body: 'Upload any reference photo to cast someone new in a dream.',
+      body: 'Upload any reference photo to cast someone new in a dream. Uploaded photo dreams do not support dream cast references.',
     },
   ],
 };
