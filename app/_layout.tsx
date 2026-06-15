@@ -70,32 +70,51 @@ function AuthInitializer() {
   useEffect(() => {
     async function handleUrl(url: string) {
       const parsed = Linking.parse(url);
+      const path = parsed.path ?? '';
+      const fragment = url.split('#')[1];
+      const fragParams = fragment ? new URLSearchParams(fragment) : null;
+
+      // Password-recovery deep link (redirectTo: dreambot://reset-password).
+      // The recovery email carries a session (?code= for PKCE, #access_token
+      // for implicit) just like an OAuth callback — so we establish the session
+      // the same way, then route to the set-new-password screen instead of the
+      // feed. Detect it by the redirect path or an explicit type=recovery.
+      const isRecovery =
+        path === 'reset-password' ||
+        parsed.queryParams?.type === 'recovery' ||
+        fragParams?.get('type') === 'recovery';
+
+      async function goToResetIfRecovery() {
+        if (!isRecovery) return false;
+        const { router } = await import('expo-router');
+        router.replace('/reset-password');
+        return true;
+      }
 
       // PKCE flow: Supabase redirects with ?code=xxx in the query string
       const code = parsed.queryParams?.code;
       if (typeof code === 'string') {
         await supabase.auth.exchangeCodeForSession(code);
+        await goToResetIfRecovery();
         return;
       }
 
       // Implicit flow fallback: tokens in URL fragment #access_token=xxx
-      const fragment = url.split('#')[1];
-      if (fragment) {
-        const params = new URLSearchParams(fragment);
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
+      if (fragParams) {
+        const accessToken = fragParams.get('access_token');
+        const refreshToken = fragParams.get('refresh_token');
         if (accessToken && refreshToken) {
           await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
+          await goToResetIfRecovery();
           return;
         }
       }
 
       // Deep link routing: dreambot://photo/{id} or https://dreambotapp.com/post/{id}
       // Just store the post ID — the home screen picks it up when ready
-      const path = parsed.path ?? '';
       const postMatch = path.match(/^(?:post|photo)\/([a-f0-9-]+)$/i);
       if (postMatch) {
         const { useFeedStore } = await import('@/store/feed');
@@ -612,6 +631,7 @@ function RootLayout() {
                   <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
                   <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
                   <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                  <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
                 </Stack>
                 <StatusBar style="light" />
                 <ToastHost />
