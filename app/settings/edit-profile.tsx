@@ -297,7 +297,7 @@ export default function EditProfileScreen() {
               onboarding chrome; auto-saves via useAutoSaveProfile above) followed
               by the Mood / Locations drill-ins. */}
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>DREAM IDENTITY</Text>
+            <Text style={styles.sectionLabel}>DREAM SETTINGS</Text>
             <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
             <View style={[styles.sectionCard, { marginTop: verticalScale(8) }]}>
               {DREAM_IDENTITY_ROWS.map((row, i) => (
