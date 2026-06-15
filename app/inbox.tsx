@@ -61,9 +61,11 @@ const MASCOTS = [
   require('@/assets/images/mascots/mascot-5.jpg'),
 ];
 
-// Hard cap on subtext: ensures single-line render on the smallest devices
-// (iPhone SE has ~30 chars of visible budget after icon + time column).
-const SUBTEXT_MAX = 28;
+// Inline message preview length. Bumped from 28 → 90 so comment / reply /
+// mention / dream bodies read like a real message snippet across up to two
+// lines instead of a clipped fragment. (The server may cap the body shorter;
+// this is just the client ceiling.)
+const SUBTEXT_MAX = 90;
 function capSubtext(text: string | null | undefined): string | null {
   if (!text) return null;
   const trimmed = text.trim();
@@ -371,6 +373,10 @@ function GroupRow({
   // actually tapped.
   const isNew = group.isNewSinceView;
   const firstActorId = group.previewActorIds[0] ?? null;
+  // Lead with the actor's face when we have one (likes / comments / follows);
+  // system pings (dream ready, downloads, milestones) have no actor → fall
+  // back to the tinted type tile.
+  const avatar = group.previewAvatars[0] ?? null;
 
   return (
     <ReanimatedSwipeable
@@ -411,22 +417,39 @@ function GroupRow({
           </View>
         )}
 
-        {/* Icon tile — per-type glyph + optional "new" pip top-right. */}
+        {/* Leading visual — the actor's avatar with a small type-glyph badge
+            (heart / comment / follow…), or the tinted type tile when there's
+            no actor. "New" pip rides top-right. */}
         <View style={styles.iconTileWrap}>
-          <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
-            <Ionicons name={icon.name} size={20} color={icon.color} />
-          </View>
+          {avatar ? (
+            <>
+              <Image
+                source={{ uri: resizeAvatar(avatar) }}
+                style={styles.avatarImg}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              />
+              <View style={[styles.typeBadge, { backgroundColor: icon.color }]}>
+                <Ionicons name={icon.name} size={11} color="#FFFFFF" />
+              </View>
+            </>
+          ) : (
+            <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
+              <Ionicons name={icon.name} size={20} color={icon.color} />
+            </View>
+          )}
           {isNew && <View style={styles.newPip} pointerEvents="none" />}
         </View>
 
-        {/* Text — subject (1 line, no truncation) + optional subtext (1 line,
-          server-capped to 28 chars so no ellipsis needed). */}
+        {/* Text — subject + optional inline message preview. Both allowed to
+            wrap to 2 lines so the row breathes instead of clipping. Unread
+            rows get a heavier subject for a touch of weight. */}
         <View style={styles.textCol}>
-          <Text style={styles.subject} numberOfLines={1}>
+          <Text style={[styles.subject, isNew && styles.subjectUnread]} numberOfLines={2}>
             {subject}
           </Text>
           {subtext && (
-            <Text style={styles.subtext} numberOfLines={1}>
+            <Text style={styles.subtext} numberOfLines={2}>
               {subtext}
             </Text>
           )}
@@ -449,7 +472,7 @@ function GroupRow({
           />
         )}
 
-        <Text style={styles.time}>{formatTimeAgo(group.lastAt)}</Text>
+        <Text style={[styles.time, isNew && styles.timeUnread]}>{formatTimeAgo(group.lastAt)}</Text>
       </TouchableOpacity>
     </ReanimatedSwipeable>
   );
@@ -893,11 +916,33 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   iconTile: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  // Actor avatar — same footprint as the tinted tile so rows stay aligned
+  // whether or not a notification has an actor.
+  avatarImg: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.card,
+  },
+  // Type-glyph badge riding the avatar's bottom-right — the pop of brand
+  // colour that tells you at a glance whether it's a like / comment / follow.
+  typeBadge: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: colors.background,
   },
   // "New since last view" pip — top-right of the icon tile.
   // Dark ring keeps it readable against any tile-tint color.
@@ -922,6 +967,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: fontScale(20),
   },
+  subjectUnread: {
+    fontWeight: '800',
+  },
   subtext: {
     color: colors.textSecondary,
     fontSize: fontScale(13),
@@ -945,7 +993,12 @@ const styles = StyleSheet.create({
     minWidth: 28,
     textAlign: 'right',
   },
-  // Avatars only appear in the actor sheet now (rows use per-type icon tiles).
+  timeUnread: {
+    color: colors.accent,
+    fontWeight: '700',
+  },
+  // The expand sheet's larger actor avatars (rows show their own avatar +
+  // type badge inline).
   sheetAvatar: {
     width: 40,
     height: 40,
