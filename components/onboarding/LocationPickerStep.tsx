@@ -18,6 +18,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
+import { GradientTitle } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 import { supabase } from '@/lib/supabase';
 
@@ -217,7 +218,17 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       {/* Sticky header — sits outside the ScrollView so the location grid
           scrolls underneath it (matches BotSelectorStep's pattern). */}
       <View style={s.stickyHeader}>
-        <Text style={shared.heroTitle}>Where do you want to dream?</Text>
+        <GradientTitle
+          size={26}
+          weight={800}
+          numberOfLines={2}
+          align="left"
+          maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
+          lineHeight={32}
+          style={{ marginBottom: verticalScale(6) }}
+        >
+          Where do you want to dream?
+        </GradientTitle>
         <Text style={shared.heroSubtitle}>Places you love, or anywhere you’d love to go.</Text>
       </View>
 
