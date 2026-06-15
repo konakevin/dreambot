@@ -23,7 +23,7 @@ export const NIGHTLY_INFO: InfoStepConfig = {
 };
 
 export const CAST_INFO: InfoStepConfig = {
-  eyebrow: 'the funny part',
+  eyebrow: 'the fun part',
   customMascot: require('@/assets/images/onboarding/mascot-cast.png'),
   headline: 'Want to be in the dream postcards?',
   body: 'Add a photo of yourself, and your favorite person if you want company. Most nights you’ll find yourselves painted right into the dream. A quiet little surprise waiting in the morning, no prompting needed.',
