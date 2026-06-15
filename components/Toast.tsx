@@ -15,7 +15,8 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { View, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/components/AppText';
 import Animated, {
   useSharedValue,
@@ -49,7 +50,7 @@ type Listener = (data: ToastData) => void;
 let listener: Listener | null = null;
 
 export const Toast = {
-  show(message: string, icon?: string, duration = 2200) {
+  show(message: string, icon?: string, duration = 3200) {
     listener?.({ message, icon, duration });
   },
 };
@@ -92,7 +93,7 @@ export function ToastHost() {
           scale.value = 0.94;
           runOnJS(dismiss)();
         }, 260);
-      }, incoming.duration ?? 2200);
+      }, incoming.duration ?? 3200);
     };
     return () => {
       listener = null;
@@ -104,10 +105,14 @@ export function ToastHost() {
     opacity: opacity.value,
   }));
 
+  const clearTimer = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+  }, []);
+
   const handleTap = useCallback(() => {
     // Tap-to-dismiss: clear the timer, fast-fade out. Mirrors iOS/IG
     // notification banner UX — the user got the message, free up the slot.
-    if (timer.current) clearTimeout(timer.current);
+    clearTimer();
     translateY.value = withTiming(-40, { duration: 180, easing: Easing.in(Easing.cubic) });
     opacity.value = withTiming(0, { duration: 180, easing: Easing.in(Easing.cubic) });
     setTimeout(() => {
@@ -115,7 +120,44 @@ export function ToastHost() {
       scale.value = 0.94;
       dismiss();
     }, 200);
-  }, [translateY, opacity, scale, dismiss]);
+  }, [clearTimer, translateY, opacity, scale, dismiss]);
+
+  // Swipe-up-to-dismiss — the toast exits upward, so an upward flick throws it
+  // out the way it leaves. Downward drag is heavily damped (rubber-band) so it
+  // never tears off the top. Tap-to-dismiss stays via the composed Tap gesture.
+  const swipeGesture = Gesture.Pan()
+    .onStart(() => {
+      runOnJS(clearTimer)();
+    })
+    .onUpdate((e) => {
+      'worklet';
+      translateY.value = e.translationY < 0 ? e.translationY : e.translationY * 0.15;
+    })
+    .onEnd((e) => {
+      'worklet';
+      if (e.translationY < -28 || e.velocityY < -450) {
+        opacity.value = withTiming(0, { duration: 160, easing: Easing.in(Easing.cubic) });
+        translateY.value = withTiming(
+          -120,
+          { duration: 160, easing: Easing.in(Easing.cubic) },
+          (finished) => {
+            if (finished) {
+              scale.value = 0.94;
+              runOnJS(dismiss)();
+            }
+          }
+        );
+      } else {
+        translateY.value = withSpring(0, { damping: 18, stiffness: 220, mass: 0.7 });
+      }
+    });
+
+  const tapGesture = Gesture.Tap().onEnd((_e, success) => {
+    if (success) runOnJS(handleTap)();
+  });
+
+  // Exclusive: a clear swipe wins; a stationary press falls through to tap.
+  const composedGesture = Gesture.Exclusive(swipeGesture, tapGesture);
 
   if (!data) return null;
 
@@ -124,7 +166,7 @@ export function ToastHost() {
       pointerEvents="box-none"
       style={[s.absoluteRoot, { top: insets.top + verticalScale(8) }, animStyle]}
     >
-      <Pressable onPress={handleTap}>
+      <GestureDetector gesture={composedGesture}>
         {/* 1.5pt outer LinearGradient acts as a brand-coloured border. The
             inner View sits over it with a tiny inset, leaving the gradient
             visible as a hairline frame. Sidesteps RN's lack of true
@@ -155,7 +197,7 @@ export function ToastHost() {
             </Text>
           </View>
         </LinearGradient>
-      </Pressable>
+      </GestureDetector>
     </Animated.View>
   );
 }
