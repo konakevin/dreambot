@@ -225,6 +225,8 @@ export default function EditProfileScreen() {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
+          <Text style={styles.sectionLabel}>PROFILE</Text>
+
           {/* Avatar block */}
           <View style={styles.avatarBlock}>
             <TouchableOpacity onPress={handleChangePhoto} activeOpacity={0.8}>
@@ -290,21 +292,15 @@ export default function EditProfileScreen() {
             </Text>
           </View>
 
-          {/* Dream Cast — inline editor. Embedding DreamCastStep with
-              embedded=true skips its outer ScrollView + onboarding hero
-              chrome, leaving just the slots + privacy note in the host
-              ScrollView's flow. Auto-saves via useAutoSaveProfile above. */}
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>DREAM CAST</Text>
-            <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
-          </View>
-
-          {/* Dream identity drill-ins (Mood / Locations / Objects). Mediums
-              + Vibes + Dream Cast no longer appear here — see comment by
-              the DREAM_IDENTITY_ROWS array. */}
+          {/* All dream settings grouped under ONE header: the inline Dream Cast
+              editor (embedded=true skips DreamCastStep's outer ScrollView +
+              onboarding chrome; auto-saves via useAutoSaveProfile above) followed
+              by the Mood / Locations drill-ins. */}
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>DREAM IDENTITY</Text>
-            <View style={styles.sectionCard}>
+            <Text style={styles.fieldLabel}>Dream Cast</Text>
+            <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
+            <View style={[styles.sectionCard, { marginTop: verticalScale(8) }]}>
               {DREAM_IDENTITY_ROWS.map((row, i) => (
                 <TouchableOpacity
                   key={row.label}
