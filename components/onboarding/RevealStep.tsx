@@ -1,12 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,7 +14,7 @@ import { GradientButton } from '@/components/GradientButton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
-import { generateFirstDreamCascade } from '@/lib/firstDreamCascade';
+import { enqueueFirstDream, awaitFirstDream } from '@/lib/firstDreamQueue';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors } from '@/constants/theme';
@@ -87,8 +80,17 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  // Tap-to-preview: shows the dream full-frame with the post/skip HUD hidden.
+  // Exiting (close button or tap anywhere) returns to the reveal screen.
+  const [preview, setPreview] = useState(false);
+  // Which CTA is in flight ('post' vs 'skip') — both set phase='creating', so
+  // this is what keeps the Post button from reading "Posting…" during a Skip.
+  const [busyAction, setBusyAction] = useState<'post' | 'skip' | null>(null);
   const generating = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
+  // Aborts the first-dream poll loop on unmount / retry so a stale poll never
+  // resolves into an unmounted screen.
+  const pollAbort = useRef<AbortController | null>(null);
 
   const activeDream = dreams.at(activeIndex) ?? null;
   const describedProfile = useRef(profile);
@@ -111,6 +113,9 @@ export function RevealStep({ onBack }: Props) {
     // way out is the "Go to feed" CTA (which calls reset() → clears this).
     setScrollLocked(hidden);
   }, [phase, setChromeHidden, setScrollLocked]);
+
+  // Abort any in-flight first-dream poll loop on unmount.
+  useEffect(() => () => pollAbort.current?.abort(), []);
 
   async function runBootSequence() {
     await new Promise((r) => setTimeout(r, 1500));
@@ -189,7 +194,15 @@ export function RevealStep({ onBack }: Props) {
       await bootPromise;
       setPhase('generating');
 
-      const result = await generateFirstDreamCascade(describedProfile.current);
+      // Enqueue ONE first-dream job + poll for its terminal state. The
+      // dual → single → scene cascade runs server-side (first-dream-render
+      // advances tiers across isolates), so the client never holds a long HTTP
+      // connection — no more "loading forever". A fresh AbortController per run
+      // lets unmount / retry cancel the poll loop cleanly.
+      pollAbort.current?.abort();
+      pollAbort.current = new AbortController();
+      const jobId = await enqueueFirstDream(describedProfile.current);
+      const result = await awaitFirstDream(jobId, { signal: pollAbort.current.signal });
       if (__DEV__) console.log('[Reveal] Got URL:', result.url?.slice(0, 80));
 
       setDreams((prev) => {
@@ -214,7 +227,7 @@ export function RevealStep({ onBack }: Props) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Generation failed:', err);
-      setError('Image generation failed. Tap to try again.');
+      setError('We couldn’t finish your first dream just now.');
       setPhase('reveal');
     } finally {
       generating.current = false;
@@ -224,6 +237,7 @@ export function RevealStep({ onBack }: Props) {
   async function handleCreateBot(makePublic: boolean) {
     if (!user || !activeDream) return;
     setPhase('creating');
+    setBusyAction(makePublic ? 'post' : 'skip');
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     try {
@@ -318,22 +332,16 @@ export function RevealStep({ onBack }: Props) {
       // feed (FeedIntroGate, 2026-06-14) — so we route straight to the feed here
       // and the gate fires there.
       //
-      // Post → reset + go straight to the feed.
-      // Skip → drop the reveal overlay + pager chrome (chromeHidden) and
-      //        transition to the "finished" phase, which renders the dream
-      //        edge-to-edge with a single "Go to feed" CTA. Defer reset()
-      //        until that CTA tap so onboarding state stays consistent
-      //        while the preview is on screen.
-      if (makePublic) {
-        reset();
-        router.replace('/(tabs)');
-      } else {
-        // chromeHidden flips via the phase-driven effect above.
-        setPhase('finished');
-      }
+      // Both Post and Skip now route straight to the main feed (Kevin
+      // 2026-06-15). Skip no longer collapses into a "finished" edge-to-edge
+      // preview with a separate "Go to feed" CTA — the dream is already saved
+      // privately to the Dreams album, so there's nothing to confirm.
+      reset();
+      router.replace('/(tabs)');
     } catch (err) {
       if (__DEV__) console.warn('[Reveal] Create error:', err);
       setPhase('reveal');
+      setBusyAction(null);
       Toast.show('Something went wrong', 'close-circle');
     }
   }
@@ -430,7 +438,7 @@ export function RevealStep({ onBack }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage subtext="Hang tight, this can take a moment." />
+        <MagicalLoadingStage subtext="This can take a moment. Hang tight while we dream up something special for you!" />
       </View>
     );
   }
@@ -439,10 +447,15 @@ export function RevealStep({ onBack }: Props) {
   return (
     <View style={s.root}>
       {error && dreams.length === 0 ? (
-        <TouchableOpacity style={s.centeredContent} onPress={() => generateImage()}>
-          <Ionicons name="refresh" size={32} color={colors.textSecondary} />
+        <View style={s.centeredContent}>
+          <Ionicons name="sparkles-outline" size={40} color={colors.textSecondary} />
           <Text style={s.errorText}>{error}</Text>
-        </TouchableOpacity>
+          <View
+            style={{ alignSelf: 'stretch', paddingHorizontal: 32, marginTop: verticalScale(18) }}
+          >
+            <GradientButton label="Try again" onPress={() => generateImage()} />
+          </View>
+        </View>
       ) : activeDream ? (
         <View style={{ flex: 1 }}>
           {/* Fullscreen dream image */}
@@ -452,6 +465,33 @@ export function RevealStep({ onBack }: Props) {
             contentFit="cover"
             transition={300}
           />
+
+          {/* Tap the image (anywhere not covered by the HUD) for a HUD-free
+              full preview. Sits above the image but below the bottom HUD, so
+              the post/skip buttons still win their own taps. */}
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => {
+              Haptics.selectionAsync();
+              setPreview(true);
+            }}
+          />
+
+          {/* Subtle affordance so tap-to-preview is discoverable. */}
+          {phase !== 'finished' && (
+            <TouchableOpacity
+              style={[s.previewHint, { top: insets.top + verticalScale(8) }]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                setPreview(true);
+              }}
+              hitSlop={12}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="expand" size={18} color="rgba(255,255,255,0.95)" />
+            </TouchableOpacity>
+          )}
 
           {phase === 'finished' ? (
             // Post-Skip preview — overlay text removed entirely so the dream
@@ -490,27 +530,60 @@ export function RevealStep({ onBack }: Props) {
                   backgroundColor: 'rgba(0,0,0,0.65)',
                 }}
               />
-              <Text style={s.revealTitle}>Your first dream</Text>
-              <Text style={s.revealBody}>(saved to your Dreams album either way)</Text>
-              <TouchableOpacity
-                style={s.createButton}
+              <GradientTitle
+                size={22}
+                weight={800}
+                lineHeight={28}
+                align="center"
+                numberOfLines={2}
+                style={{ marginBottom: verticalScale(10) }}
+              >
+                Your first dream
+              </GradientTitle>
+              <Text style={s.revealBody}>
+                All dreams are saved to your Dreams album privately by default
+              </Text>
+              <GradientButton
+                label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
                 onPress={() => handleCreateBot(true)}
                 disabled={phase === 'creating'}
-                activeOpacity={0.7}
-              >
-                {phase === 'creating' ? (
-                  <ActivityIndicator color="#FFFFFF" />
-                ) : (
-                  <Text style={s.createButtonText}>Post to my feed</Text>
-                )}
-              </TouchableOpacity>
+                style={{ alignSelf: 'stretch' }}
+              />
               <TouchableOpacity
                 style={s.secondaryButton}
                 onPress={() => handleCreateBot(false)}
                 disabled={phase === 'creating'}
                 activeOpacity={0.7}
               >
-                <Text style={s.secondaryButtonText}>Skip</Text>
+                <Text style={s.secondaryButtonText}>
+                  {busyAction === 'skip' ? 'Going to feed…' : 'Skip and go to feed'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* HUD-free full preview — the whole generated image, no post/skip
+              chrome. Tap anywhere or the close button to return to the reveal. */}
+          {preview && (
+            <View style={s.previewLayer}>
+              <Image
+                source={{ uri: activeDream.url }}
+                style={StyleSheet.absoluteFill}
+                contentFit="contain"
+                transition={150}
+              />
+              <TouchableOpacity
+                style={StyleSheet.absoluteFill}
+                activeOpacity={1}
+                onPress={() => setPreview(false)}
+              />
+              <TouchableOpacity
+                style={[s.previewClose, { top: insets.top + verticalScale(8) }]}
+                onPress={() => setPreview(false)}
+                hitSlop={12}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="close" size={26} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           )}
@@ -576,11 +649,12 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(10),
   },
   revealBody: {
-    color: 'rgba(255,255,255,0.85)',
-    fontSize: fontScale(15),
-    lineHeight: fontScale(21),
+    color: 'rgba(255,255,255,0.72)',
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
     textAlign: 'center',
     marginBottom: verticalScale(22),
+    paddingHorizontal: verticalScale(12),
   },
 
   content: { flex: 1, paddingTop: verticalScale(4), alignItems: 'center' },
@@ -678,6 +752,33 @@ const s = StyleSheet.create({
     color: 'rgba(255,255,255,0.7)',
     fontSize: fontScale(15),
     fontWeight: '700',
+  },
+  // Tap-to-preview affordance (top-right of the reveal image).
+  previewHint: {
+    position: 'absolute',
+    right: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.38)',
+  },
+  // Full-frame HUD-free preview layer (sits above the reveal HUD).
+  previewLayer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#000000',
+    zIndex: 20,
+  },
+  previewClose: {
+    position: 'absolute',
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.45)',
   },
   dreamAgainButton: {
     flex: 1,
