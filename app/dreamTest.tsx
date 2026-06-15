@@ -29,6 +29,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
+import { fetchEdge } from '@/lib/edgeFunction';
 import { saveDream } from '@/lib/dreamSave';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -174,11 +175,6 @@ export default function DreamTestScreen() {
       const profile = await loadProfile();
       if (!profile) throw new Error('No vibe profile found');
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.access_token) throw new Error('Not authenticated');
-
       const requestBody = {
         // Calls the NIGHTLY engine (same pipeline as the nightly cron + the
         // onboarding first-dream). vibe_profile is read from the body for the
@@ -204,17 +200,7 @@ export default function DreamTestScreen() {
           })
         );
 
-      const res = await fetch(
-        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/nightly-dreams`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify(requestBody),
-        }
-      );
+      const res = await fetchEdge('nightly-dreams', requestBody);
 
       if (!res.ok) {
         const errBody = await res.text();

@@ -9,6 +9,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
+import { invokeEdge } from '@/lib/edgeFunction';
 import type { VibeProfile } from '@/types/vibeProfile';
 
 export interface GenerateDreamOpts {
@@ -83,9 +84,10 @@ export async function generateDream(opts: GenerateDreamOpts): Promise<GenerateDr
       `[dreamApi] Invoking generate-dream (mode=${opts.mode}, medium=${opts.medium_key ?? 'none'})...`
     );
   }
-  const { data, error } = await supabase.functions.invoke('generate-dream', {
-    body: opts,
-  });
+  const { data, error } = await invokeEdge<GenerateDreamResult & { error?: string }>(
+    'generate-dream',
+    { body: opts }
+  );
 
   if (error) {
     if (__DEV__) console.error('[dreamApi] Edge Function error:', JSON.stringify(error));
@@ -162,7 +164,10 @@ export interface EnqueueDreamResult {
  * (insufficient_sparkles) exactly like generateDream so existing handling works.
  */
 export async function enqueueDream(opts: GenerateDreamOpts): Promise<EnqueueDreamResult> {
-  const { data, error } = await supabase.functions.invoke('enqueue-dream', { body: opts });
+  const { data, error } = await invokeEdge<EnqueueDreamResult & { error?: string }>(
+    'enqueue-dream',
+    { body: opts }
+  );
   if (error) {
     if (__DEV__) console.error('[dreamApi] enqueue-dream error:', JSON.stringify(error));
     throw new Error(await functionsInvokeError(error));
@@ -222,7 +227,9 @@ export async function restylePhoto(opts: {
     );
   }
 
-  const { data, error } = await supabase.functions.invoke('restyle-photo', {
+  const { data, error } = await invokeEdge<
+    GenerateDreamResult & { error?: string; enhanced_prompt?: string }
+  >('restyle-photo', {
     body: {
       mode: 'flux-kontext',
       input_image: opts.inputImageBase64,
@@ -290,9 +297,10 @@ export async function restylePhoto(opts: {
 export async function classifyPhoto(inputImageBase64: string): Promise<PhotoClassification> {
   const t0 = Date.now();
   if (__DEV__) console.log('[dreamApi] Invoking classify-photo...');
-  const { data, error } = await supabase.functions.invoke('classify-photo', {
-    body: { input_image: inputImageBase64 },
-  });
+  const { data, error } = await invokeEdge<PhotoClassification & { error?: string }>(
+    'classify-photo',
+    { body: { input_image: inputImageBase64 } }
+  );
   if (error) {
     if (__DEV__) console.error('[dreamApi] classify-photo error:', JSON.stringify(error));
     throw new Error((error as { message?: string })?.message ?? 'Classification failed');

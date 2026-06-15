@@ -13,6 +13,7 @@ import { useFeedStore } from '@/store/feed';
 import { GradientButton } from '@/components/GradientButton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
+import { fetchEdge } from '@/lib/edgeFunction';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { enqueueFirstDream, awaitFirstDream } from '@/lib/firstDreamQueue';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
@@ -134,20 +135,6 @@ export function RevealStep({ onBack }: Props) {
   }
 
   async function describeCastPhotos(): Promise<typeof profile.dream_cast> {
-    let {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session?.access_token) return profile.dream_cast;
-    // Proactively refresh a stale/near-expiry token before the parallel
-    // describe-photo calls — on a real device the RN auto-refresh timer pauses
-    // in the background, and getSession() can hand back an expired token that
-    // these hand-rolled fetches would 401 on (the cast-upload 401 bug).
-    if ((session.expires_at ?? 0) * 1000 - Date.now() < 60_000) {
-      const { data: refreshed } = await supabase.auth.refreshSession();
-      if (refreshed.session) session = refreshed.session;
-    }
-    const accessToken = session.access_token;
-
     const described = await Promise.all(
       profile.dream_cast.map(async (member) => {
         // Skip if already described or no URL
@@ -155,20 +142,12 @@ export function RevealStep({ onBack }: Props) {
         // Skip local file:// URIs — need a public URL
         if (member.thumb_url.startsWith('file://')) return member;
         try {
-          const res = await fetch(
-            `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify({
-                image_url: member.thumb_url,
-                role: member.role,
-              }),
-            }
-          );
+          // fetchEdge guarantees a fresh access token per call (proactive
+          // refresh + 401 retry) — no stale-token 401 on a backgrounded device.
+          const res = await fetchEdge('describe-photo', {
+            image_url: member.thumb_url,
+            role: member.role,
+          });
           if (!res.ok) throw new Error(`${res.status}`);
           const data = await res.json();
           if (__DEV__)

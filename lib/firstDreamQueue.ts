@@ -13,6 +13,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
+import { fetchEdge } from '@/lib/edgeFunction';
 import type { VibeProfile } from '@/types/vibeProfile';
 
 export interface FirstDreamResult {
@@ -25,19 +26,8 @@ export interface FirstDreamResult {
 
 /** Enqueue the onboarding first dream (free). Returns the job id to watch. */
 export async function enqueueFirstDream(profile: VibeProfile): Promise<string> {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.access_token) throw new Error('Not authenticated');
-
-  const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/enqueue-dream`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify({ first_dream: true, vibe_profile: profile }),
-  });
+  // fetchEdge guarantees a fresh access token (proactive refresh + 401 retry).
+  const res = await fetchEdge('enqueue-dream', { first_dream: true, vibe_profile: profile });
   if (!res.ok) {
     const t = await res.text().catch(() => '');
     throw new Error(`enqueue_failed:${res.status}:${t.slice(0, 120)}`);

@@ -15,6 +15,7 @@
 import { useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { invokeEdge } from '@/lib/edgeFunction';
 import { cropToPortrait } from '@/lib/cropPhoto';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
@@ -368,7 +369,7 @@ export function useDreamCreate() {
           msg.toLowerCase().includes('inappropriate');
         if (preFlightFail && user) {
           try {
-            await supabase.functions.invoke('refund-self-moderation', {
+            await invokeEdge('refund-self-moderation', {
               body: { job_id: jobId, reason: 'refund:hard_fail:client_moderation' },
             });
             serverRefunded = true;

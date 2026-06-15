@@ -10,6 +10,7 @@
  * retry for render/infra failures anyway.
  */
 import { supabase } from '@/lib/supabase';
+import { invokeEdge } from '@/lib/edgeFunction';
 import { useDreamStore } from '@/store/dream';
 import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
@@ -17,7 +18,7 @@ import * as nav from '@/lib/navigate';
 
 export async function retryDream(jobId: string): Promise<void> {
   try {
-    const { data, error } = await supabase.functions.invoke('enqueue-dream', {
+    const { data, error } = await invokeEdge('enqueue-dream', {
       body: { retry_job_id: jobId },
     });
     const newId = (data as { dream_id?: string } | null)?.dream_id;

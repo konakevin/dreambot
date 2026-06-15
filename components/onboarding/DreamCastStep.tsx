@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
 import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
+import { fetchEdge } from '@/lib/edgeFunction';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
@@ -356,37 +357,11 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         ...(plusOneRel ? { relationship: plusOneRel } : {}),
       });
 
-      // Describe the photo — spinner stays visible until this completes
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.access_token) throw new Error('No session');
-      // Mutable so a 401 refresh below can swap in a fresh token.
-      let accessToken = session.access_token;
-
-      const describeOnce = async () =>
-        fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/describe-photo`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ image_url: publicUrl, role }),
-        });
+      // Describe the photo — spinner stays visible until this completes.
+      // fetchEdge guarantees a fresh access token (proactive refresh + a 401
+      // refresh-retry), so the stale-token 401 can't happen here.
+      const describeOnce = () => fetchEdge('describe-photo', { image_url: publicUrl, role });
       let descRes = await describeOnce();
-
-      // 401 = the access token getSession() handed us is stale/expired (on a
-      // real device the RN auto-refresh timer pauses in the background, so the
-      // token can age out even though the supabase client refreshes on-demand
-      // for its OWN calls like the upload above). Force a refresh + retry once.
-      if (descRes.status === 401) {
-        if (__DEV__) console.warn('[DreamCast] describe-photo 401, refreshing session…');
-        const { data: refreshed } = await supabase.auth.refreshSession();
-        if (refreshed.session?.access_token) {
-          accessToken = refreshed.session.access_token;
-          descRes = await describeOnce();
-        }
-      }
 
       // 1 retry on 5xx (Haiku flakiness / mid-deploy).
       if (!descRes.ok && descRes.status >= 500) {

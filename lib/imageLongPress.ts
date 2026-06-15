@@ -4,7 +4,7 @@ import { showPremiumGate } from '@/lib/premiumGate';
 import { Toast } from '@/components/Toast';
 import { UpscaleModal } from '@/components/UpscaleOverlay';
 import { useAuthStore } from '@/store/auth';
-import { supabase } from '@/lib/supabase';
+import { invokeEdge } from '@/lib/edgeFunction';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { trackHdDownloadTapped } from '@/lib/analytics';
 
@@ -34,7 +34,7 @@ type UpscaleResult =
  */
 async function requestUpscale(uploadId: string): Promise<UpscaleResult> {
   try {
-    const { data, error } = await supabase.functions.invoke<UpscaleBody>('upscale-image', {
+    const { data, error } = await invokeEdge<UpscaleBody>('upscale-image', {
       body: { upload_id: uploadId },
     });
     if (error) {
