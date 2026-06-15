@@ -114,11 +114,11 @@ export default function AcknowledgementsScreen() {
   return (
     <ScreenLayout header="back" title="Acknowledgements" swipeBack={false}>
       <View style={styles.intro}>
-        <Text style={styles.introTitle}>Open-source love 💜</Text>
+        <Text style={styles.introTitle}>Open source licenses</Text>
         <Text style={styles.introBody}>
-          DreamBot stands on the shoulders of {PACKAGES.length} open-source packages. Tap any
-          package to read its license. Every contributor gets credit here. They made this app
-          possible.
+          DreamBot incorporates {PACKAGES.length} open-source software packages, each licensed under
+          its own terms. The copyright notices and full license texts are reproduced below as
+          required by those licenses. Tap any package to view its license.
         </Text>
       </View>
 
