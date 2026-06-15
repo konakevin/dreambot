@@ -18,6 +18,7 @@ import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useFeedStore } from '@/store/feed';
 import { GradientButton } from '@/components/GradientButton';
+import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { generateFirstDreamCascade } from '@/lib/firstDreamCascade';
@@ -392,7 +393,9 @@ export function RevealStep({ onBack }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
-          <Text style={s.bigTitle}>Time for your first dream!</Text>
+          <GradientTitle size={22} numberOfLines={2}>
+            Time for your first dream!
+          </GradientTitle>
           <Text style={s.centeredSub}>
             Your DreamBot knows what you like. Tap below to see what it dreams up!
           </Text>
