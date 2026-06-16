@@ -156,20 +156,33 @@ export async function classifyDualGenders(
     return { left, right, faceCount, readAny: left !== null || right !== null };
   };
 
-  let res = await classifyOnce();
-  if (!res.readAny) res = await classifyOnce(); // one retry on a fully-unreadable first pass
+  // DOUBLE-READ AGREEMENT — classify TWICE and trust a side ONLY when both
+  // independent reads agree. A single transient vision misread can no longer
+  // produce a confident (wrong) gender; it takes two consistent reads to confirm
+  // a side, otherwise that side reads null and the caller degrades. This is the
+  // belt-and-suspenders against the classifier itself being wrong.
+  const r1 = await classifyOnce();
+  const r2 = await classifyOnce();
+  const agree = (a: 'male' | 'female' | null, b: 'male' | 'female' | null) =>
+    a !== null && a === b ? a : null;
+  const left = agree(r1.left, r2.left);
+  const right = agree(r1.right, r2.right);
+  // faceCount: if EITHER read sees a single face, treat as clustered
+  // (conservative — never dual a maybe-clustered render); else take an agreed
+  // count, else the best available.
+  const faceCount =
+    r1.faceCount === 1 || r2.faceCount === 1
+      ? 1
+      : r1.faceCount !== null && r1.faceCount === r2.faceCount
+        ? r1.faceCount
+        : (r1.faceCount ?? r2.faceCount ?? null);
 
-  // Two distinct faces only when we have a clear read on BOTH sides AND the
-  // count isn't an explicit 1. A clustered couple reads as faceCount=1 or only
-  // one readable side → twoDistinctFaces=false → caller single-swaps.
-  const twoDistinctFaces = res.faceCount !== 1 && res.left !== null && res.right !== null;
+  // Two distinct faces only when BOTH sides agree on a gender AND the count
+  // isn't an explicit 1. A clustered couple reads as faceCount=1 or a non-agreed
+  // side → twoDistinctFaces=false → caller single-swaps / degrades.
+  const twoDistinctFaces = faceCount !== 1 && left !== null && right !== null;
 
-  return {
-    left: res.left,
-    right: res.right,
-    faceCount: res.faceCount,
-    twoDistinctFaces,
-  };
+  return { left, right, faceCount, twoDistinctFaces };
 }
 
 /** Standard prompts for common description tasks */

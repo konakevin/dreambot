@@ -20,7 +20,8 @@ import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
-import { routeDualSwapByGender, genderFromLock } from '../_shared/dualGenderRouting.ts';
+import { genderFromLock } from '../_shared/dualGenderRouting.ts';
+import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
@@ -1250,180 +1251,68 @@ Output ONLY the prompt.`;
     // failures (Replicate cold start, 5xx, 429). Backoff between attempts
     // gives a cold model time to boot before we hammer it again.
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
-      // ── Gender-aware source routing (see _shared/dualGenderRouting.ts) ──
-      // Flux often flips the two subjects' L/R placement vs the prompt; the swap
-      // pastes onto whatever body is in each crop, so on a mixed-gender couple a
-      // flip becomes a gender swap. Route male→male body, female→female body.
-      // ── Gender-SAFE dual routing (see _shared/dualGenderRouting.ts) ──
-      // We dual-swap ONLY when each rendered body's gender is CONFIRMED to match
-      // its cast member. When not confirmed (clustered couple read as one face,
-      // unreadable genders, or a same-gender-collision render) we re-render once
-      // for a cleaner layout, then degrade to a gender-safe single swap. A
-      // wrong-gender paste — or both faces on one person — is impossible here.
-      const srcA = {
-        sourceUrl: faceSwapSources[0].sourceUrl,
-        gender: genderFromLock(faceSwapSources[0].genderLock),
-        role: faceSwapSources[0].role,
-      };
-      const srcB = {
-        sourceUrl: faceSwapSources[1].sourceUrl,
-        gender: genderFromLock(faceSwapSources[1].genderLock),
-        role: faceSwapSources[1].role,
-      };
-      let decision = await routeDualSwapByGender(srcA, srcB, tempUrl, REPLICATE_TOKEN);
-      logAxes.dualGenderRouting = decision.routing;
-      console.log(`[generate-dream] Dual routing: ${decision.routing} (mode=${decision.mode})`);
-
-      // Unconfirmed placement → re-render once (a fresh roll usually separates
-      // the couple / reads clean), then re-route.
-      if (decision.mode === 'single') {
-        console.warn(
-          '[generate-dream] ⚠ Dual placement unconfirmed — re-rendering once for a cleaner layout'
-        );
-        fallbackReasons.push(`dual_unconfirmed_rerender:${decision.routing}`);
-        try {
-          const cg = await generateImage(
-            effectiveMode,
-            finalPrompt,
-            effectiveInputImage,
-            { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
-            pickedModel,
-            'jpg'
-          );
-          tempUrl = cg.url;
-          replicatePredictionId = cg.predictionId;
-          decision = await routeDualSwapByGender(srcA, srcB, tempUrl, REPLICATE_TOKEN);
-          logAxes.dualGenderRoutingRetry = decision.routing;
-          console.log(
-            `[generate-dream] Post-rerender routing: ${decision.routing} (mode=${decision.mode})`
-          );
-        } catch (e) {
-          console.warn('[generate-dream] re-render failed:', (e as Error).message);
-        }
-      }
-
-      if (decision.mode === 'single') {
-        // ── Could NOT confirm a safe dual → gender-safe single swap ──
-        // Paste only the gender-safe source (the user's own face, or the cast
-        // member whose gender matches the one body we could confirm). The
-        // companion renders as a generic described person — degraded (the +1
-        // likeness is lost) but NEVER a wrong-gender / Frankenstein paste.
-        console.error(
-          `[generate-dream] ⚠ Dual unconfirmed after re-render (${decision.routing}, genderMatched=${decision.genderMatched}) — gender-safe single swap`
-        );
-        logAxes.dualGenderRouting = `single-fallback:${decision.routing}`;
-        fallbackReasons.push(`dual_unconfirmed_single_fallback:${decision.routing}`);
-        try {
-          tempUrl = await faceSwap(
-            decision.singleSource,
-            tempUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId
-          );
-          logAxes.faceSwapResult = 'single-fallback-success';
-        } catch (err) {
-          throw new Error(
-            `face_swap: gender-safe single fallback failed (${(err as Error).message.slice(0, 160)})`
-          );
-        }
-      } else {
-        const FACE_SWAP_MAX_RETRIES = 3;
-        const FACE_SWAP_BACKOFF_MS = [2_000, 4_000]; // before attempt 2, attempt 3
-        let swapSuccess = false;
-        for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
-          try {
-            if (attempt > 1) {
-              const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
-              console.log(`[generate-dream] Backoff ${delay}ms before retry ${attempt}`);
-              await new Promise((r) => setTimeout(r, delay));
-            }
-            console.log(
-              `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
-            );
-            tempUrl = await dispatchDualFaceSwap(
-              decision.leftSource,
-              decision.rightSource,
-              tempUrl,
+      // ── Gender-SAFE dual swap (see _shared/dualSwapPipeline.ts) ──
+      // ONE hardened orchestrator shared with nightly-dreams: confirm gender →
+      // re-render if unclear → swap with retries → VERIFY the output → re-render
+      // + re-swap on verify fail → gender-safe single degrade. A wrong-gender /
+      // both-faces-on-one paste cannot survive. Create is non-strict, so it
+      // degrades to a gender-safe single swap; only a TOTAL failure throws (the
+      // outer catch refunds the sparkle).
+      const result = await genderSafeDualSwap(
+        {
+          sourceUrl: faceSwapSources[0].sourceUrl,
+          gender: genderFromLock(faceSwapSources[0].genderLock),
+          role: faceSwapSources[0].role,
+        },
+        {
+          sourceUrl: faceSwapSources[1].sourceUrl,
+          gender: genderFromLock(faceSwapSources[1].genderLock),
+          role: faceSwapSources[1].role,
+        },
+        tempUrl,
+        {
+          replicateToken: REPLICATE_TOKEN,
+          dispatchDual: (left, right, target) =>
+            dispatchDualFaceSwap(
+              left,
+              right,
+              target,
               REPLICATE_TOKEN,
               supabase,
               userId,
               t0 + 140_000
-            );
-            lap('dual-face-swap');
-            console.log('[generate-dream] Dual face swap complete');
-            logAxes.faceSwapResult = 'dual-success';
-            logAxes.faceSwapAttempts = attempt;
-            swapSuccess = true;
-            break;
-          } catch (err) {
-            console.warn(
-              `[generate-dream] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
-              (err as Error).message
-            );
-            if (attempt === FACE_SWAP_MAX_RETRIES) {
-              fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
-              logAxes.faceSwapResult = 'dual-failed';
-              logAxes.faceSwapError = (err as Error).message;
-              logAxes.faceSwapAttempts = attempt;
-            }
-          }
-        }
-        if (!swapSuccess) {
-          // ── One final escape: re-render + re-attempt (fresh face geometry).
-          // 9 (3 × 3 models) "no face found" rejections means the rendered scene
-          // has undetectable face geometry; a fresh render usually fixes it. If
-          // the fresh render no longer confirms a safe dual, single-swap the
-          // gender-safe source rather than risk a wrong paste. 2026-05-30 + 06-16.
-          console.warn(
-            '[generate-dream] Dual swap exhausted — re-rendering once for fresh face geometry'
-          );
-          fallbackReasons.push('dual_render_retry');
-          try {
-            const retryGen = await generateImage(
+            ),
+          singleSwap: (source, target) =>
+            faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
+          rerender: async () => {
+            const cg = await generateImage(
               effectiveMode,
               finalPrompt,
               effectiveInputImage,
-              {
-                replicateToken: REPLICATE_TOKEN,
-                openaiKey: OPENAI_KEY,
-                geminiKey: GEMINI_KEY,
-              },
+              { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
               pickedModel,
               'jpg'
             );
-            tempUrl = retryGen.url;
-            replicatePredictionId = retryGen.predictionId;
-            const routed2 = await routeDualSwapByGender(srcA, srcB, tempUrl, REPLICATE_TOKEN);
-            if (routed2.mode === 'dual') {
-              tempUrl = await dispatchDualFaceSwap(
-                routed2.leftSource,
-                routed2.rightSource,
-                tempUrl,
-                REPLICATE_TOKEN,
-                supabase,
-                userId,
-                t0 + 140_000
-              );
-              logAxes.faceSwapResult = 'dual-success-rerender';
-            } else {
-              tempUrl = await faceSwap(
-                routed2.singleSource,
-                tempUrl,
-                REPLICATE_TOKEN,
-                supabase,
-                userId
-              );
-              logAxes.faceSwapResult = 'single-fallback-rerender';
-              logAxes.dualGenderRouting = `single-fallback:${routed2.routing}`;
-            }
-            swapSuccess = true;
-          } catch (rerenderErr) {
-            throw new Error(
-              `face_swap: dual cast face swap exhausted after ${FACE_SWAP_MAX_RETRIES} attempts + 1 re-render (${(rerenderErr as Error).message.slice(0, 160)})`
-            );
-          }
-        }
+            return { url: cg.url, predictionId: cg.predictionId };
+          },
+          log: (m) => console.log(`[generate-dream] ${m}`),
+        },
+        { strict: false, deadlineMs: t0 + 140_000 }
+      );
+      tempUrl = result.url;
+      if (result.predictionId) replicatePredictionId = result.predictionId;
+      logAxes.dualGenderRouting = result.routing;
+      logAxes.dualSwapVerified = result.verified;
+      fallbackReasons.push(...result.reasons);
+      if (result.outcome === 'dual') {
+        lap('dual-face-swap');
+        logAxes.faceSwapResult = 'dual-success';
+      } else if (result.outcome === 'single') {
+        logAxes.faceSwapResult = 'single-fallback-success';
+      } else {
+        // Total failure (dual + gender-safe single both failed). The user paid
+        // for a face swap → throw so the outer catch refunds the sparkle.
+        throw new Error(`face_swap: dual cast face swap exhausted (${result.routing})`);
       }
     } else if (faceSwapSource && tempUrl) {
       try {

@@ -162,3 +162,48 @@ export async function routeDualSwapByGender(
   // can't be "wrong" because both cast members are the same gender.
   return dual(a.sourceUrl, b.sourceUrl, 'dual-samesex-positional');
 }
+
+/**
+ * Post-swap VERIFICATION — re-read the SWAPPED OUTPUT and confirm the cast
+ * genders actually landed as two distinct faces. This is the strongest possible
+ * check because it validates the FINAL result, catching the swap engine's
+ * "both faces on one person", canned-output, and wrong-gender failures even when
+ * the pre-swap routing looked fine.
+ *
+ * Returns `false` (reject) ONLY on a CONFIDENT contradiction — the output reads
+ * a single face, or reads a gender layout inconsistent with the cast. An
+ * unreadable output returns `true` (don't reject): the pre-swap routing already
+ * confirmed two matching bodies, so we never throw away a good swap just because
+ * the stylized output is hard to read.
+ */
+export async function verifyDualSwapOutput(
+  outputUrl: string,
+  a: DualSwapSource,
+  b: DualSwapSource,
+  replicateToken: string
+): Promise<boolean> {
+  const hasMale = a.gender === 'male' || b.gender === 'male';
+  const hasFemale = a.gender === 'female' || b.gender === 'female';
+
+  let read: Awaited<ReturnType<typeof classifyDualGenders>>;
+  try {
+    read = await classifyDualGenders(outputUrl, replicateToken);
+  } catch {
+    return true; // can't verify → don't reject a swap the routing already confirmed
+  }
+  const { left, right, faceCount } = read;
+
+  // The swap collapsed two faces into one (the "both on one person" failure).
+  if (faceCount === 1) return false;
+
+  // Both sides confidently read → the layout must match the cast.
+  if (left !== null && right !== null) {
+    if (hasMale && hasFemale) return left !== right; // mixed → one of each
+    const g = hasMale ? 'male' : 'female';
+    return left === g && right === g; // same-sex → both that gender
+  }
+
+  // Couldn't confidently read both sides → give the (routing-confirmed) swap the
+  // benefit of the doubt rather than risk a false reject.
+  return true;
+}
