@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -19,7 +20,7 @@ import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { enqueueFirstDream, awaitFirstDream } from '@/lib/firstDreamQueue';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
-import { colors } from '@/constants/theme';
+import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
@@ -92,9 +93,10 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  // Tap-to-preview: shows the dream full-frame with the post/skip HUD hidden.
-  // Exiting (close button or tap anywhere) returns to the reveal screen.
+  // Tap the image hides/shows the HUD (post/skip chrome). The top-right expand
+  // icon toggles the full-dimension preview (whole, non-clipped contain image).
   const [preview, setPreview] = useState(false);
+  const [hudVisible, setHudVisible] = useState(true);
   // Which CTA is in flight ('post' vs 'skip') — both set phase='creating', so
   // this is what keeps the Post button from reading "Posting…" during a Skip.
   // Only POST has an in-flight state now (the publish flip) — SKIP is an instant
@@ -443,126 +445,132 @@ export function RevealStep({ onBack }: Props) {
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             transition={300}
+            cachePolicy="memory-disk"
           />
 
-          {/* Tap the image (anywhere not covered by the HUD) for a HUD-free
-              full preview. Sits above the image but below the bottom HUD, so
-              the post/skip buttons still win their own taps. */}
+          {/* Tap the image to hide / show the HUD (post/skip chrome). Sits above
+              the image but below the bottom HUD, so the buttons win their taps. */}
           <TouchableOpacity
             style={StyleSheet.absoluteFill}
             activeOpacity={1}
             onPress={() => {
               Haptics.selectionAsync();
-              setPreview(true);
+              setHudVisible((v) => !v);
             }}
           />
 
-          {/* Subtle affordance so tap-to-preview is discoverable. */}
-          {phase !== 'finished' && (
+          {/* Expand icon (top-right) — toggles the full-dimension preview. Same
+              icon + treatment as the feed cards; persistent so it's reachable
+              whether the HUD is shown or hidden. */}
+          {!preview && (
             <TouchableOpacity
-              style={[s.previewHint, { top: insets.top + verticalScale(8) }]}
+              style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
               onPress={() => {
                 Haptics.selectionAsync();
-                setPreview(true);
+                setPreview((p) => !p);
               }}
               hitSlop={12}
               activeOpacity={0.7}
             >
-              <Ionicons name="expand" size={18} color="rgba(255,255,255,0.95)" />
+              <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
             </TouchableOpacity>
           )}
 
-          {phase === 'finished' ? (
-            // Post-Skip preview — overlay text removed entirely so the dream
-            // gets the whole frame. Single bottom CTA finalizes the nav to
-            // home (lands on Explore tab by default).
-            <View style={[s.finishedFooter, { paddingBottom: overlayBottom }]}>
-              <View style={s.finishedFooterScrim} />
-              <TouchableOpacity
-                style={s.createButton}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                  reset();
-                  router.replace('/(tabs)');
-                }}
-                activeOpacity={0.7}
-              >
-                <Text style={s.createButtonText}>Go to feed</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                paddingBottom: overlayBottom,
-                paddingHorizontal: 24,
-                paddingTop: verticalScale(60),
-                backgroundColor: 'transparent',
-              }}
-            >
+          {hudVisible &&
+            (phase === 'finished' ? (
+              // Post-Skip preview — overlay text removed entirely so the dream
+              // gets the whole frame. Single bottom CTA finalizes the nav to
+              // home (lands on Explore tab by default).
+              <View style={[s.finishedFooter, { paddingBottom: overlayBottom }]}>
+                <View style={s.finishedFooterScrim} />
+                <TouchableOpacity
+                  style={s.createButton}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    reset();
+                    router.replace('/(tabs)');
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.createButtonText}>Go to feed</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
               <View
                 style={{
-                  ...StyleSheet.absoluteFillObject,
-                  backgroundColor: 'rgba(0,0,0,0.65)',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  paddingBottom: overlayBottom,
+                  paddingHorizontal: 24,
+                  paddingTop: verticalScale(60),
+                  backgroundColor: 'transparent',
                 }}
-              />
-              <GradientTitle
-                size={22}
-                weight={800}
-                lineHeight={28}
-                align="center"
-                numberOfLines={2}
-                style={{ marginBottom: verticalScale(10) }}
               >
-                Your first dream
-              </GradientTitle>
-              <Text style={s.revealBody}>
-                All dreams are saved to your Dreams album privately by default
-              </Text>
-              <GradientButton
-                label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
-                onPress={() => handleCreateBot(true)}
-                disabled={phase === 'creating'}
-                style={{ alignSelf: 'stretch' }}
-              />
-              <TouchableOpacity
-                style={s.secondaryButton}
-                onPress={() => handleCreateBot(false)}
-                disabled={phase === 'creating'}
-                activeOpacity={0.7}
-              >
-                <Text style={s.secondaryButtonText}>Skip and go to feed</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+                <View
+                  style={{
+                    ...StyleSheet.absoluteFillObject,
+                    backgroundColor: 'rgba(0,0,0,0.65)',
+                  }}
+                />
+                <GradientTitle
+                  size={22}
+                  weight={800}
+                  lineHeight={28}
+                  align="center"
+                  numberOfLines={2}
+                  style={{ marginBottom: verticalScale(10) }}
+                >
+                  Your first dream
+                </GradientTitle>
+                <Text style={s.revealBody}>
+                  All dreams are saved to your Dreams album privately by default
+                </Text>
+                <GradientButton
+                  label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
+                  onPress={() => handleCreateBot(true)}
+                  disabled={phase === 'creating'}
+                  style={{ alignSelf: 'stretch' }}
+                />
+                <TouchableOpacity
+                  style={s.secondaryButton}
+                  onPress={() => handleCreateBot(false)}
+                  disabled={phase === 'creating'}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.secondaryButtonText}>Skip and go to feed</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
 
-          {/* HUD-free full preview — the whole generated image, no post/skip
-              chrome. Tap anywhere or the close button to return to the reveal. */}
+          {/* Full-dimension preview — opened/closed ONLY by the expand icon.
+              Whole generated image (contentFit:contain); crossfades in over the
+              reveal (no black flash); image from memory cache so it's instant. */}
           {preview && (
-            <View style={s.previewLayer}>
+            <Animated.View
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(150)}
+              style={s.previewLayer}
+            >
               <Image
                 source={{ uri: activeDream.url }}
                 style={StyleSheet.absoluteFill}
                 contentFit="contain"
-                transition={150}
+                cachePolicy="memory-disk"
               />
               <TouchableOpacity
-                style={StyleSheet.absoluteFill}
-                activeOpacity={1}
-                onPress={() => setPreview(false)}
-              />
-              <TouchableOpacity
-                style={[s.previewClose, { top: insets.top + verticalScale(8) }]}
-                onPress={() => setPreview(false)}
+                style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  setPreview(false);
+                }}
                 hitSlop={12}
                 activeOpacity={0.7}
               >
-                <Ionicons name="close" size={26} color="#FFFFFF" />
+                <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
               </TouchableOpacity>
-            </View>
+            </Animated.View>
           )}
         </View>
       ) : null}
@@ -730,32 +738,18 @@ const s = StyleSheet.create({
     fontSize: fontScale(15),
     fontWeight: '700',
   },
-  // Tap-to-preview affordance (top-right of the reveal image).
-  previewHint: {
-    position: 'absolute',
-    right: 16,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.38)',
-  },
   // Full-frame HUD-free preview layer (sits above the reveal HUD).
   previewLayer: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#000000',
     zIndex: 20,
   },
-  previewClose: {
+  // Expand icon (top-right) — matches the feed card's button (ui.sideButton +
+  // ui.sideIcon, scan-outline); this only adds position.
+  expandBtn: {
     position: 'absolute',
     right: 16,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    zIndex: 30,
   },
   dreamAgainButton: {
     flex: 1,

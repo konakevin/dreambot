@@ -6,13 +6,21 @@
  *   3. Album viewer (tapping "+" on a never-posted dream)
  */
 
-import { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useState, useEffect } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  Keyboard,
+  LayoutAnimation,
+  Platform,
+} from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -25,9 +33,17 @@ import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { Toast } from '@/components/Toast';
+import { GradientTitle } from '@/components/GradientTitle';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const IMAGE_HEIGHT = SCREEN_WIDTH * 1.3;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const MAX_IMAGE_WIDTH = SCREEN_WIDTH - 64;
+const DEFAULT_ASPECT = 768 / 1344; // portrait dream default until the image loads
+// Floor the image can shrink to when the keyboard is up, and rough reservations
+// for the header + caption box used to size the image so the input always
+// clears the keyboard. Clamped, so the estimates are safe across devices.
+const MIN_IMAGE_HEIGHT = verticalScale(170);
+const HEADER_RESERVE = verticalScale(56);
+const INPUT_RESERVE = verticalScale(120);
 
 export default function NewPostScreen() {
   const { uploadId, imageUrl } = useLocalSearchParams<{
@@ -36,8 +52,47 @@ export default function NewPostScreen() {
   }>();
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
+  const insets = useSafeAreaInsets();
   const [description, setDescription] = useState('');
   const [posting, setPosting] = useState(false);
+
+  // Shrink the dream preview as the keyboard rises so the caption input always
+  // stays visible above it (the image is too tall to just pad up). Tracks the
+  // real keyboard height via the core Keyboard API; LayoutAnimation makes the
+  // resize ride the keyboard's slide. Clamped so it's full size at rest and
+  // never collapses past a readable floor.
+  const [kbHeight, setKbHeight] = useState(0);
+  // Real aspect ratio of the dream (w/h) — defaults to portrait until expo-image
+  // reports the loaded source dimensions, then we size the box exactly to it.
+  const [imgAspect, setImgAspect] = useState(DEFAULT_ASPECT);
+  useEffect(() => {
+    const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const show = Keyboard.addListener(showEvt, (e) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setKbHeight(e.endCoordinates.height);
+    });
+    const hide = Keyboard.addListener(hideEvt, () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setKbHeight(0);
+    });
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+
+  // Size the preview to the image's real aspect, filling the available space:
+  // full width when there's vertical room (keyboard down), shrinking only as the
+  // keyboard eats height. No cap, no letterbox, no crop, no artificial narrowing.
+  const availHeight =
+    SCREEN_HEIGHT - insets.top - HEADER_RESERVE - INPUT_RESERVE - kbHeight - verticalScale(48);
+  let imageBoxWidth = MAX_IMAGE_WIDTH;
+  let imageBoxHeight = imageBoxWidth / imgAspect;
+  if (imageBoxHeight > availHeight) {
+    imageBoxHeight = Math.max(MIN_IMAGE_HEIGHT, availHeight);
+    imageBoxWidth = imageBoxHeight * imgAspect;
+  }
 
   async function handlePost() {
     if (!user || !uploadId || posting) return;
@@ -160,16 +215,16 @@ export default function NewPostScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      {/* Tapping anywhere off the keyboard (image, black borders, empty space)
+          dismisses it — interactive children (input, Cancel/Post) keep their
+          own taps. */}
+      <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} activeOpacity={0.7}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>New Post</Text>
+          <GradientTitle>New Post</GradientTitle>
           <TouchableOpacity
             onPress={handlePost}
             disabled={posting}
@@ -182,14 +237,22 @@ export default function NewPostScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Dream preview */}
+        {/* Dream preview — sized to the image's real aspect, filling the room
+            available (full width when the keyboard is down, shrinking as it
+            opens). Tap it to dismiss the keyboard and restore full size. */}
         <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: decodeURIComponent(imageUrl!) }}
-            style={styles.image}
-            contentFit="cover"
-            cachePolicy="memory-disk"
-          />
+          <View style={[styles.imageBox, { width: imageBoxWidth, height: imageBoxHeight }]}>
+            <Image
+              source={{ uri: decodeURIComponent(imageUrl!) }}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              onLoad={(e) => {
+                const src = e.source;
+                if (src?.width && src?.height) setImgAspect(src.width / src.height);
+              }}
+            />
+          </View>
         </View>
 
         {/* Description input */}
@@ -205,7 +268,7 @@ export default function NewPostScreen() {
             textAlignVertical="top"
           />
         </View>
-      </KeyboardAvoidingView>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -228,11 +291,6 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(16),
   },
-  title: {
-    color: '#FFFFFF',
-    fontSize: fontScale(17),
-    fontWeight: '600',
-  },
   postButton: {
     backgroundColor: colors.accent,
     paddingHorizontal: 20,
@@ -254,10 +312,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: verticalScale(16),
   },
-  image: {
-    width: SCREEN_WIDTH - 64,
-    height: IMAGE_HEIGHT,
+  imageBox: {
     borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: colors.background,
   },
   inputContainer: {
     flex: 1,

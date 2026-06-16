@@ -13,12 +13,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { GestureDetector } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { runOnJS, FadeIn, FadeOut } from 'react-native-reanimated';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
-import { colors } from '@/constants/theme';
+import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
@@ -37,12 +37,35 @@ export default function DreamRevealScreen() {
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
+  // Tap the image hides/shows the HUD (Post/Skip chrome). The top-right expand
+  // icon toggles the full-dimension preview (whole, non-clipped contain image).
+  const [preview, setPreview] = useState(false);
+  const [hudVisible, setHudVisible] = useState(true);
 
   // Pinch-to-zoom (focal-aware) + two-finger pan while zoomed, springing back
   // to identity on release — same Instagram-peek behavior as the feed / photo
   // detail. Swipe-left-to-profile is off; there's no author to navigate to on
   // an unposted reveal.
   const { gesture, imageTransformStyle } = useCardGestures({ disableSwipeLeft: true });
+
+  // Single tap toggles the HUD. Composed Exclusive with the card gesture so a
+  // real pinch/pan still wins; a clean one-finger tap falls through to this.
+  function toggleHud() {
+    Haptics.selectionAsync();
+    setHudVisible((v) => !v);
+  }
+  const tapToggleHud = Gesture.Tap()
+    .maxDuration(250)
+    .onEnd(() => {
+      runOnJS(toggleHud)();
+    });
+  const imageGesture = Gesture.Exclusive(gesture, tapToggleHud);
+
+  // Expand icon → toggle the full-dimension preview.
+  function togglePreview() {
+    Haptics.selectionAsync();
+    setPreview((p) => !p);
+  }
 
   // Reaching reveal means the user has seen this render (normal flow OR a
   // cold-start resume) — drop the in-flight marker so the next launch won't
@@ -131,46 +154,95 @@ export default function DreamRevealScreen() {
   return (
     <View style={s.container}>
       {/* Full-bleed image — pinch to zoom (the transform rides the wrapper so
-          expo-image keeps its decode/transition). */}
-      <GestureDetector gesture={gesture}>
+          expo-image keeps its decode/transition); single tap → HUD-free full
+          preview. */}
+      <GestureDetector gesture={imageGesture}>
         <Animated.View style={[s.fullImage, imageTransformStyle]}>
           <Image
             source={{ uri: result.imageUrl }}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             transition={600}
+            cachePolicy="memory-disk"
           />
         </Animated.View>
       </GestureDetector>
 
-      {/* Bottom gradient for readability */}
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.85)']}
-        locations={[0, 0.4, 1]}
-        style={s.bottomGradient}
-        pointerEvents="none"
-      />
+      {/* Expand icon (top-right) — toggles the full-dimension preview. Same
+          icon + treatment as the feed cards. Persistent (not part of the HUD)
+          so it's reachable whether the HUD is shown or hidden. */}
+      {!preview && (
+        <TouchableOpacity
+          style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
+          onPress={togglePreview}
+          hitSlop={12}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
+        </TouchableOpacity>
+      )}
 
-      {/* Bottom actions */}
-      <View style={[s.actions, { paddingBottom: insets.bottom + 16 }]}>
-        {saving ? (
-          <ActivityIndicator size="large" color="#fff" />
-        ) : (
-          <>
-            <View style={s.savedRow}>
-              <Ionicons name="checkmark-circle" size={14} color="rgba(255,255,255,0.7)" />
-              <Text style={s.savedHintText}>Saved to your dreams</Text>
-            </View>
-            <TouchableOpacity style={s.primaryPill} onPress={handlePost} activeOpacity={0.85}>
-              <Ionicons name="globe-outline" size={17} color="#fff" />
-              <Text style={s.primaryPillText}>Post to my feed</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={s.skipButton} onPress={handleSkip} activeOpacity={0.7}>
-              <Text style={s.skipText}>Skip</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
+      {/* HUD — bottom gradient + actions. Tap the image to hide / show. */}
+      {hudVisible && (
+        <Animated.View
+          style={StyleSheet.absoluteFill}
+          pointerEvents="box-none"
+          entering={FadeIn.duration(150)}
+          exiting={FadeOut.duration(150)}
+        >
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.85)']}
+            locations={[0, 0.4, 1]}
+            style={s.bottomGradient}
+            pointerEvents="none"
+          />
+          <View style={[s.actions, { paddingBottom: insets.bottom + 16 }]}>
+            {saving ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <>
+                <View style={s.savedRow}>
+                  <Ionicons name="checkmark-circle" size={14} color="rgba(255,255,255,0.7)" />
+                  <Text style={s.savedHintText}>Saved to your dreams</Text>
+                </View>
+                <TouchableOpacity style={s.primaryPill} onPress={handlePost} activeOpacity={0.85}>
+                  <Ionicons name="globe-outline" size={17} color="#fff" />
+                  <Text style={s.primaryPillText}>Post to my feed</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.skipButton} onPress={handleSkip} activeOpacity={0.7}>
+                  <Text style={s.skipText}>Skip</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </Animated.View>
+      )}
+
+      {/* Full-dimension preview — opened/closed ONLY by the expand icon. Whole,
+          non-clipped image (contentFit:contain); crossfades in over the reveal
+          (no black flash), image from memory cache so it's instant. */}
+      {preview && (
+        <Animated.View
+          entering={FadeIn.duration(180)}
+          exiting={FadeOut.duration(150)}
+          style={s.previewLayer}
+        >
+          <Image
+            source={{ uri: result.imageUrl }}
+            style={StyleSheet.absoluteFill}
+            contentFit="contain"
+            cachePolicy="memory-disk"
+          />
+          <TouchableOpacity
+            style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
+            onPress={togglePreview}
+            hitSlop={12}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
+          </TouchableOpacity>
+        </Animated.View>
+      )}
     </View>
   );
 }
@@ -245,5 +317,18 @@ const s = StyleSheet.create({
     color: '#fff',
     fontSize: fontScale(14),
     fontWeight: '600',
+  },
+  // Full-frame HUD-free preview layer (sits above the reveal HUD).
+  previewLayer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#000000',
+    zIndex: 20,
+  },
+  // Expand icon (top-right) — matches the feed card's button (ui.sideButton +
+  // ui.sideIcon, scan-outline); this only adds position.
+  expandBtn: {
+    position: 'absolute',
+    right: 16,
+    zIndex: 30,
   },
 });
