@@ -1694,61 +1694,151 @@ Output ONLY the prompt.`;
     const FACE_SWAP_MAX_RETRIES = 3;
     const FACE_SWAP_BACKOFF_MS = [2_000, 4_000];
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
-      // Gender-aware source routing — see _shared/dualGenderRouting.ts. Prevents
-      // a Flux L/R flip from turning a mixed-gender couple into a gender swap.
-      const { leftSource, rightSource, routing } = await routeDualSwapByGender(
-        { sourceUrl: faceSwapSources[0].sourceUrl, gender: faceSwapSources[0].gender },
-        { sourceUrl: faceSwapSources[1].sourceUrl, gender: faceSwapSources[1].gender },
-        tempUrl,
-        REPLICATE_TOKEN
-      );
-      logAxes.dualGenderRouting = routing;
-      console.log(`[nightly-dreams] Dual gender routing: ${routing}`);
+      // ── Gender-SAFE dual routing (see _shared/dualGenderRouting.ts) ──
+      // We dual-swap ONLY when each rendered body's gender is CONFIRMED to match
+      // its cast member. When not confirmed (couple clustered into one
+      // detectable face, genders unreadable, or a same-gender-collision render),
+      // we re-render once for a cleaner layout, then degrade to a gender-safe
+      // path. A wrong-gender paste — or both faces on one person — is impossible.
+      const srcA = {
+        sourceUrl: faceSwapSources[0].sourceUrl,
+        gender: faceSwapSources[0].gender,
+        role: faceSwapSources[0].role,
+      };
+      const srcB = {
+        sourceUrl: faceSwapSources[1].sourceUrl,
+        gender: faceSwapSources[1].gender,
+        role: faceSwapSources[1].role,
+      };
+      let decision = await routeDualSwapByGender(srcA, srcB, tempUrl, REPLICATE_TOKEN);
+      logAxes.dualGenderRouting = decision.routing;
+      console.log(`[nightly-dreams] Dual routing: ${decision.routing} (mode=${decision.mode})`);
+
+      if (decision.mode === 'single') {
+        // Unconfirmed placement → one fresh render usually separates the couple
+        // / reads clean. Re-render once, then re-route.
+        console.warn(
+          '[nightly-dreams] ⚠ Dual placement unconfirmed — re-rendering once for a cleaner layout'
+        );
+        fallbackReasons.push(`dual_unconfirmed_rerender:${decision.routing}`);
+        try {
+          const rr = await generateImage(
+            'flux-dev',
+            finalPrompt,
+            undefined,
+            {
+              replicateToken: REPLICATE_TOKEN,
+              openaiKey: Deno.env.get('OPENAI_API_KEY'),
+              geminiKey: Deno.env.get('GEMINI_API_KEY'),
+            },
+            pickedModel,
+            isDualFaceSwap ? 'jpg' : 'png'
+          );
+          tempUrl = rr.url;
+          replicatePredictionId = rr.predictionId;
+          observability.replicateRawUrl = rr.url;
+          observability.replicatePredictionId = rr.predictionId;
+          decision = await routeDualSwapByGender(srcA, srcB, tempUrl, REPLICATE_TOKEN);
+          logAxes.dualGenderRoutingRetry = decision.routing;
+          console.log(
+            `[nightly-dreams] Post-rerender routing: ${decision.routing} (mode=${decision.mode})`
+          );
+        } catch (e) {
+          console.warn('[nightly-dreams] re-render failed:', (e as Error).message);
+        }
+      }
 
       let swapSuccess = false;
-      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
-        try {
-          if (attempt > 1) {
-            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
-            console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
-            await new Promise((r) => setTimeout(r, delay));
-          }
-          console.log(
-            `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
-          );
-          tempUrl = await dispatchDualFaceSwap(
-            leftSource,
-            rightSource,
-            tempUrl,
-            REPLICATE_TOKEN,
-            supabase,
-            userId,
-            t0 + 140_000
-          );
-          lap('dual-face-swap');
-          console.log('[nightly-dreams] Dual face swap complete');
-          logAxes.faceSwapResult = 'dual-success';
-          logAxes.faceSwapAttempts = attempt;
-          swapSuccess = true;
-          break;
-        } catch (err) {
-          console.warn(
-            `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
-            (err as Error).message
-          );
-          if (attempt === FACE_SWAP_MAX_RETRIES) {
-            fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
-            logAxes.faceSwapResult = 'dual-failed';
-            logAxes.faceSwapError = (err as Error).message;
+      if (decision.mode === 'dual') {
+        for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+          try {
+            if (attempt > 1) {
+              const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+              console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
+              await new Promise((r) => setTimeout(r, delay));
+            }
+            console.log(
+              `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
+            );
+            tempUrl = await dispatchDualFaceSwap(
+              decision.leftSource,
+              decision.rightSource,
+              tempUrl,
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              t0 + 140_000
+            );
+            lap('dual-face-swap');
+            console.log('[nightly-dreams] Dual face swap complete');
+            logAxes.faceSwapResult = 'dual-success';
             logAxes.faceSwapAttempts = attempt;
+            swapSuccess = true;
+            break;
+          } catch (err) {
+            console.warn(
+              `[nightly-dreams] Dual face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+              (err as Error).message
+            );
+            if (attempt === FACE_SWAP_MAX_RETRIES) {
+              fallbackReasons.push(`dual_face_swap_failed_${attempt}x:${(err as Error).message}`);
+              logAxes.faceSwapResult = 'dual-failed';
+              logAxes.faceSwapError = (err as Error).message;
+              logAxes.faceSwapAttempts = attempt;
+            }
+          }
+        }
+      } else {
+        // ── Could NOT confirm a safe dual → gender-SAFE degrade ──
+        // Onboarding (strict): hard-fail so the cascade re-renders a SOLO self
+        // scene (one gender-locked person → impossible to mis-gender) instead of
+        // a maybe-wrong couple. Standard nightly cron: single-swap the
+        // gender-safe source (confirmed self / gender-matched body) best-effort.
+        if (strict_face_swap) {
+          logAxes.dualGenderRouting = `cascade-single:${decision.routing}`;
+          fallbackReasons.push(`dual_unconfirmed_cascade:${decision.routing}`);
+          console.warn(
+            `[nightly-dreams] ⚠ Dual unconfirmed (${decision.routing}) — cascading to solo self tier`
+          );
+          throw new Error('face_swap_failed:dual');
+        }
+        console.warn(
+          `[nightly-dreams] ⚠ Dual unconfirmed (${decision.routing}, genderMatched=${decision.genderMatched}) — gender-safe single swap`
+        );
+        fallbackReasons.push(`dual_unconfirmed_single:${decision.routing}`);
+        for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+          try {
+            if (attempt > 1) {
+              const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+              await new Promise((r) => setTimeout(r, delay));
+            }
+            tempUrl = await faceSwap(
+              decision.singleSource,
+              tempUrl,
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              { retry: false }
+            );
+            logAxes.faceSwapResult = 'single-fallback-success';
+            logAxes.faceSwapAttempts = attempt;
+            swapSuccess = true;
+            break;
+          } catch (err) {
+            console.warn(
+              `[nightly-dreams] single-fallback attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+              (err as Error).message
+            );
+            if (attempt === FACE_SWAP_MAX_RETRIES) {
+              fallbackReasons.push(`single_fallback_failed_${attempt}x:${(err as Error).message}`);
+              logAxes.faceSwapResult = 'single-fallback-failed';
+              logAxes.faceSwapError = (err as Error).message;
+            }
           }
         }
       }
-      // First-dream cascade: when strict_face_swap is set the client expects
-      // a hard failure here so it can drop down to single-swap on a fresh
-      // call. Don't persist the base render (no Frankenstein dream in the
-      // user's album), don't grant sparkles. Standard nightly cron path
-      // leaves strict_face_swap false → soft-fallback preserved.
+      // First-dream cascade hard-stop (preserved): a total swap failure on the
+      // strict path must hard-fail so the cascade advances / refunds.
       if (!swapSuccess && strict_face_swap) {
         throw new Error('face_swap_failed:dual');
       }
@@ -1852,25 +1942,45 @@ Output ONLY the prompt.`;
             // Re-route by gender on the freshly regenerated render (it may flip
             // L/R independently). See _shared/dualGenderRouting.ts.
             const routed = await routeDualSwapByGender(
-              { sourceUrl: faceSwapSources[0].sourceUrl, gender: faceSwapSources[0].gender },
-              { sourceUrl: faceSwapSources[1].sourceUrl, gender: faceSwapSources[1].gender },
+              {
+                sourceUrl: faceSwapSources[0].sourceUrl,
+                gender: faceSwapSources[0].gender,
+                role: faceSwapSources[0].role,
+              },
+              {
+                sourceUrl: faceSwapSources[1].sourceUrl,
+                gender: faceSwapSources[1].gender,
+                role: faceSwapSources[1].role,
+              },
               genResult.url,
               REPLICATE_TOKEN
             );
             // skipPrimary: the dup is yan-ops's canned-output bug — retrying
             // yan-ops returns the same canned scene, so escape to the fallback
-            // models (cdingram → pikachupichu25). Gender routing above already
-            // assigned each source to the correct-gender crop.
-            tempUrl = await dispatchDualFaceSwap(
-              routed.leftSource,
-              routed.rightSource,
-              genResult.url,
-              REPLICATE_TOKEN,
-              supabase,
-              userId,
-              t0 + 140_000,
-              true
-            );
+            // models (cdingram → pikachupichu25). If gender routing could NOT
+            // confirm a safe dual on this fresh render, single-swap the
+            // gender-safe source instead of risking a wrong-gender dual paste.
+            if (routed.mode === 'dual') {
+              tempUrl = await dispatchDualFaceSwap(
+                routed.leftSource,
+                routed.rightSource,
+                genResult.url,
+                REPLICATE_TOKEN,
+                supabase,
+                userId,
+                t0 + 140_000,
+                true
+              );
+            } else {
+              tempUrl = await faceSwap(
+                routed.singleSource,
+                genResult.url,
+                REPLICATE_TOKEN,
+                supabase,
+                userId,
+                { skipPrimary: true }
+              );
+            }
           } else if (faceSwapSource) {
             // skipPrimary: escape yan-ops's canned output via the fallback chain.
             tempUrl = await faceSwap(

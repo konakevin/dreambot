@@ -96,22 +96,80 @@ export async function describeWithVision(
  * Returns 'male' | 'female' per side, or null for a side it can't read. The
  * caller treats any failure as a fall-back to positional assignment.
  */
+/**
+ * Read a two-person render for dual face-swap routing.
+ *
+ * Returns, for the LEFT and RIGHT person, their apparent gender, plus
+ * `faceCount` (how many distinct faces vision could see) and `twoDistinctFaces`
+ * (a clear face on each side). The caller uses gender to route male→male /
+ * female→female, and uses faceCount/twoDistinctFaces to AVOID dual-swapping
+ * when the render clustered the couple — that's the "both faces pasted onto
+ * one person" failure (the fixed 55/55 crop catches the same face twice).
+ *
+ * HARDENING 2026-06-16: the old parser accepted ONLY the literal words
+ * "male"/"female", but vision models overwhelmingly say "man"/"woman" — and
+ * "woman" contains "man" but not "male" — so it returned null ~every call →
+ * `routing: 'unread'` ~100% of the time → the whole gender safeguard was inert.
+ * Now we accept man/woman/boy/girl/etc., ask for a face count, and retry once
+ * when the first read is unusable (stylized renders read inconsistently).
+ */
 export async function classifyDualGenders(
   imageInput: string,
   replicateToken: string
-): Promise<{ left: 'male' | 'female' | null; right: 'male' | 'female' | null }> {
+): Promise<{
+  left: 'male' | 'female' | null;
+  right: 'male' | 'female' | null;
+  faceCount: number | null;
+  twoDistinctFaces: boolean;
+}> {
   const prompt =
-    'This image shows two people positioned side by side (this is for routing a consensual face-swap of the user and their own cast photos). Identify the apparent gender of the person in the LEFT half and the person in the RIGHT half. Respond with EXACTLY two words separated by a comma — the left person first, then the right person — each either "male" or "female". No other text. Example: "female, male".';
-  const raw = await describeWithVision(imageInput, prompt, replicateToken, 20);
-  const parse = (s: string): 'male' | 'female' | null => {
+    'This image is for routing a consensual face-swap of a user onto their OWN cast photos — describe the people factually. Reply with EXACTLY three fields separated by vertical bars |: (1) the number of distinct human faces clearly visible, (2) the apparent gender of the person on the LEFT, (3) the apparent gender of the person on the RIGHT. Use the word "man" or "woman" for each gender. If only one face is clearly visible, put "none" for the side with no person. No other words. Examples: "2|woman|man" or "1|man|none".';
+
+  const readGender = (s: string): 'male' | 'female' | null => {
     const t = s.toLowerCase();
-    // Check 'female' first — 'female' contains the substring 'male'.
-    if (t.includes('female')) return 'female';
-    if (t.includes('male')) return 'male';
+    // FEMALE first — "female" contains "male"; "woman" contains "man".
+    if (/\b(female|woman|women|girl|lady|gal)\b/.test(t)) return 'female';
+    if (/\b(male|man|men|boy|guy|gentleman|dude|gent)\b/.test(t)) return 'male';
     return null;
   };
-  const parts = raw.split(',');
-  return { left: parse(parts[0] || ''), right: parse(parts[1] || '') };
+
+  const classifyOnce = async () => {
+    const raw = (await describeWithVision(imageInput, prompt, replicateToken, 40)).trim();
+    const parts = raw.split('|');
+    let left: 'male' | 'female' | null = null;
+    let right: 'male' | 'female' | null = null;
+    let faceCount: number | null = null;
+    if (parts.length >= 3) {
+      const c = parts[0].match(/\d+/);
+      faceCount = c ? parseInt(c[0], 10) : null;
+      left = readGender(parts[1]);
+      right = /\bnone\b/i.test(parts[2]) ? null : readGender(parts[2]);
+    } else {
+      // Fallback: model ignored the format. Scan free-form (also covers the old
+      // "female, male" two-word style).
+      const seg = raw.split(/[,;\n|]/);
+      left = readGender(seg[0] || '');
+      right = readGender(seg[1] || '');
+      const c = raw.match(/\b([1-9])\b/);
+      faceCount = c ? parseInt(c[1], 10) : null;
+    }
+    return { left, right, faceCount, readAny: left !== null || right !== null };
+  };
+
+  let res = await classifyOnce();
+  if (!res.readAny) res = await classifyOnce(); // one retry on a fully-unreadable first pass
+
+  // Two distinct faces only when we have a clear read on BOTH sides AND the
+  // count isn't an explicit 1. A clustered couple reads as faceCount=1 or only
+  // one readable side → twoDistinctFaces=false → caller single-swaps.
+  const twoDistinctFaces = res.faceCount !== 1 && res.left !== null && res.right !== null;
+
+  return {
+    left: res.left,
+    right: res.right,
+    faceCount: res.faceCount,
+    twoDistinctFaces,
+  };
 }
 
 /** Standard prompts for common description tasks */

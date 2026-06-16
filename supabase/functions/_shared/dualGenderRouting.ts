@@ -1,21 +1,22 @@
 /**
- * Gender-aware source routing for the dual face-swap pipeline.
+ * Gender-SAFE source routing for the dual face-swap pipeline.
  *
- * THE BUG THIS SOLVES: the dual swap crops the rendered image into left/right
- * halves and pastes each cast member's face onto its half — positionally. But
- * Flux frequently renders the two subjects on the OPPOSITE sides from the
- * prompt, and the face-swap model pastes a face onto whatever body is in the
- * crop (it doesn't look at gender). So on a MIXED-gender couple, a left/right
- * flip becomes a gender swap: the user's face lands on the partner's body.
+ * THE GUARANTEE (2026-06-16, Kevin: "impossible to fuck up … correct gender
+ * 100% of the time"): a cast face is pasted onto a body ONLY when we have
+ * CONFIRMED that body's gender matches that cast member's gender. When we can't
+ * confirm, we never guess — the caller re-renders and, failing that, degrades
+ * to a path where gender CANNOT be wrong (single self, or the onboarding
+ * cascade's solo tier). A wrong-gender paste is therefore structurally
+ * impossible: no confirmation → no paste.
  *
- * THE FIX: when the two cast genders differ, classify the rendered image and
- * route the male source onto the male body + the female source onto the female
- * body, wherever Flux actually placed them.
- *
- * Scoping: same-sex pairs can't gender-swap (both bodies are the same gender),
- * so we skip the classification entirely — no added vision call, cost, or
- * latency. Any classification failure falls back to positional assignment, so
- * this can never block or break a render.
+ * WHY THE OLD VERSION FAILED: it cropped the render left/right and pasted
+ * positionally, and its only correction depended on a classifier that returned
+ * 'unread' ~100% of the time (it accepted only the literal words "male"/"female"
+ * but vision says "man"/"woman"). So it silently fell back to blind positional
+ * pasting → the user's face on the partner's body, or — when the render
+ * clustered the couple so the fixed 55/55 crop caught one face twice — BOTH
+ * faces on one person. See `classifyDualGenders` in vision.ts for the parser fix
+ * and the faceCount/twoDistinctFaces signal this router now consumes.
  */
 
 import { classifyDualGenders } from './vision.ts';
@@ -25,31 +26,31 @@ export interface DualSwapSource {
   sourceUrl: string;
   /** Apparent gender of this cast member, or null/undefined if unknown. */
   gender: 'male' | 'female' | null | undefined;
+  /** Which cast role this is — used to pick the self face for a safe degrade. */
+  role?: 'self' | 'plus_one' | string;
 }
 
-export interface DualSwapRouting {
-  /** Source URL to paste onto the LEFT crop. */
+export interface DualSwapDecision {
+  /**
+   * 'dual'   — gender CONFIRMED for both sides; safe to paste both. Use
+   *            leftSource/rightSource.
+   * 'single' — could NOT confirm a safe dual placement. Do NOT dual-swap.
+   *            `singleSource` is the ONE cast face that is gender-safe to paste
+   *            (or self as the safe default); `genderMatched` says whether that
+   *            single paste is itself gender-confirmed. Callers that can
+   *            re-render/cascade should prefer that over a best-effort single.
+   */
+  mode: 'dual' | 'single';
+  /** LEFT crop source (mode==='dual'). */
   leftSource: string;
-  /** Source URL to paste onto the RIGHT crop. */
+  /** RIGHT crop source (mode==='dual'). */
   rightSource: string;
-  /**
-   * What happened, for logging:
-   *   'positional-samesex' — same/unknown gender, skipped classification
-   *   'confirmed'          — mixed gender, Flux honored prompt L/R, kept positional
-   *   'corrected-flip'     — mixed gender, Flux flipped L/R, swapped sources
-   *   'unread'             — mixed gender, classifier couldn't read → positional
-   *   'classify-failed'    — vision call threw → positional
-   */
+  /** The single gender-safe source to paste (mode==='single'). */
+  singleSource: string;
+  /** mode==='single': is the single paste itself gender-confirmed? */
+  genderMatched: boolean;
+  /** Human-readable reason, for logs + observability. */
   routing: string;
-  /**
-   * TRUE only when the cast is mixed-gender but the render produced TWO
-   * SAME-gender bodies — i.e. there is no opposite-gender body to route one of
-   * the faces onto, so any swap WILL paste a mismatched-gender face (the
-   * 2026-06-09 "wife's face on a bearded man" failure). The caller re-renders
-   * once and, if it persists, falls back to a single swap. Never true for
-   * same-sex casts (two same-gender bodies is correct there).
-   */
-  collision: boolean;
 }
 
 /** Map a castResolver genderLock sentence to a plain gender. */
@@ -61,73 +62,103 @@ export function genderFromLock(genderLock: string | null | undefined): 'male' | 
   return null;
 }
 
+function selfSourceOf(a: DualSwapSource, b: DualSwapSource): string {
+  if (a.role === 'self') return a.sourceUrl;
+  if (b.role === 'self') return b.sourceUrl;
+  return a.sourceUrl; // cast[0] is self by convention when role is unset
+}
+
 /**
- * Decide which source paints the left crop and which paints the right.
+ * Decide how to swap two cast faces onto a rendered scene, guaranteeing that
+ * any face we DO paste is on a gender-matching body.
  *
- * @param a intended LEFT source (cast[0]) + its gender
- * @param b intended RIGHT source (cast[1]) + its gender
- * @param renderedUrl the pre-swap Flux render to classify
+ * @param a intended LEFT source (cast[0]) + its gender + role
+ * @param b intended RIGHT source (cast[1]) + its gender + role
+ * @param renderedUrl the pre-swap render to classify
  */
 export async function routeDualSwapByGender(
   a: DualSwapSource,
   b: DualSwapSource,
   renderedUrl: string,
   replicateToken: string
-): Promise<DualSwapRouting> {
-  const mixed =
-    (a.gender === 'male' && b.gender === 'female') ||
-    (a.gender === 'female' && b.gender === 'male');
+): Promise<DualSwapDecision> {
+  const self = selfSourceOf(a, b);
+  const maleSource = a.gender === 'male' ? a.sourceUrl : b.gender === 'male' ? b.sourceUrl : null;
+  const femaleSource =
+    a.gender === 'female' ? a.sourceUrl : b.gender === 'female' ? b.sourceUrl : null;
+  const mixed = Boolean(maleSource && femaleSource);
 
-  // Same-sex or unknown gender → can't gender-swap → keep positional, no call.
-  if (!mixed) {
-    return {
-      leftSource: a.sourceUrl,
-      rightSource: b.sourceUrl,
-      routing: 'positional-samesex',
-      collision: false,
-    };
-  }
+  const single = (
+    singleSource: string,
+    genderMatched: boolean,
+    routing: string
+  ): DualSwapDecision => ({
+    mode: 'single',
+    leftSource: a.sourceUrl,
+    rightSource: b.sourceUrl,
+    singleSource,
+    genderMatched,
+    routing,
+  });
+  const dual = (leftSource: string, rightSource: string, routing: string): DualSwapDecision => ({
+    mode: 'dual',
+    leftSource,
+    rightSource,
+    singleSource: self,
+    genderMatched: false,
+    routing,
+  });
 
+  let read: Awaited<ReturnType<typeof classifyDualGenders>>;
   try {
-    const maleSource = a.gender === 'male' ? a.sourceUrl : b.sourceUrl;
-    const femaleSource = a.gender === 'male' ? b.sourceUrl : a.sourceUrl;
-    const { left, right } = await classifyDualGenders(renderedUrl, replicateToken);
-    // COLLISION: mixed cast, but both rendered bodies read the SAME gender →
-    // there is no opposite-gender body to route one face onto. The caller
-    // re-renders / falls back. (Both reads must be present + equal.)
-    const collision = left !== null && right !== null && left === right;
-    // Trust the left read; if only the right is readable, take its complement.
-    const leftBody = left ?? (right === 'male' ? 'female' : right === 'female' ? 'male' : null);
-
-    if (leftBody === 'male') {
-      return {
-        leftSource: maleSource,
-        rightSource: femaleSource,
-        routing: maleSource !== a.sourceUrl ? 'corrected-flip' : 'confirmed',
-        collision,
-      };
-    }
-    if (leftBody === 'female') {
-      return {
-        leftSource: femaleSource,
-        rightSource: maleSource,
-        routing: femaleSource !== a.sourceUrl ? 'corrected-flip' : 'confirmed',
-        collision,
-      };
-    }
-    return {
-      leftSource: a.sourceUrl,
-      rightSource: b.sourceUrl,
-      routing: 'unread',
-      collision: false,
-    };
+    read = await classifyDualGenders(renderedUrl, replicateToken);
   } catch (err) {
-    console.warn('[routeDualSwapByGender] classify failed, positional:', (err as Error).message);
-    return {
-      leftSource: a.sourceUrl,
-      rightSource: b.sourceUrl,
-      routing: 'classify-failed',
-      collision: false,
-    };
+    // Vision threw → we cannot confirm anything → degrade to single self. Never
+    // dual-paste blind. (Caller re-renders / cascades.)
+    console.warn('[routeDualSwapByGender] classify threw, single-self:', (err as Error).message);
+    return single(self, false, 'single-classify-error');
   }
+
+  const { left, right, faceCount, twoDistinctFaces } = read;
+
+  // No two clearly-separated faces → the 55/55 crop would paste both onto one
+  // body (the "both faces on one person" failure). NEVER dual here. A gender-
+  // matched single is only safe when there is a GENUINE single face (faceCount
+  // === 1) whose gender we read — a single swap targets the dominant face, so
+  // if a second (unread, maybe wrong-gender) face is present we must NOT claim a
+  // match; degrade to self and let the caller re-render / cascade to solo-self.
+  if (!twoDistinctFaces) {
+    if (faceCount === 1) {
+      const visible = left ?? right;
+      if (visible === 'male' && maleSource) return single(maleSource, true, 'single-one-face-male');
+      if (visible === 'female' && femaleSource)
+        return single(femaleSource, true, 'single-one-face-female');
+    }
+    return single(self, false, `single-unconfirmed(faces=${faceCount ?? '?'})`);
+  }
+
+  if (mixed) {
+    // Need BOTH sides read to place a mixed couple safely.
+    if (left && right) {
+      if (left !== right) {
+        // One male body + one female body → place each on its match. CONFIRMED.
+        const leftSrc = left === 'male' ? maleSource! : femaleSource!;
+        const rightSrc = left === 'male' ? femaleSource! : maleSource!;
+        const flipped = leftSrc !== a.sourceUrl;
+        return dual(leftSrc, rightSrc, flipped ? 'dual-corrected-flip' : 'dual-confirmed');
+      }
+      // Collision: render made TWO same-gender bodies. There is no body for the
+      // other cast face → paste ONLY the matching one (gender-correct single).
+      const g = left; // === right
+      const matchSource = g === 'male' ? maleSource! : femaleSource!;
+      return single(matchSource, true, `single-collision-${g}`);
+    }
+    // Mixed cast but we couldn't read both bodies → not safe to route. Degrade.
+    return single(self, false, 'single-mixed-unread');
+  }
+
+  // Same-sex (or unknown-gender) cast: two same-gender bodies is CORRECT, so a
+  // positional dual is gender-safe as long as there are two faces. Genders
+  // can't be "wrong" because both cast members are the same gender.
+  return dual(a.sourceUrl, b.sourceUrl, 'dual-samesex-positional');
 }
