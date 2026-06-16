@@ -33,6 +33,13 @@ export interface GenerateImageCredentials {
 }
 
 const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
+
+// Render-model fallback for a deprecation 404. Version-pinned models (SDXL —
+// stability-ai/sdxl has no name endpoint, so it MUST be called by version hash)
+// 404 forever once Replicate retires that version. Rather than hard-fail every
+// roll, fall back ONCE to this stable, name-based model so a deprecation
+// degrades to a different render instead of a dead dream.
+const FALLBACK_RENDER_MODEL = 'black-forest-labs/flux-1.1-pro-ultra';
 const NSFW_MAX_RETRIES = 2;
 
 /**
@@ -166,6 +173,24 @@ async function generateImageOnce(
 
   if (!res.ok) {
     const text = await res.text();
+    // 404 = the model version/name no longer exists on Replicate — typically a
+    // version-pinned model (e.g. SDXL) whose pinned version was deprecated.
+    // Fall back ONCE to a stable name-based model so a deprecation degrades to a
+    // different render rather than failing every dream. Guard recursion: don't
+    // fall back if we're ALREADY on the fallback model.
+    if (res.status === 404 && model !== FALLBACK_RENDER_MODEL) {
+      console.warn(
+        `[generateImage] ${model} submit 404'd (deprecated version/model?) — falling back to ${FALLBACK_RENDER_MODEL}: ${text.slice(0, 120)}`
+      );
+      return generateImageOnce(
+        mode,
+        prompt,
+        inputImage,
+        creds,
+        FALLBACK_RENDER_MODEL,
+        outputFormat
+      );
+    }
     throw new Error(`Replicate submit failed (${res.status}): ${text.slice(0, 200)}`);
   }
 
