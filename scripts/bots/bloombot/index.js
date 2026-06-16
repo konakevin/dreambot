@@ -54,17 +54,14 @@ module.exports = {
 
   useModelPicker: true,
   // All paths random-pick one of these per render — EXCEPT any path locked in
-  // modelByPath below, which falls through to its lock. 2026-06-09: settled on
-  // 3 models — Banana, F1.1Pro Ultra, F1.1Pro (banned gpt-image-2, then
-  // flux-2-pro + flux-2-max, all Kevin). NOTE: the real render gate is
+  // modelByPath below, which falls through to its lock. 2026-06-16: banned
+  // Banana (google/gemini-2-image), Kevin — down to 2 Flux models (F1.1Pro Ultra
+  // + F1.1Pro). History: settled on 3 (2026-06-09, banned gpt-image-2 then
+  // flux-2-pro + flux-2-max), now Banana out too. NOTE: the real render gate is
   // dream_mediums.allowed_models for bloom_hyperreal_cgi (the bot list only
-  // FILTERS it) — both must list the same models. BOT_MODEL_TALLY.md is the
-  // source of truth.
-  allowedModels: [
-    'google/gemini-2-image',
-    'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-1.1-pro',
-  ],
+  // FILTERS it) — both must list the same models (gemini removed from both).
+  // BOT_MODEL_TALLY.md is the source of truth.
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
   // Per-path model lock. tropical-grove → random pick between flux-1.1-pro and
   // flux-1.1-pro-ultra only (Kevin 2026-05-27). Paths NOT listed here use the
   // uniform allowedModels pick above.
