@@ -721,6 +721,14 @@ Reference implementation in `scripts/gen-starbot-pool.js`:
 
 **`--target N` iterative mode** — gen-starbot-pool.js supports a target-mode where it loops gen + dedup until the pool reaches N entries. Each iteration overgens by ~40% to absorb dedup losses; max 8 iterations to prevent infinite loops on exhausted themes. The script reports final count vs target if Sonnet runs out of variety before hitting target.
 
+**Scaling a batch of pools to 200 — FAN OUT, don't crawl (CRITICAL — 2026-06-15, DragonBot 4-path build).** Scaling N pools sequentially is brutally slow: 200-scale is ~5-10 min/pool, so 21 pools serial ≈ 1-2 hours. The fix is two levers, both documented but easy to miss:
+
+1. **Always pass `--count 50` for production scale-up** (the canonical batch size — line "How to seed pools" table). Default count (30) means more, smaller iterations = more Sonnet round-trips. `--target 200 --count 50` is the right command; `--target 200` alone is the slow trap.
+2. **Run pools in PARALLEL.** Each `gen-<bot>-pool.js --pool X` is an independent process writing a different `seeds/X.json` — zero file collisions. Fan out ~6 concurrent workers (each a background shell looping over a ~3-pool subset). API-bound, so bound concurrency to ~6 to stay under Anthropic rate limits; the gen script retries on a 429, but a transient hiccup can leave ONE pool unscaled (stays at 25) while its worker-mates succeed — **always re-verify every pool count after a parallel run and re-run any straggler** (DragonBot: `draconic_drama` stayed 25 on the first parallel pass, re-ran clean alone).
+   - ⚠️ zsh gotcha: `for pool in $POOLS` (unquoted var) does NOT word-split in zsh — it runs once with the whole string. Use a literal list `for pool in a b c; do …` or `${=POOLS}`.
+
+Net: 21 pools went from a ~1hr+ serial crawl to ~10-15 min across 6 workers. Dedup is unaffected (it's per-process, signature-based, within+cross-batch).
+
 ---
 
 ## How to seed pools — full canonical workflow (2026-05-19)

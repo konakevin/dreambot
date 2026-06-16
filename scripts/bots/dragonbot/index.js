@@ -32,6 +32,10 @@ const pathBuilders = {
   'wizard-tower': require('./paths/wizard-tower'),
   'dwarven-hold': require('./paths/dwarven-hold'),
   'elven-city': require('./paths/elven-city'),
+  'drow-underdark': require('./paths/drow-underdark'),
+  'dragonborn-citadel': require('./paths/dragonborn-citadel'),
+  'orc-warhold': require('./paths/orc-warhold'),
+  'giant-steadinghold': require('./paths/giant-steadinghold'),
   'sky-castle': require('./paths/sky-castle'),
   'arcane-library': require('./paths/arcane-library'),
   'female-adventurer': require('./paths/female-adventurer'),
@@ -134,6 +138,18 @@ module.exports = {
     // dwarven-hold: anchor the colossal underground dwarven kingdom.
     'dwarven-hold':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a COLOSSAL underground DWARVEN HOLD — vast hand-carved stone halls with towering rune-stamped pillars, gold veins, great dwarf-king statues, roaring forges and rivers of molten lava, tiny dwarves for scale, warm orange forge-light against deep stone shadow, Moria + Erebor monumental grandeur, painterly atmospheric depth, awe-inducing concept-art masterwork',
+    // drow-underdark: anchor the lightless dark-elf city deep underground.
+    'drow-underdark':
+      'classic painted dark-fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a sinister DROW DARK-ELF CITY deep in the LIGHTLESS UNDERDARK — elegant black obsidian needle-spires and spider-temples, spider-silk bridges over a bottomless cavern, carved spider motifs, glowing fungus and dark-crystal, lit ONLY by eerie blue-violet faerie-fire (NO sun, NO sky, NO daylight), tiny obsidian-skinned white-haired red-eyed dark elves for scale, Menzoberranzan + Underdark beauty and menace, painterly atmospheric depth into the dark, awe-inducing concept-art masterwork',
+    // dragonborn-citadel: anchor the dragon-kin volcanic temple-citadel.
+    'dragonborn-citadel':
+      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a monumental DRAGONBORN CITADEL of dragon-kin — colossal dragon-scale-tiled towers, clawed stone buttresses, dragon-statue colossi and rune-pillars on a smoking volcanic peak lit by lava and dragon-fire, tiny SCALED dragonborn (reptilian snout, horned crest, clawed hands, tail — NOT humans in armor) for scale, draconic volcanic grandeur, painterly atmospheric depth, awe-inducing concept-art masterwork',
+    // orc-warhold: anchor the savage orc horde stronghold.
+    'orc-warhold':
+      'classic painted dark-fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a savage ORC HORDE STRONGHOLD of black iron and bone — crude towers and palisades belching forge-smoke, bone totems, skull-banners, spiked iron and towering war-drums, smelting-pits glowing orange, a massing horde of tiny TUSKED green-and-grey orcs (heavy brow, tusked jaw, brutal bulk — NOT armored humans) for scale, Mordor + Isengard menace and smoke, painterly atmospheric depth, awe-inducing concept-art masterwork',
+    // giant-steadinghold: anchor the cyclopean giants' hall in the high peaks.
+    'giant-steadinghold':
+      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a TITANIC cyclopean GIANTS\' HALL in the high peaks — house-sized doorways, colossal rough-hewn megalith pillars and a vast roaring hearth hewn from raw mountain stone, mammoth-bone trophies, a towering craggy GIANT (stone-grey or frost-blue, massive — still dwarfed by the architecture, NOT a large human) for scale, storm-wracked alpine grandeur, painterly atmospheric depth, awe-inducing concept-art masterwork',
     // wizard-tower: anchor the arcana-dense mage tower.
     'wizard-tower':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an iconic WIZARD\'S TOWER dense with ARCANA — a tall fantasy mage-spire (or its arcana-crammed interior) full of glowing magic: floating spellbooks, glowing orbs, a great orrery, bubbling alchemy, star-charts, a small wizard or apprentice for scale, atmospheric magical wonder, deep high-fantasy arcane architecture, painterly grandeur and depth, awe-inducing concept-art masterwork',
@@ -619,6 +635,14 @@ module.exports = {
     'dwarven-hold',
     // NEW 2026-06-10 — elven-city (graceful elven realm, Tier 3). MVP-25.
     'elven-city',
+    // NEW 2026-06-15 — drow-underdark (lightless dark-elf city, Tier 1). MVP-25.
+    'drow-underdark',
+    // NEW 2026-06-15 — dragonborn-citadel (dragon-kin temple-citadel, Tier 1). MVP-25.
+    'dragonborn-citadel',
+    // NEW 2026-06-15 — orc-warhold (savage orc horde stronghold, Tier 2). MVP-25.
+    'orc-warhold',
+    // NEW 2026-06-15 — giant-steadinghold (cyclopean giants' hall, Tier 2). MVP-25.
+    'giant-steadinghold',
     // NEW 2026-06-10 — sky-castle (floating sky-kingdom, Tier 3). MVP-25.
     'sky-castle',
     // NEW 2026-06-10 — arcane-library (cathedral-vast hall of knowledge, Tier 3). MVP-25.
@@ -656,7 +680,7 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'sky-castle', 'arcane-library'],
+    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'drow-underdark', 'dragonborn-citadel', 'orc-warhold', 'giant-steadinghold', 'sky-castle', 'arcane-library'],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',
@@ -722,6 +746,10 @@ module.exports = {
       'wizard-tower',
       'dwarven-hold',
       'elven-city',
+      'drow-underdark',
+      'dragonborn-citadel',
+      'orc-warhold',
+      'giant-steadinghold',
       'sky-castle',
       'arcane-library',
     ],
@@ -769,6 +797,10 @@ module.exports = {
       'wizard-tower': 'scene',
       'dwarven-hold': 'scene',
       'elven-city': 'scene',
+      'drow-underdark': 'scene',
+      'dragonborn-citadel': 'scene',
+      'orc-warhold': 'scene',
+      'giant-steadinghold': 'scene',
       'sky-castle': 'scene',
       'arcane-library': 'scene',
       landscape: 'scene',

@@ -182,6 +182,36 @@ module.exports = {
   DWARFHOLD_OCCUPANT: load('dwarfhold_occupant'),
   DWARFHOLD_DRAMA: load('dwarfhold_drama'),
 
+  // ─── drow-underdark path (2026-06-15, NEW, Tier 1) — dark-elf Underdark city.
+  // SELF-LIT (no universal lighting). MVP-25. ───
+  DROW_CITY: load('drow_city'),
+  UNDERDARK_DETAIL: load('underdark_detail'),
+  DROW_CAVERN: load('drow_cavern'),
+  DROW_OCCUPANT: load('drow_occupant'),
+  UNDERDARK_LIGHT: load('underdark_light'),
+  DROW_DRAMA: load('drow_drama'),
+
+  // ─── dragonborn-citadel path (2026-06-15, NEW, Tier 1) — dragon-kin city. MVP-25. ───
+  DRACONIC_CITY: load('draconic_city'),
+  DRACONIC_DETAIL: load('draconic_detail'),
+  CITADEL_SETTING: load('citadel_setting'),
+  DRAGONBORN_OCCUPANT: load('dragonborn_occupant'),
+  DRACONIC_DRAMA: load('draconic_drama'),
+
+  // ─── orc-warhold path (2026-06-15, NEW, Tier 2) — orc horde stronghold. MVP-25. ───
+  ORC_WARHOLD: load('orc_warhold'),
+  WARHOLD_DETAIL: load('warhold_detail'),
+  WARCAMP_ACTIVITY: load('warcamp_activity'),
+  ORC_OCCUPANT: load('orc_occupant'),
+  WARHOLD_DRAMA: load('warhold_drama'),
+
+  // ─── giant-steadinghold path (2026-06-15, NEW, Tier 2) — cyclopean giants' hall. MVP-25. ───
+  GIANT_HOLD: load('giant_hold'),
+  GIANT_DETAIL: load('giant_detail'),
+  GIANT_SETTING: load('giant_setting'),
+  GIANT_OCCUPANT: load('giant_occupant'),
+  GIANT_DRAMA: load('giant_drama'),
+
   // ─── wizard-tower path (2026-06-10, NEW, Tier 3) — mage tower. MVP-25. ───
   WIZTOWER_TOWER: load('wiztower_tower'),
   WIZTOWER_ARCANA: load('wiztower_arcana'),

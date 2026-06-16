@@ -416,6 +416,62 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DROW_UNDERDARK: {
+    description:
+      'PATH-BESPOKE — DragonBot drow-underdark path (2026-06-15, Tier 1). A dark-elf city in the lightless Underdark — obsidian spires, spider motifs, faerie-fire glow. SELF-LIT: universal lighting/atmosphere are sky/daylight-coded and would fight a lightless cavern, so this path supplies its own underdark_light axis (universal: []). Path-bespoke: drow_city + underdark_detail + drow_cavern + drow_occupant + underdark_light + drama (40% gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['drow_city', 'underdark_detail', 'drow_cavern', 'drow_occupant', 'underdark_light'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DRAGONBORN_CITADEL: {
+    description:
+      'PATH-BESPOKE — DragonBot dragonborn-citadel path (2026-06-15, Tier 1). A civilization of dragon-kin — a scaled volcanic temple-citadel. Path-bespoke: draconic_city + draconic_detail + citadel_setting + dragonborn_occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['draconic_city', 'draconic_detail', 'citadel_setting', 'dragonborn_occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  ORC_WARHOLD: {
+    description:
+      'PATH-BESPOKE — DragonBot orc-warhold path (2026-06-15, Tier 2). A savage orc horde stronghold — black iron, bone, war-fire. Path-bespoke: orc_warhold + warhold_detail + warcamp_activity + orc_occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['orc_warhold', 'warhold_detail', 'warcamp_activity', 'orc_occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GIANT_HOLD: {
+    description:
+      'PATH-BESPOKE — DragonBot giant-steadinghold path (2026-06-15, Tier 2). A cyclopean giants\' hall in the high peaks. Path-bespoke: giant_hold + giant_detail + giant_setting + giant_occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['giant_hold', 'giant_detail', 'giant_setting', 'giant_occupant'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   WIZARD_TOWER: {
     description:
       'PATH-BESPOKE — DragonBot wizard-tower path (2026-06-10, Tier 3). A wizard\'s tower dense with arcana — interior or exterior, magical wonder. Path-bespoke: tower + arcane_detail + tower_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',

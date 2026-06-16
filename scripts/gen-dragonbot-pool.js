@@ -452,6 +452,333 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DROW-UNDERDARK PATH (2026-06-15 — new, Tier 1). A dark-elf
+  // city in the lightless Underdark — obsidian spires, spider
+  // motifs, faerie-fire glow. SELF-LIT (no universal lighting).
+  // ════════════════════════════════════════════════════════
+
+  drow_city: {
+    format: 'simple',
+    theme: `DRAGONBOT DROW-UNDERDARK — the dark-elf CITY itself (the hero), carved in the lightless Underdark. Each entry 25-45 words, elegant + cruel + alien.
+
+VARIETY MANDATE — ~25 distinct drow structures: a city of slender black needle-spires grown downward like stalactites; a cathedral-cavern of carved obsidian spider-temples; a city of houses strung on spider-silk bridges across a chasm; a vertical city descending a cliff-chasm in carved tiers; an obsidian palace mirrored in a black underground lake; a spider-shaped temple-complex of onyx; sculpted hanging mansions carved into giant stalactites; a fortress-manor of a noble House cut into the cavern wall; a market-cavern of dark stalls under glowing fungus; an arena-cavern ringed with onyx galleries; a sorcery-spire wreathed in faerie-fire. Each names the drow structure + elegant-cruel obsidian architecture + scale. NEVER sunlit or surface-world; ALWAYS underground.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE drow city/structure in 25-45 words — elegant, cruel, obsidian, underground. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A city of slender black needle-spires hanging downward from a colossal cavern roof like carved stalactites, faerie-fire glimmering along their length above a bottomless dark.
+2. A cathedral-cavern of carved obsidian, spider-temples and onyx galleries rising in tiers around a central well, spider-silk bridges strung across the void.
+3. A noble House's fortress-manor cut deep into a sheer cavern wall, balconies of black stone and webbed walkways, faerie-fire lanterns marking its many levels.`,
+  },
+
+  underdark_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DROW-UNDERDARK DETAIL — the drow craft + spider motifs filling the city. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: carved spider/web motifs everywhere; spider-silk bridges and gossamer banners; dark-crystal veins glowing faint in the walls; bioluminescent fungus clusters; sculpted onyx statues of drow matrons; web-draped archways; glowing-mushroom gardens; faerie-fire braziers on black pillars; obsidian filigree and silver inlay; chained captive-cages; carved spider-idol shrines; veins of glittering mithril in black rock. Each is a rich drow/Underdark craft detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE drow/Underdark craft detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Spider and web motifs are carved into every surface, and gossamer spider-silk banners hang between the black columns.
+2. Veins of dark crystal glow faint violet through the obsidian walls, catching the faerie-fire in cold glints.
+3. Sculpted onyx statues of robed drow matrons line the gallery, their carved eyes set with glittering dark gems.`,
+  },
+
+  drow_cavern: {
+    format: 'simple',
+    theme: `DRAGONBOT DROW-UNDERDARK SETTING — the vast lightless Underdark cavern cradling the city. Each entry 20-40 words, overwhelming scale + depth + DARKNESS.
+
+VARIETY MANDATE — ~25 distinct caverns: a colossal lightless chasm dropping into bottomless dark; a glowing fungal forest of giant mushrooms; the shore of a still black underground lake (the Darklake); a crystal cavern of glittering dark gems; a cathedral cavern of immense stalactites and stalagmites; a bridged abyss with no visible bottom; a spore-misted grotto; a river of black water winding through stone; a vaulted cavern lost in darkness far above. Each sets the cavern + immense scale + lightless depth. NEVER a sky, NEVER sunlight.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE vast lightless Underdark cavern in 20-40 words — scale + depth + darkness. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal lightless chasm cradles the city, its far walls fading into impenetrable black, no bottom and no roof visible in the dark.
+2. A glowing fungal forest of giant pale mushrooms surrounds the spires, their soft teal light pooling on the black cavern floor.
+3. The still black water of an underground lake stretches away into darkness, the obsidian city mirrored upside-down on its glassy surface.`,
+  },
+
+  drow_occupant: {
+    format: 'simple',
+    banHumanLanguage: true,
+    theme: `DRAGONBOT DROW-UNDERDARK OCCUPANT — tiny drow (dark-elf) figures for life + scale. Each entry 12-25 words. A drow is a CREATURE: lead with the species + its unmistakable non-human features.
+
+DROW ANATOMY (lead every entry with these): charcoal-grey to obsidian-black skin, stark white or silver hair, long pointed ears, glowing red or violet eyes, lithe and elegant. Convey rank/role via the role-noun ONLY (priestess / matron / blademaster / house-noble / scout / handmaiden), NEVER "man/woman/girl" and NEVER an age word.
+
+VARIETY MANDATE — ~25 distinct drow occupants: a drow priestess in spider-silk robes on a high bridge; a drow blademaster with twin scimitars on a stair; a drow matron on an onyx throne; a drow house-noble on a balcony surveying the city; a drow scout slipping along a ledge; two drow in cold conversation; a drow handmaiden tending a glowing-mushroom garden; a robed drow crossing a web-bridge; a drow sorcerer wreathed in faerie-fire; a mounted drow on a giant lizard. Each is a small drow figure giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny drow occupant for scale in 12-25 words — lead with the drow species + obsidian skin / white hair / red eyes. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A drow priestess, obsidian-black skin and long white hair, glowing red eyes, stands tiny on a high web-bridge in spider-silk robes.
+2. A drow blademaster with charcoal-grey skin and silver hair crosses an onyx stair, twin scimitars at his hips, small against the spires.
+3. A drow house-noble, dark skin and white braids, violet eyes, surveys the city from a black balcony, dwarfed by the cavern.`,
+  },
+
+  underdark_light: {
+    format: 'simple',
+    theme: `DRAGONBOT DROW-UNDERDARK LIGHTING — the eerie SELF-LIGHT of the lightless Underdark (this REPLACES sunlight — there is none). Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct light sources: blue-violet faerie-fire witch-light washing the spires; bioluminescent fungus casting soft teal glow; dark-crystal veins pulsing faint purple; cold cyan radiance from a crystal seam; pale moss-light columns; glowing-mushroom lantern-light; flickering faerie-fire braziers; eerie green spore-glow; deep violet shadow sparked with witch-light; a wash of silver-cold magelight; the faint red glow of distant lava far below. Each is a LIGHTLESS-cavern self-light. ABSOLUTELY NO sun, daylight, sky, golden hour, or god-rays.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE Underdark self-light source in 15-30 words — eerie, cold, magical, NEVER sunlight. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Blue-violet faerie-fire washes over the black spires, an eerie cold witch-light with no warmth and no source, pooling in the carved hollows.
+2. Bioluminescent fungus casts a soft teal glow up the obsidian walls, the only light in an ocean of cavern darkness.
+3. Dark-crystal veins pulse a faint violet through the stone, throwing cold glints across the bridges and deep purple shadow everywhere else.`,
+  },
+
+  drow_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DROW-UNDERDARK DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a giant cave-spider descending on a silk strand; a drow matron's faerie-fire ritual; a House procession with glowing banners; a duel of blademasters on a web-bridge; a bound demon or elemental wreathed in violet flame; a colossal carved spider-idol with glowing gem eyes; a slave-caravan of bound captives; a vast underground waterfall pouring into the abyss; a swarm of luminous cave-bats; a sorceress conjuring a sphere of darkness. Each adds a focal beat (does NOT replace the city).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A giant cave-spider descends slowly on a glistening silk strand from the darkness above the bridges.
+2. A colossal carved spider-idol looms over the central well, its faceted gem eyes glowing a baleful violet.
+3. A drow matron stands wreathed in blue faerie-fire on a high altar, her ritual lighting the cavern around her.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // DRAGONBORN-CITADEL PATH (2026-06-15 — new, Tier 1). A
+  // civilization of dragon-kin — a scaled temple-citadel.
+  // ════════════════════════════════════════════════════════
+
+  draconic_city: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGONBORN-CITADEL — the dragon-kin CITADEL itself (the hero), home of a civilization of draconic humanoids. Each entry 25-45 words, monumental + draconic + volcanic.
+
+VARIETY MANDATE — ~25 distinct draconic citadels: a cliffside fortress of dragon-scale-tiled towers; a volcanic temple-city ringed with dragon-statue colossi; an obsidian ziggurat on a lava-lit peak; a citadel carved into a vast dragon-skull-shaped crag; a mountaintop aerie of clawed buttresses and wing-bridges; a forge-city straddling a lava river; a gold-domed dragon-temple; a tiered cliff-citadel with roosting ledges for dragons; a caldera-rim fortress over a glowing lake of lava; a great hall flanked by colossal carved dragon-guardians. Each names the draconic citadel + its scaled/volcanic architecture + monumental scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dragon-kin citadel in 25-45 words — draconic, volcanic, monumental. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A cliffside citadel of towers roofed in overlapping dragon-scale tiles, clawed stone buttresses gripping the rock, dragon-statue colossi flanking its gate above a smoking caldera.
+2. A volcanic temple-city built around a central lava-well, tiered obsidian terraces and gold-inlaid shrines rising toward a colossal carved dragon-guardian.
+3. A mountaintop aerie-citadel of wing-shaped bridges and roosting ledges, its spires wreathed in volcanic steam, dragon-banners snapping in the updraft.`,
+  },
+
+  draconic_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGONBORN-CITADEL DETAIL — the dragon-kin craftsmanship. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: overlapping dragon-scale roof tiles; draconic rune-pillars; hoard-gold inlay in black stone; clawed wing-buttresses; brazier-altars of dragon-fire; colossal carved dragon-guardian statues; banners of draconic heraldry; obsidian-and-brass filigree; roosting ledges for dragons; a great central lava-well; carved dragon-skull motifs; gem-set scale mosaics. Each is a rich draconic craft detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE draconic craft detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. The towers are roofed in overlapping bronze and crimson dragon-scale tiles that catch the lava-light like a living hide.
+2. Colossal carved dragon-guardians flank the citadel gate, wings half-spread, gold-inlaid eyes glinting in the firelight.
+3. Brazier-altars of pale dragon-fire burn along the terraces, their blue-gold flame lighting the carved rune-pillars.`,
+  },
+
+  citadel_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGONBORN-CITADEL SETTING — the volcanic/highland setting cradling the citadel. Each entry 20-40 words, dramatic depth.
+
+VARIETY MANDATE — ~25 distinct settings: a smoking volcanic caldera; a cliff aerie above a sea of cloud; an ash-storm peak; a lava canyon; a glowing lake of magma; a jagged volcanic mountain range; a thunderhead-crowned summit; a black-sand volcanic coast; a steaming geothermal valley; a peak ringed by circling dragons. Each sets the volcanic/highland setting + depth + its fiery or stormy light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE volcanic/highland setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A smoking volcanic caldera cradles the citadel, glowing lava channels webbing the black rock far below, ash drifting across a sullen red sky.
+2. A cliff aerie high above an endless sea of cloud, the citadel's spires breaking through the mist, distant volcanic peaks glowing on the horizon.
+3. A lava canyon splits the mountain, rivers of magma lighting the citadel's foundations from below, steam rising in great curtains.`,
+  },
+
+  dragonborn_occupant: {
+    format: 'simple',
+    banHumanLanguage: true,
+    theme: `DRAGONBOT DRAGONBORN-CITADEL OCCUPANT — tiny dragonborn (dragon-kin) figures for life + scale. Each entry 12-25 words. A dragonborn is a CREATURE: lead with the species + its unmistakable draconic features.
+
+DRAGONBORN ANATOMY (lead every entry with these): a scaled reptilian hide in a metallic or chromatic color (bronze/brass/crimson/gold/black/green), a draconic snout/muzzle, a horned or finned crest, clawed hands, often a thick tail. Convey rank/role via the role-noun ONLY (warlord / flame-priest / champion / sentinel / loremaster), NEVER "man/woman/girl" and NEVER an age word.
+
+VARIETY MANDATE — ~25 distinct dragonborn occupants: a bronze-scaled warlord on a terrace; a crimson-scaled flame-priest at a brazier-altar; a gold-scaled champion on a stair; horned sentinels at a gate; a black-scaled loremaster with a tome; a dragonborn rider mounting a dragon; two dragonborn in council; a dragonborn smith at a lava-forge. Each is a small dragon-kin figure giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny dragonborn occupant for scale in 12-25 words — lead with the dragon-kin species + scaled hide / snout / horns / tail. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A bronze-scaled dragonborn warlord, draconic snout and horned crest, clawed hand on a hilt, stands tiny on a high terrace above the lava.
+2. A crimson-scaled dragonborn flame-priest, finned crest and lashing tail, raises clawed hands before a brazier-altar, small against the temple.
+3. Horned black-scaled dragonborn sentinels flank the citadel gate, dwarfed by the colossal carved dragon-guardians above them.`,
+  },
+
+  draconic_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGONBORN-CITADEL DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a living dragon alighting on the citadel as honored kin; a dragon circling the spires; a clutch of dragon-eggs glowing on an altar; a volcano erupting behind the citadel; a champion's wing-display ritual; a hoard-vault of gold revealed; a column of dragon-fire rising; a flight of dragon-riders launching; a colossal dragon-guardian statue with glowing eyes; a river of lava breaking its banks. Each adds a focal beat (does NOT replace the citadel).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great living dragon alights on the highest tower, folding its wings, honored kin returning to the citadel.
+2. A volcano erupts behind the citadel, a towering column of ash and fire lighting the spires from behind.
+3. A flight of dragonborn riders launches from the aerie ledges on winged mounts, scattering into the red sky.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ORC-WARHOLD PATH (2026-06-15 — new, Tier 2). A savage
+  // orc horde stronghold — black iron, bone, war-fire.
+  // ════════════════════════════════════════════════════════
+
+  orc_warhold: {
+    format: 'simple',
+    theme: `DRAGONBOT ORC-WARHOLD — the savage orc horde STRONGHOLD itself (the hero). Each entry 25-45 words, brutal + massive + grim.
+
+VARIETY MANDATE — ~25 distinct orc strongholds: a black-iron gate-fortress belching forge-smoke; a sprawling war-camp on a scorched plain; a mountain stronghold of crude stone and timber; a smelting-pit warren dug into a hillside; a palisade horde-camp ringed with sharpened stakes; a captured ruined castle crudely re-fortified; a volcanic war-forge; a bone-and-timber stockade over a muddy war-ground; a cliff-fortress of black towers; a siege-camp before a wall. Each names the orc stronghold + its brutal iron-and-bone construction + grim scale. NEVER noble or elegant — savage and functional.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE orc stronghold in 25-45 words — brutal, iron, grim, massive. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A black-iron gate-fortress belching forge-smoke, its crude towers hung with skull-banners, a horde massing as tiny specks on the scorched ground before the gate.
+2. A sprawling war-camp on a burnt plain, hide tents and bone totems around roaring fire-pits, crude siege-engines hulking in the smoke.
+3. A mountain stronghold of black stone and rough timber, smelting-pits glowing orange in its flanks, war-drums towering over the muddy war-ground.`,
+  },
+
+  warhold_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT ORC-WARHOLD DETAIL — the brutal orc craft filling the stronghold. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: bone totems and skull-poles; tattered skull-banners; spiked black iron everywhere; towering war-drums; smelt-fire forges; trophy walls of broken weapons; crude siege-engines; sharpened stake palisades; chained captive-pens; hide tents and fire-pits; piled scrap-iron armor; severed-banner trophies. Each is a brutal orc-stronghold detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE brutal orc detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Bone totems and skull-topped poles rise around the stronghold, strung with tattered banners and the trophies of broken foes.
+2. Spiked black iron juts from every wall and gate, crude and savage, scorched by the forge-fires below.
+3. Towering war-drums of hide and bone stand over the muster-ground, scarred from countless beatings before battle.`,
+  },
+
+  warcamp_activity: {
+    format: 'simple',
+    theme: `DRAGONBOT ORC-WARHOLD ACTIVITY — the living war-camp at work. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct activities: a horde mustering in ranks; crude weapons being forged; wargs penned and snarling; a raiding party assembling; war-drums beating; captives driven into a pen; siege-engines being hauled; fires roaring in the smelting-pits; a war-banner raised; scrap-armor hammered out; a war-beast fed. Each is a vivid war-camp-at-work detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE war-camp activity in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A horde musters in ragged ranks on the scorched ground, torchlight glinting off a forest of crude spears.
+2. Sparks fly from the smelting-pits as crude blades are hammered out on blackened anvils.
+3. Snarling wargs strain at their chains in a timber pen beside the war-drums.`,
+  },
+
+  orc_occupant: {
+    format: 'simple',
+    banHumanLanguage: true,
+    theme: `DRAGONBOT ORC-WARHOLD OCCUPANT — tiny orc/uruk figures for life + scale. Each entry 12-25 words. An orc is a CREATURE: lead with the species + its unmistakable non-human features.
+
+ORC ANATOMY (lead every entry with these): a green, grey, or ashen hide, a heavy jutting brow, a tusked underbite/jaw, a muscled brutal bulk, often war-scars and crude iron armor. Convey rank/role via the role-noun ONLY (warchief / shaman / captain / berserker / standard-bearer), NEVER "man/woman/girl" and NEVER an age word.
+
+VARIETY MANDATE — ~25 distinct orc occupants: a green-hide warchief on a crude throne; an ashen-grey shaman with a bone staff; a tusked uruk captain bellowing orders; a hulking berserker hauling a chain; a standard-bearer raising a skull-banner; an orc smith at a smelt-forge; two orcs snarling over loot; a warg-rider mounting up. Each is a small orc figure giving scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny orc occupant for scale in 12-25 words — lead with the orc species + green/grey hide / tusks / heavy brow / bulk. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A green-hide orc warchief, tusked jaw and heavy brow, slab of muscle in crude iron, looms tiny on a crude throne above the war-ground.
+2. An ashen-grey orc shaman, tusked and hunched, raises a bone-and-feather staff before a fire-pit, small against the towering totems.
+3. A tusked uruk captain in scrap-iron armor bellows at the mustering ranks, dwarfed by the black gate behind him.`,
+  },
+
+  warhold_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT ORC-WARHOLD DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a warg-rider charge mustering out the gate; a war-drum ceremony; a champion roaring atop the gate; a captured banner burned; a chained troll or ogre straining; a catapult loosing a flaming shot; a warband marching out under torches; a captive dragged to a stake; fires raging through the camp; a great bonfire of trophies. Each adds a focal beat (does NOT replace the stronghold).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A chained troll strains and bellows at the heart of the camp, orcs scattering from its reach.
+2. A war-band marches out the black gate under a forest of torches, banners and spears bristling.
+3. A catapult looses a flaming shot from the rampart, the fireball arcing into the smoke-choked sky.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // GIANT-STEADINGHOLD PATH (2026-06-15 — new, Tier 2). A
+  // cyclopean giants' hall in the high peaks.
+  // ════════════════════════════════════════════════════════
+
+  giant_hold: {
+    format: 'simple',
+    theme: `DRAGONBOT GIANT-STEADINGHOLD — the cyclopean GIANTS' HALL/steading itself (the hero). Each entry 25-45 words, titanic scale + raw stone.
+
+VARIETY MANDATE — ~25 distinct giant steadings: a cyclopean megalith-hall of titanic stone blocks; a cliff-carved steading in the high peaks; a mountaintop hall of colossal pillars; a glacier-hold of frost giants carved from blue ice; a hill-giant rampart of piled boulders; a volcanic giant-forge of mammoth scale; a great mead-hall with house-sized doors; a thunder-peak fortress of raw granite; a chasm-spanning stone causeway-hold; a ring of standing stones crowning a summit. Each names the giant steading + its titanic, raw, cyclopean construction + overwhelming scale.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cyclopean giant steading in 25-45 words — titanic, raw stone, overwhelming. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A cyclopean megalith-hall of titanic stone blocks crowns the high peak, its house-sized doorway and colossal pillars dwarfing everything, raw and ancient against a storm sky.
+2. A glacier-hold of frost giants carved straight from a wall of blue ice, vast jagged halls glowing within, the mountain rising sheer behind.
+3. A cliff-carved steading high in the peaks, colossal stone galleries and a great mead-hall hewn into the rock, mist pouring past its titanic threshold.`,
+  },
+
+  giant_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT GIANT-STEADINGHOLD DETAIL — the titanic giant craft filling the hold. Each entry 15-30 words.
+
+VARIETY MANDATE — ~25 distinct details: titanic rough-hewn stone-block masonry; a colossal roaring hearth; giant-scale furniture (a table like a plaza); carved peak-runes; mammoth-bone trophies and tusks; enormous chained gates; piled boulder ramparts; a vast iron cauldron; great carved standing stones; hanging hides and furs the size of sails; a colossal anvil. Each is a titanic giant-steading detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE titanic giant detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal hearth roars at the hall's heart, its fire big enough to roast an ox whole, lighting the titanic stone walls.
+2. Giant-scale furniture fills the hall — a table like a plaza, benches like ridgelines — dwarfing any normal figure.
+3. Mammoth-bone trophies and great curved tusks hang from the rafters, each the size of a fallen tree.`,
+  },
+
+  giant_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT GIANT-STEADINGHOLD SETTING — the high-peak/storm setting cradling the hold. Each entry 20-40 words, dramatic alpine depth.
+
+VARIETY MANDATE — ~25 distinct settings: a storm-wracked high peak; a glacier vale of blue ice; a thunderhead-crowned summit; a jagged alpine crag above the clouds; a snowfield under a vast sky; a misty mountain pass; a volcanic giant-forge valley; a frozen waterfall canyon; a windswept tundra plateau; a peak ringed by circling eagles or rocs. Each sets the high, raw, alpine setting + depth + its dramatic light.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE high-peak/alpine setting in 20-40 words with depth. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A storm-wracked high peak cradles the hold, black thunderheads boiling around the summit, lightning flickering across the titanic stone.
+2. A glacier vale of cracked blue ice stretches away below the steading, mist pouring down the slopes into a vast white silence.
+3. A jagged alpine crag rises above a sea of cloud, the hold perched on its shoulder, distant peaks glowing in cold dawn light.`,
+  },
+
+  giant_occupant: {
+    format: 'simple',
+    banHumanLanguage: true,
+    theme: `DRAGONBOT GIANT-STEADINGHOLD OCCUPANT — giant figures for life + scale. Each entry 12-25 words. A giant is a CREATURE: lead with the species + its unmistakable features, and note it is STILL dwarfed by the cyclopean hall.
+
+GIANT ANATOMY (lead every entry with these): towering colossal stature, weathered stone-grey / frost-blue / ruddy-tan skin, craggy heavy features, massive slab-muscled build, often furs and crude iron. Convey rank/role via the role-noun ONLY (jarl / elder / warrior / smith / shepherd), NEVER "man/woman/girl" and NEVER an age word. The giant is huge, yet the architecture out-scales even it.
+
+VARIETY MANDATE — ~25 distinct giant occupants: a stone-grey giant elder on a colossal seat; a frost-blue giant jarl at the hearth; a giant warrior shouldering a tree-sized club; a giant smith at a titanic anvil; a giant shepherd with a mammoth; two giants at a plaza-sized table; a giant lifting a boulder; a giant warrior at the great gate. Each is a giant figure, still small beneath the cyclopean hall.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE giant occupant in 12-25 words — lead with the giant species + towering stature / grey-or-blue craggy skin / massive build, still dwarfed by the hall. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A stone-grey giant elder, craggy and mountainous, sits on a colossal stone seat, yet is dwarfed by the titanic hall around him.
+2. A frost-blue giant jarl in heavy furs stands at the roaring hearth, vast and weathered, small beneath the cyclopean pillars.
+3. A giant warrior shoulders a tree-sized club at the great gate, towering over any normal figure yet tiny against the megalith doorway.`,
+  },
+
+  giant_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT GIANT-STEADINGHOLD DRAMA — a secondary focal point heightening the scene, fires ~40%. Each entry 12-25 words.
+
+VARIETY MANDATE — ~25 distinct dramas: a colossal hearth-fire roaring; a frost giant forging a great weapon; a mammoth or roc in the hall; an avalanche thundering down behind; a thunderstorm wreathing the peak; a captured dragon-skull trophy hauled in; a giant hurling a boulder; a feast at the plaza-table; an eagle the size of a ship landing; a rune-stone blazing to life. Each adds a focal beat (does NOT replace the hold).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An avalanche thunders down the slope behind the steading, a white wall of snow and ice against the dark peak.
+2. A mammoth the size of a house stands in the hall, tended by a giant shepherd at its flank.
+3. A great rune-stone blazes to life at the hall's heart, cold light spilling across the titanic pillars.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // WIZARD-TOWER PATH (2026-06-10 — new, Tier 3). A mage's tower
   // dense with arcana — interior or exterior.
   // ════════════════════════════════════════════════════════

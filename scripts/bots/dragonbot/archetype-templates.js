@@ -2132,6 +2132,249 @@ CRITICAL — render a COLOSSAL high-fantasy dwarven hall of carved stone, forge-
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
   },
 
+  DROW_UNDERDARK: ({ slots, sharedDNA, vibeDirective }) => {
+    const { drow_city, underdark_detail, drow_cavern, drow_occupant, underdark_light, drama } =
+      slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DROW UNDERDARK scene for DragonBot — a dark-elf city in the lightless caverns deep beneath the world. Brom + John Howe + Tony DiTerlizzi painted dark-fantasy oil tradition. Menzoberranzan / the Underdark — elegant, cruel, alien, beautiful in an eerie way. The scene should feel like a forbidden glimpse into a world that has never seen the sun.
+
+━━━ LIGHTLESS UNDERDARK — ABSOLUTE FIRST RULE ━━━
+The entire scene is DEEP UNDERGROUND in a vast lightless cavern, lit ONLY by eerie magical self-light — blue-violet faerie-fire, glowing fungus, pulsing dark-crystal. There is NO sun, NO sky, NO daylight, NO god-rays — the world above does not exist here. Elegant obsidian dark-elf architecture, deep high-fantasy (NEVER modern/sci-fi/brutalist; NEVER a surface castle or a sunlit city).
+
+━━━ THE DROW CITY ━━━
+${drow_city}
+Render the dark-elf city with elegant, cruel grandeur — its black obsidian architecture dominating the cavern.
+
+━━━ UNDERDARK DETAIL (the drow craft + spider motifs) ━━━
+${underdark_detail}
+Render the drow craftsmanship — carved spider/web motifs, silk bridges, dark-crystal, glowing fungus, onyx statues.
+
+━━━ THE CAVERN (the vast lightless Underdark) ━━━
+${drow_cavern}
+Render the immense cavern cradling the city with overwhelming scale and DARKNESS — depths fading into impenetrable black.
+
+━━━ THE OCCUPANTS (tiny drow for life + scale) ━━━
+${drow_occupant}
+DROW ARE DARK ELVES — a CREATURE, not a costumed human: obsidian-charcoal to coal-black skin, stark white or silver hair, long pointed ears, glowing red or violet eyes, lithe. Small figures, dwarfed by the city. NEVER render them as pale/tan-skinned humans in dark costumes.
+${dramaSection}
+━━━ LIGHTING (the Underdark self-light — there is no sun) ━━━
+${underdark_light}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood — but NEVER let it add daylight; this scene is always lightless and underground.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, eerie. The black obsidian drow city dominating a vast lightless cavern, lit by cold faerie-fire and glowing fungus against deep darkness, tiny drow for scale, immense depth into the dark. Beautiful and sinister. NEVER sunlit, NEVER a surface world, NEVER modern/sci-fi.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a black obsidian dark-elf city in a vast lightless Underdark cavern lit by faerie-fire — the drow city leads], [its elegant-cruel obsidian architecture + scale], [drow detail — spider motifs + silk bridges + dark-crystal + glowing fungus], [the immense lightless cavern with depth], [tiny drow (obsidian skin, white hair, red eyes) for scale], [the eerie faerie-fire / fungus self-light], [palette + cold sinister mood]
+
+CRITICAL — render a black obsidian DROW city deep in a LIGHTLESS Underdark cavern, lit only by eerie faerie-fire / glowing fungus, with tiny obsidian-skinned dark elves for scale. Do NOT render any sunlight, sky, daylight, surface world, or modern/sci-fi.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  DRAGONBORN_CITADEL: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      draconic_city,
+      draconic_detail,
+      citadel_setting,
+      dragonborn_occupant,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a DRAGONBORN CITADEL scene for DragonBot — the homeland of a civilization of dragon-kin, a scaled temple-citadel on a volcanic peak. Frank Frazetta + John Howe + Brom painted-fantasy oil tradition. Monumental, draconic, volcanic, awe-inspiring. The scene should feel like the proud capital of a race born of dragons.
+
+━━━ MONUMENTAL DRACONIC CITADEL — ABSOLUTE FIRST RULE ━━━
+A COLOSSAL citadel of dragon-kin — scaled-tile towers, clawed buttresses, dragon-statue colossi, on a volcanic peak lit by lava and fire. The architecture is the hero: monumental, draconic, volcanic. Deep high-fantasy (NEVER modern/sci-fi/brutalist). Its people are DRAGONBORN — scaled reptilian humanoids, NOT humans in dragon armor.
+
+━━━ THE CITADEL ━━━
+${draconic_city}
+Render the dragon-kin citadel with monumental scale and depth — scaled architecture dominating the volcanic peak.
+
+━━━ DRACONIC DETAIL (the craft of the place) ━━━
+${draconic_detail}
+Render the dragon-kin craftsmanship — scale-tiles, rune-pillars, gold inlay, dragon-guardian statues, brazier-fire.
+
+━━━ THE SETTING ━━━
+${citadel_setting}
+Render the volcanic/highland setting cradling the citadel with dramatic depth.
+
+━━━ THE OCCUPANTS (tiny dragonborn for life + scale) ━━━
+${dragonborn_occupant}
+DRAGONBORN ARE DRAGON-KIN — a CREATURE, not a costumed human: a scaled reptilian hide (bronze/crimson/gold/black), a draconic snout, a horned crest, clawed hands, often a tail. Small figures, dwarfed by the citadel. NEVER render them as humans in dragon-themed armor.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, monumental. The colossal dragon-kin citadel dominating a volcanic peak, lava and fire light against scaled stone, tiny dragonborn for scale, vast depth. Awe-inspiring and draconic. NEVER modern/sci-fi; NEVER small/empty.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a colossal scaled dragon-kin citadel on a volcanic peak lit by lava — the citadel leads], [its monumental draconic architecture + scale], [draconic detail — scale-tiles + rune-pillars + dragon-statues], [the volcanic setting with depth], [tiny dragonborn (scaled hide, snout, horns, tail) for scale], [lighting + atmosphere], [palette + fiery monumental mood]
+
+CRITICAL — render a COLOSSAL dragon-kin CITADEL of scaled architecture on a volcanic peak, with tiny SCALED dragonborn (reptilian snout + horns + tail) for scale. Do NOT render anything modern/sci-fi, small, or human-in-costume.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  ORC_WARHOLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      orc_warhold,
+      warhold_detail,
+      warcamp_activity,
+      orc_occupant,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing an ORC WARHOLD scene for DragonBot — a savage orc horde stronghold of black iron, bone and war-fire. Frank Frazetta + John Howe + Adrian Smith painted dark-fantasy oil tradition. Mordor / Isengard menace — brutal, smoke-choked, massive. The scene should feel like the heart of a gathering horde.
+
+━━━ SAVAGE ORC STRONGHOLD — ABSOLUTE FIRST RULE ━━━
+A brutal orc horde stronghold — black iron, rough timber, bone totems, smelt-fire and smoke. Massive and functional, NEVER noble or elegant. Deep high-fantasy (NEVER modern/sci-fi). Its people are ORCS — green/grey tusked brutes, NOT armored humans.
+
+━━━ THE STRONGHOLD ━━━
+${orc_warhold}
+Render the orc stronghold with brutal, massive scale — iron, timber, smoke and fire dominating the grim ground.
+
+━━━ WARHOLD DETAIL (the brutal craft) ━━━
+${warhold_detail}
+Render the savage detail — bone totems, skull-banners, spiked iron, war-drums, trophy walls.
+
+━━━ WAR-CAMP ACTIVITY (the living horde) ━━━
+${warcamp_activity}
+Render the war-camp at work — mustering, forging, wargs, drums — a horde preparing for war.
+
+━━━ THE OCCUPANTS (tiny orcs for life + scale) ━━━
+${orc_occupant}
+ORCS ARE BRUTES — a CREATURE, not a costumed human: a green/grey/ashen hide, a heavy jutting brow, a tusked underbite, a muscled brutal bulk. Small figures, dwarfed by the stronghold. NEVER render them as ordinary armored humans.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, grim. The brutal orc stronghold dominating the frame, smelt-fire and torchlight against black iron and smoke, tiny orcs for scale, a massing horde, oppressive depth. Savage and massive. NEVER modern/sci-fi; NEVER noble or clean.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a brutal black-iron orc horde stronghold belching forge-smoke — the stronghold leads], [its massive savage construction + scale], [warhold detail — bone totems + skull-banners + spiked iron + war-drums], [the war-camp at work], [tiny orcs (green/grey hide, tusks, heavy brow) for scale], [lighting + atmosphere], [palette + grim smoky mood]
+
+CRITICAL — render a SAVAGE orc horde STRONGHOLD of black iron, bone and war-fire, with tiny TUSKED green/grey orcs for scale. Do NOT render anything modern/sci-fi, noble/elegant, or human-in-armor.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  GIANT_HOLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, giant_hold, giant_detail, giant_setting, giant_occupant, drama } =
+      slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA — render this visibly in the scene ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a GIANTS' STEADING scene for DragonBot — a cyclopean giants' hall in the high peaks. Frank Frazetta + John Howe + Alan Lee painted-fantasy oil tradition. Titanic, raw-stone, storm-wracked, awe-inspiring. The scene should make the viewer feel ant-small before the works of giants.
+
+━━━ CYCLOPEAN GIANT SCALE — ABSOLUTE FIRST RULE ━━━
+A TITANIC giants' hall of raw cyclopean stone in the high peaks — house-sized doors, colossal pillars, hewn megaliths. The architecture is the hero: titanic, raw, overwhelming — so vast that even a giant looks small within it. Deep high-fantasy (NEVER modern/sci-fi). Its people are GIANTS — towering craggy colossi, NOT large humans.
+
+━━━ THE STEADING ━━━
+${giant_hold}
+Render the cyclopean giants' hall with overwhelming titanic scale and depth — raw megalithic stone against the high peaks.
+
+━━━ GIANT DETAIL (the titanic craft) ━━━
+${giant_detail}
+Render the titanic detail — colossal hearth, giant-scale furniture, mammoth-bone trophies, rough-hewn megaliths.
+
+━━━ THE SETTING ━━━
+${giant_setting}
+Render the high-peak/storm setting cradling the steading with dramatic alpine depth.
+
+━━━ THE OCCUPANTS (giants — still dwarfed by the hall) ━━━
+${giant_occupant}
+GIANTS ARE COLOSSI — a CREATURE, not a large human: towering stature, weathered stone-grey or frost-blue craggy skin, massive slab-muscled build, furs and crude iron. Even a giant is dwarfed by the cyclopean architecture. NEVER render them as ordinary-sized humans.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 250)}
+
+Use this ONLY for color palette, light, and overall mood.
+
+━━━ COMPOSITION ━━━
+Cinematic, painterly, titanic. The cyclopean giants' hall dominating the high peaks, raw megalithic stone, a giant for scale yet dwarfed by the architecture, vast alpine depth. Awe-inspiring and overwhelming. NEVER modern/sci-fi; NEVER small/cozy.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a titanic cyclopean giants' hall of raw megalithic stone in the high peaks — the steading leads], [its overwhelming titanic scale + depth], [giant detail — colossal hearth + giant-scale furniture + mammoth-bone], [the high-peak setting], [a giant (towering, craggy grey/blue skin) for scale, still dwarfed by the hall], [lighting + atmosphere], [palette + raw storm-lit mood]
+
+CRITICAL — render a TITANIC cyclopean GIANTS' hall of raw stone in the high peaks, with a towering craggy GIANT for scale (still dwarfed by the architecture). Do NOT render anything modern/sci-fi, small/cozy, or human-sized.
+
+Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   WIZARD_TOWER: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, tower, arcane_detail, tower_setting, occupant, drama } = slots;
 
