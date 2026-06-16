@@ -388,7 +388,15 @@ export default function CreateScreen() {
     setPhotoSourceOpen(true);
   }
 
+  // Double-submit guard: a rapid double-tap on "Dream" was pushing the loading
+  // screen twice → two generate() calls → two paid jobs from one prompt
+  // (2026-06-15). Ignore a second launch within 2.5s; a legitimate re-create
+  // happens only after returning from the loading screen, well past this window.
+  const lastLaunchRef = useRef(0);
   function startDream() {
+    const now = Date.now();
+    if (now - lastLaunchRef.current < 2500) return;
+    lastLaunchRef.current = now;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     nav.push('/dream/loading');
   }
