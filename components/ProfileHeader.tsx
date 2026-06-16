@@ -278,12 +278,17 @@ export function ProfileHeader(props: Props) {
             style={[
               styles.actionPill,
               styles.actionPillFollow,
-              props.isFollowing && styles.actionPillFollowing,
+              (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
             ]}
             onPress={props.onFollowPress}
             activeOpacity={0.7}
           >
-            <Text style={styles.actionText}>
+            <Text
+              style={[
+                styles.actionText,
+                (props.isFollowing || props.hasRequest) && styles.actionTextFollowing,
+              ]}
+            >
               {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
             </Text>
           </TouchableOpacity>
@@ -446,22 +451,26 @@ const styles = StyleSheet.create({
   actionPillSecondary: {
     backgroundColor: 'transparent',
   },
-  // Follow CTA — lavender to make it the clear primary action against the
-  // neutral Message / ⋯ pills. Darkens to accentDark in the Following state
-  // so the active relationship reads as already-actioned chrome rather than
-  // a fresh call to action.
+  // Follow CTA — solid lavender = the clear PRIMARY action ("do it") against
+  // the neutral Message / ⋯ pills. The Following / Requested state drops to a
+  // QUIET tonal treatment (faint purple tint fill + purple outline + purple
+  // text) so an already-actioned relationship reads as "done — tap to undo",
+  // not a loud call to action.
   actionPillFollow: {
     backgroundColor: colors.accent,
     borderColor: 'transparent',
   },
   actionPillFollowing: {
-    backgroundColor: colors.accentDark,
-    borderColor: 'transparent',
+    backgroundColor: 'rgba(167,139,250,0.15)',
+    borderColor: 'rgba(167,139,250,0.55)',
   },
   actionText: {
     color: colors.textPrimary,
     fontSize: fontScale(14),
     fontWeight: '600',
+  },
+  actionTextFollowing: {
+    color: colors.accent,
   },
   actionTextSecondary: {
     color: colors.textPrimary,
