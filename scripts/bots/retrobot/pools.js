@@ -33,6 +33,12 @@ module.exports = {
   ROAD_TRIP: load('road_trip'),
   SLEEPOVER_NIGHT: load('sleepover_night'),
   RETRO_TECH: load('retro_tech'),
+  // Outdoor / recreation expansion (2026-06-15)
+  ARCADE_RINK: load('arcade_rink'),
+  PARK_AND_PIER: load('park_and_pier'),
+  BACKYARD_SUMMER: load('backyard_summer'),
+  STREET_TILL_DARK: load('street_till_dark'),
+  CAMP_AND_LAKE: load('camp_and_lake'),
   SENSORY_TEXTURES: load('sensory_textures'),
   LIGHTING: load('lighting'),
   ERA_PALETTES,

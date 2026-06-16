@@ -21,6 +21,12 @@ const pathBuilders = {
   'road-trip': require('./paths/road-trip'),
   'sleepover-night': require('./paths/sleepover-night'),
   'retro-tech': require('./paths/retro-tech'),
+  // Outdoor / recreation expansion (2026-06-15)
+  'arcade-rink': require('./paths/arcade-rink'),
+  'park-and-pier': require('./paths/park-and-pier'),
+  'backyard-summer': require('./paths/backyard-summer'),
+  'street-till-dark': require('./paths/street-till-dark'),
+  'camp-and-lake': require('./paths/camp-and-lake'),
 };
 
 module.exports = {
@@ -77,6 +83,11 @@ module.exports = {
     'road-trip',
     'sleepover-night',
     'retro-tech',
+    'arcade-rink',
+    'park-and-pier',
+    'backyard-summer',
+    'street-till-dark',
+    'camp-and-lake',
   ],
 
   useModelPicker: true,
@@ -99,6 +110,11 @@ module.exports = {
       'road-trip',
       'sleepover-night',
       'retro-tech',
+      'arcade-rink',
+      'park-and-pier',
+      'backyard-summer',
+      'street-till-dark',
+      'camp-and-lake',
     ],
   },
   twoPassPolish: {
@@ -121,6 +137,11 @@ module.exports = {
       'road-trip': 'scene',
       'sleepover-night': 'scene',
       'retro-tech': 'scene',
+      'arcade-rink': 'scene',
+      'park-and-pier': 'scene',
+      'backyard-summer': 'scene',
+      'street-till-dark': 'scene',
+      'camp-and-lake': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
