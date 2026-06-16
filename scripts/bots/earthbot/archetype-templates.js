@@ -17,7 +17,7 @@ module.exports = {
       ? `\n\n━━━ RARE OPTICAL / WEATHER PHENOMENON (one signature real-Earth event, woven naturally into the scene) ━━━\n${phenomenon}\n\nCRITICAL — PHENOMENON-LIGHTING COMPATIBILITY: If this phenomenon physically contradicts the rolled lighting time-of-day (e.g., total eclipse corona cannot co-exist with golden hour or daylight; aurora cannot appear in midday sun; green flash only happens at the exact moment the sunset disc disappears; sun pillars/sun-dogs/halos need the sun visible so can't appear at night), DROP THE PHENOMENON entirely from the render and just render the clean lighting + sky + scene. Restrained truth beats forced impossibility every single time.`
       : '';
 
-    return `You are a fine-art landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. The work bar: a peak-drama gallery-print masterpiece — extreme dramatic landscape art with theatrical peak-moment light, the kind of frame people print three feet wide and hang as the centerpiece of a room, the kind that stops a phone-scroller dead and makes them screenshot it. NOT documentary travel photography. NOT a competent travel snapshot. NOT a journalism frame. This is gallery-tier fine art — peak-drama composition, peak-drama light, peak-drama scale. Real Earth, larger than life via geology + lighting + weather amplification, never AI-fake. Output wraps with style prefix + suffix.
+    return `You are a professional landscape photographer writing a SINGLE EPIC VISTA scene for EarthBot. The work bar: a clean, striking real nature photograph — a genuinely magnificent landscape captured on the best possible day, with beautiful natural light and true geological scale. The kind of clear, true-to-life nature photo a person stops scrolling to look at. Real Earth at its most magnificent — earned through real geology + real light + real weather, always a believable photograph, never stylized or AI-fake. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH, NEVER SCI-FI, NEVER AI-FAKE ━━━
 
@@ -51,38 +51,37 @@ If the scene wants water-edge stones, render them as NATURAL boulders / mossy ba
 - NO bioluminescent fungi / glowworms / phosphorescent moss / glowing-anything-landscape
 - NO floating-islands / impossible-physics geometry / Pandora-style alien biomes
 - NO galaxies "above sunset" — stars + sunset don't co-exist on Earth (Milky Way only over pure-night sky)
-- NO stylized / 3D-render / illustrated / cartoony aesthetic — this is HYPERREAL photographic, gallery-print tier
+- NO stylized / 3D-render / illustrated / cartoony aesthetic — this is clean, true-to-life photography
 
 ━━━ SCENE-AS-HERO MANDATE — THE SUBJECT IS THE WOW ━━━
 
-THE SCENE IS THE PHOTO. The vista subject DOMINATES the frame — fills 60-70%+ of the visual real estate. NO foreground prop pulled across the lower frame, NO secondary subject competing for the viewer's eye. Think gallery-print fine-art landscape: the cliff face IS the photo, the wave barrel IS the photo, the canyon IS the photo, the volcano caldera IS the photo. The scene's monumental scale + dramatic geology + theatrical peak-moment light is the entire show. Restraint on additional compositional clutter is what lets the subject HIT.
+THE SCENE IS THE PHOTO. The vista subject DOMINATES the frame — fills 60-70%+ of the visual real estate. NO foreground prop pulled across the lower frame, NO secondary subject competing for the viewer's eye. Think clean professional landscape photography: the cliff face IS the photo, the wave barrel IS the photo, the canyon IS the photo, the volcano caldera IS the photo. The scene's real scale + real geology + beautiful natural light is the entire show. Restraint on additional compositional clutter is what lets the subject HIT.
 
-━━━ GEOLOGY WOW FACTOR — DIAL THE SCALE TO ELEVEN ━━━
+━━━ GEOLOGY WOW FACTOR — LET THE REAL SCALE READ ━━━
 
-The subject's geological character is the wow, and "wow" means VERTIGINOUS THEATRICAL DRAMA, not pleasant scenery. Push every dimension of its monumental scale to MAXIMUM dramatic impact. Use this drama-vocabulary explicitly in every render:
+The subject's geological character is the wow, and the wow is its REAL monumental scale — genuine vertigo, genuine height, genuine depth, the way these places actually feel when you stand in them. Convey the true scale clearly:
 
 - VERTIGO-INDUCING — the cliff face plunges in a way that makes the viewer's stomach drop
 - CATHEDRAL-VERTICAL — walls so steep they swallow scale
-- MILE-DEEP / CONTINENT-SCALE / SKY-PIERCING — the size makes the viewer feel insignificant
-- THEATRICAL / OPERATIC / EXTREME / STAGED — the scene is being framed at maximum drama
-- The cliff's terrifying vertical drop into the abyss, the caldera's mile-wide gape, the dune-sea's infinite-shadow ridges receding to vanishing point, the fjord wall's cathedral-vertical plunge, the cresting wave's translucent-glass barrel, the ice-cap's continent-scale spread, the canyon's billion-year-strata depth.
+- MILE-DEEP / CONTINENT-SCALE / SKY-PIERCING — the size makes the viewer feel small
+- The cliff's vertical drop into the valley, the caldera's mile-wide gape, the dune-sea's ridges receding to the vanishing point, the fjord wall's plunge to the water, the cresting wave's translucent barrel, the ice-cap's spread, the canyon's billion-year-strata depth.
 
-The viewer's first reaction must be "look at the SIZE of that — it can't be real, but it is." NOT genteel competent scenery — render the SCALE at MAXIMUM dramatic impact, specific to the subject's actual geology. This is the SINGLE most important lever between "pretty travel photo" and "wallpaper masterpiece." Push it HARD. Theatrical wide-angle low-POV looking up at the wall. Aerial drone POV looking down into the chasm. Eye-level into the heart of the storm. Choose the most dramatic possible vantage for the rolled subject.
+The viewer's first reaction must be "look at the SIZE of that" — real Earth at genuine, awe-inspiring scale. Choose the most striking honest vantage for the rolled subject: wide-angle low-POV looking up at the wall, aerial looking down into the chasm, eye-level into the scene. Render the real scale clearly and beautifully, never exaggerated past what the place actually is.
 
 ━━━ THE VISTA SUBJECT (the location + its core geology — the hero of the frame, fills it) ━━━
 ${subject}
 
-━━━ LIGHTING (stacked light drama — render every dimension at peak) ━━━
+━━━ LIGHTING (render the real best-light moment) ━━━
 ${lighting}
 
-━━━ STACKED LIGHT DRAMA — render every dimension at gallery-print peak intensity ━━━
+━━━ NATURAL LIGHT — the real best-light moment ━━━
 
-The lighting above stacks 2-3 light dimensions (time + direction + color + shadow). Render ALL of them at the absolute peak of their drama, simultaneously. Not generic — the 90-second magic-window version. Color at maximum chromatic saturation, shadow at maximum depth-contrast, direction at maximum theatricality. Gallery-print bar: light is THE protagonist of the frame, and every dimension is at eleven. This is the signature lever — light drama is what separates a competent travel snapshot from a wallpaper masterpiece. Push every light dimension HARD, every render.
+The lighting above stacks 2-3 light dimensions (time + direction + color + shadow). Render them the way real light behaves at the best moment of that day — the 90-second magic-window version: beautiful natural color, real directional warmth, true shadow depth, the way the scene would actually look through a camera at golden hour or first light. Light is what makes the photo, and it stays believable — real sun and real sky, lighting that always has a clear physical source. Let the light be lovely and true, every render — never artificial, never a glow with no source.
 
 ━━━ ATMOSPHERE (render exactly as rolled — DO NOT override) ━━━
 ${atmosphere}
 
-The atmosphere rolled above dictates what's in the AIR. If it says "crisp clear," render crisp clear air with sharp distance — drama comes from light stacking alone, NO godrays or volumetric beams. If it says "valley fog" or "post-rain mist" or "sea spray," godrays and atmospheric beams emerge NATURALLY where light meets the particulate — render that emergence at peak drama. The light drama is always maximum; the atmospheric quality (clear vs hazy vs misty vs spray-veiled) is dictated SOLELY by what this axis rolled. Never force volumetric beams onto clear-air rolls. Never strip atmosphere on particulate rolls.
+The atmosphere rolled above dictates what's in the AIR. If it says "crisp clear," render crisp clear air with sharp distance — the beauty comes from the light alone, NO godrays or volumetric beams. If it says "valley fog" or "post-rain mist" or "sea spray," godrays and atmospheric beams emerge NATURALLY where light meets the particulate — render that emergence the way it really looks. The light is always lovely and true; the atmospheric quality (clear vs hazy vs misty vs spray-veiled) is dictated SOLELY by what this axis rolled. Never force volumetric beams onto clear-air rolls. Never strip atmosphere on particulate rolls.
 
 ━━━ SKY LAYER (what the sky is doing above the vista) ━━━
 ${sky_layer}
@@ -100,7 +99,7 @@ This is a SCALE PROVER ONLY — a marker-dot in the deep middle or far distance 
 Great landscape photographs catch a SECOND in time, not a frozen still. Every render must imply ONE specific physical motion the scene is producing RIGHT NOW: wind tearing the snow plume off a knife-edge ridge, fog pouring through the saddle, surf curl exploding at the base of the sea-stack, shelf cloud advancing across the horizon, aspen leaves shimmering in the breeze, spindrift catching the low light, waterfall mist breathing upward, banner cloud streaming from the summit, cornice on the verge of collapse, river braiding the silver delta, blowing sand racing across the dune crest, last leaves drifting from autumn aspens, a wave just curling, a glacier just calving, ground-blizzard sweeping across the plateau, dust-devil twisting across the desert floor. NOT new phenomena — physical motion the scene IMPLIES. ONE beat of motion, not five.
 
 ━━━ SCENE-WIDE PALETTE ━━━
-${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'cinematic deeply-saturated color, hyperreal but never artificial, naturalistic Earth-pigment range'}
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'cinematic deeply-saturated color, true-to-life and never artificial, naturalistic Earth-pigment range'}
 
 ━━━ SECONDARY COLOR VIBE ━━━
 ${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
@@ -110,7 +109,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — SUBJECT FILLS THE FRAME ━━━
 
-Wide sweeping panoramic vista where the SUBJECT geology fills 60-70%+ of the frame's visual weight. Sky above (~25-35%), scale-prover as a tiny dot in deep distance, no near-foreground prop. The viewer's eye lands on the SUBJECT immediately, registers its scale, follows the lighting drama across it, finds the tiny scale-prover as evidence. Photographic, hyperreal, alive — gallery-print caliber, the kind of frame collectors pay four figures for and people screenshot to set as wallpaper. Theatrical fine-art landscape, never documentary snapshot.
+Wide sweeping panoramic vista where the SUBJECT geology fills 60-70%+ of the frame's visual weight. Sky above (~25-35%), scale-prover as a tiny dot in deep distance, no near-foreground prop. The viewer's eye lands on the SUBJECT immediately, registers its scale, follows the natural light across it, finds the tiny scale-prover as evidence. Photographic, natural, alive — clean professional nature photography, a real photograph of Earth at its most magnificent.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
@@ -145,7 +144,7 @@ NEVER overwater bungalows, NEVER thatched huts, NEVER piers, NEVER docks, NEVER 
 - NO mountain peak as primary subject (small distant silhouette OK)
 - NO "sun-disc" alone (renders as UFO orb)
 - NO non-tropical (no alpine / no desert / no Norwegian fjord)
-- NO stylized / 3D-render / cartoony — this is HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — this is clean, true-to-life photography
 
 ━━━ COMPOSITION MANDATE — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
 
@@ -203,7 +202,7 @@ Render as TINY scale-prover (comma-speck, postage-stamp small) in the deep dista
 Catch a SECOND in time. One specific motion: gentle surf curling, palm fronds shifting in trade-wind breeze, a blossom-petal drifting on the surf-foam, sun-glare flare shimmering on the water, scattered petals on wet sand catching the light, a few seabirds gliding the distant sky.
 
 ━━━ SCENE-WIDE PALETTE ━━━
-${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'saturated tropical color, hyperreal but never artificial, turquoise water + emerald palm + saturated flower-accent'}
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'saturated tropical color, true-to-life and never artificial, turquoise water + emerald palm + saturated flower-accent'}
 
 ━━━ SECONDARY COLOR VIBE ━━━
 ${sharedDNA && sharedDNA.colorPalette ? sharedDNA.colorPalette : ''}
@@ -213,7 +212,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION — 50/50 BEACH + FLOWERS PARTNERSHIP ━━━
 
-Ground-level POV. The tropical beach extends across the midground (~50% visual weight). Tropical flowers distributed through the scene as visible named-species accents (~50% visual weight). Both equally readable, neither dominating. Hyperreal photographic — gallery-print tropical-paradise photography.
+Ground-level POV. The tropical beach extends across the midground (~50% visual weight). Tropical flowers distributed through the scene as visible named-species accents (~50% visual weight). Both equally readable, neither dominating. Clean, true-to-lifetropical-paradise photography.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**, NO "render as" suffixes. Just the phrases, starting immediately with the scene content.`;
   },
@@ -231,7 +230,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ FOREGROUND ELEMENT (one accent close to camera) ━━━\n${foreground_element}\n\nOne natural foreground accent close to camera that adds depth without dominating — palm fronds arching in, lava rocks at frame-edge, a hibiscus branch, a tiny silhouette far in the distance. Soft-focus / out-of-focus, never sharp competing detail.`
       : '';
 
-    return `You are a travel photographer writing ONE PRETTY ISLAND-BAY scene for EarthBot. A dramatic tropical island bay viewed at WATERLINE level — crystal turquoise water in the foreground, dramatic shoreline rising above (volcanic ridges, palm-fringed cliffs, lush jungle slopes), sun-burst clouds in a tropical sky. Gallery-print travel-postcard caliber. Output wraps with style prefix + suffix.
+    return `You are a travel photographer writing ONE PRETTY ISLAND-BAY scene for EarthBot. A dramatic tropical island bay viewed at WATERLINE level — crystal turquoise water in the foreground, dramatic shoreline rising above (volcanic ridges, palm-fringed cliffs, lush jungle slopes), sun-burst clouds in a tropical sky. Clean, professional travel-postcard caliber. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL TROPICAL ISLAND BAY, NEVER UNDERWATER REEF, NEVER SCI-FI ━━━
 
@@ -252,7 +251,7 @@ NEVER boats, NEVER sailboats, NEVER yachts, NEVER overwater bungalows, NEVER tha
 - NO place names (no "Bora Bora" / "Hanauma" — describe morphologically)
 - NO darkness / NO storm (always sunny tropical day)
 - NO snow / NO alpine / NO desert — always TROPICAL
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 
 ━━━ THE BAY SETTING ━━━
 ${bay_setting}
@@ -273,7 +272,7 @@ ${composition}${foregroundBlock}
 
 ━━━ HARD RULE — PRETTY TROPICAL BAY, POSTCARD-WORTHY ━━━
 
-This frame should make someone want to BOOK A FLIGHT. Gallery-print travel-photography caliber.
+This frame should make someone want to BOOK A FLIGHT. Clean, professional travel-photography caliber.
 
 ━━━ MOMENT IN MOTION ━━━
 
@@ -304,7 +303,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. Just 
       ? `\n\n━━━ RARE PHENOMENON (one signature optical/weather event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
 
-    return `You are a geological photographer writing ONE GEOLOGICAL WONDER scene for EarthBot. Earth's raw architecture as art — covers BOTH scales: INTIMATE cave interiors (crystal caves with amethyst walls / lava tubes / glacier ice caves / slot canyons with light beams / amethyst geode cathedrals) AND EPIC outdoor vistas (hoodoo amphitheaters / salt flats / basalt cliff coastlines / sandstone wave formations / travertine terraces / fresh lava flows / geyser fields). The geology itself is spectacular and alien. Gallery-print geological photography with cinematic mineral palette and atmospheric depth. Output wraps with style prefix + suffix.
+    return `You are a geological photographer writing ONE GEOLOGICAL WONDER scene for EarthBot. Earth's raw architecture as art — covers BOTH scales: INTIMATE cave interiors (crystal caves with amethyst walls / lava tubes / glacier ice caves / slot canyons with light beams / amethyst geode cathedrals) AND EPIC outdoor vistas (hoodoo amphitheaters / salt flats / basalt cliff coastlines / sandstone wave formations / travertine terraces / fresh lava flows / geyser fields). The geology itself is genuinely spectacular. Clean, professional geological photography with rich natural mineral color and atmospheric depth. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH GEOLOGY, NEVER SCI-FI / FANTASY ━━━
 
@@ -323,7 +322,7 @@ NEVER railings, NEVER walkways, NEVER stairs, NEVER bridges, NEVER cabins, NEVER
 - NO sci-fi / fantasy / magical-glow / portal-cave / multi-moons / sky-galaxies
 - NO impossible gemstone colors that don't exist
 - NO tourist landmark names (describe morphologically)
-- NO stylized / 3D-render / cartoony — this is HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — this is clean, true-to-life photography
 - NO floating rocks, NO levitating boulders
 
 ━━━ THE GEOLOGICAL SUBJECT (the formation itself — intimate or epic scale) ━━━
@@ -343,9 +342,9 @@ ${focal_anchor}
 
 ONE specific element gives the frame a focal anchor + scale-prover.${phenomenonBlock}
 
-━━━ HARD RULE — POSTER-WORTHY GALLERY-PRINT GEOLOGY ━━━
+━━━ HARD RULE — BEAUTIFUL TRUE-TO-LIFE GEOLOGY ━━━
 
-This frame must be a 10/10 poster-print with peak-drama mineral light and gallery-print fidelity.
+This frame must be a clean, true-to-life photograph with beautiful natural mineral light.
 
 ━━━ MOMENT IN MOTION ━━━
 
@@ -362,7 +361,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE ━━━
 
-The geological subject dominates 60-70% of the frame. Hyperreal photographic — gallery-print geological-photography caliber.
+The geological subject dominates 60-70% of the frame. Clean, true-to-lifegeological-photography caliber.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
@@ -373,7 +372,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature optical/weather event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
 
-    return `You are a fine-art landscape photographer writing ONE SACRED-LIGHT MOMENT scene for EarthBot. Transcendent natural-light moments in nature — the LIGHT itself is the hero. Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break broad spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over winter forest. Mid to tight framing — NOT wide panorama. The light moment fills the emotional center; the landscape supports it. Gallery-print sacred-light photography — natural-light moments as the hero. Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing ONE SACRED-LIGHT MOMENT scene for EarthBot. Transcendent natural-light moments in nature — the LIGHT itself is the hero. Dawn first-light burning a single ridge while valleys remain in cool shadow, raking shafts plural through old-growth canopy, alpenglow on a snow-capped peak, storm-break broad spotlight across a meadow, crepuscular rays through cypress over a misty lake, sun-halo over winter forest. Mid to tight framing — NOT wide panorama. The light moment fills the emotional center; the landscape supports it. Clean, professional sacred-light photography — natural-light moments as the hero. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL NATURAL LIGHT, NEVER SCI-FI / FANTASY ━━━
 
@@ -442,7 +441,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — LIGHT-AS-HERO ━━━
 
-The light moment fills the emotional center of the frame. Mid to tight framing — NOT wide panorama. Surrounding landscape sits in cool shadow / cool tones, the lit area glows with warm contrasting saturation. Hyperreal photographic — gallery-print sacred-light fine-art.
+The light moment fills the emotional center of the frame. Mid to tight framing — NOT wide panorama. Surrounding landscape sits in cool shadow / cool tones, the lit area glows with warm contrasting saturation. Clean, true-to-lifesacred-light fine-art.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
@@ -453,7 +452,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature night-sky event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled light_source (moonbow needs moisture, etc), DROP IT.`
       : '';
 
-    return `You are a night-sky photographer writing ONE TROPICAL BEACH NIGHT scene for EarthBot. Magical warm tropical beach scenes at night — moonlit water, silver Milky Way overhead, calm reflective tropical surf, palm silhouettes. The NATURAL light source (moon / stars / Milky Way) is the hero. Awe-inspiring, warm, intimate — NEVER cold ominous night. Gallery-print tropical-night photography with moon/star light as hero. Output wraps with style prefix + suffix.
+    return `You are a night-sky photographer writing ONE TROPICAL BEACH NIGHT scene for EarthBot. Magical warm tropical beach scenes at night — moonlit water, silver Milky Way overhead, calm reflective tropical surf, palm silhouettes. The NATURAL light source (moon / stars / Milky Way) is the hero. Awe-inspiring, warm, intimate — NEVER cold ominous night. Clean, professional tropical-night photography with moon/star light as hero. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL TROPICAL BEACH AT NIGHT, NEVER SCI-FI ━━━
 
@@ -477,7 +476,7 @@ NEVER tiki torches, NEVER lanterns, NEVER paper lanterns, NEVER hurricane lanter
 - NO single column / single beam / single shaft (use natural diffuse light)
 - NO place names
 - NO darkness-without-light (Milky Way / moon / stars MUST be the light source)
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 
 ━━━ THE TROPICAL BEACH NIGHT SETTING ━━━
 ${subject}
@@ -502,7 +501,7 @@ ONE natural foreground element. Palm silhouettes against the night sky, weathere
 
 ━━━ HARD RULE — WARM TROPICAL NIGHT, NEVER COLD OMINOUS ━━━
 
-This is a MAGICAL warm tropical night — the kind of beach scene that feels like vacation paradise after dark. NOT a horror beach. NOT a stormy beach. NOT a cold beach. The warmth of trade-winds, the calm of tropical surf, the awe of a Milky Way overhead. Gallery-print travel-photography at night caliber.
+This is a MAGICAL warm tropical night — the kind of beach scene that feels like vacation paradise after dark. NOT a horror beach. NOT a stormy beach. NOT a cold beach. The warmth of trade-winds, the calm of tropical surf, the awe of a Milky Way overhead. Clean, professional travel-photography at night caliber.
 
 ━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
 
@@ -519,7 +518,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — TROPICAL BEACH NIGHT POSTCARD ━━━
 
-Mid to tight framing. The light source (moon, stars, or Milky Way) fills the upper third / half. The tropical beach extends below. Reflective water carries the light source. Hyperreal photographic — gallery-print tropical-night travel photography.
+Mid to tight framing. The light source (moon, stars, or Milky Way) fills the upper third / half. The tropical beach extends below. Reflective water carries the light source. Clean, true-to-lifetropical-night travel photography.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
@@ -538,7 +537,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or subject, DROP IT.`
       : '';
 
-    return `You are an ocean photographer writing ONE WAVE scene for EarthBot. Real ocean wave drama — Clark-Little intimate translucent-barrel through monumental big-wave breaking on tropical reef. The wave IS the hero. Real ocean physics: waves come from the open ocean and break TOWARD shore on shallow reefs, cliffs, points — never walls of water sitting on flat sand. Tropical paradise setting. Gallery-print surf-photography caliber. Output wraps with style prefix + suffix.
+    return `You are an ocean photographer writing ONE WAVE scene for EarthBot. Real ocean wave drama — Clark-Little intimate translucent-barrel through monumental big-wave breaking on tropical reef. The wave IS the hero. Real ocean physics: waves come from the open ocean and break TOWARD shore on shallow reefs, cliffs, points — never walls of water sitting on flat sand. Tropical paradise setting. Clean, professional surf-photography caliber. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL OCEAN PHYSICS, NEVER FANTASY ━━━
 
@@ -563,7 +562,7 @@ NEVER piers, NEVER docks, NEVER lighthouses, NEVER beach umbrellas, NEVER cabana
 - NO impossible-physics walls-of-water on flat sand
 - NO tsunami / NO incoming-wall-of-water from horizon (waves break ON something, not as standalone walls)
 - NO whales / dolphins / fish in wave (subject is the wave, not wildlife)
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 
 ━━━ THE WAVE SUBJECT (THE hero — intimate-barrel or monumental big-wave) ━━━
 ${wave_subject}
@@ -593,7 +592,7 @@ ${light_condition}${phenomenonBlock}
 
 ━━━ HARD RULE — WAVE IS THE HERO, PHYSICS IS REAL ━━━
 
-The wave fills 50-70% of the frame. Coastal context + water color + sky support the wave drama. Real ocean physics throughout — waves coming from open ocean, breaking on shallow obstacles, spray and foam realistic. Gallery-print surf-photography caliber.
+The wave fills 50-70% of the frame. Coastal context + water color + sky support the wave drama. Real ocean physics throughout — waves coming from open ocean, breaking on shallow obstacles, spray and foam realistic. Clean, professional surf-photography caliber.
 
 ━━━ MOMENT IN MOTION — every render captures one beat of physical motion ━━━
 
@@ -610,7 +609,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — SURF PHOTOGRAPHY POSTCARD ━━━
 
-The wave fills 50-70% of the frame. Coastal context + tropical setting fill the surrounding 30-50%. Sky drama above. Hyperreal photographic — gallery-print surf photography caliber.
+The wave fills 50-70% of the frame. Coastal context + tropical setting fill the surrounding 30-50%. Sky drama above. Clean, true-to-lifesurf photography caliber.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
@@ -631,7 +630,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled season or lighting, DROP IT.`
       : '';
 
-    return `You are a fine-art nature photographer writing ONE SEASONAL-SHIFT scene for EarthBot. Real-Earth landscape captured at the peak dramatic moment of a season — wall-to-wall multi-color autumn density across mixed forests, first snow with lingering color on alpine valleys, cherry-blossom + wildflower spring superbloom richness, golden summer evenings. THE SEASON IS THE SUBJECT, MULTI-COLOR RICHNESS is mandatory, and DENSITY IS TURNED TO 11 — every branch, every meadow, every slope packed with peak color edge-to-edge. gallery-print seasonal photography — National Geographic cover quality, the kind of frame people print and hang. Output wraps with style prefix + suffix.
+    return `You are a fine-art nature photographer writing ONE SEASONAL-SHIFT scene for EarthBot. Real-Earth landscape captured at the peak dramatic moment of a season — wall-to-wall multi-color autumn density across mixed forests, first snow with lingering color on alpine valleys, cherry-blossom + wildflower spring superbloom richness, golden summer evenings. THE SEASON IS THE SUBJECT, MULTI-COLOR RICHNESS is mandatory, and DENSITY IS PEAK — every branch, every meadow, every slope packed with peak color edge-to-edge. Clean, true-to-life seasonal nature photography — a beautiful real photograph of the landscape at its richest moment. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — REAL EARTH SEASONAL DRAMA, NEVER SCI-FI / FANTASY ━━━
 
@@ -649,7 +648,7 @@ NEVER a person, NEVER a hiker, NEVER cabins, NEVER fences, NEVER cars, NEVER roa
 - NO sci-fi / fantasy / portal / mystical
 - NO architecture / stone-steps / garden-paths / cabin
 - NO humans
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 - NO mono-color scenes (the color_palette axis MANDATES multi-color variety — render ALL the named colors)
 
 ━━━ THE SEASONAL SUBJECT (the landscape composition at peak seasonal drama) ━━━
@@ -694,7 +693,7 @@ ${sky_layer}${phenomenonBlock}
 
 ━━━ HARD RULE — THE SEASON IS THE EMOTIONAL CENTER, MULTI-COLOR RICHNESS MANDATORY ━━━
 
-The viewer should feel the season in their bones. ALL named colors from the color_palette must be visible in the render — NEVER mono-tone. Multi-tier depth (FG/MG/distant) per the depth_layers axis. One captured moment per the seasonal_motion axis. Gallery-print seasonal photography with peak-color density and multi-tier depth.
+The viewer should feel the season in their bones. ALL named colors from the color_palette must be visible in the render — NEVER mono-tone. Multi-tier depth (FG/MG/distant) per the depth_layers axis. One captured moment per the seasonal_motion axis. Clean, professional seasonal photography with peak-color density and multi-tier depth.
 
 ━━━ SCENE-WIDE PALETTE ━━━
 ${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'peak-saturation seasonal multi-color, dramatic light, atmospheric depth'}
@@ -711,7 +710,7 @@ ${vibeDirective.slice(0, 250)}
 
 ⚠️ NAME SPECIFIC TREE / FLOWER SPECIES — never generic "mixed forest" alone. Autumn output must name 3-5 species visible as distinct groves: e.g. "golden-yellow paperbark birch sections + scarlet sugar-maple groves + crimson red-oak clusters + amber quaking-aspen stands + lingering dark hemlock columns". Spring output must name 3-5 species: e.g. "pink cherry-blossom canopy + white flowering-dogwood + magenta redbud + cream magnolia + understory of trillium + Virginia bluebell + dame's-rocket".
 
-━━━ DENSITY MANDATE — TURN IT TO 11 ━━━
+━━━ DENSITY MANDATE — PEAK SEASONAL FULLNESS ━━━
 
 ⚠️ DENSITY IS THE PATH'S SIGNATURE. NO sparse / open / scattered / minimal / patchy / empty / negative-space language. Use density-positive phrasing: "packed wall-to-wall", "every branch carrying peak color", "edge-to-edge", "no gaps in the canopy", "carpet-thick", "shoulder-to-shoulder bloom", "saturated mass", "dense unbroken canopy", "drenched in color".
 
@@ -719,14 +718,13 @@ ${vibeDirective.slice(0, 250)}
 
 ⚠️ BANNED — orange-shrubs-on-rocks rendering. Never use "low shrubs" / "scrub" / "low autumn vegetation" / "rocky cliffs as dominant frame element" / "canyon walls" as the dominant frame. The frame is FOREST-dominant.
 
-━━━ CINEMATIC LIGHT + COLOR GRADE — MANDATORY ━━━
+━━━ NATURAL LIGHT — BEAUTIFUL, NOT FLAT ━━━
 
-Every render MUST land cinematic light drama, not flat overcast lighting. Required elements:
+Every render wants real directional light, not flat grey overcast. Aim for:
 
-• HARD DIRECTIONAL LIGHT — low-angle golden-hour or sunset rake catching every trunk-edge and leaf-mass, hard punched shadows beneath every trunk at peak chromatic saturation, NOT flat overcast.
-• ATMOSPHERIC DEPTH — teal-cooled depth in the far distance, atmospheric perspective separating midground from distant ridge.
-• TEAL-AND-ORANGE CINEMATIC SPLIT — warm orange-amber-crimson saturation in foreground/midground + teal-cooled atmospheric depth in the far distance. Hollywood color-grade.
-• SCALE PROVER — one tiny element in the distance proves the scale: a hawk hovering as a comma-speck silhouette, a tiny lake reflecting the canopy, a small clearing, a distant ridge tooth catching alpenglow. Render small (postage-stamp scale) to make the forest feel VAST.
+• DIRECTIONAL LIGHT — low-angle golden-hour or sunset light raking across the trunks and leaf-mass, real soft shadows beneath the canopy, rich natural color — not flat overcast.
+• ATMOSPHERIC DEPTH — cooler natural haze in the far distance, real atmospheric perspective separating midground from the distant ridge.
+• SCALE PROVER — one tiny element in the distance proves the scale: a hawk hovering as a comma-speck silhouette, a tiny lake reflecting the canopy, a small clearing, a distant ridge catching first light. Render small (postage-stamp scale) to make the forest feel VAST.
 
 ━━━ COMPOSITION DIRECTIVE — WIDE FORESTED LANDSCAPE (DEFAULT) ━━━
 
@@ -736,11 +734,11 @@ For AUTUMN: the rendered output MUST read as "a mature forested hillside drenche
 
 For SPRING: the rendered output MUST read as "a mature flowering forest hillside + wildflower SUPERBLOOM understory, named groves visible across the wide frame." Render every named flower species as a distinct dense patch/carpet.
 
-━━━ WOW FACTOR — GALLERY-PRINT BANGER ━━━
+━━━ WOW FACTOR — A BEAUTIFUL REAL PHOTOGRAPH ━━━
 
-This must be a render people frame and hang. National Geographic cover quality. Gallery-print fine-art photography. Every frame is a poster-worthy banger with hard cinematic light, atmospheric depth, teal-and-orange grade, scale-prover, named species.
+This must be a clean, striking nature photo of a real forest at peak season. Every frame has beautiful natural directional light, real atmospheric depth, a tiny scale-prover, and named species visible.
 
-Multi-tier depth (foreground anchor + midground forest + distant peaks/horizon) is mandatory. Hyperreal photographic. ALL named colors visible across the wide scene.
+Multi-tier depth (foreground anchor + midground forest + distant peaks/horizon) is mandatory. Clean, true-to-life photography. ALL named colors visible across the wide scene.
 
 DO NOT default to close-camera / intimate / foreground-focused framing unless the subject explicitly demands it. Wide forest-dominant vista is the default.
 
@@ -762,7 +760,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO pr
       ? `\n\n━━━ RARE PHENOMENON (one real-Earth event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon contradicts the rolled light or feels supernatural, DROP IT. Real-Earth ONLY — no aurora, no nacreous, no bioluminescent, no sun-dogs, no fire-rainbow.`
       : '';
 
-    return `You are a fine-art landscape photographer writing ONE DESERT SOUTHWEST scene for EarthBot. American SW iconic raw geology — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoo amphitheaters, Zion narrows, Arches, Sedona red rock, Painted Desert, Canyonlands. Gallery-print Southwest landscape photography with terracotta-on-cobalt cinematic depth. Warm-terracotta on cobalt cinematic. Output wraps with style prefix + suffix.
+    return `You are a fine-art landscape photographer writing ONE DESERT SOUTHWEST scene for EarthBot. American SW iconic raw geology — Monument Valley sandstone towers, Antelope Canyon slot beams, Bryce hoodoo amphitheaters, Zion narrows, Arches, Sedona red rock, Painted Desert, Canyonlands. Clean, professional Southwest landscape photography with terracotta-on-cobalt cinematic depth. Warm-terracotta on cobalt cinematic. Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — RAW EARTH SW GEOLOGY ━━━
 
@@ -776,7 +774,7 @@ The entire frame is uninhabited landscape. NEVER a figure, NEVER a vehicle, NEVE
 
 - Avoid aurora / nacreous / sun-dogs / fire-rainbow / iridescent / bioluminescent vocabulary (fantasy triggers)
 - Avoid sci-fi / portal / mystical / impossible-reflection
-- Avoid stylized / 3D-render / cartoony — HYPERREAL photographic only
+- Avoid stylized / 3D-render / cartoony — clean true-to-life photography only
 - Avoid "fire" as a noun (renders literal flames per seasonal-shift lesson); use "blazing color" only as adjective
 - Avoid molten / lava (American SW geology is cold sandstone / basalt, NOT active volcanic)
 - Avoid opal-iridescent / shifting / glowing mineral vocabulary (fantasy-mineral drift)
@@ -821,7 +819,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — WIDE-VISTA OR STAND-AT-THE-RIM ━━━
 
-Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic landform fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Hyperreal photographic — gallery-print Southwest fine-art landscape.
+Wide-vista panoramic landscape OR stand-at-the-rim mid-wide framing. The iconic landform fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Clean, true-to-lifeSouthwest fine-art landscape.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places (describe morphologically). Describe positive content only — no negation language like "no humans" or "no architecture" (Flux tokenizer leaks those words).`;
   },
@@ -898,18 +896,18 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
 
-This is NEVER a documentary travel-snapshot. This is the LION KING OPENING SHOT / BBC Planet Earth season-finale showstopper / Disney Nature title-card / Out-of-Africa cinematic title sequence energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+This is a beautiful, striking real photograph of African wilderness — the magnificent version of a real place, the way the best wildlife-documentary cinematographers capture it. Specific composition energy to aim for:
 
-- **LOW-ANGLE HERO STANCE** preferred — camera looking UP at the baobab / acacia / dune crest from grass-level, dramatic silhouette against burning sky
-- **DRAMATIC SILHOUETTES** of trees / wildlife / dune crests against blood-red sunset, electric blue twilight, or star-crowded indigo
-- **DRONE-LEVEL EPIC VISTA** for delta / canopy / salt pan — sweeping aerial dramatic depth
-- **GOD-RAY SHAFTS** piercing dust haze, crepuscular rays, lightning-lit thunderhead, storm-break spotlight
-- **MEGA-WEATHER**: anvil thunderhead cathedral, mammatus cloud underside at sunset, virga rain-curtain stretched across plain, haboob dust-wall, monsoon rainbow
-- **EXTREME COLOR**: blood-red / molten-copper / electric-violet / acid-amber / cobalt-and-coral sunset gradient, never washed out
+- **LOW-ANGLE HERO STANCE** preferred — camera looking UP at the baobab / acacia / dune crest from grass-level, a clean silhouette against a glowing sky
+- **NATURAL SILHOUETTES** of trees / wildlife / dune crests against a warm sunset, blue twilight, or star-crowded indigo
+- **AERIAL VISTA** for delta / canopy / salt pan — sweeping natural depth
+- **GOD-RAY SHAFTS** through dust haze, crepuscular rays, a lightning-lit thunderhead, storm-break light
+- **REAL WEATHER**: anvil thunderhead, mammatus cloud underside at sunset, virga rain-curtain across the plain, haboob dust-wall, monsoon rainbow
+- **RICH NATURAL COLOR**: warm amber / copper / rose / cobalt-and-coral sunset gradient — real, saturated, never washed out, never neon
 - The iconic African subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25% (or canopy ceiling for rainforest). Multi-tier depth mandatory.
-- Photographic, hyperreal, EPIC African fine-art landscape — peak-drama moment, the 90-second magic-window version. Catch the SECOND when the elephant crosses the burning horizon, when the lion crests the kopje at first light, when the haboob crowns the Sahara, when lightning forks behind the Avenue of the Baobabs.
+- Photographic, natural, EPIC African nature photography — the best-light moment, the 90-second magic-window version. Catch the SECOND when the elephant crosses the glowing horizon, when the lion crests the kopje at first light, when the haboob crowns the Sahara, when lightning forks behind the Avenue of the Baobabs.
 
-If the rolled light condition is generic "midday" or "overcast", AMPLIFY it into drama: midday becomes "harsh-shadow blade light through dust haze", overcast becomes "pre-storm electric green-yellow oppressive light". NEVER render flat documentary travel-photo light.
+If the rolled light condition is generic "midday" or "overcast", find its real beauty: midday becomes clear hard sidelight through dust haze, overcast becomes soft pre-storm light. Aim for beautiful natural light, not flat snapshot light.
 
 ━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
 
@@ -983,17 +981,17 @@ Multi-tier depth (foreground anchor + midground hero biome + atmospheric distant
 
 ━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
 
-This is NEVER a documentary travel-snapshot. This is the LAST SAMURAI cinematic title-card / Kurosawa landscape / BBC Planet Earth Asian episode opener / Mononoke forest energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+This is a beautiful real nature photograph, not a flat travel-snapshot. This is the LAST SAMURAI cinematic title-card / Kurosawa landscape / BBC Planet Earth Asian episode opener / Mononoke forest energy. The frame must be a beautiful, striking real photograph. Specific composition energy to inject:
 
 - **LOW-ANGLE HERO STANCE** preferred — camera looking UP at the granite spire / karst pillar / cedar trunk from below, dramatic silhouette against mist or burning sky
 - **SEA-OF-CLOUDS** — Huangshan / Cordillera Asia signature: clouds breaking around granite peaks, peaks emerging like islands from a white sea
 - **DRONE-LEVEL AERIAL** for karst (Halong / Yangshuo / Zhangjiajie), dune sea (Gobi), turquoise-lake (Jiuzhaigou)
 - **DRAMATIC SILHOUETTES** of cedar / bamboo / pillar / peak against mist or sunset
 - **MIST-INVERSION** epic: Yakushima cedar forest with rolling mist, Huangshan peaks in cloud sea
-- **MEGA-WEATHER**: monsoon-lightning over karst, snow-squall over Hokkaido, sulfur plume over Bromo
-- **EXTREME COLOR**: blood-red sakura sunset / electric jade Jiuzhaigou lake / sulfur-yellow Ijen / orange Gobi against cobalt
+- **REAL WEATHER**: monsoon-lightning over karst, snow-squall over Hokkaido, sulfur plume over Bromo
+- **RICH NATURAL COLOR** (real, saturated, never neon): blood-red sakura sunset / electric jade Jiuzhaigou lake / sulfur-yellow Ijen / orange Gobi against cobalt
 - The iconic Asian subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25% (or canopy ceiling for forest). Multi-tier depth mandatory.
-- Photographic, hyperreal, EPIC pan-Asian fine-art landscape — peak-drama moment.
+- Photographic, natural, EPIC pan-Asian nature photography — the best-light moment.
 
 ━━━ SCENE-WIDE PALETTE ━━━
 ${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'Pan-Asian raw nature palette — biome-dependent (cool grey + pearl + granite black for Huangshan, jade + emerald for karst, pink + pearl for sakura, snow + birch + cool-blue for Hokkaido, sulfur + cobalt for volcano)'}
@@ -1085,7 +1083,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE ━━━
 
-The iconic South American subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Photographic — hyperreal fine-art landscape, never stylized.
+The iconic South American subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Clean, true-to-lifefine-art landscape, never stylized.
 
 ━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
 
@@ -1158,7 +1156,7 @@ Multi-tier depth (foreground anchor + midground hero biome + atmospheric distant
 
 ━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
 
-This is NEVER a documentary travel-snapshot. This is BBC Planet Earth Australia season-finale showstopper / Russell-Crowe-Australia-film cinematic title-card / Tracks-by-Robyn-Davidson energy. The frame must be JAW-DROPPING. Specific composition energy to inject:
+This is a beautiful real nature photograph, not a flat travel-snapshot. This is BBC Planet Earth Australia season-finale showstopper / Russell-Crowe-Australia-film cinematic title-card / Tracks-by-Robyn-Davidson energy. The frame must be a beautiful, striking real photograph. Specific composition energy to inject:
 
 - **LOW-ANGLE HERO STANCE** preferred — camera looking UP at Uluru / Kata Tjuta / Bungle Bungle dome / Pinnacles spire from red-dust ground level
 - **DRONE-LEVEL AERIAL** for Bungle Bungle striped domes, Pinnacles desert, Lake Eyre salt flat, Daintree canopy
@@ -1166,8 +1164,8 @@ This is NEVER a documentary travel-snapshot. This is BBC Planet Earth Australia 
 - **DRAMATIC ICONIC TREES** — solitary ghost gum on red-dust plain at sunset, twisted river-gum on dry creek-bed
 - **MILKY-WAY OVER ULURU** — outback dark-sky night with star-crowded indigo above the monolith
 - **EPIC GORGE INTERIOR** — Karijini deep red-iron gorge with emerald waterhole at base, light shafts piercing from above
-- **MEGA-WEATHER**: dust storm wall over Lake Eyre, monsoon lightning over Kakadu, fog inversion over Wilpena Pound
-- **EXTREME COLOR**: blood-red iron-oxide soil against electric cobalt sky / jade Karijini pool against rust walls / pink salt flat against cobalt
+- **REAL WEATHER**: dust storm wall over Lake Eyre, monsoon lightning over Kakadu, fog inversion over Wilpena Pound
+- **RICH NATURAL COLOR** (real, saturated, never neon): blood-red iron-oxide soil against electric cobalt sky / jade Karijini pool against rust walls / pink salt flat against cobalt
 - The iconic Australian subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory.
 
 ━━━ SCENE-WIDE PALETTE ━━━
@@ -1260,7 +1258,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE ━━━
 
-The iconic Icelandic subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Photographic — hyperreal Iceland fine-art landscape, never stylized.
+The iconic Icelandic subject fills 50-65% of the frame. Foreground anchor 15-20%. Sky 15-25%. Multi-tier depth mandatory. Clean, true-to-lifeIceland fine-art landscape, never stylized.
 
 ━━━ MANDATORY OUTPUT ORDER (CRITICAL — Flux attends most to early tokens) ━━━
 
@@ -1333,7 +1331,7 @@ Multi-tier depth (foreground anchor + midground hero geology + atmospheric dista
 
 ━━━ COMPOSITION DIRECTIVE — EPIC, NEVER DOCUMENTARY ━━━
 
-This is NEVER documentary travel-snapshot. This is BBC Planet Earth Europe season opener / Lord of the Rings Scottish Highlands cinematic / Skyfall Glen Coe energy. JAW-DROPPING. Specific composition energy:
+This is a beautiful real nature photograph, not a flat travel-snapshot. This is BBC Planet Earth Europe season opener / Lord of the Rings Scottish Highlands cinematic / Skyfall Glen Coe energy. A beautiful, striking real photograph. Specific composition energy:
 
 - **LOW-ANGLE HERO STANCE** — camera looking UP at Dolomites peak / Matterhorn pyramid / Old Man of Storr pinnacle / Faroe sea-cliff from below
 - **DRONE-LEVEL AERIAL** for Lofoten fjord, Faroe Sørvágsvatn floating-lake, Lake Bled island, Loch Lomond aerial
@@ -1341,8 +1339,8 @@ This is NEVER documentary travel-snapshot. This is BBC Planet Earth Europe seaso
 - **MIST-INVERSION SEA-OF-CLOUDS** epic: Scottish Highlands dawn cloud-sea, Dolomites alpenglow above cloud floor
 - **HEATHER MOOR SUNSET** — Scottish Highlands carpet of purple heather in raking sidelight
 - **DRAMATIC SILHOUETTES** — Old Man of Storr pinnacles / Cliffs of Moher edge / Trolltunga rock-tongue
-- **MEGA-WEATHER**: snow squall over Cairngorms, monsoon-like rain curtain Quiraing, lenticular over Matterhorn, Atlantic storm over Cliffs of Moher
-- **EXTREME COLOR**: blood-red Dolomites alpenglow / electric heather sunset / cobalt fjord at blue-hour / molten Faroe basalt-and-sea
+- **REAL WEATHER**: snow squall over Cairngorms, monsoon-like rain curtain Quiraing, lenticular over Matterhorn, Atlantic storm over Cliffs of Moher
+- **RICH NATURAL COLOR** (real, saturated, never neon): blood-red Dolomites alpenglow / electric heather sunset / cobalt fjord at blue-hour / molten Faroe basalt-and-sea
 - 50-65% subject, 15-20% foreground, 15-25% sky. Multi-tier depth mandatory.
 
 ━━━ SCENE-WIDE PALETTE ━━━
@@ -1385,7 +1383,7 @@ Output ONLY the raw 60-90 word scene description. Comma-separated phrases. The F
       ? `\n\n━━━ RARE PHENOMENON (one signature optical event woven naturally) ━━━\n${phenomenon}\n\nIf this phenomenon physically contradicts the rolled lighting or feels supernatural, DROP IT. Real-Earth ONLY — no bioluminescent / aurora / nacreous / sun-dogs / fire-rainbow / iridescent.`
       : '';
 
-    return `You are a fine-art nature photographer writing ONE HIDDEN CORNER scene for EarthBot. The OFF-THE-BEATEN-PATH discovered pocket of nature — the secret magical place you stumble into where the whole little scene is visible to you. Real-Earth ONLY. STAND-IN-THE-POCKET mid-wide framing — NOT macro close-up of a single element, NOT wide panoramic vista. The viewer is standing IN the secret pocket and can see the whole 10-15 foot intimate scene around them. CRITICAL: intimate scale does NOT mean minimal OR macro — every render must show the WHOLE little pocket of nature PACKED LUSH with multi-tier detail. Gallery-print intimate-nature photography (NOT macro close-up). Output wraps with style prefix + suffix.
+    return `You are a fine-art nature photographer writing ONE HIDDEN CORNER scene for EarthBot. The OFF-THE-BEATEN-PATH discovered pocket of nature — the secret magical place you stumble into where the whole little scene is visible to you. Real-Earth ONLY. STAND-IN-THE-POCKET mid-wide framing — NOT macro close-up of a single element, NOT wide panoramic vista. The viewer is standing IN the secret pocket and can see the whole 10-15 foot intimate scene around them. CRITICAL: intimate scale does NOT mean minimal OR macro — every render must show the WHOLE little pocket of nature PACKED LUSH with multi-tier detail. Clean, professional intimate-nature photography (NOT macro close-up). Output wraps with style prefix + suffix.
 
 ━━━ NON-NEGOTIABLE — OFF-THE-BEATEN-PATH SECRET POCKET (NOT MACRO) ━━━
 
@@ -1395,7 +1393,7 @@ This is the secluded clearing / glade / grotto / creek-pocket you'd find on a lo
 
 ⚠️ NOT WIDE VISTA — do NOT render this as a distant landscape view. Stay INSIDE the pocket — the trees / walls / canopy frame the scene.
 
-━━━ LUSH-DETAIL MANDATE — TURN IT TO 11 ━━━
+━━━ LUSH-DETAIL MANDATE — PACKED FULL ━━━
 
 ⚠️ Intimate scale ≠ minimalistic. The frame must be PACKED with rich texture and layered detail at every depth tier. Multi-tier composition mandatory: FOREGROUND close-detail anchor + MIDGROUND subject + BACKGROUND soft atmospheric depth. Every surface ALIVE with texture — moss carpeting every rock, dew on every leaf, lichen patches on every trunk, fern fiddleheads unfurling, mushroom clusters at the base, wet stones, water droplets clinging. NO sparse / empty / minimal / negative-space compositions.
 
@@ -1414,7 +1412,7 @@ NEVER a person, NEVER a hiker, NEVER cabins, NEVER fences, NEVER cars, NEVER roa
 - NO sparse / empty / minimal / negative-space compositions (LUSH packed detail mandatory)
 - NO named places
 - NO single beam / single shaft of light as ONLY light source (use "shafts plural fanning" if multiple)
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 - NO "fire" as a noun (renders literal flames — use "blazing color" as adjective only)
 
 ━━━ THE HIDDEN-CORNER SUBJECT (the off-the-beaten-path secret pocket — fills the SCENE, not the frame edge to edge) ━━━
@@ -1469,7 +1467,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — STAND-IN-THE-POCKET MID-WIDE ━━━
 
-Mid-wide framing showing the WHOLE 10-15 foot pocket of nature. The viewer is standing inside the secret pocket. NOT macro close-up, NOT wide panoramic vista. Multi-tier depth (NEAR EDGE ground details + MIDGROUND subject + BACKGROUND surrounding trees / walls / canopy). EVERY surface alive with texture. Dappled or shaft-filtered light catching dew + wet stones + leaf edges throughout the scene. Hyperreal photographic — gallery-print intimate-nature fine-art photography, National Geographic intimate-nature feature quality.
+Mid-wide framing showing the WHOLE 10-15 foot pocket of nature. The viewer is standing inside the secret pocket. NOT macro close-up, NOT wide panoramic vista. Multi-tier depth (NEAR EDGE ground details + MIDGROUND subject + BACKGROUND surrounding trees / walls / canopy). EVERY surface alive with texture. Dappled or shaft-filtered light catching dew + wet stones + leaf edges throughout the scene. Clean, true-to-lifeintimate-nature fine-art photography, National Geographic intimate-nature feature quality.
 
 ⚠️ DO NOT render as macro close-up of one element. The whole pocket must be visible.
 ⚠️ DO NOT render as wide panoramic landscape. Stay inside the pocket.
@@ -1513,7 +1511,7 @@ NEVER a person, NEVER a sunbather, NEVER a footprint trail, NEVER an empty beach
 - NO dramatic surf / crashing waves / storm waves
 - NO named places
 - NO single beam / single shaft (laser trigger)
-- NO stylized / 3D-render / cartoony — HYPERREAL photographic
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
 
 ━━━ THE INTIMATE BEACH SETTING (where this cozy moment happens) ━━━
 ${subject_setting}
@@ -1553,7 +1551,7 @@ ${vibeDirective.slice(0, 250)}
 
 ━━━ COMPOSITION DIRECTIVE — INTIMATE COZY BEACH MOMENT ━━━
 
-Mid to tight intimate framing. The intimate beach moment fills the entire frame — foreground details (driftwood / shells / palm shadows / petals) at close-camera, soft tropical water at midground, palm silhouettes / soft sky in upper frame. NEVER wide-vista panorama. Hyperreal photographic — gallery-print intimate-beach photography. Always golden-hour or soft warm light.
+Mid to tight intimate framing. The intimate beach moment fills the entire frame — foreground details (driftwood / shells / palm shadows / petals) at close-camera, soft tropical water at midground, palm silhouettes / soft sky in upper frame. NEVER wide-vista panorama. Clean, true-to-lifeintimate-beach photography. Always golden-hour or soft warm light.
 
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },

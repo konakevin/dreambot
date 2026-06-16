@@ -325,53 +325,19 @@ module.exports = {
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
 
-  // Chaos layer — both source bots had chaos enabled. Earth had no
-  // subject-chaos (allowSubjectChaosPaths: []) because there's no human
-  // subject to deform. Beach allowed subject-chaos on all paths. For zero
-  // drift, only Beach paths get subject-chaos here.
-  // 2026-05-20: epic-vista skipPaths-added — perception-distortion
-  // (geometry / reflection / scale / framing) actively fights the
-  // real-Earth identity. As each Earth path migrates to axis-system,
-  // add it here.
+  // Chaos layer — DISABLED for EarthBot (2026-06-15).
+  // The chaos layer injects "dream-logic perception distortion" (impossible
+  // geometry / warped reflection / wrong scale / surreal framing) + subject-
+  // chaos deformation. On a REAL-EARTH bot every one of those fights the
+  // identity — a 2026-06-15 hearted iceland-raw render came back as a glowing
+  // faceted fantasy crystal precisely because chaos rolled "architectural
+  // geometry subtly impossible" onto a real iceberg. The old per-path skipPaths
+  // list was incomplete (the regional paths — iceland-raw / andes-patagonia /
+  // asia-landscape / australian-outback / european-wilderness / african-
+  // landscape — were never added, so they still got chaos). Every EarthBot path
+  // is real nature, so the correct end-state is OFF, not a whack-a-mole list.
   chaos: {
-    enabled: true,
-    skipPaths: [
-      'epic-vista',
-      'national-parks',
-      'deep-forest',
-      'lush-jungle',
-      'coastal-vista',
-      'tropical-paradise',
-      'epic-sunset',
-      'hawaii-flowers',
-      'reef-paradise',
-      'geological-wonder',
-      'sacred-light',
-      'beach-night',
-      'waves',
-      'cozy-beach',
-      'seasonal-shift',
-      'hidden-corner',
-      'desert-southwest',
-    ],
-    allowSubjectChaosPaths: [
-      ...BEACH_PATHS.filter(
-        (p) =>
-          ![
-            'coastal-vista',
-            'tropical-paradise',
-            'epic-sunset',
-            'hawaii-flowers',
-            'reef-paradise',
-            'waves',
-            'cozy-beach',
-            'seasonal-shift',
-            'hidden-corner',
-            'desert-southwest',
-            'beach-night',
-          ].includes(p)
-      ),
-    ],
+    enabled: false,
   },
 
   // Two-pass polish — both bots use identical config.

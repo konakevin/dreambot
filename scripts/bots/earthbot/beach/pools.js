@@ -5,8 +5,12 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// 2026-06-15: de-Hollywood'd to match earth/pools.js — the bot is locked to
+// `cinematic`, so this rides every beach render. Dropped the "teal-and-orange
+// cinematic" VFX grade + the sci-fi-coded keys (magical / electric-blue-neon /
+// iridescent / impossible-color hallucinatory) for true-to-life tropical color.
 const VIBE_COLOR = {
-  cinematic: 'teal-and-orange beach cinematic, sunset saturation',
+  cinematic: 'natural tropical color, true-to-life sunlight, soft sunset warmth',
   cozy: 'warm amber sun, honey-tropical, golden-sand glow',
   epic: 'dramatic beach god-rays, heroic coast-scale, saturated horizon',
   nostalgic: 'faded polaroid-beach, warm copper sunset, dusty-pastel',
@@ -14,11 +18,11 @@ const VIBE_COLOR = {
   whimsical: 'buoyant beach-pastels, warm playful tropical',
   ethereal: 'pearl-white morning-mist, opalescent lagoon',
   ancient: 'weathered driftwood + sun-bleached, faded coastal',
-  enchanted: 'soft magical beach glow, dreamy tropical sparkle',
+  enchanted: 'soft warm beach glow, gentle tropical light',
   coquette: 'rose-pink sunset beach, cream sand, soft blush',
-  voltage: 'electric-blue crystal water, neon tropical accents',
-  shimmer: 'shimmering silver-gold water, iridescent sand highlights',
-  surreal: 'impossible beach-color pairings, dreamy tropical hallucinatory',
+  voltage: 'dramatic storm light over the water, charged grey-blue sky',
+  shimmer: 'warm silver-gold water, soft natural sand highlights',
+  surreal: 'rich natural tropical color, soft dreamy light',
 };
 
 module.exports = {

@@ -5,20 +5,27 @@ function load(name) {
   return JSON.parse(fs.readFileSync(path.join(__dirname, 'seeds', `${name}.json`), 'utf8'));
 }
 
+// 2026-06-15: de-Hollywood'd. The bot is locked to `cinematic` (TRAVEL_VIBES),
+// so this colorPalette rides EVERY render — the old "teal-and-orange cinematic
+// grade" was the forced VFX color-signature that made real nature read as a
+// processed/CGI movie still (Kevin: "nothing hyperreal"). Now a true-to-life
+// natural grade. The sci-fi-coded keys (magical inner-glow / electric-blue /
+// iridescent / impossible-color) are neutralized too in case they're ever
+// re-enabled — they directly contradict EarthBot's real-Earth identity.
 const VIBE_COLOR = {
-  cinematic: 'teal-and-orange cinematic grade, deep atmospheric shadows',
+  cinematic: 'natural true-to-life color, soft warm-to-cool depth, gentle atmospheric distance',
   cozy: 'warm amber golden-hour glow, honey light through canopy',
   dark: 'deep moody storm-light, rich shadows with single bright break',
   epic: 'dramatic god-rays through clouds, heroic golden scale',
   nostalgic: 'faded warm copper tones, golden-age film palette',
   peaceful: 'soft pastel dawn wash, gentle diffuse luminosity',
-  ethereal: 'soft golden-hour glow, luminous pastel sky, dreamlike clarity',
+  ethereal: 'soft golden-hour glow, luminous pastel sky, gentle clarity',
   ancient: 'weathered bronze patina, deep-umber earth tones',
-  enchanted: 'soft magical inner-glow, dreamy luminous atmosphere',
-  voltage: 'electric-blue lightning energy, storm-charged palette',
+  enchanted: 'soft warm backlight, gentle hazy atmosphere',
+  voltage: 'dramatic storm light, charged grey-blue sky',
   nightshade: 'deep violet moonlit landscape, silver-blue shadows',
-  shimmer: 'shimmering gold-amber light, iridescent surface reflections',
-  surreal: 'impossible color pairings, dreamy chromatic shifts',
+  shimmer: 'warm gold-amber light, soft natural surface reflections',
+  surreal: 'rich natural color, soft dreamy light',
 };
 
 module.exports = {

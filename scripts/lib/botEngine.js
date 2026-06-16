@@ -47,6 +47,46 @@ const { buildRecipe } = require('./recipeBuilder');
 const { SONNET, HAIKU } = require('./models');
 
 // ─────────────────────────────────────────────────────────────
+// SCAFFOLD-TOKEN SANITIZER (all bots)
+// ─────────────────────────────────────────────────────────────
+// Sonnet/Haiku pattern-complete a heavily-scaffolded brief by emitting their
+// OWN structured delimiter tokens around the scene — `[[BOT-RAW::SCENE_OPEN]]`,
+// `*EarthBot:end*`, `Prefix: **Bot | Tagline**`, `*meta, meta*` openers. These
+// are never legitimate Flux content; CLIP reads `::` / `[[ ]]` / `**` / caps-
+// hyphen runs as tech-coded markup and drifts the render sci-fi (the documented
+// "LLM brief echo-leak", EarthBot 2026-06-04 + 2026-06-15). The fix that lasts
+// is de-scaffolding the brief, but this is the belt-and-suspenders net: strip
+// the markup wrappers from the assembled Flux prompt regardless of what the LLM
+// emitted. Conservative — only removes patterns that have no place in a prose
+// scene description. Logs when it fires so leaks stay observable.
+function stripScaffoldTokens(prompt) {
+  if (!prompt) return prompt;
+  const before = prompt;
+  let out = prompt
+    // [[ANYTHING]] double-bracket scaffolds (incl. ::SCENE_OPEN / ::SCENE_CLOSE)
+    .replace(/\[\[[^\]]*\]\]/g, '')
+    // **markdown bold** wrappers (e.g. "Prefix: **EarthBot | Real Earth...**")
+    .replace(/\*\*[^*\n]*\*\*/g, '')
+    // *single-asterisk meta spans* (e.g. *EarthBot:end*, *photographic ... grade*)
+    .replace(/\*[^*\n]+\*/g, '')
+    // leading "Prefix:" / "Suffix:" / "Scene:" label tokens
+    .replace(/(^|[\n,;]\s*)(?:Prefix|Suffix|Scene|Style)\s*:\s*/gi, '$1')
+    // stray ::TOKEN runs and bare SCENE_OPEN/CLOSE leftovers
+    .replace(/::\s*[A-Z_]+/g, '')
+    .replace(/\b(?:SCENE_OPEN|SCENE_CLOSE)\b/g, '')
+    // clean up the punctuation/space debris the strips leave behind
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.])/g, '$1')
+    .replace(/(^|[\s])[,—–-]+\s*/g, (m, p1, off) => (off === 0 ? '' : p1))
+    .replace(/,\s*,/g, ',')
+    .trim();
+  if (out !== before) {
+    console.log(`  🧹 stripped scaffold tokens from Flux prompt`);
+  }
+  return out;
+}
+
+// ─────────────────────────────────────────────────────────────
 // ENV + CLIENTS
 // ─────────────────────────────────────────────────────────────
 
@@ -1337,9 +1377,9 @@ async function runBot(opts) {
           : mediumFluxFragment
             ? `${mediumFluxFragment}, `
             : '';
-      finalPrompt = `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`
-        .replace(/\s+,/g, ',')
-        .trim();
+      finalPrompt = stripScaffoldTokens(
+        `${pathPrefix}${prefix}${mediumStyle}${middle}${suffix}`.replace(/\s+,/g, ',').trim()
+      );
 
       // Resolve the render model BEFORE building the recipe — buildRecipe
       // freezes recipe.model into the upload row, and DLT replay reads it
@@ -1453,9 +1493,11 @@ async function runBot(opts) {
         const newSuffix = rawSuffix ? `, ${rawSuffix}` : '';
         const newMediumStyle =
           bot.mediumStyles && bot.mediumStyles[medium] ? `${bot.mediumStyles[medium]}, ` : '';
-        finalPrompt = `${effPathPrefix}${newPrefix}${newMediumStyle}${middle}${newSuffix}`
-          .replace(/\s+,/g, ',')
-          .trim();
+        finalPrompt = stripScaffoldTokens(
+          `${effPathPrefix}${newPrefix}${newMediumStyle}${middle}${newSuffix}`
+            .replace(/\s+,/g, ',')
+            .trim()
+        );
       }
 
       // Build the DLT recipe — frozen LOOK anchors captured at posting time.
