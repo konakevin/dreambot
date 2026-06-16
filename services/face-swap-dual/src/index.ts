@@ -102,6 +102,18 @@ Deno.serve({ port: PORT }, async (req) => {
   const t0 = Date.now();
   console.log(`[face-swap-dual] Start userId=${userId.slice(0, 8)} target=${targetUrl.slice(-30)}`);
 
+  // Re-base the swap deadline at request RECEIPT. The caller (generate-dream)
+  // passes an ABSOLUTE wall-clock deadline computed BEFORE it dispatched to us.
+  // If this machine cold-started (~9s boot at low traffic / on auto-scale-up),
+  // that boot elapsed before this handler ran and already ate into the absolute
+  // window — squeezing the swap budget until Replicate times out (the
+  // 2026-06-15 dual-swap failures). Flooring at now + MIN_SWAP_BUDGET_MS
+  // guarantees a cold-booted machine still gets a full swap budget, so a cold
+  // start costs LATENCY, not a failed dream — at ANY scale-up depth, not just
+  // machine #1. Warm requests keep the caller's larger (later) deadline.
+  const MIN_SWAP_BUDGET_MS = 60_000;
+  const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
+
   try {
     const swappedUrl = await dualFaceSwap(
       leftSourceUrl,
@@ -110,7 +122,7 @@ Deno.serve({ port: PORT }, async (req) => {
       REPLICATE_TOKEN,
       supabase,
       userId,
-      deadlineMs,
+      effectiveDeadlineMs,
       skipPrimary ?? false
     );
     const elapsed = Date.now() - t0;
