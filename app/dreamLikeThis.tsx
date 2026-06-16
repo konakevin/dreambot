@@ -12,13 +12,11 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   Keyboard,
   InteractionManager,
   ActivityIndicator,
 } from 'react-native';
+import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -284,12 +282,9 @@ export default function DreamLikeThisScreen() {
 
   return (
     <ScreenLayout header="back" title="Dream Like This" rightAction={sparklePill}>
-      <KeyboardAvoidingView
-        style={s.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={0}
-      >
-        <ScrollView
+      <View style={s.flex}>
+        <KeyboardAwareScrollView
+          bottomOffset={verticalScale(24)}
           style={s.flex}
           contentContainerStyle={[
             s.scrollContent,
@@ -381,22 +376,26 @@ export default function DreamLikeThisScreen() {
               </Text>
             </View>
           )}
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
-        {/* Footer */}
-        <View
-          style={[
-            s.footer,
-            !hasPhoto &&
-              kbOpen && { paddingBottom: verticalScale(6), paddingVertical: verticalScale(4) },
-          ]}
-        >
-          <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
-            <Ionicons name="sparkles" size={18} color="#fff" />
-            <Text style={s.dreamBtnText}>Dream · {sparkleCostFrom(imageModels, refModelUsed)}</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+        {/* Footer — pinned above the keyboard so the CTA rides up on every device */}
+        <KeyboardStickyView>
+          <View
+            style={[
+              s.footer,
+              !hasPhoto &&
+                kbOpen && { paddingBottom: verticalScale(6), paddingVertical: verticalScale(4) },
+            ]}
+          >
+            <TouchableOpacity style={s.dreamBtn} onPress={handleDream} activeOpacity={0.8}>
+              <Ionicons name="sparkles" size={18} color="#fff" />
+              <Text style={s.dreamBtnText}>
+                Dream · {sparkleCostFrom(imageModels, refModelUsed)}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardStickyView>
+      </View>
     </ScreenLayout>
   );
 }
@@ -567,6 +566,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: verticalScale(12),
     paddingBottom: verticalScale(36),
+    backgroundColor: colors.background,
   },
   dreamBtn: {
     flexDirection: 'row',

@@ -13,17 +13,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Keyboard,
-  InteractionManager,
-  Platform,
-  Modal,
-  Linking,
-} from 'react-native';
+import { View, TouchableOpacity, Keyboard, Platform, Modal, Linking } from 'react-native';
+import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Text, TextInput } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -76,7 +68,6 @@ export default function CreateScreen() {
   const { data: dbMediums = [] } = useDreamMediums();
   const { data: dbVibes = [] } = useDreamVibes();
 
-  const [kbOpen, setKbOpen] = useState(false);
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
@@ -96,6 +87,10 @@ export default function CreateScreen() {
   const imageModels = useImageModels();
   const engineConfig = useEngineConfig();
   const promptRef = useRef<TextInput>(null);
+  // Height of the floating (position:absolute) bottom tab bar. The sticky Dream
+  // footer rests at the screen's bottom edge, so without this it sits BEHIND the
+  // tab bar when the keyboard is closed — offset it up by exactly this much.
+  const tabBarHeight = useBottomTabBarHeight();
 
   // The chosen model is forced for BOTH routes: Direct sends the prompt verbatim
   // to it; DreamBot runs the full engine (mediums/vibes/face-swap) and renders
@@ -266,20 +261,6 @@ export default function CreateScreen() {
     openMediumsIntroInfo();
   }, [openMediumsIntroInfo]);
 
-  // Keyboard tracking — delay state update until after keyboard animation
-  useEffect(() => {
-    const s1 = Keyboard.addListener('keyboardDidShow', () => {
-      InteractionManager.runAfterInteractions(() => setKbOpen(true));
-    });
-    const s2 = Keyboard.addListener('keyboardDidHide', () => {
-      InteractionManager.runAfterInteractions(() => setKbOpen(false));
-    });
-    return () => {
-      s1.remove();
-      s2.remove();
-    };
-  }, []);
-
   // Derived state
   const hasPhoto = !!config.photoUri;
   // A photo dream ALWAYS runs through the DreamBot engine (the submit path in
@@ -300,14 +281,6 @@ export default function CreateScreen() {
     : (mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium);
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
-  const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'AI model';
-
-  // Photo + keyboard-open: collapse the model + medium/vibe controls into a
-  // one-line summary so the Dream button is in view (one tap away) while
-  // typing the prompt. Tapping the summary's expand arrow dismisses the
-  // keyboard, which clears kbOpen and restores the full form.
-  const collapsed = hasPhoto && kbOpen;
-
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -434,11 +407,7 @@ export default function CreateScreen() {
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }} edges={['top']}>
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={0}
-      >
+      <View className="flex-1">
         {/* Header — centered gradient title (absolutely centered so the
             right-side actions don't push it off-center), matching the shared
             nav-title treatment used across Settings/Inbox/Edit Profile. */}
@@ -486,13 +455,16 @@ export default function CreateScreen() {
           </View>
         </View>
 
-        {/* Scrollable content */}
-        <ScrollView
+        {/* Scrollable content — KeyboardAwareScrollView keeps the focused prompt
+            (and the Dream CTA below it) above the keyboard on every device,
+            measuring the real keyboard frame natively instead of guessing. */}
+        <KeyboardAwareScrollView
           className="flex-1 px-5"
+          bottomOffset={verticalScale(24)}
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: verticalScale(96) }}
+          contentContainerStyle={{ paddingBottom: tabBarHeight + verticalScale(16) }}
         >
           {/* Photo attachment card */}
           {/* Photo attachment card */}
@@ -636,10 +608,8 @@ export default function CreateScreen() {
                   color: colors.textPrimary,
                   // Fixed height — long prompts scroll internally rather than
                   // stretching the box. iOS multiline TextInputs scroll
-                  // automatically when height is fixed. Shrink in the
-                  // photo-uploaded + keyboard-open state so Medium and Vibe
-                  // dropdowns stay visible below.
-                  height: hasPhoto && kbOpen ? 80 : 120,
+                  // automatically when height is fixed.
+                  height: 120,
                   textAlignVertical: 'top',
                 }}
                 placeholder={placeholder}
@@ -660,7 +630,7 @@ export default function CreateScreen() {
               onto a scene the chosen model renders — model-agnostic, like the
               cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
               transform of the photo itself and needs an edit-capable model. */}
-          {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
+          {(!hasPhoto || config.photoStyle === 'new_scene') && (
             <View className="mb-4">
               <ModelPicker
                 onChange={setSelectedModelId}
@@ -668,42 +638,6 @@ export default function CreateScreen() {
                 dreamBotMode={!config.useExactPrompt}
               />
             </View>
-          )}
-
-          {/* Collapsed summary — replaces the model + medium/vibe controls while
-              typing on a photo dream so the Dream CTA stays one tap away. The
-              expand arrow dismisses the keyboard, which restores the full form. */}
-          {collapsed && (
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.selectionAsync();
-                Keyboard.dismiss();
-              }}
-              activeOpacity={0.7}
-              className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <View className="flex-1 mr-2">
-                <Text
-                  className="text-sm font-semibold"
-                  style={{ color: colors.textPrimary }}
-                  numberOfLines={1}
-                >
-                  {modelLabel}
-                </Text>
-                <Text className="text-xs" style={{ color: colors.textSecondary }} numberOfLines={1}>
-                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Medium: </Text>
-                  {mediumLabel} ·{' '}
-                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Vibe: </Text>
-                  {vibeLabel}
-                </Text>
-              </View>
-              <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
           )}
 
           {/* Engine selector — two named engines (no photo attached):
@@ -800,7 +734,7 @@ export default function CreateScreen() {
               AND whenever a photo is attached (photo dreams always use the
               engine). Vibe is hidden for Restyle — that path is a Kontext img2img
               edit driven by the medium only. Direct text dreams hide both. */}
-          {!effectiveExactPrompt && !collapsed && (
+          {!effectiveExactPrompt && (
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <Text
@@ -894,19 +828,30 @@ export default function CreateScreen() {
               )}
             </View>
           )}
+        </KeyboardAwareScrollView>
 
-          {/* Helper hint + Dream button — flow directly under the controls
-              (no longer bottom-pinned). This makes the resting layout match the
-              keyboard-open position, so the button no longer jumps up/down when
-              the keyboard appears, and the dead space below the Medium/Vibe row
-              is gone. */}
-          <View style={{ marginTop: verticalScale(28) }}>
+        {/* Dream CTA — pinned in a sticky footer that rides ABOVE the keyboard
+            on every device (KeyboardStickyView reads the real native keyboard
+            frame). The form scrolls beneath it, so the button is always one tap
+            away while typing — no collapsing of controls needed.
+            offset.closed lifts it above the floating tab bar when the keyboard
+            is down; when the keyboard is up it covers the tab bar, so the footer
+            sits right above the keyboard (opened offset 0). */}
+        <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
+          <View
+            className="px-5"
+            style={{
+              backgroundColor: colors.background,
+              paddingTop: verticalScale(10),
+              paddingBottom: verticalScale(22),
+            }}
+          >
             {/* Dream button — the primary gradient CTA. Cost lives in the model
                 selector now, so the CTA stays clean. */}
             <GradientButton label="Dream" variant="solid" onPress={handleDream} />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardStickyView>
+      </View>
 
       {/* Style picker bottom sheet */}
       <StylePickerSheet

@@ -19,6 +19,7 @@ import {
 } from '@expo-google-fonts/dm-sans';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
@@ -562,85 +563,87 @@ function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Analytics>
-        <QueryClientProvider client={queryClient}>
-          <AppErrorBoundary>
-            <AlertProvider>
-              <PremiumGateProvider>
-                <AuthInitializer />
-                <AnalyticsIdentity />
-                <ScreenTracker />
-                <PushRegistrar />
-                <PendingNotificationReplayer />
-                <RevenueCatInitializer />
-                <RealtimeSubscriber />
-                <DataPrefetcher />
-                <DreamResumer />
-                <Stack
-                  screenOptions={{
-                    headerShown: false,
-                    contentStyle: { backgroundColor: '#000000' },
-                  }}
-                >
-                  <Stack.Screen name="index" />
-                  <Stack.Screen name="(tabs)" />
-                  <Stack.Screen name="(auth)" />
-                  <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
-                  <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  {/* photo/[id] album: NATIVE back gesture off — it intermittently
+      <KeyboardProvider>
+        <Analytics>
+          <QueryClientProvider client={queryClient}>
+            <AppErrorBoundary>
+              <AlertProvider>
+                <PremiumGateProvider>
+                  <AuthInitializer />
+                  <AnalyticsIdentity />
+                  <ScreenTracker />
+                  <PushRegistrar />
+                  <PendingNotificationReplayer />
+                  <RevenueCatInitializer />
+                  <RealtimeSubscriber />
+                  <DataPrefetcher />
+                  <DreamResumer />
+                  <Stack
+                    screenOptions={{
+                      headerShown: false,
+                      contentStyle: { backgroundColor: '#000000' },
+                    }}
+                  >
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="(auth)" />
+                    <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
+                    <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                    {/* photo/[id] album: NATIVE back gesture off — it intermittently
                       swallowed the start of a vertical swipe (proven). The screen
                       uses useAxisLockSwipeBack instead, composed
                       simultaneousWithExternalGesture against the pager's Pan so it
                       can't block scroll activation. */}
-                  <Stack.Screen
-                    name="photo/[id]"
-                    options={{
-                      ...SCREEN_PRESETS.MODAL_SWIPEABLE,
-                      gestureEnabled: false,
-                      fullScreenGestureEnabled: false,
-                    }}
-                  />
-                  {/* user/[userId] is a full-screen posts GRID. The native
+                    <Stack.Screen
+                      name="photo/[id]"
+                      options={{
+                        ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                        gestureEnabled: false,
+                        fullScreenGestureEnabled: false,
+                      }}
+                    />
+                    {/* user/[userId] is a full-screen posts GRID. The native
                       full-screen back gesture fought the grid scroll (locked it +
                       booted back on up-swipes), so it's disabled here; the screen
                       uses useAxisLockSwipeBack instead, which locks to vertical the
                       moment you scroll. 2026-06-12. */}
-                  <Stack.Screen
-                    name="user/[userId]"
-                    options={{
-                      ...SCREEN_PRESETS.MODAL_SWIPEABLE,
-                      animation: 'simple_push',
-                      gestureEnabled: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="sharePost"
-                    options={{
-                      ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
-                      contentStyle: { backgroundColor: 'transparent' },
-                    }}
-                  />
-                  <Stack.Screen
-                    name="comments"
-                    options={{
-                      ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
-                      contentStyle: { backgroundColor: '#0F0F1A' },
-                    }}
-                  />
-                  <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                  <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                  <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                  <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                </Stack>
-                <StatusBar style="light" />
-                <ToastHost />
-                <UpscaleModalHost />
-              </PremiumGateProvider>
-            </AlertProvider>
-          </AppErrorBoundary>
-        </QueryClientProvider>
-      </Analytics>
+                    <Stack.Screen
+                      name="user/[userId]"
+                      options={{
+                        ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                        animation: 'simple_push',
+                        gestureEnabled: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="sharePost"
+                      options={{
+                        ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
+                        contentStyle: { backgroundColor: 'transparent' },
+                      }}
+                    />
+                    <Stack.Screen
+                      name="comments"
+                      options={{
+                        ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
+                        contentStyle: { backgroundColor: '#0F0F1A' },
+                      }}
+                    />
+                    <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                    <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                    <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                    <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                    <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                  </Stack>
+                  <StatusBar style="light" />
+                  <ToastHost />
+                  <UpscaleModalHost />
+                </PremiumGateProvider>
+              </AlertProvider>
+            </AppErrorBoundary>
+          </QueryClientProvider>
+        </Analytics>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   );
 }

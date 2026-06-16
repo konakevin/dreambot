@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-  KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';

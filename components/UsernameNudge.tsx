@@ -13,6 +13,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, Modal, Pressable, ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -137,7 +138,7 @@ export function UsernameNudge({ currentUsername, secondaryLabel, onSecondary, on
 
   return (
     <Modal visible transparent animationType="fade" onRequestClose={onSecondary}>
-      <View style={s.backdrop}>
+      <KeyboardAvoidingView style={s.backdrop} behavior="padding">
         <View style={s.card}>
           <Text style={s.title}>Choose your username</Text>
           <Text style={s.subtitle}>
@@ -180,7 +181,7 @@ export function UsernameNudge({ currentUsername, secondaryLabel, onSecondary, on
             <Text style={s.secondaryText}>{secondaryLabel}</Text>
           </Pressable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

@@ -4,15 +4,7 @@
  */
 
 import { useRef } from 'react';
-import {
-  View,
-  StyleSheet,
-  findNodeHandle,
-  UIManager,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import { View, StyleSheet, findNodeHandle, UIManager, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
@@ -132,11 +124,7 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
   const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
 
   return (
-    <KeyboardAvoidingView
-      style={shared.root}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={100}
-    >
+    <View style={shared.root}>
       {/* Sticky header — sits outside the ScrollView so the slider cards
           scroll underneath it (matches BotSelectorStep / Locations).
           Title kept to one line so all 4 sliders fit above the fold. */}
@@ -179,7 +167,7 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
       </ScrollView>
 
       {!isEditing && <OnboardingFooter onNext={onNext} onBack={onBack} />}
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

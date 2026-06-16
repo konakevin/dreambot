@@ -7,14 +7,8 @@
  */
 
 import { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Dimensions,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, router } from 'expo-router';

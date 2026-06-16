@@ -12,15 +12,8 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -217,111 +210,107 @@ export default function EditProfileScreen() {
         <View style={styles.topBarIcon} />
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.flex}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={verticalScale(24)}
       >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          <Text style={styles.sectionLabel}>PROFILE</Text>
+        <Text style={styles.sectionLabel}>PROFILE</Text>
 
-          {/* Avatar block */}
-          <View style={styles.avatarBlock}>
-            <TouchableOpacity onPress={handleChangePhoto} activeOpacity={0.8}>
-              {profile?.avatar_url ? (
-                <Image
-                  source={{ uri: profile.avatar_url }}
-                  style={styles.avatar}
-                  contentFit="cover"
-                />
-              ) : (
-                <View style={[styles.avatar, styles.avatarFallback]}>
-                  <Text style={styles.avatarInitial}>
-                    {(profile?.username || '?')[0]?.toUpperCase() ?? '?'}
-                  </Text>
-                </View>
-              )}
-              {avatarUploading && (
-                <View style={styles.avatarSpinner}>
-                  <ActivityIndicator color="#FFF" />
-                </View>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleChangePhoto} hitSlop={8}>
-              <Text style={styles.changePhotoText}>Change Photo</Text>
-            </TouchableOpacity>
-          </View>
+        {/* Avatar block */}
+        <View style={styles.avatarBlock}>
+          <TouchableOpacity onPress={handleChangePhoto} activeOpacity={0.8}>
+            {profile?.avatar_url ? (
+              <Image
+                source={{ uri: profile.avatar_url }}
+                style={styles.avatar}
+                contentFit="cover"
+              />
+            ) : (
+              <View style={[styles.avatar, styles.avatarFallback]}>
+                <Text style={styles.avatarInitial}>
+                  {(profile?.username || '?')[0]?.toUpperCase() ?? '?'}
+                </Text>
+              </View>
+            )}
+            {avatarUploading && (
+              <View style={styles.avatarSpinner}>
+                <ActivityIndicator color="#FFF" />
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleChangePhoto} hitSlop={8}>
+            <Text style={styles.changePhotoText}>Change Photo</Text>
+          </TouchableOpacity>
+        </View>
 
-          {/* Display Name */}
-          <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Display Name</Text>
-            <TextInput
-              style={styles.input}
-              value={displayName}
-              onChangeText={(t) => setDisplayName(t.slice(0, DISPLAY_NAME_MAX))}
-              onBlur={commitProfileText}
-              placeholder={profile?.username ?? 'your name'}
-              placeholderTextColor={colors.textSecondary}
-              maxLength={DISPLAY_NAME_MAX}
-              editable={!isLoading}
-            />
-            <Text style={styles.charCount}>
-              {displayName.length} / {DISPLAY_NAME_MAX}
-            </Text>
-          </View>
+        {/* Display Name */}
+        <View style={styles.field}>
+          <Text style={styles.fieldLabel}>Display Name</Text>
+          <TextInput
+            style={styles.input}
+            value={displayName}
+            onChangeText={(t) => setDisplayName(t.slice(0, DISPLAY_NAME_MAX))}
+            onBlur={commitProfileText}
+            placeholder={profile?.username ?? 'your name'}
+            placeholderTextColor={colors.textSecondary}
+            maxLength={DISPLAY_NAME_MAX}
+            editable={!isLoading}
+          />
+          <Text style={styles.charCount}>
+            {displayName.length} / {DISPLAY_NAME_MAX}
+          </Text>
+        </View>
 
-          {/* Bio */}
-          <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Bio</Text>
-            <TextInput
-              style={[styles.input, styles.inputMultiline]}
-              value={bio}
-              onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
-              onBlur={commitProfileText}
-              placeholder="Say something dreamy…"
-              placeholderTextColor={colors.textSecondary}
-              multiline
-              numberOfLines={3}
-              maxLength={BIO_MAX}
-              editable={!isLoading}
-            />
-            <Text style={styles.charCount}>
-              {bio.length} / {BIO_MAX}
-            </Text>
-          </View>
+        {/* Bio */}
+        <View style={styles.field}>
+          <Text style={styles.fieldLabel}>Bio</Text>
+          <TextInput
+            style={[styles.input, styles.inputMultiline]}
+            value={bio}
+            onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
+            onBlur={commitProfileText}
+            placeholder="Say something dreamy…"
+            placeholderTextColor={colors.textSecondary}
+            multiline
+            numberOfLines={3}
+            maxLength={BIO_MAX}
+            editable={!isLoading}
+          />
+          <Text style={styles.charCount}>
+            {bio.length} / {BIO_MAX}
+          </Text>
+        </View>
 
-          {/* All dream settings grouped under ONE header. Compact drill-ins
+        {/* All dream settings grouped under ONE header. Compact drill-ins
               (Locations / Mood) first so every option is visible above the fold,
               then the taller inline Dream Cast editor (embedded=true skips
               DreamCastStep's outer ScrollView + onboarding chrome; auto-saves via
               useAutoSaveProfile above). */}
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>DREAM SETTINGS</Text>
-            <View style={styles.sectionCard}>
-              {DREAM_IDENTITY_ROWS.map((row, i) => (
-                <TouchableOpacity
-                  key={row.label}
-                  style={[
-                    styles.drillRow,
-                    i < DREAM_IDENTITY_ROWS.length - 1 && styles.drillRowBorder,
-                  ]}
-                  onPress={() => router.push(row.route as never)}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name={row.icon} size={20} color={colors.textSecondary} />
-                  <Text style={styles.drillLabel}>{row.label}</Text>
-                  <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={{ marginTop: verticalScale(8) }}>
-              <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
-            </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>DREAM SETTINGS</Text>
+          <View style={styles.sectionCard}>
+            {DREAM_IDENTITY_ROWS.map((row, i) => (
+              <TouchableOpacity
+                key={row.label}
+                style={[
+                  styles.drillRow,
+                  i < DREAM_IDENTITY_ROWS.length - 1 && styles.drillRowBorder,
+                ]}
+                onPress={() => router.push(row.route as never)}
+                activeOpacity={0.7}
+              >
+                <Ionicons name={row.icon} size={20} color={colors.textSecondary} />
+                <Text style={styles.drillLabel}>{row.label}</Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            ))}
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <View style={{ marginTop: verticalScale(8) }}>
+            <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

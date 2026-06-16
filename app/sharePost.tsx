@@ -13,6 +13,7 @@ import { Text, TextInput } from '@/components/AppText';
 import * as Clipboard from 'expo-clipboard';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -262,32 +263,36 @@ export default function SharePostScreen() {
               </View>
             }
             keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets={true}
+            keyboardDismissMode="on-drag"
           />
 
-          {/* Send button — bottom anchored */}
-          <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
-            <TouchableOpacity
-              style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-              onPress={handleSend}
-              disabled={selected.size === 0 || isPending}
-              activeOpacity={0.7}
-            >
-              {isPending ? (
-                <ActivityIndicator size="small" color="#000000" />
-              ) : (
-                <Text
-                  style={[
-                    styles.sendButtonText,
-                    selected.size === 0 && styles.sendButtonTextDisabled,
-                  ]}
-                >
-                  {selected.size > 0
-                    ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
-                    : 'Select friends to send'}
-                </Text>
-              )}
-            </TouchableOpacity>
-          </View>
+          {/* Send button — bottom anchored, pinned above the keyboard */}
+          <KeyboardStickyView>
+            <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
+              <TouchableOpacity
+                style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+                onPress={handleSend}
+                disabled={selected.size === 0 || isPending}
+                activeOpacity={0.7}
+              >
+                {isPending ? (
+                  <ActivityIndicator size="small" color="#000000" />
+                ) : (
+                  <Text
+                    style={[
+                      styles.sendButtonText,
+                      selected.size === 0 && styles.sendButtonTextDisabled,
+                    ]}
+                  >
+                    {selected.size > 0
+                      ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
+                      : 'Select friends to send'}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </KeyboardStickyView>
         </Animated.View>
       </GestureDetector>
     </View>

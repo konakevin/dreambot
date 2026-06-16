@@ -13,9 +13,9 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
-  KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';

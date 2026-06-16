@@ -16,12 +16,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
   FlatList as RNFlatList,
   RefreshControl,
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

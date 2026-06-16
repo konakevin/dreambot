@@ -142,6 +142,8 @@ export default function AcknowledgementsScreen() {
         renderItem={renderItem}
         contentContainerStyle={styles.list}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        automaticallyAdjustKeyboardInsets
         initialNumToRender={20}
         maxToRenderPerBatch={20}
         windowSize={10}
