@@ -24,7 +24,6 @@ import { routeDualSwapByGender, genderFromLock } from '../_shared/dualGenderRout
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
-import { generateSceneDescription } from '../_shared/sceneDescription.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
 import { expandScene } from '../_shared/sceneExpander.ts';
 import { rollChaos, applyChaos } from '../_shared/chaosLayer.ts';
@@ -96,7 +95,7 @@ interface RequestBody {
    *   - 'scenery' → description path: scene built inspired by the place, no face-swap
    */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
-  /** Optional user-supplied scene description. If absent, Haiku auto-generates from the final prompt. */
+  /** Optional user-supplied caption stored on the upload. No auto-generation. */
   description?: string;
   /** DLT recipe-replay: when present + valid, locks medium/vibe/model from
    *  the source post's frozen recipe instead of using user-picker values.
@@ -279,8 +278,7 @@ async function handleRequest(req: Request): Promise<Response> {
   // cityscape). See DLT_FIDELITY_PLAN.md.
   const isDLT = dltReplayActive || !!style_prompt;
 
-  // Optional user-supplied description for this dream. If absent, a Haiku
-  // call generates one from finalPrompt before insert.
+  // Optional user-supplied caption for this dream (no auto-generation).
   const userDescription =
     typeof body.description === 'string' ? body.description.trim() || null : null;
 
@@ -1515,16 +1513,11 @@ Output ONLY the prompt.`;
     imageUrl = persistedUrl;
     lap('persist-done');
 
-    // Scene description: user-supplied wins; otherwise generate via Haiku.
-    let description: string | null = userDescription;
-    if (!description && ANTHROPIC_KEY) {
-      try {
-        description = await generateSceneDescription(finalPrompt, ANTHROPIC_KEY);
-      } catch (err) {
-        console.warn(`[generate-dream] description gen failed: ${(err as Error).message}`);
-      }
-    }
-    if (description) console.log(`[generate-dream] description: "${description}"`);
+    // Scene description: only a user-supplied caption is stored, if present.
+    // The auto "Place, Region" location geotag was ripped out 2026-06-15 — it
+    // was buggy on no-location / direct renders ("No location identifiable",
+    // "Enchanted Forest, Unknown") and is no longer shown on cards.
+    const description: string | null = userDescription;
 
     // Build the DLT recipe — frozen LOOK anchors captured at insert time.
     // Phase 2.2a (capture-only): user-side V4 pipeline doesn't surface

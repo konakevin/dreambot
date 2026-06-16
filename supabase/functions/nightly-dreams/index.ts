@@ -60,7 +60,6 @@ import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
-import { generateSceneDescription } from '../_shared/sceneDescription.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
 
@@ -1655,15 +1654,10 @@ Output ONLY the prompt.`;
     // Capture for duplicate-bug observability
     const observability: Record<string, unknown> = {};
 
-    // ── Scene description (parallel with image gen) ──────────────────────
-    // Frank Instagram-style caption paraphrased from finalPrompt.
-    // Runs concurrent with image gen; latency-free.
-    const descPromise: Promise<string | null> = ANTHROPIC_KEY
-      ? generateSceneDescription(finalPrompt, ANTHROPIC_KEY).catch((err) => {
-          console.warn(`[nightly-dreams] description gen failed: ${(err as Error).message}`);
-          return null;
-        })
-      : Promise.resolve(null);
+    // NOTE: the auto-generated "Place, Region" location geotag (uploads.description)
+    // was ripped out 2026-06-15 — it was buggy on no-location / direct renders
+    // ("No location identifiable", "Enchanted Forest, Unknown") and no longer
+    // shown on cards. See generate-dream + DreamCard.
 
     const genResult = await generateImage(
       'flux-dev',
@@ -1945,12 +1939,6 @@ Output ONLY the prompt.`;
       );
     }
 
-    // Wait for the parallel description gen now that image is persisted
-    const description = await descPromise;
-    if (description) {
-      console.log(`[nightly-dreams] description: "${description}"`);
-    }
-
     // Build the DLT recipe — frozen LOOK anchors captured at insert time.
     // Phase 2.2a: nightly path is sparse vs. bot-side; sufficient for DLT
     // replay because medium_key + vibe_key + ai_prompt is the load-bearing
@@ -1995,7 +1983,6 @@ Output ONLY the prompt.`;
           height: 1664,
           recipe: recipeForInsert,
           flux_seed: null,
-          ...(description ? { description } : {}),
           ...(outPhash ? { output_phash: outPhash } : {}),
         })
         .select('id')
