@@ -32,7 +32,11 @@ jobs:
       - name: Drain dream_queue (held-connection sync ticks)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # The worker's own token (matches the edge fn's DREAM_QUEUE_WORKER_TOKEN
+          # exactly). The service-role key is also accepted by the worker, but the
+          # GH secret copy isn't guaranteed byte-identical to the edge-injected
+          # value (a rotation would 401), so use the dedicated worker token.
+          DREAM_QUEUE_WORKER_TOKEN: ${{ secrets.DREAM_QUEUE_WORKER_TOKEN }}
         run: |
           if [ -z "$SUPABASE_URL" ]; then
             SUPABASE_URL="https://jimftynwrinwenonjrlj.supabase.co"
@@ -42,7 +46,7 @@ jobs:
           while [ "$(date +%s)" -lt "$DEADLINE" ]; do
             RESP=$(curl -sS --max-time 135 -w "\nHTTP_STATUS:%{http_code}" -X POST \
               "${SUPABASE_URL}/functions/v1/dream-queue-worker" \
-              -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+              -H "Authorization: Bearer ${DREAM_QUEUE_WORKER_TOKEN}" \
               -H "Content-Type: application/json" \
               -H "x-worker-sync: 1" \
               -d '{}') || { echo "curl failed (transient) — retrying"; sleep 3; continue; }
