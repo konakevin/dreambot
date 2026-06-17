@@ -248,26 +248,80 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
 ];
 
 /**
+ * DYNAMIC pool — movement + physical CONTACT poses (piggyback, dance spin, dip,
+ * lift, carry, jump). Unlocked 2026-06-16 by detection + the per-face composite
+ * swap: each person is placed on their OWN detected face, so the swap no longer
+ * needs the two people standing apart at the same height.
+ *
+ * The two HARD rules detection still imposes, baked into every entry:
+ *   - the two HEADS stay clearly SEPARATED (a gap / different heights) — NEVER
+ *     cheeks pressed together (that IoU-fails the per-face crop → re-render)
+ *   - body language ONLY — both faces are turned toward the camera by the brief
+ * Bodies may touch, move, and sit at different heights — that's the whole point.
+ */
+export const DUAL_ACTIONS_DYNAMIC: string[] = [
+  "one giving the other a piggyback ride, the rider perched high with hands on the carrier's shoulders, the carrier holding the rider's knees, their two faces at clearly different heights and well apart",
+  "mid-dance spin, one twirling the other out by the hand, an arm's length of space opening between them, both heads turned out toward the camera",
+  'one dipping the other in a playful dance dip, the dipped partner lower and angled to the side, both faces tilted up and clearly separated',
+  "walking forward together in stride, one with an arm slung loosely around the other's shoulders, a gap kept between their heads",
+  'one lifting the other in a side hug just off the ground, bodies close but heads angled apart',
+  'both mid-stride walking ahead together, one gesturing forward, shoulders near but faces well apart',
+  'one hopping up onto a low ledge while the other steadies them by the hand, the climber higher, the helper lower, faces at different heights',
+  "one carrying the other bridal-style, the carried partner's head resting back and to the side, both faces up and clearly separate",
+  "jumping into the air together mid-leap with knees bent, an arm's length apart, both faces toward the camera",
+  'one spinning the other under a raised joined hand like a dance turn, a clear gap between their heads',
+  'one tugging the other forward by the hand in a happy run, the leader a step ahead and turned back, faces apart',
+  'one boosting the other up to sit on a high wall, the seated partner above with feet dangling, the booster below, faces stacked and separate',
+  'mid high-five with their free arms raised, bodies angled in, heads kept well apart',
+  'one swinging the other around by both hands, both leaning back with the motion, a wide gap between their heads',
+  "sharing an umbrella and leaning together, shoulders touching, heads kept a hand's width apart, both looking out",
+  "climbing a few steps together, one a step higher reaching back for the other's hand, faces at clearly different heights",
+  'one scooping the other up in a side-lift, both laughing, heads angled apart',
+  "a playful dance hold at arm's length, hands joined and leaning back away from each other so the heads are well apart",
+  'walking forward in step with hands swinging joined between them, a comfortable gap between their heads',
+  'one twirling in place while the other reaches to spin them, bodies a step apart, both faces to the camera',
+  'one lifting the other onto their shoulders, the lifted partner high above with arms out, the two heads stacked vertically and well separated',
+  'leaning back-to-back then turning their heads to look out over their own shoulders, heads clearly apart',
+  'one pulling the other up from sitting by both hands, one rising and one braced, faces at different heights',
+  'skipping forward together hand in hand, a clear gap between their two heads',
+];
+
+/**
  * Pick a dual action seed based on the plus_one's relationship.
- * Partner/significant_other: 30% romantic pool, 70% companion pool.
- * Everyone else: companion pool only.
+ * Partner/significant_other: dynamic-contact + romantic + companion.
+ * Everyone else: dynamic-contact + companion.
+ *
+ * The DYNAMIC pool (movement + contact poses) is mixed in for everyone — the
+ * per-face composite swap makes piggyback / dance / lift poses swap-safe.
  *
  * `forcePool` overrides the relationship roll — used for QA testing of
  * specific pools.
  */
 export function pickDualAction(
   relationship: string | undefined,
-  forcePool?: 'partner' | 'companion'
+  forcePool?: 'partner' | 'companion' | 'dynamic'
 ): string {
+  if (forcePool === 'dynamic') {
+    return DUAL_ACTIONS_DYNAMIC[Math.floor(Math.random() * DUAL_ACTIONS_DYNAMIC.length)];
+  }
   if (forcePool === 'partner') {
     return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
   }
   if (forcePool === 'companion') {
     return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
   }
+  const roll = Math.random();
   const isPartner = relationship === 'partner' || relationship === 'significant_other';
-  if (isPartner && Math.random() < 0.3) {
-    return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
+  if (isPartner) {
+    // 40% dynamic-contact, 25% romantic-static, 35% companion-static
+    if (roll < 0.4)
+      return DUAL_ACTIONS_DYNAMIC[Math.floor(Math.random() * DUAL_ACTIONS_DYNAMIC.length)];
+    if (roll < 0.65)
+      return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
+    return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
   }
+  // Companions (friends/family): 30% dynamic-contact, 70% companion-static
+  if (roll < 0.3)
+    return DUAL_ACTIONS_DYNAMIC[Math.floor(Math.random() * DUAL_ACTIONS_DYNAMIC.length)];
   return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
 }

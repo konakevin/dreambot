@@ -20,7 +20,13 @@
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
 import { detectFacesWithGender, type GenderedFace } from './faceDetect.ts';
-import { planDualSplit } from './faceDetectMath.ts';
+import {
+  planDualSplit,
+  faceCropBox,
+  compositeFaceMasked,
+  iou,
+  type FaceBox,
+} from './faceDetectMath.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
@@ -550,6 +556,23 @@ function cropRegion(
   return out;
 }
 
+/** Rectangular sub-crop (x,y,w,h) — used by the per-face composite path. */
+function cropRect(
+  data: Uint8Array,
+  srcW: number,
+  x: number,
+  y: number,
+  cw: number,
+  ch: number
+): Uint8Array {
+  const out = new Uint8Array(cw * ch * 4);
+  for (let row = 0; row < ch; row++) {
+    const srcOff = ((y + row) * srcW + x) * 4;
+    out.set(data.subarray(srcOff, srcOff + cw * 4), row * cw * 4);
+  }
+  return out;
+}
+
 function stitchHalves(
   leftData: Uint8Array,
   leftW: number,
@@ -620,6 +643,113 @@ function resizeNearest(
   return out;
 }
 
+/**
+ * PER-FACE COMPOSITE swap — the path for poses the vertical strip CAN'T separate:
+ * faces vertically stacked or horizontally overlapping (piggyback, dip, one
+ * partner above/behind the other, dancing close). Instead of splitting the whole
+ * image into two strips, crop a padded box around EACH detected face, swap the
+ * gender-matched source onto it, then composite each swapped face back onto the
+ * original render MASKED to its own face region (overlapping crops never clobber
+ * each other). Works for ANY 2-face layout where the boxes are distinguishable.
+ *
+ * Returns null when the two faces overlap too heavily to crop apart (high IoU) —
+ * the swap model would catch the wrong face in each crop, so the caller re-renders.
+ */
+async function perFaceCompositeSwap(
+  base: Uint8Array,
+  W: number,
+  H: number,
+  faceL: GenderedFace,
+  faceR: GenderedFace,
+  leftSrc: string,
+  rightSrc: string,
+  replicateToken: string,
+  supabase: SupabaseClient,
+  userId: string,
+  swapBudgetMs: number,
+  skipPrimary: boolean
+): Promise<string | null> {
+  const overlap = iou(faceL, faceR);
+  if (overlap > 0.35) {
+    console.log(
+      `[dualFaceSwap] per-face: boxes overlap too much (iou=${overlap.toFixed(2)}) — re-render`
+    );
+    return null;
+  }
+
+  const swapOne = async (src: string, face: FaceBox, label: string) => {
+    const box = faceCropBox(face, W, H);
+    const cropPixels = cropRect(base, W, box.x, box.y, box.w, box.h);
+    const jpeg = await encodeJpeg({ data: cropPixels, width: box.w, height: box.h }, 92);
+    const path = `temp/${userId}/face-${label}-${Date.now()}.jpg`;
+    const up = await supabase.storage.from('uploads').upload(path, jpeg, {
+      contentType: 'image/jpeg',
+      upsert: true,
+      cacheControl: '2592000',
+    });
+    if (up.error) throw new Error(`Upload ${label} face crop failed: ${up.error.message}`);
+    const cropUrl = supabase.storage.from('uploads').getPublicUrl(path).data.publicUrl;
+    const swapUrl = await faceSwap(src, cropUrl, replicateToken, supabase, userId, {
+      maxWaitMs: swapBudgetMs,
+      retry: false,
+      skipPrimary,
+      perturb: false,
+    });
+    const resp = await fetch(swapUrl);
+    const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
+    let data = img.data;
+    if (img.width !== box.w || img.height !== box.h) {
+      data = resizeNearest(data, img.width, img.height, box.w, box.h);
+    }
+    supabase.storage
+      .from('uploads')
+      .remove([path])
+      .catch(() => {});
+    return { data, box };
+  };
+
+  const [l, r] = await Promise.all([swapOne(leftSrc, faceL, 'l'), swapOne(rightSrc, faceR, 'r')]);
+  console.log('[dualFaceSwap] per-face: both swaps complete, compositing');
+
+  // Composite each swapped face back onto a COPY of the original, masked to its own
+  // face region (feather ≈ 0.6× face width) so stacked/close crops blend cleanly.
+  const composed = new Uint8Array(base);
+  compositeFaceMasked(
+    composed,
+    W,
+    H,
+    l.data,
+    l.box.x,
+    l.box.y,
+    l.box.w,
+    l.box.h,
+    faceL,
+    faceL.w * 0.6
+  );
+  compositeFaceMasked(
+    composed,
+    W,
+    H,
+    r.data,
+    r.box.x,
+    r.box.y,
+    r.box.w,
+    r.box.h,
+    faceR,
+    faceR.w * 0.6
+  );
+
+  const bytes = await encodeJpeg({ data: composed, width: W, height: H }, 92);
+  const tempFile = `temp/${userId}/composite-${Date.now()}.jpg`;
+  const { error: upErr } = await supabase.storage.from('uploads').upload(tempFile, bytes, {
+    contentType: 'image/jpeg',
+    upsert: true,
+    cacheControl: '2592000',
+  });
+  if (upErr) throw new Error(`Composite upload failed: ${upErr.message}`);
+  return supabase.storage.from('uploads').getPublicUrl(tempFile).data.publicUrl;
+}
+
 export interface DualSwapResult {
   /** The stitched swapped image URL, or null when the render had no clean 2-face
    *  split (caller should re-render the couple). */
@@ -685,11 +815,53 @@ export async function dualFaceSwap(
       faceCount = faces.length;
       const split = planDualSplit(faces, W);
       if (!split.ok) {
-        // <2 faces or overlapping faces → don't do a bad crop; signal re-render.
-        console.log(
-          `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
+        // <2 faces → there's no second face to swap; must re-render.
+        if (split.reason === 'lt2_faces' || !split.leftBox || !split.rightBox) {
+          console.log(
+            `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
+          );
+          return { swappedUrl: null, faceCount };
+        }
+        // reason==='overlap' → faces too close to split into vertical strips
+        // (stacked / close pose: piggyback, dip, dancing). Use the PER-FACE
+        // COMPOSITE path, which crops + swaps + composites each face independently.
+        const fL = split.leftBox as GenderedFace;
+        const fR = split.rightBox as GenderedFace;
+        let lSrc = leftSourceUrl;
+        let rSrc = rightSourceUrl;
+        const mixed =
+          (genders?.left === 'male' && genders?.right === 'female') ||
+          (genders?.left === 'female' && genders?.right === 'male');
+        if (mixed) {
+          if (!(fL.gender && fR.gender && fL.gender !== fR.gender)) {
+            console.log(
+              `[dualFaceSwap] per-face: mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
+            );
+            return { swappedUrl: null, faceCount };
+          }
+          const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
+          const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;
+          lSrc = fL.gender === 'male' ? maleSrc : femaleSrc;
+          rSrc = fL.gender === 'male' ? femaleSrc : maleSrc;
+        }
+        const perFaceBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
+        const composedUrl = await perFaceCompositeSwap(
+          targetImg.data,
+          W,
+          H,
+          fL,
+          fR,
+          lSrc,
+          rSrc,
+          replicateToken,
+          supabase,
+          userId,
+          perFaceBudgetMs,
+          skipPrimary
         );
-        return { swappedUrl: null, faceCount };
+        if (!composedUrl) return { swappedUrl: null, faceCount };
+        console.log(`[dualFaceSwap] per-face composite complete faces=${faceCount}`);
+        return { swappedUrl: composedUrl, faceCount };
       }
       const fL = split.leftBox as GenderedFace;
       const fR = split.rightBox as GenderedFace;

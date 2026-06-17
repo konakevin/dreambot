@@ -15,6 +15,8 @@ import {
   nms,
   iou,
   planDualSplit,
+  faceCropBox,
+  compositeFaceMasked,
   type FaceBox,
   type YuNetHeads,
 } from './faceDetectMath.ts';
@@ -92,6 +94,74 @@ Deno.test('planDualSplit — <2 faces and overlapping faces both refuse (→ re-
   );
   assertEquals(o.reason, 'overlap');
   assert(!o.ok);
+});
+
+Deno.test('faceCropBox — square, centered on the face, clamped inside the image', () => {
+  // face near the top-left corner → crop clamps to (0,0), stays square
+  const b = faceCropBox({ x: 10, y: 10, w: 100, h: 120, score: 0.9 }, 800, 1000, 2.4);
+  assertEquals(b.w, b.h); // square
+  assertEquals(b.w, Math.round(120 * 2.4)); // side = max(w,h)*pad
+  assert(b.x >= 0 && b.y >= 0);
+  assert(b.x + b.w <= 800 && b.y + b.h <= 1000);
+  // a centered face → crop is centered on the face center
+  const c = faceCropBox({ x: 400, y: 500, w: 100, h: 100, score: 0.9 }, 1000, 1200, 2.0);
+  assertEquals(c.x + c.w / 2, 450); // face center x = 450
+  assertEquals(c.y + c.h / 2, 550);
+});
+
+Deno.test('compositeFaceMasked — full opacity over the face, original preserved far away', () => {
+  const W = 40,
+    H = 40;
+  const base = new Uint8Array(W * H * 4).fill(0); // all black, alpha 0
+  for (let i = 0; i < base.length; i += 4) base[i + 3] = 255;
+  // crop = a 20×20 swapped patch (all white) placed at (10,10)
+  const cropW = 20,
+    cropH = 20;
+  const crop = new Uint8Array(cropW * cropH * 4).fill(255);
+  const face: FaceBox = { x: 16, y: 16, w: 8, h: 8, score: 0.9 }; // centered in the patch
+  compositeFaceMasked(base, W, H, crop, 10, 10, cropW, cropH, face, 4);
+  // center of the face → fully white (alpha 1)
+  const cIdx = (20 * W + 20) * 4;
+  assertEquals(base[cIdx], 255);
+  // a pixel OUTSIDE the patch entirely → untouched (still black)
+  const farIdx = (2 * W + 2) * 4;
+  assertEquals(base[farIdx], 0);
+});
+
+Deno.test('compositeFaceMasked — overlapping patches each keep their OWN face (no clobber)', () => {
+  const W = 60,
+    H = 40;
+  const base = new Uint8Array(W * H * 4);
+  for (let i = 0; i < base.length; i += 4) base[i + 3] = 255; // black, opaque
+  // Two faces close together (overlapping pads). Patch A = red, patch B = green.
+  const faceA: FaceBox = { x: 18, y: 16, w: 8, h: 8, score: 0.9 };
+  const faceB: FaceBox = { x: 34, y: 16, w: 8, h: 8, score: 0.9 };
+  const mk = (r: number, g: number, b: number, w: number, h: number) => {
+    const a = new Uint8Array(w * h * 4);
+    for (let i = 0; i < a.length; i += 4) {
+      a[i] = r;
+      a[i + 1] = g;
+      a[i + 2] = b;
+      a[i + 3] = 255;
+    }
+    return a;
+  };
+  const cropA = mk(255, 0, 0, 28, 28);
+  const cropB = mk(0, 255, 0, 28, 28);
+  compositeFaceMasked(base, W, H, cropA, 8, 6, 28, 28, faceA, 4);
+  compositeFaceMasked(base, W, H, cropB, 24, 6, 28, 28, faceB, 4);
+  // faceA center stays RED (B's overlapping pad didn't overwrite A's face)
+  const aIdx = (20 * W + 22) * 4;
+  assert(
+    base[aIdx] > 200 && base[aIdx + 1] < 60,
+    `faceA center not red: ${base[aIdx]},${base[aIdx + 1]}`
+  );
+  // faceB center is GREEN
+  const bIdx = (20 * W + 38) * 4;
+  assert(
+    base[bIdx + 1] > 200 && base[bIdx] < 60,
+    `faceB center not green: ${base[bIdx]},${base[bIdx + 1]}`
+  );
 });
 
 Deno.test('planDualSplit — picks the two LARGEST boxes when a 3rd (bystander) is detected', () => {

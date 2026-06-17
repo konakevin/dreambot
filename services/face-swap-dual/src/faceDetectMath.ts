@@ -159,6 +159,75 @@ export interface DualSplit {
   rightBox?: FaceBox;
 }
 
+/**
+ * A square crop around a face (+padding), clamped to the image — the region fed
+ * to the swap model for the PER-FACE composite path (poses the vertical strip
+ * can't separate: piggyback, dip, faces vertically stacked). Padding gives the
+ * swap model context; centering keeps the TARGET face the most prominent one.
+ */
+export function faceCropBox(
+  face: FaceBox,
+  W: number,
+  H: number,
+  pad = 2.4
+): { x: number; y: number; w: number; h: number } {
+  const s = Math.min(W, H, Math.round(Math.max(face.w, face.h) * pad));
+  let x = Math.round(face.x + face.w / 2 - s / 2);
+  let y = Math.round(face.y + face.h / 2 - s / 2);
+  x = Math.max(0, Math.min(W - s, x));
+  y = Math.max(0, Math.min(H - s, y));
+  return { x, y, w: s, h: s };
+}
+
+/**
+ * Paste a swapped face crop back onto the base image, MASKED to the face region
+ * with a feathered border. Only the area around THIS face is affected, so two
+ * overlapping per-face crops never clobber each other's swapped face — that's
+ * what lets the composite handle ANY layout (stacked/close), not just
+ * horizontally-separable ones. Mutates `base` in place.
+ *
+ * @param face the detected face box, in BASE-image coordinates
+ * @param feather px over which the mask fades from full (over the face) to 0
+ */
+export function compositeFaceMasked(
+  base: Uint8Array,
+  baseW: number,
+  baseH: number,
+  crop: Uint8Array,
+  cropX: number,
+  cropY: number,
+  cropW: number,
+  cropH: number,
+  face: FaceBox,
+  feather: number
+): void {
+  // Full-opacity core = the face box expanded 30%; fade to 0 over `feather`.
+  const ex = face.w * 0.3;
+  const ey = face.h * 0.3;
+  const fx0 = face.x - ex;
+  const fy0 = face.y - ey;
+  const fx1 = face.x + face.w + ex;
+  const fy1 = face.y + face.h + ey;
+  for (let y = 0; y < cropH; y++) {
+    const by = cropY + y;
+    if (by < 0 || by >= baseH) continue;
+    for (let x = 0; x < cropW; x++) {
+      const bx = cropX + x;
+      if (bx < 0 || bx >= baseW) continue;
+      const dx = Math.max(0, fx0 - bx, bx - fx1);
+      const dy = Math.max(0, fy0 - by, by - fy1);
+      const d = Math.max(dx, dy);
+      const a = d <= 0 ? 1 : d >= feather ? 0 : 1 - d / feather;
+      if (a <= 0) continue;
+      const bi = (by * baseW + bx) * 4;
+      const ci = (y * cropW + x) * 4;
+      base[bi] = Math.round(base[bi] * (1 - a) + crop[ci] * a);
+      base[bi + 1] = Math.round(base[bi + 1] * (1 - a) + crop[ci + 1] * a);
+      base[bi + 2] = Math.round(base[bi + 2] * (1 - a) + crop[ci + 2] * a);
+    }
+  }
+}
+
 export function planDualSplit(
   boxes: FaceBox[],
   W: number,

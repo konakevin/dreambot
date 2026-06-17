@@ -1059,10 +1059,17 @@ Deno.serve(async (req) => {
     if (composition === 'character') {
       if (faceSwapEligible) {
         const faceLockPhrase = isDualFaceSwap
-          ? 'two people, three-quarter view to camera, both faces visible to camera, person on left side, person on right side, clear gap between them, NEITHER facing away, NEITHER from behind, NO back view, NO back of head, both heads turned toward camera'
+          ? 'two people together, both faces CLEARLY VISIBLE and turned toward the camera, interacting naturally, two distinct heads (not cheek-to-cheek overlapping), NEITHER facing away, NEITHER from behind, NO back view, NO back of head'
           : 'three-quarter view to camera, face visible to camera, eyes and nose visible, head turned toward camera, NO back view, NO back of head, NO silhouette, NOT facing away';
+        // POSE IS FREE now — detection + per-face composite swap places each person
+        // on their own detected face, so the old rigid L/R / same-height / clear-gap
+        // lock is gone. The ONLY hard rules left are what DETECTION needs: both faces
+        // visible + camera-facing, and the two heads readable as DISTINCT (not
+        // cheek-pressed, which IoU-fails the per-face crop → re-render). A soft
+        // role-to-side LEAN still helps same-sex casts (no gender signal to tell them
+        // apart); mixed casts are resolved by per-face gender regardless of position.
         const dualSepRule = isDualFaceSwap
-          ? `\n- ━━━ ROLE-TO-SIDE LOCK (NON-NEGOTIABLE) ━━━\n- The FIRST cast member (${resolvedCast[0]?.role ?? 'self'}) MUST be on the LEFT half of the frame.\n- The SECOND cast member (${resolvedCast[1]?.role ?? 'plus_one'}) MUST be on the RIGHT half of the frame.\n- DO NOT swap their positions. Reversing breaks the face-swap pipeline (faces land on wrong bodies → gender swap disaster).\n- Clear ~2-3 ft gap between them. NO overlap across the midline.\n- BOTH at SAME VERTICAL HEIGHT — both standing OR both sitting OR both crouching. NEVER one tall + one short.\n- BOTH faces three-quarter to camera. NO back views. NO profiles. NO faces away.\n- Both heads at the SAME Y-axis line so the L/R crop captures each face cleanly.`
+          ? `\n- ━━━ BOTH FACES VISIBLE TO CAMERA (the ONE hard rule) ━━━\n- TWO people in frame, BOTH faces clearly visible and turned toward the camera (three-quarter or front). The face-swap pipeline must SEE both faces.\n- NO back views, NO back-of-head, NO face hidden/obscured/turned fully away, NO heavy profile that hides an eye.\n- The two faces must read as TWO DISTINCT heads with a little space between them — NOT cheeks pressed together / faces overlapping.\n- ━━━ POSE IS FREE ━━━\n- They can interact naturally: standing close, arm around a shoulder, hugging, dancing, one giving the other a piggyback, leaning together, a playful dip, sitting on a ledge together. Movement and different heights are GOOD.\n- Soft lean (not a hard rule): when the pose allows, place the ${resolvedCast[0]?.role ?? 'self'} a touch toward the LEFT and the ${resolvedCast[1]?.role ?? 'plus_one'} a touch toward the RIGHT.`
           : '';
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
@@ -1077,10 +1084,10 @@ Deno.serve(async (req) => {
           ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.'
           : 'Character visible from waist up, filling at least 50% of frame height.';
         const faceAngleLine = isDualFaceSwap
-          ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.'
+          ? 'Both faces clearly visible to camera — three-quarter or front, eyes and nose visible on BOTH. Heads can tilt toward each other for a candid feel, but each face stays turned enough toward the camera to be fully readable. NOT backs to camera, NO full profile that hides an eye, NEVER both gazing away at scenery.'
           : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.';
         const staticLine = isDualFaceSwap
-          ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.'
+          ? 'Dynamic candid poses welcome — interaction, movement, an arm around a shoulder, a spin, a piggyback. Keep both faces turned toward the camera through the motion.'
           : '';
         const cameraLine = isDualFaceSwap
           ? 'Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.'
