@@ -3165,6 +3165,21 @@ A hearted `tiny-vehicles` render came back as a **boxelder-bug-drawn wagon** ("w
 - **Word-ban the spider family explicitly**: Sonnet reaches for "spider-silk", "gossamer" (literally = spider silk), "spiderwort"/"spider-plant" (real plant names) — all evoke a spider in Flux. Ban the *words*, substitute "silk-thread" / "dewy strand" / "fern-leaf". The `flies\b` regex false-positives on "dragonfLIES" (allowed) — don't auto-strip those.
 - Validated MVP-25 → 0 bug language in both pools → render-tested 5 tiny-vehicles to the feed (Kevin signed off) → scaled to 200. A couple of stray spider-words survived the 200-scale (Sonnet drift); surgically patched the 2-3 entries rather than re-rolling the whole pool.
 
+### tiny-vehicles → a STORYTELLING path (2026-06-16, Kevin: "just a little tiny vehicle isn't interesting")
+
+Right after the de-bugging, Kevin flagged the path as boring: a single cute vehicle is pretty-but-empty — it fails the **Visible-story bar** ("something happening the eye reads in 2 seconds"). The path was built as an **object PORTRAIT**, and two things locked it that way (both already named in the playbook):
+
+1. **The composition line was a catalog instruction** — *"Hero-shot the vehicle — vehicle catalog energy… vehicle filling the frame."* Same portrait-lock as the MechBot `standing`-example and the story-beat-blocked-by-medium-cruft lessons.
+2. **Thin single-subject pool** — `TINY_VEHICLES` entries are "a walnut boat sits on a puddle," exactly the "figure + ONE object on a bare surface → degrades to a macro product shot" failure from the open TinyBot diagnosis.
+
+**The fix — reframe "a tiny vehicle" → "a tiny JOURNEY," via 3 new compose-time axes + a composition rewrite (kept the look: tilt-shift, natural-material craft, cuteness, vehicle-as-hero):**
+- **`TINY_JOURNEY_BEATS`** — the verb-led MOMENT (open with a gerund: casting off / cresting / racing / arriving home to lantern-lit docks). Vehicle-/element-agnostic so it composes with any rolled vehicle; the template tells Sonnet to adapt it to water/air/land.
+- **`TINY_WORLDS`** — the staged SETTING with explicit foreground/midground/far-distance layers (harbors, markets, canals, teacup-lakes), so the render has depth + a bigger-world feel. Directly fixes the thin-single-subject failure.
+- **`TINY_CREW`** — verb-led acting cast (mouse captain at the tiller, snail dockmaster waving), rolled 1–2 (~75% / ~35%), so the eye has characters to follow. Multi-figure-story recipe: open with the critter + an active verb.
+- **Composition rewrite** — replaced the catalog line with *"a candid storybook MOMENT… something in MOTION, crew mid-action, multiple depth layers, vehicle NOT centered/filling-frame, room for the world to breathe, NOT a product/turntable shot."* (Per the lesson: trim the portrait-coded template line FIRST.)
+
+All 3 new pools carry the cute-only + spider/creepy-bug word-bans + `banHumanLanguage`. Validated MVP-25 (0 bug/human leaks) → 5 renders to the feed (Kevin: "these look good") → scaled to 200 (surgically patched ~5 stray bug-words from the 200-scale). **Cross-bot lesson: when a render is "pretty but boring," it's almost always an object-portrait — the fix is a story-beat axis + a layered-world axis + a verb-led cast, AND killing any "hero-shot / catalog / fills-the-frame" composition line that pins it static.**
+
 ---
 
 ## SteamBot — lessons

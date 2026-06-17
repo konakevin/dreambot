@@ -49,6 +49,12 @@ module.exports = {
   TINY_BEACH: load('tiny_beach'),
   TINY_FOOD_WORLD: load('tiny_food_world'),
   TINY_VEHICLES: load('tiny_vehicles'),
+  // tiny-vehicles storytelling axes (2026-06-16): the journey MOMENT, the
+  // staged little WORLD, and the verb-led CREW — compose a story, not a
+  // parked-vehicle product shot.
+  TINY_JOURNEY_BEATS: load('tiny_journey_beats'),
+  TINY_WORLDS: load('tiny_worlds'),
+  TINY_CREW: load('tiny_crew'),
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),
