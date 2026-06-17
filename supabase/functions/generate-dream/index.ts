@@ -1043,9 +1043,21 @@ Output ONLY the prompt.`;
                   mediumFluxFragment: medium.fluxFragment ?? medium.key,
                   vibeDirective: applyVibeGenderModifier(vibe.key, vibe.directive ?? '', null),
                   avoidList: vibeProfile?.avoid?.join(', ') ?? '',
-                  action: pickDualAction(
-                    castMembers.find((m: DreamCastMember) => m.role === 'plus_one')?.relationship
-                  ),
+                  // Create: NEUTRAL pose only — force the relationship-appropriate
+                  // partner/companion pool (NOT the 18% playful roll). Create is the
+                  // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
+                  // injected onto someone's serious request. (Goofy/elegant scenes are
+                  // nightly-only and never touch the user's Create prompt either.)
+                  action: (() => {
+                    const rel = String(
+                      castMembers.find((m: DreamCastMember) => m.role === 'plus_one')
+                        ?.relationship ?? ''
+                    );
+                    return pickDualAction(
+                      rel,
+                      rel === 'partner' || rel === 'significant_other' ? 'partner' : 'companion'
+                    );
+                  })(),
                 },
                 ANTHROPIC_KEY!
               );
