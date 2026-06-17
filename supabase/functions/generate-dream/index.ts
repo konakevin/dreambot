@@ -33,7 +33,10 @@ import {
   postProcessPrompt,
   sanitizeUserPrompt,
   deriveFocalAnchor,
+  applyVibeGenderModifier,
 } from '../_shared/promptCompiler.ts';
+import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
+import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
@@ -1000,17 +1003,81 @@ Output ONLY the prompt.`;
         });
 
         try {
-          const sonnet = await callSonnet(compiled.sonnetBrief, ANTHROPIC_KEY, compiled.maxTokens);
-          sonnetBrief = sonnet.brief;
-          sonnetRawResponse = sonnet.rawResponse;
-          if (sonnet.text.length < 10) throw new Error('too short');
-          finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
-
+          // Face-swap sources come from the compiler regardless of prompt path.
           if (compiled.faceSwapSource) {
             faceSwapSource = compiled.faceSwapSource;
           }
           if (compiled.faceSwapSources) {
             faceSwapSources = compiled.faceSwapSources;
+          }
+
+          if (isDualSwapRender) {
+            // ── Route Create dual face-swap through the PROVEN nightly slot pipeline ──
+            // buildDualBrief lets Sonnet write the whole prompt → on romance-prone
+            // mediums it drifts to full-body / facing-each-other → tiny touching
+            // faces → broken swap. The slot pipeline LOCKS framing (waist-up,
+            // side-by-side, big separated faces to camera) and only lets Sonnet fill
+            // scene/wardrobe/mood/props → two clean large faces → reliable swap.
+            // Falls back to the legacy buildDualBrief output on any error.
+            try {
+              const slotResult = await runCharacterSlotPipeline(
+                {
+                  cast: resolvedCast.map((rc) => {
+                    const src = castMembers.find((m: DreamCastMember) => m.role === rc.role);
+                    return {
+                      role: rc.role,
+                      promptDesc: rc.promptDesc,
+                      age: src?.age ?? null,
+                      physicalSummary: src?.physical_summary ?? null,
+                      gender: src?.gender ?? null,
+                    };
+                  }),
+                  iconicAnchor: null,
+                  userPlace: cleanedPrompt || null,
+                  timeAxis: '',
+                  weatherAxis: '',
+                  phenomenaAxis: '',
+                  // Pass the user's scene as a wardrobe hint too so a themed request
+                  // ("as superheroes") reaches the wardrobe slot, not just the scene.
+                  wardrobeAnchor: cleanedPrompt || null,
+                  mediumFluxFragment: medium.fluxFragment ?? medium.key,
+                  vibeDirective: applyVibeGenderModifier(vibe.key, vibe.directive ?? '', null),
+                  avoidList: vibeProfile?.avoid?.join(', ') ?? '',
+                  action: pickDualAction(
+                    castMembers.find((m: DreamCastMember) => m.role === 'plus_one')?.relationship
+                  ),
+                },
+                ANTHROPIC_KEY!
+              );
+              sonnetBrief = slotResult.briefUsed;
+              sonnetRawResponse = slotResult.rawResponse;
+              finalPrompt = slotResult.assembledPrompt;
+              fallbackReasons.push(...slotResult.fallbackReasons);
+              console.log(
+                `[generate-dream] dual slot pipeline: retries=${slotResult.retries} fallbacks=${slotResult.fallbackReasons.length}`
+              );
+            } catch (slotErr) {
+              // Slot pipeline failed → legacy dual brief (never worse than before).
+              fallbackReasons.push(`create_dual_slot_failed:${(slotErr as Error).message}`);
+              const sonnet = await callSonnet(
+                compiled.sonnetBrief,
+                ANTHROPIC_KEY,
+                compiled.maxTokens
+              );
+              sonnetBrief = sonnet.brief;
+              sonnetRawResponse = sonnet.rawResponse;
+              finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
+            }
+          } else {
+            const sonnet = await callSonnet(
+              compiled.sonnetBrief,
+              ANTHROPIC_KEY,
+              compiled.maxTokens
+            );
+            sonnetBrief = sonnet.brief;
+            sonnetRawResponse = sonnet.rawResponse;
+            if (sonnet.text.length < 10) throw new Error('too short');
+            finalPrompt = postProcessPrompt(sonnet.text, compiled.postProcess);
           }
           logAxes = {
             medium: medium.key,
