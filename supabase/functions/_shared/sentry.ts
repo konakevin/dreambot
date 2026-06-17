@@ -14,7 +14,12 @@
  * which reads dream_queue.current_stage (migration 272) and captures on behalf
  * of the dead isolate. This module covers the GRACEFUL failure class + alerting.
  */
-import * as Sentry from 'https://deno.land/x/sentry@8.55.0/index.mjs';
+// esm.sh (not deno.land/x): the deno.land CDN repeatedly timed out Supabase's
+// 10s bundler fetch, failing deploys of every function that imports this. esm.sh
+// is the CDN this repo already relies on for supabase-js — fast, cached, and a
+// plain URL import so `deno check` resolves it without node_modules. Same
+// @sentry/deno package.
+import * as Sentry from 'https://esm.sh/@sentry/deno@8.55.0';
 
 let initialised = false;
 

@@ -1751,7 +1751,16 @@ Output ONLY the prompt.`;
     // dead-letter + refund + notify). The worker is fire-and-forget. Do this
     // FIRST and return — the synchronous-path refund/notify below is skipped.
     if (isQueue && jobId) {
-      await failQueueJob(supabase, jobId, userId, errMsg, isNsfw);
+      // A missing cast source is permanent → dead-letter immediately (terminal),
+      // not after 5 retries over ~2h. isNsfw still drives the notification copy.
+      await failQueueJob(
+        supabase,
+        jobId,
+        userId,
+        errMsg,
+        isNsfw,
+        isNsfw || refundClass === 'source_missing'
+      );
       // Best-effort audit log (mirrors the synchronous path's failure log).
       try {
         await insertGenerationLog(supabase, {
@@ -1948,6 +1957,21 @@ function classifyFailure(errMsg: string): string {
   if (m.includes('persiststorage') || m.includes('storage upload')) return 'storage_upload';
   if (m.includes('upload') && m.includes('failed')) return 'storage_upload';
   if (m.includes('uploads insert') || m.includes('db insert')) return 'db_insert';
+  // A missing/unreachable cast source photo is PERMANENT — the file is gone (e.g.
+  // the user re-uploaded their cast photo after this dream was queued, deleting
+  // the old one). Retrying just re-fails on the same dead URL, so this is treated
+  // as TERMINAL (immediate dead-letter + refund) rather than burning 5 retries
+  // over ~2h. Checked before the generic face_swap class since the message
+  // carries a `face_swap:` prefix.
+  if (
+    m.includes('source unreachable') ||
+    m.includes('source fetch failed') ||
+    m.includes('source not an image') ||
+    m.includes('invalid source url') ||
+    m.includes('object not found')
+  ) {
+    return 'source_missing';
+  }
   if (m.includes('face swap') || m.includes('face_swap')) return 'face_swap';
   if (m.includes('rate limit') || m.includes('rate-limit')) return 'rate_limit';
   if (m.includes('timed out') || m.includes('deadline')) return 'timeout';

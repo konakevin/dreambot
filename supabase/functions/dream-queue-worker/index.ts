@@ -294,8 +294,17 @@ Deno.serve(async (req) => {
           // NSFW/safety rejections are terminal — a retry re-runs a doomed (and
           // costly) render. Dead-letter immediately.
           const isNsfw = message.startsWith('nsfw:');
+          // A missing/unreachable cast source photo is permanent too (e.g. the
+          // user re-uploaded their cast after enqueue, deleting the old file).
+          // Retrying re-fails on the same dead URL → dead-letter immediately
+          // instead of burning the full backoff. isNsfw still drives copy/refund.
+          const isPermanent =
+            isNsfw ||
+            /source unreachable|source fetch failed|source not an image|invalid source url|object not found/i.test(
+              message
+            );
           const nextAttempt = job.attempt_count + 1;
-          const isDead = isNsfw || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+          const isDead = isPermanent || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
 
           console.error(
             `[worker:${workerId}] Job ${job.id} failed (attempt ${nextAttempt}/${MAX_ATTEMPTS_BEFORE_DEAD_LETTER}${isNsfw ? ', terminal:nsfw' : ''}):`,

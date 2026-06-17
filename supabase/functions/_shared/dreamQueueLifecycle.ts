@@ -114,7 +114,14 @@ export async function failQueueJob(
   jobId: string,
   userId: string,
   errMsg: string,
-  isNsfw: boolean
+  isNsfw: boolean,
+  // PERMANENT failures (NSFW, or a missing/unreachable cast source photo) skip
+  // the retry cycle and dead-letter immediately — retrying re-fails identically
+  // and only delays the refund + spams "failed" pushes over the backoff window.
+  // Defaults to isNsfw so existing callers keep their behavior. `isNsfw` still
+  // drives the notification COPY (rejected vs failed); `terminal` drives the
+  // no-retry decision, so a non-NSFW permanent error gets the plain refund copy.
+  terminal: boolean = isNsfw
 ): Promise<void> {
   const message = (errMsg || 'unknown').slice(0, 1000);
   const { data: job } = await sb
@@ -123,7 +130,7 @@ export async function failQueueJob(
     .eq('id', jobId)
     .single();
   const nextAttempt = (job?.attempt_count ?? 0) + 1;
-  const isDead = isNsfw || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+  const isDead = terminal || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
 
   if (!isDead) {
     // Exponential backoff: created_at into the future so the claim RPC's
