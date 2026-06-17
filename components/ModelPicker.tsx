@@ -8,10 +8,11 @@
  * output (faceSwap.ts handles OpenAI/Gemini base64), so any model can run
  * through the engine.
  *
- * Built for non-technical users first: a small "Recommended" group up top
- * (RECOMMENDED_MODEL_IDS) with short plain-English blurbs, and a "More models"
- * group below for everything else. Each row shows the model's sparkle cost
- * (costs now vary 1–5 and the Dream button reflects the pick).
+ * Built for non-technical users first: every model is simply listed in two
+ * cost tiers — Standard (1✦) and Premium (2✦+) — with short plain-English
+ * blurbs, so people can freely experiment with any look. No per-medium
+ * steering; flux-1.1-pro just carries a small "Default" hint. Each row shows
+ * the model's sparkle cost (costs vary 1–5 and the Dream button reflects it).
  *
  * STICKY + cross-device: persists to users.pro_mode_flux_model (the column the
  * engine already reads), so the choice follows the user to a new install.
@@ -22,7 +23,7 @@
 import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
-import { GradientTitle } from '@/components/GradientTitle';
+import { TitleText } from '@/components/TitleText';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -43,13 +44,6 @@ interface Props {
   /** Fires after the initial DB load and on each selection. */
   onChange?: (modelId: string) => void;
   /**
-   * Model ids that render the currently-selected medium well (face swap +
-   * style). Surfaced as a "Best for this look" group at the top of the picker.
-   * Sourced from the selected medium's client_meta.recommended_models. When
-   * empty/absent the picker falls back to the single global RECOMMENDED_MODEL_ID.
-   */
-  recommendedModelIds?: string[];
-  /**
    * True when the Create screen is in DreamBot mode (the face-swap engine).
    * In that mode models flagged dreamBotEnabled=false (e.g. flux-schnell, which
    * breaks the swap — 2026-06-13 audit) are hidden. Direct mode shows them all.
@@ -57,7 +51,7 @@ interface Props {
   dreamBotMode?: boolean;
 }
 
-export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Props) {
+export function ModelPicker({ onChange, dreamBotMode }: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
   // In DreamBot mode, drop models that aren't swap-quality from the picker.
@@ -108,17 +102,12 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
 
   // Two tiers in explicit curated order: Standard (1✦) + Premium (2✦+).
   // Draws from visibleModels so DreamBot-hidden models (flux-schnell) drop out.
+  // No per-medium steering — every model is listed so people can experiment
+  // however they want; flux-1.1-pro just carries a "Default" hint.
   const order = (ids: string[]) =>
     ids.map((id) => visibleModels.find((m) => m.id === id)).filter((m): m is ImageModel => !!m);
   const standard = order(STANDARD_MODEL_IDS);
   const premium = order(PREMIUM_MODEL_IDS);
-  // Per-medium recommended models (picker hint). When present they get their
-  // own "Best for this look" group at the top and are removed from the
-  // Standard/Premium tiers so they aren't listed twice.
-  const recSet = new Set(recommendedModelIds ?? []);
-  const recommended = order(recommendedModelIds ?? []);
-  const standardRest = recSet.size ? standard.filter((m) => !recSet.has(m.id)) : standard;
-  const premiumRest = recSet.size ? premium.filter((m) => !recSet.has(m.id)) : premium;
 
   // If the saved pick is hidden in DreamBot mode (e.g. a Direct-mode flux-schnell
   // choice), fall back to the default for face-swap dreams WITHOUT overwriting
@@ -167,7 +156,7 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
             >
               {opt.label}
             </Text>
-            {(recSet.size ? recSet.has(opt.id) : opt.id === RECOMMENDED_MODEL_ID) && (
+            {opt.id === RECOMMENDED_MODEL_ID && (
               <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Default</Text>
             )}
           </View>
@@ -254,7 +243,7 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
           <View style={[styles.modalSheet, { backgroundColor: colors.background }]}>
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
-              <GradientTitle size={20}>Choose your AI model</GradientTitle>
+              <TitleText>Choose your AI model</TitleText>
               <TouchableOpacity
                 style={styles.modalClose}
                 onPress={() => setModalOpen(false)}
@@ -272,26 +261,16 @@ export function ModelPicker({ onChange, recommendedModelIds, dreamBotMode }: Pro
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: verticalScale(24) }}
             >
-              {recommended.length > 0 && (
-                <View style={{ marginTop: verticalScale(12) }}>
-                  <View style={styles.groupHeader}>
-                    <Text style={[styles.groupLabel, { color: colors.accent }]}>
-                      Best for this look
-                    </Text>
-                  </View>
-                  {recommended.map(renderRow)}
-                </View>
-              )}
-              {standardRest.length > 0 && (
+              {standard.length > 0 && (
                 <View style={{ marginTop: verticalScale(12) }}>
                   {renderTierHeader('Standard')}
-                  {standardRest.map(renderRow)}
+                  {standard.map(renderRow)}
                 </View>
               )}
-              {premiumRest.length > 0 && (
+              {premium.length > 0 && (
                 <View style={{ marginTop: verticalScale(8) }}>
                   {renderTierHeader('Premium')}
-                  {premiumRest.map(renderRow)}
+                  {premium.map(renderRow)}
                 </View>
               )}
             </ScrollView>

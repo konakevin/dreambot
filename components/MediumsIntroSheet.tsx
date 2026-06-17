@@ -2,11 +2,11 @@
  * MediumsIntroSheet — one-time teaching sheet shown the FIRST time a user opens
  * the medium picker on the Create screen. Explains the two kinds of mediums:
  *
- *   • "face" (blue)  — built from the user's ACTUAL PHOTO (face swap), a true
- *                      likeness (photography, cinematic, watercolor, …).
- *   • "art"  (amber) — works from a likeness of the user rather than their actual
- *                      photo, so it's an approximation, reimagined in the medium's
- *                      art style (LEGO, pixel art, anime, claymation, …).
+ *   • "face" (teal) — built from the user's ACTUAL PHOTO (face swap), a true
+ *                     likeness (photography, cinematic, watercolor, …).
+ *   • "art"  (pink) — works from a likeness of the user rather than their actual
+ *                     photo, so it's an approximation, reimagined in the medium's
+ *                     art style (LEGO, pixel art, anime, claymation, …).
  *
  * Mirrors CreateIntroSheet's pattern: a pageSheet Modal gated by an AsyncStorage
  * flag, marked seen on mount so a kill-app-mid-view doesn't re-trap the user.
@@ -74,7 +74,7 @@ const CARDS: CardSpec[] = [
     bg: FACE_BG,
     icon: 'person',
     title: 'Real Face',
-    body: 'You yourself appear in the dream. Typically more true-to-life styles - photography, canvas, watercolor, etc.',
+    body: 'Mediums tagged FACE put the real you in the dream — true-to-life styles like photography, canvas, and watercolor.',
   },
   {
     badge: 'art',
@@ -82,7 +82,7 @@ const CARDS: CardSpec[] = [
     bg: ART_BG,
     icon: 'color-palette',
     title: 'Dream Art',
-    body: 'A fun look-alike of you, reimagined in the art style, appears in the dream. Think LEGO, pixel art, claymation, etc.',
+    body: 'Mediums tagged ART reimagine a fun look-alike of you in the style — think LEGO, pixel art, and claymation.',
   },
 ];
 

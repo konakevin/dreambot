@@ -7,6 +7,7 @@
 import { useCallback, useRef, useEffect, useState } from 'react';
 import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
+import { TitleText } from '@/components/TitleText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import Animated, {
@@ -28,7 +29,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.6 : SCREEN_HEIGHT * 0.5;
 
 // Subtle, mode-agnostic highlight for the selected row + active tab. The COLOR
-// meaning (purple = Real Face, pink = Dream Art) lives only in the text +
+// meaning (teal = Real Face, pink = Dream Art) lives only in the text +
 // checkmark; the outline/fill stay quiet and identical across both modes.
 const HILITE_BG = 'rgba(255,255,255,0.05)';
 const HILITE_BORDER = 'rgba(255,255,255,0.16)';
@@ -52,7 +53,7 @@ interface Props {
   /**
    * Whether the currently-selected MEDIUM face-swaps (real face) vs is artistic.
    * The Vibe sheet has no face/art split of its own, so it inherits this to
-   * match the selected medium's color (purple = Real Face, pink = Dream Art).
+   * match the selected medium's color (teal = Real Face, pink = Dream Art).
    */
   mediumIsFace?: boolean;
 }
@@ -91,7 +92,7 @@ export function StylePickerSheet({
   );
 
   // Color-code the sheet toward the relevant medium mode: Real Face = brand
-  // purple, Dream Art = brand pink (the two MEDIUM_BADGE ends). The medium sheet
+  // teal, Dream Art = brand pink (the two MEDIUM_BADGE stops). The medium sheet
   // keys off its active tab; the Vibe sheet (no split) inherits the selected
   // medium's mode via `mediumIsFace` so it matches whatever medium is chosen.
   const accentIsFace = type === 'medium' ? mediumSegment === 'face' : mediumIsFace;
@@ -285,7 +286,7 @@ export function StylePickerSheet({
           {segments.map((seg) => {
             const active = mediumSegment === seg.key;
             // Only the active tab's TEXT carries its brand color (Real Face =
-            // purple, Dream Art = pink); the outline/fill stay subtle + common.
+            // teal, Dream Art = pink); the outline/fill stay subtle + common.
             const segColor = seg.key === 'face' ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
             return (
               <TouchableOpacity
@@ -361,13 +362,10 @@ export function StylePickerSheet({
             />
           </View>
 
-          {/* Title */}
-          <Text
-            className="text-center text-base font-bold mb-3"
-            style={{ color: colors.textPrimary }}
-          >
+          {/* Title — shared white display-font H2 (matches the model sheet). */}
+          <TitleText style={{ marginBottom: verticalScale(12) }}>
             {type === 'medium' ? 'Choose Medium' : 'Choose Vibe'}
-          </Text>
+          </TitleText>
 
           {type === 'medium' && renderMediumToggle()}
 

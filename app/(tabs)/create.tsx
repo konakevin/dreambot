@@ -287,15 +287,6 @@ export default function CreateScreen() {
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
 
-  // Models that render the selected medium well (good face swap + on-style),
-  // from the medium's client_meta.recommended_models (migration 266). Drives
-  // the "Best for this look" group in the ModelPicker so users are steered
-  // toward models that don't drift photoreal on stylized mediums.
-  const recommendedModelIds = ((): string[] | undefined => {
-    const rec = selectedMediumRow?.client_meta?.recommended_models;
-    return Array.isArray(rec) ? rec.filter((m): m is string => typeof m === 'string') : undefined;
-  })();
-
   // Placeholder text
   const placeholder = hasPhoto
     ? 'Describe a scene...'
@@ -632,11 +623,7 @@ export default function CreateScreen() {
               transform of the photo itself and needs an edit-capable model. */}
           {(!hasPhoto || config.photoStyle === 'new_scene') && (
             <View className="mb-4">
-              <ModelPicker
-                onChange={setSelectedModelId}
-                recommendedModelIds={recommendedModelIds}
-                dreamBotMode={!config.useExactPrompt}
-              />
+              <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
             </View>
           )}
 
