@@ -391,6 +391,15 @@ function GroupRow({
       friction={2}
       rightThreshold={40}
       overshootRight={false}
+      // Only a RIGHT action exists (swipe LEFT to delete). By default the row's
+      // pan activates on either direction at ±10px (activeOffsetX [-10, 10]),
+      // which steals the screen's full-width back-swipe (fullScreenGestureEnabled
+      // on the inbox Stack.Screen) everywhere but the native edge zone — the
+      // reported "have to swipe from the far left edge" bug. Pushing the
+      // left-edge drag offset (the RIGHTWARD activation bound) effectively to
+      // infinity means rightward back-swipes pass through to the navigator while
+      // leftward delete still activates at -10px.
+      dragOffsetFromLeftEdge={10000}
       renderRightActions={() => (
         <TouchableOpacity
           style={styles.deleteAction}
