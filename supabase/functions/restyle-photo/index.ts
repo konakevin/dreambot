@@ -714,15 +714,12 @@ Deno.serve((req) => {
   if (edgeRuntime && edgeRuntime.waitUntil) {
     edgeRuntime.waitUntil(task.catch(() => {}));
   }
-  // QUEUE dispatch (dream-queue-worker): ack 202 immediately + render in the
-  // background; handleRequest updates dream_queue itself, so the worker never
-  // awaits the long render (no gateway-504 false-fails).
-  if (req.headers.get('x-dream-queue') === '1') {
-    return new Response(JSON.stringify({ ok: true, accepted: true }), {
-      status: 202,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  // x-dream-queue NO LONGER detaches (2026-06-17): the platform stopped honoring
+  // EdgeRuntime.waitUntil for background work, so a detached render was silently
+  // dropped after the 202 → the job dead-lettered + false-refunded. Render
+  // SYNCHRONOUSLY (the worker holds the connection, keeping the isolate alive,
+  // like the nightly dispatch); handleRequest still owns dream_queue terminal
+  // state. See generate-dream's wrapper + _shared/dualSwapDispatch's create.ts.
   return task;
 });
 

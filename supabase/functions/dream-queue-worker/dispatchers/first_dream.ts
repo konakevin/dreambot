@@ -1,15 +1,18 @@
 /**
- * First-dream dispatcher — FIRE-AND-FORGET dispatch of one queued onboarding
- * first dream to the first-dream-render orchestrator.
+ * First-dream dispatcher — SYNCHRONOUS dispatch of one queued onboarding first
+ * dream to the first-dream-render orchestrator.
  *
- * Same render-owns-lifecycle contract as create/dlt: first-dream-render acks 202
- * immediately and finishes in EdgeRuntime.waitUntil, then owns the dream_queue
- * terminal state itself (complete on success, re-queue the next tier on a
- * cascadeable failure, dead_letter when all tiers are exhausted). The worker
- * does NOT await the render — it only confirms the dispatch was accepted (a
- * non-2xx here means the orchestrator never started → throw so the worker
- * re-queues with backoff). Auth is the worker token (first-dream-render checks
- * DREAM_QUEUE_WORKER_TOKEN), not service-role.
+ * Same render-owns-lifecycle contract as create/dlt: first-dream-render renders
+ * with the connection held open (the worker awaits this) and owns the dream_queue
+ * terminal state (complete / re-queue the next cascade tier / dead_letter). It
+ * used to ack 202 + render in EdgeRuntime.waitUntil, but the platform stopped
+ * honoring waitUntil for background work (2026-06-17), so the detached render was
+ * dropped. Auth is the worker token (not service-role).
+ *
+ * Ownership contract with the worker (mirrors create.ts):
+ *   • Any HTTP response (2xx / 5xx) ⇒ the orchestrator ran + owns terminal state ⇒ return.
+ *   • A pre-render 4xx ⇒ throw so the worker dead-letters.
+ *   • Network/timeout (no response) ⇒ throw; the worker re-queues, status-guarded.
  */
 
 export interface FirstDreamDispatcherArgs {
@@ -18,26 +21,36 @@ export interface FirstDreamDispatcherArgs {
   jobId: string;
 }
 
+const RENDER_TIMEOUT_MS = 180_000;
+
 export async function dispatchFirstDreamJob(args: FirstDreamDispatcherArgs): Promise<void> {
   const { supabaseUrl, workerToken, jobId } = args;
 
-  const res = await fetch(`${supabaseUrl}/functions/v1/first-dream-render`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${workerToken}`,
-    },
-    body: JSON.stringify({ job_id: jobId }),
-  });
-
-  if (!res.ok) {
-    let msg = `dispatch_http_${res.status}`;
-    try {
-      const d = await res.json();
-      if (d && typeof d.error === 'string') msg = d.error;
-    } catch {
-      /* keep the http_<status> message */
-    }
-    throw new Error(msg);
+  let res: Response;
+  try {
+    res = await fetch(`${supabaseUrl}/functions/v1/first-dream-render`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${workerToken}`,
+      },
+      body: JSON.stringify({ job_id: jobId }),
+      signal: AbortSignal.timeout(RENDER_TIMEOUT_MS),
+    });
+  } catch (e) {
+    throw new Error(`dispatch_unreachable:${(e as Error).message}`);
   }
+
+  // Any HTTP response ⇒ the orchestrator ran and owns its own terminal state.
+  if (res.ok || res.status >= 500) return;
+
+  // Pre-render 4xx ⇒ surface so the worker dead-letters.
+  let msg = `dispatch_http_${res.status}`;
+  try {
+    const d = await res.json();
+    if (d && typeof d.error === 'string') msg = d.error;
+  } catch {
+    /* keep the http_<status> message */
+  }
+  throw new Error(msg);
 }

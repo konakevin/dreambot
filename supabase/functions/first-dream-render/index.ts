@@ -74,19 +74,15 @@ Deno.serve(async (req) => {
 
   const supabase: SupabaseClient = createClient(supabaseUrl, serviceRoleKey);
 
-  // Render in the background so we ack 202 fast (render-owns-lifecycle: the
-  // worker dispatched us fire-and-forget and won't await this).
-  const work = renderFirstDream(supabase, supabaseUrl, workerToken, jobId);
-  const edgeRuntime = (
-    globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
-  ).EdgeRuntime;
-  if (edgeRuntime?.waitUntil) {
-    edgeRuntime.waitUntil(work);
-  } else {
-    await work; // local/test: run inline
-  }
-
-  return json({ accepted: true, job_id: jobId }, 202);
+  // Render SYNCHRONOUSLY — the worker holds the connection open (it awaits this
+  // dispatch), which keeps the isolate alive for the full render. We used to ack
+  // 202 + render in EdgeRuntime.waitUntil, but the platform stopped honoring
+  // waitUntil for background work (2026-06-17): the detached render was silently
+  // dropped after the 202, so the onboarding first dream never rendered.
+  // renderFirstDream still owns the dream_queue terminal state (complete /
+  // re-queue the next cascade tier / dead_letter).
+  await renderFirstDream(supabase, supabaseUrl, workerToken, jobId);
+  return json({ done: true, job_id: jobId }, 200);
 });
 
 async function renderFirstDream(

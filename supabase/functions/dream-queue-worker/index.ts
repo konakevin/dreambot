@@ -221,13 +221,16 @@ Deno.serve(async (req) => {
             }
             case 'create':
             case 'dlt': {
-              // User-initiated dream (paid). FIRE-AND-FORGET: generate-dream's
-              // x-dream-queue path acks 202, renders in waitUntil, and updates
-              // dream_queue itself on completion/failure. We only confirm the
-              // dispatch was accepted (a throw here = render never started →
-              // worker re-queues). The job stays 'in_progress' (set by claim)
-              // until the render flips it — which also keeps the concurrency
-              // cap honest without the worker holding a long HTTP await.
+              // User-initiated dream (paid). SYNCHRONOUS: generate-dream/
+              // restyle-photo render with the connection held open (so the
+              // isolate stays alive — the platform stopped honoring waitUntil for
+              // background work, 2026-06-17). The render owns dream_queue terminal
+              // state (completeQueueJob/failQueueJob) on success AND its own
+              // failures. dispatchCreateJob returns on any HTTP response (render
+              // owns it) and throws only on an unreachable dispatch / pre-render
+              // 4xx → the catch re-queues, status-guarded so a dropped connection
+              // on a success can't re-render. Holding the connection also keeps
+              // the in_progress concurrency count accurate for the per-weight cap.
               await dispatchCreateJob({ supabaseUrl, serviceRoleKey, payload: job.payload });
               ownedByRender = true;
               break;
@@ -268,6 +271,26 @@ Deno.serve(async (req) => {
           return { id: job.id, status: 'completed', ms: Date.now() - jobT0 };
         } catch (err) {
           const message = ((err as Error).message ?? 'unknown').slice(0, 1000);
+          // Render-owns-lifecycle guard: create/dlt/first_dream render
+          // SYNCHRONOUSLY and own their own dream_queue terminal state
+          // (completeQueueJob/failQueueJob / cascade re-queue). If the dispatch
+          // threw on a dropped connection (timeout/network) but the render had
+          // already reached a terminal state, DON'T re-handle — that would
+          // re-render a success or double dead-letter. Re-check the live status
+          // first; only proceed to re-queue if it's still non-terminal.
+          if (job.source === 'create' || job.source === 'dlt' || job.source === 'first_dream') {
+            const { data: cur } = await supabase
+              .from('dream_queue')
+              .select('status')
+              .eq('id', job.id)
+              .single();
+            if (cur && (cur.status === 'completed' || cur.status === 'dead_letter')) {
+              console.log(
+                `[worker:${workerId}] job ${job.id} dispatch threw but render already ${cur.status} — leaving it (render-owned)`
+              );
+              return { id: job.id, status: cur.status, ms: Date.now() - jobT0 };
+            }
+          }
           // NSFW/safety rejections are terminal — a retry re-runs a doomed (and
           // costly) render. Dead-letter immediately.
           const isNsfw = message.startsWith('nsfw:');

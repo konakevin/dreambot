@@ -201,6 +201,11 @@ async function handleRequest(req: Request): Promise<Response> {
     console.log(
       `[generate-dream] ${isRetry ? 'RETRY' : 'QUEUE'} render for job ${srvJobId} (user ${userId})`
     );
+    // Earliest possible breadcrumb — proves the detached (waitUntil) render task
+    // actually resumed past the 202 ack. If 'claimed' never appears the platform
+    // dropped the background task; if it appears but 'resolve' doesn't, the task
+    // is alive but hung before prompt-building.
+    markStage(supabase, srvJobId, 'claimed');
   } else {
     // The Supabase gateway already validated the JWT before invoking us, so we
     // can trust the token to identify the user.
@@ -1901,16 +1906,26 @@ Deno.serve((req) => {
   const edgeRuntime = (
     globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
   ).EdgeRuntime;
+  // Durability for the NORMAL (client-connected) path: keep the isolate alive to
+  // finish the render even if the app backgrounds/disconnects.
   if (edgeRuntime && edgeRuntime.waitUntil) {
     edgeRuntime.waitUntil(task.catch(() => {}));
   }
-  // Server-triggered RETRY (refund-stuck-jobs) and QUEUE dispatch (dream-queue-
-  // worker) must NOT block on the multi-second render — ack immediately. The
-  // waitUntil above keeps the isolate alive to finish the render in the
-  // background; the QUEUE path then updates dream_queue itself (completeQueueJob
-  // / failQueueJob inside handleRequest), so a slow render can never gateway-
-  // time-out the worker and false-fail a render that actually succeeds.
-  if (req.headers.get('x-dream-retry') === '1' || req.headers.get('x-dream-queue') === '1') {
+  // x-dream-retry (refund-stuck-jobs best-effort re-dispatch) still acks 202.
+  //
+  // x-dream-queue (dream-queue-worker) NO LONGER detaches. On 2026-06-17 the
+  // platform stopped honoring EdgeRuntime.waitUntil for background work: a
+  // detached render was silently dropped after the 202 (verified — the render
+  // never resumed past its first await), so every create/dlt dream sat
+  // in_progress → stale-recovery re-queued → dead_letter + false refund + a
+  // "failed" push hours later. We now render SYNCHRONOUSLY for the queue path:
+  // the worker holds the connection open (exactly like the proven nightly
+  // dispatch), which keeps the isolate alive for the full render, and we return
+  // the real result. The render still owns dream_queue terminal state
+  // (completeQueueJob / failQueueJob), and the worker re-queues only if the
+  // dispatch is unreachable AND the job is still non-terminal (see create.ts +
+  // the worker catch), so a dropped connection on a success can't re-render it.
+  if (req.headers.get('x-dream-retry') === '1') {
     return new Response(JSON.stringify({ ok: true, accepted: true }), {
       status: 202,
       headers: { 'Content-Type': 'application/json' },
