@@ -81,29 +81,12 @@ module.exports = {
   // context word dropped — DragonBot is dragon-fantasy, not forest).
   // FaeBot uses: 'enchanted-forest fantasy concept art, painterly'
   mediumStyles: {
-    // gpt-image-2 clean (routed via mediumByModel below). Pulls GPT-Image-2
-    // out of the abstract painterly-plate prior the bot's painted_fantasy
-    // medium + dragon-scene's 5-painter prefix trigger. Mirrors mystical-
-    // mermaid (2026-06-05). The painterly per-path prefixes (dragon-scene,
-    // artsy-girl) are stripped for gpt-2 via gptCleanPathPrefixByPath below
-    // (engine swaps in the cleaned prefix — content kept, painters dropped).
-    dragonbot_gpt_clean: blocks.GPT_CLEAN,
     painted_fantasy_novel: 'fantasy concept art, painterly',
   },
 
-  // cleanMediumByModel: gpt-image-2 renders the bot-only clean medium (DragonBot
-  // has no nano-banana in its lineup, so gpt-2 only). On the two painterly paths
-  // (dragon-scene, artsy-girl) the path-prefix is dropped ('') on this swap — the
-  // seed pools (DRAGON_SCENE_DRAGON anatomy; FANTASY_RACE / ARTSY_GIRL_OUTFIT /
-  // ARTSY_GIRL_ACTION) carry the subject, so we don't leak the painter name-drops
-  // that pull gpt-2 abstract. Flux is unaffected (it still uses the full
-  // promptPrefixByPath painterly wrappers below). 2026-06-07.
-  cleanMediumByModel: {
-    'openai/gpt-image-2': {
-      medium: 'dragonbot_gpt_clean',
-      pathPrefix: { 'dragon-scene': '', 'artsy-girl': '' },
-    },
-  },
+  // gpt-2 clean-medium routing removed 2026-06-17 with the bot-wide GPT Image 2
+  // ban (DragonBot is Flux-1.1-only now, so cleanMediumByModel had no model to
+  // route + dragonbot_gpt_clean/GPT_CLEAN went dead).
 
   // Override prefix to empty (matches FaeBot exactly).
   promptPrefix: '',
@@ -247,14 +230,13 @@ module.exports = {
   // heart-ban), MINUS Flux 2 Flex (Kevin 2026-06-05, F2 Flex was the
   // remaining F2-family model and the path-level audits had been banning
   // it on every reviewed path anyway — promoting to bot-wide), AND
-  // MINUS Nano Banana (Kevin 2026-06-05, banned bot-wide).
-  // Was `ALL_ENABLED_AI_MODELS` — dropped 5 models fleet-wide for DragonBot
-  // after audit. Explicit list because bot is a proper subset.
-  allowedModels: [
-    'openai/gpt-image-2',
-    'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-1.1-pro',
-  ],
+  // MINUS Nano Banana (Kevin 2026-06-05, banned bot-wide), MINUS GPT Image 2
+  // (Kevin 2026-06-17, banned bot-wide — removed here AND from every modelByPath
+  // lock below; the gpt-clean routing it drove is now dead).
+  // Was `ALL_ENABLED_AI_MODELS` — dropped models fleet-wide for DragonBot
+  // after audit. Explicit list because bot is a proper subset. DragonBot now
+  // renders on the Flux 1.1 family only (Pro + Ultra).
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
 
   // Per-path bans (2026-05-31): Kevin reviewed the 4 female-character
   // dragonbot paths (artsy-girl + female-adventurer/explorer/action-scenes)
@@ -343,7 +325,6 @@ module.exports = {
     // landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4.
     landscape: [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -352,12 +333,10 @@ module.exports = {
     // (F2 Flex never reachable via normal picker — wasn't in the modelByPath
     // list to begin with — but documenting the heart-ban here for completeness.)
     'iconic-landscape': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     castle: [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -366,17 +345,14 @@ module.exports = {
     // all hearted-as-bad in the enriched-path test.
     'epic-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'dark-realm': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-lore': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dragon-scene': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
