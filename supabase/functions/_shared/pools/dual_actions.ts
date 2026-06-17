@@ -3,14 +3,15 @@
  *
  * COMPANION: universal pool for any two people sharing a scene.
  * PARTNER: additional pool for romantic partners only — comfortable intimacy, not cheesy.
+ * DYNAMIC: movement + contact poses (piggyback, dance, dip, lift) — unlocked by the
+ *   per-face composite swap (2026-06-16).
  *
- * Every entry must:
- *   - Describe what BOTH characters are doing (left person + right person)
- *   - Keep heads on separate sides (no leaning into each other)
- *   - Describe BODY POSE only — face direction is overridden by the brief
- *   - Both characters STATIONARY — no walking, stepping, navigating, arriving
- *   - Both characters roughly SIDE BY SIDE — not one behind the other
- *   - Scene-neutral — body poses must work in ANY setting
+ * The COMPANION/PARTNER entries are STATIONARY + roughly SIDE BY SIDE — but that's
+ * now a STYLISTIC choice (calm, posed look), NOT a face-swap safety rule. The swap
+ * engine handles any layout where the two heads are distinct (not cheek-pressed),
+ * so DYNAMIC entries move/contact freely. The only hard rule across all pools: keep
+ * the two HEADS readable as separate (no cheek-to-cheek), face direction set by the
+ * shared pose contract (dualSwapContract.ts).
  */
 
 export const DUAL_ACTIONS_COMPANION: string[] = [

@@ -58,6 +58,7 @@ import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
+import { DUAL_FACE_LOCK_PHRASE, dualPoseRules } from '../_shared/dualSwapContract.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
@@ -1058,18 +1059,24 @@ Deno.serve(async (req) => {
 
     if (composition === 'character') {
       if (faceSwapEligible) {
+        // Dual pose rules come from the SHARED contract (dualSwapContract.ts) — the
+        // same one Create + the slot pipeline use, so the per-face-composite pose
+        // freedom + gender guarantee can't drift between paths.
+        const dualSameSex = !!(
+          resolvedCast[0]?.gender &&
+          resolvedCast[1]?.gender &&
+          resolvedCast[0].gender === resolvedCast[1].gender
+        );
         const faceLockPhrase = isDualFaceSwap
-          ? 'two people together, both faces CLEARLY VISIBLE and turned toward the camera, interacting naturally, two distinct heads (not cheek-to-cheek overlapping), NEITHER facing away, NEITHER from behind, NO back view, NO back of head'
+          ? DUAL_FACE_LOCK_PHRASE
           : 'three-quarter view to camera, face visible to camera, eyes and nose visible, head turned toward camera, NO back view, NO back of head, NO silhouette, NOT facing away';
-        // POSE IS FREE now — detection + per-face composite swap places each person
-        // on their own detected face, so the old rigid L/R / same-height / clear-gap
-        // lock is gone. The ONLY hard rules left are what DETECTION needs: both faces
-        // visible + camera-facing, and the two heads readable as DISTINCT (not
-        // cheek-pressed, which IoU-fails the per-face crop → re-render). A soft
-        // role-to-side LEAN still helps same-sex casts (no gender signal to tell them
-        // apart); mixed casts are resolved by per-face gender regardless of position.
         const dualSepRule = isDualFaceSwap
-          ? `\n- ━━━ BOTH FACES VISIBLE TO CAMERA (the ONE hard rule) ━━━\n- TWO people in frame, BOTH faces clearly visible and turned toward the camera (three-quarter or front). The face-swap pipeline must SEE both faces.\n- NO back views, NO back-of-head, NO face hidden/obscured/turned fully away, NO heavy profile that hides an eye.\n- The two faces must read as TWO DISTINCT heads with a little space between them — NOT cheeks pressed together / faces overlapping.\n- ━━━ POSE IS FREE ━━━\n- They can interact naturally: standing close, arm around a shoulder, hugging, dancing, one giving the other a piggyback, leaning together, a playful dip, sitting on a ledge together. Movement and different heights are GOOD.\n- Soft lean (not a hard rule): when the pose allows, place the ${resolvedCast[0]?.role ?? 'self'} a touch toward the LEFT and the ${resolvedCast[1]?.role ?? 'plus_one'} a touch toward the RIGHT.`
+          ? '\n' +
+            dualPoseRules({
+              leftRole: resolvedCast[0]?.role ?? 'self',
+              rightRole: resolvedCast[1]?.role ?? 'plus_one',
+              sameSex: dualSameSex,
+            })
           : '';
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
@@ -1389,7 +1396,11 @@ Output ONLY the prompt.`;
       finalPrompt = `set in ${userPlace}, ` + finalPrompt;
     }
 
-    // Post-process: strip contemplative/directional/interaction language for dual face swap.
+    // Post-process: strip ONLY language that breaks DETECTION — faces turned away
+    // from the camera (gaze-at-scenery, back/rear views) or literal face contact
+    // (kiss / noses touching, which IoU-fail the per-face crop). Interaction
+    // language (facing each other, leaning together, arm around, eye contact) is
+    // now KEPT — the per-face composite swaps any layout with two distinct heads.
     // Skipped when slot pipeline ran — assembled prompt is clean already.
     if (isDualFaceSwap && !slotPipelineHandled) {
       finalPrompt = finalPrompt
@@ -1397,25 +1408,11 @@ Output ONLY the prompt.`;
         .replace(/gazing (at|toward|into|across|over) [^,]+/gi, '')
         .replace(/overlooking [^,]+/gi, '')
         .replace(/staring (at|into|toward) [^,]+/gi, '')
-        .replace(/watching [^,]+/gi, '')
         .replace(/from behind/gi, '')
         .replace(/rear view/gi, '')
         .replace(/back view/gi, '')
         .replace(/backs? to (the )?(camera|viewer)/gi, '')
-        .replace(/sharing [^,]+ with /gi, '')
-        .replace(/murmuring [^,]*/gi, '')
-        .replace(/whispering [^,]*/gi, '')
-        .replace(/turned toward (each other|the other|one another)/gi, '')
-        .replace(/facing (each other|one another)/gi, '')
-        .replace(/looking at (each other|one another)/gi, '')
-        .replace(/leaning (in )?(toward|into|close to) (each other|the other|one another)/gi, '')
-        .replace(/eye contact/gi, '')
-        .replace(/locked eyes/gi, '')
-        .replace(/eyes locked/gi, '')
-        .replace(/standing opposite/gi, '')
-        .replace(/face[- ]to[- ]face/gi, '')
         .replace(/about to kiss/gi, '')
-        .replace(/leaning in for/gi, '')
         .replace(/noses (almost )?touching/gi, '')
         .replace(/,\s*,/g, ',')
         .replace(/,\s*$/g, '');

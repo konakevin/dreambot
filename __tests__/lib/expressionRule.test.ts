@@ -207,28 +207,28 @@ describe('USER INTENT rule — dual cast brief', () => {
     expect(output.sonnetBrief).toMatch(/LEFT\/RIGHT/);
   });
 
-  it('preserves the dual L/R face-swap constraint INSIDE the action override (the critical bit)', () => {
-    // This is the load-bearing test. When motion is allowed, it MUST NOT
-    // collapse the face-swap requirements: characters stay in L/R halves,
-    // faces stay 3/4-toward-camera, characters stay synchronized side-by-
-    // side (NOT one ahead — that breaks the 55% crop).
+  it('keeps the REAL face-swap constraints inside the action override (faces visible, distinct heads) while freeing the pose', () => {
+    // Post-detection (per-face composite, 2026-06-16): motion is fully free. The
+    // ONLY constraints kept are what detection needs — both faces visible/
+    // camera-facing and the two heads distinct (not cheek-pressed).
     const output = compilePrompt(makeDualInput());
-    expect(output.sonnetBrief).toMatch(/L\/R halves/);
-    expect(output.sonnetBrief).toMatch(/3\/4 toward camera/i);
-    expect(output.sonnetBrief).toMatch(/synchronized parallel motion/i);
-    expect(output.sonnetBrief).toMatch(/NOT one ahead/i);
+    expect(output.sonnetBrief).toMatch(/move freely/i);
+    expect(output.sonnetBrief).toMatch(/3\/4 or front toward camera/i);
     expect(output.sonnetBrief).toMatch(/never pure profile/i);
     expect(output.sonnetBrief).toMatch(/never from behind/i);
+    expect(output.sonnetBrief).toMatch(/two heads stay distinct/i);
+    // The obsolete fixed-55/55-crop locks are GONE.
+    expect(output.sonnetBrief).not.toMatch(/L\/R halves/);
+    expect(output.sonnetBrief).not.toMatch(/synchronized parallel motion/i);
   });
 
-  it('replaces the OLD "Characters are STATIONARY" hard rule with the conditional override', () => {
-    // The old rule blanket-banned motion. The new rule says "default
-    // STATIONARY UNLESS user specified an action — see ACTION/POSE RULE".
+  it('drops the OLD "STATIONARY default" — pose is now FREE (per-face composite handles any layout)', () => {
     const output = compilePrompt(makeDualInput());
-    expect(output.sonnetBrief).toMatch(/default to STATIONARY/i);
-    expect(output.sonnetBrief).toMatch(/UNLESS the user prompt specifies an action/i);
-    // Old phrasing is gone
-    expect(output.sonnetBrief).not.toMatch(/^Characters are STATIONARY — standing/m);
+    expect(output.sonnetBrief).toMatch(/POSE IS FREE/);
+    expect(output.sonnetBrief).toMatch(/piggyback/i);
+    // Old fixed-crop phrasing is gone.
+    expect(output.sonnetBrief).not.toMatch(/default to STATIONARY/i);
+    expect(output.sonnetBrief).not.toMatch(/Characters are STATIONARY/);
   });
 
   it('does NOT inject the rule when there is no userPrompt', () => {
