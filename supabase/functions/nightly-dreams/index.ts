@@ -55,6 +55,7 @@ import {
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
+import { pickPlayfulScenario } from '../_shared/pools/dual_scenarios.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -995,6 +996,13 @@ Deno.serve(async (req) => {
     let slotPipelineHandled = false;
     let slotPipelineFallbacks: string[] = [];
 
+    // Playful scenario (Phase 2): ~15% of DUAL nightly dreams get a goofy,
+    // unconventional setup (dino onesies, banana costumes, superhero duo). The fun
+    // lives entirely in the scene + wardrobe; the slot pipeline keeps the framing
+    // locked so the swap stays clean. Overrides the location for these renders.
+    const dualPlayfulScene = isDualFaceSwap && Math.random() < 0.15 ? pickPlayfulScenario() : null;
+    const effectiveUserPlace = dualPlayfulScene ?? userPlace;
+
     // ── Unified character face-swap slot pipeline ──
     // Handles BOTH single-human and dual-character face swap. Sonnet only
     // fills controlled slots; geometry/identity/gender/(side for dual) are
@@ -1017,17 +1025,20 @@ Deno.serve(async (req) => {
               // body's sex to the cast photo (fixes male-face-on-female-body).
               gender: (selectedCast[i] as DreamCastMember).gender ?? null,
             })),
-            iconicAnchor,
-            userPlace: userPlace ?? null,
-            timeAxis,
-            weatherAxis,
-            phenomenaAxis,
+            // Playful scenario overrides the location + neutralizes the biome axes
+            // (a studio dino-onesie shot shouldn't fight "blizzard at midnight").
+            iconicAnchor: dualPlayfulScene ?? iconicAnchor,
+            userPlace: dualPlayfulScene ?? userPlace ?? null,
+            timeAxis: dualPlayfulScene ? '' : timeAxis,
+            weatherAxis: dualPlayfulScene ? '' : weatherAxis,
+            phenomenaAxis: dualPlayfulScene ? '' : phenomenaAxis,
             wardrobeAnchor:
-              bespokeBiome &&
+              dualPlayfulScene ??
+              (bespokeBiome &&
               Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
               (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
                 ? pickAxis((bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE)
-                : null,
+                : null),
             mediumFluxFragment: baseMedium.fluxFragment,
             vibeDirective: applyVibeGenderModifier(
               nightlyVibe.key,
@@ -1373,13 +1384,15 @@ Output ONLY the prompt.`;
       }
     }
 
-    // Post-process: ensure location name appears in final prompt (Sonnet sometimes drifts)
+    // Post-process: ensure location name appears in final prompt (Sonnet sometimes
+    // drifts). Uses the effective place — for a playful scenario that's the scenario
+    // (already in the prompt → no-op), so the real location is never injected onto it.
     if (
       includeLocation &&
-      userPlace &&
-      !finalPrompt.toLowerCase().includes(userPlace.toLowerCase())
+      effectiveUserPlace &&
+      !finalPrompt.toLowerCase().includes(effectiveUserPlace.toLowerCase())
     ) {
-      finalPrompt = `set in ${userPlace}, ` + finalPrompt;
+      finalPrompt = `set in ${effectiveUserPlace}, ` + finalPrompt;
     }
 
     // Post-process: strip contemplative/directional/interaction language for dual face swap.

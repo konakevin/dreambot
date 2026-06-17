@@ -247,23 +247,62 @@ export const DUAL_ACTIONS_PARTNER: string[] = [
   'both standing close, one shaking out their hands, the other with thumbs hooked in belt loops',
 ];
 
+// PLAYFUL pool — fun/goofy/tongue-in-cheek poses for unconventional couple photos.
+// SWAP-SAFE by construction, same hard rules as the other pools: the two HEADS
+// stay clearly apart (a gap between them), faces are set by the brief (to camera),
+// body language ONLY, NO contact / lift / dip / piggyback / cheek-to-cheek. The
+// fun is in the gesture + attitude, never in pulling the faces together. (2026-06-16)
+export const DUAL_ACTIONS_PLAYFUL: string[] = [
+  'both throwing up peace signs with both hands, standing a shoulder-width apart with a clear gap between their heads',
+  'both giving a big enthusiastic two-handed thumbs up, arms out, heads kept apart',
+  "one holding up two fingers as bunny ears from a step to the SIDE of the other's head, both heads still clearly apart",
+  'both in a matching superhero power stance, fists planted on hips and chests out, a clear gap between them',
+  'both pointing finger-guns toward the camera, leaning back slightly, heads apart',
+  'both throwing exaggerated jazz hands, leaning slightly outward away from each other',
+  'both flexing their biceps side by side with mock-serious bravado, a gap between their heads',
+  'one sweeping a grand "ta-da" presentation gesture toward the other who stands proudly, both a step apart',
+  'both with hands on their own cheeks in exaggerated wide mock-surprise, elbows wide, heads apart',
+  'both blowing a kiss toward the camera with one hand, standing apart with a clear gap between their heads',
+  'both crossing their arms in a mock-tough cool-guy pose facing forward, a gap between them',
+  'both pointing across the gap at each other with playful "this one!" grins, faces still toward camera',
+  'both making finger-hearts up near their own shoulders, standing a step apart',
+  'both mid-shrug with palms up and goofy "who knows" looks, heads apart',
+  'both throwing up rock-on horns with both hands, big grins, heads kept apart',
+  'one taking a dramatic theatrical bow with a flourish while the other gives a grand curtsy, a clear step apart',
+  'both doing a cheesy synchronized double-point up toward the sky, leaning slightly outward',
+  'both saluting crisply side by side with mock seriousness, a gap between their heads',
+  'both holding up matching shaka signs (thumb and pinky out, three fingers curled into the palm), heads apart',
+  'both striking a confident catalog-model pose with hands in pockets and chins up, a clear gap between them',
+  'both pretending to lean an elbow casually on thin air, mirrored, kept apart with heads separated',
+  'both holding an invisible tiny object up to inspect with mock concentration, a gap between them',
+  'both giving an exaggerated over-the-top wink with finger-guns, leaning slightly apart',
+  'both flashing double "OK" hand signs near their faces with proud grins, heads kept apart',
+  'both planting hands on hips like proud heroes surveying the horizon but heads turned to camera, gap between them',
+];
+
 /**
  * Pick a dual action seed based on the plus_one's relationship.
- * Partner/significant_other: 30% romantic pool, 70% companion pool.
- * Everyone else: companion pool only.
+ * 18% PLAYFUL (fun/goofy) for everyone. Otherwise: partner/significant_other →
+ * 30% romantic / 70% companion; everyone else → companion.
  *
  * `forcePool` overrides the relationship roll — used for QA testing of
  * specific pools.
  */
 export function pickDualAction(
   relationship: string | undefined,
-  forcePool?: 'partner' | 'companion'
+  forcePool?: 'partner' | 'companion' | 'playful'
 ): string {
+  if (forcePool === 'playful') {
+    return DUAL_ACTIONS_PLAYFUL[Math.floor(Math.random() * DUAL_ACTIONS_PLAYFUL.length)];
+  }
   if (forcePool === 'partner') {
     return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
   }
   if (forcePool === 'companion') {
     return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
+  }
+  if (Math.random() < 0.18) {
+    return DUAL_ACTIONS_PLAYFUL[Math.floor(Math.random() * DUAL_ACTIONS_PLAYFUL.length)];
   }
   const isPartner = relationship === 'partner' || relationship === 'significant_other';
   if (isPartner && Math.random() < 0.3) {
