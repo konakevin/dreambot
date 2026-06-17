@@ -285,8 +285,9 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
  * 18% PLAYFUL (fun/goofy) for everyone. Otherwise: partner/significant_other →
  * 30% romantic / 70% companion; everyone else → companion.
  *
- * `forcePool` overrides the relationship roll — used for QA testing of
- * specific pools.
+ * `forcePool` overrides the relationship roll — used by QA + by CREATE (which
+ * forces partner/companion so a user's specific prompt never gets a random goofy
+ * pose). Nightly uses the default, which includes the 18% playful mix.
  */
 export function pickDualAction(
   relationship: string | undefined,
