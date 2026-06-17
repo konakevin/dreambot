@@ -58,7 +58,6 @@ import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
-import { DUAL_FACE_LOCK_PHRASE, dualPoseRules } from '../_shared/dualSwapContract.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
@@ -1059,24 +1058,11 @@ Deno.serve(async (req) => {
 
     if (composition === 'character') {
       if (faceSwapEligible) {
-        // Dual pose rules come from the SHARED contract (dualSwapContract.ts) — the
-        // same one Create + the slot pipeline use, so the per-face-composite pose
-        // freedom + gender guarantee can't drift between paths.
-        const dualSameSex = !!(
-          resolvedCast[0]?.gender &&
-          resolvedCast[1]?.gender &&
-          resolvedCast[0].gender === resolvedCast[1].gender
-        );
         const faceLockPhrase = isDualFaceSwap
-          ? DUAL_FACE_LOCK_PHRASE
+          ? 'two people, three-quarter view to camera, both faces visible to camera, person on left side, person on right side, clear gap between them, NEITHER facing away, NEITHER from behind, NO back view, NO back of head, both heads turned toward camera'
           : 'three-quarter view to camera, face visible to camera, eyes and nose visible, head turned toward camera, NO back view, NO back of head, NO silhouette, NOT facing away';
         const dualSepRule = isDualFaceSwap
-          ? '\n' +
-            dualPoseRules({
-              leftRole: resolvedCast[0]?.role ?? 'self',
-              rightRole: resolvedCast[1]?.role ?? 'plus_one',
-              sameSex: dualSameSex,
-            })
+          ? `\n- ━━━ ROLE-TO-SIDE LOCK (NON-NEGOTIABLE) ━━━\n- The FIRST cast member (${resolvedCast[0]?.role ?? 'self'}) MUST be on the LEFT half of the frame.\n- The SECOND cast member (${resolvedCast[1]?.role ?? 'plus_one'}) MUST be on the RIGHT half of the frame.\n- DO NOT swap their positions. Reversing breaks the face-swap pipeline (faces land on wrong bodies → gender swap disaster).\n- Clear ~2-3 ft gap between them. NO overlap across the midline.\n- BOTH at SAME VERTICAL HEIGHT — both standing OR both sitting OR both crouching. NEVER one tall + one short.\n- BOTH faces three-quarter to camera. NO back views. NO profiles. NO faces away.\n- Both heads at the SAME Y-axis line so the L/R crop captures each face cleanly.`
           : '';
         const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
@@ -1091,10 +1077,10 @@ Deno.serve(async (req) => {
           ? 'Medium shot — both characters waist-up, filling the frame. NOT a wide establishing shot. Characters must NOT be dwarfed by architecture or scenery.'
           : 'Character visible from waist up, filling at least 50% of frame height.';
         const faceAngleLine = isDualFaceSwap
-          ? 'Both faces clearly visible to camera — three-quarter or front, eyes and nose visible on BOTH. Heads can tilt toward each other for a candid feel, but each face stays turned enough toward the camera to be fully readable. NOT backs to camera, NO full profile that hides an eye, NEVER both gazing away at scenery.'
+          ? 'Three-quarter view on both faces — both angled slightly toward the VIEWER, like a candid movie still. Eyes and nose visible on both. NOT facing each other. NOT backs to camera. NEVER looking away from camera. NEVER gazing at scenery or horizon.'
           : 'Three-quarter view — eyes and nose visible but character is NOT looking at the camera.';
         const staticLine = isDualFaceSwap
-          ? 'Dynamic candid poses welcome — interaction, movement, an arm around a shoulder, a spin, a piggyback. Keep both faces turned toward the camera through the motion.'
+          ? 'Characters are STATIONARY — standing, sitting, leaning. NO walking, NO movement through the scene.'
           : '';
         const cameraLine = isDualFaceSwap
           ? 'Eye-level camera angle. NEVER extreme low angle looking up. Warm atmospheric lighting — NEVER harsh overhead or flat institutional light.'
@@ -1396,11 +1382,7 @@ Output ONLY the prompt.`;
       finalPrompt = `set in ${userPlace}, ` + finalPrompt;
     }
 
-    // Post-process: strip ONLY language that breaks DETECTION — faces turned away
-    // from the camera (gaze-at-scenery, back/rear views) or literal face contact
-    // (kiss / noses touching, which IoU-fail the per-face crop). Interaction
-    // language (facing each other, leaning together, arm around, eye contact) is
-    // now KEPT — the per-face composite swaps any layout with two distinct heads.
+    // Post-process: strip contemplative/directional/interaction language for dual face swap.
     // Skipped when slot pipeline ran — assembled prompt is clean already.
     if (isDualFaceSwap && !slotPipelineHandled) {
       finalPrompt = finalPrompt
@@ -1408,11 +1390,25 @@ Output ONLY the prompt.`;
         .replace(/gazing (at|toward|into|across|over) [^,]+/gi, '')
         .replace(/overlooking [^,]+/gi, '')
         .replace(/staring (at|into|toward) [^,]+/gi, '')
+        .replace(/watching [^,]+/gi, '')
         .replace(/from behind/gi, '')
         .replace(/rear view/gi, '')
         .replace(/back view/gi, '')
         .replace(/backs? to (the )?(camera|viewer)/gi, '')
+        .replace(/sharing [^,]+ with /gi, '')
+        .replace(/murmuring [^,]*/gi, '')
+        .replace(/whispering [^,]*/gi, '')
+        .replace(/turned toward (each other|the other|one another)/gi, '')
+        .replace(/facing (each other|one another)/gi, '')
+        .replace(/looking at (each other|one another)/gi, '')
+        .replace(/leaning (in )?(toward|into|close to) (each other|the other|one another)/gi, '')
+        .replace(/eye contact/gi, '')
+        .replace(/locked eyes/gi, '')
+        .replace(/eyes locked/gi, '')
+        .replace(/standing opposite/gi, '')
+        .replace(/face[- ]to[- ]face/gi, '')
         .replace(/about to kiss/gi, '')
+        .replace(/leaning in for/gi, '')
         .replace(/noses (almost )?touching/gi, '')
         .replace(/,\s*,/g, ',')
         .replace(/,\s*$/g, '');

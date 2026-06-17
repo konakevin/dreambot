@@ -26,7 +26,6 @@
 
 import { callSonnet } from './llm.ts';
 import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
-import { DUAL_FACE_LOCK_PHRASE, dualPoseFluxTokens } from './dualSwapContract.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -520,21 +519,17 @@ export function assembleCharacterPrompt(
   // Gender lock SHOUTED at position 1. Non-negotiable for dual.
   const genderLock = `${left.gender.toUpperCase()} on the LEFT, ${right.gender.toUpperCase()} on the RIGHT`;
 
-  // Dual anchor + framing — shared pose contract (per-face composite swap handles
-  // ANY layout, so the old "side by side / same vertical height / frontal portrait"
-  // crop locks are gone). The gender SHOUT (genderLock above) + per-side wardrobe
-  // blocks keep the L/R bias, so same-sex casts still resolve which-is-which.
-  const sameSexCast = !!(
-    left.castGender &&
-    right.castGender &&
-    left.castGender === right.castGender
-  );
-  const dualAnchor = `TWO people together, ${DUAL_FACE_LOCK_PHRASE}, interacting naturally`;
-  const framingBlock = dualPoseFluxTokens({
-    sameSex: sameSexCast,
-    leftRole: input.cast[0].role,
-    rightRole: input.cast[1].role,
-  });
+  // Dual anchor — positive phrasing, no negatives
+  const dualAnchor =
+    'TWO people, side by side, both characters looking out at the camera, frontal couple portrait, both faces turned toward the viewer, both heads tilted toward the audience, three-quarter view to camera';
+
+  // Framing — includes L/R clear-gap + same-height constraints for crop pipeline
+  const framingBlock = [
+    'both shown from the waist up, fully visible',
+    'both faces unobstructed and clearly visible to the viewer',
+    'frontal portrait composition, both faces turned to the camera',
+    'clear gap between them, both at the same vertical height, heads at the same level',
+  ].join(', ');
 
   const parts = [
     genderLock,
