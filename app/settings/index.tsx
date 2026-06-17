@@ -1,4 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
+import { asDbResult } from '@/lib/dbResult';
 import { Toast } from '@/components/Toast';
 import { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet, Switch } from 'react-native';
@@ -99,11 +100,11 @@ export default function SettingsScreen() {
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
-        const row = data as unknown as {
+        const row = asDbResult<{
           is_admin?: boolean;
           is_public?: boolean;
           allow_reposts?: boolean;
-        };
+        }>(data);
         if (row?.is_admin) setIsAdmin(true);
         if (row?.is_public) setIsPublic(true);
         setAllowReposts(row?.allow_reposts ?? true);

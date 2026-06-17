@@ -53,7 +53,7 @@ import {
   persistToStorage,
   buildDisplayVariant,
 } from '../_shared/persistence.ts';
-import { insertGenerationLog } from '../_shared/logging.ts';
+import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { markStage } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
@@ -955,7 +955,7 @@ Deno.serve(async (req) => {
       // falls back to the shared class config (getBiomeConfig) below.
       const cfg = locCard?.biome_config;
       if (isValidBiomeConfig(cfg)) {
-        bespokeBiome = cfg as unknown as ReturnType<typeof getBiomeConfig>;
+        bespokeBiome = cfg; // isValidBiomeConfig is a type guard → cfg is BiomeConfig here
       }
     }
     // Backfill-at-runtime: no stored biome → derive a coherent biome from the
@@ -1108,9 +1108,9 @@ Deno.serve(async (req) => {
             wardrobeAnchor: dualSpecialScene
               ? dualSpecialWardrobe
               : bespokeBiome &&
-                  Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
-                  (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
-                ? pickAxis((bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE)
+                  Array.isArray(bespokeBiome.WARDROBE) &&
+                  bespokeBiome.WARDROBE.length > 0
+                ? pickAxis(bespokeBiome.WARDROBE)
                 : null,
             mediumFluxFragment: baseMedium.fluxFragment,
             vibeDirective: applyVibeGenderModifier(
@@ -2008,7 +2008,7 @@ Output ONLY the prompt.`;
       insertGenerationLog(supabase, {
         user_id: userId,
         job_id: queueJobId,
-        recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+        recipe_snapshot: asJsonbObject(vibe_profile),
         rolled_axes: { ...logAxes, timings, observability },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,

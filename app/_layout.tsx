@@ -22,6 +22,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
 import { routeFromNotification } from '@/lib/notificationRouting';
@@ -393,7 +394,7 @@ function DataPrefetcher() {
             p_user_id: user.id,
           });
           if (error) throw error;
-          const row = (data as unknown as Record<string, unknown>[])?.[0];
+          const row = asDbResult<Record<string, unknown>[]>(data)?.[0];
           return row ?? null;
         },
         staleTime: 5 * 60_000,
@@ -476,23 +477,12 @@ function DataPrefetcher() {
         }
       }
 
-      // Mark stale processing jobs as failed (>3 min old)
-      if (user) {
-        const cutoff = new Date(Date.now() - 3 * 60_000).toISOString();
-        supabase
-          .from('dream_jobs')
-          .update({
-            status: 'failed',
-            error: 'timed_out',
-            completed_at: new Date().toISOString(),
-          })
-          .eq('user_id', user.id)
-          .eq('status', 'processing')
-          .lt('created_at', cutoff)
-          .then(() => {
-            /* fire and forget */
-          });
-      }
+      // NOTE: stale-job cleanup is owned SERVER-SIDE now — refund-stuck-jobs
+      // (sweeps dream_jobs processing >5min + refunds, every 5min) + dream_queue
+      // worker stale-recovery. The old client 3-min timeout here was removed: it
+      // raced the async queue (a dream legitimately sits >3min behind the heavy
+      // cap or the ≤5min sync backstop) and could mark a still-rendering job
+      // 'failed', surfacing a FALSE failure while the render later completed.
     });
     return () => sub.remove();
     // touchLastActive captures `user` via closure — re-bind on user change.

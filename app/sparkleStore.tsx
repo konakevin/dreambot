@@ -144,7 +144,9 @@ const MOCK_PACKAGES: PurchasesPackage[] = [
     identifier: 'pack_500',
     product: { identifier: 'com.konakevin.radorbad.sparkles.500_v2', priceString: '$49.99' },
   },
-  // deno-lint-ignore no-explicit-any
+  // Accepted boundary: a minimal offline FALLBACK shaped to RevenueCat's
+  // PurchasesPackage[] (the SDK type carries many runtime-only fields we don't
+  // populate in a static fallback). Replaced by the live SDK offerings at runtime.
 ] as unknown as PurchasesPackage[];
 
 export default function SparkleStoreScreen() {

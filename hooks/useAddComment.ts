@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import { moderateText } from '@/lib/moderation';
+import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
 import { trackCommentAdded } from '@/lib/analytics';
 import type { Comment } from '@/hooks/useComments';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -35,7 +35,12 @@ export function useAddComment() {
         .select('id, created_at')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // The server-side moderation trigger (migration 276) is the real
+        // enforcement; surface its block with the same friendly copy.
+        if (isModerationError(error)) throw new Error(MODERATION_BLOCKED_MESSAGE);
+        throw error;
+      }
       return data;
     },
     onSuccess: (data, { uploadId, body, parentId }) => {

@@ -26,6 +26,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 import * as nav from '@/lib/navigate';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums } from '@/hooks/useDreamStyles';
@@ -109,7 +110,7 @@ export default function DreamLikeThisScreen() {
       // Surface fetch failures — a silently-ignored error here (a nonexistent
       // selected column) left refMedium null and dead-buttoned the whole screen.
       if (error && __DEV__) console.warn('[DLT] reference post fetch failed:', error.message);
-      const row = data as unknown as Record<string, unknown> | null;
+      const row = asDbResult<Record<string, unknown> | null>(data);
       if (row) {
         const mk = (row.dream_medium as string) ?? null;
         setRefMedium(mk);
@@ -134,6 +135,9 @@ export default function DreamLikeThisScreen() {
         // Direct-fetch the medium row — covers bot-only mediums that aren't
         // returned by useDreamMediums() (gothic / gothic-realistic / etc).
         if (mk) {
+          // Accepted boundary: structurally re-type the typed Supabase client to
+          // query by a DYNAMIC table/column string (bot-only mediums aren't in
+          // the statically-typed schema). Not a validation bypass.
           const { data: mRow } = await (
             supabase as unknown as {
               from: (t: string) => {

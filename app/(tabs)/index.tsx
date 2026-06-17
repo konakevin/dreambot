@@ -14,6 +14,7 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { reconcileWelcomeBonus } from '@/lib/welcomeBonus';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
@@ -288,7 +289,7 @@ export default function HomeScreen() {
         .eq('id', id)
         .single();
       if (row) {
-        const post = mapToDreamPost(row as unknown as Record<string, unknown>);
+        const post = mapToDreamPost(asDbResult<Record<string, unknown>>(row));
         setPinnedPost(post);
       }
     })();

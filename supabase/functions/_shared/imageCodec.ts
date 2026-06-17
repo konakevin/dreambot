@@ -99,6 +99,9 @@ export async function encodeJpeg(
     height: image.height,
     colorSpace: 'srgb' as const,
   };
+  // Accepted boundary: `imageData` is a structural ImageData, but the DOM
+  // `ImageData` lib type isn't available in the Deno edge runtime, so we cast to
+  // satisfy @jsquash's param type. Shape is correct (data/width/height/colorSpace).
   const ab = await encodeJpegLib(imageData as unknown as ImageData, { quality });
   return new Uint8Array(ab);
 }

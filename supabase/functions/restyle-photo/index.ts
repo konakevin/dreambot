@@ -33,7 +33,7 @@ import { captureRenderError } from '../_shared/sentry.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
-import { insertGenerationLog } from '../_shared/logging.ts';
+import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 
 interface RestyleRequest {
   mode: 'flux-dev' | 'flux-kontext';
@@ -391,7 +391,7 @@ async function handleRequest(req: Request): Promise<Response> {
       insertGenerationLog(supabase, {
         user_id: userId,
         job_id: jobId ?? null,
-        recipe_snapshot: (vibeProfile as unknown as Record<string, unknown>) ?? {},
+        recipe_snapshot: asJsonbObject(vibeProfile),
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
@@ -568,7 +568,7 @@ async function handleRequest(req: Request): Promise<Response> {
     insertGenerationLog(supabase, {
       user_id: userId,
       job_id: jobId ?? null,
-      recipe_snapshot: (vibeProfile as unknown as Record<string, unknown>) ?? {},
+      recipe_snapshot: asJsonbObject(vibeProfile),
       rolled_axes: { ...logAxes, timings, error: errMsg },
       enhanced_prompt: finalPrompt,
       model_used: pickedModel,

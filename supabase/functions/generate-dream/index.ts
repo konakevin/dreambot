@@ -56,7 +56,7 @@ import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
-import { insertGenerationLog } from '../_shared/logging.ts';
+import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
 import { pickCreateFaceSwapOverride } from '../_shared/createFaceSwapOverrides.ts';
@@ -1465,7 +1465,7 @@ Output ONLY the prompt.`;
       insertGenerationLog(supabase, {
         user_id: userId,
         job_id: jobId ?? null,
-        recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+        recipe_snapshot: asJsonbObject(vibe_profile),
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
         model_used: pickedModel,
@@ -1766,7 +1766,7 @@ Output ONLY the prompt.`;
         await insertGenerationLog(supabase, {
           user_id: userId,
           job_id: jobId ?? null,
-          recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+          recipe_snapshot: asJsonbObject(vibe_profile),
           rolled_axes: { ...logAxes, error: errMsg, refundClass, queued: true },
           enhanced_prompt: finalPrompt,
           model_used: force_model || 'unknown',
@@ -1837,7 +1837,7 @@ Output ONLY the prompt.`;
       await insertGenerationLog(supabase, {
         user_id: userId,
         job_id: jobId ?? null,
-        recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
+        recipe_snapshot: asJsonbObject(vibe_profile),
         rolled_axes: { ...logAxes, error: errMsg, refundClass, sparkleRefunded },
         enhanced_prompt: finalPrompt,
         model_used: force_model || 'unknown',

@@ -26,6 +26,8 @@ export interface BiomeConfig {
   SUBJECT_RULE: string;
   /** Hard content bans for this biome — appended to the brief */
   BANS: string[];
+  /** Optional — bespoke per-location overrides only carry this; wardrobe options. */
+  WARDROBE?: string[];
 }
 
 const SHARED_CAMERA = [

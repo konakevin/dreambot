@@ -20,6 +20,25 @@ export interface ModerationResult {
   reason: string | null;
 }
 
+/** User-facing copy shown when text is blocked (client pre-check OR the server trigger). */
+export const MODERATION_BLOCKED_MESSAGE = "This contains language we don't allow.";
+
+/**
+ * True if a Supabase/PostgREST error came from the server-side moderation trigger
+ * (migration 276 raises `moderation_blocked`). The DB trigger is the real
+ * enforcement (the client check below is just a fast pre-check + can drift from
+ * the DB-tunable wordlist), so map this to {@link MODERATION_BLOCKED_MESSAGE}.
+ */
+export function isModerationError(err: unknown): boolean {
+  const msg =
+    typeof err === 'string'
+      ? err
+      : err && typeof err === 'object' && 'message' in err
+        ? String((err as { message?: unknown }).message ?? '')
+        : '';
+  return msg.includes('moderation_blocked');
+}
+
 const PASS: ModerationResult = { passed: true, reason: null };
 const FAIL: ModerationResult = {
   passed: false,

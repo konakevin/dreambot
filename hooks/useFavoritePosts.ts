@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { mapToDreamPost } from '@/lib/mapPost';
+import { asDbResult } from '@/lib/dbResult';
 
 const PAGE_SIZE = 18;
 
@@ -18,7 +19,7 @@ export function useFavoritePosts(enabled = true) {
         .order('created_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
-      const rows = ((data ?? []) as unknown as Record<string, unknown>[])
+      const rows = asDbResult<Record<string, unknown>[]>(data ?? [])
         .map((r) => r.uploads as Record<string, unknown> | null)
         .filter((u): u is Record<string, unknown> => u !== null)
         .map(mapToDreamPost);

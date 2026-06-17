@@ -59,6 +59,9 @@ export async function saveDream(opts: SaveDreamOpts): Promise<SaveDreamResult> {
 
   const { data, error } = await supabase
     .from('uploads')
+    // Accepted boundary: widen the typed insert payload with an index signature to
+    // satisfy PostgREST's strict generated Insert type (a few fields are looser
+    // than the generated shape). Not a validation bypass — `row` is built typed above.
     .insert(row as unknown as typeof row & Record<string, unknown>)
     .select('id')
     .single();

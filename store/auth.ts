@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 import { useFeedStore } from '@/store/feed';
 import { queryClient } from '@/lib/queryClient';
 import {
@@ -95,7 +96,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         .eq('id', session.user.id)
         .single()
         .then(({ data }) => {
-          const row = data as unknown as EntitlementRow | null;
+          const row = asDbResult<EntitlementRow | null>(data);
           set({
             isAdmin: !!row?.is_admin,
             isPro: isProActive(row),
@@ -137,7 +138,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       .select(ENTITLEMENT_COLUMNS)
       .eq('id', userId)
       .single();
-    const row = data as unknown as EntitlementRow | null;
+    const row = asDbResult<EntitlementRow | null>(data);
     set({
       isAdmin: !!row?.is_admin,
       isPro: isProActive(row),
@@ -156,7 +157,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         .eq('id', userId)
         .single()
         .then(({ data }) => {
-          const row = data as unknown as EntitlementRow | null;
+          const row = asDbResult<EntitlementRow | null>(data);
           set({
             isAdmin: !!row?.is_admin,
             isPro: isProActive(row),

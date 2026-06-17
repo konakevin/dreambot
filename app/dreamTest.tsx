@@ -29,6 +29,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 import { fetchEdge } from '@/lib/edgeFunction';
 import { saveDream } from '@/lib/dreamSave';
 import { colors } from '@/constants/theme';
@@ -160,7 +161,7 @@ export default function DreamTestScreen() {
       .single();
     const recipe = data?.recipe as Record<string, unknown> | null;
     if (recipe?.version === 2) {
-      profileRef.current = recipe as unknown as VibeProfile;
+      profileRef.current = asDbResult<VibeProfile>(recipe);
       return profileRef.current;
     }
     return null;

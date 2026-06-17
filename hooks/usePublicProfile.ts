@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { asDbResult } from '@/lib/dbResult';
 
 export interface PublicProfile {
   id: string;
@@ -40,8 +41,7 @@ export function usePublicProfile(userId: string) {
         // Cast through Record so this compiles even when types/database.ts
         // hasn't been regen'd yet for migration 210 (which added created_at
         // to the get_public_profile RETURNS TABLE).
-        created_at:
-          ((row as unknown as Record<string, unknown>).created_at as string | null) ?? null,
+        created_at: (asDbResult<Record<string, unknown>>(row).created_at as string | null) ?? null,
         postCount: Number(row.post_count),
         followerCount: Number(row.follower_count),
         followingCount: Number(row.following_count),

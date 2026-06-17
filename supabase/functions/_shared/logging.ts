@@ -10,6 +10,17 @@
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+/**
+ * Adapt a typed object (e.g. a VibeProfile) to the loosely-typed JSONB
+ * `recipe_snapshot` / `rolled_axes` columns in ONE justified place, so call
+ * sites don't each need an `as unknown as Record<...>` cast. The single `as`
+ * here is a legitimate object→record downcast at the JSONB serialization
+ * boundary (the value is stored as opaque JSONB for observability).
+ */
+export function asJsonbObject(v: object | null | undefined): Record<string, unknown> {
+  return (v ?? {}) as Record<string, unknown>;
+}
+
 export interface GenerationLogEntry {
   user_id: string;
   /**

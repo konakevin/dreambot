@@ -33,7 +33,7 @@ import { showAlert } from '@/components/CustomAlert';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
-import { moderateText } from '@/lib/moderation';
+import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
 
 const DISPLAY_NAME_MAX = 50;
 const BIO_MAX = 160;
@@ -132,7 +132,11 @@ export default function EditProfileScreen() {
         bio: trimmedBio ? trimmedBio.slice(0, BIO_MAX) : null,
       };
       const { error } = await supabase.from('users').update(payload).eq('id', user.id);
-      if (error) throw error;
+      if (error) {
+        // Server-side moderation trigger (migration 276) → friendly copy.
+        if (isModerationError(error)) throw new Error(MODERATION_BLOCKED_MESSAGE);
+        throw error;
+      }
       savedRef.current = { name: trimmedName, bio: trimmedBio };
       await queryClient.invalidateQueries({ queryKey: ['publicProfile', user.id] });
       Toast.show('Saved', 'checkmark-circle');
