@@ -31,10 +31,12 @@ export interface CreateDispatcherArgs {
   payload: Record<string, unknown>;
 }
 
-// Generous ceiling: a heavy dual render is ~60-90s; 180s leaves headroom under
-// the 400s edge wall-clock without letting a truly-hung render block the worker
-// forever. A timeout aborts → throw → worker re-queues (status-guarded).
-const RENDER_TIMEOUT_MS = 180_000;
+// A render that sends no response bytes for 150s gets gateway-504'd + the
+// isolate reaped anyway (request-idle limit), so 180s was never really reachable.
+// 120s keeps the worker's own abort UNDER that ceiling: a heavy dual is ~60-90s,
+// so this still has headroom; a truly-hung render aborts → throw → worker
+// re-queues (status-guarded). Also keeps a worker SYNC tick under SYNC_TICK_BUDGET.
+const RENDER_TIMEOUT_MS = 120_000;
 
 export async function dispatchCreateJob(args: CreateDispatcherArgs): Promise<void> {
   const { supabaseUrl, serviceRoleKey, payload } = args;

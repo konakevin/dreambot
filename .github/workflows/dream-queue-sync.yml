@@ -1,0 +1,63 @@
+name: Dream Queue Sync Backstop
+
+# Reliability backstop for the dream-queue worker. The fast path (pg_cron every
+# minute + per-enqueue kick) acks 202 and runs its tick in EdgeRuntime.waitUntil
+# — great WHEN waitUntil is healthy, but the platform DROPPED waitUntil for a
+# window on 2026-06-17, stalling the whole queue (nightly + create + first_dream).
+#
+# This workflow drains the queue WITHOUT depending on waitUntil: GitHub's runner
+# holds the curl connection open until the worker responds, so the
+# GH → worker → render chain is all actively-awaited inbound requests (the only
+# reliable Supabase-edge keep-alive). The worker's x-worker-sync mode runs ONE
+# tick inline (capped <150s) per call; we LOOP short calls in bash for ~3.5 min,
+# breaking early when a tick reports 0 processed (queue drained — don't burn
+# budget). When waitUntil is healthy this usually finds an empty queue and exits
+# in seconds; when it's down, this is what keeps dreams rendering (within ~5 min).
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # every 5 minutes (the reliable floor; pg_cron is the fast path)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  drain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Drain dream_queue (held-connection sync ticks)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ]; then
+            SUPABASE_URL="https://jimftynwrinwenonjrlj.supabase.co"
+          fi
+          DEADLINE=$(( $(date +%s) + 210 ))   # ~3.5 min loop budget
+          TICKS=0
+          while [ "$(date +%s)" -lt "$DEADLINE" ]; do
+            RESP=$(curl -sS --max-time 135 -w "\nHTTP_STATUS:%{http_code}" -X POST \
+              "${SUPABASE_URL}/functions/v1/dream-queue-worker" \
+              -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+              -H "Content-Type: application/json" \
+              -H "x-worker-sync: 1" \
+              -d '{}') || { echo "curl failed (transient) — retrying"; sleep 3; continue; }
+            STATUS=$(echo "$RESP" | tail -1 | cut -d: -f2)
+            BODY=$(echo "$RESP" | sed '$d')
+            TICKS=$((TICKS+1))
+            echo "tick $TICKS → status=$STATUS body=$BODY"
+            if [ "$STATUS" != "200" ]; then
+              echo "::error::sync worker returned non-200 ($STATUS)"
+              exit 1
+            fi
+            PROCESSED=$(echo "$BODY" | grep -o '"processed":[0-9-]*' | cut -d: -f2)
+            # Queue drained (0 processed) → stop; don't spin the remaining budget.
+            if [ "$PROCESSED" = "0" ]; then
+              echo "queue drained after $TICKS tick(s) — exiting"
+              break
+            fi
+          done

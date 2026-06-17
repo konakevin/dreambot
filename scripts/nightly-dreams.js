@@ -70,6 +70,25 @@ if (!SUPABASE_KEY) {
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/**
+ * Fetch ALL rows of a query in 1000-row pages. Supabase/PostgREST SILENTLY caps
+ * a single read at 1000 rows, so any unbounded full-set fetch must paginate or
+ * it drops everything past 1000 with no error — for nightly that means users
+ * 1001+ get NO dream (and miss reminders). `buildQuery` MUST return a FRESH
+ * query builder each call (builders are single-use / not re-runnable).
+ */
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 (async () => {
@@ -97,16 +116,22 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // Eligible: real users (no bots — never tunable), Pro or in-trial, gated by the
   // config predicates (onboarding / ai_enabled, both default on).
-  let eligibleQuery = sb
-    .from('user_recipes')
-    .select(
-      `user_id,
+  // PAGINATED — without this, PostgREST's 1000-row cap silently drops every
+  // eligible user past 1000 (they'd get NO nightly dream, no error). buildEligible
+  // returns a fresh builder per page (builders are single-use).
+  const buildEligible = () => {
+    let q = sb
+      .from('user_recipes')
+      .select(
+        `user_id,
        users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot, is_admin)`
-    )
-    .eq('users.is_bot', false);
-  if (cfg.nightlyRequireOnboarding) eligibleQuery = eligibleQuery.eq('onboarding_completed', true);
-  if (cfg.nightlyRequireAiEnabled) eligibleQuery = eligibleQuery.eq('ai_enabled', true);
-  const { data: users, error } = await eligibleQuery;
+      )
+      .eq('users.is_bot', false);
+    if (cfg.nightlyRequireOnboarding) q = q.eq('onboarding_completed', true);
+    if (cfg.nightlyRequireAiEnabled) q = q.eq('ai_enabled', true);
+    return q;
+  };
+  const { data: users, error } = await fetchAllPages(buildEligible);
 
   if (error) {
     console.error('DB error:', error.message);
@@ -167,16 +192,23 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
     // guard and we want dry mode to print would-send reminders too.
   } else {
     // Pre-filter against today's already-enqueued jobs (idempotent re-runs).
+    // Chunk the .in() — 1000+ keys in one PostgREST .in() blows the URL length
+    // (and hits the read row-cap). 300/chunk stays well under both. (The unique
+    // index on dedup_key + the upsert below also backstop dedup; this pre-filter
+    // is the optimization that skips already-enqueued users.)
     const allKeys = allRows.map((r) => r.dedup_key);
-    const { data: existing, error: exErr } = await sb
-      .from('dream_queue')
-      .select('dedup_key')
-      .in('dedup_key', allKeys);
-    if (exErr) {
-      console.error('Dedup lookup failed:', exErr.message);
-      process.exit(1);
+    const existingKeys = new Set();
+    for (let i = 0; i < allKeys.length; i += 300) {
+      const { data: existing, error: exErr } = await sb
+        .from('dream_queue')
+        .select('dedup_key')
+        .in('dedup_key', allKeys.slice(i, i + 300));
+      if (exErr) {
+        console.error('Dedup lookup failed:', exErr.message);
+        process.exit(1);
+      }
+      for (const e of existing || []) existingKeys.add(e.dedup_key);
     }
-    const existingKeys = new Set((existing || []).map((e) => e.dedup_key));
     const newRows = allRows.filter((r) => !existingKeys.has(r.dedup_key));
 
     if (newRows.length === 0) {
@@ -251,16 +283,18 @@ async function sendTrialReminders(sb, enqueuedPool) {
   // Pool of users to check: every onboarded non-bot trial user (we want to
   // ping even users who aren't currently eligible for nightlies — that's
   // the whole point of the reminder). Paid Pro excluded.
-  const { data: trialUsers, error: tErr } = await sb
-    .from('user_recipes')
-    .select(
-      `user_id,
+  const { data: trialUsers, error: tErr } = await fetchAllPages(() =>
+    sb
+      .from('user_recipes')
+      .select(
+        `user_id,
        users!inner(pro_subscription, pro_subscription_expires_at, pro_trial_started_at, is_bot)`
-    )
-    .eq('onboarding_completed', true)
-    .eq('users.is_bot', false)
-    .eq('users.pro_subscription', false)
-    .not('users.pro_trial_started_at', 'is', null);
+      )
+      .eq('onboarding_completed', true)
+      .eq('users.is_bot', false)
+      .eq('users.pro_subscription', false)
+      .not('users.pro_trial_started_at', 'is', null)
+  );
   if (tErr) {
     console.warn(`⚠️  trial-reminder user lookup failed: ${tErr.message}`);
     return;
@@ -370,17 +404,19 @@ async function sendPaidProReminders(sb, enqueuedPool) {
   // Candidates: onboarded paid Pro users who have cancelled auto-renewal
   // (will_renew=false → they ARE going to lose access at expires_at). Bots
   // and trial users excluded.
-  const { data: paidUsers, error: pErr } = await sb
-    .from('user_recipes')
-    .select(
-      `user_id,
+  const { data: paidUsers, error: pErr } = await fetchAllPages(() =>
+    sb
+      .from('user_recipes')
+      .select(
+        `user_id,
        users!inner(pro_subscription, pro_subscription_expires_at, pro_subscription_will_renew, pro_trial_started_at, is_bot)`
-    )
-    .eq('onboarding_completed', true)
-    .eq('users.is_bot', false)
-    .eq('users.pro_subscription', true)
-    .eq('users.pro_subscription_will_renew', false)
-    .not('users.pro_subscription_expires_at', 'is', null);
+      )
+      .eq('onboarding_completed', true)
+      .eq('users.is_bot', false)
+      .eq('users.pro_subscription', true)
+      .eq('users.pro_subscription_will_renew', false)
+      .not('users.pro_subscription_expires_at', 'is', null)
+  );
   if (pErr) {
     console.warn(`⚠️  paid-pro-reminder user lookup failed: ${pErr.message}`);
     return;

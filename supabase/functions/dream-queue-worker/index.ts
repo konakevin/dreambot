@@ -34,6 +34,10 @@ const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // faster (bounded by provider rate limits + Supabase concurrent-isolate
 // limits); overlapping ticks add more concurrency via SKIP LOCKED.
 const MAX_JOBS_PER_TICK = 10;
+// SYNC mode (x-worker-sync) caps one tick under the 150s request-idle ceiling —
+// we must send a response before the gateway 504s + reaps the isolate. The GH
+// backstop loops multiple short held calls; never one long hold.
+const SYNC_TICK_BUDGET_MS = 120_000;
 const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 
@@ -75,9 +79,12 @@ Deno.serve(async (req) => {
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
+  // Accept the worker token (pg_cron / enqueue kick) OR the service-role key
+  // (the GitHub Actions sync backstop + enqueue kick use it — it's strictly
+  // higher-privilege + already a repo secret, so no separate GH secret needed).
   const authHeader = req.headers.get('Authorization') ?? '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (bearer !== expectedToken) {
+  if (bearer !== expectedToken && bearer !== serviceRoleKey) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
@@ -131,35 +138,21 @@ Deno.serve(async (req) => {
     // in_progress); a saturated pool claims 0 and those jobs wait. Both caps are
     // live-tunable via engine_config (no deploy). Splitting the cap means a flood
     // of heavy dual dreams can never throttle light text dreams (and vice versa).
+    // Per-weight concurrency caps are now enforced ATOMICALLY inside
+    // claim_dream_queue_jobs_by_weight (migration 275): it reads the cap from
+    // engine_config, counts in_progress, and claims LEAST(limit, cap−inflight)
+    // under a per-weight advisory lock. So we just ask for maxPerTick per weight
+    // and trust the RPC — no racy worker-side pre-count (which under overlapping
+    // invokers, e.g. the GH sync backstop + pg_cron + the kick, could overshoot
+    // the heavy cap → Fly.io exhaustion). A saturated pool returns 0; jobs wait.
     const cfg = await fetchEngineConfig(supabase).catch(() => null);
-    const lightCap = cfg?.dreamQueueMaxConcurrent ?? 40;
-    const heavyCap = cfg?.dreamQueueMaxConcurrentHeavy ?? 15;
     const maxPerTick = cfg?.dreamQueueMaxJobsPerTick ?? MAX_JOBS_PER_TICK;
 
-    const { data: ipRows } = await supabase
-      .from('dream_queue')
-      .select('weight')
-      .eq('status', 'in_progress');
-    let lightIP = 0;
-    let heavyIP = 0;
-    for (const r of ipRows ?? []) r.weight === 'heavy' ? heavyIP++ : lightIP++;
-    const lightLimit = Math.min(maxPerTick, Math.max(0, lightCap - lightIP));
-    const heavyLimit = Math.min(maxPerTick, Math.max(0, heavyCap - heavyIP));
-
-    if (lightLimit <= 0 && heavyLimit <= 0) {
-      console.log(
-        `[worker:${workerId}] both caps saturated (light=${lightIP}/${lightCap} heavy=${heavyIP}/${heavyCap}) — skipping claim`
-      );
-      return;
-    }
-
-    // ── Claim each weight pool + parallel dispatch ─────────────────────────
-    const claimWeight = async (weight: 'light' | 'heavy', limit: number): Promise<QueueRow[]> => {
-      if (limit <= 0) return [];
+    const claimWeight = async (weight: 'light' | 'heavy'): Promise<QueueRow[]> => {
       const { data, error } = await supabase.rpc('claim_dream_queue_jobs_by_weight', {
         p_worker_id: workerId,
         p_weight: weight,
-        p_limit: limit,
+        p_limit: maxPerTick,
       });
       if (error) {
         console.error(`[worker:${workerId}] ${weight} claim error:`, error.message);
@@ -167,10 +160,8 @@ Deno.serve(async (req) => {
       }
       return (data ?? []) as QueueRow[];
     };
-    const jobs = [
-      ...(await claimWeight('light', lightLimit)),
-      ...(await claimWeight('heavy', heavyLimit)),
-    ];
+    const jobs = [...(await claimWeight('light')), ...(await claimWeight('heavy'))];
+    if (jobs.length === 0) return 0;
 
     const results = await Promise.all(
       jobs.map(async (job) => {
@@ -421,14 +412,44 @@ Deno.serve(async (req) => {
     console.log(
       `[worker:${workerId}] Tick complete in ${elapsed}ms — processed ${results.length} jobs`
     );
+    return results.length;
   };
 
-  // Run the tick as a BACKGROUND task so we ack the trigger (pg_cron's pg_net)
-  // immediately. Otherwise the worker holds the request open for the whole
-  // batch; pg_net's short timeout disconnects and the isolate is reaped at the
-  // 150s idle limit (IDLE_TIMEOUT), killing in-flight renders. waitUntil keeps
-  // the isolate alive (up to wall-clock) to finish the batch after responding.
-  // Per-job marking + stale-recovery make a reaped mid-batch isolate safe.
+  // ── SYNC mode (x-worker-sync:1) — the waitUntil-FREE reliable drain ────────
+  // The caller (GitHub Actions curl, .github/workflows/dream-queue-sync.yml)
+  // HOLDS the connection until we respond, so the isolate stays alive on an
+  // actively-awaited inbound request — NOT on waitUntil (which the platform
+  // dropped on 2026-06-17, stalling the whole queue). We run ONE tick inline and
+  // return its processed count so the GH bash loop can break when the queue
+  // drains. Cap the tick under the 150s request-idle ceiling (we must send a
+  // response before then or the gateway 504s + reaps us); the GH loop does the
+  // multi-tick looping across short held calls, never one long hold.
+  if (req.headers.get('x-worker-sync') === '1') {
+    let processed = 0;
+    try {
+      processed = await Promise.race([
+        runTick(),
+        new Promise<number>((resolve) => setTimeout(() => resolve(-1), SYNC_TICK_BUDGET_MS)),
+      ]);
+    } catch (e) {
+      console.error(`[worker:${workerId}] sync tick error:`, (e as Error).message);
+      return new Response(JSON.stringify({ error: (e as Error).message, worker_id: workerId }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    return new Response(JSON.stringify({ processed, worker_id: workerId, mode: 'sync' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // ── FAST path (pg_cron / enqueue kick) — ack 202, run the tick in background ─
+  // pg_net is fire-and-forget (can't hold a connection), so we ack immediately
+  // and run the tick in waitUntil. This is low-latency WHEN waitUntil is healthy.
+  // If waitUntil is degraded, the sync backstop above (every ~5 min) is what
+  // actually guarantees the queue drains. Per-job marking + stale-recovery make
+  // a reaped mid-batch isolate safe.
   const edgeRuntime = (
     globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } }
   ).EdgeRuntime;

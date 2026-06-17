@@ -21,7 +21,9 @@ export interface FirstDreamDispatcherArgs {
   jobId: string;
 }
 
-const RENDER_TIMEOUT_MS = 180_000;
+// 120s keeps the worker's abort under the 150s request-idle ceiling (a render
+// sending no bytes for 150s is gateway-504'd + reaped regardless). See create.ts.
+const RENDER_TIMEOUT_MS = 120_000;
 
 export async function dispatchFirstDreamJob(args: FirstDreamDispatcherArgs): Promise<void> {
   const { supabaseUrl, workerToken, jobId } = args;
