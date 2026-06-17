@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DreamBot — Create &amp; Nightly Pipelines</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #0b1120;
+        color: #e2e8f0;
+        font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      header {
+        padding: 28px 32px 8px;
+        border-bottom: 1px solid #1e293b;
+        position: sticky;
+        top: 0;
+        background: linear-gradient(#0b1120, rgba(11,17,32,0.85));
+        backdrop-filter: blur(6px);
+        z-index: 5;
+      }
+      h1 { margin: 0 0 4px; font-size: 22px; letter-spacing: 0.2px; }
+      .sub { color: #94a3b8; font-size: 13px; }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        padding: 12px 32px 16px;
+        font-size: 12.5px;
+        color: #cbd5e1;
+        border-bottom: 1px solid #1e293b;
+      }
+      .legend span { display: inline-flex; align-items: center; gap: 7px; }
+      .swatch { width: 13px; height: 13px; border-radius: 3px; border: 1px solid; display: inline-block; }
+      .s-edge { background: #064e3b; border-color: #34d399; }
+      .s-db { background: #3b0764; border-color: #c084fc; }
+      .s-ext { background: #7c2d12; border-color: #fb923c; }
+      .s-store { background: #422006; border-color: #facc15; }
+      .s-mech { background: #0f172a; border-color: #94a3b8; }
+      .s-client { background: #1e293b; border-color: #60a5fa; }
+      .wrap { padding: 18px; overflow: auto; }
+      .mermaid { display: flex; justify-content: center; }
+      .controls { padding: 6px 32px; font-size: 12px; color: #64748b; }
+      button {
+        background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+        border-radius: 6px; padding: 5px 11px; font-size: 12px; cursor: pointer; margin-right: 8px;
+      }
+      button:hover { background: #334155; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>DreamBot — Create &amp; Nightly dream pipelines</h1>
+      <div class="sub">
+        Both pipelines converge on one shared <b>queue → worker → scene/render engine</b>. Only the
+        <b>entry</b> and <b>prompt hydration</b> differ.
+      </div>
+    </header>
+    <div class="legend">
+      <span><i class="swatch s-client"></i> iOS client</span>
+      <span><i class="swatch s-edge"></i> Supabase Edge Function</span>
+      <span><i class="swatch s-db"></i> Postgres table / RPC</span>
+      <span><i class="swatch s-store"></i> Supabase Storage</span>
+      <span><i class="swatch s-ext"></i> External AI / service</span>
+      <span><i class="swatch s-mech"></i> Mechanism (cron, engine step)</span>
+    </div>
+    <div class="controls">
+      <button onclick="z(0.1)">Zoom +</button><button onclick="z(-0.1)">Zoom −</button
+      ><button onclick="zr()">Reset</button> · scroll to pan
+    </div>
+    <div class="wrap">
+      <pre class="mermaid" id="d">
+flowchart TD
+    %% ENTRY
+    U["User types a blurb<br/>(Create screen)"]:::client
+    OB["Onboarding reveal<br/>(first dream)"]:::client
+    CRON["GitHub Actions cron<br/>0 8 * * * UTC"]:::mech
+
+    %% CREATE ENQUEUE
+    U --> ENQ
+    OB --> ENQ
+    ENQ["enqueue-dream (Edge)<br/>JWT auth · in-flight cap &le;5<br/>charge_sparkles · classify weight"]:::edge
+    ENQ -->|INSERT light/heavy| Q
+    ENQ -.->|seed| DJ
+    ENQ ==>|"&lt;500ms returns dream_id"| LOAD
+
+    %% NIGHTLY ENQUEUE
+    CRON --> NS
+    NS["nightly-dreams.js (cron script)<br/>paginate eligible Pro/trial users<br/>dedup_key · bulk INSERT"]:::edge
+    UR[("user_recipes / users")]:::db
+    NSEED[("nightly_seeds<br/>8 pools x 100 templates")]:::db
+    NS -->|reads eligibility| UR
+    NS -->|"INSERT source=nightly, weight=heavy"| Q
+
+    %% QUEUE + WORKER (SHARED)
+    Q[("dream_queue")]:::db
+    DJ[("dream_jobs")]:::db
+    ENQ -.->|kick| W
+    NS -.->|kick| W
+    PGC["pg_cron · 1-min"]:::mech --> W
+    GHB["GH sync backstop · 5-min<br/>waitUntil-free held curl"]:::mech --> W
+    W["dream-queue-worker (Edge)<br/>claim_dream_queue_jobs_by_weight<br/>ATOMIC per-weight cap · SKIP LOCKED<br/>stale-recovery"]:::edge
+    Q -->|claim| W
+
+    W -->|create / dlt| GD["generate-dream (Edge)"]:::edge
+    W -->|nightly| NDF["nightly-dreams (Edge)"]:::edge
+    W -->|first_dream| FDR["first-dream-render (Edge)<br/>cascade dual→single→scene"]:::edge
+
+    CFG[("dream_mediums / dream_vibes<br/>dream_seeds.places · cast thumbs")]:::db
+    NDF -->|load recipe + pick seed| NSEED
+    GD -->|reads| CFG
+
+    GD --> R1
+    NDF --> R1
+    FDR --> R1
+
+    %% SHARED SCENE + RENDER ENGINE
+    R1["Resolve medium+vibe+cast<br/>rollDream (composition)"]:::mech
+    R2["recipeBuilder + sceneEngine<br/>build Sonnet brief"]:::mech
+    SON[["Anthropic Sonnet<br/>writes the Flux prompt"]]:::ext
+    R3["sanitize + post-process"]:::mech
+    R4["pickModel (per-medium)"]:::mech
+    R5["generateImage · submit + poll<br/>→ image URL"]:::mech
+    REP[["Replicate (Flux)"]]:::ext
+    GEMI[["Gemini (Nano Banana)"]]:::ext
+    OAII[["OpenAI GPT Image"]]:::ext
+    R6{"face swap?"}:::mech
+    FLY[["face-swap-dual<br/>Fly.io 2GB ONNX"]]:::ext
+    FS["faceSwap (in-process)"]:::mech
+    R7["persistToStorage"]:::mech
+
+    R1 --> R2 --> SON --> R3 --> R4 --> R5
+    R5 --> REP
+    R5 --> GEMI
+    R5 --> OAII
+    R5 --> R6
+    R6 -->|dual| FLY --> R7
+    R6 -->|single| FS --> R7
+    R6 -->|none| R7
+    R5 -.->|error| FAIL
+
+    %% PERSIST + TERMINAL
+    R7 --> STO[("Supabase Storage<br/>uploads bucket")]:::store
+    R7 --> UPL[("uploads row +<br/>ai_generation_log +<br/>current_stage breadcrumbs")]:::db
+    R7 --> TERM["completeQueueJob<br/>dream_queue=completed + upload_id"]:::mech
+    TERM --> Q
+    FAIL["failQueueJob<br/>retry/backoff → dead_letter<br/>+ refund + notify"]:::mech --> Q
+
+    %% SERVE BACK TO APP
+    Q -.->|realtime row update| LOAD["Loading screen<br/>dream_queue realtime<br/>(dream_jobs poll fallback)"]:::client
+    LOAD --> SHOW["Show dream → user Posts<br/>(is_public=true)"]:::client
+    NDF --> BMSG["Haiku bot message"]:::mech --> NOT[("notifications")]:::db
+    NOT -->|DB trigger on INSERT| SP["send-push (Edge)"]:::edge --> EXPO[["Expo Push"]]:::ext --> DEV["User device"]:::client
+    SHOW --> FEED["get_feed RPC<br/>posted+public+unblocked"]:::mech --> DEV
+    STO -->|public URL · expo-image| DEV
+
+    classDef client fill:#1e293b,stroke:#60a5fa,color:#e2e8f0
+    classDef edge fill:#064e3b,stroke:#34d399,color:#d1fae5
+    classDef db fill:#3b0764,stroke:#c084fc,color:#f3e8ff
+    classDef ext fill:#7c2d12,stroke:#fb923c,color:#ffedd5
+    classDef store fill:#422006,stroke:#facc15,color:#fef9c3
+    classDef mech fill:#0f172a,stroke:#64748b,color:#cbd5e1
+      </pre>
+    </div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        securityLevel: 'loose',
+        flowchart: { curve: 'basis', nodeSpacing: 45, rankSpacing: 55, padding: 10 },
+        themeVariables: { fontFamily: 'ui-sans-serif, system-ui', fontSize: '14px' },
+      });
+      let scale = 1;
+      const el = () => document.querySelector('#d svg');
+      window.z = (d) => { scale = Math.max(0.4, scale + d); const s = el(); if (s) s.style.transform = `scale(${scale})`, (s.style.transformOrigin = 'top center'); };
+      window.zr = () => { scale = 1; const s = el(); if (s) s.style.transform = 'scale(1)'; };
+    </script>
+  </body>
+</html>
