@@ -206,12 +206,19 @@ Output ONLY the JSON array, no markdown, no commentary.`,
     .replace(/^```(json)?/i, '')
     .replace(/```$/, '')
     .trim();
-  let parsed;
+  let parsed = [];
   try {
     parsed = JSON.parse(text);
   } catch {
-    const m = text.match(/\[[\s\S]*\]/);
-    parsed = m ? JSON.parse(m[0]) : [];
+    // Salvage the array; if Sonnet returned malformed JSON (e.g. an unescaped
+    // quote), skip this batch entirely rather than crashing the whole run — the
+    // while-loop just retries.
+    try {
+      const m = text.match(/\[[\s\S]*\]/);
+      if (m) parsed = JSON.parse(m[0]);
+    } catch {
+      parsed = [];
+    }
   }
   return Array.isArray(parsed) ? parsed.filter((o) => o && o.scene && o.attire) : [];
 }

@@ -41,24 +41,84 @@ const DRY = args.includes('--dry-run');
 const BUCKET_FILTER = arg('--buckets', null); // 'sample' or csv of keys
 
 const ELEGANT_BUCKETS = [
-  { key: 'victorian', label: 'Victorian era', desc: 'Victorian formal — gowns with bustles, tailcoats, top hats held (not worn over the face); gas-lit cobblestone streets, conservatories, parlors, manicured estate gardens.' },
-  { key: 'gatsby_1920s', label: '1920s Art Deco / Gatsby', desc: 'Roaring-20s glamour — beaded flapper gowns, sharp tuxedos; Art Deco ballrooms, jazz lounges, grand staircases, rooftop speakeasies.' },
-  { key: 'renaissance_baroque', label: 'Renaissance / Baroque court', desc: 'Opulent Renaissance/Baroque court finery — rich brocade and velvet; palace halls, frescoed galleries, ornate courtyards, candlelit banquet rooms.' },
-  { key: 'regency', label: 'Regency', desc: 'Regency elegance (Bridgerton-style) — empire-waist gowns and tailored coats; pastel ballrooms, garden follies, grand drawing rooms.' },
-  { key: 'old_hollywood', label: 'Old Hollywood / 1950s glam', desc: 'Old-Hollywood glamour — satin gowns, classic black-tie; red-carpet staircases, vintage theaters, chic supper clubs, convertible at a premiere.' },
-  { key: 'modern_blacktie', label: 'Modern black-tie', desc: 'Modern formal — sleek gown and tailored suit/tux; galas, fine restaurants, rooftop bars at night, art-gallery openings, hotel terraces.' },
-  { key: 'romantic_gardens', label: 'Romantic gardens & flowers', desc: 'Beautiful garden settings, any tasteful era — blooming rose gardens, lavender and wildflower fields, courtyards, flower-draped gazebos, greenhouse conservatories. Elegant attire.' },
-  { key: 'evening_city', label: 'Pretty city at night', desc: 'Lovely evening cityscapes, any era — a pretty lamplit street at night, café terraces, stone bridges over a river, plazas with fountains. Dressed up.' },
+  {
+    key: 'victorian',
+    label: 'Victorian era',
+    desc: 'Victorian formal — gowns with bustles, tailcoats, top hats held (not worn over the face); gas-lit cobblestone streets, conservatories, parlors, manicured estate gardens.',
+  },
+  {
+    key: 'gatsby_1920s',
+    label: '1920s Art Deco / Gatsby',
+    desc: 'Roaring-20s glamour — beaded flapper gowns, sharp tuxedos; Art Deco ballrooms, jazz lounges, grand staircases, rooftop speakeasies.',
+  },
+  {
+    key: 'renaissance_baroque',
+    label: 'Renaissance / Baroque court',
+    desc: 'Opulent Renaissance/Baroque court finery — rich brocade and velvet; palace halls, frescoed galleries, ornate courtyards, candlelit banquet rooms.',
+  },
+  {
+    key: 'regency',
+    label: 'Regency',
+    desc: 'Regency elegance (Bridgerton-style) — empire-waist gowns and tailored coats; pastel ballrooms, garden follies, grand drawing rooms.',
+  },
+  {
+    key: 'old_hollywood',
+    label: 'Old Hollywood / 1950s glam',
+    desc: 'Old-Hollywood glamour — satin gowns, classic black-tie; red-carpet staircases, vintage theaters, chic supper clubs, convertible at a premiere.',
+  },
+  {
+    key: 'modern_blacktie',
+    label: 'Modern black-tie',
+    desc: 'Modern formal — sleek gown and tailored suit/tux; galas, fine restaurants, rooftop bars at night, art-gallery openings, hotel terraces.',
+  },
+  {
+    key: 'romantic_gardens',
+    label: 'Romantic gardens & flowers',
+    desc: 'Beautiful garden settings, any tasteful era — blooming rose gardens, lavender and wildflower fields, courtyards, flower-draped gazebos, greenhouse conservatories. Elegant attire.',
+  },
+  {
+    key: 'evening_city',
+    label: 'Pretty city at night',
+    desc: 'Lovely evening cityscapes, any era — a pretty lamplit street at night, café terraces, stone bridges over a river, plazas with fountains. Dressed up.',
+  },
 ];
 
 const GOOFY_BUCKETS = [
-  { key: 'time_travel', label: 'Time-travel comedy', desc: 'Funny PERIOD scenes — show the couple as cavemen in furs, swashbuckling pirates, medieval knights/peasants, Roman gladiators, vikings, wild-west cowboys, 70s disco-goers, ancient Egyptians. The period costume is the joke. Faces must stay fully visible (no helmets/masks/face-paint).' },
-  { key: 'absurd_everyday', label: 'Absurd everyday', desc: 'Goofy absurd modern situations in NORMAL clothes — stuck waist-deep in a giant ball pit, tangled in holiday lights, buried in autumn leaves, caught in a confetti explosion, in a runaway shopping cart, in an overflowing bubble bath of foam.' },
-  { key: 'giant_scale', label: 'Giant / oversized props', desc: 'Comically OVERSIZED props, normal clothes — perched on a giant rubber duck, beside a donut taller than them, on a giant slice of pizza, holding a colossal ice-cream cone, on an enormous beanbag.' },
-  { key: 'animal_mayhem', label: 'Animal mayhem', desc: 'Funny animal situations, normal clothes — swarmed by a pile of puppies/kittens, photobombed by a llama or alpaca, surrounded by a flock of flamingos or penguins, a goat standing between them, a parrot on a shoulder.' },
-  { key: 'fantastical_silly', label: 'Fantastical & silly', desc: 'Light-hearted fantasy/sci-fi comedy, readable — taking a selfie with a friendly cartoonish alien, a tiny dragon perched nearby, a goofy robot butler serving them, a friendly yeti leaning in, riding a slow cartoon dinosaur.' },
-  { key: 'party_carnival', label: 'Party & carnival chaos', desc: 'Fun party/carnival/food chaos, normal clothes — mid conga line, a cannon of confetti going off, an over-the-top birthday cake explosion, a retro arcade, bumper cars, a bouncy castle, mountains of balloons.' },
-  { key: 'fun_activities', label: 'Fun activities & adventures', desc: 'The couple doing a fun/silly ACTIVITY together in normal (activity-appropriate) clothes — bungee jumping, cruising in a candy-colored lowrider convertible, jamming together in a garage rock band with instruments, on a wild rollercoaster mid-drop, go-karting, at a carnival midway with prizes, riding a mechanical bull, on a tandem skydive, in a paddle boat shaped like a swan.' },
+  {
+    key: 'time_travel',
+    label: 'Time-travel comedy',
+    desc: 'Funny PERIOD scenes — show the couple as cavemen in furs, swashbuckling pirates, medieval knights/peasants, Roman gladiators, vikings, wild-west cowboys, 70s disco-goers, ancient Egyptians. The period costume is the joke. Faces must stay fully visible (no helmets/masks/face-paint).',
+  },
+  {
+    key: 'absurd_everyday',
+    label: 'Absurd everyday',
+    desc: 'Goofy absurd modern situations in NORMAL clothes — stuck waist-deep in a giant ball pit, tangled in holiday lights, buried in autumn leaves, caught in a confetti explosion, in a runaway shopping cart, in an overflowing bubble bath of foam.',
+  },
+  {
+    key: 'giant_scale',
+    label: 'Giant / oversized props',
+    desc: 'Comically OVERSIZED props, normal clothes — perched on a giant rubber duck, beside a donut taller than them, on a giant slice of pizza, holding a colossal ice-cream cone, on an enormous beanbag.',
+  },
+  {
+    key: 'animal_mayhem',
+    label: 'Animal mayhem',
+    desc: 'Funny animal situations, normal clothes — swarmed by a pile of puppies/kittens, photobombed by a llama or alpaca, surrounded by a flock of flamingos or penguins, a goat standing between them, a parrot on a shoulder.',
+  },
+  {
+    key: 'fantastical_silly',
+    label: 'Fantastical & silly',
+    desc: 'Light-hearted fantasy/sci-fi comedy, readable — taking a selfie with a friendly cartoonish alien, a tiny dragon perched nearby, a goofy robot butler serving them, a friendly yeti leaning in, riding a slow cartoon dinosaur.',
+  },
+  {
+    key: 'party_carnival',
+    label: 'Party & carnival chaos',
+    desc: 'Fun party/carnival/food chaos, normal clothes — mid conga line, a cannon of confetti going off, an over-the-top birthday cake explosion, a retro arcade, bumper cars, a bouncy castle, mountains of balloons.',
+  },
+  {
+    key: 'fun_activities',
+    label: 'Fun activities & adventures',
+    desc: 'The couple doing a fun/silly ACTIVITY together in normal (activity-appropriate) clothes — bungee jumping, cruising in a candy-colored lowrider convertible, jamming together in a garage rock band with instruments, on a wild rollercoaster mid-drop, go-karting, at a carnival midway with prizes, riding a mechanical bull, on a tandem skydive, in a paddle boat shaped like a swan.',
+  },
 ];
 
 async function genBatch(pool, bucket, n, banList) {
@@ -93,13 +153,22 @@ Output ONLY the JSON array, no markdown, no commentary.`,
       },
     ],
   });
-  let text = msg.content[0].text.trim().replace(/^```(json)?/i, '').replace(/```$/, '').trim();
-  let parsed;
+  let text = msg.content[0].text
+    .trim()
+    .replace(/^```(json)?/i, '')
+    .replace(/```$/, '')
+    .trim();
+  let parsed = [];
   try {
     parsed = JSON.parse(text);
   } catch {
-    const m = text.match(/\[[\s\S]*\]/);
-    parsed = m ? JSON.parse(m[0]) : [];
+    // Skip a malformed batch (e.g. unescaped quote) instead of crashing the run.
+    try {
+      const m = text.match(/\[[\s\S]*\]/);
+      if (m) parsed = JSON.parse(m[0]);
+    } catch {
+      parsed = [];
+    }
   }
   return Array.isArray(parsed) ? parsed.filter((o) => o && o.scene && o.attire) : [];
 }
@@ -111,9 +180,12 @@ const fs = require('fs');
   for (const pool of pools) {
     let buckets = pool === 'elegant' ? ELEGANT_BUCKETS : GOOFY_BUCKETS;
     if (BUCKET_FILTER === 'sample') buckets = buckets.slice(0, 3);
-    else if (BUCKET_FILTER) buckets = buckets.filter((b) => BUCKET_FILTER.split(',').includes(b.key));
+    else if (BUCKET_FILTER)
+      buckets = buckets.filter((b) => BUCKET_FILTER.split(',').includes(b.key));
 
-    console.log(`\n########## POOL: ${pool.toUpperCase()} (${buckets.length} buckets × ~${PER}) ##########`);
+    console.log(
+      `\n########## POOL: ${pool.toUpperCase()} (${buckets.length} buckets × ~${PER}) ##########`
+    );
     const all = [];
     const seen = new Set();
     for (const bucket of buckets) {
@@ -122,9 +194,17 @@ const fs = require('fs');
       let tries = 0;
       while (got.length < PER && tries < 6) {
         tries++;
-        const batch = await genBatch(pool, bucket, Math.min(PER - got.length + 3, 20), all.map((x) => x.scene));
+        const batch = await genBatch(
+          pool,
+          bucket,
+          Math.min(PER - got.length + 3, 20),
+          all.map((x) => x.scene)
+        );
         for (const o of batch) {
-          const key = o.scene.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+          const key = o.scene
+            .toLowerCase()
+            .replace(/[^a-z0-9 ]/g, '')
+            .trim();
           if (seen.has(key)) continue;
           seen.add(key);
           got.push({ scene: o.scene.trim(), attire: o.attire.trim() });
@@ -147,5 +227,7 @@ const fs = require('fs');
   }
   // Always save a JSON backup so a generation run is never wasted (insert later).
   fs.writeFileSync('/tmp/dual_scenarios.json', JSON.stringify(everything, null, 2));
-  console.log(`\n💾 saved ${everything.length} total to /tmp/dual_scenarios.json${DRY ? ' (dry — not inserted)' : ''}`);
+  console.log(
+    `\n💾 saved ${everything.length} total to /tmp/dual_scenarios.json${DRY ? ' (dry — not inserted)' : ''}`
+  );
 })();
