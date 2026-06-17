@@ -797,6 +797,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      dual_scenarios: {
+        Row: {
+          attire: string;
+          category: string | null;
+          created_at: string;
+          disabled: boolean;
+          id: string;
+          pool: string;
+          scene: string;
+        };
+        Insert: {
+          attire: string;
+          category?: string | null;
+          created_at?: string;
+          disabled?: boolean;
+          id?: string;
+          pool: string;
+          scene: string;
+        };
+        Update: {
+          attire?: string;
+          category?: string | null;
+          created_at?: string;
+          disabled?: boolean;
+          id?: string;
+          pool?: string;
+          scene?: string;
+        };
+        Relationships: [];
+      };
       edge_function_invocations: {
         Row: {
           created_at: string;

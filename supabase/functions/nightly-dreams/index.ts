@@ -55,11 +55,8 @@ import {
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
-import {
-  pickPlayfulScenario,
-  pickElegantScenario,
-  pickSpecialLighting,
-} from '../_shared/pools/dual_scenarios.ts';
+import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
+import { loadDualScenarios, pickDualScenario } from '../_shared/pools/dualScenarioLoader.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -1015,15 +1012,18 @@ Deno.serve(async (req) => {
     // the same scenario never renders the same twice. The slot pipeline keeps the
     // framing locked so the swap stays clean. Location for these = the scenario.
     let dualSpecialScene: string | null = null;
-    let dualSpecialWardrobe: string | null = null; // set only for elegant (dress them up)
+    let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
     if (isDualFaceSwap) {
+      const pools = await loadDualScenarios(supabase);
       const roll = Math.random();
       if (force_playful || (!force_elegant && roll < 0.2)) {
-        dualSpecialScene = pickPlayfulScenario();
+        const s = pickDualScenario(pools.goofy);
+        dualSpecialScene = s.scene;
+        dualSpecialWardrobe = s.attire;
       } else if (force_elegant || roll < 0.4) {
-        const e = pickElegantScenario();
-        dualSpecialScene = e.scene;
-        dualSpecialWardrobe = e.attire;
+        const s = pickDualScenario(pools.elegant);
+        dualSpecialScene = s.scene;
+        dualSpecialWardrobe = s.attire;
       }
     }
     const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;
