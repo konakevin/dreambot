@@ -12,6 +12,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from '../_shared/faceSwap.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 
 interface RequestBody {
   targetUrl: string;
@@ -21,6 +22,8 @@ interface RequestBody {
   deadlineMs?: number;
   /** Skip the yan-ops primary, swap with fallback models only (dup-retry escape). */
   skipPrimary?: boolean;
+  /** dream_queue.id — cross-isolate trace key (prefixes logs + Sentry). */
+  traceId?: string | null;
 }
 
 const CORS_HEADERS = {
@@ -78,7 +81,8 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs, skipPrimary } = body;
+  const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs, skipPrimary, traceId } =
+    body;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
     return new Response(JSON.stringify({ error: 'Missing required field' }), {
       status: 400,
@@ -86,8 +90,11 @@ Deno.serve(async (req) => {
     });
   }
 
+  const tag = traceId ? `[${traceId}]` : '';
   const t0 = Date.now();
-  console.log(`[face-swap-dual] Start userId=${userId.slice(0, 8)} target=${targetUrl.slice(-30)}`);
+  console.log(
+    `[face-swap-dual]${tag} Start userId=${userId.slice(0, 8)} target=${targetUrl.slice(-30)}`
+  );
 
   try {
     const swappedUrl = await dualFaceSwap(
@@ -101,7 +108,7 @@ Deno.serve(async (req) => {
       skipPrimary ?? false
     );
     const elapsed = Date.now() - t0;
-    console.log(`[face-swap-dual] Done in ${elapsed}ms`);
+    console.log(`[face-swap-dual]${tag} Done in ${elapsed}ms`);
     return new Response(JSON.stringify({ swappedUrl }), {
       status: 200,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
@@ -109,7 +116,14 @@ Deno.serve(async (req) => {
   } catch (err) {
     const elapsed = Date.now() - t0;
     const message = (err as Error).message ?? 'Unknown error';
-    console.error(`[face-swap-dual] Failed in ${elapsed}ms: ${message}`);
+    console.error(`[face-swap-dual]${tag} Failed in ${elapsed}ms: ${message}`);
+    await captureRenderError(err, {
+      fn: 'face-swap-dual',
+      jobId: traceId,
+      userId,
+      stage: 'face_swap',
+      weight: 'heavy',
+    });
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

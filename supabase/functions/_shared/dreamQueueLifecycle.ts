@@ -30,6 +30,51 @@ const NSFW_REJECT_BODY =
   'Looks like that one tipped the NSFW scale — sparkle refunded, tweak the prompt and try again';
 const RENDER_FAIL_BODY = "Your dream couldn't render — sparkle refunded";
 
+/**
+ * Stage breadcrumb — stamp the render's progress into dream_queue BEFORE each
+ * risky step. This row is created at enqueue and OUTLIVES a hard isolate kill
+ * (546 WORKER_RESOURCE_LIMIT / OOM), so when the catch never runs, current_stage
+ * still tells us exactly where the render died. The worker's stale-recovery
+ * reads it to report the dead isolate to Sentry. Migration 272 owns the columns.
+ *
+ * Fire-and-forget + never throws (matches insertGenerationLog discipline).
+ * No-op when there's no jobId (the pure-synchronous, non-queue render path).
+ * Optional `model` is recorded as soon as it's picked (coalesced — a later
+ * stage without a model never clears it).
+ */
+export type RenderStage =
+  | 'claimed'
+  | 'resolve'
+  | 'sonnet_brief'
+  | 'flux_render'
+  | 'face_swap'
+  | 'upload'
+  | 'persist';
+
+export function markStage(
+  sb: SupabaseClient,
+  jobId: string | null | undefined,
+  stage: RenderStage,
+  model?: string | null
+): void {
+  if (!jobId) return;
+  const patch: Record<string, unknown> = {
+    current_stage: stage,
+    stage_updated_at: new Date().toISOString(),
+  };
+  if (model) patch.model = model;
+  void sb
+    .from('dream_queue')
+    .update(patch)
+    .eq('id', jobId)
+    .then(
+      () => {},
+      (err: unknown) => {
+        console.warn('[markStage] update failed:', (err as Error)?.message);
+      }
+    );
+}
+
 /** Build the dream_failed notification row (consistent everywhere). */
 export function dreamFailedNotification(jobId: string, userId: string, isNsfw: boolean) {
   return {

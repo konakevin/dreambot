@@ -26,6 +26,8 @@ export interface NightlyDispatcherArgs {
   anthropicKey: string;
   userId: string;
   payload: Record<string, unknown>;
+  /** dream_queue.id — forwarded so the render can stamp stage breadcrumbs. */
+  queueJobId?: string;
 }
 
 // Notifications here are best-effort — they must never fail the job (already
@@ -53,13 +55,15 @@ function clampInboxBody(msg: string | null): string {
 }
 
 export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<string> {
-  const { supabase, supabaseUrl, workerToken, anthropicKey, userId } = args;
+  const { supabase, supabaseUrl, workerToken, anthropicKey, userId, queueJobId } = args;
 
   // 1. Render in its own isolate via the worker-token branch of nightly-dreams.
+  // Forward the queue job id so the render stamps stage breadcrumbs onto the
+  // dream_queue row (survives a hard isolate kill → diagnosable via forensics).
   const res = await fetch(`${supabaseUrl}/functions/v1/nightly-dreams`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${workerToken}` },
-    body: JSON.stringify({ user_id: userId }),
+    body: JSON.stringify({ user_id: userId, queue_job_id: queueJobId }),
   });
   let data: Record<string, unknown> = {};
   try {

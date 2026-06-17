@@ -54,6 +54,8 @@ import {
   buildDisplayVariant,
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
+import { markStage } from '../_shared/dreamQueueLifecycle.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
 import { loadDualScenarios, pickDualScenario } from '../_shared/pools/dualScenarioLoader.ts';
@@ -204,6 +206,10 @@ Deno.serve(async (req) => {
   // the Dream Generator Test screen can exercise the nightly pipeline without
   // polluting the user's album. Default true (normal nightly + first-dream).
   const persist = body.persist !== false;
+  // dream_queue.id (forwarded by the worker's nightly dispatcher) — lets this
+  // render stamp stage breadcrumbs that survive a hard isolate kill. null on
+  // the direct/QA path (Dream Generator Test screen), where markStage no-ops.
+  const queueJobId = (body.queue_job_id as string) || null;
 
   if (!vibe_profile) {
     return new Response(JSON.stringify({ error: 'vibe_profile is required' }), {
@@ -501,6 +507,8 @@ Deno.serve(async (req) => {
     const effectiveCastRole =
       preRolledType != null && force_cast_role === undefined ? preRolledCastRole : force_cast_role;
     const effectiveComposition = preRolledType != null ? preRolledComposition : null;
+    // Stage breadcrumb — pre-render (roll + cast describe + scene + Sonnet brief).
+    markStage(supabase, queueJobId, 'resolve');
     const dreamRoll = rollDream(
       describedCastMembers,
       nightlyMedium,
@@ -1727,6 +1735,9 @@ Output ONLY the prompt.`;
     `[nightly-dreams] User ${userId}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
   );
 
+  // Stage breadcrumb — Flux render (records the model for hard kills).
+  markStage(supabase, queueJobId, 'flux_render', pickedModel);
+
   try {
     console.log(`[nightly-dreams] Starting image generation (model: ${pickedModel})...`);
     // Capture for duplicate-bug observability
@@ -1767,6 +1778,11 @@ Output ONLY the prompt.`;
       `[nightly-dreams] Image generation complete (prediction: ${genResult.predictionId})`
     );
 
+    // Stage breadcrumb — face swap (the memory-heaviest step; the 546 culprit).
+    if (tempUrl && ((faceSwapSources && faceSwapSources.length === 2) || faceSwapSource)) {
+      markStage(supabase, queueJobId, 'face_swap', pickedModel);
+    }
+
     // Face swap: dual (two people) or single — retry up to 3 times with
     // backoff between attempts so a cold Replicate model has time to boot.
     const FACE_SWAP_MAX_RETRIES = 3;
@@ -1795,7 +1811,8 @@ Output ONLY the prompt.`;
               userId,
               t0 + 140_000,
               false,
-              { left: s0.gender, right: s1.gender }
+              { left: s0.gender, right: s1.gender },
+              queueJobId
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId, { retry: false }),
@@ -1952,7 +1969,8 @@ Output ONLY the prompt.`;
               userId,
               t0 + 140_000,
               true,
-              { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender }
+              { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
+              queueJobId
             );
             tempUrl = r.swappedUrl ?? genResult.url;
           } else if (faceSwapSource) {
@@ -1977,6 +1995,9 @@ Output ONLY the prompt.`;
       observability.preStoragetUrl = tempUrl;
     }
 
+    // Stage breadcrumb — storage upload + persist.
+    markStage(supabase, queueJobId, 'upload', pickedModel);
+
     // Persist to Storage + log in parallel
     timings.total = Date.now() - t0;
     const persistPromise = outBuf
@@ -1986,6 +2007,7 @@ Output ONLY the prompt.`;
       persistPromise,
       insertGenerationLog(supabase, {
         user_id: userId,
+        job_id: queueJobId,
         recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
         rolled_axes: { ...logAxes, timings, observability },
         enhanced_prompt: finalPrompt,
@@ -2148,6 +2170,7 @@ Output ONLY the prompt.`;
     // this user retryable. insertGenerationLog never throws.
     await insertGenerationLog(supabase, {
       user_id: userId,
+      job_id: queueJobId,
       recipe_snapshot: {},
       rolled_axes: { engine: 'nightly-failed' },
       enhanced_prompt: '',
@@ -2160,6 +2183,19 @@ Output ONLY the prompt.`;
       fallback_reasons: [`nightly_error:${errMsg.slice(0, 200)}`],
       replicate_prediction_id: null,
     });
+
+    // Report to Sentry (no-op without SENTRY_EDGE_DSN; skip expected NSFW).
+    if (!/nsfw|safety/i.test(errMsg)) {
+      await captureRenderError(err, {
+        fn: 'nightly-dreams',
+        jobId: queueJobId,
+        userId,
+        stage: typeof logAxes.model === 'string' ? 'flux_render' : 'resolve',
+        model: typeof logAxes.model === 'string' ? logAxes.model : force_model,
+        source: strict_face_swap ? 'first_dream' : 'nightly',
+        weight: 'heavy',
+      });
+    }
 
     // First-dream cascade — when strict_face_swap is set, classify the
     // failure into a structured 422 the client can act on. Face-swap and

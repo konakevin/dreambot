@@ -27,7 +27,9 @@ import {
   completeQueueJob,
   failQueueJob,
   dreamFailedNotification,
+  markStage,
 } from '../_shared/dreamQueueLifecycle.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
@@ -240,6 +242,9 @@ async function handleRequest(req: Request): Promise<Response> {
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
 
+  // Stage breadcrumb — pre-render (medium/vibe resolve + vision + Sonnet brief).
+  markStage(supabase, jobId, 'resolve');
+
   // ── Resolve medium + vibe from DB ───────────────────────────────────────
   // 2026-06-02 — art_styles / aesthetics favorites removed from VibeProfile
   // + the resolver branches that consumed them. Client always passes a
@@ -347,6 +352,9 @@ async function handleRequest(req: Request): Promise<Response> {
     `[restyle-photo] User ${userId}, mode=${effectiveMode}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
   );
 
+  // Stage breadcrumb — Flux/Kontext render (records the model for hard kills).
+  markStage(supabase, jobId, 'flux_render', pickedModel);
+
   // ── Generate image via Replicate ────────────────────────────────────────
   try {
     console.log(`[restyle-photo] ⏱ Starting image generation (model: ${pickedModel})...`);
@@ -373,12 +381,16 @@ async function handleRequest(req: Request): Promise<Response> {
       `[restyle-photo] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
     );
 
+    // Stage breadcrumb — storage upload + persist.
+    markStage(supabase, jobId, 'upload', pickedModel);
+
     // ── Persist to Storage + log in parallel ────────────────────────────
     timings.total = Date.now() - t0;
     const [persistedUrl] = await Promise.all([
       persistToStorage(genResult.url, userId, supabase),
       insertGenerationLog(supabase, {
         user_id: userId,
+        job_id: jobId ?? null,
         recipe_snapshot: (vibeProfile as unknown as Record<string, unknown>) ?? {},
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
@@ -555,6 +567,7 @@ async function handleRequest(req: Request): Promise<Response> {
     // Log the failure
     insertGenerationLog(supabase, {
       user_id: userId,
+      job_id: jobId ?? null,
       recipe_snapshot: (vibeProfile as unknown as Record<string, unknown>) ?? {},
       rolled_axes: { ...logAxes, timings, error: errMsg },
       enhanced_prompt: finalPrompt,
@@ -574,6 +587,19 @@ async function handleRequest(req: Request): Promise<Response> {
     // ── Classify the failure for refund + UI messaging ──
     const refundClass = classifyFailure(errMsg);
     const isNsfw = refundClass === 'nsfw';
+
+    // Report to Sentry (no-op without SENTRY_EDGE_DSN; skip expected NSFW).
+    if (!isNsfw) {
+      await captureRenderError(err, {
+        fn: 'restyle-photo',
+        jobId,
+        userId,
+        stage: 'flux_render',
+        model: typeof logAxes.model === 'string' ? logAxes.model : pickedModel,
+        source: isQueue ? 'dlt' : 'sync',
+        weight: 'light',
+      });
+    }
 
     // QUEUE path: WE own the dream_queue terminal state (retry/backoff or
     // dead-letter + refund + notify). The worker is fire-and-forget.

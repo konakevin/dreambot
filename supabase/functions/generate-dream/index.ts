@@ -47,7 +47,9 @@ import {
   completeQueueJob,
   failQueueJob,
   dreamFailedNotification,
+  markStage,
 } from '../_shared/dreamQueueLifecycle.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
@@ -410,6 +412,10 @@ async function handleRequest(req: Request): Promise<Response> {
       console.warn('[generate-dream] charge_sparkles failed (continuing):', (err as Error).message);
     }
   }
+
+  // Stage breadcrumb — pre-render (cast/scene resolve + Sonnet brief). Survives
+  // a hard isolate kill so the worker's stale-recovery can report where we died.
+  markStage(supabase, jobId, 'resolve');
 
   // ── Build prompt ──────────────────────────────────────────────────────────
   // Initialized to '' (not just declared) so the failure-logging path in the
@@ -1299,6 +1305,10 @@ Output ONLY the prompt.`;
     `[generate-dream] User ${userId}, mode=${effectiveMode}, model=${pickedModel}${force_model ? ' (force_model override)' : ''}, prompt=${finalPrompt.slice(0, 80)}...`
   );
 
+  // Stage breadcrumb — Flux/Replicate render. Records the chosen model too, so a
+  // hard kill here (which skips ai_generation_log) still tells us which model ran.
+  markStage(supabase, jobId, 'flux_render', pickedModel);
+
   // ── Generate image via Replicate ──────────────────────────────────────────
   try {
     console.log(`[generate-dream] ⏱ Starting image generation (model: ${pickedModel})...`);
@@ -1326,6 +1336,11 @@ Output ONLY the prompt.`;
       `[generate-dream] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
     );
 
+    // Stage breadcrumb — face swap (the memory-heaviest step; the 546 culprit).
+    const willSwap =
+      !!tempUrl && ((faceSwapSources && faceSwapSources.length === 2) || !!faceSwapSource);
+    if (willSwap) markStage(supabase, jobId, 'face_swap', pickedModel);
+
     // Face swap: dual (two people) or single — retry up to 3x on transient
     // failures (Replicate cold start, 5xx, 429). Backoff between attempts
     // gives a cold model time to boot before we hammer it again.
@@ -1352,7 +1367,8 @@ Output ONLY the prompt.`;
               userId,
               t0 + 140_000,
               false,
-              { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) }
+              { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) },
+              jobId
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
@@ -1434,12 +1450,16 @@ Output ONLY the prompt.`;
 
     let imageUrl = tempUrl;
 
+    // Stage breadcrumb — storage upload + persist.
+    markStage(supabase, jobId, 'upload', pickedModel);
+
     // Persist to Storage + log in parallel (log doesn't need the permanent URL)
     timings.total = Date.now() - t0;
     const [persistedUrl] = await Promise.all([
       persistToStorage(tempUrl, userId, supabase),
       insertGenerationLog(supabase, {
         user_id: userId,
+        job_id: jobId ?? null,
         recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
         rolled_axes: { ...logAxes, timings },
         enhanced_prompt: finalPrompt,
@@ -1708,6 +1728,20 @@ Output ONLY the prompt.`;
     const refundClass = classifyFailure(errMsg);
     const isNsfw = refundClass === 'nsfw';
 
+    // Report to Sentry (no-op without SENTRY_EDGE_DSN). NSFW rejections are an
+    // expected outcome, not an infra error — skip those to keep the signal clean.
+    if (!isNsfw) {
+      await captureRenderError(err, {
+        fn: 'generate-dream',
+        jobId,
+        userId,
+        stage: logAxes.faceSwapResult ? 'face_swap' : 'flux_render',
+        model: typeof logAxes.model === 'string' ? logAxes.model : force_model,
+        source: isQueue ? 'create' : 'sync',
+        weight: undefined,
+      });
+    }
+
     // QUEUE path: WE own the dream_queue terminal state (retry/backoff or
     // dead-letter + refund + notify). The worker is fire-and-forget. Do this
     // FIRST and return — the synchronous-path refund/notify below is skipped.
@@ -1717,6 +1751,7 @@ Output ONLY the prompt.`;
       try {
         await insertGenerationLog(supabase, {
           user_id: userId,
+          job_id: jobId ?? null,
           recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
           rolled_axes: { ...logAxes, error: errMsg, refundClass, queued: true },
           enhanced_prompt: finalPrompt,
@@ -1787,6 +1822,7 @@ Output ONLY the prompt.`;
     try {
       await insertGenerationLog(supabase, {
         user_id: userId,
+        job_id: jobId ?? null,
         recipe_snapshot: (vibe_profile as unknown as Record<string, unknown>) ?? {},
         rolled_axes: { ...logAxes, error: errMsg, refundClass, sparkleRefunded },
         enhanced_prompt: finalPrompt,

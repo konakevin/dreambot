@@ -12,6 +12,13 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 export interface GenerationLogEntry {
   user_id: string;
+  /**
+   * dream_queue.id / dream_jobs.id this generation belongs to (= sparkle ledger
+   * reference_id = failure-notification reference_id). Lets dream_forensics()
+   * stitch this audit row to an exact render. NULL for pure-synchronous renders
+   * that have no job. Column added in migration 272.
+   */
+  job_id?: string | null;
   recipe_snapshot: Record<string, unknown>;
   rolled_axes: Record<string, unknown>;
   enhanced_prompt: string;

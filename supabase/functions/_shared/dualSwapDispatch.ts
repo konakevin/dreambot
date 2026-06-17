@@ -43,7 +43,10 @@ export async function dispatchDualFaceSwap(
   skipPrimary = false,
   // Each source's gender — lets the Fly engine put each cast member on the
   // matching-gender DETECTED face (the dynamic-split path).
-  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null }
+  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null },
+  // dream_queue.id — forwarded so the Fly/edge swap logs prefix the same id,
+  // letting one grep follow a render across Supabase + Fly logs.
+  traceId?: string | null
 ): Promise<DualDispatchResult> {
   const useFanout = Deno.env.get('DUAL_SWAP_FANOUT') === 'true';
 
@@ -110,6 +113,7 @@ export async function dispatchDualFaceSwap(
         skipPrimary,
         leftGender: genders?.left ?? null,
         rightGender: genders?.right ?? null,
+        traceId: traceId ?? null,
       }),
     });
 
@@ -152,7 +156,7 @@ export async function dispatchDualFaceSwap(
     }
     const faceCount = parsed.faceCount ?? (swappedUrl ? 2 : 0);
     console.log(
-      `[dispatchDualFaceSwap] ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount}`
+      `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount}`
     );
     return { swappedUrl, faceCount };
   } finally {

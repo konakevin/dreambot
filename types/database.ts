@@ -70,6 +70,7 @@ export type Database = {
           error_message: string | null;
           fallback_reasons: string[];
           id: string;
+          job_id: string | null;
           model_used: string;
           recipe_snapshot: Json;
           replicate_prediction_id: string | null;
@@ -88,6 +89,7 @@ export type Database = {
           error_message?: string | null;
           fallback_reasons?: string[];
           id?: string;
+          job_id?: string | null;
           model_used?: string;
           recipe_snapshot: Json;
           replicate_prediction_id?: string | null;
@@ -106,6 +108,7 @@ export type Database = {
           error_message?: string | null;
           fallback_reasons?: string[];
           id?: string;
+          job_id?: string | null;
           model_used?: string;
           recipe_snapshot?: Json;
           replicate_prediction_id?: string | null;
@@ -697,11 +700,14 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          current_stage: string | null;
           dedup_key: string | null;
           id: string;
           last_error: string | null;
+          model: string | null;
           payload: Json;
           source: string;
+          stage_updated_at: string | null;
           started_at: string | null;
           status: string;
           upload_id: string | null;
@@ -713,11 +719,14 @@ export type Database = {
           attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
+          current_stage?: string | null;
           dedup_key?: string | null;
           id?: string;
           last_error?: string | null;
+          model?: string | null;
           payload: Json;
           source: string;
+          stage_updated_at?: string | null;
           started_at?: string | null;
           status?: string;
           upload_id?: string | null;
@@ -729,11 +738,14 @@ export type Database = {
           attempt_count?: number;
           completed_at?: string | null;
           created_at?: string;
+          current_stage?: string | null;
           dedup_key?: string | null;
           id?: string;
           last_error?: string | null;
+          model?: string | null;
           payload?: Json;
           source?: string;
+          stage_updated_at?: string | null;
           started_at?: string | null;
           status?: string;
           upload_id?: string | null;
@@ -2403,11 +2415,14 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          current_stage: string | null;
           dedup_key: string | null;
           id: string;
           last_error: string | null;
+          model: string | null;
           payload: Json;
           source: string;
+          stage_updated_at: string | null;
           started_at: string | null;
           status: string;
           upload_id: string | null;
@@ -2428,11 +2443,14 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          current_stage: string | null;
           dedup_key: string | null;
           id: string;
           last_error: string | null;
+          model: string | null;
           payload: Json;
           source: string;
+          stage_updated_at: string | null;
           started_at: string | null;
           status: string;
           upload_id: string | null;
@@ -2453,11 +2471,14 @@ export type Database = {
           attempt_count: number;
           completed_at: string | null;
           created_at: string;
+          current_stage: string | null;
           dedup_key: string | null;
           id: string;
           last_error: string | null;
+          model: string | null;
           payload: Json;
           source: string;
+          stage_updated_at: string | null;
           started_at: string | null;
           status: string;
           upload_id: string | null;
@@ -2494,6 +2515,11 @@ export type Database = {
         Returns: undefined;
       };
       drain_pending_push_groups: { Args: never; Returns: undefined };
+      dream_forensics: { Args: { p_job_id: string }; Returns: Json };
+      dream_forensics_recent: {
+        Args: { p_hours?: number; p_user_id: string };
+        Returns: Json;
+      };
       fetch_nightly_history: {
         Args: { p_user_id: string };
         Returns: {

@@ -24,6 +24,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -135,6 +136,16 @@ Deno.serve(async (req) => {
       });
       if (refundErr) throw refundErr;
       if (didRefund) refunded++;
+
+      // A job stuck in 'processing' past the threshold = its render isolate
+      // died before the inline catch ran (the classic hard-kill). Report it so
+      // these silent infra deaths are visible + alertable in Sentry.
+      await captureRenderError(
+        new Error(
+          `dream_jobs stuck in processing > threshold — swept + refunded (${job.error || 'no error recorded'})`
+        ),
+        { fn: 'refund-stuck-jobs', jobId: job.id, userId: job.user_id, stage: 'unknown' }
+      );
 
       // Mark the job timeout so we don't sweep it again
       await supabase

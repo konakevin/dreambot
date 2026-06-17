@@ -25,6 +25,7 @@ import { dispatchCreateJob } from './dispatchers/create.ts';
 import { dispatchFirstDreamJob } from './dispatchers/first_dream.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -97,9 +98,30 @@ Deno.serve(async (req) => {
       .update({ status: 'queued', started_at: null, worker_id: null })
       .eq('status', 'in_progress')
       .lt('started_at', staleCutoff)
-      .select('id');
+      // Pull the migration-272 breadcrumbs so we can report WHERE the dead
+      // isolate died — current_stage/model survived the kill on this row.
+      .select('id, current_stage, model, source, user_id, attempt_count');
     if (staleRows && staleRows.length > 0) {
       console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
+      // The dead isolate couldn't report itself (a 546/OOM kill skips every
+      // catch). WE report on its behalf — this is the ONLY path that gets hard
+      // kills into Sentry, tagged with the exact stage that killed it.
+      for (const row of staleRows) {
+        await captureRenderError(
+          new Error(
+            `render isolate died at stage=${row.current_stage ?? 'unknown'} (in_progress > ${STALE_THRESHOLD_MIN}min) — re-queued`
+          ),
+          {
+            fn: 'dream-queue-worker:stale-recovery',
+            jobId: row.id,
+            userId: row.user_id,
+            stage: row.current_stage,
+            model: row.model,
+            source: row.source,
+            weight: undefined,
+          }
+        );
+      }
     }
 
     // ── Per-WEIGHT concurrency caps (the anti-546 lever) ───────────────────
@@ -193,6 +215,7 @@ Deno.serve(async (req) => {
                 anthropicKey: ANTHROPIC_KEY,
                 userId: job.user_id,
                 payload: job.payload,
+                queueJobId: job.id,
               });
               break;
             }
