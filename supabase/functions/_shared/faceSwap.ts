@@ -188,6 +188,17 @@ async function perturbSourceImage(
   const resp = await fetch(sourceImageUrl);
   if (!resp.ok) throw new Error(`Source download failed: ${resp.status}`);
   const buf = new Uint8Array(await resp.arrayBuffer());
+  // A large source (e.g. a full-res cast photo stored as the thumb_url) decodes
+  // into a huge RGBA buffer that blows the 256MB Edge isolate → 546
+  // WORKER_RESOURCE_LIMIT. The perturb is only an anti-hash-cache nicety, so for
+  // oversized sources skip the in-process decode and pass the URL straight through
+  // (Replicate fetches + handles it server-side). 1.2MB ≈ a comfortably big thumb.
+  if (buf.length > 1_200_000) {
+    console.warn(
+      `[perturbSource] source ${buf.length}B exceeds in-isolate decode budget — skipping perturb, passing URL through`
+    );
+    return { url: sourceImageUrl, path: '' };
+  }
   const decoded = await decodeImage(buf);
   const data = decoded.data;
   const w = decoded.width;
