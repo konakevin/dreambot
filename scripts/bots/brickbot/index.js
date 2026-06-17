@@ -50,16 +50,11 @@ module.exports = {
   // Banned 2026-06-02: flux-2-max (Kevin heart-ban).
   allowedModels: [
     'google/gemini-2-image',
-    'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
-  // Per-path model pins. 2026-06-06: lego-landscapes pinned to gpt-image-2,
-  // matching the nightly LEGO pin — produces the cleanest physical-LEGO-build
-  // read (no flux-2 family blocky over-stacking, no flux-1.1 pasty plastic).
-  modelByPath: {
-    'lego-landscapes': { 'openai/gpt-image-2': 100 },
-  },
+  // Per-path model pins land here when a specific path needs a specific model.
+  modelByPath: {},
   // (history) modelByPath was previously Object.fromEntries(
   //   pools.PATHS.map(p => [p, {'flux-1.1-pro': 100}])) — every path
   // weighted-pinned to 100% flux-1.1-pro, which OVERRODE the 4-model
@@ -69,14 +64,13 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
-  // read the MOC-photography prefix/suffix as "go abstract"; the clean medium
+  // nano-banana clean-render override (2026-06-07). This model reads the
+  // MOC-photography prefix/suffix as "go abstract"; the clean medium
   // (+ empty promptPrefixByMedium) lets the seed's LEGO build lead.
   mediumStyles: {
     brickbot_gpt_clean: blocks.GPT_CLEAN,
   },
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'brickbot_gpt_clean' },
     'google/gemini-2-image': { medium: 'brickbot_gpt_clean' },
   },
   promptPrefixByMedium: {

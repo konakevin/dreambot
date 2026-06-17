@@ -55,7 +55,6 @@ module.exports = {
   // re-added on several paths via modelByPath, so it can still roll.)
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'starbot_gpt_clean' },
     'google/gemini-2-image': { medium: 'starbot_gpt_clean' },
   },
 
@@ -98,7 +97,6 @@ module.exports = {
   //   • Nano Banana          — 2026-06-05 (this commit, full bot-wide ban)
   useModelPicker: true,
   allowedModels: [
-    'openai/gpt-image-2',
     'black-forest-labs/flux-2-pro',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
@@ -140,12 +138,11 @@ module.exports = {
     // MINUS Flux 2 Flex + MINUS Banana (heart-bans from today's comparison
     // test), AND MINUS Flux 1.1 Pro (Ultra is strictly better — Pro is
     // redundant when Ultra is present). Down to 2 models.
-    'cosmic-vista': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'cosmic-vista': ['black-forest-labs/flux-1.1-pro-ultra'],
     // alien-landscape (Kevin 2026-05-31): bot-wide MINUS Flux 2 Flex,
     // MINUS Banana (heart-ban), AND MINUS Flux 1.1 Pro (redundant w/ Ultra).
     // Down to 3 models.
     'alien-landscape': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -155,13 +152,11 @@ module.exports = {
     // density well; F1.1 Pro is redundant with Ultra on these. Down to 3.
     'alien-city': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     megastructure: [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -171,7 +166,6 @@ module.exports = {
     // applied here — Kevin's call). Banana dropped 2026-06-05 with the
     // bot-wide ban. Down to 3 models.
     'cozy-sci-fi-interior': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -180,13 +174,12 @@ module.exports = {
     // F1.1 Ultra after 3 model-test rounds — Banana / F2 Pro / F2 Flex
     // produced "too messy" renders even with gating; F1.1 Ultra ships clean,
     // GPT-2 handles the gated density well.
-    'space-opera': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'space-opera': ['black-forest-labs/flux-1.1-pro-ultra'],
     // real-space (Kevin 2026-05-31): GPT-2 + F1.1 Pro + F1.1 Ultra after the
     // premium-tier axis enrichment + 9-render test. Banana / F2 Pro / F2 Flex
     // remain banned. F1.1 Pro kept (Kevin's "keep Pro on non-character paths"
     // override of the "Pro redundant with Ultra" rule).
     'real-space': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

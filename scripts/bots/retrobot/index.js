@@ -50,7 +50,6 @@ module.exports = {
     retrobot_gpt_clean: blocks.GPT_CLEAN,
   },
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'retrobot_gpt_clean' },
     'google/gemini-2-image': { medium: 'retrobot_gpt_clean' },
   },
   promptPrefixByMedium: {

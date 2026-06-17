@@ -95,7 +95,7 @@ module.exports = {
   // EXCLUDED — it's gpt-2-locked with its own painted mer-folk medium
   // (mediumByPath below), so skipPaths keeps that look intact.
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'oceanbot_gpt_clean', skipPaths: ['mystical-mermaid'] },
+    // gpt-image-2 entry removed 2026-06-17 (banned fleet-wide).
     'google/gemini-2-image': { medium: 'oceanbot_gpt_clean', skipPaths: ['mystical-mermaid'] },
   },
   promptPrefixByMedium: {
@@ -116,7 +116,7 @@ module.exports = {
   useModelPicker: true,
   allowedModels: [
     'google/gemini-2-image',
-    'openai/gpt-image-2',
+    // gpt-image-2 removed 2026-06-17 (banned fleet-wide).
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
 
@@ -131,32 +131,27 @@ module.exports = {
     // (flux-2-pro dropped from this entry when removed bot-wide
     // 2026-06-05.)
     'ghost-ship': ['google/gemini-2-image', 'black-forest-labs/flux-1.1-pro-ultra'],
-    // deep-wonder: bot-wide MINUS Gemini 2 Image (Nano Banana) — the
-    // abyssal-black bioluminescent register reads stronger on the
-    // other 2 models. Down to 2.
-    // (flux-2-pro dropped from this entry when removed bot-wide
-    // 2026-06-05.)
-    'deep-wonder': ['openai/gpt-image-2', 'black-forest-labs/flux-1.1-pro-ultra'],
+    // deep-wonder: the abyssal-black bioluminescent register reads
+    // strongest on Ultra. (Gemini dropped earlier; gpt-image-2 removed
+    // 2026-06-17 with the fleet-wide ban.) Down to 1.
+    'deep-wonder': ['black-forest-labs/flux-1.1-pro-ultra'],
     // bioluminescent-night: bot-wide MINUS Flux 2 Pro PLUS Flux 1.1 Pro
     // (re-enabled here even though banned bot-wide). Kevin's call from
     // R0b — Flux 2 Pro reads off for the surface-glow register and
     // Flux 1.1 Pro fits better here than on other paths. Stays at 4.
     'bioluminescent-night': [
       'google/gemini-2-image',
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    // mystical-mermaid: HARD-LOCKED to gpt-image-2 only (Kevin
-    // 2026-06-05). Flux-1.1-pro-ultra + gemini-2-image both render
-    // nipples even when the prompt explicitly describes a concrete
-    // chest-covering (scaled bodice, shell cups, hair-over-shoulders).
-    // OpenAI's content policy on gpt-image-2 is the only one that
-    // reliably refuses to render bare-chest on the painted-mer-folk
-    // register. Verified across multiple R0/R1 batches — see
-    // BOT_SCENE_QUALITY_PLAYBOOK.md "Mermaid / painted-female-figure"
-    // section.
-    'mystical-mermaid': ['openai/gpt-image-2'],
+    // mystical-mermaid: DEACTIVATED 2026-06-17 (removed from the active
+    // `paths` list below) because it was HARD-LOCKED to gpt-image-2, which
+    // is now banned fleet-wide. It was gpt-2-only on purpose: flux-1.1-pro-
+    // ultra + gemini-2-image both render bare-chest even with an explicit
+    // chest-covering described, and OpenAI's content policy was the only
+    // one that reliably refused. With gpt-2 gone there's no safe model, so
+    // the path is parked (files + pools kept). To revive: find a model that
+    // holds the chest-covering, re-add it here, and re-list the path.
   },
 
   // Force-pin mystical-mermaid to the bot-only painted-mer-folk medium
@@ -202,7 +197,8 @@ module.exports = {
     'reef-paradise',
     'polar-seas',
     'bioluminescent-night',
-    'mystical-mermaid',
+    // 'mystical-mermaid' — DEACTIVATED 2026-06-17 (gpt-2-only path; gpt-2
+    // banned fleet-wide). Files + pools kept; see modelByPath note above.
     'seaturtle-scape',
     'wild-sealife-camera',
     'tropical-fish-closeup',

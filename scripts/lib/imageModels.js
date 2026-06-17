@@ -60,7 +60,9 @@
 // aspect-ratio default, so both are now production-grade and back in.
 const ALL_ENABLED_AI_MODELS = [
   'google/gemini-2-image', // Nano Banana — 4¢, ~22s (native Gemini)
-  'openai/gpt-image-2', // GPT Image 2 — 6¢, ~70s (native OpenAI)
+  // GPT Image 2 (openai/gpt-image-2) BANNED fleet-wide for bots 2026-06-17 (Kevin)
+  // — removed here AND from every bot's allowedModels / modelByPath / pathWeights
+  // / cleanMediumByModel. Not used by bots going forward.
   'black-forest-labs/flux-dev', // 3¢ — open-weight Flux 1, artistic register
   'black-forest-labs/flux-2-flex', // 6¢
   'black-forest-labs/flux-1.1-pro-ultra', // 6¢

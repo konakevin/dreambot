@@ -54,7 +54,6 @@ module.exports = {
   // Banned 2026-06-02: flux-2-flex (Kevin heart-ban — fleet-wide for gothbot).
   // Banned 2026-06-02: google/gemini-2-image (Kevin heart-ban — Nano Banana).
   allowedModels: [
-    'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
@@ -139,40 +138,33 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'dark-landscape': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'gothic-architecture': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'castlevania-scene': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-sanctum — non-character scene lineup (2026-06-10 NEW).
     'the-sanctum': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // the-frost-garden — non-character scene lineup (2026-06-10 NEW).
     'the-frost-garden': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // twilight-gothic — non-character scene lineup (2026-06-10 NEW).
     'twilight-gothic': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'gothic-vista': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -230,7 +222,6 @@ module.exports = {
   // the bot's horror PROMPT_PREFIX doesn't leak back in.
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'gothbot_gpt_clean' },
     // google/gemini-2-image (Nano Banana) BANNED fleet-wide for gothbot 2026-06-10 (Kevin).
   },
 

@@ -79,7 +79,6 @@ module.exports = {
   // nano-banana (google/gemini-2-image) + flux-2-flex BANNED bot-wide
   // 2026-06-12 (Kevin). Lineup is now Flux 1.1 Pro / Pro Ultra + GPT-Image-2.
   allowedModels: [
-    'openai/gpt-image-2',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
   ],
@@ -94,24 +93,20 @@ module.exports = {
     'sexy-steampunk-woman': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-man': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-scene': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'airship-skies': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-curio': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'steampunk-spectacle': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steam-transport': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     'steampunk-labs': [
-      'openai/gpt-image-2',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -128,7 +123,6 @@ module.exports = {
   // it into abstract ornamental plates. (nano-banana entry removed 2026-06-12
   // when the model was banned bot-wide.)
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'steambot_gpt_clean' },
   },
 
   mediumByPath: {

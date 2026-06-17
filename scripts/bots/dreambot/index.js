@@ -153,10 +153,6 @@ module.exports = {
   // creature renders). Non-look paths still swap to clean. (MVP-4 listed here;
   // expand to all 16 look paths at full rollout.)
   cleanMediumByModel: {
-    'openai/gpt-image-2': {
-      medium: 'chibibot_gpt_clean',
-      skipPaths: CHIBI_LOOK_PATHS,
-    },
     'google/gemini-2-image': {
       medium: 'chibibot_gpt_clean',
       skipPaths: CHIBI_LOOK_PATHS,
@@ -274,10 +270,9 @@ module.exports = {
   // gpt-2 picks auto-swap to chibibot_gpt_clean via cleanMediumByModel (mig
   // 238) so they render with the dedicated clean directive instead of the
   // neutral medium's Pop-Mart vinyl default.
-  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'openai/gpt-image-2'],
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra'],
   modelWeights: {
     'black-forest-labs/flux-1.1-pro-ultra': 80,
-    'openai/gpt-image-2': 20,
   },
 
   // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:

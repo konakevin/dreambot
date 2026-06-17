@@ -75,7 +75,6 @@ module.exports = {
   // read the IMAX/PBR/ray-traced anchors as "go abstract"; the clean medium
   // (+ empty prefix/suffix) lets the seed's dinosaur scene lead.
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'dinobot_gpt_clean' },
     'google/gemini-2-image': { medium: 'dinobot_gpt_clean' },
   },
   promptPrefixByMedium: {

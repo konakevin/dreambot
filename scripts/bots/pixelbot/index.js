@@ -60,21 +60,16 @@ module.exports = {
   useModelPicker: true,
   allowedModels: ALL_ENABLED_AI_MODELS,
 
-  // Per-path model pins. 2026-06-06: pixel-landscapes pinned to gpt-image-2
-  // (matches BrickBot's lego-landscapes pin — cleanest result for this
-  // pure-vista, real-world-place register).
-  modelByPath: {
-    'pixel-landscapes': { 'openai/gpt-image-2': 100 },
-  },
+  // Per-path model pins land here when a specific path needs a specific model.
+  modelByPath: {},
 
-  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Keeps the
-  // pixel-art register crisp + readable on these models (+ empty
-  // promptPrefixByMedium so the bot's prefix doesn't pull them off-style).
+  // nano-banana clean-render override (2026-06-07). Keeps the pixel-art
+  // register crisp + readable on this model (+ empty promptPrefixByMedium
+  // so the bot's prefix doesn't pull it off-style).
   mediumStyles: {
     pixelbot_gpt_clean: blocks.GPT_CLEAN,
   },
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'pixelbot_gpt_clean' },
     'google/gemini-2-image': { medium: 'pixelbot_gpt_clean' },
   },
   promptPrefixByMedium: {

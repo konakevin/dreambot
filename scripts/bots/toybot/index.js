@@ -79,7 +79,6 @@ module.exports = {
   // Other ToyBot paths still rotate the 2-model whitelist above.
   modelByPath: {
     'toy-landscapes': {
-      'openai/gpt-image-2': 100,
       'black-forest-labs/flux-1.1-pro': 100,
       'black-forest-labs/flux-1.1-pro-ultra': 100,
     },

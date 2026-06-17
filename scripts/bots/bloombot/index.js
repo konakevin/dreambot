@@ -88,10 +88,9 @@ module.exports = {
   // they render the clean editorial-floral register instead. (2026-06-09:
   // briefly let Banana carry the looks directly — verified no abstract drift
   // — but Kevin preferred Banana on its clean prompt; reverted. The looks
-  // ride the 2 Flux models.) gpt-2 is currently banned (not in allowed_models)
-  // so its entry is dormant but kept for if it's ever re-enabled.
+  // ride the 2 Flux models.) The gpt-image-2 entry was removed 2026-06-17
+  // (banned fleet-wide for bots).
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'bloombot_gpt_clean' },
     'google/gemini-2-image': { medium: 'bloombot_gpt_clean' },
   },
   mediumStyles: {

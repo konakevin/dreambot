@@ -117,7 +117,6 @@ module.exports = {
   // painterly-fusion medium/prefix make these models pick one extreme; the
   // clean medium (+ empty promptPrefixByMedium) lets the seed's kawaii food lead.
   cleanMediumByModel: {
-    'openai/gpt-image-2': { medium: 'yumbot_gpt_clean' },
     'google/gemini-2-image': { medium: 'yumbot_gpt_clean' },
   },
   // Per-medium prompt-prefix override (engine line 1314) — REPLACES the
@@ -142,7 +141,6 @@ module.exports = {
   // Banned 2026-06-07: flux-2-max (Kevin heart-ban).
   allowedModels: [
     'google/gemini-2-image',
-    'openai/gpt-image-2',
     'black-forest-labs/flux-dev',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',
