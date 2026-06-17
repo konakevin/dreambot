@@ -57,6 +57,7 @@ import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
 import { loadDualScenarios, pickDualScenario } from '../_shared/pools/dualScenarioLoader.ts';
+import { loadSingleScenarios, pickSingleScenario } from '../_shared/pools/singleScenarioLoader.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -183,9 +184,12 @@ Deno.serve(async (req) => {
   // untouched. Ignored when force_medium is also set (explicit wins).
   const force_face_swap_eligible = body.force_face_swap_eligible === true;
   // QA: force a special scene path — goofy (force_playful) or dressed-up elegant
-  // (force_elegant) — instead of the random 20%/20%/60% mix.
+  // (force_elegant) — instead of the random 20%/20%/60% mix. The _single_ variants
+  // force the SOLO special pools (single_scenarios) on a single-cast face swap.
   const force_playful = body.force_playful === true;
   const force_elegant = body.force_elegant === true;
+  const force_single_playful = body.force_single_playful === true;
+  const force_single_elegant = body.force_single_elegant === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -1011,6 +1015,9 @@ Deno.serve(async (req) => {
     // the random pose, the rotating model/medium/vibe, and the random Flux seed mean
     // the same scenario never renders the same twice. The slot pipeline keeps the
     // framing locked so the swap stays clean. Location for these = the scenario.
+    // Applies to BOTH dual (couples) and single (solo) face-swap dreams: 60%
+    // location / 20% goofy / 20% elegant. Single draws from the single_scenarios
+    // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
     let dualSpecialScene: string | null = null;
     let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
     if (isDualFaceSwap) {
@@ -1024,6 +1031,23 @@ Deno.serve(async (req) => {
         const s = pickDualScenario(pools.elegant);
         dualSpecialScene = s.scene;
         dualSpecialWardrobe = s.attire;
+      }
+    } else if (isSingleHumanFaceSwap) {
+      const pools = await loadSingleScenarios(supabase);
+      const g = castGender === 'male' || castGender === 'female' ? castGender : null;
+      const roll = Math.random();
+      if (force_single_playful || (!force_single_elegant && roll < 0.2)) {
+        const s = pickSingleScenario(pools, 'goofy', g);
+        if (s) {
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+        }
+      } else if (force_single_elegant || roll < 0.4) {
+        const s = pickSingleScenario(pools, 'elegant', g);
+        if (s) {
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+        }
       }
     }
     const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;

@@ -1877,6 +1877,39 @@ export type Database = {
           },
         ];
       };
+      single_scenarios: {
+        Row: {
+          attire: string;
+          category: string | null;
+          created_at: string;
+          disabled: boolean;
+          gender: string;
+          id: string;
+          pool: string;
+          scene: string;
+        };
+        Insert: {
+          attire: string;
+          category?: string | null;
+          created_at?: string;
+          disabled?: boolean;
+          gender?: string;
+          id?: string;
+          pool: string;
+          scene: string;
+        };
+        Update: {
+          attire?: string;
+          category?: string | null;
+          created_at?: string;
+          disabled?: boolean;
+          gender?: string;
+          id?: string;
+          pool?: string;
+          scene?: string;
+        };
+        Relationships: [];
+      };
       sparkle_packs: {
         Row: {
           icon: string;
