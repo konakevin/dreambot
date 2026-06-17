@@ -1026,19 +1026,21 @@ Deno.serve(async (req) => {
               gender: (selectedCast[i] as DreamCastMember).gender ?? null,
             })),
             // Playful scenario overrides the location + neutralizes the biome axes
-            // (a studio dino-onesie shot shouldn't fight "blizzard at midnight").
+            // (a goofy setting shouldn't fight "blizzard at midnight"). It drives
+            // ONLY the scene — wardrobeAnchor stays null so the couple keeps normal,
+            // scene-appropriate clothes (NO costumes; the fun is the environment).
             iconicAnchor: dualPlayfulScene ?? iconicAnchor,
             userPlace: dualPlayfulScene ?? userPlace ?? null,
             timeAxis: dualPlayfulScene ? '' : timeAxis,
             weatherAxis: dualPlayfulScene ? '' : weatherAxis,
             phenomenaAxis: dualPlayfulScene ? '' : phenomenaAxis,
-            wardrobeAnchor:
-              dualPlayfulScene ??
-              (bespokeBiome &&
-              Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
-              (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
+            wardrobeAnchor: dualPlayfulScene
+              ? null
+              : bespokeBiome &&
+                  Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
+                  (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
                 ? pickAxis((bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE)
-                : null),
+                : null,
             mediumFluxFragment: baseMedium.fluxFragment,
             vibeDirective: applyVibeGenderModifier(
               nightlyVibe.key,
