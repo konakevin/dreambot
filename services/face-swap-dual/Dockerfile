@@ -15,11 +15,18 @@ WORKDIR /app
 ## the dep cache.
 COPY src/deno.json src/deno.json
 COPY src/imageCodec.ts src/imageCodec.ts
+COPY src/faceDetectMath.ts src/faceDetectMath.ts
+COPY src/faceDetect.ts src/faceDetect.ts
 COPY src/faceSwap.ts src/faceSwap.ts
 COPY src/index.ts src/index.ts
+## In-process face-detection models (YuNet ~230KB + InsightFace genderage ~1.3MB).
+## Loaded once at boot via import.meta.url — no Replicate call, no cold start.
+COPY src/yunet.onnx src/yunet.onnx
+COPY src/genderage.onnx src/genderage.onnx
 
 ## Pre-warm the dep cache during build so cold starts don't pay the
-## one-time esm.sh fetch tax (Replicate + Supabase clients + jpeg WASM).
+## one-time esm.sh fetch tax (Replicate + Supabase clients + jpeg WASM +
+## onnxruntime-web).
 RUN deno cache src/index.ts
 
 ## Fly's internal HTTP service listens on 8080 by convention. The
@@ -31,4 +38,4 @@ EXPOSE 8080
 ## --allow-net is required for outbound Replicate + Supabase Storage.
 ## --allow-env exposes process env (REPLICATE_API_TOKEN, SUPABASE_*).
 ## --allow-read covers temp file ops inside _shared.
-CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-read", "src/index.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-read", "--allow-ffi", "src/index.ts"]
