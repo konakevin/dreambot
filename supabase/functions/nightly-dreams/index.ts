@@ -55,7 +55,11 @@ import {
 } from '../_shared/persistence.ts';
 import { insertGenerationLog } from '../_shared/logging.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
-import { pickPlayfulScenario } from '../_shared/pools/dual_scenarios.ts';
+import {
+  pickPlayfulScenario,
+  pickElegantScenario,
+  pickSpecialLighting,
+} from '../_shared/pools/dual_scenarios.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -181,8 +185,10 @@ Deno.serve(async (req) => {
   // normal nightly queue path never sets this, so its dream_eligible roll is
   // untouched. Ignored when force_medium is also set (explicit wins).
   const force_face_swap_eligible = body.force_face_swap_eligible === true;
-  // QA: force the playful/funny path — goofy scenario + playful pose pool.
+  // QA: force a special scene path — goofy (force_playful) or dressed-up elegant
+  // (force_elegant) — instead of the random 20%/20%/60% mix.
   const force_playful = body.force_playful === true;
+  const force_elegant = body.force_elegant === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -716,11 +722,13 @@ Deno.serve(async (req) => {
 
     const isDualCharacter = composition === 'character' && selectedCast.length === 2;
     const isSingleCharacter = composition === 'character' && selectedCast.length === 1;
+    // Default dual pose (used for LOCATION scenes). Special scenes re-pick a
+    // scene-matched pose at the slot-pipeline call below.
     const dualAction =
       isDualFaceSwap || isDualCharacter
         ? pickDualAction(
             selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-            force_playful ? 'playful' : force_dual_pool
+            force_dual_pool
           )
         : null;
     const singleActionObj = isSingleCharacter ? pickSingleAction(force_single_pool) : null;
@@ -998,13 +1006,28 @@ Deno.serve(async (req) => {
     let slotPipelineHandled = false;
     let slotPipelineFallbacks: string[] = [];
 
-    // Playful scenario (Phase 2): ~15% of DUAL nightly dreams get a goofy,
-    // unconventional setup (dino onesies, banana costumes, superhero duo). The fun
-    // lives entirely in the scene + wardrobe; the slot pipeline keeps the framing
-    // locked so the swap stays clean. Overrides the location for these renders.
-    const dualPlayfulScene =
-      isDualFaceSwap && (force_playful || Math.random() < 0.15) ? pickPlayfulScenario() : null;
-    const effectiveUserPlace = dualPlayfulScene ?? userPlace;
+    // Nightly DUAL scene mix (Phase 2): 60% their saved location / 20% GOOFY /
+    // 20% PRETTY. The two special pools swap the location for a curated scene:
+    //  - goofy (DUAL_SCENARIOS_PLAYFUL): fun environment, NORMAL clothes (wardrobe null)
+    //  - elegant (DUAL_SCENARIOS_ELEGANT): pretty scene, DRESSED-UP attire (wardrobe set)
+    // A LIGHTING axis + the slot pipeline's fresh Sonnet scene/wardrobe/mood/props,
+    // the random pose, the rotating model/medium/vibe, and the random Flux seed mean
+    // the same scenario never renders the same twice. The slot pipeline keeps the
+    // framing locked so the swap stays clean. Location for these = the scenario.
+    let dualSpecialScene: string | null = null;
+    let dualSpecialWardrobe: string | null = null; // set only for elegant (dress them up)
+    if (isDualFaceSwap) {
+      const roll = Math.random();
+      if (force_playful || (!force_elegant && roll < 0.2)) {
+        dualSpecialScene = pickPlayfulScenario();
+      } else if (force_elegant || roll < 0.4) {
+        const e = pickElegantScenario();
+        dualSpecialScene = e.scene;
+        dualSpecialWardrobe = e.attire;
+      }
+    }
+    const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;
+    const effectiveUserPlace = dualSpecialScene ?? userPlace;
 
     // ── Unified character face-swap slot pipeline ──
     // Handles BOTH single-human and dual-character face swap. Sonnet only
@@ -1016,7 +1039,20 @@ Deno.serve(async (req) => {
         // Single-cast action comes from pickSingleAction (pose only — we drop
         // the legacy needsEpicBackdrop signal because the slot pipeline owns
         // its own framing). Dual-cast action comes from pickDualAction.
-        const action = selectedCast.length === 2 ? dualAction : (singleAction ?? null);
+        // Match the pose to the scene: elegant/dressed-up → refined partner pose
+        // (a thumbs-up clashes with formal wear); goofy → playful pose; location →
+        // the already-rolled dualAction.
+        const action =
+          selectedCast.length === 2
+            ? dualSpecialWardrobe
+              ? pickDualAction(
+                  selectedCast.find((c) => c.role === 'plus_one')?.relationship,
+                  'partner'
+                )
+              : dualSpecialScene
+                ? pickDualAction(undefined, 'playful')
+                : dualAction
+            : (singleAction ?? null);
         const slotResult = await runCharacterSlotPipeline(
           {
             cast: resolvedCast.map((rc, i) => ({
@@ -1028,17 +1064,17 @@ Deno.serve(async (req) => {
               // body's sex to the cast photo (fixes male-face-on-female-body).
               gender: (selectedCast[i] as DreamCastMember).gender ?? null,
             })),
-            // Playful scenario overrides the location + neutralizes the biome axes
-            // (a goofy setting shouldn't fight "blizzard at midnight"). It drives
-            // ONLY the scene — wardrobeAnchor stays null so the couple keeps normal,
-            // scene-appropriate clothes (NO costumes; the fun is the environment).
-            iconicAnchor: dualPlayfulScene ?? iconicAnchor,
-            userPlace: dualPlayfulScene ?? userPlace ?? null,
-            timeAxis: dualPlayfulScene ? '' : timeAxis,
-            weatherAxis: dualPlayfulScene ? '' : weatherAxis,
-            phenomenaAxis: dualPlayfulScene ? '' : phenomenaAxis,
-            wardrobeAnchor: dualPlayfulScene
-              ? null
+            // Special scene (goofy/elegant) overrides the location + swaps the biome
+            // axes for a LIGHTING-quality axis (varies the look; a goofy/indoor scene
+            // shouldn't fight "blizzard at midnight"). wardrobeAnchor: goofy → null
+            // (normal clothes); elegant → the dressed-up attire; location → biome.
+            iconicAnchor: dualSpecialScene ?? iconicAnchor,
+            userPlace: dualSpecialScene ?? userPlace ?? null,
+            timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
+            weatherAxis: dualSpecialScene ? '' : weatherAxis,
+            phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
+            wardrobeAnchor: dualSpecialScene
+              ? dualSpecialWardrobe
               : bespokeBiome &&
                   Array.isArray((bespokeBiome as unknown as { WARDROBE?: string[] }).WARDROBE) &&
                   (bespokeBiome as unknown as { WARDROBE: string[] }).WARDROBE.length > 0
