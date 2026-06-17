@@ -1,276 +1,244 @@
 # DreamBot — Claude Code Guidelines
 
-## Session Startup
-
-**Read this entire file before doing anything else.** You are a senior principal engineer on this project. Jump straight into whatever Kevin needs.
+**Read this whole file before starting.** You are a senior principal engineer here — jump straight into
+what Kevin needs. Deep/niche procedures (after-change checklists, admin-config catalog, bot module
+internals, onboarding flow) live in `ENGINEERING_NOTES.md` — read the relevant section only when doing
+that kind of work; don't preload it. Per-topic docs are indexed at the bottom.
 
 Do NOT auto-start the dev environment. Tell Kevin he can run `/dream` to spin up the dev tools.
 
----
+## What this app is
 
-## What This App Is
-
-DreamBot is an AI-powered dream image generator for iOS. Users build a "Vibe Profile" during onboarding (locations, dream cast photos, mood sliders), and the app generates personalized AI dreams. Dark, high-energy aesthetic.
-
-**Key features:** personalized AI image generation (Sonnet brief → Flux render), multiple creation modes (Dream Me / Chaos / Cinematic / restyle / reimagine / Dream Like This / custom), Dream Cast face-swap (self + plus_one), nightly automatic dreams with bot messages, social feed (likes / comments / shares / follows / friends), Sparkle currency (RevenueCat IAP) + Pro subscription for HQ downloads, 18 image-generation bots posting to a public feed (4× daily).
-
----
+DreamBot is an AI dream-image generator for iOS (RN + Expo). Users build a "Vibe Profile" in onboarding
+(locations, dream-cast photos, mood sliders); the app generates personalized AI dreams (Sonnet writes a
+brief → Flux/Gemini/GPT renders), with creation modes (Dream Me / Chaos / Cinematic / restyle / reimagine
+/ Dream Like This / custom), Dream-Cast face-swap (self + plus_one), nightly auto-dreams, a social feed,
+Sparkle currency (RevenueCat IAP) + a Pro subscription, and 18 image-gen bots posting to a public feed.
 
 ## Stack
 
-- **Framework:** React Native 0.81 + Expo SDK 54, Expo Router v6 (file-based)
-- **Styling:** NativeWind v4 preferred for new code; existing `StyleSheet.create` is fine — match each file's existing style
-- **Responsive sizing:** all new UI components import scale helpers from `@/lib/responsive` — `verticalScale(n)` for paddings/margins/dimensions, `fontScale(n)` for `fontSize`/`lineHeight`, `horizontalScale(n)` for sparse horizontal needs, `verticalScaleClamped(n, min, max)` for hero elements with floors/ceilings, `useDeviceClass()` → `{isSmall, isLarge, isTablet, height, width}` for conditional layouts. Don't introduce hardcoded numeric values in `StyleSheet.create` or `style={{}}` — design at the iPhone 14 base (844×390pt) and scale. Legacy code is grandfathered; new code that adds hardcoded values is a regression.
-- **State:** Zustand (client) + TanStack Query v5 (server/async)
-- **Backend:** Supabase (Postgres, auth, storage, realtime, Deno Edge Functions)
-- **AI Image Gen:** Replicate (Flux family) + Gemini (Nano Banana) + OpenAI (GPT Image 2)
-- **AI Text:** Anthropic Claude Sonnet (briefs) + Haiku (vision, polishing, bot messages)
-- **Payments:** RevenueCat (sparkle IAP + Pro)
-- **Auth:** Supabase Auth (email + Google + Apple + Facebook OAuth)
-- **Animations:** Reanimated 4 + Gesture Handler
-- **Images:** `expo-image` only (never RN `Image`)
-- **Language:** TypeScript strict — no `any`, no `as any`, no `as Function`, no `// @ts-ignore`
+- **RN 0.81 + Expo SDK 54**, Expo Router v6 (file-based). **TypeScript strict** — no `any`, `as any`,
+  `as Function`, `as unknown as`, `// @ts-ignore` (regenerate types instead).
+- **Styling** NativeWind v4 for new code (existing `StyleSheet.create` is fine — match the file).
+  **Responsive:** new UI imports `@/lib/responsive` scale helpers (`verticalScale`, `fontScale`,
+  `horizontalScale`, `verticalScaleClamped`, `useDeviceClass`); design at the iPhone-14 base (844×390pt),
+  no hardcoded numbers in new styles (legacy grandfathered).
+- **State** Zustand + TanStack Query v5. **Images** `expo-image` only.
+- **Backend** Supabase (Postgres, auth, storage, realtime, Deno Edge Functions, pg_cron).
+- **AI** Replicate (Flux) + Gemini (Nano Banana) + OpenAI (GPT Image 2) for images; Anthropic Sonnet
+  (briefs) + Haiku (vision/polish/bot messages) for text.
+
+Layout: `app/` (routes), `components/` (~116), `hooks/` (~60), `store/` (6 Zustand), `lib/` (~45 glue),
+`constants/`, `types/database.ts` (auto-gen) + `vibeProfile.ts`; `supabase/migrations/` (277 files,
+highest prefix 275) + `supabase/functions/` (15 edge fns + ~49 `_shared/`); `scripts/bots/<botname>/`
+(18 bots) + `scripts/lib/` (bot infra) + `scripts/*.js`; `__tests__/lib/,store/` (fast jest) +
+`__tests__/db/` (`*.dbspec.ts`).
 
 ---
 
-## File Structure
+## The two dream pipelines
 
-```
-app/                  Expo Router routes
-  (auth)/             index, login, signup
-  (onboarding)/       single pager that orchestrates 5 data steps + 5 info screens
-  (tabs)/             5 tabs: index, create, top, bots, profile
-  settings/           11 sub-screens (edit-profile, dream-cast, locations, mood,
-                      notifications, advanced-mode, bots, blocked-users, about, …)
-  dream/, photo/[id], post/[id], user/[userId]
-  comments, inbox, dreamLikeThis, sharePost, sparkleStore, proStore, welcome-gift
-components/           58 files; onboarding/ + ui/ subdirs; biggest: DreamCard, DreamWishSheet,
-                      CommentOverlay, FullScreenFeed, PostGrid
-hooks/                58 TanStack Query + plain hooks; gestures/ subdir
-store/                6 Zustand stores: album, auth, dream, explore, feed, onboarding
-lib/                  36 glue files; supabase client, dreamApi, revenuecat, proStatus,
-                      moderation, navigation, sentry, posthog, analytics
-types/                database.ts (auto-gen), vibeProfile.ts (v2 + isVibeProfile guard)
-constants/            12 files; theme, proPlan, sparklePacks (fallback), imageModels, …
-supabase/
-  migrations/         255 SQL migrations (highest prefix: 255)
-  functions/          14 Edge Functions + 58 _shared/ modules
-scripts/
-  bots/<botname>/     18 self-contained bots (index.js, paths/, pools.js, seeds/)
-  lib/                Shared bot infra (botEngine, brief-composer, chaosLayer, …)
-  dispatch-bots.js, run-bot.js, iter-bot.js, nightly-dreams.js, qa-bot-model-matrix.js, …
-__tests__/
-  lib/, store/        fast suite (*.test.ts) — runs in husky + CI `check`
-  db/                 live-DB lane (*.dbspec.ts) — real Postgres, CI `db-tests` only
-```
+Both render through the shared async **`dream_queue`** and the **`dream-queue-worker`**. One UUID flows
+through everything: `dream_queue.id` == `dream_jobs.id` == `job_id` == sparkle-ledger `reference_id`.
 
----
+### 1. Create — user-initiated, interactive, paid (behind `EXPO_PUBLIC_DREAM_QUEUE_ENABLED`)
 
-## Generation Architecture
+Client → **`enqueue-dream`**: auth → per-user in-flight cap (≤5 queued/in_progress) → charge sparkles
+(idempotent on `job_id`) → INSERT `dream_queue` (with `weight` light/heavy) + seed `dream_jobs` → kick the
+worker → returns `{dream_id}` in <500ms. The loading screen subscribes to the `dream_queue` row via
+realtime (`dream_jobs` poll = fallback). The worker claims it under the per-weight cap and dispatches to
+**`generate-dream`** (or **`restyle-photo`** for Kontext restyle) on the `x-dream-queue` service path; the
+render persists the upload and flips the `dream_queue` row → the client shows the dream. Modes (Dream Me /
+Chaos / Cinematic / reimagine / DLT / custom) all flow through `generate-dream`. **DLT** = "Dream Like
+This" (re-render from an existing dream's style + the user's prompt).
 
-Two main render paths:
+### 2. Nightly — automated, batch, Pro/trial-only
 
-1. **User-initiated dreams** → `generate-dream` Edge Function. Flow: resolve medium + vibe from DB tables → load cast + `dream_seeds.places[]` → roll a composition (`_shared/dreamAlgorithm.ts:rollDream`) → build Sonnet brief (`_shared/recipeBuilder.ts` + `sceneEngine.ts`) → Sonnet writes Flux prompt (sanitized + post-processed) → Flux renders (model picked per-medium) → optional face swap → persist (Storage upload, dedup, `uploads` row, `ai_generation_log`).
+GitHub Actions cron `0 8 * * *` UTC runs **`scripts/nightly-dreams.js`**, which ENQUEUES one `dream_queue`
+job per eligible Pro-or-in-trial user (bots excluded; **paginated** — PostgREST silently caps reads at
+1000 rows; per-user-per-day idempotent via `dedup_key`). The worker drains the backlog overnight at the
+heavy cap → **`nightly-dreams`** render edge fn → personalizes from `user_recipes.recipe` JSONB via the
+shared scene engine → Haiku bot message → dreamer notification. It also sends trial / paid-pro-cancel
+reminder pushes. Master kill-switch: `engine_config.nightly_enabled`.
 
-2. **Nightly dreams** (and the **first dream** in onboarding) → async queue pipeline. The GitHub Actions cron `0 8 * * *` runs `scripts/nightly-dreams.js`, which ENQUEUES one `dream_queue` job per eligible Pro-or-in-trial user (bots excluded; per-user-per-day idempotent via `dedup_key`). The `dream-queue-worker` (pg_cron every minute) batch-claims jobs (`claim_dream_queue_jobs` — SELECT FOR UPDATE SKIP LOCKED) and dispatches to the `nightly-dreams` render Edge Function via `EdgeRuntime.waitUntil`. Same scene engine, personalizes from `user_recipes.recipe` JSONB. Full architecture: `NIGHTLY_DREAM_ENGINE.md` + `QUEUE_WORKERS_REFACTOR.md` + `NIGHTLY_SEED_POOL_QA.md`.
+**Onboarding first-dream** is its own queue source: `enqueue-dream` (first_dream branch) → `dream_queue` →
+**`first-dream-render`**, which runs a cascade (dual → single → scene face-swap) so the user is reliably
+cast into one of their places. Free (no charge).
 
-**Onboarding Reveal (first dream)** routes through the `nightly-dreams` engine with `force_cast_role` + `force_face_swap_eligible` so the user is reliably cast into one of their places. The engine returns the private `upload_id`; Post flips it public (no double-insert). No separate `generate-first-dream` function — it was ripped out 2026-06-02.
+### Shared engine + worker reliability (status of record: `QUEUE_WORKERS_REFACTOR.md`)
 
-**Photo restyle** → separate `restyle-photo` Edge Function. Kontext-based transform with per-medium configs in `_shared/photoPrompts.ts`.
-
-**Dual face swap** runs in its own `face-swap-dual` Edge Function isolate (memory separation). Routing via `_shared/dualSwapDispatch.ts`. Don't add new pixel work to the dual swap path in-process; new steps go in a separate Edge Function.
-
-**User dreams via the async queue (2026-06-13, feature-flagged `EXPO_PUBLIC_DREAM_QUEUE_ENABLED`).** Routes Create/DLT/restyle through `dream_queue` like nightly, to escape Supabase Edge 546 `WORKER_RESOURCE_LIMIT` at scale. Flow: client → `enqueue-dream` (charge + INSERT `dream_queue` + seed `dream_jobs` + kick worker → `{dream_id}` in <500ms) → loading screen subscribes to `dream_queue` realtime (`dream_jobs` poll = fallback) → `dream-queue-worker` (pg_cron 1min + per-enqueue kick) **claims under the cap and dispatches FIRE-AND-FORGET** → `generate-dream`/`restyle-photo` (`x-dream-queue:1` service path) ack 202, render in `waitUntil`, and **own their own `dream_queue` terminal state** via `completeQueueJob`/`failQueueJob` (`_shared/dreamQueueLifecycle.ts`). One UUID = `dream_queue.id` == `dream_jobs.id` == `job_id` == sparkle ledger `reference_id`.
-
-- **LOAD-BEARING GOTCHA — the RENDER owns the queue lifecycle, NOT the worker.** Never make the worker synchronously await a long render: under load the gateway 504s the worker's HTTP call and it would re-queue a render that ACTUALLY SUCCEEDED (re-rendering + orphaning uploads). The 202-ack + render-self-completes design is what fixes this. Worker stale-recovery (in_progress >5min → re-queue) catches a dead isolate.
-- **PER-WEIGHT concurrency caps are the anti-546 lever** (migration 265). `dream_queue.weight` ('light'|'heavy', set at enqueue: photo new_scene / `force_cast_role` / self-referential-with-cast = heavy; plain text + restyle = light). LIGHT runs at `engine_config.dream_queue_max_concurrent` (default 40), HEAVY at `engine_config.dream_queue_max_concurrent_heavy` (default **10**). Worker claims each pool separately (`claim_dream_queue_jobs_by_weight`). **Both knobs are live-tunable from the dashboard, no deploy.** Beyond a cap, jobs queue + drain (never fail) — it bounds CONCURRENCY, not total users.
-- **The HEAVY ceiling is the Fly.io dual-swap service.** Load-tested: light holds at 40 + drains fast; heavy at 10 = 24/24 dual succeeded, but at 15 the Fly.io swap exhausted under combined load. To raise the heavy cap, **scale the Fly.io `face-swap-dual` service first**, then bump `dream_queue_max_concurrent_heavy`. Nightly is also 'heavy' (default weight) but non-interactive, so it drains overnight regardless.
-- **Tuning + validation:** load-test scripts `scripts/loadtest-create-queue.js` (light), `loadtest-dual-swap.js` (heavy), `loadtest-mixed.js` (both) — each `--count`/`--light`/`--heavy` + `--cleanup` (deletes rows AND storage blobs; a bare uploads-row delete orphans the file). Status of record: `QUEUE_WORKERS_REFACTOR.md`.
-
-**Pro-state is one rule across three runtimes** that MUST stay in sync: `lib/proStatus.ts` (client), `scripts/lib/nightlyEligibility.js` (nightly cron gate), `is_pro_active()` Postgres fn (Edge Functions). Pro = paid+unexpired OR within the trial window — **trial LENGTH is `engine_config.pro_trial_days`** (default 14, read by all three runtimes; migration 248), so change the trial length in ONE DB row, not in code. Re-validated on every read. Tests: `__tests__/lib/proStatus.test.ts`, `__tests__/lib/nightlyEligibility.test.ts`, `__tests__/db/isProActive.dbspec.ts`. Change the trial *logic* in all three together.
-
----
-
-## Admin Config — patch generation without a client deploy
-
-A lot of generation config is **DB-driven** so it can be changed from the Supabase dashboard with **no App Store build** (the dangerous, days-slow path). Full audit + design: `ADMIN_CONFIG_PLAN.md` (status: SHIPPED). The backbone:
-
-- **`engine_config`** (singleton row, id=1) — the remote-config spine, read by all three runtimes (client `useEngineConfig` → `get_engine_config()` RPC; Edge `_shared/engineConfig.ts`; scripts `scripts/lib/engineConfig.js`). Holds: `base_sparkle_cost`, `welcome_sparkle_bonus`, `pro_trial_days` (the 3-runtime trial value), `prompt_max_length`, `photo_preprocess_*`, `nightly_max_jobs`, `nightly_enabled` (master kill-switch), `nightly_require_*`, `pro_monthly_sparkle_bundle`, the cast-detection regexes, plus the nightly distribution knobs (chaos tiers, embodied/face-swap rates). Every field has a code FALLBACK — a missing row never breaks anything.
-- **`dream_mediums` / `dream_vibes`** — directives/flux fragments/flags (already DB); `client_meta jsonb` (migration 251) lets NEW client-driving attributes be added with no RPC/rebuild.
-- **`bot_config`** (migration 249) — per-bot DIALS overlaid on code at run time (`scripts/lib/botConfig.js`): `allowed_models`, medium/vibe locks, `chaos_enabled`, `two_pass_polish_enabled`. NULL/missing = pure code. (Paths/pools/archetypes/prose stay code — creative source, not dials.)
-- **`mood_axes`** (250) — onboarding sliders (`useMoodAxes`); axis KEYS are a typed engine contract.
-- **`sparkle_packs`** (255) — pack sizes; **bot cadence/seeds** (`bot_schedules`/`bot_seeds`), **nightly seeds** (`nightly_seeds`), **locations** (`location_cards`) are all DB too.
-
-**Deliberately still code:** the scene-engine *algorithm* (`sceneEngine.ts`/`dreamAlgorithm.ts`/`recipeBuilder.ts`), bot paths/pools/prose, sanitization/chaos/face-swap dispatch, and the nightly *cron time* (GitHub Actions can't read the DB — would need pg_cron).
-
-When you add a hardcoded constant that shapes generation/economy/UX copy, ask: should this be an `engine_config` field (or a config table) instead? Default yes for anything an admin would reasonably want to tune post-launch.
+- **Scene engine** (shared by all paths): `dreamAlgorithm.ts:rollDream` → `recipeBuilder.ts`/
+  `sceneEngine.ts` build a Sonnet brief → Sonnet writes the Flux prompt (sanitized) → model picked
+  per-medium → optional face swap → persist (Storage, `uploads` row, `ai_generation_log`).
+- **Renders run SYNCHRONOUSLY** — the worker holds the render's HTTP connection (an actively-awaited
+  request keeps the isolate alive). It does NOT rely on `EdgeRuntime.waitUntil` for the render: the
+  platform dropped `waitUntil` background tasks on 2026-06-17 and silently stalled the queue. The render
+  **owns its own `dream_queue` terminal state** (`completeQueueJob`/`failQueueJob`,
+  `_shared/dreamQueueLifecycle.ts`) — retry/backoff/dead-letter + refund + notify.
+- **Worker invocation = pg_cron every minute + per-enqueue kick (fast path, uses `waitUntil`) + a GitHub
+  Actions `x-worker-sync` backstop** (`dream-queue-sync.yml`, every 5 min, held-connection loop) that
+  drains even when `waitUntil` is down. `RENDER_TIMEOUT_MS` 120s (under the 150s gateway idle ceiling).
+- **PER-WEIGHT concurrency caps are the anti-546 lever**, enforced ATOMICALLY inside
+  `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock — no overshoot under
+  concurrent invokers). `weight` set at enqueue (face-swap-likely = heavy, plain text + restyle = light);
+  light cap `engine_config.dream_queue_max_concurrent` (40), heavy `…_heavy` (10), both live-tunable.
+  Beyond the cap, jobs queue + drain (never fail). **The heavy ceiling is the Fly.io `face-swap-dual`
+  service** — scale Fly FIRST (`fly scale count N`, runbook in `QUEUE_WORKERS_REFACTOR.md`), then raise
+  the heavy cap.
+- **Dual face swap** runs in its own `face-swap-dual` isolate (Fly.io, 2GB; memory separation), routed via
+  `_shared/dualSwapDispatch.ts`. Never add pixel work to it in-process (Hard Rules).
+- **Pro-state is ONE rule across three runtimes** (keep in sync): `lib/proStatus.ts` (client),
+  `scripts/lib/nightlyEligibility.js` (cron gate), `is_pro_active()` Postgres fn (Edge). Pro =
+  paid+unexpired OR within trial; **trial length = `engine_config.pro_trial_days`** (default 14) — one DB
+  row, read by all three. Change the trial *logic* in all three together.
+- **DB-driven config** (`engine_config` singleton + config tables) tunes generation/economy/UX from the
+  dashboard with NO App Store build. New constant that shapes generation/economy/UX copy → ask "should
+  this be an `engine_config` field?" (default yes). Catalog: `ENGINEERING_NOTES.md` / `ADMIN_CONFIG_PLAN.md`.
 
 ---
 
-## Bot System (18 bots)
+## Bots
 
-> **STOP — read this before any bot work.** ANY task that touches bot config, paths, pools, seeds, archetypes, brief composition, or even just *answers a question* about how a specific bot works requires re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` in full first. The playbook is the canonical brain (the 10/10 bar, the 8 components of memorable scenes, per-bot Round-N iteration logs, cross-bot lessons, failure-mode catalog). Skipping it produces one-off fixes that contradict prior lessons. **And: update the playbook with every new lesson learned the moment you learn it — don't wait to be asked.**
+18 image-gen bots (bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot,
+mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot) post to the public feed
+**4×/day**. Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (every 15 min) reads
+`bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under
+`scripts/bots/<botname>/` (config + paths + pools + seeds); multi-provider (Flux/Gemini/GPT). Full
+architecture, cadence mechanics, entry points (`run-bot.js`, `iter-bot.js`, `qa-bot-model-matrix.js`):
+`ENGINEERING_NOTES.md` + `BOTS.md`.
 
-**The 18:** bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot, mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot. Active in `bot_schedules` at 4 posts/day.
-
-**Per-bot model lineups** (which AI models each bot rolls from) live in `BOT_MODEL_TALLY.md`. The `model` column on `uploads` (migration 211) records which model rendered each post; DreamCard shows a model badge.
-
-**Architecture.** Each bot is a self-contained module under `scripts/bots/<botname>/`: `index.js` (config + `rollSharedDNA()` + `buildBrief()`), `paths/*.js` (one per creative path; inline brief OR archetype consumed by `scripts/lib/brief-composer.js`), `pools.js` (axis pools), `seeds/*.json` (loaded into the `bot_seeds` table). Shared infra in `scripts/lib/`: `botEngine.js`, `brief-composer.js`, `chaosLayer.js`, `sensoryAnchors.js`, `twoPassPolish.js`, `modelPicker.js`, `seed-generator.js`.
-
-**Cadence is DB-driven.** The dispatcher (`.github/workflows/bots-dispatcher.yml`, every 15 min) reads `bot_schedules` for due bots and shells out to `scripts/run-bot.js`. To change a bot's cadence: `UPDATE bot_schedules SET posts_per_day = N WHERE bot_name = '<name>';` — no code commit, no app deploy.
-
-**Path rotation is flat round-robin.** Every bot sets `cycleAllPaths: true` with no `pathWeights`; each path posts exactly once per cycle before the bag reshuffles. Cycle state persists via `bot_run_log` count % cycle-size.
-
-**Entry points:** `scripts/run-bot.js` (production, called per due bot), `scripts/iter-bot.js` (dev iteration; `--bot`, `--count` default 5, `--mode`, `--post` required for live), `scripts/qa-bot-model-matrix.js` (HTML matrix — when Kevin says "run an HTML matrix on `<bot>`", just run it with defaults: 1 render per (path × model), `--post` on; full protocol in the playbook).
-
----
-
-## Sparkle + Pro
-
-**Costs (DB-tunable, no deploy).** Base dream = `engine_config.base_sparkle_cost` (default 1). First dream is free (server-side). Nightly dreams are Pro/trial-only (free users post-trial get none). Welcome bonus = `engine_config.welcome_sparkle_bonus` (default 25), granted on onboarding completion. 5 sparkle packs (15/40/90/200/500) — **source of truth is the `sparkle_packs` table** (migration 255), read by the store UI (`useSparklePacks`) AND `revenuecat-webhook`; `constants/sparklePacks.ts` is the offline fallback. Pro monthly bundle = `engine_config.pro_monthly_sparkle_bundle` (default 75; yearly = 12×). (There is no "fusion" cost — the Twin/Fuse feature was removed; DLT renders cost the base.)
-
-**Pro perk.** Long-press save-to-photos for HQ downloads + a nightly dream every night. Trial = `engine_config.pro_trial_days` days on signup (default 14). Purchase flow: app → RevenueCat SDK → Apple → RevenueCat webhook → `revenuecat-webhook` Edge Function → `grant_sparkles` RPC or pro flag flip. RevenueCat webhook secret: `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets). Setup: `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`.
+> **STOP — before ANY bot work** (config, paths, pools, seeds, archetypes, briefs, or even answering how a
+> bot works): re-read **`BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL** first — the canonical brain (the 10/10
+> bar, the 8 components of a memorable scene, per-bot iteration logs, the failure-mode catalog). Prior
+> session context is NOT a substitute. **Update the playbook with every new lesson the moment you learn
+> it.** When Kevin says "run an HTML matrix on `<bot>`", just run `node scripts/qa-bot-model-matrix.js
+> --bot <name>` (defaults: 1×/(path×model), `--post` on).
 
 ---
 
-## Onboarding
+## Infrastructure & services (how it ties together)
 
-5 data steps (welcome, locations, dream cast, mood sliders, reveal) wrapped by 5 info/selector screens (4 InfoStep cards + bot_selector) — 10 total UI screens in the STEPS array, orchestrated by a single pager at `app/(onboarding)/index.tsx`. Profile saves on first dream generation (not just on post).
+All four services hang off **one Supabase project** (`jimftynwrinwenonjrlj`), shared by the app AND the
+website.
 
-- **Locations:** curated 63 location cards (`location_cards` DB table). Min 3 / max 10. Stored as `dream_seeds.places[]`. NEVER free-text — locations come from cards with rich essence data.
-- **Dream Cast:** photo upload for self + plus_one. Llama Vision (`describe-photo`) generates descriptions. Relationship picker for +1.
-- **Mood Sliders:** 4 bipolar (peaceful↔chaotic, cute↔terrifying, minimal↔maximal, realistic↔surreal).
-- **Reveal:** first-dream generation via the `nightly-dreams` engine with a forced cast face swap; post / skip; 25-sparkle welcome; welcome notification.
+- **Supabase** — Postgres (data + RLS), Auth (email + Google + Apple + Facebook OAuth — `AUTH_PROVIDERS.md`),
+  Storage (`uploads` bucket), Realtime (the loading screen + feed), **Edge Functions** (all generation +
+  webhooks), **pg_cron** (the queue worker + log retention). Migrations run by hand in the dashboard SQL
+  editor; edge fns deploy via CLI (see ops).
+- **App Store Connect** — the iOS app + all IAP products. Sparkle packs (`com.konakevin.radorbad.sparkles.*_v2`)
+  and the Pro auto-renewing subscription (`com.konakevin.dreambot.pro.monthly` / `.pro.yearly`) are defined
+  here, then mirrored in RevenueCat as offerings/packages. Pro entitlement = `'pro'`, offering = `'pro'`
+  (`constants/proPlan.ts` is the client source of truth). Bundle/associated-domain:
+  `BUNDLE_ID_MIGRATION.md`; listing: `APP_STORE_LISTING.md`; launch: `LAUNCH.md`.
+- **RevenueCat** — payment abstraction. Purchase flow: app → RevenueCat SDK → Apple → **RevenueCat webhook
+  → the Supabase Edge Function `revenuecat-webhook`** (NOT a web route) → `grant_sparkles` RPC (packs) or
+  flips the Pro flag (sub). Secret `REVENUECAT_WEBHOOK_SECRET` (Supabase Edge secrets). Setup:
+  `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`.
+- **Website (`dreambot-web`)** — `dreambotapp.com`, a **separate sibling repo** (`../dreambot-web`,
+  `github.com/konakevin/dreambot-web`) with its OWN `CLAUDE.md`. Next.js 15 (App Router) on **Vercel**
+  (project `dreambot-web`, `prj_6nvTfWZsjgtH1az7NBJ0EnYmyw2E`). Marketing/legal + deep-link share targets
+  (`/`, `/privacy`, `/terms`, `/support`, `/post/[id]`, `/user/[id]`); no API routes — reads the SAME
+  Supabase project (public feed). **Deploy: `git push main` → Vercel auto-deploys prod.** ⚠️ The GitHub↔
+  Vercel integration can silently disconnect (it did 2026-05-28 → 20-day frozen site) — if pushes stop
+  deploying, `npx vercel git connect` then `npx vercel --prod`, verify with `npx vercel ls`. Don't
+  `npm audit fix --force` (tries to downgrade Next catastrophically).
+- **Domain / email** — DNS/nameservers at **Wix** (point the domain at Vercel; add records in Wix →
+  Domains → DNS). `support@dreambotapp.com` = **ImprovMX** free forwarding → Gmail (MX/SPF in Wix DNS).
 
-VibeProfile v2 is the only supported format (legacy v1 + `aesthetics`/`art_styles` favorites + `objects/things` were ripped out — migrations 216 + 218).
-
----
-
-## Working With Kevin
-
-**Team.** Kevin is the sole human dev; Claude is the other dev. No PR review. All agents commit directly to `main` — no feature branches. Kevin keeps concurrent agents on different areas; when they collide, resolve in real time. **Don't edit files outside your task's scope** — if another agent has WIP in the working tree, leave their files alone.
-
-**Screenshots.** When Kevin asks to view one: `ls -t ~/Desktop/*.png | head -1` then Read it.
-
-**Node scripts.** `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>`.
-
-**Deploying Edge Functions.** `supabase functions deploy <name> --no-verify-jwt`. **Always `--no-verify-jwt`. Deploy immediately after editing — don't wait to be asked.** Active functions: `generate-dream`, `nightly-dreams`, `dream-queue-worker`, `face-swap-dual`, `restyle-photo`, `describe-photo`, `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`.
-
-**Migrations.** Files in `supabase/migrations/`. Run manually in Supabase dashboard SQL editor (DDL can't go through the JS client). Before adding one: `ls supabase/migrations/ | grep ^NNN` to check prefix collisions. For follow-ups to an existing number, use `NNNa_`, `NNNb_`.
-
-**Running the app — `dreambot` zsh function** (in Kevin's `~/.zshrc`, NOT the repo). `dreambot` = Debug + Metro tab (daily-dev default). `dreambot --release` = Release build (no `__DEV__`, no Metro) — required to test Sentry + PostHog (both gated on `!__DEV__`). `--clean` forces `expo prebuild --clean`. Flags combine.
-
-**Dev build for native modules.** Must use dev build via Xcode, not Expo Go. After adding native packages: `cd ios && pod install && cd ..` then rebuild.
-
-**Running nightly dreams locally.** `node scripts/nightly-dreams.js` (reads `.env.local`).
-
-**Setting a sparkle balance.** Inline node one-liner with `SUPABASE_SERVICE_ROLE_KEY` from `.env.local` → `users.update({sparkle_balance:N}).eq('id', kevinUserId)`. Project URL: `https://jimftynwrinwenonjrlj.supabase.co`.
-
-**Kevin's user ID.** `eab700d8-f11a-4f47-a3a1-addda6fb67ec`.
-
-**Observability.** Sentry (`@sentry/react-native`, gated on `EXPO_PUBLIC_SENTRY_DSN` + `!__DEV__`) and PostHog product analytics (`posthog-react-native`, same gating). Manual Sentry test: Settings → "Run Dream Generator" (admin) → 🐛 top-right. PostHog MCP available via `.mcp.json` (project DreamBot, id 442133). Full picture: `memory/project_observability_setup.md`, event taxonomy: `ANALYTICS_PLAN.md`.
-
-**Notifications.** Two layers — in-app inbox (the `notifications` table → `useInboxGrouped`) and push banners (`send-push` Edge Function → Expo). Push is fired by a DB trigger on `notifications` INSERT (migration 196); to send any push, just insert a notification row. Architecture: `NOTIFICATIONS_ARCHITECTURE.md`.
+Tie-together: **App (RN/Expo, distributed via App Store Connect) ↔ Supabase (all data/auth/storage/edge) ;
+payments App → RevenueCat → Apple → RC webhook → Supabase edge ; Website (Vercel) reads the same Supabase
+for the public feed + serves deep-link share targets.**
 
 ---
 
-## Hard Rules (no exceptions)
+## Working with Kevin
 
-- **NEVER unscoped deletes on `bot_seeds` or `nightly_seeds`.** Scope by category prefix. `SELECT category, count(*) GROUP BY category` BEFORE any delete. The April 2026 incident wiped both tables with one unscoped delete.
-- **NEVER `git add -A` or `git add .`.** Always explicit paths — Kevin runs multiple agents in the same working tree; everything you don't recognize as yours stays unstaged.
-- **NEVER edit another agent's WIP files.** Edit only files in your task's scope.
-- **NEVER use `as Function`, `as any`, `as unknown as <type>` to bypass types.** Regenerate types instead: `supabase gen types typescript --linked 2>/dev/null > types/database.ts`.
-- **NEVER fire-and-forget critical RPCs without `.catch` that logs in dev.** Silent failures lived for months on `record_impression`.
-- **NEVER comment out a rate limit, security check, or RLS policy "for now".** Delete it AND create a follow-up. Comments rot.
-- **NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts`. Deno Edge runtime crashes (BOOT_ERROR). Use explicit null checks.
-- **NEVER enumerate biomes / materials / sub-styles in a path's `promptPrefixByPath`** (or any prompt-prefix that prepends to EVERY render of that path). Flux's CLIP tokenizer attends most to the FIRST-named noun in a comma-separated list and renders ONLY that. The prefix names the REGION; the scene content carries the biome.
-- **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and update it with every new lesson — don't wait to be asked.
-- **NEVER add new pixel work to `dualFaceSwap` in-process.** New steps go in a separate Edge Function. Don't introduce another base64 data URI in the swap pipeline — always upload to temp storage and pass URLs.
-- **AUDIT mediums + prefixes for accumulated cruft every ~3 months per bot, or whenever a bot's renders feel "off"** (negation cascades, camera-brand stuffing, tech-spec adjectives, travel-magazine register, mountain-photographer tropes, stacked intensifiers). Target: medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120 chars. Method + cruft tables in `BOT_SCENE_QUALITY_PLAYBOOK.md` → "Medium + prefix CRUFT ACCUMULATION".
+- **Team.** Kevin = sole human dev; Claude = the other dev. No PR review; all agents commit directly to
+  `main` (no feature branches). Concurrent agents share the working tree — **edit only your task's files;
+  never touch another agent's WIP; never `git add -A`/`git add .` (explicit paths only).** Commit/push
+  only when asked.
+- **Deploy edge functions.** `supabase functions deploy <name> --no-verify-jwt` — ALWAYS `--no-verify-jwt`,
+  deploy immediately after editing. Active (15): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
+  `enqueue-dream`, `first-dream-render`, `face-swap-dual`, `restyle-photo`, `describe-photo`,
+  `classify-photo`, `extract-style`, `revenuecat-webhook`, `send-push`, `refund-self-moderation`,
+  `refund-stuck-jobs`, `upscale-image`.
+- **Migrations** run by hand in the Supabase dashboard SQL editor (DDL can't go through the JS client).
+  Checklist + prefix rules: `ENGINEERING_NOTES.md`.
+- **Node scripts.** `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>`. Nightly
+  locally: `node scripts/nightly-dreams.js` (reads `.env.local`).
+- **Run the app — `dreambot` zsh fn** (in `~/.zshrc`): `dreambot` = Debug+Metro; `dreambot --release` =
+  no `__DEV__`/Metro (to test Sentry+PostHog, both gated on `!__DEV__`); `--clean` forces prebuild. Native
+  modules need a dev build via Xcode (`cd ios && pod install` after adding).
+- **Screenshots:** `ls -t ~/Desktop/*.png | head -1` then Read it.
+- **Kevin's user ID** `eab700d8-f11a-4f47-a3a1-addda6fb67ec`; project URL
+  `https://jimftynwrinwenonjrlj.supabase.co`. Set a sparkle balance via an inline node one-liner with
+  `SUPABASE_SERVICE_ROLE_KEY` from `.env.local`.
+- **Notifications.** In-app inbox (`notifications` table → `useInboxGrouped`) + push (`send-push` → Expo,
+  fired by a DB trigger on `notifications` INSERT — to push, insert a row). `NOTIFICATIONS_ARCHITECTURE.md`.
 
----
+## Hard rules (no exceptions)
 
-## After-Change Checklists
+- **NEVER unscoped deletes on `bot_seeds` / `nightly_seeds`.** Scope by category prefix; `SELECT category,
+  count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
+- **NEVER `git add -A` / `git add .`** — explicit paths only (shared working tree).
+- **NEVER edit another agent's WIP files** — only your task's scope.
+- **NEVER use `as Function` / `as any` / `as unknown as <type>`** — regenerate types.
+- **NEVER fire-and-forget a critical RPC without a `.catch` that logs in dev** (silent
+  `record_impression` failures lived for months).
+- **NEVER comment out a rate limit / security check / RLS policy "for now"** — delete it AND file a
+  follow-up.
+- **NEVER use `?.` in top-level module expressions** in `supabase/functions/_shared/*.ts` — the Deno Edge
+  runtime crashes (BOOT_ERROR). Use explicit null checks.
+- **NEVER enumerate biomes/materials/sub-styles in a path's prompt-prefix** — Flux's CLIP attends to the
+  FIRST-named noun and renders only that. The prefix names the REGION; scene content carries the biome.
+- **NEVER add new pixel work to `dualFaceSwap` in-process** — new steps go in a separate Edge Function;
+  no new base64 data URIs in the swap pipeline (upload to temp storage, pass URLs).
+- **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and
+  update it with every new lesson.
+- **AUDIT bot mediums + prefixes for cruft every ~3 months** (negation cascades, camera-brand stuffing,
+  travel-magazine register, stacked intensifiers): medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120.
 
-### After adding / changing a Supabase table, column, or RPC
+## CI, tests & monitoring
 
-1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`.
-2. **For UPDATE policies on user-writable tables:** verify `WITH CHECK` OR an UPDATE trigger freezes sensitive columns. Postgres does NOT require `WITH CHECK` on UPDATE — you have to remember. Reference: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.
-3. **Smoke-test new RPCs** — especially fire-and-forget ones.
-4. **Signature change on existing function:** prepend `DROP FUNCTION IF EXISTS public.<name>(<args>);` before `CREATE OR REPLACE` — Postgres can't change return type in-place (42P13).
-
-### After adding a migration file
-
-1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions.
-2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
-3. Run via Supabase dashboard SQL editor.
-
-### After adding a medium to `dream_mediums`
-
-1. **Insert the DB row.** `key` MUST equal `label.toLowerCase().replace(/ /g, '_')`. Directive ≤ ~150 words, front-load identity rules, avoid female-coded language for any-gender mediums, no camera/composition language.
-2. **Add `MEDIUM_CONFIGS` entry in `_shared/photoPrompts.ts`** — without it the photo-restyle path falls through to a generic 1-liner and ignores the directive. After adding, grep for the key to confirm no duplicates.
-3. **Update `__tests__/lib/photoPrompts.test.ts` `ACTIVE_MEDIUMS`.** Test fails if step 2 was skipped.
-4. **Optional: bot config** — add the key to the bot's `mediums` in `scripts/bots/<botname>/index.js`.
-5. **Deploy** `generate-dream` + `restyle-photo`. Smoke-test all 5 user paths (no-hint scene, text prompt, self-reference, photo restyle, photo+prompt). Full reference: `MEDIUMS_FAQ.md`.
-
-### After ripping out a feature
-
-1. Audit DB columns it owned — write cleanup migration for vestigial columns (SightEngine + objects + VibeProfile favorites all left dead state for months before being cleaned up).
-2. Search hanging RLS references, triggers, RPCs that read those columns.
-3. Search type definitions that mention the feature.
-
-### Auto-QA loop (when Kevin says "run an automated QA loop on path X")
-
-Self-driven, no human review per round. Tag every render `auto-qa: <path> R<N>` for filtering. Batches of 5 with `--post`. Read the JPEG, grade 0–5, identify the failing layer (composition prepend / Sonnet brief / action pool / medium / swap pipeline), make ONE change per round, document in `memory/project_auto_qa_<path>.md`. Stop at 3 consecutive 4.5+/5 rounds OR 20 rounds OR Kevin stops. Cross-reference Kevin's hearts every ~5 rounds.
-
-### Seed tables — `bot_seeds` vs `nightly_seeds` (separate; never cross-contaminate)
-
-- **`bot_seeds`** — per-bot, `used_at` lifecycle, auto-regenerates when exhausted.
-- **`nightly_seeds`** — 8 pools × 100 slotted templates for user nightly dreams; permanent, random pick.
-
-Bot seed cleanup: `.delete().like('category', 'botname_%')` — scoped. Nightly seed refresh: `node scripts/generate-nightly-seeds.js`.
-
----
-
-## Pre-Commit + Test Lanes
-
-A husky pre-commit hook runs `./scripts/check-secrets.sh` then `npm run check` (prettier → lint → tsc → typecheck:deno → jest). Don't bypass with `--no-verify` — every historical bypass broke CI.
-
-```
-npm run check          # full pre-commit gate
-npm run fix            # auto-fix prettier + lint
-npm run test           # jest fast suite
-npm run test:dbspec    # live-DB lane (CI only — no local Postgres on Kevin's Mac)
-```
-
-**Two test lanes.**
-
-1. **Fast jest** (`*.test.ts`, husky + CI `check`) — pure logic. `_shared/*` Deno modules importable via `@engine/*`; URL imports stubbed in `__tests__/__mocks__/`. Tests that import `@engine/*` are excluded from `tsc` — add new ones to `tsconfig.json` `exclude`.
-2. **Live-DB** (`*.dbspec.ts`, CI `db-tests` job only — a `postgres:16` service container) — for SQL invariants (`ON CONFLICT`, `FOR UPDATE SKIP LOCKED`, triggers, security-definer fns). Fixture pattern: FK-stub tables + the real DDL extracted from the migration file via `__tests__/db/_support/pg.ts`. Currently covers: `claim_upscale_job`, `claim_dream_queue_jobs` SKIP LOCKED, `is_pro_active`, `freeze_upload_columns`, notification opt-in, rate-limit inserts. RLS not yet covered. Validate changes by pushing + `gh run watch` the `db-tests` job — no local Docker.
-
----
-
-## GitHub & CI/CD
-
-**Repo:** `konakevin/dreambot`. `main` is the trunk.
-
-**Workflows (`.github/workflows/`):**
-
-- `ci.yml` — tsc, lint, prettier, jest, db-tests on every push
-- `nightly-dreams.yml` — `0 8 * * *` UTC: enqueue jobs for Pro/trial users
-- `bots-dispatcher.yml` — every 15 min: read `bot_schedules`, run due bots
-- `refund-stuck-jobs.yml` — every 5 min: sweep `dream_jobs` >5min processing
-- `upscale-sweep.yml` + `upscale-smoke-test.yml` — drain + smoke-test upscale queue
-- `dream-queue-monitor.yml` (hourly) / `ai-failure-monitor.yml` (6h) / `push-failure-monitor.yml` (6h) / `bot-health-monitor.yml` (4h) — fail-loud monitors → GitHub's built-in failure email
-
-Secrets used by crons: `SUPABASE_SERVICE_ROLE_KEY`, `REPLICATE_API_TOKEN`, `ANTHROPIC_API_KEY`.
+- **Pre-commit (husky):** `./scripts/check-secrets.sh` then `npm run check` (prettier → lint → tsc →
+  typecheck:deno → jest). **Don't bypass with `--no-verify`** (every historical bypass broke CI).
+  `npm run fix` auto-fixes; `npm run test` = fast jest.
+- **Two test lanes:** **fast jest** (`*.test.ts`, husky + CI `check`, pure logic; `_shared/*` via
+  `@engine/*`, URL imports stubbed; `@engine/*` tests excluded from `tsc` → add to `tsconfig.json`
+  `exclude`) and **live-DB** (`*.dbspec.ts`, CI `db-tests` job only — `postgres:16` container; FK-stubs +
+  real DDL extracted from migration files via `__tests__/db/_support/pg.ts`). No local Postgres — validate
+  dbspecs by pushing + `gh run watch` the `db-tests` job.
+- **GitHub Actions** (`.github/workflows/`, repo `konakevin/dreambot`, trunk `main`): `ci.yml` (every
+  push); `nightly-dreams.yml` (08:00 UTC enqueue); `bots-dispatcher.yml` (15 min); `dream-queue-sync.yml`
+  (5 min reliability backstop — held-connection drain); `refund-stuck-jobs.yml` (5 min); upscale
+  sweep/smoke. Cron secrets: `SUPABASE_SERVICE_ROLE_KEY`, `DREAM_QUEUE_WORKER_TOKEN`, `REPLICATE_API_TOKEN`,
+  `ANTHROPIC_API_KEY`.
+- **Monitoring** (fail-loud → GitHub failure email): `dream-queue-monitor` (hourly — stuck/dead-letter +
+  worker-liveness + Fly-saturation), `ai-failure-monitor` (6h), `push-failure-monitor` (6h),
+  `bot-health-monitor` (4h), and `queue-smoke-monitor` (hourly **synthetic canary** — enqueues a real
+  cheap dream + asserts it completes end-to-end, self-cleans; would catch a queue/`waitUntil` outage
+  within the hour). **Diagnose a failed dream:** every render stamps stage breadcrumbs
+  (`dream_queue.current_stage`, migration 272) + an `ai_generation_log` row; `node scripts/check-forensics.js
+  [userId]` (or the `dream_forensics`/`dream_forensics_recent` RPCs) stitches a failure to its exact
+  stage/model/error. Edge errors → Sentry (`_shared/sentry.ts`, gated on the `SENTRY_EDGE_DSN` secret).
+  `ai_generation_log` + terminal queue rows auto-prune to 30 days (pg_cron, migration 274). Client
+  observability: Sentry + PostHog (`!__DEV__`-gated; PostHog MCP in `.mcp.json`, project 442133).
+  `memory/project_observability_setup.md`, `ANALYTICS_PLAN.md`.
 
 ---
 
-## Reference Docs (in repo root)
+## Reference docs
 
-- **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`, `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`
-- **Engine + scaling:** `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_QA_HANDOFF.md`, `QUEUE_WORKERS_REFACTOR.md`, `V4_HARDENING_PLAN.md`
-- **Features:** `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`, `COMMENTS_IMPLEMENTATION.md`, `UPSCALE_QUEUE_PLAN.md`, `UPSCALE_HARDENING_PLAN.md`, `NOTIFICATIONS_ARCHITECTURE.md`
-- **Money:** `SPARKLE_PAYMENTS_SETUP.md`, `SPARKLE_PRICING_STRATEGY.md`, `PRO_SUBSCRIPTION_SETUP.md`
-- **Other:** `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `ANALYTICS_PLAN.md`, `LAUNCH.md`, `DREAMBOT.md` + `DREAMBOT_CHARACTER.md` (personality)
+- **Procedures (read-when-relevant):** `ENGINEERING_NOTES.md` (after-change checklists, admin-config
+  catalog, bot module internals, onboarding flow).
+- **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
+  `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
+- **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
+  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `V4_HARDENING_PLAN.md`.
+- **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
+  `SPARKLE_PRICING_STRATEGY.md`, `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `APP_STORE_LISTING.md`,
+  `LAUNCH.md`. (Website specifics live in `../dreambot-web/CLAUDE.md`.)
+- **Features:** `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`,
+  `COMMENTS_IMPLEMENTATION.md`, `UPSCALE_QUEUE_PLAN.md`, `NOTIFICATIONS_ARCHITECTURE.md`,
+  `ADMIN_CONFIG_PLAN.md`, `ANALYTICS_PLAN.md`.
+- **Personality:** `DREAMBOT.md`, `DREAMBOT_CHARACTER.md`.
