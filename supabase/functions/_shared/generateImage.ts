@@ -89,13 +89,16 @@ export async function generateImage(
   throw lastErr ?? new Error('NSFW_CONTENT: exhausted retries');
 }
 
+const MAX_429_RETRIES = 3;
+
 async function generateImageOnce(
   mode: string,
   prompt: string,
   inputImage: string | undefined,
   creds: GenerateImageCredentials,
   modelOverride?: string,
-  outputFormat: 'png' | 'jpg' = 'png'
+  outputFormat: 'png' | 'jpg' = 'png',
+  retryCount = 0
 ): Promise<GenerateImageResult> {
   const picked = await pickModel(mode, prompt);
   const model = modelOverride || picked.model;
@@ -165,10 +168,26 @@ async function generateImageOnce(
   });
 
   if (res.status === 429) {
-    const json = await res.json();
+    // BOUNDED retry — a sustained Replicate 429 must not recurse forever (it
+    // would stack waits past the render budget + the worker's 120s abort). Cap
+    // at MAX_429_RETRIES, then throw so the caller's failQueueJob handles it.
+    if (retryCount >= MAX_429_RETRIES) {
+      throw new Error(`Replicate rate-limited (429) after ${MAX_429_RETRIES} retries`);
+    }
+    const json = await res.json().catch(() => ({}));
     const retryAfter = json.retry_after ?? 6;
     await new Promise((r) => setTimeout(r, retryAfter * 1000));
-    return generateImageOnce(mode, prompt, inputImage, creds, modelOverride);
+    // Preserve outputFormat (the old call dropped it → a JPEG-required dual-swap
+    // render would have retried as PNG and risked 546) + carry the retry count.
+    return generateImageOnce(
+      mode,
+      prompt,
+      inputImage,
+      creds,
+      modelOverride,
+      outputFormat,
+      retryCount + 1
+    );
   }
 
   if (!res.ok) {
@@ -188,7 +207,8 @@ async function generateImageOnce(
         inputImage,
         creds,
         FALLBACK_RENDER_MODEL,
-        outputFormat
+        outputFormat,
+        retryCount
       );
     }
     throw new Error(`Replicate submit failed (${res.status}): ${text.slice(0, 200)}`);

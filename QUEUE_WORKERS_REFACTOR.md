@@ -247,7 +247,16 @@ One UUID is `dream_queue.id == dream_jobs.id == job_id == sparkle ledger referen
 
 ### The real ceiling + how to scale heavy
 
-The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase. Tested: heavy=10 → all dual swaps succeed; heavy=15 → `dual cast face swap exhausted (face-swap-dual@fly)` under combined load. To support more concurrent interactive dual dreams: **scale the Fly.io service (instances / machine size) FIRST, then raise `dream_queue_max_concurrent_heavy`.** Beyond the cap, jobs queue + drain (never fail) — concurrency is bounded, throughput/total-users is not. Nightly is `weight='heavy'` (the column default) but non-interactive, so a multi-hour overnight drain is invisible.
+The HEAVY cap is the **Fly.io `face-swap-dual` service capacity**, not Supabase. Tested: heavy=10 → all dual swaps succeed; heavy=15 → `dual cast face swap exhausted (face-swap-dual@fly)` under combined load. To support more concurrent interactive dual dreams: **scale the Fly.io service FIRST, then raise `dream_queue_max_concurrent_heavy`.** Beyond the cap, jobs queue + drain (never fail) — concurrency is bounded, throughput/total-users is not. Nightly is `weight='heavy'` (the column default) but non-interactive, so a multi-hour overnight drain is invisible.
+
+**RUNBOOK — scaling the Fly heavy ceiling (do this BEFORE raising the cap):**
+`services/face-swap-dual/fly.toml` is currently effectively **one machine** (`min_machines_running=1`, no explicit count, no `[http_service.concurrency]`). The app is stateless (each swap is independent), so it scales horizontally cleanly. Steps, from `services/face-swap-dual/`:
+1. `fly scale count 2` (or 3) — pins N machines. Verify: `fly machines list`.
+2. Re-run `node scripts/loadtest-dual-swap.js` (or `loadtest-mixed.js --heavy N`) at the new intended concurrency to confirm no `face-swap-dual@fly` exhaustion / no 546.
+3. Only then raise `dream_queue_max_concurrent_heavy` in `engine_config` (live, no deploy) to ~`10 × machine_count` and watch `dream-queue-monitor` for dead_letters.
+Rule of thumb from the load test: ~10 concurrent dual swaps per 1-vCPU/2GB machine. Never raise the cap past tested Fly capacity — excess just exhausts the swap service.
+
+**Hardening pass 2026-06-17 (this section is the status of record):** (a) the per-weight cap is now enforced ATOMICALLY inside `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock) so overlapping invokers can't overshoot; (b) the worker has an `x-worker-sync` mode + a GitHub Actions backstop (`.github/workflows/dream-queue-sync.yml`, every 5 min) that drains via a HELD connection — the queue keeps draining even if `EdgeRuntime.waitUntil` is dropped by the platform (which happened 2026-06-17 and stalled the queue); (c) `RENDER_TIMEOUT_MS` lowered to 120s (under the 150s request-idle ceiling); (d) `generateImage` 429 retry is now bounded (3); (e) nightly user fetches are paginated (PostgREST's silent 1000-row cap was dropping users 1001+). See `[[project_waituntil_regression_synchronous_queue_render]]`.
 
 ### Validation / tuning tools
 

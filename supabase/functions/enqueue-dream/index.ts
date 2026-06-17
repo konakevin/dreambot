@@ -157,6 +157,21 @@ Deno.serve(async (req) => {
   const forceModel = typeof body.force_model === 'string' ? body.force_model : null;
   const isDlt = body.dlt_recipe != null;
 
+  // Per-user in-flight cap — sparkles are otherwise the only throttle, so bound
+  // how many dreams one user can have queued/rendering at once (accidental
+  // double-taps or abuse). Beyond this, reject 429 BEFORE charging; the user's
+  // existing dreams keep draining. Cheap single COUNT; checked here so the
+  // first-dream + retry branches above (onboarding / re-run a failure) bypass it.
+  const MAX_INFLIGHT_PER_USER = 5;
+  const { count: inflight } = await supabase
+    .from('dream_queue')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .in('status', ['queued', 'in_progress']);
+  if ((inflight ?? 0) >= MAX_INFLIGHT_PER_USER) {
+    return json({ error: 'too_many_inflight', limit: MAX_INFLIGHT_PER_USER }, 429);
+  }
+
   // Charge up front (idempotent on jobId), same cost rule as generate-dream so
   // the price stays server-driven. The render's own charge is then a no-op.
   await loadModelCosts(supabase);

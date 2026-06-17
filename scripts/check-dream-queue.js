@@ -101,6 +101,49 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
     alarm = true;
   }
 
+  // Worker liveness — catch a full stall FASTER than the 60-min stuck check: if
+  // DUE jobs are queued but the worker hasn't claimed anything recently, the
+  // drain has stopped (e.g. waitUntil dropped AND the GH sync backstop failing).
+  const WORKER_LIVENESS_MIN = parseInt(getKey('QUEUE_WORKER_LIVENESS_MIN') || '10', 10);
+  const nowIso = new Date().toISOString();
+  const { count: dueQueued } = await sb
+    .from('dream_queue')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'queued')
+    .lte('created_at', nowIso); // exclude future-dated backoff retries
+  if (dueQueued && dueQueued > 0) {
+    const { data: lastClaim } = await sb
+      .from('dream_queue')
+      .select('started_at')
+      .not('started_at', 'is', null)
+      .order('started_at', { ascending: false })
+      .limit(1);
+    const lastMs = lastClaim?.[0]?.started_at ? new Date(lastClaim[0].started_at).getTime() : 0;
+    const ageMin = lastMs ? Math.round((Date.now() - lastMs) / 60_000) : Infinity;
+    console.log(`due-queued=${dueQueued}, last worker claim ${lastMs ? ageMin + 'min ago' : 'never'}`);
+    if (Date.now() - lastMs > WORKER_LIVENESS_MIN * 60_000) {
+      console.error(
+        `::error::${dueQueued} jobs DUE+queued but no worker claim in >${WORKER_LIVENESS_MIN}min — queue STALLED (waitUntil down + GH sync backstop failing?).`
+      );
+      alarm = true;
+    }
+  }
+
+  // Heavy vs light DUE-queued breakdown — Fly-saturation visibility. Heavy is
+  // bounded by the Fly dual-swap service; a SUSTAINED heavy backlog (vs a normal
+  // nightly burst that drains) means scale Fly + raise the heavy cap. Logged (not
+  // alarmed) — a fresh nightly burst legitimately spikes heavy-queued; the
+  // stuck-60min + dead_letter alarms catch a genuine heavy bottleneck.
+  for (const w of ['light', 'heavy']) {
+    const { count: qd } = await sb
+      .from('dream_queue')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'queued')
+      .eq('weight', w)
+      .lte('created_at', nowIso);
+    console.log(`  queued ${w} (due): ${qd || 0}`);
+  }
+
   if (alarm) {
     process.exit(1);
   }
