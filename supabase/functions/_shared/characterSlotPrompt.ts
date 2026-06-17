@@ -126,15 +126,17 @@ export function extractHair(physicalSummary: string | null | undefined): string 
   return hairParts.join(', ');
 }
 
-// Pull explicit build/frame word from physical_summary so we can front-load
-// body proportions. Flux otherwise defaults bulkier/more muscular than source.
-export function extractBuild(physicalSummary: string | null | undefined): string | null {
-  if (!physicalSummary) return null;
-  const s = physicalSummary.toLowerCase();
-  const m = s.match(
-    /\b(athletic|slim|lean|fit|toned|muscular|stocky|broad|average|medium|petite|slender|curvy|full[- ]figured|thin|skinny|trim|wiry|husky|stout)\b/
-  );
-  return m ? m[1].replace(/\s+/g, '-') : null;
+// Pull the build word from physical_summary. Constrained to the SAME three
+// buckets the describer now emits — thin / athletic / average — so no one ever
+// gets a heavy/unkind body label. Any other (legacy) word like "curvy" or
+// "full-figured" from an older stored description is IGNORED (→ null), so the
+// AI decides the body instead of inheriting a wrong size token. (2026-06-16)
+export function extractBuild(physicalSummary: string | null | undefined): string {
+  const m = (physicalSummary ?? '').toLowerCase().match(/\b(thin|athletic|average)\b/);
+  // Default to "average" when the regex finds no bucket — covers legacy stored
+  // descriptions ("curvy"/"full-figured" → average) and any model miss. Kevin's
+  // rule: never a heavy/unkind label; everyone who isn't thin/athletic is average.
+  return m ? m[1] : 'average';
 }
 
 // Pull explicit age phrase from cast desc so we can front-load it. Flux

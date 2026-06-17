@@ -111,6 +111,29 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // ── Build bucket: thin / athletic / average (persons only) ──
+    // The describer commits the build on the header line right after the gender.
+    // Pull it from there (it sits at the front once the gender prefix is stripped),
+    // remove it from the prose, and ensure physical_summary carries it. If parsing
+    // finds no bucket anywhere, DEFAULT to "average" — never a heavy/unkind label.
+    if (role !== 'pet') {
+      let build: string | null = null;
+      const headerBuild = description.match(/^(thin|athletic|average)\b[\s,.:;-]*/i);
+      if (headerBuild) {
+        build = headerBuild[1].toLowerCase();
+        description = description.slice(headerBuild[0].length).trim();
+      }
+      if (!build) {
+        const found = `${physicalSummary} ${description}`
+          .toLowerCase()
+          .match(/\b(thin|athletic|average)\b/);
+        build = found ? found[1] : 'average';
+      }
+      if (!/\b(thin|athletic|average)\b/i.test(physicalSummary)) {
+        physicalSummary = physicalSummary ? `${build} build, ${physicalSummary}` : `${build} build`;
+      }
+    }
+
     console.log(
       `[describe-photo] ${role} (${gender ?? 'pet'}, age=${age ?? '?'}):`,
       description.slice(0, 120)
