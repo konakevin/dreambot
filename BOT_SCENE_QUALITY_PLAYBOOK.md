@@ -3153,6 +3153,18 @@ The fork-macro render also exposed bot-wide issues beyond borrowers, pending Kev
 - **Thin single-subject seeds** — much of several pools is "figure + ONE object on a bare surface," which degrades to a macro object shot whenever the figure drops. Reseed toward multi-element constructed worlds.
 - **Axis-system conversion is NOT the fix on its own** — TinyBot is intimate/scene-centric, the category the playbook has repeatedly reverted out of the generic composer (cozy-sci-fi-interior, mecha-hangars, the franchise massacre). Treat axis decomposition as one tool for the thin-seed problem, piloted on ONE path — not a 16-path migration.
 
+### "cutsie-only" de-bugging of tiny-vehicles + the SHARED creatures pool (2026-06-16, Kevin)
+
+A hearted `tiny-vehicles` render came back as a **boxelder-bug-drawn wagon** ("why is it a fucking bug?"). Diagnosis found TWO bug sources, and the second is the cross-bot lesson:
+
+1. **`TINY_VEHICLES` had bug-drawn/bodied vehicles** — cricket-drawn chariots, beetle-shell coaches, spider-pulled sleds, beetle-elytra airships — written right into the gen recipe's VEHICLE TYPES + MATERIALS + EXAMPLES.
+2. **`TINY_CREATURES` is a SHARED pool feeding 8 paths**, and ~25% of it was un-cute bugs (jewel-beetles, scarabs, mantises, centipedes, crickets, grasshoppers, ants, moths). So the "tiny-vehicles bug" was actually leaking from a *shared* pool into every path that rolls a creature. **Cross-bot rule: before fixing a "this path renders X" complaint, check whether the offending pool is SHARED — a shared-pool contaminant is a fleet-wide bug, and cleaning it once fixes every consumer.** (Same shape as the DragonBot frozen/shared-pool caution at line 319.)
+
+**The fix pattern (cute-register enforcement):**
+- A positive **cute-only allow-list** beats a pure ban-list. For bugs: only 7 are "cute" — ladybug, butterfly, bumblebee, snail, caterpillar, firefly, dragonfly — everything else (beetle/mantis/spider/centipede/grasshopper/cricket/moth/stick-insect/ant/wasp…) is hard-banned. Non-bug critters (frogs, geckos, mice, hedgehogs, bunnies, fawns, songbirds, fairies) carry the cuteness.
+- **Word-ban the spider family explicitly**: Sonnet reaches for "spider-silk", "gossamer" (literally = spider silk), "spiderwort"/"spider-plant" (real plant names) — all evoke a spider in Flux. Ban the *words*, substitute "silk-thread" / "dewy strand" / "fern-leaf". The `flies\b` regex false-positives on "dragonfLIES" (allowed) — don't auto-strip those.
+- Validated MVP-25 → 0 bug language in both pools → render-tested 5 tiny-vehicles to the feed (Kevin signed off) → scaled to 200. A couple of stray spider-words survived the 200-scale (Sonnet drift); surgically patched the 2-3 entries rather than re-rolling the whole pool.
+
 ---
 
 ## SteamBot — lessons
