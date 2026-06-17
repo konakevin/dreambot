@@ -181,6 +181,8 @@ Deno.serve(async (req) => {
   // normal nightly queue path never sets this, so its dream_eligible roll is
   // untouched. Ignored when force_medium is also set (explicit wins).
   const force_face_swap_eligible = body.force_face_swap_eligible === true;
+  // QA: force the playful/funny path — goofy scenario + playful pose pool.
+  const force_playful = body.force_playful === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -718,7 +720,7 @@ Deno.serve(async (req) => {
       isDualFaceSwap || isDualCharacter
         ? pickDualAction(
             selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-            force_dual_pool
+            force_playful ? 'playful' : force_dual_pool
           )
         : null;
     const singleActionObj = isSingleCharacter ? pickSingleAction(force_single_pool) : null;
@@ -1000,7 +1002,8 @@ Deno.serve(async (req) => {
     // unconventional setup (dino onesies, banana costumes, superhero duo). The fun
     // lives entirely in the scene + wardrobe; the slot pipeline keeps the framing
     // locked so the swap stays clean. Overrides the location for these renders.
-    const dualPlayfulScene = isDualFaceSwap && Math.random() < 0.15 ? pickPlayfulScenario() : null;
+    const dualPlayfulScene =
+      isDualFaceSwap && (force_playful || Math.random() < 0.15) ? pickPlayfulScenario() : null;
     const effectiveUserPlace = dualPlayfulScene ?? userPlace;
 
     // ── Unified character face-swap slot pipeline ──
