@@ -21,10 +21,28 @@ const fs = require('fs');
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 
-const env = fs.readFileSync('.env.local', 'utf8');
-const get = (k) => (env.match(new RegExp('^' + k + '=(.*)$', 'm')) || [])[1];
+// Resolve secrets from process.env (CI / GitHub Action) first, then .env.local
+// (local dev). readFileSync would throw in CI where no .env.local exists.
+function readEnvFile() {
+  try {
+    const env = {};
+    for (const line of fs.readFileSync('.env.local', 'utf8').split('\n')) {
+      const eq = line.indexOf('=');
+      if (eq > 0) env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+    }
+    return env;
+  } catch {
+    return {};
+  }
+}
+const envFile = readEnvFile();
+const get = (k) => process.env[k] || envFile[k];
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const SRK = get('SUPABASE_SERVICE_ROLE_KEY');
+if (!SRK) {
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
 const sb = createClient(SUPABASE_URL, SRK);
 
 const userId = process.argv[2] || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
@@ -56,6 +74,10 @@ async function deleteBlobs(uploadId) {
     vibe_profile: { version: 2, dream_cast: [], dream_seeds: { places: [] } },
     job_id: id,
     subject_type: 'scene',
+    // Cheapest/fastest model — the canary tests the PIPELINE (queue → dispatch →
+    // synchronous render → upload → complete), not model selection. Keeps a
+    // frequent schedule near-free. force_model bypasses the picker/ban gates.
+    force_model: 'black-forest-labs/flux-schnell',
   };
   await sb.from('dream_jobs').insert({ id, user_id: userId, status: 'processing', payload });
   await sb.from('dream_queue').insert({
@@ -102,11 +124,26 @@ async function deleteBlobs(uploadId) {
     );
   }
 
+  // Refund the canary's own sparkle charge (idempotent on jobId; refunds the
+  // actual debited amount) so a frequent schedule never drains the balance. A
+  // dead_letter already refunds itself, but this is safe either way.
+  await sb
+    .rpc('refund_sparkles', {
+      p_user_id: userId,
+      p_amount: 1,
+      p_reason: 'refund:queue_smoke',
+      p_reference_id: id,
+    })
+    .then(
+      () => {},
+      () => {}
+    );
+
   // Clean up so the smoke test never pollutes the album.
   await deleteBlobs(row?.upload_id);
   await sb.from('dream_queue').delete().eq('id', id);
   await sb.from('dream_jobs').delete().eq('id', id);
-  console.log('🧹 cleaned up smoke job');
+  console.log('🧹 cleaned up smoke job (sparkle refunded)');
 
   process.exit(ok ? 0 : 1);
 })();

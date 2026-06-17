@@ -1,0 +1,41 @@
+name: Queue Smoke Monitor
+
+# Synthetic canary for the PAID create-dream pipeline. Enqueues one cheap
+# (flux-schnell) create dream and asserts it renders end to end
+# (queued → worker claim → synchronous render → upload → completed), then cleans
+# up after itself (storage blob + uploads + queue/jobs rows) and refunds its own
+# sparkle. Fails the run (→ GitHub failure email) if the dream doesn't complete.
+#
+# This is the alarm that would have caught the 2026-06-17 EdgeRuntime.waitUntil
+# outage within the hour instead of via a user's "failed" push hours later: a
+# render stuck at current_stage=null never reaches 'completed' → exit 1 → red.
+#
+# Manual run: Actions tab → "Queue Smoke Monitor" → Run workflow (workflow_dispatch).
+# Local run:  node scripts/queue-smoke.js   (uses .env.local)
+
+on:
+  schedule:
+    - cron: '30 * * * *' # hourly, offset 30m past the hour
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Queue smoke test (enqueue → render → complete → cleanup)
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/queue-smoke.js

@@ -6,9 +6,22 @@
  * Usage: node scripts/check-forensics.js [userId] [hours]
  */
 const fs = require('fs');
-const env = fs.readFileSync('.env.local', 'utf8');
-const get = (k) => (env.match(new RegExp('^' + k + '=(.*)$', 'm')) || [])[1];
 const { createClient } = require('@supabase/supabase-js');
+// process.env (CI) first, .env.local (local dev) fallback.
+function readEnvFile() {
+  try {
+    const env = {};
+    for (const line of fs.readFileSync('.env.local', 'utf8').split('\n')) {
+      const eq = line.indexOf('=');
+      if (eq > 0) env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+    }
+    return env;
+  } catch {
+    return {};
+  }
+}
+const envFile = readEnvFile();
+const get = (k) => process.env[k] || envFile[k];
 const sb = createClient('https://jimftynwrinwenonjrlj.supabase.co', get('SUPABASE_SERVICE_ROLE_KEY'));
 
 const userId = process.argv[2] || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
