@@ -155,73 +155,79 @@ EXAMPLES (3):
 
   arclib_library: {
     format: 'simple',
-    theme: `DRAGONBOT ARCANE-LIBRARY — the great LIBRARY hall (the hero), cathedral-vast. Each entry 25-45 words, overwhelming vertical scale + depth.
+    theme: `DRAGONBOT ARCANE-LIBRARY — the LIBRARY (the hero): imagine RIVENDELL'S great ancient library — a graceful HIGH-ELVEN arcane library, ancient and serene yet WARM and inviting, a place you'd want to get happily lost in among the scrolls and tomes. Each entry 25-45 words.
 
-VARIETY MANDATE — ~25 distinct arcane libraries: a cathedral-vast hall of towering shelves climbing into shadow; an endless spiral-tower of book-stacks; a star-domed reading-room ringed with galleries; a forbidden archive of chained tomes; a sunlit hall with shelves between great pillars; a labyrinth of narrow towering stacks; a circular library around a central well dropping into dark; a hall of floating bookshelves; an ancient ruined library reclaimed by ivy; a gothic vaulted scriptorium; a crystal-walled library glowing within; a library carved into a cliff-cavern. Each names the library + colossal vertical scale + depth.`,
+THE VIBE — Tolkien's Rivendell / Lothlorien, but a library: flowing ORGANIC carved elven wood-and-stone, slender arches and graceful columns, living trees grown into the architecture, ivy and golden leaves, ancient leather tomes and rolled scrolls, ARCANE wonder. Ancient, elegant, timeless, and COZY — warm reading-nooks, cushioned window-seats, a content elven scholar. A place of deep serene magic you'd never want to leave.
+
+LIGHT — ABSOLUTE RULE: this is HIGH FANTASY, there is NO ELECTRICITY. Light comes ONLY from: warm CANDLELIGHT, branched CANDELABRA, glowing BRAZIERS, a crackling HEARTH, golden DAYLIGHT slanting through tall arched windows, and soft MAGICAL glow — glowing runes, floating witch-lights / fey-lights, luminous enchanted tomes, glowing crystals. ABSOLUTELY NO modern "lamps", NO lanterns that look electric, NO lightbulbs, NO glass desk-lamps, NOTHING modern.
+
+ALSO BANNED — NO cold dwarfing vast atrium, NO central void, NO spiral stair climbing into darkness, NO tier-upon-tier of galleries lost in shadow. Warm, inviting, candlelit, ancient-elven — grand but never cold or dwarfing.
+
+VARIETY MANDATE — ~25 distinct RIVENDELL-style ancient elven arcane libraries: a candlelit elven reading-hall of carved wood arches and golden ivy, daylight slanting through tall windows onto ancient tomes; a serene library-pavilion open to a waterfall garden, candelabra glowing among scroll-racks; an arcane study grown into a vast living tree, root-shelves of tomes lit by floating fey-lights; a warm carved-stone archive of graceful alcoves lit by braziers and glowing runes; a snug high-elven reading-nook of cushioned window-seats and candle-clusters among slender shelves; an ancient hall of arched colonnades wrapped in flowering vines, hearth-fire warm on old leather spines; a moonlit-and-candlelit elven scriptorium of carved galleries and reflecting pools. Each names a graceful, ANCIENT, ELVEN, candlelit, WARM library + its organic architecture + its non-electric light.`,
     touchpoints: [],
-    instructions: `Each entry is ONE cathedral-vast arcane library in 25-45 words — vertical scale + depth. Output a NUMBERED list.
+    instructions: `Each entry is ONE graceful, ANCIENT, HIGH-ELVEN (Rivendell-style) arcane library in 25-45 words — warm, inviting, candlelit/brazier/hearth/daylight/magical-glow ONLY (NEVER modern lamps or lanterns or electricity), cozy and serene. NEVER a cold dwarfing atrium or spiral-shaft. Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A cathedral-vast hall of towering wooden shelves climbing dozens of stories into shadow, narrow galleries and spiral stairs winding between them, the ceiling lost in gloom far above.
-2. An endless spiral-tower of book-stacks winding up and out of sight, a dizzying central void dropping away below, warm lamplight glowing at every level.
-3. A grand star-domed reading-room ringed by tiers of book-galleries, a painted constellation ceiling glowing faintly above, long tables far below.`,
+1. A serene Rivendell-style elven reading-hall of carved-wood arches twined with golden ivy, warm daylight slanting through tall windows onto ancient open tomes, candelabra glowing among cushioned window-seats.
+2. An arcane elven study grown into a vast living tree, spiralling root-shelves of leather tomes and scrolls lit by drifting fey-lights and a low warm brazier, a deep cushioned reading-chair below.
+3. A graceful carved-stone elven archive of vine-wrapped arched alcoves, a crackling hearth warm on old leather spines, branched candelabra and softly glowing runes lighting the ancient scroll-racks.`,
   },
 
   arclib_detail: {
     format: 'simple',
-    theme: `DRAGONBOT ARCANE-LIBRARY DETAIL — the magical knowledge filling the hall. Each entry 15-30 words.
+    theme: `DRAGONBOT ARCANE-LIBRARY DETAIL — the cozy magic + books filling the warm hall. Each entry 15-30 words. Warm, wondrous, charming — the little magical touches that make you want to curl up and stay.
 
-VARIETY MANDATE — ~25 distinct arcane details: open tomes floating through the air; glowing books on the shelves; drifting scrolls and loose pages; a floating quill writing by itself; candle-lit reading desks; runes lifting off the pages as light; ladders rolling along the stacks; chained forbidden books; glowing bookmarks like fireflies; stacked towers of teetering volumes; a glowing index-orb; map-charts pinned between shelves. Each is a vivid arcane-knowledge detail.`,
+VARIETY MANDATE — ~25 distinct warm magical details (ancient + elven + arcane): ancient tomes drifting gently through golden candlelight, pages turning by themselves; books glowing softly in jewel tones along carved shelves; rolled scrolls trailing ribbons of warm runic light; a friendly quill writing by itself at a candlelit reading-desk; branched candelabra and clusters of floating candle-flames; drifting fey-lights / witch-lights glowing like fireflies; an ancient open tome aglow on a carved lectern; ivy and golden leaves curling along the shelf-edges; runes lifting off the pages like warm sparks; a wisp of enchanted light curled on a stack like a cat; star-charts and pressed leaves pinned between shelves; hearth-glow and brazier-glow flickering across old leather spines. Each is a vivid, WARM, ancient-elven arcane detail (never cold or ominous, NEVER a modern lamp/lantern/electric light).`,
     touchpoints: [],
-    instructions: `Each entry is ONE arcane-knowledge detail in 15-30 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE warm, ancient-elven arcane-knowledge detail in 15-30 words — charming + inviting, candlelit / brazier / hearth / magical-glow ONLY (NEVER a modern lamp or electric light). Output a NUMBERED list.
 
 EXAMPLES (3):
-1. Open tomes drift slowly through the air between the stacks, their pages turning by themselves, glowing runes lifting off the parchment.
-2. Hundreds of books glow softly on the shelves in shifting colors, casting a gentle jewel-toned light across the gallery.
-3. Tall ladders roll silently along the towering shelves, and drifting scrolls float down through the lamplit air.`,
+1. Ancient tomes drift gently through the golden candlelight between the carved shelves, their pages turning by themselves, warm runes lifting off the parchment like soft sparks.
+2. A branched candelabra glows beside an open tome on a deep cushioned reading-chair, drifting fey-lights hovering softly overhead.
+3. Rolled scrolls glow in warm jewel tones along the carved elven shelves, witch-lights flitting between them like drowsy fireflies.`,
   },
 
   arclib_feature: {
     format: 'simple',
-    theme: `DRAGONBOT ARCANE-LIBRARY FEATURE — a focal wonder anchoring the scene. Each entry 15-30 words.
+    theme: `DRAGONBOT ARCANE-LIBRARY FEATURE — a WARM focal wonder anchoring the scene, inviting rather than imposing. Each entry 15-30 words.
 
-VARIETY MANDATE — ~25 distinct focal features: a colossal arched stained-glass window pouring colored light; a great turning orrery suspended overhead; a forbidden vault-door deep in the stacks; a glowing knowledge-orb on a central pedestal; a vast central staircase spiralling up; a great reading-table strewn with maps; an ancient statue of a robed sage; a glowing portal-mirror; a pool reflecting the ceiling; a towering central pillar of carved lore; a hovering glowing tome on an altar; a great clockwork astrolabe. Each is a single focal wonder.`,
+VARIETY MANDATE — ~25 distinct warm ancient-elven focal wonders: a great crackling hearth ringed with deep cushioned chairs and reading-rugs; a tall arched elven window pouring warm golden light across the carved galleries; a gently turning carved-wood orrery glowing with soft fey-light; a softly glowing knowledge-orb above an ancient reading-table; a wide carved reading-table laid with star-charts, candelabra and an open tome; a serene reflecting-pool mirroring candlelight at the hall's heart; a graceful statue of an elf-sage draped in golden ivy; a hovering open tome aglow on a vine-wrapped lectern; a fireside window-seat piled with cushions and ancient books; a waterfall-garden archway open beyond the scroll-racks; a branched tree-trunk pillar grown through the carved shelves. Each is a single WARM, inviting, ancient-elven focal wonder (never a forbidden vault, never ominous, NEVER a modern lamp/lantern).`,
     touchpoints: [],
-    instructions: `Each entry is ONE focal library feature in 15-30 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE warm, inviting, ancient-elven focal wonder in 15-30 words — cozy + serene + arcane, candlelit/hearth/daylight/magical-glow only (NEVER a modern lamp/lantern), never forbidden/ominous. Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A colossal arched stained-glass window pours shafts of colored light across the towering stacks, dust and motes drifting in the beams.
-2. A great brass orrery turns slowly suspended above the central hall, its planets casting moving shadows across the galleries.
-3. A glowing knowledge-orb hovers above a central pedestal, pulsing with soft light, ringed by the tallest stacks.`,
+1. A great crackling hearth at the library's heart, ringed with deep cushioned chairs and reading-rugs, firelight dancing warm across the ancient leather spines all around.
+2. A tall arched elven window pours warm golden afternoon light across the carved reading-galleries, dust motes drifting lazily through the honeyed beams.
+3. A softly glowing knowledge-orb hovers above an ancient carved reading-table strewn with open tomes, star-charts and a branched candelabra, casting gentle gold light.`,
   },
 
   arclib_occupant: {
     format: 'simple',
     banHumanLanguage: true,
-    theme: `DRAGONBOT ARCANE-LIBRARY OCCUPANT — a tiny scholar for life + scale. Each entry 12-25 words.
+    theme: `DRAGONBOT ARCANE-LIBRARY OCCUPANT — someone AT HOME in the warm library, cozy + content, giving the scene life. Each entry 12-25 words. Inhabited and welcoming — the occupant looks like they belong and never wants to leave, NOT a tiny figure dwarfed/lost in immensity.
 
-VARIETY MANDATE — ~25 distinct occupants: a robed scholar bent over a tome at a desk; a librarian on a tall rolling ladder; a wizard reading by candlelight; a young apprentice carrying a stack of books; a hooded figure browsing the stacks; a cat curled on a reading-table; an old sage asleep among books; a scribe copying at a desk; a reader gazing up at the towering shelves; two scholars in quiet discussion; a robed figure ascending the central stair. Each is a small figure giving scale.`,
+VARIETY MANDATE — ~25 distinct cozy occupants (high-fantasy, elven-coded): an elven scholar curled in a deep cushioned chair reading by candlelight, a cat on their lap; a robed elf-librarian humming up a rolling ladder; an apprentice happily buried in a pile of ancient open tomes; a hooded elven reader browsing the warm scroll-racks by candle-glow; a silver-haired sage dozing contentedly among cushions and tomes; a scribe at a sunlit carved desk with a steaming cup; two elves in quiet conversation by the hearth; a young mage sketching runes by candlelight; a tabby cat curled asleep on an open tome; a robed elf tracing a star-chart by fey-light. Each is a content, at-home figure adding life + warmth (give the figure a NON-human fantasy race where natural — elf above all, also dwarf, tiefling — NEVER a pointed-hat-wizard cliché). NO modern lamp held — a candle, a taper, or magical light only.`,
     touchpoints: [],
-    instructions: `Each entry is ONE tiny scholar/occupant for scale in 12-25 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE cozy, at-home, elven-coded library occupant in 12-25 words — content + inhabited + warm, holding a candle/taper or near magical light (NEVER a modern lamp), NEVER "tiny/dwarfed in the vast hall". Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A robed scholar sits bent over an open tome at a candle-lit desk, tiny beneath the towering shelves.
-2. A librarian balances atop a tall rolling ladder reaching for a high shelf, dwarfed by the stacks.
-3. A lone reader stands gazing up at the vertiginous towering shelves, a small figure in the vast hall.`,
+1. An elven scholar curled in a deep cushioned chair by the hearth, an ancient tome on their knees and a cat dozing on the armrest.
+2. A young apprentice sits cross-legged on a warm rug, happily buried in a circle of open glowing tomes and candle-stubs.
+3. A silver-haired elf-librarian hums to herself climbing a rolling ladder, a single candle in one hand, reshelving a stack of warm-glowing scrolls.`,
   },
 
   arclib_drama: {
     format: 'simple',
-    theme: `DRAGONBOT ARCANE-LIBRARY DRAMA — a secondary focal point heightening the wonder, fires ~40%. Each entry 12-25 words.
+    theme: `DRAGONBOT ARCANE-LIBRARY DRAMA — a charming, WONDROUS secondary beat heightening the magic, fires ~40%. Each entry 12-25 words. Whimsical + warm, never scary or ominous.
 
-VARIETY MANDATE — ~25 distinct dramas: a small book-dragon napping on a high shelf; a spell escaping a book in a burst of light; a ghostly apparition drifting between stacks; a shaft of divine light from above; a magical storm of loose pages whirling; a glowing summoned creature of light; a forbidden book glowing ominously; a constellation projected across the dome; a flock of paper-birds taking flight; a hidden door swinging open; an owl gliding between the galleries. Each adds a focal beat (does NOT replace the library).`,
+VARIETY MANDATE — ~25 distinct whimsical magical beats: a small book-dragon, no bigger than a cat, napping curled among the tomes; a friendly spell drifting from an open book in a swirl of gentle sparks; a flock of paper-birds taking wing through the warm light; an owl gliding lazily between the cozy galleries; a constellation gently projected across the dome; a hidden door easing open onto a snug reading-nook; a tiny glowing sprite tidying the shelves; pages of light fluttering up like butterflies; a teapot pouring itself by the fire; a sleepy dragon-cat stretching atop a stack; a chandelier of floating candles drifting past. Each adds a charming, warm focal beat (NEVER ominous, ghostly-scary, or cold — and does NOT replace the library).`,
     touchpoints: [],
-    instructions: `Each entry is ONE secondary drama detail in 12-25 words. Output a NUMBERED list.
+    instructions: `Each entry is ONE charming, whimsical magical beat in 12-25 words — warm + wondrous, never scary/ominous/cold. Output a NUMBERED list.
 
 EXAMPLES (3):
-1. A small book-dragon, no bigger than a cat, naps curled on a high shelf among the tomes.
-2. A spell escapes an open book in a burst of light, pages and sparks whirling up into the dark.
-3. A swirling storm of loose glowing pages spirals up through the central void toward the distant ceiling.`,
+1. A small book-dragon, no bigger than a cat, naps curled on a warm shelf among the glowing tomes.
+2. A friendly spell drifts from an open book in a swirl of gentle golden sparks, pages fluttering softly.
+3. A flock of glowing paper-birds takes wing through the warm candlelight, circling lazily up toward the carved elven galleries.`,
   },
 
   // ════════════════════════════════════════════════════════

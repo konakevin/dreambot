@@ -109,9 +109,16 @@ module.exports = {
     // dragon-hoard: anchor the Western dragon coiled on a mountain of treasure.
     'dragon-hoard':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a colossal traditional Western DRAGON — four legs + two massive membrane wings + horned reptilian skull + thick scaled body + long tail — AT HOME in its UNIQUE LAIR amid the distinctive collection it has gathered (a scholar-dragon library / sea-dragon shipwreck-trove / war-dragon trophy-hall / frost-dragon ice-relics / art-gallery / crystal-geode / NOT necessarily gold), a characterful lived-in dragon dwelling, opulent grandeur, dramatic light, painterly atmospheric depth, awe-inducing concept-art masterwork',
-    // arcane-library: anchor the cathedral-vast hall of magical knowledge.
+    // arcane-library: a Rivendell-style ANCIENT HIGH-ELVEN library — graceful,
+    // arcane, candlelit, warm + inviting (Kevin 2026-06-17: "high fantasy, NO
+    // electricity… no modern lamps… imagine Rivendell with a massive ancient
+    // library"). POSITIVE-ONLY prefix — negations like "NO lamps" leak into the
+    // Flux prompt and CLIP renders the banned noun; the no-electricity intent is
+    // carried by naming ONLY period light sources (candles/candelabra/braziers/
+    // hearth/daylight/fey-light). The anti-lamp + anti-cavernous bans live in the
+    // Sonnet TEMPLATE (archetype-templates.js), which Sonnet follows without echo.
     'arcane-library':
-      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a COLOSSAL ARCANE LIBRARY — a cathedral-vast hall of towering book-stacks climbing into shadow, floating glowing tomes and drifting scrolls, spiral stairs and galleries, a great stained-glass window or orrery, warm candlelight against vertiginous depth, a tiny robed scholar for scale, deep high-fantasy hall-of-knowledge wonder, painterly atmospheric grandeur, awe-inducing concept-art masterwork',
+      'Alan Lee + John Howe painted-fantasy oil tradition, soft painterly brushwork, warm rich color, a graceful ANCIENT HIGH-ELVEN arcane library like the great library of Rivendell — flowing organic carved elven wood-and-stone arches, living trees grown into the architecture, golden ivy, ancient leather tomes and rolled scrolls, cushioned reading-nooks and a crackling hearth, drifting glowing tomes and soft runic fey-light, a content elven scholar at home among the shelves, warm candlelight, branched candelabra, glowing braziers, hearth-fire and golden daylight slanting through tall arched windows, ancient and serene yet cozy, intimate and inviting',
     // sky-castle: anchor the floating sky-kingdom among the clouds.
     'sky-castle':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an impossible FLOATING SKY-CASTLE — a great fantasy castle adrift high in open sky atop a floating chunk of mountain, waterfalls pouring off its edge into a vast sea of cloud far below, sky-bridges and glowing spires, tiny airships and distant dragons for scale, soaring vertiginous altitude and wonder, painterly atmospheric grandeur, awe-inducing concept-art masterwork',

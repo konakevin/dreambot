@@ -1891,30 +1891,30 @@ ${drama}
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing a GREAT ARCANE LIBRARY scene for DragonBot — a cathedral-vast hall of magical knowledge, towering with books and wonder. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Awe-inspiring, vertiginous, luminous with knowledge. The scene should make the viewer want to lose themselves in its stacks.
+    return `You are a fantasy concept-art painter writing an ANCIENT HIGH-ELVEN LIBRARY scene for DragonBot — imagine RIVENDELL'S great library: a graceful, ancient, arcane elven library, serene and timeless yet WARM and inviting, a place you'd want to get happily lost in among the scrolls and tomes. Alan Lee + John Howe + Ted Nasmith painted-fantasy oil tradition. Golden, candlelit, ancient, cozy. The scene should make the viewer want to sink into a cushioned chair by the hearth and never leave.
 
-━━━ CATHEDRAL-VAST KNOWLEDGE — ABSOLUTE FIRST RULE ━━━
-A COLOSSAL arcane library — towering shelves climbing into shadow, endless books, floating tomes and glowing knowledge. Vertiginous scale and magical wonder. Deep high-fantasy (NOT modern, NOT sci-fi). Warm candlelight and arcane glow against vast shadowed depth.
+━━━ RIVENDELL-STYLE, ANCIENT, ELVEN, WARM — ABSOLUTE FIRST RULE ━━━
+A graceful ANCIENT HIGH-ELVEN arcane library — flowing organic carved elven wood-and-stone, slender arches and graceful columns, living trees grown into the architecture, golden ivy, ancient leather tomes and rolled scrolls, warm and inviting. You are INSIDE it among the shelves, cushioned chairs and a crackling hearth nearby, gentle glowing magic within reach. Deep high-fantasy (Tolkien's Rivendell / Lothlorien). ⚠ HIGH FANTASY = NO ELECTRICITY: light comes ONLY from CANDLELIGHT, CANDELABRA, BRAZIERS, a HEARTH, golden DAYLIGHT through tall arched windows, and soft MAGICAL glow (glowing runes, fey-lights, luminous tomes). ABSOLUTELY NO modern "lamps", NO lanterns, NO lightbulbs, NOTHING modern. And NOT a cold dwarfing vast atrium, NO spiral stair into shadow, NO tier-upon-tier galleries lost above — warm, inviting, ancient, never cold or dwarfing.
 
-━━━ THE LIBRARY (the great hall) ━━━
+━━━ THE LIBRARY (the ancient elven hall) ━━━
 ${library}
 
-Render the vast library with overwhelming vertical scale and depth — towering stacks receding into glowing gloom.
+Render it graceful, ANCIENT, and ELVEN but WARM and inviting — carved organic wood-and-stone, ivy, ancient tomes and scrolls, cushioned reading-nooks, a hearth, candlelit. NEVER a cold dwarfing atrium or spiral-shaft; NEVER a modern lamp or electric light.
 
-━━━ ARCANE DETAIL (the magic of knowledge) ━━━
+━━━ ARCANE DETAIL (the ancient magic of knowledge) ━━━
 ${arcane_detail}
 
-Render the magical knowledge richly — floating books, glowing tomes, drifting scrolls, candle-lit desks, runic light.
+Render the magic warmly — drifting glowing tomes, runes like soft sparks, branched candelabra, candle-clusters, drifting fey-lights, an open scroll aglow on a carved lectern. NO modern lamps.
 
-━━━ A LIBRARY FEATURE (a focal wonder) ━━━
+━━━ A LIBRARY FEATURE (a warm focal wonder) ━━━
 ${library_feature}
 
-Render this focal feature — a great window, an orrery, a forbidden vault, a knowledge-orb — anchoring the scene.
+Render this inviting focal wonder — a crackling hearth, a sunlit arched window, a gentle orrery, a glowing knowledge-orb over a reading-table — anchoring the scene with warmth.
 
-━━━ THE OCCUPANT (a tiny scholar for scale) ━━━
+━━━ THE OCCUPANT (someone at home here) ━━━
 ${occupant}
 
-A small figure — a scholar, librarian, or robed reader — gives life and scale, dwarfed by the towering stacks.
+Render a figure who BELONGS here — content, cozy, reading or browsing — giving the scene life and warmth. NOT a tiny figure dwarfed or lost in immensity. If a face shows, a non-human fantasy race is welcome (elf, dwarf, tiefling) — never the pointed-hat-wizard cliché.
 ${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
@@ -1928,15 +1928,15 @@ ${sharedDNA.scenePalette}
 ━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
 ${vibeDirective.slice(0, 250)}
 
-Use this ONLY for color palette, light, and overall mood.
+Use this ONLY for color palette, light, and overall mood — but keep the library WARM and inviting above all.
 
 ━━━ COMPOSITION ━━━
-Cinematic, painterly, vertiginous, wondrous. The cathedral-vast arcane library towering into shadow, floating books and glowing knowledge throughout, a focal feature, a tiny scholar for scale, warm candlelight against vast depth. Awe-inspiring. NEVER modern/sci-fi; NEVER small/empty.
+Painterly, golden, candlelit, ancient-elven, warm. A graceful Rivendell-style ancient elven library — carved organic wood-and-stone arches, golden ivy, ancient tomes and scrolls, cushioned reading-nooks, a crackling hearth, a content elven reader at home in it. Warm honey-gold CANDLELIGHT + hearth-glow + golden daylight dominant. NEVER modern/sci-fi; NEVER a modern lamp/lantern/electric light; NEVER a cold dwarfing atrium, spiral-stair shaft, or tier-upon-tier galleries. Ancient, graceful, warm, inviting.
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING — a cathedral-vast arcane library of towering book-stacks and floating tomes — the great library leads], [the library's overwhelming vertical scale + depth], [arcane detail — floating books + glowing tomes + drifting scrolls], [a focal feature — great window/orrery/vault], [a tiny scholar for scale], [lighting + atmosphere], [palette + wondrous scholarly mood]
+[OPENING — a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting — the ancient elven library leads], [its carved organic elven architecture — wood-and-stone arches, ivy, cushioned nooks, hearth], [ancient arcane detail — drifting glowing tomes + candelabra + fey-lights + soft runic light], [a warm focal wonder — hearth/arched window/orrery/reflecting-pool], [a content elven occupant at home here], [warm candlelight + hearth-glow + golden daylight], [honey-gold palette + ancient serene cozy mood]
 
-CRITICAL — render a COLOSSAL high-fantasy arcane library of towering stacks, floating books and glowing knowledge, a tiny scholar for scale. Do NOT render anything modern/sci-fi, small, or empty.
+CRITICAL — render a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting, lit ONLY by candlelight / candelabra / braziers / hearth / golden daylight / magical glow, a content elven reader at home in it. Do NOT render any modern lamp, lantern, or electric light; do NOT render a cold dwarfing atrium, spiral-stair shaft, towering galleries, or anything modern/sci-fi or grey.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
   },
