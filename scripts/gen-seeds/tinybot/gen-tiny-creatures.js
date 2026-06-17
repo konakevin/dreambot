@@ -8,47 +8,47 @@ generatePool({
     n
   ) => `You are writing ${n} TINY CREATURE descriptions for TinyBot — tiny-scale creatures for terrarium + macro-nature paths.
 
-Each entry: 8-16 words. One specific tiny creature with charm note.
+Each entry: 8-16 words. One specific tiny creature with a charm note.
 
-━━━ CATEGORIES ━━━
-- Tiny lizard sunning on rock (anole, gecko, skink)
-- Tiny frog on mushroom (poison-dart, glass-frog, tree-frog)
-- Beetle with iridescent shell (jewel-beetle, scarab)
-- Snail with spiraled shell on leaf
-- Butterfly resting on flower (monarch, swallowtail, blue-morpho)
-- Ladybug on petal
-- Bee pollinating flower
-- Dragonfly hovering over pond
-- Pixie or fairy (tiny fantasy)
-- Fae creature (tiny magical)
-- Ant carrying leaf (leafcutter)
-- Caterpillar on twig
-- Praying-mantis (tiny posing)
-- Hummingbird mid-hover (tiny)
-- Tiny mouse nibbling berry
-- Chipmunk with cheeks-full
-- Hedgehog in autumn leaves
-- Tiny tree-frog with suction-pads
-- Spider on dewy web
-- Centipede in leaf-litter
-- Bumble-bee covered in pollen
-- Moth with patterned wings on bark
-- Grasshopper on grass-blade
-- Ant on crumb of bread
-- Tiny turtle on leaf
-- Cricket on rock
-- Ladybird larva on leaf
-- Tiny snake curled on moss
-- Fairy-wren tiny bird
-- Pollen-covered bee mid-flight
-- Tiny gecko on tropical plant
-- Stick-insect camouflaged
-- Firefly at dusk
+EVERYTHING MUST BE ADORABLE — rounded, friendly, storybook-cute. If a creature
+isn't classically cute, DO NOT include it.
+
+━━━ CUTE BUGS — these are the ONLY insects allowed ━━━
+- Ladybug on a petal (red, round, polka-dotted)
+- Butterfly resting on a flower (monarch, swallowtail, blue-morpho)
+- Fuzzy bumblebee dusted in pollen / honeybee on a blossom
+- Snail with a spiraled shell on a dewy leaf
+- Plump fuzzy caterpillar inching along a twig
+- Firefly glowing softly at dusk
+- Jewel-bright dragonfly hovering over a pond
+
+━━━ CUTE NON-BUG CRITTERS (use these freely) ━━━
+- Tiny tree-frog / poison-dart frog perched on a mushroom cap
+- Little gecko / anole / skink sunning on a warm pebble
+- Tiny mouse nibbling a berry
+- Chipmunk with cheeks full
+- Hedgehog curled in autumn leaves
+- Tiny turtle on a leaf
+- Hummingbird mid-hover
+- Tiny fluffy songbird (fairy-wren, robin chick, finch)
+- Baby bunny / spotted fawn (tiny, storybook)
+- Pixie / fairy / fae sprite (tiny, sweet, magical)
 
 ━━━ RULES ━━━
-- Real or fantasy (pixie/fairy) tiny-scale
-- Charm detail included
-- Fits terrarium / macro-nature scale
+- CUTE-ONLY. Real or fantasy (pixie/fairy), tiny-scale, always endearing.
+- A charm detail in every entry (sleepy blink, dewdrop, tiny smile, fluffy fur).
+- Fits terrarium / macro-nature / tiny-vehicle-passenger scale.
+
+━━━ ABSOLUTELY BANNED (NOT cute — never include) ━━━
+- NO beetles of any kind (no jewel-beetle, scarab, tiger-beetle, ground-beetle, weevil)
+- NO praying mantises, NO spiders, NO centipedes / millipedes
+- NO grasshoppers, NO crickets, NO locusts
+- NO moths, NO stick-insects, NO ants, NO cockroaches, NO earwigs, NO stink-bugs
+- NO wasps / hornets / flies / mosquitoes / gnats
+- NO snakes, NO anything spiky, leggy, creepy, or pest-like
+- NEVER write the words "spider", "spider-silk", "spiderweb", "spiderwort", or
+  "gossamer" — they evoke spiders. Say "dewy strand" or "silk thread" instead.
+Only the seven cute bugs listed above + the cute non-bug critters.
 
 ━━━ OUTPUT ━━━
 JSON array of ${n} strings. No preamble, no numbering.`,

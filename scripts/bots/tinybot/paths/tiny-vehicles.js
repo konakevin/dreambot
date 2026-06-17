@@ -9,7 +9,7 @@ module.exports = ({ sharedDNA, vibeDirective, picker }) => {
     ? picker.pickWithRecency(pools.TINY_CREATURES, 'tiny_creature')
     : null;
 
-  return `You are a master model-maker writing TINY-VEHICLE scenes for TinyBot. Delicate single miniature vehicles built from natural materials — walnut-shell sailboats with leaf sails, acorn-cap carriages drawn by snails, dandelion-seed parachutes, leaf hot-air balloons with twig baskets, mushroom-cap submarines, cricket-drawn chariots, beetle-elytra airships, paper-bird kites, twig-and-thread biplanes. The hero is the VEHICLE — beautifully crafted from real natural materials at hand-palm scale. Output wraps with style prefix + suffix.
+  return `You are a master model-maker writing CUTE, tongue-in-cheek TINY-VEHICLE scenes for TinyBot. Delightfully charming, storybook-adorable miniature vehicles built from natural materials — walnut-shell sailboats with leaf sails, snail-drawn acorn-cap carriages, dandelion-seed parachutes, leaf hot-air balloons with twig baskets, mushroom-cap submarines, flower-petal balloons, paper-bird kites, twig-and-thread biplanes. The hero is the VEHICLE — beautifully crafted from real natural materials at hand-palm scale, and it should make you smile. NEVER creepy: no insect-drawn or insect-bodied vehicles (no beetle, cricket, spider, or ant pulling or forming a vehicle). Output wraps with style prefix + suffix.
 
 ${blocks.TILT_SHIFT_MINIATURE_BLOCK}
 
@@ -42,7 +42,7 @@ ${blocks.BLOW_IT_UP_BLOCK}
 ${vibeDirective.slice(0, 250)}
 
 ━━━ TINY-VEHICLES DNA ━━━
-The vehicle is the HERO. Built from REAL natural materials — walnut shells, acorn caps, leaves, twigs, dandelion seeds, mushroom caps, bird-feathers, snail-shells, beetle-wings, spider-silk thread — assembled with master-modelmaker craft into a working tiny conveyance. Every fastening visible: thread-stitching on a leaf-sail, twig-pegs in walnut planks, acorn-cap rivets. The vehicle SITS in a real environment at correct scale: a walnut boat on a teacup-sized puddle, a leaf balloon over real grass-blades, an acorn carriage on a moss-path. Tilt-shift shallow DOF makes the natural world feel storybook. Warm sunlight or magical-hour glow on craft surfaces.
+The vehicle is the HERO. Built from REAL natural materials — walnut shells, acorn caps, leaves, twigs, dandelion seeds, mushroom caps, flower petals, bird-feathers, snail-shells, silk thread — assembled with master-modelmaker craft into a working tiny conveyance. Every fastening visible: thread-stitching on a leaf-sail, twig-pegs in walnut planks, acorn-cap rivets. The vehicle SITS in a real environment at correct scale: a walnut boat on a teacup-sized puddle, a leaf balloon over real grass-blades, an acorn carriage on a moss-path. Tilt-shift shallow DOF makes the natural world feel storybook. Warm sunlight or magical-hour glow on craft surfaces.
 
 ━━━ COMPOSITION ━━━
 Mid-close or macro-close on the vehicle filling the frame. The vehicle is rendered with obsessive natural-materials detail. Environment behind it shows scale (giant grass blades, towering mushroom, vast leaf, looming pebble). Tilt-shift shallow DOF. Optional tiny creature pilot/passenger. Palette dictated by LIGHTING + WEATHER + VIBE blocks above. Hero-shot the vehicle — vehicle catalog energy, but make it magical.
