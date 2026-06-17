@@ -45,7 +45,6 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
-import { routeDualSwapByGender } from '../_shared/dualGenderRouting.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import {
   aHashHex,
@@ -1696,34 +1695,29 @@ Output ONLY the prompt.`;
     const FACE_SWAP_BACKOFF_MS = [2_000, 4_000];
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
       // ── Gender-SAFE dual swap (see _shared/dualSwapPipeline.ts) ──
-      // ONE hardened orchestrator: confirm gender → re-render if unclear → swap
-      // with retries → VERIFY the output → re-render + re-swap on verify fail →
-      // gender-safe degrade. A wrong-gender / both-faces-on-one paste cannot
-      // survive. Onboarding (strict) cascades to a solo-self tier when it can't
-      // confirm; nightly cron single-swaps the confirmed source.
+      // The Fly engine detects the two faces + their gender, splits at the gap
+      // between them, and puts each cast member on their matching-gender face —
+      // correct by construction (both-on-one / wrong-gender impossible). The
+      // orchestrator just retries the COUPLE render until the engine reports a
+      // clean 2-face split, then degrades (onboarding strict → solo-self cascade;
+      // nightly cron → single self-swap).
+      const s0 = faceSwapSources[0];
+      const s1 = faceSwapSources[1];
+      const selfSrc = faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl;
       const result = await genderSafeDualSwap(
-        {
-          sourceUrl: faceSwapSources[0].sourceUrl,
-          gender: faceSwapSources[0].gender,
-          role: faceSwapSources[0].role,
-        },
-        {
-          sourceUrl: faceSwapSources[1].sourceUrl,
-          gender: faceSwapSources[1].gender,
-          role: faceSwapSources[1].role,
-        },
         tempUrl,
         {
-          replicateToken: REPLICATE_TOKEN,
-          dispatchDual: (left, right, target) =>
+          dispatchDual: (target) =>
             dispatchDualFaceSwap(
-              left,
-              right,
+              s0.sourceUrl,
+              s1.sourceUrl,
               target,
               REPLICATE_TOKEN,
               supabase,
               userId,
-              t0 + 140_000
+              t0 + 140_000,
+              false,
+              { left: s0.gender, right: s1.gender }
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId, { retry: false }),
@@ -1744,19 +1738,14 @@ Output ONLY the prompt.`;
             observability.replicatePredictionId = rr.predictionId;
             return { url: rr.url, predictionId: rr.predictionId };
           },
+          selfSource: selfSrc,
           log: (m) => console.log(`[nightly-dreams] ${m}`),
         },
-        {
-          strict: strict_face_swap,
-          maxSwapRetries: FACE_SWAP_MAX_RETRIES,
-          backoffMs: FACE_SWAP_BACKOFF_MS,
-          deadlineMs: t0 + 140_000,
-        }
+        { strict: strict_face_swap, deadlineMs: t0 + 140_000 }
       );
       tempUrl = result.url;
       if (result.predictionId) replicatePredictionId = result.predictionId;
-      logAxes.dualGenderRouting = result.routing;
-      logAxes.dualSwapVerified = result.verified;
+      logAxes.dualFaceCount = result.faceCount;
       logAxes.faceSwapResult =
         result.outcome === 'dual'
           ? 'dual-success'
@@ -1771,8 +1760,7 @@ Output ONLY the prompt.`;
           // Onboarding → hard-fail so the cascade re-renders a SOLO self scene.
           throw new Error('face_swap_failed:dual');
         }
-        // Nightly cron → deliver the clean UNSWAPPED scene (a valid dream with no
-        // cast likeness) rather than a wrong / Frankenstein face.
+        // Nightly cron → deliver the clean UNSWAPPED scene rather than a wrong face.
         console.warn('[nightly-dreams] ⚠ Dual unrecoverable — delivering unswapped scene');
       }
     } else if (faceSwapSource && tempUrl) {
@@ -1872,48 +1860,23 @@ Output ONLY the prompt.`;
         if (dupAttempt > 0) await new Promise((r) => setTimeout(r, 350));
         try {
           if (faceSwapSources && faceSwapSources.length === 2) {
-            // Re-route by gender on the freshly regenerated render (it may flip
-            // L/R independently). See _shared/dualGenderRouting.ts.
-            const routed = await routeDualSwapByGender(
-              {
-                sourceUrl: faceSwapSources[0].sourceUrl,
-                gender: faceSwapSources[0].gender,
-                role: faceSwapSources[0].role,
-              },
-              {
-                sourceUrl: faceSwapSources[1].sourceUrl,
-                gender: faceSwapSources[1].gender,
-                role: faceSwapSources[1].role,
-              },
+            // skipPrimary: the dup is yan-ops's canned-output bug — escape to the
+            // fallback models. The engine detects + gender-routes the swap on the
+            // freshly regenerated render. If it finds no clean 2-face split
+            // (swappedUrl null), keep the regenerated render (the next dup check
+            // decides) rather than a bad crop.
+            const r = await dispatchDualFaceSwap(
+              faceSwapSources[0].sourceUrl,
+              faceSwapSources[1].sourceUrl,
               genResult.url,
-              REPLICATE_TOKEN
+              REPLICATE_TOKEN,
+              supabase,
+              userId,
+              t0 + 140_000,
+              true,
+              { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender }
             );
-            // skipPrimary: the dup is yan-ops's canned-output bug — retrying
-            // yan-ops returns the same canned scene, so escape to the fallback
-            // models (cdingram → pikachupichu25). If gender routing could NOT
-            // confirm a safe dual on this fresh render, single-swap the
-            // gender-safe source instead of risking a wrong-gender dual paste.
-            if (routed.mode === 'dual') {
-              tempUrl = await dispatchDualFaceSwap(
-                routed.leftSource,
-                routed.rightSource,
-                genResult.url,
-                REPLICATE_TOKEN,
-                supabase,
-                userId,
-                t0 + 140_000,
-                true
-              );
-            } else {
-              tempUrl = await faceSwap(
-                routed.singleSource,
-                genResult.url,
-                REPLICATE_TOKEN,
-                supabase,
-                userId,
-                { skipPrimary: true }
-              );
-            }
+            tempUrl = r.swappedUrl ?? genResult.url;
           } else if (faceSwapSource) {
             // skipPrimary: escape yan-ops's canned output via the fallback chain.
             tempUrl = await faceSwap(

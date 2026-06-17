@@ -21,6 +21,14 @@
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap, ensureHttpsImageUrl } from './faceSwap.ts';
 
+export interface DualDispatchResult {
+  /** The swapped image, or null when the render had no clean 2-face split
+   *  (caller should re-render the couple). */
+  swappedUrl: string | null;
+  /** Faces the engine detected (legacy / non-detecting path reports 2). */
+  faceCount: number;
+}
+
 export async function dispatchDualFaceSwap(
   leftSourceUrl: string,
   rightSourceUrl: string,
@@ -32,8 +40,11 @@ export async function dispatchDualFaceSwap(
   // skipPrimary → swap both halves with the fallback models only (cdingram →
   // pikachupichu25), skipping yan-ops. Used by the dup-detect retry to escape
   // yan-ops's canned-output bug.
-  skipPrimary = false
-): Promise<string> {
+  skipPrimary = false,
+  // Each source's gender — lets the Fly engine put each cast member on the
+  // matching-gender DETECTED face (the dynamic-split path).
+  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null }
+): Promise<DualDispatchResult> {
   const useFanout = Deno.env.get('DUAL_SWAP_FANOUT') === 'true';
 
   // Convert data: URL targets (from native OpenAI + Gemini providers) to a
@@ -51,7 +62,10 @@ export async function dispatchDualFaceSwap(
 
   try {
     if (!useFanout) {
-      return await dualFaceSwap(
+      // In-process path uses the legacy in-Supabase engine (no detection — Edge's
+      // 256 MB cap can't host onnxruntime). Returns a URL; normalize to the result
+      // shape with faceCount=2 (it always crops 55/55).
+      const url = await dualFaceSwap(
         leftSourceUrl,
         rightSourceUrl,
         httpsTarget,
@@ -61,6 +75,7 @@ export async function dispatchDualFaceSwap(
         deadlineMs,
         skipPrimary
       );
+      return { swappedUrl: url, faceCount: 2 };
     }
 
     // 2026-06-01: when DUAL_SWAP_FLY_URL is set, route to the Fly.io
@@ -93,6 +108,8 @@ export async function dispatchDualFaceSwap(
         userId,
         deadlineMs,
         skipPrimary,
+        leftGender: genders?.left ?? null,
+        rightGender: genders?.right ?? null,
       }),
     });
 
@@ -107,7 +124,12 @@ export async function dispatchDualFaceSwap(
       );
     }
 
-    let parsed: { swappedUrl?: string; error?: string };
+    let parsed: {
+      swappedUrl?: string | null;
+      faceCount?: number;
+      status?: string;
+      error?: string;
+    };
     try {
       parsed = JSON.parse(text);
     } catch {
@@ -116,12 +138,23 @@ export async function dispatchDualFaceSwap(
       );
     }
 
-    if (!parsed.swappedUrl) {
-      throw new Error(`${target}: ${parsed.error ?? 'no swappedUrl in response'} (${elapsedMs}ms)`);
+    // A true error throws. But a NULL swappedUrl with status 'rerender' is NOT an
+    // error — the engine found no clean 2-face split and wants the caller to
+    // re-render the couple. (Old engines omit faceCount/status: a present
+    // swappedUrl ⇒ faceCount 2; absent + an `error` ⇒ throw.)
+    if (parsed.error) {
+      throw new Error(`${target}: ${parsed.error} (${elapsedMs}ms)`);
     }
-
-    console.log(`[dispatchDualFaceSwap] ${target} succeeded in ${elapsedMs}ms`);
-    return parsed.swappedUrl;
+    const swappedUrl = parsed.swappedUrl ?? null;
+    if (!swappedUrl && parsed.status !== 'rerender' && parsed.faceCount === undefined) {
+      // Legacy engine returned no url and no rerender signal → treat as failure.
+      throw new Error(`${target}: no swappedUrl in response (${elapsedMs}ms)`);
+    }
+    const faceCount = parsed.faceCount ?? (swappedUrl ? 2 : 0);
+    console.log(
+      `[dispatchDualFaceSwap] ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount}`
+    );
+    return { swappedUrl, faceCount };
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.
     if (targetTempPath) {

@@ -164,7 +164,9 @@ export function planDualSplit(
   W: number,
   opts: { minGapFrac?: number; overlapFrac?: number } = {}
 ): DualSplit {
-  const minGap = (opts.minGapFrac ?? 0.03) * W;
+  // minGap == overlapFrac so a clean split always affords an overlap ≥ the
+  // stitch blend half-width (≈2% of W) — narrower gaps read as 'overlap' → re-render.
+  const minGap = (opts.minGapFrac ?? 0.04) * W;
   const overlapMax = (opts.overlapFrac ?? 0.04) * W;
   if (boxes.length < 2) {
     return {

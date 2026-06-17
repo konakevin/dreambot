@@ -21,6 +21,10 @@ interface RequestBody {
   deadlineMs?: number;
   /** Skip the yan-ops primary, swap with fallback models only (dup-retry escape). */
   skipPrimary?: boolean;
+  /** Each source's gender — lets the engine put each cast member on the
+   *  matching-gender detected face (dynamic-split path). */
+  leftGender?: 'male' | 'female' | null;
+  rightGender?: 'male' | 'female' | null;
 }
 
 const CORS_HEADERS = {
@@ -91,7 +95,16 @@ Deno.serve({ port: PORT }, async (req) => {
     });
   }
 
-  const { targetUrl, leftSourceUrl, rightSourceUrl, userId, deadlineMs, skipPrimary } = body;
+  const {
+    targetUrl,
+    leftSourceUrl,
+    rightSourceUrl,
+    userId,
+    deadlineMs,
+    skipPrimary,
+    leftGender,
+    rightGender,
+  } = body;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
     return new Response(JSON.stringify({ error: 'Missing required field' }), {
       status: 400,
@@ -115,7 +128,7 @@ Deno.serve({ port: PORT }, async (req) => {
   const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
 
   try {
-    const swappedUrl = await dualFaceSwap(
+    const { swappedUrl, faceCount } = await dualFaceSwap(
       leftSourceUrl,
       rightSourceUrl,
       targetUrl,
@@ -123,14 +136,20 @@ Deno.serve({ port: PORT }, async (req) => {
       supabase,
       userId,
       effectiveDeadlineMs,
-      skipPrimary ?? false
+      skipPrimary ?? false,
+      { left: leftGender ?? null, right: rightGender ?? null }
     );
     const elapsed = Date.now() - t0;
-    console.log(`[face-swap-dual] Done in ${elapsed}ms`);
-    return new Response(JSON.stringify({ swappedUrl }), {
-      status: 200,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-    });
+    // swappedUrl=null is NOT an error — the render had no clean 2-face split, so
+    // the caller should re-render the couple. status distinguishes it from 'ok'.
+    console.log(`[face-swap-dual] Done in ${elapsed}ms faceCount=${faceCount} ok=${!!swappedUrl}`);
+    return new Response(
+      JSON.stringify({ swappedUrl, faceCount, status: swappedUrl ? 'ok' : 'rerender' }),
+      {
+        status: 200,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      }
+    );
   } catch (err) {
     const elapsed = Date.now() - t0;
     const message = (err as Error).message ?? 'Unknown error';

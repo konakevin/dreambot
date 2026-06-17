@@ -19,6 +19,8 @@
 // deno-lint-ignore-file no-explicit-any
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
+import { detectFacesWithGender, type GenderedFace } from './faceDetect.ts';
+import { planDualSplit } from './faceDetectMath.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;
 const POLL_INTERVAL_MS = 1000;
@@ -559,7 +561,10 @@ function stitchHalves(
   outW: number
 ): Uint8Array {
   const BLEND_PX = 40;
-  const halfBlend = Math.min(BLEND_PX >> 1, leftTake, outW - leftTake);
+  // Clamp to rightSkip (= the crop overlap) too: with a dynamic split the overlap
+  // can be narrower than the blend, and the blend reads rightData at
+  // (x - leftTake + rightSkip) — halfBlend > rightSkip would read before column 0.
+  const halfBlend = Math.min(BLEND_PX >> 1, leftTake, outW - leftTake, Math.max(0, rightSkip));
   const blendStart = leftTake - halfBlend;
   const blendEnd = leftTake + halfBlend;
   const blendWidth = blendEnd - blendStart;
@@ -615,17 +620,30 @@ function resizeNearest(
   return out;
 }
 
+export interface DualSwapResult {
+  /** The stitched swapped image URL, or null when the render had no clean 2-face
+   *  split (caller should re-render the couple). */
+  swappedUrl: string | null;
+  /** Faces detected in the render (legacy 55/55 path reports 2). */
+  faceCount: number;
+}
+
 /**
  * Dual face swap — crop→swap→paste for two people in one scene.
  *
- * Crops left 55% and right 55% (10% overlap at center), swaps each face
- * independently in parallel, stitches left half + right half at midpoint.
- * Uploads stitched result to Supabase temp storage, returns public URL.
+ * When `DUAL_SWAP_DYNAMIC_SPLIT=true`: detect the two face boxes (in-process
+ * YuNet) + each face's gender (genderage), split at the GAP BETWEEN the faces
+ * (so each half holds exactly one face), put each cast member on their
+ * matching-gender face, then stitch. Correct by construction — both-on-one and
+ * wrong-gender are impossible. Returns `swappedUrl=null, faceCount<2` when the
+ * render has no clean two-face split (→ caller re-renders the couple).
  *
- * `deadlineMs` is the absolute deadline (Date.now() + remaining). The swap
- * budget is computed from whatever time remains, minus 15s reserved for
- * download/stitch/upload. No retry on individual swaps — retrying in
- * parallel doubles total time and blows the Edge Function limit.
+ * Fallback-safe: flag off OR detection throws → the legacy fixed 55/55 positional
+ * crop (never worse than before). A clean detection that finds <2 / overlapping
+ * faces returns the re-render signal instead of doing a bad crop.
+ *
+ * `deadlineMs` is the absolute deadline. `genders` carries each source's gender
+ * for the matching (left=cast[0], right=cast[1]).
  */
 export async function dualFaceSwap(
   leftSourceUrl: string,
@@ -635,10 +653,14 @@ export async function dualFaceSwap(
   supabase: SupabaseClient,
   userId: string,
   deadlineMs?: number,
-  skipPrimary = false
-): Promise<string> {
+  skipPrimary = false,
+  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null }
+): Promise<DualSwapResult> {
   const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
-  console.log(`[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s`);
+  const dynamicSplit = Deno.env.get('DUAL_SWAP_DYNAMIC_SPLIT') === 'true';
+  console.log(
+    `[dualFaceSwap] Starting — budget ${Math.round((deadline - Date.now()) / 1000)}s dynamicSplit=${dynamicSplit}`
+  );
 
   const targetResp = await fetch(targetImageUrl);
   if (!targetResp.ok) throw new Error(`Download target failed: ${targetResp.status}`);
@@ -648,10 +670,62 @@ export async function dualFaceSwap(
   let imgData: Uint8Array | null = targetImg.data;
   console.log(`[dualFaceSwap] Target: ${W}x${H}`);
 
-  const leftW = Math.floor(W * 0.55);
-  const rightStart = Math.floor(W * 0.45);
+  // ── Crop geometry + per-crop source. Default = legacy fixed 55/55 positional
+  // (also the fallback if detection is off or errors — never worse than before). ──
+  let leftW = Math.floor(W * 0.55);
+  let rightStart = Math.floor(W * 0.45);
+  let leftTake = Math.floor(W / 2); // stitch boundary
+  let leftSrc = leftSourceUrl;
+  let rightSrc = rightSourceUrl;
+  let faceCount = 2;
+
+  if (dynamicSplit) {
+    try {
+      const faces = await detectFacesWithGender(imgData, W, H);
+      faceCount = faces.length;
+      const split = planDualSplit(faces, W);
+      if (!split.ok) {
+        // <2 faces or overlapping faces → don't do a bad crop; signal re-render.
+        console.log(
+          `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
+        );
+        return { swappedUrl: null, faceCount };
+      }
+      const fL = split.leftBox as GenderedFace;
+      const fR = split.rightBox as GenderedFace;
+      const mixedCast =
+        (genders?.left === 'male' && genders?.right === 'female') ||
+        (genders?.left === 'female' && genders?.right === 'male');
+      if (mixedCast) {
+        // Detected faces must read one-of-each, else we can't place correctly
+        // (genderage misread, or the render produced two same-gender bodies) → re-render.
+        if (!(fL.gender && fR.gender && fL.gender !== fR.gender)) {
+          console.log(
+            `[dualFaceSwap] mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
+          );
+          return { swappedUrl: null, faceCount };
+        }
+        const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
+        const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;
+        leftSrc = fL.gender === 'male' ? maleSrc : femaleSrc;
+        rightSrc = fL.gender === 'male' ? femaleSrc : maleSrc;
+      } // else same-sex / unknown → positional (leftSource→left face by x-order)
+      leftW = Math.min(W, split.splitX + split.overlap);
+      rightStart = Math.max(0, split.splitX - split.overlap);
+      leftTake = split.splitX;
+      console.log(
+        `[dualFaceSwap] dynamic split @${split.splitX} overlap=${split.overlap} faces=${faceCount} L=${fL.gender} R=${fR.gender}`
+      );
+    } catch (e) {
+      console.warn(
+        `[dualFaceSwap] detection failed (${(e as Error).message.slice(0, 80)}) — 55/55 fallback`
+      );
+      // keep the legacy bounds + positional sources set above
+    }
+  }
+
   const rightW = W - rightStart;
-  const midX = Math.floor(W / 2);
+  const rightSkip = leftTake - rightStart;
 
   let leftPixels: Uint8Array | null = cropRegion(imgData, W, H, 0, leftW);
   let rightPixels: Uint8Array | null = cropRegion(imgData, W, H, rightStart, rightW);
@@ -690,7 +764,7 @@ export async function dualFaceSwap(
   const swapBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
   console.log(`[dualFaceSwap] Swap budget: ${Math.round(swapBudgetMs / 1000)}s`);
   const [leftSwapUrl, rightSwapUrl] = await Promise.all([
-    faceSwap(leftSourceUrl, leftCropUrl, replicateToken, supabase, userId, {
+    faceSwap(leftSrc, leftCropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
       retry: false,
       skipPrimary,
@@ -702,7 +776,7 @@ export async function dualFaceSwap(
       // collisions instead.
       perturb: false,
     }),
-    faceSwap(rightSourceUrl, rightCropUrl, replicateToken, supabase, userId, {
+    faceSwap(rightSrc, rightCropUrl, replicateToken, supabase, userId, {
       maxWaitMs: swapBudgetMs,
       retry: false,
       skipPrimary,
@@ -740,15 +814,14 @@ export async function dualFaceSwap(
     );
   }
 
-  const rightStitchSkip = midX - rightStart;
   const stitched = stitchHalves(
     leftSwapData,
     leftW,
     rightSwapData,
     rightW,
     H,
-    midX,
-    rightStitchSkip,
+    leftTake,
+    rightSkip,
     W
   );
   // Drop the half buffers — stitched is the only thing we need from here (~10MB freed)
@@ -770,5 +843,5 @@ export async function dualFaceSwap(
     .remove([leftPath, rightPath])
     .catch(() => {});
   console.log('[dualFaceSwap] Pipeline complete');
-  return urlData.publicUrl;
+  return { swappedUrl: urlData.publicUrl, faceCount };
 }

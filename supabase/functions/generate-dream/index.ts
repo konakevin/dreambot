@@ -1252,35 +1252,28 @@ Output ONLY the prompt.`;
     // gives a cold model time to boot before we hammer it again.
     if (faceSwapSources && faceSwapSources.length === 2 && tempUrl) {
       // ── Gender-SAFE dual swap (see _shared/dualSwapPipeline.ts) ──
-      // ONE hardened orchestrator shared with nightly-dreams: confirm gender →
-      // re-render if unclear → swap with retries → VERIFY the output → re-render
-      // + re-swap on verify fail → gender-safe single degrade. A wrong-gender /
-      // both-faces-on-one paste cannot survive. Create is non-strict, so it
-      // degrades to a gender-safe single swap; only a TOTAL failure throws (the
-      // outer catch refunds the sparkle).
+      // The Fly engine detects faces + gender and splits at the gap between them
+      // (correct by construction — both-on-one / wrong-gender impossible). The
+      // orchestrator retries the COUPLE render until the engine reports a clean
+      // 2-face split. If it's truly unrecoverable, REFUND: Create users paid for
+      // "me + my partner", so we don't ship a solo / stranger — strict:true →
+      // outcome 'cascade' → throw → the outer catch refunds the sparkle.
+      const s0 = faceSwapSources[0];
+      const s1 = faceSwapSources[1];
       const result = await genderSafeDualSwap(
-        {
-          sourceUrl: faceSwapSources[0].sourceUrl,
-          gender: genderFromLock(faceSwapSources[0].genderLock),
-          role: faceSwapSources[0].role,
-        },
-        {
-          sourceUrl: faceSwapSources[1].sourceUrl,
-          gender: genderFromLock(faceSwapSources[1].genderLock),
-          role: faceSwapSources[1].role,
-        },
         tempUrl,
         {
-          replicateToken: REPLICATE_TOKEN,
-          dispatchDual: (left, right, target) =>
+          dispatchDual: (target) =>
             dispatchDualFaceSwap(
-              left,
-              right,
+              s0.sourceUrl,
+              s1.sourceUrl,
               target,
               REPLICATE_TOKEN,
               supabase,
               userId,
-              t0 + 140_000
+              t0 + 140_000,
+              false,
+              { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) }
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
@@ -1295,24 +1288,23 @@ Output ONLY the prompt.`;
             );
             return { url: cg.url, predictionId: cg.predictionId };
           },
+          selfSource: faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl,
           log: (m) => console.log(`[generate-dream] ${m}`),
         },
-        { strict: false, deadlineMs: t0 + 140_000 }
+        { strict: true, deadlineMs: t0 + 140_000 }
       );
       tempUrl = result.url;
       if (result.predictionId) replicatePredictionId = result.predictionId;
-      logAxes.dualGenderRouting = result.routing;
-      logAxes.dualSwapVerified = result.verified;
+      logAxes.dualFaceCount = result.faceCount;
       fallbackReasons.push(...result.reasons);
       if (result.outcome === 'dual') {
         lap('dual-face-swap');
         logAxes.faceSwapResult = 'dual-success';
-      } else if (result.outcome === 'single') {
-        logAxes.faceSwapResult = 'single-fallback-success';
       } else {
-        // Total failure (dual + gender-safe single both failed). The user paid
-        // for a face swap → throw so the outer catch refunds the sparkle.
-        throw new Error(`face_swap: dual cast face swap exhausted (${result.routing})`);
+        // Unrecoverable → refund: Create users paid for the couple, so throw
+        // (no solo / stranger) and let the outer catch refund the sparkle.
+        logAxes.faceSwapResult = 'dual-refund';
+        throw new Error(`face_swap: couldn't render both faces (faces=${result.faceCount})`);
       }
     } else if (faceSwapSource && tempUrl) {
       try {

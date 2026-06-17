@@ -1,143 +1,97 @@
 /**
- * genderSafeDualSwap — the shared, fully-hardened dual face-swap orchestrator.
- * Kevin 2026-06-16: "code red catastrophic if the face swap ever fucks up or
- * fails." These tests lock every belt-and-suspenders branch: confirm → swap →
- * VERIFY the output → re-render+re-swap on verify-fail → gender-safe degrade,
- * plus deadline-aware load-shedding. The orchestrator NEVER returns a dual it
- * couldn't verify.
+ * genderSafeDualSwap — the dual face-swap orchestrator. The Fly engine now does
+ * real face detection + gender + gap-split (correct by construction), so the
+ * orchestrator's job is: dual-swap → if the engine found no clean 2-face split,
+ * RE-RENDER the couple and retry → else degrade (strict → cascade; non-strict →
+ * single self). These tests lock that loop + the per-flow degrade.
  */
 
-jest.mock('@engine/vision', () => ({
-  classifyDualGenders: jest.fn(),
-}));
-
-import { classifyDualGenders } from '@engine/vision';
 import { genderSafeDualSwap } from '@engine/dualSwapPipeline';
 
-const mockClassify = classifyDualGenders as jest.Mock;
-
-const SELF_F = { sourceUrl: 'self-female.jpg', gender: 'female' as const, role: 'self' };
-const PLUS_M = { sourceUrl: 'plus-male.jpg', gender: 'male' as const, role: 'plus_one' };
-
-const read = (
-  left: 'male' | 'female' | null,
-  right: 'male' | 'female' | null,
-  twoDistinctFaces: boolean,
-  faceCount: number | null = twoDistinctFaces ? 2 : 1
-) => ({ left, right, faceCount, twoDistinctFaces });
+const okRender = { url: 'RERENDER.jpg', predictionId: 'p2' };
 
 const makeDeps = (over: Partial<Record<string, jest.Mock>> = {}) => ({
-  replicateToken: 'tok',
-  dispatchDual: over.dispatchDual ?? jest.fn().mockResolvedValue('SWAPPED.jpg'),
+  dispatchDual:
+    over.dispatchDual ?? jest.fn().mockResolvedValue({ swappedUrl: 'SWAP.jpg', faceCount: 2 }),
   singleSwap: over.singleSwap ?? jest.fn().mockResolvedValue('SINGLE.jpg'),
-  rerender:
-    over.rerender ?? jest.fn().mockResolvedValue({ url: 'RERENDER.jpg', predictionId: 'p2' }),
+  rerender: over.rerender ?? jest.fn().mockResolvedValue(okRender),
+  selfSource: 'self.jpg',
 });
 
-beforeEach(() => mockClassify.mockReset());
-
-it('HAPPY PATH — confirmed dual + output verifies → dual', async () => {
-  // call 1 = route (female left, male right), call 2 = verify output (same).
-  mockClassify
-    .mockResolvedValueOnce(read('female', 'male', true))
-    .mockResolvedValueOnce(read('female', 'male', true));
+it('HAPPY PATH — engine returns a swapped url → dual, no re-render', async () => {
   const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, { strict: false });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
   expect(r.outcome).toBe('dual');
-  expect(r.url).toBe('SWAPPED.jpg');
-  expect(r.verified).toBe(true);
+  expect(r.url).toBe('SWAP.jpg');
+  expect(r.faceCount).toBe(2);
   expect(deps.dispatchDual).toHaveBeenCalledTimes(1);
-  expect(deps.dispatchDual).toHaveBeenCalledWith(SELF_F.sourceUrl, PLUS_M.sourceUrl, 'render.jpg');
+  expect(deps.dispatchDual).toHaveBeenCalledWith('render.jpg');
+  expect(deps.rerender).not.toHaveBeenCalled();
   expect(deps.singleSwap).not.toHaveBeenCalled();
 });
 
-it('VERIFY FAILS → re-render + re-route + re-swap + re-verify → dual', async () => {
-  mockClassify
-    .mockResolvedValueOnce(read('female', 'male', true)) // route 1
-    .mockResolvedValueOnce(read('male', 'male', true)) // verify 1 → BAD (two males on a mixed cast)
-    .mockResolvedValueOnce(read('female', 'male', true)) // route 2 (post re-render)
-    .mockResolvedValueOnce(read('female', 'male', true)); // verify 2 → good
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, { strict: false });
+it('NO clean split → re-render the couple → succeeds → dual', async () => {
+  const dispatchDual = jest
+    .fn()
+    .mockResolvedValueOnce({ swappedUrl: null, faceCount: 1 }) // clustered / 1 face
+    .mockResolvedValueOnce({ swappedUrl: 'SWAP2.jpg', faceCount: 2 }); // fresh render is clean
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
   expect(r.outcome).toBe('dual');
+  expect(r.url).toBe('SWAP2.jpg');
   expect(deps.rerender).toHaveBeenCalledTimes(1);
   expect(deps.dispatchDual).toHaveBeenCalledTimes(2);
-  expect(r.reasons).toContain('dual_swap_verify_failed');
   expect(r.predictionId).toBe('p2');
+  expect(r.reasons).toContain('no_dual_split(faces=1)');
 });
 
-it('UNCONFIRMED route → re-render → confirmed dual', async () => {
-  mockClassify
-    .mockResolvedValueOnce(read(null, null, false, null)) // route 1 → unreadable
-    .mockResolvedValueOnce(read('female', 'male', true)) // route 2 (post re-render) → confirmed
-    .mockResolvedValueOnce(read('female', 'male', true)); // verify
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, { strict: false });
-  expect(r.outcome).toBe('dual');
-  expect(deps.rerender).toHaveBeenCalledTimes(1);
-});
-
-it('STRICT + unconfirmable → cascade (no single swap, caller hard-fails to solo-self)', async () => {
-  mockClassify
-    .mockResolvedValueOnce(read(null, null, false, null)) // route 1
-    .mockResolvedValueOnce(read(null, null, false, null)); // route 2 (post re-render) still unreadable
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, { strict: true });
+it('STRICT + never a clean split → cascade (no single swap; caller → solo-self / refund)', async () => {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: true, maxRerenders: 2 });
   expect(r.outcome).toBe('cascade');
+  expect(deps.dispatchDual).toHaveBeenCalledTimes(3); // original + 2 re-renders
+  expect(deps.rerender).toHaveBeenCalledTimes(2);
   expect(deps.singleSwap).not.toHaveBeenCalled();
-  expect(deps.dispatchDual).not.toHaveBeenCalled();
 });
 
-it('NON-STRICT + unconfirmable → gender-safe single swap', async () => {
-  mockClassify
-    .mockResolvedValueOnce(read(null, null, false, null)) // route 1
-    .mockResolvedValueOnce(read(null, null, false, null)); // route 2 still unreadable
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, { strict: false });
+it('NON-STRICT + never a clean split → single self-swap', async () => {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 1 });
   expect(r.outcome).toBe('single');
   expect(r.url).toBe('SINGLE.jpg');
-  expect(deps.singleSwap).toHaveBeenCalledWith(SELF_F.sourceUrl, expect.any(String)); // self is the safe default
+  expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
+});
+
+it('engine THROWS → retry via re-render → recovers', async () => {
+  const dispatchDual = jest
+    .fn()
+    .mockRejectedValueOnce(new Error('engine 500'))
+    .mockResolvedValueOnce({ swappedUrl: 'SWAP3.jpg', faceCount: 2 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+  expect(r.outcome).toBe('dual');
+  expect(r.url).toBe('SWAP3.jpg');
+  expect(deps.rerender).toHaveBeenCalledTimes(1);
 });
 
 it('DEADLINE exhausted → skips the re-render, degrades immediately', async () => {
-  mockClassify.mockResolvedValueOnce(read(null, null, false, null)); // route 1 unconfirmed
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, {
     strict: false,
     deadlineMs: Date.now() + 1_000, // far less than the recover budget
   });
-  expect(deps.rerender).not.toHaveBeenCalled(); // no time to re-render
+  expect(deps.rerender).not.toHaveBeenCalled();
   expect(r.reasons).toContain('recover_budget_exhausted');
-  expect(r.outcome).toBe('single'); // degrades with what it has
+  expect(r.outcome).toBe('single');
 });
 
-it('all swap attempts fail → re-render escape → dual', async () => {
-  mockClassify
-    .mockResolvedValueOnce(read('female', 'male', true)) // route 1
-    .mockResolvedValueOnce(read('female', 'male', true)) // route 2 (post recover re-render)
-    .mockResolvedValueOnce(read('female', 'male', true)); // verify 2
-  const dispatchDual = jest
-    .fn()
-    .mockRejectedValueOnce(new Error('no face found'))
-    .mockRejectedValueOnce(new Error('no face found'))
-    .mockRejectedValueOnce(new Error('no face found'))
-    .mockResolvedValueOnce('SWAPPED2.jpg');
-  const deps = makeDeps({ dispatchDual });
-  const r = await genderSafeDualSwap(SELF_F, PLUS_M, 'render.jpg', deps, {
-    strict: false,
-    backoffMs: [0, 0],
-  });
-  expect(r.outcome).toBe('dual');
-  expect(r.url).toBe('SWAPPED2.jpg');
-  expect(deps.rerender).toHaveBeenCalledTimes(1);
-});
-
-it('same-sex cast (two males) → positional dual, never gender-confused', async () => {
-  const PLUS_M2 = { sourceUrl: 'bro.jpg', gender: 'male' as const, role: 'plus_one' };
-  mockClassify
-    .mockResolvedValueOnce(read('male', 'male', true)) // route
-    .mockResolvedValueOnce(read('male', 'male', true)); // verify (two males = correct for same-sex)
-  const deps = makeDeps();
-  const r = await genderSafeDualSwap(PLUS_M, PLUS_M2, 'render.jpg', deps, { strict: false });
-  expect(r.outcome).toBe('dual');
+it('non-strict, dual fails AND single fails → cascade', async () => {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 0 });
+  const singleSwap = jest.fn().mockRejectedValue(new Error('no face'));
+  const deps = makeDeps({ dispatchDual, singleSwap });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 0 });
+  expect(r.outcome).toBe('cascade');
 });
