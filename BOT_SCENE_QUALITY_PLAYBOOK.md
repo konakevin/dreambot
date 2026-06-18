@@ -196,6 +196,19 @@ The `cleanMediumByModel` rule auto-swaps gpt-image-2 + nano-banana to a `*_gpt_c
 - Pool load: `scripts/bots/bloombot/pools.js` `BLOOM_LOOK_REGISTER`
 - DB: none (reused `bloom_hyperreal_cgi` + its existing `dlt_clean_mediums` row)
 
+### BloomBot "all pink" → flower×color RENDER-PRIOR matrix + design-menu themes (2026-06-17, Kevin)
+
+Kevin: "BloomBot has drifted into all pink — did the medium cleanup mess this up?" Deep dive verdict: **NO, not the medium.** Full git trace showed the 2026-06-02 cruft sweep only trimmed tech-spec/jewel-tone tokens and *kept* color enforcement; the anti-pink + warm/cool guards were ADDED 2026-05-27 and survive. And the PROMPTS were already color-diverse (only 3/25 pink-dominant in text). The drift was **prompt-diverse but render-pink** — I pulled renders whose prompt had ZERO pink and they came back a purple/magenta wash (wisteria, bougainvillea, jacaranda, hydrangea).
+
+**Root cause = Flux's species-color prior overriding the assigned color tag.** The engine tagged species with a random botanically-valid color ("white king protea"), but **Flux renders each flower in its FIXED prior color regardless** — and the pool was structurally pink/purple-heavy (classified all 348 species: purple 72 + pink 61 = 38% default pink/purple). You cannot recolor a wisteria yellow with a word.
+
+**The fix — a flower×color render-prior matrix:**
+1. **Classify every species with two fields** (`scripts/gen-seeds/bloombot/classify-flower-colors.js`, one Sonnet pass → `flowers.json`): `primary` = the single color Flux actually renders it; `versatile` = true if Flux reliably renders it in ANY requested color (rose/tulip/dahlia/ranunculus — 46 of 348), false if color-locked (sunflower→yellow, wisteria→lavender — 302).
+2. **Select by the matrix, not botanical range** (`flowerEngine.js`): a species is eligible for a theme only if it's `versatile` OR its `primary` family is in the theme. Color-locked species render in their `primary`; versatile ones get a theme color. This auto-**quarantines** the pink/purple-magnet species to genuinely pink/purple themes. Smoke test: 0 magnet-leak across all 16 themes; heroes color-coherent (yellow→calla lily, nightshade→indigo dahlia).
+3. **Design-menu themes** (`flowerThemes.js`): every theme is ONE intentional florist palette; the feed rotates ⅓ pure-mono / ⅓ curated-harmony (sunset / **nightshade** / white+blue / purple+gold / coral+peach+cream / blush+white) / ⅓ spectrum (true-rainbow + cottage-mixed). Kevin's framing: "each scene feels designed by a professional florist," not a color salad — variety lives ACROSS the feed, not within each frame.
+
+**Scope — mostly BloomBot-specific, NOT a broad cross-bot win.** The full fix (matrix + design-menu themes + engine quarantine) only applies because BloomBot is unusual: it *rolls a color theme and assigns colors to a NAMED cast*. Almost every other bot gets its color from LIGHTING + PALETTE + MEDIUM + scene, not from tagging a named cast — so this architecture doesn't transfer to the fantasy / landscape / character bots at all. The only genuinely portable kernel is narrow and already known: **Flux renders a named subject in its prior color; a color word won't override it** (a sibling of the first-named-noun / Flux-prior lessons). That kernel *could* marginally help **OceanBot** (reef-fish/coral have strong color priors — clownfish→orange, blue-tang→blue) IF its reef paths ever go color-themed, and YumBot food if it ever did color themes — but neither does today. Don't reach for the matrix on a bot unless it literally assigns colors to a recurring named cast. No reseeding of scene pools — this was an engine + per-species-metadata change.
+
 ---
 
 ## Inventing NEW PATHS for a bot — the full repeatable process (2026-06-09, StarBot)

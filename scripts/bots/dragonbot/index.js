@@ -118,7 +118,7 @@ module.exports = {
     // hearth/daylight/fey-light). The anti-lamp + anti-cavernous bans live in the
     // Sonnet TEMPLATE (archetype-templates.js), which Sonnet follows without echo.
     'arcane-library':
-      'Alan Lee + John Howe painted-fantasy oil tradition, soft painterly brushwork, warm rich color, a graceful ANCIENT HIGH-ELVEN arcane library like the great library of Rivendell — flowing organic carved elven wood-and-stone arches, living trees grown into the architecture, golden ivy, ancient leather tomes and rolled scrolls, cushioned reading-nooks and a crackling hearth, drifting glowing tomes and soft runic fey-light, a content elven scholar at home among the shelves, warm candlelight, branched candelabra, glowing braziers, hearth-fire and golden daylight slanting through tall arched windows, ancient and serene yet cozy, intimate and inviting',
+      'Alan Lee + John Howe painted-fantasy oil tradition, soft painterly brushwork, warm rich color, a graceful ANCIENT HIGH-ELVEN arcane library like the great library of Rivendell — flowing organic carved elven wood-and-stone arches, living trees grown into the architecture, golden ivy, ancient leather tomes and rolled scrolls, cushioned reading-nooks and a crackling hearth, drifting glowing tomes and soft runic fey-light, enchanted dragon-lore curios and treasures tucked among the shelves, warm candlelight, branched candelabra, glowing braziers, hearth-fire and golden daylight slanting through tall arched windows, ancient and serene yet cozy, intimate and inviting',
     // sky-castle: anchor the floating sky-kingdom among the clouds.
     'sky-castle':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an impossible FLOATING SKY-CASTLE — a great fantasy castle adrift high in open sky atop a floating chunk of mountain, waterfalls pouring off its edge into a vast sea of cloud far below, sky-bridges and glowing spires, tiny airships and distant dragons for scale, soaring vertiginous altitude and wonder, painterly atmospheric grandeur, awe-inducing concept-art masterwork',
@@ -139,10 +139,10 @@ module.exports = {
       'classic painted dark-fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a savage ORC HORDE STRONGHOLD of black iron and bone — crude towers and palisades belching forge-smoke, bone totems, skull-banners, spiked iron and towering war-drums, smelting-pits glowing orange, a massing horde of tiny TUSKED green-and-grey orcs (heavy brow, tusked jaw, brutal bulk — NOT armored humans) for scale, Mordor + Isengard menace and smoke, painterly atmospheric depth, awe-inducing concept-art masterwork',
     // giant-steadinghold: anchor the cyclopean giants' hall in the high peaks.
     'giant-steadinghold':
-      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a TITANIC cyclopean GIANTS\' HALL in the high peaks — house-sized doorways, colossal rough-hewn megalith pillars and a vast roaring hearth hewn from raw mountain stone, mammoth-bone trophies, a towering craggy GIANT (stone-grey or frost-blue, massive — still dwarfed by the architecture, NOT a large human) for scale, storm-wracked alpine grandeur, painterly atmospheric depth, awe-inducing concept-art masterwork',
+      "classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a TITANIC cyclopean GIANTS' HALL in the high peaks — house-sized doorways, colossal rough-hewn megalith pillars and a vast roaring hearth hewn from raw mountain stone, mammoth-bone trophies, a towering craggy GIANT (stone-grey or frost-blue, massive — still dwarfed by the architecture, NOT a large human) for scale, storm-wracked alpine grandeur, painterly atmospheric depth, awe-inducing concept-art masterwork",
     // wizard-tower: anchor the arcana-dense mage tower.
     'wizard-tower':
-      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an iconic WIZARD\'S TOWER dense with ARCANA — a tall fantasy mage-spire (or its arcana-crammed interior) full of glowing magic: floating spellbooks, glowing orbs, a great orrery, bubbling alchemy, star-charts, a small wizard or apprentice for scale, atmospheric magical wonder, deep high-fantasy arcane architecture, painterly grandeur and depth, awe-inducing concept-art masterwork',
+      "classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an iconic WIZARD'S TOWER dense with ARCANA — a tall fantasy mage-spire (or its arcana-crammed interior) full of glowing magic: floating spellbooks, glowing orbs, a great orrery, bubbling alchemy, star-charts, a small wizard or apprentice for scale, atmospheric magical wonder, deep high-fantasy arcane architecture, painterly grandeur and depth, awe-inducing concept-art masterwork",
     // necromancer: anchor the dark high-fantasy undead scene.
     necromancer:
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a DARK HIGH-FANTASY NECROMANCY scene — an undead lord (lich / death-knight / wraith-lord / bone-dragon) commanding a risen host of skeletons and wraiths, sickly green soul-flame and dark runes, a cursed crypt/necropolis/blighted battlefield in decay, macabre grim majesty under a blood-moon, painterly ominous depth, awe-inducing concept-art masterwork',
@@ -286,32 +286,14 @@ module.exports = {
     // (Kevin 2026-06-10 — Flux 2 didn't land the rider). 4 models. NOTE:
     // banana isn't in cleanMediumByModel for DragonBot, so it renders the
     // full painted_fantasy medium directly (the version Kevin reviewed).
-    'dragon-rider': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'dragon-rider': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // ── Character paths — Banana BANNED (Kevin 2026-06-05 after character-path
     // ── audit: Banana lost on every DragonBot character path).
-    'artsy-girl': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'female-adventurer': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'male-adventurer': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'female-explorer': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'male-explorer': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'artsy-girl': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'female-adventurer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'male-adventurer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'female-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'male-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'female-action-scenes': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -331,38 +313,20 @@ module.exports = {
     // heart-test on each. Same lineup applies on all 7 non-char paths.
     // landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4.
-    landscape: [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    landscape: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // iconic-landscape (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): F2 Pro + F2 Flex hearted-as-bad. Locked to 4 models.
     // (F2 Flex never reachable via normal picker — wasn't in the modelByPath
     // list to begin with — but documenting the heart-ban here for completeness.)
-    'iconic-landscape': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    castle: [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'iconic-landscape': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    castle: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // epic-moment (Kevin 2026-06-01 after premium-tier axis enrichment +
     // 18-render comparison): locked to 3 models. Banana + GPT-2 + F2 Flex
     // all hearted-as-bad in the enriched-path test.
     'epic-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
-    'dark-realm': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'dragon-lore': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'dragon-scene': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'dark-realm': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'dragon-lore': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'dragon-scene': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   },
 
   // Previous modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
@@ -663,7 +627,28 @@ module.exports = {
     enabled: true,
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
-    skipPaths: ['dragon-rider', 'dragon-hoard', 'dragon-battle', 'dragon-flight', 'dragon-brood', 'dragon-breeds', 'clash-of-armies', 'magic-unleashed', 'mythic-bestiary', 'dungeon-delve', 'necromancer', 'wizard-tower', 'dwarven-hold', 'elven-city', 'drow-underdark', 'dragonborn-citadel', 'orc-warhold', 'giant-steadinghold', 'sky-castle', 'arcane-library'],
+    skipPaths: [
+      'dragon-rider',
+      'dragon-hoard',
+      'dragon-battle',
+      'dragon-flight',
+      'dragon-brood',
+      'dragon-breeds',
+      'clash-of-armies',
+      'magic-unleashed',
+      'mythic-bestiary',
+      'dungeon-delve',
+      'necromancer',
+      'wizard-tower',
+      'dwarven-hold',
+      'elven-city',
+      'drow-underdark',
+      'dragonborn-citadel',
+      'orc-warhold',
+      'giant-steadinghold',
+      'sky-castle',
+      'arcane-library',
+    ],
     allowSubjectChaosPaths: [
       'landscape',
       'fantasy-scene',

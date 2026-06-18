@@ -362,14 +362,17 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
 
   ARCANE_LIBRARY: {
     description:
-      'PATH-BESPOKE — DragonBot arcane-library path (2026-06-10, Tier 3). The great arcane library / cathedral-vast hall of knowledge — towering stacks, floating books, glowing tomes. Path-bespoke: library + arcane_detail + library_feature + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+      'PATH-BESPOKE — DragonBot arcane-library path (2026-06-10, Tier 3; set_pieces + optional occupant added 2026-06-17). A Rivendell-style ancient high-elven library — warm, candlelit, cozy. Path-bespoke: library + arcane_detail + library_feature + set_pieces (pickN:2 lived-in trinkets, always); occupant is OPTIONAL (60% gated — ~40% of renders are figure-free so the cozy clutter owns the frame); drama (40% gated). Universal lighting + atmosphere reused.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['library', 'arcane_detail', 'library_feature', 'occupant'],
+      path: ['library', 'arcane_detail', 'library_feature', 'set_pieces'],
     },
-    pickN: {},
+    pickN: { set_pieces: 2 },
     conditionalLayer: { slot: 'drama', gate: 0.4 },
+    // occupant rolled independently — ~60% of renders have a cozy reader,
+    // ~40% are peaceful + empty so the trinkets/eggs/relics own the frame.
+    conditionalLayers: [{ slot: 'occupant', gate: 0.6 }],
     framingModes: null,
     anchorScaleRange: null,
   },
@@ -460,7 +463,7 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
 
   GIANT_HOLD: {
     description:
-      'PATH-BESPOKE — DragonBot giant-steadinghold path (2026-06-15, Tier 2). A cyclopean giants\' hall in the high peaks. Path-bespoke: giant_hold + giant_detail + giant_setting + giant_occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+      "PATH-BESPOKE — DragonBot giant-steadinghold path (2026-06-15, Tier 2). A cyclopean giants' hall in the high peaks. Path-bespoke: giant_hold + giant_detail + giant_setting + giant_occupant + drama (40% gated). Universal lighting + atmosphere reused.",
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
@@ -474,7 +477,7 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
 
   WIZARD_TOWER: {
     description:
-      'PATH-BESPOKE — DragonBot wizard-tower path (2026-06-10, Tier 3). A wizard\'s tower dense with arcana — interior or exterior, magical wonder. Path-bespoke: tower + arcane_detail + tower_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.',
+      "PATH-BESPOKE — DragonBot wizard-tower path (2026-06-10, Tier 3). A wizard's tower dense with arcana — interior or exterior, magical wonder. Path-bespoke: tower + arcane_detail + tower_setting + occupant + drama (40% gated). Universal lighting + atmosphere reused.",
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],

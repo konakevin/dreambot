@@ -13,58 +13,59 @@ const ALL =
     ' '
   );
 
-// Weights re-tuned 2026-05-27 to SPREAD color families. The pink hybrids were
-// crowding out yellow/orange/white/sunset (warm output was ~all pink); trimmed
-// them, lifted sunset, added a golden-meadow hybrid, and nudged the scarce
-// monos. Net ~20% mono / ~44% hybrid / ~36% spectrum (mixed-lush still dominant).
+// THE DESIGN MENU (2026-06-17). Every theme is ONE intentional florist palette;
+// the feed rotates through them ~⅓ pure-mono / ⅓ curated-harmony / ⅓ spectrum
+// (Kevin's call — "each scene feels designed by a professional florist", not a
+// color salad). Coherence is enforced downstream by the flower×color render
+// matrix in flowerEngine (species cast by their RENDER-prior color + a versatile
+// flag, NOT botanical range) — so a "yellow" scene actually renders yellow
+// instead of drifting pink/purple, and the pink-magnet species (wisteria,
+// bougainvillea, jacaranda…) only appear on genuinely pink/purple themes.
+// Colors use the base vocab the matrix + FAMILY map understand.
 const THEMES = {
-  // ── monochrome ──
-  pink: { label: 'pink', colors: ['pink', 'magenta', 'coral', 'peach'], weight: 2 },
-  purple: { label: 'purple', colors: ['purple', 'violet', 'lavender'], weight: 3 },
-  blue: { label: 'blue', colors: ['blue', 'indigo'], weight: 3 },
-  yellow: { label: 'yellow', colors: ['yellow', 'cream'], weight: 2 },
-  orange: { label: 'orange', colors: ['orange', 'peach', 'bronze'], weight: 2 },
-  red: { label: 'red', colors: ['red', 'burgundy'], weight: 2 },
-  white: { label: 'white', colors: ['white', 'cream'], weight: 2 },
-  // ── hybrid ──
-  pinkWhite: { label: 'pink & white', colors: ['pink', 'white', 'cream', 'coral'], weight: 4 },
-  purpleWhiteBlue: {
-    label: 'purple, white & blue',
-    colors: ['purple', 'violet', 'lavender', 'white', 'blue'],
-    weight: 5,
-  },
+  // ── PURE MONOCHROME (~⅓ of the feed) — a single-hue florist study ──
+  pink: { label: 'pure pink', colors: ['pink', 'magenta'], weight: 4 },
+  red: { label: 'pure red', colors: ['red', 'burgundy'], weight: 4 },
+  orange: { label: 'pure orange', colors: ['orange', 'coral', 'peach'], weight: 4 },
+  yellow: { label: 'pure golden yellow', colors: ['yellow'], weight: 5 },
+  white: { label: 'pure white & cream', colors: ['white', 'cream'], weight: 5 },
+  purple: { label: 'pure purple', colors: ['purple', 'violet', 'lavender'], weight: 4 },
+  blue: { label: 'pure blue', colors: ['blue', 'indigo'], weight: 4 },
+  // ── CURATED HARMONY (~⅓) — 2-3 complementary hues, a designed arrangement ──
   sunset: {
-    label: 'sunset shades (red, orange, yellow)',
+    label: 'sunset (red, orange, yellow & coral)',
     colors: ['red', 'orange', 'yellow', 'coral'],
-    weight: 8,
-  },
-  goldenMeadow: {
-    label: 'golden meadow (yellow, cream, peach & white)',
-    colors: ['yellow', 'cream', 'peach', 'white', 'orange'],
     weight: 6,
   },
-  bluePurple: {
-    label: 'blue & purple',
-    colors: ['blue', 'indigo', 'purple', 'violet', 'lavender'],
+  nightshade: {
+    label: 'nightshade (deep purple, violet, indigo & burgundy)',
+    colors: ['purple', 'violet', 'indigo', 'burgundy'],
     weight: 5,
   },
-  coralCreamPeach: {
-    label: 'coral, cream & peach',
-    colors: ['coral', 'cream', 'peach', 'pink'],
-    weight: 3,
+  whiteBlue: { label: 'white & blue (crisp and cool)', colors: ['white', 'blue', 'cream'], weight: 4 },
+  purpleGold: {
+    label: 'purple & gold (regal complementary)',
+    colors: ['purple', 'violet', 'yellow'],
+    weight: 4,
   },
-  magentaGold: { label: 'magenta & gold', colors: ['magenta', 'yellow', 'pink'], weight: 3 },
-  // ── spectrum (mixed-lush is the backbone) ──
+  coralCreamPeach: {
+    label: 'coral, peach & cream (soft warm)',
+    colors: ['coral', 'peach', 'cream'],
+    weight: 4,
+  },
+  bluePurple: { label: 'blue & purple', colors: ['blue', 'indigo', 'purple', 'violet'], weight: 4 },
+  blushWhite: { label: 'blush & white (soft romantic)', colors: ['pink', 'white', 'cream'], weight: 3 },
+  // ── SPECTRUM (~⅓) — many colors, deliberately massed (cottage + showpiece) ──
   rainbow: {
-    label: 'full rainbow spectrum (every color, equal weight)',
+    label: 'full rainbow spectrum (every color, evenly massed in distinct clumps)',
     colors: ALL,
-    weight: 8,
+    weight: 12,
     spectrum: true,
   },
   mixedLush: {
-    label: 'mixed lush (rich balanced multi-color)',
+    label: 'mixed cottage-lush (rich balanced multi-color)',
     colors: ALL,
-    weight: 20,
+    weight: 18,
     spectrum: true,
   },
 };

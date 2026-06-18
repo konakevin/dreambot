@@ -1880,8 +1880,42 @@ Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO 
   },
 
   ARCANE_LIBRARY: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, library, arcane_detail, library_feature, occupant, drama } =
-      slots;
+    const {
+      lighting,
+      atmosphere,
+      library,
+      arcane_detail,
+      library_feature,
+      occupant,
+      set_pieces,
+      drama,
+    } = slots;
+
+    // set_pieces is a pickN:2 slot → an array of two trinket clusters.
+    const trinkets = Array.isArray(set_pieces) ? set_pieces : [set_pieces].filter(Boolean);
+    const setPiecesSection = trinkets.length
+      ? `
+━━━ TRINKETS & CURIOS — scatter these whimsical set-pieces around (lived-in, NOT the focus) ━━━
+${trinkets.map((t) => `• ${t}`).join('\n')}
+
+Tuck these little curios in around the shelves, tables, sills and beams as charming lived-in clutter — they give the place soul. Render them as quiet set-dressing, NEVER competing with the focal wonder. Period-correct only — candle/hearth/magical glow, NEVER a modern lamp or electric light.
+
+`
+      : '';
+
+    // occupant is OPTIONAL (60% gated) — when absent, render a peaceful EMPTY
+    // library so the cozy clutter + trinkets own the frame.
+    const occupantSection = occupant
+      ? `
+━━━ THE OCCUPANT (someone at home here) ━━━
+${occupant}
+
+Render a figure who BELONGS here — content, cozy, reading or browsing — giving the scene life and warmth. NOT a tiny figure dwarfed or lost in immensity. If a face shows, a non-human fantasy race is welcome (elf, dwarf, tiefling) — never the pointed-hat-wizard cliché.
+`
+      : `
+━━━ NO FIGURE — a peaceful, empty library at rest ━━━
+This scene is UNOCCUPIED — no reader, nobody present. The cozy lived-in clutter, the trinkets, and the warm light tell the whole story: an empty cushioned chair drawn up to the hearth, a book left open mid-page, a teacup gone cold, a candle burning low for no one. Inhabited-feeling but serenely empty.
+`;
 
     const dramaSection = drama
       ? `
@@ -1911,11 +1945,7 @@ ${library_feature}
 
 Render this inviting focal wonder — a crackling hearth, a sunlit arched window, a gentle orrery, a glowing knowledge-orb over a reading-table — anchoring the scene with warmth.
 
-━━━ THE OCCUPANT (someone at home here) ━━━
-${occupant}
-
-Render a figure who BELONGS here — content, cozy, reading or browsing — giving the scene life and warmth. NOT a tiny figure dwarfed or lost in immensity. If a face shows, a non-human fantasy race is welcome (elf, dwarf, tiefling) — never the pointed-hat-wizard cliché.
-${dramaSection}
+${occupantSection}${setPiecesSection}${dramaSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
@@ -1931,12 +1961,12 @@ ${vibeDirective.slice(0, 250)}
 Use this ONLY for color palette, light, and overall mood — but keep the library WARM and inviting above all.
 
 ━━━ COMPOSITION ━━━
-Painterly, golden, candlelit, ancient-elven, warm. A graceful Rivendell-style ancient elven library — carved organic wood-and-stone arches, golden ivy, ancient tomes and scrolls, cushioned reading-nooks, a crackling hearth, a content elven reader at home in it. Warm honey-gold CANDLELIGHT + hearth-glow + golden daylight dominant. NEVER modern/sci-fi; NEVER a modern lamp/lantern/electric light; NEVER a cold dwarfing atrium, spiral-stair shaft, or tier-upon-tier galleries. Ancient, graceful, warm, inviting.
+Painterly, golden, candlelit, ancient-elven, warm. A graceful Rivendell-style ancient elven library — carved organic wood-and-stone arches, golden ivy, ancient tomes and scrolls, cushioned reading-nooks, a crackling hearth${occupant ? ', a content elven reader at home in it' : ', peaceful and empty, no figure'}. Warm honey-gold CANDLELIGHT + hearth-glow + golden daylight dominant. NEVER modern/sci-fi; NEVER a modern lamp/lantern/electric light; NEVER a cold dwarfing atrium, spiral-stair shaft, or tier-upon-tier galleries. Ancient, graceful, warm, inviting.
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
-[OPENING — a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting — the ancient elven library leads], [its carved organic elven architecture — wood-and-stone arches, ivy, cushioned nooks, hearth], [ancient arcane detail — drifting glowing tomes + candelabra + fey-lights + soft runic light], [a warm focal wonder — hearth/arched window/orrery/reflecting-pool], [a content elven occupant at home here], [warm candlelight + hearth-glow + golden daylight], [honey-gold palette + ancient serene cozy mood]
+[OPENING — a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting — the ancient elven library leads], [its carved organic elven architecture — wood-and-stone arches, ivy, cushioned nooks, hearth], [ancient arcane detail — drifting glowing tomes + candelabra + fey-lights + soft runic light], [a warm focal wonder — hearth/arched window/orrery/reflecting-pool], ${occupant ? '[a content elven occupant at home here], ' : ''}[whimsical trinkets & curios scattered around as lived-in set-dressing], [warm candlelight + hearth-glow + golden daylight], [honey-gold palette + ancient serene cozy mood]
 
-CRITICAL — render a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting, lit ONLY by candlelight / candelabra / braziers / hearth / golden daylight / magical glow, a content elven reader at home in it. Do NOT render any modern lamp, lantern, or electric light; do NOT render a cold dwarfing atrium, spiral-stair shaft, towering galleries, or anything modern/sci-fi or grey.
+CRITICAL — render a graceful ANCIENT HIGH-ELVEN (Rivendell-style) arcane library, warm and inviting, lit ONLY by candlelight / candelabra / braziers / hearth / golden daylight / magical glow${occupant ? ', a content elven reader at home in it' : ', peaceful and unoccupied with no figure present'}. Do NOT render any modern lamp, lantern, or electric light; do NOT render a cold dwarfing atrium, spiral-stair shaft, towering galleries, or anything modern/sci-fi or grey.
 
 Output ONLY the raw 70-100 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
   },

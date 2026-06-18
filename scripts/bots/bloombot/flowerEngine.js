@@ -79,10 +79,12 @@ function pickDistinct(arr, n, used) {
   }
   return out;
 }
+// Matrix-aware (2026-06-17): a COLOR-LOCKED species renders in its render-PRIMARY
+// (Flux ignores any other color tag); a VERSATILE species can be tagged any of
+// the theme's colors. Used by the mono/spectrum branch.
 function colorFor(f, theme) {
-  const opts = f.colors.filter((c) => theme.colors.includes(c));
-  const src = opts.length ? opts : f.colors;
-  return src[Math.floor(Math.random() * src.length)];
+  if (!f.versatile) return f.primary;
+  return theme.colors[Math.floor(Math.random() * theme.colors.length)];
 }
 // "violet allium" — but avoid "blue blue delphinium" when the name already names the color
 const tagWith = (f, color) =>
@@ -99,8 +101,16 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
   const theme = rollTheme(picker, themeBias);
   const register = rollRegister(picker);
 
-  // candidates: flowers whose natural colors intersect the theme
-  let pool = flowers.filter((f) => f.colors.some((c) => theme.colors.includes(c)));
+  // COHERENCE MATRIX (2026-06-17): a flower is eligible for this theme only if it
+  // can RENDER in one of the theme's color families — either it's VERSATILE (Flux
+  // renders it in any requested color) OR its render-PRIMARY family is in the
+  // theme. This casts a coherent designed palette AND auto-quarantines the
+  // pink/purple-magnet species (wisteria→lavender, bougainvillea→magenta,
+  // jacaranda→purple) to genuinely pink/purple themes. Replaces the old botanical-
+  // range intersection, which leaked pink-prior species into every theme.
+  const themeFams = new Set(theme.colors.map(familyOf));
+  const eligible = (f) => f.versatile || themeFams.has(familyOf(f.primary));
+  let pool = flowers.filter(eligible);
   // bias to biome when it yields enough; always allow cottage/meadow as general
   if (biome && biome !== 'any') {
     const biomed = pool.filter(
@@ -108,7 +118,7 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
     );
     if (biomed.length >= 8) pool = biomed;
   }
-  if (pool.length < 5) pool = flowers.filter((f) => f.colors.some((c) => theme.colors.includes(c)));
+  if (pool.length < 5) pool = flowers.filter(eligible);
 
   // distinct color FAMILIES this theme wants (order preserved from theme.colors)
   const fams = [];
@@ -132,14 +142,20 @@ function roll({ biome = 'any', themeBias, picker } = {}) {
     // spectrum themes span all 7 families → enlarge the cast so each family lands
     const nSupport = theme.spectrum ? 4 : 3;
     const nFiller = theme.spectrum ? 3 : 2;
-    // assign a color to a flower constrained to a target family (fallback: any theme color)
+    // assign a color for the target family: color-locked → its render-primary
+    // (already in `fam` because pickFam selected it there); versatile → a theme
+    // color in that family.
     const colorForFamily = (f, fam) => {
-      const opts = f.colors.filter((c) => familyOf(c) === fam && theme.colors.includes(c));
-      return opts.length ? opts[Math.floor(Math.random() * opts.length)] : colorFor(f, theme);
+      if (!f.versatile) return f.primary;
+      const opts = theme.colors.filter((c) => familyOf(c) === fam);
+      return opts.length
+        ? opts[Math.floor(Math.random() * opts.length)]
+        : colorFor(f, theme);
     };
     // pick a distinct flower that can render `fam` in the desired form; relax form, then family, then pool
     const pickFam = (fam, forms) => {
-      const canFam = (f) => f.colors.some((c) => familyOf(c) === fam && theme.colors.includes(c));
+      // versatile → can fill any theme family; color-locked → only its primary family
+      const canFam = (f) => (f.versatile ? themeFams.has(fam) : familyOf(f.primary) === fam);
       let cand = pool.filter((f) => forms.includes(f.form) && canFam(f));
       if (!cand.length) cand = pool.filter(canFam);
       if (!cand.length) cand = pool.filter((f) => forms.includes(f.form));

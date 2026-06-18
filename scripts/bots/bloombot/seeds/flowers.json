@@ -1,715 +1,2030 @@
 [
   {
     "name": "king protea",
-    "colors": ["pink", "red", "cream", "white", "burgundy"],
-    "biomes": ["african", "alpine", "exotic"],
+    "colors": [
+      "pink",
+      "red",
+      "cream",
+      "white",
+      "burgundy"
+    ],
+    "biomes": [
+      "african",
+      "alpine",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "leucospermum pincushion",
-    "colors": ["orange", "yellow", "red", "coral", "peach"],
-    "biomes": ["african", "exotic"],
+    "colors": [
+      "orange",
+      "yellow",
+      "red",
+      "coral",
+      "peach"
+    ],
+    "biomes": [
+      "african",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "leonotis (lion's tail)",
-    "colors": ["orange"],
-    "biomes": ["african", "desert", "meadow"],
+    "colors": [
+      "orange"
+    ],
+    "biomes": [
+      "african",
+      "desert",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "exotic"]
+    "register": [
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "agapanthus",
-    "colors": ["blue", "violet", "purple", "white"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "gazania",
-    "colors": ["orange", "yellow", "pink", "red", "white"],
-    "biomes": ["african", "desert", "meadow"],
+    "colors": [
+      "orange",
+      "yellow",
+      "pink",
+      "red",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "desert",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["naturalistic", "desert"]
+    "register": [
+      "naturalistic",
+      "desert"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "watsonia",
-    "colors": ["pink", "red", "orange", "coral", "white"],
-    "biomes": ["african", "meadow", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "orange",
+      "coral",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "meadow",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "fynbos heathers",
-    "colors": ["pink", "purple", "white", "red"],
-    "biomes": ["african", "alpine"],
+    "colors": [
+      "pink",
+      "purple",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "african",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "alpine"]
+    "register": [
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "bird-of-paradise (strelitzia)",
-    "colors": ["orange", "blue", "white"],
-    "biomes": ["african", "tropical", "exotic"],
+    "colors": [
+      "orange",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "nerine",
-    "colors": ["pink", "red", "coral", "white", "magenta"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "pink",
+      "red",
+      "coral",
+      "white",
+      "magenta"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "gloriosa lily",
-    "colors": ["red", "orange", "yellow"],
-    "biomes": ["african", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "flame lily",
-    "colors": ["red", "orange", "yellow"],
-    "biomes": ["african", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "freesia",
-    "colors": ["white", "yellow", "pink", "red", "purple", "orange", "lavender"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "white",
+      "yellow",
+      "pink",
+      "red",
+      "purple",
+      "orange",
+      "lavender"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": true
   },
   {
     "name": "hesperantha",
-    "colors": ["pink", "white", "red"],
-    "biomes": ["african", "meadow", "cottage"],
+    "colors": [
+      "pink",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "african",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "cherry blossom (sakura)",
-    "colors": ["pink", "white"],
-    "biomes": ["asian", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["naturalistic", "cottage", "exotic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "plum blossom",
-    "colors": ["pink", "white", "red"],
-    "biomes": ["asian", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "exotic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "wisteria",
-    "colors": ["purple", "lavender", "violet", "white", "pink"],
-    "biomes": ["asian", "northAmerican", "cottage", "woodland"],
+    "colors": [
+      "purple",
+      "lavender",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "cottage",
+      "woodland"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "tree peony",
-    "colors": ["pink", "red", "white", "yellow", "purple", "coral", "peach", "magenta"],
-    "biomes": ["asian", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "yellow",
+      "purple",
+      "coral",
+      "peach",
+      "magenta"
+    ],
+    "biomes": [
+      "asian",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "exotic"]
+    "register": [
+      "cottage",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "camellia",
-    "colors": ["pink", "red", "white", "magenta", "peach", "cream"],
-    "biomes": ["asian", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "magenta",
+      "peach",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "woodland", "exotic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "magnolia",
-    "colors": ["white", "pink", "cream", "purple", "peach"],
-    "biomes": ["asian", "northAmerican", "woodland", "cottage"],
+    "colors": [
+      "white",
+      "pink",
+      "cream",
+      "purple",
+      "peach"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["naturalistic", "cottage", "woodland"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "sacred lotus",
-    "colors": ["pink", "white", "cream"],
-    "biomes": ["asian", "aquatic", "tropical"],
+    "colors": [
+      "pink",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "aquatic",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic"]
+    "register": [
+      "aquatic",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "water lily",
-    "colors": ["white", "pink", "yellow", "purple", "red", "blue", "cream"],
-    "biomes": ["aquatic", "tropical", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "pink",
+      "yellow",
+      "purple",
+      "red",
+      "blue",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "northAmerican",
+      "asian"
+    ],
     "form": "floating",
     "scale": "medium",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": true
   },
   {
     "name": "rhododendron",
-    "colors": ["pink", "red", "purple", "white", "yellow", "orange", "lavender"],
-    "biomes": ["asian", "northAmerican", "alpine", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "purple",
+      "white",
+      "yellow",
+      "orange",
+      "lavender"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "alpine",
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["woodland", "cottage", "alpine"]
+    "register": [
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "azalea",
-    "colors": ["pink", "red", "white", "purple", "orange", "magenta", "coral"],
-    "biomes": ["asian", "northAmerican", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "purple",
+      "orange",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "chrysanthemum",
-    "colors": ["yellow", "white", "pink", "red", "purple", "orange", "bronze", "cream"],
-    "biomes": ["asian", "cottage", "meadow"],
+    "colors": [
+      "yellow",
+      "white",
+      "pink",
+      "red",
+      "purple",
+      "orange",
+      "bronze",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "exotic"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "yellow",
+    "versatile": true
   },
   {
     "name": "gardenia",
-    "colors": ["white", "cream"],
-    "biomes": ["asian", "tropical", "cottage"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "tropical",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "exotic", "tropical"]
+    "register": [
+      "cottage",
+      "exotic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "jasmine",
-    "colors": ["white", "yellow", "pink"],
-    "biomes": ["asian", "tropical", "cottage"],
+    "colors": [
+      "white",
+      "yellow",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "tropical",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "tropical"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "torch ginger",
-    "colors": ["red", "pink", "coral"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "red",
+      "pink",
+      "coral"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "ginger lily",
-    "colors": ["white", "yellow", "orange", "red", "pink"],
-    "biomes": ["asian", "tropical", "exotic"],
+    "colors": [
+      "white",
+      "yellow",
+      "orange",
+      "red",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "tropical",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "bauhinia (Hong Kong orchid tree)",
-    "colors": ["pink", "purple", "magenta", "white", "red"],
-    "biomes": ["asian", "tropical", "exotic"],
+    "colors": [
+      "pink",
+      "purple",
+      "magenta",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "asian",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "kangaroo paw",
-    "colors": ["red", "orange", "yellow", "pink"],
-    "biomes": ["australian", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink"
+    ],
+    "biomes": [
+      "australian",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "exotic"]
+    "register": [
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "banksia",
-    "colors": ["yellow", "orange", "red", "bronze"],
-    "biomes": ["australian", "exotic"],
+    "colors": [
+      "yellow",
+      "orange",
+      "red",
+      "bronze"
+    ],
+    "biomes": [
+      "australian",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "exotic"]
+    "register": [
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "waratah",
-    "colors": ["red", "pink", "white"],
-    "biomes": ["australian", "exotic"],
+    "colors": [
+      "red",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "australian",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "eucalyptus blossoms",
-    "colors": ["white", "cream", "pink", "red", "yellow"],
-    "biomes": ["australian", "exotic"],
+    "colors": [
+      "white",
+      "cream",
+      "pink",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "australian",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "exotic"]
+    "register": [
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "grevillea",
-    "colors": ["red", "orange", "yellow", "pink", "white", "cream"],
-    "biomes": ["australian", "desert", "woodland", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "australian",
+      "desert",
+      "woodland",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "bottlebrush (callistemon)",
-    "colors": ["red", "pink", "white", "cream", "yellow"],
-    "biomes": ["australian", "woodland", "desert", "exotic"],
+    "colors": [
+      "red",
+      "pink",
+      "white",
+      "cream",
+      "yellow"
+    ],
+    "biomes": [
+      "australian",
+      "woodland",
+      "desert",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "flannel flower",
-    "colors": ["white", "cream"],
-    "biomes": ["australian", "woodland", "cottage"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "australian",
+      "woodland",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "woodland"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "Sturt's desert pea",
-    "colors": ["red", "burgundy"],
-    "biomes": ["australian", "desert"],
+    "colors": [
+      "red",
+      "burgundy"
+    ],
+    "biomes": [
+      "australian",
+      "desert"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "boronia",
-    "colors": ["pink", "red", "white", "yellow", "purple"],
-    "biomes": ["australian", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "yellow",
+      "purple"
+    ],
+    "biomes": [
+      "australian",
+      "woodland",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "woodland", "exotic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "hakea",
-    "colors": ["white", "cream", "pink", "red", "yellow"],
-    "biomes": ["australian", "desert", "woodland", "exotic"],
+    "colors": [
+      "white",
+      "cream",
+      "pink",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "australian",
+      "desert",
+      "woodland",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "passion flower (passiflora)",
-    "colors": ["purple", "blue", "white", "pink", "red", "lavender"],
-    "biomes": ["southAmerican", "tropical", "exotic", "cottage"],
+    "colors": [
+      "purple",
+      "blue",
+      "white",
+      "pink",
+      "red",
+      "lavender"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["exotic", "tropical", "cottage"]
+    "register": [
+      "exotic",
+      "tropical",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "heliconia",
-    "colors": ["red", "orange", "yellow", "pink"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "bromeliad bloom",
-    "colors": ["red", "orange", "yellow", "pink", "purple", "magenta"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "purple",
+      "magenta"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "fuchsia",
-    "colors": ["pink", "red", "purple", "magenta", "white", "coral"],
-    "biomes": ["southAmerican", "cottage", "woodland", "tropical"],
+    "colors": [
+      "pink",
+      "red",
+      "purple",
+      "magenta",
+      "white",
+      "coral"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage",
+      "woodland",
+      "tropical"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "exotic", "woodland"]
+    "register": [
+      "cottage",
+      "exotic",
+      "woodland"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "mandevilla",
-    "colors": ["pink", "red", "white"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "pink",
+      "red",
+      "white"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "calla lily",
-    "colors": ["white", "cream", "yellow", "pink", "purple", "burgundy", "orange"],
-    "biomes": ["african", "aquatic", "cottage", "exotic"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow",
+      "pink",
+      "purple",
+      "burgundy",
+      "orange"
+    ],
+    "biomes": [
+      "african",
+      "aquatic",
+      "cottage",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "cottage", "aquatic"]
+    "register": [
+      "exotic",
+      "cottage",
+      "aquatic"
+    ],
+    "primary": "white",
+    "versatile": true
   },
   {
     "name": "anthurium",
-    "colors": ["red", "pink", "white", "orange", "coral", "burgundy", "magenta"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "pink",
+      "white",
+      "orange",
+      "coral",
+      "burgundy",
+      "magenta"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "brugmansia (angel's trumpet)",
-    "colors": ["white", "yellow", "pink", "orange", "peach", "cream"],
-    "biomes": ["southAmerican", "tropical", "exotic", "cottage"],
+    "colors": [
+      "white",
+      "yellow",
+      "pink",
+      "orange",
+      "peach",
+      "cream"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["exotic", "tropical", "cottage"]
+    "register": [
+      "exotic",
+      "tropical",
+      "cottage"
+    ],
+    "primary": "peach",
+    "versatile": false
   },
   {
     "name": "lapacho/ipê",
-    "colors": ["yellow", "pink", "purple", "white"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "yellow",
+      "pink",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "tropical", "naturalistic"]
+    "register": [
+      "exotic",
+      "tropical",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "ceibo",
-    "colors": ["red", "coral"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "red",
+      "coral"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "tropical", "naturalistic"]
+    "register": [
+      "exotic",
+      "tropical",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "Victoria amazonica giant water lily",
-    "colors": ["white", "pink"],
-    "biomes": ["southAmerican", "aquatic", "tropical", "exotic"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "southAmerican",
+      "aquatic",
+      "tropical",
+      "exotic"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic", "tropical"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "jacaranda blossoms",
-    "colors": ["purple", "lavender", "violet", "blue"],
-    "biomes": ["southAmerican", "african", "tropical", "exotic"],
+    "colors": [
+      "purple",
+      "lavender",
+      "violet",
+      "blue"
+    ],
+    "biomes": [
+      "southAmerican",
+      "african",
+      "tropical",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["exotic", "tropical", "naturalistic"]
+    "register": [
+      "exotic",
+      "tropical",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "black-eyed susan",
-    "colors": ["yellow", "orange"],
-    "biomes": ["northAmerican", "meadow", "cottage", "woodland"],
+    "colors": [
+      "yellow",
+      "orange"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "purple coneflower (echinacea)",
-    "colors": ["purple", "pink", "white"],
-    "biomes": ["northAmerican", "meadow", "cottage", "woodland"],
+    "colors": [
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "Indian paintbrush",
-    "colors": ["red", "orange", "yellow", "pink", "coral"],
-    "biomes": ["northAmerican", "meadow", "alpine", "desert"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "coral"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "alpine",
+      "desert"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["naturalistic", "alpine"]
+    "register": [
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "lupine",
-    "colors": ["purple", "blue", "pink", "white", "yellow", "red", "violet", "lavender"],
-    "biomes": ["northAmerican", "alpine", "meadow", "cottage", "woodland"],
+    "colors": [
+      "purple",
+      "blue",
+      "pink",
+      "white",
+      "yellow",
+      "red",
+      "violet",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "California poppy",
-    "colors": ["orange", "yellow", "peach", "cream"],
-    "biomes": ["northAmerican", "desert", "meadow", "cottage"],
+    "colors": [
+      "orange",
+      "yellow",
+      "peach",
+      "cream"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "desert"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "desert"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "columbine",
-    "colors": ["purple", "blue", "red", "pink", "yellow", "white", "violet"],
-    "biomes": ["northAmerican", "alpine", "woodland", "cottage", "meadow"],
+    "colors": [
+      "purple",
+      "blue",
+      "red",
+      "pink",
+      "yellow",
+      "white",
+      "violet"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "woodland", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "cardinal flower",
-    "colors": ["red"],
-    "biomes": ["northAmerican", "aquatic", "woodland", "meadow"],
+    "colors": [
+      "red"
+    ],
+    "biomes": [
+      "northAmerican",
+      "aquatic",
+      "woodland",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "woodland", "aquatic"]
+    "register": [
+      "naturalistic",
+      "woodland",
+      "aquatic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "Joe-Pye weed",
-    "colors": ["pink", "purple", "lavender"],
-    "biomes": ["northAmerican", "meadow", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "purple",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "woodland",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "large",
-    "register": ["naturalistic", "cottage", "woodland"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "Texas bluebonnet",
-    "colors": ["blue", "violet", "purple", "white"],
-    "biomes": ["northAmerican", "meadow", "desert"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "desert"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "desert marigold",
-    "colors": ["yellow", "orange"],
-    "biomes": ["northAmerican", "desert"],
+    "colors": [
+      "yellow",
+      "orange"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "ocotillo bloom",
-    "colors": ["red", "orange"],
-    "biomes": ["northAmerican", "desert"],
+    "colors": [
+      "red",
+      "orange"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "saguaro flower",
-    "colors": ["white", "cream"],
-    "biomes": ["northAmerican", "desert"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "prickly pear blossom",
-    "colors": ["yellow", "orange", "pink", "magenta", "red"],
-    "biomes": ["northAmerican", "desert", "southAmerican"],
+    "colors": [
+      "yellow",
+      "orange",
+      "pink",
+      "magenta",
+      "red"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert",
+      "southAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "yucca bloom",
-    "colors": ["white", "cream"],
-    "biomes": ["northAmerican", "desert"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "fireweed",
-    "colors": ["pink", "magenta", "purple"],
-    "biomes": ["northAmerican", "alpine", "meadow", "woodland"],
+    "colors": [
+      "pink",
+      "magenta",
+      "purple"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "meadow",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "alpine", "woodland"]
+    "register": [
+      "naturalistic",
+      "alpine",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "evening primrose",
-    "colors": ["yellow", "white", "pink"],
-    "biomes": ["northAmerican", "meadow", "cottage", "desert"],
+    "colors": [
+      "yellow",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage",
+      "desert"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "desert"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "desert"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "trillium",
-    "colors": ["white", "pink", "red", "purple"],
-    "biomes": ["northAmerican", "woodland"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "purple"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["woodland", "naturalistic"]
+    "register": [
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "bluebell",
-    "colors": ["violet", "lavender", "white", "pink"],
-    "biomes": ["woodland", "cottage", "meadow"],
+    "colors": [
+      "violet",
+      "lavender",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "primrose",
-    "colors": ["yellow", "pink", "red", "white", "purple", "lavender", "cream"],
-    "biomes": ["woodland", "cottage", "meadow", "alpine"],
+    "colors": [
+      "yellow",
+      "pink",
+      "red",
+      "white",
+      "purple",
+      "lavender",
+      "cream"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": true
   },
   {
     "name": "foxglove",
-    "colors": ["pink", "purple", "white", "cream", "magenta"],
-    "biomes": ["woodland", "cottage", "meadow"],
+    "colors": [
+      "pink",
+      "purple",
+      "white",
+      "cream",
+      "magenta"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "cyclamen",
-    "colors": ["pink", "red", "white", "magenta", "lavender"],
-    "biomes": ["woodland", "cottage", "asian"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "magenta",
+      "lavender"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "asian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "hellebore",
-    "colors": ["white", "cream", "pink", "purple", "burgundy", "lavender"],
-    "biomes": ["woodland", "cottage"],
+    "colors": [
+      "white",
+      "cream",
+      "pink",
+      "purple",
+      "burgundy",
+      "lavender"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "wood anemone",
-    "colors": ["white", "pink", "lavender"],
-    "biomes": ["woodland", "meadow"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "naturalistic"]
+    "register": [
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "gentian",
-    "colors": ["blue", "violet", "purple", "white"],
-    "biomes": ["alpine", "meadow", "centralAsian"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "centralAsian"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "edelweiss",
-    "colors": ["white", "cream"],
-    "biomes": ["alpine"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "forget-me-not",
-    "colors": ["blue", "pink", "white"],
-    "biomes": ["woodland", "cottage", "meadow", "alpine"],
+    "colors": [
+      "blue",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "glacier lily",
-    "colors": ["yellow"],
-    "biomes": ["alpine", "northAmerican"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "alpine",
+      "northAmerican"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "snowdrop",
-    "colors": ["white"],
-    "biomes": ["woodland", "cottage", "meadow"],
+    "colors": [
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "crocus",
-    "colors": ["purple", "lavender", "white", "yellow", "orange"],
-    "biomes": ["alpine", "meadow", "cottage", "woodland"],
+    "colors": [
+      "purple",
+      "lavender",
+      "white",
+      "yellow",
+      "orange"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "oxlip",
-    "colors": ["yellow", "cream"],
-    "biomes": ["woodland", "meadow", "cottage"],
+    "colors": [
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "lily-of-the-valley",
-    "colors": ["white", "pink"],
-    "biomes": ["woodland", "cottage"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "wild Turkish/Iranian tulip",
-    "colors": ["red", "yellow", "orange", "pink", "white"],
-    "biomes": ["centralAsian", "meadow", "alpine"],
+    "colors": [
+      "red",
+      "yellow",
+      "orange",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "alpine"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "alpine"]
+    "register": [
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "iris germanica",
-    "colors": ["purple", "violet", "blue", "white", "yellow", "lavender", "burgundy", "pink"],
-    "biomes": ["cottage", "meadow", "northAmerican", "asian"],
+    "colors": [
+      "purple",
+      "violet",
+      "blue",
+      "white",
+      "yellow",
+      "lavender",
+      "burgundy",
+      "pink"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "asian"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "fritillaria imperialis (crown imperial)",
-    "colors": ["orange", "red", "yellow"],
-    "biomes": ["centralAsian", "cottage"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "exotic"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "allium giganteum",
-    "colors": ["purple", "violet"],
-    "biomes": ["centralAsian", "meadow", "cottage"],
+    "colors": [
+      "purple",
+      "violet"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "peacock anemone",
-    "colors": ["red", "pink", "purple", "white", "blue", "magenta"],
-    "biomes": ["meadow", "cottage", "asian"],
+    "colors": [
+      "red",
+      "pink",
+      "purple",
+      "white",
+      "blue",
+      "magenta"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "asian"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "scilla",
-    "colors": ["blue", "violet", "white", "pink"],
-    "biomes": ["woodland", "meadow", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "muscari grape hyacinth",
-    "colors": ["blue", "violet", "purple", "white"],
-    "biomes": ["cottage", "meadow", "woodland", "centralAsian"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "woodland",
+      "centralAsian"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "dahlia (decorative + cactus + pompon)",
@@ -725,1186 +2040,3485 @@
       "peach",
       "burgundy"
     ],
-    "biomes": ["northAmerican", "cottage"],
+    "biomes": [
+      "northAmerican",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "exotic", "naturalistic"]
+    "register": [
+      "cottage",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "parrot tulip",
-    "colors": ["red", "orange", "yellow", "pink", "white", "purple", "magenta"],
-    "biomes": ["cottage", "meadow"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "white",
+      "purple",
+      "magenta"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "exotic"]
+    "register": [
+      "cottage",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "Rembrandt tulip",
-    "colors": ["red", "white", "purple", "pink", "yellow"],
-    "biomes": ["cottage", "meadow"],
+    "colors": [
+      "red",
+      "white",
+      "purple",
+      "pink",
+      "yellow"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "exotic"]
+    "register": [
+      "cottage",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "agave bloom stalks",
-    "colors": ["yellow", "cream"],
-    "biomes": ["desert", "northAmerican", "southAmerican"],
+    "colors": [
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "ocotillo",
-    "colors": ["red", "orange"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "red",
+      "orange"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "desert sand verbena",
-    "colors": ["pink", "lavender", "purple"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "pink",
+      "lavender",
+      "purple"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "chuparosa",
-    "colors": ["red", "yellow"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "desert globemallow",
-    "colors": ["orange", "coral", "red", "pink"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "orange",
+      "coral",
+      "red",
+      "pink"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "palo verde blossoms",
-    "colors": ["yellow"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "barrel cactus bloom",
-    "colors": ["yellow", "orange", "red", "pink"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "yellow",
+      "orange",
+      "red",
+      "pink"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["desert", "naturalistic"]
+    "register": [
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "hedgehog cactus bloom",
-    "colors": ["pink", "magenta", "red", "purple", "orange", "yellow", "white"],
-    "biomes": ["desert", "northAmerican"],
+    "colors": [
+      "pink",
+      "magenta",
+      "red",
+      "purple",
+      "orange",
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "water hyacinth",
-    "colors": ["lavender", "violet", "purple", "blue", "white"],
-    "biomes": ["aquatic", "tropical", "southAmerican"],
+    "colors": [
+      "lavender",
+      "violet",
+      "purple",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "southAmerican"
+    ],
     "form": "floating",
     "scale": "medium",
-    "register": ["aquatic", "exotic"]
+    "register": [
+      "aquatic",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "water iris",
-    "colors": ["purple", "violet", "blue", "yellow", "white"],
-    "biomes": ["aquatic", "meadow", "northAmerican", "asian", "cottage"],
+    "colors": [
+      "purple",
+      "violet",
+      "blue",
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "meadow",
+      "northAmerican",
+      "asian",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["aquatic", "naturalistic", "cottage"]
+    "register": [
+      "aquatic",
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "sweet flag",
-    "colors": ["yellow", "cream"],
-    "biomes": ["aquatic", "northAmerican", "asian", "woodland"],
+    "colors": [
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "asian",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "marsh marigold",
-    "colors": ["yellow", "white"],
-    "biomes": ["aquatic", "meadow", "woodland", "northAmerican", "alpine"],
+    "colors": [
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "meadow",
+      "woodland",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["aquatic", "naturalistic", "woodland", "cottage"]
+    "register": [
+      "aquatic",
+      "naturalistic",
+      "woodland",
+      "cottage"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "spider lily",
-    "colors": ["white", "red", "pink", "yellow"],
-    "biomes": ["aquatic", "tropical", "asian", "northAmerican", "woodland"],
+    "colors": [
+      "white",
+      "red",
+      "pink",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "asian",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["aquatic", "exotic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "papyrus flower",
-    "colors": ["cream", "white", "bronze"],
-    "biomes": ["aquatic", "african", "tropical"],
+    "colors": [
+      "cream",
+      "white",
+      "bronze"
+    ],
+    "biomes": [
+      "aquatic",
+      "african",
+      "tropical"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["aquatic", "exotic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "pickerelweed",
-    "colors": ["violet", "purple", "blue", "white"],
-    "biomes": ["aquatic", "meadow", "northAmerican"],
+    "colors": [
+      "violet",
+      "purple",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "ghost orchid",
-    "colors": ["white", "cream"],
-    "biomes": ["tropical", "northAmerican", "woodland", "exotic"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "tropical",
+      "northAmerican",
+      "woodland",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "jade vine (electric-blue strongylodon)",
-    "colors": ["blue", "indigo"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "blue",
+      "indigo"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "blue Himalayan poppy (meconopsis)",
-    "colors": ["blue", "purple", "lavender", "white"],
-    "biomes": ["alpine", "centralAsian", "asian", "woodland"],
+    "colors": [
+      "blue",
+      "purple",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "centralAsian",
+      "asian",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["alpine", "exotic", "naturalistic"]
+    "register": [
+      "alpine",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "titan arum",
-    "colors": ["burgundy", "red", "white", "cream"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "burgundy",
+      "red",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "burgundy",
+    "versatile": false
   },
   {
     "name": "night-blooming cereus",
-    "colors": ["white", "cream"],
-    "biomes": ["desert", "tropical", "northAmerican", "southAmerican"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "desert",
+      "tropical",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "queen of the andes (puya)",
-    "colors": ["blue", "indigo", "violet", "white"],
-    "biomes": ["alpine", "southAmerican", "exotic"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "southAmerican",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["alpine", "exotic"]
+    "register": [
+      "alpine",
+      "exotic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "monkey-face orchid",
-    "colors": ["white", "purple", "orange", "red"],
-    "biomes": ["tropical", "southAmerican", "exotic"],
+    "colors": [
+      "white",
+      "purple",
+      "orange",
+      "red"
+    ],
+    "biomes": [
+      "tropical",
+      "southAmerican",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "bee orchid",
-    "colors": ["pink", "purple", "white"],
-    "biomes": ["meadow", "woodland", "cottage", "alpine"],
+    "colors": [
+      "pink",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "meadow",
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["naturalistic", "exotic", "cottage"]
+    "register": [
+      "naturalistic",
+      "exotic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "dove orchid",
-    "colors": ["white", "cream", "pink"],
-    "biomes": ["tropical", "southAmerican", "exotic"],
+    "colors": [
+      "white",
+      "cream",
+      "pink"
+    ],
+    "biomes": [
+      "tropical",
+      "southAmerican",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "chenille plant",
-    "colors": ["red", "pink", "coral"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "red",
+      "pink",
+      "coral"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "corpse flower",
-    "colors": ["burgundy", "red", "white", "cream"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "burgundy",
+      "red",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "burgundy",
+    "versatile": false
   },
   {
     "name": "moonflower (datura)",
-    "colors": ["white", "cream", "lavender", "purple"],
-    "biomes": ["desert", "northAmerican", "southAmerican", "tropical", "cottage"],
+    "colors": [
+      "white",
+      "cream",
+      "lavender",
+      "purple"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican",
+      "southAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "cottage", "desert"]
+    "register": [
+      "exotic",
+      "cottage",
+      "desert"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "plumeria (frangipani)",
-    "colors": ["white", "yellow", "pink", "red", "coral", "peach", "magenta"],
-    "biomes": ["tropical", "southAmerican", "asian", "northAmerican", "exotic"],
+    "colors": [
+      "white",
+      "yellow",
+      "pink",
+      "red",
+      "coral",
+      "peach",
+      "magenta"
+    ],
+    "biomes": [
+      "tropical",
+      "southAmerican",
+      "asian",
+      "northAmerican",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "hibiscus rosa-sinensis",
-    "colors": ["red", "pink", "orange", "yellow", "white", "coral", "peach", "magenta"],
-    "biomes": ["tropical", "asian", "northAmerican", "african", "cottage"],
+    "colors": [
+      "red",
+      "pink",
+      "orange",
+      "yellow",
+      "white",
+      "coral",
+      "peach",
+      "magenta"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "northAmerican",
+      "african",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic", "cottage"]
+    "register": [
+      "tropical",
+      "exotic",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "ixora",
-    "colors": ["red", "orange", "pink", "yellow", "white"],
-    "biomes": ["tropical", "asian", "african", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "pink",
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "african",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "vanda orchid",
-    "colors": ["blue", "purple", "violet", "pink", "white", "yellow", "orange"],
-    "biomes": ["tropical", "asian", "exotic"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "pink",
+      "white",
+      "yellow",
+      "orange"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "cattleya orchid",
-    "colors": ["purple", "lavender", "pink", "white", "yellow", "orange", "magenta"],
-    "biomes": ["tropical", "southAmerican", "exotic"],
+    "colors": [
+      "purple",
+      "lavender",
+      "pink",
+      "white",
+      "yellow",
+      "orange",
+      "magenta"
+    ],
+    "biomes": [
+      "tropical",
+      "southAmerican",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "dendrobium orchid",
-    "colors": ["white", "purple", "pink", "lavender", "yellow", "orange"],
-    "biomes": ["tropical", "asian", "australian", "exotic"],
+    "colors": [
+      "white",
+      "purple",
+      "pink",
+      "lavender",
+      "yellow",
+      "orange"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "australian",
+      "exotic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "flame-of-the-forest",
-    "colors": ["orange", "red", "yellow"],
-    "biomes": ["tropical", "asian", "african", "exotic"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "african",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "jacaranda",
-    "colors": ["lavender", "purple", "violet", "blue", "white"],
-    "biomes": ["tropical", "southAmerican", "african", "australian", "exotic"],
+    "colors": [
+      "lavender",
+      "purple",
+      "violet",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "tropical",
+      "southAmerican",
+      "african",
+      "australian",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "ohia lehua",
-    "colors": ["red", "orange", "yellow", "pink", "white"],
-    "biomes": ["tropical", "northAmerican", "exotic"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "tropical",
+      "northAmerican",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "pikake jasmine",
-    "colors": ["white", "cream", "yellow"],
-    "biomes": ["tropical", "asian", "northAmerican", "exotic"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "northAmerican",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["tropical", "exotic", "cottage"]
+    "register": [
+      "tropical",
+      "exotic",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "delphinium",
-    "colors": ["blue", "purple", "violet", "white", "pink", "lavender"],
-    "biomes": ["northAmerican", "alpine", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "white",
+      "pink",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "salvia nemorosa",
-    "colors": ["violet", "purple", "blue", "white"],
-    "biomes": ["centralAsian", "cottage", "meadow", "alpine"],
+    "colors": [
+      "violet",
+      "purple",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "baptisia",
-    "colors": ["blue", "indigo", "purple", "white", "yellow"],
-    "biomes": ["northAmerican", "meadow", "cottage", "woodland"],
+    "colors": [
+      "blue",
+      "indigo",
+      "purple",
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "muscari",
-    "colors": ["blue", "indigo", "violet", "white", "purple"],
-    "biomes": ["asian", "centralAsian", "cottage", "meadow", "woodland"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet",
+      "white",
+      "purple"
+    ],
+    "biomes": [
+      "asian",
+      "centralAsian",
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "globe thistle",
-    "colors": ["blue", "violet", "white"],
-    "biomes": ["centralAsian", "meadow", "cottage", "alpine"],
+    "colors": [
+      "blue",
+      "violet",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage",
+      "alpine"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "camassia",
-    "colors": ["blue", "violet", "white", "lavender"],
-    "biomes": ["northAmerican", "meadow", "woodland", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "white",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "woodland",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "woodland", "cottage"]
+    "register": [
+      "naturalistic",
+      "woodland",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "veronica spicata",
-    "colors": ["blue", "violet", "purple", "pink", "white"],
-    "biomes": ["centralAsian", "alpine", "meadow", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "alpine",
+      "meadow",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "amsonia",
-    "colors": ["blue", "lavender"],
-    "biomes": ["northAmerican", "woodland", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "woodland", "cottage"]
+    "register": [
+      "naturalistic",
+      "woodland",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "nigella",
-    "colors": ["blue", "violet", "white", "pink", "purple"],
-    "biomes": ["centralAsian", "meadow", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "white",
+      "pink",
+      "purple"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "scabiosa",
-    "colors": ["lavender", "violet", "white", "pink", "blue"],
-    "biomes": ["centralAsian", "meadow", "alpine", "cottage"],
+    "colors": [
+      "lavender",
+      "violet",
+      "white",
+      "pink",
+      "blue"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "alpine",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "lavender",
+    "versatile": true
   },
   {
     "name": "phlox paniculata",
-    "colors": ["purple", "violet", "pink", "white", "lavender", "magenta", "coral"],
-    "biomes": ["northAmerican", "cottage", "meadow", "woodland"],
+    "colors": [
+      "purple",
+      "violet",
+      "pink",
+      "white",
+      "lavender",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "northAmerican",
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "catmint",
-    "colors": ["lavender", "violet", "blue", "white"],
-    "biomes": ["centralAsian", "cottage", "meadow", "alpine"],
+    "colors": [
+      "lavender",
+      "violet",
+      "blue",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow",
+      "alpine"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "lungwort",
-    "colors": ["blue", "violet", "pink", "purple", "white"],
-    "biomes": ["woodland", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "blue",
+      "violet",
+      "pink",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage"]
+    "register": [
+      "woodland",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "anchusa",
-    "colors": ["blue", "indigo", "violet"],
-    "biomes": ["centralAsian", "meadow", "cottage", "alpine"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "iris sibirica",
-    "colors": ["blue", "violet", "purple", "white", "lavender"],
-    "biomes": ["centralAsian", "meadow", "aquatic", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white",
+      "lavender"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "aquatic",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "aquatic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "aquatic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "platycodon",
-    "colors": ["blue", "violet", "purple", "white", "pink"],
-    "biomes": ["asian", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "aconitum",
-    "colors": ["blue", "indigo", "violet", "purple", "white"],
-    "biomes": ["alpine", "woodland", "cottage", "northAmerican", "centralAsian"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "woodland",
+      "cottage",
+      "northAmerican",
+      "centralAsian"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["alpine", "woodland", "cottage"]
+    "register": [
+      "alpine",
+      "woodland",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "lobelia erinus",
-    "colors": ["blue", "violet", "purple", "white", "pink"],
-    "biomes": ["african", "cottage", "meadow", "northAmerican"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "borage",
-    "colors": ["blue", "violet", "white"],
-    "biomes": ["centralAsian", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "violet",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "jacob's ladder",
-    "colors": ["blue", "violet", "lavender", "white"],
-    "biomes": ["northAmerican", "woodland", "cottage", "alpine"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage", "alpine"]
+    "register": [
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "eryngium",
-    "colors": ["blue", "violet", "indigo", "white"],
-    "biomes": ["centralAsian", "meadow", "cottage", "alpine", "northAmerican"],
+    "colors": [
+      "blue",
+      "violet",
+      "indigo",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage",
+      "alpine",
+      "northAmerican"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "campanula persicifolia",
-    "colors": ["blue", "violet", "lavender", "white", "purple"],
-    "biomes": ["centralAsian", "cottage", "meadow", "woodland", "alpine"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "white",
+      "purple"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow",
+      "woodland",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "hesperis",
-    "colors": ["violet", "purple", "white", "lavender", "pink"],
-    "biomes": ["centralAsian", "cottage", "meadow", "woodland"],
+    "colors": [
+      "violet",
+      "purple",
+      "white",
+      "lavender",
+      "pink"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "hydrangea",
-    "colors": ["blue", "purple", "violet", "pink", "white", "lavender"],
-    "biomes": ["asian", "northAmerican", "cottage", "woodland"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "pink",
+      "white",
+      "lavender"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": true
   },
   {
     "name": "toadflax",
-    "colors": ["violet", "purple", "lavender", "white", "yellow", "orange", "pink"],
-    "biomes": ["centralAsian", "meadow", "cottage", "alpine"],
+    "colors": [
+      "violet",
+      "purple",
+      "lavender",
+      "white",
+      "yellow",
+      "orange",
+      "pink"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "allium cristophii",
-    "colors": ["violet", "purple", "lavender"],
-    "biomes": ["centralAsian", "cottage", "meadow"],
+    "colors": [
+      "violet",
+      "purple",
+      "lavender"
+    ],
+    "biomes": [
+      "centralAsian",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "tradescantia",
-    "colors": ["purple", "violet", "blue", "pink", "white"],
-    "biomes": ["northAmerican", "cottage", "meadow", "woodland"],
+    "colors": [
+      "purple",
+      "violet",
+      "blue",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "sweet violet",
-    "colors": ["violet", "purple", "white", "lavender"],
-    "biomes": ["woodland", "cottage", "meadow", "northAmerican", "centralAsian"],
+    "colors": [
+      "violet",
+      "purple",
+      "white",
+      "lavender"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "centralAsian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "violet",
+    "versatile": false
   },
   {
     "name": "liatris",
-    "colors": ["purple", "violet", "magenta", "white"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "purple",
+      "violet",
+      "magenta",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "browallia",
-    "colors": ["blue", "violet", "white", "purple"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "blue",
+      "violet",
+      "white",
+      "purple"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["tropical", "exotic", "cottage"]
+    "register": [
+      "tropical",
+      "exotic",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "meconopsis",
-    "colors": ["blue", "violet", "purple", "white", "yellow", "orange", "red"],
-    "biomes": ["alpine", "asian", "woodland"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "white",
+      "yellow",
+      "orange",
+      "red"
+    ],
+    "biomes": [
+      "alpine",
+      "asian",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["alpine", "woodland", "exotic"]
+    "register": [
+      "alpine",
+      "woodland",
+      "exotic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "salvia",
-    "colors": ["blue", "purple", "violet", "red", "pink", "white"],
-    "biomes": ["cottage", "meadow", "northAmerican", "southAmerican", "desert"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "red",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "southAmerican",
+      "desert"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "desert"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "desert"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "larkspur",
-    "colors": ["blue", "purple", "violet", "lavender", "pink", "white"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "lavender",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "verbena bonariensis",
-    "colors": ["purple", "violet", "lavender"],
-    "biomes": ["southAmerican", "cottage", "meadow"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "exotic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "allium",
-    "colors": ["purple", "lavender", "violet", "white", "pink"],
-    "biomes": ["cottage", "meadow", "centralAsian", "alpine"],
+    "colors": [
+      "purple",
+      "lavender",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "centralAsian",
+      "alpine"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "phacelia",
-    "colors": ["blue", "violet", "lavender", "white"],
-    "biomes": ["northAmerican", "desert", "meadow", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "desert",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "desert", "cottage"]
+    "register": [
+      "naturalistic",
+      "desert",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "veronica",
-    "colors": ["blue", "purple", "lavender", "pink", "white"],
-    "biomes": ["cottage", "meadow", "alpine", "northAmerican", "centralAsian"],
+    "colors": [
+      "blue",
+      "purple",
+      "lavender",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "alpine",
+      "northAmerican",
+      "centralAsian"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "pulmonaria",
-    "colors": ["blue", "purple", "violet", "pink", "white"],
-    "biomes": ["woodland", "cottage", "asian", "northAmerican"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "asian",
+      "northAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "lobelia",
-    "colors": ["blue", "violet", "purple", "red", "white", "pink"],
-    "biomes": ["northAmerican", "cottage", "woodland", "aquatic", "african"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple",
+      "red",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "northAmerican",
+      "cottage",
+      "woodland",
+      "aquatic",
+      "african"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "aquatic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "aquatic",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "echinops",
-    "colors": ["blue", "violet", "white"],
-    "biomes": ["centralAsian", "meadow", "cottage", "desert"],
+    "colors": [
+      "blue",
+      "violet",
+      "white"
+    ],
+    "biomes": [
+      "centralAsian",
+      "meadow",
+      "cottage",
+      "desert"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "desert"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "desert"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "geranium",
-    "colors": ["purple", "blue", "violet", "lavender", "pink", "magenta", "white"],
-    "biomes": ["cottage", "woodland", "meadow", "alpine", "northAmerican", "asian"],
+    "colors": [
+      "purple",
+      "blue",
+      "violet",
+      "lavender",
+      "pink",
+      "magenta",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland",
+      "meadow",
+      "alpine",
+      "northAmerican",
+      "asian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland",
+      "alpine"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "campanula",
-    "colors": ["blue", "purple", "lavender", "violet", "white", "pink"],
-    "biomes": ["alpine", "cottage", "meadow", "woodland", "centralAsian"],
+    "colors": [
+      "blue",
+      "purple",
+      "lavender",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "alpine",
+      "cottage",
+      "meadow",
+      "woodland",
+      "centralAsian"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic", "woodland"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "himalayan blue poppy",
-    "colors": ["blue", "lavender", "purple", "white"],
-    "biomes": ["asian", "alpine", "cottage"],
+    "colors": [
+      "blue",
+      "lavender",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "asian",
+      "alpine",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["exotic", "alpine", "naturalistic"]
+    "register": [
+      "exotic",
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "plumbago",
-    "colors": ["blue", "lavender", "white"],
-    "biomes": ["african", "tropical", "cottage", "asian"],
+    "colors": [
+      "blue",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "cottage",
+      "asian"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["exotic", "tropical", "cottage"]
+    "register": [
+      "exotic",
+      "tropical",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "periwinkle",
-    "colors": ["lavender", "blue", "violet", "white", "pink"],
-    "biomes": ["woodland", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "lavender",
+      "blue",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "stokesia",
-    "colors": ["blue", "lavender", "purple", "pink", "white"],
-    "biomes": ["northAmerican", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "lavender",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "white peony",
-    "colors": ["white", "cream", "pink"],
-    "biomes": ["asian", "cottage", "woodland"],
+    "colors": [
+      "white",
+      "cream",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white foxglove",
-    "colors": ["white", "cream", "pink", "purple"],
-    "biomes": ["cottage", "woodland", "northAmerican"],
+    "colors": [
+      "white",
+      "cream",
+      "pink",
+      "purple"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "sweet alyssum",
-    "colors": ["white", "pink", "purple", "lavender"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "purple",
+      "lavender"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "baby's breath",
-    "colors": ["white", "pink"],
-    "biomes": ["cottage", "meadow", "centralAsian"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "centralAsian"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white wisteria",
-    "colors": ["white", "lavender", "pink"],
-    "biomes": ["asian", "cottage", "northAmerican"],
+    "colors": [
+      "white",
+      "lavender",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "northAmerican"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["cottage", "exotic"]
+    "register": [
+      "cottage",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "lily of the valley",
-    "colors": ["white", "pink"],
-    "biomes": ["woodland", "cottage", "northAmerican"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage"]
+    "register": [
+      "woodland",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white water lily",
-    "colors": ["white", "pink", "cream"],
-    "biomes": ["aquatic", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "pink",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "asian"
+    ],
     "form": "floating",
     "scale": "medium",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "narcissus",
-    "colors": ["white", "cream", "yellow", "peach", "pink"],
-    "biomes": ["cottage", "meadow", "woodland", "northAmerican"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow",
+      "peach",
+      "pink"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "woodland",
+      "northAmerican"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "sweet pea",
-    "colors": ["pink", "white", "lavender", "purple", "red", "coral", "peach"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "pink",
+      "white",
+      "lavender",
+      "purple",
+      "red",
+      "coral",
+      "peach"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "pale blue delphinium",
-    "colors": ["blue", "lavender", "white", "purple", "pink"],
-    "biomes": ["cottage", "meadow", "northAmerican", "alpine"],
+    "colors": [
+      "blue",
+      "lavender",
+      "white",
+      "purple",
+      "pink"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "stock",
-    "colors": ["white", "pink", "lavender", "purple", "red", "cream"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender",
+      "purple",
+      "red",
+      "cream"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "white cosmos",
-    "colors": ["white", "pink", "peach", "magenta"],
-    "biomes": ["cottage", "meadow", "northAmerican", "southAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "peach",
+      "magenta"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "phlox",
-    "colors": ["white", "pink", "lavender", "purple", "red", "coral"],
-    "biomes": ["cottage", "meadow", "northAmerican", "woodland"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender",
+      "purple",
+      "red",
+      "coral"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "creeping phlox",
-    "colors": ["white", "pink", "lavender", "purple", "blue"],
-    "biomes": ["alpine", "northAmerican", "cottage"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender",
+      "purple",
+      "blue"
+    ],
+    "biomes": [
+      "alpine",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "nemesia",
-    "colors": ["white", "pink", "yellow", "orange", "peach", "lavender"],
-    "biomes": ["african", "cottage"],
+    "colors": [
+      "white",
+      "pink",
+      "yellow",
+      "orange",
+      "peach",
+      "lavender"
+    ],
+    "biomes": [
+      "african",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "anemone",
-    "colors": ["white", "pink", "red", "purple", "blue", "magenta"],
-    "biomes": ["cottage", "meadow", "woodland", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "purple",
+      "blue",
+      "magenta"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "woodland",
+      "northAmerican",
+      "asian"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "white bleeding heart",
-    "colors": ["white", "pink"],
-    "biomes": ["woodland", "cottage", "asian", "northAmerican"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "asian",
+      "northAmerican"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["woodland", "cottage"]
+    "register": [
+      "woodland",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white astilbe",
-    "colors": ["white", "pink", "red", "lavender", "peach"],
-    "biomes": ["woodland", "cottage", "asian", "northAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "lavender",
+      "peach"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "asian",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white nicotiana",
-    "colors": ["white", "pink", "red"],
-    "biomes": ["cottage", "northAmerican", "southAmerican", "tropical"],
+    "colors": [
+      "white",
+      "pink",
+      "red"
+    ],
+    "biomes": [
+      "cottage",
+      "northAmerican",
+      "southAmerican",
+      "tropical"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "tropical"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "tropical"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white camellia",
-    "colors": ["white", "pink", "red", "cream"],
-    "biomes": ["asian", "cottage", "woodland"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "woodland", "exotic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "arabis",
-    "colors": ["white", "pink"],
-    "biomes": ["alpine", "cottage", "northAmerican"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "alpine",
+      "cottage",
+      "northAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage"]
+    "register": [
+      "alpine",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "iberis",
-    "colors": ["white", "pink", "lavender"],
-    "biomes": ["cottage", "meadow", "northAmerican", "alpine"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "alpine", "naturalistic"]
+    "register": [
+      "cottage",
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white agapanthus",
-    "colors": ["white", "blue", "lavender"],
-    "biomes": ["african", "cottage"],
+    "colors": [
+      "white",
+      "blue",
+      "lavender"
+    ],
+    "biomes": [
+      "african",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "exotic"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white echinacea",
-    "colors": ["white", "pink", "peach", "orange", "yellow", "red", "magenta"],
-    "biomes": ["meadow", "northAmerican", "cottage"],
+    "colors": [
+      "white",
+      "pink",
+      "peach",
+      "orange",
+      "yellow",
+      "red",
+      "magenta"
+    ],
+    "biomes": [
+      "meadow",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white lupine",
-    "colors": ["white", "pink", "purple", "blue", "yellow", "red"],
-    "biomes": ["cottage", "meadow", "northAmerican", "alpine"],
+    "colors": [
+      "white",
+      "pink",
+      "purple",
+      "blue",
+      "yellow",
+      "red"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "dianthus",
-    "colors": ["white", "pink", "red", "coral", "magenta"],
-    "biomes": ["cottage", "meadow", "northAmerican", "alpine"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "coral",
+      "magenta"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "alpine", "naturalistic"]
+    "register": [
+      "cottage",
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "white snapdragon",
-    "colors": ["white", "pink", "red", "yellow", "orange", "peach", "cream"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "yellow",
+      "orange",
+      "peach",
+      "cream"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "feverfew",
-    "colors": ["white", "cream", "yellow"],
-    "biomes": ["cottage", "meadow", "northAmerican", "woodland"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white hellebore",
-    "colors": ["white", "cream", "pink", "purple", "burgundy"],
-    "biomes": ["woodland", "cottage", "alpine"],
+    "colors": [
+      "white",
+      "cream",
+      "pink",
+      "purple",
+      "burgundy"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["woodland", "cottage", "alpine"]
+    "register": [
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white verbena",
-    "colors": ["white", "pink", "purple", "lavender", "red", "coral"],
-    "biomes": ["cottage", "meadow", "northAmerican", "southAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "purple",
+      "lavender",
+      "red",
+      "coral"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "white lobularia",
-    "colors": ["white", "pink", "purple"],
-    "biomes": ["cottage", "meadow", "northAmerican"],
+    "colors": [
+      "white",
+      "pink",
+      "purple"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "queen anne's lace",
-    "colors": ["white", "cream", "pink"],
-    "biomes": ["meadow", "northAmerican", "cottage", "woodland"],
+    "colors": [
+      "white",
+      "cream",
+      "pink"
+    ],
+    "biomes": [
+      "meadow",
+      "northAmerican",
+      "cottage",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "woodland"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "protea",
-    "colors": ["pink", "red", "coral", "cream", "white", "burgundy"],
-    "biomes": ["african", "australian", "desert"],
+    "colors": [
+      "pink",
+      "red",
+      "coral",
+      "cream",
+      "white",
+      "burgundy"
+    ],
+    "biomes": [
+      "african",
+      "australian",
+      "desert"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "desert", "naturalistic"]
+    "register": [
+      "exotic",
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "bird of paradise",
-    "colors": ["orange", "blue", "indigo", "white"],
-    "biomes": ["african", "tropical", "exotic"],
+    "colors": [
+      "orange",
+      "blue",
+      "indigo",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "exotic"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "celosia",
-    "colors": ["red", "orange", "yellow", "pink", "magenta", "purple", "coral"],
-    "biomes": ["tropical", "african", "cottage"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "magenta",
+      "purple",
+      "coral"
+    ],
+    "biomes": [
+      "tropical",
+      "african",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["tropical", "cottage", "exotic"]
+    "register": [
+      "tropical",
+      "cottage",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "globe amaranth",
-    "colors": ["magenta", "pink", "purple", "orange", "white", "red"],
-    "biomes": ["tropical", "northAmerican", "cottage", "meadow"],
+    "colors": [
+      "magenta",
+      "pink",
+      "purple",
+      "orange",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "tropical",
+      "northAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "tropical"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "tropical"
+    ],
+    "primary": "magenta",
+    "versatile": true
   },
   {
     "name": "gomphrena",
-    "colors": ["magenta", "pink", "purple", "white", "orange", "red"],
-    "biomes": ["tropical", "northAmerican", "cottage"],
+    "colors": [
+      "magenta",
+      "pink",
+      "purple",
+      "white",
+      "orange",
+      "red"
+    ],
+    "biomes": [
+      "tropical",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "magenta",
+    "versatile": true
   },
   {
     "name": "verbena",
-    "colors": ["purple", "violet", "pink", "red", "white", "lavender", "magenta"],
-    "biomes": ["southAmerican", "northAmerican", "cottage", "meadow"],
+    "colors": [
+      "purple",
+      "violet",
+      "pink",
+      "red",
+      "white",
+      "lavender",
+      "magenta"
+    ],
+    "biomes": [
+      "southAmerican",
+      "northAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "aubrieta",
-    "colors": ["purple", "violet", "lavender", "pink"],
-    "biomes": ["alpine", "cottage"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender",
+      "pink"
+    ],
+    "biomes": [
+      "alpine",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "bougainvillea",
-    "colors": ["magenta", "pink", "red", "orange", "coral", "purple", "white"],
-    "biomes": ["southAmerican", "tropical", "desert", "exotic"],
+    "colors": [
+      "magenta",
+      "pink",
+      "red",
+      "orange",
+      "coral",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "desert",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["tropical", "exotic", "desert"]
+    "register": [
+      "tropical",
+      "exotic",
+      "desert"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "bleeding heart",
-    "colors": ["pink", "red", "white"],
-    "biomes": ["woodland", "asian", "northAmerican", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "asian",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "lotus",
-    "colors": ["pink", "white", "yellow", "red"],
-    "biomes": ["aquatic", "asian", "tropical"],
+    "colors": [
+      "pink",
+      "white",
+      "yellow",
+      "red"
+    ],
+    "biomes": [
+      "aquatic",
+      "asian",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "passionflower",
-    "colors": ["purple", "violet", "lavender", "white", "blue", "indigo"],
-    "biomes": ["southAmerican", "tropical", "northAmerican", "exotic"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender",
+      "white",
+      "blue",
+      "indigo"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "northAmerican",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["tropical", "exotic", "naturalistic"]
+    "register": [
+      "tropical",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "torch lily",
-    "colors": ["red", "orange", "yellow", "coral", "cream"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "coral",
+      "cream"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["exotic", "cottage", "naturalistic"]
+    "register": [
+      "exotic",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "sea holly",
-    "colors": ["blue", "indigo", "violet"],
-    "biomes": ["meadow", "cottage", "northAmerican", "alpine"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "crocosmia",
-    "colors": ["red", "orange", "yellow", "coral"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "coral"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "exotic"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "statice",
-    "colors": ["lavender", "purple", "blue", "white", "pink", "yellow"],
-    "biomes": ["desert", "meadow", "cottage", "northAmerican"],
+    "colors": [
+      "lavender",
+      "purple",
+      "blue",
+      "white",
+      "pink",
+      "yellow"
+    ],
+    "biomes": [
+      "desert",
+      "meadow",
+      "cottage",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "desert"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "desert"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "helenium",
-    "colors": ["orange", "red", "yellow", "bronze", "burgundy"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow",
+      "bronze",
+      "burgundy"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "rudbeckia",
-    "colors": ["yellow", "orange", "bronze", "red"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "yellow",
+      "orange",
+      "bronze",
+      "red"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "echinacea",
-    "colors": ["pink", "purple", "red", "orange", "white", "yellow", "magenta", "coral"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "pink",
+      "purple",
+      "red",
+      "orange",
+      "white",
+      "yellow",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "veronicastrum",
-    "colors": ["lavender", "purple", "white", "pink", "blue"],
-    "biomes": ["northAmerican", "asian", "meadow", "cottage"],
+    "colors": [
+      "lavender",
+      "purple",
+      "white",
+      "pink",
+      "blue"
+    ],
+    "biomes": [
+      "northAmerican",
+      "asian",
+      "meadow",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "tithonia",
-    "colors": ["orange", "red", "yellow"],
-    "biomes": ["northAmerican", "tropical", "cottage", "meadow"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "northAmerican",
+      "tropical",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["naturalistic", "cottage", "tropical"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "tropical"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "lavender",
-    "colors": ["purple", "lavender", "violet"],
-    "biomes": ["asian", "alpine", "cottage", "meadow", "northAmerican"],
+    "colors": [
+      "purple",
+      "lavender",
+      "violet"
+    ],
+    "biomes": [
+      "asian",
+      "alpine",
+      "cottage",
+      "meadow",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "ironweed",
-    "colors": ["purple", "magenta", "violet"],
-    "biomes": ["northAmerican", "meadow"],
+    "colors": [
+      "purple",
+      "magenta",
+      "violet"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic"]
+    "register": [
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "joe pye weed",
-    "colors": ["pink", "purple"],
-    "biomes": ["northAmerican", "meadow", "woodland"],
+    "colors": [
+      "pink",
+      "purple"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "large",
-    "register": ["naturalistic", "woodland"]
+    "register": [
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "lupin",
-    "colors": ["purple", "violet", "blue", "pink", "red", "yellow", "white", "orange"],
-    "biomes": ["northAmerican", "alpine", "cottage", "meadow"],
+    "colors": [
+      "purple",
+      "violet",
+      "blue",
+      "pink",
+      "red",
+      "yellow",
+      "white",
+      "orange"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "ageratum",
-    "colors": ["blue", "violet", "lavender", "purple", "pink", "white"],
-    "biomes": ["northAmerican", "tropical", "cottage"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "tropical"]
+    "register": [
+      "cottage",
+      "tropical"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "chive blossom",
-    "colors": ["lavender", "purple", "violet"],
-    "biomes": ["asian", "northAmerican", "cottage", "meadow"],
+    "colors": [
+      "lavender",
+      "purple",
+      "violet"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "teasel",
-    "colors": ["lavender", "purple", "pink"],
-    "biomes": ["northAmerican", "asian", "meadow", "cottage"],
+    "colors": [
+      "lavender",
+      "purple",
+      "pink"
+    ],
+    "biomes": [
+      "northAmerican",
+      "asian",
+      "meadow",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "bugle weed",
-    "colors": ["violet", "blue", "purple", "pink", "white"],
-    "biomes": ["northAmerican", "woodland", "cottage"],
+    "colors": [
+      "violet",
+      "blue",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "sweet william",
-    "colors": ["magenta", "pink", "red", "purple", "white", "burgundy"],
-    "biomes": ["asian", "cottage", "meadow"],
+    "colors": [
+      "magenta",
+      "pink",
+      "red",
+      "purple",
+      "white",
+      "burgundy"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "wild bergamot",
-    "colors": ["lavender", "purple", "pink", "magenta"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "lavender",
+      "purple",
+      "pink",
+      "magenta"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "iris",
@@ -1920,889 +5534,2525 @@
       "burgundy",
       "pink"
     ],
-    "biomes": ["northAmerican", "asian", "alpine", "aquatic", "cottage", "meadow"],
+    "biomes": [
+      "northAmerican",
+      "asian",
+      "alpine",
+      "aquatic",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "aquatic", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "aquatic",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "violetta pansy",
-    "colors": ["violet", "purple", "lavender", "yellow", "white", "indigo"],
-    "biomes": ["northAmerican", "alpine", "cottage", "meadow", "woodland"],
+    "colors": [
+      "violet",
+      "purple",
+      "lavender",
+      "yellow",
+      "white",
+      "indigo"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "alpine", "woodland"]
+    "register": [
+      "cottage",
+      "alpine",
+      "woodland"
+    ],
+    "primary": "violet",
+    "versatile": false
   },
   {
     "name": "monkshood",
-    "colors": ["violet", "indigo", "blue", "purple", "white"],
-    "biomes": ["alpine", "northAmerican", "woodland", "cottage", "meadow"],
+    "colors": [
+      "violet",
+      "indigo",
+      "blue",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "northAmerican",
+      "woodland",
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["woodland", "alpine", "naturalistic", "cottage"]
+    "register": [
+      "woodland",
+      "alpine",
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "indigo",
+    "versatile": false
   },
   {
     "name": "hollyhock",
-    "colors": ["pink", "red", "white", "purple", "burgundy", "coral", "yellow", "magenta"],
-    "biomes": ["cottage", "meadow", "asian", "northAmerican"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "purple",
+      "burgundy",
+      "coral",
+      "yellow",
+      "magenta"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "asian",
+      "northAmerican"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "yarrow",
-    "colors": ["white", "yellow", "pink", "red", "coral", "orange"],
-    "biomes": ["meadow", "cottage", "northAmerican", "asian", "alpine"],
+    "colors": [
+      "white",
+      "yellow",
+      "pink",
+      "red",
+      "coral",
+      "orange"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "asian",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "cornflower",
-    "colors": ["blue", "purple", "pink", "white"],
-    "biomes": ["meadow", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "blue",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "astrantia",
-    "colors": ["white", "pink", "red", "burgundy"],
-    "biomes": ["woodland", "cottage", "meadow", "alpine"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "burgundy"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "meadow",
+      "alpine"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "aquilegia",
-    "colors": ["purple", "blue", "pink", "red", "white", "yellow", "lavender", "coral"],
-    "biomes": ["cottage", "woodland", "meadow", "alpine", "northAmerican"],
+    "colors": [
+      "purple",
+      "blue",
+      "pink",
+      "red",
+      "white",
+      "yellow",
+      "lavender",
+      "coral"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland",
+      "meadow",
+      "alpine",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "woodland", "alpine"]
+    "register": [
+      "cottage",
+      "woodland",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "cosmos",
-    "colors": ["pink", "white", "red", "magenta", "coral", "burgundy", "orange", "yellow"],
-    "biomes": ["cottage", "meadow", "northAmerican", "southAmerican"],
+    "colors": [
+      "pink",
+      "white",
+      "red",
+      "magenta",
+      "coral",
+      "burgundy",
+      "orange",
+      "yellow"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "lychnis",
-    "colors": ["red", "pink", "magenta", "white", "coral"],
-    "biomes": ["meadow", "cottage", "alpine", "asian"],
+    "colors": [
+      "red",
+      "pink",
+      "magenta",
+      "white",
+      "coral"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "alpine",
+      "asian"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "geranium rozanne",
-    "colors": ["blue", "violet", "purple"],
-    "biomes": ["cottage", "woodland", "meadow", "northAmerican", "asian"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland",
+      "meadow",
+      "northAmerican",
+      "asian"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "violet",
+    "versatile": false
   },
   {
     "name": "kniphofia",
-    "colors": ["orange", "red", "yellow", "coral"],
-    "biomes": ["african", "cottage", "meadow", "desert"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow",
+      "coral"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow",
+      "desert"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["naturalistic", "exotic", "desert"]
+    "register": [
+      "naturalistic",
+      "exotic",
+      "desert"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "gaillardia",
-    "colors": ["orange", "red", "yellow", "burgundy"],
-    "biomes": ["meadow", "cottage", "northAmerican", "desert"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow",
+      "burgundy"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "desert"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage", "desert"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "desert"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "linaria",
-    "colors": ["purple", "pink", "yellow", "white", "lavender", "red", "violet"],
-    "biomes": ["meadow", "cottage", "northAmerican", "alpine"],
+    "colors": [
+      "purple",
+      "pink",
+      "yellow",
+      "white",
+      "lavender",
+      "red",
+      "violet"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "alpine"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "ox-eye daisy",
-    "colors": ["white", "yellow"],
-    "biomes": ["meadow", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "linum",
-    "colors": ["blue", "red", "white", "yellow"],
-    "biomes": ["meadow", "cottage", "alpine", "northAmerican"],
+    "colors": [
+      "blue",
+      "red",
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "alpine",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["naturalistic", "cottage", "alpine"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "alpine"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "penstemon",
-    "colors": ["pink", "red", "purple", "lavender", "white", "coral"],
-    "biomes": ["cottage", "meadow", "northAmerican", "alpine", "desert"],
+    "colors": [
+      "pink",
+      "red",
+      "purple",
+      "lavender",
+      "white",
+      "coral"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "northAmerican",
+      "alpine",
+      "desert"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "alpine"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "heuchera",
-    "colors": ["pink", "red", "white", "coral"],
-    "biomes": ["woodland", "cottage", "northAmerican"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "coral"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican"
+    ],
     "form": "filler",
     "scale": "small",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "monarda",
-    "colors": ["red", "pink", "purple", "lavender", "white"],
-    "biomes": ["meadow", "cottage", "northAmerican", "woodland"],
+    "colors": [
+      "red",
+      "pink",
+      "purple",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "agrostemma",
-    "colors": ["pink", "magenta", "white"],
-    "biomes": ["meadow", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "pink",
+      "magenta",
+      "white"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "thalictrum",
-    "colors": ["lavender", "purple", "white", "pink", "yellow"],
-    "biomes": ["woodland", "meadow", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "lavender",
+      "purple",
+      "white",
+      "pink",
+      "yellow"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "filler",
     "scale": "medium",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "laburnum",
-    "colors": ["yellow"],
-    "biomes": ["woodland", "cottage", "alpine"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "alpine"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "clematis",
-    "colors": ["purple", "violet", "lavender", "pink", "white", "red", "blue"],
-    "biomes": ["woodland", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender",
+      "pink",
+      "white",
+      "red",
+      "blue"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "trailing lobelia",
-    "colors": ["blue", "violet", "lavender", "white", "pink"],
-    "biomes": ["african", "cottage", "meadow"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "african",
+      "cottage",
+      "meadow"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "climbing rose",
-    "colors": ["pink", "red", "white", "cream", "yellow", "peach", "coral"],
-    "biomes": ["cottage", "woodland", "northAmerican", "asian"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "cream",
+      "yellow",
+      "peach",
+      "coral"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland",
+      "northAmerican",
+      "asian"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "trumpet vine",
-    "colors": ["orange", "red", "coral"],
-    "biomes": ["northAmerican", "woodland", "cottage"],
+    "colors": [
+      "orange",
+      "red",
+      "coral"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["naturalistic", "cottage", "woodland"]
+    "register": [
+      "naturalistic",
+      "cottage",
+      "woodland"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "love-lies-bleeding",
-    "colors": ["red", "burgundy", "magenta"],
-    "biomes": ["southAmerican", "tropical", "cottage"],
+    "colors": [
+      "red",
+      "burgundy",
+      "magenta"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "exotic", "naturalistic"]
+    "register": [
+      "cottage",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "burgundy",
+    "versatile": false
   },
   {
     "name": "black-eyed susan vine",
-    "colors": ["orange", "yellow", "white"],
-    "biomes": ["african", "tropical", "cottage"],
+    "colors": [
+      "orange",
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "african",
+      "tropical",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "naturalistic", "tropical"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "tropical"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "surfinia petunia",
-    "colors": ["pink", "purple", "violet", "white", "red", "magenta", "lavender"],
-    "biomes": ["southAmerican", "cottage"],
+    "colors": [
+      "pink",
+      "purple",
+      "violet",
+      "white",
+      "red",
+      "magenta",
+      "lavender"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": true
   },
   {
     "name": "trailing fuchsia",
-    "colors": ["pink", "red", "purple", "white", "magenta"],
-    "biomes": ["southAmerican", "woodland", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "purple",
+      "white",
+      "magenta"
+    ],
+    "biomes": [
+      "southAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "morning glory",
-    "colors": ["blue", "purple", "violet", "pink", "white", "red"],
-    "biomes": ["northAmerican", "tropical", "cottage"],
+    "colors": [
+      "blue",
+      "purple",
+      "violet",
+      "pink",
+      "white",
+      "red"
+    ],
+    "biomes": [
+      "northAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "honeysuckle",
-    "colors": ["white", "cream", "yellow", "pink", "red", "orange"],
-    "biomes": ["woodland", "cottage", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow",
+      "pink",
+      "red",
+      "orange"
+    ],
+    "biomes": [
+      "woodland",
+      "cottage",
+      "northAmerican",
+      "asian"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "woodland", "naturalistic"]
+    "register": [
+      "cottage",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "wisteria floribunda",
-    "colors": ["violet", "purple", "white", "pink"],
-    "biomes": ["asian", "cottage"],
+    "colors": [
+      "violet",
+      "purple",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "asian",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["exotic", "cottage", "naturalistic"]
+    "register": [
+      "exotic",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "lavender",
+    "versatile": false
   },
   {
     "name": "nasturtium trailing",
-    "colors": ["orange", "red", "yellow"],
-    "biomes": ["southAmerican", "cottage", "meadow"],
+    "colors": [
+      "orange",
+      "red",
+      "yellow"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "climbing hydrangea",
-    "colors": ["white", "cream"],
-    "biomes": ["asian", "woodland", "cottage"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "large",
-    "register": ["woodland", "cottage", "naturalistic"]
+    "register": [
+      "woodland",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "purple bell vine",
-    "colors": ["purple", "violet"],
-    "biomes": ["southAmerican", "tropical", "exotic"],
+    "colors": [
+      "purple",
+      "violet"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "exotic"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "chocolate vine",
-    "colors": ["purple", "burgundy"],
-    "biomes": ["asian", "woodland", "cottage"],
+    "colors": [
+      "purple",
+      "burgundy"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["woodland", "exotic", "cottage"]
+    "register": [
+      "woodland",
+      "exotic",
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "cup-and-saucer vine",
-    "colors": ["violet", "purple", "white", "cream"],
-    "biomes": ["northAmerican", "tropical", "cottage"],
+    "colors": [
+      "violet",
+      "purple",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "northAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["cottage", "exotic", "naturalistic"]
+    "register": [
+      "cottage",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "climbing snapdragon",
-    "colors": ["pink", "white", "lavender", "purple"],
-    "biomes": ["cottage", "woodland"],
+    "colors": [
+      "pink",
+      "white",
+      "lavender",
+      "purple"
+    ],
+    "biomes": [
+      "cottage",
+      "woodland"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "coral vine",
-    "colors": ["pink", "coral", "white"],
-    "biomes": ["northAmerican", "tropical", "desert"],
+    "colors": [
+      "pink",
+      "coral",
+      "white"
+    ],
+    "biomes": [
+      "northAmerican",
+      "tropical",
+      "desert"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["tropical", "desert", "naturalistic"]
+    "register": [
+      "tropical",
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "coral",
+    "versatile": false
   },
   {
     "name": "canary creeper",
-    "colors": ["yellow"],
-    "biomes": ["southAmerican", "cottage", "meadow"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "cascading",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "blue passion flower",
-    "colors": ["blue", "white", "violet"],
-    "biomes": ["southAmerican", "tropical"],
+    "colors": [
+      "blue",
+      "white",
+      "violet"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "virgin's bower",
-    "colors": ["white", "cream", "lavender"],
-    "biomes": ["woodland", "northAmerican", "meadow", "cottage"],
+    "colors": [
+      "white",
+      "cream",
+      "lavender"
+    ],
+    "biomes": [
+      "woodland",
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "cascading",
     "scale": "medium",
-    "register": ["woodland", "naturalistic", "cottage"]
+    "register": [
+      "woodland",
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "snapdragon",
-    "colors": ["red", "pink", "orange", "yellow", "white", "coral", "peach", "burgundy"],
-    "biomes": ["cottage", "meadow"],
+    "colors": [
+      "red",
+      "pink",
+      "orange",
+      "yellow",
+      "white",
+      "coral",
+      "peach",
+      "burgundy"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage"]
+    "register": [
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "red-hot poker",
-    "colors": ["red", "orange", "yellow"],
-    "biomes": ["african", "cottage"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow"
+    ],
+    "biomes": [
+      "african",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["exotic", "naturalistic"]
+    "register": [
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "foxtail lily",
-    "colors": ["white", "yellow", "orange", "pink", "peach"],
-    "biomes": ["centralAsian", "desert"],
+    "colors": [
+      "white",
+      "yellow",
+      "orange",
+      "pink",
+      "peach"
+    ],
+    "biomes": [
+      "centralAsian",
+      "desert"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "orange",
+    "versatile": false
   },
   {
     "name": "gladiolus",
-    "colors": ["pink", "red", "orange", "yellow", "white", "purple", "lavender", "coral"],
-    "biomes": ["african", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "orange",
+      "yellow",
+      "white",
+      "purple",
+      "lavender",
+      "coral"
+    ],
+    "biomes": [
+      "african",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "exotic"]
+    "register": [
+      "cottage",
+      "exotic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "agastache",
-    "colors": ["orange", "pink", "purple", "blue", "lavender"],
-    "biomes": ["northAmerican", "cottage", "desert"],
+    "colors": [
+      "orange",
+      "pink",
+      "purple",
+      "blue",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "cottage",
+      "desert"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["cottage", "desert", "naturalistic"]
+    "register": [
+      "cottage",
+      "desert",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "grape hyacinth",
-    "colors": ["blue", "indigo", "violet", "purple", "white"],
-    "biomes": ["cottage", "meadow", "woodland"],
+    "colors": [
+      "blue",
+      "indigo",
+      "violet",
+      "purple",
+      "white"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "bugbane",
-    "colors": ["white", "cream"],
-    "biomes": ["woodland", "northAmerican", "asian"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "woodland",
+      "northAmerican",
+      "asian"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["woodland", "naturalistic"]
+    "register": [
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "blue vervain",
-    "colors": ["blue", "violet", "purple"],
-    "biomes": ["northAmerican", "meadow", "aquatic"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "aquatic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic"]
+    "register": [
+      "naturalistic"
+    ],
+    "primary": "violet",
+    "versatile": false
   },
   {
     "name": "tower of jewels",
-    "colors": ["red", "pink", "white"],
-    "biomes": ["desert", "cottage"],
+    "colors": [
+      "red",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "desert",
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "bear's breeches",
-    "colors": ["white", "lavender", "purple"],
-    "biomes": ["cottage"],
+    "colors": [
+      "white",
+      "lavender",
+      "purple"
+    ],
+    "biomes": [
+      "cottage"
+    ],
     "form": "spire",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "prairie blazing star",
-    "colors": ["purple", "violet", "lavender"],
-    "biomes": ["northAmerican", "meadow"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic"]
+    "register": [
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "yellow asphodel",
-    "colors": ["yellow"],
-    "biomes": ["alpine", "meadow"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "hyacinth",
-    "colors": ["blue", "indigo", "purple", "pink", "white", "yellow"],
-    "biomes": ["cottage", "meadow", "centralAsian"],
+    "colors": [
+      "blue",
+      "indigo",
+      "purple",
+      "pink",
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "cottage",
+      "meadow",
+      "centralAsian"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage"]
+    "register": [
+      "cottage"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "stachys betonica",
-    "colors": ["pink", "purple", "violet"],
-    "biomes": ["meadow", "cottage", "woodland"],
+    "colors": [
+      "pink",
+      "purple",
+      "violet"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "spire",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "white asphodel",
-    "colors": ["white", "cream"],
-    "biomes": ["meadow", "desert"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "meadow",
+      "desert"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "desert"]
+    "register": [
+      "naturalistic",
+      "desert"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "blue lobelia",
-    "colors": ["blue", "violet", "purple"],
-    "biomes": ["northAmerican", "meadow", "aquatic"],
+    "colors": [
+      "blue",
+      "violet",
+      "purple"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "aquatic"
+    ],
     "form": "spire",
     "scale": "medium",
-    "register": ["naturalistic", "aquatic"]
+    "register": [
+      "naturalistic",
+      "aquatic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "candytuft",
-    "colors": ["white", "pink", "lavender", "purple"],
-    "biomes": ["meadow", "cottage", "woodland"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender",
+      "purple"
+    ],
+    "biomes": [
+      "meadow",
+      "cottage",
+      "woodland"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "ice plant",
-    "colors": ["pink", "magenta", "purple", "orange", "yellow", "white"],
-    "biomes": ["desert", "australian", "southAmerican"],
+    "colors": [
+      "pink",
+      "magenta",
+      "purple",
+      "orange",
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "desert",
+      "australian",
+      "southAmerican"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "magenta",
+    "versatile": false
   },
   {
     "name": "moss phlox",
-    "colors": ["pink", "white", "purple", "violet", "blue"],
-    "biomes": ["northAmerican", "alpine", "meadow"],
+    "colors": [
+      "pink",
+      "white",
+      "purple",
+      "violet",
+      "blue"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "creeping thyme",
-    "colors": ["pink", "purple", "lavender", "white"],
-    "biomes": ["alpine", "meadow", "woodland"],
+    "colors": [
+      "pink",
+      "purple",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "woodland"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "sea thrift",
-    "colors": ["pink", "white", "magenta"],
-    "biomes": ["northAmerican", "alpine", "meadow"],
+    "colors": [
+      "pink",
+      "white",
+      "magenta"
+    ],
+    "biomes": [
+      "northAmerican",
+      "alpine",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "naturalistic", "cottage"]
+    "register": [
+      "alpine",
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "snow-in-summer",
-    "colors": ["white"],
-    "biomes": ["alpine", "meadow", "woodland"],
+    "colors": [
+      "white"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "woodland"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "rock cress",
-    "colors": ["white", "pink", "purple"],
-    "biomes": ["alpine", "woodland", "meadow"],
+    "colors": [
+      "white",
+      "pink",
+      "purple"
+    ],
+    "biomes": [
+      "alpine",
+      "woodland",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "bugleweed",
-    "colors": ["violet", "blue", "purple", "pink", "white"],
-    "biomes": ["woodland", "meadow", "cottage"],
+    "colors": [
+      "violet",
+      "blue",
+      "purple",
+      "pink",
+      "white"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "naturalistic", "cottage"]
+    "register": [
+      "woodland",
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "dianthus mat",
-    "colors": ["pink", "red", "white", "magenta", "coral"],
-    "biomes": ["alpine", "meadow", "cottage"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "blue star creeper",
-    "colors": ["blue", "lavender", "white"],
-    "biomes": ["australian", "woodland", "cottage"],
+    "colors": [
+      "blue",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "australian",
+      "woodland",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["cottage", "naturalistic", "woodland"]
+    "register": [
+      "cottage",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "creeping speedwell",
-    "colors": ["blue", "violet", "white", "pink"],
-    "biomes": ["meadow", "woodland", "alpine"],
+    "colors": [
+      "blue",
+      "violet",
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "meadow",
+      "woodland",
+      "alpine"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["naturalistic", "alpine", "woodland"]
+    "register": [
+      "naturalistic",
+      "alpine",
+      "woodland"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "portulaca",
-    "colors": ["pink", "red", "orange", "yellow", "white", "magenta", "coral"],
-    "biomes": ["desert", "southAmerican", "meadow"],
+    "colors": [
+      "pink",
+      "red",
+      "orange",
+      "yellow",
+      "white",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "desert",
+      "southAmerican",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["desert", "cottage", "naturalistic"]
+    "register": [
+      "desert",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "creeping mazus",
-    "colors": ["purple", "violet", "white"],
-    "biomes": ["asian", "woodland", "alpine"],
+    "colors": [
+      "purple",
+      "violet",
+      "white"
+    ],
+    "biomes": [
+      "asian",
+      "woodland",
+      "alpine"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "woodland", "naturalistic"]
+    "register": [
+      "alpine",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "violet wood sorrel",
-    "colors": ["violet", "purple", "pink"],
-    "biomes": ["northAmerican", "woodland", "meadow"],
+    "colors": [
+      "violet",
+      "purple",
+      "pink"
+    ],
+    "biomes": [
+      "northAmerican",
+      "woodland",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "naturalistic"]
+    "register": [
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "violet",
+    "versatile": false
   },
   {
     "name": "mountain avens",
-    "colors": ["white", "yellow", "cream"],
-    "biomes": ["alpine", "northAmerican", "meadow"],
+    "colors": [
+      "white",
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "alpine",
+      "northAmerican",
+      "meadow"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "naturalistic"]
+    "register": [
+      "alpine",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "creeping Jenny",
-    "colors": ["yellow"],
-    "biomes": ["woodland", "meadow", "aquatic"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "woodland",
+      "meadow",
+      "aquatic"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["woodland", "aquatic", "naturalistic"]
+    "register": [
+      "woodland",
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "pratia",
-    "colors": ["white", "blue", "lavender"],
-    "biomes": ["australian", "woodland", "alpine"],
+    "colors": [
+      "white",
+      "blue",
+      "lavender"
+    ],
+    "biomes": [
+      "australian",
+      "woodland",
+      "alpine"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "woodland", "naturalistic"]
+    "register": [
+      "alpine",
+      "woodland",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "creeping baby's breath",
-    "colors": ["white", "pink"],
-    "biomes": ["alpine", "meadow", "cottage"],
+    "colors": [
+      "white",
+      "pink"
+    ],
+    "biomes": [
+      "alpine",
+      "meadow",
+      "cottage"
+    ],
     "form": "groundcover",
     "scale": "small",
-    "register": ["alpine", "cottage", "naturalistic"]
+    "register": [
+      "alpine",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "tropical blue water lily",
-    "colors": ["blue", "violet", "lavender", "white"],
-    "biomes": ["aquatic", "tropical"],
+    "colors": [
+      "blue",
+      "violet",
+      "lavender",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "tropical", "exotic"]
+    "register": [
+      "aquatic",
+      "tropical",
+      "exotic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "tropical purple water lily",
-    "colors": ["purple", "violet", "lavender"],
-    "biomes": ["aquatic", "tropical"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "tropical", "exotic"]
+    "register": [
+      "aquatic",
+      "tropical",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "hardy water lily",
-    "colors": ["white", "cream", "yellow"],
-    "biomes": ["aquatic", "northAmerican", "woodland"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "pink hardy water lily",
-    "colors": ["pink", "peach", "white"],
-    "biomes": ["aquatic", "northAmerican", "cottage"],
+    "colors": [
+      "pink",
+      "peach",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "cottage", "naturalistic"]
+    "register": [
+      "aquatic",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "red hardy water lily",
-    "colors": ["red", "pink"],
-    "biomes": ["aquatic", "northAmerican", "cottage"],
+    "colors": [
+      "red",
+      "pink"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "cottage"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "cottage"]
+    "register": [
+      "aquatic",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "yellow hardy water lily",
-    "colors": ["yellow", "cream"],
-    "biomes": ["aquatic", "northAmerican", "meadow"],
+    "colors": [
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "meadow"
+    ],
     "form": "floating",
     "scale": "medium",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "white lotus",
-    "colors": ["white", "cream", "yellow"],
-    "biomes": ["aquatic", "asian", "tropical"],
+    "colors": [
+      "white",
+      "cream",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "asian",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic"]
+    "register": [
+      "aquatic",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "pink lotus",
-    "colors": ["pink", "white", "yellow"],
-    "biomes": ["aquatic", "asian", "tropical"],
+    "colors": [
+      "pink",
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "asian",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic", "tropical"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "tropical"
+    ],
+    "primary": "pink",
+    "versatile": false
   },
   {
     "name": "water poppy",
-    "colors": ["yellow", "white"],
-    "biomes": ["aquatic", "southAmerican", "tropical"],
+    "colors": [
+      "yellow",
+      "white"
+    ],
+    "biomes": [
+      "aquatic",
+      "southAmerican",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "small",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "floating heart",
-    "colors": ["white", "yellow", "cream"],
-    "biomes": ["aquatic", "northAmerican", "meadow"],
+    "colors": [
+      "white",
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "meadow"
+    ],
     "form": "floating",
     "scale": "small",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "water hawthorn",
-    "colors": ["white", "cream"],
-    "biomes": ["aquatic", "african", "cottage"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "african",
+      "cottage"
+    ],
     "form": "floating",
     "scale": "small",
-    "register": ["aquatic", "cottage", "naturalistic"]
+    "register": [
+      "aquatic",
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "water snowflake",
-    "colors": ["white", "yellow", "cream"],
-    "biomes": ["aquatic", "asian", "australian"],
+    "colors": [
+      "white",
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "aquatic",
+      "asian",
+      "australian"
+    ],
     "form": "floating",
     "scale": "small",
-    "register": ["aquatic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "naturalistic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "fringed water lily",
-    "colors": ["yellow"],
-    "biomes": ["aquatic", "northAmerican", "woodland"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "northAmerican",
+      "woodland"
+    ],
     "form": "floating",
     "scale": "small",
-    "register": ["aquatic", "naturalistic", "woodland"]
+    "register": [
+      "aquatic",
+      "naturalistic",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "tropical night-blooming water lily",
-    "colors": ["white", "pink", "lavender"],
-    "biomes": ["aquatic", "tropical", "african"],
+    "colors": [
+      "white",
+      "pink",
+      "lavender"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "african"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "tropical", "exotic"]
+    "register": [
+      "aquatic",
+      "tropical",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "purple tropical water lily",
-    "colors": ["indigo", "violet", "purple", "blue"],
-    "biomes": ["aquatic", "tropical", "asian"],
+    "colors": [
+      "indigo",
+      "violet",
+      "purple",
+      "blue"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "asian"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "tropical", "exotic"]
+    "register": [
+      "aquatic",
+      "tropical",
+      "exotic"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "cape blue water lily",
-    "colors": ["blue", "lavender", "white", "yellow"],
-    "biomes": ["aquatic", "african", "tropical"],
+    "colors": [
+      "blue",
+      "lavender",
+      "white",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "african",
+      "tropical"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "exotic", "naturalistic"]
+    "register": [
+      "aquatic",
+      "exotic",
+      "naturalistic"
+    ],
+    "primary": "blue",
+    "versatile": false
   },
   {
     "name": "coral water lily",
-    "colors": ["coral", "peach", "orange", "yellow"],
-    "biomes": ["aquatic", "tropical", "cottage"],
+    "colors": [
+      "coral",
+      "peach",
+      "orange",
+      "yellow"
+    ],
+    "biomes": [
+      "aquatic",
+      "tropical",
+      "cottage"
+    ],
     "form": "floating",
     "scale": "large",
-    "register": ["aquatic", "tropical", "cottage"]
+    "register": [
+      "aquatic",
+      "tropical",
+      "cottage"
+    ],
+    "primary": "coral",
+    "versatile": false
   },
   {
     "name": "snowball viburnum",
-    "colors": ["white", "cream"],
-    "biomes": ["asian", "northAmerican", "woodland", "cottage"],
+    "colors": [
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "northAmerican",
+      "woodland",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "pompom dahlia",
-    "colors": ["pink", "red", "orange", "yellow", "purple", "white", "coral"],
-    "biomes": ["southAmerican", "cottage", "meadow"],
+    "colors": [
+      "pink",
+      "red",
+      "orange",
+      "yellow",
+      "purple",
+      "white",
+      "coral"
+    ],
+    "biomes": [
+      "southAmerican",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "billy buttons",
-    "colors": ["yellow"],
-    "biomes": ["australian", "meadow"],
+    "colors": [
+      "yellow"
+    ],
+    "biomes": [
+      "australian",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "small",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "peony",
-    "colors": ["pink", "red", "white", "cream", "magenta", "coral"],
-    "biomes": ["asian", "cottage", "woodland"],
+    "colors": [
+      "pink",
+      "red",
+      "white",
+      "cream",
+      "magenta",
+      "coral"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "pink",
+    "versatile": true
   },
   {
     "name": "ranunculus",
-    "colors": ["yellow", "orange", "pink", "red", "white", "cream"],
-    "biomes": ["asian", "cottage", "meadow"],
+    "colors": [
+      "yellow",
+      "orange",
+      "pink",
+      "red",
+      "white",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "yellow",
+    "versatile": true
   },
   {
     "name": "carnation",
-    "colors": ["red", "pink", "white", "magenta", "coral", "peach", "burgundy"],
-    "biomes": ["asian", "cottage", "meadow"],
+    "colors": [
+      "red",
+      "pink",
+      "white",
+      "magenta",
+      "coral",
+      "peach",
+      "burgundy"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "tuberous begonia",
-    "colors": ["red", "orange", "pink", "yellow", "white", "coral", "peach"],
-    "biomes": ["southAmerican", "tropical", "cottage"],
+    "colors": [
+      "red",
+      "orange",
+      "pink",
+      "yellow",
+      "white",
+      "coral",
+      "peach"
+    ],
+    "biomes": [
+      "southAmerican",
+      "tropical",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["tropical", "cottage"]
+    "register": [
+      "tropical",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "oriental lily",
-    "colors": ["white", "pink", "red", "orange", "yellow", "cream"],
-    "biomes": ["asian", "cottage", "woodland"],
+    "colors": [
+      "white",
+      "pink",
+      "red",
+      "orange",
+      "yellow",
+      "cream"
+    ],
+    "biomes": [
+      "asian",
+      "cottage",
+      "woodland"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["cottage", "woodland"]
+    "register": [
+      "cottage",
+      "woodland"
+    ],
+    "primary": "white",
+    "versatile": true
   },
   {
     "name": "hibiscus",
-    "colors": ["red", "pink", "white", "yellow", "coral", "peach", "magenta"],
-    "biomes": ["tropical", "asian", "african"],
+    "colors": [
+      "red",
+      "pink",
+      "white",
+      "yellow",
+      "coral",
+      "peach",
+      "magenta"
+    ],
+    "biomes": [
+      "tropical",
+      "asian",
+      "african"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["tropical", "exotic"]
+    "register": [
+      "tropical",
+      "exotic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "datura",
-    "colors": ["white", "cream", "lavender"],
-    "biomes": ["desert", "northAmerican", "southAmerican"],
+    "colors": [
+      "white",
+      "cream",
+      "lavender"
+    ],
+    "biomes": [
+      "desert",
+      "northAmerican",
+      "southAmerican"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["desert", "exotic"]
+    "register": [
+      "desert",
+      "exotic"
+    ],
+    "primary": "white",
+    "versatile": false
   },
   {
     "name": "amaryllis",
-    "colors": ["red", "pink", "white", "orange", "coral", "burgundy"],
-    "biomes": ["southAmerican", "african", "tropical"],
+    "colors": [
+      "red",
+      "pink",
+      "white",
+      "orange",
+      "coral",
+      "burgundy"
+    ],
+    "biomes": [
+      "southAmerican",
+      "african",
+      "tropical"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["exotic", "tropical"]
+    "register": [
+      "exotic",
+      "tropical"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "gerbera daisy",
-    "colors": ["red", "orange", "yellow", "pink", "white", "coral", "magenta"],
-    "biomes": ["african", "meadow", "cottage"],
+    "colors": [
+      "red",
+      "orange",
+      "yellow",
+      "pink",
+      "white",
+      "coral",
+      "magenta"
+    ],
+    "biomes": [
+      "african",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "sunflower",
-    "colors": ["yellow", "orange", "bronze", "burgundy"],
-    "biomes": ["northAmerican", "meadow", "cottage"],
+    "colors": [
+      "yellow",
+      "orange",
+      "bronze",
+      "burgundy"
+    ],
+    "biomes": [
+      "northAmerican",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "large",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "yellow",
+    "versatile": false
   },
   {
     "name": "tulip",
-    "colors": ["red", "pink", "orange", "yellow", "white", "purple", "violet", "magenta", "peach"],
-    "biomes": ["centralAsian", "asian", "cottage", "meadow"],
+    "colors": [
+      "red",
+      "pink",
+      "orange",
+      "yellow",
+      "white",
+      "purple",
+      "violet",
+      "magenta",
+      "peach"
+    ],
+    "biomes": [
+      "centralAsian",
+      "asian",
+      "cottage",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "red",
+    "versatile": true
   },
   {
     "name": "poppy",
-    "colors": ["red", "orange", "pink", "white", "purple", "coral", "peach"],
-    "biomes": ["asian", "meadow", "cottage"],
+    "colors": [
+      "red",
+      "orange",
+      "pink",
+      "white",
+      "purple",
+      "coral",
+      "peach"
+    ],
+    "biomes": [
+      "asian",
+      "meadow",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "cottage"]
+    "register": [
+      "naturalistic",
+      "cottage"
+    ],
+    "primary": "red",
+    "versatile": false
   },
   {
     "name": "fritillaria",
-    "colors": ["purple", "burgundy", "orange", "yellow", "white", "bronze"],
-    "biomes": ["centralAsian", "asian", "alpine", "meadow"],
+    "colors": [
+      "purple",
+      "burgundy",
+      "orange",
+      "yellow",
+      "white",
+      "bronze"
+    ],
+    "biomes": [
+      "centralAsian",
+      "asian",
+      "alpine",
+      "meadow"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["naturalistic", "alpine"]
+    "register": [
+      "naturalistic",
+      "alpine"
+    ],
+    "primary": "purple",
+    "versatile": false
   },
   {
     "name": "lisianthus",
-    "colors": ["purple", "violet", "lavender", "white", "pink", "indigo"],
-    "biomes": ["northAmerican", "southAmerican", "cottage"],
+    "colors": [
+      "purple",
+      "violet",
+      "lavender",
+      "white",
+      "pink",
+      "indigo"
+    ],
+    "biomes": [
+      "northAmerican",
+      "southAmerican",
+      "cottage"
+    ],
     "form": "statement",
     "scale": "medium",
-    "register": ["cottage", "naturalistic"]
+    "register": [
+      "cottage",
+      "naturalistic"
+    ],
+    "primary": "purple",
+    "versatile": true
   }
 ]

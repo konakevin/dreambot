@@ -159,6 +159,7 @@ module.exports = {
   ARCLIB_DETAIL: load('arclib_detail'),
   ARCLIB_FEATURE: load('arclib_feature'),
   ARCLIB_OCCUPANT: load('arclib_occupant'),
+  ARCLIB_SET_PIECES: load('arclib_set_pieces'), // pickN:2 — whimsical lived-in trinkets (2026-06-17)
   ARCLIB_DRAMA: load('arclib_drama'),
 
   // ─── sky-castle path (2026-06-10, NEW, Tier 3) — floating kingdom. MVP-25. ───

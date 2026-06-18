@@ -257,20 +257,23 @@ module.exports = {
       // back to the temperate pool (de-tropicalizing the render); warm themes
       // are rich in tropical species so the roster stays tropical. (2) warm =
       // loud iconic Hawaiian (hibiscus/bird-of-paradise/heliconia hot tones).
+      // Keys updated 2026-06-17 to the new design-menu themes. Suppress cool
+      // themes (sparse tropical pool + de-tropicalizing), boost warm/iconic.
       themeBias = {
         blue: 0.15,
         purple: 0.2,
+        nightshade: 0.2,
         bluePurple: 0.2,
-        purpleWhiteBlue: 0.3,
+        whiteBlue: 0.3,
+        purpleGold: 0.5,
         white: 0.4,
+        blushWhite: 0.8,
         sunset: 2.5,
         orange: 2.5,
         red: 1.6,
-        magentaGold: 2,
         coralCreamPeach: 1.8,
         yellow: 1.5,
-        pinkWhite: 1.3,
-        goldenMeadow: 1.3,
+        pink: 1.2,
         rainbow: 1.4,
         mixedLush: 1.2,
       };
