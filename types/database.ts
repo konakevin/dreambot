@@ -2237,6 +2237,41 @@ export type Database = {
           },
         ];
       };
+      user_first_run: {
+        Row: {
+          seen_create_intro: boolean;
+          seen_feed_intro: boolean;
+          seen_mediums_intro: boolean;
+          seen_sparkle_intro: boolean;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          seen_create_intro?: boolean;
+          seen_feed_intro?: boolean;
+          seen_mediums_intro?: boolean;
+          seen_sparkle_intro?: boolean;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          seen_create_intro?: boolean;
+          seen_feed_intro?: boolean;
+          seen_mediums_intro?: boolean;
+          seen_sparkle_intro?: boolean;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_first_run_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       user_recipes: {
         Row: {
           ai_enabled: boolean;

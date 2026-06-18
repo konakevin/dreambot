@@ -7,11 +7,12 @@
  *   2. Bot selection — reuses BotSelectorStep; the user must follow ≥1 bot
  *      before "Go to my feed" enables. On finish, marks the seen flag + closes.
  *
- * Gating: persists `dreambot.seenFeedIntro.v1` in AsyncStorage — set on
- * COMPLETION (not on mount), because picking ≥1 bot is required. A user who
- * kills the app mid-flow re-sees the gate next launch (correct — it's mandatory).
+ * Gating: account-bound seen-flag in public.user_first_run (migration 284, via
+ * lib/firstRunFlags) — set on COMPLETION (not on mount), because picking ≥1 bot
+ * is required. A user who kills the app mid-flow re-sees the gate next launch
+ * (correct — it's mandatory).
  *
- * Mirrors the CreateIntroSheet first-run pattern (AsyncStorage flag + config
+ * Mirrors the CreateIntroSheet first-run pattern (account-bound flag + config
  * copy), but is a blocking full-screen flow rather than a dismissible sheet.
  */
 
@@ -27,7 +28,7 @@ import {
   useSafeAreaInsets,
   initialWindowMetrics,
 } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { FEED_INTRO } from '@/constants/onboardingInfo';
@@ -42,20 +43,14 @@ import { GradientButton } from '@/components/GradientButton';
 const PARTY_IMG_HEIGHT = Math.min((screen.width - 56) / 1.5, screen.height * 0.24, 220);
 const PARTY_IMG_WIDTH = PARTY_IMG_HEIGHT * 1.5;
 
-const SEEN_FEED_INTRO_KEY = 'dreambot.seenFeedIntro.v1';
-
 /** Has the user already completed the first-run feed intro? Gate the feed on this. */
-export async function hasSeenFeedIntro(): Promise<boolean> {
-  try {
-    return (await AsyncStorage.getItem(SEEN_FEED_INTRO_KEY)) === '1';
-  } catch {
-    return false;
-  }
+export function hasSeenFeedIntro(): Promise<boolean> {
+  return hasSeenFlag('feed');
 }
 
 /** Clear the flag so the gate shows again — used by the admin Reset-Profile tool. */
-export async function resetFeedIntro(): Promise<void> {
-  await AsyncStorage.removeItem(SEEN_FEED_INTRO_KEY);
+export function resetFeedIntro(): Promise<void> {
+  return resetFlag('feed');
 }
 
 interface Props {
@@ -67,7 +62,7 @@ export function FeedIntroGate({ onDone }: Props) {
 
   const complete = useCallback(() => {
     // Set the seen flag only now — after the user has followed ≥1 bot.
-    AsyncStorage.setItem(SEEN_FEED_INTRO_KEY, '1').catch((e) => {
+    markFlagSeen('feed').catch((e) => {
       if (__DEV__) console.warn('[FeedIntroGate] seen-flag persist failed', e);
     });
     onDone();

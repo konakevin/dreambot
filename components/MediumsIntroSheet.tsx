@@ -8,7 +8,7 @@
  *                     photo, so it's an approximation, reimagined in the medium's
  *                     art style (LEGO, pixel art, anime, claymation, …).
  *
- * Mirrors CreateIntroSheet's pattern: a pageSheet Modal gated by an AsyncStorage
+ * Mirrors CreateIntroSheet's pattern: a pageSheet Modal gated by an account-bound
  * flag, marked seen on mount so a kill-app-mid-view doesn't re-trap the user.
  * The badge chip colors here match the face/art badge on the Create medium row.
  */
@@ -19,14 +19,12 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const SEEN_MEDIUMS_INTRO_KEY = 'dreambot.seenMediumsIntro.v1';
 
 // Matches the face/art badge tints on the Create medium row (single source of
 // truth in constants/theme.ts → MEDIUM_BADGE, the two ends of the brand gradient).
@@ -36,18 +34,14 @@ const ART_COLOR = MEDIUM_BADGE.art.color;
 const ART_BG = MEDIUM_BADGE.art.bg;
 
 /** Has the user already seen the mediums intro? Gate rendering with this. */
-export async function hasSeenMediumsIntro(): Promise<boolean> {
-  try {
-    return (await AsyncStorage.getItem(SEEN_MEDIUMS_INTRO_KEY)) === '1';
-  } catch {
-    return false;
-  }
+export function hasSeenMediumsIntro(): Promise<boolean> {
+  return hasSeenFlag('mediums');
 }
 
 /** Clear the "seen" flag so the intro shows again — used by the admin
  *  Reset-Profile tool to re-test the first-run experience. */
-export async function resetMediumsIntro(): Promise<void> {
-  await AsyncStorage.removeItem(SEEN_MEDIUMS_INTRO_KEY);
+export function resetMediumsIntro(): Promise<void> {
+  return resetFlag('mediums');
 }
 
 interface Props {
@@ -91,7 +85,7 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
     if (!visible) return;
-    AsyncStorage.setItem(SEEN_MEDIUMS_INTRO_KEY, '1').catch((e) => {
+    markFlagSeen('mediums').catch((e) => {
       if (__DEV__) console.warn('[MediumsIntroSheet] seen-flag persist failed', e);
     });
   }, [visible]);

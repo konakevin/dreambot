@@ -8,9 +8,9 @@
  * copy + screenshot + 4 mode cards stay in one place — the same config
  * that drove the (now removed) onboarding InfoStep.
  *
- * Gating: persists `dreambot.seenCreateIntro.v1` in AsyncStorage. Set on
- * mount of the sheet so a user who kills the app mid-view doesn't get
- * re-trapped on next launch.
+ * Gating: account-bound seen-flag in public.user_first_run (migration 284, via
+ * lib/firstRunFlags). Marked seen on mount of the sheet so a user who kills the
+ * app mid-view doesn't get re-trapped on next launch.
  */
 
 import { View, StyleSheet, ScrollView, Modal } from 'react-native';
@@ -20,31 +20,25 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 
-const SEEN_CREATE_INTRO_KEY = 'dreambot.seenCreateIntro.v1';
-
 /**
  * Async check — has the user already seen the intro? Use this on the
  * Create tab to decide whether to render <CreateIntroSheet />.
  */
-export async function hasSeenCreateIntro(): Promise<boolean> {
-  try {
-    return (await AsyncStorage.getItem(SEEN_CREATE_INTRO_KEY)) === '1';
-  } catch {
-    return false;
-  }
+export function hasSeenCreateIntro(): Promise<boolean> {
+  return hasSeenFlag('create');
 }
 
 /** Clear the "seen" flag so the intro shows again — used by the admin
  *  Reset-Profile tool to re-test the first-run experience. */
-export async function resetCreateIntro(): Promise<void> {
-  await AsyncStorage.removeItem(SEEN_CREATE_INTRO_KEY);
+export function resetCreateIntro(): Promise<void> {
+  return resetFlag('create');
 }
 
 interface Props {
@@ -60,7 +54,7 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
     if (!visible) return;
-    AsyncStorage.setItem(SEEN_CREATE_INTRO_KEY, '1').catch((e) => {
+    markFlagSeen('create').catch((e) => {
       if (__DEV__) console.warn('[CreateIntroSheet] seen-flag persist failed', e);
     });
   }, [visible]);

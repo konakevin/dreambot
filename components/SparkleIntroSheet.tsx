@@ -6,8 +6,9 @@
  * dream proceeds; it never shows again.
  *
  * Mirrors CreateIntroSheet / MediumsIntroSheet: a pageSheet Modal gated by an
- * AsyncStorage flag, marked seen on mount so a kill-app-mid-view doesn't
- * re-trap the user. The ONLY way out is the bottom "Got it" CTA.
+ * account-bound flag (public.user_first_run, via lib/firstRunFlags), marked seen
+ * on mount so a kill-app-mid-view doesn't re-trap the user. The ONLY way out is
+ * the bottom "Got it" CTA.
  */
 
 import { View, StyleSheet, ScrollView, Modal } from 'react-native';
@@ -17,28 +18,22 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { formatCompact } from '@/lib/formatNumber';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 
-const SEEN_SPARKLE_INTRO_KEY = 'dreambot.seenSparkleIntro.v1';
-
 /** Has the user already seen the sparkle intro? Gate rendering with this. */
-export async function hasSeenSparkleIntro(): Promise<boolean> {
-  try {
-    return (await AsyncStorage.getItem(SEEN_SPARKLE_INTRO_KEY)) === '1';
-  } catch {
-    return false;
-  }
+export function hasSeenSparkleIntro(): Promise<boolean> {
+  return hasSeenFlag('sparkle');
 }
 
 /** Clear the "seen" flag so the intro shows again — used by the admin
  *  Reset-Tutorials tool to re-test the first-run experience. */
-export async function resetSparkleIntro(): Promise<void> {
-  await AsyncStorage.removeItem(SEEN_SPARKLE_INTRO_KEY);
+export function resetSparkleIntro(): Promise<void> {
+  return resetFlag('sparkle');
 }
 
 interface CardSpec {
@@ -65,7 +60,7 @@ export function SparkleIntroSheet({ visible, onClose, cost, balance }: Props) {
   // Mark seen the moment the sheet renders — kill-app-mid-view-safe.
   useEffect(() => {
     if (!visible) return;
-    AsyncStorage.setItem(SEEN_SPARKLE_INTRO_KEY, '1').catch((e) => {
+    markFlagSeen('sparkle').catch((e) => {
       if (__DEV__) console.warn('[SparkleIntroSheet] seen-flag persist failed', e);
     });
   }, [visible]);
