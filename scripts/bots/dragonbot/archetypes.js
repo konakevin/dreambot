@@ -360,6 +360,43 @@ Pure scenery — NO CHARACTERS, NO FIGURES. The landscape is the hero. "Land is 
     anchorScaleRange: null,
   },
 
+  DRAGON_LAIR: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-lair path (2026-06-17). COZY, CLOSE-IN scenes of eggs + baby dragons INSIDE a lair (Kevin: cozy, not a wide epic vista). The lair is just the warm interior SETTING. cozy lair-nook (lair) + nest+eggs (nests) + baby dragons (broodlings, reuses the realistic dragnest pool) + lair dressing (lair_detail pickN:2 hoard/crystals, no meat); mother OPTIONAL (65%); drama (40% gated). Two framing modes: ~70% cozy nest+babies, ~30% a high-fidelity CLOSE-UP of magical eggs. Realistic painted Western dragons, NOT cartoon. Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['lair', 'nests', 'broodlings', 'lair_detail'],
+    },
+    pickN: { lair_detail: 2 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    conditionalLayers: [{ slot: 'mother', gate: 0.65 }],
+    // ~70% a cozy close-in nest+babies scene in the lair, ~30% a gorgeous
+    // high-fidelity CLOSE-UP of the magical eggs. Template branches on _framingMode.
+    framingModes: {
+      modes: ['cozy_scene', 'egg_closeup'],
+      weights: [70, 30],
+    },
+    anchorScaleRange: null,
+  },
+
+  DRAGON_NEST: {
+    description:
+      'PATH-BESPOKE — DragonBot dragon-nest path (2026-06-17). Behind-the-scenes WESTERN HIGH-FANTASY young dragons (realistic painted, NOT cute/cartoon) — a lively group of hatchlings at their home, which is NOW in varied settings: dens/caves AND the great outdoors (forest clearing / lakeshore / streambank / sunny meadow). Path-bespoke: nest_setting (where their home is — indoor OR outdoor) + clutch (the eggs) + broodlings (the realistic young-dragon hero, a lively group) + nest_detail (pickN:2 clean nest dressing, no meat/bones); mother OPTIONAL (65% gated); drama (40% gated beat). Universal lighting + atmosphere reused.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['nest_setting', 'clutch', 'broodlings', 'nest_detail'],
+    },
+    pickN: { nest_detail: 2 },
+    conditionalLayer: { slot: 'drama', gate: 0.4 },
+    // mother rolled independently — ~65% have a tending mother dragon, ~35% are
+    // just the brood. clutch stays always-on (the eggs/home anchor the scene).
+    conditionalLayers: [{ slot: 'mother', gate: 0.65 }],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   ARCANE_LIBRARY: {
     description:
       'PATH-BESPOKE — DragonBot arcane-library path (2026-06-10, Tier 3; set_pieces + optional occupant added 2026-06-17). A Rivendell-style ancient high-elven library — warm, candlelit, cozy. Path-bespoke: library + arcane_detail + library_feature + set_pieces (pickN:2 lived-in trinkets, always); occupant is OPTIONAL (60% gated — ~40% of renders are figure-free so the cozy clutter owns the frame); drama (40% gated). Universal lighting + atmosphere reused.',

@@ -162,6 +162,20 @@ module.exports = {
   ARCLIB_SET_PIECES: load('arclib_set_pieces'), // pickN:2 — whimsical lived-in trinkets (2026-06-17)
   ARCLIB_DRAMA: load('arclib_drama'),
 
+  // ─── dragon-nest path (2026-06-17, NEW) — baby dragons + eggs + nest. MVP-25. ───
+  DRAGNEST_SETTING: load('dragnest_setting'),
+  DRAGNEST_CLUTCH: load('dragnest_clutch'),
+  DRAGNEST_BROODLINGS: load('dragnest_broodlings'),
+  DRAGNEST_DETAIL: load('dragnest_detail'), // pickN:2 — cozy nest dressing
+  DRAGNEST_MOTHER: load('dragnest_mother'), // 65% gated conditional
+  DRAGNEST_DRAMA: load('dragnest_drama'), // 40% gated conditional
+
+  // ─── dragon-lair path (2026-06-17, NEW) — cozy eggs+babies inside a lair. ───
+  // broodlings / mother / drama reuse the dragnest pools (above).
+  DRAGONLAIR_LAIR: load('dragonlair_lair'), // cozy lair-interior nook
+  DRAGONLAIR_NESTS: load('dragonlair_nests'), // small tidy 3-6 egg clutch
+  DRAGONLAIR_DETAIL: load('dragonlair_detail'), // pickN:2 — hoard dressing (clean)
+
   // ─── sky-castle path (2026-06-10, NEW, Tier 3) — floating kingdom. MVP-25. ───
   SKYCASTLE_STRUCTURE: load('skycastle_structure'),
   SKYCASTLE_DETAIL: load('skycastle_detail'),

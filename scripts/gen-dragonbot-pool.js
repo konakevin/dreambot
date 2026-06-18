@@ -257,6 +257,206 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // DRAGON-NEST PATH (2026-06-17 — new). Tender behind-the-scenes
+  // baby dragons — a clutch of eggs + broodlings in their nest.
+  // ════════════════════════════════════════════════════════
+
+  dragnest_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST SETTING — WHERE the brood's home is + (for dens) how the eggs stay warm. Each entry 25-45 words. Intimate, close-in, room for the brood to play. SPANS BOTH sheltered dens AND the great OUTDOORS — get these young dragons OUTSIDE in nature, not always in a cave.
+
+VARIETY MANDATE — span ~25 settings, roughly HALF sheltered dens and HALF out in the wild:
+  SHELTERED DENS (~half — eggs incubated by the named warmth): a den of warm ash beside a glowing lava vent in a volcanic cavern; a clutch half-buried in a warm bed of gold in a treasure-hoard cavern; a cliff-ledge aerie on a wind-scoured crag; a mineral hot-spring grotto wreathed in steam; a blue glacier ice-cavern; a mossy hollow inside a giant ancient tree; a crystal-lined geode cave glowing softly.
+  OUT IN THE WILD (~half — warmed by the open SUN, get them outside): a sunny forest clearing ringed with ferns and wildflowers, dappled light through the canopy; a pebbled lakeshore with calm water lapping at smooth stones; a mossy streambank with a clear brook running over rocks; a warm grassy meadow dotted with boulders; a mist-wreathed waterfall pool; a riverbank under dappled woodland light; a sun-warmed clearing among autumn trees; a reed-fringed pond at golden hour. Each names the PLACE + (den) its incubating warmth or (outdoor) the sun + open nature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE setting for the brood's home in 25-45 words — roughly half sheltered dens (name the incubating warmth: lava / gold-bed / steam / ice) and half OUT IN THE WILD (forest clearing / lakeshore / streambank / meadow / waterfall / riverbank, warmed by the open SUN). Intimate + close-in with room to play, NEVER a vast empty vista. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A sunny forest clearing ringed with ferns and wildflowers, dappled light falling through the canopy onto soft mossy ground, a clear brook murmuring past one edge, warmed by long hours of sun.
+2. A pebbled lakeshore where calm water laps at smooth stones, reeds swaying at the margin and gentle hills rising beyond, the shingle warmed by the open afternoon sun.
+3. A den of warm ash beside a glowing lava vent deep in a red volcanic cavern, the eggs incubated by the steady heat rising off the molten rock below.`,
+  },
+
+  dragnest_clutch: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST CLUTCH — the EGGS themselves. Each entry 15-30 words. Wondrous, charming, varied.
+
+VARIETY MANDATE — ~25 distinct egg-clutches: a tight cluster of jewel-toned leathery eggs; a few large mottled stone-like eggs flecked with gold; speckled eggs glowing faintly from the hatchling curled within; crystalline translucent eggs catching the light; a single huge pearl-white egg cradled alone; a dozen small copper eggs in a ring; eggs veined with faint molten cracks of inner heat; frost-rimed pale-blue eggs; one egg already cracking, a wet little snout poking through; eggs dusted with warm ash; iridescent eggs shimmering like oil; eggs nestled in shed scales. Vary the COUNT, the SHELL (leathery / stony / crystalline / speckled / iridescent), the COLOR, and the STATE (whole / cracking / glowing). Never a single boring egg-type.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dragon-egg clutch in 15-30 words — vary count + shell + color + state (whole/cracking/glowing). Wondrous + charming. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tight cluster of five jewel-toned leathery eggs, deep crimson and gold, their surfaces faintly warm and glowing from the curled hatchlings within.
+2. Three large mottled stone-grey eggs flecked with copper, one already cracking along a hairline seam, a wet little snout just breaking through.
+3. A ring of small frost-rimed pale-blue eggs dusted with snow, glinting like polished moonstones in the cold cavern light.`,
+  },
+
+  dragnest_broodlings: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST BROODLINGS — a lively GROUP of YOUNG WESTERN DRAGONS (hatchlings), the hero, caught mid-moment. Each entry 22-42 words. A characterful group doing their thing — works whether at a den OR out in the wild (water's edge, grass, forest).
+
+⚠ REALISTIC, NOT CARTOON — painted high-fantasy Western dragon hatchlings (Frank Frazetta / Brom / Alan Lee oil realism), real scaled hide, real horns and claws. YOUNG (smaller, sleeker, softer-featured than an adult) with ALERT CLEAR EYES (normal dragon eyes, NOT enlarged), small not-yet-grown wings, budding horns, short sharp claws — NEVER cute/chubby/big-eyed, NEVER Pixar / DreamWorks / "How to Train Your Dragon", never rubbery. Endearing because they're young, never through cartoon exaggeration.
+
+VARIETY MANDATE — vary the COLOR/kind (crimson / emerald / sapphire / gold / obsidian-black / pearl-white / copper / amethyst — fantasy-native, never real-world ethnicity) AND the lively GROUP moment (3-6 young dragons): a knot lounging in a heap; two scrapping and tumbling together; one clambering over its siblings or up a rock; several clustered watching a cracking egg; two squabbling over a shiny coin; a few stretching and yawning awake; one crouched ready to pounce on a sibling; several splashing and wading at a water's edge; a few romping and chasing through grass; one craning up to watch a bird overhead; a couple sunning on a warm rock. ~3-6 young dragons, a lively candid group. NO meat, NO bones, NO carcass.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lively group of 3-6 young Western dragon hatchlings caught mid-moment in 22-42 words — REALISTIC painted dragons (real scales/horns/claws, alert normal eyes, sleek young bodies), NEVER cute/big-eyed/Pixar/How-to-Train-Your-Dragon. Actions work at a den OR outdoors (water/grass/forest). NO meat/bones. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Four crimson hatchlings lounging in a tangled heap, glossy new scales rising and falling, budding horns and short claws, sleek young bodies, painted in rich high-fantasy oils.
+2. Two emerald young dragons scrapping and tumbling, jade scales flashing, small wings beating, alert slit-pupil eyes narrowed, short claws scrabbling for grip.
+3. Three sapphire hatchlings splashing at a shallow water's edge, banded scales beaded with bright droplets, small wings half-spread, alert silver eyes lit with curiosity.`,
+  },
+
+  dragnest_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST DETAIL — the cozy little touches that fill the nest (pickN:2 — two scattered into every render). Each entry 12-25 words. Small, natural, lived-in nest-dressing — NOT the eggs, NOT the babies, NOT the setting.
+
+⚠ NO MEAT, NO CARCASS, NO BONES, NO GORE — keep it clean and appealing (no prey, no kills, no gnawed bones, nothing gross).
+
+VARIETY MANDATE — ~25 distinct clean nest touches: scattered curls of cracked eggshell; the nest lined soft with downy shed-scales and feathers; a few glittering hoard-coins bedded among the straw; thin wisps of warm smoke or steam curling up; soft drifts of warm ash; a fallen wing-feather; claw-scratch marks worn into the nest rim; a shiny trinket the brood has hoarded (a coin, a gem, a buckle); clusters of raw crystals or geodes; tufts of moss and dry grass woven in; smooth river-stones the brood plays with; a puddle of dew catching the light; a single bright beetle skittering past. Each is ONE small natural nest-detail. Clean + appealing + natural ONLY — no meat, no bones, no modern objects.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small clean natural nest-detail in 12-25 words — lived-in set-dressing scattered in the nest, NOT the eggs/dragons/setting. NO meat, NO bones, NO carcass, NO gore. Natural objects only (no modern items). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Curls of cracked eggshell lie scattered across the nest floor, pale fragments still faintly warm among the straw and ash.
+2. The nest is lined soft with downy shed-scales and a few stray feathers, glints of stray hoard-gold bedded here and there.
+3. A scatter of smooth river-stones and a couple of raw crystals lie tumbled at the nest's edge, glinting in the warm light.`,
+  },
+
+  dragnest_mother: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST MOTHER — the tending MOTHER DRAGON (optional, ~65% of renders). Each entry 20-40 words. A great adult Western dragon, but TENDER and protective — she frames the babies, the BABIES stay the hero.
+
+ANATOMY — a full-grown Western dragon (four legs + two membrane wings + horned reptilian skull + long tail), vast beside the tiny babies (for scale + warmth), but her POSE/expression is gentle, maternal, watchful — never fierce or battle-ready.
+
+VARIETY MANDATE — vary her COLOR (crimson / emerald / bronze / obsidian / pearl / gold) AND her tender act: curled protectively in a great ring around the whole nest; sheltering the babies under one outstretched wing; lowering her huge head to nuzzle a hatchling; watching over the clutch with one half-lidded golden eye; breathing a gentle warm glow over the eggs; dozing with a broodling perched on her snout; gently nudging a wandering baby back to the nest with her nose; coiled with babies tucked against her warm flank. She is BIG and tender; the babies remain the focus.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tending mother dragon in 20-40 words — full-grown Western dragon, vast but TENDER/maternal/watchful (never fierce), framing the babies. Vary color + tender act. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast crimson mother curls in a great protective ring around the whole nest, her huge head lowered to nuzzle the smallest hatchling, one golden eye half-lidded and tender.
+2. A bronze mother dragon shelters the broodlings beneath one outstretched membrane wing, breathing a soft warm glow over the eggs, her long tail wrapped gently around the nest.
+3. An obsidian mother dozes with a tiny hatchling perched contentedly on her snout, the rest of the brood tucked warm against her great scaled flank.`,
+  },
+
+  dragnest_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-NEST DRAMA — a charming, TENDER little beat heightening the cuteness, fires ~40%. Each entry 12-25 words. Whimsical + warm, never scary or violent.
+
+VARIETY MANDATE — ~25 distinct tender beats: an egg cracking right now, a wet snout breaking through the shell; a broodling sneezing its very first tiny puff of smoke, surprising itself; a hatchling tumbling off the nest-edge, caught gently by the mother's curling tail; two babies in a tug-of-war over one little bone; a broodling's first wobbly flame, no bigger than a candle-flicker; one pouncing clumsily on a fluttering moth; a hatchling hiccuping little smoke-rings; a baby trying to roar and managing only a squeak; one curled asleep on top of an unhatched egg; a broodling proudly dragging a shiny coin twice its size. Each adds a warm, funny, heart-melting moment (never frightening or violent).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE charming, tender baby-dragon beat in 12-25 words — whimsical + warm + funny, never scary/violent. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. One egg cracks open right now, a wet little snout breaking through the shell as the tiny hatchling sneezes its first breath.
+2. A broodling sneezes its very first puff of smoke and startles itself, tumbling backward off the warm nest rim.
+3. A baby dragon proudly drags a shiny gold coin twice its own size across the nest, wings flapping with the effort.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // DRAGON-LAIR PATH (2026-06-17 — new). A BIG grand lair
+  // teeming with dragon-family life — nests, eggs, parents,
+  // young playing throughout the huge cavern home.
+  // ════════════════════════════════════════════════════════
+
+  dragonlair_lair: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR SETTING — the SURROUNDINGS where a nest of eggs + baby dragons sits. Each entry 22-40 words. Cozy + CLOSE-IN (the nest stays the focus, NOT a wide vista) — but VARY THE SETTING WIDELY so NO TWO look alike. Mix CAVES with the GREAT OUTDOORS — these dragons do NOT all nest in the same cave.
+
+⚠ MIX IT UP — roughly HALF cozy cave/lair nooks (varied) and HALF OUT IN THE WILD:
+  CAVE / LAIR NOOKS (vary the ROCK + LIGHT widely — never default to warm-gold): warm sandstone · dark obsidian+basalt · pale grey granite · deep red sandstone · moss-grown stone · amethyst crystal-lined · blue glacier ice · white marble · slate · copper-veined rock — lit by warm amber hoard-glow / cool blue moonlight / blue-white crystal glow / green bioluminescence / a shaft of white daylight / firelight orange / teal mineral-glow / magenta crystal light.
+  OUT IN THE WILD (get them OUTSIDE — name the spot + the light): a nest at the edge of a still forest pond, lily-pads and reeds close; a nest in a sunny forest clearing ringed with ferns; a nest on a windswept clifftop ledge high above the sea; a nest in soft dune-grass by the seashore, surf hushing near; a nest on a mossy riverbank under dappled trees; a nest in a warm wildflower meadow hollow; a nest among sun-warmed boulders by a mountain tarn; a nest tucked in the great roots of an ancient tree; a nest on a warm rock-shelf beside a waterfall pool.
+Each = ONE cozy close nesting spot with a DISTINCT setting (cave OR outdoor) — name the surroundings AND the light. The nest stays the close focus; the setting is what varies. NEVER a vast wide vista.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cozy, close-in nesting SETTING in 22-40 words — roughly half varied CAVE/lair nooks (distinct rock+light) and half OUT IN THE WILD (forest pond / forest clearing / clifftop / seashore / riverbank / meadow / mountain tarn / tree-roots). Name the surroundings + the light. Vary widely; NEVER a wide vista. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A nest at the mossy edge of a still forest pond, lily-pads and reeds close around, soft dappled green light falling through the leaves overhead onto the eggs.
+2. A snug nook of dark obsidian and basalt, cool blue moonlight slanting through a crack and pooling silver over the nest, a few gold coins glinting in the bedding.
+3. A nest on a windswept clifftop ledge high above the crashing sea, warm late-gold sun on the close grass-tufted rock, gulls wheeling far below.`,
+  },
+
+  dragonlair_nests: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR NESTS — a nest cradling a SMALL TIDY clutch of EGGS in the lair. Each entry 15-30 words.
+
+⚠ CAP THE COUNT — 3 to 6 EGGS ONLY, a small tidy clutch, neatly nestled. NEVER "seventeen / a dozen / dozens / many / heaps of / a ring of / arranged in a circle / scattered clutches / several nests" — high counts and rings cram the frame into a sloppy mess of eggs and dragon-heads. ONE nest, a FEW eggs.
+
+⚠ MAKE THE EGGS POP — each clutch should be beautiful and eye-catching IN ITSELF: luminous, glowing from within, iridescent or gem-like, so the eggs stand out against whatever rock/light surrounds them. Vary the EGG COLOR widely across entries (jade-green / sapphire-blue / violet / crimson / molten-gold / pearl-white / obsidian-black / opal-iridescent / turquoise / amber) and the way they GLOW (inner light / iridescent shimmer / veined with light / frosted-gem / molten-cracked).
+
+VARIETY MANDATE — ~25 distinct single nests, each a small 3-6 egg clutch with a DISTINCT egg color + glow: four jade-green eggs glowing soft from within; three sapphire-blue eggs shimmering iridescent; a clutch of five molten-gold eggs veined with glowing cracks; a few violet opalescent eggs catching the light; a couple of big pearl-white eggs lit from inside; four obsidian eggs edged with a thin glowing seam; three turquoise crystalline eggs; a clutch of amber eggs warm and luminous. Vary SHELL (leathery / stony / crystalline / iridescent), COLOR, and GLOW — keep it 3-6 eggs, ONE tidy nest. NO meat, NO bones.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE nest with a SMALL TIDY clutch of 3-6 eggs in 15-30 words — give the eggs a DISTINCT eye-catching color + a way they GLOW/POP (inner light / iridescent / veined / gem-like). Vary egg color widely across entries. Keep count LOW (3-6), ONE nest. NEVER many eggs / a ring / a dozen. NO meat/bones. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A snug nest cradles four jade-green eggs glowing soft from within, their smooth shells iridescent at the edges where the light catches them.
+2. Three molten-gold eggs veined with glowing amber cracks, bedded in a drift of hoard-coins, radiating their own warm inner light.
+3. A clutch of five sapphire-blue crystalline eggs, shimmering with iridescence, cool light pooling out across the bedding around them.`,
+  },
+
+  dragonlair_parent: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR PARENT — the parent dragon(s) presiding over the lair (ONE great adult, or sometimes a PAIR). Each entry 20-40 words. A full-grown realistic Western dragon, TENDER and watchful (never battle-fierce) — the heart of the family home.
+
+ANATOMY — a full-grown Western dragon (four legs + two membrane wings + horned reptilian skull + long tail), vast and majestic but gentle/maternal/paternal in pose, presiding over the brood. Realistic painted, NOT cartoon.
+
+VARIETY MANDATE — vary COLOR (crimson / emerald / bronze / obsidian / pearl / gold / slate) and the presiding act: curled in a great protective coil around the central nest; perched high on a ledge watching the whole lair with one half-lidded eye; lowering a huge head to nuzzle a clambering hatchling; breathing a slow warm glow over a clutch; a PAIR of parents flanking the nest, one dozing while the other watches; stretched along a gold-slope with young swarming over its back; settling in with wings half-furled like a canopy over the brood. BIG and tender; the lair + young remain the wider scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE presiding parent dragon (or a pair) in 20-40 words — full-grown realistic Western dragon, vast but TENDER/watchful (never fierce), the heart of the lair. Vary color + presiding act. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A vast crimson mother curled in a great protective coil around the central nest, her huge horned head resting close, one amber eye half-lidded and watchful over the whole lair.
+2. A pair of bronze parents flank the hoard-nest, one dozing with wings furled while the other perches alert on a high ledge, surveying the brood below.
+3. A great slate dragon stretched along a golden slope, several young clambering over its back and tail while it watches, patient and unbothered.`,
+  },
+
+  dragonlair_young_activity: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR YOUNG ACTIVITY — a POCKET of young-dragon play somewhere in the big lair (pickN:3 — THREE of these are scattered through every scene to fill the huge space with life). Each entry 14-28 words. ONE little knot of young dragons doing something, somewhere in the lair.
+
+⚠ REALISTIC, NOT CARTOON — young Western dragon hatchlings (Frazetta/Brom/Alan Lee oil realism), real scales/horns/claws, alert NORMAL eyes — NEVER cute/big-eyed/Pixar/How-to-Train-Your-Dragon. NO meat, NO bones.
+
+VARIETY MANDATE — ~25 distinct pockets of activity (each somewhere in the lair): a cluster wrestling and tumbling on the cavern floor; a few clambering a slope of hoard-gold; some splashing at the edge of the lair's pool; a knot dozing in a warm heap by a nest; two chasing across the stone; one flapping hard, attempting a first wobbly flight up to a ledge; a few clustered watching a cracking egg; some scrambling over the parent's tail; two in a tug-of-war over a goblet; one perched alone watching the others; a few sunning in a shaft of light. Each is ONE pocket of realistic young-dragon life.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE pocket of young-dragon activity somewhere in the lair in 14-28 words — a small knot of realistic young Western dragons doing something (wrestling / clambering hoard / splashing / dozing / first-flight / watching an egg / climbing the parent). NEVER cute/big-eyed/cartoon, NO meat/bones. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. On the cavern floor a cluster of young dragons wrestle and tumble in a knot of small wings and lashing tails, claws scrabbling on the stone.
+2. A few hatchlings clamber a steep slope of hoard-gold, coins sliding and clattering down behind them as they scramble higher.
+3. At the lair's pool two young dragons splash and snap at the ripples while a third watches from a warm rock, wings half-spread.`,
+  },
+
+  dragonlair_detail: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR DETAIL — the lived-in dressing of the grand lair (pickN:2 — two scattered into every scene). Each entry 12-25 words. Small touches that make the huge lair feel like a real dragon-family home.
+
+⚠ NO MEAT, NO CARCASS, NO BONES, NO GORE — keep it clean.
+
+VARIETY MANDATE — ~25 distinct lair touches: glittering drifts and heaps of hoard-gold and gems; great claw-scratch gouges raked into the stone walls; scattered shed-scales catching the light; old shields, crowns, goblets and armor half-buried in the hoard; steam venting softly from cracks in the floor; massive stalactites hung with mineral glitter; a cluster of glowing crystals; coins drifted like sand into the corners; a thin waterfall trickling down a far wall; tufts of dry bedding-grass and moss in the nests; ancient carved pillars wreathed in faint mist. Each is ONE clean, natural/treasure lair-detail — no meat, no bones.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE clean lived-in lair-detail in 12-25 words — hoard-gold / claw-scratches / shed-scales / old treasure / steam / crystals / stalactites. NO meat, NO bones, NO gore. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Glittering drifts of hoard-gold and loose gems heaped against the cavern walls, coins spilled like sand across the floor.
+2. Great claw-scratch gouges rake down the stone walls, pale against the dark rock, worn smooth by generations of dragons.
+3. Old shields, a dented crown and tarnished goblets lie half-buried in the golden hoard, catching the warm light.`,
+  },
+
+  dragonlair_drama: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LAIR DRAMA — a charming, warm beat in the grand lair, fires ~40%. Each entry 12-25 words. Whimsical + warm, never scary or violent. NO meat, NO bones.
+
+VARIETY MANDATE — ~25 distinct warm lair beats: a great shaft of daylight breaking through to light the whole lair; an egg cracking as the young gather close; a young dragon tumbling off a gold-pile in a clatter of coins; the brood swarming up to a returning parent at the lair mouth; a young dragon's first small sputter of flame lighting startled faces; a parent breathing a slow warm glow over a clutch; the whole lair waking and stirring at dawn-light; a young dragon proudly hauling a goblet bigger than itself; the brood settling into a sleepy heap as the lair dims. Each adds a warm, lived-in moment (never frightening or violent).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE charming, warm lair beat in 12-25 words — whimsical + warm, never scary/violent. NO meat/bones. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A great shaft of golden daylight breaks through a crack high above, lighting the whole lair and the dust drifting through it.
+2. The brood swarms up in a clamber of small wings as a parent sweeps in through the lair mouth, returning home.
+3. A young dragon tumbles off a gold-pile in a bright clatter of sliding coins, scrambling upright unhurt.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // SKY-CASTLE PATH (2026-06-10 — new, Tier 3). A floating
   // castle / sky-kingdom among the clouds.
   // ════════════════════════════════════════════════════════

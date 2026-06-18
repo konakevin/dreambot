@@ -38,6 +38,10 @@ const pathBuilders = {
   'giant-steadinghold': require('./paths/giant-steadinghold'),
   'sky-castle': require('./paths/sky-castle'),
   'arcane-library': require('./paths/arcane-library'),
+  // 2026-06-17 — dragon-nest: tender behind-the-scenes baby dragons + eggs + nest.
+  'dragon-nest': require('./paths/dragon-nest'),
+  // 2026-06-17 — dragon-lair: a grand populated lair (nests/eggs/parent/young).
+  'dragon-lair': require('./paths/dragon-lair'),
   'female-adventurer': require('./paths/female-adventurer'),
   // 2026-05-23: carbon copy of the cool-armor female-adventurer state.
   // female-adventurer was reverted to its 2026-05-14 baseline; this path
@@ -119,6 +123,21 @@ module.exports = {
     // Sonnet TEMPLATE (archetype-templates.js), which Sonnet follows without echo.
     'arcane-library':
       'Alan Lee + John Howe painted-fantasy oil tradition, soft painterly brushwork, warm rich color, a graceful ANCIENT HIGH-ELVEN arcane library like the great library of Rivendell — flowing organic carved elven wood-and-stone arches, living trees grown into the architecture, golden ivy, ancient leather tomes and rolled scrolls, cushioned reading-nooks and a crackling hearth, drifting glowing tomes and soft runic fey-light, enchanted dragon-lore curios and treasures tucked among the shelves, warm candlelight, branched candelabra, glowing braziers, hearth-fire and golden daylight slanting through tall arched windows, ancient and serene yet cozy, intimate and inviting',
+    // dragon-nest: a behind-the-scenes nest of YOUNG WESTERN HIGH-FANTASY dragons
+    // (Kevin 2026-06-17: realistic painted, NOT cute/big-eyed Pixar/HTTYD). Keep
+    // the packed-nest density (a lively group + eggs) but render them REALISTIC —
+    // alert normal eyes, real scales/horns/claws, Frazetta/Brom oil realism.
+    // POSITIVE-ONLY prefix (no negations leak into Flux); the anti-cartoon bans
+    // live in the Sonnet TEMPLATE.
+    'dragon-nest':
+      'classic painted fantasy-novel oil illustration in the Frank Frazetta + Brom + Alan Lee tradition, visible painterly brushwork, rich warm color, realistic painted scaled hide, a behind-the-scenes moment of YOUNG WESTERN HIGH-FANTASY dragons at home — a lively group of dragon hatchlings with real scaled hide, real budding horns and claws, alert clear eyes, sleek young bodies and small not-yet-grown wings, true Western-dragon anatomy at hatchling scale, in and around their home in a den OR out in the wild (a forest clearing, a lakeshore, a streambank, a sunny meadow), a candid characterful wildlife moment, warm and atmospheric, painterly atmospheric depth',
+    // dragon-lair: a COZY, CLOSE-IN scene of eggs + baby dragons INSIDE a lair
+    // (Kevin 2026-06-17: cozy, NOT a wide epic vista with ant-sized dragons). The
+    // lair is just the warm interior setting (a snug hoard-gold nook). Realistic
+    // painted Western dragons, NOT cartoon. Positive-only; close-in, no grand/vast/
+    // teeming words (those front-load Flux into a wide establishing shot).
+    'dragon-lair':
+      'classic painted fantasy-novel oil illustration in the Frank Frazetta + Brom + Alan Lee tradition, visible painterly brushwork, rich warm color, realistic painted scaled hide, a COZY CLOSE-IN scene of a nest of glowing eggs and young WESTERN HIGH-FANTASY baby dragons at their nesting spot — nestled close in their varied surroundings (a snug lair/cave nook OR out in the wild: a forest pond, a sunny clearing, a clifftop, the seashore, a riverbank), intimate and close, real scaled hide, real budding horns and claws, alert clear eyes, true Western-dragon anatomy at hatchling scale, cozy and inviting, painterly atmospheric depth',
     // sky-castle: anchor the floating sky-kingdom among the clouds.
     'sky-castle':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an impossible FLOATING SKY-CASTLE — a great fantasy castle adrift high in open sky atop a floating chunk of mountain, waterfalls pouring off its edge into a vast sea of cloud far below, sky-bridges and glowing spires, tiny airships and distant dragons for scale, soaring vertiginous altitude and wonder, painterly atmospheric grandeur, awe-inducing concept-art masterwork',
@@ -594,6 +613,9 @@ module.exports = {
     'sky-castle',
     // NEW 2026-06-10 — arcane-library (cathedral-vast hall of knowledge, Tier 3). MVP-25.
     'arcane-library',
+    // NEW 2026-06-17 — dragon-nest (baby dragons + eggs + nest, behind-the-scenes). MVP-25.
+    'dragon-nest',
+    'dragon-lair',
     'female-adventurer',
     'female-explorer',
     'female-action-scenes',
@@ -648,6 +670,8 @@ module.exports = {
       'giant-steadinghold',
       'sky-castle',
       'arcane-library',
+      'dragon-nest',
+      'dragon-lair',
     ],
     allowSubjectChaosPaths: [
       'landscape',
@@ -720,6 +744,8 @@ module.exports = {
       'giant-steadinghold',
       'sky-castle',
       'arcane-library',
+      'dragon-nest',
+      'dragon-lair',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -771,6 +797,8 @@ module.exports = {
       'giant-steadinghold': 'scene',
       'sky-castle': 'scene',
       'arcane-library': 'scene',
+      'dragon-nest': 'scene',
+      'dragon-lair': 'scene',
       landscape: 'scene',
       'fantasy-scene': 'scene',
       'epic-moment': 'scene',

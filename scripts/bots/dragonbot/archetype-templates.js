@@ -1879,6 +1879,210 @@ Then weave: castle architectural detail, biome surrounding it, sky overhead, tin
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  DRAGON_LAIR: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, lair, nests, broodlings, lair_detail, mother, drama } = slots;
+
+    // lair_detail is pickN:2.
+    const details = Array.isArray(lair_detail) ? lair_detail : [lair_detail].filter(Boolean);
+    const detailSection = details.length
+      ? `
+━━━ LAIR DETAIL — cozy hoard dressing ━━━
+${details.map((d) => `• ${d}`).join('\n')}
+
+`
+      : '';
+
+    const motherSection = mother
+      ? `
+━━━ MOMMA (a tending guardian nearby) ━━━
+${mother}
+
+Render her TENDER and protective — curled close around the nest or watching over from just beside it. She frames the scene; the eggs + babies stay the hero.
+`
+      : `
+━━━ NO ADULT — just the little ones ━━━
+No grown dragon in frame — just the eggs and the baby dragons cozy at their nest.
+`;
+
+    const dramaSection = drama
+      ? `
+━━━ A LITTLE MOMENT — render this beat ━━━
+${drama}
+
+`
+      : '';
+
+    // EGG CLOSE-UP MODE (~30%) — a gorgeous high-fidelity study of the MAGICAL
+    // eggs in a nest, in its varied setting (cave OR outdoor), momma a soft presence.
+    if (slots._framingMode === 'egg_closeup') {
+      return `You are a fantasy concept-art painter writing a COZY CLOSE-UP of MAGICAL DRAGON EGGS for DragonBot — a gorgeous, high-fidelity close study of a clutch of dragon eggs nestled at their cozy nesting spot (a snug lair/cave nook OR out in the wild). Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Exquisite, luminous, jewel-like — the EGGS are the hero, warm and intimate.
+
+━━━ THE EGGS — THE HERO (close-up, exquisite high-fidelity detail) ━━━
+${nests}
+
+Render the clutch CLOSE-UP and large in frame as the gorgeous centerpiece — high-fidelity, intricate, MAGICAL: luminous shells with a soft glowing inner light, jewel-toned and iridescent, fine scaled / veined / crystalline texture, gentle motes of light drifting around them, cradled in a warm nest of soft bedding. ⚠ A SMALL TIDY clutch of just a FEW eggs (3-6), MOSTLY UNHATCHED and whole — NOT a swarm of many eggs, NOT a ring of eggs, NOT a cram of hatching dragon-heads. Clean and elegant, the eggs themselves the beauty.
+
+━━━ THE SETTING AROUND THEM (cave OR outdoor — close, varied) ━━━
+${lair}
+
+This setting cradles the nest close around — a snug lair/cave nook OR a sheltered outdoor spot (pondside, a clearing, a clifftop, the seashore). Render it distinctly; the eggs lead, the setting hugs them close. NOT a wide vista. ⚠ LIGHT FOR DRAMA — usually a strong directional KEY LIGHT (a shaft breaking in, a rim-light, or the eggs' own glow) makes the eggs pop, the rest falling into softer shadow.
+
+━━━ MOMMA NEARBY (a soft guardian presence) ━━━
+${mother || 'A great mother dragon curled close around the nest, mostly out of frame, a warm guardian presence behind the eggs.'}
+${detailSection}${dramaSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 150)}
+
+Use this ONLY for color palette, light, and overall mood — keep it WARM and magical above all.
+
+━━━ COMPOSITION ━━━
+Painterly, warm, luminous, intimate, CLOSE-IN. A gorgeous close-up of magical dragon eggs, large in frame, cradled in a warm nest at its distinct setting (cave nook or sheltered outdoor spot), a momma dragon a soft guardian presence close behind. High-fidelity, glowing, jewel-like. NOT a wide vista, NOT tiny eggs in a huge space, NOT a cartoon, NOT an epic battle.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a gorgeous close-up of a clutch of magical dragon eggs, large in frame, in a warm nest leads], [the eggs' luminous magical high-fidelity detail], [the distinct close setting cradling them (cave nook OR a sheltered outdoor spot)], [a momma dragon a soft guardian presence close behind], [warm magical light + palette + intimate wondrous mood]
+
+CRITICAL — render a gorgeous, high-fidelity CLOSE-UP of MAGICAL dragon eggs LARGE in frame (luminous, glowing, jewel-toned, intricate), cradled in a cozy warm nest at its distinct setting (a cave nook OR a sheltered outdoor spot), a momma dragon a soft presence close behind. Do NOT render a wide vista, tiny eggs lost in a huge space, a cartoon, or an epic battle.
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+    }
+
+    return `You are a fantasy concept-art painter writing a COZY DRAGON-NEST scene for DragonBot — an intimate, close-in moment: a nest of eggs and young WESTERN DRAGONS nestled snug at their cozy nesting spot, which may be a snug lair/cave nook OR out in the wild. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Warm, cozy, lived-in — the viewer should want to lean in and watch.
+
+⚠ COZY + CLOSE-IN — ABSOLUTE FIRST RULE ━━━
+This is an INTIMATE, close-in scene — the nest of eggs and the baby dragons fill the frame as the close hero, cradled close in their cozy nesting spot (a snug lair/cave nook OR out in the wild: pondside, a forest clearing, a clifftop, the seashore, a riverbank). NOT a wide epic vista, NOT a huge space with tiny ant-sized dragons, NOT an establishing shot. Snug, warm, and close.
+
+⚠ A NEST OF EGGS IS ALWAYS PRESENT AND CENTRAL — the baby dragons are clustered AT and AROUND the nest of eggs, the eggs clearly visible in frame. Even in an outdoor setting, the nest of eggs sits right there (on the bank, the ledge, the grass) with the babies AT it — NEVER just dragons wandering off, swimming away, or a scene with no nest of eggs. The eggs are the heart of the scene.
+
+⚠ REALISTIC YOUNG WESTERN DRAGONS, NOT CARTOON ━━━
+PAINTED high-fantasy Western dragon hatchlings — real scaled hide, real horns and claws, alert NORMAL eyes — young (smaller, sleeker) but NEVER cute/big-eyed, NEVER a Pixar / DreamWorks / "How to Train Your Dragon" cartoon, never rubbery. Frazetta/Brom/Alan Lee oil realism.
+
+━━━ THE BABY DRAGONS (the close-in hero) ━━━
+${broodlings}
+
+Render the young dragons front-and-center, close and cozy in their nest — candid and lively, with a LITTLE STORY playing out you can read in a glance (one peeking up, one nuzzling close to a sibling, one clambering over an egg, one curled half-asleep). A handful of babies, not a crowd. Realistically painted, never cute-cartoon.
+
+⚠ LIGHT FOR DRAMA — usually give the scene ONE strong directional KEY LIGHT for punch and depth: a shaft of light breaking in, a rim-light catching the eggs and dragons, or the eggs' own inner glow as the light source — with the rest falling into softer shadow so the nest is the bright focal point. (Occasionally a soft even light is fine for variety — but lean dramatic.)
+
+━━━ THE NEST & EGGS ━━━
+${nests}
+
+Make the eggs POP — a small clutch of just 3-6 eggs, EACH glowing with its own soft inner light and a distinct jewel-like color (jade / sapphire / molten-gold / violet / crystalline / pearl), NEVER plain matte eggs, never a big pile. They should be beautiful in themselves and stand out against the surrounding setting and light.
+
+━━━ THE SETTING (cave OR outdoor — VARIES, the key variety lever) ━━━
+${lair}
+
+Render this DISTINCT setting richly — it may be a snug lair/cave nook (vary the rock type/color + light) OR out in the wild (a forest pond, a sunny clearing, a clifftop, the seashore, a riverbank). It cradles the nest CLOSE around — snug and intimate, NOT a wide vista. THE SETTING is what makes each scene different — lean into it.
+${detailSection}${motherSection}${dramaSection}━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 150)}
+
+Use this ONLY for color palette, light, and overall mood — keep it WARM and cozy above all.
+
+━━━ COMPOSITION ━━━
+Painterly, warm, intimate, CLOSE-IN. A nest of eggs + baby dragons nestled snug at their cozy nesting spot (a cave nook OR an outdoor spot — varies) as the close hero; ${mother ? 'a tending mother dragon curled close' : 'just the little ones, no grown dragon'}. Realistically-painted Western-dragon anatomy (alert NORMAL eyes). NOT a wide epic vista, NOT tiny dragons in a huge space, NOT a cute / big-eyed / Pixar / How-to-Train-Your-Dragon cartoon, NOT an epic battle.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a nest of eggs + baby dragons nestled close at their cozy nesting spot leads], [what the baby dragons are doing, close-in], [the nest + eggs], [the DISTINCT close setting cradling them — a cave nook OR an outdoor spot, the variety lever], [cozy details], ${mother ? '[a tending mother dragon curled close], ' : ''}[warm cozy light + palette + intimate mood]
+
+CRITICAL — render a COZY, CLOSE-IN nest of eggs + baby WESTERN dragons nestled snug at their cozy nesting spot (a cave nook OR out in the wild — pond / clearing / clifftop / seashore), realistically-painted scaled anatomy (alert NORMAL eyes), warm and intimate, the babies + eggs filling the frame as the close hero. Do NOT render a wide epic vista, tiny ant-sized dragons in a huge space, a cute / big-eyed / Pixar / How-to-Train-Your-Dragon cartoon, or an epic battle.
+
+Output ONLY the raw 85-115 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  DRAGON_NEST: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, nest_setting, clutch, broodlings, nest_detail, mother, drama } =
+      slots;
+
+    // nest_detail is a pickN:2 slot → an array of two cozy nest touches.
+    const details = Array.isArray(nest_detail) ? nest_detail : [nest_detail].filter(Boolean);
+    const detailSection = details.length
+      ? `
+━━━ NEST DETAIL — fill the nest with these cozy touches ━━━
+${details.map((d) => `• ${d}`).join('\n')}
+
+`
+      : '';
+
+    // mother is OPTIONAL (65% gated) — when absent it's a pure nursery (eggs + young dragons only).
+    const motherSection = mother
+      ? `
+━━━ THE MOTHER (a tending guardian) ━━━
+${mother}
+
+Render her TENDER and protective — curled around the nest, watching over, or sheltering the young under a wing — giving the scene warmth and scale. She frames the young dragons; the YOUNG DRAGONS stay the hero.
+`
+      : `
+━━━ NO ADULT — a pure nursery ━━━
+No grown dragon in frame — just the eggs and the young dragons owning the scene. The nest, the warm light, and the lively hatchlings tell the whole story.
+`;
+
+    const dramaSection = drama
+      ? `
+━━━ A LITTLE MOMENT — render this beat ━━━
+${drama}
+
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing a BEHIND-THE-SCENES scene of YOUNG WESTERN DRAGONS for DragonBot — a candid wildlife moment: a lively group of dragon hatchlings at their home. Frank Frazetta + Brom + Alan Lee painted-fantasy oil tradition. Warm and characterful — the viewer should want to lean in and watch.
+
+⚠ REALISTIC YOUNG WESTERN DRAGONS, NOT CARTOON — ABSOLUTE FIRST RULE ━━━
+The young dragons lead the scene. PAINTED high-fantasy Western dragon hatchlings with REALISTIC scaled hide, real horns and claws — they read as YOUNG (smaller, sleeker, softer-featured than an adult) with ALERT CLEAR EYES (normal dragon eyes, NOT oversized), small not-yet-grown wings, budding horns, sleek young scaled bodies. Frazetta/Brom/Alan Lee oil realism — NEVER cute/chubby/big-eyed, NEVER a Pixar / DreamWorks / "How to Train Your Dragon" cartoon, never rubbery. A lively group, candid and full of character. NOT an epic battle, NOT a lone grown dragon dominating the frame.
+
+━━━ WHERE THEY ARE — their home (indoor OR out in the wild) ━━━
+${nest_setting}
+
+This is the brood's home — render it richly as the setting. It may be a sheltered DEN/cave, OR (just as often) OUT IN THE WILD: a forest clearing, a lakeshore, a streambank, a sunny meadow, a waterfall pool. If it's outdoors, the young dragons are out in nature — splashing at the water's edge, romping in the grass, weaving between trees. Name where the warmth comes from (volcanic heat / a bed of gold / geothermal steam indoors, or simply the SUN outdoors).
+
+━━━ THE EGGS (their clutch nearby) ━━━
+${clutch}
+
+━━━ THE BROOD (the young dragons — the hero) ━━━
+${broodlings}
+
+Render the young dragons front-and-center, candid and lively — a group caught mid-moment doing their thing (in the den or out in the wild). Realistically painted, never cute-cartoon.
+${detailSection}${motherSection}${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT (palette + atmosphere ONLY) ━━━
+${vibeDirective.slice(0, 150)}
+
+Use this ONLY for color palette, light, and overall mood — keep it WARM and characterful above all.
+
+━━━ COMPOSITION ━━━
+Painterly, warm, characterful, full of life. A lively group of young Western dragons at their home — a den OR out in the wild (forest / lakeshore / streambank / meadow) — as the close-in hero; ${mother ? 'a tending mother dragon part of the scene' : 'just the brood, no grown dragon'}. Realistically-painted Western-dragon anatomy, young-proportioned (alert NORMAL eyes, budding horns, small wings, sleek young body). NOT a cute / big-eyed / Pixar / How-to-Train-Your-Dragon cartoon, NOT an epic battle, NOT a lone adult dragon, NOT a vast empty vista.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a lively group of young Western dragons (hatchlings) at their home leads], [the setting — a den OR out in the wild (forest/lakeshore/streambank/meadow) + its warmth], [what the young dragons are doing], [a few eggs from their clutch nearby], [clean nest details], ${mother ? '[a tending mother dragon nearby], ' : ''}[warm characterful light + palette + lively mood]
+
+CRITICAL — render a lively group of young WESTERN HIGH-FANTASY dragons (hatchlings) at their home — sometimes a den, OFTEN out in the wild (a forest clearing, a lakeshore, a streambank, a sunny meadow) — realistically-painted scaled anatomy (alert NORMAL eyes, budding horns, small wings, sleek young body), warm and characterful. Do NOT render a cute / big-eyed / Pixar / How-to-Train-Your-Dragon cartoon, an epic battle, a lone grown dragon dominating, or a vast empty landscape.
+
+Output ONLY the raw 85-115 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   ARCANE_LIBRARY: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,
