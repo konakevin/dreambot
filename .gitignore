@@ -45,7 +45,15 @@ app-example
 /ios
 /android
 Screenshot*.png
+*Screenshot*.png
 
 # Local benchmark / experiment outputs
 scripts/*-bench-results.json
-scripts/bots/*/seeds/*.bak-*
+
+# Dev cruft — editor swap files + generated/manual backups (never commit these)
+*.swp
+*.bak
+*.bak-*
+*.poc-bak
+*.test-bak
+*.orig
