@@ -37,6 +37,12 @@ module.exports = {
         // No non-exempt encryption (standard HTTPS only) — skips the App Store
         // export-compliance prompt on every submission.
         ITSAppUsesNonExemptEncryption: false,
+        // Facebook SDK is used for LOGIN ONLY. Disable its default auto-event
+        // logging + advertiser-ID collection so the app does no ad "tracking" —
+        // keeps the App Privacy "Tracking" answer truthfully "No" (a tracking=yes
+        // label with no ATT prompt is an auto-reject).
+        FacebookAutoLogAppEventsEnabled: false,
+        FacebookAdvertiserIDCollectionEnabled: false,
         NSCameraUsageDescription:
           'DreamBot uses your camera to capture photos for AI dream generation.',
         CFBundleURLTypes: [
