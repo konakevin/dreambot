@@ -86,8 +86,7 @@ GRANT UPDATE (
 -- First collapse any pre-existing duplicate ACTIVE rows (keep newest) so the
 -- index can build — those duplicates are exactly the race this closes.
 UPDATE public.dream_queue d
-  SET status = 'failed',
-      error = COALESCE(d.error, '') || ' [281: collapsed duplicate active first_dream]'
+  SET status = 'failed'
 WHERE d.source = 'first_dream'
   AND d.status IN ('queued', 'in_progress')
   AND d.id NOT IN (
