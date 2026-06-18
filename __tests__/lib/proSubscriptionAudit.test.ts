@@ -233,9 +233,13 @@ describe('revenuecat-webhook: subscription (Pro + Basic) state machine + sparkle
 describe('store/auth.ts: isPro respects pro_subscription_expires_at', () => {
   const src = read('store/auth.ts');
 
-  it('reads the expiry column alongside is_admin and pro_subscription', () => {
-    expect(src).toContain('pro_subscription_expires_at');
-    expect(src).toMatch(/is_admin,\s*pro_subscription,\s*pro_subscription_expires_at/);
+  it('reads entitlements (incl. the expiry column) via the self-only get_my_account RPC', () => {
+    // The economic columns are no longer client-readable from the users table
+    // (migration 280) — they come from get_my_account, which RETURNS the expiry
+    // column so isProActive can timestamp-gate a missed RevenueCat expiration.
+    expect(src).toContain("supabase.rpc('get_my_account')");
+    const rpc = read('supabase/migrations/280_hide_economic_columns.sql');
+    expect(rpc).toMatch(/is_admin[\s\S]*pro_subscription[\s\S]*pro_subscription_expires_at/);
   });
 
   it('delegates Pro-state logic to the shared, unit-tested @/lib/proStatus module', () => {

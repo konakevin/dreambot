@@ -100,3 +100,35 @@ describe('edge functions: render charge cannot be skipped', () => {
     expect(src).toContain('first_dream_already_claimed');
   });
 });
+
+describe('migration 280: hide economic columns from cross-user reads', () => {
+  const sql = read('supabase/migrations/280_hide_economic_columns.sql');
+
+  it('adds a self-only get_my_account RPC (SECURITY DEFINER, keyed on auth.uid)', () => {
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION public.get_my_account');
+    expect(sql).toContain('SECURITY DEFINER');
+    expect(sql).toMatch(/WHERE u\.id = auth\.uid\(\)/);
+    expect(sql).toMatch(/GRANT EXECUTE ON FUNCTION public\.get_my_account\(\) TO authenticated/);
+  });
+
+  it('re-grants users SELECT WITHOUT the economic / privilege / PII columns', () => {
+    expect(sql).toMatch(/REVOKE SELECT ON public\.users FROM anon, authenticated/);
+    const grant = sql.split('GRANT SELECT (')[1]?.split(') ON public.users')[0] ?? '';
+    for (const hidden of [
+      'sparkle_balance',
+      'is_admin',
+      'email',
+      'pro_subscription',
+      'basic_subscription',
+    ]) {
+      expect(grant).not.toContain(hidden);
+    }
+    expect(grant).toContain('username'); // public columns still readable
+  });
+
+  it('client reads economics via the RPC, not the users table', () => {
+    expect(read('hooks/useSparkles.ts')).toContain("supabase.rpc('get_my_account')");
+    expect(read('store/auth.ts')).toContain("supabase.rpc('get_my_account')");
+    expect(read('store/auth.ts')).not.toContain('ENTITLEMENT_COLUMNS');
+  });
+});

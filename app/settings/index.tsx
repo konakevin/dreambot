@@ -21,6 +21,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { CreateIntroSheet, resetCreateIntro } from '@/components/CreateIntroSheet';
 import { resetFeedIntro } from '@/components/FeedIntroGate';
 import { MediumsIntroSheet, resetMediumsIntro } from '@/components/MediumsIntroSheet';
+import { resetSparkleIntro } from '@/components/SparkleIntroSheet';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -69,7 +70,9 @@ export default function SettingsScreen() {
   const isPaidPro = useAuthStore((s) => s.isPaidPro);
   const isBasic = useAuthStore((s) => s.isBasic);
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // is_admin is no longer client-readable from the users table (migration 280) —
+  // it comes from the auth store, populated via the get_my_account RPC.
+  const isAdmin = useAuthStore((s) => s.isAdmin);
   const [isPublic, setIsPublic] = useState(false);
   const [allowReposts, setAllowReposts] = useState(true);
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
@@ -96,16 +99,14 @@ export default function SettingsScreen() {
     if (!user) return;
     supabase
       .from('users')
-      .select('is_admin, is_public, allow_reposts')
+      .select('is_public, allow_reposts')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
         const row = asDbResult<{
-          is_admin?: boolean;
           is_public?: boolean;
           allow_reposts?: boolean;
         }>(data);
-        if (row?.is_admin) setIsAdmin(true);
         if (row?.is_public) setIsPublic(true);
         setAllowReposts(row?.allow_reposts ?? true);
       });
@@ -376,6 +377,7 @@ export default function SettingsScreen() {
                 await Promise.all([
                   resetCreateIntro(),
                   resetMediumsIntro(),
+                  resetSparkleIntro(),
                   resetFeedIntro(),
                 ]).catch(() => {});
                 useOnboardingStore.getState().reset();
@@ -395,6 +397,7 @@ export default function SettingsScreen() {
                 await Promise.all([
                   resetCreateIntro(),
                   resetMediumsIntro(),
+                  resetSparkleIntro(),
                   resetFeedIntro(),
                 ]).catch(() => {});
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

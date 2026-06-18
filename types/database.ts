@@ -2721,6 +2721,20 @@ export type Database = {
         Returns: number;
       };
       get_notification_settings: { Args: { p_user_id?: string }; Returns: Json };
+      get_my_account: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          sparkle_balance: number;
+          is_admin: boolean;
+          email: string;
+          pro_subscription: boolean;
+          pro_subscription_expires_at: string | null;
+          pro_subscription_will_renew: boolean;
+          pro_trial_started_at: string | null;
+          basic_subscription: boolean;
+          basic_subscription_expires_at: string | null;
+        }[];
+      };
       get_public_profile: {
         Args: { p_user_id: string };
         Returns: {

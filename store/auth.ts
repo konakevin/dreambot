@@ -67,8 +67,10 @@ interface EntitlementRow {
 // truth, mirrored by the nightly cron + the is_pro_active() Postgres function.
 // Imported above.
 
-const ENTITLEMENT_COLUMNS =
-  'is_admin, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at';
+// Entitlement + sparkle reads go through the get_my_account RPC (self-only,
+// SECURITY DEFINER) — the economic columns are no longer client-readable from
+// the users table (migration 280, so another user can't snoop your balance /
+// Pro / admin). The RPC returns the same fields, so EntitlementRow is unchanged.
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
@@ -91,9 +93,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     // Check admin + pro status
     if (session?.user) {
       supabase
-        .from('users')
-        .select(ENTITLEMENT_COLUMNS)
-        .eq('id', session.user.id)
+        .rpc('get_my_account')
         .single()
         .then(({ data }) => {
           const row = asDbResult<EntitlementRow | null>(data);
@@ -133,11 +133,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   refreshEntitlements: async () => {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return;
-    const { data } = await supabase
-      .from('users')
-      .select(ENTITLEMENT_COLUMNS)
-      .eq('id', userId)
-      .single();
+    const { data } = await supabase.rpc('get_my_account').single();
     const row = asDbResult<EntitlementRow | null>(data);
     set({
       isAdmin: !!row?.is_admin,
@@ -150,11 +146,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   initialize: () => {
-    const checkEntitlements = (userId: string) => {
+    const checkEntitlements = () => {
       supabase
-        .from('users')
-        .select(ENTITLEMENT_COLUMNS)
-        .eq('id', userId)
+        .rpc('get_my_account')
         .single()
         .then(({ data }) => {
           const row = asDbResult<EntitlementRow | null>(data);
@@ -201,7 +195,7 @@ export const useAuthStore = create<AuthState>((set) => ({
           initialized: true,
           isSuperAdmin: isSupremeAdmin(session?.user?.id),
         });
-        if (session?.user) checkEntitlements(session.user.id);
+        if (session?.user) checkEntitlements();
       })
       .finally(() => {
         console.error = origConsoleError;
@@ -216,7 +210,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         initialized: true,
         isSuperAdmin: isSupremeAdmin(session?.user?.id),
       });
-      if (session?.user) checkEntitlements(session.user.id);
+      if (session?.user) checkEntitlements();
       else
         set({
           isAdmin: false,

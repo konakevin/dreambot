@@ -16,11 +16,10 @@ export function useSparkleBalance() {
   return useQuery({
     queryKey: ['sparkleBalance', user?.id],
     queryFn: async (): Promise<number> => {
-      const { data } = await supabase
-        .from('users')
-        .select('sparkle_balance')
-        .eq('id', user!.id)
-        .single();
+      // sparkle_balance is no longer client-readable from the users table
+      // (migration 280 — economic columns are hidden cross-user); read the
+      // caller's own balance via the self-only get_my_account RPC.
+      const { data } = await supabase.rpc('get_my_account').single();
       return data?.sparkle_balance ?? 0;
     },
     enabled: !!user,
