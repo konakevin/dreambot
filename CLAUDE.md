@@ -197,6 +197,16 @@ for the public feed + serves deep-link share targets.**
   update it with every new lesson.
 - **AUDIT bot mediums + prefixes for cruft every ~3 months** (negation cascades, camera-brand stuffing,
   travel-magazine register, stacked intensifiers): medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120.
+- **`users` + `uploads` use COLUMN-LEVEL grants (migration 278) — a NEW column is silently
+  client-invisible/un-writable until you grant it.** Adding a column to `users` → also `GRANT SELECT
+  (col) ON public.users TO anon, authenticated;`; to `uploads` → also `GRANT UPDATE (col) ON
+  public.uploads TO authenticated;` in the same migration, or the client read/update of it fails. Withheld
+  on purpose: `users.email` (PII) + the 6 `uploads` engagement counters (anti-feed-gaming) — don't re-grant.
+- **EVERY new user-text input MUST pass through `_shared/sanitizeUserText.ts`** (NFKC + control/zero-width/
+  bidi strip + prompt-injection neutralization + length cap) before it reaches an LLM/Flux prompt or
+  storage — `callSonnet` sends one user-role message with no system/user split, so unsanitized text is read
+  with engine authority. Stored fields written via direct PostgREST also get the migration-279 trigger
+  (`sanitize_user_text` on users/comments/uploads). `sanitize.ts` is NSFW-softening only, NOT this.
 
 ## CI, tests & monitoring
 
