@@ -5,6 +5,7 @@ import { Toast } from '@/components/Toast';
 import { UpscaleModal } from '@/components/UpscaleOverlay';
 import { useAuthStore } from '@/store/auth';
 import { invokeEdge } from '@/lib/edgeFunction';
+import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { trackHdDownloadTapped } from '@/lib/analytics';
 
@@ -186,11 +187,37 @@ export function handleImageLongPress(opts: LongPressOpts) {
 }
 
 /**
- * Auto-save the HD copy after a `download_ready` notification tap. By now the
- * upscale is cached, so saveHd's first server round-trip returns {done} and
- * saves instantly (the modal flashes 'requesting' → 'Saved in HD'). Idempotent
- * and cap-free — upscale-image's cache-hit branch returns before charging.
+ * Save the ready HD copy DIRECTLY to the device — driven by the top-right
+ * "Download" badge that appears when the user reaches a post via a
+ * `download_ready` notification (push / inbox / foreground banner).
+ *
+ * By the time that notification fires the upscale is finished and `image_url_hq`
+ * is populated, so we read it straight off the row and save it — no UpscaleModal,
+ * no re-request, no re-charge (this is just a file download). A simple "Saving to
+ * your device…" toast covers the brief download; `saveUrlToPhotos` then shows the
+ * final "Saved in HD". Returns true on success so the caller can hide the badge.
+ *
+ * Rare race fallback: if the HD isn't on the row yet (notification beat the
+ * persist, or a stale cache), fall back to the full `saveHd` request path so the
+ * download still completes rather than silently failing.
  */
-export function saveReadyHdDownload(uploadId: string) {
-  return saveHd(uploadId, null);
+export async function saveReadyHdDownloadDirect(uploadId: string): Promise<boolean> {
+  trackHdDownloadTapped({ cached: true });
+  Toast.show('Saving to your device…', 'cloud-download');
+  try {
+    const { data } = await supabase
+      .from('uploads')
+      .select('image_url_hq')
+      .eq('id', uploadId)
+      .maybeSingle();
+    const hq = (data as { image_url_hq?: string | null } | null)?.image_url_hq ?? null;
+    if (hq) {
+      return await saveUrlToPhotos(uploadId, hq, true);
+    }
+  } catch (err) {
+    if (__DEV__) console.warn('[saveReadyHdDownloadDirect] hq lookup failed', err);
+  }
+  // HD not ready on the row — fall back to the request+modal path so it still saves.
+  await saveHd(uploadId, null);
+  return true;
 }

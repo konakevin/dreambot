@@ -7,17 +7,17 @@
  * user gets a `download_ready` push when done), and if left open it POLLS the
  * upload row and AUTO-SAVES the moment the HD image lands. See UPSCALE_QUEUE_PLAN.md.
  *
- * Honest waiting UX: a spinner + rotating flavor text — NOT a progress bar.
+ * Honest waiting UX: a spinner + one clean line — NOT a progress bar.
  * Replicate doesn't stream per-step progress back to us (we only poll for the
  * finished image), so any bar would be a timer-faked guess that stalls on slow
- * runs. The rotating line keeps it feeling alive without claiming progress.
+ * runs. A single static message (no cycling) keeps it calm and honest.
  *
  * Imperative API like Toast — mount UpscaleModalHost once in _layout, call
  * UpscaleModal.show(uploadId) from anywhere.
  */
 
 import { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -26,16 +26,13 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
 import { startHqPoll } from '@/lib/upscalePoll';
+import { Toast } from '@/components/Toast';
+import { WaveLoader } from '@/components/WaveLoader';
 
-// Rotated every few seconds while waiting (flavor, not progress — see header).
-const WAITING_MESSAGES = [
-  'Polishing every pixel…',
-  'Sharpening the dream…',
-  'Coaxing out the fine details…',
-  'Dusting on the HD sparkle…',
-  'Making it poster-worthy…',
-];
-const WAITING_SUB = "Keep browsing. We'll save it to your Photos the moment it's ready.";
+// One clean, static waiting message — mirrors the Create "generating dream"
+// loading copy (app/dream/loading.tsx). No cycling flavor text.
+const WAITING_TITLE = 'Upscaling to HD';
+const WAITING_SUB = "Dismiss to be notified when it's ready.";
 
 type Phase = 'requesting' | 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
@@ -72,7 +69,6 @@ export function UpscaleModalHost() {
     phase: 'requesting',
   });
   const [phase, setPhase] = useState<Phase>('requesting');
-  const [msgIdx, setMsgIdx] = useState(0);
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -95,15 +91,6 @@ export function UpscaleModalHost() {
   }, [state.phase, state.uploadId]);
 
   const isActive = phase === 'requesting' || phase === 'processing';
-
-  // Rotate the witty line every few seconds while waiting so the spinner reads
-  // as alive. Resets when a new wait starts; stops once we leave the wait.
-  useEffect(() => {
-    if (!isActive) return;
-    setMsgIdx(0);
-    const id = setInterval(() => setMsgIdx((i) => (i + 1) % WAITING_MESSAGES.length), 3000);
-    return () => clearInterval(id);
-  }, [isActive]);
 
   // Poll for the HD result while open; auto-save when it lands. Starts the
   // instant the modal opens (even during 'requesting') so a fast cache hit still
@@ -138,31 +125,45 @@ export function UpscaleModalHost() {
   if (!state.visible) return null;
 
   const copy = {
-    requesting: { icon: 'sparkles' as const, title: '', sub: WAITING_SUB, showDismiss: false },
-    processing: { icon: 'sparkles' as const, title: '', sub: WAITING_SUB, showDismiss: true },
+    // dismiss: 'hidden' (terminal, no button) | 'disabled' (rendered but not yet
+    // safe to dismiss — server hasn't confirmed the job is running) | 'enabled'.
+    // Keeping the button MOUNTED from the first frame avoids the layout pop when
+    // requesting → processing; we just enable it once dismiss is safe.
+    requesting: {
+      icon: 'sparkles' as const,
+      title: WAITING_TITLE,
+      sub: WAITING_SUB,
+      dismiss: 'disabled' as const,
+    },
+    processing: {
+      icon: 'sparkles' as const,
+      title: WAITING_TITLE,
+      sub: WAITING_SUB,
+      dismiss: 'enabled' as const,
+    },
     saving: {
       icon: 'download' as const,
       title: 'Saving to your Photos…',
       sub: 'Almost there.',
-      showDismiss: false,
+      dismiss: 'hidden' as const,
     },
     done: {
       icon: 'checkmark-circle' as const,
       title: 'Saved in HD',
       sub: 'Straight to your Photos.',
-      showDismiss: false,
+      dismiss: 'hidden' as const,
     },
     timeout: {
       icon: 'time' as const,
       title: 'Still polishing your HD…',
       sub: "Taking longer than usual. We'll notify you the moment it's ready to grab.",
-      showDismiss: true,
+      dismiss: 'enabled' as const,
     },
   }[phase];
 
   // Active + 'saving' show a spinner; terminal states (done/timeout) show an icon.
   const showSpinner = isActive || phase === 'saving';
-  const title = isActive ? WAITING_MESSAGES[msgIdx] : copy.title;
+  const title = copy.title;
 
   return (
     <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, animStyle]}>
@@ -170,18 +171,25 @@ export function UpscaleModalHost() {
         <View style={styles.center}>
           <View style={styles.card}>
             {showSpinner ? (
-              <ActivityIndicator size="large" color={colors.accent} />
+              <WaveLoader />
             ) : (
               <Ionicons name={copy.icon} size={40} color={colors.accent} />
             )}
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{copy.sub}</Text>
-            {copy.showDismiss && (
+            {copy.dismiss !== 'hidden' && (
               <Pressable
-                style={styles.dismissBtn}
+                style={[
+                  styles.dismissBtn,
+                  copy.dismiss === 'disabled' && styles.dismissBtnDisabled,
+                ]}
+                disabled={copy.dismiss === 'disabled'}
                 onPress={() => {
                   // Dismiss just closes the modal — the upscale keeps running
                   // server-side and the user is notified on completion regardless.
+                  // Confirm that with a toast (mirrors the dream-queue toast in
+                  // app/dream/loading.tsx) so backgrounding it gives clear feedback.
+                  Toast.show("We'll notify you when it's ready", 'checkmark-circle');
                   UpscaleModal.hide();
                 }}
                 hitSlop={8}
@@ -231,5 +239,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.accent,
   },
+  dismissBtnDisabled: { opacity: 0.4 },
   dismissText: { color: '#FFFFFF', fontSize: fontScale(14), fontWeight: '700' },
 });

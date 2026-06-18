@@ -1,5 +1,5 @@
-import { useMemo, useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useMemo, useCallback, useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from '@/components/AppText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { GestureDetector, type GestureType } from 'react-native-gesture-handler';
@@ -22,7 +22,7 @@ import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { trackPostViewed } from '@/lib/analytics';
-import { saveReadyHdDownload } from '@/lib/imageLongPress';
+import { saveReadyHdDownloadDirect } from '@/lib/imageLongPress';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
@@ -44,22 +44,33 @@ export default function PhotoDetailScreen() {
     trackPostViewed({ source: src, is_own: src === 'own' || src === 'dreams' });
   }, []);
 
-  // Arrived from a "download_ready" notification tap → the HD is cached now;
-  // save it straight to Photos (the modal flashes 'Preparing' → 'Saved in HD').
-  // Guard with a ref so a re-render / param re-read can't double-fire it.
-  const didAutoSaveHd = useRef(false);
-  useEffect(() => {
-    if (downloadReady !== '1' || !id || didAutoSaveHd.current) return;
-    didAutoSaveHd.current = true;
-    if (canHd) {
-      saveReadyHdDownload(id);
-    } else {
-      // Subscription lapsed between requesting the upscale and the HD landing —
-      // the file is prepared but locked. Surface the gate instead of silently
-      // doing nothing when the notification is tapped.
+  // Arrived from a "download_ready" notification tap (push / inbox / banner) →
+  // show a top-right Download badge instead of auto-saving. Tapping it saves the
+  // ready HD straight to the device (one simple "Saving…" indicator); we don't
+  // re-download on arrival anymore. `badgeDone` hides it after a successful save.
+  const arrivedFromDownloadNotif = downloadReady === '1';
+  const [badgeDone, setBadgeDone] = useState(false);
+  const [badgeSaving, setBadgeSaving] = useState(false);
+  // The badge is tied to the notification's target upload (`id`); track the
+  // visible pager post so swiping to a different dream hides it.
+  const [visiblePostId, setVisiblePostId] = useState<string | undefined>(id);
+
+  const handleDownloadBadge = useCallback(async () => {
+    if (badgeSaving) return;
+    if (!canHd) {
+      // Subscription lapsed between requesting the upscale and tapping the
+      // badge — the file is prepared but locked. Surface the gate.
       showPremiumGate({ kind: 'hd_premium' });
+      return;
     }
-  }, [downloadReady, canHd, id]);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setBadgeSaving(true);
+    const ok = await saveReadyHdDownloadDirect(id);
+    setBadgeSaving(false);
+    if (ok) setBadgeDone(true);
+  }, [badgeSaving, canHd, id]);
+
+  const showDownloadBadge = arrivedFromDownloadNotif && !badgeDone && visiblePostId === id;
 
   // Two modes:
   //  - Album mode (albumIds populated): bounded list, single useQuery
@@ -180,7 +191,10 @@ export default function PhotoDetailScreen() {
   const handleIndexChange = useCallback(
     (idx: number) => {
       const post = posts[idx];
-      if (post) setCurrentPostId(post.id);
+      if (post) {
+        setCurrentPostId(post.id);
+        setVisiblePostId(post.id);
+      }
     },
     [posts, setCurrentPostId]
   );
@@ -312,6 +326,21 @@ export default function PhotoDetailScreen() {
           </TouchableOpacity>
         </Animated.View>
 
+        {showDownloadBadge && (
+          <Animated.View style={[s.downloadBadge, overlayStyle]}>
+            <TouchableOpacity onPress={handleDownloadBadge} hitSlop={12} disabled={badgeSaving}>
+              <View style={s.downloadPill}>
+                {badgeSaving ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <Ionicons name="cloud-download" size={18} color="#FFFFFF" />
+                )}
+                <Text style={s.downloadPillText}>{badgeSaving ? 'Saving…' : 'Download'}</Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+
         <FullScreenFeed
           posts={posts}
           isLoading={isLoading}
@@ -343,6 +372,24 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  // Top-right Download badge, shown only when the user arrived via a
+  // `download_ready` notification (see showDownloadBadge). Mirrors the
+  // back button's placement on the opposite corner.
+  downloadBadge: { position: 'absolute', top: 54, right: 16, zIndex: 10 },
+  downloadPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    height: 36,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+  },
+  downloadPillText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(14),
+    fontWeight: '600',
   },
   unavailable: {
     flex: 1,
