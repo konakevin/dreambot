@@ -52,12 +52,11 @@ module.exports = {
   BLOOMBOT_CITY_FLOWERS_ATMOSPHERIC_PHENOMENON: loadIfExists(
     'bloombot_city_flowers_atmospheric_phenomenon'
   ),
-  // ─── flower-tunnels path (2026-05-19) — POV through bloom-tunnels w/ flowers as light source ───
-  BLOOMBOT_FLOWER_TUNNELS_TUNNEL_SETTING: loadIfExists('bloombot_flower_tunnels_tunnel_setting'),
-  BLOOMBOT_FLOWER_TUNNELS_FLOWER_LANTERNS: loadIfExists('bloombot_flower_tunnels_flower_lanterns'),
-  BLOOMBOT_FLOWER_TUNNELS_ATMOSPHERIC_PHENOMENON: loadIfExists(
-    'bloombot_flower_tunnels_atmospheric_phenomenon'
-  ),
+  // ─── jack-and-the-giant-flower path (2026-06-18, replaced flower-tunnels) —
+  // upward worm's-eye view of ONE colossal flower climbing to the sky ───
+  BLOOMBOT_GIANT_FLOWER_GIANT_FORM: loadIfExists('bloombot_giant_flower_giant_form'),
+  BLOOMBOT_GIANT_FLOWER_BASE_SURROUND: loadIfExists('bloombot_giant_flower_base_surround'),
+  BLOOMBOT_GIANT_FLOWER_SKY_ASCENT: loadIfExists('bloombot_giant_flower_sky_ascent'),
   // ─── flower-friends path (2026-05-19) — close-up flower + pleasant pollinator pairing ───
   BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER: loadIfExists(
     'bloombot_flower_friends_flower_focal_cluster'

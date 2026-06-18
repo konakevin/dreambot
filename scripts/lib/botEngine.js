@@ -1354,8 +1354,17 @@ async function runBot(opts) {
       // is set, use it INSTEAD of bot.promptPrefix/bot.promptSuffix. Lets a specific medium use
       // a totally different stylistic anchor (e.g. gothic-whimsy uses Tim-Burton-whimsical prefix
       // instead of the bot's default Castlevania-manga prefix).
+      // promptPrefixReplaceByPath: a per-path REPLACEMENT for the bot-wide
+      // promptPrefix (unlike promptPrefixByPath, which PREPENDS). For a bot with
+      // a strong identity prefix where ONE path needs a different leading anchor
+      // (e.g. BloomBot's "blooms fill the frame" prefix vs the giant-flower-tree
+      // path that needs open sky). Higher priority than promptPrefix, lower than
+      // a per-medium override.
       let rawPrefix =
-        (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
+        (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
+        (bot.promptPrefixReplaceByPath && bot.promptPrefixReplaceByPath[resolvedPath]) ||
+        bot.promptPrefix ||
+        '';
       let rawSuffix =
         (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
         (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||
@@ -1481,7 +1490,10 @@ async function runBot(opts) {
         );
         medium = cleanResolved.medium;
         rawPrefix =
-          (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) || bot.promptPrefix || '';
+          (bot.promptPrefixByMedium && bot.promptPrefixByMedium[medium]) ||
+          (bot.promptPrefixReplaceByPath && bot.promptPrefixReplaceByPath[resolvedPath]) ||
+          bot.promptPrefix ||
+          '';
         rawSuffix =
           (bot.promptSuffixByPath && bot.promptSuffixByPath[resolvedPath]) ||
           (bot.promptSuffixByMedium && bot.promptSuffixByMedium[medium]) ||

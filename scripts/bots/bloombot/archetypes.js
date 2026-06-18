@@ -13,12 +13,16 @@
  */
 
 module.exports = {
-  BLOOMBOT_FLOWER_TUNNELS: {
+  BLOOMBOT_GIANT_FLOWER: {
     description:
-      'PATH-BESPOKE — BloomBot flower-tunnels path (2026-05-19 NEW). POV-through-tunnels-of-flowers where flowers are BOTH the dominant visual AND the light source (saturated color caught in dim ambient reads as lanterns / chandeliers / fairy-lights). Variants: wisteria-cathedral cascades, forest tree-canopy paths, lava-tube with Hawaiian flowers, spiraling flower-wormholes, flower-portals to other dimensions, bloom-caves, cherry-blossom archways. 3 path-bespoke pools (tunnel_setting / flower_lanterns / atmospheric_phenomenon-40%-gated) + universal lighting/atmosphere. Inspired by user-hearted bloom-tunnel render where marigolds + wisteria-strands visually functioned as lanterns through saturated petal-color in dim torch-warm ambient.',
-    slots: { universal: ['lighting'], bot: [], path: ['tunnel_setting', 'flower_lanterns'] },
+      'PATH-BESPOKE — BloomBot jack-and-the-giant-flower path (2026-06-18, replaced flower-tunnels). A "Jack and the Beanstalk" NOD (no Jack, no human): an awe-struck UPWARD worm\'s-eye view of a SINGLE COLOSSAL flower growing impossibly tall, climbing into the open sky and dwarfing a lush normal-scale world at its base. The giant IS the flowerEngine roster HERO species at monumental scale (rotates across species + matches the rolled palette). Fixes the old directionless 360° flower-tunnel/kaleidoscope, which had no hero and color-collapsed. 3 path-bespoke pools (giant_form / base_surround / sky_ascent) + universal lighting.',
+    slots: {
+      universal: ['lighting'],
+      bot: [],
+      path: ['giant_form', 'base_surround', 'sky_ascent'],
+    },
     pickN: {},
-    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.4 },
+    conditionalLayer: null,
     framingModes: null,
     anchorScaleRange: null,
   },

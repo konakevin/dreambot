@@ -34,7 +34,7 @@ const pathBuilders = {
   conservatory: require('./paths/conservatory'),
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
-  'flower-tunnels': require('./paths/flower-tunnels'),
+  'jack-and-the-giant-flower': require('./paths/jack-and-the-giant-flower'),
   'sunset-flowers': require('./paths/sunset-flowers'),
   'flower-friends': require('./paths/flower-friends'),
   'flower-humming-birds': require('./paths/flower-humming-birds'),
@@ -75,6 +75,19 @@ module.exports = {
 
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
+
+  // jack-and-the-giant-flower REPLACES the bot-wide "blooms fill the frame"
+  // prefix — that path needs open sky + a dwarfed ground world (negative space),
+  // the opposite of the frame-filling mandate. (2026-06-18.)
+  // SHORT anchor only (playbook: stuffed wrappers gridlock variety + first-named-
+  // noun lock). Just enough to (a) escape the bot-wide "blooms fill the frame"
+  // prefix and (b) assert ONE giant flower on a flowering vine-stem against open
+  // sky. The SETTING, scale-prover + bans live in the pool + Sonnet template — NOT
+  // here (no biome, no "deer", no negation in the prefix).
+  promptPrefixReplaceByPath: {
+    'jack-and-the-giant-flower':
+      'a single colossal flower on a giant flowering vine-stem, towering high against open sky',
+  },
 
   // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
   // clean medium. The bot-wide PROMPT_PREFIX ("monumental bloom-form dominating
@@ -121,7 +134,7 @@ module.exports = {
     'conservatory',
     'tropical-paradise',
     'city-flowers',
-    'flower-tunnels',
+    'jack-and-the-giant-flower',
     'sunset-flowers',
     'flower-friends',
     'flower-humming-birds',
@@ -150,7 +163,7 @@ module.exports = {
       'conservatory',
       'tropical-paradise',
       'city-flowers',
-      'flower-tunnels',
+      'jack-and-the-giant-flower',
       'sunset-flowers',
       'flower-friends',
       'flower-humming-birds',
@@ -179,7 +192,7 @@ module.exports = {
       'dreamscape',
       'conservatory',
       'city-flowers',
-      'flower-tunnels',
+      'jack-and-the-giant-flower',
       'sunset-flowers',
       'flower-friends',
       'flower-humming-birds',
@@ -203,7 +216,7 @@ module.exports = {
       conservatory: 'scene',
       'tropical-paradise': 'scene',
       'city-flowers': 'scene',
-      'flower-tunnels': 'scene',
+      'jack-and-the-giant-flower': 'scene',
       'sunset-flowers': 'scene',
       'flower-friends': 'scene',
       'flower-humming-birds': 'scene',
@@ -306,8 +319,15 @@ module.exports = {
     if (!builder) throw new Error(`BloomBot: unknown path "${path}"`);
     // The axis-system archetype templates do NOT use the shared DENSITY/
     // ARRANGEMENT blocks, so the "lush flower hero" bar must be injected here.
+    // jack-and-the-giant-flower needs the OPPOSITE of the frame-filling bar — a
+    // single colossal flower-TREE against open sky with a dwarfed ground world,
+    // i.e. negative space is REQUIRED. Swap in its own mandate (2026-06-18).
+    const GIANT_FLOWER_MANDATE = `━━━ BLOOMBOT BAR — GIANT FLOWER ON A FLOWERY VINE-STEM (NON-NEGOTIABLE, READ FIRST) ━━━
+This is a SINGLE flower (or a grove of them) grown impossibly tall — one colossal bloom atop a towering, thick, LUSH GREEN FLOWERING VINE-STEM: a giant beanstalk-like stalk that is soft, green, leafy and viny, wrapped in tendrils, climbing-leaves and small buds + blooms up its length, CURVING and twisting organically as it climbs (it MUST read as a living flower-stem / vine — NEVER a woody tree-trunk, NEVER bark, NEVER a straight rigid column). It is as TALL as a redwood but is a flower-stem, not a tree. The giant flower dominates through SCALE, not by packing the frame. REQUIRED: OPEN SKY above and a small DWARFED, normal-scale world at its base for scale contrast — render whatever ground world the scene below names (do NOT default to a pine forest, and NEVER include a person; if a scale-prover animal is wanted, only use the one the scene names). NOT a frame-filling bloom-mass, NOT a wall of flowers, NOT a tunnel, NOT a macro — there MUST be open sky and a tiny dwarfed world. Crisp, painterly, awe-inducing, with real negative space.`;
     const LUSH_HERO_MANDATE = `━━━ BLOOMBOT BAR — LUSH FLOWER HERO (NON-NEGOTIABLE, READ FIRST) ━━━
 This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated, distant elements clearly rendered and colored, just smaller and in sharp focus.`;
+    const heroMandate =
+      path === 'jack-and-the-giant-flower' ? GIANT_FLOWER_MANDATE : LUSH_HERO_MANDATE;
     // Bot-wide "Medium Looks" override — the rolled look register sets the
     // rendering medium for THIS render. Leads the brief so Sonnet opens its
     // Flux prompt with these tokens (the medium is the leading CLIP anchor).
@@ -332,8 +352,8 @@ This is the AUTHORITY on rendering medium, finish and surface. Open your Flux pr
         vibeDirective,
         picker,
       });
-      if (typeof composed === 'string') return `${lookOverride}${LUSH_HERO_MANDATE}\n\n${composed}`;
-      return { ...composed, brief: `${lookOverride}${LUSH_HERO_MANDATE}\n\n${composed.brief}` };
+      if (typeof composed === 'string') return `${lookOverride}${heroMandate}\n\n${composed}`;
+      return { ...composed, brief: `${lookOverride}${heroMandate}\n\n${composed.brief}` };
     }
     if (typeof builder === 'function') {
       const legacy = builder({ sharedDNA, vibeDirective, picker });

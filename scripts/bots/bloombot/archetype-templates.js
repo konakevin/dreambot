@@ -11,93 +11,48 @@
  */
 
 module.exports = {
-  BLOOMBOT_FLOWER_TUNNELS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, tunnel_setting, flower_lanterns, atmospheric_phenomenon } = slots;
+  BLOOMBOT_GIANT_FLOWER: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, giant_form, base_surround, sky_ascent } = slots;
+    // 50/50 — a FOREST of giant flowers, or a lone colossal one.
+    const forest = Math.random() < 0.5;
 
-    const phenomenonSection = atmospheric_phenomenon
+    const ascentSection = sky_ascent
       ? `
-━━━ ATMOSPHERIC PHENOMENON — render visibly in the tunnel scene ━━━
-${atmospheric_phenomenon}
-
-A specific atmospheric moment within the tunnel that supports (doesn't compete with) the lit-flower-cores aesthetic.
+━━━ THE SKY / CANOPY ABOVE ━━━
+${sky_ascent}
 
 `
       : '';
 
-    return `You are a fantasy concept-art painter writing POV-DOWN-A-FLOWER-TUNNEL scene descriptions for BloomBot. The flowers themselves are LIT UP — each visible flower has a vivid warm-glowing core radiating soft light. Output is a 90-130 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+    return `You are a fantasy concept-art painter writing GIANT-FLOWER scenes for BloomBot — a single flower grown impossibly tall, as TALL as a giant redwood, but the stalk is a LUSH GREEN FLOWERING VINE-STEM, not a tree. (A "Jack and the Beanstalk" nod — but NO Jack, NO human.) Output 90-130 words, comma-separated phrases for Flux. NO preamble, NO labels.
 
-━━━ THE CORE AESTHETIC — FLOWERS LOOK UNMISTAKABLY LIT UP ━━━
+━━━ THE #1 RULE — MONUMENTAL SCALE, SHOT FROM FAR BACK (READ FIRST) ━━━
+This is a WIDE LANDSCAPE SHOT, never a close-up flower portrait. The giant flower TOWERS HIGH above a TINY DWARFED WORLD far below, with LOTS OF OPEN SKY around and above it. The whole point is SCALE CONTRAST: the colossal flower + its long stem fill the vertical frame, while the ground world (trees, hills, the whole biome) is shrunk to a tiny strip at the very bottom. The camera is pulled FAR BACK and low, looking up — you can see the entire towering stem from the tiny ground to the bloom high in the sky. If the ground world isn't clearly tiny and far below, the scale has failed. NEVER a botanical specimen study, NEVER a cropped close-up of the bloom.
 
-The unifying mandate: EVERY visible flower in the frame IS A SWITCHED-ON BLOOM-LAMP — each flower visibly glows like a turned-on light-bulb in the exact shape of that flower. The petals are TRANSLUCENT and brightly lit from a glowing-bulb CORE inside, the way a lit lamp's shade looks: the bloom itself reads as illuminated, the petals appear backlit and luminous, every bloom unmistakably ON.
+━━━ THE FLOWER ON A COLOSSAL FLOWERY VINE-STEM ━━━
+A SINGLE giant flower towers redwood-tall on a thick, soft, GREEN FLOWERING VINE-STEM — a giant beanstalk-like stalk that is leafy and viny, wrapped in tendrils, climbing-leaves and small buds, CURVING and twisting organically as it climbs (never a straight rigid pole). The stem MUST read as a living flower-stem / vine, NEVER a woody tree-trunk, NEVER bark. One enormous bloom crowns it, high overhead. ${
+      forest
+        ? 'COMPOSITION = FOREST: a GROVE of these colossal flowering vine-stems, twisting up in receding ranks into misty distance, shafts of light falling between them.'
+        : 'COMPOSITION = SOLO: ONE lone colossal flowering vine-stem, curving up tree-tall, dwarfing the ordinary forest and world around its base.'
+    }
 
-Think of it like this (do not write 'Christmas lights' in the output — that confuses Flux): imagine someone replaced every flower in the scene with a translucent ornamental light-bulb shaped exactly like that flower, and turned them all on. The petals glow from inside. The flower IS the lamp. The flower IS the bulb. Each bloom in the frame is unmistakably a SELF-ILLUMINATED FLOWER-LAMP.
+━━━ THE GIANT FLOWER + ITS FLOWERY STEM (the hero — the ROSTER HERO species) ━━━
+${giant_form}
 
-Each flower's CORE / HEART / THROAT / INTERIOR is the bright bulb-center; the petals around it are translucent, backlit, glowing from within. Like Tiffany-style stained-glass lamps in the shape of flowers, or paper-lantern flowers, or fiber-optic-flower fixtures — but rendered naturalistically as actual translucent self-illuminated blooms.
+Render the HERO species from the roster below as the colossal bloom crowning a towering, thick, GREEN, leafy, twisting FLOWER-VINE-STEM in the hero's theme color. ${
+      forest
+        ? 'Multiple such flowering vine-stems form the grove — the nearest fully detailed, others receding into mist.'
+        : 'One dominant flowering vine-stem, with ordinary normal-size trees and ferns dwarfed at its base.'
+    }
 
-NEVER flat / dull / non-glowing / opaque-petals / mere bright-color. EVERY visible flower in the foreground and midground is clearly a switched-on flower-lamp with translucent backlit petals.
+━━━ THE GROUND WORLD AT THE BASE (normal-scale — proves the scale) ━━━
+${base_surround}
 
-
-
-THE COMPOSITION — ENGULFED IN A FLOWER WORMHOLE:
-
-The viewer is INSIDE a wormhole made ENTIRELY of flowers and green vines / leaves. Flower-mass wraps 360° around the viewer — flowers above, below, left, right, ahead. No architecture, no buildings, no archways, no walls, no columns, no cathedral, no stone, no rock, no cave. Just dense overlapping flowers, climbing vines, and green leaves forming the entire enclosed wormhole around the viewer.
-
-  - The viewer feels ENGULFED — walls, ceiling, floor of the wormhole all made of flowers + climbing-vines + green leaves, no bare sections
-  - Foreground flowers close to the camera (within arm's reach); midground recedes deeper, still wrapping 360°; deep distance recedes into MORE FLOWERS (dimmer, smaller), not a bright destination-glow
-  - The FLOWERS are the entire focal subject — the wormhole structure itself is bloom-mass. No architecture (archways / vaults / columns / stone / brick), just dense bloom-mass + vines
-  - Every flower has a glowing warm-amber bulb-core making it a switched-on flower-lamp
-
-🚫🚫🚫 ABSOLUTE HARD BAN — NO HUMANS / FIGURES / SILHOUETTES anywhere. The wormhole is completely empty of human presence. Flowers only 🚫🚫🚫
-
-━━━ HARD MANDATES (every render, BOTH registers) ━━━
-
-1. **EVERY FLOWER IS A SWITCHED-ON FLOWER-LAMP** — describe each species AS A LIT LAMP IN THE SHAPE OF THAT FLOWER with a warm-amber/gold/pink lit bulb-core making its petals translucent and backlit from within (foxglove-bell glowing like a paper-lantern, rose-lamp's layered petals glowing translucent, lily-lamp's lit throat-bulb glowing through the trumpet). The flower IS the bulb — not a flower 'with glow,' but a flower THAT IS A GLOWING LAMP.
-
-2. **FOREGROUND BRILLIANTLY LIT** — the closest blooms to the camera are vivid saturated bright with visibly glowing cores; the foreground is the brightest area.
-
-3. **POV DOWN THE TUNNEL** — viewer inside the tunnel looking toward a vanishing point, walls converging into the deep distance, every surface packed dense with flowers.
-
-4. **CHANDELIER + WALL-SCONCE + FLOOR-CANDLE DISTRIBUTION** — flower-lanterns distributed like a real lighting installation: ceiling hanging-cluster chandelier-flowers (trumpet-vine / wisteria), wall flower-cluster sconces (foxglove / fuchsia), floor-edge candle-cluster flowers along the path (marigold / dahlia / poppy).
-
-ONE positive guard: the vanishing-point is a warm-magical glow OR deep-dark recession (never a bright sun-shaft / god-ray / magic-portal-flash); Register B is DRAMATIC not scary — flowers fight and WIN against the dark; the only lights are FLOWER-CORES (no electric lamps / candles / bioluminescent sci-fi-glow).
-
-━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST HAVE SOMETHING STRIKING ━━━
-Every render is an EPIC CINEMATIC MOVIE POSTER / GALLERY-PIECE FRAME — the kind of magical-garden establishing-shot that opens a Studio Ghibli film, the cover of a Tolkien-illustrated fairytale edition, the centerpiece of a Pinterest 'magical flower tunnel' board. EVERY QUADRANT of the frame carries weight — no empty quadrants, no quiet corners.
-
-OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
-
-  1. **FLOWERS PACKED 80-90% OF FRAME** — every visible surface of the tunnel (walls / ceiling / floor / archway / path-edges) overflows with dense flower-mass, hundreds of glowing flower-cores constellating across every quadrant
-  2. **BRILLIANT FOREGROUND BLOOM-POP** — closest flowers to the camera are vivid saturated bright with VIVID glowing cores — the foreground feels alive with light
-  3. **CHANDELIER + SCONCE + CANDLE DISTRIBUTION** — hanging chandelier-cluster midway down + wall-sconce flower-clusters at intervals + floor-candle-cluster blooms along the path edges
-  4. **CONSTELLATION-DEPTH RECESSION** — flower-cores get smaller and dimmer toward the deep distance, creating multi-tier vertical depth from packed-foreground to fading-distance
-  5. **ATMOSPHERIC TEXTURE** — drifting petal-fall / mossy path / wet-stone reflection / lateral petal-drift / crisp depth-layering adding visual richness without competing with the flower-cores
-
-THINK: Studio Ghibli Howl's-Moving-Castle-garden-establishing-frame / Spirited-Away-spirit-realm-corridor / Princess-Mononoke-forest-path / Tim-Burton Alice-in-Wonderland enchanted-garden-tunnel / Brian-Froud faerie-realm-passage / Pinterest 'most-beautiful-flower-tunnel-Pinterest-board' / Magic-the-Gathering 'Cocoon of Avacyn' art / Disney-Princess secret-garden discovery / Tolkien-illustrated edition fairytale-passage.
-
-The viewer should GASP at the magical density. Every frame is a still someone would screenshot and want to step into.
-
-🚫 NO empty bare surfaces, NO sparse petals-on-stone, NO single hero bloom dominating — DENSITY across every quadrant.
-
-━━━ THE TUNNEL SETTING ━━━
-${tunnel_setting}
-
-━━━ THE FLOWER-LANTERNS — flowers whose CORES function as the light fixtures ━━━
-${flower_lanterns}
-
-EVERY flower in the frame has a warm-glowing CENTER / HEART / INTERIOR / THROAT radiating soft warm light through its petals into the surrounding ambient.
-${phenomenonSection}━━━ COMPOSITION CRAFT — POV-DOWN-A-FLOWER-TUNNEL ━━━
-
-  • Strong vanishing-point perspective — tunnel walls + ceiling converge toward a deep-distance point
-  • Leading-line along the path — drawing the eye DEEPER through the flower-tunnel with each glowing flower-core as a guide-marker
-  • Foreground: BRILLIANT vivid warm-color blooms (Register A: warm-amber / coral / pink whimsical / Register B: super-saturated foreground blooms popping against dark)
-  • Midground: tunnel-walls packed with smaller fairy-light cluster-flowers (wisteria-strands / jasmine / honeysuckle / foxgloves)
-  • Midground center: HANGING CHANDELIER flower-cluster
-  • Deep distance: EITHER soft warm-magical destination-glow surrounded by flower-silhouettes (Register A) OR deep dark recession with cores fading smaller and dimmer into unlit depth (Register B)
-
-━━━ AMBIENT LIGHTING ━━━
+Render the dwarfed ground world EXACTLY as described just above — whatever biome + tiny details it names — all DWARFED so the giant reads as monumental. Do NOT default to a pine forest. NO humans, and NEVER a person for scale (any scale-prover animal comes ONLY from the description above, if it names one).
+${ascentSection}━━━ AMBIENT LIGHTING ━━━
 ${lighting}
 
-Reinterpret the rolled lighting to support whichever register the tunnel_setting suggests. The flower-cores provide the WARM light story across both registers — the ambient supports it.
+Soft misty light — shafts of god-rays falling around the towering flower-stem, gentle atmospheric depth.
 
 ━━━ COLOR PALETTE — STRICT ━━━
 ${sharedDNA.palette}
@@ -105,22 +60,31 @@ ${sharedDNA.palette}
 ━━━ FLOWER SPECIES — STRICT ━━━
 ${sharedDNA.roster}
 
-Pick 3-5 species from the roster. EVERY species rendered with a clearly glowing warm-amber / warm-orange / warm-gold / warm-pink CENTER lit like a candle-flame, petals backlit / catching the glow.
+The HERO is the giant flower on its colossal flowery vine-stem. Supporting + filler species grow at the base at normal scale. Every bloom strictly within the palette colors.
 
-━━━ DEFAULTS TO RESIST ━━━
-Warm-magical glow OR deep-dark recession at the vanishing-point (never a bright sun-shaft / portal-flash); FLOWER-CORES are the only lights (no bioluminescent / electric-cyan / fairy-dust); every surface packed with glowing flowers; only roster species; ABSOLUTE HARD BAN on humans / figures / silhouettes anywhere.
+━━━ COMPOSITION CRAFT ━━━
+  • Looking UP at, or across at, a flower towering on a thick GREEN FLOWERY VINE-STEM that CURVES and twists as it climbs — organic, leafy, never a straight rigid pole
+  • Strong scale contrast: the colossal leafy stem vs the dwarfed normal-scale ground world at the base
+  • ${forest ? 'Receding ranks of giant flowering vine-stems + light-shafts + mist = grove depth' : 'ONE monumental flowering vine-stem + a dwarfed normal world at its base'}
+  • Open sky / canopy light far above
+
+━━━ HARD BANS ━━━
+NO humans / figures / Jack / people-for-scale anywhere. NO tunnel / wormhole / 360° engulfment / kaleidoscope / wall of flowers. The stalk MUST be a LUSH GREEN LEAFY FLOWER-VINE-STEM — NEVER a woody tree-trunk, NEVER bark, NEVER a straight rigid column.
 
 ━━━ MOOD CONTEXT ━━━
 ${vibeDirective.slice(0, 150)}
 
 ━━━ STRUCTURE — write in this exact order ━━━
-[POV-down-flower-tunnel composition with NO HUMAN PRESENCE], [the specific tunnel setting + 3-5 specific flower species packing every surface], [GLOWING WARM-AMBER FLOWER-CORES as the entire light source — explicitly describe each species' center glowing like a candle / paper-lantern / ember-core], [flower-lantern constellation distribution — ceiling chandelier + wall sconces + floor candles], [REGISTER A or B ambient — warm enchanted whimsical OR dramatic-dark with brilliant foreground bloom-pop]${atmospheric_phenomenon ? ', [atmospheric phenomenon supporting the lit-flowers aesthetic]' : ''}, [vanishing-point — soft warm-magical destination-glow OR deep dark recession]
+[${
+      forest
+        ? 'a grove of flowers towering on thick GREEN FLOWERY VINE-STEMS curving up into misty light-shafts'
+        : 'ONE colossal flower towering on a thick GREEN leafy FLOWERY VINE-STEM that curves and twists upward, dwarfing the world at its base'
+    }, NO humans], [the giant flower + its lush green leafy twisting vine-stem in the hero color], [the dwarfed normal-scale ground world at the base for scale, as described], [god-ray light-shafts + mist]${sky_ascent ? ', [sky / canopy above]' : ''}, [palette colors strictly + mood]
 
-CRITICAL — every visible flower has a clearly glowing core. The flowers look UNMISTAKABLY LIT UP. ABSOLUTE HARD BAN ON HUMANS / PEOPLE / FIGURES / SILHOUETTES anywhere in the frame.
+CRITICAL — a giant flower on a LUSH GREEN LEAFY FLOWERY VINE-STEM that curves organically as it climbs, redwood-tall. NEVER a woody tree-trunk, NOT a tunnel, NOT a wall, NO humans / NO person for scale.
 
 Output ONLY 90-130 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
   },
-
   BLOOMBOT_FLOWER_FRIENDS: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, flower_focal_cluster, hero_pollinator, magical_particles } = slots;
 
