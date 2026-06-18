@@ -119,3 +119,27 @@ export function markFlagSeen(flag: FirstRunFlag): Promise<void> {
 export function resetFlag(flag: FirstRunFlag): Promise<void> {
   return write(flag, false);
 }
+
+/** Clear ALL first-run flags in one upsert — used by the admin "Reset Profile +
+ *  Tutorials" / "Reset First-Run Tutorials" tools so every intro re-shows. (No
+ *  client DELETE: the table grants SELECT/INSERT/UPDATE only — setting the row
+ *  all-false is equivalent to an absent row for gating.) */
+export async function resetAllFirstRunFlags(): Promise<void> {
+  const userId = await currentUserId();
+  if (!userId) return;
+  if (cache && cacheUserId === userId) {
+    cache = { feed: false, create: false, mediums: false, sparkle: false };
+  }
+  const { error } = await supabase.from('user_first_run').upsert(
+    {
+      user_id: userId,
+      seen_feed_intro: false,
+      seen_create_intro: false,
+      seen_mediums_intro: false,
+      seen_sparkle_intro: false,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'user_id' }
+  );
+  if (error && __DEV__) console.warn('[firstRun] resetAll failed', error.message);
+}

@@ -18,10 +18,9 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useOnboardingStore } from '@/store/onboarding';
-import { CreateIntroSheet, resetCreateIntro } from '@/components/CreateIntroSheet';
-import { resetFeedIntro } from '@/components/FeedIntroGate';
-import { MediumsIntroSheet, resetMediumsIntro } from '@/components/MediumsIntroSheet';
-import { resetSparkleIntro } from '@/components/SparkleIntroSheet';
+import { CreateIntroSheet } from '@/components/CreateIntroSheet';
+import { MediumsIntroSheet } from '@/components/MediumsIntroSheet';
+import { resetAllFirstRunFlags } from '@/lib/firstRunFlags';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -371,15 +370,10 @@ export default function SettingsScreen() {
               onPress={async () => {
                 await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
                 await supabase.from('user_recipes').delete().eq('user_id', user!.id);
-                // Also clear the first-run intro flags so the Create-tab tutorials
-                // (CreateIntro + MediumsIntro) re-show — otherwise a re-onboard
-                // would skip them. Non-fatal if storage hiccups.
-                await Promise.all([
-                  resetCreateIntro(),
-                  resetMediumsIntro(),
-                  resetSparkleIntro(),
-                  resetFeedIntro(),
-                ]).catch(() => {});
+                // Also clear the account-bound first-run intro flags (user_first_run,
+                // migration 284) so all four tutorials re-show — otherwise a re-onboard
+                // would skip them. Non-fatal if the write hiccups.
+                await resetAllFirstRunFlags().catch(() => {});
                 useOnboardingStore.getState().reset();
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 router.replace('/(onboarding)');
@@ -391,15 +385,10 @@ export default function SettingsScreen() {
               icon="refresh-outline"
               label="Reset First-Run Tutorials (test)"
               onPress={async () => {
-                // Clears ONLY the first-run intro flags (CreateIntro + MediumsIntro)
-                // so those tutorial sheets re-show next time — without re-onboarding.
-                // Lets us replay the first-run flows over and over.
-                await Promise.all([
-                  resetCreateIntro(),
-                  resetMediumsIntro(),
-                  resetSparkleIntro(),
-                  resetFeedIntro(),
-                ]).catch(() => {});
+                // Clears ONLY the account-bound first-run intro flags (feed / Create
+                // / Mediums / Sparkle, in user_first_run) so those tutorial sheets
+                // re-show next time — without re-onboarding. Replay the flows freely.
+                await resetAllFirstRunFlags().catch(() => {});
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 showAlert(
                   'Tutorials reset',
