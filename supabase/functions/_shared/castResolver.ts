@@ -19,6 +19,7 @@ export interface DreamCastMember {
 }
 
 import { resolveCastGender, genderLockSentence, type CastGender } from './genderLock.ts';
+import { sanitizeUserText } from './sanitizeUserText.ts';
 
 export interface ResolvedCastMember {
   role: string;
@@ -53,11 +54,15 @@ export function resolveCastForPrompt(
     .filter((m) => m.description && m.thumb_url)
     .map((member) => {
       const rawDesc = member.description ?? '';
-      // Clean markdown formatting
-      const cleanDesc = rawDesc
-        .replace(/^#.*\n/gm, '')
-        .replace(/\*\*/g, '')
-        .trim();
+      // Clean markdown formatting + run the full user-text sanitizer. A tampered
+      // client can POST an arbitrary cast `description` straight to generate-dream
+      // (bypassing describe-photo), and it lands in the Sonnet CHARACTER block —
+      // so neutralize prompt-injection / control / zero-width here too. 'vision'
+      // cap (generous) so a legit detailed description isn't truncated.
+      const cleanDesc = sanitizeUserText(
+        rawDesc.replace(/^#.*\n/gm, '').replace(/\*\*/g, ''),
+        'vision'
+      );
 
       // Gender — single source of truth (explicit field > prose). Non-pet
       // members with no signal default to male (preserves prior behavior).
@@ -79,7 +84,7 @@ export function resolveCastForPrompt(
         genderLock,
         gender,
         sourcePhotoUrl: member.thumb_url,
-        physicalTraits: member.physical_summary || '',
+        physicalTraits: sanitizeUserText(member.physical_summary || '', 'vision'),
         relationship: member.relationship,
       };
     });

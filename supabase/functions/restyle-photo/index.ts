@@ -31,7 +31,12 @@ import {
 } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { callSonnet } from '../_shared/llm.ts';
-import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
+import {
+  getCostCents,
+  getSparkleCost,
+  loadModelCosts,
+  isKnownModel,
+} from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
@@ -145,15 +150,11 @@ async function handleRequest(req: Request): Promise<Response> {
     userId = user.id;
   }
 
-  const {
-    mode,
-    input_image,
-    medium_key,
-    vibe_key,
-    hint,
-    force_model,
-    vibe_profile: vibeProfile,
-  } = body;
+  const { mode, input_image, medium_key, vibe_key, hint, vibe_profile: vibeProfile } = body;
+  // Validated below against the model catalog (after loadModelCosts) — an unknown
+  // force_model is ignored so a client can't force an arbitrary/unpriced model.
+  let force_model: string | undefined =
+    typeof body.force_model === 'string' ? body.force_model : undefined;
 
   // Every user-initiated restyle MUST carry a job_id so the sparkle charge below
   // has an idempotency key. Without one the charge block was skipped entirely —
@@ -253,6 +254,11 @@ async function handleRequest(req: Request): Promise<Response> {
   // force_model in practice → 1 sparkle; getSparkleCost handles either.
   if (jobId) {
     await loadModelCosts(supabase);
+    // Ignore an unknown force_model (catalog-bound cost + render).
+    if (force_model && !isKnownModel(force_model)) {
+      console.warn(`[restyle-photo] ignoring unknown force_model: ${force_model}`);
+      force_model = undefined;
+    }
     const dreamCost = getSparkleCost(force_model || '');
     try {
       const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {

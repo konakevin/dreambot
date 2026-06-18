@@ -53,7 +53,12 @@ import { captureRenderError } from '../_shared/sentry.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
-import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
+import {
+  getCostCents,
+  getSparkleCost,
+  loadModelCosts,
+  isKnownModel,
+} from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
@@ -438,6 +443,14 @@ async function handleRequest(req: Request): Promise<Response> {
   // (nightly + first-dream are separate, free functions).
   if (jobId) {
     await loadModelCosts(supabase);
+    // Reject an unknown force_model: a client could otherwise force an arbitrary
+    // / unpriced Replicate model and be charged the DEFAULT 1-sparkle floor.
+    // Ignore it (fall back to the priced auto-picker) so cost + render stay
+    // catalog-bound — and a retired model in an old DLT recipe still renders.
+    if (force_model && !isKnownModel(force_model)) {
+      console.warn(`[generate-dream] ignoring unknown force_model: ${force_model}`);
+      force_model = undefined;
+    }
     // DreamBot (no force_model) → engine_config.base_sparkle_cost (admin-tunable,
     // default 1); Direct/DLT → the picked model's cost. Mirrors the client.
     const cfg = await fetchEngineConfig(supabase);

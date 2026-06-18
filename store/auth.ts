@@ -3,6 +3,10 @@ import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 import { useFeedStore } from '@/store/feed';
+import { useOnboardingStore } from '@/store/onboarding';
+import { useDreamStore } from '@/store/dream';
+import { useAlbumStore } from '@/store/album';
+import { useExploreStore } from '@/store/explore';
 import { queryClient } from '@/lib/queryClient';
 import {
   isProActive,
@@ -121,8 +125,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   signOut: async () => {
     await supabase.auth.signOut();
     set({ session: null, user: null, isSuperAdmin: false });
-    // Clear all cached data from previous session
+    // Clear ALL per-session in-memory state so the next user on a shared device
+    // can't inherit the previous user's feed / onboarding draft / dream-composer
+    // selections / album / explore filters.
     useFeedStore.getState().bumpReset();
+    useOnboardingStore.getState().reset();
+    useDreamStore.getState().reset();
+    useAlbumStore.getState().clearAlbum();
+    useExploreStore.getState().clearPending();
     // Clear TanStack Query cache
     queryClient.clear();
     // Drop any in-flight dream marker so the next user on this device can't

@@ -1,5 +1,5 @@
 /**
- * Essence Cards — rich cinematic descriptions of locations and objects.
+ * Essence Cards — rich cinematic descriptions of locations.
  *
  * Shared across all users. Generated lazily by Sonnet on first encounter,
  * then cached in DB forever. Module-level cache prevents duplicate queries

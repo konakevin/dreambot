@@ -22,6 +22,7 @@ import {
 } from '../_shared/dreamStyles.ts';
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
+import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import {
   fetchChaosConfig,
   getChaosTier,
@@ -598,7 +599,13 @@ Deno.serve(async (req) => {
     // Strip banned (fantasy/sci-fi/imagined) entries from the place pool
     // before any rolling logic touches it. See _shared/locationFilters.ts
     // for the rationale + the 3-layer cleanup it pairs with.
-    let placePool: string[] = (seeds.places ?? []).filter((p: string) => !isBannedLocationName(p));
+    // Sanitize every place at the source — places are normally DB-curated picker
+    // keys (sanitize is identity for those), but a tampered client can write
+    // arbitrary text into user_recipes.recipe.dream_seeds.places, and userPlace
+    // flows into the Sonnet brief. Neutralizes injection / control / zero-width.
+    let placePool: string[] = (seeds.places ?? [])
+      .map((p: string) => sanitizeUserText(String(p), 'subject_description'))
+      .filter((p: string) => p && !isBannedLocationName(p));
     if (placePool.length > 0 && recentPlaces.length > 0) {
       const excludeSet = new Set(recentPlaces);
       const filtered = placePool.filter((p: string) => !excludeSet.has(p));
@@ -835,7 +842,10 @@ Deno.serve(async (req) => {
     // Objects flow through assembleScene() naturally — no enforcement in the brief.
     const avoidList =
       nightlyProfile.avoid && nightlyProfile.avoid.length > 0
-        ? `\nNEVER INCLUDE: ${nightlyProfile.avoid.join(', ')}`
+        ? `\nNEVER INCLUDE: ${nightlyProfile.avoid
+            .map((a: string) => sanitizeUserText(String(a), 'subject_description'))
+            .filter(Boolean)
+            .join(', ')}`
         : '';
 
     // ── DREAM COMPOSITION PATHS ──

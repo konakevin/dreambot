@@ -1,4 +1,7 @@
-import { rollDream, MediumProps, CastMember } from '@/lib/dreamAlgorithm';
+// The production rolling logic lives in the shared edge module; the old
+// lib/dreamAlgorithm.ts was a byte-identical client clone with no production
+// caller (deleted 2026-06-18). Test the real shared module via the @engine alias.
+import { rollDream, MediumProps, CastMember } from '@engine/dreamAlgorithm';
 
 const SELF: CastMember = {
   role: 'self',

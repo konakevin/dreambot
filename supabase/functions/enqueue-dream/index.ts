@@ -117,6 +117,12 @@ Deno.serve(async (req) => {
       dedup_key: `first_dream:${fdJobId}`,
     });
     if (fdEnqErr) {
+      // The partial unique index ux_dream_queue_active_first_dream (migration 281)
+      // makes one-free-first-dream-per-account ATOMIC — a racing duplicate insert
+      // raises 23505 instead of slipping past the check-then-insert guard above.
+      if (fdEnqErr.code === '23505') {
+        return json({ error: 'first_dream_already_claimed' }, 409);
+      }
       return json({ error: `enqueue_failed: ${fdEnqErr.message}` }, 500);
     }
 
@@ -242,7 +248,15 @@ Deno.serve(async (req) => {
     dedup_key: `create:${jobId}`,
   });
   if (enqErr) {
-    // Enqueue failed after charging — refund so the user isn't out a sparkle.
+    // Idempotent retry: a dedup_key (create:${jobId}) collision means this exact
+    // dream is ALREADY queued/rendering (e.g. the first enqueue succeeded but its
+    // response was lost and the client resent the same job_id). It will complete +
+    // post — so return it as success and DO NOT refund (the charge is idempotent;
+    // refunding here would hand the user a free, already-rendering dream).
+    if (enqErr.code === '23505') {
+      return json({ dream_id: jobId, status: 'queued' }, 200);
+    }
+    // Genuine enqueue failure after charging — refund so the user isn't out a sparkle.
     await supabase
       .rpc('refund_sparkles', {
         p_user_id: userId,

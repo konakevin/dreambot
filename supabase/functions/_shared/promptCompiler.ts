@@ -54,7 +54,6 @@ export interface CompilerInput {
     styleReference?: string;
     photoDescription?: string;
     objectDirective?: string;
-    dreamWish?: string;
   };
 
   cast: ResolvedCastMember[];
@@ -167,9 +166,6 @@ function buildSceneBlock(scene: CompilerInput['scene']): string {
   // compilePrompt(), which reproduces the format and recasts the subject INTO it.
   if (scene.photoDescription) {
     parts.push(`PHOTO SUBJECT: ${scene.photoDescription}`);
-  }
-  if (scene.dreamWish) {
-    parts.push(`DREAM WISH (make this the heart): "${scene.dreamWish}"`);
   }
   if (!scene.userPrompt && !scene.styleReference) {
     parts.push(

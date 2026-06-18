@@ -38,6 +38,25 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
   }
 
+  // Rate limit (migration 228): this is an authenticated paid-Haiku endpoint —
+  // cap it like classify/describe-photo so an authed user can't loop it.
+  const supabaseAdmin = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  );
+  const { error: rlErr } = await supabaseAdmin
+    .from('edge_function_invocations')
+    .insert({ user_id: user.id, function_name: 'extract-style' });
+  if (rlErr) {
+    const isRl =
+      rlErr.message?.includes('rate_limited') ||
+      (rlErr as { hint?: string }).hint === 'rate_limited';
+    if (isRl) {
+      return new Response(JSON.stringify({ error: 'rate_limited' }), { status: 429 });
+    }
+    console.error('[extract-style] rate-limit log INSERT failed:', rlErr.message);
+  }
+
   const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
   if (!ANTHROPIC_KEY) {
     return new Response(JSON.stringify({ error: 'Missing ANTHROPIC_API_KEY' }), { status: 500 });

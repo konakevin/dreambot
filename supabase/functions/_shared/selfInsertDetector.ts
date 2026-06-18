@@ -29,7 +29,7 @@ export interface SelfInsertResult {
 // the MY_SELF catch-all and wrongly cast SELF (Kevin, 2026-06-08).
 //
 // MUST match the DEFAULTs in migration 256 AND the client fallback in
-// app/(tabs)/create.tsx (separate RN runtime — can't import this Deno module).
+// hooks/useEngineConfig.ts (separate RN runtime — can't import this Deno module).
 export const DEFAULT_RELATIONSHIP_WORDS =
   'plus[\\s-]?one|plus\\s?1|\\+\\s?1|significant other|partner|wife|husband|girlfriend|boyfriend|gf|bf|spouse|fiancée?|fiancé|fiance|fiancee|friend|best friend|bestie|buddy|bff|pal|mate|mom|mum|dad|mother|father|parent|brother|sister|sibling|twin|son|daughter|kid|kids|child|children|cousin|aunt|uncle|niece|nephew|grandma|grandpa|grandmother|grandfather|granny|roommate|neighbour|neighbor|coworker|colleague|teammate|classmate|hubby|wifey|family';
 export const DEFAULT_PET_WORDS = 'dog|cat|pet|puppy|kitten|pup|kitty|pupper|doggo';

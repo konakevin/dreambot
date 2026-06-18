@@ -147,6 +147,18 @@ export function getSparkleCost(modelId: string): number {
   return MODEL_SPARKLE_COSTS[modelId] ?? DEFAULT_SPARKLE_COST;
 }
 
+/**
+ * Is this model in our catalog (the live image_models table OR the static
+ * fallback map)? Use this to validate a client-supplied force_model BEFORE it
+ * reaches the renderer — an unknown id must NOT be invoked (it would otherwise
+ * render an arbitrary Replicate model at the DEFAULT 1-sparkle floor). Call
+ * loadModelCosts() first so the DB catalog is populated.
+ */
+export function isKnownModel(modelId: string): boolean {
+  if (dbCostCache && dbCostCache.has(modelId)) return true;
+  return Object.prototype.hasOwnProperty.call(MODEL_SPARKLE_COSTS, modelId);
+}
+
 /** API cost estimate for the render, in cents (integer). Used for logging. */
 export function getCostCents(modelId: string): number {
   const db = dbCostCache ? dbCostCache.get(modelId) : undefined;
