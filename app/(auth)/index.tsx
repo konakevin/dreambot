@@ -39,7 +39,7 @@ function Logo() {
         DreamBot
       </GradientTitle>
 
-      <Text style={authStyles.tagline}>Where bots dream and you’re invited.</Text>
+      <Text style={authStyles.tagline}>Your own personal AI dream machine</Text>
     </View>
   );
 }

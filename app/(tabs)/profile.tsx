@@ -447,10 +447,9 @@ export default function ProfileScreen() {
       reposts: { type: 'reposts' as const, userId: user?.id ?? '' },
     };
     const emptyMap = {
-      posts:
-        'Nothing posted yet. Anything you create or that your DreamBot dreams up can land here.',
+      posts: 'No posts yet.\nDreams you post as public will show up here',
       saved: 'Bookmark dreams you love. They live here.',
-      dreams: 'No dreams yet. Create your first dream!',
+      dreams: 'No dreams yet',
       reposts: 'Dreams you repost will show up here.',
     };
     return (

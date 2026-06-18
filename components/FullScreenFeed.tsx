@@ -393,7 +393,13 @@ export function FullScreenFeed({
               })
               .then(({ error }) => {
                 if (error && __DEV__) {
-                  console.error('[FullScreenFeed] record_impression failed:', error.message);
+                  // Impression tracking is best-effort. A transient transport
+                  // failure ("Network request failed") is environmental noise, not
+                  // a bug — warn so it doesn't pop the red LogBox overlay mid-test.
+                  // A REAL RPC error (RLS/SQL/missing-fn) still logs loudly.
+                  const isNetwork = /network request failed/i.test(error.message ?? '');
+                  const log = isNetwork ? console.warn : console.error;
+                  log('[FullScreenFeed] record_impression failed:', error.message);
                 }
               });
           }, 1000);

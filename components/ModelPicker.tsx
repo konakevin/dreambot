@@ -171,9 +171,19 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
             {modelBlurb(opt.id, opt.description)}
           </Text>
         </View>
-        {/* Sparkle icon only — cost number dropped (Kevin 2026-06-17). */}
+        {/* Sparkle icon + per-model cost number. */}
         <View style={[styles.costBadge, { borderColor: colors.border }]}>
           <Ionicons name="sparkles" size={13} color="#A78BFA" />
+          <Text
+            style={{
+              color: '#A78BFA',
+              fontSize: fontScale(12),
+              fontWeight: '700',
+              marginLeft: 3,
+            }}
+          >
+            {opt.sparkleCost}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -198,12 +208,20 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
         >
           {current?.label ?? 'Flux 1.1 Pro'}
         </Text>
-        {/* Sparkle icon only — the cost NUMBER was dropped (Kevin 2026-06-17:
-            "the sparkle icon is enough"). The exact cost still shows on the Dream
-            button. */}
+        {/* Sparkle icon + the selected model's cost number. */}
         {current && (
           <View style={styles.pillCost}>
             <Ionicons name="sparkles" size={14} color="#A78BFA" />
+            <Text
+              style={{
+                color: '#A78BFA',
+                fontSize: fontScale(13),
+                fontWeight: '700',
+                marginLeft: 3,
+              }}
+            >
+              {current.sparkleCost}
+            </Text>
           </View>
         )}
         <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
