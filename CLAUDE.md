@@ -157,6 +157,15 @@ for the public feed + serves deep-link share targets.**
   `main` (no feature branches). Concurrent agents share the working tree — **edit only your task's files;
   never touch another agent's WIP; never `git add -A`/`git add .` (explicit paths only).** Commit/push
   only when asked.
+- **Before committing, READ the staged diff (`git diff --cached <paths>`) — explicit paths is NOT enough.**
+  In the long-lived shared tree a single file accumulates hunks from MULTIPLE efforts; staging it by
+  ownership ("it's my file") can sweep in an unrelated change you didn't mean to land. Specifically watch
+  for a **split-dependency partial commit**: committing a file whose new `import` points at another file
+  that's still untracked → `main` breaks on a fresh checkout even though everything passed locally. **The
+  pre-commit hook validates the WORKING TREE, not the commit** (the imported file exists on your disk, so
+  `tsc`/`jest` go green), so it will NOT catch this. Verify the actual hunks, and that any new import's
+  target is staged in the same commit. (2026-06-18: committed `settings/index.tsx`'s `resetSparkleIntro`
+  import while `SparkleIntroSheet.tsx` stayed untracked → broke `main` silently.)
 - **Deploy edge functions.** `supabase functions deploy <name> --no-verify-jwt` — ALWAYS `--no-verify-jwt`,
   deploy immediately after editing. Active (15): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
   `enqueue-dream`, `first-dream-render`, `face-swap-dual`, `restyle-photo`, `describe-photo`,
