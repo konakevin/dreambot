@@ -120,6 +120,10 @@ module.exports = {
         },
       ],
       'expo-build-properties',
+      // Generate module maps for GoogleUtilities + RecaptchaInterop so the Swift
+      // pod AppCheckCore (pulled in by @react-native-google-signin) integrates as
+      // a static library. See plugins/withGoogleModularHeaders.js for the why.
+      './plugins/withGoogleModularHeaders',
       // Sentry — sets up the native crash handler + (with SENTRY_AUTH_TOKEN +
       // org/project at build time) symbolicated source-map upload. Runtime
       // capture is no-op until EXPO_PUBLIC_SENTRY_DSN is set (see lib/sentry.ts).
