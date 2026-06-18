@@ -102,9 +102,10 @@ The two things that still touch the build: confirm production **EAS env vars**
       tracking=yes label would be an auto-reject).
 - [x] **Privacy Policy + Support URLs** entered in ASC (both live). 2026-05-28.
 - [x] **Content rights** answered — user-generated / AI-generated. 2026-05-28.
-- [ ] **Demo account in App Review notes** — the app is login-gated. **Review-notes
-      draft (incl. moderation explanation) is in `APP_STORE_LISTING.md`** — just create
-      a pre-onboarded demo account with sparkles and paste its credentials in.
+- [x] **Demo account in App Review notes** (2026-06-18) — `apptester@dreambotapp.com`
+      created + pre-onboarded (4 locations + male/female Dream Cast), 500 sparkles,
+      1-year Pro, follows all bots. Credentials + moderation explanation are filled
+      into the review-notes block in `APP_STORE_LISTING.md`, ready to paste into ASC.
 
 ---
 

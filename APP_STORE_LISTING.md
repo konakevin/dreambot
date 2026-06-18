@@ -57,27 +57,32 @@ Sweet dreams. ✨
 ## App Review notes (paste into "Notes" for the reviewer)
 
 ```
-DEMO ACCOUNT (please use to review — the app is login-gated):
-  Email: <CREATE A DEMO ACCOUNT AND PUT CREDENTIALS HERE>
-  Password: <...>
+DEMO ACCOUNT (please use this to review. The app requires sign in.):
+  Email: apptester@dreambotapp.com
+  Password: l3tm3!nn2026DR34MB0T
 
 ABOUT THE APP
-- DreamBot generates personalized AI art from a "Vibe Profile" the user builds in
-  onboarding. The demo account is pre-onboarded so you can generate immediately
-  from the Create tab.
-- IN-APP PURCHASES: "Sparkles" are a consumable currency that powers dream
-  generation (1 sparkle per dream). The demo account has sparkles preloaded.
-  "DreamBot Pro" is an auto-renewing subscription for HQ downloads + a nightly dream.
-- DREAM CAST (face-swap): users may upload photos of themselves to place their
+- DreamBot creates personalized art from a "Vibe Profile" the user sets up during
+  onboarding. This demo account is already set up with locations and Dream Cast
+  photos, so you can generate art right away from the Create tab, including a
+  Dream Cast face swap. You will still see a few short feature tips the first time
+  you open the Feed and Create tabs. That is normal.
+- In-app purchases. "Sparkles" are a consumable currency that powers art
+  generation, at one sparkle per image. This account already has sparkles loaded.
+  "DreamBot Pro" is an auto-renewing subscription for high quality downloads and a
+  nightly image. This account already has Pro turned on, so you can review the Pro
+  features without buying anything. You can still test the purchase and Restore
+  Purchases flows in the StoreKit sandbox.
+- Dream Cast face swap. Users can upload photos of themselves to place their
   likeness into generated art. Our terms require users to only upload photos they
   have the rights to.
 
 CONTENT MODERATION
-- AI image generation runs through providers with built-in NSFW safety filters.
-- User-submitted text (usernames, captions, comments, prompts) is screened by an
+- Image generation runs through providers that have built-in NSFW safety filters.
+- Text that users enter (usernames, captions, comments, prompts) is screened by an
   automated word filter.
-- Every post, comment, and user can be reported; users can block other users;
-  violating content is removed. There is an in-app account deletion flow.
+- Any post, comment, or user can be reported. Users can block other users.
+  Violating content is removed. The app also has an in-app account deletion flow.
 ```
 
 ---
