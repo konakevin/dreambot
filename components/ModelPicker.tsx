@@ -171,11 +171,9 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
             {modelBlurb(opt.id, opt.description)}
           </Text>
         </View>
+        {/* Sparkle icon only — cost number dropped (Kevin 2026-06-17). */}
         <View style={[styles.costBadge, { borderColor: colors.border }]}>
-          <Text style={[styles.costBadgeText, { color: colors.textPrimary }]}>
-            {opt.sparkleCost}
-          </Text>
-          <Ionicons name="sparkles" size={11} color="#A78BFA" style={{ marginLeft: 3 }} />
+          <Ionicons name="sparkles" size={13} color="#A78BFA" />
         </View>
       </TouchableOpacity>
     );
@@ -200,29 +198,12 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
         >
           {current?.label ?? 'Flux 1.1 Pro'}
         </Text>
+        {/* Sparkle icon only — the cost NUMBER was dropped (Kevin 2026-06-17:
+            "the sparkle icon is enough"). The exact cost still shows on the Dream
+            button. */}
         {current && (
           <View style={styles.pillCost}>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: fontScale(14),
-                fontWeight: '600',
-                marginRight: 5,
-              }}
-            >
-              Cost:
-            </Text>
-            <Ionicons name="sparkles" size={13} color="#A78BFA" />
-            <Text
-              style={{
-                color: '#A78BFA',
-                fontSize: fontScale(15),
-                fontWeight: '700',
-                marginLeft: 4,
-              }}
-            >
-              {current.sparkleCost}
-            </Text>
+            <Ionicons name="sparkles" size={14} color="#A78BFA" />
           </View>
         )}
         <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
@@ -315,7 +296,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 10,
   },
-  costBadgeText: { fontSize: fontScale(12), fontWeight: '700' },
   pillLabel: {
     fontSize: fontScale(12),
     fontWeight: '500',

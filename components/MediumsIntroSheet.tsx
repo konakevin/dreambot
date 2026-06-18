@@ -74,7 +74,7 @@ const CARDS: CardSpec[] = [
     bg: FACE_BG,
     icon: 'person',
     title: 'Real Face',
-    body: 'Mediums tagged FACE put the real you in the dream — true-to-life styles like photography, canvas, and watercolor.',
+    body: 'Mediums tagged FACE put the real you in the dream, in true-to-life styles like photography, canvas, and watercolor.',
   },
   {
     badge: 'art',
@@ -82,7 +82,7 @@ const CARDS: CardSpec[] = [
     bg: ART_BG,
     icon: 'color-palette',
     title: 'Dream Art',
-    body: 'Mediums tagged ART reimagine a fun look-alike of you in the style — think LEGO, pixel art, and claymation.',
+    body: 'Mediums tagged ART reimagine a fun look-alike of you in the style, like LEGO, pixel art, and claymation.',
   },
 ];
 
@@ -164,8 +164,9 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
                 </View>
               </View>
               <Text style={s.cardBody}>
-                Skip the engine and send your prompt straight to the AI model of choice. No medium,
-                vibe, or face rendering. Your prompt has full control over the scene and style.
+                Skip the engine and send your prompt straight to the model of your choice. No
+                medium, vibe, or face rendering. Your prompt has full control over the scene and
+                style.
               </Text>
             </View>
           </View>

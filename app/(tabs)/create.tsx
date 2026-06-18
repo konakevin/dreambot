@@ -13,7 +13,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 
-import { View, TouchableOpacity, Keyboard, Platform, Modal, Linking } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
+  Modal,
+  Linking,
+  InteractionManager,
+} from 'react-native';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Text, TextInput } from '@/components/AppText';
@@ -39,6 +47,7 @@ import { GradientButton } from '@/components/GradientButton';
 import { showAlert } from '@/components/CustomAlert';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
+import { SparkleIntroSheet, hasSeenSparkleIntro } from '@/components/SparkleIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
@@ -71,6 +80,25 @@ export default function CreateScreen() {
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
+  // Keyboard-open tracking, used to collapse the model + medium/vibe controls
+  // into a one-line summary while typing (so the selected medium/vibe stay
+  // visible and the Dream CTA is one tap away). Core RN Keyboard listeners
+  // (not the keyboard-controller reanimated hook, which crashes if it can't
+  // bind — see feedback_render_crashes_uncovered_prefer_core_apis). Deferred
+  // to after the keyboard animation so the layout swap doesn't jump.
+  const [kbOpen, setKbOpen] = useState(false);
+  useEffect(() => {
+    const s1 = Keyboard.addListener('keyboardDidShow', () =>
+      InteractionManager.runAfterInteractions(() => setKbOpen(true))
+    );
+    const s2 = Keyboard.addListener('keyboardDidHide', () =>
+      InteractionManager.runAfterInteractions(() => setKbOpen(false))
+    );
+    return () => {
+      s1.remove();
+      s2.remove();
+    };
+  }, []);
   // The image picker can't present while this Modal is still dismissing (iOS),
   // so stash the chosen action and fire it AFTER the modal is gone.
   const pendingPhotoAction = useRef<null | (() => void)>(null);
@@ -225,6 +253,27 @@ export default function CreateScreen() {
   // false when opened from the (i) for a re-read (just close).
   const openPickerAfterIntro = useRef(false);
 
+  // First-Dream-tap teaching sheet — the FIRST time the user taps Dream, explain
+  // how Sparkles relate to models + dreams, show this dream's cost, and set
+  // expectations (AI is unpredictable). "Got it" dismisses + proceeds; shows
+  // once. Default the ref to `true` (don't show) until the async flag loads so a
+  // fast tap before load never re-traps a user who's already seen it. Re-read on
+  // focus so the admin tutorials-reset re-arms it without an app restart.
+  const sparkleIntroSeen = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      hasSeenSparkleIntro().then((seen) => {
+        if (!cancelled) sparkleIntroSeen.current = seen;
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [])
+  );
+  const [sparkleIntroVisible, setSparkleIntroVisible] = useState(false);
+  const [sparkleIntroCost, setSparkleIntroCost] = useState(0);
+
   // Show the face-vs-art teaching sheet. Marks it seen so it never auto-pops
   // again (the sheet also persists the flag), and records whether to open the
   // picker on dismiss.
@@ -281,6 +330,13 @@ export default function CreateScreen() {
     : (mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium);
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
+  const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
+  // Collapse the model + medium/vibe controls into a one-line summary while the
+  // keyboard is up on any ENGINE dream (DreamBot mode OR a photo) — keeps the
+  // selected medium/vibe visible and the Dream CTA one tap away. NOT in Direct
+  // mode (no medium/vibe there). Tapping the summary dismisses the keyboard,
+  // which restores the full form.
+  const collapsed = kbOpen && !effectiveExactPrompt;
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -375,6 +431,21 @@ export default function CreateScreen() {
       showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
       return;
     }
+    // First time they tap Dream (and can afford it): teach how Sparkles work +
+    // show this dream's cost. "Got it" marks it seen and proceeds with the dream;
+    // shows once, ever. (After the premium gate so an unaffordable dream routes
+    // to the paywall, not the tutorial.)
+    if (!sparkleIntroSeen.current) {
+      sparkleIntroSeen.current = true;
+      setSparkleIntroCost(cost);
+      setSparkleIntroVisible(true);
+      return;
+    }
+    proceedWithDream();
+  }
+
+  // The dream-launch tail (shared by handleDream + the sparkle sheet's "Got it").
+  function proceedWithDream() {
     // Empty-prompt confirmation: when the prompt box is shown but blank, the
     // dream is fully random — either a totally surprise scene, or (with a photo
     // in New Scene mode) a random scene invented around the person. Restyle has
@@ -621,10 +692,49 @@ export default function CreateScreen() {
               onto a scene the chosen model renders — model-agnostic, like the
               cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
               transform of the photo itself and needs an edit-capable model. */}
-          {(!hasPhoto || config.photoStyle === 'new_scene') && (
+          {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
             <View className="mb-4">
               <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
             </View>
+          )}
+
+          {/* Collapsed summary — while the keyboard is up on an engine dream, the
+              model + mode + medium/vibe controls fold into this one-line summary
+              so the selected medium/vibe stay visible and the Dream CTA is one
+              tap away. Tapping it dismisses the keyboard, restoring the full
+              form. (Restored 2026-06-17 — was removed in f601e81e; now covers
+              text DreamBot dreams too, not just photo dreams.) */}
+          {collapsed && (
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.selectionAsync();
+                Keyboard.dismiss();
+              }}
+              activeOpacity={0.7}
+              className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
+              style={{
+                backgroundColor: colors.surface,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <View className="flex-1 mr-2">
+                <Text
+                  className="text-sm font-semibold"
+                  style={{ color: colors.textPrimary }}
+                  numberOfLines={1}
+                >
+                  {modelLabel}
+                </Text>
+                <Text className="text-xs" style={{ color: colors.textSecondary }} numberOfLines={1}>
+                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Medium: </Text>
+                  {mediumLabel} ·{' '}
+                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Vibe: </Text>
+                  {vibeLabel}
+                </Text>
+              </View>
+              <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
+            </TouchableOpacity>
           )}
 
           {/* Engine selector — two named engines (no photo attached):
@@ -634,8 +744,8 @@ export default function CreateScreen() {
                 the chosen AI model, skipping styling + face swap.
               State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
               Photo path hides this and shows the inline note above (Direct is
-              text-only). */}
-          {!hasPhoto && (
+              text-only). Hidden while collapsed (keyboard up). */}
+          {!hasPhoto && !collapsed && (
             <View className="mb-4">
               {/* Mode label + contextual info icon (DreamBot → medium sheet,
                   Direct → Direct explainer). */}
@@ -720,8 +830,9 @@ export default function CreateScreen() {
           {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
               AND whenever a photo is attached (photo dreams always use the
               engine). Vibe is hidden for Restyle — that path is a Kontext img2img
-              edit driven by the medium only. Direct text dreams hide both. */}
-          {!effectiveExactPrompt && (
+              edit driven by the medium only. Direct text dreams hide both.
+              Collapsed into the summary above while the keyboard is up. */}
+          {!effectiveExactPrompt && !collapsed && (
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <Text
@@ -748,7 +859,10 @@ export default function CreateScreen() {
                     >
                       {mediumLabel}
                     </Text>
-                    {(isSurpriseMedium || selectedMediumRow) && (
+                    {/* FACE/ART tag indicates whether the medium face-swaps. Hidden
+                        in uploaded-picture mode (hasPhoto) — photo dreams don't run
+                        the face swap, so the tag would be misleading there. */}
+                    {(isSurpriseMedium || selectedMediumRow) && !hasPhoto && (
                       <View
                         style={{
                           paddingHorizontal: 5,
@@ -881,6 +995,18 @@ export default function CreateScreen() {
 
       {/* First-Create-tap teaching sheet — see effect above. */}
       <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
+
+      {/* First-Dream-tap sparkle teaching sheet. "Got it" dismisses + proceeds
+          with the dream. Shows once (flag set on the sheet's mount). */}
+      <SparkleIntroSheet
+        visible={sparkleIntroVisible}
+        cost={sparkleIntroCost}
+        balance={sparkleBalance}
+        onClose={() => {
+          setSparkleIntroVisible(false);
+          proceedWithDream();
+        }}
+      />
 
       {/* Face-vs-art teaching sheet. Auto-shown the first time Medium is tapped
           (falls through to the picker on dismiss), and re-openable from the (i)
