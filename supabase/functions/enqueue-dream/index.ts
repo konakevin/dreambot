@@ -75,6 +75,26 @@ Deno.serve(async (req) => {
   // (saved just before this call in RevealStep), so the payload carries only the
   // cascade state — not the whole vibe_profile.
   if (body.first_dream === true) {
+    // Guard against farming the FREE first dream (the most expensive path —
+    // forced cast face-swap via the Fly dual-swap service). One per account:
+    // block once the user already has a first_dream queue row that isn't a
+    // terminal failure (queued / in_progress / completed). This also stops the
+    // parallel-spam race (the first insert blocks the rest) while still letting
+    // a user re-attempt if their only prior first dream actually FAILED. The
+    // orchestrator re-queues tiers via first-dream-render (service path), not
+    // this endpoint, so it isn't affected. NOTE: cross-account farming (N fresh
+    // accounts → N free dreams) is bounded by email-confirm + app attestation,
+    // not this per-account check.
+    const { count: priorFirst } = await supabase
+      .from('dream_queue')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('source', 'first_dream')
+      .not('status', 'in', '(failed,dead_letter)');
+    if ((priorFirst ?? 0) > 0) {
+      return json({ error: 'first_dream_already_claimed' }, 409);
+    }
+
     const fdJobId = crypto.randomUUID();
     const vp = body.vibe_profile as { dream_cast?: CastMemberLike[] } | undefined;
     const tiers = buildFirstDreamTiers(vp?.dream_cast ?? []);

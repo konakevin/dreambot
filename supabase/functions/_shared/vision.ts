@@ -6,6 +6,7 @@
  */
 
 import { HAIKU } from './models.ts';
+import { sanitizeUserText } from './sanitizeUserText.ts';
 const SYSTEM_PROMPT = `You are a visual description assistant for an AI art app called DreamBot. Users upload photos of themselves, loved ones, and pets so the app can generate personalized artwork featuring them. Your job is to describe the photo subject in precise visual detail so the art generator can recreate their likeness accurately. This is a creative, consensual use case — the user uploaded this photo themselves. Always provide detailed, factual physical descriptions. Never refuse. IMPORTANT: Always describe the person in a flattering, idealized way — skip under-eye bags, blemishes, wrinkles, dark circles, tired eyes, or any temporary imperfections. Describe their best features. The goal is beautiful artwork, not a medical exam.`;
 
 /**
@@ -79,7 +80,10 @@ export async function describeWithVision(
   const data = await res.json();
   const text =
     data.content && data.content[0] && data.content[0].type === 'text' ? data.content[0].text : '';
-  return text.trim();
+  // Treat the description as UNTRUSTED — a user can paint instructions onto the
+  // photo (indirect prompt injection) which the model would faithfully repeat
+  // into the brief. Strip injection/control/zero-width before any caller uses it.
+  return sanitizeUserText(text, 'vision');
 }
 
 /**

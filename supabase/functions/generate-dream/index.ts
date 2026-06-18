@@ -60,6 +60,7 @@ import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
 import { pickCreateFaceSwapOverride } from '../_shared/createFaceSwapOverrides.ts';
+import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 
 interface RequestBody {
   /** Which Flux model to use */
@@ -164,6 +165,20 @@ async function handleRequest(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
+  // Sanitize EVERY user-supplied text field up front — before any of it reaches
+  // the Sonnet brief, Flux, or storage. enqueue-dream forwards the body
+  // unsanitized + retries replay the stored payload, so the render path is the
+  // single gate. Strips prompt-injection / control / zero-width / bidi, NFKC-
+  // normalizes, and caps length. Idempotent, so re-running on a retry is safe.
+  if (typeof body.prompt === 'string') body.prompt = sanitizeUserText(body.prompt, 'prompt');
+  if (typeof body.hint === 'string') body.hint = sanitizeUserText(body.hint, 'hint');
+  if (typeof body.subject_description === 'string')
+    body.subject_description = sanitizeUserText(body.subject_description, 'subject_description');
+  if (typeof body.style_prompt === 'string')
+    body.style_prompt = sanitizeUserText(body.style_prompt, 'style_prompt');
+  if (typeof body.description === 'string')
+    body.description = sanitizeUserText(body.description, 'description');
+
   // Auth. Normal path: the user's JWT (the gateway already validated it). Retry
   // path: refund-stuck-jobs re-invokes this function to REPLAY a dead render — it
   // has no user JWT, so it sends `x-dream-retry: 1` + the service-role key and we
@@ -241,7 +256,6 @@ async function handleRequest(req: Request): Promise<Response> {
     input_image,
     photo_style = 'restyle',
     force_cast_role,
-    job_id: jobId,
     style_prompt,
     subject_description,
     subject_type,
@@ -252,6 +266,41 @@ async function handleRequest(req: Request): Promise<Response> {
   // nightly, DLT, etc. keep auto-saving as before. Fixes the duplicate first
   // dream (gen inserted a row AND "Post my Dream" inserted another).
   const persist = body.persist !== false;
+
+  // Every user-initiated render MUST carry a job_id so the sparkle charge below
+  // has an idempotency key. Without one the charge block was skipped entirely —
+  // a tampered client could omit job_id for a FREE render. Synthesize one for
+  // direct callers; server-invoked queue/retry paths already require it (above).
+  let jobId: string | undefined =
+    typeof body.job_id === 'string' && body.job_id.length > 0 ? body.job_id : undefined;
+  if (!jobId && !isServerInvoked) {
+    jobId = crypto.randomUUID();
+  }
+
+  // Per-user rate limit on the DIRECT user path. The queue/worker server path is
+  // already bounded by enqueue-dream's in-flight cap + the worker's per-weight
+  // concurrency caps, so skip it there. Reuses migration 228's
+  // edge_function_invocations trigger (10 expensive edge calls/min/user). Closes
+  // the "call generate-dream directly to bypass the enqueue in-flight cap" hole.
+  // Fail-open on a logging error (never block a paid dream on infra); the charge
+  // below is the hard gate.
+  if (!isServerInvoked) {
+    const { error: rlErr } = await supabase
+      .from('edge_function_invocations')
+      .insert({ user_id: userId, function_name: 'generate-dream' });
+    if (rlErr) {
+      const isRl =
+        rlErr.message?.includes('rate_limited') ||
+        (rlErr as { hint?: string }).hint === 'rate_limited';
+      if (isRl) {
+        return new Response(JSON.stringify({ error: 'rate_limited' }), {
+          status: 429,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      console.error('[generate-dream] rate-limit log INSERT failed:', rlErr.message);
+    }
+  }
 
   // ── DLT recipe replay (consume-side) ────────────────────────────────────
   // When the client passes a valid frozen recipe, lock the LOOK identity
@@ -384,9 +433,9 @@ async function handleRequest(req: Request): Promise<Response> {
   // a no-op (never a double charge), worker retries are safe, and a tampered
   // client can't dodge it. Cost mirrors the client: getSparkleCost(force_model)
   // (DreamBot has no force_model → 1; Direct/DLT → the picked model's cost).
-  // Skipped without a jobId (no idempotency key — legacy/test calls).
-  // generate-dream is always a paid path (nightly + first-dream are separate,
-  // free functions), so there is no free-render case to guard here.
+  // jobId is now always present on the user path (synthesized above), so the
+  // charge can't be skipped by omitting it. generate-dream is always a paid path
+  // (nightly + first-dream are separate, free functions).
   if (jobId) {
     await loadModelCosts(supabase);
     // DreamBot (no force_model) → engine_config.base_sparkle_cost (admin-tunable,
@@ -412,9 +461,17 @@ async function handleRequest(req: Request): Promise<Response> {
         `[generate-dream] Charge: ${chargeStatus} (${dreamCost}✦, model=${force_model || 'default'})`
       );
     } catch (err) {
-      // Fail-open: don't block a paid dream on a transient charge error. Old
-      // clients already charged client-side; new clients are a rare miss.
-      console.warn('[generate-dream] charge_sparkles failed (continuing):', (err as Error).message);
+      console.warn('[generate-dream] charge_sparkles failed:', (err as Error).message);
+      // Fail CLOSED on the direct user path — THIS is the only charge, so a
+      // charge error must not yield a free render. Server-invoked (queue/retry)
+      // paths were already charged at enqueue, so they fail OPEN: don't fail an
+      // already-paid render on a transient re-charge error (idempotent no-op).
+      if (!isServerInvoked) {
+        return new Response(JSON.stringify({ error: 'charge_failed' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
   }
 

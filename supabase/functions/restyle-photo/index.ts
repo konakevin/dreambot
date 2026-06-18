@@ -34,6 +34,7 @@ import { callSonnet } from '../_shared/llm.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
+import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 
 interface RestyleRequest {
   mode: 'flux-dev' | 'flux-kontext';
@@ -91,6 +92,11 @@ async function handleRequest(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
+  // Sanitize user text up front (hint) before it reaches the Sonnet rewrite /
+  // Kontext prompt. enqueue-dream forwards the body unsanitized → gate here.
+  // Strips prompt-injection / control / zero-width, NFKC-normalizes, caps length.
+  if (typeof body.hint === 'string') body.hint = sanitizeUserText(body.hint, 'hint');
+
   // ── Auth ────────────────────────────────────────────────────────────────
   // Normal path: the user's JWT. Queue path: dream-queue-worker dispatches this
   // server-side (x-dream-queue:1 + service-role) and AWAITS the result; resolve
@@ -146,9 +152,40 @@ async function handleRequest(req: Request): Promise<Response> {
     vibe_key,
     hint,
     force_model,
-    job_id: jobId,
     vibe_profile: vibeProfile,
   } = body;
+
+  // Every user-initiated restyle MUST carry a job_id so the sparkle charge below
+  // has an idempotency key. Without one the charge block was skipped entirely —
+  // a tampered client could omit job_id for a FREE render. Synthesize one for
+  // direct callers; the queue path already requires it (validated above).
+  let jobId: string | undefined =
+    typeof body.job_id === 'string' && body.job_id.length > 0 ? body.job_id : undefined;
+  if (!jobId && !isQueue) {
+    jobId = crypto.randomUUID();
+  }
+
+  // Per-user rate limit on the DIRECT user path (the queue path is bounded by
+  // enqueue-dream's in-flight cap + the worker's concurrency caps). Reuses
+  // migration 228's edge_function_invocations trigger (10 expensive edge
+  // calls/min/user). Fail-open on a logging error; the charge below is the gate.
+  if (!isQueue) {
+    const { error: rlErr } = await supabase
+      .from('edge_function_invocations')
+      .insert({ user_id: userId, function_name: 'restyle-photo' });
+    if (rlErr) {
+      const isRl =
+        rlErr.message?.includes('rate_limited') ||
+        (rlErr as { hint?: string }).hint === 'rate_limited';
+      if (isRl) {
+        return new Response(JSON.stringify({ error: 'rate_limited' }), {
+          status: 429,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      console.error('[restyle-photo] rate-limit log INSERT failed:', rlErr.message);
+    }
+  }
 
   // ── Validate ────────────────────────────────────────────────────────────
   if (!mode || (mode !== 'flux-dev' && mode !== 'flux-kontext')) {
@@ -231,7 +268,16 @@ async function handleRequest(req: Request): Promise<Response> {
         });
       }
     } catch (err) {
-      console.warn('[restyle-photo] charge_sparkles failed (continuing):', (err as Error).message);
+      console.warn('[restyle-photo] charge_sparkles failed:', (err as Error).message);
+      // Fail CLOSED on the direct user path — THIS is the only charge, so a
+      // charge error must not yield a free render. The queue path was already
+      // charged at enqueue, so it fails OPEN (idempotent no-op re-charge).
+      if (!isQueue) {
+        return new Response(JSON.stringify({ error: 'charge_failed' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
   }
 

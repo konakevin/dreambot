@@ -17,7 +17,11 @@
  *
  * POST /functions/v1/refund-stuck-jobs
  * Body: optional { older_than_min?: number } — defaults to 5
- * Auth: requires service-role JWT (don't deploy with --no-verify-jwt)
+ * Auth: deployed --no-verify-jwt (like the rest of the fleet), so it
+ *   authenticates the caller ITSELF — requires `Authorization: Bearer
+ *   <SERVICE_ROLE_KEY or DREAM_QUEUE_WORKER_TOKEN>`. The GitHub Actions cron
+ *   (dream-queue-sync / refund-stuck-jobs.yml) sends the service-role key.
+ *   Without this an anonymous POST could trigger refunds + paid re-renders.
  *
  * Response: { swept: number, refunded: number, errors: number }
  */
@@ -52,6 +56,22 @@ Deno.serve(async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+  // Authenticate the caller — this function uses the service role internally (it
+  // sweeps every user's jobs + issues refunds + re-dispatches paid renders), so
+  // it must NOT be invokable anonymously. Accept the service-role key (the cron)
+  // or the worker token. Deployed --no-verify-jwt, so the gateway won't do this.
+  const authHeader = req.headers.get('authorization') ?? '';
+  const workerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
+  const authorized =
+    authHeader === `Bearer ${serviceRoleKey}` ||
+    (workerToken ? authHeader === `Bearer ${workerToken}` : false);
+  if (!authorized) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    });
+  }
 
   let olderThanMin = 5;
   try {
