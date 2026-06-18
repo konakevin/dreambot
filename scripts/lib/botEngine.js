@@ -35,6 +35,7 @@ const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { pickModel } = require('./modelPicker');
 const { applyBotConfigOverlay } = require('./botConfig');
+const { pickFromBag, withRetry } = require('./botCycle');
 const { resolveCleanMedium } = require('./cleanMediumByModel');
 const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
 const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
@@ -548,16 +549,21 @@ async function createPicker({ botName, sb }) {
       // For each axis whose cycle exhausted this render, DELETE its
       // prior dedup rows first — the new pick below seeds the fresh
       // cycle. Scoped to (bot_name, axis) so other bots / other axes
-      // are untouched.
+      // are untouched. withRetry so a transient blip doesn't leave a
+      // half-reset axis (the seed-recycling redundancy lever); the
+      // delete is naturally idempotent, so a retry can't over-delete.
       for (const axis of exhaustedAxes) {
-        const { error: delErr } = await sb
-          .from('bot_dedup')
-          .delete()
-          .eq('bot_name', botName)
-          .eq('axis', axis);
-        if (delErr) {
-          console.warn(`  ⚠️ bot_dedup cycle-reset (axis=${axis}) failed: ${delErr.message}`);
-        }
+        await withRetry(
+          async () => {
+            const { error: delErr } = await sb
+              .from('bot_dedup')
+              .delete()
+              .eq('bot_name', botName)
+              .eq('axis', axis);
+            if (delErr) throw delErr;
+          },
+          { label: `bot_dedup cycle-reset (axis=${axis})` }
+        );
       }
 
       if (pendingPicks.length === 0) return;
@@ -566,10 +572,19 @@ async function createPicker({ botName, sb }) {
         axis: p.axis,
         value: p.value,
       }));
-      const { error: insErr } = await sb.from('bot_dedup').insert(rows);
-      if (insErr) {
-        console.warn(`  ⚠️ bot_dedup commit failed: ${insErr.message}`);
-      }
+      // Plain insert (bot_dedup has no unique constraint — it tolerates repeat
+      // (bot_name,axis,value) rows across cycles, pruned by picked_at). A
+      // multi-row insert is one atomic statement, so a retry after a FAILED
+      // attempt can't double-insert; the only dup risk is a retry after a
+      // silently-dropped success, which just adds a redundant recency row
+      // (benign — recency filtering + 30-day prune absorb it).
+      await withRetry(
+        async () => {
+          const { error: insErr } = await sb.from('bot_dedup').insert(rows);
+          if (insErr) throw insErr;
+        },
+        { label: 'bot_dedup commit' }
+      );
     },
   };
 }
@@ -660,68 +675,44 @@ function resolvePath({ bot, recentPaths }) {
   return weightedPick(candidates, bot.pathWeights);
 }
 
-// Cycle size = total slots per cycle. With pathWeights, each path occupies
-// (weight) slots per cycle (default 1). Without weights, every path gets 1 slot
-// and cycle size = bot.paths.length (legacy behavior).
-function computeCycleSize(bot) {
-  if (!bot.pathWeights) return bot.paths.length;
-  return bot.paths.reduce((sum, p) => sum + (bot.pathWeights[p] ?? 1), 0);
-}
-
-// Count occurrences of each path in the cycle-history array.
-function countOccurrences(arr) {
-  const counts = {};
-  for (const p of arr || []) {
-    counts[p] = (counts[p] || 0) + 1;
-  }
-  return counts;
-}
-
-// Paths with remaining slots in the current cycle (used count < weight).
-function getRemainingSlots(bot, usedCounts) {
-  return bot.paths.filter((p) => {
-    const w = bot.pathWeights ? (bot.pathWeights[p] ?? 1) : 1;
-    return (usedCounts[p] || 0) < w;
-  });
-}
-
-// Pick from remaining paths, weighting by REMAINING slots (paths with more
-// slots left get picked more often — this keeps category ratios roughly
-// balanced throughout the cycle rather than back-loading the heavy category).
-function pickFromRemaining(bot, remaining, usedCounts) {
-  if (!bot.pathWeights) {
-    return remaining[Math.floor(Math.random() * remaining.length)];
-  }
-  const slotWeights = {};
-  for (const p of remaining) {
-    const total = bot.pathWeights[p] ?? 1;
-    slotWeights[p] = total - (usedCounts[p] || 0);
-  }
-  return weightedPick(remaining, slotWeights);
-}
-
 // Shuffle-bag path selection: cycle through ALL paths before any repeats.
-// Opt in via `cycleAllPaths: true` in bot config. Respects `pathWeights` —
-// each path occupies (weight) slots per cycle.
+// Opt in via `cycleAllPaths: true` in bot config. Respects `pathWeights`.
+//
+// PURE selection primitive — delegates to botCycle.pickFromBag (the single
+// source of truth for the shuffle-bag, shared with the seed picker). `used` is
+// the SET of paths already consumed this cycle; the production cycle's used-set
+// is persisted in `bot_path_cycle` (migration 283) and passed in here. We don't
+// surface `didReset` to legacy callers (resolvePathCycled is used by the
+// in-process iter-bot window + tests, which don't persist a reset); the live
+// dispatcher branch calls pickFromBag directly so it can act on `didReset`.
 function resolvePathCycled({ bot, recentPaths }) {
   if (!Array.isArray(bot.paths) || bot.paths.length === 0) {
     throw new Error(`Bot ${bot.username} has no paths configured`);
   }
-  const usedCounts = countOccurrences(recentPaths);
-  const remaining = getRemainingSlots(bot, usedCounts);
-
-  if (remaining.length === 0) {
-    return weightedPick(bot.paths, bot.pathWeights);
-  }
-
-  return pickFromRemaining(bot, remaining, usedCounts);
+  return pickFromBag({
+    items: bot.paths,
+    used: recentPaths || [],
+    weights: bot.pathWeights,
+  }).chosen;
 }
 
 // In-memory batch path window — shared across renders in a single batch run.
 // Persists for the lifetime of the process so consecutive iter-bot renders dedup.
 const _batchPathWindow = {};
 
-// Separate cycle tracker for cycleAllPaths bots — resets when cycle completes.
+// Per-bot pending path-cycle state for the CURRENT dispatcher run, keyed by bot
+// username. Populated when the live branch picks a path; consumed (committed to
+// `bot_path_cycle`) only AFTER a successful dispatcher post. Shape:
+//   { path: string, didReset: boolean }
+// `didReset` true means the bag was empty → the whole cycle resets: on commit we
+// delete every existing row for the bot first, then insert just this path.
+const _pathCycleState = {};
+
+// In-process path shuffle-bag for NON-dispatcher cycleAllPaths runs (iter-bot /
+// qa-matrix). A binary used-set (array of paths picked this process) so test
+// batches still cover every path before repeating — WITHOUT reading or writing
+// the persisted production cycle (`bot_path_cycle`). Reset in-process when the
+// bag empties; never persisted.
 const _batchCycleTracker = {};
 
 // 2026-06-05 — cycle reads filter to source='dispatcher' so iter-bot /
@@ -744,25 +735,58 @@ async function getRecentPaths(sb, botName, limit = 5) {
   return (data || []).map((r) => r.path);
 }
 
-async function getCycledUsedPaths(sb, botName, cycleSize) {
-  const { count, error } = await sb
-    .from('bot_run_log')
-    .select('*', { count: 'exact', head: true })
-    .eq('bot_name', botName)
-    .eq('status', 'ok')
-    .eq('source', 'dispatcher');
-  if (error || !count) return [];
-  const position = count % cycleSize;
-  if (position === 0) return [];
-  const { data } = await sb
-    .from('bot_run_log')
+// Persisted path-cycle used-set (migration 283 `bot_path_cycle`). Returns the
+// array of paths the DISPATCHER has already posted in the current cycle. This
+// is the roster-change-robust replacement for the old count%cycleSize
+// reconstruction: a path is "used" iff it has a row, full stop — no positional
+// math that drifts when the path roster changes. On a read error we return []
+// (treat the bag as full → the live branch falls back to resolvePath anyway via
+// its try/catch, so a transient blip never blocks a post).
+async function getPathCycleUsed(sb, botName) {
+  const { data, error } = await sb
+    .from('bot_path_cycle')
     .select('path')
-    .eq('bot_name', botName)
-    .eq('status', 'ok')
-    .eq('source', 'dispatcher')
-    .order('created_at', { ascending: false })
-    .limit(position);
+    .eq('bot_name', botName);
+  if (error) {
+    console.warn(`  ⚠️ path-cycle read failed: ${error.message}`);
+    return [];
+  }
   return (data || []).map((r) => r.path);
+}
+
+// Commit the pending path-cycle pick AFTER a successful dispatcher post.
+//   st = { path, didReset }  (from _pathCycleState[botName])
+// didReset → the bag had emptied: wipe every existing row for the bot first
+// (start a fresh reshuffled cycle), then record just this path. Otherwise add
+// this path to the current cycle's used-set. Both writes go through withRetry
+// (the redundancy lever) so a single network blip doesn't lose cycle state; the
+// upsert is idempotent on (bot_name, path) so a retry can't double-count.
+async function commitPathCycle(sb, botName, st) {
+  if (!st || !st.path) return;
+  if (st.didReset) {
+    await withRetry(
+      async () => {
+        const { error } = await sb
+          .from('bot_path_cycle')
+          .delete()
+          .eq('bot_name', botName);
+        if (error) throw error;
+      },
+      { label: `path-cycle reset(${botName})` }
+    );
+  }
+  await withRetry(
+    async () => {
+      const { error } = await sb
+        .from('bot_path_cycle')
+        .upsert(
+          { bot_name: botName, path: st.path },
+          { onConflict: 'bot_name,path', ignoreDuplicates: true }
+        );
+      if (error) throw error;
+    },
+    { label: `path-cycle record(${botName}/${st.path})` }
+  );
 }
 
 function pushBatchPath(botName, path) {
@@ -979,8 +1003,10 @@ async function writeRunLog(sb, row) {
  *   source    — bot_run_log source tag ('dispatcher' | 'iter-bot' | 'qa-matrix'
  *               | 'run-bot' | 'manual'). Default 'dispatcher' for the
  *               production cron path. iter-bot passes 'iter-bot' so its test
- *               runs are excluded from the cycle math (see getCycledUsedPaths
- *               + getRecentPaths) and don't pollute production round-robin.
+ *               runs use an IN-PROCESS path bag (never the persisted
+ *               `bot_path_cycle`) and write source='iter-bot' to bot_run_log,
+ *               so they don't pollute the production round-robin (see the
+ *               cycleAllPaths branch + getPathCycleUsed/getRecentPaths).
  *               Migration 226_bot_run_log_source.sql adds the column.
  *   sbOverride — inject a supabase client (tests)
  *
@@ -1015,20 +1041,44 @@ async function runBot(opts) {
   // Resolve path — shuffle-bag cycle or rolling dedup window
   let resolvedPath;
   if (pathArg === 'random') {
-    if (bot.cycleAllPaths) {
-      const cycleSize = computeCycleSize(bot);
-      if (!_batchCycleTracker[bot.username]) {
-        _batchCycleTracker[bot.username] = await getCycledUsedPaths(sb, bot.username, cycleSize);
+    if (bot.cycleAllPaths && source === 'dispatcher') {
+      // PRODUCTION shuffle-bag — persisted, roster-change-robust (migration 283).
+      // Read the cycle's used-set, pick a path NOT yet used this cycle, and stash
+      // the pick as PENDING; it's committed to `bot_path_cycle` only after the
+      // post succeeds (writeRunLog 'ok' branch). A read/pick error degrades to the
+      // rolling dedup window so cycle-state I/O can NEVER block a production post.
+      try {
+        const used = await getPathCycleUsed(sb, bot.username);
+        const { chosen, didReset } = pickFromBag({
+          items: bot.paths,
+          used,
+          weights: bot.pathWeights,
+        });
+        resolvedPath = chosen;
+        _pathCycleState[bot.username] = { path: chosen, didReset };
+      } catch (e) {
+        console.warn(`  ⚠️ path-cycle pick failed (${e.message}); using dedup fallback`);
+        delete _pathCycleState[bot.username];
+        const dbRecent = await getRecentPaths(sb, bot.username);
+        const batchRecent = _batchPathWindow[bot.username] || [];
+        const combined = [...new Set([...batchRecent, ...dbRecent])].slice(0, 5);
+        resolvedPath = resolvePath({ bot, recentPaths: combined });
+        pushBatchPath(bot.username, resolvedPath);
       }
-      const usedCounts = countOccurrences(_batchCycleTracker[bot.username]);
-      const remaining = getRemainingSlots(bot, usedCounts);
-      if (remaining.length === 0) {
+    } else if (bot.cycleAllPaths) {
+      // Non-dispatcher cycleAllPaths (iter-bot / qa-matrix): IN-PROCESS bag only —
+      // covers every path before repeating without touching the persisted
+      // production cycle, so test runs never pollute round-robin.
+      const { chosen, didReset } = pickFromBag({
+        items: bot.paths,
+        used: _batchCycleTracker[bot.username] || [],
+        weights: bot.pathWeights,
+      });
+      if (didReset || !_batchCycleTracker[bot.username]) {
         _batchCycleTracker[bot.username] = [];
-        resolvedPath = weightedPick(bot.paths, bot.pathWeights);
-      } else {
-        resolvedPath = pickFromRemaining(bot, remaining, usedCounts);
       }
-      _batchCycleTracker[bot.username].push(resolvedPath);
+      _batchCycleTracker[bot.username].push(chosen);
+      resolvedPath = chosen;
     } else {
       const dbRecent = await getRecentPaths(sb, bot.username);
       const batchRecent = _batchPathWindow[bot.username] || [];
@@ -1653,6 +1703,15 @@ async function runBot(opts) {
       // 13. Commit dedup picks ONLY on successful post
       errorStage = 'commit-dedup';
       await picker.commit();
+
+      // 13b. Advance the persisted PATH cycle ONLY on a successful dispatcher
+      // post — failed renders must not burn a cycle slot, and only production
+      // posts move the production round-robin (iter-bot/qa-matrix never do).
+      if (source === 'dispatcher' && _pathCycleState[bot.username]) {
+        errorStage = 'commit-path-cycle';
+        await commitPathCycle(sb, bot.username, _pathCycleState[bot.username]);
+        delete _pathCycleState[bot.username];
+      }
     }
 
     const durationMs = Date.now() - startedAt;
