@@ -23,7 +23,7 @@ const pathBuilders = {
   'mech-insect-hybrids': require('./paths/mech-insect-hybrids'),
   'hunter-killers': require('./paths/hunter-killers'),
   'abyss-mechs': require('./paths/abyss-mechs'),
-  'sentinels': require('./paths/sentinels'),
+  sentinels: require('./paths/sentinels'),
   'chrome-shogun': require('./paths/chrome-shogun'),
   'arena-titans': require('./paths/arena-titans'),
   'void-lancers': require('./paths/void-lancers'),
@@ -44,7 +44,6 @@ const pathBuilders = {
   'mecha-pilots': require('./paths/mecha-pilots'),
   'titan-war-machines': require('./paths/titan-war-machines'),
   'power-armor-infantry': require('./paths/power-armor-infantry'),
-  'industrial-machines': require('./paths/industrial-machines'),
   'post-apoc-rust-tech': require('./paths/post-apoc-rust-tech'),
   'alien-biomechs': require('./paths/alien-biomechs'),
   'mech-skyships': require('./paths/mech-skyships'),
@@ -192,15 +191,6 @@ module.exports = {
       'minimal',
       'ancient',
     ],
-    'industrial-machines': [
-      'cinematic',
-      'dark',
-      'nostalgic',
-      'minimal',
-      'ancient',
-      'voltage',
-      'epic',
-    ],
     'post-apoc-rust-tech': [
       'cinematic',
       'dark',
@@ -292,10 +282,7 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // killer-cyborgs — Flux-locked like its scifi parent (verbatim clone).
-    'killer-cyborgs': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'killer-cyborgs': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'killer-cyborgs-male': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
@@ -306,67 +293,34 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
     // hunter-killers — Flux-locked for crisp hard-surface military-machine detail.
-    'hunter-killers': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'hunter-killers': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // abyss-mechs — Flux-locked for crisp hard-surface deep-sea machine detail.
-    'abyss-mechs': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'abyss-mechs': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // sentinels — Flux-locked for the colossal ancient-guardian awe register.
-    'sentinels': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    sentinels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // chrome-shogun — Flux-locked for crisp ornate samurai-mech armor detail.
-    'chrome-shogun': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'chrome-shogun': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // arena-titans — Flux-locked for crisp gladiator-mech detail + stadium spectacle.
-    'arena-titans': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'arena-titans': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // void-lancers — Flux-locked for crisp zero-G orbital mech-knight hardware.
-    'void-lancers': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'void-lancers': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // OG path — FLUX ONLY for the photoreal glossy beauty look (banana goes
     // painterly + breaks the photoreal register; gpt-2 banned bot-wide).
-    'og-cyborg-female': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'og-cyborg-female': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // cyborg-man — DEACTIVATED 2026-06-05 from bot.paths; modelByPath entry
     // removed since it never resolves. Restore the entry above with banana if
     // the path is re-enabled.
     // flux-dev BANNED from these robot/mech paths 2026-06-09 (Kevin) — it was
     // over-represented in the bland front-on renders + lowest Flux fidelity.
-    'droid-assassin': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'mecha-pilots': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'humanoid-robots': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'droid-assassin': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'mecha-pilots': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'humanoid-robots': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'power-armor-infantry': [
       'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'robot-moment': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'robot-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   },
 
   // Previous modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
@@ -401,8 +355,7 @@ module.exports = {
     // identity GUARD (human-bodied, not a robotic chassis); the visual REGISTER
     // is now set per-render by the rolled look-register (see the template's LOOK
     // OVERRIDE block). The template still enforces the full cyborg-woman DNA.
-    'cyborg-woman':
-      'a woman, cybernetics integrated into a human body, not a robotic chassis',
+    'cyborg-woman': 'a woman, cybernetics integrated into a human body, not a robotic chassis',
     'cyborg-female-legacy':
       'beautiful woman, cybernetic breakthroughs integrated into a human body rather than a robotic chassis',
     'droid-assassin':
@@ -424,7 +377,7 @@ module.exports = {
     'mech-insect-hybrids': '',
     'hunter-killers': '',
     'abyss-mechs': '',
-    'sentinels': '',
+    sentinels: '',
     'chrome-shogun': '',
     'arena-titans': '',
     'void-lancers': '',
@@ -482,7 +435,6 @@ module.exports = {
     'mecha-pilots',
     'titan-war-machines',
     'power-armor-infantry',
-    'industrial-machines',
     'post-apoc-rust-tech',
     'alien-biomechs',
     'mech-skyships',
@@ -507,7 +459,6 @@ module.exports = {
       'mecha-pilots',
       'titan-war-machines',
       'power-armor-infantry',
-      'industrial-machines',
       'post-apoc-rust-tech',
       'alien-biomechs',
       'mech-skyships',
@@ -578,17 +529,6 @@ module.exports = {
         'centaur',
         'centaur-base',
       ],
-      'industrial-machines': [
-        'quadrupedal',
-        'four-legged',
-        'hexapedal',
-        'hexapod',
-        'six-legged',
-        'six legs',
-        'multi-arm',
-        'six-armed',
-        'four-armed',
-      ],
       'alien-biomechs': [
         'arthropod',
         'eight legs',
@@ -620,7 +560,6 @@ module.exports = {
       'mecha-pilots': 'scene',
       'titan-war-machines': 'scene',
       'power-armor-infantry': 'scene',
-      'industrial-machines': 'scene',
       'post-apoc-rust-tech': 'scene',
       'alien-biomechs': 'scene',
       'mech-skyships': 'scene',

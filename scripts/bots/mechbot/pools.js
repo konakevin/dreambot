@@ -326,11 +326,6 @@ module.exports = {
   POWER_ARMOR_ENGAGEMENT: load('power_armor_engagement'), // ALWAYS-ON multi-actor combat narrative
   POWER_ARMOR_ALLIED_TECH: load('power_armor_allied_tech'), // ALWAYS-ON friendly combat-bot/drone/walker
   POWER_ARMOR_DRAMA: load('power_armor_drama'), // 40% gated battlefield phenomenon
-  // Industrial-machines path (kept on legacy 2026-05-16 — migration attempted +
-  // reverted, legacy converts better; see memory project_industrial_machines_kept_legacy.md)
-  INDUSTRIAL_SUBJECTS: load('industrial_subjects'),
-  INDUSTRIAL_ACTIONS: load('industrial_actions'),
-  INDUSTRIAL_SETTINGS: load('industrial_settings'),
   // Post-apoc-rust-tech path (migrated to declarative axis system 2026-05-16)
   // Reuses production-grade legacy subject/action pools (200/200) + 151
   // settings pool. Adds 3 path-bespoke pools for Mad Max chase composition,
