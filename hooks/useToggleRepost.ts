@@ -43,13 +43,21 @@ export function useToggleRepost() {
   const key = ['repostIds', user?.id];
 
   return useMutation({
+    // Tagged so useRepostIds can find in-flight toggles and reconcile membership
+    // against them during read-after-write lag (both directions — see that hook).
+    mutationKey: ['toggleRepost'],
     mutationFn: async ({ uploadId }: ToggleArgs) => {
       // The RPC toggles insert/delete server-side and returns the authoritative
       // (reposted, repost_count). We trust optimistic ±1 for the count (matching
-      // useToggleLike) and let useRepostIds reconcile membership on next mount.
-      const { error } = await supabase.rpc('toggle_repost', { p_upload_id: uploadId });
+      // useToggleLike) but reconcile MEMBERSHIP to the server's `reposted` in
+      // onSuccess — an optimistic-only toggle could drift (e.g. a fast
+      // repost→unpost→repost or a refetch race left the icon stuck).
+      const { data, error } = await supabase.rpc('toggle_repost', { p_upload_id: uploadId });
       if (error) throw error;
       trackPostReposted();
+      // RETURNS TABLE(reposted, repost_count) → supabase delivers an array of rows.
+      const row = Array.isArray(data) ? data[0] : data;
+      return { reposted: !!(row as { reposted?: boolean } | undefined)?.reposted };
     },
     onMutate: async ({ uploadId, currentlyReposted }) => {
       const snapshots: Array<{ key: readonly unknown[]; data: unknown }> = [];
@@ -130,8 +138,18 @@ export function useToggleRepost() {
         for (const rollback of ctx.rollbacks) rollback();
       }
     },
-    // No onSettled refetch — optimistic state is trusted within a session
-    // (read-after-write race, same rationale as useToggleLike); useRepostIds
-    // refetches on mount for cross-session reconciliation.
+    onSuccess: ({ reposted }, { uploadId }) => {
+      // Reconcile membership to the server's authoritative state. Overrides any
+      // optimistic drift (fast multi-toggle, or a refetch that resurrected/dropped
+      // the id mid-flight) so the repost icon always lands on the real answer.
+      qc.setQueryData<Set<string>>(key, (old = new Set()) => {
+        const next = new Set(old);
+        if (reposted) next.add(uploadId);
+        else next.delete(uploadId);
+        return next;
+      });
+    },
+    // No onSettled refetch — onSuccess already reconciled membership to the
+    // server's truth; useRepostIds refetches on mount for cross-session sync.
   });
 }

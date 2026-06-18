@@ -28,10 +28,27 @@ export function useRepostIds() {
         if (data.length < PAGE) break;
       }
       const fresh = new Set(all.map((r) => r.upload_id));
-      // UNION with current cache to preserve a pending optimistic repost against
-      // read-after-write replication lag (same race useLikeIds documents).
-      const current = queryClient.getQueryData<Set<string>>(['repostIds', user!.id]);
-      if (current) for (const id of current) fresh.add(id);
+      // Reconcile against IN-FLIGHT toggles only (not a blanket union with the
+      // cache). A repost toggle goes BOTH ways, so an add-only union could
+      // resurrect a just-removed repost during read-after-write lag and leave
+      // the icon stuck "reposted". Instead, apply each pending toggle's intended
+      // state on top of the authoritative server read: a pending repost adds the
+      // id (server INSERT may not have replicated yet), a pending un-repost
+      // removes it (server DELETE may not have replicated yet). Once a toggle
+      // settles it drops out of this set, so nothing lingers.
+      const pending = queryClient.getMutationCache().findAll({
+        mutationKey: ['toggleRepost'],
+        status: 'pending',
+      });
+      for (const m of pending) {
+        const vars = m.state.variables as
+          | { uploadId: string; currentlyReposted: boolean }
+          | undefined;
+        if (!vars) continue;
+        // intended next state = the opposite of what it was when tapped.
+        if (vars.currentlyReposted) fresh.delete(vars.uploadId);
+        else fresh.add(vars.uploadId);
+      }
       return fresh;
     },
     enabled: !!user,
