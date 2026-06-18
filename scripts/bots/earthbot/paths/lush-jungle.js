@@ -15,13 +15,15 @@
  */
 
 module.exports = {
-  archetype: 'EARTHBOT_EPIC_VISTA',
+  // 2026-06-18 — moved off EARTHBOT_EPIC_VISTA onto the INTERIOR archetype
+  // (rainforest understory framed from INSIDE, filtered canopy light + humid
+  // haze + vine/buttress detail, not a wide-vista overlook). Subject unchanged.
+  archetype: 'EARTHBOT_FOREST_INTERIOR',
   pools: {
     subject: 'LUSH_JUNGLE_SUBJECT', // BESPOKE — tropical rainforest, biome-tagged
-    lighting: 'EPIC_VISTA_LIGHTING',
-    atmosphere: 'EPIC_VISTA_ATMOSPHERE',
-    hero_feature: 'EPIC_VISTA_HERO_FEATURE',
-    sky_layer: 'EPIC_VISTA_SKY',
-    phenomenon: 'EPIC_VISTA_PHENOMENON',
+    lighting: 'FOREST_INTERIOR_LIGHTING',
+    atmosphere: 'FOREST_INTERIOR_ATMOSPHERE',
+    understory: 'FOREST_INTERIOR_UNDERSTORY',
+    phenomenon: 'FOREST_INTERIOR_PHENOMENON', // 30%-gated
   },
 };

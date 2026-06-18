@@ -27,6 +27,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  EARTHBOT_FOREST_INTERIOR: {
+    description:
+      'PATH-BESPOKE — EarthBot forest/jungle INTERIOR (2026-06-18). Shared by deep-forest + lush-jungle. Fixes the "everything is a wide-vista national-park postcard" drift: those two paths previously reused EARTHBOT_EPIC_VISTA (wide-angle aerial-overlook template + EPIC_VISTA wide-vista lighting/sky pools), so a forest CATHEDRAL INTERIOR rendered as a sweeping overlook. This archetype keeps EarthBot\'s guardrails (no humans, no built features, no sci-fi, true-to-life photography, moment-in-motion) but frames INSIDE the forest — looking up the trunks / into the understory / down a corridor between trees, intimate-to-mid scale, dappled canopy light + mist between trunks, NO sky-as-hero, NO distant-overlook scale-prover. Subject pool stays bespoke per path (temperate vs tropical). 4 axes: 3 always-on shared (interior lighting / interior atmosphere / understory-canopy detail) + 1 conditional 30%-gated interior phenomenon.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['subject', 'lighting', 'atmosphere', 'understory'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'phenomenon', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_HAWAII_FLOWERS: {
     description:
       'PATH-BESPOKE — EarthBot hawaii-flowers (2026-05-21 R3 architecture). Hawaiian/tropical-paradise coast with TROPICAL FLOWERS as visible co-star. Different from EARTHBOT_EPIC_VISTA in that flowers are a SEPARATE always-on axis (HAWAII_FLOWERS_ARRANGEMENTS — 200-entry production pool reused from legacy beach/tropical_flower_arrangements). Subject pool is ground-level beach-only (no flower content). Template explicitly composes flowers as TASTEFULLY SPRINKLED through the scene (R6/R7 iterations: not foreground-wall, not invisible, distributed positions). 7 axes: 6 always-on (subject + flowers + lighting + atmosphere + hero_feature + sky_layer) + 1 conditional 30%-gated phenomenon.',

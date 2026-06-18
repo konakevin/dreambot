@@ -36,6 +36,13 @@ module.exports = {
   DEEP_FOREST_SUBJECT: load('deep_forest_subject'),
   // lush-jungle (2026-05-20). Same clone pattern — bespoke subject only.
   LUSH_JUNGLE_SUBJECT: load('lush_jungle_subject'),
+  // FOREST INTERIOR shared pools (2026-06-18) — deep-forest + lush-jungle under
+  // EARTHBOT_FOREST_INTERIOR. Interior-scale light/air/detail (replaces the
+  // wide-vista EPIC_VISTA pool reuse that made forest interiors render as overlooks).
+  FOREST_INTERIOR_LIGHTING: load('forest_interior_lighting'),
+  FOREST_INTERIOR_ATMOSPHERE: load('forest_interior_atmosphere'),
+  FOREST_INTERIOR_UNDERSTORY: load('forest_interior_understory'),
+  FOREST_INTERIOR_PHENOMENON: load('forest_interior_phenomenon'),
   // coastal-vista (2026-05-20) — FIRST BEACH-SIDE path migrated. Validates
   // canonical landscape template clones cross-namespace.
   COASTAL_VISTA_SUBJECT: load('coastal_vista_subject'),

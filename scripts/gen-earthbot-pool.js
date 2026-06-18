@@ -434,14 +434,16 @@ Lineage to channel: Marc Adamus + Peter Lik + Galen Rowell SW landscape photogra
 
 ⚠️ MANDATORY — every entry must LEAD with an Icelandic toponym in the first 5-8 words. Required openings include: "Reynisfjara black-sand beach...", "Vatnajökull glacier tongue...", "Jökulsárlón glacier lagoon...", "Diamond Beach iceberg shards...", "Skógafoss waterfall...", "Seljalandsfoss waterfall...", "Gullfoss two-tier waterfall...", "Dettifoss thunder waterfall...", "Háifoss high waterfall...", "Goðafoss waterfall...", "Stuðlagil basalt canyon...", "Svartifoss basalt cliff...", "Reynisdrangar sea stacks...", "Sólheimajökull glacier tongue...", "Breiðamerkurjökull glacier face...", "Vatnajökull ice cave interior...", "Landmannalaugar rhyolite ridge...", "Þingvellir continental rift fissure...", "Eldhraun moss-on-lava field...", "Strokkur geyser cone...", "Kerlingarfjöll geothermal valley...", "Námafjall sulfur field...", "Hvítserkur basalt sea arch...", "Aldeyjarfoss basalt-column waterfall...", "Kirkjufell mountain..." — toponym FIRST, then the rest of the composition.
 
-🎯 BIOME COVERAGE TARGET (across 25 entries):
-  • Glacier tongues + ice caves: 4 entries
-  • Glacier lagoons + iceberg beaches (Jökulsárlón / Diamond Beach): 3 entries
-  • Black-sand beaches (Reynisfjara / Vík / Hvítserkur): 4 entries
-  • Basalt sea stacks + columns (Reynisdrangar / Stuðlagil / Svartifoss / Aldeyjarfoss): 3 entries
-  • Waterfalls (Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Háifoss / Goðafoss): 4 entries
-  • Rhyolite mountains (Landmannalaugar / Kerlingarfjöll / Kirkjufell): 3 entries
-  • Moss-on-lava + continental rift + geothermal (Eldhraun / Þingvellir / Strokkur / Námafjall): 4 entries
+🎯 BIOME COVERAGE TARGET (across 25 entries) — Iceland's INTERIOR geology LEADS; the coast is a MINOR accent only (this path was over-weighted on beaches/sea-stacks — pull it inland):
+  • Glacier tongues + ice caves: 5 entries
+  • Waterfalls (Skógafoss / Seljalandsfoss / Gullfoss / Dettifoss / Háifoss / Goðafoss): 5 entries
+  • Inland basalt canyons + column-waterfalls (Stuðlagil / Svartifoss / Aldeyjarfoss / Studlafoss): 2 entries
+  • Rhyolite + HIGHLAND-INTERIOR mountains (Landmannalaugar / Kerlingarfjöll / Fjallabak / Þórsmörk): 4 entries
+  • Moss-on-lava + continental rift + geothermal + calderas (Eldhraun / Þingvellir / Strokkur / Námafjall / Askja-Víti crater lake): 5 entries
+  • Glacier lagoon + iceberg beach (Jökulsárlón / Diamond Beach — genuinely iconic, KEEP but capped): 2 entries
+  • Black-sand coast (Reynisfjara — the ONE iconic black beach only): 2 entries
+
+⚠️ Iceland is MOSTLY INTERIOR. Do NOT over-weight beaches / sea-stacks / coast — that's only ~4 of 25 here. The hero is glaciers, waterfalls, geothermal, rhyolite highlands, rift fields, ice caves.
 
 🚫 ABSOLUTE BANS (every entry MUST clear these):
   • ZERO photographer names (Iurie Belegurschi / Albert Dros / Daniel Kordan / Erez Marom / Max Rive — these leak verbatim into the polished output and bias renders)
@@ -475,15 +477,15 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
       'Eldhraun moss-on-lava field at low-winter-sun, undulating volcanic-rock hummocks blanketed in thick Racomitrium lanuginosum moss in muted green-gold, foreground close moss carpet with embedded lava clinker, midground hummock waves stretching to distant Mýrdalsjökull glacier edge',
       'Strokkur geyser fountain at blue-hour, the 20-metre boiling-water column rising vertically against cool twilight sky, foreground hot-spring rim crusted in sulphur and silica, steam plume drifting upward, distant Geysir field rust-red mineral-stained ground',
       'Sólheimajökull glacier tongue at polar-overcast, the cracked grey-ash-streaked glacier face descending toward a black-sand outwash plain, foreground close blue-glacier-ice slab with ash bands, midground crevasse field, distant glacier tongue receding to cloud-shrouded ice cap',
-      'Hvítserkur basalt sea arch at midnight sun glow, the 15-metre-tall dragon-shaped sea stack rising from a glassy tidal plain, foreground tidal-flat with reflection of stack, soft cool-pink twilight on the rock face, distant Strandir coastline silhouette',
+      'Þórsmörk highland valley at golden hour, the green glacial valley cradled between three glacier tongues (Eyjafjallajökull / Mýrdalsjökull / Tindfjallajökull), braided glacial rivers threading the valley floor, foreground close birch-scrub and moss at near edge, distant ice caps glowing warm, deep canyon walls in blue haze',
       'Aldeyjarfoss basalt-column waterfall, milky-blue glacial water falling 20 metres into a basalt-column-walled pool, foreground close hexagonal basalt rim wet with spray, column-curtain wall dominant midground, sky a clear arctic cobalt',
       'Kirkjufell mountain at blue-hour, the iconic conical Snæfellsnes peak rising 463 metres beside the small Kirkjufellsfoss waterfall, foreground wet basalt boulders with foaming stream, midground falls leading the eye to peak, distant fjord water and cobalt sky behind',
-      'Reynisdrangar sea stacks at storm light, three basalt sea stacks rising from churning Atlantic surf with crashing wave-spray, foreground Reynisfjara black sand with surf-pattern arcs, breaking storm cloud overhead with rain curtain advancing, distant cliff coast in cool grey mist',
+      'Askja Víti crater lake in the central highlands, the milky opaque-blue geothermal lake filling a circular caldera of rust-and-charcoal volcanic rock, foreground close warm-mineral crater rim at near edge, midground steaming lake surface, distant Dyngjufjöll caldera walls under flat polar light',
       'Goðafoss horseshoe waterfall at polar twilight, the 12-metre-tall arcing waterfall sweeping in a U-shape over a basalt rim, foreground close basalt ledge with mossy edge, milky-blue water curtain dominant, distant cliff-face and pink-violet polar dawn sky',
       'Námafjall geothermal field at midday, rust-orange and sulphur-yellow mineral-crust ground steaming with active fumaroles and bubbling mud pots, foreground close fumarole rim with concentric sulphur deposit, midground bubbling pot, distant Mýrdalsjökull glacier edge cool blue',
       'Háifoss high waterfall, the 122-metre vertical thread of glacial-silt-grey water dropping into a vast canyon, foreground close basalt-rim with moss carpet, neighboring smaller waterfall Granni at left, deep canyon walls in atmospheric blue depth',
       'Kerlingarfjöll geothermal valley at golden hour, rhyolite ridges in rust + ochre + violet striations with steaming hot-spring veins running through the slope, foreground close mineral-crust ground with sulphur deposits, midground steam plume drifting, distant rhyolite peaks in warm copper sidelight',
-      'Snæfellsjökull peak at midnight sun, the 1446-metre glacier-capped volcano rising from coastal foothills, foreground basalt-pebble fan on coastal flat, midground moss-on-lava hummocks, glacier cap glowing soft cool-pink in midnight-sun grazing light',
+      'Fjallabak Nature Reserve highland interior at golden hour, rust-ochre-and-green rhyolite hills rolling under a vast empty central-highland plateau, a braided glacial river winding through the foreground volcanic gravel, midground steaming geothermal vent, distant Hekla volcano silhouette in warm haze',
     ],
     instructions: `Output ONLY a numbered list of {COUNT} Iceland subject entries. NO preamble, NO commentary. Each entry 30-55 words on a single line. Format follows the touchpoint pattern: "Toponym + feature + close-foreground detail + midground hero + distant atmospheric depth + lighting note".`,
   },
@@ -2155,30 +2157,31 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
 
 ⚠️ MANDATORY — every entry must LEAD with a European toponym in the first 5-8 words.
 
-🇪🇺 ICONIC EUROPEAN WILDERNESS COMPOSITIONS (mix across 25 entries):
+🇪🇺 ICONIC EUROPEAN INLAND-WILDERNESS COMPOSITIONS (mix across 25 entries) — ALL INLAND: alpine peaks, cirque tarns, inland freshwater lakes, river-gorges, terraced waterfalls, conifer/beech forest, sandstone towers, highland moor. NO coast, NO fjord, NO sea:
   A. **DOLOMITES TRE CIME** — the three iconic limestone peaks at alpenglow, low-angle stance from Tre Cime trail at sunset / OR Lago di Braies turquoise lake mirror-reflecting Dolomite peaks / OR Seceda ridge razor edge at sunrise
   B. **MATTERHORN RIFFELSEE** — iconic pyramidal Matterhorn mirror-reflected in Riffelsee / Stellisee at dawn, perfect alpenglow on east face
   C. **SCOTTISH HIGHLANDS GLEN COE** — dramatic glen with heather-covered slopes + Three Sisters peaks, mist drift through valley at dawn
-  D. **OLD MAN OF STORR / QUIRAING** — Trotternish ridge pinnacles silhouetted against burning sky, Atlantic mist
-  E. **CLIFFS OF MOHER** — sheer Irish Atlantic cliff face plunging to ocean below at sunset
+  D. **QUIRAING TROTTERNISH** — Isle of Skye inland landslip of swooping grassy ridges + pinnacle towers, sea-of-clouds inversion in the glen below (frame the LANDFORM, not the sea)
+  E. **PLITVICE / KRKA TERRACES** — Croatian terraced travertine waterfall cascades pouring between turquoise forest pools, beech canopy framing, mist
   F. **SNOWDONIA LLYN IDWAL** — cirque tarn reflecting slate-grey peaks above, mossy emerald rocks
-  G. **LOFOTEN REINE FJORD** — drone POV aerial of Norwegian arctic fjord with snow peaks rising from black-water inlet
-  H. **GEIRANGERFJORD AERIAL** — drone POV looking down narrow Norwegian fjord with waterfalls cascading from cliffs
-  I. **TROLLTUNGA ROCK TONGUE** — dramatic horizontal rock tongue jutting over fjord far below
-  J. **FAROE DRANGARNIR ARCH** — basalt sea arch with emerald-turf island beyond
-  K. **MÚLAFOSSUR FAROE** — waterfall plunging from cliff into Atlantic at sunset
-  L. **SØRVÁGSVATN FAROE** — floating-lake illusion above ocean cliff
+  G. **VERDON GORGE** — sheer limestone river-canyon walls plunging to the turquoise Verdon river far below, low-angle from the rim
+  H. **BLACK FOREST MUMMELSEE** — misty German conifer forest, dark fir ranks marching up the slope, a still glacial tarn, fog drifting between trunks
+  I. **TATRAS MORSKIE OKO** — High Tatras glacial lake cradled by sheer granite peaks, larch + spruce shore, alpenglow
+  J. **SAXON / BOHEMIAN SWITZERLAND** — Elbe-sandstone pillar towers (Bastei) rising from a sea-of-fog forest at dawn, mist between the spires
+  K. **PLATEAU / JOTUNHEIMEN** — Norwegian INLAND high-mountain plateau, the Besseggen ridge between two alpine lakes (Gjende emerald + Bessvatn blue), tundra foreground (NOT a fjord)
+  L. **PICOS DE EUROPA** — Spanish limestone massif, jagged grey peaks above green karst gorges and beech forest, cloud spilling over a col
   M. **LAKE BLED ISLAND** — Slovenian island reflected in turquoise lake, Julian Alps behind
-  N. **KÖNIGSSEE / EIBSEE** — Bavarian Alps lake with cliffs rising from emerald water
-  O. **HEATHER MOOR SUNSET** — Scottish moor blanket of purple heather catching raking sidelight
-  P. **CONNEMARA / BURREN** — Irish limestone karst pavement with Atlantic in distance
+  N. **KÖNIGSSEE / EIBSEE** — Bavarian Alps inland lake, sheer limestone slopes rising from emerald freshwater, larch shore
+  O. **HEATHER MOOR SUNSET** — Scottish moor blanket of purple heather catching raking sidelight, rolling to distant inland hills
+  P. **JULIAN ALPS / TRIGLAV VALLEY** — Slovenian alpine valley, emerald meadow + spruce forest beneath the Triglav massif, a clear mountain stream threading through
 
 🚫 ABSOLUTE BANS:
+  • ZERO COAST/SEA — this is INLAND wilderness. NO ocean, sea, fjord, sea-cliff, sea-arch, sea-stack, beach, Atlantic/coastal horizon, surf, or tidal water. Any water is ALPINE/INLAND freshwater (tarn / glacial lake / river / waterfall), never the sea. (Coast is the coastal-vista path's domain.)
   • ZERO photographer names (Max Rive / Marc Adamus / Daniel Kordan / Albert Dros)
   • ZERO castles, ruins, monasteries, villages, viewing platforms (cultural — respect)
   • ZERO standing stones / Stonehenge / Avebury / megalithic features (cultural)
   • ZERO sheep / cows / agricultural pastures / drystone walls / fences (agricultural)
-  • ZERO lighthouses, cabins, huts (including Tre Cime rifugio / Faroe black cabins)
+  • ZERO lighthouses, cabins, huts (including Tre Cime rifugio)
   • ZERO roads / funiculars / cable cars
   • ZERO Iceland content (that's iceland-raw path's domain — no Reynisfjara / Vatnajökull / Jökulsárlón)
   • ZERO American Rockies / Patagonian analogues — describe Europe on its own terms
@@ -2191,8 +2194,8 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
   • Specific HABITAT hero (peak / cliff / cirque tarn / fjord / sea arch / heather moor / limestone pavement)
   • Specific CAMERA ANGLE
   • Multi-tier depth language
-  • Europe-coded materials (limestone / Dolomite-pink stone / heather / Scottish moor / Welsh slate / Irish limestone karst / Norwegian basalt / Faroe basalt + turf / alpine larch / Julian-Alps emerald)
-  • A specific DRAMATIC lighting moment (Dolomites pink alpenglow / Lofoten arctic-pink twilight / Glen Coe storm-break / Cliffs of Moher Atlantic sunset / Riffelsee mirror dawn / heather moor raking sidelight)
+  • Europe-coded INLAND materials (limestone / Dolomite-pink stone / heather / Scottish moor / Welsh slate / Elbe sandstone / Tatras granite / travertine + turquoise pools / alpine larch + spruce + beech / Julian-Alps emerald meadow)
+  • A specific DRAMATIC lighting moment (Dolomites pink alpenglow / Tatras granite alpenglow / Glen Coe storm-break / Black Forest fog-shaft dawn / Riffelsee mirror dawn / heather moor raking sidelight / Saxon-sandstone sea-of-fog sunrise)
 
 Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBERED list.`,
     touchpoints: [
@@ -2204,23 +2207,23 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
       'Glen Coe Scottish Highlands dramatic glen at dawn, the Three Sisters peaks rising from heather-covered slopes with mist drift through valley, foreground close moss-and-heather at near edge, blue-hour cobalt sky brightening, low cloud base catching warm color',
       'Old Man of Storr pinnacles on Trotternish ridge Isle of Skye, the iconic basalt pinnacles silhouetted against blazing copper sunset over Atlantic, low-angle hero stance, foreground close moss-and-heather at near edge, Cuillin range beyond in cool blue haze',
       'Quiraing Trotternish landslip dramatic rock formations at sunrise, swooping ridges and pinnacle towers with mist drift between, foreground close grass-and-rock at near edge, sea-of-clouds inversion in distance below ridge',
-      'Cliffs of Moher Atlantic sea-cliff face at sunset, sheer 200-metre limestone wall plunging to churning ocean below, low-angle stance from clifftop, foreground close grass-clifftop edge with thrift flowers at near edge, deep cobalt sky above',
+      'Quiraing Trotternish inland landslip Isle of Skye, swooping grassy ridges and pinnacle towers with a sea-of-clouds inversion filling the glen below, low-angle hero stance, foreground close moss-and-rock at near edge, blazing copper sunrise, Cuillin range beyond in cool blue haze',
       'Snowdonia Llyn Idwal cirque tarn reflecting slate-grey peaks above at dawn, mossy emerald rocks ring the tarn shoreline, foreground close moss-and-water-edge boulder at near edge, mist drift between peaks, blue-hour cobalt gradient',
-      'Lofoten Reine fjord drone POV aerial looking down at the iconic arctic fjord with snow peaks rising from black-water inlet, foreground close fjord shore at near edge, blue-hour arctic-pink twilight, deep cobalt-and-rose gradient sky',
-      'Geirangerfjord aerial drone POV looking down the narrow Norwegian fjord with multiple waterfalls cascading from sheer cliffs above, deep emerald water below, foreground close fjord-edge ledge at near edge, blazing golden-hour sidelight on cliffs',
-      'Trolltunga rock tongue jutting horizontal over fjord far below in dramatic perspective, low-angle stance from the tongue edge looking down, foreground close granite-and-moss rock at near edge, deep emerald fjord water 700 metres below, cobalt sky',
-      'Faroe Drangarnir basalt sea arch with emerald-turf island beyond in deep tier, drone POV from sea-level looking through the arch, foreground close basalt rock at near edge, Atlantic spray drift around arch, cobalt sky and breaking cloud',
-      'Múlafossur waterfall Faroe Islands plunging from emerald-turf cliff into Atlantic Ocean at sunset, foreground close emerald-turf cliff edge at near edge, blazing copper sky behind, deep cobalt sea below',
-      'Sørvágsvatn floating-lake Faroe optical illusion appearing to hover above ocean cliff drop, drone POV from elevated angle, foreground close emerald-turf at near edge, lake stretching to distant cliff edge, Atlantic Ocean beyond and below',
-      'Lake Bled Slovenian island reflected in turquoise lake at sunrise, the iconic small island with the Julian Alps rising beyond, foreground close lakeshore boulder at near edge, mist drift on lake surface, pale rose sky brightening',
-      'Königssee Bavarian Alps lake with sheer cliffs rising from emerald water, drone POV from fjord-style narrow lake, foreground close lake-edge larch tree at near edge, sea-of-clouds inversion above peaks in distance, blue-hour cobalt twilight',
+      'Plitvice Lakes Croatia terraced travertine waterfalls pouring between turquoise forest pools, beech canopy framing the cascades, drone POV looking down the stepped pools, foreground close mossy travertine lip at near edge, soft mist and dappled forest light',
+      'Verdon Gorge France sheer limestone canyon walls plunging to the turquoise Verdon river far below, low-angle stance from the rim, foreground close limestone-and-scrub edge at near edge, golden-hour sidelight raking the canyon wall, deep cobalt sky',
+      'Tatras Morskie Oko glacial lake cradled by sheer granite peaks, larch and spruce ringing the emerald shore, foreground close granite-and-moss boulder at near edge, alpenglow on the summits, mist drift across the still water at dawn',
+      'Saxon Switzerland Bastei sandstone pillar towers rising from a sea-of-fog beech forest at sunrise, the iconic eroded spires emerging from drifting mist, low-angle hero stance, foreground close sandstone-and-pine edge at near edge, warm rose light on the towers',
+      'Jotunheimen Besseggen ridge Norway between two inland alpine lakes, emerald Gjende below one side and deep-blue Bessvatn the other, tundra-and-rock foreground at near edge, low-angle ridge stance, cool arctic-clear light, no sea anywhere',
+      'Picos de Europa Spain jagged grey limestone massif above a green karst gorge and beech forest, cloud spilling over a high col, low-angle hero stance from the valley, foreground close limestone-and-fern at near edge, golden-hour sidelight on the peaks',
+      'Lake Bled Slovenian island reflected in turquoise inland lake at sunrise, the iconic small island with the Julian Alps rising beyond, foreground close lakeshore boulder at near edge, mist drift on lake surface, pale rose sky brightening',
+      'Königssee Bavarian Alps inland lake with sheer limestone slopes rising from emerald freshwater, drone POV down the narrow mountain lake, foreground close lake-edge larch tree at near edge, sea-of-clouds inversion above peaks in distance, blue-hour cobalt twilight',
       'Eibsee Bavarian Alps mirror-still lake reflecting Zugspitze-area peaks at dawn, foreground close pebble shore at near edge, larch trees framing the water, pale rose sky brightening',
-      'Scottish moor blanket of purple heather at sunset in raking horizontal sidelight, vast carpet of heather stretching to distant hills, foreground close heather flower cluster at near edge, blazing copper sky, low-angle hero stance from moor level',
-      'Burren limestone karst pavement Ireland with criss-crossing fissures stretching to flat Atlantic horizon, drone POV looking down at the karst-pattern, foreground close limestone slab edge with grass-tuft at near edge, cobalt sky',
+      'Scottish moor blanket of purple heather at sunset in raking horizontal sidelight, vast carpet of heather rolling to distant inland hills, foreground close heather flower cluster at near edge, blazing copper sky, low-angle hero stance from moor level',
+      'Black Forest Germany misty conifer hillside at dawn, dark fir ranks marching up the slope with fog-shafts threading between trunks, a still glacial tarn (Mummelsee) below, foreground close fern-and-fir-needle at near edge, pearl-grey mist brightening to gold',
       'Cinque Torri Dolomites five-tower limestone formation cluster at sunset, low-angle hero stance from below the towers, foreground close alpine-grass-and-rock at near edge, pink alpenglow on towers, deep cobalt sky',
-      'Skogafoss-style cliffside waterfall Faroe Islands plunging onto basalt beach below, drone POV from offshore, foreground close basalt-beach at near edge, golden-hour sidelight on emerald-turf cliff above',
-      'Connemara Ireland boggy peat-stream snaking through emerald moss to flat Atlantic horizon, foreground close boggy peat-edge at near edge, mist drift over the moor, blazing rose sunset, low Atlantic horizon',
-      'Bavarian Alpsee mirror lake reflecting distant peaks at dawn, foreground close mossy lakeshore at near edge, pale rose sky brightening, mist drift on water surface in pearl-grey',
+      'Triglav National Park Slovenia alpine valley, emerald meadow and spruce forest beneath the Triglav massif, a clear mountain stream threading through the foreground, low-angle stance, mist drift in the valley, golden-hour light on the peak',
+      'High Tatras Slovakia granite spires above a larch-forest basin at sunrise, the jagged ridge catching first alpenglow, foreground close larch-and-boulder at near edge, sea-of-clouds pooling in the valley below, deep cobalt zenith',
+      'Bavarian Alpsee mirror lake reflecting distant inland peaks at dawn, foreground close mossy lakeshore at near edge, pale rose sky brightening, mist drift on water surface in pearl-grey',
     ],
     instructions: `Output ONLY a numbered list of {COUNT} European subject entries. NO preamble. Each entry 30-55 words on a single line. Format follows touchpoint pattern: "Toponym + habitat hero + camera angle + close-foreground + depth + lighting".`,
   },
@@ -2644,6 +2647,85 @@ Vary the LIGHT quality interacting with water: midday sun-sparkle, golden-hour a
       'Pre-dawn glassy water with brilliant Milky Way reflected in the dark surface',
     ],
     instructions: `Output ONLY a numbered list of {COUNT} reef water-quality entries. NO preamble. Each entry 14-25 words on a single line. CRITICAL: every water-state category MUST be represented — do not collapse to "crystal turquoise."`,
+  },
+
+  // ─── FOREST INTERIOR shared pools (2026-06-18) — for deep-forest + lush-jungle
+  //     under the EARTHBOT_FOREST_INTERIOR archetype. Fixes the wide-vista postcard
+  //     drift: light/atmosphere/detail are all INTERIOR-scale (filtered canopy light,
+  //     mist between trunks, understory richness), never wide-overlook. ───
+  forest_interior_lighting: {
+    format: 'simple',
+    theme: `INTERIOR FOREST LIGHT — the real light moment INSIDE a forest, filtered by the canopy. 16-30 words. The camera is among the trees; light arrives FILTERED, never as open-sky overlook light.
+
+🎯 EVERY entry is canopy-filtered interior light with a clear physical source (sun through the canopy):
+  • DAPPLED FLOOR LIGHT — broken coins of sun scattered across the forest floor and trunks
+  • HARD GOD-SHAFTS — distinct sun-shafts lancing through a canopy gap into the haze
+  • BACKLIT CANOPY — low sun behind the leaves, foliage glowing translucent green-gold
+  • SOFT OVERCAST GREEN — diffuse flat light, the whole interior a soft even green glow
+  • FIRST-LIGHT RAKE — warm low dawn light raking horizontally between the trunks
+  • BLUE-HOUR UNDERSTORY — cool pre-dawn / dusk blue settling in the understory, mist holding the last light
+
+🚫 BANS: NO open-sky / overlook / panorama / golden-hour-on-distant-peaks light. NO "alpenglow on the summit." NO artificial glow with no source. NO sunset-over-the-horizon (you're under a canopy). Light is always canopy-filtered and interior.`,
+    touchpoints: [
+      'Hard god-shafts lancing through a gap in the high canopy into drifting haze, distinct beams striking the mossy floor in bright pools',
+      'Dappled morning light scattered in broken coins across fern fronds and wet trunk bark, soft contrast, the floor mottled gold-and-green',
+      'Low backlight behind the canopy, the leaves glowing translucent emerald-gold, trunks rimmed in warm light, deep shade between',
+      'Soft diffuse overcast-green glow filling the whole interior evenly, no harsh shadows, the wet understory richly saturated',
+      'First warm dawn light raking horizontally between the trunk columns, long soft shadows reaching across the leaf litter',
+      'Cool blue-hour light settling in the understory, mist holding the last pale glow, trunks fading to deep shade in the distance',
+    ],
+    instructions: `Each entry is ONE interior canopy-filtered lighting moment, 16-30 words. ALWAYS interior + filtered, NEVER open-sky overlook light. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  forest_interior_atmosphere: {
+    format: 'simple',
+    theme: `INTERIOR FOREST ATMOSPHERE — what's in the AIR between the trunks. 14-26 words. Sets the air quality of the interior (it dictates whether god-shafts/beams emerge naturally).
+
+🎯 DISTRIBUTION (~25): ground-mist pooling between the trunks / drifting fog veiling the deep trees / post-rain steam rising off the warm floor / crisp clear air with sharp leaf detail (NO beams) / heavy humid haze softening the deep distance / spore-and-pollen drift catching the light / fine drizzle-veil between the trees / dawn dew-haze hanging low / smoke-blue depth haze layering the receding trunks.`,
+    touchpoints: [
+      'Ground-mist pooling low between the trunks, the deep forest dissolving into soft grey-green haze',
+      'Drifting fog veiling the deeper trees, near trunks sharp and far ones ghosted to silhouette',
+      'Post-rain steam rising off the warm leaf litter, the air thick and luminous where light hits it',
+      'Crisp clear air, every leaf and bark-ridge razor-sharp, no haze, light clean and dry (no beams)',
+      'Heavy humid haze softening the deep distance into layered green-grey planes of receding trunks',
+      'Fine spore-and-pollen drift hanging in the still air, catching any shaft of light as floating motes',
+    ],
+    instructions: `Each entry is ONE interior air-quality state, 14-26 words. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  forest_interior_understory: {
+    format: 'simple',
+    theme: `UNDERSTORY / CANOPY DETAIL — the LUSH packed richness that fills a forest interior. 16-30 words. The dense living detail layered through the scene (foreground to midground), NOT an isolated prop, NOT a distant scale-marker.
+
+🎯 DISTRIBUTION (~25): mossy buttress roots + fallen nurse-logs sprouting saplings / a creek sliding over moss-furred boulders / fern banks and unfurling fronds carpeting the floor / hanging vines + epiphytes draping the mid-trunks / sword-fern + huckleberry understory thickets / a fallen giant trunk bridging the frame, moss-blanketed / bracket fungi shelving up a wet trunk / leaf-litter and seedlings on the dim floor / a shaft-lit clearing of waist-high ferns / lichen-bearded branches in the canopy gloom / a slow shallow stream braiding through the roots.
+
+🚫 BANS: NO human-built anything (no steps/bridge/wall — see template). NO bioluminescence/glow. NO distant peaks or sky.`,
+    touchpoints: [
+      'Massive moss-furred buttress roots in the foreground, a fallen nurse-log sprouting a row of young saplings along its spine',
+      'A shallow creek sliding over moss-rounded boulders, ferns leaning over the water, wet stones catching the filtered light',
+      'Dense banks of sword-fern and unfurling fiddleheads carpeting the floor between the trunk columns',
+      'Hanging vines and epiphytes draping the mid-trunks, broad dripping leaves layered into the green gloom',
+      'A vast fallen giant trunk bridging the mid-frame, blanketed in deep moss and sprouting fungus shelves',
+      'Lichen-bearded branches hanging in the canopy gloom above, soft beards swaying in the still humid air',
+    ],
+    instructions: `Each entry is ONE lush interior understory/canopy detail, 16-30 words. Woven-through richness, never an isolated prop. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
+  },
+
+  forest_interior_phenomenon: {
+    format: 'simple',
+    theme: `QUIET INTERIOR PHENOMENON (30%-gated) — one understated real-forest event that deepens the mood. 12-22 words. Subtle, never a spectacle, never sci-fi.
+
+🎯 DISTRIBUTION (~20): a single dramatic god-shaft breaking through as a cloud passes / a light rain-veil drifting through the trunks / mist suddenly pouring through a saddle in the trees / a flush of falling autumn leaves spiralling down / dew-drip cascading from the canopy after rain / a low sun-flare igniting one patch of the understory / steam lifting off the floor as sun hits wet ground.
+
+🚫 BANS: NO aurora / bioluminescence / glow / lightning-in-the-forest / rainbow-spectacle. Quiet and real only.`,
+    touchpoints: [
+      'a single dramatic sun-shaft breaking through the canopy as a cloud passes, igniting one column of haze',
+      'a soft rain-veil drifting through the trunks, the far trees dissolving behind it',
+      'a flush of autumn leaves spiralling down through a shaft of light',
+      'dew-drip cascading in fine threads from the canopy after rain, sparkling where light catches it',
+      'low steam lifting off the warm wet forest floor as the first sun reaches it',
+    ],
+    instructions: `Each entry is ONE quiet real interior phenomenon, 12-22 words. Subtle, never a spectacle. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
   },
 };
 

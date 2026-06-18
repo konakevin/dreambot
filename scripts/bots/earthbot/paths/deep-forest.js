@@ -15,14 +15,17 @@
  * Legacy implementation preserved at paths/legacy/deep-forest.js.
  */
 
+// 2026-06-18 — moved off EARTHBOT_EPIC_VISTA (wide-vista overlook template + sky
+// pools made the cathedral interior render as a sweeping postcard) onto the
+// INTERIOR archetype: filtered canopy light, mist between trunks, understory
+// richness, framed from INSIDE the forest. Bespoke subject pool unchanged.
 module.exports = {
-  archetype: 'EARTHBOT_EPIC_VISTA',
+  archetype: 'EARTHBOT_FOREST_INTERIOR',
   pools: {
     subject: 'DEEP_FOREST_SUBJECT', // BESPOKE — temperate-forest cathedrals, biome-tagged
-    lighting: 'EPIC_VISTA_LIGHTING',
-    atmosphere: 'EPIC_VISTA_ATMOSPHERE',
-    hero_feature: 'EPIC_VISTA_HERO_FEATURE',
-    sky_layer: 'EPIC_VISTA_SKY',
-    phenomenon: 'EPIC_VISTA_PHENOMENON',
+    lighting: 'FOREST_INTERIOR_LIGHTING',
+    atmosphere: 'FOREST_INTERIOR_ATMOSPHERE',
+    understory: 'FOREST_INTERIOR_UNDERSTORY',
+    phenomenon: 'FOREST_INTERIOR_PHENOMENON', // 30%-gated
   },
 };
