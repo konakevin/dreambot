@@ -24,78 +24,65 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { describeWithVision } from '../_shared/vision.ts';
 
+// NOTE: pipe-delimited, NOT JSON. The vision output is run through
+// _shared/sanitizeUserText (in describeWithVision), which STRIPS { } [ ] < >
+// braces/brackets — so a JSON contract silently breaks (the braces vanish and
+// the parse always falls back to "unclear"). Pipes survive sanitization, so we
+// use a single "TYPE|description" line, the same trick classifyDualGenders uses.
 const CLASSIFY_PROMPT = `Classify the primary subject of this photo and describe it.
 
-Return ONLY a JSON object matching this exact shape (no markdown, no code fences, no preamble):
-{"type":"<TYPE>","description":"<visual description, 20-60 words>"}
+Reply with EXACTLY one line and nothing else — the TYPE, then a vertical bar |, then the description. No JSON, no braces, no markdown, no preamble:
+TYPE|<visual description, 20-60 words>
 
-TYPE values:
-- "person"  — one person is the clear dominant subject
-- "group"   — multiple people visible, none clearly dominant (describe each briefly, up to 4)
-- "animal"  — a single animal or pet
-- "object"  — a single object or thing (car, gadget, item)
-- "scenery" — landscape or place without people as the subject
-- "unclear" — too blurry/small/abstract/collage/meme to read confidently
+TYPE is exactly one of:
+- person  — one person is the clear dominant subject
+- group   — multiple people visible, none clearly dominant (describe each briefly, up to 4)
+- animal  — a single animal or pet
+- object  — a single object or thing (car, gadget, item)
+- scenery — landscape or place without people as the subject
+- unclear — too blurry/small/abstract/collage/meme to read confidently
 
 Description requirements — describe like a painter needs to render the subject from memory, with enough detail for a strong likeness. For PEOPLE and GROUPS be EXTREMELY specific about IDENTITY: face shape, eye color, exact hair color (e.g. sandy brown, chestnut) + length + texture + style, skin tone, build, approximate age, and distinguishing features (glasses, freckles, jewelry, tattoos). For facial hair be precise — clean-shaven, light stubble, heavy stubble, short beard, medium beard, or full long beard — do NOT exaggerate (stubble is NOT a beard). Be flattering: skip under-eye bags, dark circles, blemishes, wrinkles. Do NOT describe clothing, outfits, shirt patterns, logos, or accessories — these dreams place the person in a brand-new scene and the generator dresses them to match it; describing the uploaded outfit makes it bleed into the render. (Objects and scenery: describe fully — materials, colors, condition.)
 
 Examples:
-{"type":"person","description":"A woman in her early 30s with an oval face, warm hazel eyes, shoulder-length chestnut-brown wavy hair, fair lightly-freckled skin, slim build, and a warm genuine smile"}
-{"type":"group","description":"Three people outdoors: a woman in her 20s with curly brown hair and green eyes, a man in his 30s with a short dark beard and olive skin, and a teenage girl with long straight blonde hair and blue eyes"}
-{"type":"animal","description":"A fluffy golden retriever with floppy ears and a bright happy expression, sitting on green grass"}
-{"type":"object","description":"A vintage cherry-red convertible sports car with chrome trim and leather seats, parked on cobblestones"}
-{"type":"scenery","description":"A snowy alpine mountain peak at dusk with dramatic orange-pink clouds catching the light"}
-{"type":"unclear","description":"unclear"}`;
+person|A woman in her early 30s with an oval face, warm hazel eyes, shoulder-length chestnut-brown wavy hair, fair lightly-freckled skin, slim build, and a warm genuine smile
+group|Three people outdoors: a woman in her 20s with curly brown hair and green eyes, a man in his 30s with a short dark beard and olive skin, and a teenage girl with long straight blonde hair and blue eyes
+animal|A fluffy golden retriever with floppy ears and a bright happy expression, sitting on green grass
+object|A vintage cherry-red convertible sports car with chrome trim and leather seats, parked on cobblestones
+scenery|A snowy alpine mountain peak at dusk with dramatic orange-pink clouds catching the light
+unclear|unclear`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-type SubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
+const SUBJECT_TYPES = ['person', 'group', 'animal', 'object', 'scenery', 'unclear'] as const;
+type SubjectType = (typeof SUBJECT_TYPES)[number];
 
-const VALID_TYPES = new Set<SubjectType>([
-  'person',
-  'group',
-  'animal',
-  'object',
-  'scenery',
-  'unclear',
-]);
+function isSubjectType(s: string): s is SubjectType {
+  return (SUBJECT_TYPES as readonly string[]).includes(s);
+}
 
 function parseResponse(raw: string): { description: string; type: SubjectType } {
-  // Strip markdown fences if Haiku added any (```json ... ```).
-  const stripped = raw
-    .trim()
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/i, '')
-    .trim();
-
-  // Extract the JSON object — look for the first `{` and its matching `}`.
-  const firstBrace = stripped.indexOf('{');
-  if (firstBrace < 0) {
-    console.warn('[classify-photo] No JSON in response:', stripped.slice(0, 100));
-    return { description: stripped.slice(0, 200), type: 'unclear' };
+  // Pipe-delimited contract "TYPE|description" (see CLASSIFY_PROMPT). Split on
+  // the FIRST pipe only — the type is one token before it, the description is
+  // everything after (and may itself contain stray punctuation). Robust to the
+  // sanitizer that strips braces/newlines and collapses whitespace.
+  const trimmed = raw.trim();
+  const pipe = trimmed.indexOf('|');
+  if (pipe < 0) {
+    // No delimiter — best-effort: keep the prose, mark unreadable so the client
+    // shows the "photo hard to read" confirm rather than trusting a guess.
+    console.warn('[classify-photo] No delimiter in response:', trimmed.slice(0, 100));
+    return { description: trimmed.slice(0, 400), type: 'unclear' };
   }
-  const jsonText = stripped.slice(firstBrace);
-  try {
-    // Attempt to parse. Haiku may output extra text after the JSON; use the
-    // last valid object we can parse by trimming back to the last `}`.
-    const lastBrace = jsonText.lastIndexOf('}');
-    const candidate = lastBrace > 0 ? jsonText.slice(0, lastBrace + 1) : jsonText;
-    const parsed = JSON.parse(candidate);
-    const type: SubjectType = VALID_TYPES.has(parsed.type) ? parsed.type : 'unclear';
-    const description = typeof parsed.description === 'string' ? parsed.description.trim() : '';
-    return { description, type };
-  } catch (err) {
-    console.warn(
-      '[classify-photo] JSON parse failed:',
-      (err as Error).message,
-      '| raw:',
-      stripped.slice(0, 150)
-    );
-    return { description: stripped.slice(0, 200), type: 'unclear' };
-  }
+  const rawType = trimmed.slice(0, pipe).trim().toLowerCase();
+  const type: SubjectType = isSubjectType(rawType) ? rawType : 'unclear';
+  const description = trimmed.slice(pipe + 1).trim();
+  // If the model emitted a type but no usable description, fall back to the
+  // whole line so we never hand downstream an empty subject.
+  return { description: description || trimmed.slice(0, 400), type };
 }
 
 Deno.serve(async (req) => {
