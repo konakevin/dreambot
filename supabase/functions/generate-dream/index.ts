@@ -2066,8 +2066,11 @@ function scheduleBackground(p: Promise<unknown>): void {
 // an optional leading "Male:/Female:" gender token. For an uploaded-photo dream
 // we only want the prose identity description (the AGE/TRAITS lines are for
 // stored-cast age-lock). Keep just the prose, drop the gender parse-token.
+// NOTE: _shared/sanitizeUserText (run on the vision output) strips newlines, so
+// the AGE/TRAITS labels arrive inline — split on the labels themselves (word
+// boundary), NOT on a leading \n, or the meta leaks into the Flux brief.
 function stripCastMeta(raw: string): string {
-  const beforeMeta = raw.split(/\n+\s*(?:AGE|TRAITS)\s*:/i)[0].trim();
+  const beforeMeta = raw.split(/\b(?:AGE|TRAITS)\s*:/i)[0].trim();
   return beforeMeta.replace(/^\s*(male|female)\s*:\s*/i, '').trim();
 }
 

@@ -67,21 +67,26 @@ Deno.serve(async (req: Request) => {
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
     const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 400);
 
-    // Split AGE: and TRAITS: lines from the description
+    // Split the AGE: and TRAITS: sections from the description. These labels USED
+    // to sit on their own lines, but _shared/sanitizeUserText (run on the vision
+    // output in describeWithVision) strips control chars — including newlines —
+    // and collapses whitespace, so they now arrive inline (". AGE: 27 TRAITS: …").
+    // Match the labels on a word boundary instead of anchoring on \n so the parse
+    // is robust whether or not the newlines survive.
     let mainText = rawDescription;
     let physicalSummary = '';
     let age: number | null = null;
-    const ageMatch = rawDescription.match(/\n\s*AGE:\s*(\d{1,3})\b/i);
+    const ageMatch = rawDescription.match(/\bAGE:\s*(\d{1,3})\b/i);
     if (ageMatch) {
       const n = parseInt(ageMatch[1], 10);
       if (Number.isFinite(n) && n >= 1 && n <= 120) age = n;
     }
-    const traitsMatch = rawDescription.match(/\n\s*TRAITS:\s*(.+)/i);
+    const traitsMatch = rawDescription.match(/\bTRAITS:\s*(.+)/i);
     if (traitsMatch) {
       physicalSummary = traitsMatch[1].trim();
     }
-    // mainText = everything before the first AGE: or TRAITS: line
-    const firstStructuredMatch = rawDescription.match(/\n\s*(?:AGE|TRAITS):/i);
+    // mainText = everything before the first AGE: / TRAITS: label
+    const firstStructuredMatch = rawDescription.match(/\b(?:AGE|TRAITS):/i);
     if (firstStructuredMatch && firstStructuredMatch.index !== undefined) {
       mainText = rawDescription.slice(0, firstStructuredMatch.index).trim();
     }
