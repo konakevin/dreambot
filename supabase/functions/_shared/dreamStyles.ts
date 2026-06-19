@@ -73,6 +73,10 @@ export interface ResolvedMedium {
    * (flux-dev if a flux_dev_prompt_template exists, else Kontext). The 6 curated
    * Real Face restyle mediums set this to 'google/gemini-2-image' (Nano Banana). */
   restyleModel: string | null;
+  /** Restyle-specific model POOL — the render picks one at random. Takes
+   * precedence over restyleModel. LEGO/Vinyl use this to peg restyle to
+   * flux-1.1-pro / -ultra without touching the shared allowedModels. */
+  restyleModels: string[] | null;
 }
 
 export interface ResolvedVibe {
@@ -110,6 +114,14 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     restyleModel:
       row.client_meta && typeof row.client_meta.restyle_model === 'string'
         ? row.client_meta.restyle_model
+        : null,
+    // restyle_models (array) — a restyle-specific model POOL the render picks one
+    // from (e.g. LEGO/Vinyl peg to flux-1.1-pro / -ultra). Takes precedence over
+    // restyleModel. Lets us restrict restyle models without touching the shared
+    // allowed_models (which nightly + new-scene also use).
+    restyleModels:
+      row.client_meta && Array.isArray(row.client_meta.restyle_models)
+        ? row.client_meta.restyle_models.filter((x): x is string => typeof x === 'string')
         : null,
   };
 }

@@ -397,12 +397,20 @@ async function handleRequest(req: Request): Promise<Response> {
     resolvedMediumKey,
     resolvedVibeKey
   );
-  // Per-medium restyle model (migration 294): the 6 curated Real Face mediums set
-  // restyle_model='google/gemini-2-image' (Nano Banana edit mode); everything else
-  // keeps the resolved default (Kontext for kontext_directive mediums, Flux-Dev for
-  // lego/vinyl). The flux-dev rebuild path never sets restyle_model, so it's
-  // unaffected. A client force_model still wins (advanced override).
-  const pickedModel = force_model || medium.restyleModel || autoPicked.model;
+  // Per-medium restyle model selection:
+  //   • restyleModels (POOL) → pick one at random. LEGO/Vinyl peg restyle to
+  //     flux-1.1-pro / -ultra here (migration 301), instead of the random
+  //     allowed_models pool, WITHOUT touching the shared allowed_models (which
+  //     nightly + new-scene also use).
+  //   • restyleModel (single) → the 6 Real Face mediums (Nano Banana, mig 294).
+  //   • else → the resolved default (Kontext / Flux-Dev medium pool).
+  // A client force_model still wins (advanced override).
+  const restylePool = medium.restyleModels;
+  const restyleChoice =
+    restylePool && restylePool.length > 0
+      ? restylePool[Math.floor(Math.random() * restylePool.length)]
+      : medium.restyleModel;
+  const pickedModel = force_model || restyleChoice || autoPicked.model;
   logAxes.model = pickedModel;
 
   console.log(
