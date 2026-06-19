@@ -20,7 +20,6 @@ import { reconcileWelcomeBonus } from '@/lib/welcomeBonus';
 import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
-import { FeedIntroGate, hasSeenFeedIntro } from '@/components/FeedIntroGate';
 import { UsernameNudge } from '@/components/UsernameNudge';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -170,13 +169,8 @@ export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const { data: botUsers } = useBotUsers();
 
-  // First-run feed gate — orientation (feed + tabs) then mandatory bot selection.
-  // null = still reading the AsyncStorage flag; true = show; false = seen/dismissed.
-  const [showFeedIntro, setShowFeedIntro] = useState<boolean | null>(null);
-  useEffect(() => {
-    if (!user) return;
-    hasSeenFeedIntro().then((seen) => setShowFeedIntro(!seen));
-  }, [user]);
+  // (The post-feed FeedIntroGate was removed 2026-06-18 — bot selection moved into
+  // onboarding, so the feed now opens directly after the reveal.)
 
   // Safety net for the welcome sparkle bonus: if the at-onboarding grant was
   // missed (a network blip during finalizeOnboarding), credit it now. The grant
@@ -205,7 +199,6 @@ export default function HomeScreen() {
     setUsernameSnoozed(true);
   }, []);
   const showUsernameNudge =
-    showFeedIntro === false &&
     usernameSnoozed === false &&
     !usernameDone &&
     usernameStatus != null &&
@@ -357,10 +350,6 @@ export default function HomeScreen() {
           <View style={{ flex: 1, minWidth: 42 }} />
         </View>
       </Animated.View>
-
-      {/* First-run gate: feed orientation → mandatory bot selection. Full-screen
-          modal, shown once (dreambot.seenFeedIntro.v1). */}
-      {showFeedIntro === true && <FeedIntroGate onDone={() => setShowFeedIntro(false)} />}
 
       {/* One-time "claim your @username" nudge (dismissible). */}
       {showUsernameNudge && usernameStatus && (

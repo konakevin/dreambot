@@ -58,11 +58,27 @@ interface OnboardingStore {
   chromeHidden: boolean;
   setChromeHidden: (v: boolean) => void;
 
+  // First dream is kicked off in the BACKGROUND at the "Save & continue" cutoff
+  // step (SaveContinueStep), then awaited at the reveal step — the user picks
+  // bots in between. The jobId + status survive navigation here (the job itself
+  // lives in dream_jobs, pollable by id from any screen).
+  firstDreamJobId: string | null;
+  firstDreamStatus: FirstDreamStatus;
+  setFirstDreamJobId: (id: string | null) => void;
+  setFirstDreamStatus: (s: FirstDreamStatus) => void;
+
   // Load existing profile for editing
   loadProfile: (profile: VibeProfile) => void;
 
   reset: () => void;
 }
+
+export type FirstDreamStatus =
+  | 'idle' // not started
+  | 'starting' // kickoff async in flight (describe → save → enqueue)
+  | 'enqueued' // jobId obtained, render in progress
+  | 'already_claimed' // returning user re-onboarding → skip to feed
+  | 'error'; // kickoff failed before enqueue
 
 function toggle<T>(arr: T[], item: T): T[] {
   return arr.includes(item) ? arr.filter((i) => i !== item) : [...arr, item];
@@ -184,6 +200,11 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   chromeHidden: false,
   setChromeHidden: (v) => set({ chromeHidden: v }),
 
+  firstDreamJobId: null,
+  firstDreamStatus: 'idle',
+  setFirstDreamJobId: (id) => set({ firstDreamJobId: id }),
+  setFirstDreamStatus: (s) => set({ firstDreamStatus: s }),
+
   loadProfile: (profile) => set({ profile, isHydrated: true }),
 
   reset: () =>
@@ -193,6 +214,8 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       isHydrated: false,
       scrollLocked: false,
       chromeHidden: false,
+      firstDreamJobId: null,
+      firstDreamStatus: 'idle',
       profile: { ...DEFAULT_VIBE_PROFILE },
     }),
 }));

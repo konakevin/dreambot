@@ -14,15 +14,14 @@ import { useFeedStore } from '@/store/feed';
 import { GradientButton } from '@/components/GradientButton';
 import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
-import { fetchEdge } from '@/lib/edgeFunction';
-import { grantWelcomeBonus } from '@/lib/welcomeBonus';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import {
-  enqueueFirstDream,
   awaitFirstDream,
   FirstDreamAlreadyClaimedError,
+  type FirstDreamResult,
 } from '@/lib/firstDreamQueue';
-import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
+import { startFirstDream } from '@/lib/firstDreamKickoff';
+import { trackFirstDreamGenerated } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
@@ -84,6 +83,12 @@ export function RevealStep({ onBack }: Props) {
   const reset = useOnboardingStore((s) => s.reset);
   const setChromeHidden = useOnboardingStore((s) => s.setChromeHidden);
   const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
+  // First dream is kicked off at the cutoff step (SaveContinueStep) and awaited
+  // here — these carry the in-flight job across the bots screen in between.
+  const firstDreamJobId = useOnboardingStore((s) => s.firstDreamJobId);
+  const firstDreamStatus = useOnboardingStore((s) => s.firstDreamStatus);
+  const setFirstDreamJobId = useOnboardingStore((s) => s.setFirstDreamJobId);
+  const setFirstDreamStatus = useOnboardingStore((s) => s.setFirstDreamStatus);
   const user = useAuthStore((s) => s.user);
   const engineConfig = useEngineConfig();
   const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
@@ -93,7 +98,10 @@ export function RevealStep({ onBack }: Props) {
   // buttons don't sit flush against the screen edge on SE-class devices.
   const overlayBottom = Math.max(insets.bottom + verticalScale(8), verticalScale(24));
 
-  const [phase, setPhase] = useState<Phase>('idle');
+  // The dream is already kicked off (at the cutoff step) by the time we mount, so
+  // start on the loader — never the legacy "Let's go!" idle screen. Edit mode (no
+  // first dream) starts idle to show its "Save changes" screen.
+  const [phase, setPhase] = useState<Phase>(isEditing ? 'idle' : 'generating');
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -106,7 +114,9 @@ export function RevealStep({ onBack }: Props) {
   // Only POST has an in-flight state now (the publish flip) — SKIP is an instant
   // redirect, so it never enters a busy state.
   const [busyAction, setBusyAction] = useState<'post' | null>(null);
-  const generating = useRef(false);
+  // Guards: one await/kick at a time, and run the on-mount kickoff/await once.
+  const awaiting = useRef(false);
+  const kickoffStarted = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
   // Aborts the first-dream poll loop on unmount / retry so a stale poll never
   // resolves into an unmounted screen.
@@ -137,167 +147,126 @@ export function RevealStep({ onBack }: Props) {
   // Abort any in-flight first-dream poll loop on unmount.
   useEffect(() => () => pollAbort.current?.abort(), []);
 
-  async function runBootSequence() {
-    await new Promise((r) => setTimeout(r, 1500));
+  // Append the rendered dream + flip to the reveal state.
+  function showDream(result: FirstDreamResult) {
+    setDreams((prev) => {
+      const next = [
+        ...prev,
+        {
+          url: result.url,
+          prompt: result.prompt,
+          medium: result.medium,
+          vibe: result.vibe,
+          uploadId: result.uploadId,
+        },
+      ];
+      const newIdx = next.length - 1;
+      setActiveIndex(newIdx);
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ x: newIdx * IMAGE_WIDTH, animated: true });
+      }, 100);
+      return next;
+    });
+    setPhase('reveal');
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    trackFirstDreamGenerated({ medium: result.medium, vibe: result.vibe });
   }
 
-  async function describeCastPhotos(): Promise<typeof profile.dream_cast> {
-    const described = await Promise.all(
-      profile.dream_cast.map(async (member) => {
-        // Skip if already described or no URL
-        if (member.description || !member.thumb_url) return member;
-        // Skip local file:// URIs — need a public URL
-        if (member.thumb_url.startsWith('file://')) return member;
-        try {
-          // fetchEdge guarantees a fresh access token per call (proactive
-          // refresh + 401 retry) — no stale-token 401 on a backgrounded device.
-          const res = await fetchEdge('describe-photo', {
-            image_url: member.thumb_url,
-            role: member.role,
-          });
-          if (!res.ok) throw new Error(`${res.status}`);
-          const data = await res.json();
-          if (__DEV__)
-            console.log(`[Reveal] Described ${member.role}:`, data.description?.slice(0, 80));
-          return {
-            ...member,
-            description: data.description ?? '',
-            ...(data.gender ? { gender: data.gender } : {}),
-            ...(typeof data.age === 'number' ? { age: data.age } : {}),
-            ...(data.physical_summary ? { physical_summary: data.physical_summary } : {}),
-          };
-        } catch (err) {
-          if (__DEV__) console.warn(`[Reveal] Failed to describe ${member.role}:`, err);
-          return member;
-        }
-      })
-    );
-    return described;
+  function handleDreamError(err: unknown) {
+    if (err instanceof FirstDreamAlreadyClaimedError) {
+      // Returning user re-onboarding — they already have their free first dream.
+      if (__DEV__) console.log('[Reveal] first dream already claimed → feed');
+      router.replace('/(tabs)');
+      return;
+    }
+    if ((err as Error)?.message === 'aborted') return; // unmount / retry — not a failure
+    if (__DEV__) console.warn('[Reveal] first dream failed:', err);
+    setError('We couldn’t finish your first dream just now.');
+    setPhase('reveal');
   }
 
-  async function generateImage() {
-    if (generating.current) return;
-    generating.current = true;
-    setPhase('booting');
+  // Poll the first dream that was already enqueued at the cutoff step.
+  async function awaitDream(jobId: string) {
+    if (awaiting.current) return;
+    awaiting.current = true;
     setError(null);
-
-    // Run boot-up sequence in parallel with saving profile + describing cast photos
-    const bootPromise = runBootSequence();
-
+    setPhase('generating');
+    pollAbort.current?.abort();
+    pollAbort.current = new AbortController();
     try {
-      // Describe cast photos (one-time AI vision call per photo). Timeout-
-      // guarded so a stalled vision call can never trap the loading screen — if
-      // it doesn't finish in time we proceed with the cast we already have.
-      let describedCast = profile.dream_cast;
-      try {
-        describedCast = await withTimeout(describeCastPhotos(), 45000);
-      } catch (err) {
-        if (__DEV__) console.warn('[Reveal] describe cast timed out/failed, proceeding:', err);
-      }
-      const profileWithDescriptions = {
-        ...profile,
-        dream_cast: describedCast,
-      };
-      describedProfile.current = profileWithDescriptions;
-
-      // Persist the profile (timeout-guarded — never trap the user before their
-      // dream if the write stalls; it's idempotent and re-saved on edit anyway).
-      if (user) {
-        try {
-          await withTimeout(saveVibeProfile(user.id, profileWithDescriptions), 15000);
-        } catch (err) {
-          if (__DEV__) console.warn('[Reveal] profile save timed out/failed:', err);
-        }
-      }
-
-      // END OF ONBOARDING — persist all remaining bookkeeping NOW, before the
-      // dream generates (welcome sparkles + completion + welcome-gift
-      // notification). Fire-and-forget so it never blocks generation OR the
-      // reveal: by the time the dream lands and the reveal shows, everything is
-      // already saved, so Post/Skip is a pure instant redirect.
-      void finalizeOnboarding();
-
-      await bootPromise;
-      setPhase('generating');
-
-      // Enqueue ONE first-dream job + poll for its terminal state. The
-      // dual → single → scene cascade runs server-side (first-dream-render
-      // advances tiers across isolates), so the client never holds a long HTTP
-      // connection — no more "loading forever". A fresh AbortController per run
-      // lets unmount / retry cancel the poll loop cleanly.
-      pollAbort.current?.abort();
-      pollAbort.current = new AbortController();
-      const jobId = await enqueueFirstDream(describedProfile.current);
       const result = await awaitFirstDream(jobId, { signal: pollAbort.current.signal });
       if (__DEV__) console.log('[Reveal] Got URL:', result.url?.slice(0, 80));
-
-      setDreams((prev) => {
-        const next = [
-          ...prev,
-          {
-            url: result.url,
-            prompt: result.prompt,
-            medium: result.medium,
-            vibe: result.vibe,
-            uploadId: result.uploadId,
-          },
-        ];
-        const newIdx = next.length - 1;
-        setActiveIndex(newIdx);
-        setTimeout(() => {
-          scrollRef.current?.scrollTo({ x: newIdx * IMAGE_WIDTH, animated: true });
-        }, 100);
-        return next;
-      });
-      setPhase('reveal');
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      // Non-network analytics about the rendered dream (medium/vibe only known
-      // now). Onboarding-completion + persistence already fired in
-      // finalizeOnboarding before generation.
-      trackFirstDreamGenerated({ medium: result.medium, vibe: result.vibe });
+      showDream(result);
     } catch (err) {
-      if (err instanceof FirstDreamAlreadyClaimedError) {
-        // Returning user re-onboarding: they already have their free first dream,
-        // so there's nothing new to reveal. Onboarding bookkeeping already fired
-        // (finalizeOnboarding above) — go straight to the feed, never loop.
-        if (__DEV__) console.log('[Reveal] first dream already claimed → feed');
-        router.replace('/(tabs)');
-        return;
-      }
-      if (__DEV__) console.warn('[Reveal] Generation failed:', err);
+      handleDreamError(err);
+    } finally {
+      awaiting.current = false;
+    }
+  }
+
+  // Re-run the FULL kickoff — used by "Try again", and as a defensive fallback if
+  // the reveal is somehow reached without the cutoff having started the dream.
+  async function retryDream() {
+    if (awaiting.current || !user) return;
+    awaiting.current = true;
+    setError(null);
+    setPhase('generating');
+    pollAbort.current?.abort();
+    pollAbort.current = new AbortController();
+    try {
+      setFirstDreamStatus('starting');
+      const jobId = await startFirstDream(profile, user.id, engineConfig.welcomeSparkleBonus);
+      setFirstDreamJobId(jobId);
+      setFirstDreamStatus('enqueued');
+      const result = await awaitFirstDream(jobId, { signal: pollAbort.current.signal });
+      showDream(result);
+    } catch (err) {
+      handleDreamError(err);
+    } finally {
+      awaiting.current = false;
+    }
+  }
+
+  // On mount: the dream was kicked off at the cutoff — await it (or handle its
+  // terminal kickoff state). Runs once. Edit mode (no first dream) is exempt.
+  useEffect(() => {
+    if (isEditing || kickoffStarted.current) return;
+    kickoffStarted.current = true;
+    if (firstDreamStatus === 'already_claimed') {
+      router.replace('/(tabs)');
+      return;
+    }
+    if (firstDreamStatus === 'error') {
       setError('We couldn’t finish your first dream just now.');
       setPhase('reveal');
-    } finally {
-      generating.current = false;
+      return;
     }
-  }
+    if (firstDreamJobId) {
+      void awaitDream(firstDreamJobId);
+      return;
+    }
+    if (firstDreamStatus === 'starting' || firstDreamStatus === 'enqueued') {
+      // Kickoff in flight; show the loader — the jobId effect awaits when it lands.
+      setPhase('generating');
+      return;
+    }
+    // Defensive: reached reveal with nothing started → kick off here.
+    void retryDream();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // End-of-onboarding bookkeeping — fired ONCE from generateImage before the
-  // dream renders, so the reveal has nothing left to persist. All best-effort +
-  // timeout-guarded; a failure here never blocks the user or the dream.
-  //   • welcome sparkles — the grant is idempotent (migration 258), so no
-  //     balance-check is needed; a missed grant here is rescued by
-  //     reconcileWelcomeBonus on the feed.
-  //   • completion analytics
-  //   • welcome-gift notification (no upload_id — it routes to /welcome-gift by
-  //     TYPE and the screen doesn't display a dream, so the id was vestigial)
-  async function finalizeOnboarding() {
-    if (!user) return;
-    trackOnboardingCompleted();
-    try {
-      await withTimeout(grantWelcomeBonus(user.id, engineConfig.welcomeSparkleBonus), 10000);
-      await withTimeout(
-        supabase.from('notifications').insert({
-          recipient_id: user.id,
-          actor_id: user.id,
-          type: 'welcome_gift',
-        }),
-        10000
-      );
-    } catch (err) {
-      if (__DEV__) console.warn('[Reveal] onboarding finalize failed:', err);
+  // When the background kickoff produces a jobId, start awaiting it.
+  useEffect(() => {
+    if (isEditing) return;
+    if (firstDreamJobId && phase === 'generating' && !awaiting.current && dreams.length === 0) {
+      void awaitDream(firstDreamJobId);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstDreamJobId]);
+
+  // (End-of-onboarding bookkeeping — welcome sparkles + completion + welcome-gift
+  // notification — now runs in lib/firstDreamKickoff.startFirstDream at the cutoff
+  // step, before the dream renders, so the reveal has nothing left to persist.)
 
   async function handleCreateBot(makePublic: boolean) {
     if (!user || !activeDream) return;
@@ -402,7 +371,7 @@ export function RevealStep({ onBack }: Props) {
           </Text>
           <GradientButton
             label="Let’s go!"
-            onPress={() => generateImage()}
+            onPress={() => retryDream()}
             style={{ alignSelf: 'stretch', marginTop: verticalScale(8) }}
           />
           <TouchableOpacity
@@ -446,7 +415,7 @@ export function RevealStep({ onBack }: Props) {
           <View
             style={{ alignSelf: 'stretch', paddingHorizontal: 32, marginTop: verticalScale(18) }}
           >
-            <GradientButton label="Try again" onPress={() => generateImage()} />
+            <GradientButton label="Try again" onPress={() => retryDream()} />
             {/* Escape hatch so a repeatedly-failing first dream never traps the
                 user (was app-restart-only). Aborts the poll, restores chrome,
                 and goes back to the previous "Let's go" step. */}

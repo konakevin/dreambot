@@ -16,6 +16,8 @@ import { WelcomeStep } from '@/components/onboarding/WelcomeStep';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
 import { LocationPickerStep } from '@/components/onboarding/LocationPickerStep';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
+import { SaveContinueStep } from '@/components/onboarding/SaveContinueStep';
+import { BotSelectorStep } from '@/components/onboarding/BotSelectorStep';
 import { RevealStep } from '@/components/onboarding/RevealStep';
 import { InfoStep } from '@/components/onboarding/InfoStep';
 // CREATE_INFO is intentionally NOT imported here — the Create-screen intro
@@ -67,8 +69,13 @@ const STEPS: StepConfig[] = [
     skipInEdit: true,
   },
   { key: 'personality', component: MoodSlidersStep },
-  // Bot intro + selection moved OUT of onboarding (2026-06-14) — now a first-run
-  // gate on the feed (components/FeedIntroGate), shown after "Go to my feed".
+  // CUTOFF (2026-06-18): "Save & continue" commits the profile and kicks the first
+  // dream off in the BACKGROUND, then the user meets the bots while it renders, and
+  // the reveal awaits it. save-continue / meet-bots / reveal are a forward-only
+  // region (see swipeLocked / noBack below). Bot selection moved back IN from the
+  // post-feed FeedIntroGate (removed) so the wait is spent doing something useful.
+  { key: 'save-continue', component: SaveContinueStep, skipInEdit: true },
+  { key: 'meet-bots', component: BotSelectorStep, skipInEdit: true },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
 
@@ -145,6 +152,16 @@ export default function OnboardingPager() {
     }
   }, [step, steps, profile.dream_seeds.places.length]);
 
+  // Forward-only region (the cutoff onward). swipeLocked: the cutoff + bots + reveal
+  // can't be swiped (the cutoff must advance via "Save & continue" so the first-dream
+  // kickoff actually fires; bots/reveal are post-commit). noBack: once past the
+  // cutoff there's no going back (the profile is saved + the dream is rendering) —
+  // the cutoff itself still allows Back to the vibe slider to reconsider.
+  const currentKey = steps[step - 1]?.key;
+  const swipeLocked =
+    currentKey === 'save-continue' || currentKey === 'meet-bots' || currentKey === 'reveal';
+  const noBack = currentKey === 'meet-bots' || currentKey === 'reveal';
+
   const onMomentumScrollEnd = useCallback(
     (e: { nativeEvent: { contentOffset: { x: number } } }) => {
       const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
@@ -165,7 +182,7 @@ export default function OnboardingPager() {
           <OnboardingHeader
             stepNumber={step}
             totalSteps={steps.length}
-            onBack={step > 1 || isEditing ? goBack : undefined}
+            onBack={!noBack && (step > 1 || isEditing) ? goBack : undefined}
           />
         )}
         {isEditing && (
@@ -200,7 +217,7 @@ export default function OnboardingPager() {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        scrollEnabled={canProceed && !scrollLocked}
+        scrollEnabled={!swipeLocked && canProceed && !scrollLocked}
         onMomentumScrollEnd={onMomentumScrollEnd}
         keyExtractor={(item) => item.key}
         getItemLayout={(_, index) => ({
