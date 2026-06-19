@@ -34,7 +34,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -332,11 +332,17 @@ export default function CreateScreen() {
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
   // Collapse the model + medium/vibe controls into a one-line summary while the
-  // keyboard is up on any ENGINE dream (DreamBot mode OR a photo) — keeps the
-  // selected medium/vibe visible and the Dream CTA one tap away. NOT in Direct
-  // mode (no medium/vibe there). Tapping the summary dismisses the keyboard,
-  // which restores the full form.
-  const collapsed = kbOpen && !effectiveExactPrompt;
+  // keyboard is up — keeps the selected medium/vibe visible and the Dream CTA one
+  // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
+  // dismisses the keyboard, which restores the full form.
+  //
+  // For the TEXT-ONLY main view (no photo) on normal/large devices we DON'T
+  // collapse — there's plenty of room, so the full controls stay visible while
+  // typing (the Dream CTA is a sticky footer above the keyboard regardless).
+  // We still collapse when a photo is attached (that view is taller) and on
+  // SE-class (height < 700pt), where the expanded form would crowd the keyboard.
+  const { isSmall } = useDeviceClass();
+  const collapsed = kbOpen && !effectiveExactPrompt && (hasPhoto || isSmall);
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
