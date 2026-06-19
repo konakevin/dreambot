@@ -498,10 +498,18 @@ export function assembleCharacterPrompt(
       mediumSignal,
       location ? `set at ${location}` : '',
       singleAnchor,
+      // Environment FRONT-LOADED — same fix as the dual path. It used to sit after
+      // the wardrobe block + framing, so Flux read a "frontal portrait" and
+      // rendered a plain/studio backdrop, ignoring the scene. Moved right after the
+      // single anchor with a positive "fills the background" cue (no negation). The
+      // waist-up framing below keeps the subject prominent so the scene can't
+      // dwarf them.
+      slots.scene_description
+        ? `${slots.scene_description} — the full scene fills the entire background with rich, layered environmental detail`
+        : '',
       input.action || '',
       identityBlock,
       framingBlock,
-      slots.scene_description,
       slots.mood,
       slots.props,
       'foreground midground background stacked top to bottom, layered depth',
