@@ -47,40 +47,43 @@ No detection for 3 months.
 
 ---
 
-## P1 — Data integrity (D4) ⚠️VERIFY against the dump
+## P1 — Data integrity (D4) ✅ GROUNDED against the live catalog (2026-06-18)
 
-Adding a UNIQUE/CHECK fails if existing data violates it, so each needs a pre-check (or
-`ADD … NOT VALID` then `VALIDATE`). Candidates (confirm present-or-missing on live first):
+Introspected `pg_constraint` directly. **Most agent findings were FALSE** — the constraints
+exist. Reconciled truth:
 
-| Gap | Table | Risk | Fix |
-|---|---|---|---|
-| UNIQUE missing? | `likes(user_id,upload_id)` | double-like → 2× count + 2× push | `CREATE UNIQUE INDEX IF NOT EXISTS … ` after dedupe |
-| UNIQUE missing? | `upscale_requests(user_id,upload_id)` | double HD request | same |
-| UNIQUE missing? | `post_shares(sender_id,receiver_id,upload_id)` | double share | same |
-| CHECK missing | `dream_jobs.status`, `upscale_jobs.status`, `dream_queue.weight` | invalid status stored | `ADD CONSTRAINT … CHECK (… IN (…))` |
-| floor (`>=0`) | `users.sparkle_balance`, `uploads.*_count`, `comments.*_count` | negative via direct UPDATE (freeze-trigger guards economic ones, but counters not) | `ADD CONSTRAINT … CHECK (col >= 0)` |
-| FK on-delete | sweep all FKs for orphan-causing (no FK) vs over-cascade | data orphans / surprise deletes | per-FK fix |
+| Agent claim | Live reality | Verdict |
+|---|---|---|
+| `likes(user_id,upload_id)` UNIQUE missing | `CONSTRAINT likes UNIQUE (user_id, upload_id)` present | ❌ refuted |
+| `post_reposts` UNIQUE missing | `UNIQUE (reposter_id, upload_id)` present | ❌ refuted |
+| `favorites` UNIQUE missing | `UNIQUE (user_id, upload_id)` present | ❌ refuted |
+| `dream_jobs.status` CHECK missing | `CHECK (status IN queued/processing/done/failed/nsfw/timeout)` present | ❌ refuted |
+| `dream_queue.weight/.status/.source` CHECK missing | all three present | ❌ refuted |
+| `comments`/`uploads`/`users` length CHECKs | all present (body 1–500, caption ≤200, bio ≤160, name ≤50, username regex, email/username UNIQUE) | ✅ already good |
+| counter `CHECK(>=0)` floors | **unnecessary** — columns are frozen + UPDATE-revoked (mig 278); only the DEFINER triggers write them → flooring the *triggers* (mig 286 + 290) is the real fix | ✅ handled, no CHECK |
 
-> Note: `dream_queue.dedup_key` UNIQUE (idempotency) + the `sparkle_transactions` grant-dedup
-> partial index are **present** (mig 259/258) — those are good.
+**Genuinely missing / minor (deferred, low value):** `upscale_requests` and `post_shares`
+have no UNIQUE — but their index sets weren't introspected and a double-share may be intentional;
+revisit only if double-request bugs surface. `comment_likes` UNIQUE is its PK (contype `p`, not
+queried). FK on-delete sweep still worth a pass but no orphan bug observed.
 
 ---
 
-## P1 — Indexes & performance (D3) ⚠️VERIFY
+## P1 — Indexes & performance (D3) ✅ GROUNDED (2026-06-18)
 
-`CREATE INDEX IF NOT EXISTS` is always safe (additive). Confirmed-good: all rate-limit count()
-queries are indexed; queue-claim, notifications, ai_generation_log are indexed.
+Introspected `pg_indexes`. The "missing composite membership" claims were FALSE — the unique
+keys (`likes_user_id_upload_id_key`, `follows_follower_id_following_id_key`,
+`post_reposts_reposter_id_upload_id_key`, `favorites_user_id_upload_id_key`) ARE those composite
+indexes. `idx_dream_queue_user_status` also exists. **One genuine gap:**
 
-| Missing index | Why | DDL |
+| Missing index | Why | Status |
 |---|---|---|
-| `blocked_users(blocked_id)` (reverse) | feed block-filter `UNION` seq-scans the reverse arm (`blocker_id` is indexed, `blocked_id` is not) | `CREATE INDEX IF NOT EXISTS idx_blocked_users_blocked ON blocked_users(blocked_id, blocker_id);` |
-| `dream_queue(user_id,status)` partial | per-user in-flight cap check on every create | `… (user_id) WHERE status IN ('queued','in_progress');` |
-| composite membership | `likes`/`follows`/`post_reposts`/`favorites` use two single-col indexes for a 2-col equality | `(user_id, upload_id)` etc. |
+| `blocked_users(blocked_id, blocker_id)` | feed block-filter `UNION` seq-scans the reverse arm — live has `idx_blocked_users_blocker` + a `(blocker_id, blocked_id)` composite, neither leads on `blocked_id` | ✅ added in **mig 290** |
 
-Drop **after `pg_stat_user_indexes` confirms 0 scans**: `idx_uploads_user_phash_recent`,
-`idx_uploads_user_hash_recent`, `idx_uploads_view_count`, `idx_object_cards_name`,
-`uploads_image_url_hq_present_idx`, and the superseded `idx_dream_queue_pending` (replaced by
-`idx_dream_queue_pending_weight`, mig 265).
+Drop-candidate (verify `pg_stat_user_indexes` shows 0 scans first): `idx_dream_queue_pending`
+appears superseded by `idx_dream_queue_pending_weight`. The other drop candidates from the
+inferred pass (`idx_uploads_user_phash_recent` etc.) need a stat check before removal — deferred,
+they cost only disk, not correctness.
 
 ---
 
@@ -91,12 +94,14 @@ Confirmed live + no code references → safe `DROP … IF EXISTS`:
 - `uploads.from_wish` (same) — also remove its line from the `freeze_upload_columns_on_update` trigger
 - Vestigial twin/fuse remnants + `is_approved` (SightEngine, dead) — **verify-then-drop** (`is_approved` is still read in old feed-ranking RPCs, so drop the column AND the `OR is_approved` clauses together, or leave).
 
-Dead trigger functions (retired twin/fuse features): `update_twin_count`, `update_fuse_count`
-are `SECURITY INVOKER` + missing `search_path` + no floor — but they fire on dropped columns,
-so they're dead → **drop the triggers + functions** rather than fix.
+Dead trigger functions (retired twin/fuse features): ✅ **already gone** — `update_twin_count` /
+`update_fuse_count` did NOT appear in the live `pg_proc` introspection (the `LIKE 'update_%count%'`
+sweep returned only the 6 real counters), so there's nothing to drop. Refuted.
 
-Counter floors still missing `GREATEST(…,0)` on DELETE (minor drift risk): `update_save_count`,
-`update_share_count`, `update_comment_like_count`. Redefine (function-only, no data dependency).
+Counter floors missing `GREATEST(…,0)` on DELETE: live `pg_proc` confirmed `update_save_count`,
+`update_share_count`, `update_comment_like_count` had `floor=false` (the other 3 floored by mig 286).
+✅ **Fixed in mig 290** — redefined all three with `GREATEST(…,0)` + pinned `search_path` (function-
+only, no data dependency). All 6 counter triggers are `SECURITY DEFINER`.
 
 ---
 
@@ -117,11 +122,20 @@ Drift happened because **migrations are hand-applied with no verification**. Fix
 
 ## Sequenced execution
 
-1. **Pull the authoritative live dump** (needs Docker running, or the DB password) — grounds P1.
-2. **Migration: reports drift fix** + `useReport.ts` edit + restore details sanitize (P0, fixes a broken safety feature). *(Grounded now — does not need the dump.)*
-3. **Migration: missing indexes** (P1, all `IF NOT EXISTS` — safe now; drop-unused waits for dump).
-4. **Migration: integrity constraints** (P1 — needs dump + per-constraint data pre-check).
-5. **Migration: dead-schema cleanup** (P2 — grounded in gen-types).
-6. **CI drift check** (P0 process).
+1. ✅ **Live introspection** (2026-06-18) — got the authoritative `pg_constraint` / `pg_indexes` /
+   `pg_proc` state via an SQL-editor query (Docker/pg_dump/DB-password all unavailable). This
+   REFUTED nearly every inferred P1 finding — see the grounded tables above.
+2. ✅ **Migration 289: reports drift fix** + `useReport.ts` edit + restored details sanitize (P0,
+   fixed the broken report-a-user/comment safety feature — verified live).
+3. ✅ **Migration 290: grounded integrity** — the only two real fixes left after grounding:
+   `idx_blocked_users_blocked` (reverse block-filter) + the 3 missing counter-decrement floors.
+4. **Migration: dead-schema cleanup** (P2 — `wish_*` / `from_wish` column drops, grounded in
+   gen-types). *Still TODO — low risk, additive cleanup.*
+5. **CI drift check** (P0 process) — the most valuable remaining deliverable: a job that diffs
+   `supabase gen types` (live) vs the committed `types/database.ts` so the next 047-style partial-
+   apply is caught in CI, not 3 months later in prod. *Still TODO.*
+
+**Integrity work is essentially complete** — grounding collapsed a scary-looking backlog into two
+small, safe migrations. What remains is P2 cosmetic cleanup + the anti-drift process guard.
 
 **Each as its own reviewable migration**, applied deliberately — not a big-bang.
