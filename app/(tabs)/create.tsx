@@ -698,7 +698,7 @@ export default function CreateScreen() {
               >
                 {config.photoStyle === 'new_scene'
                   ? 'We’ll invent a fresh scene around you. Works best with a clear single-subject photo.'
-                  : 'We’ll keep your pose and restyle it in this medium. Restyle uses one model built for accurate edits, so the model picker doesn’t apply here.'}
+                  : 'We’ll keep your pose and restyle it in this medium. Restyle picks the best edit model for each medium, so the model picker doesn’t apply here.'}
               </Text>
             </View>
           )}
@@ -1036,40 +1036,39 @@ export default function CreateScreen() {
                 </TouchableOpacity>
               </View>
 
-              {/* Vibe — hidden for Restyle (medium-only Kontext edit). */}
-              {!(hasPhoto && config.photoStyle === 'restyle') && (
-                <View className="flex-1">
+              {/* Vibe — shown for Restyle too; the selected vibe modulates the
+                  restyle (Kevin's choice to keep vibe applying). */}
+              <View className="flex-1">
+                <Text
+                  className="text-xs font-medium mb-1.5 ml-1"
+                  style={{ color: colors.textSecondary }}
+                >
+                  Vibe
+                </Text>
+                <TouchableOpacity
+                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPickerType('vibe');
+                  }}
+                  activeOpacity={0.7}
+                >
                   <Text
-                    className="text-xs font-medium mb-1.5 ml-1"
-                    style={{ color: colors.textSecondary }}
+                    className="text-sm font-semibold"
+                    style={{ color: colors.textPrimary }}
+                    numberOfLines={1}
                   >
-                    Vibe
+                    {vibeLabel}
                   </Text>
-                  <TouchableOpacity
-                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      setPickerType('vibe');
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <Text
-                      className="text-sm font-semibold"
-                      style={{ color: colors.textPrimary }}
-                      numberOfLines={1}
-                    >
-                      {vibeLabel}
-                    </Text>
-                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-              )}
+                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </KeyboardAwareScrollView>
