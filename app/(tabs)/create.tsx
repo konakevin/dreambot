@@ -838,9 +838,9 @@ export default function CreateScreen() {
                   >
                     {mediumLabel}
                   </Text>
-                  {/* Color-coded FACE/ART tag (matches the medium picker). Hidden on
-                      photo dreams, which don't run the face swap. */}
-                  {!hasPhoto && (
+                  {/* Color-coded FACE/ART tag — shown in all modes (matches the
+                      medium picker). */}
+                  {(isSurpriseMedium || selectedMediumRow) && (
                     <View
                       style={{
                         marginLeft: 5,
@@ -1002,10 +1002,9 @@ export default function CreateScreen() {
                     >
                       {mediumLabel}
                     </Text>
-                    {/* FACE/ART tag indicates whether the medium face-swaps. Hidden
-                        in uploaded-picture mode (hasPhoto) — photo dreams don't run
-                        the face swap, so the tag would be misleading there. */}
-                    {(isSurpriseMedium || selectedMediumRow) && !hasPhoto && (
+                    {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
+                        so the medium's type is always visible on the picker. */}
+                    {(isSurpriseMedium || selectedMediumRow) && (
                       <View
                         style={{
                           paddingHorizontal: 5,
