@@ -22,6 +22,7 @@ import { pickDualAction } from './pools/dual_actions.ts';
 import { applyVibeGenderModifier } from './promptCompiler.ts';
 import { applyFaceSwapOverride } from './faceSwapFluxOverrides.ts';
 import { classifyDualAction } from './dualActionDetector.ts';
+import { buildDualGenderFront } from './dualSideOrder.ts';
 
 export function buildDualBrief(input: CompilerInput): CompilerOutput {
   const { medium: rawMedium, vibe, scene, cast, composition, profile } = input;
@@ -78,10 +79,9 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
           : null;
   const leftG = parseGender(cast[0].genderLock);
   const rightG = parseGender(cast[1].genderLock);
-  const genderFront =
-    leftG && rightG
-      ? `${leftG === 'male' ? 'MAN' : 'WOMAN'} on the LEFT, ${rightG === 'male' ? 'MAN' : 'WOMAN'} on the RIGHT, `
-      : '';
+  // cast[0] is whatever the side-flip placed on the LEFT, so this front-load
+  // always matches the rendered side. (buildDualGenderFront is unit-tested.)
+  const genderFront = buildDualGenderFront(leftG, rightG);
   const dualPrepend =
     genderFront + dualPath.prepend.replace('{realisticFaceTag}', realisticFaceTag);
 

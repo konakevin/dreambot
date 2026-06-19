@@ -45,6 +45,7 @@ import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
+import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import {
   completeQueueJob,
   failQueueJob,
@@ -978,6 +979,16 @@ Output ONLY the prompt.`;
         const self = castMembers.find((m: DreamCastMember) => m.role === 'self');
         const plusOne = castMembers.find((m: DreamCastMember) => m.role === 'plus_one');
         castMembers = self && plusOne ? [self, plusOne] : [self ?? castMembers[0]];
+      }
+
+      // Randomize which dual-cast member lands on the LEFT vs RIGHT (~50%) so the
+      // same person isn't always on the same side. castMembers order drives BOTH
+      // the brief (CHARACTER 1 = LEFT, via resolveCastForPrompt) and the swap
+      // sources, so flipping it once here is consistent end-to-end. Safe: the
+      // gender-safe router pastes by DETECTED gender, so it follows whichever side
+      // Sonnet actually placed each person.
+      if (isFaceSwapEligible && castMembers.length === 2 && shouldFlipDualSide()) {
+        castMembers = orderDualSides(castMembers[0], castMembers[1], true);
       }
 
       // Direct mode (use_exact_prompt) must win over cast/self-insert detection.

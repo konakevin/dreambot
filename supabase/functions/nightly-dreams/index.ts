@@ -48,6 +48,7 @@ import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
+import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import {
   aHashHex,
@@ -537,9 +538,20 @@ Deno.serve(async (req) => {
       nightlyPath,
       composition,
       compositionMode,
-      castMembers: selectedCast,
+      castMembers: rolledCast,
       includeLocation,
     } = dreamRoll;
+    // Randomize which dual-cast member lands on the LEFT vs RIGHT (~50%) so the
+    // same person isn't always on the same side. selectedCast order drives BOTH
+    // the brief (CHARACTER 1 = LEFT) and the swap dispatch, so flipping it once
+    // here is consistent end-to-end. Safe: the gender-safe router (dualGenderRouting)
+    // pastes each face onto its gender-matching body from the DETECTED render, so
+    // it follows whichever side Sonnet actually placed each person. Single/pet
+    // casts are untouched.
+    const selectedCast =
+      rolledCast.length === 2 && shouldFlipDualSide()
+        ? orderDualSides(rolledCast[0], rolledCast[1], true)
+        : rolledCast;
     // Character renders MUST be stylized art mediums — realistic mediums
     // (hyperreal / render / photography) push Flux into "generic adult"
     // proportions (older + bulkier + wrong hair) that fight every face-swap
