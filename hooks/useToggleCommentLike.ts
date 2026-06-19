@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
-import type { Comment } from '@/hooks/useComments';
+import type { Comment, CommentsPage } from '@/hooks/useComments';
 
 interface ToggleLikeArgs {
   commentId: string;
@@ -10,12 +10,22 @@ interface ToggleLikeArgs {
   currentlyLiked: boolean;
 }
 
-function updateCommentInPages(pages: Comment[][], commentId: string, liked: boolean): Comment[][] {
-  return pages.map((page) =>
-    page.map((c) =>
+// useComments is an infinite query whose pages are CommentsPage OBJECTS
+// ({ rows, hasMore, nextOffset }) — NOT bare Comment[] arrays. The comments
+// live under page.rows, so we must map there. (Treating a page as an array
+// threw `page.map is not a function` inside onMutate, which aborted the whole
+// mutation before the DB write — the heart did nothing, count never moved.)
+function updateCommentInPages(
+  pages: CommentsPage[],
+  commentId: string,
+  liked: boolean
+): CommentsPage[] {
+  return pages.map((page) => ({
+    ...page,
+    rows: page.rows.map((c) =>
       c.id === commentId ? { ...c, isLiked: liked, likeCount: c.likeCount + (liked ? 1 : -1) } : c
-    )
-  );
+    ),
+  }));
 }
 
 export function useToggleCommentLike() {
@@ -44,9 +54,9 @@ export function useToggleCommentLike() {
       // Optimistically update comments
       const commentsKey = ['comments', uploadId];
       await queryClient.cancelQueries({ queryKey: commentsKey });
-      const prevComments = queryClient.getQueryData<InfiniteData<Comment[]>>(commentsKey);
+      const prevComments = queryClient.getQueryData<InfiniteData<CommentsPage>>(commentsKey);
       if (prevComments) {
-        queryClient.setQueryData<InfiniteData<Comment[]>>(commentsKey, {
+        queryClient.setQueryData<InfiniteData<CommentsPage>>(commentsKey, {
           ...prevComments,
           pages: updateCommentInPages(prevComments.pages, commentId, liked),
         });

@@ -31,7 +31,7 @@ function mapRow(row: Record<string, unknown>): Comment {
   };
 }
 
-interface CommentsPage {
+export interface CommentsPage {
   rows: Comment[];
   hasMore: boolean;
   nextOffset: number;
