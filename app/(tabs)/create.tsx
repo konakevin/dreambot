@@ -672,8 +672,11 @@ export default function CreateScreen() {
                   color: colors.textPrimary,
                   // Fixed height — long prompts scroll internally rather than
                   // stretching the box. iOS multiline TextInputs scroll
-                  // automatically when height is fixed.
-                  height: 120,
+                  // automatically when height is fixed. A bit taller than strictly
+                  // needed so the box reads as "write something here" and the page
+                  // feels fuller; the KeyboardAwareScrollView still floats it above
+                  // the keyboard on focus.
+                  height: 144,
                   textAlignVertical: 'top',
                 }}
                 placeholder={placeholder}
