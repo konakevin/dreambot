@@ -11,6 +11,9 @@ settings that produced these live in [`../DREAMBOT_MASCOT_PROMPTS.md`](../DREAMB
 - **`app-states/`** — a starter suite of mascot moods: `cheer` (success), `sleep` (nightly/
   loading), `wave` (welcome), `think` (searching/loading), `gift` (sparkle reward), `peek`
   (empty state).
+- **`icon-replica-attempts/`** — 10 candidate app-icon replacements (antenna-free), generated
+  with the original `icon.png` as a Flux `image_prompt` reference at varied strengths (lower
+  number = lower strength = less antenna, looser composition). Picking a replacement here.
 
 Reference only — not bundled into the app (except the one oops-bot copied into `assets/`).
 To make more in the same style, follow the recipe doc.
