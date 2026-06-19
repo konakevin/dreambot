@@ -673,6 +673,13 @@ export default function CreateScreen() {
             >
               <TextInput
                 ref={promptRef}
+                // Remount when the placeholder text changes (photo<->no-photo).
+                // iOS doesn't re-wrap a multiline placeholder when the prop
+                // changes while unfocused — it stays clipped to one line until
+                // the next focus/relayout. Keying on the placeholder forces a
+                // fresh layout so the full hint wraps immediately. Only fires on
+                // the photo toggle (2 placeholder values), never on keystrokes.
+                key={placeholder}
                 className="px-4 py-4 text-base"
                 style={{
                   color: colors.textPrimary,
