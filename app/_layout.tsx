@@ -277,19 +277,6 @@ function RealtimeSubscriber() {
       )
       .on(
         'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'users',
-          filter: `id=eq.${user.id}`,
-        },
-        () => {
-          // Balance or profile changed — refresh sparkles immediately
-          queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
-        }
-      )
-      .on(
-        'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
           // New dream generated for this user — refresh feeds (single predicate call)
@@ -301,25 +288,22 @@ function RealtimeSubscriber() {
           });
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'dream_jobs',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          const status = (payload.new as { status?: string }).status;
-          if (status === 'done') {
-            // Queued dream finished — refresh grouped inbox + badge + dreams.
-            queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
-            queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-          }
+      .subscribe((status) => {
+        // CRITICAL: postgres_changes silently delivers NOTHING if ANY bound
+        // table isn't in the supabase_realtime publication — the whole channel
+        // goes CHANNEL_ERROR and every binding dies, including the
+        // notification→toast trigger above. This screen used to bind `users`
+        // (UPDATE) and `dream_jobs` (UPDATE), neither of which was ever added to
+        // the publication (only notifications/uploads/user_recipes/dream_queue
+        // were), which killed the channel and suppressed every in-app toast.
+        // Those bindings were removed (their work is covered: the notifications
+        // INSERT below refreshes inbox+badge; the uploads INSERT refreshes
+        // my-dreams). Log any future channel error loudly so this can't hide
+        // again.
+        if (__DEV__ && (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT')) {
+          console.warn(`[realtime] user-${user.id} channel: ${status}`);
         }
-      )
-      .subscribe();
+      });
 
     return () => {
       supabase.removeChannel(channel);
