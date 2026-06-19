@@ -244,18 +244,25 @@ export default function SettingsScreen() {
                       }
                     }
 
-                    // Also clean the avatars bucket: avatar + cast photos
-                    // (separate bucket, not covered by list_my_upload_paths).
-                    // Build from in-memory state — no extra RPC needed.
+                    // Also clean the avatars + cast-photos buckets: profile
+                    // avatar + cast face photos (separate buckets, not covered
+                    // by list_my_upload_paths). Build from in-memory state — no
+                    // extra RPC needed. Cast photos are in the PRIVATE
+                    // `cast-photos` bucket (storage_path); legacy un-migrated
+                    // ones may still be a public `avatars` URL (thumb_url).
                     const avatarPaths: string[] = [];
+                    const castPaths: string[] = [];
                     if (profile?.avatar_url) {
                       const m = profile.avatar_url.match(/\/avatars\/(.+?)(\?|$)/);
                       if (m?.[1]) avatarPaths.push(decodeURIComponent(m[1]));
                     }
                     for (const cm of vibeProfile.dream_cast ?? []) {
-                      if (!cm.thumb_url) continue;
-                      const m = cm.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
-                      if (m?.[1]) avatarPaths.push(decodeURIComponent(m[1]));
+                      if (cm.storage_path) {
+                        castPaths.push(cm.storage_path);
+                      } else if (cm.thumb_url) {
+                        const m = cm.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
+                        if (m?.[1]) avatarPaths.push(decodeURIComponent(m[1]));
+                      }
                     }
                     if (avatarPaths.length > 0) {
                       await supabase.storage
@@ -263,6 +270,14 @@ export default function SettingsScreen() {
                         .remove(avatarPaths)
                         .catch((e) => {
                           if (__DEV__) console.warn('[settings] storage cleanup failed', e);
+                        });
+                    }
+                    if (castPaths.length > 0) {
+                      await supabase.storage
+                        .from('cast-photos')
+                        .remove(castPaths)
+                        .catch((e) => {
+                          if (__DEV__) console.warn('[settings] cast cleanup failed', e);
                         });
                     }
 
@@ -368,6 +383,26 @@ export default function SettingsScreen() {
               icon="trash-outline"
               label="Reset Profile + Tutorials (test)"
               onPress={async () => {
+                // Purge cast face photos from storage first — the reset RPC
+                // can't touch storage, so without this the reset-and-re-onboard
+                // test loop leaks orphaned face photos. Owner-RLS lets the client
+                // delete its own files. Best-effort (both buckets: new private +
+                // legacy public).
+                if (user) {
+                  for (const bucket of ['cast-photos', 'avatars'] as const) {
+                    try {
+                      const { data: files } = await supabase.storage
+                        .from(bucket)
+                        .list(user.id, { limit: 1000 });
+                      const paths = (files ?? [])
+                        .filter((f) => f.name.startsWith('cast-'))
+                        .map((f) => `${user.id}/${f.name}`);
+                      if (paths.length) await supabase.storage.from(bucket).remove(paths);
+                    } catch {
+                      /* non-fatal */
+                    }
+                  }
+                }
                 // Server-side reset (migration 287): flips has_ai_recipe, deletes
                 // user_recipes, AND releases the free-first-dream claim — the last
                 // of which the client can't delete under RLS, and whose absence

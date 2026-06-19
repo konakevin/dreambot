@@ -45,8 +45,10 @@ export type CastRelationship = 'partner' | 'friend' | 'family';
 export interface DreamCastMember {
   /** 'self' | 'plus_one' | 'pet' */
   role: 'self' | 'plus_one' | 'pet';
-  /** Thumbnail URL stored in Supabase storage */
-  thumb_url: string;
+  /** Legacy public URL (un-migrated members). New uploads use `storage_path`. */
+  thumb_url?: string;
+  /** Object path in the PRIVATE `cast-photos` bucket (migration 292). */
+  storage_path?: string;
   /** AI-generated text description of appearance (set once at save time) */
   description: string;
   /** Explicit gender from vision describe — used by castResolver for gender lock. Pets have no gender. */

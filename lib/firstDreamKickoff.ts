@@ -11,6 +11,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
+import { castSignedUrl } from '@/lib/castPhoto';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { grantWelcomeBonus } from '@/lib/welcomeBonus';
 import { enqueueFirstDream } from '@/lib/firstDreamQueue';
@@ -32,11 +33,15 @@ function withTimeout<T>(p: PromiseLike<T>, ms: number): Promise<T> {
 async function describeCastPhotos(cast: DreamCastMember[]): Promise<DreamCastMember[]> {
   return Promise.all(
     cast.map(async (member) => {
-      if (member.description || !member.thumb_url) return member;
-      if (member.thumb_url.startsWith('file://')) return member; // need a public URL
+      if (member.description) return member;
+      // Resolve a fetchable URL: a signed URL for a private storage_path, or the
+      // legacy public thumb_url. (Normally a no-op — the cast was described at
+      // upload time — but this is the kickoff's safety re-describe.)
+      const src = member.storage_path ? await castSignedUrl(member.storage_path) : member.thumb_url;
+      if (!src || src.startsWith('file://')) return member; // need a public URL
       try {
         const res = await fetchEdge('describe-photo', {
-          image_url: member.thumb_url,
+          image_url: src,
           role: member.role,
         });
         if (!res.ok) throw new Error(`${res.status}`);

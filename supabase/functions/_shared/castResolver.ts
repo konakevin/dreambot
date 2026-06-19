@@ -9,7 +9,11 @@
 
 export interface DreamCastMember {
   role: string;
-  thumb_url: string;
+  /** Legacy public URL (un-migrated). New uploads use `storage_path`; both are
+   *  hydrated to a fetchable `thumb_url` before this resolver runs. */
+  thumb_url?: string;
+  /** Object path in the PRIVATE `cast-photos` bucket (migration 292). */
+  storage_path?: string;
   description: string;
   /** Explicit gender set at describe-photo time — preferred over regex inference */
   gender?: 'male' | 'female';
@@ -83,7 +87,10 @@ export function resolveCastForPrompt(
         promptDesc,
         genderLock,
         gender,
-        sourcePhotoUrl: member.thumb_url,
+        // The `.filter(m => m.thumb_url)` above guarantees this is set at
+        // runtime (cast sources are hydrated to a fetchable thumb_url before
+        // this resolver runs); the `?? ''` only satisfies the optional type.
+        sourcePhotoUrl: member.thumb_url ?? '',
         physicalTraits: sanitizeUserText(member.physical_summary || '', 'vision'),
         relationship: member.relationship,
       };

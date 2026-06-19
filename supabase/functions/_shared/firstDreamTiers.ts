@@ -23,6 +23,8 @@
 export interface CastMemberLike {
   role?: string;
   thumb_url?: string;
+  /** Object path in the PRIVATE `cast-photos` bucket (migration 292). */
+  storage_path?: string;
 }
 
 export interface FirstDreamTier {
@@ -32,8 +34,14 @@ export interface FirstDreamTier {
 }
 
 function usable(cast: CastMemberLike[], role: string): boolean {
+  // A member is usable when it has a PRIVATE storage_path (resolved to a signed
+  // URL at render time) OR a legacy public http thumb_url. At enqueue time a
+  // freshly-uploaded cast carries only storage_path, so a bare http check would
+  // wrongly drop the user from their own first dream.
   return cast.some(
-    (m) => m.role === role && typeof m.thumb_url === 'string' && m.thumb_url.startsWith('http')
+    (m) =>
+      m.role === role &&
+      (!!m.storage_path || (typeof m.thumb_url === 'string' && m.thumb_url.startsWith('http')))
   );
 }
 

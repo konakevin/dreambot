@@ -61,10 +61,11 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
     //
     // The upload wait is load-bearing: a fast user can reach this cutoff before a
     // cast photo finishes uploading. If we enqueued then, the profile's
-    // dream_cast thumb_urls aren't yet http → buildFirstDreamTiers (server) sees
-    // no usable cast → a scene-only first dream with NO face swap. We wait for
-    // castUploadsInFlight to hit 0 (capped so a stuck upload can't trap it), then
-    // read the FRESH profile so the kickoff always sees the settled cast.
+    // dream_cast members wouldn't yet have a storage_path → buildFirstDreamTiers
+    // (server) sees no usable cast → a scene-only first dream with NO face swap.
+    // We wait for castUploadsInFlight to hit 0 (capped so a stuck upload can't
+    // trap it), then read the FRESH profile so the kickoff always sees the
+    // settled cast.
     setFirstDreamStatus('starting');
     if (user) {
       void (async () => {

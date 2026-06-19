@@ -13,9 +13,11 @@
  *   3. dream_queue source='first_dream'   → releases the one-free-first-dream
  *      (+ matching dream_jobs)               claim so they get a fresh one
  *   4. user_first_run (delete)            → first-run tutorials re-show
+ *   5. cast photos (delete from storage)  → both the PRIVATE `cast-photos` bucket
+ *      and any legacy `avatars` cast-* files, so the reset-and-re-onboard loop
+ *      doesn't leak orphaned face photos (it used to — 100+ piled up from testing)
  *
- * Leaves alone: their cast photos in storage (re-onboarding re-uploads; old ones
- * are harmless), their existing dreams/likes/feed history, sparkles, Pro status.
+ * Leaves alone: their existing dreams/likes/feed history, sparkles, Pro status.
  *
  * Usage:
  *   node scripts/reset-user.js <userId>                # reset by uuid
@@ -47,6 +49,32 @@ function arg(name) {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DRY = arg('dry-run') === true;
+
+// Cast face photos live in the user's own folder in the PRIVATE `cast-photos`
+// bucket (new) and possibly the `avatars` bucket (legacy). List the user's
+// folder in each and return every `cast-*` object path.
+async function listCastPaths(userId) {
+  const paths = [];
+  for (const bucket of ['cast-photos', 'avatars']) {
+    const { data: files } = await sb.storage.from(bucket).list(userId, { limit: 1000 });
+    for (const f of files || []) {
+      if (f.name.startsWith('cast-')) paths.push({ bucket, path: `${userId}/${f.name}` });
+    }
+  }
+  return paths;
+}
+
+async function purgeCastPhotos(castPaths) {
+  const byBucket = {};
+  for (const { bucket, path } of castPaths) (byBucket[bucket] ||= []).push(path);
+  let removed = 0;
+  for (const [bucket, paths] of Object.entries(byBucket)) {
+    const { error } = await sb.storage.from(bucket).remove(paths);
+    if (error) console.warn(`  ⚠️  cast purge (${bucket}) failed: ${error.message}`);
+    else removed += paths.length;
+  }
+  return removed;
+}
 
 async function resolveUserId() {
   const positional = process.argv.slice(2).find((a) => UUID_RE.test(a));
@@ -91,6 +119,7 @@ async function resolveUserId() {
   const recipes = await countOf('user_recipes', { user_id: userId });
   const firstDreams = await countOf('dream_queue', { user_id: userId, source: 'first_dream' });
   const firstRun = await countOf('user_first_run', { user_id: userId });
+  const castPaths = await listCastPaths(userId);
 
   console.log(
     `\n${DRY ? '🔎 DRY RUN — would reset' : '♻️  Resetting'} user @${u.username || '?'} (${userId})`
@@ -99,6 +128,7 @@ async function resolveUserId() {
   console.log(`   user_recipes:         ${recipes} row(s) → delete`);
   console.log(`   first_dream queue:    ${firstDreams} row(s) → delete (+ matching dream_jobs)`);
   console.log(`   user_first_run flags: ${firstRun} row(s) → delete`);
+  console.log(`   cast photos:          ${castPaths.length} file(s) → delete from storage`);
 
   if (DRY) {
     console.log('\n(dry run — nothing changed)\n');
@@ -123,10 +153,14 @@ async function resolveUserId() {
   }
   // 4. clear first-run tutorial flags
   await sb.from('user_first_run').delete().eq('user_id', userId);
+  // 5. purge cast photos from storage (both buckets) so the reset-and-re-onboard
+  //    loop doesn't leak orphaned face photos
+  const removed = castPaths.length ? await purgeCastPhotos(castPaths) : 0;
 
   console.log(
-    `\n✅ Reset complete. @${u.username || userId} will re-onboard on next app open and can claim a fresh free first dream.\n`
+    `\n✅ Reset complete. @${u.username || userId} will re-onboard on next app open and can claim a fresh free first dream.`
   );
+  console.log(`   (purged ${removed} cast photo file(s) from storage)\n`);
 })().catch((e) => {
   console.error('❌', e.message);
   process.exit(1);

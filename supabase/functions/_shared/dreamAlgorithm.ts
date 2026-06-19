@@ -26,6 +26,8 @@ export interface CastMember {
   role: string;
   description?: string;
   thumb_url?: string;
+  /** Object path in the PRIVATE `cast-photos` bucket (migration 292). */
+  storage_path?: string;
   relationship?: string;
 }
 

@@ -43,6 +43,7 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import {
   completeQueueJob,
   failQueueJob,
@@ -936,7 +937,14 @@ Output ONLY the prompt.`;
           })
         : { isSelfInsert: false, cleanedPrompt: '', referencedRoles: new Set<string>() };
 
-      const dreamCast: DreamCastMember[] = vibeProfile?.dream_cast ?? [];
+      // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292);
+      // resolve each storage_path to a fresh signed URL up front so all the
+      // downstream thumb_url.startsWith('http') gates work unchanged. No-op for
+      // legacy members already carrying a public thumb_url.
+      const dreamCast: DreamCastMember[] = await hydrateCastSources(
+        vibeProfile?.dream_cast ?? [],
+        supabase
+      );
       const describedCast = dreamCast.filter((m: DreamCastMember) => m.thumb_url && m.description);
 
       let castMembers: DreamCastMember[] = [];

@@ -47,8 +47,14 @@ export type CastRelationship = 'partner' | 'friend' | 'family';
 export interface DreamCastMember {
   /** 'self' | 'plus_one' | 'pet' */
   role: 'self' | 'plus_one' | 'pet';
-  /** Thumbnail URL stored in Supabase storage */
-  thumb_url: string;
+  /** Legacy public URL (PUBLIC `avatars` bucket). Present on un-migrated members;
+   *  new uploads use `storage_path` (private bucket) instead. Optional now that
+   *  cast photos are private — display/describe resolve a signed URL on demand. */
+  thumb_url?: string;
+  /** Object path in the PRIVATE `cast-photos` bucket (migration 292), e.g.
+   *  `<userId>/cast-self-<ts>.jpg`. The source of truth for new uploads; a signed
+   *  URL is minted from it for display, describe, and the face-swap render. */
+  storage_path?: string;
   /** AI-generated text description of appearance (set once at save time) */
   description: string;
   /** Explicit gender from vision describe — used by castResolver for gender lock. Pets have no gender. */

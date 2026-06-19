@@ -46,6 +46,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import {
   aHashHex,
@@ -299,6 +300,15 @@ Deno.serve(async (req) => {
     // ══ NIGHTLY DREAMBOT PATH — fully isolated, no shared templates ══
     // ══════════════════════════════════════════════════════════════════
     const nightlyProfile = vibe_profile as VibeProfile;
+
+    // Cast photos live in the PRIVATE `cast-photos` bucket (migration 292).
+    // Resolve each member's storage_path to a fresh signed URL up front so ALL
+    // downstream face-swap + describe logic (which gates on
+    // thumb_url.startsWith('http')) works unchanged. No-op for legacy members
+    // that already carry a public thumb_url.
+    if (Array.isArray(nightlyProfile.dream_cast) && nightlyProfile.dream_cast.length > 0) {
+      nightlyProfile.dream_cast = await hydrateCastSources(nightlyProfile.dream_cast, supabase);
+    }
 
     // Recency: exclude the last 7 nightly mediums + vibes + locations from
     // the pool so the user doesn't see the same choices repeat in a row.

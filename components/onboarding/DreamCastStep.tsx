@@ -15,6 +15,7 @@ import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
 import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
+import { castSignedUrl, castHasPhoto } from '@/lib/castPhoto';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
@@ -67,6 +68,33 @@ const RELATIONSHIPS: { key: CastRelationship; label: string }[] = [
   { key: 'partner', label: 'Partner' },
 ];
 
+const CAST_BUCKET = 'cast-photos';
+
+// Delete the storage file backing a cast member, whichever bucket it lives in.
+// New uploads: `storage_path` in the PRIVATE `cast-photos` bucket. Legacy
+// uploads: a public URL in the `avatars` bucket. Returns an error string on
+// failure so callers can decide whether to proceed (atomic-delete in
+// handleRemove) or fire-and-forget (replacement cleanup).
+async function removeCastFile(m: {
+  storage_path?: string;
+  thumb_url?: string;
+}): Promise<string | null> {
+  if (m.storage_path) {
+    const { error } = await supabase.storage.from(CAST_BUCKET).remove([m.storage_path]);
+    return error ? error.message : null;
+  }
+  if (m.thumb_url) {
+    const match = m.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
+    if (match?.[1]) {
+      const { error } = await supabase.storage
+        .from('avatars')
+        .remove([decodeURIComponent(match[1])]);
+      return error ? error.message : null;
+    }
+  }
+  return null;
+}
+
 function CastSlot({
   config,
   member,
@@ -99,6 +127,26 @@ function CastSlot({
     member.description.length >= 20 &&
     (isPet || (member.gender && typeof member.age === 'number'))
   );
+
+  // Resolve a fetchable URI for the thumbnail. Private cast photos
+  // (`storage_path`) need a freshly-minted signed URL; legacy members carry a
+  // public `thumb_url`. Re-runs when the member's source changes.
+  const [displayUri, setDisplayUri] = useState<string | undefined>(undefined);
+  const storagePath = member?.storage_path;
+  const legacyThumb = member?.thumb_url;
+  useEffect(() => {
+    let alive = true;
+    if (storagePath) {
+      castSignedUrl(storagePath).then((u) => {
+        if (alive) setDisplayUri(u ?? undefined);
+      });
+    } else {
+      setDisplayUri(legacyThumb);
+    }
+    return () => {
+      alive = false;
+    };
+  }, [storagePath, legacyThumb]);
 
   return (
     <View style={s.slotCard}>
@@ -136,7 +184,11 @@ function CastSlot({
         <>
           <View style={s.uploadedRow}>
             <View>
-              <Image source={{ uri: member.thumb_url }} style={s.thumb} contentFit="cover" />
+              <Image
+                source={displayUri ? { uri: displayUri } : undefined}
+                style={s.thumb}
+                contentFit="cover"
+              />
               {isUploading && (
                 <View style={s.thumbSpinner}>
                   <ActivityIndicator size="small" color="#FFFFFF" />
@@ -256,7 +308,8 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     validatedOnceRef.current = true;
     let removedAny = false;
     for (const m of dreamCast) {
-      if (!m.thumb_url || !m.thumb_url.startsWith('http')) continue;
+      // "Has a photo" = a private storage_path OR a legacy public thumb_url.
+      if (!castHasPhoto(m)) continue;
       const isPet = m.role === 'pet';
       const ok =
         m.description &&
@@ -267,18 +320,10 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           console.warn(
             `[DreamCast] removing incomplete cast (${m.role}): desc=${m.description?.length ?? 0} gender=${m.gender ?? 'none'} age=${m.age ?? 'none'}`
           );
-        // Also clean the orphaned storage file if one exists.
-        if (m.thumb_url) {
-          const match = m.thumb_url.match(/\/avatars\/(.+?)(\?|$)/);
-          if (match?.[1]) {
-            supabase.storage
-              .from('avatars')
-              .remove([decodeURIComponent(match[1])])
-              .catch((e) => {
-                if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
-              });
-          }
-        }
+        // Also clean the orphaned storage file (either bucket). Fire-and-forget.
+        removeCastFile(m).catch((e) => {
+          if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+        });
         removeCastMember(m.role);
         removedAny = true;
       }
@@ -315,26 +360,27 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     // enqueuing — otherwise advancing mid-upload yields a scene-only dream.
     beginCastUpload();
 
-    // Capture the existing thumb_url BEFORE upload so we can clean up the
-    // old storage file after the new one lands. Each upload uses a fresh
-    // timestamped path, so without this cleanup every cast photo
-    // replacement orphans the prior file in the avatars bucket.
-    const previousThumb = getMember(role)?.thumb_url;
+    // Capture the existing member BEFORE upload so we can clean up the old
+    // storage file after the new one lands. Each upload uses a fresh
+    // timestamped path, so without this cleanup every cast photo replacement
+    // orphans the prior file. The prior file may be in either bucket (a private
+    // storage_path or a legacy public thumb_url) — removeCastFile handles both.
+    const previousMember = getMember(role);
 
     try {
-      // Upload to Supabase Storage — need a public URL for describe-photo + Kontext.
-      // Transcode whatever the picker handed us to actual JPEG bytes BEFORE
-      // upload. Without this, PNG/WebP/GIF/AVIF picks from the Files app
-      // upload with their raw bytes under a lying 'image/jpeg' content-type,
-      // which trips downstream face-swap + display-variant decoders on edge
-      // cases. See lib/normalizeImageToJpeg.ts header for the full audit.
+      // Upload to the PRIVATE `cast-photos` bucket (migration 292). Transcode
+      // whatever the picker handed us to actual JPEG bytes BEFORE upload.
+      // Without this, PNG/WebP/GIF/AVIF picks from the Files app upload with
+      // their raw bytes under a lying 'image/jpeg' content-type, which trips
+      // downstream face-swap + display-variant decoders on edge cases. See
+      // lib/normalizeImageToJpeg.ts header for the full audit.
       const path = `${user.id}/cast-${role}-${Date.now()}.jpg`;
       const normalized = await normalizeImageToJpeg(asset.uri);
       const response = await fetch(normalized.uri);
       const arrayBuffer = await response.arrayBuffer();
 
       const { error: uploadError } = await supabase.storage
-        .from('avatars')
+        .from(CAST_BUCKET)
         .upload(path, arrayBuffer, {
           contentType: 'image/jpeg',
           upsert: true,
@@ -342,22 +388,18 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         });
       if (uploadError) throw uploadError;
 
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from('avatars').getPublicUrl(path);
+      // Mint a short-lived signed URL — the private bucket has no public URL,
+      // and describe-photo (Haiku vision via Replicate) must fetch it over HTTP.
+      const signedUrl = await castSignedUrl(path);
+      if (!signedUrl) throw new Error('could not sign cast photo URL');
 
       // Clean up the prior cast photo (replacement flow). Fire-and-forget —
       // a failed cleanup just leaves one orphaned file; the new file is
       // already up and the user-facing flow proceeds.
-      if (previousThumb) {
-        const m = previousThumb.match(/\/avatars\/(.+?)(\?|$)/);
-        if (m?.[1])
-          supabase.storage
-            .from('avatars')
-            .remove([decodeURIComponent(m[1])])
-            .catch((e) => {
-              if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
-            });
+      if (previousMember) {
+        removeCastFile(previousMember).catch((e) => {
+          if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+        });
       }
 
       // Show the photo immediately (spinner stays on until describe completes).
@@ -369,7 +411,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         role === 'plus_one' ? (existing?.relationship ?? 'friend') : existing?.relationship;
       setCastMember({
         role,
-        thumb_url: publicUrl,
+        storage_path: path,
         description: '',
         ...(plusOneRel ? { relationship: plusOneRel } : {}),
       });
@@ -377,7 +419,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
       // Describe the photo — spinner stays visible until this completes.
       // fetchEdge guarantees a fresh access token (proactive refresh + a 401
       // refresh-retry), so the stale-token 401 can't happen here.
-      const describeOnce = () => fetchEdge('describe-photo', { image_url: publicUrl, role });
+      const describeOnce = () => fetchEdge('describe-photo', { image_url: signedUrl, role });
       let descRes = await describeOnce();
 
       // 1 retry on 5xx (Haiku flakiness / mid-deploy).
@@ -394,7 +436,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         removeCastMember(role);
         // Clean up the uploaded file
         supabase.storage
-          .from('avatars')
+          .from(CAST_BUCKET)
           .remove([path])
           .catch((e) => {
             if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
@@ -416,7 +458,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         role === 'plus_one' ? (current?.relationship ?? 'friend') : current?.relationship;
       setCastMember({
         role,
-        thumb_url: publicUrl,
+        storage_path: path,
         description: descData.description,
         ...(descData.gender ? { gender: descData.gender } : {}),
         ...(typeof descData.age === 'number' ? { age: descData.age } : {}),
@@ -451,23 +493,6 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     }
   }
 
-  // Pulls the storage path out of a cast thumb_url and deletes the file.
-  // thumb_url shape:
-  //   https://<project>.supabase.co/storage/v1/object/public/avatars/<path>[?cache-bust]
-  // Returns a promise so the caller can await before mutating the recipe
-  // — the awaited variant is used by handleRemove (atomic delete), while
-  // re-upload sites can still fire-and-forget for the prior file.
-  async function cleanupCastStorage(thumbUrl: string | undefined): Promise<void> {
-    if (!thumbUrl) return;
-    const m = thumbUrl.match(/\/avatars\/(.+?)(\?|$)/);
-    if (!m?.[1]) return;
-    const { error } = await supabase.storage.from('avatars').remove([decodeURIComponent(m[1])]);
-    if (error) {
-      if (__DEV__) console.warn('[DreamCast] storage cleanup failed', error.message);
-      throw error;
-    }
-  }
-
   async function handleRemove(role: CastRole) {
     // ── Atomic delete (2026-05-31 hardening) ──
     // Storage cleanup runs FIRST, awaited. Only if it succeeds do we
@@ -480,13 +505,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     // entry intact so the user can retry — they'll see the cast tile in
     // their UI unchanged.
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const thumb = getMember(role)?.thumb_url;
-    if (thumb) {
-      try {
-        await cleanupCastStorage(thumb);
-      } catch (e) {
+    const member = getMember(role);
+    if (member && (member.storage_path || member.thumb_url)) {
+      const err = await removeCastFile(member);
+      if (err) {
         if (__DEV__)
-          console.warn('[DreamCast] aborting recipe removal — storage cleanup failed', e);
+          console.warn('[DreamCast] aborting recipe removal — storage cleanup failed', err);
         return; // do NOT mutate recipe
       }
     }
