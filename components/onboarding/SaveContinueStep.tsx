@@ -75,7 +75,11 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
     <View style={s.root}>
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
         <View style={s.mascotWrap}>
-          <Image source={require('@/assets/images/icon.png')} style={s.mascot} contentFit="cover" />
+          <Image
+            source={require('@/assets/images/onboarding/mascot-thumbsup.png')}
+            style={s.mascot}
+            contentFit="cover"
+          />
         </View>
 
         <Text style={s.eyebrow}>last step</Text>
