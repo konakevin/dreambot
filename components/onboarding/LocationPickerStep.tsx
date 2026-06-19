@@ -27,7 +27,10 @@ if (Platform.OS === 'android') {
 }
 
 const MIN_REQUIRED = 1;
-const MAX_ONBOARDING = 10;
+// Effectively uncapped (2026-06-18, Kevin) — high practical bound only, since the
+// picker is a plain ScrollView (not virtualized). Nothing downstream limits
+// location count. See store/onboarding.ts MAX_LOCATIONS.
+const MAX_ONBOARDING = 100;
 const TILES_COLLAPSED = 4;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
@@ -154,7 +157,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   const [sections, setSections] = useState<LocationSection[]>([]);
 
   const canProceed = places.length >= MIN_REQUIRED;
-  const atMax = places.length >= (isEditing ? 25 : MAX_ONBOARDING);
+  const atMax = places.length >= MAX_ONBOARDING;
 
   // Load locations from DB (location_cards). Group by picker_category,
   // sort by picker_sort_order. Section icons + titles + descriptions

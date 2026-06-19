@@ -3,6 +3,12 @@ import type { VibeProfile, MoodAxes, DreamSeeds, DreamCastMember } from '@/types
 import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
 
 const MAX_SEEDS_PER_CATEGORY = 10;
+// Locations are effectively UNCAPPED (2026-06-18, Kevin): the old 10/25 limit had
+// no downstream reason — persistence is an unbounded JSONB string array and every
+// engine (nightly / scene / first-dream) random-picks ONE place from it. The only
+// constraint is UI scroll perf (the picker is a plain ScrollView), so we keep a
+// high practical bound rather than truly infinite.
+const MAX_LOCATIONS = 100;
 
 type SeedCategory = keyof DreamSeeds;
 
@@ -137,7 +143,10 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       return {
         profile: {
           ...s.profile,
-          dream_seeds: { ...s.profile.dream_seeds, places: [...current, ...newKeys].slice(0, 25) },
+          dream_seeds: {
+            ...s.profile.dream_seeds,
+            places: [...current, ...newKeys].slice(0, MAX_LOCATIONS),
+          },
         },
       };
     }),
@@ -148,7 +157,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       const allSelected = keys.every((k) => current.includes(k));
       const newPlaces = allSelected
         ? current.filter((k) => !keys.includes(k))
-        : [...current, ...keys.filter((k) => !current.includes(k))].slice(0, 25);
+        : [...current, ...keys.filter((k) => !current.includes(k))].slice(0, MAX_LOCATIONS);
       return {
         profile: {
           ...s.profile,
