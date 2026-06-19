@@ -24,14 +24,20 @@ jobs:
       - name: Invoke refund-stuck-jobs Edge Function
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # The function self-authenticates by string-matching the Bearer token
+          # against its own SUPABASE_SERVICE_ROLE_KEY (auto-injected) OR the
+          # DREAM_QUEUE_WORKER_TOKEN. Use the worker token: Supabase's new
+          # sb_secret_* key format means the auto-injected service-role key no
+          # longer matches the old JWT key in CI secrets (was 401'ing). The
+          # worker token is a stable custom secret, identical on both sides.
+          DREAM_QUEUE_WORKER_TOKEN: ${{ secrets.DREAM_QUEUE_WORKER_TOKEN }}
         run: |
           if [ -z "$SUPABASE_URL" ]; then
             SUPABASE_URL="https://jimftynwrinwenonjrlj.supabase.co"
           fi
           RESP=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" -X POST \
             "${SUPABASE_URL}/functions/v1/refund-stuck-jobs" \
-            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Authorization: Bearer ${DREAM_QUEUE_WORKER_TOKEN}" \
             -H "Content-Type: application/json" \
             -d '{"older_than_min": 5}')
           STATUS=$(echo "$RESP" | tail -1 | cut -d: -f2)
