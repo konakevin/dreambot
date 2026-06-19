@@ -26,13 +26,23 @@ import { FirstDreamAlreadyClaimedError } from '@/lib/firstDreamQueue';
 
 const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
 
+// Resolve once no cast-photo upload is in flight. Capped at 30s so a stuck/failed
+// upload (endCastUpload always fires in DreamCastStep's finally, but belt-and-
+// suspenders) can never trap the kickoff — worst case we proceed with whatever
+// cast has settled, exactly the old behavior.
+async function waitForCastUploadsToSettle(): Promise<void> {
+  const deadline = Date.now() + 30000;
+  while (useOnboardingStore.getState().castUploadsInFlight > 0 && Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 150));
+  }
+}
+
 interface Props {
   onNext: () => void;
   onBack: () => void;
 }
 
 export function SaveContinueStep({ onNext, onBack }: Props) {
-  const profile = useOnboardingStore((s) => s.profile);
   const setFirstDreamJobId = useOnboardingStore((s) => s.setFirstDreamJobId);
   const setFirstDreamStatus = useOnboardingStore((s) => s.setFirstDreamStatus);
   const user = useAuthStore((s) => s.user);
@@ -44,17 +54,31 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
     started.current = true;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-    // Kick off the first dream DETACHED — describe cast → save profile →
-    // finalize → enqueue all run in the background while the user picks bots.
-    // Results land in the store (the reveal step polls the jobId).
+    // Kick off the first dream DETACHED — wait for any in-flight cast uploads to
+    // settle, then describe cast → save profile → finalize → enqueue, all in the
+    // background while the user picks bots. Results land in the store (the reveal
+    // step polls the jobId).
+    //
+    // The upload wait is load-bearing: a fast user can reach this cutoff before a
+    // cast photo finishes uploading. If we enqueued then, the profile's
+    // dream_cast thumb_urls aren't yet http → buildFirstDreamTiers (server) sees
+    // no usable cast → a scene-only first dream with NO face swap. We wait for
+    // castUploadsInFlight to hit 0 (capped so a stuck upload can't trap it), then
+    // read the FRESH profile so the kickoff always sees the settled cast.
     setFirstDreamStatus('starting');
     if (user) {
-      startFirstDream(profile, user.id, engineConfig.welcomeSparkleBonus)
-        .then((jobId) => {
+      void (async () => {
+        try {
+          await waitForCastUploadsToSettle();
+          const freshProfile = useOnboardingStore.getState().profile;
+          const jobId = await startFirstDream(
+            freshProfile,
+            user.id,
+            engineConfig.welcomeSparkleBonus
+          );
           setFirstDreamJobId(jobId);
           setFirstDreamStatus('enqueued');
-        })
-        .catch((err) => {
+        } catch (err) {
           if (err instanceof FirstDreamAlreadyClaimedError) {
             // Returning user re-onboarding — reveal will route straight to feed.
             setFirstDreamStatus('already_claimed');
@@ -62,7 +86,8 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
             if (__DEV__) console.warn('[SaveContinue] first-dream kickoff failed:', err);
             setFirstDreamStatus('error');
           }
-        });
+        }
+      })();
     } else {
       setFirstDreamStatus('error');
     }
@@ -133,7 +158,7 @@ const s = StyleSheet.create({
     maxWidth: 360,
   },
   reassure: {
-    color: colors.textMuted,
+    color: colors.textSecondary,
     fontSize: fontScale(13),
     lineHeight: fontScale(19),
     textAlign: 'center',

@@ -223,9 +223,23 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
   const dreamCast = useOnboardingStore((s) => s.profile.dream_cast);
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
+  const beginCastUpload = useOnboardingStore((s) => s.beginCastUpload);
+  const endCastUpload = useOnboardingStore((s) => s.endCastUpload);
+  const setScrollLocked = useOnboardingStore((s) => s.setScrollLocked);
   const user = useAuthStore((s) => s.user);
   const [uploading, setUploading] = useState<CastRole | null>(null);
   const validatedOnceRef = useRef(false);
+
+  // Lock the pager swipe while a cast photo is uploading/describing so the
+  // user can't swipe past mid-process (the footer buttons are disabled too) —
+  // leaving the step aborts the in-flight upload + describe-photo call and
+  // leaves a half-broken cast member. Onboarding pager only (the embedded
+  // Edit Profile variant isn't in the pager and has no footer).
+  useEffect(() => {
+    if (embedded) return;
+    setScrollLocked(uploading !== null);
+    return () => setScrollLocked(false);
+  }, [embedded, uploading, setScrollLocked]);
 
   function getMember(role: CastRole): DreamCastMember | undefined {
     return dreamCast.find((m) => m.role === role);
@@ -297,6 +311,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
 
     const asset = result.assets[0];
     setUploading(role);
+    // Mark this upload in-flight so the first-dream cutoff waits for it before
+    // enqueuing — otherwise advancing mid-upload yields a scene-only dream.
+    beginCastUpload();
 
     // Capture the existing thumb_url BEFORE upload so we can clean up the
     // old storage file after the new one lands. Each upload uses a fresh
@@ -430,6 +447,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
       );
     } finally {
       setUploading(null);
+      endCastUpload();
     }
   }
 
@@ -531,6 +549,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           onNext={onNext}
           onBack={onBack}
           nextLabel={dreamCast.length === 0 ? 'Skip' : 'Next'}
+          // While a cast photo is uploading/describing, lock BOTH buttons —
+          // advancing (or backing out) mid-process aborts the in-flight
+          // upload + describe-photo call and leaves a half-broken cast member.
+          disabled={uploading !== null}
+          disabledLabel={uploading !== null ? 'Analyzing…' : undefined}
+          backDisabled={uploading !== null}
         />
       )}
     </View>

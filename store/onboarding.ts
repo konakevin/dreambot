@@ -39,6 +39,16 @@ interface OnboardingStore {
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
 
+  /** Number of cast-photo uploads (storage upload + describe) currently in
+   *  flight. The first-dream cutoff (SaveContinueStep) waits for this to reach 0
+   *  before enqueuing, so the cast's http thumb_urls are present when the server
+   *  builds the face-swap tiers. Without it, a fast user who advances mid-upload
+   *  fires the kickoff before the upload lands → buildFirstDreamTiers sees no
+   *  usable cast → a scene-only first dream (no face swap). */
+  castUploadsInFlight: number;
+  beginCastUpload: () => void;
+  endCastUpload: () => void;
+
   // Location toggles (curated picker)
   toggleLocation: (key: string) => void;
   addLocationPack: (keys: string[]) => void;
@@ -140,6 +150,11 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       profile: { ...s.profile, dream_cast: s.profile.dream_cast.filter((m) => m.role !== role) },
     })),
 
+  castUploadsInFlight: 0,
+  beginCastUpload: () => set((s) => ({ castUploadsInFlight: s.castUploadsInFlight + 1 })),
+  endCastUpload: () =>
+    set((s) => ({ castUploadsInFlight: Math.max(0, s.castUploadsInFlight - 1) })),
+
   toggleLocation: (key) =>
     set((s) => ({
       profile: {
@@ -216,6 +231,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       chromeHidden: false,
       firstDreamJobId: null,
       firstDreamStatus: 'idle',
+      castUploadsInFlight: 0,
       profile: { ...DEFAULT_VIBE_PROFILE },
     }),
 }));
