@@ -365,9 +365,15 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
-  // This dream's sparkle cost (model tier 1–5) — shown on the Dream button AND
-  // next to the model name in the collapsed summary so the price is always visible.
-  const sparkleCost = sparkleCostFrom(imageModels, selectedModelId);
+  // This dream's sparkle cost — shown on the Dream button AND next to the model
+  // name in the collapsed summary so the price is always visible. Restyle ignores
+  // the model picker and is charged the flat BASE cost server-side (it never sends
+  // a force_model), so the gate/label must use the base cost too — otherwise a
+  // user with a high-tier model still selected would be over-blocked on a restyle
+  // that only costs 1.
+  const sparkleCost = isRestyle
+    ? engineConfig.baseSparkleCost
+    : sparkleCostFrom(imageModels, selectedModelId);
   // Collapse the model + medium/vibe controls into a one-line summary while the
   // keyboard is up — keeps the selected medium/vibe visible and the Dream CTA one
   // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
@@ -471,9 +477,9 @@ export default function CreateScreen() {
     // Gate on insufficient sparkles HERE (before navigating) so the user gets the
     // premium gate on this screen and never enters the loading flow on a dream
     // they can't afford. The server charge stays authoritative as a backstop.
-    const cost = sparkleCostFrom(imageModels, selectedModelId);
-    if (sparkleBalance < cost) {
-      showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
+    // Use the mode-aware cost (restyle = flat base cost — see sparkleCost above).
+    if (sparkleBalance < sparkleCost) {
+      showPremiumGate({ kind: 'sparkles', needed: sparkleCost, balance: sparkleBalance });
       return;
     }
     // First time they tap Dream (and can afford it): teach how Sparkles work +
@@ -482,7 +488,7 @@ export default function CreateScreen() {
     // to the paywall, not the tutorial.)
     if (!sparkleIntroSeen.current) {
       sparkleIntroSeen.current = true;
-      setSparkleIntroCost(cost);
+      setSparkleIntroCost(sparkleCost);
       setSparkleIntroVisible(true);
       return;
     }

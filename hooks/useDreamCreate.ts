@@ -21,6 +21,7 @@ import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useImageModels } from '@/hooks/useImageModels';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { sparkleCostFrom } from '@/constants/imageModels';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { Toast } from '@/components/Toast';
@@ -62,8 +63,18 @@ export function useDreamCreate() {
   const queryClient = useQueryClient();
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const models = useImageModels();
+  const engineConfig = useEngineConfig();
   const setResult = useDreamStore((s) => s.setResult);
   const busy = useRef(false);
+
+  // The current dream's sparkle cost. Restyle ignores the model picker and is
+  // charged the flat BASE cost server-side (it never sends a force_model), so its
+  // client cost must be the base too — not the selected model's tier.
+  const dreamSparkleCost = useCallback((): number => {
+    const cfg = useDreamStore.getState().config;
+    const isRestyle = !!cfg.photoUri && cfg.photoStyle === 'restyle';
+    return isRestyle ? engineConfig.baseSparkleCost : sparkleCostFrom(models, cfg.forceModel);
+  }, [models, engineConfig.baseSparkleCost]);
 
   const loadProfile = useCallback(async (): Promise<VibeProfile | null> => {
     if (!user) return null;
@@ -81,17 +92,14 @@ export function useDreamCreate() {
   // The client no longer debits; it just gates the UX so the user sees a
   // paywall before firing a dream they can't afford. Cost comes from the
   // DB-driven catalog (useImageModels), so it always matches the server price.
-  const canAffordDream = useCallback(
-    (modelId: string | null): boolean => {
-      const cost = sparkleCostFrom(models, modelId);
-      if (sparkleBalance < cost) {
-        showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
-        return false;
-      }
-      return true;
-    },
-    [sparkleBalance, models]
-  );
+  const canAffordDream = useCallback((): boolean => {
+    const cost = dreamSparkleCost();
+    if (sparkleBalance < cost) {
+      showPremiumGate({ kind: 'sparkles', needed: cost, balance: sparkleBalance });
+      return false;
+    }
+    return true;
+  }, [sparkleBalance, dreamSparkleCost]);
 
   /**
    * Generate a dream. Returns status so the Loading screen can navigate.
@@ -167,7 +175,7 @@ export function useDreamCreate() {
       // Backstop pre-check (the create/DLT buttons gate before navigating here).
       // Returns 'insufficient' so the Loading screen routes back instead of
       // sitting on a spinner; canAffordDream already surfaced the premium gate.
-      if (!canAffordDream(config.forceModel)) return 'insufficient';
+      if (!canAffordDream()) return 'insufficient';
       busy.current = true;
       // Persist a tiny in-flight marker so an app KILL mid-render can be
       // recovered on the next cold start (resumeInFlightDream). Fire-and-forget;
@@ -337,7 +345,7 @@ export function useDreamCreate() {
           if (user) queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });
           showPremiumGate({
             kind: 'sparkles',
-            needed: sparkleCostFrom(models, config.forceModel),
+            needed: dreamSparkleCost(),
             balance: sparkleBalance,
           });
           return 'insufficient';
@@ -398,7 +406,7 @@ export function useDreamCreate() {
         busy.current = false;
       }
     },
-    [user, canAffordDream, loadProfile, setResult, queryClient]
+    [user, canAffordDream, dreamSparkleCost, sparkleBalance, loadProfile, setResult, queryClient]
   );
 
   return { generate, sparkleBalance };
