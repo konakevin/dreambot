@@ -1,6 +1,6 @@
 import '../global.css';
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AppState, InteractionManager } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { Stack, usePathname } from 'expo-router';
@@ -44,6 +44,7 @@ import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
+import { AnimatedSplash } from '@/components/AnimatedSplash';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
 import { initSentry, Sentry } from '@/lib/sentry';
 import {
@@ -545,6 +546,15 @@ function RootLayout() {
     DMSans_700Bold,
   });
 
+  // Auth restore (session rehydrate) flips this true — our "app is ready" signal,
+  // so the wave loader holds under the wordmark until the first real screen is
+  // routable rather than flashing in for a frame. (AuthInitializer, mounted below,
+  // sets it; the auth store is a plain zustand store so we can read it up here.)
+  const initialized = useAuthStore((s) => s.initialized);
+  const [splashDone, setSplashDone] = useState(false);
+
+  // Hide the NATIVE splash the instant fonts are ready; the React AnimatedSplash
+  // overlay (same wordmark, + wave loader) takes over seamlessly until ready.
   useEffect(() => {
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded]);
@@ -634,6 +644,7 @@ function RootLayout() {
           </QueryClientProvider>
         </Analytics>
       </KeyboardProvider>
+      {!splashDone && <AnimatedSplash ready={initialized} onHidden={() => setSplashDone(true)} />}
     </GestureHandlerRootView>
   );
 }
