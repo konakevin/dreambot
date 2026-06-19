@@ -1,0 +1,39 @@
+name: Abuse Monitor
+
+# Tripwire for CROSS-ACCOUNT abuse (free-render farming) that the per-user rate
+# limits can't see. Fails the run (→ GitHub failure email) when signup or free
+# first-dream volume spikes past a threshold in the last 1h (burst) or 24h
+# (drip). Thresholds start conservative — tune them up in the env block below
+# once real baseline traffic is known. See scripts/check-abuse.js.
+
+on:
+  schedule:
+    - cron: '40 * * * *' # hourly, offset 40m past the hour (spread out from other monitors)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check for abuse signals
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Tune these up once baseline traffic is known (defaults in check-abuse.js).
+          # ABUSE_NEW_USERS_1H: '40'
+          # ABUSE_NEW_USERS_24H: '300'
+          # ABUSE_FIRST_DREAMS_1H: '50'
+          # ABUSE_FIRST_DREAMS_24H: '350'
+        run: node scripts/check-abuse.js
