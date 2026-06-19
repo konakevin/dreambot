@@ -2334,6 +2334,7 @@ export type Database = {
           basic_subscription: boolean;
           basic_subscription_expires_at: string | null;
           bio: string | null;
+          confirm_surprise_dream: boolean;
           created_at: string;
           display_name: string | null;
           dreams_private_only: boolean;
@@ -2361,6 +2362,7 @@ export type Database = {
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
           bio?: string | null;
+          confirm_surprise_dream?: boolean;
           created_at?: string;
           display_name?: string | null;
           dreams_private_only?: boolean;
@@ -2388,6 +2390,7 @@ export type Database = {
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
           bio?: string | null;
+          confirm_surprise_dream?: boolean;
           created_at?: string;
           display_name?: string | null;
           dreams_private_only?: boolean;

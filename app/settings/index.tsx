@@ -13,6 +13,7 @@ import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
+import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 import { UsernameNudge } from '@/components/UsernameNudge';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
@@ -77,6 +78,7 @@ export default function SettingsScreen() {
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
+  const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
 
   // Which auth providers back this account. OAuth-only users (Google/Apple/
   // Facebook) have no email/password identity — "Change password" is
@@ -596,6 +598,29 @@ export default function SettingsScreen() {
             label="Mood"
             onPress={() => nav.push('/settings/mood')}
           />
+          <View style={styles.row}>
+            <Ionicons name="help-circle-outline" size={20} color={colors.accent} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rowLabel}>Confirm surprise dreams</Text>
+              <Text
+                style={{
+                  color: colors.textSecondary,
+                  fontSize: fontScale(12),
+                  marginTop: verticalScale(2),
+                }}
+              >
+                {confirmSurprise
+                  ? 'Ask before dreaming with no prompt'
+                  : 'Dream a surprise right away, no prompt needed'}
+              </Text>
+            </View>
+            <Switch
+              value={confirmSurprise}
+              onValueChange={(val) => void setConfirmSurprise(val)}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
         </View>
 
         {/* Dream Engine drill-ins (Art Styles / Vibes / Mood / Locations /

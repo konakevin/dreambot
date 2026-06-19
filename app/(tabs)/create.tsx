@@ -46,12 +46,17 @@ import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 import { showAlert } from '@/components/CustomAlert';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
-import { MediumsIntroSheet, hasSeenMediumsIntro } from '@/components/MediumsIntroSheet';
+import {
+  MediumsIntroSheet,
+  hasSeenMediumsIntro,
+  markMediumsIntroSeen,
+} from '@/components/MediumsIntroSheet';
 import { SparkleIntroSheet, hasSeenSparkleIntro } from '@/components/SparkleIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 
 // Sticky medium/vibe — last explicit Create-tab pick, remembered across app
 // launches (local, like the useExactPrompt toggle; the model has its own DB
@@ -76,6 +81,10 @@ export default function CreateScreen() {
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { data: dbMediums = [] } = useDreamMediums();
   const { data: dbVibes = [] } = useDreamVibes();
+  // Cross-device pref: show the "Surprise dream?" confirmation before an
+  // empty-prompt dream. The dialog's "Don't show again" checkbox + Settings both
+  // write it. Defaults true while loading, so we never skip it prematurely.
+  const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
 
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
@@ -283,16 +292,18 @@ export default function CreateScreen() {
     setMediumsIntroVisible(true);
   }, []);
 
-  // Open the medium picker, but the first time gate it behind the intro sheet.
+  // Open the medium picker. The face-vs-art intro no longer auto-pops on the
+  // first tap — opening the picker just dismisses it for good (it's available on
+  // demand via the (i) icon). Persist the seen flag so it never auto-shows.
   const openMediumPicker = useCallback(() => {
     Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!mediumsIntroSeen.current) {
-      showMediumsIntro(true);
-    } else {
-      setPickerType('medium');
+      mediumsIntroSeen.current = true;
+      void markMediumsIntroSeen();
     }
-  }, [showMediumsIntro]);
+    setPickerType('medium');
+  }, []);
 
   // The (i) next to the engine row re-opens that same teaching sheet. If the
   // user taps it before ever opening Medium, marking it seen here means it
@@ -464,14 +475,22 @@ export default function CreateScreen() {
     // exempt. Confirm the random intent before spending sparkles.
     const promptEmpty = !config.userPrompt.trim();
     const promptBoxShown = !(hasPhoto && config.photoStyle === 'restyle');
-    if (promptEmpty && promptBoxShown) {
+    // Skip the dialog entirely if the user turned it off (checkbox or Settings).
+    if (promptEmpty && promptBoxShown && confirmSurprise) {
       showAlert(
         'Surprise dream?',
         'No prompt, no problem. DreamBot will dream up a surprise for you. Continue?',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Surprise me', onPress: startDream },
-        ]
+          {
+            text: 'Surprise me',
+            onPress: (dontShowAgain) => {
+              if (dontShowAgain) void setConfirmSurprise(false);
+              startDream();
+            },
+          },
+        ],
+        { checkbox: { label: "Don't show this again" } }
       );
       return;
     }
@@ -864,11 +883,7 @@ export default function CreateScreen() {
                   hitSlop={10}
                   className="ml-1.5"
                 >
-                  <Ionicons
-                    name="information-circle-outline"
-                    size={14}
-                    color={colors.textSecondary}
-                  />
+                  <Ionicons name="information-circle" size={17} color={colors.accent} />
                 </TouchableOpacity>
               </View>
               <View

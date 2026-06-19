@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
@@ -13,7 +14,15 @@ const PRIMARY_BG = BRAND_GRADIENT[0];
 interface AlertButton {
   text: string;
   style?: 'default' | 'cancel' | 'destructive';
-  onPress?: () => void;
+  /** Receives the "don't show again" checkbox state when `options.checkbox` is
+   *  set; the arg is undefined for alerts without a checkbox. */
+  onPress?: (dontShowAgain?: boolean) => void;
+}
+
+interface AlertOptions {
+  /** Renders a tappable "don't show again" checkbox above the buttons. Its
+   *  checked state is passed to each button's onPress. */
+  checkbox?: { label: string };
 }
 
 interface AlertState {
@@ -21,19 +30,26 @@ interface AlertState {
   title: string;
   message: string;
   buttons: AlertButton[];
+  checkbox?: { label: string };
 }
 
 // Global ref so showAlert can be called from anywhere (no hook required)
-let globalShowAlert: ((title: string, message: string, buttons?: AlertButton[]) => void) | null =
-  null;
+let globalShowAlert:
+  | ((title: string, message: string, buttons?: AlertButton[], options?: AlertOptions) => void)
+  | null = null;
 
 /**
  * Drop-in replacement for showAlert() — uses our dark theme styling.
  * Works from any component or callback without needing a hook.
  */
-export function showAlert(title: string, message: string, buttons?: AlertButton[]) {
+export function showAlert(
+  title: string,
+  message: string,
+  buttons?: AlertButton[],
+  options?: AlertOptions
+) {
   if (globalShowAlert) {
-    globalShowAlert(title, message, buttons);
+    globalShowAlert(title, message, buttons, options);
   }
 }
 
@@ -44,15 +60,21 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     message: '',
     buttons: [],
   });
+  const [dontShowAgain, setDontShowAgain] = useState(false);
 
-  const show = useCallback((title: string, message: string, buttons?: AlertButton[]) => {
-    setAlert({
-      visible: true,
-      title,
-      message,
-      buttons: buttons ?? [{ text: 'OK' }],
-    });
-  }, []);
+  const show = useCallback(
+    (title: string, message: string, buttons?: AlertButton[], options?: AlertOptions) => {
+      setDontShowAgain(false); // reset each time a dialog opens
+      setAlert({
+        visible: true,
+        title,
+        message,
+        buttons: buttons ?? [{ text: 'OK' }],
+        checkbox: options?.checkbox,
+      });
+    },
+    []
+  );
 
   // Register the global function
   globalShowAlert = show;
@@ -63,7 +85,8 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
 
   function handlePress(button: AlertButton) {
     dismiss();
-    setTimeout(() => button.onPress?.(), 150);
+    const checked = dontShowAgain;
+    setTimeout(() => button.onPress?.(checked), 150);
   }
 
   const isStacked = alert.buttons.length !== 2;
@@ -87,6 +110,18 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
           <Pressable style={styles.card} onPress={() => {}}>
             {alert.title ? <Text style={styles.title}>{alert.title}</Text> : null}
             {alert.message ? <Text style={styles.message}>{alert.message}</Text> : null}
+            {alert.checkbox ? (
+              <TouchableOpacity
+                style={styles.checkboxRow}
+                onPress={() => setDontShowAgain((v) => !v)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.checkbox, dontShowAgain && styles.checkboxChecked]}>
+                  {dontShowAgain ? <Ionicons name="checkmark" size={14} color="#FFFFFF" /> : null}
+                </View>
+                <Text style={styles.checkboxLabel}>{alert.checkbox.label}</Text>
+              </TouchableOpacity>
+            ) : null}
             <View style={isStacked ? styles.buttonCol : styles.buttonRow}>
               {sortedButtons.map((btn, i) => {
                 const isDefault = btn.style !== 'cancel' && btn.style !== 'destructive';
@@ -162,6 +197,30 @@ const styles = StyleSheet.create({
     fontSize: fontScale(15),
     lineHeight: fontScale(21),
     textAlign: 'center',
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    paddingVertical: verticalScale(4),
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: PRIMARY_BG,
+    borderColor: PRIMARY_BG,
+  },
+  checkboxLabel: {
+    color: colors.textSecondary,
+    fontSize: fontScale(14),
   },
   buttonRow: {
     flexDirection: 'row',
