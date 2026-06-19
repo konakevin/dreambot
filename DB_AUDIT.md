@@ -129,13 +129,19 @@ Drift happened because **migrations are hand-applied with no verification**. Fix
    fixed the broken report-a-user/comment safety feature — verified live).
 3. ✅ **Migration 290: grounded integrity** — the only two real fixes left after grounding:
    `idx_blocked_users_blocked` (reverse block-filter) + the 3 missing counter-decrement floors.
-4. **Migration: dead-schema cleanup** (P2 — `wish_*` / `from_wish` column drops, grounded in
-   gen-types). *Still TODO — low risk, additive cleanup.*
-5. **CI drift check** (P0 process) — the most valuable remaining deliverable: a job that diffs
-   `supabase gen types` (live) vs the committed `types/database.ts` so the next 047-style partial-
-   apply is caught in CI, not 3 months later in prod. *Still TODO.*
+4. ✅ **Migration 291: dead Dream Wish schema rip-out** — drops `uploads.from_wish` +
+   `user_recipes.dream_wish` / `wish_modifiers` / `wish_recipient_ids`. Two had live deps,
+   rebuilt atomically: `finalize_nightly_upload` (dropped the `p_from_wish` param — the nightly
+   dispatcher already stopped passing it) + `freeze_upload_columns_on_update` (dropped the
+   `from_wish` freeze line). `types/database.ts` synced. The `'dream_wish'` notification-category
+   vocab is deliberately LEFT (routes historical notification rows; inert).
+5. ✅ **CI drift check** (`scripts/check-schema-drift.sh` + `.github/workflows/schema-drift.yml`)
+   — regenerates types from live and fails if they differ from committed `types/database.ts`.
+   Runs on migration/type changes + daily. **One-time setup:** add the `SUPABASE_ACCESS_TOKEN`
+   repo secret; after applying 291, regenerate the baseline so live == repo.
 
-**Integrity work is essentially complete** — grounding collapsed a scary-looking backlog into two
-small, safe migrations. What remains is P2 cosmetic cleanup + the anti-drift process guard.
+**The audit is complete.** Grounding collapsed a scary-looking backlog into two small integrity
+migrations (290), a clean dead-schema rip-out (291), and the anti-drift guard that prevents the
+root cause from recurring. Apply 290 + 291 in the dashboard; add the drift-check secret.
 
 **Each as its own reviewable migration**, applied deliberately — not a big-bang.

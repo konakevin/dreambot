@@ -2023,7 +2023,6 @@ export type Database = {
           dream_medium: string | null;
           dream_vibe: string | null;
           flux_seed: number | null;
-          from_wish: string | null;
           height: number | null;
           id: string;
           image_url: string;
@@ -2067,7 +2066,6 @@ export type Database = {
           dream_medium?: string | null;
           dream_vibe?: string | null;
           flux_seed?: number | null;
-          from_wish?: string | null;
           height?: number | null;
           id?: string;
           image_url: string;
@@ -2111,7 +2109,6 @@ export type Database = {
           dream_medium?: string | null;
           dream_vibe?: string | null;
           flux_seed?: number | null;
-          from_wish?: string | null;
           height?: number | null;
           id?: string;
           image_url?: string;
@@ -2299,35 +2296,26 @@ export type Database = {
         Row: {
           ai_enabled: boolean;
           created_at: string;
-          dream_wish: string | null;
           onboarding_completed: boolean;
           recipe: Json;
           updated_at: string;
           user_id: string;
-          wish_modifiers: Json | null;
-          wish_recipient_ids: Json | null;
         };
         Insert: {
           ai_enabled?: boolean;
           created_at?: string;
-          dream_wish?: string | null;
           onboarding_completed?: boolean;
           recipe?: Json;
           updated_at?: string;
           user_id: string;
-          wish_modifiers?: Json | null;
-          wish_recipient_ids?: Json | null;
         };
         Update: {
           ai_enabled?: boolean;
           created_at?: string;
-          dream_wish?: string | null;
           onboarding_completed?: boolean;
           recipe?: Json;
           updated_at?: string;
           user_id?: string;
-          wish_modifiers?: Json | null;
-          wish_recipient_ids?: Json | null;
         };
         Relationships: [
           {
@@ -2588,7 +2576,6 @@ export type Database = {
       finalize_nightly_upload: {
         Args: {
           p_bot_message?: string;
-          p_from_wish?: string;
           p_upload_id: string;
         };
         Returns: undefined;
