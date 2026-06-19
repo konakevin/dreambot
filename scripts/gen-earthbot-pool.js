@@ -2727,6 +2727,85 @@ Vary the LIGHT quality interacting with water: midday sun-sparkle, golden-hour a
     ],
     instructions: `Each entry is ONE quiet real interior phenomenon, 12-22 words. Subtle, never a spectacle. Output as a NUMBERED list (1. ... 2. ...), one per line. NO internal newlines.`,
   },
+
+  // ═══ NEW PATHS 2026-06-18 (Kevin) — great-waterfalls + wetlands-wild reuse
+  //     EARTHBOT_EPIC_VISTA (bespoke subject pool only). ═══
+
+  great_waterfalls_subject: {
+    format: 'simple',
+    theme: `PURE GREAT-WATERFALL scenes for EarthBot's great-waterfalls path. THE WATERFALL IS THE HERO — the world's iconic falls at full power, real Earth. Each entry 30-55 words. A clean true-to-life nature photograph, the thundering water + its scale the whole show.
+
+🎯 THE FALL IS THE HERO:
+  • The waterfall fills 55-70% of the frame; its scale + the motion of falling water is the wow
+  • CAMERA VARIETY: low-angle from the plunge-pool looking up / aerial over the brink / side-profile showing the full drop / from behind the curtain / wide showing the whole horseshoe
+  • MOTION: the water is falling RIGHT NOW — mist billowing, spray rainbow, churning plunge-pool
+
+💦 ICONIC REAL FALLS (mix across 25):
+  A. IGUAZÚ — the vast Devil's-Throat horseshoe of dozens of falls in jungle, mist columns rising
+  B. VICTORIA FALLS — the mile-wide curtain plunging into the Zambezi gorge, "smoke that thunders"
+  C. ANGEL FALLS — the world's tallest, a thread plunging off a Venezuelan tepui into cloud
+  D. PLITVICE — terraced travertine cascades between turquoise forest pools
+  E. SKÓGAFOSS / SELJALANDSFOSS — Icelandic cliff falls (basalt, green moss, rainbow in spray)
+  F. KAIETEUR — single massive drop in pristine Guyanese rainforest
+  G. DETIAN / BAN GIOC — terraced falls on the China–Vietnam karst border
+  H. GULLFOSS / DETTIFOSS — powerful glacial-river falls in a canyon
+  I. HAVASU / multnomah — turquoise travertine / mossy tiered cliff fall
+  J. JUNGLE CASCADE — an unnamed lush multi-tier cascade pouring over mossy rock into a clear pool
+  K. FROZEN / partially-iced winter waterfall
+
+🚫 BANS: ZERO humans, ZERO viewing platforms/railings/bridges/walkways/boats, ZERO buildings, ZERO sci-fi/fantasy/glowing, ZERO photographer names, ZERO negation phrases.
+
+✅ EVERY ENTRY: the named/identifiable fall + its character (height/width/tiers) + camera angle + the water's MOTION (mist/spray/rainbow/churn) + setting (jungle/canyon/basalt-cliff) + a real lighting moment.`,
+    touchpoints: [
+      "Iguazú Falls Devil's Throat, dozens of cataracts plunging in a vast horseshoe into rising mist, aerial over the brink showing the scale, jungle crowding the rim, a faint rainbow in the spray, soft overcast light",
+      'Victoria Falls mile-wide curtain thundering into the narrow Zambezi gorge, towering spray-cloud rising hundreds of feet, side-profile showing the full width, rainforest rim glowing green, golden-hour rainbow arcing through the mist',
+      'Skógafoss Iceland, the sixty-metre curtain plunging off a moss-streaked basalt cliff into a churning pool, low-angle from the spray-soaked black-pebble fan, double rainbow in the mist, bright overcast light',
+      'Plitvice terraced travertine cascades pouring between turquoise forest pools, beech canopy framing the tiers, drone-down on the stepped falls, foreground mossy travertine lip, dappled soft light',
+      'Angel Falls thread plunging off the sheer Auyán-tepui into drifting cloud, the tallest fall on Earth, wide showing the full kilometre drop, rainforest base, low cloud catching first light',
+      'Kaieteur Falls single massive plunge into a misty gorge in pristine Guyanese rainforest, low-angle from the gorge showing the immense single drop, dense jungle rim, warm late light through mist',
+      'Detian terraced falls on the karst border, three wide tiers spilling between green limestone hills into a calm river, wide vista, mist rising off the lower tier, soft golden-hour light',
+      'A lush unnamed multi-tier jungle cascade pouring over mossy black rock into a clear emerald pool, ferns and vines crowding the cascade, low-angle from the pool, dappled forest light, fine spray',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} great-waterfall entries. Each 30-55 words, single line. Format: "named fall + character + camera angle + water-motion + setting + lighting". NO preamble.`,
+  },
+
+  wetlands_wild_subject: {
+    format: 'simple',
+    theme: `PURE WILD-WETLAND scenes for EarthBot's wetlands-wild path — INLAND freshwater wetlands, deltas, swamps, lily lagoons, mangrove channels. THE WETLAND IS THE HERO. Each entry 30-55 words. A clean true-to-life nature photograph. Lush, watery, alive — NOT a dry vista, NOT an ocean coast.
+
+🎯 THE WETLAND IS THE HERO:
+  • Water + aquatic vegetation fill the frame — channels, reflections, reeds, lily-pads, flooded forest, papyrus
+  • CAMERA VARIETY: drone-down on the braided channels / low eye-level skimming the water surface / into a mangrove/cypress tunnel / wide flooded-forest vista with mirror reflection
+  • Wildlife if present is a TINY distant scale-prover (a far heron, a distant elephant in the delta), never the hero
+
+🌿 ICONIC REAL WETLANDS (mix across 25):
+  A. OKAVANGO DELTA — aerial of glittering braided channels threading green papyrus islands
+  B. PANTANAL — flooded grassland-and-forest mosaic at golden hour, mirror reflections
+  C. EVERGLADES — sawgrass "river of grass" with hammock tree-islands, big sky
+  D. CYPRESS SWAMP / BAYOU — tupelo + bald-cypress with knees + Spanish moss, glass-black water reflection
+  E. MANGROVE TUNNEL — arching mangrove roots over a still tidal-free channel of clear water
+  F. LOTUS / WATER-LILY LAGOON — a lagoon carpeted in pink lotus or white lilies at dawn
+  G. AMAZON FLOODED VÁRZEA forest — trees standing in mirror-still blackwater, reflections doubling the canopy
+  H. CAMARGUE / reedbed marsh — vast reedbeds and shallow lagoons under a wide sky
+  I. KERALA / SUNDARBANS backwater channels lined with palms and green
+  J. PEAT BOG / fen pools with reflective dark water and cotton-grass
+
+🚫 BANS: ZERO humans, ZERO boats/canoes/docks/piers/stilt-huts/buildings, ZERO ocean/sea/surf/beach (this is INLAND freshwater), ZERO sci-fi/fantasy/glowing/bioluminescence, ZERO photographer names, ZERO negation phrases.
+
+✅ EVERY ENTRY: the named/identifiable wetland + its water + its vegetation + camera angle + reflection/mirror detail + a real lighting moment (golden hour / dawn mist / soft overcast).`,
+    touchpoints: [
+      'Okavango Delta from the air, glittering braided channels threading between emerald papyrus islands and palm-dotted floodplain, drone-down showing the labyrinth of water, golden-hour light glinting off the channels, a tiny distant elephant for scale',
+      'Pantanal flooded forest-and-grassland mosaic at golden hour, mirror-still water doubling the scattered trees and warm sky, low eye-level skimming the surface, foreground reeds, soft amber light',
+      'Bald-cypress swamp with Spanish moss draping the tupelo, glass-black water perfectly reflecting the trunks and cypress knees, into the flooded forest at dawn, pale mist between the trees, soft cool light',
+      'Mangrove tunnel of arching prop-roots over a clear still channel, green light filtering through the canopy, low eye-level into the tunnel, roots mirrored in the water, dappled soft light',
+      'Lotus lagoon carpeted in pink blooms and broad green pads at dawn, a soft mist hanging over the still water, low eye-level across the lily-carpet, distant reed line, pale rose first light',
+      'Amazon flooded várzea forest in the wet season, tall trees standing in mirror-still blackwater that doubles the canopy and sky, wide reflection vista, warm late light, faint mist',
+      'Everglades sawgrass river of grass stretching to the horizon with scattered hardwood hammock tree-islands, big cumulus sky reflected in the shallow water, wide vista, golden-hour light',
+      'Camargue reedbed marsh, vast golden reeds and shallow mirror lagoons under a wide pastel sky, low eye-level across the water, a tiny distant flock of flamingos, soft dawn light',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} wild-wetland entries. Each 30-55 words, single line. Format: "named wetland + water + vegetation + camera angle + reflection detail + lighting". INLAND freshwater only — NO sea/coast. NO preamble.`,
+  },
+
 };
 
 if (!POOL_RECIPES[POOL]) {

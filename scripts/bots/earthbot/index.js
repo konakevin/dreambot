@@ -92,6 +92,8 @@ const pathBuilders = {
   'asia-landscape': require('./paths/asia-landscape'), // axis-system (2026-06-01 activation)
   'australian-outback': require('./paths/australian-outback'), // axis-system (2026-06-01 activation)
   'european-wilderness': require('./paths/european-wilderness'), // axis-system (2026-06-01 activation)
+  'great-waterfalls': require('./paths/great-waterfalls'), // NEW 2026-06-18 (EPIC_VISTA clone)
+  'wetlands-wild': require('./paths/wetlands-wild'), // NEW 2026-06-18 (EPIC_VISTA clone)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -122,6 +124,9 @@ const EARTH_PATHS = [
   'asia-landscape',
   'australian-outback',
   'european-wilderness',
+  // NEW 2026-06-18 — world waterfalls + inland wetlands. Land paths → EARTH_PREFIX.
+  'great-waterfalls',
+  'wetlands-wild',
 ];
 
 const BEACH_PATHS = [

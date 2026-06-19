@@ -43,6 +43,10 @@ module.exports = {
   FOREST_INTERIOR_ATMOSPHERE: load('forest_interior_atmosphere'),
   FOREST_INTERIOR_UNDERSTORY: load('forest_interior_understory'),
   FOREST_INTERIOR_PHENOMENON: load('forest_interior_phenomenon'),
+  // NEW PATHS 2026-06-18 — great-waterfalls + wetlands-wild reuse
+  // EARTHBOT_EPIC_VISTA (bespoke subject only).
+  GREAT_WATERFALLS_SUBJECT: load('great_waterfalls_subject'),
+  WETLANDS_WILD_SUBJECT: load('wetlands_wild_subject'),
   // coastal-vista (2026-05-20) — FIRST BEACH-SIDE path migrated. Validates
   // canonical landscape template clones cross-namespace.
   COASTAL_VISTA_SUBJECT: load('coastal_vista_subject'),
