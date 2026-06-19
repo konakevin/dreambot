@@ -93,10 +93,9 @@ module.exports = {
       [
         'expo-splash-screen',
         {
-          // The DreamBot gradient wordmark on black — the instant native frame.
-          // imageWidth is in points + resizeMode 'contain', so ~220pt is
-          // density-independent and fits even SE-class (320pt) with margin. The
-          // React AnimatedSplash takes over and adds the wave loader underneath.
+          // The DreamBot gradient wordmark on black. imageWidth is in points +
+          // resizeMode 'contain', so 220pt is density-independent and fits even
+          // SE-class (320pt) with margin — responsive across every screen.
           image: './assets/images/splash-wordmark.png',
           imageWidth: 220,
           resizeMode: 'contain',
