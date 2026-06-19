@@ -110,7 +110,10 @@ async function generateImageOnce(
     return { url: r.url, predictionId: r.predictionId, provider: 'openai', model };
   }
   if (isGeminiModel(model)) {
-    const r = await generateGeminiImage(model, prompt, creds.geminiKey ?? '');
+    // Pass the source image so Gemini EDITS it (restyle) rather than generating
+    // from scratch — used by restyle-photo's Nano Banana mediums. Text-only
+    // generation paths pass inputImage=undefined (unchanged behavior).
+    const r = await generateGeminiImage(model, prompt, creds.geminiKey ?? '', inputImage);
     return { url: r.url, predictionId: r.predictionId, provider: 'gemini', model };
   }
 

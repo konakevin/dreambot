@@ -26,6 +26,7 @@ interface DbMediumRow {
   engine: string | null;
   allowed_models: string[] | null;
   scene_eligible_models: string[] | null;
+  client_meta: Record<string, unknown> | null;
 }
 
 /** App format — matches existing code expectations */
@@ -68,6 +69,10 @@ export interface ResolvedMedium {
    * NULL → use engine_config.scene_eligible_models global. Non-null → use
    * this list instead (still intersected with allowedModels). Mig 214. */
   sceneEligibleModels: string[] | null;
+  /** Model to force for photo RESTYLE (migration 294). NULL → existing routing
+   * (flux-dev if a flux_dev_prompt_template exists, else Kontext). The 6 curated
+   * Real Face restyle mediums set this to 'google/gemini-2-image' (Nano Banana). */
+  restyleModel: string | null;
 }
 
 export interface ResolvedVibe {
@@ -100,6 +105,12 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     engine: row.engine,
     allowedModels: row.allowed_models ?? [],
     sceneEligibleModels: row.scene_eligible_models ?? null,
+    // restyle_model lives in client_meta (JSONB) — no dedicated column, so the
+    // select can't break renders before the data migration lands (migration 294).
+    restyleModel:
+      row.client_meta && typeof row.client_meta.restyle_model === 'string'
+        ? row.client_meta.restyle_model
+        : null,
   };
 }
 
@@ -124,7 +135,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models,scene_eligible_models'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models,scene_eligible_models,client_meta'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {

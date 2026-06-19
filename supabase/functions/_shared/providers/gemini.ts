@@ -44,10 +44,43 @@ export function isGeminiModel(modelId: string): boolean {
   return modelId.startsWith('google/');
 }
 
+// Safe byte→base64 (chunked so a multi-MB image can't blow the call stack via
+// String.fromCharCode(...spread)).
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+// Turn a restyle source (data: URI, http(s) URL, or bare base64) into a Gemini
+// inlineData part so Nano Banana can EDIT the photo (restyle) rather than
+// generate from scratch.
+async function toInlineData(inputImage: string): Promise<{ mimeType: string; data: string }> {
+  if (inputImage.startsWith('data:')) {
+    const comma = inputImage.indexOf(',');
+    const header = inputImage.slice(5, comma); // e.g. "image/jpeg;base64"
+    const mimeType = header.split(';')[0] || 'image/jpeg';
+    return { mimeType, data: inputImage.slice(comma + 1) };
+  }
+  if (inputImage.startsWith('http')) {
+    const res = await fetch(inputImage);
+    if (!res.ok) throw new Error(`Gemini edit: source fetch failed (${res.status})`);
+    const ct = res.headers.get('content-type') || 'image/jpeg';
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    return { mimeType: ct.split(';')[0], data: bytesToBase64(bytes) };
+  }
+  // Assume raw base64 (no data: prefix).
+  return { mimeType: 'image/jpeg', data: inputImage };
+}
+
 export async function generateGeminiImage(
   modelId: string,
   prompt: string,
-  geminiKey: string
+  geminiKey: string,
+  inputImage?: string
 ): Promise<GeminiImageResult> {
   const geminiModel = GEMINI_MODEL_MAP[modelId];
   if (!geminiModel) {
@@ -55,6 +88,14 @@ export async function generateGeminiImage(
   }
   if (!geminiKey) {
     throw new Error('GEMINI_API_KEY missing');
+  }
+
+  // Restyle (edit) mode: include the source photo as an inlineData part alongside
+  // the prompt. Without it, Gemini generates from scratch (ignores the photo).
+  const requestParts: Array<Record<string, unknown>> = [{ text: prompt }];
+  if (inputImage) {
+    const inline = await toInlineData(inputImage);
+    requestParts.push({ inlineData: inline });
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
@@ -68,7 +109,7 @@ export async function generateGeminiImage(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
+      contents: [{ parts: requestParts }],
       generationConfig: {
         responseModalities: ['IMAGE'],
         // imageConfig.aspectRatio is honored on BOTH gemini-3-pro-image-preview

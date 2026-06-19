@@ -330,9 +330,32 @@ export default function CreateScreen() {
   const effectiveExactPrompt = config.useExactPrompt && !hasPhoto;
 
   // Find labels for selected medium/vibe
-  // Build options lists with Surprise Me prepended
-  const mediumOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbMediums];
+  // Build options lists with Surprise Me prepended.
+  //
+  // RESTYLE offers only the curated restyle-eligible mediums (client_meta.
+  // restyle_enabled, migration 294) — many mediums restyle badly (near-photoreal
+  // ones go uncanny). It's an explicit pick (no Surprise Me). New Scene shows the
+  // full catalog.
+  const isRestyle = hasPhoto && config.photoStyle === 'restyle';
+  const restyleMediums = dbMediums.filter((m) => m.client_meta?.restyle_enabled === true);
+  const mediumOptions = isRestyle
+    ? restyleMediums
+    : [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbMediums];
   const vibeOptions = [{ key: 'surprise_me', label: 'Surprise Me' }, ...dbVibes];
+
+  // Keep the active medium valid for restyle: entering Restyle with a non-eligible
+  // medium (e.g. Photography) snaps to a sensible restyle default. Transient
+  // (setMedium, not persistMedium) so the New Scene sticky preference is preserved
+  // and restored when they leave restyle.
+  const restyleMediumKeys = restyleMediums.map((m) => m.key);
+  const restyleKeysSig = restyleMediumKeys.join(',');
+  useEffect(() => {
+    if (!isRestyle || restyleMediumKeys.length === 0) return;
+    if (!restyleMediumKeys.includes(config.selectedMedium)) {
+      setMedium(restyleMediumKeys.includes('watercolor') ? 'watercolor' : restyleMediumKeys[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRestyle, config.selectedMedium, restyleKeysSig, setMedium]);
 
   const isSurpriseMedium =
     config.selectedMedium === 'surprise_me_face' || config.selectedMedium === 'surprise_me_art';

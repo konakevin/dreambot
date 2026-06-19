@@ -397,7 +397,12 @@ async function handleRequest(req: Request): Promise<Response> {
     resolvedMediumKey,
     resolvedVibeKey
   );
-  const pickedModel = force_model || autoPicked.model;
+  // Per-medium restyle model (migration 294): the 6 curated Real Face mediums set
+  // restyle_model='google/gemini-2-image' (Nano Banana edit mode); everything else
+  // keeps the resolved default (Kontext for kontext_directive mediums, Flux-Dev for
+  // lego/vinyl). The flux-dev rebuild path never sets restyle_model, so it's
+  // unaffected. A client force_model still wins (advanced override).
+  const pickedModel = force_model || medium.restyleModel || autoPicked.model;
   logAxes.model = pickedModel;
 
   console.log(
