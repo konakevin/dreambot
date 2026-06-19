@@ -676,13 +676,6 @@ export default function CreateScreen() {
             >
               <TextInput
                 ref={promptRef}
-                // Remount when the placeholder text changes (photo<->no-photo).
-                // iOS doesn't re-wrap a multiline placeholder when the prop
-                // changes while unfocused — it stays clipped to one line until
-                // the next focus/relayout. Keying on the placeholder forces a
-                // fresh layout so the full hint wraps immediately. Only fires on
-                // the photo toggle (2 placeholder values), never on keystrokes.
-                key={placeholder}
                 className="px-4 py-4 text-base"
                 style={{
                   color: colors.textPrimary,
@@ -695,8 +688,6 @@ export default function CreateScreen() {
                   height: 144,
                   textAlignVertical: 'top',
                 }}
-                placeholder={placeholder}
-                placeholderTextColor={colors.textMuted ?? '#6B7280'}
                 value={config.userPrompt}
                 onChangeText={setPrompt}
                 maxLength={engineConfig.promptMaxLength}
@@ -704,6 +695,23 @@ export default function CreateScreen() {
                 scrollEnabled
                 returnKeyType="default"
               />
+              {/* Custom placeholder overlay instead of the native one. iOS's
+                  multiline placeholder ignores textAlignVertical:'top' until focus
+                  (it floats vertically centered) AND won't re-wrap when the text
+                  changes while unfocused. A top-aligned Text overlay (taps pass
+                  through) sits exactly where typed text begins, so the hint is
+                  stable across the photo toggle and on focus. */}
+              {!config.userPrompt && (
+                <View
+                  pointerEvents="none"
+                  className="px-4 py-4"
+                  style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+                >
+                  <Text className="text-base" style={{ color: colors.textMuted ?? '#6B7280' }}>
+                    {placeholder}
+                  </Text>
+                </View>
+              )}
             </View>
           )}
 
