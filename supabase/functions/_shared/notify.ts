@@ -64,6 +64,38 @@ export function hasSeenSibling(args: {
 }
 
 /**
+ * View gate for OS push banners — the universal "I already saw this" rule.
+ *
+ * Pushes now fire on a 30s-2min DEBOUNCE (migration 204), not synchronously on
+ * insert — so by the time the banner would go out, the user may have already
+ * opened their inbox and seen THIS notification. hasSeenSibling deliberately
+ * ignores the current row's own view-state (it was written for the old
+ * synchronous trigger, where the row "couldn't have been seen yet"), and it only
+ * fires when a SIBLING exists — so a singleton notification (a dream-ready, a
+ * comment, a friend request, a first like) is never suppressed by it.
+ *
+ * This closes that hole: if the user opened their inbox AT OR AFTER this
+ * notification was created, they've seen it — skip the banner. Applies to every
+ * notification. For an aggregated group `createdAt` is the LATEST row's time, so
+ * a genuinely-newer event arriving after the last view still pushes.
+ *
+ * Both timestamps are server-stamped now() (users.last_inbox_view_at vs
+ * notifications.created_at), so they're directly comparable.
+ *
+ * Returns true when the push should be SKIPPED.
+ */
+export function hasViewedSinceCreated(args: {
+  createdAt: string | null | undefined;
+  lastInboxViewedAt: string | null | undefined;
+}): boolean {
+  if (!args.createdAt || !args.lastInboxViewedAt) return false;
+  const createdMs = new Date(args.createdAt).getTime();
+  const viewedMs = new Date(args.lastInboxViewedAt).getTime();
+  if (Number.isNaN(createdMs) || Number.isNaN(viewedMs)) return false;
+  return viewedMs >= createdMs;
+}
+
+/**
  * Activity gate for OS push banners (migration 224).
  *
  * Skip the Expo POST when the recipient is currently active in the app — the

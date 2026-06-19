@@ -3,7 +3,7 @@
 // Looks up the recipient's Expo push token and sends a push notification.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { hasSeenSibling, shouldSkipForActivity } from '../_shared/notify.ts';
+import { hasSeenSibling, shouldSkipForActivity, hasViewedSinceCreated } from '../_shared/notify.ts';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 
@@ -256,6 +256,29 @@ Deno.serve(async (req) => {
     if (shouldSkipForActivity({ lastActiveAt: activityRow?.last_active_at, now: Date.now() })) {
       return new Response(
         JSON.stringify({ message: 'Recipient active in-app; skipping push', skipped: 'active' }),
+        { status: 200 }
+      );
+    }
+
+    // View gate — the universal "I already saw this" rule. Pushes fire on a
+    // 30s-2min debounce (migration 204), so by send time the user may have
+    // already opened their inbox and seen THIS notification. The sibling gate
+    // below only covers GROUPED notifications (it ignores the current row's own
+    // view-state, by design for the old synchronous trigger), so a singleton
+    // (dream-ready, comment, friend request, first like) would otherwise still
+    // push after being viewed. If the inbox was opened at/after this row was
+    // created, skip the banner. Decision in _shared/notify.ts (jest-tested).
+    if (
+      hasViewedSinceCreated({
+        createdAt: record.created_at,
+        lastInboxViewedAt: activityRow?.last_inbox_view_at,
+      })
+    ) {
+      return new Response(
+        JSON.stringify({
+          message: 'Recipient already viewed inbox; skipping push',
+          skipped: 'viewed',
+        }),
         { status: 200 }
       );
     }
