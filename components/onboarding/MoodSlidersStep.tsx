@@ -18,6 +18,37 @@ import { OnboardingFooter } from './OnboardingFooter';
 const SLIDER_WIDTH = verticalScaleClamped(260, 220, 280);
 const THUMB_SIZE = 28;
 
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+
+// Linear-interpolate between two #RRGGBB colors. Used to fade each pole label
+// from muted → bright accent based on how far the slider leans its way, so the
+// labels always read as "more this / less that" — never both-dead-gray at center.
+function lerpColor(from: string, to: string, t: number): string {
+  const a = from.replace('#', '');
+  const b = to.replace('#', '');
+  const ar = parseInt(a.slice(0, 2), 16);
+  const ag = parseInt(a.slice(2, 4), 16);
+  const ab = parseInt(a.slice(4, 6), 16);
+  const br = parseInt(b.slice(0, 2), 16);
+  const bg = parseInt(b.slice(2, 4), 16);
+  const bb = parseInt(b.slice(4, 6), 16);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `rgb(${r}, ${g}, ${bl})`;
+}
+
+// How strongly a label brightens as the slider leans toward it. >1 makes a small
+// lean visible while keeping BOTH labels half-lit at dead center (0.5 each).
+const LEAN_GAIN = 1.4;
+function poleIntensities(value: number) {
+  const lean = value - 0.5; // -0.5 (full left) … +0.5 (full right)
+  return {
+    left: clamp01(0.5 - lean * LEAN_GAIN),
+    right: clamp01(0.5 + lean * LEAN_GAIN),
+  };
+}
+
 interface SliderCardProps {
   title: string;
   description: string;
@@ -46,6 +77,13 @@ function SliderCard({
   const trackRef = useRef<View>(null);
   const trackLeft = useRef(0);
 
+  // Continuous label emphasis: brighter toward the selected side, dimmer the
+  // other way, both half-lit at center (fixes the "both grayed out / broken"
+  // look when the thumb sits mid-track).
+  const intensity = poleIntensities(value);
+  const leftColor = lerpColor(colors.textMuted, colors.accentLight, intensity.left);
+  const rightColor = lerpColor(colors.textMuted, colors.accentLight, intensity.right);
+
   function handleGrant(pageX: number) {
     const node = findNodeHandle(trackRef.current);
     if (node) {
@@ -70,11 +108,11 @@ function SliderCard({
       <View style={s.sliderWrap}>
         <View style={s.poleRow}>
           <View style={s.poleCol}>
-            <Text style={[s.poleLabel, value < 0.4 && s.poleLabelActive]}>{leftLabel}</Text>
+            <Text style={[s.poleLabel, { color: leftColor }]}>{leftLabel}</Text>
             <Text style={s.poleHint}>{leftHint}</Text>
           </View>
           <View style={[s.poleCol, { alignItems: 'flex-end' }]}>
-            <Text style={[s.poleLabel, value > 0.6 && s.poleLabelActive]}>{rightLabel}</Text>
+            <Text style={[s.poleLabel, { color: rightColor }]}>{rightLabel}</Text>
             <Text style={[s.poleHint, { textAlign: 'right' }]}>{rightHint}</Text>
           </View>
         </View>
@@ -218,8 +256,8 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(2),
   },
   poleCol: { gap: 1 },
+  // color is set inline per-label (lerped by slider lean); this is the fallback.
   poleLabel: { color: colors.textMuted, fontSize: fontScale(13), fontWeight: '700' },
-  poleLabelActive: { color: colors.accent },
   poleHint: { color: colors.textMuted, fontSize: fontScale(11) },
   hitArea: { paddingVertical: verticalScale(12) },
   track: {
