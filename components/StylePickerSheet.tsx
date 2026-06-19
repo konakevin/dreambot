@@ -196,13 +196,13 @@ export function StylePickerSheet({
     const isSelected = isSurpriseRow
       ? selected === 'surprise_me_face' || selected === 'surprise_me_art'
       : opt.key === selected;
-    // Accurate DB-authored blurb to the right of vibe labels (vibe sheet only) —
-    // sourced from dream_vibes.description so it matches what the vibe actually
-    // does to renders. Surprise Me has no DB row, so give it a fun fallback.
-    const blurb =
-      type === 'vibe'
-        ? (opt.description ?? (opt.key === 'surprise_me' ? 'Roll the dice' : undefined))
-        : undefined;
+    // Accurate DB-authored blurb to the right of each label — sourced from
+    // dream_vibes.description / dream_mediums.description so it matches what the
+    // option actually does to renders. Shown for BOTH mediums and vibes. The
+    // Surprise Me rows have no DB row, so give them a fun fallback.
+    const isAnySurprise =
+      opt.key === 'surprise_me' || opt.key === 'surprise_me_face' || opt.key === 'surprise_me_art';
+    const blurb = opt.description ?? (isAnySurprise ? 'Roll the dice' : undefined);
     return (
       <TouchableOpacity
         key={opt.key}
