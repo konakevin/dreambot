@@ -368,8 +368,15 @@ export default function SettingsScreen() {
               icon="trash-outline"
               label="Reset Profile + Tutorials (test)"
               onPress={async () => {
-                await supabase.from('users').update({ has_ai_recipe: false }).eq('id', user!.id);
-                await supabase.from('user_recipes').delete().eq('user_id', user!.id);
+                // Server-side reset (migration 287): flips has_ai_recipe, deletes
+                // user_recipes, AND releases the free-first-dream claim — the last
+                // of which the client can't delete under RLS, and whose absence
+                // trapped re-onboarding in the "Try again" loop.
+                try {
+                  await supabase.rpc('reset_my_profile');
+                } catch {
+                  /* non-fatal — onboarding store reset + nav still proceed */
+                }
                 // Also clear the account-bound first-run intro flags (user_first_run,
                 // migration 284) so all four tutorials re-show — otherwise a re-onboard
                 // would skip them. Non-fatal if the write hiccups.

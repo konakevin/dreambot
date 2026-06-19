@@ -17,7 +17,11 @@ import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
 import { grantWelcomeBonus } from '@/lib/welcomeBonus';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
-import { enqueueFirstDream, awaitFirstDream } from '@/lib/firstDreamQueue';
+import {
+  enqueueFirstDream,
+  awaitFirstDream,
+  FirstDreamAlreadyClaimedError,
+} from '@/lib/firstDreamQueue';
 import { trackFirstDreamGenerated, trackOnboardingCompleted } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors, ui } from '@/constants/theme';
@@ -252,6 +256,14 @@ export function RevealStep({ onBack }: Props) {
       // finalizeOnboarding before generation.
       trackFirstDreamGenerated({ medium: result.medium, vibe: result.vibe });
     } catch (err) {
+      if (err instanceof FirstDreamAlreadyClaimedError) {
+        // Returning user re-onboarding: they already have their free first dream,
+        // so there's nothing new to reveal. Onboarding bookkeeping already fired
+        // (finalizeOnboarding above) — go straight to the feed, never loop.
+        if (__DEV__) console.log('[Reveal] first dream already claimed → feed');
+        router.replace('/(tabs)');
+        return;
+      }
       if (__DEV__) console.warn('[Reveal] Generation failed:', err);
       setError('We couldn’t finish your first dream just now.');
       setPhase('reveal');
@@ -435,6 +447,37 @@ export function RevealStep({ onBack }: Props) {
             style={{ alignSelf: 'stretch', paddingHorizontal: 32, marginTop: verticalScale(18) }}
           >
             <GradientButton label="Try again" onPress={() => generateImage()} />
+            {/* Escape hatch so a repeatedly-failing first dream never traps the
+                user (was app-restart-only). Aborts the poll, restores chrome,
+                and goes back to the previous "Let's go" step. */}
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.selectionAsync();
+                pollAbort.current?.abort();
+                setError(null);
+                setPhase('idle');
+                setChromeHidden(false);
+                setScrollLocked(false);
+                onBack();
+              }}
+              hitSlop={8}
+              style={{
+                marginTop: verticalScale(14),
+                alignSelf: 'center',
+                paddingVertical: verticalScale(8),
+                paddingHorizontal: 16,
+              }}
+            >
+              <Text
+                style={{
+                  color: colors.textSecondary,
+                  fontSize: fontScale(15),
+                  fontWeight: '600',
+                }}
+              >
+                Cancel
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : activeDream ? (

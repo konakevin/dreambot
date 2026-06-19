@@ -24,12 +24,30 @@ export interface FirstDreamResult {
   uploadId?: string;
 }
 
+/**
+ * The account already used its one free first dream (enqueue-dream returns 409
+ * `first_dream_already_claimed`). Thrown distinctly so the reveal can treat it
+ * as "already done → continue to the feed" rather than a render FAILURE — which
+ * otherwise trapped re-onboarding users in an infinite "Try again" loop.
+ */
+export class FirstDreamAlreadyClaimedError extends Error {
+  constructor() {
+    super('first_dream_already_claimed');
+    this.name = 'FirstDreamAlreadyClaimedError';
+  }
+}
+
 /** Enqueue the onboarding first dream (free). Returns the job id to watch. */
 export async function enqueueFirstDream(profile: VibeProfile): Promise<string> {
   // fetchEdge guarantees a fresh access token (proactive refresh + 401 retry).
   const res = await fetchEdge('enqueue-dream', { first_dream: true, vibe_profile: profile });
   if (!res.ok) {
     const t = await res.text().catch(() => '');
+    // Already claimed (returning user re-onboarding) is NOT a failure — surface
+    // it distinctly so the caller can skip straight to the feed.
+    if (res.status === 409 || t.includes('first_dream_already_claimed')) {
+      throw new FirstDreamAlreadyClaimedError();
+    }
     throw new Error(`enqueue_failed:${res.status}:${t.slice(0, 120)}`);
   }
   const data = await res.json();

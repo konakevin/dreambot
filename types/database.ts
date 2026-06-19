@@ -2903,6 +2903,7 @@ export type Database = {
           reposted: boolean;
         }[];
       };
+      reset_my_profile: { Args: never; Returns: undefined };
       touch_last_active: { Args: never; Returns: undefined };
     };
     Enums: {
