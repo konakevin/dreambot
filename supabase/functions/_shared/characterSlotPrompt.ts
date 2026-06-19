@@ -538,11 +538,21 @@ export function assembleCharacterPrompt(
     mediumSignal,
     location ? `set at ${location}` : '',
     dualAnchor,
+    // Environment FRONT-LOADED. It used to sit AFTER both wardrobe-heavy
+    // character blocks + the framing block, so by the time Flux's attention
+    // reached it the prompt read as a "frontal couple portrait" → plain/studio
+    // backdrop, ignoring the described scene. Moving it right after the couple
+    // anchor (with a positive "fills the background" cue — no negation that would
+    // seed "studio") gets the scene actually rendered. The waist-up framing block
+    // below still keeps the couple prominent so the scene can't dwarf them (the
+    // face swap needs big-enough faces).
+    slots.scene_description
+      ? `${slots.scene_description} — the full scene fills the entire background with rich, layered environmental detail`
+      : '',
     input.action || '',
     leftBlock,
     rightBlock,
     framingBlock,
-    slots.scene_description,
     slots.mood,
     slots.props,
     'foreground midground background stacked top to bottom, layered depth',
