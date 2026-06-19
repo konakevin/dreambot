@@ -98,7 +98,7 @@ module.exports = {
           // density-independent and fits even SE-class (320pt) with margin. The
           // React AnimatedSplash takes over and adds the wave loader underneath.
           image: './assets/images/splash-wordmark.png',
-          imageWidth: 176,
+          imageWidth: 220,
           resizeMode: 'contain',
           backgroundColor: '#000000',
           dark: {

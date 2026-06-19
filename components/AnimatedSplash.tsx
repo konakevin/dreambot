@@ -70,7 +70,7 @@ export function AnimatedSplash({ ready, onHidden }: Props) {
   return (
     <Animated.View style={[StyleSheet.absoluteFill, s.root, fadeStyle]} pointerEvents="none">
       <GradientTitle
-        size={32}
+        size={40}
         weight={700}
         letterSpacing={1}
         numberOfLines={1}
