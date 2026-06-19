@@ -182,7 +182,7 @@ export default function OnboardingPager() {
           <OnboardingHeader
             stepNumber={step}
             totalSteps={steps.length}
-            onBack={!noBack && (step > 1 || isEditing) ? goBack : undefined}
+            onBack={!noBack && !scrollLocked && (step > 1 || isEditing) ? goBack : undefined}
           />
         )}
         {isEditing && (

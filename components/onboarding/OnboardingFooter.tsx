@@ -23,6 +23,9 @@ interface Props {
   nextVariant?: 'default' | 'gradient';
   /** Hide the Back button (used on the first onboarding screen — nowhere to go back to). */
   hideBack?: boolean;
+  /** Disable the Back button (e.g. while a photo is being analyzed — leaving the
+   *  step mid-process can corrupt the upload/describe pipeline). */
+  backDisabled?: boolean;
 }
 
 /**
@@ -44,6 +47,7 @@ export function OnboardingFooter({
   counterRight,
   nextVariant = 'default',
   hideBack = false,
+  backDisabled = false,
 }: Props) {
   const insets = useSafeAreaInsets();
   const bottomPad = Math.max(insets.bottom, verticalScale(16));
@@ -69,7 +73,12 @@ export function OnboardingFooter({
       )}
       <View style={shared.footerButtons}>
         {!hideBack && (
-          <TouchableOpacity style={shared.backBtn} onPress={onBack} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={[shared.backBtn, backDisabled && { opacity: 0.4 }]}
+            onPress={onBack}
+            disabled={backDisabled}
+            activeOpacity={0.7}
+          >
             <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
             <Text style={shared.backBtnText}>Back</Text>
           </TouchableOpacity>
