@@ -348,7 +348,7 @@ export default function CreateScreen() {
   // plus_one) into the render as a face swap.
   const placeholder = hasPhoto
     ? 'Describe a scene...'
-    : 'Describe any dream. Say "me", "my wife", or "my friend" to add your real faces — or leave blank for a surprise.';
+    : 'Describe any dream. Say "me", "my wife", or "my friend" to add the real faces from your profile — or leave blank for a surprise.';
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
