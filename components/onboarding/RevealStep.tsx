@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -105,9 +104,7 @@ export function RevealStep({ onBack }: Props) {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  // Tap the image hides/shows the HUD (post/skip chrome). The top-right expand
-  // icon toggles the full-dimension preview (whole, non-clipped contain image).
-  const [preview, setPreview] = useState(false);
+  // Tap the image hides/shows the HUD (post/skip chrome).
   const [hudVisible, setHudVisible] = useState(true);
   // Which CTA is in flight ('post' vs 'skip') — both set phase='creating', so
   // this is what keeps the Post button from reading "Posting…" during a Skip.
@@ -471,23 +468,6 @@ export function RevealStep({ onBack }: Props) {
             }}
           />
 
-          {/* Expand icon (top-right) — toggles the full-dimension preview. Same
-              icon + treatment as the feed cards; persistent so it's reachable
-              whether the HUD is shown or hidden. */}
-          {!preview && (
-            <TouchableOpacity
-              style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                setPreview((p) => !p);
-              }}
-              hitSlop={12}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
-            </TouchableOpacity>
-          )}
-
           {hudVisible &&
             (phase === 'finished' ? (
               // Post-Skip preview — overlay text removed entirely so the dream
@@ -555,35 +535,6 @@ export function RevealStep({ onBack }: Props) {
                 </TouchableOpacity>
               </View>
             ))}
-
-          {/* Full-dimension preview — opened/closed ONLY by the expand icon.
-              Whole generated image (contentFit:contain); crossfades in over the
-              reveal (no black flash); image from memory cache so it's instant. */}
-          {preview && (
-            <Animated.View
-              entering={FadeIn.duration(180)}
-              exiting={FadeOut.duration(150)}
-              style={s.previewLayer}
-            >
-              <Image
-                source={{ uri: activeDream.url }}
-                style={StyleSheet.absoluteFill}
-                contentFit="contain"
-                cachePolicy="memory-disk"
-              />
-              <TouchableOpacity
-                style={[ui.sideButton, s.expandBtn, { top: insets.top + verticalScale(8) }]}
-                onPress={() => {
-                  Haptics.selectionAsync();
-                  setPreview(false);
-                }}
-                hitSlop={12}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="scan-outline" size={28} color="#FFFFFF" style={ui.sideIcon} />
-              </TouchableOpacity>
-            </Animated.View>
-          )}
         </View>
       ) : null}
     </View>
@@ -749,19 +700,6 @@ const s = StyleSheet.create({
     color: 'rgba(255,255,255,0.7)',
     fontSize: fontScale(15),
     fontWeight: '700',
-  },
-  // Full-frame HUD-free preview layer (sits above the reveal HUD).
-  previewLayer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000000',
-    zIndex: 20,
-  },
-  // Expand icon (top-right) — matches the feed card's button (ui.sideButton +
-  // ui.sideIcon, scan-outline); this only adds position.
-  expandBtn: {
-    position: 'absolute',
-    right: 16,
-    zIndex: 30,
   },
   dreamAgainButton: {
     flex: 1,
