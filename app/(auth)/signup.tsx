@@ -44,15 +44,23 @@ export default function SignupScreen() {
       options: { data: { username: username.trim() } },
     });
     setLoading(false);
+    // Which branch runs depends on the Supabase Auth "Confirm email" setting
+    // (mailer_autoconfirm). As of 2026-06-19 confirmation is REQUIRED
+    // (mailer_autoconfirm=false), so signUp() returns NO session and the
+    // check-your-email branch is the live production path — this is also our
+    // first line of defense against free-first-dream farming (an account can't
+    // reach onboarding until a real inbox confirms it). The has-session branch
+    // is the fallback if the dashboard ever flips autoconfirm back on; keep both
+    // so the flow is correct either way.
     if (error) {
       showAlert('Sign up failed', error.message);
     } else if (data.session) {
-      // Email confirmation is off — logged in immediately
+      // autoconfirm ON → already logged in, go straight in.
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       const dest = await getPostAuthRoute();
       router.replace(dest);
     } else {
-      // Email confirmation is on — show check-your-email UI
+      // autoconfirm OFF (current state) → must confirm via email first.
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setAwaitingConfirmation(true);
     }
