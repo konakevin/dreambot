@@ -173,6 +173,11 @@ Deno.serve(async (req) => {
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
+  // First-dream onboarding mandates the SETTING be one of the user's just-picked
+  // locations (passed in the queue payload at enqueue time). Bypasses the random
+  // place roll below AND the user_recipes-load race (the recipe may not be
+  // persisted yet when the first dream renders).
+  const force_place = (body.force_place as string) || undefined;
   const force_dual_pool =
     (body.force_dual_pool as 'partner' | 'companion' | undefined) || undefined;
   const force_single_pool =
@@ -612,8 +617,11 @@ Deno.serve(async (req) => {
       // Keep filtered pool only if it has something; otherwise full list
       if (filtered.length >= 1) placePool = filtered;
     }
-    const userPlace =
-      includeLocation && placePool.length > 0
+    const userPlace = force_place
+      ? // Mandated first-dream location — use the user's just-picked place
+        // exactly (sanitized like any pool place), never the random roll.
+        sanitizeUserText(String(force_place), 'subject_description')
+      : includeLocation && placePool.length > 0
         ? placePool[Math.floor(Math.random() * placePool.length)]
         : undefined;
 

@@ -96,8 +96,21 @@ Deno.serve(async (req) => {
     }
 
     const fdJobId = crypto.randomUUID();
-    const vp = body.vibe_profile as { dream_cast?: CastMemberLike[] } | undefined;
-    const tiers = buildFirstDreamTiers(vp?.dream_cast ?? []);
+    const vp = body.vibe_profile as
+      | { dream_cast?: CastMemberLike[]; dream_seeds?: { places?: string[] } }
+      | undefined;
+    // Mandate the first dream's setting to one of the locations the user JUST
+    // picked in onboarding (carried in the request vibe_profile), not the random
+    // seed pool. Pick one here and bake it into every tier; bypasses the
+    // user_recipes-load race at render time. Falls back to the pool only if the
+    // user selected zero locations (firstDreamTiers leaves force_place unset).
+    const userPlaces = (vp?.dream_seeds?.places ?? []).filter(
+      (p): p is string => typeof p === 'string' && p.trim().length > 0
+    );
+    const firstPlace = userPlaces.length
+      ? userPlaces[Math.floor(Math.random() * userPlaces.length)]
+      : undefined;
+    const tiers = buildFirstDreamTiers(vp?.dream_cast ?? [], firstPlace);
     const fdPayload = { tiers, tier_index: 0 };
 
     await supabase

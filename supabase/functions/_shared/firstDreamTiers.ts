@@ -37,8 +37,14 @@ function usable(cast: CastMemberLike[], role: string): boolean {
   );
 }
 
-/** Build the ordered tier list from the user's cast (mirrors the old client buildTiers). */
-export function buildFirstDreamTiers(cast: CastMemberLike[]): FirstDreamTier[] {
+/**
+ * Build the ordered tier list from the user's cast (mirrors the old client
+ * buildTiers). `place` (one of the user's just-selected onboarding locations,
+ * passed from enqueue) is stamped onto EVERY tier as `force_place` so the first
+ * dream is set in THEIR place — not a random/generic scene — in every fallback
+ * tier, regardless of whether their recipe has persisted yet.
+ */
+export function buildFirstDreamTiers(cast: CastMemberLike[], place?: string): FirstDreamTier[] {
   const list: CastMemberLike[] = Array.isArray(cast) ? cast : [];
   const tiers: FirstDreamTier[] = [];
 
@@ -73,5 +79,12 @@ export function buildFirstDreamTiers(cast: CastMemberLike[]): FirstDreamTier[] {
   // Works even if the user uploaded zero cast photos. strict_face_swap omitted:
   // scene-only doesn't swap, so there's nothing to cascade past here.
   tiers.push({ name: 'scene', body: { force_cast_role: null } });
+
+  // Mandate the user's chosen location across every tier (cast tiers + the
+  // scene fallback), so the first dream always lands in one of their places.
+  const trimmed = typeof place === 'string' ? place.trim() : '';
+  if (trimmed) {
+    for (const t of tiers) t.body.force_place = trimmed;
+  }
   return tiers;
 }
