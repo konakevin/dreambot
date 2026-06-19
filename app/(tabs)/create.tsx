@@ -331,6 +331,9 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
+  // This dream's sparkle cost (model tier 1–5) — shown on the Dream button AND
+  // next to the model name in the collapsed summary so the price is always visible.
+  const sparkleCost = sparkleCostFrom(imageModels, selectedModelId);
   // Collapse the model + medium/vibe controls into a one-line summary while the
   // keyboard is up — keeps the selected medium/vibe visible and the Dream CTA one
   // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
@@ -737,13 +740,40 @@ export default function CreateScreen() {
               }}
             >
               <View className="flex-1 mr-2">
-                <Text
-                  className="text-sm font-semibold"
-                  style={{ color: colors.textPrimary }}
-                  numberOfLines={1}
-                >
-                  {modelLabel}
-                </Text>
+                <View className="flex-row items-center">
+                  <Text
+                    className="text-sm font-semibold flex-shrink"
+                    style={{ color: colors.textPrimary }}
+                    numberOfLines={1}
+                  >
+                    {modelLabel}
+                  </Text>
+                  {/* Mini sparkle-cost badge — what this dream will cost. */}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginLeft: 8,
+                      paddingHorizontal: 6,
+                      paddingVertical: verticalScale(2),
+                      borderRadius: 6,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                  >
+                    <Ionicons name="sparkles" size={11} color="#A78BFA" />
+                    <Text
+                      style={{
+                        color: '#A78BFA',
+                        fontSize: fontScale(11),
+                        fontWeight: '700',
+                        marginLeft: 2,
+                      }}
+                    >
+                      {sparkleCost}
+                    </Text>
+                  </View>
+                </View>
                 <View className="flex-row items-center mt-0.5">
                   <Text
                     className="text-[13px]"
