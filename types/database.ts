@@ -1849,30 +1849,53 @@ export type Database = {
       };
       reports: {
         Row: {
+          comment_id: string | null;
           created_at: string;
+          details: string | null;
           id: string;
           reason: string;
+          reported_user_id: string | null;
           reporter_id: string;
           resolved: boolean;
-          upload_id: string;
+          upload_id: string | null;
         };
         Insert: {
+          comment_id?: string | null;
           created_at?: string;
+          details?: string | null;
           id?: string;
           reason: string;
+          reported_user_id?: string | null;
           reporter_id: string;
           resolved?: boolean;
-          upload_id: string;
+          upload_id?: string | null;
         };
         Update: {
+          comment_id?: string | null;
           created_at?: string;
+          details?: string | null;
           id?: string;
           reason?: string;
+          reported_user_id?: string | null;
           reporter_id?: string;
           resolved?: boolean;
-          upload_id?: string;
+          upload_id?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'reports_comment_id_fkey';
+            columns: ['comment_id'];
+            isOneToOne: false;
+            referencedRelation: 'comments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reports_reported_user_id_fkey';
+            columns: ['reported_user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'reports_reporter_id_fkey';
             columns: ['reporter_id'];
