@@ -81,7 +81,7 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
         <Text style={s.eyebrow}>last step</Text>
 
         <GradientTitle size={24} weight={800} lineHeight={30} maxWidth={340} numberOfLines={0}>
-          You&apos;re all set ✨
+          You&apos;re all set
         </GradientTitle>
 
         <Text style={s.body}>
