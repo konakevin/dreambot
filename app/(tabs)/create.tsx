@@ -744,12 +744,61 @@ export default function CreateScreen() {
                 >
                   {modelLabel}
                 </Text>
-                <Text className="text-xs" style={{ color: colors.textSecondary }} numberOfLines={1}>
-                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Medium: </Text>
-                  {mediumLabel} ·{' '}
-                  <Text style={{ color: colors.textMuted ?? colors.textSecondary }}>Vibe: </Text>
-                  {vibeLabel}
-                </Text>
+                <View className="flex-row items-center mt-0.5">
+                  <Text
+                    className="text-[13px]"
+                    style={{ color: colors.textMuted ?? colors.textSecondary }}
+                  >
+                    Medium:{' '}
+                  </Text>
+                  <Text
+                    className="text-[13px]"
+                    style={{ color: colors.textSecondary }}
+                    numberOfLines={1}
+                  >
+                    {mediumLabel}
+                  </Text>
+                  {/* Color-coded FACE/ART tag (matches the medium picker). Hidden on
+                      photo dreams, which don't run the face swap. */}
+                  {!hasPhoto && (
+                    <View
+                      style={{
+                        marginLeft: 5,
+                        paddingHorizontal: 5,
+                        paddingVertical: verticalScale(1),
+                        borderRadius: 5,
+                        backgroundColor: mediumFaceSwaps
+                          ? MEDIUM_BADGE.face.bg
+                          : MEDIUM_BADGE.art.bg,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: fontScale(8),
+                          fontWeight: '700',
+                          color: mediumFaceSwaps ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color,
+                          textTransform: 'uppercase',
+                          letterSpacing: 0.5,
+                        }}
+                      >
+                        {mediumFaceSwaps ? 'face' : 'art'}
+                      </Text>
+                    </View>
+                  )}
+                  <Text
+                    className="text-[13px]"
+                    style={{ color: colors.textMuted ?? colors.textSecondary }}
+                  >
+                    {'   ·   Vibe: '}
+                  </Text>
+                  <Text
+                    className="text-[13px] flex-shrink"
+                    style={{ color: colors.textSecondary }}
+                    numberOfLines={1}
+                  >
+                    {vibeLabel}
+                  </Text>
+                </View>
               </View>
               <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
             </TouchableOpacity>
