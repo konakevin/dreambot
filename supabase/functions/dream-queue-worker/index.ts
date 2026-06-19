@@ -26,6 +26,7 @@ import { dispatchFirstDreamJob } from './dispatchers/first_dream.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -84,7 +85,7 @@ Deno.serve(async (req) => {
   // higher-privilege + already a repo secret, so no separate GH secret needed).
   const authHeader = req.headers.get('Authorization') ?? '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (bearer !== expectedToken && bearer !== serviceRoleKey) {
+  if (!timingSafeEqual(bearer, expectedToken) && !timingSafeEqual(bearer, serviceRoleKey)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },

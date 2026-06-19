@@ -29,6 +29,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -62,10 +63,11 @@ Deno.serve(async (req) => {
   // it must NOT be invokable anonymously. Accept the service-role key (the cron)
   // or the worker token. Deployed --no-verify-jwt, so the gateway won't do this.
   const authHeader = req.headers.get('authorization') ?? '';
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
   const workerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
   const authorized =
-    authHeader === `Bearer ${serviceRoleKey}` ||
-    (workerToken ? authHeader === `Bearer ${workerToken}` : false);
+    timingSafeEqual(bearer, serviceRoleKey) ||
+    (workerToken ? timingSafeEqual(bearer, workerToken) : false);
   if (!authorized) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 401,

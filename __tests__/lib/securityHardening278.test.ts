@@ -92,7 +92,10 @@ describe('edge functions: render charge cannot be skipped', () => {
   it('refund-stuck-jobs authenticates the caller (no anonymous trigger)', () => {
     const src = read('supabase/functions/refund-stuck-jobs/index.ts');
     expect(src).toContain('unauthorized');
-    expect(src).toMatch(/authHeader === `Bearer \$\{serviceRoleKey\}`/);
+    // Constant-time compare of the bearer against the service-role key OR the
+    // worker token (migration-285 era hardening — was a plain === before).
+    expect(src).toMatch(/timingSafeEqual\(bearer, serviceRoleKey\)/);
+    expect(src).toMatch(/timingSafeEqual\(bearer, workerToken\)/);
   });
 
   it('enqueue-dream guards the free first dream against farming', () => {
