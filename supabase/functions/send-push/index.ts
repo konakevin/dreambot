@@ -4,6 +4,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { hasSeenSibling, shouldSkipForActivity, hasViewedSinceCreated } from '../_shared/notify.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 
@@ -218,7 +219,8 @@ Deno.serve(async (req) => {
     // anything else so a leaked URL can't be used to spam pushes to any user.
     // Reuses DREAM_QUEUE_WORKER_TOKEN (same secret the queue worker validates).
     const expectedToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
-    if (!expectedToken || req.headers.get('Authorization') !== `Bearer ${expectedToken}`) {
+    const presentedAuth = req.headers.get('Authorization') ?? '';
+    if (!expectedToken || !timingSafeEqual(presentedAuth, `Bearer ${expectedToken}`)) {
       return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401 });
     }
 

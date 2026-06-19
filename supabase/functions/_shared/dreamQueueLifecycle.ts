@@ -163,34 +163,41 @@ export async function failQueueJob(
     })
     .eq('id', jobId);
 
-  await sb
-    .rpc('refund_sparkles', {
-      p_user_id: userId,
-      p_amount: 1,
-      p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
-      p_reference_id: jobId,
-    })
-    .then(
-      () => {},
-      () => {}
-    );
-  await sb
+  // These three terminal writes are intentionally non-fatal (we never throw out
+  // of dead-lettering), but a SILENT failure here is dangerous: a dropped refund
+  // is lost revenue, a dropped dream_jobs flip strands the client on the loading
+  // screen, a dropped notification means the user never learns the dream failed.
+  // Log every failure so the monitors / Sentry breadcrumbs can catch a pattern.
+  const { error: refundErr } = await sb.rpc('refund_sparkles', {
+    p_user_id: userId,
+    p_amount: 1,
+    p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+    p_reference_id: jobId,
+  });
+  if (refundErr) {
+    console.error(`[failQueueJob] refund_sparkles FAILED for job ${jobId}:`, refundErr.message);
+  }
+  const { error: jobsErr } = await sb
     .from('dream_jobs')
     .update({
       status: isNsfw ? 'nsfw' : 'failed',
       error: message,
       completed_at: new Date().toISOString(),
     })
-    .eq('id', jobId)
-    .then(
-      () => {},
-      () => {}
+    .eq('id', jobId);
+  if (jobsErr) {
+    console.error(
+      `[failQueueJob] dream_jobs status flip FAILED for job ${jobId}:`,
+      jobsErr.message
     );
-  await sb
+  }
+  const { error: notifyErr } = await sb
     .from('notifications')
-    .insert(dreamFailedNotification(jobId, userId, isNsfw))
-    .then(
-      () => {},
-      () => {}
+    .insert(dreamFailedNotification(jobId, userId, isNsfw));
+  if (notifyErr) {
+    console.error(
+      `[failQueueJob] failure notification FAILED for job ${jobId}:`,
+      notifyErr.message
     );
+  }
 }

@@ -13,6 +13,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from '../_shared/faceSwap.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 interface RequestBody {
   targetUrl: string;
@@ -62,7 +63,7 @@ Deno.serve(async (req) => {
   // Architect audit flagged it CRITICAL.
   const authHeader = req.headers.get('Authorization') ?? '';
   const presentedToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (!presentedToken || presentedToken !== serviceRoleKey) {
+  if (!presentedToken || !timingSafeEqual(presentedToken, serviceRoleKey)) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

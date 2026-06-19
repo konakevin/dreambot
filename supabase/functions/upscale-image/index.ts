@@ -34,6 +34,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
+import { captureRenderError } from '../_shared/sentry.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -271,7 +272,18 @@ Deno.serve(async (req) => {
           .eq('upload_id', uploadId);
         // The stuck-sweep retries; if it ultimately gives up it notifies failure.
       }
-    })().catch((e) => console.error('[upscale-image] upscale task threw:', (e as Error).message));
+    })().catch((e) => {
+      console.error('[upscale-image] upscale task threw:', (e as Error).message);
+      // Surface to Sentry too — console-only meant a persistent upscale failure
+      // was invisible until the stuck-job sweep (every 10m) re-ran it. The sweep
+      // still recovers the work; this just makes a repeating failure diagnosable.
+      void captureRenderError(e, {
+        fn: 'upscale-image',
+        stage: 'upscale',
+        jobId: uploadId,
+        userId: user.id,
+      });
+    });
 
     const er = (globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } })
       .EdgeRuntime;

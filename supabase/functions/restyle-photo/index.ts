@@ -40,6 +40,7 @@ import {
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 interface RestyleRequest {
   mode: 'flux-dev' | 'flux-kontext';
@@ -111,7 +112,7 @@ async function handleRequest(req: Request): Promise<Response> {
   const isQueue = req.headers.get('x-dream-queue') === '1';
   let userId: string;
   if (isQueue) {
-    if (authHeader !== `Bearer ${serviceRoleKey}`) {
+    if (!timingSafeEqual(authHeader, `Bearer ${serviceRoleKey}`)) {
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }
     const qJobId = typeof body.job_id === 'string' ? body.job_id : null;

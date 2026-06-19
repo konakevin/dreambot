@@ -43,6 +43,7 @@ import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
@@ -113,7 +114,7 @@ Deno.serve(async (req) => {
   }
 
   const workerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
-  const isWorkerCall = Boolean(workerToken) && authHeader === `Bearer ${workerToken}`;
+  const isWorkerCall = Boolean(workerToken) && timingSafeEqual(authHeader, `Bearer ${workerToken}`);
 
   let userId: string;
   let vibe_profile: VibeProfile | undefined;

@@ -6,6 +6,7 @@ import { Text, TextInput } from '@/components/AppText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import * as Linking from 'expo-linking';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -18,6 +19,29 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  async function handleForgotPassword() {
+    if (!email.trim()) {
+      showAlert('Enter your email', 'Type your email above, then tap Forgot password again.');
+      return;
+    }
+    setLoading(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Sends a recovery email; the link deep-links to dreambot://reset-password
+    // (handled in _layout.tsx) where the user sets a new password. Same pattern
+    // as settings/index.tsx, but here the email comes from the field (no session).
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: Linking.createURL('reset-password'),
+    });
+    setLoading(false);
+    // Always show the same confirmation — never reveal whether an email is
+    // registered (account-enumeration guard).
+    showAlert(
+      'Check your email',
+      `If an account exists for ${email.trim()}, we've sent a link to reset your password.`
+    );
+    if (error) console.warn('[login] resetPasswordForEmail error:', error.message);
+  }
 
   async function handleLogin() {
     if (!email.trim() || !password.trim()) {
@@ -91,7 +115,11 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity className="self-end mb-8">
+          <TouchableOpacity
+            className="self-end mb-8"
+            onPress={handleForgotPassword}
+            disabled={loading}
+          >
             <Text className="text-[#A78BFA] text-sm">Forgot password?</Text>
           </TouchableOpacity>
 

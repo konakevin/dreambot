@@ -24,6 +24,7 @@
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { completeQueueJob } from '../_shared/dreamQueueLifecycle.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import type { FirstDreamTier } from '../_shared/firstDreamTiers.ts';
 
 // Per-tier infra retries before giving up on a tier and falling to the next one.
@@ -59,7 +60,7 @@ Deno.serve(async (req) => {
   }
   const authHeader = req.headers.get('Authorization') ?? '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-  if (bearer !== workerToken) {
+  if (!timingSafeEqual(bearer, workerToken)) {
     return json({ error: 'unauthorized' }, 401);
   }
 

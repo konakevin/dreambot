@@ -41,6 +41,7 @@ import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
@@ -201,7 +202,7 @@ async function handleRequest(req: Request): Promise<Response> {
   const isServerInvoked = isRetry || isQueue;
   let userId: string;
   if (isServerInvoked) {
-    if (authHeader !== `Bearer ${serviceRoleKey}`) {
+    if (!timingSafeEqual(authHeader, `Bearer ${serviceRoleKey}`)) {
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }
     const srvJobId = typeof body.job_id === 'string' ? body.job_id : null;
