@@ -38,6 +38,13 @@ export function hasSeenMediumsIntro(): Promise<boolean> {
   return hasSeenFlag('mediums');
 }
 
+/** Persist the "seen" flag WITHOUT showing the sheet — used when the user opens
+ *  the medium picker directly. The intro no longer auto-pops on first pick; it's
+ *  available on demand via the (i) icon, so opening the picker marks it seen. */
+export function markMediumsIntroSeen(): Promise<void> {
+  return markFlagSeen('mediums');
+}
+
 /** Clear the "seen" flag so the intro shows again — used by the admin
  *  Reset-Profile tool to re-test the first-run experience. */
 export function resetMediumsIntro(): Promise<void> {

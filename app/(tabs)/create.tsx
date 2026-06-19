@@ -883,7 +883,7 @@ export default function CreateScreen() {
                   hitSlop={10}
                   className="ml-1.5"
                 >
-                  <Ionicons name="information-circle" size={17} color={colors.accent} />
+                  <Ionicons name="information-circle-outline" size={16} color={colors.accent} />
                 </TouchableOpacity>
               </View>
               <View
