@@ -21,6 +21,7 @@ import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
+import { OopsScreen } from '@/components/OopsScreen';
 import { trackPostViewed } from '@/lib/analytics';
 import { saveReadyHdDownloadDirect } from '@/lib/imageLongPress';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -146,7 +147,13 @@ export default function PhotoDetailScreen() {
   // deleted posts, blocked authors. Postgrest returns PGRST116 ("Cannot
   // coerce the result to a single JSON object") in all three cases.
   // Without this guard the screen renders an empty FullScreenFeed (black).
-  const targetUnavailable = !isAlbum && !!contextQuery.error && posts.length === 0;
+  // Fire on the error (the usual PGRST116 path) AND on a settled-but-empty
+  // success, so no unreadable target can ever fall through to the black void —
+  // it lands on the whimsical OopsScreen instead.
+  const targetUnavailable =
+    !isAlbum &&
+    posts.length === 0 &&
+    (!!contextQuery.error || (contextQuery.isSuccess && !contextQuery.isFetching));
   const handleEndReached = useCallback(() => {
     // Source mode: paginate the grid's underlying query.
     if (storeModeRef.current && sourceQuery?.hasNextPage && !sourceQuery.isFetchingNextPage) {
@@ -301,14 +308,7 @@ export default function PhotoDetailScreen() {
               </View>
             </TouchableOpacity>
           </Animated.View>
-          <View style={s.unavailable}>
-            <Ionicons name="lock-closed" size={40} color="#9CA3AF" />
-            <Text style={s.unavailableTitle}>Post unavailable</Text>
-            <Text style={s.unavailableBody}>This dream is private or no longer available.</Text>
-            <TouchableOpacity style={s.unavailableBtn} onPress={() => safeBack()}>
-              <Text style={s.unavailableBtnText}>Go back</Text>
-            </TouchableOpacity>
-          </View>
+          <OopsScreen />
         </Animated.View>
       </GestureDetector>
     );
@@ -390,37 +390,5 @@ const s = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(14),
     fontWeight: '600',
-  },
-  unavailable: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 32,
-  },
-  unavailableTitle: {
-    color: '#FFFFFF',
-    fontSize: fontScale(20),
-    fontWeight: '600',
-    marginTop: verticalScale(16),
-  },
-  unavailableBody: {
-    color: '#9CA3AF',
-    fontSize: fontScale(15),
-    textAlign: 'center',
-    marginTop: verticalScale(8),
-  },
-  unavailableBtn: {
-    marginTop: verticalScale(24),
-    paddingHorizontal: 24,
-    paddingVertical: verticalScale(12),
-    borderRadius: 24,
-    backgroundColor: '#1A1A2E',
-    borderWidth: 1,
-    borderColor: '#2D2D44',
-  },
-  unavailableBtnText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(15),
-    fontWeight: '500',
   },
 });
