@@ -47,7 +47,9 @@ export function toastForNotification(row: NotificationRowLike): ToastSpec | null
   switch (type) {
     case 'dream_generated':
       return {
-        message: 'Your dream is ready ✨',
+        // No emoji in the message — the app font (DM Sans) has no emoji glyph so
+        // it renders as a tofu box; the sparkle is already shown via `icon`.
+        message: 'Your dream is ready',
         icon: 'sparkles',
         action: { kind: 'route', data: { type, uploadId } },
       };
