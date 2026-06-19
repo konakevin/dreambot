@@ -89,8 +89,8 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
         </GradientTitle>
 
         <Text style={s.body}>
-          We&apos;ll start painting your very first dream now. It takes a moment — meet a few bots
-          while it comes to life.
+          DreamBot is ready to generate your first dream. Before we finish, meet our cast of Bots
+          and see what they&apos;re dreaming up.
         </Text>
 
         <Text style={s.reassure}>
