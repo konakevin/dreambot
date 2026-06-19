@@ -348,7 +348,7 @@ export default function CreateScreen() {
   // plus_one) into the render as a face swap.
   const placeholder = hasPhoto
     ? 'Describe a scene...'
-    : 'Describe your dream...\nSay "I / me / my" or "my friend / bf / gf / wife / husband" to cast your real faces into the scene.\nOr leave blank for a surprise.';
+    : 'Describe your dream...\nSay "me", "my wife", or "my friend" to add real faces.\nOr leave blank for a surprise.';
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
@@ -672,9 +672,8 @@ export default function CreateScreen() {
                   color: colors.textPrimary,
                   // Fixed height — long prompts scroll internally rather than
                   // stretching the box. iOS multiline TextInputs scroll
-                  // automatically when height is fixed. Tall enough to show the
-                  // full real-face education placeholder without clipping.
-                  height: 148,
+                  // automatically when height is fixed.
+                  height: 120,
                   textAlignVertical: 'top',
                 }}
                 placeholder={placeholder}
