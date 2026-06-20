@@ -28,7 +28,15 @@ import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO } from '@/constants/onboardingInfo';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type StepComponent = (props: { onNext: () => void; onBack: () => void }) => React.JSX.Element;
+type StepComponent = (props: {
+  onNext: () => void;
+  onBack: () => void;
+  // True only when this step is the one currently on screen. The pager is a
+  // FlatList that MOUNTS every step up front (10 steps < its default
+  // initialNumToRender), so a step must NOT run "I'm here now" side-effects on
+  // mount — e.g. RevealStep kicking off the first dream. It gates on isActive.
+  isActive?: boolean;
+}) => React.JSX.Element;
 
 interface StepConfig {
   key: string;
@@ -227,7 +235,11 @@ export default function OnboardingPager() {
         })}
         renderItem={({ item, index }) => (
           <View style={s.page}>
-            <item.component onNext={goNext} onBack={index > 0 ? goBack : () => {}} />
+            <item.component
+              onNext={goNext}
+              onBack={index > 0 ? goBack : () => {}}
+              isActive={currentKey === item.key}
+            />
           </View>
         )}
       />

@@ -25,6 +25,16 @@ import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
 
+// First-dream diagnostic logging (DEV). Same [FD] tag as the kickoff path so the
+// upload lifecycle + the cutoff gate read as one timeline.
+const fdt = () => new Date().toISOString().slice(11, 23);
+const fdlog = (msg: string) => {
+  if (__DEV__)
+    console.log(
+      `[FD ${fdt()}] ${msg} inFlight=${useOnboardingStore.getState().castUploadsInFlight}`
+    );
+};
+
 interface Props {
   /**
    * When true, the component renders the slot list + privacy note WITHOUT
@@ -359,6 +369,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     // Mark this upload in-flight so the first-dream cutoff waits for it before
     // enqueuing — otherwise advancing mid-upload yields a scene-only dream.
     beginCastUpload();
+    fdlog(`castUpload BEGIN role=${role}`);
 
     // Capture the existing member BEFORE upload so we can clean up the old
     // storage file after the new one lands. Each upload uses a fresh
@@ -387,6 +398,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           cacheControl: '2592000',
         });
       if (uploadError) throw uploadError;
+      fdlog(`castUpload STORAGE WRITE DONE role=${role} path=${path}`);
 
       // Mint a short-lived signed URL — the private bucket has no public URL,
       // and describe-photo (Haiku vision via Replicate) must fetch it over HTTP.
@@ -415,6 +427,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
         description: '',
         ...(plusOneRel ? { relationship: plusOneRel } : {}),
       });
+      fdlog(`castUpload setCastMember(storage_path) role=${role} (describe next)`);
 
       // Describe the photo — spinner stays visible until this completes.
       // fetchEdge guarantees a fresh access token (proactive refresh + a 401
@@ -490,6 +503,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
     } finally {
       setUploading(null);
       endCastUpload();
+      fdlog(`castUpload END role=${role}`);
     }
   }
 

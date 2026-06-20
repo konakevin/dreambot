@@ -20,6 +20,7 @@ import {
   type FirstDreamResult,
 } from '@/lib/firstDreamQueue';
 import { startFirstDream } from '@/lib/firstDreamKickoff';
+import { decideRevealAction } from '@/lib/firstDreamReveal';
 import { trackFirstDreamGenerated } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors, ui } from '@/constants/theme';
@@ -74,9 +75,15 @@ interface Dream {
 interface Props {
   onNext: () => void;
   onBack: () => void;
+  // The pager (FlatList) mounts EVERY step up front, so RevealStep mounts on the
+  // welcome screen. Its first-dream kickoff/await MUST only run once the user has
+  // actually reached this step — otherwise the "defensive" retryDream fires on
+  // mount with an empty profile and claims the one-per-account first dream as a
+  // faceless scene-only render. Gate every kickoff effect on this.
+  isActive?: boolean;
 }
 
-export function RevealStep({ onBack }: Props) {
+export function RevealStep({ onBack, isActive = false }: Props) {
   const profile = useOnboardingStore((s) => s.profile);
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const reset = useOnboardingStore((s) => s.reset);
@@ -211,6 +218,10 @@ export function RevealStep({ onBack }: Props) {
     pollAbort.current?.abort();
     pollAbort.current = new AbortController();
     try {
+      if (__DEV__)
+        console.log(
+          `[FD ${new Date().toISOString().slice(11, 23)}] RevealStep retryDream → startFirstDream (FOREGROUND fallback)`
+        );
       setFirstDreamStatus('starting');
       const jobId = await startFirstDream(profile, user.id, engineConfig.welcomeSparkleBonus);
       setFirstDreamJobId(jobId);
@@ -224,42 +235,58 @@ export function RevealStep({ onBack }: Props) {
     }
   }
 
-  // On mount: the dream was kicked off at the cutoff — await it (or handle its
-  // terminal kickoff state). Runs once. Edit mode (no first dream) is exempt.
+  // When the user ACTUALLY REACHES this step (isActive), resolve the first dream:
+  // await the cutoff's background job, or — if nothing was started (the cutoff
+  // deferred because the cast wasn't ready, or some path skipped it) — kick it off
+  // here in the foreground. CRITICAL: gated on isActive + runs only once. The pager
+  // mounts every step up front, so WITHOUT this gate the "defensive" retryDream
+  // below fires on the WELCOME screen with an empty profile and burns the
+  // one-per-account first dream on a faceless scene-only render. Edit mode exempt.
   useEffect(() => {
-    if (isEditing || kickoffStarted.current) return;
+    if (isEditing || !isActive || kickoffStarted.current) return;
     kickoffStarted.current = true;
-    if (firstDreamStatus === 'already_claimed') {
-      router.replace('/(tabs)');
-      return;
+    const action = decideRevealAction({
+      isActive,
+      isEditing,
+      status: firstDreamStatus,
+      jobId: firstDreamJobId,
+    });
+    switch (action) {
+      case 'route_feed':
+        router.replace('/(tabs)');
+        break;
+      case 'show_error':
+        setError('We couldn’t finish your first dream just now.');
+        setPhase('reveal');
+        break;
+      case 'await_job':
+        if (firstDreamJobId) void awaitDream(firstDreamJobId);
+        break;
+      case 'show_loader':
+        // Kickoff in flight; show the loader — the jobId effect awaits when it lands.
+        setPhase('generating');
+        break;
+      case 'kickoff':
+        // Reached reveal with nothing started → start it here (foreground; by now
+        // the cast uploads are guaranteed settled).
+        void retryDream();
+        break;
+      case 'noop':
+        break;
     }
-    if (firstDreamStatus === 'error') {
-      setError('We couldn’t finish your first dream just now.');
-      setPhase('reveal');
-      return;
-    }
-    if (firstDreamJobId) {
-      void awaitDream(firstDreamJobId);
-      return;
-    }
-    if (firstDreamStatus === 'starting' || firstDreamStatus === 'enqueued') {
-      // Kickoff in flight; show the loader — the jobId effect awaits when it lands.
-      setPhase('generating');
-      return;
-    }
-    // Defensive: reached reveal with nothing started → kick off here.
-    void retryDream();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isActive]);
 
-  // When the background kickoff produces a jobId, start awaiting it.
+  // When the background kickoff produces a jobId AFTER we've reached the reveal,
+  // start awaiting it. Gated on isActive so it never polls from the pre-mounted
+  // (off-screen) instance.
   useEffect(() => {
-    if (isEditing) return;
+    if (isEditing || !isActive) return;
     if (firstDreamJobId && phase === 'generating' && !awaiting.current && dreams.length === 0) {
       void awaitDream(firstDreamJobId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstDreamJobId]);
+  }, [firstDreamJobId, isActive]);
 
   // (End-of-onboarding bookkeeping — welcome sparkles + completion + welcome-gift
   // notification — now runs in lib/firstDreamKickoff.startFirstDream at the cutoff

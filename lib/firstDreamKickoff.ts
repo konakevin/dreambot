@@ -88,11 +88,17 @@ async function finalizeOnboarding(userId: string, welcomeBonus: number): Promise
  * awaited) from the cutoff step — describe + save are timeout-guarded and
  * finalize is fire-and-forget, so it can never hang the UI.
  */
+const fdt = () => new Date().toISOString().slice(11, 23);
+const fdCast = (cast: DreamCastMember[]) =>
+  JSON.stringify(cast.map((c) => ({ role: c.role, storage_path: !!c.storage_path })));
+
 export async function startFirstDream(
   profile: VibeProfile,
   userId: string,
   welcomeBonus: number
 ): Promise<string> {
+  if (__DEV__)
+    console.log(`[FD ${fdt()}] startFirstDream CALLED cast=${fdCast(profile.dream_cast)}`);
   // 1. describe cast (proceed with what we have on a stall)
   let describedCast = profile.dream_cast;
   try {
@@ -113,5 +119,7 @@ export async function startFirstDream(
   void finalizeOnboarding(userId, welcomeBonus);
 
   // 4. enqueue → jobId (throws FirstDreamAlreadyClaimedError on 409)
+  if (__DEV__)
+    console.log(`[FD ${fdt()}] startFirstDream ENQUEUEING cast=${fdCast(described.dream_cast)}`);
   return enqueueFirstDream(described);
 }

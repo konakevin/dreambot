@@ -29,12 +29,12 @@ const TITLE_TEXT = 'Build your dream team';
 interface Props {
   onNext: () => void;
   onBack: () => void;
-  /** Footer button label — defaults to 'Next' (onboarding pager). The first-run
-   *  feed gate passes 'Go to my feed' since this is the last step before the feed. */
+  /** Footer button label. In onboarding this is the last step before the reveal,
+   *  so it defaults to 'See my first dream'. */
   nextLabel?: string;
 }
 
-export function BotSelectorStep({ onNext, onBack, nextLabel }: Props) {
+export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first dream' }: Props) {
   const { data: allBots = [], isLoading: botsLoading } = useBotUsers();
   const { data: thumbnails } = useBotThumbnails(3);
   const { data: followingIds = [] } = useFollowingIds();

@@ -1071,33 +1071,41 @@ Deno.serve(async (req) => {
     // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
     let dualSpecialScene: string | null = null;
     let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
-    if (isDualFaceSwap) {
-      const pools = await loadDualScenarios(supabase);
-      const roll = Math.random();
-      if (force_playful || (!force_elegant && roll < 0.2)) {
-        const s = pickDualScenario(pools.goofy);
-        dualSpecialScene = s.scene;
-        dualSpecialWardrobe = s.attire;
-      } else if (force_elegant || roll < 0.4) {
-        const s = pickDualScenario(pools.elegant);
-        dualSpecialScene = s.scene;
-        dualSpecialWardrobe = s.attire;
-      }
-    } else if (isSingleHumanFaceSwap) {
-      const pools = await loadSingleScenarios(supabase);
-      const g = castGender === 'male' || castGender === 'female' ? castGender : null;
-      const roll = Math.random();
-      if (force_single_playful || (!force_single_elegant && roll < 0.2)) {
-        const s = pickSingleScenario(pools, 'goofy', g);
-        if (s) {
+    // A MANDATED location (force_place) suppresses the goofy/elegant special-scene
+    // roll entirely. force_place is set ONLY by the onboarding FIRST DREAM, which
+    // must put the user in the place they JUST picked — the "here's you in YOUR
+    // spot" showcase moment — never a random rodeo/ballroom from the pools.
+    // Regular nightly dreams pass no force_place, so they keep the 60% location /
+    // 20% goofy / 20% elegant variety mix below.
+    if (!force_place) {
+      if (isDualFaceSwap) {
+        const pools = await loadDualScenarios(supabase);
+        const roll = Math.random();
+        if (force_playful || (!force_elegant && roll < 0.2)) {
+          const s = pickDualScenario(pools.goofy);
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+        } else if (force_elegant || roll < 0.4) {
+          const s = pickDualScenario(pools.elegant);
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
         }
-      } else if (force_single_elegant || roll < 0.4) {
-        const s = pickSingleScenario(pools, 'elegant', g);
-        if (s) {
-          dualSpecialScene = s.scene;
-          dualSpecialWardrobe = s.attire;
+      } else if (isSingleHumanFaceSwap) {
+        const pools = await loadSingleScenarios(supabase);
+        const g = castGender === 'male' || castGender === 'female' ? castGender : null;
+        const roll = Math.random();
+        if (force_single_playful || (!force_single_elegant && roll < 0.2)) {
+          const s = pickSingleScenario(pools, 'goofy', g);
+          if (s) {
+            dualSpecialScene = s.scene;
+            dualSpecialWardrobe = s.attire;
+          }
+        } else if (force_single_elegant || roll < 0.4) {
+          const s = pickSingleScenario(pools, 'elegant', g);
+          if (s) {
+            dualSpecialScene = s.scene;
+            dualSpecialWardrobe = s.attire;
+          }
         }
       }
     }

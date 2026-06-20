@@ -23,18 +23,49 @@ import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { startFirstDream } from '@/lib/firstDreamKickoff';
 import { FirstDreamAlreadyClaimedError } from '@/lib/firstDreamQueue';
+import { isCastReadyForKickoff } from '@/lib/firstDreamReady';
 
 const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
 
-// Resolve once no cast-photo upload is in flight. Capped at 30s so a stuck/failed
-// upload (endCastUpload always fires in DreamCastStep's finally, but belt-and-
-// suspenders) can never trap the kickoff — worst case we proceed with whatever
-// cast has settled, exactly the old behavior.
-async function waitForCastUploadsToSettle(): Promise<void> {
+// First-dream diagnostic logging (DEV only). Tag every line [FD] + HH:MM:SS.mmm
+// so the whole kickoff path can be read as one timeline in the Metro console.
+const fdt = () => new Date().toISOString().slice(11, 23);
+function castSnapshot() {
+  const s = useOnboardingStore.getState();
+  return {
+    inFlight: s.castUploadsInFlight,
+    cast: s.profile.dream_cast.map((c) => ({ role: c.role, storage_path: !!c.storage_path })),
+  };
+}
+function fdlog(msg: string) {
+  if (__DEV__) console.log(`[FD ${fdt()}] ${msg} ${JSON.stringify(castSnapshot())}`);
+}
+
+// Is the cast ready for the kickoff — every uploaded member carrying a usable
+// storage_path/thumb_url? Gating on this (not a proxy in-flight COUNTER, which
+// can read 0 a beat before the storage_path is committed) is what stops a
+// faceless scene-only enqueue. Shared predicate (locked by firstDreamReady.test)
+// so it can't drift from the server's tier-builder.
+function castIsReady(): boolean {
+  return isCastReadyForKickoff(useOnboardingStore.getState().profile.dream_cast);
+}
+
+// Resolve once no cast-photo upload is in flight AND every added member is usable.
+// Capped at 30s so a stuck/failed upload can never trap the kickoff. Returns
+// whether the cast was actually ready at the end (false → defer to the reveal).
+async function waitForCastReady(): Promise<boolean> {
   const deadline = Date.now() + 30000;
-  while (useOnboardingStore.getState().castUploadsInFlight > 0 && Date.now() < deadline) {
+  const startedAt = Date.now();
+  fdlog('waitForCastReady START');
+  while (
+    (useOnboardingStore.getState().castUploadsInFlight > 0 || !castIsReady()) &&
+    Date.now() < deadline
+  ) {
     await new Promise((r) => setTimeout(r, 150));
   }
+  const ready = castIsReady();
+  fdlog(`waitForCastReady END after ${Date.now() - startedAt}ms ready=${ready}`);
+  return ready;
 }
 
 interface Props {
@@ -52,6 +83,7 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
   function handleSaveContinue() {
     if (started.current) return;
     started.current = true;
+    fdlog('cutoff TAP (handleSaveContinue)');
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
     // Kick off the first dream DETACHED — wait for any in-flight cast uploads to
@@ -70,13 +102,25 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
     if (user) {
       void (async () => {
         try {
-          await waitForCastUploadsToSettle();
+          const ready = await waitForCastReady();
+          if (!ready) {
+            // Photos never settled with a usable storage_path within the 30s cap —
+            // do NOT enqueue a faceless scene-only first dream. Reset to 'idle' so
+            // the reveal step runs it in the FOREGROUND (uploads guaranteed done by
+            // then) — the old, never-raced behavior. Rare: only when an upload is
+            // genuinely stuck past 30s.
+            fdlog('NOT READY after wait → DEFER kickoff to reveal');
+            setFirstDreamStatus('idle');
+            return;
+          }
+          fdlog('READY → calling startFirstDream (enqueue)');
           const freshProfile = useOnboardingStore.getState().profile;
           const jobId = await startFirstDream(
             freshProfile,
             user.id,
             engineConfig.welcomeSparkleBonus
           );
+          fdlog(`startFirstDream RETURNED jobId=${jobId}`);
           setFirstDreamJobId(jobId);
           setFirstDreamStatus('enqueued');
         } catch (err) {
