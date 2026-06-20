@@ -742,6 +742,16 @@ Deno.serve(async (req) => {
       if (force_model) {
         faceSwapPrePickedModel = force_model;
       } else {
+        // First dreams (strict_face_swap — set only by the onboarding first-dream
+        // tiers) random ONLY between the two Flux pro models: they give the most
+        // reliable, highest-quality face swap for the make-or-break onboarding
+        // showcase. Nano Banana (gemini) + GPT Image 2 are BANNED here — they
+        // re-render/restyle and degrade the "that's really me" moment. Regular
+        // nightly face-swaps rotate the full pool.
+        const FIRST_DREAM_MODELS = [
+          'black-forest-labs/flux-1.1-pro',
+          'black-forest-labs/flux-1.1-pro-ultra',
+        ];
         const FACE_SWAP_MODELS = [
           'black-forest-labs/flux-dev',
           'black-forest-labs/flux-1.1-pro',
@@ -749,8 +759,8 @@ Deno.serve(async (req) => {
           'google/gemini-2-image',
           'openai/gpt-image-2',
         ];
-        faceSwapPrePickedModel =
-          FACE_SWAP_MODELS[Math.floor(Math.random() * FACE_SWAP_MODELS.length)];
+        const pool = strict_face_swap ? FIRST_DREAM_MODELS : FACE_SWAP_MODELS;
+        faceSwapPrePickedModel = pool[Math.floor(Math.random() * pool.length)];
       }
       console.log(
         `[nightly] face-swap character model (${selectedCast.length === 2 ? 'dual' : 'single'}): ${faceSwapPrePickedModel}`
