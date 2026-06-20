@@ -463,6 +463,35 @@ function fallbackSlots(input: CharacterSlotPipelineInput): CharacterSlots {
 }
 
 // ── Final prompt assembly (template-owned geometry) ────────────────────
+//
+// ████████████████████████████████████████████████████████████████████████
+// HARD LESSON (2026-06-20) — DO NOT FRONT-LOAD / AMPLIFY THE SCENE HERE.
+// ████████████████████████████████████████████████████████████████████████
+// The face swap IS the product. The face-swap-dual service detects the two
+// rendered faces, splits them at the gap, and pastes each cast member onto the
+// matching face. It can ONLY do that if Flux renders the couple BIG with two
+// large, clearly-separated, frontal faces. The ORDER of these `parts` is the
+// lever that controls face size: identity/anchor/framing come FIRST so the
+// couple dominates, and `slots.scene_description` comes LAST (after the framing
+// block) so the environment fills in behind them WITHOUT shrinking them.
+//
+// On 2026-06-19 a change (commit 7a1092ff "front-load the scene", + its single
+// twin 2c34da44) moved scene_description to the front AND added the cue
+// "...fills the entire background with rich, layered environmental detail" to
+// fix plain/studio backdrops. It worked for backdrops — but it made Flux render
+// the SCENE dominant and the couple SMALL, so the detector could no longer find
+// two clean faces: ai_generation_log filled with
+//   no_dual_split(faces=2/0) -> rerender_for_dual -> dual_degrade_single
+// and renders came back with BOTH cast faces merged onto one figure / a
+// stranger's face. Dual face swaps had been 100% for days; this broke them
+// "left and right" within minutes of the deploy. Reverted in d29c2ddb.
+//
+// RULE: never move scene_description earlier than the framing block, and never
+// tell Flux the scene "fills the background" / is "rich/layered/dominant" on a
+// face-swap prompt. If backdrops are too plain, fix it WITHOUT shrinking the
+// faces (e.g. richer scene_description CONTENT, never a size/dominance cue), and
+// re-verify the no_dual_split rate in ai_generation_log before shipping.
+// ████████████████████████████████████████████████████████████████████████
 
 export function assembleCharacterPrompt(
   slots: CharacterSlots,

@@ -202,6 +202,13 @@ for the public feed + serves deep-link share targets.**
   FIRST-named noun and renders only that. The prefix names the REGION; scene content carries the biome.
 - **NEVER add new pixel work to `dualFaceSwap` in-process** — new steps go in a separate Edge Function;
   no new base64 data URIs in the swap pipeline (upload to temp storage, pass URLs).
+- **NEVER front-load or amplify the scene on a FACE-SWAP prompt** (`_shared/characterSlotPrompt.ts`). The
+  face swap needs Flux to render BIG, clearly-separated, frontal faces — `scene_description` stays AFTER
+  the framing block, and you never tell Flux the scene "fills the background" / is "rich/layered/dominant".
+  Making the scene dominant shrinks the couple → the face-swap-dual detector can't split two clean faces →
+  `no_dual_split` → `dual_degrade_single` → both faces merged onto one figure. (2026-06-19: commit 7a1092ff
+  did exactly this to "fix plain backdrops" and broke 100%-working dual swaps within minutes; reverted in
+  d29c2ddb. Diagnose swap failures via `ai_generation_log.fallback_reasons`, NOT by eyeballing the image.)
 - **NEVER propose a bot path migration without re-reading `BOT_SCENE_QUALITY_PLAYBOOK.md` first**, and
   update it with every new lesson.
 - **AUDIT bot mediums + prefixes for cruft every ~3 months** (negation cascades, camera-brand stuffing,
