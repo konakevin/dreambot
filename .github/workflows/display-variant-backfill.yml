@@ -1,0 +1,37 @@
+name: Display Variant Backfill
+
+# Builds uploads.image_url_display for any post still missing it. The nightly
+# render now DEFERS the heavy full-res JPEG encode out of the edge isolate (it
+# was the last in-isolate 546 resource-limit hot-spot) and leaves
+# image_url_display NULL; this cron builds the small feed JPEG out-of-process
+# (sharp) within minutes. Until it lands, the card falls back to the full-res
+# original, and the full-screen view always uses the full-res original — so the
+# dream's quality is never affected. Idempotent + resumable (only touches NULL
+# rows). See scripts/backfill-display-variants.js.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # every 10 minutes
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Build missing display variants
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/backfill-display-variants.js --limit 1000

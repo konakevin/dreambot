@@ -51,12 +51,14 @@ import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import {
-  aHashHex,
+  aHashFromDecoded,
   hammingDistance,
   persistBufferToStorage,
   persistToStorage,
   buildDisplayVariant,
 } from '../_shared/persistence.ts';
+import { decodeImage, type DecodedImage } from '../_shared/imageCodec.ts';
+import { computeThumbhash } from '../_shared/thumbhashGen.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { markStage } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
@@ -1948,8 +1950,17 @@ Output ONLY the prompt.`;
     // distance to match by visual similarity.
     const DUP_RETRY_MAX = 2;
     const HAMMING_THRESHOLD = 6;
+    // Past this elapsed budget, do NOT start another dup re-render — a re-render
+    // is a full face-swap (~30-50s) + decode, and chasing the rare yan-ops
+    // canned-output collision that late risks a 546 resource-limit kill that
+    // loses the WHOLE dream. Ship the current output instead.
+    const DUP_RERENDER_MAX_ELAPSED_MS = 80_000;
     let outBuf: ArrayBuffer | null = null;
     let outPhash: string | null = null;
+    // The output decoded ONCE — reused for the perceptual hash here AND the
+    // display variant below, so a face-swap render decodes the full image a
+    // single time (decoding it twice was the 546 CPU hot-spot).
+    let decodedOut: DecodedImage | null = null;
     if (faceSwapSource || faceSwapSources) {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data: recent } = await supabase
@@ -1971,9 +1982,12 @@ Output ONLY the prompt.`;
         }
         outBuf = await fetchResp.arrayBuffer();
         try {
-          outPhash = await aHashHex(outBuf);
+          // Decode ONCE; reuse for the hash now and the display variant later.
+          decodedOut = await decodeImage(new Uint8Array(outBuf));
+          outPhash = aHashFromDecoded(decodedOut);
         } catch (e) {
-          console.warn(`[dup-detect] aHash failed: ${(e as Error).message}`);
+          console.warn(`[dup-detect] decode/aHash failed: ${(e as Error).message}`);
+          decodedOut = null;
           break;
         }
         const collision = recentPhashes.find(
@@ -1988,6 +2002,16 @@ Output ONLY the prompt.`;
             `[dup-detect] DUPLICATE PERSISTS after ${dupAttempt} retries — accepting | phash=${outPhash} dist=${hammingDistance(collision, outPhash)} pred=${replicatePredictionId}`
           );
           fallbackReasons.push(`dup_unresolved:${outPhash}`);
+          break;
+        }
+        // Deadline guard: a re-render is a full face-swap + decode. If we're
+        // already late, skip it and ship the current output rather than risk a
+        // 546 that loses the whole dream chasing a rare canned-output collision.
+        if (Date.now() - t0 > DUP_RERENDER_MAX_ELAPSED_MS) {
+          console.warn(
+            `[dup-detect] HIT but past ${DUP_RERENDER_MAX_ELAPSED_MS}ms — skipping re-render, accepting output | phash=${outPhash}`
+          );
+          fallbackReasons.push(`dup_skipped_deadline:${outPhash}`);
           break;
         }
         console.warn(
@@ -2108,7 +2132,27 @@ Output ONLY the prompt.`;
     // Draft upload + budget upsert in parallel
     let uploadId: string | undefined;
     const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
-    const { url: displayUrl, thumbhash } = await buildDisplayVariant(imageUrl, userId, supabase);
+    // Display variant: DEFER the heavy full-res JPEG encode out of this cramped
+    // isolate — it was the last in-isolate 546 hot-spot. For the face-swap path
+    // we already decoded the output for the dup-detect hash, so compute the CHEAP
+    // thumbhash inline (instant blurry placeholder) but leave image_url_display
+    // NULL; the backfill-display-variants cron builds the small JPEG out-of-process
+    // (sharp) within minutes, and until then the card falls back to the full-res
+    // original (image_url). Scene-only renders (no in-isolate decode, lighter,
+    // never 546) keep the inline path so their variant is ready immediately.
+    let displayUrl: string | null = null;
+    let thumbhash: string | null = null;
+    if (decodedOut) {
+      try {
+        thumbhash = computeThumbhash(decodedOut);
+      } catch (_e) {
+        thumbhash = null;
+      }
+    } else {
+      const dv = await buildDisplayVariant(imageUrl, userId, supabase);
+      displayUrl = dv.url;
+      thumbhash = dv.thumbhash;
+    }
     const [uploadResult] = await Promise.all([
       supabase
         .from('uploads')

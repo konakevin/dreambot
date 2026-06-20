@@ -7,7 +7,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { decodeImage, encodeJpeg } from './imageCodec.ts';
+import { decodeImage, encodeJpeg, type DecodedImage } from './imageCodec.ts';
 import { computeThumbhash } from './thumbhashGen.ts';
 
 export async function persistToStorage(
@@ -42,6 +42,43 @@ export interface DisplayVariantResult {
   thumbhash: string | null;
 }
 
+/**
+ * Build the display variant (thumbhash + downscaled JPEG) from an ALREADY-DECODED
+ * image — no fetch, no decode. Use this when the caller already holds the decoded
+ * pixels (e.g. nightly-dreams decodes once for the perceptual hash and reuses the
+ * same DecodedImage here), so a face-swap render decodes the full image ONCE
+ * instead of twice. Decoding a ~1-2MP image to RGBA is the single heaviest CPU
+ * step in the edge isolate; doing it twice was tripping the 546 resource limit.
+ */
+export async function buildDisplayVariantFromDecoded(
+  decoded: DecodedImage,
+  userId: string,
+  supabase: SupabaseClient
+): Promise<DisplayVariantResult> {
+  // Thumbhash — cheap, ~25-byte base64. Compute first; even if the JPEG
+  // re-encode/upload fails below, we still persist the hash so the client gets
+  // the instant blurry placeholder.
+  const thumbhash = computeThumbhash(decoded);
+
+  // Display JPEG variant — heavier; upload may fail (storage quota, network)
+  // without invalidating the thumbhash we just computed.
+  let url: string | null = null;
+  try {
+    const jpeg = await encodeJpeg(decoded, 80);
+    const key = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.display.jpg`;
+    const { error } = await supabase.storage
+      .from('uploads')
+      .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
+    if (!error) {
+      url = supabase.storage.from('uploads').getPublicUrl(key).data.publicUrl;
+    }
+  } catch (_e) {
+    // url stays null; thumbhash may still be present
+  }
+
+  return { url, thumbhash };
+}
+
 export async function buildDisplayVariant(
   imageUrl: string,
   userId: string,
@@ -50,39 +87,13 @@ export async function buildDisplayVariant(
   try {
     const res = await fetch(imageUrl);
     if (!res.ok) return { url: null, thumbhash: null };
-
-    // ONE decode → both variants. Thumbhash gen nearest-neighbor
-    // downsamples the same DecodedImage we'd JPEG-re-encode for the
-    // display variant, so we never decode twice.
-    let decoded;
+    let decoded: DecodedImage;
     try {
       decoded = await decodeImage(await res.arrayBuffer());
     } catch (_e) {
       return { url: null, thumbhash: null };
     }
-
-    // Thumbhash — cheap, ~25-byte base64. Compute first; even if the
-    // JPEG re-encode/upload fails below, we still persist the hash so
-    // the client gets the instant blurry placeholder.
-    const thumbhash = computeThumbhash(decoded);
-
-    // Display JPEG variant — heavier; upload may fail (storage quota,
-    // network) without invalidating the thumbhash we just computed.
-    let url: string | null = null;
-    try {
-      const jpeg = await encodeJpeg(decoded, 80);
-      const key = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.display.jpg`;
-      const { error } = await supabase.storage
-        .from('uploads')
-        .upload(key, jpeg, { contentType: 'image/jpeg', cacheControl: '2592000' });
-      if (!error) {
-        url = supabase.storage.from('uploads').getPublicUrl(key).data.publicUrl;
-      }
-    } catch (_e) {
-      // url stays null; thumbhash may still be present
-    }
-
-    return { url, thumbhash };
+    return await buildDisplayVariantFromDecoded(decoded, userId, supabase);
   } catch (_e) {
     return { url: null, thumbhash: null };
   }
@@ -153,7 +164,15 @@ export async function sha256Hex(buf: ArrayBuffer): Promise<string> {
  *   5. Pack 64 bits into 16-char hex
  */
 export async function aHashHex(buf: ArrayBuffer): Promise<string> {
-  const decoded = await decodeImage(new Uint8Array(buf));
+  return aHashFromDecoded(await decodeImage(new Uint8Array(buf)));
+}
+
+/**
+ * aHash from an ALREADY-DECODED image — no decode. Lets a caller that already
+ * holds the decoded pixels (nightly-dreams' dup-detect) reuse them for both the
+ * perceptual hash AND the display variant, decoding the full image only once.
+ */
+export function aHashFromDecoded(decoded: DecodedImage): string {
   const data = decoded.data;
   const w = decoded.width;
   const h = decoded.height;
