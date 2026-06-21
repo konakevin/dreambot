@@ -392,12 +392,17 @@ export default function CreateScreen() {
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
 
-  // Placeholder text. The no-photo box has room to teach the real-face system:
-  // first-person + relationship words pull the user's dream-cast photos (self +
-  // plus_one) into the render as a face swap.
-  const placeholder = hasPhoto
-    ? 'Describe a scene...'
-    : 'Describe any dream. Say "me", "my wife", or "my friend" to add the real faces from your profile, or leave blank for a surprise.';
+  // Placeholder text. Mode-dependent: Direct (use_exact_prompt) sends the prompt
+  // verbatim to the model with NO transforms on our side — no face swap — so it
+  // must NOT teach the real-face "me / my wife" trick (that does nothing there).
+  // DreamBot mode runs the engine: the no-photo box teaches the real-face system
+  // (first-person + relationship words pull the user's dream-cast photos — self +
+  // plus_one — into the render as a face swap).
+  const placeholder = effectiveExactPrompt
+    ? 'Describe any scene. Your prompt is passed directly to the model. Real face and DreamBot mediums/vibes not supported in Direct mode.'
+    : hasPhoto
+      ? 'Describe a scene...'
+      : 'Describe any dream. Say "me", "my wife", or "my friend" to add the real faces from your profile, or leave blank for a surprise.';
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
