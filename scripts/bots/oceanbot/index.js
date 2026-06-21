@@ -87,6 +87,9 @@ module.exports = {
     canvas: blocks.CANVAS_MARITIME,
     oceanbot_mermaid_paint: blocks.MERMAID_PAINT,
     oceanbot_gpt_clean: blocks.GPT_CLEAN,
+    // deep-wonder is PINNED to this (mediumByPath) — locks the realistic
+    // vivid-glow aesthetic Kevin hearted instead of rolling random mediums.
+    oceanbot_deep_glow: blocks.DEEP_GLOW,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -158,6 +161,11 @@ module.exports = {
   // woman for airship-female / sexy-steampunk-woman.
   mediumByPath: {
     'mystical-mermaid': 'oceanbot_mermaid_paint',
+    // deep-wonder PINNED to the realistic vivid-glow medium (2026-06-21) —
+    // Kevin hearted the canvas/voltage realistic-color jellyfish and asked to
+    // copy that look for the path; rolling random mediums gave inconsistent
+    // results (watercolor "artsy", photography flat). One look every render.
+    'deep-wonder': 'oceanbot_deep_glow',
   },
 
   // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
@@ -176,12 +184,17 @@ module.exports = {
     'nightshade',
   ],
 
-  // No per-path vibe overrides — every OceanBot path (including
-  // reef-paradise and mystical-mermaid) uses the bot-wide 10-vibe list.
-  // Earlier trims (reef-paradise dark-vibe drop 2026-06-04, mystical-
-  // mermaid mystical-coded subset) were reversed 2026-06-05: full
-  // vibe surface area across the bot.
-  vibesByPath: {},
+  // Per-path vibe curation. Every other path uses the bot-wide 10-vibe
+  // list (full surface area — earlier trims reversed 2026-06-05).
+  //
+  // deep-wonder: CURATED "Vivid 6" (Kevin 2026-06-21). The path renders
+  // glowing creatures on pure black via the pinned realistic-glow medium;
+  // these 6 vibes give vivid / jewel / cool-saturated palettes that suit
+  // it. Dropped: voltage (its electric-arc palette dissolves the hero into
+  // an abstract column), peaceful + ethereal + ancient (palest palettes).
+  vibesByPath: {
+    'deep-wonder': ['cinematic', 'dark', 'epic', 'enchanted', 'nightshade', 'nostalgic'],
+  },
 
   paths: [
     'shipwreck-kingdom',
