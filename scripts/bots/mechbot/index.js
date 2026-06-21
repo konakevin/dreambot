@@ -368,12 +368,19 @@ module.exports = {
     'power-armor-infantry': '',
     'post-apoc-rust-tech': '',
     'humanoid-robots': '',
-    // NEW exotic path — empty per the wrapper-strip lesson; the look-led Sonnet
-    // body leads. The exotic identity lives entirely in the bespoke pools.
-    'scifi-cyborg-female': '',
+    // 2026-06-21: testing the ORIGINAL StarBot cyborg-woman path prefix here too
+    // (verbatim, commit 1a278ac3) — same drift fix as og-cyborg-female.
+    'scifi-cyborg-female':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'killer-cyborgs': '',
     'killer-cyborgs-male': '',
-    'og-cyborg-female': '',
+    // 2026-06-21: restored the ORIGINAL StarBot cyborg-woman path prefix
+    // (verbatim from starbot/index.js promptPrefixByPath, commit 1a278ac3) —
+    // the path had drifted to a robotic-chassis look on MechBot because the
+    // empty path-prefix let the bot-wide "intricate mechanical surfaces" lead
+    // CLIP. This puts "beautiful woman" back as the first tokens Flux reads.
+    'og-cyborg-female':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
     'mech-insect-hybrids': '',
     'hunter-killers': '',
     'abyss-mechs': '',
