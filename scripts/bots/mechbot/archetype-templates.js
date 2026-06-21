@@ -2008,9 +2008,9 @@ Render its eyes/sensors exactly this way — insect optics fused with machine.
 ━━━ THE SHOWSTOPPER (the ONE wow-element — render it prominently) ━━━
 ${signature_wow}
 
-━━━ COMPOSITION — THE HYBRID IS THE MAIN FOCUS ━━━
+━━━ COMPOSITION — FULL-BODY HERO (NON-NEGOTIABLE) ━━━
 ${composition}
-The hybrid is the HERO of the frame — large, central, legible, its bio-mechanical design the star.
+NON-NEGOTIABLE: render 80-100% of the hybrid's FULL BODY — head/mandibles through thorax to legs/abdomen, the ENTIRE creature inside the frame and instantly recognizable as that bug-machine. NEVER a fragment or extreme close-up — NO head-only, NO thorax-only, NO single-limb crop, NO detail-closeup that hides the rest of the body. Keep the intricate bio-mechanical detail legible ACROSS the whole creature; do NOT zoom in to show detail — pull the camera back so the complete silhouette reads. The hybrid is the large, central, legible hero, but its WHOLE body is in the frame.
 
 ━━━ THE COOL SCI-FI SETTING (keep it cool — but the HERO stays the focus) ━━━
 ${biome}

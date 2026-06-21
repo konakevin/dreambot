@@ -38,6 +38,8 @@ The environment is alive in its own way — bioluminescent walls, coolant pools,
 ━━━ CAMERA / FRAMING ━━━
 ${cameraAngle}
 
+NON-NEGOTIABLE: render 80-100% of the organism's FULL BODY — the ENTIRE creature, head/limbs to tail/rear, inside the frame and instantly recognizable as one whole biomech organism. NEVER a fragment or extreme close-up — NO head-only, NO torso-only, NO single-limb crop, NO detail-closeup that hides the rest of the body. "Giger / Scorn intimacy" means an eerie, unsettling MOOD — it does NOT mean a cropped body; keep the whole organism in frame. Keep the flesh-machine detail legible ACROSS the full body; do NOT zoom in to show detail — pull the camera back so the complete creature reads.
+
 ━━━ LIGHTING ━━━
 ${lighting}
 
