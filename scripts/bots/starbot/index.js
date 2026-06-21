@@ -96,11 +96,9 @@ module.exports = {
   //   • Flux 2 Flex          — 2026-06-01
   //   • Nano Banana          — 2026-06-05 (this commit, full bot-wide ban)
   useModelPicker: true,
-  allowedModels: [
-    'black-forest-labs/flux-2-pro',
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  // Flux 2 Pro BANNED bot-wide 2026-06-21 (Kevin) — removed from every path +
+  // the bot-wide lineup. StarBot is now flux-1.1-pro + flux-1.1-pro-ultra only.
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
 
   // Per-path override (2026-05-30 BOT_MODEL_TALLY): Kevin hearted Flux 2 Max
   // renders on `cosmic-vista` and `real-space` but explicitly wants those
@@ -114,49 +112,21 @@ module.exports = {
     // ── Character paths — Banana RE-ENABLED via per-path override
     // ── (Kevin 2026-06-05 character-path audit). Bot-wide bans Banana,
     // ── these paths opt back in. Bot-wide 4 models + Banana = 5.
-    'cosmic-oracle': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'female-explorer': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'male-explorer': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'space-femme': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    // Flux 2 Pro removed from these per-path lists 2026-06-21 (bot-wide ban).
+    'cosmic-oracle': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'female-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'male-explorer': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'space-femme': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // cosmic-vista: Banana/Flux2 dropped. F1.1 Pro re-added alongside Ultra
     // 2026-06-21 (Kevin: 1.1-pro allowed anywhere ultra is, overrides the
     // prior "redundant with Ultra" exclusion).
     'cosmic-vista': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
-    // alien-landscape: Banana/Flux2Flex dropped. F1.1 Pro re-added 2026-06-21.
-    'alien-landscape': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
-    // alien-city / megastructure — city-coded paths. Nano Banana removed
-    // 2026-06-21 (banned fleet-wide); F1.1 Pro re-added alongside Ultra the
-    // same day (Kevin's fleet-wide rule). Now Flux 2 Pro + F1.1 Ultra + F1.1 Pro.
-    'alien-city': [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
-    megastructure: [
-      'black-forest-labs/flux-2-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
+    // alien-landscape / alien-city / megastructure — Nano Banana + Flux 2 Pro
+    // both removed 2026-06-21 (fleet-wide Banana ban + StarBot Flux-2-Pro ban).
+    // Now flux-1.1-pro-ultra + flux-1.1-pro.
+    'alien-landscape': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    'alien-city': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    megastructure: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     // cozy-sci-fi-interior (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro
     // AND MINUS Flux 2 Flex (3 hearts each in tonight's comparison test).
     // F1.1 Pro intentionally kept (the "Pro redundant w/ Ultra" rule is NOT
