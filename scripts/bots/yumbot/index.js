@@ -60,6 +60,10 @@ const pathBuilders = {
   // (cotton-candy-cart / funnel-cake-stand / caramel-apple-booth /
   // snow-cone-stand / pretzel-cart / carnival-corn-dog).
   'carnival-food': require('./paths/carnival-food'),
+  // 2026-06-21 — STORYTELLING path: embodied kawaii food CHARACTERS out doing
+  // activities in real-world locations (amusement park / water park / mall /
+  // camping / etc.). Uses the embodied yumbot_food_character medium + ultra.
+  'food-adventures': require('./paths/food-adventures'),
 };
 
 module.exports = {
@@ -74,6 +78,10 @@ module.exports = {
     // visual treatment via sharedDNA.lookRegister (meal-types is the first).
     // Locks the kawaii-food character but NOT the medium / palette / finish.
     yumbot_food_neutral: blocks.YUMBOT_FOOD_NEUTRAL,
+    // 2026-06-21 — embodied food CHARACTER identity for the food-adventures
+    // storytelling path (little bodies, outfits, props). Look/palette still
+    // deferred to the rolled look_register.
+    yumbot_food_character: blocks.YUMBOT_FOOD_CHARACTER,
   },
 
   // Per-path medium override — meal-types uses the neutral anchor so the
@@ -105,6 +113,8 @@ module.exports = {
     'fruits-veggies': 'yumbot_food_neutral',
     'fast-food': 'yumbot_food_neutral',
     'carnival-food': 'yumbot_food_neutral',
+    // STORYTELLING path — embodied food-character identity, not face-baked-in.
+    'food-adventures': 'yumbot_food_character',
   },
 
   // Per-medium prompt prefix override (engine line 1314) — REPLACES the
@@ -127,6 +137,7 @@ module.exports = {
   //     behavior; the clean medium's own fragment carries the kawaii anchor).
   promptPrefixByMedium: {
     yumbot_food_neutral: 'kawaii illustration',
+    yumbot_food_character: 'kawaii illustration',
     yumbot_gpt_clean: '',
   },
   // Per-medium prompt-suffix override (engine line 1316-1319) — replaces
@@ -135,6 +146,7 @@ module.exports = {
   // register can carry the visual treatment without late-prompt smothering.
   promptSuffixByMedium: {
     yumbot_food_neutral: 'soft kawaii charm, every face is a food, no humans',
+    yumbot_food_character: 'soft kawaii charm, every character is a food, no humans',
   },
 
   useModelPicker: true,
@@ -186,6 +198,7 @@ module.exports = {
     'fruits-veggies',
     'fast-food',
     'carnival-food',
+    'food-adventures',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
@@ -206,6 +219,10 @@ module.exports = {
   // (handled outside modelByPath), so night renders stay on ultra.
   modelByPath: {
     'kawaii-koi-pond-ultra': 'black-forest-labs/flux-1.1-pro-ultra',
+    // food-adventures: embodied characters + props + real-world scenes are
+    // demanding — lock to ultra (best coherence now that gpt-image-2, which
+    // rendered the hearted taco-mariachi winner, is banned fleet-wide).
+    'food-adventures': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },

@@ -233,6 +233,10 @@ module.exports = {
   // Bucket F — 6 narrative-action sub-themes share axis pools.
   // Re-gen via scripts/gen-seeds/yumbot/gen-narrative-*.js
   YUMBOT_NARRATIVE_SCENES: load('yumbot_narrative_scenes'),
+  // food-adventures storytelling path (2026-06-21) — embodied food characters
+  // out doing activities in real-world locations. Reuses the narrative axis
+  // pools for camera/lighting/palette/time/companion/decor/atmospheric.
+  YUMBOT_FOOD_ADVENTURES_SCENES: load('yumbot_food_adventures_scenes'),
   YUMBOT_NARRATIVE_CAMERAS: load('yumbot_narrative_cameras'),
   YUMBOT_NARRATIVE_LIGHTING: load('yumbot_narrative_lighting'),
   YUMBOT_NARRATIVE_PALETTES: load('yumbot_narrative_palettes'),

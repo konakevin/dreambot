@@ -68,6 +68,14 @@ const GPT_CLEAN =
 const YUMBOT_FOOD_NEUTRAL =
   'Kawaii smiling faces baked INTO the food/drink itself (each food IS the character with dimpled-cheek blush, closed-arc eyes, tiny printed mouth ON the surface). The only cast in frame is food and drink — every face belongs to a food item. Visual treatment + surface + palette set by the look-register tokens that lead the prompt.';
 
+// 2026-06-21 — EMBODIED-character anchor for the food-adventures storytelling
+// path. Unlike YUMBOT_FOOD_NEUTRAL ("face baked into a food OBJECT"), this gives
+// each food a cute little BODY so it can wear outfits, hold props, and DO
+// activities out in the world (the hearted taco-mariachi register). Surface /
+// palette / finish still deferred to the rolled look_register.
+const YUMBOT_FOOD_CHARACTER =
+  'Kawaii food CHARACTERS — each character IS a food or drink come to life: you can always tell exactly which food it is, its real shape, color, toppings and texture kept fully intact, with a kawaii face, acting out the scene. The food itself is the character. Every character in frame is a food or drink. Visual treatment + surface + palette set by the look-register tokens that lead the prompt.';
+
 // 2026-06-12 de-cruft: the 4-line "LOOK REGISTER OVERRIDE … open your Flux
 // prompt with this medium … translate every surface … open with these tokens"
 // boilerplate was inlined verbatim at the top of all 19 templates. One terse
@@ -87,6 +95,7 @@ module.exports = {
   PROMPT_SUFFIX,
   GPT_CLEAN,
   YUMBOT_FOOD_NEUTRAL,
+  YUMBOT_FOOD_CHARACTER,
   YUMBOT_NIGHTTIME_BLOCK,
   YUMBOT_LOOK_OVERRIDE,
 };

@@ -1247,6 +1247,76 @@ The kawaii food (with kawaii face) is the HERO and the actor, caught MID-ACTION 
 The raw Flux prompt, 160-220 words, comma-separated. Open with LOOK REGISTER, then the kawaii hero MID-ACTION + the narrative moment, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
   },
 
+  YUMBOT_FOOD_ADVENTURES: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      scene,
+      camera_framing,
+      lighting,
+      palette,
+      time_of_day,
+      companion,
+      decor_accents,
+      atmospheric_accent,
+    } = slots;
+
+    const decorList = Array.isArray(decor_accents) ? decor_accents : [decor_accents];
+    const decorBlock = decorList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `${
+      sharedDNA && sharedDNA.lookRegister
+        ? YUMBOT_LOOK_OVERRIDE(sharedDNA)
+        : `━━━ LOOK REGISTER (NON-NEGOTIABLE — open your Flux prompt with this medium; render every surface in it) ━━━
+${LOOK_FALLBACK}
+
+`
+    }You are writing FOOD-ADVENTURE storytelling renders for YumBot — adorable kawaii food CHARACTERS out in the world DOING fun things (riding rides, playing, performing, exploring). This is the playful, story-driven side of YumBot, NOT a staged close-up of a smiling food. The VISUAL TREATMENT is locked by the LOOK REGISTER above.
+
+━━━ EMBODIED CHARACTER (NON-NEGOTIABLE — the food itself is the character) ━━━
+Each character IS a food or drink come to life — always clearly recognizable as that exact food (its real shape, color, toppings and texture kept intact), with a kawaii face, physically acting out the scene (riding, kicking, splashing, performing, building). The food itself is the character. No humans, no human hands — every character is a food or drink.
+
+━━━ THE SCENE (the food-character friend(s) + activity + real-world location + story moment) ━━━
+${scene}
+
+━━━ STORYTELLING FRAMING (NON-NEGOTIABLE — out in the world) ━━━
+The real-world LOCATION fills the frame around the characters — a rich, fully-built, readable environment (rides, water, trees, stalls, crowds, lights, etc.) with multi-tier depth: foreground detail, the characters mid-action in the midground, the location built out behind and to the sides. This is a SCENE happening in a PLACE — NEVER a figurine on a blank / white / studio backdrop, NEVER a tight product close-up, NEVER a flat pastel void. The setting is as fun and full as the characters.
+
+━━━ FOOD-FRIENDS — MULTIPLE HEROES WELCOME ━━━
+Include the food-friend characters named in the scene as CO-HEROES, not tiny extras — they're all friends sharing the adventure. A group of 2-4 food characters doing the activity TOGETHER is great (like a band of friends), each its own recognizable food doing its own action.
+
+━━━ DECOR ACCENTS — ALL 3 APPEAR BY NAME ━━━
+${decorBlock}
+
+━━━ COMPANION — APPEARS BY NAME (small, near the hero) ━━━
+${companion}
+
+━━━ ATMOSPHERIC ACCENT — APPEARS BY NAME ━━━
+${atmospheric_accent}
+
+━━━ CAMERA + FRAMING ━━━
+${camera_framing}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ COLOR PALETTE ━━━
+${palette}
+
+━━━ VIBE MOOD ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ HARD BANS ━━━
+- NO human faces/hands/characters (food IS the entire cast). NO photoreal tokens. NO tight close-up product shot. NO blank pastel-void background — the real-world location must read.
+
+━━━ OUTPUT ━━━
+The raw Flux prompt, 160-220 words, comma-separated. Open with the LOOK REGISTER tokens, then the embodied hero character mid-action + the real-world location + the story moment + the secondary food-friends, then decor names + companion + atmospheric accent, then camera + lighting + time + palette + vibe. NO preamble, NO titles, NO headers, NO ━━━ markers, NO bulleted lists.`;
+  },
+
   YUMBOT_PLACES: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       scene,

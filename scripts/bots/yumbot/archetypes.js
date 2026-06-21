@@ -364,6 +364,29 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  YUMBOT_FOOD_ADVENTURES: {
+    description:
+      'PATH-BESPOKE — YumBot food-adventures (2026-06-21). STORYTELLING path: EMBODIED kawaii food CHARACTERS (little chibi bodies, outfits, props) out DOING activities in real-world locations (amusement park / water park / mall / camping / park / beach / concert / etc.). Wider establishing framing — the opposite of the close-up "face baked in" paths. Uses the yumbot_food_character medium + sharedDNA.lookRegister; reuses the narrative axis pools.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene',
+        'camera_framing',
+        'lighting',
+        'palette',
+        'time_of_day',
+        'companion',
+        'decor_accents',
+        'atmospheric_accent',
+      ],
+    },
+    pickN: { decor_accents: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   YUMBOT_PLACES: {
     description:
       'PATH-BESPOKE — YumBot places (2026-06-07 trial). Bucket-aggregated path covering 6 unexpected-place sub-themes (greenhouse / library / train / amusement-park / aquarium / rooftop-garden). Same architecture as meal-types / whimsical / cuisine / scale. Uses sharedDNA.lookRegister via yumbot_food_neutral medium.',
