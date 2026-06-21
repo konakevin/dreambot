@@ -173,8 +173,10 @@ module.exports = {
     'mini-chef',
     'cottagecore-nature',
     'coquette-food',
-    'kawaii-koi-pond',
-    'kawaii-koi-pond-ultra',
+    // kawaii-koi-pond + kawaii-koi-pond-ultra DEACTIVATED 2026-06-21 (Kevin) —
+    // their hero is koi fish / axolotls (animals), not food. YumBot is a FOOD
+    // bot; non-food paths removed. Files + pathBuilders + modelByPath entries
+    // preserved for easy revert (just re-add the two strings here).
     'meal-types',
     'whimsical',
     'cuisine',
