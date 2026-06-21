@@ -328,6 +328,9 @@ module.exports = {
     // GPT-2, F1.1 Pro) stripped — Ultra renders the new National-Geographic
     // medium with the right premium-photography fidelity.
     'black-forest-labs/flux-1.1-pro-ultra',
+    // 2026-06-21 (Kevin): F1.1 Pro re-allowed alongside Ultra fleet-wide
+    // (overrides the 2026-06-01 ultra-only lock above).
+    'black-forest-labs/flux-1.1-pro',
   ],
 
   // Chaos layer — DISABLED for EarthBot (2026-06-15).

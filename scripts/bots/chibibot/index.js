@@ -93,12 +93,9 @@ module.exports = {
   // chibi creature with no abstract drift (gorgeous critter-village + cute
   // creature renders). Non-look paths still swap to clean. (MVP-4 listed here;
   // expand to all 16 look paths at full rollout.)
-  cleanMediumByModel: {
-    'google/gemini-2-image': {
-      medium: 'chibibot_gpt_clean',
-      skipPaths: CHIBI_LOOK_PATHS,
-    },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only). (CHIBI_LOOK_PATHS still drives mediumByPath.)
+  cleanMediumByModel: {},
 
   // Per-path medium lock — falls through to bot.mediums 50/50 rotation
   // when path not listed.
@@ -213,9 +210,11 @@ module.exports = {
   // gpt-2 picks auto-swap to chibibot_gpt_clean via cleanMediumByModel (mig
   // 238) so they render with the dedicated clean directive instead of the
   // neutral medium's Pop-Mart vinyl default.
-  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra'],
+  // flux-1.1-pro allowed alongside ultra everywhere (Kevin 2026-06-21).
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
   modelWeights: {
     'black-forest-labs/flux-1.1-pro-ultra': 80,
+    'black-forest-labs/flux-1.1-pro': 80,
   },
 
   // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:

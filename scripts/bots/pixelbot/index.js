@@ -69,9 +69,9 @@ module.exports = {
   mediumStyles: {
     pixelbot_gpt_clean: blocks.GPT_CLEAN,
   },
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'pixelbot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   promptPrefixByMedium: {
     pixelbot_gpt_clean: '',
   },

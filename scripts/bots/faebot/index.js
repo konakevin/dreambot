@@ -59,9 +59,9 @@ module.exports = {
   // nano-banana clean-render override (2026-06-07; no gpt-image-2 in FaeBot's
   // lineup). Banana reads the painted graphic-novel anchors as "go abstract";
   // the clean medium (+ empty promptPrefixByMedium) lets the seed's fae scene lead.
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'faebot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
 
   // Per-medium prompt prefix overrides for flower-fairy: lead with painterly
   // + fae register so Flux lands on the soft ethereal style FaeBot wants.
@@ -111,11 +111,8 @@ module.exports = {
   useModelPicker: true,
   // Trimmed to 3 (Kevin 2026-06-02): Banana + F1.1 Pro + F1.1 Pro Ultra.
   // History: flux-2-pro removed 2026-06-01; gpt-image-2 + flux-2-max removed today.
-  allowedModels: [
-    'google/gemini-2-image',
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  // Nano Banana banned fleet-wide 2026-06-21 (Kevin) — bots are FLUX-ONLY.
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   // modelByPath: stripped 2026-05-30 to let allowedModels picker drive selection.
   // Original locks (restore individual lines if a path needs pinning again):
   // modelByPath: {

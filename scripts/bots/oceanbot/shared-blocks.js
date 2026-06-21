@@ -66,6 +66,16 @@ const CANVAS_MARITIME =
 const MERMAID_PAINT =
   'Classical fairy-tale illustration of mer-folk, golden-age storybook plate, smooth painted shading with clearly readable anatomy and recognizable mer-folk features, luminous jewel-tone palette, mythic illustrated register';
 
+// Dedicated deep-wonder medium — PINNED via mediumByPath (NOT rolled). Kevin
+// hearted the canvas/voltage crystal-jellyfish render — a clean REALISTIC vivid
+// color render (not a painting) — and asked to lock that exact aesthetic for the
+// path instead of rolling random mediums (watercolor → "artsy" splatter,
+// photography → flat/dark, canvas → inconsistent). Positive-only, no negation
+// soup. The "realistic / clean / three-dimensional" anchor keeps it from going
+// artsy/abstract; the "intense saturated glowing color" keeps it from going flat.
+const DEEP_GLOW =
+  'ultra-detailed realistic bioluminescent creature render, crisp clean cinematic three-dimensional clarity, the creature lit entirely by its own intense glowing bioluminescence against pure black, rich saturated luminous color, strong cool rim-light defining every edge';
+
 // Ship anatomy guardrail — embedded into ANY naval-lore path template
 // (pirates / ghost-ship / shipwreck-kingdom). Positive-language only.
 // Per legacy lesson f7f319cf: modern hulls / steamships / submarines /
@@ -134,16 +144,22 @@ The creature's BODY must be visible in the frame — mantle, head, eye, bulk, sh
 // Clean-render medium for gpt-image-2 + nano-banana (routed via
 // cleanMediumByModel in index.js). The CANVAS_MARITIME oil anchors + bot prefix
 // pull these models into abstract painted plates; this positive-only directive
-// keeps a readable ocean scene. mystical-mermaid opts out (keeps its painted
-// mer-folk medium via mediumByPath). Light genre tag, no negation cascade.
+// keeps a clean readable render. mystical-mermaid opts out (keeps its painted
+// mer-folk medium via mediumByPath).
+// MEDIUM = ART TREATMENT ONLY — describes the illustrative STYLE, never scene
+// content. NO scene nouns here (ships / sea life / underwater scenes / nautical /
+// age-of-sail) — those compete with the path's actual subject (e.g. they injected
+// surface ships + a sunken castle into a creature-only deep-wonder render,
+// 2026-06-20). One-size-fits-all clean illustration for every OceanBot path.
 const GPT_CLEAN =
-  'Cinematic ocean illustration, clean editorial render with clearly readable ships, sea life, and underwater scenes, rich jewel-tone nautical palette with atmospheric depth, age-of-sail and deep-sea register';
+  'Clean cinematic illustration, crisp editorial render, clearly readable subject with layered atmospheric depth, rich saturated color, polished illustrative finish';
 
 module.exports = {
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CANVAS_MARITIME,
   MERMAID_PAINT,
+  DEEP_GLOW,
   PRE_1850_VESSEL_BLOCK,
   SUBMERGED_CIVILIZATION_BLOCK,
   PIRATE_ERA_BLOCK,

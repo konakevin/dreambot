@@ -48,11 +48,8 @@ module.exports = {
   useModelPicker: true,
   // Banned 2026-06-02: flux-2-flex (Kevin heart-ban).
   // Banned 2026-06-02: flux-2-max (Kevin heart-ban).
-  allowedModels: [
-    'google/gemini-2-image',
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  // Nano Banana banned fleet-wide 2026-06-21 (Kevin) — bots are FLUX-ONLY.
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   // Per-path model pins land here when a specific path needs a specific model.
   modelByPath: {},
   // (history) modelByPath was previously Object.fromEntries(
@@ -70,9 +67,9 @@ module.exports = {
   mediumStyles: {
     brickbot_gpt_clean: blocks.GPT_CLEAN,
   },
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'brickbot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   promptPrefixByMedium: {
     brickbot_gpt_clean: '',
   },

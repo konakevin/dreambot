@@ -116,9 +116,9 @@ module.exports = {
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). The CGI +
   // painterly-fusion medium/prefix make these models pick one extreme; the
   // clean medium (+ empty promptPrefixByMedium) lets the seed's kawaii food lead.
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'yumbot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   // Per-medium prompt-prefix override (engine line 1314) — REPLACES the
   // bot.promptPrefix when set for the current medium.
   //   yumbot_food_neutral: tight 4-word anchor so the rolled sharedDNA
@@ -139,8 +139,8 @@ module.exports = {
 
   useModelPicker: true,
   // Banned 2026-06-07: flux-2-max (Kevin heart-ban).
+  // Nano Banana banned fleet-wide 2026-06-21 (Kevin) — bots are FLUX-ONLY.
   allowedModels: [
-    'google/gemini-2-image',
     'black-forest-labs/flux-dev',
     'black-forest-labs/flux-1.1-pro',
     'black-forest-labs/flux-1.1-pro-ultra',

@@ -54,9 +54,9 @@ module.exports = {
   // clean sci-fi illustration register instead. (Banana is bot-wide-banned but
   // re-added on several paths via modelByPath, so it can still roll.)
   // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'starbot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
 
   mediumByPath: {
     'real-space': 'real_astro', // NASA-grade astrophotography stays separate
@@ -134,31 +134,28 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    // cosmic-vista (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro (2026-05-30),
-    // MINUS Flux 2 Flex + MINUS Banana (heart-bans from today's comparison
-    // test), AND MINUS Flux 1.1 Pro (Ultra is strictly better — Pro is
-    // redundant when Ultra is present). Down to 2 models.
-    'cosmic-vista': ['black-forest-labs/flux-1.1-pro-ultra'],
-    // alien-landscape (Kevin 2026-05-31): bot-wide MINUS Flux 2 Flex,
-    // MINUS Banana (heart-ban), AND MINUS Flux 1.1 Pro (redundant w/ Ultra).
-    // Down to 3 models.
+    // cosmic-vista: Banana/Flux2 dropped. F1.1 Pro re-added alongside Ultra
+    // 2026-06-21 (Kevin: 1.1-pro allowed anywhere ultra is, overrides the
+    // prior "redundant with Ultra" exclusion).
+    'cosmic-vista': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    // alien-landscape: Banana/Flux2Flex dropped. F1.1 Pro re-added 2026-06-21.
     'alien-landscape': [
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
     ],
-    // alien-city / megastructure — city-coded paths (Kevin 2026-06-05):
-    // Banana re-enabled per-path (overriding the bot-wide Banana ban) and
-    // Flux 1.1 Pro explicitly banned per-path. Banana handles cityscape
-    // density well; F1.1 Pro is redundant with Ultra on these. Down to 3.
+    // alien-city / megastructure — city-coded paths. Nano Banana removed
+    // 2026-06-21 (banned fleet-wide); F1.1 Pro re-added alongside Ultra the
+    // same day (Kevin's fleet-wide rule). Now Flux 2 Pro + F1.1 Ultra + F1.1 Pro.
     'alien-city': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
     ],
     megastructure: [
-      'google/gemini-2-image',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
     ],
     // cozy-sci-fi-interior (Kevin 2026-05-31): bot-wide MINUS Flux 2 Pro
     // AND MINUS Flux 2 Flex (3 hearts each in tonight's comparison test).
@@ -174,7 +171,8 @@ module.exports = {
     // F1.1 Ultra after 3 model-test rounds — Banana / F2 Pro / F2 Flex
     // produced "too messy" renders even with gating; F1.1 Ultra ships clean,
     // GPT-2 handles the gated density well.
-    'space-opera': ['black-forest-labs/flux-1.1-pro-ultra'],
+    // F1.1 Pro re-added alongside Ultra 2026-06-21 (Kevin's fleet-wide rule).
+    'space-opera': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     // real-space (Kevin 2026-05-31): GPT-2 + F1.1 Pro + F1.1 Ultra after the
     // premium-tier axis enrichment + 9-render test. Banana / F2 Pro / F2 Flex
     // remain banned. F1.1 Pro kept (Kevin's "keep Pro on non-character paths"

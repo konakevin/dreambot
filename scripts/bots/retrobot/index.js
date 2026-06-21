@@ -49,9 +49,9 @@ module.exports = {
   mediumStyles: {
     retrobot_gpt_clean: blocks.GPT_CLEAN,
   },
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'retrobot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   promptPrefixByMedium: {
     retrobot_gpt_clean: '',
   },

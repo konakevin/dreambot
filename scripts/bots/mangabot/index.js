@@ -64,9 +64,9 @@ module.exports = {
     // art-style to the rolled sharedDNA.lookRegister. See shared-blocks.js.
     mangabot_anime_neutral: blocks.ANIME_NEUTRAL,
   },
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'mangabot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
 
   // ── "Looks" axis (2026-06-07) — full rollout, 17 of 21 paths ───────────
   // The look-enabled paths route to mangabot_anime_neutral so the bot-wide

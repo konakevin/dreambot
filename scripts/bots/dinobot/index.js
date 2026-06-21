@@ -74,9 +74,9 @@ module.exports = {
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
   // read the IMAX/PBR/ray-traced anchors as "go abstract"; the clean medium
   // (+ empty prefix/suffix) lets the seed's dinosaur scene lead.
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'dinobot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   promptPrefixByMedium: {
     dinobot_gpt_clean: '',
   },

@@ -59,10 +59,11 @@
 // the native API providers + fixed the data-URL downloader + Nano Banana's
 // aspect-ratio default, so both are now production-grade and back in.
 const ALL_ENABLED_AI_MODELS = [
-  'google/gemini-2-image', // Nano Banana — 4¢, ~22s (native Gemini)
-  // GPT Image 2 (openai/gpt-image-2) BANNED fleet-wide for bots 2026-06-17 (Kevin)
-  // — removed here AND from every bot's allowedModels / modelByPath / pathWeights
-  // / cleanMediumByModel. Not used by bots going forward.
+  // Nano Banana (google/gemini-2-image) BANNED fleet-wide for bots 2026-06-21 (Kevin),
+  // joining GPT Image 2 (openai/gpt-image-2) BANNED 2026-06-17. Both removed here AND
+  // from every bot's allowedModels / modelByPath / pathWeights / cleanMediumByModel.
+  // Bots are FLUX-ONLY going forward. (These models remain available to user-facing
+  // Create mode / nightly via their own model lists — this registry is bot-only.)
   'black-forest-labs/flux-dev', // 3¢ — open-weight Flux 1, artistic register
   'black-forest-labs/flux-2-flex', // 6¢
   'black-forest-labs/flux-1.1-pro-ultra', // 6¢

@@ -103,9 +103,9 @@ module.exports = {
   // — but Kevin preferred Banana on its clean prompt; reverted. The looks
   // ride the 2 Flux models.) The gpt-image-2 entry was removed 2026-06-17
   // (banned fleet-wide for bots).
-  cleanMediumByModel: {
-    'google/gemini-2-image': { medium: 'bloombot_gpt_clean' },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   mediumStyles: {
     bloombot_gpt_clean: blocks.GPT_CLEAN,
     // Override the DB bloom_hyperreal_cgi flux_fragment with the neutral

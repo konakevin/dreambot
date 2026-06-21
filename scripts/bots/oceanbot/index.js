@@ -94,10 +94,9 @@ module.exports = {
   // promptPrefixByMedium) lets the seed's ocean scene lead. mystical-mermaid is
   // EXCLUDED — it's gpt-2-locked with its own painted mer-folk medium
   // (mediumByPath below), so skipPaths keeps that look intact.
-  cleanMediumByModel: {
-    // gpt-image-2 entry removed 2026-06-17 (banned fleet-wide).
-    'google/gemini-2-image': { medium: 'oceanbot_gpt_clean', skipPaths: ['mystical-mermaid'] },
-  },
+  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
+  // both now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
   promptPrefixByMedium: {
     oceanbot_gpt_clean: '',
   },
@@ -114,11 +113,10 @@ module.exports = {
   // bans), flux-dev (artistic-fights-ocean-photoreal), flux-1.1-pro
   // (redundant with Ultra after dream_mediums fix surfaced Ultra).
   useModelPicker: true,
-  allowedModels: [
-    'google/gemini-2-image',
-    // gpt-image-2 removed 2026-06-17 (banned fleet-wide).
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  // Nano Banana removed 2026-06-21 (banned fleet-wide). Bot-wide lineup is
+  // flux-1.1-pro-ultra + flux-1.1-pro (1.1-pro re-allowed alongside ultra
+  // fleet-wide, Kevin 2026-06-21).
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
 
   // Per-path model bans (Kevin 2026-06-04). lost-cities + pirates used
   // to have their own modelByPath dropping flux-1.1-pro; that became
@@ -130,17 +128,16 @@ module.exports = {
     // register reads stronger on the other 2 models. Down to 2.
     // (flux-2-pro dropped from this entry when removed bot-wide
     // 2026-06-05.)
-    'ghost-ship': ['google/gemini-2-image', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'ghost-ship': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     // deep-wonder: the abyssal-black bioluminescent register reads
     // strongest on Ultra. (Gemini dropped earlier; gpt-image-2 removed
     // 2026-06-17 with the fleet-wide ban.) Down to 1.
-    'deep-wonder': ['black-forest-labs/flux-1.1-pro-ultra'],
+    'deep-wonder': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     // bioluminescent-night: bot-wide MINUS Flux 2 Pro PLUS Flux 1.1 Pro
     // (re-enabled here even though banned bot-wide). Kevin's call from
     // R0b — Flux 2 Pro reads off for the surface-glow register and
     // Flux 1.1 Pro fits better here than on other paths. Stays at 4.
     'bioluminescent-night': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],

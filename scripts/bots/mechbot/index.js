@@ -231,16 +231,13 @@ module.exports = {
   // subtraction of ALL_ENABLED_AI_MODELS) so the lineup is auditable.
   // BOT_MODEL_TALLY.md is the source of truth.
   useModelPicker: true,
-  // gpt-image-2 BANNED bot-wide 2026-06-09 (Kevin) — its MechBot renders came
-  // out messy / hard-to-read: it can't resolve dense hard-surface mech + cyborg
-  // machinery into coherent forms, rendering busy greeble-clutter instead.
-  // Flux + nano-banana handle hard-surface detail cleanly; gpt-2 doesn't.
-  allowedModels: [
-    'google/gemini-2-image',
-    'black-forest-labs/flux-dev',
-    'black-forest-labs/flux-1.1-pro-ultra',
-    'black-forest-labs/flux-1.1-pro',
-  ],
+  // 2026-06-21 (Kevin) — MechBot is FLUX-LOCKED bot-wide to flux-1.1-pro +
+  // flux-1.1-pro-ultra ONLY. Nano Banana (google/gemini-2-image) and gpt-image-2
+  // are both banned: Banana goes painterly / over-symmetric and renders the
+  // hard-surface mech + organic-biomech briefs as unreadable mush (the hearted
+  // alien-biomechs failure), and gpt-2 produces greeble-clutter. flux-dev also
+  // dropped (lowest Flux fidelity; was already off the robot/mech paths).
+  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
 
   // Per-path bans (2026-05-30): cyborg-woman + cyborg-man drop Nano Banana
   // and Flux 2 Pro per Kevin's review of the 24-render cyborg-woman test.
@@ -248,31 +245,17 @@ module.exports = {
   // above already excludes them, but kept consistent for readability).
   // cyborg-man path is deactivated 2026-06-05 — entry left for reference if
   // the path is ever re-enabled.
-  // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
-  // 'mechbot_gpt_clean' medium + minimal prefix override. Pulls these models out
-  // of the abstract-plate prior triggered by the bot's "concept art /
-  // production-art polish" prefix. Content-bearing path prefixes (cyborg gender/
-  // body locks) are unlisted here, so they're KEPT on the swap.
-  // 2026-06-07 (extends the 2026-06-05 gpt-only fix to nano-banana).
-  cleanMediumByModel: {
-    // scifi-cyborg-female skips the mech-clean swap — that medium is mech-coded
-    // ("recognizable machinery") and fights the exotic alien-cyborg aesthetic;
-    // banana renders the look-led brief directly instead.
-    'google/gemini-2-image': { medium: 'mechbot_gpt_clean', skipPaths: ['scifi-cyborg-female'] },
-  },
+  // cleanMediumByModel retired 2026-06-21 — it only ever routed Nano Banana /
+  // gpt-2 to the clean medium, and both are now banned bot-wide (FLUX-only).
+  cleanMediumByModel: {},
 
   promptPrefixByMedium: {
     mechbot_gpt_clean: 'mech sci-fi scene',
   },
 
   modelByPath: {
-    // ── Character paths — Banana RE-ENABLED 2026-06-05 for character-path audit.
-    'cyborg-woman': [
-      'google/gemini-2-image',
-      'black-forest-labs/flux-dev',
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    // 2026-06-21: Flux-locked (1.1-pro + ultra) with the bot-wide ban.
+    'cyborg-woman': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // NEW exotic path — Flux (highest fidelity for dense exotic detail) +
     // nano-banana. gpt-2 excluded bot-wide; flux-dev excluded for fidelity.
     // Locked to Flux 1.1-pro + ultra (2026-06-09, Kevin) — banana goes painterly
@@ -316,7 +299,6 @@ module.exports = {
     'mecha-pilots': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'humanoid-robots': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'power-armor-infantry': [
-      'google/gemini-2-image',
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
