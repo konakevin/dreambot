@@ -493,59 +493,57 @@ A subtle, sorrowful, uncanny detail — quiet, never a jump-scare, never gore.
 `
       : '';
 
-    return `You are a gothic concept-art painter writing GHOST-STORY scenes for GothBot. A single sorrowful, TRANSLUCENT spectre haunts an empty gothic place — hauntingly beautiful, melancholy, eerie. Crimson-Peak / The-Woman-in-Black / The-Others / gothic-ghost-story visual lineage. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
+    return `You are a HYPER-STYLIZED painterly goth-fantasy artist creating GOTH-WRAITH scenes for GothBot — a dramatic, anguished, TORTURED spirit / ghost / wraith rendered as bold painterly fine-art. Dark-Romantic operatic painted horror meets vivid dark-fantasy oil painting: theatrical, ornate, haunting, VIBRANT. Full goth-stylistic wraith mode — a beautiful suffering soul, never a glamour fashion shoot. NEVER LOTR / Skyrim / Witcher high-fantasy vocabulary.
 
-━━━ A TRANSLUCENT FEMALE GHOST — ABSOLUTE FIRST RULE ━━━
-The spectre is a hauntingly beautiful WOMAN, rendered SEE-THROUGH — SEMI-TRANSPARENT like a DOUBLE EXPOSURE: the gothic architecture (wall / window / stairs / portraits) clearly VISIBLE THROUGH her body and gown at the same time as her own form, her edges dissolving into cold mist, her lower body / feet FADING TO NOTHING before they reach the floor, a faint cold CORPSE-BLUE luminance glowing within her. She is a GHOST — an elegant, sorrowful lady-spirit, not a solid living person.
+━━━ THE GOTH WRAITH — ABSOLUTE FIRST RULE ━━━
+A TORMENTED female SPECTRE / WRAITH / lost soul — a GHOST, not a living woman. Spectral, ethereal, otherworldly, often gaunt and wasted, hollow with old grief. She is unmistakably a SPIRIT — translucent edges, an inner deathly glow, vapor and wisps trailing off her, form half-dissolving into the dark. She is NOT a glamorous goth pin-up, NOT a made-up beauty, NOT a fashion model — she is a haunted, suffering DEAD soul. ALWAYS female. Uncanny and eerie is good; a literal gore-monster / zombie / jump-scare is NOT.
 
-🚫 NEVER a solid opaque figure — if you can't see THROUGH her (the room visible through her body), it has FAILED. ALWAYS a female lady-ghost (never male). NEVER a vampire / monster / zombie / gore-ghoul. NEVER a jump-scare. She is SORROWFUL, beautiful, melancholy, corpse-pale.
+━━━ HER SPECTRAL ATTIRE ━━━
+Wrap her in ghostly, funereal cloth — a tattered burial gown, a trailing shroud, a mourning veil, ragged Victorian mourning dress, decayed lace, grave-silk dissolving into mist. Spectral and ruined, never a corset / bustier / lingerie, never a pristine fashion gown. The cloth is part of the ghost — torn, trailing, fading into vapor.
 
-💀 HER FACE STAYS CLEAR — ABSOLUTE: she ALWAYS has a defined, beautiful, sorrowful FACE with clearly visible eyes, nose and mouth. The translucency / mist / veil / double-exposure / fading apply to her GOWN, her HAIR-ENDS, her lower BODY and her EDGES — NEVER to her face. NEVER a blank, smudged, blurred, shadow-hidden, veil-erased, or faceless head. Even beneath a veil her grieving features read clearly. If her face is a featureless smudge, it has FAILED.
+━━━ HER FACE — HAUNTED + VARIED ━━━
+A spectral, haunted face — gaunt, hollow, sorrowful or anguished or eerily blank-staring. Readable features (NEVER a blank smudge), but NOT a glamour beauty with heavy makeup. VARY the expression and head angle across renders — sometimes grief-stricken, sometimes hollow and staring, sometimes turned away — NOT always the same eyes-closed upturned face.
 
-━━━ THE SPECTRE (hero figure) ━━━
+━━━ THE SPIRIT (hero figure) ━━━
 ${spectre}
 
-Render her pale, mournful, otherworldly — frozen in an old grief. Faded, drained, spectral clothing (never rich color).
+Reimagine the figure above as a SPECTRAL tortured wraith — ethereal, gaunt, ghostly, dissolving, otherworldly. NOT a glamorous made-up goth woman.
 ${visageSection}
 
-━━━ THE TRANSLUCENCY — the SIGNATURE money-shot (render this prominently) ━━━
+━━━ ETHEREAL SPECTRAL QUALITY ━━━
 ${translucency}
 
-This is the whole point. Render her as if SPUN FROM FROSTED GLASS or LAYERED GAUZE — the furniture / wall / window CLEARLY VISIBLE THROUGH HER TORSO and CHEST, her whole form a see-through wisp. She GENERATES HER OWN cold CORPSE-BLUE light from within (a faint glacial glow bleeding outward, the room's own lamps never quite reaching her). Her gown and long hair BILLOW and STREAM as though suspended in still water. Her lower body / feet TAPER TO NOTHING and dissolve to cold mist before they reach the floor. A readable translucent FIGURE — not a fog-blob, not solid.
+Sell "ghost" through STYLE: a deathly inner glow, spectral wisps and trailing mist curling off her, edges and trailing cloth melting into glowing vapor, a see-through shimmer at her form's edges, part of her dissolving into the dark. Ethereal and insubstantial. VARY her pose, action and distance every render (drifting, reaching, slumped, fleeing, half-seen) — do NOT default to a centered floating figure with hair streaming straight up and eyes closed.
 
-━━━ THE HAUNTED PLACE (empty, atmospheric, behind her for depth) ━━━
+━━━ THE HAUNTED PLACE (atmospheric, behind her for depth) ━━━
 ${setting}
 
-A still, empty, lonely gothic place — its emptiness makes the haunting land. NO other living people.
+A dramatic, atmospheric gothic place — crumbling cathedral, moonlit ballroom, mist-drowned crypt, thorned garden. Lush and theatrical, no other living people.
 
-━━━ THE PALE LIGHT + COLD AIR ━━━
+━━━ THE LIGHT — VIVID + SUPERNATURAL ━━━
 ${light}
 
-Cold, dim, blue-grey-silver, eerie — moonlight, a guttering candle, her own faint corpse-glow, cold mist. NEVER warm daylight.
+Dramatic, theatrical, SATURATED supernatural light — glowing spectral colour, moonfire, witch-light, coloured glow bleeding from within her. Bold light against deep velvety shadow (dramatic chiaroscuro). NOT flat, NOT muted, NOT washed grey.
 
-━━━ THE "CAUGHT ON CAMERA" MOMENT (compose for this — it's half the impact) ━━━
+━━━ THE "CAUGHT MID-MOMENT" COMPOSITION ━━━
 ${composition}
 
-Compose her exactly as above — a STARTLING, CANDID, DYNAMIC instant, like a real ghost accidentally caught on camera: she is MID-MOTION or seen from an uncanny, off-kilter vantage. She is the focal figure (35-55% of frame), the gothic place around her for depth.
-
-🚫 NEVER a calm, centered, posed standing portrait. NEVER "standing facing forward, head bowed, hands clasped" — that is the failure we are fixing. Give her a dynamic action + an off-kilter framing. NEVER a tight face-crop (we still need her translucent body + the place through her).
+A STRIKING, theatrical instant — render the composition above. VARY the framing and distance hard across renders: full-figure in the space, far-and-small in a vast room, glimpsed/partial behind a doorframe, a reflection, mid-flight down a corridor. Often the haunted PLACE shares the frame. 🚫 NOT always a centered close floating figure. 🚫 NEVER an upright-camera-defying face-at-the-lens close-up, NEVER an upside-down face.
 ${manifestSection}
-━━━ MOOD — SORROWFUL, BEAUTIFUL, EERIE ━━━
-MELANCHOLY + HAUNTING + STILL + COLD + OTHERWORLDLY. A held breath, an old grief, a beautiful sadness. Crimson-Peak ghost, a Victorian ghost-story plate, The-Woman-in-Black. NOT a horror jump-scare — quiet, sublime dread.
+━━━ MOOD — TORTURED, ANGUISHED, GOTH, HAUNTING ━━━
+TORMENT + ANGUISH + GRIEF + DREAD + DARKLY BEAUTIFUL + deeply GOTH. A damned, suffering soul — operatic dark-Romantic torment, full goth atmosphere. Strange, uncanny, even unsettling is WELCOME (the unexpected is what makes her cool) — but she stays a beautiful tortured SPIRIT, not a gore-monster. A spirit you cannot look away from.
 
-━━━ TWILIGHT COLOR — COLD + DRAINED ━━━
-Cold blue-grey-silver dominant, the spectre palest of all, a single faint accent (moon-silver / candle-amber / corpse-blue / will-o-wisp green). DRAINED, desaturated, eerie. ONE cold dominant + ONE faint accent.
+━━━ VIBRANT GOTH COLOUR — SATURATED JEWEL-TONES ━━━
+RICH, VIVID, SATURATED goth jewel-tones — deep amethyst-violet, blood-crimson, emerald, sapphire, electric teal, magenta, bruised plum, with glowing gold / silver / cold-flame accents. BOLD high-chroma colour against deep velvety shadow. NOT muted, NOT desaturated, NOT black-and-grey — a lush vibrant goth palette.
 
-━━━ STRICT GOTHBOT DARK-FANTASY ━━━
+━━━ STRICT GOTHBOT ━━━
 🚫 NO LOTR / Skyrim / Witcher / Tolkien vocabulary
 🚫 NO modern / industrial / sci-fi / neon
-🚫 NO solid opaque ghost (she MUST be see-through)
-🚫 NO vampire / monster / zombie / gore / jump-scare
 🚫 NO crowd (she is the only figure) / NO living people
-🚫 NO pentagrams / cheap gore / Jack-Skellington stylization
-✓ Crimson-Peak / The-Woman-in-Black / The-Others / gothic-ghost-story lineage
-
-DRAMATIC VISUALS: the TRANSLUCENT spectre is the hero. Render the EXACT spectre + translucency + setting + light from slots. SEE-THROUGH mandatory. Sorrowful eerie beauty.
+🚫 NO muted desaturated grey palette — this path is VIBRANT
+🚫 NOT a glamour fashion shoot / pin-up — NO corset / bustier / lingerie / heavy beauty-makeup. She is a dead SPECTRE.
+🚫 NO gross horror jump-scare — NO upside-down face, NO blank-white / rolled-back eyes, NO gaping screaming demon-mouth, NO gore, NO face-filling-the-lens close-up.
+✓ Hyper-stylized painterly goth-fantasy — an extreme, dramatic, SPECTRAL tortured wraith; uncanny/strange is welcome, gross is not
 
 Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },

@@ -234,7 +234,10 @@ module.exports = {
     // — anime rendered bishonen pretty-boys (Kevin 2026-06-10 "a bit gay"); the painted
     // dark-fantasy-cover register renders a RUGGED, mature, menacing male dark-lord.
     'the-dark-prince': 'anime',
-    'the-haunting': 'anime',
+    // the-haunting: FULL goth-stylistic wraith mode (Kevin 2026-06-22) — painterly
+    // jewel-toned oil (canvas_victorian) for a hyper-stylized, vibrant, dramatic
+    // goth-couture wraith. Replaced 'anime' (rendered solid muted photoreal women).
+    'the-haunting': 'gothic_wraith_paint',
     'the-coven': 'anime',
     'moonlit-maiden': 'anime',
     // Scene/landscape paths hardcoded to anime medium for the trial.
@@ -304,6 +307,10 @@ module.exports = {
     // monster-prowl-victorian — FROZEN classical-Victorian prefix (converged state).
     canvas_victorian:
       'a classical Victorian gothic oil painting of a single recognizable monster, dark-Romantic 19th-century painted horror, operatic and beautiful and terrifying, vivid and richly saturated',
+    // the-haunting goth-wraith prefix — wraith/glamour register, NO "monster" /
+    // NO "terrifying" (that canvas_victorian wording rendered creepy-monster faces).
+    gothic_wraith_paint:
+      'a hyper-stylized painterly goth-fantasy painting of a tormented, anguished wraith — a tortured lost soul in grief, dark-Romantic operatic painted horror, vivid jewel-toned dark-fantasy oil, dramatic and haunting, richly saturated',
     // monster-prowl (inked) — REPLACES the bot-wide prefix to drop its purple-lead
     // ("deep purples + midnight blues + velvet blacks") that was forcing a violet
     // monochrome. Front-loads VIVID VARIED saturated comic color (Kevin 2026-05-25).
@@ -410,6 +417,12 @@ module.exports = {
     // anchors carry the classical oil register.
     canvas_victorian:
       'lush classical oil painting on canvas, vivid luminous dark-fantasy oil, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation gothic-horror oil painting',
+    // the-haunting goth-wraith mode (2026-06-22) — SAME painterly jewel-tone oil
+    // STYLE as canvas_victorian, but routed with a wraith/glamour prefix instead
+    // of canvas_victorian's "single recognizable MONSTER… terrifying" prefix
+    // (that leak rendered creepy-monster faces on the wraith path).
+    gothic_wraith_paint:
+      'lush painterly goth-fantasy oil painting, vivid luminous dark-fantasy oil, rich JEWEL-TONED SATURATED color, glowing radiant highlights against deep velvety shadows, dramatic chiaroscuro, fine detailed painterly brushwork, bold vibrant high-saturation spectral gothic-horror',
     // monster-prowl bespoke (Kevin 2026-05-25) — inked dark-anime / comic-horror.
     // monster-prowl — ULTRA-HIGH-DEF HYPERREAL cinematic render (Kevin 2026-05-25).
     hyperreal:
@@ -611,7 +624,11 @@ module.exports = {
     'cozy-goth',
     'vampire-girls-2',
     'the-dark-prince',
-    'the-haunting',
+    // the-haunting DISABLED 2026-06-22 (Kevin) — parked mid-experiment. The
+    // goth-wraith rework (gothic_wraith_paint medium + tortured-spectre template
+    // + cleaned composition pool) is preserved for when we revisit; just re-add
+    // 'the-haunting' here to re-enable.
+    // 'the-haunting',
     'the-coven',
     'moonlit-maiden',
     'gothic-vista',
