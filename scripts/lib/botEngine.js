@@ -33,7 +33,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
-const { pickModel } = require('./modelPicker');
+const { pickModel, BOT_BANNED_MODELS } = require('./modelPicker');
 const { applyBotConfigOverlay } = require('./botConfig');
 const { pickFromBag, withRetry } = require('./botCycle');
 const { resolveCleanMedium } = require('./cleanMediumByModel');
@@ -1506,6 +1506,16 @@ async function runBot(opts) {
         renderModel = picked.model;
         renderInputOverrides = picked.inputOverrides;
         console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
+      }
+
+      // HARD BAN guard (Kevin 2026-06-22) — no bot may EVER render Nano Banana
+      // (gemini-2-image) or GPT Image 2, regardless of which branch chose the
+      // model (night_mode / modelByPath / picker) or stale DB config. modelByPath
+      // bypasses pickModel's strip, so re-check here as the final gate.
+      if (BOT_BANNED_MODELS.has(renderModel)) {
+        console.log(`  🚫 ${renderModel} is BANNED for bots — forcing flux-1.1-pro-ultra`);
+        renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
+        renderInputOverrides = {};
       }
 
       // cleanMediumByModel: per-model "clean render" override. When the rolled

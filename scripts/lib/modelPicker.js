@@ -34,6 +34,18 @@ const fs = require('fs');
 
 const CACHE_TTL_MS = 60_000;
 const DEFAULT_MODEL = 'black-forest-labs/flux-2-dev';
+
+// HARD BAN — these models are permanently banned for ALL bots (Kevin 2026-06-22).
+// Stripped from EVERY candidate pool below regardless of bot.allowedModels OR
+// dream_mediums.allowed_models, so no bot can ever render them even if a bot
+// config is missing/empty or the DB still lists them. This is the bot-side
+// picker (scope='bot'); the user-facing V4/nightly Deno sibling
+// (_shared/modelPicker.ts) is intentionally NOT affected.
+const BOT_BANNED_MODELS = new Set([
+  'google/gemini-2-image', // Nano Banana
+  'google/nano-banana',
+  'openai/gpt-image-2', // GPT Image 2
+]);
 const SDXL_OVERRIDES = Object.freeze({
   width: 768,
   height: 1344,
@@ -214,9 +226,12 @@ async function pickModel({
   // this set before picking — lets a bot opt out of specific models (e.g.
   // GothBot banning flux-2-dev + flux-2-pro because of tensor bugs + safety).
   const filterByAllowed = (arr) => {
-    if (!allowedModels || !Array.isArray(allowedModels) || allowedModels.length === 0) return arr;
+    // ALWAYS strip the hard-banned bot models first — applies even when the bot
+    // supplied no allowedModels (so a DB medium pool can never serve them).
+    let out = arr.filter((m) => !BOT_BANNED_MODELS.has(m));
+    if (!allowedModels || !Array.isArray(allowedModels) || allowedModels.length === 0) return out;
     const allowedSet = new Set(allowedModels);
-    return arr.filter((m) => allowedSet.has(m));
+    return out.filter((m) => allowedSet.has(m));
   };
 
   // medium+vibe override first
@@ -246,12 +261,16 @@ async function pickModel({
   }
 
   // Fallback: pick from the bot's allowedModels whitelist itself, or DEFAULT.
+  // Strip banned here too in case a bot's allowedModels still lists one.
   if (allowedModels && Array.isArray(allowedModels) && allowedModels.length > 0) {
-    const picked = pickWeighted(allowedModels, modelWeights);
-    return {
-      model: picked,
-      inputOverrides: defaultsForModel(picked),
-    };
+    const safe = allowedModels.filter((m) => !BOT_BANNED_MODELS.has(m));
+    if (safe.length > 0) {
+      const picked = pickWeighted(safe, modelWeights);
+      return {
+        model: picked,
+        inputOverrides: defaultsForModel(picked),
+      };
+    }
   }
   return { model: DEFAULT_MODEL, inputOverrides: {} };
 }
@@ -268,5 +287,6 @@ module.exports = {
   pickModel,
   SDXL_OVERRIDES,
   DEFAULT_MODEL,
+  BOT_BANNED_MODELS,
   _resetCacheForTests,
 };
