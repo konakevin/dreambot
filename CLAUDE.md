@@ -223,6 +223,18 @@ for the public feed + serves deep-link share targets.**
   storage — `callSonnet` sends one user-role message with no system/user split, so unsanitized text is read
   with engine authority. Stored fields written via direct PostgREST also get the migration-279 trigger
   (`sanitize_user_text` on users/comments/uploads). `sanitize.ts` is NSFW-softening only, NOT this.
+- **POST-SEED HOOK — after seeding/generating ANY dual-character face-swap pose/scene pool, you MUST run
+  `node scripts/scan-dual-faceswap-proximity.js` and reword every flagged entry before shipping.** The dual
+  swap can only place the +1 (partner) face when the render shows TWO cleanly-separated faces; a seed that
+  poses the couple too close (cheek-to-cheek / "standing close" / shoulders touching / leaning into each
+  other) makes Flux render the heads adjacent/overlapping → detector can't split (`no_dual_split`) → the
+  pipeline degrades to a SELF-ONLY swap and the partner's likeness is silently DROPPED (the "wrong
+  partner / wrong female" bug — root-caused 2026-06-21 via the genderage+YuNet probe; it was NOT gender,
+  NOT medium, it was face overlap). Reword to dual-swap-SAFE positioning: keep the couple natural and side
+  by side, but with a CLEAR GAP between their FACES/HEADS (mirror the `dual_actions.ts` header rule "keep
+  heads on separate sides" + the PLAYFUL pool's "a clear gap between their heads"). Dual pose/scene pools
+  live in `supabase/functions/_shared/pools/dual_*.ts`; the scan auto-discovers them. Scan must exit 0
+  (zero violations) before the seeding task is done.
 
 ## CI, tests & monitoring
 

@@ -29,7 +29,7 @@ export const DUAL_SCENARIOS_PLAYFUL: string[] = [
   'surrounded by a swarm of bright butterflies in a glass conservatory',
   'in front of a glowing wall of vintage arcade machines',
   'floating on a giant inflatable flamingo on a calm lake',
-  'with a tiny donkey nuzzling in between them on a sunny farm',
+  'with a tiny donkey standing in the gap between them on a sunny farm',
   'at a festival surrounded by huge floating soap bubbles',
   'in a cozy retro diner booth with an enormous towering milkshake between them',
   'standing proudly beside a lopsided snowman they clearly just built',

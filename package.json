@@ -15,7 +15,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx}\" --ignore-path .gitignore",
     "typecheck": "tsc --noEmit",
     "typecheck:deno": "sh scripts/check-deno.sh",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run typecheck:deno && npm run test -- --silent",
+    "scan:dual-proximity": "node scripts/scan-dual-faceswap-proximity.js",
+    "check": "npm run format:check && npm run scan:dual-proximity && npm run lint && npm run typecheck && npm run typecheck:deno && npm run test -- --silent",
     "fix": "npm run format && npm run lint -- --fix",
     "prepare": "husky"
   },
