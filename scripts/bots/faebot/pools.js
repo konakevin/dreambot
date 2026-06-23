@@ -151,6 +151,9 @@ module.exports = {
   // ─── druid paths (2026-06-11) — elven nature-warrior-mages (shared across the 4 druid paths) ───
   FAEBOT_FEMALE_DRUID: loadIfExists('faebot_female_druid'),
   FAEBOT_MALE_DRUID: loadIfExists('faebot_male_druid'),
+  FAEBOT_DRUID_HAIR: loadIfExists('faebot_druid_hair'),
+  FAEBOT_DRUID_OUTFIT: loadIfExists('faebot_druid_outfit'),
+  FAEBOT_DRUID_POSE: loadIfExists('faebot_druid_pose'),
   FAEBOT_DRUID_COMPANION: loadIfExists('faebot_druid_companion'),
   FAEBOT_DRUID_ADVENTURE_SETTING: loadIfExists('faebot_druid_adventure_setting'),
   FAEBOT_DRUID_ADVENTURE_ACTION: loadIfExists('faebot_druid_adventure_action'),

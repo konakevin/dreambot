@@ -135,11 +135,11 @@ module.exports = {
 
   FAEBOT_FEMALE_DRUID: {
     description:
-      "PATH-BESPOKE — FaeBot female-druid INTIMATE (2026-06-11, MVP). The forest's DEFENDER — a female ELF nature-warrior-mage (night-elf / wood-elf / high-elf / blood-elf / dusk-elf / LOTR-silvan lineages via subThemes). Capable, agile, magical, stylish — distinct from gentle faes + ancient bark elders. Intimate posed half-body/bust register (the counterpart to dryad-portrait but a warrior-mage, not a tree-spirit). Lean-COVERED tasteful armor (no cheesecake). MVP wiring reuses dryad backdrop + lighting; bespoke druid scene axes come after the character look is approved. Companion (spirit-animal) 40%-gated.",
+      "PATH-BESPOKE — FaeBot female-druid (2026-06-11; hair/outfit/pose split into their own axes 2026-06-22). The forest's DEFENDER — a female ELF nature-warrior-mage (night-elf / wood-elf / high-elf / blood-elf / dusk-elf / LOTR-silvan lineages via subThemes). Capable, agile, magical, stylish — distinct from gentle faes + ancient bark elders. The character pool is now ELF BASE ONLY (lineage + skin + eyes + ears + face); HAIR, OUTFIT (incl. staff + nature-magic) and POSE/FRAMING are separate rolled axes for guaranteed per-dimension variety (was rendering the same white-haired side-braid leaf-and-gold bust every time). Lean-COVERED tasteful (no cheesecake). Reuses dryad backdrop + lighting. Companion (spirit-animal) 40%-gated.",
     slots: {
       universal: [],
       bot: [],
-      path: ['character', 'backdrop', 'lighting'],
+      path: ['character', 'hair', 'outfit', 'pose', 'backdrop', 'lighting'],
     },
     pickN: {},
     conditionalLayer: { slot: 'companion', gate: 0.4 },
@@ -170,11 +170,11 @@ module.exports = {
 
   FAEBOT_MALE_DRUID: {
     description:
-      'PATH-BESPOKE — FaeBot male-druid INTIMATE (2026-06-11). Male counterpart to female-druid: a male ELF nature-warrior-mage (same lineages via subThemes). HARD GENDER-LOCK (he/his). Intimate posed half-body/bust register. Male NSFW guard: chest ALWAYS named-covered, FACE-only skin (anti-beefcake). MVP reuses dryad backdrop + lighting. Companion 40%-gated.',
+      'PATH-BESPOKE — FaeBot male-druid (2026-06-11; hair/outfit/pose split into their own axes 2026-06-22). Male counterpart to female-druid: a male ELF nature-warrior-mage (same lineages via subThemes). HARD GENDER-LOCK (he/his). Character pool is now ELF BASE ONLY (lineage + skin + eyes + ears + face + optional short beard); HAIR, OUTFIT (incl. staff + nature-magic) and POSE/FRAMING are separate rolled axes for guaranteed per-dimension variety. Male NSFW guard: chest ALWAYS named-covered, FACE-only skin (anti-beefcake). Reuses dryad backdrop + lighting. Companion 40%-gated.',
     slots: {
       universal: [],
       bot: [],
-      path: ['character', 'backdrop', 'lighting'],
+      path: ['character', 'hair', 'outfit', 'pose', 'backdrop', 'lighting'],
     },
     pickN: {},
     conditionalLayer: { slot: 'companion', gate: 0.4 },

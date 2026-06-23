@@ -4663,35 +4663,37 @@ EVERY entry: a specific adorable critter (shown WHOLE) + the sweet way the fae i
   // Lineage spread (night-elf / wood-elf / high-elf / blood-elf / dusk-elf / LOTR-silvan) via subThemes. ════════
   faebot_female_druid: {
     format: 'simple',
-    theme: `FEMALE ELF DRUID (features-only, NO posture/scene) for FaeBot's druid paths — the forest's DEFENDER. ONE unified description of a single female elf druid: elven lineage + skin + glowing eyes + hair + nature war-paint + leaf-and-gold druid armor + a druidic staff/weapon + a nature-magic signature. 45-75 words. ALL FEMALE (she/her).
+    theme: `FEMALE ELF DRUID — ELF BASE ONLY (features-only, NO hair, NO outfit, NO pose, NO scene) for FaeBot's druid paths — the forest's DEFENDER. ONE description of a single female elf druid's BASE: elven lineage + skin tone + eye color + long pointed ears + face/expression + OPTIONAL nature war-paint. 25-40 words. ALL FEMALE (she/her).
 
-THE BAR: a striking ELVEN nature-warrior-mage — lithe, powerful, capable, agile, magical, STYLISH. Beautiful but a real guardian, NOT a pin-up, NOT cheesecake, NOT a delicate gentle fae, NOT an ancient bark elder. Long pointed elf ears, glowing eyes, otherworldly elven skin, vivid hair, leaf-motif gold-filigree armor, a carved druidic staff, nature magic at her hand. Painterly fantasy concept art (Manchess + Giancola + Bonner + Froud).
+THE BAR: a striking ELVEN nature-warrior-mage's FACE & lineage — capable, agile, magical, the forest's guardian. Beautiful but a real guardian, NOT a pin-up, NOT cheesecake, NOT a delicate gentle fae, NOT an ancient bark elder. Long pointed elf ears, elven features, otherworldly elven skin. Painterly fantasy concept art (Manchess + Giancola + Bonner + Froud).
 
-EVERY ENTRY = these stacked features:
-  - LINEAGE — the FEATURED elven lineage for this batch (see above), giving her skin/eye/hair palette
-  - LONG POINTED ELF EARS + glowing or luminous eyes (silver / gold / green / violet / blue — per lineage)
-  - HAIR — a NAMED color + style (long flowing / warrior braids woven with leaves / high warrior-tail / loose windswept), per lineage palette
-  - FACE WAR-PAINT / MARKINGS (signature druid detail) — leaf-shaped marks under the eyes / an antler-line down the brow / dotted nature-constellations / tribal moon-paint
-  - ARMOR (COVERED-LEAN, leaf-and-gold) — an ornate leaf-motif cuirass / gold-filigree breastplate / layered tabard over fitted leggings / pauldrons of carved leaves or feathers; torso COVERED with an ARMORED or HIGH-NECKED bust (NO low-cut, NO plunging, NO cleavage-window); capable battle-mage silhouette
-  - STAFF / WEAPON — a crescent-moon staff / a glowing-orb living-wood stave / a carved antler-staff / a leaf-bladed glaive / a recurve bow of living wood
-  - NATURE-MAGIC SIGNATURE — green / teal / violet glow at her hand or staff, drifting wisps, curling vines, moonlight, a swirl of leaves
+⚠️ HAIR, OUTFIT/ARMOR, STAFF, POSE and SCENE are now SEPARATE AXES — describe NONE of them here. This entry is ONLY the elf base.
 
-⚠️ VARIETY MANDATE: vary skin, eyes, hair color & style, war-paint, armor and staff WIDELY so each is a distinct individual.
+EVERY ENTRY = these features ONLY:
+  - LINEAGE — the FEATURED elven lineage for this batch (see above), giving her skin/eye palette
+  - SKIN TONE — per the lineage
+  - EYE COLOR — per the lineage. Eyes are MOSTLY ordinary elven eyes; make GLOWING/LUMINOUS eyes OPTIONAL (only about 1 in 3 entries — most have normal eyes, not glowing)
+  - LONG POINTED ELF EARS + elven facial features
+  - FACE / EXPRESSION — a brief capable, composed, watchful elven look
+  - OPTIONAL nature WAR-PAINT / face MARKINGS (signature druid detail, on the FACE only) — leaf-shaped marks under the eyes / an antler-line down the brow / dotted nature-constellations / tribal moon-paint (vary; not every entry needs it)
 
-STRICT BANS (keep it capable + tasteful — lean-covered):
+⚠️ VARIETY MANDATE: vary skin, eyes, war-paint WIDELY so each is a distinct elf individual.
+
+STRICT BANS:
   - ALL FEMALE — she/her; long pointed elf ears
-  - TORSO COVERED — NO chainmail-bikini / battle-bra / string-strap outfit / cleavage-AS-the-focus / plunging neckline / bare-thigh pin-up / bondage-harness; NO "sultry / sensual / alluring / seductive / provocative"; tasteful bare arms or shoulders are fine
+  - features ONLY — NO hair, NO outfit, NO armor, NO staff/weapon, NO pose/posture/action, NO scene/backdrop (all separate axes)
+  - NO low-cut / cleavage / plunging / "sultry / sensual / alluring / seductive / provocative" (this is just the face & lineage anyway)
   - NOT a gentle fae / NOT a tiny pixie / NOT an ancient bark elder — a CAPABLE WARRIOR-MAGE
-  - NO posture/action/scene (separate axes); NO artist name-drops (Frazetta / Brom / Vallejo / Boris); NO modern objects`,
+  - NO artist name-drops (Frazetta / Brom / Vallejo / Boris); NO modern objects`,
     touchpoints: [
-      'A night-elf druid with smooth lavender-violet skin and softly glowing silver eyes, long pointed ears, flowing deep-green hair in warrior braids woven with tiny leaves, leaf-shaped teal war-paint beneath her eyes, an ornate leaf-motif cuirass of green leather and gold filigree with carved-leaf pauldrons, a tall crescent-moon staff of pale living wood, a curl of green moon-magic at her free hand',
-      'A wood-elf druid with warm bronze-tan skin and bright amber eyes, long ears, auburn hair in a high warrior-tail threaded with oak-leaves and a hawk feather, freckles and earthy dotted nature-paint across her cheekbones, a layered moss-green tabard over fitted brown leggings with a carved-bark breastplate, a recurve bow of living wood across her back and an antler-staff in hand, drifting golden pollen-light',
-      'A high-elf druid with fair porcelain skin faintly luminous and glowing pale-gold eyes, long ears, platinum hair in a long elegant braid, a delicate antler-line of gold paint down her brow, a gold-filigree breastplate over a deep-green layered gown-of-war, a glowing-orb stave of white living wood, soft teal wisps spiralling around the orb',
-      'A blood-elf druid with fair skin and luminous emerald eyes, long ears, raven-black hair in a sleek warrior-tail with a crimson streak, fine red leaf-marks at her temples, a crimson-and-gold leaf-scale cuirass with feathered pauldrons, a carved living-wood staff topped with a green crystal, a swirl of jade nature-magic at her fingertips',
-      'A dusk-elf druid with cool deep-violet skin and glowing cyan eyes, long ears, white hair loose and windswept, pale moon-paint dotted across her brow, a midnight-blue and tarnished-gold leaf cuirass with a draped cloak, a tall staff crowned with a glowing blue crescent, drifting violet wisps and a faint vine curling up the staff',
-      'A silvan elf druid of Rivendell elegance with fair ethereal skin and clear grey eyes faintly catching the light, long ears, dark-brown hair flowing loose with a thin circlet of woven leaves, subtle green leaf-marks at her cheekbones, a noble forest-green surcoat over supple grey-leather armor with gold-leaf trim, a slender carved staff of silver birch, a soft halo of pale nature-light',
+      'A night-elf druid with smooth lavender-violet skin and softly glowing silver eyes, long pointed ears, fine sculpted elven features, leaf-shaped teal war-paint beneath her eyes, a calm watchful expression',
+      'A wood-elf druid with warm bronze-tan skin and bright amber eyes, long pointed ears, freckles and earthy dotted nature-paint across her cheekbones, sharp elven features and a steady, capable gaze',
+      'A high-elf druid with fair porcelain skin and clear pale-gold eyes, long pointed ears, refined elegant elven features, a delicate antler-line of gold paint down her brow, a composed serene look',
+      'A blood-elf druid with fair skin and luminous emerald eyes, long pointed ears, proud refined elven features, fine red leaf-marks at her temples, a confident watchful expression',
+      'A dusk-elf druid with cool deep-violet skin and ordinary clear cyan eyes, long pointed ears, mysterious elegant features, pale moon-paint dotted across her brow, a quiet composed gaze',
+      'A silvan elf druid of Rivendell elegance with fair ethereal skin and clear grey eyes, long pointed ears, noble understated elven features, subtle green leaf-marks at her cheekbones, a serene and watchful look',
     ],
-    instructions: `Each entry is ONE unified FEMALE elf druid description (features ONLY), 45-75 words. Prose, comma-separated phrases. Build it as the FEATURED LINEAGE for this batch. MANDATORY — lineage + long pointed elf ears + glowing/luminous eyes + NAMED hair color & style + FACE war-paint + COVERED leaf-and-gold armor + a druidic staff/weapon + a nature-magic signature. A capable WARRIOR-MAGE, lean-covered & tasteful (no cheesecake). NO posture/action/scene. NO artist names. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry is ONE FEMALE elf druid BASE description (lineage + skin + eyes + ears + face/expression + optional war-paint ONLY), 25-40 words. Prose, comma-separated phrases. Build it as the FEATURED LINEAGE for this batch. MANDATORY — lineage + skin tone + eye color + long pointed elf ears + elven features/expression + OPTIONAL face war-paint. Glowing/luminous eyes OPTIONAL (~1 in 3; most ordinary). NO hair, NO outfit/armor, NO staff, NO pose, NO scene (all separate axes). A capable WARRIOR-MAGE. NO artist names. Output as a NUMBERED list, one entry per line, no internal newlines.`,
     subThemes: [
       {
         aspect:
@@ -4728,35 +4730,37 @@ STRICT BANS (keep it capable + tasteful — lean-covered):
 
   faebot_male_druid: {
     format: 'simple',
-    theme: `MALE ELF DRUID (features-only, NO posture/scene) for FaeBot's druid paths — the forest's DEFENDER. ONE unified description of a single male elf druid: elven lineage + skin + glowing eyes + hair + nature war-paint + leaf-and-gold druid armor + a druidic staff/weapon + a nature-magic signature. 45-75 words. ALL MALE (he/his).
+    theme: `MALE ELF DRUID — ELF BASE ONLY (features-only, NO hair, NO outfit, NO pose, NO scene) for FaeBot's druid paths — the forest's DEFENDER. ONE description of a single male elf druid's BASE: elven lineage + skin tone + eye color + long pointed ears + face/expression (optionally a short trimmed beard or clean-shaven) + OPTIONAL nature war-paint. 25-40 words. ALL MALE (he/his).
 
-THE BAR: a striking ELVEN nature-warrior-mage — lithe-but-strong, capable, agile, magical, STYLISH. A real guardian, NOT a beefcake pin-up, NOT a delicate fae, NOT an ancient bark elder. Long pointed elf ears, glowing eyes, otherworldly elven skin, vivid hair, leaf-motif gold-filigree armor, a carved druidic staff, nature magic at his hand. Painterly fantasy concept art (Manchess + Giancola + Bonner + Froud).
+THE BAR: a striking ELVEN nature-warrior-mage's FACE & lineage — lithe-but-strong, capable, agile, the forest's guardian. A real guardian, NOT a beefcake pin-up, NOT a delicate fae, NOT an ancient bark elder. Long pointed elf ears, elven features, otherworldly elven skin. Painterly fantasy concept art (Manchess + Giancola + Bonner + Froud).
 
-EVERY ENTRY = these stacked features:
-  - LINEAGE — the FEATURED elven lineage for this batch (see above), giving his skin/eye/hair palette
-  - LONG POINTED ELF EARS + glowing or luminous eyes (silver / gold / green / violet / blue — per lineage)
-  - HAIR — a NAMED color + style (long flowing / warrior braids woven with leaves / high warrior-tail / loose windswept) AND optionally a short trimmed beard OR clean-shaven (vary), per lineage palette
-  - FACE WAR-PAINT / MARKINGS (signature druid detail, on the FACE only) — leaf-shaped marks beneath the eyes / an antler-line down the brow / dotted nature-constellations / tribal moon-paint
-  - ARMOR (chest ALWAYS COVERED, leaf-and-gold) — name a chest-covering piece: a leaf-motif cuirass / scale breastplate / layered tabard / druid-robe / leaf-mail hauberk over fitted trousers, with carved-leaf or feather pauldrons; capable battle-mage silhouette
-  - STAFF / WEAPON — a crescent-moon staff / a glowing-orb living-wood stave / a carved antler-staff / a leaf-bladed glaive / a recurve bow of living wood
-  - NATURE-MAGIC SIGNATURE — green / teal / violet glow at his hand or staff, drifting wisps, curling vines, moonlight, a swirl of leaves
+⚠️ HAIR, OUTFIT/ARMOR, STAFF, POSE and SCENE are now SEPARATE AXES — describe NONE of them here. This entry is ONLY the elf base. (A short beard or clean-shaven facial detail is fine — that is part of the face, not the hairstyle.)
 
-⚠️ VARIETY MANDATE: vary skin, eyes, hair color & style, beard/clean-shaven, war-paint, armor and staff WIDELY so each is a distinct individual.
+EVERY ENTRY = these features ONLY:
+  - LINEAGE — the FEATURED elven lineage for this batch (see above), giving his skin/eye palette
+  - SKIN TONE — per the lineage (on the FACE only — cheekbones / jaw / brow — NEVER torso/chest/abs/muscular body)
+  - EYE COLOR — per the lineage. Eyes are MOSTLY ordinary elven eyes; make GLOWING/LUMINOUS eyes OPTIONAL (only about 1 in 3 entries — most have normal eyes)
+  - LONG POINTED ELF EARS + elven facial features, optionally a short trimmed beard OR clean-shaven (vary)
+  - FACE / EXPRESSION — a brief capable, composed, watchful elven look
+  - OPTIONAL nature WAR-PAINT / face MARKINGS (signature druid detail, on the FACE only) — leaf-shaped marks beneath the eyes / an antler-line down the brow / dotted nature-constellations / tribal moon-paint (vary; not every entry)
 
-STRICT BANS (male NSFW — DIFFERENT failure mode: the bare-muscular-beefcake drift):
+⚠️ VARIETY MANDATE: vary skin, eyes, beard/clean-shaven, war-paint WIDELY so each is a distinct elf individual.
+
+STRICT BANS (male NSFW — the bare-muscular-beefcake drift):
   - ALL MALE — he/his; long pointed elf ears
-  - CHEST ALWAYS COVERED — every entry NAMES a chest-covering piece. NO shirtless / bare-chested / open-vest-revealing-chest / oiled / sculpted / chiseled / sweat-gleaming / muscular-pecs / loincloth-only. Describe SKIN on the FACE ONLY (cheekbones / jaw / brow) — NEVER torso / chest / abs / muscular body.
+  - features ONLY — NO hair (style/color), NO outfit, NO armor, NO staff/weapon, NO pose/posture/action, NO scene/backdrop (all separate axes)
+  - Describe SKIN on the FACE ONLY — NEVER torso / chest / abs / muscular body / shirtless / oiled / sculpted / chiseled
   - NOT a gentle fae / NOT an ancient bark elder — a CAPABLE WARRIOR-MAGE
-  - NO posture/action/scene (separate axes); NO artist name-drops; NO modern objects`,
+  - NO artist name-drops; NO modern objects`,
     touchpoints: [
-      'A night-elf druid with smooth lavender-grey skin and softly glowing silver eyes, long pointed ears, long deep-green hair in warrior braids woven with leaves and a short trimmed beard, leaf-shaped teal war-paint beneath his eyes, a leaf-motif cuirass of green leather and gold filigree with carved-leaf pauldrons over a covered tunic, a tall crescent-moon staff of pale living wood, a curl of green moon-magic at his free hand',
-      'A wood-elf druid with warm bronze skin and bright amber eyes, long ears, chestnut hair in a high warrior-tail threaded with oak-leaves, clean-shaven with earthy dotted nature-paint across his cheekbones, a layered moss-green tabard over a bark-scale breastplate and fitted brown trousers, an antler-staff in hand and a living-wood bow across his back, drifting golden pollen-light',
-      'A high-elf druid with fair luminous skin and glowing pale-gold eyes, long ears, long platinum hair loose with a leaf circlet, a fine antler-line of gold paint down his brow, a gold-filigree breastplate over a deep-green high-collared robe, a glowing-orb stave of white living wood, soft teal wisps spiralling around the orb',
-      'A dusk-elf druid with cool deep-violet skin and glowing cyan eyes, long ears, white hair in long warrior braids, a short beard, pale moon-paint dotted across his brow, a midnight-blue and tarnished-gold leaf-mail hauberk with a draped cloak, a tall staff crowned with a glowing blue crescent, drifting violet wisps and a vine curling up the staff',
-      'A blood-elf druid with fair skin and luminous emerald eyes, long ears, raven hair in a sleek warrior-tail, clean-shaven with fine red leaf-marks at his temples, a crimson-and-gold leaf-scale cuirass with feathered pauldrons over a covered black tunic, a carved living-wood staff topped with a green crystal, a swirl of jade nature-magic at his fingertips',
-      'A silvan elf druid of Rivendell elegance with fair skin and clear grey eyes faintly luminous, long ears, dark-brown hair flowing loose with a thin woven-leaf circlet, clean-shaven with subtle green leaf-marks at his cheekbones, a noble forest-green surcoat over supple grey-leather armor with gold-leaf trim, a slender carved staff of silver birch, a soft halo of pale nature-light',
+      'A night-elf druid with smooth lavender-grey skin and softly glowing silver eyes, long pointed ears, a short trimmed beard, leaf-shaped teal war-paint beneath his eyes, a calm watchful elven expression',
+      'A wood-elf druid with warm bronze skin and bright amber eyes, long pointed ears, clean-shaven with earthy dotted nature-paint across his cheekbones, sharp elven features and a steady, capable gaze',
+      'A high-elf druid with fair skin and clear pale-gold eyes, long pointed ears, refined elegant elven features, a fine antler-line of gold paint down his brow, a composed serene look',
+      'A dusk-elf druid with cool deep-violet skin and ordinary clear cyan eyes, long pointed ears, a short beard, pale moon-paint dotted across his brow, a quiet mysterious gaze',
+      'A blood-elf druid with fair skin and luminous emerald eyes, long pointed ears, clean-shaven with fine red leaf-marks at his temples, proud refined elven features and a confident watchful look',
+      'A silvan elf druid of Rivendell elegance with fair skin and clear grey eyes, long pointed ears, clean-shaven with subtle green leaf-marks at his cheekbones, noble understated elven features and a serene expression',
     ],
-    instructions: `Each entry is ONE unified MALE elf druid description (features ONLY), 45-75 words. Prose, comma-separated phrases. Build it as the FEATURED LINEAGE for this batch. MANDATORY — lineage + long pointed elf ears + glowing/luminous eyes + NAMED hair color & style (+ optional short beard or clean-shaven) + FACE war-paint + a NAMED chest-covering leaf-and-gold armor piece + a druidic staff/weapon + a nature-magic signature. A capable WARRIOR-MAGE. CHEST COVERED, FACE-ONLY skin (no torso/muscular/shirtless). NO posture/action/scene. NO artist names. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry is ONE MALE elf druid BASE description (lineage + skin + eyes + ears + face/expression + optional short-beard/clean-shaven + optional war-paint ONLY), 25-40 words. Prose, comma-separated phrases. Build it as the FEATURED LINEAGE for this batch. MANDATORY — lineage + skin tone + eye color + long pointed elf ears + elven features/expression (+ optional short beard or clean-shaven) + OPTIONAL face war-paint. Glowing/luminous eyes OPTIONAL (~1 in 3; most ordinary). NO hair style/color, NO outfit/armor, NO staff, NO pose, NO scene (all separate axes). FACE-ONLY skin (no torso/muscular/shirtless). A capable WARRIOR-MAGE. NO artist names. Output as a NUMBERED list, one entry per line, no internal newlines.`,
     subThemes: [
       {
         aspect:
@@ -4789,6 +4793,80 @@ STRICT BANS (male NSFW — DIFFERENT failure mode: the bare-muscular-beefcake dr
         weight: 2,
       },
     ],
+  },
+
+  // ── DRUID HAIR axis (2026-06-22) — gender-neutral hairstyle + color. Split OUT of the character pool
+  //    to guarantee per-dimension variety (was rendering the same white-haired side-braid every time). ──
+  faebot_druid_hair: {
+    format: 'simple',
+    theme: `DRUID HAIR — ONE hairstyle + hair COLOR per entry, GENDER-NEUTRAL phrasing for FaeBot's elf druids (shared by female + male druid paths). Each entry 12-20 words. LEAD WITH THE COLOR, then the style. Phrase it gender-neutrally (e.g. "raven-black hair worn in…"). This is the HAIR axis ONLY — NO face, NO ears, NO outfit, NO pose, NO scene.
+
+⚠️ THE WHOLE POINT: beat Flux's pale-white-elf drift. Push DARK + SATURATED colors HARD. White/silver appears in ONLY about 1 in 6 entries — the rest are raven, brown, auburn, copper, blonde, green, teal, violet, etc.
+
+COLORS (span widely across ~25 entries, MUCH less white): raven-black, jet, deep brown, chestnut, warm auburn, copper-red, honey-blonde, golden, ashen-grey, platinum, silver, emerald-green, deep teal, deep violet, soft lavender, snow-white. White/silver/platinum ONLY ~1 in 6 — everything else is dark or saturated.
+
+STYLES (span widely — works for ALL genders): long loose flowing, windswept wild, thick warrior braids, a single side-braid, a crown/halo braid, a high ponytail, a low chignon/bun, a top-knot, half-up half-down, cropped short, a shaved-sided undercut, an intricate woven updo, locs, beaded braids. Use male-appropriate variants too (it's shared). A leaf / feather / bead woven into the hair is a nice optional touch.
+
+⚠️ VARIETY MANDATE: across ~25 entries, every style appears and the color distribution leans HEAVILY dark/saturated, white/silver rare.`,
+    touchpoints: [
+      'raven-black hair worn in thick warrior braids, a few small leaves woven through',
+      'warm auburn hair worn long, loose and windswept across the shoulders',
+      'deep chestnut-brown hair in a high ponytail, the ends catching the light',
+      'copper-red hair in a shaved-sided undercut, the top swept back',
+      'emerald-green hair worn in a crown braid wrapping the head, threaded with a vine',
+      'snow-white hair in a single thick side-braid falling over one shoulder',
+    ],
+    instructions: `Each entry is ONE hairstyle + color in 12-20 words, gender-neutral phrasing, LEAD WITH THE COLOR then the style. Span styles widely; push DARK + saturated colors hard — white/silver/platinum only about 1 in 6. HAIR ONLY — no face, ears, outfit, pose or scene. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  // ── DRUID OUTFIT axis (2026-06-22) — gender-neutral druid outfit + staff/weapon + nature-magic signature.
+  //    Split OUT of the character pool (was always leaf-and-gold). TASTEFUL-COVERED is load-bearing. ──
+  faebot_druid_outfit: {
+    format: 'simple',
+    theme: `DRUID OUTFIT — ONE druid outfit per entry, INCLUDING the druidic staff/weapon AND a nature-magic signature, GENDER-NEUTRAL phrasing for FaeBot's elf druids (shared by female + male). Each entry 15-28 words. This is the OUTFIT axis — NO face, NO hair, NO pose, NO scene.
+
+⚠️ TASTEFUL-COVERED IS LOAD-BEARING: the torso/chest is COVERED in every entry. NO chainmail-bikini / battle-bra / cleavage-as-focus / plunging neckline / pin-up / oiled-shirtless / bare-chested. NO "sultry / sensual / seductive / alluring". Capable and tasteful.
+
+MATERIAL (span widely across ~25): supple layered leathers, flowing cloth robes, a scale-leaf cuirass, an ornate gold-filigree breastplate, a feathered mantle, fur-trimmed garb, woven-vine & bark-touched armor, an embroidered tabard, light chain-and-leather, roughspun naturalist robes.
+
+COLOR (span WIDELY beyond gold-and-green): deep blue, royal violet, crimson, charcoal-black, forest-green, earth-brown, teal, bronze, ivory, jewel-tones, ochre — and yes SOME classic gold-and-green, but it must be ONE of many, not the default.
+
+STAFF / WEAPON (vary): a crescent-moon staff / a carved antler-staff / a glowing-orb living-wood stave / a leaf-bladed glaive / a living-wood recurve bow.
+
+NATURE-MAGIC WISP (vary the color): a green / teal / violet / amber / gold glow or drifting wisp at the hand or staff.
+
+⚠️ VARIETY MANDATE: across ~25 entries, span the materials, push colors WELL beyond gold-and-green, and vary the staff + wisp color.`,
+    touchpoints: [
+      'a deep-blue layered cloth robe over light leather, a carved antler-staff in hand, a violet wisp curling at the fingertips',
+      'a charcoal-black scale-leaf cuirass with a feathered mantle, a crescent-moon staff, a teal glow drifting at the hand',
+      'supple earth-brown layered leathers with a fur-trimmed shoulder, a living-wood recurve bow, an amber spark of nature-magic',
+      'an ornate gold-filigree breastplate over a forest-green tabard, a glowing-orb living-wood stave wrapped in a soft green light',
+      'royal-violet roughspun robes with woven-vine trim, a leaf-bladed glaive, a swirl of golden pollen-light at the hand',
+      'a crimson embroidered tabard over light chain-and-leather, a carved staff topped with a green crystal, a green wisp at the staff',
+    ],
+    instructions: `Each entry is ONE druid outfit (material + color) + a staff/weapon + a nature-magic wisp, 15-28 words, gender-neutral phrasing. Span materials widely; push colors WELL beyond gold-and-green; vary the staff + wisp color. TORSO/CHEST COVERED — NO chainmail-bikini / battle-bra / cleavage / plunging / pin-up / shirtless / "sultry/sensual/seductive". OUTFIT ONLY — no face, hair, pose or scene. Output as a NUMBERED list, one per line, no internal newlines.`,
+  },
+
+  // ── DRUID POSE/FRAMING axis (2026-06-22) — gender-neutral pose + framing. Split OUT (was always a 3/4 bust).
+  //    Varies BOTH the framing (bust / half / full) AND the action. NEVER sultry/pin-up. ──
+  faebot_druid_pose: {
+    format: 'simple',
+    theme: `DRUID POSE + FRAMING — ONE pose AND framing per entry, GENDER-NEUTRAL ("the druid"), for FaeBot's elf druids (shared by female + male). Each entry 12-22 words. This is the POSE/FRAMING axis — NO face, NO hair, NO outfit, NO scene detail.
+
+⚠️ VARY THE FRAMING (was always a 3/4 bust): mix BUST (head/shoulders), HALF-BODY (to the waist/hips), and FULL-BODY (the whole figure). Name the framing in each entry.
+
+⚠️ VARY THE ACTION (across ~25): standing poised, crouched examining a plant, mid-stride walking through brush, raising the staff to cast, drawing a bow, kneeling to touch the earth, looking back over the shoulder, seated on a great root, arms crossed and watchful, channeling magic with both hands, turning toward the viewer.
+
+Composed and capable, quiet power — NEVER sultry, NEVER pin-up, NEVER a sexualized pose. Candid or poised is fine; come-on framing is not.`,
+    touchpoints: [
+      'a full-body shot, the druid mid-stride walking through ferns, staff in hand, cloak stirring',
+      'a half-body framing, the druid raising the staff to cast, head tilted up toward the light',
+      'a bust framing, the druid looking back over one shoulder with a calm watchful gaze',
+      'a full-body shot, the druid kneeling to press a palm to the earth, staff laid across one knee',
+      'a half-body framing, the druid with arms crossed, standing watchful and composed',
+      'a full-body shot, the druid seated on a great mossy root, drawing a recurve bow at rest',
+    ],
+    instructions: `Each entry is ONE pose + framing in 12-22 words, gender-neutral ("the druid"). VARY the framing (bust / half-body / full-body — name it) AND the action. Composed and capable, NEVER sultry / pin-up / sexualized. POSE ONLY — no face, hair, outfit or scene detail. Output as a NUMBERED list, one per line, no internal newlines.`,
   },
 
   // ── shared DRUID ADVENTURE axes (gender-neutral — used by female-druid-adventure + male-druid-adventure) ──

@@ -23,6 +23,9 @@ module.exports = {
   archetype: 'FAEBOT_FEMALE_DRUID',
   pools: {
     character: 'FAEBOT_FEMALE_DRUID',
+    hair: 'FAEBOT_DRUID_HAIR',
+    outfit: 'FAEBOT_DRUID_OUTFIT',
+    pose: 'FAEBOT_DRUID_POSE',
     backdrop: 'FAEBOT_DRYAD_PORTRAIT_FOREST_BACKDROP',
     lighting: 'FAEBOT_DRYAD_PORTRAIT_LIGHTING',
     companion: 'FAEBOT_DRUID_COMPANION',

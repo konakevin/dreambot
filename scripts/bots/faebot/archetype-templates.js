@@ -511,40 +511,52 @@ Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELDER MID-ACT �
   },
 
   FAEBOT_FEMALE_DRUID: ({ slots, sharedDNA, vibeDirective }) => {
-    const { character, backdrop, lighting, companion } = slots;
+    const { character, hair, outfit, pose, backdrop, lighting, companion } = slots;
 
     const companionSection = companion
       ? `\n\n━━━ COMPANION (a single spirit-animal sharing the moment) ━━━\n${companion}\n\nWoven naturally beside her — a loyal spirit-animal, never a competing focal subject. The eye lands on HER first.`
       : '';
 
-    return `You are writing ONE Flux prompt for an INTIMATE PORTRAIT of a FEMALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+    return `You are writing ONE Flux prompt for a FEMALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — these MUST be the FIRST visual elements described.
 
-1. THE SUBJECT IS A FEMALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. SHE is unmistakably a striking female elf: long pointed ears, glowing/luminous eyes, otherworldly elven skin, vivid hair, nature war-paint. Use SHE / HER throughout. NOT a gentle fairy, NOT a tiny pixie, NOT a tree-spirit — a powerful elven druid.
+1. THE SUBJECT IS A FEMALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. SHE is unmistakably a striking female elf: long pointed ears, elven features, otherworldly elven skin. Use SHE / HER throughout. NOT a gentle fairy, NOT a tiny pixie, NOT a tree-spirit — a powerful elven druid.
 
-2. Render her EXACTLY as the character entry describes — her lineage skin-tone, glowing eyes, hair, war-paint, her leaf-and-gold ARMOR, her druidic STAFF/weapon, and her nature-magic. 5+ stacked features must land. Her TORSO IS COVERED (leaf-motif cuirass / breastplate / tabard) — capable and tasteful, NEVER cheesecake, NEVER chainmail-bikini, NEVER cleavage-as-focus, NEVER sultry/seductive.
+2. RENDER THE ROLLED HAIR, OUTFIT and POSE EXACTLY as the axes below name them — these are SEPARATELY ROLLED and MUST each land. Her hair is whatever COLOR & STYLE the HAIR axis names — render her hair EXACTLY the rolled color and style, do NOT default to white/silver and do NOT default to a side-braid. Her outfit is whatever the OUTFIT axis names. Her TORSO IS COVERED — capable and tasteful, NEVER cheesecake, NEVER chainmail-bikini, NEVER cleavage-as-focus, NEVER sultry/seductive.
 
-3. INTIMATE POSED FRAMING — a half-body or bust portrait (head, shoulders, upper body, her staff visible), she carries herself with poise and quiet power, a slight three-quarter turn, a confident or watchful gaze. Beautiful, magical, composed. NOT a stiff ID-photo, NOT a sexualized pin-up pose.
+3. Render the FRAMING and POSE the POSE axis names (bust / half-body / full-body) — do NOT force a tight bust. Composed, capable, quiet power. NOT a stiff ID-photo, NOT a sexualized pin-up pose.
 
-Open your prompt with the female elf druid. She opens; everything else is HER FRAME.
+Open with the elf base, then immediately her rolled hair, then her rolled outfit.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-━━━ 1. THE DRUID (the subject — render HER exactly as described) ━━━
+━━━ 1. THE ELF BASE (render HER lineage exactly — skin, eyes, ears, face) ━━━
 ${character}
 
-Preserve every feature unmistakably — lineage skin & glowing eyes, hair, war-paint, leaf-and-gold covered armor, her staff/weapon, her nature-magic. A capable warrior-mage, mythic-elf beauty, NOT a human pin-up.
+Long pointed elf ears + elven features unmistakably. A capable warrior-mage, mythic-elf beauty, NOT a human pin-up.
 
-━━━ 2. POSE + EXPRESSION (intimate, poised, powerful) ━━━
-A composed half-body/bust pose — a slight three-quarter turn, her staff or a curl of nature-magic visible, a confident, watchful, or serene expression. Quiet power and poise. NEVER a sultry/seductive pose, NEVER eye-contact-as-come-on; she can meet or avert the gaze with calm command.
+━━━ 2. HAIR (render EXACTLY this color & style — do NOT default to white/silver) ━━━
+${hair}
 
-━━━ 3. FOREST BACKDROP (softly out-of-focus behind her) ━━━
+⚑ CRITICAL: render her hair EXACTLY the rolled color and style above. If it names raven / brown / auburn / green / etc., that is the hair — do NOT drift to white, silver, or a side-braid.
+
+━━━ 3. OUTFIT (her druid garb + staff/weapon + nature-magic — render exactly) ━━━
+${outfit}
+
+Her torso is COVERED. Render the named material, color, staff/weapon and the nature-magic wisp.
+
+━━━ 4. POSE + FRAMING (render the rolled framing & action) ━━━
+${pose}
+
+⚑ Honor the rolled framing — bust, half-body, OR full-body as named. Composed and capable, quiet power. NEVER a sultry/seductive pose, NEVER eye-contact-as-come-on.
+
+━━━ 5. FOREST BACKDROP (softly out-of-focus behind her) ━━━
 ${backdrop}
 
 A deep enchanted forest softly behind her — atmospheric haze sells the depth; never let the backdrop compete with her presence.
 
-━━━ 4. LIGHTING (portrait light + time of day) ━━━
+━━━ 6. LIGHTING (portrait light + time of day) ━━━
 ${lighting}
 
 ⚑ Let this rolled lighting / time-of-day lead the mood and color — moonlit blue-teal night, twilight, dawn or soft day all work; keep her beautifully lit and readable.
@@ -558,12 +570,12 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 
 ━━━ HARD BANS ━━━
 - NO cheesecake / NO chainmail-bikini / NO battle-bra / NO cleavage-as-focus / NO plunging neckline / NO bare-thigh pin-up / NO bondage-harness / NO sultry / sensual / seductive / alluring framing (she is COVERED & capable; tasteful bare arms/shoulders are fine)
-- NO tiny-fairy / NO pixie-wings / NO gentle-fae register, NO tree-spirit / NO bark-skin (she is an ELF, not a plant-spirit)
+- NO tiny-fairy / NO pixie-wings / NO gentle-fae register, NO tree-spirit / NO bark-skin (she is an ELF, not a plant-spirit); NO other races — no humans / dryads / fauns / orcs
 - NO modern objects, NO additional human figures, NO gore / menace / grim mood
 - NO artist name-drops, NO smooth illustration / NO airbrushed / NO modern-anime / NO Pixar-3D
 
 ━━━ OUTPUT ━━━
-Write 80-110 words, comma-separated phrases. LEAD WITH THE FEMALE ELF DRUID — her lineage features, war-paint, covered leaf-and-gold armor, staff and nature-magic. Then her poised pose + expression. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then her spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+Write 80-110 words, comma-separated phrases. LEAD WITH THE FEMALE ELF DRUID base (lineage, ears, features), IMMEDIATELY FOLLOWED BY her rolled HAIR (exact color & style) and her rolled OUTFIT (covered armor, staff, nature-magic). Then her rolled POSE + FRAMING. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then her spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
   FAEBOT_FEMALE_DRUID_ADVENTURE: ({ slots, sharedDNA, vibeDirective }) => {
@@ -640,38 +652,50 @@ Write 80-110 words, comma-separated phrases. LEAD WITH THE DRUID MID-ACTION in h
   },
 
   FAEBOT_MALE_DRUID: ({ slots, sharedDNA, vibeDirective }) => {
-    const { character, backdrop, lighting, companion } = slots;
+    const { character, hair, outfit, pose, backdrop, lighting, companion } = slots;
     const companionSection = companion
       ? `\n\n━━━ COMPANION (a single spirit-animal sharing the moment) ━━━\n${companion}\n\nWoven naturally beside him — never a competing focal subject. The eye lands on HIM first.`
       : '';
-    return `You are writing ONE Flux prompt for an INTIMATE PORTRAIT of a MALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
+    return `You are writing ONE Flux prompt for a MALE ELF DRUID — the forest's defender — in FaeBot's painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + Brian Froud painted-fantasy lineage). Output ONLY the prompt — comma-separated phrases, 80-110 words, no preamble, no headers, no markers.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ABSOLUTE NON-NEGOTIABLE MANDATE — FIRST visual elements.
 
-1. THE SUBJECT IS A MALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. HE is unmistakably a striking male elf: long pointed ears, glowing eyes, otherworldly elven skin, vivid hair (optionally a short trimmed beard), nature war-paint. Use HE / HIS. NEVER a woman, NEVER feminine, NEVER androgynous. NOT a gentle fairy, NOT a tree-spirit.
+1. THE SUBJECT IS A MALE ELF DRUID — a capable, agile, magical NATURE-WARRIOR-MAGE, the forest's GUARDIAN. HE is unmistakably a striking male elf: long pointed ears, elven features, otherworldly elven skin (optionally a short trimmed beard). Use HE / HIS. NEVER a woman, NEVER feminine, NEVER androgynous. NOT a gentle fairy, NOT a tree-spirit.
 
-2. Render him EXACTLY as the character entry describes — lineage skin-tone, glowing eyes, hair, war-paint, leaf-and-gold ARMOR, druidic STAFF, nature-magic. His CHEST IS COVERED (named armor piece) — NEVER shirtless, NEVER bare-chested, NEVER oiled/sculpted/muscular-pecs. Describe skin on the FACE only.
+2. RENDER THE ROLLED HAIR, OUTFIT and POSE EXACTLY as the axes below name them — these are SEPARATELY ROLLED and MUST each land. His hair is whatever COLOR & STYLE the HAIR axis names — render his hair EXACTLY the rolled color and style, do NOT default to white/silver and do NOT default to a side-braid. His outfit is whatever the OUTFIT axis names. His CHEST IS COVERED — NEVER shirtless, NEVER bare-chested, NEVER oiled/sculpted/muscular-pecs. Describe skin on the FACE only.
 
-3. INTIMATE POSED FRAMING — a half-body or bust portrait (head, shoulders, upper body, staff visible), poise and quiet power, a slight three-quarter turn, a confident or watchful gaze. NOT a stiff ID-photo, NOT a beefcake glamour pose.
+3. Render the FRAMING and POSE the POSE axis names (bust / half-body / full-body) — do NOT force a tight bust. Composed, capable, quiet power. NOT a stiff ID-photo, NOT a beefcake glamour pose.
 
-Open with the male elf druid. He opens; everything else is HIS FRAME.
+Open with the elf base, then immediately his rolled hair, then his rolled outfit.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-━━━ 1. THE DRUID (render HIM exactly as described, MALE) ━━━
+━━━ 1. THE ELF BASE (render HIS lineage exactly — skin, eyes, ears, face; MALE) ━━━
 ${character}
 
-Preserve lineage skin & glowing eyes, hair, war-paint, COVERED leaf-and-gold armor, staff, nature-magic. A capable warrior-mage, mythic-elf, NOT a beefcake. Chest covered, skin described on the FACE only.
+Long pointed elf ears + elven features unmistakably, optionally a short beard. A capable warrior-mage, mythic-elf, NOT a beefcake. Skin described on the FACE only.
 
-━━━ 2. POSE + EXPRESSION (intimate, poised, powerful) ━━━
-A composed half-body/bust pose — slight three-quarter turn, staff or a curl of nature-magic visible, a confident, watchful, or serene expression. Quiet power. NEVER a smoldering/glamour pose, NEVER shirtless.
+━━━ 2. HAIR (render EXACTLY this color & style — do NOT default to white/silver) ━━━
+${hair}
 
-━━━ 3. FOREST BACKDROP (softly out-of-focus behind him) ━━━
+⚑ CRITICAL: render his hair EXACTLY the rolled color and style above. If it names raven / brown / auburn / green / etc., that is the hair — do NOT drift to white, silver, or a side-braid.
+
+━━━ 3. OUTFIT (his druid garb + staff/weapon + nature-magic — render exactly) ━━━
+${outfit}
+
+His chest is COVERED (named piece). Render the named material, color, staff/weapon and the nature-magic wisp. Skin on the FACE only.
+
+━━━ 4. POSE + FRAMING (render the rolled framing & action) ━━━
+${pose}
+
+⚑ Honor the rolled framing — bust, half-body, OR full-body as named. Composed and capable, quiet power. NEVER a smoldering/glamour pose, NEVER shirtless.
+
+━━━ 5. FOREST BACKDROP (softly out-of-focus behind him) ━━━
 ${backdrop}
 
 A deep enchanted forest softly behind him — atmospheric haze sells depth; never let it compete with his presence.
 
-━━━ 4. LIGHTING (portrait light + time of day) ━━━
+━━━ 6. LIGHTING (portrait light + time of day) ━━━
 ${lighting}
 
 ⚑ Let the rolled lighting / time-of-day lead the mood — moonlit, twilight, dawn or soft day all work.
@@ -686,12 +710,12 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 ━━━ HARD BANS ━━━
 - NO shirtless / bare-chested / oiled / sculpted / chiseled / muscular-pecs / loincloth (chest ALWAYS covered; describe skin on the FACE only)
 - NO woman / feminine / androgynous (this is a MALE elf)
-- NO tiny-fairy / pixie / gentle-fae register, NO tree-spirit / bark-skin (he is an ELF)
+- NO tiny-fairy / pixie / gentle-fae register, NO tree-spirit / bark-skin (he is an ELF); NO other races — no humans / dryads / fauns / orcs
 - NO modern objects, NO additional human figures, NO gore / menace
 - NO artist name-drops, NO smooth illustration / airbrushed / modern-anime / Pixar-3D
 
 ━━━ OUTPUT ━━━
-Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELF DRUID — lineage features, war-paint, COVERED leaf-and-gold armor, staff, nature-magic. Then his poised pose + expression. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then his spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
+Write 80-110 words, comma-separated phrases. LEAD WITH THE MALE ELF DRUID base (lineage, ears, features), IMMEDIATELY FOLLOWED BY his rolled HAIR (exact color & style) and his rolled OUTFIT (covered armor, staff, nature-magic). Then his rolled POSE + FRAMING. Then the soft-focus forest backdrop. Then lighting.${companion ? ' Then his spirit-animal companion.' : ''} Painted-fantasy oil-brushwork throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
   FAEBOT_MALE_DRUID_ADVENTURE: ({ slots, sharedDNA, vibeDirective }) => {
