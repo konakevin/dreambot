@@ -319,9 +319,8 @@ module.exports = {
     // NEW 2026-06-09 — impossible-sky: colossal ringed giant over an alien
     // horizon + 40% tiny-witness layer. Pools scaled to 200 (Kevin-approved).
     'impossible-sky',
-    // NEW 2026-06-09 — crystalline-world: titanic crystal prisms fracturing
-    // starlight; composition axis kills architecture repetition. Scaled to 200.
-    'crystalline-world',
+    // crystalline-world DEACTIVATED 2026-06-23 (Kevin). Files/pools/config kept.
+    // 'crystalline-world',
     // NEW 2026-06-09 — derelict: dead abandoned ship + lone explorer's beam,
     // Alien/Dead-Space awe-horror. Pools scaled to 200 (Kevin-approved).
     'derelict',
@@ -330,7 +329,7 @@ module.exports = {
     'leviathan',
     // NEW 2026-06-10 — second wave (MVP-25, seed-test-then-scale):
     'orbital-descent', // world from orbit, tiny craft on approach
-    'asteroid-mining', // gritty blue-collar industrial space
+    // 'asteroid-mining', // DEACTIVATED 2026-06-23 (Kevin). Files/pools/config kept.
     'cockpit-view', // first-person pilot POV through canopy + HUD
     'ship-graveyard', // fleet-scale boneyard of dead warships
     'terraforming', // a world being born — barren meets living
