@@ -12,14 +12,13 @@
  */
 
 import { useState, useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  Linking,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
+// gesture-handler's ScrollView (not RN's) so it coordinates with the screen's
+// swipe-back Pan gesture — the Pan's failOffsetY yields vertical drags to the
+// scroll, letting swipe-back AND scrolling coexist (a plain RN ScrollView gets
+// starved by the Pan, which is why scrolling was dead with swipeBack on).
+import { ScrollView } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -114,6 +113,7 @@ export default function SubscribeScreen() {
   const { data: packages = [], isLoading } = useProPackages();
   const { mutate: purchase } = usePurchasePro();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
+  const insets = useSafeAreaInsets();
 
   // Default to yearly (better deal). Tap the toggle to switch.
   const [period, setPeriod] = useState<Period>('year');
@@ -170,18 +170,15 @@ export default function SubscribeScreen() {
   return (
     <ScreenLayout header="back" title="Plans">
       <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-          {/* Hero — gradient wordmark title (brand display font + gradient via
-              the shared GradientTitle primitive) */}
+        <ScrollView
+          style={s.scrollView}
+          contentContainerStyle={s.scroll}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={s.hero}>
-            <GradientTitle size={26} weight={700}>
-              Choose your plan
+            <GradientTitle size={22} weight={700}>
+              Choose a plan
             </GradientTitle>
-            <Text style={s.heroSub}>
-              {isOnTrial
-                ? 'Enjoying the free trial? Keep it all going.'
-                : 'Get the full DreamBot magic.'}
-            </Text>
           </View>
 
           {/* Trial countdown banner */}
@@ -331,24 +328,23 @@ export default function SubscribeScreen() {
               })}
             </View>
           )}
+        </ScrollView>
 
-          {/* Restore + legal */}
+        {/* Fixed footer — auto-renew disclosure + required legal links stay
+            visible regardless of scroll position (App Store 3.1.2). */}
+        <View style={[s.footer, { paddingBottom: verticalScale(12) + insets.bottom }]}>
           <TouchableOpacity
-            style={s.restore}
             onPress={() => restore()}
             disabled={restoring}
             activeOpacity={0.7}
+            style={s.footerRestore}
           >
             <Text style={s.restoreText}>{restoring ? 'Restoring…' : 'Restore purchases'}</Text>
           </TouchableOpacity>
-
-          <Text style={s.legal}>
-            Payment is charged to your Apple ID at confirmation of purchase. Your subscription
-            renews automatically unless cancelled at least 24 hours before the end of the current
-            period. Manage or cancel anytime in your App Store settings. Upgrade or downgrade
-            between Basic and Pro at any time.
+          <Text style={s.footerLegal}>
+            Payment is charged to your Apple ID at purchase. Auto-renews unless cancelled at least
+            24 hours before the period ends; manage anytime in App Store settings.
           </Text>
-
           <View style={s.legalLinks}>
             <Text
               style={s.legalLink}
@@ -364,7 +360,7 @@ export default function SubscribeScreen() {
               Terms of Use (EULA)
             </Text>
           </View>
-        </ScrollView>
+        </View>
       </View>
     </ScreenLayout>
   );
@@ -373,20 +369,13 @@ export default function SubscribeScreen() {
 const s = StyleSheet.create({
   scroll: {
     paddingHorizontal: verticalScale(20),
-    paddingBottom: verticalScale(40),
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(12),
   },
   hero: {
     alignItems: 'center',
-    marginTop: verticalScale(8),
-    marginBottom: verticalScale(20),
-  },
-  heroSub: {
-    fontSize: fontScale(14),
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: verticalScale(6),
-    paddingHorizontal: verticalScale(12),
-    lineHeight: fontScale(20),
+    marginTop: verticalScale(4),
+    marginBottom: verticalScale(12),
   },
   trialBanner: {
     flexDirection: 'row',
@@ -422,7 +411,7 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: verticalScale(12),
     padding: verticalScale(4),
-    marginBottom: verticalScale(20),
+    marginBottom: verticalScale(8),
     gap: verticalScale(4),
   },
   toggleBtn: {
@@ -463,12 +452,12 @@ const s = StyleSheet.create({
     color: '#5A3A00',
   },
   cards: {
-    gap: verticalScale(16),
+    gap: verticalScale(12),
   },
   card: {
     backgroundColor: colors.surface,
     borderRadius: verticalScale(18),
-    padding: verticalScale(18),
+    padding: verticalScale(15),
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -497,7 +486,7 @@ const s = StyleSheet.create({
     color: '#1A1A24',
   },
   cardHead: {
-    marginBottom: verticalScale(10),
+    marginBottom: verticalScale(8),
   },
   cardNameRow: {
     flexDirection: 'row',
@@ -519,7 +508,7 @@ const s = StyleSheet.create({
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: verticalScale(14),
+    marginBottom: verticalScale(10),
   },
   priceAmount: {
     fontSize: fontScale(28),
@@ -533,7 +522,7 @@ const s = StyleSheet.create({
   },
   cardPerks: {
     gap: verticalScale(8),
-    marginBottom: verticalScale(18),
+    marginBottom: verticalScale(12),
   },
   cardPerkRow: {
     flexDirection: 'row',
@@ -547,7 +536,7 @@ const s = StyleSheet.create({
   },
   cta: {
     borderRadius: verticalScale(12),
-    paddingVertical: verticalScale(14),
+    paddingVertical: verticalScale(12),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -565,10 +554,10 @@ const s = StyleSheet.create({
   ctaTextLit: {
     color: '#FFFFFF',
   },
-  restore: {
+  footerRestore: {
     alignItems: 'center',
-    marginTop: verticalScale(22),
-    padding: verticalScale(8),
+    paddingVertical: verticalScale(4),
+    marginBottom: verticalScale(10),
   },
   restoreText: {
     fontSize: fontScale(14),
@@ -576,13 +565,19 @@ const s = StyleSheet.create({
     fontWeight: '600',
     textDecorationLine: 'underline',
   },
-  legal: {
+  scrollView: { flex: 1 },
+  footer: {
+    paddingHorizontal: verticalScale(20),
+    paddingTop: verticalScale(12),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
+  footerLegal: {
     fontSize: fontScale(11),
     color: colors.textMuted,
     textAlign: 'center',
-    marginTop: verticalScale(14),
-    lineHeight: fontScale(16),
-    paddingHorizontal: verticalScale(8),
+    lineHeight: fontScale(15),
   },
   legalLinks: {
     flexDirection: 'row',

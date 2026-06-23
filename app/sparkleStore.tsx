@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
+// gesture-handler's ScrollView (not RN's) so it coordinates with the screen's
+// swipe-back Pan gesture — lets swipe-back AND scrolling coexist (see subscribe.tsx).
+import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -216,12 +219,16 @@ export default function SparkleStoreScreen() {
       }
     >
       <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={s.scrollView}
+          contentContainerStyle={s.scroll}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Hero — gradient wordmark title (brand display font + gradient via
               the shared GradientTitle primitive). The balance lives in the
               header's rightAction slot, opposite the back button. */}
           <View style={s.hero}>
-            <GradientTitle size={26} weight={700}>
+            <GradientTitle size={22} weight={700}>
               Choose a pack
             </GradientTitle>
           </View>
@@ -250,8 +257,41 @@ export default function SparkleStoreScreen() {
               ))}
             </View>
           )}
+        </ScrollView>
 
-          {/* Restore */}
+        {/* Pinned bottom — the purchase area (pack copy + Buy) sits ABOVE the
+            sticky footer content (Restore + legal links), separated by a divider
+            so the button is never sandwiched. The footer is anchored at the
+            very bottom (matches the Plans screen). */}
+        <View style={s.stickyFooter}>
+          {sorted.length > 0 && (
+            <>
+              {selectedInfo && (
+                <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>
+              )}
+              <TouchableOpacity
+                onPress={handlePurchase}
+                disabled={!selectedPkg || purchasing}
+                activeOpacity={0.85}
+              >
+                <View style={[s.cta, (!selectedPkg || purchasing) && s.ctaDim]}>
+                  {purchasing ? (
+                    <View style={s.ctaConnecting}>
+                      <ActivityIndicator color="#FFFFFF" />
+                      <Text style={s.ctaText}>Connecting to App Store…</Text>
+                    </View>
+                  ) : (
+                    <Text style={s.ctaText}>
+                      {selectedPkg
+                        ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles (${selectedPkg.product.priceString})`
+                        : 'Select a pack'}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View style={s.footerDivider} />
+            </>
+          )}
           <TouchableOpacity
             style={s.restoreButton}
             onPress={() =>
@@ -265,53 +305,39 @@ export default function SparkleStoreScreen() {
           >
             <Text style={s.restoreText}>{restoring ? 'Restoring…' : 'Restore purchases'}</Text>
           </TouchableOpacity>
-        </ScrollView>
-
-        {/* Pinned footer — selection copy + primary CTA, always visible. */}
-        {sorted.length > 0 && (
-          <View style={s.stickyFooter}>
-            {selectedInfo && <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>}
-            <TouchableOpacity
-              onPress={handlePurchase}
-              disabled={!selectedPkg || purchasing}
-              activeOpacity={0.85}
+          <View style={s.legalLinks}>
+            <Text
+              style={s.legalLink}
+              onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
             >
-              <View style={[s.cta, (!selectedPkg || purchasing) && s.ctaDim]}>
-                {purchasing ? (
-                  <View style={s.ctaConnecting}>
-                    <ActivityIndicator color="#FFFFFF" />
-                    <Text style={s.ctaText}>Connecting to App Store…</Text>
-                  </View>
-                ) : (
-                  <Text style={s.ctaText}>
-                    {selectedPkg
-                      ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles (${selectedPkg.product.priceString})`
-                      : 'Select a pack'}
-                  </Text>
-                )}
-              </View>
-            </TouchableOpacity>
+              Privacy Policy
+            </Text>
+            <Text style={s.legalDot}> · </Text>
+            <Text
+              style={s.legalLink}
+              onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+            >
+              Terms of Use (EULA)
+            </Text>
           </View>
-        )}
+        </View>
       </View>
     </ScreenLayout>
   );
 }
 
 const s = StyleSheet.create({
-  // Bottom padding sized for the sticky footer height (helper line +
-  // CTA + paddings ≈ 130-150px) plus a buffer so the Restore link
-  // can still be scrolled into view above the footer.
+  scrollView: { flex: 1 },
   scroll: {
     paddingHorizontal: verticalScale(20),
-    paddingBottom: verticalScale(180),
+    paddingBottom: verticalScale(12),
   },
 
   // Hero — gradient title + balance pill (mirrors the Plans paywall hero).
   hero: {
     alignItems: 'center',
-    marginTop: verticalScale(8),
-    marginBottom: verticalScale(20),
+    marginTop: verticalScale(4),
+    marginBottom: verticalScale(12),
   },
   // Balance — a compact surface pill in the header's rightAction slot,
   // opposite the back button (the sparkle icon doubles as the "available" cue).
@@ -480,12 +506,41 @@ const s = StyleSheet.create({
   emptyText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
   emptySub: { color: colors.textSecondary, fontSize: fontScale(14), textAlign: 'center' },
 
-  // Restore
-  restoreButton: { alignItems: 'center', paddingVertical: verticalScale(28) },
+  // Divider between the purchase area and the sticky footer content (Restore +
+  // legal) so the Buy button is never sandwiched. Full-width (negates the
+  // footer's horizontal padding).
+  footerDivider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+    marginTop: verticalScale(14),
+    marginBottom: verticalScale(10),
+    marginHorizontal: -verticalScale(20),
+  },
+  // Restore + legal links — grouped secondary footer content (mirrors Plans).
+  restoreButton: {
+    alignItems: 'center',
+    paddingVertical: verticalScale(4),
+  },
   restoreText: {
     color: colors.textMuted,
     fontSize: fontScale(14),
     fontWeight: '600',
     textDecorationLine: 'underline',
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: verticalScale(8),
+  },
+  legalLink: {
+    fontSize: fontScale(12),
+    color: colors.accent,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+  legalDot: {
+    fontSize: fontScale(12),
+    color: colors.textMuted,
   },
 });
