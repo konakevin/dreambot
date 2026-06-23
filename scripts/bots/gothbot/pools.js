@@ -44,6 +44,10 @@ function loadOptional(name) {
 }
 
 module.exports = {
+  // Looks system (2026-06-22) — bot-wide gothic render-style register rolled per
+  // render via rollSharedDNA.lookRegister; injected at the top of look-enabled
+  // briefs so the render style varies within the gothic identity (MangaBot pattern).
+  GOTHBOT_LOOK_REGISTER: loadOptional('gothbot_look_register'),
   DARK_FEMALE_CHARACTERS: load('dark_characters'),
   DARK_MALE_CHARACTERS: loadOptional('dark_male_characters'),
   FEMALE_CHARACTER_ACTIONS: load('character_actions'),
@@ -243,7 +247,7 @@ module.exports = {
   // succubi, lich/undead, dragons) — the vivid inked style is distinct enough that
   // the overlap with goth-female/vampire paths doesn't matter (Kevin 2026-05-25).
   MONSTER_PROWL_INKED_CREATURE: loadOptional('gothbot_monster_prowl_inked_creature'),
-  // Gargoyle path (monster-prowl-weta) — bespoke gnarly+ornate gargoyle axes (2026-05-25).
+  // Gargoyle path (gargoyles) — bespoke gnarly+ornate gargoyle axes (2026-05-25).
   GARGOYLE_CREATURE: loadOptional('gothbot_creature_gargoyle'),
   GARGOYLE_ACTION: loadOptional('gothbot_weta_gargoyle_action'),
   GARGOYLE_EYES: loadOptional('gothbot_gargoyle_eyes'),

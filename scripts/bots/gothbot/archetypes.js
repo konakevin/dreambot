@@ -278,9 +278,9 @@ module.exports = {
     anchorScaleRange: null,
   },
 
-  GOTHBOT_MONSTER_PROWL_WETA: {
+  GOTHBOT_GARGOYLES: {
     description:
-      'PATH-BESPOKE — GothBot monster-prowl-weta = GARGOYLES ONLY (2026-05-25 pivot). Super high-def Weta-Workshop + Unreal Engine 5 realistic RENDER of the most GNARLY, MEAN, ferocious yet ORNATELY-CARVED gargoyles, dialed to 11 + scroll-stopping, in action (flying / perched / attacking / scouting / lurking). Bespoke gargoyle axes: creature (gnarly+ornate stone gargoyle) / action (gargoyle in motion) / eye_glow (glowing eyes) / feature (signature gnarly+ornate detail) / stage (lush gothic) + drama (60%-gated) + universal lighting/atmosphere. Full-spectrum saturated color held against deep ominous shadow.',
+      'PATH-BESPOKE — GothBot gargoyles path = GARGOYLES ONLY (2026-05-25 pivot). Super high-def Weta-Workshop + Unreal Engine 5 realistic RENDER of the most GNARLY, MEAN, ferocious yet ORNATELY-CARVED gargoyles, dialed to 11 + scroll-stopping, in action (flying / perched / attacking / scouting / lurking). Bespoke gargoyle axes: creature (gnarly+ornate stone gargoyle) / action (gargoyle in motion) / eye_glow (glowing eyes) / feature (signature gnarly+ornate detail) / stage (lush gothic) + drama (60%-gated) + universal lighting/atmosphere. Full-spectrum saturated color held against deep ominous shadow.',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],

@@ -35,8 +35,39 @@ const pathBuilders = {
   'monster-prowl': require('./paths/monster-prowl'),
   'monster-prowl-victorian': require('./paths/monster-prowl-victorian'),
   'monster-prowl-inked': require('./paths/monster-prowl-inked'),
-  'monster-prowl-weta': require('./paths/monster-prowl-weta'),
+  gargoyles: require('./paths/gargoyles'),
 };
+
+// Looks system (2026-06-22) — paths that roll a per-render gothic LOOK (render
+// style varies within the gothic identity). buildBrief prepends GOTHBOT_LOOK_OVERRIDE
+// for these, and each is routed to the gothbot_neutral medium via mediumByPath.
+// 2026-06-22: rolled out to ALL active paths (Kevin) — incl. the formerly
+// style-locked ones (gothic-architecture, the-sanctum, castlevania-scene,
+// vampire-girls-2). (the-haunting is disabled; add here if/when re-enabled.)
+const LOOK_ENABLED_PATHS = new Set([
+  'dark-landscape',
+  'the-frost-garden',
+  'twilight-gothic',
+  'goth-closeup',
+  'goth-full-body',
+  'cozy-goth',
+  'the-dark-prince',
+  'the-coven',
+  'moonlit-maiden',
+  'gothic-vista',
+  'vampire-assassin-female',
+  'vampire-from-a-distance',
+  'vampire-hunter-in-action',
+  'goth-male-full-body-axis',
+  'vampire-assassin-combat',
+  'monster-prowl',
+  'gargoyles',
+  // formerly style-locked — now look-rolled too (Kevin 2026-06-22)
+  'vampire-girls-2',
+  'gothic-architecture',
+  'the-sanctum',
+  'castlevania-scene',
+]);
 
 module.exports = {
   username: 'gothbot',
@@ -212,7 +243,7 @@ module.exports = {
     'monster-prowl': ['dark', 'nightshade', 'macabre'],
     'monster-prowl-victorian': ['dark', 'nightshade', 'macabre'],
     'monster-prowl-inked': ['dark', 'nightshade', 'macabre'],
-    'monster-prowl-weta': ['dark', 'nightshade', 'macabre'],
+    gargoyles: ['dark', 'nightshade', 'macabre'],
   },
 
   // cleanMediumByModel: gpt-image-2 AND nano-banana both render the bot-only
@@ -226,43 +257,39 @@ module.exports = {
   },
 
   mediumByPath: {
-    // Character paths consolidated to anime medium (matches scene paths).
-    'goth-closeup': 'anime',
-    'goth-full-body': 'anime',
-    'vampire-girls-2': 'anime',
-    // the-dark-prince: gothic_realistic (Frazetta/Royo/Vallejo masculine oil-painting)
-    // — anime rendered bishonen pretty-boys (Kevin 2026-06-10 "a bit gay"); the painted
-    // dark-fantasy-cover register renders a RUGGED, mature, menacing male dark-lord.
-    'the-dark-prince': 'anime',
-    // the-haunting: FULL goth-stylistic wraith mode (Kevin 2026-06-22) — painterly
-    // jewel-toned oil (canvas_victorian) for a hyper-stylized, vibrant, dramatic
-    // goth-couture wraith. Replaced 'anime' (rendered solid muted photoreal women).
+    // ── LOOKS SYSTEM (2026-06-22) ──────────────────────────────────────────
+    // Look-enabled paths route to the gothbot_neutral medium; the per-render
+    // gothic LOOK (rolled in rollSharedDNA, prepended in buildBrief) supplies the
+    // render style. This replaces the old single-medium pins (mostly 'anime' +
+    // the monster-prowl render-branches) with rolled style variety per render.
+    'goth-closeup': 'gothbot_neutral',
+    'goth-full-body': 'gothbot_neutral',
+    'the-dark-prince': 'gothbot_neutral',
+    'the-coven': 'gothbot_neutral',
+    'moonlit-maiden': 'gothbot_neutral',
+    'dark-landscape': 'gothbot_neutral',
+    'the-frost-garden': 'gothbot_neutral',
+    'twilight-gothic': 'gothbot_neutral',
+    'cozy-goth': 'gothbot_neutral',
+    'gothic-vista': 'gothbot_neutral',
+    'vampire-assassin-female': 'gothbot_neutral',
+    'vampire-from-a-distance': 'gothbot_neutral',
+    'vampire-hunter-in-action': 'gothbot_neutral',
+    'goth-male-full-body-axis': 'gothbot_neutral',
+    'vampire-assassin-combat': 'gothbot_neutral',
+    'monster-prowl': 'gothbot_neutral',
+    // gargoyles: now look-rolled too (was pure weta_render — too one-note; Kevin
+    // wanted the dark-anime/inked/oil variety the hearted gargoyles also had).
+    gargoyles: 'gothbot_neutral',
+
+    // 2026-06-22: rolled looks out to these too (Kevin) — were style-locked.
+    'vampire-girls-2': 'gothbot_neutral',
+    'gothic-architecture': 'gothbot_neutral',
+    'the-sanctum': 'gothbot_neutral',
+    'castlevania-scene': 'gothbot_neutral',
+
+    // the-haunting: DISABLED (parked) — keeps its goth-wraith medium for revival.
     'the-haunting': 'gothic_wraith_paint',
-    'the-coven': 'anime',
-    'moonlit-maiden': 'anime',
-    // Scene/landscape paths hardcoded to anime medium for the trial.
-    'dark-landscape': 'anime',
-    'gothic-architecture': 'gothbot_gothic_print',
-    'the-sanctum': 'gothbot_gothic_print',
-    'the-frost-garden': 'anime',
-    'twilight-gothic': 'anime',
-    'castlevania-scene': 'anime',
-    'cozy-goth': 'anime',
-    'gothic-vista': 'anime',
-    // Vampire-assassin paths locked to anime medium for the trial.
-    'vampire-assassin-female': 'anime',
-    'vampire-from-a-distance': 'anime',
-    'vampire-hunter-in-action': 'anime',
-    'goth-male-full-body-axis': 'anime',
-    'vampire-assassin-combat': 'anime',
-    // monster-prowl renders in the dark-ANIME medium (Kevin 2026-05-25 — anime gives
-    // the most creative range in Flux; this is the medium that made the hearted ghoul).
-    // Spiced up with the 40%-gated drama axis (dramatic gothic background events).
-    'monster-prowl': 'anime',
-    // monster-prowl-victorian stays the FROZEN classical-oil branch.
-    'monster-prowl-victorian': 'canvas_victorian',
-    'monster-prowl-inked': 'inked_spectrum',
-    'monster-prowl-weta': 'gargoyle_anime',
   },
 
   // Bot-only tags (inactive in dream_mediums so users can't pick them — VenusBot's 'surreal' pattern):
@@ -291,6 +318,9 @@ module.exports = {
     // (Castlevania horror anchors) does NOT leak in and pull GPT-Image-2
     // abstract — the gothbot_gpt_clean mediumStyle carries the register alone.
     gothbot_gpt_clean: '',
+    // Looks neutral medium — short IDENTITY-only anchor (no render-style words),
+    // so the rolled LOOK leads CLIP instead of the bot-wide painterly prefix.
+    gothbot_neutral: 'gothic dark-fantasy art',
     // 2026-06-02 cruft-audit micro-strip — dropped travel-mag `wallpaper-
     // worthy` (Condé-Nast prior pull).
     vampire_portrait:
@@ -355,11 +385,17 @@ module.exports = {
     // anchors carry the illustration register.
     gothbot_gothic_print:
       'dark gothic-action-horror promotional-art finish, sharp linework, high-def gallery-print fidelity, dark gothic-action-horror illustration quality, no text no words no watermarks',
+    // Looks system neutral medium — clean tail, NO render-style words (the rolled
+    // LOOK owns the style); just the no-text guard + quality.
+    gothbot_neutral: 'frame-worthy gothic dark-fantasy art, no text no words no watermarks',
   },
 
   // Per-medium prompt injection — gives each medium distinct visual character.
   // This fragment gets injected between promptPrefix and the Sonnet-written scene.
   mediumStyles: {
+    // Looks system neutral medium — locks the gothic identity, defers render
+    // style to the rolled LOOK (look-enabled paths route here via mediumByPath).
+    gothbot_neutral: blocks.GOTHBOT_NEUTRAL,
     // gpt-image-2 clean medium (routed via mediumByModel above). Pulls
     // GPT-Image-2 out of the abstract / ornamental plate prior the bot's
     // normal mediums + PROMPT_PREFIX trigger. Positive-only, no name-drops,
@@ -578,7 +614,7 @@ module.exports = {
       'monster-prowl',
       'monster-prowl-victorian',
       'monster-prowl-inked',
-      'monster-prowl-weta',
+      'gargoyles',
       'vampire-hunter-in-action',
       'goth-male-full-body-axis',
       'the-dark-prince',
@@ -638,11 +674,14 @@ module.exports = {
     'goth-male-full-body-axis',
     'vampire-assassin-combat',
     'monster-prowl',
-    'monster-prowl-victorian',
-    // Built + working, intentionally NOT live yet — Kevin may activate later (2026-05-26).
-    // Builder / medium / pools / seeds all wired below; re-enable by uncommenting.
+    // gargoyles — EXCLUSIVELY-gargoyle path; now LOOK-ROLLED (weta + dark-anime +
+    // inked + oil + …) instead of pure weta.
+    'gargoyles',
+    // monster-prowl-victorian + monster-prowl-inked RETIRED 2026-06-22: redundant
+    // under the looks system — their classical-oil and vivid-inked styles are now
+    // rolled looks on `monster-prowl` itself. Files/archetypes kept for revert.
+    // 'monster-prowl-victorian',
     // 'monster-prowl-inked',
-    // 'monster-prowl-weta',
   ],
 
   // Flat rotation (2026-05-26 fleet-wide flatten): no pathWeights — every active
@@ -655,6 +694,13 @@ module.exports = {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.dark,
+      // Looks system (2026-06-22): roll a gothic render-style look per render.
+      // Consumed by look-enabled paths via the GOTHBOT_LOOK_OVERRIDE prepend in
+      // buildBrief below. Recency-aware so the same look doesn't repeat back-to-back.
+      lookRegister:
+        picker && pools.GOTHBOT_LOOK_REGISTER && pools.GOTHBOT_LOOK_REGISTER.length
+          ? picker.pickWithRecency(pools.GOTHBOT_LOOK_REGISTER, 'look_register')
+          : null,
     };
   },
 
@@ -674,20 +720,27 @@ module.exports = {
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, medium, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`GothBot: unknown path "${path}"`);
+    let brief;
     if (typeof builder === 'function') {
-      return builder({ sharedDNA, vibeDirective, vibeKey, medium, picker });
-    }
-    if (builder && typeof builder === 'object' && builder.archetype) {
+      brief = builder({ sharedDNA, vibeDirective, vibeKey, medium, picker });
+    } else if (builder && typeof builder === 'object' && builder.archetype) {
       const { composeBrief } = require('../../lib/brief-composer');
-      return composeBrief({
+      brief = composeBrief({
         bot: module.exports,
         pathConfig: builder,
         sharedDNA,
         vibeDirective,
         picker,
       });
+    } else {
+      throw new Error(`GothBot: path "${path}" has invalid export shape`);
     }
-    throw new Error(`GothBot: path "${path}" has invalid export shape`);
+    // Looks system: prepend the render-style AUTHORITY override for look-enabled
+    // paths so the rolled look leads + beats any baked style language below.
+    if (LOOK_ENABLED_PATHS.has(path)) {
+      brief = blocks.GOTHBOT_LOOK_OVERRIDE(sharedDNA) + brief;
+    }
+    return brief;
   },
 
   caption({ path }) {

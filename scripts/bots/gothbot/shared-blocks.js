@@ -138,7 +138,28 @@ const PAINTED_GOTHIC_FANTASY_MEDIUM = 'gothic dark-fantasy concept art, painterl
 const PROMPT_SUFFIX_PAINTED_GOTHIC_FANTASY =
   'painted dark-fantasy concept art, atmospheric gothic illustration, dramatic chiaroscuro, oil-painted brushwork, deep saturated jewel-tones with painted shadow, dark-fantasy painted-cover craft, no text, no watermarks';
 
+// ── Looks system (2026-06-22) ──────────────────────────────────────────────
+// Neutral medium for look-enabled paths: locks the GOTHIC dark-fantasy IDENTITY
+// but defers the render style / medium / finish / palette to the rolled LOOK.
+const GOTHBOT_NEUTRAL =
+  'gothic dark-fantasy horror — hauntingly beautiful, dramatic, operatic, dark and atmospheric. The render style, medium, finish and palette are set by the LOOK tokens that lead the prompt — render the whole scene in THAT look.';
+
+// STYLE-AUTHORITY override header, prepended to look-enabled briefs. Strong
+// wording (per the MangaBot lesson) so the rolled look beats any baked style
+// language in the path template; content/composition/hard-rules stay intact.
+const GOTHBOT_LOOK_OVERRIDE = (sharedDNA) =>
+  sharedDNA && sharedDNA.lookRegister
+    ? `━━━ LOOK — RENDER STYLE AUTHORITY (NON-NEGOTIABLE — open your Flux prompt with this) ━━━
+${sharedDNA.lookRegister}
+
+This is the AUTHORITY on rendering STYLE for THIS render. It OVERRIDES any other art-style / medium / finish / linework wording anywhere below (e.g. "oil painting", "inked", "cel-shaded", "hyperreal", "Weta", "3D render", "concept art"). Keep the SCENE content, the subject, the composition, and EVERY hard rule below exactly as written — but render ALL of it in THIS look. Open your Flux prompt with these look tokens.
+
+`
+    : '';
+
 module.exports = {
+  GOTHBOT_NEUTRAL,
+  GOTHBOT_LOOK_OVERRIDE,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   GPT_CLEAN,
