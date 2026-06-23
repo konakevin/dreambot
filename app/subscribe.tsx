@@ -12,7 +12,14 @@
  */
 
 import { useState, useEffect } from 'react';
-import { View, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  Linking,
+} from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -336,9 +343,27 @@ export default function SubscribeScreen() {
           </TouchableOpacity>
 
           <Text style={s.legal}>
-            Subscriptions renew automatically until cancelled. Manage or cancel anytime in your App
-            Store settings. Upgrade or downgrade between Basic and Pro at any time.
+            Payment is charged to your Apple ID at confirmation of purchase. Your subscription
+            renews automatically unless cancelled at least 24 hours before the end of the current
+            period. Manage or cancel anytime in your App Store settings. Upgrade or downgrade
+            between Basic and Pro at any time.
           </Text>
+
+          <View style={s.legalLinks}>
+            <Text
+              style={s.legalLink}
+              onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
+            >
+              Privacy Policy
+            </Text>
+            <Text style={s.legalDot}> · </Text>
+            <Text
+              style={s.legalLink}
+              onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+            >
+              Terms of Use (EULA)
+            </Text>
+          </View>
         </ScrollView>
       </View>
     </ScreenLayout>
@@ -558,5 +583,21 @@ const s = StyleSheet.create({
     marginTop: verticalScale(14),
     lineHeight: fontScale(16),
     paddingHorizontal: verticalScale(8),
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: verticalScale(8),
+  },
+  legalLink: {
+    fontSize: fontScale(12),
+    color: colors.accent,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+  legalDot: {
+    fontSize: fontScale(12),
+    color: colors.textMuted,
   },
 });
