@@ -1251,6 +1251,93 @@ CRITICAL — SYMMETRIC PORTRAIT composition is THE RULE. The archway is the eye'
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the symmetric portrait + archway + path.`;
   },
 
+  BLOOMBOT_HANGING_FLOWERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { setting, hanging_pieces, walkway_accent, atmospheric_phenomenon } = slots;
+
+    const phenomenonSection = atmospheric_phenomenon
+      ? `
+━━━ ATMOSPHERIC PHENOMENON — render visibly in the passage ━━━
+${atmospheric_phenomenon}
+
+This is the "magic-moment" detail that elevates the walkway — render as a specific visible element among the hanging blooms or along the path.
+
+`
+      : '';
+
+    return `You are a fine-art floral painter writing HANGING-FLOWER-CANOPY WALKWAY scene descriptions for BloomBot. Output is an 85-115 word comma-separated phrase string for Flux. NO preamble, NO labels — just the prose.
+
+━━━ NO PEOPLE — ABSOLUTE FIRST RULE ━━━
+NO humans, NO figures, NO silhouettes, NO shadows of people anywhere. ⚠️ CRITICAL: the far end / vanishing point of the path is EMPTY — do NOT place a lone person walking away into the misty distance, NO silhouette at the end of the walkway, NO figure on the platform or track. This exact composition (a path receding into glowing haze) tempts a "someone walking into the light" figure — there is NONE. The walkway is completely DESERTED and serene, the viewer themself about to step into it. (Tiny wildlife — a butterfly / songbird / firefly cloud — only when the atmospheric phenomenon calls for it.)
+
+━━━ THE LOOK — DREAMY HANGING-FLOWER WALKWAY RECEDING INTO MISTY DEPTH (NON-NEGOTIABLE) ━━━
+The hero is a COMPOSED overhead arrangement of pretty HANGING FLOWERS — the species + colors come from the rolled roster/palette (VARY them; this is NOT a wisteria-only look). It combines:
+  1. A COHESIVE OVERHEAD CANOPY of the rolled dominant flowering species — abundant blooms crowning the top and framing the sides (cascading, draping or massed, whatever suits the species), a lush designed ceiling you walk beneath.
+  2. A RHYTHMIC RECEDING LINE of DISCRETE, ORNATE HANGING FLOWER-ARRANGEMENTS — ornate hanging baskets / flower chandeliers / suspended bloom-orbs / pendant flower-lanterns on VISIBLE CHAINS at varying heights — distinct, designed pieces that march INTO THE DISTANCE, getting smaller and softer as they recede. These discrete hanging arrangements on chains are the DESIGNED SIGNATURE of this shot — they read as separate, intentional, ornate pieces hung in a row, not dissolved into the canopy.
+Beneath both layers, a PATH / LANE / TRAIN-TRACK / WALKWAY curves from the foreground and vanishes into a luminous, dreamy depth, its edges lined with lush, colorful flowers. Mood: magical, serene, dreamlike — a pretty scene you long to walk into.
+
+━━━ ATMOSPHERIC MISTY DEPTH — NON-NEGOTIABLE ━━━
+Strong AERIAL PERSPECTIVE. The walkway and the receding hanging arrangements DISSOLVE into a soft, glowing, luminous depth toward the center / far end — dreamy haze, soft glow or golden backlight (let the lighting set the exact mood), gentle bokeh. This atmospheric depth is what makes the shot magical: crisp, saturated hanging flowers + path in the FOREGROUND, fading to a pale, glowing vanishing point where the walkway and the last little hanging pieces disappear. NEVER a flat, evenly-lit, depthless scene; NEVER a blank backdrop — always the receding row of hanging pieces fading into soft luminous depth.
+
+━━━ COMPOSITION — portrait, leading INTO depth ━━━
+Portrait composition. The path/track curves from the bottom of the frame deep into the distance, drawing the viewer in as the lead-line. The overhead canopy drapes the top + sides like a living proscenium; the receding line of ornate hanging arrangements marches down the corridor into the luminous depth. The whole thing is COMPOSED and DESIGNED — a cohesive dominant species overhead, ornate discrete hanging pieces in a deliberate rhythm — never a chaotic wall of mixed strands. NEVER a flat horizontal landscape, NEVER a single centered bloom — this is a dreamy passage you walk into.
+
+━━━ THE SETTING (the walkway environment the canopy hangs over) ━━━
+${setting}
+
+Establish this real, specific place — its architecture, surfaces and mood — but keep it the BACKDROP that the flowers dress; the hanging blooms + accents are the hero. The walkway of this setting leads dead into the frame's depth.
+
+━━━ THE HANGING PIECES (the suspended overhead arrangement — THE HERO) ━━━
+${hanging_pieces}
+
+These hang DOWN FROM ABOVE over the walkway, lush and alive but DELIBERATELY COMPOSED — the cohesive cascade curtain plus a rhythmic RECEDING LINE of discrete ornate hanging baskets/lanterns on visible chains, marching into the misty depth and getting smaller as they recede. Negative space and luminous haze between them. They are the unmistakable hero, designed like a high-end floral installation, NEVER a spammy chaotic jumble.
+
+━━━ THE WALKWAY ACCENTS (lush living flowers lining the path) ━━━
+${walkway_accent}
+
+These dress the ground and edges of the walkway at eye/foot level, so the path feels embraced by flowers on every side — overflowing and alive, never sparse.
+
+━━━ HERO FORMS — cohesive CASCADING / PENDANT shapes, designed not jumbled ━━━
+The OVERHEAD hanging arrangement favors blooms that read as HANGING — long cascading racemes, trailing sprays, pendant bells, draping clusters, overflowing basket-mounds. For COHESION, let ONE (at most two) dominant flowering species carry the hanging arrangement — a unified, designed look — NOT five different flower types tangled together overhead. Use the other roster species for the path-edge accents below. Each hanging piece is full and lush, but the arrangement stays composed, spaced and intentional — never a chaotic mass of mixed strands everywhere.
+
+━━━ DRAMATIC ATMOSPHERIC LIGHT DOWN THE WALKWAY ━━━
+Soft directional light filters DOWN THROUGH the hanging canopy and pours along the walkway toward a glowing far end — dappled light through the blooms above, the path lit warmer in the distance, a dreamy luminous depth (gentle haze / god-rays / soft glow). The hanging blooms catch the light in tack-sharp detail; the air is clear and alive.
+${phenomenonSection}━━━ POSTCARD / MOVIE-STILL / GALLERY-PIECE COMPOSITION — NON-NEGOTIABLE ━━━
+Every render is a POSTCARD-WORTHY / MOVIE-STILL / GALLERY-PIECE shot. Every quadrant earns its space, the eye lands on 4+ striking details, the framing feels DELIBERATE. The viewer should GASP / want to step INTO the frame / want to print and frame the image.
+
+DELIBERATE COMPOSITION CRAFT:
+- Portrait passage — hanging canopy overhead + down the sides, walkway leading dead into the depth as the lead-line
+- Multi-tier depth: tactile hanging blooms + path edge in the foreground → midground canopy + setting → glowing atmospheric far end
+- Light hierarchy: warm glow at the walkway's far end, dappled light through the canopy, cooler ambient near the viewer
+- Frame-within-frame: the hanging-flower canopy IS the living proscenium framing the depth beyond
+
+━━━ MATERIAL POETRY at the canopy + walkway ━━━
+"Cascading racemes hanging at brow-height", "wet cobblestones reflecting the blooms overhead", "petals scattered across the path", "a hanging basket overflowing on a rusted chain", "moss between the paving-stones", "morning-dew beading on the trailing flowers", "warm lamplight glowing among the hanging blooms".
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+Use the actual species names. Pick 2-3 species total — ONE dominant species for the hanging overhead arrangement (cohesion; whatever the roster rolls — it need NOT be a cascading/pendant species, vary it), the other 1-2 for the path-edge accents. Mass them at the palette's named colors.
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+
+━━━ DEFAULTS TO RESIST ━━━
+COMPOSED and DESIGNED, never spammy — no chaotic wall of mixed flowers hanging down all over the top of the frame, no many-species tangle overhead, no packing every inch (let it breathe with negative space + rhythm). The hanging arrangement hangs from ABOVE (no scene of flowers only growing up from the ground); ALWAYS a walkway leading into depth (no flat landscape / no single centered bloom); the far end glows with atmospheric depth (no blank backdrop); no pink/rose/blush dominance unless the palette names it; only roster species; the composed overhead hanging flowers ARE the hero.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[portrait walkway passage with COMPOSED hanging flowers overhead and the path leading dead into the depth], [the setting established as a clean backdrop — its architecture/surfaces/mood], [the HANGING PIECES — designed, spaced, cohesive (one dominant species or discrete chandeliers/baskets at rhythmic intervals) — crowning the upper frame with breathing room between], [the lush walkway accents lining the path at ground/edge level], [soft light filtering down through the arrangement and glowing at the walkway's far end]${atmospheric_phenomenon ? ', [the atmospheric phenomenon as a visible element in the passage]' : ''}, [material poetry at the hanging pieces + path]
+
+CRITICAL — a COMPOSED, DESIGNED arrangement of overhead hanging flowers over a walkway leading INTO depth is THE RULE. Curated and cohesive with negative space + rhythm — NEVER a spammy chaotic wall of mixed flowers hanging down all over. The hanging flowers are the hero; the walkway is the lead-line.
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the portrait walkway + composed overhead hanging flowers.`;
+  },
+
   BLOOMBOT_CONSERVATORY: ({ slots, sharedDNA, vibeDirective }) => {
     const { conservatory_type, structural_anchor, atmospheric_phenomenon } = slots;
 

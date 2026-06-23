@@ -57,6 +57,14 @@ module.exports = {
   BLOOMBOT_GIANT_FLOWER_GIANT_FORM: loadIfExists('bloombot_giant_flower_giant_form'),
   BLOOMBOT_GIANT_FLOWER_BASE_SURROUND: loadIfExists('bloombot_giant_flower_base_surround'),
   BLOOMBOT_GIANT_FLOWER_SKY_ASCENT: loadIfExists('bloombot_giant_flower_sky_ascent'),
+  // ─── hanging-flowers path (2026-06-22) — scenic walkway beneath an overhead
+  // canopy of hanging flowers (wisteria curtains / basket-chandeliers / bloom-orbs) ───
+  BLOOMBOT_HANGING_FLOWERS_SETTING: loadIfExists('bloombot_hanging_flowers_setting'),
+  BLOOMBOT_HANGING_FLOWERS_HANGING_PIECES: loadIfExists('bloombot_hanging_flowers_hanging_pieces'),
+  BLOOMBOT_HANGING_FLOWERS_WALKWAY_ACCENT: loadIfExists('bloombot_hanging_flowers_walkway_accent'),
+  BLOOMBOT_HANGING_FLOWERS_ATMOSPHERIC_PHENOMENON: loadIfExists(
+    'bloombot_hanging_flowers_atmospheric_phenomenon'
+  ),
   // ─── flower-friends path (2026-05-19) — close-up flower + pleasant pollinator pairing ───
   BLOOMBOT_FLOWER_FRIENDS_FLOWER_FOCAL_CLUSTER: loadIfExists(
     'bloombot_flower_friends_flower_focal_cluster'

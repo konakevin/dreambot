@@ -35,6 +35,7 @@ const pathBuilders = {
   'tropical-paradise': require('./paths/tropical-paradise'),
   'city-flowers': require('./paths/city-flowers'),
   'jack-and-the-giant-flower': require('./paths/jack-and-the-giant-flower'),
+  'hanging-flowers': require('./paths/hanging-flowers'),
   'sunset-flowers': require('./paths/sunset-flowers'),
   'flower-friends': require('./paths/flower-friends'),
   'flower-humming-birds': require('./paths/flower-humming-birds'),
@@ -135,6 +136,7 @@ module.exports = {
     'tropical-paradise',
     'city-flowers',
     'jack-and-the-giant-flower',
+    'hanging-flowers',
     'sunset-flowers',
     'flower-friends',
     'flower-humming-birds',
@@ -154,7 +156,9 @@ module.exports = {
     enabled: true,
     // flower-arrangement skips chaos — perception-distortion warps the careful
     // ornate arrangement; its own whimsy layer supplies the controlled "pop".
-    skipPaths: ['flower-arrangement'],
+    // hanging-flowers skips chaos for the MVP — protect the overhead-canopy
+    // walkway composition while validating (2026-06-22; revisit after sign-off).
+    skipPaths: ['flower-arrangement', 'hanging-flowers'],
     allowSubjectChaosPaths: [
       'landscape',
       'cozy',
@@ -193,6 +197,7 @@ module.exports = {
       'conservatory',
       'city-flowers',
       'jack-and-the-giant-flower',
+      'hanging-flowers',
       'sunset-flowers',
       'flower-friends',
       'flower-humming-birds',
@@ -217,6 +222,7 @@ module.exports = {
       'tropical-paradise': 'scene',
       'city-flowers': 'scene',
       'jack-and-the-giant-flower': 'scene',
+      'hanging-flowers': 'scene',
       'sunset-flowers': 'scene',
       'flower-friends': 'scene',
       'flower-humming-birds': 'scene',
@@ -326,8 +332,20 @@ module.exports = {
 This is a SINGLE flower (or a grove of them) grown impossibly tall — one colossal bloom atop a towering, thick, LUSH GREEN FLOWERING VINE-STEM: a giant beanstalk-like stalk that is soft, green, leafy and viny, wrapped in tendrils, climbing-leaves and small buds + blooms up its length, CURVING and twisting organically as it climbs (it MUST read as a living flower-stem / vine — NEVER a woody tree-trunk, NEVER bark, NEVER a straight rigid column). It is as TALL as a redwood but is a flower-stem, not a tree. The giant flower dominates through SCALE, not by packing the frame. REQUIRED: OPEN SKY above and a small DWARFED, normal-scale world at its base for scale contrast — render whatever ground world the scene below names (do NOT default to a pine forest, and NEVER include a person; if a scale-prover animal is wanted, only use the one the scene names). NOT a frame-filling bloom-mass, NOT a wall of flowers, NOT a tunnel, NOT a macro — there MUST be open sky and a tiny dwarfed world. Crisp, painterly, awe-inducing, with real negative space.`;
     const LUSH_HERO_MANDATE = `━━━ BLOOMBOT BAR — LUSH FLOWER HERO (NON-NEGOTIABLE, READ FIRST) ━━━
 This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO and FILL the frame — either a monumental bloom-form or a dense, overflowing bloom-mass dominating 60%+ of the composition. Any setting (ruin / valley / wall / waterfall / architecture / landscape) is ONLY a backdrop framing the flowers — NEVER the subject. NEVER a sparse, thin, or barren scene; NEVER "a [place] with a few accent flowers"; NEVER a macro of just 2-3 blooms. Pack the frame edge-to-edge with abundant, varied, jewel-toned blooms in a deliberate, cohesive, magazine-cover composition: a clear focal hero up front, multi-tier depth behind, every quadrant earning its space. Keep the WHOLE frame crisp, clear and COLORED — build background depth from receding layers of more blooms and clearly-rendered colored scenery, the sky clean and saturated, distant elements clearly rendered and colored, just smaller and in sharp focus.`;
+    // hanging-flowers needs a COMPOSED/DESIGNED bar, NOT the frame-packing
+    // "dense overflowing bloom-mass" of LUSH_HERO — that mandate produced a
+    // "spammy" chaotic wall of mixed flowers hanging down everywhere (Kevin
+    // 2026-06-22). The hero stays the hanging flowers, but they must read
+    // CURATED + COHESIVE with negative space + rhythm, like a florist designed
+    // the installation.
+    const HANGING_FLOWERS_MANDATE = `━━━ BLOOMBOT BAR — COMPOSED HANGING-FLOWER WALKWAY (NON-NEGOTIABLE, READ FIRST) ━━━
+This is an ELEGANT, COMPOSED, well-DESIGNED scene: a scenic walkway beneath hanging flowers that look DELIBERATELY ARRANGED by a florist / garden designer — NOT an overgrown random jumble. The hanging flowers are still the abundant, lush HERO overhead, but they are CURATED and COHESIVE, arranged in one of two ways: (a) DISCRETE hanging PIECES — flower chandeliers / hanging baskets / suspended bloom-orbs / pendant flower-lanterns / garland swags — spaced with clear RHYTHM at intentional, even intervals; OR (b) a CLEAN, COHESIVE cascade of ONE dominant flowering species forming a tidy curtain / tunnel / arch. COMPOSITION OVER DENSITY: clear structure and balance, breathing room and NEGATIVE SPACE around and between the hanging pieces, a clean architectural or soft-sky backdrop visible between them, and a strong focal WALKWAY leading the eye into depth. Each hanging piece is full and lush, but the overall arrangement is restrained, intentional and gorgeous — like a high-end garden installation or a magazine-worthy designed floral walkway. ❌ NEVER a "spammy", busy, chaotic wall of mixed flowers hanging down all over the top of the frame; NEVER many different flower types tangled together overhead; NEVER packing every inch — let the design breathe.`;
     const heroMandate =
-      path === 'jack-and-the-giant-flower' ? GIANT_FLOWER_MANDATE : LUSH_HERO_MANDATE;
+      path === 'jack-and-the-giant-flower'
+        ? GIANT_FLOWER_MANDATE
+        : path === 'hanging-flowers'
+          ? HANGING_FLOWERS_MANDATE
+          : LUSH_HERO_MANDATE;
     // Bot-wide "Medium Looks" override — the rolled look register sets the
     // rendering medium for THIS render. Leads the brief so Sonnet opens its
     // Flux prompt with these tokens (the medium is the leading CLIP anchor).

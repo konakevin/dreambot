@@ -27,6 +27,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  BLOOMBOT_HANGING_FLOWERS: {
+    description:
+      'PATH-BESPOKE — BloomBot hanging-flowers path (2026-06-22 NEW). A SCENIC WALKWAY beneath an OVERHEAD CANOPY of HANGING FLOWERS — cascading wisteria curtains, suspended flower-basket chandeliers, hanging bloom-orbs + floral pendant lanterns strung above a path that recedes into atmospheric depth, with lush "alive" flower accents lining the way. Reference: the Kevin-hearted wisteria-over-train-tracks render (a dreamy tunnel of hanging blooms overhead, flowers spilling along the path, soft misty light at the end). The walkway SETTING is the big variety axis (parks / towns / train stations + tracks / gardens / courtyards / canals / cloisters / more); the suspended hanging pieces are the signature hero. 3 path-bespoke axes (setting / hanging_pieces / walkway_accent) + 55%-gated atmospheric_phenomenon. Palette + lighting + roster via sharedDNA.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['setting', 'hanging_pieces', 'walkway_accent'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmospheric_phenomenon', gate: 0.55 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   BLOOMBOT_FLOWER_FRIENDS: {
     description:
       'PATH-BESPOKE — BloomBot flower-friends path (2026-05-19 NEW). CLOSE-UP FLOWER + PLEASANT POLLINATOR pairing renders — beautiful butterfly / bumblebee / dragonfly / ladybug / firefly / moth co-hero with a hero bloom in a soft magical close-up scene with bouquet-cluster foreground + dreamy bokeh background + optional pollen-dust / fairy-light particles. All flower colors welcome. 3 path-bespoke pools (flower_focal_cluster / hero_pollinator / magical_particles-40%-gated) + universal lighting. Inspired by 6 user-hearted IG cozy-insect-on-flower references.',
