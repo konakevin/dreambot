@@ -22,7 +22,7 @@ export default function DreamCastStepSettings() {
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
-      <DreamCastStep onNext={() => router.back()} onBack={() => router.back()} />
+      <DreamCastStep settingsCopy onNext={() => router.back()} onBack={() => router.back()} />
     </SafeAreaView>
   );
 }

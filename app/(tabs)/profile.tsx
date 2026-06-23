@@ -28,6 +28,8 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { useSparkleBalance } from '@/hooks/useSparkles';
+import { formatCompact } from '@/lib/formatNumber';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import { Toast } from '@/components/Toast';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
@@ -322,6 +324,8 @@ export default function ProfileScreen() {
     </Animated.View>
   );
 
+  const { data: sparkleBalance = 0 } = useSparkleBalance();
+
   const header = (
     <>
       <ProfileHeader
@@ -344,7 +348,17 @@ export default function ProfileScreen() {
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
         onChangePhoto={changePhoto}
-      />
+      >
+        {/* Sparkle balance + a doorway to the store (own profile only) */}
+        <TouchableOpacity
+          onPress={() => nav.push('/sparkleStore')}
+          activeOpacity={0.8}
+          style={styles.sparkleChip}
+        >
+          <Ionicons name="sparkles" size={15} color={colors.accent} />
+          <Text style={styles.sparkleChipText}>{formatCompact(sparkleBalance)} sparkles</Text>
+        </TouchableOpacity>
+      </ProfileHeader>
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats
@@ -518,6 +532,26 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  // Sparkle balance chip in the own-profile header — shows the balance and
+  // taps through to the Sparkle Store (a passive IAP discovery point).
+  sparkleChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    gap: 6,
+    marginTop: verticalScale(12),
+    paddingHorizontal: 14,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(167,139,250,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.55)',
+  },
+  sparkleChipText: {
+    color: colors.accent,
+    fontSize: fontScale(13),
+    fontWeight: '700',
+  },
   // Section header above the followers / following user list. Same shape
   // as the public-profile screen's version so the two surfaces stay
   // visually consistent.

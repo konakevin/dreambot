@@ -444,6 +444,42 @@ export default function SettingsScreen() {
           </View>
         )}
 
+        {/* Premium — surfaced at the TOP as a highlighted card so the upgrade +
+            sparkle store are the first thing a user sees. Sell line for
+            non-payers; calmer "Manage plan" for paid. (Replaces the old plain
+            PREMIUM section that used to sit below Privacy.) */}
+        <View style={styles.premiumCard}>
+          {!isPaidPro && !isBasic && (
+            <View style={styles.premiumHeader}>
+              <Text style={styles.premiumTitle}>
+                {isPro ? "You're on the free trial" : 'Go Premium'}
+              </Text>
+              <Text style={styles.premiumSub}>
+                {isPro && proTrialEndsAt
+                  ? `${trialDaysLeftLabel(proTrialEndsAt)} on your free trial`
+                  : 'Nightly dreams, more sparkles, and HD downloads'}
+              </Text>
+            </View>
+          )}
+          <SettingsRow
+            icon="diamond"
+            label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
+            trailing={
+              isPaidPro ? (
+                <Text style={styles.trailingSummary}>Pro</Text>
+              ) : isBasic ? (
+                <Text style={styles.trailingSummary}>Basic</Text>
+              ) : null
+            }
+            onPress={() => nav.push('/subscribe')}
+          />
+          <SettingsRow
+            icon="sparkles"
+            label="Get Sparkles"
+            onPress={() => nav.push('/sparkleStore')}
+          />
+        </View>
+
         {/* Avatar + "Change photo" moved to the Profile screen (under the
             avatar) — it doesn't belong in Settings. Edit Profile is the
             canonical home for avatar / display name / bio drill-ins. */}
@@ -545,37 +581,17 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* Premium — plan + sparkles, the two money/upgrade rows together. */}
-        <Text style={styles.sectionHeader}>PREMIUM</Text>
-        <View style={styles.section}>
-          <SettingsRow
-            icon="diamond"
-            label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
-            trailing={
-              isPaidPro ? (
-                <Text style={styles.trailingSummary}>Pro</Text>
-              ) : isBasic ? (
-                <Text style={styles.trailingSummary}>Basic</Text>
-              ) : isPro && proTrialEndsAt ? (
-                <Text style={styles.trailingSummary}>{trialDaysLeftLabel(proTrialEndsAt)}</Text>
-              ) : null
-            }
-            onPress={() => nav.push('/subscribe')}
-          />
-          <SettingsRow
-            icon="sparkles"
-            label="Get Sparkles"
-            onPress={() => nav.push('/sparkleStore')}
-          />
-        </View>
-
         {/* Bots — browse the full roster with previews + follow toggles
             (post-onboarding equivalent of the onboarding bot selector).
             Inline Follow on cards covers contextual follows; this is the
             discovery/manage surface. */}
         <Text style={styles.sectionHeader}>BOTS</Text>
         <View style={styles.section}>
-          <SettingsRow icon="planet" label="Bots" onPress={() => nav.push('/settings/bots')} />
+          <SettingsRow
+            icon="planet"
+            label="Follow Bots"
+            onPress={() => nav.push('/settings/bots')}
+          />
         </View>
 
         {/* Dream Settings — also reachable from Edit Profile, surfaced here too.
@@ -667,7 +683,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <SettingsRow
             icon="help-circle-outline"
-            label="How Create works"
+            label="How to create"
             onPress={() => setShowCreateIntro(true)}
           />
           <SettingsRow
@@ -770,6 +786,34 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
     marginBottom: verticalScale(24),
+  },
+  // Premium upgrade card — accent-tinted + rounded so it stands out from the
+  // plain full-bleed sections. Sits at the top of Settings. Inner SettingsRows
+  // render full-bleed and clip to the radius via overflow:hidden.
+  premiumCard: {
+    marginHorizontal: 16,
+    marginBottom: verticalScale(24),
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.5)',
+    backgroundColor: 'rgba(167,139,250,0.06)',
+    overflow: 'hidden',
+  },
+  premiumHeader: {
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(14),
+    paddingBottom: verticalScale(10),
+  },
+  premiumTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(16),
+    fontWeight: '700',
+  },
+  premiumSub: {
+    color: colors.textSecondary,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
+    marginTop: verticalScale(2),
   },
   row: {
     flexDirection: 'row',

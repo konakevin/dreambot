@@ -45,6 +45,9 @@ interface Props {
    * + scrolling chrome.
    */
   embedded?: boolean;
+  /** Use the Settings-context hero copy instead of the onboarding copy, so the
+   *  /settings/dream-cast screen doesn't read like a torn-out onboarding step. */
+  settingsCopy?: boolean;
   onNext: () => void;
   onBack: () => void;
 }
@@ -280,7 +283,7 @@ function CastSlot({
   );
 }
 
-export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
+export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy = false }: Props) {
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const dreamCast = useOnboardingStore((s) => s.profile.dream_cast);
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
@@ -572,11 +575,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false }: Props) {
           lineHeight={30}
           style={{ marginBottom: verticalScale(6) }}
         >
-          Who&apos;s coming along?
+          {settingsCopy ? 'Your dream cast' : "Who's coming along?"}
         </GradientTitle>
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream
-          together — optional, but it’s the fun part.
+          {settingsCopy
+            ? 'Update the faces that star in your nightly dreams. Swap your photo or your +1 anytime.'
+            : 'Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream together — optional, but it’s the fun part.'}
         </Text>
         <View style={{ height: verticalScale(16) }} />
         {innerSlots}
