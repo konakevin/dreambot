@@ -11,7 +11,7 @@ This is the **business model** doc — for IAP/RevenueCat technical wiring see `
 - **Sparkle cost is model-tiered (1/2/3/5), not flat.** A render costs us $0.003–$0.134 depending on the model; the user pays 1–5 sparkles to match. Default model (Flux 1.1 Pro) = 1 sparkle, $0.040. Worst-case cost **$0.046/sparkle**, blended ~$0.03.
 - **Cost per dream:** nightly **~$0.035**, user-created **~$0.045** all-in (model + Sonnet brief + amortized face swap). Validated 2026-06-08 against provider pricing.
 - **Apple's cut:** 30% standard, **15% if enrolled in Small Business Program** (qualify under $1M annual proceeds). This is the biggest single margin lever — confirm enrollment.
-- **Two paid products:** consumable **sparkle packs** (15/40/90/200/500) + a **Pro subscription** ($9.99/mo or $79.99/yr) bundling 75 sparkles/mo + 30 nightly dreams + 100 HD downloads.
+- **Two paid products:** consumable **sparkle packs** (15/40/90/200/550) + a **Pro subscription** ($9.99/mo or $79.99/yr) bundling 75 sparkles/mo + 30 nightly dreams + 100 HD downloads.
 - **No ads exist** (no ad SDK installed). Free users (post-trial) cost ~$0.02/mo and contribute nothing until they convert. The business is **paid-conversion-driven**.
 - **Pack margins (worst case):** 46–59% @15%, 34–50% @30% — profitable under every cost/cut combination.
 
@@ -135,10 +135,12 @@ default model. Real blended usage (~$0.03/sparkle) runs higher.
 | **Starter** | 40 | $4.99 | $0.125 | $4.24 | $1.84 | **+$2.40** | 57% |
 | **Popular** | 90 | $9.99 | $0.111 | $8.49 | $4.14 | **+$4.35** | 51% |
 | **Best Value** | 200 | $19.99 | $0.100 | $16.99 | $9.20 | **+$7.79** | 46% |
-| **Whale** | 500 | $49.99 | $0.100 | $42.49 | $23.00 | **+$19.49** | 46% |
+| **Whale** | 550 | $49.99 | $0.091 | $42.49 | $25.30 | **+$17.19** | 40% |
 
-**Gross-per-sparkle waterfall:** $0.133 → $0.125 → $0.111 → $0.100 → $0.100 —
-bigger packs are a better deal per sparkle without dropping below the 25% floor.
+**Gross-per-sparkle waterfall:** $0.133 → $0.125 → $0.111 → $0.100 → $0.091 —
+every step down is a real per-sparkle discount, none below the 25% floor. (The
+Whale was bumped 500 → 550 sparkles on 2026-06-23, migration 304, so it's a
+genuine volume discount instead of flat at $0.100 vs the 200.)
 
 ### Same packs at the 30% Apple cut (over $1M proceeds)
 
@@ -148,7 +150,7 @@ bigger packs are a better deal per sparkle without dropping below the 25% floor.
 | Starter 40 / $4.99 | $3.49 | $1.84 | +$1.65 | 47% |
 | Popular 90 / $9.99 | $6.99 | $4.14 | +$2.85 | 41% |
 | Best Value 200 / $19.99 | $13.99 | $9.20 | +$4.79 | 34% |
-| Whale 500 / $49.99 | $34.99 | $23.00 | +$11.99 | 34% |
+| Whale 550 / $49.99 | $34.99 | $25.30 | +$9.69 | 28% |
 
 Every tier clears the 25% floor even at 30% + worst-case model. **Enrolling in
 Small Business (15%) is the single biggest margin lever** — see below.
@@ -187,8 +189,9 @@ The comparison is designed to push undecided users toward Pro.
 ### Killed packs (historical — don't reintroduce)
 
 - **100 / $7.99** — barely profitable at 30%. Replaced by 90 / $9.99.
-- **500 / $24.99** — lost money per sale at 30%. The current Whale is 500 /
-  $49.99 (46% margin @15%).
+- **500 / $24.99** — lost money per sale at 30%. The current Whale is 550 /
+  $49.99 ($0.091/sparkle, 40% margin @15%, 28% @30%) — bumped from 500 on
+  2026-06-23 (migration 304) so it's a real volume discount over the 200.
 
 ---
 

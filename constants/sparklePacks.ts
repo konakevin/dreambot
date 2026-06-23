@@ -10,15 +10,15 @@
  * Pricing locked 2026-05-18 per PRO_SUBSCRIPTION_SETUP.md + SPARKLE_PRICING_
  * STRATEGY.md analysis. Assumes 15% Apple Small Business cut. All tiers
  * profitable at $0.06/sparkle fully-loaded cost (Replicate + Sonnet/Haiku
- * + storage). Margins: 47% → 43% → 36% → 29% → 29% (slides toward floor
- * at the higher tiers to give power users a real volume incentive).
+ * + storage), comfortably above the 25% floor.
  *
- * Per-sparkle stepladder:
- *   Impulse  15 / $1.99  → $0.133/sparkle (highest, smallest pack)
- *   Starter  40 / $4.99  → $0.125
- *   Popular  90 / $9.99  → $0.111
+ * Per-sparkle stepladder (the Whale was bumped 500 → 550 on 2026-06-23,
+ * migration 304, so it's a real volume discount instead of flat vs the 200):
+ *   Impulse  15 / $1.99   → $0.133/sparkle (highest, smallest pack)
+ *   Starter  40 / $4.99   → $0.125
+ *   Popular  90 / $9.99   → $0.111
  *   Value    200 / $19.99 → $0.100 (cleanly better than Popular per unit)
- *   Whale    500 / $49.99 → $0.100 (flat at floor — sells on volume)
+ *   Whale    550 / $49.99 → $0.091 (real discount over the 200; 40% margin @15%)
  *
  * Popular at $9.99 deliberately collides with Pro subscription at $9.99.
  * Forces the user to compare Popular (75 sparkles one-time, no extras) vs
@@ -63,7 +63,7 @@ export const SPARKLE_PACKS: SparklePack[] = [
   },
   {
     productId: 'com.konakevin.radorbad.sparkles.500_v2',
-    sparkles: 500,
+    sparkles: 550,
     label: 'Whale',
     icon: 'rocket',
   },
