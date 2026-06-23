@@ -407,7 +407,8 @@ module.exports = {
     'humanoid-robots',
     // 'cyborg-woman',  // TEMP DISABLED 2026-06-09 — replaced in rotation by the 4 new cyborg-female paths below. Re-enable by uncommenting.
     'scifi-cyborg-female',
-    'killer-cyborgs',
+    // killer-cyborgs DEACTIVATED 2026-06-23 (Kevin). Files/pools/config kept; re-enable by uncommenting.
+    // 'killer-cyborgs',
     'killer-cyborgs-male',
     'og-cyborg-female',
     'mech-insect-hybrids',
