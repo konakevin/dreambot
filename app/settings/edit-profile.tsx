@@ -26,6 +26,7 @@ import { useAuthStore } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useAvatarUpload } from '@/hooks/useAvatarUpload';
+import { showAvatarConfirm } from '@/components/AvatarConfirm';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
@@ -175,7 +176,8 @@ export default function EditProfileScreen() {
             quality: 0.8,
           });
           if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
           }
         },
       },
@@ -193,7 +195,8 @@ export default function EditProfileScreen() {
             quality: 0.8,
           });
           if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
           }
         },
       },

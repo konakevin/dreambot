@@ -5,6 +5,7 @@ import { showAlert } from '@/components/CustomAlert';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useAvatarUpload } from '@/hooks/useAvatarUpload';
+import { showAvatarConfirm } from '@/components/AvatarConfirm';
 
 /**
  * Change-avatar flow — the action sheet (pick from library / take photo /
@@ -37,7 +38,8 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
             quality: 0.8,
           });
           if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
           }
         },
       },
@@ -55,7 +57,8 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
             quality: 0.8,
           });
           if (!result.canceled && result.assets[0]) {
-            uploadAvatar(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
           }
         },
       },
