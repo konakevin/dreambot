@@ -31,6 +31,7 @@ import { ProfileHeader } from '@/components/ProfileHeader';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
+import type { DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
@@ -46,8 +47,9 @@ type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
   const [activeTab, setActiveTab] = useState<Tab>('posts');
-  // Dreams album "Private only" filter (toggle on the right of the subheader).
-  const [privateOnly, setPrivateOnly] = useState(false);
+  // Dreams album filter (segmented control on the right of the subheader):
+  // All / Posted (live on feed) / Private (unposted). Persisted per migration 306.
+  const [dreamsFilter, setDreamsFilter] = useState<DreamsFilter>('all');
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
@@ -72,36 +74,37 @@ export default function ProfileScreen() {
     nav.push('/inbox');
   }, []);
 
-  // Load the persisted "Private only" Dreams filter (users.dreams_private_only).
+  // Load the persisted Dreams filter (users.dreams_filter, migration 306).
   useEffect(() => {
     if (!user) return;
     supabase
       .from('users')
-      .select('dreams_private_only')
+      .select('dreams_filter')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
-        if (data) setPrivateOnly(data.dreams_private_only ?? false);
+        const f = (data as { dreams_filter?: string } | null)?.dreams_filter;
+        if (f === 'all' || f === 'posted' || f === 'private') setDreamsFilter(f);
       });
   }, [user]);
 
-  // Flip the Dreams All/Private filter — optimistic, then persist.
-  const applyPrivateOnly = useCallback(
-    (next: boolean) => {
-      if (next === privateOnly) return;
+  // Switch the Dreams filter — optimistic, then persist.
+  const applyDreamsFilter = useCallback(
+    (next: DreamsFilter) => {
+      if (next === dreamsFilter) return;
       Haptics.selectionAsync();
-      setPrivateOnly(next);
+      setDreamsFilter(next);
       if (user) {
         supabase
           .from('users')
-          .update({ dreams_private_only: next })
+          .update({ dreams_filter: next })
           .eq('id', user.id)
           .then(({ error }) => {
-            if (error && __DEV__) console.warn('persist dreams_private_only failed', error);
+            if (error && __DEV__) console.warn('persist dreams_filter failed', error);
           });
       }
     },
-    [privateOnly, user]
+    [dreamsFilter, user]
   );
 
   // Reset to posts tab only when profile tab icon is re-tapped
@@ -404,29 +407,28 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Dreams album: a slim right-aligned All / Private segmented filter.
-          The other albums show no subheader — the icons speak for themselves. */}
+      {/* Dreams album: a slim right-aligned All / Posted / Private segmented
+          filter. The other albums show no subheader — the icons speak for
+          themselves. */}
       {activeTab === 'dreams' && (
         <View style={styles.dreamsFilterRow}>
           <View style={styles.segmented}>
-            <TouchableOpacity
-              style={[styles.segment, !privateOnly && styles.segmentActive]}
-              onPress={() => applyPrivateOnly(false)}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.segmentText, !privateOnly && styles.segmentTextActive]}>
-                All
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.segment, privateOnly && styles.segmentActive]}
-              onPress={() => applyPrivateOnly(true)}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.segmentText, privateOnly && styles.segmentTextActive]}>
-                Private
-              </Text>
-            </TouchableOpacity>
+            {(['all', 'posted', 'private'] as const).map((f) => {
+              const active = dreamsFilter === f;
+              const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
+              return (
+                <TouchableOpacity
+                  key={f}
+                  style={[styles.segment, active && styles.segmentActive]}
+                  onPress={() => applyDreamsFilter(f)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+                    {label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
       )}
@@ -458,7 +460,7 @@ export default function ProfileScreen() {
     const sourceMap = {
       posts: { type: 'own' as const },
       saved: { type: 'saved' as const },
-      dreams: { type: 'dreams' as const, privateOnly },
+      dreams: { type: 'dreams' as const, dreamsFilter },
       reposts: { type: 'reposts' as const, userId: user?.id ?? '' },
     };
     const emptyMap = {
@@ -581,8 +583,8 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(8),
   },
-  // Segmented All | Private control — a pill-shaped track with two segments;
-  // the active one fills with the accent.
+  // Segmented All | Posted | Private control — a pill-shaped track;
+  // the active segment fills with the accent.
   // Mirrors the Create-screen Mode tabs (DreamBot / Direct): a `surface`
   // track with rounded-lg segments; the active one fills with tonal moon-
   // purple + a purple border + purple text (not a solid accent pill).

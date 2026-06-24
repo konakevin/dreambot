@@ -2337,6 +2337,7 @@ export type Database = {
           confirm_surprise_dream: boolean;
           created_at: string;
           display_name: string | null;
+          dreams_filter: string;
           dreams_private_only: boolean;
           email: string;
           first_dream_completed_at: string | null;
@@ -2365,6 +2366,7 @@ export type Database = {
           confirm_surprise_dream?: boolean;
           created_at?: string;
           display_name?: string | null;
+          dreams_filter?: string;
           dreams_private_only?: boolean;
           email: string;
           first_dream_completed_at?: string | null;
@@ -2393,6 +2395,7 @@ export type Database = {
           confirm_surprise_dream?: boolean;
           created_at?: string;
           display_name?: string | null;
+          dreams_filter?: string;
           dreams_private_only?: boolean;
           email?: string;
           first_dream_completed_at?: string | null;

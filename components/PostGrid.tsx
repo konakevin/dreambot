@@ -26,11 +26,12 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import type { DreamPostItem } from '@/components/DreamCard';
+import type { DreamsFilter } from '@/hooks/useMyDreams';
 
 export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
-  | { type: 'dreams'; privateOnly?: boolean }
+  | { type: 'dreams'; dreamsFilter?: DreamsFilter }
   | { type: 'reposts'; userId: string }
   | { type: 'user'; userId: string };
 
@@ -89,11 +90,11 @@ export function PostGrid({
   const isReposts = source.type === 'reposts';
   const userId = isUser ? source.userId : isReposts ? source.userId : '';
 
-  const dreamsPrivateOnly = source.type === 'dreams' ? (source.privateOnly ?? false) : false;
+  const dreamsFilter = source.type === 'dreams' ? (source.dreamsFilter ?? 'all') : 'all';
   const ownQuery = useUserPosts(isOwn_);
   const savedQuery = useFavoritePosts(isSaved);
   const userQuery = usePublicProfilePosts(userId, isUser);
-  const dreamsQuery = useMyDreams(dreamsPrivateOnly);
+  const dreamsQuery = useMyDreams(dreamsFilter);
   const repostsQuery = useUserReposts(userId, isReposts);
 
   const activeQuery = isOwn_
