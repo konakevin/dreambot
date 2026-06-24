@@ -537,8 +537,17 @@ export default function SettingsScreen() {
             <Switch
               value={isPublic}
               onValueChange={async (val) => {
-                setIsPublic(val);
-                await supabase.from('users').update({ is_public: val }).eq('id', user!.id);
+                const prev = isPublic;
+                setIsPublic(val); // optimistic
+                const { error } = await supabase
+                  .from('users')
+                  .update({ is_public: val })
+                  .eq('id', user!.id);
+                if (error) {
+                  setIsPublic(prev); // revert — don't leave the UI lying
+                  showAlert("Couldn't update", 'Please try again.');
+                  return;
+                }
                 queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
                 if (val) {
                   Toast.show('All pending follow requests approved', 'checkmark-circle');
