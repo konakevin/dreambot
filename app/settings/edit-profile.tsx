@@ -164,17 +164,13 @@ export default function EditProfileScreen() {
       {
         text: 'Choose from library',
         onPress: async () => {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== 'granted') {
-            showAlert('Permission needed', 'Allow photo library access in Settings.');
-            return;
-          }
-          // Loop so "Choose another" in the confirm re-opens the picker.
+          // No allowsEditing → iOS uses the modern PHPicker: faster to open and
+          // needs no library-permission prompt (the avatar renders cover-cropped
+          // in a circle, so a square crop step isn't needed). Loop so "Choose
+          // another" in the confirm re-opens the picker.
           for (;;) {
             const result = await ImagePicker.launchImageLibraryAsync({
               mediaTypes: ['images'],
-              allowsEditing: true,
-              aspect: [1, 1],
               quality: 0.8,
             });
             if (result.canceled || !result.assets[0]) return;
@@ -199,8 +195,6 @@ export default function EditProfileScreen() {
           // Loop so "Choose another" in the confirm re-opens the camera.
           for (;;) {
             const result = await ImagePicker.launchCameraAsync({
-              allowsEditing: true,
-              aspect: [1, 1],
               quality: 0.8,
             });
             if (result.canceled || !result.assets[0]) return;
