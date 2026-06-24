@@ -98,6 +98,15 @@ module.exports = {
   BEACH_NIGHT_WATER_STATE: load('beach_night_water_state'),
   BEACH_NIGHT_SHORELINE_ELEMENT: load('beach_night_shoreline_element'),
   BEACH_NIGHT_PHENOMENON: load('beach_night_phenomenon'),
+
+  // night-landscapes (2026-06-24) — pretty visible landscape hero + beautiful
+  // night-sky backdrop. night_sky carries the time-of-night variety + lights
+  // the land; celestial_accent is 30%-gated.
+  NIGHT_LANDSCAPES_LANDSCAPE: load('night_landscapes_landscape'),
+  NIGHT_LANDSCAPES_NIGHT_SKY: load('night_landscapes_night_sky'),
+  NIGHT_LANDSCAPES_SKY_AIR: load('night_landscapes_sky_air'),
+  NIGHT_LANDSCAPES_CELESTIAL_ACCENT: load('night_landscapes_celestial_accent'),
+
   // waves (2026-05-22) — MERGE of legacy wave + big-wave. Clark-Little
   // intimate-barrel + monumental big-wave registers in single subject pool.
   WAVES_SUBJECT: load('waves_subject'),

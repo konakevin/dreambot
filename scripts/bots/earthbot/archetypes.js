@@ -111,6 +111,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  EARTHBOT_NIGHT_LANDSCAPES: {
+    description:
+      'PATH-BESPOKE — EarthBot night-landscapes (2026-06-24). A pretty, detailed, VISIBLE real-Earth landscape (the HERO, filling the lower ~60%) beneath a beautiful night sky (the backdrop). The land is clearly lit + detailed — NEVER a flat black silhouette (that was the old throwaway "sky sovereign, land silent" minimalism). The night sky rotates across the full variety: bright moonlight, the Milky Way spiraling, bright starry nights, shades of twilight, a-few-faint-stars, aurora over cold land. Natural light ONLY (moon / starlight / Milky Way / aurora-glow / twilight) — the light always REVEALS the landscape. Clean true-to-life nightscape astrophotography — NEVER neon / hyperreal / fantasy galaxy. 3 always-on axes (landscape, night_sky [carries the variety + lights the land], sky_air) + 1 conditional 30%-gated celestial_accent (meteor / planet / zodiacal light). NO humans, NO human-built features, NO sci-fi.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['landscape', 'night_sky', 'sky_air'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'celestial_accent', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   EARTHBOT_WAVES: {
     description:
       'PATH-BESPOKE — EarthBot waves (2026-05-22 axis-system migration). MERGES legacy wave + big-wave paths. Ocean wave drama at surf-magazine caliber. FOUR framing modes driven by composition axis: (1) side-view-of-barrel Clark-Little, (2) pulled-out wide showing wave + following sets in deep ocean, (3) inside-barrel POV looking out from inside the tube, (4) panned-out with tropical-island landscape behind. 7 path-bespoke axes — 6 always-on (wave_subject, composition, coastal_context, water_color, sky_layer, light_condition) + 1 conditional 30%-gated phenomenon (rainbow / spray-prism / sun-pillar / crepuscular ray). NO surfers / humans (the wave is the subject, no one rides it), NO sci-fi / bioluminescent / fantasy tubes, NO architecture / piers / lighthouses, NO named places (no "Pipeline" / "Teahupo‘o" / "Jaws Maui" — describe morphologically), NO single-shaft / single-beam (laser trigger), NO impossible-physics flat-sand walls.',

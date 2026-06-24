@@ -94,6 +94,7 @@ const pathBuilders = {
   'european-wilderness': require('./paths/european-wilderness'), // axis-system (2026-06-01 activation)
   'great-waterfalls': require('./paths/great-waterfalls'), // NEW 2026-06-18 (EPIC_VISTA clone)
   'wetlands-wild': require('./paths/wetlands-wild'), // NEW 2026-06-18 (EPIC_VISTA clone)
+  'night-landscapes': require('./paths/night-landscapes'), // NEW 2026-06-24 (pretty landscape + night sky)
   // Beach paths
   'coastal-vista': require('./paths/coastal-vista'), // axis-system (2026-05-20)
   waves: require('./paths/waves'), // axis-system MERGE of legacy wave + big-wave (2026-05-22)
@@ -127,6 +128,9 @@ const EARTH_PATHS = [
   // NEW 2026-06-18 — world waterfalls + inland wetlands. Land paths → EARTH_PREFIX.
   'great-waterfalls',
   'wetlands-wild',
+  // NEW 2026-06-24 — pretty landscape + night sky. Bespoke NIGHT prefix (below),
+  // EARTH_SUFFIX (uninhabited-landscape no-humans anchor).
+  'night-landscapes',
 ];
 
 const BEACH_PATHS = [
@@ -169,6 +173,11 @@ const EARTH_PREFIX = 'landscape photograph';
 // words" (redundant with no-text). "no text" + "no watermarks" stay because
 // those are real image artifacts the suffix needs to suppress.
 const EARTH_SUFFIX = 'uninhabited landscape, no text, no watermarks';
+// night-landscapes (2026-06-24) — anchors NIGHT + the pretty-landscape-at-night
+// register from token 0 (the daytime EARTH_PREFIX + NatGeo medium otherwise pull
+// toward day). Deliberately does NOT enumerate moon/stars/aurora (first-named-
+// noun lock); the night_sky axis carries the specific look. EARTH_SUFFIX applies.
+const NIGHT_LANDSCAPES_PREFIX = 'nightscape photograph, a beautiful real Earth landscape at night';
 const BEACH_PREFIX = 'tropical coastal photograph';
 const BEACH_SUFFIX = 'uninhabited coast, no text, no watermarks';
 // 2026-06-02 — Reef-paradise bespoke prefix. BEACH_PREFIX + the
@@ -284,6 +293,9 @@ module.exports = {
     // Anchor TROPICAL ISLAND BAY at token 0 to fight the resort/luxury
     // prior even after the medium cleanup.
     'reef-paradise': REEF_PARADISE_PREFIX,
+    // night-landscapes: anchor NIGHT from token 0 (overrides the daytime
+    // EARTH_PREFIX that byPath set above).
+    'night-landscapes': NIGHT_LANDSCAPES_PREFIX,
   },
 
   // Per-path suffix override — engine reads this BEFORE promptSuffixByMedium
@@ -389,6 +401,9 @@ module.exports = {
       'asia-landscape',
       'australian-outback',
       'european-wilderness',
+      // 2026-06-24: night-landscapes — polish compression would strip the
+      // load-bearing "land is lit + visible" + night-physics language.
+      'night-landscapes',
     ],
   },
 

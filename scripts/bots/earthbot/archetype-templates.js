@@ -592,6 +592,79 @@ Mid to tight framing. The light source (moon, stars, or Milky Way) fills the upp
 Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
   },
 
+  EARTHBOT_NIGHT_LANDSCAPES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { landscape, night_sky, sky_air, celestial_accent } = slots;
+    const accentBlock = celestial_accent
+      ? `\n\n━━━ ONE CELESTIAL ACCENT (subtle — never overpowers the land or sky) ━━━\n${celestial_accent}\n\nIf this accent doesn't fit the rolled night sky (e.g. a faint accent against a bright moon-washed sky), DROP IT. Restrained truth beats a forced detail.`
+      : '';
+
+    return `You are a landscape photographer writing ONE NIGHT-LANDSCAPE scene for EarthBot. A beautiful, dramatic real-Earth landscape — clearly visible and richly detailed — beneath a gorgeous night sky. The LANDSCAPE is the hero; the night sky is a stunning backdrop above it. Clean, true-to-life nightscape photography — the most magnificent REAL version of a real place at night. Output wraps with a style prefix + suffix.
+
+━━━ THE #1 RULE — THE LANDSCAPE IS THE PRETTY, VISIBLE HERO (never a black silhouette) ━━━
+
+The real-Earth landscape is the subject and it must read PRETTY, DETAILED, and clearly VISIBLE — its geology, depth, water, snow, foliage and texture all legible, filling the lower ~55-65% of the frame. The night light (moon / twilight / aurora-glow / starlight on snow + water) REVEALS the land. NEVER reduce the land to a flat black silhouette or an empty dark shape under the sky. A gorgeous sky over a dead-black foreground is the FAILURE we are avoiding. The land is lit and beautiful; the sky is the beautiful backdrop.
+
+━━━ NON-NEGOTIABLE — REAL EARTH AT NIGHT, NEVER SCI-FI ━━━
+
+REAL Earth geography at REAL night. Natural light only — moonlight, starlight, the Milky Way, aurora, twilight afterglow. Clean true-to-life astrophotography: real aurora greens and teals (occasional faint violet/red), real Milky-Way dust lanes, real star color, real moon-silver. NEVER neon, NEVER "hyperreal", NEVER a saturated fantasy galaxy, NEVER glowing sci-fi color, NEVER electric/laser light. Physically accurate: one moon only, dark between the stars.
+
+━━━ THE LAND IS LIT BY THE SKY — IT DOES NOT EMIT LIGHT ━━━
+
+The landscape is REVEALED by the sky's light; it never glows or emits light itself. A waterfall is silver-white or dark in moonlight — NEVER a glowing molten, neon, or fiery beam of light pouring down. Water, snow, rock and foliage REFLECT the moon/star/aurora light softly — they do NOT glow. Warm moonlight tints the land amber-silver but does NOT turn rivers or waterfalls into streams of glowing light. (The ONLY natural exception is real molten lava on an active volcano.) Nothing in the landscape is a light source.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+
+NEVER a person, NEVER a silhouette of a figure, NEVER a stargazer, NEVER a lone person looking up at the sky, NEVER a headlamp or flashlight beam, NEVER a hiker or camper, NEVER a tiny distant figure standing in the fields / on a path / by the water / for scale. Night-sky photography stock data WILL try to insert a lone person gazing up at the stars OR a tiny figure for scale — OVERRIDE THAT BIAS. Empty wilderness only.
+
+━━━ ZERO HUMAN-BUILT FEATURES — NEVER, EVEN AS BACKGROUND DECORATION ━━━
+
+NEVER a tent, NEVER a cabin or a lit window, NEVER a campfire / fire-pit / lantern / torch, NEVER a car or headlights, NEVER a road / trail / path / boardwalk, NEVER a fence / cairn / signpost, NEVER a bridge / dock / pier, NEVER a building of any kind, NEVER city glow or light pollution on the horizon, NEVER scattered warm village / farm / window lights dotting a distant hillside or fields, NEVER a warm fiery glow shining through a distant arch / canyon opening / cave mouth. Night scenes especially tempt Flux toward a glowing tent, a warm cabin window, or little settlement lights on a slope — OVERRIDE IT HARD. The ONLY light anywhere in the frame is the natural night sky (moon / stars / Milky Way / aurora / twilight). If the land is farmland or terraced fields, it is dark and unlit — no settlement lights. Raw, uninhabited nature only.
+
+━━━ ABSOLUTELY BANNED ━━━
+
+- NO neon / electric / glowing / hyperreal / fantasy aurora or stars (real colors only)
+- NO black-silhouette-only foreground (the land must be lit + detailed)
+- NO humans / figures / stargazers / headlamps
+- NO tents / cabins / campfires / lanterns / cars / roads / trails / buildings / city glow
+- NO sun / sunset-as-daylight / daytime (it is night or deep twilight)
+- NO single beam / single shaft / single column of light (natural diffuse light only)
+- NO place names / landmark names
+- NO stylized / 3D-render / cartoony — clean true-to-life photography
+
+━━━ THE LANDSCAPE (the hero — pretty, detailed, lit, fills the lower frame) ━━━
+${landscape}
+
+━━━ THE NIGHT SKY + ITS LIGHT (the backdrop — and it REVEALS the land) ━━━
+${night_sky}
+
+Render the named night sky LITERALLY and REAL, as the beautiful STARSCAPE backdrop above the land — the Milky Way, dense stars, or aurora is the signature. Its light reaches the landscape so the terrain stays clearly visible. Under a dark starry / Milky-Way sky the land is NOT a black silhouette — it is revealed by luminous snow, pale rock, glacier ice, or reflective water catching the starlight and faint skyglow, so it reads pretty and clearly visible. The sky is gorgeous; the land below is gorgeous AND lit.
+
+━━━ THE AIR ━━━
+${sky_air}${accentBlock}
+
+━━━ PHYSICAL TRUTH — DROP-IF-CONFLICTS ━━━
+
+- AURORA occurs ONLY over cold high-latitude land (snow, ice, fjord, tundra, boreal forest, glaciated peaks). If the rolled night sky is aurora but the landscape is warm / tropical / desert, render a clear starry or moonlit sky over that land instead — never aurora over a warm-climate scene.
+- A bright moon WASHES OUT the Milky Way — if both are implied, keep the moon and show only a scatter of bright stars (no blazing Milky Way under a bright moon).
+- It is fully NIGHT or deep twilight — no daytime sun.
+
+━━━ MOMENT IN MOTION — capture one beat ━━━
+
+A thread of waterfall catching the light, a faint breeze in the conifers, a ripple crossing the still reflective water, drifting valley mist, a single softly-shifting aurora ribbon. One real second in time.
+
+━━━ SCENE-WIDE PALETTE ━━━
+${sharedDNA && sharedDNA.scenePalette ? sharedDNA.scenePalette : 'natural night palette — cool silver-blue moonlight or deep cobalt twilight, true-to-life star and aurora color, the land softly lit and legible'}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION — PRETTY LANDSCAPE BELOW, BEAUTIFUL NIGHT SKY ABOVE ━━━
+
+The detailed, lit landscape fills the lower ~55-65% of the frame as the clear subject; the gorgeous night sky is the backdrop in the upper ~35-45%, looking somewhat up toward the heavens. Strong depth, a clear hero landform, the sky a stunning crown — never a dominant empty sky over a dead-black foreground. Clean true-to-life nightscape photography.
+
+Output ONLY the raw 60-90 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO named places.`;
+  },
+
   EARTHBOT_WAVES: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       wave_subject,
