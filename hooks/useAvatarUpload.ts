@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { normalizeImageToJpeg } from '@/lib/normalizeImageToJpeg';
+import { showAlert } from '@/components/CustomAlert';
 
 const MAX_AVATAR_BYTES = 8 * 1024 * 1024; // 8MB
 
@@ -38,8 +39,13 @@ export function useAvatarUpload() {
       if (uploadError) throw uploadError;
 
       const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
-      // Cache-bust so expo-image picks up the new file
-      const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
+      // Cache-bust so expo-image picks up the new file. MUST be named `?v=`:
+      // lib/imageUrl.ts `transform()` only carries a cache-buster named `v`
+      // onto the resized render URL (the profile hero, feed, comments all use
+      // that resized path). A `?t=` buster gets stripped there, so the CDN
+      // keeps serving the OLD avatar and "change photo" looks broken even
+      // though the upload + DB update succeeded. (root-caused 2026-06-23)
+      const avatarUrl = `${data.publicUrl}?v=${Date.now()}`;
 
       const { error: updateError } = await supabase
         .from('users')
@@ -55,6 +61,15 @@ export function useAvatarUpload() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publicProfile', user?.id] });
+    },
+    onError: (err) => {
+      // Don't fail silently — the user picked a photo and tapped through, so a
+      // swallowed error reads as "change photo is broken".
+      if (__DEV__) console.warn('[avatar] upload failed', err);
+      showAlert(
+        "Couldn't update photo",
+        err instanceof Error ? err.message : 'Something went wrong. Please try again.'
+      );
     },
   });
 }
