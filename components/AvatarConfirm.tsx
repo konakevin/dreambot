@@ -15,33 +15,37 @@ import { Text } from '@/components/AppText';
 import { colors, gradients } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 
+/** 'use' = upload it, 'retry' = let me pick another, 'cancel' = abandon. */
+export type AvatarConfirmResult = 'use' | 'retry' | 'cancel';
+
 // Global imperative entry point (set by the provider on mount).
-let globalShow: ((uri: string) => Promise<boolean>) | null = null;
+let globalShow: ((uri: string) => Promise<AvatarConfirmResult>) | null = null;
 
 /**
- * Show the confirm and resolve true (use it) / false (cancel). Falls back to
- * `true` if the provider isn't mounted, so the upload flow never dead-ends.
+ * Show the confirm. Resolves 'use' (upload), 'retry' (re-open the picker), or
+ * 'cancel' (abandon — tapped outside / back). Falls back to 'use' if the
+ * provider isn't mounted, so the upload flow never dead-ends.
  */
-export function showAvatarConfirm(uri: string): Promise<boolean> {
+export function showAvatarConfirm(uri: string): Promise<AvatarConfirmResult> {
   if (globalShow) return globalShow(uri);
-  return Promise.resolve(true);
+  return Promise.resolve('use');
 }
 
 export function AvatarConfirmProvider({ children }: { children: React.ReactNode }) {
   const [uri, setUri] = useState<string | null>(null);
-  const resolverRef = useRef<((ok: boolean) => void) | null>(null);
+  const resolverRef = useRef<((r: AvatarConfirmResult) => void) | null>(null);
 
   const show = useCallback((u: string) => {
     setUri(u);
-    return new Promise<boolean>((resolve) => {
+    return new Promise<AvatarConfirmResult>((resolve) => {
       resolverRef.current = resolve;
     });
   }, []);
   // Register the global imperative entry point (cheap; runs each render).
   globalShow = show;
 
-  const finish = useCallback((ok: boolean) => {
-    resolverRef.current?.(ok);
+  const finish = useCallback((r: AvatarConfirmResult) => {
+    resolverRef.current?.(r);
     resolverRef.current = null;
     setUri(null);
   }, []);
@@ -54,23 +58,23 @@ export function AvatarConfirmProvider({ children }: { children: React.ReactNode 
         transparent
         animationType="fade"
         statusBarTranslucent
-        onRequestClose={() => finish(false)}
+        onRequestClose={() => finish('cancel')}
       >
-        <Pressable style={styles.overlay} onPress={() => finish(false)}>
+        <Pressable style={styles.overlay} onPress={() => finish('cancel')}>
           <Pressable style={styles.card} onPress={() => {}}>
             <Text style={styles.title}>Use this photo?</Text>
             {uri ? <Image source={{ uri }} style={styles.preview} contentFit="cover" /> : null}
             <View style={styles.row}>
               <TouchableOpacity
                 style={styles.cancelBtn}
-                onPress={() => finish(false)}
+                onPress={() => finish('retry')}
                 activeOpacity={0.8}
               >
                 <Text style={styles.cancelText}>Choose another</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.useBtnWrap}
-                onPress={() => finish(true)}
+                onPress={() => finish('use')}
                 activeOpacity={0.85}
               >
                 <LinearGradient

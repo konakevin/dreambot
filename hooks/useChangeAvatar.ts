@@ -31,15 +31,22 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
             showAlert('Permission needed', 'Allow photo library access in Settings.');
             return;
           }
-          const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images'],
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          });
-          if (!result.canceled && result.assets[0]) {
-            const uri = result.assets[0].uri;
-            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
+          // Loop so "Choose another" in the confirm re-opens the picker.
+          for (;;) {
+            const result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ['images'],
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 0.8,
+            });
+            if (result.canceled || !result.assets[0]) return;
+            const choice = await showAvatarConfirm(result.assets[0].uri);
+            if (choice === 'use') {
+              uploadAvatar(result.assets[0].uri);
+              return;
+            }
+            if (choice === 'cancel') return;
+            // 'retry' → loop, re-open the picker
           }
         },
       },
@@ -51,14 +58,21 @@ export function useChangeAvatar(currentAvatarUrl: string | null | undefined) {
             showAlert('Permission needed', 'Allow camera access in Settings.');
             return;
           }
-          const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          });
-          if (!result.canceled && result.assets[0]) {
-            const uri = result.assets[0].uri;
-            if (await showAvatarConfirm(uri)) uploadAvatar(uri);
+          // Loop so "Choose another" in the confirm re-opens the camera.
+          for (;;) {
+            const result = await ImagePicker.launchCameraAsync({
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 0.8,
+            });
+            if (result.canceled || !result.assets[0]) return;
+            const choice = await showAvatarConfirm(result.assets[0].uri);
+            if (choice === 'use') {
+              uploadAvatar(result.assets[0].uri);
+              return;
+            }
+            if (choice === 'cancel') return;
+            // 'retry' → loop, re-open the camera
           }
         },
       },

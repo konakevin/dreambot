@@ -27,7 +27,7 @@
  */
 
 import type { ReactNode } from 'react';
-import { View, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,6 +56,8 @@ interface BaseProps {
   activeStat?: StatsTab;
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
+  /** Show a spinner overlaid on the avatar while a new photo is uploading. */
+  avatarUploading?: boolean;
   /**
    * Optional slot rendered between the meta line (joined chip + plain-
    * text stats) and the action pill row. Reserved for future
@@ -95,13 +97,15 @@ function AvatarBlock({
   avatar_url,
   username,
   onPress,
+  uploading,
 }: {
   avatar_url: string | null;
   username: string;
   onPress?: () => void;
+  uploading?: boolean;
 }) {
   const initial = (username || '?')[0]?.toUpperCase() ?? '?';
-  const inner = avatar_url ? (
+  const image = avatar_url ? (
     // Wrap in the Supabase transform helper so we fetch a 128×128 WebP
     // (~5-10 KB) instead of the raw full-res avatar upload (up to 1+ MB).
     // Drops the "black avatar in header until the original loads" pause.
@@ -114,6 +118,18 @@ function AvatarBlock({
   ) : (
     <View style={[styles.avatar, styles.avatarFallback]}>
       <Text style={styles.avatarInitial}>{initial}</Text>
+    </View>
+  );
+  // Spinner overlay so a new-photo upload (a couple seconds) reads as "working"
+  // instead of "broken until it suddenly pops in".
+  const inner = (
+    <View>
+      {image}
+      {uploading ? (
+        <View style={styles.avatarSpinner}>
+          <ActivityIndicator color="#FFFFFF" />
+        </View>
+      ) : null}
     </View>
   );
   if (!onPress) return inner;
@@ -142,6 +158,7 @@ export function ProfileHeader(props: Props) {
     createdAt,
     onStatsPress,
     onAvatarPress,
+    avatarUploading,
   } = props;
 
   // Compose the hero text. Display name preferred when present; else fall
@@ -157,7 +174,12 @@ export function ProfileHeader(props: Props) {
           block that used to sit beside the avatar moved to a plain-text
           line below the bio (X-influenced design call 2026-05-29). */}
       <View style={styles.topRow}>
-        <AvatarBlock avatar_url={avatar_url} username={username} onPress={onAvatarPress} />
+        <AvatarBlock
+          avatar_url={avatar_url}
+          username={username}
+          onPress={onAvatarPress}
+          uploading={avatarUploading}
+        />
       </View>
 
       {/* "Change photo" — own profile only. Changing your picture lives here
@@ -343,6 +365,17 @@ const styles = StyleSheet.create({
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
     backgroundColor: colors.surface,
+  },
+  avatarSpinner: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatarFallback: {
     alignItems: 'center',

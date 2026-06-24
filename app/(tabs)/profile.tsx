@@ -117,7 +117,7 @@ export default function ProfileScreen() {
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
   // Change-avatar action sheet (under the avatar) — moved here from Settings.
-  const { changePhoto } = useChangeAvatar(profile?.avatar_url);
+  const { changePhoto, uploading: avatarUploading } = useChangeAvatar(profile?.avatar_url);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -331,6 +331,7 @@ export default function ProfileScreen() {
       <ProfileHeader
         variant="own"
         avatar_url={profile?.avatar_url ?? null}
+        avatarUploading={avatarUploading}
         onAvatarPress={() => setShowAvatarPreview(true)}
         username={user?.user_metadata?.username ?? 'you'}
         display_name={profile?.display_name ?? null}
