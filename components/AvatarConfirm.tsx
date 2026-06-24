@@ -45,9 +45,17 @@ export function AvatarConfirmProvider({ children }: { children: React.ReactNode 
   globalShow = show;
 
   const finish = useCallback((r: AvatarConfirmResult) => {
-    resolverRef.current?.(r);
+    const resolve = resolverRef.current;
     resolverRef.current = null;
-    setUri(null);
+    setUri(null); // start dismissing the modal
+    // For 'retry' the caller immediately re-presents the native image picker.
+    // iOS silently drops a picker presented while a modal is still animating
+    // out, so let the dismiss finish before resolving (→ before the re-launch).
+    if (r === 'retry') {
+      setTimeout(() => resolve?.(r), 350);
+    } else {
+      resolve?.(r);
+    }
   }, []);
 
   return (

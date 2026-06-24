@@ -261,7 +261,9 @@ export default function EditProfileScreen() {
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={handleChangePhoto} hitSlop={8}>
-            <Text style={styles.changePhotoText}>Change Photo</Text>
+            <Text style={styles.changePhotoText}>
+              {profile?.avatar_url ? 'Change Photo' : 'Upload Photo'}
+            </Text>
           </TouchableOpacity>
         </View>
 

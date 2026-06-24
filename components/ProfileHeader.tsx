@@ -186,7 +186,7 @@ export function ProfileHeader(props: Props) {
           (under the avatar), not in Settings. */}
       {props.variant === 'own' && props.onChangePhoto && (
         <Pressable onPress={props.onChangePhoto} hitSlop={6} style={styles.changePhotoBtn}>
-          <Text style={styles.changePhotoText}>Change photo</Text>
+          <Text style={styles.changePhotoText}>{avatar_url ? 'Change photo' : 'Upload photo'}</Text>
         </Pressable>
       )}
 
