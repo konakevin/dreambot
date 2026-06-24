@@ -623,29 +623,35 @@ export const DreamCard = memo(function DreamCard({
                   />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={ui.sideButton}
-                onPress={
-                  onShare ??
-                  (() =>
-                    nav.push(
-                      // The download flow used to live in its own side-rail
-                      // icon next to share. Folded into the share sheet's
-                      // header (2026-06-06) so the user reaches Copy + Save
-                      // from the same surface; thread the image URLs through
-                      // as route params so the sheet has what it needs.
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
-                    ))
-                }
-                activeOpacity={0.7}
-              >
-                <Ionicons
-                  name="paper-plane-outline"
-                  size={24}
-                  color="#FFFFFF"
-                  style={ui.sideIcon}
-                />
-              </TouchableOpacity>
+              {/* Share is hidden on PRIVATE posts: the share sheet produces the
+                  public dreambotapp.com/post/<id> link, which an anon recipient
+                  can't open (RLS → "Dream not found"). Only show when the post
+                  is public (is_public !== false; feed rows default to public). */}
+              {item.is_public !== false && (
+                <TouchableOpacity
+                  style={ui.sideButton}
+                  onPress={
+                    onShare ??
+                    (() =>
+                      nav.push(
+                        // The download flow used to live in its own side-rail
+                        // icon next to share. Folded into the share sheet's
+                        // header (2026-06-06) so the user reaches Copy + Save
+                        // from the same surface; thread the image URLs through
+                        // as route params so the sheet has what it needs.
+                        `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
+                      ))
+                  }
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name="paper-plane-outline"
+                    size={24}
+                    color="#FFFFFF"
+                    style={ui.sideIcon}
+                  />
+                </TouchableOpacity>
+              )}
               {onDreamLikeThis && (
                 <TouchableOpacity
                   style={ui.sideButton}

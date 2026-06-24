@@ -66,7 +66,10 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
   };
 }
 
-/** Map a raw RPC row (flat — no `users` join, username/avatar at top level) to DreamPostItem */
+/** Map a raw RPC row (flat — no `users` join, username/avatar at top level) to DreamPostItem.
+ *  Note: get_feed (the only mapRpcToDreamPost source) does NOT return is_public and
+ *  filters `WHERE is_public = true`, so every RPC row is public — default is_public to
+ *  TRUE here. Defaulting to false would wrongly hide the share button on the whole feed. */
 export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
   return {
     id: row.id as string,
@@ -93,7 +96,9 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     // column yet. Either order (run migration first or types-regen first)
     // is safe; the runtime value is null until backfill + new renders.
     model: ((row as Record<string, unknown>).model as string | null) ?? null,
-    is_public: (row.is_public as boolean) ?? false,
+    // get_feed returns only public posts but doesn't include the column; default
+    // TRUE so the share button isn't hidden across the entire feed. See header.
+    is_public: (row.is_public as boolean) ?? true,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
     // Repost surface (get_feed migration 243). Non-feed rows lack these → default
