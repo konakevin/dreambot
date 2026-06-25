@@ -19,8 +19,14 @@ export interface BotUser {
  * lib/botProfiles.ts, and uncomment the cron in
  * .github/workflows/bot-dreams.yml. The bot code under scripts/ is
  * intentionally untouched so revival is one-PR away.
+ *
+ * Decommissioned 2026-06-24: MechBot retired — its 8 best paths (+ their post
+ * history) were moved to StarBot; its dead paths are kept on disk for
+ * reference. Also hidden server-side via users.is_public=false (migration 308),
+ * but listed here too so it stays out of the bot lists AND search (see
+ * useSearchUsers) regardless. Revive = remove here + flip is_public back.
  */
-const HIDDEN_BOT_USERNAMES = new Set(['humanbot', 'glowbot']);
+export const HIDDEN_BOT_USERNAMES = new Set(['humanbot', 'glowbot', 'mechbot']);
 
 export function useBotUsers() {
   return useQuery({

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useBlockedIds } from '@/hooks/useBlockUser';
+import { HIDDEN_BOT_USERNAMES } from '@/hooks/useBotUsers';
 
 export interface SearchUser {
   id: string;
@@ -28,14 +29,19 @@ export function useSearchUsers(query: string) {
         .limit(20);
 
       if (error) throw error;
-      return (data ?? [])
-        .filter((u) => !blockedIds?.has(u.id))
-        .map((u) => ({
-          id: u.id,
-          username: u.username,
-          avatarUrl: u.avatar_url,
-          isPublic: ((u as Record<string, unknown>).is_public as boolean) ?? true,
-        }));
+      return (
+        (data ?? [])
+          .filter((u) => !blockedIds?.has(u.id))
+          // Retired/decommissioned bots (MechBot, HumanBot, GlowBot) stay out of
+          // search too — same list that hides them from the bot pills/selector.
+          .filter((u) => !HIDDEN_BOT_USERNAMES.has((u.username ?? '').toLowerCase()))
+          .map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatar_url,
+            isPublic: ((u as Record<string, unknown>).is_public as boolean) ?? true,
+          }))
+      );
     },
     enabled: !!user && query.trim().length >= 2,
     staleTime: 30_000,

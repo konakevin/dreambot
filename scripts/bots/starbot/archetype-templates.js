@@ -887,7 +887,14 @@ Output ONLY the raw 130-150 word scene description. Comma-separated phrases. NO 
   },
 
   ORBITAL_DESCENT: ({ slots, sharedDNA, vibeDirective }) => {
-    const { planet_type, surface_detail, atmosphere_glow, approach_craft, space_backdrop, descent_event } = slots;
+    const {
+      planet_type,
+      surface_detail,
+      atmosphere_glow,
+      approach_craft,
+      space_backdrop,
+      descent_event,
+    } = slots;
     const eventSection = descent_event
       ? `\n━━━ DESCENT EVENT — a beat (in the sky / on approach) ━━━\n${descent_event}\n\n`
       : '';
@@ -935,7 +942,14 @@ Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO p
   },
 
   ASTEROID_MINING: ({ slots, sharedDNA, vibeDirective }) => {
-    const { mining_setting, industrial_detail, mining_action, worker_presence, belt_setting, hazard_event } = slots;
+    const {
+      mining_setting,
+      industrial_detail,
+      mining_action,
+      worker_presence,
+      belt_setting,
+      hazard_event,
+    } = slots;
     const eventSection = hazard_event
       ? `\n━━━ HAZARD EVENT — a beat of industrial danger ━━━\n${hazard_event}\n\n`
       : '';
@@ -979,7 +993,8 @@ Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO p
   },
 
   COCKPIT_VIEW: ({ slots, sharedDNA, vibeDirective }) => {
-    const { cockpit_type, hud_overlay, view_beyond, cockpit_detail, alert_state, combat_event } = slots;
+    const { cockpit_type, hud_overlay, view_beyond, cockpit_detail, alert_state, combat_event } =
+      slots;
     const eventSection = combat_event
       ? `\n━━━ COMBAT EVENT — a beat beyond/around the cockpit ━━━\n${combat_event}\n\n`
       : '';
@@ -1025,7 +1040,14 @@ Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO p
   },
 
   SHIP_GRAVEYARD: ({ slots, sharedDNA, vibeDirective }) => {
-    const { graveyard_setting, wreck_detail, graveyard_scale, explorer_craft, cosmic_setting, eerie_detail } = slots;
+    const {
+      graveyard_setting,
+      wreck_detail,
+      graveyard_scale,
+      explorer_craft,
+      cosmic_setting,
+      eerie_detail,
+    } = slots;
     const eventSection = eerie_detail
       ? `\n━━━ EERIE DETAIL — a haunting beat among the dead ships ━━━\n${eerie_detail}\n\n`
       : '';
@@ -1071,7 +1093,14 @@ Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO p
   },
 
   TERRAFORMING: ({ slots, sharedDNA, vibeDirective }) => {
-    const { terraform_stage, terraform_tech, climate_drama, settlement, world_backdrop, milestone_event } = slots;
+    const {
+      terraform_stage,
+      terraform_tech,
+      climate_drama,
+      settlement,
+      world_backdrop,
+      milestone_event,
+    } = slots;
     const eventSection = milestone_event
       ? `\n━━━ MILESTONE EVENT — a beat of a world being born ━━━\n${milestone_event}\n\n`
       : '';
@@ -1960,5 +1989,467 @@ ${vibeDirective.slice(0, 150)}
 Open with the SUBJECT and its named instrument/wavelength. Layer in: spectral / color details (saturated multi-wavelength composite), composition framing, atmospheric/instrumental glow effects, scale-prover positioning, the secondary surprise element. ONE haunting detail (impossible color, time-dilated light, gravitational lensing arc, X-ray jet at relativistic speed). Photoreal astrophotography finish, cranked saturation, glowing depth.
 
 Output ONLY the raw 100-130 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ═══ or ### markers, NO **bold labels**. Just the scene content.`;
+  },
+
+  STARBOT_SCIFI_CYBORG_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      xeno_being,
+      organic,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ EXOTIC PHENOMENON (weave in — don't let it steal focus from her) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing an EXOTIC ALIEN-CYBORG FEMALE scene for MechBot. The goal is a "WOW!!" — a genuinely out-there, otherworldly cyborg woman that makes the viewer stop scrolling and stare. She is SIMULTANEOUSLY a beautiful feminine being AND something truly alien and machine. Push HARD into the strange and wondrous — this is an AI dream-app, lean all the way into exotic sci-fi.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default glossy register.
+
+━━━ THE ALIEN-CYBORG BEING (the HERO — render with obsessive, otherworldly detail) ━━━
+${xeno_being}
+
+She is the focal subject: an elegant, FEMININE, genuinely ALIEN cyborg woman. Render her exotic anatomy + cyborg fusion + body material EXACTLY as described — a different alien race every render, so commit fully to what she IS. Beautiful and strange in equal measure.
+
+━━━ LEAN HARD INTO THE ALIEN/CYBORG HYBRID (the cool look) ━━━
+The magic is the HYBRID — exotic ALIEN biology fused with a sleek CHROME CYBORG chassis, into ONE being, with glowing internal light or accent-glow threaded through. Push BOTH sides hard: polished chrome plating / sculpted mechanical panels / exposed servo-and-cable detail / glowing cores — fused seamlessly with her exotic alien features (elongated head / crests / exotic glossy skin / alien eyes). Half-organic, half-machine, gorgeous and otherworldly. This hybrid LOOK is the whole point.
+
+━━━ HER ORGANIC SIDE — THE LIVING FACE + ALIEN BIOLOGY (render this clearly) ━━━
+${organic}
+
+This is the AUTHORITY on her face, skin, and organic biology — render her face and exposed flesh EXACTLY as described (human or alien, with whatever alien biology it specifies: extra eyes / head-tendrils / translucent-organ skin / crests / gills / skin color). Where the being above and this organic side meet, the machine is fused INTO this living flesh. Her face reads clearly and beautifully.
+
+━━━ HER EYES (glowing) ━━━
+${eyes}
+Render her eyes exactly this way (honour any eye-count her alien biology specifies above).
+
+━━━ THE SHOWSTOPPER (the ONE wow-element — render it prominently) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — THE CHARACTER IS THE MAIN FOCUS ━━━
+${composition}
+She is the HERO of the frame — large, central, her hybrid design the star. Use the rolled framing as a hint, but DO NOT bury her in an elaborate ACTION or narrative (no descending-staircases / mid-stride / theatrical staging) — showcase her cool alien/cyborg LOOK with a striking, mostly-still presence.
+
+━━━ THE COOL SCI-FI SETTING (keep it cool — but SHE stays the focus) ━━━
+${biome}
+
+Render a cool, atmospheric sci-fi environment with real depth behind and around her — but SHE is the main focus, large and central. The setting frames and elevates her without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ TASTEFUL — exotic elegance, NOT pinup ━━━
+She is alluring through ALIEN WONDER and elegant power, never through skin. Her own exotic anatomy / chassis / chitin / scales / plating is her covering. No bikini-chassis, no cleavage-as-focus, no pin-up posing — the awe of WHAT SHE IS carries it.
+
+━━━ NEVER SKELETAL ━━━
+She is a sleek, WHOLE, elegant FEMININE figure with a clearly readable face. NEVER skeletal anatomy — no exposed ribcage, no visible ribs, no exposed spine or vertebrae, no bones, no skull-faced or skeleton look. Exotic surfaces and forms, never a skeleton or a bare creature-skull.
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the alien-cyborg being, her showstopper feature, the composition/pose, the exotic environment with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — exotic, wondrous, jaw-dropping.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  STARBOT_OG_CYBORG_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      subject,
+      hair,
+      cyber_feature,
+      eyes,
+      setting,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ SUBTLE ATMOSPHERE (soft accent — never clutter) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a master photoreal sci-fi artist rendering a BEAUTIFUL SEXY FEMALE CYBORG for MechBot — Sorayama-chrome meets Ghost-in-the-Shell beauty. She is a GORGEOUS WOMAN who is a cyborg: human-proportioned, a flawless beautiful face, a curvy feminine figure clad in a glossy sculpted chassis. HYPER-PHOTOREAL — high-end cinematic 3D render quality, realistic skin and reflections, crisp detail.
+
+━━━ ABSOLUTE BAR — BEAUTIFUL WOMAN FIRST, CYBORG SECOND ━━━
+She reads as a stunning woman first, cyborg second. A real, beautiful human(oid) FACE — NEVER an alien creature, NEVER insectoid, NEVER a monster, NEVER a faceless mannequin. Photoreal beauty render.
+
+━━━ INTEGRATED FACE — NOT A HEAD ON A ROBOT (the #1 failure to avoid) ━━━
+The chrome and tech INTEGRATE INTO her face and head — partial chrome face-plating across the temple / crown / cheek / jaw, glossy chrome flowing seamlessly from her neck UP INTO her face, glowing circuitry on her skin, her glossy skin and the chassis ONE continuous surface. She is a single seamless cyborg design. NEVER a plain human head pasted on top of a separate generic robot body.
+
+━━━ SKIN ━━━
+Pale / fair OR a STYLIZED exotic sci-fi color (emerald-green-glitter / cobalt-blue / pearl-white / soft-violet / chrome-silver / rose-gold / stylized-obsidian jet-black synthetic finish). NEVER a realistic ethnic-RACE skin tone (no African-American / deep-ebony / dark-brown realistic-race skin).
+
+━━━ FRAMING — PULL THE CAMERA BACK (important) ━━━
+Show her from at least the WAIST UP, and frequently FULL-BODY (head-to-hip or head-to-foot). We must SEE HER BODY — her chassis, her figure, her pose. Do NOT default to a neck-up headshot or a face close-up. The composition axis below sets the exact framing; when in doubt go WIDER, never tighter than waist-up.
+
+━━━ THE CYBORG WOMAN (the HERO — render exactly) ━━━
+${subject}
+
+Render her skin, her flawless face, her curvy figure, and her glossy sculpted chassis EXACTLY as described — sleek panels over her body, exposed mechanical detail at the joints (neck / shoulders / spine / arms), glowing accent-lights threaded through. High-gloss, photoreal.
+
+━━━ HAIR ━━━
+${hair}
+
+━━━ SIGNATURE CYBER FEATURE (render prominently) ━━━
+${cyber_feature}
+
+━━━ EYES (glowing) ━━━
+${eyes}
+
+━━━ COMPOSITION + POSE ━━━
+${composition}
+
+━━━ BACKGROUND (soft — she is the focus) ━━━
+${setting}
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 180)}
+
+━━━ TASTEFUL-SEXY ━━━
+She is sexy through her curvy sculpted form, gloss, and beauty — NEVER through bare skin. The glossy chassis / panels COVER her body. NO bare breasts, NO nipples, NO topless, NO lingerie. NO exposed ribcage / skeleton — her chassis is smooth and whole.
+
+━━━ STRUCTURE — write 100-140 words ━━━
+Open with the cyborg woman (skin + beautiful face + glossy chassis), then weave: hair, her signature cyber feature, glowing eyes, composition/pose, soft background, lighting/atmosphere. PHOTOREAL beauty render — crisp, glossy, gorgeous.
+
+Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  STARBOT_MECH_INSECT_HYBRIDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      being,
+      material,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ DRAMA PHENOMENON (weave in — don't let it steal focus from the hero) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi creature-design concept artist writing a MECHANICAL-INSECT HYBRID scene for MechBot. The goal is a "WOW!!" — a crazy, poster-worthy hybrid where a living INSECT and a MACHINE have fused into ONE wild sci-fi creature. Lean ALL the way into the strange: this is an AI dream-app, push the bio-mechanical insect design hard.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE MECHANICAL-INSECT HYBRID (the HERO — render with obsessive detail) ━━━
+${being}
+
+This is the focal subject: ONE crazy mechanical-insect hybrid. Render its insect order + machine archetype + fused anatomy EXACTLY as described — a different hybrid every render, so commit fully to what it IS.
+
+━━━ INSECT + MECHANICAL DOMINATES (the overriding rule) ━━━
+Both the INSECT and the MACHINE must be unmistakable and fused into ONE creature. The insect anatomy (chitin carapace / wing-cases / mandibles / segmented legs / antennae / compound eyes) and the machine (servos / hydraulics / chrome plating / reactors / turbines / circuitry) merge seamlessly. Even if the hybrid is an insectoid-HUMANOID, the insect + mechanical features DOMINATE the silhouette — NEVER a plain human in armor, NEVER a non-insect robot. The bug-machine fusion IS the whole point.
+
+━━━ THE FUSION MATERIAL — where chitin meets chrome (render this surface clearly) ━━━
+${material}
+
+Render the hybrid's surfaces EXACTLY as described — the seam where living insect biology meets machine, with its finishes, sheens, and exposed mechanisms.
+
+━━━ THE OPTICS / EYES (glowing) ━━━
+${eyes}
+Render its eyes/sensors exactly this way — insect optics fused with machine.
+
+━━━ THE SHOWSTOPPER (the ONE wow-element — render it prominently) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — FULL-BODY HERO (NON-NEGOTIABLE) ━━━
+${composition}
+NON-NEGOTIABLE: render 80-100% of the hybrid's FULL BODY — head/mandibles through thorax to legs/abdomen, the ENTIRE creature inside the frame and instantly recognizable as that bug-machine. NEVER a fragment or extreme close-up — NO head-only, NO thorax-only, NO single-limb crop, NO detail-closeup that hides the rest of the body. Keep the intricate bio-mechanical detail legible ACROSS the whole creature; do NOT zoom in to show detail — pull the camera back so the complete silhouette reads. The hybrid is the large, central, legible hero, but its WHOLE body is in the frame.
+
+━━━ THE COOL SCI-FI SETTING (keep it cool — but the HERO stays the focus) ━━━
+${biome}
+
+Render a cool, atmospheric sci-fi environment with real depth behind and around the hybrid — but the CREATURE is the main focus, large and central. The setting frames and elevates it without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the mechanical-insect hybrid, the fusion material, its showstopper feature, the composition, the sci-fi environment with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — a crazy bug-machine you'd stop scrolling to stare at.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  STARBOT_VOID_LANCERS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lancer, maneuver, void: voidSetting, look, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ THE ENGAGEMENT — RENDER THIS ACTION PROMINENTLY (it's the main event) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a visionary sci-fi concept artist writing a VOID-LANCERS scene for MechBot — a ZERO-G orbital mech-KNIGHT in weightless vacuum combat. The goal is a "WOW!!" — a free-floating combat-mech, a planet's curve below, hard sunlight and a deep starfield. Hyper-real cinematic 3D (Gundam space-combat / Knights of Sidonia / The Expanse).
+
+━━━ THE ABSOLUTE FIRST RULE — A HUMANOID MECH-KNIGHT, FREE-FLOATING IN ORBIT (NEVER A SHIP) ━━━
+The hero is a HUMANOID combat-MECH — a robot with a HEAD, a TORSO, TWO ARMS and TWO LEGS, in vacuum-armor, holding a lance or blade — posed WEIGHTLESS and free-floating in the vacuum of orbit, attitude-thrusters firing. 🚫 NEVER a spaceship / starfighter / craft / torpedo / drone / winged vehicle / gun-platform — it is a humanoid ROBOT KNIGHT whose limbs you can count. A planet's curve / a station / a debris-field provides orbital scale. NEVER a grounded standing pose, NEVER atmospheric flight, NEVER a planet-surface scene.
+
+⚡ DYNAMIC ACTION — show the knight ENGAGED and MID-COMBAT: charging lance-first, striking, dueling, corkscrewing on thrusters, or running down a foe. OFTEN a SECOND mech-knight (a rival/opponent) is in the frame, mid-clash or tumbling defeated. NOT a static floating pose — this is a fight.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish, render reference. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE ORBITAL MECH-KNIGHT (the HERO — render with sleek vacuum-rated detail) ━━━
+${lancer}
+
+This is the focal subject: ONE zero-G orbital combat-mech. Render its archetype + vacuum-armor + thrusters + weapon EXACTLY as described — free-floating and weightless, knightly and lethal.
+
+━━━ THE MANEUVER — the SIGNATURE money-shot (render the zero-G action) ━━━
+${maneuver}
+This is the iconic detail — the weightless combat maneuver (lance-charge, thruster-burn, clash). Make it a dynamic focal element, all motion read as ZERO-G.
+
+━━━ COMPOSITION — THE WHOLE MECH, WEIGHTLESS + ORBITAL SCALE ━━━
+${composition}
+The lancer is the HERO of the frame — full body, free-floating (never grounded), with a planet-curve / station / debris for orbital scale. Pull back enough to show the whole mech, never a tight crop.
+
+━━━ THE VOID — the orbital setting (its OWN lighting/mood; the mech stays the focus) ━━━
+${voidSetting}
+
+Render this orbital setting with hard vacuum lighting and a planet/station for scale around the mech — its lighting and mood as described — but the MECH is the main focus, central and weightless.
+${dramaSection}
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the orbital mech-knight, its zero-G maneuver/weapon, the weightless full-body composition, the orbital void with a planet/station for scale, any orbital combat, mood. Every render must feel like a frame from an unmade sci-fi epic — a weightless knight of the vacuum.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
+  },
+
+  STARBOT_POST_APOC_RUST_TECH: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, subject, action, landscape, composition, drama } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ WASTELAND PHENOMENON — render this visibly in the scene ━━━
+${drama}
+
+An environmental wasteland event amplifying the chase / scavenger / bush-fix moment (dust-devil / sandstorm wall / wreck-fireball / molotov / vultures / fuel-spill / ram-impact / etc.). Render it visibly.
+
+`
+      : '';
+
+    return `You are a sci-fi wasteland cinematographer writing a POST-APOC RUST TECH scene for MechBot — a SCRAP-WELDED BUSH-FIX FAR-FUTURE scavenger rig + visible crew running across the wasteland (or being bush-fixed mid-action). Hyper-real cinematic 3D / VFX-quality. MAD MAX FURY ROAD (sci-fi-tilted variant) / DOOF WAGON / GIGAHORSE / WAR RIG / BORDERLANDS PANDORA BANDIT / TANK GIRL / DEATH STRANDING off-Earth / TWISTED METAL / WARHAMMER 40K ORK-LOOTED / DUNE Sardaukar-thopter / CYBERPUNK 2077 NOMAD-CLAN / HORIZON ZERO DAWN rebel-tech / FALLOUT-RAIDER lineage. Sci-fi-tilted RETROFUTURIST, JURY-RIGGED, lived-in, off-kilter, scary, gleefully unsafe.
+
+🚫 SCI-FI MANDATORY — NOT 21st-CENTURY EARTH ━━━
+The rig is a FAR-FUTURE post-apoc machine, NOT a present-day Earth vehicle. NEVER render anything that reads as a contemporary truck / 18-wheeler / big-rig / Peterbilt / Kenworth / semi-truck / box-truck / pickup-truck / motorcycle / VW van / camper / RV / construction equipment / 1981-Mad-Max-Toecutter-buggy. The rig is FAR-FUTURE — alien-world / post-collapse Earth / Pandora / Mars-colony / asteroid-mining-zone / cyberpunk-dystopia-wasteland. Mandatory sci-fi cues (render 2-3 per render visibly): fusion-cell engines / plasma-drive exhaust / alien-tech salvage welded into the build / hover-skirt augmentation / glowing energy-conduit veins through the chassis / power-pack lashings / radiation symbols / xenomaterial fittings / scavenged orbital-debris hull-plates / pulse-cannon mounts / glowing reactor-core in the gut of the rig.
+
+━━━ NON-NEGOTIABLE — BUSH-FIX SCRAP DNA ━━━
+This rig is a SCRAP-WELDED CHIMERA held together with wire / chains / prayer / spite. NEVER a clean factory-built vehicle. NEVER military-issue. NEVER pristine. EVERY surface shows bush-mechanic ingenuity:
+• MISMATCHED salvaged body panels (alien-hull plates / drop-pod fragments / road-sign offcuts / locker-doors / oil-drum sheets / refrigerator-door slabs / cargo-container flanks welded chaotically)
+• ANTENNA FOREST rising from the roof (twisted comms-rods, war-banner poles, signal-mirror masts, scrap-totem)
+• EXHAUST STACKS (multiple chimneys belching plasma-glow or black smoke)
+• RAM PROW or SPIKE PLATE on the front (welded scrap-iron spikes, hood-ornament alien-skull, cattle-catcher prong)
+• ROPE-BOUND POWER-CELLS / fuel-pods lashed to chassis (visibly-glowing power packs with frayed ropes)
+• WAR-TROPHIES dangling (alien-skulls, captured enemy-tech, severed weapon-parts, chains, banners with hand-painted radiation symbols)
+• SUN-BLEACHED PAINT over rust
+• WIRE-MESH CAGES around driver / crew positions
+• EXPOSED ENGINE BLOCKS (fusion-cells / plasma-coils / reactor-rods visible through hull gaps)
+• DRAGGING CHAINS / SPIKES behind
+
+🚫 ABSOLUTE BANS:
+• NO clean / pristine / well-maintained machinery (industrial-machines territory)
+• NO professional military uniforms (power-armor-infantry territory) — crews are RAGGED scavengers
+• NO giant-titan scale (titan-war territory) — VEHICLE / WALKER scale (2-5x crew height)
+• NO pilot-in-glass-cockpit (mecha-pilots territory) — drivers EXPOSED in open hatches / wire-mesh cages
+• NO ceremonial / ornate / showpiece robot (robot-moment territory)
+• NO abandoned / decay-pathos / no-crew — rigs are RUNNING, crew is VISIBLE
+• NO Star Wars / Halo IP names
+• 🚫 HARD BAN — NO PRESENT-DAY EARTH SETTING. NEVER a recognizable 21st-century street / suburban road / highway / overpass / asphalt city-block / parking lot / shopping mall / gas station / regular intersection / pedestrian sidewalk. Setting is ALWAYS post-apoc WASTELAND or POST-COLLAPSE RUIN.
+• 🚫 HARD BAN — NO MODERN INDUSTRIAL INFRASTRUCTURE rendered as still-functional. NEVER a working oil refinery / modern pipeline / present-day power plant / chemical plant / nuclear cooling-tower. Even "rust-tower graveyards" must render as POST-COLLAPSE BONE-YARDS — rusted skeletal frames decayed for decades, never present-day operation.
+
+━━━ NON-NEGOTIABLE — CREW IS VISIBLE & ENGAGED ━━━
+1-5 crew MUST be visible on/around the rig: driver in open hatch / gunners perched on roof / scavengers leaning out side hatches / lookouts on chassis / mechanics swarming during bush-fix. Crew aesthetic: war-painted faces, goggles, leather harnesses, scarves over mouths, mismatched scavenger gear, scarred skin, ragged hair, lashed-on gear.
+
+━━━ NON-NEGOTIABLE — RIG IS ALIVE & MOVING (or BUSH-FIXED MID-ACTION) ━━━
+The rig is RUNNING (roaring / racing / chasing / pursuing) OR being BUSH-FIXED mid-action (crew mid-weld / pit-stop refuel / wheel-change in a hidden gulch). Dust kicked up by wheels / treads / leg-impacts. Plasma-drive exhaust trailing. Engine-roar implied.
+
+━━━ NON-NEGOTIABLE — MAD MAX CHASE COMPOSITION ━━━
+${composition}
+
+The chosen camera angle DRIVES the framing — render it precisely as described. The composition makes the rig's SCRAP CHARACTER + MOTION + crew immediately legible.
+
+━━━ MOVIE POSTER MANDATE — EVERY QUADRANT MUST BE STRIKING — FLAGSHIP MOMENT ━━━
+This is a FLAGSHIP path. Every render is a MOVIE POSTER PROMOTIONAL FRAME — the kind of vista that stops the viewer mid-scroll. EVERY QUADRANT of the frame has something striking — NO quiet corners. The viewer should be able to SCREENSHOT THIS AS A WALLPAPER and want to study it.
+
+OBSESSIVE-DENSITY MANDATE — stack ALL of these elements simultaneously in EVERY render:
+  1. THE RIG at vertigo-inducing scale — fills 50-70% of frame as a scrap-welded sci-fi chimera, recognizable bush-fix + sci-fi DNA, every panel of the chassis legible from a distance
+  2. THE VISIBLE CREW (2-5 figures on/around rig) all in mid-action — driver leaning out hatch / gunner mid-fire on roof / lookout scanning / scavenger / mechanic mid-bush-fix — no static poses, every body in motion or engaged
+  3. MOTION OR ACTION (dust-trail trailing across frame / motion-blur on ground / pursuit close behind / pit-repair sparks flying / convoy formation receding into distance)
+  4. SCI-FI CUE — at least 3-4 of: glowing energy-conduit veins / fusion-cell engine pulsing through chassis gaps / plasma-drive exhaust trailing GLOWING SMOKE / alien-tech salvage panel / hover-skirt humming / xenomaterial fitting glowing / radiation symbol stenciled / pulse-cannon mount mid-charge / reactor-core visible in the gut
+  5. SCRAP-WELDED DETAIL — at minimum 5 of: antenna forest with war-banners snapping / mismatched body panels (drop-pod fragments + locker-doors + license-plates + alien-hull) / lashed fuel/power-cells visibly glowing / war-trophies dangling / ram prow with welded scrap-iron spikes / 4+ exhaust stacks belching glowing-plasma / improvised pulse-weapons / wire-mesh cages / dragging chains
+  6. MULTI-TIER DEPTH MANDATORY — foreground tactile texture (cracked salt-pan / dust-cloud / scrap-shard / wreckage in extreme close) / midground rig + crew (the hero subject) / deep distance wasteland vista (ruined sci-fi mega-spires / collapsed orbital-debris pylons / dust-canyon receding / sandstorm wall building / sunset horizon)
+  7. SATURATED THEATRICAL SKY — never bland or empty. Fury Road BURNING ORANGE sunset / blood-red dawn / sandstorm SEPIA WALL filling upper third / plasma-storm electric-violet / DUAL-COLOR contrast (cold upper sky + warm lower horizon). The sky is HALF the poster.
+  8. AIRBORNE CHAOS EVERYWHERE — at least 2-3 of: airborne debris / dust-plumes / flame-flickers / glowing-plasma exhaust trails / sparks from welding or impact / atmospheric haze cones / floating scrap / vultures circling / sandstorm particulate / heat-shimmer distortion
+  9. EYE-LANDS-ON-4+-DETAILS — the viewer's eye should immediately land on 4+ striking details in different quadrants — NOT a centered single-focus beauty shot. Wreckage in foreground-left, hero rig in midground-center, distant convoy in deep-right, sandstorm wall in upper-frame, etc.
+  10. EMOTIONAL DNA mandatory — every render should land one of: AWE (vertigo-scale wasteland reveal) / DREAD (the world has ended and these are the survivors) / DEFIANCE (the crew fights on against impossible odds) / ELATION (catching air mid-jump, war-banners snapping) / KILL-ENERGY (mid-raid moment, crew teeth-bared)
+
+VERTIGO-INDUCING SCALE — every render conveys awe-inducing scope:
+• Wasteland horizons that vanish into mist or sandstorm
+• Towering ruined sci-fi mega-spires looming in the deep distance
+• Dust-canyons dropping a thousand meters below the rig
+• Convoys stretching across the entire frame
+• Sky dominating 50%+ of the frame with theatrical color
+
+THINK MAD MAX FURY ROAD theatrical-release promotional-frame / WH40K Ork Looted-Trukk RAID key-art / Dune Sardaukar-thopter establishing-shot / BORDERLANDS bandit-camp marketing reveal / DEATH STRANDING off-Earth E3-trailer frame / CYBERPUNK 2077 NOMAD-CLAN cinematic / HORIZON ZERO DAWN raider-tech promotional / FALLOUT key-art Highwayman silhouette against ruined-city / BLADE RUNNER 2049 wasteland-vehicle approach-shot. Every render should make the viewer GASP.
+
+━━━ THE RIG + CREW (the seeded subject) ━━━
+${subject}
+
+━━━ THE ACTION (rig running, crew engaged, or pit-stop bush-fix) ━━━
+${action}
+
+Render the rig MID-MOTION or MID-BUSH-FIX. The crew is engaged. NEVER static showpiece-pose.
+
+━━━ THE WASTELAND SETTING ━━━
+${landscape}
+
+Render the wasteland environment as half the story — heat-shimmer, dust storms, sun-bleached terrain, wreckage scattered, desolate vista in distance. Multi-tier depth: foreground terrain detail / midground rig + crew / background wasteland vista.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+Golden-hour and dust-orange hues favored — Mad Max sunset palette. Even at night, sodium-orange / fire-glow / molotov-uplight accents. Layer the rolled lighting mode with wasteland-specific accents — rig-mounted plasma-torch / exhaust-smoke catching light / dust-cloud catching backlight.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 250)}
+
+━━━ STRUCTURE — write 130-170 words ━━━
+Open with the chase camera angle + scrap-welded sci-fi rig context ("Low-chase from the salt-flat as an 8-wheeled scavenger rig welded from drop-pod hull-fragments and refrigerator-door slabs roars past at full plasma-drive, twin fusion-cell engine glowing amber through gut-gaps, four crew in war-paint bungee-lashed to roof-mounted pulse-cannon mounts..."). Then weave in: visible crew engaged, wasteland setting with multi-tier depth, any wasteland-phenomenon drama, lighting/atmosphere, palette and mood. The render MUST feel like a sci-fi-tilted Mad Max key-art moment.
+
+Output ONLY the raw 130-170 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  STARBOT_KILLER_CYBORGS_MALE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      xeno_being,
+      organic,
+      eyes,
+      signature_wow,
+      biome,
+      look,
+      composition,
+      drama,
+    } = slots;
+
+    const dramaSection = drama
+      ? `
+━━━ MENACING ATMOSPHERE (weave in — don't let it steal focus from the killer) ━━━
+${drama}
+`
+      : '';
+
+    return `You are a master photoreal sci-fi artist rendering a SLEEK COOL ANTIHERO OUTLAW CYBORG for MechBot — a stylish, cool cyberpunk antihero with PERSONALITY (gun-for-hire / bounty-hunter / merc / rogue / smuggler / lone-ronin). He is a lethal, STYLISH man fused with sleek polished cyborg gear + a signature stylish flair — a cool antihero you'd put on a poster, NOT a scruffy scavenger. Lean into sleek, cool, stylish Cyberpunk-2077 / Cowboy-Bebop antihero cyberpunk. NEVER a pretty-boy, NEVER scruffy/junkyard, NEVER bare-chested.
+
+━━━ LOOK REGISTER — THE VISUAL TREATMENT (AUTHORITY — OPEN your prompt with this) ━━━
+${look}
+
+This sets the ENTIRE rendering register — palette, lighting mood, finish. OPEN your Flux prompt with these look tokens; they lead CLIP. Render everything below in THIS look. Each render rolls a different look — never collapse to one default register.
+
+━━━ THE ASSASSIN CYBORG (the HERO — render with obsessive, lethal detail) ━━━
+${xeno_being}
+
+He is the focal subject: a sleek, COOL antihero OUTLAW cyborg with PERSONALITY. Render his face (a sleek mask/visor OR a cool sharp visible face), his sleek stylish gear, his signature flair, and his sleek cyborg augments + weapon EXACTLY as described — a different cool antihero every render. Lethal, stylish, cool.
+
+━━━ SLEEK COOL ANTIHERO — stylish, NOT scruffy ━━━
+He is a SLEEK, COOL cyberpunk antihero — a stylish man with cool ATTITUDE (a confident smirk / cold swagger), fused with SLEEK, POLISHED, personalized cyborg gear + a SIGNATURE stylish flair (a sharp tailored long coat / a sleek hood or cowl / sleek goggles or visor / a clean bandolier / a sleek cybernetic arm). Lean-to-athletic build. Polished, sharp, badass — every render a DIFFERENT cool antihero. NEVER scruffy / junkyard / war-paint-raider / bushy-bearded, NEVER a pretty-boy, NEVER a faceless robot / mech / skeleton. ABSOLUTELY NO HATS — no fedora / cowboy-hat / wide-brim / brimmed hat of any kind (hoods/cowls/visors only).
+
+━━━ HIS FACE/HEAD — sleek mask OR cool sharp face (render clearly) ━━━
+${organic}
+
+Render his FACE/HEAD EXACTLY as described — EITHER a sleek mask / visor / goggles / face-wrap (cool, mysterious) OR a striking cool sharp visible face (hard, confident, with cool flair) + integrated cyber. COOL and stylish — NEVER a pretty-boy, NEVER a bare-skull, NEVER a scruffy bum, NEVER a generic robot helmet.
+
+━━━ HIS EYES (glowing) ━━━
+${eyes}
+Render his eyes exactly this way — cold and lethal.
+
+━━━ THE WEAPON (render it prominently — carried or being used) ━━━
+${signature_wow}
+
+━━━ COMPOSITION — HE IS THE MAIN FOCUS ━━━
+${composition}
+He is the HERO of the frame — large, central, his lethal presence, agile build, and weapon reading clearly. A striking, dangerous presence (full-body or three-quarter favored).
+
+━━━ THE COOL/DARK SCI-FI SETTING (but HE stays the focus) ━━━
+${biome}
+
+Render a cool, dark, atmospheric sci-fi environment with real depth behind and around him — but HE is the main focus, large and central. The setting frames and elevates him without stealing attention.
+${dramaSection}
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ LETHAL — NOT SHIRTLESS, NOT PIN-UP ━━━
+He is a cool, dangerous antihero. His torso is ALWAYS FULLY COVERED by a sleek coat / armored chassis / tactical gear — NO shirtless, NO bare chest, NO exposed muscular pecs/abs, NO oiled-pecs, NO open-vest, NO pin-up posing. He's fully dressed and cool. A sharp coat / cloak is welcome.
+
+━━━ NO SKULL-FACE / NO SKELETON ━━━
+His augments are sleek tech integrated into a weathered human male body, and his FACE is human FLESH (eyes, nose, lips, skin) + cyber. NEVER a bare skull / metal-skull face / skull-head / death's-head / exposed-teeth grinning skull, and NO exposed bone ribcage / ribs / spine. A real characterful human face and a whole body — never a skeleton.
+
+━━━ STRUCTURE — write 110-150 words ━━━
+OPEN with the LOOK REGISTER tokens, then weave: the male cyborg assassin, his weapon, the agile composition/pose, the dark sci-fi setting with depth, lighting/atmosphere, mood. Every render must feel like a frame from an unmade sci-fi epic — striking, lethal, badass.
+
+Output ONLY the raw 110-150 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content, opening with the look register.`;
   },
 };

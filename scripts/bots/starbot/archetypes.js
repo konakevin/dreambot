@@ -297,7 +297,13 @@ ORBIT MANDATE — the planet's CURVE fills the frame, seen from above in vacuum;
     slots: {
       universal: [],
       bot: [],
-      path: ['planet_type', 'surface_detail', 'atmosphere_glow', 'approach_craft', 'space_backdrop'],
+      path: [
+        'planet_type',
+        'surface_detail',
+        'atmosphere_glow',
+        'approach_craft',
+        'space_backdrop',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'descent_event', gate: 0.4 },
@@ -321,7 +327,13 @@ GRITTY MANDATE — worn, industrial, blue-collar, scarred metal and floodlit dus
     slots: {
       universal: [],
       bot: [],
-      path: ['mining_setting', 'industrial_detail', 'mining_action', 'worker_presence', 'belt_setting'],
+      path: [
+        'mining_setting',
+        'industrial_detail',
+        'mining_action',
+        'worker_presence',
+        'belt_setting',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'hazard_event', gate: 0.4 },
@@ -369,7 +381,13 @@ GRAVEYARD MANDATE — silent, vast, cold, melancholy — a field of the dead at 
     slots: {
       universal: [],
       bot: [],
-      path: ['graveyard_setting', 'wreck_detail', 'graveyard_scale', 'explorer_craft', 'cosmic_setting'],
+      path: [
+        'graveyard_setting',
+        'wreck_detail',
+        'graveyard_scale',
+        'explorer_craft',
+        'cosmic_setting',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'eerie_detail', gate: 0.4 },
@@ -417,7 +435,13 @@ DREAD MANDATE — silent, cold, abandoned, tense. Photoreal cinematic film-still
     slots: {
       universal: [],
       bot: [],
-      path: ['derelict_setting', 'decay_detail', 'explorer_light', 'ominous_reveal', 'light_atmosphere'],
+      path: [
+        'derelict_setting',
+        'decay_detail',
+        'explorer_light',
+        'ominous_reveal',
+        'light_atmosphere',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'threat_hint', gate: 0.4 },
@@ -443,7 +467,13 @@ WONDER MANDATE — awe, scale, first-contact. The alien is colossal and unmistak
     slots: {
       universal: [],
       bot: [],
-      path: ['creature_form', 'creature_detail', 'creature_behavior', 'cosmic_setting', 'scale_anchor'],
+      path: [
+        'creature_form',
+        'creature_detail',
+        'creature_behavior',
+        'cosmic_setting',
+        'scale_anchor',
+      ],
     },
     pickN: {},
     conditionalLayer: { slot: 'contact_event', gate: 0.4 },
@@ -581,5 +611,107 @@ PREMIUM-TIER axis stack (2026-05-31 enrichment — 2 → 8 bespoke pools):
     pickN: { scale_provers: 3 },
     conditionalLayer: { slot: 'event', gate: 0.35 },
     framingModes: null,
+  },
+
+  STARBOT_SCIFI_CYBORG_FEMALE: {
+    description:
+      'PATH-BESPOKE — MechBot scifi-cyborg-female (2026-06-09, NEW from scratch). "Truly out there" exotic alien-cyborg females — built with NO baggage from the legacy cyborg-woman beauty-portrait. The xeno_being HERO axis rolls a genuinely DIFFERENT alien race per render (insectoid / crystalline / cephalopod / fungal / cosmic-void / porcelain / coral / etc.); signature_wow layers ONE showstopper feature; the look axis varies the rendering register so nothing homogenizes; biome sets an exotic alien stage; composition varies framing/pose. 5 path-bespoke pools + 1 conditional drama (40%-gated exotic phenomenon). Tasteful-sexy via exotic elegance, never pinup. No look-lock in the template — the look axis leads.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['xeno_being', 'organic', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.4,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STARBOT_OG_CYBORG_FEMALE: {
+    description:
+      'PATH-BESPOKE — MechBot og-cyborg-female (2026-06-09, NEW). Replicates Kevin\'s "OG" reference aesthetic: beautiful SEXY human-proportioned female cyborgs — glossy sculpted chassis + exposed mechanical joints + glowing accents, real hair OR chrome cranium, glowing eyes, a signature cyber head/neck feature. Sorayama-chrome meets Ghost-in-the-Shell beauty, PHOTOREAL. Grounded, NOT the wild alien-creature register of scifi-cyborg-female. 6 path-bespoke pools (subject HERO / hair / cyber_feature / eyes / setting / composition) + 1 conditional drama (40%-gated soft atmosphere). Uses the photoreal render medium; no look-axis (the consistent photoreal glossy look IS the aesthetic). Tasteful-sexy — glossy chassis covers her, never bare skin.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'hair', 'cyber_feature', 'eyes', 'setting', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.4,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STARBOT_MECH_INSECT_HYBRIDS: {
+    description:
+      'PATH-BESPOKE — MechBot mech-insect-hybrids (2026-06-09, NEW). Mechanical/live hybrid insects: an insectoid race where machine + insect fuse into wild sci-fi hybrids. Insect + mechanical aesthetic OVERRULES (insectoid-humanoids allowed but insect/mech dominates). being(HERO) + fusion_material + eyes + signature_wow + biome + look(register, anti-homogenize) + composition + 40%-gated drama. Flux-locked, wrapper-strip.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['being', 'material', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.4,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STARBOT_VOID_LANCERS: {
+    description:
+      'PATH-BESPOKE — MechBot void-lancers (2026-06-10, NEW; 2026-06-10 made DYNAMIC + multi-mech per Kevin). ZERO-G orbital mech-KNIGHT combat — EVA combat-mechs FIGHTING / charging / dueling in vacuum, lances + thrusters, often TWO mechs ENGAGED, a planet curve below. MECH-FOCUSED (not StarBot cosmic vistas, not mech-skyships atmospheric flight). FIGURE (lancer HERO + maneuver money-shot) + ENVIRONMENT (void + look) + composition(dynamic zero-G action) + 85%-gated engagement (multi-mech orbital combat). universal:[] (ALWAYS weightless in vacuum + planet/station for orbital scale). Flux-locked, wrapper-strip.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['lancer', 'maneuver', 'void', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.85,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STARBOT_POST_APOC_RUST_TECH: {
+    description:
+      "PATH-BESPOKE — MechBot post-apoc-rust-tech path (2026-05-16 migration; sixth MechBot path). FAR-FUTURE sci-fi BUSH-FIX scavenger rigs + crews running across post-apoc wasteland. Mad Max Fury Road (sci-fi-tilted) / Borderlands Pandora / WH40K Ork-Looted / Dune Sardaukar-thopter / Cyberpunk 2077 Nomad-clan / Horizon Zero Dawn rebel-tech / Death Stranding off-Earth lineage. Subject/action/setting pools FULLY REGENERATED 2026-05-16 with sci-fi-tilt + bush-fix mandate baked in (legacy 200-entry pools had present-day-truck / modern-refinery / 21st-century-Earth DNA that surgical word-replace patches couldn't fix at the concept level). New 30-entry MVP pools — fusion-cell engines, plasma-drives, alien-tech salvage, hover-skirts, glowing energy-conduits, scavenged orbital-debris. 3 path-bespoke pools added: composition (Mad Max chase angles), lighting (Fury Road wasteland), drama (40%-gated wasteland phenomena).",
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['subject', 'action', 'landscape', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.4,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STARBOT_KILLER_CYBORGS_MALE: {
+    description:
+      'PATH-BESPOKE — MechBot killer-cyborgs-male (2026-06-09). MALE mirror of killer-cyborgs: handsome/rugged lethal MALE cyborg assassin-thieves — agile, sleek, dangerous. Same architecture; only the gendered subject + face pools are male-specific (weapon / biome / look / composition / eyes / drama are SHARED with the female killer path). Flux-locked.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['xeno_being', 'organic', 'eyes', 'signature_wow', 'biome', 'look', 'composition'],
+    },
+    pickN: {},
+    conditionalLayer: {
+      slot: 'drama',
+      gate: 0.4,
+    },
+    framingModes: null,
+    anchorScaleRange: null,
   },
 };

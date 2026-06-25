@@ -36,6 +36,15 @@ const pathBuilders = {
   'cockpit-view': require('./paths/cockpit-view'),
   'ship-graveyard': require('./paths/ship-graveyard'),
   terraforming: require('./paths/terraforming'),
+  // ─── Moved back from MechBot 2026-06-24 (MechBot decommission). ───
+  'robot-moment': require('./paths/robot-moment'),
+  'scifi-cyborg-female': require('./paths/scifi-cyborg-female'),
+  'og-cyborg-female': require('./paths/og-cyborg-female'),
+  'mech-insect-hybrids': require('./paths/mech-insect-hybrids'),
+  'void-lancers': require('./paths/void-lancers'),
+  'post-apoc-rust-tech': require('./paths/post-apoc-rust-tech'),
+  'alien-biomechs': require('./paths/alien-biomechs'),
+  'killer-cyborgs-male': require('./paths/killer-cyborgs-male'),
 };
 
 module.exports = {
@@ -72,6 +81,16 @@ module.exports = {
     'space-femme': 'starbot_space_femme',
     // megastructure: reverted to default starbot_hyperreal medium
     // (Kevin 2026-05-14 — align with all other scene paths)
+    // ─── Moved from MechBot 2026-06-24 — pin to the `render` medium so these
+    // render bit-for-bit as they did on MechBot (not starbot_hyperreal). ───
+    'robot-moment': 'render',
+    'scifi-cyborg-female': 'render',
+    'og-cyborg-female': 'render',
+    'mech-insect-hybrids': 'render',
+    'void-lancers': 'render',
+    'post-apoc-rust-tech': 'render',
+    'alien-biomechs': 'render',
+    'killer-cyborgs-male': 'render',
   },
 
   // cozy-sci-fi-interior only gets warm/intimate vibes
@@ -86,6 +105,44 @@ module.exports = {
       'arcane',
       'surreal',
       'cinematic',
+    ],
+    // ─── Moved from MechBot 2026-06-24 (verbatim vibe sets). The other 5
+    // moved paths have no per-path vibes → fall through to vibes:['cinematic']
+    // (identical to MechBot's default). ───
+    'robot-moment': [
+      'cinematic',
+      'dark',
+      'epic',
+      'nostalgic',
+      'arcane',
+      'ancient',
+      'fierce',
+      'voltage',
+      'nightshade',
+      'ethereal',
+      'minimal',
+      'peaceful',
+    ],
+    'post-apoc-rust-tech': [
+      'cinematic',
+      'dark',
+      'fierce',
+      'macabre',
+      'nightshade',
+      'ancient',
+      'voltage',
+      'nostalgic',
+    ],
+    'alien-biomechs': [
+      'dark',
+      'macabre',
+      'nightshade',
+      'voltage',
+      'arcane',
+      'surreal',
+      'fierce',
+      'cinematic',
+      'psychedelic',
     ],
   },
 
@@ -147,7 +204,25 @@ module.exports = {
     // premium-tier axis enrichment + 9-render test. Banana / F2 Pro / F2 Flex
     // remain banned. F1.1 Pro kept (Kevin's "keep Pro on non-character paths"
     // override of the "Pro redundant with Ultra" rule).
-    'real-space': [
+    'real-space': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    // ─── Moved from MechBot 2026-06-24 — same flux-1.1 lineup they ran on MechBot. ───
+    'robot-moment': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'scifi-cyborg-female': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'og-cyborg-female': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'mech-insect-hybrids': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'void-lancers': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'post-apoc-rust-tech': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
+    'alien-biomechs': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'killer-cyborgs-male': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
@@ -183,6 +258,9 @@ module.exports = {
     // space-femme: minimal neutral prefix so the rolled render_style axis (not a
     // fixed style) sets the look. Overrides the heavier bot-wide PROMPT_PREFIX.
     starbot_space_femme: 'bold vivid imaginative science-fiction cover art',
+    // ─── `render` medium = MechBot's bot-level prompt prefix (moved paths
+    // 2026-06-24). Reproduces the exact wrapper those paths had on MechBot. ───
+    render: 'cinematic sci-fi concept art, intricate mechanical surfaces',
   },
   promptSuffixByMedium: {
     star_oil_cosmos: 'oil-on-canvas finish, impasto brushwork, no text no words no watermarks',
@@ -210,6 +288,20 @@ module.exports = {
     // clouds only" positive anchors hold the vacuum context.
     starbot_cosmic_void:
       'cinematic concept art precision, photoreal materials in vacuum, lens flare from distant stars, atmospheric haze from nebula clouds only, the kilometer-class capital spaceship is the MAIN SUBJECT filling the frame, surrounded by smaller craft and starfield, deep black void backdrop, no text, no words, no watermarks, photorealistic film still in deep space',
+    // ─── `render` medium = MechBot's bot-level suffix (moved paths 2026-06-24). ───
+    render: 'no text, no words, no watermarks, masterpiece quality',
+  },
+
+  // Per-path prompt PREFIX (prepended). Moved from MechBot 2026-06-24: the two
+  // cyborg-female paths carry their human-not-chassis anchor; combined with the
+  // `render` promptPrefixByMedium above this reproduces MechBot's exact prefix.
+  // The other 6 moved paths had an empty/absent per-path prefix on MechBot, so
+  // they inherit just the `render` medium prefix here.
+  promptPrefixByPath: {
+    'scifi-cyborg-female':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
+    'og-cyborg-female':
+      'beautiful woman, cybernetic breakthroughs integrated into human body (not a robotic chassis)',
   },
 
   // Per-medium prompt injection — StarBot's dialect for each medium.
@@ -333,6 +425,17 @@ module.exports = {
     'cockpit-view', // first-person pilot POV through canopy + HUD
     'ship-graveyard', // fleet-scale boneyard of dead warships
     'terraforming', // a world being born — barren meets living
+    // ─── Moved back from MechBot 2026-06-24 (MechBot decommission). These
+    // render with the `render` medium (mediumByPath) so they look exactly as
+    // they did on MechBot. ───
+    'robot-moment',
+    'scifi-cyborg-female',
+    'og-cyborg-female',
+    'mech-insect-hybrids',
+    'void-lancers',
+    'post-apoc-rust-tech',
+    'alien-biomechs',
+    'killer-cyborgs-male',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
@@ -376,6 +479,11 @@ module.exports = {
       // space-femme = the "crazy" path — subject chaos ON for weird LOOKS
       // (Kevin 2026-05-23: "increase the chaos threshold for weird looks/scenes").
       'space-femme',
+      // ─── Moved from MechBot 2026-06-24 — these 3 had subject-chaos ON on
+      // MechBot (the other 5 moved paths did not). ───
+      'robot-moment',
+      'post-apoc-rust-tech',
+      'alien-biomechs',
     ],
     // Per-path chaos intensity bias — space-femme cranked high for weird/wild
     // renders; other StarBot paths keep default (no bias). +0.3 ≈ chaos almost
@@ -406,6 +514,10 @@ module.exports = {
       'cockpit-view',
       'ship-graveyard',
       'terraforming',
+      // ─── Moved from MechBot 2026-06-24 — these 2 skipped polish on MechBot
+      // (axis-system paths). The other 6 moved paths kept polish ON. ───
+      'post-apoc-rust-tech',
+      'alien-biomechs',
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -448,6 +560,47 @@ module.exports = {
         'cloak',
         'ballistic harness',
       ],
+      // ─── Moved from MechBot 2026-06-24 — limb-count locks (Haiku polish
+      // strips these during compression and breaks the leg/arm anatomy). ───
+      'robot-moment': [
+        'tripedal',
+        'tripod',
+        'three legs',
+        'three pneumatic legs',
+        'three telescoping legs',
+        'three strut legs',
+        'three hydraulic legs',
+        'quadrupedal',
+        'four-legged',
+        'four legs',
+        'four pneumatic legs',
+        'four reinforced legs',
+        'four strut legs',
+        'hexapod',
+        'six-legged',
+        'six legs',
+        'six pneumatic legs',
+        'six articulated legs',
+        'six rubber-tipped legs',
+        'octopod',
+        'eight legs',
+        'four mechanical arms',
+        'four arms',
+        'six arms',
+        'multi-armed',
+      ],
+      'alien-biomechs': [
+        'arthropod',
+        'eight legs',
+        'six-legged',
+        'six legs',
+        'cephalopod',
+        'six tendrils',
+        'four tendrils',
+        'eight tendrils',
+        'serpentine',
+        'segmented',
+      ],
     },
   },
 
@@ -488,6 +641,10 @@ module.exports = {
       'cockpit-view': 'spacewalk',
       'ship-graveyard': 'spacewalk',
       terraforming: 'scene',
+      // ─── Moved from MechBot 2026-06-24 — robot-moment uses the 'robot'
+      // sensory context (seeds copied). The other 7 moved paths used 'scene'
+      // (the default) on MechBot, so they need no entry here. ───
+      'robot-moment': 'robot',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -512,6 +669,10 @@ module.exports = {
     weather_particulate: 'WEATHER_PARTICULATE',
     emotional_dna: 'EMOTIONAL_DNA',
     lighting: 'LIGHTING',
+    // atmosphere — universal slot used by the declarative paths moved from
+    // MechBot 2026-06-24 (StarBot's native paths use weather_particulate
+    // instead). Maps to StarBot's existing ATMOSPHERES pool.
+    atmosphere: 'ATMOSPHERES',
     anchor_scale: 'ANCHOR_SCALE',
     // Bot-level axes
     surprise_element: 'SURPRISE_ELEMENT',

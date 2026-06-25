@@ -333,6 +333,102 @@ module.exports = {
   SPACE_FEMME_CAMERA_POSTER: load('space_femme_camera_poster'),
   SPACE_FEMME_PHENOMENON: load('space_femme_phenomenon'),
 
+  // ─── Paths moved back from MechBot 2026-06-24 (MechBot decommission). ───
+  // These pools + their seeds were copied bit-for-bit; archetypes/templates
+  // live in starbot/archetypes.js + archetype-templates.js (names kept
+  // MECHBOT_* for fidelity). Render with the `render` medium (mediumByPath).
+  // scifi-cyborg-female
+  SCIFI_CYBORG_XENO_BEING: load('scifi_cyborg_xeno_being'),
+  SCIFI_CYBORG_ORGANIC: load('scifi_cyborg_organic'),
+  SCIFI_CYBORG_EYES: load('scifi_cyborg_eyes'),
+  SCIFI_CYBORG_SIGNATURE_WOW: load('scifi_cyborg_signature_wow'),
+  SCIFI_CYBORG_BIOME: load('scifi_cyborg_biome'),
+  SCIFI_CYBORG_LOOK: load('scifi_cyborg_look'),
+  SCIFI_CYBORG_COMPOSITION: load('scifi_cyborg_composition'),
+  SCIFI_CYBORG_DRAMA: load('scifi_cyborg_drama'),
+  // og-cyborg-female
+  OG_CYBORG_SUBJECT: load('og_cyborg_subject'),
+  OG_CYBORG_HAIR: load('og_cyborg_hair'),
+  OG_CYBORG_CYBER_FEATURE: load('og_cyborg_cyber_feature'),
+  OG_CYBORG_EYES: load('og_cyborg_eyes'),
+  OG_CYBORG_SETTING: load('og_cyborg_setting'),
+  OG_CYBORG_COMPOSITION: load('og_cyborg_composition'),
+  OG_CYBORG_DRAMA: load('og_cyborg_drama'),
+  // mech-insect-hybrids
+  MECH_INSECT_BEING: load('mech_insect_being'),
+  MECH_INSECT_MATERIAL: load('mech_insect_material'),
+  MECH_INSECT_EYES: load('mech_insect_eyes'),
+  MECH_INSECT_FEATURE: load('mech_insect_feature'),
+  MECH_INSECT_BIOME: load('mech_insect_biome'),
+  MECH_INSECT_LOOK: load('mech_insect_look'),
+  MECH_INSECT_COMPOSITION: load('mech_insect_composition'),
+  MECH_INSECT_DRAMA: load('mech_insect_drama'),
+  // void-lancers
+  VOID_LANCER: load('void_lancer'),
+  VOID_MANEUVER: load('void_maneuver'),
+  VOID_SETTING: load('void_setting'),
+  VOID_LOOK: load('void_look'),
+  VOID_COMPOSITION: load('void_composition'),
+  VOID_DRAMA: load('void_drama'),
+  // post-apoc-rust-tech
+  RUST_APOC_SUBJECTS: load('rust_apoc_subjects'),
+  RUST_APOC_ACTIONS: load('rust_apoc_actions'),
+  RUST_APOC_SETTINGS: load('rust_apoc_settings'),
+  RUST_APOC_LIGHTING: load('rust_apoc_lighting'),
+  RUST_APOC_COMPOSITION: load('rust_apoc_composition'),
+  RUST_APOC_DRAMA: load('rust_apoc_drama'),
+  // killer-cyborgs-male
+  KILLER_CYBORG_MALE_XENO_BEING: load('killer_cyborg_male_xeno_being'),
+  KILLER_CYBORG_MALE_ORGANIC: load('killer_cyborg_male_organic'),
+  KILLER_CYBORG_EYES: load('killer_cyborg_eyes'),
+  KILLER_CYBORG_SIGNATURE_WOW: load('killer_cyborg_signature_wow'),
+  KILLER_CYBORG_BIOME: load('killer_cyborg_biome'),
+  KILLER_CYBORG_LOOK: load('killer_cyborg_look'),
+  KILLER_CYBORG_COMPOSITION: load('killer_cyborg_composition'),
+  KILLER_CYBORG_DRAMA: load('killer_cyborg_drama'),
+  // alien-biomechs (function-form path)
+  ALIEN_BIOMECH_SUBJECTS: load('alien_biomech_subjects'),
+  ALIEN_BIOMECH_ACTIONS: load('alien_biomech_actions'),
+  ALIEN_BIOMECH_SETTINGS: load('alien_biomech_settings'),
+  // robot-moment (function-form path) — composite settings pools namespaced
+  // ROBOT_* so they don't collide with StarBot's own CHARACTER_INTERIOR /
+  // PLANET_SETTING. Construction copied verbatim from MechBot's pools.js
+  // (planet_* reuse StarBot's near-identical seeds; IP architecture/landscapes
+  // copied from MechBot).
+  ROBOT_TYPES: load('robot_types'),
+  TRANQUIL_MOMENTS: load('tranquil_moments'),
+  ROBOT_CHARACTER_INTERIOR: [
+    ...load('dune_architecture'),
+    ...load('aliens_architecture'),
+    ...load('halo_architecture'),
+    ...load('starwars_architecture'),
+    ...load('guardians_architecture'),
+    ...load('mass_effect_architecture'),
+    ...load('startrek_architecture'),
+    ...load('starcraft_architecture'),
+  ],
+  ROBOT_PLANET_SETTING: [
+    ...load('planet_jungle'),
+    ...load('planet_swamp'),
+    ...load('planet_ocean'),
+    ...load('planet_ice'),
+    ...load('planet_desert'),
+    ...load('planet_crystal'),
+    ...load('planet_volcanic'),
+    ...load('planet_sky'),
+    ...load('planet_ruins'),
+    ...load('planet_cave'),
+    ...load('planet_extreme'),
+    ...load('dune_landscapes'),
+    ...load('aliens_landscapes'),
+    ...load('starwars_landscapes'),
+    ...load('guardians_landscapes'),
+    ...load('mass_effect_landscapes'),
+    ...load('startrek_landscapes'),
+    ...load('halo_landscapes'),
+    ...load('starcraft_landscapes'),
+  ],
+
   ATMOSPHERES: load('atmospheres'),
   LIGHTING: load('lighting'),
   CAMERA_ANGLES: load('camera_angles'),
@@ -369,6 +465,16 @@ module.exports = {
       weight: load('sensory_scene_weight'),
       air: load('sensory_scene_air'),
       lightcolor: load('sensory_scene_lightcolor'),
+    },
+    // robot — moved back from MechBot 2026-06-24 (robot-moment path).
+    robot: {
+      smell: load('sensory_robot_smell'),
+      sound: load('sensory_robot_sound'),
+      touch: load('sensory_robot_touch'),
+      temperature: load('sensory_robot_temperature'),
+      weight: load('sensory_robot_weight'),
+      air: load('sensory_robot_air'),
+      lightcolor: load('sensory_robot_lightcolor'),
     },
     // spacewalk (2026-06-09) — hard vacuum + zero-G. ONLY lightcolor; the
     // weight / air / temperature / smell channels inject gravity, breathable
