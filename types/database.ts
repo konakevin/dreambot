@@ -6,31 +6,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
-  graphql_public: {
-    Tables: {
-      [_ in never]: never;
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json;
-          operationName?: string;
-          query?: string;
-          variables?: Json;
-        };
-        Returns: Json;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
   public: {
     Tables: {
       ai_generation_budget: {
@@ -224,6 +199,24 @@ export type Database = {
           id?: number;
           picked_at?: string;
           value?: string;
+        };
+        Relationships: [];
+      };
+      bot_path_cycle: {
+        Row: {
+          bot_name: string;
+          path: string;
+          posted_at: string;
+        };
+        Insert: {
+          bot_name: string;
+          path: string;
+          posted_at?: string;
+        };
+        Update: {
+          bot_name?: string;
+          path?: string;
+          posted_at?: string;
         };
         Relationships: [];
       };
@@ -1382,6 +1375,21 @@ export type Database = {
         };
         Relationships: [];
       };
+      moderation_words: {
+        Row: {
+          is_phrase: boolean;
+          word: string;
+        };
+        Insert: {
+          is_phrase?: boolean;
+          word: string;
+        };
+        Update: {
+          is_phrase?: boolean;
+          word?: string;
+        };
+        Relationships: [];
+      };
       mood_axes: {
         Row: {
           default_value: number;
@@ -2022,6 +2030,7 @@ export type Database = {
           description: string | null;
           dream_medium: string | null;
           dream_vibe: string | null;
+          face_swap_mode: string | null;
           flux_seed: number | null;
           height: number | null;
           id: string;
@@ -2065,6 +2074,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          face_swap_mode?: string | null;
           flux_seed?: number | null;
           height?: number | null;
           id?: string;
@@ -2108,6 +2118,7 @@ export type Database = {
           description?: string | null;
           dream_medium?: string | null;
           dream_vibe?: string | null;
+          face_swap_mode?: string | null;
           flux_seed?: number | null;
           height?: number | null;
           id?: string;
@@ -2580,10 +2591,7 @@ export type Database = {
         }[];
       };
       finalize_nightly_upload: {
-        Args: {
-          p_bot_message?: string;
-          p_upload_id: string;
-        };
+        Args: { p_bot_message?: string; p_upload_id: string };
         Returns: undefined;
       };
       get_blocked_users: {
@@ -2676,6 +2684,7 @@ export type Database = {
           description: string;
           dream_medium: string;
           dream_vibe: string;
+          face_swap_mode: string;
           feed_score: number;
           height: number;
           id: string;
@@ -2767,25 +2776,25 @@ export type Database = {
           title: string;
         }[];
       };
+      get_my_account: {
+        Args: never;
+        Returns: {
+          basic_subscription: boolean;
+          basic_subscription_expires_at: string;
+          email: string;
+          is_admin: boolean;
+          pro_subscription: boolean;
+          pro_subscription_expires_at: string;
+          pro_subscription_will_renew: boolean;
+          pro_trial_started_at: string;
+          sparkle_balance: number;
+        }[];
+      };
       get_new_notification_count: {
         Args: { p_user_id: string };
         Returns: number;
       };
       get_notification_settings: { Args: { p_user_id?: string }; Returns: Json };
-      get_my_account: {
-        Args: Record<PropertyKey, never>;
-        Returns: {
-          sparkle_balance: number;
-          is_admin: boolean;
-          email: string;
-          pro_subscription: boolean;
-          pro_subscription_expires_at: string | null;
-          pro_subscription_will_renew: boolean;
-          pro_trial_started_at: string | null;
-          basic_subscription: boolean;
-          basic_subscription_expires_at: string | null;
-        }[];
-      };
       get_public_profile: {
         Args: { p_user_id: string };
         Returns: {
@@ -2837,6 +2846,30 @@ export type Database = {
           vibe_score: number;
         }[];
       };
+      get_shared_post: {
+        Args: { p_id: string };
+        Returns: {
+          allow_reposts: boolean;
+          avatar_url: string;
+          caption: string;
+          comment_count: number;
+          created_at: string;
+          description: string;
+          dream_medium: string;
+          dream_vibe: string;
+          id: string;
+          image_url: string;
+          image_url_display: string;
+          image_url_hq: string;
+          is_public: boolean;
+          like_count: number;
+          model: string;
+          posted_at: string;
+          thumbhash: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
       get_unread_group_count: { Args: { p_user_id: string }; Returns: number };
       get_unread_notification_count: {
         Args: { p_user_id: string };
@@ -2865,6 +2898,13 @@ export type Database = {
           p_upload_id: string;
         };
         Returns: string;
+      };
+      prune_observability_logs: {
+        Args: { p_days?: number };
+        Returns: {
+          deleted: number;
+          table_name: string;
+        }[];
       };
       rebalance_bot_schedules: {
         Args: { p_min_lead_seconds?: number };
@@ -2898,6 +2938,8 @@ export type Database = {
         Args: { p_job_id: string };
         Returns: undefined;
       };
+      reset_my_profile: { Args: never; Returns: undefined };
+      sanitize_user_text: { Args: { p_text: string }; Returns: string };
       set_notification_pref: {
         Args: { p_category: string; p_channel: string; p_enabled: boolean };
         Returns: undefined;
@@ -2912,6 +2954,7 @@ export type Database = {
         };
         Returns: boolean;
       };
+      text_is_blocked: { Args: { p_text: string }; Returns: boolean };
       toggle_repost: {
         Args: { p_upload_id: string };
         Returns: {
@@ -2919,7 +2962,6 @@ export type Database = {
           reposted: boolean;
         }[];
       };
-      reset_my_profile: { Args: never; Returns: undefined };
       touch_last_active: { Args: never; Returns: undefined };
     };
     Enums: {
@@ -3047,9 +3089,6 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],

@@ -17,7 +17,7 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { POST_SELECT, mapToDreamPost, castRow, castRows } from '@/lib/mapPost';
+import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRow, castRows } from '@/lib/mapPost';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 const PAGE_SIZE = 20;
@@ -44,7 +44,25 @@ export function useUserContextFeed(currentId: string, enabled = true) {
           .select(POST_SELECT)
           .eq('id', currentId)
           .single();
-        if (singleErr) throw singleErr;
+
+        // RLS-blocked target = a PRIVATE dream shared by direct link, opened
+        // IN THE APP by a recipient who isn't the owner (the universal link
+        // routed them into app/photo/[id] instead of the website). Fall back to
+        // get_shared_post (SECURITY DEFINER, unlisted-by-UUID — migration 311)
+        // so they can view the single shared dream. No context feed: they were
+        // given ONE link, and we can't read the owner's other posts as this
+        // user anyway. The owner viewing their OWN private link hits the normal
+        // path above (RLS lets them read it) and still gets their context feed.
+        if (singleErr || !single) {
+          const { data: sharedRows } = await supabase.rpc('get_shared_post', {
+            p_id: currentId,
+          });
+          const sharedRow = Array.isArray(sharedRows) ? sharedRows[0] : null;
+          if (!sharedRow) throw singleErr ?? new Error('post not found');
+          const shared = mapRpcToDreamPost(castRow(sharedRow));
+          return { rows: [shared], userId: shared.user_id, nextOffset: PAGE_SIZE, hasMore: false };
+        }
+
         const targetRow = castRow(single);
         const target: DreamPostItem = {
           ...mapToDreamPost(targetRow),
