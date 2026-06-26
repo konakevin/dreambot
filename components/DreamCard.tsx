@@ -77,6 +77,10 @@ export interface DreamPostItem {
    * engine + Edge Functions; older posts are null. Powers the bottom-left
    * model badge (above the username). */
   model?: string | null;
+  /** Dream-Cast face-swap marker (migration 310). 'single' | 'dual' when a cast
+   * photo was swapped into this dream → HD download is disabled (upscaling an
+   * already-rendered AI face is uncanny). NULL/absent → plain render, HD allowed. */
+  face_swap_mode?: string | null;
   is_public?: boolean;
   posted_at?: string | null;
   description?: string | null;
@@ -325,6 +329,7 @@ export const DreamCard = memo(function DreamCard({
       imageUrl: item.image_url,
       imageUrlHq: item.image_url_hq ?? null,
       isOwn: isOwnPost,
+      faceSwapMode: item.face_swap_mode ?? null,
       onDelete,
     });
   }
@@ -640,7 +645,7 @@ export const DreamCard = memo(function DreamCard({
                       // header (2026-06-06) so the user reaches Copy + Save
                       // from the same surface; thread the image URLs through
                       // as route params so the sheet has what it needs.
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${item.face_swap_mode ? `&faceSwapMode=${encodeURIComponent(item.face_swap_mode)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
                     ))
                 }
                 activeOpacity={0.7}

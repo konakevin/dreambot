@@ -11,6 +11,7 @@ import { View, TouchableOpacity, Pressable, Modal, StyleSheet } from 'react-nati
 import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { GradientButton } from '@/components/GradientButton';
 import { colors, gradients } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import * as nav from '@/lib/navigate';
@@ -85,21 +86,15 @@ export function PremiumGateProvider({ children }: { children: React.ReactNode })
                 <View style={styles.buttons}>
                   {content.buttons.map((btn, i) =>
                     btn.variant === 'primary' ? (
-                      <TouchableOpacity
+                      // THE shared primary CTA (brand-gradient pill, near-black
+                      // text) so every gate matches the rest of the app and
+                      // flips from one place.
+                      <GradientButton
                         key={i}
+                        label={btn.label}
                         onPress={() => onButton(btn)}
-                        activeOpacity={0.85}
                         style={styles.primaryWrap}
-                      >
-                        <LinearGradient
-                          colors={gradients.accent}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 1, y: 0 }}
-                          style={styles.primaryBtn}
-                        >
-                          <Text style={styles.primaryText}>{btn.label}</Text>
-                        </LinearGradient>
-                      </TouchableOpacity>
+                      />
                     ) : (
                       <TouchableOpacity
                         key={i}
@@ -188,16 +183,6 @@ const styles = StyleSheet.create({
   },
   primaryWrap: {
     width: '100%',
-  },
-  primaryBtn: {
-    paddingVertical: verticalScale(15),
-    borderRadius: verticalScale(15),
-    alignItems: 'center',
-  },
-  primaryText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(16),
-    fontWeight: '800',
   },
   secondaryBtn: {
     paddingVertical: verticalScale(13),

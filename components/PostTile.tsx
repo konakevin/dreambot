@@ -57,6 +57,7 @@ export const PostTile = memo(function PostTile({
       imageUrl: item.image_url,
       imageUrlHq: item.image_url_hq ?? null,
       isOwn,
+      faceSwapMode: item.face_swap_mode ?? null,
       onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
     });
   }

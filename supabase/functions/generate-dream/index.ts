@@ -1636,6 +1636,17 @@ Output ONLY the prompt.`;
       // this row lands, and a CPU bust in the deferred task can't fail the
       // dream (best-effort; the feed/DreamCard fall back to image_url when the
       // display variant is null).
+      // Did a Dream-Cast face land in the final image? Drives the HD-upscale
+      // block (migration 310): upscaling an already-rendered AI face is uncanny,
+      // so cast dreams are never offered "Save in HD". Create only reaches the
+      // insert on a successful swap (failures throw + refund above), so this is
+      // just dual vs single. NULL = plain render, HD allowed.
+      const faceSwapMode =
+        logAxes.faceSwapResult === 'dual-success'
+          ? 'dual'
+          : logAxes.faceSwapResult === 'success'
+            ? 'single'
+            : null;
       const [uploadResult] = await Promise.all([
         supabase
           .from('uploads')
@@ -1653,6 +1664,7 @@ Output ONLY the prompt.`;
             // DreamCard (migration 211, 2026-05-30). pickedModel resolves
             // to force_model when provided, else the picker's choice.
             model: pickedModel || null,
+            face_swap_mode: faceSwapMode,
             is_public: false,
             width: 768,
             height: 1664,

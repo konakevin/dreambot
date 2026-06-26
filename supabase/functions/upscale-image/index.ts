@@ -87,12 +87,22 @@ Deno.serve(async (req) => {
   // image_url_hq is already populated (cache hit).
   const { data: uploadRow, error: uploadErr } = await supabase
     .from('uploads')
-    .select('id, user_id, image_url, image_url_hq')
+    .select('id, user_id, image_url, image_url_hq, face_swap_mode')
     .eq('id', body.upload_id)
     .maybeSingle();
   if (uploadErr || !uploadRow) {
     return json({ error: 'Upload not found' }, 404);
   }
+
+  // HD is never available for Dream-Cast dreams (single or dual face swap):
+  // upscaling an already-rendered AI face forces it into the uncanny valley.
+  // The client already hides "Save in HD" for these, but enforce server-side so
+  // a stale/forged client can't trigger it. The native-resolution "Save to
+  // Photos" path doesn't hit this fn, so it's unaffected. (migration 310)
+  if (uploadRow.face_swap_mode) {
+    return json({ error: 'hd_unavailable_face_swap' }, 422);
+  }
+
   const isOwn = uploadRow.user_id === user.id;
 
   // Subscription gate: Pro (paid OR trial) and DreamBot Basic (paid) can HD-

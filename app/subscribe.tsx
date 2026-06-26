@@ -115,8 +115,8 @@ export default function SubscribeScreen() {
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
   const insets = useSafeAreaInsets();
 
-  // Default to yearly (better deal). Tap the toggle to switch.
-  const [period, setPeriod] = useState<Period>('year');
+  // Default to monthly (lower entry price). Tap the toggle to switch to yearly.
+  const [period, setPeriod] = useState<Period>('month');
   // Which plan's purchase is in flight — so ONLY that card's CTA spins (not both).
   const [purchasingPlan, setPurchasingPlan] = useState<'basic' | 'pro' | null>(null);
 

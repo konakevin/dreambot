@@ -2171,6 +2171,17 @@ Output ONLY the prompt.`;
       displayUrl = dv.url;
       thumbhash = dv.thumbhash;
     }
+    // Did a Dream-Cast face land in the final image? Drives the HD-upscale
+    // block (migration 310). 'single-fallback-success' = dual degraded to self
+    // only (partner dropped) but a cast face still landed → still block HD.
+    // 'dual-cascade' / 'failed' delivered an UNswapped scene → NULL, HD allowed.
+    const faceSwapMode =
+      logAxes.faceSwapResult === 'dual-success'
+        ? 'dual'
+        : logAxes.faceSwapResult === 'single-fallback-success' ||
+            logAxes.faceSwapResult === 'success'
+          ? 'single'
+          : null;
     const [uploadResult] = await Promise.all([
       supabase
         .from('uploads')
@@ -2186,6 +2197,7 @@ Output ONLY the prompt.`;
           // Which AI model rendered this — drives the model badge on
           // DreamCard (migration 211, 2026-05-30).
           model: pickedModel || null,
+          face_swap_mode: faceSwapMode,
           is_ai_generated: true,
           is_public: false,
           width: 768,

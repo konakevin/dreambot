@@ -24,7 +24,15 @@ type UpscaleResult =
   | { kind: 'processing' }
   | { kind: 'cap'; cap?: number; resetsOn?: string; tier?: 'basic' | 'pro' }
   | { kind: 'subscription' }
+  | { kind: 'face_swap' }
   | { kind: 'error' };
+
+/**
+ * Disclaimer shown in place of the HD option for Dream-Cast (face-swap) dreams.
+ * Upscaling an already-rendered AI face forces it into the uncanny valley, so HD
+ * is disabled for these; the native-res "Save to Photos" still works. (310)
+ */
+const FACE_SWAP_NO_HD_MESSAGE = "HD isn't available for dreams featuring your cast photos.";
 
 /**
  * Ask the server for the HD version. supabase-js delivers any non-2xx as `error`
@@ -53,6 +61,10 @@ async function requestUpscale(uploadId: string): Promise<UpscaleResult> {
         return { kind: 'cap', cap: body.cap, resetsOn: body.resets_on, tier: body.tier };
       }
       if (status === 403) return { kind: 'subscription' };
+      // Cast-photo dream — HD is never available (server guard, migration 310).
+      if (status === 422 && body.error === 'hd_unavailable_face_swap') {
+        return { kind: 'face_swap' };
+      }
       if (__DEV__) console.warn('[requestUpscale] http', status, error.message);
       return { kind: 'error' };
     }
@@ -109,6 +121,11 @@ async function saveHd(id: string, cachedHqUrl: string | null) {
     showPremiumGate({ kind: 'hd_premium' });
     return;
   }
+  if (res.kind === 'face_swap') {
+    // Reached only via a stale path (the menu hides HD for cast dreams).
+    Toast.show(FACE_SWAP_NO_HD_MESSAGE, 'information-circle');
+    return;
+  }
   Toast.show('Couldn’t prepare your HD download. Try again.', 'close-circle');
 }
 
@@ -122,6 +139,11 @@ interface SaveOpts {
    *  HD-download their own dreams (nightly or created), free + uncapped —
    *  no subscription required. The server (upscale-image) enforces the same. */
   isOwn?: boolean;
+  /** 'single' | 'dual' when this dream was rendered with a Dream-Cast face
+   *  swap. HD upscaling is disabled for these (uncanny AI faces); only native
+   *  "Save to Photos" is offered. NULL/undefined → plain render, HD allowed.
+   *  (migration 310; the server enforces the same.) */
+  faceSwapMode?: string | null;
 }
 interface LongPressOpts extends SaveOpts {
   onDelete?: () => void;
@@ -140,7 +162,29 @@ type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: (
  * "(Pro)", which would wrongly imply Basic can't. (An earlier ✨ glyph rendered
  * broken on some iOS fonts and was dropped 2026-06-06.)
  */
+/**
+ * Show the cast-photo HD disclaimer ONLY to users who would otherwise have a
+ * working HD button — i.e. subscribers, or the owner of the post (free + uncapped
+ * on their own dreams). A free user looking at someone else's post never had HD
+ * here anyway, so the explanation is just noise to them. (migration 310)
+ */
+function faceSwapNoHdMessage(opts: SaveOpts): string {
+  if (!opts.faceSwapMode) return '';
+  const { isPro, isBasic } = useAuthStore.getState();
+  return isPro || isBasic || opts.isOwn ? FACE_SWAP_NO_HD_MESSAGE : '';
+}
+
 function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
+  const saveNative: SheetButton = {
+    text: 'Save to Photos',
+    onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false),
+  };
+  // Dream-Cast (face-swap) dream → HD is never offered; upscaling an already-
+  // rendered AI face is uncanny. Just one native save → label it plainly "Save"
+  // (no "in HD" sibling to disambiguate against). (migration 310)
+  if (opts.faceSwapMode) {
+    return [{ text: 'Save', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) }];
+  }
   const { isPro, isBasic } = useAuthStore.getState();
   // HD downloads are a paid perk of BOTH tiers (Pro 100/mo, Basic 20/mo — the
   // server enforces the per-tier cap). Any paid subscriber may HD-save ANY
@@ -148,7 +192,7 @@ function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
   const canHd = isPro || isBasic || !!opts.isOwn;
   const cachedHqUrl = canHd ? (opts.imageUrlHq ?? null) : null;
   return [
-    { text: 'Save to Photos', onPress: () => saveUrlToPhotos(opts.id, opts.imageUrl, false) },
+    saveNative,
     {
       text: canHd ? 'Save in HD' : 'Save in HD (Premium)',
       onPress: () =>
@@ -163,7 +207,10 @@ function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
  */
 export function openDownloadSheet(opts: SaveOpts) {
   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  showAlert('Download', '', [{ text: 'Cancel', style: 'cancel' }, ...downloadOptionButtons(opts)]);
+  showAlert('Download', faceSwapNoHdMessage(opts), [
+    { text: 'Cancel', style: 'cancel' },
+    ...downloadOptionButtons(opts),
+  ]);
 }
 
 /**
@@ -183,7 +230,7 @@ export function handleImageLongPress(opts: LongPressOpts) {
   if (opts.onDelete) {
     buttons.push({ text: 'Delete', style: 'destructive', onPress: opts.onDelete });
   }
-  showAlert(opts.onDelete ? 'Options' : 'Download', '', buttons);
+  showAlert(opts.onDelete ? 'Options' : 'Download', faceSwapNoHdMessage(opts), buttons);
 }
 
 /**

@@ -52,6 +52,8 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     // column yet. Either order (run migration first or types-regen first)
     // is safe; the runtime value is null until backfill + new renders.
     model: ((row as Record<string, unknown>).model as string | null) ?? null,
+    // Dream-Cast face-swap marker (migration 310) — gates the HD-download option.
+    face_swap_mode: (row.face_swap_mode as string | null) ?? null,
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
@@ -96,6 +98,8 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     // column yet. Either order (run migration first or types-regen first)
     // is safe; the runtime value is null until backfill + new renders.
     model: ((row as Record<string, unknown>).model as string | null) ?? null,
+    // Dream-Cast face-swap marker (migration 310) — gates the HD-download option.
+    face_swap_mode: (row.face_swap_mode as string | null) ?? null,
     // get_feed returns only public posts but doesn't include the column; default
     // TRUE so the share button isn't hidden across the entire feed. See header.
     is_public: (row.is_public as boolean) ?? true,

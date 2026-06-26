@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { ScreenLayout } from '@/components/ScreenLayout';
+import { showPremiumGate } from '@/lib/premiumGate';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
@@ -380,6 +381,13 @@ export default function SettingsScreen() {
               icon="flask"
               label="Run Dream Generator"
               onPress={() => nav.push('/dreamTest')}
+            />
+            {/* QA: preview the HD-download upsell sheet (free-user "Save in HD"
+                tap) to check its styling. Admin-only — never reaches users. */}
+            <SettingsRow
+              icon="arrow-down-circle"
+              label="Preview HD upsell (QA)"
+              onPress={() => showPremiumGate({ kind: 'hd_premium' })}
             />
             <SettingsRow
               icon="trash-outline"
