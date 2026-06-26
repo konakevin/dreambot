@@ -12,12 +12,21 @@
  */
 
 import { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
-// gesture-handler's ScrollView (not RN's) so it coordinates with the screen's
-// swipe-back Pan gesture — the Pan's failOffsetY yields vertical drags to the
-// scroll, letting swipe-back AND scrolling coexist (a plain RN ScrollView gets
-// starved by the Pan, which is why scrolling was dead with swipeBack on).
-import { ScrollView } from 'react-native-gesture-handler';
+// RN's ScrollView (NOT gesture-handler's) so it coexists with the swipe-back
+// Pan via activeOffsetX/failOffsetY — the proven pattern used by every other
+// screen (settings, inbox). A gesture-handler ScrollView registers as an RNGH
+// handler nested under the swipe-back GestureDetector and competes in the same
+// gesture arena, which made scrolling need a few swipes to engage and blocked
+// swipe-back mid-scroll. The old "RN ScrollView gets starved" note predated the
+// PanResponder→useStandardSwipeBack migration and no longer applies. (2026-06-25)
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Linking,
+  ScrollView,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -41,7 +50,7 @@ interface Plan {
   key: 'basic' | 'pro';
   name: string;
   tiers: ProPlanTier[];
-  perks: readonly { icon: string; title: string; sub: string }[];
+  perks: readonly { icon: string; title: string; sub: string; note?: string }[];
   highlight: boolean;
   badge?: string;
   /** Dreamy tier motif (moon for Basic's nightly dream, sparkles for Pro). */
@@ -283,7 +292,10 @@ export default function SubscribeScreen() {
                       {plan.perks.map((perk) => (
                         <View key={perk.title} style={s.cardPerkRow}>
                           <Ionicons name="checkmark-circle" size={16} color={ACCENT} />
-                          <Text style={s.cardPerkText}>{perk.title}</Text>
+                          <Text style={s.cardPerkText}>
+                            {perk.title}
+                            {perk.note ? <Text style={s.cardPerkNote}> {perk.note}</Text> : null}
+                          </Text>
                         </View>
                       ))}
                     </View>
@@ -374,8 +386,8 @@ const s = StyleSheet.create({
   },
   hero: {
     alignItems: 'center',
-    marginTop: verticalScale(4),
-    marginBottom: verticalScale(12),
+    marginTop: verticalScale(2),
+    marginBottom: verticalScale(8),
   },
   trialBanner: {
     flexDirection: 'row',
@@ -452,12 +464,12 @@ const s = StyleSheet.create({
     color: '#5A3A00',
   },
   cards: {
-    gap: verticalScale(12),
+    gap: verticalScale(10),
   },
   card: {
     backgroundColor: colors.surface,
     borderRadius: verticalScale(18),
-    padding: verticalScale(15),
+    padding: verticalScale(13),
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -486,7 +498,7 @@ const s = StyleSheet.create({
     color: '#1A1A24',
   },
   cardHead: {
-    marginBottom: verticalScale(8),
+    marginBottom: verticalScale(6),
   },
   cardNameRow: {
     flexDirection: 'row',
@@ -508,10 +520,10 @@ const s = StyleSheet.create({
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: verticalScale(10),
+    marginBottom: verticalScale(6),
   },
   priceAmount: {
-    fontSize: fontScale(28),
+    fontSize: fontScale(26),
     fontWeight: '900',
     color: colors.textPrimary,
   },
@@ -521,8 +533,8 @@ const s = StyleSheet.create({
     marginLeft: verticalScale(2),
   },
   cardPerks: {
-    gap: verticalScale(8),
-    marginBottom: verticalScale(12),
+    gap: verticalScale(7),
+    marginBottom: verticalScale(10),
   },
   cardPerkRow: {
     flexDirection: 'row',
@@ -534,9 +546,13 @@ const s = StyleSheet.create({
     fontSize: fontScale(13),
     color: colors.textPrimary,
   },
+  cardPerkNote: {
+    fontSize: fontScale(11),
+    color: colors.textMuted,
+  },
   cta: {
     borderRadius: verticalScale(12),
-    paddingVertical: verticalScale(12),
+    paddingVertical: verticalScale(11),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -556,8 +572,8 @@ const s = StyleSheet.create({
   },
   footerRestore: {
     alignItems: 'center',
-    paddingVertical: verticalScale(4),
-    marginBottom: verticalScale(10),
+    paddingVertical: verticalScale(3),
+    marginBottom: verticalScale(8),
   },
   restoreText: {
     fontSize: fontScale(14),
@@ -568,7 +584,7 @@ const s = StyleSheet.create({
   scrollView: { flex: 1 },
   footer: {
     paddingHorizontal: verticalScale(20),
-    paddingTop: verticalScale(12),
+    paddingTop: verticalScale(10),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
@@ -583,7 +599,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: verticalScale(8),
+    marginTop: verticalScale(6),
   },
   legalLink: {
     fontSize: fontScale(12),

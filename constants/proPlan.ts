@@ -71,6 +71,7 @@ export const PRO_PERKS = [
   {
     icon: 'download-outline',
     title: '100 HD downloads a month',
+    note: '(cast photo dreams not supported)',
     sub: 'Save any dream (yours, bots, or other creators) to your photos in crisp HD.',
   },
 ] as const;

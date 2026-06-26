@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
-// gesture-handler's ScrollView (not RN's) so it coordinates with the screen's
-// swipe-back Pan gesture — lets swipe-back AND scrolling coexist (see subscribe.tsx).
-import { ScrollView } from 'react-native-gesture-handler';
+// RN's ScrollView (NOT gesture-handler's) so it coexists with the swipe-back
+// Pan via activeOffsetX/failOffsetY — the proven pattern used by every other
+// screen. A gesture-handler ScrollView competes with the swipe-back Pan in the
+// same RNGH gesture arena (janky scroll + blocked swipe-back). See subscribe.tsx.
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Linking,
+  ScrollView,
+} from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';

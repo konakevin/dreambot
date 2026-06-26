@@ -51,6 +51,7 @@ export const BASIC_PERKS = [
   {
     icon: 'download-outline',
     title: `${BASIC_HQ_DOWNLOADS_PER_MONTH} HD downloads a month`,
+    note: '(cast photo dreams not supported)',
     sub: 'Save your favorite dreams to your photos in crisp HD.',
   },
 ] as const;
