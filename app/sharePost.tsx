@@ -10,6 +10,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
+import { GradientTitle } from '@/components/GradientTitle';
 import * as Clipboard from 'expo-clipboard';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -87,11 +88,12 @@ export default function SharePostScreen() {
   // longer consumed here — was previously used in the Share.share() copy
   // label ("View kevin's dream"). Kept on the type so the navigate call
   // doesn't have to change.
-  const { uploadId, imageUrl, imageUrlHq, isOwn } = useLocalSearchParams<{
+  const { uploadId, imageUrl, imageUrlHq, faceSwapMode, isOwn } = useLocalSearchParams<{
     uploadId: string;
     username?: string;
     imageUrl?: string;
     imageUrlHq?: string;
+    faceSwapMode?: string;
     isOwn?: string;
   }>();
   const { data: vibers = [], isLoading } = useShareableVibers();
@@ -160,6 +162,7 @@ export default function SharePostScreen() {
         id: uploadId!,
         imageUrl,
         imageUrlHq: imageUrlHq ?? null,
+        faceSwapMode: faceSwapMode ?? null,
         isOwn: isOwn === '1',
       });
     }, 220);
@@ -180,10 +183,17 @@ export default function SharePostScreen() {
 
           {/* Header */}
           <View style={styles.header}>
+            {/* Title is absolutely centered over the full header width so the
+                wider Copy+Save cluster on the right doesn't shove it left
+                (space-between would otherwise center it in the leftover gap). */}
+            <View style={styles.headerTitleWrap} pointerEvents="none">
+              <GradientTitle size={18} weight={800}>
+                Share
+              </GradientTitle>
+            </View>
             <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
               <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Share</Text>
             <View style={styles.headerActions}>
               <TouchableOpacity
                 onPress={handleCopyLink}
@@ -331,10 +341,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: verticalScale(10),
   },
-  headerTitle: {
-    color: colors.textPrimary,
-    fontSize: fontScale(18),
-    fontWeight: '800',
+  // Absolutely centered over the header row (behind the X + actions, which
+  // sit above it in the row). Full-width + center so "Share" lands at the true
+  // horizontal center of the sheet regardless of the side clusters' widths.
+  headerTitleWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   // Two-button cluster (Copy + Save) on the right side of the header.
   // gap mirrors the inner button padding so they read as a typographic
