@@ -46,8 +46,15 @@ const FRAG_CRISP_ORNATE_ILLUSTRATION =
 const FRAG_POLISHED_DIGITAL_RENDER =
   'polished digital painting, professional concept art, high-quality digital artwork, smooth painterly surfaces with crisp detail, vibrant saturated colors, masterful digital art, fine art digital painting, polished digital rendering';
 
+// 2026-06-22 — rewritten to be FACE-SWAP-FRIENDLY. The old version leaned on
+// "cartoon-style 2D drawing / Sunday newspaper comics / editorial cartoon",
+// which rendered big stylized eyes regardless of vibe — the swap couldn't map a
+// real face onto cartoon eyes and left broken artifacts (Kevin case #2). The
+// "naturally-sized features" guards were negations Flux ignored. This version
+// POSITIVELY reinforces realistic facial proportions + true-to-life eye size so
+// the swap lands cleanly, while keeping the bold inked-comic look.
 const FRAG_ADULT_CARTOON =
-  'vibrant comic strip illustration, bold flat colors with strong outlines, cartoon-style 2D drawing with adult-proportioned features, Sunday newspaper comics aesthetic, editorial cartoon style, mature comic illustration with naturalistic adult faces, hand-drawn comic art with naturally-sized human features';
+  'grounded semi-realistic comic-book illustration, painted graphic-novel art with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, bold confident ink linework and rich saturated flat color, detailed hand-painted character art, naturalistic mature features, illustrated portrait realism';
 
 // Override entry — each curated fragment can opt-out specific vibes that
 // empirically push it into a bad failure mode (e.g. "epic" vibe + cartoon
