@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { showPremiumGate } from '@/lib/premiumGate';
+import { showForceUpdatePreview } from '@/components/ForceUpdateGate';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
@@ -388,6 +389,13 @@ export default function SettingsScreen() {
               icon="arrow-down-circle"
               label="Preview HD upsell (QA)"
               onPress={() => showPremiumGate({ kind: 'hd_premium' })}
+            />
+            {/* QA: preview the blocking app-update gate (migration 312) without
+                editing engine_config. Tap the backdrop / "Close preview" to exit. */}
+            <SettingsRow
+              icon="arrow-up-circle"
+              label="Preview update gate (QA)"
+              onPress={() => showForceUpdatePreview('hard')}
             />
             <SettingsRow
               icon="trash-outline"

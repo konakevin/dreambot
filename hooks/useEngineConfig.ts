@@ -27,6 +27,10 @@ export interface EngineConfig {
   // from these; null → create.tsx falls back to its bundled word-list constants.
   relationshipWords: string | null;
   petWords: string | null;
+  // App-update gate (migration 312). Marketing-version strings; null = no gate.
+  // ForceUpdateGate fails open on null/malformed, so these never brick the app.
+  minAppVersion: string | null;
+  latestAppVersion: string | null;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -42,6 +46,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipRegex: null,
   relationshipWords: null,
   petWords: null,
+  minAppVersion: null,
+  latestAppVersion: null,
 };
 
 function num(v: unknown, d: number): number {
@@ -86,6 +92,14 @@ export function useEngineConfig(): EngineConfig {
             ? c.relationship_words
             : DEFAULT_ENGINE_CONFIG.relationshipWords,
         petWords: typeof c.pet_words === 'string' ? c.pet_words : DEFAULT_ENGINE_CONFIG.petWords,
+        minAppVersion:
+          typeof c.min_app_version === 'string'
+            ? c.min_app_version
+            : DEFAULT_ENGINE_CONFIG.minAppVersion,
+        latestAppVersion:
+          typeof c.latest_app_version === 'string'
+            ? c.latest_app_version
+            : DEFAULT_ENGINE_CONFIG.latestAppVersion,
       };
     },
     staleTime: 5 * 60_000,

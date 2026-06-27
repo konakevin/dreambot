@@ -45,6 +45,7 @@ import { UpscaleModalHost } from '@/components/UpscaleOverlay';
 
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
+import { ForceUpdateGate } from '@/components/ForceUpdateGate';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
 import { initSentry, Sentry } from '@/lib/sentry';
 import {
@@ -555,6 +556,9 @@ function RootLayout() {
                     <RealtimeSubscriber />
                     <DataPrefetcher />
                     <DreamResumer />
+                    {/* DB-driven app-update gate (migration 312): blocks below
+                        engine_config.min_app_version, nudges below latest. */}
+                    <ForceUpdateGate />
                     <Stack
                       screenOptions={{
                         headerShown: false,
