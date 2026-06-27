@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin:0; padding:0; width:1320px; height:2868px; overflow:hidden; }
+  #shot { position:absolute; inset:0; width:1320px; height:2868px; object-fit:cover; }
+  .badge {
+    position:absolute; left:50%; transform:translateX(-50%);
+    top:160px;
+    display:inline-flex; align-items:center; gap:20px;
+    padding:30px 60px;
+    border-radius:120px;
+    white-space:nowrap;
+    font-family:'SF Pro Rounded','Avenir Next','Futura',system-ui,sans-serif;
+  }
+  .badge .txt {
+    font-weight:800; font-size:78px; letter-spacing:-1.5px; line-height:1; color:#fff;
+  }
+  .badge .accent { color:#D8C9FF; }
+
+  /* ---- glass ---- */
+  .glass {
+    background:rgba(17,10,31,0.40);
+    -webkit-backdrop-filter:blur(26px) saturate(165%);
+    backdrop-filter:blur(26px) saturate(165%);
+    border:1.5px solid rgba(255,255,255,0.30);
+    box-shadow:0 18px 55px rgba(0,0,0,0.42), inset 0 1.5px 0 rgba(255,255,255,0.28);
+  }
+  .glass .txt { text-shadow:0 2px 10px rgba(0,0,0,0.30); }
+
+  /* ---- gradient ---- */
+  .grad {
+    background:linear-gradient(135deg,#A78BFA 0%,#C16 DDD 55%,#F49AC2 100%);
+    background:linear-gradient(135deg,#A78BFA 0%,#C56BDD 52%,#F49AC2 100%);
+    border:1.5px solid rgba(255,255,255,0.45);
+    box-shadow:0 18px 50px rgba(150,90,220,0.50), inset 0 2px 0 rgba(255,255,255,0.45);
+  }
+  .grad .txt { text-shadow:0 2px 8px rgba(80,30,120,0.35); }
+  .grad .accent { color:#fff; }
+</style>
+</head>
+<body>
+  <img id="shot" />
+  <div id="badge" class="badge"><span class="txt"></span></div>
+<script>
+  const p = new URLSearchParams(location.search);
+  document.getElementById('shot').src = p.get('img') || '';
+  const badge = document.getElementById('badge');
+  badge.classList.add(p.get('style') || 'glass');
+  // caption may contain *accent* markers → wrap in <span class=accent>
+  const raw = p.get('caption') || '';
+  const html = raw.replace(/\*([^*]+)\*/g, '<span class="accent">$1</span>');
+  const txt = badge.querySelector('.txt');
+  txt.innerHTML = html;
+  // Vertical position (px from top). Default a touch lower than the notch.
+  badge.style.top = (p.get('top') || '230') + 'px';
+  // Auto-fit BEFORE rotating (rotation would inflate offsetWidth): keep every
+  // caption on ONE line within a consistent max badge width.
+  let size = 78;
+  txt.style.fontSize = size + 'px';
+  while (badge.offsetWidth > 1180 && size > 46) { size -= 1; txt.style.fontSize = size + 'px'; }
+  // Optional diagonal tilt, applied last so it doesn't affect the width measure.
+  const rot = parseFloat(p.get('rot') || '0');
+  badge.style.transform = `translateX(-50%) rotate(${rot}deg)`;
+</script>
+</body>
+</html>
