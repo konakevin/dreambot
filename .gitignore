@@ -57,3 +57,6 @@ scripts/*-bench-results.json
 *.poc-bak
 *.test-bak
 *.orig
+
+# Supabase CLI local state (per-machine: project link + tool versions)
+supabase/.temp/
