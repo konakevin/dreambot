@@ -225,6 +225,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  CHIBIBOT_CREATURE_OUTING: {
+    description:
+      'SHARED-FAMILY — ChibiBot creature-outing paths (2026-06-28). A band of 2-4 chibi CREATURE friends out DOING fun things TOGETHER in a real-world "out in the wild" place. Scene-led: the place fills the frame, friends mid-action as co-heroes (opposite of solo-wilderness outdoor-adventure). Reused by the 6 per-setting paths (amusement-park / beach-day / camping / snow-day / county-fair / birthday-party) — each supplies its own bespoke activity / setting_detail / prop / surprise pools; the creature band rolls from the shared unified pool. 7 axes: 2 universal (lighting + atmosphere) + 5 path-bespoke (creature_group pickN:3 + activity + setting_detail pickN:3 + prop + surprise_element). chibibot_neutral medium (look-register); skip two-pass polish.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['creature_group', 'activity', 'setting_detail', 'prop', 'surprise_element'],
+    },
+    pickN: { creature_group: 3, setting_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   CHIBIBOT_CREATURE_ADVENTURES: {
     description:
       'PATH-BESPOKE — ChibiBot creature-adventures (2026-06-28). Clone of YumBot food-adventures: a band of 2-4 chibi CREATURE friends out DOING fun things in real-world "out in the wild" settings (amusement park / water park / beach / camping / snow / fair / playground / pool / cookout / arcade / movie-theater / aquarium / birthday). Scene-led — the real-world LOCATION fills the frame; the creatures + their friends are NAMED in the scene. Opposite of outdoor-adventure (which is solo + pure wilderness). Single bespoke axis: scene (tagged bucket pool, all settings roll uniformly). Look/palette via sharedDNA.lookRegister; chibibot_neutral medium; skip two-pass polish.',

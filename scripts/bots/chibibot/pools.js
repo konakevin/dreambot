@@ -169,6 +169,34 @@ module.exports = {
   // settings roll uniformly at render time.
   CHIBIBOT_CREATURE_ADVENTURES_SCENES: load('chibibot_creature_adventures_scenes'),
 
+  // Creature-OUTING per-setting paths (2026-06-28) — bespoke multi-axis pools.
+  // Shared CHIBIBOT_CREATURE_OUTING archetype; creature band + lighting/atmosphere
+  // come from shared pools.
+  CHIBIBOT_AMUSEMENT_PARK_ACTIVITY: load('chibibot_amusement_park_activity'),
+  CHIBIBOT_AMUSEMENT_PARK_DETAIL: load('chibibot_amusement_park_detail'),
+  CHIBIBOT_AMUSEMENT_PARK_PROP: load('chibibot_amusement_park_prop'),
+  CHIBIBOT_AMUSEMENT_PARK_SURPRISE: load('chibibot_amusement_park_surprise'),
+  CHIBIBOT_BEACH_DAY_ACTIVITY: load('chibibot_beach_day_activity'),
+  CHIBIBOT_BEACH_DAY_DETAIL: load('chibibot_beach_day_detail'),
+  CHIBIBOT_BEACH_DAY_PROP: load('chibibot_beach_day_prop'),
+  CHIBIBOT_BEACH_DAY_SURPRISE: load('chibibot_beach_day_surprise'),
+  CHIBIBOT_CAMPING_ACTIVITY: load('chibibot_camping_activity'),
+  CHIBIBOT_CAMPING_DETAIL: load('chibibot_camping_detail'),
+  CHIBIBOT_CAMPING_PROP: load('chibibot_camping_prop'),
+  CHIBIBOT_CAMPING_SURPRISE: load('chibibot_camping_surprise'),
+  CHIBIBOT_SNOW_DAY_ACTIVITY: load('chibibot_snow_day_activity'),
+  CHIBIBOT_SNOW_DAY_DETAIL: load('chibibot_snow_day_detail'),
+  CHIBIBOT_SNOW_DAY_PROP: load('chibibot_snow_day_prop'),
+  CHIBIBOT_SNOW_DAY_SURPRISE: load('chibibot_snow_day_surprise'),
+  CHIBIBOT_COUNTY_FAIR_ACTIVITY: load('chibibot_county_fair_activity'),
+  CHIBIBOT_COUNTY_FAIR_DETAIL: load('chibibot_county_fair_detail'),
+  CHIBIBOT_COUNTY_FAIR_PROP: load('chibibot_county_fair_prop'),
+  CHIBIBOT_COUNTY_FAIR_SURPRISE: load('chibibot_county_fair_surprise'),
+  CHIBIBOT_BIRTHDAY_PARTY_ACTIVITY: load('chibibot_birthday_party_activity'),
+  CHIBIBOT_BIRTHDAY_PARTY_DETAIL: load('chibibot_birthday_party_detail'),
+  CHIBIBOT_BIRTHDAY_PARTY_PROP: load('chibibot_birthday_party_prop'),
+  CHIBIBOT_BIRTHDAY_PARTY_SURPRISE: load('chibibot_birthday_party_surprise'),
+
   // Outdoor-adventure path-bespoke axes (2026-05-20 full-bespoke migration)
   OUTDOOR_ADVENTURE_ACTIVITIES: load('outdoor_adventure_activities'),
   OUTDOOR_ADVENTURE_WILDERNESS: load('outdoor_adventure_wilderness'),

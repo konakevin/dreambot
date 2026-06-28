@@ -707,6 +707,63 @@ If a REAL-OBJECT-AS-HOME, open with: "Wide-shot from INSIDE a giant [object] —
 Then unfold. Output ONLY the raw Flux prompt, one flowing paragraph of comma-separated phrases, 90-120 words MAX — count them; a tight readable scene beats a crammed one. No labels, headers, or ━━━ markers.`;
   },
 
+  CHIBIBOT_CREATURE_OUTING: ({ slots, sharedDNA, vibeDirective }) => {
+    const { creature_group, activity, setting_detail, prop, surprise_element, lighting, atmosphere } =
+      slots;
+    const creatureList = Array.isArray(creature_group) ? creature_group : [creature_group];
+    const creatureBlock = creatureList
+      .filter(Boolean)
+      .map((c, i) => `Friend ${i + 1}: ${c}`)
+      .join('\n\n');
+    const detailList = Array.isArray(setting_detail) ? setting_detail : [setting_detail];
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+
+    return `${lookOverride(sharedDNA)}You are writing a CREATURE-OUTING "day out" scene for ChibiBot — a little band of adorable chibi CREATURE friends out DOING something fun TOGETHER in a real-world place. The playful, story-driven side of ChibiBot — friends having the best day out. Viewer reaction: "look at these little critters having the BEST day!" Output wraps with style prefix + suffix.
+
+CORE RULES: Wholesome friendship joy — all friends happy, never scared or sad. Chibi proportions (oversized round heads, big sparkling dewy eyes, blush cheeks), friends visibly different species/sizes. NO humans of any kind, NO human hands, NO children — every character is a cute creature. NO food characters. The render style/finish is set ONLY by the LOOK tokens above.
+
+━━━ HARD RULE: A REAL-WORLD PLACE, FULLY BUILT, FILLING THE FRAME ━━━
+This is a SCENE in a PLACE — the real-world location is fully built and readable, filling the frame with multi-tier depth: foreground detail, the friends mid-action in the midground, the location built out behind and to the sides. NEVER a creature on a blank/white/studio backdrop, NEVER a tight close-up portrait, NEVER a pure-wilderness or fantasy-village scene (those are other paths). The place is as fun and full as the creatures.
+
+━━━ THE BAND OF FRIENDS (chibi creatures, all present, doing it TOGETHER as co-heroes) ━━━
+${creatureBlock}
+
+━━━ THE ACTIVITY (what they're doing together right now — the headline; it sets the place) ━━━
+${activity}
+
+━━━ THREE SETTING DETAILS (lived-in real-world richness that builds the place) ━━━
+${detailBlock}
+
+━━━ PROP (small charm one of them holds or wears) ━━━
+${prop}
+
+━━━ SURPRISE ELEMENT (tucked-away background detail) ━━━
+${surprise_element}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Captured mid-moment (three-quarter / off-center / low hero-up), the friends interacting with each other and the place, not lined up posing. Three-act depth: foreground detail, friends mid-action midground, the place built out behind.
+
+Open with: "[A chibi (species) and friends] [shared activity verb-phrase], at/on/in [the place]..." then unfold. Output ONLY the raw Flux prompt, one flowing paragraph of comma-separated phrases, 90-120 words MAX — count them; a tight readable scene beats a crammed one. No labels, headers, or ━━━ markers.`;
+  },
+
   CHIBIBOT_CREATURE_ADVENTURES: ({ slots, sharedDNA, vibeDirective }) => {
     const { scene } = slots;
 
