@@ -81,6 +81,13 @@ const pathBuilders = {
   // the impossible tower-city is the hero. Own painterly-storybook medium,
   // flux-ultra. EXTERIOR VISTAS ONLY.
   'dream-spires': require('./paths/dream-spires'),
+  // far-eden — scene-as-hero HAPPY fantasy ALIEN WORLD (2026-06-28). NO character;
+  // an original inviting paradise is the hero ("brochure shots of alien worlds").
+  // Two PERMANENT sibling paths sharing one archetype + eden_* pools + look-neutral
+  // template, differing ONLY in medium: far-eden = HYPERREAL, far-eden-soft =
+  // PAINTERLY. Kevin approved BOTH looks (2026-06-28) — both ship + post.
+  'far-eden': require('./paths/far-eden'),
+  'far-eden-soft': require('./paths/far-eden-soft'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -95,6 +102,8 @@ const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
     p !== 'dreamscape' &&
     p !== 'butterfly-realm' &&
     p !== 'dream-spires' &&
+    p !== 'far-eden' &&
+    p !== 'far-eden-soft' &&
     !p.startsWith('bubble-bot-dreams')
 );
 
@@ -164,6 +173,10 @@ module.exports = {
     dreambot_butterfly: blocks.BUTTERFLY_MEDIUM,
     // dream-spires — own painterly-storybook medium (code-only, no DB row).
     dreambot_spires: blocks.DREAM_SPIRES_MEDIUM,
+    // far-eden — two code-only mediums (no DB rows). far-eden locks hyperreal;
+    // far-eden-soft locks painterly. Both approved + shipped (Kevin 2026-06-28).
+    dreambot_eden_hyperreal: blocks.EDEN_MEDIUM_HYPERREAL,
+    dreambot_eden_painterly: blocks.EDEN_MEDIUM_PAINTERLY,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -209,6 +222,9 @@ module.exports = {
     'butterfly-realm': 'dreambot_butterfly',
     // dream-spires locks its own painterly-storybook medium.
     'dream-spires': 'dreambot_spires',
+    // far-eden sibling paths — hyperreal vs painterly (both shipped).
+    'far-eden': 'dreambot_eden_hyperreal',
+    'far-eden-soft': 'dreambot_eden_painterly',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -238,6 +254,12 @@ module.exports = {
     // cue. Region/world-anchor only — no enumeration (first-noun lock).
     dreambot_spires:
       'whimsical fairytale tower-city, impossible twisting pastel spires with glowing windows, lush painterly storybook dream-world, dreamy and magical',
+    // far-eden: LEAD with the alien-world paradise hero + cosmic sky. Region/
+    // world-anchor only — NO biome enumeration (first-noun lock). Two registers.
+    dreambot_eden_hyperreal:
+      'breathtaking alien-world paradise vista under a cosmic sky, lush otherworldly wonder, cinematic wallpaper, deep focus, ultra-saturated',
+    dreambot_eden_painterly:
+      'breathtaking alien-world paradise vista under a cosmic sky, lush otherworldly wonder, luminous painterly dreamscape, deep focus, ultra-saturated',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/
@@ -304,6 +326,10 @@ module.exports = {
     'dreamscape',
     'butterfly-realm',
     'dream-spires',
+    // far-eden + far-eden-soft (2026-06-28): both looks approved by Kevin; both
+    // post on the flat rotation (hyperreal + painterly alien-world vistas).
+    'far-eden',
+    'far-eden-soft',
   ],
 
   // Path weights — 2× indoor boost; everything else 1×.
@@ -363,6 +389,17 @@ module.exports = {
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-2-max',
     ],
+    // far-eden — flux-1.1 pair ONLY (Kevin 2026-06-28: banned flux-dev, and after
+    // a forced-render test, ruled OUT the flux-2 family for these paths too).
+    // Both sibling paths share the roster; medium (hyperreal vs painterly) varies.
+    'far-eden': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+    ],
+    'far-eden-soft': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+    ],
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -380,6 +417,8 @@ module.exports = {
       'dreamscape',
       'butterfly-realm',
       'dream-spires',
+      'far-eden',
+      'far-eden-soft',
       ...CROSSOVER_PATHS,
     ],
     allowSubjectChaosPaths: [
@@ -409,6 +448,8 @@ module.exports = {
       'dreamscape',
       'butterfly-realm',
       'dream-spires',
+      'far-eden',
+      'far-eden-soft',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',

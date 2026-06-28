@@ -109,4 +109,35 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // far-eden — scene-as-hero HAPPY fantasy ALIEN WORLD (2026-06-28, new).
+  // NO character; an original, beautiful, INVITING alien world is the hero —
+  // "brochure shots of alien worlds" (Kevin: steered AWAY from sci-fi's dark/
+  // serious default → joyful paradise vistas). Modeled on the dreamscape shape
+  // (NOT painterly spires). 5 always axes (world + cosmic_sky + flora ×2 +
+  // palette + atmosphere) + 4 INDEPENDENT gated conditionals (terrain_glow ~50%
+  // so half are bright-daylight paradises, life_accent ~28%, wonder_structure
+  // ~30%, dream_event ~30%). AXIS-CLEAN: world owns BIOME, cosmic_sky owns the
+  // OVERHEAD celestial wonder (the signature axis), flora owns plant-life,
+  // palette owns COLOR, atmosphere owns LIGHT+AIR. LOOK-NEUTRAL template — the
+  // MEDIUM decides hyperreal vs painterly (two sibling paths: far-eden +
+  // far-eden-soft share this archetype + pools, differ only in medium).
+  DREAMBOT_FAR_EDEN: {
+    description:
+      'PATH-BESPOKE — DreamBot far-eden (2026-06-28). Scene-as-hero HAPPY fantasy ALIEN WORLD; an original, beautiful, inviting paradise vista is the hero, no character. 5 always axes (world + cosmic_sky + flora ×2 + palette + atmosphere) + 4 independent gated conditionals (terrain_glow ~50%, life_accent ~28%, wonder_structure ~30%, dream_event ~30%). Look-neutral template; medium decides hyperreal vs painterly. flux-1 family; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['world', 'cosmic_sky', 'flora', 'palette', 'atmosphere'],
+    },
+    pickN: { flora: 2 },
+    conditionalLayers: [
+      { slot: 'terrain_glow', gate: 0.5 },
+      { slot: 'life_accent', gate: 0.28 },
+      { slot: 'wonder_structure', gate: 0.3 },
+      { slot: 'dream_event', gate: 0.3 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

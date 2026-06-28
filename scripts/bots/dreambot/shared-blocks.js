@@ -51,6 +51,21 @@ const BUTTERFLY_MEDIUM =
 const DREAM_SPIRES_MEDIUM =
   'lush painterly fantasy dreamscape, dreamy storybook illustration, an impossible whimsical fairytale tower-city of impossibly tall twisting spires, lavishly hand-painted and glowing from within with hundreds of warm golden windows, soft pastel twilight color, drifting chimney-steam and lantern glow, winding stairs and slender skybridges, volumetric dreamlight, deep atmospheric depth, cozy magical wonder, wallpaper-tier';
 
+// FAR-EDEN MEDIUMS (2026-06-28) — the two render registers for the far-eden
+// sibling paths (far-eden = hyperreal, far-eden-soft = painterly). Kevin approved
+// BOTH looks, so both ship. Both are HAPPY, inviting alien-paradise vistas; the
+// template is look-NEUTRAL so the medium decides the look. Code-only mediums (no
+// DB row; modelByPath hard-locks the model). Lean (≤250 chars, no negation
+// cascade). Color/light/world come from the axes.
+//   • HYPERREAL = the cinematic sci-fi-fantasy concept-art look (the brochure-shot
+//     reference register), mirrors DREAMSCAPE_MEDIUM.
+const EDEN_MEDIUM_HYPERREAL =
+  'cinematic hyperreal sci-fi-fantasy render, lavish detail, ultra-saturated jewel color, volumetric light, deep focus crisp to the horizon, luminous glowing surfaces, breathtaking otherworldly paradise vista, ArtStation fantasy concept art, wallpaper-tier';
+//   • PAINTERLY = the luminous hand-painted dreamscape look (matches the feed look
+//     Kevin recently hearted on spires/butterfly), applied to alien worlds.
+const EDEN_MEDIUM_PAINTERLY =
+  'lush painterly sci-fi-fantasy dreamscape, luminous hand-painted illustration glowing from within, ultra-saturated jewel color, volumetric dreamlight, deep atmospheric depth, breathtaking otherworldly paradise vista, magical-realism, wallpaper-tier';
+
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
 Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting and mood should match the SCENE naturally (rainy = soft grey, sunset = golden, night = moonlit) — not forced bright.`;
@@ -242,6 +257,8 @@ module.exports = {
   DREAMSCAPE_MEDIUM,
   BUTTERFLY_MEDIUM,
   DREAM_SPIRES_MEDIUM,
+  EDEN_MEDIUM_HYPERREAL,
+  EDEN_MEDIUM_PAINTERLY,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

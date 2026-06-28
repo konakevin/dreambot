@@ -96,6 +96,22 @@ module.exports = {
   DREAM_SPIRES_CHARM: load('dream_spires_charm'),
   DREAM_SPIRES_LIGHT: load('dream_spires_light'),
   DREAM_SPIRES_WHIMSY: load('dream_spires_whimsy'),
+  // FAR-EDEN (2026-06-28) — scene-as-hero HAPPY fantasy ALIEN WORLDS ("brochure
+  // shots of alien worlds"). NO character; an original inviting paradise is the
+  // hero. Modeled on the dreamscape shape. AXIS-CLEAN: world=biome, cosmic_sky=
+  // overhead celestial wonder (signature), flora=plant-life, palette=color,
+  // atmosphere=light+air; terrain_glow/life_accent/wonder_structure/dream_event
+  // are gated conditionals. Shared by both sibling paths (far-eden hyperreal +
+  // far-eden-soft painterly) for the MVP A/B.
+  EDEN_WORLD: load('eden_world'),
+  EDEN_COSMIC_SKY: load('eden_cosmic_sky'),
+  EDEN_FLORA: load('eden_flora'),
+  EDEN_PALETTE: load('eden_palette'),
+  EDEN_ATMOSPHERE: load('eden_atmosphere'),
+  EDEN_TERRAIN_GLOW: load('eden_terrain_glow'),
+  EDEN_LIFE_ACCENT: load('eden_life_accent'),
+  EDEN_WONDER_STRUCTURE: load('eden_wonder_structure'),
+  EDEN_DREAM_EVENT: load('eden_dream_event'),
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),

@@ -568,6 +568,184 @@ Spread across: GOLDEN-HOUR GLOW (warm amber backlight rim-lighting wings, a glow
     instructions: `Generate NEW dreamy, LUMINOUS, COLORFUL light treatments — colored light behavior (quality/direction/time) + a glowing atmospheric haze with real depth. Lean vivid/colorful, never muted gray; no swirling fog. 8-16 words, ONE line. Light + glow only — no butterfly color, no setting, no dream element.`,
   },
 
+  // ════════════════ FAR-EDEN — happy fantasy ALIEN WORLDS ════════════════════
+  // 2026-06-28 (new path). Scene-as-hero: an ORIGINAL, beautiful, INVITING alien
+  // world is the hero (no character) — "brochure shots of alien worlds." The
+  // sci-fi default of dark/serious/ominous is BANNED; these are joyful paradise
+  // vistas you wish you could visit. Modeled on the dreamscape scene-as-hero shape
+  // (NOT dream-spires' painterly storybook). AXIS-CLEAN: world owns the BIOME,
+  // cosmic_sky owns the OVERHEAD celestial wonder (the signature axis), flora owns
+  // the plant-life (×2), palette owns COLOR, atmosphere owns LIGHT+AIR; terrain_glow
+  // / life_accent / wonder_structure / dream_event are gated conditional layers.
+
+  eden_world: {
+    label: 'far-eden world',
+    maxWords: 24,
+    theme: `Each entry is ONE specific, ORIGINAL, beautiful FANTASY ALIEN WORLD — a lush, frame-worthy paradise vista where the otherworldly landscape ITSELF is the hero (no character). The bar: a vivid named alien biome + ONE signature wonder + a depth/scale cue (the world rising and receding to a luminous horizon). An INVITING place you wish you could visit.
+
+⚠️ TERSE REGISTER: a SHORT 12-24 word fragment, like the touchpoints — name the world + its signature feature + a depth cue, then STOP. Sonnet EXPANDS it into rich prose at render time; an over-long seed crowds the frame. ONE comma-joined fragment, no multi-clause paragraphs.
+  ✅ GOOD: "a turquoise lagoon archipelago of jewel-clear islands ringed by pale sandbars, mirror-water receding to a glowing horizon"
+  ✅ GOOD: "a valley of giant prism-crystal formations rising like cathedral spires, faceted light scattering into the misty depths"
+  ❌ TOO LONG: a flowing three-clause paragraph of atmospheric prose.
+
+OWN ONLY THE WORLD-TYPE / BIOME (the LAND + its signature wonder + depth). Do NOT specify the cosmic sky (separate axis), the palette (separate axis), the light (separate axis), the flora list (separate axis), any distant city (separate axis), or any creature/figure.
+
+🚫 HAPPY ONLY: every world is BEAUTIFUL, lush, inviting, alive — a paradise. NO dark/grim/ominous/derelict/dystopian/wasteland/menacing worlds. NO ruins of a dead civilization, NO toxic/barren/volcanic-hellscape. NO humans, NO named franchises (never "Pandora"/"Avatar"/a known movie world). Spread across A-L. OMIT negation language. Never exceed 24 words.`,
+    instructions: `Generate NEW original happy ALIEN WORLDS extending the variety across families A-L — a vivid alien biome + signature wonder + a depth/scale cue. 12-24 word terse fragments, ONE line each. WORLD/BIOME only — no sky, no palette, no light, no flora list, no city, no creatures. Every world inviting + beautiful.`,
+    // One Sonnet phase per family so cross-batch dedup can't starve a family.
+    subThemes: [
+      'BIOLUMINESCENT MEADOW-PLAINS — rolling glowing-grass prairies, light-river deltas threading luminous savanna, soft-lit rolling downs, glowing-wildflower steppes spreading to the horizon',
+      'TURQUOISE LAGOON ARCHIPELAGO — jewel-clear island chains, pale sandbar atolls, mirror-lagoons between low green isles, shallow gem-water flats, coral-sand cays',
+      'CRYSTAL-GARDEN VALLEY — giant prism/gem formations rising like cathedral spires, geode canyons, faceted-crystal fields, quartz-spire groves, opal-terrace basins',
+      'CANDY-CORAL LAND-REEF COAST — terrestrial reef-gardens of vivid coral, anemone meadows on land, tide-terrace shores, sea-fan canopies above ground, pearl-bubble spring coves',
+      'GIANT ALIEN BLOSSOM FIELDS — meadows of oversized exotic flowers, blossom canyons, petal-valley terraces, towering bloom-stalk forests, drifting-pollen flower-plains',
+      'TERRACED WATERFALL VALLEY — cascading turquoise pool-terraces, travertine step-falls, tiered mirror-basins spilling down, mist-veiled cataract gorges, ribboned waterfall walls',
+      'FLOATING SKY-ISLAND ARCHIPELAGO — drifting garden-isles trailing vines, waterfalls spilling off island-edges into cloud, sky-bridges between floating peaks, levitating meadow-crags',
+      'LUMINOUS FUNGAL GROVE — bright glowing mushroom forests, luminous-cap canopies, spore-light dells, shelf-fungus terraces aglow, friendly toadstool clearings (bright + cheerful, never creepy)',
+      'PASTEL DUNE OASIS — soft rolling color-banded dunes, spring-fed palm-isle oases, glass-sand flats catching light, mineral-pool basins, gentle ripple-dune seas',
+      'AURORA GLASS-GARDEN — warm shimmering ice-crystal gardens, frost-flower fields glittering, glass-bloom meadows, soft snow-glass valleys (inviting + warm-lit, never bleak)',
+      'LUSH JUNGLE DELTA — vivid alien rainforest, mirror-water channels winding through, canopy-waterfalls, broadleaf-fern deltas, glowing-river jungle basins',
+      'RAINBOW MINERAL HOT-SPRING TERRACES — prismatic stepped spring-pools, steaming jewel-tone basins, rainbow-rimmed travertine terraces, opal mud-pots, mineral-rainbow flats',
+    ],
+  },
+
+  eden_cosmic_sky: {
+    label: 'far-eden cosmic sky',
+    maxWords: 18,
+    theme: `Each entry is ONE breathtaking COSMIC SKY overhead — the signature wonder of an alien-world brochure shot. A stunning celestial spectacle hanging over the paradise: a giant neighboring planet, rings, multiple moons, a soft nebula, an aurora. Owns the SKY + CELESTIAL ELEMENTS ONLY: NOT ground light, NOT the world, NOT the palette.
+
+🚫 WONDER, NEVER DOOM: the sky is beautiful, soft, awe-inspiring and INVITING — never an ominous looming threat, never a blood-red dying star, never a menacing black void. Keep it luminous and gorgeous.
+
+  ✅ GOOD: "a vast banded ringed gas-giant hanging low and serene on the horizon, its rings arcing across the sky"
+  ✅ GOOD: "three pastel moons in a clear gradient sky, a faint galaxy band beyond"
+  ✅ GOOD: "soft rippling aurora curtains in rose and mint above a scatter of gentle stars"`,
+    instructions: `Generate NEW breathtaking COSMIC SKIES for an alien-paradise vista — a stunning celestial sight (giant planet / rings / moons / nebula / aurora) that reads as WONDER, never doom. 8-18 words, ONE line. Sky + celestial only — no ground light, no world, no palette.`,
+    subThemes: [
+      'RINGED GAS-GIANT — a vast banded ringed planet hanging low and serene, rings arcing across the sky, soft and beautiful',
+      'SISTER-PLANET — a huge oceanic blue-green neighbor world hanging close and friendly, swirled with white cloud, gentle on the horizon',
+      'MULTIPLE MOONS — twin or triple pastel moons in a clear soft-gradient sky, varied sizes and phases, calm and lovely',
+      'NEBULA / GALAXY BAND — a soft luminous nebula ribbon or galaxy arc drifting across a tranquil dusk sky, gently glowing, never black-void',
+      'AURORA HEAVENS — rippling color curtains (rose/mint/gold/violet) shimmering softly across the sky above a scatter of gentle stars',
+      'LOW WARM SUN + RINGS — a gentle warm sun near the horizon with delicate planetary-ring arcs cutting the sky, golden and inviting',
+      'COMET / STARFIELD WONDER — a brilliant comet or a rich gentle starfield with drifting light, soft and magical, a dreamy clear night-into-dusk',
+    ],
+  },
+
+  eden_flora: {
+    label: 'far-eden flora',
+    maxWords: 16,
+    theme: `Each entry is ONE dominant exotic ALIEN PLANT element that fills a paradise world with lush density — stands alone (the path layers TWO per render). Big, vivid, frame-filling otherworldly botanical wonder. Beautiful + inviting, NEVER thorny/menacing/carnivorous. NOT a full world (separate axis), NOT a creature, NOT architecture.
+
+✅ GOOD: "towering parasol-frond trees with translucent glowing leaves"
+✅ GOOD: "oversized luminous lily-blooms the size of boats floating on the water"
+✅ GOOD: "clusters of crystal-tipped succulent rosettes catching the light"`,
+    instructions: `Generate NEW single exotic ALIEN PLANT elements — one otherworldly botanical wonder each, stands alone in any paradise world. 6-16 words, ONE line. Plant only — no full world, no buildings, no creatures. Beautiful + inviting.`,
+    subThemes: [
+      'CANOPY FORMS — towering parasol-frond trees, translucent glowing-leaf giants, spiral-trunk alien palms, crystal-leaf groves, weeping light-willow forms, mushroom-cap trees',
+      'BLOOM-MASS — oversized luminous lily-blooms, giant alien orchids and trumpet-flowers, coral-bloom thickets, glowing pollen-flowers, boat-sized water-lilies',
+      'FROND / REEF FORMS — feathery alien ferns, kelp-tree forms on land, sea-fan plants, plume-grass stands, anemone-like land-coral fronds',
+      'POD / BULB FORMS — glowing seed-pods, bulb-lantern plants, bubble-fruit clusters, dangling light-gourds, translucent egg-pod stalks',
+      'GROUND COVER — luminous moss carpets, jewel-grass meadows, crystal-tipped succulent rosettes, glowing clover, bioluminescent lichen flats',
+      'HANGING FORMS — vine-curtains of glowing tendrils, trailing blossom-drapes, cascading light-ivy, hanging pod-lanterns, draped luminous moss-veils',
+    ],
+  },
+
+  eden_palette: {
+    label: 'far-eden palette',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive, JOYFUL alien-world COLOR STORY for the whole render — the dominant hues that lead, like a palette a designer chose on purpose (NOT a random color salad). Names 3-5 hues + how they relate (a dominant + accents + a contrast pop). The feed's color VARIETY lives here, so spread WIDELY. Owns COLOR ONLY: no light-quality, no time-of-day, no celestial elements (separate axes).
+
+🚫 Keep it BRIGHT, vivid, jewel/candy/pastel — joyful and luminous. NO muddy, NO drab, NO grim dark-grey/black-heavy palettes.
+
+✅ GOOD: "turquoise and aqua waters with coral-pink and gold accents, a pop of violet bloom"
+✅ GOOD: "emerald and chartreuse foliage, warm amber light, a single ruby focal flower"
+✅ GOOD: "lavender and rose sky-tones over mint terrain, pearl-white and sunshine-gold highlights"`,
+    instructions: `Generate NEW cohesive JOYFUL alien-world COLOR STORIES — 3-5 dominant hues + how they relate (dominant + accents + a contrast pop). 8-18 words, ONE line. Color only — no light quality, no time-of-day, no sky elements. Spread widely, always bright + inviting.`,
+  },
+
+  eden_atmosphere: {
+    label: 'far-eden atmosphere',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive, INVITING LIGHT-QUALITY + AIR treatment for the whole render — the light behavior and atmospheric set-dressing that make the alien paradise feel warm, dreamy, and cinematic. Describe light by QUALITY / DIRECTION / TIME and the AIR effects; let the PALETTE axis own the actual hues (use neutral light words: warm/cool/soft/golden-glow, not "magenta"). NOT the celestial sky (separate axis), NOT color.
+
+🚫 Tilt BRIGHT + WARM + INVITING — bright airy daylight, warm golden hour, soft luminous dawn, dreamy sun-shot mist, gentle blue-hour glow. NO stormy/gloomy/dark/oppressive light.
+
+✅ GOOD: "bright airy mid-morning sun with soft god-rays and a few drifting light-motes"
+✅ GOOD: "warm golden-hour glow bathing the world, gentle haze softening the distance"
+✅ GOOD: "soft luminous pastel dawn, dewy air sparkling, light-shafts breaking through"`,
+    instructions: `Generate NEW INVITING LIGHT-QUALITY + AIR treatments — light behavior (quality/direction/time) + atmospheric effects (god-rays/motes/mist/bloom). 8-18 words, ONE line. Light + air only — no specific hues, no celestial sky. Always bright + warm + inviting.`,
+  },
+
+  eden_terrain_glow: {
+    label: 'far-eden terrain glow',
+    maxWords: 16,
+    theme: `Each entry is ONE way the LAND ITSELF emits soft light — self-lit terrain that makes an alien world magical (fires on ~50% of renders, so the other half are bright-daylight paradises; each glow must read as a self-contained delight, never required). Owns SELF-EMITTED TERRAIN LIGHT ONLY: NOT the sky, NOT overhead light, NOT the palette, NOT flora type.
+
+🚫 Warm + inviting glow (soft cyan / warm gold / gentle rose / mint) — NEVER an eerie/toxic/radioactive sickly glow.
+
+✅ GOOD: "glowing rivers of soft cyan light winding through the dark terrain"
+✅ GOOD: "veins of warm golden light threading the canyon walls"
+✅ GOOD: "luminous crystals scattered across the ground pulsing a gentle rose glow"`,
+    instructions: `Generate NEW ways the LAND emits soft warm light — glowing rivers/veins/crystals/pools/groundcover. 6-16 words, ONE line. Self-lit terrain only — no sky, no overhead light, no palette, no flora. Warm + inviting glow, never eerie/toxic.`,
+  },
+
+  eden_life_accent: {
+    label: 'far-eden life accent',
+    maxWords: 16,
+    theme: `Each entry is ONE sparse, DISTANT, gentle bit of alien LIFE that adds scale + warmth to a paradise (fires on ~28% of renders, so each must be a self-contained delight, never required). Small and FAR enough that it reads as a wondrous glimpse, never the subject. Graceful, friendly, beautiful. NEVER a human, NEVER a person, NEVER a menacing/predatory beast.
+
+✅ GOOD: "a few graceful sky-creatures gliding on wide wings in the far distance"
+✅ GOOD: "a distant herd of gentle long-necked grazers crossing the plain"
+✅ GOOD: "a drift of luminous jellyfish-like creatures floating in the air, far off"`,
+    instructions: `Generate NEW sparse DISTANT gentle alien LIFE — graceful far-off creatures that add scale + warmth. 6-16 words, ONE line. Distant gentle creatures only — small-scale, never a human, never menacing.`,
+    subThemes: [
+      'SKY GLIDERS — graceful winged sky-creatures gliding far off, distant flocks of luminous birds, soaring manta-like sky-rays, drifting kite-creatures',
+      'GENTLE GRAZERS — a distant herd of long-necked grazers crossing the plain, far-off gentle giants ambling, a band of soft alien deer-forms at the tree-line',
+      'AIR-DRIFTERS — luminous jellyfish-like creatures floating in the air far off, drifting glow-orbs of life, slow-floating seed-creatures, hovering lantern-fauna',
+      'WATER LIFE — schools of glowing fish gliding in a clear channel, distant gentle leviathan breaching far out, luminous koi-forms in a spring',
+      'TINY DISTANT FAUNA — a small glowing fox-form on a far ridge, a pair of luminous fawns at a distant pool, perched jewel-birds on a faraway crag',
+    ],
+  },
+
+  eden_wonder_structure: {
+    label: 'far-eden wonder structure',
+    maxWords: 18,
+    theme: `Each entry is ONE beautiful, DISTANT alien marvel on the horizon — an optional far-off wonder that adds awe to a paradise (fires on ~30% of renders, so the rest are pure-natural; each must read as a graceful distant accent, NEVER dominating, NEVER the subject). Owns a FAR-OFF MAN-MADE/ALIEN WONDER ONLY: NOT the natural world, NOT flora, NOT the sky.
+
+🚫 BEAUTIFUL + INVITING + DISTANT — an elegant gleaming marvel, never a grim/derelict/dystopian ruin, never a dark fortress, never a crashed wreck. NO humans.
+
+✅ GOOD: "a distant gleaming crystalline city skyline glinting on the far horizon"
+✅ GOOD: "an elegant soaring arch-bridge spanning the valley in the distance"
+✅ GOOD: "a serene floating ring-monument hovering far over the landscape"`,
+    instructions: `Generate NEW beautiful DISTANT alien WONDERS on the horizon — elegant far-off marvels (a gleaming city / graceful arch / floating monument). 8-18 words, ONE line. Distant wonder only — far-off, never dominating, never grim/derelict, no humans.`,
+    subThemes: [
+      'DISTANT CITY — a gleaming crystalline city skyline glinting on the far horizon, elegant white spires far off, a luminous tower-cluster in the distance',
+      'GRACEFUL SPANS — an elegant soaring arch-bridge spanning the valley in the distance, slender skyway-ribbons between far peaks, a delicate aqueduct-arc',
+      'FLOATING MARVELS — a serene floating ring-monument hovering far over the land, distant levitating platforms, a graceful orbital habitat-ring low on the horizon',
+      'ELEGANT MONUMENTS — a far-off graceful obelisk or dome catching the light, a distant terraced sky-temple, a luminous gateway-arch on the horizon',
+      'SOFT FAR LIGHTS — the distant warm-lit windows of a far settlement glinting across the valley, gentle far-off pavilions among the flora, faraway lantern-clusters',
+    ],
+  },
+
+  eden_dream_event: {
+    label: 'far-eden dream event',
+    maxWords: 16,
+    theme: `Each entry is ONE magical EVENT / moment of motion or wonder happening in the scene — a beat that brings the alien paradise alive (fires on ~30% of renders, so each must be a self-contained delight, never required). NOT the world, NOT a static element — a HAPPENING. Joyful + beautiful. NO humans.
+
+✅ GOOD: "a brilliant meteor shower streaking across the dusk"
+✅ GOOD: "a double rainbow arcing over the waterfalls"
+✅ GOOD: "a drift of glowing spores rising softly into the light"`,
+    instructions: `Generate NEW magical EVENTS / moments that bring an alien paradise alive — meteor showers, rainbows, drifting spores, blossom-falls, light-blooms, comets. 5-16 words, ONE line. A happening only — no humans, no static scenery. Joyful + beautiful.`,
+    subThemes: [
+      'CELESTIAL MOMENTS — a brilliant meteor shower streaking the dusk, a comet blazing across the sky, shooting stars raining down, a soft solar-flare bloom',
+      'WEATHER-WONDER — a double rainbow arcing over the falls, a gentle shimmer of light-rain, a soft prismatic mist-bow, a glittering sun-shower',
+      'DRIFTING LIGHT — a drift of glowing spores rising into the light, floating luminous seeds on the breeze, a swirl of gentle light-orbs spiraling up',
+      'BLOOM-FALLS — a soft snow of falling blossoms drifting down, a cascade of petals on the wind, drifting pollen-glitter catching the sun',
+      'WATER-WONDER — a waterfall of pure light spilling over a ledge, a geyser of luminous spray, a sudden bloom of bioluminescence rippling across the water',
+      'FLOCK-MOTION — a flock of luminous birds wheeling overhead, a cloud of glowing motes lifting off the meadow, a shimmer of winged light rising',
+    ],
+  },
+
   // ════════════════ DREAM-SPIRES — whimsical fairytale TOWER-CITY ════════════
   // 2026-06-27 (new path). Scene-as-hero: the impossible whimsical tower-city is
   // the hero (no character). Ref: relmseeker "Seuss-inspired" pastel spiral-tower

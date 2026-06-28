@@ -196,4 +196,67 @@ Vertical 9:16 phone-wallpaper. The whimsical tower-city fills the frame edge to 
 
 Write the Flux prompt OPENING with the whimsical tower-city (its formation + towers), then layer in the color story, the charm details, the exterior vantage, any dream element, and the light + sky. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
   },
+
+  // DreamBot far-eden — scene-as-hero HAPPY fantasy ALIEN WORLD (2026-06-28).
+  // "Brochure shots of alien worlds": original, beautiful, INVITING paradise
+  // vistas (Kevin: steered away from sci-fi's dark/serious default). LOOK-NEUTRAL
+  // on rendering technique (says only "cinematic / vivid / luminous") so the
+  // MEDIUM decides hyperreal vs painterly — far-eden + far-eden-soft share this
+  // template. cosmic_sky is the signature money-shot axis (always-on). Gated
+  // slots arrive undefined when they don't fire; the composer omits their blocks.
+  DREAMBOT_FAR_EDEN: ({ slots }) => {
+    const { world, cosmic_sky, palette, atmosphere } = slots;
+    const flora = (Array.isArray(slots.flora) ? slots.flora : [slots.flora])
+      .filter(Boolean)
+      .join('; ');
+    const glow = slots.terrain_glow;
+    const life = slots.life_accent;
+    const structure = slots.wonder_structure;
+    const event = slots.dream_event;
+
+    return `You are writing ONE breathtaking, frame-worthy phone-wallpaper render for DreamBot — an ORIGINAL, beautiful FANTASY ALIEN WORLD where the otherworldly landscape ITSELF is the hero (NOT a character, NOT a product). This is a "brochure shot of an alien paradise": a wondrous, inviting, jaw-dropping place you wish you could visit. Vertical, cinematic, dreamy, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ HAPPY, BEAUTIFUL, ALLURING — THE #1 RULE ━━━
+This alien world is JOYFUL and INVITING — gorgeous, alluring, full of wonder and life. It is a PARADISE, a place that makes you smile and want to step inside. NEVER dark, NEVER ominous, NEVER bleak, NEVER a grim / derelict / dystopian sci-fi wasteland. No menace, no horror, no decay, no cold lifeless void — beautiful and warm and alive, always.
+
+━━━ THE ALIEN WORLD (THE HERO — original, bold, lush, and ENCHANTING) ━━━
+${world}
+This otherworldly landscape fills the frame and IS the show — an ORIGINAL alien world (never Earth, never a known movie or game world). Render it as a fully-realized, jaw-dropping place with real layered DEPTH: a detailed foreground anchoring the bottom, the world rising and receding around it, a luminous horizon beyond. Commit hard to its signature wonder.
+
+━━━ THE COSMIC SKY (the signature wonder overhead — a beautiful celestial spectacle) ━━━
+${cosmic_sky}
+The sky is a major, breathtaking part of the frame — a stunning celestial sight hanging over the paradise below. Render it as WONDER and beauty (soft, luminous, awe-inspiring), never as threat or doom.
+
+━━━ ALIEN FLORA (the lush, exotic plant-life that packs the world) ━━━
+Layer in, big and abundant: ${flora}.
+
+━━━ COLOR STORY (commit fully — joyful, designed, cohesive, never a muddy color salad) ━━━
+${palette}
+
+━━━ LIGHT + ATMOSPHERE (cinematic, dreamy, inviting) ━━━
+${atmosphere}
+${glow ? `
+━━━ GLOWING TERRAIN (the land emits its own soft light) ━━━
+${glow}
+Weave this self-lit glow naturally through the world — luminous and magical, but still warm and inviting.
+` : ''}${structure ? `
+━━━ A DISTANT WONDER (one beautiful, far-off alien marvel — NOT dominating) ━━━
+${structure}
+Keep it DISTANT and elegant on the horizon as a graceful accent — beautiful and inviting, never grim or derelict. The natural world stays the hero.
+` : ''}${life ? `
+━━━ SPARSE DISTANT LIFE (rare, far-off, gentle — adds scale + warmth, never the focus) ━━━
+${life}
+Keep it SMALL and DISTANT — a delightful glimpse of gentle life, never the subject. It is a creature, NEVER a human.
+` : ''}${event ? `
+━━━ A MAGICAL MOMENT (a beat of motion / wonder in the scene) ━━━
+${event}
+` : ''}
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+NEVER a human, a person, a child, an astronaut, or a humanoid figure anywhere in the frame — NOT in the foreground, NOT a tiny silhouette for scale. This is an UNINHABITED alien paradise. Flux's training data WILL try to place a lone figure standing on a ledge / clifftop gazing at the vista, or walking into the misty distance — the vantage point stays EMPTY: no lone person, no silhouette. If Flux's instinct is a figure, render the exact same scene without one.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper. The alien world fills the frame edge to edge with real depth — foreground, midground, the cosmic sky above, a glowing horizon. CRITICAL: render the WHOLE WORLD in SHARP, deep focus, crisp and fully visible to the horizon — this is NOT a studio product shot, NOT a shallow depth-of-field portrait, NOT a blurred / bokeh / empty background. Lush and abundant yet COHESIVE and designed — readable depth, never a chaotic jumble. Cinematic, vivid, luminous, frame-worthy. NO text, NO words, NO watermarks.
+
+Write the Flux prompt OPENING with the alien world + the cosmic sky, then layer in the flora, the color story, light, and any glowing terrain / distant wonder / life / magical moment. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
+  },
 };
