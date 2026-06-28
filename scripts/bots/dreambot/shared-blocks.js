@@ -28,6 +28,17 @@ const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 const DREAMSCAPE_MEDIUM =
   'cinematic hyperreal 3D fantasy render, lavish painterly detail, ultra-saturated candy-jewel color, volumetric dreamlight, deep focus crisp to the horizon, glossy luminous surfaces, magical-realism film still, ArtStation fantasy concept art, wallpaper-tier';
 
+// BUTTERFLY_MEDIUM (2026-06-27, R5) — the `butterfly-realm` path's own register.
+// R4 ("fantasy concept-art render / ArtStation / sharp crisp focus") read as
+// CHEESY CGI: flat anime-game render with glossy sticker-butterflies pasted ON the
+// scene (Kevin). R5 matches the DREAMSCAPE path's actual feed look — PAINTERLY
+// STORYBOOK fantasy ILLUSTRATION with luminous internal glow, deep + cohesive — and
+// paints the butterflies INTO the world (luminous painterly wings, not crisp glossy
+// vectors). Code-only medium (no DB row; modelByPath hard-locks the model). Lean
+// (≤250 chars, no negation cascade). Color/light/world come from the axes.
+const BUTTERFLY_MEDIUM =
+  'lush painterly fantasy dreamscape, dreamy storybook illustration, butterflies with luminous iridescent painterly wings glowing from within and woven softly into the scene, lavish hand-painted detail, ultra-saturated jewel color, volumetric dreamlight, deep atmospheric depth, magical-realism, wallpaper-tier';
+
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
 Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting and mood should match the SCENE naturally (rainy = soft grey, sunset = golden, night = moonlit) — not forced bright.`;
@@ -217,6 +228,7 @@ module.exports = {
   CHIBI_RENDER_MEDIUM,
   CHIBI_CREATURE_MEDIUM,
   DREAMSCAPE_MEDIUM,
+  BUTTERFLY_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

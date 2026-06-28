@@ -67,4 +67,26 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // butterfly-realm — striking butterflies as the focal point of a lush, very-
+  // pretty scene (2026-06-27, new). NO character; the BUTTERFLIES are the hero.
+  // Two modes — (A) photoreal swarm blanketing a natural feature, (B) surreal
+  // butterfly-phenomenon (arc/vortex/river) over a vista — both carried by the
+  // composition axis. Full color spectrum (monochrome → multicolor) via palette.
+  // 8 axes / 9 picks. AXIS-CLEAN: setting owns BIOME, palette owns BUTTERFLY
+  // COLOR, composition owns ARRANGEMENT, atmosphere owns LIGHT, backdrop owns the
+  // far depth band. flora pickN 2 for lush density; event is a ~35% gated beat.
+  DREAMBOT_BUTTERFLY_REALM: {
+    description:
+      'PATH-BESPOKE — DreamBot butterfly-realm (2026-06-27, R1 redesign). Striking BUTTERFLIES are the focal point of a CLEAN, dreamy, WHIMSICAL dreamscape; no character. 6 always axes (setting + feature + composition + palette + whimsy + atmosphere). R0 was "spammy / too flowery / not dreamy" → de-flowered, composition-over-density, dropped the flora ×2 + backdrop + event axes, added a WHIMSY axis (surreal dream-magic). Two modes (clean swarm-on-feature + clean sky-phenomenon) via composition; monochrome-biased full color via palette. Own cinematic-dreamscape medium (dreambot_butterfly), flux-1.1-pro + pro-ultra; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['setting', 'feature', 'composition', 'palette', 'whimsy', 'atmosphere'],
+    },
+    pickN: {},
+    conditionalLayers: [],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

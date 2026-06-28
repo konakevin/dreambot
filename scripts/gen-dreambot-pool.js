@@ -402,6 +402,172 @@ Spread across: GLOWING MAMMALS (a tiny glowing fox curled on a stone, a pair of 
     ],
   },
 
+  // ════════════════ BUTTERFLY-REALM — striking butterflies in a DREAMSCAPE ════
+  // 2026-06-27 (new path, R1 redesign after R0 "spammy / too flowery / not dreamy"
+  // feedback). NO character — striking BUTTERFLIES are the hero of a CLEAN, dreamy,
+  // WHIMSICAL scene (refs: eroticbotanical.art blue-morpho-blanketed MOSSY TRUNK in
+  // a misty forest + ai_bubnova butterfly-rainbow over a vista). The references are
+  // RESTRAINED: ONE clean striking subject against misty negative space — NOT a
+  // packed flower garden. So: de-flowered, composition-over-density, + a WHIMSY axis
+  // for dream-magic. 6 axes. AXIS-CLEAN: setting owns BIOME, palette owns BUTTERFLY
+  // COLOR, composition owns ARRANGEMENT, whimsy owns the SURREAL DREAM ELEMENT,
+  // atmosphere owns LIGHT, feature owns the ONE clean anchor.
+
+  butterfly_realm_setting: {
+    label: 'butterfly-realm setting',
+    maxWords: 18,
+    theme: `Each entry is ONE vivid, COLORFUL, SURREAL fantasy DREAM-WORLD the butterflies inhabit — the stage. These are DREAMS, NOT rooted in realism: saturated color, luminous magic, wonder, with real atmospheric DEPTH (so the butterflies stay the crisp hero). Push past the muted gray misty forest — these worlds GLOW with dreamlike color. The butterflies + dream-magic are added by other axes; this is the vivid STAGE.
+
+⚠️ TERSE REGISTER: a SHORT 10-18 word fragment — name the dream-world + its vivid color/light signature + a depth cue, then STOP. ONE comma-joined fragment.
+  ✅ GOOD: "a bioluminescent forest glowing teal and magenta, glowing trunks receding into luminous violet haze"
+  ✅ GOOD: "a candy-pastel cloud valley of pink and mint mist, glowing peaks fading into a golden horizon"
+  ✅ GOOD: "an enchanted twilight glade lit electric-blue and gold, glowing ferns vanishing into dreamy haze"
+  ❌ TOO MUTED: "a gray misty forest of trunks vanishing into silver fog" (too pedestrian, not vivid).
+  ❌ TOO LONG: a multi-clause paragraph.
+
+OWN ONLY THE SETTING. Do NOT mention butterflies, the focal feature, the palette, the whimsy element, or flowers/flora lists. Just the vivid dream-world + its color/light + atmospheric depth.
+
+🚫 IMPORTANT — NOT a flower garden. Worlds are glowing forests, valleys, water, crystal, sky, dream-spaces — NOT flower meadows / lavender fields / formal gardens (butterflies are the color here). Keep flowers OUT of the setting.
+
+VARIETY MANDATE — spread WIDELY across VIVID DREAM-WORLDS (each glowing with color, with atmospheric depth):
+  A. BIOLUMINESCENT FOREST  B. ENCHANTED MOONLIT GLADE  C. JEWEL-TONE FOG WATER (lake/falls/pool)
+  D. SURREAL FLOATING-ISLAND VISTA  E. AURORA HIGHLAND / NIGHT  F. CANDY-PASTEL CLOUD REALM
+  G. CRYSTAL GROTTO / CAVERN  H. SUNSET / GOLDEN-HOUR VALLEY  I. EMERALD JUNGLE GORGE (lush, glowing)
+  J. COSMIC STARLIT CLEARING  K. PRISMATIC TWILIGHT WOOD  L. DREAMLIKE MIRROR-WORLD (impossible, reflective)
+
+🚫 BANS: NO butterflies, NO humans, NO flowers-as-subject, NO scary/dark. Spread across A-L. OMIT negation. Never exceed 18 words.`,
+    instructions: `Generate NEW vivid SURREAL dream-worlds across families A-L — a glowing colorful fantasy biome + its vivid color/light signature + depth cue. NOT muted gray. 10-18 word terse fragments, ONE line each. Setting only — no butterflies, no feature, no palette, no whimsy, NO flowers.`,
+    subThemes: [
+      'BIOLUMINESCENT FOREST — glowing teal-and-magenta trunks, softly luminous old growth, an electric-glow grove receding into violet haze, glowing-fern cathedrals of light',
+      'ENCHANTED MOONLIT GLADE — a silver-and-sapphire moonlit clearing, an enchanted glade glowing blue and gold, a luminous grove under a magic glow, dreamy lit birches',
+      'JEWEL-TONE FOG WATER — a turquoise mirror-lake under glowing fog, an emerald cascade into a luminous pool, an amethyst-misted reflecting tarn, a glowing spring',
+      'SURREAL FLOATING-ISLAND VISTA — drifting glowing islands over a saturated valley, floating dreamscape with luminous skybridges, suspended lands fading to a glowing horizon',
+      'AURORA HIGHLAND / NIGHT — an aurora rippling green-and-violet over glowing moorland, an electric-night highland, a luminous nightscape under shifting color',
+      'CANDY-PASTEL CLOUD REALM — a pink-and-mint cloud valley, a cotton-candy sky-sea glowing peach and lilac, a pastel dream-realm above luminous clouds',
+      'CRYSTAL GROTTO / CAVERN — a glowing-crystal grotto of sapphire and rose, a luminous geode cavern, a prismatic crystal canyon fading into glowing depths',
+      'SUNSET / GOLDEN-HOUR VALLEY — a saturated golden-amber valley aglow, a tangerine-and-rose sunset highland, a warm luminous dreamy vale fading to a bright horizon',
+      'EMERALD JUNGLE GORGE — a luminous emerald gorge glowing with green light, a lush radiant cloud-forest chasm, a glowing vine-draped ravine fading to bright haze',
+      'COSMIC STARLIT CLEARING — a glade open to a vivid nebula sky, a clearing under a glowing aurora-starfield, a dreamy meadow beneath a luminous galaxy band',
+      'PRISMATIC TWILIGHT WOOD — a violet-and-coral twilight forest glowing with color, an iridescent dusk grove, a prismatic evening wood lit in shifting hues',
+      'DREAMLIKE MIRROR-WORLD — an impossible glassy mirror-realm doubling a glowing sky, a reflective dream-plain of luminous color, a surreal mirrored dreamscape',
+    ],
+  },
+
+  butterfly_realm_feature: {
+    label: 'butterfly-realm feature',
+    maxWords: 14,
+    theme: `Each entry is ONE clean, striking natural CENTERPIECE the scene is built around — the SINGLE focal anchor butterflies swarm/cling to, OR an open-air option for sky scenes. ONE clean element (NOT a cluttered garden). Beautiful, photogenic, dreamy. NOT the full setting, NOT the butterflies, NOT the palette.
+
+⚠️ Mostly NON-FLORAL — the references are butterflies on BARK/STONE/in OPEN AIR, not flowers. Keep flowers rare (an occasional single blossoming tree is fine, but default to trunks / water / stone / open air).
+
+Spread across: TRUNK / TREE (a colossal moss-covered ancient trunk — the hero reference; a lone gnarled tree; a fallen mossy log; a great bare branch), WATER (a tall waterfall; a still mirror-pool; a misty cascade), STONE (a mossy standing stone; a weathered stone arch; a lichen-crusted boulder; a rock spire), AERIAL / OPEN (open misty air with no ground anchor; a lone floating island; a drifting branch), occasionally a SINGLE blossoming tree.
+
+✅ GOOD: "a colossal moss-covered ancient tree trunk, gnarled bark glistening with dew"
+✅ GOOD: "open misty air over the valley, no ground feature — the sky is the stage"
+✅ GOOD: "a single mossy standing stone in the clearing"`,
+    instructions: `Generate NEW clean single CENTERPIECES — mostly trunks / water / stone / open-air (flowers rare). 5-14 words, ONE line. ONE feature only — no full setting, no butterflies, no palette, no clutter.`,
+    subThemes: [
+      'TRUNK / TREE — a colossal moss-covered ancient tree trunk, a lone gnarled tree, a fallen moss-furred log, a great dew-glistening bare branch, a lichen-bearded old snag',
+      'WATER — a tall misty waterfall, a still dark mirror-pool, a tiered cascade over mossy rock, a fog-wreathed spring, a glassy reflecting tarn',
+      'STONE — a mossy standing stone, a weathered stone arch, a lichen-crusted boulder, a slender rock spire, a moss-covered ruined column',
+      'AERIAL / OPEN AIR — open misty air with no ground anchor (the sky is the stage), a lone floating island, a single drifting bough, an empty luminous expanse',
+      'SINGLE BLOSSOMING TREE (use sparingly) — one lone tree in soft blossom, a single weeping flowering branch, a solitary blossom-laden bough',
+    ],
+  },
+
+  butterfly_realm_composition: {
+    label: 'butterfly-realm composition',
+    maxWords: 20,
+    theme: `Each entry is ONE striking, CLEAN, GRACEFUL ARRANGEMENT of the butterflies — HOW they are the unmistakable focal point. Owns ARRANGEMENT ONLY: no specific color (palette axis), no setting, no light. Refer to "the butterflies" generically so the palette axis sets their color.
+
+⚠️ CLEAN + GRACEFUL, NOT SWIRLY — the arrangements are readable, graceful shapes with a few LARGE crisp hero butterflies in the near field. ❌ NO chaotic swirling vortexes, NO churning galaxy-spirals, NO twisting tornado-columns, NO frantic ribbon-streams — those read as "swirly noise." A gentle column, a soft sweeping arc, or a feature blanketed in wings is the goal, not a whirlpool.
+
+A few butterflies LARGE and exquisitely crisp in the near foreground (the clear focal point), the rest forming ONE cohesive, readable shape.
+
+VARIETY MANDATE — spread across these CLEAN arrangements:
+  • DESCENDING COLUMN / CASCADE — a graceful column of butterflies descending the frame, largest in front and tapering smaller into the depth (the hearted look).
+  • BLANKETING A FEATURE — the butterflies densely cloak / cover the focal feature (trunk/stone/branch), a few lifting off into the clear air.
+  • BIG FLOATING HEROES — two or three huge crisp butterflies floating front-and-center, a soft scatter of smaller ones drifting behind in the haze.
+  • GATHERED ON BRANCHES — the butterflies perched and clustered across boughs/foreground foliage, wings open, a few in flight above.
+  • GENTLE SWEEPING ARC — one soft sweeping arc / band of butterflies curving across the frame, thinning gracefully into the atmosphere.
+  • RISING DRIFT — a soft, loose drift of butterflies rising gently upward, largest below, dispersing softly into glowing air.
+
+✅ GOOD: "a graceful column of butterflies descending the frame, the largest crisp in front, tapering smaller into the glowing depth"
+✅ GOOD: "two or three huge crisp butterflies floating front-and-center, a soft scatter drifting behind in the haze"
+✅ GOOD: "the butterflies densely blanketing the feature, wings overlapping, a graceful few lifting off into the clear air"`,
+    instructions: `Generate NEW CLEAN, graceful butterfly ARRANGEMENTS across the six families above — readable shapes with a few large crisp hero butterflies. NO swirling vortex / galaxy-spiral / tornado / churning-ribbon language. Refer to "the butterflies" generically. 8-20 words, ONE line. Arrangement only — no color, no setting, no light.`,
+    subThemes: [
+      'DESCENDING COLUMN / CASCADE — a graceful column descending the frame, the largest crisp in front tapering smaller into the depth, a soft cascade of wings flowing downward',
+      'BLANKETING A FEATURE — the butterflies densely cloaking the trunk/stone/branch, wings overlapping like scales, a few gracefully lifting off into the clear air',
+      'BIG FLOATING HEROES — two or three huge exquisitely crisp butterflies floating front-and-center, a soft scatter of smaller ones drifting behind in the glowing haze',
+      'GATHERED ON BRANCHES — the butterflies perched and clustered across boughs and foreground foliage, wings open and vivid, a graceful few in flight above',
+      'GENTLE SWEEPING ARC — one soft sweeping arc of butterflies curving across the frame, a single living-color band thinning gracefully into the luminous atmosphere',
+      'RISING DRIFT — a soft loose drift of butterflies rising gently upward, the largest crisp below, dispersing softly into the glowing air',
+    ],
+  },
+
+  butterfly_realm_palette: {
+    label: 'butterfly-realm palette',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive BUTTERFLY COLOR STORY — the color of the butterfly mass, which is the focal point. Owns the BUTTERFLY COLOR ONLY: no setting, no light, no arrangement.
+
+⚠️ Flux renders named species in their PRIOR color — lean on that: "blue morpho" = electric blue, "monarch" = orange-black, "glasswing" = translucent, "sulphur" = yellow. Name species/hues so the color reads true.
+
+⚠️ COLOR VARIETY IS CRITICAL — the feed was way too BLUE. Spread the color WIDE across the full spectrum; blue is just ONE of many. Aim for roughly EVEN coverage: gold/yellow, orange, crimson/red, emerald/green, violet/purple, pink/rose, white/opal, AND blue — plus rich multicolor mixes. Blue morpho stays in the rotation as one striking option, NOT the default.
+
+✅ GOOD: "a mass of golden-amber butterflies, glowing lemon-and-honey wings veined in soft bronze"
+✅ GOOD: "a cloud of deep violet-and-magenta butterflies, iridescent amethyst wings edged in black"
+✅ GOOD: "a full-spectrum rainbow of mixed butterflies — scarlet, orange, gold, emerald, sapphire, violet"`,
+    instructions: `Generate NEW butterfly COLOR STORIES spread EVENLY across the full spectrum (gold, orange, crimson, emerald, violet, pink, white/opal, blue) plus multicolor/rainbow/jewel mixes. Do NOT over-produce blue — it is one option among many. Name species/hues for true color. 8-18 words, ONE line. Butterfly color only — no setting, no light, no arrangement.`,
+    // NOTE: the gen family-loop fills in order and can starve the LAST families
+    // once the total target is met, so BLUE + RAINBOW lead here to guarantee their
+    // (modest) share; the warm/cool single-colors follow.
+    subThemes: [
+      'BLUE MORPHO (one option, not the default) — electric cobalt-blue morphos edged in black, shimmering sapphire-and-cerulean masses, luminous turquoise-blue wings',
+      'RAINBOW / JEWEL / SUNSET MULTICOLOR — full-spectrum rainbow of mixed species; sapphire+emerald+amethyst+ruby+gold jewel mix; coral+tangerine+rose-gold sunset swarms',
+      'WARM GOLD / YELLOW / AMBER — golden-amber butterflies glowing lemon and honey, sulphur-yellow masses, chrome-gold wings, soft buttercup-and-bronze, luminous topaz swarms',
+      'ORANGE / CRIMSON / RED — orange-black monarchs, burnt-tangerine swarms, deep crimson swallowtails, scarlet-ruby wings veined in black, blood-orange-and-gold masses',
+      'EMERALD / GREEN — luminous emerald-green butterflies shifting teal and gold, jade-and-chartreuse wings, iridescent malachite swarms, soft mint-and-lime masses',
+      'VIOLET / PURPLE / PINK / ROSE — deep amethyst-and-magenta butterflies, violet-shot iridescent wings, rose-pink-and-lilac masses, orchid-purple swarms edged in black',
+      'WHITE / OPAL / PASTEL / GLOW — luminous white glasswings, opalescent holographic wings, pearl-shimmer prismatic, soft pastel pink-lilac-mint, bioluminescent fairy-glow',
+    ],
+  },
+
+  butterfly_realm_whimsy: {
+    label: 'butterfly-realm whimsy',
+    maxWords: 16,
+    theme: `Each entry is ONE surreal, magical DREAM ELEMENT that makes the scene a DREAMSCAPE — the single touch of whimsy and wonder that lifts it out of "literal nature photo" into a DREAM (one rolled per render, so it must stand alone and be evocative). Dreamy, ethereal, magical, otherworldly. NO humans.
+
+Spread across: CELESTIAL (a giant luminous low moon behind the trees, a second smaller moon, a brilliant low Milky-Way band, a low ringed planet, a soft aurora rippling overhead), GLOWING DRIFT (a scatter of floating glowing orbs, drifting will-o-wisps, a haze of luminous light-motes, fairy-lights hanging in the air), LUMINOUS WORLD (everything faintly bioluminescent, glowing mushrooms underfoot, a tree of soft light, glowing dew suspended in air), IMPOSSIBLE / SURREAL (floating islands drifting beyond, gravity-soft floating rocks, a mirror-still reflection doubling the whole dream, an impossibly oversized butterfly far in the distance, a glowing archway of light), ETHEREAL AIR (a low river of glowing mist, drifting light-petals, slow-falling sparkle-snow).
+
+✅ GOOD: "a giant luminous moon hanging low behind the misty trees"
+✅ GOOD: "a scatter of soft glowing orbs drifting through the air"
+✅ GOOD: "a mirror-still reflection doubling the whole dream below"`,
+    instructions: `Generate NEW surreal DREAM ELEMENTS — celestial / glowing drift / luminous world / impossible-surreal / ethereal air. Each is ONE evocative touch of whimsy. 5-16 words, ONE line. A dream element only — no humans, no full setting, no butterfly color.`,
+    subThemes: [
+      'CELESTIAL — a giant luminous low moon behind the trees, a second smaller moon, a brilliant low Milky-Way band, a low ringed planet on the horizon, a soft aurora rippling overhead',
+      'GLOWING DRIFT — a scatter of floating glowing orbs, drifting will-o-wisps, a haze of luminous light-motes, fairy-lights suspended in the air, slow-rising glow-sparks',
+      'LUMINOUS WORLD — everything faintly bioluminescent, glowing mushrooms underfoot, a tree made of soft light, glowing dew suspended midair, softly luminescent moss',
+      'IMPOSSIBLE / SURREAL — floating islands drifting beyond, gravity-soft floating rocks, a mirror-still reflection doubling the whole dream, an impossibly oversized butterfly far in the distance, a glowing archway of light',
+      'ETHEREAL AIR — a low river of glowing mist winding through, drifting light-petals, slow-falling sparkle-snow, ribbons of luminous fog, a soft veil of floating light',
+    ],
+  },
+
+  butterfly_realm_atmosphere: {
+    label: 'butterfly-realm atmosphere',
+    maxWords: 16,
+    theme: `Each entry is ONE dreamy, LUMINOUS, COLORFUL LIGHT treatment + atmospheric glow for the whole scene — the light behavior + glowing haze that give the vivid DREAM-WORLD look with real DEPTH (the depth keeps the butterflies the crisp hero; the COLOR keeps it from looking pedestrian). Describe light by QUALITY / DIRECTION / TIME + the GLOWING AIR. Lean into COLOR in the light (golden, rose, teal, violet, amber, magenta) — NOT muted gray.
+
+Spread across: GOLDEN-HOUR GLOW (warm amber backlight rim-lighting wings, a glowing honey haze), MAGIC-HOUR COLOR (rose-and-violet dusk glow, magenta-gold twilight light), GOD-RAYS (luminous colored light-shafts pouring through a glowing canopy), AURORA / NIGHT GLOW (shifting green-violet night light, electric moon-glow), BIOLUMINESCENT (the air itself softly glowing teal/blue/pink, an internal luminance), PRISMATIC DIFFUSE (soft iridescent pearl-rainbow light, a luminous dreamy haze).
+
+⚠️ Keep real atmospheric DEPTH (so the butterflies pop) but make the light COLORFUL and LUMINOUS, never a flat muted gray. No swirling/churning fog — soft glowing haze.
+
+✅ GOOD: "warm amber god-rays pouring through a glowing canopy, the depths dissolving into honey haze"
+✅ GOOD: "rose-and-violet dusk glow, the air luminous, far depths fading into magenta light"
+✅ GOOD: "softly bioluminescent teal air glowing from within, a dreamy luminous haze"`,
+    instructions: `Generate NEW dreamy, LUMINOUS, COLORFUL light treatments — colored light behavior (quality/direction/time) + a glowing atmospheric haze with real depth. Lean vivid/colorful, never muted gray; no swirling fog. 8-16 words, ONE line. Light + glow only — no butterfly color, no setting, no dream element.`,
+  },
+
   // ════════════════ CROSSOVER WORLDS — the bubble-bot visits other bots ═══════
   // Each = a themed dream_world pool (the bot's scenes), rendered in DreamBot's
   // glossy-dreamy register. World-focused voice (no bot detail; the renderer

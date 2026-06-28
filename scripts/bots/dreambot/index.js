@@ -73,6 +73,10 @@ const pathBuilders = {
   // dreamscape — scene-as-hero candy-fantasy world vista (2026-06-27). NO
   // character; the world is the hero. Own cinematic-fantasy medium, flux-ultra.
   dreamscape: require('./paths/dreamscape'),
+  // butterfly-realm — striking butterflies as the focal point of a lush scene
+  // (2026-06-27). NO character; the butterflies are the hero. Own photoreal-
+  // cinematic medium, flux-ultra.
+  'butterfly-realm': require('./paths/butterfly-realm'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -82,7 +86,11 @@ const pathBuilders = {
 // All bubble-bot-dreams* paths (base + warm + crossovers) are NON-look paths:
 // locked to the glossy designer-vinyl medium, excluded from the look rotation.
 const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
-  (p) => p !== 'creature-world' && p !== 'dreamscape' && !p.startsWith('bubble-bot-dreams')
+  (p) =>
+    p !== 'creature-world' &&
+    p !== 'dreamscape' &&
+    p !== 'butterfly-realm' &&
+    !p.startsWith('bubble-bot-dreams')
 );
 
 // Crossover paths (the bubble-bot in other bots' worlds). All share the
@@ -147,6 +155,8 @@ module.exports = {
     // no DB row; fetchMediumFluxFragment returns '' for an unknown key + modelByPath
     // hard-locks the model). NOT the chibi vinyl/pixar look. See shared-blocks.js.
     dreambot_dreamscape: blocks.DREAMSCAPE_MEDIUM,
+    // butterfly-realm — own photoreal-cinematic medium (code-only, no DB row).
+    dreambot_butterfly: blocks.BUTTERFLY_MEDIUM,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -188,6 +198,8 @@ module.exports = {
     ...Object.fromEntries(CROSSOVER_PATHS.map((p) => [p, 'chibibot_render'])),
     // dreamscape locks its own cinematic-fantasy medium (the world-vista look).
     dreamscape: 'dreambot_dreamscape',
+    // butterfly-realm locks its own photoreal-cinematic medium.
+    'butterfly-realm': 'dreambot_butterfly',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -208,6 +220,11 @@ module.exports = {
     // lesson). Region/world-anchor only — NO biome enumeration (first-noun lock).
     dreambot_dreamscape:
       'lush hyper-detailed magical fantasy dream-world, cinematic wallpaper, deep focus, ultra-saturated',
+    // butterfly-realm (R5): LEAD with the striking butterflies + a PAINTERLY
+    // STORYBOOK dream-world cue (Kevin: R4 read cheesy-CGI; match the dreamscape
+    // path's painterly look). Subject anchor only.
+    dreambot_butterfly:
+      'lush painterly butterfly dreamscape, striking iridescent butterflies the focal point painted into the scene, a dreamy colorful storybook dream-world, magical and whimsical',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/
@@ -267,7 +284,7 @@ module.exports = {
   // DreamBot's active paths. First path: bubble-bot-dreams (xerox-copied from
   // ChibiBot 2026-06-12). The rest of the ChibiBot machinery is inherited
   // (dormant) so future DreamBot paths are easy — only listed paths post.
-  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS, 'dreamscape'],
+  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS, 'dreamscape', 'butterfly-realm'],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -305,6 +322,9 @@ module.exports = {
     ),
     // dreamscape — pro-ultra renders the lush hyperreal candy-fantasy vista best.
     dreamscape: 'black-forest-labs/flux-1.1-pro-ultra',
+    // butterfly-realm — flux-1.1-pro + pro-ultra (uniform random), both render
+    // crisp iridescent wings + lush photoreal depth (Kevin 2026-06-27).
+    'butterfly-realm': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -315,7 +335,7 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', 'dreamscape', ...CROSSOVER_PATHS],
+    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', 'dreamscape', 'butterfly-realm', ...CROSSOVER_PATHS],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -341,6 +361,7 @@ module.exports = {
       'bubble-bot-dreams',
       'bubble-bot-dreams-warm',
       'dreamscape',
+      'butterfly-realm',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',

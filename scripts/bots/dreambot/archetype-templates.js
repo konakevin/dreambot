@@ -108,4 +108,44 @@ Vertical 9:16 phone-wallpaper. The lush world fills the frame edge to edge with 
 
 Write the Flux prompt OPENING with the dream world + its hero flora, then layer in the foreground, any accents, the color story, light, and sky. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
   },
+
+  // DreamBot butterfly-realm — striking butterflies in a VIVID, COLORFUL, SURREAL
+  // dream-world (2026-06-27, R4). The BUTTERFLIES are the hero (lead with them).
+  // R0 spammy/flowery, R3 too swirly, then "pretty good but a bit conservative /
+  // pedestrian — make it a vivid FUN dream-world, NOT rooted in realism" (Kevin).
+  // R4 fix: PUSH the WORLD vivid/surreal/colorful (like the dreamscape path) while
+  // keeping the butterflies the big-crisp-striking hero + atmospheric DEPTH so they
+  // pop. Clean graceful arrangements (NO swirly background chaos), no flower-garden,
+  // no humans. Color via `palette`; surreal dream-element via `whimsy`.
+  DREAMBOT_BUTTERFLY_REALM: ({ slots }) => {
+    const { setting, feature, composition, palette, whimsy, atmosphere } = slots;
+
+    return `You are writing ONE breathtaking, frame-worthy phone-wallpaper render for DreamBot — a VIVID, COLORFUL, SURREAL fantasy DREAM-WORLD where STRIKING BUTTERFLIES are the unmistakable hero, rendered as a LUSH PAINTERLY STORYBOOK ILLUSTRATION (luminous, hand-painted, glowing from within — NOT a glossy 3D game-render, NOT crisp plastic clip-art). This is a DREAM, NOT rooted in realism: lean into wonder, saturated color, and magic. Vertical, cinematic, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ THE BUTTERFLIES (THE HERO — striking, vivid, painted INTO the dream-world) ━━━
+Color story: ${palette}
+Arrangement: ${composition}
+A FEW butterflies are LARGE and bold in the near foreground (luminous painterly wings glowing with iridescent color) — the eye lands on them FIRST — with a SPARSE, graceful scatter of smaller ones behind. CRITICAL: never a uniform frame-filling CARPET of same-size butterflies — a few clear HEROES dominate, the rest are few and softly placed. They are gorgeous and unmistakably the subject, but painted INTO the scene with the same luminous storybook brush as the world (NOT crisp glossy stickers pasted on top).
+
+━━━ THE DREAM-WORLD (the CO-STAR — a deep, cohesive, PAINTERLY storybook world) ━━━
+Setting: ${setting}
+One striking focal anchor: ${feature}
+Render this as a JAW-DROPPING painterly fantasy dream-world — saturated, luminous, magical, lavishly hand-painted, with real layered DEPTH (foreground anchor, the world receding into glowing atmospheric haze, a luminous horizon beyond). Like a beautiful storybook illustration glowing from within, NOT a literal nature photo, NOT a flat game-render, NOT a muted gray misty forest. Keep it COHESIVE and deep so the butterflies belong IN the world. This is NOT a flower garden — do not fill it with flowers or busy undergrowth.
+
+━━━ THE WHIMSY (this is a DREAM — one surreal, magical, otherworldly touch) ━━━
+${whimsy}
+Weave this in as ONE clean, graceful, wondrous element — surreal and dreamlike. Render it SIMPLY and beautifully: NO chaotic swirling vortexes, NO busy spiral patterns, NO churning fog crowding the frame — clean dream-magic, not visual noise.
+
+━━━ LIGHT + ATMOSPHERE (dreamy, luminous, colorful) ━━━
+${atmosphere}
+Commit to dreamy, luminous light with real atmospheric depth — the glow makes the butterfly wings shimmer and the world feel magical.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+NEVER a human, a person, or a figure anywhere in the frame. Flux's training data WILL try to add a LONE FIGURE STANDING ON A CLIFFTOP / PEAK / ROCK GAZING UP at the butterflies or the vista — there is NO such person: the clifftop / ledge / summit is EMPTY. Also NOT a silhouette in the distance, NOT someone walking a path, NOT a figure watching the swarm. The only "characters" are the butterflies. If Flux's instinct is to place a person admiring the scene, render the exact same scene with the vantage point EMPTY.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper. A FEW large bold butterflies are the clear focal hero in the near field, with only a sparse graceful scatter behind — set into a vivid, painterly, surreal dream-world with real atmospheric depth so they belong IN it. Everything is lush hand-painted storybook illustration glowing from within — NOT a glossy 3D game-render, NOT crisp plastic clip-art, NOT a uniform frame-filling carpet of butterflies, NOT a flower garden, NO swirling background noise. Cinematic, dreamy, ultra-vivid, frame-worthy. NO text, NO words, NO watermarks.
+
+Write the Flux prompt OPENING with the striking butterflies (their color + arrangement), then paint them into the vivid surreal storybook dream-world with its anchor, the whimsy dream-element, and luminous light. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-125 words. No preamble, no labels.`;
+  },
 };

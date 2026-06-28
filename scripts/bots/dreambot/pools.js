@@ -75,6 +75,17 @@ module.exports = {
   DREAMSCAPE_SKY: load('dreamscape_sky'),
   DREAMSCAPE_EVENT: load('dreamscape_event'),
   DREAMSCAPE_CREATURE: load('dreamscape_creature'),
+  // BUTTERFLY-REALM (2026-06-27, R1 redesign) — striking butterflies in a clean,
+  // dreamy, WHIMSICAL dreamscape. De-flowered + composition-over-density + a
+  // whimsy axis (R0 was spammy/flowery/not-dreamy). AXIS-CLEAN: setting=biome,
+  // palette=butterfly color, composition=arrangement, whimsy=dream element,
+  // atmosphere=light+mist, feature=one clean anchor.
+  BUTTERFLY_REALM_SETTING: load('butterfly_realm_setting'),
+  BUTTERFLY_REALM_FEATURE: load('butterfly_realm_feature'),
+  BUTTERFLY_REALM_COMPOSITION: load('butterfly_realm_composition'),
+  BUTTERFLY_REALM_PALETTE: load('butterfly_realm_palette'),
+  BUTTERFLY_REALM_WHIMSY: load('butterfly_realm_whimsy'),
+  BUTTERFLY_REALM_ATMOSPHERE: load('butterfly_realm_atmosphere'),
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),
