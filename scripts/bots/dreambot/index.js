@@ -342,9 +342,13 @@ module.exports = {
     ),
     // dreamscape — pro-ultra renders the lush hyperreal candy-fantasy vista best.
     dreamscape: 'black-forest-labs/flux-1.1-pro-ultra',
-    // butterfly-realm — flux-1.1-pro + pro-ultra (uniform random), both render
-    // crisp iridescent wings + lush photoreal depth (Kevin 2026-06-27).
-    'butterfly-realm': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    // butterfly-realm — flux-1 family only (Kevin 2026-06-28): the 3 flux-2
+    // models are banned here; keep the flux-1.1 pair + flux-dev. Uniform random.
+    'butterfly-realm': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-dev',
+    ],
     // dream-spires — the 6 models approved for this path (2026-06-28), uniform
     // random. pro-ultra = the most magical/polished pastel castle-cities;
     // flux-1.1-pro = pro-ultra-tier crisp + cheaper; flux-dev = softer warm
