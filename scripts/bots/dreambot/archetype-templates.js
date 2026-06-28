@@ -53,4 +53,59 @@ Vertical 9:16 phone-wallpaper. The bubble-bot is the clear focal hero, small-to-
 
 Write the Flux prompt OPENING with the bubble-bot hero (body + dome + eyes), then place it into the richly-detailed dream world. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
   },
+
+  // DreamBot dreamscape — scene-as-hero candy-fantasy world vista (2026-06-27).
+  // The WORLD is the hero (no character). Holds the LOOK constant (own medium +
+  // candy palette + dreamy light) while the world axis spans ~12 biomes. The
+  // three conditional slots (whimsical_structure / dream_event / tiny_creature)
+  // are woven in only when they fired (composer leaves them undefined otherwise).
+  DREAMBOT_DREAMSCAPE: ({ slots }) => {
+    const { world, foreground, palette, atmosphere, sky } = slots;
+    const flora = (Array.isArray(slots.flora) ? slots.flora : [slots.flora])
+      .filter(Boolean)
+      .join('; ');
+    const structure = slots.whimsical_structure;
+    const event = slots.dream_event;
+    const creature = slots.tiny_creature;
+
+    return `You are writing ONE frame-worthy magical phone-wallpaper render for DreamBot — a lush, hyper-saturated, candy-colored FANTASY WORLD where the WORLD ITSELF is the hero (NOT a character, NOT a product). Vertical, cinematic, dreamy, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ THE DREAM WORLD (THE HERO — build it bold, dense, lush, sharp, and CREATIVE) ━━━
+${world}
+This world fills the frame and IS the show. Render it as a fully-realized, jaw-dropping place with real layered depth: a detailed foreground anchoring the bottom, the lush world rising and receding around it, a glowing horizon beyond. Commit hard to its signature wonder — towering, teeming, glowing, alive. A place you'd want to step inside.
+
+━━━ HERO FLORA (the lush oversized plant-life that packs the world) ━━━
+Layer in, big and abundant: ${flora}.
+
+━━━ FOREGROUND ANCHOR (grounds the bottom, leads the eye in) ━━━
+${foreground}
+${structure ? `
+━━━ WHIMSICAL ARCHITECTURE (a charming accent nestled INTO the world — NOT dominating it) ━━━
+${structure}
+Tuck it naturally among the flora as a storybook accent; the world stays the hero.
+` : ''}${creature ? `
+━━━ A TINY HIDDEN CREATURE (rare ambient life — a delightful detail you discover, NEVER the focus) ━━━
+${creature}
+Keep it SMALL and dwarfed by the world — a tiny resident, not the subject. It is a creature, NEVER a human.
+` : ''}${event ? `
+━━━ A MAGICAL MOMENT (a beat of motion bringing the scene alive) ━━━
+${event}
+` : ''}
+━━━ COLOR STORY (commit fully — designed, cohesive, never a random color salad) ━━━
+${palette}
+
+━━━ LIGHT + ATMOSPHERE (cinematic, dreamy, magical) ━━━
+${atmosphere}
+
+━━━ SKY OVERHEAD ━━━
+${sky}
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+NEVER a human, a person, a child, or a humanoid figure anywhere in the frame — NOT walking the path, NOT on a balcony, NOT a tiny silhouette for scale. This is an UNINHABITED magical world. Flux's training data WILL try to place a lone figure walking into the misty distance at the end of a stream / path — the vanishing point stays EMPTY: no lone person, no silhouette at the end of the walkway. If Flux's instinct is a figure, render the same scene without one.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper. The lush world fills the frame edge to edge with real depth — foreground, midground, glowing horizon. CRITICAL: render the WHOLE WORLD in SHARP, deep focus, crisp and fully visible to the horizon — this is NOT a studio product shot, NOT a shallow depth-of-field portrait, NOT a blurred / bokeh / empty background. Dense and abundant, yet COHESIVE and designed — rhythm and readable depth, not a chaotic spammy jumble. Cinematic, hyperreal, ultra-saturated, frame-worthy. NO text, NO words, NO watermarks.
+
+Write the Flux prompt OPENING with the dream world + its hero flora, then layer in the foreground, any accents, the color story, light, and sky. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
+  },
 };

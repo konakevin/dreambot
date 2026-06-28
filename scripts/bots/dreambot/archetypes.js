@@ -39,4 +39,32 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // dreamscape — scene-as-hero candy-fantasy world vista (2026-06-27, new).
+  // NO bubble-bot, NO central character — the WORLD itself is the hero (ref
+  // aida_ai_pro: lush oversized flora + whimsical fairytale architecture + a
+  // reflective stream under a dreamy twilight sky). 9 axes / 10 picks; the
+  // `world` axis carries the wide variety spread. AXIS-CLEAN discipline:
+  // palette owns COLOR, atmosphere owns LIGHT, sky owns OVERHEAD, world owns
+  // the BIOME — no lane bleeds. structure/dream_event/tiny_creature are three
+  // INDEPENDENT gated conditional layers (so ~⅓ of renders are pure-natural
+  // uninhabited wonderlands; events + rare ambient critters roll separately).
+  DREAMBOT_DREAMSCAPE: {
+    description:
+      'PATH-BESPOKE — DreamBot dreamscape (2026-06-27). Scene-as-hero hyper-saturated candy-fantasy world vista; the WORLD is the hero, no character. 6 always axes (world + flora ×2 + foreground + palette + atmosphere + sky) + 3 independent gated conditionals (whimsical_structure ~60%, dream_event ~40%, tiny_creature ~22%). Own cinematic-fantasy medium (dreambot_dreamscape), flux-1.1-pro-ultra; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['world', 'flora', 'foreground', 'palette', 'atmosphere', 'sky'],
+    },
+    pickN: { flora: 2 },
+    // Three unrelated "a chance for X" layers, each rolled separately.
+    conditionalLayers: [
+      { slot: 'whimsical_structure', gate: 0.6 },
+      { slot: 'dream_event', gate: 0.4 },
+      { slot: 'tiny_creature', gate: 0.22 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

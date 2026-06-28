@@ -226,6 +226,182 @@ Vary widely: floating iridescent soap bubbles; a glossy mirror-reflective floor 
     instructions: `Generate NEW single-layer atmospheric touches in the dreamy register — each stands alone, could float in any world. 6-16 words, ONE line.`,
   },
 
+  // ════════════════ DREAMSCAPE — scene-as-hero candy-fantasy world vistas ═════
+  // 2026-06-27 (new path). NO bubble-bot, NO central character — the WORLD is the
+  // hero (hyper-saturated candy-colored cinematic dream-vistas, ref aida_ai_pro:
+  // lush oversized flora + whimsical fairytale architecture + a reflective stream
+  // under a dreamy twilight sky). 9 axes; the `world` axis carries the wide spread.
+  // AXIS-CLEAN discipline: palette owns COLOR, atmosphere owns LIGHT, sky owns
+  // OVERHEAD, world owns the BIOME — no lane bleeds into another (EarthBot L4).
+
+  dreamscape_world: {
+    label: 'dreamscape world',
+    maxWords: 22,
+    theme: `Each entry is ONE specific, imaginative, hyper-saturated candy-colored FANTASY WORLD — a lush, frame-worthy dream-vista where the WORLD ITSELF is the hero (no character). The bar (from the reference renders): a vivid named world + ONE signature whimsical feature + a depth/scale cue (the world rising and receding to a glowing horizon). Bold, magical, "I want to step inside it."
+
+⚠️ TERSE REGISTER: a SHORT 12-22 word fragment, like the touchpoints — name the world + its signature feature + a depth cue, then STOP. Sonnet EXPANDS it into rich prose at render time; an over-long seed crowds the frame. ONE comma-joined fragment, no multi-clause paragraphs.
+  ✅ GOOD: "a candy-colored valley of giant cotton-candy canopy trees, a mirror-stream winding through flower banks to a glowing horizon"
+  ✅ GOOD: "a bioluminescent mushroom forest of house-sized glowing toadstools, light-vines strung between cap and cap, misty depths beyond"
+  ❌ TOO LONG: a flowing three-clause paragraph of atmospheric prose.
+
+OWN ONLY THE WORLD-TYPE / BIOME. Do NOT specify the palette (separate axis), the light (separate axis), the sky (separate axis), the architecture (separate axis), or any creature/figure. Just the LAND + its signature wonder + depth.
+
+VARIETY MANDATE — spread WIDELY across fantastical candy-biomes (never cluster on flower-valley):
+  A. CANDY-FLOWER VALLEY  B. GLOWING MUSHROOM FOREST  C. FLOATING SKY-ISLANDS  D. CRYSTAL / GEODE GARDEN
+  E. DREAM-REEF (coral-on-land)  F. COTTON-CANDY CLOUD KINGDOM  G. ENCHANTED CANAL / WATERWAY REALM
+  H. GIANT-FLORA MACRO WORLD  I. RAINBOW DESERT / GLASS OASIS  J. AURORA SNOW-GLASS REALM
+  K. BIOLUM NEON-PASTEL JUNGLE  L. SURREAL WONDERLAND (impossible candy geometry)
+
+🚫 BANS: NO bubble-bot, NO humans, NO named characters. NO scary / dark / macabre. Spread across A-L. OMIT negation language. Never exceed 22 words.`,
+    instructions: `Generate NEW hyper-saturated candy-fantasy WORLDS extending the variety across families A-L — a vivid world-type + signature whimsical feature + a depth/scale cue. 12-22 word terse fragments, ONE line each. WORLD/BIOME only — no palette, no light, no sky, no architecture, no creatures.`,
+    // Production scale: one Sonnet phase per family so cross-batch dedup can't
+    // starve a family (Kevin's equal-share-per-subtheme hard rule).
+    subThemes: [
+      'CANDY-FLOWER VALLEY — oversized-bloom valleys, petal-river gorges, flower-canyon terraces, bouquet-mound meadows, blossom-cascade ravines, giant-rose amphitheaters, pom-pom-tree groves, dahlia-hill country',
+      'GLOWING MUSHROOM FOREST — house-sized luminous toadstools, fungal cathedrals, bioluminescent spore-groves, layered mushroom-shelf cliffs, glowing-cap canopies, fairy-ring hollows, moss-and-fungus dells',
+      'FLOATING SKY-ISLANDS — drifting flower-crags with waterfalls spilling into cloud, cloud-archipelago chains, levitating garden-isles, sky-bridges between floating peaks, upside-down island roots trailing vines',
+      'CRYSTAL / GEODE GARDEN — gemstone grottos rising like cathedral spires, prism-spire forests, amethyst canyons, opal lakes, crystalline ice-flower fields, quartz cathedrals, mirror-gem mazes',
+      'DREAM-REEF (coral-on-land) — terrestrial reef gardens of candy coral, anemone meadows, brain-coral hills, kelp-tree groves above ground, tide-pool terraces, pearl-bubble springs, sea-fan canopies',
+      'COTTON-CANDY CLOUD KINGDOM — pastel cloud realms, sugar-spun cloud-castles, marshmallow cloud-banks you could walk on, rainbow roads, balloon-festival skies, floating soap-bubble seas',
+      'ENCHANTED CANAL / WATERWAY REALM — whimsical waterway valleys, lantern-lit canal gorges in the blooms, lily-pad lagoons, tiered-waterfall basins, glowing-river deltas, reflecting-pool terraces',
+      'GIANT-FLORA MACRO WORLD — a world beneath oversized flowers and leaves, dewdrop-jewel meadows, towering dandelion fields, giant-clover canopies, fern-spiral hollows, berry-bush groves the size of hills',
+      'RAINBOW DESERT / GLASS OASIS — candy-striped dunes, prism-glass oases, crystal-sand flats, geode badlands, mirage-pool basins, rainbow-rock arches, sugar-sand mesas',
+      'AURORA SNOW-GLASS REALM — frosted pastel tundra, ice-flower fields, snowglobe valleys, frozen-waterfall palaces, glittering glacier-cave gardens, crystal-snow drifts under shimmering skies',
+      'BIOLUM NEON-PASTEL JUNGLE — Avatar-style glowing rainforest, vine-light canopies, neon-frond gorges, glowing-pod groves, luminous-river jungles, bioluminescent flower-walls, spore-lit understory',
+      'SURREAL WONDERLAND — upside-down floating ponds, liquid-rainbow waterfalls, teacup-island archipelagos, candy-geometry canyons, impossible spiral-stair gardens, gravity-defying bloom-towers, melting-clock meadows',
+    ],
+  },
+
+  dreamscape_flora: {
+    label: 'dreamscape flora',
+    maxWords: 16,
+    theme: `Each entry is ONE dominant oversized magical PLANT element that fills a candy-fantasy world with lush density — stands alone (the path layers TWO per render). Big, vivid, frame-filling botanical wonder. NOT a full world (separate axis), NOT architecture, NOT a creature.
+
+Spread across: CANOPY (giant cotton-candy pom-pom trees, towering blossom-canopies, prism-leaf palms, weeping light-willows), FUNGI (house-sized glowing mushrooms, shelf-fungus terraces, puffball clusters), FLOWER-MASS (massive bouquet-flower mounds, giant lotus, oversized dahlias, coral-bloom thickets), SUCCULENT/CRYSTAL (crystal succulents, gemstone cacti, geode-pods), HANGING (wisteria-light curtains, vine-lanterns, hanging bloom-baskets, trailing glow-tendrils), GROUND (bubble-berry bushes, fern-spirals, candy-grass tufts, glowing moss carpets).
+
+✅ GOOD: "giant cotton-candy pom-pom trees in magenta and teal towering overhead"
+✅ GOOD: "house-sized glowing mushrooms with luminous gilled caps"
+✅ GOOD: "massive bouquet-flower mounds spilling over mossy stones"`,
+    instructions: `Generate NEW single oversized magical PLANT elements — one botanical wonder each, stands alone in any candy-fantasy world. 6-16 words, ONE line. Plant only — no full world, no buildings, no creatures.`,
+    subThemes: [
+      'CANOPY TREES — giant cotton-candy pom-pom trees, towering blossom-canopies, prism-leaf palms, weeping light-willows, balloon-fruit trees, spiral-trunk giants, parasol-bloom trees, glass-leaf groves',
+      'GIANT FUNGI — house-sized glowing mushrooms, luminous gilled caps, shelf-fungus terraces, puffball clusters, lantern-cap toadstools, coral-fungus fans, spotted parasol-mushrooms',
+      'FLOWER-MASS — massive bouquet-flower mounds, giant lotus blooms, oversized dahlias and peonies, coral-bloom thickets, sunflower-giants, hydrangea hills, tulip-spire fields',
+      'SUCCULENT / CRYSTAL FLORA — crystal succulents, gemstone cacti, geode-pods, prism-aloe rosettes, quartz-bud stalks, glass-petal flowers, jewel-berry vines',
+      'HANGING FLORA — wisteria-light curtains, vine-lanterns, hanging bloom-baskets, trailing glow-tendrils, cascading-petal drapes, dangling pod-lights, ivy-light garlands',
+      'GROUND FLORA — bubble-berry bushes, fern-spirals, candy-grass tufts, glowing moss carpets, lily-pad rafts, clover-jewel patches, toadstool rings, dewdrop-spangled groundcover',
+    ],
+  },
+
+  dreamscape_structure: {
+    label: 'dreamscape structure',
+    maxWords: 18,
+    theme: `Each entry is ONE whimsical fairytale STRUCTURE nestled INTO a candy-fantasy world — organic, storybook architecture that belongs to the world (the render layers it among the flora). This fires on ~60% of renders; the other ~40% are pure-natural wonderlands, so each structure must read as a charming accent, NEVER dominating the world. NO humans. NOT the full world, NOT the flora.
+
+Spread across: TREE-TOWNS (tiered treehouse-villages with round wooden balconies wrapped around giant trunks, lantern-lit windows — the reference look), MUSHROOM/ORGANIC COTTAGES (toadstool houses, snail-shell huts, gourd-cottages, pod-dwellings), TOWERS/SPIRES (crystal spires, twisting candy-towers, blossom-clad pagodas), WATER STRUCTURES (lantern-lit canal houses on stilts, floating pavilions, lily-pad docks, arched flower-bridges), WONDERS (hanging sky-platforms on vines, spiral garden-stairs, glass conservatories, bell-domed gazebos).
+
+✅ GOOD: "tiered treehouse cottages with round wooden balconies and warm lantern-lit windows wrapped around a giant trunk"
+✅ GOOD: "a cluster of toadstool cottages with curved doors and glowing windows"
+✅ GOOD: "lantern-lit canal houses on carved stilts above the reflecting water"`,
+    instructions: `Generate NEW whimsical fairytale STRUCTURES that nestle into a candy-fantasy world as a charming accent — organic, storybook, warm-lit. 8-18 words, ONE line. Architecture only — no humans, no full world, no flora list.`,
+    subThemes: [
+      'TREE-TOWNS — tiered treehouse-villages with round wooden balconies wrapped around giant trunks, lantern-lit windows, rope-and-vine walkways, stacked canopy-cottages, spiral-staircase trunk-towers',
+      'ORGANIC COTTAGES — toadstool houses with curved doors, snail-shell huts, gourd-cottages, pod-dwellings, woven-nest homes, acorn-cap cabins, flower-bud houses with glowing windows',
+      'TOWERS / SPIRES — crystal spires, twisting candy-striped towers, blossom-clad pagodas, vine-wrapped bell-towers, glass minarets, coral-spire turrets, lantern-topped watch-towers',
+      'WATER STRUCTURES — lantern-lit canal houses on carved stilts, floating pavilions, lily-pad docks, arched flower-bridges, waterwheel mills, reflecting-pool terraces with railings',
+      'AERIAL / GARDEN WONDERS — hanging sky-platforms on vines, spiral garden-stairs, glass conservatories, bell-domed gazebos, suspended walkway-bridges, terraced balcony-gardens with string-lights',
+    ],
+  },
+
+  dreamscape_foreground: {
+    label: 'dreamscape foreground',
+    maxWords: 16,
+    theme: `Each entry is ONE foreground GROUNDING element that anchors the bottom of the frame and leads the eye INTO the world — most often a reflective waterway (the reference signature), sometimes a path or clearing. Builds depth; mirrors the colorful world above it. NOT the full world, NOT flora, NOT sky.
+
+Spread across: WINDING WATER (a mirror-stream winding over colorful pebbles to the horizon, a glowing river-bend, a reflecting canal), STILL WATER (a glassy reflecting pool doubling the scene, a lily-pad pond, a quiet lagoon, a crystal spring), MOVING WATER (tiered cascading waterfalls into a basin, a bubbling brook over mossy stones, a petal-strewn rapids), STONE-LINED EDGES (mossy boulder-banks framing the water, glowing-pebble shallows), NON-WATER (a petal-carpet path winding in, a dewy moss clearing, a flower-lined trail of light).
+
+✅ GOOD: "a mirror-still stream winding over colorful pebbles, reflecting the world above, leading to the horizon"
+✅ GOOD: "a glassy reflecting pool doubling the glowing scene, mossy boulders framing the edge"
+✅ GOOD: "tiered waterfalls cascading into a clear basin ringed with flower banks"`,
+    instructions: `Generate NEW foreground grounding elements that lead the eye into a candy-fantasy world — usually reflective water, sometimes a petal path/clearing. 6-16 words, ONE line. Foreground anchor only.`,
+    subThemes: [
+      'WINDING WATER — a mirror-stream winding over colorful pebbles to the horizon, a glowing river-bend, a reflecting canal threading the blooms, a serpentine creek catching the light',
+      'STILL WATER — a glassy reflecting pool doubling the scene, a lily-pad pond, a quiet mirror-lagoon, a crystal spring, a still rock-pool reflecting the sky',
+      'MOVING WATER — tiered cascading waterfalls into a basin, a bubbling brook over mossy stones, a petal-strewn rapids, a fountain-spring overflowing into a pool',
+      'STONE-LINED EDGES — mossy boulder-banks framing bright water, glowing-pebble shallows, lichen-stone stepping rims, smooth-river-rock borders studded with blooms',
+      'NON-WATER PATHS — a petal-carpet path winding inward, a dewy moss clearing, a flower-lined trail of soft light, a fallen-blossom walkway, a glowing-stone footpath into the depths',
+    ],
+  },
+
+  dreamscape_palette: {
+    label: 'dreamscape palette',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive candy-fantasy COLOR STORY for the whole render — the dominant hues that lead, like a palette a designer chose on purpose (NOT a random color salad). Names 3-5 hues + how they relate (a dominant + accents + a contrast). The feed's color VARIETY lives here, so spread WIDELY — never default to all-pink. Owns COLOR ONLY: no light-quality, no time-of-day, no air FX (separate axis).
+
+Spread WIDELY: magenta + violet + teal with cool-blue water (the reference); coral + rose-gold + cream; emerald + chartreuse + gold; sunset orange + hot-pink + purple; aqua + mint + pearl-white; ruby + sapphire + gold jewel-tones; lavender + peach + butter-yellow; crimson + plum + amber; turquoise + coral + sunshine-yellow; lilac + sky-blue + silver; tangerine + fuchsia + lime; rose + powder-blue + gold; and full prismatic rainbow spreads.
+
+✅ GOOD: "magenta and violet canopy over teal foliage, cool cobalt water reflections, pops of coral and gold"
+✅ GOOD: "emerald and chartreuse greens with gold light and deep-amber accents, a single ruby-red focal bloom"`,
+    instructions: `Generate NEW cohesive candy-fantasy COLOR STORIES — 3-5 dominant hues + how they relate (dominant + accents + a contrast pop). 8-18 words, ONE line. Color only — no light quality, no time-of-day, no effects. Spread widely, never all-pink.`,
+  },
+
+  dreamscape_atmosphere: {
+    label: 'dreamscape atmosphere',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive dreamy LIGHT-QUALITY + AIR treatment for the whole render — the light behavior and atmospheric set-dressing that make it cinematic and magical. Describe light by QUALITY / DIRECTION / TIME and the AIR effects; let the PALETTE axis own the actual hues (use neutral light words: warm/cool/soft/golden-glow, not "magenta"). NOT the sky overhead (separate axis), NOT color.
+
+Spread across: VOLUMETRIC (soft god-rays pouring through with drifting glow-motes, light-shafts through the canopy, beams cutting morning haze), TIME-OF-DAY LIGHT (warm golden-hour bloom + soft sparkle, misty pastel dawn, dreamy blue-hour twilight glow, lantern-lit dusk warmth), MAGIC AIR (floating luminous spores, drifting petals on the breeze, slow glitter-motes like golden snow, soft iridescent ground-mist, gentle bokeh orbs, fairy-dust shimmer), SOFT-FOCUS (ethereal fog softening the depths, soft cinematic lens-bloom, dewy humid glow).
+
+✅ GOOD: "soft volumetric god-rays pouring down through drifting luminous spores, dreamy and warm"
+✅ GOOD: "misty pastel dawn haze with gentle light-shafts and slow-falling glitter-motes"`,
+    instructions: `Generate NEW dreamy LIGHT-QUALITY + AIR treatments — light behavior (quality/direction/time) + atmospheric effects (spores/motes/mist/bloom). 8-18 words, ONE line. Light + air only — no specific hues, no sky.`,
+  },
+
+  dreamscape_sky: {
+    label: 'dreamscape sky',
+    maxWords: 16,
+    theme: `Each entry is ONE SKY overhead for a candy-fantasy vista — the upper band of the frame (the world fills most of it, but the sky sets the ceiling mood). Owns the SKY ONLY: cloud forms + celestial elements. NOT ground light, NOT the world, NOT air FX near the ground.
+
+Spread across: DRAMATIC CLOUDS (a dramatic twilight cloudscape with billowing clouds catching the light — the reference; towering cumulus, wispy cirrus streaks), CELESTIAL (twin pastel moons, a giant ringed planet low on the horizon, a galaxy/nebula band, a scatter of soft stars), AURORA (rippling aurora ribbons, shimmering polar curtains), SOFT (clean pastel-gradient sky, cotton-candy cloud banks, a faint rainbow arc, sun-shafts breaking through cloud-gaps).
+
+✅ GOOD: "a dramatic twilight cloudscape, billowing clouds catching the last warm light"
+✅ GOOD: "twin pastel moons hanging low over a soft gradient sky"
+✅ GOOD: "rippling aurora ribbons across a deep dusk sky"`,
+    instructions: `Generate NEW skies overhead for a candy-fantasy vista — cloud forms + celestial elements. 5-16 words, ONE line. Sky only — no ground light, no world, no near-ground effects.`,
+  },
+
+  dreamscape_event: {
+    label: 'dreamscape event',
+    maxWords: 16,
+    theme: `Each entry is ONE magical EVENT / moment happening in the scene — a beat of motion or wonder that brings the world alive (fires on ~40% of renders, so each must be a self-contained delight, never required). NOT the world, NOT a static element — a HAPPENING. NO humans.
+
+Spread across: DRIFTING LIGHT (a cloud of glowing spores drifting up, floating wish-lanterns rising, a swirl of light-orbs spiraling), FLOCKS (a flock of luminous birds wheeling overhead, a cloud of glowing butterflies, fireflies swarming up from the blooms, a drift of glowing jellyfish-in-air), WEATHER-MAGIC (a sudden shower of petals raining down, a rainbow arcing across the falls, a meteor streaking the dusk, a shimmer of light-rain), BLOOM-MOMENT (a giant flower bursting open in a puff of pollen-light, a waterfall of pure light spilling over a ledge).
+
+✅ GOOD: "a cloud of glowing spores drifting upward through the light"
+✅ GOOD: "a flock of luminous birds wheeling across the sky"
+✅ GOOD: "a sudden shower of glowing petals raining down"`,
+    instructions: `Generate NEW magical EVENTS / moments of motion that bring a candy-fantasy world alive — drifting light, flocks, weather-magic, bloom-moments. 5-16 words, ONE line. A happening only — no humans, no static scenery.`,
+  },
+
+  dreamscape_creature: {
+    label: 'dreamscape creature',
+    maxWords: 16,
+    theme: `Each entry is ONE tiny charming AMBIENT creature dwarfed in the world — rare ambient life, NEVER the hero (fires on ~22% of renders). Small and far enough that it reads as a delightful detail you discover, not the subject. Whimsical, cute, magical. NEVER a human, NEVER a person.
+
+Spread across: GLOWING MAMMALS (a tiny glowing fox curled on a stone, a pair of luminous fawns drinking at the water, a fluffy cloud-sheep grazing, a small moss-backed rabbit), MINI-MYTHICS (a palm-sized dragon-kitten napping, a tiny phoenix-bird preening, a baby gryphon-cub, a small unicorn-foal), WATER LIFE (glowing koi gliding in the stream, a tiny otter on a lily-pad, bubble-snails on a leaf), WINGED (a luminous owl on a branch, a hummingbird of light, a tiny pastel deer-bird), SPRITES (a chibi forest-sprite peeking out, a glowing wisp-creature, a thumb-sized mushroom-elf).
+
+✅ GOOD: "a tiny glowing fox curled asleep on a mossy stone by the water"
+✅ GOOD: "a pair of luminous fawns drinking at the stream's edge, small in the distance"`,
+    instructions: `Generate NEW tiny charming AMBIENT creatures dwarfed in a candy-fantasy world — rare magical life, a discovered detail not the hero. 6-16 words, ONE line. Creature only — small-scale, never a human.`,
+    subThemes: [
+      'GLOWING MAMMALS — a tiny glowing fox curled on a stone, luminous fawns at the water, a fluffy cloud-sheep grazing, a moss-backed rabbit, a small glowing wolf-pup, a soft-lit hedgehog',
+      'MINI-MYTHICS — a palm-sized dragon-kitten napping, a tiny phoenix-bird preening, a baby gryphon-cub, a small unicorn-foal, a thumb-sized pegasus, a curled baby wyvern',
+      'WATER LIFE — glowing koi gliding in the stream, a tiny otter on a lily-pad, bubble-snails on a leaf, a small turtle with a flowering shell, luminous frogs on a pad',
+      'WINGED — a luminous owl on a branch, a hummingbird of light, a tiny pastel deer-bird, a glowing songbird pair, a small moth-winged sprite-bird',
+      'SPRITES — a chibi forest-sprite peeking from the blooms, a glowing wisp-creature, a thumb-sized mushroom-elf, a tiny floating star-spirit, a small leaf-cloaked pixie',
+    ],
+  },
+
   // ════════════════ CROSSOVER WORLDS — the bubble-bot visits other bots ═══════
   // Each = a themed dream_world pool (the bot's scenes), rendered in DreamBot's
   // glossy-dreamy register. World-focused voice (no bot detail; the renderer

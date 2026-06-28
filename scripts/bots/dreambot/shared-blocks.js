@@ -18,6 +18,16 @@ const PROMPT_PREFIX =
 // 2026-06-02 — dropped tech-spec `hyper detailed`.
 const PROMPT_SUFFIX = 'no text, no words, no watermarks, masterpiece quality';
 
+// DREAMSCAPE_MEDIUM (2026-06-27) — the `dreamscape` path's own cinematic-fantasy
+// render register. NOT the chibi vinyl/pixar look: this is a hyperreal, lavishly-
+// detailed, ultra-saturated fantasy WORLD vista (ref aida_ai_pro). Code-only
+// medium (bot.mediumStyles override; no DB row needed — fetchMediumFluxFragment
+// returns '' for an unknown key, and modelByPath hard-locks the model). Kept
+// lean (≤250 chars, no negation cascade, no camera-brand stuffing) per the
+// medium-cruft rule. Color/light/sky come from the axes, NOT baked here.
+const DREAMSCAPE_MEDIUM =
+  'cinematic hyperreal 3D fantasy render, lavish painterly detail, ultra-saturated candy-jewel color, volumetric dreamlight, deep focus crisp to the horizon, glossy luminous surfaces, magical-realism film still, ArtStation fantasy concept art, wallpaper-tier';
+
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
 Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting and mood should match the SCENE naturally (rainy = soft grey, sunset = golden, night = moonlit) — not forced bright.`;
@@ -206,6 +216,7 @@ module.exports = {
   BLOW_IT_UP_BLOCK,
   CHIBI_RENDER_MEDIUM,
   CHIBI_CREATURE_MEDIUM,
+  DREAMSCAPE_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

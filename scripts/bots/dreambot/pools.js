@@ -62,6 +62,19 @@ module.exports = {
   // same path renders in a different animation look each time (Pixar / Disney
   // CG / Ghibli / storybook / Pop-Mart / etc.). Mirrors YumBot's look_register.
   CHIBIBOT_LOOK_REGISTER: load('chibibot_look_register'),
+  // DREAMSCAPE (2026-06-27) — scene-as-hero candy-fantasy world vistas. NO
+  // bubble-bot, NO central character — the WORLD is the hero. 9 axes; `world`
+  // carries the wide spread. AXIS-CLEAN: palette=color, atmosphere=light,
+  // sky=overhead, world=biome. structure/event/creature are gated conditionals.
+  DREAMSCAPE_WORLD: load('dreamscape_world'),
+  DREAMSCAPE_FLORA: load('dreamscape_flora'),
+  DREAMSCAPE_STRUCTURE: load('dreamscape_structure'),
+  DREAMSCAPE_FOREGROUND: load('dreamscape_foreground'),
+  DREAMSCAPE_PALETTE: load('dreamscape_palette'),
+  DREAMSCAPE_ATMOSPHERE: load('dreamscape_atmosphere'),
+  DREAMSCAPE_SKY: load('dreamscape_sky'),
+  DREAMSCAPE_EVENT: load('dreamscape_event'),
+  DREAMSCAPE_CREATURE: load('dreamscape_creature'),
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),

@@ -70,6 +70,9 @@ const pathBuilders = {
   'jungle-village': require('./paths/jungle-village'),
   'twilight-village': require('./paths/twilight-village'),
   'sunny-village': require('./paths/sunny-village'),
+  // dreamscape — scene-as-hero candy-fantasy world vista (2026-06-27). NO
+  // character; the world is the hero. Own cinematic-fantasy medium, flux-ultra.
+  dreamscape: require('./paths/dreamscape'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -79,7 +82,7 @@ const pathBuilders = {
 // All bubble-bot-dreams* paths (base + warm + crossovers) are NON-look paths:
 // locked to the glossy designer-vinyl medium, excluded from the look rotation.
 const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
-  (p) => p !== 'creature-world' && !p.startsWith('bubble-bot-dreams')
+  (p) => p !== 'creature-world' && p !== 'dreamscape' && !p.startsWith('bubble-bot-dreams')
 );
 
 // Crossover paths (the bubble-bot in other bots' worlds). All share the
@@ -140,6 +143,10 @@ module.exports = {
     // shared-blocks.js CHIBI_NEUTRAL. Supersedes the chibibot_render/pixar
     // coin-flip on look-enabled paths.
     chibibot_neutral: blocks.CHIBI_NEUTRAL,
+    // dreamscape — the world-vista path's own cinematic-fantasy medium (code-only,
+    // no DB row; fetchMediumFluxFragment returns '' for an unknown key + modelByPath
+    // hard-locks the model). NOT the chibi vinyl/pixar look. See shared-blocks.js.
+    dreambot_dreamscape: blocks.DREAMSCAPE_MEDIUM,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -179,6 +186,8 @@ module.exports = {
     'bubble-bot-dreams-warm': 'dreambot_render_warm',
     // crossover paths use the sharp glossy-dreamy medium (the R4 look).
     ...Object.fromEntries(CROSSOVER_PATHS.map((p) => [p, 'chibibot_render'])),
+    // dreamscape locks its own cinematic-fantasy medium (the world-vista look).
+    dreamscape: 'dreambot_dreamscape',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -195,6 +204,10 @@ module.exports = {
       'lush richly-detailed magical dream-world wallpaper, deep focus crisp throughout, glossy luminous pastel finish',
     chibibot_pixar: blocks.PROMPT_PREFIX_PIXAR,
     chibibot_gpt_clean: '',
+    // dreamscape: LEAD with the WORLD so CLIP gets a scene cue first (env-collapse
+    // lesson). Region/world-anchor only — NO biome enumeration (first-noun lock).
+    dreambot_dreamscape:
+      'lush hyper-detailed magical fantasy dream-world, cinematic wallpaper, deep focus, ultra-saturated',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/
@@ -254,7 +267,7 @@ module.exports = {
   // DreamBot's active paths. First path: bubble-bot-dreams (xerox-copied from
   // ChibiBot 2026-06-12). The rest of the ChibiBot machinery is inherited
   // (dormant) so future DreamBot paths are easy — only listed paths post.
-  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS],
+  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS, 'dreamscape'],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -290,6 +303,8 @@ module.exports = {
     ...Object.fromEntries(
       CROSSOVER_PATHS.map((p) => [p, 'black-forest-labs/flux-1.1-pro-ultra'])
     ),
+    // dreamscape — pro-ultra renders the lush hyperreal candy-fantasy vista best.
+    dreamscape: 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -300,7 +315,7 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS],
+    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', 'dreamscape', ...CROSSOVER_PATHS],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -325,6 +340,7 @@ module.exports = {
       'bath-time',
       'bubble-bot-dreams',
       'bubble-bot-dreams-warm',
+      'dreamscape',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',
