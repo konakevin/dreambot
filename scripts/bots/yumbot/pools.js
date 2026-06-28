@@ -36,6 +36,11 @@ module.exports = {
   // ============ SHARED FOUNDATIONAL CATALOGS ============
   // Tagged kawaii food catalog — used by ALL paths via { name: 'FOOD_CATALOG', tags: [...] }
   FOOD_CATALOG: load('food_catalog'),
+
+  // ============ FOOD-OUTING per-setting paths (2026-06-28) — per-setting deep
+  // SCENE pools (food-adventures recipe: cast + action + rich location baked in).
+  // Reuse the YUMBOT_FOOD_ADVENTURES archetype + shared narrative secondary axes.
+  YUMBOT_AMUSEMENT_PARK_SCENES: load('yumbot_amusement_park_scenes'),
   // Tagged tiny companion creatures (peripheral cuties — never the hero)
   TINY_COMPANIONS: load('tiny_companions'),
   // Tagged small decor items (lanterns / flowers / ribbons / bunting / etc.)

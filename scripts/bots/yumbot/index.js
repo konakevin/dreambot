@@ -64,6 +64,7 @@ const pathBuilders = {
   // activities in real-world locations (amusement park / water park / mall /
   // camping / etc.). Uses the embodied yumbot_food_character medium + ultra.
   'food-adventures': require('./paths/food-adventures'),
+  'food-amusement-park': require('./paths/food-amusement-park'),
 };
 
 module.exports = {
@@ -115,6 +116,7 @@ module.exports = {
     'carnival-food': 'yumbot_food_neutral',
     // STORYTELLING path — embodied food-character identity, not face-baked-in.
     'food-adventures': 'yumbot_food_character',
+    'food-amusement-park': 'yumbot_food_character',
   },
 
   // Per-medium prompt prefix override (engine line 1314) — REPLACES the
@@ -199,6 +201,7 @@ module.exports = {
     'fast-food',
     'carnival-food',
     'food-adventures',
+    'food-amusement-park',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
@@ -223,6 +226,7 @@ module.exports = {
     // demanding — lock to ultra (best coherence now that gpt-image-2, which
     // rendered the hearted taco-mariachi winner, is banned fleet-wide).
     'food-adventures': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-amusement-park': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
