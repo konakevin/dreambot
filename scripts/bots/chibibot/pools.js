@@ -164,6 +164,11 @@ module.exports = {
   COZY_INTERIOR_SURPRISE: load('cozy_interior_surprise'),
   COZY_INTERIOR_PHENOMENA: load('cozy_interior_phenomena'),
 
+  // Creature-adventures path (2026-06-28) — chibi creatures out in real-world
+  // fun settings (clone of YumBot food-adventures). Tagged bucket pool; all
+  // settings roll uniformly at render time.
+  CHIBIBOT_CREATURE_ADVENTURES_SCENES: load('chibibot_creature_adventures_scenes'),
+
   // Outdoor-adventure path-bespoke axes (2026-05-20 full-bespoke migration)
   OUTDOOR_ADVENTURE_ACTIVITIES: load('outdoor_adventure_activities'),
   OUTDOOR_ADVENTURE_WILDERNESS: load('outdoor_adventure_wilderness'),

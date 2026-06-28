@@ -41,6 +41,7 @@ const pathBuilders = {
   'cuddly-aquatic': require('./paths/cuddly-aquatic'),
   'night-meadow': require('./paths/night-meadow'),
   'outdoor-adventure': require('./paths/outdoor-adventure'),
+  'creature-adventures': require('./paths/creature-adventures'),
   'cozy-interior': require('./paths/cozy-interior'),
   // 6 village paths
   'cottagecore-village': require('./paths/cottagecore-village'),
@@ -189,6 +190,7 @@ module.exports = {
     'cuddly-aquatic',
     'night-meadow',
     'outdoor-adventure',
+    'creature-adventures',
     'cozy-interior',
     // 6 village
     'cottagecore-village',
@@ -227,6 +229,9 @@ module.exports = {
   // here because flux-dev is exactly what we want.)
   modelByPath: {
     'creature-world': 'black-forest-labs/flux-dev',
+    // creature-adventures: rich real-world scenes + multiple creature friends +
+    // props render cleanest on ultra (mirrors YumBot food-adventures' ultra lock).
+    'creature-adventures': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -250,6 +255,7 @@ module.exports = {
       'cottagecore-village',
       'cozy-interior',
       'rainy-interior',
+      'creature-adventures',
     ],
   },
 
@@ -276,6 +282,7 @@ module.exports = {
       'outdoor-adventure',
       'creature-portrait',
       'creature-world',
+      'creature-adventures',
     ],
   },
 
@@ -298,6 +305,7 @@ module.exports = {
       'rainy-day-cozy': 'scene',
       'night-meadow': 'scene',
       'outdoor-adventure': 'creature',
+      'creature-adventures': 'scene',
       'aquatic-village': 'scene',
       'jungle-village': 'scene',
       'arctic-village': 'scene',

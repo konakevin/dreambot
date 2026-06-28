@@ -225,6 +225,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  CHIBIBOT_CREATURE_ADVENTURES: {
+    description:
+      'PATH-BESPOKE — ChibiBot creature-adventures (2026-06-28). Clone of YumBot food-adventures: a band of 2-4 chibi CREATURE friends out DOING fun things in real-world "out in the wild" settings (amusement park / water park / beach / camping / snow / fair / playground / pool / cookout / arcade / movie-theater / aquarium / birthday). Scene-led — the real-world LOCATION fills the frame; the creatures + their friends are NAMED in the scene. Opposite of outdoor-adventure (which is solo + pure wilderness). Single bespoke axis: scene (tagged bucket pool, all settings roll uniformly). Look/palette via sharedDNA.lookRegister; chibibot_neutral medium; skip two-pass polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['scene'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   CHIBIBOT_CREATURE_PORTRAIT: {
     description:
       'PATH-BESPOKE — ChibiBot creature-portrait (2026-05-20 full-bespoke). SOLO CREATURE-AS-HERO tight portrait MAXED with cute outfit + visible accessory + 3 scattered set-decorations. Creature FILLS 60-80% of the frame, dreamy soft-bokeh background ~20-30%. Hyper-cute marshmallow proportions. 12 axes: 3 universal + 9 path-bespoke (creature + pose + expression + portrait_feature pickN:2 + outfit + accessory + set_decoration pickN:3 + background_mood + time_of_day).',
