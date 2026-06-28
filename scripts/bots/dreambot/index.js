@@ -345,15 +345,16 @@ module.exports = {
     // butterfly-realm — flux-1.1-pro + pro-ultra (uniform random), both render
     // crisp iridescent wings + lush photoreal depth (Kevin 2026-06-27).
     'butterfly-realm': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
-    // dream-spires — the 5 models approved for this path (2026-06-28), uniform
+    // dream-spires — the 6 models approved for this path (2026-06-28), uniform
     // random. pro-ultra = the most magical/polished pastel castle-cities;
-    // flux-1.1-pro = pro-ultra-tier crisp + cheaper; flux-2-flex = cozy inked
-    // storybook; flux-2-pro = rich painterly misty spire-villages; flux-2-max =
-    // rich detailed whimsy+charm (the safety-filter false-positives it trips just
-    // re-roll + recover, never fail). (flux-dev banned — too soft/atmospheric.)
+    // flux-1.1-pro = pro-ultra-tier crisp + cheaper; flux-dev = softer warm
+    // atmospheric dreamy variant; flux-2-flex = cozy inked storybook; flux-2-pro
+    // = rich painterly misty spire-villages; flux-2-max = rich detailed
+    // whimsy+charm (its safety-filter false-positives just re-roll + recover).
     'dream-spires': [
       'black-forest-labs/flux-1.1-pro-ultra',
       'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-dev',
       'black-forest-labs/flux-2-flex',
       'black-forest-labs/flux-2-pro',
       'black-forest-labs/flux-2-max',
