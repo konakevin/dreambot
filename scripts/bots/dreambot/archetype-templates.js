@@ -148,4 +148,52 @@ Vertical 9:16 phone-wallpaper. A FEW large bold butterflies are the clear focal 
 
 Write the Flux prompt OPENING with the striking butterflies (their color + arrangement), then paint them into the vivid surreal storybook dream-world with its anchor, the whimsy dream-element, and luminous light. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-125 words. No preamble, no labels.`;
   },
+
+  // DreamBot dream-spires — scene-as-hero whimsical fairytale TOWER-CITY
+  // (2026-06-27). The impossible whimsical tower-city is the hero (lead with it).
+  // EXTERIOR VISTAS ONLY (Kevin: no cozy interior POV). Painterly storybook
+  // register (matches dreamscape + butterfly R5). charm_details arrive as an
+  // array (pickN 2); whimsy is gated (~40% — undefined otherwise; the composer
+  // omits its block when it didn't fire).
+  DREAMBOT_DREAM_SPIRES: ({ slots }) => {
+    const { spire_world, palette, vantage, light_sky } = slots;
+    const charm = (Array.isArray(slots.charm_details) ? slots.charm_details : [slots.charm_details])
+      .filter(Boolean)
+      .join('; ');
+    const whimsy = slots.whimsy;
+
+    return `You are writing ONE breathtaking, frame-worthy phone-wallpaper render for DreamBot — an IMPOSSIBLE, WHIMSICAL FAIRYTALE TOWER-CITY where the dream-city ITSELF is the hero (NOT a character, NOT a product), rendered as a LUSH PAINTERLY STORYBOOK ILLUSTRATION (luminous, lavishly hand-painted, glowing from within — NOT a flat 3D game-render). Think Dr. Seuss meets Studio Ghibli: absurdly tall, slender, gently TWISTING towers stacked with round lantern-lit windows and balconies. Vertical, cinematic, dreamy, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ THE TOWER-CITY (THE HERO — build it tall, dense, whimsical, and ENCHANTING) ━━━
+${spire_world}
+This whimsical tower-city fills the frame and IS the show. Render it as a fully-realized, jaw-dropping place with real layered DEPTH: detailed towers in the foreground, the spire-city receding and rising around them, a hazy horizon of more distant spires beyond. The towers are impossibly tall and slender, gently spiraling/twisting, packed with charming round windows glowing warm gold. A magical, peaceful dream-city — the architecture is always the hero.
+
+━━━ COLOR STORY (commit fully — soft candy-pastel, designed and cohesive) ━━━
+${palette}
+Each tower a different soft pastel hue; the whole city reads as one cohesive candy-pastel palette, never a random color salad.
+
+━━━ THE CHARM LAYER (the signature whimsical details — weave in naturally) ━━━
+${charm}
+These decorative details make it magical; layer them through the towers, never letting them clutter the silhouette. Keep it serene — NO crowds, NO market vendors, NO bustling marketplace filling the foreground.
+
+━━━ VANTAGE (the exterior camera — an outside view of the city) ━━━
+${vantage}
+This is always an EXTERIOR view OF the tower-city — never an indoor room. Lead the eye up and through the spires with real depth.
+${whimsy ? `
+━━━ A DREAM ELEMENT (one surreal, magical touch in the sky/air — this is a DREAM) ━━━
+${whimsy}
+Weave it in simply and beautifully as ONE graceful accent — never cluttering the city.
+` : ''}
+━━━ LIGHT + SKY ━━━
+${light_sky}
+Commit to dreamy, luminous light and a soft painterly sky; the windows glow warm against it.
+
+━━━ THE CITY IS THE HERO — NO FOREGROUND PEOPLE, NO CROWDS ━━━
+The tower-city architecture is ALWAYS the subject. Never a person in the foreground, never a face, never a crowd, never a marketplace of vendors, never a lone figure posed for scale dominating the frame. If any residents appear at all they are TINY and DISTANT — barely-there specks of life glimpsed on a far balcony or bridge, adding scale and warmth, never a focal point. When in doubt, leave the walkways empty.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper. The whimsical tower-city fills the frame edge to edge with real depth — foreground towers, the city rising and receding, a glowing horizon of distant spires. Everything is lush hand-painted storybook illustration glowing from within — NOT a flat 3D game-render, NOT photoreal, NOT a modern city. Dense and abundant yet COHESIVE and designed, readable depth, never a chaotic jumble. Cinematic, dreamy, whimsical, frame-worthy. NO text, NO words, NO watermarks.
+
+Write the Flux prompt OPENING with the whimsical tower-city (its formation + towers), then layer in the color story, the charm details, the exterior vantage, any dream element, and the light + sky. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
+  },
 };

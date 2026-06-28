@@ -568,6 +568,167 @@ Spread across: GOLDEN-HOUR GLOW (warm amber backlight rim-lighting wings, a glow
     instructions: `Generate NEW dreamy, LUMINOUS, COLORFUL light treatments — colored light behavior (quality/direction/time) + a glowing atmospheric haze with real depth. Lean vivid/colorful, never muted gray; no swirling fog. 8-16 words, ONE line. Light + glow only — no butterfly color, no setting, no dream element.`,
   },
 
+  // ════════════════ DREAM-SPIRES — whimsical fairytale TOWER-CITY ════════════
+  // 2026-06-27 (new path). Scene-as-hero: the impossible whimsical tower-city is
+  // the hero (no character). Ref: relmseeker "Seuss-inspired" pastel spiral-tower
+  // cities. EXTERIOR VISTAS ONLY. LEAN axes (hero is rich). AXIS-CLEAN:
+  // spire_world owns FORMATION+STYLE, palette owns COLOR, vantage owns the
+  // exterior CAMERA, charm owns the signature detail layer, light owns LIGHT+SKY,
+  // whimsy owns the gated dream element.
+
+  dream_spires_world: {
+    label: 'dream-spires world',
+    maxWords: 24,
+    theme: `Each entry is ONE impossible, whimsical FAIRYTALE TOWER-CITY formation — the HERO of the scene. Think Dr. Seuss meets Studio Ghibli: absurdly tall, slender, gently TWISTING/SPIRALING towers, stacked with round windows + balconies, packed into a charming dream-city. Name the FORMATION + the architectural character + a depth cue. These are EXTERIOR cities (the camera is outside).
+
+⚠️ TERSE REGISTER: a 14-24 word fragment — name the tower-city formation + its signature shape/style + a depth/horizon cue, then STOP. ONE comma-joined fragment.
+  ✅ GOOD: "a dense metropolis of impossibly tall twisting pastel spiral-towers linked by arched sky-bridges, smaller spires receding into hazy distance"
+  ✅ GOOD: "a colossal lone spiral hero-tower wrapped in winding staircases, a cluster of smaller candy-towers around its base, a glowing horizon beyond"
+  ❌ TOO LONG: a multi-clause paragraph. ❌ NO interior rooms — this is always the city seen from OUTSIDE.
+
+OWN ONLY THE FORMATION + STYLE. Do NOT specify the exact colors (palette axis), the camera angle (vantage axis), the small charm details (charm axis), the light/sky, or any sky dream-element. Just the whimsical tower-city + its architectural character + depth.
+
+VARIETY MANDATE — spread WIDELY across whimsical tower-WORLDS (Kevin: wide range):
+  A. SEUSS SPIRAL METROPOLIS  B. COLOSSAL LONE HERO-TOWER  C. CLIFFSIDE STACKED SPIRE-TOWN
+  D. HARBOR / SEASIDE SPIRE-PORT  E. FLOATING TOWER-ISLES (in cloud)  F. MUSHROOM-CAP TOWER-VILLAGE
+  G. HILLSIDE TIERED SPIRE-VILLAGE  H. LAKESIDE MIRROR-REFLECTED SPIRES  I. MOUNTAIN-PEAK SPIRE-CASTLE
+  J. DEEP-CANYON BRIDGE-CITY  K. FOREST-CANOPY TREE-SPIRE TOWN  L. ONION-DOME / PAGODA SPIRE-CITY
+
+🚫 BANS: NO humans, NO modern/realistic city, NO interiors, NO scary/dark. Spread across A-L. OMIT negation. Never exceed 24 words.`,
+    instructions: `Generate NEW whimsical fairytale TOWER-CITY formations across families A-L — the formation + architectural character + a depth cue. 14-24 word terse fragments, ONE line each. Formation + style only — no exact colors, no camera angle, no small details, no light, no humans, no interiors.`,
+    subThemes: [
+      'SEUSS SPIRAL METROPOLIS — a dense city of impossibly tall twisting spiral-towers linked by arched sky-bridges, smaller spires receding into haze; a teeming spire-downtown of curling towers',
+      'COLOSSAL LONE HERO-TOWER — one colossal spiral tower wrapped in winding staircases ringed by smaller towers; a single absurd hero-spire rising above a cluster of candy-towers',
+      'CLIFFSIDE STACKED SPIRE-TOWN — whimsical towers clinging up a steep cliff/gorge wall in tiers, balconies stacked over a drop, bridges spanning the chasm',
+      'HARBOR / SEASIDE SPIRE-PORT — slender spiral towers crowding a curved harbor, little boats below, towers reflected in calm water, a misty sea horizon',
+      'FLOATING TOWER-ISLES — whimsical spire-towers perched on floating islands drifting in cloud, linked by swaying rope-and-plank bridges, sky stretching below',
+      'MUSHROOM-CAP TOWER-VILLAGE — round organic towers topped with mushroom-cap roofs and curling chimneys, a cozy storybook hamlet of bulbous spires',
+      'HILLSIDE TIERED SPIRE-VILLAGE — whimsical towers terraced up a lush green hillside in winding tiers, gardens between, a spire-crowned summit above',
+      'LAKESIDE MIRROR-REFLECTED SPIRES — a cluster of tall pastel spires on a still lake, perfectly mirrored in glassy water, mountains hazy beyond',
+      'MOUNTAIN-PEAK SPIRE-CASTLE — a fairytale spire-castle-town crowning a craggy peak, towers and turrets above a sea of cloud, switchback stairs climbing',
+      'DEEP-CANYON BRIDGE-CITY — towers rising from both walls of a deep chasm, a web of arched bridges and staircases spanning the gap, depth plunging below',
+      'FOREST-CANOPY TREE-SPIRE TOWN — slender towers woven among colossal trees, treetop balconies and rope-bridges, a green-gold canopy city in the branches',
+      'ONION-DOME / PAGODA SPIRE-CITY — an eastern-fairytale skyline of stacked pagoda-tiers and onion-dome spires, curling eaves and lanterns, layered rooftops to a hazy horizon',
+    ],
+  },
+
+  dream_spires_palette: {
+    label: 'dream-spires palette',
+    maxWords: 16,
+    theme: `Each entry is ONE cohesive SOFT CANDY-PASTEL color scheme for the tower-city — the towers + overall color story. Owns COLOR ONLY: no formation, no camera, no light-time, no details. Each tower a different soft pastel; the whole city reads as one designed palette.
+
+⚠️ Keep it SOFT and PASTEL (the reference is dreamy candy-color, not neon). Name 3-4 hues.
+  ✅ GOOD: "soft peach, mint-green, rose-pink and cream towers with warm golden window-light"
+  ✅ GOOD: "pale lavender, butter-yellow and sky-blue spires washed in soft coral"
+
+Spread across: WARM CANDY (peach/coral/rose/cream), COOL CANDY (mint/sky-blue/lavender), SUNSET-WARM (apricot/gold/blush), TWILIGHT-COOL (periwinkle/lilac/dusky-blue with amber windows), MIXED RAINBOW-PASTEL (a gentle spread of many pastels), MONO-TINT (one pastel family in soft gradients).
+
+🚫 BANS: NO neon/garish, NO formation, NO camera, NO time-of-day. OMIT negation. ≤16 words.`,
+    instructions: `Generate NEW soft candy-pastel color schemes for the tower-city — 3-4 named pastel hues + the window-glow. 8-16 words, ONE line. Color only — no formation, no camera, no light-time, no details.`,
+    subThemes: [
+      'WARM CANDY — soft peach, coral, rose-pink and cream towers with warm golden window-light',
+      'COOL CANDY — pale mint-green, sky-blue and lavender spires, soft and dreamy, gentle gold windows',
+      'SUNSET-WARM — apricot, blush, soft gold and rose towers glowing in warm pastel light',
+      'TWILIGHT-COOL — periwinkle, lilac and dusky-blue spires with amber lantern-lit windows',
+      'MIXED RAINBOW-PASTEL — a gentle spread of peach, mint, lilac, butter-yellow and rose pastel towers',
+      'MONO-TINT GRADIENT — one soft pastel family (all rose-tones, or all mint-tones) in gentle gradients with gold windows',
+    ],
+  },
+
+  dream_spires_vantage: {
+    label: 'dream-spires vantage',
+    maxWords: 18,
+    theme: `Each entry is ONE EXTERIOR camera vantage on the tower-city — HOW we view it from OUTSIDE. Owns the CAMERA/COMPOSITION ONLY: no formation, no color, no details, no light. ALWAYS an exterior view of the city (NEVER an indoor room looking out).
+
+⚠️ EXTERIOR ONLY — the camera is in the open air among / below / above / across from the towers. NO interiors, NO window-frame foregrounds, NO cozy rooms.
+  ✅ GOOD: "looking steeply UP the towering spires from a plaza far below, towers soaring into the sky"
+  ✅ GOOD: "a sweeping aerial vista ACROSS the spire-city at mid-height, rooftops and bridges receding to the horizon"
+
+Spread across: LOOK-UP (from the base, spires soaring), MID-HEIGHT SWEEP (across a tower-canyon), HIGH AERIAL (down over the rooftops), DISTANT SKYLINE (the whole city across water/valley), THREE-QUARTER HERO (one tower foregrounded, city behind), BRIDGE-LEVEL (along a sky-bridge between towers, the city around).
+
+🚫 BANS: NO interiors/rooms, NO window foregrounds, NO formation, NO color, NO light. OMIT negation. ≤18 words.`,
+    instructions: `Generate NEW EXTERIOR camera vantages on the tower-city — the angle/height/sweep, always from outside. 8-18 words, ONE line. Camera only — no interiors, no formation, no color, no details, no light.`,
+    subThemes: [
+      'LOOK-UP FROM BELOW — looking steeply up the towering spires from a plaza far below, towers soaring into the sky',
+      'MID-HEIGHT CANYON SWEEP — a sweeping view across a canyon of towers at mid-height, bridges and balconies receding',
+      'HIGH AERIAL OVER ROOFTOPS — a high aerial vista looking down over the spire-rooftops and winding bridges below',
+      'DISTANT SKYLINE VISTA — the whole tower-city seen across water or a valley, a full whimsical skyline to the horizon',
+      'THREE-QUARTER HERO TOWER — one grand tower foregrounded at three-quarter angle, the rest of the city rising behind it',
+      'BRIDGE-LEVEL THROUGH THE SPIRES — a view along a sky-bridge between towers, the spire-city soaring all around',
+    ],
+  },
+
+  dream_spires_charm: {
+    label: 'dream-spires charm',
+    maxWords: 14,
+    theme: `Each entry is ONE signature whimsical CHARM DETAIL that makes the tower-city magical and lived-in (two rolled per render). Owns the small DETAIL ONLY: no formation, no color, no camera, no light. These weave through the towers.
+
+✅ GOOD: "chimney-pots puffing little curls of white steam"
+✅ GOOD: "winding external spiral staircases hugging the towers"
+✅ GOOD: "arched sky-bridges linking the spires"
+✅ GOOD: "flowering window-boxes and potted plants on wrought-iron balconies"
+
+Spread across: STEAM (chimney-pots puffing steam, steaming kett) , STAIRS (winding external spiral staircases, switchback stairs), BRIDGES (arched sky-bridges, rope-and-plank walkways), GREENERY (flowering balconies, hanging vines, window-box gardens, rooftop gardens), LIGHTS (hanging lanterns, string-lights, glowing windows), MARKET-LIFE (colorful awnings, fluttering pennants, little market stalls, laundry-lines), WHIMSY-FIXTURES (weather-vanes, spinning pinwheels, little clock-faces, birdhouses).
+
+🚫 BANS: NO humans, NO formation, NO color, NO camera, NO light. OMIT negation. ≤14 words.`,
+    instructions: `Generate NEW whimsical charm DETAILS for the tower-city — steam, stairs, bridges, greenery, lights, market-life, fixtures. 4-14 words, ONE line. ONE small detail only — no humans, no formation, no color, no camera, no light.`,
+    subThemes: [
+      'STEAM — chimney-pots puffing little curls of white steam, a steaming kettle-vent, soft smoke drifting from spire-tops',
+      'STAIRS — winding external spiral staircases hugging the towers, switchback stone stairs climbing between balconies',
+      'BRIDGES — arched sky-bridges linking the spires, swaying rope-and-plank walkways, little covered footbridges',
+      'GREENERY — flowering window-boxes and potted plants on wrought-iron balconies, hanging vines, tiny rooftop gardens',
+      'LIGHTS — strings of hanging lanterns, warm fairy-lights laced between towers, rows of glowing round windows',
+      'MARKET-LIFE — colorful striped awnings, fluttering pennant-flags, tiny market stalls, laundry-lines strung between balconies',
+      'WHIMSY-FIXTURES — copper weather-vanes, spinning pinwheels, little clock-faces, birdhouses and dovecotes on the spires',
+    ],
+  },
+
+  dream_spires_light: {
+    label: 'dream-spires light+sky',
+    maxWords: 16,
+    theme: `Each entry is ONE dreamy LIGHT + SKY treatment for the whole tower-city — the time-of-day light behavior + the sky. Owns LIGHT + SKY ONLY: no formation, no tower-color, no camera, no details. Use neutral light words; let palette own the tower colors.
+
+✅ GOOD: "warm golden-hour sunset, soft peach-and-lavender clouds, windows beginning to glow"
+✅ GOOD: "soft pastel dawn, pale mist between the towers, gentle pink sky"
+✅ GOOD: "glowing blue dusk, every window lit warm gold, a deep violet sky"
+
+Spread across: GOLDEN-HOUR SUNSET (warm, glowing clouds), PASTEL DAWN (soft pink, low mist), GLOWING DUSK (blue hour, windows all lit), SOFT MIDDAY CLOUD-SEA (bright, fluffy clouds), LAVENDER TWILIGHT (violet sky, first stars), DREAMY OVERCAST (soft pearl light, gentle haze).
+
+🚫 BANS: NO formation, NO tower-color, NO camera, NO charm-details, NO humans. OMIT negation. ≤16 words.`,
+    instructions: `Generate NEW dreamy LIGHT + SKY treatments for the tower-city — time-of-day light + the sky + window-glow. 8-16 words, ONE line. Light + sky only — no formation, no tower-color, no camera, no details.`,
+    subThemes: [
+      'GOLDEN-HOUR SUNSET — warm golden-hour light, soft peach-and-lavender sunset clouds, windows beginning to glow',
+      'PASTEL DAWN — soft pink pastel dawn, pale mist drifting between the towers, a gentle glowing sky',
+      'GLOWING DUSK — deep blue dusk, every round window lit warm gold, a violet sky and first lights',
+      'SOFT MIDDAY CLOUD-SEA — soft bright daylight, big fluffy white clouds drifting around the spires',
+      'LAVENDER TWILIGHT — a lavender-and-rose twilight sky, first stars, the city softly aglow',
+      'DREAMY OVERCAST — soft pearl-grey light, gentle low haze wreathing the towers, a calm muted sky',
+    ],
+  },
+
+  dream_spires_whimsy: {
+    label: 'dream-spires whimsy',
+    maxWords: 14,
+    theme: `Each entry is ONE surreal, magical DREAM ELEMENT in the SKY or AIR around the tower-city — the touch of whimsy that makes it a DREAM (one gated roll, so it must stand alone). Owns the SKY/AIR dream-element ONLY: no towers, no color, no camera, no light.
+
+✅ GOOD: "a stately airship drifting between the distant spires"
+✅ GOOD: "a cluster of hot-air balloons floating over the city"
+✅ GOOD: "a giant luminous moon hanging low behind the towers"
+
+Spread across: SKY-VESSELS (a drifting airship, a tiny flotilla of sky-ships, hot-air balloons, a gondola-balloon), CELESTIAL (a giant low moon, a soft aurora, a low ringed planet, a brilliant low Milky-Way band), FLOATING-MAGIC (drifting sky-lanterns, floating glowing orbs, paper lanterns rising), SKY-LIFE (a wheeling flock of distant birds, a flight of paper kites, a soaring whale-shaped cloud), SOFT-PHENOMENON (a gentle rainbow arcing over the spires, a shower of drifting petals on the wind).
+
+🚫 BANS: NO humans, NO towers, NO color, NO camera, NO ground-detail. OMIT negation. ≤14 words.`,
+    instructions: `Generate NEW surreal SKY/AIR dream-elements for the tower-city — sky-vessels, celestial, floating-magic, sky-life, soft-phenomena. 4-14 words, ONE line. ONE sky/air element only — no humans, no towers, no color, no camera.`,
+    subThemes: [
+      'SKY-VESSELS — a stately airship drifting between the spires, a tiny flotilla of sky-ships, a gondola-balloon gliding past',
+      'CELESTIAL — a giant luminous moon low behind the towers, a soft aurora rippling overhead, a low ringed planet on the horizon',
+      'FLOATING-MAGIC — drifting sky-lanterns rising over the city, floating glowing orbs, a stream of paper lanterns aloft',
+      'SKY-LIFE — a wheeling flock of distant birds, a flight of colorful paper kites, a soaring whale-shaped cloud',
+      'SOFT-PHENOMENON — a gentle rainbow arcing over the spires, a soft shower of drifting petals on the wind, falling sparkle-light',
+      'HOT-AIR BALLOONS — a cluster of candy-striped hot-air balloons floating over the tower-city, drifting lazily between spires',
+    ],
+  },
+
   // ════════════════ CROSSOVER WORLDS — the bubble-bot visits other bots ═══════
   // Each = a themed dream_world pool (the bot's scenes), rendered in DreamBot's
   // glossy-dreamy register. World-focused voice (no bot detail; the renderer

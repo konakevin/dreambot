@@ -39,6 +39,18 @@ const DREAMSCAPE_MEDIUM =
 const BUTTERFLY_MEDIUM =
   'lush painterly fantasy dreamscape, dreamy storybook illustration, butterflies with luminous iridescent painterly wings glowing from within and woven softly into the scene, lavish hand-painted detail, ultra-saturated jewel color, volumetric dreamlight, deep atmospheric depth, magical-realism, wallpaper-tier';
 
+// DREAM_SPIRES_MEDIUM (2026-06-27, leaned 2026-06-28) — the `dream-spires` path's
+// own register: an impossible whimsical fairytale TOWER-CITY in the painterly-
+// storybook look. Kevin hearted a full batch of this exact medium (NOT the
+// hyperreal refs) across flux-1.1-pro-ultra / flux-2-flex / flux-2-pro / flux-2-max
+// — so the medium stays painterly and now LEANS into the recurring DNA of every
+// hearted render: hundreds of warm glowing windows, pastel twilight/golden-hour
+// color, drifting chimney-steam + lantern glow, winding stairs + slender
+// skybridges, impossibly tall twisting spires. Code-only medium (no DB row;
+// modelByPath rolls the qualified model pool). Color/light/world come from the axes.
+const DREAM_SPIRES_MEDIUM =
+  'lush painterly fantasy dreamscape, dreamy storybook illustration, an impossible whimsical fairytale tower-city of impossibly tall twisting spires, lavishly hand-painted and glowing from within with hundreds of warm golden windows, soft pastel twilight color, drifting chimney-steam and lantern glow, winding stairs and slender skybridges, volumetric dreamlight, deep atmospheric depth, cozy magical wonder, wallpaper-tier';
+
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
 Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting and mood should match the SCENE naturally (rainy = soft grey, sunset = golden, night = moonlit) — not forced bright.`;
@@ -229,6 +241,7 @@ module.exports = {
   CHIBI_CREATURE_MEDIUM,
   DREAMSCAPE_MEDIUM,
   BUTTERFLY_MEDIUM,
+  DREAM_SPIRES_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

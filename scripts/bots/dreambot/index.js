@@ -77,6 +77,10 @@ const pathBuilders = {
   // (2026-06-27). NO character; the butterflies are the hero. Own photoreal-
   // cinematic medium, flux-ultra.
   'butterfly-realm': require('./paths/butterfly-realm'),
+  // dream-spires — whimsical fairytale TOWER-CITY (2026-06-27). NO character;
+  // the impossible tower-city is the hero. Own painterly-storybook medium,
+  // flux-ultra. EXTERIOR VISTAS ONLY.
+  'dream-spires': require('./paths/dream-spires'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -90,6 +94,7 @@ const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
     p !== 'creature-world' &&
     p !== 'dreamscape' &&
     p !== 'butterfly-realm' &&
+    p !== 'dream-spires' &&
     !p.startsWith('bubble-bot-dreams')
 );
 
@@ -157,6 +162,8 @@ module.exports = {
     dreambot_dreamscape: blocks.DREAMSCAPE_MEDIUM,
     // butterfly-realm — own photoreal-cinematic medium (code-only, no DB row).
     dreambot_butterfly: blocks.BUTTERFLY_MEDIUM,
+    // dream-spires — own painterly-storybook medium (code-only, no DB row).
+    dreambot_spires: blocks.DREAM_SPIRES_MEDIUM,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -200,6 +207,8 @@ module.exports = {
     dreamscape: 'dreambot_dreamscape',
     // butterfly-realm locks its own photoreal-cinematic medium.
     'butterfly-realm': 'dreambot_butterfly',
+    // dream-spires locks its own painterly-storybook medium.
+    'dream-spires': 'dreambot_spires',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -225,6 +234,10 @@ module.exports = {
     // path's painterly look). Subject anchor only.
     dreambot_butterfly:
       'lush painterly butterfly dreamscape, striking iridescent butterflies the focal point painted into the scene, a dreamy colorful storybook dream-world, magical and whimsical',
+    // dream-spires: LEAD with the whimsical tower-city hero + painterly storybook
+    // cue. Region/world-anchor only — no enumeration (first-noun lock).
+    dreambot_spires:
+      'whimsical fairytale tower-city, impossible twisting pastel spires with glowing windows, lush painterly storybook dream-world, dreamy and magical',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/
@@ -284,7 +297,14 @@ module.exports = {
   // DreamBot's active paths. First path: bubble-bot-dreams (xerox-copied from
   // ChibiBot 2026-06-12). The rest of the ChibiBot machinery is inherited
   // (dormant) so future DreamBot paths are easy — only listed paths post.
-  paths: ['bubble-bot-dreams', 'bubble-bot-dreams-warm', ...CROSSOVER_PATHS, 'dreamscape', 'butterfly-realm'],
+  paths: [
+    'bubble-bot-dreams',
+    'bubble-bot-dreams-warm',
+    ...CROSSOVER_PATHS,
+    'dreamscape',
+    'butterfly-realm',
+    'dream-spires',
+  ],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -325,6 +345,19 @@ module.exports = {
     // butterfly-realm — flux-1.1-pro + pro-ultra (uniform random), both render
     // crisp iridescent wings + lush photoreal depth (Kevin 2026-06-27).
     'butterfly-realm': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    // dream-spires — the 5 models Kevin approved for this path (2026-06-28),
+    // uniform random. pro-ultra = the most magical/polished pastel castle-cities;
+    // flux-1.1-pro = pro-ultra-tier crisp + cheaper; flux-dev = softer warm
+    // atmospheric dreamy variant; flux-2-flex = cozy inked storybook; flux-2-pro
+    // = rich painterly misty spire-villages. (flux-2-max dropped — kept tripping
+    // Replicate's safety-filter false-positives mid-batch.)
+    'dream-spires': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-dev',
+      'black-forest-labs/flux-2-flex',
+      'black-forest-labs/flux-2-pro',
+    ],
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -335,7 +368,15 @@ module.exports = {
     // 2026-06-05 — bath-time lean-rebuild: every chaos perturbation (geometry,
     // framing, secondary_light, etc.) pushes the bath vessel further out of
     // focus on a path whose entire identity is "creature in a bath." Skip.
-    skipPaths: ['bath-time', 'bubble-bot-dreams', 'bubble-bot-dreams-warm', 'dreamscape', 'butterfly-realm', ...CROSSOVER_PATHS],
+    skipPaths: [
+      'bath-time',
+      'bubble-bot-dreams',
+      'bubble-bot-dreams-warm',
+      'dreamscape',
+      'butterfly-realm',
+      'dream-spires',
+      ...CROSSOVER_PATHS,
+    ],
     allowSubjectChaosPaths: [
       'cozy-landscape',
       'rainy-day-cozy',
@@ -362,6 +403,7 @@ module.exports = {
       'bubble-bot-dreams-warm',
       'dreamscape',
       'butterfly-realm',
+      'dream-spires',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',

@@ -86,6 +86,16 @@ module.exports = {
   BUTTERFLY_REALM_PALETTE: load('butterfly_realm_palette'),
   BUTTERFLY_REALM_WHIMSY: load('butterfly_realm_whimsy'),
   BUTTERFLY_REALM_ATMOSPHERE: load('butterfly_realm_atmosphere'),
+  // DREAM-SPIRES (2026-06-27) — whimsical fairytale TOWER-CITY, scene-as-hero,
+  // EXTERIOR VISTAS ONLY. AXIS-CLEAN: spire_world=formation+style, palette=color,
+  // vantage=exterior camera, charm=signature charm layer, light=light+sky,
+  // whimsy=gated dream element.
+  DREAM_SPIRES_WORLD: load('dream_spires_world'),
+  DREAM_SPIRES_PALETTE: load('dream_spires_palette'),
+  DREAM_SPIRES_VANTAGE: load('dream_spires_vantage'),
+  DREAM_SPIRES_CHARM: load('dream_spires_charm'),
+  DREAM_SPIRES_LIGHT: load('dream_spires_light'),
+  DREAM_SPIRES_WHIMSY: load('dream_spires_whimsy'),
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),

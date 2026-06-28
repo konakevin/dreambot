@@ -89,4 +89,24 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // dream-spires — scene-as-hero whimsical fairytale TOWER-CITY (2026-06-27, new).
+  // NO character; the impossible whimsical tower-city is the hero. LEAN axes
+  // (hero is rich — OceanBot lesson): 5 always + 1 gated whimsy. EXTERIOR VISTAS
+  // ONLY. AXIS-CLEAN: spire_world owns FORMATION+STYLE, palette owns COLOR,
+  // vantage owns the exterior CAMERA, charm_details (pickN 2) own the signature
+  // charm layer, light_sky owns LIGHT+SKY, whimsy owns the gated dream element.
+  DREAMBOT_DREAM_SPIRES: {
+    description:
+      'PATH-BESPOKE — DreamBot dream-spires (2026-06-27). Scene-as-hero whimsical fairytale TOWER-CITY (Seuss-meets-Ghibli spiral pastel towers, chimney-steam, skybridges, lit windows); the WORLD is the hero, no character. 5 always axes (spire_world + palette + vantage + charm_details ×2 + light_sky) + 1 gated conditional (whimsy ~40%). EXTERIOR VISTAS ONLY. Own painterly-storybook medium (dreambot_spires), flux-1.1-pro-ultra; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['spire_world', 'palette', 'vantage', 'charm_details', 'light_sky'],
+    },
+    pickN: { charm_details: 2 },
+    conditionalLayers: [{ slot: 'whimsy', gate: 0.4 }],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
