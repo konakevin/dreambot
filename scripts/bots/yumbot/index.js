@@ -65,6 +65,14 @@ const pathBuilders = {
   // camping / etc.). Uses the embodied yumbot_food_character medium + ultra.
   'food-adventures': require('./paths/food-adventures'),
   'food-amusement-park': require('./paths/food-amusement-park'),
+  'food-water-park': require('./paths/food-water-park'),
+  'food-beach-day': require('./paths/food-beach-day'),
+  'food-camping': require('./paths/food-camping'),
+  'food-concert': require('./paths/food-concert'),
+  'food-arcade': require('./paths/food-arcade'),
+  'food-county-fair': require('./paths/food-county-fair'),
+  'food-birthday-party': require('./paths/food-birthday-party'),
+  'food-outings': require('./paths/food-outings'),
 };
 
 module.exports = {
@@ -117,6 +125,14 @@ module.exports = {
     // STORYTELLING path — embodied food-character identity, not face-baked-in.
     'food-adventures': 'yumbot_food_character',
     'food-amusement-park': 'yumbot_food_character',
+    'food-water-park': 'yumbot_food_character',
+    'food-beach-day': 'yumbot_food_character',
+    'food-camping': 'yumbot_food_character',
+    'food-concert': 'yumbot_food_character',
+    'food-arcade': 'yumbot_food_character',
+    'food-county-fair': 'yumbot_food_character',
+    'food-birthday-party': 'yumbot_food_character',
+    'food-outings': 'yumbot_food_character',
   },
 
   // Per-medium prompt prefix override (engine line 1314) — REPLACES the
@@ -202,6 +218,14 @@ module.exports = {
     'carnival-food',
     'food-adventures',
     'food-amusement-park',
+    'food-water-park',
+    'food-beach-day',
+    'food-camping',
+    'food-concert',
+    'food-arcade',
+    'food-county-fair',
+    'food-birthday-party',
+    'food-outings',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
@@ -227,6 +251,14 @@ module.exports = {
     // rendered the hearted taco-mariachi winner, is banned fleet-wide).
     'food-adventures': 'black-forest-labs/flux-1.1-pro-ultra',
     'food-amusement-park': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-water-park': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-beach-day': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-camping': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-concert': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-arcade': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-county-fair': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-birthday-party': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-outings': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },

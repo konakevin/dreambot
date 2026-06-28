@@ -41,6 +41,14 @@ module.exports = {
   // SCENE pools (food-adventures recipe: cast + action + rich location baked in).
   // Reuse the YUMBOT_FOOD_ADVENTURES archetype + shared narrative secondary axes.
   YUMBOT_AMUSEMENT_PARK_SCENES: load('yumbot_amusement_park_scenes'),
+  YUMBOT_WATER_PARK_SCENES: load('yumbot_water_park_scenes'),
+  YUMBOT_BEACH_DAY_SCENES: load('yumbot_beach_day_scenes'),
+  YUMBOT_CAMPING_SCENES: load('yumbot_camping_scenes'),
+  YUMBOT_CONCERT_SCENES: load('yumbot_concert_scenes'),
+  YUMBOT_ARCADE_SCENES: load('yumbot_arcade_scenes'),
+  YUMBOT_COUNTY_FAIR_SCENES: load('yumbot_county_fair_scenes'),
+  YUMBOT_BIRTHDAY_PARTY_SCENES: load('yumbot_birthday_party_scenes'),
+  YUMBOT_FOOD_OUTINGS_SCENES: load('yumbot_food_outings_scenes'),
   // Tagged tiny companion creatures (peripheral cuties — never the hero)
   TINY_COMPANIONS: load('tiny_companions'),
   // Tagged small decor items (lanterns / flowers / ribbons / bunting / etc.)
