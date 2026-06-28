@@ -27,11 +27,11 @@ module.exports = {
 
     return `Write ONE cinematic steampunk illustration for SteamBot: a single gorgeous WOMAN caught mid-action inside a fully-realized Victorian-industrial world. Lush painted key-art register (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet). Solo, candid, tasteful — beauty reads through couture craftsmanship and confident poise, never exposed skin.
 
-GENDER LOCK: open with "a [ethnicity-coded] woman [doing the action]…" — the word "woman" in the first 8 tokens, before any role-noun. She/her throughout. Exactly one character.
+OPEN by establishing she is a single gorgeous woman (the word "woman" within the first 8 tokens, before any role-noun). Build her looks ONLY from the visual traits below — NEVER a nationality, ethnicity, or region. She/her throughout. Exactly one character.
 
 THE OUTFIT is the main show — render it ornate, layered, period Victorian-industrial (brass clasps, embroidered cuffs, jeweled brooch, velvet/brocade panels), whatever silhouette the wardrobe rolls. She fills 25-40% of frame, full-body, clearly readable.
 Persona: ${persona}.
-She is a ${skin.split(',')[0]}, ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, makeup ${makeup.split(',')[0]}, wearing ${outfit}, carrying ${accessory} (rendered with rich mechanical detail).
+She has ${skin}; ${eyes.split(',')[0]}; ${hair_color.split(',')[0]} styled ${hairstyle.split(',')[0]}; makeup ${makeup.split(',')[0]}. She wears ${outfit}, carrying ${accessory} (rendered with rich mechanical detail).
 Action right now (caught mid-task, not posing): ${action}.
 
 HER STAGE — the steampunk setting: ${landscape}. Render it lived-in with real depth (tactile foreground near her → the room around her → the wider world receding into haze), never a flat backdrop.
@@ -47,11 +47,11 @@ ${TAIL}`;
 
     return `Write ONE cinematic steampunk illustration for SteamBot: a single handsome MAN caught mid-action inside a fully-realized Victorian-industrial world. Lush painted key-art register (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet). Solo, candid. Handsome through action and craftsmanship — fully dressed at all times, never seductive, never shirtless.
 
-GENDER LOCK: open with "a [ethnicity-coded] man [doing the action]…" — the word "man" in the first 8 tokens, before any role-noun. He/his throughout. Exactly one character, no women.
+OPEN by establishing he is a single handsome man (the word "man" within the first 8 tokens, before any role-noun). Build his looks ONLY from the visual traits below — NEVER a nationality, ethnicity, or region. He/his throughout. Exactly one character, no women.
 
 THE OUTFIT is the main show — render it ornate, layered, period gentleman's attire (brass buttons, leather straps, waistcoat lapels, coat-cuffs), whatever silhouette the wardrobe rolls. He fills 25-40% of frame, full-body, clearly readable.
 Persona: ${persona}.
-He is a ${skin.split(',')[0]}, ${eyes.split(',')[0]} eyes, ${facial_hair.split(',')[0]}, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit}, carrying ${accessory} (rendered with rich mechanical detail).
+He has ${skin}; ${eyes.split(',')[0]}; ${facial_hair.split(',')[0]}; ${hair_color.split(',')[0]} styled ${hairstyle.split(',')[0]}. He wears ${outfit}, carrying ${accessory} (rendered with rich mechanical detail).
 Action right now (caught mid-task, not posing): ${action}.
 
 HIS STAGE — the steampunk setting: ${landscape}. Render it lived-in with real depth (tactile foreground near him → the room around him → the wider world receding into haze), never a flat backdrop.
@@ -240,23 +240,36 @@ ${TAIL}`;
   },
 
   STEAMBOT_AIRSHIP_MALE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, role, skin, eyes, facial_hair, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+    const { lighting, atmosphere, role, skin, face, eyes, facial_hair, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+
+    // Role TITLE only — the full role description carries costume language that
+    // would override the rolled outfit and homogenize every render into one
+    // uniform. The outfit slot is the ONLY thing that dresses him.
+    const roleTitle = String(role).split('—')[0].trim();
 
     const dramaLine = drama
-      ? `A dramatic environmental event escalating the action (never replacing him as focal point): ${drama}.\n`
+      ? `A dramatic environmental event heightening the moment (never replacing him as focal point): ${drama}.\n`
       : '';
 
-    return `Write ONE cinematic AIRSHIP-ACTION scene for SteamBot — a single MALE air-officer / sky-corsair caught MID-ACTION on or around a steampunk airship. Lush painted key-art (Treasure-Planet / Last-Exile / Mortal-Engines / Sinbad sky-captain). He is DOING something, never posing. Combat allowed. Handsome through action — fully dressed at all times, never seductive, never shirtless. He is the sole focal point (background crew OK if small, mid-distance, faceless).
+    return `Write ONE cinematic AIRSHIP HERO-SHOT for SteamBot — a single handsome man OWNING the frame in an iconic, poised moment on or around a steampunk airship. Lush painted movie-poster key-art (Treasure-Planet / Last-Exile / Sinbad sky-captain). He is confident and commanding, handsome through poise and craftsmanship — fully dressed at all times, never seductive, never shirtless. He is the sole focal point (background crew OK if small, mid-distance, faceless).
 
-OPENING LOCK: start with the ethnicity-noun-phrase from the skin slot verbatim, immediately followed by his hair color natural to that heritage — e.g. "a Norwegian man with windswept sandy-blond hair…", "a Yoruba man with close-cropped black hair…". Never substitute a role-noun or "young/handsome man". Vary hair color render to render (lean lighter — blond/red/auburn — for fair European heritages). He/his throughout, no women.
+THE MAN — render his face clear and handsome, distinct render to render. Do NOT default to a generic grizzled sailor; build him EXACTLY from these rolled visual traits:
+- Skin: ${skin}.
+- Face: ${face}.
+- Eyes: ${eyes.split(',')[0]}.
+- Facial hair: ${facial_hair}.
+- Hair: ${hair_color}, ${hairstyle}.
+Never substitute a nationality, ethnicity, or a bare "young/handsome man" — describe him through these concrete visual traits only. He/his throughout, no women.
 
-THE ACTION (the headline — caught mid-motion, weight engaged, hair and coat-tails whipping): ${action}.
-He fills 40-60% of frame, full or three-quarter body. Role: ${role}. He is ${skin.split(',')[0]}, ${eyes.split(',')[0]} eyes, ${facial_hair.split(',')[0]}, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit} (tailored, layered, combat-capable AND striking — every brass clasp and strap, fully dressed), equipped with ${accessory} (rich mechanical detail).
-On/around a steampunk airship — deck, rigging, brass railing, cannon-port anchoring the action, lived-in and functional.
-THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city rushing past, never stealing focus): ${backdrop}.
+WHAT HE WEARS (his clothing comes ONLY from here — do NOT default him into a naval officer's coat or any uniform unless this line says so): ${outfit}. Render this outfit faithfully and in full, distinct in its own silhouette.
+
+THE MOMENT (the headline — an iconic poised hero-shot, hair caught in the slipstream): ${action}.
+He fills 40-60% of frame, full or three-quarter body, the clear hero of the image. His role/vibe: ${roleTitle}. He carries ${accessory} (rich mechanical detail).
+On/around a steampunk airship — deck, rigging, brass railing, lived-in and functional.
+THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city beyond, never stealing focus): ${backdrop}.
 ${dramaLine}
 Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
-Three-quarter or dynamic side angle, telephoto compression (him crisp, background hazed), movie-poster framing. No text/words/watermarks.
+Three-quarter or dynamic angle, telephoto compression (him crisp, background hazed), movie-poster framing. No text/words/watermarks.
 
 ${TAIL}`;
   },

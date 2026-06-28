@@ -167,6 +167,7 @@ module.exports = {
       characterDnaAxes: [
         'role',
         'skin',
+        'face',
         'eyes',
         'facial_hair',
         'hair_color',

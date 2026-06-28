@@ -1,106 +1,52 @@
 #!/usr/bin/env node
+/**
+ * SteamBot steampunk-man ARCHETYPES (personas) — scale to ~80 (2026-06-27).
+ *
+ * REPLACES the original recipe, which bundled COSTUME into every persona
+ * ("Steam-rifleman in worn leather coat", "Gentleman explorer in dust-flecked
+ * khaki, pith helmet") and locked silhouettes by overriding the outfit slot.
+ * The approved MVP-25 reseed stripped all clothing — persona = ROLE + DEMEANOR
+ * only. This scales it back up while keeping it strictly costume-free.
+ *
+ * HARD RULE: persona carries a role-noun + a personality/bearing note ONLY.
+ * NEVER name clothing, props, weapons, or accessories — those come from the
+ * outfit/accessory slots. Scan clean of clothing/prop words after running.
+ */
 const { generatePool } = require('../../lib/seedGenHelper');
-generatePool({
-  outPath: 'scripts/bots/steambot/seeds/steampunk_men_archetypes.json',
-  total: 100,
-  append: true,
-  batch: 25,
-  metaPrompt: (
-    n
-  ) => `You are writing ${n} STEAMPUNK MAN ARCHETYPES for SteamBot's steampunk-man path. STRICTLY two genres only: COMBAT/GUNSLINGER types and ADVENTURER/EXPLORER types. Period-accurate Victorian-industrial era, NOT modern, NOT anime, NOT sexualized.
 
-Each entry: 14-25 words. ONE specific archetype.
+const OUT = 'scripts/bots/steambot/seeds/steampunk_men_archetypes.json';
 
-━━━ TONE — CRITICAL ━━━
-- DASHING / RUGGED / WEATHERED / INTENT / CAPABLE / DANGEROUS — never "sexy" or "seductive"
-- Period-accurate Victorian-industrial / late-19th-century steampunk
-- DNA: Indiana Jones / Around-The-World-In-80-Days / League-of-Extraordinary-Gentlemen / Wild-Wild-West / 20,000-Leagues-Under-The-Sea / Treasure-Planet / BioShock-Infinite / Sherlock-Holmes / Allan-Quatermain / Phileas-Fogg / The-Mummy
-- He's a CHARACTER with a story — armed and dangerous OR exploring the unknown. ALWAYS one or the other.
-- NOT a fashion model. NOT posing. NEVER at a desk or workbench.
+(async () => {
+  await generatePool({
+    outPath: OUT,
+    total: 80,
+    batch: 28,
+    maxTokens: 12000,
+    append: true,
+    metaPrompt: (n) =>
+      `You are writing ${n} steampunk MALE personas for SteamBot's steampunk-man path. Each persona = a ROLE/PROFESSION + a short DEMEANOR / BEARING note. ONE handsome Victorian-industrial gentleman per entry.
 
-━━━ ALLOWED ARCHETYPE TYPES — STRICTLY THESE TWO BUCKETS ━━━
+━━━ ABSOLUTE RULES ━━━
+- ROLE + DEMEANOR ONLY. NEVER name clothing, garments, fabrics, hats, props, tools, weapons, or accessories (no coat, jacket, waistcoat, hat, pith helmet, cravat, goggles, rifle, revolver, pistol, sword, cane, pocket-watch, monocle, sextant, satchel, holster, badge, etc.). Clothing and props are handled by SEPARATE systems — naming them here breaks the variety.
+- NO nationality / ethnicity / region words.
+- Keep them HANDSOME and dignified; vary the bearing (commanding, roguish, scholarly, brooding, charming, intense, calm, eccentric-brilliant, world-weary-but-distinguished). Mixed ages welcome (young prime to distinguished older), all good-looking.
+- Format: a short noun-phrase, about 10-18 words, lowercase lead is fine. Just the persona — it gets slotted into "Persona: ___".
 
-▶ COMBAT / GUNSLINGER (mix evenly across these):
-1. STEAM-RIFLEMAN — long brass-barreled rifle, leather coat, predator calm
-2. STEAM-GUNSLINGER — duster coat, twin brass-revolvers low-slung, slouch hat
-3. PISTOL-DUELIST — tailored morning coat, ivory-handled flintlock, scarred knuckles
-4. SHARPSHOOTER / MARKSMAN — long brass-scoped rifle, ghillie gear, hawk-eyed
-5. OCCULT MONSTER-HUNTER — silver crucifix + steam-revolver, vested suit, wary
-6. BOUNTY-TRACKER — trail-worn riding coat, wanted-poster in pocket, brass-spurred boots
-7. SKY-PIRATE GUNSLINGER — patched leather waistcoat, holstered brass pistols, devil's smirk
-8. FRONTIER MARSHAL / LAWMAN — silver star, twin revolvers, weathered Stetson
-9. NOBLEMAN-DUELIST — embroidered silk waistcoat, dueling pistol, refined menace
-10. BRASS-KNUCKLE PUGILIST — bareknuckle boxer, scarred fists, taped knuckles
-11. ARTILLERY-OFFICER — powder-stained uniform, brass range-finder slung across chest
-12. ORDNANCE / EXPLOSIVES SPECIALIST — blast-scarred leather coat, fuse-wire on belt
-13. MERCENARY GUN-FOR-HIRE — twin holsters, scuffed boots, eyes-everywhere wariness
-14. FENCING / SABRE-MASTER — fencing master with brass-hilted sabre, dueling-club bearing
-15. STEAM-POWERED CLOCKWORK SOLDIER — bronze cuirass, steam-rifle, hardened soldier
-16. CAVALRY OFFICER — sabre at hip, brass-buttoned regimental jacket, riding boots
-17. AIRSHIP MARINE — military-cut greatcoat, repeating brass-rifle, dirigible-deck stance
-18. ARMS-DEALER — black wool greatcoat, brass-fitted weapon-case in hand, calculating gaze
-19. STEAM-PISTOL DEMONSTRATOR — sharp-eyed showman with prototype steam-pistol drawn
-20. WERWOLF/VAMPIRE HUNTER (Van-Helsing-coded) — leather longcoat, silver-bladed pistol
+━━━ EXAMPLES (mirror exactly — note ZERO clothing/props) ━━━
+"a gentleman explorer with an air of rugged, far-traveled determination"
+"a brilliant clockwork inventor with a sharp, restless, curious intensity"
+"a sky-clipper navigator with calm, seasoned, unflappable authority"
+"a dashing privateer captain with an easy, roguish, devil-may-care confidence"
+"a distinguished professor of aether-sciences, thoughtful, precise, and quietly commanding"
+"a brooding railway magnate with a cool, calculating, self-made hardness"
+"a charming stage illusionist with a knowing, mischievous theatrical flair"
+"a steely frontier marshal with an unhurried, unbreakable composure"
+"a celebrated aeronaut-adventurer with a sunlit, fearless charisma"
+"a meticulous master horologist, soft-spoken, exacting, lost in his own brilliance"
 
-▶ ADVENTURER / EXPLORER (mix evenly across these):
-21. GENTLEMAN EXPLORER — pith helmet, khaki linen, traveling case, dust-flecked boots
-22. AETHER PILOT — leather flying-helmet, brass goggles raised, sheepskin-lined jacket
-23. ORNITHOPTER TEST-PILOT — padded leather flight-suit, wing-frame blueprints, bruised
-24. DIRIGIBLE NAVIGATOR — sheepskin-collared flight-coat, altitude-gauge pinned to lapel
-25. AIRSHIP CAPTAIN — weathered brass-buttoned greatcoat, telescope at belt, command bearing
-26. CLIPPER NAVIGATOR — navy peacoat with brass buttons, sextant, salt-spray weathered
-27. STEAM-TRAWLER CAPTAIN — waterproofed greatcoat, fishing-chart, salt-crusted beard
-28. BRASS-COMPASS NAVIGATOR — salt-stained oilskin coat, chart-tube, storm-weathered face
-29. DIVING-BELL / BATHYSPHERE OPERATOR — rubberized canvas suit, brass helmet under arm
-30. ANTIQUARIAN CARTOGRAPHER — ink-stained vest, rolled map-case, compass on chain
-31. EXPEDITION PHOTOGRAPHER — canvas field jacket, brass-fitted plate-camera on tripod
-32. STORM-CHASER — reinforced canvas duster, lightning-rod apparatus strapped to back
-33. SUBTERRANEAN SURVEYOR / SPELUNKER — miner's helmet with carbide-lamp, geological hammer
-34. GEOLOGICAL PROSPECTOR — canvas field-trousers, ore-sample pouch heavy, rock-hammer
-35. SURVEYOR — trail-worn field-coat, brass theodolite on tripod, terrain-map under arm
-36. SPECIMEN-COLLECTOR / NATURALIST — canvas expedition-vest, butterfly-net, chloroform jar
-37. ARCTIC / POLAR EXPLORER — fur-lined parka with brass goggles, snowshoes, frost-bearded
-38. JUNGLE / SAFARI EXPLORER — pith helmet, brass-barreled rifle, khaki safari-coat
-39. ALPINE MOUNTAIN-CLIMBER — brass crampons, ice-axe, ropes coiled across chest
-40. LOST-CIVILIZATION ARCHAEOLOGIST — Indiana-Jones-coded with bullwhip + brass-revolver
-41. SUBMARINE / NAUTILUS-STYLE CAPTAIN — Captain Nemo-coded with ornate uniform
-42. AETHER-FLIGHT MERIDIAN-CHARTER — high-altitude pilot with oxygen tube
-43. BIG-GAME HUNTER — Allan-Quatermain-coded with elephant gun + safari kit
-44. CIRCUMNAVIGATOR — Phileas Fogg-coded gentleman with valise + pocket-watch
-45. AETHER-WHALER — sky-whaler with brass harpoon-gun on airship deck
-46. EXPLORER-DETECTIVE — Sherlock-Holmes-in-the-field with magnifying glass + steam-revolver
-47. RIVER-EXPEDITION CAPTAIN — Heart-of-Darkness-coded with steamboat
-48. DESERT-EXPEDITION LEADER — Lawrence-of-Arabia-coded with khaki + brass scope
-49. CRYPTOZOOLOGIST — naturalist hunting unknown beasts, brass-fitted specimen-cage
-50. AERONAUT — pioneering balloon-pilot with brass-fitted altimeter, leather-bound logbook
+━━━ VARIETY MANDATE ━━━
+Rotate widely across roles: inventor, navigator, explorer, captain, professor, detective, diplomat, engineer, duelist, financier, surgeon, cartographer, admiral, illusionist, photographer, horologist, test-pilot, naturalist, journalist, harbor-master, architect, gambler, ambassador, researcher, cavalry officer, composer, archaeologist, alchemist, telegraph-operator, locomotive-engineer, big-game hunter, vintner, fencing-master, astronomer, etc. Vary the demeanor every entry.
 
-━━━ FOR EACH ENTRY INCLUDE ━━━
-- Core archetype (combat or adventurer — never both, never other)
-- 2-3 distinctive identifying details (brass-rifle, pith helmet, dueling pistol, chart-tube)
-- His ENERGY in 1-2 words (predator-calm, daring, weathered, intent, hawk-eyed, fearless)
-
-━━━ ABSOLUTELY BANNED ━━━
-- NO factory workers, industrial laborers, mechanics, foremen, supervisors
-- NO desk-scholars, professors, draughtsmen, patent-clerks, pencil-pushers
-- NO craftsmen at workbenches (no glassblowers, smiths, lens-grinders, etc.)
-- NO socialites, tycoons, lawyers, doctors, ministers, gentlemen-of-leisure
-- NO musicians, performers, photographers-in-studio, artists
-- NO laborers (riveters, stokers, lamplighters, drivers, couriers, dispatchers)
-- NO "sexy", "seductive", "alluring", "smoldering"
-- NO modern era (no cars / phones / contemporary fashion)
-- NO anime / manga register
-- NO shirtless / underwear poses
-- NO named real people / IP characters (no Indiana Jones BY NAME, no Allan Quatermain BY NAME)
-
-━━━ EXAMPLES (DO NOT REUSE — write fresh) ━━━
-- "Steam-rifleman in worn leather coat, brass-barreled rifle slung over shoulder, predator's calm gaze, weathered composure"
-- "Gentleman explorer in dust-flecked khaki linen, pith helmet tucked under arm, traveling case in hand, rugged determination"
-- "Steam-gunslinger in long duster coat, twin brass-revolvers holstered low, slouch hat shadowing eyes, lethal calm"
-- "Aether pilot in leather flying-helmet, brass goggles pushed up, sheepskin jacket worn, oxygen tube coiled, daring readiness"
-
-━━━ OUTPUT ━━━
-JSON array of ${n} strings. No preamble, no numbering, no markdown.`,
-}).catch((e) => {
-  console.error('Fatal:', e.message);
-  process.exit(1);
-});
+Return ONLY a JSON array of ${n} strings. No commentary.`,
+  });
+})();

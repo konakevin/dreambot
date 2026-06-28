@@ -26,9 +26,12 @@ module.exports = {
     // Path-bespoke
     action: 'AIRSHIP_MALE_ACTION',
     backdrop: 'AIRSHIP_BACKDROP', // shared with airship-female
-    // Character DNA — 8 axes (male adds facial_hair)
+    // Character DNA — 9 atomic axes (male adds facial_hair; R2 2026-06-27:
+    // nationality-label + grime/aging pools replaced with clean pure-visual
+    // atomic axes incl. a new `face` axis, mirroring airship-female).
     role: 'AIRSHIP_ROLE', // shared
     skin: 'AIRSHIP_MALE_SKIN',
+    face: 'AIRSHIP_MALE_FACE',
     eyes: 'AIRSHIP_MALE_EYES',
     facial_hair: 'AIRSHIP_MALE_FACIAL_HAIR',
     hair_color: 'AIRSHIP_MALE_HAIR_COLOR',
