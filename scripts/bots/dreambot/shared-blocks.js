@@ -66,6 +66,15 @@ const EDEN_MEDIUM_HYPERREAL =
 const EDEN_MEDIUM_PAINTERLY =
   'lush painterly sci-fi-fantasy dreamscape, luminous hand-painted illustration glowing from within, ultra-saturated jewel color, volumetric dreamlight, deep atmospheric depth, breathtaking otherworldly paradise vista, magical-realism, wallpaper-tier';
 
+// CONSERVATORY_MEDIUM (2026-06-28) — the `hidden-conservatory` path's render
+// register: a photoreal cinematic interior of a lush overgrown stained-glass
+// greenhouse, with rainbow prismatic light refracting through jewel-toned glass
+// (ref: benmyhre "Stained Glass Greenhouses"). Code-only medium (no DB row;
+// modelByPath hard-locks the model). Lean (≤250 chars, no negation cascade). The
+// glass color / mood / flora come from the axes; the medium just sets the look.
+const CONSERVATORY_MEDIUM =
+  'cinematic photoreal interior, a lush overgrown stained-glass conservatory, brilliant jewel-toned glass, rainbow prismatic light refraction scattered across the scene, rich volumetric god-rays, deep atmospheric depth, ultra-detailed botanical greenhouse, romantic and magical, wallpaper-tier';
+
 const CUTE_CUDDLY_COZY_BLOCK = `━━━ CUTE + CUDDLY + COZY (NON-NEGOTIABLE) ━━━
 
 Every render must produce: AWWW + instant smile + "I want to hug it" instinct. If the render has even a whisper of dark / edgy / menacing — it FAILED. The reaction is wholesome delight — big eyes, soft shapes, infectious cuteness. Lighting and mood should match the SCENE naturally (rainy = soft grey, sunset = golden, night = moonlit) — not forced bright.`;
@@ -259,6 +268,7 @@ module.exports = {
   DREAM_SPIRES_MEDIUM,
   EDEN_MEDIUM_HYPERREAL,
   EDEN_MEDIUM_PAINTERLY,
+  CONSERVATORY_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,
   // Pixar aliases

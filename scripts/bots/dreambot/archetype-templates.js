@@ -259,4 +259,69 @@ Vertical 9:16 phone-wallpaper. The alien world fills the frame edge to edge with
 
 Write the Flux prompt OPENING with the alien world + the cosmic sky, then layer in the flora, the color story, light, and any glowing terrain / distant wonder / life / magical moment. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
   },
+
+  // DreamBot hidden-conservatory — scene-as-hero stained-glass GREENHOUSE INTERIOR
+  // (2026-06-28). An overgrown garden inside a grand stained-glass cathedral/
+  // conservatory; sun SHATTERS through jewel-glass into rainbow prismatic light
+  // (ref: benmyhre "Stained Glass Greenhouses"). `light_effect` is the signature
+  // money-shot (always-on); `atmosphere` rolls the full mood range (moody-dark ↔
+  // bright) — the template keeps glass + flora + refracted light VIVID either way.
+  // Gated slots (water_feature / architectural_detail / ambient_life) arrive
+  // undefined when they don't fire; the composer omits their blocks.
+  DREAMBOT_HIDDEN_CONSERVATORY: ({ slots }) => {
+    const { conservatory, glass_palette, light_effect, vantage, atmosphere } = slots;
+    const flora = (Array.isArray(slots.flora) ? slots.flora : [slots.flora])
+      .filter(Boolean)
+      .join('; ');
+    const water = slots.water_feature;
+    const detail = slots.architectural_detail;
+    const life = slots.ambient_life;
+
+    return `You are writing ONE breathtaking, frame-worthy phone-wallpaper render for DreamBot — a lush, overgrown botanical garden growing INSIDE a grand STAINED-GLASS CONSERVATORY, where sunlight pours through jewel-toned glass and SHATTERS into rainbow prismatic light across the whole scene. The room ITSELF is the hero (NOT a character, NOT a product) — a "secret garden inside a cathedral." Vertical, cinematic, photoreal, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ VIBRANT + ROMANTIC + MAGICAL — THE #1 RULE ━━━
+However moody or bright the light, the scene is GORGEOUS, romantic, and enchanting — the stained glass, the flowers, and the refracted rainbow light are ALWAYS brilliant and vivid. A reclaimed/overgrown look (vines on the columns, green softening the stone) is welcome and beautiful, but it reads LUSH and THRIVING — NEVER grim, NEVER horror, NEVER rotting/decaying, NEVER a bleak derelict ruin. Beautiful and alive, always.
+
+━━━ THE CONSERVATORY (THE HERO — grand stained-glass architecture overgrown with garden) ━━━
+${conservatory}
+This soaring stained-glass hall fills the frame and IS the show. Render it as a fully-realized, jaw-dropping interior with real layered DEPTH: a detailed foreground of plants and path, the glazed hall rising and receding around it, the great windows glowing beyond. Towering stained-glass windows and a glass roof, ornate iron/stone framing, a lush garden overtaking the floor.
+
+━━━ THE PRISMATIC LIGHT (the signature — rainbow refraction is a MAJOR element) ━━━
+${light_effect}
+Commit HARD to this: the colored glass breaks the sun into brilliant rainbow light scattered across the floor, the plants, and the air. This is the whole magic of the shot — make it rich and unmistakable.
+
+━━━ STAINED-GLASS COLOR STORY (the jewel hues of the glass + the light it casts) ━━━
+${glass_palette}
+The glass glows in these jewel hues, and the refracted light paints the scene in the same palette — cohesive, brilliant, never a muddy color salad.
+
+━━━ THE LUSH GARDEN (the overgrown botanicals packing the hall) ━━━
+Layer in, big and abundant: ${flora}.
+
+━━━ VANTAGE (the interior camera) ━━━
+${vantage}
+Always an INTERIOR view inside the conservatory, with strong leading lines drawing the eye through the hall.
+
+━━━ LIGHT + ATMOSPHERE + MOOD (this sets the overall mood — moody-dark OR bright, both beautiful) ━━━
+${atmosphere}
+${water ? `
+━━━ A REFLECTIVE WATER ELEMENT (doubles the colored light) ━━━
+${water}
+The water mirrors the stained-glass color, doubling the magic — keep it natural to the garden.
+` : ''}${detail ? `
+━━━ A CHARMING ARCHITECTURAL ACCENT (a graceful detail — NOT dominating) ━━━
+${detail}
+Tuck it naturally into the hall as a storybook accent; the garden + glass stay the hero.
+` : ''}${life ? `
+━━━ TINY AMBIENT LIFE (a rare delightful detail — never the focus) ━━━
+${life}
+Keep it SMALL and incidental — a charming creature you notice, never the subject. It is a creature, NEVER a human.
+` : ''}
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+NEVER a human, a person, a child, a gardener, or a humanoid figure anywhere in the frame — NOT on the path, NOT a tiny silhouette for scale. This is an UNINHABITED secret garden. Flux's training data WILL try to place a lone figure walking down the central aisle into the light — the path stays EMPTY: no lone person, no silhouette at the end of the walkway. If Flux's instinct is a figure, render the exact same scene without one.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper. The stained-glass conservatory fills the frame with real depth — a lush foreground, the glazed hall receding, the glowing windows beyond. A soft out-of-focus foreground curtain of blooms/leaves framing the shot is welcome, but the MID-GROUND and the hall stay SHARP and fully readable — NOT a studio product shot, NOT an all-over blurred/empty background. Lush and abundant yet COHESIVE and designed. Cinematic, photoreal, richly detailed, frame-worthy. NO text, NO words, NO watermarks.
+
+Write the Flux prompt OPENING with the stained-glass conservatory + the rainbow prismatic light, then layer in the glass color, the lush garden, the vantage, atmosphere, and any water / architectural accent / ambient life. Output ONLY the raw Flux prompt as one flowing paragraph, ~95-130 words. No preamble, no labels.`;
+  },
 };

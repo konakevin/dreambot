@@ -112,6 +112,22 @@ module.exports = {
   EDEN_LIFE_ACCENT: load('eden_life_accent'),
   EDEN_WONDER_STRUCTURE: load('eden_wonder_structure'),
   EDEN_DREAM_EVENT: load('eden_dream_event'),
+  // HIDDEN-CONSERVATORY (2026-06-28) — scene-as-hero stained-glass GREENHOUSE
+  // INTERIOR (ref benmyhre "Stained Glass Greenhouses"). NO character; an
+  // overgrown garden inside a grand stained-glass cathedral/conservatory with
+  // rainbow prismatic light is the hero. AXIS-CLEAN: conservatory=architecture,
+  // glass_palette=glass color, flora=plant-life, light_effect=prismatic refraction
+  // (signature), vantage=interior camera, atmosphere=light+mood+air;
+  // water/detail/life are gated conditionals.
+  CONSERVATORY_ARCH: load('conservatory_arch'),
+  CONSERVATORY_GLASS: load('conservatory_glass'),
+  CONSERVATORY_FLORA: load('conservatory_flora'),
+  CONSERVATORY_LIGHT: load('conservatory_light'),
+  CONSERVATORY_VANTAGE: load('conservatory_vantage'),
+  CONSERVATORY_ATMOSPHERE: load('conservatory_atmosphere'),
+  CONSERVATORY_WATER: load('conservatory_water'),
+  CONSERVATORY_DETAIL: load('conservatory_detail'),
+  CONSERVATORY_LIFE: load('conservatory_life'),
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),

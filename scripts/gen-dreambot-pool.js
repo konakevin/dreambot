@@ -746,6 +746,191 @@ OWN ONLY THE WORLD-TYPE / BIOME (the LAND + its signature wonder + depth). Do NO
     ],
   },
 
+  // ════════════════ HIDDEN-CONSERVATORY — stained-glass greenhouse ════════════
+  // 2026-06-28 (new path). Scene-as-hero INTERIOR: an overgrown botanical garden
+  // inside a grand stained-glass cathedral/conservatory, where sun pours through
+  // jewel-toned glass and SHATTERS into rainbow prismatic light across the scene
+  // (ref: benmyhre "Stained Glass Greenhouses"). The room is the hero, no
+  // character. Mood ROLLS the full range (moody-dark ↔ bright) via the atmosphere
+  // axis, but the GLASS + FLOWERS + REFRACTED LIGHT are always vivid (keeps it
+  // pretty, not grim). AXIS-CLEAN: conservatory owns ARCHITECTURE, glass_palette
+  // owns GLASS COLOR, flora owns plant-life (×2), light_effect owns the PRISMATIC
+  // REFRACTION (the signature axis), vantage owns the interior CAMERA, atmosphere
+  // owns LIGHT-QUALITY+MOOD+AIR; water_feature / architectural_detail / ambient_life
+  // are gated conditionals.
+
+  conservatory_arch: {
+    label: 'hidden-conservatory architecture',
+    maxWords: 24,
+    theme: `Each entry is ONE specific grand STAINED-GLASS CONSERVATORY / glasshouse INTERIOR — the architectural HERO that an overgrown garden grows inside. Name the building-type + its glass/structure character + a depth cue (the hall receding to a great window or rising into a vaulted glass ceiling). Cathedral-meets-greenhouse: soaring stained-glass windows, glass roofs, ornate iron/stone framing.
+
+⚠️ TERSE REGISTER: a SHORT 12-24 word fragment, like the touchpoints — name the structure + its signature glass feature + a depth cue, then STOP. Sonnet EXPANDS it at render time. ONE comma-joined fragment, no multi-clause paragraphs.
+  ✅ GOOD: "a soaring Gothic cathedral-glasshouse, tall lancet stained-glass windows down a ribbed-vault nave receding to a great rose window"
+  ✅ GOOD: "a curved white wrought-iron Victorian conservatory, a barrel-vaulted glass roof arcing overhead above a long central aisle"
+  ❌ TOO LONG: a flowing three-clause paragraph of atmospheric prose.
+
+OWN ONLY THE ARCHITECTURE + GLASS STRUCTURE (the building, its windows/roof/framing, the depth). Do NOT specify the glass COLORS (separate axis), the flora (separate axis), the light/refraction (separate axis), the camera vantage (separate axis), water, or any figure.
+
+🚫 BEAUTIFUL + MAGICAL: every conservatory is gorgeous, romantic, a secret garden cathedral — nature thriving inside. A reclaimed/overgrown look is welcome (vines on the columns, green softening the stone) but it reads LUSH + ENCHANTING, NEVER grim/rotting/horror/derelict-ruin/decay. NO humans, NO named real places. Spread across A-L. OMIT negation language. Never exceed 24 words.`,
+    instructions: `Generate NEW grand stained-glass CONSERVATORY interiors across families A-L — a building-type + signature glass feature + a depth cue. 12-24 word terse fragments, ONE line each. ARCHITECTURE + glass structure only — no glass colors, no flora, no light FX, no camera, no water, no figures. Every one lush + enchanting.`,
+    subThemes: [
+      'GOTHIC CATHEDRAL-GLASSHOUSE — soaring pointed-arch naves, ribbed stone vaults, tall lancet stained-glass windows, clustered columns, a great rose window at the end',
+      'VICTORIAN IRON CONSERVATORY — white-painted wrought-iron-and-glass, curved barrel-vault roofs, tiered plant staging, delicate glazing bars, a long central aisle',
+      'ART-NOUVEAU GLASS PAVILION — sinuous organic iron tracery, whiplash curves, lily-and-vine motif leadwork, flowing stained-glass panels, a graceful glazed hall',
+      'DOMED BOTANICAL PALACE — a vast central glass dome, ringed galleries and balconies, a rotunda crowned in colored glass, soaring open space',
+      'ORANGERY / LIMONAIA — a long stone orangery of tall arched windows, terracotta-tiled floor, a high glazed roof, classical pilasters',
+      'RECLAIMED CHAPEL GREENHOUSE — an old stone chapel softened by green, glorious stained-glass windows, ivy on the columns, vaulted ceiling open to a thriving garden (lush, NOT grim/rotting)',
+      'GRAND PALM-HOUSE — a towering curved-glass palm house, a soaring central aisle, wrap-around iron galleries, an immense vaulted glass canopy',
+      'ROSE-WINDOW ROTUNDA — a circular hall crowned by a giant radiant rose window, radiating stained-glass panels, a domed glazed ceiling',
+      'MOORISH GLASS-DOME — horseshoe arches, intricate geometric jewel-glass, a tiled courtyard hall, a star-patterned glazed dome',
+      'BELLE-ÉPOQUE WINTER-GARDEN — an ornate gilded glass winter garden, elegant arched glazing, a high airy glasshouse hall, decorative ironwork',
+      'GLAZED CLOISTER GARDEN — an arcaded cloister walk glazed with colored glass wrapping a green inner courtyard, repeating arches receding',
+      'VAULTED GLASS HALL — an immense iron-and-glass vaulted hall (trainshed-grand) repurposed as a garden, ribbed glass canopy soaring overhead',
+    ],
+  },
+
+  conservatory_glass: {
+    label: 'hidden-conservatory glass palette',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive STAINED-GLASS COLOR STORY for the windows — the jewel hues that lead the glass (and therefore the refracted light), like a real stained-glass artist's palette. Names 3-5 hues + how they relate (a dominant + accents + a contrast). The feed's color VARIETY lives here, so spread WIDELY. Owns the GLASS COLOR ONLY: NOT the architecture, NOT the light behavior, NOT the flora.
+
+🚫 Keep it BRILLIANT + JEWEL-TONED + vivid — luminous cathedral-glass color. NO muddy/drab/grey-brown glass.
+
+✅ GOOD: "cobalt, ruby and emerald jewel-glass with gold-amber borders and a violet accent"
+✅ GOOD: "warm amber, rose and honey-gold panes with deep teal contrast"
+✅ GOOD: "full rainbow prism glass, every pane a different saturated hue"`,
+    instructions: `Generate NEW cohesive STAINED-GLASS color stories — 3-5 jewel hues + how they relate (dominant + accents + a contrast). 8-18 words, ONE line. Glass color only — no architecture, no light behavior, no flora. Spread widely, always brilliant + jewel-toned.`,
+  },
+
+  conservatory_flora: {
+    label: 'hidden-conservatory flora',
+    maxWords: 16,
+    theme: `Each entry is ONE dominant lush BOTANICAL element that overgrows a stained-glass conservatory — stands alone (the path layers TWO per render). Vivid flowers + rich greenery reclaiming the hall. Beautiful + thriving, NEVER dead/wilted/thorny-menacing. NOT the architecture, NOT the light, NOT a creature.
+
+✅ GOOD: "banks of vivid orange and magenta orchids lining the central path"
+✅ GOOD: "cascading wisteria and climbing roses spilling down the iron columns"
+✅ GOOD: "towering tree ferns and broad palm fronds arching over the aisle"`,
+    instructions: `Generate NEW lush BOTANICAL elements that overgrow a glass conservatory — vivid flower masses + rich greenery. 6-16 words, ONE line. Plant only — no architecture, no light, no creatures. Beautiful + thriving.`,
+    subThemes: [
+      'FLOWER-MASS BEDS — banks of vivid orange and magenta orchids, beds of pink and red azaleas, rose thickets, ranks of potted bloom along the path, foxglove-and-lily borders',
+      'CLIMBING VINES — cascading wisteria down iron columns, climbing roses on the arches, jasmine smothering the mullions, ivy softening the stone, morning-glory on the glazing bars',
+      'FERNS + PALMS — towering tree ferns, broad palm fronds arching over the aisle, monstera and banana leaves, lush fern banks, fan-palms reaching the glass roof',
+      'HANGING + TRAILING — hanging flower baskets dripping color, trailing fuchsia and string-of-pearls from the galleries, draped fern fronds, dangling orchid sprays from above',
+      'PATH-SIDE BLOOMS — rows of potted bougainvillea, tubs of bright tulips and ranunculus, low borders of pansies and primrose, mossy planters spilling blossom onto the tiles',
+      'CANOPY GREENERY — a dense leafy canopy filling the upper hall, vine-curtains hanging from the vault, broadleaf foliage framing the windows, a green ceiling of climbing growth',
+    ],
+  },
+
+  conservatory_light: {
+    label: 'hidden-conservatory light effect',
+    maxWords: 16,
+    theme: `Each entry is ONE way the SUNLIGHT REFRACTS through the stained glass — the SIGNATURE of this whole path (always-on, so make it rich + varied). The colored glass shatters the sun into rainbow prismatic light scattered across the scene. Owns the PRISMATIC LIGHT PHENOMENON ONLY: NOT the glass color names, NOT the architecture, NOT the air/time-of-day (separate axis).
+
+🚫 The refracted light is BRILLIANT + MAGICAL — rainbow color splashed everywhere. This is the hook; commit hard.
+
+✅ GOOD: "pools of rainbow stained-glass light splashed across the tiled floor and path"
+✅ GOOD: "brilliant prismatic god-rays streaming down through the colored glass"
+✅ GOOD: "a blazing sunstar bursting through the window with rainbow lens-flare streaks"`,
+    instructions: `Generate NEW ways sunlight REFRACTS through stained glass into rainbow prismatic light — god-rays, colored floor-pools, sunstar bursts + lens-flare, prism bokeh, jewel-dapple on leaves/stone. 6-16 words, ONE line. The refraction phenomenon only — no glass-color names, no architecture, no time-of-day. Brilliant + magical.`,
+    subThemes: [
+      'COLORED FLOOR-POOLS — pools of rainbow stained-glass light splashed across the tiled floor, jewel-colored light washing down the central path, projected window-patterns on the stone',
+      'PRISMATIC GOD-RAYS — brilliant rainbow god-rays streaming down through the colored glass, shafts of jewel-toned light cutting the air, colored sunbeams fanning across the hall',
+      'SUNSTAR BURST — a blazing sunstar bursting through the window with rainbow lens-flare streaks, a brilliant flare exploding off the glass, radiant starburst spokes of color',
+      'PRISM BOKEH + SPARKLE — a scatter of rainbow prism bokeh orbs drifting in the air, glittering color-sparkles, refracted light-flecks dancing through the scene',
+      'JEWEL-DAPPLE — jewel-colored light dappling the leaves and blooms, refracted color speckling the foliage, stained-glass light freckling the plants and walls',
+      'COLOR-WASH WALLS — refracted color washing across the stone walls and columns, the whole hall bathed in shifting rainbow glass-light, the air aglow with colored light',
+    ],
+  },
+
+  conservatory_vantage: {
+    label: 'hidden-conservatory vantage',
+    maxWords: 16,
+    theme: `Each entry is ONE interior CAMERA vantage for a stained-glass conservatory vista — how the shot is composed, with strong leading lines. Owns the CAMERA/COMPOSITION ONLY: NOT the architecture detail, NOT the light, NOT the flora. Always an INTERIOR view (never outside the building).
+
+✅ GOOD: "looking straight down the central garden path toward the great glowing window"
+✅ GOOD: "low angle gazing up into the vaulted stained-glass ceiling"
+✅ GOOD: "a three-quarter corner view, foreground blooms softly blurred, framing the lit windows"`,
+    instructions: `Generate NEW interior CAMERA vantages for a stained-glass conservatory — leading lines down a path, up into the vault, corner three-quarter, foreground bloom-bokeh framing, wide symmetrical nave. 6-16 words, ONE line. Camera/composition only — interior, no architecture detail, no light, no flora.`,
+    subThemes: [
+      'DOWN-THE-PATH — looking straight down the central garden path toward the great glowing window at the far end, deep one-point perspective',
+      'LOOKING UP — a low angle gazing up into the vaulted stained-glass ceiling, the glass canopy soaring overhead, plants reaching up the frame',
+      'CORNER THREE-QUARTER — a three-quarter corner view of the lit windows and garden, foreground blooms softly blurred and framing the shot',
+      'WIDE SYMMETRICAL NAVE — a wide symmetrical view down the glazed hall, windows marching down both sides, the garden filling the floor',
+      'THROUGH FOREGROUND BLOOM — peering through a soft foreground curtain of out-of-focus flowers and leaves toward the brilliant glass beyond',
+    ],
+  },
+
+  conservatory_atmosphere: {
+    label: 'hidden-conservatory atmosphere',
+    maxWords: 18,
+    theme: `Each entry is ONE cohesive LIGHT-QUALITY + MOOD + AIR treatment for the whole render — the overall light behavior, mood, and atmospheric set-dressing. This axis ROLLS THE FULL MOOD RANGE: some moody-dark (dramatic chiaroscuro, deep shadows with brilliant light breaking in), some bright (sun-flooded airy daylight). BOTH are beautiful, romantic, magical. Describe light by QUALITY / BRIGHTNESS / TIME + AIR effects; let the glass palette own the hues (neutral light words: warm/cool/dim/bright/golden, not "magenta"). NOT the refraction phenomenon (separate axis), NOT the glass color.
+
+🚫 Whether dark or bright, the mood is ROMANTIC + MAGICAL + enchanting — NEVER grim, NEVER horror, NEVER gloomy-depressing. A dark scene is moody-DRAMATIC, not bleak.
+
+✅ GOOD (moody): "deep dramatic shadow with brilliant shafts of light breaking through, glowing dust-motes, chiaroscuro"
+✅ GOOD (bright): "warm sun-flooded daylight pouring in, airy and luminous, soft humid haze and floating motes"
+✅ GOOD: "golden-hour warmth glowing through the hall, dust drifting in the long light"`,
+    instructions: `Generate NEW LIGHT-QUALITY + MOOD + AIR treatments spanning the FULL range moody-dark ↔ bright-daylight — light behavior (quality/brightness/time) + air (motes/haze/mist). 8-18 words, ONE line. Light + mood + air only — no glass hues, no refraction phenomenon. Always romantic + magical, never grim/bleak.`,
+    subThemes: [
+      'MOODY-DARK DRAMATIC — deep dramatic shadow with brilliant shafts of light breaking through, chiaroscuro, glowing dust-motes in the dark air, a single radiant beam',
+      'MOODY-WARM — dim warm twilight glow inside, pools of warm light in shadow, cozy and atmospheric, embers of light through the dark hall',
+      'BRIGHT DAYLIGHT — warm sun-flooded daylight pouring in, airy and luminous, the whole hall bright and alive, soft floating motes',
+      'GOLDEN-HOUR — golden-hour warmth glowing through the glass, long warm light raking the hall, dust drifting in the amber beams',
+      'SOFT MISTY — soft humid greenhouse haze, gentle diffuse light, dewy air, a dreamy luminous mist softening the depths',
+      'FRESH MORNING — cool fresh morning light, crisp bright air, sparkling clarity, gentle sun just breaking across the garden',
+    ],
+  },
+
+  conservatory_water: {
+    label: 'hidden-conservatory water feature',
+    maxWords: 16,
+    theme: `Each entry is ONE reflective WATER element that doubles the colored light in a conservatory (fires on ~35% of renders, so each is a self-contained delight, never required). Owns a WATER/REFLECTIVE SURFACE ONLY: NOT the architecture, NOT the flora, NOT the light. NO humans.
+
+✅ GOOD: "a still reflecting pool down the center doubling the stained-glass color"
+✅ GOOD: "a rain-wet mirror-polished tile floor catching every colored reflection"
+✅ GOOD: "a small tiered stone fountain rippling with refracted rainbow light"`,
+    instructions: `Generate NEW reflective WATER features that double the colored light — a reflecting pool, wet mirror-tile floor, fountain, lily pond, narrow water-rill. 6-16 words, ONE line. Water/reflective surface only — no architecture, no flora, no humans.`,
+    subThemes: [
+      'REFLECTING POOL — a still reflecting pool down the center doubling the stained-glass color, a glassy basin mirroring the windows, a long mirror-still water channel',
+      'WET FLOOR — a rain-wet mirror-polished tile floor catching every colored reflection, glistening damp stone reflecting the glass, a sheen of water doubling the light',
+      'FOUNTAIN — a small tiered stone fountain rippling with refracted rainbow light, a bubbling cherub fountain catching colored beams, a quiet jet sparkling with glass-light',
+      'LILY POND — a lily-pad pond glowing with reflected color, a koi basin scattered with blossoms, a still green pool mirroring the vault',
+    ],
+  },
+
+  conservatory_detail: {
+    label: 'hidden-conservatory architectural detail',
+    maxWords: 16,
+    theme: `Each entry is ONE charming structural ACCENT inside a stained-glass conservatory (fires on ~40% of renders, so the rest are pure garden+glass; each reads as a graceful accent, never dominating). Owns a BUILT DETAIL ONLY: NOT the main architecture mass, NOT the flora, NOT the light. NO humans.
+
+✅ GOOD: "an ornate wrought-iron spiral staircase wound with vines"
+✅ GOOD: "a slender iron mezzanine walkway crossing high above the garden"
+✅ GOOD: "antique brass lanterns hanging between the columns"`,
+    instructions: `Generate NEW charming built ACCENTS in a glass conservatory — spiral iron stair, mezzanine walkway, hanging lanterns/chandelier, vine-wrapped columns, a stone archway, carved bench, ornate floor tiling. 6-16 words, ONE line. Built detail only — never dominating, no flora, no humans.`,
+    subThemes: [
+      'IRONWORK — an ornate wrought-iron spiral staircase wound with vines, a slender iron mezzanine walkway high above, delicate filigree railings, a curved iron footbridge',
+      'HANGING FIXTURES — antique brass lanterns hanging between the columns, a crystal chandelier dripping refracted light, strings of warm bulbs, hanging glass globes',
+      'STONE + COLUMNS — vine-wrapped carved stone columns, a mossy stone archway, a weathered statue softened by green, an ornate carved doorway',
+      'GROUND + SEATING — intricate mosaic floor tiling, a curved stone bench among the blooms, terracotta-tiled steps, a low balustrade ringing the garden',
+    ],
+  },
+
+  conservatory_life: {
+    label: 'hidden-conservatory ambient life',
+    maxWords: 14,
+    theme: `Each entry is ONE tiny bit of gentle AMBIENT LIFE in a conservatory (fires on ~22% of renders, so each is a self-contained delight, never required). Small and incidental — a delightful detail you notice, never the subject. NEVER a human, NEVER a person.
+
+✅ GOOD: "butterflies drifting through the colored light beams"
+✅ GOOD: "koi gliding in the reflecting pool"
+✅ GOOD: "a tiny bird perched on an iron rail"`,
+    instructions: `Generate NEW tiny gentle AMBIENT LIFE for a conservatory — butterflies in the light, koi in a pool, a perched songbird, a dragonfly, fireflies/glow-motes. 5-14 words, ONE line. Tiny incidental life only — never a human, never the subject.`,
+    subThemes: [
+      'WINGED — butterflies drifting through the colored light beams, a cloud of butterflies over the blooms, a dragonfly hovering, moths circling a lantern',
+      'BIRDS — a tiny bird perched on an iron rail, a songbird among the vines, a hummingbird at a flower, doves up in the vault',
+      'WATER + GLOW — koi gliding in the reflecting pool, fireflies sparkling in the dusk hall, glow-motes drifting in the beams, a frog on a lily pad',
+    ],
+  },
+
   // ════════════════ DREAM-SPIRES — whimsical fairytale TOWER-CITY ════════════
   // 2026-06-27 (new path). Scene-as-hero: the impossible whimsical tower-city is
   // the hero (no character). Ref: relmseeker "Seuss-inspired" pastel spiral-tower

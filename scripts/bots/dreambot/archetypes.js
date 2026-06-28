@@ -140,4 +140,35 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // hidden-conservatory — scene-as-hero stained-glass GREENHOUSE INTERIOR
+  // (2026-06-28, new). NO character; an overgrown garden inside a grand
+  // stained-glass cathedral/conservatory is the hero, with sun SHATTERING through
+  // jewel-glass into rainbow prismatic light (ref: benmyhre "Stained Glass
+  // Greenhouses"). 6 always axes (conservatory + glass_palette + flora ×2 +
+  // light_effect + vantage + atmosphere) + 3 INDEPENDENT gated conditionals
+  // (water_feature ~35%, architectural_detail ~40%, ambient_life ~22%). The mood
+  // ROLLS the full range (moody-dark ↔ bright) via the atmosphere axis; the glass
+  // + flora + refracted light stay vivid (pretty, not grim). AXIS-CLEAN:
+  // conservatory=architecture, glass_palette=glass color, flora=plant-life,
+  // light_effect=the prismatic refraction (the signature axis), vantage=interior
+  // camera, atmosphere=light-quality+mood+air. Own photoreal-cinematic medium
+  // (dreambot_conservatory), flux-1.1 pair; skips look-rotation + chaos + two-pass.
+  DREAMBOT_HIDDEN_CONSERVATORY: {
+    description:
+      'PATH-BESPOKE — DreamBot hidden-conservatory (2026-06-28). Scene-as-hero stained-glass GREENHOUSE INTERIOR; an overgrown garden inside a grand stained-glass cathedral/conservatory with rainbow prismatic light refraction is the hero, no character. 6 always axes (conservatory + glass_palette + flora ×2 + light_effect + vantage + atmosphere) + 3 independent gated conditionals (water_feature ~35%, architectural_detail ~40%, ambient_life ~22%). Mood rolls moody-dark↔bright via atmosphere; glass/flora/light stay vivid. Own photoreal medium (dreambot_conservatory), flux-1.1 pair; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['conservatory', 'glass_palette', 'flora', 'light_effect', 'vantage', 'atmosphere'],
+    },
+    pickN: { flora: 2 },
+    conditionalLayers: [
+      { slot: 'water_feature', gate: 0.35 },
+      { slot: 'architectural_detail', gate: 0.4 },
+      { slot: 'ambient_life', gate: 0.22 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };
