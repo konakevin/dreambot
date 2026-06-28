@@ -26,12 +26,16 @@ module.exports = {
     // Path-bespoke
     action: 'AIRSHIP_FEMALE_ACTION',
     backdrop: 'AIRSHIP_BACKDROP',
-    // Character DNA — 7 axes (R1: dropped separate heritage axis;
-    // diversity now baked into skin via "[Ethnicity] woman with..." format)
+    // Character DNA — 8 atomic axes (R2 2026-06-27: nationality-label SKIN
+    // pool + template "ethnicity OPENING LOCK" homogenized every render to one
+    // grungy brunette. Replaced with PURE-VISUAL atomic axes: skin TONE / face
+    // / eye color / hair color / hairstyle, each female-bespoke + clean of the
+    // engine-grime/aging contamination. No nationality words anywhere.)
     role: 'AIRSHIP_ROLE',
     skin: 'AIRSHIP_FEMALE_SKIN',
-    eyes: 'AIRSHIP_EYES',
-    hair_color: 'AIRSHIP_HAIR_COLOR',
+    face: 'AIRSHIP_FEMALE_FACE',
+    eyes: 'AIRSHIP_FEMALE_EYES',
+    hair_color: 'AIRSHIP_FEMALE_HAIR_COLOR',
     hairstyle: 'AIRSHIP_FEMALE_HAIRSTYLE',
     outfit: 'AIRSHIP_FEMALE_OUTFIT',
     accessory: 'AIRSHIP_ACCESSORY',

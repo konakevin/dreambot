@@ -149,7 +149,7 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['role', 'skin', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: ['role', 'skin', 'face', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
       path: ['action', 'backdrop'],
     },
     pickN: {},

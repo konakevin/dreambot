@@ -180,7 +180,6 @@ module.exports = {
       'arcane',
       'ancient',
       'enchanted',
-      'fierce',
       'coquette',
       'voltage',
       'nightshade',
@@ -199,7 +198,6 @@ module.exports = {
       'arcane',
       'ancient',
       'enchanted',
-      'fierce',
       'voltage',
       'nightshade',
       'macabre',
@@ -208,12 +206,11 @@ module.exports = {
     ],
     // airship-female: action-leaning subset (drop peaceful/cozy/nostalgic
     // vibes that conflict with combat / mid-action register; keep dark /
-    // epic / fierce / cinematic / voltage that amplify).
+    // epic / cinematic / voltage that amplify). fierce banned 2026-06-28 (Kevin).
     'airship-female': [
       'cinematic',
       'dark',
       'epic',
-      'fierce',
       'voltage',
       'arcane',
       'ancient',
@@ -227,7 +224,6 @@ module.exports = {
       'cinematic',
       'dark',
       'epic',
-      'fierce',
       'voltage',
       'arcane',
       'ancient',

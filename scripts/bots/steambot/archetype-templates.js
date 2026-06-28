@@ -205,23 +205,36 @@ ${TAIL}`;
   },
 
   STEAMBOT_AIRSHIP_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, role, skin, eyes, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+    const { lighting, atmosphere, role, skin, face, eyes, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+
+    // Role TITLE only (text before the em-dash) — the full role description
+    // carries costume language ("impeccable coat", "gold braid epaulettes")
+    // that would override the rolled outfit and homogenize every render into a
+    // naval officer's coat. The outfit slot is the ONLY thing that dresses her.
+    const roleTitle = String(role).split('—')[0].trim();
 
     const dramaLine = drama
-      ? `A dramatic environmental event escalating the action (never replacing her as focal point): ${drama}.\n`
+      ? `A dramatic environmental event heightening the moment (never replacing her as focal point): ${drama}.\n`
       : '';
 
-    return `Write ONE cinematic AIRSHIP-ACTION scene for SteamBot — a single female air-officer / sky-corsair caught MID-ACTION on or around a steampunk airship. Lush painted key-art (Treasure-Planet / Last-Exile / Mortal-Engines Anna-Fang / Skies-of-Arcadia). She is DOING something, never posing. Combat allowed. She is the sole focal point (background crew OK if small, mid-distance, faceless).
+    return `Write ONE cinematic AIRSHIP HERO-SHOT for SteamBot — a single, strikingly beautiful young woman OWNING the frame in an iconic, poised moment on or around a steampunk airship. Lush painted movie-poster key-art (Treasure-Planet / Last-Exile / Skies-of-Arcadia). She is gorgeous, confident, and adventurous, the sole focal point (background crew OK if small, mid-distance, faceless).
 
-OPENING LOCK: start with the ethnicity-noun-phrase from the skin slot verbatim, immediately followed by her hair color natural to that heritage — e.g. "a Norwegian woman with windswept strawberry-blonde hair…", "a Yoruba woman with close-cropped black hair…". Never substitute a role-noun or "young/beautiful woman". Vary hair color render to render (lean lighter — blonde/red/auburn — for fair European heritages). She/her throughout.
+THE WOMAN — render her face BIG and clear, beautiful and distinct. Do NOT default to a generic brunette; build her EXACTLY from these rolled visual traits and vary her render to render:
+- Skin: ${skin}.
+- Face: ${face}.
+- Eyes: ${eyes}.
+- Hair: ${hair_color}, ${hairstyle}.
+Never substitute a nationality, ethnicity, or a bare "young/beautiful woman" — describe her through these concrete visual traits only. She/her throughout.
 
-THE ACTION (the headline — caught mid-motion, weight engaged, hair whipping, coat swirling): ${action}.
-She fills 40-60% of frame, full or three-quarter body. Role: ${role}. She is ${skin.split(',')[0]}, ${eyes.split(',')[0]} eyes, ${hair_color.split(',')[0]} hair styled ${hairstyle.split(',')[0]}, wearing ${outfit} (tailored, layered, combat-capable AND beautiful — every brass clasp and strap), equipped with ${accessory} (rich mechanical detail).
-On/around a steampunk airship — deck, rigging, brass railing, cannon-port anchoring the action, lived-in and functional.
-THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city rushing past, never stealing focus): ${backdrop}.
+WHAT SHE WEARS (her clothing comes ONLY from here — do NOT default her into a naval officer's coat or any uniform unless this line says so): ${outfit}. Render this outfit faithfully and in full, distinct in its own silhouette.
+
+THE MOMENT (the headline — an iconic poised hero-shot, hair caught in the slipstream): ${action}.
+She fills 40-60% of frame, full or three-quarter body, the clear hero of the image. Her role/vibe: ${roleTitle}. She carries ${accessory} (rich mechanical detail).
+On/around a steampunk airship — deck, rigging, brass railing, lived-in and functional.
+THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city beyond, never stealing focus): ${backdrop}.
 ${dramaLine}
 Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
-Three-quarter or dynamic side angle, telephoto compression (her crisp, background hazed), movie-poster framing. No text/words/watermarks.
+Three-quarter or dynamic angle, telephoto compression (her crisp, background hazed), movie-poster framing. No text/words/watermarks.
 
 ${TAIL}`;
   },
