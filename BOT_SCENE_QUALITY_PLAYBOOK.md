@@ -387,6 +387,25 @@ When you create a new bot medium (a `mediumStyles` entry + its `dream_mediums` r
 
 **How to add it:** run `node scripts/distill-clean-mediums.js --missing` (distills any bot medium lacking a clean row via Haiku and upserts), or `--key <medium_key>` for one. It auto-strips scene/cast/subject language. Eyeball the output (it's a 25–45 word style phrase) before relying on it. Resolution logic + fallback edge cases are covered by `__tests__/lib/cleanMedium.test.ts`.
 
+### A BOT-ONLY medium needs NO DB migration at all — define it purely in code (2026-06-27, DreamBot dreamscape)
+
+The section above is about a medium you want **DLT-eligible**. But when a new path's medium is **bot-only** (it never needs to be user-applied via DLT), you can skip the `dream_mediums` row, the `dlt_clean_mediums` row, AND the manual SQL-editor migration entirely — define it 100% in code. This is what `dreambot_dreamscape` does. Why it's safe:
+
+- `bot.mediumStyles[medium]` **overrides** the DB `flux_fragment` (botEngine.js ~1434), so the style is fully code-controlled.
+- `fetchMediumFluxFragment` does `.maybeSingle()` and `if (!data) return ''` (botEngine.js ~820) — an **unknown medium key does NOT throw**; the missing fragment just falls through to the `mediumStyles` override.
+- `modelByPath['<path>']` **hard-locks the render model** (botEngine.js ~1466), so `pickModel` / `dream_mediums.allowed_models` never runs — the missing row can't break model selection either.
+
+So the full recipe for a bot-only medium is code-only: add the fragment to `shared-blocks.js`, register it in `bot.mediumStyles`, route the path via `bot.mediumByPath`, lead it with `bot.promptPrefixByMedium`, and lock the model via `bot.modelByPath`. No dashboard, no SQL, no DLT row — which means you can build + render-test + iterate the whole path yourself without waiting on Kevin to apply a migration. (Complements BloomBot LESSON B "reuse an existing key + override in code"; this is the **brand-new key** version.) The ONE tradeoff: a code-only medium is not DLT-eligible — if you later want users to be able to "Dream Like This" on it, add the `dream_mediums` + `dlt_clean_mediums` rows then.
+
+### DreamBot `dreamscape` — scene-as-hero candy-fantasy world vista (2026-06-27, NEW PATH, first-batch banger)
+
+A wildcard-bot path (DreamBot is NOT bound to its ChibiBot creature identity) cloning the **aida_ai_pro** aesthetic: lush, hyper-saturated, candy-colored cinematic dream-worlds — oversized magical flora + whimsical fairytale architecture + a reflective stream under a dreamy sky. The WORLD is the hero, no character. Built straight off the "Inventing NEW PATHS" process; R0 MVP-6 came back all bangers (Kevin: "these look awesome"), then scaled 25→200. Reusable lessons:
+
+- **The "hold the LOOK constant, vary the WORLD wide" structure is the whole game for a single-aesthetic vista path.** The reference is one narrow look (candy-flower-stream-vista), but 200 identical-vibe seeds would read same-y. Fix: the `world` axis carries a 12-family VARIETY MANDATE (candy-flower valley / glowing-mushroom forest / floating sky-islands / crystal-geode garden / dream-reef / cloud kingdom / lantern canal-town / giant-flora macro / rainbow oasis / aurora snow-glass / biolum jungle / surreal wonderland) while the medium + palette + dreamy-light axes hold the aesthetic constant. Result: every render is unmistakably the same world's-fair look, but a different *kind* of place.
+- **9 axes, AXIS-CLEAN (EarthBot L4 applied to a fantasy vista):** `world` owns BIOME, `palette` owns COLOR (a dedicated color-story axis is the anti-"all-pink" lever — BloomBot's lesson — keep it separate from light), `atmosphere` owns LIGHT-QUALITY+AIR (color-neutral words only), `sky` owns OVERHEAD. `flora` pickN 2 for density. Three INDEPENDENT gated conditionalLayers — `whimsical_structure` 60% (so ⅓ render pure-natural), `dream_event` 40%, `tiny_creature` 22% (rare ambient life, never the hero).
+- **Same load-bearing scene mandates as EarthBot/BloomBot still apply on a fantasy bot:** hoist ZERO-HUMANS standalone + name the "lone figure walking into the misty vanishing point" trope explicitly (these path-receding-into-glow compositions spawn it — held 5/5); world-is-hero deep-focus / not-a-product-shot-bokeh (the bubble-bot env-collapse lesson); cohesive-not-spammy density; region-anchor-only prefix (no biome enumeration lock).
+- Config mirrors the `bubble-bot-dreams` family: own code-only medium, flux-1.1-pro-ultra lock, excluded from the look-rotation, skips chaos + two-pass-polish. Files: `paths/dreamscape.js`, `DREAMBOT_DREAMSCAPE` archetype + template, `DREAMSCAPE_MEDIUM` in shared-blocks, 9 `dreamscape_*` pools, recipes in `gen-dreambot-pool.js`. Commit `3cd35133`.
+
 ---
 
 ## Bot profile avatars — how to update (2026-05-26)
