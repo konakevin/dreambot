@@ -134,6 +134,7 @@ module.exports = {
   BOTANICAL_SETTING: load('botanical_setting'),
   BOTANICAL_LIGHT_SEASON: load('botanical_light_season'),
   BOTANICAL_FRAMING: load('botanical_framing'),
+  BOTANICAL_ELEMENT: load('botanical_element'),
 
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),

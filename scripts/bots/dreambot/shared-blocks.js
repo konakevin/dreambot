@@ -254,7 +254,7 @@ const CHIBI_NEUTRAL =
 //    the wild-card poster; these expand it into beautiful subject areas the fleet
 //    lacks. Each also leads with its own promptPrefixByMedium anchor in index.js.
 const BOTANICAL_MEDIUM =
-  'lush botanical fine-art photography, soft natural light, exquisite leaf, bark and fungi detail, painterly depth and atmosphere, rich seasonal color, serene gallery-print composition, wallpaper-tier';
+  'lush botanical fine-art photography with a dreamy whimsical storybook atmosphere, soft enchanted light, exquisite leaf and foliage detail, painterly depth and a magical wistful mood, rich and joyfully varied jewel-like color, an impossibly beautiful dreamworld you could wander into, serene gallery-print composition, wallpaper-tier';
 
 module.exports = {
   GPT_CLEAN,

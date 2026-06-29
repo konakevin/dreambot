@@ -283,7 +283,7 @@ module.exports = {
       'lush overgrown stained-glass conservatory interior, rainbow prismatic light scattered through jewel-toned glass, a secret cathedral garden, cinematic photoreal, deep focus, vivid',
     // Beauty-gap paths (2026-06-28): each LEADS with its hero subject + signature look.
     dreambot_botanical:
-      'a gorgeous botanical scene, lush foliage, trees, or fungi as the hero, fine-art nature photography, soft natural light, rich seasonal color, serene and beautiful',
+      'a gorgeous dreamlike storybook botanical scene, lush foliage or trees as the hero, fine-art nature photography, soft enchanted nostalgic light, rich and varied color, an impossibly pretty place you would want to wander through, dreamy serene and beautiful',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/

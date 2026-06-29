@@ -174,10 +174,10 @@ module.exports = {
 
   DREAMBOT_BOTANICAL: {
     description:
-      'PATH-BESPOKE — DreamBot botanical (2026-06-28). Gorgeous plant-life that is NOT a single flower bloom (BloomBot owns flowers) — foliage, trees, fungi, gardens, mosses, ferns. 4 axes: botanical + setting + light_season + framing. Own botanical fine-art medium (dreambot_botanical); flux-1.1 pair; skips look-rotation + chaos + two-pass-polish.',
+      'PATH-BESPOKE — DreamBot botanical (2026-06-28, dreamy biome-diverse pure-nature rework per Kevin). OUTDOOR, dreamy/whimsical/storybook, biome-diverse lush plant-life scenes you want to walk through — NOT a single flower bloom and NO draping flower-sheets (BloomBot owns flowers; blossoms only sprinkled or as overhead canopies), NEVER an indoor atrium/greenhouse/conservatory. 4 always axes (biome-diverse botanical hero + biome-neutral setting + light_season + framing) + 1 gated scene_element (~25%: subtle NATURAL accents — stream/mist/pool/waterfall/light-shafts, plus a few soft nature-integrated touches). Own botanical fine-art medium (dreambot_botanical); flux-1.1-pro-ultra; skips look-rotation + chaos + two-pass-polish.',
     slots: { universal: [], bot: [], path: ['botanical', 'setting', 'light_season', 'framing'] },
     pickN: {},
-    conditionalLayers: [],
+    conditionalLayers: [{ slot: 'scene_element', gate: 0.25 }],
     framingModes: null,
     anchorScaleRange: null,
   },

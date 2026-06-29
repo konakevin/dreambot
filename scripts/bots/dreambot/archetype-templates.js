@@ -327,27 +327,31 @@ Write the Flux prompt OPENING with the stained-glass conservatory + the rainbow 
 
   DREAMBOT_BOTANICAL: ({ slots }) => {
     const { botanical, setting, light_season, framing } = slots;
-    return `You are writing ONE gorgeous, frame-worthy phone-wallpaper render for DreamBot — lush PLANT-LIFE as the hero. Fine-art botanical photography. Output wraps with the style prefix + suffix.
+    const element = slots.scene_element;
+    return `You are writing ONE gorgeous, frame-worthy phone-wallpaper render for DreamBot — lush OUTDOOR PLANT-LIFE as the hero. Fine-art botanical photography. Output wraps with the style prefix + suffix.
 
 ━━━ THE BOTANICAL HERO (filling the frame) ━━━
 ${botanical}.
 
-━━━ AN IMMERSIVE PLACE, NOT AN OBJECT — THE #1 RULE ━━━
-This is an ENVIRONMENT you stand INSIDE — a lush grove, a foliage tunnel, a fern-filled hollow, a mossy glasshouse, a canopy seen from within — that fills the whole frame and surrounds the viewer. It is NOT a single specimen plant centered against a blurred background, and absolutely NOT a potted/dish/bonsai/houseplant object on display (that look is BANNED — it reads as a product shot). NOT a single flower bloom either (that's a different bot). The lush living place ITSELF is the hero. Render it as exquisite fine-art nature photography: every leaf, frond, blade, cap, and bit of bark detailed with loving precision. Beautiful, serene, never grim or dead.
+━━━ AN IMMERSIVE OUTDOOR PLACE, NOT AN OBJECT — THE #1 RULE ━━━
+This is an OUTDOOR ENVIRONMENT you stand INSIDE — a lush grove, a foliage tunnel, a fern-filled hollow, a canopy seen from within, a wild hillside or garden under open sky — that fills the whole frame and surrounds the viewer. It is ALWAYS outdoors in nature: NEVER inside a greenhouse, glasshouse, conservatory, atrium, or any indoor/built interior (BANNED). It is NOT a single specimen plant centered against a blurred background, and absolutely NOT a potted/dish/bonsai/houseplant object on display (BANNED — reads as a product shot). The foliage and trees are the hero, and blossoming trees are welcome for color — a canopy of blossoms arching OVERHEAD (a flowering grove or avenue) is lovely. What's BANNED is flowers DANGLING or DRAPING DOWN in hanging sheets or curtains toward the viewer (that wisteria-curtain / flower-show look is BloomBot's territory), and a single flower bloom as the close-up subject. Blossoms belong up in the canopy or sprinkled naturally, never hanging down in draped sheets. The lush living place ITSELF is the hero. Render it as exquisite fine-art nature photography: every leaf, frond, blade, cap, and bit of bark detailed with loving precision. Beautiful, serene, never grim or dead.
 
-━━━ A BIT OF WHIMSY ━━━
-Lean into gentle wonder and enchantment — a place that feels a touch magical and dreamlike (light streaming just so, an impossibly lush or fairy-tale corner of nature), while staying believable fine-art photography.
+━━━ STORYBOOK + NOSTALGIC MOOD — THE FEELING ━━━
+Infuse a warm, wistful, storybook feeling — like a beloved page from a childhood picture-book, or a golden half-remembered afternoon. Soft nostalgic light, dreamy enchanted atmosphere, a fairy-tale hush, timeless and tender. Keep it believable fine-art photography (NOT cartoon or illustration), just suffused with that cozy storybook warmth and gentle nostalgia.
 
 ━━━ SETTING + LIGHT + FRAMING ━━━
 Set it ${setting}, in ${light_season}, captured as ${framing}.
-
+${element ? `
+━━━ A SUBTLE NATURAL ACCENT (woven softly in) ━━━
+Let ${element} appear as a subtle, natural feature tucked softly into the scene — secondary to and half-hidden by the lush greenery, never a centerpiece. The gorgeous botanical display stays the hero.
+` : ''}
 ━━━ FRESH, NOT STOCK (anti-cliché) ━━━
 Lean into the real, specific beauty of this plant-life — avoid the tired AI defaults (no generic glowing-blue mushrooms by default, no lone red-leaf-on-a-pond, no single potted tree). Make it a place you'd want to wander into.
 
 ━━━ COMPOSITION + RULES ━━━
-Vertical 9:16 phone-wallpaper. Lush, abundant, and immersive yet cohesive and serene — foliage filling the frame. No people, no text, no words, no watermarks. Gorgeous, ultra-detailed, frame-worthy.
+Vertical 9:16 phone-wallpaper. Lush, abundant, and immersive yet cohesive and serene — foliage filling the frame, always outdoors under natural light. No people, no text, no words, no watermarks. Gorgeous, ultra-detailed, frame-worthy.
 
-Write the Flux prompt OPENING with the immersive botanical place, then the setting, light/season, and framing. Output ONLY the raw Flux prompt as one flowing paragraph, ~70-100 words. No preamble, no labels.`;
+Write the Flux prompt OPENING with the immersive outdoor botanical place, then the setting, light/season, framing, and any storybook element. Output ONLY the raw Flux prompt as one flowing paragraph, ~75-105 words. No preamble, no labels.`;
   },
 
 };
