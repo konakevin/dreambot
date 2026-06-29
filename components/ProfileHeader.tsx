@@ -473,7 +473,11 @@ const styles = StyleSheet.create({
   },
   actionPill: {
     flex: 1,
-    backgroundColor: colors.surface,
+    // card (#1A1A24), not surface (#0F0F14) — surface is barely lighter than the
+    // #000 page bg, so Edit Profile / Share read as disabled. card is the app's
+    // standard elevated tappable fill (matches the auth/social buttons). The
+    // Follow (accent) and Message (transparent ghost) variants override this.
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 8,

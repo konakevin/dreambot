@@ -9,9 +9,9 @@ import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
-  Share,
   Animated,
 } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -156,28 +156,17 @@ export default function ProfileScreen() {
     setActiveTab(tab as Tab);
   }
 
-  // System share-sheet handler for the [Share] button. Universal link
-  // (`/user/<id>`) opens directly in the app for users with it installed
-  // (AASA-registered) and lands on the public web profile for everyone
-  // else — that web page itself has an "Open in DreamBot" CTA.
+  // [Share] copies the profile link straight to the clipboard (on-brand, one
+  // tap) instead of the off-brand native share sheet — mirrors the card share's
+  // Copy Link. The link is an AASA universal link: recipients WITH DreamBot open
+  // it in-app; everyone else lands on the public web profile
+  // (`dreambotapp.com/user/<id>`), which has an "Open in DreamBot" CTA. So the
+  // not-installed case is handled by the OS + web fallback, not app-detection.
   const handleShareProfile = useCallback(async () => {
     if (!user) return;
-    const handle = user.user_metadata?.username ?? 'someone';
-    try {
-      const result = await Share.share({
-        message: `Check out @${handle} on DreamBot ✨ https://dreambotapp.com/user/${user.id}`,
-      });
-      // The iOS share sheet's "Copy" is silent — surface our own confirmation
-      // so the user knows the link made it to the clipboard.
-      if (
-        result.action === Share.sharedAction &&
-        result.activityType === 'com.apple.UIKit.activity.CopyToPasteboard'
-      ) {
-        Toast.show('Link copied', 'checkmark-circle');
-      }
-    } catch {
-      /* user cancelled — no-op */
-    }
+    await Clipboard.setStringAsync(`https://dreambotapp.com/user/${user.id}`);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Toast.show('Profile link copied', 'checkmark-circle');
   }, [user]);
 
   const handleEditProfile = useCallback(() => {
