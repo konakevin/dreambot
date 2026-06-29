@@ -13,7 +13,7 @@ import type { PostGridSource } from '@/components/PostGrid';
 import { thumbnailUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
+import { TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
 
 interface PostTileProps {
   item: DreamPostItem;
@@ -25,6 +25,10 @@ interface PostTileProps {
   // stash it in the album store without re-fetching. Reference-stable
   // (memoized at PostGrid level) so memo'd PostTile doesn't re-render.
   allPosts?: DreamPostItem[];
+  // Tile width override. Defaults to the grid's TILE_WIDTH; the search-results
+  // triplet passes its own (always-3-up) width so it doesn't shrink when the
+  // grid runs more columns on iPad. Height derives from the 4:5 portrait ratio.
+  width?: number;
 }
 
 export const PostTile = memo(function PostTile({
@@ -34,6 +38,7 @@ export const PostTile = memo(function PostTile({
   isHighlighted = false,
   showPrivateBadge = false,
   allPosts,
+  width = TILE_WIDTH,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
@@ -64,7 +69,7 @@ export const PostTile = memo(function PostTile({
 
   return (
     <TouchableOpacity
-      style={styles.tile}
+      style={[styles.tile, { width, height: width * PORTRAIT_RATIO }]}
       onPress={handlePress}
       onLongPress={handleLongPress}
       delayLongPress={400}
@@ -105,8 +110,6 @@ export const PostTile = memo(function PostTile({
 
 const styles = StyleSheet.create({
   tile: {
-    width: TILE_WIDTH,
-    height: TILE_HEIGHT,
     backgroundColor: colors.card,
   },
   image: {

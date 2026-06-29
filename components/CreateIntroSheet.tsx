@@ -22,10 +22,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useEffect } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, screen } from '@/lib/responsive';
+import { verticalScale, fontScale, screen, byDevice, isTabletDevice } from '@/lib/responsive';
 import { CREATE_INFO } from '@/constants/onboardingInfo';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 
 /**
  * Async check — has the user already seen the intro? Use this on the
@@ -68,7 +69,10 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      // iPhone keeps the standard pageSheet (parent peeks at top). On iPad
+      // pageSheet renders as a narrow centered card with side margins — go
+      // fullScreen there so the sheet fills the width instead.
+      presentationStyle={isTabletDevice ? 'fullScreen' : 'pageSheet'}
       onRequestClose={onClose}
     >
       <SafeAreaView style={s.root} edges={['top']}>
@@ -78,53 +82,55 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
           contentContainerStyle={s.content}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
+          <View style={s.col}>
+            <Text style={s.eyebrow}>{CREATE_INFO.eyebrow}</Text>
 
-          {/* Standardized hero title — size 24, sentence case, 2-line wrap
+            {/* Standardized hero title — size 24, sentence case, 2-line wrap
               fallback, width-constrained (shared across all intro screens). */}
-          <GradientTitle
-            size={24}
-            numberOfLines={2}
-            maxWidth={screen.width - 56}
-            letterSpacing={0.5}
-            lineHeight={30}
-            align="center"
-          >
-            {CREATE_INFO.headline}
-          </GradientTitle>
+            <GradientTitle
+              size={24}
+              numberOfLines={2}
+              maxWidth={screen.width - 56}
+              letterSpacing={0.5}
+              lineHeight={30}
+              align="center"
+            >
+              {CREATE_INFO.headline}
+            </GradientTitle>
 
-          <Text style={s.body}>{CREATE_INFO.body}</Text>
+            <Text style={s.body}>{CREATE_INFO.body}</Text>
 
-          {CREATE_INFO.subFeatures && CREATE_INFO.subFeatures.length > 0 && (
-            <View style={s.subFeatures}>
-              {CREATE_INFO.subFeatures.map((f) => (
-                <View key={f.title} style={s.subFeature}>
-                  <View style={s.subFeatureIcon}>
-                    {f.icon ? (
-                      <Ionicons name={f.icon} size={20} color={colors.accentLight} />
-                    ) : (
-                      <Text style={s.subFeatureEmoji}>{f.emoji}</Text>
-                    )}
+            {CREATE_INFO.subFeatures && CREATE_INFO.subFeatures.length > 0 && (
+              <View style={s.subFeatures}>
+                {CREATE_INFO.subFeatures.map((f) => (
+                  <View key={f.title} style={s.subFeature}>
+                    <View style={s.subFeatureIcon}>
+                      {f.icon ? (
+                        <Ionicons name={f.icon} size={20} color={colors.accentLight} />
+                      ) : (
+                        <Text style={s.subFeatureEmoji}>{f.emoji}</Text>
+                      )}
+                    </View>
+                    <View style={s.subFeatureText}>
+                      <Text style={s.subFeatureTitle}>{f.title}</Text>
+                      {f.bullets ? (
+                        <View style={s.bulletList}>
+                          {f.bullets.map((b, i) => (
+                            <View key={i} style={s.bulletRow}>
+                              <Text style={s.bulletDot}>•</Text>
+                              <Text style={s.bulletText}>{b}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      ) : (
+                        <Text style={s.subFeatureBody}>{f.body}</Text>
+                      )}
+                    </View>
                   </View>
-                  <View style={s.subFeatureText}>
-                    <Text style={s.subFeatureTitle}>{f.title}</Text>
-                    {f.bullets ? (
-                      <View style={s.bulletList}>
-                        {f.bullets.map((b, i) => (
-                          <View key={i} style={s.bulletRow}>
-                            <Text style={s.bulletDot}>•</Text>
-                            <Text style={s.bulletText}>{b}</Text>
-                          </View>
-                        ))}
-                      </View>
-                    ) : (
-                      <Text style={s.subFeatureBody}>{f.body}</Text>
-                    )}
-                  </View>
-                </View>
-              ))}
-            </View>
-          )}
+                ))}
+              </View>
+            )}
+          </View>
         </ScrollView>
 
         {/* Floating CTA — pinned over the scroll so it's ALWAYS visible; the
@@ -138,7 +144,11 @@ export function CreateIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’s
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
-          <GradientButton label={ctaLabel} onPress={handleClose} />
+          {/* CTA capped to the standardized onboarding button width (600 on
+              iPad, full width on phone) so it matches the rest of the flow. */}
+          <ResponsiveContainer maxWidth={600}>
+            <GradientButton label={ctaLabel} onPress={handleClose} />
+          </ResponsiveContainer>
         </View>
       </SafeAreaView>
     </Modal>
@@ -157,6 +167,9 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(96),
     alignItems: 'center',
   },
+  // Centered content column — caps width on iPad so cards/body/title align
+  // instead of stretching across a wide pageSheet (no-op on phones).
+  col: { width: '100%', alignItems: 'center' },
 
   eyebrow: {
     color: colors.accentLight,
@@ -173,7 +186,7 @@ const s = StyleSheet.create({
     lineHeight: fontScale(22),
     textAlign: 'center',
     marginTop: verticalScale(16),
-    maxWidth: 340,
+    maxWidth: byDevice(340, 504),
   },
 
   subFeatures: { width: '100%', marginTop: verticalScale(24), gap: 12 },

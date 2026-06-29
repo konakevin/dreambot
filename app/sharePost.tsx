@@ -27,12 +27,14 @@ import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { openDownloadSheet } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { trackPostShared } from '@/lib/analytics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
-const COLUMNS = 3;
+// iPad fills its extra width with more columns so the share-target grid isn't
+// three big sparse cells; phones keep 3.
+const COLUMNS = isTabletDevice ? 5 : 3;
 const AVATAR_SIZE = 64;
 const CELL_WIDTH = (SCREEN_WIDTH - 32) / COLUMNS;
 const DEFAULT_ROWS = 4;

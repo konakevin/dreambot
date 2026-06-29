@@ -39,7 +39,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
-import { NUM_COLUMNS, TILE_GAP, TILE_WIDTH } from '@/constants/grid';
+import { NUM_COLUMNS, TILE_GAP, TILE_WIDTH, TRIPLET_TILE_WIDTH } from '@/constants/grid';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
@@ -195,22 +195,22 @@ function PostTripletRow({
 }) {
   return (
     <View style={s.postTripletRow}>
-      <View style={{ width: TILE_WIDTH }}>
-        <PostTile item={left} />
+      <View style={{ width: TRIPLET_TILE_WIDTH }}>
+        <PostTile item={left} width={TRIPLET_TILE_WIDTH} />
       </View>
       {middle ? (
-        <View style={{ width: TILE_WIDTH }}>
-          <PostTile item={middle} />
+        <View style={{ width: TRIPLET_TILE_WIDTH }}>
+          <PostTile item={middle} width={TRIPLET_TILE_WIDTH} />
         </View>
       ) : (
-        <View style={{ width: TILE_WIDTH }} />
+        <View style={{ width: TRIPLET_TILE_WIDTH }} />
       )}
       {right ? (
-        <View style={{ width: TILE_WIDTH }}>
-          <PostTile item={right} />
+        <View style={{ width: TRIPLET_TILE_WIDTH }}>
+          <PostTile item={right} width={TRIPLET_TILE_WIDTH} />
         </View>
       ) : (
-        <View style={{ width: TILE_WIDTH }} />
+        <View style={{ width: TRIPLET_TILE_WIDTH }} />
       )}
     </View>
   );

@@ -35,6 +35,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -1199,67 +1200,74 @@ export default function CreateScreen() {
                 borderColor: colors.border,
               }}
             >
-              <View
-                className="self-center rounded-full mb-4"
-                style={{
-                  width: 40,
-                  height: 4,
-                  backgroundColor: colors.border,
-                  marginTop: verticalScale(2),
-                }}
-              />
-              <Text className="text-base font-bold mb-3 ml-1" style={{ color: colors.textPrimary }}>
-                Add a photo
-              </Text>
-              {(
-                [
-                  { icon: 'camera', label: 'Take Photo', action: launchCamera },
-                  { icon: 'images', label: 'Choose from Library', action: launchLibrary },
-                ] as const
-              ).map((opt) => (
-                <TouchableOpacity
-                  key={opt.label}
-                  className="flex-row items-center gap-3 px-4 py-3.5 rounded-xl mb-2.5"
+              {/* Sheet bg stays full-bleed; content capped to the standardized
+                  600 column on iPad so the buttons aren't absurdly wide. */}
+              <ResponsiveContainer maxWidth={600}>
+                <View
+                  className="self-center rounded-full mb-4"
                   style={{
-                    backgroundColor: colors.surface,
-                    borderWidth: 1,
-                    borderColor: colors.border,
+                    width: 40,
+                    height: 4,
+                    backgroundColor: colors.border,
+                    marginTop: verticalScale(2),
                   }}
-                  onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    if (Platform.OS === 'ios') {
-                      // iOS: the picker can't present while the modal is still
-                      // dismissing — launch from the Modal's onDismiss instead.
-                      pendingPhotoAction.current = opt.action;
-                      setPhotoSourceOpen(false);
-                    } else {
-                      // Android has no presentation collision; launch directly.
-                      setPhotoSourceOpen(false);
-                      opt.action();
-                    }
-                  }}
+                />
+                <Text
+                  className="text-base font-bold mb-3 ml-1"
+                  style={{ color: colors.textPrimary }}
+                >
+                  Add a photo
+                </Text>
+                {(
+                  [
+                    { icon: 'camera', label: 'Take Photo', action: launchCamera },
+                    { icon: 'images', label: 'Choose from Library', action: launchLibrary },
+                  ] as const
+                ).map((opt) => (
+                  <TouchableOpacity
+                    key={opt.label}
+                    className="flex-row items-center gap-3 px-4 py-3.5 rounded-xl mb-2.5"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      if (Platform.OS === 'ios') {
+                        // iOS: the picker can't present while the modal is still
+                        // dismissing — launch from the Modal's onDismiss instead.
+                        pendingPhotoAction.current = opt.action;
+                        setPhotoSourceOpen(false);
+                      } else {
+                        // Android has no presentation collision; launch directly.
+                        setPhotoSourceOpen(false);
+                        opt.action();
+                      }
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View
+                      className="w-9 h-9 rounded-full items-center justify-center"
+                      style={{ backgroundColor: 'rgba(167,139,250,0.18)' }}
+                    >
+                      <Ionicons name={opt.icon} size={18} color="#A78BFA" />
+                    </View>
+                    <Text className="text-base font-semibold" style={{ color: colors.textPrimary }}>
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity
+                  className="items-center py-3.5 rounded-xl mt-1"
+                  onPress={() => setPhotoSourceOpen(false)}
                   activeOpacity={0.7}
                 >
-                  <View
-                    className="w-9 h-9 rounded-full items-center justify-center"
-                    style={{ backgroundColor: 'rgba(167,139,250,0.18)' }}
-                  >
-                    <Ionicons name={opt.icon} size={18} color="#A78BFA" />
-                  </View>
-                  <Text className="text-base font-semibold" style={{ color: colors.textPrimary }}>
-                    {opt.label}
+                  <Text className="text-base font-semibold" style={{ color: colors.textSecondary }}>
+                    Cancel
                   </Text>
                 </TouchableOpacity>
-              ))}
-              <TouchableOpacity
-                className="items-center py-3.5 rounded-xl mt-1"
-                onPress={() => setPhotoSourceOpen(false)}
-                activeOpacity={0.7}
-              >
-                <Text className="text-base font-semibold" style={{ color: colors.textSecondary }}>
-                  Cancel
-                </Text>
-              </TouchableOpacity>
+              </ResponsiveContainer>
             </View>
           </TouchableOpacity>
         </TouchableOpacity>

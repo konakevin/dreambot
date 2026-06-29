@@ -30,7 +30,7 @@ module.exports = {
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
     ios: {
-      supportsTablet: false,
+      supportsTablet: true,
       bundleIdentifier: 'com.konakevin.radorbad',
       associatedDomains: ['applinks:dreambotapp.com'],
       infoPlist: {

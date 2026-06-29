@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { onboardingStyles as shared } from './sharedStyles';
 import { GradientButton } from '@/components/GradientButton';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 
@@ -60,57 +61,62 @@ export function OnboardingFooter({
   const isPrompt = disabled && disabledLabel !== undefined;
   const buttonLabel = isPrompt ? disabledLabel : nextLabel;
   return (
-    <View style={[shared.footer, { paddingBottom: bottomPad }]}>
-      {(counter !== undefined || counterRight) && (
-        <View style={shared.counterRow}>
-          {counter !== undefined && (
-            <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
-              {counter}
-            </Text>
-          )}
-          {counterRight}
-        </View>
-      )}
-      <View style={shared.footerButtons}>
-        {!hideBack && (
-          <TouchableOpacity
-            style={[shared.backBtn, backDisabled && { opacity: 0.4 }]}
-            onPress={onBack}
-            disabled={backDisabled}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
-            <Text style={shared.backBtnText}>Back</Text>
-          </TouchableOpacity>
-        )}
-        {nextVariant === 'gradient' ? (
-          <GradientButton
-            label={buttonLabel}
-            icon={isPrompt ? undefined : 'arrow-forward'}
-            disabled={disabled}
-            onPress={handleNext}
-            style={{ flex: 1 }}
-          />
-        ) : (
-          <TouchableOpacity
-            style={[shared.continueBtn, disabled && shared.continueBtnDisabled]}
-            onPress={handleNext}
-            disabled={disabled}
-            activeOpacity={0.7}
-          >
-            <Text style={[shared.continueBtnText, disabled && shared.continueBtnTextDisabled]}>
-              {buttonLabel}
-            </Text>
-            {!isPrompt && (
-              <Ionicons
-                name="arrow-forward"
-                size={18}
-                color={disabled ? colors.textSecondary : '#FFFFFF'}
-              />
+    // Centered at a phone-like width on iPad so the Back/Next footer is identical
+    // across ALL onboarding steps — whether the content above fills (picker grids)
+    // or is centered (text/info steps). No-op on phones.
+    <ResponsiveContainer maxWidth={600}>
+      <View style={[shared.footer, { paddingBottom: bottomPad }]}>
+        {(counter !== undefined || counterRight) && (
+          <View style={shared.counterRow}>
+            {counter !== undefined && (
+              <Text style={[shared.selectedCount, counterMet && shared.selectedCountMet]}>
+                {counter}
+              </Text>
             )}
-          </TouchableOpacity>
+            {counterRight}
+          </View>
         )}
+        <View style={shared.footerButtons}>
+          {!hideBack && (
+            <TouchableOpacity
+              style={[shared.backBtn, backDisabled && { opacity: 0.4 }]}
+              onPress={onBack}
+              disabled={backDisabled}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+              <Text style={shared.backBtnText}>Back</Text>
+            </TouchableOpacity>
+          )}
+          {nextVariant === 'gradient' ? (
+            <GradientButton
+              label={buttonLabel}
+              icon={isPrompt ? undefined : 'arrow-forward'}
+              disabled={disabled}
+              onPress={handleNext}
+              style={{ flex: 1 }}
+            />
+          ) : (
+            <TouchableOpacity
+              style={[shared.continueBtn, disabled && shared.continueBtnDisabled]}
+              onPress={handleNext}
+              disabled={disabled}
+              activeOpacity={0.7}
+            >
+              <Text style={[shared.continueBtnText, disabled && shared.continueBtnTextDisabled]}>
+                {buttonLabel}
+              </Text>
+              {!isPrompt && (
+                <Ionicons
+                  name="arrow-forward"
+                  size={18}
+                  color={disabled ? colors.textSecondary : '#FFFFFF'}
+                />
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-    </View>
+    </ResponsiveContainer>
   );
 }

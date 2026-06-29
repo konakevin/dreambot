@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
 import { trackOnboardingStep } from '@/lib/analytics';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
@@ -86,6 +87,12 @@ const STEPS: StepConfig[] = [
   { key: 'meet-bots', component: BotSelectorStep, skipInEdit: true },
   { key: 'reveal', component: RevealStep, skipInEdit: true },
 ];
+
+// Steps that should FILL the iPad width rather than be centered in a phone-width
+// column like the text/info steps: the picker GRIDS (their tiles compute the
+// column count from the screen width) and the REVEAL (a full-bleed dream image
+// that would otherwise be letterboxed inside a narrow column).
+const FILL_WIDTH_STEPS = new Set(['locations', 'cast', 'meet-bots', 'reveal']);
 
 export default function OnboardingPager() {
   const isEditing = useOnboardingStore((s) => s.isEditing);
@@ -233,15 +240,29 @@ export default function OnboardingPager() {
           offset: SCREEN_WIDTH * index,
           index,
         })}
-        renderItem={({ item, index }) => (
-          <View style={s.page}>
+        renderItem={({ item, index }) => {
+          const stepEl = (
             <item.component
               onNext={goNext}
               onBack={index > 0 ? goBack : () => {}}
               isActive={currentKey === item.key}
             />
-          </View>
-        )}
+          );
+          return (
+            <View style={s.page}>
+              {/* Picker GRID steps fill the iPad width (their tiles size their own
+                  columns from the screen width). Text/info steps get centered at a
+                  comfortable column so they don't stretch edge-to-edge. */}
+              {FILL_WIDTH_STEPS.has(item.key) ? (
+                stepEl
+              ) : (
+                <ResponsiveContainer maxWidth={600} style={s.pageInner}>
+                  {stepEl}
+                </ResponsiveContainer>
+              )}
+            </View>
+          );
+        }}
       />
     </SafeAreaView>
   );
@@ -250,6 +271,7 @@ export default function OnboardingPager() {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   page: { width: SCREEN_WIDTH, flex: 1 },
+  pageInner: { flex: 1 },
   headerRow: { position: 'relative' },
   doneButton: {
     position: 'absolute',

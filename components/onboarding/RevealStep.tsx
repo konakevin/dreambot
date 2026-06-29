@@ -11,6 +11,7 @@ import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useFeedStore } from '@/store/feed';
 import { GradientButton } from '@/components/GradientButton';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { GradientTitle } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
@@ -28,7 +29,7 @@ import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive
 import { Toast } from '@/components/Toast';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 
-const MASCOT = require('@/assets/images/icon.png');
+const MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_WIDTH = SCREEN_WIDTH - 48;
@@ -533,33 +534,35 @@ export function RevealStep({ onBack, isActive = false }: Props) {
                     backgroundColor: 'rgba(0,0,0,0.65)',
                   }}
                 />
-                <GradientTitle
-                  size={22}
-                  weight={800}
-                  lineHeight={28}
-                  align="center"
-                  numberOfLines={2}
-                  style={{ marginBottom: verticalScale(10) }}
-                >
-                  Your first dream
-                </GradientTitle>
-                <Text style={s.revealBody}>
-                  All dreams are saved to your Dreams album privately by default
-                </Text>
-                <GradientButton
-                  label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
-                  onPress={() => handleCreateBot(true)}
-                  disabled={phase === 'creating'}
-                  style={{ alignSelf: 'stretch' }}
-                />
-                <TouchableOpacity
-                  style={s.secondaryButton}
-                  onPress={() => handleCreateBot(false)}
-                  disabled={phase === 'creating'}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.secondaryButtonText}>Skip and go to feed</Text>
-                </TouchableOpacity>
+                <ResponsiveContainer maxWidth={600} style={{ alignSelf: 'center' }}>
+                  <GradientTitle
+                    size={22}
+                    weight={800}
+                    lineHeight={28}
+                    align="center"
+                    numberOfLines={2}
+                    style={{ marginBottom: verticalScale(10) }}
+                  >
+                    Your first dream
+                  </GradientTitle>
+                  <Text style={s.revealBody}>
+                    All dreams are saved to your Dreams album privately by default
+                  </Text>
+                  <GradientButton
+                    label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
+                    onPress={() => handleCreateBot(true)}
+                    disabled={phase === 'creating'}
+                    style={{ alignSelf: 'stretch' }}
+                  />
+                  <TouchableOpacity
+                    style={s.secondaryButton}
+                    onPress={() => handleCreateBot(false)}
+                    disabled={phase === 'creating'}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={s.secondaryButtonText}>Skip and go to feed</Text>
+                  </TouchableOpacity>
+                </ResponsiveContainer>
               </View>
             ))}
         </View>

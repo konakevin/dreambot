@@ -3,7 +3,7 @@ import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
+import { verticalScale, fontScale, verticalScaleClamped, byDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 
@@ -86,7 +86,7 @@ export function InfoStep({
         ) : useMascot ? (
           <View style={s.mascotWrap}>
             <Image
-              source={require('@/assets/images/icon.png')}
+              source={require('@/assets/images/onboarding/mascot-welcome.png')}
               style={s.mascot}
               contentFit="cover"
             />
@@ -99,7 +99,13 @@ export function InfoStep({
 
         {/* Gradient headline — wraps freely (0 = unlimited lines), matching
             the prior unbounded Text. */}
-        <GradientTitle size={22} weight={800} lineHeight={28} maxWidth={340} numberOfLines={0}>
+        <GradientTitle
+          size={22}
+          weight={800}
+          lineHeight={28}
+          maxWidth={byDevice(340, 520)}
+          numberOfLines={0}
+        >
           {headline}
         </GradientTitle>
 
@@ -174,7 +180,7 @@ const s = StyleSheet.create({
     lineHeight: fontScale(24),
     textAlign: 'center',
     marginTop: verticalScale(18),
-    maxWidth: 360,
+    maxWidth: byDevice(360, 520),
   },
 
   subFeatures: { width: '100%', marginTop: verticalScale(28), gap: verticalScale(14) },

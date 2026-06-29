@@ -10,12 +10,14 @@ import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useMoodAxes } from '@/hooks/useMoodAxes';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, verticalScaleClamped, screen } from '@/lib/responsive';
+import { verticalScale, fontScale, verticalScaleClamped, screen, byDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 
-const SLIDER_WIDTH = verticalScaleClamped(260, 220, 280);
+// Phone: a comfortable clamped track. iPad: wider so the slider fills the card
+// instead of floating in the middle of a roomy centered column.
+const SLIDER_WIDTH = byDevice(verticalScaleClamped(260, 220, 280), 440);
 const THUMB_SIZE = 28;
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));

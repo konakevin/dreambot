@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { GradientTitle } from '@/components/GradientTitle';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
@@ -26,9 +27,10 @@ const MASCOT_SIZE = verticalScaleClamped(130, 100, 150);
 function Logo() {
   return (
     <View style={authStyles.logoContainer}>
-      {/* Mascot */}
+      {/* Mascot — the robot-reaching-for-a-star (NOT the star-field app icon,
+          which is reserved for the home-screen icon only). */}
       <Image
-        source={require('@/assets/images/icon.png')}
+        source={require('@/assets/images/onboarding/mascot-welcome.png')}
         style={authStyles.mascot}
         contentFit="cover"
       />
@@ -100,114 +102,119 @@ export default function WelcomeScreen() {
         <Logo />
       </View>
 
-      <View className="px-6 pb-8 gap-3">
-        {/* Social buttons use the theme's `bg-card` (#1A1A24) with a thin
+      <ResponsiveContainer maxWidth={600}>
+        <View className="px-6 pb-8 gap-3">
+          {/* Social buttons use the theme's `bg-card` (#1A1A24) with a thin
             `border-border` so they read as discrete tappable cards against
             the solid black bg. Pure-black-on-black is invisible; this
             gives just enough elevation for the eye to lock on without
             adding bright color. Brand identity is carried by the LOGO
             color (Apple white, Google multi-color G, Facebook blue f). */}
 
-        {/* Apple Sign-In (iOS only) */}
-        {Platform.OS === 'ios' && (
+          {/* Apple Sign-In (iOS only) */}
+          {Platform.OS === 'ios' && (
+            <TouchableOpacity
+              className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+              onPress={() => handleSocialSignIn('apple')}
+              disabled={loading !== null}
+              activeOpacity={0.8}
+            >
+              {loading === 'apple' ? (
+                <ActivityIndicator color="#FFFFFF" size="small" />
+              ) : (
+                <>
+                  <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
+                  <Text className="text-white font-semibold text-base">Continue with Apple</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          )}
+
+          {/* Google Sign-In */}
           <TouchableOpacity
             className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
-            onPress={() => handleSocialSignIn('apple')}
+            onPress={() => handleSocialSignIn('google')}
             disabled={loading !== null}
             activeOpacity={0.8}
           >
-            {loading === 'apple' ? (
+            {loading === 'google' ? (
               <ActivityIndicator color="#FFFFFF" size="small" />
             ) : (
               <>
-                <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
-                <Text className="text-white font-semibold text-base">Continue with Apple</Text>
+                <Ionicons name="logo-google" size={20} color="#4285F4" />
+                <Text className="text-white font-semibold text-base">Continue with Google</Text>
               </>
             )}
           </TouchableOpacity>
-        )}
 
-        {/* Google Sign-In */}
-        <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
-          onPress={() => handleSocialSignIn('google')}
-          disabled={loading !== null}
-          activeOpacity={0.8}
-        >
-          {loading === 'google' ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
-          ) : (
-            <>
-              <Ionicons name="logo-google" size={20} color="#4285F4" />
-              <Text className="text-white font-semibold text-base">Continue with Google</Text>
-            </>
-          )}
-        </TouchableOpacity>
+          {/* Facebook Sign-In */}
+          <TouchableOpacity
+            className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
+            onPress={() => handleSocialSignIn('facebook')}
+            disabled={loading !== null}
+            activeOpacity={0.8}
+          >
+            {loading === 'facebook' ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <>
+                <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+                <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
+              </>
+            )}
+          </TouchableOpacity>
 
-        {/* Facebook Sign-In */}
-        <TouchableOpacity
-          className="bg-card border border-border rounded-full py-4 flex-row items-center justify-center gap-3"
-          onPress={() => handleSocialSignIn('facebook')}
-          disabled={loading !== null}
-          activeOpacity={0.8}
-        >
-          {loading === 'facebook' ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
-          ) : (
-            <>
-              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
-              <Text className="text-white font-semibold text-base">Continue with Facebook</Text>
-            </>
-          )}
-        </TouchableOpacity>
-
-        {/* Email signup + login as inline text links — social trio above is
+          {/* Email signup + login as inline text links — social trio above is
             now the primary path; email signup is the alternative, demoted
             from full-width buttons (was visually competing with the social
             buttons and muddling the "do this" hierarchy). */}
-        <View className="flex-row items-center justify-center gap-1.5 mt-3">
-          <Text className="text-white/60 text-sm">New here?</Text>
-          <Link href="/(auth)/signup" asChild>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-            >
-              <Text className="text-white font-semibold text-sm">Create an account</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-        <View className="flex-row items-center justify-center gap-1.5">
-          <Text className="text-white/60 text-sm">Have an account?</Text>
-          <Link href="/(auth)/login" asChild>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
-            >
-              <Text className="text-white font-semibold text-sm">Sign in</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
+          <View className="flex-row items-center justify-center gap-1.5 mt-3">
+            <Text className="text-white/60 text-sm">New here?</Text>
+            <Link href="/(auth)/signup" asChild>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+              >
+                <Text className="text-white font-semibold text-sm">Create an account</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+          <View className="flex-row items-center justify-center gap-1.5">
+            <Text className="text-white/60 text-sm">Have an account?</Text>
+            <Link href="/(auth)/login" asChild>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+              >
+                <Text className="text-white font-semibold text-sm">Sign in</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
 
-        {/* Legal disclosure — bumped from text-tertiary (invisible on the
+          {/* Legal disclosure — bumped from text-tertiary (invisible on the
             purple haze) to white/55 so it's legible without shouting. */}
-        <Text className="text-xs text-center mt-3 px-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
-          By continuing you agree to our{' '}
           <Text
-            className="underline"
-            onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+            className="text-xs text-center mt-3 px-4"
+            style={{ color: 'rgba(255,255,255,0.55)' }}
           >
-            Terms of Service
-          </Text>{' '}
-          and{' '}
-          <Text
-            className="underline"
-            onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
-          >
-            Privacy Policy
+            By continuing you agree to our{' '}
+            <Text
+              className="underline"
+              onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
+            >
+              Terms of Service
+            </Text>{' '}
+            and{' '}
+            <Text
+              className="underline"
+              onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
+            >
+              Privacy Policy
+            </Text>
+            .
           </Text>
-          .
-        </Text>
-      </View>
+        </View>
+      </ResponsiveContainer>
     </SafeAreaView>
   );
 }

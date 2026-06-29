@@ -37,6 +37,23 @@ const initial = Dimensions.get('window');
  */
 export const screen = { width: initial.width, height: initial.height };
 
+/**
+ * Module-load tablet flag (width >= 600pt = iPad, mirroring `useDeviceClass`).
+ * Safe as a one-time capture because the app is portrait-locked + fullscreen on
+ * iPad (no split-screen / rotation), so the window never resizes after launch.
+ * Use for static StyleSheet values that need a phone-vs-tablet branch.
+ */
+export const isTabletDevice = initial.width >= 600;
+
+/**
+ * Pick a value by device family at module load — `byDevice(phoneValue, tabletValue)`.
+ * Cleaner than inlining the `isTabletDevice ? ... : ...` ternary at every call site.
+ * For values that must react to runtime resize, use `useDeviceClass()` instead.
+ */
+export function byDevice<T>(phone: T, tablet: T): T {
+  return isTabletDevice ? tablet : phone;
+}
+
 /** Height percentage — converts a % of screen height to points. */
 export function heightPercent(percent: number): number {
   return Math.round((percent / 100) * initial.height);

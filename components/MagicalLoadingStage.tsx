@@ -18,7 +18,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, byDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { WaveLoader } from '@/components/WaveLoader';
 
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fontScale(14),
     textAlign: 'center',
-    maxWidth: 260,
+    maxWidth: byDevice(260, 460),
     marginTop: verticalScale(-12), // tighten against the gap:24 the parent set
   },
 });

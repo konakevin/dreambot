@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { colors } from '@/constants/theme';
-import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
+import { verticalScale, verticalScaleClamped, fontScale, byDevice } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 
@@ -20,7 +20,13 @@ export function WelcomeStep({ onNext, onBack }: Props) {
     <View style={s.root}>
       <View style={s.content}>
         <View style={s.iconStack}>
-          <Image source={require('@/assets/images/icon.png')} style={s.mascot} contentFit="cover" />
+          {/* The original robot-reaching-for-a-star mascot — kept on this screen
+              even after the app icon switched to the gradient star-field design. */}
+          <Image
+            source={require('@/assets/images/onboarding/mascot-welcome.png')}
+            style={s.mascot}
+            contentFit="cover"
+          />
         </View>
 
         <Text style={s.welcomeEyebrow}>Welcome to</Text>
@@ -78,7 +84,7 @@ const s = StyleSheet.create({
     lineHeight: fontScale(22),
     textAlign: 'center',
     marginBottom: verticalScale(24),
-    maxWidth: 340,
+    maxWidth: byDevice(340, 520),
   },
   footnote: {
     color: colors.textSecondary,
