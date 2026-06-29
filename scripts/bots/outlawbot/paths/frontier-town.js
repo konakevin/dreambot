@@ -1,0 +1,12 @@
+module.exports = {
+  archetype: 'OUTLAWBOT_FRONTIER_TOWN',
+  pools: {
+    town: 'OUTLAWBOT_FRONTIER_TOWN_TOWN',
+    structures: 'OUTLAWBOT_FRONTIER_TOWN_STRUCTURES',
+    street_life: 'OUTLAWBOT_FRONTIER_TOWN_STREET_LIFE',
+    surround: 'OUTLAWBOT_FRONTIER_TOWN_SURROUND',
+    atmosphere: 'OUTLAWBOT_FRONTIER_TOWN_ATMOSPHERE',
+    sky: 'OUTLAWBOT_FRONTIER_TOWN_SKY',
+    composition: 'OUTLAWBOT_FRONTIER_TOWN_COMPOSITION',
+  },
+};
