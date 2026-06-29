@@ -171,4 +171,14 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  DREAMBOT_BOTANICAL: {
+    description:
+      'PATH-BESPOKE — DreamBot botanical (2026-06-28). Gorgeous plant-life that is NOT a single flower bloom (BloomBot owns flowers) — foliage, trees, fungi, gardens, mosses, ferns. 4 axes: botanical + setting + light_season + framing. Own botanical fine-art medium (dreambot_botanical); flux-1.1 pair; skips look-rotation + chaos + two-pass-polish.',
+    slots: { universal: [], bot: [], path: ['botanical', 'setting', 'light_season', 'framing'] },
+    pickN: {},
+    conditionalLayers: [],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

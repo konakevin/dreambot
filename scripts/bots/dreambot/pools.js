@@ -128,6 +128,13 @@ module.exports = {
   CONSERVATORY_WATER: load('conservatory_water'),
   CONSERVATORY_DETAIL: load('conservatory_detail'),
   CONSERVATORY_LIFE: load('conservatory_life'),
+
+  // Beauty-gap paths (2026-06-28)
+  BOTANICAL_HERO: load('botanical_hero'),
+  BOTANICAL_SETTING: load('botanical_setting'),
+  BOTANICAL_LIGHT_SEASON: load('botanical_light_season'),
+  BOTANICAL_FRAMING: load('botanical_framing'),
+
   // Creature pools (4)
   CUTE_CREATURES: load('cute_creatures'),
   AQUATIC_CREATURES: load('aquatic_creatures'),

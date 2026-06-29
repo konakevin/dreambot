@@ -250,9 +250,16 @@ const GPT_CLEAN =
 const CHIBI_NEUTRAL =
   'Every figure in frame is an adorable chibi CREATURE — a real animal or a cute fantasy critter — at chibi proportions (oversized round head, big sparkling eyes), NEVER a human or human child. Keep the composition the scene below describes — a hero creature OR a village / landscape / interior populated by chibi creatures. The animation style, rendering medium, finish, and palette are set by the look-register tokens that lead the prompt.';
 
+// ── Beauty-gap scene mediums (2026-06-28) — code-only, no DB rows. DreamBot is
+//    the wild-card poster; these expand it into beautiful subject areas the fleet
+//    lacks. Each also leads with its own promptPrefixByMedium anchor in index.js.
+const BOTANICAL_MEDIUM =
+  'lush botanical fine-art photography, soft natural light, exquisite leaf, bark and fungi detail, painterly depth and atmosphere, rich seasonal color, serene gallery-print composition, wallpaper-tier';
+
 module.exports = {
   GPT_CLEAN,
   CHIBI_NEUTRAL,
+  BOTANICAL_MEDIUM,
   PROMPT_PREFIX,
   PROMPT_SUFFIX,
   CUTE_CUDDLY_COZY_BLOCK,

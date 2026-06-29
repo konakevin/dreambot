@@ -93,6 +93,9 @@ const pathBuilders = {
   // cathedral/conservatory with rainbow prismatic light is the hero (ref benmyhre
   // "Stained Glass Greenhouses"). Own photoreal medium, flux-1.1 pair.
   'hidden-conservatory': require('./paths/hidden-conservatory'),
+  // Beauty-gap scene paths (2026-06-28) — own bespoke mediums, excluded from the
+  // look rotation.
+  'botanical': require('./paths/botanical'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -110,6 +113,7 @@ const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
     p !== 'far-eden' &&
     p !== 'far-eden-soft' &&
     p !== 'hidden-conservatory' &&
+    p !== 'botanical' &&
     !p.startsWith('bubble-bot-dreams')
 );
 
@@ -185,6 +189,8 @@ module.exports = {
     dreambot_eden_painterly: blocks.EDEN_MEDIUM_PAINTERLY,
     // hidden-conservatory — own photoreal stained-glass-greenhouse medium (code-only).
     dreambot_conservatory: blocks.CONSERVATORY_MEDIUM,
+    // Beauty-gap paths (2026-06-28) — own bespoke code-only mediums.
+    dreambot_botanical: blocks.BOTANICAL_MEDIUM,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -235,6 +241,7 @@ module.exports = {
     'far-eden-soft': 'dreambot_eden_painterly',
     // hidden-conservatory locks its own photoreal stained-glass-greenhouse medium.
     'hidden-conservatory': 'dreambot_conservatory',
+    'botanical': 'dreambot_botanical',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -274,6 +281,9 @@ module.exports = {
     // refraction (the signature). Scene anchor only — no architecture enumeration.
     dreambot_conservatory:
       'lush overgrown stained-glass conservatory interior, rainbow prismatic light scattered through jewel-toned glass, a secret cathedral garden, cinematic photoreal, deep focus, vivid',
+    // Beauty-gap paths (2026-06-28): each LEADS with its hero subject + signature look.
+    dreambot_botanical:
+      'a gorgeous botanical scene, lush foliage, trees, or fungi as the hero, fine-art nature photography, soft natural light, rich seasonal color, serene and beautiful',
     // Tight cute anchor that REPLACES the bot's Pop-Mart-vinyl PROMPT_PREFIX so
     // the rolled look leads the style. Deliberately NOT "creature" — that word
     // here front-loads creature-as-subject and collapses the scene-led village/
@@ -347,6 +357,8 @@ module.exports = {
     // hidden-conservatory (2026-06-28): stained-glass greenhouse interior, approved
     // by Kevin; posts on the flat rotation (pegged to flux-1.1-pro-ultra).
     'hidden-conservatory',
+    // Beauty-gap POC paths (2026-06-28).
+    'botanical',
   ],
 
   // Path weights — 2× indoor boost; everything else 1×.
@@ -421,6 +433,7 @@ module.exports = {
     // a flux-2 + nano + gpt-2 model test). Renders the lush photoreal glasshouse +
     // prismatic light cleanest at native 9:16.
     'hidden-conservatory': 'black-forest-labs/flux-1.1-pro-ultra',
+    'botanical': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -441,6 +454,7 @@ module.exports = {
       'far-eden',
       'far-eden-soft',
       'hidden-conservatory',
+      'botanical',
       ...CROSSOVER_PATHS,
     ],
     allowSubjectChaosPaths: [
@@ -473,6 +487,7 @@ module.exports = {
       'far-eden',
       'far-eden-soft',
       'hidden-conservatory',
+      'botanical',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',
