@@ -593,432 +593,276 @@ export default function CreateScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: tabBarHeight + verticalScale(16) }}
         >
-          {/* Photo attachment card */}
-          {/* Photo attachment card */}
-          {hasPhoto && (
-            <View
-              className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <TouchableOpacity onPress={() => setPreviewPhoto(true)}>
-                <Image
-                  source={{ uri: config.photoUri! }}
-                  className="rounded-lg"
-                  style={{ width: 48, height: 48 }}
-                  contentFit="cover"
-                />
-              </TouchableOpacity>
-              <View className="flex-1">
-                <Text className="text-sm font-semibold" style={{ color: colors.textPrimary }}>
-                  Reference Photo
-                </Text>
-                <Text className="text-xs" style={{ color: colors.textSecondary }}>
-                  Tap to preview
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  clearPhoto();
-                }}
-                hitSlop={8}
-              >
-                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Photo mode toggle — only when a photo is attached */}
-          {hasPhoto && (
-            <View className="mb-3">
+          {/* iPad: keep the form a centered ~600 column instead of stretching the
+              fields edge-to-edge (no-op on phone). */}
+          <ResponsiveContainer maxWidth={600} style={{ width: '100%' }}>
+            {/* Photo attachment card */}
+            {/* Photo attachment card */}
+            {hasPhoto && (
               <View
-                className="flex-row rounded-xl p-1"
+                className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
                 style={{
                   backgroundColor: colors.surface,
                   borderWidth: 1,
                   borderColor: colors.border,
                 }}
               >
-                <TouchableOpacity
-                  className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
-                  style={{
-                    // Tonal moon-purple when active — matches the DreamBot/Direct
-                    // mode tabs so it doesn't compete with the gradient Dream CTA.
-                    backgroundColor:
-                      config.photoStyle === 'new_scene' ? 'rgba(167,139,250,0.18)' : 'transparent',
-                    borderWidth: 1,
-                    borderColor:
-                      config.photoStyle === 'new_scene' ? 'rgba(167,139,250,0.55)' : 'transparent',
-                  }}
-                  onPress={() => {
-                    Haptics.selectionAsync();
-                    setPhotoStyle('new_scene');
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name="sparkles-outline"
-                    size={14}
-                    color={config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary}
+                <TouchableOpacity onPress={() => setPreviewPhoto(true)}>
+                  <Image
+                    source={{ uri: config.photoUri! }}
+                    className="rounded-lg"
+                    style={{ width: 48, height: 48 }}
+                    contentFit="cover"
                   />
-                  <Text
-                    className="text-xs font-semibold"
-                    style={{
-                      color: config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary,
-                    }}
-                  >
-                    New Scene
-                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
-                  style={{
-                    backgroundColor:
-                      config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.18)' : 'transparent',
-                    borderWidth: 1,
-                    borderColor:
-                      config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.55)' : 'transparent',
-                  }}
-                  onPress={() => {
-                    Haptics.selectionAsync();
-                    setPhotoStyle('restyle');
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name="color-palette-outline"
-                    size={14}
-                    color={config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary}
-                  />
-                  <Text
-                    className="text-xs font-semibold"
-                    style={{
-                      color: config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary,
-                    }}
-                  >
-                    Restyle
+                <View className="flex-1">
+                  <Text className="text-sm font-semibold" style={{ color: colors.textPrimary }}>
+                    Reference Photo
                   </Text>
+                  <Text className="text-xs" style={{ color: colors.textSecondary }}>
+                    Tap to preview
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    clearPhoto();
+                  }}
+                  hitSlop={8}
+                >
+                  <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
-              <Text
-                className="text-xs mt-1.5 px-1"
-                style={{ color: colors.textSecondary, opacity: 0.7 }}
-              >
-                {config.photoStyle === 'new_scene'
-                  ? 'We’ll invent a fresh scene around you. Works best with a clear single-subject photo.'
-                  : 'We’ll keep your pose and restyle it in this medium. Restyle picks the best edit model for each medium, so the model picker doesn’t apply here.'}
-              </Text>
-            </View>
-          )}
+            )}
 
-          {/* Prompt input — hidden when a photo is in Restyle mode, since
-              that path is medium+vibe only (no prompt influence). The
-              underlying `config.userPrompt` is preserved so flipping back
-              to New Scene restores whatever the user had typed. */}
-          {!(hasPhoto && config.photoStyle === 'restyle') && (
-            <View
-              className="rounded-xl mb-4"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <TextInput
-                ref={promptRef}
-                className="px-4 py-4 text-base"
-                style={{
-                  color: colors.textPrimary,
-                  // Fixed height — long prompts scroll internally rather than
-                  // stretching the box. iOS multiline TextInputs scroll
-                  // automatically when height is fixed. A bit taller than strictly
-                  // needed so the box reads as "write something here" and the page
-                  // feels fuller; the KeyboardAwareScrollView still floats it above
-                  // the keyboard on focus.
-                  height: 144,
-                  textAlignVertical: 'top',
-                }}
-                value={config.userPrompt}
-                onChangeText={setPrompt}
-                maxLength={engineConfig.promptMaxLength}
-                multiline
-                scrollEnabled
-                returnKeyType="default"
-              />
-              {/* Custom placeholder overlay instead of the native one. iOS's
-                  multiline placeholder ignores textAlignVertical:'top' until focus
-                  (it floats vertically centered) AND won't re-wrap when the text
-                  changes while unfocused. A top-aligned Text overlay (taps pass
-                  through) sits exactly where typed text begins, so the hint is
-                  stable across the photo toggle and on focus. */}
-              {!config.userPrompt && (
+            {/* Photo mode toggle — only when a photo is attached */}
+            {hasPhoto && (
+              <View className="mb-3">
                 <View
-                  pointerEvents="none"
-                  className="px-4 py-4"
-                  style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
-                >
-                  <Text className="text-base" style={{ color: colors.textMuted ?? '#6B7280' }}>
-                    {placeholder}
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-
-          {/* Unified AI-model picker — top-level. The model is orthogonal to the
-              engine: any model can render a raw (Direct) prompt, a full DreamBot
-              dream, OR a New Scene photo dream (your uploaded face is swapped
-              onto a scene the chosen model renders — model-agnostic, like the
-              cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
-              transform of the photo itself and needs an edit-capable model. */}
-          {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
-            <View className="mb-4">
-              <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
-            </View>
-          )}
-
-          {/* Collapsed summary — while the keyboard is up on an engine dream, the
-              model + mode + medium/vibe controls fold into this one-line summary
-              so the selected medium/vibe stay visible and the Dream CTA is one
-              tap away. Tapping it dismisses the keyboard, restoring the full
-              form. (Restored 2026-06-17 — was removed in f601e81e; now covers
-              text DreamBot dreams too, not just photo dreams.) */}
-          {collapsed && (
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.selectionAsync();
-                Keyboard.dismiss();
-              }}
-              activeOpacity={0.7}
-              className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
-              style={{
-                backgroundColor: colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              <View className="flex-1 mr-2">
-                <View className="flex-row items-center">
-                  <Text
-                    className="text-sm font-semibold flex-shrink"
-                    style={{ color: colors.textPrimary }}
-                    numberOfLines={1}
-                  >
-                    {modelLabel}
-                  </Text>
-                  {/* Mini sparkle-cost badge — what this dream will cost. */}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginLeft: 8,
-                      paddingHorizontal: 6,
-                      paddingVertical: verticalScale(2),
-                      borderRadius: 6,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                  >
-                    <Ionicons name="sparkles" size={11} color="#A78BFA" />
-                    <Text
-                      style={{
-                        color: '#A78BFA',
-                        fontSize: fontScale(11),
-                        fontWeight: '700',
-                        marginLeft: 2,
-                      }}
-                    >
-                      {sparkleCost}
-                    </Text>
-                  </View>
-                </View>
-                <View className="flex-row items-center mt-0.5">
-                  <Text
-                    className="text-[13px]"
-                    style={{ color: colors.textMuted ?? colors.textSecondary }}
-                  >
-                    Medium:{' '}
-                  </Text>
-                  <Text
-                    className="text-[13px]"
-                    style={{ color: colors.textSecondary }}
-                    numberOfLines={1}
-                  >
-                    {mediumLabel}
-                  </Text>
-                  {/* Color-coded FACE/ART tag — shown in all modes (matches the
-                      medium picker). */}
-                  {(isSurpriseMedium || selectedMediumRow) && (
-                    <View
-                      style={{
-                        marginLeft: 5,
-                        paddingHorizontal: 5,
-                        paddingVertical: verticalScale(1),
-                        borderRadius: 5,
-                        backgroundColor: mediumFaceSwaps
-                          ? MEDIUM_BADGE.face.bg
-                          : MEDIUM_BADGE.art.bg,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: fontScale(8),
-                          fontWeight: '700',
-                          color: mediumFaceSwaps ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color,
-                          textTransform: 'uppercase',
-                          letterSpacing: 0.5,
-                        }}
-                      >
-                        {mediumFaceSwaps ? 'face' : 'art'}
-                      </Text>
-                    </View>
-                  )}
-                  <Text
-                    className="text-[13px]"
-                    style={{ color: colors.textMuted ?? colors.textSecondary }}
-                  >
-                    {'   ·   Vibe: '}
-                  </Text>
-                  <Text
-                    className="text-[13px] flex-shrink"
-                    style={{ color: colors.textSecondary }}
-                    numberOfLines={1}
-                  >
-                    {vibeLabel}
-                  </Text>
-                </View>
-              </View>
-              <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
-          )}
-
-          {/* Engine selector — two named engines (no photo attached):
-              • DreamBot (config.useExactPrompt = false) — our engine: custom
-                mediums/vibes, prompt polish, and cast-photo face swap.
-              • Direct (config.useExactPrompt = true) — prompt goes verbatim to
-                the chosen AI model, skipping styling + face swap.
-              State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
-              Photo path hides this and shows the inline note above (Direct is
-              text-only). Hidden while collapsed (keyboard up). */}
-          {!hasPhoto && !collapsed && (
-            <View className="mb-4">
-              {/* Mode label + contextual info icon (DreamBot → medium sheet,
-                  Direct → Direct explainer). */}
-              <View className="flex-row items-center mb-1.5 ml-1">
-                <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
-                  Mode
-                </Text>
-                <TouchableOpacity
-                  onPress={handleModeInfo}
-                  activeOpacity={0.6}
-                  hitSlop={10}
-                  className="ml-1.5"
-                >
-                  <Ionicons name="information-circle-outline" size={16} color={colors.accent} />
-                </TouchableOpacity>
-              </View>
-              <View
-                className="flex-row rounded-xl p-1"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-              >
-                <TouchableOpacity
-                  className="flex-row items-center justify-center py-2 rounded-lg"
-                  style={{
-                    flex: 1,
-                    // Tonal moon-purple when active (selected) — a quiet selector,
-                    // so it doesn't compete with the gradient Dream CTA. Border on
-                    // both (transparent when inactive) to avoid a 1px toggle shift.
-                    backgroundColor: !config.useExactPrompt
-                      ? 'rgba(167,139,250,0.18)'
-                      : 'transparent',
-                    borderWidth: 1,
-                    borderColor: !config.useExactPrompt ? 'rgba(167,139,250,0.55)' : 'transparent',
-                  }}
-                  onPress={() => {
-                    Haptics.selectionAsync();
-                    toggleUseExactPrompt(false);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    className="text-sm font-semibold"
-                    style={{ color: !config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
-                  >
-                    DreamBot
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="flex-row items-center justify-center py-2 rounded-lg"
-                  style={{
-                    flex: 1,
-                    backgroundColor: config.useExactPrompt
-                      ? 'rgba(167,139,250,0.18)'
-                      : 'transparent',
-                    borderWidth: 1,
-                    borderColor: config.useExactPrompt ? 'rgba(167,139,250,0.55)' : 'transparent',
-                  }}
-                  onPress={() => {
-                    Haptics.selectionAsync();
-                    toggleUseExactPrompt(true);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    className="text-sm font-semibold"
-                    style={{ color: config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
-                  >
-                    Direct
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-
-          {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
-              AND whenever a photo is attached (photo dreams always use the
-              engine). Vibe is hidden for Restyle — that path is a Kontext img2img
-              edit driven by the medium only. Direct text dreams hide both.
-              Collapsed into the summary above while the keyboard is up. */}
-          {!effectiveExactPrompt && !collapsed && (
-            <View className="flex-row gap-3 mb-4">
-              <View className="flex-1">
-                <Text
-                  className="text-xs font-medium mb-1.5 ml-1"
-                  style={{ color: colors.textSecondary }}
-                >
-                  Medium
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                  className="flex-row rounded-xl p-1"
                   style={{
                     backgroundColor: colors.surface,
                     borderWidth: 1,
                     borderColor: colors.border,
                   }}
-                  onPress={openMediumPicker}
-                  activeOpacity={0.7}
                 >
-                  <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                  <TouchableOpacity
+                    className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                    style={{
+                      // Tonal moon-purple when active — matches the DreamBot/Direct
+                      // mode tabs so it doesn't compete with the gradient Dream CTA.
+                      backgroundColor:
+                        config.photoStyle === 'new_scene'
+                          ? 'rgba(167,139,250,0.18)'
+                          : 'transparent',
+                      borderWidth: 1,
+                      borderColor:
+                        config.photoStyle === 'new_scene'
+                          ? 'rgba(167,139,250,0.55)'
+                          : 'transparent',
+                    }}
+                    onPress={() => {
+                      Haptics.selectionAsync();
+                      setPhotoStyle('new_scene');
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name="sparkles-outline"
+                      size={14}
+                      color={config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary}
+                    />
                     <Text
-                      className="text-sm font-semibold"
+                      className="text-xs font-semibold"
+                      style={{
+                        color: config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary,
+                      }}
+                    >
+                      New Scene
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                    style={{
+                      backgroundColor:
+                        config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.18)' : 'transparent',
+                      borderWidth: 1,
+                      borderColor:
+                        config.photoStyle === 'restyle' ? 'rgba(167,139,250,0.55)' : 'transparent',
+                    }}
+                    onPress={() => {
+                      Haptics.selectionAsync();
+                      setPhotoStyle('restyle');
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name="color-palette-outline"
+                      size={14}
+                      color={config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary}
+                    />
+                    <Text
+                      className="text-xs font-semibold"
+                      style={{
+                        color: config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary,
+                      }}
+                    >
+                      Restyle
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text
+                  className="text-xs mt-1.5 px-1"
+                  style={{ color: colors.textSecondary, opacity: 0.7 }}
+                >
+                  {config.photoStyle === 'new_scene'
+                    ? 'We’ll invent a fresh scene around you. Works best with a clear single-subject photo.'
+                    : 'We’ll keep your pose and restyle it in this medium. Restyle picks the best edit model for each medium, so the model picker doesn’t apply here.'}
+                </Text>
+              </View>
+            )}
+
+            {/* Prompt input — hidden when a photo is in Restyle mode, since
+              that path is medium+vibe only (no prompt influence). The
+              underlying `config.userPrompt` is preserved so flipping back
+              to New Scene restores whatever the user had typed. */}
+            {!(hasPhoto && config.photoStyle === 'restyle') && (
+              <View
+                className="rounded-xl mb-4"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <TextInput
+                  ref={promptRef}
+                  className="px-4 py-4 text-base"
+                  style={{
+                    color: colors.textPrimary,
+                    // Fixed height — long prompts scroll internally rather than
+                    // stretching the box. iOS multiline TextInputs scroll
+                    // automatically when height is fixed. A bit taller than strictly
+                    // needed so the box reads as "write something here" and the page
+                    // feels fuller; the KeyboardAwareScrollView still floats it above
+                    // the keyboard on focus.
+                    height: 144,
+                    textAlignVertical: 'top',
+                  }}
+                  value={config.userPrompt}
+                  onChangeText={setPrompt}
+                  maxLength={engineConfig.promptMaxLength}
+                  multiline
+                  scrollEnabled
+                  returnKeyType="default"
+                />
+                {/* Custom placeholder overlay instead of the native one. iOS's
+                  multiline placeholder ignores textAlignVertical:'top' until focus
+                  (it floats vertically centered) AND won't re-wrap when the text
+                  changes while unfocused. A top-aligned Text overlay (taps pass
+                  through) sits exactly where typed text begins, so the hint is
+                  stable across the photo toggle and on focus. */}
+                {!config.userPrompt && (
+                  <View
+                    pointerEvents="none"
+                    className="px-4 py-4"
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+                  >
+                    <Text className="text-base" style={{ color: colors.textMuted ?? '#6B7280' }}>
+                      {placeholder}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
+
+            {/* Unified AI-model picker — top-level. The model is orthogonal to the
+              engine: any model can render a raw (Direct) prompt, a full DreamBot
+              dream, OR a New Scene photo dream (your uploaded face is swapped
+              onto a scene the chosen model renders — model-agnostic, like the
+              cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
+              transform of the photo itself and needs an edit-capable model. */}
+            {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
+              <View className="mb-4">
+                <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
+              </View>
+            )}
+
+            {/* Collapsed summary — while the keyboard is up on an engine dream, the
+              model + mode + medium/vibe controls fold into this one-line summary
+              so the selected medium/vibe stay visible and the Dream CTA is one
+              tap away. Tapping it dismisses the keyboard, restoring the full
+              form. (Restored 2026-06-17 — was removed in f601e81e; now covers
+              text DreamBot dreams too, not just photo dreams.) */}
+            {collapsed && (
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  Keyboard.dismiss();
+                }}
+                activeOpacity={0.7}
+                className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <View className="flex-1 mr-2">
+                  <View className="flex-row items-center">
+                    <Text
+                      className="text-sm font-semibold flex-shrink"
                       style={{ color: colors.textPrimary }}
+                      numberOfLines={1}
+                    >
+                      {modelLabel}
+                    </Text>
+                    {/* Mini sparkle-cost badge — what this dream will cost. */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginLeft: 8,
+                        paddingHorizontal: 6,
+                        paddingVertical: verticalScale(2),
+                        borderRadius: 6,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                    >
+                      <Ionicons name="sparkles" size={11} color="#A78BFA" />
+                      <Text
+                        style={{
+                          color: '#A78BFA',
+                          fontSize: fontScale(11),
+                          fontWeight: '700',
+                          marginLeft: 2,
+                        }}
+                      >
+                        {sparkleCost}
+                      </Text>
+                    </View>
+                  </View>
+                  <View className="flex-row items-center mt-0.5">
+                    <Text
+                      className="text-[13px]"
+                      style={{ color: colors.textMuted ?? colors.textSecondary }}
+                    >
+                      Medium:{' '}
+                    </Text>
+                    <Text
+                      className="text-[13px]"
+                      style={{ color: colors.textSecondary }}
                       numberOfLines={1}
                     >
                       {mediumLabel}
                     </Text>
-                    {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
-                        so the medium's type is always visible on the picker. */}
+                    {/* Color-coded FACE/ART tag — shown in all modes (matches the
+                      medium picker). */}
                     {(isSurpriseMedium || selectedMediumRow) && (
                       <View
                         style={{
+                          marginLeft: 5,
                           paddingHorizontal: 5,
                           paddingVertical: verticalScale(1),
                           borderRadius: 5,
@@ -1042,46 +886,214 @@ export default function CreateScreen() {
                         </Text>
                       </View>
                     )}
+                    <Text
+                      className="text-[13px]"
+                      style={{ color: colors.textMuted ?? colors.textSecondary }}
+                    >
+                      {'   ·   Vibe: '}
+                    </Text>
+                    <Text
+                      className="text-[13px] flex-shrink"
+                      style={{ color: colors.textSecondary }}
+                      numberOfLines={1}
+                    >
+                      {vibeLabel}
+                    </Text>
                   </View>
-                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </TouchableOpacity>
-              </View>
+                </View>
+                <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
 
-              {/* Vibe — shown for Restyle too; the selected vibe modulates the
-                  restyle (Kevin's choice to keep vibe applying). */}
-              <View className="flex-1">
-                <Text
-                  className="text-xs font-medium mb-1.5 ml-1"
-                  style={{ color: colors.textSecondary }}
-                >
-                  Vibe
-                </Text>
-                <TouchableOpacity
-                  className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+            {/* Engine selector — two named engines (no photo attached):
+              • DreamBot (config.useExactPrompt = false) — our engine: custom
+                mediums/vibes, prompt polish, and cast-photo face swap.
+              • Direct (config.useExactPrompt = true) — prompt goes verbatim to
+                the chosen AI model, skipping styling + face swap.
+              State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
+              Photo path hides this and shows the inline note above (Direct is
+              text-only). Hidden while collapsed (keyboard up). */}
+            {!hasPhoto && !collapsed && (
+              <View className="mb-4">
+                {/* Mode label + contextual info icon (DreamBot → medium sheet,
+                  Direct → Direct explainer). */}
+                <View className="flex-row items-center mb-1.5 ml-1">
+                  <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                    Mode
+                  </Text>
+                  <TouchableOpacity
+                    onPress={handleModeInfo}
+                    activeOpacity={0.6}
+                    hitSlop={10}
+                    className="ml-1.5"
+                  >
+                    <Ionicons name="information-circle-outline" size={16} color={colors.accent} />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  className="flex-row rounded-xl p-1"
                   style={{
                     backgroundColor: colors.surface,
                     borderWidth: 1,
                     borderColor: colors.border,
                   }}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setPickerType('vibe');
-                  }}
-                  activeOpacity={0.7}
                 >
-                  <Text
-                    className="text-sm font-semibold"
-                    style={{ color: colors.textPrimary }}
-                    numberOfLines={1}
+                  <TouchableOpacity
+                    className="flex-row items-center justify-center py-2 rounded-lg"
+                    style={{
+                      flex: 1,
+                      // Tonal moon-purple when active (selected) — a quiet selector,
+                      // so it doesn't compete with the gradient Dream CTA. Border on
+                      // both (transparent when inactive) to avoid a 1px toggle shift.
+                      backgroundColor: !config.useExactPrompt
+                        ? 'rgba(167,139,250,0.18)'
+                        : 'transparent',
+                      borderWidth: 1,
+                      borderColor: !config.useExactPrompt
+                        ? 'rgba(167,139,250,0.55)'
+                        : 'transparent',
+                    }}
+                    onPress={() => {
+                      Haptics.selectionAsync();
+                      toggleUseExactPrompt(false);
+                    }}
+                    activeOpacity={0.7}
                   >
-                    {vibeLabel}
-                  </Text>
-                  <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                </TouchableOpacity>
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: !config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
+                    >
+                      DreamBot
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-center py-2 rounded-lg"
+                    style={{
+                      flex: 1,
+                      backgroundColor: config.useExactPrompt
+                        ? 'rgba(167,139,250,0.18)'
+                        : 'transparent',
+                      borderWidth: 1,
+                      borderColor: config.useExactPrompt ? 'rgba(167,139,250,0.55)' : 'transparent',
+                    }}
+                    onPress={() => {
+                      Haptics.selectionAsync();
+                      toggleUseExactPrompt(true);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: config.useExactPrompt ? '#A78BFA' : colors.textSecondary }}
+                    >
+                      Direct
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          )}
+            )}
+
+            {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
+              AND whenever a photo is attached (photo dreams always use the
+              engine). Vibe is hidden for Restyle — that path is a Kontext img2img
+              edit driven by the medium only. Direct text dreams hide both.
+              Collapsed into the summary above while the keyboard is up. */}
+            {!effectiveExactPrompt && !collapsed && (
+              <View className="flex-row gap-3 mb-4">
+                <View className="flex-1">
+                  <Text
+                    className="text-xs font-medium mb-1.5 ml-1"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Medium
+                  </Text>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={openMediumPicker}
+                    activeOpacity={0.7}
+                  >
+                    <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                      <Text
+                        className="text-sm font-semibold"
+                        style={{ color: colors.textPrimary }}
+                        numberOfLines={1}
+                      >
+                        {mediumLabel}
+                      </Text>
+                      {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
+                        so the medium's type is always visible on the picker. */}
+                      {(isSurpriseMedium || selectedMediumRow) && (
+                        <View
+                          style={{
+                            paddingHorizontal: 5,
+                            paddingVertical: verticalScale(1),
+                            borderRadius: 5,
+                            backgroundColor: mediumFaceSwaps
+                              ? MEDIUM_BADGE.face.bg
+                              : MEDIUM_BADGE.art.bg,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: fontScale(8),
+                              fontWeight: '700',
+                              color: mediumFaceSwaps
+                                ? MEDIUM_BADGE.face.color
+                                : MEDIUM_BADGE.art.color,
+                              textTransform: 'uppercase',
+                              letterSpacing: 0.5,
+                            }}
+                          >
+                            {mediumFaceSwaps ? 'face' : 'art'}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Vibe — shown for Restyle too; the selected vibe modulates the
+                  restyle (Kevin's choice to keep vibe applying). */}
+                <View className="flex-1">
+                  <Text
+                    className="text-xs font-medium mb-1.5 ml-1"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    Vibe
+                  </Text>
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setPickerType('vibe');
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: colors.textPrimary }}
+                      numberOfLines={1}
+                    >
+                      {vibeLabel}
+                    </Text>
+                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </ResponsiveContainer>
         </KeyboardAwareScrollView>
 
         {/* Dream CTA — pinned in a sticky footer that rides ABOVE the keyboard
@@ -1101,8 +1113,11 @@ export default function CreateScreen() {
             }}
           >
             {/* Dream button — the primary gradient CTA. Cost lives in the model
-                selector now, so the CTA stays clean. */}
-            <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+                selector now, so the CTA stays clean. iPad: capped to the same
+                centered 600 column as the form so it isn't absurdly wide. */}
+            <ResponsiveContainer maxWidth={600}>
+              <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+            </ResponsiveContainer>
           </View>
         </KeyboardStickyView>
       </View>
