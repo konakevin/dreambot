@@ -167,6 +167,27 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // castle-moonscape (2026-06-29, new) — TWO co-equal heroes: a crazy-beautiful
+  // gothic castle / grand haunted house AND a bright full moon dominating the sky.
+  // Bonus bats/crows (gated). Mirrors the castlevania-scene scene shape but
+  // ELEVATES the moon to its own hero axis (moonscape), drops spice_decoration.
+  // AXIS-CLEAN: structure=building, moonscape=the moon, sky_layer=rest of the night
+  // sky, accent_creature=bats/crows. Look-enabled (rolls the gothbot look register).
+  GOTHBOT_CASTLE_MOONSCAPE: {
+    description:
+      'PATH-BESPOKE — GothBot castle-moonscape path (2026-06-29, R1). TWO co-equal heroes: a crazy-beautiful COOL SPRAWLING gothic CASTLE / grand HAUNTED HOUSE and a bright FULL MOON (cool-biased color) dominating the night sky. Bonus bats/crows. R1 added a COMPOSITION axis to break the boring central-single-tower lock + cool-biased the moon/sky. 6 path axes (composition / structure / architectural_detail pickN:3 / inner_light / moonscape / sky_layer) + accent_creature 65%-gated (bats/crows) + universal lighting + atmosphere. AXIS-CLEAN: composition owns FRAMING, structure owns the BUILDING, moonscape owns the MOON, sky_layer owns the rest of the night sky. Look-enabled (rolls the gothbot look register).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['composition', 'structure', 'architectural_detail', 'inner_light', 'moonscape', 'sky_layer'],
+    },
+    pickN: { architectural_detail: 3 },
+    // bats/crows show ~85% of the time (Kevin wants strong ambience).
+    conditionalLayer: { slot: 'accent_creature', gate: 0.85 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   GOTHBOT_GOTHIC_ARCHITECTURE: {
     description:
       'PATH-BESPOKE — GothBot gothic-architecture path (2026-05-15 bespoke migration). STRUCTURE IS THE HERO with MASSIVE VERTICAL EPIC SCALE — towering, clawing upward, dwarfing everything. Inner dark-magic light glows from within. Ornate architectural detail porn. Two accent layers: accent_creature (80%-gated dark-wildlife) + spice_decoration (100% small atmospheric flourish — vivid moons, lanterns, wisps, sigils). Castlevania / Bloodborne / Crimson-Peak / Berserk / Dark-Souls lineage. Exterior-only. 6 path-bespoke axes (structure / architectural_detail pickN:3 / inner_light / accent_creature 80%-gated / spice_decoration / sky_layer) + universal lighting + atmosphere.',

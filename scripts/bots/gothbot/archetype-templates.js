@@ -1244,6 +1244,91 @@ ${vibeDirective.slice(0, 150)}
 Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
+  // GothBot castle-moonscape (2026-06-29) — TWO co-equal heroes: a crazy-beautiful
+  // gothic castle / grand haunted house AND a bright full moon. Bonus bats/crows
+  // (accent_creature, 65%-gated). Render-style stays light here — the look register
+  // (prepended by buildBrief as GOTHBOT_LOOK_OVERRIDE) leads the medium.
+  GOTHBOT_CASTLE_MOONSCAPE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      composition,
+      structure,
+      architectural_detail,
+      inner_light,
+      moonscape,
+      sky_layer,
+      accent_creature,
+    } = slots;
+    const details = Array.isArray(architectural_detail)
+      ? architectural_detail
+      : [architectural_detail];
+
+    const accentSection = accent_creature
+      ? `
+━━━ BATS / CROWS (atmospheric silhouettes — never the subject) ━━━
+${accent_creature}
+
+`
+      : '';
+
+    return `You are a gothic landscape painter illustrating CASTLE + FULL-MOON night scenes for GothBot. Castlevania / Crimson-Peak / Hammer-horror / Tim-Burton / classic-haunted-house lineage. Two breathtaking heroes share the frame.
+
+━━━ TWO CO-EQUAL HEROES — ABSOLUTE FIRST RULE ━━━
+This image has TWO heroes that BOTH must be spectacular: (1) a crazy-beautiful, COOL, SPRAWLING gothic CASTLE or grand HAUNTED HOUSE, and (2) a BRIGHT, LARGE, INTERESTING FULL MOON dominating the sky — big and theatrical (about a THIRD of the sky), a bold co-star, but still a believable MOON (rich craters + a glowing corona keep it celestial): never a planet-sized wall filling the whole frame, never a sci-fi "nearby planet" surface looming edge-to-edge. Neither hero buries the other.
+
+━━━ COMPOSITION / FRAMING (follow this exactly — it sets the whole shot) ━━━
+${composition}
+CRITICAL ANTI-MONOTONY RULE: do NOT render a single lone tower standing dead-center with the moon directly behind it. Follow the framing above — the castle is WIDE and SPRAWLING (many towers/wings), placed and angled per the composition, and the moon's position varies (off to a side, low on the horizon, between spires, beside the castle).
+
+━━━ THE STRUCTURE (hero #1 — a crazy-beautiful, COOL, SPRAWLING gothic castle / haunted house) ━━━
+${structure}
+Render it in RICH, READABLE DETAIL — NOT a flat black silhouette spike. It is ORNATE, IMPOSING, theatrical, elaborate, and a little HAUNTED, with MANY towers / wings / levels forming a wide dramatic silhouette. Moonlight catches its stonework and edges; warm light glows in its windows. EXTERIOR only. A place that makes you gasp.
+
+━━━ ORNATE ARCHITECTURAL DETAIL (render all three visibly) ━━━
+  • DETAIL 1: ${details[0] || ''}
+  • DETAIL 2: ${details[1] || ''}
+  • DETAIL 3: ${details[2] || ''}
+
+━━━ INNER LIGHT (the structure feels alive / haunted) ━━━
+${inner_light}
+Light leaks through windows / rose-windows / doorways so the building reads inhabited against the night.
+
+━━━ THE FULL MOON (hero #2 — big, bright, INTERESTING, dominating the sky) ━━━
+${moonscape}
+This moon is a SHOWSTOPPER — large, bright, and dramatic (about a third of the sky, NOT a planet-sized wall, NOT sci-fi), flooding the scene with moonlight. TWO TRAITS MAKE IT INTERESTING — render BOTH: (1) RICH SURFACE DETAIL — visible craters, dark maria, a mottled ancient pitted face, never a plain flat glowing disc; (2) a GLOWING COLORED CORONA / HALO breathing around its rim, OR thin clouds drifting across and veiling its face. ITS STATED COLOR LEADS THE WHOLE SCENE — whatever shade the moon is (icy blue / silver / violet / green / teal OR amber / orange / blood-red / gold), the sky and the moonlight on the castle take THAT color. Make the moon unmistakable and gorgeous.
+
+━━━ THE NIGHT SKY (around the moon — cool, dramatic, varied) ━━━
+${sky_layer}
+
+━━━ GOTHIC AMBIENCE (ALWAYS — make the scene atmospheric + alive with mood) ━━━
+Lean HARD into rich gothic AMBIENCE so the scene feels moody, eerie, and alive (never sterile or empty): low FOG and MIST rolling in and creeping across the base of the structure, drifting wisps and haze; BATS or CROWS in the air; GARGOYLES perched and brooding on the parapets and spires; gnarled dead trees; a haunted hush. Weave these atmospheric touches throughout the scene.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+NEVER a human, a person, a caped figure, a knight, a vampire-lord, a cloaked silhouette, or ANY humanoid anywhere in the frame. Flux's training data WILL try to place a LONE FIGURE (or a small group) standing on a balcony / ledge / clifftop / rampart / rooftop GAZING UP at the moon or the castle — there is NO such person: that ledge / balcony / rooftop stays EMPTY. No figure for scale, no distant silhouette of a person. The ONLY living creatures are the bats / crows. If Flux's instinct is to add someone admiring the scene, render the exact same scene with that spot EMPTY.
+${accentSection}━━━ LIGHTING (ambient weather light, separate from the castle's inner glow) ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE (the MOON's color wins for sky + moonlight) ━━━
+${sharedDNA.scenePalette}
+${sharedDNA.colorPalette}
+Use these for the gothic mood + the warm WINDOW-glow accents. The MOON and the SKY take the MOON's OWN stated color (above) — whatever shade it is — and that color leads the whole scene; the palette is a secondary mood accent, never overriding the moon's color.
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION — A VARIED, DRAMATIC MOONLIT-CASTLE SHOT ━━━
+Follow the COMPOSITION/FRAMING directive above — never the same shot twice, never a single tower dead-center. The big, bright, dramatic full moon is always present and prominent (about a third of the sky, with visible craters + a glowing corona — never a plain disc, never a planet-sized wall), its position varying per the framing. The COOL SPRAWLING gothic castle / haunted house is rendered in rich readable detail (not a flat central spike), placed and angled per the framing. Real depth — foreground rise (crag, gnarled dead trees, gate, graveyard, rolling fog), midground castle with window-glow + gargoyles + bats/crows, the moon + cool dramatic sky beyond. Moonlight rims the stonework. Rich moody AMBIENCE throughout. NO humans, NO legible text / letters / words / numbers anywhere.
+
+━━━ STRUCTURE — write the prompt in this order ━━━
+[OPENING: the FRAMING + a LARGE, bright, dramatic full moon (its stated color, with visible craters + a glowing corona), prominent but believable in size], [the cool sprawling many-towered gothic castle / haunted house in rich detail, placed per the framing], [its three architectural details], [warm window-glow], [the cool dramatic night sky around the moon], [gothic ambience — rolling fog, bats/crows, gargoyles], [moonlit haunted atmosphere]. The moon and the castle are CO-EQUAL heroes — both prominent, both spectacular, framed with variety.
+
+Output ONLY the raw 85-115 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO legible text in the image. Just the scene content.`;
+  },
+
   GOTHBOT_GOTHIC_ARCHITECTURE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       lighting,

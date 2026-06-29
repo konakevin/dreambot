@@ -165,6 +165,16 @@ module.exports = {
   ),
   GOTHBOT_CASTLEVANIA_SCENE_SPICE: loadOptional('gothbot_castlevania_scene_spice'),
   GOTHBOT_CASTLEVANIA_SCENE_SKY: loadOptional('gothbot_castlevania_scene_sky'),
+  // ─── castle-moonscape path (2026-06-29, new) — TWO co-heroes: gothic castle /
+  // haunted house + bright full moon. moonscape = the moon hero; sky_layer = the
+  // rest of the night sky; accent_creature = bats/crows (65%-gated bonus).
+  GOTHBOT_CASTLE_MOONSCAPE_COMPOSITION: loadOptional('gothbot_castle_moonscape_composition'),
+  GOTHBOT_CASTLE_MOONSCAPE_STRUCTURE: loadOptional('gothbot_castle_moonscape_structure'),
+  GOTHBOT_CASTLE_MOONSCAPE_DETAIL: loadOptional('gothbot_castle_moonscape_detail'),
+  GOTHBOT_CASTLE_MOONSCAPE_INNER_LIGHT: loadOptional('gothbot_castle_moonscape_inner_light'),
+  GOTHBOT_CASTLE_MOONSCAPE_MOON: loadOptional('gothbot_castle_moonscape_moon'),
+  GOTHBOT_CASTLE_MOONSCAPE_SKY: loadOptional('gothbot_castle_moonscape_sky'),
+  GOTHBOT_CASTLE_MOONSCAPE_ACCENT_CREATURE: loadOptional('gothbot_castle_moonscape_accent_creature'),
   // ─── gothic-architecture path (2026-05-15, bespoke axis migration with STRUCTURE-IS-HERO)
   GOTHBOT_GOTHIC_ARCHITECTURE_STRUCTURE: load('gothbot_gothic_architecture_structure'),
   GOTHBOT_GOTHIC_ARCHITECTURE_DETAIL: load('gothbot_gothic_architecture_detail'),

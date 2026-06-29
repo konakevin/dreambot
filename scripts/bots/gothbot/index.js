@@ -20,6 +20,7 @@ const pathBuilders = {
   'goth-closeup': require('./paths/goth-closeup'),
   'goth-full-body': require('./paths/goth-full-body'),
   'castlevania-scene': require('./paths/castlevania-scene'),
+  'castle-moonscape': require('./paths/castle-moonscape'),
   'cozy-goth': require('./paths/cozy-goth'),
   'vampire-girls-2': require('./paths/vampire-girls-2'),
   'the-dark-prince': require('./paths/the-dark-prince'),
@@ -67,6 +68,7 @@ const LOOK_ENABLED_PATHS = new Set([
   'gothic-architecture',
   'the-sanctum',
   'castlevania-scene',
+  'castle-moonscape',
 ]);
 
 module.exports = {
@@ -180,6 +182,11 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
+    // castle-moonscape — non-character scene lineup (2026-06-29 NEW).
+    'castle-moonscape': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     // the-sanctum — non-character scene lineup (2026-06-10 NEW).
     'the-sanctum': [
       'black-forest-labs/flux-1.1-pro',
@@ -232,6 +239,7 @@ module.exports = {
     'the-frost-garden': ['dark', 'nightshade', 'macabre'],
     'twilight-gothic': ['dark', 'nightshade', 'macabre'],
     'castlevania-scene': ['dark', 'nightshade', 'macabre'],
+    'castle-moonscape': ['dark', 'nightshade', 'macabre'],
     'cozy-goth': ['dark', 'nightshade', 'macabre'],
     'gothic-vista': ['dark', 'nightshade', 'macabre'],
     // Vampire-assassin paths locked to the dark triad.
@@ -287,6 +295,7 @@ module.exports = {
     'gothic-architecture': 'gothbot_neutral',
     'the-sanctum': 'gothbot_neutral',
     'castlevania-scene': 'gothbot_neutral',
+    'castle-moonscape': 'gothbot_neutral',
 
     // the-haunting: DISABLED (parked) — keeps its goth-wraith medium for revival.
     'the-haunting': 'gothic_wraith_paint',
@@ -511,6 +520,9 @@ module.exports = {
       'the-haunting',
       'the-coven',
       'moonlit-maiden',
+      // castle-moonscape — protect the two-hero (castle + moon) composition for the
+      // MVP (re-enable on scale per playbook Step 6).
+      'castle-moonscape',
     ],
     allowSubjectChaosPaths: ['goth-full-body', 'goth-male-full-body-axis'],
   },
@@ -557,6 +569,7 @@ module.exports = {
       'the-haunting': 'scene',
       'gothic-vista': 'scene',
       'castlevania-scene': 'scene',
+      'castle-moonscape': 'scene',
       'cozy-goth': 'scene',
     },
 
@@ -610,6 +623,7 @@ module.exports = {
       'the-coven',
       'moonlit-maiden',
       'castlevania-scene',
+      'castle-moonscape',
       'cozy-goth',
       'monster-prowl',
       'monster-prowl-victorian',
@@ -657,6 +671,7 @@ module.exports = {
     'goth-closeup',
     'goth-full-body',
     'castlevania-scene',
+    'castle-moonscape',
     'cozy-goth',
     'vampire-girls-2',
     'the-dark-prince',

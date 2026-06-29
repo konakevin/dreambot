@@ -1412,6 +1412,156 @@ const POOL_RECIPES = {
     instructions: `Each entry is ONE saturated theatrical Castlevania sky, 15-30 words. RICH + LUSH + FULL-COLOR. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
   },
 
+  // ─── GOTHBOT castle-moonscape path (2026-06-29, new). TWO co-equal heroes:
+  // a crazy-beautiful gothic castle / grand haunted house AND a bright full moon
+  // dominating the sky. Bonus bats/crows. Look-enabled (rolls the gothbot look
+  // register). AXIS-CLEAN: structure owns the BUILDING, moonscape owns the MOON,
+  // sky_layer owns the rest of the night sky, accent_creature owns bats/crows. ──
+
+  gothbot_castle_moonscape_structure: {
+    format: 'simple',
+    theme: `GOTHIC CASTLES + GRAND HAUNTED HOUSES for GothBot's castle-moonscape path — the STRUCTURE is a co-hero (sharing the frame with a bright full moon, which is a SEPARATE axis). Each entry is ONE specific crazy-beautiful gothic structure with rich detail, 45-75 words. Castlevania / Crimson-Peak / Hammer-horror / Tim-Burton / classic-haunted-house lineage. The building must read instantly as GOTHIC, ORNATE, IMPOSING, and a little HAUNTED — the kind of place that makes you gasp.
+
+⚠️ STRUCTURE is a CO-HERO — it commands the lower/middle of the frame, leaving the upper sky OPEN for the moon (separate axis). NOT 80% — share the frame with the sky.
+⚠️ EXTERIOR ONLY — turrets, spires, ramparts, towers, facades, gables, gates, broken windows, wraparound porches. NOT interior chamber-shots.
+⚠️ NIGHT scene, but DESCRIBE ONLY THE BUILDING — do NOT describe the moon, stars, clouds, or sky (separate axes). Do NOT bake bats/crows in (separate axis).
+⚠️ "CRAZY BEAUTIFUL" + COOL — wild, dramatic, theatrical, fantastical, jaw-dropping gothic architecture. Each entry should make you say "HOLY SHIT, look at that castle." Push the COOLEST, most elaborate, most UNIQUE silhouettes — Howl's-Moving-Castle complexity, Bloodborne cathedral-city verticality, Castlevania Symphony-of-the-Night grandeur, Minas-Morgul drama, Disney-Haunted-Mansion whimsy. Use cool signature features: cascading stepped rooflines, flying bridges + arched skywalks between towers, impossible cantilevered wings jutting over a void, clustered spires of wildly different heights, stacked tiers + buttressed terraces climbing a crag, a great central keep ringed by a forest of smaller towers, sweeping grand staircases, lopsided organic asymmetry.
+⚠️ NEVER a single boring tower/spire sticking up through the center — EVERY entry is a SPRAWLING, COMPLEX, ELABORATE landmark: MANY towers/wings/levels, a wide dramatic silhouette that spreads across the frame. A lone central spike is the #1 thing to avoid. Distinct + memorable + WILD every time, never generic.
+
+VARIETY MANDATE — spread WIDELY across both castles AND haunted houses (never cluster on one):
+  A. TOWERING GOTHIC CASTLE on a crag — multi-spire ancestral fortress, curtain-walls, central keep
+  B. GRAND HAUNTED VICTORIAN MANSION — turrets, gables, wraparound porch, broken shutters, widow's-walk, Addams/Hill-House energy
+  C. RUINED GOTHIC ABBEY-CASTLE — crumbling cathedral-fortress, collapsed roof, ivy-swallowed flying buttresses (glorious, NOT mere rubble)
+  D. FAIRYTALE-GOTHIC FANTASY CASTLE — wild crazy impossible spires, Neuschwanstein-gone-dark, dreamlike asymmetry
+  E. CLIFFSIDE / SEA FORTRESS — gothic castle clinging to jagged sea-cliffs, crashing waves below
+  F. SPRAWLING GOTHIC MANOR-ESTATE — Allerdale-Hall sprawl, sinking foundations, ornate chimneys, decayed grandeur
+  G. CROOKED WITCH'S TOWER-HOUSE — spindly leaning gothic tower-cottage, candlelit windows, storybook-eerie
+  H. GOTHIC CLOCKTOWER / CATHEDRAL HYBRID — soaring belltower-cathedral with a great clock-face, gargoyle balustrades
+  I. SOUTHERN / PLANTATION-GOTHIC MANSION — decaying colonnaded estate wreathed in spanish-moss and creeping vine
+  J. FROST / OBSIDIAN GOTHIC PALACE — a dark glittering ice-or-black-stone palace of impossible gothic spires
+
+🚫 BANS: NO modern/industrial/sci-fi. NO humans. NO describing the moon/sky/stars/clouds (separate axes). NO bats/crows (separate axis). NO real-world ethnic codes. NO pentagram/satanic iconography. NO cheap gore. Spread across A-J.`,
+    touchpoints: [
+      'A towering Wallachian gothic castle clawing up a black craggy peak, a dozen impossibly tall crooked spires of varying heights, three concentric curtain-walls lined with carved gargoyle-finials, a vast central keep with a soaring rose-window, flying buttresses and arched galleries in dramatic relief, ornate bat-wing finials crowning every tower, a grand stone gatehouse with a raised portcullis at the base.',
+      'A grand haunted Victorian mansion of impossible asymmetry, a steep mansard roof bristling with iron-cresting and crooked chimneys, a corner turret with a conical witch-hat cap, a sagging wraparound porch with broken gingerbread fretwork, tall narrow windows with peeling shutters, a widow’s-walk railing along the ridge, gables stacked at wild angles, ivy strangling the clapboard facade.',
+      'A ruined gothic abbey-fortress half-swallowed by the dark, a collapsed nave open to the night, twin shattered bell-towers still soaring, ranks of broken pointed-arch windows like empty eye-sockets, flying buttresses wrapped in thick black ivy, a crumbling rose-window frame, fallen stone arches forming a dramatic skeletal silhouette, weathered statuary slumped along the walls.',
+      'A wild fairytale-gothic fantasy castle of dreamlike asymmetry, dozens of needle-thin spires twisting at impossible angles, cascading rooflines and floating balconies, ornate spiral-stair towers wrapping the keep, delicate filigree tracery on every gable, a soaring central spire crowned with an iron weathervane, the whole silhouette crazy and theatrical against the night.',
+      'A black gothic sea-fortress clinging to jagged storm-battered cliffs, multiple spired wings rising in tiers from the rock, a long arched causeway-bridge connecting two towers over a chasm, crashing surf far below, ornate crenellated ramparts, a lighthouse-spire at the seaward edge, weathered stone slick with salt-spray, dramatic vertical scale.',
+      'A sprawling decayed gothic manor-estate sinking into its grounds, a long ornate facade of bay windows and oriels, a forest of clustered barley-twist chimneys, a porte-cochère entrance with carved stone griffins, sagging slate gables, cracked grand windows glinting, creeping vine engulfing one whole wing, the grandeur magnificent and crumbling at once.',
+      'A crooked spindly witch’s tower-house leaning at a storybook angle, stacked uneven floors each jutting a different way, a tall conical roof with an iron spire, tiny diamond-paned windows aglow, a precarious external spiral-stair winding up the outside, gnarled chimney-pots, the whole structure impossibly tall and impossibly thin.',
+      'A colossal gothic clocktower-cathedral hybrid, a great gold-rimmed clock-face set into the soaring belltower, twin flanking spires with gargoyle balustrades, immense pointed-arch windows, flying buttresses with carved-skull keystones, ornate bronze bells visible in the open belfry, a grand marble-stair approach, dramatic vertical silhouette.',
+      'A decaying Southern-gothic plantation mansion wreathed in spanish-moss, a colonnade of cracked corinthian columns across a deep sagging veranda, tall shuttered windows, a crowning cupola, peeling white stone gone grey, twisted live-oak limbs framing the facade, an air of beautiful haunted decay.',
+      'A dark glittering obsidian-and-frost gothic palace, impossibly tall spires of black stone veined with ice, faceted crystalline towers catching cold light, ornate frozen tracery dripping icicles, a grand frost-rimed gateway, sweeping frozen stairs, the whole palace gleaming dark and theatrical.',
+    ],
+    instructions: `Each entry is ONE crazy-beautiful, COOL, SPRAWLING gothic castle OR grand haunted house exterior, 45-75 words. MANY towers/wings/levels with a wide elaborate silhouette — NEVER a single central tower/spire. Co-hero scale (commands lower/mid frame, leaves the upper sky open). Exterior only. ORNATE + IMPOSING + a little HAUNTED. DO NOT describe the moon, sky, stars, clouds, or bats/crows (separate axes). Spread across families A-J. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_detail: {
+    format: 'simple',
+    theme: `ORNATE GOTHIC ARCHITECTURAL DETAILS for the castle-moonscape path — close-up flourishes layered onto the structure (the path picks 3 per render). Each entry is ONE specific ornament, 12-28 words. Castlevania / Crimson-Peak / haunted-house lineage.
+
+Spread across: SPIRES & FINIALS (bat-wing finials, iron weathervanes, crooked spire-tips, gold-leaf crockets), STONEWORK (gargoyles, grotesques, carved-saint statuary, skull-keystones, vine-and-skull tracery), IRONWORK (wrought-iron gates with heraldic devices, cresting, balcony railings, lanterns), WINDOWS (rose-windows, stained-glass, diamond-panes, broken/boarded windows), DECAY & LIFE (strangling ivy, spanish-moss, crumbling cornices, cracked balustrades), HERALDRY (carved crests, velvet banners, stone shields).
+
+✅ GOOD: "carved stone gargoyles perched along the parapet, wings half-spread, weathered and grimacing"
+✅ GOOD: "a colossal sapphire-and-violet stained-glass rose-window above the great doors"
+✅ GOOD: "wrought-iron cresting and crooked barley-twist chimneys bristling along the roofline"`,
+    instructions: `Each entry is ONE ornate gothic architectural detail, 12-28 words. Spires/stonework/ironwork/windows/decay/heraldry. NO moon, NO sky, NO bats/crows, NO humans. Output as a NUMBERED list, one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_inner_light: {
+    format: 'simple',
+    theme: `INNER LIGHT for the castle-moonscape path — the haunted glow that makes the structure feel ALIVE/INHABITED at night. Each entry is ONE light source, 18-35 words. Warm candle-amber, sickly fel-green, cold blue, or stained-glass jewel-glow leaking from within.
+
+Spread across: amber candlelight in scattered windows; a single lit window high in a tower; flickering fel-green glow behind stained-glass; warm hearth-light spilling from the great doors; a chandelier glimpsed through an arched window; cold blue spectral light in the upper floors; a lantern swinging at the gate.
+
+✅ GOOD: "warm amber candlelight glowing from a scattering of tall windows, one tower-window flickering as if someone paces within"
+✅ GOOD: "sickly fel-green light pulsing behind the great rose-window, casting jeweled color across the stonework"`,
+    instructions: `Each entry is ONE inner-glow light source for a haunted gothic structure, 18-35 words. Warm amber / fel-green / cold-blue / jewel stained-glass. NO moon, NO sky, NO humans shown. Output as a NUMBERED list, one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_moon: {
+    format: 'simple',
+    theme: `THE FULL MOON — the SECOND co-hero of the castle-moonscape path. Each entry is ONE bright, beautiful, BIG, INTERESTING full moon dominating the night sky, 28-50 words. This is a HERO element — luminous, theatrical, dramatic, characterful. The moon floods the scene with its colored light.
+
+⚠️ TWO TRAITS ARE MANDATORY ON EVERY MOON (this is what makes a moon "interesting", not a plain disc):
+  1. RICH SURFACE DETAIL — crisp visible craters, dark maria patches, mottled mountainous texture, an ancient pitted face. NEVER a plain featureless glowing disc.
+  2. A GLOWING COLORED CORONA / HALO — a luminous ring of light breathing around the rim (matching or complementing the moon's color), OR thin clouds drifting across and veiling its face. Give it atmosphere and aura, never a flat sticker.
+
+⚠️ BIG, BOLD, DOMINANT — a commanding full moon, roughly a THIRD of the sky, a true co-hero you can't miss. Big and dramatic. BUT still a believable MOON (the craters + corona keep it celestial): NEVER a planet-sized wall filling the whole frame, NEVER sci-fi "nearby planet" surface looming edge-to-edge.
+⚠️ Owns ONLY the moon itself (disc, color, size, halo/corona, surface detail, any thin cloud veiling its face, the moonlight it casts) — NOT the broader cloudscape/stars/aurora (sky axis), NOT the castle.
+
+⚠️ COLOR — ANY SHADE, vary it BOLDLY across the pool. Cool (icy blue-white / frost-silver / pale lavender-violet / ghost-green / teal / cold pearl / bone-white) AND warm (amber-gold / burnt orange / harvest-gold / blood-red / rose-copper) are ALL welcome. Do not default to one family; spread the whole spectrum. The moon's color is the DOMINANT light of the entire scene.
+
+Spread WIDELY across the moon's character:
+  • COLOR (full spectrum): icy blue-white / frost-silver / lavender-violet / ghost-green / teal / pearl / bone-white / amber-gold / burnt orange / harvest-gold / blood-red / rose-copper
+  • PLACEMENT (big + dominant): a colossal full moon hanging prominently / riding high / rising huge beside the castle / sitting low and enormous near the horizon
+  • CORONA / VEIL: a luminous halo-ring breathing at the rim / a prismatic corona / thin clouds drifting across and veiling the face / a smoldering aura / a ring of cold fire
+  • SURFACE (always detailed): crisp razor-sharp craters and maria / a mottled ancient pitted face / dark seas across a luminous disc / a cracked weathered moon-face
+
+✅ GOOD: "a colossal icy blue-white moon dominates the sky, its cratered face razor-sharp with dark maria, a cold silver halo-ring breathing around it, thin clouds drifting across, flooding the world in arctic light"
+✅ GOOD: "a huge pale lavender-violet moon rides high, ancient and pitted, a faint prismatic corona shimmering at its rim, bathing the scene in ghostly violet light"
+✅ GOOD: "an enormous burnt-amber moon sits low beside the castle, its mottled cratered face smoldering, a warm coppery halo glowing around it, washing the towers in molten gold"
+✅ GOOD: "a great blood-red moon hangs huge and luminous, dark maria scarring its face, a deep crimson corona bleeding at the edge, drenching the world in eerie red light"`,
+    instructions: `Each entry is ONE big, dominant, INTERESTING full moon (a co-hero, roughly a third of the sky — bold but still a believable moon, NEVER a planet-sized wall filling the frame), 28-50 words. EVERY moon MUST have (1) rich visible surface detail (craters / maria / mottled face — never a plain disc) AND (2) a glowing colored corona/halo OR thin clouds veiling its face. COLOR = any shade, spread the WHOLE spectrum boldly (cool icy-blue/violet/teal/silver AND warm amber/orange/blood-red/gold) — do not default to one family. The moon color is the dominant scene light. Owns ONLY the moon (not the broader cloudscape, stars, or castle). Output as a NUMBERED list, one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_sky: {
+    format: 'simple',
+    theme: `THE NIGHT SKY around the moon for the castle-moonscape path — everything in the sky EXCEPT the moon (separate axis) and the castle. Each entry is ONE cohesive, COOL, DRAMATIC, COOL-TONED night-sky treatment, 22-45 words. Make the skies WILD and beautiful and VARIED — this is a key wow-factor.
+
+⚠️ COOL + DRAMATIC + VARIED — lean cool (indigo / violet / deep teal / arctic blue / silver-grey), NOT warm orange skies. Push spectacle: auroras, nebula-tinged starfields, sweeping cloud-drama, lightning, galaxy bands.
+
+Spread WIDELY (never just "some clouds"):
+  • AURORA skies — ribbons of green-and-violet or teal-and-rose aurora rippling across the stars
+  • NEBULA / GALAXY — a faint cosmic nebula-glow tinting the sky, a luminous galaxy band arcing overhead, a dense brilliant starfield
+  • STORM DRAMA — towering thunderheads stacked behind the moon, distant violet lightning forking the horizon, wind-torn clouds racing
+  • SWEEPING CLOUDSCAPE — great curling cloud-banks rimmed in cold silver moonlight, dramatic layered cloud-shelves parting around the moon
+  • CLEAR COSMIC NIGHT — a vast deep-indigo sky ablaze with stars, a shooting star, the Milky Way faint behind
+  • MIST + FOG — low ground-fog and rising mist-ribbons veiling the base, a sea of cloud below with the castle breaking through
+  • TWILIGHT GRADIENT — deep violet-to-black or teal-to-indigo gradient, the last cold light bleeding at the horizon
+
+⚠️ Owns the SKY ONLY (clouds / stars / aurora / nebula / mist / lightning / twilight gradient / horizon). NOT the moon itself (separate axis). NOT the castle.
+
+✅ GOOD: "ribbons of green-and-violet aurora ripple across a star-blazing indigo sky, great cloud-banks rimmed in cold silver below"
+✅ GOOD: "towering thunderheads stack behind the castle, distant violet lightning forking the horizon, wind-torn clouds racing past in silver-edged shreds"
+✅ GOOD: "a vast deep-indigo cosmic night ablaze with stars, a faint galaxy band arcing overhead, thin mist pooling far below"`,
+    instructions: `Each entry is ONE COOL, DRAMATIC, VARIED night-sky treatment AROUND the moon (aurora / nebula-starfield / storm-drama / sweeping cloudscape / cosmic night / mist / cool twilight), 22-45 words. Lean COOL-toned, push spectacle, never just "some clouds." NOT the moon itself, NOT the castle. Output as a NUMBERED list, one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_accent_creature: {
+    format: 'simple',
+    theme: `ACCENT CREATURES — bats and crows/ravens for the castle-moonscape path (the BONUS element, ~65%-gated). Each entry is ONE flock/cluster of bats or crows as atmospheric silhouettes, 18-35 words. They animate the night air or perch on the structure — NEVER the subject.
+
+Spread across: a swirl of bats pouring from a tower; bats scattered in silhouette across the moon's face; a murder of crows wheeling above the spires; ravens perched in a row along a parapet/gable; a few crows lifting off a weathervane; a cloud of bats spiraling up into the sky; crows silhouetted on bare branches before the castle.
+
+✅ GOOD: "a swirling ribbon of bats pours from the highest tower, scattering in silhouette across the bright moon"
+✅ GOOD: "a murder of crows wheels above the spires, more perched in a black row along the parapet"`,
+    instructions: `Each entry is ONE flock of bats or crows/ravens as night silhouettes, 18-35 words. Atmospheric accent only, never the focus. Often crossing the moon or perched on the structure. NO humans. Output as a NUMBERED list, one entry per line.`,
+  },
+
+  gothbot_castle_moonscape_composition: {
+    format: 'simple',
+    theme: `CAMERA COMPOSITION / FRAMING for the castle-moonscape path — how the shot is composed, so the feed has WILD VARIETY and never the same "single tower dead-center with the moon behind it." Each entry is ONE distinct composition directive, 18-40 words. This is the anti-monotony axis — vary the angle, the castle's placement, the moon's placement, and the depth.
+
+⚠️ BREAK THE CENTRAL-TOWER LOCK — almost NEVER center the castle as a single vertical spike with the moon directly behind. Push the castle wide/sprawling/off-center, vary the moon's position (left, right, low horizon, between spires, beside the castle), vary the camera angle.
+
+Spread WIDELY across framings:
+  • WIDE ESTABLISHING — the sprawling castle spread LOW across the whole lower frame, the great moon huge above; epic movie-poster vista
+  • OFF-CENTER — the castle towering at frame-LEFT (or right), the enormous moon dominating the opposite open sky over a misty valley
+  • LOW HERO-ANGLE — looking steeply UP the full height of a colossal multi-towered castle, the moon blazing between its spires
+  • THREE-QUARTER SPRAWL — a dramatic 3/4 view of a massive multi-winged castle complex sprawling across a crag, the moon low on the horizon beyond
+  • CLIFF / SEA DRAMA — the castle clinging to a sheer cliff at one side, the colossal moon in the open sky on the other, depth plunging below
+  • GRAND APPROACH — a long causeway / stair / avenue of dead trees leading the eye toward the sprawling castle, the moon rising behind its widest wing
+  • MOON-ON-HORIZON — an enormous low moon filling the horizon BEHIND a long silhouetted castle ridge-line of MANY towers (a skyline, not one spire)
+  • THROUGH-A-FRAME — the castle and moon glimpsed through a foreground gothic arch / ruined window / gnarled tree-branches
+  • AERIAL / HIGH VANTAGE — looking down and across a vast castle-complex sprawling below, the moon huge beyond the far towers
+
+✅ GOOD: "a wide epic establishing vista, the sprawling many-towered castle spread low across the whole lower frame, the colossal moon huge in the open sky above"
+✅ GOOD: "an off-center composition — the castle towering at frame-left clawing skyward, the enormous moon dominating the open right sky over a misty plunging valley"
+✅ GOOD: "a low dramatic hero-angle looking steeply up a colossal multi-spired castle, the bright moon blazing between two of its towers"`,
+    instructions: `Each entry is ONE camera-composition / framing directive, 18-40 words. BREAK the central-single-tower-with-moon-behind cliché — vary angle + castle placement (wide/off-center/low/3-4) + moon placement (left/right/low/between spires). NO humans. Output as a NUMBERED list, one entry per line.`,
+  },
+
   // ─── GOTHBOT gothic-architecture path (2026-05-15, bespoke migration).
   // STRUCTURE IS THE HERO (80%+ visual weight). Inner-glow mandatory.
   // Ornate architectural detail porn. Exterior only. ─────────────────
