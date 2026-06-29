@@ -600,7 +600,22 @@ export default function CreateScreen() {
         >
           {/* iPad: keep the form a centered ~600 column instead of stretching the
               fields edge-to-edge (no-op on phone). */}
-          <ResponsiveContainer maxWidth={600} style={{ width: '100%' }}>
+          <ResponsiveContainer
+            maxWidth={600}
+            style={[
+              { width: '100%' },
+              // iPad: contain the centered form group in a subtle card (faint
+              // lift + defining border) so it reads as an intentional panel
+              // rather than controls floating in a void (no-op on phone).
+              isTabletDevice && {
+                backgroundColor: 'rgba(255,255,255,0.03)',
+                borderWidth: 1,
+                borderColor: colors.border,
+                borderRadius: 24,
+                padding: 24,
+              },
+            ]}
+          >
             {/* Photo attachment card */}
             {/* Photo attachment card */}
             {hasPhoto && (
