@@ -20,9 +20,12 @@ import Animated, {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+// iPad: constrain the whole drawer to a centered ~600 card (not a full-width
+// edge-to-edge sheet); phones keep the full-width drawer.
+const SHEET_SIDE_INSET = isTabletDevice ? Math.max(0, (SCREEN_WIDTH - 600) / 2) : 0;
 // On smaller phones (iPhone SE class) bump the sheet to 60% so 6+ options
 // don't get clipped behind the rounded bottom. Larger phones stay at 50%
 // — they have plenty of headroom.
@@ -351,6 +354,8 @@ export function StylePickerSheet({
               borderTopColor: colors.border,
               paddingBottom: insets.bottom,
             },
+            // iPad: pull the drawer in to a centered ~600 card.
+            { left: SHEET_SIDE_INSET, right: SHEET_SIDE_INSET },
             sheetStyle,
           ]}
         >

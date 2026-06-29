@@ -29,7 +29,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import {
   DEFAULT_MODEL_ID,
   STANDARD_MODEL_IDS,
@@ -239,7 +239,13 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
             activeOpacity={1}
             onPress={() => setModalOpen(false)}
           />
-          <View style={[styles.modalSheet, { backgroundColor: colors.background }]}>
+          <View
+            style={[
+              styles.modalSheet,
+              { backgroundColor: colors.background, width: '100%' },
+              isTabletDevice && { maxWidth: 600 },
+            ]}
+          >
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
               <TitleText>Choose your AI model</TitleText>
@@ -338,6 +344,9 @@ const styles = StyleSheet.create({
   modalRoot: {
     flex: 1,
     justifyContent: 'flex-end',
+    // iPad: center the constrained sheet horizontally (no-op on phone, where the
+    // sheet is full width).
+    alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalSheet: {
