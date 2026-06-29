@@ -41,9 +41,11 @@ import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { avatarUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+// iPad: constrain the comment pane to a centered ~600 card (no-op on phone).
+const PANE_SIDE_INSET = isTabletDevice ? Math.max(0, (SCREEN_WIDTH - 600) / 2) : 0;
 const THUMB_HEIGHT = Math.round(SCREEN_HEIGHT * 0.28);
 const THUMB_WIDTH = Math.round((THUMB_HEIGHT * 9) / 16); // maintain 9:16 aspect
 const THUMB_MARGIN_TOP = 8;
@@ -330,7 +332,13 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
         {/* Comment pane */}
         <GestureDetector gesture={panGesture}>
-          <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
+          <Animated.View
+            style={[
+              styles.pane,
+              { top: HEADER_HEIGHT, left: PANE_SIDE_INSET, right: PANE_SIDE_INSET },
+              paneStyle,
+            ]}
+          >
             <KeyboardAvoidingView
               behavior="padding"
               style={{ flex: 1 }}

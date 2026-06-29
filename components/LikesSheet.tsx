@@ -22,11 +22,13 @@ import { Ionicons } from '@expo/vector-icons';
 import * as nav from '@/lib/navigate';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { usePostLikes } from '@/hooks/usePostLikes';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const SHEET_WIDTH = SCREEN_WIDTH * 0.75;
+// Right-side drawer: 75% of a phone, but capped to a sensible panel width on
+// iPad (75% of a wide tablet is far too wide for a list of names).
+const SHEET_WIDTH = isTabletDevice ? 420 : SCREEN_WIDTH * 0.75;
 
 interface Props {
   uploadId: string | null;

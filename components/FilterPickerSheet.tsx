@@ -22,10 +22,12 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { ACTIVE_OFFSET, SWIPE_DISMISS_DISTANCE, VELOCITY_THRESHOLD } from '@/constants/gestures';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+// iPad: constrain the drawer to a centered ~600 card (no-op on phone).
+const SHEET_SIDE_INSET = isTabletDevice ? Math.max(0, (SCREEN_WIDTH - 600) / 2) : 0;
 // On smaller phones bump to 65% so 6+ options don't get clipped.
 const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.65 : SCREEN_HEIGHT * 0.55;
 
@@ -120,7 +122,15 @@ export function FilterPickerSheet({
       <Pressable style={s.backdrop} onPress={dismiss} />
       <Animated.View
         {...panResponder.panHandlers}
-        style={[s.sheet, { paddingBottom: insets.bottom + 16, transform: [{ translateY }] }]}
+        style={[
+          s.sheet,
+          {
+            paddingBottom: insets.bottom + 16,
+            left: SHEET_SIDE_INSET,
+            right: SHEET_SIDE_INSET,
+            transform: [{ translateY }],
+          },
+        ]}
       >
         <View style={s.handleRow}>
           <View style={s.handle} />
