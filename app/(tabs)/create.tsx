@@ -34,7 +34,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale, useDeviceClass } from '@/lib/responsive';
+import { verticalScale, fontScale, useDeviceClass, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -591,7 +591,12 @@ export default function CreateScreen() {
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: tabBarHeight + verticalScale(16) }}
+          contentContainerStyle={[
+            { paddingBottom: tabBarHeight + verticalScale(16) },
+            // iPad: vertically center the form + CTA group so a short form isn't
+            // top-anchored above a big empty void (no-op on phone).
+            isTabletDevice && { flexGrow: 1, justifyContent: 'center' },
+          ]}
         >
           {/* iPad: keep the form a centered ~600 column instead of stretching the
               fields edge-to-edge (no-op on phone). */}
@@ -1093,6 +1098,13 @@ export default function CreateScreen() {
                 </View>
               </View>
             )}
+            {/* iPad: the Dream CTA lives WITH the form as one centered group,
+                instead of pinned to the far bottom like the phone sticky footer. */}
+            {isTabletDevice && (
+              <View style={{ marginTop: verticalScale(28) }}>
+                <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+              </View>
+            )}
           </ResponsiveContainer>
         </KeyboardAwareScrollView>
 
@@ -1103,23 +1115,25 @@ export default function CreateScreen() {
             offset.closed lifts it above the floating tab bar when the keyboard
             is down; when the keyboard is up it covers the tab bar, so the footer
             sits right above the keyboard (opened offset 0). */}
-        <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
-          <View
-            className="px-5"
-            style={{
-              backgroundColor: colors.background,
-              paddingTop: verticalScale(10),
-              paddingBottom: verticalScale(22),
-            }}
-          >
-            {/* Dream button — the primary gradient CTA. Cost lives in the model
+        {!isTabletDevice && (
+          <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
+            <View
+              className="px-5"
+              style={{
+                backgroundColor: colors.background,
+                paddingTop: verticalScale(10),
+                paddingBottom: verticalScale(22),
+              }}
+            >
+              {/* Dream button — the primary gradient CTA. Cost lives in the model
                 selector now, so the CTA stays clean. iPad: capped to the same
                 centered 600 column as the form so it isn't absurdly wide. */}
-            <ResponsiveContainer maxWidth={600}>
-              <GradientButton label="Dream" variant="solid" onPress={handleDream} />
-            </ResponsiveContainer>
-          </View>
-        </KeyboardStickyView>
+              <ResponsiveContainer maxWidth={600}>
+                <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+              </ResponsiveContainer>
+            </View>
+          </KeyboardStickyView>
+        )}
       </View>
 
       {/* Style picker bottom sheet */}
