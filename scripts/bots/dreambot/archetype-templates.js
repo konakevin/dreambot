@@ -354,4 +354,86 @@ Vertical 9:16 phone-wallpaper. Lush, abundant, and immersive yet cohesive and se
 Write the Flux prompt OPENING with the immersive outdoor botanical place, then the setting, light/season, framing, and any storybook element. Output ONLY the raw Flux prompt as one flowing paragraph, ~75-105 words. No preamble, no labels.`;
   },
 
+  DREAMBOT_PULP_FEMME: ({ slots }) => {
+    const { being, hair_color, femme_hairstyle, femme_outfit, femme_pose, world, sky, lighting, shot } = slots;
+    const gag = slots.gag;
+    const prop = slots.prop;
+
+    return `You are writing ONE deliriously fun, frame-worthy phone-wallpaper render for DreamBot — a RETRO PULP SCI-FI COMEDY scene straight out of the 1960s-70s space age: loony, campy, tongue-in-cheek, glamorous, and a little sexy, with a real sense of humor. A glamorous SPACE-HEROINE is the star. Painted like a vintage pulp sci-fi ILLUSTRATION (a painting, NOT a book cover). Vertical, cinematic, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ CRANK THE IMAGINATION — GO BIG ━━━
+Be maximalist and a little UNHINGED: wild stylish props, absurd background business, over-the-top retro space-fashion, ridiculous gizmos and gadgets crammed into every corner. Surprise and delight — the weirder and more inventive, the better. Keep it CLEVER and stylish, never gross, never crude, never lazy or cheap-looking. Gloriously, gorgeously bananas.
+
+━━━ THE STAR — assemble her from these EXACT traits (she is the #1 rule) ━━━
+A glamorous retro space-heroine: a woman with ${being}, ${hair_color} hair styled in ${femme_hairstyle}, wearing ${femme_outfit}, ${femme_pose}. She is the focal hero of the scene — big, bold, FRONT-AND-CENTER, bursting with confident pin-up glamour: flirty, self-assured, a twinkle of mischief in her eye. Render her with vintage pulp-illustration glamour and lean ALL the way into the comedy and the camp.
+${prop ? `She has ${prop} — a fun retro detail worked naturally into her hands or the scene.
+` : ''}
+
+━━━ THE RETRO SPACE SCENE (her setting) ━━━
+${world}
+Build it around her as a vivid kitschy retro-future set — chrome, fins, ray-guns, bubble-helmets, atomic-age curves, blinking gizmos — packed with playful space-age detail.
+
+━━━ THE COSMOS (retro space-age backdrop) ━━━
+${sky}
+Style it RETRO and bold, like a vintage sci-fi movie poster.
+
+━━━ LIGHT + CAMERA (drive the cinematic fidelity) ━━━
+Light the scene with ${lighting}. Compose it as ${shot}. Render it RICH and HIGH-FIDELITY — crisp confident linework, lush painted shading, depth and atmosphere, packed with specific tactile retro detail in every corner.
+
+━━━ THE HUMOR (tongue firmly in cheek) ━━━
+There must be a WINK — a sight gag, an over-the-top pose, a goofy contrast. This scene is FUNNY; never po-faced or grim.
+${gag ? `
+━━━ A WILD PROP / SIGHT GAG (a sprinkle of crazy — work it in) ━━━
+Somewhere in the scene: ${gag}. Make it land as a delightful, funny detail — woven in naturally, adding to the chaos and charm without crowding out the star.
+` : ''}
+━━━ SEXY-BUT-TASTEFUL ━━━
+Glamour in the spirit of a vintage pulp pin-up — flirty, confident, campy. Her outfit ALWAYS fully covers her torso. Suggestive is fine; bare skin is not — NO nudity, NO bare chest, NO exposed nipples, nothing explicit. Covered, classy, and playful, like a fun retro illustration.
+
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper, painted like a bold retro pulp sci-fi illustration — dynamic, the heroine prominent with the retro scene rich around her. Saturated, glossy, fun, frame-worthy. Her torso is FULLY COVERED by her outfit. This is the artwork ONLY: NO text, NO words, NO lettering, NO title, NO signs with writing, NO signature or artist credit, NO watermark, NO URL, NO logos, NO gore.
+
+Write the Flux prompt OPENING with the heroine and her pose, then the retro space scene, the cosmic backdrop, and the comedic wink. Output ONLY the raw Flux prompt as one flowing paragraph, ~90-120 words. No preamble, no labels.`;
+  },
+
+  DREAMBOT_PULP_HERO: ({ slots }) => {
+    const { being, hair_color, hero_hairstyle, hero_outfit, hero_pose, world, sky, lighting, shot } = slots;
+    const gag = slots.gag;
+    const prop = slots.prop;
+
+    return `You are writing ONE deliriously fun, frame-worthy phone-wallpaper render for DreamBot — a RETRO PULP SCI-FI COMEDY scene straight out of the 1960s-70s space age: loony, campy, tongue-in-cheek, adventurous, and a little roguish, with a real sense of humor. A LEAN, COOL SPACE-HERO is the star. Painted like a vintage pulp sci-fi ILLUSTRATION (a painting, NOT a book cover). Vertical, cinematic, poster-worthy. Output wraps with the style prefix + suffix.
+
+━━━ CRANK THE IMAGINATION — GO BIG ━━━
+Be maximalist and a little UNHINGED: wild stylish props, absurd background business, over-the-top retro space-gear, ridiculous gizmos and gadgets crammed into every corner. Surprise and delight — the weirder and more inventive, the better. Keep it CLEVER and stylish, never gross, never crude, never lazy or cheap-looking. Gloriously, gorgeously bananas.
+
+━━━ THE STAR — assemble him from these EXACT traits (he is the #1 rule) ━━━
+A lean, handsome retro space-hero: a man with ${being}, ${hair_color} hair styled in ${hero_hairstyle}, wearing ${hero_outfit}, ${hero_pose}. He is the focal hero of the scene — big, bold, FRONT-AND-CENTER, effortlessly cool and confident: a roguish space-smuggler / cool retro leading man with a twinkle of mischief. Render him with vintage pulp-illustration adventure-cool and lean ALL the way into the comedy and the camp.
+${prop ? `He has ${prop} — a fun retro detail worked naturally into his hands or the scene.
+` : ''}
+
+━━━ HE IS LEAN, COOL + MASCULINE (NOT ANDROGYNOUS) — bake this in HARD ━━━
+He is LEAN and HANDSOME with a slim athletic build — effortlessly cool, NOT a bulky bodybuilder, NOT a beefcake. His pose is MASCULINE and grounded (arms crossed, gripping his ray-gun, fists ready, hands at his sides, or mid-action). He wears a PRACTICAL, masculine retro outfit. NEVER a skin-tight catsuit or spandex, NEVER shirtless or bare-chested, NEVER a hand-on-hip / cocked-hip / coy / flirty pin-up pose (that posing is ONLY for the women, never him), NEVER flamboyant, campy, effeminate, or androgynous.
+
+━━━ THE RETRO SPACE SCENE (his setting) ━━━
+${world}
+Build it around him as a vivid kitschy retro-future set — chrome, fins, ray-guns, bubble-helmets, atomic-age curves, blinking gizmos — packed with playful space-age detail.
+
+━━━ THE COSMOS (retro space-age backdrop) ━━━
+${sky}
+Style it RETRO and bold, like a vintage sci-fi movie poster.
+
+━━━ LIGHT + CAMERA (drive the cinematic fidelity) ━━━
+Light the scene with ${lighting}. Compose it as ${shot}. Render it RICH and HIGH-FIDELITY — crisp confident linework, lush painted shading, depth and atmosphere, packed with specific tactile retro detail in every corner.
+
+━━━ THE HUMOR (tongue firmly in cheek) ━━━
+There must be a WINK — a sight gag, a goofy contrast, a deadpan robot, a backfiring jetpack. This scene is FUNNY; never po-faced or grim.
+${gag ? `
+━━━ A WILD PROP / SIGHT GAG (a sprinkle of crazy — work it in) ━━━
+Somewhere in the scene: ${gag}. Make it land as a delightful, funny detail — woven in naturally, adding to the chaos and charm without crowding out the star.
+` : ''}
+━━━ COMPOSITION + RULES ━━━
+Vertical 9:16 phone-wallpaper, painted like a bold retro pulp sci-fi illustration — dynamic, the hero prominent with the retro scene rich around him. Saturated, glossy, fun, frame-worthy. He is always FULLY DRESSED in his practical retro outfit — never shirtless. This is the artwork ONLY: NO text, NO words, NO lettering, NO title, NO signs with writing, NO signature or artist credit, NO watermark, NO URL, NO logos, NO gore.
+
+Write the Flux prompt OPENING with the hero and his action, then the retro space scene, the cosmic backdrop, and the comedic wink. Output ONLY the raw Flux prompt as one flowing paragraph, ~90-120 words. No preamble, no labels.`;
+  },
+
 };

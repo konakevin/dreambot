@@ -181,4 +181,48 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  // pulp-femme — the female star of the shared retro pulp sci-fi COMEDY universe
+  // (sibling of pulp-hero). The CHARACTER is decomposed into independent trait axes
+  // (being + hair_color + hairstyle + outfit + pose) so every render is a fresh
+  // diverse combination; female traits live in FEMALE-ONLY pools so no androgynous
+  // wording can bleed across. `gag` is a ~70% gated sight-gag layer.
+  DREAMBOT_PULP_FEMME: {
+    description:
+      'PATH-BESPOKE — DreamBot pulp-femme (2026-06-29). A glamorous SPACE-HEROINE is the star of a retro 1960s-70s pulp sci-fi COMEDY scene (loony, campy, flirty pin-up glamour, a little sexy but tasteful). Character assembled from independent trait axes — being (diverse human skin tones + retro alien types) + hair_color + femme_hairstyle + femme_outfit (always torso-covering) + femme_pose (confident pin-up) — over a shared retro spacescape (world) + cosmic backdrop (sky). 7 always axes + 1 gated sight-gag (gag ~70%). Shares the pulp universe + PULP_MEDIUM with pulp-hero; female traits are FEMALE-ONLY pools. flux-1.1 pair; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['being', 'hair_color', 'femme_hairstyle', 'femme_outfit', 'femme_pose', 'world', 'sky', 'lighting', 'shot'],
+    },
+    pickN: {},
+    conditionalLayers: [
+      { slot: 'gag', gate: 0.7 },
+      { slot: 'prop', gate: 0.7 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  // pulp-hero — the male star of the shared retro pulp sci-fi COMEDY universe
+  // (sibling of pulp-femme). Same decomposed-character axis system, but male traits
+  // live in MALE-ONLY pools, and the template bakes the LEAN-COOL-MASCULINE rules in
+  // hard (lean not bulky, grounded masculine pose, practical outfit not a catsuit,
+  // never shirtless/flamboyant/effeminate/androgynous).
+  DREAMBOT_PULP_HERO: {
+    description:
+      'PATH-BESPOKE — DreamBot pulp-hero (2026-06-29). A LEAN, COOL SPACE-HERO (roguish space-smuggler / cool retro leading man) is the star of a retro 1960s-70s pulp sci-fi COMEDY scene. Character assembled from independent trait axes — being (diverse human skin tones + retro alien types) + hair_color + hero_hairstyle + hero_outfit (practical masculine retro gear) + hero_pose (masculine, grounded) — over the shared retro spacescape (world) + cosmic backdrop (sky). 7 always axes + 1 gated sight-gag (gag ~70%). Shares the pulp universe + PULP_MEDIUM with pulp-femme; male traits are MALE-ONLY pools and the template bakes in lean/masculine/practical (never bulky, catsuit, shirtless, flamboyant, effeminate, androgynous). flux-1.1 pair; skips look-rotation + chaos + two-pass-polish.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['being', 'hair_color', 'hero_hairstyle', 'hero_outfit', 'hero_pose', 'world', 'sky', 'lighting', 'shot'],
+    },
+    pickN: {},
+    conditionalLayers: [
+      { slot: 'gag', gate: 0.7 },
+      { slot: 'prop', gate: 0.7 },
+    ],
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

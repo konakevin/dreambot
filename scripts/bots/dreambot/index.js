@@ -96,6 +96,11 @@ const pathBuilders = {
   // Beauty-gap scene paths (2026-06-28) — own bespoke mediums, excluded from the
   // look rotation.
   'botanical': require('./paths/botanical'),
+  // Retro pulp sci-fi COMEDY paths (2026-06-29) — two gendered character paths
+  // sharing one universe + medium (pulp-femme + pulp-hero). Own code-only medium,
+  // excluded from the look rotation.
+  'pulp-femme': require('./paths/pulp-femme'),
+  'pulp-hero': require('./paths/pulp-hero'),
 };
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
@@ -114,6 +119,8 @@ const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
     p !== 'far-eden-soft' &&
     p !== 'hidden-conservatory' &&
     p !== 'botanical' &&
+    p !== 'pulp-femme' &&
+    p !== 'pulp-hero' &&
     !p.startsWith('bubble-bot-dreams')
 );
 
@@ -191,6 +198,8 @@ module.exports = {
     dreambot_conservatory: blocks.CONSERVATORY_MEDIUM,
     // Beauty-gap paths (2026-06-28) — own bespoke code-only mediums.
     dreambot_botanical: blocks.BOTANICAL_MEDIUM,
+    // pulp-femme + pulp-hero share one retro pulp illustration medium.
+    dreambot_pulp: blocks.PULP_MEDIUM,
   },
 
   // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
@@ -242,6 +251,8 @@ module.exports = {
     // hidden-conservatory locks its own photoreal stained-glass-greenhouse medium.
     'hidden-conservatory': 'dreambot_conservatory',
     'botanical': 'dreambot_botanical',
+    'pulp-femme': 'dreambot_pulp',
+    'pulp-hero': 'dreambot_pulp',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -271,6 +282,10 @@ module.exports = {
     // cue. Region/world-anchor only — no enumeration (first-noun lock).
     dreambot_spires:
       'whimsical fairytale tower-city, impossible twisting pastel spires with glowing windows, lush painterly storybook dream-world, dreamy and magical',
+    // pulp-femme + pulp-hero: LEAD with the retro pulp illustration + a glamorous
+    // space character. Gender-neutral anchor (the template assembles the character).
+    dreambot_pulp:
+      'a fun retro 1960s pulp sci-fi illustration, a glamorous space character front and center, campy retro-future scene, bold saturated vintage airbrush artwork',
     // far-eden: LEAD with the alien-world paradise hero + cosmic sky. Region/
     // world-anchor only — NO biome enumeration (first-noun lock). Two registers.
     dreambot_eden_hyperreal:
@@ -359,6 +374,9 @@ module.exports = {
     'hidden-conservatory',
     // Beauty-gap POC paths (2026-06-28).
     'botanical',
+    // Retro pulp sci-fi comedy paths (2026-06-29).
+    'pulp-femme',
+    'pulp-hero',
   ],
 
   // Path weights — 2× indoor boost; everything else 1×.
@@ -434,6 +452,15 @@ module.exports = {
     // prismatic light cleanest at native 9:16.
     'hidden-conservatory': 'black-forest-labs/flux-1.1-pro-ultra',
     'botanical': 'black-forest-labs/flux-1.1-pro-ultra',
+    // pulp-femme + pulp-hero — flux-1.1 pair (matches far-eden's roster).
+    'pulp-femme': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+    ],
+    'pulp-hero': [
+      'black-forest-labs/flux-1.1-pro-ultra',
+      'black-forest-labs/flux-1.1-pro',
+    ],
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -455,6 +482,8 @@ module.exports = {
       'far-eden-soft',
       'hidden-conservatory',
       'botanical',
+      'pulp-femme',
+      'pulp-hero',
       ...CROSSOVER_PATHS,
     ],
     allowSubjectChaosPaths: [
@@ -488,6 +517,8 @@ module.exports = {
       'far-eden-soft',
       'hidden-conservatory',
       'botanical',
+      'pulp-femme',
+      'pulp-hero',
       ...CROSSOVER_PATHS,
       'cuddly-aquatic',
       'night-meadow',

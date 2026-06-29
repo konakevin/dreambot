@@ -66,6 +66,12 @@ const EDEN_MEDIUM_HYPERREAL =
 const EDEN_MEDIUM_PAINTERLY =
   'lush painterly sci-fi-fantasy dreamscape, luminous hand-painted illustration glowing from within, ultra-saturated jewel color, volumetric dreamlight, deep atmospheric depth, breathtaking otherworldly paradise vista, magical-realism, wallpaper-tier';
 
+// PULP_MEDIUM (2026-06-29) — shared look for the two retro pulp sci-fi COMEDY
+// paths (pulp-femme + pulp-hero). "ILLUSTRATION / painting" on purpose, NOT
+// "cover/poster" (which makes Flux render garbled title text + fake watermarks).
+const PULP_MEDIUM =
+  'Vintage 1960s-70s pulp sci-fi ILLUSTRATION, retro-futurist airbrush painting: bold saturated atomic-age palette, glossy space-age glamour, clean confident linework, campy and cinematic with a wink. A painted artwork only, no lettering or signature.';
+
 // CONSERVATORY_MEDIUM (2026-06-28) — the `hidden-conservatory` path's render
 // register: a photoreal cinematic interior of a lush overgrown stained-glass
 // greenhouse, with rainbow prismatic light refracting through jewel-toned glass
@@ -275,6 +281,7 @@ module.exports = {
   DREAM_SPIRES_MEDIUM,
   EDEN_MEDIUM_HYPERREAL,
   EDEN_MEDIUM_PAINTERLY,
+  PULP_MEDIUM,
   CONSERVATORY_MEDIUM,
   COZY_INDOOR_CLUTTER_BLOCK,
   COZY_VILLAGE_CLUTTER_BLOCK,

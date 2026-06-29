@@ -112,6 +112,25 @@ module.exports = {
   EDEN_LIFE_ACCENT: load('eden_life_accent'),
   EDEN_WONDER_STRUCTURE: load('eden_wonder_structure'),
   EDEN_DREAM_EVENT: load('eden_dream_event'),
+
+  // PULP (2026-06-29) — two retro pulp sci-fi COMEDY paths (pulp-femme +
+  // pulp-hero). Character decomposed into independent trait axes; shared scene +
+  // gender-split character pools so no androgynous wording bleeds across.
+  PULP_BEING: load('pulp_being'),
+  PULP_HAIR_COLOR: load('pulp_hair_color'),
+  PULP_FEMME_HAIRSTYLE: load('pulp_femme_hairstyle'),
+  PULP_FEMME_OUTFIT: load('pulp_femme_outfit'),
+  PULP_FEMME_POSE: load('pulp_femme_pose'),
+  PULP_HERO_HAIRSTYLE: load('pulp_hero_hairstyle'),
+  PULP_HERO_OUTFIT: load('pulp_hero_outfit'),
+  PULP_HERO_POSE: load('pulp_hero_pose'),
+  PULP_WORLD: load('pulp_world'),
+  PULP_SKY: load('pulp_sky'),
+  PULP_LIGHTING: load('pulp_lighting'),
+  PULP_SHOT: load('pulp_shot'),
+  PULP_PROP: load('pulp_prop'),
+  PULP_GAG: load('pulp_gag'),
+
   // HIDDEN-CONSERVATORY (2026-06-28) — scene-as-hero stained-glass GREENHOUSE
   // INTERIOR (ref benmyhre "Stained Glass Greenhouses"). NO character; an
   // overgrown garden inside a grand stained-glass cathedral/conservatory with
