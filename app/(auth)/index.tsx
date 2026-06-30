@@ -1,13 +1,6 @@
 import { showAlert } from '@/components/CustomAlert';
 import { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  Platform,
-  StyleSheet,
-  Linking,
-} from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,6 +10,7 @@ import * as Haptics from 'expo-haptics';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { GradientTitle } from '@/components/GradientTitle';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
+import { TermsAgreementFooter } from '@/components/TermsAgreementFooter';
 import { signInWithGoogle } from '@/lib/googleAuth';
 import { signInWithApple } from '@/lib/appleAuth';
 import { signInWithFacebook } from '@/lib/facebookAuth';
@@ -191,28 +185,7 @@ export default function WelcomeScreen() {
             </Link>
           </View>
 
-          {/* Legal disclosure — bumped from text-tertiary (invisible on the
-            purple haze) to white/55 so it's legible without shouting. */}
-          <Text
-            className="text-xs text-center mt-3 px-4"
-            style={{ color: 'rgba(255,255,255,0.55)' }}
-          >
-            By continuing you agree to our{' '}
-            <Text
-              className="underline"
-              onPress={() => Linking.openURL('https://dreambotapp.com/terms')}
-            >
-              Terms of Service
-            </Text>{' '}
-            and{' '}
-            <Text
-              className="underline"
-              onPress={() => Linking.openURL('https://dreambotapp.com/privacy')}
-            >
-              Privacy Policy
-            </Text>
-            .
-          </Text>
+          <TermsAgreementFooter />
         </View>
       </ResponsiveContainer>
     </SafeAreaView>

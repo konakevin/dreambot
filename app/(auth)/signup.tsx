@@ -5,6 +5,7 @@ import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
+import { TermsAgreementFooter } from '@/components/TermsAgreementFooter';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -147,14 +148,7 @@ export default function SignupScreen() {
 
         <ResponsiveContainer maxWidth={600} style={{ flex: 1 }}>
           <View className="flex-1 px-6">
-            <Ionicons
-              name="flame"
-              size={32}
-              color="#FF4500"
-              style={{ marginBottom: verticalScale(8) }}
-            />
-            <Text className="text-white text-2xl font-bold mb-1">Create your account</Text>
-            <Text className="text-text-secondary mb-8">Join and start dreaming.</Text>
+            <Text className="text-white text-2xl font-bold mb-8">Create your account</Text>
 
             <Text className="text-text-secondary text-xs mb-2 ml-1">USERNAME</Text>
             <View className="bg-card border border-border rounded-2xl px-4 py-4 flex-row items-center mb-5">
@@ -222,6 +216,8 @@ export default function SignupScreen() {
                 <Text className="text-[#A78BFA] font-semibold">Sign in</Text>
               </Link>
             </View>
+
+            <TermsAgreementFooter />
           </View>
         </ResponsiveContainer>
       </KeyboardAwareScrollView>

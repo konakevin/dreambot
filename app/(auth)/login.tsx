@@ -4,6 +4,7 @@ import { View, TouchableOpacity, Platform, ActivityIndicator } from 'react-nativ
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
+import { TermsAgreementFooter } from '@/components/TermsAgreementFooter';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -239,6 +240,8 @@ export default function LoginScreen() {
                 <Text className="text-[#A78BFA] font-semibold">Sign up</Text>
               </Link>
             </View>
+
+            <TermsAgreementFooter />
           </View>
         </ResponsiveContainer>
       </KeyboardAwareScrollView>
