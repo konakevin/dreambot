@@ -44,8 +44,6 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-// iPad: constrain the comment pane to a centered ~600 card (no-op on phone).
-const PANE_SIDE_INSET = isTabletDevice ? Math.max(0, (SCREEN_WIDTH - 600) / 2) : 0;
 const THUMB_HEIGHT = Math.round(SCREEN_HEIGHT * 0.28);
 const THUMB_WIDTH = Math.round((THUMB_HEIGHT * 9) / 16); // maintain 9:16 aspect
 const THUMB_MARGIN_TOP = 8;
@@ -138,6 +136,12 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
       transform: [{ translateY }],
     };
   });
+
+  // Thumbnail-meta fade-in (phone path). Hoisted here so it's called
+  // unconditionally — the iPad early return below must not sit before a hook.
+  const thumbMetaFade = useAnimatedStyle(() => ({
+    opacity: interpolate(progress.value, [0.6, 1], [0, 1]),
+  }));
 
   // ── Comments ─────────────────────────────────────────────────────────────
   const queryClient = useQueryClient();
@@ -264,6 +268,172 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
     );
   }
 
+  // ── iPad: a self-contained centered comment card. This is a SEPARATE render
+  // path from the iPhone morph-sheet below — the two designs never share a
+  // shell, so the iPad layout can't leak into iPhone. ──
+  if (isTabletDevice) {
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        <Animated.View style={[styles.overlay, overlayStyle]}>
+          <TouchableOpacity style={StyleSheet.absoluteFill} activeOpacity={1} onPress={dismiss} />
+          <View style={styles.ipadWrap} pointerEvents="box-none">
+            <View style={styles.ipadCard}>
+              {/* Header: post thumbnail + author + count + close */}
+              <View style={styles.ipadHeader}>
+                <Image
+                  source={{ uri: post.image_url_display ?? post.image_url }}
+                  style={styles.ipadHeaderThumb}
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
+                  placeholder={post.thumbhash ? { thumbhash: post.thumbhash } : null}
+                  placeholderContentFit="cover"
+                />
+                <View style={{ flexShrink: 1 }}>
+                  <Text style={styles.thumbUsername} numberOfLines={1}>
+                    {post.username}
+                  </Text>
+                  <Text style={styles.thumbCount}>
+                    {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }} />
+                <TouchableOpacity onPress={dismiss} hitSlop={12} style={styles.closeButton}>
+                  <Ionicons name="close" size={22} color={colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
+
+              <KeyboardAvoidingView
+                behavior="padding"
+                style={{ flex: 1 }}
+                enabled={Platform.OS === 'ios'}
+              >
+                <FlatList
+                  data={comments}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <CommentRow
+                      comment={item}
+                      uploadId={post.id}
+                      onReply={handleReply}
+                      expandedCommentId={expandedCommentId}
+                    />
+                  )}
+                  onEndReached={() => {
+                    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+                  }}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={
+                    isFetchingNextPage ? (
+                      <View style={styles.footerLoader}>
+                        <ActivityIndicator color={colors.textSecondary} />
+                      </View>
+                    ) : null
+                  }
+                  ListEmptyComponent={
+                    <View style={styles.empty}>
+                      {isLoading ? (
+                        <ActivityIndicator color={colors.textSecondary} />
+                      ) : (
+                        <>
+                          <Ionicons
+                            name="chatbubble-outline"
+                            size={36}
+                            color="rgba(255,255,255,0.15)"
+                          />
+                          <Text style={styles.emptyTitle}>No comments yet</Text>
+                          <Text style={styles.emptySub}>Be the first to say something</Text>
+                        </>
+                      )}
+                    </View>
+                  }
+                  keyboardShouldPersistTaps="handled"
+                  contentContainerStyle={styles.listContent}
+                />
+
+                {replyTo && (
+                  <View style={styles.replyBar}>
+                    <Text style={styles.replyText}>
+                      Replying to{' '}
+                      <Text style={styles.replyUsername}>{replyTo.username ?? 'comment'}</Text>
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setReplyTo(null);
+                        setText('');
+                      }}
+                      hitSlop={8}
+                    >
+                      <Ionicons name="close" size={16} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {mentionQuery.length >= 1 && mentionResults.length > 0 && (
+                  <View style={styles.mentionList}>
+                    {mentionResults.slice(0, 5).map((u) => (
+                      <TouchableOpacity
+                        key={u.id}
+                        style={styles.mentionRow}
+                        onPress={() => completeMention(u)}
+                        activeOpacity={0.7}
+                      >
+                        {u.avatarUrl ? (
+                          <Image source={{ uri: u.avatarUrl }} style={styles.mentionAvatar} />
+                        ) : (
+                          <View style={styles.mentionAvatarFallback}>
+                            <Text style={styles.mentionAvatarInitial}>
+                              {(u.username || '?')[0].toUpperCase()}
+                            </Text>
+                          </View>
+                        )}
+                        <Text style={styles.mentionUsername}>{u.username}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+
+                <View style={[styles.inputBar, { paddingBottom: verticalScale(12) }]}>
+                  {currentUser ? (
+                    <>
+                      <TextInput
+                        ref={inputRef}
+                        style={styles.input}
+                        placeholder="Add a comment..."
+                        placeholderTextColor={colors.textSecondary}
+                        value={text}
+                        onChangeText={handleTextChange}
+                        multiline
+                        maxLength={MAX_COMMENT_LENGTH}
+                      />
+                      <TouchableOpacity
+                        style={[styles.sendBtn, !text.trim() && styles.sendBtnDisabled]}
+                        onPress={handleSend}
+                        disabled={!text.trim() || isPending}
+                        activeOpacity={0.7}
+                      >
+                        {isPending ? (
+                          <ActivityIndicator color="#000" size="small" />
+                        ) : (
+                          <Ionicons
+                            name="arrow-up"
+                            size={18}
+                            color={text.trim() ? '#000000' : colors.textSecondary}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <Text style={styles.signInPrompt}>Sign in to comment</Text>
+                  )}
+                </View>
+              </KeyboardAvoidingView>
+            </View>
+          </View>
+        </Animated.View>
+      </View>
+    );
+  }
+
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
       {/* Dark overlay */}
@@ -298,16 +468,8 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         <Animated.View
           style={[
             styles.thumbMeta,
-            {
-              top: insets.top + THUMB_MARGIN_TOP + THUMB_HEIGHT + 8,
-              // iPad: align the header row with the centered 600 comment pane
-              // (otherwise the username sits far-left while the pane is narrower).
-              left: isTabletDevice ? PANE_SIDE_INSET + 16 : 16,
-              right: isTabletDevice ? PANE_SIDE_INSET + 16 : 16,
-            },
-            useAnimatedStyle(() => ({
-              opacity: interpolate(progress.value, [0.6, 1], [0, 1]),
-            })),
+            { top: insets.top + THUMB_MARGIN_TOP + THUMB_HEIGHT + 8 },
+            thumbMetaFade,
           ]}
         >
           <View style={styles.thumbUserRow}>
@@ -338,13 +500,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
         {/* Comment pane */}
         <GestureDetector gesture={panGesture}>
-          <Animated.View
-            style={[
-              styles.pane,
-              { top: HEADER_HEIGHT, left: PANE_SIDE_INSET, right: PANE_SIDE_INSET },
-              paneStyle,
-            ]}
-          >
+          <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
             <KeyboardAvoidingView
               behavior="padding"
               style={{ flex: 1 }}
@@ -493,6 +649,39 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
+  },
+  // ── iPad: centered comment card (iPad-only; phone uses the morph sheet) ──
+  ipadWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  ipadCard: {
+    width: '100%',
+    maxWidth: 520,
+    height: '86%',
+    maxHeight: 760,
+    backgroundColor: colors.surface,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  ipadHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: verticalScale(12),
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
+  },
+  ipadHeaderThumb: {
+    width: 40,
+    height: 52,
+    borderRadius: 8,
+    backgroundColor: colors.card,
   },
   // ── Thumbnail meta ─────────────────────────────────────────────────────────
   thumbMeta: {
