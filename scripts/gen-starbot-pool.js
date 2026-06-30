@@ -199,7 +199,7 @@ EXAMPLES (3):
     format: 'simple',
     theme: `STARBOT ASTEROID-MINING WORKER — the small, grubby human presence for scale. Each entry 12-25 words. Small + blue-collar against the industrial scale.
 
-VARIETY MANDATE — ~25 distinct worker beats: a tiny suited miner with a cutting-tool on the rock face; a crew of figures on a gantry; a foreman silhouette in a floodlit doorway; an EVA team hauling a cable; a worker riding a maintenance pod; a figure waving a hauler in with light-wands; a pair tightening a valve; a lone miner trudging a catwalk; a suited figure dwarfed at a drill-head. Small, grubby, real.`,
+VARIETY MANDATE — ~25 distinct worker beats: a tiny suited miner with a cutting-tool on the rock face; a crew of figures on a gantry; a foreman silhouette in a floodlit doorway; an EVA team steadying a drifting ore-pallet; a worker riding a maintenance pod; a figure waving a hauler in with light-wands; a pair tightening a valve; a lone miner trudging a catwalk; a suited figure dwarfed at a drill-head. Small, grubby, real. (NO worker strung hand-over-hand on a cable/tether — that pose is overused.)`,
     touchpoints: [],
     instructions: `Each entry is ONE small worker beat in 12-25 words — grubby, for scale. Output a NUMBERED list.
 
@@ -379,7 +379,7 @@ EXAMPLES (3):
 
 VARIETY MANDATE — ~25 distinct visitors: a small salvage ship threading the hulls with floodlights; a single EVA figure drifting among the wreckage; a scavenger tug hauling a piece of debris; a survey probe drifting; a lone fighter on patrol; a ship's running-lights tiny in the field; a salvager cutting into a hull; a drone swarm picking the wrecks; a tug pulling a salvaged hull. Always TINY — one small living thing among the dead.`,
     touchpoints: [],
-    instructions: `Each entry is ONE tiny lone visitor in 12-25 words, dwarfed by the wrecks. Output a NUMBERED list.
+    instructions: `Each entry is ONE tiny lone visitor in 12-25 words, dwarfed by the wrecks. The visitor DRIFTS free or pilots a small craft — NEVER hand-over-hand along a hull-rail / wire / tether (overused pose). Output a NUMBERED list.
 
 EXAMPLES (3):
 1. A small salvage ship threads slowly between the dead hulls, its floodlights sweeping across the wreckage, a single living mote in the boneyard.
@@ -1069,17 +1069,19 @@ EXAMPLES (4):
 
   spacewalk_eva_action: {
     format: 'simple',
-    theme: `STARBOT SPACEWALK EVA ACTION — what the floating astronaut is DOING in zero gravity at this exact instant. The VERB leads. ZERO-G body language ONLY — weightless, free-falling, tether drifting, body at a diagonal — NEVER standing, NEVER feet-on-ground. Each entry 15-30 words.
+    theme: `STARBOT SPACEWALK EVA ACTION — what the floating astronaut is DOING in zero gravity at this exact instant. The VERB leads. ZERO-G body language ONLY — weightless, free-falling, body at a diagonal, a stray strap or hose drifting — NEVER standing, NEVER feet-on-ground. Each entry 15-30 words.
 
-VARIETY MANDATE — ~25 distinct candid EVA moments: drifting untethered with arms spread; reaching toward a drifting tool/object just out of grasp; hand-over-hand hauling along a guide-wire; welding/cutting a hull panel with a shower of sparks; tumbling slowly end-over-end; pushing off a hull with both boots; hanging head-down relative to the planet below; anchoring a cable to a truss; retrieving a drifting cargo crate; twisting to look back over the shoulder at the viewer; bracing against recoil while firing a maneuvering thruster; cradling a recovered component to the chest; reaching the apex of a tether arc; inspecting a glowing instrument up close. The reader must SEE the action in the first 5 words.`,
+⚠️ NO CHARACTER-ON-A-WIRE — never hand-over-hand along a guide-wire/cable, never hauling / reeling / clinging to a tether, never zip-lining or rappelling. That pose is badly overused. The astronaut floats FREE in open vacuum or works hands-on directly against the hull.
+
+VARIETY MANDATE — ~25 distinct candid EVA moments: drifting untethered with arms spread wide; reaching toward a drifting tool just beyond gloved fingertips; welding/cutting a hull panel with a shower of sparks; tumbling slowly end-over-end; pushing off a hull with both boots; spinning a power-wrench to drive a bolt; catching a tumbling component to the chest; hanging head-down relative to the planet below; twisting to look back over the shoulder at the viewer; bracing one knee against a strut while torquing a fitting; bracing against recoil while firing a maneuvering thruster; planting a glowing sensor-beacon on the plating; sealing an access panel; floating face-to-face with a drifting helmet or a small drone; inspecting a glowing instrument up close; chasing a runaway drone with a short thruster burst; throwing an arm up to shield the visor from a sudden solar flare; trailing a glittering ribbon of vented coolant crystals; reading a data-slate strapped to the forearm; recoiling as a micrometeoroid sparks bright off a shoulder plate; silhouetted mid-drift against a passing eclipse; reaching back toward a crewmate just out of frame; punching a stuck release-latch with a gloved fist. The reader must SEE the action in the first 5 words.`,
     touchpoints: [],
-    instructions: `Each entry is ONE zero-G EVA action in 15-30 words. Format: "ACTION-VERB-CAP — body position in free-fall + what they interact with". ALWAYS weightless/floating, NEVER grounded. Output a NUMBERED list.
+    instructions: `Each entry is ONE zero-G EVA action in 15-30 words. Format: "ACTION-VERB-CAP — body position in free-fall + what they interact with". ALWAYS weightless/floating, NEVER grounded. NEVER hand-over-hand on a wire/cable/tether, NEVER zip-lining or rappelling. Output a NUMBERED list.
 
 EXAMPLES (4):
-1. DRIFTING UNTETHERED — body turned slow at a diagonal, arms spread wide, safety tether trailing in a loose curve behind, helmet tipped toward the world below.
-2. REACHING FOR A LOST TOOL — one arm fully extended after a wrench tumbling just beyond gloved fingertips, the other anchored to a handrail, legs floating free.
+1. DRIFTING UNTETHERED — body turned slow at a diagonal, arms spread wide, a stray suit-strap floating loose, helmet tipped toward the world below.
+2. REACHING FOR A LOST TOOL — one arm fully extended after a wrench tumbling just beyond gloved fingertips, the other braced flat on a hull-panel, legs floating free.
 3. WELDING A HULL BREACH — braced upside-down against the plating, plasma-cutter throwing a fan of white sparks that drift and die in the vacuum.
-4. PUSHING OFF THE HULL — both boots planted mid-shove, body launching backward into the void, tether snapping taut in a lazy arc.`,
+4. PUSHING OFF THE HULL — both boots planted mid-shove, body launching backward into the void, arms flung wide against the stars.`,
   },
 
   spacewalk_visor_reflection: {
@@ -1116,7 +1118,7 @@ EXAMPLES (4):
     format: 'simple',
     theme: `STARBOT SPACEWALK NEARBY STRUCTURE — the hard-surface tech in the FOREGROUND that the astronaut floats against, clings to, or works on. It grounds the figure in a real place in space and adds tactile mechanical detail. Each entry 20-40 words.
 
-VARIETY MANDATE — ~25 distinct foreground structures: a battered hull surface of riveted panels, antennae and grab-rails; a vast gold-foil solar-array wing; a girdered docking truss with clamps and cabling; the looming dark hull of a derelict ship; a tumbling satellite with a dish and folded panels; a tether snaking off-frame to an unseen ship; an open airlock hatch with interior glow; a drifting cargo container with hazard stripes; a damaged engine nozzle scorched and cracked; a comms dish the size of a building; the ribbed spine of a starship stretching into the distance; a habitat module with lit portholes. Hard-surface, mechanical, detailed.`,
+VARIETY MANDATE — ~25 distinct foreground structures: a battered hull surface of riveted panels, antennae and grab-rails; a vast gold-foil solar-array wing; a girdered docking truss with clamps and cabling; the looming dark hull of a derelict ship; a tumbling satellite with a dish and folded panels; a folded robotic service-arm reaching from the hull; an open airlock hatch with interior glow; a drifting cargo container with hazard stripes; a damaged engine nozzle scorched and cracked; a comms dish the size of a building; the ribbed spine of a starship stretching into the distance; a habitat module with lit portholes. Hard-surface, mechanical, detailed.`,
     touchpoints: [],
     instructions: `Each entry is ONE foreground hard-surface structure in 20-40 words, comma-separated prose. Mechanical, tactile, detailed — panels/rivets/cabling/antennae. Output a NUMBERED list.
 
@@ -1875,14 +1877,14 @@ VARIETY: each entry visually distinct — different suit color and material, dif
       'native alien creature (avian flier)',
       'small scout drone (octagonal, hovering)',
       'six-wheel exploration rover',
-      'lone climber with rope on rock face',
+      'lone explorer cresting a windswept dune ridge',
       'single survival tent with antenna',
       'small landing pod (single-occupant)',
-      'rappelling scientist on cliff face',
+      'scientist kneeling at a steaming ground-vent',
       'lone hunter tracking prey',
       'medic with field kit beside fallen explorer',
       'cartographer with theodolite tripod',
-      'small spherical probe trailing tether',
+      'small spherical probe scanning a monolith',
       'lone xeno-fauna (massive but distant)',
       'jetpack scout silhouette',
       'lone monk-like figure in robe-and-suit',
@@ -1890,7 +1892,7 @@ VARIETY: each entry visually distinct — different suit color and material, dif
       'sniper prone with bipod rifle',
       'sample-collector with case in hand',
     ],
-    instructions: `Each entry is ONE lone wilderness witness entity, 15-40 words. Format: "ENTITY NAME — visual description of the entity at TINY/SMALL scale in alien-landscape composition". Variety required across all entries: human explorers in EVA gear, native alien creatures (sentient AND fauna), small scout vehicles, single survival objects. NO cities, NO architecture, NO capital ships, NO megastructures, NO crowds, NO multiple figures. ALWAYS a single witness. Output JSON array of strings.`,
+    instructions: `Each entry is ONE lone wilderness witness entity, 15-40 words. Format: "ENTITY NAME — visual description of the entity at TINY/SMALL scale in alien-landscape composition". Variety required across all entries: human explorers in EVA gear, native alien creatures (sentient AND fauna), small scout vehicles, single survival objects. NO cities, NO architecture, NO capital ships, NO megastructures, NO crowds, NO multiple figures. NO climber-on-a-rope / rappelling / abseiling / figure-on-a-tether (overused pose) — witnesses stand, walk, crest ridges, kneel, or pilot small craft. ALWAYS a single witness. Output JSON array of strings.`,
   },
   landscape_moment: {
     theme:
@@ -2076,7 +2078,7 @@ VARIETY: each entry visually distinct — different color, different style-famil
     touchpoints: [
       'BATTLING — firefight from cover',
       'CLIMBING — three points of contact on alien rock',
-      'RAPPELLING — controlled descent on rope',
+      'VAULTING — leaping a gap, one hand pushing off rock',
       'AIMING — rifle braced at distant target',
       'CROUCHING — examining tracks / artifact on ground',
       'HACKING — at glowing alien terminal',
@@ -2091,8 +2093,14 @@ VARIETY: each entry visually distinct — different color, different style-famil
       'TRACKING — body low and stalking through brush',
       'PUSHING THROUGH — shoulder against blast door',
       'PROTECTING — body shielding small object behind her',
-      'ZIPLINING — sliding down cable in motion',
+      'PLANTING — driving a beacon-flag into the ground',
       'SCANNING — handheld scanner sweeping',
+      'SLIDING — knee-skid into low cover under fire',
+      'CARRYING — wounded crewmate braced over one shoulder',
+      'CALMING — hand extended slowly to a wary alien creature',
+      'SPRINTING — full-tilt from a collapsing structure',
+      'BRANDISHING — plasma-blade flaring as she spins to face a threat',
+      'STEADYING — bracing a heavy weapon on a rock for a long shot',
     ],
     instructions: `Each entry is ONE simple clear action in 15-30 words. NO obscure setups, NO extra props, NO numbered measurements, NO atmospheric details. Just: VERB + body position + weapon/tool. The reader must understand the action in the first 5 words.
 
@@ -2493,16 +2501,16 @@ Output 25 numbered list entries.`,
   busy_fleet_elements: {
     format: 'simple',
     theme:
-      'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews on tethers, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
+      'Scene-filling elements that populate dense sci-fi space scenes around a featured spaceship: EVA crews swarming a hull breach, magnetic dock grapples, supply ships parallel-running, refueling tenders, gantries with welding sparks, hauler queues, drone swarms, sensor buoys, debris fragments, capital ship hulls as deep-background scale anchors, station infrastructure, repair scaffolds, escort craft.',
     touchpoints: [],
     instructions: `Write 30 scene-filling sci-fi space elements that go AROUND the featured spaceship in a busy scene. One sentence each. Detailed, specific, visual — describe count + motion + glowing detail.
 
-Mix industrial activity (EVA crews on tethers, gantries with welding sparks, magnetic grapples docking, supply ships running parallel, refueling tenders, cargo bay traffic) with combat support (escort craft, drone swarms, sensor buoys, capital ship silhouettes in deep background, debris fragments).
+Mix industrial activity (EVA crews swarming a hull breach, gantries with welding sparks, magnetic grapples docking, supply ships running parallel, refueling tenders, cargo bay traffic) with combat support (escort craft, drone swarms, sensor buoys, capital ship silhouettes in deep background, debris fragments). NOTE: do NOT string EVA figures hand-over-hand along tether/guide lines — that pose is overused; show them clustered at work on a hull, in pods, or thruster-drifting.
 
 Each entry should add depth and density to a scene — not be the hero itself, just a textural element making the scene FULL.
 
 Examples:
-1. White EVA-suited figures moving like stretched marionettes along tether lines anchored to a hull breach, magnetic grapples glowing blue at contact points.
+1. White EVA-suited figures swarming a torn hull breach in tight clusters, tools flashing, magnetic grapples glowing blue at their contact points.
 2. A parallel supply ship 200 meters off the starboard flank, exposed aluminum truss-work gantry extending across the gap, cargo pods crawling on rails.
 3. The deep-background silhouette of a kilometer-class capital hull receding into atmospheric haze, lit window-grids speckling its flanks, weapon batteries flashing distantly.
 
