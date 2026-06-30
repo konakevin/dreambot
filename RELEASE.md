@@ -109,3 +109,15 @@ eas submit -p ios --profile production
 - The local `dreambot` / `dreamphone` / `dreamkev` zsh functions are
   simulator/device DEV builds via Xcode — never App Store builds. Only `eas build
 --profile production` produces a submittable binary.
+- **Local Release-to-device builds need `SENTRY_DISABLE_AUTO_UPLOAD=true` (already
+  set in `ios/.xcode.env.local`).** The Sentry org/token live ONLY as EAS env
+  secrets, so a LOCAL Xcode Release build can't authenticate — `sentry-cli
+  react-native xcode` aborts with "An organization ID or slug is required" BEFORE
+  Metro bundles the JS, so no `main.jsbundle.map` is written, then
+  `collect-modules.sh` fails with "Source map file does not exist" and `exit 1`,
+  killing the build. The flag makes the Sentry phase skip the upload and run the
+  plain RN bundler. **This does NOT affect App Store builds:** `ios/.xcode.env.local`
+  is gitignored and never leaves this Mac; EAS production builds run in the cloud
+  from a fresh checkout with the real Sentry secrets, so they still upload source
+  maps. (Found 2026-06-30: local Release build to iPhone failed here while the
+  prior EAS App Store build succeeded — same Sentry phase, different env.)
