@@ -16,6 +16,8 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
 import { castSignedUrl, castHasPhoto } from '@/lib/castPhoto';
+import { hasAiConsent } from '@/lib/aiConsent';
+import { showAiConsent } from '@/components/AiConsentSheet';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
@@ -358,6 +360,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   }
 
   async function handleUpload(role: CastRole) {
+    // App Store 5.1.2: obtain consent before the photo is sent to our AI
+    // providers (describe-photo + face-swap). One-and-done per account.
+    if (!(await hasAiConsent())) {
+      const agreed = await showAiConsent();
+      if (!agreed) return;
+    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: false,
@@ -553,8 +561,9 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       <View style={s.privacyNote}>
         <Ionicons name="lock-closed" size={13} color={colors.textSecondary} />
         <Text style={s.privacyNoteText}>
-          Your photo is only used to place your likeness into your dreams. It&apos;s never displayed
-          publicly. Your dreams are 100% private unless you choose to share them.
+          Your photo is sent to our AI providers only to place your likeness into your dreams, never
+          to train their models. It&apos;s never displayed publicly, and your dreams are 100%
+          private unless you choose to share them.
         </Text>
       </View>
     </>

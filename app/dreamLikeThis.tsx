@@ -26,6 +26,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { supabase } from '@/lib/supabase';
+import { hasAiConsent } from '@/lib/aiConsent';
+import { showAiConsent } from '@/components/AiConsentSheet';
 import { asDbResult } from '@/lib/dbResult';
 import * as nav from '@/lib/navigate';
 import { useDreamStore } from '@/store/dream';
@@ -189,6 +191,11 @@ export default function DreamLikeThisScreen() {
   const faceInvolved = hasPhoto && hasPrompt;
 
   async function handlePickPhoto() {
+    // App Store 5.1.2: consent before the photo is sent to AI (one-and-done).
+    if (!(await hasAiConsent())) {
+      const agreed = await showAiConsent();
+      if (!agreed) return;
+    }
     pickerOpenRef.current = true;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],

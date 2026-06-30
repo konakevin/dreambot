@@ -36,6 +36,8 @@ import * as nav from '@/lib/navigate';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, useDeviceClass, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
+import { hasAiConsent } from '@/lib/aiConsent';
+import { showAiConsent } from '@/components/AiConsentSheet';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
@@ -427,7 +429,14 @@ export default function CreateScreen() {
     }
   }
 
+  // App Store 5.1.2: consent before a Create photo is sent to AI (one-and-done).
+  async function ensurePhotoConsent(): Promise<boolean> {
+    if (await hasAiConsent()) return true;
+    return showAiConsent();
+  }
+
   async function launchLibrary() {
+    if (!(await ensurePhotoConsent())) return;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       quality: 0.8,
@@ -438,6 +447,7 @@ export default function CreateScreen() {
   }
 
   async function launchCamera() {
+    if (!(await ensurePhotoConsent())) return;
     const existing = await ImagePicker.getCameraPermissionsAsync();
     if (existing.status === 'denied' && !existing.canAskAgain) {
       Toast.show('Enable camera in Settings', 'close-circle');

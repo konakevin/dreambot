@@ -2292,6 +2292,7 @@ export type Database = {
       };
       user_first_run: {
         Row: {
+          ai_consent_at: string | null;
           seen_create_intro: boolean;
           seen_feed_intro: boolean;
           seen_mediums_intro: boolean;
@@ -2300,6 +2301,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          ai_consent_at?: string | null;
           seen_create_intro?: boolean;
           seen_feed_intro?: boolean;
           seen_mediums_intro?: boolean;
@@ -2308,6 +2310,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
+          ai_consent_at?: string | null;
           seen_create_intro?: boolean;
           seen_feed_intro?: boolean;
           seen_mediums_intro?: boolean;

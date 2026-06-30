@@ -24,6 +24,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { CreateIntroSheet } from '@/components/CreateIntroSheet';
 import { MediumsIntroSheet } from '@/components/MediumsIntroSheet';
 import { resetAllFirstRunFlags } from '@/lib/firstRunFlags';
+import { resetAiConsent } from '@/lib/aiConsent';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -458,6 +459,23 @@ export default function SettingsScreen() {
                 showAlert(
                   'Tutorials reset',
                   'First-run tutorials will show again. Reopen the Create tab to see them.'
+                );
+              }}
+              trailing={null}
+            />
+            <SettingsRow
+              icon="shield-checkmark-outline"
+              label="Reset AI Consent (test)"
+              onPress={async () => {
+                // Clears the account-bound AI photo-consent timestamp (migration
+                // 316) so the disclosure sheet re-fires the next time a photo is
+                // sent to AI (Dream Cast upload / Create add-photo). For iterating
+                // on the consent gate without re-onboarding.
+                await resetAiConsent().catch(() => {});
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                showAlert(
+                  'AI consent reset',
+                  'The consent sheet will show again next time you add a photo in Dream Cast or Create.'
                 );
               }}
               trailing={null}

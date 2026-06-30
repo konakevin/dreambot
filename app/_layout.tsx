@@ -38,6 +38,7 @@ import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
+import { AiConsentProvider } from '@/components/AiConsentSheet';
 import { PremiumGateProvider } from '@/components/PremiumGateSheet';
 import { AvatarConfirmProvider } from '@/components/AvatarConfirm';
 import { Toast, ToastHost } from '@/components/Toast';
@@ -545,82 +546,87 @@ function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <AppErrorBoundary>
               <AlertProvider>
-                <PremiumGateProvider>
-                  <AvatarConfirmProvider>
-                    <AuthInitializer />
-                    <AnalyticsIdentity />
-                    <ScreenTracker />
-                    <PushRegistrar />
-                    <PendingNotificationReplayer />
-                    <RevenueCatInitializer />
-                    <RealtimeSubscriber />
-                    <DataPrefetcher />
-                    <DreamResumer />
-                    {/* DB-driven app-update gate (migration 312): blocks below
+                <AiConsentProvider>
+                  <PremiumGateProvider>
+                    <AvatarConfirmProvider>
+                      <AuthInitializer />
+                      <AnalyticsIdentity />
+                      <ScreenTracker />
+                      <PushRegistrar />
+                      <PendingNotificationReplayer />
+                      <RevenueCatInitializer />
+                      <RealtimeSubscriber />
+                      <DataPrefetcher />
+                      <DreamResumer />
+                      {/* DB-driven app-update gate (migration 312): blocks below
                         engine_config.min_app_version, nudges below latest. */}
-                    <ForceUpdateGate />
-                    <Stack
-                      screenOptions={{
-                        headerShown: false,
-                        contentStyle: { backgroundColor: '#000000' },
-                      }}
-                    >
-                      <Stack.Screen name="index" />
-                      <Stack.Screen name="(tabs)" />
-                      <Stack.Screen name="(auth)" />
-                      <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
-                      <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                      {/* photo/[id] album: NATIVE back gesture off — it intermittently
+                      <ForceUpdateGate />
+                      <Stack
+                        screenOptions={{
+                          headerShown: false,
+                          contentStyle: { backgroundColor: '#000000' },
+                        }}
+                      >
+                        <Stack.Screen name="index" />
+                        <Stack.Screen name="(tabs)" />
+                        <Stack.Screen name="(auth)" />
+                        <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
+                        <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                        {/* photo/[id] album: NATIVE back gesture off — it intermittently
                       swallowed the start of a vertical swipe (proven). The screen
                       uses useAxisLockSwipeBack instead, composed
                       simultaneousWithExternalGesture against the pager's Pan so it
                       can't block scroll activation. */}
-                      <Stack.Screen
-                        name="photo/[id]"
-                        options={{
-                          ...SCREEN_PRESETS.MODAL_SWIPEABLE,
-                          gestureEnabled: false,
-                          fullScreenGestureEnabled: false,
-                        }}
-                      />
-                      {/* user/[userId] is a full-screen posts GRID. The native
+                        <Stack.Screen
+                          name="photo/[id]"
+                          options={{
+                            ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                            gestureEnabled: false,
+                            fullScreenGestureEnabled: false,
+                          }}
+                        />
+                        {/* user/[userId] is a full-screen posts GRID. The native
                       full-screen back gesture fought the grid scroll (locked it +
                       booted back on up-swipes), so it's disabled here; the screen
                       uses useAxisLockSwipeBack instead, which locks to vertical the
                       moment you scroll. 2026-06-12. */}
-                      <Stack.Screen
-                        name="user/[userId]"
-                        options={{
-                          ...SCREEN_PRESETS.MODAL_SWIPEABLE,
-                          animation: 'simple_push',
-                          gestureEnabled: false,
-                        }}
-                      />
-                      <Stack.Screen
-                        name="sharePost"
-                        options={{
-                          ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
-                          contentStyle: { backgroundColor: 'transparent' },
-                        }}
-                      />
-                      <Stack.Screen
-                        name="comments"
-                        options={{
-                          ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
-                          contentStyle: { backgroundColor: '#0F0F1A' },
-                        }}
-                      />
-                      <Stack.Screen name="sparkleStore" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                      <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                      <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                      <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                      <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
-                    </Stack>
-                    <StatusBar style="light" />
-                    <ToastHost />
-                    <UpscaleModalHost />
-                  </AvatarConfirmProvider>
-                </PremiumGateProvider>
+                        <Stack.Screen
+                          name="user/[userId]"
+                          options={{
+                            ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                            animation: 'simple_push',
+                            gestureEnabled: false,
+                          }}
+                        />
+                        <Stack.Screen
+                          name="sharePost"
+                          options={{
+                            ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
+                            contentStyle: { backgroundColor: 'transparent' },
+                          }}
+                        />
+                        <Stack.Screen
+                          name="comments"
+                          options={{
+                            ...SCREEN_PRESETS.SHEET_DISMISSIBLE,
+                            contentStyle: { backgroundColor: '#0F0F1A' },
+                          }}
+                        />
+                        <Stack.Screen
+                          name="sparkleStore"
+                          options={SCREEN_PRESETS.MODAL_SWIPEABLE}
+                        />
+                        <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                        <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                        <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                        <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
+                      </Stack>
+                      <StatusBar style="light" />
+                      <ToastHost />
+                      <UpscaleModalHost />
+                    </AvatarConfirmProvider>
+                  </PremiumGateProvider>
+                </AiConsentProvider>
               </AlertProvider>
             </AppErrorBoundary>
           </QueryClientProvider>
