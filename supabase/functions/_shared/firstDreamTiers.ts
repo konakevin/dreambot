@@ -88,6 +88,13 @@ export function buildFirstDreamTiers(cast: CastMemberLike[], place?: string): Fi
   // scene-only doesn't swap, so there's nothing to cascade past here.
   tiers.push({ name: 'scene', body: { force_cast_role: null } });
 
+  // First-dream renders must NEVER use GPT Image 2 — it's too slow (60-120s) and
+  // risks the onboarding loading timeout. Mark every tier so nightly-dreams bans
+  // gpt-image-2 for FIRST DREAMS ONLY (nightlies still legitimately pin
+  // lego/pixels to it). The face-swap tiers already skip gpt via the Flux-only
+  // picker; this also covers the scene-only fallback tier (incl. lego/pixels pins).
+  for (const t of tiers) t.body.first_dream = true;
+
   // Mandate the user's chosen location across every tier (cast tiers + the
   // scene fallback), so the first dream always lands in one of their places.
   const trimmed = typeof place === 'string' ? place.trim() : '';

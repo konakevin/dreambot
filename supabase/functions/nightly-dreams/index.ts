@@ -178,6 +178,10 @@ Deno.serve(async (req) => {
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
+  // First-dream onboarding flag (set on every first-dream cascade tier). Used to
+  // ban gpt-image-2 (too slow for the onboarding loading screen) — see the model
+  // gate below. Nightlies never set this, so their lego/pixels gpt pins stand.
+  const isFirstDream = body.first_dream === true;
   // First-dream onboarding mandates the SETTING be one of the user's just-picked
   // locations (passed in the queue payload at enqueue time). Bypasses the random
   // place roll below AND the user_recipes-load race (the recipe may not be
@@ -1767,6 +1771,24 @@ Output ONLY the prompt.`;
       );
       pickedModel = pin;
     }
+  }
+
+  // ── First-dream GPT-Image-2 ban (FIRST DREAMS ONLY) ───────────────────────
+  // GPT Image 2 takes 60-120s — far too slow for the onboarding loading screen,
+  // which risks a timeout/"failed" first dream. Ban it ENTIRELY for first dreams,
+  // AFTER every other gate (pool pick, scene gate, per-medium pin) so it catches
+  // gpt no matter how it was chosen (e.g. a scene-only first dream landing on the
+  // lego/pixels pin). Re-pick a fast model from the medium's allowed_models minus
+  // gpt, else a safe Flux default. force_model (QA) still wins. Nightlies never
+  // hit this (isFirstDream is false), so their lego/pixels gpt pins are untouched.
+  if (isFirstDream && !force_model && pickedModel === 'openai/gpt-image-2') {
+    const nonGpt = resolvedMediumAllowedModels.filter((m) => m !== 'openai/gpt-image-2');
+    const fallback =
+      nonGpt.length > 0
+        ? nonGpt[Math.floor(Math.random() * nonGpt.length)]
+        : 'black-forest-labs/flux-1.1-pro';
+    console.log(`[nightly-dreams] first_dream: GPT Image 2 banned (too slow) -> '${fallback}'`);
+    pickedModel = fallback;
   }
   logAxes.model = pickedModel;
 
