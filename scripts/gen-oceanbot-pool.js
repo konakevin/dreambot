@@ -913,19 +913,21 @@ NEVER use negation. NEVER name modern cinema terms (dolly / dutch tilt / etc —
 
 ⚠️ NO CREW. NO LIVING PEOPLE. Empty decks. Unmanned helms. The ships are ALONE. (Skeletal/decayed forms occasionally OK as part of the haunting, but no living crew.)
 
+⚠️ THE HAUNTING LEADS — the eerie, IMPOSSIBLE story-beat is the subject (a helm spinning to no hand, a table still set with goblets in the great cabin, every lantern lit where the crew vanished mid-meal, full sail driving hard into a dead calm, the ship's bell tolling itself). Encrustation / ice-coating / salt-crystal / bioluminescent-outline is only SUPPORTING texture — NEVER the whole point of the image. If the entry is just "a ship coated in [X]" with no haunting beat, it has failed.
+
 ✓ VARIETY MANDATE — distribute across haunted-vessel categories (~3 entries each):
-  A. Fog drift (vessel emerging from / fading into rolling fog bank, partial silhouette visible)
-  B. Becalmed / glassy (perfect calm, ship motionless on mirror-flat water, no wind in slack sails)
-  C. Listing / capsized partial (heeled at dramatic angle, half-submerged, sinking-but-not-sunk)
-  D. Encrusted / overgrown (barnacles armor-thick, kelp draping like Medusa hair, coral colonizing hull)
-  E. Spectral lighting (lanterns burning blue/green on empty deck, bioluminescent plankton outlining hull)
-  F. Arctic / ice-locked (frozen in pack ice, rigging crystallized, hull groaning under glacial pressure)
-  G. Storm-impossible (calm hurricane eye / sailing into wind / crew-less ship racing impossibly)
-  H. Crescent / fleet phantom (multiple derelicts drifting in formation, ghost-armada at horizon)
-  I. Decayed period detail (figurehead splintered, gun ports empty, wheel spinning to no hand)
+  A. IMPOSSIBLE HAUNTING MOMENT (helm spinning to no hand / table set in the great cabin / lanterns lit where the crew vanished / full sail into dead calm / bell tolling itself)
+  B. Fog drift (vessel emerging from / fading into rolling fog bank, partial silhouette visible)
+  C. Becalmed / glassy (motionless on mirror-flat water, slack sails, an eerie wrongness to the stillness)
+  D. Listing / capsized partial (heeled at a dramatic angle, half-submerged, sinking-but-not-sunk)
+  E. Encrusted / overgrown (barnacle-armored or kelp-draped — but the DECAY tells a story, not just coating)
+  F. Spectral lighting (lanterns burning blue/green on an empty deck, or a hull rim-lit by plankton — with a haunting beat)
+  G. Arctic / ice-locked (frozen in pack ice, rigging crystallized — paired with an eerie beat, used sparingly)
+  H. Storm-impossible (calm hurricane eye / sailing into the wind / crew-less ship racing impossibly)
+  I. Crescent / fleet phantom (multiple derelicts drifting in formation, ghost-armada at the horizon)
   J. Tropical / temperate setting (mangrove ghost, Caribbean derelict, monsoon-faded junk) — NOT all polar
 
-Each entry: ONE specific vessel type + state + ONE spectral atmospheric anchor (fog / lantern-glow / bioluminescence / ice-encrustation / etc.) + ONE haunting beat. NO modern vessels. NO sea monsters / krakens (separate path). NO sunken-into-coral ruins (shipwreck-kingdom path).
+Each entry: ONE specific vessel type + an IMPOSSIBLE/HAUNTING beat + ONE spectral atmospheric anchor (fog / lantern-glow / bioluminescence / decay). NO modern vessels. NO sea monsters / krakens (separate path). NO sunken-into-coral ruins (shipwreck-kingdom path).
 
 Visual register: "eerie maritime ghost story" — haunting beauty, not gore-horror.
 
@@ -1355,7 +1357,7 @@ DO write positively. NEVER negation.`,
       'Manta ray banking over a Maldivian reef, mouth wide as it filter-feeds plankton, cleaner wrasses attending its underside.',
       'Hawksbill turtle resting on a Coral Triangle pinnacle, scarred shell encrusted, two cleaner shrimp picking algae from its eye-ridge.',
     ],
-    instructions: `Each entry is ONE specific reef moment, 20-28 words. Format: "reef-structure anchor + named species + atmospheric/light detail." Vary across the 15 categories above. NEVER include ships / boats / people / scuba gear. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+    instructions: `Each entry is ONE specific reef moment, 20-28 words. Format: "reef-structure anchor + named species + atmospheric/light detail." Vary across the 15 categories above. FAVOR active dramatic behavior (hunting, predation, cleaning symbiosis, spawning, mass schooling, territorial display) over passive hovering / gliding. For bottom-resting fish write "resting on its splayed pectoral fins," NEVER "perched" (it triggers bird/talon anatomy). NEVER include ships / boats / people / scuba gear. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
   },
 
   reef_camera_framing: {
@@ -1406,52 +1408,50 @@ NEVER use negation. NEVER name modern cinema terms.`,
 
   polar_scenes: {
     format: 'simple',
-    theme: `POLAR SCENES for OceanBot's polar-seas path — Arctic / Antarctic ocean ecosystem. NatGeo / BBC-Frozen-Planet register. Each entry is ONE specific polar moment, 18-26 words. Ice formation OR wildlife OR aurora + setting ALL BAKED INTO THE ENTRY — this is the HERO pool.
+    theme: `POLAR SCENES for OceanBot's polar-seas path — Arctic / Antarctic ocean ecosystem. NatGeo / BBC-Frozen-Planet register. Each entry is ONE specific polar moment, 18-26 words. A polar ANIMAL or a MONUMENTAL ICE FORMATION is always the HERO — baked into the entry.
 
-⚠️ MANDATORY — every entry is a REAL Arctic OR Antarctic ocean / ice / wildlife scene. Real species, real ice formations, real polar light. Eerie blue silence of the far poles.
+⚠️ ABSOLUTE RULE — EVERY entry has a clear HERO that is either (a) a real polar ANIMAL (whale, narwhal, beluga, orca, polar bear, penguin, seal, walrus) doing something, large and readable in frame, OR (b) a MONUMENTAL ICE FORMATION as the dramatic subject (a towering tabular berg, a blue-ice arch or cave, a glacier mid-calving). Aurora, polar dawn and blue-hour light may set the MOOD as a BACKDROP behind that hero, but are NEVER the subject on their own. A bare aurora, an empty pack-ice mosaic, a krill cloud, or a plain light-on-water shot is BANNED — if a viewer would say "there's nothing in it," it has failed.
 
 ⚠️ NO SHIPS. NO ICEBREAKERS. NO PEOPLE. NO EXPEDITION CAMPS. NO SCIENTISTS. Just the polar ocean and its inhabitants.
 
-✓ VARIETY MANDATE — distribute across polar-scene categories:
-  A. ICEBERG MAJESTY (towering tabular berg / Greenland calving glacier / ice arch / impossibly-blue iceberg cave)
-  B. PACK ICE LANDSCAPE (pack-ice mosaic from above / polynya open-water lead / ice-edge horizon)
-  C. POLAR CETACEAN (narwhal tusk-display through ice crack / beluga pod surfacing through fast ice / orca pod hunting along ice edge / humpback breach in icy water / bowhead breaking thin ice)
-  D. POLAR BEAR (bear hunting on ice edge / bear swimming between floes / bear and cub on tabular berg)
-  E. PENGUIN COLONY (emperor penguin march / Adélie colony on Antarctic ice shelf / king penguin sea-return)
-  F. SEAL / WALRUS (weddell seal on ice / leopard seal hunting at ice edge / ringed seal pup / walrus haul-out on ice floe)
-  G. AURORA OVER OCEAN (aurora borealis arcing over still arctic water / aurora australis over Antarctic peninsula / aurora reflecting on glassy polar sea)
-  H. POLAR LIGHT MOMENT (polar dawn pink-orange over ice / blue-hour stillness over fjord / midnight-sun amber on glacier)
-  I. UNDERWATER POLAR (camera below ice, sun-shafts piercing fast ice from above / krill swarm under sea ice / ice algae underside)
-  J. CALVING / FRAGMENTATION (glacier calving event mid-fall / berg fracturing into bergy bits / ice cliff face)
+✓ VARIETY MANDATE — distribute across polar HEROES:
+  A. ICE-FORMATION HERO (a towering tabular berg, a translucent blue-ice arch or cave, a glacier cliff — monumental and the clear subject)
+  B. POLAR CETACEAN (narwhal tusk-display through an ice crack / beluga pod at a breathing hole / orca pod hunting the ice edge / humpback breach in icy water / bowhead breaking thin ice)
+  C. POLAR BEAR (hunting at the ice edge / swimming between floes / mother and cub on a tabular berg)
+  D. PENGUIN (emperor column marching / Adélie colony / king penguins porpoising to sea)
+  E. SEAL / WALRUS (leopard seal hunting at the ice edge / weddell seal on fast ice / walrus haul-out / ringed seal pup)
+  F. CALVING / ICE DRAMA (a glacier calving mid-fall, an ice cliff fracturing — a dramatic EVENT in motion)
+  G. UNDERWATER WITH A CREATURE (camera below the ice with a seal / penguin / whale silhouetted against sun-shafts — an animal is ALWAYS present)
+  (Aurora / polar dawn / midnight-sun may light any of the above as a BACKDROP — never as the subject alone.)
 
-Each entry: ONE polar subject + ONE setting/light anchor + ONE atmospheric detail. Specific named locations OK (Lemaire Channel, Disko Bay, Svalbard, Ross Sea, McMurdo Sound, etc.). Speak vivid and specific.
+Each entry: ONE animal or ice-formation HERO + its action/state + ONE light/atmosphere anchor. Specific named locations OK (Lemaire Channel, Disko Bay, Svalbard, Ross Sea, McMurdo Sound, etc.). Speak vivid and specific.
 
 DO write positively. NEVER negation.`,
     touchpoints: [
       'Tabular iceberg dominating an Antarctic peninsula channel, vertical cliff face glacier-cyan and pearl-white, calm fjord water reflecting the full silhouette below.',
-      'Pack ice mosaic stretching to horizon, dark leads of open water threading between floes, low arctic sun raking long shadows across the white.',
+      'Blue-ice arch carved by wave action through a Greenland berg, dark sea visible through the tunnel, translucent walls glowing turquoise from within.',
       'Narwhal pod surfacing through a crack in arctic fast ice, three spiraled tusks raised into pale polar light, breath crystallizing in the air above.',
       'Beluga family surfacing through breathing holes in shore-fast ice, white melons gleaming wet, crystal-clear arctic water below visible through the ice.',
       'Orca pod cruising along an Antarctic ice edge in tight formation, six tall dorsal fins cutting the dark swell, ice cliffs towering above the water.',
       'Polar bear stepping carefully across pack ice between leads of dark water, paws spread wide on a thin floe, distant horizon hazy with sea-fog.',
       'Emperor penguin column marching across an Antarctic ice shelf at dawn, hundreds of bodies casting long shadows on snow, blue-hour pink staining the horizon.',
       'Weddell seal hauled out on fast ice in Antarctic still air, eyes half-closed, breath visible as fine vapor in the polar cold.',
-      'Aurora borealis arcing green-and-violet over a glassy arctic fjord, ice-cliff silhouettes below, perfect reflection of the auroral curtain in still water.',
+      'Belugas surfacing in a black arctic lead beneath a sweeping green aurora, the curtain light rippling across their wet white backs as breath plumes rise.',
       'Glacier calving in slow motion, a vertical slab of ice the size of a building toppling forward into churning meltwater below, spray erupting upward.',
-      'Underwater polar scene, camera below sea ice with sun-shafts piercing the ice ceiling, ice algae brown-stained on the underside, plankton drifting in shafts.',
+      'Weddell seal gliding through golden sun-shafts beneath Antarctic fast ice, the ice ceiling glowing above, plankton drifting bright in the angled light.',
       'Walrus haul-out on Svalbard ice floe, dozen-strong herd lying densely packed, ivory tusks catching low golden polar sun, breath rising in vapor columns.',
       'Greenland calving glacier face stretching across the frame, blue-ice fractures running vertical, sea-spray fanning where ice meets sea.',
       'Adélie penguin colony on an Antarctic island shore, thousands of nesting pairs across pebbled ground, distant tabular berg dominating the bay horizon.',
       'Leopard seal hunting at the ice edge underwater, sleek serpentine body in mid-water, ringed seal silhouetted above the ice ceiling.',
-      'Midnight-sun amber light raking across an Arctic glacier, the ice front catching warm gold while shadowed crevasses hold deep cobalt blue.',
+      'Polar bear silhouetted on a ridge of pack ice beneath a sweeping emerald aurora, the dark animal anchoring the frame under the luminous sky.',
       'Bowhead whale breaking through thin Beaufort Sea ice, smooth callous-free head emerging slow, ice fragments cracking outward in concentric rings.',
-      'Iceberg arch carved by wave action, dramatic tunnel through a Greenland berg, dark sea beyond visible through the opening, blue-ice walls glowing translucent.',
-      'Aurora australis sweeping cool-emerald above the Ross Sea pack ice, southern stars piercing the curtain, polar hush across the still water.',
+      'Towering blue-ice cave inside a grounded Antarctic berg, sea-water lapping the entrance, light filtering through metres of compressed glacier ice.',
+      'Humpback whale breaching in a Svalbard fjord beside a calving glacier, vast body twisting clear of the dark water, ice cliff towering behind.',
       'Polar bear mother and cub on a melting floe, mother nuzzling cub, both backs framed against vast pale arctic sky, distant pack ice receding to horizon.',
-      'Krill swarm under Antarctic sea ice, billions of bodies forming a glowing cloud beneath the ice ceiling, sun-shafts piercing where leads open above.',
+      'Leopard seal exploding from the water at the ice edge to snatch an Adélie penguin, spray and ice-chips flying, the chase frozen mid-strike.',
       'King penguin colony returning to sea, individuals porpoising through icy water beside a glacier face, others gathered on pebbled beach watching.',
     ],
-    instructions: `Each entry is ONE specific polar moment, 18-26 words. Format: "polar subject + setting/light anchor + atmospheric detail." Vary across the 10 categories above. NEVER include ships / icebreakers / people / scientists / huts. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+    instructions: `Each entry is ONE specific polar moment, 18-26 words. Format: "animal or ice-formation HERO + action/state + light/atmosphere anchor." EVERY entry MUST have an animal or monumental ice-formation hero — never a bare aurora / pack-ice / krill / light-on-water shot. Vary across the 7 hero categories above. NEVER include ships / icebreakers / people / scientists / huts. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
   },
 
   polar_camera_framing: {
@@ -1503,51 +1503,48 @@ NEVER use negation. NEVER name modern cinema terms.`,
 
   biolum_scenes: {
     format: 'simple',
-    theme: `BIOLUMINESCENT-NIGHT SCENES for OceanBot's bioluminescent-night path — nighttime ocean surface lit FROM WITHIN by dinoflagellate plankton bloom. NatGeo / Blue-Planet bioluminescent-shore register. Each entry is ONE specific glowing-surface moment, 18-26 words. Setting + glow detail + (optional) creature/landscape anchor ALL BAKED INTO THE ENTRY — this is the HERO pool.
+    theme: `BIOLUMINESCENT-NIGHT SCENES for OceanBot's bioluminescent-night path — a wild marine CREATURE dramatized by bioluminescent plankton light at night. The bioluminescence is the LIGHTING; a living animal is ALWAYS the HERO. NatGeo / Blue-Planet night-ocean register. Each entry is ONE specific creature in a luminous moment, 18-26 words. Creature + what it is doing + the cyan glow its motion ignites ALL BAKED INTO THE ENTRY — this is the HERO pool.
 
-⚠️ MANDATORY REGISTER — the ocean ITSELF is the light source. Cyan / electric-blue / aqua glow rising from the water. Dark night sky above. Counterpoint to deep-wonder which is creature-in-absolute-black; this path is SURFACE / SHORE / WAVE / TIDE scale.
+⚠️ ABSOLUTE RULE — EVERY entry has a living animal HERO, large and clearly readable in frame (roughly 20-50% of the image), its movement igniting, trailing or scattering electric-cyan plankton light. The glow REVEALS and dramatizes the creature; it never replaces it. This is wildlife photography at night, NOT a landscape of glowing water. If a viewer could say "it's just glowing water with nothing in it," the entry has failed.
 
-⚠️ NO SHIPS. NO BOATS. NO KAYAKS. NO PEOPLE. NO HEADLAMPS. NO DIVE LIGHTS. Only the natural glow + (optional) a wild creature leaving a plankton trail.
+⚠️ NO SHIPS. NO BOATS. NO KAYAKS. NO PEOPLE. NO HEADLAMPS. NO DIVE LIGHTS. The natural plankton glow is the only light, and a wild animal is always the subject.
 
-✓ VARIETY MANDATE — distribute across biolum-scene categories:
-  A. SHORE GLOWING SURF (waves breaking glowing cyan on dark beach, full surf-line illuminated)
-  B. MILKY SEAS (horizon-to-horizon vast surface glow, ocean lit pale aqua under dark sky)
-  C. CETACEAN PLANKTON TRAIL (dolphin / whale swimming with luminous wake trailing behind)
-  D. JELLYFISH SURFACE SWARM (translucent jellies floating at twilight surface with own inner glow)
-  E. WAVE-CREST CYAN BREAK (single dramatic wave breaking with luminous crest, dark face below)
-  F. BIOLUMINESCENT BAY (sheltered tropical bay rim-lit with glow, palm silhouettes on shore)
-  G. PLUNGING-FISH TRAIL (single fish or dolphin breaching with cyan splash, droplets glowing)
-  H. AURORA + PLANKTON (rare: aurora above + plankton glow below, double-light composition)
-  I. TIDE-POOL GLOW (small intimate scene of glowing tide pool with sea-life rim-lit)
-  J. LAGOON FROM ABOVE (looking down into a glowing tropical lagoon, glow seeping outward)
-  K. STORM-DISTURBED BLOOM (chop and white-caps lit cyan from below, dramatic surface texture)
-  L. STARRY-SKY + GLOW (mirror composition: starry sky above + plankton-glow water below)
+✓ VARIETY MANDATE — distribute across CREATURE HEROES + dramatic moments:
+  A. DOLPHIN / PORPOISE (pod tearing through a bloom trailing comets of light, single breach flinging glowing spray, calf on a glowing bow-wake)
+  B. WHALE (humpback fluke sheeting cyan water, sperm whale surfacing in a glowing blow, orca dorsal parting a curtain of light)
+  C. SEA TURTLE (adult gliding with luminous flipper-trails, hatchlings sparking the wet sand alive as they scramble to the surf)
+  D. SHARK / RAY (manta barrel-feeding belly-lit in a swarm, reef shark firing a glowing wake, eagle ray lit from below over a sand flat)
+  E. SQUID / CEPHALOPOD (Toyama firefly-squid swarm turning the shallows electric, Humboldt squid flashing, octopus rim-lit in a glowing tide pool)
+  F. JELLYFISH (translucent swarm pulsing their OWN light at the surface, a single great bell glowing from within)
+  G. BAITBALL DRAMA (a baitball detonating into cyan fireworks as a VISIBLE predator — sea lion, tuna, dolphin — punches through it)
+  H. SEABIRD (a tern or shearwater skimming a glowing wave to snatch a glowing fish, wingtips flicking sparks off the dark water)
+  I. CRAB / SHORE CREATURE (ghost crab or hatchling rim-lit on a glowing tide-line, intimate macro drama)
+  J. SEAL / SEA LION (a seal porpoising through a bloom, trailing a comet of plankton light)
 
-Each entry: ONE setting/scale anchor + ONE specific glow detail + ONE atmospheric or creature/landscape detail. Real species OK (dolphins, whales, sea turtles, jellyfish, baitfish). Real locations OK (Vieques bioluminescent bay, Toyama Bay, Maldives glowing shore, etc.).
+Each entry: ONE named creature + ONE specific action + the cyan glow that action ignites. Real species + real glowing-water locations OK (Vieques / Mosquito Bay, Toyama Bay, the Maldives). The creature leads; the glow lights it.
 
 DO write positively. NEVER negation.`,
     touchpoints: [
-      'Glowing cyan surf line breaking on a dark Maldivian beach, each wave erupting in bioluminescent foam, palm silhouettes against starry sky beyond.',
-      'Milky sea stretching horizon-to-horizon under a dark moonless sky, vast pale-aqua glow rising from the entire surface, no creature in frame.',
-      'Dolphin pod swimming through Vieques bay at night, six luminous plankton-trails behind their wakes glowing cyan in the dark water.',
-      'Translucent jellyfish swarm floating at the surface in twilight, each bell glowing soft green from within, dark water below mirroring stars above.',
-      'Single dramatic wave breaking in a Caribbean bay at night, cyan-electric crest illuminating the wave face, dark trough below holding deeper blue.',
-      'Bioluminescent bay rim-lit at midnight, mangrove silhouettes lining the shore, glow seeping from the still water in concentric ripples.',
-      'Bottlenose dolphin breaching through a plankton-thick night sea, every droplet of spray catching the cyan glow, body silhouetted against starry sky.',
-      'Aurora borealis sweeping green above an Icelandic shore, dinoflagellate bloom glowing pale cyan along the surf below, double-light composition.',
-      'Tide pool at low tide on a Pacific beach at night, water glowing soft cyan, hermit crabs rim-lit moving across rocks, dark sea pulling back beyond.',
-      'Aerial view down into a glowing tropical lagoon, ring of cyan radiating outward from a central reef, dark deeper-water at the edges.',
-      'Storm-chop on a bioluminescent sea, white-cap waves lit cyan from below, dark heavy storm sky pressing close above, dramatic charged atmosphere.',
-      'Glassy still ocean surface mirror-perfect, starry Milky Way arching above, plankton glow tracing fine cyan threads where currents move.',
-      'Sea turtle gliding through a tropical glow-bay at night, plankton trail behind each flipper-stroke, shell silhouetted against luminous water.',
-      'Baitfish school flashing cyan as they evade an unseen predator, hundreds of bioluminescent silhouettes scattering like fireworks in dark water.',
-      'Surf erupting against volcanic black rocks at midnight, cyan foam exploding upward, dark cliffs silhouetted against starry oceanic sky.',
-      'Toyama Bay firefly squid swarm rising to the surface in dense formation, thousands of small bioluminescent bodies glowing pale blue against night water.',
-      'Manta ray gliding through a Maldivian bioluminescent bay, wingtips trailing cyan plankton sparkles, body silhouetted against the glowing water beneath.',
-      'Whale exhaling at the surface in a plankton-rich nighttime sea, blow column lit cyan from below, dark body parallel to the camera.',
-      'Calm lagoon at new-moon midnight, paddle-stroke ripples spreading cyan glow outward in radial waves, no boat visible — only the glow pattern.',
+      'Dolphin pod tearing through a Mosquito Bay bloom, each body trailing a comet of cyan light, spray flung glowing into the dark.',
+      'Humpback whale fluking at the surface of a plankton-rich night sea, the great tail sheeting electric-cyan water as it slips under.',
+      'Sea-turtle hatchlings scrambling down a dark beach into the glowing surf, each tiny flipper-step sparking the wet sand alive with cyan.',
+      'Manta ray barrel-rolling through a dense plankton swarm, white belly lit from below, wingtips drawing glowing spirals in the black water.',
+      'Toyama Bay firefly squid swarming to the surface in their thousands, the whole shallows pulsing electric blue around their tiny bodies.',
+      'Bottlenose dolphin breaching clear of a glowing Caribbean sea, every falling droplet a cyan ember against the starry sky.',
+      'A baitball detonating into cyan fireworks as a sea lion punches through the center, the predator silhouetted in the glow it triggered.',
+      'Translucent moon-jellyfish swarm drifting at the twilight surface, every bell lit soft aqua from within, mirrored on the glassy black.',
+      'Green sea turtle gliding through a Maldivian glow-bay, slow flipper-strokes trailing luminous plankton like smoke behind the shell.',
+      'Orca surfacing through a bioluminescent bloom at midnight, tall dorsal fin parting a curtain of cyan, breath flashing pale in the dark.',
+      'Ghost crab darting across a glowing tide-line, its small body rim-lit cyan where the wet sand ignites under each scuttling step.',
+      'Reef shark cutting a fast glowing wake through a shallow lagoon at night, plankton firing electric blue along its whole flank.',
+      'Eagle ray gliding low over a glowing sand flat, the bloom lighting its pale underside as its wing-tips stir spirals of cyan.',
+      'A tern dipping to snatch a glowing fish from a luminous wave-crest, wingtips flicking sparks of cyan off the dark water.',
+      'Humboldt squid flashing through a night bloom, chromatophores pulsing red and white as the disturbed plankton flares around them.',
+      'Spinner dolphin leaping in a series through a glowing swell, each splashdown bursting cyan, a chain of light strung across the dark bay.',
+      'Sea lion porpoising through a plankton bloom off a rocky islet, body trailing a long comet of glowing water under the stars.',
+      'Whale shark cruising a Maldivian night shallows, mouth agape filtering plankton, the glow tracing every white spot along its flank.',
     ],
-    instructions: `Each entry is ONE specific bioluminescent-night moment, 18-26 words. Format: "setting/scale anchor + glow detail + atmospheric/creature anchor." Vary across the 12 categories above. NEVER include ships / boats / kayaks / people / artificial lights. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
+    instructions: `Each entry is ONE marine-creature bioluminescent-night moment, 18-26 words. Format: "named creature + specific action + the cyan glow it ignites." EVERY entry MUST have a living animal hero large in frame — never a subject-less water / surf / glow / aurora shot. Vary across the 10 creature categories above. NEVER include ships / boats / people / artificial lights. NEVER write negation language. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines.`,
   },
 
   biolum_camera_framing: {
@@ -2113,7 +2110,7 @@ Each entry: species + behavior + habitat anchor + sensory/light detail. NEVER ne
       'Green hatchling first dive in surf-zone shallows, tiny body kicking sideways through translucent wave, head turned upward, body silhouetted against bright surface.',
       'Juvenile green turtle drifting in a sargassum mat in mid-Atlantic, body half-hidden in floating algae, tiny crabs visible in the weed around her shell.',
     ],
-    instructions: `Each entry 18-26 words. Format: "[species] [behavior + body position] [habitat] [sensory detail]." Vary across 7 species + 15 behavior-habitat combos. NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 18-26 words. Format: "[species] [behavior + body position] [habitat] [sensory detail]." Vary across 7 species + 15 behavior-habitat combos. FAVOR active dramatic moments (feeding, predator-escape, mating display, hatchling surf-scramble, cleaning-station interaction, current-riding) over passive cruising / drifting / resting. NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   seaturtle_camera_framing: {
@@ -2320,7 +2317,7 @@ Each entry: species name + behavior + backdrop + sensory detail. NEVER negation.
       'Coral grouper hovering at a reef-edge cleaning station, electric red-and-blue speckled body in three-quarter profile, cleaner wrasse at its lip.',
       'Sergeant major damselfish hovering above its purple egg-patch on dead coral, black-and-yellow striped body in defensive guard position.',
     ],
-    instructions: `Each entry 18-26 words. Format: "[species name] [behavior + body position] [reef backdrop] [sensory detail]." Vary across 20+ species and 7+ behavior categories. NEVER include multiple competing species in one entry (one hero only). NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 18-26 words. Format: "[species name] [behavior + body position] [reef backdrop] [sensory detail]." Vary across 20+ species and 7+ behavior categories. REWEIGHT toward bold, large, charismatic subjects (lionfish with fanned spines, Napoleon wrasse, goliath grouper, giant moray face-fill, queen triggerfish, emperor angelfish) — keep tiny subjects (pygmy seahorse, gobies, shrimp) to ~20% max. FAVOR active behavior (biting, threat-display, cleaning symbiosis, spawning-color flash, ambush) over still hovering / in-profile. For bottom-resting fish (hawkfish, blennies, gobies) write "resting on its splayed pectoral fins" — NEVER "perched" (the word triggers bird/talon anatomy in the render). NEVER include multiple competing species in one entry (one hero only). NEVER include ships / boats / divers / people. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   tropical_fish_camera_framing: {
@@ -2368,7 +2365,7 @@ NEVER use negation. NEVER modern cinema terms.`,
     format: 'simple',
     theme: `COASTAL POWER SCENES for OceanBot's coastal-power path — heavy swells and wave crashes colliding with the shore. Each entry 20-28 words. Shore element + wave action + location/intensity ALL BAKED INTO THE ENTRY — this is the HERO pool.
 
-⚠️ MANDATORY: every entry names a REAL coastal shore-element (cliff face / sea-stack / jagged rock / reef breaker / lighthouse / cape / sand beach / rock-shelf) + a REAL wave action (crashing / exploding / surging / engulfing / shorebreak-curling / pounding / overtopping / spraying). NO ships, NO people, NO surfers. The collision is the visual spine.
+⚠️ MANDATORY: every entry names a SPECIFIC, RECOGNIZABLE coastal landmark by name — never a generic "a cliff" / "a beach" / "a rock-shelf" / "an empty shore." A named place is what makes the image distinctive instead of a stock wave photo. Roster (use these, or an equally iconic named site): Big Sur, Nazaré, Cliffs of Moher, Cape Horn, Reynisfjara, Portland Head Light, Pe'ahi (Jaws), Teahupo'o, Lands End, Étretat, Cap Fréhel, Cape Disappointment, Pipeline / Banzai, Puerto Escondido (Zicatela), Giant's Causeway, the Faroe sea-stacks, Stack Rocks Wales, Thunder Hole Maine, Bay of Biscay, Skellig Michael. Pair it with a REAL wave action (crashing / exploding / surging / engulfing / shorebreak-curling / pounding / overtopping / spraying). NO ships, NO people, NO surfers. The collision is the visual spine; the named place is the hero.
 
 ✓ VARIETY MANDATE (distribute across):
   A. CLIFF FACE IMPACT (massive wave hitting vertical cliff, spray erupting 50+ feet)
@@ -2403,14 +2400,14 @@ Each entry: shore element + wave-impact action + iconic-location-or-intensity-cu
       'Sea-cave mouth at Lands End mid-surge, heavy wave compressing into the cave throat, spray-vapor blasting outward at violent pressure.',
       'Hurricane-scale wave hitting a low-coastal sea-wall in the Outer Banks, advancing wall of water filling the frame, light-fixtures barely visible above.',
       'Sea-stack of Iceland at Reynisfjara mid-impact, heavy grey-green wave breaking on the basalt column, white spray climbing the dark vertical pillars.',
-      'Shorebreak slam on a Mexican Pacific beach, heavy wave curling onto wet sand and exploding outward in a wide white foam-burst, empty shore beyond.',
+      'Heavy shorebreak detonating onto Zicatela sand at Puerto Escondido, the Mexican-Pipeline lip pitching forward and exploding in a wide white foam-burst.',
       'Coastal cliff at Etretat in Normandy mid-impact, chalk-white cliff dwarfed by exploding wave, spray fanning sideways in the brisk Atlantic wind.',
       'Heavy storm surge at a Maine rocky coastline at blue hour, wave overtopping the jagged granite, spray sheeting upward into the steel-blue dawn.',
       'Massive shorebreak barrel at Pipeline at golden hour, perfect tube curling onto wet sand, sun spear through the lip, empty beach stretching far behind.',
       'Lighthouse rocks at Cap Fréhel completely engulfed by a heavy Atlantic wave at dusk, only the lighthouse tower visible above the white spray and foam.',
       'Sea-stack impact at Stack Rocks in Wales mid-storm, heavy swell wrapping the column, brown-green water churning at the base, sky bruised behind.',
     ],
-    instructions: `Each entry 20-28 words. Format: "[shore element + location] [wave action + impact intensity] [sensory anchor / scale-cue]." Vary across the 15 categories above. NEVER include ships / boats / surfers / people / drones. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
+    instructions: `Each entry 20-28 words. Format: "[NAMED iconic coast + shore element] [wave action + impact intensity] [sensory anchor / scale-cue]." EVERY entry MUST name a specific recognizable landmark from the roster (or an equally iconic named site) — never a generic unnamed cliff/beach/shelf/"empty shore." Vary across the 15 categories above. NEVER include ships / boats / surfers / people / drones. NEVER negation. Output as a NUMBERED list, one entry per line, no internal newlines.`,
   },
 
   coastal_power_weather_and_sky: {
