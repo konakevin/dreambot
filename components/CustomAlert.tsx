@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 // Primary dialog button = the soft purple at the gradient's left end (matches the
 // solid Dream button). The full brand gradient is reserved for one-shot
@@ -179,6 +179,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
+    // iPad: cap to a normal alert width so it isn't a ~940px-wide dialog
+    // (the overlay centers it; no-op on phone).
+    maxWidth: isTabletDevice ? 460 : undefined,
     backgroundColor: colors.surface,
     borderRadius: 20,
     borderWidth: 1,
