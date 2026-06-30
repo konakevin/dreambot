@@ -17,6 +17,7 @@ import { ScreenLayout } from '@/components/ScreenLayout';
 import { showAlert } from '@/components/CustomAlert';
 import { Toast } from '@/components/Toast';
 import * as nav from '@/lib/navigate';
+import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -60,6 +61,21 @@ export default function AdminReportsScreen() {
     [actions]
   );
 
+  // A comment report row carries comment_id but not the post it lives on, so
+  // resolve the comment's upload before routing to it.
+  const goToCommentPost = useCallback(async (commentId: string) => {
+    const { data, error } = await supabase
+      .from('comments')
+      .select('upload_id')
+      .eq('id', commentId)
+      .maybeSingle();
+    if (error || !data?.upload_id) {
+      Toast.show('Post unavailable (comment may be deleted)', 'close-circle');
+      return;
+    }
+    nav.push(`/photo/${data.upload_id}`);
+  }, []);
+
   const openActions = useCallback(
     (r: AdminReport) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -67,20 +83,31 @@ export default function AdminReportsScreen() {
         { text: 'Cancel', style: 'cancel' },
       ];
 
+      // 1) Jump to the reported content for context. Posts link straight to the
+      //    post; comments link to the post they live on (look-up required).
       if (r.target_kind === 'post' && r.upload_id) {
-        buttons.push({ text: 'View post', onPress: () => nav.push(`/photo/${r.upload_id}`) });
+        buttons.push({ text: 'Go to post', onPress: () => nav.push(`/photo/${r.upload_id}`) });
+      } else if (r.target_kind === 'comment' && r.comment_id) {
+        buttons.push({ text: 'Go to post', onPress: () => goToCommentPost(r.comment_id!) });
+      }
+
+      // 2) Jump to the target user's profile (post/comment author, or the
+      //    reported user) — useful for every report kind.
+      if (r.target_user_id) {
+        buttons.push({
+          text: 'Go to profile',
+          onPress: () => nav.push(`/user/${r.target_user_id}`),
+        });
+      }
+
+      // 3) Destructive moderation.
+      if (r.target_kind === 'post' && r.upload_id) {
         buttons.push({
           text: 'Delete post',
           style: 'destructive',
           onPress: () => runAction(() => actions.deleteUpload(r.upload_id!), r, 'Post deleted'),
         });
-      } else if (r.target_user_id) {
-        buttons.push({
-          text: 'View profile',
-          onPress: () => nav.push(`/user/${r.target_user_id}`),
-        });
       }
-
       if (r.target_kind === 'comment' && r.comment_id) {
         buttons.push({
           text: 'Delete comment',
@@ -127,7 +154,7 @@ export default function AdminReportsScreen() {
         buttons
       );
     },
-    [actions, runAction]
+    [actions, runAction, goToCommentPost]
   );
 
   const renderItem = useCallback(
