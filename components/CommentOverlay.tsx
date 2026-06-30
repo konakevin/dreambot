@@ -298,7 +298,13 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         <Animated.View
           style={[
             styles.thumbMeta,
-            { top: insets.top + THUMB_MARGIN_TOP + THUMB_HEIGHT + 8 },
+            {
+              top: insets.top + THUMB_MARGIN_TOP + THUMB_HEIGHT + 8,
+              // iPad: align the header row with the centered 600 comment pane
+              // (otherwise the username sits far-left while the pane is narrower).
+              left: isTabletDevice ? PANE_SIDE_INSET + 16 : 16,
+              right: isTabletDevice ? PANE_SIDE_INSET + 16 : 16,
+            },
             useAnimatedStyle(() => ({
               opacity: interpolate(progress.value, [0.6, 1], [0, 1]),
             })),
