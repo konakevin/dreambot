@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabase';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumPosts } from '@/hooks/useAlbumPosts';
+import { useBlockedIds } from '@/hooks/useBlockUser';
 import { useUserContextFeed } from '@/hooks/useUserContextFeed';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
@@ -205,6 +206,19 @@ export default function PhotoDetailScreen() {
     },
     [posts, setCurrentPostId]
   );
+
+  // Live-session block enforcement: if the author of the post you're viewing
+  // gets blocked (e.g. via this screen's "•••" menu), go home. Going *back*
+  // would land on the blocked user's profile, which is exactly where you don't
+  // want to be — so route home, matching the profile-screen block.
+  const { data: blockedIds } = useBlockedIds();
+  useEffect(() => {
+    if (!blockedIds || blockedIds.size === 0) return;
+    const current = posts.find((p) => p.id === visiblePostId);
+    if (current && blockedIds.has(current.user_id)) {
+      router.replace('/(tabs)');
+    }
+  }, [blockedIds, posts, visiblePostId]);
 
   const initialIndex = useMemo(() => {
     const idx = posts.findIndex((p) => p.id === id);

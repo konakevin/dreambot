@@ -42,7 +42,6 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
-import { reportContent } from '@/lib/reportContent';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -179,6 +178,13 @@ export default function PublicProfileScreen() {
     }
   }, [showAvatarPreview, avatarProgress, overlayOpacity]);
 
+  function handleUnblock() {
+    showAlert('Unblock User?', 'They will be able to see your posts and contact you again.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Unblock', onPress: () => toggleBlock({ userId, currentlyBlocked: true }) },
+    ]);
+  }
+
   function handleMoreMenu() {
     showAlert('Options', '', [
       {
@@ -186,7 +192,7 @@ export default function PublicProfileScreen() {
         style: isBlocked ? 'default' : 'destructive',
         onPress: () => {
           if (isBlocked) {
-            toggleBlock({ userId, currentlyBlocked: true });
+            handleUnblock();
           } else {
             showAlert('Block User?', "They won't be able to see your posts or contact you.", [
               { text: 'Cancel', style: 'cancel' },
@@ -194,23 +200,10 @@ export default function PublicProfileScreen() {
                 text: 'Block',
                 style: 'destructive',
                 onPress: () => {
+                  // Navigate away only here — after the explicit Block confirm.
+                  // Report is its own menu item, so no "report too?" follow-up.
                   toggleBlock({ userId, currentlyBlocked: false });
                   router.replace('/(tabs)');
-                  // Apple 1.2: a block should ALSO notify the developer of the
-                  // inappropriate content. Offer to report so the block can feed
-                  // the report -> admin-notification pipeline (migration 315).
-                  showAlert(
-                    'Report this user too?',
-                    'Send it to our team to review and remove abusive content.',
-                    [
-                      { text: 'Not now', style: 'cancel' },
-                      {
-                        text: 'Report',
-                        style: 'destructive',
-                        onPress: () => reportContent({ reportedUserId: userId }),
-                      },
-                    ]
-                  );
                 },
               },
             ]);
@@ -362,7 +355,9 @@ export default function PublicProfileScreen() {
   );
 
   // Visibility gate for this account's posts/reposts (referenced inside header).
-  const canSeePosts = profile.is_public || isFollowing || isOwnProfile;
+  // A blocked user's content is hidden even if their account is public — so the
+  // live session reflects the block immediately, not just after a refetch.
+  const canSeePosts = !isBlocked && (profile.is_public || isFollowing || isOwnProfile);
 
   const header = (
     <>
@@ -537,22 +532,39 @@ export default function PublicProfileScreen() {
                 scrollEventThrottle={16}
               >
                 {header}
-                <View style={styles.lockedState}>
-                  <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
-                  <Text style={styles.lockedTitle}>This account is private</Text>
-                  <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
-                  <TouchableOpacity
-                    style={[styles.followButton, hasRequest && styles.followingButton]}
-                    onPress={handleFollow}
-                    activeOpacity={0.8}
-                  >
-                    <Text
-                      style={[styles.followButtonText, hasRequest && styles.followingButtonText]}
-                    >
-                      {hasRequest ? 'Requested' : 'Follow'}
+                {isBlocked ? (
+                  <View style={styles.lockedState}>
+                    <Ionicons name="ban-outline" size={48} color={colors.textSecondary} />
+                    <Text style={styles.lockedTitle}>You blocked this user</Text>
+                    <Text style={styles.lockedSub}>
+                      You won&apos;t see their dreams while they&apos;re blocked
                     </Text>
-                  </TouchableOpacity>
-                </View>
+                    <TouchableOpacity
+                      style={styles.followButton}
+                      onPress={handleUnblock}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.followButtonText}>Unblock</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={styles.lockedState}>
+                    <Ionicons name="lock-closed" size={48} color={colors.textSecondary} />
+                    <Text style={styles.lockedTitle}>This account is private</Text>
+                    <Text style={styles.lockedSub}>Follow them to see their dreams</Text>
+                    <TouchableOpacity
+                      style={[styles.followButton, hasRequest && styles.followingButton]}
+                      onPress={handleFollow}
+                      activeOpacity={0.8}
+                    >
+                      <Text
+                        style={[styles.followButtonText, hasRequest && styles.followingButtonText]}
+                      >
+                        {hasRequest ? 'Requested' : 'Follow'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </ScrollView>
             )}
           </SafeAreaView>

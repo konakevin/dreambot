@@ -1,8 +1,8 @@
 /**
  * The visible "•••" options menu on a feed post (a discoverable entry point for
  * App Store 1.2 flag/block, in addition to long-press). Centralizes Report +
- * Block, including the block confirm and the "report too?" follow-up (so a block
- * also notifies the developer of the content, per Apple's wording).
+ * Block (Report is its own item, so a block doesn't force a second "report too?"
+ * prompt — the two are independent).
  *
  * Lib (imperative) so the feed card calls it without re-implementing the flow.
  * `blockUser` is the useToggleBlock().mutate from the caller (hooks can't run
@@ -10,6 +10,7 @@
  */
 import * as Haptics from 'expo-haptics';
 import { showAlert } from '@/components/CustomAlert';
+import { Toast } from '@/components/Toast';
 import { reportContent } from '@/lib/reportContent';
 
 type BlockMutate = (args: { userId: string; currentlyBlocked: boolean }) => void;
@@ -47,20 +48,7 @@ export function openPostOptions(opts: {
             style: 'destructive',
             onPress: () => {
               opts.blockUser({ userId: opts.authorId, currentlyBlocked: false });
-              // Apple 1.2: a block should also notify the developer of the
-              // content — offer to report so it feeds the report pipeline.
-              showAlert(
-                'Report this user too?',
-                'Send it to our team to review and remove abusive content.',
-                [
-                  { text: 'Not now', style: 'cancel' },
-                  {
-                    text: 'Report',
-                    style: 'destructive',
-                    onPress: () => reportContent({ reportedUserId: opts.authorId }),
-                  },
-                ]
-              );
+              Toast.show(`Blocked @${name}`, 'checkmark-circle');
             },
           },
         ]),

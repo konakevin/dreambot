@@ -75,6 +75,10 @@ export function useToggleBlock() {
       // Block severs follows + hides content both ways, so refresh the social graph.
       queryClient.invalidateQueries({ queryKey: ['blockedIds', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['blockedUsers', user?.id] });
+      // block_user severs the follow in BOTH directions server-side, so the
+      // cached following set is now stale — without this the Follow/Following
+      // pill keeps showing "Following" on a user you just blocked.
+      queryClient.invalidateQueries({ queryKey: ['followingIds', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
       queryClient.invalidateQueries({ queryKey: ['shareableVibers', user?.id] });
