@@ -1,6 +1,54 @@
 # Plan: Support all Apple device sizes (iPhone SE → iPad), iPad solved
 
-> Status: APPROVED, not yet started. Scoped 2026-06-29; pick up from Phase 0.
+> Status: IMPLEMENTED 2026-06-29 (screen-by-screen on iPad Pro 13"). The original
+> plan is kept below for history; **read "AS BUILT" first — it diverges from the plan
+> in several places.** Remaining QA: iPad mini lower-bound + small-iPhone (SE) pass;
+> untested-but-should-inherit screens: settings, paywall/Sparkle store, post-detail.
+
+## AS BUILT (2026-06-29) — what actually shipped + divergences
+
+The implementation took a **per-surface `isTabletDevice` approach**, not the global
+"cap the scale engine" approach in Phase 1. All iPad changes are gated behind
+`isTabletDevice` (module-load `width >= 600`) as **separate branches**, so iPhone
+renders are byte-for-byte unchanged (an SE is 375pt wide → every gate resolves to the
+phone value). New primitives: `lib/responsive.ts` `isTabletDevice` + `byDevice(phone,
+tablet)`; `components/ResponsiveContainer.tsx` (centers content at a `maxWidth`, default
+600, no-op on phone).
+
+**Divergences from the plan:**
+- **Phase 1 (global scale-engine cap) was NOT done.** `lib/responsive.ts` helpers still
+  scale up on iPad. Instead, sizing is controlled per-surface via `byDevice` +
+  `ResponsiveContainer` + explicit 600/460/420 caps. Lower-risk and clearer than a global
+  cap that silently touches ~90 files.
+- **Feed = FULL-BLEED immersive, NOT a centered phone-width column** (owner reversed
+  Decision #1 on 2026-06-29). Chrome (pills, action rail, tab bar) stays phone-sized —
+  iPad standard is not to scale chrome with screen size.
+- **Comment sheet (`CommentOverlay`) = full-screen on iPad, NOT a centered card.**
+  Constraining the image-morph + keyboard overlay made it worse ("chopped" / keyboard
+  covered the card); reverted to full-screen. Lesson: leave complex animated overlays
+  full-screen on iPad. See `memory/feedback_ipad_complex_overlay_fullscreen.md`.
+
+**What shipped (all iPad-gated):**
+- Config: `app.config.js` `supportsTablet: true`, `orientation: 'portrait'`. (Portrait
+  lock prevents the resize/split-screen problem; explicit `requireFullScreen` /
+  `UIRequiresFullScreen` was not added — verify before submission if needed.)
+- Auth (landing/login/signup), onboarding text/info steps, Create form + Dream CTA →
+  centered 600 column. Onboarding picker grids + reveal fill width.
+- Grids: `NUM_COLUMNS = isTabletDevice ? 5 : 3` (`constants/grid.ts`); `PostTile` gained a
+  `width` prop; search-results triplet pinned to a 3-up `TRIPLET_TILE_WIDTH`. Covers
+  profile/saved/search/share grids.
+- Intro sheets (`CreateIntroSheet`, `MediumsIntroSheet`, `SparkleIntroSheet`): `Modal`
+  goes `fullScreen` on iPad; cards full-width; CTA capped to 600.
+- Drawers/pickers constrained to centered cards: `StylePickerSheet` + `FilterPickerSheet`
+  (left/right insets → 600), `ModelPicker` (`maxWidth` 600 + centered), add-photo action
+  sheet (content → 600), `LikesSheet` (75% → fixed 420). `CustomAlert` (every `showAlert`)
+  → `maxWidth` 460. Comment sheet left full-screen (above).
+- Website (`dreambot-web`, separate repo): `/user` + `/post` share pages brand-aligned
+  (gradient logo, byline, above-the-fold CTA) — unrelated to this RN plan.
+
+---
+
+> Original plan (pre-implementation) follows. Scoped 2026-06-29.
 
 ## Context
 
