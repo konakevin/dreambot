@@ -42,6 +42,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
+import { reportContent } from '@/lib/reportContent';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
 import { trackProfileViewed } from '@/lib/analytics';
@@ -195,6 +196,21 @@ export default function PublicProfileScreen() {
                 onPress: () => {
                   toggleBlock({ userId, currentlyBlocked: false });
                   router.replace('/(tabs)');
+                  // Apple 1.2: a block should ALSO notify the developer of the
+                  // inappropriate content. Offer to report so the block can feed
+                  // the report -> admin-notification pipeline (migration 315).
+                  showAlert(
+                    'Report this user too?',
+                    'Send it to our team to review and remove abusive content.',
+                    [
+                      { text: 'Not now', style: 'cancel' },
+                      {
+                        text: 'Report',
+                        style: 'destructive',
+                        onPress: () => reportContent({ reportedUserId: userId }),
+                      },
+                    ]
+                  );
                 },
               },
             ]);

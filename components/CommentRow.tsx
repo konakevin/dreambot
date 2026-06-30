@@ -12,6 +12,7 @@ import { useAuthStore } from '@/store/auth';
 import { useReplies } from '@/hooks/useReplies';
 import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
 import { useDeleteComment } from '@/hooks/useDeleteComment';
+import { reportContent } from '@/lib/reportContent';
 import type { Comment } from '@/hooks/useComments';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -70,17 +71,29 @@ export function CommentRow({
   }
 
   function handleLongPress() {
-    if (!canDelete) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    showAlert('Delete comment', 'Are you sure?', [
+    const buttons: { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void }[] = [
       { text: 'Cancel', style: 'cancel' },
-      {
+    ];
+    // Report — App Store 1.2 requires flagging objectionable content. Shown on
+    // any comment that isn't yours.
+    if (!isOwn) {
+      buttons.push({
+        text: 'Report comment',
+        style: 'destructive',
+        onPress: () => reportContent({ commentId: comment.id }),
+      });
+    }
+    // Delete — your own comment, or any comment on a post you own (moderation).
+    if (canDelete) {
+      buttons.push({
         text: 'Delete',
         style: 'destructive',
         onPress: () =>
           deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
-      },
-    ]);
+      });
+    }
+    showAlert('Comment', '', buttons);
   }
 
   return (

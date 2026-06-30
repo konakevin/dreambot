@@ -872,6 +872,8 @@ export type Database = {
           face_swap_share: number;
           face_swap_share_with_plus_one: number;
           id: number;
+          latest_app_version: string | null;
+          min_app_version: string | null;
           nightly_enabled: boolean;
           nightly_max_jobs: number;
           nightly_require_ai_enabled: boolean;
@@ -911,6 +913,8 @@ export type Database = {
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
           id?: number;
+          latest_app_version?: string | null;
+          min_app_version?: string | null;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
@@ -950,6 +954,8 @@ export type Database = {
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
           id?: number;
+          latest_app_version?: string | null;
+          min_app_version?: string | null;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;
           nightly_require_ai_enabled?: boolean;
@@ -1865,6 +1871,9 @@ export type Database = {
           reported_user_id: string | null;
           reporter_id: string;
           resolved: boolean;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: string;
           upload_id: string | null;
         };
         Insert: {
@@ -1876,6 +1885,9 @@ export type Database = {
           reported_user_id?: string | null;
           reporter_id: string;
           resolved?: boolean;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: string;
           upload_id?: string | null;
         };
         Update: {
@@ -1887,6 +1899,9 @@ export type Database = {
           reported_user_id?: string | null;
           reporter_id?: string;
           resolved?: boolean;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: string;
           upload_id?: string | null;
         };
         Relationships: [
@@ -1907,6 +1922,13 @@ export type Database = {
           {
             foreignKeyName: 'reports_reporter_id_fkey';
             columns: ['reporter_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reports_resolved_by_fkey';
+            columns: ['resolved_by'];
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
@@ -2342,6 +2364,8 @@ export type Database = {
         Row: {
           allow_reposts: boolean;
           avatar_url: string | null;
+          banned_at: string | null;
+          banned_by: string | null;
           basic_subscription: boolean;
           basic_subscription_expires_at: string | null;
           bio: string | null;
@@ -2355,6 +2379,7 @@ export type Database = {
           has_ai_recipe: boolean;
           id: string;
           is_admin: boolean | null;
+          is_banned: boolean;
           is_bot: boolean;
           is_public: boolean;
           last_active_at: string | null;
@@ -2371,6 +2396,8 @@ export type Database = {
         Insert: {
           allow_reposts?: boolean;
           avatar_url?: string | null;
+          banned_at?: string | null;
+          banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
           bio?: string | null;
@@ -2384,6 +2411,7 @@ export type Database = {
           has_ai_recipe?: boolean;
           id: string;
           is_admin?: boolean | null;
+          is_banned?: boolean;
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
@@ -2400,6 +2428,8 @@ export type Database = {
         Update: {
           allow_reposts?: boolean;
           avatar_url?: string | null;
+          banned_at?: string | null;
+          banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
           bio?: string | null;
@@ -2413,6 +2443,7 @@ export type Database = {
           has_ai_recipe?: boolean;
           id?: string;
           is_admin?: boolean | null;
+          is_banned?: boolean;
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
@@ -2426,7 +2457,15 @@ export type Database = {
           username?: string;
           username_confirmed?: boolean;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'users_banned_by_fkey';
+            columns: ['banned_by'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
     };
     Views: {
@@ -2440,7 +2479,38 @@ export type Database = {
       };
     };
     Functions: {
+      admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
+      admin_delete_comment: {
+        Args: { p_comment_id: string };
+        Returns: undefined;
+      };
       admin_delete_upload: { Args: { p_upload_id: string }; Returns: undefined };
+      admin_hide_upload: { Args: { p_upload_id: string }; Returns: undefined };
+      admin_list_reports: {
+        Args: { p_limit?: number; p_status?: string };
+        Returns: {
+          comment_body: string;
+          comment_id: string;
+          created_at: string;
+          details: string;
+          id: string;
+          reason: string;
+          reporter_id: string;
+          reporter_username: string;
+          status: string;
+          target_kind: string;
+          target_user_banned: boolean;
+          target_user_id: string;
+          target_username: string;
+          upload_id: string;
+          upload_image_url: string;
+        }[];
+      };
+      admin_resolve_report: {
+        Args: { p_report_id: string; p_status: string };
+        Returns: undefined;
+      };
+      admin_unban_user: { Args: { p_user_id: string }; Returns: undefined };
       approve_follow_and_follow_back: {
         Args: { p_requester_id: string };
         Returns: undefined;

@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/auth';
 import { invokeEdge } from '@/lib/edgeFunction';
 import { supabase } from '@/lib/supabase';
 import { saveUrlToPhotos } from '@/lib/savePhoto';
+import { reportContent } from '@/lib/reportContent';
 import { trackHdDownloadTapped } from '@/lib/analytics';
 
 interface UpscaleBody {
@@ -230,7 +231,17 @@ export function handleImageLongPress(opts: LongPressOpts) {
   if (opts.onDelete) {
     buttons.push({ text: 'Delete', style: 'destructive', onPress: opts.onDelete });
   }
-  showAlert(opts.onDelete ? 'Options' : 'Download', faceSwapNoHdMessage(opts), buttons);
+  // Report — App Store 1.2 requires a way to flag objectionable content. Shown on
+  // posts the user does NOT own (you don't report your own dream).
+  if (!opts.isOwn) {
+    buttons.push({
+      text: 'Report',
+      style: 'destructive',
+      onPress: () => reportContent({ uploadId: opts.id }),
+    });
+  }
+  const hasContextActions = !!opts.onDelete || !opts.isOwn || !!opts.onDreamLikeThis;
+  showAlert(hasContextActions ? 'Options' : 'Download', faceSwapNoHdMessage(opts), buttons);
 }
 
 /**

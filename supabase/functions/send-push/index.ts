@@ -140,6 +140,10 @@ function getNotificationContent(
       };
     case 'download_ready':
       return { title: 'Your HD download is ready', body: 'Tap to save it to your photos' };
+    case 'report':
+      // Admin-only: a user filed a content report. Sent to every admin so they
+      // can act within 24h (App Store 1.2). Routes to the admin Reports screen.
+      return { title: 'New content report', body: 'Tap to review and take action' };
     default:
       return { title: 'New notification', body: '' };
   }

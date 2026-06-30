@@ -77,6 +77,13 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     return '/welcome-gift';
   }
 
+  // Admin-only content report → the moderation queue (where the admin acts on
+  // it), NOT the reported post. Carries uploadId/commentId for context, so this
+  // must precede the upload-based routing below.
+  if (data.type === 'report') {
+    return '/settings/reports';
+  }
+
   const actorId = data.userId ?? data.actorId;
 
   if (data.type && FRIEND_FOLLOW_TYPES.has(data.type) && actorId) {

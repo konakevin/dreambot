@@ -308,6 +308,11 @@ export default function SettingsScreen() {
           <>
             <Text style={styles.sectionHeader}>ADMIN</Text>
             <View style={styles.section}>
+              <SettingsRow
+                icon="flag-outline"
+                label="Reports"
+                onPress={() => nav.push('/settings/reports')}
+              />
               <View style={styles.row}>
                 <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
                 <View style={{ flex: 1 }}>

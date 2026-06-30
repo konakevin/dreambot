@@ -40,6 +40,8 @@ jest.mock('@/components/CustomAlert', () => ({
 jest.mock('@/components/Toast', () => ({
   Toast: { show: (...a: unknown[]) => mockToastShow(...a) },
 }));
+// reportContent pulls in queryClient (native) — stub it; reporting isn't under test here.
+jest.mock('@/lib/reportContent', () => ({ reportContent: jest.fn() }));
 jest.mock('@/components/UpscaleOverlay', () => ({
   UpscaleModal: {
     show: (...a: unknown[]) => mockModalShow(...a),
@@ -94,7 +96,8 @@ describe('handleImageLongPress — quality sheet + entitlement gating', () => {
   it('free user on ANY post can save native res (no Pro block)', async () => {
     mockIsPro = false;
     handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    expect(mockShowAlert).toHaveBeenCalledWith('Download', '', expect.any(Array));
+    // Non-owned post: the menu now includes Report, so the title is "Options".
+    expect(mockShowAlert).toHaveBeenCalledWith('Options', '', expect.any(Array));
     await pressAlertButton('Save to Photos');
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/orig.jpg', false);
     expect(mockInvoke).not.toHaveBeenCalled();
@@ -153,7 +156,8 @@ describe('saveHd — on-demand upscale (server resolve)', () => {
   async function triggerHdSave(invokeResult: { data?: unknown; error?: unknown }) {
     mockInvoke.mockResolvedValue(invokeResult);
     handleImageLongPress({ id: 'p9', imageUrl: 'https://img/orig.jpg' });
-    expect(mockShowAlert).toHaveBeenCalledWith('Download', '', expect.any(Array));
+    // Non-owned post: the menu now includes Report, so the title is "Options".
+    expect(mockShowAlert).toHaveBeenCalledWith('Options', '', expect.any(Array));
     await pressAlertButton('Save in HD');
   }
 
