@@ -945,11 +945,13 @@ const s = StyleSheet.create({
     textShadowOffset: { width: 0, height: 1 },
   } as TextStyle,
   timestamp: {
-    color: 'rgba(255,255,255,0.7)',
+    color: 'rgba(255,255,255,0.92)',
     fontSize: fontScale(12),
-    fontWeight: '500',
-    textShadowColor: 'rgba(0,0,0,0.85)',
-    textShadowRadius: 3,
+    fontWeight: '600',
+    // Stronger shadow than the username's — the smaller, lighter timestamp needs
+    // more separation to stay legible over bright/saturated renders.
+    textShadowColor: 'rgba(0,0,0,0.95)',
+    textShadowRadius: 4,
     textShadowOffset: { width: 0, height: 1 },
     marginTop: verticalScale(1),
   },

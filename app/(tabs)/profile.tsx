@@ -497,6 +497,9 @@ export default function ProfileScreen() {
         }
         keyExtractor={(item) => item.id}
         ListHeaderComponent={header}
+        // Clear the floating tab bar so the last row isn't trapped under it
+        // (mirrors PostGrid's bottom padding).
+        contentContainerStyle={{ paddingBottom: verticalScale(90) }}
         // Mirror the PostGrid path's scroll-progress wiring so the same
         // sticky top bar collapses identically on this sub-view.
         onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}
