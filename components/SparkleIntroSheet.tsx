@@ -20,7 +20,8 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useEffect } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale, screen } from '@/lib/responsive';
+import { verticalScale, fontScale, screen, isTabletDevice } from '@/lib/responsive';
+import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { formatCompact } from '@/lib/formatNumber';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -94,7 +95,9 @@ export function SparkleIntroSheet({ visible, onClose, cost, balance }: Props) {
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      // iPhone keeps the standard pageSheet; on iPad pageSheet is a narrow
+      // centered card, so go fullScreen there to fill the width.
+      presentationStyle={isTabletDevice ? 'fullScreen' : 'pageSheet'}
       onRequestClose={onClose}
     >
       <SafeAreaView style={s.root} edges={['top']}>
@@ -154,7 +157,11 @@ export function SparkleIntroSheet({ visible, onClose, cost, balance }: Props) {
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
-          <GradientButton label="Got it" onPress={handleClose} />
+          {/* CTA capped to the standardized onboarding button width (600 on
+              iPad, full width on phone) so it matches the rest of the flow. */}
+          <ResponsiveContainer maxWidth={600}>
+            <GradientButton label="Got it" onPress={handleClose} />
+          </ResponsiveContainer>
         </View>
       </SafeAreaView>
     </Modal>
