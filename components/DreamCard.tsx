@@ -33,6 +33,9 @@ import { useAuthStore } from '@/store/auth';
 import { useAdminShowModelBadge } from '@/lib/adminPrefs';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
+import { useToggleBlock } from '@/hooks/useBlockUser';
+import { useBotUsers } from '@/hooks/useBotUsers';
+import { openPostOptions } from '@/lib/postOptions';
 import { useRepostIds } from '@/hooks/useRepostIds';
 import { useToggleRepost } from '@/hooks/useToggleRepost';
 
@@ -166,7 +169,16 @@ export const DreamCard = memo(function DreamCard({
   // public instant-follow path is correct here.
   const { data: followingSet } = useFollowingIds();
   const toggleFollow = useToggleFollow();
-  const showFollow = !isOwnPost && followingSet !== undefined && !followingSet.has(item.user_id);
+  const toggleBlock = useToggleBlock();
+  const { data: botUsers } = useBotUsers();
+  // Bot authors get Report-only options (curated content, can't be "blocked").
+  const isBotAuthor = (botUsers ?? []).some((b) => b.id === item.user_id);
+  // Author controls on the card (non-own posts): a Follow/Following toggle pill
+  // (so the user can also unfollow from the feed, not just quick-follow) + a
+  // visible "•••" options button that opens Report/Block (a discoverable 1.2
+  // entry point alongside long-press). Shown once the following set has loaded.
+  const showAuthorControls = !isOwnPost && followingSet !== undefined;
+  const isFollowing = !!followingSet?.has(item.user_id);
   // Repost — self-contained (membership Set is one shared cached query; the
   // mutation toggles via the toggle_repost RPC). Hidden on own posts AND on posts
   // whose author opted out (allow_reposts === false) — the server also rejects
@@ -464,53 +476,82 @@ export const DreamCard = memo(function DreamCard({
               )}
               {/* Repost moved to the right-side icon rail (between bookmark and
                   share). The attribution line above still credits a reposter. */}
-              <TouchableOpacity
-                style={s.usernameRow}
-                onPress={() =>
-                  isOwnPost
-                    ? nav.navigate('/(tabs)/profile')
-                    : nav.push(`/user/${item.user_id}?viewedPost=${item.id}`)
-                }
-                activeOpacity={0.7}
-              >
-                {item.avatar_url ? (
-                  <Image
-                    source={{ uri: avatarUrl(item.avatar_url!) }}
-                    style={s.avatar}
-                    cachePolicy="memory-disk"
-                  />
-                ) : (
-                  <View style={s.avatarFallback}>
-                    <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
+              <View>
+                <TouchableOpacity
+                  style={s.usernameRow}
+                  onPress={() =>
+                    isOwnPost
+                      ? nav.navigate('/(tabs)/profile')
+                      : nav.push(`/user/${item.user_id}?viewedPost=${item.id}`)
+                  }
+                  activeOpacity={0.7}
+                >
+                  {item.avatar_url ? (
+                    <Image
+                      source={{ uri: avatarUrl(item.avatar_url!) }}
+                      style={s.avatar}
+                      cachePolicy="memory-disk"
+                    />
+                  ) : (
+                    <View style={s.avatarFallback}>
+                      <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
+                    </View>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    {/* Row 1: name + time inline */}
+                    <View style={s.usernameLine}>
+                      <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                      <Text style={[s.timestamp, { marginLeft: 6, marginTop: 0 }]}>
+                        · {timeAgo(item.created_at)}
+                      </Text>
+                    </View>
+                    {item.description ? (
+                      <ExpandableDescription text={item.description} style={s.description} />
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+
+                {/* Row 2 (below the chip, flows under the avatar): Follow/Following
+                    toggle + the visible "•••" options (Report/Block) — a
+                    discoverable 1.2 entry point. */}
+                {showAuthorControls && (
+                  <View style={s.authorControlsRow}>
+                    <TouchableOpacity
+                      style={[s.followPill, isFollowing && s.followPillFollowing]}
+                      onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        toggleFollow.mutate({
+                          userId: item.user_id,
+                          currentlyFollowing: isFollowing,
+                          isPublic: true,
+                        });
+                      }}
+                      hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={[s.followText, isFollowing && s.followTextFollowing]}>
+                        {isFollowing ? 'Following' : 'Follow'}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={s.optionsBtn}
+                      onPress={() =>
+                        openPostOptions({
+                          uploadId: item.id,
+                          authorId: item.user_id,
+                          authorName: item.username ?? 'user',
+                          isBot: isBotAuthor,
+                          blockUser: toggleBlock.mutate,
+                        })
+                      }
+                      hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name="ellipsis-horizontal" size={16} color="#FFFFFF" />
+                    </TouchableOpacity>
                   </View>
                 )}
-                <View style={{ flex: 1 }}>
-                  <View style={s.usernameLine}>
-                    <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
-                    {showFollow && (
-                      <TouchableOpacity
-                        style={s.followPill}
-                        onPress={() => {
-                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                          toggleFollow.mutate({
-                            userId: item.user_id,
-                            currentlyFollowing: false,
-                            isPublic: true,
-                          });
-                        }}
-                        hitSlop={{ top: 8, bottom: 8, left: 4, right: 10 }}
-                        activeOpacity={0.7}
-                      >
-                        <Text style={s.followText}>Follow</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  {item.description ? (
-                    <ExpandableDescription text={item.description} style={s.description} />
-                  ) : null}
-                  <Text style={s.timestamp}>{timeAgo(item.created_at)}</Text>
-                </View>
-              </TouchableOpacity>
+              </View>
             </View>
 
             {/* Side actions */}
@@ -857,18 +898,42 @@ const s = StyleSheet.create({
   // accent washed out on bright images).
   usernameLine: { flexDirection: 'row', alignItems: 'center' },
   followPill: {
-    marginLeft: 8,
-    paddingHorizontal: 9,
-    paddingVertical: verticalScale(3),
-    borderRadius: 11,
+    height: verticalScale(26),
+    paddingHorizontal: 10,
+    borderRadius: 7,
     backgroundColor: 'rgba(0,0,0,0.35)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.55)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   followText: {
     color: '#FFFFFF',
     fontSize: fontScale(12),
     fontWeight: '700',
+  },
+  // "Following" — quieter than the accent "Follow" so it isn't noisy on a
+  // bot-heavy feed where you follow everything.
+  followPillFollowing: {
+    borderColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  followTextFollowing: { color: 'rgba(255,255,255,0.8)' },
+  authorControlsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: verticalScale(7),
+  },
+  optionsBtn: {
+    height: verticalScale(26),
+    paddingHorizontal: 10,
+    borderRadius: 7,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   description: {
     color: 'rgba(255,255,255,0.85)',
