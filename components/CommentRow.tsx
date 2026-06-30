@@ -11,7 +11,7 @@ import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { useAuthStore } from '@/store/auth';
 import { useReplies } from '@/hooks/useReplies';
 import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
-import { useDeleteComment } from '@/hooks/useDeleteComment';
+import { useDeleteComment, useAdminDeleteComment } from '@/hooks/useDeleteComment';
 import { reportContent } from '@/lib/reportContent';
 import type { Comment } from '@/hooks/useComments';
 import { colors } from '@/constants/theme';
@@ -47,9 +47,13 @@ export function CommentRow({
   expandedCommentId,
 }: CommentRowProps) {
   const currentUser = useAuthStore((s) => s.user);
+  const isAdmin = useAuthStore((s) => s.isAdmin);
   const isOwn = currentUser?.id === comment.userId;
   const isPostOwner = currentUser?.id === postOwnerId;
   const canDelete = isOwn || isPostOwner;
+  // Admins can delete anyone's comment (moderation), even when not the author or
+  // post owner — routed through the admin RPC rather than the RLS direct delete.
+  const adminOnlyDelete = isAdmin && !canDelete;
   const [showReplies, setShowReplies] = useState(expandedCommentId === comment.id);
 
   // Auto-expand when a reply is posted to this comment
@@ -59,6 +63,7 @@ export function CommentRow({
   const { data: replies = [] } = useReplies(comment.id, showReplies && !isReply);
   const { mutate: toggleLike } = useToggleCommentLike();
   const { mutate: deleteComment } = useDeleteComment();
+  const { mutate: adminDeleteComment } = useAdminDeleteComment();
 
   function handleLike() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -79,7 +84,7 @@ export function CommentRow({
     // any comment that isn't yours.
     if (!isOwn) {
       buttons.push({
-        text: 'Report comment',
+        text: 'Report',
         style: 'destructive',
         onPress: () => reportContent({ commentId: comment.id }),
       });
@@ -91,6 +96,14 @@ export function CommentRow({
         style: 'destructive',
         onPress: () =>
           deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
+      });
+    } else if (adminOnlyDelete) {
+      // Admin moderation: delete anyone's comment via the admin RPC.
+      buttons.push({
+        text: 'Delete (admin)',
+        style: 'destructive',
+        onPress: () =>
+          adminDeleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
       });
     }
     showAlert('Comment', '', buttons);

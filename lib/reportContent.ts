@@ -65,8 +65,39 @@ async function submitReport(target: ReportTarget, reason: string): Promise<void>
     queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
     queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
   }
+  // A reported comment should vanish from the reporter's view right away (same
+  // intent as the post path above). We mutate the cache directly rather than
+  // invalidate: get_comments doesn't filter reported comments yet, so a refetch
+  // would bring it back. Migration 317 adds the server-side filter for
+  // durability across remount; this handles the live session immediately.
+  if (target.commentId) {
+    hideReportedCommentFromCache(target.commentId);
+  }
   Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   Toast.show('Thanks, our team will review this', 'checkmark-circle');
+}
+
+// Remove a reported comment from both comment caches: the top-level infinite
+// query (['comments', uploadId] → { pages: [{ rows }] }) and any expanded reply
+// thread (['replies', parentId] → Comment[]). Keyed on id only, so we don't need
+// the uploadId/parentId threaded through the report call.
+function hideReportedCommentFromCache(commentId: string): void {
+  queryClient.setQueriesData<{ pages: { rows: { id: string }[] }[]; pageParams: unknown[] }>(
+    { queryKey: ['comments'] },
+    (old) =>
+      old?.pages
+        ? {
+            ...old,
+            pages: old.pages.map((p) => ({
+              ...p,
+              rows: p.rows.filter((r) => r.id !== commentId),
+            })),
+          }
+        : old
+  );
+  queryClient.setQueriesData<{ id: string }[]>({ queryKey: ['replies'] }, (old) =>
+    Array.isArray(old) ? old.filter((r) => r.id !== commentId) : old
+  );
 }
 
 /**
