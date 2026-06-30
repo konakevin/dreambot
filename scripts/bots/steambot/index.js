@@ -28,6 +28,7 @@ const pathBuilders = {
   'steam-transport': require('./paths/steam-transport'),
   'cozy-steampunk': require('./paths/cozy-steampunk'),
   'steampunk-labs': require('./paths/steampunk-labs'),
+  'steampunk-hybrid': require('./paths/steampunk-hybrid'),
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -99,6 +100,7 @@ const STEAMBOT_LOOK_PATHS = new Set([
   'steam-transport',
   'cozy-steampunk',
   'steampunk-labs',
+  'steampunk-hybrid',
 ]);
 
 // Per-render LOOK override block, prepended to the brief in buildBrief. Strong
@@ -294,6 +296,7 @@ module.exports = {
     'steam-transport',
     'cozy-steampunk',
     'steampunk-labs',
+    'steampunk-hybrid',
   ],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts

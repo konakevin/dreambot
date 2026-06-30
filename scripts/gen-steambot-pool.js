@@ -73,6 +73,33 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ═══════════════════════════════════════════════════════════
+  // STEAMPUNK-HYBRID path (revived 2026-06-30) — steampunk × another
+  // genre collision, both genres equally visible. The bot's variety lane.
+  // ═══════════════════════════════════════════════════════════
+  steambot_hybrid_worlds: {
+    format: 'simple',
+    theme: `STEAMPUNK x GENRE FUSION world-scenes. Each entry is ONE vivid scene where the steampunk world (brass, copper, riveted iron, gears, pipework, gaslight, steam-engines, clockwork, Victorian-industrial) COLLIDES with ANOTHER GENRE so that BOTH are equally, unmistakably present — a place that could not exist in either genre alone. The other genre's signature elements must be as prominent as the brass and gears.
+
+DISTRIBUTE the entries EVENLY across these genre collisions (roughly equal count each):
+- GOTHIC-HORROR: crumbling cathedrals, vampires, bats, blood-moons, gargoyles, fog-shrouded graveyards, ironwork crypts.
+- WILD-WEST: desert canyons, saloons, steam-locomotives, dusty frontier towns, mesa railways, brass six-shooters.
+- RAIN-NOIR: gaslit rain-slick city streets, detective offices, trench-coated silhouettes in shadow, smoke, reflections in wet cobblestone.
+- UNDERWATER: submerged brass diving-cities, coral-encrusted machinery, kelp forests, bioluminescent depths, riveted bathyspheres.
+- ARCTIC: iron icebreakers, frozen research-stations, aurora skies, glacier-bound machinery, steam against blizzard-white.
+- FANTASY: floating crystal isles, magic-crystal reactors, enchanted clockwork forests, arcane brass sorcery, dragon-scale dirigibles.
+- VOLCANIC / DESERT / JUNGLE: lava-forges, sand-buried clockwork ruins, overgrown brass temples reclaimed by vines.
+
+THE BAR: each scene reads instantly as BOTH steampunk AND its partner genre, fused — never steampunk-with-a-hint, never the other genre with a token gear. Environment-dominant, cinematic, wallpaper-worthy. NO single human as the subject.`,
+    touchpoints: [
+      'GOTHIC FORGE-CATHEDRAL — a crumbling Gothic cathedral retrofitted with towering brass pipe-organs and steam-belching gargoyle furnaces, blood-red rose windows glowing, fog and wheeling bats under a clockwork moon.',
+      'FRONTIER STEAM-CANYON — a dusty Wild-West mesa town straddling a brass cog-railway, a steam-locomotive venting at the depot, sandstone spires and saloon boardwalks wired with copper pipework under a bleached sky.',
+      'SUNKEN BRASS ATLANTIS — a submerged Victorian diving-city of riveted domes and coral-crusted gears, kelp swaying through gaslit streets, bioluminescent fish drifting past bathysphere windows in deep blue gloom.',
+      'AURORA ICEBREAKER STATION — an iron steam-icebreaker frozen at a glacier research-outpost, brass funnels steaming against blizzard-white, green aurora overhead, pressure-ridged sea-ice splitting around the hull.',
+    ],
+    instructions: `Each entry 22-35 words. STRICT: both genres equally visible and fused. Distribute evenly across the genre buckets. Environment-dominant, no human subject. Format: "PLACE-NAME-CAPS — scene description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
   // AIRSHIP-FEMALE path (2026-05-23) — solo female air-officer mid-action
   // on a steampunk airship. Combat allowed. 4 female-bespoke pools + 7
   // shared with future airship-male sister (heritage/role/eyes/hair_color/

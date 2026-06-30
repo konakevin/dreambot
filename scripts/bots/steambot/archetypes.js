@@ -59,6 +59,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  STEAMBOT_STEAMPUNK_HYBRID: {
+    description:
+      'PATH-BESPOKE — SteamBot steampunk-hybrid path (revived 2026-06-30). STEAMPUNK x another GENRE collision — gothic-horror / wild-west / rain-noir / underwater / arctic / fantasy / volcanic-desert-jungle. BOTH genres EQUALLY visible: the partner genre as prominent as the brass + gears, fused into one impossible place. Environment-dominant world scenes; figures incidental, never focal. The bot VARIETY lane. 1 path-bespoke hero (hybrid_world) + 40%-gated surprise + universal lighting + atmosphere. Render style comes from the per-render LOOK.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['hybrid_world'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'surprise_element', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   STEAMBOT_AIRSHIP_SKIES: {
     description:
       "PATH-BESPOKE — SteamBot airship-skies path (2026-05-15 migration from function-based form). MOVIE-POSTER airship scenes — dirigibles, sky-galleons, packet-ships, sky-clippers in vertigo-inducing dramatic-sky moments. NO ground, NO city — pure sky-world. Mortal-Engines / Treasure-Planet / Howl's-Moving-Castle / Last-Exile / Atlantis-lost-empire / Skies-of-Arcadia visual lineage. 4 path-bespoke axes (scene / sky_layer / surprise_element / phenomenon 70%-gated) + universal lighting + atmosphere. NO CHARACTERS as primary subject.",
@@ -149,7 +163,16 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      characterDnaAxes: ['role', 'skin', 'face', 'eyes', 'hair_color', 'hairstyle', 'outfit', 'accessory'],
+      characterDnaAxes: [
+        'role',
+        'skin',
+        'face',
+        'eyes',
+        'hair_color',
+        'hairstyle',
+        'outfit',
+        'accessory',
+      ],
       path: ['action', 'backdrop'],
     },
     pickN: {},

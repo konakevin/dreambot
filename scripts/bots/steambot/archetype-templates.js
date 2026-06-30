@@ -108,6 +108,21 @@ Wide cinematic establishing shot, the sky wrapping the vessel. No text/words/wat
 ${TAIL}`;
   },
 
+  STEAMBOT_STEAMPUNK_HYBRID: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, hybrid_world, surprise_element } = slots;
+    const surpriseLine = surprise_element
+      ? `A small secondary detail deeper in the scene (never eclipsing the world): ${surprise_element}.\n`
+      : '';
+
+    return `Write ONE steampunk GENRE-FUSION scene for SteamBot — a world where steampunk COLLIDES with another genre and BOTH are equally visible. The brass-and-clockwork Victorian-industrial machinery AND the other genre's signature elements share the frame as equals, fused into one impossible place. Environment-dominant; any figures are tiny and incidental, never the focus.
+
+THE FUSED WORLD: ${hybrid_world}. Render BOTH genres in full force, woven together — the steampunk layer (brass, copper, riveted iron, gears, pipework, gaslight, steam) AND the other genre's defining elements, equally prominent, neither one winning. Real depth: a tactile foreground, the fused world filling the midground, the wider scene receding into atmosphere.
+${surpriseLine}Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
+Wide or medium cinematic establishing shot, the whole strange world readable. No text/words/watermarks.
+
+${TAIL}`;
+  },
+
   STEAMBOT_STEAMPUNK_CURIO: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, curio, habitat, ornate_flourish } = slots;
     const flourishes = (

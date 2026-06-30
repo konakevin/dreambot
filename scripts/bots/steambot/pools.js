@@ -67,6 +67,7 @@ module.exports = {
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   STEAMBOT_LOOK_REGISTER: load('steambot_look_register'),
+  STEAMBOT_HYBRID_WORLDS: load('steambot_hybrid_worlds'),
   // Slot-pool DNA for sexy-steampunk-woman path (mirrors GothBot pattern)
   STEAMPUNK_WOMEN_ARCHETYPES: load('steampunk_women_archetypes'),
   STEAMPUNK_WOMEN_SKIN: load('steampunk_women_skin'),
