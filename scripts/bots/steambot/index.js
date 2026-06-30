@@ -70,6 +70,50 @@ const STEAMBOT_PAINTED_MAN_STYLE =
 const STEAMBOT_PAINTED_INTERIOR_STYLE =
   'lush oil-painted steampunk-interior illustration, visible painterly brushwork, golden atmospheric warmth, saturated jewel-toned pigment, ornate brass-and-clockwork detail, painted-worldbuilding depth';
 
+// Grounded de-cheesed character medium (A/B test 2026-06-30). Painted feel but
+// NOT the romance-cover register — naturalistic, matte, gritty, documentary.
+// Drops golden-rim-light / jewel-tone / fantasy-cover glamour that made the
+// character paths read as paperback covers.
+const STEAMBOT_GROUNDED_PAINTED_STYLE =
+  'grounded painterly steampunk illustration, naturalistic muted earthy palette, matte finish, lived-in grit and material wear, tactile realistic brass and iron and wood and leather, soft naturalistic directional light, documentary realism in a painted register';
+
+// "Medium Looks" system (2026-06-30) — GothBot/MangaBot pattern. One
+// composition-NEUTRAL medium locks the steampunk-world identity; a per-render
+// LOOK (rolled in rollSharedDNA, prepended in buildBrief) supplies the render
+// style. Replaces the per-path painted-woman/man/interior + hyperreal mediums
+// so the bot rolls a dynamic range of treatments instead of one locked look.
+const STEAMBOT_NEUTRAL_STYLE =
+  'richly detailed steampunk Victorian-industrial imagery — brass, copper, riveted iron, exposed gears, pipework, glass gauges, oiled wood and gaslight, an 1800s world of impossible clockwork engineering; render exactly the scene and composition the brief describes — the art-style, medium, palette and finish are set entirely by the LOOK at the top of the prompt';
+
+// Paths that roll a look (all of them) — routed to steambot_neutral below and
+// receive the look-override in buildBrief.
+const STEAMBOT_LOOK_PATHS = new Set([
+  'steampunk-scene',
+  'airship-skies',
+  'airship-female',
+  'airship-male',
+  'steampunk-curio',
+  'sexy-steampunk-woman',
+  'steampunk-man',
+  'steampunk-spectacle',
+  'steam-transport',
+  'cozy-steampunk',
+  'steampunk-labs',
+]);
+
+// Per-render LOOK override block, prepended to the brief in buildBrief. Strong
+// STYLE-AUTHORITY wording (MangaBot lesson) so it beats any baked style phrase
+// ("lush painted key-art" / "cinematic") still living in a template.
+function lookOverride(look) {
+  if (!look) return '';
+  return `━━━ RENDER LOOK (AUTHORITY — open your Flux prompt with this; render EVERYTHING in this style) ━━━
+${look}
+
+This LOOK is the authority on rendering style. It OVERRIDES any other art-style, medium, palette, or finish wording anywhere below (e.g. "lush painted key-art", "oil-painted", "cinematic painted depth"). Keep the scene content, characters, composition, and every rule exactly as written — but render all of it in THIS look. Open your Flux prompt with these look tokens.
+
+`;
+}
+
 module.exports = {
   username: 'steambot',
   displayName: 'SteamBot',
@@ -78,10 +122,7 @@ module.exports = {
   // flux-2-pro BANNED bot-wide 2026-06-07 (Kevin).
   // nano-banana (google/gemini-2-image) + flux-2-flex BANNED bot-wide
   // 2026-06-12 (Kevin). Lineup is now Flux 1.1 Pro / Pro Ultra + GPT-Image-2.
-  allowedModels: [
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
 
   // modelByPath: per-path bans. Character paths (airship-female/male,
   // sexy-steampunk-woman, steampunk-man) are Flux-only (GPT-2 dropped there
@@ -90,26 +131,20 @@ module.exports = {
     // ── Character paths — Flux 1.1 family only.
     'airship-female': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'airship-male': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
-    'sexy-steampunk-woman': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'sexy-steampunk-woman': [
+      'black-forest-labs/flux-1.1-pro',
+      'black-forest-labs/flux-1.1-pro-ultra',
+    ],
     'steampunk-man': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
-    'steampunk-scene': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'steampunk-scene': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'airship-skies': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
-    'steampunk-curio': [
+    'steampunk-curio': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'steampunk-spectacle': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'steampunk-spectacle': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
-    'steam-transport': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'steampunk-labs': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'steam-transport': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'steampunk-labs': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'cozy-steampunk': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
   },
 
@@ -122,20 +157,13 @@ module.exports = {
   // medium + minimal prefix. Strips the "impossibly-detailed" anchor that pulls
   // it into abstract ornamental plates. (nano-banana entry removed 2026-06-12
   // when the model was banned bot-wide.)
-  cleanMediumByModel: {
-  },
+  cleanMediumByModel: {},
 
-  mediumByPath: {
-    'sexy-steampunk-woman': 'steambot-painted-woman',
-    'steampunk-man': 'steambot-painted-man',
-    'airship-female': 'steambot-painted-woman',
-    'airship-male': 'steambot-painted-man',
-    'cozy-steampunk': 'steambot-painted-interior',
-    // steampunk-labs uses default hyperreal medium — painted-interior medium
-    // drowned the sci-fi mad-science energy with lush atmospheric-Victorian
-    // painter lineage (Parrish/Gurney/Christensen). Hyperreal lets the
-    // glowing experiments + sigils + Tesla arcs come through.
-  },
+  // Looks system (2026-06-30): every look-enabled path routes to the
+  // composition-neutral medium; the per-render LOOK supplies the render style.
+  // (Replaced the per-path painted-woman/man/interior + default-hyperreal
+  // mediums so the bot rolls a dynamic range of treatments.)
+  mediumByPath: Object.fromEntries([...STEAMBOT_LOOK_PATHS].map((p) => [p, 'steambot_neutral'])),
 
   mediumStyles: {
     // gpt-image-2 clean (routed via mediumByModel above). Pulls GPT-Image-2
@@ -143,6 +171,8 @@ module.exports = {
     // anchors trigger. Mirrors mystical-mermaid (2026-06-05).
     steambot_gpt_clean: blocks.GPT_CLEAN,
     'steambot-hyperreal': STEAMBOT_HYPERREAL_STYLE,
+    steambot_neutral: STEAMBOT_NEUTRAL_STYLE,
+    'steambot-grounded-painted': STEAMBOT_GROUNDED_PAINTED_STYLE,
     'steambot-painted-woman': STEAMBOT_PAINTED_WOMAN_STYLE,
     'steambot-painted-man': STEAMBOT_PAINTED_MAN_STYLE,
     'steambot-painted-interior': STEAMBOT_PAINTED_INTERIOR_STYLE,
@@ -154,12 +184,19 @@ module.exports = {
     // the actual register.
     steambot_gpt_clean: 'steampunk Victorian scene',
     'steambot-hyperreal': blocks.PROMPT_PREFIX,
+    // Neutral medium: tight CONTENT-only anchor (no style/palette tokens) so the
+    // rolled LOOK leads the CLIP anchor.
+    steambot_neutral: 'steampunk illustration, Victorian-industrial clockwork machinery',
+    'steambot-grounded-painted':
+      'steampunk scene, brass and copper clockwork machinery, Victorian-industrial, working gaslit atmosphere',
     'steambot-painted-woman': blocks.PROMPT_PREFIX,
     'steambot-painted-man': blocks.PROMPT_PREFIX,
     'steambot-painted-interior': blocks.PROMPT_PREFIX,
   },
   promptSuffixByMedium: {
     'steambot-hyperreal': blocks.PROMPT_SUFFIX,
+    steambot_neutral: blocks.PROMPT_SUFFIX,
+    'steambot-grounded-painted': blocks.PROMPT_SUFFIX,
     'steambot-painted-woman': blocks.PROMPT_SUFFIX,
     'steambot-painted-man': blocks.PROMPT_SUFFIX,
     'steambot-painted-interior': blocks.PROMPT_SUFFIX,
@@ -270,7 +307,12 @@ module.exports = {
     // injecting extra subjects + surreal geometry ("stairs that resolve into
     // nothing") that read as crammed/confusing. Skip chaos on those two.
     skipPaths: ['steampunk-labs', 'steampunk-spectacle'],
-    allowSubjectChaosPaths: ['steampunk-scene', 'airship-skies', 'steampunk-curio', 'steam-transport'],
+    allowSubjectChaosPaths: [
+      'steampunk-scene',
+      'airship-skies',
+      'steampunk-curio',
+      'steam-transport',
+    ],
   },
   twoPassPolish: {
     enabled: true,
@@ -469,26 +511,33 @@ module.exports = {
     return {
       scenePalette: picker.pickWithRecency(pools.SCENE_PALETTES, 'scene_palette'),
       colorPalette: pools.VIBE_COLOR[vibeKey] || pools.VIBE_COLOR.cinematic,
+      lookRegister: picker.pickWithRecency(pools.STEAMBOT_LOOK_REGISTER, 'look_register'),
     };
   },
 
   buildBrief({ path, sharedDNA, vibeDirective, vibeKey, picker }) {
     const builder = pathBuilders[path];
     if (!builder) throw new Error(`SteamBot: unknown path "${path}"`);
+    let brief;
     if (typeof builder === 'function') {
-      return builder({ sharedDNA, vibeDirective, vibeKey, picker });
-    }
-    if (builder && typeof builder === 'object' && builder.archetype) {
+      brief = builder({ sharedDNA, vibeDirective, vibeKey, picker });
+    } else if (builder && typeof builder === 'object' && builder.archetype) {
       const { composeBrief } = require('../../lib/brief-composer');
-      return composeBrief({
+      brief = composeBrief({
         bot: module.exports,
         pathConfig: builder,
         sharedDNA,
         vibeDirective,
         picker,
       });
+    } else {
+      throw new Error(`SteamBot: path "${path}" has invalid export shape`);
     }
-    throw new Error(`SteamBot: path "${path}" has invalid export shape`);
+    // Looks system: prepend the rolled LOOK override on look-enabled paths.
+    if (STEAMBOT_LOOK_PATHS.has(path) && sharedDNA && sharedDNA.lookRegister) {
+      brief = lookOverride(sharedDNA.lookRegister) + brief;
+    }
+    return brief;
   },
 
   caption({ path }) {

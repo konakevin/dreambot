@@ -23,7 +23,20 @@ const TAIL =
 
 module.exports = {
   STEAMBOT_STEAMPUNK_WOMAN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, persona, skin, eyes, makeup, hair_color, hairstyle, outfit, accessory, landscape, action } = slots;
+    const {
+      lighting,
+      atmosphere,
+      persona,
+      skin,
+      eyes,
+      makeup,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+    } = slots;
 
     return `Write ONE cinematic steampunk illustration for SteamBot: a single gorgeous WOMAN caught mid-action inside a fully-realized Victorian-industrial world. Lush painted key-art register (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet). Solo, candid, tasteful — beauty reads through couture craftsmanship and confident poise, never exposed skin.
 
@@ -43,7 +56,20 @@ ${TAIL}`;
   },
 
   STEAMBOT_STEAMPUNK_MAN: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, persona, skin, eyes, facial_hair, hair_color, hairstyle, outfit, accessory, landscape, action } = slots;
+    const {
+      lighting,
+      atmosphere,
+      persona,
+      skin,
+      eyes,
+      facial_hair,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      landscape,
+      action,
+    } = slots;
 
     return `Write ONE cinematic steampunk illustration for SteamBot: a single handsome MAN caught mid-action inside a fully-realized Victorian-industrial world. Lush painted key-art register (BioShock-Infinite / Mortal-Engines / Howl's-Moving-Castle / Treasure-Planet). Solo, candid. Handsome through action and craftsmanship — fully dressed at all times, never seductive, never shirtless.
 
@@ -84,7 +110,9 @@ ${TAIL}`;
 
   STEAMBOT_STEAMPUNK_CURIO: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, curio, habitat, ornate_flourish } = slots;
-    const flourishes = (Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish]).filter(Boolean);
+    const flourishes = (
+      Array.isArray(ornate_flourish) ? ornate_flourish : [ornate_flourish]
+    ).filter(Boolean);
 
     return `Write ONE cinematic steampunk CURIO scene for SteamBot — a single clockwork AUTOMATON (a brass mechanical creature) at rest in a lived-in Victorian-industrial room. The automaton is the hero (40-60% of frame); the room wraps around it. No people, no hands, no faces.
 
@@ -139,9 +167,12 @@ ${TAIL}`;
   },
 
   STEAMBOT_COZY_STEAMPUNK: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } = slots;
+    const { lighting, atmosphere, room, flora, window_view, intricate_detail, quiet_moment } =
+      slots;
     const floraArr = (Array.isArray(flora) ? flora : [flora]).filter(Boolean);
-    const detailArr = (Array.isArray(intricate_detail) ? intricate_detail : [intricate_detail]).filter(Boolean);
+    const detailArr = (
+      Array.isArray(intricate_detail) ? intricate_detail : [intricate_detail]
+    ).filter(Boolean);
 
     const quietLine = quiet_moment
       ? `A small comforting human-trace detail at midground (someone just was here), never eclipsing the room: ${quiet_moment}.\n`
@@ -162,7 +193,8 @@ ${TAIL}`;
   },
 
   STEAMBOT_STEAMPUNK_LABS: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, lab_space, centerpiece, apparatus, electrical, scientist } = slots;
+    const { lighting, atmosphere, lab_space, centerpiece, apparatus, electrical, scientist } =
+      slots;
     const details = (Array.isArray(apparatus) ? apparatus : [apparatus]).filter(Boolean);
 
     const accent = details[0] || '';
@@ -205,7 +237,21 @@ ${TAIL}`;
   },
 
   STEAMBOT_AIRSHIP_FEMALE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, role, skin, face, eyes, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      role,
+      skin,
+      face,
+      eyes,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      action,
+      backdrop,
+      drama,
+    } = slots;
 
     // Role TITLE only (text before the em-dash) — the full role description
     // carries costume language ("impeccable coat", "gold braid epaulettes")
@@ -217,30 +263,44 @@ ${TAIL}`;
       ? `A dramatic environmental event heightening the moment (never replacing her as focal point): ${drama}.\n`
       : '';
 
-    return `Write ONE cinematic AIRSHIP HERO-SHOT for SteamBot — a single, strikingly beautiful young woman OWNING the frame in an iconic, poised moment on or around a steampunk airship. Lush painted movie-poster key-art (Treasure-Planet / Last-Exile / Skies-of-Arcadia). She is gorgeous, confident, and adventurous, the sole focal point (background crew OK if small, mid-distance, faceless).
+    return `Write ONE steampunk illustration for SteamBot — a single young woman working aboard an AETHERIC SKY-AIRSHIP high in the clouds, caught in the MIDDLE OF A REAL MOMENT, the steampunk world alive and deep around her. She is a capable, characterful member of the crew — distinctive and appealing but NOT a glamour model, NOT a posed cover-girl, NOT heavily made-up. She SHARES the frame with her world: a candid working scene with a story playing out, never a triumphant hero-pose, never a portrait against a blurred backdrop.
 
-THE WOMAN — render her face BIG and clear, beautiful and distinct. Do NOT default to a generic brunette; build her EXACTLY from these rolled visual traits and vary her render to render:
+THE WORLD IS A STEAMPUNK AIRSHIP IN THE SKY — riveted brass-and-copper hull, gas-envelope overhead, propellers, exposed gears, pipework, gaslamps, floating among clouds and other airships. This is the open SKY: never an ocean, never water, never a wooden sailing ship on the sea. Spend most of the word budget on this world and the action — not on her face.
+
+THE WOMAN — distinct, built from these rolled visual traits (vary her render to render; never a nationality or ethnicity — visual traits only; natural, not glamorized):
 - Skin: ${skin}.
 - Face: ${face}.
 - Eyes: ${eyes}.
 - Hair: ${hair_color}, ${hairstyle}.
-Never substitute a nationality, ethnicity, or a bare "young/beautiful woman" — describe her through these concrete visual traits only. She/her throughout.
+She/her throughout. She wears ONLY this (never default her into a naval officer's coat or any uniform): ${outfit} — render it faithfully and in full. She carries ${accessory} (rich mechanical detail). Her role/vibe: ${roleTitle}.
 
-WHAT SHE WEARS (her clothing comes ONLY from here — do NOT default her into a naval officer's coat or any uniform unless this line says so): ${outfit}. Render this outfit faithfully and in full, distinct in its own silhouette.
+THE MOMENT (candid, caught mid-task — actively DOING the labor, hands on the work; if the action reads as a heroic flourish, ground it into real crew-work instead): ${action}.
 
-THE MOMENT (the headline — an iconic poised hero-shot, hair caught in the slipstream): ${action}.
-She fills 40-60% of frame, full or three-quarter body, the clear hero of the image. Her role/vibe: ${roleTitle}. She carries ${accessory} (rich mechanical detail).
-On/around a steampunk airship — deck, rigging, brass railing, lived-in and functional.
-THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city beyond, never stealing focus): ${backdrop}.
+HER WORLD does as much storytelling as she does — the working airship rendered with genuine depth and life, in crisp focus front to back: a tactile foreground of brass rail / rigging / deck-gear, the busy deck around her with OTHER CREW at work, ropes, valves, cargo and instruments, and the wider sky beyond — other airships, a cloud sky-port, distant terrain. ${backdrop}.
 ${dramaLine}
-Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
-Three-quarter or dynamic angle, telephoto compression (her crisp, background hazed), movie-poster framing. No text/words/watermarks.
+She fills ~20-30% of the frame, full or three-quarter body, one working figure among a deep steampunk scene — NOT a telephoto close-up, NOT the only thing in focus. Candid three-quarter or dynamic angle, deep focus throughout.
+Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}. No text/words/watermarks.
 
 ${TAIL}`;
   },
 
   STEAMBOT_AIRSHIP_MALE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, role, skin, face, eyes, facial_hair, hair_color, hairstyle, outfit, accessory, action, backdrop, drama } = slots;
+    const {
+      lighting,
+      atmosphere,
+      role,
+      skin,
+      face,
+      eyes,
+      facial_hair,
+      hair_color,
+      hairstyle,
+      outfit,
+      accessory,
+      action,
+      backdrop,
+      drama,
+    } = slots;
 
     // Role TITLE only — the full role description carries costume language that
     // would override the rolled outfit and homogenize every render into one
@@ -251,25 +311,24 @@ ${TAIL}`;
       ? `A dramatic environmental event heightening the moment (never replacing him as focal point): ${drama}.\n`
       : '';
 
-    return `Write ONE cinematic AIRSHIP HERO-SHOT for SteamBot — a single handsome man OWNING the frame in an iconic, poised moment on or around a steampunk airship. Lush painted movie-poster key-art (Treasure-Planet / Last-Exile / Sinbad sky-captain). He is confident and commanding, handsome through poise and craftsmanship — fully dressed at all times, never seductive, never shirtless. He is the sole focal point (background crew OK if small, mid-distance, faceless).
+    return `Write ONE steampunk illustration for SteamBot — a single man working aboard an AETHERIC SKY-AIRSHIP high in the clouds, caught in the MIDDLE OF A REAL MOMENT, the steampunk world alive and deep around him. He is a capable, characterful member of the crew — handsome through competence, fully dressed at all times, never seductive, never shirtless, but NOT a posed prince, NOT a romance-cover hero. He SHARES the frame with his world: a candid working scene with a story playing out, never a triumphant hero-pose, never a portrait against a blurred backdrop.
 
-THE MAN — render his face clear and handsome, distinct render to render. Do NOT default to a generic grizzled sailor; build him EXACTLY from these rolled visual traits:
+THE WORLD IS A STEAMPUNK AIRSHIP IN THE SKY — riveted brass-and-copper hull, gas-envelope overhead, propellers, exposed gears, pipework, gaslamps, floating among clouds and other airships. This is the open SKY: never an ocean, never water, never a wooden sailing ship on the sea. Spend most of the word budget on this world and the action — not on his face.
+
+THE MAN — distinct, built from these rolled visual traits (vary him render to render; never a nationality or ethnicity — visual traits only; natural, not idealized):
 - Skin: ${skin}.
 - Face: ${face}.
 - Eyes: ${eyes.split(',')[0]}.
 - Facial hair: ${facial_hair}.
 - Hair: ${hair_color}, ${hairstyle}.
-Never substitute a nationality, ethnicity, or a bare "young/handsome man" — describe him through these concrete visual traits only. He/his throughout, no women.
+He/his throughout, no women. He wears ONLY this (never default him into a naval officer's coat or any uniform): ${outfit} — render it faithfully and in full. He carries ${accessory} (rich mechanical detail). His role/vibe: ${roleTitle}.
 
-WHAT HE WEARS (his clothing comes ONLY from here — do NOT default him into a naval officer's coat or any uniform unless this line says so): ${outfit}. Render this outfit faithfully and in full, distinct in its own silhouette.
+THE MOMENT (candid, caught mid-task — actively DOING the labor, hands on the work; if the action reads as a heroic flourish, ground it into real crew-work instead): ${action}.
 
-THE MOMENT (the headline — an iconic poised hero-shot, hair caught in the slipstream): ${action}.
-He fills 40-60% of frame, full or three-quarter body, the clear hero of the image. His role/vibe: ${roleTitle}. He carries ${accessory} (rich mechanical detail).
-On/around a steampunk airship — deck, rigging, brass railing, lived-in and functional.
-THE BACKDROP (distant, atmospheric — sky/clouds/terrain/city beyond, never stealing focus): ${backdrop}.
+HIS WORLD does as much storytelling as he does — the working airship rendered with genuine depth and life, in crisp focus front to back: a tactile foreground of brass rail / rigging / deck-gear, the busy deck around him with OTHER CREW at work, ropes, valves, cargo and instruments, and the wider sky beyond — other airships, a cloud sky-port, distant terrain. ${backdrop}.
 ${dramaLine}
-Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
-Three-quarter or dynamic angle, telephoto compression (him crisp, background hazed), movie-poster framing. No text/words/watermarks.
+He fills ~20-30% of the frame, full or three-quarter body, one working figure among a deep steampunk scene — NOT a telephoto close-up, NOT the only thing in focus. Candid three-quarter or dynamic angle, deep focus throughout.
+Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}. No text/words/watermarks.
 
 ${TAIL}`;
   },
