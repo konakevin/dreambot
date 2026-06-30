@@ -122,7 +122,16 @@ module.exports = {
           scheme: `fb${FB_APP_ID}`,
         },
       ],
-      'expo-build-properties',
+      [
+        'expo-build-properties',
+        {
+          // Min iOS 16.0 — aligns the supported floor with the responsive
+          // design floor (375pt / iPhone SE 2nd-3rd gen). Drops 2015-2016
+          // hardware (iPhone 6s/7/SE-1st-gen = 320pt wide), which is below the
+          // scale engine's design base anyway. Default would be 15.1.
+          ios: { deploymentTarget: '16.0' },
+        },
+      ],
       // Generate module maps for GoogleUtilities + RecaptchaInterop so the Swift
       // pod AppCheckCore (pulled in by @react-native-google-signin) integrates as
       // a static library. See plugins/withGoogleModularHeaders.js for the why.
