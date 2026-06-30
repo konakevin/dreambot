@@ -163,7 +163,7 @@ const ALL_PATHS = [...EARTH_PATHS, ...BEACH_PATHS];
 //   - "gallery-quality" / "masterpiece" → AI-generation tells (per cruft
 //     audit memory entry: "stacked generic intensifiers burn attention
 //     budget on zero semantic content")
-const EARTH_PREFIX = 'landscape photograph';
+const EARTH_PREFIX = 'fine-art landscape photograph'; // 2026-06-30 fine-art embellishment (was 'landscape photograph')
 // Suffix scrubbed of "no humans / no people" (2026-05-23) — Flux's CLIP/T5
 // tokenizer attends to the words "humans" / "people" regardless of the
 // preceding "no" and was rendering people silhouettes into landscape
@@ -178,7 +178,7 @@ const EARTH_SUFFIX = 'uninhabited landscape, no text, no watermarks';
 // toward day). Deliberately does NOT enumerate moon/stars/aurora (first-named-
 // noun lock); the night_sky axis carries the specific look. EARTH_SUFFIX applies.
 const NIGHT_LANDSCAPES_PREFIX = 'nightscape photograph, a beautiful real Earth landscape at night';
-const BEACH_PREFIX = 'tropical coastal photograph';
+const BEACH_PREFIX = 'fine-art tropical coastal photograph'; // 2026-06-30 fine-art embellishment (was 'tropical coastal photograph')
 const BEACH_SUFFIX = 'uninhabited coast, no text, no watermarks';
 // 2026-06-02 — Reef-paradise bespoke prefix. BEACH_PREFIX + the
 // earthbot_photography medium were collectively pulling reef-paradise into
@@ -264,7 +264,7 @@ module.exports = {
   // (is_active: false, is_bot_only: true) — never exposed to user pickers.
   // Its flux_fragment in the DB IS the override; no mediumStyles entry
   // needed since there's no DB fragment to replace.
-  defaultMedium: 'earthbot_photography',
+  defaultMedium: 'earthbot_wow', // 2026-06-30 — bold wow/lush 'fantastical but physics-bound' medium (replaced earthbot_photography; Kevin wanted prettier, higher-wow shots)
 
   // Bot-level prefix/suffix kept empty so the per-path overrides below
   // are the SOLE prefix/suffix sources. Engine prepends promptPrefixByPath
