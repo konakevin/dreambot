@@ -25,6 +25,7 @@ describe('detectSelfInsert', () => {
     "I'd love to be in space",
     "I've always dreamed of castles",
     'my face in a painting',
+    'my hair flowing in the wind',
     'make me a wizard',
     'make me into a superhero',
     'make me look like a knight',
@@ -34,6 +35,9 @@ describe('detectSelfInsert', () => {
     'show my friend at the beach',
     'my partner and I at the beach',
     'me and my dog hiking',
+    // Standalone plus-one jargon (no "my" required — the app's own term)
+    'me and +1 at the beach',
+    'plus one on a rooftop in tokyo',
   ];
 
   it.each(truePositives)('detects self-insert: "%s"', (prompt) => {
@@ -52,6 +56,16 @@ describe('detectSelfInsert', () => {
     'a partner dancing in moonlight',
     'dog running through a park',
     'the husband and wife portrait',
+    // Generic "my [object]" possessives are NOT self-inserts (2026-07-01 —
+    // the old catch-all cast the user for these, and even for a bare "My"
+    // mid-typing, which made the Create screen's live face lamp look broken)
+    'My',
+    'My annoying car in the sun',
+    'my car parked outside a diner',
+    'my childhood home in autumn',
+    // "mine" the noun is scenery, not the user
+    'a diamond mine at dusk',
+    'an abandoned mine shaft full of crystals',
   ];
 
   it.each(falsePositives)('does NOT detect self-insert: "%s"', (prompt) => {
@@ -141,6 +155,32 @@ describe('detectSelfInsert', () => {
       expect(result.referencedRoles.has('self')).toBe(false);
     });
 
+    // Descriptor words between "my" and the noun (2026-07-01: "my sexy wife
+    // in hawaii" detected NOTHING — the pattern required the noun immediately
+    // after "my").
+    it('"my sexy wife in hawaii" → plus_one only', () => {
+      const result = detectSelfInsert('my sexy wife in hawaii');
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+      expect(result.referencedRoles.has('self')).toBe(false);
+    });
+
+    it('"my absolutely gorgeous girlfriend at sunset" → plus_one only', () => {
+      const result = detectSelfInsert('my absolutely gorgeous girlfriend at sunset');
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+      expect(result.referencedRoles.has('self')).toBe(false);
+    });
+
+    it('"my fluffy dog on a surfboard" → pet only', () => {
+      const result = detectSelfInsert('my fluffy dog on a surfboard');
+      expect(result.referencedRoles.has('pet')).toBe(true);
+      expect(result.referencedRoles.has('self')).toBe(false);
+    });
+
+    it('"my beautiful long hair flowing" → self (descriptored self-part)', () => {
+      const result = detectSelfInsert('my beautiful long hair flowing');
+      expect(result.referencedRoles.has('self')).toBe(true);
+    });
+
     // ── "plus one" / "+1" — the app's OWN term for the second cast member.
     //    Regression: these used to fall through MY_SELF and cast SELF instead.
     it.each([
@@ -159,6 +199,17 @@ describe('detectSelfInsert', () => {
       const result = detectSelfInsert('my plus one and I in tokyo');
       expect(result.referencedRoles.has('self')).toBe(true);
       expect(result.referencedRoles.has('plus_one')).toBe(true);
+    });
+
+    it('"me and +1 at the beach" → self + plus_one (standalone +1, no "my")', () => {
+      const result = detectSelfInsert('me and +1 at the beach');
+      expect(result.referencedRoles.has('self')).toBe(true);
+      expect(result.referencedRoles.has('plus_one')).toBe(true);
+    });
+
+    it('"5+1 dragons" does NOT read the +1 as a plus-one', () => {
+      const result = detectSelfInsert('5+1 dragons flying in formation');
+      expect(result.referencedRoles.has('plus_one')).toBe(false);
     });
   });
 
@@ -207,6 +258,19 @@ describe('detectSelfInsert', () => {
     const result = detectSelfInsert('my dog at the park');
     expect(result.cleanedPrompt).toContain('a pet');
     expect(result.cleanedPrompt).not.toMatch(/\bdog\b/i);
+  });
+
+  it('cleans a standalone "+1" to "a companion" (no raw token leaks to the model)', () => {
+    const result = detectSelfInsert('me and +1 at the beach');
+    expect(result.cleanedPrompt).toContain('a companion');
+    expect(result.cleanedPrompt).not.toContain('+1');
+  });
+
+  it('keeps the descriptor when cleaning "my sexy wife" → "a sexy companion"', () => {
+    const result = detectSelfInsert('my sexy wife in hawaii');
+    expect(result.cleanedPrompt).toContain('a sexy companion');
+    expect(result.cleanedPrompt).not.toMatch(/\bwife\b/i);
+    expect(result.cleanedPrompt).toContain('hawaii');
   });
 
   it('cleans "my face" with generic possessive', () => {

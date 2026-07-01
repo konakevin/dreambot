@@ -219,6 +219,8 @@ export async function restylePhoto(opts: {
   hint?: string;
   vibeProfile?: VibeProfile;
   jobId?: string;
+  /** Restyle-scoped model pick (Kontext / NB Pro) — priced by the server. */
+  forceModel?: string;
 }): Promise<GenerateDreamResult> {
   const t0 = Date.now();
   if (__DEV__) {
@@ -238,6 +240,7 @@ export async function restylePhoto(opts: {
       hint: opts.hint,
       vibe_profile: opts.vibeProfile,
       job_id: opts.jobId,
+      force_model: opts.forceModel,
     },
   });
 

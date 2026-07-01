@@ -12,6 +12,7 @@
     "services/**",
     "scripts/qa-nightly-coherence.ts",
     "__tests__/lib/selfInsertDetector.test.ts",
+    "__tests__/lib/selfInsertParity.test.ts",
     "__tests__/lib/renderEntity.test.ts",
     "__tests__/lib/sanitize.test.ts",
     "__tests__/lib/sanitizeUserText.test.ts",

@@ -10,7 +10,7 @@
  * One screen, one button: "Dream ✨"
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useFocusEffect } from 'expo-router';
 
 import {
@@ -37,6 +37,7 @@ import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, useDeviceClass, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { hasAiConsent } from '@/lib/aiConsent';
+import { detectCastRoles } from '@/lib/selfInsertDetect';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
@@ -45,6 +46,11 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { ModelPicker } from '@/components/ModelPicker';
+import {
+  RestyleModelPicker,
+  DEFAULT_RESTYLE_MODEL_ID,
+  restyleSparkleCost,
+} from '@/components/RestyleModelPicker';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 import { showAlert } from '@/components/CustomAlert';
@@ -132,13 +138,12 @@ export default function CreateScreen() {
   // tab bar when the keyboard is closed — offset it up by exactly this much.
   const tabBarHeight = useBottomTabBarHeight();
 
-  // The chosen model is forced for BOTH routes: Direct sends the prompt verbatim
-  // to it; DreamBot runs the full engine (mediums/vibes/face-swap) and renders
-  // with it. The server charges getSparkleCost(force_model), so the cost is the
-  // model's tier (1–5) regardless of route — matching the Dream button below.
-  useEffect(() => {
-    setForceModel(selectedModelId);
-  }, [selectedModelId, setForceModel]);
+  // Restyle-scoped model pick (Kontext default / Nano Banana Pro) — separate
+  // state from selectedModelId ON PURPOSE: restyle is img2img with its own
+  // 2-model catalog, and its pick must never overwrite the user's main model.
+  // The force_model effect below (after isRestyle resolves) routes whichever
+  // pick applies to the store.
+  const [restyleModelId, setRestyleModelId] = useState(DEFAULT_RESTYLE_MODEL_ID);
 
   // The Create-screen pickers used to filter their options down to the
   // user's onboarding-curated aesthetics + art_styles via a `userFilter`
@@ -340,6 +345,15 @@ export default function CreateScreen() {
   // ones go uncanny). It's an explicit pick (no Surprise Me). New Scene shows the
   // full catalog.
   const isRestyle = hasPhoto && config.photoStyle === 'restyle';
+  // Pool-managed restyle mediums (LEGO / Vinyl): they run the flux-dev rebuild
+  // path with a curated Flux pool (client_meta.restyle_models, migration 301)
+  // because Kontext can't reshape a head into a minifigure — no model choice
+  // there, so the restyle picker hides and no force_model is sent.
+  const restyleMeta = isRestyle
+    ? dbMediums.find((m) => m.key === config.selectedMedium)?.client_meta
+    : null;
+  const restylePoolManaged =
+    Array.isArray(restyleMeta?.restyle_models) && restyleMeta.restyle_models.length > 0;
   const restyleMediums = dbMediums.filter((m) => m.client_meta?.restyle_enabled === true);
   const mediumOptions = isRestyle
     ? restyleMediums
@@ -369,14 +383,28 @@ export default function CreateScreen() {
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
   // This dream's sparkle cost — shown on the Dream button AND next to the model
-  // name in the collapsed summary so the price is always visible. Restyle ignores
-  // the model picker and is charged the flat BASE cost server-side (it never sends
-  // a force_model), so the gate/label must use the base cost too — otherwise a
-  // user with a high-tier model still selected would be over-blocked on a restyle
-  // that only costs 1.
+  // name in the collapsed summary so the price is always visible. Restyle
+  // charges by ITS OWN picked model (Kontext 1 / NB Pro 5, sent as force_model
+  // — enqueue-dream prices getSparkleCost(force_model)); pool-managed restyle
+  // mediums (LEGO/Vinyl) send no force_model and stay at the flat base cost.
   const sparkleCost = isRestyle
-    ? engineConfig.baseSparkleCost
+    ? restylePoolManaged
+      ? engineConfig.baseSparkleCost
+      : restyleSparkleCost(restyleModelId)
     : sparkleCostFrom(imageModels, selectedModelId);
+  // The forced model routes by mode: Restyle sends the restyle-scoped pick
+  // (Kontext / NB Pro; nothing for pool-managed LEGO/Vinyl, which keep their
+  // curated Flux pool), everything else sends the main picker's model. The
+  // server charges getSparkleCost(force_model), so the cost is the model's
+  // tier — matching the Dream button.
+  useEffect(() => {
+    if (isRestyle) {
+      setForceModel(restylePoolManaged ? null : restyleModelId);
+    } else {
+      setForceModel(selectedModelId);
+    }
+  }, [isRestyle, restylePoolManaged, restyleModelId, selectedModelId, setForceModel]);
+
   // Collapse the model + medium/vibe controls into a one-line summary while the
   // keyboard is up — keeps the selected medium/vibe visible and the Dream CTA one
   // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
@@ -394,6 +422,30 @@ export default function CreateScreen() {
   const mediumFaceSwaps = isSurpriseMedium
     ? config.selectedMedium === 'surprise_me_face'
     : (selectedMediumRow?.face_swaps ?? true);
+  // Live cast detection on the prompt — powers the face lamp on the Medium
+  // label. Client mirror of the engine's detector (lib/selfInsertDetect.ts)
+  // fed the same live-tunable engine_config word lists, so the indicator and
+  // the render agree on what counts as a self-reference.
+  const promptCastRoles = useMemo(
+    () =>
+      detectCastRoles(config.userPrompt, {
+        relationshipWords: engineConfig.relationshipWords,
+        petWords: engineConfig.petWords,
+        selfRefRegex: engineConfig.selfRefRegex,
+      }),
+    [
+      config.userPrompt,
+      engineConfig.relationshipWords,
+      engineConfig.petWords,
+      engineConfig.selfRefRegex,
+    ]
+  );
+  // The indicator is a FACE lamp: pets are cast-injected but not face-swapped,
+  // so a pet-only reference ("my dog camping") stays gray. New Scene photo
+  // dreams always cast the uploaded photo's face. Direct/Restyle never swap
+  // (the icon's container renders only for engine dreams, so it's hidden there).
+  const faceCastDetected = promptCastRoles.has('self') || promptCastRoles.has('plus_one');
+  const faceSwapLit = hasPhoto ? config.photoStyle === 'new_scene' : faceCastDetected;
 
   // Placeholder text. Mode-dependent: Direct (use_exact_prompt) sends the prompt
   // verbatim to the model with NO transforms on our side — no face swap — so it
@@ -810,11 +862,23 @@ export default function CreateScreen() {
               engine: any model can render a raw (Direct) prompt, a full DreamBot
               dream, OR a New Scene photo dream (your uploaded face is swapped
               onto a scene the chosen model renders — model-agnostic, like the
-              cast photos). Hidden ONLY for Restyle, which is a Kontext img2img
-              transform of the photo itself and needs an edit-capable model. */}
+              cast photos). Hidden ONLY for Restyle, which is a img2img
+              transform of the photo itself and gets its OWN edit-capable
+              picker below. */}
             {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
               <View className="mb-4">
                 <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
+              </View>
+            )}
+
+            {/* Restyle model picker — Kontext (default, 1✦) vs Nano Banana Pro
+              (5✦, strongest likeness). Separate from the main picker: img2img
+              models only, own sticky pick, never touches the main model.
+              Hidden for pool-managed mediums (LEGO/Vinyl — flux-dev rebuild
+              path with a curated pool, no choice to make). */}
+            {isRestyle && !restylePoolManaged && !collapsed && (
+              <View className="mb-4">
+                <RestyleModelPicker onChange={setRestyleModelId} />
               </View>
             )}
 
@@ -1031,12 +1095,38 @@ export default function CreateScreen() {
             {!effectiveExactPrompt && !collapsed && (
               <View className="flex-row gap-3 mb-4">
                 <View className="flex-1">
-                  <Text
-                    className="text-xs font-medium mb-1.5 ml-1"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    Medium
-                  </Text>
+                  <View className="flex-row items-center mb-1.5 ml-1">
+                    <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
+                      Medium
+                    </Text>
+                    {/* Live face-swap lamp. Gray = no cast reference in the
+                      prompt; lit = this dream casts YOU, colored by the medium
+                      family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
+                      colors from the medium picker). New Scene photo dreams are
+                      always lit. Hidden for Restyle (img2img — never swaps; the
+                      Direct case is already excluded by this section's guard).
+                      Tap opens the face-vs-art teaching sheet. */}
+                    {!isRestyle && (
+                      <TouchableOpacity
+                        onPress={handleModeInfo}
+                        activeOpacity={0.7}
+                        hitSlop={10}
+                        className="ml-1.5"
+                      >
+                        <Ionicons
+                          name={faceSwapLit ? 'happy' : 'happy-outline'}
+                          size={15}
+                          color={
+                            faceSwapLit
+                              ? mediumFaceSwaps
+                                ? MEDIUM_BADGE.face.color
+                                : MEDIUM_BADGE.art.color
+                              : (colors.textMuted ?? colors.textSecondary)
+                          }
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
                   <TouchableOpacity
                     className="flex-row items-center justify-between px-4 py-3 rounded-xl"
                     style={{

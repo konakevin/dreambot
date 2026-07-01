@@ -242,6 +242,10 @@ export function useDreamCreate() {
             // prompt box in this state to make the contract obvious.
             if (DREAM_QUEUE_ENABLED) {
               // photo_style:'restyle' routes the queue dispatcher to restyle-photo.
+              // force_model = the restyle-scoped pick (Kontext / NB Pro) — the
+              // server charges getSparkleCost(force_model), so NB Pro restyles
+              // bill their real 5✦ tier. Pool-managed mediums (LEGO/Vinyl)
+              // leave it null and keep their curated pool + flat base cost.
               await enqueueDream({
                 mode: 'flux-kontext',
                 photo_style: 'restyle',
@@ -250,6 +254,7 @@ export function useDreamCreate() {
                 vibe_key: config.selectedVibe ?? 'cinematic',
                 vibe_profile: vibeProfile ?? undefined,
                 job_id: jobId,
+                force_model: config.forceModel ?? undefined,
               });
               return 'queued';
             }
@@ -259,6 +264,7 @@ export function useDreamCreate() {
               vibeKey: config.selectedVibe ?? 'cinematic',
               vibeProfile: vibeProfile ?? undefined,
               jobId,
+              forceModel: config.forceModel ?? undefined,
             });
           }
         } else {
