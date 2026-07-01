@@ -31,6 +31,7 @@ import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
+import { PostActionSheet } from '@/components/PostActionSheet';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
@@ -159,57 +160,55 @@ export default function EditProfileScreen() {
     };
   }, []);
 
+  // Profile-picture source picker — slide-up action sheet (same sheet the
+  // profile tab uses for its avatar), replacing the old alert menu.
+  const [photoSheetOpen, setPhotoSheetOpen] = useState(false);
+
+  async function chooseFromLibrary() {
+    // No allowsEditing → iOS uses the modern PHPicker: faster to open and
+    // needs no library-permission prompt (the avatar renders cover-cropped
+    // in a circle, so a square crop step isn't needed). Loop so "Choose
+    // another" in the confirm re-opens the picker.
+    for (;;) {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.8,
+      });
+      if (result.canceled || !result.assets[0]) return;
+      const choice = await showAvatarConfirm(result.assets[0].uri);
+      if (choice === 'use') {
+        uploadAvatar(result.assets[0].uri);
+        return;
+      }
+      if (choice === 'cancel') return;
+      // 'retry' → loop, re-open the picker
+    }
+  }
+
+  async function takePhoto() {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      showAlert('Permission needed', 'Allow camera access in Settings.');
+      return;
+    }
+    // Loop so "Choose another" in the confirm re-opens the camera.
+    for (;;) {
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 0.8,
+      });
+      if (result.canceled || !result.assets[0]) return;
+      const choice = await showAvatarConfirm(result.assets[0].uri);
+      if (choice === 'use') {
+        uploadAvatar(result.assets[0].uri);
+        return;
+      }
+      if (choice === 'cancel') return;
+      // 'retry' → loop, re-open the camera
+    }
+  }
+
   function handleChangePhoto() {
-    showAlert('Profile picture', '', [
-      {
-        text: 'Choose from library',
-        onPress: async () => {
-          // No allowsEditing → iOS uses the modern PHPicker: faster to open and
-          // needs no library-permission prompt (the avatar renders cover-cropped
-          // in a circle, so a square crop step isn't needed). Loop so "Choose
-          // another" in the confirm re-opens the picker.
-          for (;;) {
-            const result = await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ['images'],
-              quality: 0.8,
-            });
-            if (result.canceled || !result.assets[0]) return;
-            const choice = await showAvatarConfirm(result.assets[0].uri);
-            if (choice === 'use') {
-              uploadAvatar(result.assets[0].uri);
-              return;
-            }
-            if (choice === 'cancel') return;
-            // 'retry' → loop, re-open the picker
-          }
-        },
-      },
-      {
-        text: 'Take photo',
-        onPress: async () => {
-          const { status } = await ImagePicker.requestCameraPermissionsAsync();
-          if (status !== 'granted') {
-            showAlert('Permission needed', 'Allow camera access in Settings.');
-            return;
-          }
-          // Loop so "Choose another" in the confirm re-opens the camera.
-          for (;;) {
-            const result = await ImagePicker.launchCameraAsync({
-              quality: 0.8,
-            });
-            if (result.canceled || !result.assets[0]) return;
-            const choice = await showAvatarConfirm(result.assets[0].uri);
-            if (choice === 'use') {
-              uploadAvatar(result.assets[0].uri);
-              return;
-            }
-            if (choice === 'cancel') return;
-            // 'retry' → loop, re-open the camera
-          }
-        },
-      },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
+    setPhotoSheetOpen(true);
   }
 
   return (
@@ -328,6 +327,29 @@ export default function EditProfileScreen() {
           </View>
         </View>
       </KeyboardAwareScrollView>
+
+      <PostActionSheet
+        visible={photoSheetOpen}
+        onClose={() => setPhotoSheetOpen(false)}
+        title="Profile picture"
+        titleImageUrl={profile?.avatar_url ?? null}
+        rows={[
+          {
+            key: 'library',
+            label: 'Choose from library',
+            icon: 'images-outline',
+            group: 'primary',
+            onPress: () => void chooseFromLibrary(),
+          },
+          {
+            key: 'camera',
+            label: 'Take photo',
+            icon: 'camera-outline',
+            group: 'primary',
+            onPress: () => void takePhoto(),
+          },
+        ]}
+      />
     </SafeAreaView>
   );
 }

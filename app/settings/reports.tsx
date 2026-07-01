@@ -7,7 +7,7 @@
  * accurate. Server-guarded by is_admin in every RPC (migrations 313/314); this
  * screen is also client-gated.
  */
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
@@ -15,6 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { showAlert } from '@/components/CustomAlert';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import type { PostActionRow } from '@/lib/imageLongPress';
 import { Toast } from '@/components/Toast';
 import * as nav from '@/lib/navigate';
 import { supabase } from '@/lib/supabase';
@@ -76,51 +78,96 @@ export default function AdminReportsScreen() {
     nav.push(`/photo/${data.upload_id}`);
   }, []);
 
-  const openActions = useCallback(
-    (r: AdminReport) => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const buttons: { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void }[] = [
-        { text: 'Cancel', style: 'cancel' },
-      ];
+  // Report actions — slide-up action sheet (same pattern as the post
+  // long-press), replacing the old alert-button menu. Ban keeps its explicit
+  // confirm alert.
+  const [actionReport, setActionReport] = useState<AdminReport | null>(null);
+
+  const openActions = useCallback((r: AdminReport) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setActionReport(r);
+  }, []);
+
+  const rowsFor = useCallback(
+    (r: AdminReport): PostActionRow[] => {
+      const rows: PostActionRow[] = [];
 
       // 1) Jump to the reported content for context. Posts link straight to the
       //    post; comments link to the post they live on (look-up required).
       if (r.target_kind === 'post' && r.upload_id) {
-        buttons.push({ text: 'Go to post', onPress: () => nav.push(`/photo/${r.upload_id}`) });
+        rows.push({
+          key: 'goto-post',
+          label: 'Go to post',
+          icon: 'image-outline',
+          group: 'primary',
+          onPress: () => nav.push(`/photo/${r.upload_id}`),
+        });
       } else if (r.target_kind === 'comment' && r.comment_id) {
-        buttons.push({ text: 'Go to post', onPress: () => goToCommentPost(r.comment_id!) });
+        rows.push({
+          key: 'goto-post',
+          label: 'Go to post',
+          icon: 'image-outline',
+          group: 'primary',
+          onPress: () => void goToCommentPost(r.comment_id!),
+        });
       }
 
       // 2) Jump to the target user's profile (post/comment author, or the
       //    reported user) — useful for every report kind.
       if (r.target_user_id) {
-        buttons.push({
-          text: 'Go to profile',
+        rows.push({
+          key: 'goto-profile',
+          label: 'Go to profile',
+          icon: 'person-outline',
+          group: 'primary',
           onPress: () => nav.push(`/user/${r.target_user_id}`),
         });
       }
 
+      rows.push({
+        key: 'dismiss',
+        label: 'Dismiss (no action)',
+        icon: 'checkmark-circle-outline',
+        group: 'primary',
+        onPress: () => {
+          actions
+            .resolve(r.id, 'dismissed')
+            .then(() => Toast.show('Report dismissed', 'checkmark-circle'))
+            .catch(() => Toast.show('Failed', 'close-circle'));
+        },
+      });
+
       // 3) Destructive moderation.
       if (r.target_kind === 'post' && r.upload_id) {
-        buttons.push({
-          text: 'Delete post',
-          style: 'destructive',
-          onPress: () => runAction(() => actions.deleteUpload(r.upload_id!), r, 'Post deleted'),
+        rows.push({
+          key: 'delete-post',
+          label: 'Delete post',
+          icon: 'trash-outline',
+          group: 'danger',
+          destructive: true,
+          onPress: () =>
+            void runAction(() => actions.deleteUpload(r.upload_id!), r, 'Post deleted'),
         });
       }
       if (r.target_kind === 'comment' && r.comment_id) {
-        buttons.push({
-          text: 'Delete comment',
-          style: 'destructive',
+        rows.push({
+          key: 'delete-comment',
+          label: 'Delete comment',
+          icon: 'trash-outline',
+          group: 'danger',
+          destructive: true,
           onPress: () =>
-            runAction(() => actions.deleteComment(r.comment_id!), r, 'Comment deleted'),
+            void runAction(() => actions.deleteComment(r.comment_id!), r, 'Comment deleted'),
         });
       }
 
       if (r.target_user_id && !r.target_user_banned) {
-        buttons.push({
-          text: `Ban @${r.target_username ?? 'user'}`,
-          style: 'destructive',
+        rows.push({
+          key: 'ban',
+          label: `Ban @${r.target_username ?? 'user'}`,
+          icon: 'ban-outline',
+          group: 'danger',
+          destructive: true,
           onPress: () =>
             showAlert(
               `Ban @${r.target_username ?? 'this user'}?`,
@@ -131,28 +178,14 @@ export default function AdminReportsScreen() {
                   text: 'Ban user',
                   style: 'destructive',
                   onPress: () =>
-                    runAction(() => actions.banUser(r.target_user_id!), r, 'User banned'),
+                    void runAction(() => actions.banUser(r.target_user_id!), r, 'User banned'),
                 },
               ]
             ),
         });
       }
 
-      buttons.push({
-        text: 'Dismiss (no action)',
-        onPress: () => {
-          actions
-            .resolve(r.id, 'dismissed')
-            .then(() => Toast.show('Report dismissed', 'checkmark-circle'))
-            .catch(() => Toast.show('Failed', 'close-circle'));
-        },
-      });
-
-      showAlert(
-        'Report actions',
-        `${reasonLabel(r.reason)} · reported by @${r.reporter_username ?? 'someone'}`,
-        buttons
-      );
+      return rows;
     },
     [actions, runAction, goToCommentPost]
   );
@@ -234,6 +267,18 @@ export default function AdminReportsScreen() {
           ItemSeparatorComponent={() => <View style={styles.sep} />}
         />
       )}
+
+      <PostActionSheet
+        visible={!!actionReport}
+        onClose={() => setActionReport(null)}
+        title={
+          actionReport
+            ? `${reasonLabel(actionReport.reason)} · reported by @${actionReport.reporter_username ?? 'someone'}`
+            : undefined
+        }
+        titleImageUrl={actionReport?.upload_image_url ?? null}
+        rows={actionReport ? rowsFor(actionReport) : []}
+      />
     </ScreenLayout>
   );
 }

@@ -44,6 +44,8 @@ import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import { avatarUrl } from '@/lib/imageUrl';
 import { trackProfileViewed } from '@/lib/analytics';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
@@ -185,71 +187,32 @@ export default function PublicProfileScreen() {
     ]);
   }
 
-  function handleMoreMenu() {
-    showAlert('Options', '', [
+  // "⋯" options — slide-up action sheet (same pattern as the post long-press),
+  // replacing the old stacked-alert menu. Block keeps its explicit confirm
+  // alert; Report opens a second sheet with the reason list.
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+
+  function confirmBlock() {
+    showAlert('Block User?', "They won't be able to see your posts or contact you.", [
+      { text: 'Cancel', style: 'cancel' },
       {
-        text: isBlocked ? 'Unblock User' : 'Block User',
-        style: isBlocked ? 'default' : 'destructive',
-        onPress: () => {
-          if (isBlocked) {
-            handleUnblock();
-          } else {
-            showAlert('Block User?', "They won't be able to see your posts or contact you.", [
-              { text: 'Cancel', style: 'cancel' },
-              {
-                text: 'Block',
-                style: 'destructive',
-                onPress: () => {
-                  // Navigate away only here — after the explicit Block confirm.
-                  // Report is its own menu item, so no "report too?" follow-up.
-                  toggleBlock({ userId, currentlyBlocked: false });
-                  router.replace('/(tabs)');
-                },
-              },
-            ]);
-          }
-        },
-      },
-      {
-        text: 'Report User',
+        text: 'Block',
         style: 'destructive',
         onPress: () => {
-          showAlert('Report User', 'Why are you reporting this user?', [
-            {
-              text: 'Spam',
-              style: 'destructive',
-              onPress: () => {
-                report({ reason: 'spam', reportedUserId: userId });
-                showAlert('Reported', 'Thanks for letting us know.', [
-                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
-                ]);
-              },
-            },
-            {
-              text: 'Harassment',
-              style: 'destructive',
-              onPress: () => {
-                report({ reason: 'harassment', reportedUserId: userId });
-                showAlert('Reported', 'Thanks for letting us know.', [
-                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
-                ]);
-              },
-            },
-            {
-              text: 'Inappropriate',
-              style: 'destructive',
-              onPress: () => {
-                report({ reason: 'inappropriate', reportedUserId: userId });
-                showAlert('Reported', 'Thanks for letting us know.', [
-                  { text: 'OK', onPress: () => router.replace('/(tabs)') },
-                ]);
-              },
-            },
-            { text: 'Cancel', style: 'cancel' },
-          ]);
+          // Navigate away only here — after the explicit Block confirm.
+          // Report is its own menu item, so no "report too?" follow-up.
+          toggleBlock({ userId, currentlyBlocked: false });
+          router.replace('/(tabs)');
         },
       },
-      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
+
+  function sendReport(reason: 'spam' | 'harassment' | 'inappropriate') {
+    report({ reason, reportedUserId: userId });
+    showAlert('Reported', 'Thanks for letting us know.', [
+      { text: 'OK', onPress: () => router.replace('/(tabs)') },
     ]);
   }
 
@@ -383,7 +346,7 @@ export default function PublicProfileScreen() {
         onMessagePress={() => {
           /* TODO: DM flow once it ships — silent no-op for now */
         }}
-        onMorePress={handleMoreMenu}
+        onMorePress={() => setMoreOpen(true)}
       />
       {/* Posts / Reposts icon toggle — own profile only. On every other
           profile (bots and regular users) we only show their public posts,
@@ -503,6 +466,75 @@ export default function PublicProfileScreen() {
     </Modal>
   ) : null;
 
+  // Both sheets render as inline overlays at the screen root (both return
+  // paths). The report sheet opens from the options sheet's Report row —
+  // PostActionSheet runs a row's onPress after its own dismissal, so the
+  // second sheet springs up cleanly.
+  const moreSheets = (
+    <>
+      <PostActionSheet
+        visible={moreOpen}
+        onClose={() => setMoreOpen(false)}
+        title={profile ? `@${profile.username}` : undefined}
+        titleImageUrl={profile?.avatar_url ? avatarUrl(profile.avatar_url) : null}
+        rows={[
+          isBlocked
+            ? {
+                key: 'unblock',
+                label: 'Unblock user',
+                icon: 'lock-open-outline',
+                group: 'primary',
+                onPress: handleUnblock,
+              }
+            : {
+                key: 'block',
+                label: 'Block user',
+                icon: 'ban-outline',
+                group: 'danger',
+                destructive: true,
+                onPress: confirmBlock,
+              },
+          {
+            key: 'report',
+            label: 'Report user',
+            icon: 'flag-outline',
+            group: 'danger',
+            destructive: true,
+            onPress: () => setReportOpen(true),
+          },
+        ]}
+      />
+      <PostActionSheet
+        visible={reportOpen}
+        onClose={() => setReportOpen(false)}
+        title="Why are you reporting this user?"
+        rows={[
+          {
+            key: 'spam',
+            label: 'Spam',
+            icon: 'megaphone-outline',
+            group: 'primary',
+            onPress: () => sendReport('spam'),
+          },
+          {
+            key: 'harassment',
+            label: 'Harassment',
+            icon: 'hand-left-outline',
+            group: 'primary',
+            onPress: () => sendReport('harassment'),
+          },
+          {
+            key: 'inappropriate',
+            label: 'Inappropriate',
+            icon: 'alert-circle-outline',
+            group: 'primary',
+            onPress: () => sendReport('inappropriate'),
+          },
+        ]}
+      />
+    </>
+  );
+
   if (activeTab === 'posts') {
     return (
       <GestureDetector gesture={backGesture}>
@@ -567,6 +599,7 @@ export default function PublicProfileScreen() {
                 )}
               </ScrollView>
             )}
+            {moreSheets}
           </SafeAreaView>
         </Animated.View>
       </GestureDetector>
@@ -617,6 +650,7 @@ export default function PublicProfileScreen() {
             />
           )}
         />
+        {moreSheets}
       </SafeAreaView>
     </View>
   );

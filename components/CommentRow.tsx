@@ -1,6 +1,7 @@
-import { showAlert } from '@/components/CustomAlert';
 import { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Pressable, StyleSheet, Modal } from 'react-native';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import type { PostActionRow } from '@/lib/imageLongPress';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -75,38 +76,50 @@ export function CommentRow({
     });
   }
 
+  // Long-press context menu — slide-up action sheet (same pattern as the post
+  // long-press). Hosted in a transparent Modal so the inline-overlay sheet
+  // escapes the row's own layout (rows are nested inside lists + replies).
+  const [menuOpen, setMenuOpen] = useState(false);
+
   function handleLongPress() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const buttons: { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void }[] = [
-      { text: 'Cancel', style: 'cancel' },
-    ];
-    // Report — App Store 1.2 requires flagging objectionable content. Shown on
-    // any comment that isn't yours.
-    if (!isOwn) {
-      buttons.push({
-        text: 'Report',
-        style: 'destructive',
-        onPress: () => reportContent({ commentId: comment.id }),
-      });
-    }
-    // Delete — your own comment, or any comment on a post you own (moderation).
-    if (canDelete) {
-      buttons.push({
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () =>
-          deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
-      });
-    } else if (adminOnlyDelete) {
-      // Admin moderation: delete anyone's comment via the admin RPC.
-      buttons.push({
-        text: 'Delete (admin)',
-        style: 'destructive',
-        onPress: () =>
-          adminDeleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
-      });
-    }
-    showAlert('Comment', '', buttons);
+    setMenuOpen(true);
+  }
+
+  const menuRows: PostActionRow[] = [];
+  // Report — App Store 1.2 requires flagging objectionable content. Shown on
+  // any comment that isn't yours.
+  if (!isOwn) {
+    menuRows.push({
+      key: 'report',
+      label: 'Report',
+      icon: 'flag-outline',
+      group: 'danger',
+      destructive: true,
+      onPress: () => reportContent({ commentId: comment.id }),
+    });
+  }
+  // Delete — your own comment, or any comment on a post you own (moderation).
+  if (canDelete) {
+    menuRows.push({
+      key: 'delete',
+      label: 'Delete',
+      icon: 'trash-outline',
+      group: 'danger',
+      destructive: true,
+      onPress: () => deleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
+    });
+  } else if (adminOnlyDelete) {
+    // Admin moderation: delete anyone's comment via the admin RPC.
+    menuRows.push({
+      key: 'admin-delete',
+      label: 'Delete (admin)',
+      icon: 'trash-outline',
+      group: 'danger',
+      destructive: true,
+      onPress: () =>
+        adminDeleteComment({ commentId: comment.id, uploadId, parentId: comment.parentId }),
+    });
   }
 
   return (
@@ -217,6 +230,18 @@ export function CommentRow({
               />
             ))}
         </View>
+      )}
+
+      {menuOpen && (
+        <Modal visible transparent animationType="none" onRequestClose={() => setMenuOpen(false)}>
+          <PostActionSheet
+            visible
+            onClose={() => setMenuOpen(false)}
+            title={comment.username ? `@${comment.username}` : 'Comment'}
+            titleImageUrl={comment.avatarUrl ? resizeAvatar(comment.avatarUrl) : null}
+            rows={menuRows}
+          />
+        </Modal>
       )}
     </View>
   );
