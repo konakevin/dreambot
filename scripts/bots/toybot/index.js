@@ -584,7 +584,7 @@ module.exports = {
     'collector-shelf-epic',
     'epic-hero-bucket',
     'dollhouse-life',
-    'hotwheels-city',
+    // hotwheels-city deactivated 2026-06-30 (Kevin) — pulled from rotation.
     'model-train-world',
     'plush-world',
     'mech-toy-rampage',
