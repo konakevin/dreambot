@@ -84,6 +84,12 @@ export interface ResolvedVibe {
   label: string;
   directive: string;
   isDreamEligible: boolean;
+  /** Restyle-safe mood line (client_meta.restyle_fragment, migration 320) —
+   *  an imperative color/light/atmosphere grade with NO scene content, so
+   *  Kontext can apply it without fighting "keep the exact composition".
+   *  The full `directive` is scene-generation text and reads as a no-op to
+   *  an edit model. Null → restyle-photo falls back to the legacy slice. */
+  restyleFragment: string | null;
 }
 
 function toMedium(row: DbMediumRow): ResolvedMedium {
@@ -166,7 +172,7 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
   const sb = getServiceClient();
   const { data, error } = await sb
     .from('dream_vibes')
-    .select('key, label, directive, is_dream_eligible')
+    .select('key, label, directive, is_dream_eligible, client_meta')
     .eq('is_active', true)
     .order('sort_order');
   if (error) {
@@ -174,11 +180,21 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
     return [];
   }
   cachedVibes = (data ?? []).map(
-    (r: { key: string; label: string; directive: string; is_dream_eligible: boolean }) => ({
+    (r: {
+      key: string;
+      label: string;
+      directive: string;
+      is_dream_eligible: boolean;
+      client_meta: Record<string, unknown> | null;
+    }) => ({
       key: r.key,
       label: r.label,
       directive: r.directive,
       isDreamEligible: !!r.is_dream_eligible,
+      restyleFragment:
+        r.client_meta && typeof r.client_meta.restyle_fragment === 'string'
+          ? r.client_meta.restyle_fragment
+          : null,
     })
   );
   return cachedVibes;

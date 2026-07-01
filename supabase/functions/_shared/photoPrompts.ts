@@ -78,8 +78,14 @@ export function getPhotoRestyleConfig(
   const kontextPrompt = medium.kontextDirective || medium.directive;
   return {
     model: 'kontext-pro',
+    // Imperative framing ("Also shift…"), not a descriptive trailing "Mood:"
+    // paragraph — Kontext is an edit model and follows commands; the old
+    // "Mood: Everything is warm…" flavor text was a visible no-op (2026-07-01
+    // A/B: cozy vs macabre restyles were indistinguishable). The vibe string
+    // itself should be a restyle_fragment (color/light/atmosphere only) when
+    // the vibe has one — see restyle-photo.
     buildPrompt: (_photo, vibe, hint) =>
-      `${kontextPrompt}\n\nMood: ${vibe}${hint ? '\n' + hint : ''}`,
+      `${kontextPrompt}\n\nAlso shift the overall mood and color grade of the image: ${vibe}${hint ? '\n' + hint : ''}`,
   };
 }
 

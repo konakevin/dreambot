@@ -324,8 +324,15 @@ async function handleRequest(req: Request): Promise<Response> {
   let logAxes: Record<string, unknown> = {};
 
   const config = getPhotoRestyleConfig(medium.key, medium);
+  // The vibe's restyle-safe fragment (client_meta.restyle_fragment, migration
+  // 320): an imperative color/light/atmosphere grade with no scene content —
+  // the only vibe lever an img2img edit can actually apply while preserving
+  // composition. The legacy fallback (a 200-char slice of the scene-generation
+  // directive, often cut mid-word) read as a no-op to Kontext: a 2026-07-01
+  // A/B showed cozy vs macabre restyles were indistinguishable.
+  const rawVibeDirective =
+    vibe.restyleFragment ?? (vibe.directive ? vibe.directive.slice(0, 200) : '');
   // Apply gender modifier (coquette routing) — null gender = female default for restyle
-  const rawVibeDirective = vibe.directive ? vibe.directive.slice(0, 200) : '';
   const vibeDirective = applyVibeGenderModifier(vibe.key, rawVibeDirective, null);
 
   if (config && config.model === 'flux-dev') {
