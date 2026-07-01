@@ -35,13 +35,16 @@ interface WebhookPayload {
   group_key?: string;
 }
 
-// Single, fixed copy for the nightly-dream notification. Title-only — clean
-// and consistent every morning.
-const NIGHTLY_DREAM_PUSH_TITLE = 'A new dream has appeared';
+// Single, fixed copy for the nightly-dream notification — the push is the
+// "announcement" voice; the inbox row is the matching "label" ("Last night's
+// dream" in app/inbox.tsx getGroupText). Keep the two vocabularies paired.
+const NIGHTLY_DREAM_PUSH_TITLE = 'You dreamed something last night';
+const NIGHTLY_DREAM_PUSH_BODY = 'Tap to see it';
 // Copy for a dream the user ACTIVELY created and then left the app before it
 // finished (subtype='manual'). The nightly "while you slept" framing is wrong
-// here — they made this on purpose, so the copy is direct.
-const MANUAL_DREAM_PUSH_BODY = 'Tap to see what you created';
+// here — they made this on purpose, so the copy is direct. Inbox label pair:
+// "The dream you made".
+const MANUAL_DREAM_PUSH_BODY = 'Come see how it turned out';
 
 function getNotificationContent(
   type: string,
@@ -116,12 +119,12 @@ function getNotificationContent(
       if (subtype === 'manual') {
         return { title: 'Your dream is ready', body: MANUAL_DREAM_PUSH_BODY };
       }
-      // Nightly auto-dream — one fixed, clean title, no body. The stored
+      // Nightly auto-dream — one fixed, clean title + body. The stored
       // `body` is the Haiku bot-message (clamped for the single-line INBOX
       // preview); it is NOT used as push copy — reusing it surfaced
       // mid-sentence fragments in the push banner ("those saturated colors
       // went"). Inbox keeps the bot message; the push stays clean.
-      return { title: NIGHTLY_DREAM_PUSH_TITLE, body: 'Tap to step inside' };
+      return { title: NIGHTLY_DREAM_PUSH_TITLE, body: NIGHTLY_DREAM_PUSH_BODY };
     case 'dream_failed':
       // A render failed. The stored `body` is the inbox copy and already leads
       // with "…couldn't render…", so don't echo it as the push body. Surface the
@@ -160,11 +163,16 @@ function getAggregatedNotificationContent(
   latestActorName: string,
   secondActorName: string | null,
   actorCount: number,
-  body: string | null
+  body: string | null,
+  // subtype MUST thread through both fallbacks below: every push arrives with
+  // aggregated=true (migration 204 drain), so dropping it here routed manual
+  // dream_generated / dream_failed / trial+pro reminders to their subtype-less
+  // default copy (manual creates pushed the nightly "A new dream has appeared").
+  subtype: string | null = null
 ) {
   if (actorCount <= 1) {
     // Singleton group — fall back to the single-actor copy.
-    return getNotificationContent(type, latestActorName, body);
+    return getNotificationContent(type, latestActorName, body, subtype);
   }
 
   const others = actorCount - 1;
@@ -210,7 +218,7 @@ function getAggregatedNotificationContent(
     case 'trial_reminder':
     case 'pro_reminder':
       // Self-events — fall through to single-actor copy regardless of count.
-      return getNotificationContent(type, latestActorName, body);
+      return getNotificationContent(type, latestActorName, body, subtype);
     default:
       return { title: 'New notifications', body: '' };
   }
@@ -379,7 +387,8 @@ Deno.serve(async (req) => {
         actorName,
         secondActorName,
         actorCount,
-        record.body
+        record.body,
+        record.subtype ?? null
       );
     }
 
