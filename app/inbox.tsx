@@ -30,6 +30,9 @@ import { useMarkInboxViewed } from '@/hooks/useMarkInboxViewed';
 import { useGroupActors } from '@/hooks/useGroupActors';
 import { InboxSkeleton } from '@/components/Skeleton';
 import { GradientTitle } from '@/components/GradientTitle';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import * as Clipboard from 'expo-clipboard';
+import { Toast } from '@/components/Toast';
 import { useDeleteAllNotifications } from '@/hooks/useDeleteAllNotifications';
 import {
   useApproveFollowRequest,
@@ -346,6 +349,7 @@ function GroupActorsSheet({
 function GroupRow({
   group,
   onPress,
+  onThumbPress,
   onLongPress,
   onDelete,
   onSwipeOpen,
@@ -355,6 +359,8 @@ function GroupRow({
 }: {
   group: InboxGroup;
   onPress: () => void;
+  /** Tap on the right-side post thumbnail — routes straight to the post. */
+  onThumbPress: () => void;
   onLongPress: () => void;
   onDelete: () => void;
   /** Reports this row's swipeable as it starts opening so the screen can close
@@ -365,8 +371,16 @@ function GroupRow({
   onToggleSelect: () => void;
 }) {
   const swipeRef = useRef<SwipeableMethods>(null);
-  const { subject, subtext } = getGroupText(group);
+  const { subject, subtext, isAggregable } = getGroupText(group);
   const icon = iconForGroup(group);
+  // Left-zone tap toggles the full message inline (subtext is display-capped
+  // at SUBTEXT_MAX; `body` holds the whole thing). Rows whose tap opens a
+  // richer surface keep the screen-level behavior: multi-actor aggregates →
+  // actor sheet, dream_failed → retry/tweak alert.
+  const [expanded, setExpanded] = useState(false);
+  const fullBody = group.body?.trim() || null;
+  const canExpand =
+    !!subtext && !(isAggregable && group.actorCount > 1) && group.type !== 'dream_failed';
   // "New since last inbox view" — drives the pip overlay on the icon
   // tile. Migration 223 swapped per-row seen_at into a time-window flag
   // off `users.last_inbox_view_at` so the inbox is reliably empty-of-pips
@@ -414,76 +428,97 @@ function GroupRow({
         </TouchableOpacity>
       )}
     >
-      <TouchableOpacity
-        style={styles.row}
-        onPress={() => (selectMode ? onToggleSelect() : onPress())}
-        onLongPress={selectMode ? undefined : onLongPress}
-        delayLongPress={400}
-        activeOpacity={0.7}
-      >
-        {selectMode && (
-          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-            {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
-          </View>
-        )}
-
-        {/* Leading visual — the actor's avatar with a small type-glyph badge
-            (heart / comment / follow…), or the tinted type tile when there's
-            no actor. "New" pip rides top-right. */}
-        <View style={styles.iconTileWrap}>
-          {avatar ? (
-            <>
-              <Image
-                source={{ uri: resizeAvatar(avatar) }}
-                style={styles.avatarImg}
-                contentFit="cover"
-                cachePolicy="memory-disk"
-              />
-              <View style={[styles.typeBadge, { backgroundColor: icon.color }]}>
-                <Ionicons name={icon.name} size={11} color="#FFFFFF" />
-              </View>
-            </>
-          ) : (
-            <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
-              <Ionicons name={icon.name} size={20} color={icon.color} />
+      <View style={styles.row}>
+        {/* Left zone — avatar + text. Tap expands/collapses the full message
+            when there's more to read; otherwise falls through to the row's
+            screen-level tap (actor sheet / failed-dream alert / route). */}
+        <TouchableOpacity
+          style={styles.leftZone}
+          onPress={() => {
+            if (selectMode) return onToggleSelect();
+            if (canExpand) return setExpanded((e) => !e);
+            onPress();
+          }}
+          onLongPress={selectMode ? undefined : onLongPress}
+          delayLongPress={400}
+          activeOpacity={0.7}
+        >
+          {selectMode && (
+            <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+              {isSelected && <Ionicons name="checkmark" size={14} color="#000" />}
             </View>
           )}
-          {isNew && <View style={styles.newPip} pointerEvents="none" />}
-        </View>
 
-        {/* Text — subject + optional inline message preview. Both allowed to
-            wrap to 2 lines so the row breathes instead of clipping. Unread
-            rows get a heavier subject for a touch of weight. */}
-        <View style={styles.textCol}>
-          <Text style={[styles.subject, isNew && styles.subjectUnread]} numberOfLines={2}>
-            {subject}
-          </Text>
-          {subtext && (
-            <Text style={styles.subtext} numberOfLines={2}>
-              {subtext}
+          {/* Leading visual — the actor's avatar with a small type-glyph badge
+              (heart / comment / follow…), or the tinted type tile when there's
+              no actor. "New" pip rides top-right. */}
+          <View style={styles.iconTileWrap}>
+            {avatar ? (
+              <>
+                <Image
+                  source={{ uri: resizeAvatar(avatar) }}
+                  style={styles.avatarImg}
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
+                />
+                <View style={[styles.typeBadge, { backgroundColor: icon.color }]}>
+                  <Ionicons name={icon.name} size={11} color="#FFFFFF" />
+                </View>
+              </>
+            ) : (
+              <View style={[styles.iconTile, { backgroundColor: `${icon.color}1A` }]}>
+                <Ionicons name={icon.name} size={20} color={icon.color} />
+              </View>
+            )}
+            {isNew && <View style={styles.newPip} pointerEvents="none" />}
+          </View>
+
+          {/* Text — subject + optional inline message preview. Collapsed rows
+              cap both at 2 lines; expanded rows show the full body. Unread
+              rows get a heavier subject for a touch of weight. */}
+          <View style={styles.textCol}>
+            <Text
+              style={[styles.subject, isNew && styles.subjectUnread]}
+              numberOfLines={expanded ? undefined : 2}
+            >
+              {subject}
             </Text>
-          )}
-        </View>
+            {subtext && (
+              <Text style={styles.subtext} numberOfLines={expanded ? undefined : 2}>
+                {expanded ? (fullBody ?? subtext) : subtext}
+              </Text>
+            )}
+          </View>
+        </TouchableOpacity>
 
         {/* Follow-request approve/deny — only on the actor's own follow request. */}
         {group.type === 'follow_request' && isNew && firstActorId && (
           <FollowRequestActions actorId={firstActorId} />
         )}
 
-        {/* Post thumbnail — tap propagates the row press (route to /photo/[id]). */}
+        {/* Post thumbnail — its own tap zone, routes straight to the post
+            (like / download live there) regardless of what the left zone does. */}
         {group.uploadImageUrl && (
-          <Image
-            source={{ uri: group.uploadImageUrl }}
-            style={styles.thumbnail}
-            contentFit="cover"
-            cachePolicy="memory-disk"
-            placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
-            placeholderContentFit="cover"
-          />
+          <TouchableOpacity
+            onPress={() => (selectMode ? onToggleSelect() : onThumbPress())}
+            onLongPress={selectMode ? undefined : onLongPress}
+            delayLongPress={400}
+            activeOpacity={0.7}
+            hitSlop={6}
+          >
+            <Image
+              source={{ uri: group.uploadImageUrl }}
+              style={styles.thumbnail}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              placeholder={group.uploadThumbhash ? { thumbhash: group.uploadThumbhash } : null}
+              placeholderContentFit="cover"
+            />
+          </TouchableOpacity>
         )}
 
         <Text style={[styles.time, isNew && styles.timeUnread]}>{formatTimeAgo(group.lastAt)}</Text>
-      </TouchableOpacity>
+      </View>
     </ReanimatedSwipeable>
   );
 }
@@ -511,6 +546,8 @@ export default function InboxScreen() {
   // "•••" header dropdown — custom branded menu. headerH (measured) positions
   // the dropdown right under the header.
   const [menuOpen, setMenuOpen] = useState(false);
+  // Long-press row → slide-up action sheet (matches the dream-card long-press).
+  const [actionGroup, setActionGroup] = useState<InboxGroup | null>(null);
   const [headerH, setHeaderH] = useState(0);
 
   // One swipe row open at a time: when a row starts opening, close the
@@ -662,12 +699,23 @@ export default function InboxScreen() {
     );
   }
 
+  // Thumbnail tap — always route to the post itself (the like/download
+  // surface), even for rows whose left-zone tap expands text or opens the
+  // actor sheet.
+  function handleThumbTap(g: InboxGroup) {
+    routeFromNotification(
+      {
+        type: g.type,
+        uploadId: g.uploadId ?? undefined,
+        actorId: g.previewActorIds[0] ?? undefined,
+      },
+      { markSeen: true }
+    );
+  }
+
   function handleLongPress(g: InboxGroup) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    showAlert('Delete', 'Remove this notification?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteGroup(g.groupKey) },
-    ]);
+    setActionGroup(g);
   }
 
   // Top-right "•••" menu — a custom on-brand dropdown (not the system action
@@ -772,6 +820,7 @@ export default function InboxScreen() {
             <GroupRow
               group={item}
               onPress={() => handleTap(item)}
+              onThumbPress={() => handleThumbTap(item)}
               onLongPress={() => handleLongPress(item)}
               onDelete={() => deleteGroup(item.groupKey)}
               onSwipeOpen={handleSwipeOpen}
@@ -852,6 +901,45 @@ export default function InboxScreen() {
           </Pressable>
         </Pressable>
       )}
+
+      <PostActionSheet
+        visible={!!actionGroup}
+        onClose={() => setActionGroup(null)}
+        rows={
+          actionGroup
+            ? [
+                // Copy the bot's dream message — nightly + manual dream rows
+                // carry the full body even when the row preview truncates it.
+                // (Welcome pings have no real message, so they're excluded.)
+                ...(actionGroup.type === 'dream_generated' &&
+                actionGroup.subtype !== 'welcome' &&
+                actionGroup.body?.trim()
+                  ? [
+                      {
+                        key: 'copy-message',
+                        label: 'Copy dream message',
+                        icon: 'copy-outline',
+                        group: 'primary' as const,
+                        onPress: () => {
+                          void Clipboard.setStringAsync(actionGroup.body!.trim());
+                          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                          Toast.show('Message copied', 'checkmark-circle');
+                        },
+                      },
+                    ]
+                  : []),
+                {
+                  key: 'delete',
+                  label: 'Delete notification',
+                  icon: 'trash-outline',
+                  group: 'danger',
+                  destructive: true,
+                  onPress: () => deleteGroup(actionGroup.groupKey),
+                },
+              ]
+            : []
+        }
+      />
     </SafeAreaView>
   );
 }
@@ -989,6 +1077,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.like,
     borderWidth: 1.5,
     borderColor: colors.background,
+  },
+  // Left tap zone — avatar + text; fills the row up to the thumbnail so the
+  // expand target is generous.
+  leftZone: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   textCol: {
     flex: 1,
