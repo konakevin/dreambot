@@ -23,7 +23,7 @@
  */
 
 import { useMemo } from 'react';
-import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, StyleSheet, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -122,12 +122,12 @@ export default function WelcomeGiftScreen() {
       {/* CTA pill — full-width, accent background. Replaces history so
           back-button doesn't return to the welcome screen. */}
       <View style={s.ctaWrap}>
-        <Pressable
-          onPress={handleStart}
-          style={({ pressed }) => [s.ctaBtn, pressed && s.ctaBtnPressed]}
-        >
+        {/* TouchableOpacity + plain style, NOT a function-form Pressable style —
+            with reactCompiler enabled the function style never gets applied
+            (see ProfileHeader stats fix, 2026-07-01) and the pill rendered bare. */}
+        <TouchableOpacity onPress={handleStart} style={s.ctaBtn} activeOpacity={0.85}>
           <Text style={s.ctaText}>Let&rsquo;s dream ✨</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -250,10 +250,6 @@ const s = StyleSheet.create({
     shadowOpacity: 0.45,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 4 },
-  },
-  ctaBtnPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
   },
   ctaText: {
     color: '#FFFFFF',

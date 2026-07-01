@@ -135,7 +135,10 @@ function AvatarBlock({
 }
 
 /** One stat "box": number on top, label left-aligned beneath it. Boxes are
- *  spaced apart (gap on the row) for clean separation — no outline. */
+ *  spaced apart (gap on the row) for clean separation — no outline.
+ *  TouchableOpacity + plain style, NOT a function-form Pressable style: with
+ *  reactCompiler enabled the function style never gets applied (verified via
+ *  bg-color probe 2026-07-01) and the box rendered unstyled. */
 function Stat({
   count,
   label,
@@ -148,14 +151,10 @@ function Stat({
   onPress: () => void;
 }) {
   return (
-    <Pressable
-      onPress={onPress}
-      hitSlop={8}
-      style={({ pressed }) => [styles.statBox, pressed && { opacity: 0.6 }]}
-    >
+    <TouchableOpacity onPress={onPress} hitSlop={8} style={styles.statBox} activeOpacity={0.6}>
       <Text style={styles.statNum}>{count}</Text>
       <Text style={[styles.statLbl, active && styles.statLblActive]}>{label}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -361,10 +360,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   // Stats — number-over-label boxes, left-aligned, spaced apart (no outline).
+  // Label rides at 14 (close to the 15 number) so the pair reads as one unit
+  // (Kevin 2026-07-01 — the old 12 label read detached from its number).
   statsRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 20,
+    gap: 28,
     marginTop: verticalScale(6),
   },
   statBox: {
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   },
   statLbl: {
     color: colors.textSecondary,
-    fontSize: fontScale(12),
+    fontSize: fontScale(14),
     marginTop: verticalScale(1),
   },
   statLblActive: {

@@ -152,8 +152,18 @@ export default function PublicProfileScreen() {
   const topBarBorderStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [20, 80], [0, 1], Extrapolation.CLAMP),
   }));
+  // Collapsed flag for the sticky bar's Follow pill: its OPACITY is animated
+  // by compactNameStyle, but pointerEvents needs a JS boolean so the invisible
+  // pill can't catch stray taps while the hero header is still on screen.
+  const [barCollapsed, setBarCollapsed] = useState(false);
+  const barCollapsedRef = useRef(false);
   const handleScrollProgress = (y: number) => {
     scrollY.value = y;
+    const collapsed = y > 100;
+    if (collapsed !== barCollapsedRef.current) {
+      barCollapsedRef.current = collapsed;
+      setBarCollapsed(collapsed);
+    }
   };
 
   // ── Top-bar tap-to-top ──
@@ -313,6 +323,27 @@ export default function PublicProfileScreen() {
         </Animated.Text>
       </TouchableOpacity>
       <View style={{ flex: 1 }} />
+      {/* Follow pill — fades in on the same 80-150 scroll band as the collapsed
+          name, so the follow action stays reachable once the hero header (and
+          its full-width follow button) has scrolled away. */}
+      {!isOwnProfile && !isBlocked && (
+        <Animated.View style={compactNameStyle} pointerEvents={barCollapsed ? 'auto' : 'none'}>
+          <TouchableOpacity
+            style={[styles.followButton, (isFollowing || hasRequest) && styles.followingButton]}
+            onPress={handleFollow}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={[
+                styles.followButtonText,
+                (isFollowing || hasRequest) && styles.followingButtonText,
+              ]}
+            >
+              {isFollowing ? 'Following' : hasRequest ? 'Requested' : 'Follow'}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
       <Animated.View pointerEvents="none" style={[styles.topBarBottomBorder, topBarBorderStyle]} />
     </Animated.View>
   );
