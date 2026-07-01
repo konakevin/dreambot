@@ -77,9 +77,7 @@ export function PremiumGateProvider({ children }: { children: React.ReactNode })
                 {content.balance ? (
                   <View style={styles.balanceRow}>
                     <Ionicons name="sparkles" size={fontScale(15)} color={colors.accentLight} />
-                    <Text style={styles.balanceText}>
-                      You have {content.balance.have} · need {content.balance.need}
-                    </Text>
+                    <Text style={styles.balanceText}>{content.balance.label}</Text>
                   </View>
                 ) : null}
 

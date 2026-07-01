@@ -15,10 +15,12 @@ import {
 describe('gateContent — sparkles', () => {
   it('routes the primary CTA to the sparkle store with the cost + balance', () => {
     const c = gateContent({ kind: 'sparkles', needed: 3, balance: 1 });
-    expect(c.title).toBe('Not enough sparkles');
-    expect(c.body).toContain('3 sparkles');
-    expect(c.body).toContain('You have 1');
-    expect(c.balance).toEqual({ have: 1, need: 3 });
+    // Friendly, not scolding — and the numbers live ONLY in the badge label
+    // (the body repeating them was redundant on screen).
+    expect(c.title).toBe('Refill your sparkles');
+    expect(c.body).toContain('Top up');
+    expect(c.body).not.toMatch(/\d/);
+    expect(c.balance).toEqual({ have: 1, need: 3, label: '1 of 3 sparkles' });
     expect(c.buttons[0]).toEqual({
       label: 'Get Sparkles',
       route: '/sparkleStore',
@@ -28,10 +30,9 @@ describe('gateContent — sparkles', () => {
     expect(c.buttons[1].route).toBeUndefined();
   });
 
-  it('pluralizes correctly for a 1-sparkle cost', () => {
+  it('pluralizes the badge correctly for a 1-sparkle cost', () => {
     const c = gateContent({ kind: 'sparkles', needed: 1, balance: 0 });
-    expect(c.body).toContain('1 sparkle.');
-    expect(c.body).not.toContain('1 sparkles');
+    expect(c.balance?.label).toBe('0 of 1 sparkle');
   });
 });
 

@@ -36,8 +36,10 @@ export interface GateContent {
   icon: string;
   title: string;
   body: string;
-  /** Sparkle-balance context (sparkles reason only) — shows have-vs-need. */
-  balance?: { have: number; need: number };
+  /** Sparkle-balance context (sparkles reason only) — shows have-vs-need.
+   *  `label` is the ready-to-render badge text ("2 of 5 sparkles") so the
+   *  sheet stays presentational and the copy is test-locked here. */
+  balance?: { have: number; need: number; label: string };
   /** Primary button first. */
   buttons: GateButton[];
 }
@@ -50,9 +52,17 @@ export function gateContent(reason: GateReason): GateContent {
     case 'sparkles':
       return {
         icon: 'sparkles',
-        title: 'Not enough sparkles',
-        body: `This dream costs ${reason.needed} ${sparklesWord(reason.needed)}. You have ${reason.balance}.`,
-        balance: { have: reason.balance, need: reason.needed },
+        // Clean and neutral, no scolding — and the numbers live ONLY in the
+        // badge below (the old copy repeated them in both body and badge).
+        title: 'Refill your sparkles',
+        // Hard break between the sentences so the centered wrap lands as two
+        // balanced lines instead of orphaning "and keep dreaming."
+        body: 'Every dream starts with a little stardust.\nTop up and keep dreaming.',
+        balance: {
+          have: reason.balance,
+          need: reason.needed,
+          label: `${reason.balance} of ${reason.needed} ${sparklesWord(reason.needed)}`,
+        },
         buttons: [
           { label: 'Get Sparkles', route: '/sparkleStore', variant: 'primary' },
           { label: 'Maybe later', variant: 'secondary' },
