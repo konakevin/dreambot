@@ -3,27 +3,27 @@
  *
  * Shared identity-block at the top of both the own-profile screen
  * (`app/(tabs)/profile.tsx`) and the public-profile screen
- * (`app/user/[userId].tsx`). Replaces the older inline 32px-avatar +
- * stats-only layout with the IG-style hybrid Kevin signed off on:
+ * (`app/user/[userId].tsx`). Compact IG/X-style layout (2026-06-30 squash —
+ * was a tall fully-centered stack):
  *
- *   ╭──────╮     <postCount>   <followers>   <following>
- *   │      │     POSTS         FOLLOWERS     FOLLOWING
- *   │ 96px │
+ *   ╭──────╮  Display name
+ *   │ 84px │  @username
+ *   │  📷  │  <posts> Posts · <followers> Followers · <following> Following
  *   ╰──────╯
- *   Display name
- *   @username
- *   Bio (optional, 1–2 lines)
- *   [ Edit Profile ]   [ Share ]   (own)
- *   [ Follow ]  [ Message ]  [ ⋯ ]  (other — human)
- *   [ Follow ]                       (other — bot)
+ *   Bio (optional)  ·  Joined March 2026
+ *   [ Edit Profile ]  [ Share ]  [ ✦ 23k ]   (own)
+ *   [ Follow ]  [ Message ]  [ ⋯ ]           (other — human)
+ *   [ Follow ]                                (other — bot)
  *
- * Borrows IG's left-aligned avatar + inline stats and IG's equal-width
- * pill action row; TikTok-bumps the avatar to 96px so the identity
- * moment reads larger than IG's default 80px.
+ * Avatar sits LEFT with name/handle/stats stacked to its right (reclaims the
+ * vertical height the old centered stack wasted). Bio + "Joined" collapse into
+ * one full-width line. "Change photo" is gone — tapping the avatar (own) opens
+ * the change-photo flow, signalled by a camera badge. Sparkles ride in the
+ * action row (passed as `children` by the own-profile screen).
  *
  * Display name falls back to `@username` when null; bio is omitted when
- * null/empty. Stats taps notify the parent — list overlays + tab
- * switching stay owned by the parent so this component is pure layout.
+ * null/empty. Stats taps notify the parent — list overlays + tab switching stay
+ * owned by the parent so this component is pure layout.
  */
 
 import type { ReactNode } from 'react';
@@ -36,7 +36,7 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { avatarUrl } from '@/lib/imageUrl';
 import type { StatsTab } from '@/components/ProfileStatsRow';
 
-const AVATAR_SIZE = 96;
+const AVATAR_SIZE = 84;
 
 interface BaseProps {
   avatar_url: string | null;
@@ -46,23 +46,19 @@ interface BaseProps {
   postCount: number;
   followerCount: number;
   followingCount: number;
-  /** ISO timestamp of account creation — drives the 'Joined …' chip. */
+  /** ISO timestamp of account creation — drives the 'Joined …' text. */
   createdAt?: string | null;
   /** Notify when one of the three stat slots is tapped. */
   onStatsPress: (tab: StatsTab) => void;
   /** Which stat is currently the active sub-view (drives the inline label
-   *  highlight on the stats line). When omitted, no highlight is shown
-   *  (callers that don't surface a sub-view leave it undefined). */
+   *  highlight on the stats line). */
   activeStat?: StatsTab;
   /** Tap on the avatar (preview / change). Optional. */
   onAvatarPress?: () => void;
   /** Show a spinner overlaid on the avatar while a new photo is uploading. */
   avatarUploading?: boolean;
-  /**
-   * Optional slot rendered between the meta line (joined chip + plain-
-   * text stats) and the action pill row. Reserved for future
-   * DreamBot-signature inline elements.
-   */
+  /** Inline slot rendered at the end of the action row (own profile: the
+   *  sparkle-balance chip). */
   children?: ReactNode;
 }
 
@@ -70,7 +66,7 @@ interface OwnVariant extends BaseProps {
   variant: 'own';
   onEditPress: () => void;
   onSharePress: () => void;
-  /** Tapping the "Change photo" link under the avatar (own profile only). */
+  /** Change-photo flow — fired by tapping the avatar (own profile). */
   onChangePhoto?: () => void;
 }
 
@@ -79,12 +75,9 @@ interface OtherVariant extends BaseProps {
   isFollowing: boolean;
   hasRequest: boolean;
   isPrivate: boolean;
-  /** Hide Message + ellipsis controls for bot profiles — users can't DM
-   *  bots and don't need to block/report them (unfollow is enough). */
+  /** Hide Message + ellipsis controls for bot profiles. */
   isBot?: boolean;
-  /** Hide Message + ellipsis on your OWN profile (reached via /user/[me] from
-   *  a feed/comment tap) — the ⋯ menu is report/block, which is nonsensical
-   *  on yourself, and you don't DM yourself either. */
+  /** Hide Message + ellipsis on your OWN profile reached via /user/[me]. */
   isSelf?: boolean;
   onFollowPress: () => void;
   onMessagePress: () => void;
@@ -98,17 +91,16 @@ function AvatarBlock({
   username,
   onPress,
   uploading,
+  showCameraBadge,
 }: {
   avatar_url: string | null;
   username: string;
   onPress?: () => void;
   uploading?: boolean;
+  showCameraBadge?: boolean;
 }) {
   const initial = (username || '?')[0]?.toUpperCase() ?? '?';
   const image = avatar_url ? (
-    // Wrap in the Supabase transform helper so we fetch a 128×128 WebP
-    // (~5-10 KB) instead of the raw full-res avatar upload (up to 1+ MB).
-    // Drops the "black avatar in header until the original loads" pause.
     <Image
       source={{ uri: avatarUrl(avatar_url) }}
       style={styles.avatar}
@@ -120,14 +112,16 @@ function AvatarBlock({
       <Text style={styles.avatarInitial}>{initial}</Text>
     </View>
   );
-  // Spinner overlay so a new-photo upload (a couple seconds) reads as "working"
-  // instead of "broken until it suddenly pops in".
   const inner = (
     <View>
       {image}
       {uploading ? (
         <View style={styles.avatarSpinner}>
           <ActivityIndicator color="#FFFFFF" />
+        </View>
+      ) : showCameraBadge ? (
+        <View style={styles.cameraBadge}>
+          <Ionicons name="camera" size={13} color="#FFFFFF" />
         </View>
       ) : null}
     </View>
@@ -140,10 +134,29 @@ function AvatarBlock({
   );
 }
 
-function formatJoinedDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return '';
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+/** One stat "box": number on top, label left-aligned beneath it. Boxes are
+ *  spaced apart (gap on the row) for clean separation — no outline. */
+function Stat({
+  count,
+  label,
+  active,
+  onPress,
+}: {
+  count: number;
+  label: string;
+  active?: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={8}
+      style={({ pressed }) => [styles.statBox, pressed && { opacity: 0.6 }]}
+    >
+      <Text style={styles.statNum}>{count}</Text>
+      <Text style={[styles.statLbl, active && styles.statLblActive]}>{label}</Text>
+    </Pressable>
+  );
 }
 
 export function ProfileHeader(props: Props) {
@@ -155,128 +168,66 @@ export function ProfileHeader(props: Props) {
     postCount,
     followerCount,
     followingCount,
-    createdAt,
     onStatsPress,
     onAvatarPress,
     avatarUploading,
   } = props;
 
-  // Compose the hero text. Display name preferred when present; else fall
-  // back to '@username' so the slot is never empty.
   const heroName = display_name?.trim() ? display_name : `@${username}`;
-  const showHandleLine = !!display_name?.trim(); // only show @handle when display name occupied the hero line
+  const showHandleLine = !!display_name?.trim();
   const hasBio = !!bio?.trim();
-  const joinedDate = createdAt ? formatJoinedDate(createdAt) : '';
+  // Own profile: tapping the avatar opens the change-photo flow (the old
+  // standalone "Change photo" link is gone). Other profiles: preview.
+  const avatarPress =
+    props.variant === 'own' ? (props.onChangePhoto ?? onAvatarPress) : onAvatarPress;
 
   return (
     <View style={styles.root}>
-      {/* Row 1 — avatar (left-aligned, on its own). The 3-column stats
-          block that used to sit beside the avatar moved to a plain-text
-          line below the bio (X-influenced design call 2026-05-29). */}
+      {/* Row 1 — avatar LEFT, identity + stats stacked to its RIGHT */}
       <View style={styles.topRow}>
         <AvatarBlock
           avatar_url={avatar_url}
           username={username}
-          onPress={onAvatarPress}
+          onPress={avatarPress}
           uploading={avatarUploading}
+          showCameraBadge={props.variant === 'own'}
         />
-      </View>
-
-      {/* "Change photo" — own profile only. Changing your picture lives here
-          (under the avatar), not in Settings. */}
-      {props.variant === 'own' && props.onChangePhoto && (
-        <Pressable onPress={props.onChangePhoto} hitSlop={6} style={styles.changePhotoBtn}>
-          <Text style={styles.changePhotoText}>{avatar_url ? 'Change photo' : 'Upload photo'}</Text>
-        </Pressable>
-      )}
-
-      {/* Row 2 — display name / handle / bio (left-aligned, beneath avatar) */}
-      <View style={styles.identityBlock}>
-        <Text style={styles.heroName} numberOfLines={1}>
-          {heroName}
-        </Text>
-        {showHandleLine && (
-          <Text style={styles.handle} numberOfLines={1}>
-            @{username}
+        <View style={styles.identityCol}>
+          <Text style={styles.heroName} numberOfLines={1}>
+            {heroName}
           </Text>
-        )}
-        {hasBio && <Text style={styles.bio}>{bio}</Text>}
-      </View>
-
-      {/* Row 2.25 — joined chip (X-style). Tiny calendar + month-year.
-          Only renders when we have an account creation date. */}
-      {joinedDate.length > 0 && (
-        <View style={styles.joinedChip}>
-          <Ionicons name="calendar-outline" size={13} color={colors.textSecondary} />
-          <Text style={styles.joinedText}>Joined {joinedDate}</Text>
+          {showHandleLine && (
+            <Text style={styles.handle} numberOfLines={1}>
+              @{username}
+            </Text>
+          )}
+          <View style={styles.statsRow}>
+            <Stat
+              count={postCount}
+              label={postCount === 1 ? 'Post' : 'Posts'}
+              active={props.activeStat === 'posts'}
+              onPress={() => onStatsPress('posts')}
+            />
+            <Stat
+              count={followerCount}
+              label={followerCount === 1 ? 'Follower' : 'Followers'}
+              active={props.activeStat === 'followers'}
+              onPress={() => onStatsPress('followers')}
+            />
+            <Stat
+              count={followingCount}
+              label="Following"
+              active={props.activeStat === 'following'}
+              onPress={() => onStatsPress('following')}
+            />
+          </View>
         </View>
-      )}
-
-      {/* Row 2.5 — plain-text stats line. All three items are tappable
-          and notify the parent via onStatsPress. The parent decides
-          what each does — own + public profile use 'posts' to switch
-          BACK to the posts grid (from the followers/following list
-          sub-views), and 'followers'/'following' to switch INTO those
-          lists. Each item gets its own Pressable + paddingVertical
-          for a comfortable tap target. */}
-      <View style={styles.statsRow}>
-        <Pressable
-          onPress={() => onStatsPress('posts')}
-          hitSlop={8}
-          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
-        >
-          <Text style={styles.statsItem}>
-            <Text style={styles.statsCount}>{postCount}</Text>{' '}
-            <Text
-              style={[styles.statsLabel, props.activeStat === 'posts' && styles.statsLabelActive]}
-            >
-              {postCount === 1 ? 'Post' : 'Posts'}
-            </Text>
-          </Text>
-        </Pressable>
-        <Text style={styles.statsDivider}>·</Text>
-        <Pressable
-          onPress={() => onStatsPress('followers')}
-          hitSlop={8}
-          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
-        >
-          <Text style={styles.statsItem}>
-            <Text style={styles.statsCount}>{followerCount}</Text>{' '}
-            <Text
-              style={[
-                styles.statsLabel,
-                props.activeStat === 'followers' && styles.statsLabelActive,
-              ]}
-            >
-              {followerCount === 1 ? 'Follower' : 'Followers'}
-            </Text>
-          </Text>
-        </Pressable>
-        <Text style={styles.statsDivider}>·</Text>
-        <Pressable
-          onPress={() => onStatsPress('following')}
-          hitSlop={8}
-          style={({ pressed }) => [styles.statsTap, pressed && { opacity: 0.6 }]}
-        >
-          <Text style={styles.statsItem}>
-            <Text style={styles.statsCount}>{followingCount}</Text>{' '}
-            <Text
-              style={[
-                styles.statsLabel,
-                props.activeStat === 'following' && styles.statsLabelActive,
-              ]}
-            >
-              Following
-            </Text>
-          </Text>
-        </Pressable>
       </View>
 
-      {/* Row 2.75 — optional inline slot for future DreamBot-signature
-          elements. Currently unused. */}
-      {props.children}
+      {/* Row 2 — bio, full-width under the avatar row */}
+      {hasBio && <Text style={styles.bio}>{bio}</Text>}
 
-      {/* Row 3 — action pills */}
+      {/* Row 3 — action pills (+ sparkle chip via children on own) */}
       {props.variant === 'own' ? (
         <View style={styles.actionRow}>
           <TouchableOpacity
@@ -293,6 +244,7 @@ export function ProfileHeader(props: Props) {
           >
             <Text style={styles.actionText}>Share</Text>
           </TouchableOpacity>
+          {props.children}
         </View>
       ) : (
         <View style={styles.actionRow}>
@@ -308,7 +260,9 @@ export function ProfileHeader(props: Props) {
             <Text
               style={[
                 styles.actionText,
-                (props.isFollowing || props.hasRequest) && styles.actionTextFollowing,
+                props.isFollowing || props.hasRequest
+                  ? styles.actionTextFollowing
+                  : styles.actionTextFollow,
               ]}
             >
               {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
@@ -345,20 +299,15 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(12),
   },
-  changePhotoBtn: {
-    alignSelf: 'center',
-    marginTop: verticalScale(8),
-  },
-  changePhotoText: {
-    color: colors.accent,
-    fontSize: fontScale(14),
-    fontWeight: '700',
-  },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: 16,
+  },
+  identityCol: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: 2,
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -386,97 +335,70 @@ const styles = StyleSheet.create({
     fontSize: AVATAR_SIZE * 0.4,
     fontWeight: '700',
   },
-  // Joined chip — calendar icon + "Joined May 2026" beneath the bio.
-  // Centered along with the rest of the hero block; dim, low visual
-  // weight; reads as a quiet metadata line, not a primary element.
-  joinedChip: {
-    flexDirection: 'row',
+  // Camera badge — bottom-right of the avatar, signals "tap to change photo"
+  // (own profile). Punched out from the page bg with a dark ring.
+  cameraBadge: {
+    position: 'absolute',
+    right: -2,
+    bottom: -2,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.accent,
+    borderWidth: 2,
+    borderColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
-    marginTop: verticalScale(8),
-  },
-  joinedText: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-  },
-  // Plain-text stats row — replaces the 3-column block that used to
-  // live beside the avatar. All three items wrap in Pressables so the
-  // parent can hook each one (Posts → switch to grid sub-view,
-  // Followers/Following → switch to their list views).
-  statsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    marginTop: verticalScale(8),
-  },
-  // Each pressable gets a bit of vertical padding so the tap target is
-  // comfortably finger-sized (was previously the text's natural ~15px
-  // height — too small to land reliably).
-  statsTap: {
-    paddingVertical: verticalScale(4),
-  },
-  statsItem: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-  },
-  statsCount: {
-    color: colors.textPrimary,
-    fontWeight: '700',
-  },
-  statsLabel: {
-    color: colors.textSecondary,
-  },
-  // Active sub-view highlight — promotes the selected stat's label to the
-  // same color + weight as the count itself so the user can see which
-  // tab they're in at a glance. Without it, the followers/following lists
-  // look interchangeable when both contain near-identical sets of users
-  // (e.g. the bot-on-bot follow graph).
-  statsLabelActive: {
-    color: colors.textPrimary,
-    fontWeight: '700',
-  },
-  statsDivider: {
-    color: colors.textSecondary,
-    fontSize: fontScale(15),
-    marginHorizontal: 8,
-  },
-  identityBlock: {
-    marginTop: verticalScale(10),
-    gap: 2,
-    alignItems: 'center',
   },
   heroName: {
     color: colors.textPrimary,
-    fontSize: fontScale(17),
+    fontSize: fontScale(18),
     fontWeight: '700',
-    textAlign: 'center',
   },
   handle: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
     fontWeight: '500',
-    textAlign: 'center',
   },
+  // Stats — number-over-label boxes, left-aligned, spaced apart (no outline).
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 20,
+    marginTop: verticalScale(6),
+  },
+  statBox: {
+    alignItems: 'flex-start',
+  },
+  statNum: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
+  statLbl: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(1),
+  },
+  statLblActive: {
+    color: colors.textPrimary,
+    fontWeight: '700',
+  },
+  // Bio — full-width line under the avatar row.
   bio: {
     color: colors.textPrimary,
     fontSize: fontScale(14),
     lineHeight: fontScale(19),
-    marginTop: verticalScale(4),
-    textAlign: 'center',
+    marginTop: verticalScale(12),
   },
   actionRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginTop: verticalScale(14),
   },
   actionPill: {
     flex: 1,
-    // card (#1A1A24), not surface (#0F0F14) — surface is barely lighter than the
-    // #000 page bg, so Edit Profile / Share read as disabled. card is the app's
-    // standard elevated tappable fill (matches the auth/social buttons). The
-    // Follow (accent) and Message (transparent ghost) variants override this.
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
@@ -488,26 +410,28 @@ const styles = StyleSheet.create({
   actionPillSecondary: {
     backgroundColor: 'transparent',
   },
-  // Follow CTA — solid lavender = the clear PRIMARY action ("do it") against
-  // the neutral Message / ⋯ pills. The Following / Requested state drops to a
-  // QUIET tonal treatment (faint purple tint fill + purple outline + purple
-  // text) so an already-actioned relationship reads as "done — tap to undo",
-  // not a loud call to action.
+  // Follow (not yet following) — TONAL purple: faint fill + purple outline + purple
+  // text (the quiet CTA, matches the onboarding bot-card follow buttons).
   actionPillFollow: {
-    backgroundColor: colors.accent,
-    borderColor: 'transparent',
-  },
-  actionPillFollowing: {
     backgroundColor: 'rgba(167,139,250,0.15)',
     borderColor: 'rgba(167,139,250,0.55)',
+  },
+  // Following / Requested — quiet monotone matching the dream-card follow pill:
+  // whitish outline + white-80% text (legible "done — tap to undo", not too dim).
+  actionPillFollowing: {
+    backgroundColor: colors.card,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   actionText: {
     color: colors.textPrimary,
     fontSize: fontScale(14),
     fontWeight: '600',
   },
-  actionTextFollowing: {
+  actionTextFollow: {
     color: colors.accent,
+  },
+  actionTextFollowing: {
+    color: 'rgba(255,255,255,0.8)',
   },
   actionTextSecondary: {
     color: colors.textPrimary,

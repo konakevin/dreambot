@@ -26,7 +26,8 @@ import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { handleImageLongPress } from '@/lib/imageLongPress';
+import { buildPostActionRows } from '@/lib/imageLongPress';
+import { PostActionSheet } from '@/components/PostActionSheet';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
@@ -35,7 +36,6 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useToggleBlock } from '@/hooks/useBlockUser';
 import { useBotUsers } from '@/hooks/useBotUsers';
-import { openPostOptions } from '@/lib/postOptions';
 import { useRepostIds } from '@/hooks/useRepostIds';
 import { useToggleRepost } from '@/hooks/useToggleRepost';
 
@@ -171,8 +171,9 @@ export const DreamCard = memo(function DreamCard({
   const toggleFollow = useToggleFollow();
   const toggleBlock = useToggleBlock();
   const { data: botUsers } = useBotUsers();
-  // Bot authors get Report-only options (curated content, can't be "blocked").
   const isBotAuthor = (botUsers ?? []).some((b) => b.id === item.user_id);
+  // Long-press context menu (PostActionSheet).
+  const [actionsOpen, setActionsOpen] = useState(false);
   // Author controls on the card (non-own posts): a Follow/Following toggle pill
   // (so the user can also unfollow from the feed, not just quick-follow) + a
   // visible "•••" options button that opens Report/Block (a discoverable 1.2
@@ -336,14 +337,8 @@ export const DreamCard = memo(function DreamCard({
   }
 
   function handleLongPress() {
-    handleImageLongPress({
-      id: item.id,
-      imageUrl: item.image_url,
-      imageUrlHq: item.image_url_hq ?? null,
-      isOwn: isOwnPost,
-      faceSwapMode: item.face_swap_mode ?? null,
-      onDelete,
-    });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    setActionsOpen(true);
   }
 
   // Gestures composed by useCardGestures above — swipe-left, pinch, two-finger pan.
@@ -498,12 +493,35 @@ export const DreamCard = memo(function DreamCard({
                     </View>
                   )}
                   <View style={{ flex: 1 }}>
-                    {/* Row 1: name + time inline */}
+                    {/* Row 1: name + time + inline Follow/Following pill */}
                     <View style={s.usernameLine}>
                       <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
                       <Text style={[s.timestamp, { marginLeft: 6, marginTop: 0 }]}>
                         · {timeAgo(item.created_at)}
                       </Text>
+                      {showAuthorControls && (
+                        <TouchableOpacity
+                          style={[
+                            s.followPill,
+                            { marginLeft: 10 },
+                            isFollowing && s.followPillFollowing,
+                          ]}
+                          onPress={() => {
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                            toggleFollow.mutate({
+                              userId: item.user_id,
+                              currentlyFollowing: isFollowing,
+                              isPublic: true,
+                            });
+                          }}
+                          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={[s.followText, isFollowing && s.followTextFollowing]}>
+                            {isFollowing ? 'Following' : 'Follow'}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                     {item.description ? (
                       <ExpandableDescription text={item.description} style={s.description} />
@@ -511,46 +529,8 @@ export const DreamCard = memo(function DreamCard({
                   </View>
                 </TouchableOpacity>
 
-                {/* Row 2 (below the chip, flows under the avatar): Follow/Following
-                    toggle + the visible "•••" options (Report/Block) — a
-                    discoverable 1.2 entry point. */}
-                {showAuthorControls && (
-                  <View style={s.authorControlsRow}>
-                    <TouchableOpacity
-                      style={[s.followPill, isFollowing && s.followPillFollowing]}
-                      onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        toggleFollow.mutate({
-                          userId: item.user_id,
-                          currentlyFollowing: isFollowing,
-                          isPublic: true,
-                        });
-                      }}
-                      hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={[s.followText, isFollowing && s.followTextFollowing]}>
-                        {isFollowing ? 'Following' : 'Follow'}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={s.optionsBtn}
-                      onPress={() =>
-                        openPostOptions({
-                          uploadId: item.id,
-                          authorId: item.user_id,
-                          authorName: item.username ?? 'user',
-                          isBot: isBotAuthor,
-                          blockUser: toggleBlock.mutate,
-                        })
-                      }
-                      hitSlop={{ top: 8, bottom: 8, left: 6, right: 8 }}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="ellipsis-horizontal" size={16} color="#FFFFFF" />
-                    </TouchableOpacity>
-                  </View>
-                )}
+                {/* Report/Block live on long-press of the post (imageLongPress)
+                    and on the author's profile — no visible "•••" on the card. */}
               </View>
             </View>
 
@@ -730,6 +710,26 @@ export const DreamCard = memo(function DreamCard({
             </View>
           </Animated.View>
         </Pressable>
+
+        <PostActionSheet
+          visible={actionsOpen}
+          onClose={() => setActionsOpen(false)}
+          bottomInset={bottomPadding}
+          rows={buildPostActionRows({
+            id: item.id,
+            imageUrl: item.image_url,
+            imageUrlHq: item.image_url_hq ?? null,
+            isOwn: isOwnPost,
+            faceSwapMode: item.face_swap_mode ?? null,
+            onDelete,
+            onDreamLikeThis,
+            authorName: item.username ?? undefined,
+            isBot: isBotAuthor,
+            onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),
+            onToggleVisibility: showVisibilityToggle ? onTogglePosted : undefined,
+            isPublic: item.is_public,
+          })}
+        />
       </Animated.View>
     </GestureDetector>
   );
@@ -919,22 +919,6 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
   },
   followTextFollowing: { color: 'rgba(255,255,255,0.8)' },
-  authorControlsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: verticalScale(7),
-  },
-  optionsBtn: {
-    height: verticalScale(26),
-    paddingHorizontal: 10,
-    borderRadius: 7,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   description: {
     color: 'rgba(255,255,255,0.85)',
     fontSize: fontScale(13),

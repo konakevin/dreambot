@@ -28,8 +28,11 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
+import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
@@ -120,7 +123,15 @@ export default function ProfileScreen() {
   const isSocialTab = activeTab === 'followers' || activeTab === 'following';
   const { data: profile, refetch: refetchProfile } = usePublicProfile(user?.id ?? '');
   // Change-avatar action sheet (under the avatar) — moved here from Settings.
-  const { changePhoto, uploading: avatarUploading } = useChangeAvatar(profile?.avatar_url);
+  const {
+    chooseFromLibrary,
+    takePhoto,
+    deletePhoto,
+    hasAvatar,
+    uploading: avatarUploading,
+  } = useChangeAvatar(profile?.avatar_url);
+  const tabBarHeight = useBottomTabBarHeight();
+  const [showPicSheet, setShowPicSheet] = useState(false);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
   );
@@ -190,6 +201,44 @@ export default function ProfileScreen() {
       avatarUrl={profile?.avatar_url ?? null}
       username={user?.user_metadata?.username ?? null}
       onClose={() => setShowAvatarPreview(false)}
+    />
+  );
+  // Profile-picture action menu — same slide-up sheet as the dream-card long-press.
+  const picSheet = (
+    <PostActionSheet
+      visible={showPicSheet}
+      onClose={() => setShowPicSheet(false)}
+      title="Update Profile Photo"
+      titleImageUrl={profile?.avatar_url ? avatarUrl(profile.avatar_url) : null}
+      bottomInset={tabBarHeight}
+      rows={[
+        {
+          key: 'library',
+          label: 'Choose from library',
+          icon: 'images-outline',
+          group: 'primary',
+          onPress: chooseFromLibrary,
+        },
+        {
+          key: 'camera',
+          label: 'Take photo',
+          icon: 'camera-outline',
+          group: 'primary',
+          onPress: takePhoto,
+        },
+        ...(hasAvatar
+          ? [
+              {
+                key: 'delete',
+                label: 'Delete photo',
+                icon: 'trash-outline',
+                group: 'danger' as const,
+                destructive: true,
+                onPress: deletePhoto,
+              },
+            ]
+          : []),
+      ]}
     />
   );
   const userListRef = useRef<FlatList<FollowUser>>(null);
@@ -340,7 +389,7 @@ export default function ProfileScreen() {
         onStatsPress={handleStatsTabChange}
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
-        onChangePhoto={changePhoto}
+        onChangePhoto={() => setShowPicSheet(true)}
       >
         {/* Sparkle balance + a doorway to the store (own profile only) */}
         <TouchableOpacity
@@ -349,7 +398,7 @@ export default function ProfileScreen() {
           style={styles.sparkleChip}
         >
           <Ionicons name="sparkles" size={15} color={colors.accent} />
-          <Text style={styles.sparkleChipText}>{formatCompact(sparkleBalance)} sparkles</Text>
+          <Text style={styles.sparkleChipText}>{formatCompact(sparkleBalance)}</Text>
         </TouchableOpacity>
       </ProfileHeader>
 
@@ -472,6 +521,7 @@ export default function ProfileScreen() {
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
         />
+        {picSheet}
       </SafeAreaView>
     );
   }
@@ -521,6 +571,7 @@ export default function ProfileScreen() {
           />
         )}
       />
+      {picSheet}
     </SafeAreaView>
   );
 }
@@ -532,12 +583,10 @@ const styles = StyleSheet.create({
   sparkleChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'center',
     gap: 6,
-    marginTop: verticalScale(12),
     paddingHorizontal: 14,
-    height: 32,
-    borderRadius: 16,
+    height: 34,
+    borderRadius: 8,
     backgroundColor: 'rgba(167,139,250,0.18)',
     borderWidth: 1,
     borderColor: 'rgba(167,139,250,0.55)',

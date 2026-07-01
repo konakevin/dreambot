@@ -215,6 +215,128 @@ export function openDownloadSheet(opts: SaveOpts) {
 }
 
 /**
+ * A single row in the slide-up PostActionSheet (the Instagram-style long-press
+ * menu). `group` splits the rows into visual cards: 'primary' (save / create /
+ * visibility) vs 'danger' (report / block / delete). `icon` is an Ionicons name.
+ */
+export type PostActionRow = {
+  key: string;
+  label: string;
+  icon: string;
+  group: 'primary' | 'danger';
+  destructive?: boolean;
+  onPress: () => void;
+};
+
+export interface PostActionSheetOpts extends LongPressOpts {
+  /** Author display name — for the "Block @name" label. */
+  authorName?: string;
+  /** Bot authors are curated first-party content: Report is offered, Block is not. */
+  isBot?: boolean;
+  /** useToggleBlock().mutate wrapper from the caller (hooks can't run in a lib). */
+  onBlock?: () => void;
+  /** Own-post visibility toggle (album/profile contexts). */
+  onToggleVisibility?: () => void;
+  /** Current visibility, to label the toggle "Make private" vs "Make public". */
+  isPublic?: boolean;
+}
+
+const iconForDownload = (label: string): string =>
+  label.startsWith('Save in HD') ? 'sparkles-outline' : 'download-outline';
+
+/**
+ * Build the ordered rows for the PostActionSheet. Reuses the exact download /
+ * HD-gating logic (downloadOptionButtons + saveHd) so the sheet and the legacy
+ * alert stay in lockstep. Presentation lives in components/PostActionSheet.tsx.
+ */
+export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] {
+  const rows: PostActionRow[] = [];
+
+  // Save / Save in HD (or single "Save" for face-swap dreams).
+  for (const b of downloadOptionButtons(opts)) {
+    rows.push({
+      key: `save:${b.text}`,
+      label: b.text,
+      icon: iconForDownload(b.text),
+      group: 'primary',
+      onPress: () => b.onPress?.(),
+    });
+  }
+
+  // Dream like this — re-render from this post's style.
+  if (opts.onDreamLikeThis) {
+    rows.push({
+      key: 'dlt',
+      label: 'Dream like this',
+      icon: 'color-wand-outline',
+      group: 'primary',
+      onPress: opts.onDreamLikeThis,
+    });
+  }
+
+  // Own-post visibility toggle.
+  if (opts.onToggleVisibility) {
+    rows.push({
+      key: 'visibility',
+      label: opts.isPublic ? 'Make private' : 'Make public',
+      icon: opts.isPublic ? 'eye-off-outline' : 'eye-outline',
+      group: 'primary',
+      onPress: opts.onToggleVisibility,
+    });
+  }
+
+  // Report — required flag path; only on posts you don't own.
+  if (!opts.isOwn) {
+    rows.push({
+      key: 'report',
+      label: 'Report',
+      icon: 'flag-outline',
+      group: 'danger',
+      onPress: () => reportContent({ uploadId: opts.id }),
+    });
+  }
+
+  // Block — real users only (not our own bots), not your own post. Confirm first.
+  if (!opts.isOwn && !opts.isBot && opts.onBlock) {
+    const name = opts.authorName || 'user';
+    const block = opts.onBlock;
+    rows.push({
+      key: 'block',
+      label: `Block @${name}`,
+      icon: 'remove-circle-outline',
+      group: 'danger',
+      destructive: true,
+      onPress: () =>
+        showAlert(`Block @${name}?`, "They won't be able to see your posts or contact you.", [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Block',
+            style: 'destructive',
+            onPress: () => {
+              block();
+              Toast.show(`Blocked @${name}`, 'checkmark-circle');
+            },
+          },
+        ]),
+    });
+  }
+
+  // Delete — own posts (destructive).
+  if (opts.onDelete) {
+    rows.push({
+      key: 'delete',
+      label: 'Delete',
+      icon: 'trash-outline',
+      group: 'danger',
+      destructive: true,
+      onPress: opts.onDelete,
+    });
+  }
+
+  return rows;
+}
+
+/**
  * Long-press menu = the quality options plus context actions (Dream like this,
  * Delete) for owners/admins. CustomAlert auto-stacks when there are ≠2 buttons
  * and floats Cancel to the bottom.

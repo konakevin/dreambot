@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/AppText';
+import { GradientTitle } from '@/components/GradientTitle';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
@@ -171,11 +172,21 @@ export function UpscaleModalHost() {
         <View style={styles.center}>
           <View style={styles.card}>
             {showSpinner ? (
-              <WaveLoader />
+              <>
+                {/* Title ABOVE the loading wave, in the brand logo gradient/font. */}
+                <GradientTitle size={18} weight={700}>
+                  {title}
+                </GradientTitle>
+                <View style={styles.waveBelowTitle}>
+                  <WaveLoader />
+                </View>
+              </>
             ) : (
-              <Ionicons name={copy.icon} size={40} color={colors.accent} />
+              <>
+                <Ionicons name={copy.icon} size={40} color={colors.accent} />
+                <Text style={styles.title}>{title}</Text>
+              </>
             )}
-            <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{copy.sub}</Text>
             {copy.dismiss !== 'hidden' && (
               <Pressable
@@ -225,6 +236,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(18),
     textAlign: 'center',
   },
+  waveBelowTitle: { marginTop: verticalScale(16) },
   subtitle: {
     color: colors.textSecondary,
     fontSize: fontScale(13),
