@@ -1502,17 +1502,23 @@ async function runBot(opts) {
           vibeKey: vibeKey,
           allowedModels: bot.allowedModels,
           modelWeights: bot.modelWeights,
+          banExemptions: bot.modelBanExemptions,
         });
         renderModel = picked.model;
         renderInputOverrides = picked.inputOverrides;
         console.log(`  🎨 model=${renderModel} (picked for medium=${medium}, vibe=${vibeKey})`);
       }
 
-      // HARD BAN guard (Kevin 2026-06-22) — no bot may EVER render Nano Banana
+      // HARD BAN guard (Kevin 2026-06-22) — no bot may render Nano Banana
       // (gemini-2-image) or GPT Image 2, regardless of which branch chose the
       // model (night_mode / modelByPath / picker) or stale DB config. modelByPath
       // bypasses pickModel's strip, so re-check here as the final gate.
-      if (BOT_BANNED_MODELS.has(renderModel)) {
+      // Per-bot opt-back-in (2026-07-01, Kevin): a bot may exempt a model via
+      // bot.modelBanExemptions (dinobot banana; chibibot + yumbot banana + gpt-2).
+      if (
+        BOT_BANNED_MODELS.has(renderModel) &&
+        !(Array.isArray(bot.modelBanExemptions) && bot.modelBanExemptions.includes(renderModel))
+      ) {
         console.log(`  🚫 ${renderModel} is BANNED for bots — forcing flux-1.1-pro-ultra`);
         renderModel = 'black-forest-labs/flux-1.1-pro-ultra';
         renderInputOverrides = {};

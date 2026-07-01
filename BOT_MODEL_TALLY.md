@@ -6,6 +6,14 @@ Kevin's per-bot model review after the 17 × 8 × 3 matrix run (2026-05-30, comm
 
 **Status legend:** ✅ keep · ❌ drop · ⭐ favorite · 🟡 conditional / minor issues · ⏳ awaiting review
 
+> **⚠️ FLEET BAN OVERLAY (supersedes the per-bot ✅ below for these two models):**
+> GPT Image 2 banned fleet-wide 2026-06-17; Nano Banana banned fleet-wide 2026-06-21
+> (`BOT_BANNED_MODELS` in `scripts/lib/modelPicker.js` + render-time guard in `botEngine.js`).
+> **Per-bot re-enables 2026-07-01 (Kevin), via `bot.modelBanExemptions` + `allowedModels`:**
+> **dinobot** → Nano Banana back; **chibibot** → Banana + GPT-2 back (weight 20 vs 80 for the
+> flux pair, clean-medium/skipPaths routing restored); **yumbot** → Banana + GPT-2 back
+> (route through `yumbot_gpt_clean`). All other bots remain Flux-only.
+
 ---
 
 ## bloombot

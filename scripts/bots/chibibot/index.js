@@ -100,9 +100,18 @@ module.exports = {
   // chibi creature with no abstract drift (gorgeous critter-village + cute
   // creature renders). Non-look paths still swap to clean. (MVP-4 listed here;
   // expand to all 16 look paths at full rollout.)
-  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
-  // both now banned bot-wide (FLUX-only). (CHIBI_LOOK_PATHS still drives mediumByPath.)
-  cleanMediumByModel: {},
+  // Retired with the 2026-06-21 fleet ban; RESTORED 2026-07-01 (Kevin) —
+  // ChibiBot re-enables gpt-2 + Nano Banana via modelBanExemptions below.
+  cleanMediumByModel: {
+    'openai/gpt-image-2': {
+      medium: 'chibibot_gpt_clean',
+      skipPaths: CHIBI_LOOK_PATHS,
+    },
+    'google/gemini-2-image': {
+      medium: 'chibibot_gpt_clean',
+      skipPaths: CHIBI_LOOK_PATHS,
+    },
+  },
 
   // Per-path medium lock — falls through to bot.mediums 50/50 rotation
   // when path not listed.
@@ -219,17 +228,26 @@ module.exports = {
   cycleAllPaths: true,
 
   useModelPicker: true,
-  // Locked to flux-1.1-pro-ultra (Kevin 2026-06-07 — the chibi look rolls
-  // cleanest on pro-ultra) with a 20% bounce to gpt-image-2 for variety. The
-  // gpt-2 picks auto-swap to chibibot_gpt_clean via cleanMediumByModel (mig
-  // 238) so they render with the dedicated clean directive instead of the
-  // neutral medium's Pop-Mart vinyl default.
-  // flux-1.1-pro allowed alongside ultra everywhere (Kevin 2026-06-21).
-  allowedModels: ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+  // Ultra + 1.1-pro carry the chibi look (Kevin 2026-06-07 / 2026-06-21);
+  // gpt-2 + Nano Banana re-enabled bot-wide 2026-07-01 (Kevin) as minority
+  // variety picks (20 vs 80 weight ≈ 1-in-5 combined). On look paths they
+  // render WITH the rolled look (skipPaths above); non-look paths swap to
+  // chibibot_gpt_clean.
+  allowedModels: [
+    'black-forest-labs/flux-1.1-pro-ultra',
+    'black-forest-labs/flux-1.1-pro',
+    'openai/gpt-image-2',
+    'google/gemini-2-image',
+  ],
   modelWeights: {
     'black-forest-labs/flux-1.1-pro-ultra': 80,
     'black-forest-labs/flux-1.1-pro': 80,
+    'openai/gpt-image-2': 20,
+    'google/gemini-2-image': 20,
   },
+  // Per-bot opt-out of the fleet-wide BOT_BANNED_MODELS set (modelPicker +
+  // botEngine render guard both honor this).
+  modelBanExemptions: ['openai/gpt-image-2', 'google/gemini-2-image'],
 
   // Per-path model lock. creature-world → flux-dev. CONFIRMED from the DB:
   // the ornate reference renders Kevin hearted (2026-05-07, paths

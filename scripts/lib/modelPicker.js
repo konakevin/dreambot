@@ -201,6 +201,11 @@ async function pickModel({
   forceModel,
   allowedModels,
   modelWeights,
+  // Per-bot opt-out of BOT_BANNED_MODELS (bot.modelBanExemptions). The fleet
+  // ban stays the default; a bot re-enables a banned model ONLY by listing it
+  // here AND in its allowedModels (2026-07-01: dinobot banana; chibibot +
+  // yumbot banana + gpt-2).
+  banExemptions = [],
 } = {}) {
   if (forceModel) {
     return {
@@ -225,10 +230,12 @@ async function pickModel({
   // Bot-scoped whitelist. If supplied, intersect every candidate pool with
   // this set before picking — lets a bot opt out of specific models (e.g.
   // GothBot banning flux-2-dev + flux-2-pro because of tensor bugs + safety).
+  const isBannedHere = (m) =>
+    BOT_BANNED_MODELS.has(m) && !(Array.isArray(banExemptions) && banExemptions.includes(m));
   const filterByAllowed = (arr) => {
     // ALWAYS strip the hard-banned bot models first — applies even when the bot
     // supplied no allowedModels (so a DB medium pool can never serve them).
-    let out = arr.filter((m) => !BOT_BANNED_MODELS.has(m));
+    let out = arr.filter((m) => !isBannedHere(m));
     if (!allowedModels || !Array.isArray(allowedModels) || allowedModels.length === 0) return out;
     const allowedSet = new Set(allowedModels);
     return out.filter((m) => allowedSet.has(m));
@@ -263,7 +270,7 @@ async function pickModel({
   // Fallback: pick from the bot's allowedModels whitelist itself, or DEFAULT.
   // Strip banned here too in case a bot's allowedModels still lists one.
   if (allowedModels && Array.isArray(allowedModels) && allowedModels.length > 0) {
-    const safe = allowedModels.filter((m) => !BOT_BANNED_MODELS.has(m));
+    const safe = allowedModels.filter((m) => !isBannedHere(m));
     if (safe.length > 0) {
       const picked = pickWeighted(safe, modelWeights);
       return {

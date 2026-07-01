@@ -62,8 +62,11 @@ const ALL_ENABLED_AI_MODELS = [
   // Nano Banana (google/gemini-2-image) BANNED fleet-wide for bots 2026-06-21 (Kevin),
   // joining GPT Image 2 (openai/gpt-image-2) BANNED 2026-06-17. Both removed here AND
   // from every bot's allowedModels / modelByPath / pathWeights / cleanMediumByModel.
-  // Bots are FLUX-ONLY going forward. (These models remain available to user-facing
-  // Create mode / nightly via their own model lists — this registry is bot-only.)
+  // Bots default FLUX-ONLY. (These models remain available to user-facing Create
+  // mode / nightly via their own model lists — this registry is bot-only.)
+  // 2026-07-01 (Kevin): individual bots may opt back in by listing a banned model
+  // in BOTH bot.allowedModels AND bot.modelBanExemptions (dinobot: banana;
+  // chibibot + yumbot: banana + gpt-2). The canonical list here stays Flux-only.
   'black-forest-labs/flux-dev', // 3¢ — open-weight Flux 1, artistic register
   'black-forest-labs/flux-2-flex', // 6¢
   'black-forest-labs/flux-1.1-pro-ultra', // 6¢

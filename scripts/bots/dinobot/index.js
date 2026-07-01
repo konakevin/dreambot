@@ -71,12 +71,14 @@ module.exports = {
     dinobot_gpt_clean: '',
   },
 
-  // gpt-image-2 + nano-banana clean-render override (2026-06-07). Both models
-  // read the IMAX/PBR/ray-traced anchors as "go abstract"; the clean medium
+  // nano-banana clean-render override (2026-06-07). Banana reads the
+  // IMAX/PBR/ray-traced anchors as "go abstract"; the clean medium
   // (+ empty prefix/suffix) lets the seed's dinosaur scene lead.
-  // cleanMediumByModel retired 2026-06-21 — only ever routed Nano Banana / gpt-2,
-  // both now banned bot-wide (FLUX-only).
-  cleanMediumByModel: {},
+  // Retired with the 2026-06-21 fleet ban; RESTORED 2026-07-01 (Kevin) —
+  // DinoBot re-enables Nano Banana via modelBanExemptions below.
+  cleanMediumByModel: {
+    'google/gemini-2-image': { medium: 'dinobot_gpt_clean' },
+  },
   promptPrefixByMedium: {
     dinobot_gpt_clean: '',
   },
@@ -120,14 +122,22 @@ module.exports = {
   // Ban flux-2-max + flux-2-flex from DinoBot specifically. Per Kevin
   // 2026-06-01 — those two models push DinoBot's photoreal-dinosaur prompt
   // toward 3D-render/plastic-CGI looks that fight the BBC-Planet-Earth /
-  // museum-paleoart aesthetic the bot wants. Other 6 models in
-  // ALL_ENABLED_AI_MODELS stay (banana / gpt-2 / flux-dev / flux-1.1-pro /
-  // flux-1.1-pro-ultra / flux-2-pro). Filtered from the canonical list so
-  // newly-added models auto-inherit (still need explicit add to the ban
-  // set if they also fight the look).
-  allowedModels: ALL_ENABLED_AI_MODELS.filter(
-    (m) => m !== 'black-forest-labs/flux-2-max' && m !== 'black-forest-labs/flux-2-flex'
-  ),
+  // museum-paleoart aesthetic the bot wants. The remaining canonical Flux
+  // models stay (flux-dev / flux-1.1-pro / flux-1.1-pro-ultra / flux-2-pro);
+  // filtered from the canonical list so newly-added models auto-inherit
+  // (still need explicit add to the ban set if they also fight the look).
+  allowedModels: [
+    ...ALL_ENABLED_AI_MODELS.filter(
+      (m) => m !== 'black-forest-labs/flux-2-max' && m !== 'black-forest-labs/flux-2-flex'
+    ),
+    // Nano Banana re-enabled for DinoBot (Kevin 2026-07-01) — not in the
+    // canonical list (fleet ban stands), so added explicitly here and
+    // exempted below.
+    'google/gemini-2-image',
+  ],
+  // Per-bot opt-out of the fleet-wide BOT_BANNED_MODELS set (modelPicker +
+  // botEngine render guard both honor this).
+  modelBanExemptions: ['google/gemini-2-image'],
 
   // Single locked vibe — cinematic. Was rotating 11 vibes which produced
   // inconsistent moods (cozy/ethereal/shimmer pulled away from the
