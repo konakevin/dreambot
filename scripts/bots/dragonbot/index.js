@@ -171,9 +171,13 @@ module.exports = {
     // mythic-bestiary: anchor ONE non-dragon mythic creature portrait.
     'mythic-bestiary':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a BESTIARY HERO PORTRAIT of ONE magnificent legendary NON-DRAGON creature (griffon / kraken / phoenix / hydra / treant / chimera / manticore / roc / etc.), the creature large and central with its anatomy + texture + signature features in crisp detail, a tiny figure for scale, its native habitat behind with depth, monster-manual showcase, painterly atmospheric grandeur, awe-inducing concept-art masterwork',
-    // magic-unleashed: anchor the colossal high-fantasy spell event.
+    // magic-unleashed: SHORT anchor only (2026-07-01 de-cram). The old stuffed
+    // wrapper mandated "light filling and dominating the frame, a SMALL figure
+    // dwarfed below" — which locked every render to Flux's generic energy-blob
+    // + rear-silhouette-ant centroid regardless of the rolled seeds. The
+    // template now owns composition; the prefix names only medium + register.
     'magic-unleashed':
-      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a COLOSSAL HIGH-FANTASY SPELL being UNLEASHED — overwhelming arcane energy, glowing runes, swirling magical power and light filling and dominating the frame, a SMALL robed wizard/sorcerer figure dwarfed below as they channel it, the setting transformed and lit by the magic, cinematic painterly grandeur, awe-inducing concept-art masterwork',
+      'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, a colossal high-fantasy spell unleashed',
     // clash-of-armies: anchor the epic HIGH-FANTASY battle + dragons (not Roman).
     'clash-of-armies':
       'classic painted fantasy-novel-cover oil illustration, visible painterly brushwork, rich full color, an EPIC MASSED HIGH-FANTASY BATTLE — two vast armies of fantasy races (armored fantasy knights, orcs, elves, dwarves, trolls, undead) in ORNATE FANTASTICAL plate armor with magical weapons and fantasy heraldry, great WESTERN DRAGONS sweeping over the battle breathing fire, towering fantastical siege engines, war-magic and spell-blasts, banners and dust receding to the horizon, Pelennor-Fields + Helms-Deep scale and grandeur — NOT a Roman / Greco-Roman / historical legion battle, cinematic painterly depth, thunderous chaos, awe-inducing concept-art masterwork',
