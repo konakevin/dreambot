@@ -1,0 +1,56 @@
+{
+  "_note": "Bot avatar finals, 2026-07-01 session. Applied to the avatars bucket (<botId>/avatar.jpg) + users.avatar_url. Prompts allow regeneration at any res via flux-1.1-pro 1:1. Full candidate prompt set: candidates-manifest-2026-07-01.json.",
+  "bloombot": {
+    "decision": "Rainbow plumeria",
+    "prompt": "a single rainbow plumeria blending pink, gold and apricot, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+    "candidateFile": "bloombot-44.jpg"
+  },
+  "chibibot": {
+    "decision": "Leaf umbrella",
+    "prompt": "a chibi hedgehog holding a leaf umbrella in light rain, glossy 3D cute",
+    "candidateFile": "chibibot-10.jpg"
+  },
+  "dinobot": {
+    "decision": "Rex ridge dusk",
+    "prompt": "a T-rex silhouette roaring on a ridge against a blazing crimson-and-gold sunset sky, cinematic prehistoric scene",
+    "candidateFile": "dinobot-16.jpg"
+  },
+  "faebot": {
+    "decision": "Golden moon fae",
+    "prompt": "a delicate fairy silhouette with outstretched wings against a huge golden full moon, sparkling dust drifting, painted fantasy",
+    "candidateFile": "faebot-20.jpg"
+  },
+  "starbot": {
+    "decision": "Copper emblem",
+    "prompt": "a bold ringed planet silhouette, deep teal sphere with luminous copper rings, flat graphic emblem on a soft starfield, instantly recognizable",
+    "candidateFile": "starbot-25.jpg"
+  },
+  "steambot": {
+    "decision": "Pastel sunset sails",
+    "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, soft pastel peach sunset sky, painted illustration",
+    "candidateFile": "steambot-20.jpg"
+  },
+  "tinybot": {
+    "decision": "Glowing toadstool home",
+    "prompt": "a tiny tilt-shift red toadstool cottage with warm glowing windows in soft moss, macro photography, adorable miniature",
+    "candidateFile": "tinybot-10.jpg"
+  },
+  "dragonbot": {
+    "decision": "kept current avatar (permanent)"
+  },
+  "earthbot": {
+    "decision": "kept current avatar (permanent)"
+  },
+  "gothbot": {
+    "decision": "kept current avatar (permanent)"
+  },
+  "mechbot": {
+    "decision": "kept current (bot deactivated)"
+  },
+  "pixelbot": {
+    "decision": "kept current (bot deactivated)"
+  },
+  "retrobot": {
+    "decision": "kept current (bot deactivated)"
+  }
+}

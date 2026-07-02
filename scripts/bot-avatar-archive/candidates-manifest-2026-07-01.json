@@ -1,0 +1,2025 @@
+{
+  "bloombot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-0.jpg",
+      "label": "Golden Age rose",
+      "prompt": "a single deep-crimson rose in full bloom, Dutch Golden Age oil painting, dramatic dark background, dewdrops on velvet petals"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-1.jpg",
+      "label": "Hummingbird sip",
+      "prompt": "a jewel-green hummingbird hovering at a glowing trumpet flower, wings spread, painterly fine-art render, luminous"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-2.jpg",
+      "label": "Stained-glass bloom",
+      "prompt": "a Tiffany stained-glass lotus flower, jewel-tone glass petals glowing with backlight, ornate leadwork"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-3.jpg",
+      "label": "Pastel peony",
+      "prompt": "a lush blush-pink peony fully open, soft pastel watercolor, delicate and pretty, gentle morning light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-4.jpg",
+      "label": "Dawn lotus macro",
+      "prompt": "a dew-covered pink lotus glowing at dawn, macro photography, soft golden backlight, crystal water droplets"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-5.jpg",
+      "label": "Sunglasses sunflower",
+      "prompt": "a cheerful sunflower wearing tiny sunglasses, tilted like it is posing for a photo, bright summer light, playful 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-6.jpg",
+      "label": "Petal confetti",
+      "prompt": "a bright flower bursting open in a joyful explosion of petal confetti, mid-pop, vivid and playful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-7.jpg",
+      "label": "Bee pilot",
+      "prompt": "a chubby bumblebee wearing tiny aviator goggles coming in for a landing on a bright zinnia, playful macro"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-8.jpg",
+      "label": "Ladybug lounger",
+      "prompt": "a ladybug lounging on a daisy petal like a sun chair beside a tiny drink umbrella, whimsical macro"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-9.jpg",
+      "label": "Singing tulips",
+      "prompt": "two tulips leaning together like duet singers with pollen sparkle notes in the air, whimsical illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-10.jpg",
+      "label": "Blossom branch",
+      "prompt": "a cherry blossom branch in full bloom against a pale blue spring sky, delicate pink petals, fine-art photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-11.jpg",
+      "label": "Wisteria cascade",
+      "prompt": "a cascading curtain of lavender wisteria blooms glowing in soft light, dreamy painterly render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-12.jpg",
+      "label": "Mason jar posy",
+      "prompt": "a wildflower bouquet in a mason jar on a sunlit cottage windowsill, warm and charming, soft photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-13.jpg",
+      "label": "White orchid",
+      "prompt": "a single elegant white orchid on a soft cream background, minimal, graceful fine-art still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-14.jpg",
+      "label": "Lavender hour",
+      "prompt": "one sharp lavender stem before a dreamy golden-hour lavender field bokeh, warm fine-art photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-15.jpg",
+      "label": "Bloom terrarium",
+      "prompt": "a glass terrarium globe filled with tiny colorful blooms and moss, glowing softly, whimsical render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-16.jpg",
+      "label": "Butterfly landing",
+      "prompt": "a monarch butterfly alighting on a purple coneflower, painterly botanical art, luminous"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-17.jpg",
+      "label": "Petal spiral",
+      "prompt": "a rainbow ranunculus flower macro, hypnotic spiral of layered petals, vivid fine-art photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-18.jpg",
+      "label": "Flower crown",
+      "prompt": "a lush flower crown of roses and baby breath on a clean ivory background, pretty product-art flat lay"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-19.jpg",
+      "label": "Twilight bloom",
+      "prompt": "a magical flower glowing softly from within at twilight, luminous petals, enchanted fantasy render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-20.jpg",
+      "label": "Rose emblem",
+      "prompt": "a bold elegant silhouette of a single rose in deep magenta, flat graphic emblem on a soft cream background, instantly recognizable shape"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-21.jpg",
+      "label": "Tulip emblem",
+      "prompt": "a bold coral tulip silhouette with one leaf curve, flat graphic emblem on a pale mint background, clean and pretty"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-22.jpg",
+      "label": "Sunflower emblem",
+      "prompt": "a bold golden sunflower silhouette with radiating petals, flat graphic emblem on a warm ivory background, iconic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-23.jpg",
+      "label": "Orchid emblem",
+      "prompt": "a bold violet orchid silhouette, graceful petal shape, flat graphic emblem on a soft blush background"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-24.jpg",
+      "label": "Calla curve",
+      "prompt": "a bold elegant calla lily silhouette in white with a soft gold edge, flat graphic emblem on a dusty rose background"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-25.jpg",
+      "label": "Twilight lotus",
+      "prompt": "a magical lotus glowing softly from within at twilight, luminous violet-pink petals, enchanted fantasy render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-26.jpg",
+      "label": "Moonflower glow",
+      "prompt": "a luminous white moonflower glowing from within under a deep-blue twilight sky, soft silver shimmer, enchanted fantasy render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-27.jpg",
+      "label": "Ember tulip",
+      "prompt": "a magical tulip glowing warm amber from within at dusk, luminous petals against indigo twilight, enchanted fantasy render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-28.jpg",
+      "label": "Aurora orchid",
+      "prompt": "a glowing orchid with iridescent teal-and-violet luminous petals at twilight, soft magical light, enchanted fantasy render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-29.jpg",
+      "label": "Starlit rose",
+      "prompt": "a magical rose glowing softly from within under early stars, luminous blush petals, twilight blue backdrop, enchanted fantasy render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-30.jpg",
+      "label": "Pink hibiscus",
+      "prompt": "a single vivid blush-pink hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-31.jpg",
+      "label": "White hibiscus",
+      "prompt": "a single vivid pure-white hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-32.jpg",
+      "label": "Golden hibiscus",
+      "prompt": "a single vivid golden-yellow hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-33.jpg",
+      "label": "Orange hibiscus",
+      "prompt": "a single vivid bright coral-orange hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-34.jpg",
+      "label": "Violet hibiscus",
+      "prompt": "a single vivid deep violet hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-35.jpg",
+      "label": "Blue hibiscus",
+      "prompt": "a single vivid rare sapphire-blue hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-36.jpg",
+      "label": "Peach hibiscus",
+      "prompt": "a single vivid soft peach-cream hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-37.jpg",
+      "label": "Magenta hibiscus",
+      "prompt": "a single vivid electric magenta hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-38.jpg",
+      "label": "Lavender hibiscus",
+      "prompt": "a single vivid pale lavender hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-39.jpg",
+      "label": "Sunset hibiscus",
+      "prompt": "a single vivid two-tone sunset red-and-gold hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-40.jpg",
+      "label": "Classic plumeria",
+      "prompt": "a single perfect white plumeria with a golden-yellow center, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-41.jpg",
+      "label": "Pink plumeria",
+      "prompt": "a single blush-pink plumeria with a warm gold heart, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-42.jpg",
+      "label": "Sunset plumeria",
+      "prompt": "a single two-tone plumeria blushing from cream to sunset coral, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-43.jpg",
+      "label": "Crimson plumeria",
+      "prompt": "a single rare deep-crimson plumeria, velvety petals, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-44.jpg",
+      "label": "Rainbow plumeria",
+      "prompt": "a single rainbow plumeria blending pink, gold and apricot, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-45.jpg",
+      "label": "Plumeria pair",
+      "prompt": "two white-and-gold plumeria blossoms nestled together, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-46.jpg",
+      "label": "Plumeria cluster",
+      "prompt": "a small cluster of pink plumeria blossoms on a branch tip, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-47.jpg",
+      "label": "Floating plumeria",
+      "prompt": "a white plumeria floating on still turquoise water, gentle ripples, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-48.jpg",
+      "label": "Twilight plumeria",
+      "prompt": "a single plumeria glowing softly from within at twilight, luminous cream petals, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/bloombot-49.jpg",
+      "label": "Golden plumeria",
+      "prompt": "a single golden-yellow plumeria radiant in warm sunlight, dewy fresh petals, lush tropical botanical, soft magical glow, extreme close-up, single subject fills the frame, simple clean background",
+      "round": 6
+    }
+  ],
+  "brickbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-0.jpg",
+      "label": "Classic Space minifig",
+      "prompt": "a LEGO Classic Space astronaut minifigure, white suit with blue trim, smiling yellow face inside clear helmet, glossy plastic toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-1.jpg",
+      "label": "Pirate captain minifig",
+      "prompt": "a LEGO pirate captain minifigure with tricorn hat and parrot on shoulder, cheerful grin, glossy brick-built ship deck bokeh"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-2.jpg",
+      "label": "Brick dragon head",
+      "prompt": "a red dragon head built entirely from LEGO bricks, studs visible, glossy plastic, fierce and charming AFOL masterpiece"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-3.jpg",
+      "label": "Knight minifig",
+      "prompt": "a LEGO castle knight minifigure with silver helmet visor raised and red plume, heroic smile, toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-4.jpg",
+      "label": "Brick rainbow heart",
+      "prompt": "a heart built from rainbow LEGO bricks, studs visible, glossy candy-colored plastic, playful and clean"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-5.jpg",
+      "label": "Ice cream minifig",
+      "prompt": "a LEGO minifigure gleefully holding a giant brick-built ice cream cone twice its size, glossy toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-6.jpg",
+      "label": "Brick surfer",
+      "prompt": "a LEGO minifigure surfing a translucent blue brick-built wave, arms out, action toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-7.jpg",
+      "label": "Minifig wizard",
+      "prompt": "a LEGO wizard minifigure casting a spell of floating rainbow studs, sparkly toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-8.jpg",
+      "label": "Shark suit",
+      "prompt": "a LEGO minifigure in a shark costume suit, goofy grin visible in the shark mouth, glossy toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/brickbot-9.jpg",
+      "label": "Selfie minifig",
+      "prompt": "a LEGO minifigure taking a selfie with a tiny brick phone, big printed smile, glossy toy photography"
+    }
+  ],
+  "chibibot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-0.jpg",
+      "label": "Red panda cub",
+      "prompt": "one adorable chibi red panda cub with huge sparkling eyes, fluffy fur, glossy Pixar-style 3D render, heart-melting cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-1.jpg",
+      "label": "Baby dragon hatchling",
+      "prompt": "a chibi pastel baby dragon hatchling with tiny wings and big shiny eyes, sitting in half an eggshell, storybook 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-2.jpg",
+      "label": "Otter with lantern",
+      "prompt": "a chibi otter cub holding a tiny glowing lantern with both paws, warm light on its face, cozy storybook render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-3.jpg",
+      "label": "Fox in flower crown",
+      "prompt": "a chibi fox kit wearing a tiny daisy flower crown, watercolor storybook illustration, soft and sweet"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-4.jpg",
+      "label": "Penguin in scarf",
+      "prompt": "a chibi baby penguin wrapped in a red knit scarf, snowflakes sparkling, glossy cute 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-5.jpg",
+      "label": "Hamster cheeks",
+      "prompt": "a chibi hamster with comically stuffed cheeks hugging a giant strawberry, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-6.jpg",
+      "label": "Shark onesie cat",
+      "prompt": "a chibi kitten wearing a shark onesie hoodie, only its face peeking out, glossy 3D adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-7.jpg",
+      "label": "Party duckling",
+      "prompt": "a chibi duckling in a tiny party hat blowing a paper party horn, confetti bits, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-8.jpg",
+      "label": "Teacup cannonball",
+      "prompt": "a chibi bunny mid-cannonball leap into a giant teacup of bubbles, joyful, glossy 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-9.jpg",
+      "label": "Giggling panda",
+      "prompt": "a chibi baby panda rolling on its back laughing with tiny tears of joy, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-10.jpg",
+      "label": "Leaf umbrella",
+      "prompt": "a chibi hedgehog holding a leaf umbrella in light rain, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-11.jpg",
+      "label": "Baby seal",
+      "prompt": "a chibi baby seal pup with huge dark eyes on pale ice, glossy 3D adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-12.jpg",
+      "label": "Corgi pup",
+      "prompt": "a chibi corgi puppy with a tiny happy tongue out, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-13.jpg",
+      "label": "Nightcap owl",
+      "prompt": "a chibi baby owl wearing a striped nightcap, sleepy eyes, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-14.jpg",
+      "label": "Teacup kitten",
+      "prompt": "a chibi kitten sitting inside a floral teacup, paws on the rim, glossy 3D adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-15.jpg",
+      "label": "Butterfly nose",
+      "prompt": "a chibi fawn cross-eyed at a butterfly landing on its nose, glossy 3D sweet"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-16.jpg",
+      "label": "Rainbow scarf",
+      "prompt": "a chibi puppy wrapped in an oversized rainbow knit scarf, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-17.jpg",
+      "label": "Baby axolotl",
+      "prompt": "a chibi pink axolotl smiling with frilly gills, underwater sparkle, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-18.jpg",
+      "label": "Flower lamb",
+      "prompt": "a chibi fluffy lamb with a daisy tucked behind its ear, glossy 3D sweet"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-19.jpg",
+      "label": "Cookie bandit",
+      "prompt": "a chibi raccoon clutching a chocolate-chip cookie with guilty delight, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-20.jpg",
+      "label": "Maple red panda",
+      "prompt": "one adorable chibi red panda hugging a glowing maple leaf, huge sparkling eyes, glossy 3D designer-vinyl render, storybook cute",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-21.jpg",
+      "label": "Heart dragonet",
+      "prompt": "one adorable chibi baby dragon clutching a tiny glowing heart, huge sparkling eyes, glossy 3D designer-vinyl render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-22.jpg",
+      "label": "Pearl otter",
+      "prompt": "one adorable chibi otter holding a shimmering pearl on its tummy, huge sparkling eyes, glossy 3D render, storybook cute",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-23.jpg",
+      "label": "Scarf penguin",
+      "prompt": "one adorable chibi penguin wrapped in a cozy red scarf, huge sparkling eyes, snowflakes, glossy 3D designer-vinyl render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-24.jpg",
+      "label": "Lantern bunny",
+      "prompt": "one adorable chibi bunny holding a tiny glowing lantern, huge sparkling eyes, warm light, glossy 3D render, storybook cute",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-25.jpg",
+      "label": "Firefly fox",
+      "prompt": "one adorable chibi fox curled with tiny fireflies glowing around it, huge sparkling eyes, glossy 3D designer-vinyl render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-26.jpg",
+      "label": "Umbrella hedgehog",
+      "prompt": "one adorable chibi hedgehog under a tiny flower umbrella, huge sparkling eyes, soft rain sparkle, glossy 3D render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-27.jpg",
+      "label": "Star seal",
+      "prompt": "one adorable chibi seal pup balancing a glowing star on its nose, huge sparkling eyes, glossy 3D designer-vinyl render",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-28.jpg",
+      "label": "Moonlit owlet",
+      "prompt": "one adorable chibi owlet perched under a soft crescent moon, huge sparkling eyes, glossy 3D render, storybook cute",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/chibibot-29.jpg",
+      "label": "Smiling axolotl",
+      "prompt": "one adorable chibi pink axolotl smiling with tiny bubbles, huge sparkling eyes, glossy 3D designer-vinyl render",
+      "round": 4
+    }
+  ],
+  "dinobot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-0.jpg",
+      "label": "T-rex eye macro",
+      "prompt": "extreme close-up of a Tyrannosaurus rex eye, glowing amber iris, textured scaly skin, cinematic photoreal BBC documentary"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-1.jpg",
+      "label": "Feathered raptor",
+      "prompt": "a feathered Velociraptor head portrait, iridescent plumage, sharp intelligent eye, photoreal paleoart, dramatic side light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-2.jpg",
+      "label": "Triceratops portrait",
+      "prompt": "a Triceratops head-on portrait, magnificent frill and horns, golden-hour light, photoreal wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-3.jpg",
+      "label": "Hatchling in egg",
+      "prompt": "an adorable baby sauropod hatchling peeking out of a cracked egg, big curious eyes, photoreal, warm nest light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-4.jpg",
+      "label": "Sunset sauropod",
+      "prompt": "a Brachiosaurus head and long neck silhouetted against a giant orange sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-5.jpg",
+      "label": "Party rex",
+      "prompt": "a photoreal Tyrannosaurus rex wearing a tiny pointed party hat, deadpan expression, cinematic lighting"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-6.jpg",
+      "label": "Raptor zoomies",
+      "prompt": "a feathered raptor mid-sprint doing joyful zoomies, dust kicked up, tongue out, photoreal action"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-7.jpg",
+      "label": "Eggshell helmet",
+      "prompt": "a baby dinosaur hatchling wearing its eggshell half as a helmet, big happy eyes, photoreal warm light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-8.jpg",
+      "label": "Butterfly horn",
+      "prompt": "a photoreal triceratops looking cross-eyed at a bright butterfly perched on its horn, golden light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-9.jpg",
+      "label": "Snowflake snap",
+      "prompt": "a photoreal T-rex trying to catch a snowflake on its tongue, snow dusting its snout, soft winter light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-10.jpg",
+      "label": "Sunset rex",
+      "prompt": "a Tyrannosaurus rex head and shoulders roaring, silhouetted against a giant orange sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-11.jpg",
+      "label": "Sunset trike",
+      "prompt": "a Triceratops profile with frill and horns silhouetted against a giant golden sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-12.jpg",
+      "label": "Sunset stego",
+      "prompt": "a Stegosaurus with its plated back silhouetted against a giant amber sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-13.jpg",
+      "label": "Sunset wings",
+      "prompt": "a Pteranodon gliding wings-spread silhouetted across a giant crimson sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-14.jpg",
+      "label": "Sunset sail",
+      "prompt": "a Spinosaurus with its tall sail silhouetted against a giant burnt-orange sunset sun, bold graphic composition, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-15.jpg",
+      "label": "Sauropod sundown",
+      "prompt": "a long-necked sauropod silhouette against an enormous glowing orange sunset sun, golden haze, cinematic prehistoric scene",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-16.jpg",
+      "label": "Rex ridge dusk",
+      "prompt": "a T-rex silhouette roaring on a ridge against a blazing crimson-and-gold sunset sky, cinematic prehistoric scene",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-17.jpg",
+      "label": "Pterosaur sky",
+      "prompt": "pterosaur silhouettes gliding across a giant amber sunset sun, layered dusk clouds, cinematic prehistoric scene",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-18.jpg",
+      "label": "Triceratops gold",
+      "prompt": "a triceratops silhouette in tall golden grass at sunset, huge warm sun behind, cinematic prehistoric scene",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dinobot-19.jpg",
+      "label": "Lakeside stego",
+      "prompt": "a stegosaurus silhouette beside a still lake reflecting a giant pink-orange sunset, cinematic prehistoric scene",
+      "round": 4
+    }
+  ],
+  "dragonbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-0.jpg",
+      "label": "Painted dragon head",
+      "prompt": "a majestic dragon head and shoulders, intricate emerald scales, glowing golden eyes, painted oil fantasy-novel-cover art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-1.jpg",
+      "label": "Dragon eye macro",
+      "prompt": "extreme close-up of a dragon eye, molten-gold slit pupil, jeweled scales reflecting treasure light, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-2.jpg",
+      "label": "Hoard hatchling",
+      "prompt": "a cute baby dragon curled asleep on a pile of gold coins, one gold coin stuck to its head, warm painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-3.jpg",
+      "label": "Moon silhouette",
+      "prompt": "a dragon in flight silhouetted across a huge full moon, wings spread, bold graphic dark fantasy, painted"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-4.jpg",
+      "label": "Elven white dragon",
+      "prompt": "an elegant white-and-gold dragon head with silver filigree horns, Alan Lee painted high-fantasy, ethereal light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-5.jpg",
+      "label": "Sneeze flame",
+      "prompt": "a cute baby dragon mid-sneeze releasing a tiny puff of flame and smoke, startled eyes, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-6.jpg",
+      "label": "One-coin hoard",
+      "prompt": "a baby dragon proudly hugging a single gold coin like the greatest treasure ever, painted fantasy, charming"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-7.jpg",
+      "label": "Helmet hatchling",
+      "prompt": "a baby dragon wearing an oversized knight helmet slipping over one eye, painted fantasy, adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-8.jpg",
+      "label": "Heart smoke rings",
+      "prompt": "a young dragon blowing heart-shaped smoke rings, pleased with itself, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-9.jpg",
+      "label": "Treasure belly-flop",
+      "prompt": "a chubby dragon belly-flopped face-down on a pile of gold, utterly content, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-10.jpg",
+      "label": "Crimson dragon",
+      "prompt": "a majestic crimson dragon head and shoulders, intricate scales, glowing golden eyes, Frank Frazetta painted fantasy art, dramatic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-11.jpg",
+      "label": "Ember black dragon",
+      "prompt": "a majestic obsidian-black dragon head and shoulders, ember-lit scale edges, glowing orange eyes, painted fantasy art, dramatic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-12.jpg",
+      "label": "Emerald dragon",
+      "prompt": "a majestic emerald-green dragon head and shoulders, jeweled scales, glowing amber eyes, painted fantasy-novel-cover art, dramatic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-13.jpg",
+      "label": "Storm dragon",
+      "prompt": "a majestic sapphire-blue dragon head and shoulders, storm-lit scales, glowing white eyes, painted fantasy art, dramatic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dragonbot-14.jpg",
+      "label": "Gilded dragon",
+      "prompt": "a majestic golden dragon head and shoulders, burnished metallic scales, glowing sapphire eyes, painted fantasy art, dramatic"
+    }
+  ],
+  "dreambot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-0.jpg",
+      "label": "Bubble-bot face",
+      "prompt": "a glossy cute robot with a glass dome visor face, a swirling candy-colored dream world reflected in the dome, designer-toy 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-1.jpg",
+      "label": "Robot painter",
+      "prompt": "a cute round robot holding a paintbrush, painting a glowing swirl of magic stardust, glossy 3D render, whimsical"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-2.jpg",
+      "label": "Dream orb",
+      "prompt": "a crystal orb containing a miniature candy-colored dream world with tiny spires and a rainbow river, glowing softly, magical 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-3.jpg",
+      "label": "Asleep on a cloud",
+      "prompt": "a chibi robot asleep on a fluffy cloud under a crescent moon and sparkling stars, pastel dreamy 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-4.jpg",
+      "label": "Stardust hands",
+      "prompt": "a friendly glossy robot cupping glowing stardust spilling through its fingers, deep twilight background, magical 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-5.jpg",
+      "label": "Star juggler",
+      "prompt": "a glossy cute robot juggling a tiny sun, moon and star, delighted expression, designer-toy 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-6.jpg",
+      "label": "Paint-splattered grin",
+      "prompt": "a cute robot with rainbow paint splattered across its face grinning proudly, brush behind its ear, 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-7.jpg",
+      "label": "World bubble",
+      "prompt": "a cute robot blowing a soap bubble that contains a tiny dream world with spires and a rainbow, 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-8.jpg",
+      "label": "Confetti dance",
+      "prompt": "a chibi robot mid-happy-dance with one leg up, confetti and sparkles around it, glossy 3D render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/dreambot-9.jpg",
+      "label": "Sleepy nightcap",
+      "prompt": "a cute robot in a striped nightcap mid-yawn with little glowing Z letters floating up, cozy 3D render"
+    }
+  ],
+  "earthbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-0.jpg",
+      "label": "Peak above clouds",
+      "prompt": "a golden-hour mountain peak rising above a sea of clouds, alpenglow, clean professional landscape photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-1.jpg",
+      "label": "Turquoise barrel",
+      "prompt": "inside a glassy turquoise ocean wave barrel, sunlight through the crest, crisp nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-2.jpg",
+      "label": "Forest god-rays",
+      "prompt": "golden god-rays piercing morning mist in an ancient mossy forest, true-to-life nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-3.jpg",
+      "label": "Aurora peak",
+      "prompt": "green aurora borealis curtain over a snow-covered peak, starry sky, clean night landscape photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-4.jpg",
+      "label": "Slot canyon beam",
+      "prompt": "a light beam striking the sculpted red sandstone curves of a slot canyon, warm glow, professional photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-5.jpg",
+      "label": "Quokka smile",
+      "prompt": "a quokka smiling its famous huge smile straight at the camera, crisp wildlife photography, golden light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-6.jpg",
+      "label": "Puffin haul",
+      "prompt": "a puffin with a comically overstuffed beak full of silver fish, crisp wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-7.jpg",
+      "label": "Otter float",
+      "prompt": "a sea otter floating on its back holding a favorite pebble on its belly, sweet wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-8.jpg",
+      "label": "Fox pounce",
+      "prompt": "a red fox frozen mid-pounce diving nose-first toward snow, tail up, crisp winter wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-9.jpg",
+      "label": "Mud-puddle calf",
+      "prompt": "a baby elephant joyfully splashing in a mud puddle, ears out, warm wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-10.jpg",
+      "label": "Savanna acacia",
+      "prompt": "a lone acacia tree silhouetted against a giant orange African sunset, golden haze, epic cinematic nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-11.jpg",
+      "label": "Hilltop oak",
+      "prompt": "one majestic oak tree on a hill backlit by golden sunrise, glowing mist, epic cinematic nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-12.jpg",
+      "label": "Ridge pine",
+      "prompt": "a lone windswept pine silhouetted on a misty blue mountain ridge at dawn, cinematic nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-13.jpg",
+      "label": "Baobab dusk",
+      "prompt": "a massive baobab tree silhouetted against a warm amber dusk sky, epic cinematic nature photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/earthbot-14.jpg",
+      "label": "Lakeside willow",
+      "prompt": "a graceful willow tree golden-backlit over a mirror-still lake at sunrise, epic cinematic nature photography"
+    }
+  ],
+  "faebot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-0.jpg",
+      "label": "Fairy portrait",
+      "prompt": "a luminous forest fairy close-up portrait, iridescent butterfly wings, flower crown, soft ethereal painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-1.jpg",
+      "label": "Fae on mushroom",
+      "prompt": "a tiny glowing fae sitting cross-legged on a red-capped mushroom, fireflies around her, painted storybook fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-2.jpg",
+      "label": "Forest queen",
+      "prompt": "a serene forest queen portrait with an antler-and-wildflower crown, dappled golden light, Alan Lee painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-3.jpg",
+      "label": "Fae door",
+      "prompt": "a tiny glowing arched fairy door in the roots of an ancient mossy oak, warm light spilling out, enchanted painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-4.jpg",
+      "label": "Blossom dryad",
+      "prompt": "a gentle dryad face emerging from cherry blossom petals, bark-and-petal skin, dreamy painted fantasy portrait"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-5.jpg",
+      "label": "Bee rodeo",
+      "prompt": "a tiny fae riding a chubby bumblebee like a rodeo bronco, glitter trail behind, painted fantasy, gleeful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-6.jpg",
+      "label": "Tulip nap",
+      "prompt": "a pixie napping inside a half-open tulip, feet sticking out over the petal edge, painted fantasy, sweet"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-7.jpg",
+      "label": "Snail tea party",
+      "prompt": "a tiny fae having a mushroom-table tea party with a polite snail, acorn teacups, painted storybook"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-8.jpg",
+      "label": "Glitter loop",
+      "prompt": "a fairy pulling a joyful loop-de-loop leaving a spiral glitter trail, painted fantasy, dynamic and fun"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-9.jpg",
+      "label": "Grumpy gnome",
+      "prompt": "a tiny grumpy toadstool gnome peeking out of moss with crossed arms, painted storybook, endearing"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-10.jpg",
+      "label": "Lantern flight",
+      "prompt": "a tiny fae flying through night air carrying a glowing paper lantern, warm light on her face, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-11.jpg",
+      "label": "Moth-wing moon",
+      "prompt": "a moth-winged fae silhouetted against a huge golden full moon, delicate wing patterns, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-12.jpg",
+      "label": "Acorn-hat sprite",
+      "prompt": "a tiny sprite wearing an acorn cap peeking over the edge of a green leaf, big curious eyes, storybook fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-13.jpg",
+      "label": "Dewdrop mirror",
+      "prompt": "a fairy admiring her reflection in a giant dewdrop on a leaf, morning sparkle, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-14.jpg",
+      "label": "Luna wings",
+      "prompt": "close-up of luminous luna-moth fairy wings, pale green with moon-dust sparkle, ethereal fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-15.jpg",
+      "label": "Walnut cradle",
+      "prompt": "a baby fae asleep in a walnut-shell cradle with a firefly nightlight, heart-melting painted storybook"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-16.jpg",
+      "label": "Leaf crown",
+      "prompt": "an elven crown woven of silver leaves and starlight resting on a mossy stone, glowing, painted fantasy still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-17.jpg",
+      "label": "Paper-boat voyage",
+      "prompt": "a tiny fae sailing a folded paper boat down a sparkling stream, joyful, painted storybook fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-18.jpg",
+      "label": "Foxglove heart",
+      "prompt": "a pixie drawing a heart of glittering pixie dust above a foxglove spire, whimsical painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-19.jpg",
+      "label": "Blackberry hug",
+      "prompt": "a tiny dragonfly-winged fae hugging a blackberry bigger than she is, gleeful, painted storybook"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-20.jpg",
+      "label": "Golden moon fae",
+      "prompt": "a delicate fairy silhouette with outstretched wings against a huge golden full moon, sparkling dust drifting, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-21.jpg",
+      "label": "Blue moon dance",
+      "prompt": "a dancing fairy silhouette mid-twirl against a huge pale-blue full moon, glitter trail, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-22.jpg",
+      "label": "Crescent perch",
+      "prompt": "a fairy silhouette sitting on the tip of a glowing crescent moon, legs swinging, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-23.jpg",
+      "label": "Dandelion wish",
+      "prompt": "a fairy silhouette blowing dandelion seeds that drift across a huge silver moon, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-24.jpg",
+      "label": "Moonlit ascent",
+      "prompt": "a fairy silhouette rising toward a huge amber harvest moon, wings catching the light, sparkles below, painted fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-25.jpg",
+      "label": "Blue moon twirl",
+      "prompt": "a dancing fairy silhouette mid-twirl against a huge pale-blue full moon, glitter trail, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-26.jpg",
+      "label": "Blue moon leap",
+      "prompt": "a leaping fairy silhouette arms outstretched against a huge pale-blue full moon, sparkling glitter arc, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-27.jpg",
+      "label": "Blue moon waltz",
+      "prompt": "a graceful fairy silhouette dancing on a flower stem against a huge ice-blue full moon, drifting glitter, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-28.jpg",
+      "label": "Blue moon spin",
+      "prompt": "a spinning fairy silhouette with ribbon of sparkles against a huge silver-blue full moon, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-29.jpg",
+      "label": "Blue moon glide",
+      "prompt": "a gliding fairy silhouette trailing stardust against a huge luminous blue full moon, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-30.jpg",
+      "label": "Golden moon rise",
+      "prompt": "a delicate fairy silhouette with outstretched wings against a huge golden full moon, sparkling dust drifting, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-31.jpg",
+      "label": "Golden moon perch",
+      "prompt": "a fairy silhouette perched on a branch, wings spread against a huge warm golden full moon, drifting sparkles, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-32.jpg",
+      "label": "Golden moon flight",
+      "prompt": "a fairy silhouette soaring upward across a huge honey-gold full moon, trail of glowing dust, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-33.jpg",
+      "label": "Golden moon bloom",
+      "prompt": "a fairy silhouette raising a glowing flower against a huge amber-gold full moon, sparkling dust, painted fantasy",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/faebot-34.jpg",
+      "label": "Golden moon calm",
+      "prompt": "a serene floating fairy silhouette, wings wide against a huge radiant golden full moon, soft drifting sparkles, painted fantasy",
+      "round": 4
+    }
+  ],
+  "gothbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-0.jpg",
+      "label": "Vampire portrait",
+      "prompt": "a beautiful gothic vampire woman portrait, glowing magenta eyes, black lace veil, pale skin, dark romantic fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-1.jpg",
+      "label": "Black rose",
+      "prompt": "a single black rose with crimson-edged petals and glowing red dew drops, on deep shadow, dark romantic still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-2.jpg",
+      "label": "Moon gargoyle",
+      "prompt": "a stone gargoyle silhouetted before a huge full moon and cathedral rose window, bold gothic graphic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-3.jpg",
+      "label": "Gothic cat",
+      "prompt": "a sleek black cat with glowing amber eyes sitting on a moonlit gothic balustrade, elegant dark fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-4.jpg",
+      "label": "Rose window glow",
+      "prompt": "a candlelit gothic cathedral rose window, stained glass glowing crimson and violet in darkness, ornate tracery"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-5.jpg",
+      "label": "Winking bat",
+      "prompt": "a fluffy black bat hanging upside down winking one big amber eye, moonlit, cute dark fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-6.jpg",
+      "label": "Lace ghost",
+      "prompt": "an elegant little ghost wearing a black lace veil, softly glowing, cute gothic romance"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-7.jpg",
+      "label": "Witch-hat cat",
+      "prompt": "a black cat in a tiny crooked witch hat, glowing amber eyes, moonlight, charming dark fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-8.jpg",
+      "label": "Heart lollipop",
+      "prompt": "a skeleton hand elegantly holding a black heart-shaped lollipop with a crimson bow, gothic cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-9.jpg",
+      "label": "Coffee gargoyle",
+      "prompt": "a stone gargoyle on a cathedral ledge sipping from a tiny coffee mug, deadpan, moonlit, witty gothic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-10.jpg",
+      "label": "Vampire cameo",
+      "prompt": "an ornate Victorian cameo brooch with a vampire woman silhouette, carved ivory on black velvet, gothic elegance"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-11.jpg",
+      "label": "Raven jewel",
+      "prompt": "a glossy raven holding a glowing crimson jewel in its beak, moonlit, dark romantic fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-12.jpg",
+      "label": "Black candelabra",
+      "prompt": "an ornate silver candelabra with dripping black candles and violet flames, gothic still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-13.jpg",
+      "label": "Crimson elixir",
+      "prompt": "an ornate gothic perfume bottle glowing with crimson liquid, black lace beneath, dark romance still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-14.jpg",
+      "label": "Rose gate",
+      "prompt": "a moonlit ornate iron gate wrapped in blood-red climbing roses, gothic romance, misty"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-15.jpg",
+      "label": "Fanged smile",
+      "prompt": "a close-up of dark crimson lips with elegant vampire fangs, pale skin, bold dark glamour"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-16.jpg",
+      "label": "Skeleton key",
+      "prompt": "an ornate antique skeleton key with a bat-wing bow, glowing faintly violet, gothic still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-17.jpg",
+      "label": "Bat crystal ball",
+      "prompt": "a crystal ball on a clawed stand showing a swirling bat swarm inside, candlelit, gothic fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-18.jpg",
+      "label": "Widow veil",
+      "prompt": "an elegant Victorian widow hat with black lace veil on a brass stand, moody gothic still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-19.jpg",
+      "label": "Black swan",
+      "prompt": "a black swan gliding on a moonlit lake, red eye glinting, dark elegant fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-20.jpg",
+      "label": "Crimson gaze",
+      "prompt": "a beautiful gothic vampire woman portrait, glowing crimson eyes, raven-black hair, pale skin, dark romantic fantasy art, foreboding"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-21.jpg",
+      "label": "Violet choker",
+      "prompt": "a beautiful gothic vampire woman portrait, glowing violet eyes, black velvet choker, pale skin, dark romantic fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-22.jpg",
+      "label": "Silver moonlight",
+      "prompt": "a beautiful gothic vampire woman portrait lit by moonlight, glowing silver eyes, windswept black hair, dark romantic fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-23.jpg",
+      "label": "Rose whisper",
+      "prompt": "a beautiful gothic vampire woman portrait holding a black rose near her lips, glowing red eyes, dark romantic fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-24.jpg",
+      "label": "Candlelit stare",
+      "prompt": "a beautiful gothic vampire woman portrait in flickering candlelight, glowing amber eyes, lace collar, dark romantic fantasy art, foreboding"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-25.jpg",
+      "label": "Moonlit keep",
+      "prompt": "a gothic castle silhouette beneath an enormous luminous full moon filling the sky, wisps of mist, bats, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-26.jpg",
+      "label": "Spires and moon",
+      "prompt": "black gothic spires piercing upward across a huge glowing full moon disc, silver night clouds, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-27.jpg",
+      "label": "Cliff castle moon",
+      "prompt": "a gothic castle on a cliff edge under a giant bright full moon, moonlit sea below, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-28.jpg",
+      "label": "Blood moon keep",
+      "prompt": "a gothic castle silhouette beneath an enormous blood-orange full moon, drifting mist, bats circling, dark fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-29.jpg",
+      "label": "Mirror lake moon",
+      "prompt": "a gothic castle and a huge full moon reflected perfectly in a still black lake, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-30.jpg",
+      "label": "Thorn gate moon",
+      "prompt": "a thorny iron gate and gothic castle beneath a massive glowing full moon, silver mist, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-31.jpg",
+      "label": "Winter keep moon",
+      "prompt": "a snow-dusted gothic castle under an enormous cold white full moon, bare black trees, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-32.jpg",
+      "label": "Raven tower moon",
+      "prompt": "ravens circling a gothic tower silhouetted against a giant luminous full moon, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-33.jpg",
+      "label": "Ivy ruin moon",
+      "prompt": "an ivy-clad gothic ruin beneath a huge silver full moon, fireflies in the mist, dark romantic fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-34.jpg",
+      "label": "Stormbreak moon",
+      "prompt": "a gothic castle as storm clouds part around an enormous brilliant full moon, moonbeams on the towers, dark fantasy art",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-35.jpg",
+      "label": "Magenta gaze",
+      "prompt": "a dark vampire woman face close-up, glowing magenta eyes, black lace veil, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-36.jpg",
+      "label": "Crimson gaze",
+      "prompt": "a dark vampire woman face close-up, glowing crimson eyes, raven-black hair framing her face, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-37.jpg",
+      "label": "Ice gaze",
+      "prompt": "a dark vampire woman face close-up, glowing ice-blue eyes, silver-white hair, frost-pale lips, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-38.jpg",
+      "label": "Violet gaze",
+      "prompt": "a dark vampire woman face close-up, glowing violet eyes, dark hood casting shadow across her brow, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-39.jpg",
+      "label": "Amber gaze",
+      "prompt": "a dark vampire woman face close-up, glowing ember-amber eyes, loose black curls, a thin trickle of shadow at her lips, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-40.jpg",
+      "label": "Emerald gaze",
+      "prompt": "a dark vampire woman face close-up, glowing emerald eyes, high lace collar, jet-black hair parted severely, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-41.jpg",
+      "label": "Blood moon gaze",
+      "prompt": "a dark vampire woman face close-up, glowing red eyes, a blood-red moon glow rimming her silhouette, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-42.jpg",
+      "label": "Veiled stare",
+      "prompt": "a dark vampire woman face close-up, luminous white-violet eyes behind a sheer black mourning veil, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-43.jpg",
+      "label": "Rose thorn gaze",
+      "prompt": "a dark vampire woman face close-up, glowing deep-pink eyes, a black rose tucked in her hair, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-44.jpg",
+      "label": "Candlelit gaze",
+      "prompt": "a dark vampire woman face close-up, glowing gold-red eyes, warm candlelight from below, smoke curling, pale porcelain skin, dark romantic gothic fantasy art, deep shadows",
+      "round": 5
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-45.jpg",
+      "label": "Vampire queen",
+      "prompt": "a dark vampire woman, regal vampire queen face with glowing crimson eyes, black filigree crown, raven hair, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-46.jpg",
+      "label": "Fanged smile",
+      "prompt": "a dark vampire woman, beautiful face with a sly fanged smile, glowing red eyes, deep red lips, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-47.jpg",
+      "label": "Victorian choker",
+      "prompt": "a dark vampire woman, elegant face with glowing violet eyes, black velvet choker with garnet, upswept dark hair, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-48.jpg",
+      "label": "Profile moon",
+      "prompt": "a dark vampire woman, striking side profile against a huge pale moon, glowing amber eye, flowing black hair, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-49.jpg",
+      "label": "Over-shoulder",
+      "prompt": "a dark vampire woman, looking back over a bare pale shoulder, glowing ice-blue eyes, cascading black curls, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-50.jpg",
+      "label": "Red velvet",
+      "prompt": "a dark vampire woman, face framed by a deep red velvet hood, glowing golden eyes, dark lips, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-51.jpg",
+      "label": "Silver mist",
+      "prompt": "a dark vampire woman, face emerging from silver mist, glowing white-blue eyes, ethereal pale beauty, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-52.jpg",
+      "label": "Rose crown",
+      "prompt": "a dark vampire woman, face crowned with black roses, glowing magenta eyes, porcelain skin, dark elegance, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-53.jpg",
+      "label": "Candlelight beauty",
+      "prompt": "a dark vampire woman, softly candlelit face, glowing warm crimson eyes, gentle haunting beauty, loose dark waves, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/gothbot-54.jpg",
+      "label": "Storm eyes",
+      "prompt": "a dark vampire woman, fierce face with lightning-bright glowing violet eyes, wind-blown black hair, stormy backdrop, dark romantic gothic fantasy art, deep shadows",
+      "round": 6
+    }
+  ],
+  "mangabot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-0.jpg",
+      "label": "Sakura portrait",
+      "prompt": "an anime girl close-up portrait, big expressive eyes, cherry blossom petals drifting, vibrant cel-shaded anime art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-1.jpg",
+      "label": "Magical girl",
+      "prompt": "a magical girl mid-transformation, sparkling ribbons of light, star wand glow, vibrant anime art, joyful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-2.jpg",
+      "label": "Ghibli summer",
+      "prompt": "a Ghibli-style girl in a straw hat smiling in a summer meadow, soft watercolor anime, warm and nostalgic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-3.jpg",
+      "label": "Kitsune spirit",
+      "prompt": "a beautiful nine-tailed kitsune fox spirit with glowing markings, anime art, mystical blue flames"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-4.jpg",
+      "label": "Neo-Tokyo neon",
+      "prompt": "an anime cyberpunk girl portrait lit by neon signs, reflective visor pushed up, Trigger-style bold anime art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-5.jpg",
+      "label": "Ramen bliss",
+      "prompt": "a chibi anime girl blissfully slurping a giant bowl of ramen, steam swirls, sparkle eyes, vibrant anime"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-6.jpg",
+      "label": "Cat-girl wink",
+      "prompt": "an anime cat-girl winking and flashing a peace sign, cherry blossom bokeh, vibrant cel-shaded anime"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-7.jpg",
+      "label": "Blossom mecha",
+      "prompt": "a giant mecha tilting its head at a single cherry blossom stuck on its faceplate, gentle anime moment"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-8.jpg",
+      "label": "Onigiri laugh",
+      "prompt": "an anime girl laughing with an onigiri in each hand, sparkles and joy, cel-shaded anime"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mangabot-9.jpg",
+      "label": "Sailor shiba",
+      "prompt": "a shiba inu wearing a sailor school uniform collar, proud expression, cute anime style"
+    }
+  ],
+  "mechbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-0.jpg",
+      "label": "Mech visor",
+      "prompt": "a futuristic mech robot head close-up, glowing violet visor, sleek armored panels, cinematic sci-fi concept art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-1.jpg",
+      "label": "Titan silhouette",
+      "prompt": "a colossal titan war mech silhouetted against a burning orange sky, bold graphic scale, cinematic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-2.jpg",
+      "label": "Chrome shogun",
+      "prompt": "a chrome samurai-mech mask close-up, ornate armored faceplate, glowing red eye slits, cinematic sci-fi"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-3.jpg",
+      "label": "Scout drone",
+      "prompt": "a small round scout drone robot with a single large friendly glowing blue eye, brushed metal, sci-fi concept art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-4.jpg",
+      "label": "Android profile",
+      "prompt": "an android woman profile portrait, glowing circuit traces on synthetic skin, chrome cervical column, cinematic sci-fi"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-5.jpg",
+      "label": "Tiny flex",
+      "prompt": "a hulking battle mech flexing comically tiny arms, gym pose, cinematic sci-fi with a wink"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-6.jpg",
+      "label": "Kitten cargo",
+      "prompt": "a giant war mech gently cradling a tiny orange kitten in its massive armored hand, warm sci-fi"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-7.jpg",
+      "label": "Low battery",
+      "prompt": "a cute robot with droopy sleepy eyes and a low-battery icon on its chest, plugged in and dozing, sci-fi charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-8.jpg",
+      "label": "Cone party hat",
+      "prompt": "a battle mech wearing an orange traffic cone as a party hat, deadpan glowing visor, witty sci-fi"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/mechbot-9.jpg",
+      "label": "Wheelie bot",
+      "prompt": "a small round robot popping a gleeful wheelie on one wheel, sparks and motion streaks, playful sci-fi"
+    }
+  ],
+  "oceanbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-0.jpg",
+      "label": "Turtle glide",
+      "prompt": "a green sea turtle close-up gliding over a sunlit coral reef, crisp underwater photography, turquoise light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-1.jpg",
+      "label": "Deep-glow jelly",
+      "prompt": "a bioluminescent jellyfish glowing electric blue and violet against pure black deep ocean, realistic render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-2.jpg",
+      "label": "Whale breach",
+      "prompt": "a humpback whale breaching at golden sunset, water spray backlit, cinematic ocean photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-3.jpg",
+      "label": "Anemone home",
+      "prompt": "a vivid orange clownfish peeking from a swaying anemone, macro underwater photography, colorful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-4.jpg",
+      "label": "Kraken eye",
+      "prompt": "a giant kraken eye and spiraling tentacle underwater, moody teal light, painterly maritime fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-5.jpg",
+      "label": "Surprised puffer",
+      "prompt": "a fully puffed pufferfish with huge surprised eyes, comically round, crisp underwater photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-6.jpg",
+      "label": "Pirate octopus",
+      "prompt": "an octopus wearing a tiny pirate tricorn hat, one tentacle raised like a salute, painterly maritime fun"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-7.jpg",
+      "label": "Clapping seal",
+      "prompt": "a delighted seal mid-clap with flippers together, sparkling water drops, crisp wildlife photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-8.jpg",
+      "label": "Crab workout",
+      "prompt": "a muscular little crab lifting a tiny barbell made of pebbles, determined face, playful underwater render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/oceanbot-9.jpg",
+      "label": "Bubble-ring dolphin",
+      "prompt": "a dolphin blowing a perfect silver bubble ring, playful eye contact, crisp underwater photography"
+    }
+  ],
+  "pixelbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-0.jpg",
+      "label": "Pixel hero",
+      "prompt": "a 16-bit pixel-art hero character face, bold colorful chunky pixels, clean retro SNES sprite"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-1.jpg",
+      "label": "Pixel slime",
+      "prompt": "a cute smiling blue pixel-art slime with shiny eyes, chunky 16-bit sprite, charming JRPG mascot"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-2.jpg",
+      "label": "Pixel sunset",
+      "prompt": "a 16-bit pixel-art sunset over mountains and a lake, bold gradient dither sky, beautiful retro vista"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-3.jpg",
+      "label": "Pixel potion",
+      "prompt": "a glowing pink pixel-art potion bottle with sparkles, crisp 16-bit item icon, game inventory style"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-4.jpg",
+      "label": "Pixel farmhouse",
+      "prompt": "a cozy pixel-art farmhouse with smoking chimney at dusk, warm windows, 16-bit farming-game charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-5.jpg",
+      "label": "Pixel cat chaos",
+      "prompt": "a 16-bit pixel-art cat mid-swipe knocking a potion bottle off a table, mischievous, charming sprite scene"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-6.jpg",
+      "label": "Chicken knight",
+      "prompt": "a 16-bit pixel-art knight riding a giant chicken, triumphant banner, playful JRPG sprite"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-7.jpg",
+      "label": "Pizza ghost",
+      "prompt": "a 16-bit pixel-art ghost happily eating a slice of pizza, crumbs floating, cute sprite"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-8.jpg",
+      "label": "Mimic grin",
+      "prompt": "a 16-bit pixel-art treasure chest mimic with a huge toothy grin and a gold coin on its tongue, playful sprite"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/pixelbot-9.jpg",
+      "label": "Sword frog",
+      "prompt": "a 16-bit pixel-art frog adventurer with a tiny sword strapped to its back, determined, cute sprite"
+    }
+  ],
+  "retrobot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-0.jpg",
+      "label": "CRT glow",
+      "prompt": "a glowing retro 1980s CRT computer monitor on a desk, warm neon-lit room, nostalgic film grain"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-1.jpg",
+      "label": "Boombox sunset",
+      "prompt": "a chrome 1980s boombox radio against a neon-pink sunset grid, retro airbrush style, nostalgic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-2.jpg",
+      "label": "VHS tape",
+      "prompt": "a black VHS tape with a colorful hand-written rental sticker, on rewind, warm 90s film photo"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-3.jpg",
+      "label": "Arcade joystick",
+      "prompt": "an arcade cabinet joystick and glowing buttons close-up, neon reflections, 80s arcade nostalgia"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-4.jpg",
+      "label": "Roller skates",
+      "prompt": "white roller skates with rainbow laces under roller-rink disco light, 80s film photography, fun"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-5.jpg",
+      "label": "Cool cassette",
+      "prompt": "a cassette tape wearing tiny sunglasses, neon-pink 80s glow, retro airbrush style, fun"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-6.jpg",
+      "label": "Happy computer",
+      "prompt": "a beige retro computer with a big pixel smiley face on its CRT screen, cheerful 80s product photo"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-7.jpg",
+      "label": "Floppy duck",
+      "prompt": "a rubber duck perched proudly on a stack of rainbow floppy disks, warm 90s film photo, playful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-8.jpg",
+      "label": "Rad pizza",
+      "prompt": "a pizza slice riding a skateboard, motion blur, totally rad 90s airbrush cartoon style"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/retrobot-9.jpg",
+      "label": "Party controller",
+      "prompt": "a retro game controller with a party popper bursting confetti, saturday-morning fun, bright"
+    }
+  ],
+  "starbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-0.jpg",
+      "label": "Cosmic visor",
+      "prompt": "a sci-fi astronaut in a glossy reflective helmet, a nebula and stars mirrored in the visor, vibrant retro-futurist cover art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-1.jpg",
+      "label": "Ringed giant",
+      "prompt": "a tiny astronaut floating before an enormous ringed planet, bold graphic scale contrast, cinematic space art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-2.jpg",
+      "label": "Retro rocket",
+      "prompt": "a gleaming chrome retro rocket ship with a warm exhaust flame climbing through stars, vintage sci-fi poster art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-3.jpg",
+      "label": "Crystal world",
+      "prompt": "a glowing crystalline alien planet with prismatic spires, seen from orbit, luminous sci-fi concept art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-4.jpg",
+      "label": "Star leviathan",
+      "prompt": "a cosmic space whale silhouette swimming through a glowing violet nebula, majestic sci-fi fantasy art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-5.jpg",
+      "label": "Zero-g taco",
+      "prompt": "an astronaut in a helmet chasing a floating taco with drifting lettuce in zero gravity, playful sci-fi art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-6.jpg",
+      "label": "UFO wave",
+      "prompt": "a cute green alien blob waving happily from a flying saucer porthole, retro sci-fi cartoon charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-7.jpg",
+      "label": "Star surfer",
+      "prompt": "an astronaut surfing a shooting star like a skateboard, sparkling trail, playful retro sci-fi poster"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-8.jpg",
+      "label": "Space corgi",
+      "prompt": "a corgi wearing a bubble space helmet, ears up, stars behind, adorable sci-fi render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-9.jpg",
+      "label": "Donut asteroid",
+      "prompt": "an astronaut proudly planting a tiny flag on a giant glazed-donut-shaped asteroid, witty sci-fi art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-10.jpg",
+      "label": "Phoenix nebula",
+      "prompt": "a glowing nebula shaped like a rising phoenix, vivid violet and gold, deep-space astrophotography art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-11.jpg",
+      "label": "Zen astronaut",
+      "prompt": "an astronaut floating cross-legged in serene meditation among drifting stars, peaceful sci-fi art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-12.jpg",
+      "label": "Ringed dawn",
+      "prompt": "a giant ringed planet rising over crystalline mountains, seen from an alien beach, luminous sci-fi vista"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-13.jpg",
+      "label": "Aurora jelly",
+      "prompt": "a bioluminescent space-jellyfish creature drifting through an aurora nebula, elegant cosmic fantasy"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-14.jpg",
+      "label": "Chrome ray-gun",
+      "prompt": "a gleaming chrome retro ray-gun with glowing rings, vintage pulp sci-fi poster art, playful"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-15.jpg",
+      "label": "Overgrown helmet",
+      "prompt": "an astronaut helmet overgrown with glowing alien vines and tiny luminous flowers, poetic sci-fi still life"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-16.jpg",
+      "label": "Golden record",
+      "prompt": "a glowing golden data disc etched with star maps, floating in space, luminous sci-fi artifact"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-17.jpg",
+      "label": "Twin moons",
+      "prompt": "two glowing ringed moons rising over a violet crystalline horizon, breathtaking sci-fi vista"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-18.jpg",
+      "label": "Probe buddy",
+      "prompt": "a cute round space probe with solar-panel wings and a waving antenna, friendly lens eye, charming sci-fi render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-19.jpg",
+      "label": "Rainbow comet",
+      "prompt": "a brilliant comet with a prismatic rainbow tail streaking past a purple planet, vivid space art"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-20.jpg",
+      "label": "Ringed emblem",
+      "prompt": "a bold ringed planet silhouette, deep indigo sphere with luminous gold rings, flat graphic emblem on a soft starfield, instantly recognizable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-21.jpg",
+      "label": "Crescent world",
+      "prompt": "a planet in dramatic crescent light, clean bold shape against deep space, luminous edge, graphic and iconic"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-22.jpg",
+      "label": "Twin moon planet",
+      "prompt": "a bold violet planet silhouette with two small glowing moons, clean graphic composition on dark starfield"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-23.jpg",
+      "label": "Swirl giant",
+      "prompt": "a gas giant with one bold glowing storm swirl, rich teal and gold bands, clean iconic planet shape on dark space"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-24.jpg",
+      "label": "Eclipse corona",
+      "prompt": "a dark planet silhouette in total eclipse with a blazing corona ring, bold graphic, instantly recognizable shape"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-25.jpg",
+      "label": "Copper emblem",
+      "prompt": "a bold ringed planet silhouette, deep teal sphere with luminous copper rings, flat graphic emblem on a soft starfield, instantly recognizable",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-26.jpg",
+      "label": "Crimson emblem",
+      "prompt": "a bold ringed planet silhouette, dark crimson sphere with bright silver rings, flat graphic emblem on a soft starfield",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-27.jpg",
+      "label": "Violet emblem",
+      "prompt": "a bold ringed planet silhouette, royal violet sphere with pale gold rings, flat graphic emblem on a soft starfield",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-28.jpg",
+      "label": "Crescent emblem",
+      "prompt": "a bold ringed planet emblem with a crescent shadow, indigo sphere and glowing white-gold rings, flat graphic on a starfield",
+      "round": 4
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/starbot-29.jpg",
+      "label": "Twin-moon emblem",
+      "prompt": "a bold ringed planet emblem with two tiny moons on the ring line, midnight-blue sphere, luminous amber rings, flat graphic starfield",
+      "round": 4
+    }
+  ],
+  "steambot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-0.jpg",
+      "label": "Brass airship",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, golden sunset clouds, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-1.jpg",
+      "label": "Clockwork owl",
+      "prompt": "an ornate brass clockwork owl automaton with glowing amber glass eyes, visible gears, warm gaslit render"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-2.jpg",
+      "label": "Goggles & top hat",
+      "prompt": "polished brass steampunk goggles resting on a leather top hat, warm workshop light, rich detail illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-3.jpg",
+      "label": "Gear heart",
+      "prompt": "a brass-and-copper mechanical heart with turning gears and a soft steam wisp, glowing warm, steampunk illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-4.jpg",
+      "label": "Aviatrix portrait",
+      "prompt": "a glamorous steampunk aviatrix portrait with brass goggles on her leather cap, warm gaslight, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-5.jpg",
+      "label": "Butler bot",
+      "prompt": "a dapper brass robot butler with a curled mustache plate serving tea on a gear tray, warm steampunk charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-6.jpg",
+      "label": "Penny-farthing mouse",
+      "prompt": "a clockwork mouse riding a tiny penny-farthing bicycle, gears whirring, whimsical steampunk illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-7.jpg",
+      "label": "Monocle cat",
+      "prompt": "a distinguished cat wearing a monocle and tiny top hat with brass goggles, steampunk portrait, charming"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-8.jpg",
+      "label": "Teapot airship",
+      "prompt": "a whimsical airship built from a copper teapot with steam puffing from the spout, steampunk illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-9.jpg",
+      "label": "Wind-up hummingbird",
+      "prompt": "a brass wind-up hummingbird mid-hover with a turning key on its back, gaslit sparkle, steampunk charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-10.jpg",
+      "label": "Brass zeppelin",
+      "prompt": "a majestic brass zeppelin airship in side profile against a pale cream sky, polished hull gleaming, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-11.jpg",
+      "label": "Galleon of the skies",
+      "prompt": "an ornate galleon-style airship with white canvas balloon sailing a bright pale-blue sky, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-12.jpg",
+      "label": "Teapot dirigible",
+      "prompt": "a whimsical airship built from a copper teapot puffing steam, floating on a soft ivory sky, charming illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-13.jpg",
+      "label": "Gearwork balloon",
+      "prompt": "a brass hot-air balloon airship with visible clockwork gondola, bright white clouds behind, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-14.jpg",
+      "label": "Pocket airship",
+      "prompt": "a small rounded adorable airship with twin propellers and portholes, soft pastel morning sky, charming illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-15.jpg",
+      "label": "Cloud flagship",
+      "prompt": "a grand flagship airship cresting through bright white cumulus clouds in full sun, luminous painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-16.jpg",
+      "label": "Butterfly wings",
+      "prompt": "an elegant airship with brass butterfly wings spread wide, pale pearl sky background, whimsical illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-17.jpg",
+      "label": "Sky locomotive",
+      "prompt": "a steam locomotive-style skyship with a big front lamp puffing white steam, pale morning sky, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-18.jpg",
+      "label": "Sunlit underbelly",
+      "prompt": "an ornate brass airship seen from below against a bright white cloud dome with sun flare, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-19.jpg",
+      "label": "Swan airship",
+      "prompt": "an elegant swan-shaped white-and-brass airship gliding on a light pearl sky, graceful painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-20.jpg",
+      "label": "Pastel sunset sails",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, soft pastel peach sunset sky, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-21.jpg",
+      "label": "Lavender dusk ship",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, light lavender-and-gold evening sky, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-22.jpg",
+      "label": "Coral dawn ship",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, pale coral dawn sky with soft clouds, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-23.jpg",
+      "label": "Bright day sails",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, bright pale-blue midday sky with white clouds, painted illustration"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/steambot-24.jpg",
+      "label": "Golden haze ship",
+      "prompt": "a majestic steampunk airship with ornate brass hull and billowing sails, luminous light-gold hazy sky, painted illustration"
+    }
+  ],
+  "tinybot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-0.jpg",
+      "label": "Mushroom cottage",
+      "prompt": "a tiny tilt-shift miniature mushroom cottage with lit windows, adorable handcrafted model, macro photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-1.jpg",
+      "label": "Walnut sailboat",
+      "prompt": "a tiny walnut-shell sailboat with a leaf sail and a mouse sailor at the tiller, tilt-shift macro, storybook charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-2.jpg",
+      "label": "Teacup island",
+      "prompt": "a miniature island world with a tiny tree and cottage inside a porcelain teacup, macro tilt-shift, whimsical"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-3.jpg",
+      "label": "Pastel village",
+      "prompt": "a tiny pastel miniature village street on a mossy shelf, tilt-shift macro photography, dollhouse charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-4.jpg",
+      "label": "Acorn lantern",
+      "prompt": "a tiny acorn-cap lantern glowing warm with a firefly perched on top, macro tilt-shift, enchanting miniature"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-5.jpg",
+      "label": "Snail mail",
+      "prompt": "a tiny snail with leather mail saddlebags delivering a letter to a mushroom door, tilt-shift macro, adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-6.jpg",
+      "label": "Bottle-cap picnic",
+      "prompt": "two tiny mice having a picnic on a bottle-cap table with crumb sandwiches, tilt-shift macro, charming"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-7.jpg",
+      "label": "Jam jar gnome",
+      "prompt": "a tiny gnome happily stuck inside a jam jar licking jam off his fingers, macro tilt-shift, funny"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-8.jpg",
+      "label": "Leaf raincoat",
+      "prompt": "a hedgehog wearing a folded-leaf raincoat in light rain, tiny puddle boots, macro storybook cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-9.jpg",
+      "label": "Frog king",
+      "prompt": "a tiny frog wearing a bottle-cap crown sitting on a spool throne, regal and ridiculous, macro tilt-shift"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-10.jpg",
+      "label": "Glowing toadstool home",
+      "prompt": "a tiny tilt-shift red toadstool cottage with warm glowing windows in soft moss, macro photography, adorable miniature"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-11.jpg",
+      "label": "Mushroom lane",
+      "prompt": "a tiny mushroom cottage with a pebble path and micro picket fence, tilt-shift macro, charming miniature scene"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-12.jpg",
+      "label": "Mushroom hamlet",
+      "prompt": "a cluster of three tiny mushroom houses with lit windows nestled in moss, tilt-shift macro, enchanting miniature"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-13.jpg",
+      "label": "Autumn mushroom",
+      "prompt": "a tiny mushroom cottage among fallen autumn leaves, warm window glow, tilt-shift macro, cozy miniature"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/tinybot-14.jpg",
+      "label": "Firefly mushroom",
+      "prompt": "a tiny mushroom cottage at dusk with a firefly glowing by the door, tilt-shift macro, magical miniature"
+    }
+  ],
+  "toybot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-0.jpg",
+      "label": "Hero figure",
+      "prompt": "a heroic toy action figure, glossy molded plastic, dynamic pose, cinematic toy photography, dramatic light"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-1.jpg",
+      "label": "Clay monster",
+      "prompt": "a cute claymation monster with a goofy grin, visible fingerprint texture in the clay, stop-motion charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-2.jpg",
+      "label": "Army man",
+      "prompt": "a classic green plastic army man toy soldier close-up, molded plastic sheen, cinematic toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-3.jpg",
+      "label": "Teddy astronaut",
+      "prompt": "a plush teddy bear in a tiny astronaut suit, soft fabric detail, warm toy photography, adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-4.jpg",
+      "label": "Tin wind-up",
+      "prompt": "a vintage tin wind-up robot toy with lithographed panels and a wind-up key, glossy retro toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-5.jpg",
+      "label": "Super duck",
+      "prompt": "a rubber duck wearing a tiny red superhero cape, heroic chin up, glossy toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-6.jpg",
+      "label": "Tea party truce",
+      "prompt": "a fierce action figure politely holding a tiny teacup at a dolls tea party, toy photography, funny"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-7.jpg",
+      "label": "Crayon snack",
+      "prompt": "a claymation dinosaur guiltily chewing a bright crayon, clay crumbs, stop-motion charm"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-8.jpg",
+      "label": "Slinky tangle",
+      "prompt": "a wind-up robot toy hopelessly tangled in a rainbow slinky, cheerful panic, glossy toy photography"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/toybot-9.jpg",
+      "label": "Sock dragon",
+      "prompt": "a sock-puppet dragon with button eyes and felt flames mid-roar, handmade charm, toy photography"
+    }
+  ],
+  "yumbot": [
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-0.jpg",
+      "label": "Smiling cupcake",
+      "prompt": "an adorable kawaii cupcake with a cute smiling face, pastel pink frosting swirl, candy sprinkles, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-1.jpg",
+      "label": "Happy onigiri",
+      "prompt": "a kawaii onigiri rice ball with a tiny happy face and nori wrap, glossy 3D render, festival-cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-2.jpg",
+      "label": "Glossy strawberry",
+      "prompt": "a kawaii strawberry with a sweet smiling face and a leaf hat, glossy dewy 3D render, adorable"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-3.jpg",
+      "label": "Boba buddy",
+      "prompt": "a kawaii boba milk tea cup with a happy face, pastel pearls and a striped straw, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-4.jpg",
+      "label": "Pancake stack",
+      "prompt": "a kawaii pancake stack with a smiling face, melting butter beret and syrup drizzle, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-5.jpg",
+      "label": "Dancing taco",
+      "prompt": "a kawaii taco with a happy face doing a little dance, lettuce ruffling like a skirt, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-6.jpg",
+      "label": "Sushi tower",
+      "prompt": "three kawaii sushi rolls with tiny faces stacked in a wobbling tower, top one cheering, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-7.jpg",
+      "label": "Hula donut",
+      "prompt": "a kawaii donut hula-hooping with an onion ring, sprinkles flying, glossy 3D fun"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-8.jpg",
+      "label": "Melting wink",
+      "prompt": "a kawaii ice cream cone winking as its scoop slides dramatically to one side, glossy 3D cute"
+    },
+    {
+      "file": "/tmp/bot-avatar-candidates/yumbot-9.jpg",
+      "label": "Cowboy hotdog",
+      "prompt": "a kawaii hotdog wearing a tiny cowboy hat with a ketchup lasso swirl, glossy 3D fun"
+    }
+  ]
+}
