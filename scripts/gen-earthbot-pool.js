@@ -308,7 +308,7 @@ Lineage to channel: Marc Adamus + Peter Lik + Galen Rowell SW landscape photogra
       'MONSOON CUMULUS BUILDUP — towering white-and-grey cumulus thunderheads building in the deep distance against cobalt blue',
       'SUNSET BANNER CLOUD — long horizontal banner cloud at the horizon glowing amber-and-crimson at sunset',
       'PARTLY-CLOUDY DAPPLE — scattered cumulus clouds with shifting shadows across the sandstone landscape',
-      'LENTICULAR OVER BUTTES — smooth lenticular cloud hovering over a distant butte in deep cobalt sky',
+      'LENTICULAR OVER BUTTES — smooth lens-shaped cloud cap with soft feathered edges draped above a distant butte in deep cobalt sky',
       'DARK-SKY MILKY WAY — black night sky with the Milky Way arching above the canyon, stars in dense scatter',
       'STORM-CELL DRAMATIC — dramatic dark storm cell building in deep distance with rain curtain trailing below, golden light still on foreground',
       'CIRRUS WISPS HIGH — high thin cirrus wisps streaking the cobalt sky in horizontal feather patterns',
@@ -395,7 +395,7 @@ Lineage to channel: Marc Adamus + Peter Lik + Galen Rowell SW landscape photogra
       'SUN PILLAR AT HORIZON — vertical sun pillar rising above the setting sun at the deep horizon in copper glow',
       'FOG INVERSION IN CANYON — soft fog inversion filling the canyon below the rim, leaving only the high sandstone tops emerging',
       'SNOW FLURRY OVER HOODOOS — gentle snow flurry drifting through the Bryce hoodoo amphitheater in soft white veil',
-      'LENTICULAR OVER SHIPROCK — smooth lenticular disk cloud hovering motionless above a distant volcanic plug',
+      'LENTICULAR OVER SHIPROCK — smooth lenticular cloud cap, visibly made of layered moist cloud, soft-edged, draped above a distant volcanic plug',
       'STRATUS INVERSION GRAND CANYON — temperature inversion filling the Grand Canyon below the rim with a sea of cloud',
       'SUBTLE SUN HALO — pale translucent 22-degree sun halo arc faintly visible in thin cirrostratus above the landform',
       'THERMAL SHIMMER DEEP DISTANCE — visible thermal-current shimmer distorting the deep-distance ridges in heat waves',
@@ -653,7 +653,7 @@ Each entry 14-22 words, single line. Output as a NUMBERED list.`,
   • Snow-squall sky white-grey diffuse with falling streaks visible
   • Star-crowded moonless night sky with Milky Way arch
   • Inversion-cloud sea below peak with clear sky above
-  • Polar lenticular stack three-tiered over Snæfellsjökull
+  • Polar lenticular wave-clouds layered in soft feathered bands over Snæfellsjökull
 
 🚫 ABSOLUTE BANS:
   • ZERO photographer names
@@ -662,7 +662,7 @@ Each entry 14-22 words, single line. Output as a NUMBERED list.`,
 
 Each entry 14-22 words, single line. Output as a NUMBERED list.`,
     touchpoints: [
-      'Lenticular cloud disc hovering motionless over Eyjafjallajökull volcano peak',
+      'Lenticular cloud cap with softly feathered edges draped over Eyjafjallajökull volcano peak',
       'Breaking storm cloud deck with sun-shafts emerging through three distinct openings',
       'Polar twilight gradient with cobalt zenith fading down to copper-amber at low horizon',
       'Summer-night cloud in pastel blue-pink-grey illuminated by midnight sun from below',
@@ -676,7 +676,7 @@ Each entry 14-22 words, single line. Output as a NUMBERED list.`,
       'Snow-squall sky white-grey diffuse with falling streaks visible across the frame',
       'Star-crowded moonless night sky with the Milky Way arch overhead',
       'Inversion-cloud sea below the peak with clear cobalt sky above',
-      'Triple-stack polar lenticular cloud disc tier over Snæfellsjökull peak',
+      'Stacked lenticular wave-clouds in smooth layered soft-edged bands capping Snæfellsjökull peak',
     ],
     instructions: `Output ONLY a numbered list of {COUNT} Iceland sky layer entries. NO preamble. Each entry 14-22 words on a single line.`,
   },
@@ -993,14 +993,14 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
   • Pre-storm yellow-green oppressive Patagonian sky
   • Stratus deck low over Tierra del Fuego coast
   • Cumulonimbus anvil over Iguazu plateau
-  • Stack-of-three lenticular over Aconcagua peak
+  • Layered lenticular wave-cloud bands over Aconcagua peak
   • Layered stratocumulus broken by cobalt patches
   • Star-crowded moonless Altiplano sky with Milky Way
   • Pastel polar-twilight cloud Patagonia
   • Sunset orange-violet ribbon at horizon over Andes
 `,
     touchpoints: [
-      'Lenticular cloud cap hovering motionless over Fitz Roy peak',
+      'Lenticular cloud cap with softly feathered rim draped over Fitz Roy peak',
       'Patagonian banner cloud streaming horizontally off Cuernos del Paine peak',
       'Sea-of-clouds inversion below Andean summit with peaks emerging into clear sky',
       'Cobalt high-altitude noon sky at 4500-metre elevation deep saturation',
@@ -1010,7 +1010,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
       'Pre-storm yellow-green oppressive Patagonian sky pressing low',
       'Stratus deck low over Tierra del Fuego coast in cool grey blanket',
       'Cumulonimbus anvil rising thirty thousand feet over Iguazu plateau',
-      'Stack-of-three lenticular discs tiered over Aconcagua peak',
+      'Stacked lenticular wave-clouds layered in soft bands above Aconcagua peak',
       'Layered stratocumulus broken by cobalt patches in alternating bands',
       'Star-crowded moonless Altiplano sky with the Milky Way arch overhead',
       'Pastel polar-twilight cloud Patagonia in cool blue-pink-grey gradient',
@@ -1066,7 +1066,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
 
 ✅ SOUTH AMERICAN PHENOMENA:
   • Glacier calving event mid-fall on Perito Moreno
-  • Lenticular cloud stack hovering over Fitz Roy
+  • Lenticular wave-cloud bands capping Fitz Roy
   • Sea-of-clouds breaking around Cordillera Blanca peak
   • Salt-flat mirror perfect at dawn during wet season
   • Volcanic eruption fountain (Cotopaxi / Villarrica) glowing
@@ -1083,7 +1083,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
 `,
     touchpoints: [
       'Glacier calving event mid-fall on Perito Moreno seracs cascading into lake',
-      'Lenticular cloud stack hovering over Fitz Roy peak in three discs',
+      'Lenticular wave-clouds capping Fitz Roy peak in soft layered bands',
       'Sea-of-clouds breaking around Cordillera Blanca peak at dawn',
       'Salt-flat mirror perfect at dawn during wet season with thin-water layer',
       'Volcanic eruption fountain incandescent-red glowing at Villarrica crater rim',
@@ -1703,7 +1703,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
       'Halong Bay blue-hour gradient cool cobalt-to-amber low over jade water',
       'Volcanic-ash-tinted sky with copper-yellow undertone after recent Bromo eruption',
       'Star-crowded moonless Mongolian night sky with Milky Way arch overhead',
-      'Lenticular cloud disc hovering motionless over Mt. Fuji peak',
+      'Lenticular cloud cap with softly feathered edges draped over Mt. Fuji peak',
       'Layered stratocumulus broken by cobalt patches over karst pillars',
       'Mist-inversion sea below Huangshan ridge with clear cobalt above',
       'Misty rose dawn over Li River with pillars softly silhouetted against pale gold',
@@ -2373,7 +2373,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
   • Sunset orange-violet ribbon over fjord
 `,
     touchpoints: [
-      'Lenticular cloud disc hovering motionless over Matterhorn peak',
+      'Lenticular cloud cap with softly feathered edges draped over Matterhorn peak',
       'Banner cloud streaming horizontally off Dolomite Tre Cime peak',
       'Sea-of-clouds inversion below alpine ridge with peaks emerging into clear sky',
       'Heavy nimbostratus rain-bearing dark grey deck over Scottish Highlands',
@@ -2463,7 +2463,7 @@ Each entry 30-55 words, comma-separated descriptive phrasing. Output as a NUMBER
       'Lofoten Northern Lights green aurora ribbon arching across arctic sky',
       'Faroe Atlantic spray geyser blasting up at sea arch with sunset light',
       'Snow squall sweeping over Cairngorms in diagonal white streaks',
-      'Lenticular cloud stack over Matterhorn peak in three discs',
+      'Lenticular wave-clouds capping Matterhorn peak in soft layered bands',
       'Crepuscular ray ladder breaking through cloud over Bavarian Alps',
       'Sunset alpenglow rose-amber on Trolltunga rock tongue and fjord below',
       'Rainbow arc piercing post-rain mist over Snowdonia at golden hour',
