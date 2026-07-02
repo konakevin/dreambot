@@ -197,8 +197,11 @@ function getGroupText(g: InboxGroup): {
       if (g.subtype === 'welcome') {
         return { subject: "Welcome, here's a gift", subtext: null, isAggregable: false };
       }
+      // Label form of the push announcement (send-push pairs: "Your dream is
+      // ready" / "You dreamed something last night") so the inbox row reads
+      // as the same event the banner announced.
       return {
-        subject: 'Your dream has arrived',
+        subject: g.subtype === 'manual' ? 'The dream you made' : "Last night's dream",
         subtext: capSubtext(g.body),
         isAggregable: false,
       };
