@@ -493,7 +493,9 @@ export const DreamCard = memo(function DreamCard({
                     </View>
                   )}
                   <View style={{ flex: 1 }}>
-                    {/* Row 1: name + time + inline Follow/Following pill */}
+                    {/* Row 1: name + time + inline Follow/Following pill — one
+                        scan line of author metadata (stacked-pill layout tried
+                        2026-07-01, read as a stranded button; reverted). */}
                     <View style={s.usernameLine}>
                       <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
                       <Text style={[s.timestamp, { marginLeft: 6, marginTop: 0 }]}>
@@ -894,9 +896,9 @@ const s = StyleSheet.create({
     textShadowRadius: 3,
     textShadowOffset: { width: 0, height: 1 },
   },
+  usernameLine: { flexDirection: 'row', alignItems: 'center' },
   // Inline "username  [Follow]" — Follow is a readable white chip (the lavender
   // accent washed out on bright images).
-  usernameLine: { flexDirection: 'row', alignItems: 'center' },
   followPill: {
     height: verticalScale(26),
     paddingHorizontal: 10,

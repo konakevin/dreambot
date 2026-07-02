@@ -4,6 +4,10 @@
  *   1. Dream Reveal ("Post" button)
  *   2. DLT flow (after generation)
  *   3. Album viewer (tapping "+" on a never-posted dream)
+ *   4. Onboarding first-dream reveal ("Post to my feed") — arrives with
+ *      fromOnboarding=1: the reveal REPLACED its route with this screen, so
+ *      there's nothing to pop back to and Cancel lands on the feed instead
+ *      (the dream stays private in the album).
  */
 
 import { useState, useEffect } from 'react';
@@ -46,9 +50,10 @@ const HEADER_RESERVE = verticalScale(56);
 const INPUT_RESERVE = verticalScale(120);
 
 export default function NewPostScreen() {
-  const { uploadId, imageUrl } = useLocalSearchParams<{
+  const { uploadId, imageUrl, fromOnboarding } = useLocalSearchParams<{
     uploadId: string;
     imageUrl: string;
+    fromOnboarding?: string;
   }>();
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
@@ -221,7 +226,10 @@ export default function NewPostScreen() {
       <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={() => (fromOnboarding ? router.replace('/(tabs)') : router.back())}
+            activeOpacity={0.7}
+          >
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
           <GradientTitle>New Post</GradientTitle>

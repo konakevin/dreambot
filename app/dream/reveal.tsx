@@ -153,19 +153,22 @@ export default function DreamRevealScreen() {
 
   return (
     <View style={s.container}>
-      {/* Full-bleed image — pinch to zoom (the transform rides the wrapper so
-          expo-image keeps its decode/transition); single tap → HUD-free full
-          preview. */}
+      {/* Full-bleed image — pinch to zoom + drag; single tap → HUD-free full
+          preview. The detector rides an UNTRANSFORMED wrapper (the zoom
+          transform lives on the inner view) so the pinch's focal coords stay
+          in screen space while the image scales under the fingers. */}
       <GestureDetector gesture={imageGesture}>
-        <Animated.View style={[s.fullImage, imageTransformStyle]}>
-          <Image
-            source={{ uri: result.imageUrl }}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            transition={600}
-            cachePolicy="memory-disk"
-          />
-        </Animated.View>
+        <View style={s.fullImage}>
+          <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
+            <Image
+              source={{ uri: result.imageUrl }}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              transition={600}
+              cachePolicy="memory-disk"
+            />
+          </Animated.View>
+        </View>
       </GestureDetector>
 
       {/* Expand icon (top-right) — toggles the full-dimension preview. Same

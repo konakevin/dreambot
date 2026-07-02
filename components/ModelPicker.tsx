@@ -14,13 +14,16 @@
  * steering; flux-1.1-pro just carries a small "Default" hint. Each row shows
  * the model's sparkle cost (costs vary 1–5 and the Dream button reflects it).
  *
- * STICKY + cross-device: persists to users.pro_mode_flux_model (the column the
- * engine already reads), so the choice follows the user to a new install.
- * Fires onChange(modelId) after the initial DB load AND on every selection so
- * the Create screen keeps force_model + the cost display in sync.
+ * ACCOUNT-STICKY + cross-device: persists to users.pro_mode_flux_model —
+ * fetched once per session (a module-level cache keeps remounts instant, no
+ * refetch flicker) and written through on every selection, so the choice
+ * follows the user across launches and installs. Fires onChange(modelId) on
+ * mount, after the once-per-session restore, AND on every selection so the
+ * Create screen keeps force_model + the cost display in sync. Opening the
+ * modal scrolls the selected model into view.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { TitleText } from '@/components/TitleText';
@@ -41,7 +44,7 @@ import {
 import { useImageModels } from '@/hooks/useImageModels';
 
 interface Props {
-  /** Fires after the initial DB load and on each selection. */
+  /** Fires on mount, after the once-per-session DB restore, and on each selection. */
   onChange?: (modelId: string) => void;
   /**
    * True when the Create screen is in DreamBot mode (the face-swap engine).
@@ -51,19 +54,32 @@ interface Props {
   dreamBotMode?: boolean;
 }
 
+// Session cache of the account-sticky pick: the DB column is fetched once per
+// session, then remounts (tab switches, screen re-pushes) seed from here
+// instantly. Keyed to the user so an account switch mid-session refetches.
+let sessionModelId: string | null = null;
+let sessionUserId: string | null = null;
+
 export function ModelPicker({ onChange, dreamBotMode }: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
   // In DreamBot mode, drop models that aren't swap-quality from the picker.
   const visibleModels = dreamBotMode ? models.filter((m) => m.dreamBotEnabled !== false) : models;
-  const [selected, setSelected] = useState<string>(DEFAULT_MODEL_ID);
-  const [saving, setSaving] = useState(false);
+  const [selected, setSelected] = useState<string>(() => sessionModelId ?? DEFAULT_MODEL_ID);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Load the sticky choice from the DB column (cross-device). Fire onChange so
+  // Sync the parent's force_model + cost with the cached session pick once on
+  // mount — the parent's own state resets on remount, this module's doesn't.
+  useEffect(() => {
+    onChange?.(selected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Restore the account-sticky choice from the DB column, once per session per
+  // user (the module cache serves every remount after that). Fire onChange so
   // the parent's force_model + cost reflect the restored value immediately.
   useEffect(() => {
-    if (!user) return;
+    if (!user || (sessionModelId !== null && sessionUserId === user.id)) return;
     let active = true;
     (async () => {
       const { data } = await supabase
@@ -73,6 +89,8 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
         .single();
       if (!active) return;
       const loaded = data?.pro_mode_flux_model || DEFAULT_MODEL_ID;
+      sessionModelId = loaded;
+      sessionUserId = user.id;
       setSelected(loaded);
       onChange?.(loaded);
     })();
@@ -84,20 +102,24 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const handleSelect = async (modelId: string) => {
-    if (!user || saving) return;
+  const handleSelect = (modelId: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const changed = modelId !== selected;
     setSelected(modelId);
+    sessionModelId = modelId;
     onChange?.(modelId);
     setModalOpen(false);
-    if (modelId === selected) return;
-    setSaving(true);
-    const { error } = await supabase
+    if (!user || !changed) return;
+    sessionUserId = user.id;
+    // Write-through to the account column (cross-device). Last-write-wins; a
+    // failure just means the pick doesn't follow to the next session.
+    supabase
       .from('users')
       .update({ pro_mode_flux_model: modelId })
-      .eq('id', user.id);
-    if (error && __DEV__) console.error('[ModelPicker] save failed:', error.message);
-    setSaving(false);
+      .eq('id', user.id)
+      .then(({ error }) => {
+        if (error && __DEV__) console.error('[ModelPicker] save failed:', error.message);
+      });
   };
 
   // Two tiers in explicit curated order: Standard (1✦) + Premium (2✦+).
@@ -119,6 +141,24 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
     if (savedHidden) onChange?.(effectiveSelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedHidden, effectiveSelected]);
+  // Scroll-into-view: rows have variable heights (blurbs wrap), so the selected
+  // row's position can't be computed from its index. Capture each row's y within
+  // its tier section + each section's y within the scroll content via onLayout,
+  // then jump (non-animated, before the sheet finishes sliding in) when the
+  // modal's ScrollView lays out. The Modal unmounts its content when closed, so
+  // onContentSizeChange refires on every open.
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionTops = useRef<Record<string, number>>({});
+  const rowTops = useRef<Record<string, { tier: string; y: number }>>({});
+
+  const scrollToSelected = () => {
+    const row = rowTops.current[effectiveSelected];
+    if (!row) return;
+    const y = (sectionTops.current[row.tier] ?? 0) + row.y;
+    // Leave headroom above the row so it reads in context, not pinned to the top.
+    scrollRef.current?.scrollTo({ y: Math.max(0, y - verticalScale(100)), animated: false });
+  };
+
   // Tier header is just the label — each row already shows its own cost, so the
   // group-level cost indicator was redundant.
   const renderTierHeader = (title: string) => (
@@ -127,12 +167,15 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
     </View>
   );
 
-  const renderRow = (opt: ImageModel) => {
+  const renderRow = (opt: ImageModel, tier: string) => {
     const isSelected = opt.id === effectiveSelected;
     return (
       <TouchableOpacity
         key={opt.id}
         onPress={() => handleSelect(opt.id)}
+        onLayout={(e) => {
+          rowTops.current[opt.id] = { tier, y: e.nativeEvent.layout.y };
+        }}
         activeOpacity={0.7}
         style={[
           styles.option,
@@ -234,8 +277,12 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
         onRequestClose={() => setModalOpen(false)}
       >
         <View style={styles.modalRoot}>
+          {/* alignSelf stretch is load-bearing: modalRoot centers children for
+              the iPad sheet, which otherwise collapses this backdrop to zero
+              WIDTH — taps above the sheet then hit nothing and the picker
+              could only be closed via the X. */}
           <TouchableOpacity
-            style={{ flex: 1 }}
+            style={{ flex: 1, alignSelf: 'stretch' }}
             activeOpacity={1}
             onPress={() => setModalOpen(false)}
           />
@@ -262,20 +309,32 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
               depending on compute.
             </Text>
             <ScrollView
+              ref={scrollRef}
               style={{ maxHeight: 460 }}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: verticalScale(24) }}
+              onContentSizeChange={scrollToSelected}
             >
               {standard.length > 0 && (
-                <View style={{ marginTop: verticalScale(12) }}>
+                <View
+                  style={{ marginTop: verticalScale(12) }}
+                  onLayout={(e) => {
+                    sectionTops.current.standard = e.nativeEvent.layout.y;
+                  }}
+                >
                   {renderTierHeader('Standard')}
-                  {standard.map(renderRow)}
+                  {standard.map((m) => renderRow(m, 'standard'))}
                 </View>
               )}
               {premium.length > 0 && (
-                <View style={{ marginTop: verticalScale(8) }}>
+                <View
+                  style={{ marginTop: verticalScale(8) }}
+                  onLayout={(e) => {
+                    sectionTops.current.premium = e.nativeEvent.layout.y;
+                  }}
+                >
                   {renderTierHeader('Premium')}
-                  {premium.map(renderRow)}
+                  {premium.map((m) => renderRow(m, 'premium'))}
                 </View>
               )}
             </ScrollView>

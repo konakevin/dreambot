@@ -1,11 +1,13 @@
 /**
- * useCardGestures — composed pinch + pan-when-zoomed + swipe-left-to-profile.
+ * useCardGestures — composed pinch-zoom-and-drag + swipe-left-to-profile.
  *
- * For fullscreen image cards (feed, photo detail, etc). Bundles the three
- * gestures that must coexist on a dream card:
- *   1. Pinch to zoom (1x – 5x, focal-point aware, auto-reset on release)
- *   2. Two-finger pan when zoomed (clamped to image boundaries)
- *   3. Single-finger swipe-left to profile (disabled while zoomed)
+ * For fullscreen image cards (feed, photo detail, etc). Bundles the gestures
+ * that must coexist on a dream card:
+ *   1. Pinch to zoom (1x – 5x, auto-reset on release). The image point under
+ *      the fingers TRACKS them: spreading zooms, sliding both fingers drags
+ *      the zoomed image around (clamped to image boundaries) — one gesture,
+ *      like Instagram's peek zoom.
+ *   2. Single-finger swipe-left to profile (disabled while zoomed)
  *
  * USAGE
  *   const {
@@ -61,8 +63,6 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
   const savedScale = useSharedValue(1);
   const transX = useSharedValue(0);
   const transY = useSharedValue(0);
-  const savedTransX = useSharedValue(0);
-  const savedTransY = useSharedValue(0);
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
   const isZoomed = useSharedValue(false);
@@ -107,30 +107,22 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
       runOnJS(triggerSwipeLeft)();
     });
 
-  // Two-finger pan when zoomed.
-  const zoomPanGesture = Gesture.Pan()
-    .minPointers(2)
-    .onStart(() => {
-      'worklet';
-      savedTransX.value = transX.value;
-      savedTransY.value = transY.value;
-    })
-    .onUpdate((e) => {
-      'worklet';
-      if (savedScale.value <= 1) return;
-      // Clamp pan to image boundaries.
-      const maxX = ((savedScale.value - 1) * SCREEN_WIDTH) / 2;
-      const maxY = ((savedScale.value - 1) * SCREEN_HEIGHT) / 2;
-      transX.value = Math.max(-maxX, Math.min(maxX, savedTransX.value + e.translationX));
-      transY.value = Math.max(-maxY, Math.min(maxY, savedTransY.value + e.translationY));
-    });
-
-  // Pinch to zoom.
+  // Pinch to zoom AND drag. Gesture.Pinch fires onUpdate whenever either
+  // pointer moves (not just when the spread changes), so tracking the LIVE
+  // focal point each frame gives two-finger drag-while-zoomed for free: the
+  // image point grabbed at pinch-start stays glued under the fingers as they
+  // spread apart or slide around. (The old separate two-finger Pan gesture was
+  // dead code — its `savedScale > 1` guard never passed because savedScale was
+  // only ever reset, and it fought the pinch for transX/transY anyway.)
   const pinchGesture = Gesture.Pinch()
     .onStart((e) => {
       'worklet';
-      focalX.value = e.focalX - SCREEN_WIDTH / 2;
-      focalY.value = e.focalY - SCREEN_HEIGHT / 2;
+      // The grabbed image point, in pre-transform coords relative to the view
+      // center. Divide out the CURRENT transform (not identity) so re-grabbing
+      // mid reset-animation doesn't make the image jump.
+      savedScale.value = scale.value;
+      focalX.value = (e.focalX - SCREEN_WIDTH / 2 - transX.value) / scale.value;
+      focalY.value = (e.focalY - SCREEN_HEIGHT / 2 - transY.value) / scale.value;
     })
     .onUpdate((e) => {
       'worklet';
@@ -140,9 +132,15 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
       );
       scale.value = newScale;
       isZoomed.value = newScale > 1.01;
-      // Pan toward the focal point as you zoom.
-      transX.value = savedTransX.value + focalX.value * (1 - e.scale);
-      transY.value = savedTransY.value + focalY.value * (1 - e.scale);
+      // Solve translate so the grabbed point sits under the live focal point
+      // (screen = point*scale + translate), clamped to the image boundaries so
+      // dragging can't pull the image edge past the screen edge.
+      const maxX = ((newScale - 1) * SCREEN_WIDTH) / 2;
+      const maxY = ((newScale - 1) * SCREEN_HEIGHT) / 2;
+      const rawX = e.focalX - SCREEN_WIDTH / 2 - focalX.value * newScale;
+      const rawY = e.focalY - SCREEN_HEIGHT / 2 - focalY.value * newScale;
+      transX.value = Math.max(-maxX, Math.min(maxX, rawX));
+      transY.value = Math.max(-maxY, Math.min(maxY, rawY));
     })
     .onEnd(() => {
       'worklet';
@@ -151,15 +149,10 @@ export function useCardGestures(options?: UseCardGesturesOptions) {
       transX.value = withTiming(0, { duration: PINCH_RESET_DURATION });
       transY.value = withTiming(0, { duration: PINCH_RESET_DURATION });
       savedScale.value = 1;
-      savedTransX.value = 0;
-      savedTransY.value = 0;
       isZoomed.value = false;
     });
 
-  const gesture = Gesture.Simultaneous(
-    swipeGesture,
-    Gesture.Simultaneous(pinchGesture, zoomPanGesture)
-  );
+  const gesture = Gesture.Simultaneous(swipeGesture, pinchGesture);
 
   const imageTransformStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: transX.value }, { translateY: transY.value }, { scale: scale.value }],

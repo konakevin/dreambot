@@ -6,10 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { runOnJS } from 'react-native-reanimated';
+import { useCardGestures } from '@/hooks/gestures/useCardGestures';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
-import { useFeedStore } from '@/store/feed';
 import { GradientButton } from '@/components/GradientButton';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { GradientTitle } from '@/components/GradientTitle';
@@ -36,17 +38,7 @@ const IMAGE_WIDTH = SCREEN_WIDTH - 48;
 const IMAGE_HEIGHT = Math.min(IMAGE_WIDTH * (SCREEN_HEIGHT / SCREEN_WIDTH), SCREEN_HEIGHT * 0.45);
 const IDLE_MASCOT_SIZE = verticalScaleClamped(140, 110, 160);
 
-// Race a promise against a timeout so a stalled network call can never trap the
-// user on the reveal. The underlying request keeps running in the background if
-// it loses the race — we just stop waiting on it.
-function withTimeout<T>(p: PromiseLike<T>, ms: number): Promise<T> {
-  return Promise.race([
-    Promise.resolve(p),
-    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
-  ]);
-}
-
-type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'creating' | 'sparkles' | 'finished';
+type Phase = 'idle' | 'booting' | 'generating' | 'reveal' | 'sparkles' | 'finished';
 /**
  * Reveal overlay: the user already saw the nightly-dream pitch on the
  * INFO Nightly onboarding screen, so the reveal collapses to a single
@@ -98,7 +90,6 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   const setFirstDreamStatus = useOnboardingStore((s) => s.setFirstDreamStatus);
   const user = useAuthStore((s) => s.user);
   const engineConfig = useEngineConfig();
-  const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const insets = useSafeAreaInsets();
   // Bottom inset for the overlay buttons: respect the home indicator when
   // present (insets.bottom > 0), otherwise use a sensible floor so the
@@ -114,12 +105,27 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   const [error, setError] = useState<string | null>(null);
   // Tap the image hides/shows the HUD (post/skip chrome).
   const [hudVisible, setHudVisible] = useState(true);
-  // Which CTA is in flight ('post' vs 'skip') — both set phase='creating', so
-  // this is what keeps the Post button from reading "Posting…" during a Skip.
-  // Only POST has an in-flight state now (the publish flip) — SKIP is an instant
-  // redirect, so it never enters a busy state.
-  const [busyAction, setBusyAction] = useState<'post' | null>(null);
-  // Guards: one await/kick at a time, and run the on-mount kickoff/await once.
+  // Pinch-to-zoom-and-drag on the revealed dream — same Instagram-peek behavior
+  // as the feed cards (zoom follows the fingers, springs back on release). No
+  // author to swipe to on an unposted first dream.
+  const { gesture: zoomGesture, imageTransformStyle } = useCardGestures({
+    disableSwipeLeft: true,
+  });
+  // Single tap toggles the HUD. Composed Exclusive with the zoom gesture so a
+  // real pinch still wins; a clean one-finger tap falls through to this.
+  function toggleHud() {
+    Haptics.selectionAsync();
+    setHudVisible((v) => !v);
+  }
+  const tapToggleHud = Gesture.Tap()
+    .maxDuration(250)
+    .onEnd(() => {
+      runOnJS(toggleHud)();
+    });
+  const imageGesture = Gesture.Exclusive(zoomGesture, tapToggleHud);
+  // Guards: one await/kick at a time, run the on-mount kickoff/await once, and
+  // one Post/Skip exit navigation (both CTAs are instant redirects).
+  const navigated = useRef(false);
   const awaiting = useRef(false);
   const kickoffStarted = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
@@ -137,11 +143,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   // when nav'ing away (store.reset clears chromeHidden back to false).
   useEffect(() => {
     const hidden =
-      phase === 'booting' ||
-      phase === 'generating' ||
-      phase === 'reveal' ||
-      phase === 'creating' ||
-      phase === 'finished';
+      phase === 'booting' || phase === 'generating' || phase === 'reveal' || phase === 'finished';
     setChromeHidden(hidden);
     // Also LOCK the pager swipe for these phases — once the dream is
     // generating/revealed there's no going back through onboarding; the only
@@ -293,40 +295,38 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   // notification — now runs in lib/firstDreamKickoff.startFirstDream at the cutoff
   // step, before the dream renders, so the reveal has nothing left to persist.)
 
-  async function handleCreateBot(makePublic: boolean) {
-    if (!user || !activeDream) return;
+  function handleCreateBot(makePublic: boolean) {
+    if (!user || !activeDream || navigated.current) return;
+    navigated.current = true;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     // Profile, welcome sparkles, welcome-gift notification, and completion all
     // already persisted at the END of onboarding (finalizeOnboarding, before the
     // dream generated). So there is NOTHING left to save here:
     //   • SKIP  → instant redirect, zero awaits, can't get stuck.
-    //   • POST  → ONE timeout-guarded write (flip the private draft public) +
-    //             pin it to the feed, then go. The render already persisted the
-    //             dream, so we never insert a second row.
+    //   • POST  → hand off to the STANDARD New Post screen (description input +
+    //             moderation + publish flip + feed pin) — the same flow as
+    //             posting a manual dream or tapping + on a private dream in the
+    //             album. The render already persisted the dream privately, so
+    //             nothing is lost if the user cancels there.
     const uploadId: string | null = activeDream.uploadId ?? null;
     if (makePublic && uploadId) {
-      setBusyAction('post');
-      setPhase('creating');
-      try {
-        await withTimeout(
-          supabase
-            .from('uploads')
-            // Clear the prompt-derived caption so the feed post reads clean.
-            .update({ is_public: true, posted_at: new Date().toISOString(), caption: null })
-            .eq('id', uploadId),
-          4000
-        );
-        // Pin the just-posted dream to the top of the home feed. The home screen
-        // fetches the FULL persisted row from this id (real storage URL, like
-        // state, dimensions) so the pinned card renders cleanly, and it survives
-        // the post-onboarding FeedIntroGate (bot selection) underneath.
-        setPendingPostId(uploadId);
-      } catch (err) {
-        // Publish stalled/failed — the dream still lives privately in the album.
-        // Don't trap the user on the reveal; head to the feed regardless.
-        if (__DEV__) console.warn('[Reveal] publish flip failed/timed out:', err);
-      }
+      // Clear the prompt-derived caption so the eventual feed post reads clean —
+      // fire-and-forget on the still-private row; New Post owns the publish.
+      supabase
+        .from('uploads')
+        .update({ caption: null })
+        .eq('id', uploadId)
+        .then(({ error }) => {
+          if (error && __DEV__) console.warn('[Reveal] caption clear failed:', error.message);
+        });
+      reset();
+      // replace (not push): onboarding is done — there's no stepping back into
+      // it. fromOnboarding tells New Post's Cancel to land on the feed.
+      router.replace(
+        `/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(activeDream.url)}&fromOnboarding=1`
+      );
+      return;
     }
 
     reset();
@@ -476,25 +476,25 @@ export function RevealStep({ onBack, isActive = false }: Props) {
         </View>
       ) : activeDream ? (
         <View style={{ flex: 1 }}>
-          {/* Fullscreen dream image */}
-          <Image
-            source={{ uri: activeDream.url }}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            transition={300}
-            cachePolicy="memory-disk"
-          />
-
-          {/* Tap the image to hide / show the HUD (post/skip chrome). Sits above
-              the image but below the bottom HUD, so the buttons win their taps. */}
-          <TouchableOpacity
-            style={StyleSheet.absoluteFill}
-            activeOpacity={1}
-            onPress={() => {
-              Haptics.selectionAsync();
-              setHudVisible((v) => !v);
-            }}
-          />
+          {/* Fullscreen dream image — pinch to zoom + drag; single tap toggles
+              the HUD (post/skip chrome). The GestureDetector replaces the old
+              tap-catching TouchableOpacity overlay; it sits below the bottom
+              HUD, so the buttons still win their taps. */}
+          <GestureDetector gesture={imageGesture}>
+            {/* Detector rides the UNTRANSFORMED wrapper — the zoom transform
+                lives on the inner view, so focal coords stay in screen space. */}
+            <View style={StyleSheet.absoluteFill}>
+              <Animated.View style={[StyleSheet.absoluteFill, imageTransformStyle]}>
+                <Image
+                  source={{ uri: activeDream.url }}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                  transition={300}
+                  cachePolicy="memory-disk"
+                />
+              </Animated.View>
+            </View>
+          </GestureDetector>
 
           {hudVisible &&
             (phase === 'finished' ? (
@@ -549,15 +549,13 @@ export function RevealStep({ onBack, isActive = false }: Props) {
                     All dreams are saved to your Dreams album privately by default
                   </Text>
                   <GradientButton
-                    label={busyAction === 'post' ? 'Posting…' : 'Post to my feed'}
+                    label="Post to my feed"
                     onPress={() => handleCreateBot(true)}
-                    disabled={phase === 'creating'}
                     style={{ alignSelf: 'stretch' }}
                   />
                   <TouchableOpacity
                     style={s.secondaryButton}
                     onPress={() => handleCreateBot(false)}
-                    disabled={phase === 'creating'}
                     activeOpacity={0.7}
                   >
                     <Text style={s.secondaryButtonText}>Skip and go to feed</Text>

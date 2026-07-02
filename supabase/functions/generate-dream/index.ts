@@ -1223,19 +1223,23 @@ Output ONLY the prompt.`;
         // insert all unchanged.
         finalPrompt = sanitizeUserPrompt(userSubject.trim());
 
-        // Read the user's Pro Mode Flux model preference (default flux-1.1-pro
-        // if column unset / row missing — preserves backward compatibility
-        // before migration 149 lands).
-        const { data: userRow } = await supabase
-          .from('users')
-          .select('pro_mode_flux_model')
-          .eq('id', userId)
-          .single();
-        const proModeModel =
-          (userRow as { pro_mode_flux_model?: string } | null)?.pro_mode_flux_model ||
-          'black-forest-labs/flux-1.1-pro';
-        force_model = proModeModel;
-        console.log(`[generate-dream] DIRECT PASS-THROUGH model preference: ${proModeModel}`);
+        // Honor the request's force_model (the pick from <ModelPicker>, already
+        // validated + charged above) — it IS what the user was billed for, so
+        // overriding it with the users.pro_mode_flux_model column could let the
+        // rendered model diverge from the charge if the column write raced or
+        // failed. The column (still written by the picker, cross-device sticky)
+        // is only the fallback for old clients that predate force_model.
+        if (!force_model) {
+          const { data: userRow } = await supabase
+            .from('users')
+            .select('pro_mode_flux_model')
+            .eq('id', userId)
+            .single();
+          force_model =
+            (userRow as { pro_mode_flux_model?: string } | null)?.pro_mode_flux_model ||
+            'black-forest-labs/flux-1.1-pro';
+        }
+        console.log(`[generate-dream] DIRECT PASS-THROUGH model preference: ${force_model}`);
         logAxes = {
           medium: medium.key,
           vibe: vibe.key,
@@ -1245,7 +1249,7 @@ Output ONLY the prompt.`;
         };
         fallbackReasons.push('direct_pass_thru:no_sonnet');
         console.log(
-          `[generate-dream] DIRECT PASS-THROUGH (${proModeModel}): ${finalPrompt.slice(0, 150)}`
+          `[generate-dream] DIRECT PASS-THROUGH (${force_model}): ${finalPrompt.slice(0, 150)}`
         );
         lap('direct-pass-thru-done');
       } else {
