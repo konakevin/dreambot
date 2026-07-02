@@ -4,7 +4,7 @@ generatePool({
   outPath: 'scripts/bots/faebot/seeds/village_wildlife.json',
   total: 200,
   batch: 40,
-  append: false,
+  append: true, // top-up to total (2026-07-01 kodama-purge refill); delete the JSON to force full regen
   maxTokens: 6000,
   metaPrompt: (
     n
@@ -14,7 +14,7 @@ generatePool({
 
 Every entry should look like a Studio Ghibli forest moment — life EVERYWHERE, each creature doing something specific. Not "butterflies drifting" but "three orange monarchs clustered on a foreground foxglove, one mid-flight crossing a god-ray." Mix mundane critter density with mythic-forest cameos that make the world feel enchanted.
 
-References: Mononoke spirit forest creatures + Cinderella's woodland helpers + Snow White's animal companions + Princess Mononoke kodama tree-spirits + Studio Ghibli white-stag moments.
+References: Mononoke spirit forest creatures + Cinderella's woodland helpers + Snow White's animal companions + Studio Ghibli white-stag moments. NEVER a kodama or any bald/round-white-headed/faceless spirit — Flux renders them as uncanny human heads; every mythic creature is a recognizable ANIMAL form (stag, owl, fox, wolf, raven).
 
 ━━━ EVERY ENTRY MUST INCLUDE ALL OF THESE ━━━
 
@@ -32,7 +32,7 @@ MYTHIC FLOOR — these MUST appear as headline critter in their target % of entr
 - **RAVEN** (~4% — about 8): a raven perched on a stone arch / a pair of ravens on a chimney / a raven mid-flight crossing god-rays
 - **CROW** (~4% — about 8): a flock of crows wheeling over the village / a single crow on a fence-post
 - **SPIRIT WOLF** (~4% — about 8): a translucent spirit wolf gazing from the deep forest / a small spirit wolf pup curled at a doorway
-- **TREE SPIRIT / KODAMA** (~5% — about 10): tiny white kodama tree-spirits clustered in middle distance with rotating heads / a single kodama peeking from a knothole / kodama sitting on roots
+- **LUNA MOTHS / GLOW-MOTHS** (~5% — about 10): pale-green luna moths resting on a lantern post / a cluster of glow-moths circling a chimney lantern / a single luna moth sunning on a mossy railing
 - **LUNA MOTH** (~4% — about 8): a luminous pale-green luna moth resting on a window / a luna moth in flight at the lantern / a pair of luna moths on a foreground leaf
 
 MUNDANE CRITTER ROTATION — distribute the rest of the entries across these (don't lean on any one):
@@ -52,7 +52,7 @@ MUNDANE CRITTER ROTATION — distribute the rest of the entries across these (do
 
 FLYING: hummingbirds, butterflies, dragonflies, moths (luna, atlas, hawk), songbirds, bees, bumblebees, fireflies, glowbugs
 GROUND/CLIMBING: squirrels, chipmunks, hedgehogs, baby rabbits, forest mice, frogs, ladybugs, snails (painted shells)
-LARGER & MYTHIC: white stags, deer with fawn, owls (barred / snowy / great-horned), fox spirits, ravens, crows, spirit wolves, tree-spirits/kodama
+LARGER & MYTHIC: white stags, deer with fawn, owls (barred / snowy / great-horned), fox spirits, ravens, crows, spirit wolves
 LIVING-SCENE TOUCHES (always include 1-2): smoke from chimney, hanging laundry, lit windows with warm glow, garlands of flowers, hanging herb-bundles
 
 ━━━ EXAMPLES (write fresh — do not copy) ━━━
@@ -62,7 +62,7 @@ MYTHIC HEADLINE:
 - "A barred owl with golden eyes perched on a moss-covered branch above the cottage, a hummingbird at a foreground fuchsia, a frog mid-leap from a lily-pad, ladybugs on a fern, lit windows with warm glow."
 - "A glowing-eyed fox spirit silhouette drifting between trunks at the forest edge in middle distance, a red squirrel balancing on a vine-rope railing, a luna moth resting on a wooden door, butterflies in light shafts, hanging laundry."
 - "A flock of three ravens wheeling over the village rooftops, a chipmunk peeking from a knothole with cheek-pouches stuffed, dragonflies skimming a pond, smoke curling from chimneys."
-- "Tiny white kodama tree-spirits clustered on a moss-covered root in middle distance with their heads rotating softly, a hedgehog snuffling through leaf-litter foreground, a bumblebee on lavender, songbirds on a hewn beam."
+- "A pale-green luna moth resting open-winged on a lantern post in middle distance, a hedgehog snuffling through leaf-litter foreground, a bumblebee on lavender, songbirds on a hewn beam."
 - "A translucent spirit wolf gazing from the deep forest in middle distance, a baby rabbit upright on hind legs at the cottage doorstep, hummingbirds at trumpet-flowers, butterflies in god-rays."
 - "A pair of luna moths with luminous pale-green wings resting on the window-frame, a frog on a foreground lily-pad, a chipmunk on the stone path, fireflies drifting, lit windows."
 
