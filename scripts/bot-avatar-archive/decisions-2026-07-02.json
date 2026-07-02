@@ -1,0 +1,9 @@
+{
+  "note": "FaeBot avatar refresh (supersedes faebot entry in decisions-2026-07-01.json). Anchor: previous golden-moon fae prompt + colorful variant.",
+  "faebot": {
+    "decision": "Meadow glow",
+    "prompt": "a delicate tiny fairy with outstretched wings, in a colorful wildflower meadow at golden hour, wings backlit in warm rainbow light, sparkling dust drifting, painted fantasy",
+    "candidateFile": "faebot-concept-7.jpg",
+    "appliedVersion": 1782975430547
+  }
+}

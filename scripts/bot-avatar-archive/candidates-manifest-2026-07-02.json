@@ -1,0 +1,64 @@
+{
+  "faebot": [
+    {
+      "idx": 0,
+      "label": "Rainbow moon fae",
+      "prompt": "a delicate tiny fairy with outstretched wings, iridescent rainbow wings glowing against a huge golden full moon, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-0.jpg"
+    },
+    {
+      "idx": 1,
+      "label": "Aurora fae",
+      "prompt": "a delicate tiny fairy with outstretched wings, silhouetted against a swirling pink-teal-violet aurora sky, wings catching every color, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-1.jpg"
+    },
+    {
+      "idx": 2,
+      "label": "Jewel wings",
+      "prompt": "a delicate tiny fairy with outstretched wings, stained-glass jewel-tone wings in sapphire, emerald and ruby, glowing from within against deep twilight, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-2.jpg"
+    },
+    {
+      "idx": 3,
+      "label": "Blossom hover",
+      "prompt": "a delicate tiny fairy with outstretched wings, hovering above one huge vivid magenta flower, warm golden glow, colorful petals, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-3.jpg"
+    },
+    {
+      "idx": 4,
+      "label": "Rainbow fireflies",
+      "prompt": "a delicate tiny fairy with outstretched wings, surrounded by drifting multicolored fae-lights in pink, gold, teal and violet against dusk blue, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-4.jpg"
+    },
+    {
+      "idx": 5,
+      "label": "Sunset moon fae",
+      "prompt": "a delicate tiny fairy with outstretched wings, against a huge peach-and-rose moon in a violet sky, warm gold dust, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-5.jpg"
+    },
+    {
+      "idx": 6,
+      "label": "Opal shimmer",
+      "prompt": "a delicate tiny fairy with outstretched wings, opalescent mother-of-pearl wings shimmering teal, magenta and gold against deep indigo, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-6.jpg"
+    },
+    {
+      "idx": 7,
+      "label": "Meadow glow",
+      "prompt": "a delicate tiny fairy with outstretched wings, in a colorful wildflower meadow at golden hour, wings backlit in warm rainbow light, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-7.jpg"
+    },
+    {
+      "idx": 8,
+      "label": "Prism light",
+      "prompt": "a delicate tiny fairy with outstretched wings, sunbeam splitting into soft prismatic rainbow rays through her translucent wings, golden sky, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-8.jpg"
+    },
+    {
+      "idx": 9,
+      "label": "Morpho wings",
+      "prompt": "a delicate tiny fairy with outstretched wings, vivid butterfly wings in electric blue and monarch orange against a huge golden moon, sparkling dust drifting, painted fantasy",
+      "file": "faebot-concept-9.jpg"
+    }
+  ]
+}
