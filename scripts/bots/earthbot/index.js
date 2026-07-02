@@ -264,7 +264,14 @@ module.exports = {
   // (is_active: false, is_bot_only: true) — never exposed to user pickers.
   // Its flux_fragment in the DB IS the override; no mediumStyles entry
   // needed since there's no DB fragment to replace.
-  defaultMedium: 'earthbot_wow', // 2026-06-30 — bold wow/lush 'fantastical but physics-bound' medium (replaced earthbot_photography; Kevin wanted prettier, higher-wow shots)
+  // 2026-06-30 — bold wow/lush physics-bound medium (replaced earthbot_photography;
+  // Kevin wanted prettier, higher-wow shots). 2026-07-02 — DB fragment dialed back
+  // a tad at Kevin's ask ("lush + professional, not overblown"): top amplifiers
+  // removed (jaw-dropping / fantastical / saturated / too-beautiful-to-be-real),
+  // "clean professional grade / crisp fine detail" added. The fragment lives in the
+  // dream_mediums row; the old 488-char version is preserved for revert in
+  // memory/feedback_earthbot_bold_wow_medium.md.
+  defaultMedium: 'earthbot_wow',
 
   // Bot-level prefix/suffix kept empty so the per-path overrides below
   // are the SOLE prefix/suffix sources. Engine prepends promptPrefixByPath
