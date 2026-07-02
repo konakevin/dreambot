@@ -81,12 +81,19 @@ describe('migration 322: storage upload limits on user buckets', () => {
   });
 });
 
-describe('migration 323: eligibility RPCs not client-callable', () => {
-  const sql = read('supabase/migrations/323_revoke_eligibility_rpc_authenticated.sql');
-  it('revokes EXECUTE on is_pro_active / is_basic_active / is_dream_eligible from authenticated', () => {
+describe('migrations 323+324: eligibility RPCs not client-callable', () => {
+  // 324 is the load-bearing fix: 323 revoked from authenticated/anon but the
+  // DEFAULT PUBLIC grant kept the RPCs callable by the anon key (verified live).
+  // 324 revokes from PUBLIC and re-grants service_role. This test asserts 324
+  // exists so the PUBLIC hole can't silently return.
+  const sql = read('supabase/migrations/324_eligibility_rpc_revoke_public.sql');
+  it('revokes EXECUTE from PUBLIC and re-grants only service_role', () => {
     for (const fn of ['is_pro_active', 'is_basic_active', 'is_dream_eligible']) {
       expect(sql).toMatch(
-        new RegExp(`REVOKE EXECUTE ON FUNCTION public\\.${fn}\\(uuid\\) FROM authenticated`)
+        new RegExp(`REVOKE EXECUTE ON FUNCTION public\\.${fn}\\(uuid\\) FROM PUBLIC`)
+      );
+      expect(sql).toMatch(
+        new RegExp(`GRANT EXECUTE ON FUNCTION public\\.${fn}\\(uuid\\) TO service_role`)
       );
     }
   });
