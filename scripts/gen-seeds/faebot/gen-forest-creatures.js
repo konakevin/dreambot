@@ -8,7 +8,7 @@ generatePool({
   maxTokens: 4000,
   metaPrompt: (
     n
-  ) => `Write ${n} unified descriptions of EXOTIC FOREST CREATURES — fairies, dryads, nymphs, forest-spirits, leshy-lords, kodama. The kind of beings that, glimpsed in a clearing, make you stop and think "wow, that's stunningly beautiful." Each entry is a complete creature description for a downstream Flux fantasy-illustration prompt-writer.
+  ) => `Write ${n} unified descriptions of EXOTIC FOREST CREATURES — fairies, dryads, nymphs, forest-spirits, leshy-lords. The kind of beings that, glimpsed in a clearing, make you stop and think "wow, that's stunningly beautiful." Each entry is a complete creature description for a downstream Flux fantasy-illustration prompt-writer.
 
 Each entry: 35-55 words, woven as ONE paragraph (NOT a field list).
 
@@ -75,8 +75,6 @@ GLOW + MOON CREATURES:
 - Foxfire-spirit (bioluminescent fungal-glow being)
 - Glow-moth fairy (luna-moth wings, pearlescent skin)
 
-KODAMA / TREE-SPIRITS (occasional):
-- Kodama (small white tree-spirit, oversized round head, simple painted features)
 - Mossfolk small being
 
 ━━━ EXAMPLE OUTPUTS (calibrate to this voice) ━━━

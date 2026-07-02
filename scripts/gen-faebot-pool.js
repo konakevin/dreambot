@@ -1464,7 +1464,7 @@ Channel: Burnett "Secret Garden" reveal + Studio Ghibli secret-place reveals + T
   K. **DOUBLE LIGHT-SHAFTS** — paired sun-shafts through the arch symmetric to the framing
   L. **MAGIC-DUST SPARKLES** — suspended dust-mote sparkles caught in side-light through the arch
 
-Channel: Princess Mononoke kodama-spirits + Studio Ghibli light-shaft moments + Burnett "Secret Garden" robin / magic-bird reveal + Disney Sleeping-Beauty fairy-dust + Tasha Tudor candle-in-cottage warm moments.`,
+Channel: Princess Mononoke forest-light moments + Studio Ghibli light-shaft moments + Burnett "Secret Garden" robin / magic-bird reveal + Disney Sleeping-Beauty fairy-dust + Tasha Tudor candle-in-cottage warm moments.`,
     touchpoints: [
       'VERTICAL SUN-SHAFT THROUGH ARCH — single vertical sun-shaft falling through the archway opening onto the path stones at the center, vapor and dust-motes suspended in the volumetric beam',
       'FALLING PETALS THROUGH THE ARCH — drifting petal-fall caught mid-air through the archway opening, petals from the climbing-bloom canopy above slowly descending toward the path',
@@ -2940,12 +2940,12 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   // ─── forest-fairy-scene path (2026-05-20 axis-system migration, 10 axes) ───
   faebot_forest_fairy_scene_creature: {
     format: 'simple',
-    theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / kodama / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature.
+    theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature. NEVER a kodama or any bald / round-white-headed / dot-eyed / faceless spirit, NEVER a body merging or fused into bark or saplings — Flux has no prior for these and renders an uncanny bald human head grafted onto a tree (Kevin-flagged 2026-07-01). Every creature has a FULL beautiful face with real eyes and real hair.
 
 ⚠️ THE BAR: each creature reads as a SINGLE coherent mythic being. NOT a list — a unified painted-fantasy character description. Otherworldly mythic-creature beauty, NEVER human-model beauty. Hidden-camera candid posture — NEVER posing, NEVER eye-contact, NEVER pinup.
 
 ⚠️ EVERY ENTRY MUST include AT LEAST 5 of these stacked exotic feature categories:
-  - SPECIES LINEAGE — dryad / naiad / kodama / hamadryad / pixie-sprite / fae queen / nymph / fox-spirit / glow-moth-fae / vine-nymph / meliae / sidhe / banshee-spirit / etc.
+  - SPECIES LINEAGE — dryad / naiad / hamadryad / pixie-sprite / fae queen / nymph / fox-spirit / glow-moth-fae / vine-nymph / meliae / sidhe / banshee-spirit / etc.
   - SKIN TREATMENT — translucent with constellations / bark-textured / moss-tinted olive / bioluminescent-freckled / mottled green-flecked / luminous pearl / silver-bark patches / lichen-detail / pale-jade / etc.
   - PLANT-MERGED HAIR — living vines woven with blooms / river-water flowing / pale willow-fronds / wisteria-petals cascading / moss tendrils with asphodel / dark pine-needles crowned with antlers / silver-leaf cascade / cherry-blossom braided / autumn-leaf flowing / etc.
   - PLANT-MERGED GARMENT — petal-shawl / leaf-bodice woven of ferns / vine-skirt / silk-petal wrap / overlapping rose-petals / moss-skirt with woven ivy / cape of willow-leaves / draped garland of clematis / birch-bark tunic / overlapping calla-lily / etc.
@@ -2961,7 +2961,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
   • ~3 PIXIE / FAE-COURT (queen / sidhe / Tylwyth Teg)
   • ~3 ANIMAL-MERGED SPIRITS (fox-spirit / owl-fae / deer-spirit / swan-maiden)
   • ~2 INSECT-FAE (glow-moth / pixie-dragonfly / firefly-fae)
-  • ~2 KODAMA / WOODLAND-SPRITE (smaller mythic beings)
+  • ~2 GLOW-MOTH FAIRY / PIXIE-SPRITE (smaller mythic beings, full faces)
   • ~1 RARE / OTHERWORLDLY (Meliae / hamadryad / banshee-spirit)
 
 🚫 ABSOLUTE BANS:
@@ -2994,7 +2994,7 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
       'An owl-fae with mottled bark-textured skin and feathered hair of pale willow-fronds with single white moonflowers, owl-feather cape draped across shoulders, large pearl-iris eyes with horizontal-slit pupils, sitting motionless on a high mossy branch in profile, weathered face turned to one side listening to forest sounds',
       'A deer-spirit with mottled green-flecked skin and hair of dark moss threaded with autumn-leaves, draped cape of overlapping willow-leaves, large branching deer-antlers crowning her head, soft fawn-marks dotting her shoulders, kneeling at the edge of a forest-pool with one hand brushing the water',
       'A firefly-fae with luminous pearl skin and hair of silver-leaf cascading past her waist, translucent dragonfly wings veined with gold, snug bodice of overlapping luminescent petals, softly glowing fingertips trailing fairy-light, sitting on a moss-stone with her cupped palm holding a cluster of fireflies',
-      'A kodama tree-spirit with round white head and gentle painted eyes, slender translucent body merging with mossy bark, bobbing politely beside a mushroom ring, tiny violets blooming where its translucent feet touch moss, soft pearl-glow haloing its small form, ancient lichen detail on its small hands',
+      'A pixie-sprite with a bright elfin face and wide amber eyes, hair of tiny fern-curls dusted with pollen-glow, dragonfly-veined wings folded along her back, perched beside a mushroom ring where violets bloom at her touch, soft pearl-glow haloing her small form',
       'A Tylwyth Teg sidhe with cascading silver hair threaded with gold-leaf and dewdrop-pearls, layered robe of overlapping willow-leaves with vine-belted waist and floor-length train, porcelain skin with faint constellation freckles, walking slowly through a moonlit wisteria-archway in regal procession',
       'A banshee-spirit with translucent silver-grey skin and hair of cool mist flowing past her waist, draped cape of woven cobweb and willow-leaves, ghost-white pearl-iris eyes, hovering just above ground in a misty pine-grove, fingertips trailing slow-drifting cold-pollen, mournful gentle bearing not aggressive',
       'A flower-dryad with porcelain skin showing faint pink undertones and hair of cherry-blossom branches with single white moonflowers woven through, draped bodice of overlapping rose-petals, small antlers crowned with foxglove-bells, kneeling in a meadow with palm extended to a hovering will-o-wisp, soft pollen-light haloing her face',
@@ -5181,9 +5181,10 @@ VARIETY (~25): a hanging fern-frond; a cluster of glowing toadstools; a draped c
   • ~2 BLOSSOM / HERB-NYMPH (foxglove / hellebore / asphodel / lily — feminine)
   • ~2 INSECT-FAE (glow-moth / dragonfly-fae / firefly-fae)
   • ~2 RARE / OTHERWORLDLY (Meliae / hamadryad / banshee-spirit / hellebore-nymph)
-  • ~2 KODAMA / WOODLAND-SPRITE (smaller mythic beings still adult-scale)
+  • ~2 GLOW-MOTH FAIRY / PIXIE-SPRITE (smaller mythic beings still adult-scale, full faces)
 
 🚫 STRICT BANS:
+  • NEVER a kodama / bald round-white-headed / dot-eyed / faceless spirit, NEVER a body merging or fused into bark — renders as an uncanny bald human head grafted onto a tree (Kevin-flagged 2026-07-01); every creature has a FULL beautiful face with real eyes and hair
   • NO posture / action / expression (separate axes — creature is features ONLY)
   • NO human-model beauty / NO pin-up / NO sexualized framing
   • NO modern attire / NO contemporary references

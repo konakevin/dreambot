@@ -6,7 +6,7 @@ generatePool({
   batch: 25,
   metaPrompt: (
     n
-  ) => `You are writing ${n} ENCHANTED FOREST CREATURE scene descriptions for ForestBot. Each scene is a CANDID GLIMPSE into a magical forest — caught a moment with a forest spirit, dryad, fairy, leshy, kodama, etc. The vibe is HIGHLY organic, HIGHLY enchanted, HIGHLY magical. Every render is a tiny sacred moment.
+  ) => `You are writing ${n} ENCHANTED FOREST CREATURE scene descriptions for ForestBot. Each scene is a CANDID GLIMPSE into a magical forest — caught a moment with a forest spirit, dryad, fairy, leshy, etc. The vibe is HIGHLY organic, HIGHLY enchanted, HIGHLY magical. Every render is a tiny sacred moment.
 
 Each entry: 22-35 words. ONE specific creature in ONE specific forest setting in ONE intimate / contemplative / candid moment.
 
@@ -85,7 +85,6 @@ FOREST-LORD ARCHETYPES (mature, antlered, gravitas):
 - Pan-spirit (half-goat, gentle pipes-player)
 
 JAPANESE FOREST SPIRITS:
-- Kodama (small white tree-spirit, oversized round head, simple painted features, bobbing politely)
 - Kitsune (multi-tailed fox-spirit, vine-collared, glowing-eyed)
 - Tanuki (raccoon-dog spirit with leaf-cap)
 
@@ -136,7 +135,7 @@ sipping dewdrops from cupped leaf / whispering blessing over a sprouting seedlin
 ✅ "Dryad with moss-tinted gold-olive skin and vine-hair woven with tiny yellow blossoms, half-turned profile, sitting cross-legged on moss-covered rock by a forest stream, palm cupped around a softly glowing seed, dappled green light filtering through canopy, sparkles of pollen-magic drifting around her shoulders, tiny ferns sprouting from her collarbone."
 ✅ "Leshy lord of the wood — tall figure with bark-skin, vine-beard, and antler-crown sprouting tiny leaves — half-emerged from a moonlit oak grove, palm raised toward a small white stag, faint amber wisps glowing between them, mossy roots spreading from his bare feet."
 ✅ "Tiny pixie-sprite with translucent dragonfly wings and bluebell-petal dress, perched on the brim of a phosphorescent mushroom in a fairy-ring, dewdrop crown shimmering, fairy-dust trail behind her, soft golden glow lighting the ferns around her."
-✅ "Kodama — small white tree-spirit with round head and simple painted face — peeking shyly from a hollow oak's burl, surrounded by floating glowing pollen-motes, soft pearl-light haloing the moss-circle around the trunk."
+✅ "Pixie-sprite — bright elfin face, wide amber eyes, fern-curl hair — peeking shyly from a hollow oak's burl, surrounded by floating glowing pollen-motes, soft pearl-light haloing the moss-circle around the trunk."
 
 ━━━ BANNED ━━━
 - NO violent / scared / edgy moods
