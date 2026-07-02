@@ -21,7 +21,6 @@ import { DreamCard } from '@/components/DreamCard';
 import { FeedCardSkeleton } from '@/components/Skeleton';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { CommentOverlay } from '@/components/CommentOverlay';
-import { showAlert } from '@/components/CustomAlert';
 import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
@@ -338,15 +337,12 @@ export function FullScreenFeed({
   const [likesPostId, setLikesPostId] = useState<string | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
-  // Admin instant-delete is a hard delete (row + storage files) with no undo,
-  // and its button sits on the card's side rail — gate it behind a confirm so
-  // a stray tap can't destroy a post.
+  // Admin instant-delete is a hard delete (row + storage files) with no undo.
+  // No confirm on purpose (Kevin 2026-07-01) — he bulk-prunes bot test renders
+  // from the feed and the dialog was friction on every tap.
   const handleAdminDelete = useCallback(
     (uploadId: string) => {
-      showAlert('Delete this post?', 'Admin delete is immediate and permanent.', [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => deletePost(uploadId) },
-      ]);
+      deletePost(uploadId);
     },
     [deletePost]
   );
