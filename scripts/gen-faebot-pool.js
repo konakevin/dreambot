@@ -2938,6 +2938,113 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     instructions: `Each entry is ONE specific dramatic atmospheric / wildlife / geologic / hydrologic / celestial PHENOMENON, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visible drama + secondary detail + position in frame". Vary across the 10 categories above. Each phenomenon is the "stop-the-scroll wow moment" but doesn't replace the bloom-carpet. NO humans, NO vehicles, NO architecture, NO surreal physics. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
   // ─── forest-fairy-scene path (2026-05-20 axis-system migration, 10 axes) ───
+  // ── fae-cottage path (2026-07-01, Kevin cottagecore reference lock) ──────
+  faebot_fae_cottage_dwelling: {
+    format: 'simple',
+    theme: `THE COZY FAE DWELLING for FaeBot's fae-cottage path — ONE charming ancient building that is the HERO of the frame. The Kevin-locked reference aesthetic: OVERGROWN BUT NOT RUNDOWN, OLD BUT DIGNIFIED. The dwelling is real medieval STONE ARCHITECTURE whose lines still read clearly and gracefully — gothic arched windows, arched doorways, gabled porches, tiny bell-cupolas, tall chimneys — built of pale weathered masonry softened by centuries. The forest has spent those centuries CLIMBING it: mossy green roof caps, ivy sheeting up the walls and chimney, growth threading every ledge, maybe a tiny sapling sprouting from the chimney top — yet the building stands intact and loved, windows whole, roof sound. Old comes from weathered stone + moss + the forest's embrace, never from decay and never from tidiness. Windows always capable of glowing warm amber. Each entry is ONE building described with 4+ readable features: STONE + AGE character, ROOF (moss-capped, readable architecture), WINDOWS (arched/gothic/deep-set, glowing warm), DOOR character, and ONE signature charm (a tiny moss-capped bell-cupola, a gabled stone porch, a sapling crowning the chimney, a stone bench by the door, a slowly turning moss-slicked waterwheel, a perfectly round door). 30-60 words each.
+
+SILHOUETTE RULE (Kevin-locked — breadth is the point): EVERY entry names its roof/massing shape explicitly, and the shapes must range WIDELY across the pool — steep single gable, cross-gables, a long low ridgeline, an L-shaped cottage with a wing, a catslide roof sweeping nearly to the ground, eyebrow dormers, a lean-to addition, a stepped hillside cottage on two levels. Cylindrical/conical-turret massing is RARE (one entry in the whole pool) — the pool must never read as "round tower with pointy hat".
+
+VARIETY MANDATE (~25): ~5 ancient stone fae-chapel cottages (the reference family: tall steep GABLE, gothic arched windows glowing amber, moss-capped roof, tiny bell-cupola, ivy-climbed chimney tower — NO crosses); ~4 low long stone cottages (low sweeping ridgeline, deep eaves, eyebrow dormers, gabled stone porch); ~3 L-shaped or cross-gabled stone cottages with a crooked wing and two rooflines; ~2 catslide-roofed cottages, the mossy roof sweeping down almost to the wildflowers on one side; ~3 turf-roofed hillside burrow-cottages with round doors half-sunk in a flowering bank; ~3 cottages grown around a living ancient tree (roots braided into weathered stone walls, a bough lifting one gable); ~2 little gabled stone watermill or bridge-houses straddling a brook; ~1 round stone turret-cottage with a moss-greened conical roof (the ONLY cylindrical entry); ~2 rare charmers with GABLED silhouettes (a tiny stone well-house cottage, a two-level stepped cottage climbing a mossy hillside).
+
+MATERIAL RULE (every entry): the walls are VISIBLE WEATHERED STONE — uneven grey or honey stone blocks, fieldstone courses, lichen-patched ashlar — stonework that clearly READS as individual aged stones. NEVER smooth plaster, NEVER cream render, NEVER whitewash. Door hardware is hand-forged dark iron (a ring-pull, strap hinges) — never brass levers. Any roof finial is a weathered verdigris ball or a tiny iron weathervane — never a cross.
+
+STRICT BANS: ONE dwelling only — never a village, never a second full building (a tiny attached shed/lean-to is fine); NEVER monumental (no castles, no cathedrals, no manor houses); INTACT and lived-in — never derelict (no broken windows, no collapsed roofs, no abandoned ruin); never tidy-new (no crisp fresh masonry, no new shingles, no timber-frame X-bracing with clean plaster panels, no brick, no terracotta, no wall-mounted lanterns, no bay windows); NO crosses, NO gravestones, NO churchyard trappings; NO people.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE ancient overgrown-but-dignified stone fae dwelling in 30-60 words: weathered stone + moss-capped readable roof + glowing arched windows + door + one signature charm — old and forest-climbed, never rundown, never tidy-new. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. An ancient fae-chapel cottage of uneven weathered grey stone blocks patched with lichen, its steep gabled roof capped in deep green moss, three tall gothic arched windows glowing warm amber, heavy arched oak double doors with black strap hinges under a gabled stone porch, and a tiny moss-capped bell-cupola against the sky.
+2. A low gabled cottage of centuries-worn honey fieldstone laid in crooked courses, its steep roof green with moss and tiny ferns along the ridge, deep-set arched windows lit honey-gold, a rounded oak door with an iron ring-pull up two hollowed steps, and a tall ivy-climbed stone chimney with a little sapling sprouting from its crown.
+3. A cottage grown around a living ancient oak, the trunk braided through its lichen-patched stone-block wall and one great bough lifting the mossy gabled roofline, tiny arched windows glowing amber between root and stone, a rounded silvered-plank door with black iron strap hinges set in the hollow between two roots.
+4. A little gabled stone watermill cottage straddling a brook, its uneven grey stone blocks furred green at every edge, the dark moss-slicked waterwheel turning slowly, small arched windows glowing warm over the water, a rounded plank door with an iron ring-pull reached by a worn stone footbridge.`,
+  },
+
+  faebot_fae_cottage_setting: {
+    format: 'simple',
+    theme: `THE ENCHANTED FAE SETTING for FaeBot's fae-cottage path — WHERE the one cozy dwelling sits, deep in a medieval fairytale realm. Pure landscape context; the dwelling axis owns the building, so entries describe ONLY the land, water and trees around it. Every setting is IDYLLIC and gently magical — the prettiest corner of an enchanted forest: water lies mirror-glassy and faintly luminous, banks foam with wildflowers, ancient trees arch protectively, moss glows emerald. Beauty is the point. 25-45 words each.
+
+VARIETY MANDATE (~25, water in well over half per Kevin): ~5 mirror-still woodland lakes and lily-ponds (glassy luminous reflections, water-lilies, trailing willows); ~4 glass-clear stream bends with mossy banks and stepping stones, wildflowers crowding the water's edge; ~3 slow rivers winding through flower-foamed meadows; ~3 waterfall pools breathing soft spray, sunbeams through the canopy gap; ~3 flowering forest clearings ringed by ancient arching oaks or glowing birches; ~3 wildflower meadows lapping at a wood's edge, drifts of blossom like standing water; ~2 mossy fern glens with emerald boulders and a threading rill; ~2 blossom groves where petals carpet the grass.
+
+STRICT BANS: ALWAYS forest / forest-edge fae country — trees present or immediately adjacent (home-biome rule); NO mountains-epic, NO sea/coast, NO desert, NO moor, NO city; NO buildings or structures in the entry (the dwelling axis owns them); NO people.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE idyllic enchanted setting in 25-45 words — land + water + trees only, no buildings — as pretty and ethereal as fairytale illustration allows. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The still shore of a small woodland lake, water-lilies scattered across glassy faintly-luminous water, the whole canopy reflected without a ripple, a leaning willow trailing its branches into its own mirror image.
+2. A glass-clear brook-bend with mossy emerald banks, smooth stepping stones crossing the shallows, foxgloves and forget-me-nots crowding right to the water's edge, ancient oaks arching protectively overhead.
+3. A slow river winding through a meadow foaming with white and blush wildflowers, its surface catching soft light like poured silver, glowing birch trunks lining the far bank.
+4. A ferny glen beneath a low waterfall, the pool breathing the softest spray over moss-cushioned boulders, a single sunbeam falling through the canopy gap to light the water from within.`,
+  },
+
+  faebot_fae_cottage_overgrowth: {
+    format: 'simple',
+    theme: `THE OVERGROWTH for FaeBot's fae-cottage path — HOW the forest wears the dwelling. Each entry is ONE DOMINANT flowering species engulfing the building (cohesion rule: a single-species cascade reads designed; a mixed jumble reads spammy) plus how it drapes. 20-40 words each.
+
+VARIETY MANDATE (~25): climbing roses (blush / crimson / white), wisteria (lavender / white), clematis (violet / magenta), honeysuckle, jasmine, morning glory, trumpet vine, moss + ferns (green-only variant), ivy threaded with tiny white blossom, hops, grape vine with autumn tint, flowering quince. Vary WHERE it drapes: over the roof ridge, down one gable, framing the door, curtaining a window, swallowing the chimney.
+
+STRICT BANS: ONE dominant species per entry (a second species only as a trace accent); NEVER "every wall covered in mixed flowers"; NO dead/thorny-menace register — always lush and alive.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE dominant-species overgrowth in 20-40 words: the species + colors + exactly how it drapes the building. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A single ancient wisteria engulfing the whole roofline, its lavender racemes dripping past the eaves in heavy curtains, the trunk braided thick up one corner of the wall.
+2. Climbing blush-pink roses swallowing one gable end, cascading around the upper window and scattering petals down the wall, a few runners reaching along the roof ridge.
+3. Deep-violet clematis pouring over the porch arch and door frame, blooms crowding so dense the stone barely shows, tendrils curling along the gutter line.
+4. Emerald moss and button-ferns sheathing the north roof slope and chimney, glowing green against weathered slate, tiny white toadflax blooming from the mortar seams.`,
+  },
+
+  faebot_fae_cottage_garden: {
+    format: 'simple',
+    theme: `THE GARDEN FOREGROUND for FaeBot's fae-cottage path — small charming details filling the ground between the viewer and the dwelling (two are picked and combined per render). 15-35 words each.
+
+VARIETY MANDATE (~25): drifts of named wildflowers with colors (magenta campion, butter-yellow primulas, white daisies, blue forget-me-nots, foxgloves, lupines); red-capped toadstool clusters and fairy rings (some faintly glowing); a winding path of moss-rimmed natural stones; a low tumbled mossy stone wall; a gate woven from living willow withies; a rope swing on an oak limb; skep beehives of woven straw; wild herb tangles; a mossy stone birdbath; a weathered wooden rowboat half-lost in reeds; a stack of silvered firewood under the eave; an ancient stone well swallowed in ivy.
+
+STRICT BANS: NO people; NO modern objects; everything WEATHERED FOREST MATERIALS ONLY — mossy stone, silvered wood, woven willow (no brick, no terracotta, no painted picket fences, no iron fixtures); details stay SMALL-scale (nothing that competes with the dwelling for hero).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE garden/foreground charm in 15-35 words with a color or material. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. An explosive drift of magenta campion and butter-yellow primulas crowding both sides of the path, petals catching the light.
+2. A cluster of red-capped white-spotted toadstools by a mossy boulder, a full fairy ring circling in the shorter grass beyond.
+3. A winding flagstone path, each stone rimmed with moss, leading from the foreground grass to the doorstep.
+4. A ring of red-capped white-spotted toadstools glowing faintly from within, circling a mossy hollow in the shorter grass.`,
+  },
+
+  faebot_fae_cottage_lighting: {
+    format: 'simple',
+    theme: `THE ETHEREAL LIGHT for FaeBot's fae-cottage path — the time of day + light that owns the whole palette. EVERY entry is soft, luminous and dreamlike — enchanted-realm light, never plain weather — and EVERY entry must keep the money shot possible: the dwelling's windows glow WARM against the scene. 20-40 words each.
+
+VARIETY MANDATE (~25): ~5 pastel misty dawn (rose-and-pearl / lavender-and-gold light suffusing hanging haze, dew glittering); ~5 golden-hour enchantment (low honeyed sun in soft shafts through the canopy, the air itself glowing); ~4 blue-hour dusk with fireflies rising and a violet-to-gold sky; ~4 moonlit night, silver-blue radiance, the lake or stream shining like polished glass, candlelit windows; ~3 soft sunbeam-cathedral light, god-rays falling through the canopy into luminous haze; ~2 pearly silver mist-light, the world softened to a dream with the warm windows doubly bright; ~2 blossom-season light, petals backlit and the whole scene tinted rose-gold.
+
+STRICT BANS: never harsh noon glare, never gloomy-murky or grey-drab (the scene stays radiant and pretty), never spooky/ominous, never plain overcast.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE ethereal light register in 20-40 words: time of day + sky + luminous quality; the warm-window contrast must remain natural. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Pastel misty dawn, rose-and-pearl light suffusing the hanging haze, dew glittering on every leaf and web, the air faintly luminous, a soft warm glow waking in the windows.
+2. Golden-hour enchantment, low honeyed sun pouring through the canopy in soft glowing shafts, the air itself alight, warm gold pooling on the grass and the water.
+3. Blue-hour dusk, the sky shading violet to deep gold over the treeline, fireflies rising from the grass, the cottage windows burning warm amber against the gathering blue.
+4. Moonlit night, silver-blue radiance washing the clearing, the water shining like polished glass under a full moon, candlelight glowing honey-warm in every tiny pane.`,
+  },
+
+  faebot_fae_cottage_atmosphere: {
+    format: 'simple',
+    theme: `THE MAGICAL AIR for FaeBot's fae-cottage path — what the enchanted air itself is doing. One gentle, subtly MAGICAL atmospheric condition per entry, adding fae wonder and depth without stealing the scene — the quiet kind of magic (drifting light, luminous mist, glowing pollen), never neon or particle-effect flashy. 15-30 words each.
+
+VARIETY MANDATE (~25): tiny motes of golden fae-light drifting between the trees; fireflies weaving slow constellations over the grass; luminous waist-high mist glowing where light touches it; golden pollen haze shimmering in sunbeams; blossom petals drifting like slow snow; dandelion seeds floating lit from behind; a faint shimmer over the water as if the surface remembers moonlight; woodsmoke curling from the chimney and hanging in a soft ribbon; dew-sparkle hanging in the air after mist; slow falling leaves turning in the light; thin luminous fog threading between trunks; soft glowing spores drifting from mossy boughs.
+
+STRICT BANS: no storms/lightning, no wind-blown chaos, no gloom, no neon/rainbow sparkle-spam.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gently magical air condition in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Tiny motes of golden fae-light drifting lazily between the trunks, brightest where the shadows pool, like the forest breathing softly glowing dust.
+2. Fireflies weaving slow constellations above the grass and the water, their tiny lights doubling in the glassy reflection.
+3. Luminous waist-high mist lying across the clearing, glowing pearl where the light touches it, the flowers rising through it like islands.
+4. Blossom petals drifting like slow snow from the canopy, each catching the light as it turns, a few settling on the water's skin.`,
+  },
+
   faebot_forest_fairy_scene_creature: {
     format: 'simple',
     theme: `STACKED-EXOTIC MYTHIC FOREST CREATURE for FaeBot's forest-fairy-scene path. Each entry is ONE unified description of a single mythic plant-merged forest spirit — dryad / naiad / fox-spirit / glow-moth fairy / vine-nymph / hamadryad / forest queen / pixie / meliae / etc. Each entry 50-90 words. 5+ stacked exotic features per creature. NEVER a kodama or any bald / round-white-headed / dot-eyed / faceless spirit, NEVER a body merging or fused into bark or saplings — Flux has no prior for these and renders an uncanny bald human head grafted onto a tree (Kevin-flagged 2026-07-01). Every creature has a FULL beautiful face with real eyes and real hair.

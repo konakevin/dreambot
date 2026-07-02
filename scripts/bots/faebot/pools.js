@@ -81,6 +81,13 @@ module.exports = {
   FAE_VILLAGES: load('fae_villages'),
   VILLAGE_LIGHTING: load('village_lighting'),
   VILLAGE_WILDLIFE: load('village_wildlife'),
+  // fae-cottage (2026-07-01) — cottagecore hero-dwelling path
+  FAEBOT_FAE_COTTAGE_DWELLING: loadIfExists('faebot_fae_cottage_dwelling'),
+  FAEBOT_FAE_COTTAGE_SETTING: loadIfExists('faebot_fae_cottage_setting'),
+  FAEBOT_FAE_COTTAGE_OVERGROWTH: loadIfExists('faebot_fae_cottage_overgrowth'),
+  FAEBOT_FAE_COTTAGE_GARDEN: loadIfExists('faebot_fae_cottage_garden'),
+  FAEBOT_FAE_COTTAGE_LIGHTING: loadIfExists('faebot_fae_cottage_lighting'),
+  FAEBOT_FAE_COTTAGE_ATMOSPHERE: loadIfExists('faebot_fae_cottage_atmosphere'),
   VILLAGE_FOREST_DETAIL: load('village_forest_detail'),
   // ─── flower-fairy path (R11 reset, 2026-05-17) ───
   FLOWER_FAIRY_CREATURES: loadIfExists('flower_fairy_creatures'),

@@ -243,6 +243,20 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_FAE_COTTAGE: {
+    description:
+      'PATH-BESPOKE — FaeBot fae-cottage (2026-07-01, Kevin cottagecore reference lock: the hearted flower-drowned stone chapel-cottage with glowing amber windows). ONE cozy fae dwelling — cottage / stone chapel / mill / lodge — as the unmistakable HERO (~40-60% of frame), nestled in a wild FaeBot setting (stream / lake / clearing / meadow / glen), a single dominant flowering species engulfing it, warm window-glow + chimney smoke against a softer scene (the money shot, mandated in the template), charming garden foreground, ZERO humans (critters only via the 60%-gated wildlife accent reusing VILLAGE_WILDLIFE). Self-contained: dwelling + setting + overgrowth + garden (pickN 2) + cottage_lighting + atmosphere + wildlife_accent (60%-gated).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['dwelling', 'setting', 'overgrowth', 'garden', 'cottage_lighting', 'atmosphere'],
+    },
+    pickN: { garden: 2 },
+    conditionalLayer: { slot: 'wildlife_accent', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_WILDS_VILLAGE: {
     description:
       'PATH-BESPOKE — FaeBot fae-wilds-village (2026-06-10). Sibling of fae-castle-village, but the village is BUILT AROUND a mandated dramatic NATURE LANDSCAPE FEATURE — a stream / canyon / waterfall / giant rocks / cliffs / ancient trees. The landscape leads; the elven castle-cottages cling to / span / nestle into it, with parts joined by CREATIVE CONNECTORS (arched bridges, stone arches, rope bridges, swinging vines, ladders, ziplines, hanging lift-baskets, walkways). Soft FaeBot fairy register. Self-contained: landscape_feature + village_built + connectors + inhabitants + fae_lighting + drama (40%-gated).',

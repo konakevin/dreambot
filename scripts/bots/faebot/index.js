@@ -22,6 +22,7 @@ const pathBuilders = {
   'tiny-fae': require('./paths/tiny-fae'),
   'queen-of-the-forest': require('./paths/queen-of-the-forest'),
   'enchanted-vista': require('./paths/enchanted-vista'),
+  'fae-cottage': require('./paths/fae-cottage'),
   'fae-village': require('./paths/fae-village'),
   'fae-village-axis': require('./paths/fae-village-axis'),
   'flower-fairy': require('./paths/flower-fairy'),
@@ -92,6 +93,9 @@ module.exports = {
     'tiny-fae',
     'queen-of-the-forest',
     'enchanted-vista',
+    // fae-cottage deactivated 2026-07-01 (Kevin) — built + converged over 5 test rounds but held
+    // back from rotation for now; pools still MVP-25. Uncomment + scale pools to activate.
+    // 'fae-cottage',
     'fae-village',
     'fae-village-axis',
     'flower-fairy',
@@ -177,6 +181,7 @@ module.exports = {
       'tiny-fae',
       'queen-of-the-forest',
       'enchanted-vista',
+      'fae-cottage',
       'fae-village',
       'fae-village-axis',
       'fae-court',

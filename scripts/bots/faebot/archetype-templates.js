@@ -957,6 +957,82 @@ Soft, painterly, luminous, tender, storybook, whimsically organic. A charming li
 Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE TIME OF DAY — the sky + light + overall mood come FIRST and dominate, e.g. "a deep violet lantern-lit night" / "a fiery rose-orange sunset" / "a soft grey rainy dusk" / "first pale misty dawn" / "bright clear midday"], [a charming organic fairy village of earthy nature-grown dwellings built around the dramatic nature feature], [the dramatic nature feature — stream/canyon/waterfall/rocks/cliffs/trees], [the little EARTHY dwellings — wood, giant mushrooms, huge flowers, hollow logs, woven branches — lit by the time of day, glowing windows + lanterns if it is dark], [creative natural connectors — root-bridges, vine ropes + swings, mushroom-steps, reed-bridges], [tiny elves + fae + a cute critter], [drifting glowing fae-motes + pixies + how the village glows at this hour], [palette + mood MATCHING the time of day — never a default warm golden day].`;
   },
 
+  FAEBOT_FAE_COTTAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      dwelling,
+      setting,
+      overgrowth,
+      garden,
+      cottage_lighting,
+      atmosphere,
+      wildlife_accent,
+    } = slots;
+
+    const wildlifeSection = wildlife_accent
+      ? `
+━━━ TINY WILDLIFE (small living accents — never the hero) ━━━
+${wildlife_accent}
+
+Render these little critters SMALL and candid — a touch of life at the garden's edge, never competing with the dwelling.
+`
+      : '';
+
+    return `You are a fantasy concept-art painter writing ONE COZY FAE DWELLING scene in FaeBot's SOFT painted-fantasy register (Greg Manchess + Donato Giancola + Paul Bonner + NC Wyeth + Brian Froud + Eyvind Earle painted-fantasy lineage) — pure serene COTTAGECORE deep inside an enchanted MEDIEVAL FAIRYTALE realm. This world exists centuries before our own and belongs to the fae: every building was raised by hand from stone, timber and thatch in a crooked storybook way, and the land itself is gently magical. The kind of little home the viewer aches to live in.
+
+━━━ ONE DWELLING, THE HERO — ABSOLUTE FIRST RULE ━━━
+EXACTLY ONE cozy dwelling fills ~40-60% of the frame as the unmistakable hero — NEVER a village, NEVER a second full building, NEVER a distant town. The wild setting wraps around it like a frame with breathing room on all sides.
+
+━━━ ETHEREAL FAE ENCHANTMENT (every render — this is the soul of the path) ━━━
+The whole scene is softly ENCHANTED and dreamlike — almost too beautiful to be real. Ethereal light suffuses everything: a gentle luminous haze, tiny motes of golden fae-light drifting in the air, water lying glassy and faintly glowing, colors rich yet pastel-soft, every edge tender and painterly. A quiet magic hums in the scene the way it does in the loveliest fairytale illustrations — subtle, serene, radiant — never neon, never particle-effect flashy.
+
+━━━ THE DWELLING (the hero — render every feature) ━━━
+${dwelling}
+
+Render its materials, roof, windows, door and signature charm EXACTLY as described — tactile, ancient, loved.
+
+━━━ OLD AND OVERGROWN, NEVER RUNDOWN — HARD RULE (the Kevin-locked aesthetic) ━━━
+The dwelling is ANCIENT, DIGNIFIED stone architecture that the forest has spent centuries climbing: pale weathered masonry softened by age, mossy green roof caps, ivy sheeting the walls, growth threading every ledge — yet the building itself stands INTACT and loved, its arches, windows and rooflines still reading clearly and gracefully. Overgrown but never derelict (no broken windows, no collapse, no ruin); old but never rundown; ancient but never tidy-new (no crisp fresh materials, no brick, no clean plaster panels). Think: a centuries-old fae chapel-cottage the forest adores.
+
+The walls show VISIBLE INDIVIDUAL WEATHERED STONES — uneven blocks, crooked courses, lichen patches — never smooth plaster or cream render. Every chimney is stacked from the SAME weathered mossy stone as the walls. Rooflines end in bare mossy eaves. Door hardware is hand-forged dark iron (ring-pull, strap hinges). A roof peak ends in a weathered verdigris ball or tiny iron weathervane — NEVER a cross. The ONLY lights in the scene are the warm glowing windows and the sky's own light — the doorway stands in soft window-spill, framed by nothing but stone and climbing growth. Render the dwelling's MASSING exactly as the entry describes (its gables, wings, ridgeline) — do not default to a round tower with a conical roof.
+
+━━━ THE WILD SETTING (where it sits) ━━━
+${setting}
+
+The dwelling is NESTLED INTO this land — by the water, in the clearing, against the trees — as if it grew there.
+
+━━━ THE OVERGROWTH (the forest wears the house) ━━━
+${overgrowth}
+
+ONE dominant flowering species draping the building exactly as described — a cohesive designed cascade, never a mixed flower-jumble.
+
+━━━ THE GARDEN FOREGROUND (render both) ━━━
+${garden}
+
+These charming small details fill the ground between the viewer and the dwelling.
+${wildlifeSection}
+━━━ THE MONEY SHOT — WARM LIFE INSIDE (every render) ━━━
+The windows glow WARM amber from within and gentle woodsmoke curls from the chimney — the little home is ALIVE and inviting, its warmth playing against the cooler light of the scene. This warm-against-soft contrast is the soul of the image.
+
+━━━ LIGHT (owns the palette) ━━━
+${cottage_lighting}
+
+The rolled time-of-day + light above owns the WHOLE palette — commit fully (pastel dawn stays rose-and-pearl; golden hour pours honey; moonlight goes silver-blue with candlelit windows; dusk goes deep and firefly-lit). Always luminous and ethereal, never harsh, never murky.
+
+━━━ THE AIR ━━━
+${atmosphere}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective ? String(vibeDirective).slice(0, 150) : ''}
+
+━━━ NOBODY HOME BUT THE LIGHT — HARD RULE ━━━
+ZERO people, ZERO humanoid figures, ZERO fae figures — the life in this scene is the glowing windows, the chimney smoke and the little critters. Flux WILL want to place a person on the path, the doorstep or the garden — the path is EMPTY, the doorstep is EMPTY, the garden holds only flowers and critters. NO present-day people, NO tourists, NO silhouettes at windows.
+
+━━━ COMPOSITION ━━━
+Soft, painterly, luminous, serene, storybook — an ethereal medieval-fairytale scene. One cozy fae dwelling as hero at ~40-60% of frame with breathing room, enchanted land wrapping it, a single flowering species cascading over it, warm glowing windows + chimney smoke against the softer scene, charming garden foreground, deep readable focus front to back (never bokeh-blurred). NEVER a village; NEVER monumental; NEVER modern; NEVER gloomy or spooky — always pretty, tender, magical, inviting.
+
+Write ONE Flux prompt — comma-separated phrases, 100-135 words, no preamble, no headers, no markers. Start immediately with the scene content. Order: [LEAD WITH THE ROLLED LIGHT — its ethereal sky + palette come FIRST and dominate], [the ONE cozy medieval-storybook dwelling with its materials / roof / glowing windows / door / signature charm], [the dominant overgrowth species draping it], [the enchanted setting it nestles into], [the garden foreground details], [the tiny critters if rolled], [warm window-glow + chimney smoke against the cooler scene], [the magical air], [soft ethereal painted-fantasy mood].`;
+  },
+
   FAEBOT_WILDS_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
     const { landscape_feature, village_built, connectors, inhabitants, fae_lighting, drama } =
       slots;
