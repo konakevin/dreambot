@@ -12,7 +12,7 @@
 // downgrade Pro→Basic) sets the new tier's flag AND clears the other tier's —
 // see the SUBSCRIPTION_TIERS handling below.
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 // Constant-time string comparison for the webhook bearer secret, so a timing
 // side-channel can't be used to recover it byte-by-byte.

@@ -21,7 +21,7 @@
  *     to match what actually renders.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 type OverrideRow = {
   model: string;

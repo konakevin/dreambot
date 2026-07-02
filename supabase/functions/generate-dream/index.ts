@@ -15,7 +15,7 @@
  * Authorization: Bearer <user JWT>
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';

@@ -15,7 +15,7 @@
  * medium is returned UNCHANGED — DLT falls back to the raw bot medium.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 export interface CleanMediumRow {
   medium_key: string;

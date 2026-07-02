@@ -32,7 +32,7 @@
  * slow + ~4× the cost for a phone download.)
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 
@@ -81,6 +81,26 @@ Deno.serve(async (req) => {
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+  // Per-minute rate limit (2026-07-01 audit S4). The monthly HD cap alone left
+  // upscale burst-abusable: fire N parallel requests before the count-then-cap
+  // check commits → N Replicate upscaler calls + monthly cap blown in seconds.
+  // Reuse the proven edge_function_invocations trigger (10 expensive calls/min
+  // per user) exactly like generate-dream/restyle-photo. Fail-open on a logging
+  // error (never block a legit HD download on infra); the monthly cap below is
+  // the hard economic gate.
+  {
+    const { error: rlErr } = await supabase
+      .from('edge_function_invocations')
+      .insert({ user_id: user.id, function_name: 'upscale-image' });
+    if (rlErr) {
+      const isRl =
+        rlErr.message?.includes('rate_limited') ||
+        (rlErr as { hint?: string }).hint === 'rate_limited';
+      if (isRl) return json({ error: 'rate_limited' }, 429);
+      console.error('[upscale-image] rate-limit log INSERT failed:', rlErr.message);
+    }
+  }
 
   // Load the upload FIRST — we need the owner (a user can ALWAYS HD-download
   // their OWN dream, free + uncapped), the source image_url, and whether

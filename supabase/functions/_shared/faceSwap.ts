@@ -17,7 +17,7 @@
  */
 
 // deno-lint-ignore-file no-explicit-any
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
 
 const DEFAULT_MAX_WAIT_MS = 90_000;

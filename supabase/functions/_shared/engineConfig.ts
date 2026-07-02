@@ -10,7 +10,7 @@
  * cache per invocation.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { DEFAULT_RELATIONSHIP_WORDS, DEFAULT_PET_WORDS } from './selfInsertDetector.ts';
 
 export interface EngineConfig {

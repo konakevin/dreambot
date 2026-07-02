@@ -19,7 +19,7 @@
  * See QUEUE_WORKERS_REFACTOR.md.
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { processNightlyJob } from './dispatchers/nightly.ts';
 import { dispatchCreateJob } from './dispatchers/create.ts';
 import { dispatchFirstDreamJob } from './dispatchers/first_dream.ts';
@@ -371,14 +371,28 @@ Deno.serve(async (req) => {
                 .eq('id', job.id)
                 .then(
                   () => {},
-                  () => {}
+                  // Non-fatal, but NEVER silent: a dropped dream_jobs flip
+                  // strands the client's polling fallback on "processing…"
+                  // forever (CLAUDE.md no-silent-catch rule).
+                  (e: unknown) =>
+                    console.error(
+                      `[worker:${workerId}] dream_jobs terminal flip FAILED for job ${job.id}:`,
+                      (e as Error)?.message
+                    )
                 );
               await supabase
                 .from('notifications')
                 .insert(dreamFailedNotification(job.id, job.user_id, isNsfw))
                 .then(
                   () => {},
-                  () => {}
+                  // Non-fatal, but NEVER silent: a dropped notification means
+                  // the user never learns the dream failed (or that they were
+                  // refunded) and can't hit retry.
+                  (e: unknown) =>
+                    console.error(
+                      `[worker:${workerId}] dream_failed notification insert FAILED for job ${job.id}:`,
+                      (e as Error)?.message
+                    )
                 );
             }
             return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };

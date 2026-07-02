@@ -14,7 +14,10 @@ module.exports = {
     '^\\./renderEntity\\.ts$': '<rootDir>/supabase/functions/_shared/renderEntity',
     '^\\./persistence\\.ts$': '<rootDir>/supabase/functions/_shared/persistence',
     // Map Deno URL imports to mocks
-    '^https://esm\\.sh/@supabase/supabase-js@2$': '<rootDir>/__tests__/__mocks__/supabase-esm.js',
+    // Version-agnostic: matches @2, @2.100.0, etc. so pinning the edge-fn
+    // import version (2026-07-01) doesn't break the fast-jest stub.
+    '^https://esm\\.sh/@supabase/supabase-js@2[.\\d]*$':
+      '<rootDir>/__tests__/__mocks__/supabase-esm.js',
     '^https://esm\\.sh/@jsquash/.*$': '<rootDir>/__tests__/__mocks__/jsquash-stub.js',
     '^https://esm\\.sh/thumbhash@.*$': '<rootDir>/__tests__/__mocks__/thumbhash-stub.js',
     // Native analytics/crash SDKs — stub so transitive imports don't crash jest.

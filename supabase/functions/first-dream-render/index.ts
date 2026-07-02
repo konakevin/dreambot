@@ -22,7 +22,7 @@
  * Auth: worker token (Authorization: Bearer <DREAM_QUEUE_WORKER_TOKEN>).
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { completeQueueJob } from '../_shared/dreamQueueLifecycle.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import type { FirstDreamTier } from '../_shared/firstDreamTiers.ts';

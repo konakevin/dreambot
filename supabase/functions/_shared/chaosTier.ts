@@ -18,7 +18,7 @@
  * All knobs live on engine_config (singleton id=1) — see migrations 239 + 260.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 export type ChaosTier = 'low' | 'mid' | 'high';
 

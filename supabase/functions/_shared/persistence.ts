@@ -6,7 +6,7 @@
  * Detects PNG vs JPEG from magic bytes so the content-type matches.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { decodeImage, encodeJpeg, type DecodedImage } from './imageCodec.ts';
 import { computeThumbhash } from './thumbhashGen.ts';
 

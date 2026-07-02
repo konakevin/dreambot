@@ -4,7 +4,7 @@
  * One-time cost at profile save time.
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 
 const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;

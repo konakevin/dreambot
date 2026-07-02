@@ -10,7 +10,7 @@
  * Returns: { style: string }
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { HAIKU } from '../_shared/models.ts';
 
 Deno.serve(async (req) => {

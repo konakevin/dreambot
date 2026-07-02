@@ -26,7 +26,7 @@
  * existing weaker filtering. Zero-regression scenario.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { HAIKU } from './models.ts';
 const HAIKU_MODEL = HAIKU;
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);

@@ -9,7 +9,7 @@
  * userPlace/iconicAnchor; `attire` → wardrobeAnchor (a period/elegant costume, or
  * "normal scene-appropriate everyday clothes" for the environment-only goofy ones).
  */
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { DUAL_SCENARIOS_PLAYFUL, DUAL_SCENARIOS_ELEGANT } from './dual_scenarios.ts';
 
 export interface DualScenario {

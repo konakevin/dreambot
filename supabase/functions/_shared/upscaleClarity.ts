@@ -24,7 +24,7 @@
  * later in the background.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { persistBufferToStorage } from './persistence.ts';
 
 // Both are COMMUNITY models, so they MUST run via POST /v1/predictions with a

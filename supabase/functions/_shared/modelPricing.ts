@@ -35,7 +35,7 @@
  *   5. Mirror in `constants/imageModels.ts`
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 const DEFAULT_SPARKLE_COST = 1;
 const DEFAULT_COST_CENTS = 5;

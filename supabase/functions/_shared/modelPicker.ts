@@ -16,7 +16,7 @@
  * Both DB tables are cached in-memory with a 60-second TTL.
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 export interface PickedModel {
   model: string;

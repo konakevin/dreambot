@@ -13,7 +13,7 @@
  * Authorization: Bearer <user JWT>
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile } from '../_shared/vibeProfile.ts';
 import { getPhotoRestyleConfig } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
@@ -523,7 +523,10 @@ async function handleRequest(req: Request): Promise<Response> {
         )
         .then(
           () => {},
-          () => {}
+          // Non-fatal but not silent: a dropped budget upsert corrupts
+          // cost-tracking / daily-limit accounting (CLAUDE.md rule).
+          (e: unknown) =>
+            console.error('[restyle-photo] budget upsert FAILED:', (e as Error)?.message)
         ),
     ]);
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
@@ -582,7 +585,13 @@ async function handleRequest(req: Request): Promise<Response> {
             .eq('id', jobId)
             .then(
               () => {},
-              () => {}
+              // Non-fatal but not silent: a dropped dream_jobs flip strands
+              // the client's polling fallback on the loading screen.
+              (e: unknown) =>
+                console.error(
+                  `[restyle-photo] dream_jobs terminal flip FAILED for job ${jobId}:`,
+                  (e as Error)?.message
+                )
             )
         : Promise.resolve(),
       // Only notify if the user queued/left — a foreground wait gets no ping.
@@ -654,7 +663,11 @@ async function handleRequest(req: Request): Promise<Response> {
       replicate_prediction_id: replicatePredictionId,
     }).then(
       () => {},
-      () => {}
+      (e: unknown) =>
+        console.error(
+          '[restyle-photo] ai_generation_log failure-record write FAILED:',
+          (e as Error)?.message
+        )
     );
 
     // ── Classify the failure for refund + UI messaging ──

@@ -26,7 +26,7 @@
  * Response: { swept: number, refunded: number, errors: number }
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';

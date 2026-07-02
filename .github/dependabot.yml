@@ -1,0 +1,30 @@
+# Dependabot — automated dependency-update PRs (2026-07-01 audit S6/#6).
+#
+# NOTE ON EDGE FUNCTIONS: the Supabase Edge Functions import Deno deps via
+# pinned esm.sh URLs (e.g. `@supabase/supabase-js@2.100.0`). Dependabot does
+# NOT parse URL imports, so those are pinned by hand and bumped deliberately —
+# grep `esm.sh/@supabase/supabase-js@` before/after any bump and re-run
+# `npm run typecheck:deno`. This config covers the npm client + GitHub Actions.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Batch low-risk dev/tooling bumps into one PR to cut noise.
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      # Next/Expo/RN majors are migration-gated — never auto-bump majors.
+      - dependency-name: 'expo'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-native'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3

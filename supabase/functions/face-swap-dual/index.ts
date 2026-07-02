@@ -10,7 +10,7 @@
  * Response 4xx/5xx: { error }
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { dualFaceSwap } from '../_shared/faceSwap.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';

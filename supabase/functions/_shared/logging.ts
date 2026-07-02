@@ -8,7 +8,7 @@
  * Schema owned by migration 117_ai_log_full_brief.sql.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 /**
  * Adapt a typed object (e.g. a VibeProfile) to the loosely-typed JSONB

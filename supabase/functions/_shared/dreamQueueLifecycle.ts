@@ -13,7 +13,7 @@
  * dies before reaching either of these (in_progress > 5 min → re-queue).
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h

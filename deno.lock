@@ -43,6 +43,7 @@
     "https://esm.sh/@jsquash/jpeg@1.5.0/denonext/decode.mjs": "28959102476b3b0697e7a6968bf4c1ee3c7095475eed926baf42bdf6c8f1ff83",
     "https://esm.sh/@jsquash/jpeg@1.5.0/encode": "bf56e60b352f6d6e85e40cc7472ffc3fbf2985dfbdcb4994e870df810f66125a",
     "https://esm.sh/@sentry/deno@8.55.0": "4223ed94ffde24466e43b77108a92c62c3bd9f9dfcfdc53c1c4b898f5e681a71",
+    "https://esm.sh/@supabase/supabase-js@2.100.0": "e3f8cd4f9df4df6e8dbf724810f5146414a7f4b4351d2403fa44a82d84dc8336",
     "https://esm.sh/@supabase/supabase-js@2.103.3": "f6efbe62d34ae9d50f3cf7eb51496246ec9378f422c38ff2b637a38157d4fc6b",
     "https://esm.sh/jpeg-js@0.4.4": "42a7c0c44335295014457724ddd096d3bf93696ab24f52391aae8be50e4cb732",
     "https://esm.sh/onnxruntime-web@1.20.1": "b550f566d005b4ea9e68a7e4d79dec11d5fbfbcb4f9023ee88989b8daf6c172a",

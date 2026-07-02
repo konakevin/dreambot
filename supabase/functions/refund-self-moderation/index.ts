@@ -18,7 +18,7 @@
  * Response 200: { refunded: boolean, reason: string }
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',

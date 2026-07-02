@@ -2,7 +2,7 @@
 // Called via database webhook when a notification row is inserted.
 // Looks up the recipient's Expo push token and sends a push notification.
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { hasSeenSibling, shouldSkipForActivity, hasViewedSinceCreated } from '../_shared/notify.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 

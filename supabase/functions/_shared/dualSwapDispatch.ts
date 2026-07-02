@@ -18,7 +18,7 @@
  * auth flow transparent + debuggable.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { dualFaceSwap, ensureHttpsImageUrl } from './faceSwap.ts';
 
 export interface DualDispatchResult {

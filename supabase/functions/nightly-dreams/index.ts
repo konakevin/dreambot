@@ -13,7 +13,7 @@
  * Authorization: Bearer <user JWT>
  */
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import {
   resolveMediumFromDb,

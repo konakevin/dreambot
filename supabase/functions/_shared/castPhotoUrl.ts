@@ -18,7 +18,7 @@
  * this is safe to roll out before the public files are migrated.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 const CAST_BUCKET = 'cast-photos';
 // 1h: far longer than any single render (RENDER_TIMEOUT_MS = 120s) yet short

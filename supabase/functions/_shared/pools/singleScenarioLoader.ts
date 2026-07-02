@@ -10,7 +10,7 @@
  * skips the special scene (no fallback array — single special scenes are a pure
  * enrichment, and a normal location dream is the graceful default).
  */
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 
 export interface SingleScenario {
   scene: string;

@@ -16,7 +16,7 @@
  * worker dead-letters immediately instead of retrying a doomed render 5×.
  */
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { HAIKU } from '../../_shared/models.ts';
 
 export interface NightlyDispatcherArgs {

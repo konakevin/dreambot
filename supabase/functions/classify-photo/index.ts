@@ -21,7 +21,7 @@
  * Response: { subject_description: string, type: 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear' }
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { describeWithVision } from '../_shared/vision.ts';
 
 // NOTE: pipe-delimited, NOT JSON. The vision output is run through
