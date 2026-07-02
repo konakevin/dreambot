@@ -252,7 +252,8 @@ module.exports = {
       path: ['dwelling', 'setting', 'overgrowth', 'garden', 'cottage_lighting', 'atmosphere'],
     },
     pickN: { garden: 2 },
-    conditionalLayer: { slot: 'wildlife_accent', gate: 0.6 },
+    // gate 0.6→0.75 (2026-07-01 keeper tally): 19 of Kevin's 21 keepers featured critters
+    conditionalLayer: { slot: 'wildlife_accent', gate: 0.75 },
     framingModes: null,
     anchorScaleRange: null,
   },
