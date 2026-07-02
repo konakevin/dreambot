@@ -127,6 +127,10 @@ module.exports = {
 
   // ─── spacewalk path (2026-06-09, NEW) — zero-G EVA shot. MVP-25 pools. ───
   SPACEWALK_SUIT: load('spacewalk_suit'),
+  // Path-bespoke SUNLIT lighting (2026-07-01, Kevin reference calibration) —
+  // the universal LIGHTING pool's moody/night entries rolled gloomy frames;
+  // spacewalk is a bright sunlit-clarity path, always.
+  SPACEWALK_LIGHTING: load('spacewalk_lighting'),
   SPACEWALK_EVA_ACTION: load('spacewalk_eva_action'),
   SPACEWALK_VISOR_REFLECTION: load('spacewalk_visor_reflection'),
   SPACEWALK_VOID_BACKDROP: load('spacewalk_void_backdrop'),

@@ -2376,6 +2376,34 @@ Spent ~7 rounds trying to migrate. Pivot to "pure mech creatures" lost the surre
 
 ## StarBot
 
+### spacewalk — busywork-chore action register = the drift; hearted DNA is COMPOSED AWE + COMPOSED MOMENTUM (2026-07-01, Kevin heart calibration)
+
+Kevin hearted 16 spacewalk renders from the 2026-06-30 test batches, then flagged that the committed state "drifted" from them. Heart-calibration (all 16 `ai_prompt`s + images pulled from the DB) nailed the winning DNA and the drift mechanism:
+
+**The hearted DNA (both must hold):**
+- **Action = one of exactly TWO registers.** COMPOSED AWE — still/arrested/transfixed before the spectacle, arms drifting wide, helmet lifted, silhouetted, anchored calm by one glove/boot while the body floats. COMPOSED MOMENTUM — gliding streamlined on a diagonal, diving beneath a spar, rolling into alignment, kicking off. Always poised, cinematic, full-body readable. The story is *the figure meeting the immensity*.
+- The rest of the frame: massive hull/station anchoring an edge, spectacle backdrop (cloudy planet limb, corona, cluster, colliding galaxies — exotic spectacle IS hearted; flux-ultra often grounds it into cloudy-Earth-orbit realism and those ground-ed renders get hearted too), visor reflection, thin trailing tether OK. All 16 hearts were flux-1.1-pro-ultra.
+
+**The drift = maintenance-chore busywork + graceless poses in the action pool, SANCTIONED BY THE RECIPE.** The `spacewalk_eva_action` recipe's variety mandate literally listed "welding a hull panel", "tumbling slowly end-over-end", "hanging head-down", "punching a stuck release-latch", "reaching back toward a crewmate" — and its WELDING example was "braced upside-down". So the wire-purge regen (4d3dc868) faithfully produced 192 entries of chores (threading bolts / photographing damage ×10 / wrestling hatches / venting / signaling), contortions (somersaulting ×7 / head-down ×3 / recoiling ×6), and SOLO-violations (crewmate hand-offs). Same law as OceanBot's "the recipe TOLD Sonnet to write subject-less phenomena" — **the fix must rewrite the recipe's variety mandate + examples, or the next regen reintroduces the drift.** (SteamBot's "crisis-busywork / Titanic-boiler-room" anti-pattern, now confirmed on a second bot: an ICONIC-AWE path renders a work order instead of a poster.)
+
+**Recovery gotcha — the winning pools lived only in `.bak` files.** The hearted renders came from mid-session curated mini-pools (8 momentum + 41 awe entries) that were later regenerated away and then `git restore`d past. The gen script's timestamped `.bak`s let the exact hearts-window state be reconstructed (bak-T = pool state BEFORE the regen at T; map hearted upload filename epochs against bak epochs to find which state was live). Restored those entries verbatim (anchor-on-winning-prompt rule), + curated in-register salvage → 53-entry pool; hardened the recipe with the two registers + the hearted entries as examples + compact bans (no chores / no contortions / no wire / solo). Scale to ~150-200 with the hardened recipe only after Kevin's verdict.
+
+**Litmus:** if an awe-shot path renders "someone doing station maintenance," read the action pool TITLES — a chore-verb majority (welding/threading/patching/photographing) is the recipe talking, not Flux.
+
+### spacewalk PART 2 — the 10-round reference-convergence session: vocabulary literalization + winning-family lockdown (2026-07-01, same day)
+
+Kevin re-hearted 7 references and pushed through ~10 render rounds to converge the path on them. The hard-won lessons (all cross-bot):
+
+**1. Ultra LITERALIZES any word with a terrestrial/structural prior — the session's confirmed list.** Each of these was in a pool entry (many written by me chasing the reference) and reliably produced a grounded/cluttered scene: `canyon systems` (on a planet seen from orbit!) → rock canyon around the figure; `grab-rail / rail` → deck railing, figure standing shipboard; `moon-surface sliding past below` → grounded moonwalk; `nebula pillars/towers/thunderheads` → enclosing gas cavern / literal clouds; `twin suns flaring / binary sunrise` → orange spark-shower; `kicking/pushing off with both boots` → parkour jump with dust spray; `watching debris drift past` → debris field; `running lights blinking, hull invisible` → bokeh light-city; suffix `dust motes in light shafts, every plane filled with detail` → floating flecks on every render (fixed via `promptSuffixByPath.spacewalk` — first use of a per-path suffix override). **Litmus: before adding ANY entry to a space path, scan every noun for its strongest training prior; if that prior is terrestrial (rail/canyon/surface/tower), Flux will render the prior, not your scene.**
+
+**2. Reference-pinning beats broad pools when converging on hearted references.** My first fix rebuilt 100-200-entry pools "in the same register" — but every roll drew ingredients Kevin never approved, so every batch surfaced a new miss flavor. Convergence only started when every pool was pinned to reference-provenance ingredients (hearted entries verbatim + hand-authored entries modeled on the hearted renders' ACTUAL look). Variety comes later by generating variations INSIDE the winning families, never by keeping the old tail.
+
+**3. Winning-family tally after N rounds is the decision tool.** Across 5 batches (~30 renders), EVERY Kevin-grade hit had a backdrop from ONE family — big bright planet limb seen from orbit (± one-sided colossal hull, sunlit lighting); every miss traced to nebula/moon-surface/corona/starfield-only/fleet backdrops. Final state locks void_backdrop to 10 planet-orbit entries. When a path chases a reference look, tally hits per family and DELETE the losing families — don't keep them for "variety" (they're variety of the wrong thing).
+
+**4. "Heart = ban" reverse flags mid-session.** Kevin hearted 2 UGLY posts explicitly to flag them ("not cause i like them — we need to root that look out"). Always confirm which direction a heart means when it arrives during an iteration session.
+
+**5. Hit-rate reality: the original reference set was itself a ~40% cherry-pick** (16 hearts from ~40 renders that night). Converging automation to ~100% reference-grade is not achievable at ultra variance; the goal is (a) the worst modes structurally impossible (busywork/wires/debris/chores gone), (b) every roll drawn from approved families. Final state: eva_action 10 momentum beats, void 10 planet-orbit, structure 9 (hearted 8 + clean mothership flank), sunlit-only path lighting pool (SPACEWALK_LIGHTING — path override of the universal axis), de-flecked suit details, clean per-path suffix, breathing-room + sharp-backdrop template mandates.
+
 ### alien-city (StarBot)
 
 **Round 0** — diagnostic baseline: top-down portal/pillar over generic cyberpunk haze; figure foregrounded; "alien city" became "lone figure in icy gorge". Pool entries too thin, figure-placement language too soft.

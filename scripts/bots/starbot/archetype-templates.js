@@ -1524,7 +1524,7 @@ Place this far away in the deep background — it adds story and scale but must 
     return `You are a sci-fi concept-art painter writing the single most iconic SPACE image for StarBot — a ZERO-GRAVITY SPACEWALK. One lone suited figure FLOATING in the open vacuum of space, weightless, caught in a candid loaded instant of an EVA. Same universe as our cosmic vistas and alien worlds. Think the breath-held silence of Gravity / 2001 / Interstellar — a real human-scale figure dwarfed by, but vivid against, the overwhelming cosmos. Output wraps with style prefix + suffix.
 
 ━━━ ZERO-G — ABSOLUTE FIRST RULE ━━━
-The figure FLOATS. Weightless, free-falling in vacuum — NO feet on any ground, NO standing pose, NO "down" direction. Limbs drift, the safety tether snakes loose in a slow curve, the body is oriented at a cinematic diagonal (NOT bolt-upright). This is the OPPOSITE of standing on a planet. Free-float body language in EVERY pose.
+The figure FLOATS. Weightless, free-falling in vacuum — NO feet on any ground, NO standing pose, NO "down" direction. Limbs drift, the safety tether snakes loose in a slow curve — never taut, never a straight hanging line, the figure is NEVER suspended below a structure like a climber on a rope. The body is oriented at a cinematic diagonal (NOT bolt-upright). This is the OPPOSITE of standing on a planet. Free-float body language in EVERY pose.
 
 ━━━ OPEN SPACE — ALWAYS THE AIRLESS VOID (positive anchor) ━━━
 The setting is ALWAYS the open airless black void of outer space — high above any world, in hard vacuum, surrounded by the star-field and the cosmic backdrop below. The environment is pure orbital space: the curve of a planet seen from orbit, a nebula, a star, or a colossal spacecraft hull adrift in the black. The safety tether is a loose weightless line floating in vacuum (NOT a taut climbing rope). Keep the whole frame in deep space — the void backdrop below is a WORLD SEEN FROM ORBIT, sky and vacuum, never a ground-level landscape the figure could stand in.
@@ -1538,6 +1538,9 @@ Render this action EXACTLY, captured at a loaded mid-instant — the body positi
 This render has TWO heroes and both must be richly rendered:
 1. THE FIGURE — a single suited astronaut, ~20-35% of the frame, FULL BODY visible, suit and gear tack-sharp and READABLE. Not a tiny lost speck, not a centered portrait — a readable human-scale figure floating in the vast frame.
 2. THE VOID — the cosmic environment behind and around them fills the remaining 65%+ of frame with breathtaking, detailed deep-space spectacle. NEVER an empty black background — the void is alive with the backdrop below.
+
+━━━ VAST, PRETTY, AWE-INSPIRING — THE FRAME BREATHES (load-bearing) ━━━
+This shot showcases the vast RAW BEAUTY of open space juxtaposed behind the astronaut. The scene is SIMPLE and readable at a glance: ONE colossal clean spectacle (the void backdrop below), the open black of space with stars, and the lone figure. Give the frame negative space and silence — vast emptiness IS the subject. The foreground structure hugs ONE edge or corner only. The backdrop is a single wonder seen whole and clear (a planet's curve, a nebula glowing across the dark, a star-field, a blazing corona) — never a texture that swallows the frame. Calm, majestic, poster-clean.
 
 ━━━ THE SUIT (the figure's identity — render every detail) ━━━
 ${suit}
@@ -1555,7 +1558,7 @@ ${suit_detail}
 ━━━ THE VOID BACKDROP (the cosmic environment — the "out in space" hero) ━━━
 ${void_backdrop}
 
-This dominates the deep background — colossal, detailed, breathtaking. The figure floats AGAINST it. Render it with full atmospheric depth, color, and scale so the frame screams "we are OUT IN SPACE."
+This dominates the deep background — colossal, detailed, breathtaking. The figure floats AGAINST it. The backdrop is PART OF THE STORY: render it in crisp deep focus, sharp and fully readable edge to edge — never blurred, never hazed over, never dissolved into bokeh or abstract texture. Full color and scale so the frame screams "we are OUT IN SPACE."
 
 ━━━ FOREGROUND STRUCTURE — hard-surface tech near the figure ━━━
 ${nearby_structure}
@@ -1565,7 +1568,7 @@ ${eventSection}
 ━━━ LIGHTING ━━━
 ${lighting}
 
-Harsh, directional sunlight in vacuum — brilliant rim-light on one side of the suit, deep black shadow on the other, with soft fill bouncing off the void backdrop (planet-glow, nebula-wash). High dynamic range, cinematic.
+Harsh, directional sunlight in vacuum — brilliant rim-light on one side of the suit, deep black shadow on the other, with soft fill bouncing off the void backdrop (planet-glow, nebula-wash). High dynamic range, cinematic, and BRIGHT: sunlit clarity across the scene, the backdrop luminous and readable — never murky, never underexposed gloom, never a muddy dim frame.
 
 ━━━ SCENE-WIDE COLOR PALETTE ━━━
 ${sharedDNA.scenePalette}
@@ -1583,7 +1586,7 @@ EXACTLY ONE suited figure (a distant second EVA figure is allowed ONLY if the co
 Describe the suit and tech by their FEATURES, never by franchise / trademark. No "EVA", "NASA", "spacesuit-model", brand, or named-program text in the output — describe the hardware.
 
 ━━━ COMPOSITION ━━━
-Cinematic wide film-still. The figure floats OFF-CENTER (rule of thirds), oriented at a dramatic diagonal, full-body. The void backdrop fills the majority of the frame behind them with deep, detailed spectacle. Foreground structure anchors one edge or corner. Strong sense of scale, isolation, and silence. NEVER a centered head-and-shoulders portrait. NEVER an empty black frame.
+Cinematic wide film-still. The figure floats OFF-CENTER (rule of thirds), oriented at a dramatic diagonal, full-body. The void backdrop fills the majority of the frame behind them with ONE deep, clean, readable spectacle. Foreground structure anchors ONE edge or corner only — never both sides, never enclosing the figure, never a corridor or canyon of hardware. Open space and stars stay visible; the frame breathes. Strong sense of scale, isolation, and silence. NEVER a centered head-and-shoulders portrait. NEVER an empty black frame. NEVER a cluttered debris-storm.
 
 ━━━ STRUCTURE (write the prompt in this exact order) ━━━
 [OPENING — a wide cinematic shot of a lone suited astronaut FLOATING weightless in space, DOING THE EXACT EVA ACTION — the action verb leads], [the suit rendered in full material detail — plating / joints / glowing tech / gear], [the visor reflection mirroring the cosmos], [the colossal void backdrop filling the frame behind them], [the foreground structure they float against], [lighting — harsh vacuum sun + void-glow fill], [color palette and silent, awestruck mood]

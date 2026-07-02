@@ -21,6 +21,9 @@
 module.exports = {
   archetype: 'SPACEWALK',
   pools: {
+    // Path override of the universal lighting axis — sunlit-bright only
+    // (2026-07-01 reference calibration; the universal pool rolled gloom).
+    lighting: 'SPACEWALK_LIGHTING',
     suit: 'SPACEWALK_SUIT',
     eva_action: 'SPACEWALK_EVA_ACTION',
     visor_reflection: 'SPACEWALK_VISOR_REFLECTION',

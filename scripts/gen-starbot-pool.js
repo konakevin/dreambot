@@ -1069,19 +1069,29 @@ EXAMPLES (4):
 
   spacewalk_eva_action: {
     format: 'simple',
-    theme: `STARBOT SPACEWALK EVA ACTION — what the floating astronaut is DOING in zero gravity at this exact instant. The VERB leads. ZERO-G body language ONLY — weightless, free-falling, body at a diagonal, a stray strap or hose drifting — NEVER standing, NEVER feet-on-ground. Each entry 15-30 words.
+    theme: `STARBOT SPACEWALK EVA ACTION — what the floating astronaut is DOING in zero gravity at this exact instant. This path is the ICONIC AWE SHOT (Gravity / 2001 / Interstellar film-still): a lone figure, composed and cinematic, full-body readable at a dramatic diagonal against the overwhelming cosmos. Every entry is a hero-poster beat — the VERB leads. ZERO-G body language ONLY — weightless, free-falling — NEVER standing, NEVER feet-on-ground. Each entry 15-30 words.
 
-⚠️ NO CHARACTER-ON-A-WIRE — never hand-over-hand along a guide-wire/cable, never hauling / reeling / clinging to a tether, never zip-lining or rappelling. That pose is badly overused. The astronaut floats FREE in open vacuum or works hands-on directly against the hull.
+Every entry belongs to ONE of exactly TWO registers (2026-07-01 reference lock — Kevin's 7 re-hearted renders are ALL these):
+• REGISTER A — COMPOSED MOMENTUM (~70%): purposeful graceful motion. Gliding streamlined on a taut diagonal, diving beneath a spar, rolling into alignment, mid-tuck clearing a pod, surging toward a vessel, poised at the hull edge as one boot releases its grip — momentum carrying the glide, never frantic.
+• REGISTER B — ANCHORED CALM MID-TURN (~30%): boots hooked to a rail-clamp on a satellite chassis, or one glove resting on the hull edge, body floating free and composed, helmet turning or snapping toward something far across the void. The contact point is INCIDENTAL — the body always floats.
 
-VARIETY MANDATE — ~25 distinct candid EVA moments: drifting untethered with arms spread wide; reaching toward a drifting tool just beyond gloved fingertips; welding/cutting a hull panel with a shower of sparks; tumbling slowly end-over-end; pushing off a hull with both boots; spinning a power-wrench to drive a bolt; catching a tumbling component to the chest; hanging head-down relative to the planet below; twisting to look back over the shoulder at the viewer; bracing one knee against a strut while torquing a fitting; bracing against recoil while firing a maneuvering thruster; planting a glowing sensor-beacon on the plating; sealing an access panel; floating face-to-face with a drifting helmet or a small drone; inspecting a glowing instrument up close; chasing a runaway drone with a short thruster burst; throwing an arm up to shield the visor from a sudden solar flare; trailing a glittering ribbon of vented coolant crystals; reading a data-slate strapped to the forearm; recoiling as a micrometeoroid sparks bright off a shoulder plate; silhouetted mid-drift against a passing eclipse; reaching back toward a crewmate just out of frame; punching a stuck release-latch with a gloved fist. The reader must SEE the action in the first 5 words.`,
+The body is always COMPOSED, READABLE, and NATURAL — a pose a real suited human would hold in zero-G. The scene's story is the figure meeting the immensity, never a work order.
+
+⚠️ NO STATIC LIMP FLOATS — never motionless / arms-spread-wide cruciform / transfixed gazing / paused in reflected light / drifting aimlessly. Kevin: "stupid poses." Motion or purposeful anchor, always.
+⚠️ NO "RAIL / GRAB-RAIL / RAILING" as a word — it renders a ship's deck railing with the figure standing at it. The ONLY allowed contact nouns: hull edge, docking strut, satellite chassis rail-clamp, truss.
+⚠️ NO KICKING/PUSHING OFF with boots driving against plating — renders a grounded parkour jump with dust.
+⚠️ NO MAINTENANCE-CHORE BUSYWORK — a repair task is never the subject of the beat.
+⚠️ NO CONTORTED / GRACELESS POSES — never inverted, head-down, end-over-end, recoiling or colliding. Composed diagonals only.
+⚠️ NO CHARACTER-ON-A-WIRE — never hand-over-hand along a guide-wire/cable, never hauling / reeling / clinging to a tether, never zip-lining or rappelling. A loose safety tether may trail in a slow weightless curve, nothing more.
+⚠️ SOLO — exactly one figure; never a crewmate in frame or just out of it.`,
     touchpoints: [],
-    instructions: `Each entry is ONE zero-G EVA action in 15-30 words. Format: "ACTION-VERB-CAP — body position in free-fall + what they interact with". ALWAYS weightless/floating, NEVER grounded. NEVER hand-over-hand on a wire/cable/tether, NEVER zip-lining or rappelling. Output a NUMBERED list.
+    instructions: `Each entry is ONE zero-G EVA hero-beat in 15-30 words. Format: "ACTION-VERB-CAP — composed free-fall body position + what the figure faces or glides past". ALWAYS weightless/floating, full-body readable, composed, natural. Output a NUMBERED list.
 
-EXAMPLES (4):
-1. DRIFTING UNTETHERED — body turned slow at a diagonal, arms spread wide, a stray suit-strap floating loose, helmet tipped toward the world below.
-2. REACHING FOR A LOST TOOL — one arm fully extended after a wrench tumbling just beyond gloved fingertips, the other braced flat on a hull-panel, legs floating free.
-3. WELDING A HULL BREACH — braced upside-down against the plating, plasma-cutter throwing a fan of white sparks that drift and die in the vacuum.
-4. PUSHING OFF THE HULL — both boots planted mid-shove, body launching backward into the void, arms flung wide against the stars.`,
+EXAMPLES (4 — these are Kevin-hearted production entries; match their register):
+1. GLIDING FAST ON A TAUT DIAGONAL — body streamlined, arms swept back, skimming the scarred flank of a colossal derelict vessel through wide-open hard vacuum.
+2. MID-TUCK FORWARD ARROW — knees drawn sharply to chest clearing a thruster-cluster pod, body snapping back into a purposeful forward diagonal, weightless in open vacuum.
+3. FLOATING POISED AT THE HULL EDGE — one boot just releasing a scarred docking strut, the other trailing free in the airless black, body on a dramatic diagonal against the infinite.
+4. BRACING CALM BEFORE THE FLEET — boots hooked to a rail-clamp on a tumbling satellite's chassis, body squared and composed in open vacuum, watching a vast silent fleet slide through the deep dark beyond.`,
   },
 
   spacewalk_visor_reflection: {
@@ -1101,32 +1111,46 @@ EXAMPLES (4):
 
   spacewalk_void_backdrop: {
     format: 'simple',
-    theme: `STARBOT SPACEWALK VOID BACKDROP — the colossal cosmic environment the astronaut floats AGAINST, filling 65%+ of the frame. This is the "OUT IN SPACE" hero of the shot — it must be BREATHTAKING and never an empty black background. Each entry 30-50 words.
+    theme: `STARBOT SPACEWALK VOID BACKDROP — ONE colossal LUMINOUS PLANET the astronaut floats above, seen from low orbit, dominating the frame below/behind the figure. This is the "big bright beautiful world" money shot (2026-07-01 reference lock — Kevin's hearted renders are ALL this family). One planet per entry — vast, bright, readable, gorgeous. Each entry 30-45 words.
 
-VARIETY MANDATE — ~25 jaw-dropping deep-space backdrops: the vast curved limb of a banded gas giant with churning storm-bands and a thin atmosphere glow; a planet's day/night terminator with city-lights sprinkled across the dark side; a towering nebula wall in magenta, cyan and gold lit from within; a ringed planet with its rings slicing across the whole frame at a dramatic tilt; the roiling orange corona of a sun with arcing prominences; a star-dense field with the bright band of a galaxy's core overhead; a cratered moon's surface sliding past below; an ice-blue ocean world wrapped in spiral storms; a blood-red dying star bloated on the horizon; a distant blue marble hung in pure black with the Milky Way behind. Each must establish overwhelming scale + color + atmospheric depth.`,
+EVERY ENTRY MUST INCLUDE all four anchors:
+(a) colossal scale wording — vast / enormous / immense / fills the lower frame / dominates the view;
+(b) LUMINOUS daylight wording — sunlit / brilliant / bright / sunlight blazing off cloud tops;
+(c) the CURVED LIMB against black space with a thin atmosphere-glow line — the in-orbit anchor. The world curves away BELOW the figure; it is never a flat surface, never ground the figure could stand on;
+(d) 2-3 readable surface features — cloud spirals, ocean color, coastlines, city-light webs on the night side, storm bands, ring shadows, auroras on the limb.
+
+VARIETY INSIDE THE FAMILY (~equal shares): blue-and-white Earth-like worlds (cloud systems / oceans / coastlines / city-lit terminators); turquoise ocean worlds with ivory spiral storms; ice worlds with violet-green polar auroras on the limb; COOL-toned gas giants (cream / rust / indigo banding, oval storms, blue limb glow); ringed planets (rings slicing the frame at a tilt, ring shadows striping the cloud tops, small moons strung along the ring-plane ABOVE the limb); terminator drama (sunrise sweeping the face, golden city-light webs on the dark side); one or two small moons hung in the sky above the limb (in the SKY, never a surface below).
+
+PALETTE — cool and luminous ONLY: blues, whites, turquoise, cream, indigo, violet/green auroras. NEVER warm-fire wording (no "glows warm amber", no "blinding arc", no fire / embers / molten / blazing corona) — warm-glow wording renders as a fire vortex.
+
+BANS (each one reliably renders a failure — locked 2026-07-01): NO nebulae (render as enclosing gas caverns); NO moon/planet SURFACE below the figure, NO "slides past below", NO craters/regolith (render as a grounded moonwalk); NO bare starfield-only entries (render as streak bokeh); NO suns/coronas as the subject; NO fleets or ships; NO debris; NO canyon/mesa/cliff/mountain nouns (terrestrial prior); NO "fills the entire frame edge to edge" (the limb and open black space must stay visible — the frame breathes).`,
     touchpoints: [],
-    instructions: `Each entry is ONE breathtaking deep-space backdrop in 30-50 words, comma-separated prose. It dominates the frame behind the floating figure. NEVER empty black — always rich + colored + detailed. Output a NUMBERED list.
+    instructions: `Each entry is ONE luminous planet-from-orbit backdrop in 30-45 words, comma-separated prose, containing all four anchors (colossal scale + luminous daylight + curved limb against black + 2-3 surface features). Output a NUMBERED list.
 
-EXAMPLES (4):
-1. The immense curved limb of a banded amber gas giant fills the lower half of the frame, churning cream-and-rust storm-bands and a great oval cyclone, a razor-thin blue atmosphere-glow rimming its edge against deep black.
-2. A planet's day-night terminator sweeps across the frame, the dark hemisphere sprinkled with the gold web of sprawling city-lights, the dayside a luminous arc of ocean-blue and white cloud curving into atmosphere haze.
-3. A towering nebula wall climbs the whole frame, magenta and teal pillars lit from within, threaded with newborn blue-white stars and dark dust lanes, fading into a deep star-dense field.
-4. A ringed planet hangs huge and tilted, its banded ice-and-cobalt rings slicing diagonally across the entire frame casting banded shadows, three small moons strung along the ring-plane into the distance.`,
+EXAMPLES (4 — production entries from Kevin's reference lock; match them):
+1. A vast sunlit Earth-like world fills the frame below, brilliant white cloud systems swirling over deep-blue ocean, the curved limb glowing with a razor-thin atmosphere line against black space, golden city-lights glittering along the terminator.
+2. A colossal sunlit ocean world curves below, ivory spiral storm systems drifting over turquoise seas, the bright daylit surface fading to a city-lit night side across the terminator, stars sharp above the glowing limb.
+3. The immense curved limb of a jewel-toned amber gas giant, churning cream-and-rust storm-bands and a great oval cyclone, a luminous blue atmosphere-glow rimming its edge against a star-dense black.
+4. A ringed planet hangs huge and tilted, its banded ice-and-cobalt rings catching golden sunlight and slicing across the frame, three small moons strung along the ring-plane.`,
   },
 
   spacewalk_nearby_structure: {
     format: 'simple',
-    theme: `STARBOT SPACEWALK NEARBY STRUCTURE — the hard-surface tech in the FOREGROUND that the astronaut floats against, clings to, or works on. It grounds the figure in a real place in space and adds tactile mechanical detail. Each entry 20-40 words.
+    theme: `STARBOT SPACEWALK NEARBY STRUCTURE — the hard-surface tech near the figure. TWO kinds only (2026-07-01 reference lock), and in BOTH the vast cosmos stays open beyond — the structure never encloses the frame:
+• KIND A — CORNER PROP (~60%): one compact piece of hardware anchoring a single corner/edge — a meteorite-scarred heat-shield panel, a thruster-cluster pod, a girdered docking strut, a drifting hazard-striped cargo container, a battered comms-dish EDGE, a folded robotic service-arm, a tumbling satellite drifting close. Compact, tactile, detailed.
+• KIND B — COLOSSAL CLEAN FLANK (~40%): the smooth plated flank of a mothership or station running along ONE side of the frame — running lights strung like beads, glowing docking bays, lit windows, crisp panel lines — the open cosmos and the world below breathing wide beyond it.
 
-VARIETY MANDATE — ~25 distinct foreground structures: a battered hull surface of riveted panels, antennae and grab-rails; a vast gold-foil solar-array wing; a girdered docking truss with clamps and cabling; the looming dark hull of a derelict ship; a tumbling satellite with a dish and folded panels; a folded robotic service-arm reaching from the hull; an open airlock hatch with interior glow; a drifting cargo container with hazard stripes; a damaged engine nozzle scorched and cracked; a comms dish the size of a building; the ribbed spine of a starship stretching into the distance; a habitat module with lit portholes. Hard-surface, mechanical, detailed.`,
+Each entry 20-40 words.
+
+BANS (each reliably renders a failure — locked 2026-07-01): NO structure on BOTH sides / bracketing / corridors / canyons of hardware (encloses the figure); NO "stretches into the distance" / "recedes into perspective" (renders an enclosing spine); NO masts / antenna booms / lattice towers RISING vertically (render as terrestrial radio towers); NO peeled / twisted / shattered wreckage plating (renders as rock); NO venting / leaking / weeping vapor (renders as flecks); NO tether or cable crossing the frame; NO grab-rails named as "rails".`,
     touchpoints: [],
-    instructions: `Each entry is ONE foreground hard-surface structure in 20-40 words, comma-separated prose. Mechanical, tactile, detailed — panels/rivets/cabling/antennae. Output a NUMBERED list.
+    instructions: `Each entry is ONE foreground structure in 20-40 words, comma-separated prose — either a compact corner prop or a clean colossal flank along one side, the cosmos open beyond. Mechanical, tactile, crisp. Output a NUMBERED list.
 
-EXAMPLES (4):
-1. A battered hull surface fills one edge of the frame — riveted grey panels streaked with scoring, a row of grab-rails, a cluster of antennae and a glowing inspection-light, the astronaut's gloved hand braced on a handhold.
-2. A vast gold-foil solar-array wing stretches diagonally across the foreground, its segmented cells catching brilliant sunlight, a thin truss spine and bundled cabling running its length toward an unseen ship.
-3. The dark looming hull of a derelict ship dominates one side, hull-plates peeled and twisted, a shattered porthole, dead antennae, the astronaut tiny against its silent scarred flank.
-4. A girdered docking truss crosses the foreground, heavy clamps and coiled umbilical lines, a tether running from the astronaut's waist to an anchor-point, a winking status-beacon.`,
+EXAMPLES (4 — production entries from Kevin's reference lock; match them):
+1. A thruster-cluster pod anchors the left edge, four nozzles around a central manifold, silver-wrapped fuel lines, a red-tagged lockout pin swinging loose on a lanyard.
+2. A meteorite-scarred heat-shield panel floats in the near foreground corner, ablative ceramic tiles spiderwebbed and charred, sheared mounting bolts catching hard sunlight.
+3. The colossal clean flank of a mothership runs along one edge of the frame, smooth grey plated hull with running lights strung like orange beads, docking bays glowing warm amber, the vast open cosmos beyond it.
+4. A massive station module edge runs along one side of the frame, crisp white-grey plating with softly lit windows and a docking ring, the open starfield and the world below breathing wide beyond it.`,
   },
 
   spacewalk_suit_detail: {

@@ -292,6 +292,16 @@ module.exports = {
     render: 'no text, no words, no watermarks, masterpiece quality',
   },
 
+  // Per-path prompt SUFFIX (replaces the medium suffix). spacewalk (2026-07-01,
+  // Kevin de-clutter pass): the hyperreal suffix's "dust motes in light shafts,
+  // every plane filled with detail" is a particle/clutter mandate — this path's
+  // look is ONE clean majestic spectacle + open space, backdrop SHARP (it's part
+  // of the story, never fuzzed into bokeh).
+  promptSuffixByPath: {
+    spacewalk:
+      'cinematic concept art precision, photoreal materials and lighting, deep focus — the cosmic backdrop rendered sharp, majestic and fully readable, clean uncluttered frame, no text, no words, no watermarks, photorealistic film still',
+  },
+
   // Per-path prompt PREFIX (prepended). Moved from MechBot 2026-06-24: the two
   // cyborg-female paths carry their human-not-chassis anchor; combined with the
   // `render` promptPrefixByMedium above this reproduces MechBot's exact prefix.

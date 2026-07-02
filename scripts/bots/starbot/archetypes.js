@@ -255,7 +255,7 @@ PREMIUM-TIER axis stack (2026-05-31 reactivation + enrichment — paritying spac
 
 7 bespoke slots + 1 conditional cosmic event (50%-gated):
   • suit              — the EVA suit (the figure's identity — sealed, gender-neutral): silhouette + material/finish + helmet/visor + glowing tech + wear
-  • eva_action        — what they're DOING in zero-G (verb-led): untethered drift / hull repair / reaching / tumbling / hand-over-hand on a line / pushing off — FREE-FLOAT body language, never grounded
+  • eva_action        — what they're DOING in zero-G (verb-led), TWO registers only (2026-07-01 heart calibration): COMPOSED AWE (still/arrested/transfixed before the spectacle) or COMPOSED MOMENTUM (gliding/diving/rolling/kicking-off) — FREE-FLOAT, composed, full-body readable; never chores, never contortions, never grounded
   • visor_reflection  — the signature detail: what's mirrored in the curved visor (planet curve / blazing star / nebula / the hull / HUD glow / their own ship)
   • void_backdrop     — the dominant cosmic environment they float against (gas-giant curve / planet terminator with city-lights / nebula wall / ringed planet / solar corona / star-dense field) — the "out in space" hero
   • nearby_structure  — the foreground hard-surface tech near them (battered hull panels / solar array / docking truss / derelict / satellite / tether to an offscreen ship)
