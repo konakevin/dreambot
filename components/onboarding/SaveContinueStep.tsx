@@ -168,7 +168,10 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
         </Text>
       </ScrollView>
 
-      <OnboardingFooter onNext={handleSaveContinue} onBack={onBack} nextLabel="Save & continue" />
+      {/* Short label — "Save & continue" overflowed the half-width Next pill
+          (it shares the footer row with Back). The save still happens; the
+          button doesn't need to say so. */}
+      <OnboardingFooter onNext={handleSaveContinue} onBack={onBack} nextLabel="Let’s go" />
     </View>
   );
 }
