@@ -151,7 +151,8 @@ module.exports = {
   // Per-medium suffix override — chibibot_neutral drops the bot PROMPT_SUFFIX's
   // generic tail and reinforces the no-humans guard; the look carries finish.
   promptSuffixByMedium: {
-    chibibot_neutral: 'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
+    chibibot_neutral:
+      'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
   },
 
   // Per-path prefix override — prepended BEFORE the medium style prefix as
@@ -177,7 +178,8 @@ module.exports = {
   },
 
   // Cute-forward vibes (banned: dark, fierce, macabre, nightshade,
-  // psychedelic, ancient, epic, voltage, arcane).
+  // psychedelic, ancient, epic, voltage, arcane; surreal cut 2026-07-03 —
+  // dream-logic wrongness is this bot's uncanny failure mode).
   vibes: [
     'cozy',
     'peaceful',
@@ -188,7 +190,6 @@ module.exports = {
     'nostalgic',
     'ethereal',
     'cinematic',
-    'surreal',
   ],
 
   paths: [

@@ -95,7 +95,7 @@ const pathBuilders = {
   'hidden-conservatory': require('./paths/hidden-conservatory'),
   // Beauty-gap scene paths (2026-06-28) — own bespoke mediums, excluded from the
   // look rotation.
-  'botanical': require('./paths/botanical'),
+  botanical: require('./paths/botanical'),
   // Retro pulp sci-fi COMEDY paths (2026-06-29) — two gendered character paths
   // sharing one universe + medium (pulp-femme + pulp-hero). Own code-only medium,
   // excluded from the look rotation.
@@ -250,7 +250,7 @@ module.exports = {
     'far-eden-soft': 'dreambot_eden_painterly',
     // hidden-conservatory locks its own photoreal stained-glass-greenhouse medium.
     'hidden-conservatory': 'dreambot_conservatory',
-    'botanical': 'dreambot_botanical',
+    botanical: 'dreambot_botanical',
     'pulp-femme': 'dreambot_pulp',
     'pulp-hero': 'dreambot_pulp',
   },
@@ -310,7 +310,8 @@ module.exports = {
   // Per-medium suffix override — chibibot_neutral drops the bot PROMPT_SUFFIX's
   // generic tail and reinforces the no-humans guard; the look carries finish.
   promptSuffixByMedium: {
-    chibibot_neutral: 'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
+    chibibot_neutral:
+      'adorable wholesome charm, every character is a creature, no humans, no text no watermarks',
   },
 
   // Per-path prefix override — prepended BEFORE the medium style prefix as
@@ -341,13 +342,14 @@ module.exports = {
   },
 
   // Cute-forward vibes (banned: dark, fierce, macabre, nightshade,
-  // psychedelic, ancient, epic, voltage, arcane).
+  // psychedelic, ancient, epic, voltage, arcane). surreal KEPT deliberately —
+  // DreamBot is the dream-world wildcard bot. coquette cut 2026-07-03
+  // (off-brand vibe audit) — lace/ribbon/teacup register on a bubble-robot bot.
   vibes: [
     'cozy',
     'peaceful',
     'whimsical',
     'enchanted',
-    'coquette',
     'shimmer',
     'nostalgic',
     'ethereal',
@@ -410,9 +412,7 @@ module.exports = {
     // Lock to pro-ultra (no gpt-2 bounce) — the glossy iridescent reference look.
     'bubble-bot-dreams': 'black-forest-labs/flux-1.1-pro-ultra',
     'bubble-bot-dreams-warm': 'black-forest-labs/flux-1.1-pro-ultra',
-    ...Object.fromEntries(
-      CROSSOVER_PATHS.map((p) => [p, 'black-forest-labs/flux-1.1-pro-ultra'])
-    ),
+    ...Object.fromEntries(CROSSOVER_PATHS.map((p) => [p, 'black-forest-labs/flux-1.1-pro-ultra'])),
     // dreamscape — pro-ultra renders the lush hyperreal candy-fantasy vista best.
     dreamscape: 'black-forest-labs/flux-1.1-pro-ultra',
     // butterfly-realm — flux-1 family only (Kevin 2026-06-28): the 3 flux-2
@@ -439,28 +439,16 @@ module.exports = {
     // far-eden — flux-1.1 pair ONLY (Kevin 2026-06-28: banned flux-dev, and after
     // a forced-render test, ruled OUT the flux-2 family for these paths too).
     // Both sibling paths share the roster; medium (hyperreal vs painterly) varies.
-    'far-eden': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
-    'far-eden-soft': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
+    'far-eden': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    'far-eden-soft': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     // hidden-conservatory — pegged to flux-1.1-pro-ultra (Kevin 2026-06-28, after
     // a flux-2 + nano + gpt-2 model test). Renders the lush photoreal glasshouse +
     // prismatic light cleanest at native 9:16.
     'hidden-conservatory': 'black-forest-labs/flux-1.1-pro-ultra',
-    'botanical': 'black-forest-labs/flux-1.1-pro-ultra',
+    botanical: 'black-forest-labs/flux-1.1-pro-ultra',
     // pulp-femme + pulp-hero — flux-1.1 pair (matches far-eden's roster).
-    'pulp-femme': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
-    'pulp-hero': [
-      'black-forest-labs/flux-1.1-pro-ultra',
-      'black-forest-labs/flux-1.1-pro',
-    ],
+    'pulp-femme': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    'pulp-hero': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't

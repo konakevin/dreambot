@@ -39,6 +39,8 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // surreal cut 2026-07-03 (off-brand vibe audit) — miniature scale-play is
+  // already the bot's premise; dream-logic melt on crafted dioramas reads broken.
   vibes: [
     'cinematic',
     'cozy',
@@ -49,7 +51,6 @@ module.exports = {
     'ancient',
     'enchanted',
     'shimmer',
-    'surreal',
     // 'pastel-dream' — VIBE_COLOR registered in pools.js but NOT in DB
     // dream_vibes table. To activate, insert row into dream_vibes first.
   ],

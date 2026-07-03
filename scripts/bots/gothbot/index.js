@@ -86,10 +86,7 @@ module.exports = {
   // gothbot render picks flux-dev or flux-1.1-pro only.
   // Banned 2026-06-02: flux-2-flex (Kevin heart-ban — fleet-wide for gothbot).
   // Banned 2026-06-02: google/gemini-2-image (Kevin heart-ban — Nano Banana).
-  allowedModels: [
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
 
   // Per-path model override — takes precedence over pickModel (medium pool).
   // Every path locked to flux-1.1-pro (Kevin's call 2026-05-16: PNG output
@@ -170,42 +167,21 @@ module.exports = {
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'dark-landscape': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'dark-landscape': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'gothic-architecture': [
       'black-forest-labs/flux-1.1-pro',
       'black-forest-labs/flux-1.1-pro-ultra',
     ],
-    'castlevania-scene': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'castlevania-scene': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // castle-moonscape — non-character scene lineup (2026-06-29 NEW).
-    'castle-moonscape': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'castle-moonscape': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // the-sanctum — non-character scene lineup (2026-06-10 NEW).
-    'the-sanctum': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'the-sanctum': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // the-frost-garden — non-character scene lineup (2026-06-10 NEW).
-    'the-frost-garden': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'the-frost-garden': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     // twilight-gothic — non-character scene lineup (2026-06-10 NEW).
-    'twilight-gothic': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
-    'gothic-vista': [
-      'black-forest-labs/flux-1.1-pro',
-      'black-forest-labs/flux-1.1-pro-ultra',
-    ],
+    'twilight-gothic': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'gothic-vista': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'monster-prowl': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'monster-prowl-victorian': [
       'black-forest-labs/flux-1.1-pro',
@@ -635,10 +611,12 @@ module.exports = {
     ],
   },
 
-  // Curated 13 — cuts: whimsical/nostalgic/enchanted/voltage (too soft/fairytale/neon);
-  // excludes: minimal/cozy/peaceful (off-brand). Coquette + shimmer re-added
-  // 2026-04-22 for vampire-vogue editorial-couture path (pastel-rose/black-lace
-  // and tarnished-silver/gold-glint work for extreme vampire fashion).
+  // Bot-wide FALLBACK only — every active path has a vibesByPath override, so
+  // this list is effectively dead config; it exists to catch a future path
+  // shipped without an override. 2026-07-03 (off-brand vibe audit): pruned to
+  // the dark core — cut psychedelic / surreal / coquette (the vampire-vogue
+  // path that justified coquette is gone; melting-fractal + dream-logic
+  // registers were never on-brand).
   // Array repetition weights: macabre/nightshade/arcane 3× (flagship trio), others 1×.
   vibes: [
     'macabre',
@@ -653,12 +631,9 @@ module.exports = {
     'cinematic',
     'dark',
     'epic',
-    'psychedelic',
     'ethereal',
     'ancient',
     'fierce',
-    'surreal',
-    'coquette',
     'shimmer',
   ],
 

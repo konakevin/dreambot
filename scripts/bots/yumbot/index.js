@@ -190,6 +190,8 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
+  // surreal cut 2026-07-03 (off-brand vibe audit) — melty dream-logic on
+  // kawaii food reads broken, not cute.
   vibes: [
     'cozy',
     'peaceful',
@@ -200,7 +202,6 @@ module.exports = {
     'nostalgic',
     'ethereal',
     'cinematic',
-    'surreal',
   ],
 
   paths: [

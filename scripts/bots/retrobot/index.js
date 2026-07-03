@@ -59,18 +59,10 @@ module.exports = {
   promptPrefix: blocks.PROMPT_PREFIX,
   promptSuffix: blocks.PROMPT_SUFFIX,
 
-  vibes: [
-    'cozy',
-    'peaceful',
-    'whimsical',
-    'nostalgic',
-    'ethereal',
-    'cinematic',
-    'surreal',
-    'shimmer',
-    'coquette',
-    'enchanted',
-  ],
+  // surreal / enchanted / whimsical cut 2026-07-03 (off-brand vibe audit) —
+  // this bot is grounded real-world 80s/90s nostalgia; dream-logic,
+  // fairy-tale sparkle, and impossible-physics registers fight that.
+  vibes: ['cozy', 'peaceful', 'nostalgic', 'ethereal', 'cinematic', 'shimmer', 'coquette'],
 
   paths: [
     'saturday-morning',

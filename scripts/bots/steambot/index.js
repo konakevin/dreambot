@@ -207,6 +207,11 @@ module.exports = {
   // Single-vibe lock for scene paths. Female path overrides with vibesByPath.
   vibes: ['cinematic'],
 
+  // 2026-07-03 (off-brand vibe audit) — surreal / macabre / whimsical /
+  // arcane cut from all four character paths: dream-logic, Burton spooky-cute,
+  // impossible-physics, and fairy-tale spellcraft all fight the grounded
+  // Victorian-steampunk register (the de-cheese work). coquette kept on
+  // sexy-steampunk-woman — the glam is wanted.
   vibesByPath: {
     'sexy-steampunk-woman': [
       'cinematic',
@@ -214,17 +219,13 @@ module.exports = {
       'epic',
       'nostalgic',
       'peaceful',
-      'whimsical',
       'ethereal',
-      'arcane',
       'ancient',
       'enchanted',
       'coquette',
       'voltage',
       'nightshade',
-      'macabre',
       'shimmer',
-      'surreal',
     ],
     'steampunk-man': [
       'cinematic',
@@ -232,45 +233,19 @@ module.exports = {
       'epic',
       'nostalgic',
       'peaceful',
-      'whimsical',
       'ethereal',
-      'arcane',
       'ancient',
       'enchanted',
       'voltage',
       'nightshade',
-      'macabre',
       'shimmer',
-      'surreal',
     ],
     // airship-female: action-leaning subset (drop peaceful/cozy/nostalgic
     // vibes that conflict with combat / mid-action register; keep dark /
     // epic / cinematic / voltage that amplify). fierce banned 2026-06-28 (Kevin).
-    'airship-female': [
-      'cinematic',
-      'dark',
-      'epic',
-      'voltage',
-      'arcane',
-      'ancient',
-      'macabre',
-      'nightshade',
-      'shimmer',
-      'surreal',
-    ],
+    'airship-female': ['cinematic', 'dark', 'epic', 'voltage', 'ancient', 'nightshade', 'shimmer'],
     // airship-male: same action-leaning subset as airship-female.
-    'airship-male': [
-      'cinematic',
-      'dark',
-      'epic',
-      'voltage',
-      'arcane',
-      'ancient',
-      'macabre',
-      'nightshade',
-      'shimmer',
-      'surreal',
-    ],
+    'airship-male': ['cinematic', 'dark', 'epic', 'voltage', 'ancient', 'nightshade', 'shimmer'],
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,

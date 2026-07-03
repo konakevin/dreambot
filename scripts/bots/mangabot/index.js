@@ -118,6 +118,10 @@ module.exports = {
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   // Inverts old excludeVibes (ancient/fierce/psychedelic/minimal).
+  // 2026-07-03 (off-brand vibe audit) — cut bot-wide: 'surreal' (dream-logic
+  // wrongness, off the anime register), 'macabre' (Burton/Coraline register,
+  // not anime), 'coquette' + 'nightshade' (only fit specific paths — moved to
+  // vibesByPath below for kawaii / occult-tokyo).
   vibes: [
     'cinematic',
     'dark',
@@ -129,13 +133,25 @@ module.exports = {
     'ethereal',
     'arcane',
     'enchanted',
-    'coquette',
     'voltage',
-    'nightshade',
-    'macabre',
     'shimmer',
-    'surreal',
   ],
+
+  // Per-path vibe curation (2026-07-03 audit): coquette belongs on the cute
+  // path only; nightshade belongs on the dark-occult path only.
+  vibesByPath: {
+    kawaii: [
+      'cozy',
+      'peaceful',
+      'whimsical',
+      'enchanted',
+      'coquette',
+      'shimmer',
+      'nostalgic',
+      'cinematic',
+    ],
+    'occult-tokyo': ['cinematic', 'dark', 'arcane', 'nightshade', 'voltage', 'ethereal'],
+  },
 
   paths: [
     'mythological-creature',

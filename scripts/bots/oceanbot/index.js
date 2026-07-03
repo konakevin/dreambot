@@ -168,32 +168,60 @@ module.exports = {
     'deep-wonder': 'oceanbot_deep_glow',
   },
 
-  // 10 ocean-coded vibes. Drops the 6 that don't fit ocean drama / wonder
+  // Ocean-coded vibes. Drops the ones that don't fit ocean drama / wonder
   // / age-of-sail (coquette, shimmer, cozy, macabre, surreal, dreamy,
   // arcane, fierce — none of those map cleanly to maritime register).
-  vibes: [
-    'cinematic',
-    'dark',
-    'peaceful',
-    'epic',
-    'nostalgic',
-    'ethereal',
-    'ancient',
-    'enchanted',
-    'voltage',
-    'nightshade',
-  ],
+  // 2026-07-03 (off-brand vibe audit) — 'voltage' cut bot-wide (neon-city-
+  // at-night register on ocean scenes; already the 1-miss culprit dropped
+  // from deep-wonder) and 'nightshade' moved to per-path (gothic-vampire
+  // elegance fits the dark naval paths, not reef/turtle/tropical-fish).
+  vibes: ['cinematic', 'dark', 'peaceful', 'epic', 'nostalgic', 'ethereal', 'ancient', 'enchanted'],
 
-  // Per-path vibe curation. Every other path uses the bot-wide 10-vibe
-  // list (full surface area — earlier trims reversed 2026-06-05).
+  // Per-path vibe curation. Every other path uses the bot-wide list.
   //
   // deep-wonder: CURATED "Vivid 6" (Kevin 2026-06-21). The path renders
   // glowing creatures on pure black via the pinned realistic-glow medium;
   // these 6 vibes give vivid / jewel / cool-saturated palettes that suit
   // it. Dropped: voltage (its electric-arc palette dissolves the hero into
   // an abstract column), peaceful + ethereal + ancient (palest palettes).
+  //
+  // pirates / ghost-ship / kraken-leviathan: bot-wide list + nightshade
+  // (the gothic register is on-brand for the dark naval paths only).
   vibesByPath: {
     'deep-wonder': ['cinematic', 'dark', 'epic', 'enchanted', 'nightshade', 'nostalgic'],
+    pirates: [
+      'cinematic',
+      'dark',
+      'peaceful',
+      'epic',
+      'nostalgic',
+      'ethereal',
+      'ancient',
+      'enchanted',
+      'nightshade',
+    ],
+    'ghost-ship': [
+      'cinematic',
+      'dark',
+      'peaceful',
+      'epic',
+      'nostalgic',
+      'ethereal',
+      'ancient',
+      'enchanted',
+      'nightshade',
+    ],
+    'kraken-leviathan': [
+      'cinematic',
+      'dark',
+      'peaceful',
+      'epic',
+      'nostalgic',
+      'ethereal',
+      'ancient',
+      'enchanted',
+      'nightshade',
+    ],
   },
 
   paths: [

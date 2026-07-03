@@ -380,6 +380,10 @@ module.exports = {
   // after Kevin flagged a dragon-lore hoard render: the vibe's "impossible
   // color-pairings, arcane hallucinatory shifts" palette overrides the
   // path's intended register. Don't re-add without his word.
+  // 2026-07-03 (off-brand vibe audit) — 'voltage' removed bot-wide + every
+  // vibesByPath list (neon/LED electric-city register; high fantasy has no
+  // electricity — same fight as the arcane-library lamp leak) and 'macabre'
+  // removed (Burton/Coraline spooky-cute whimsy, not D&D/LOTR).
   vibes: [
     'cinematic',
     'dark',
@@ -392,14 +396,12 @@ module.exports = {
     'ancient',
     'enchanted',
     'fierce',
-    'voltage',
     'nightshade',
-    'macabre',
     'shimmer',
   ],
 
-  // Per-path vibe overrides — scene-only paths exclude `macabre`
-  // (renders weird gore-coded landscapes; only fits character paths).
+  // Per-path vibe overrides. (`macabre` is now excluded bot-wide — 2026-07-03
+  // audit; these per-path lists predate that and stay as tighter curations.)
   // Character paths (female-adventurer, female-action-scenes, male-adventurer, dragon-scene) inherit
   // the full bot.vibes list.
   vibesByPath: {
@@ -415,7 +417,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -431,7 +432,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -447,7 +447,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -492,7 +491,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -508,7 +506,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -524,7 +521,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -540,7 +536,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],
@@ -556,7 +551,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'fierce',
-      'voltage',
       'nightshade',
       'shimmer',
     ],

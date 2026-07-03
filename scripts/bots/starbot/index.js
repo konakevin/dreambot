@@ -108,13 +108,14 @@ module.exports = {
     ],
     // ─── Moved from MechBot 2026-06-24 (verbatim vibe sets). The other 5
     // moved paths have no per-path vibes → fall through to vibes:['cinematic']
-    // (identical to MechBot's default). ───
+    // (identical to MechBot's default). 2026-07-03 off-brand vibe audit:
+    // 'arcane' cut from robot-moment (fairy-tale spellcraft on a robot path);
+    // alien-biomechs keeps surreal/psychedelic/arcane deliberately (Giger). ───
     'robot-moment': [
       'cinematic',
       'dark',
       'epic',
       'nostalgic',
-      'arcane',
       'ancient',
       'fierce',
       'voltage',
