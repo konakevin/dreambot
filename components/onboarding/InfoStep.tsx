@@ -49,6 +49,13 @@ export interface InfoStepConfig {
   imageSource?: number;
   headline: string;
   body: string;
+  /**
+   * Optional muted icon + one-liner under the body — wayfinding hints like
+   * "your dreams land under [moon] on your profile". The icon should match
+   * the real in-app icon it references so the association sticks.
+   */
+  footnote?: string;
+  footnoteIcon?: keyof typeof Ionicons.glyphMap;
   /** Optional sub-feature cards under the body. */
   subFeatures?: InfoSubFeature[];
   ctaLabel?: string;
@@ -67,6 +74,8 @@ export function InfoStep({
   imageSource,
   headline,
   body,
+  footnote,
+  footnoteIcon,
   subFeatures,
   ctaLabel = 'Next',
   onNext,
@@ -110,6 +119,15 @@ export function InfoStep({
         </GradientTitle>
 
         <Text style={s.body}>{body}</Text>
+
+        {footnote && (
+          <View style={s.footnoteRow}>
+            {footnoteIcon && (
+              <Ionicons name={footnoteIcon} size={fontScale(14)} color={colors.textSecondary} />
+            )}
+            <Text style={s.footnote}>{footnote}</Text>
+          </View>
+        )}
 
         {subFeatures && subFeatures.length > 0 && (
           <View style={s.subFeatures}>
@@ -174,13 +192,31 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
     textAlign: 'center',
   },
+  // Near-white body (not textSecondary): on the pure-black onboarding canvas
+  // secondary gray reads washed-out — the muted tone is reserved for true
+  // captions, and the footnote gets the eyebrow's accent so the stack has a
+  // deliberate cadence (purple / gradient / white / purple).
   body: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
+    opacity: 0.92,
     fontSize: fontScale(16),
     lineHeight: fontScale(24),
     textAlign: 'center',
     marginTop: verticalScale(18),
     maxWidth: byDevice(360, 520),
+  },
+
+  footnoteRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: verticalScale(16),
+  },
+  footnote: {
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    fontWeight: '600',
+    textAlign: 'center',
   },
 
   subFeatures: { width: '100%', marginTop: verticalScale(28), gap: verticalScale(14) },

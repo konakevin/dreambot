@@ -26,6 +26,10 @@ import { OnboardingFooter } from './OnboardingFooter';
 
 const TITLE_TEXT = 'Build your dream team';
 
+// Minimum bots to follow before continuing — one bot made for a dead-feeling
+// first feed; three guarantees a decent mix on first launch.
+const MIN_BOTS = 3;
+
 interface Props {
   onNext: () => void;
   onBack: () => void;
@@ -88,8 +92,9 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
-          Every bot dreams in its own little world. Tap Follow on any that catch your eye and
-          they’ll start drifting into your feed.
+          Welcome to the neighborhood. Every bot lives in its own dreamy little corner: flowers,
+          dragons, deep space, tiny villages. Follow your favorites and their dreams will drift into
+          your feed.
         </Text>
       </View>
 
@@ -115,16 +120,19 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
         </ScrollView>
       )}
 
-      {/* Following ≥1 bot is required — Next stays disabled until at
-          least one bot is followed so the user's feed isn't empty on
-          first launch. */}
+      {/* Following ≥MIN_BOTS is required — Next stays disabled until enough
+          bots are followed so the user's feed isn't empty on first launch.
+          The counter row signposts progress; the disabled button says
+          exactly how many are still needed. Gate only applies when the bot
+          list actually loaded (the empty state says "skip ahead" — don't
+          dead-end it against a disabled button). */}
       <OnboardingFooter
         onNext={handleNext}
         onBack={onBack}
         hideBack
         nextLabel={nextLabel}
-        disabled={followedBotCount === 0}
-        disabledLabel="(pick at least one)"
+        disabled={orderedBots.length > 0 && followedBotCount < MIN_BOTS}
+        disabledLabel={`Follow ${MIN_BOTS - followedBotCount} more to continue`}
         nextVariant="gradient"
       />
 
@@ -155,8 +163,10 @@ const s = StyleSheet.create({
   title: {
     marginBottom: verticalScale(10),
   },
+  // Near-white per the onboarding text cadence (gray reads washed-out on black).
   subtitle: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
+    opacity: 0.92,
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
     textAlign: 'center',

@@ -410,13 +410,13 @@ export default function CreateScreen() {
   // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
   // dismisses the keyboard, which restores the full form.
   //
-  // For the TEXT-ONLY main view (no photo) on normal/large devices we DON'T
-  // collapse — there's plenty of room, so the full controls stay visible while
-  // typing (the Dream CTA is a sticky footer above the keyboard regardless).
-  // We still collapse when a photo is attached (that view is taller) and on
-  // SE-class (height < 700pt), where the expanded form would crowd the keyboard.
-  const { isSmall } = useDeviceClass();
-  const collapsed = kbOpen && !effectiveExactPrompt && (hasPhoto || isSmall);
+  // Collapse on EVERY phone while the keyboard is up. The Jun-19 carve-out
+  // ("text-only on normal devices has room, keep the full form") stopped being
+  // true as the form grew — by 2026-07-02 the medium/vibe controls sat under
+  // the keyboard even on an 852pt iPhone 15 Pro (Kevin), hiding the selection.
+  // Only iPad genuinely has room for the expanded form with the keyboard open.
+  const { isTablet } = useDeviceClass();
+  const collapsed = kbOpen && !effectiveExactPrompt && !isTablet;
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -454,10 +454,10 @@ export default function CreateScreen() {
   // (first-person + relationship words pull the user's dream-cast photos — self +
   // plus_one — into the render as a face swap).
   const placeholder = effectiveExactPrompt
-    ? 'Describe any scene. Your prompt is passed directly to the model. Real face and DreamBot mediums/vibes not supported in Direct mode.'
+    ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, mediums, or vibes in Direct mode.'
     : hasPhoto
       ? 'Describe a scene...'
-      : 'Describe any dream. Say "me", "my wife", or "my friend" to add the real faces from your profile, or leave blank for a surprise.';
+      : 'Describe any dream. Say "me" or "my partner" to paint your Dream Cast in, or leave blank for a surprise.';
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
@@ -819,8 +819,14 @@ export default function CreateScreen() {
               >
                 <TextInput
                   ref={promptRef}
-                  className="px-4 py-4 text-base"
+                  className="px-4 py-4"
                   style={{
+                    // Responsive type instead of fixed text-base, at a smaller
+                    // 14pt base — 16 read oversized even at the design size
+                    // (Kevin 2026-07-02). Placeholder overlay below must stay in
+                    // lockstep so the hint aligns exactly where typed text begins.
+                    fontSize: fontScale(14),
+                    lineHeight: fontScale(20),
                     color: colors.textPrimary,
                     // Fixed height — long prompts scroll internally rather than
                     // stretching the box. iOS multiline TextInputs scroll
@@ -850,7 +856,13 @@ export default function CreateScreen() {
                     className="px-4 py-4"
                     style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
                   >
-                    <Text className="text-base" style={{ color: colors.textMuted ?? '#6B7280' }}>
+                    <Text
+                      style={{
+                        fontSize: fontScale(14),
+                        lineHeight: fontScale(20),
+                        color: colors.textMuted ?? '#6B7280',
+                      }}
+                    >
                       {placeholder}
                     </Text>
                   </View>
@@ -979,6 +991,31 @@ export default function CreateScreen() {
                           {mediumFaceSwaps ? 'face' : 'art'}
                         </Text>
                       </View>
+                    )}
+                    {/* Face-swap lamp, same as the full form's Medium label. It
+                      reacts LIVE to cast language in the prompt — which the user
+                      types exactly while this collapsed summary is showing — so
+                      it must stay visible here. Inner touchable wins over the
+                      row's dismiss-keyboard tap; opens the same teaching sheet. */}
+                    {!isRestyle && (
+                      <TouchableOpacity
+                        onPress={handleModeInfo}
+                        activeOpacity={0.7}
+                        hitSlop={10}
+                        style={{ marginLeft: 6 }}
+                      >
+                        <Ionicons
+                          name={faceSwapLit ? 'happy' : 'happy-outline'}
+                          size={14}
+                          color={
+                            faceSwapLit
+                              ? mediumFaceSwaps
+                                ? MEDIUM_BADGE.face.color
+                                : MEDIUM_BADGE.art.color
+                              : (colors.textMuted ?? colors.textSecondary)
+                          }
+                        />
+                      </TouchableOpacity>
                     )}
                     <Text
                       className="text-[13px]"

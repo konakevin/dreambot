@@ -42,7 +42,14 @@ function lerpColor(from: string, to: string, t: number): string {
 
 // How strongly a label brightens as the slider leans toward it. >1 makes a small
 // lean visible while keeping BOTH labels half-lit at dead center (0.5 each).
-const LEAN_GAIN = 1.4;
+const LEAN_GAIN = 2.2;
+
+// Lerp endpoints for the pole labels — deliberately wider than
+// textMuted→accentLight so a committed lean reads at a glance: the losing
+// side falls nearly to the card background, the winning side outshines
+// accentLight itself.
+const POLE_DIM = '#4A4A56';
+const POLE_BRIGHT = '#DDD2FF';
 function poleIntensities(value: number) {
   const lean = value - 0.5; // -0.5 (full left) … +0.5 (full right)
   return {
@@ -83,8 +90,8 @@ function SliderCard({
   // other way, both half-lit at center (fixes the "both grayed out / broken"
   // look when the thumb sits mid-track).
   const intensity = poleIntensities(value);
-  const leftColor = lerpColor(colors.textMuted, colors.accentLight, intensity.left);
-  const rightColor = lerpColor(colors.textMuted, colors.accentLight, intensity.right);
+  const leftColor = lerpColor(POLE_DIM, POLE_BRIGHT, intensity.left);
+  const rightColor = lerpColor(POLE_DIM, POLE_BRIGHT, intensity.right);
 
   function handleGrant(pageX: number) {
     const node = findNodeHandle(trackRef.current);
@@ -111,11 +118,11 @@ function SliderCard({
         <View style={s.poleRow}>
           <View style={s.poleCol}>
             <Text style={[s.poleLabel, { color: leftColor }]}>{leftLabel}</Text>
-            <Text style={s.poleHint}>{leftHint}</Text>
+            <Text style={[s.poleHint, { color: leftColor }]}>{leftHint}</Text>
           </View>
           <View style={[s.poleCol, { alignItems: 'flex-end' }]}>
             <Text style={[s.poleLabel, { color: rightColor }]}>{rightLabel}</Text>
-            <Text style={[s.poleHint, { textAlign: 'right' }]}>{rightHint}</Text>
+            <Text style={[s.poleHint, { textAlign: 'right', color: rightColor }]}>{rightHint}</Text>
           </View>
         </View>
         <View
@@ -179,9 +186,7 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
         >
           What kind of dreams?
         </GradientTitle>
-        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Slide them however feels right.
-        </Text>
+        <Text style={[shared.heroSubtitle, s.heroSub]}>No wrong answers, just vibes</Text>
       </View>
 
       <ScrollView
@@ -226,6 +231,12 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(6),
     paddingBottom: verticalScale(10),
     backgroundColor: colors.background,
+  },
+  // Near-white per the onboarding text cadence (gray reads washed-out on black).
+  heroSub: {
+    textAlign: 'center',
+    color: colors.textPrimary,
+    opacity: 0.92,
   },
 
   // Tightened so all 4 cards fit above the fold without scrolling.

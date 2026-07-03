@@ -40,7 +40,7 @@ export const DEFAULT_MOOD_SLIDERS: MoodSlider[] = [
     description: 'Warm light or creeping shadows.',
     left: 'Cozy',
     right: 'Eerie',
-    leftHint: 'Cozy, friendly, safe',
+    leftHint: 'Warm, friendly, safe',
     rightHint: 'Moody, haunting, uneasy',
   },
   {

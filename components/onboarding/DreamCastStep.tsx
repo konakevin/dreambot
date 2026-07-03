@@ -20,7 +20,7 @@ import { hasAiConsent } from '@/lib/aiConsent';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
-import { colors } from '@/constants/theme';
+import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
@@ -68,7 +68,7 @@ const SLOTS: SlotConfig[] = [
     role: 'self',
     label: 'You',
     icon: 'person',
-    tip: 'Clear face photos work best. Good lighting helps!',
+    tip: 'This is the face that stars in your dreams',
   },
   {
     role: 'plus_one',
@@ -177,14 +177,14 @@ function CastSlot({
             paddingHorizontal: 5,
             paddingVertical: verticalScale(1),
             borderRadius: 5,
-            backgroundColor: 'rgba(96,165,250,0.15)',
+            backgroundColor: MEDIUM_BADGE.face.bg,
           }}
         >
           <Text
             style={{
               fontSize: fontScale(8),
               fontWeight: '700',
-              color: '#60A5FA',
+              color: MEDIUM_BADGE.face.color,
               textTransform: 'uppercase',
               letterSpacing: 0.5,
             }}
@@ -547,6 +547,21 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
   // own scroll surface, header, and Save action.
   const innerSlots = (
     <>
+      {/* Photo guidance gets top billing — a straight-on, well-lit shot is the
+          single biggest lever on face-swap quality, and it applies to both
+          slots (so it lives above the cards, not buried inside one). */}
+      <View style={s.photoTipRow}>
+        {/* The mascot posing for its own passport photo — demonstrates the
+            straight-on framing instead of describing it. */}
+        <Image
+          source={require('@/assets/images/onboarding/mascot-passport.png')}
+          style={s.photoTipImage}
+          contentFit="cover"
+        />
+        <Text style={s.photoTipText}>
+          A straight-on, well-lit photo works best, like a passport photo
+        </Text>
+      </View>
       {SLOTS.map((slot) => (
         <CastSlot
           key={slot.role}
@@ -561,11 +576,22 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       <View style={s.privacyNote}>
         <Ionicons name="lock-closed" size={13} color={colors.textSecondary} />
         <Text style={s.privacyNoteText}>
-          Your photo is sent to our AI providers only to place your likeness into your dreams, never
-          to train their models. It&apos;s never displayed publicly, and your dreams are 100%
-          private unless you choose to share them.
+          Your photo is used only to place you in your dreams, never to train AI models or shown
+          publicly. Dreams stay private unless you share them.
         </Text>
       </View>
+      {/* Gentle heads-up, only while the "You" slot is empty (onboarding only) —
+          without a self photo every dream renders scene-only. Reassure + warn,
+          never nag: it disappears the moment they upload. */}
+      {!embedded && !settingsCopy && !getMember('self') && (
+        <View style={s.nudgeRow}>
+          <Ionicons name="image-outline" size={14} color={colors.accentLight} />
+          <Text style={s.nudgeText}>
+            Without a photo, your dreams still arrive every night as beautiful scenes, you just
+            won’t be in them
+          </Text>
+        </View>
+      )}
     </>
   );
 
@@ -584,13 +610,20 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           lineHeight={30}
           style={{ marginBottom: verticalScale(6) }}
         >
-          {settingsCopy ? 'Your dream cast' : "Who's coming along?"}
+          {settingsCopy ? 'Your Dream Cast' : "Who's coming along?"}
         </GradientTitle>
-        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
+        <Text style={[shared.heroSubtitle, s.heroBody]}>
           {settingsCopy
             ? 'Update the faces that star in your nightly dreams. Swap your photo or your +1 anytime.'
-            : 'Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream together — optional, but it’s the fun part.'}
+            : 'Add your face and you’ll star in your own nightly dreams. Bring a +1 and you’ll dream together.'}
         </Text>
+        {/* The playful aside gets the accent treatment (echoes the info-screen
+            footnote cadence) instead of hiding inside the gray paragraph. Also
+            the ONE place onboarding names the feature — "Dream Cast" is used
+            cold in the Create tutorial + Settings, so it must be taught here. */}
+        {!settingsCopy && (
+          <Text style={s.funPart}>Your Dream Cast: optional, but it’s the fun part</Text>
+        )}
         <View style={{ height: verticalScale(16) }} />
         {innerSlots}
       </ScrollView>
@@ -615,6 +648,24 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
 const s = StyleSheet.create({
   // paddingBottom was 100 (absolute footer reservation); now in-flow → 16.
   scroll: { paddingHorizontal: 20, paddingTop: verticalScale(8), paddingBottom: verticalScale(16) },
+  // Near-white body per the onboarding text cadence — secondary gray reads
+  // washed-out on the pure-black canvas (gray is reserved for true captions
+  // like the privacy note below).
+  heroBody: {
+    color: colors.textPrimary,
+    opacity: 0.92,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
+    textAlign: 'center',
+    marginTop: verticalScale(4),
+  },
+  funPart: {
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: verticalScale(10),
+  },
   encourageText: {
     color: colors.textPrimary,
     fontSize: fontScale(14),
@@ -622,6 +673,47 @@ const s = StyleSheet.create({
     marginTop: verticalScale(10),
     marginBottom: verticalScale(16),
     lineHeight: fontScale(20),
+  },
+  // Contained pill (subtle accent tint) so the tip reads as its own element
+  // instead of bleeding into the hero text above. The mascot's passport
+  // photo sits where an icon would — it demonstrates the framing.
+  photoTipRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    gap: 10,
+    backgroundColor: 'rgba(167,139,250,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.25)',
+    borderRadius: 12,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: 10,
+    marginBottom: verticalScale(14),
+  },
+  photoTipImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+  },
+  photoTipText: {
+    flexShrink: 1,
+    color: colors.textPrimary,
+    opacity: 0.92,
+    fontSize: fontScale(13),
+    fontWeight: '600',
+  },
+  nudgeRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+    marginBottom: verticalScale(12),
+  },
+  nudgeText: {
+    flex: 1,
+    color: colors.textPrimary,
+    opacity: 0.9,
+    fontSize: fontScale(13),
+    lineHeight: fontScale(18),
   },
   privacyNote: {
     flexDirection: 'row',

@@ -18,22 +18,30 @@ import type { InfoStepConfig } from '@/components/onboarding/InfoStep';
 export const NIGHTLY_INFO: InfoStepConfig = {
   eyebrow: 'the nightly thing',
   customMascot: require('@/assets/images/onboarding/mascot-nightly.png'),
-  headline: 'DreamBot dreams while you sleep',
-  body: 'Every night you’ll wake up to a little custom postcard from one of your favorite places, painted in the mood you set. The next few steps tell DreamBot what to dream about.',
+  // \n forces a balanced two-line break — the natural wrap strands "sleep"
+  // alone on line two.
+  headline: 'DreamBot dreams\nwhile you sleep',
+  body: 'Every night, DreamBot dreams for you. Your favorite places get woven in, and some nights it whisks you somewhere wonderfully unexpected.',
+  // The "up next" transition lives in the footnote slot so it reads as its
+  // own quiet line under the paragraph instead of bulking up the body.
+  footnote: 'Up next: teach it what to dream about',
 };
 
 export const CAST_INFO: InfoStepConfig = {
   eyebrow: 'the fun part',
   customMascot: require('@/assets/images/onboarding/mascot-cast.png'),
-  headline: 'Want to be in the dream postcards?',
-  body: 'Add a photo of yourself, and your favorite person if you want company. Most nights you’ll find yourselves painted right into the dream. A quiet little surprise waiting in the morning, no prompting needed.',
+  // \n forces a balanced break — the natural wrap strands "postcards?" alone.
+  headline: 'Want to be in the\ndream postcards?',
+  body: 'Most nights you’ll find yourself painted right into the dream. A quiet little surprise waiting in the morning, no prompting needed.',
+  footnote: 'Up next: cast yourself and a favorite person in your dreams',
 };
 
 export const MOOD_INFO: InfoStepConfig = {
   eyebrow: 'the vibe knob',
   customMascot: require('@/assets/images/onboarding/mascot-mood.png'),
   headline: 'Now set the mood',
-  body: 'Tell DreamBot how you want your dreams to feel. Peaceful or chaotic, minimal or maximal, real or surreal. It’ll match every night.',
+  body: 'Tell DreamBot how you want your dreams to feel. Peaceful or chaotic, minimal or maximal, real or surreal. It all shapes what DreamBot dreams up for you.',
+  footnote: 'Up next: a few sliders to dial in your vibe',
 };
 
 // CreateIntroSheet (the one-time sheet on the Create tab) reads this
@@ -43,26 +51,28 @@ export const CREATE_INFO: InfoStepConfig = {
   eyebrow: 'how create works',
   headline: 'A full AI image studio',
   body: 'Enter your prompt, pick an AI model, and tap Dream. There are four ways to create:',
+  // Filled icon variants (not -outline) — the outline glyphs carry so little
+  // ink at 20px that the accent tint reads as disabled-gray.
   subFeatures: [
     {
-      icon: 'sparkles-outline',
+      icon: 'sparkles',
       title: 'DreamBot mode',
-      body: 'Supports personalized renders using your Dream Cast photos. Just mention yourself (“me,” “I”…) or your +1 (“my partner,” “my friend”…) and we’ll cast them in. Plus custom mediums and vibes for epic dreams.',
+      body: 'Mention yourself (“me”) or your +1 (“my partner”) and your Dream Cast is painted right into the dream. Add mediums and vibes to shape the look.',
     },
     {
-      icon: 'flash-outline',
+      icon: 'flash',
       title: 'Direct mode',
-      body: 'Sends your prompt directly to your AI model of choice. No personalization, medium, or vibe applied.',
+      body: 'Sends your prompt straight to the model you pick. No personalization, medium, or vibe.',
     },
     {
-      icon: 'color-palette-outline',
+      icon: 'color-palette',
       title: 'Restyle a photo',
-      body: 'Upload a photo, pick a look, and transform your photo into a work of art.',
+      body: 'Upload a photo, pick a look, and turn it into a work of art.',
     },
     {
-      icon: 'people-outline',
+      icon: 'people',
       title: 'Cast any photo',
-      body: 'Upload any reference photo to cast someone new in a dream. Uploaded photo dreams do not support dream cast references.',
+      body: 'Upload a photo of anyone to cast them in a dream. These use the uploaded photo instead of your Dream Cast.',
     },
   ],
 };

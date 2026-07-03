@@ -164,7 +164,7 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
         </Text>
 
         <Text style={s.reassure}>
-          You can change your places, cast, and vibe anytime from your profile.
+          You can change your places, cast, and vibe anytime from your profile
         </Text>
       </ScrollView>
 
@@ -194,8 +194,11 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
     textAlign: 'center',
   },
+  // Mirrors the InfoStep text cadence (purple eyebrow / gradient headline /
+  // near-white body / accent footnote) so this reads as part of the same set.
   body: {
-    color: colors.textSecondary,
+    color: colors.textPrimary,
+    opacity: 0.92,
     fontSize: fontScale(16),
     lineHeight: fontScale(24),
     textAlign: 'center',
@@ -203,8 +206,9 @@ const s = StyleSheet.create({
     maxWidth: 360,
   },
   reassure: {
-    color: colors.textSecondary,
+    color: colors.accentLight,
     fontSize: fontScale(13),
+    fontWeight: '600',
     lineHeight: fontScale(19),
     textAlign: 'center',
     marginTop: verticalScale(16),

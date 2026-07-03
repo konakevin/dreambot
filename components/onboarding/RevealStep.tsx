@@ -425,7 +425,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage subtext="This can take a moment. Hang tight while we dream up something special for you!" />
+        <MagicalLoadingStage subtext="First dreams take a minute or two to paint" />
       </View>
     );
   }
@@ -524,7 +524,9 @@ export function RevealStep({ onBack, isActive = false }: Props) {
                   right: 0,
                   paddingBottom: overlayBottom,
                   paddingHorizontal: 24,
-                  paddingTop: verticalScale(60),
+                  // Keep the scrim tight to the content — it dims the dream
+                  // reveal, so every extra point of height costs showcase.
+                  paddingTop: verticalScale(20),
                   backgroundColor: 'transparent',
                 }}
               >
@@ -545,8 +547,12 @@ export function RevealStep({ onBack, isActive = false }: Props) {
                   >
                     Your first dream
                   </GradientTitle>
+                  {/* The moon glyph matches the profile Dreams tab icon so the
+                      association sticks when they go looking for the album. */}
                   <Text style={s.revealBody}>
-                    All dreams are saved to your Dreams album privately by default
+                    All dreams are saved to your Dreams{' '}
+                    <Ionicons name="moon" size={fontScale(13)} color="rgba(255,255,255,0.72)" />{' '}
+                    album privately by default
                   </Text>
                   <GradientButton
                     label="Post to my feed"

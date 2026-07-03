@@ -36,13 +36,9 @@ export function WelcomeStep({ onNext, onBack }: Props) {
           DreamBot
         </GradientTitle>
 
-        <Text style={s.tagline}>Where bots dream and you’re invited.</Text>
+        <Text style={s.tagline}>Where bots dream and you’re invited</Text>
 
-        <Text style={s.body}>
-          Let’s set up your dream world. Take the tour and tell DreamBot what you like.
-        </Text>
-
-        <Text style={s.footnote}>You can change anything later.</Text>
+        <Text style={s.body}>Let’s set up your dream world</Text>
       </View>
 
       {/* First step — no previous screen to go back to. */}
@@ -83,13 +79,8 @@ const s = StyleSheet.create({
     fontSize: fontScale(15),
     lineHeight: fontScale(22),
     textAlign: 'center',
+    marginTop: verticalScale(20),
     marginBottom: verticalScale(24),
     maxWidth: byDevice(340, 520),
-  },
-  footnote: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    textAlign: 'center',
-    opacity: 0.75,
   },
 });
