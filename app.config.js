@@ -140,6 +140,10 @@ module.exports = {
       // org/project at build time) symbolicated source-map upload. Runtime
       // capture is no-op until EXPO_PUBLIC_SENTRY_DSN is set (see lib/sentry.ts).
       '@sentry/react-native',
+      // Bake SENTRY_DISABLE_AUTO_UPLOAD=true into ios/.xcode.env on every
+      // prebuild — Xcode GUI builds don't inherit shell env, and hand-edits to
+      // .xcode.env.local are wiped by `--clean`. See the plugin header.
+      './plugins/withSentryNoLocalUpload',
       // expo-localization — required peer dep of posthog-react-native (device
       // locale for analytics context). See lib/posthog.ts.
       'expo-localization',
