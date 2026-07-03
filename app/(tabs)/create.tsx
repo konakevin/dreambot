@@ -20,7 +20,8 @@ import {
   Platform,
   Modal,
   Linking,
-  InteractionManager,
+  LayoutAnimation,
+  type KeyboardEvent,
 } from 'react-native';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -102,16 +103,36 @@ export default function CreateScreen() {
   // into a one-line summary while typing (so the selected medium/vibe stay
   // visible and the Dream CTA is one tap away). Core RN Keyboard listeners
   // (not the keyboard-controller reanimated hook, which crashes if it can't
-  // bind — see feedback_render_crashes_uncovered_prefer_core_apis). Deferred
-  // to after the keyboard animation so the layout swap doesn't jump.
+  // bind — see feedback_render_crashes_uncovered_prefer_core_apis).
+  //
+  // iOS listens to keyboardWILLShow/Hide — they fire at animation START and
+  // carry the keyboard's duration, which we hand to LayoutAnimation so the
+  // collapse/expand slides in lockstep with the keyboard. The old
+  // keyboardDidShow + runAfterInteractions pair waited for the keyboard to
+  // fully land, then hard-swapped the layout — the "keyboard settles, then
+  // the controls pop a beat later" jank (Kevin 2026-07-03). Android has no
+  // will* events, so it keeps did* (and still gets the animated swap).
   const [kbOpen, setKbOpen] = useState(false);
   useEffect(() => {
-    const s1 = Keyboard.addListener('keyboardDidShow', () =>
-      InteractionManager.runAfterInteractions(() => setKbOpen(true))
-    );
-    const s2 = Keyboard.addListener('keyboardDidHide', () =>
-      InteractionManager.runAfterInteractions(() => setKbOpen(false))
-    );
+    const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const onToggle = (open: boolean) => (e: KeyboardEvent) => {
+      LayoutAnimation.configureNext({
+        duration: e?.duration && e.duration > 0 ? e.duration : 250,
+        update: { type: LayoutAnimation.Types.keyboard },
+        create: {
+          type: LayoutAnimation.Types.keyboard,
+          property: LayoutAnimation.Properties.opacity,
+        },
+        delete: {
+          type: LayoutAnimation.Types.keyboard,
+          property: LayoutAnimation.Properties.opacity,
+        },
+      });
+      setKbOpen(open);
+    };
+    const s1 = Keyboard.addListener(showEvt, onToggle(true));
+    const s2 = Keyboard.addListener(hideEvt, onToggle(false));
     return () => {
       s1.remove();
       s2.remove();
