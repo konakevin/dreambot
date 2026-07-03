@@ -26,6 +26,10 @@ module.exports = function withSentryNoLocalUpload(config) {
   return withDangerousMod(config, [
     'ios',
     (cfg) => {
+      // LOCAL builds only. EAS cloud builds (EAS_BUILD=true) carry the real
+      // Sentry org/token as env secrets and MUST keep uploading source maps
+      // (RELEASE.md gotcha: prod App Store builds symbolicate via this).
+      if (process.env.EAS_BUILD === 'true') return cfg;
       const xcodeEnv = path.join(cfg.modRequest.platformProjectRoot, '.xcode.env');
       let contents = fs.existsSync(xcodeEnv) ? fs.readFileSync(xcodeEnv, 'utf8') : '';
       if (!contents.includes('SENTRY_DISABLE_AUTO_UPLOAD')) {
