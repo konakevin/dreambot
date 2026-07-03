@@ -376,6 +376,10 @@ module.exports = {
   // },
 
   // Inverts old excludeVibes (minimal/dark).
+  // 2026-07-03 — 'surreal' removed bot-wide (here + every vibesByPath list)
+  // after Kevin flagged a dragon-lore hoard render: the vibe's "impossible
+  // color-pairings, arcane hallucinatory shifts" palette overrides the
+  // path's intended register. Don't re-add without his word.
   vibes: [
     'cinematic',
     'dark',
@@ -392,7 +396,6 @@ module.exports = {
     'nightshade',
     'macabre',
     'shimmer',
-    'surreal',
   ],
 
   // Per-path vibe overrides — scene-only paths exclude `macabre`
@@ -415,7 +418,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'fantasy-scene': [
       'cinematic',
@@ -432,7 +434,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'epic-moment': [
       'cinematic',
@@ -449,7 +450,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     castle: [
       'cinematic',
@@ -461,7 +461,6 @@ module.exports = {
       'ethereal',
       'enchanted',
       'shimmer',
-      'surreal',
       'nightshade',
       'cozy',
     ],
@@ -480,7 +479,6 @@ module.exports = {
       'ancient',
       'enchanted',
       'shimmer',
-      'surreal',
     ],
     'arcane-halls': [
       'cinematic',
@@ -497,7 +495,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'arcane-spaces': [
       'cinematic',
@@ -514,7 +511,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'dark-realm': [
       'cinematic',
@@ -531,7 +527,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'dragon-lore': [
       'cinematic',
@@ -548,7 +543,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
     'iconic-landscape': [
       'cinematic',
@@ -565,7 +559,6 @@ module.exports = {
       'voltage',
       'nightshade',
       'shimmer',
-      'surreal',
     ],
   },
 
