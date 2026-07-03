@@ -28,6 +28,9 @@ import { resetAiConsent } from '@/lib/aiConsent';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
+import { LinearGradient } from 'expo-linear-gradient';
+import { BRAND_GRADIENT } from '@/components/GradientTitle';
+import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
 function SettingsRow({
@@ -82,6 +85,7 @@ export default function SettingsScreen() {
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
   const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
+  const { data: sparkleBalance } = useSparkleBalance();
 
   // Which auth providers back this account. OAuth-only users (Google/Apple/
   // Facebook) have no email/password identity — "Change password" is
@@ -483,41 +487,57 @@ export default function SettingsScreen() {
           </View>
         )}
 
-        {/* Premium — surfaced at the TOP as a highlighted card so the upgrade +
-            sparkle store are the first thing a user sees. Sell line for
-            non-payers; calmer "Manage plan" for paid. (Replaces the old plain
-            PREMIUM section that used to sit below Privacy.) */}
-        <View style={styles.premiumCard}>
-          {!isPaidPro && !isBasic && (
-            <View style={styles.premiumHeader}>
-              <Text style={styles.premiumTitle}>
-                {isPro ? "You're on the free trial" : 'Go Premium'}
-              </Text>
-              <Text style={styles.premiumSub}>
-                {isPro && proTrialEndsAt
-                  ? `${trialDaysLeftLabel(proTrialEndsAt)} on your free trial`
-                  : 'Nightly dreams, more sparkles, and HD downloads'}
-              </Text>
-            </View>
-          )}
-          <SettingsRow
-            icon="diamond"
-            label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
-            trailing={
-              isPaidPro ? (
-                <Text style={styles.trailingSummary}>Pro</Text>
-              ) : isBasic ? (
-                <Text style={styles.trailingSummary}>Basic</Text>
-              ) : null
-            }
-            onPress={() => nav.push('/subscribe')}
-          />
-          <SettingsRow
-            icon="sparkles"
-            label="Get Sparkles"
-            onPress={() => nav.push('/sparkleStore')}
-          />
-        </View>
+        {/* Store — surfaced at the TOP as the one brand-gradient moment in
+            Settings (this is how the app makes money). Gradient hairline
+            border + STORE eyebrow + live sparkle balance on the shop row.
+            Sell line for non-payers; calmer "Manage plan" for paid. */}
+        <Text style={[styles.sectionHeader, styles.storeHeader]}>STORE</Text>
+        <LinearGradient
+          colors={BRAND_GRADIENT}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.storeCardBorder}
+        >
+          <View style={styles.premiumCard}>
+            {!isPaidPro && !isBasic && (
+              <View style={styles.premiumHeader}>
+                <Text style={styles.premiumTitle}>
+                  {isPro ? "You're on the free trial" : 'Go Premium'}
+                </Text>
+                <Text style={styles.premiumSub}>
+                  {isPro && proTrialEndsAt
+                    ? `${trialDaysLeftLabel(proTrialEndsAt)} on your free trial`
+                    : 'Nightly dreams, more sparkles, and HD downloads'}
+                </Text>
+              </View>
+            )}
+            <SettingsRow
+              icon="diamond"
+              label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
+              trailing={
+                isPaidPro ? (
+                  <Text style={styles.trailingSummary}>Pro</Text>
+                ) : isBasic ? (
+                  <Text style={styles.trailingSummary}>Basic</Text>
+                ) : null
+              }
+              onPress={() => nav.push('/subscribe')}
+            />
+            <SettingsRow
+              icon="sparkles"
+              label="Sparkle Shop"
+              trailing={
+                sparkleBalance !== undefined ? (
+                  <View style={styles.balanceChip}>
+                    <Ionicons name="sparkles" size={12} color={colors.accentLight} />
+                    <Text style={styles.balanceChipText}>{sparkleBalance.toLocaleString()}</Text>
+                  </View>
+                ) : null
+              }
+              onPress={() => nav.push('/sparkleStore')}
+            />
+          </View>
+        </LinearGradient>
 
         {/* Avatar + "Change photo" moved to the Profile screen (under the
             avatar) — it doesn't belong in Settings. Edit Profile is the
@@ -835,16 +855,27 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
     marginBottom: verticalScale(24),
   },
-  // Premium upgrade card — accent-tinted + rounded so it stands out from the
-  // plain full-bleed sections. Sits at the top of Settings. Inner SettingsRows
-  // render full-bleed and clip to the radius via overflow:hidden.
-  premiumCard: {
+  // STORE eyebrow — accent-tinted variant of the plain section headers so the
+  // revenue section reads as a highlight, not another gray settings group.
+  storeHeader: {
+    color: colors.accentLight,
+    letterSpacing: 2,
+  },
+  // Brand-gradient hairline border: the LinearGradient wrapper shows through
+  // a 1px padding ring around the solid inner card.
+  storeCardBorder: {
     marginHorizontal: 16,
     marginBottom: verticalScale(24),
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.5)',
-    backgroundColor: 'rgba(167,139,250,0.06)',
+    padding: 1,
+  },
+  // Premium upgrade card — solid near-black w/ faint purple tint (must be
+  // OPAQUE: it sits on the gradient border wrapper, and any translucency
+  // would bleed the gradient through the card face). Inner SettingsRows
+  // render full-bleed and clip to the radius via overflow:hidden.
+  premiumCard: {
+    borderRadius: 13,
+    backgroundColor: '#0B0812',
     overflow: 'hidden',
   },
   premiumHeader: {
@@ -880,6 +911,21 @@ const styles = StyleSheet.create({
   },
   destructiveText: { color: colors.textPrimary },
   trailingSummary: { color: colors.textSecondary, fontSize: fontScale(13), maxWidth: 160 },
+  // Live sparkle balance on the Sparkle Shop row — wallet treatment.
+  balanceChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: verticalScale(3),
+    borderRadius: 10,
+    backgroundColor: 'rgba(167,139,250,0.15)',
+  },
+  balanceChipText: {
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    fontWeight: '700',
+  },
   rowTrailing: {
     flexDirection: 'row',
     alignItems: 'center',
