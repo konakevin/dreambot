@@ -723,97 +723,80 @@ DRAMATIC VISUALS: render the EXACT slot-pool details above. Beautiful but MENACI
 Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
-  DRAGONBOT_DRAGON_LORE: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, scene, architecture, surprise_element, sky_layer, phenomenon } =
-      slots;
+  DRAGONBOT_DRAGON_LORE: ({ slots, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      relic,
+      setting,
+      reclamation,
+      human_trace,
+      sky_layer,
+      palette,
+      phenomenon,
+    } = slots;
 
     const phenomenonSection = phenomenon
       ? `
-━━━ ATMOSPHERIC PHENOMENON — render this visibly in the scene ━━━
+━━━ ATMOSPHERIC PHENOMENON — one quiet visible accent ━━━
 ${phenomenon}
 
-A magical / atmospheric event woven into the lore-scene — render as a visible focal point. Amplifies the "ancient mystery" mood.
+A single atmospheric event supporting the relic's mood. It NEVER competes with the relic for attention.
 
 `
       : '';
 
-    return `You are an archaeological-fantasy concept-art painter writing DRAGON LORE scenes for DragonBot — ancient evidence of dragons. Massive skeletal remains, weathered murals depicting dragon wars, abandoned lairs with scattered treasure, fossilized eggs, ruined temples built to worship dragons, crumbling dragon-rider outposts. The dragons are GONE but their presence echoes everywhere. STRICT WESTERN HIGH FANTASY — LOTR / GoT / Skyrim / Witcher / Warcraft / D&D / Elden Ring visual lineage.
+    return `You are an archaeological-fantasy concept-art painter writing DRAGON RELIC scenes for DragonBot — the colossal remains and ruins a vanished race of dragons left behind. STRICT WESTERN HIGH FANTASY — LOTR / GoT / Skyrim / Elden Ring visual lineage. The dragons are GONE — no living dragon appears; this is the aftermath, and their scale remains.
 
-━━━ THE MOOD — NON-NEGOTIABLE ━━━
-WONDER + MELANCHOLY + REVERENCE + LOST GRANDEUR. The viewer should feel: "something immense lived here once". Not a battle. Not living dragons. ABSENCE made visible. Mystery. The weight of forgotten civilizations.
+━━━ THE RELIC IS THE HERO — ABSOLUTE FIRST RULE ━━━
+Every render is built around ONE colossal piece of dragon evidence with an instantly-readable silhouette, owning 40-70% of the frame. A viewer at thumbnail size should read the relic's shape in half a second. Everything else exists to SUPPORT the relic: the setting seats it, the light dignifies it, the sky frames it. One hero. Never a collage.
 
-━━━ THE SCALE OF ABSENCE — NON-NEGOTIABLE ━━━
-Massive dragon bones dwarf any human element. Ancient murals stretch across cathedral walls. Abandoned hoards gather dust in cavernous lairs. Skeletons the size of mountains. Eggs the size of carriages. Everything whispers: something immense lived here once.
+━━━ THE RELIC ━━━
+${relic}
 
-━━━ MOVIE POSTER MANDATE — STACK THE ELEMENTS ━━━
-Every render MUST be a MOVIE POSTER PROMOTIONAL FRAME — every quadrant has something striking. Stack 3+ visually-arresting elements simultaneously:
+━━━ WHERE IT RESTS ━━━
+${setting}
 
-  1. **PRIMARY LORE-SCENE** — the dragon-evidence at MAXIMUM scale (skeleton stretching the entire frame / mural the size of a cathedral wall / hoard knee-deep across a vast vault / egg the size of a carriage)
-  2. **ARCHITECTURE ANCHOR** — dragon-temple / aerie / bone-cathedral positioned to dwarf any human, scale-proven against the dragon-evidence
-  3. **DRAGON-HABITAT PHENOMENON** — the never-before-seen habitat feature dominating its quadrant (petrified-fire glass forest / crystallized-tear salt-flat / glass-tree grove / ash-snow / blood-geyser field / prism-canyon / bone-coral reef / time-paused rainstorm / phosphorescent blood-veins / etc.). THE HABITAT IS THE DRAMA — unique evidence of dragon-presence transforming the world.
-  4. **SCALE PROVER** — tiny scholar/explorer figure (5-15% of frame) OR wildlife OR abandoned artifact making the impossible scale feel earned
+The setting is a stage, not a rival — it gives the relic geography and depth, and the relic dominates it.
 
-The frame should be a movie-poster establishing shot — Peter-Jackson-LOTR-extended-cut, but tilted toward DRAGON-TOUCHED-WORLD impossibility. The world bears the dragon's mark in ways no other world could.
+━━━ RECLAIMED BY TIME — ancient, never rundown ━━━
+${reclamation}
 
-━━━ TILT TOWARD DRAGON-CODED EVERYWHERE ━━━
-Every quadrant should signal "dragon was here": claw-marks in stone / scale-fossils underfoot / bone-coral structures / petrified-flame-residue / glass-fused trees / dragon-rune carvings / dragon-silhouette echoes in the cliff-shapes. The world IS dragon-history made visible.
+Centuries have claimed the relic BEAUTIFULLY. Weathered, overgrown, softened — and still magnificent. Serene decay, never squalor, never debris-strewn dereliction.
 
-━━━ TINY FIGURES PERMITTED (and encouraged as scale provers) ━━━
-UNLIKE the pure-landscape path, dragon-lore PERMITS tiny human figures — scholars, explorers, archaeologists, awe-struck pilgrims, lone-wanderer-finding-a-relic. They are AWED, REVERENT, INVESTIGATING — never combat, never action. Their purpose is SCALE-PROVING and MOOD-SETTING. Render them as TINY silhouettes at midground or deep midground — 5-15% of frame height max, never the focus. The eye lands on the LORE, not on them.
+━━━ HUMAN TRACE — tiny, reverent ━━━
+${human_trace}
 
-━━━ STRICT WESTERN HIGH FANTASY ━━━
-🚫 NO sci-fi / cosmic / nebulas / floating islands / sky-tears / orbital structures / sky-whales / Hubble-deep-field skies
-🚫 NO real-world ethnic codes (no pagoda-coded temples / no Egyptian-coded pyramids — use fantasy-canon analogues like dwarven holds / Mordor-coded ruins / Carian academies)
-🚫 NO modern / industrial architecture (no lighthouses / windmills / clocktowers / steel structures)
-🚫 NO living dragons in the frame — that's dragon-scene. THIS is the AFTERMATH, the RUIN, the ECHO.
-✓ Ancient dragon-skeletons / weathered murals / abandoned hoards / fossilized eggs / ruined dragon-temples / crumbling dragon-rider outposts / cracked dragon-eggshells / mummified dragon-wings / petrified-dragon-stone / runic dragon-tomb-markers
-
-━━━ THE DRAGON LORE SCENE ━━━
-${scene}
-
-━━━ ARCHITECTURAL CONTEXT ━━━
-${architecture}
-
-The architecture is fantasy-canon: cathedral-dragon-temple / cliff-cut-roost / underground-vault / mural-hall / colonnade-of-bones / standing-stones-shrine / sky-spire-aerie / mountain-tomb. Built TO or FOR dragons — scale shows it.
+Rendered TINY (5-12% of frame height), at midground, awed and reverent. Never combat, never the focus. Their smallness IS the relic's scale.
 
 ━━━ SKY OVERHEAD ━━━
 ${sky_layer}
 ${phenomenonSection}
-━━━ SURPRISE ELEMENT — secondary subject adding story ━━━
-${surprise_element}
-
-Place at midground or deep midground — a small detail implying the wider mystery. Tiny scholar figure / wildlife / abandoned artifact / scattered relic / weathered banner. NEVER eclipses the lore-scene.
-
 ━━━ LIGHTING ━━━
 ${lighting}
 
 ━━━ ATMOSPHERIC DETAIL ━━━
 ${atmosphere}
 
-━━━ SCENE-WIDE COLOR PALETTE ━━━
-${sharedDNA.scenePalette}
-
-━━━ SECONDARY LIGHTING VIBE ━━━
-${sharedDNA.colorPalette}
+━━━ COLOR PALETTE — colors only, not scene content ━━━
+${palette}
 
 ━━━ MOOD CONTEXT ━━━
-${vibeDirective.slice(0, 250)}
+WONDER + MELANCHOLY + REVERENCE. The viewer should feel: "something immense lived here once."
+${vibeDirective.slice(0, 200)}
 
 ━━━ COMPOSITION ━━━
-MULTI-TIER DEPTH MANDATORY:
-• FOREGROUND: tactile evidence — fragments of bone / fallen rune-stones / cracked egg-shell / scattered gold-coins-in-dust / vine-claimed claw-marks-in-stone
-• MIDGROUND: the main lore-element — the dragon-skeleton / the mural-wall / the abandoned-hoard / the temple-interior / the dragon-rider-monument
-• DEEP DISTANCE: atmospheric layer or supporting context — distant peaks / vault-ceiling fading into darkness / mountain-valley containing the ruin
-• SKY: dramatic overhead element — god-rays through broken roof / aurora through ruined dome / storm-light through colonnade
-
-Multi-element stacking: scene + architecture + atmospheric phenomenon (80% gated) + tiny figure scale-prover all in frame. Movie-poster intensity.
+• The relic's full silhouette reads clearly against sky or setting — never cropped into abstraction, never buried in clutter
+• FOREGROUND: one quiet tactile detail at most (grass, water, stones) leading the eye to the relic
+• MIDGROUND: the relic, dominant
+• DEEP DISTANCE: the setting's atmospheric layer giving scale and air
 
 ━━━ STRUCTURE — write the prompt in this order ━━━
-[OPENING: "[lore-scene description]" — scene leads], [the architectural context anchoring it], [the sky overhead], [phenomenon if rolled], [surprise element / tiny figure at midground], [lighting and atmospheric detail], [color palette and mood]
+[OPENING: the relic itself — the colossal remains lead], [where it rests], [how time has reclaimed it], [the tiny human trace], [sky, lighting, atmosphere], [color palette]
 
-DRAMATIC VISUALS: render the EXACT slot-pool details above. The dragons are GONE — show their absence at impossible scale.
+Render the EXACT slot details above. One colossal relic, beautifully reclaimed, tiny reverent witnesses.
 
-Output ONLY the raw 100-140 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
 
   ARCANE_SPACES: ({ slots, sharedDNA, vibeDirective }) => {

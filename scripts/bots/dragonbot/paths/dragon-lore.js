@@ -1,32 +1,36 @@
 /**
- * DragonBot dragon-lore path — archaeological-fantasy evidence of dragons.
+ * DragonBot dragon-lore path — colossal dragon RELICS & RUINS.
  *
- * Migrated 2026-05-14 from legacy function-based slot-pool form to
- * declarative 5-axis bespoke system. The dragons are GONE — their
- * presence echoes everywhere. Mood: WONDER + MELANCHOLY + REVERENCE +
- * LOST GRANDEUR. UNLIKE landscape path, tiny figures (scholars /
- * explorers / archaeologists / pilgrims) ARE permitted as scale-provers
- * and mood-setters.
+ * 2026-07-03 HERO-RELIC overhaul (Kevin). The 2026-05-14 form stacked a
+ * movie-poster mandate + 80% phenomenon + maximal scene seeds into busy
+ * kitchen-sink frames. Now: ONE colossal piece of dragon evidence is the
+ * unmistakable hero of every render, beautifully reclaimed by time. The
+ * dragons are GONE — their scale remains.
  *
- * 5 path-bespoke pools (mirror of landscape's pattern):
- *   - scene: DRAGON_LORE_SCENE (the lore beat — skeleton / mural /
- *     hoard / egg / temple / outpost)
- *   - architecture: DRAGON_LORE_ARCHITECTURE (dragon-themed structure)
- *   - phenomenon: DRAGON_LORE_PHENOMENON (80% gated atmospheric event)
- *   - surprise_element: DRAGON_LORE_SURPRISE_ELEMENT (tiny figure or
- *     wildlife or abandoned artifact)
- *   - sky_layer: DRAGON_LORE_SKY (overhead atmospheric element)
+ * 6 path-bespoke pools:
+ *   - relic: DRAGON_LORE_RELIC (the money axis — the colossal relic/ruin)
+ *   - setting: DRAGON_LORE_SETTING (the biome it rests in)
+ *   - reclamation: DRAGON_LORE_RECLAMATION (how time claimed it —
+ *     ancient + beautiful, never rundown)
+ *   - human_trace: DRAGON_LORE_HUMAN_TRACE (tiny reverent scale-prover)
+ *   - sky_layer: DRAGON_LORE_SKY (kept from the original form)
+ *   - palette: DRAGON_LORE_PALETTE (COLOR-ONLY — replaces the bot-wide
+ *     scene_palettes shared-DNA slot, whose entries carry scene nouns
+ *     that injected a second scene into every roll)
  *
- * Plus universal lighting + atmosphere from bot defaults.
+ * Plus universal lighting + atmosphere, and the original phenomenon pool
+ * on a lowered 40% gate.
  */
 
 module.exports = {
   archetype: 'DRAGONBOT_DRAGON_LORE',
   pools: {
-    scene: 'DRAGON_LORE_SCENE',
-    architecture: 'DRAGON_LORE_ARCHITECTURE',
-    phenomenon: 'DRAGON_LORE_PHENOMENON',
-    surprise_element: 'DRAGON_LORE_SURPRISE_ELEMENT',
+    relic: 'DRAGON_LORE_RELIC',
+    setting: 'DRAGON_LORE_SETTING',
+    reclamation: 'DRAGON_LORE_RECLAMATION',
+    human_trace: 'DRAGON_LORE_HUMAN_TRACE',
     sky_layer: 'DRAGON_LORE_SKY',
+    palette: 'DRAGON_LORE_PALETTE',
+    phenomenon: 'DRAGON_LORE_PHENOMENON',
   },
 };

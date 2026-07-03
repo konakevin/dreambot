@@ -641,6 +641,9 @@ module.exports = {
     // NEW 2026-06-10 paths skip chaos during MVP validation (protect the
     // dragon+rider / subject composition from distortion while we test).
     skipPaths: [
+      // 2026-07-03 hero-relic overhaul — protect the single-hero composition
+      // while the new recipe is validated.
+      'dragon-lore',
       'dragon-rider',
       'dragon-hoard',
       'dragon-battle',

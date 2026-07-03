@@ -60,6 +60,83 @@ if (!POOL) {
 // touchpoints Sonnet should draw from. Same format the playbook uses.
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // DRAGON-LORE HERO-RELIC OVERHAUL (2026-07-03). One colossal
+  // dragon relic/ruin as the unmistakable hero per render,
+  // beautifully reclaimed by time. Kevin rejected the stacked
+  // movie-poster form as busy kitchen-sink.
+  // ════════════════════════════════════════════════════════
+
+  dragon_lore_relic: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LORE RELIC — the ONE colossal piece of dragon evidence that is the HERO of the render. Each entry 25-40 words: the relic + its impossible scale (proven against landscape features) + one distinctive morphological detail. The dragons are GONE — remains and ruins only, never a living dragon. STRICT WESTERN HIGH FANTASY (LOTR / GoT / Skyrim / Elden Ring lineage).
+
+VARIETY MANDATE — ~22 distinct relic families, roughly even coverage: a colossal horned SKULL half-buried at an angle; a RIBCAGE arching like a cathedral nave; a complete curled SKELETON draped over a hillside; a SPINE running exposed through cliff strata; a single WING'S bone-fingers and petrified membrane standing like a sail; a severed TALON bigger than a house; a BONE BRIDGE where a skeleton spans a gorge; a fossilized EGG CLUTCH in a split stone hollow; a drift of shed SCALES each the size of a shield; a single TOOTH standing as a monolith; CLAW GOUGES raked across a valley wall; a WHOLE DRAGON PETRIFIED to stone mid-coil; a TAIL's vertebrae trailing into a lake; a JAWBONE forming a natural arch over a road; a ruined DRAGON-TEMPLE built around a skull altar; a toppled DRAGON-RIDER MONUMENT; a barrow-TOMB with a dragon-shaped burial mound; a HORN spiraling out of a hilltop; an ancient NEST of fused branches and bone big as an amphitheater; a mummified WING draped over a ruin; a breastbone KEEL rising like a ship's prow from a moor; a skull-crowned STANDING-STONE ring.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal dragon relic in 25-40 words — name the relic form, prove its scale against the land, give one distinctive morphological detail. NO living dragons. NO real-world ethnic coding. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A colossal horned dragon skull half-buried nose-down in the earth, tall as a keep, one curved horn snapped short, its empty eye socket wide enough to walk through upright.
+2. An immense ribcage arching over the valley floor like a cathedral nave, each rib thick as an oak trunk, pale bone weathered smooth, the far ribs fading into morning haze.
+3. A dragon skeleton spanning a river gorge as a natural bridge, spine and ribs fused into a walkway of bone, tail vertebrae anchored in the far cliff like a moored chain.`,
+  },
+
+  dragon_lore_setting: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LORE SETTING — the fantasy biome the colossal relic rests in. Each entry 20-35 words naming the biome + its depth layers (foreground texture, midground land-shape, far distance). The setting is a STAGE for a colossal relic — open enough to seat something the size of a castle. STRICT WESTERN HIGH FANTASY landscapes.
+
+VARIETY MANDATE — ~20 distinct biomes, roughly even: heather moorland; highland glen; fjord cliffside; golden-grass steppe; desert basin with red mesas; rolling dune sea; glacier field; snowbound tundra; deep pine forest clearing; autumn birchwood valley; river gorge; waterfall canyon; sea-cliff headland; tidal flats at low tide; vast cavern with a skylight breach; volcanic plain greening over; alpine meadow in wildflower bloom; misty lake shallows; peat marsh with still pools; mountain pass between peaks.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE landscape stage in 20-35 words with named depth layers. It must have ROOM for a castle-sized relic. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A heather moorland rolling purple to the horizon, low granite outcrops breaking the surface, a silver stream threading the foreground, distant fells dissolving into rain-haze.
+2. A fjord cliffside of layered grey stone, cold green water far below, gulls circling the updrafts, snow-dusted peaks rising across the strait.
+3. A desert basin of rust-red sand and cracked clay, wind-carved mesas at midground, heat shimmering the far rim, one dry riverbed curving through the foreground.`,
+  },
+
+  dragon_lore_reclamation: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LORE RECLAMATION — how centuries of nature have BEAUTIFULLY claimed the colossal relic. Each entry 15-30 words tying living nature directly onto the remains. The register is SERENE and DIGNIFIED: ancient and weathered but never rundown, never rotting, never squalid. Life growing on the bones of something immense.
+
+VARIETY MANDATE — ~20 distinct reclamation modes: moss carpeting in emerald sheets; wildflowers blooming through an eye socket; ivy sleeving the bones; lichen constellations in gold and rust; drifted sand banked against the leeward side; ice sheathing it in glassy layers; snow capping every ridge; tree roots gripping and growing around it; a young rowan growing from a crack; songbirds nesting in the hollows; swallows pouring from the jaw at dusk; butterflies drifting over blossom; golden grass grown waist-high between ribs; heather lapping its base; a waterfall pouring through a gap in the bones; tide pools cupped in old footprints; deer grazing in its shadow; morning spiderwebs strung between spines catching dew; creeping thyme purpling the stone; pale mushrooms fairy-ringed at its foot.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE way nature has claimed the relic, 15-30 words, physically tied onto the remains. Serene and beautiful — never rot, debris, or dereliction. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Emerald moss carpets the sunward slopes of the bone, centuries thick, with tiny white flowers starring the deepest green.
+2. Wildflowers spill from the eye socket in a hanging meadow, and drifting seeds catch the light around it.
+3. A rowan sapling grows from a crack in the vertebra, roots wrapped tight around the bone like a setting around a stone.`,
+  },
+
+  dragon_lore_human_trace: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LORE HUMAN TRACE — the tiny reverent human presence proving the relic's scale. Each entry 15-30 words. TINY figures (5-12% of frame) or small human artifacts, always AWED, REVERENT, PEACEFUL — never combat, never action-hero. Fantasy-native folk only (no real-world nationality coding).
+
+VARIETY MANDATE — ~20 distinct traces: a lone pilgrim with a staff dwarfed beneath it; two scholars sketching by lantern; a candle shrine flickering at the jaw; prayer flags strung between teeth; a rope ladder up a rib with a climber halfway; a small expedition camp with tents and a cookfire; offering bowls and dried garlands at its base; a hooded wanderer resting a palm against the bone; a shepherd and flock passing beneath the arch; a child on a parent's shoulders pointing up; a monk sweeping a worn bone step; carved warning runes on a marker stone; an abandoned cart of excavation tools; a tiny rowboat approaching across the lake; a robed procession with lanterns at dusk; laundry-lines of votive ribbons; a scribe measuring a tooth with a knotted cord; a hermit's hut built snug against a vertebra; fresh footprints in snow leading to the socket; a caravan resting in its shade.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny human trace in 15-30 words — reverent, peaceful, scale-proving. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lone pilgrim with a walking staff stands dwarfed beneath the arch of bone, head tilted back, cloak stirring in the wind.
+2. Prayer flags in faded reds and golds strung between two colossal teeth, snapping gently, a ladder of knotted rope hanging below.
+3. Two robed scholars sketch by lantern-light at the base, their parchments weighted with stones, tiny against the curve of the skull.`,
+  },
+
+  dragon_lore_palette: {
+    format: 'simple',
+    theme: `DRAGONBOT DRAGON-LORE COLOR PALETTE — a COLORS-ONLY grading note for the render. Each entry 10-18 words: 3-4 color/light descriptors. ABSOLUTELY NO scene content — no objects, no places, no structures, no creatures, no weather events. Pure color language (hues, metals, minerals, light qualities). This pool exists because the old shared palette pool carried scene nouns ("sky citadel", "aerial kingdom") that injected a second scene into every roll.
+
+VARIETY MANDATE — ~20 distinct moods across the day and seasons: warm late-gold with long violet shadow; cool silver-blue mist tones; heather-violet dusk with ember accents; autumn copper and bronze; glacial teal and white; dawn rose and pale gold; storm slate with shafts of warm light; deep green-gold forest light; bone ivory against moss green; peat brown and burnished amber; moonlit pewter and indigo; honey light over ochre; verdigris and weathered bronze; rain-washed grey-green with silver highlights; late-summer wheat gold and dusty blue; frost white with lavender shadow.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colors-only grading note, 10-18 words, 3-4 hues/light qualities. NO nouns of things or places — color and light words only. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Weathered bone ivory against deep moss green, warm late-gold light, shadows falling long and violet.
+2. Cool silver-blue mist tones, pale pewter highlights, one low shaft of amber warmth.
+3. Autumn copper and burnished bronze, dusty blue distance, soft honey-colored light.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // DRAGON-RIDER PATH (2026-06-10 — new). Rider mounted on a
   // colossal Western dragon, in flight or battle. Co-heroes.
   // ════════════════════════════════════════════════════════

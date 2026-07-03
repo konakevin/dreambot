@@ -103,12 +103,19 @@ module.exports = {
   LANDSCAPE_PHENOMENON: load('landscape_phenomenon'),
   LANDSCAPE_SURPRISE_ELEMENT: load('landscape_surprise_element'),
   LANDSCAPE_SKY: load('landscape_sky'),
-  // ─── dragon-lore path (2026-05-14, migration from legacy)
+  // ─── dragon-lore path (2026-05-14 migration; 2026-07-03 hero-relic overhaul)
   DRAGON_LORE_SCENE: load('dragon_lore_scene'),
   DRAGON_LORE_ARCHITECTURE: load('dragon_lore_architecture'),
   DRAGON_LORE_PHENOMENON: load('dragon_lore_phenomenon'),
   DRAGON_LORE_SURPRISE_ELEMENT: load('dragon_lore_surprise_element'),
   DRAGON_LORE_SKY: load('dragon_lore_sky'),
+  // Hero-relic overhaul pools. SCENE/ARCHITECTURE/SURPRISE stay registered
+  // above for easy revert; the path file no longer references them.
+  DRAGON_LORE_RELIC: load('dragon_lore_relic'),
+  DRAGON_LORE_SETTING: load('dragon_lore_setting'),
+  DRAGON_LORE_RECLAMATION: load('dragon_lore_reclamation'),
+  DRAGON_LORE_HUMAN_TRACE: load('dragon_lore_human_trace'),
+  DRAGON_LORE_PALETTE: load('dragon_lore_palette'),
   // ─── dark-realm path (2026-05-14, migration from legacy)
   DARK_REALM_SCENE: load('dark_realm_scene'),
   DARK_REALM_ARCHITECTURE: load('dark_realm_architecture'),

@@ -171,14 +171,14 @@ module.exports = {
 
   DRAGONBOT_DRAGON_LORE: {
     description:
-      'PATH-BESPOKE — DragonBot dragon-lore path (2026-05-14 migration from legacy function-based form). Ancient archaeological-fantasy evidence of dragons — massive skeletal remains, weathered murals depicting dragon wars, abandoned lairs with scattered hoards, fossilized eggs, ruined dragon-temples, crumbling dragon-rider outposts. The dragons are GONE but their presence echoes everywhere. Mood: WONDER + MELANCHOLY + REVERENCE + LOST GRANDEUR. Optional tiny figures (scholars / explorers / archaeologists) as scale-provers and mood-setters. 5 path-bespoke axes (scene / architecture / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',
+      'PATH-BESPOKE — DragonBot dragon-lore path (2026-07-03 HERO-RELIC overhaul; the 2026-05-14 movie-poster-stack form rendered busy kitchen-sink frames Kevin rejected). ONE colossal dragon relic or ruin as the unmistakable hero per render — a skull half-buried in a moor, a ribcage forming a cathedral nave, a bone bridge over a gorge, a petrified wing membrane backlit like stained glass. Nature reclaims it BEAUTIFULLY (moss / sand / ice / roots — ancient, never rundown; fae-cottage calibration). Tiny reverent human traces as scale-provers. Mood: WONDER + MELANCHOLY + REVERENCE + LOST GRANDEUR. 6 path-bespoke axes (relic / setting / reclamation / human_trace / sky_layer / palette color-only) + universal lighting + atmosphere; phenomenon gate lowered 0.8→0.4 (drama is a treat, not wallpaper).',
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['scene', 'architecture', 'surprise_element', 'sky_layer'],
+      path: ['relic', 'setting', 'reclamation', 'human_trace', 'sky_layer', 'palette'],
     },
     pickN: {},
-    conditionalLayer: { slot: 'phenomenon', gate: 0.8 },
+    conditionalLayer: { slot: 'phenomenon', gate: 0.4 },
     framingModes: null,
     anchorScaleRange: null,
   },
