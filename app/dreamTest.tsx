@@ -25,7 +25,7 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { supabase } from '@/lib/supabase';
@@ -63,6 +63,10 @@ const CAST_OPTIONS: { key: string | null; label: string }[] = [
 
 export default function DreamTestScreen() {
   const user = useAuthStore((s) => s.user);
+  // Owner-only dev tool. The Settings entry point is super-admin-gated, but
+  // the route itself was reachable by URL for anyone — including "admin lite"
+  // moderators (plain is_admin), who get Reports + delete only.
+  const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [generating, setGenerating] = useState(false);
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -257,6 +261,9 @@ export default function DreamTestScreen() {
     },
     [dreams.length, activeIndex]
   );
+
+  // After all hooks — safe early return.
+  if (!isSuperAdmin) return <Redirect href="/(tabs)" />;
 
   return (
     <View className="flex-1 bg-[#0F0F1A]">

@@ -1,8 +1,12 @@
 /**
  * Supreme admin — the single "super user" designation, held by the app owner
- * ONLY. Distinct from `is_admin` (a broader, DB-granted moderator role that may
- * be given to others): supreme-admin gates owner-only debug/diagnostic UI such
- * as the AI model badge on cards.
+ * ONLY. Distinct from `is_admin`, the DB-granted "ADMIN LITE" moderator tier
+ * (e.g. sunnysteph, 2026-07-03): lite admins get moderation only — the
+ * Reports screen + one-tap/anywhere delete of others' posts and comments
+ * (admin_delete_upload/comment, reports RPCs, admin_ban_user), plus report
+ * push notifications and the nightly-eligibility bypass. Supreme-admin gates
+ * everything else: dev/QA tools in Settings (Dream Generator, previews,
+ * resets, Refresh App), the /dreamTest route, and the AI model badge.
  *
  * Identified by user id today (no DB column needed). To make it DB-driven later,
  * add an `is_super_admin` column and resolve it in store/auth.ts — every consumer

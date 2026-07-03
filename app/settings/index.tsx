@@ -375,18 +375,23 @@ export default function SettingsScreen() {
                 </View>
               )}
               {/* Debug escape hatch — clears all query cache + reshuffles the
-                  feed + resets scroll. Admin-only (was a vague user-facing row). */}
-              <SettingsRow
-                icon="refresh-outline"
-                label="Refresh App"
-                onPress={handleRefreshAll}
-                trailing={null}
-              />
+                  feed + resets scroll. Owner-only (dev tool, not moderation). */}
+              {isSuperAdmin && (
+                <SettingsRow
+                  icon="refresh-outline"
+                  label="Refresh App"
+                  onPress={handleRefreshAll}
+                  trailing={null}
+                />
+              )}
             </View>
           </>
         )}
 
-        {showAdmin && (
+        {/* Dev/QA tools — SUPER-admin (owner) only. Plain is_admin is the
+            "admin lite" moderator tier (sunnysteph): Reports + one-tap
+            delete above, nothing else. */}
+        {isSuperAdmin && (
           <View style={styles.section}>
             <SettingsRow
               icon="flask"
