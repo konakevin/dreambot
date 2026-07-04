@@ -134,10 +134,17 @@ const CREDIT_PATTERNS = [
     return CREDIT_PATTERNS.some((re) => re.test(b.last_failure_reason));
   });
 
-  // ─ Auto-deactivated bots ─ the dispatcher flips active=false + stamps an
-  //   "auto-deactivated" note after 5 consecutive failures. Excludes bots
-  //   disabled by hand (no such note) so an intentional pause never alarms.
-  const autoDeactivated = inactive.filter((b) => /auto-deactivated/i.test(b.notes || ''));
+  // ─ Auto-deactivated bots ─ the dispatcher flips active=false + stamps a
+  //   note STARTING WITH "auto-deactivated" and leaves consecutive_failures
+  //   at the cutoff. Both conditions required: a loose substring match once
+  //   false-alarmed on manually-paused bots whose notes still carried the
+  //   June-3 credit-incident RECOVERY text ("…auto-deactivated 10 bots…")
+  //   mid-sentence (pixelbot/retrobot, 2026-07-04). Bots disabled by hand
+  //   have counters at 0 and no such note prefix — an intentional pause
+  //   never alarms.
+  const autoDeactivated = inactive.filter(
+    (b) => /^auto-deactivated/i.test((b.notes || '').trim()) && (b.consecutive_failures || 0) > 0
+  );
 
   // ─ Active bots climbing toward the 5-failure cutoff (early warning) ─
   const elevatedFailures = active.filter((b) => (b.consecutive_failures || 0) >= FAILURE_ALARM);
