@@ -1,0 +1,9 @@
+{
+  "note": "PixelBot avatar refresh — 10 varied pixel-art concepts generated via Gemini 2.5 flash image, Kevin picked #10.",
+  "pixelbot": {
+    "decision": "star power-up",
+    "prompt": "A square avatar icon in chunky 16-bit PIXEL ART style: bold readable silhouette, centered subject filling most of the frame, vibrant saturated colors, crisp large pixels, subtle dark retro-game backdrop with a faint scanline glow. A golden pixel-art star power-up with big cheerful eyes, radiating small pixel sparkles, platformer-game energy.",
+    "candidateFile": "pixelbot-star-powerup-2026-07-04.png",
+    "appliedVersion": 1783145833537
+  }
+}
