@@ -20,6 +20,7 @@ const pathBuilders = {
   'male-druid': require('./paths/male-druid'),
   'male-druid-adventure': require('./paths/male-druid-adventure'),
   'tiny-fae': require('./paths/tiny-fae'),
+  'fairy-swarm': require('./paths/fairy-swarm'),
   'queen-of-the-forest': require('./paths/queen-of-the-forest'),
   'enchanted-vista': require('./paths/enchanted-vista'),
   'fae-cottage': require('./paths/fae-cottage'),
@@ -76,6 +77,14 @@ module.exports = {
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
+  // Per-path prefix (engine prepends before other layers). fairy-swarm needs a
+  // PLURAL subject anchor as the FIRST tokens CLIP reads — the ToyBot
+  // multi-figure lesson: a singular opener collapses the crowd to one hero.
+  // Structural anchor only, no style/content language.
+  promptPrefixByPath: {
+    'fairy-swarm':
+      'a lively gathering of many tiny palm-sized fairies together in one scene, a fairy crowd mid-story',
+  },
   promptSuffix: blocks.PROMPT_SUFFIX,
 
   // Vibes that fit the peaceful-fairy mood. These translate to vibeDirective
@@ -91,6 +100,8 @@ module.exports = {
     'male-druid',
     'male-druid-adventure',
     'tiny-fae',
+    // fairy-swarm — large fairy gatherings (2026-07-04).
+    'fairy-swarm',
     'queen-of-the-forest',
     'enchanted-vista',
     // fae-cottage deactivated 2026-07-01 (Kevin) — built + converged over 5 test rounds but held
@@ -154,6 +165,7 @@ module.exports = {
       'forest-fairy-scene',
       'queen-of-the-forest',
       'tiny-fae',
+      'fairy-swarm',
       'fae-court',
     ],
   },
@@ -179,6 +191,8 @@ module.exports = {
       'male-druid',
       'male-druid-adventure',
       'tiny-fae',
+      // fairy-swarm: the crowd-composition mandate is load-bearing; polish strips it.
+      'fairy-swarm',
       'queen-of-the-forest',
       'enchanted-vista',
       'fae-cottage',

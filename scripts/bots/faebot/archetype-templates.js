@@ -211,6 +211,80 @@ Visible oil-brushwork, painted edges, romantic painted atmosphere. Greg Manchess
 Write 80-110 words, comma-separated phrases. LEAD WITH THE FAIRY — preserve her stacked exotic flower-merged features unmistakably (including wings). Then composition framing. Then flower biome wrapping around her. Then lighting + weather. Then foreground anchor + botanical accent. Then pollen-magical flavor. Then giant-flower scale prover.${companion ? ' Then companion woven in naturally.' : ''} Painted-fantasy oil-brushwork register throughout. NO preamble, NO headers, NO ━━━ markers, NO bullets, NO bold-labels.`;
   },
 
+  // fairy-swarm â LARGE gatherings of palm-sized fairies (2026-07-04).
+  FAEBOT_FAIRY_SWARM: ({ slots }) => {
+    const {
+      gathering_event,
+      fae_troupe,
+      gathering_spot,
+      critter_guests,
+      lighting,
+      magical_flavor,
+    } = slots;
+    const flora = (Array.isArray(slots.flora_detail) ? slots.flora_detail : [slots.flora_detail])
+      .filter(Boolean)
+      .join('; ');
+
+    const magicSection = magical_flavor
+      ? `
+
+━━━ MAGICAL FLAVOR (one supernatural accent at their scale) ━━━
+${magical_flavor}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for a LARGE FAIRY GATHERING painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene — write no negations (Sonnet echoing “never posed for camera” into the prompt wastes tokens CLIP can’t negate).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. THIS IS A CROWD SCENE. AT LEAST SIX palm-sized fairies are visible simultaneously — more (up to a dozen or so) when the event calls for it. The fairies in this scene are MANY distinct little individuals spread across foreground and midground, all engaged in the SAME shared event. NO single hero centered alone. NEVER one fairy with a blurred background.
+
+2. EVERY visible fairy is palm-sized (3-8 inches), and the venue's props prove it: mushrooms are their pavilions, acorns their kettles, a fallen leaf their table.
+
+3. The 2-3 NEAREST fairies have fully detailed, beautiful faces — real eyes, real hair, distinct from each other. Farther fairies stay readable little figures (never faceless blobs, never bald dot-eyed sprites).
+
+4. PAINTERLY-REAL rendering. NEVER chibi, NEVER anime, NEVER Disney, NEVER Tinkerbell, NEVER mascot. Slender elegant proportions, painterly oil-brushwork register.
+
+5. Candid storybook moment — caught mid-event, NEVER posed for camera, NEVER looking at viewer.
+
+6. A TIMELESS FAE WORLD: every garment is petal-silk, leaf-cloth, or woven grass; every tool and furnishing is fae-made of twig, bark, thorn, spider-silk, and dew. The entire scene belongs to the enchanted forest's own storybook age.
+
+Open your prompt with the gathering itself — many tiny fairies mid-event.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE SHARED EVENT (the hero — what the whole gathering is doing) ━━━
+${gathering_event}
+
+Every fairy in frame is oriented toward or taking part in THIS event — carrying, reaching, laughing, watching, helping. The event gives the scene its story.
+
+━━━ 2. THE TROUPE (who they are — varied little individuals) ━━━
+${fae_troupe}
+
+No two fairies alike: vary wings, hair, dress colors, and postures across the crowd exactly as described. They are a community, not copies.
+
+━━━ 3. THE GATHERING SPOT (the tiny forest venue) ━━━
+${gathering_spot}
+
+A little hidden place in the enchanted forest, rendered at THEIR scale — fairy-furniture scale, intimate and inviting.
+
+━━━ 4. CRITTER GUESTS (whole, complete, adorable) ━━━
+${critter_guests}
+
+Rendered as WHOLE recognizable animals (full head + body), attending the gathering peacefully among the fairies — never looming, never scary, never a disembodied body part.
+
+━━━ 5. FLORA + PRETTINESS (the lush flowery dressing) ━━━
+${flora}
+
+━━━ 6. LIGHTING ━━━
+${lighting}
+
+⛑ Let the rolled lighting lead the mood while every nearby face stays beautifully lit and readable.${magicSection}
+
+━━━ COMPOSITION ━━━
+Wide-enough framing to hold the whole gathering: fairies layered across foreground and midground, the venue holding them together, depth receding into the glowing forest. The eye lands on the shared event first, then wanders fairy to fairy discovering little stories. NO text, NO watermarks.`;
+  },
+
   FAEBOT_TINY_FAE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       creature,
@@ -958,15 +1032,8 @@ Write ONE Flux prompt — comma-separated phrases, 90-120 words, no preamble, no
   },
 
   FAEBOT_FAE_COTTAGE: ({ slots, sharedDNA, vibeDirective }) => {
-    const {
-      dwelling,
-      setting,
-      overgrowth,
-      garden,
-      cottage_lighting,
-      atmosphere,
-      wildlife_accent,
-    } = slots;
+    const { dwelling, setting, overgrowth, garden, cottage_lighting, atmosphere, wildlife_accent } =
+      slots;
 
     const wildlifeSection = wildlife_accent
       ? `

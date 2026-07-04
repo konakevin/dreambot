@@ -80,6 +80,85 @@ if (!POOL) {
 
 const POOL_RECIPES = {
   // ════════════════════════════════════════════════════════
+  // FAIRY-SWARM PATH (2026-07-04). Large gatherings (6-14) of
+  // palm-sized fairies mid-shared-story-event at tiny forest
+  // venues. ToyBot multi-figure recipe: events are VERB-LED
+  // shared happenings, never pose language.
+  // ════════════════════════════════════════════════════════
+
+  faebot_fairy_swarm_event: {
+    format: 'simple',
+    theme: `FAEBOT FAIRY-SWARM EVENT — the SHARED STORY EVENT a whole gathering of palm-sized fairies is engaged in together. Each entry 25-45 words, OPENING WITH AN ACTIVE VERB, naming ONE common object/happening that AT LEAST SIX fairies are visibly taking part in, with 2-3 distinct little sub-actions distributed among them. NEVER pose language ("mid-flight", "posing", "standing"), NEVER a lone fairy.
+
+FOREST-CRAFT LAW (non-negotiable): every object, garment, and ceremony in an event is FAE-MADE FROM FOREST MATERIALS — twig, leaf, petal, acorn, birch-bark, spider-silk, rush, pebble, dew. Before using ANY event noun, test it: "what is the most famous image of this noun?" If the answer is a modern or human-scale scene (a wedding, a dress-form/mannequin, a choir with conductor, a birthday party, a parade), DO NOT use the noun — recast the same joy as a forest-craft happening (a blossom-festival lantern-lighting, dressing a fairy volunteer in petal-silk, singing rounds on acorn stools). Garments are always petal-silk, leaf-cloth, or woven grass — never modern clothing.
+
+VARIETY MANDATE — ~24 distinct events: raising a maypole of woven grass and ribbon-petals; feasting at a long leaf-table set with acorn-cup soup; racing walnut-shell boats down a rivulet; hoisting a dew-lantern up into the branches for the night; harvesting blackberries with ladders and pulley-baskets; dressing a beaming fairy volunteer in a new petal-gown while others stitch the hem; teaching fledgling fairies to fly off a toadstool ledge; painting a snail's shell in festival colors; holding a storytelling circle around a caged-firefly lamp; lighting the first lantern of the blossom festival, a cupped flame passed hand to hand up a living chain; drumming and dancing a reel on a flat mushroom cap; rescuing a bee with a torn wing, splinting it with grass; building a bridge of twigs across a puddle; brewing dew-tea in an acorn kettle over a spark-fire; holding a petal-parachute jumping contest; stringing a spiderweb loom with morning dew-pearls; carrying home an enormous strawberry on shoulder-poles; tucking in glow-worm lanterns along a path; a market morning trading seeds, berries and thimble-wares; singing rounds in a moonlit circle with a mushroom-cap drum and fireflies keeping time; wrapping a sleeping dormouse in a woven-grass blanket; launching paper-birch wish-boats onto a still pool; repairing a wren-feather roof before rain; crowning a May-queen with a daisy circlet.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE shared event in 25-45 words — OPEN with an active verb, name the common object/happening, distribute 2-3 sub-actions among the crowd. At least six fairies implied. Every noun passes the forest-craft test (no ceremony/object whose famous image is modern or human-scale). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Raising a maypole of woven grass crowned with ribbon-petals, four fairies hauling guy-lines of spider silk taut while others steady the base and one directs from a toadstool, ribbons already streaming.
+2. Racing walnut-shell boats down a chattering rivulet, fairies poling and paddling their shells through the riffles while spectators crowd the mossy bank waving petal-flags and cheering.
+3. Feasting at a long leaf-table set with acorn-cup soup and berry halves, fairies passing dishes down the line, one pouring dew from a bluebell pitcher, two toasting with raspberry-cordial thimbles.`,
+  },
+
+  faebot_fairy_swarm_troupe: {
+    format: 'simple',
+    theme: `FAEBOT FAIRY-SWARM TROUPE — WHO the gathered fairies are: a group-level description of a crowd of palm-sized fairies. Each entry 30-50 words sketching 2-3 DISTINCT lead fairies (each with different wings + hair + dress colors) plus the varied crowd behind them. Painterly-real Froud/Vess register. EVERY fairy has a full beautiful face, real eyes, real hair — NEVER bald, NEVER dot-eyed, NEVER faceless. Slender elegant proportions, NEVER chibi/anime/Disney.
+
+VARIETY MANDATE — ~22 distinct troupes varying: wing types (dragonfly-clear / luna-moth green / beetle-shell iridescent / petal-wings / lacewing gold); hair (silver braids, chestnut curls, moss-green waves, marigold crop, black sleek, strawberry plaits); dress palettes (petal-pinks, leaf-greens, acorn-browns, bluebell-blues, mushroom-creams, berry-reds); mixed ages and builds (willowy, round-cheeked, wiry, matronly, spry elders with silver hair — conveyed physically, never with age words); moods (merry, industrious, ceremonious, mischievous, sleepy-cozy, festival-giddy).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE troupe in 30-50 words — sketch 2-3 distinct leads (wings + hair + dress each different) + the varied crowd behind. Full faces, real eyes and hair on all. NO age words (young/old/elderly), no "woman/man/girl/boy" nouns — they are fairies/fae. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A merry troupe led by a fairy with clear dragonfly wings, chestnut curls and a poppy-red dress, beside one with luna-moth-green wings, silver braids and mushroom-cream skirts, and a wiry leader in acorn-brown with lacewing-gold wings, the crowd behind a flutter of mismatched petal-colors.
+2. An industrious harvest troupe: a broad-shouldered fairy with beetle-shell iridescent wings and moss-green waves rolled up in leaf-aprons, a spry silver-haired fairy with dew-clear wings directing, a freckled one with marigold hair hauling twine, the rest bustling in patched berry-dyed workclothes.
+3. A ceremonious twilight troupe, one fairy in bluebell-blue silk with frost-pale lacewings and black sleek hair, another in ivory petal-layers with rose-tinted wings and strawberry plaits, an elder with silver hair and amber moth-wings bearing a lantern, the gathering behind them hushed in dusk colors.`,
+  },
+
+  faebot_fairy_swarm_spot: {
+    format: 'simple',
+    theme: `FAEBOT FAIRY-SWARM SPOT — the tiny hidden FOREST VENUE where the gathering happens, rendered at fairy-furniture scale. Each entry 25-45 words: the venue + 2-3 fairy-scale furnishings/props that prove palm-size (mushroom pavilions, acorn kettles, leaf awnings, pebble stages).
+
+VARIETY MANDATE — ~22 distinct venues: a ring of toadstools around a moss dance-floor; a hollow-stump amphitheater with bracket-fungus balconies; a mossy root-bowl between oak buttresses; a streamside pebble shore with reed-pole jetties; a foxglove grove with bell-canopies; a fallen-log bridge decked with lichen bunting; a flat sun-warmed stone table-rock; a curled dry leaf pavilion under a fern; an abandoned bird-nest turned banquet bowl; a bluebell dell with dew-chandeliers; a knot-hole doorway plaza in an ancient trunk; a puddle harbor with walnut-shell boats moored; a moss terrace stepped like paddies; a bramble arch gateway hung with berry lanterns; a mushroom-gill undercroft lit by glow-worms; a wild-strawberry patch clearing; a birch-bark scroll amphitheater; a spring seep with watercress gardens; an acorn-cap teahouse row on a branch; a clover meadow pocket ringed by daisies.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny forest venue in 25-45 words with 2-3 fairy-scale furnishings proving palm-size. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A ring of red-capped toadstools around a moss dance-floor, dew-lanterns strung between the stems, a flat pebble stage at one edge and acorn-cup seats scattered in the clover.
+2. A hollow-stump amphitheater, its rings worn into benches, bracket-fungus balconies stepping up the inner wall, a leaf-awning rigged over the stage on twig poles.
+3. A streamside pebble shore where reed-pole jetties reach into the shallows, walnut-shell boats moored in a row, a driftwood-splinter boardwalk lined with berry lanterns.`,
+  },
+
+  faebot_fairy_swarm_critter_guests: {
+    format: 'simple',
+    theme: `FAEBOT FAIRY-SWARM CRITTER GUESTS — 1-2 WHOLE, complete, adorable forest critters attending the gathering among the fairies. Each entry 20-35 words: the critter(s), whole head + body, peacefully taking part (watching, being decorated, carrying, dozing). Sweet storybook register — never looming, never scary.
+
+VARIETY MANDATE — ~20 distinct guests: a dormouse dozing at the table's end; a robin ferrying fairies to a branch seat; a hedgehog with lanterns hung gently on its quills; a chipmunk cheeks-full at the feast; a snail whose shell serves as the band-stage; two field mice waltzing at the edge of the dance; a mother duck and duckling watching from the shallows; a fawn lying folded behind the gathering; a squirrel handing down hazelnuts from a branch; a toad in a moss cap acting as doorman; a bumblebee guest of honor with a clover garland; a wren perched on the maypole top; a rabbit with fairies plaiting daisies into its fur; an owl fledgling blinking from a knot-hole box seat; a ladybug procession crossing the table; a mole surfacing politely at the party's edge; a red fox curled at a respectful distance, tail wrapped; a frog chorus on lily-pad risers; a butterfly landing as living bunting; a shrew waiter balancing a berry tray.`,
+    touchpoints: [],
+    instructions: `Each entry is 1-2 whole complete critters attending peacefully, 20-35 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A dormouse dozing at the table's end, whole and round and velvet-furred, a fairy tucking a woven-grass napkin over it like a blanket.
+2. A hedgehog attending with tiny dew-lanterns hung gently from its quills, whole and bright-eyed, standing patiently as living candelabra beside the dance floor.
+3. Two field mice waltzing together at the edge of the gathering, whole and whiskered, a ring of fairies clapping the beat around them.`,
+  },
+
+  faebot_fairy_swarm_flora: {
+    format: 'simple',
+    theme: `FAEBOT FAIRY-SWARM FLORA — the lush flowery PRETTINESS dressing the gathering. Each entry 12-25 words: one botanical layer at fairy scale (blooms as architecture, moss as carpet, petals as decor).
+
+VARIETY MANDATE — ~20 distinct layers: foxglove spires leaning overhead like street-lamps; a drift of bluebells nodding at head-height; moss lawns starred with wood-anemones; wild strawberries glowing like festival globes; a curtain of hanging wisteria; fern fronds arching as green vaults; daisy heads serving as parasols; clover in full pink bloom; forget-me-not sprays woven into railings; a fallen peony petal carpet; lily-of-the-valley bell-garlands; cow-parsley lace canopies; buttercups pooling gold light; violet clumps perfuming a doorway; rose-hips strung as lanterns; cherry-blossom snow drifting through; honeysuckle trumpets dripping nectar; toadstool-red accents among the green; dandelion clocks ready as fireworks; snowdrop pergolas.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE botanical dressing layer at fairy scale, 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Foxglove spires leaning overhead like lamplit street-lamps, each freckled bell glowing faintly pink above the gathering.
+2. A carpet of fallen peony petals laid across the moss like festival rugs, edges curling softly.
+3. Forget-me-not sprays woven through the twig railings, tiny sky-blue stars against the green.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-NATURAL-VILLAGE PATH (2026-06-10). Clone of wilds-
   // village but dwellings made of ORGANIC EARTHY nature stuff
   // (wood / mushrooms / giant flowers / logs / woven branches).

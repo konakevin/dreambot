@@ -61,6 +61,32 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  // fairy-swarm — LARGE GATHERINGS of palm-sized fairies (2026-07-04, Kevin).
+  // Purpose-built for crowds: AT LEAST SIX fairies per render, more as the
+  // event dictates. The gathering_event (shared story beat) is the hero;
+  // the ToyBot multi-figure recipe applies (verb-led event seeds + template
+  // composition lock + plural prefix opener) or Flux collapses to one fairy.
+  FAEBOT_FAIRY_SWARM: {
+    description:
+      'PATH-BESPOKE — FaeBot fairy-swarm (2026-07-04). Large gatherings (6-14) of palm-sized fairies at one tiny forest venue, mid-shared-story-event, with whole cute critter guests. Painterly-real Froud/Vess register, full faces/hair (kodama ban). 6 always axes (gathering_event + fae_troupe + gathering_spot + critter_guests + flora_detail ×2 + lighting reused from tiny-fae) + magical_flavor gated 0.5 (reused from tiny-fae). In twoPassPolish.skipPaths (polish strips the group-composition mandate) + nudityCheck paths + promptPrefixByPath plural anchor.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'gathering_event',
+        'fae_troupe',
+        'gathering_spot',
+        'critter_guests',
+        'flora_detail',
+        'lighting',
+      ],
+    },
+    pickN: { flora_detail: 2 },
+    conditionalLayer: { slot: 'magical_flavor', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_TINY_FAE: {
     description:
       'PATH-BESPOKE — FaeBot tiny-fae (2026-05-21 axis-system migration). Palm-sized winged fae (3-8 inches tall) at MACRO perspective in the enchanted forest. THE PATH IDENTITY is the scale_anchor_companion — every render includes a normal-sized forest creature (fox / deer / fawn / robin / squirrel / hedgehog / owl / etc.) that DRAMATICALLY DWARFS her. Without this scale-proof, Flux defaults to regular-sized fairy. Painterly-real (Brian Froud + Charles Vess lineage). 10 axes (9 always-on + 1 gated botanical_accent). IMPORTANT: tiny-fae is in twoPassPolish.skipPaths because Haiku polish strips dwarfing language. Pool entries use strong dwarfing positions (perched on a single feature / under looming face / fits inside a paw).',

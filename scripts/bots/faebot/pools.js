@@ -121,6 +121,12 @@ module.exports = {
   FAEBOT_FLOWER_FAIRY_SCALE_PROVER: loadIfExists('faebot_flower_fairy_scale_prover'),
   FAEBOT_FLOWER_FAIRY_COMPANION: loadIfExists('faebot_flower_fairy_companion'),
   // ─── tiny-fae axis-system pools (2026-05-21) ───
+  // fairy-swarm — large fairy gatherings (2026-07-04).
+  FAEBOT_FAIRY_SWARM_EVENT: loadIfExists('faebot_fairy_swarm_event'),
+  FAEBOT_FAIRY_SWARM_TROUPE: loadIfExists('faebot_fairy_swarm_troupe'),
+  FAEBOT_FAIRY_SWARM_SPOT: loadIfExists('faebot_fairy_swarm_spot'),
+  FAEBOT_FAIRY_SWARM_CRITTER_GUESTS: loadIfExists('faebot_fairy_swarm_critter_guests'),
+  FAEBOT_FAIRY_SWARM_FLORA: loadIfExists('faebot_fairy_swarm_flora'),
   FAEBOT_TINY_FAE_CREATURE: loadIfExists('faebot_tiny_fae_creature'),
   FAEBOT_TINY_FAE_SCALE_ANCHOR_COMPANION: loadIfExists('faebot_tiny_fae_scale_anchor_companion'),
   FAEBOT_TINY_FAE_MACRO_PERCH: loadIfExists('faebot_tiny_fae_macro_perch'),
