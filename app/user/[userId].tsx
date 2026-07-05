@@ -374,9 +374,6 @@ export default function PublicProfileScreen() {
         onStatsPress={(tab) => setActiveTab(tab as Tab)}
         onAvatarPress={() => setShowAvatarPreview(true)}
         onFollowPress={handleFollow}
-        onMessagePress={() => {
-          /* TODO: DM flow once it ships — silent no-op for now */
-        }}
         onMorePress={() => setMoreOpen(true)}
       />
       {/* Posts / Reposts icon toggle — own profile only. On every other

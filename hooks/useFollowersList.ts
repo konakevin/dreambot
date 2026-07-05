@@ -24,7 +24,12 @@ export function useFollowersList(userId: string) {
           .range(offset, offset + PAGE - 1);
         if (error) throw error;
         if (!data || data.length === 0) break;
-        for (const r of data) all.push(r.users as FollowUser);
+        // The embedded join yields users:null for rows RLS hides from the
+        // CALLER (e.g. a follower the viewer has BLOCKED) — pushing the null
+        // crashed keyExtractor (null.id) via the error boundary (2026-07-05,
+        // "kev" repro: viewer had blocked one of the followers). Blocked
+        // users simply don't appear in the list.
+        for (const r of data) if (r.users) all.push(r.users as FollowUser);
         if (data.length < PAGE) break;
       }
       return all;

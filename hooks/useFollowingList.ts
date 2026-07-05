@@ -19,7 +19,9 @@ export function useFollowingList(userId: string) {
           .range(offset, offset + PAGE - 1);
         if (error) throw error;
         if (!data || data.length === 0) break;
-        for (const r of data) all.push(r.users as FollowUser);
+        // Same null-join guard as useFollowersList (2026-07-05): RLS hides
+        // rows the viewer has blocked → users:null → keyExtractor crash.
+        for (const r of data) if (r.users) all.push(r.users as FollowUser);
         if (data.length < PAGE) break;
       }
       return all;

@@ -80,7 +80,10 @@ interface OtherVariant extends BaseProps {
   /** Hide Message + ellipsis on your OWN profile reached via /user/[me]. */
   isSelf?: boolean;
   onFollowPress: () => void;
-  onMessagePress: () => void;
+  /** Optional — the Message pill renders ONLY when provided. Left unwired
+   *  2026-07-05 (Kevin): no in-app messaging exists; a silent no-op button
+   *  shipped to profiles. Re-wire when the DM flow (DM_FEATURE_PLAN.md) ships. */
+  onMessagePress?: () => void;
   onMorePress: () => void;
 }
 
@@ -269,13 +272,15 @@ export function ProfileHeader(props: Props) {
           </TouchableOpacity>
           {!props.isBot && !props.isSelf && (
             <>
-              <TouchableOpacity
-                style={[styles.actionPill, styles.actionPillSecondary]}
-                onPress={props.onMessagePress}
-                activeOpacity={0.7}
-              >
-                <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
-              </TouchableOpacity>
+              {props.onMessagePress && (
+                <TouchableOpacity
+                  style={[styles.actionPill, styles.actionPillSecondary]}
+                  onPress={props.onMessagePress}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.actionText, styles.actionTextSecondary]}>Message</Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 style={styles.iconPill}
                 onPress={props.onMorePress}
