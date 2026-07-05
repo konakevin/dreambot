@@ -308,12 +308,18 @@ export function FullScreenFeed({
   // Tap-active-tab-to-top gesture (Instagram-style). When the parent bumps
   // scrollToTopToken, jump to index 0 AND reset currentIndex so the next
   // focus/resume re-snap doesn't yank us back to where the user was scrolled.
+  // Also dismiss the transient overlays (comment overlay + likes sheet, and
+  // with them any comment action sheet nested inside) — a Home re-tap
+  // refreshed the feed UNDER a still-open sheet (Kevin 2026-07-05: long-press
+  // a comment, tap Home, feed resets behind the orphaned sheet).
   const skipFirstScrollToTop = useRef(true);
   useEffect(() => {
     if (skipFirstScrollToTop.current) {
       skipFirstScrollToTop.current = false;
       return;
     }
+    setCommentPost(null);
+    setLikesPostId(null);
     currentIndex.current = 0;
     scrollToTopImpl(true);
   }, [scrollToTopToken, scrollToTopImpl]);

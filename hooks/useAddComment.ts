@@ -61,28 +61,36 @@ export function useAddComment() {
         parentId: parentId ?? undefined,
       };
 
+      // Comments page shape changed 2026-05-02: now { rows, hasMore, nextOffset }.
+      type CommentsPage = { rows: Comment[]; [k: string]: unknown };
       if (parentId) {
         // Add reply optimistically to the replies list
         queryClient.setQueryData<Comment[]>(['replies', parentId], (old = []) => [
           ...old,
           newComment,
         ]);
-        // Bump reply count on the parent comment in the comments list
+        // Bump reply count on the parent comment in the comments list.
+        // (2026-07-05: this branch still used the pre-2026-05-02 array page
+        // shape — page.map on the {rows,...} object threw "undefined is not
+        // a function" AFTER the reply had inserted, so TanStack routed it to
+        // onError: error toast + the optimistic reply vanished while the DB
+        // write silently succeeded.)
         const commentsKey = ['comments', uploadId];
-        queryClient.setQueryData<InfiniteData<Comment[]>>(commentsKey, (prev) => {
+        queryClient.setQueryData<InfiniteData<CommentsPage>>(commentsKey, (prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            pages: prev.pages.map((page) =>
-              page.map((c) => (c.id === parentId ? { ...c, replyCount: c.replyCount + 1 } : c))
-            ),
+            pages: prev.pages.map((page) => ({
+              ...page,
+              rows: page.rows.map((c) =>
+                c.id === parentId ? { ...c, replyCount: c.replyCount + 1 } : c
+              ),
+            })),
           };
         });
       } else {
         // Add top-level comment optimistically — prepend (newest first).
-        // Comments page shape changed 2026-05-02: now { rows, hasMore, nextOffset }.
         const commentsKey = ['comments', uploadId];
-        type CommentsPage = { rows: Comment[]; [k: string]: unknown };
         queryClient.setQueryData<InfiniteData<CommentsPage>>(commentsKey, (prev) => {
           if (!prev) return prev;
           return {
