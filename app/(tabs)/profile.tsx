@@ -341,7 +341,7 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
           <View style={styles.inboxBubbleWrap}>
             <Ionicons
-              name={unreadCount > 0 ? 'chatbubble' : 'chatbubble-outline'}
+              name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
               size={26}
               color={unreadCount > 0 ? colors.accent : colors.textSecondary}
             />
@@ -712,10 +712,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: colors.surface,
   },
-  // Wrap is just a positioning anchor for the corner badge — the bubble
-  // icon centers naturally inside it. No more in-bubble text overlay
-  // (that approach gave the off-centered look Kevin flagged because the
-  // chatbubble glyph isn't symmetric — the tail throws "center" off).
+  // Wrap is just a positioning anchor for the corner badge — the bell
+  // icon centers naturally inside it. (Was a chatbubble; swapped to the
+  // notifications bell 2026-07-05 — a speech bubble implied messaging,
+  // which the app doesn't have.)
   inboxBubbleWrap: {
     width: 26,
     height: 26,
