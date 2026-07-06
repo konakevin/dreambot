@@ -2,19 +2,67 @@
 
 The repeatable runbook for building DreamBot and shipping it to App Store Connect.
 For the one-time first-launch history and the wider go-live checklist, see
-`LAUNCH.md` (this doc is the "do it again" version of its §6-7).
+`LAUNCH.md`. The shipped-build ledger (tag ↔ build ↔ commit) is `RELEASES.md`.
 
 ## TL;DR
 
-From a clean, green `main`:
+**New marketing version** (user-visible, e.g. `1.0.1` → `1.0.2`) — let the helper
+do the bump + tag + push, then build:
+
+```sh
+./scripts/release.sh 1.0.2          # bumps app.config.js, runs checks, commits, tags v1.0.2, pushes
+eas build -p ios --profile production --auto-submit
+```
+
+**New build of the SAME version** (resubmit after a rejection / TestFlight iter) —
+no bump, no helper, just rebuild (EAS auto-increments the build number):
 
 ```sh
 eas build -p ios --profile production --auto-submit
 ```
 
-That builds on EAS (auto-incrementing the build number) and uploads straight to
-App Store Connect. Then finish in ASC: attach the build, confirm screenshots,
-add review notes, Submit for Review.
+Then finish in ASC (attach build, screenshots, review notes, Submit), bump the
+`engine_config` update gate, and add a row to `RELEASES.md`. Full ordered
+checklist below.
+
+## The full ordered checklist (a new marketing version)
+
+1. **Green `main`.** Clean tree, pushed, CI green. The build bakes COMMITTED code.
+2. **DB migrations applied** in the Supabase dashboard SQL editor (they are NOT in
+   the binary — apply before the build goes live if the release depends on them).
+3. **Edge functions deployed** (`supabase functions deploy <name> --no-verify-jwt`)
+   — also not in the binary; ship them first.
+4. **Bump + tag + push:** `./scripts/release.sh <X.Y.Z>` (see §1). This is the ONE
+   command that changes the version, commits `Release vX.Y.Z`, creates the
+   annotated tag on that commit, and pushes both.
+5. **Build + submit:** `eas build -p ios --profile production --auto-submit`.
+6. **In App Store Connect** (§4): attach the processed build, screenshots, review
+   notes, Submit for Review.
+7. **Bump the update gate** in `engine_config` (§5) once the version is live —
+   `latest_app_version` so older clients get the "update available" nudge.
+8. **Log it:** add a row to `RELEASES.md` with the build number
+   (`eas build:list --limit 1`) and ASC status.
+
+## Git tags — the release demarcation points
+
+Every SHIPPED build (submitted for App Store review — not every TestFlight iter)
+gets an **annotated** git tag so the exact commit is a permanent, findable point.
+
+- **Convention:** `v<marketing-version>` on the commit the build was cut from
+  (`scripts/release.sh` creates it). e.g. `v1.0.2`.
+- **Multiple builds of one version** (a resubmission after rejection): the extra
+  builds get `v<version>-build<N>`, and `v<version>` stays on the build that was
+  ultimately **approved**. Tag a resubmission by hand:
+  `git tag -a v1.0.2-build11 <commit> -m "resubmit: <what changed>" && git push origin v1.0.2-build11`.
+- **See what shipped:** `git tag -n1 -l 'v*'` (list + first message line), or
+  `git show v1.0.1` (the tagged commit + full message). The build↔commit map is
+  authoritative in `eas build:list` and mirrored in `RELEASES.md`.
+- **The tag is annotated, not lightweight** — it carries date, message, and the
+  build/ASC context. Don't use `git tag v1.0.2` (lightweight); the helper uses
+  `git tag -a`.
+- **Retroactive tags** for 1.0.0 (build 8, `9feb0c42`) and 1.0.1 (build 9,
+  `80551918`) were created 2026-07-06 from `eas build:list`; that command is the
+  source of truth if you ever need to tag an old build.
 
 ## Reference (IDs)
 
@@ -22,9 +70,13 @@ add review notes, Submit for Review.
 - **ASC app ID:** `6761505205`
 - **Apple Team ID:** `43VMZ5KMW4`
 - **EAS project:** `014926a1-297b-4abf-9184-a01979a83879` (owner `konakevin`)
-- **Marketing version:** `app.config.js` -> `expo.version` (currently `1.0.0`)
+- **Marketing version:** `app.config.js` -> `expo.version` (currently `1.0.1`;
+  bump via `scripts/release.sh`)
 - **Build number:** owned by EAS (`appVersionSource: remote` in `eas.json`, plus
   `autoIncrement: true` on the production profile). Do NOT set it locally.
+- **Release helper:** `scripts/release.sh <X.Y.Z>` — bump + check + commit + tag + push.
+- **Release ledger:** `RELEASES.md` — every shipped build (tag ↔ build ↔ commit ↔ ASC status).
+- **Latest shipped:** 1.0.1 (build 9). Tags: `git tag -n1 -l 'v*'`.
 
 ## 0. Pre-flight (before building)
 
@@ -42,13 +94,19 @@ add review notes, Submit for Review.
 
 ## 1. Version vs build number
 
-- **New build of the SAME marketing version** (e.g. resubmitting after a
-  rejection, or a TestFlight iteration): change nothing. EAS auto-increments the
-  build number on each production build.
-- **New marketing version** (user-visible release like `1.0.1` / `1.1.0`): bump
-  `expo.version` in `app.config.js`, commit, then build.
-- Never hand-edit the iOS `buildNumber` — `appVersionSource: remote` means EAS
-  owns it.
+- **Marketing version** (`1.0.2`) is what users see (Settings → About reads
+  `Constants.expoConfig.version`). It lives in **`app.config.js` → `expo.version`
+  — the single source of truth.** `package.json` `version` is an npm field the app
+  never reads; `scripts/release.sh` keeps it aligned best-effort, but it doesn't
+  matter functionally.
+- **Build number** is owned by EAS (`appVersionSource: remote` + `autoIncrement:
+  true` on the production profile). Never set or hand-edit the iOS `buildNumber`.
+- **New build of the SAME marketing version** (resubmit / TestFlight iter): change
+  nothing, just rebuild — EAS bumps the build number.
+- **New marketing version:** run `./scripts/release.sh <X.Y.Z>` (bumps
+  `app.config.js`, runs `npm run check`, commits `Release vX.Y.Z`, tags, pushes).
+  Do NOT hand-edit the version + forget the tag — that's exactly what the helper
+  prevents.
 
 ## 2. Build
 
@@ -88,7 +146,32 @@ eas submit -p ios --profile production
 - Export compliance: auto-handled by `ITSAppUsesNonExemptEncryption: false`.
 - Submit for Review. First-pass turnaround is typically 24-48h.
 
-## 5. Resubmitting after a rejection
+## 5. Post-release: the in-app update gate (`engine_config`)
+
+`components/ForceUpdateGate.tsx` compares the running app's version against two
+`engine_config` columns (via `useEngineConfig`) — this is how you nudge or force
+users off old builds WITHOUT an App Store change:
+
+- **`latest_app_version`** — clients below this get a **dismissible** "Update
+  available" nudge. Bump it to the new version AFTER the build is live on the App
+  Store (not before — you'd nudge users toward a version they can't download yet).
+- **`min_app_version`** — clients below this get a **blocking, non-dismissible**
+  "Update Required" wall. Only raise this to kill a genuinely broken/unsafe old
+  build. Leave it well behind `latest` normally.
+
+Both are currently `NULL` (gate inert — no nudges, no forced updates). Set them
+from the dashboard SQL editor:
+
+```sql
+UPDATE public.engine_config SET latest_app_version = '1.0.2';   -- after 1.0.2 is live
+-- UPDATE public.engine_config SET min_app_version = '1.0.2';   -- only to force-kill an old build
+```
+
+Version strings are compared with `lib/appVersion.ts` (`parseVersion` →
+dotted-digit runs; `v`-prefix and pre-release suffixes are rejected, so use a
+bare `1.0.2`).
+
+## 6. Resubmitting after a rejection
 
 1. Fix the flagged issues, commit to `main`, push.
 2. `eas build -p ios --profile production --auto-submit` (same `version`, new

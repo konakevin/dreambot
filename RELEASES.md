@@ -1,0 +1,32 @@
+# RELEASES.md — the DreamBot release ledger
+
+One row per **shipped** App Store build (the ones submitted for review, not every
+TestFlight iteration). This is the human-readable changelog + the map from a git
+tag to its EAS build number and commit. Update it as the LAST step of every
+release (`scripts/release.sh` prints the reminder).
+
+Tag convention: annotated `v<marketing-version>` on the exact commit the build was
+cut from. If one marketing version ships more than one build (a resubmission after
+rejection), the extra builds get `v<version>-build<N>` and `v<version>` stays on
+the build that was ultimately **approved**. See `RELEASE.md` for the full runbook.
+
+| Tag | Version | Build | Commit | Shipped | ASC status | Notes |
+|-----|---------|-------|--------|---------|-----------|-------|
+| `v1.0.1` | 1.0.1 | 9 | `805519184c` | 2026-07-05 | Submitted | Followers-list crash fix, block-aware profile counts, Message button removed. |
+| `v1.0.0` | 1.0.0 | 8 | `9feb0c4200` | 2026-07-03 | Approved (first release) | First App Store submission. |
+
+<!--
+TestFlight / non-shipped production builds (from `eas build:list`, for reference —
+NOT tagged): 1.0.0 b7 (canceled), b6, b5, b4, b3, b2 (errored). Only builds that
+were submitted for App Store review get a row + a tag above.
+-->
+
+## How to add a row
+
+After a build finishes and you submit it in ASC:
+
+1. `eas build:list --platform ios --limit 1` → note the build number + commit.
+2. Add a row at the TOP of the table (newest first) with the tag, version, build,
+   short commit, date, ASC status (`Submitted` → later `Approved` / `Rejected`),
+   and a one-line "what changed".
+3. Commit `RELEASES.md` (the release commit or a follow-up — either is fine).
