@@ -1,5 +1,6 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +8,8 @@ import { useDeletePost } from '@/hooks/useDeletePost';
 import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
-import { handleImageLongPress } from '@/lib/imageLongPress';
+import { buildPostActionRows } from '@/lib/imageLongPress';
+import { PostActionSheet } from '@/components/PostActionSheet';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
@@ -59,20 +61,15 @@ export const PostTile = memo(function PostTile({
     nav.push(`/photo/${item.id}`);
   }
 
+  // Long-press opens the SAME PostActionSheet the fullscreen card uses
+  // (2026-07-05, replacing the old CustomAlert stacked-button menu) so every
+  // post surface shares one menu UX. Sheet is per-tile local state — the
+  // Modal renders nothing while closed, so per-tile instances are cheap.
+  const [actionsOpen, setActionsOpen] = useState(false);
+
   function handleLongPress() {
-    handleImageLongPress({
-      id: item.id,
-      imageUrl: item.image_url,
-      imageUrlHq: item.image_url_hq ?? null,
-      isOwn,
-      faceSwapMode: item.face_swap_mode ?? null,
-      onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
-      // Profile pin toggle (migration 330) — own PUBLIC posts only (the
-      // Dreams album shows private dreams; those aren't pinnable).
-      isPinned,
-      onTogglePin:
-        isOwn && item.is_public ? () => (isPinned ? unpin(item.id) : pin(item.id)) : undefined,
-    });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    setActionsOpen(true);
   }
 
   return (
@@ -119,6 +116,23 @@ export const PostTile = memo(function PostTile({
           <Text style={styles.publicBadgeText}>Public</Text>
         </View>
       )}
+      <PostActionSheet
+        visible={actionsOpen}
+        onClose={() => setActionsOpen(false)}
+        rows={buildPostActionRows({
+          id: item.id,
+          imageUrl: item.image_url,
+          imageUrlHq: item.image_url_hq ?? null,
+          isOwn,
+          faceSwapMode: item.face_swap_mode ?? null,
+          onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
+          // Profile pin toggle (migration 330) — own PUBLIC posts only (the
+          // Dreams album shows private dreams; those aren't pinnable).
+          isPinned,
+          onTogglePin:
+            isOwn && item.is_public ? () => (isPinned ? unpin(item.id) : pin(item.id)) : undefined,
+        })}
+      />
     </TouchableOpacity>
   );
 });

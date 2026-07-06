@@ -62,16 +62,17 @@ jest.mock('@/lib/premiumGate', () => ({
   showPremiumGate: (...a: unknown[]) => mockShowPremiumGate(...a),
 }));
 
-import { handleImageLongPress } from '@/lib/imageLongPress';
+// 2026-07-05: handleImageLongPress (CustomAlert menu) was retired — grid tiles
+// now share the fullscreen card's PostActionSheet. Same decision logic, tested
+// through buildPostActionRows (the rows builder both surfaces consume).
+import { buildPostActionRows } from '@/lib/imageLongPress';
 
-type AlertButton = { text: string; onPress?: () => void };
-/** Pull the captured showAlert buttons + invoke a button by its label. */
-function pressAlertButton(label: string) {
-  const lastCall = mockShowAlert.mock.calls[mockShowAlert.mock.calls.length - 1];
-  const buttons = lastCall[2] as AlertButton[];
-  const btn = buttons.find((b) => b.text === label);
-  if (!btn?.onPress) throw new Error(`no button "${label}"`);
-  return btn.onPress();
+type Row = { label: string; onPress?: () => void };
+/** Find a built row by its label + invoke it. */
+function pressRow(rows: Row[], label: string) {
+  const row = rows.find((r) => r.label === label);
+  if (!row?.onPress) throw new Error(`no row "${label}"`);
+  return row.onPress();
 }
 
 beforeEach(() => {
@@ -81,32 +82,34 @@ beforeEach(() => {
   mockSaveUrlToPhotos.mockResolvedValue(undefined);
 });
 
-describe('handleImageLongPress — quality sheet + entitlement gating', () => {
-  it('free user on their OWN post: options menu offers a native save', async () => {
+describe('buildPostActionRows — quality rows + entitlement gating', () => {
+  it('free user on their OWN post: rows offer a native save (+ Delete)', async () => {
     mockIsPro = false;
-    handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg', onDelete: jest.fn() });
-    // owner/admin → the fuller "Options" menu (save options + Delete)
-    expect(mockShowAlert).toHaveBeenCalledWith('Options', '', expect.any(Array));
-    await pressAlertButton('Save to Photos');
+    const rows = buildPostActionRows({
+      id: 'p1',
+      imageUrl: 'https://img/orig.jpg',
+      onDelete: jest.fn(),
+    });
+    expect(rows.some((r) => r.label === 'Delete')).toBe(true);
+    await pressRow(rows, 'Save to Photos');
     // native res = not HD (third arg false), and never calls the server
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/orig.jpg', false);
     expect(mockInvoke).not.toHaveBeenCalled();
   });
 
-  it('free user on ANY post can save native res (no Pro block)', async () => {
+  it('free user on ANY post can save native res (no Pro block); Report offered', async () => {
     mockIsPro = false;
-    handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    // Non-owned post: the menu now includes Report, so the title is "Options".
-    expect(mockShowAlert).toHaveBeenCalledWith('Options', '', expect.any(Array));
-    await pressAlertButton('Save to Photos');
+    const rows = buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
+    expect(rows.some((r) => r.label === 'Report')).toBe(true);
+    await pressRow(rows, 'Save to Photos');
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/orig.jpg', false);
     expect(mockInvoke).not.toHaveBeenCalled();
   });
 
   it('free user: "Save in HD (Premium)" opens the premium gate (the upsell)', () => {
     mockIsPro = false;
-    handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    pressAlertButton('Save in HD (Premium)');
+    const rows = buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
+    pressRow(rows, 'Save in HD (Premium)');
     expect(mockShowPremiumGate).toHaveBeenCalledWith({ kind: 'hd_premium' });
     expect(mockSaveUrlToPhotos).not.toHaveBeenCalled();
     expect(mockInvoke).not.toHaveBeenCalled();
@@ -115,38 +118,60 @@ describe('handleImageLongPress — quality sheet + entitlement gating', () => {
   it('BASIC user gets the unlocked "Save in HD" (HD is a paid perk of both tiers)', async () => {
     mockIsPro = false;
     mockIsBasic = true;
-    handleImageLongPress({
+    const rows = buildPostActionRows({
       id: 'p1',
       imageUrl: 'https://img/orig.jpg',
       imageUrlHq: 'https://img/hq.png',
     });
     // Unlocked label (no "(Pro)" suffix) + saves from cache, not routed to paywall
-    await pressAlertButton('Save in HD');
+    await pressRow(rows, 'Save in HD');
     expect(mockRouterPush).not.toHaveBeenCalled();
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/hq.png', true);
   });
 
   it('Pro user can grab a quick native save (no server call, no cap burn)', async () => {
-    handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    await pressAlertButton('Save to Photos');
+    const rows = buildPostActionRows({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
+    await pressRow(rows, 'Save to Photos');
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/orig.jpg', false);
     expect(mockInvoke).not.toHaveBeenCalled();
   });
 
-  it('always fires haptic feedback', () => {
-    handleImageLongPress({ id: 'p1', imageUrl: 'https://img/orig.jpg' });
-    expect(mockImpactAsync).toHaveBeenCalled();
+  it('pin row: label flips with isPinned; absent without onTogglePin (migration 330)', () => {
+    const onTogglePin = jest.fn();
+    const pinned = buildPostActionRows({
+      id: 'p1',
+      imageUrl: 'https://img/orig.jpg',
+      isOwn: true,
+      isPinned: true,
+      onTogglePin,
+    });
+    expect(pinned.some((r) => r.label === 'Unpin from profile')).toBe(true);
+    const unpinned = buildPostActionRows({
+      id: 'p1',
+      imageUrl: 'https://img/orig.jpg',
+      isOwn: true,
+      isPinned: false,
+      onTogglePin,
+    });
+    pressRow(unpinned, 'Pin to profile');
+    expect(onTogglePin).toHaveBeenCalled();
+    const noToggle = buildPostActionRows({
+      id: 'p1',
+      imageUrl: 'https://img/orig.jpg',
+      isOwn: true,
+    });
+    expect(noToggle.some((r) => String(r.label).includes('in to profile'))).toBe(false);
   });
 });
 
 describe('saveHd — cache hit (instant resolve, no server call)', () => {
   it('Pro user picks "Save in HD" with a cached HQ → instant save from cache', async () => {
-    handleImageLongPress({
+    const rows = buildPostActionRows({
       id: 'p1',
       imageUrl: 'https://img/orig.jpg',
       imageUrlHq: 'https://img/hq.png',
     });
-    await pressAlertButton('Save in HD');
+    await pressRow(rows, 'Save in HD');
     expect(mockSaveUrlToPhotos).toHaveBeenCalledWith('p1', 'https://img/hq.png', true);
     expect(mockInvoke).not.toHaveBeenCalled();
   });
@@ -155,10 +180,8 @@ describe('saveHd — cache hit (instant resolve, no server call)', () => {
 describe('saveHd — on-demand upscale (server resolve)', () => {
   async function triggerHdSave(invokeResult: { data?: unknown; error?: unknown }) {
     mockInvoke.mockResolvedValue(invokeResult);
-    handleImageLongPress({ id: 'p9', imageUrl: 'https://img/orig.jpg' });
-    // Non-owned post: the menu now includes Report, so the title is "Options".
-    expect(mockShowAlert).toHaveBeenCalledWith('Options', '', expect.any(Array));
-    await pressAlertButton('Save in HD');
+    const rows = buildPostActionRows({ id: 'p9', imageUrl: 'https://img/orig.jpg' });
+    await pressRow(rows, 'Save in HD');
   }
 
   it('status:done → opens the modal immediately, then saves the raced cache hit + closes', async () => {

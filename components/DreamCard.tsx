@@ -36,6 +36,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useToggleBlock } from '@/hooks/useBlockUser';
 import { useBotUsers } from '@/hooks/useBotUsers';
+import { usePinPost } from '@/hooks/usePinPost';
 import { useRepostIds } from '@/hooks/useRepostIds';
 import { useToggleRepost } from '@/hooks/useToggleRepost';
 
@@ -177,6 +178,9 @@ export const DreamCard = memo(function DreamCard({
   const isBotAuthor = (botUsers ?? []).some((b) => b.id === item.user_id);
   // Long-press context menu (PostActionSheet).
   const [actionsOpen, setActionsOpen] = useState(false);
+  // Profile pin toggle (migration 330) — own public posts only.
+  const { pin, unpin } = usePinPost();
+  const isPinned = !!item.pinned_at;
   // Author controls on the card (non-own posts): a Follow/Following toggle pill
   // (so the user can also unfollow from the feed, not just quick-follow) + a
   // visible "•••" options button that opens Report/Block (a discoverable 1.2
@@ -733,6 +737,12 @@ export const DreamCard = memo(function DreamCard({
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),
             onToggleVisibility: showVisibilityToggle ? onTogglePosted : undefined,
             isPublic: item.is_public,
+            // Profile pin toggle (migration 330) — own public posts only.
+            isPinned,
+            onTogglePin:
+              isOwnPost && item.is_public
+                ? () => (isPinned ? unpin(item.id) : pin(item.id))
+                : undefined,
           })}
         />
       </Animated.View>

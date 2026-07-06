@@ -289,6 +289,17 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
+  // Profile pin toggle — own public posts only (IG model, migration 330).
+  if (opts.onTogglePin) {
+    rows.push({
+      key: 'pin',
+      label: opts.isPinned ? 'Unpin from profile' : 'Pin to profile',
+      icon: 'pin-outline',
+      group: 'primary',
+      onPress: opts.onTogglePin,
+    });
+  }
+
   // Report — required flag path; only on posts you don't own.
   if (!opts.isOwn) {
     rows.push({
@@ -340,42 +351,11 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   return rows;
 }
 
-/**
- * Long-press menu = the quality options plus context actions (Dream like this,
- * Delete) for owners/admins. CustomAlert auto-stacks when there are ≠2 buttons
- * and floats Cancel to the bottom.
- */
-export function handleImageLongPress(opts: LongPressOpts) {
-  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-  const buttons: SheetButton[] = [
-    { text: 'Cancel', style: 'cancel' },
-    ...downloadOptionButtons(opts),
-  ];
-  if (opts.onDreamLikeThis) {
-    buttons.push({ text: 'Dream like this', onPress: opts.onDreamLikeThis });
-  }
-  // Profile pin toggle — own posts only (IG model, migration 330).
-  if (opts.onTogglePin) {
-    buttons.push({
-      text: opts.isPinned ? 'Unpin from profile' : 'Pin to profile',
-      onPress: opts.onTogglePin,
-    });
-  }
-  if (opts.onDelete) {
-    buttons.push({ text: 'Delete', style: 'destructive', onPress: opts.onDelete });
-  }
-  // Report — App Store 1.2 requires a way to flag objectionable content. Shown on
-  // posts the user does NOT own (you don't report your own dream).
-  if (!opts.isOwn) {
-    buttons.push({
-      text: 'Report',
-      style: 'destructive',
-      onPress: () => reportContent({ uploadId: opts.id }),
-    });
-  }
-  const hasContextActions = !!opts.onDelete || !opts.isOwn || !!opts.onDreamLikeThis;
-  showAlert(hasContextActions ? 'Options' : 'Download', faceSwapNoHdMessage(opts), buttons);
-}
+// handleImageLongPress (the CustomAlert stacked-button menu) was retired
+// 2026-07-05 — the grid tiles now open the same PostActionSheet as the
+// fullscreen card (buildPostActionRows above), so every post surface shares
+// one menu UX. (Kevin: "migrate the popup dialog in album/grid view to use
+// the popup sheet".)
 
 /**
  * Save the ready HD copy DIRECTLY to the device — driven by the top-right
