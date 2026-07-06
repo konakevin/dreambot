@@ -140,11 +140,12 @@ async function handleRequest(req: Request): Promise<Response> {
       error: authError,
     } = await supabaseUser.auth.getUser();
     if (authError || !user) {
+      // Never log token bytes — only presence (audit S1, 2026-07-06).
       console.error(
         '[restyle-photo] Auth failed:',
         authError && authError.message ? authError.message : 'no user',
-        'header:',
-        authHeader.slice(0, 30)
+        'bearer_present:',
+        authHeader.startsWith('Bearer ')
       );
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }

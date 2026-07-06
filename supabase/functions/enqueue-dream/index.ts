@@ -95,6 +95,18 @@ Deno.serve(async (req) => {
       return json({ error: 'first_dream_already_claimed' }, 409);
     }
 
+    // Per-IP cap on the FREE first dream (migration 332) — the anti-farming
+    // lever the per-account check above CAN'T provide: N fresh accounts from one
+    // machine each pass the per-account guard, so a per-IP limit bounds the
+    // "N free heavy dual-swap renders on our bill" abuse. Fail-open on an
+    // unknown IP (proxy stripped the header) — the RPC handles that. Take the
+    // FIRST hop of x-forwarded-for (the client; later hops are our proxies).
+    const clientIp = (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim();
+    const { data: ipOk } = await supabase.rpc('claim_first_dream_ip', { p_ip: clientIp });
+    if (ipOk === false) {
+      return json({ error: 'first_dream_ip_rate_limited' }, 429);
+    }
+
     const fdJobId = crypto.randomUUID();
     const vp = body.vibe_profile as
       | { dream_cast?: CastMemberLike[]; dream_seeds?: { places?: string[] } }

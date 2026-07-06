@@ -38,6 +38,8 @@
     "__tests__/lib/dreamQueueWeight.test.ts",
     "__tests__/lib/generateImage.test.ts",
     "__tests__/lib/firstDreamTiers.test.ts",
-    "__tests__/lib/firstDreamReady.test.ts"
+    "__tests__/lib/firstDreamReady.test.ts",
+    "__tests__/lib/singleSwapGuard.test.ts",
+    "__tests__/lib/surpriseResolver.test.ts"
   ]
 }

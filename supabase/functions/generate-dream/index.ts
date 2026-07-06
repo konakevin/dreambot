@@ -243,11 +243,14 @@ async function handleRequest(req: Request): Promise<Response> {
       error: authError,
     } = await supabaseUser.auth.getUser();
     if (authError || !user) {
+      // Log ONLY whether a bearer header was present — never any bytes of the
+      // token itself (the first 30 chars leaked ~22 chars of the JWT into
+      // centralized logs; flagged by the 2026-07-06 audit S1).
       console.error(
         '[generate-dream] Auth failed:',
         authError?.message,
-        'header:',
-        authHeader.slice(0, 30)
+        'bearer_present:',
+        authHeader.startsWith('Bearer ')
       );
       return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
     }
