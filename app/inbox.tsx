@@ -199,9 +199,12 @@ function getGroupText(g: InboxGroup): {
       }
       // Label form of the push announcement (send-push pairs: "Your dream is
       // ready" / "You dreamed something last night") so the inbox row reads
-      // as the same event the banner announced.
+      // as the same event the banner announced. NOTE: this branch only works
+      // once migration 329 lands — get_inbox never returned `subtype` before,
+      // so every dream row (including Create-screen dreams) mislabeled as
+      // "Last night's dream" (Kevin 2026-07-05).
       return {
-        subject: g.subtype === 'manual' ? 'The dream you made' : "Last night's dream",
+        subject: g.subtype === 'manual' ? 'Your dream is ready' : "Last night's dream",
         subtext: capSubtext(g.body),
         isAggregable: false,
       };
