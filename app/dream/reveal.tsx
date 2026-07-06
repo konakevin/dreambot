@@ -22,6 +22,7 @@ import { colors, ui } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
+import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { saveDream } from '@/lib/dreamSave';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { Toast } from '@/components/Toast';
@@ -31,8 +32,11 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 export default function DreamRevealScreen() {
   const user = useAuthStore((s) => s.user);
   const result = useDreamStore((s) => s.result);
+  const config = useDreamStore((s) => s.config);
   const clearResult = useDreamStore((s) => s.clearResult);
   const reset = useDreamStore((s) => s.reset);
+  const { data: dbMediums } = useDreamMediums();
+  const { data: dbVibes } = useDreamVibes();
 
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
@@ -92,6 +96,27 @@ export default function DreamRevealScreen() {
       </View>
     );
   }
+
+  // Surprise Me reveal — the payoff for leaving an axis to chance: show ONLY the
+  // axis/axes the user actually surprised (if they picked Watercolor themselves,
+  // don't tell them it's Watercolor). Creator-only by nature (their own reveal).
+  const prettify = (k: string) => k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  const mediumWasSurprise =
+    config.selectedMedium === 'surprise_me_face' || config.selectedMedium === 'surprise_me_art';
+  const vibeWasSurprise = config.selectedVibe === 'surprise_me';
+  const revealParts: string[] = [];
+  if (mediumWasSurprise && result.resolvedMedium) {
+    revealParts.push(
+      dbMediums?.find((m) => m.key === result.resolvedMedium)?.label ??
+        prettify(result.resolvedMedium)
+    );
+  }
+  if (vibeWasSurprise && result.resolvedVibe) {
+    revealParts.push(
+      dbVibes?.find((v) => v.key === result.resolvedVibe)?.label ?? prettify(result.resolvedVibe)
+    );
+  }
+  const surpriseReveal = revealParts.join(' · ');
 
   async function handlePost() {
     if (!user || saving) return;
@@ -204,6 +229,15 @@ export default function DreamRevealScreen() {
               <ActivityIndicator size="large" color="#fff" />
             ) : (
               <>
+                {surpriseReveal ? (
+                  <View style={s.surpriseChip}>
+                    <Ionicons name="sparkles" size={13} color="#fff" />
+                    <Text style={s.surpriseChipText}>
+                      <Text style={s.surpriseChipEyebrow}>Surprise Me · </Text>
+                      {surpriseReveal}
+                    </Text>
+                  </View>
+                ) : null}
                 <View style={s.savedRow}>
                   <Ionicons name="checkmark-circle" size={14} color="rgba(255,255,255,0.7)" />
                   <Text style={s.savedHintText}>Saved to your dreams</Text>
@@ -290,6 +324,20 @@ const s = StyleSheet.create({
     gap: 6,
     marginBottom: verticalScale(4),
   },
+  surpriseChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: verticalScale(7),
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.22)',
+    marginBottom: verticalScale(6),
+  },
+  surpriseChipText: { color: '#fff', fontSize: fontScale(13), fontWeight: '700' },
+  surpriseChipEyebrow: { color: 'rgba(255,255,255,0.7)', fontWeight: '600' },
   savedHintText: { color: 'rgba(255,255,255,0.7)', fontSize: fontScale(13), fontWeight: '600' },
   primaryPill: {
     flexDirection: 'row',

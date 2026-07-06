@@ -48,6 +48,7 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     ai_prompt: (row.ai_prompt as string | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,
     dream_vibe: (row.dream_vibe as string | null) ?? null,
+    recipe: (row.recipe as Record<string, unknown> | null) ?? null,
     // Defensive cast — pre-migration-211 generated types don't have this
     // column yet. Either order (run migration first or types-regen first)
     // is safe; the runtime value is null until backfill + new renders.
@@ -96,6 +97,7 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     ai_concept: (row.ai_concept as Record<string, unknown> | null) ?? null,
     dream_medium: (row.dream_medium as string | null) ?? null,
     dream_vibe: (row.dream_vibe as string | null) ?? null,
+    recipe: (row.recipe as Record<string, unknown> | null) ?? null,
     // Defensive cast — pre-migration-211 generated types don't have this
     // column yet. Either order (run migration first or types-regen first)
     // is safe; the runtime value is null until backfill + new renders.

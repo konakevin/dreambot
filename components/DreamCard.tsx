@@ -27,6 +27,7 @@ import * as nav from '@/lib/navigate';
 import { colors, ui, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { buildPostActionRows } from '@/lib/imageLongPress';
+import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
@@ -79,6 +80,10 @@ export interface DreamPostItem {
   bot_message?: string | null;
   dream_medium?: string | null;
   dream_vibe?: string | null;
+  /** The dream's saved inputs (recipeBuilder). Only `hint` (the original user
+   *  prompt) is read on the client, for the owner-only "Dream this again"
+   *  reload. Present on POST_SELECT (`*`) surfaces; null via the feed RPC. */
+  recipe?: Record<string, unknown> | null;
   /** AI model identifier that rendered this image (e.g. 'openai/gpt-image-2',
    * 'black-forest-labs/flux-1.1-pro'). Populated for new posts by the bot
    * engine + Edge Functions; older posts are null. Powers the bottom-left
@@ -165,6 +170,8 @@ export const DreamCard = memo(function DreamCard({
   const currentUser = useAuthStore((s) => s.user);
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge] = useAdminShowModelBadge();
+  // Owner-only "Dream this again" reload + recipe labels (gated at the sheet).
+  const dreamAgain = useDreamAgain(item);
   const isOwnPost = currentUser?.id === item.user_id;
   // Inline "Follow" on the card (IG-style) — lets the user follow this account
   // without drilling into the profile. Only shown once the following set has
@@ -724,6 +731,11 @@ export const DreamCard = memo(function DreamCard({
           visible={actionsOpen}
           onClose={() => setActionsOpen(false)}
           bottomInset={bottomPadding}
+          recipe={
+            isOwnPost && dreamAgain.canDreamAgain
+              ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
+              : undefined
+          }
           rows={buildPostActionRows({
             id: item.id,
             imageUrl: item.image_url,
@@ -732,6 +744,8 @@ export const DreamCard = memo(function DreamCard({
             faceSwapMode: item.face_swap_mode ?? null,
             onDelete,
             onDreamLikeThis,
+            onDreamAgain:
+              isOwnPost && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
             authorName: item.username ?? undefined,
             isBot: isBotAuthor,
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),

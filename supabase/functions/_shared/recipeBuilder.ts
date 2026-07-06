@@ -41,6 +41,12 @@ export interface Recipe {
   bot_username: string | null;
   path: string | null;
   ai_prompt: string;
+
+  // The ORIGINAL user prompt (hint) the dreamer typed — persisted so the owner
+  // can reload their exact inputs into Create ("Dream this again", 2026-07-06).
+  // Empty for prompt-less surprise dreams and for bot renders. Distinct from
+  // ai_prompt, which is the expanded Flux prompt Sonnet wrote.
+  hint: string;
 }
 
 export interface RenderContext {
@@ -64,6 +70,7 @@ export interface RenderContext {
   blowItUpBlock?: string | null;
   botUsername?: string | null;
   path?: string | null;
+  hint?: string | null;
 }
 
 export function buildRecipe(renderContext: RenderContext): Recipe {
@@ -107,6 +114,7 @@ export function buildRecipe(renderContext: RenderContext): Recipe {
     bot_username: _strOrNull(renderContext.botUsername),
     path: _strOrNull(renderContext.path),
     ai_prompt: aiPrompt,
+    hint: _str(renderContext.hint),
   };
 }
 

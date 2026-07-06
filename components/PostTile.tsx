@@ -9,6 +9,7 @@ import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { buildPostActionRows } from '@/lib/imageLongPress';
+import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -47,6 +48,8 @@ export const PostTile = memo(function PostTile({
   const { pin, unpin } = usePinPost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
   const isPinned = !!item.pinned_at;
+  // Owner-only "Dream this again" reload + recipe labels (gated below on isOwn).
+  const dreamAgain = useDreamAgain(item);
 
   async function handlePress() {
     // Stash the source array + source type so PhotoDetailScreen can reuse
@@ -132,6 +135,11 @@ export const PostTile = memo(function PostTile({
           <PostActionSheet
             visible
             onClose={() => setActionsOpen(false)}
+            recipe={
+              isOwn && dreamAgain.canDreamAgain
+                ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
+                : undefined
+            }
             rows={buildPostActionRows({
               id: item.id,
               imageUrl: item.image_url,
@@ -139,6 +147,7 @@ export const PostTile = memo(function PostTile({
               isOwn,
               faceSwapMode: item.face_swap_mode ?? null,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
+              onDreamAgain: isOwn && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
               // Profile pin toggle (migration 330) — own PUBLIC posts only (the
               // Dreams album shows private dreams; those aren't pinnable).
               isPinned,

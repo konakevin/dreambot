@@ -72,6 +72,17 @@ export interface DreamFailure {
   isPreFlightModeration: boolean;
 }
 
+/** A dream's saved inputs, reloaded into Create by "Dream this again" (owner-
+ *  only, 2026-07-06). Set by the action-sheet handler, consumed + cleared by the
+ *  Create screen on focus so it survives the sticky medium/vibe rehydrate. */
+export interface CreatePreset {
+  prompt: string;
+  medium: string;
+  vibe: string;
+  /** Model id to preselect, or null to leave the picker default. */
+  model: string | null;
+}
+
 interface DreamStore {
   // Config (set by Create + Configure screens)
   config: DreamConfig;
@@ -81,7 +92,10 @@ interface DreamStore {
   activeJobId: string | null;
   // Failure state — set by useDreamCreate's catch block, consumed by Loading screen
   activeJobFailure: DreamFailure | null;
+  // One-shot "Dream this again" hand-off to the Create screen (see CreatePreset).
+  pendingCreatePreset: CreatePreset | null;
   // Actions
+  setPendingCreatePreset: (preset: CreatePreset | null) => void;
   setMode: (mode: DreamFlowMode) => void;
   setPhoto: (base64: string, uri: string) => void;
   setPhotoStyle: (style: PhotoStyle) => void;
@@ -122,7 +136,9 @@ export const useDreamStore = create<DreamStore>((set) => ({
   result: null,
   activeJobId: null,
   activeJobFailure: null,
+  pendingCreatePreset: null,
 
+  setPendingCreatePreset: (preset) => set({ pendingCreatePreset: preset }),
   setMode: (mode) => set((s) => ({ config: { ...s.config, mode } })),
   setPhoto: (base64, uri) =>
     set((s) => ({ config: { ...s.config, photoBase64: base64, photoUri: uri, mode: 'photo' } })),
@@ -143,5 +159,11 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setActiveJobId: (id) => set({ activeJobId: id }),
   setActiveJobFailure: (failure) => set({ activeJobFailure: failure }),
   reset: () =>
-    set({ config: { ...INITIAL_CONFIG }, result: null, activeJobId: null, activeJobFailure: null }),
+    set({
+      config: { ...INITIAL_CONFIG },
+      result: null,
+      activeJobId: null,
+      activeJobFailure: null,
+      pendingCreatePreset: null,
+    }),
 }));

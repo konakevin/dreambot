@@ -243,6 +243,9 @@ export interface PostActionSheetOpts extends LongPressOpts {
   onToggleVisibility?: () => void;
   /** Current visibility, to label the toggle "Make private" vs "Make public". */
   isPublic?: boolean;
+  /** Owner-only "Dream this again" — reloads this dream's saved inputs into
+   *  Create (from useDreamAgain). Present ⇒ the row shows. */
+  onDreamAgain?: () => void;
 }
 
 const iconForDownload = (label: string): string =>
@@ -275,6 +278,19 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'color-wand-outline',
       group: 'primary',
       onPress: opts.onDreamLikeThis,
+    });
+  }
+
+  // Dream this again — owner-only reload of this dream's saved inputs into
+  // Create (original prompt + medium + vibe + model), editable. The caller only
+  // passes onDreamAgain for the owner, so no extra isOwn gate needed here.
+  if (opts.onDreamAgain) {
+    rows.push({
+      key: 'dream-again',
+      label: 'Dream this again',
+      icon: 'refresh-outline',
+      group: 'primary',
+      onPress: opts.onDreamAgain,
     });
   }
 

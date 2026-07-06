@@ -103,6 +103,8 @@ function buildRecipe(renderContext) {
     bot_username: _strOrNull(renderContext.botUsername),
     path: _strOrNull(renderContext.path),
     ai_prompt: aiPrompt,
+    // Kept in shape-sync with the edge recipeBuilder.ts (bots never set it).
+    hint: _str(renderContext.hint),
   };
 }
 

@@ -44,6 +44,10 @@ interface PostActionSheetProps {
   title?: string;
   /** Optional small avatar/thumbnail shown left of the title for context. */
   titleImageUrl?: string | null;
+  /** Owner-only "Recipe" line — the dream's medium + vibe ("formula"). Shown
+   *  ONLY on the owner's own dream (the caller gates it); never on other
+   *  people's view of a post. Undefined ⇒ hidden. */
+  recipe?: { mediumLabel: string; vibeLabel: string };
   /** Card bottom padding (clears the tab bar) so the last row isn't occluded. */
   bottomInset?: number;
 }
@@ -54,6 +58,7 @@ export function PostActionSheet({
   rows,
   title,
   titleImageUrl,
+  recipe,
   bottomInset,
 }: PostActionSheetProps) {
   const insets = useSafeAreaInsets();
@@ -179,6 +184,17 @@ export function PostActionSheet({
             <Text style={s.title}>{title}</Text>
           </View>
         ) : null}
+        {recipe ? (
+          <View style={s.recipeChip}>
+            <Ionicons name="sparkles-outline" size={14} color={colors.accent} />
+            <Text style={s.recipeText} numberOfLines={1}>
+              <Text style={s.recipeEyebrow}>Recipe </Text>
+              {recipe.mediumLabel}
+              {recipe.mediumLabel && recipe.vibeLabel ? ' · ' : ''}
+              {recipe.vibeLabel}
+            </Text>
+          </View>
+        ) : null}
         {renderCard(primary)}
         {renderCard(danger)}
       </Animated.View>
@@ -222,6 +238,15 @@ const s = StyleSheet.create({
     fontSize: fontScale(16),
     fontWeight: '700',
   },
+  recipeChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingBottom: verticalScale(10),
+  },
+  recipeEyebrow: { color: colors.textSecondary, fontWeight: '700' },
+  recipeText: { color: colors.textPrimary, fontSize: fontScale(13), fontWeight: '600' },
   card: {
     backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: 14,

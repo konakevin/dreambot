@@ -1672,6 +1672,10 @@ Output ONLY the prompt.`;
           vibeKey: resolvedVibeKey,
           aiPrompt: finalPrompt,
           fluxSeed: null,
+          // Persist the dreamer's original prompt so they can reload their exact
+          // inputs into Create later. Sanitized at request entry. Empty for
+          // prompt-less surprise dreams.
+          hint: typeof hint === 'string' ? hint : '',
           // User-side V4 doesn't use bot-style overrides — leave style anchors
           // empty, the medium directive resolves fresh from DB at DLT time.
         });

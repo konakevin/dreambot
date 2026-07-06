@@ -196,29 +196,30 @@ describe('buildRecipe — snapshot (cuddlebot plushie-life representative)', () 
   it('matches expected shape', () => {
     const r = buildRecipeTs(FULL_CONTEXT);
     expect(r).toMatchInlineSnapshot(`
-{
-  "ai_prompt": "a plush fox by a campfire, warm golden lighting, soft fabric texture, no text",
-  "blow_it_up_block": "
-BLOW IT UP: max every element",
-  "bot_username": "cuddlebot",
-  "camera": "medium-wide eye-level shot",
-  "chaos_block": "
-CHAOS LAYER: silhouette distortion at 0.3 intensity",
-  "color_palette": "amber, rust, cream, deep teal",
-  "flux_seed": 12345678,
-  "lighting": "firelight + lantern-glow + golden-hour",
-  "medium_key": "plush_fabric",
-  "medium_style_override": "plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR",
-  "model": "black-forest-labs/flux-1.1-pro",
-  "path": "plushie-life",
-  "prompt_prefix": "plush stuffed-animal characters",
-  "prompt_suffix": "no text, no watermark",
-  "scene_palette": "forest campsite at dusk",
-  "sensory_block": "
-SENSORY: warm woodsmoke, distant owl call",
-  "version": 1,
-  "vibe_key": "cozy",
-}
-`);
+      {
+        "ai_prompt": "a plush fox by a campfire, warm golden lighting, soft fabric texture, no text",
+        "blow_it_up_block": "
+      BLOW IT UP: max every element",
+        "bot_username": "cuddlebot",
+        "camera": "medium-wide eye-level shot",
+        "chaos_block": "
+      CHAOS LAYER: silhouette distortion at 0.3 intensity",
+        "color_palette": "amber, rust, cream, deep teal",
+        "flux_seed": 12345678,
+        "hint": "",
+        "lighting": "firelight + lantern-glow + golden-hour",
+        "medium_key": "plush_fabric",
+        "medium_style_override": "plush stuffed-animal characters — soft-fabric creatures with visible plush-fiber FUR",
+        "model": "black-forest-labs/flux-1.1-pro",
+        "path": "plushie-life",
+        "prompt_prefix": "plush stuffed-animal characters",
+        "prompt_suffix": "no text, no watermark",
+        "scene_palette": "forest campsite at dusk",
+        "sensory_block": "
+      SENSORY: warm woodsmoke, distant owl call",
+        "version": 1,
+        "vibe_key": "cozy",
+      }
+    `);
   });
 });

@@ -81,6 +81,7 @@ export default function CreateScreen() {
   const config = useDreamStore((s) => s.config);
   const setPhoto = useDreamStore((s) => s.setPhoto);
   const clearPhoto = useDreamStore((s) => s.clearPhoto);
+  const setMode = useDreamStore((s) => s.setMode);
   const setMedium = useDreamStore((s) => s.setMedium);
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
@@ -220,8 +221,38 @@ export default function CreateScreen() {
   // (cross-session restore) AND whenever the user returns to the tab — so a
   // reset() after a dream, or a DLT replay that changed the shared store, is
   // overridden back to the user's sticky choice. No-op on first run (no keys).
+  // "Dream this again" hand-off (owner-only, imageLongPress → PostActionSheet):
+  // reload a past dream's saved inputs into Create, editable. Consumed + cleared
+  // once here. Applied to the store (prompt/medium/vibe) + the local model
+  // picker; suppresses the sticky rehydrate below for this focus so the preset
+  // wins WITHOUT overwriting the user's sticky Surprise-Me default.
+  const presetJustAppliedRef = useRef(false);
   useFocusEffect(
     useCallback(() => {
+      const preset = useDreamStore.getState().pendingCreatePreset;
+      if (!preset) return;
+      useDreamStore.getState().setPendingCreatePreset(null);
+      presetJustAppliedRef.current = true;
+      clearPhoto(); // reload as a text dream — the original photo isn't reusable
+      setMode('prompt');
+      setPrompt(preset.prompt);
+      setMedium(preset.medium);
+      setVibe(preset.vibe);
+      // Only preselect the model if it's still a known/available picker option.
+      if (preset.model && imageModels.some((m) => m.id === preset.model)) {
+        setSelectedModelId(preset.model);
+      }
+    }, [clearPhoto, setMode, setPrompt, setMedium, setVibe, imageModels])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      // A "Dream this again" preset just set medium/vibe explicitly — don't let
+      // the sticky rehydrate clobber it. Applies for this one focus only.
+      if (presetJustAppliedRef.current) {
+        presetJustAppliedRef.current = false;
+        return;
+      }
       let cancelled = false;
       (async () => {
         try {
