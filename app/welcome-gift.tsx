@@ -17,9 +17,15 @@
  *     per mount (so a returning user sees a different mascot each visit;
  *     splash-icon stays the canonical "splash flash" mascot)
  *
+ * Reached two ways (2026-07-05): auto-presented at the end of onboarding
+ * (RevealStep routes its feed exits here with ?from=onboarding — this is
+ * now the guaranteed trial + sparkle education moment) AND via the inbox
+ * notification tap forever after.
+ *
  * Tap dismiss flow: back arrow top-left routes to /inbox (where they
- * came from). Primary CTA routes to /create. The welcome_gift
- * notification stays in the inbox forever as a sentimental keepsake.
+ * came from) — or straight to the feed when from=onboarding (they've
+ * never seen the inbox yet). Primary CTA routes to /create. The
+ * welcome_gift notification stays in the inbox as a sentimental keepsake.
  */
 
 import { useMemo } from 'react';
@@ -30,7 +36,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
 import { GradientTitle } from '@/components/GradientTitle';
@@ -61,20 +67,27 @@ function FeatureRow({ emoji, text }: { emoji: string; text: string }) {
 export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
   const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
+  // from=onboarding → auto-presented at the end of onboarding (RevealStep):
+  // the user has never seen the inbox, so "back" means the feed.
+  const { from } = useLocalSearchParams<{ from?: string }>();
+  const fromOnboarding = from === 'onboarding';
 
   function handleStart() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     // replace() so back-button doesn't return them to this screen
-    // (they've consumed the welcome moment; back goes home/inbox).
-    router.replace('/(tabs)/create');
+    // (they've consumed the welcome moment). Onboarding arrivals land on
+    // the MAIN FEED (Kevin 2026-07-05 — never strand a first-session user
+    // anywhere but home); inbox arrivals keep the Create destination.
+    router.replace(fromOnboarding ? '/(tabs)' : '/(tabs)/create');
   }
 
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // Inbox is where they came from. nav.back() would work for warm
-    // taps but breaks on cold-start push opens — explicit route is
-    // safer.
-    nav.replace('/inbox');
+    // Inbox is where they came from (notification tap). nav.back() would
+    // work for warm taps but breaks on cold-start push opens — explicit
+    // route is safer. Onboarding arrivals have never seen the inbox, so
+    // back lands them on the feed instead.
+    nav.replace(fromOnboarding ? '/(tabs)' : '/inbox');
   }
 
   return (
@@ -112,11 +125,17 @@ export default function WelcomeGiftScreen() {
           <FeatureRow emoji="🌙" text="Cast yourself in dream worlds" />
         </View>
 
-        {/* Pro trial footnote — trial length from engine_config (the same
+        {/* Pro-trial card — promoted from a buried footnote to its own
+            artifact (2026-07-05) so the trial terms actually register:
+            when it ends in {proTrialDays} days, the user should already
+            know it was a trial. Length from engine_config (the same
             admin-tunable window the entitlement gates read). */}
-        <Text style={s.footnote}>
-          Nightly dreams land every morning during your {proTrialDays}-day Pro trial.
-        </Text>
+        <View style={s.trialCard}>
+          <Text style={s.giftEmoji}>🌙</Text>
+          <Text style={s.trialBig}>{proTrialDays}-day Pro trial</Text>
+          <Text style={s.giftSubtitle}>nightly dreams land every morning, on us</Text>
+          <Text style={s.trialFoot}>After that, keep them coming with Pro</Text>
+        </View>
       </ScrollView>
 
       {/* CTA pill — full-width, accent background. Replaces history so
@@ -126,7 +145,7 @@ export default function WelcomeGiftScreen() {
             with reactCompiler enabled the function style never gets applied
             (see ProfileHeader stats fix, 2026-07-01) and the pill rendered bare. */}
         <TouchableOpacity onPress={handleStart} style={s.ctaBtn} activeOpacity={0.85}>
-          <Text style={s.ctaText}>Let&rsquo;s dream ✨</Text>
+          <Text style={s.ctaText}>{fromOnboarding ? 'Let’s go ✨' : 'Let’s dream ✨'}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -227,13 +246,31 @@ const s = StyleSheet.create({
     flex: 1,
   },
 
-  footnote: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    fontWeight: '500',
-    textAlign: 'center',
+  // Trial card — same artifact treatment as the gift card, quieter border
+  // (it's the terms, not the present).
+  trialCard: {
     marginTop: verticalScale(24),
-    paddingHorizontal: 12,
+    paddingHorizontal: 24,
+    paddingVertical: verticalScale(16),
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: 'rgba(167,139,250,0.06)',
+    alignItems: 'center',
+    minWidth: 240,
+  },
+  trialBig: {
+    color: colors.textPrimary,
+    fontSize: fontScale(20),
+    fontWeight: '800',
+    letterSpacing: -0.3,
+  },
+  trialFoot: {
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: verticalScale(8),
   },
 
   ctaWrap: {

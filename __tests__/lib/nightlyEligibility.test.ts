@@ -22,6 +22,7 @@ const {
   hoursUntilProSubscriptionEnds,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
+  shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
   TRIAL_DURATION_DAYS,
@@ -186,6 +187,49 @@ describe('trial-reminder windows — last-night fires in (0, 36]h', () => {
     const u = { pro_trial_started_at: trialAt(13.5) };
     expect(shouldSendLastNightTrialReminder(u, NOW)).toBe(true);
     expect(shouldSend3DayTrialReminder(u, NOW)).toBe(false);
+  });
+});
+
+describe('trial-reminder windows — ended notice fires in [-36, 0]h (post-expiry)', () => {
+  const trialAt = (hUntilEnd: number) =>
+    new Date(NOW + hUntilEnd * 3_600_000 - TRIAL_DURATION_DAYS * 86_400_000).toISOString();
+
+  it('fires just after expiry (-1h)', () => {
+    const u = { pro_trial_started_at: trialAt(-1) };
+    expect(shouldSendTrialEndedNotice(u, NOW)).toBe(true);
+  });
+
+  it('fires at exactly 0 (the moment of expiry)', () => {
+    const u = { pro_trial_started_at: trialAt(0) };
+    expect(shouldSendTrialEndedNotice(u, NOW)).toBe(true);
+  });
+
+  it('fires at the lower-bound edge (-36h — late cron still catches)', () => {
+    const u = { pro_trial_started_at: trialAt(-36) };
+    expect(shouldSendTrialEndedNotice(u, NOW)).toBe(true);
+  });
+
+  it('does NOT fire on a stale lapsed trial (-37h — chance missed, no nagging)', () => {
+    const u = { pro_trial_started_at: trialAt(-37) };
+    expect(shouldSendTrialEndedNotice(u, NOW)).toBe(false);
+  });
+
+  it('does NOT fire while the trial is still alive (+1h — that is last-night territory)', () => {
+    const u = { pro_trial_started_at: trialAt(1) };
+    expect(shouldSendTrialEndedNotice(u, NOW)).toBe(false);
+    expect(shouldSendLastNightTrialReminder(u, NOW)).toBe(true);
+  });
+
+  it('never fires for a user who never started a trial', () => {
+    expect(shouldSendTrialEndedNotice({ pro_trial_started_at: null }, NOW)).toBe(false);
+  });
+
+  it('windows are mutually exclusive — no hour matches both last-night and ended', () => {
+    for (const h of [-36, -12, -0.5, 0, 0.5, 12, 36]) {
+      const u = { pro_trial_started_at: trialAt(h) };
+      const both = shouldSendLastNightTrialReminder(u, NOW) && shouldSendTrialEndedNotice(u, NOW);
+      expect(both).toBe(false);
+    }
   });
 });
 

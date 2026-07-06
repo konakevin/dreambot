@@ -330,7 +330,13 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     }
 
     reset();
-    router.replace('/(tabs)');
+    // Route the feed exit THROUGH the welcome-gift screen (2026-07-05): it's
+    // the one surface that explains the sparkle bonus + the Pro trial, and as
+    // an inbox-notification-only destination almost nobody saw it. The
+    // from=onboarding param makes its back/CTA land on the feed, not /inbox.
+    // (The "Post to my feed" fork above skips it — those users still have the
+    // welcome_gift inbox row.)
+    router.replace('/welcome-gift?from=onboarding');
   }
 
   // ── Sparkles welcome (legacy — now skipped, goes straight to home) ──
@@ -508,7 +514,8 @@ export function RevealStep({ onBack, isActive = false }: Props) {
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                     reset();
-                    router.replace('/(tabs)');
+                    // Through the welcome-gift screen — see handleCreateBot.
+                    router.replace('/welcome-gift?from=onboarding');
                   }}
                   activeOpacity={0.7}
                 >

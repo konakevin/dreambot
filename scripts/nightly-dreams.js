@@ -24,6 +24,7 @@ const {
   isDreamEligible,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
+  shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
 } = require('./lib/nightlyEligibility');
@@ -304,9 +305,10 @@ async function sendTrialReminders(sb, enqueuedPool) {
   // "last night" reminder so we never promise a dream we don't deliver.
   const enqueuedIds = new Set((enqueuedPool || []).map((u) => u.user_id));
 
-  // Window-match each trial user against the two reminder gates.
+  // Window-match each trial user against the three reminder gates.
   const need3Day = [];
   const needLast = [];
+  const needEnded = [];
   for (const row of trialUsers || []) {
     const u = row.users;
     if (shouldSend3DayTrialReminder(u, now, cfg.proTrialDays)) need3Day.push(row.user_id);
@@ -316,16 +318,19 @@ async function sendTrialReminders(sb, enqueuedPool) {
     ) {
       needLast.push(row.user_id);
     }
+    // Post-expiry notice (2026-07-05): trial expired within the last 36h.
+    // No enqueue gate — the whole point is that dreams have STOPPED.
+    if (shouldSendTrialEndedNotice(u, now, cfg.proTrialDays)) needEnded.push(row.user_id);
   }
-  if (need3Day.length === 0 && needLast.length === 0) {
-    console.log('Trial reminders: nobody in either window.');
+  if (need3Day.length === 0 && needLast.length === 0 && needEnded.length === 0) {
+    console.log('Trial reminders: nobody in any window.');
     return;
   }
 
   // Idempotency: pull every existing trial_reminder notification for our
   // candidate set, since the earliest trial-start in scope. Skip insertion
   // when the row already exists for (recipient × subtype).
-  const candidateIds = [...new Set([...need3Day, ...needLast])];
+  const candidateIds = [...new Set([...need3Day, ...needLast, ...needEnded])];
   const { data: alreadySent, error: dupErr } = await sb
     .from('notifications')
     .select('recipient_id, subtype')
@@ -352,10 +357,12 @@ async function sendTrialReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'trial_reminder',
         subtype: '3day',
-        // Subject-only inbox row — kept short for the single-line "no
+        // Subject-only inbox row — kept ≤39 chars for the single-line "no
         // ellipsis" inbox layout (migration 223 / 2026-06-04). Push body
-        // uses the same string; iOS truncates long titles anyway.
-        body: 'Trial ends in 3 days — tap to subscribe',
+        // uses the same string; iOS truncates long titles anyway. Warmed
+        // 2026-07-05 (was "Trial ends in 3 days — tap to subscribe") —
+        // tap already routes to /subscribe, the string can afford charm.
+        body: '3 dream nights left in your trial ✨',
         is_read: false,
       });
     }
@@ -367,14 +374,29 @@ async function sendTrialReminders(sb, enqueuedPool) {
         actor_id: null,
         type: 'trial_reminder',
         subtype: 'last_night',
-        body: 'Trial ends tomorrow — tap to subscribe',
+        body: 'Tonight’s your last trial dream ✨',
+        is_read: false,
+      });
+    }
+  }
+  for (const id of needEnded) {
+    if (!sentSet.has(`${id}:ended`)) {
+      rows.push({
+        recipient_id: id,
+        actor_id: null,
+        type: 'trial_reminder',
+        subtype: 'ended',
+        // The post-expiry notice — routes to /subscribe like the others
+        // (lib/notificationRouting.ts keys on type, so no client change).
+        body: 'Trial ended — keep your dreams going',
         is_read: false,
       });
     }
   }
   if (rows.length === 0) {
     console.log(
-      `Trial reminders: ${need3Day.length} matched 3day + ${needLast.length} matched last_night, all already sent.`
+      `Trial reminders: ${need3Day.length} matched 3day + ${needLast.length} matched last_night ` +
+        `+ ${needEnded.length} matched ended, all already sent.`
     );
     return;
   }
@@ -394,7 +416,8 @@ async function sendTrialReminders(sb, enqueuedPool) {
   }
   console.log(
     `📬 Trial reminders sent: ${rows.filter((r) => r.subtype === '3day').length}× 3day, ` +
-      `${rows.filter((r) => r.subtype === 'last_night').length}× last_night`
+      `${rows.filter((r) => r.subtype === 'last_night').length}× last_night, ` +
+      `${rows.filter((r) => r.subtype === 'ended').length}× ended`
   );
 }
 

@@ -26,6 +26,7 @@ import { InfoStep } from '@/components/onboarding/InfoStep';
 // sheet the first time the user opens the Create tab (CreateIntroSheet,
 // which reuses the same CREATE_INFO config).
 import { NIGHTLY_INFO, CAST_INFO, MOOD_INFO } from '@/constants/onboardingInfo';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -45,6 +46,22 @@ interface StepConfig {
   skipInEdit?: boolean;
 }
 
+// Nightly info card with the trial length appended live from engine_config —
+// the ONE place onboarding tells the user the nightly dreams they're being
+// sold are a {proTrialDays}-day Pro trial, so day-15 "my dreams stopped"
+// isn't a surprise. Named component (not an inline arrow) so the hook is
+// lint-clean and identity is stable across pager re-renders.
+function NightlyInfoStep(p: Parameters<StepComponent>[0]) {
+  const { proTrialDays } = useEngineConfig();
+  return (
+    <InfoStep
+      {...NIGHTLY_INFO}
+      body={`${NIGHTLY_INFO.body} Your first ${proTrialDays} days of nightly dreams are on us.`}
+      {...p}
+    />
+  );
+}
+
 // Mediums + vibes picker steps removed when Kevin pivoted away from user-
 // curated taste (the nightly engine rolls its own and the Create screen
 // exposes the full catalog every render). Objects step removed 2026-06-02
@@ -62,7 +79,7 @@ const STEPS: StepConfig[] = [
   { key: 'welcome', component: WelcomeStep },
   {
     key: 'info_nightly',
-    component: (p) => <InfoStep {...NIGHTLY_INFO} {...p} />,
+    component: NightlyInfoStep,
     skipInEdit: true,
   },
   { key: 'locations', component: LocationPickerStep },

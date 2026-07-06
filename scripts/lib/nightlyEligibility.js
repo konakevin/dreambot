@@ -154,6 +154,25 @@ function shouldSendLastNightPaidProReminder(u, now = Date.now()) {
   return h > 0 && h <= 36;
 }
 
+/**
+ * Trial-ENDED notice window (2026-07-05). Returns true when the trial
+ * expired within the last 36 hours — i.e. h in [-36, 0]. The post-expiry
+ * companion to the two pre-expiry reminders: without it, nightly dreams
+ * just silently stop and the user's inbox never says why.
+ *
+ * Why 36h: the cron runs daily and can drift several hours late; a 24h
+ * window could miss a user whose expiry lands just after one run when the
+ * next run fires late. 36h guarantees at least one daily cron falls inside
+ * the window; the notifications-table (recipient × subtype) dedup makes a
+ * second in-window run a no-op. Anything older than 36h means we already
+ * had our chance — don't nag stale lapsed trials.
+ */
+function shouldSendTrialEndedNotice(u, now = Date.now(), trialDays = TRIAL_DURATION_DAYS) {
+  const h = hoursUntilTrialEnds(u, now, trialDays);
+  if (h === null) return false;
+  return h <= 0 && h >= -36;
+}
+
 module.exports = {
   isProActive,
   isPaidProActive,
@@ -165,6 +184,7 @@ module.exports = {
   hoursUntilProSubscriptionEnds,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
+  shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
   TRIAL_DURATION_DAYS,
