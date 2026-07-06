@@ -6,7 +6,7 @@
 
 import { useEffect } from 'react';
 import { verticalScale } from '@/lib/responsive';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -39,6 +39,13 @@ export function FeedCardSkeleton() {
   return (
     <View style={s.feedCard}>
       <ShimmerBlock style={{ ...StyleSheet.absoluteFillObject, borderRadius: 0 }} />
+      {/* The shimmer alone is invisible here — surface #0F0F14 pulsing at
+          0.3-0.7 opacity over the #000 card reads as a plain black screen
+          (Kevin, 2026-07-05, home-tab re-tap refresh). A real spinner says
+          "loading" unambiguously; the shimmer stays for the card silhouette. */}
+      <View style={s.feedSpinner} pointerEvents="none">
+        <ActivityIndicator size="large" color={colors.textSecondary} />
+      </View>
       <View style={s.feedBottom}>
         <View style={s.feedUserRow}>
           <ShimmerBlock style={{ width: 32, height: 32, borderRadius: 16 }} />
@@ -119,6 +126,11 @@ const s = StyleSheet.create({
     bottom: 110,
     gap: 20,
     alignItems: 'center',
+  },
+  feedSpinner: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   grid: {
     flexDirection: 'row',
