@@ -103,7 +103,7 @@ ${cast2.physicalTraits ? `PHYSICAL TRAITS: ${cast2.physicalTraits}` : ''}`;
   const userPrompt = scene.userPrompt
     ? `\n═══ USER PROMPT — SACRED, OVERRIDES EVERYTHING BELOW ═══
 "${scene.userPrompt}"
-This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
+This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their APPEARANCE and HAIRSTYLE requests win (a hairstyle stated here OVERRIDES the CHARACTER descriptions' hair — write the requested hair beside that character's traits instead of their default hair). Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
 `
     : '';
   const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';

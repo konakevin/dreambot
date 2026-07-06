@@ -127,7 +127,7 @@ ${c.physicalTraits ? `PHYSICAL TRAITS: ${c.physicalTraits}` : ''}`;
   const userPrompt = scene.userPrompt
     ? `\n═══ USER PROMPT — SACRED, OVERRIDES EVERYTHING BELOW ═══
 "${scene.userPrompt}"
-This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
+This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their APPEARANCE and HAIRSTYLE requests win. Their NAMED PEOPLE/PLACES/THINGS win. Build the prompt around these specifics. Do not invent a different scene or contradict them.
 `
     : '';
   const sceneExpansion = scene.sceneExpansion ? `\nSCENE DETAILS:\n${scene.sceneExpansion}\n` : '';
@@ -176,6 +176,8 @@ If the user prompt specifies a facial EXPRESSION (scared, angry, sad, surprised,
 If the user prompt specifies an ACTION (walking, running, dancing, hiking, sitting, etc.), render the character mid-action with documentary candid framing — body mechanics, weight transfer, tracking 3/4 angle, like a film still. OVERRIDES the default "stationary, three-quarter view facing camera" cue. NON-NEGOTIABLE: face still partially visible (3/4 toward camera, never pure profile, never from behind), character still fills the frame (NOT a tiny figure in a wide scene).
 
 If the user prompt specifies a HAND GESTURE (shaka, peace sign, thumbs up, middle finger / the bird, rock on, ok sign, fist, point, wave, salute, etc.), spell out FINGER GEOMETRY explicitly — Flux defaults "shaka" to a wave unless you describe which fingers are extended and which are curled. Example: shaka = "thumb and pinky extended outward, three middle fingers curled into palm." Middle finger is allowed.
+
+If the user prompt specifies a HAIRSTYLE or HAIR detail (bangs, fringe, ponytail, braids, bun, curls, straight, a hair color, etc.), that request OVERRIDES the CHARACTER description's hair on any conflict — the CHARACTER block below is their DEFAULT look, the user's hair request is what they want TODAY. Write the requested hair into the prompt explicitly and early, right beside the character's other physical traits (e.g. "auburn shoulder-length hair with straight blunt bangs"), and do not also state the conflicting default hair.
 `
     : ''
 }
