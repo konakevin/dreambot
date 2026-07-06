@@ -124,7 +124,7 @@ async function generateImageOnce(
   }
   const isSDXL = model === 'sdxl';
 
-  const input: Record<string, unknown> = {
+  let input: Record<string, unknown> = {
     prompt,
     ...(!isSDXL
       ? {
@@ -148,11 +148,66 @@ async function generateImageOnce(
     ...inputOverrides,
   };
 
+  // Seedream text-to-image (no source image — e.g. a forced model on a
+  // flux-dev-path medium): schema-clean input; it has no num_outputs /
+  // output_format / output_quality fields.
+  if (model === 'bytedance/seedream-4' && !inputImage) {
+    input = { prompt, aspect_ratio: '9:16', size: '2K' };
+  }
+
   if (mode === 'flux-kontext' && inputImage) {
-    input.input_image = inputImage;
-    input.output_quality = 95;
-    input.safety_tolerance = 2;
-    input.prompt_upsampling = true;
+    // Model-keyed edit inputs (2026-07-06 restyle model expansion). Each
+    // editor takes the source image under a DIFFERENT parameter name AND
+    // rejects fields it doesn't know (Replicate 422s on unknown props —
+    // seedream has no output_format/num_outputs; kontext-max has no
+    // output_quality), so the edit input is built from scratch per model
+    // rather than patched onto the text-to-image base above.
+    //
+    // aspect_ratio 'match_input_image' where supported — the client crops to
+    // 9:16 before sending, and matching the input means the editor never
+    // invents outpainted content.
+    //
+    // prompt_upsampling OFF on the Kontext family (2026-07-06 identity A/B):
+    // the LLM rewrite adds render-to-render variance to an EDIT prompt
+    // without improving likeness — the kontext_directive reaches the model
+    // verbatim.
+    if (model === 'bytedance/seedream-4') {
+      input = {
+        prompt,
+        image_input: [inputImage],
+        aspect_ratio: 'match_input_image',
+        size: '2K',
+      };
+    } else if (model === 'black-forest-labs/flux-2-pro') {
+      input = {
+        prompt,
+        input_images: [inputImage],
+        aspect_ratio: '9:16',
+        output_format: outputFormat,
+        output_quality: 95,
+        safety_tolerance: 2,
+      };
+    } else if (model === 'black-forest-labs/flux-kontext-max') {
+      input = {
+        prompt,
+        input_image: inputImage,
+        aspect_ratio: 'match_input_image',
+        output_format: outputFormat,
+        safety_tolerance: 2,
+        prompt_upsampling: false,
+      };
+    } else {
+      // Kontext-pro (the default editor) and any input_image-style model.
+      input = {
+        prompt,
+        input_image: inputImage,
+        aspect_ratio: 'match_input_image',
+        output_format: outputFormat,
+        output_quality: 95,
+        safety_tolerance: 2,
+        prompt_upsampling: false,
+      };
+    }
   }
 
   // SDXL uses version-based API; Flux uses model-based API

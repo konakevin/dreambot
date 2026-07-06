@@ -49,6 +49,7 @@ export const MODEL_SPARKLE_COSTS: Record<string, number> = {
   'black-forest-labs/flux-2-dev': 1, // ~$0.025
   'black-forest-labs/flux-2-pro': 1, // ~$0.031
   'black-forest-labs/flux-kontext-pro': 1, // ~$0.040
+  'bytedance/seedream-4': 1, // ~$0.030 (2K, restyle editor 2026-07-06)
   'google/gemini-2-image': 1, // Nano Banana ~$0.039
   sdxl: 1, // ~$0.020
 
@@ -92,6 +93,7 @@ export const MODEL_COST_CENTS: Record<string, number> = {
   'black-forest-labs/flux-2-dev': 3, // ~$0.025 (was 4)
   'black-forest-labs/flux-krea-dev': 1, // ~$0.004 (was 4 — big over-estimate)
   'black-forest-labs/flux-2-pro': 3, // ~$0.031 (was 6)
+  'bytedance/seedream-4': 3, // ~$0.030 at 2K (restyle editor 2026-07-06)
   'black-forest-labs/flux-kontext-max': 5, // ~$0.050
   'black-forest-labs/flux-1.1-pro-ultra': 6, // ~$0.060
   'black-forest-labs/flux-2-flex': 6, // ~$0.063 (was 3 — under-estimate)
