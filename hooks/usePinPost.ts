@@ -36,7 +36,7 @@ export function usePinPost() {
     },
     onError: (err: { message?: string }) => {
       if (err?.message?.includes('pin_limit_reached')) {
-        showAlert('Pin limit reached', 'You can pin up to 3 posts — unpin one first.', [
+        showAlert('Pin limit reached', 'You can pin up to 3 posts. Unpin one first.', [
           { text: 'OK' },
         ]);
       } else {
