@@ -185,22 +185,23 @@ const styles = StyleSheet.create({
   // "Public" pill on PUBLIC dreams — neutral dark overlay + white text (an
   // indicator, not a CTA; the accent/purple is reserved for the Private-only
   // filter button). Drop shadow + hairline border keep it legible on any tile.
-  // Pin badge — accent-filled circle, top-left (bottom-right belongs to the
-  // Public badge; the two can coexist on one tile). Solid brand purple + white
-  // glyph + drop shadow so it reads on ANY artwork (the dark pill vanished on
-  // dark tiles); mirrors the avatar camera-badge treatment.
+  // Pin badge — dark chip + white glyph, top-left (bottom-right belongs to
+  // the Public badge; the two can coexist on one tile). Same badge family as
+  // Public/Just-viewed. Calibration history: v1 (60% black, 11pt glyph, no
+  // shadow) vanished on dark art; v2 (solid accent 24pt) was "a bit much" —
+  // Kevin. v3 = the dark chip with real presence: 20pt, 78% black, shadow.
   pinBadge: {
     position: 'absolute',
     top: 6,
     left: 6,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.accent,
-    borderWidth: 1.5,
-    borderColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: 'rgba(0,0,0,0.78)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.35)',
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowRadius: 3,
