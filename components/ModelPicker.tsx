@@ -150,13 +150,32 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
   const scrollRef = useRef<ScrollView>(null);
   const sectionTops = useRef<Record<string, number>>({});
   const rowTops = useRef<Record<string, { tier: string; y: number }>>({});
+  // Fire-once latch per modal open. The old version only tried from
+  // onContentSizeChange — when that fired before the row/section onLayout
+  // measurements landed, it bailed on the missing entry and NEVER retried,
+  // so a below-the-fold selection opened at the top (Kevin 2026-07-05).
+  // Now every measurement event retries until one succeeds.
+  const didAutoScroll = useRef(false);
 
   const scrollToSelected = () => {
+    if (didAutoScroll.current) return;
     const row = rowTops.current[effectiveSelected];
     if (!row) return;
-    const y = (sectionTops.current[row.tier] ?? 0) + row.y;
-    // Leave headroom above the row so it reads in context, not pinned to the top.
-    scrollRef.current?.scrollTo({ y: Math.max(0, y - verticalScale(100)), animated: false });
+    const sectionY = sectionTops.current[row.tier];
+    if (sectionY == null) return;
+    const y = sectionY + row.y;
+    if (y <= 0) {
+      // Selected row is at/above the fold anyway — latch without scrolling.
+      didAutoScroll.current = true;
+      return;
+    }
+    didAutoScroll.current = true;
+    // rAF so the jump lands after the current layout pass — a scrollTo issued
+    // mid-mount (modal still presenting) can be dropped on iOS.
+    requestAnimationFrame(() => {
+      // Leave headroom above the row so it reads in context, not pinned to the top.
+      scrollRef.current?.scrollTo({ y: Math.max(0, y - verticalScale(100)), animated: false });
+    });
   };
 
   // Tier header is just the label — each row already shows its own cost, so the
@@ -175,6 +194,9 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
         onPress={() => handleSelect(opt.id)}
         onLayout={(e) => {
           rowTops.current[opt.id] = { tier, y: e.nativeEvent.layout.y };
+          // Retry the auto-scroll — this row might be the selected one and
+          // the last measurement the jump was waiting on.
+          if (opt.id === effectiveSelected) scrollToSelected();
         }}
         activeOpacity={0.7}
         style={[
@@ -240,6 +262,9 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
       <TouchableOpacity
         onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          // Re-arm the auto-scroll — the latch and measurements are refs on
+          // this component (not the modal content), so they survive close.
+          didAutoScroll.current = false;
           setModalOpen(true);
         }}
         activeOpacity={0.7}
@@ -320,6 +345,7 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
                   style={{ marginTop: verticalScale(12) }}
                   onLayout={(e) => {
                     sectionTops.current.standard = e.nativeEvent.layout.y;
+                    scrollToSelected();
                   }}
                 >
                   {renderTierHeader('Standard')}
@@ -331,6 +357,7 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
                   style={{ marginTop: verticalScale(8) }}
                   onLayout={(e) => {
                     sectionTops.current.premium = e.nativeEvent.layout.y;
+                    scrollToSelected();
                   }}
                 >
                   {renderTierHeader('Premium')}
