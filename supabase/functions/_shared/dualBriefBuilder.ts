@@ -36,9 +36,7 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
   // face" language so cdingram's swap doesn't fight cartoon-eye proportions.
   const medium = applyFaceSwapOverride(rawMedium);
   const mediumStyle = medium.key.replace(/_/g, ' ');
-  // Swap-safe vibe variant (migration 328) — see singleBriefBuilder note.
-  const vibeText = vibe.faceSwapDirective ?? vibe.directive;
-  const vibeDirective = applyVibeGenderModifier(vibe.key, vibeText, null);
+  const vibeDirective = applyVibeGenderModifier(vibe.key, vibe.directive, null);
 
   // ── Classify the user's prompt for L/R-incompatible actions ──
   // 'ok'       → no breaking verb → pool runs as normal, user's action (if any) blends via SACRED block

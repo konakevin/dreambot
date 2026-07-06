@@ -43,7 +43,6 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
-import { ensureSoloSwapTarget } from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
@@ -507,9 +506,6 @@ async function handleRequest(req: Request): Promise<Response> {
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   let faceSwapSource: string | undefined; // original photo for face swap after generation
-  // Cast gender for the SOLO swap guard (singleSwapGuard.ts) — set wherever
-  // faceSwapSource is set. null = unknown → the guard checks face count only.
-  let faceSwapGender: 'male' | 'female' | null = null;
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; genderLock: string | null }>
     | undefined;
@@ -660,11 +656,7 @@ async function handleRequest(req: Request): Promise<Response> {
             faceSwapDirective: medium.faceSwapDirective ?? null,
             faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
-          vibe: {
-            key: vibe.key,
-            directive: vibe.directive ?? '',
-            faceSwapDirective: vibe.faceSwapDirective ?? null,
-          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: userSubject || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
@@ -789,11 +781,7 @@ async function handleRequest(req: Request): Promise<Response> {
             faceSwapDirective: medium.faceSwapDirective ?? null,
             faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
-          vibe: {
-            key: vibe.key,
-            directive: vibe.directive ?? '',
-            faceSwapDirective: vibe.faceSwapDirective ?? null,
-          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: hint || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
@@ -824,7 +812,6 @@ async function handleRequest(req: Request): Promise<Response> {
         // Photo is the face-swap source (face-swap block handles upload).
         if (isFaceSwapEligible) {
           faceSwapSource = input_image!;
-          faceSwapGender = genderFromLock(resolvedCast[0]?.genderLock);
         }
 
         photoOverrideMode = 'flux-dev';
@@ -919,13 +906,6 @@ Output ONLY the prompt.`;
       // medium is face-swap eligible, we get real face preservation + new scene.
       if (medium.characterRenderMode === 'natural') {
         faceSwapSource = input_image!;
-        // The castPerson vision description opens with a "Female, average" /
-        // "Male, athletic" header line — read the gender for the solo guard.
-        faceSwapGender = /^\s*female\b/i.test(visionDescription ?? '')
-          ? 'female'
-          : /^\s*male\b/i.test(visionDescription ?? '')
-            ? 'male'
-            : null;
         logAxes.faceSwap = true;
         console.log('[generate-dream] Reimagine + face-swap enabled for this medium');
       }
@@ -1107,11 +1087,7 @@ Output ONLY the prompt.`;
             faceSwapDirective: medium.faceSwapDirective ?? null,
             faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
-          vibe: {
-            key: vibe.key,
-            directive: vibe.directive ?? '',
-            faceSwapDirective: vibe.faceSwapDirective ?? null,
-          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: cleanedPrompt || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
@@ -1131,7 +1107,6 @@ Output ONLY the prompt.`;
           // Face-swap sources come from the compiler regardless of prompt path.
           if (compiled.faceSwapSource) {
             faceSwapSource = compiled.faceSwapSource;
-            faceSwapGender = genderFromLock(resolvedCast[0]?.genderLock);
           }
           if (compiled.faceSwapSources) {
             faceSwapSources = compiled.faceSwapSources;
@@ -1338,11 +1313,7 @@ Output ONLY the prompt.`;
             faceSwapDirective: medium.faceSwapDirective ?? null,
             faceSwapFluxFragment: medium.faceSwapFluxFragment ?? null,
           },
-          vibe: {
-            key: vibe.key,
-            directive: vibe.directive ?? '',
-            faceSwapDirective: vibe.faceSwapDirective ?? null,
-          },
+          vibe: { key: vibe.key, directive: vibe.directive ?? '' },
           scene: {
             userPrompt: sanitizedPrompt || undefined,
             sceneExpansion: isDLT ? undefined : finalExpansion || undefined,
@@ -1530,49 +1501,6 @@ Output ONLY the prompt.`;
         throw new Error(`face_swap: couldn't render both faces (faces=${result.faceCount})`);
       }
     } else if (faceSwapSource && tempUrl) {
-      // ── Solo-swap safety guard (see _shared/singleSwapGuard.ts) ──
-      // The single-swap models are face-blind: if the render invented a second
-      // person (couple-coded scenes beat the solo framing mandate), the cast
-      // face can land on the WRONG person — the 2026-07-05 "wife's face on the
-      // man" failure. Probe face count + gender; re-render while unsafe; never
-      // paste unconfirmed. Unrecoverable → refund: Create users paid for THEIR
-      // face in the scene, so throw (same contract as swap exhaustion below).
-      const soloGuard = await ensureSoloSwapTarget(
-        tempUrl,
-        {
-          castGender: faceSwapGender,
-          replicateToken: REPLICATE_TOKEN,
-          rerender: async () => {
-            // Re-rolling the identical prompt mostly re-renders the same couple
-            // (couple-coded scenes beat the mid-prompt solo mandate ~4/6 in QA).
-            // Front-load the person count — earliest tokens win CLIP attention,
-            // and this front-loads the SUBJECT, not the scene (Hard Rule safe).
-            const soloNoun =
-              faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
-            const rr = await generateImage(
-              effectiveMode,
-              `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
-              effectiveInputImage,
-              { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
-              pickedModel,
-              'png'
-            );
-            return { url: rr.url, predictionId: rr.predictionId };
-          },
-          log: (m) => console.log(`[generate-dream] ${m}`),
-        },
-        { deadlineMs: t0 + 140_000 }
-      );
-      fallbackReasons.push(...soloGuard.reasons);
-      logAxes.soloFaceCount = soloGuard.faceCount;
-      if (!soloGuard.safe) {
-        logAxes.faceSwapResult = 'solo-unsafe-refund';
-        throw new Error(
-          `face_swap: render kept an extra or mismatched person (faces=${soloGuard.faceCount ?? '?'})`
-        );
-      }
-      tempUrl = soloGuard.url;
-      if (soloGuard.predictionId) replicatePredictionId = soloGuard.predictionId;
       try {
         let sourceUrl: string;
         let swapFileName: string | null = null;

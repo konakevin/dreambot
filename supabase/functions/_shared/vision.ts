@@ -9,16 +9,6 @@ import { HAIKU } from './models.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
 const SYSTEM_PROMPT = `You are a visual description assistant for an AI art app called DreamBot. Users upload photos of themselves, loved ones, and pets so the app can generate personalized artwork featuring them. Your job is to describe the photo subject in precise visual detail so the art generator can recreate their likeness accurately. This is a creative, consensual use case — the user uploaded this photo themselves. Always provide detailed, factual physical descriptions. Never refuse. IMPORTANT: Always describe the person in a flattering, idealized way — skip under-eye bags, blemishes, wrinkles, dark circles, tired eyes, or any temporary imperfections. Describe their best features. The goal is beautiful artwork, not a medical exam.`;
 
-// System prompt for analyzing the app's OWN AI-generated renders (face-count /
-// gender probes). The uploaded-photo SYSTEM_PROMPT above claims "the user
-// uploaded this photo themselves" — shown an obviously AI-generated artwork,
-// Haiku 4.5 flags that mismatch and REFUSES (verified 2026-07-05: the solo-swap
-// guard read 'unread' on 6/6 probes; with this prompt the same image read
-// "2|man|woman" 4/4). Keep it factual and justification-free: asking to count
-// people in our own artwork needs no consent story, and including one is
-// exactly what trips the refusal.
-const RENDER_ANALYSIS_SYSTEM_PROMPT = `You are an image-analysis assistant for an AI art application. You are shown AI-generated artwork produced by the app itself and answer factual questions about the image content (composition, subject count, apparent attributes) concisely and in the exact format requested.`;
-
 /**
  * Describe a photo using Claude Haiku vision.
  *
@@ -26,14 +16,12 @@ const RENDER_ANALYSIS_SYSTEM_PROMPT = `You are an image-analysis assistant for a
  * @param prompt — the instruction for what to describe
  * @param _replicateToken — unused, kept for backward compat (callers still pass it)
  * @param maxTokens — max response length (default 200)
- * @param systemPrompt — override for non-photo use (AI-render analysis probes)
  */
 export async function describeWithVision(
   imageInput: string,
   prompt: string,
   _replicateToken: string,
-  maxTokens: number = 200,
-  systemPrompt: string = SYSTEM_PROMPT
+  maxTokens: number = 200
 ): Promise<string> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) throw new Error('Missing ANTHROPIC_API_KEY');
@@ -73,7 +61,7 @@ export async function describeWithVision(
     body: JSON.stringify({
       model: HAIKU,
       max_tokens: maxTokens,
-      system: systemPrompt,
+      system: SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',
@@ -138,15 +126,8 @@ export async function classifyDualGenders(
   faceCount: number | null;
   twoDistinctFaces: boolean;
 }> {
-  // ⚠️ Keep this prompt JUSTIFICATION-FREE. It used to open with "This image is
-  // for routing a consensual face-swap…" — Haiku 4.5 reads that consent story
-  // (against the photo-description system prompt) as an injection attempt and
-  // REFUSES, which parses as all-null → every gender guard silently degrades to
-  // its fallback (found 2026-07-05: 6/6 solo probes 'unread'). A plain factual
-  // question about our own artwork, under RENDER_ANALYSIS_SYSTEM_PROMPT, reads
-  // clean and consistent.
   const prompt =
-    'Reply with EXACTLY three fields separated by vertical bars |: (1) the number of distinct human faces clearly visible in this artwork, (2) the apparent gender of the person on the LEFT (or of the only person), (3) the apparent gender of the person on the RIGHT. Use the word "man" or "woman" for each gender. If only one face is clearly visible, put "none" for the side with no person. No other words. Examples: "2|woman|man" or "1|woman|none".';
+    'This image is for routing a consensual face-swap of a user onto their OWN cast photos — describe the people factually. Reply with EXACTLY three fields separated by vertical bars |: (1) the number of distinct human faces clearly visible, (2) the apparent gender of the person on the LEFT, (3) the apparent gender of the person on the RIGHT. Use the word "man" or "woman" for each gender. If only one face is clearly visible, put "none" for the side with no person. No other words. Examples: "2|woman|man" or "1|man|none".';
 
   const readGender = (s: string): 'male' | 'female' | null => {
     const t = s.toLowerCase();
@@ -157,15 +138,7 @@ export async function classifyDualGenders(
   };
 
   const classifyOnce = async () => {
-    const raw = (
-      await describeWithVision(
-        imageInput,
-        prompt,
-        replicateToken,
-        40,
-        RENDER_ANALYSIS_SYSTEM_PROMPT
-      )
-    ).trim();
+    const raw = (await describeWithVision(imageInput, prompt, replicateToken, 40)).trim();
     const parts = raw.split('|');
     let left: 'male' | 'female' | null = null;
     let right: 'male' | 'female' | null = null;

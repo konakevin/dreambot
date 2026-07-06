@@ -513,7 +513,7 @@ export function assembleCharacterPrompt(
 
     // Single anchor — positive phrasing, no L/R
     const singleAnchor =
-      'ONE person alone in the scene, the only person in the image, frontal portrait, the character is looking out at the camera in three-quarter view, face turned toward the viewer';
+      'ONE person, frontal portrait, the character is looking out at the camera in three-quarter view, face turned toward the viewer';
 
     // Framing — single doesn't need the L/R clear-gap line
     const framingBlock = [

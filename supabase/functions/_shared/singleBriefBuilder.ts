@@ -43,39 +43,35 @@ interface SingleCompositionPath {
 }
 
 const SINGLE_COMPOSITION_PATHS: SingleCompositionPath[] = [
-  // Every prepend opens with "one person alone" — this rides Flux's early-token
-  // window, the strongest lever against the invented-second-person failure
-  // (couple-coded scenes like a tea party render a companion, then the
-  // face-blind swap can paste the cast face on the WRONG person — 2026-07-05).
   {
     name: 'candid',
     prepend:
-      'candid medium shot of one person alone in the scene, person centered, three-quarter view facing camera, face fully visible, waist-up framing, character filling most of the frame, warm natural lighting,',
+      'candid medium shot, person centered, three-quarter view facing camera, face fully visible, waist-up framing, character filling most of the frame, warm natural lighting,',
     briefHint: 'Candid feel — like a friend snapped this moment naturally. Relaxed body language.',
   },
   {
     name: 'portrait',
     prepend:
-      'portrait shot of one person alone in the scene, person centered facing the camera, three-quarter view, face fully visible and well-lit, waist-up framing, character dominating the frame, not from behind, not silhouette,',
+      'portrait shot, person centered facing the camera, three-quarter view, face fully visible and well-lit, waist-up framing, character dominating the frame, not from behind, not silhouette,',
     briefHint:
       'Classic portrait — character aware of the camera, natural but composed, fills the frame.',
   },
   {
     name: 'cinematic',
     prepend:
-      'cinematic still, one person alone in the scene, person in medium shot, three-quarter view facing camera, eye-level, atmospheric lighting, face fully visible, waist-up framing, character is the unmistakable subject filling the frame,',
+      'cinematic still, person in medium shot, three-quarter view facing camera, eye-level, atmospheric lighting, face fully visible, waist-up framing, character is the unmistakable subject filling the frame,',
     briefHint: 'Movie still — dramatic lighting, purposeful framing, like a film poster moment.',
   },
   {
     name: 'editorial',
     prepend:
-      'editorial portrait of one person alone in the scene, person posed naturally in medium shot, three-quarter view toward viewer, eye-level camera, golden hour lighting, face fully visible, waist-up framing,',
+      'editorial portrait, person posed naturally in medium shot, three-quarter view toward viewer, eye-level camera, golden hour lighting, face fully visible, waist-up framing,',
     briefHint: 'Editorial/magazine quality — stylish, purposeful, effortlessly cool.',
   },
   {
     name: 'environmental_medium',
     prepend:
-      'environmental medium shot, one person alone in the scene, person centered in the foreground, three-quarter view facing camera, waist-up framing, scene visible behind but character clearly the subject and filling most of the frame, atmospheric lighting,',
+      'environmental medium shot, person centered in the foreground, three-quarter view facing camera, waist-up framing, scene visible behind but character clearly the subject and filling most of the frame, atmospheric lighting,',
     briefHint:
       'Character grounded in a vivid setting, but the character is unmistakably the subject — scene supports, never dominates.',
   },
@@ -106,11 +102,7 @@ export function buildSingleBrief(input: CompilerInput): CompilerOutput {
       : c.genderLock
         ? 'female'
         : null;
-  // Swap-safe vibe variant (migration 328): the regular directive can prime a
-  // stylized face prior (kawaii's big anime eyes) that the swap can't fully
-  // replace — same disease/cure as the medium-level applyFaceSwapOverride above.
-  const vibeText = vibe.faceSwapDirective ?? vibe.directive;
-  const vibeDirective = applyVibeGenderModifier(vibe.key, vibeText, castGender);
+  const vibeDirective = applyVibeGenderModifier(vibe.key, vibe.directive, castGender);
 
   // ── Composition path: pick once, prepend at end via postProcess ──
   const singlePath = pickSingleCompositionPath();
@@ -142,7 +134,7 @@ This is what the user asked for. Their LOCATION wins. Their ACTION wins. Their N
   // character. Forces Sonnet to keep frame-filling framing in the final
   // prompt even after its own rewrites.
   const faceLockPhrase =
-    'a single person alone in the frame, three-quarter view, face centered in frame, eyes nose mouth visible';
+    'single person, three-quarter view, face centered in frame, eyes nose mouth visible';
 
   const sonnetBrief = `You are a cinematic ${mediumStyle} artist. Write a Flux AI prompt (70-100 words, comma-separated).
 
@@ -158,7 +150,6 @@ MANDATORY — include this EXACT phrase unchanged somewhere in the prompt:
 "${faceLockPhrase}"
 
 COMPOSITION RULES (NON-NEGOTIABLE — face-swap pipeline depends on these):
-- EXACTLY ONE PERSON — the character is ALONE in the scene, the ONLY human figure anywhere in the image. Do NOT add a companion, partner, date, friend, waiter, or background figure, even when the scene type implies company (a tea party, a dinner, a ball, a picnic, a wedding). Stage it as the character's private moment: the setting may show a second teacup or an empty chair, but never a second person — not even blurred, distant, or partially out of frame. The face-swap step targets ONE face; a second face breaks it.
 - Medium shot — character waist-up, FILLING the frame. NOT a wide establishing shot. NOT a tall environmental portrait. NEVER subject in lower third. Character must NOT be dwarfed by architecture or scenery.
 - Three-quarter view of the face — angled slightly toward the VIEWER, like a candid movie still. Eyes, nose, and mouth all clearly visible. NOT a full profile, NOT back to camera, NEVER looking away from camera.
 - Character is the UNMISTAKABLE SUBJECT — scene supports them, scene does NOT dominate them.
@@ -200,7 +191,7 @@ Output ONLY the prompt.`;
     faceLockPhrase,
     c.promptDesc.split(',')[0],
     vibe.directive ? vibe.directive.split('.')[0] : '',
-    'medium shot, waist-up, one person alone in the frame, character fills the frame',
+    'medium shot, waist-up, character fills the frame',
     'no text, no words, no letters, no watermarks, hyper detailed',
   ].filter(Boolean);
   const fallback = fallbackParts.join(', ');

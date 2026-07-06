@@ -46,9 +46,6 @@ export interface CompilerInput {
   vibe: {
     key: string;
     directive: string;
-    /** Swap-safe directive replacement (migration 328) — consumed by the
-     *  single/dual face-swap brief builders; NULL/absent → directive. */
-    faceSwapDirective?: string | null;
   };
 
   scene: {
