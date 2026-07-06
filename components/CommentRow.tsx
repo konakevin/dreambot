@@ -5,7 +5,7 @@ import type { PostActionRow } from '@/lib/imageLongPress';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
@@ -130,10 +130,12 @@ export function CommentRow({
         delayLongPress={400}
       >
         {/* Avatar */}
-        <TouchableOpacity
-          onPress={() => router.replace(`/user/${comment.userId}`)}
-          activeOpacity={0.7}
-        >
+        {/* PUSH, not replace (2026-07-05): replace destroyed the post screen
+            hosting the comment thread, so back from the profile landed on the
+            home feed. Push keeps the thread mounted underneath — back returns
+            to it exactly as left (CommentOverlay is an inline overlay, so it
+            survives under the pushed route). */}
+        <TouchableOpacity onPress={() => nav.push(`/user/${comment.userId}`)} activeOpacity={0.7}>
           {comment.avatarUrl ? (
             <Image
               source={{ uri: resizeAvatar(comment.avatarUrl) }}
@@ -168,7 +170,8 @@ export function CommentRow({
                       .eq('username', username)
                       .maybeSingle()
                       .then(({ data }) => {
-                        if (data) router.replace(`/user/${data.id}`);
+                        // push (not replace) — see the avatar handler above.
+                        if (data) nav.push(`/user/${data.id}`);
                       });
                   }}
                 >
