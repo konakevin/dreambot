@@ -220,7 +220,23 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   setFirstDreamJobId: (id) => set({ firstDreamJobId: id }),
   setFirstDreamStatus: (s) => set({ firstDreamStatus: s }),
 
-  loadProfile: (profile) => set({ profile, isHydrated: true }),
+  // Normalize over the modern defaults: isVibeProfile only checks version===2,
+  // so a FOSSIL recipe (early accounts predate dream_seeds/dream_cast — e.g.
+  // @bunny's April-era row, 2026-07-05) loads with those fields missing and
+  // every consumer that does profile.dream_cast.find(...) crashes (Edit
+  // Profile's embedded DreamCastStep was unusable for her alone). Legacy
+  // extra keys ride along harmlessly; the defaults only fill gaps.
+  loadProfile: (profile) =>
+    set({
+      profile: {
+        ...DEFAULT_VIBE_PROFILE,
+        ...profile,
+        moods: { ...DEFAULT_VIBE_PROFILE.moods, ...(profile.moods ?? {}) },
+        dream_seeds: { ...DEFAULT_VIBE_PROFILE.dream_seeds, ...(profile.dream_seeds ?? {}) },
+        dream_cast: profile.dream_cast ?? [],
+      },
+      isHydrated: true,
+    }),
 
   reset: () =>
     set({
