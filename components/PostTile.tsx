@@ -4,6 +4,7 @@ import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { useDeletePost } from '@/hooks/useDeletePost';
+import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
 import { handleImageLongPress } from '@/lib/imageLongPress';
@@ -41,7 +42,9 @@ export const PostTile = memo(function PostTile({
   width = TILE_WIDTH,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
+  const { pin, unpin } = usePinPost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
+  const isPinned = !!item.pinned_at;
 
   async function handlePress() {
     // Stash the source array + source type so PhotoDetailScreen can reuse
@@ -64,6 +67,11 @@ export const PostTile = memo(function PostTile({
       isOwn,
       faceSwapMode: item.face_swap_mode ?? null,
       onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
+      // Profile pin toggle (migration 330) — own PUBLIC posts only (the
+      // Dreams album shows private dreams; those aren't pinnable).
+      isPinned,
+      onTogglePin:
+        isOwn && item.is_public ? () => (isPinned ? unpin(item.id) : pin(item.id)) : undefined,
     });
   }
 
@@ -93,6 +101,13 @@ export const PostTile = memo(function PostTile({
             <Ionicons name="eye-outline" size={13} color="#FFFFFF" />
             <Text style={styles.highlightText}>Just viewed</Text>
           </View>
+        </View>
+      )}
+      {/* Pin badge (migration 330) — small dark pill, top-left, matching the
+          other tile badges. Shows wherever the tile renders a pinned post. */}
+      {isPinned && (
+        <View style={styles.pinBadge} pointerEvents="none">
+          <Ionicons name="pin" size={11} color="#FFFFFF" />
         </View>
       )}
       {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
@@ -139,6 +154,19 @@ const styles = StyleSheet.create({
   // "Public" pill on PUBLIC dreams — neutral dark overlay + white text (an
   // indicator, not a CTA; the accent/purple is reserved for the Private-only
   // filter button). Drop shadow + hairline border keep it legible on any tile.
+  // Pin badge — icon-only pill, top-left (bottom-right belongs to the Public
+  // badge; the two can coexist on one tile). Same dark-pill treatment.
+  pinBadge: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    paddingHorizontal: 5,
+    paddingVertical: verticalScale(3),
+    borderRadius: 999,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.25)',
+  },
   publicBadge: {
     position: 'absolute',
     bottom: 5,

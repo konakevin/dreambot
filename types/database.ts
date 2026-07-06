@@ -876,6 +876,7 @@ export type Database = {
           face_swap_share_with_plus_one: number;
           id: number;
           latest_app_version: string | null;
+          max_pinned_posts: number;
           min_app_version: string | null;
           nightly_enabled: boolean;
           nightly_max_jobs: number;
@@ -917,6 +918,7 @@ export type Database = {
           face_swap_share_with_plus_one?: number;
           id?: number;
           latest_app_version?: string | null;
+          max_pinned_posts?: number;
           min_app_version?: string | null;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;
@@ -958,6 +960,7 @@ export type Database = {
           face_swap_share_with_plus_one?: number;
           id?: number;
           latest_app_version?: string | null;
+          max_pinned_posts?: number;
           min_app_version?: string | null;
           nightly_enabled?: boolean;
           nightly_max_jobs?: number;
@@ -2074,6 +2077,7 @@ export type Database = {
           model: string | null;
           output_hash: string | null;
           output_phash: string | null;
+          pinned_at: string | null;
           posted_at: string | null;
           recipe: Json | null;
           recipe_id: string | null;
@@ -2118,6 +2122,7 @@ export type Database = {
           model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
+          pinned_at?: string | null;
           posted_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
@@ -2162,6 +2167,7 @@ export type Database = {
           model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
+          pinned_at?: string | null;
           posted_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
@@ -2975,6 +2981,7 @@ export type Database = {
         };
         Returns: string;
       };
+      pin_post: { Args: { p_upload_id: string }; Returns: undefined };
       prune_observability_logs: {
         Args: { p_days?: number };
         Returns: {
@@ -3039,6 +3046,7 @@ export type Database = {
         }[];
       };
       touch_last_active: { Args: never; Returns: undefined };
+      unpin_post: { Args: { p_upload_id: string }; Returns: undefined };
     };
     Enums: {
       vote_type: 'rad' | 'bad' | 'skip';

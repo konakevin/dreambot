@@ -16,6 +16,10 @@ export function usePublicProfilePosts(userId: string, enabled = true) {
         .select(POST_SELECT)
         .eq('user_id', userId)
         .eq('is_public', true)
+        // Pins first (migration 330) — one ORDER BY keeps range pagination
+        // correct with no prepend logic; unpinned rows have NULL pinned_at
+        // and sort after every pin.
+        .order('pinned_at', { ascending: false, nullsFirst: false })
         // See useUserPosts for the nullsLast rationale (mig 246 + defense
         // against stray NULL posted_at on public uploads).
         .order('posted_at', { ascending: false, nullsFirst: false })

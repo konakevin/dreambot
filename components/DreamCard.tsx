@@ -45,6 +45,9 @@ export interface DreamPostItem {
   id: string;
   user_id: string;
   image_url: string;
+  /** Profile pin timestamp (migration 330) — non-null means pinned to the
+   * owner's profile grid. Set via pin_post/unpin_post RPCs only. */
+  pinned_at?: string | null;
   /** 4× upscaled HQ version, populated lazily by upscale-image Edge Function
    * or pre-populated by bot pipeline / Pro user pre-upscale. NULL until first
    * upscale completes. Used by long-press to skip the "this will take ~30s"

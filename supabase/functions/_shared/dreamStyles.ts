@@ -90,6 +90,12 @@ export interface ResolvedVibe {
    *  The full `directive` is scene-generation text and reads as a no-op to
    *  an edit model. Null → restyle-photo falls back to the legacy slice. */
   restyleFragment: string | null;
+  /** Swap-safe directive replacement (migration 328) — used ONLY by the
+   *  face-swap brief builders. Keeps the vibe's WORLD styling but mandates
+   *  photoreal human face proportions so the pre-swap render is
+   *  swap-compatible (the vibe twin of dream_mediums.face_swap_directive;
+   *  born from the kawaii big-anime-eye swap failure). NULL → directive. */
+  faceSwapDirective: string | null;
 }
 
 function toMedium(row: DbMediumRow): ResolvedMedium {
@@ -172,7 +178,7 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
   const sb = getServiceClient();
   const { data, error } = await sb
     .from('dream_vibes')
-    .select('key, label, directive, is_dream_eligible, client_meta')
+    .select('key, label, directive, is_dream_eligible, client_meta, face_swap_directive')
     .eq('is_active', true)
     .order('sort_order');
   if (error) {
@@ -186,11 +192,13 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
       directive: string;
       is_dream_eligible: boolean;
       client_meta: Record<string, unknown> | null;
+      face_swap_directive: string | null;
     }) => ({
       key: r.key,
       label: r.label,
       directive: r.directive,
       isDreamEligible: !!r.is_dream_eligible,
+      faceSwapDirective: r.face_swap_directive ?? null,
       restyleFragment:
         r.client_meta && typeof r.client_meta.restyle_fragment === 'string'
           ? r.client_meta.restyle_fragment
@@ -319,6 +327,16 @@ export async function resolveMediumFromDb(
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;
+  }
+  // Create-screen "Surprise Me". The client normally resolves the surprise
+  // tile to a concrete key before calling (surprise_me_face/_art roll from the
+  // cached catalog), but the raw token still reaches the server on the photo
+  // path and when the client cache is cold — and it used to hit the unknown-key
+  // fallback below, so "Surprise Me" silently rendered CANVAS every time
+  // (users reported it as "stuck on the previous medium", 2026-07-05). Roll
+  // from the curated pool instead — same pool the nightly auto-roll trusts.
+  if (key === 'surprise_me' || key === 'my_mediums') {
+    return resolveMediumFromDb('dream_eligible', excludeRecent);
   }
   // Nightly auto-roll for character/face-swap renders: filter to mediums
   // that face-swap WELL on auto-roll. Photoreal mediums (hyperreal /
@@ -457,6 +475,13 @@ export async function resolveVibeFromDb(
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return vibes.find((v) => v.key === picked)!;
+  }
+  // Create-screen "Surprise Me". Unlike mediums, the client sends the vibe
+  // surprise token RAW — and it used to hit the unknown-key fallback below, so
+  // "Surprise Me" for vibes silently rendered CINEMATIC every single time
+  // (the "stuck vibe" user reports, 2026-07-05). Roll the curated pool.
+  if (key === 'surprise_me' || key === 'my_vibes') {
+    return resolveVibeFromDb('dream_eligible', excludeRecent);
   }
   // Explicit key resolution. Stable fallback to 'cinematic' (most generic
   // mood) instead of random pick. Unknown vibe keys should degrade

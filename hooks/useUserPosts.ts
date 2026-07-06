@@ -20,6 +20,8 @@ export function useUserPosts(enabled = true) {
         .select(POST_SELECT)
         .eq('user_id', user!.id)
         .eq('is_public', true)
+        // Pins first (migration 330) — see usePublicProfilePosts.
+        .order('pinned_at', { ascending: false, nullsFirst: false })
         // nullsLast: Postgres sorts NULLs FIRST in DESC by default — before
         // mig 246 backfilled legacy posted_at, that pinned all pre-2026-06
         // public uploads to the top of the grid. nullsLast is defense for

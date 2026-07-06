@@ -56,6 +56,8 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     face_swap_mode: (row.face_swap_mode as string | null) ?? null,
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
+    // Profile pin (migration 330). Defensive cast — safe before types regen.
+    pinned_at: (row.pinned_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,
     // Repost surface (get_feed migration 243). Non-feed rows lack these → default
     // to a repost-free 'original' so callers other than get_feed are unaffected.

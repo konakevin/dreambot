@@ -46,6 +46,7 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
+import { ensureSoloSwapTarget } from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
@@ -265,6 +266,9 @@ Deno.serve(async (req) => {
   // engine_config.scene_eligible_models global. Captured for the post-try gate.
   let resolvedMediumSceneModels: string[] | null = null;
   let faceSwapSource: string | undefined;
+  // Cast gender for the SOLO swap guard (singleSwapGuard.ts) — set where
+  // faceSwapSource is set. null = unknown → the guard checks face count only.
+  let faceSwapGender: 'male' | 'female' | null = null;
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
     | undefined;
@@ -1634,6 +1638,7 @@ Output ONLY the prompt.`;
       selectedCast.length === 1
     ) {
       faceSwapSource = castPick.thumb_url;
+      faceSwapGender = resolveCastGender(castPick as DreamCastMember);
       console.log(`[nightly-dreams] Nightly face swap: ${castPick.role} -> ${nightlyMedium.key}`);
     }
 
@@ -1942,41 +1947,94 @@ Output ONLY the prompt.`;
         console.warn('[nightly-dreams] ⚠ Dual unrecoverable — delivering unswapped scene');
       }
     } else if (faceSwapSource && tempUrl) {
-      let swapSuccessSingle = false;
-      for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
-        try {
-          if (attempt > 1) {
-            const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
-            console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
-            await new Promise((r) => setTimeout(r, delay));
-          }
-          const sourceUrl = faceSwapSource;
-          console.log(`[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`);
-          tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN, supabase, userId, {
-            retry: false,
-          });
-          lap('face-swap-model');
-          console.log('[nightly-dreams] Face swap complete');
-          logAxes.faceSwapResult = 'success';
-          logAxes.faceSwapAttempts = attempt;
-          swapSuccessSingle = true;
-          break;
-        } catch (err) {
-          console.warn(
-            `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
-            (err as Error).message
-          );
-          if (attempt === FACE_SWAP_MAX_RETRIES) {
-            fallbackReasons.push(`face_swap_failed_${attempt}x:${(err as Error).message}`);
-            logAxes.faceSwapResult = 'failed';
-            logAxes.faceSwapError = (err as Error).message;
+      // ── Solo-swap safety guard (see _shared/singleSwapGuard.ts) ──
+      // The single-swap models are face-blind: if the render invented a second
+      // person, the cast face can land on the WRONG person (the 2026-07-05
+      // "wife's face on the man" failure). Probe face count + gender;
+      // re-render while unsafe; never paste unconfirmed.
+      const soloGuard = await ensureSoloSwapTarget(
+        tempUrl,
+        {
+          castGender: faceSwapGender,
+          replicateToken: REPLICATE_TOKEN,
+          rerender: async () => {
+            // Front-load the person count on the retry — re-rolling the identical
+            // prompt mostly re-renders the same invented couple (see the
+            // generate-dream twin). Subject-count only, never the scene.
+            const soloNoun =
+              faceSwapGender === 'female' ? 'woman' : faceSwapGender === 'male' ? 'man' : 'person';
+            const rr = await generateImage(
+              'flux-dev',
+              `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+              undefined,
+              {
+                replicateToken: REPLICATE_TOKEN,
+                openaiKey: Deno.env.get('OPENAI_API_KEY'),
+                geminiKey: Deno.env.get('GEMINI_API_KEY'),
+              },
+              pickedModel,
+              'png'
+            );
+            observability.replicateRawUrl = rr.url;
+            observability.replicatePredictionId = rr.predictionId;
+            return { url: rr.url, predictionId: rr.predictionId };
+          },
+          log: (m) => console.log(`[nightly-dreams] ${m}`),
+        },
+        { deadlineMs: t0 + 140_000 }
+      );
+      fallbackReasons.push(...soloGuard.reasons);
+      logAxes.soloFaceCount = soloGuard.faceCount;
+      if (!soloGuard.safe) {
+        if (strict_face_swap) {
+          // Onboarding first-dream → hard-fail so the cascade re-renders solo-self.
+          throw new Error('face_swap_failed:single');
+        }
+        // Nightly cron → deliver the clean UNSWAPPED scene rather than risk
+        // pasting the face onto an invented second person.
+        console.warn('[nightly-dreams] ⚠ Solo swap unconfirmed — delivering unswapped scene');
+        logAxes.faceSwapResult = 'solo-unsafe-unswapped';
+      } else {
+        tempUrl = soloGuard.url;
+        if (soloGuard.predictionId) replicatePredictionId = soloGuard.predictionId;
+        let swapSuccessSingle = false;
+        for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
+          try {
+            if (attempt > 1) {
+              const delay = FACE_SWAP_BACKOFF_MS[attempt - 2] ?? 4_000;
+              console.log(`[nightly-dreams] Backoff ${delay}ms before retry ${attempt}`);
+              await new Promise((r) => setTimeout(r, delay));
+            }
+            const sourceUrl = faceSwapSource;
+            console.log(
+              `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES}...`
+            );
+            tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN, supabase, userId, {
+              retry: false,
+            });
+            lap('face-swap-model');
+            console.log('[nightly-dreams] Face swap complete');
+            logAxes.faceSwapResult = 'success';
             logAxes.faceSwapAttempts = attempt;
+            swapSuccessSingle = true;
+            break;
+          } catch (err) {
+            console.warn(
+              `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
+              (err as Error).message
+            );
+            if (attempt === FACE_SWAP_MAX_RETRIES) {
+              fallbackReasons.push(`face_swap_failed_${attempt}x:${(err as Error).message}`);
+              logAxes.faceSwapResult = 'failed';
+              logAxes.faceSwapError = (err as Error).message;
+              logAxes.faceSwapAttempts = attempt;
+            }
           }
         }
-      }
-      // First-dream cascade — see comment in the dual branch above.
-      if (!swapSuccessSingle && strict_face_swap) {
-        throw new Error('face_swap_failed:single');
+        // First-dream cascade — see comment in the dual branch above.
+        if (!swapSuccessSingle && strict_face_swap) {
+          throw new Error('face_swap_failed:single');
+        }
       }
     }
 

@@ -149,6 +149,10 @@ interface SaveOpts {
 interface LongPressOpts extends SaveOpts {
   onDelete?: () => void;
   onDreamLikeThis?: () => void;
+  /** Profile pin state + toggle (migration 330) — provided only for the
+   * owner's own posts on the profile grid. */
+  isPinned?: boolean;
+  onTogglePin?: () => void;
 }
 type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void };
 
@@ -349,6 +353,13 @@ export function handleImageLongPress(opts: LongPressOpts) {
   ];
   if (opts.onDreamLikeThis) {
     buttons.push({ text: 'Dream like this', onPress: opts.onDreamLikeThis });
+  }
+  // Profile pin toggle — own posts only (IG model, migration 330).
+  if (opts.onTogglePin) {
+    buttons.push({
+      text: opts.isPinned ? 'Unpin from profile' : 'Pin to profile',
+      onPress: opts.onTogglePin,
+    });
   }
   if (opts.onDelete) {
     buttons.push({ text: 'Delete', style: 'destructive', onPress: opts.onDelete });
