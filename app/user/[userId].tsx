@@ -453,8 +453,17 @@ export default function PublicProfileScreen() {
         />
         <Animated.View style={animatedAvatarStyle}>
           {profile.avatar_url ? (
+            // placeholder = the 128px transform URI the header avatar already
+            // has in expo-image's memory cache — paints the zooming circle
+            // from frame 0 (the raw full-size URI is a different URL, so
+            // without this the circle expanded EMPTY over the black scrim and
+            // the image popped in on decode — the jank Kevin flagged
+            // 2026-07-05). Full-res crossfades over the thumb when ready.
             <Image
               source={{ uri: profile.avatar_url }}
+              placeholder={{ uri: avatarUrl(profile.avatar_url) }}
+              placeholderContentFit="cover"
+              transition={150}
               style={{ width: '100%', height: '100%', borderRadius: 9999 }}
               contentFit="cover"
             />
