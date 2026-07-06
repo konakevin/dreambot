@@ -782,8 +782,15 @@ export default function InboxScreen() {
             >
               <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
             </TouchableOpacity>
-            {/* Shared gradient nav title (matches Create/Settings/Edit Profile). */}
-            <GradientTitle>Inbox</GradientTitle>
+            {/* Shared gradient nav title (matches Create/Settings/Edit Profile).
+                Absolutely centered on the header box — the flanks are unequal
+                (28pt back arrow left; right side is 0-22pt depending on whether
+                the ••• menu shows), so space-between centering drifted the
+                title ~14pt right. Absolute centering makes flank widths
+                irrelevant; pointerEvents none keeps the ••• tappable. */}
+            <View pointerEvents="none" style={styles.headerTitleCenter}>
+              <GradientTitle>Inbox</GradientTitle>
+            </View>
             <View style={styles.headerActions}>
               {hasAny && (
                 <TouchableOpacity
@@ -967,6 +974,17 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(20),
     fontWeight: '800',
+  },
+  // True-center overlay for the default-mode title (select-mode keeps its
+  // inline space-between title, whose flanks are both text and read fine).
+  headerTitleCenter: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerActions: {
     flexDirection: 'row',
