@@ -559,7 +559,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           contentFit="cover"
         />
         <Text style={s.photoTipText}>
-          A straight-on, well-lit photo works best, like a passport photo
+          A straight-on, well-lit photo works best, like a passport photo.
         </Text>
       </View>
       {SLOTS.map((slot) => (
