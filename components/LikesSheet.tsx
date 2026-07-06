@@ -16,7 +16,13 @@ import {
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as nav from '@/lib/navigate';
@@ -45,6 +51,27 @@ export function LikesSheet({ uploadId, visible, onClose }: Props) {
     translateX.value = withTiming(visible ? 0 : SHEET_WIDTH, { duration: 250 });
   }, [visible, translateX]);
 
+  // Swipe right to dismiss — the sheet lives on the right edge, so the
+  // dismiss direction matches the iOS back-swipe users already do on the
+  // profile screen. Drag follows the finger; past a third of the panel (or a
+  // flick) it commits, otherwise it springs back. activeOffsetX/failOffsetY
+  // keep the vertical likes list scrollable and row taps intact.
+  const panGesture = Gesture.Pan()
+    .activeOffsetX(10)
+    .failOffsetY([-15, 15])
+    .onUpdate((e) => {
+      translateX.value = Math.max(0, e.translationX);
+    })
+    .onEnd((e) => {
+      if (e.translationX > SHEET_WIDTH / 3 || e.velocityX > 500) {
+        translateX.value = withTiming(SHEET_WIDTH, { duration: 200 }, () => {
+          runOnJS(onClose)();
+        });
+      } else {
+        translateX.value = withTiming(0, { duration: 200 });
+      }
+    });
+
   const sheetStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
   }));
@@ -61,43 +88,55 @@ export function LikesSheet({ uploadId, visible, onClose }: Props) {
   return (
     <Animated.View style={[StyleSheet.absoluteFill, s.overlay, backdropStyle]}>
       <Pressable style={s.backdrop} onPress={onClose} />
-      <Animated.View style={[s.sheet, sheetStyle]}>
-        <View style={[s.header, { paddingTop: insets.top + 14 }]}>
-          <Text style={s.title}>Likes</Text>
-          <TouchableOpacity onPress={onClose} hitSlop={12}>
-            <Ionicons name="close" size={22} color={colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
+      <GestureDetector gesture={panGesture}>
+        <Animated.View style={[s.sheet, sheetStyle]}>
+          {/* Header matches the app's screen convention: < back on the left
+              (no ✕ — Kevin 2026-07-05), title centered on the header box. */}
+          <View style={[s.header, { paddingTop: insets.top + 14 }]}>
+            <TouchableOpacity onPress={onClose} hitSlop={12} style={s.headerBack}>
+              <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
+            </TouchableOpacity>
+            {/* Mirror the header's padding so the absolute-centered title sits
+                on the same baseline as the chevron (the header box includes
+                the safe-area inset). */}
+            <View
+              pointerEvents="none"
+              style={[s.headerTitleCenter, { paddingTop: insets.top + 14 }]}
+            >
+              <Text style={s.title}>Likes</Text>
+            </View>
+          </View>
 
-        {isLoading ? (
-          <ActivityIndicator size="small" color={colors.accent} style={s.loading} />
-        ) : likes.length === 0 ? (
-          <Text style={s.empty}>No likes yet</Text>
-        ) : (
-          <FlatList
-            data={likes}
-            keyExtractor={(item) => item.id}
-            style={s.list}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={s.row}
-                onPress={() => handleUserPress(item.id)}
-                activeOpacity={0.7}
-              >
-                <Image
-                  source={{ uri: item.avatar_url ? resizeAvatar(item.avatar_url) : undefined }}
-                  style={s.avatar}
-                  contentFit="cover"
-                  cachePolicy="memory-disk"
-                />
-                <Text style={s.username} numberOfLines={1}>
-                  {item.username}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-      </Animated.View>
+          {isLoading ? (
+            <ActivityIndicator size="small" color={colors.accent} style={s.loading} />
+          ) : likes.length === 0 ? (
+            <Text style={s.empty}>No likes yet</Text>
+          ) : (
+            <FlatList
+              data={likes}
+              keyExtractor={(item) => item.id}
+              style={s.list}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={s.row}
+                  onPress={() => handleUserPress(item.id)}
+                  activeOpacity={0.7}
+                >
+                  <Image
+                    source={{ uri: item.avatar_url ? resizeAvatar(item.avatar_url) : undefined }}
+                    style={s.avatar}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                  />
+                  <Text style={s.username} numberOfLines={1}>
+                    {item.username}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          )}
+        </Animated.View>
+      </GestureDetector>
     </Animated.View>
   );
 }
@@ -123,11 +162,23 @@ const s = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingBottom: verticalScale(14),
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
+  },
+  headerBack: {
+    marginLeft: -6,
+  },
+  headerTitleCenter: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: verticalScale(14),
   },
   title: {
     color: colors.textPrimary,
