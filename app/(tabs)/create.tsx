@@ -50,7 +50,7 @@ import { ModelPicker } from '@/components/ModelPicker';
 import {
   RestyleModelPicker,
   DEFAULT_RESTYLE_MODEL_ID,
-  restyleSparkleCost,
+  resolveRestyleCost,
 } from '@/components/RestyleModelPicker';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
@@ -389,6 +389,16 @@ export default function CreateScreen() {
   const restyleKeysSig = restyleMediumKeys.join(',');
   useEffect(() => {
     if (!isRestyle || restyleMediumKeys.length === 0) return;
+    // Surprise tokens are VALID in restyle — they resolve at submit time to a
+    // random restyle-eligible medium (useDreamCreate). Snapping them here was
+    // the "Surprise Me always becomes Watercolor" bug (2026-07-06): the token
+    // isn't in restyleMediumKeys, so this effect instantly overwrote it.
+    if (
+      config.selectedMedium === 'surprise_me_face' ||
+      config.selectedMedium === 'surprise_me_art'
+    ) {
+      return;
+    }
     if (!restyleMediumKeys.includes(config.selectedMedium)) {
       setMedium(restyleMediumKeys.includes('watercolor') ? 'watercolor' : restyleMediumKeys[0]);
     }
@@ -411,7 +421,8 @@ export default function CreateScreen() {
   const sparkleCost = isRestyle
     ? restylePoolManaged
       ? engineConfig.baseSparkleCost
-      : restyleSparkleCost(restyleModelId)
+      : // DB-preferred (matches enqueue-dream's charge); catalog is the fallback.
+        resolveRestyleCost(imageModels, restyleModelId)
     : sparkleCostFrom(imageModels, selectedModelId);
   // The forced model routes by mode: Restyle sends the restyle-scoped pick
   // (Kontext / NB Pro; nothing for pool-managed LEGO/Vinyl, which keep their

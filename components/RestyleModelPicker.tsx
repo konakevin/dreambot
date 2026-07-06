@@ -29,6 +29,8 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
+import { useImageModels } from '@/hooks/useImageModels';
+import { sparkleCostFrom } from '@/constants/imageModels';
 
 export interface RestyleModel {
   id: string;
@@ -37,32 +39,73 @@ export interface RestyleModel {
   blurb: string;
 }
 
-// The restyle catalog. Costs mirror the server's modelPricing.ts SPARKLE map —
-// enqueue-dream charges getSparkleCost(force_model), so these numbers are the
-// display of that charge, not the source of truth.
+// The restyle catalog. This owns the CLIENT concerns — which models to offer,
+// their order, labels, and blurbs. The `sparkleCost` here is a FALLBACK only:
+// the live price comes from the DB (image_models, via resolveRestyleCost) so a
+// dashboard price change can't leave a stale label. enqueue-dream charges
+// getSparkleCost(force_model) off that same DB row, so the shown price and the
+// charge always agree.
+// Expanded 2026-07-06 after the restyle identity A/B (see the results page /
+// session notes): Flux 2 Pro won likeness at the 1-sparkle tier and is the
+// new default; Kontext stays for its looser artistic repaint; Seedream is
+// the photo-faithful budget pick; Nano Banana Pro remains the premium.
 export const RESTYLE_MODELS: RestyleModel[] = [
   {
+    id: 'black-forest-labs/flux-2-pro',
+    label: 'Flux 2 Pro',
+    sparkleCost: 1,
+    blurb: 'Keeps your face and composition true while fully committing to the style.',
+  },
+  {
     id: 'black-forest-labs/flux-kontext-pro',
-    label: 'Kontext',
+    label: 'Flux Kontext',
     sparkleCost: 1,
     blurb: "Repaints your photo in the medium's style. Artistic and loose.",
+  },
+  {
+    id: 'bytedance/seedream-4',
+    label: 'Seedream',
+    sparkleCost: 1,
+    blurb: 'Stays closest to your original photo, with a lighter artistic touch.',
+  },
+  {
+    id: 'black-forest-labs/flux-kontext-max',
+    label: 'Flux Kontext Max',
+    sparkleCost: 2,
+    blurb: 'Kontext with stronger prompt adherence and detail.',
   },
   {
     id: 'google/gemini-3-image-preview',
     label: 'Nano Banana Pro',
     sparkleCost: 5,
-    blurb: 'Premium restyle — keeps faces, likeness, and composition closest to your photo.',
+    blurb: 'Premium restyle: the most beautiful artistic take that still keeps your likeness.',
   },
 ];
 
 export const DEFAULT_RESTYLE_MODEL_ID = RESTYLE_MODELS[0].id;
 
+/** Catalog fallback price — used only when the DB row is unavailable. */
 export function restyleSparkleCost(modelId: string): number {
   return RESTYLE_MODELS.find((m) => m.id === modelId)?.sparkleCost ?? 1;
 }
 
+/**
+ * Live restyle price: prefer the DB (image_models) so it matches what
+ * enqueue-dream will actually charge; fall back to the hardcoded catalog when
+ * the model isn't a DB row (restyle-only models may be hidden from the main
+ * picker) or the models list hasn't loaded. `models` comes from useImageModels.
+ */
+export function resolveRestyleCost(
+  models: Array<{ id: string; sparkleCost: number }>,
+  modelId: string
+): number {
+  return models.find((m) => m.id === modelId)?.sparkleCost ?? restyleSparkleCost(modelId);
+}
+
 // Sticky per-device (like the medium/vibe prefs) — restores across launches.
-const RESTYLE_MODEL_KEY = 'create.restyleModel.v1';
+// v2 (2026-07-06): key bumped so everyone re-defaults to Flux 2 Pro (the old
+// v1 pref pinned early users to Kontext, which lost the identity A/B).
+const RESTYLE_MODEL_KEY = 'create.restyleModel.v2';
 
 interface Props {
   /** Fires once after the sticky pick loads and on each selection. */
@@ -72,6 +115,7 @@ interface Props {
 export function RestyleModelPicker({ onChange }: Props) {
   const [selected, setSelected] = useState<string>(DEFAULT_RESTYLE_MODEL_ID);
   const [modalOpen, setModalOpen] = useState(false);
+  const models = useImageModels();
 
   useEffect(() => {
     let cancelled = false;
@@ -119,7 +163,7 @@ export function RestyleModelPicker({ onChange }: Props) {
           <Text
             style={{ color: '#A78BFA', fontSize: fontScale(13), fontWeight: '700', marginLeft: 3 }}
           >
-            {current.sparkleCost}
+            {resolveRestyleCost(models, current.id)}
           </Text>
         </View>
         <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
@@ -212,7 +256,7 @@ export function RestyleModelPicker({ onChange }: Props) {
                         marginLeft: 3,
                       }}
                     >
-                      {opt.sparkleCost}
+                      {resolveRestyleCost(models, opt.id)}
                     </Text>
                   </View>
                 </TouchableOpacity>

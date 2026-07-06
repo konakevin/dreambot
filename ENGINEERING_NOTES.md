@@ -126,3 +126,39 @@ GOTCHA: every bot-render runtime needs `GEMINI_API_KEY` + `OPENAI_API_KEY` or ~4
 
 VibeProfile v2 is the only supported format (legacy v1 + `aesthetics`/`art_styles` favorites +
 `objects/things` were ripped out — migrations 216 + 218).
+
+---
+
+## Architecture decisions — deliberate non-fixes (don't re-flag)
+
+A whole-codebase audit (2026-07-06) surfaced these as "issues." Each was triaged and
+INTENTIONALLY left as-is. The reasoning is recorded so the next audit (or agent) doesn't
+re-open them. Fixing any of these is a net-negative churn on working, load-bearing code.
+
+- **Pro-state logic lives in three runtimes** (`lib/proStatus.ts` client, `scripts/lib/
+  nightlyEligibility.js` cron, `is_pro_active()` SQL). This is NOT a single-source-of-truth
+  violation: the SQL fn is the ONE enforcement point (re-validates on every real Pro action).
+  The client/cron copies are caches of a *display* value — a wrong client verdict only mis-shows
+  a paywall, never grants access. The one thing that could drift (trial length) is already
+  single-sourced from `engine_config.pro_trial_days`, and `proStatus.test.ts` +
+  `isProActive.dbspec.ts` lock the three into agreement. Codegen/RPC-per-render "fixes" add
+  latency + build complexity to chase a test-guarded, low-impact drift.
+
+- **`generate-dream` / `nightly-dreams` are large (~2000+ lines).** They're *orchestrators* of a
+  long linear pipeline (auth → scene roll → model pick → LLM → image → face swap → persist). The
+  reusable logic is ALREADY extracted into `_shared/*` (dreamAlgorithm, sceneEngine, recipeBuilder,
+  the brief builders, faceSwap, dualSwapDispatch). What remains is sequential glue you read
+  top-to-bottom anyway. Splitting it scatters one readable sequence behind indirection and risks a
+  bug in money/render code for zero behavioral gain. Extract only opportunistically, when a piece
+  genuinely wants to be reused.
+
+- **~12 components call `supabase.from(...)` directly.** Most are one-shot reads where a hook
+  wrapper adds ceremony and nothing else. The audit's specific "duplicate users fetch"
+  (ModelPicker vs UsernameNudge) is FALSE — they run different queries (own-row `pro_mode_flux_model`
+  vs another-row username-availability lookup). There is no genuine own-user-read duplication worth
+  consolidating; leave the one-shots alone.
+
+**Actually fixed from that audit** (so they're not mistaken for open items): the solo-swap guard +
+surprise-resolver tests (migration-era regression locks), the per-IP first-dream cap
+(migration 332 + `claim_first_dream_ip`), the JWT-in-logs redaction, and restyle price labels now
+DB-preferred (`resolveRestyleCost`, so a dashboard price change can't leave a stale label).

@@ -120,13 +120,31 @@ export function useDreamCreate() {
       if (resolvedMediumKey === 'surprise_me_face' || resolvedMediumKey === 'surprise_me_art') {
         const wantFace = resolvedMediumKey === 'surprise_me_face';
         const cachedMediums = queryClient.getQueryData<DreamMedium[]>(['dreamMediums']) ?? [];
-        const pool = cachedMediums.filter((m) =>
+        // RESTYLE rolls only restyle-eligible mediums (client_meta.restyle_enabled,
+        // migration 294 — most mediums transform badly), and excludes the
+        // pool-managed ones (LEGO/Vinyl carry their own curated model pool that
+        // conflicts with the restyle model pick sent as force_model).
+        const isRestyleRoll = !!config.photoBase64 && config.photoStyle === 'restyle';
+        const base = isRestyleRoll
+          ? cachedMediums.filter(
+              (m) =>
+                m.client_meta?.restyle_enabled === true &&
+                !(
+                  Array.isArray(m.client_meta?.restyle_models) &&
+                  (m.client_meta.restyle_models as unknown[]).length > 0
+                )
+            )
+          : cachedMediums;
+        const pool = base.filter((m) =>
           wantFace ? m.face_swaps === true : m.face_swaps === false
         );
-        if (pool.length > 0) {
-          resolvedMediumKey = pool[Math.floor(Math.random() * pool.length)].key;
+        // Restyle's face/art split can leave an empty side — fall back to the
+        // whole eligible base rather than a token the server can't scope.
+        const rollFrom = pool.length > 0 ? pool : base;
+        if (rollFrom.length > 0) {
+          resolvedMediumKey = rollFrom[Math.floor(Math.random() * rollFrom.length)].key;
         } else {
-          resolvedMediumKey = 'surprise_me';
+          resolvedMediumKey = isRestyleRoll ? 'watercolor' : 'surprise_me';
         }
         if (__DEV__)
           console.log(`[useDreamCreate] Resolved ${config.selectedMedium} → ${resolvedMediumKey}`);
