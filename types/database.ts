@@ -6,31 +6,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
-  graphql_public: {
-    Tables: {
-      [_ in never]: never;
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json;
-          operationName?: string;
-          query?: string;
-          variables?: Json;
-        };
-        Returns: Json;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
   public: {
     Tables: {
       ai_generation_budget: {
@@ -794,6 +769,7 @@ export type Database = {
           created_at: string;
           description: string | null;
           directive: string;
+          face_swap_directive: string | null;
           is_active: boolean;
           is_dream_eligible: boolean;
           key: string;
@@ -806,6 +782,7 @@ export type Database = {
           created_at?: string;
           description?: string | null;
           directive: string;
+          face_swap_directive?: string | null;
           is_active?: boolean;
           is_dream_eligible?: boolean;
           key: string;
@@ -818,6 +795,7 @@ export type Database = {
           created_at?: string;
           description?: string | null;
           directive?: string;
+          face_swap_directive?: string | null;
           is_active?: boolean;
           is_dream_eligible?: boolean;
           key?: string;
@@ -2854,6 +2832,7 @@ export type Database = {
           preview_actor_ids: string[];
           preview_avatars: string[];
           preview_usernames: string[];
+          subtype: string;
           type: string;
           upload_id: string;
           upload_image_url: string;
@@ -3186,9 +3165,6 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],
