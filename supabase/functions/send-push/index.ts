@@ -67,6 +67,14 @@ function getNotificationContent(
         body: body ?? 'Your trial ends tomorrow — subscribe to keep nightly dreams coming',
       };
     }
+    // Post-expiry notice (2026-07-05, nightly-dreams.js 'ended' subtype) —
+    // dreams have already stopped; the tap routes to the /subscribe paywall.
+    if (subtype === 'ended') {
+      return {
+        title: 'Your Pro trial has ended',
+        body: body ?? 'Subscribe to keep nightly dreams coming',
+      };
+    }
     return { title: 'Your Pro trial is ending', body: body ?? 'Tap to learn more' };
   }
   // Paid Pro expiry reminders (sub cancelled but still in paid period).
