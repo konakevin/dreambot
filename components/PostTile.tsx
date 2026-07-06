@@ -104,11 +104,12 @@ export const PostTile = memo(function PostTile({
           </View>
         </View>
       )}
-      {/* Pin badge (migration 330) — small dark pill, top-left, matching the
-          other tile badges. Shows wherever the tile renders a pinned post. */}
+      {/* Pin badge (migration 330) — accent-filled pill, top-left (the dark
+          pill read as invisible on dark art — Kevin 2026-07-05; accent purple
+          matches the avatar camera badge treatment). */}
       {isPinned && (
         <View style={styles.pinBadge} pointerEvents="none">
-          <Ionicons name="pin" size={11} color="#FFFFFF" />
+          <Ionicons name="pin" size={12} color="#FFFFFF" />
         </View>
       )}
       {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
@@ -184,18 +185,26 @@ const styles = StyleSheet.create({
   // "Public" pill on PUBLIC dreams — neutral dark overlay + white text (an
   // indicator, not a CTA; the accent/purple is reserved for the Private-only
   // filter button). Drop shadow + hairline border keep it legible on any tile.
-  // Pin badge — icon-only pill, top-left (bottom-right belongs to the Public
-  // badge; the two can coexist on one tile). Same dark-pill treatment.
+  // Pin badge — accent-filled circle, top-left (bottom-right belongs to the
+  // Public badge; the two can coexist on one tile). Solid brand purple + white
+  // glyph + drop shadow so it reads on ANY artwork (the dark pill vanished on
+  // dark tiles); mirrors the avatar camera-badge treatment.
   pinBadge: {
     position: 'absolute',
-    top: 5,
-    left: 5,
-    paddingHorizontal: 5,
-    paddingVertical: verticalScale(3),
-    borderRadius: 999,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.25)',
+    top: 6,
+    left: 6,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accent,
+    borderWidth: 1.5,
+    borderColor: 'rgba(0,0,0,0.35)',
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    shadowOffset: { width: 0, height: 1 },
   },
   publicBadge: {
     position: 'absolute',
