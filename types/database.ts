@@ -1642,6 +1642,32 @@ export type Database = {
           },
         ];
       };
+      post_hashtags: {
+        Row: {
+          created_at: string;
+          tag: string;
+          upload_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          tag: string;
+          upload_id: string;
+        };
+        Update: {
+          created_at?: string;
+          tag?: string;
+          upload_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'post_hashtags_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       post_impressions: {
         Row: {
           first_seen: string;
@@ -2665,6 +2691,7 @@ export type Database = {
         Args: { p_hours?: number; p_user_id: string };
         Returns: Json;
       };
+      extract_hashtags: { Args: { p_text: string }; Returns: string[] };
       fetch_nightly_history: {
         Args: { p_user_id: string };
         Returns: {
@@ -3023,6 +3050,13 @@ export type Database = {
       };
       reset_my_profile: { Args: never; Returns: undefined };
       sanitize_user_text: { Args: { p_text: string }; Returns: string };
+      search_hashtags: {
+        Args: { p_limit?: number; p_prefix: string };
+        Returns: {
+          post_count: number;
+          tag: string;
+        }[];
+      };
       set_notification_pref: {
         Args: { p_category: string; p_channel: string; p_enabled: boolean };
         Returns: undefined;

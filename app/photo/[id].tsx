@@ -21,6 +21,7 @@ import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
+import { useHashtagPosts } from '@/hooks/useHashtagPosts';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { OopsScreen } from '@/components/OopsScreen';
 import { trackPostViewed } from '@/lib/analytics';
@@ -107,7 +108,7 @@ export default function PhotoDetailScreen() {
     storeModeRef.current = useAlbumStore.getState().posts.length > 0;
   }
 
-  // Call all four hooks (TanStack dedupes by queryKey; only the matching
+  // Call all the source hooks (TanStack dedupes by queryKey; only the matching
   // one is enabled by source). Always-call is required for hook stability.
   const ownPosts = useUserPosts(albumSource?.type === 'own');
   const savedPosts = useFavoritePosts(albumSource?.type === 'saved');
@@ -115,6 +116,10 @@ export default function PhotoDetailScreen() {
   const userPosts = usePublicProfilePosts(
     albumSource?.type === 'user' ? albumSource.userId : '',
     albumSource?.type === 'user'
+  );
+  const hashtagPosts = useHashtagPosts(
+    albumSource?.type === 'hashtag' ? albumSource.tag : '',
+    albumSource?.type === 'hashtag'
   );
   const sourceQuery =
     albumSource?.type === 'own'
@@ -125,7 +130,9 @@ export default function PhotoDetailScreen() {
           ? dreamsPosts
           : albumSource?.type === 'user'
             ? userPosts
-            : null;
+            : albumSource?.type === 'hashtag'
+              ? hashtagPosts
+              : null;
   const sourcePosts: DreamPostItem[] = useMemo(
     () => sourceQuery?.data?.pages.flatMap((p) => p.rows) ?? [],
     [sourceQuery?.data]

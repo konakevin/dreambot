@@ -17,6 +17,7 @@ import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useUserReposts } from '@/hooks/useUserReposts';
 import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
+import { useHashtagPosts } from '@/hooks/useHashtagPosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
@@ -33,7 +34,8 @@ export type PostGridSource =
   | { type: 'saved' }
   | { type: 'dreams'; dreamsFilter?: DreamsFilter }
   | { type: 'reposts'; userId: string }
-  | { type: 'user'; userId: string };
+  | { type: 'user'; userId: string }
+  | { type: 'hashtag'; tag: string };
 
 interface PostGridProps {
   source: PostGridSource;
@@ -88,7 +90,9 @@ export function PostGrid({
   const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
   const isReposts = source.type === 'reposts';
+  const isHashtag = source.type === 'hashtag';
   const userId = isUser ? source.userId : isReposts ? source.userId : '';
+  const hashtag = source.type === 'hashtag' ? source.tag : '';
 
   const dreamsFilter = source.type === 'dreams' ? (source.dreamsFilter ?? 'all') : 'all';
   const ownQuery = useUserPosts(isOwn_);
@@ -96,6 +100,7 @@ export function PostGrid({
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams(dreamsFilter);
   const repostsQuery = useUserReposts(userId, isReposts);
+  const hashtagQuery = useHashtagPosts(hashtag, isHashtag);
 
   const activeQuery = isOwn_
     ? ownQuery
@@ -105,7 +110,9 @@ export function PostGrid({
         ? dreamsQuery
         : isReposts
           ? repostsQuery
-          : userQuery;
+          : isHashtag
+            ? hashtagQuery
+            : userQuery;
 
   // Pull-to-refresh on an infinite query refetches EVERY loaded page in
   // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
@@ -126,8 +133,9 @@ export function PostGrid({
     if (isSaved) return ['favoritePosts', authUserId];
     if (isDreams) return ['my-dreams', authUserId];
     if (isReposts) return ['userReposts', userId];
+    if (isHashtag) return ['hashtagPosts', hashtag];
     return ['publicProfilePosts', userId];
-  }, [isOwn_, isSaved, isDreams, isReposts, userId, authUserId]);
+  }, [isOwn_, isSaved, isDreams, isReposts, isHashtag, hashtag, userId, authUserId]);
   const handleRefresh = useCallback(async () => {
     queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
       old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old

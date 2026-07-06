@@ -1,11 +1,21 @@
 /**
  * ExpandableDescription — tap-to-expand the truncated caption beneath a
  * DreamCard. Extracted from DreamCard (2026-06-06).
+ *
+ * Hashtags + mentions (2026-07-05): #tags and @mentions render as tappable
+ * links (same treatment as CommentRow's comment mentions). Nested Text
+ * onPress wins over the parent's expand-toggle, so tapping a link navigates
+ * and tapping plain text still expands. PUSH, not replace — see CommentRow's
+ * comment-nav lesson (replace destroys the screen underneath, so back lands
+ * on the home feed).
  */
 
 import { useState } from 'react';
-import { type TextStyle, type StyleProp } from 'react-native';
+import { StyleSheet, type TextStyle, type StyleProp } from 'react-native';
 import { Text } from '@/components/AppText';
+import * as nav from '@/lib/navigate';
+import { supabase } from '@/lib/supabase';
+import { splitCaption, isHashtagToken, isMentionToken, normalizeTag } from '@/lib/hashtags';
 
 interface Props {
   text: string;
@@ -20,7 +30,53 @@ export function ExpandableDescription({ text, style }: Props) {
       numberOfLines={expanded ? undefined : 1}
       onPress={() => setExpanded((v) => !v)}
     >
-      {text}
+      {splitCaption(text).map((part, i) => {
+        if (isHashtagToken(part)) {
+          return (
+            <Text
+              key={i}
+              style={styles.link}
+              onPress={() => nav.push(`/hashtag/${normalizeTag(part)}`)}
+            >
+              {part}
+            </Text>
+          );
+        }
+        if (isMentionToken(part)) {
+          return (
+            <Text
+              key={i}
+              style={styles.link}
+              onPress={() => {
+                const username = part.slice(1);
+                // Look up user by username and navigate — same lookup
+                // CommentRow's mentions do.
+                supabase
+                  .from('users')
+                  .select('id')
+                  .eq('username', username)
+                  .maybeSingle()
+                  .then(({ data }) => {
+                    if (data) nav.push(`/user/${data.id}`);
+                  });
+              }}
+            >
+              {part}
+            </Text>
+          );
+        }
+        return part;
+      })}
     </Text>
   );
 }
+
+const styles = StyleSheet.create({
+  // Bold white, not link-blue — on the dream card the caption sits over the
+  // artwork, where blue reads as clutter; the weight change alone marks it
+  // tappable (Kevin 2026-07-05).
+  link: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+});

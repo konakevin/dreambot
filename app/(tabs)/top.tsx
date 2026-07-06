@@ -34,6 +34,7 @@ import { useFeedStore } from '@/store/feed';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
+import { useSearchHashtags } from '@/hooks/useHashtagPosts';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
@@ -106,6 +107,8 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
 type SearchItem =
   | { type: 'userHeader' }
   | { type: 'user'; user: SearchUser }
+  | { type: 'tagHeader' }
+  | { type: 'tag'; tag: string; count: number }
   | { type: 'postHeader' }
   | {
       type: 'postTriplet';
@@ -113,6 +116,26 @@ type SearchItem =
       middle?: DreamPostItem;
       right?: DreamPostItem;
     };
+
+// Hashtag result row (migration 331) — # glyph disc + tag + post count,
+// pushes the tag page. Mirrors the SearchRow (people) layout.
+function TagRow({ tag, count }: { tag: string; count: number }) {
+  return (
+    <TouchableOpacity
+      style={s.searchUserRow}
+      onPress={() => nav.push(`/hashtag/${tag}`)}
+      activeOpacity={0.7}
+    >
+      <View style={s.searchAvatarFallback}>
+        <Text style={s.tagGlyph}>#</Text>
+      </View>
+      <View style={s.searchUserInfo}>
+        <Text style={s.searchUsername}>#{tag}</Text>
+        <Text style={s.tagCount}>{count === 1 ? '1 dream' : `${count} dreams`}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 function SearchRow({ user }: { user: SearchUser }) {
   const { data: followingIds = new Set<string>() } = useFollowingIds();
@@ -303,9 +326,13 @@ export default function SearchExploreScreen() {
     isFetchingNextPage: fetchingMorePosts,
   } = useSearchPosts(searchActive ? debouncedQuery : '', selectedMedium, selectedVibe);
 
+  // Tag prefix search (migration 331) — works with or without a leading '#'
+  // in the query; the hook/RPC normalize it.
+  const { data: tagResults = [] } = useSearchHashtags(searchActive ? debouncedQuery : '');
+
   const searchPosts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
   const searchLoading = usersLoading || postsLoading;
-  const hasResults = userResults.length > 0 || searchPosts.length > 0;
+  const hasResults = userResults.length > 0 || tagResults.length > 0 || searchPosts.length > 0;
 
   const searchListData = useMemo(() => {
     if (!hasQuery || !searchActive) return [];
@@ -314,6 +341,12 @@ export default function SearchExploreScreen() {
       items.push({ type: 'userHeader' });
       for (const user of userResults.slice(0, 3)) {
         items.push({ type: 'user', user });
+      }
+    }
+    if (tagResults.length > 0) {
+      items.push({ type: 'tagHeader' });
+      for (const t of tagResults) {
+        items.push({ type: 'tag', tag: t.tag, count: t.post_count });
       }
     }
     if (searchPosts.length > 0) {
@@ -328,7 +361,7 @@ export default function SearchExploreScreen() {
       }
     }
     return items;
-  }, [hasQuery, searchActive, userResults, searchPosts]);
+  }, [hasQuery, searchActive, userResults, tagResults, searchPosts]);
 
   const renderSearchItem = useCallback(({ item }: { item: SearchItem }) => {
     switch (item.type) {
@@ -336,6 +369,10 @@ export default function SearchExploreScreen() {
         return <SectionHeader title="People" />;
       case 'user':
         return <SearchRow user={item.user} />;
+      case 'tagHeader':
+        return <SectionHeader title="Tags" />;
+      case 'tag':
+        return <TagRow tag={item.tag} count={item.count} />;
       case 'postHeader':
         return <SectionHeader title="Dreams" />;
       case 'postTriplet':
@@ -351,6 +388,10 @@ export default function SearchExploreScreen() {
         return 'uh';
       case 'user':
         return `u-${item.user.id}`;
+      case 'tagHeader':
+        return 'th';
+      case 'tag':
+        return `t-${item.tag}`;
       case 'postHeader':
         return 'ph';
       case 'postTriplet':
@@ -708,6 +749,9 @@ const s = StyleSheet.create({
   searchAvatarText: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '700' },
   searchUserInfo: { flex: 1, gap: 2 },
   searchUsername: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '600' },
+  // Tag result rows — # disc reuses the avatar-fallback disc.
+  tagGlyph: { color: colors.textSecondary, fontSize: fontScale(20), fontWeight: '700' },
+  tagCount: { color: colors.textSecondary, fontSize: fontScale(12) },
   searchActions: { flexDirection: 'row', gap: 8, alignItems: 'center' },
   followButton: {
     borderWidth: 1,
