@@ -53,14 +53,20 @@ export function useAutoSaveProfile() {
       .select('recipe')
       .eq('user_id', user.id)
       .single()
-      .then(({ data }) => {
+      .then(({ data, error }) => {
         if (cancelled || useOnboardingStore.getState().isHydrated) return;
         const recipe = (data as { recipe?: unknown } | null)?.recipe;
         if (isVibeProfile(recipe)) {
           useOnboardingStore.getState().loadProfile(recipe);
-        } else {
+        } else if (!error || error.code === 'PGRST116') {
+          // Confirmed: no row (PGRST116) or a row whose recipe isn't a valid
+          // profile — nothing real to clobber, safe to allow saves.
           useOnboardingStore.getState().setHydrated(true);
         }
+        // Read FAILED (network / timeout / DB jam) → we don't know what
+        // exists. Stay un-hydrated: auto-save stays disabled rather than
+        // risking a default-profile overwrite of the user's real recipe
+        // (2026-07-06: the DB connection jam made exactly this reachable).
       });
     return () => {
       cancelled = true;

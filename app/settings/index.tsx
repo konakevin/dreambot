@@ -137,21 +137,40 @@ export default function SettingsScreen() {
   // Load vibe profile into onboarding store for settings sub-screens.
   // Set isEditing once on mount, clear on unmount — NOT on focus/blur,
   // because navigating to a sub-screen blurs the index and would toggle it off.
+  //
+  // HYDRATE ONCE PER SESSION (2026-07-06, bunny's vanishing cast photos):
+  // this used to loadProfile() on EVERY Settings mount with no cancellation.
+  // The auto-save is debounced 1.5s, so a slow or stale read resolving AFTER
+  // the user edited a sub-screen (uploaded a cast photo → "Ready for dreams")
+  // REVERTED the store to the pre-edit recipe, and the auto-save then
+  // persisted the reversion — the edit silently un-did itself seconds later.
+  // Normally a ~200ms race window, but a slow DB/network stretches it to
+  // minutes. Once the store is hydrated, it IS the session's source of truth
+  // (sign-out resets isHydrated, so a new user still hydrates fresh).
   const vibeProfile = useOnboardingStore((s) => s.profile);
   useEffect(() => {
     if (!user) return;
+    let cancelled = false;
     (async () => {
-      const { data } = await supabase
-        .from('user_recipes')
-        .select('recipe')
-        .eq('user_id', user.id)
-        .single();
-      if (data?.recipe && isVibeProfile(data.recipe)) {
-        useOnboardingStore.getState().loadProfile(data.recipe);
+      if (!useOnboardingStore.getState().isHydrated) {
+        const { data } = await supabase
+          .from('user_recipes')
+          .select('recipe')
+          .eq('user_id', user.id)
+          .single();
+        if (
+          !cancelled &&
+          !useOnboardingStore.getState().isHydrated &&
+          data?.recipe &&
+          isVibeProfile(data.recipe)
+        ) {
+          useOnboardingStore.getState().loadProfile(data.recipe);
+        }
       }
-      useOnboardingStore.getState().setIsEditing(true);
+      if (!cancelled) useOnboardingStore.getState().setIsEditing(true);
     })();
     return () => {
+      cancelled = true;
       useOnboardingStore.getState().setIsEditing(false);
     };
   }, [user]);

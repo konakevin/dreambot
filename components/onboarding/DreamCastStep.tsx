@@ -25,6 +25,7 @@ import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
+import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import type { DreamCastMember, CastRelationship } from '@/types/vibeProfile';
 
 // First-dream diagnostic logging (DEV). Same [FD] tag as the kickoff path so the
@@ -490,6 +491,21 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         ...(plusOneRelFinal ? { relationship: plusOneRelFinal } : {}),
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      // Flush the save NOW in edit mode so "Ready for dreams" means PERSISTED,
+      // not just in-store — the debounced auto-save leaves a ~2-3s window where
+      // an app kill loses a member the badge already called ready. Onboarding
+      // deliberately excluded: it persists at the Save & Continue cutoff, and
+      // an early saveVibeProfile would mark onboarding_completed prematurely.
+      // Failure is non-fatal — the debounced auto-save remains the retry net.
+      if (useOnboardingStore.getState().isEditing) {
+        try {
+          await saveVibeProfile(user.id, useOnboardingStore.getState().profile);
+          fdlog(`castUpload PERSISTED role=${role}`);
+        } catch (e) {
+          if (__DEV__)
+            console.warn('[DreamCast] immediate persist failed (auto-save will retry):', e);
+        }
+      }
       if (__DEV__)
         console.log(
           `[DreamCast] Described ${role} (${descData.gender}):`,
