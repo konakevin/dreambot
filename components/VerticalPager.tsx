@@ -157,6 +157,53 @@ function VerticalPagerInner<T>(
     onScrollActiveRef.current?.(active);
   }, []);
 
+  // ── Id-anchoring (2026-07-06) ──
+  // The pager positions purely by index (translateY = -index × pageHeight), so
+  // if `data`'s prefix ever shifts (a refetch reshuffles rows, an item above
+  // the viewport is removed), the same index suddenly shows a DIFFERENT item —
+  // the "different post pops into view mid-scroll" bug. Anchor by KEY instead:
+  // remember which item the user is on; when `data` changes and that item
+  // moved, re-align to its new index instantly (no animation — visually
+  // nothing changes, which is the point).
+  const keyExtractorRef = useRef(keyExtractor);
+  keyExtractorRef.current = keyExtractor;
+  const activeKeyRef = useRef<string | null>(null);
+
+  // User navigation (swipe / scrollToIndex) adopts the new card as the anchor.
+  // Runs on index changes only — declared BEFORE the data-shift effect so that
+  // when both fire in one commit, intent wins.
+  useEffect(() => {
+    const it = data[activeIndex];
+    activeKeyRef.current = it != null ? keyExtractorRef.current(it, activeIndex) : null;
+    // data deliberately not a dep: a data-only change must not re-adopt here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex]);
+
+  // Data change: if the anchored item now lives at a different index, follow it.
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
+  useEffect(() => {
+    const key = activeKeyRef.current;
+    if (key == null) return;
+    const idx = activeIndexRef.current;
+    const cur = data[idx];
+    if (cur != null && keyExtractorRef.current(cur, idx) === key) return; // stable — nothing to do
+    const newIdx = data.findIndex((it, i) => keyExtractorRef.current(it, i) === key);
+    // Anchored item vanished (deleted/hidden): clamp into range and adopt
+    // whatever sits at the clamped index.
+    const target = newIdx >= 0 ? newIdx : Math.min(idx, Math.max(0, data.length - 1));
+    if (target === idx) return;
+    indexSV.value = target;
+    setActiveIndex(target);
+    cancelAnimation(translateY);
+    translateY.value = -target * pageHeightSV.value;
+    if (newIdx >= 0) activeKeyRef.current = key;
+    // Keep the parent's index bookkeeping true (same item, new index) —
+    // without firing onEndReached side effects.
+    onActiveIndexChangeRef.current?.(target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   // ── Pull-to-refresh ──
   const onRefreshRef = useRef(onRefresh);
   onRefreshRef.current = onRefresh;

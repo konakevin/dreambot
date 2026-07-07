@@ -88,6 +88,12 @@ function useDreamFeed(tab: FeedTab) {
       return lastPage.nextCursor ?? undefined;
     },
     enabled: !!useAuthStore.getState().user,
+    // Freeze loaded pages for the session — see hooks/useDreamFeed.ts
+    // (2026-07-06): background refetches recompute LIVE feed_scores and
+    // reshuffle the prefix under the index-anchored pager mid-scroll.
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -360,6 +366,7 @@ export default function HomeScreen() {
           onSaved={() => setUsernameDone(true)}
         />
       )}
+
     </View>
   );
 }

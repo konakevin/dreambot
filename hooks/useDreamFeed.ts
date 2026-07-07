@@ -81,6 +81,15 @@ export function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
     initialPageParam: null as FeedCursor | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     enabled: !!useAuthStore.getState().user,
+    // Freeze loaded pages for the session (2026-07-06): feed_score is LIVE
+    // (age decay + engagement), so any background refetch of already-loaded
+    // pages returns shifted rows and swaps the post under the index-anchored
+    // pager mid-scroll. Fresh content still arrives through every intentional
+    // channel: pull-to-refresh, the >60s-background invalidate in _layout,
+    // and the per-session feedSeed (part of the query key).
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 

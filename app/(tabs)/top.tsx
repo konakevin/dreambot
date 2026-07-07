@@ -98,7 +98,13 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
       return { score: last.feed_score, id: last.id } as ExploreCursor;
     },
     enabled: !!user,
-    staleTime: 60_000,
+    // Freeze loaded pages for the session — see hooks/useDreamFeed.ts
+    // (2026-07-06): background refetches recompute LIVE feed_scores and
+    // reshuffle already-rendered grid content. Pull-to-refresh + the
+    // feedSeed rotation remain the intentional refresh channels.
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -330,7 +336,16 @@ export default function SearchExploreScreen() {
   // in the query; the hook/RPC normalize it.
   const { data: tagResults = [] } = useSearchHashtags(searchActive ? debouncedQuery : '');
 
-  const searchPosts = useMemo(() => postPages?.pages.flatMap((p) => p.rows) ?? [], [postPages]);
+  // Same page-boundary dedup as the explore grid below — see that memo's note.
+  const searchPosts = useMemo(() => {
+    const rows = postPages?.pages.flatMap((p) => p.rows) ?? [];
+    const seen = new Set<string>();
+    return rows.filter((r) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    });
+  }, [postPages]);
   const searchLoading = usersLoading || postsLoading;
   const hasResults = userResults.length > 0 || tagResults.length > 0 || searchPosts.length > 0;
 
@@ -414,7 +429,20 @@ export default function SearchExploreScreen() {
   const activeVibes = selectedVibe ? [selectedVibe] : [];
   const { data, isLoading, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useExploreDreams(activeMediums, activeVibes);
-  const posts = useMemo(() => data?.pages.flat() ?? [], [data]);
+  // Dedup by id across page boundaries. get_feed's keyset cursor compares
+  // LIVE-recomputed feed_scores (time-decay + engagement terms), so a page-1
+  // boundary post whose score drifts below the stale cursor by the page-2
+  // request is re-emitted — the "same image twice ~20 tiles in" grid bug
+  // (2026-07-06). Same guard as the home feed's feedPosts memo.
+  const posts = useMemo(() => {
+    const rows = data?.pages.flat() ?? [];
+    const seen = new Set<string>();
+    return rows.filter((r) => {
+      if (seen.has(r.id)) return false;
+      seen.add(r.id);
+      return true;
+    });
+  }, [data]);
 
   // ── Tap-active-tab gesture (Instagram-style) ──
   // Scroll-to-top is already handled by the feedSeed effect above (regenerateSeed
