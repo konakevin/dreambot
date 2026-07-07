@@ -112,6 +112,90 @@ export type Database = {
           },
         ];
       };
+      announcement_seen: {
+        Row: {
+          announcement_id: string;
+          seen_at: string;
+          user_id: string;
+        };
+        Insert: {
+          announcement_id: string;
+          seen_at?: string;
+          user_id: string;
+        };
+        Update: {
+          announcement_id?: string;
+          seen_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'announcement_seen_announcement_id_fkey';
+            columns: ['announcement_id'];
+            isOneToOne: false;
+            referencedRelation: 'announcements';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'announcement_seen_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      announcements: {
+        Row: {
+          audience: string;
+          body: string;
+          created_at: string;
+          cta_label: string | null;
+          cta_route: string | null;
+          ends_at: string | null;
+          id: string;
+          image_url: string | null;
+          is_active: boolean;
+          min_build: number | null;
+          priority: number;
+          starts_at: string;
+          style: string;
+          title: string;
+        };
+        Insert: {
+          audience?: string;
+          body: string;
+          created_at?: string;
+          cta_label?: string | null;
+          cta_route?: string | null;
+          ends_at?: string | null;
+          id: string;
+          image_url?: string | null;
+          is_active?: boolean;
+          min_build?: number | null;
+          priority?: number;
+          starts_at?: string;
+          style?: string;
+          title: string;
+        };
+        Update: {
+          audience?: string;
+          body?: string;
+          created_at?: string;
+          cta_label?: string | null;
+          cta_route?: string | null;
+          ends_at?: string | null;
+          id?: string;
+          image_url?: string | null;
+          is_active?: boolean;
+          min_build?: number | null;
+          priority?: number;
+          starts_at?: string;
+          style?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
       blocked_users: {
         Row: {
           blocked_id: string;
@@ -874,6 +958,12 @@ export type Database = {
           face_swap_self_rate: number;
           face_swap_share: number;
           face_swap_share_with_plus_one: number;
+          first_dream_ip_max: number;
+          first_dream_ip_window_hours: number;
+          gift_max_per_day: number;
+          gift_max_per_send: number;
+          gift_message_max_len: number;
+          gifting_enabled: boolean;
           id: number;
           latest_app_version: string | null;
           max_pinned_posts: number;
@@ -916,6 +1006,12 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          first_dream_ip_max?: number;
+          first_dream_ip_window_hours?: number;
+          gift_max_per_day?: number;
+          gift_max_per_send?: number;
+          gift_message_max_len?: number;
+          gifting_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
           max_pinned_posts?: number;
@@ -958,6 +1054,12 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          first_dream_ip_max?: number;
+          first_dream_ip_window_hours?: number;
+          gift_max_per_day?: number;
+          gift_max_per_send?: number;
+          gift_message_max_len?: number;
+          gifting_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
           max_pinned_posts?: number;
@@ -1053,6 +1155,24 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      first_dream_ip_events: {
+        Row: {
+          created_at: string;
+          id: number;
+          ip: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: never;
+          ip: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: never;
+          ip?: string;
+        };
+        Relationships: [];
       };
       first_dream_scene_cards: {
         Row: {
@@ -2664,6 +2784,7 @@ export type Database = {
           isSetofReturn: true;
         };
       };
+      claim_first_dream_ip: { Args: { p_ip: string }; Returns: boolean };
       claim_upscale_job: {
         Args: { p_stale_minutes?: number; p_upload_id: string };
         Returns: string;
@@ -2815,6 +2936,28 @@ export type Database = {
           width: number;
         }[];
       };
+      get_gift: {
+        Args: { p_reference_id: string };
+        Returns: {
+          amount: number;
+          created_at: string;
+          message: string;
+          sender_avatar: string;
+          sender_id: string;
+          sender_username: string;
+          thanked: boolean;
+        }[];
+      };
+      get_giftable_balance: {
+        Args: never;
+        Returns: {
+          balance: number;
+          giftable: number;
+          max_per_day: number;
+          max_per_send: number;
+          sent_today: number;
+        }[];
+      };
       get_group_actors: {
         Args: {
           p_group_key: string;
@@ -2865,6 +3008,7 @@ export type Database = {
           preview_actor_ids: string[];
           preview_avatars: string[];
           preview_usernames: string[];
+          reference_id: string;
           subtype: string;
           type: string;
           upload_id: string;
@@ -2984,6 +3128,15 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: number;
       };
+      gift_sparkles: {
+        Args: {
+          p_amount: number;
+          p_message?: string;
+          p_recipient: string;
+          p_reference_id?: string;
+        };
+        Returns: string;
+      };
       grant_sparkles: {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
@@ -3072,6 +3225,7 @@ export type Database = {
         Returns: boolean;
       };
       text_is_blocked: { Args: { p_text: string }; Returns: boolean };
+      thank_gift: { Args: { p_reference_id: string }; Returns: string };
       toggle_repost: {
         Args: { p_upload_id: string };
         Returns: {

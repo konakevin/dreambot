@@ -17,6 +17,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { GradientTitle } from '@/components/GradientTitle';
 import * as Haptics from 'expo-haptics';
+import { useLocalSearchParams } from 'expo-router';
+import { supabase } from '@/lib/supabase';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { GiftFriendPicker, type GiftRecipient } from '@/components/GiftFriendPicker';
+import { GiftSparklesSheet } from '@/components/GiftSparklesSheet';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { colors } from '@/constants/theme';
 import { Toast } from '@/components/Toast';
@@ -170,6 +175,32 @@ export default function SparkleStoreScreen() {
   }, []);
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
 
+  // Gift Sparkles (migration 334). `?giftFor=<userId>` is the bounce-back
+  // path from GiftSparklesSheet's zero-giftable upsell: after landing here
+  // (and ideally buying), the gift sheet reopens for that recipient.
+  const { giftingEnabled } = useEngineConfig();
+  const { giftFor } = useLocalSearchParams<{ giftFor?: string }>();
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [giftSheetOpen, setGiftSheetOpen] = useState(false);
+  const [giftRecipient, setGiftRecipient] = useState<GiftRecipient | null>(null);
+  useEffect(() => {
+    if (typeof giftFor !== 'string' || !giftFor) return;
+    supabase
+      .from('users')
+      .select('id, username, avatar_url')
+      .eq('id', giftFor)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setGiftRecipient({
+            id: data.id,
+            username: data.username ?? 'dreamer',
+            avatarUrl: data.avatar_url,
+          });
+        }
+      });
+  }, [giftFor]);
+
   // Screenshot mode bypasses the live RC data so the new lineup renders
   // even before App Store Connect + RC have synced the new products.
   const packages = USE_MOCK_PACKS_FOR_SCREENSHOT ? MOCK_PACKAGES : livePackages;
@@ -206,6 +237,10 @@ export default function SparkleStoreScreen() {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         const info = packInfo[selectedPkg.product.identifier];
         Toast.show(`${info?.sparkles ?? ''} sparkles added!`, 'sparkles');
+        // ?giftFor= bounce-back: they came here from the gift sheet's
+        // zero-giftable upsell — reopen the gift for that recipient now
+        // that they have giftable sparkles.
+        if (giftRecipient) setGiftSheetOpen(true);
       },
       onError: (err) => {
         if (err.message === 'cancelled') return;
@@ -227,6 +262,34 @@ export default function SparkleStoreScreen() {
       }
     >
       <View style={{ flex: 1 }}>
+        {/* Gifting context (migration 334) — PINNED above the scroll area so
+            the "who am I buying for" context can never scroll away. Copy makes
+            the two-step explicit: pack lands in YOUR balance, then you choose
+            how many to send. */}
+        {giftingEnabled && giftRecipient && !giftSheetOpen && (
+          <View style={s.giftContextBanner}>
+            {/* Banner body reopens the gift sheet (a dismissed sheet was
+                otherwise unreachable without re-picking — Kevin 2026-07-06);
+                the X exits gifting mode entirely. */}
+            <TouchableOpacity
+              style={s.giftContextBody}
+              activeOpacity={0.7}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setGiftSheetOpen(true);
+              }}
+            >
+              <Ionicons name="gift" size={16} color={ACCENT} />
+              <Text style={s.giftContextText}>
+                Gifting to <Text style={s.giftContextName}>{giftRecipient.username}</Text>. Buy a
+                pack, then choose how many sparkles to send them.
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setGiftRecipient(null)} hitSlop={10}>
+              <Ionicons name="close" size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+        )}
         <ScrollView
           style={s.scrollView}
           contentContainerStyle={s.scroll}
@@ -240,6 +303,26 @@ export default function SparkleStoreScreen() {
               Choose a pack
             </GradientTitle>
           </View>
+
+          {/* Gift entry (migration 334) — a compact pill ABOVE the fold,
+              between the title and the grid. The original placement (a card
+              below the pack grid) sat hidden under the sticky purchase footer
+              (Kevin 2026-07-06). Hidden while a gifting context is active —
+              the banner below takes over. */}
+          {giftingEnabled && !giftRecipient && (
+            <TouchableOpacity
+              style={s.giftPill}
+              activeOpacity={0.8}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setPickerOpen(true);
+              }}
+            >
+              <Ionicons name="gift" size={16} color={ACCENT} />
+              <Text style={s.giftPillText}>Gifting for a friend?</Text>
+              <Ionicons name="chevron-forward" size={14} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )}
 
           {isLoading ? (
             <ActivityIndicator
@@ -265,41 +348,12 @@ export default function SparkleStoreScreen() {
               ))}
             </View>
           )}
-        </ScrollView>
 
-        {/* Pinned bottom — the purchase area (pack copy + Buy) sits ABOVE the
-            sticky footer content (Restore + legal links), separated by a divider
-            so the button is never sandwiched. The footer is anchored at the
-            very bottom (matches the Plans screen). */}
-        <View style={s.stickyFooter}>
-          {sorted.length > 0 && (
-            <>
-              {selectedInfo && (
-                <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>
-              )}
-              <TouchableOpacity
-                onPress={handlePurchase}
-                disabled={!selectedPkg || purchasing}
-                activeOpacity={0.85}
-              >
-                <View style={[s.cta, (!selectedPkg || purchasing) && s.ctaDim]}>
-                  {purchasing ? (
-                    <View style={s.ctaConnecting}>
-                      <ActivityIndicator color="#FFFFFF" />
-                      <Text style={s.ctaText}>Connecting to App Store…</Text>
-                    </View>
-                  ) : (
-                    <Text style={s.ctaText}>
-                      {selectedPkg
-                        ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles (${selectedPkg.product.priceString})`
-                        : 'Select a pack'}
-                    </Text>
-                  )}
-                </View>
-              </TouchableOpacity>
-              <View style={s.footerDivider} />
-            </>
-          )}
+          {/* Restore + legal live IN the scroll (not the pinned footer): they
+              must exist on the screen, not stay pinned — and the slim footer
+              gives the pack list back ~90pt so it fits without scrolling on
+              regular phones and scrolls comfortably on small ones
+              (Kevin 2026-07-06: 550 pack hid under the tall footer). */}
           <TouchableOpacity
             style={s.restoreButton}
             onPress={() =>
@@ -328,8 +382,57 @@ export default function SparkleStoreScreen() {
               Terms of Use (EULA)
             </Text>
           </View>
-        </View>
+        </ScrollView>
+
+        {/* Pinned bottom — SLIM: pack copy + Buy only. Restore + legal moved
+            into the scroll content (2026-07-06) so the pack list gets ~90pt
+            back and never hides under the footer. */}
+        {sorted.length > 0 && (
+          <View style={s.stickyFooter}>
+            {selectedInfo && <Text style={s.packDetail}>{getPackCopy(selectedInfo.sparkles)}</Text>}
+            <TouchableOpacity
+              onPress={handlePurchase}
+              disabled={!selectedPkg || purchasing}
+              activeOpacity={0.85}
+            >
+              <View style={[s.cta, (!selectedPkg || purchasing) && s.ctaDim]}>
+                {purchasing ? (
+                  <View style={s.ctaConnecting}>
+                    <ActivityIndicator color="#FFFFFF" />
+                    <Text style={s.ctaText}>Connecting to App Store…</Text>
+                  </View>
+                ) : (
+                  <Text style={s.ctaText}>
+                    {selectedPkg
+                      ? `Buy ${selectedInfo?.sparkles ?? ''} sparkles (${selectedPkg.product.priceString})`
+                      : 'Select a pack'}
+                  </Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
+
+      {/* Gift flow (migration 334): picker → gift sheet. */}
+      {pickerOpen && (
+        <GiftFriendPicker
+          onClose={() => setPickerOpen(false)}
+          onSelect={(recipient) => {
+            setGiftRecipient(recipient);
+            setPickerOpen(false);
+            setGiftSheetOpen(true);
+          }}
+        />
+      )}
+      {giftSheetOpen && giftRecipient && (
+        <GiftSparklesSheet
+          recipientId={giftRecipient.id}
+          recipientUsername={giftRecipient.username}
+          recipientAvatarUrl={giftRecipient.avatarUrl}
+          onClose={() => setGiftSheetOpen(false)}
+        />
+      )}
     </ScreenLayout>
   );
 }
@@ -338,7 +441,9 @@ const s = StyleSheet.create({
   scrollView: { flex: 1 },
   scroll: {
     paddingHorizontal: verticalScale(20),
-    paddingBottom: verticalScale(12),
+    // Generous tail so the last pack card fully clears the purchase footer
+    // when scrolled to the bottom (was 12 — the 550 pack read as truncated).
+    paddingBottom: verticalScale(28),
   },
 
   // Hero — gradient title + balance pill (mirrors the Plans paywall hero).
@@ -369,6 +474,49 @@ const s = StyleSheet.create({
 
   // Pack list — vertical stack of compact pack cards. Each card is a single
   // row: icon chip + sparkle count + price + radio (matches the Plans cards).
+  // Gifting-context banner — arrival-from-gift-flow indicator above the grid.
+  giftContextBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginHorizontal: verticalScale(20),
+    marginBottom: verticalScale(6),
+    paddingHorizontal: 12,
+    paddingVertical: verticalScale(10),
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.45)',
+    backgroundColor: 'rgba(167,139,250,0.10)',
+  },
+  giftContextBody: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  giftContextText: {
+    flex: 1,
+    color: colors.textPrimary,
+    fontSize: fontScale(12.5),
+    lineHeight: fontScale(17),
+  },
+  giftContextName: { fontWeight: '800', color: '#A78BFA' },
+  // Gift entry pill (migration 334) — compact, above the fold under the
+  // title; the old below-grid card hid under the sticky purchase footer.
+  giftPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    gap: 8,
+    marginBottom: verticalScale(14),
+    paddingHorizontal: 14,
+    paddingVertical: verticalScale(8),
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
+  },
+  giftPillText: { color: colors.textPrimary, fontSize: fontScale(13), fontWeight: '700' },
   packGrid: {
     gap: verticalScale(12),
   },
@@ -472,7 +620,7 @@ const s = StyleSheet.create({
   stickyFooter: {
     paddingHorizontal: verticalScale(20),
     paddingTop: verticalScale(10),
-    paddingBottom: verticalScale(32),
+    paddingBottom: verticalScale(24),
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,

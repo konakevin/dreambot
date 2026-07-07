@@ -42,6 +42,8 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import { useReport } from '@/hooks/useReport';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { GiftSparklesSheet } from '@/components/GiftSparklesSheet';
 import { useBlockedIds, useToggleBlock } from '@/hooks/useBlockUser';
 import { showAlert } from '@/components/CustomAlert';
 import { PostActionSheet } from '@/components/PostActionSheet';
@@ -202,6 +204,9 @@ export default function PublicProfileScreen() {
   // alert; Report opens a second sheet with the reason list.
   const [moreOpen, setMoreOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  // Gift Sparkles (migration 334) — sheet opens from the ••• menu.
+  const [giftOpen, setGiftOpen] = useState(false);
+  const { giftingEnabled } = useEngineConfig();
 
   function confirmBlock() {
     showAlert('Block User?', "They won't be able to see your posts or contact you.", [
@@ -509,12 +514,33 @@ export default function PublicProfileScreen() {
   // second sheet springs up cleanly.
   const moreSheets = (
     <>
+      {giftOpen && profile && (
+        <GiftSparklesSheet
+          recipientId={userId as string}
+          recipientUsername={profile.username}
+          recipientAvatarUrl={profile.avatar_url}
+          onClose={() => setGiftOpen(false)}
+        />
+      )}
       <PostActionSheet
         visible={moreOpen}
         onClose={() => setMoreOpen(false)}
         title={profile ? `@${profile.username}` : undefined}
         titleImageUrl={profile?.avatar_url ? avatarUrl(profile.avatar_url) : null}
         rows={[
+          // Gift Sparkles (migration 334) — kill-switch-gated, never on
+          // bots/blocked profiles (the RPC re-validates all of this anyway).
+          ...(giftingEnabled && !isBot && !isBlocked && profile
+            ? [
+                {
+                  key: 'gift',
+                  label: 'Gift sparkles',
+                  icon: 'gift-outline' as const,
+                  group: 'primary' as const,
+                  onPress: () => setGiftOpen(true),
+                },
+              ]
+            : []),
           isBlocked
             ? {
                 key: 'unblock',

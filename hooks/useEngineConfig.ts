@@ -31,6 +31,12 @@ export interface EngineConfig {
   // ForceUpdateGate fails open on null/malformed, so these never brick the app.
   minAppVersion: string | null;
   latestAppVersion: string | null;
+  // Gift Sparkles (migrations 334/335). giftingEnabled=false hides every
+  // entry point client-side AND hard-blocks the RPC server-side.
+  giftingEnabled: boolean;
+  giftMaxPerSend: number;
+  giftMaxPerDay: number;
+  giftMessageMaxLen: number;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -48,6 +54,10 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   petWords: null,
   minAppVersion: null,
   latestAppVersion: null,
+  giftingEnabled: false,
+  giftMaxPerSend: 100,
+  giftMaxPerDay: 200,
+  giftMessageMaxLen: 100,
 };
 
 function num(v: unknown, d: number): number {
@@ -100,6 +110,13 @@ export function useEngineConfig(): EngineConfig {
           typeof c.latest_app_version === 'string'
             ? c.latest_app_version
             : DEFAULT_ENGINE_CONFIG.latestAppVersion,
+        giftingEnabled:
+          typeof c.gifting_enabled === 'boolean'
+            ? c.gifting_enabled
+            : DEFAULT_ENGINE_CONFIG.giftingEnabled,
+        giftMaxPerSend: num(c.gift_max_per_send, DEFAULT_ENGINE_CONFIG.giftMaxPerSend),
+        giftMaxPerDay: num(c.gift_max_per_day, DEFAULT_ENGINE_CONFIG.giftMaxPerDay),
+        giftMessageMaxLen: num(c.gift_message_max_len, DEFAULT_ENGINE_CONFIG.giftMessageMaxLen),
       };
     },
     staleTime: 5 * 60_000,
