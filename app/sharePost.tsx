@@ -12,9 +12,9 @@ import {
 import { Text, TextInput } from '@/components/AppText';
 import { GradientTitle } from '@/components/GradientTitle';
 import * as Clipboard from 'expo-clipboard';
-import Animated from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
-import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -105,6 +105,25 @@ export default function SharePostScreen() {
   const { gesture, animatedStyle } = useStandardSheetDismiss();
   const insets = useSafeAreaInsets();
 
+  // ── Keyboard-reactive sheet (2026-07-06) ──
+  // The old layout was a FIXED-height 0.65 sheet with only the send button
+  // lifted (KeyboardStickyView) — so when the keyboard (~40% of the screen)
+  // opened, it covered the search box AND the friend grid, leaving a broken
+  // near-empty sheet. Instagram's model: the sheet GROWS to fill the space
+  // above the keyboard so the search bar (top), the scrolling friend list
+  // (middle), and the send button (bottom, above the keyboard) all stay
+  // visible. `useReanimatedKeyboardAnimation` gives the animated keyboard
+  // height; we grow the sheet by it (clamped to the safe-area top) and pad the
+  // send row up above the keyboard. Sign-agnostic via abs().
+  const { height: kbHeight } = useReanimatedKeyboardAnimation();
+  const maxSheetHeight = SCREEN_HEIGHT - insets.top - verticalScale(8);
+  const sheetGrowStyle = useAnimatedStyle(() => ({
+    height: Math.min(SHEET_HEIGHT + Math.abs(kbHeight.value), maxSheetHeight),
+  }));
+  const sendPadStyle = useAnimatedStyle(() => ({
+    paddingBottom: insets.bottom + 16 + Math.abs(kbHeight.value),
+  }));
+
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     if (!q) return vibers.slice(0, DEFAULT_LIMIT);
@@ -177,7 +196,7 @@ export default function SharePostScreen() {
 
       {/* Bottom sheet */}
       <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.sheet, animatedStyle]}>
+        <Animated.View style={[styles.sheet, animatedStyle, sheetGrowStyle]}>
           {/* Drag handle */}
           <View style={styles.handleRow}>
             <View style={styles.handle} />
@@ -247,8 +266,11 @@ export default function SharePostScreen() {
             )}
           </View>
 
-          {/* Grid */}
+          {/* Grid — flex:1 so it fills the space between the (pinned) search
+              bar and the (pinned-above-keyboard) send row, scrolling in the
+              middle as the sheet grows/shrinks with the keyboard. */}
           <FlatList
+            style={styles.list}
             data={filtered}
             keyExtractor={(item) => item.userId}
             numColumns={COLUMNS}
@@ -275,36 +297,34 @@ export default function SharePostScreen() {
               </View>
             }
             keyboardShouldPersistTaps="handled"
-            automaticallyAdjustKeyboardInsets={true}
             keyboardDismissMode="on-drag"
           />
 
-          {/* Send button — bottom anchored, pinned above the keyboard */}
-          <KeyboardStickyView>
-            <View style={[styles.sendRow, { paddingBottom: insets.bottom + 16 }]}>
-              <TouchableOpacity
-                style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-                onPress={handleSend}
-                disabled={selected.size === 0 || isPending}
-                activeOpacity={0.7}
-              >
-                {isPending ? (
-                  <ActivityIndicator size="small" color="#000000" />
-                ) : (
-                  <Text
-                    style={[
-                      styles.sendButtonText,
-                      selected.size === 0 && styles.sendButtonTextDisabled,
-                    ]}
-                  >
-                    {selected.size > 0
-                      ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
-                      : 'Select friends to send'}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </KeyboardStickyView>
+          {/* Send button — pinned at the bottom; padded up above the keyboard
+              (sendPadStyle) so it stays visible while the sheet grows. */}
+          <Animated.View style={[styles.sendRow, sendPadStyle]}>
+            <TouchableOpacity
+              style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+              onPress={handleSend}
+              disabled={selected.size === 0 || isPending}
+              activeOpacity={0.7}
+            >
+              {isPending ? (
+                <ActivityIndicator size="small" color="#000000" />
+              ) : (
+                <Text
+                  style={[
+                    styles.sendButtonText,
+                    selected.size === 0 && styles.sendButtonTextDisabled,
+                  ]}
+                >
+                  {selected.size > 0
+                    ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
+                    : 'Select friends to send'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </Animated.View>
         </Animated.View>
       </GestureDetector>
     </View>
@@ -320,7 +340,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   sheet: {
-    height: SHEET_HEIGHT,
+    // Height is animated (sheetGrowStyle) — SHEET_HEIGHT at rest, growing with
+    // the keyboard. Kept off the static style so the animated value owns it.
     backgroundColor: colors.surface,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -400,6 +421,9 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(15),
     height: 40,
+  },
+  list: {
+    flex: 1,
   },
   grid: {
     paddingHorizontal: 16,
