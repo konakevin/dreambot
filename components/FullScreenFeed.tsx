@@ -44,6 +44,11 @@ interface Props {
   onEndReached?: () => void;
   /** Index to scroll to on mount (for album deep links) */
   initialIndex?: number;
+  /** The id of the post to open on. Identity anchor that survives a post-mount
+   *  `posts` reorder (e.g. a new dream prepended after opening) — a numeric
+   *  initialIndex goes stale the moment the array shifts, landing on the wrong
+   *  post. When set, the pager seeks to this id once it first appears. */
+  initialId?: string;
   /** Called when the visible card changes */
   onIndexChange?: (index: number) => void;
   /** Imperative handle to control the pager externally (scrollToIndex/Offset). */
@@ -192,6 +197,7 @@ export function FullScreenFeed({
   onRefresh: onRefreshProp,
   onEndReached,
   initialIndex = 0,
+  initialId,
   onIndexChange,
   listRef,
   panRef,
@@ -277,6 +283,29 @@ export function FullScreenFeed({
     });
     return () => handle.cancel();
   }, [isFocused, posts.length, pageHeight, scrollToIndexImpl]);
+
+  // Initial-target seek (2026-07-06). The numeric initialIndex is computed by the
+  // parent from `posts` at first render; but `posts` can reorder RIGHT AFTER
+  // mount (opening a dream just after creating one: the live album query prepends
+  // the new post, so every index shifts and the pager — positioned by number —
+  // lands on the wrong post, usually index 0). VerticalPager's own id-anchoring
+  // can't help because it seeds its anchor from that same wrong index. So once
+  // the intended post (initialId) first appears in `posts`, seek to it ONCE by
+  // identity. Fires at mount (the tapped post is normally in the stashed grid
+  // snapshot immediately) and re-corrects if the array was reordered first;
+  // after this one placement, VerticalPager's key-anchor follows the user.
+  const anchorCorrected = useRef(false);
+  useEffect(() => {
+    if (anchorCorrected.current || !initialId || posts.length === 0) return;
+    const idx = posts.findIndex((p) => p.id === initialId);
+    if (idx < 0) return; // target not loaded into `posts` yet — wait for it
+    anchorCorrected.current = true;
+    if (idx !== currentIndex.current) {
+      currentIndex.current = idx;
+      setActiveId(initialId);
+      scrollToIndexImpl(idx, false);
+    }
+  }, [posts, initialId, scrollToIndexImpl]);
 
   // Also re-snap when the APP returns from background. useIsFocused only tracks
   // navigation-stack focus, not app foreground/background — so on minimize+reopen,

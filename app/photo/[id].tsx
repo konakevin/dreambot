@@ -367,6 +367,7 @@ export default function PhotoDetailScreen() {
           isLoading={isLoading}
           onRefresh={() => refetch()}
           initialIndex={initialIndex}
+          initialId={id}
           onIndexChange={handleIndexChange}
           disableSwipeToProfile
           hideTabBar
