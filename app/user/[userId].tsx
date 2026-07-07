@@ -54,7 +54,14 @@ import type { FollowUser } from '@/hooks/useFollowersList';
 type Tab = 'posts' | 'followers' | 'following';
 
 export default function PublicProfileScreen() {
-  const { userId, viewedPost } = useLocalSearchParams<{ userId: string; viewedPost?: string }>();
+  const { userId, viewedPost, drawer } = useLocalSearchParams<{
+    userId: string;
+    viewedPost?: string;
+    // Set (?drawer=1) when pushed from the comment overlay: keeps YOUR OWN
+    // profile as a swipe-back drawer over the comments instead of redirecting
+    // to the Profile tab, so back returns to the thread (Kevin 2026-07-07).
+    drawer?: string;
+  }>();
   const currentUser = useAuthStore((s) => s.user);
   const isOwnProfile = currentUser?.id === userId;
   const [activeTab, setActiveTab] = useState<Tab>('posts');
@@ -263,8 +270,10 @@ export default function PublicProfileScreen() {
   // Your own shared link routes here (/user/<me>) — e.g. a profile link you
   // sent a friend, opened on your own device. The public view only shows
   // public posts; send yourself to the real profile tab, which has your full
-  // albums (Dreams / Saved / Reposts + private dreams).
-  if (isOwnProfile) {
+  // albums (Dreams / Saved / Reposts + private dreams). EXCEPT in drawer mode
+  // (tapping your own identity in the comment overlay): there we render the
+  // pushable public view so you can swipe back to the thread you left.
+  if (isOwnProfile && !drawer) {
     return <Redirect href="/(tabs)/profile" />;
   }
 
