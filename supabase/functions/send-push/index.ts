@@ -25,6 +25,9 @@ interface WebhookPayload {
     subtype: string | null;
     created_at: string;
     group_key?: string | null;
+    // Migration 334: generic non-upload reference (sparkle gifts → the gift's
+    // ledger reference for the unwrap screen).
+    reference_id?: string | null;
   };
   // Phase 2 (migration 204): the drain_pending_push_groups() pg_cron worker
   // sets these when collapsing a debounced group into a single aggregated
@@ -151,6 +154,13 @@ function getNotificationContent(
       };
     case 'download_ready':
       return { title: 'Your HD download is ready', body: 'Tap to save it to your photos' };
+    case 'sparkle_gift':
+      // Gift Sparkles (migration 334). 'received' carries the gifter's
+      // optional message as `body` — surface it; 'thanks' is the reply ping.
+      if (subtype === 'thanks') {
+        return { title: `${actorName} loved your gift ✨`, body: '' };
+      }
+      return { title: `🎁 ${actorName} gifted you sparkles`, body: body ?? 'Tap to unwrap' };
     case 'report':
       // Admin-only: a user filed a content report. Sent to every admin so they
       // can act within 24h (App Store 1.2). Routes to the admin Reports screen.
@@ -423,6 +433,9 @@ Deno.serve(async (req) => {
     const data: Record<string, string> = { type: record.type };
     if (record.upload_id) data.uploadId = record.upload_id;
     if (record.id) data.notificationId = record.id;
+    // Comment types carry the comment id so a push tap deep-links to the
+    // comment thread on the post (parity with the inbox tap; Kevin 2026-07-06).
+    if (record.comment_id) data.commentId = record.comment_id;
     // group_key: prefer payload.group_key (worker-supplied for debounced
     // aggregated pushes) over record.group_key (column on the underlying
     // notification row) — they're usually the same but the worker payload
@@ -430,6 +443,14 @@ Deno.serve(async (req) => {
     const groupKey = payload.group_key ?? record.group_key;
     if (groupKey) data.groupKey = groupKey;
     if (record.type === 'friend_request' || record.type === 'friend_accepted') {
+      data.userId = record.actor_id;
+    }
+    // Sparkle gift (migration 334): the unwrap screen needs the gift's ledger
+    // reference; subtype disambiguates 'received' (→ unwrap) from 'thanks'
+    // (→ the thanker's profile, so userId rides along too).
+    if (record.type === 'sparkle_gift') {
+      if (record.reference_id) data.referenceId = record.reference_id;
+      if (record.subtype) data.subtype = record.subtype;
       data.userId = record.actor_id;
     }
 

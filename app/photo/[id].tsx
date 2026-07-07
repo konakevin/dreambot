@@ -31,7 +31,12 @@ import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
 
 export default function PhotoDetailScreen() {
-  const { id, downloadReady } = useLocalSearchParams<{ id: string; downloadReady?: string }>();
+  const { id, downloadReady, comment } = useLocalSearchParams<{
+    id: string;
+    downloadReady?: string;
+    /** Present when arriving from a comment notification — auto-open the thread. */
+    comment?: string;
+  }>();
   const user = useAuthStore((s) => s.user);
   const isPro = useAuthStore((s) => s.isPro);
   const isBasic = useAuthStore((s) => s.isBasic);
@@ -368,6 +373,7 @@ export default function PhotoDetailScreen() {
           onRefresh={() => refetch()}
           initialIndex={initialIndex}
           initialId={id}
+          openCommentsForPostId={comment ? id : undefined}
           onIndexChange={handleIndexChange}
           disableSwipeToProfile
           hideTabBar

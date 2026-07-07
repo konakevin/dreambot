@@ -49,6 +49,9 @@ interface Props {
    *  initialIndex goes stale the moment the array shifts, landing on the wrong
    *  post. When set, the pager seeks to this id once it first appears. */
   initialId?: string;
+  /** When set, auto-open the comment thread on this post once it's loaded —
+   *  used by comment-notification deep links (Kevin 2026-07-06). One-shot. */
+  openCommentsForPostId?: string;
   /** Called when the visible card changes */
   onIndexChange?: (index: number) => void;
   /** Imperative handle to control the pager externally (scrollToIndex/Offset). */
@@ -198,6 +201,7 @@ export function FullScreenFeed({
   onEndReached,
   initialIndex = 0,
   initialId,
+  openCommentsForPostId,
   onIndexChange,
   listRef,
   panRef,
@@ -372,6 +376,18 @@ export function FullScreenFeed({
   const [likesPostId, setLikesPostId] = useState<string | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
+  // Comment-notification deep link: auto-open the comment thread on the target
+  // post once it's loaded into `posts`. One-shot (the ref guard) so it doesn't
+  // reopen after the user closes it or as posts paginate.
+  const autoOpenedComments = useRef(false);
+  useEffect(() => {
+    if (autoOpenedComments.current || !openCommentsForPostId) return;
+    const target = posts.find((p) => p.id === openCommentsForPostId);
+    if (!target) return; // wait until the post is loaded
+    autoOpenedComments.current = true;
+    setCommentPost(target);
+  }, [posts, openCommentsForPostId]);
+
   // Admin instant-delete is a hard delete (row + storage files) with no undo.
   // No confirm on purpose (Kevin 2026-07-01) — he bulk-prunes bot test renders
   // from the feed and the dialog was friction on every tap.
@@ -474,7 +490,12 @@ export function FullScreenFeed({
         showVisibilityToggle={showVisibilityToggle}
         toggleLike={toggleLike}
         toggleFavorite={toggleFavorite}
-        onComment={setCommentPost}
+        onComment={(p) => {
+          setCommentPost(p);
+          // Mask screen chrome (home pills) while the comment view owns the
+          // screen — hidden HUD is also non-interactive.
+          onHudToggle?.(false);
+        }}
         onLikesPress={setLikesPostId}
         onDelete={handleDelete}
         onAdminDelete={handleAdminDelete}
@@ -539,9 +560,19 @@ export function FullScreenFeed({
         />
       </View>
       {commentPost && (
+        /* Inline overlay ON PURPOSE (not a Modal): profile pushes from
+           comment rows must cover it and return to the thread on back — a
+           Modal would sit above the nav stack and swallow those pushes. The
+           screen chrome problem (home's Following/Explore pills floating
+           above + staying tappable, Kevin 2026-07-06) is solved via the HUD
+           channel: hidden HUD is faded out AND non-interactive
+           (pointerEvents none in the host's overlayStyle). */
         <CommentOverlay
           post={commentPost}
-          onClose={() => setCommentPost(null)}
+          onClose={() => {
+            setCommentPost(null);
+            onHudToggle?.(true);
+          }}
           hideTabBar={hideTabBar}
         />
       )}

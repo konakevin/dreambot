@@ -117,6 +117,10 @@ function iconForGroup(g: InboxGroup): IconSpec {
       return { name: 'diamond', color: colors.accent };
     case 'welcome_gift':
       return { name: 'gift', color: colors.accent };
+    case 'sparkle_gift':
+      return g.subtype === 'thanks'
+        ? { name: 'heart', color: colors.accent }
+        : { name: 'gift', color: colors.accent };
     default:
       return { name: 'notifications', color: colors.accent };
   }
@@ -231,6 +235,18 @@ function getGroupText(g: InboxGroup): {
 
     case 'welcome_gift':
       return { subject: "Welcome, here's a gift", subtext: null, isAggregable: false };
+
+    case 'sparkle_gift':
+      // 'received' body = the gifter's optional message (surface as subtext);
+      // 'thanks' is the reply ping. Never aggregable — each gift is its own tap.
+      if (g.subtype === 'thanks') {
+        return { subject: `${first} loved your gift`, subtext: null, isAggregable: false };
+      }
+      return {
+        subject: `${first} gifted you sparkles`,
+        subtext: capSubtext(g.body),
+        isAggregable: false,
+      };
 
     default:
       return { subject: g.body ?? '', subtext: null, isAggregable: false };
@@ -698,8 +714,11 @@ export default function InboxScreen() {
     routeFromNotification(
       {
         type: g.type,
+        subtype: g.subtype ?? undefined,
         uploadId: g.uploadId ?? undefined,
         actorId: g.previewActorIds[0] ?? undefined,
+        referenceId: g.referenceId ?? undefined,
+        commentId: g.commentId ?? undefined,
       },
       { markSeen: true }
     );
@@ -714,6 +733,7 @@ export default function InboxScreen() {
         type: g.type,
         uploadId: g.uploadId ?? undefined,
         actorId: g.previewActorIds[0] ?? undefined,
+        commentId: g.commentId ?? undefined,
       },
       { markSeen: true }
     );

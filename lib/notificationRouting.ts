@@ -41,6 +41,16 @@ export interface NotificationRouteData {
   /** notification.group_key — set in the push payload. Retained for forensics
    *  / analytics; mark-as-viewed is user-level. */
   groupKey?: string;
+  /** notification.reference_id — generic non-upload reference (migration 334;
+   *  sparkle gifts link the gift's ledger reference for the unwrap screen). */
+  referenceId?: string;
+  /** notification.comment_id — on comment_like / comment / comment_reply /
+   *  comment_mention. Deep-links the tap to the comment thread on the post so
+   *  it opens the conversation, not just the dream card (Kevin 2026-07-06). */
+  commentId?: string;
+  /** notification.subtype — disambiguates variants of a type (e.g. a
+   *  sparkle_gift 'received' vs its 'thanks' reply). */
+  subtype?: string;
 }
 
 const FRIEND_FOLLOW_TYPES = new Set([
@@ -84,6 +94,17 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     return '/settings/reports';
   }
 
+  // Sparkle gift (migration 334): received → the unwrap screen (needs the
+  // gift's ledger reference; get_gift is recipient-only so the thanks variant
+  // must NOT route there); a 'thanks' ping → the thanker's profile.
+  if (data.type === 'sparkle_gift') {
+    if (data.subtype !== 'thanks' && data.referenceId) {
+      return `/giftUnwrap?ref=${data.referenceId}`;
+    }
+    const giftActor = data.userId ?? data.actorId;
+    return giftActor ? `/user/${giftActor}` : null;
+  }
+
   const actorId = data.userId ?? data.actorId;
 
   if (data.type && FRIEND_FOLLOW_TYPES.has(data.type) && actorId) {
@@ -94,11 +115,19 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     if (data.type === 'download_ready') {
       return `/photo/${data.uploadId}?downloadReady=1`;
     }
+    // Comment notifications → open the comment thread on the post, not just the
+    // dream card. The `comment` param carries the target comment id (used to
+    // auto-open the overlay now; a later phase can scroll to the exact comment).
+    if (data.type && COMMENT_TYPES.has(data.type) && data.commentId) {
+      return `/photo/${data.uploadId}?comment=${data.commentId}`;
+    }
     return `/photo/${data.uploadId}`;
   }
 
   return null;
 }
+
+const COMMENT_TYPES = new Set(['comment_like', 'comment', 'comment_reply', 'comment_mention']);
 
 /**
  * Mark the inbox as viewed on the server (migration 223 "viewed = read"
