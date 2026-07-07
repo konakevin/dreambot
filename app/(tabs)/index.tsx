@@ -25,6 +25,8 @@ import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OverlayPill } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
+import { useAnnouncement } from '@/hooks/useAnnouncement';
+import { AnnouncementSheet } from '@/components/AnnouncementSheet';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 // Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
@@ -192,6 +194,7 @@ export default function HomeScreen() {
   // snoozes it (AsyncStorage) for a week so it isn't every-launch. Shows after
   // the feed intro is done so a brand-new OAuth user never sees two at once.
   const { data: usernameStatus } = useUsernameStatus();
+  const { announcement, markSeen: markAnnouncementSeen } = useAnnouncement();
   const [usernameSnoozed, setUsernameSnoozed] = useState<boolean | null>(null);
   const [usernameDone, setUsernameDone] = useState(false);
   useEffect(() => {
@@ -367,6 +370,15 @@ export default function HomeScreen() {
         />
       )}
 
+      {/* DB-driven announcement takeover (migration 333) — highest-priority
+          unseen active row, max one per session. Yields to the username nudge
+          so two sheets can't stack. */}
+      {announcement && !showUsernameNudge && (
+        <AnnouncementSheet
+          announcement={announcement}
+          onClose={() => markAnnouncementSeen(announcement.id)}
+        />
+      )}
     </View>
   );
 }
