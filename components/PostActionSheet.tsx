@@ -133,23 +133,35 @@ export function PostActionSheet({
   const renderCard = (group: PostActionRow[]) =>
     group.length === 0 ? null : (
       <View style={s.card}>
-        {group.map((row, i) => (
-          <TouchableOpacity
-            key={row.key}
-            style={[s.row, i > 0 && s.rowDivider]}
-            onPress={() => runRow(row)}
-            activeOpacity={0.6}
-          >
-            <Ionicons
-              name={row.icon as IoniconName}
-              size={22}
-              color={row.destructive ? colors.error : colors.textPrimary}
-            />
-            <Text style={[s.rowLabel, row.destructive && { color: colors.error }]}>
-              {row.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {group.map((row, i) =>
+          // Disabled = informational placeholder (e.g. HD-unavailable on cast
+          // dreams): muted, non-interactive, with an explanatory subtitle.
+          row.disabled ? (
+            <View key={row.key} style={[s.row, i > 0 && s.rowDivider]}>
+              <Ionicons name={row.icon as IoniconName} size={22} color={colors.textSecondary} />
+              <View style={s.rowTextWrap}>
+                <Text style={[s.rowLabel, s.rowLabelDisabled]}>{row.label}</Text>
+                {row.subtitle ? <Text style={s.rowSubtitle}>{row.subtitle}</Text> : null}
+              </View>
+            </View>
+          ) : (
+            <TouchableOpacity
+              key={row.key}
+              style={[s.row, i > 0 && s.rowDivider]}
+              onPress={() => runRow(row)}
+              activeOpacity={0.6}
+            >
+              <Ionicons
+                name={row.icon as IoniconName}
+                size={22}
+                color={row.destructive ? colors.error : colors.textPrimary}
+              />
+              <Text style={[s.rowLabel, row.destructive && { color: colors.error }]}>
+                {row.label}
+              </Text>
+            </TouchableOpacity>
+          )
+        )}
       </View>
     );
 
@@ -186,11 +198,10 @@ export function PostActionSheet({
         ) : null}
         {recipe ? (
           <View style={s.recipeChip}>
-            <Ionicons name="sparkles-outline" size={14} color={colors.accent} />
             <Text style={s.recipeText} numberOfLines={1}>
-              <Text style={s.recipeEyebrow}>Recipe </Text>
+              <Text style={s.recipeEyebrow}>Medium: </Text>
               {recipe.mediumLabel}
-              {recipe.mediumLabel && recipe.vibeLabel ? ' · ' : ''}
+              <Text style={s.recipeEyebrow}> · Vibe: </Text>
               {recipe.vibeLabel}
             </Text>
           </View>
@@ -262,4 +273,12 @@ const s = StyleSheet.create({
   },
   rowDivider: { borderTopWidth: 0.5, borderTopColor: colors.border },
   rowLabel: { color: colors.textPrimary, fontSize: fontScale(16), fontWeight: '500' },
+  rowTextWrap: { flex: 1 },
+  rowLabelDisabled: { color: colors.textSecondary },
+  rowSubtitle: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: fontScale(12),
+    fontWeight: '500',
+    marginTop: verticalScale(1),
+  },
 });

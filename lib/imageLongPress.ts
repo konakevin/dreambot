@@ -229,6 +229,11 @@ export type PostActionRow = {
   icon: string;
   group: 'primary' | 'danger';
   destructive?: boolean;
+  /** Informational, non-interactive row (muted, no press) — e.g. the HD-not-
+   *  available placeholder on cast-photo dreams. */
+  disabled?: boolean;
+  /** Second line under the label (muted), for the disabled placeholder note. */
+  subtitle?: string;
   onPress: () => void;
 };
 
@@ -267,6 +272,24 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: iconForDownload(b.text),
       group: 'primary',
       onPress: () => b.onPress?.(),
+    });
+  }
+
+  // Cast-photo (face-swap) dream: HD is intentionally omitted (upscaling a
+  // swapped face reads uncanny). Rather than silently drop the HD row — which
+  // looks like a bug — show a muted, non-interactive placeholder IN the HD slot
+  // that explains why. Gated the same as the alert disclaimer (faceSwapNoHdMessage):
+  // only for users who'd otherwise have HD here (subscribers / own posts), so it
+  // isn't noise to a free user on someone else's post.
+  if (faceSwapNoHdMessage(opts)) {
+    rows.push({
+      key: 'hd-unavailable',
+      label: 'Save in HD',
+      subtitle: 'Not available for dreams with your cast photos',
+      icon: 'sparkles-outline',
+      group: 'primary',
+      disabled: true,
+      onPress: () => {},
     });
   }
 
