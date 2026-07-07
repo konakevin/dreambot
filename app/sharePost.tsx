@@ -37,8 +37,6 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
 const COLUMNS = isTabletDevice ? 5 : 3;
 const AVATAR_SIZE = 64;
 const CELL_WIDTH = (SCREEN_WIDTH - 32) / COLUMNS;
-const DEFAULT_ROWS = 4;
-const DEFAULT_LIMIT = DEFAULT_ROWS * COLUMNS;
 
 function ViberBubble({
   item,
@@ -124,9 +122,14 @@ export default function SharePostScreen() {
     paddingBottom: insets.bottom + 16 + Math.abs(kbHeight.value),
   }));
 
+  // Show ALL shareable friends, scrollable — not an arbitrary first-N slice.
+  // The RPC (get_shareable_vibers) already returns the full set ranked by
+  // interaction with no server cap, so there's nothing to lazy-load; the grid
+  // just scrolls. Capping to 12 made it look like you only had a few friends
+  // and hid the rest behind search (Kevin 2026-07-06).
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    if (!q) return vibers.slice(0, DEFAULT_LIMIT);
+    if (!q) return vibers;
     return vibers.filter((v) => v.username.toLowerCase().includes(q));
   }, [vibers, search]);
 
