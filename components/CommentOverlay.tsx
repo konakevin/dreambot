@@ -14,6 +14,7 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
+  Keyboard,
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
@@ -40,6 +41,7 @@ import { CommentRow } from '@/components/CommentRow';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { avatarUrl } from '@/lib/imageUrl';
+import * as nav from '@/lib/navigate';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 
@@ -231,24 +233,35 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
     if (!body) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-    // Show immediately
+    // Show immediately — but ONLY for top-level comments. This local list
+    // renders at the TOP LEVEL of the thread, so adding a reply here showed
+    // it twice: nested under its parent (useAddComment's ['replies'] cache
+    // update + auto-expand) AND as a solo top-level ghost until the
+    // invalidate settled (Kevin 2026-07-06). Replies rely on the hook's
+    // replies-cache optimism alone.
     const tempId = `temp-${Date.now()}`;
-    const optimistic: Comment = {
-      id: tempId,
-      userId: currentUser!.id,
-      username: myProfile.username,
-      avatarUrl: myProfile.avatarUrl,
-      body,
-      likeCount: 0,
-      replyCount: 0,
-      createdAt: new Date().toISOString(),
-      isLiked: false,
-      parentId: replyTo?.id,
-    };
-    setOptimisticComments((prev) => [optimistic, ...prev]);
+    if (!replyTo) {
+      const optimistic: Comment = {
+        id: tempId,
+        userId: currentUser!.id,
+        username: myProfile.username,
+        avatarUrl: myProfile.avatarUrl,
+        body,
+        likeCount: 0,
+        replyCount: 0,
+        createdAt: new Date().toISOString(),
+        isLiked: false,
+        parentId: undefined,
+      };
+      setOptimisticComments((prev) => [optimistic, ...prev]);
+    }
     setText('');
     const savedReply = replyTo;
     setReplyTo(null);
+    // Drop the keyboard so the thread (with the new comment) is immediately
+    // visible — without this the keyboard sat over the list after posting
+    // with no way to tap off (Kevin 2026-07-07).
+    Keyboard.dismiss();
 
     addComment(
       { uploadId: post.id, body, parentId: savedReply?.id },
@@ -306,22 +319,32 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
           ]}
         >
           <View style={styles.thumbUserRow}>
-            {post.avatar_url ? (
-              <Image
-                source={{ uri: avatarUrl(post.avatar_url!) }}
-                style={styles.thumbAvatar}
-                cachePolicy="memory-disk"
-              />
-            ) : (
-              <View style={styles.thumbAvatarFallback}>
-                <Text style={styles.thumbAvatarText}>
-                  {(post.username || '?')[0].toUpperCase()}
-                </Text>
-              </View>
-            )}
-            <Text style={styles.thumbUsername} numberOfLines={1}>
-              {post.username}
-            </Text>
+            {/* Author identity → their profile as a swipe-back drawer (PUSH
+                keeps this overlay mounted underneath; ?drawer=1 lets your OWN
+                profile render here too instead of redirecting to the tab —
+                Kevin 2026-07-07). Matches the CommentRow identity behavior. */}
+            <TouchableOpacity
+              style={styles.thumbIdentity}
+              onPress={() => nav.push(`/user/${post.user_id}?drawer=1`)}
+              activeOpacity={0.7}
+            >
+              {post.avatar_url ? (
+                <Image
+                  source={{ uri: avatarUrl(post.avatar_url!) }}
+                  style={styles.thumbAvatar}
+                  cachePolicy="memory-disk"
+                />
+              ) : (
+                <View style={styles.thumbAvatarFallback}>
+                  <Text style={styles.thumbAvatarText}>
+                    {(post.username || '?')[0].toUpperCase()}
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.thumbUsername} numberOfLines={1}>
+                {post.username}
+              </Text>
+            </TouchableOpacity>
             <Text style={styles.thumbCount}>
               {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
             </Text>
@@ -332,147 +355,160 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         </Animated.View>
 
         {/* Comment pane */}
-        <GestureDetector gesture={panGesture}>
-          <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
-            <KeyboardAvoidingView
-              behavior="padding"
-              style={{ flex: 1 }}
-              keyboardVerticalOffset={HEADER_HEIGHT}
-              enabled={Platform.OS === 'ios'}
-            >
-              {/* Handle */}
-              <View style={styles.handleRow}>
-                <View style={styles.handle} />
-              </View>
-
-              {/* Comments list */}
-              <FlatList
-                data={comments}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <CommentRow
-                    comment={item}
-                    uploadId={post.id}
-                    onReply={handleReply}
-                    expandedCommentId={expandedCommentId}
-                  />
-                )}
-                onEndReached={() => {
-                  if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-                }}
-                onEndReachedThreshold={0.5}
-                ListFooterComponent={
-                  isFetchingNextPage ? (
-                    <View style={styles.footerLoader}>
-                      <ActivityIndicator color={colors.textSecondary} />
-                    </View>
-                  ) : null
-                }
-                ListEmptyComponent={
-                  <View style={styles.empty}>
-                    {isLoading ? (
-                      <ActivityIndicator color={colors.textSecondary} />
-                    ) : (
-                      <>
-                        <Ionicons
-                          name="chatbubble-outline"
-                          size={36}
-                          color="rgba(255,255,255,0.15)"
-                        />
-                        <Text style={styles.emptyTitle}>No comments yet</Text>
-                        <Text style={styles.emptySub}>Be the first to say something</Text>
-                      </>
-                    )}
-                  </View>
-                }
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.listContent}
-              />
-
-              {/* Reply indicator */}
-              {replyTo && (
-                <View style={styles.replyBar}>
-                  <Text style={styles.replyText}>
-                    Replying to{' '}
-                    <Text style={styles.replyUsername}>{replyTo.username ?? 'comment'}</Text>
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setReplyTo(null);
-                      setText('');
-                    }}
-                    hitSlop={8}
-                  >
-                    <Ionicons name="close" size={16} color={colors.textSecondary} />
-                  </TouchableOpacity>
+        <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
+          {/* keyboardVerticalOffset MUST stay 0: the pane's bottom is flush
+              with the screen bottom, so the measured frame already accounts
+              for the header above. Passing HEADER_HEIGHT here over-padded by
+              ~the whole header and crushed the comment list to zero height
+              whenever the keyboard opened (Kevin 2026-07-07, "completely
+              broken"). */}
+          <KeyboardAvoidingView
+            behavior="padding"
+            style={{ flex: 1 }}
+            enabled={Platform.OS === 'ios'}
+          >
+            {/* Swipe-down-to-dismiss covers the handle + comment list ONLY.
+                The input bar lives OUTSIDE the pan (2026-07-06): a downward
+                drag inside the multiline input is how you scroll a long
+                comment back up, and the pan was stealing it ("the comment
+                box locks me down"). */}
+            <GestureDetector gesture={panGesture}>
+              <Animated.View style={{ flex: 1 }}>
+                {/* Handle */}
+                <View style={styles.handleRow}>
+                  <View style={styles.handle} />
                 </View>
-              )}
 
-              {/* Mention autocomplete */}
-              {mentionQuery.length >= 1 && mentionResults.length > 0 && (
-                <View style={styles.mentionList}>
-                  {mentionResults.slice(0, 5).map((u) => (
-                    <TouchableOpacity
-                      key={u.id}
-                      style={styles.mentionRow}
-                      onPress={() => completeMention(u)}
-                      activeOpacity={0.7}
-                    >
-                      {u.avatarUrl ? (
-                        <Image source={{ uri: u.avatarUrl }} style={styles.mentionAvatar} />
-                      ) : (
-                        <View style={styles.mentionAvatarFallback}>
-                          <Text style={styles.mentionAvatarInitial}>
-                            {(u.username || '?')[0].toUpperCase()}
-                          </Text>
-                        </View>
-                      )}
-                      <Text style={styles.mentionUsername}>{u.username}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-
-              {/* Input bar */}
-              <View
-                style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 60) }]}
-              >
-                {currentUser ? (
-                  <>
-                    <TextInput
-                      ref={inputRef}
-                      style={styles.input}
-                      placeholder="Add a comment..."
-                      placeholderTextColor={colors.textSecondary}
-                      value={text}
-                      onChangeText={handleTextChange}
-                      multiline
-                      maxLength={MAX_COMMENT_LENGTH}
+                {/* Comments list */}
+                <FlatList
+                  data={comments}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <CommentRow
+                      comment={item}
+                      uploadId={post.id}
+                      onReply={handleReply}
+                      expandedCommentId={expandedCommentId}
                     />
-                    <TouchableOpacity
-                      style={[styles.sendBtn, !text.trim() && styles.sendBtnDisabled]}
-                      onPress={handleSend}
-                      disabled={!text.trim() || isPending}
-                      activeOpacity={0.7}
-                    >
-                      {isPending ? (
-                        <ActivityIndicator color="#000" size="small" />
+                  )}
+                  onEndReached={() => {
+                    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+                  }}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={
+                    isFetchingNextPage ? (
+                      <View style={styles.footerLoader}>
+                        <ActivityIndicator color={colors.textSecondary} />
+                      </View>
+                    ) : null
+                  }
+                  ListEmptyComponent={
+                    <View style={styles.empty}>
+                      {isLoading ? (
+                        <ActivityIndicator color={colors.textSecondary} />
                       ) : (
-                        <Ionicons
-                          name="arrow-up"
-                          size={18}
-                          color={text.trim() ? '#000000' : colors.textSecondary}
-                        />
+                        <>
+                          <Ionicons
+                            name="chatbubble-outline"
+                            size={36}
+                            color="rgba(255,255,255,0.15)"
+                          />
+                          <Text style={styles.emptyTitle}>No comments yet</Text>
+                          <Text style={styles.emptySub}>Be the first to say something</Text>
+                        </>
                       )}
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <Text style={styles.signInPrompt}>Sign in to comment</Text>
-                )}
+                    </View>
+                  }
+                  keyboardShouldPersistTaps="handled"
+                  keyboardDismissMode="on-drag"
+                  contentContainerStyle={styles.listContent}
+                />
+              </Animated.View>
+            </GestureDetector>
+
+            {/* Reply indicator */}
+            {replyTo && (
+              <View style={styles.replyBar}>
+                <Text style={styles.replyText}>
+                  Replying to{' '}
+                  <Text style={styles.replyUsername}>{replyTo.username ?? 'comment'}</Text>
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setReplyTo(null);
+                    setText('');
+                  }}
+                  hitSlop={8}
+                >
+                  <Ionicons name="close" size={16} color={colors.textSecondary} />
+                </TouchableOpacity>
               </View>
-            </KeyboardAvoidingView>
-          </Animated.View>
-        </GestureDetector>
+            )}
+
+            {/* Mention autocomplete */}
+            {mentionQuery.length >= 1 && mentionResults.length > 0 && (
+              <View style={styles.mentionList}>
+                {mentionResults.slice(0, 5).map((u) => (
+                  <TouchableOpacity
+                    key={u.id}
+                    style={styles.mentionRow}
+                    onPress={() => completeMention(u)}
+                    activeOpacity={0.7}
+                  >
+                    {u.avatarUrl ? (
+                      <Image source={{ uri: u.avatarUrl }} style={styles.mentionAvatar} />
+                    ) : (
+                      <View style={styles.mentionAvatarFallback}>
+                        <Text style={styles.mentionAvatarInitial}>
+                          {(u.username || '?')[0].toUpperCase()}
+                        </Text>
+                      </View>
+                    )}
+                    <Text style={styles.mentionUsername}>{u.username}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            {/* Input bar */}
+            <View
+              style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 60) }]}
+            >
+              {currentUser ? (
+                <>
+                  <TextInput
+                    ref={inputRef}
+                    style={styles.input}
+                    placeholder="Add a comment..."
+                    placeholderTextColor={colors.textSecondary}
+                    value={text}
+                    onChangeText={handleTextChange}
+                    multiline
+                    maxLength={MAX_COMMENT_LENGTH}
+                  />
+                  <TouchableOpacity
+                    style={[styles.sendBtn, !text.trim() && styles.sendBtnDisabled]}
+                    onPress={handleSend}
+                    disabled={!text.trim() || isPending}
+                    activeOpacity={0.7}
+                  >
+                    {isPending ? (
+                      <ActivityIndicator color="#000" size="small" />
+                    ) : (
+                      <Ionicons
+                        name="arrow-up"
+                        size={18}
+                        color={text.trim() ? '#000000' : colors.textSecondary}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <Text style={styles.signInPrompt}>Sign in to comment</Text>
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        </Animated.View>
       </Animated.View>
     </View>
   );
@@ -499,6 +535,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  thumbIdentity: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flexShrink: 1,
   },
   thumbAvatar: {
     width: 28,
@@ -646,7 +688,9 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.textPrimary,
     fontSize: fontScale(15),
-    maxHeight: 80,
+    // ~6 lines visible while composing (was 80/~4) — more context before the
+    // input starts scrolling internally.
+    maxHeight: 120,
     lineHeight: fontScale(20),
   },
   sendBtn: {

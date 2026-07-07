@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { StyleSheet, type TextStyle, type StyleProp } from 'react-native';
 import { Text } from '@/components/AppText';
 import * as nav from '@/lib/navigate';
-import { supabase } from '@/lib/supabase';
+import { openMentionProfile } from '@/lib/mentions';
 import { splitCaption, isHashtagToken, isMentionToken, normalizeTag } from '@/lib/hashtags';
 
 interface Props {
@@ -44,23 +44,7 @@ export function ExpandableDescription({ text, style }: Props) {
         }
         if (isMentionToken(part)) {
           return (
-            <Text
-              key={i}
-              style={styles.link}
-              onPress={() => {
-                const username = part.slice(1);
-                // Look up user by username and navigate — same lookup
-                // CommentRow's mentions do.
-                supabase
-                  .from('users')
-                  .select('id')
-                  .eq('username', username)
-                  .maybeSingle()
-                  .then(({ data }) => {
-                    if (data) nav.push(`/user/${data.id}`);
-                  });
-              }}
-            >
+            <Text key={i} style={styles.link} onPress={() => void openMentionProfile(part)}>
               {part}
             </Text>
           );

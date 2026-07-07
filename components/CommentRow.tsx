@@ -7,10 +7,12 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
-import { supabase } from '@/lib/supabase';
+import { openMentionProfile } from '@/lib/mentions';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import { useAuthStore } from '@/store/auth';
 import { useReplies } from '@/hooks/useReplies';
+import { useToggleBlock, useBlockedIds } from '@/hooks/useBlockUser';
+import { showAlert } from '@/components/CustomAlert';
 import { useToggleCommentLike } from '@/hooks/useToggleCommentLike';
 import { useDeleteComment, useAdminDeleteComment } from '@/hooks/useDeleteComment';
 import { reportContent } from '@/lib/reportContent';
@@ -86,6 +88,70 @@ export function CommentRow({
     setMenuOpen(true);
   }
 
+  // Identity (avatar/username) interactions (Kevin 2026-07-06): tap → the
+  // user's profile as a swipe-back drawer (PUSH keeps this thread mounted
+  // underneath — see the avatar handler note below); long-press → a user
+  // sheet (view profile / block / report). Own identity gets the same tap +
+  // a profile-only sheet.
+  const [userSheetOpen, setUserSheetOpen] = useState(false);
+  const { data: blockedIds = new Set<string>() } = useBlockedIds();
+  const { mutate: toggleBlock } = useToggleBlock();
+  const isBlocked = blockedIds.has(comment.userId);
+
+  function openProfile() {
+    // ?drawer=1 so tapping your OWN identity opens the profile as a swipe-back
+    // drawer over the comments instead of redirecting to the Profile tab (which
+    // destroyed the thread + had no back — Kevin 2026-07-07). Harmless for
+    // other users (they never hit the own-profile redirect).
+    nav.push(`/user/${comment.userId}?drawer=1`);
+  }
+  function handleIdentityLongPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setUserSheetOpen(true);
+  }
+  const userSheetRows: PostActionRow[] = [
+    {
+      key: 'profile',
+      label: isOwn ? 'View your profile' : 'View profile',
+      icon: 'person-circle-outline',
+      group: 'primary',
+      onPress: openProfile,
+    },
+    ...(!isOwn
+      ? ([
+          {
+            key: 'block',
+            label: isBlocked ? 'Unblock user' : 'Block user',
+            icon: isBlocked ? 'lock-open-outline' : 'ban-outline',
+            group: 'danger',
+            destructive: !isBlocked,
+            onPress: () => {
+              if (isBlocked) {
+                toggleBlock({ userId: comment.userId, currentlyBlocked: true });
+                return;
+              }
+              showAlert('Block User?', "They won't be able to see your posts or contact you.", [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Block',
+                  style: 'destructive',
+                  onPress: () => toggleBlock({ userId: comment.userId, currentlyBlocked: false }),
+                },
+              ]);
+            },
+          },
+          {
+            key: 'report-user',
+            label: 'Report user',
+            icon: 'flag-outline',
+            group: 'danger',
+            destructive: true,
+            onPress: () => reportContent({ reportedUserId: comment.userId }),
+          },
+        ] as PostActionRow[])
+      : []),
+  ];
+
   const menuRows: PostActionRow[] = [];
   // Report — App Store 1.2 requires flagging objectionable content. Shown on
   // any comment that isn't yours.
@@ -135,7 +201,12 @@ export function CommentRow({
             home feed. Push keeps the thread mounted underneath — back returns
             to it exactly as left (CommentOverlay is an inline overlay, so it
             survives under the pushed route). */}
-        <TouchableOpacity onPress={() => nav.push(`/user/${comment.userId}`)} activeOpacity={0.7}>
+        <TouchableOpacity
+          onPress={openProfile}
+          onLongPress={handleIdentityLongPress}
+          delayLongPress={400}
+          activeOpacity={0.7}
+        >
           {comment.avatarUrl ? (
             <Image
               source={{ uri: resizeAvatar(comment.avatarUrl) }}
@@ -152,29 +223,19 @@ export function CommentRow({
         {/* Body */}
         <View style={styles.body}>
           <Text style={styles.headerLine}>
-            <Text style={styles.username}>{comment.username ?? 'dreamer'}</Text>
+            <Text
+              style={styles.username}
+              onPress={openProfile}
+              onLongPress={handleIdentityLongPress}
+            >
+              {comment.username ?? 'dreamer'}
+            </Text>
             <Text style={styles.time}> {formatTimeAgo(comment.createdAt)}</Text>
           </Text>
           <Text style={styles.commentText}>
             {comment.body.split(/(@[a-zA-Z0-9_.]+)/g).map((part, i) =>
               part.startsWith('@') ? (
-                <Text
-                  key={i}
-                  style={styles.mention}
-                  onPress={() => {
-                    const username = part.slice(1);
-                    // Look up user by username and navigate
-                    supabase
-                      .from('users')
-                      .select('id')
-                      .eq('username', username)
-                      .maybeSingle()
-                      .then(({ data }) => {
-                        // push (not replace) — see the avatar handler above.
-                        if (data) nav.push(`/user/${data.id}`);
-                      });
-                  }}
-                >
+                <Text key={i} style={styles.mention} onPress={() => void openMentionProfile(part)}>
                   {part}
                 </Text>
               ) : (
@@ -243,6 +304,22 @@ export function CommentRow({
             title={comment.username ? `@${comment.username}` : 'Comment'}
             titleImageUrl={comment.avatarUrl ? resizeAvatar(comment.avatarUrl) : null}
             rows={menuRows}
+          />
+        </Modal>
+      )}
+      {userSheetOpen && (
+        <Modal
+          visible
+          transparent
+          animationType="none"
+          onRequestClose={() => setUserSheetOpen(false)}
+        >
+          <PostActionSheet
+            visible
+            onClose={() => setUserSheetOpen(false)}
+            title={comment.username ? `@${comment.username}` : 'User'}
+            titleImageUrl={comment.avatarUrl ? resizeAvatar(comment.avatarUrl) : null}
+            rows={userSheetRows}
           />
         </Modal>
       )}
