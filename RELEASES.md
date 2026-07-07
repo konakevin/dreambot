@@ -12,6 +12,7 @@ the build that was ultimately **approved**. See `RELEASE.md` for the full runboo
 
 | Tag | Version | Build | Commit | Shipped | ASC status | Notes |
 |-----|---------|-------|--------|---------|-----------|-------|
+| `v1.0.2` | 1.0.2 | 10 | `987c68c28f` | 2026-07-07 | Submitted | Gift Sparkles, pinned posts, tappable hashtags, Dream this again, dream-notification aggregation + Dreams-tab auto-ack, comment profile taps + @mentions, share-sheet + create-screen polish, cast-photo / pull-to-refresh / album fixes. |
 | `v1.0.1` | 1.0.1 | 9 | `805519184c` | 2026-07-05 | Submitted | Followers-list crash fix, block-aware profile counts, Message button removed. |
 | `v1.0.0` | 1.0.0 | 8 | `9feb0c4200` | 2026-07-03 | Approved (first release) | First App Store submission. |
 
