@@ -555,8 +555,10 @@ async function handleRequest(req: Request): Promise<Response> {
 
     // ── Job update + notification in parallel ─────────────────────────
     // Inbox subtext only (push copy is generated in send-push from
-    // subtype='manual'). Clean descriptor — no legacy 'dream:' prefix.
-    const notifBody = hint ? hint.slice(0, 150) : `${resolvedMediumKey} · ${resolvedVibeKey}`;
+    // subtype='manual'). Store the FULL hint (≤240 via sanitizer) — the inbox
+    // row truncates the preview itself, but "Copy dream message" copies this
+    // stored body, so slicing truncated the copied prompt (Kevin 2026-07-06).
+    const notifBody = hint ? hint : `${resolvedMediumKey} · ${resolvedVibeKey}`;
 
     // Notify ONLY if the user queued/left (loading screen "Queue This" sets
     // notify_on_complete); a foreground wait gets no ping. See migration 191.

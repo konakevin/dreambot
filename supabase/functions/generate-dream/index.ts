@@ -1816,8 +1816,11 @@ Output ONLY the prompt.`;
     // Job update + notification in parallel (both need uploadId but not each other)
     // Inbox subtext only (the push copy is generated in send-push from
     // subtype='manual'). Clean descriptor — no legacy 'dream:' prefix.
+    // Store the FULL hint (already ≤240 via the sanitizer) — the inbox row
+    // truncates the PREVIEW itself, but "Copy dream message" copies this stored
+    // body, so slicing here truncated the copied prompt (Kevin 2026-07-06).
     const notifBody = hint
-      ? hint.slice(0, 150)
+      ? hint
       : `${resolvedMediumKey ?? 'surprise'} · ${resolvedVibeKey ?? 'surprise'}`;
 
     // Notify ONLY if the user left/queued (the loading screen's "Queue This"
