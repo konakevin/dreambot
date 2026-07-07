@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useBlockedIds } from '@/hooks/useBlockUser';
-import { HIDDEN_BOT_USERNAMES } from '@/hooks/useBotUsers';
+import { SEARCH_HIDDEN_BOT_USERNAMES } from '@/hooks/useBotUsers';
 
 export interface SearchUser {
   id: string;
@@ -32,9 +32,9 @@ export function useSearchUsers(query: string) {
       return (
         (data ?? [])
           .filter((u) => !blockedIds?.has(u.id))
-          // Retired/decommissioned bots (MechBot, HumanBot, GlowBot) stay out of
-          // search too — same list that hides them from the bot pills/selector.
-          .filter((u) => !HIDDEN_BOT_USERNAMES.has((u.username ?? '').toLowerCase()))
+          // Retired bots stay out of search (same as the pills), and AlphaBot
+          // (private proving ground) is search-hidden for EVERYONE.
+          .filter((u) => !SEARCH_HIDDEN_BOT_USERNAMES.has((u.username ?? '').toLowerCase()))
           .map((u) => ({
             id: u.id,
             username: u.username,

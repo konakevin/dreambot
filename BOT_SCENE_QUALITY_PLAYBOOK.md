@@ -33,6 +33,34 @@ The framework — Rich Scene Seeds, the 8 components of memorable scenes, the it
 
 ---
 
+## ⚠️ ALL NEW PATH DEVELOPMENT GOES THROUGH ALPHABOT (2026-07-07, Kevin mandate)
+
+New candidate paths are no longer iterated on the live bot's public profile. **AlphaBot**
+(`scripts/bots/alphabot/`, `ALPHABOT.md` — read it before wiring a candidate) is a PRIVATE
+proving-ground bot visible only to Kevin (private account + follower-gated RLS; verified by
+`scripts/verify-alphabot-privacy.js`). The loop is unchanged (MVP-25 → wire → `iter-bot --post`
+→ judge from the feed → iterate → verdict → scale) except `--bot alphabot`, so QA batches no
+longer pollute live bot profiles and no test-post deletions are needed.
+
+- **Portability contract:** the candidate's per-path config (medium, models, prefixes,
+  polish/chaos/sensory) is cloned BYTE-IDENTICAL from the destination bot — a path proven under
+  the wrong config proves nothing. Axis names must not collide with the destination's live axes.
+- **Promotion** = reverse xerox (files + wiring maps) + `promote-alphabot-renders.js` for the
+  approved renders + a 5-render confirmation batch ON the destination before rotation. Full
+  checklist in `ALPHABOT.md`.
+- **Existing-path regression QA** (HTML matrix over a live bot's current roster) still runs on
+  the live bot — AlphaBot is for paths that don't exist in production yet.
+- AlphaBot never auto-posts (no `bot_schedules` row — the never-posted-6h guard can't kill it).
+- **2026-07-07 DreamBot non-robot split:** DreamBot is now PURELY the bubble-bot robot (base +
+  warm + 18 crossovers). Its 9 non-robot paths (dreamscape / butterfly-realm / dream-spires /
+  far-eden ×2 / hidden-conservatory / botanical / pulp ×2), the 18 dormant ChibiBot-heritage
+  paths, their pools/seeds/archetypes, and their 261 existing renders all moved to AlphaBot
+  byte-identical (details + resident list: `ALPHABOT.md`). The 8 non-robot `DREAMBOT_*`
+  archetypes now live in alphabot's registry files — do NOT re-add them to dreambot's (duplicate
+  names crash the cross-bot registry).
+
+---
+
 ## "Medium Looks" architecture — bot-wide CUTE-ONLY visual register axis (2026-06-07, NOVEL — replicate to other bots)
 
 **Origin:** Built on YumBot 2026-06-07 to break a single-bot Pop-Mart vinyl CLIP lock. Kevin asked YumBot to feel "more varied" and explicitly requested the LOOK to vary while the kawaii character stayed constant. The approach below was the answer and shipped to all 18 YumBot paths (11 original + 7 new bucket-aggregated). Validation: scale-bucket renders got "i LOVE LOVE LOVE those ones." Applicable to **any single-medium bot that needs varied visual treatment without losing its identity**.

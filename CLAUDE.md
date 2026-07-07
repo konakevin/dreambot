@@ -105,7 +105,9 @@ mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbo
 `bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under
 `scripts/bots/<botname>/` (config + paths + pools + seeds); multi-provider (Flux/Gemini/GPT). Full
 architecture, cadence mechanics, entry points (`run-bot.js`, `iter-bot.js`, `qa-bot-model-matrix.js`):
-`ENGINEERING_NOTES.md` + `BOTS.md`.
+`ENGINEERING_NOTES.md` + `BOTS.md`. **ALL new-path development happens on AlphaBot, the PRIVATE
+proving-ground bot visible ONLY to Kevin (never flip its `is_public`, never add followers, never give it
+a `bot_schedules` row) — workflow + promotion checklist in `ALPHABOT.md`.**
 
 > **STOP — before ANY bot work** (config, paths, pools, seeds, archetypes, briefs, or even answering how a
 > bot works): re-read **`BOT_SCENE_QUALITY_PLAYBOOK.md` IN FULL** first — the canonical brain (the 10/10

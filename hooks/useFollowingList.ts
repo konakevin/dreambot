@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { PRIVATE_BOT_USERNAMES } from '@/hooks/useBotUsers';
 import type { FollowUser } from './useFollowersList';
 
 export function useFollowingList(userId: string) {
@@ -21,7 +22,16 @@ export function useFollowingList(userId: string) {
         if (!data || data.length === 0) break;
         // Same null-join guard as useFollowersList (2026-07-05): RLS hides
         // rows the viewer has blocked → users:null → keyExtractor crash.
-        for (const r of data) if (r.users) all.push(r.users as FollowUser);
+        // AlphaBot (private proving ground, ALPHABOT.md) must not leak via the
+        // supreme admin's public following list. Retired-but-public bots stay
+        // listed (their posts are still visible), so this filters ONLY the
+        // private set.
+        for (const r of data) {
+          if (!r.users) continue;
+          const u = r.users as FollowUser;
+          if (PRIVATE_BOT_USERNAMES.has((u.username ?? '').toLowerCase())) continue;
+          all.push(u);
+        }
         if (data.length < PAGE) break;
       }
       return all;

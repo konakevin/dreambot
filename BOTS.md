@@ -16,6 +16,10 @@
 > - `scripts/lib/modelPicker.js` — per-medium/vibe model routing (DB-backed)
 > - `scripts/iter-bot.js` — dev iteration CLI (batch renders to /tmp or --post)
 > - `scripts/run-bot.js` — production entry point (1 render, fail-loud, called by cron)
+>
+> **NEW PATH DEVELOPMENT (2026-07-07): all candidate paths iterate on AlphaBot**
+> (`scripts/bots/alphabot/`), the PRIVATE proving-ground bot visible only to Kevin —
+> see `ALPHABOT.md` for the privacy model, workflow, and promotion checklist.
 
 ---
 
