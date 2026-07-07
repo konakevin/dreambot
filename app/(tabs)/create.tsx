@@ -930,6 +930,49 @@ export default function CreateScreen() {
                     </Text>
                   </View>
                 )}
+                {/* Footer: Clear + live character count. Only rendered when the
+                  box has text (so an empty box stays clean and shows just the
+                  placeholder). Sits below the input with a hairline divider so
+                  it never overlaps the typed prompt. Clear keeps focus so you
+                  can immediately retype. */}
+                {config.userPrompt.length > 0 && (
+                  <View
+                    className="flex-row items-center justify-end px-4 py-2"
+                    style={{ borderTopWidth: 1, borderTopColor: colors.border, gap: 14 }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: fontScale(12),
+                        fontVariant: ['tabular-nums'],
+                        color:
+                          config.userPrompt.length >= engineConfig.promptMaxLength
+                            ? colors.error
+                            : (colors.textMuted ?? '#6B7280'),
+                      }}
+                    >
+                      {config.userPrompt.length} / {engineConfig.promptMaxLength}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        setPrompt('');
+                        promptRef.current?.focus();
+                      }}
+                      hitSlop={{ top: 8, bottom: 8, left: 12, right: 8 }}
+                      activeOpacity={0.6}
+                    >
+                      <Text
+                        style={{
+                          fontSize: fontScale(13),
+                          fontWeight: '600',
+                          color: colors.textSecondary,
+                        }}
+                      >
+                        Clear
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             )}
 
