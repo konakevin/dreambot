@@ -31,7 +31,9 @@ import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { trackPostShared } from '@/lib/analytics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SHEET_HEIGHT = SCREEN_HEIGHT * 0.65;
+// 0.72 (was 0.65) so a full extra row of friends clears the fold before the
+// grid needs scrolling — fewer half-cut names on the resting sheet.
+const SHEET_HEIGHT = SCREEN_HEIGHT * 0.72;
 // iPad fills its extra width with more columns so the share-target grid isn't
 // three big sparse cells; phones keep 3.
 const COLUMNS = isTabletDevice ? 5 : 3;
@@ -198,138 +200,144 @@ export default function SharePostScreen() {
       <Pressable style={styles.backdrop} onPress={() => router.back()} />
 
       {/* Bottom sheet */}
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.sheet, animatedStyle, sheetGrowStyle]}>
-          {/* Drag handle */}
-          <View style={styles.handleRow}>
-            <View style={styles.handle} />
-          </View>
+      <Animated.View style={[styles.sheet, animatedStyle, sheetGrowStyle]}>
+        {/* Drag-to-dismiss is scoped to the handle + header ONLY. Wrapping the
+            whole sheet (incl. the grid) in the Pan made it arbitrate against
+            the FlatList's scroll, so the list couldn't be dragged (Kevin
+            2026-07-06). The grid now scrolls freely below this zone. */}
+        <GestureDetector gesture={gesture}>
+          <View>
+            {/* Drag handle */}
+            <View style={styles.handleRow}>
+              <View style={styles.handle} />
+            </View>
 
-          {/* Header */}
-          <View style={styles.header}>
-            {/* Title is absolutely centered over the full header width so the
+            {/* Header */}
+            <View style={styles.header}>
+              {/* Title is absolutely centered over the full header width so the
                 wider Copy+Save cluster on the right doesn't shove it left
                 (space-between would otherwise center it in the leftover gap). */}
-            <View style={styles.headerTitleWrap} pointerEvents="none">
-              <GradientTitle size={18} weight={800}>
-                Share
-              </GradientTitle>
-            </View>
-            <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-              <Ionicons name="close" size={24} color={colors.textSecondary} />
-            </TouchableOpacity>
-            <View style={styles.headerActions}>
-              <TouchableOpacity
-                onPress={handleCopyLink}
-                style={styles.linkButton}
-                activeOpacity={0.7}
-              >
-                <View style={styles.linkIcon}>
-                  <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
-                </View>
-                <Text style={styles.linkLabel}>Copy</Text>
+              <View style={styles.headerTitleWrap} pointerEvents="none">
+                <GradientTitle size={18} weight={800}>
+                  Share
+                </GradientTitle>
+              </View>
+              <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
-              {!!imageUrl && (
+              <View style={styles.headerActions}>
                 <TouchableOpacity
-                  onPress={handleSave}
+                  onPress={handleCopyLink}
                   style={styles.linkButton}
                   activeOpacity={0.7}
-                  accessibilityLabel="Download this dream"
                 >
                   <View style={styles.linkIcon}>
-                    <Ionicons name="download-outline" size={20} color={colors.textPrimary} />
+                    <Ionicons name="link-outline" size={20} color={colors.textPrimary} />
                   </View>
-                  <Text style={styles.linkLabel}>Save</Text>
+                  <Text style={styles.linkLabel}>Copy</Text>
                 </TouchableOpacity>
-              )}
-            </View>
-          </View>
-
-          {/* Search */}
-          <View style={styles.searchWrap}>
-            <Ionicons
-              name="search"
-              size={16}
-              color={colors.textSecondary}
-              style={styles.searchIcon}
-            />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search friends"
-              placeholderTextColor={colors.textSecondary}
-              value={search}
-              onChangeText={setSearch}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            {search.length > 0 && (
-              <TouchableOpacity onPress={() => setSearch('')} hitSlop={8}>
-                <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Grid — flex:1 so it fills the space between the (pinned) search
-              bar and the (pinned-above-keyboard) send row, scrolling in the
-              middle as the sheet grows/shrinks with the keyboard. */}
-          <FlatList
-            style={styles.list}
-            data={filtered}
-            keyExtractor={(item) => item.userId}
-            numColumns={COLUMNS}
-            contentContainerStyle={styles.grid}
-            renderItem={({ item }) => (
-              <ViberBubble
-                item={item}
-                selected={selected.has(item.userId)}
-                onToggle={() => toggleViber(item.userId)}
-              />
-            )}
-            ListEmptyComponent={
-              <View style={styles.empty}>
-                {isLoading ? (
-                  <ActivityIndicator color={colors.textSecondary} />
-                ) : search.length > 0 ? (
-                  <Text style={styles.emptyText}>No matches</Text>
-                ) : (
-                  <>
-                    <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
-                    <Text style={styles.emptyText}>No friends to share with yet</Text>
-                  </>
+                {!!imageUrl && (
+                  <TouchableOpacity
+                    onPress={handleSave}
+                    style={styles.linkButton}
+                    activeOpacity={0.7}
+                    accessibilityLabel="Download this dream"
+                  >
+                    <View style={styles.linkIcon}>
+                      <Ionicons name="download-outline" size={20} color={colors.textPrimary} />
+                    </View>
+                    <Text style={styles.linkLabel}>Save</Text>
+                  </TouchableOpacity>
                 )}
               </View>
-            }
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="on-drag"
-          />
+            </View>
+          </View>
+        </GestureDetector>
 
-          {/* Send button — pinned at the bottom; padded up above the keyboard
-              (sendPadStyle) so it stays visible while the sheet grows. */}
-          <Animated.View style={[styles.sendRow, sendPadStyle]}>
-            <TouchableOpacity
-              style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
-              onPress={handleSend}
-              disabled={selected.size === 0 || isPending}
-              activeOpacity={0.7}
-            >
-              {isPending ? (
-                <ActivityIndicator size="small" color="#000000" />
-              ) : (
-                <Text
-                  style={[
-                    styles.sendButtonText,
-                    selected.size === 0 && styles.sendButtonTextDisabled,
-                  ]}
-                >
-                  {selected.size > 0
-                    ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
-                    : 'Select friends to send'}
-                </Text>
-              )}
+        {/* Search */}
+        <View style={styles.searchWrap}>
+          <Ionicons
+            name="search"
+            size={16}
+            color={colors.textSecondary}
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search friends"
+            placeholderTextColor={colors.textSecondary}
+            value={search}
+            onChangeText={setSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch('')} hitSlop={8}>
+              <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
             </TouchableOpacity>
-          </Animated.View>
+          )}
+        </View>
+
+        {/* Grid — flex:1 so it fills the space between the (pinned) search
+              bar and the (pinned-above-keyboard) send row, scrolling in the
+              middle as the sheet grows/shrinks with the keyboard. */}
+        <FlatList
+          style={styles.list}
+          data={filtered}
+          keyExtractor={(item) => item.userId}
+          numColumns={COLUMNS}
+          contentContainerStyle={styles.grid}
+          renderItem={({ item }) => (
+            <ViberBubble
+              item={item}
+              selected={selected.has(item.userId)}
+              onToggle={() => toggleViber(item.userId)}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.empty}>
+              {isLoading ? (
+                <ActivityIndicator color={colors.textSecondary} />
+              ) : search.length > 0 ? (
+                <Text style={styles.emptyText}>No matches</Text>
+              ) : (
+                <>
+                  <Ionicons name="people-outline" size={36} color="rgba(255,255,255,0.2)" />
+                  <Text style={styles.emptyText}>No friends to share with yet</Text>
+                </>
+              )}
+            </View>
+          }
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        />
+
+        {/* Send button — pinned at the bottom; padded up above the keyboard
+              (sendPadStyle) so it stays visible while the sheet grows. */}
+        <Animated.View style={[styles.sendRow, sendPadStyle]}>
+          <TouchableOpacity
+            style={[styles.sendButton, selected.size === 0 && styles.sendButtonDisabled]}
+            onPress={handleSend}
+            disabled={selected.size === 0 || isPending}
+            activeOpacity={0.7}
+          >
+            {isPending ? (
+              <ActivityIndicator size="small" color="#000000" />
+            ) : (
+              <Text
+                style={[
+                  styles.sendButtonText,
+                  selected.size === 0 && styles.sendButtonTextDisabled,
+                ]}
+              >
+                {selected.size > 0
+                  ? `Send to ${selected.size} friend${selected.size > 1 ? 's' : ''}`
+                  : 'Select friends to send'}
+              </Text>
+            )}
+          </TouchableOpacity>
         </Animated.View>
-      </GestureDetector>
+      </Animated.View>
     </View>
   );
 }
