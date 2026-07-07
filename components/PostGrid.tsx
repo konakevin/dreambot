@@ -136,11 +136,25 @@ export function PostGrid({
     if (isHashtag) return ['hashtagPosts', hashtag];
     return ['publicProfilePosts', userId];
   }, [isOwn_, isSaved, isDreams, isReposts, isHashtag, hashtag, userId, authUserId]);
+  // Spinner state owned LOCALLY so the RefreshControl reflects ONLY a
+  // user-initiated pull — never a programmatic refetch. Binding `refreshing` to
+  // activeQuery.isRefetching (the old way) meant any background refetch (screen
+  // focus, app foreground, a mutation invalidating this key elsewhere) flipped
+  // the RefreshControl on, which iOS renders as a pull — and since there was no
+  // real pull gesture, the ScrollView got STUCK in the pulled-down state with
+  // the spinner showing forever (Kevin 2026-07-07). This mirrors the fix the
+  // profile Followers list already uses.
+  const [isPulling, setIsPulling] = useState(false);
   const handleRefresh = useCallback(async () => {
-    queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
-      old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
-    );
-    await queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' });
+    setIsPulling(true);
+    try {
+      queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
+        old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
+      );
+      await queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' });
+    } finally {
+      setIsPulling(false);
+    }
   }, [queryClient, activeQueryKey]);
 
   const posts: DreamPostItem[] = useMemo(
@@ -364,11 +378,7 @@ export function PostGrid({
         initialNumToRender={12}
         removeClippedSubviews={false}
         refreshControl={
-          <RefreshControl
-            refreshing={activeQuery.isRefetching && !isFetchingNextPage}
-            onRefresh={handleRefresh}
-            tintColor="#fff"
-          />
+          <RefreshControl refreshing={isPulling} onRefresh={handleRefresh} tintColor="#fff" />
         }
         ListHeaderComponent={
           ListHeaderComponent ? (
