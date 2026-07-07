@@ -270,23 +270,60 @@ function RealtimeSubscriber() {
           filter: `recipient_id=eq.${user.id}`,
         },
         (payload) => {
+          const row = payload.new as NotificationRowLike;
+          // Dreams-tab auto-acknowledge (migration 340): if a dream lands while
+          // the user is actively watching their own Profile → Dreams grid, mark
+          // it seen so it never lights the bell/badge and skip the toast — they
+          // are literally watching it slide in. The inbox row still exists as
+          // pre-read history. Likes/comments in the same window are untouched
+          // (not dream_generated) and badge normally.
+          if (
+            row?.type === 'dream_generated' &&
+            row.id &&
+            useFeedStore.getState().viewingOwnDreams
+          ) {
+            const dreamId = row.id;
+            lastToastedNotifId = dreamId; // belt-and-suspenders: never toast it
+            void (async () => {
+              const { error } = await supabase
+                .from('notifications')
+                .update({ seen_at: new Date().toISOString() })
+                .eq('id', dreamId);
+              if (error) {
+                if (__DEV__) console.warn('[autoAck] seen update failed', error);
+                return;
+              }
+              // Refresh AFTER seen lands so the badge count (now gated on
+              // seen_at IS NULL) reflects the acknowledgment; the inbox refresh
+              // surfaces the pre-read row.
+              queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
+              queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
+            })();
+            return;
+          }
           // New notification — refresh grouped inbox + distinct-group badge.
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
           queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
           // ...and, for high-signal "your-content" events, a tappable in-app
           // toast (the foreground stand-in for the suppressed OS push).
-          maybeShowNotificationToast(payload.new as NotificationRowLike);
+          maybeShowNotificationToast(row);
         }
       )
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
-          // New dream generated for this user — refresh feeds (single predicate call)
+          // New dream generated for this user — refresh the user's OWN
+          // surfaces. Deliberately NOT dreamFeed (2026-07-06): get_feed
+          // excludes your own posts (up.user_id != p_user_id), so the feed
+          // can't contain the row that changed — and invalidating it here
+          // refetched every loaded page mid-scroll with LIVE feed_scores,
+          // reshuffling the prefix under the index-anchored VerticalPager
+          // (the "different post pops into view at the page boundary" bug).
           queryClient.invalidateQueries({
             predicate: (query) => {
               const key = query.queryKey[0];
-              return key === 'dreamFeed' || key === 'userPosts' || key === 'my-dreams';
+              return key === 'userPosts' || key === 'my-dreams';
             },
           });
         }

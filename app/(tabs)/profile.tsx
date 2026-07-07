@@ -68,6 +68,19 @@ export default function ProfileScreen() {
     }, [])
   );
 
+  // Dreams-tab auto-acknowledge (migration 340): flag the store while the user
+  // is focused on THIS (own) profile with the Dreams sub-tab active, so a dream
+  // arriving via realtime is marked seen silently (no bell/badge/toast) — they
+  // are watching it slide into the grid. Keyed on activeTab so switching sub-
+  // tabs re-runs (cleanup clears it); blur clears it too.
+  const setViewingOwnDreams = useFeedStore((s) => s.setViewingOwnDreams);
+  useFocusEffect(
+    useCallback(() => {
+      setViewingOwnDreams(activeTab === 'dreams');
+      return () => setViewingOwnDreams(false);
+    }, [activeTab, setViewingOwnDreams])
+  );
+
   // Tapping the inbox bubble just navigates — the inbox screen owns its
   // own mark-viewed firing on focus (mig 223 viewed=read model). No more
   // duplicate "mark seen" call site here; the badge clears via the

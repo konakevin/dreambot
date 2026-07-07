@@ -207,6 +207,16 @@ function getGroupText(g: InboxGroup): {
       // once migration 329 lands — get_inbox never returned `subtype` before,
       // so every dream row (including Create-screen dreams) mislabeled as
       // "Last night's dream" (Kevin 2026-07-05).
+      // A day's manual (Create-screen) dreams share one group_key (migration
+      // 340), so a queued batch collapses into a single row — "N dreams are
+      // ready" instead of a pile of identical rows. Nightly stays one-per-row.
+      if (g.subtype === 'manual' && g.eventCount > 1) {
+        return {
+          subject: `${g.eventCount} dreams are ready`,
+          subtext: null,
+          isAggregable: false,
+        };
+      }
       return {
         subject: g.subtype === 'manual' ? 'Your dream is ready' : "Last night's dream",
         subtext: capSubtext(g.body),

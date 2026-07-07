@@ -34,6 +34,7 @@ export type NotificationType =
   | 'trial_reminder' // Pro-trial expiry pings (3-day + last-night), migration 215 commit
   | 'pro_reminder' // Paid Pro expiry pings (cancelled but still in paid period)
   | 'welcome_gift' // Onboarding welcome ping (mig 223) — routes to /welcome-gift
+  | 'sparkle_gift' // Gift Sparkles (mig 334) — 'received' → /giftUnwrap, 'thanks' → profile
   | 'comment'; // legacy rows kept queryable
 
 export type NotificationCategory =
@@ -65,8 +66,17 @@ export interface InboxGroup {
   previewAvatars: (string | null)[];
   /** Total distinct actor count (drives "and N others"). */
   actorCount: number;
+  /**
+   * Total events (rows) in the group (migration 340). For self-authored dreams
+   * actorCount is always 1, so this is what drives "N dreams are ready" when a
+   * day's manual dreams collapse into one row.
+   */
+  eventCount: number;
   uploadId: string | null;
   commentId: string | null;
+  /** Generic non-upload reference (migration 334/336) — sparkle gifts carry
+   *  the gift's ledger reference for the unwrap route. */
+  referenceId: string | null;
   /** Upload's display variant (image_url_display) when present, else image_url. */
   uploadImageUrl: string | null;
   /** ~25-byte base64 thumbhash preview hash. Fed to expo-image's
@@ -106,8 +116,13 @@ function mapRow(row: Record<string, unknown>): InboxGroup {
     previewUsernames: (row.preview_usernames as string[] | null) ?? [],
     previewAvatars: (row.preview_avatars as (string | null)[] | null) ?? [],
     actorCount: (row.actor_count as number) ?? 0,
+    // Defensive fallback — present once migration 340 is applied; before it,
+    // fall back to 1 so copy reads "Your dream is ready" (never "0 dreams").
+    eventCount: (row.event_count as number | undefined) ?? 1,
     uploadId: (row.upload_id as string | null) ?? null,
     commentId: (row.comment_id as string | null) ?? null,
+    // Defensive cast — present once migration 336 is applied; null before.
+    referenceId: (row.reference_id as string | null) ?? null,
     uploadImageUrl: (row.upload_image_url as string | null) ?? null,
     uploadThumbhash: (row.upload_thumbhash as string | null) ?? null,
     body: (row.body as string | null) ?? null,

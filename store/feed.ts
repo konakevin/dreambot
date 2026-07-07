@@ -41,6 +41,13 @@ export interface FeedStore {
   // HUD visibility — toggled by single tap on feed cards
   hudVisible: boolean;
   setHudVisible: (visible: boolean) => void;
+  // True while the user is actively watching their OWN Profile → Dreams grid
+  // (focused + Dreams sub-tab). When set, a dream that arrives via realtime is
+  // auto-acknowledged (marked seen, no bell/badge, no toast) since the user is
+  // literally watching it slide into the grid — the inbox row is still written
+  // as pre-read history. Set by app/(tabs)/profile.tsx; read in app/_layout.tsx.
+  viewingOwnDreams: boolean;
+  setViewingOwnDreams: (viewing: boolean) => void;
 }
 
 export const useFeedStore = create<FeedStore>((set) => ({
@@ -68,4 +75,6 @@ export const useFeedStore = create<FeedStore>((set) => ({
   setPendingNotificationData: (data) => set({ pendingNotificationData: data }),
   hudVisible: true,
   setHudVisible: (visible) => set({ hudVisible: visible }),
+  viewingOwnDreams: false,
+  setViewingOwnDreams: (viewing) => set({ viewingOwnDreams: viewing }),
 }));
