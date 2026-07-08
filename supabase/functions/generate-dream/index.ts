@@ -21,6 +21,7 @@ import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { genderFromLock } from '../_shared/genderLock.ts';
+import { restoreFace } from '../_shared/faceRestore.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
@@ -1774,6 +1775,30 @@ Output ONLY the prompt.`;
       }
     }
 
+    // ── Stage 2: post-swap face restoration (CodeFormer f=0.9, bench-picked
+    // 2026-07-08). Runs on ANY successful swap (dual or single); fail-open —
+    // a restore failure ships the unrestored swap. Dark until
+    // engine_config.face_restore_enabled flips (staged rollout contract).
+    const didSwap =
+      logAxes.faceSwapResult === 'dual-success' || logAxes.faceSwapResult === 'success';
+    if (didSwap && tempUrl) {
+      const cfg = await fetchEngineConfig(supabase);
+      if (cfg.faceRestoreEnabled) {
+        const restored = await restoreFace(tempUrl, {
+          replicateToken: REPLICATE_TOKEN,
+          fidelity: cfg.faceRestoreFidelity,
+          deadlineMs: t0 + 140_000,
+        });
+        if (restored.restored) {
+          tempUrl = restored.url;
+          fallbackReasons.push(`face_restore:ok:${restored.ms}ms`);
+          lap('face-restore');
+        } else if (restored.reason) {
+          fallbackReasons.push(restored.reason);
+        }
+      }
+    }
+
     let imageUrl = tempUrl;
 
     // Stage breadcrumb — storage upload + persist.
@@ -2009,22 +2034,22 @@ Output ONLY the prompt.`;
             )
         : Promise.resolve(),
       // Only notify if the user queued/left — a foreground wait gets no ping.
+      // Route through ensure_dream_generated_notification (migration 343) so this
+      // insert and request_dream_notification's catch-up insert share the same
+      // idempotent path (partial unique index + ON CONFLICT DO NOTHING) and can
+      // never double-ping on a race.
       shouldSendCompletionNotification({ uploadId, jobId, notifyOnComplete })
         ? supabase
-            .from('notifications')
-            .insert({
-              recipient_id: userId,
-              actor_id: userId,
-              type: 'dream_generated',
-              subtype: 'manual',
-              upload_id: uploadId,
-              body: notifBody,
+            .rpc('ensure_dream_generated_notification', {
+              p_upload_id: uploadId,
+              p_user_id: userId,
+              p_body: notifBody,
             })
             .then(
               () => {},
-              // No longer swallowed: the inbox row is the guaranteed delivery
-              // backstop (push rides on it via migration 196), so a failed
-              // insert is a real silent-notification failure worth surfacing.
+              // Not swallowed: the inbox row is the guaranteed delivery backstop
+              // (push rides on it), so a failed insert is a real silent-
+              // notification failure worth surfacing.
               (e: unknown) =>
                 console.error(
                   '[generate-dream] completion notification insert FAILED:',

@@ -40,6 +40,9 @@ export interface EngineConfig {
   newSceneMaxPeople: number;
   newScenePriceStandard: number;
   newScenePriceBest: number;
+  /** Stage 2 (FACE_SWAP_UPGRADE_PLAN.md): post-swap CodeFormer restoration. */
+  faceRestoreEnabled: boolean;
+  faceRestoreFidelity: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -61,6 +64,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   newSceneMaxPeople: 3,
   newScenePriceStandard: 3,
   newScenePriceBest: 5,
+  faceRestoreEnabled: false,
+  faceRestoreFidelity: 0.9,
 };
 
 let cached: EngineConfig | null = null;
@@ -107,6 +112,12 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.dream_queue_max_jobs_per_tick ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxJobsPerTick
     ),
     newSceneMaxPeople: Number(data.new_scene_max_people ?? DEFAULT_ENGINE_CONFIG.newSceneMaxPeople),
+    faceRestoreEnabled: Boolean(
+      data.face_restore_enabled ?? DEFAULT_ENGINE_CONFIG.faceRestoreEnabled
+    ),
+    faceRestoreFidelity: Number(
+      data.face_restore_fidelity ?? DEFAULT_ENGINE_CONFIG.faceRestoreFidelity
+    ),
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

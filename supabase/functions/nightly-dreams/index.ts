@@ -23,6 +23,8 @@ import {
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
+import { restoreFace } from '../_shared/faceRestore.ts';
+import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import {
   fetchChaosConfig,
   getChaosTier,
@@ -2034,6 +2036,32 @@ Output ONLY the prompt.`;
         // First-dream cascade — see comment in the dual branch above.
         if (!swapSuccessSingle && strict_face_swap) {
           throw new Error('face_swap_failed:single');
+        }
+      }
+    }
+
+    // ── Stage 2: post-swap face restoration (CodeFormer f=0.9, bench-picked
+    // 2026-07-08). Any successful swap outcome; fail-open; dark until
+    // engine_config.face_restore_enabled flips. Runs BEFORE dup-detect so the
+    // perceptual hash + display variant see the final pixels.
+    const swappedOk =
+      logAxes.faceSwapResult === 'dual-success' ||
+      logAxes.faceSwapResult === 'single-fallback-success' ||
+      logAxes.faceSwapResult === 'success';
+    if (swappedOk && tempUrl) {
+      const restoreCfg = await fetchEngineConfig(supabase);
+      if (restoreCfg.faceRestoreEnabled) {
+        const restored = await restoreFace(tempUrl, {
+          replicateToken: REPLICATE_TOKEN!,
+          fidelity: restoreCfg.faceRestoreFidelity,
+          deadlineMs: t0 + 140_000,
+        });
+        if (restored.restored) {
+          tempUrl = restored.url;
+          fallbackReasons.push(`face_restore:ok:${restored.ms}ms`);
+          lap('face-restore');
+        } else if (restored.reason) {
+          fallbackReasons.push(restored.reason);
         }
       }
     }
