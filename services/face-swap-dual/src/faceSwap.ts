@@ -780,6 +780,9 @@ export interface DualSwapResult {
   swappedUrl: string | null;
   /** Faces detected in the render (legacy 55/55 path reports 2). */
   faceCount: number;
+  /** Why swappedUrl is null (re-render signal) — distinguishes a detection
+   *  shortfall from a gender-guard refusal in bench stats + forensics. */
+  reason?: string;
 }
 
 /**
@@ -844,7 +847,7 @@ export async function dualFaceSwap(
           console.log(
             `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
           );
-          return { swappedUrl: null, faceCount };
+          return { swappedUrl: null, faceCount, reason: `no_split:${split.reason}` };
         }
         // reason==='overlap' → faces too close to split into vertical strips
         // (stacked / close pose: piggyback, dip, dancing). Use the PER-FACE
@@ -861,7 +864,11 @@ export async function dualFaceSwap(
             console.log(
               `[dualFaceSwap] per-face: mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
             );
-            return { swappedUrl: null, faceCount };
+            return {
+              swappedUrl: null,
+              faceCount,
+              reason: `gender_unconfirmed:${fL.gender ?? '?'}/${fR.gender ?? '?'}`,
+            };
           }
           const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
           const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;
@@ -883,7 +890,7 @@ export async function dualFaceSwap(
           perFaceBudgetMs,
           skipPrimary
         );
-        if (!composedUrl) return { swappedUrl: null, faceCount };
+        if (!composedUrl) return { swappedUrl: null, faceCount, reason: 'perface_swap_failed' };
         console.log(`[dualFaceSwap] per-face composite complete faces=${faceCount}`);
         return { swappedUrl: composedUrl, faceCount };
       }
@@ -899,7 +906,11 @@ export async function dualFaceSwap(
           console.log(
             `[dualFaceSwap] mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
           );
-          return { swappedUrl: null, faceCount };
+          return {
+            swappedUrl: null,
+            faceCount,
+            reason: `gender_unconfirmed:${fL.gender ?? '?'}/${fR.gender ?? '?'}`,
+          };
         }
         const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
         const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;

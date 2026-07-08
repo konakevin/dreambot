@@ -220,7 +220,7 @@ Deno.serve({ port: PORT }, async (req) => {
   const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
 
   try {
-    const { swappedUrl, faceCount } = await dualFaceSwap(
+    const { swappedUrl, faceCount, reason } = await dualFaceSwap(
       leftSourceUrl,
       rightSourceUrl,
       targetUrl,
@@ -240,6 +240,9 @@ Deno.serve({ port: PORT }, async (req) => {
         swappedUrl,
         faceCount,
         status: swappedUrl ? 'ok' : 'rerender',
+        // Why the engine asked for a re-render (null on success) — lets the
+        // dispatcher + benches split "no second face" from "gender misread".
+        reason: reason ?? null,
         // Engine variant + timing ride every response so the DISPATCHER can
         // persist them into ai_generation_log (Stage 0 telemetry) — Fly's own
         // log buffer is ephemeral and invisible to forensics.

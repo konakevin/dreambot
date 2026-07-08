@@ -35,6 +35,10 @@ export interface DualDispatchResult {
   engine: string;
   /** Swap round-trip in ms (transport-inclusive). */
   swapMs: number;
+  /** Engine's stated re-render reason when swappedUrl is null (e.g.
+   *  no_split:lt2_faces, gender_unconfirmed:male/male). Null on success or
+   *  when the engine predates the field. */
+  rejectReason: string | null;
 }
 
 export async function dispatchDualFaceSwap(
@@ -92,6 +96,7 @@ export async function dispatchDualFaceSwap(
         faceCount: 2,
         engine: 'in-process-legacy',
         swapMs: Date.now() - tInProc,
+        rejectReason: null,
       };
     }
 
@@ -146,6 +151,7 @@ export async function dispatchDualFaceSwap(
       swappedUrl?: string | null;
       faceCount?: number;
       status?: string;
+      reason?: string | null;
       error?: string;
       variant?: string;
     };
@@ -178,7 +184,13 @@ export async function dispatchDualFaceSwap(
     console.log(
       `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount} engine=${engine}`
     );
-    return { swappedUrl, faceCount, engine, swapMs: elapsedMs };
+    return {
+      swappedUrl,
+      faceCount,
+      engine,
+      swapMs: elapsedMs,
+      rejectReason: swappedUrl ? null : (parsed.reason ?? null),
+    };
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.
     if (targetTempPath) {

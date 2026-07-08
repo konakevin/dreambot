@@ -32,9 +32,13 @@ export interface DualSwapDeps {
    * gender, splits at the gap, and routes each source to its matching face).
    * Returns the swapped url, or null when there was no clean 2-face split.
    */
-  dispatchDual: (
-    target: string
-  ) => Promise<{ swappedUrl: string | null; faceCount: number; engine?: string; swapMs?: number }>;
+  dispatchDual: (target: string) => Promise<{
+    swappedUrl: string | null;
+    faceCount: number;
+    engine?: string;
+    swapMs?: number;
+    rejectReason?: string | null;
+  }>;
   /** Single-swap one source onto the dominant face (the gender-safe degrade). */
   singleSwap: (source: string, target: string) => Promise<string>;
   /** Produce a FRESH render of the same couple scene (different layout/seed).
@@ -107,7 +111,13 @@ export async function genderSafeDualSwap(
       }
     }
 
-    let res: { swappedUrl: string | null; faceCount: number; engine?: string; swapMs?: number };
+    let res: {
+      swappedUrl: string | null;
+      faceCount: number;
+      engine?: string;
+      swapMs?: number;
+      rejectReason?: string | null;
+    };
     try {
       res = await deps.dispatchDual(target);
     } catch (e) {
@@ -130,6 +140,10 @@ export async function genderSafeDualSwap(
     // No clean 2-face split → the loop re-renders the couple and tries again.
     log(`no clean dual split (faceCount=${faceCount}) — re-render`);
     reasons.push(`no_dual_split(faces=${faceCount})`);
+    // Engine-stated cause (no_split:* vs gender_unconfirmed:*) — the two need
+    // different fixes (pose wording vs gender-read fallback), so forensics
+    // must be able to tell them apart (2026-07-08 action bench lesson).
+    if (res.rejectReason) reasons.push(`dual_reject:${res.rejectReason}`);
   }
 
   // ── Could not deliver a verified dual ──
