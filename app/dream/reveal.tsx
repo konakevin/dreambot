@@ -168,7 +168,16 @@ export default function DreamRevealScreen() {
       Toast.show('Saved to your dreams', 'checkmark-circle');
 
       clearResult();
-      router.back();
+      // Return to where the dream started. DLT dreams were pushed from a post
+      // (Dream-Like-This), so pop back to it; a normal Create dream should land
+      // back on the Create tab, NOT dumped on the home feed (router.back() lands
+      // on whatever tab was last active). Mirrors the loading screen's Queue nav.
+      const fromDlt = config.dltRecipe !== null || config.stylePrompt !== null;
+      if (fromDlt) {
+        router.back();
+      } else {
+        router.replace('/(tabs)/create');
+      }
     } catch (err) {
       if (__DEV__) console.error('[Reveal] Skip error:', err);
       Toast.show('Failed to save dream', 'close-circle');

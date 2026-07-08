@@ -19,7 +19,7 @@ import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, byDevice } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
 import { WaveLoader } from '@/components/WaveLoader';
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
@@ -67,10 +67,11 @@ export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) 
   return (
     <View style={styles.stage}>
       <Image source={mascotSource} style={styles.mascot} contentFit="contain" />
-      {/* Gradient wordmark — same brand title treatment as the Create / Inbox titles. */}
-      <GradientTitle size={24} weight={700} letterSpacing={0.3}>
+      {/* Gradient wordmark — same brand treatment as the Create / Inbox titles,
+        but with a slow left↔right gradient shimmer so the wait feels alive. */}
+      <AnimatedGradientTitle size={24} weight={700} letterSpacing={0.3}>
         Dreaming
-      </GradientTitle>
+      </AnimatedGradientTitle>
       {/* Loading dots sit below the title. */}
       <WaveLoader />
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}

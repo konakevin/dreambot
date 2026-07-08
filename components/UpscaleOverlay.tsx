@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/AppText';
-import { GradientTitle } from '@/components/GradientTitle';
+import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
@@ -186,10 +186,11 @@ export function UpscaleModalHost() {
           <View style={styles.card}>
             {showSpinner ? (
               <>
-                {/* Title ABOVE the loading wave, in the brand logo gradient/font. */}
-                <GradientTitle size={18} weight={700}>
+                {/* Title ABOVE the loading wave, in the brand logo gradient/font
+                  with the continuous flowing gradient. */}
+                <AnimatedGradientTitle size={18} weight={700}>
                   {title}
-                </GradientTitle>
+                </AnimatedGradientTitle>
                 <View style={styles.waveBelowTitle}>
                   <WaveLoader />
                 </View>
