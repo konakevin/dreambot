@@ -128,8 +128,12 @@ async function flyProbe(
   const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
   if (!flyUrl || !flyToken) return null;
   try {
-    const base = flyUrl.endsWith('/') ? flyUrl.slice(0, -1) : flyUrl;
-    const res = await fetch(`${base}/detect`, {
+    // DUAL_SWAP_FLY_URL carries a legacy path (`…fly.dev/face-swap-dual`) that
+    // the swap route tolerates (any unmatched path falls through to swap) but
+    // /detect does not — probe the ORIGIN, not the secret verbatim.
+    // (2026-07-08: appending to the raw secret sent /face-swap-dual/detect →
+    // silent 400 from the swap handler → permanent Haiku fallback.)
+    const res = await fetch(`${new URL(flyUrl).origin}/detect`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${flyToken}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ imageUrl }),

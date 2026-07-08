@@ -108,6 +108,11 @@ Deno.serve({ port: PORT }, async (req) => {
     const authHeader = req.headers.get('authorization') ?? '';
     const presented = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
     if (!presented || !timingSafeEqual(presented, expectedToken)) {
+      // Log enough to distinguish "wrong secret on the caller" from "no token
+      // sent" — a silent 401 here cost a debugging session (Stage 3 probe).
+      console.warn(
+        `[face-swap-dual] 401 path=${url.pathname} presented=${presented ? `len${presented.length}` : 'none'} expected=len${expectedToken.length}`
+      );
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
@@ -132,6 +137,9 @@ Deno.serve({ port: PORT }, async (req) => {
       if (!resp.ok) throw new Error(`fetch ${resp.status}`);
       const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
       const faces = await detectFacesWithGender(img.data, img.width, img.height);
+      console.log(
+        `[detect] ok faces=${faces.length} genders=${faces.map((f) => f.gender ?? '?').join('/') || '-'} ${Date.now() - t0d}ms`
+      );
       return new Response(
         JSON.stringify({
           faces: faces.map((f) => ({
@@ -149,6 +157,7 @@ Deno.serve({ port: PORT }, async (req) => {
         { status: 200, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } }
       );
     } catch (err) {
+      console.error(`[detect] error: ${(err as Error).message}`);
       return new Response(JSON.stringify({ error: (err as Error).message }), {
         status: 500,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
