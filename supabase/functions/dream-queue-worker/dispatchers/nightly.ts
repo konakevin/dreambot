@@ -41,16 +41,17 @@ const swallow = (resOrErr: unknown) => {
   }
 };
 
-// Clamp a Haiku bot-message to the single-line inbox preview (mig 223) without
-// chopping mid-word. ≤28 → returned as-is; longer → trimmed back to the last
-// word boundary within 28 chars and ellipsised, so the inbox reads as a
-// complete (if shortened) phrase rather than a dangling fragment.
+// Clamp the nightly scene caption to the inbox preview without chopping
+// mid-word. The inbox now renders up to ~2 lines (~90 chars), so a scene
+// caption gets ~56 chars — enough for "A woman by a sunlit barn window" — and
+// only ellipsises the rare overrun back to a word boundary.
+const INBOX_CAPTION_MAX = 56;
 function clampInboxBody(msg: string | null): string {
   const s = (msg || '').trim();
-  if (s.length <= 28) return s;
-  const cut = s.slice(0, 28);
+  if (s.length <= INBOX_CAPTION_MAX) return s;
+  const cut = s.slice(0, INBOX_CAPTION_MAX);
   const lastSpace = cut.lastIndexOf(' ');
-  const trimmed = lastSpace > 12 ? cut.slice(0, lastSpace) : cut;
+  const trimmed = lastSpace > 24 ? cut.slice(0, lastSpace) : cut;
   return trimmed.replace(/[\s.,;:!?-]+$/, '') + '…';
 }
 
@@ -86,8 +87,9 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   const promptUsed = (data.prompt_used as string) || '';
   if (!uploadId) throw new Error('nightly_render_no_upload_id');
 
-  // 2. Whimsical bot message (Haiku). Best-effort — never fail the job over it.
-  const botMessage = await generateBotMessage(supabase, anthropicKey, userId, promptUsed);
+  // 2. Scene caption (Haiku) — a short factual description of the dream's scene,
+  //    used as the inbox subtext so nightly rows differ at a glance. Best-effort.
+  const botMessage = await generateBotMessage(anthropicKey, promptUsed);
 
   // 3. Finalize the upload (bot_message + approval/visibility).
   const { error: rpcErr } = await supabase.rpc('finalize_nightly_upload', {
@@ -96,7 +98,7 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
   });
   if (rpcErr) console.error(`[nightly] finalize_nightly_upload failed: ${rpcErr.message}`);
 
-  // 4. Notify the dreamer. body is the clean bot message text (inbox subtext).
+  // 4. Notify the dreamer. body is the scene caption (inbox subtext).
   await supabase
     .from('notifications')
     .insert({
@@ -104,10 +106,9 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       actor_id: userId,
       type: 'dream_generated',
       upload_id: uploadId,
-      // Clamp to ≤28 chars to fit the single-line inbox layout (mig 223), but
-      // break on a WORD boundary so the preview never shows a mid-word
-      // fragment. (The Haiku prompt asks for ≤28; this catches the occasional
-      // overrun.) The push banner uses its own curated copy — see send-push.
+      // Clamp to the inbox preview length on a WORD boundary so a rare overrun
+      // never shows a mid-word fragment. The push banner uses its own curated
+      // copy — see send-push.
       body: clampInboxBody(botMessage),
     })
     .then(swallow, swallow);
@@ -116,28 +117,11 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
 }
 
 async function generateBotMessage(
-  supabase: SupabaseClient,
   anthropicKey: string,
-  userId: string,
   promptUsed: string
 ): Promise<string | null> {
   if (!anthropicKey) return null;
   try {
-    const { data: recentDreams } = await supabase
-      .from('uploads')
-      .select('ai_prompt')
-      .eq('user_id', userId)
-      .eq('is_ai_generated', true)
-      .order('created_at', { ascending: false })
-      .limit(5);
-    const recentContext = (recentDreams ?? [])
-      .map((d: { ai_prompt?: string }) => (d.ai_prompt ? d.ai_prompt.slice(0, 80) : null))
-      .filter(Boolean);
-
-    let memoryBlock = '';
-    if (recentContext.length > 0)
-      memoryBlock += `\nOPTIONAL CONTEXT (reference ONLY if genuinely interesting, otherwise ignore):\n- Recent dreams: ${recentContext.join(' | ')}`;
-
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -151,37 +135,37 @@ async function generateBotMessage(
         messages: [
           {
             role: 'user',
-            content: `You are a Dream Bot — a tiny creative spirit living in someone's phone, making dreams nightly. Playful, warm, a little weird. You love your human.
+            content: `You are captioning a dream image for its owner's inbox — a short, factual description of the scene so they can tell their dreams apart at a glance.
 
-Tonight's dream prompt: "${promptUsed.slice(0, 200)}"
+Dream prompt: "${promptUsed.slice(0, 200)}"
 
-Write ONE very short reaction to making this dream. Maximum 28 characters total (about 3-5 words). It will display as a single-line inbox preview.
+Write ONE short caption describing the SCENE: its setting and main subject.
 
-CRITICAL RULES:
-- ≤28 characters total (HARD LIMIT — server truncates beyond this anyway).
-- NEVER start with "Okay so" or "Not gonna lie" or "Honestly"
-- NEVER use the phrases "hit different", "chef's kiss", "you're welcome", "no regrets", "trust the process"
-- Reference ONE specific thing from the prompt — a creature, place, color, or vibe — but as a single tight phrase, not a full sentence.
-- React to the creative choice, don't describe the image
-- No emojis. Max one exclamation mark.
-${memoryBlock}
+RULES:
+- A concise descriptive phrase, about 4-8 words (≤56 characters). It shows as one inbox line.
+- THIRD PERSON, describing the image. NEVER use "I", "me", "my", "you", or "your".
+- Name a concrete place/setting and/or the main subject. Examples: "A misty pine forest at dawn", "A woman by a sunlit barn window", "Neon Tokyo rooftop in the rain".
+- Just describe — no greeting, no reaction, no opinion, no personality.
+- No emojis, no quotation marks, no trailing punctuation.
 
-Output ONLY the message, nothing else.`,
+Output ONLY the caption, nothing else.`,
           },
         ],
       }),
     });
     if (!res.ok) return null;
     const json = await res.json();
-    const text =
+    let text =
       json && json.content && json.content[0] && typeof json.content[0].text === 'string'
         ? json.content[0].text.trim()
         : '';
-    // Accept 3-40 chars (the prompt asks for ≤28, but Haiku occasionally
-    // overruns by a few; we slice to 28 at the insert call site as the
-    // hard cap, so accepting up to 40 here just gives Sonnet some
-    // breathing room without forcing a retry on borderline outputs).
-    if (text.length >= 3 && text.length <= 40) return text;
+    // Strip wrapping quotes + trailing punctuation the model sometimes adds.
+    text = text
+      .replace(/^["'“”]+|["'“”]+$/g, '')
+      .replace(/[.]+$/, '')
+      .trim();
+    // Accept a short phrase; the clamp at the insert site is the hard cap.
+    if (text.length >= 3 && text.length <= 72) return text;
     return null;
   } catch {
     return null;
