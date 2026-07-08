@@ -75,9 +75,18 @@ export function useDreamCreate() {
     const cfg = useDreamStore.getState().config;
     const isRestyle = !!cfg.photoUri && cfg.photoStyle === 'restyle';
     const isNewScenePhoto = !!cfg.photoUri && cfg.photoStyle === 'new_scene';
-    if (isNewScenePhoto) return engineConfig.newScenePriceStandard;
+    if (isNewScenePhoto) {
+      return cfg.newSceneTier === 'best'
+        ? engineConfig.newScenePriceBest
+        : engineConfig.newScenePriceStandard;
+    }
     return isRestyle ? engineConfig.baseSparkleCost : sparkleCostFrom(models, cfg.forceModel);
-  }, [models, engineConfig.baseSparkleCost, engineConfig.newScenePriceStandard]);
+  }, [
+    models,
+    engineConfig.baseSparkleCost,
+    engineConfig.newScenePriceStandard,
+    engineConfig.newScenePriceBest,
+  ]);
 
   const loadProfile = useCallback(async (): Promise<VibeProfile | null> => {
     if (!user) return null;
@@ -261,8 +270,10 @@ export function useDreamCreate() {
               num_people: classification?.num_people,
               num_animals: classification?.num_animals,
               face: classification?.face,
-              // Tier toggle is a follow-up UI; default to Standard for now.
-              new_scene_tier: classification ? 'standard' : undefined,
+              // Likeness tier from the Create-screen toggle (Standard vs Best).
+              // Only sent alongside the classification signals so the server
+              // reference path stays fully client-gated.
+              new_scene_tier: classification ? config.newSceneTier : undefined,
               job_id: jobId,
               style_prompt: config.stylePrompt || undefined,
               dlt_recipe: config.dltRecipe ?? undefined,

@@ -86,6 +86,7 @@ export default function CreateScreen() {
   const setVibe = useDreamStore((s) => s.setVibe);
   const setPrompt = useDreamStore((s) => s.setPrompt);
   const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
+  const setNewSceneTier = useDreamStore((s) => s.setNewSceneTier);
   const setUseExactPrompt = useDreamStore((s) => s.setUseExactPrompt);
   const setForceModel = useDreamStore((s) => s.setForceModel);
 
@@ -452,8 +453,10 @@ export default function CreateScreen() {
   // mediums (LEGO/Vinyl) send no force_model and stay at the flat base cost.
   const sparkleCost = isNewScene
     ? // New Scene is flat-priced by tier server-side (the model picker doesn't
-      // apply); show the Standard price. (Best-likeness tier is a follow-up.)
-      engineConfig.newScenePriceStandard
+      // apply); Best-likeness routes to Nano Banana Pro at the higher price.
+      config.newSceneTier === 'best'
+      ? engineConfig.newScenePriceBest
+      : engineConfig.newScenePriceStandard
     : isRestyle
       ? restylePoolManaged
         ? engineConfig.baseSparkleCost
@@ -866,9 +869,86 @@ export default function CreateScreen() {
                   style={{ color: colors.textSecondary, opacity: 0.7 }}
                 >
                   {config.photoStyle === 'new_scene'
-                    ? 'We’ll invent a fresh scene around you. Works best with a clear single-subject photo.'
-                    : 'We’ll keep your pose and restyle it in this medium. Restyle picks the best edit model for each medium, so the model picker doesn’t apply here.'}
+                    ? 'We’ll reimagine your photo into a new scene. Keeps its look; for your exact face, describe a dream and say “me” instead.'
+                    : 'We’ll restyle your photo in this medium, keeping the pose.'}
                 </Text>
+
+                {/* New Scene — identity chip + likeness tier. The chip sets the
+                  expectation (reference-render, not an exact swap); the tier
+                  toggle picks Standard vs Best-likeness (Nano Banana Pro), which
+                  the server maps to the reference model + price. */}
+                {config.photoStyle === 'new_scene' && (
+                  <View className="mt-3">
+                    <View className="flex-row items-center gap-1.5 mb-2 px-1">
+                      <Ionicons name="color-wand-outline" size={13} color="#A78BFA" />
+                      <Text className="text-xs font-semibold" style={{ color: '#A78BFA' }}>
+                        Your likeness, reimagined
+                      </Text>
+                    </View>
+                    <View
+                      className="flex-row rounded-xl p-1"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                    >
+                      {[
+                        {
+                          tier: 'standard' as const,
+                          label: 'Standard',
+                          price: engineConfig.newScenePriceStandard,
+                        },
+                        {
+                          tier: 'best' as const,
+                          label: 'Best likeness',
+                          price: engineConfig.newScenePriceBest,
+                        },
+                      ].map((opt) => {
+                        const active = config.newSceneTier === opt.tier;
+                        return (
+                          <TouchableOpacity
+                            key={opt.tier}
+                            className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                            style={{
+                              backgroundColor: active ? 'rgba(167,139,250,0.18)' : 'transparent',
+                              borderWidth: 1,
+                              borderColor: active ? 'rgba(167,139,250,0.55)' : 'transparent',
+                            }}
+                            onPress={() => {
+                              Haptics.selectionAsync();
+                              setNewSceneTier(opt.tier);
+                            }}
+                            activeOpacity={0.7}
+                          >
+                            <Text
+                              className="text-xs font-semibold"
+                              style={{ color: active ? '#A78BFA' : colors.textSecondary }}
+                            >
+                              {opt.label}
+                            </Text>
+                            <View className="flex-row items-center">
+                              <Ionicons
+                                name="sparkles"
+                                size={10}
+                                color={active ? '#A78BFA' : colors.textSecondary}
+                              />
+                              <Text
+                                className="text-xs"
+                                style={{
+                                  color: active ? '#A78BFA' : colors.textSecondary,
+                                  marginLeft: 2,
+                                }}
+                              >
+                                {opt.price}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </View>
+                )}
               </View>
             )}
 
@@ -982,13 +1062,11 @@ export default function CreateScreen() {
             )}
 
             {/* Unified AI-model picker — top-level. The model is orthogonal to the
-              engine: any model can render a raw (Direct) prompt, a full DreamBot
-              dream, OR a New Scene photo dream (your uploaded face is swapped
-              onto a scene the chosen model renders — model-agnostic, like the
-              cast photos). Hidden ONLY for Restyle, which is a img2img
-              transform of the photo itself and gets its OWN edit-capable
-              picker below. */}
-            {(!hasPhoto || config.photoStyle === 'new_scene') && !collapsed && (
+              engine: any model can render a raw (Direct) prompt or a full DreamBot
+              dream. Hidden for BOTH photo modes: New Scene routes to a fixed
+              reference model (Standard/Best tier picks it), and Restyle is an
+              img2img transform with its OWN edit-capable picker below. */}
+            {!hasPhoto && !collapsed && (
               <View className="mb-4">
                 <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
               </View>

@@ -19,11 +19,22 @@ export type DreamFlowMode = 'surprise' | 'photo' | 'prompt';
  */
 export type PhotoStyle = 'restyle' | 'new_scene';
 
+/**
+ * New Scene likeness tier — reference-render quality/price toggle.
+ *   'standard' — Seedream / Nano Banana (new_scene_price_standard sparkles)
+ *   'best'     — Nano Banana Pro, strongest likeness (new_scene_price_best)
+ * Only meaningful when photoStyle === 'new_scene'; server maps it to the model.
+ */
+export type NewSceneTier = 'standard' | 'best';
+
 interface DreamConfig {
   mode: DreamFlowMode;
   photoBase64: string | null;
   photoUri: string | null;
   photoStyle: PhotoStyle;
+  /** New Scene likeness tier (Standard vs Best). Only used when
+   *  photoStyle === 'new_scene'; drives the reference model + price. */
+  newSceneTier: NewSceneTier;
   selectedMedium: string;
   selectedVibe: string;
   userPrompt: string;
@@ -99,6 +110,7 @@ interface DreamStore {
   setMode: (mode: DreamFlowMode) => void;
   setPhoto: (base64: string, uri: string) => void;
   setPhotoStyle: (style: PhotoStyle) => void;
+  setNewSceneTier: (tier: NewSceneTier) => void;
   setMedium: (key: string) => void;
   setVibe: (key: string) => void;
   setPrompt: (text: string) => void;
@@ -122,6 +134,7 @@ const INITIAL_CONFIG: DreamConfig = {
   // Sonnet-invented scenes. Users who want to preserve their photo's pose
   // can toggle to 'restyle'.
   photoStyle: 'new_scene',
+  newSceneTier: 'standard',
   selectedMedium: 'surprise_me_face',
   selectedVibe: 'surprise_me',
   userPrompt: '',
@@ -143,6 +156,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setPhoto: (base64, uri) =>
     set((s) => ({ config: { ...s.config, photoBase64: base64, photoUri: uri, mode: 'photo' } })),
   setPhotoStyle: (style) => set((s) => ({ config: { ...s.config, photoStyle: style } })),
+  setNewSceneTier: (tier) => set((s) => ({ config: { ...s.config, newSceneTier: tier } })),
   setMedium: (key) => set((s) => ({ config: { ...s.config, selectedMedium: key } })),
   setVibe: (key) => set((s) => ({ config: { ...s.config, selectedVibe: key } })),
   setPrompt: (text) => set((s) => ({ config: { ...s.config, userPrompt: text } })),
@@ -154,7 +168,13 @@ export const useDreamStore = create<DreamStore>((set) => ({
   clearResult: () => set({ result: null }),
   clearPhoto: () =>
     set((s) => ({
-      config: { ...s.config, photoBase64: null, photoUri: null, photoStyle: 'new_scene' },
+      config: {
+        ...s.config,
+        photoBase64: null,
+        photoUri: null,
+        photoStyle: 'new_scene',
+        newSceneTier: 'standard',
+      },
     })),
   setActiveJobId: (id) => set({ activeJobId: id }),
   setActiveJobFailure: (failure) => set({ activeJobFailure: failure }),

@@ -335,24 +335,30 @@ Restyle read as one family.
 - **To ship to users:** cut build 11 (`eas build -p ios --profile production`) — the server is
   live + dormant for old clients, so nothing breaks pre-build.
 
-**Phase 2 — UI polish checklist (no build needed to write; needs a build to test):**
-- [ ] **Best-likeness tier toggle** — New Scene `new_scene_tier` is hardcoded `'standard'`; add
-  the Standard/Best on-screen toggle (reference route only) + wire `new_scene_price_best`.
-  Files: `create.tsx` (control), `useDreamCreate.ts` (send the chosen tier).
-- [ ] **Hide the raw model picker on New Scene** — it's cosmetic there now; `create.tsx:986`
-  gate is `(!hasPhoto || photoStyle==='new_scene')` → drop the new_scene clause.
-- [ ] **Identity chip** — route-aware: `✦ Your exact face` (solo-swap / cast) vs
-  `Your likeness, reimagined` (reference). Needs attach-time classification to know the route.
-- [ ] **"Transform a photo" framing + promise lines** — the describe-vs-transform copy
-  (see "Communicating the split"), reimagine word never "face swap".
+**Phase 2 — UI (in-place contract BUILT 2026-07-07; route-aware refinements deferred):**
+- [x] **Best-likeness tier toggle** — Standard / Best-likeness segmented control on New Scene
+  (`create.tsx`), wired through the store (`newSceneTier`), `useDreamCreate` (sends the chosen
+  tier), and the cost calc (`newScenePriceBest` on Best). Shown for all New Scene uploads (not
+  yet route-gated — see attach-time classification below).
+- [x] **Hide the raw model picker on New Scene** — gate is now `!hasPhoto` (both photo modes hide
+  it; New Scene routes to a fixed reference model, Restyle keeps its own edit picker).
+- [x] **Identity chip** — `✦ Your likeness, reimagined` shown on New Scene. STATIC for now (not
+  route-aware — can't distinguish the solo-swap route without attach-time classification).
+- [x] **Promise line / reimagine framing** — New Scene descriptor now reads "We'll reimagine your
+  photo into a new scene. Keeps its look; for your exact face, describe a dream and say 'me'
+  instead." Never says "face swap."
 - [ ] **Point-of-action nudge** — reference-route-with-a-person → "Uploads are reimagined, not
-  face-swapped. For your exact face, use your Dream Cast."
+  face-swapped. For your exact face, use your Dream Cast." DEFERRED — needs the route, i.e.
+  attach-time classification.
 - [ ] **Attach-time classification** — move classify from submit to photo-attach so the chip /
-  tier / cap message resolve *before* Dream (the cap already blocks pre-charge either way).
+  tier / nudge become *route-aware* (solo-swap shows "✦ Your exact face" + hides the tier; a
+  4+-person photo warns before Dream). Currently classify runs at submit; the cap already
+  blocks pre-charge, and the chip/tier degrade gracefully to the reference wording.
 - [ ] **Group/unclear confirm-modal copy reframe** — group is now supported, so its warning tone
-  → "here's what you'll get."
+  → "here's what you'll get." DEFERRED (pairs with attach-time classification).
 - [ ] (optional) **Describe / Transform segmented control** + the `photo present ⟺ Transform`
-  state rule.
+  state rule. DEFERRED — the in-place contract above makes the split visible without the
+  structural rebuild; revisit only if the copy isn't enough.
 
 ## Reference points in code
 
