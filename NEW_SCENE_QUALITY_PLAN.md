@@ -356,9 +356,10 @@ Restyle read as one family.
   blocks pre-charge, and the chip/tier degrade gracefully to the reference wording.
 - [ ] **Group/unclear confirm-modal copy reframe** — group is now supported, so its warning tone
   → "here's what you'll get." DEFERRED (pairs with attach-time classification).
-- [ ] (optional) **Describe / Transform segmented control** + the `photo present ⟺ Transform`
-  state rule. DEFERRED — the in-place contract above makes the split visible without the
-  structural rebuild; revisit only if the copy isn't enough.
+- [~] ~~(optional) **Describe / Transform segmented control** + `photo present ⟺ Transform`~~
+  **DECIDED AGAINST 2026-07-07 (Kevin).** The in-place contract (promise line + chip + tier
+  toggle + hidden picker) makes the split clear without a structural rebuild; the tabs added
+  complexity for no gain. Do not build.
 
 ## Reference points in code
 
