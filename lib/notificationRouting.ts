@@ -201,12 +201,22 @@ export function routeFromNotification(
     return false;
   }
 
-  // Side effects before navigation. Landing on a photo detail from a
-  // notification must NOT inherit a stale album-grid context from a prior
-  // screen — the user tapped a notification, not a tile. Same logic the
-  // inbox tap path runs (kept here so push + inbox stay aligned).
+  // Scope the viewer to EXACTLY the notification's target. A notification is a
+  // precise link, not a doorway into a feed — so a single upload opens as a
+  // 1-item album (no up/down swipe, no browsing the author's other posts),
+  // matching Instagram/X. Grouped "N dreams" set their own N-item album before
+  // this runs (see inbox.tsx openScopedDreamAlbum). Falls back to clearAlbum
+  // when there's no upload target (shouldn't happen for /photo/).
   if (target.startsWith('/photo/')) {
-    useAlbumStore.getState().clearAlbum();
+    const album = useAlbumStore.getState();
+    if (data.uploadId) {
+      album.setAlbum([data.uploadId]);
+      album.setAlbumPosts([]);
+      album.setAlbumSource(null);
+      album.setCurrentPostId(data.uploadId);
+    } else {
+      album.clearAlbum();
+    }
   }
 
   // A completion-push tap means the user reached this dream — drop any in-flight

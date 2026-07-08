@@ -23,6 +23,10 @@ import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
 import { retryLatestFailedDream } from '@/lib/retryDream';
 import { routeFromNotification } from '@/lib/notificationRouting';
+import { supabase } from '@/lib/supabase';
+import { useAuthStore } from '@/store/auth';
+import { useAlbumStore } from '@/store/album';
+import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import * as Haptics from 'expo-haptics';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
 import { useDeleteGroup } from '@/hooks/useDeleteGroup';
@@ -658,6 +662,48 @@ export default function InboxScreen() {
     setAllSelectedGlobal(false);
   }
 
+  // Pooled "N dreams are ready" → open a pager scoped to JUST those N new
+  // dreams (photo/[id] album mode), so swiping cycles the new dreams instead of
+  // dumping the user into their whole Posts feed (which, since fresh dreams are
+  // private drafts, doesn't even contain them). The group's member uploads are
+  // exactly its notifications rows (same group_key). Falls back to single-dream
+  // routing if the group resolves to ≤1 upload.
+  async function openScopedDreamAlbum(g: InboxGroup) {
+    const uid = useAuthStore.getState().user?.id;
+    if (!uid || !g.uploadId) {
+      routeFromNotification(
+        { type: g.type, subtype: g.subtype ?? undefined, uploadId: g.uploadId ?? undefined },
+        { markSeen: true }
+      );
+      return;
+    }
+    const { data } = await supabase
+      .from('notifications')
+      .select('upload_id, created_at')
+      .eq('recipient_id', uid)
+      .eq('group_key', g.groupKey)
+      .not('upload_id', 'is', null)
+      .order('created_at', { ascending: false });
+    const ids = Array.from(new Set((data ?? []).map((r) => r.upload_id as string).filter(Boolean)));
+    if (ids.length <= 1) {
+      routeFromNotification(
+        { type: g.type, subtype: g.subtype ?? undefined, uploadId: g.uploadId },
+        { markSeen: true }
+      );
+      return;
+    }
+    // Scope the pager to exactly these uploads (newest first, so the newest —
+    // the group's representative — opens at index 0).
+    const album = useAlbumStore.getState();
+    album.setAlbum(ids);
+    album.setAlbumPosts([]);
+    album.setAlbumSource(null);
+    album.setCurrentPostId(g.uploadId);
+    void clearDreamInFlight();
+    markInboxViewed();
+    nav.push(`/photo/${g.uploadId}`);
+  }
+
   function handleTap(g: InboxGroup) {
     const text = getGroupText(g);
     // Aggregable groups with multiple actors → open the expand sheet so the
@@ -669,6 +715,11 @@ export default function InboxScreen() {
     if (text.isAggregable && g.actorCount > 1) {
       setExpandedGroupKey(g.groupKey);
       setExpandedTitle(text.subject);
+      return;
+    }
+    // Pooled "N dreams are ready" → scope the pager to just those N new dreams.
+    if (g.type === 'dream_generated' && g.eventCount > 1 && g.uploadId) {
+      void openScopedDreamAlbum(g);
       return;
     }
     // Dream failures have no post to route to (the render never produced an
@@ -738,6 +789,12 @@ export default function InboxScreen() {
   // surface), even for rows whose left-zone tap expands text or opens the
   // actor sheet.
   function handleThumbTap(g: InboxGroup) {
+    // Pooled "N dreams are ready" → scope the pager to just those N (same as the
+    // row tap), so the thumbnail doesn't drop the user into their whole album.
+    if (g.type === 'dream_generated' && g.eventCount > 1 && g.uploadId) {
+      void openScopedDreamAlbum(g);
+      return;
+    }
     routeFromNotification(
       {
         type: g.type,
