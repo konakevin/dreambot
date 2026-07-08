@@ -16,7 +16,7 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -34,6 +34,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { useCommentDrafts } from '@/store/commentDrafts';
 import { useComments, type Comment } from '@/hooks/useComments';
 import { useAddComment } from '@/hooks/useAddComment';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
@@ -184,13 +185,36 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
     [optimisticComments, serverComments]
   );
 
-  const [text, setText] = useState('');
+  // Seed from any WIP draft for this post (survives closing + reopening the
+  // overlay on the same card; cleared on swipe-away by FullScreenFeed).
+  const [text, setText] = useState(() => useCommentDrafts.getState().drafts[post.id] ?? '');
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
   const [expandedCommentId, setExpandedCommentId] = useState<string | null>(null);
   const [mentionQuery, setMentionQuery] = useState('');
   const mentionStart = useRef(-1);
   const inputRef = useRef<TextInput>(null);
   const { data: mentionResults = [] } = useSearchUsers(mentionQuery);
+
+  // Keyboard open state — drives the input bar's bottom padding. When the
+  // keyboard is up the input rides above it (KeyboardStickyView), so the tab-bar
+  // / home-indicator allowance isn't needed; when down we keep it.
+  const [kbOpen, setKbOpen] = useState(false);
+  useEffect(() => {
+    const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const s1 = Keyboard.addListener(showEvt, () => setKbOpen(true));
+    const s2 = Keyboard.addListener(hideEvt, () => setKbOpen(false));
+    return () => {
+      s1.remove();
+      s2.remove();
+    };
+  }, []);
+
+  // Persist WIP text as a per-post draft so it survives closing + reopening the
+  // overlay. Empty text drops the draft; a successful post clears text → drops it.
+  useEffect(() => {
+    useCommentDrafts.getState().setDraft(post.id, text);
+  }, [text, post.id]);
 
   function handleTextChange(newText: string) {
     setText(newText.slice(0, MAX_COMMENT_LENGTH));
@@ -356,17 +380,12 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
         {/* Comment pane */}
         <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
-          {/* keyboardVerticalOffset MUST stay 0: the pane's bottom is flush
-              with the screen bottom, so the measured frame already accounts
-              for the header above. Passing HEADER_HEIGHT here over-padded by
-              ~the whole header and crushed the comment list to zero height
-              whenever the keyboard opened (Kevin 2026-07-07, "completely
-              broken"). */}
-          <KeyboardAvoidingView
-            behavior="padding"
-            style={{ flex: 1 }}
-            enabled={Platform.OS === 'ios'}
-          >
+          {/* The comment list fills the pane; the input bar rides ABOVE the
+              keyboard via KeyboardStickyView (the Instagram/TikTok input-accessory
+              pattern) so what you type is never covered. Replaced the
+              KeyboardAvoidingView(padding) approach, which never lifted the input
+              inside this absolutely-positioned morph pane (Kevin 2026-07-08). */}
+          <View style={{ flex: 1 }}>
             {/* Swipe-down-to-dismiss covers the handle + comment list ONLY.
                 The input bar lives OUTSIDE the pan (2026-07-06): a downward
                 drag inside the multiline input is how you scroll a long
@@ -425,7 +444,9 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                 />
               </Animated.View>
             </GestureDetector>
+          </View>
 
+          <KeyboardStickyView offset={{ closed: 0 }}>
             {/* Reply indicator */}
             {replyTo && (
               <View style={styles.replyBar}>
@@ -472,7 +493,16 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
             {/* Input bar */}
             <View
-              style={[styles.inputBar, { paddingBottom: insets.bottom + (hideTabBar ? 16 : 60) }]}
+              style={[
+                styles.inputBar,
+                {
+                  // Keyboard up → riding above it, so no tab-bar/home-indicator
+                  // allowance; keyboard down → clear the tab bar + home indicator.
+                  paddingBottom: kbOpen
+                    ? verticalScale(13)
+                    : insets.bottom + (hideTabBar ? 16 : 60),
+                },
+              ]}
             >
               {currentUser ? (
                 <>
@@ -507,7 +537,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                 <Text style={styles.signInPrompt}>Sign in to comment</Text>
               )}
             </View>
-          </KeyboardAvoidingView>
+          </KeyboardStickyView>
         </Animated.View>
       </Animated.View>
     </View>
@@ -678,7 +708,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: verticalScale(10),
+    paddingVertical: verticalScale(13),
     borderTopWidth: 0.5,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,

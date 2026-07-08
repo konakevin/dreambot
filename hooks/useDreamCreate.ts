@@ -186,11 +186,12 @@ export function useDreamCreate() {
             return 'cancelled';
           }
 
-          // Ask user to confirm on ambiguous subjects BEFORE charging
-          if (
-            (classification.type === 'group' || classification.type === 'unclear') &&
-            onConfirmClassification
-          ) {
+          // Ask the user to confirm ONLY when the photo is genuinely unreadable.
+          // Group photos are no longer flagged — they route to the reference
+          // models (Seedream / Nano Banana), which preserve everyone's likeness
+          // from the photo, so the old "multiple people, won't be an exact match"
+          // warning is obsolete. (4+ people is still capped pre-charge above.)
+          if (classification.type === 'unclear' && onConfirmClassification) {
             const proceed = await onConfirmClassification(classification);
             if (!proceed) {
               if (__DEV__) console.log('[useDreamCreate] Cancelled at classification modal');

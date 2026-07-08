@@ -598,22 +598,20 @@ async function handleRequest(req: Request): Promise<Response> {
             )
         : Promise.resolve(),
       // Only notify if the user queued/left — a foreground wait gets no ping.
+      // Idempotent path shared with request_dream_notification's catch-up
+      // (migration 343) so a race can't double-ping.
       shouldSendCompletionNotification({ uploadId, jobId, notifyOnComplete })
         ? supabase
-            .from('notifications')
-            .insert({
-              recipient_id: userId,
-              actor_id: userId,
-              type: 'dream_generated',
-              subtype: 'manual',
-              upload_id: uploadId,
-              body: notifBody,
+            .rpc('ensure_dream_generated_notification', {
+              p_upload_id: uploadId,
+              p_user_id: userId,
+              p_body: notifBody,
             })
             .then(
               () => {},
-              // No longer swallowed: the inbox row is the guaranteed delivery
-              // backstop (push rides on it via migration 196), so a failed
-              // insert is a real silent-notification failure worth surfacing.
+              // Not swallowed: the inbox row is the guaranteed delivery backstop
+              // (push rides on it), so a failed insert is a real silent-
+              // notification failure worth surfacing.
               (e: unknown) =>
                 console.error(
                   '[restyle-photo] completion notification insert FAILED:',

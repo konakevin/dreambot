@@ -565,7 +565,7 @@ export default function CreateScreen() {
   const placeholder = effectiveExactPrompt
     ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, mediums, or vibes in Direct mode.'
     : hasPhoto
-      ? 'Describe a scene...'
+      ? 'Describe a scene to drop your uploaded photo into. For example: exploring a glowing forest at dusk, or sipping coffee in a Paris café.'
       : 'Describe any dream. Say "me" or "my partner" to paint your Dream Cast in, or leave blank for a surprise.';
 
   // Process a picked/captured image asset

@@ -3,8 +3,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
 import { trackCommentAdded } from '@/lib/analytics';
+import { adjustCommentCount } from '@/lib/commentCountCache';
 import type { Comment } from '@/hooks/useComments';
-import type { DreamPostItem } from '@/components/DreamCard';
 
 interface AddCommentArgs {
   uploadId: string;
@@ -102,48 +102,10 @@ export function useAddComment() {
         });
       }
 
-      // Bump comment count on the card across all feed caches.
-      // Infinite queries with {rows, ...} page shape: dreamFeed, userContextFeed,
-      // searchPosts, myDreams, favoritePosts, userPosts, publicProfilePosts.
-      // Flat-array queries: albumPosts.
-      type FeedRowPage = { rows: DreamPostItem[]; [k: string]: unknown };
-      type FeedAnyPage = FeedRowPage | DreamPostItem[];
-      const bumpComment = (p: DreamPostItem) =>
-        p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p;
-      const infiniteKeys = [
-        'dreamFeed',
-        'userContextFeed',
-        'searchPosts',
-        'my-dreams',
-        'favoritePosts',
-        'userPosts',
-        'publicProfilePosts',
-      ];
-      for (const root of infiniteKeys) {
-        const queries = queryClient.getQueryCache().findAll({ queryKey: [root] });
-        for (const query of queries) {
-          queryClient.setQueryData<InfiniteData<FeedAnyPage>>(query.queryKey, (prev) => {
-            if (!prev) return prev;
-            return {
-              ...prev,
-              pages: prev.pages.map((page) => {
-                if (Array.isArray(page)) return page.map(bumpComment);
-                return { ...page, rows: page.rows.map(bumpComment) };
-              }),
-            };
-          });
-        }
-      }
-      // Also bump in album posts (flat-array shape)
-      const albumKeys = queryClient.getQueryCache().findAll({ queryKey: ['albumPosts'] });
-      for (const query of albumKeys) {
-        queryClient.setQueryData<DreamPostItem[]>(query.queryKey, (prev) => {
-          if (!prev) return prev;
-          return prev.map((p) =>
-            p.id === uploadId ? { ...p, comment_count: (p.comment_count ?? 0) + 1 } : p
-          );
-        });
-      }
+      // Bump the card's comment_count across every cache. Symmetric with
+      // useDeleteComment's -1 (both route through adjustCommentCount) so the
+      // denormalized count can't drift.
+      adjustCommentCount(queryClient, uploadId, 1);
     },
   });
 }

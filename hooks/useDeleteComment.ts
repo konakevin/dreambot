@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { adjustCommentCount } from '@/lib/commentCountCache';
 
 interface DeleteCommentArgs {
   commentId: string;
@@ -17,6 +18,10 @@ export function useDeleteComment() {
       if (error) throw error;
     },
     onSuccess: (_, { uploadId, parentId }) => {
+      // Mirror useAddComment's +1 so the card's comment_count actually drops
+      // (the DB trigger already decremented the real count). Without this the
+      // card stayed stuck at the optimistically-bumped value after a delete.
+      adjustCommentCount(queryClient, uploadId, -1);
       queryClient.invalidateQueries({ queryKey: ['comments', uploadId] });
       if (parentId) {
         queryClient.invalidateQueries({ queryKey: ['replies', parentId] });
@@ -40,6 +45,10 @@ export function useAdminDeleteComment() {
       if (error) throw error;
     },
     onSuccess: (_, { uploadId, parentId }) => {
+      // Mirror useAddComment's +1 so the card's comment_count actually drops
+      // (the DB trigger already decremented the real count). Without this the
+      // card stayed stuck at the optimistically-bumped value after a delete.
+      adjustCommentCount(queryClient, uploadId, -1);
       queryClient.invalidateQueries({ queryKey: ['comments', uploadId] });
       if (parentId) {
         queryClient.invalidateQueries({ queryKey: ['replies', parentId] });

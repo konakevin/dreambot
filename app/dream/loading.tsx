@@ -511,7 +511,9 @@ export default function DreamLoadingScreen() {
         </SafeAreaView>
       )}
 
-      {/* Classification confirmation — fires when photo is group/unclear, BEFORE sparkle spent */}
+      {/* Classification confirmation — fires only when the photo is genuinely
+        unreadable, BEFORE sparkles are spent. (Group photos are supported now
+        and no longer prompt — see useDreamCreate.) */}
       <Modal
         visible={!!pendingConfirm}
         transparent
@@ -521,18 +523,14 @@ export default function DreamLoadingScreen() {
         <View style={s.modalBackdrop}>
           <View style={s.modalCard}>
             <Ionicons
-              name={pendingConfirm?.type === 'group' ? 'people-outline' : 'help-circle-outline'}
+              name="help-circle-outline"
               size={32}
               color={colors.accent}
               style={{ marginBottom: verticalScale(12) }}
             />
-            <Text style={s.modalTitle}>
-              {pendingConfirm?.type === 'group' ? 'Multiple people detected' : 'Photo hard to read'}
-            </Text>
+            <Text style={s.modalTitle}>Photo hard to read</Text>
             <Text style={s.modalBody}>
-              {pendingConfirm?.type === 'group'
-                ? 'Adding your likeness only works for single-subject photos. We’ll describe everyone and include them in the scene, but it won’t be an exact match.'
-                : 'We had trouble identifying the subject. Results may surprise you.'}
+              We had trouble identifying the subject. Results may surprise you.
             </Text>
             <View style={s.modalActions}>
               <TouchableOpacity

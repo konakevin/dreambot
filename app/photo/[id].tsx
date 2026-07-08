@@ -32,11 +32,14 @@ import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
 
 export default function PhotoDetailScreen() {
-  const { id, downloadReady, comment } = useLocalSearchParams<{
+  const { id, downloadReady, comment, fromDeepLink } = useLocalSearchParams<{
     id: string;
     downloadReady?: string;
     /** Present when arriving from a comment notification — auto-open the thread. */
     comment?: string;
+    /** '1' when opened via a shared deep link — back/swipe return to the home
+     *  feed instead of popping to whatever the user had open. */
+    fromDeepLink?: string;
   }>();
   const user = useAuthStore((s) => s.user);
   const isPro = useAuthStore((s) => s.isPro);
@@ -203,11 +206,19 @@ export default function PhotoDetailScreen() {
   // axis-lock still keeps a vertical swipe from triggering a back. Native
   // full-screen back is disabled for this route in app/_layout.tsx.
   const pagerPanRef = useRef<GestureType | undefined>(undefined);
+  // Shared back action for the header chevron AND the swipe gesture: a
+  // deep-linked post has no in-app history to pop back to, so back returns to the
+  // home feed; otherwise normal safe-back.
+  const deepLinked = fromDeepLink === '1';
+  const goBack = useCallback(() => {
+    if (deepLinked) router.replace('/(tabs)');
+    else safeBack();
+  }, [deepLinked]);
   const {
     gesture: backGesture,
     animatedStyle: backStyle,
     ref: backRef,
-  } = useAxisLockSwipeBack({ simultaneousWith: pagerPanRef });
+  } = useAxisLockSwipeBack({ simultaneousWith: pagerPanRef, onDismiss: goBack });
 
   const overlayOpacity = useSharedValue(1);
   const overlayStyle = useAnimatedStyle(() => ({
@@ -345,7 +356,7 @@ export default function PhotoDetailScreen() {
         <Animated.View style={[s.root, backStyle]}>
           <StatusBar hidden />
           <Animated.View style={[s.backButton, overlayStyle]}>
-            <TouchableOpacity onPress={() => safeBack()} hitSlop={12}>
+            <TouchableOpacity onPress={() => goBack()} hitSlop={12}>
               <View style={s.backCircle}>
                 <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
               </View>
@@ -362,7 +373,7 @@ export default function PhotoDetailScreen() {
       <Animated.View style={[s.root, backStyle]}>
         <StatusBar hidden />
         <Animated.View style={[s.backButton, overlayStyle]}>
-          <TouchableOpacity onPress={() => safeBack()} hitSlop={12}>
+          <TouchableOpacity onPress={() => goBack()} hitSlop={12}>
             <View style={s.backCircle}>
               <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </View>

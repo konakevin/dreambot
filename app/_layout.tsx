@@ -73,7 +73,9 @@ function AuthInitializer() {
 
   // Handle deep links — auth callbacks + post/user navigation
   useEffect(() => {
-    async function handleUrl(url: string) {
+    // `warm` = the app was ALREADY running when the link was tapped (url event),
+    // vs a cold start (initial URL). They route posts differently — see below.
+    async function handleUrl(url: string, warm: boolean) {
       const parsed = Linking.parse(url);
       const path = parsed.path ?? '';
       const fragment = url.split('#')[1];
@@ -119,11 +121,24 @@ function AuthInitializer() {
       }
 
       // Deep link routing: dreambot://photo/{id} or https://dreambotapp.com/post/{id}
-      // Just store the post ID — the home screen picks it up when ready
       const postMatch = path.match(/^(?:post|photo)\/([a-f0-9-]+)$/i);
       if (postMatch) {
-        const { useFeedStore } = await import('@/store/feed');
-        useFeedStore.getState().setPendingPostId(postMatch[1]);
+        const postId = postMatch[1];
+        if (warm) {
+          // App already open: navigate STRAIGHT to the post screen. The old
+          // path stashed a pendingPostId for the home feed to "pick up", but on
+          // a warm launch the feed is already mounted + anchored, so it left the
+          // user on their last-viewed post (Kevin 2026-07-08). fromDeepLink=1
+          // makes back/swipe return to the home feed (no in-app history to pop).
+          const { router } = await import('expo-router');
+          router.push(`/photo/${postId}?fromDeepLink=1`);
+        } else {
+          // Cold start: Expo Router's linking already routes the URL to
+          // /photo/[id]; stash the id so the home feed pins it underneath, so
+          // backing out of the post lands on a feed that includes it.
+          const { useFeedStore } = await import('@/store/feed');
+          useFeedStore.getState().setPendingPostId(postId);
+        }
         return;
       }
       const userMatch = path.match(/^user\/([a-f0-9-]+)$/i);
@@ -134,11 +149,11 @@ function AuthInitializer() {
     }
 
     // App already open when link is tapped
-    const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url));
+    const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url, true));
 
     // App was closed and opened via the link
     Linking.getInitialURL().then((url) => {
-      if (url) handleUrl(url);
+      if (url) handleUrl(url, false);
     });
 
     return () => subscription.remove();

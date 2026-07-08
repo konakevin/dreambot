@@ -28,6 +28,7 @@ import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost } from '@/hooks/useDeletePost';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
+import { useCommentDrafts } from '@/store/commentDrafts';
 import { LikesOverlay } from '@/components/LikesOverlay';
 import { VerticalPager, type VerticalPagerHandle } from '@/components/VerticalPager';
 import type { GestureType } from 'react-native-gesture-handler';
@@ -433,6 +434,9 @@ export function FullScreenFeed({
         // card's flips false), refiring each one's in-card HUD-reset effect —
         // only those two cards re-render, not the whole window.
         setActiveId(posts[idx]?.id ?? null);
+        // Swiping to a new card discards any WIP comment draft on the cards you
+        // left (drafts persist only while you're on the same card).
+        useCommentDrafts.getState().clearExcept(posts[idx]?.id ?? null);
         // Prefetch next 3 images
         const upcoming = posts.slice(idx + 1, idx + 4);
         if (upcoming.length > 0) {
