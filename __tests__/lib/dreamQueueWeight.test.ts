@@ -67,4 +67,42 @@ describe('classifyDreamWeight', () => {
       classifyDreamWeight({ ...castOf(1), hint: 'a dragon soaring over a volcano' }, CFG)
     ).toBe('light');
   });
+
+  it('New Scene REFERENCE render (pet / group / person+pet) = light (no swap)', () => {
+    const base = { input_image: 'data:image/jpeg;base64,x', photo_style: 'new_scene' };
+    expect(
+      classifyDreamWeight(
+        { ...base, subject_type: 'animal', num_people: 0, num_animals: 1, face: 'none' },
+        CFG
+      )
+    ).toBe('light');
+    expect(
+      classifyDreamWeight(
+        { ...base, subject_type: 'group', num_people: 2, num_animals: 0, face: 'multi' },
+        CFG
+      )
+    ).toBe('light');
+    expect(
+      classifyDreamWeight(
+        { ...base, subject_type: 'person', num_people: 1, num_animals: 1, face: 'clean' },
+        CFG
+      )
+    ).toBe('light'); // person + pet
+  });
+
+  it('New Scene clean solo human (no pet) = heavy (solo face swap)', () => {
+    expect(
+      classifyDreamWeight(
+        {
+          input_image: 'data:image/jpeg;base64,x',
+          photo_style: 'new_scene',
+          subject_type: 'person',
+          num_people: 1,
+          num_animals: 0,
+          face: 'clean',
+        },
+        CFG
+      )
+    ).toBe('heavy');
+  });
 });

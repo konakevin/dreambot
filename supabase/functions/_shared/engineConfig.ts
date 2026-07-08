@@ -35,6 +35,11 @@ export interface EngineConfig {
   dreamQueueMaxConcurrent: number; // LIGHT (text, no-swap) cap
   dreamQueueMaxConcurrentHeavy: number; // HEAVY (face-swap / dual) cap
   dreamQueueMaxJobsPerTick: number;
+  // New Scene reference path (migration 341). Cap = group-size limit; the two
+  // prices are the flat Standard / Best-likeness tiers.
+  newSceneMaxPeople: number;
+  newScenePriceStandard: number;
+  newScenePriceBest: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -53,6 +58,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   dreamQueueMaxConcurrent: 40,
   dreamQueueMaxConcurrentHeavy: 15,
   dreamQueueMaxJobsPerTick: 10,
+  newSceneMaxPeople: 3,
+  newScenePriceStandard: 3,
+  newScenePriceBest: 5,
 };
 
 let cached: EngineConfig | null = null;
@@ -98,6 +106,11 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     dreamQueueMaxJobsPerTick: Number(
       data.dream_queue_max_jobs_per_tick ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxJobsPerTick
     ),
+    newSceneMaxPeople: Number(data.new_scene_max_people ?? DEFAULT_ENGINE_CONFIG.newSceneMaxPeople),
+    newScenePriceStandard: Number(
+      data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
+    ),
+    newScenePriceBest: Number(data.new_scene_price_best ?? DEFAULT_ENGINE_CONFIG.newScenePriceBest),
   };
   return cached;
 }

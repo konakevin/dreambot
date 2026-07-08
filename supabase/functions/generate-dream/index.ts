@@ -24,6 +24,13 @@ import { genderFromLock } from '../_shared/dualGenderRouting.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
 import { resolveMediumFromDb, resolveVibeFromDb } from '../_shared/dreamStyles.ts';
 import { applyCleanMedium, fetchCleanMedium } from '../_shared/cleanMedium.ts';
+import {
+  routeNewSceneSubject,
+  buildNewScenePrompt,
+  newSceneModel,
+  newSceneFallbackModel,
+  type NewSceneTier,
+} from '../_shared/newSceneDirective.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
 import { resolveCastForPrompt } from '../_shared/castResolver.ts';
 import { expandScene } from '../_shared/sceneExpander.ts';
@@ -111,6 +118,16 @@ interface RequestBody {
    *   - 'scenery' → description path: scene built inspired by the place, no face-swap
    */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
+  /** New Scene reference path (classify-photo structured signals). When present,
+   *  the upload routes on these (solo-swap vs reference-by-kind) instead of the
+   *  legacy subject_type. Absent (old client) → legacy routing, unchanged. */
+  num_people?: number;
+  num_animals?: number;
+  face?: 'clean' | 'multi' | 'none' | 'unclear';
+  /** New Scene pricing tier ('standard' | 'best'). Present ⇒ the client is on the
+   *  new tier-priced flow; the server charges the flat tier price (never
+   *  force_model) for a new_scene photo. */
+  new_scene_tier?: 'standard' | 'best';
   /** Optional user-supplied caption stored on the upload. No auto-generation. */
   description?: string;
   /** DLT recipe-replay: when present + valid, locks medium/vibe/model from
@@ -271,6 +288,9 @@ async function handleRequest(req: Request): Promise<Response> {
     style_prompt,
     subject_description,
     subject_type,
+    num_people,
+    num_animals,
+    face,
     dlt_recipe,
   } = body;
   // When false, render + return WITHOUT inserting an uploads row — the caller
@@ -461,7 +481,38 @@ async function handleRequest(req: Request): Promise<Response> {
     // DreamBot (no force_model) → engine_config.base_sparkle_cost (admin-tunable,
     // default 1); Direct/DLT → the picked model's cost. Mirrors the client.
     const cfg = await fetchEngineConfig(supabase);
-    const dreamCost = force_model ? getSparkleCost(force_model) : cfg.baseSparkleCost;
+    // New Scene tier pricing: a new_scene photo from a tier-aware client charges
+    // the flat Standard/Best price by a server-validated enum (NEVER force_model,
+    // so a tampered force_model can't buy the premium model at the flat price).
+    // Old clients (no new_scene_tier) keep the legacy cost, unchanged.
+    const isNewScenePhoto = !!input_image && photo_style === 'new_scene';
+    const newSceneTierReq: NewSceneTier | null =
+      body.new_scene_tier === 'best'
+        ? 'best'
+        : body.new_scene_tier === 'standard'
+          ? 'standard'
+          : null;
+    // Edge backstop for the group-size cap (the client blocks this pre-charge; a
+    // hostile client could skip it). Reject BEFORE charging.
+    if (
+      isNewScenePhoto &&
+      newSceneTierReq &&
+      typeof num_people === 'number' &&
+      num_people > cfg.newSceneMaxPeople
+    ) {
+      return new Response(
+        JSON.stringify({ error: 'new_scene_too_many_people', max: cfg.newSceneMaxPeople }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    const dreamCost =
+      isNewScenePhoto && newSceneTierReq
+        ? newSceneTierReq === 'best'
+          ? cfg.newScenePriceBest
+          : cfg.newScenePriceStandard
+        : force_model
+          ? getSparkleCost(force_model)
+          : cfg.baseSparkleCost;
     try {
       const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
         p_user_id: userId,
@@ -516,6 +567,10 @@ async function handleRequest(req: Request): Promise<Response> {
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; genderLock: string | null }>
     | undefined;
+  // New Scene reference render (NEW_SCENE_QUALITY_PLAN.md). When set, the render
+  // section below forces mode='flux-kontext' + keeps input_image + uses this
+  // model (Seedream / Nano Banana), with NO face swap. Null = not a reference render.
+  let newSceneRefModel: string | null = null;
 
   // ── Observability (Phase 1 of V4 hardening) ─────────────────────────────────
   // Capture the full LLM exchange + fallback audit trail so every generation
@@ -616,7 +671,58 @@ async function handleRequest(req: Request): Promise<Response> {
       !!input_image
     );
 
-    if (isPhoto && photo_style === 'new_scene' && subject_type && subject_type !== 'person') {
+    // ── New Scene REFERENCE route ────────────────────────────────────────────
+    // Uploaded photo → reimagined into a NEW scene via a reference model (no
+    // face swap). Gated on the client sending classify-photo's structured
+    // signals; old clients (no signals) fall through to the legacy branches
+    // below, unchanged. See NEW_SCENE_QUALITY_PLAN.md.
+    const hasNewSceneSignals =
+      isPhoto && photo_style === 'new_scene' && typeof num_people === 'number' && !!face;
+    const newSceneRoute = hasNewSceneSignals
+      ? routeNewSceneSubject({
+          type: subject_type ?? 'unclear',
+          num_people: num_people as number,
+          num_animals: num_animals ?? 0,
+          face: face as string,
+        })
+      : null;
+
+    if (newSceneRoute && newSceneRoute.mode === 'reference') {
+      const kind = newSceneRoute.kind;
+      // Stylized/real-face mediums carry a restyleModel in the DB (Restyle
+      // curation); photoreal mediums don't. Best tier → Nano Banana Pro.
+      const stylized =
+        !!medium.restyleModel || (medium.restyleModels != null && medium.restyleModels.length > 0);
+      const tier: NewSceneTier = body.new_scene_tier === 'best' ? 'best' : 'standard';
+      newSceneRefModel = newSceneModel({ stylized, tier });
+      visionDescription = subject_description ?? null;
+      finalPrompt = buildNewScenePrompt({
+        kind,
+        subjectDescription: subject_description ?? '',
+        scene: hint ?? '',
+        mediumProse: medium.directive ?? '',
+        vibeProse: vibe.directive ?? '',
+      });
+      logAxes = {
+        medium: medium.key,
+        vibe: vibe.key,
+        engine: 'v3-new-scene-reference',
+        newSceneKind: kind,
+        newSceneTier: tier,
+        newSceneModel: newSceneRefModel,
+        faceSwap: false,
+      };
+      console.log(
+        `[generate-dream] NEW SCENE reference | kind=${kind} tier=${tier} model=${newSceneRefModel} | prompt=${finalPrompt.slice(0, 90)}...`
+      );
+      // Do NOT set photoOverrideMode (keeps input_image) and do NOT set
+      // faceSwapSource (no swap). The render section uses newSceneRefModel.
+    } else if (
+      isPhoto &&
+      photo_style === 'new_scene' &&
+      subject_type &&
+      subject_type !== 'person'
+    ) {
       // ── DESCRIPTION ROUTE: animal / object / scenery photo subjects.
       // The uploaded subject is literally included in the invented scene.
       // No face-swap, no character block — subject is the scene's focal element.
@@ -1393,8 +1499,14 @@ Output ONLY the prompt.`;
   // Legacy branches (rawPrompt, haiku_brief, vibe_profile, recipe) deleted Phase 3.2.
   // Nightly path moved to nightly-dreams Edge Function Phase 3.3.
 
-  const effectiveMode = photoOverrideMode ?? mode;
-  const effectiveInputImage = photoOverrideMode ? undefined : input_image;
+  // New Scene reference render forces the kontext (image-input) path and keeps
+  // the uploaded photo as the reference (overriding the flux-dev photo-discard).
+  const effectiveMode = newSceneRefModel ? 'flux-kontext' : (photoOverrideMode ?? mode);
+  const effectiveInputImage = newSceneRefModel
+    ? input_image
+    : photoOverrideMode
+      ? undefined
+      : input_image;
 
   finalPrompt = sanitizePrompt(finalPrompt);
 
@@ -1404,7 +1516,7 @@ Output ONLY the prompt.`;
     resolvedMediumKey,
     resolvedVibeKey
   );
-  let pickedModel = force_model || autoPicked.model;
+  let pickedModel = newSceneRefModel || force_model || autoPicked.model;
 
   // ── Dual-face-swap safety clamp: Flux 1.1 Pro Ultra → Flux 1.1 Pro ──
   // Flux 1.1 Pro Ultra renders at 4MP. The dual-swap pipeline has to decode
@@ -1446,14 +1558,54 @@ Output ONLY the prompt.`;
     // Force JPEG when this dream will go through dual-face-swap (preserves
     // the 2026-05-09 HTTP 546 fix). Otherwise PNG for lossless quality.
     const willDualFaceSwap = !!(faceSwapSources && faceSwapSources.length === 2);
-    const genResult = await generateImage(
-      effectiveMode,
-      finalPrompt,
-      effectiveInputImage,
-      { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
-      pickedModel,
-      willDualFaceSwap ? 'jpg' : 'png'
-    );
+    const genCreds = {
+      replicateToken: REPLICATE_TOKEN,
+      openaiKey: OPENAI_KEY,
+      geminiKey: GEMINI_KEY,
+    };
+    // New Scene reference render: on a refusal/failure, retry the bucket's other
+    // model ONCE (visible fallback) before the outer catch refunds. Never
+    // silently substitutes a reinvented subject — a second failure → refund.
+    let genResult;
+    if (newSceneRefModel) {
+      try {
+        genResult = await generateImage(
+          effectiveMode,
+          finalPrompt,
+          effectiveInputImage,
+          genCreds,
+          pickedModel,
+          'png'
+        );
+      } catch (refErr) {
+        const alt = newSceneFallbackModel(pickedModel);
+        fallbackReasons.push(
+          `new_scene_ref_retry:${pickedModel}->${alt}:${(refErr as Error).message.slice(0, 60)}`
+        );
+        console.warn(
+          `[generate-dream] NEW SCENE ${pickedModel} failed (${(refErr as Error).message}); retrying ${alt}`
+        );
+        pickedModel = alt;
+        logAxes.newSceneModel = alt;
+        genResult = await generateImage(
+          effectiveMode,
+          finalPrompt,
+          effectiveInputImage,
+          genCreds,
+          alt,
+          'png'
+        );
+      }
+    } else {
+      genResult = await generateImage(
+        effectiveMode,
+        finalPrompt,
+        effectiveInputImage,
+        genCreds,
+        pickedModel,
+        willDualFaceSwap ? 'jpg' : 'png'
+      );
+    }
     let tempUrl = genResult.url;
     replicatePredictionId = genResult.predictionId;
     if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {

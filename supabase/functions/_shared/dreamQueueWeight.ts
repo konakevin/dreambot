@@ -10,6 +10,7 @@
  * Extracted from enqueue-dream so it's unit-testable as pure logic.
  */
 import { detectSelfInsert } from './selfInsertDetector.ts';
+import { routeNewSceneSubject } from './newSceneDirective.ts';
 
 export interface WeightConfig {
   relationshipWords: string;
@@ -21,6 +22,26 @@ export function classifyDreamWeight(
   body: Record<string, unknown>,
   cfg: WeightConfig
 ): 'light' | 'heavy' {
+  // New Scene REFERENCE renders do NOT use the Fly swap service → LIGHT. Only a
+  // solo-swap new_scene (a clean single human) hits the swap service. Gated on
+  // the client sending classify-photo's structured signals; old clients skip
+  // this and keep the legacy heavy classification below.
+  if (
+    !!body.input_image &&
+    body.photo_style === 'new_scene' &&
+    typeof body.num_people === 'number' &&
+    typeof body.face === 'string'
+  ) {
+    const route = routeNewSceneSubject({
+      type: typeof body.subject_type === 'string' ? body.subject_type : 'unclear',
+      num_people: body.num_people as number,
+      num_animals: typeof body.num_animals === 'number' ? body.num_animals : 0,
+      face: body.face as string,
+    });
+    if (route.mode === 'reference') return 'light';
+    // solo_swap → falls through to the heavy path below (it does a face swap).
+  }
+
   const cast = (body.vibe_profile as { dream_cast?: unknown[] } | undefined)?.dream_cast ?? [];
   const hasCast = Array.isArray(cast) && cast.length > 0;
   const hint = typeof body.hint === 'string' ? body.hint : '';

@@ -227,7 +227,34 @@ Deno.serve(async (req) => {
   // the price stays server-driven. The render's own charge is then a no-op.
   await loadModelCosts(supabase);
   const cfg = await fetchEngineConfig(supabase);
-  const dreamCost = forceModel ? getSparkleCost(forceModel) : cfg.baseSparkleCost;
+  // New Scene tier pricing (mirrors generate-dream): a new_scene photo from a
+  // tier-aware client charges the flat Standard/Best price by a server-validated
+  // enum (never force_model). Old clients (no new_scene_tier) → legacy cost.
+  const isNewScenePhoto = !!body.input_image && body.photo_style === 'new_scene';
+  const newSceneTierReq =
+    body.new_scene_tier === 'best'
+      ? 'best'
+      : body.new_scene_tier === 'standard'
+        ? 'standard'
+        : null;
+  // Edge backstop for the group-size cap (the client blocks pre-charge; reject
+  // here too so a hostile client can't skip it). Before charging.
+  if (
+    isNewScenePhoto &&
+    newSceneTierReq &&
+    typeof body.num_people === 'number' &&
+    body.num_people > cfg.newSceneMaxPeople
+  ) {
+    return json({ error: 'new_scene_too_many_people', max: cfg.newSceneMaxPeople }, 400);
+  }
+  const dreamCost =
+    isNewScenePhoto && newSceneTierReq
+      ? newSceneTierReq === 'best'
+        ? cfg.newScenePriceBest
+        : cfg.newScenePriceStandard
+      : forceModel
+        ? getSparkleCost(forceModel)
+        : cfg.baseSparkleCost;
   const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
     p_user_id: userId,
     p_amount: dreamCost,
