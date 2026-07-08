@@ -1,6 +1,6 @@
 # NEW_SCENE_QUALITY_PLAN.md — freeform uploaded-photo New Scene, done right
 
-**Status:** APPROVED + Phase 0 QA COMPLETE 2026-07-08. No engine code yet. Grounded in the
+**Status:** APPROVED + Phase 0 QA COMPLETE + PHASE 1 BUILT/DEPLOYED 2026-07-08. Grounded in the
 4-agent render-flow audit + two ruthless reviews + three production measurements + a real-photo
 likeness/recomposition bench (the capability contract below). Reverses one v1 overreach (do NOT
 drop the solo swap); the supported-input set and the `new_scene_max_people = 3` cap are now
@@ -319,6 +319,40 @@ Restyle read as one family.
 1. Which exact mediums fall in each bucket (seed from Restyle; Kevin's taste call).
 2. Confirm NB-Pro-vs-Seedream on the *photoreal* Best-likeness tier (minor; Seedream is the
    proven Standard).
+
+## Build status (2026-07-08)
+
+**Phase 1 — BUILT + DEPLOYED (server live, client committed):**
+- `classify-photo` structured signals (deployed, verified 11/11).
+- `generate-dream` + `enqueue-dream` reference render path: fork → `buildNewScenePrompt`
+  (per-kind prose + real medium/vibe directives) → bucket model with `input_image`, visible
+  fallback, flat tier charge (server-validated enum), 4+ cap backstop, reference uploads → light
+  (deployed).
+- Migration 341 (applied). Client: signals + tier sent, pre-charge cap Toast, flat price shown.
+- Render-validated end-to-end with the REAL production path (not just the models): place
+  hallucination fixed, couple/person+pet/pet preserved under the heavy real directives, medium
+  + vibe both apply, Restyle stays composition-preserving.
+- **To ship to users:** cut build 11 (`eas build -p ios --profile production`) — the server is
+  live + dormant for old clients, so nothing breaks pre-build.
+
+**Phase 2 — UI polish checklist (no build needed to write; needs a build to test):**
+- [ ] **Best-likeness tier toggle** — New Scene `new_scene_tier` is hardcoded `'standard'`; add
+  the Standard/Best on-screen toggle (reference route only) + wire `new_scene_price_best`.
+  Files: `create.tsx` (control), `useDreamCreate.ts` (send the chosen tier).
+- [ ] **Hide the raw model picker on New Scene** — it's cosmetic there now; `create.tsx:986`
+  gate is `(!hasPhoto || photoStyle==='new_scene')` → drop the new_scene clause.
+- [ ] **Identity chip** — route-aware: `✦ Your exact face` (solo-swap / cast) vs
+  `Your likeness, reimagined` (reference). Needs attach-time classification to know the route.
+- [ ] **"Transform a photo" framing + promise lines** — the describe-vs-transform copy
+  (see "Communicating the split"), reimagine word never "face swap".
+- [ ] **Point-of-action nudge** — reference-route-with-a-person → "Uploads are reimagined, not
+  face-swapped. For your exact face, use your Dream Cast."
+- [ ] **Attach-time classification** — move classify from submit to photo-attach so the chip /
+  tier / cap message resolve *before* Dream (the cap already blocks pre-charge either way).
+- [ ] **Group/unclear confirm-modal copy reframe** — group is now supported, so its warning tone
+  → "here's what you'll get."
+- [ ] (optional) **Describe / Transform segmented control** + the `photo present ⟺ Transform`
+  state rule.
 
 ## Reference points in code
 
