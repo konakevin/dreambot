@@ -13,8 +13,6 @@
       "env": {
         "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
         "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
-        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN",
-        "EXPO_PUBLIC_POSTHOG_KEY": "$EXPO_PUBLIC_POSTHOG_KEY",
         "EXPO_PUBLIC_APP_ENV": "development"
       }
     },
@@ -26,8 +24,6 @@
       "env": {
         "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
         "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
-        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN",
-        "EXPO_PUBLIC_POSTHOG_KEY": "$EXPO_PUBLIC_POSTHOG_KEY",
         "EXPO_PUBLIC_APP_ENV": "preview"
       }
     },
@@ -36,8 +32,6 @@
       "env": {
         "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
         "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
-        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN",
-        "EXPO_PUBLIC_POSTHOG_KEY": "$EXPO_PUBLIC_POSTHOG_KEY",
         "EXPO_PUBLIC_APP_ENV": "production"
       }
     }

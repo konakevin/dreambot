@@ -552,8 +552,27 @@ function AnalyticsIdentity() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
   useEffect(() => {
     setAnalyticsOptOut(isAdmin);
-    if (userId) identifyUser(userId);
-    else resetAnalytics();
+    if (!userId) {
+      resetAnalytics();
+      return;
+    }
+    // Attach username as a person property — without it PostHog persons are
+    // anonymous UUIDs and activity reports can't be joined to accounts
+    // (2026-07-07 analytics audit). identify is idempotent; re-running with
+    // the property enriches the same person.
+    let cancelled = false;
+    supabase
+      .from('users')
+      .select('username')
+      .eq('id', userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (cancelled) return;
+        identifyUser(userId, data?.username ? { username: data.username } : undefined);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [userId, isAdmin]);
   return null;
 }
