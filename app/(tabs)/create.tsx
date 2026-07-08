@@ -21,6 +21,7 @@ import {
   Modal,
   Linking,
   LayoutAnimation,
+  useWindowDimensions,
   type KeyboardEvent,
 } from 'react-native';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
@@ -35,7 +36,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as nav from '@/lib/navigate';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale, useDeviceClass, isTabletDevice } from '@/lib/responsive';
+import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 import { hasAiConsent } from '@/lib/aiConsent';
 import { detectCastRoles } from '@/lib/selfInsertDetect';
@@ -115,10 +116,34 @@ export default function CreateScreen() {
   // the controls pop a beat later" jank (Kevin 2026-07-03). Android has no
   // will* events, so it keeps did* (and still gets the animated swap).
   const [kbOpen, setKbOpen] = useState(false);
+  // Live keyboard height (from the native event) — reserved as bottom padding so
+  // the flex-filled prompt stretches down to the keyboard's top, not behind it.
+  const [kbHeight, setKbHeight] = useState(0);
+  // Measured height of the sticky Dream CTA footer that floats above the
+  // keyboard. Used to compute the exact prompt height (below).
+  const [footerHeight, setFooterHeight] = useState(0);
+  // Window Y of the prompt box's top edge (measured in window coords). With the
+  // window height + keyboard + Dream-CTA heights, this lets us compute an EXACT
+  // prompt height that stretches to just above the Dream button, instead of
+  // relying on flaky flex-through-scrollview behavior.
+  const promptWrapRef = useRef<View>(null);
+  const [promptTopY, setPromptTopY] = useState(0);
+  const measurePromptTop = useCallback(() => {
+    promptWrapRef.current?.measureInWindow((_x, y) => {
+      if (y > 0) setPromptTopY(y);
+    });
+  }, []);
+  // Re-measure when the keyboard toggles — the folded controls change the prompt's
+  // top. rAF lets the collapse layout settle first.
+  useEffect(() => {
+    const id = requestAnimationFrame(measurePromptTop);
+    return () => cancelAnimationFrame(id);
+  }, [kbOpen, measurePromptTop]);
   useEffect(() => {
     const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
     const onToggle = (open: boolean) => (e: KeyboardEvent) => {
+      if (open && e?.endCoordinates?.height) setKbHeight(e.endCoordinates.height);
       LayoutAnimation.configureNext({
         duration: e?.duration && e.duration > 0 ? e.duration : 250,
         update: { type: LayoutAnimation.Types.keyboard },
@@ -446,8 +471,27 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
-  // This dream's sparkle cost — shown on the Dream button AND next to the model
-  // name in the collapsed summary so the price is always visible. Restyle
+  // Compact one-line summary of the collapsed engine controls, shown while the
+  // keyboard is up so the prompt can take the freed vertical space. Text dreams
+  // fold Model + Mode; New Scene folds the mode toggle + likeness tier.
+  const collapsedEngineSummary = isNewScene
+    ? `New Scene · ${config.newSceneTier === 'best' ? 'Best likeness' : 'Standard'}`
+    : `${modelLabel} · ${config.useExactPrompt ? 'Direct' : 'DreamBot'}`;
+  // Phone: the prompt is the last field and stretches down to the Dream CTA
+  // (keyboard-up: down to the keyboard). iPad keeps its centered fixed-height
+  // card, so it opts out.
+  const fillPrompt = !isTabletDevice;
+  // EXACT prompt height so its bottom lands just above the Dream button on any
+  // screen size: (Dream-button top) − (prompt top) − gap. The Dream button rides
+  // above the keyboard when it's up, above the tab bar when it's down.
+  const { height: windowHeight } = useWindowDimensions();
+  const dreamButtonTop = windowHeight - (kbOpen ? kbHeight : tabBarHeight) - footerHeight;
+  const computedPromptHeight =
+    fillPrompt && promptTopY > 0
+      ? Math.max(verticalScale(120), dreamButtonTop - promptTopY - verticalScale(20))
+      : undefined;
+  // This dream's sparkle cost — shown next to the model name so the price is
+  // always visible. Restyle
   // charges by ITS OWN picked model (Kontext 1 / NB Pro 5, sent as force_model
   // — enqueue-dream prices getSparkleCost(force_model)); pool-managed restyle
   // mediums (LEGO/Vinyl) send no force_model and stay at the flat base cost.
@@ -476,18 +520,12 @@ export default function CreateScreen() {
     }
   }, [isRestyle, restylePoolManaged, restyleModelId, selectedModelId, setForceModel]);
 
-  // Collapse the model + medium/vibe controls into a one-line summary while the
-  // keyboard is up — keeps the selected medium/vibe visible and the Dream CTA one
-  // tap away. NOT in Direct mode (no medium/vibe there). Tapping the summary
-  // dismisses the keyboard, which restores the full form.
-  //
-  // Collapse on EVERY phone while the keyboard is up. The Jun-19 carve-out
-  // ("text-only on normal devices has room, keep the full form") stopped being
-  // true as the form grew — by 2026-07-02 the medium/vibe controls sat under
-  // the keyboard even on an 852pt iPhone 15 Pro (Kevin), hiding the selection.
-  // Only iPad genuinely has room for the expanded form with the keyboard open.
-  const { isTablet } = useDeviceClass();
-  const collapsed = kbOpen && !effectiveExactPrompt && !isTablet;
+  // Keyboard handling is fully scrollable (Instagram-style): the form shifts up
+  // and stays scrollable so every control below the prompt is reachable while
+  // typing, and a drag dismisses the keyboard. No collapse-to-summary — that
+  // custom fold hid controls and grew fragile as the form did. `kbOpen` only
+  // drives the extra bottom padding that lets the last field clear the sticky
+  // Dream CTA (see the KeyboardAwareScrollView below).
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -716,16 +754,27 @@ export default function CreateScreen() {
         </View>
 
         {/* Scrollable content — KeyboardAwareScrollView keeps the focused prompt
-            (and the Dream CTA below it) above the keyboard on every device,
-            measuring the real keyboard frame natively instead of guessing. */}
+            above the keyboard AND lets the whole form scroll under it, so every
+            control below the prompt (Medium/Vibe/tier) is reachable while typing.
+            `keyboardDismissMode="interactive"` gives the native drag-to-dismiss
+            (Instagram-style) instead of dismissing the moment a scroll begins. */}
         <KeyboardAwareScrollView
           className="flex-1 px-5"
-          bottomOffset={verticalScale(24)}
+          bottomOffset={footerHeight + verticalScale(16)}
           keyboardShouldPersistTaps="handled"
-          onScrollBeginDrag={() => Keyboard.dismiss()}
+          keyboardDismissMode="interactive"
           showsVerticalScrollIndicator={false}
+          // No rubber-banding — the prompt is sized to fit exactly, so the form
+          // should not over-scroll into empty space.
+          bounces={false}
+          onLayout={measurePromptTop}
           contentContainerStyle={[
-            { paddingBottom: tabBarHeight + verticalScale(16) },
+            {
+              // The prompt is sized to reach the Dream CTA, so the content fits;
+              // only a small bottom gap is needed (tab-bar clearance when the
+              // keyboard is down).
+              paddingBottom: kbOpen ? verticalScale(8) : tabBarHeight + verticalScale(16),
+            },
             // iPad: vertically center the form + CTA group so a short form isn't
             // top-anchored above a big empty void (no-op on phone).
             isTabletDevice && { flexGrow: 1, justifyContent: 'center' },
@@ -788,8 +837,10 @@ export default function CreateScreen() {
               </View>
             )}
 
-            {/* Photo mode toggle — only when a photo is attached */}
-            {hasPhoto && (
+            {/* Photo mode toggle — only when a photo is attached. Folds away while
+              the keyboard is up (collapsed into the summary row below the pickers)
+              so the prompt can take the freed space. */}
+            {hasPhoto && !kbOpen && (
               <View className="mb-3">
                 <View
                   className="flex-row rounded-xl p-1"
@@ -864,27 +915,26 @@ export default function CreateScreen() {
                     </Text>
                   </TouchableOpacity>
                 </View>
+                {/* Mode subtext — a quiet one-liner explaining the mode. Muted so
+                  it reads as a hint, not a headline. */}
                 <Text
-                  className="text-xs mt-1.5 px-1"
-                  style={{ color: colors.textSecondary, opacity: 0.7 }}
+                  className="mt-1.5 px-1"
+                  style={{
+                    color: colors.textSecondary,
+                    fontSize: fontScale(12.5),
+                    lineHeight: fontScale(17),
+                  }}
                 >
                   {config.photoStyle === 'new_scene'
-                    ? 'We’ll reimagine your photo into a new scene. Keeps its look; for your exact face, describe a dream and say “me” instead.'
-                    : 'We’ll restyle your photo in this medium, keeping the pose.'}
+                    ? 'Reimagines your photo into a new scene you describe.'
+                    : 'Repaints your photo, keeping its composition.'}
                 </Text>
 
-                {/* New Scene — identity chip + likeness tier. The chip sets the
-                  expectation (reference-render, not an exact swap); the tier
-                  toggle picks Standard vs Best-likeness (Nano Banana Pro), which
-                  the server maps to the reference model + price. */}
+                {/* New Scene — likeness tier (Standard vs Best-likeness / Nano
+                  Banana Pro), which the server maps to the reference model +
+                  price. */}
                 {config.photoStyle === 'new_scene' && (
                   <View className="mt-3">
-                    <View className="flex-row items-center gap-1.5 mb-2 px-1">
-                      <Ionicons name="color-wand-outline" size={13} color="#A78BFA" />
-                      <Text className="text-xs font-semibold" style={{ color: '#A78BFA' }}>
-                        Your likeness, reimagined
-                      </Text>
-                    </View>
                     <View
                       className="flex-row rounded-xl p-1"
                       style={{
@@ -952,121 +1002,13 @@ export default function CreateScreen() {
               </View>
             )}
 
-            {/* Prompt input — hidden when a photo is in Restyle mode, since
-              that path is medium+vibe only (no prompt influence). The
-              underlying `config.userPrompt` is preserved so flipping back
-              to New Scene restores whatever the user had typed. */}
-            {!(hasPhoto && config.photoStyle === 'restyle') && (
-              <View
-                className="rounded-xl mb-4"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-              >
-                <TextInput
-                  ref={promptRef}
-                  className="px-4 py-4"
-                  style={{
-                    // Responsive type instead of fixed text-base, at a smaller
-                    // 14pt base — 16 read oversized even at the design size
-                    // (Kevin 2026-07-02). Placeholder overlay below must stay in
-                    // lockstep so the hint aligns exactly where typed text begins.
-                    fontSize: fontScale(14),
-                    lineHeight: fontScale(20),
-                    color: colors.textPrimary,
-                    // Fixed height — long prompts scroll internally rather than
-                    // stretching the box. iOS multiline TextInputs scroll
-                    // automatically when height is fixed. A bit taller than strictly
-                    // needed so the box reads as "write something here" and the page
-                    // feels fuller; the KeyboardAwareScrollView still floats it above
-                    // the keyboard on focus.
-                    height: 144,
-                    textAlignVertical: 'top',
-                  }}
-                  value={config.userPrompt}
-                  onChangeText={setPrompt}
-                  maxLength={engineConfig.promptMaxLength}
-                  multiline
-                  scrollEnabled
-                  returnKeyType="default"
-                />
-                {/* Custom placeholder overlay instead of the native one. iOS's
-                  multiline placeholder ignores textAlignVertical:'top' until focus
-                  (it floats vertically centered) AND won't re-wrap when the text
-                  changes while unfocused. A top-aligned Text overlay (taps pass
-                  through) sits exactly where typed text begins, so the hint is
-                  stable across the photo toggle and on focus. */}
-                {!config.userPrompt && (
-                  <View
-                    pointerEvents="none"
-                    className="px-4 py-4"
-                    style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: fontScale(14),
-                        lineHeight: fontScale(20),
-                        color: colors.textMuted ?? '#6B7280',
-                      }}
-                    >
-                      {placeholder}
-                    </Text>
-                  </View>
-                )}
-                {/* Footer: Clear + live character count. Only rendered when the
-                  box has text (so an empty box stays clean and shows just the
-                  placeholder). Sits below the input with a hairline divider so
-                  it never overlaps the typed prompt. Clear keeps focus so you
-                  can immediately retype. */}
-                {config.userPrompt.length > 0 && (
-                  <View
-                    className="flex-row items-center justify-end px-4 py-2"
-                    style={{ borderTopWidth: 1, borderTopColor: colors.border, gap: 14 }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: fontScale(12),
-                        fontVariant: ['tabular-nums'],
-                        color:
-                          config.userPrompt.length >= engineConfig.promptMaxLength
-                            ? colors.error
-                            : (colors.textMuted ?? '#6B7280'),
-                      }}
-                    >
-                      {config.userPrompt.length} / {engineConfig.promptMaxLength}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        setPrompt('');
-                        promptRef.current?.focus();
-                      }}
-                      hitSlop={{ top: 8, bottom: 8, left: 12, right: 8 }}
-                      activeOpacity={0.6}
-                    >
-                      <Text
-                        style={{
-                          fontSize: fontScale(13),
-                          fontWeight: '600',
-                          color: colors.textSecondary,
-                        }}
-                      >
-                        Clear
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            )}
-
             {/* Unified AI-model picker — top-level. The model is orthogonal to the
               engine: any model can render a raw (Direct) prompt or a full DreamBot
               dream. Hidden for BOTH photo modes: New Scene routes to a fixed
               reference model (Standard/Best tier picks it), and Restyle is an
-              img2img transform with its OWN edit-capable picker below. */}
-            {!hasPhoto && !collapsed && (
+              img2img transform with its OWN edit-capable picker below.
+              Folds into the summary row while the keyboard is up. */}
+            {!hasPhoto && !kbOpen && (
               <View className="mb-4">
                 <ModelPicker onChange={setSelectedModelId} dreamBotMode={!config.useExactPrompt} />
               </View>
@@ -1077,152 +1019,10 @@ export default function CreateScreen() {
               models only, own sticky pick, never touches the main model.
               Hidden for pool-managed mediums (LEGO/Vinyl — flux-dev rebuild
               path with a curated pool, no choice to make). */}
-            {isRestyle && !restylePoolManaged && !collapsed && (
+            {isRestyle && !restylePoolManaged && (
               <View className="mb-4">
                 <RestyleModelPicker onChange={setRestyleModelId} />
               </View>
-            )}
-
-            {/* Collapsed summary — while the keyboard is up on an engine dream, the
-              model + mode + medium/vibe controls fold into this one-line summary
-              so the selected medium/vibe stay visible and the Dream CTA is one
-              tap away. Tapping it dismisses the keyboard, restoring the full
-              form. (Restored 2026-06-17 — was removed in f601e81e; now covers
-              text DreamBot dreams too, not just photo dreams.) */}
-            {collapsed && (
-              <TouchableOpacity
-                onPress={() => {
-                  Haptics.selectionAsync();
-                  Keyboard.dismiss();
-                }}
-                activeOpacity={0.7}
-                className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-              >
-                <View className="flex-1 mr-2">
-                  <View className="flex-row items-center">
-                    <Text
-                      className="text-sm font-semibold flex-shrink"
-                      style={{ color: colors.textPrimary }}
-                      numberOfLines={1}
-                    >
-                      {modelLabel}
-                    </Text>
-                    {/* Mini sparkle-cost badge — what this dream will cost. */}
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginLeft: 8,
-                        paddingHorizontal: 6,
-                        paddingVertical: verticalScale(2),
-                        borderRadius: 6,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }}
-                    >
-                      <Ionicons name="sparkles" size={11} color="#A78BFA" />
-                      <Text
-                        style={{
-                          color: '#A78BFA',
-                          fontSize: fontScale(11),
-                          fontWeight: '700',
-                          marginLeft: 2,
-                        }}
-                      >
-                        {sparkleCost}
-                      </Text>
-                    </View>
-                  </View>
-                  <View className="flex-row items-center mt-0.5">
-                    <Text
-                      className="text-[13px]"
-                      style={{ color: colors.textMuted ?? colors.textSecondary }}
-                    >
-                      Medium:{' '}
-                    </Text>
-                    <Text
-                      className="text-[13px]"
-                      style={{ color: colors.textSecondary }}
-                      numberOfLines={1}
-                    >
-                      {mediumLabel}
-                    </Text>
-                    {/* Color-coded FACE/ART tag — shown in all modes (matches the
-                      medium picker). */}
-                    {(isSurpriseMedium || selectedMediumRow) && (
-                      <View
-                        style={{
-                          marginLeft: 5,
-                          paddingHorizontal: 5,
-                          paddingVertical: verticalScale(1),
-                          borderRadius: 5,
-                          backgroundColor: mediumFaceSwaps
-                            ? MEDIUM_BADGE.face.bg
-                            : MEDIUM_BADGE.art.bg,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: fontScale(8),
-                            fontWeight: '700',
-                            color: mediumFaceSwaps
-                              ? MEDIUM_BADGE.face.color
-                              : MEDIUM_BADGE.art.color,
-                            textTransform: 'uppercase',
-                            letterSpacing: 0.5,
-                          }}
-                        >
-                          {mediumFaceSwaps ? 'face' : 'art'}
-                        </Text>
-                      </View>
-                    )}
-                    {/* Face-swap lamp, same as the full form's Medium label. It
-                      reacts LIVE to cast language in the prompt — which the user
-                      types exactly while this collapsed summary is showing — so
-                      it must stay visible here. Inner touchable wins over the
-                      row's dismiss-keyboard tap; opens the same teaching sheet. */}
-                    {!isRestyle && (
-                      <TouchableOpacity
-                        onPress={handleModeInfo}
-                        activeOpacity={0.7}
-                        hitSlop={10}
-                        style={{ marginLeft: 6 }}
-                      >
-                        <Ionicons
-                          name={faceSwapLit ? 'happy' : 'happy-outline'}
-                          size={14}
-                          color={
-                            faceSwapLit
-                              ? mediumFaceSwaps
-                                ? MEDIUM_BADGE.face.color
-                                : MEDIUM_BADGE.art.color
-                              : (colors.textMuted ?? colors.textSecondary)
-                          }
-                        />
-                      </TouchableOpacity>
-                    )}
-                    <Text
-                      className="text-[13px]"
-                      style={{ color: colors.textMuted ?? colors.textSecondary }}
-                    >
-                      {'   ·   Vibe: '}
-                    </Text>
-                    <Text
-                      className="text-[13px] flex-shrink"
-                      style={{ color: colors.textSecondary }}
-                      numberOfLines={1}
-                    >
-                      {vibeLabel}
-                    </Text>
-                  </View>
-                </View>
-                <Ionicons name="chevron-expand" size={18} color={colors.textSecondary} />
-              </TouchableOpacity>
             )}
 
             {/* Engine selector — two named engines (no photo attached):
@@ -1232,8 +1032,8 @@ export default function CreateScreen() {
                 the chosen AI model, skipping styling + face swap.
               State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
               Photo path hides this and shows the inline note above (Direct is
-              text-only). Hidden while collapsed (keyboard up). */}
-            {!hasPhoto && !collapsed && (
+              text-only). Folds into the summary row while the keyboard is up. */}
+            {!hasPhoto && !kbOpen && (
               <View className="mb-4">
                 {/* Mode label + contextual info icon (DreamBot → medium sheet,
                   Direct → Direct explainer). */}
@@ -1313,12 +1113,66 @@ export default function CreateScreen() {
               </View>
             )}
 
+            {/* Collapsed engine summary — replaces the folded controls (Model +
+              Mode for text; New Scene toggle + tier for photo) while the keyboard
+              is up, so their vertical space goes to the prompt. Tap to dismiss the
+              keyboard and bring the full controls back. */}
+            {kbOpen && !isRestyle && (
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  Keyboard.dismiss();
+                }}
+                activeOpacity={0.7}
+                className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <Text
+                  className="text-sm font-semibold flex-shrink mr-2"
+                  style={{ color: colors.textPrimary }}
+                  numberOfLines={1}
+                >
+                  {collapsedEngineSummary}
+                </Text>
+                <View className="flex-row items-center">
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 8,
+                      paddingHorizontal: 6,
+                      paddingVertical: verticalScale(2),
+                      borderRadius: 6,
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                  >
+                    <Ionicons name="sparkles" size={11} color="#A78BFA" />
+                    <Text
+                      style={{
+                        color: '#A78BFA',
+                        fontSize: fontScale(11),
+                        fontWeight: '700',
+                        marginLeft: 2,
+                      }}
+                    >
+                      {sparkleCost}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-expand" size={16} color={colors.textSecondary} />
+                </View>
+              </TouchableOpacity>
+            )}
+
             {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
               AND whenever a photo is attached (photo dreams always use the
               engine). Vibe is hidden for Restyle — that path is a Kontext img2img
-              edit driven by the medium only. Direct text dreams hide both.
-              Collapsed into the summary above while the keyboard is up. */}
-            {!effectiveExactPrompt && !collapsed && (
+              edit driven by the medium only. Direct text dreams hide both. */}
+            {!effectiveExactPrompt && (
               <View className="flex-row gap-3 mb-4">
                 <View className="flex-1">
                   <View className="flex-row items-center mb-1.5 ml-1">
@@ -1439,6 +1293,121 @@ export default function CreateScreen() {
                 </View>
               </View>
             )}
+
+            {/* Prompt input — hidden when a photo is in Restyle mode, since
+              that path is medium+vibe only (no prompt influence). The
+              underlying `config.userPrompt` is preserved so flipping back
+              to New Scene restores whatever the user had typed. */}
+            {!(hasPhoto && config.photoStyle === 'restyle') && (
+              <View
+                ref={promptWrapRef}
+                onLayout={measurePromptTop}
+                className="rounded-xl mb-4"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  // Phone: exact computed height so the box bottom lands just above
+                  // the Dream button (down to the keyboard when it's up). Falls back
+                  // to a scaled default until the first measure lands. iPad: a
+                  // scaled fixed height in its centered card.
+                  height: fillPrompt
+                    ? (computedPromptHeight ?? verticalScale(160))
+                    : verticalScale(144),
+                }}
+              >
+                <TextInput
+                  ref={promptRef}
+                  className="px-4 py-4"
+                  style={{
+                    // Responsive type instead of fixed text-base, at a smaller
+                    // 14pt base — 16 read oversized even at the design size
+                    // (Kevin 2026-07-02). Placeholder overlay below must stay in
+                    // lockstep so the hint aligns exactly where typed text begins.
+                    fontSize: fontScale(14),
+                    lineHeight: fontScale(20),
+                    color: colors.textPrimary,
+                    // Fill the wrapper (which carries the scaled/computed height);
+                    // long prompts scroll internally.
+                    flex: 1,
+                    textAlignVertical: 'top',
+                  }}
+                  value={config.userPrompt}
+                  onChangeText={setPrompt}
+                  maxLength={engineConfig.promptMaxLength}
+                  multiline
+                  scrollEnabled
+                  returnKeyType="default"
+                />
+                {/* Custom placeholder overlay instead of the native one. iOS's
+                  multiline placeholder ignores textAlignVertical:'top' until focus
+                  (it floats vertically centered) AND won't re-wrap when the text
+                  changes while unfocused. A top-aligned Text overlay (taps pass
+                  through) sits exactly where typed text begins, so the hint is
+                  stable across the photo toggle and on focus. */}
+                {!config.userPrompt && (
+                  <View
+                    pointerEvents="none"
+                    className="px-4 py-4"
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: fontScale(14),
+                        lineHeight: fontScale(20),
+                        color: colors.textMuted ?? '#6B7280',
+                      }}
+                    >
+                      {placeholder}
+                    </Text>
+                  </View>
+                )}
+                {/* Footer: Clear + live character count. Only rendered when the
+                  box has text (so an empty box stays clean and shows just the
+                  placeholder). Sits below the input with a hairline divider so
+                  it never overlaps the typed prompt. Clear keeps focus so you
+                  can immediately retype. */}
+                {config.userPrompt.length > 0 && (
+                  <View
+                    className="flex-row items-center justify-end px-4 py-2"
+                    style={{ borderTopWidth: 1, borderTopColor: colors.border, gap: 14 }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: fontScale(12),
+                        fontVariant: ['tabular-nums'],
+                        color:
+                          config.userPrompt.length >= engineConfig.promptMaxLength
+                            ? colors.error
+                            : (colors.textMuted ?? '#6B7280'),
+                      }}
+                    >
+                      {config.userPrompt.length} / {engineConfig.promptMaxLength}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        setPrompt('');
+                        promptRef.current?.focus();
+                      }}
+                      hitSlop={{ top: 8, bottom: 8, left: 12, right: 8 }}
+                      activeOpacity={0.6}
+                    >
+                      <Text
+                        style={{
+                          fontSize: fontScale(13),
+                          fontWeight: '600',
+                          color: colors.textSecondary,
+                        }}
+                      >
+                        Clear
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            )}
+
             {/* iPad: the Dream CTA lives WITH the form as one centered group,
                 instead of pinned to the far bottom like the phone sticky footer. */}
             {isTabletDevice && (
@@ -1460,6 +1429,7 @@ export default function CreateScreen() {
           <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
             <View
               className="px-5"
+              onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
               style={{
                 backgroundColor: colors.background,
                 paddingTop: verticalScale(10),
