@@ -37,6 +37,11 @@ export interface EngineConfig {
   giftMaxPerSend: number;
   giftMaxPerDay: number;
   giftMessageMaxLen: number;
+  // New Scene (uploaded-photo reference path), migration 341. Group-size cap
+  // (over it → attach-time block, steer to Restyle) + the flat tier prices.
+  newSceneMaxPeople: number;
+  newScenePriceStandard: number;
+  newScenePriceBest: number;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -58,6 +63,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   giftMaxPerSend: 100,
   giftMaxPerDay: 200,
   giftMessageMaxLen: 100,
+  newSceneMaxPeople: 3,
+  newScenePriceStandard: 3,
+  newScenePriceBest: 5,
 };
 
 function num(v: unknown, d: number): number {
@@ -117,6 +125,12 @@ export function useEngineConfig(): EngineConfig {
         giftMaxPerSend: num(c.gift_max_per_send, DEFAULT_ENGINE_CONFIG.giftMaxPerSend),
         giftMaxPerDay: num(c.gift_max_per_day, DEFAULT_ENGINE_CONFIG.giftMaxPerDay),
         giftMessageMaxLen: num(c.gift_message_max_len, DEFAULT_ENGINE_CONFIG.giftMessageMaxLen),
+        newSceneMaxPeople: num(c.new_scene_max_people, DEFAULT_ENGINE_CONFIG.newSceneMaxPeople),
+        newScenePriceStandard: num(
+          c.new_scene_price_standard,
+          DEFAULT_ENGINE_CONFIG.newScenePriceStandard
+        ),
+        newScenePriceBest: num(c.new_scene_price_best, DEFAULT_ENGINE_CONFIG.newScenePriceBest),
       };
     },
     staleTime: 5 * 60_000,
