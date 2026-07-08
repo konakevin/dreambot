@@ -40,8 +40,11 @@ export interface EngineConfig {
   newSceneMaxPeople: number;
   newScenePriceStandard: number;
   newScenePriceBest: number;
-  /** Stage 2 (FACE_SWAP_UPGRADE_PLAN.md): post-swap CodeFormer restoration. */
+  /** Stage 2 (FACE_SWAP_UPGRADE_PLAN.md): post-swap CodeFormer restoration.
+   *  enabled = nightly; createEnabled = Create additionally (nightly soaks
+   *  first per the staged rollout contract). */
   faceRestoreEnabled: boolean;
+  faceRestoreCreateEnabled: boolean;
   faceRestoreFidelity: number;
 }
 
@@ -65,6 +68,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   newScenePriceStandard: 3,
   newScenePriceBest: 5,
   faceRestoreEnabled: false,
+  faceRestoreCreateEnabled: false,
   faceRestoreFidelity: 0.9,
 };
 
@@ -114,6 +118,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     newSceneMaxPeople: Number(data.new_scene_max_people ?? DEFAULT_ENGINE_CONFIG.newSceneMaxPeople),
     faceRestoreEnabled: Boolean(
       data.face_restore_enabled ?? DEFAULT_ENGINE_CONFIG.faceRestoreEnabled
+    ),
+    faceRestoreCreateEnabled: Boolean(
+      data.face_restore_create_enabled ?? DEFAULT_ENGINE_CONFIG.faceRestoreCreateEnabled
     ),
     faceRestoreFidelity: Number(
       data.face_restore_fidelity ?? DEFAULT_ENGINE_CONFIG.faceRestoreFidelity

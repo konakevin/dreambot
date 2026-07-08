@@ -1783,7 +1783,9 @@ Output ONLY the prompt.`;
       logAxes.faceSwapResult === 'dual-success' || logAxes.faceSwapResult === 'success';
     if (didSwap && tempUrl) {
       const cfg = await fetchEngineConfig(supabase);
-      if (cfg.faceRestoreEnabled) {
+      // Create requires BOTH flags — nightly (enabled only) soaks 48h first
+      // per the staged rollout contract.
+      if (cfg.faceRestoreEnabled && cfg.faceRestoreCreateEnabled) {
         const restored = await restoreFace(tempUrl, {
           replicateToken: REPLICATE_TOKEN,
           fidelity: cfg.faceRestoreFidelity,
