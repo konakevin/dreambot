@@ -29,7 +29,7 @@ Stage ledger (fill in as executed):
 |---|---|---|---|---|
 | 0 | none (observability/hardening) | 2026-07-08 | — | ✅ DONE: baseline recorded; housekeeping landed (2 audit corrections); Fly auth mandatory+constant-time, deployed; success-path telemetry LIVE (verified: dual_engine:fly-dynamic, dual_attempts:1, dual_swap_ms:16445 on a real dual, 38s e2e) |
 | 1 | ~~dynamic split flip~~ obsolete — already live (verified 2026-07-08 via Fly logs + telemetry) | — | — | ✅ CLOSED: engine confirmed dynamic on real duals; monitor engine mix via faceswap-baseline.js |
-| 2 | post-swap restoration on | pending migration 344 + config flip | 48h nightly + 48h Create | BENCH DONE 2026-07-08: CodeFormer f=0.9 wins (Kevin: "the sharper (highest) ones look best"); code landed DARK + deployed (restoreFace fail-open in generate-dream + nightly); flip = UPDATE engine_config SET face_restore_enabled=true |
+| 2 | post-swap restoration on | NIGHTLY 2026-07-08 (Create pending 48h soak + one ALTER, see note) | 48h nightly + 48h Create | BENCH DONE 2026-07-08: CodeFormer f=0.9 wins (Kevin: "the sharper (highest) ones look best"); code landed DARK + deployed (restoreFace fail-open in generate-dream + nightly); flip = UPDATE engine_config SET face_restore_enabled=true |
 | 3 | solo probe: Haiku → Fly /detect | | 48h | |
 | 4 | dual engine: Fly → easel (canary %) | | 48h per % step | |
 | 5a | dual retry prompt mutation | | 48h | |
