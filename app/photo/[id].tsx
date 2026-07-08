@@ -10,6 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useLocalSearchParams, router } from 'expo-router';
 import { safeBack } from '@/lib/navigate';
 import { useAlbumStore } from '@/store/album';
+import { syncPostCounts } from '@/lib/postCountSync';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { showPremiumGate } from '@/lib/premiumGate';
@@ -154,6 +155,22 @@ export default function PhotoDetailScreen() {
     : queryPosts;
   const isLoading = posts.length === 0 && (isAlbum ? albumQuery.isLoading : contextQuery.isLoading);
   const refetch = isAlbum ? albumQuery.refetch : contextQuery.refetch;
+
+  // Heal engagement counts everywhere whenever THIS screen receives fresh
+  // rows (notification tap / deep link / album fetch). The home + explore
+  // feeds are session-frozen (staleTime Infinity) so their like/comment
+  // counts go stale the moment someone engages — this writes the fresh
+  // numbers back without touching row order (Kevin 2026-07-08: notification
+  // showed 2 likes, home feed card still showed 0). Self-sync is loop-safe:
+  // unchanged rows keep identity, so no cache write happens.
+  useEffect(() => {
+    const fresh = [
+      ...(contextQuery.data?.pages.flatMap((p) => p.rows) ?? []),
+      ...(albumQuery.data ?? []),
+      ...sourcePosts,
+    ];
+    if (fresh.length > 0) syncPostCounts(queryClient, fresh);
+  }, [contextQuery.data, albumQuery.data, sourcePosts, queryClient]);
 
   // Context mode (deep link / notification tap) can error if the target
   // upload isn't readable by the current user — RLS-filtered private posts,
