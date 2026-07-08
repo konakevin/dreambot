@@ -42,6 +42,14 @@ export interface GenerateDreamOpts {
   subject_description?: string;
   /** Pre-classified subject type (from classifyPhoto). Determines server routing. */
   subject_type?: 'person' | 'group' | 'animal' | 'object' | 'scenery';
+  /** New Scene reference-path signals (from classifyPhoto). Drive the server's
+   *  solo-swap-vs-reference fork + the group-size cap. */
+  num_people?: number;
+  num_animals?: number;
+  face?: 'clean' | 'multi' | 'none' | 'unclear';
+  /** New Scene pricing tier. Present ⇒ the tier-priced flow (server charges the
+   *  flat Standard/Best price by this enum, not force_model). */
+  new_scene_tier?: 'standard' | 'best';
   /** Direct pass-through mode — user's prompt sent verbatim to flux-1.1-pro,
    *  no Sonnet expansion, no chaos, no medium/vibe directive merging. For
    *  power users with fully-polished prompts. */
@@ -55,9 +63,16 @@ export interface GenerateDreamOpts {
 
 export type PhotoSubjectType = 'person' | 'group' | 'animal' | 'object' | 'scenery' | 'unclear';
 
+export type FaceSignal = 'clean' | 'multi' | 'none' | 'unclear';
+
 export interface PhotoClassification {
   subject_description: string;
   type: PhotoSubjectType;
+  // New Scene structured signals (classify-photo, migration-era 2026-07-08).
+  // Older server builds omit these; default to a safe reference-routable shape.
+  num_people: number;
+  num_animals: number;
+  face: FaceSignal;
 }
 
 interface GenerateDreamResult {
@@ -312,9 +327,23 @@ export async function classifyPhoto(inputImageBase64: string): Promise<PhotoClas
   if (!data || !data.type) {
     throw new Error(data?.error ?? 'Classification returned no result');
   }
+  const t = data.type as PhotoSubjectType;
+  const faceOk = data.face === 'clean' || data.face === 'multi' || data.face === 'none';
   return {
     subject_description: data.subject_description ?? '',
-    type: data.type as PhotoSubjectType,
+    type: t,
+    // Backfill from type if an older server build omits the structured signals,
+    // so the new-scene router still has a usable (reference-safe) shape.
+    num_people:
+      typeof data.num_people === 'number'
+        ? data.num_people
+        : t === 'person'
+          ? 1
+          : t === 'group'
+            ? 2
+            : 0,
+    num_animals: typeof data.num_animals === 'number' ? data.num_animals : t === 'animal' ? 1 : 0,
+    face: faceOk ? (data.face as FaceSignal) : 'unclear',
   };
 }
 

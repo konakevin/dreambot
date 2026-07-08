@@ -162,6 +162,18 @@ export function useDreamCreate() {
           classification = await classifyPhoto(preparedRefUrl);
           if (__DEV__) console.log('[useDreamCreate] classification:', classification.type);
 
+          // Group-size cap (NEW_SCENE_QUALITY_PLAN.md): New Scene keeps up to N
+          // people looking like themselves; past that, likeness collapses. Block
+          // BEFORE charging and steer to Restyle (the server backstops this too).
+          if (classification.num_people > engineConfig.newSceneMaxPeople) {
+            Toast.show(
+              `New Scene keeps up to ${engineConfig.newSceneMaxPeople} people looking like themselves. Try Restyle to keep your whole group, or use a photo with ${engineConfig.newSceneMaxPeople} or fewer.`,
+              'people-outline',
+              6000
+            );
+            return 'cancelled';
+          }
+
           // Ask user to confirm on ambiguous subjects BEFORE charging
           if (
             (classification.type === 'group' || classification.type === 'unclear') &&
@@ -241,6 +253,13 @@ export function useDreamCreate() {
                 classification && classification.type !== 'unclear'
                   ? classification.type
                   : undefined,
+              // New Scene reference-path signals + tier. Present ⇒ the server
+              // routes solo-swap vs reference and charges the flat tier price.
+              num_people: classification?.num_people,
+              num_animals: classification?.num_animals,
+              face: classification?.face,
+              // Tier toggle is a follow-up UI; default to Standard for now.
+              new_scene_tier: classification ? 'standard' : undefined,
               job_id: jobId,
               style_prompt: config.stylePrompt || undefined,
               dlt_recipe: config.dltRecipe ?? undefined,
@@ -430,7 +449,16 @@ export function useDreamCreate() {
         busy.current = false;
       }
     },
-    [user, canAffordDream, dreamSparkleCost, sparkleBalance, loadProfile, setResult, queryClient]
+    [
+      user,
+      canAffordDream,
+      dreamSparkleCost,
+      sparkleBalance,
+      loadProfile,
+      setResult,
+      queryClient,
+      engineConfig.newSceneMaxPeople,
+    ]
   );
 
   return { generate, sparkleBalance };
