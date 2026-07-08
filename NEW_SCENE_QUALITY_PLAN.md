@@ -1,9 +1,10 @@
 # NEW_SCENE_QUALITY_PLAN.md — freeform uploaded-photo New Scene, done right
 
-**Status:** APPROVED 2026-07-08 (v2 + two rounds of review amendments). No engine code yet.
-Grounded in the 4-agent render-flow audit + two ruthless reviews + three production
-measurements, all same day. Reverses one v1 overreach (do NOT drop the solo swap) and gates the
-build behind a validation phase.
+**Status:** APPROVED + Phase 0 QA COMPLETE 2026-07-08. No engine code yet. Grounded in the
+4-agent render-flow audit + two ruthless reviews + three production measurements + a real-photo
+likeness/recomposition bench (the capability contract below). Reverses one v1 overreach (do NOT
+drop the solo swap); the supported-input set and the `new_scene_max_people = 3` cap are now
+evidence-backed.
 
 ## The goal
 
@@ -41,6 +42,51 @@ the render and pastes the one uploaded source. So:
   (they swap) → **near-zero movement.** Real finding: **65 Restyle jobs are mis-marked heavy**
   despite no Fly swap — that's the weight bug worth fixing now.
 
+## Phase 0 QA — capability contract (SIGNED-READY 2026-07-08)
+
+Bench: real photos × buckets × models (Seedream 4 / Nano Banana / Nano Banana Pro), recomposed
+to a *new* scene at 9:16 (the hard case, not in-place repaint). Verdicts are the "safe to
+promise a paying customer" bar. Grid: `~/Desktop/newscene-bench/index.html`.
+
+| Upload | Verdict | Evidence |
+|---|---|---|
+| Solo person (1) | ✅ **Support** | face recognizable, headshot → full body, even matched the shirt |
+| Couple (2) | ✅ **Support** | both faces + both outfits, rotation auto-corrected |
+| 3 people | ✅ **Support** | all three recognizable |
+| **4 people** | ❌ **NOT supported** | identities reinvented into different, wrong people |
+| 7 people | ❌ **NOT supported** | collapses to a single invented person |
+| Person + pet | ✅ **Support** | keeps the person's face **and** the pet, together |
+| Person + child (≤3 total) | ✅ **Support** | both preserved |
+| Pet / animal alone | ✅ **Support** | strong (the original dog case) |
+| Object | 🟡 **Best-effort** | keeps the category (a red SUV) but not the exact model |
+| Place / scenery | ✅ **Support** *(needs the per-type directive)* | a generic "the subject…" prompt hallucinated a person; the place directive fixes it |
+
+- **Cap: `new_scene_max_people = 3`** (bench-set default; still tunable). Total counts children
+  (a person+child pair is 2).
+- **Model routing:** photoreal → **Seedream 4** (every strong likeness result was Seedream);
+  stylized buckets → **Nano Banana / Nano Banana Pro** (Pro is the more robust, and the
+  "Best likeness" model).
+- **Refusals are sporadic, not systematic:** exactly one cell (person+child → LEGO on Nano
+  Banana) refused, while the same photo rendered fine photoreal and on Nano Banana Pro. So
+  refusals are a **render-time** concern handled by the visible fallback (retry the bucket's
+  other model → else refund + honest copy), **not** an attach-time block.
+
+## Attach-time support gate (the pre-charge check)
+
+When a photo is attached, the extended classifier runs (the decided attach-time
+classification). If it's an **unsupported category**, notify the user **before they pay**, with
+honest copy + a steer. From QA, the gate list is short:
+
+| Detected at attach | Gate | Message + steer |
+|---|---|---|
+| **4+ people** (`num_people > new_scene_max_people`) | **Block New Scene** | "New Scene keeps up to 3 people looking like themselves. This photo has more — try **Restyle** to keep your whole group, or use a photo with 3 or fewer." |
+
+That is the **only** hard attach-time block QA produced. Everything ≤3 people, person+pet, pet,
+object, and place proceeds. Objects render best-effort (softer expectation copy, no likeness
+promise on the exact item). Refusals are caught at render by the visible fallback, not blocked
+up front (they're unpredictable and content-specific). The classifier's `num_people` /
+`num_animals` signals (already in the extended schema) drive the gate.
+
 ## The upload router (v2)
 
 The fork depends **entirely on classification**, which must be extended (see below) and is
@@ -52,7 +98,8 @@ always safe; a wrong-face solo swap is the exact silent identity bug this plan e
 | **high-confidence single clean human**, no competing subject | **solo swap (unchanged)** | any scene model + solo-swap guard (+ existing kontext-unify on stylized mediums) | heavy | **exact** |
 | pet / animal only | **reference** | medium-bucket model | light | likeness |
 | object only | **reference** | medium-bucket model | light | likeness |
-| group / couple (2+ people) | **reference** (no extraction) | medium-bucket model | light | likeness (softer) |
+| group / couple (2 up to `new_scene_max_people`) | **reference** (no extraction) | medium-bucket model | light | likeness (softer) |
+| group **over the cap** | **blocked pre-charge**, steer to Restyle | — | — | (MVP boundary) |
 | person + pet | **reference** (no extraction) | medium-bucket model | light | likeness |
 | **scenery / place** | **reference** | medium-bucket model | light | **likeness of the place** |
 | ambiguous / low-confidence single face | **reference** (safe default) | medium-bucket model | light | likeness |
@@ -60,6 +107,13 @@ always safe; a wrong-face solo swap is the exact silent identity bug this plan e
 Scenery rides the **reference** path like the rest of Job B, keeping "grandma's lake house"
 recognizable. Text-to-image is a *fallback*, not the route (sending scenery to text-to-image
 would be the dog bug for places).
+
+**MVP scope — group-size cap.** Reference models keep faces recognizable only up to a handful
+of people. Bench-set to **`new_scene_max_people = 3`** (2 and 3 preserve everyone; 4 reinvents
+them; 7 collapses to one). Still tunable. **Over the cap, the attach-time classifier blocks it
+pre-charge** with honest copy that steers to **Restyle** (keeps the original composition, so a
+big family photo stays intact as a stylization) or a photo with fewer people. Deliberate
+boundary: we are not chasing faithful large-group recompositions in MVP.
 
 This makes Phase 1 **purely additive**: the solo-person path (100% of current traffic) is
 **untouched**; we only add the reference path for the cases broken today. No regression to the
@@ -247,13 +301,24 @@ Restyle read as one family.
 - **Route-aware UI:** solo-swap uploads show `✦ Your exact face` and **no tier**; reference
   uploads show the reimagined chip + tier. Nudge fires only on reference-route-with-a-person.
 - **Retry** prefers same-cost models; pricier escalation is refusal-path only, subsidy explicit.
+- **Group-size cap (MVP):** `new_scene_max_people = 3` (bench: 2 and 3 pass, 4 and 7 fail);
+  over-cap blocked pre-charge, steered to Restyle. Not chasing large-group recompositions.
 
-**Still open (Phase 0 answers most):**
-1. Per-bucket tier→model map (does NB Pro actually beat Seedream on photoreal likeness?).
-2. Children's-photo refusal rate (targeted check).
-3. Output-geometry strategy per model family.
-4. Which exact mediums fall in each bucket (seed from Restyle; Kevin's taste call).
-5. Acceptance bar per bucket for the Phase 0 bench.
+**Resolved by the Phase 0 QA bench (2026-07-08) — see the capability contract:**
+- **Supported categories:** solo, couple, 3-person, person+pet, person+child, pet, place
+  (with per-type directive). **Object = best-effort** (softer copy). **4+ people = blocked**
+  pre-charge (the attach-time gate).
+- **Output geometry: resolved** — Seedream / Nano Banana / Nano Banana Pro all honor 9:16 with
+  a reference image; no crop/pad/outpaint needed.
+- **Model routing: resolved** — photoreal → Seedream 4; stylized → Nano Banana / NB Pro (Pro =
+  Best likeness).
+- **Children's refusal: sporadic, not systematic** — handled by the render-time visible
+  fallback, not an attach-time block.
+
+**Still open:**
+1. Which exact mediums fall in each bucket (seed from Restyle; Kevin's taste call).
+2. Confirm NB-Pro-vs-Seedream on the *photoreal* Best-likeness tier (minor; Seedream is the
+   proven Standard).
 
 ## Reference points in code
 
