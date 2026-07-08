@@ -35,6 +35,7 @@
     "__tests__/lib/faceSwapGenderLock.test.ts",
     "__tests__/lib/faceSwapFallback.test.ts",
     "__tests__/lib/chaosTier.test.ts",
+    "__tests__/lib/newSceneDirective.test.ts",
     "__tests__/lib/dreamQueueWeight.test.ts",
     "__tests__/lib/generateImage.test.ts",
     "__tests__/lib/firstDreamTiers.test.ts",

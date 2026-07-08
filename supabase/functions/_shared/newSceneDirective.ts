@@ -114,3 +114,29 @@ export function buildNewScenePrompt(opts: {
     .filter(Boolean)
     .join('\n');
 }
+
+// Reference-model IDs (all accept an input image in generateImage's
+// mode='flux-kontext' path).
+export const NEW_SCENE_MODEL_SEEDREAM = 'bytedance/seedream-4'; // photoreal, bench workhorse
+export const NEW_SCENE_MODEL_NANO_BANANA = 'google/gemini-2-image'; // stylized / real-face
+export const NEW_SCENE_MODEL_NANO_BANANA_PRO = 'google/gemini-3-image-preview'; // Best likeness
+
+export type NewSceneTier = 'standard' | 'best';
+
+/**
+ * Pick the reference model. Standard: Seedream for photoreal mediums, Nano
+ * Banana for stylized (reusing the Restyle curation — a stylized medium is one
+ * the DB pegged to a restyle model). Best: Nano Banana Pro for everything.
+ * `otherModel` returns the fallback to retry on refusal (visible fallback).
+ */
+export function newSceneModel(opts: { stylized: boolean; tier: NewSceneTier }): string {
+  if (opts.tier === 'best') return NEW_SCENE_MODEL_NANO_BANANA_PRO;
+  return opts.stylized ? NEW_SCENE_MODEL_NANO_BANANA : NEW_SCENE_MODEL_SEEDREAM;
+}
+
+/** The alternate model to retry on a refusal, before refunding. */
+export function newSceneFallbackModel(primary: string): string {
+  return primary === NEW_SCENE_MODEL_SEEDREAM
+    ? NEW_SCENE_MODEL_NANO_BANANA_PRO
+    : NEW_SCENE_MODEL_SEEDREAM;
+}
