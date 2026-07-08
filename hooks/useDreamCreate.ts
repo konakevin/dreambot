@@ -67,14 +67,17 @@ export function useDreamCreate() {
   const setResult = useDreamStore((s) => s.setResult);
   const busy = useRef(false);
 
-  // The current dream's sparkle cost. Restyle ignores the model picker and is
-  // charged the flat BASE cost server-side (it never sends a force_model), so its
-  // client cost must be the base too — not the selected model's tier.
+  // The current dream's sparkle cost. Restyle + New Scene both ignore the model
+  // picker and are charged a FLAT server-side price (Restyle → base; New Scene →
+  // the flat Standard tier), so their client cost must match that, not the
+  // selected model's tier. Only text/Direct dreams price by the picked model.
   const dreamSparkleCost = useCallback((): number => {
     const cfg = useDreamStore.getState().config;
     const isRestyle = !!cfg.photoUri && cfg.photoStyle === 'restyle';
+    const isNewScenePhoto = !!cfg.photoUri && cfg.photoStyle === 'new_scene';
+    if (isNewScenePhoto) return engineConfig.newScenePriceStandard;
     return isRestyle ? engineConfig.baseSparkleCost : sparkleCostFrom(models, cfg.forceModel);
-  }, [models, engineConfig.baseSparkleCost]);
+  }, [models, engineConfig.baseSparkleCost, engineConfig.newScenePriceStandard]);
 
   const loadProfile = useCallback(async (): Promise<VibeProfile | null> => {
     if (!user) return null;

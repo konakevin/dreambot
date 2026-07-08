@@ -397,6 +397,7 @@ export default function CreateScreen() {
   // ones go uncanny). It's an explicit pick (no Surprise Me). New Scene shows the
   // full catalog.
   const isRestyle = hasPhoto && config.photoStyle === 'restyle';
+  const isNewScene = hasPhoto && config.photoStyle === 'new_scene';
   // Pool-managed restyle mediums (LEGO / Vinyl): they run the flux-dev rebuild
   // path with a curated Flux pool (client_meta.restyle_models, migration 301)
   // because Kontext can't reshape a head into a minifigure — no model choice
@@ -449,12 +450,16 @@ export default function CreateScreen() {
   // charges by ITS OWN picked model (Kontext 1 / NB Pro 5, sent as force_model
   // — enqueue-dream prices getSparkleCost(force_model)); pool-managed restyle
   // mediums (LEGO/Vinyl) send no force_model and stay at the flat base cost.
-  const sparkleCost = isRestyle
-    ? restylePoolManaged
-      ? engineConfig.baseSparkleCost
-      : // DB-preferred (matches enqueue-dream's charge); catalog is the fallback.
-        resolveRestyleCost(imageModels, restyleModelId)
-    : sparkleCostFrom(imageModels, selectedModelId);
+  const sparkleCost = isNewScene
+    ? // New Scene is flat-priced by tier server-side (the model picker doesn't
+      // apply); show the Standard price. (Best-likeness tier is a follow-up.)
+      engineConfig.newScenePriceStandard
+    : isRestyle
+      ? restylePoolManaged
+        ? engineConfig.baseSparkleCost
+        : // DB-preferred (matches enqueue-dream's charge); catalog is the fallback.
+          resolveRestyleCost(imageModels, restyleModelId)
+      : sparkleCostFrom(imageModels, selectedModelId);
   // The forced model routes by mode: Restyle sends the restyle-scoped pick
   // (Kontext / NB Pro; nothing for pool-managed LEGO/Vinyl, which keep their
   // curated Flux pool), everything else sends the main picker's model. The
