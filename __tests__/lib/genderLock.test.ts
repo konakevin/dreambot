@@ -4,7 +4,7 @@
  * This is the fix for "male face swapped onto a female body" on nightly
  * single-cast dreams: the explicit `gender` field must win over prose, pets
  * never lock, and the lock phrase must stay positive-led (negation-leak-safe)
- * while remaining parseable by dualGenderRouting.genderFromLock.
+ * while remaining parseable by genderFromLock (same module since 2026-07-08).
  */
 
 import {
@@ -12,6 +12,7 @@ import {
   genderNoun,
   genderLockShout,
   genderLockSentence,
+  genderFromLock,
 } from '@engine/genderLock';
 
 describe('resolveCastGender — explicit field is authoritative', () => {
@@ -112,5 +113,20 @@ describe('genderLockSentence — stays parseable by genderFromLock', () => {
   it('no longer contains the leaky "do not feminize" phrasing', () => {
     expect(genderLockSentence('male').toLowerCase()).not.toContain('feminize');
     expect(genderLockSentence('female').toLowerCase()).not.toContain('masculinize');
+  });
+});
+
+describe('genderFromLock (moved from dualGenderRouting, retired 2026-07-08)', () => {
+  it('reads MALE / FEMALE from the castResolver lock sentences', () => {
+    expect(genderFromLock('MALE character. Masculine features...')).toBe('male');
+    expect(genderFromLock('FEMALE character. Feminine features...')).toBe('female');
+  });
+  it('checks FEMALE before MALE (FEMALE contains the substring MALE)', () => {
+    expect(genderFromLock('FEMALE character.')).toBe('female');
+  });
+  it('returns null for missing / unrecognized locks', () => {
+    expect(genderFromLock(null)).toBeNull();
+    expect(genderFromLock(undefined)).toBeNull();
+    expect(genderFromLock('a person')).toBeNull();
   });
 });

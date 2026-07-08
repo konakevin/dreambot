@@ -338,7 +338,8 @@ async function faceSwapOnce(
  * Public face swap with retries on the primary model + fallback chain.
  *
  * Resilience strategy (in order):
- *   1. Try primary model (yan-ops — FACE_SWAP_MODELS[0]). Retry up to
+ *   1. Try primary model (FACE_SWAP_MODELS[0] — cdingram since 2026-05-30;
+ *      yan-ops was demoted for the canned-output bug). Retry up to
  *      MAX_PRIMARY_ATTEMPTS times with backoff on transient Replicate errors
  *      (5xx / 429 / timeout / "no face found" empty output).
  *   2. If primary still fails, try each fallback model in
@@ -600,7 +601,10 @@ function stitchHalves(
   return out;
 }
 
-function resizeNearest(
+// Bilinear (was nearest-neighbor, 2026-07-08 Stage 0): the swap models
+// occasionally return off-size output; nearest produced visible blockiness
+// on the resize-back. Bilinear is ~free at these sizes.
+function resizeBilinear(
   data: Uint8Array,
   srcW: number,
   srcH: number,
@@ -612,15 +616,25 @@ function resizeNearest(
   const xR = srcW / dstW;
   const yR = srcH / dstH;
   for (let y = 0; y < dstH; y++) {
-    const sy = Math.floor(y * yR);
+    const fy = Math.min(srcH - 1, y * yR);
+    const y0 = Math.floor(fy);
+    const y1 = Math.min(srcH - 1, y0 + 1);
+    const wy = fy - y0;
     for (let x = 0; x < dstW; x++) {
-      const sx = Math.floor(x * xR);
-      const s = (sy * srcW + sx) * 4;
+      const fx = Math.min(srcW - 1, x * xR);
+      const x0 = Math.floor(fx);
+      const x1 = Math.min(srcW - 1, x0 + 1);
+      const wx = fx - x0;
       const d = (y * dstW + x) * 4;
-      out[d] = data[s];
-      out[d + 1] = data[s + 1];
-      out[d + 2] = data[s + 2];
-      out[d + 3] = data[s + 3];
+      for (let c = 0; c < 4; c++) {
+        const p00 = data[(y0 * srcW + x0) * 4 + c];
+        const p10 = data[(y0 * srcW + x1) * 4 + c];
+        const p01 = data[(y1 * srcW + x0) * 4 + c];
+        const p11 = data[(y1 * srcW + x1) * 4 + c];
+        out[d + c] = Math.round(
+          p00 * (1 - wx) * (1 - wy) + p10 * wx * (1 - wy) + p01 * (1 - wx) * wy + p11 * wx * wy
+        );
+      }
     }
   }
   return out;
@@ -732,7 +746,7 @@ export async function dualFaceSwap(
     console.warn(
       `[dualFaceSwap] Left swap resize: ${leftSwapImg.width}x${leftSwapImg.height} -> ${leftW}x${H}`
     );
-    leftSwapData = resizeNearest(leftSwapData, leftSwapImg.width, leftSwapImg.height, leftW, H);
+    leftSwapData = resizeBilinear(leftSwapData, leftSwapImg.width, leftSwapImg.height, leftW, H);
   }
 
   const rightSwapResp = await fetch(rightSwapUrl);
@@ -742,7 +756,7 @@ export async function dualFaceSwap(
     console.warn(
       `[dualFaceSwap] Right swap resize: ${rightSwapImg.width}x${rightSwapImg.height} -> ${rightW}x${H}`
     );
-    rightSwapData = resizeNearest(
+    rightSwapData = resizeBilinear(
       rightSwapData,
       rightSwapImg.width,
       rightSwapImg.height,

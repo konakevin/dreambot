@@ -27,6 +27,14 @@ export interface DualDispatchResult {
   swappedUrl: string | null;
   /** Faces the engine detected (legacy / non-detecting path reports 2). */
   faceCount: number;
+  /** Which engine served the swap — 'dynamic' (Fly detection), 'legacy'
+   *  (blind 55/55), or 'in-process'/'supabase' transport labels. Persisted
+   *  into ai_generation_log so the engine mix is visible to forensics
+   *  (Stage 0, 2026-07-08 — success paths used to log NOTHING, which let an
+   *  audit misread a healthy engine as dormant). */
+  engine: string;
+  /** Swap round-trip in ms (transport-inclusive). */
+  swapMs: number;
 }
 
 export async function dispatchDualFaceSwap(
@@ -68,6 +76,7 @@ export async function dispatchDualFaceSwap(
       // In-process path uses the legacy in-Supabase engine (no detection — Edge's
       // 256 MB cap can't host onnxruntime). Returns a URL; normalize to the result
       // shape with faceCount=2 (it always crops 55/55).
+      const tInProc = Date.now();
       const url = await dualFaceSwap(
         leftSourceUrl,
         rightSourceUrl,
@@ -78,7 +87,12 @@ export async function dispatchDualFaceSwap(
         deadlineMs,
         skipPrimary
       );
-      return { swappedUrl: url, faceCount: 2 };
+      return {
+        swappedUrl: url,
+        faceCount: 2,
+        engine: 'in-process-legacy',
+        swapMs: Date.now() - tInProc,
+      };
     }
 
     // 2026-06-01: when DUAL_SWAP_FLY_URL is set, route to the Fly.io
@@ -133,6 +147,7 @@ export async function dispatchDualFaceSwap(
       faceCount?: number;
       status?: string;
       error?: string;
+      variant?: string;
     };
     try {
       parsed = JSON.parse(text);
@@ -155,10 +170,15 @@ export async function dispatchDualFaceSwap(
       throw new Error(`${target}: no swappedUrl in response (${elapsedMs}ms)`);
     }
     const faceCount = parsed.faceCount ?? (swappedUrl ? 2 : 0);
+    const engine = parsed.variant
+      ? `${useFly ? 'fly' : 'supabase'}-${parsed.variant}`
+      : useFly
+        ? 'fly-unversioned'
+        : 'supabase-legacy';
     console.log(
-      `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount}`
+      `[dispatchDualFaceSwap]${traceId ? `[${traceId}]` : ''} ${target} ${elapsedMs}ms swapped=${!!swappedUrl} faceCount=${faceCount} engine=${engine}`
     );
-    return { swappedUrl, faceCount };
+    return { swappedUrl, faceCount, engine, swapMs: elapsedMs };
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.
     if (targetTempPath) {

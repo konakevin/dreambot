@@ -158,6 +158,10 @@ export async function ensureSoloSwapTarget(
     if (last.kind === 'safe') {
       // 'solo_probe_ok' is the silent happy path; only log the odd-but-safe.
       if (last.reason !== 'solo_probe_ok') reasons.push(last.reason);
+      // SUCCESS-path telemetry (Stage 0, 2026-07-08): probe attempts are 2
+      // Haiku vision calls each — surface the count so the accounting can see
+      // probe amplification (and Stage 3's Fly /detect swap has a baseline).
+      reasons.push(`solo_probes:${attempt + 1}`);
       return { url: target, safe: true, faceCount: last.faceCount, predictionId, reasons };
     }
     reasons.push(last.reason);

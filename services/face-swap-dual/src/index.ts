@@ -13,6 +13,27 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from './faceSwap.ts';
 
+/**
+ * Constant-time string equality — mirrors supabase/functions/_shared/timingSafe.ts
+ * (Stage 0 hardening, 2026-07-08). Kept as a local copy: this service deploys
+ * from its own Docker context and can't import across the repo boundary.
+ */
+function timingSafeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const ab = enc.encode(a);
+  const bb = enc.encode(b);
+  if (ab.length !== bb.length) return false;
+  let diff = 0;
+  for (let i = 0; i < ab.length; i++) diff |= ab[i] ^ bb[i];
+  return diff === 0;
+}
+
+// Which dual engine this deployment runs — surfaced in /healthz + every swap
+// response so the engine mix is observable OUTSIDE Fly's ephemeral log buffer.
+// (Stage 0 lesson: the dynamic engine ran silently for 3 weeks while an audit
+// concluded from missing DB telemetry that it was dormant.)
+const ENGINE_VARIANT = Deno.env.get('DUAL_SWAP_DYNAMIC_SPLIT') === 'true' ? 'dynamic' : 'legacy';
+
 interface RequestBody {
   targetUrl: string;
   leftSourceUrl: string;
@@ -42,10 +63,18 @@ Deno.serve({ port: PORT }, async (req) => {
   // and the runtime is responsive. Returning JSON keeps the format
   // consistent with the other endpoints.
   if (url.pathname === '/healthz' || url.pathname === '/health') {
-    return new Response(JSON.stringify({ ok: true, ts: Date.now() }), {
-      status: 200,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        ts: Date.now(),
+        variant: ENGINE_VARIANT,
+        authRequired: !!Deno.env.get('FLY_AUTH_TOKEN'),
+      }),
+      {
+        status: 200,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      }
+    );
   }
 
   if (req.method === 'OPTIONS') {
@@ -59,13 +88,24 @@ Deno.serve({ port: PORT }, async (req) => {
   }
 
   // Bearer-token auth: must match the shared secret the caller sets.
-  // Cheap mTLS-substitute so anonymous traffic on the public Fly URL
-  // can't burn Replicate credits. Skip if FLY_AUTH_TOKEN isn't set
-  // (local dev / first deploy).
+  // Cheap mTLS-substitute so anonymous traffic on the public Fly URL can't
+  // burn Replicate credits. HARDENED (Stage 0, 2026-07-08): the token is now
+  // MANDATORY — the old skip-when-unset behavior meant a fresh deploy with a
+  // missing secret was silently open to the internet. Local dev opts out
+  // EXPLICITLY with ALLOW_UNAUTHENTICATED=true. Comparison is constant-time.
   const expectedToken = Deno.env.get('FLY_AUTH_TOKEN');
+  const allowUnauthenticated = Deno.env.get('ALLOW_UNAUTHENTICATED') === 'true';
+  if (!expectedToken && !allowUnauthenticated) {
+    console.error('[face-swap-dual] FLY_AUTH_TOKEN unset and ALLOW_UNAUTHENTICATED not set');
+    return new Response(JSON.stringify({ error: 'Service misconfigured: auth token required' }), {
+      status: 503,
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+    });
+  }
   if (expectedToken) {
-    const got = req.headers.get('authorization') ?? '';
-    if (got !== `Bearer ${expectedToken}`) {
+    const authHeader = req.headers.get('authorization') ?? '';
+    const presented = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+    if (!presented || !timingSafeEqual(presented, expectedToken)) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
@@ -144,7 +184,16 @@ Deno.serve({ port: PORT }, async (req) => {
     // the caller should re-render the couple. status distinguishes it from 'ok'.
     console.log(`[face-swap-dual] Done in ${elapsed}ms faceCount=${faceCount} ok=${!!swappedUrl}`);
     return new Response(
-      JSON.stringify({ swappedUrl, faceCount, status: swappedUrl ? 'ok' : 'rerender' }),
+      JSON.stringify({
+        swappedUrl,
+        faceCount,
+        status: swappedUrl ? 'ok' : 'rerender',
+        // Engine variant + timing ride every response so the DISPATCHER can
+        // persist them into ai_generation_log (Stage 0 telemetry) — Fly's own
+        // log buffer is ephemeral and invisible to forensics.
+        variant: ENGINE_VARIANT,
+        elapsedMs: elapsed,
+      }),
       {
         status: 200,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },

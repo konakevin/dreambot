@@ -72,11 +72,25 @@ export function genderLockShout(gender: CastGender): string {
 /**
  * Longer lock sentence baked into the create-flow prompt's
  * "GENDER — NON-NEGOTIABLE" block (via castResolver). MUST keep the leading
- * "MALE character" / "FEMALE character" tokens — `dualGenderRouting.genderFromLock`
+ * "MALE character" / "FEMALE character" tokens — `genderFromLock` below
  * parses them to route dual face-swap sources.
  */
 export function genderLockSentence(gender: CastGender): string {
   return gender === 'male'
     ? 'MALE character — a man with masculine features, build, and clothing; full beard / facial hair visible if described; keep him clearly a man.'
     : 'FEMALE character — a woman with feminine features and build; keep her clearly a woman, with no facial hair.';
+}
+
+/**
+ * Map a castResolver genderLock sentence back to a plain gender. Lives here
+ * (with the sentences it parses) since dualGenderRouting.ts was retired
+ * 2026-07-08 — the gender-safe guarantees moved into singleSwapGuard +
+ * the Fly dual engine's genderage routing.
+ */
+export function genderFromLock(genderLock: string | null | undefined): 'male' | 'female' | null {
+  if (!genderLock) return null;
+  // Check FEMALE first — "FEMALE character" contains the substring "MALE".
+  if (genderLock.startsWith('FEMALE character')) return 'female';
+  if (genderLock.startsWith('MALE character')) return 'male';
+  return null;
 }

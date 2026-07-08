@@ -32,7 +32,9 @@ export interface DualSwapDeps {
    * gender, splits at the gap, and routes each source to its matching face).
    * Returns the swapped url, or null when there was no clean 2-face split.
    */
-  dispatchDual: (target: string) => Promise<{ swappedUrl: string | null; faceCount: number }>;
+  dispatchDual: (
+    target: string
+  ) => Promise<{ swappedUrl: string | null; faceCount: number; engine?: string; swapMs?: number }>;
   /** Single-swap one source onto the dominant face (the gender-safe degrade). */
   singleSwap: (source: string, target: string) => Promise<string>;
   /** Produce a FRESH render of the same couple scene (different layout/seed). */
@@ -102,7 +104,7 @@ export async function genderSafeDualSwap(
       }
     }
 
-    let res: { swappedUrl: string | null; faceCount: number };
+    let res: { swappedUrl: string | null; faceCount: number; engine?: string; swapMs?: number };
     try {
       res = await deps.dispatchDual(target);
     } catch (e) {
@@ -113,6 +115,13 @@ export async function genderSafeDualSwap(
     }
     faceCount = res.faceCount;
     if (res.swappedUrl) {
+      // SUCCESS-path telemetry (Stage 0, 2026-07-08): the engine mix +
+      // attempt count must be visible in ai_generation_log — success used to
+      // log nothing, which let an audit misread the live dynamic engine as
+      // dormant. These reasons ride the caller's fallbackReasons into the log.
+      reasons.push(`dual_engine:${res.engine ?? 'unknown'}`);
+      reasons.push(`dual_attempts:${attempt + 1}`);
+      if (typeof res.swapMs === 'number') reasons.push(`dual_swap_ms:${res.swapMs}`);
       return { url: res.swappedUrl, outcome: 'dual', faceCount, predictionId, reasons };
     }
     // No clean 2-face split → the loop re-renders the couple and tries again.

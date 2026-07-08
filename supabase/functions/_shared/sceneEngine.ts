@@ -406,6 +406,18 @@ const LIGHTING: Entry[] = [
   { text: 'stark fluorescent lighting in an otherwise dark space', weight: 4, tags: ['urban'] },
 ];
 
+// ⚠️ CONTRADICTION WARNING (Stage 0 audit, 2026-07-08 — FACE_SWAP_ENGINE_AUDIT.md):
+// These *_FACESWAP pools mandate SMALL-subject framing ("environment still
+// dominant", "vast environment", face 8-15% of height below) — the exact
+// framing the 2026-06-19 incident proved KILLS swaps (detector can't find the
+// faces). They are NOT dead: nightly's freeform-brief legs still consume the
+// assembleScene output when the slot pipeline doesn't handle a render (pet
+// singles + the dual/single fallback when the slot pipeline throws), so
+// dreamSubject built from these pools reaches live prompts on those rare
+// paths. The slot pipeline (characterSlotPrompt.ts) owns the CORRECT framing
+// contract (waist-up, faces large, gap). Fix-by-alignment is queued as part
+// of the pose-freedom stage (FACE_SWAP_UPGRADE_PLAN.md Stage 5) — do NOT add
+// new consumers, and do NOT copy these entries into new paths.
 const SUBJECT_SCALE_FACESWAP: Entry[] = [
   { text: 'subject fills 25% of the frame height, face clearly visible', weight: 8 },
   { text: 'three-quarter body shot, subject fills 30% of frame, face readable', weight: 7 },
