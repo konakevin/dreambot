@@ -28,7 +28,7 @@ import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost } from '@/hooks/useDeletePost';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
-import { LikesSheet } from '@/components/LikesSheet';
+import { LikesOverlay } from '@/components/LikesOverlay';
 import { VerticalPager, type VerticalPagerHandle } from '@/components/VerticalPager';
 import type { GestureType } from 'react-native-gesture-handler';
 import { colors } from '@/constants/theme';
@@ -112,7 +112,7 @@ type FeedCardProps = {
   toggleLike: (vars: { uploadId: string; currentlyLiked: boolean }) => void;
   toggleFavorite: (vars: { uploadId: string; currentlyFavorited: boolean }) => void;
   onComment: (post: DreamPostItem) => void;
-  onLikesPress: (id: string) => void;
+  onLikesPress: (post: DreamPostItem) => void;
   onDelete: (id: string) => void;
   onAdminDelete: (id: string) => void;
   onTogglePosted?: (id: string) => void;
@@ -183,7 +183,7 @@ const FeedCard = memo(function FeedCard({
       }
       onLikesPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        onLikesPress(item.id);
+        onLikesPress(item);
       }}
       showVisibilityToggle={!!showVisibilityToggle && item.user_id === userId}
       onTogglePosted={onTogglePosted ? () => onTogglePosted(item.id) : undefined}
@@ -352,10 +352,13 @@ export function FullScreenFeed({
       return;
     }
     setCommentPost(null);
-    setLikesPostId(null);
+    setLikesPost(null);
+    // Both overlays mask the host screen's chrome while open — restore it, or
+    // a re-tap dismissal strands the pills hidden and untouchable.
+    onHudToggle?.(true);
     currentIndex.current = 0;
     scrollToTopImpl(true);
-  }, [scrollToTopToken, scrollToTopImpl]);
+  }, [scrollToTopToken, scrollToTopImpl, onHudToggle]);
 
   // Pull-to-refresh: the pager owns the spinner, so we just run the refetch
   // and jump back to the top once it lands.
@@ -373,7 +376,7 @@ export function FullScreenFeed({
   const { data: likeIds = new Set<string>() } = useLikeIds();
   const { mutate: toggleLike } = useToggleLike();
   const { mutate: deletePost } = useDeletePost();
-  const [likesPostId, setLikesPostId] = useState<string | null>(null);
+  const [likesPost, setLikesPost] = useState<DreamPostItem | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
   // Comment-notification deep link: auto-open the comment thread on the target
@@ -496,7 +499,13 @@ export function FullScreenFeed({
           // screen — hidden HUD is also non-interactive.
           onHudToggle?.(false);
         }}
-        onLikesPress={setLikesPostId}
+        onLikesPress={(p) => {
+          setLikesPost(p);
+          // Same chrome-masking as comments: the host screen's pill overlay
+          // (home tabs / bot pills) draws ABOVE this subtree and would cover
+          // the overlay header. Hidden HUD is faded AND non-interactive.
+          onHudToggle?.(false);
+        }}
         onDelete={handleDelete}
         onAdminDelete={handleAdminDelete}
         onTogglePosted={onTogglePosted}
@@ -576,11 +585,15 @@ export function FullScreenFeed({
           hideTabBar={hideTabBar}
         />
       )}
-      <LikesSheet
-        uploadId={likesPostId}
-        visible={!!likesPostId}
-        onClose={() => setLikesPostId(null)}
-      />
+      {likesPost && (
+        <LikesOverlay
+          post={likesPost}
+          onClose={() => {
+            setLikesPost(null);
+            onHudToggle?.(true);
+          }}
+        />
+      )}
     </>
   );
 }
