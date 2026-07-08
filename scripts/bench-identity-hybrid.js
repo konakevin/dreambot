@@ -30,8 +30,10 @@ const REPLICATE = process.env.REPLICATE_API_TOKEN;
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const CODEFORMER = 'cc4956dd26fa5a7185d5660cc9100fab1b8070a1d1654a8bb5eb6d443b020bb2';
 const CDINGRAM = 'd1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111';
-const PULID = { model: 'bytedance/flux-pulid' };
-const INFU = { model: 'zsxkib/infinite-you' };
+// Community models must be called by VERSION HASH via POST /v1/predictions —
+// the models/<owner>/<name>/predictions route 404s for them (official-only).
+const PULID = '8baa7ef2255075b46f4d91cd238c21d31181b3e6a864463f967960bb0112525b';
+const INFU = 'b1370c5f5b1bb078eaa87332641c9cc6b89fff1bbd5c61f9e0e81370541b24f0';
 const FLUX_11_PRO = 'black-forest-labs/flux-1.1-pro';
 
 const OUT = path.join(os.homedir(), 'Desktop', 'identity-hybrid-bench');
@@ -184,7 +186,7 @@ async function download(url, file) {
       })(),
       (async () => {
         const r = await replicate(
-          null,
+          PULID,
           {
             prompt: scene.p,
             main_face_image: kevinUrl,
@@ -192,17 +194,15 @@ async function download(url, file) {
             height: 1152,
             id_weight: 1,
             num_steps: 20,
-            output_format: 'jpg',
             output_quality: 90,
           },
-          'pulid',
-          PULID.model
+          'pulid'
         );
         return r;
       })(),
       (async () => {
         const r = await replicate(
-          null,
+          INFU,
           {
             prompt: scene.p,
             id_image: kevinUrl,
@@ -213,8 +213,7 @@ async function download(url, file) {
             output_format: 'jpg',
             output_quality: 90,
           },
-          'infiniteyou',
-          INFU.model
+          'infiniteyou'
         );
         return r;
       })(),
