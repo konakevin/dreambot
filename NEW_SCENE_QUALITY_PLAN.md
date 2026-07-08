@@ -1,8 +1,9 @@
 # NEW_SCENE_QUALITY_PLAN.md — freeform uploaded-photo New Scene, done right
 
-**Status:** plan v2 (2026-07-08). No engine code yet. Grounded in the 4-agent render-flow
-audit + a ruthless review + three production measurements, all same day. v2 reverses one v1
-overreach (do NOT drop the solo swap) and adds a hard validation gate.
+**Status:** APPROVED 2026-07-08 (v2 + two rounds of review amendments). No engine code yet.
+Grounded in the 4-agent render-flow audit + two ruthless reviews + three production
+measurements, all same day. Reverses one v1 overreach (do NOT drop the solo swap) and gates the
+build behind a validation phase.
 
 ## The goal
 
@@ -181,6 +182,15 @@ Restyle read as one family.
 
 ## Guardrails / correctness
 
+- **Client-known route is NOT a new trust surface — the solo-swap guard already backstops it.**
+  Classifying at attach-time means a tampered client could claim the solo route for a group
+  photo, but there's no exploit: the tier price is a server-validated enum (no economic gain),
+  and the quality attack self-defeats — the existing solo-swap guard (`singleSwapGuard.ts` /
+  `ensureSoloSwapTarget`) re-probes face count + gender **server-side at render**, so a group
+  smuggled onto the solo route hits `solo_multi_face` and rerenders or refunds. **Do NOT add a
+  redundant server re-classification call**; the guard is the backstop. (Bonus: the submit-time
+  9:16 crop can only remove content, never add people, so a route can only drift toward
+  reference, the safe direction.)
 - **Reference capability validated:** the upload path must resolve to a reference-capable model
   (fixes the latent silent-ignore where a text-only model drops the photo, `generateImage.ts:108-110`).
 - **Queue weight:** reference-path uploads → **light**; solo-swap uploads stay heavy. Also fix
@@ -210,7 +220,10 @@ Restyle read as one family.
   authoring, medium-bucket routing, visible fallback, capability + weight fixes, tier-enum
   pricing. Fixes the dog bug (and the "grandma's lake house" bug) without risking the selfie.
 - **Phase 2 — UI + copy contract.** Ships **with or before** any change to the solo path;
-  tier toggle, relabel Restyle, identity chip, promise lines, nudge, price display.
+  tier toggle, relabel Restyle, identity chip, promise lines, nudge, price display. **Reframe
+  the group/unclear pre-charge confirm modal:** with group now a valid, supported route, its
+  copy shifts from a "heads-up, this may not work" *warning* to "here's what you'll get" — add
+  it to the copy pass so the old warning tone isn't left in place.
 - **Later / optional.** DLT-on-new-path; the reference→solo-swap→kontext-unify hybrid for solo
   (only if the bench shows a reference base beats today's solo path); dual-swap-from-upload
   (only if group/couple reference likeness proves unacceptable — high bar, revisits the can of
