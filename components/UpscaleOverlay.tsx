@@ -43,6 +43,12 @@ interface State {
 }
 type Listener = (s: State) => void;
 let listener: Listener | null = null;
+// Which upload the VISIBLE modal is waiting on — read by the notification
+// toast glue (app/_layout.tsx) to suppress the redundant "HD download is
+// ready" toast while the user is literally watching it finish (Kevin
+// 2026-07-08). Cleared on hide, so a dismissed modal (upscale keeps running
+// in the background) still gets its completion toast.
+let watchedUploadId: string | null = null;
 
 export const UpscaleModal = {
   /**
@@ -52,14 +58,21 @@ export const UpscaleModal = {
    * setProcessing() once the server confirms the upscale kicked.
    */
   show(uploadId: string) {
+    watchedUploadId = uploadId;
     listener?.({ visible: true, uploadId, phase: 'requesting' });
   },
   /** Server confirmed the upscale is running. */
   setProcessing(uploadId: string) {
+    watchedUploadId = uploadId;
     listener?.({ visible: true, uploadId, phase: 'processing' });
   },
   hide() {
+    watchedUploadId = null;
     listener?.({ visible: false, uploadId: null, phase: 'requesting' });
+  },
+  /** The upload the visible modal is waiting on (null when hidden). */
+  watchingUploadId(): string | null {
+    return watchedUploadId;
   },
 };
 

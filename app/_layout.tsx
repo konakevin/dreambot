@@ -42,7 +42,7 @@ import { AiConsentProvider } from '@/components/AiConsentSheet';
 import { PremiumGateProvider } from '@/components/PremiumGateSheet';
 import { AvatarConfirmProvider } from '@/components/AvatarConfirm';
 import { Toast, ToastHost } from '@/components/Toast';
-import { UpscaleModalHost } from '@/components/UpscaleOverlay';
+import { UpscaleModalHost, UpscaleModal } from '@/components/UpscaleOverlay';
 
 import { queryClient } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
@@ -246,6 +246,17 @@ function runToastAction(action: ToastAction): void {
 function maybeShowNotificationToast(row: NotificationRowLike | null | undefined): void {
   if (!row) return;
   if (row.id && row.id === lastToastedNotifId) return;
+  // HD-upscale completion while the user is WATCHING the upscale modal for
+  // that exact upload: the modal auto-saves in front of them, so the toast is
+  // pure noise (Kevin 2026-07-08). A dismissed modal clears the watch, so
+  // background waiters still get their toast; the inbox row stays either way.
+  if (
+    row.type === 'download_ready' &&
+    row.upload_id &&
+    row.upload_id === UpscaleModal.watchingUploadId()
+  ) {
+    return;
+  }
   const spec = toastForNotification(row);
   if (!spec) return;
   lastToastedNotifId = row.id;
