@@ -1906,10 +1906,13 @@ Output ONLY the prompt.`;
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId, { retry: false }),
-          rerender: async () => {
+          rerender: async (attempt: number) => {
             const rr = await generateImage(
               'flux-dev',
-              finalPrompt,
+              // Stage 5a: final retry mutates — see generate-dream twin.
+              attempt >= 2
+                ? `two people side by side, both faces clearly visible and unobstructed, heads apart, ${finalPrompt}`
+                : finalPrompt,
               undefined,
               {
                 replicateToken: REPLICATE_TOKEN,
@@ -1983,7 +1986,7 @@ Output ONLY the prompt.`;
           },
           log: (m) => console.log(`[nightly-dreams] ${m}`),
         },
-        { deadlineMs: t0 + 140_000 }
+        { deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
       );
       fallbackReasons.push(...soloGuard.reasons);
       logAxes.soloFaceCount = soloGuard.faceCount;

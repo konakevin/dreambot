@@ -37,8 +37,11 @@ export interface DualSwapDeps {
   ) => Promise<{ swappedUrl: string | null; faceCount: number; engine?: string; swapMs?: number }>;
   /** Single-swap one source onto the dominant face (the gender-safe degrade). */
   singleSwap: (source: string, target: string) => Promise<string>;
-  /** Produce a FRESH render of the same couple scene (different layout/seed). */
-  rerender: () => Promise<{ url: string; predictionId?: string }>;
+  /** Produce a FRESH render of the same couple scene (different layout/seed).
+   *  Stage 5a (2026-07-08): receives the attempt number so callers can MUTATE
+   *  the prompt on the final retry (prepend face-separation framing) instead
+   *  of re-rolling the identical prompt and hoping for a luckier layout. */
+  rerender: (attempt: number) => Promise<{ url: string; predictionId?: string }>;
   /** The user's own face URL — the gender-safe source for a single-swap degrade. */
   selfSource: string;
   log?: (msg: string) => void;
@@ -94,7 +97,7 @@ export async function genderSafeDualSwap(
       if (!haveBudget()) break;
       reasons.push('rerender_for_dual');
       try {
-        const rr = await deps.rerender();
+        const rr = await deps.rerender(attempt);
         target = rr.url;
         predictionId = rr.predictionId ?? predictionId;
         log(`re-rendered the couple (attempt ${attempt})`);

@@ -105,6 +105,54 @@ function judge(
 }
 
 /**
+ * Stage 3 (FACE_SWAP_UPGRADE_PLAN.md): probe via the Fly service's /detect
+ * (YuNet + genderage, ~200ms, deterministic) instead of 2 Haiku vision calls.
+ * Selected by SOLO_PROBE_ENGINE=fly (Supabase secret — config-level rollback
+ * to 'haiku'). Any /detect error falls back to the Haiku probe in-request, so
+ * this can only be faster, never less available. Output is mapped to the
+ * classifyDualGenders shape so judge() is engine-agnostic.
+ */
+// Bench 2026-07-08 (12 renders): 10/12 agreement with Haiku; BOTH misses were
+// stylized mediums (canvas false-2-faces, illustration false-0-faces) — the
+// predicted YuNet weakness on painted faces. So the Fly probe is gated to
+// PHOTOREAL dream_mediums keys where its reads are trustworthy; every
+// stylized medium keeps Haiku. (These three are also the mediums nightly
+// re-rolls AWAY from for character dreams, so in practice this fires on
+// Create solos — the smallest blast radius.)
+const PHOTOREAL_PROBE_MEDIUMS = new Set(['photography', 'hyperreal', 'render']);
+
+async function flyProbe(
+  imageUrl: string
+): Promise<Awaited<ReturnType<typeof classifyDualGenders>> | null> {
+  const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
+  const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
+  if (!flyUrl || !flyToken) return null;
+  try {
+    const base = flyUrl.endsWith('/') ? flyUrl.slice(0, -1) : flyUrl;
+    const res = await fetch(`${base}/detect`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${flyToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrl }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) return null;
+    const j = (await res.json()) as {
+      faces?: { x: number; w: number; gender: 'male' | 'female' | null }[];
+    };
+    if (!Array.isArray(j.faces)) return null;
+    const byX = [...j.faces].sort((a, b) => a.x - b.x);
+    return {
+      left: byX[0]?.gender ?? null,
+      right: byX[1]?.gender ?? null,
+      faceCount: j.faces.length,
+      twoDistinctFaces: j.faces.length === 2,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Probe (and if needed re-render) a solo-cast pre-swap render until it is
  * safe to paste the cast face, or report that it never became safe.
  * Attempt 0 probes the original render; each further attempt re-renders.
@@ -112,7 +160,7 @@ function judge(
 export async function ensureSoloSwapTarget(
   renderUrl: string,
   deps: SoloSwapGuardDeps,
-  opts: { maxRerenders?: number; deadlineMs?: number } = {}
+  opts: { maxRerenders?: number; deadlineMs?: number; mediumKey?: string } = {}
 ): Promise<SoloSwapGuardResult> {
   const log = deps.log ?? (() => {});
   const reasons: string[] = [];
@@ -147,7 +195,19 @@ export async function ensureSoloSwapTarget(
     }
 
     try {
-      last = judge(await classifyDualGenders(target, deps.replicateToken), deps.castGender);
+      let read: Awaited<ReturnType<typeof classifyDualGenders>> | null = null;
+      // typeof guard: this module also runs under jest (no Deno global).
+      if (
+        typeof Deno !== 'undefined' &&
+        Deno.env.get('SOLO_PROBE_ENGINE') === 'fly' &&
+        opts.mediumKey &&
+        PHOTOREAL_PROBE_MEDIUMS.has(opts.mediumKey)
+      ) {
+        read = await flyProbe(target);
+        if (!read) reasons.push('solo_probe_fly_fallback_haiku');
+      }
+      read = read ?? (await classifyDualGenders(target, deps.replicateToken));
+      last = judge(read, deps.castGender);
     } catch (e) {
       // Probe infrastructure error → benefit of the doubt (see header).
       log(`solo probe threw: ${(e as Error).message}`);

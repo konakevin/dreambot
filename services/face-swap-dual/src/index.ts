@@ -12,6 +12,8 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from './faceSwap.ts';
+import { detectFacesWithGender } from './faceDetect.ts';
+import { decodeImage } from './imageCodec.ts';
 
 /**
  * Constant-time string equality — mirrors supabase/functions/_shared/timingSafe.ts
@@ -108,6 +110,47 @@ Deno.serve({ port: PORT }, async (req) => {
     if (!presented || !timingSafeEqual(presented, expectedToken)) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // ── /detect — YuNet + genderage probe (Stage 3, FACE_SWAP_UPGRADE_PLAN.md).
+  // Replaces the solo guard's 2-Haiku-calls-per-probe with a deterministic
+  // in-process read: ~200ms, no LLM, exact boxes. Auth already enforced above.
+  if (url.pathname === '/detect') {
+    try {
+      const { imageUrl } = (await req.json()) as { imageUrl?: string };
+      if (!imageUrl) {
+        return new Response(JSON.stringify({ error: 'imageUrl required' }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        });
+      }
+      const t0d = Date.now();
+      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      if (!resp.ok) throw new Error(`fetch ${resp.status}`);
+      const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
+      const faces = await detectFacesWithGender(img.data, img.width, img.height);
+      return new Response(
+        JSON.stringify({
+          faces: faces.map((f) => ({
+            x: f.x,
+            y: f.y,
+            w: f.w,
+            h: f.h,
+            gender: f.gender ?? null,
+            score: f.score,
+          })),
+          width: img.width,
+          height: img.height,
+          ms: Date.now() - t0d,
+        }),
+        { status: 200, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } }
+      );
+    } catch (err) {
+      return new Response(JSON.stringify({ error: (err as Error).message }), {
+        status: 500,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       });
     }

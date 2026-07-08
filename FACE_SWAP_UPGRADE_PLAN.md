@@ -34,9 +34,9 @@ Stage ledger (fill in as executed):
 | 0 | none (observability/hardening) | 2026-07-08 | — | ✅ DONE: baseline recorded; housekeeping landed (2 audit corrections); Fly auth mandatory+constant-time, deployed; success-path telemetry LIVE (verified: dual_engine:fly-dynamic, dual_attempts:1, dual_swap_ms:16445 on a real dual, 38s e2e) |
 | 1 | ~~dynamic split flip~~ obsolete — already live (verified 2026-07-08 via Fly logs + telemetry) | — | — | ✅ CLOSED: engine confirmed dynamic on real duals; monitor engine mix via faceswap-baseline.js |
 | 2 | post-swap restoration on | FULLY LIVE 2026-07-08 (nightly + Create same day — Kevin: fail-forward, friends-and-family beta) | skipped by owner call | ✅ CLOSED: CodeFormer f=0.9; verified live on a Create swap (face_restore:ok:9220ms, 54s e2e); fail-open + instant config rollback made the soak insurance, not requirement |
-| 3 | solo probe: Haiku → Fly /detect | | 48h | |
-| 4 | dual engine: Fly → easel (canary %) | | 48h per % step | |
-| 5a | dual retry prompt mutation | | 48h | |
+| 3 | solo probe: Haiku → Fly /detect | 2026-07-08 (`SOLO_PROBE_ENGINE=fly`, MEDIUM-GATED) | compressed (owner fail-forward posture) | ✅ LIVE: agreement bench 10/12 vs Haiku on 12 real swapped renders (Fly 262-712ms vs Haiku ~2-6s); BOTH misses were stylized mediums (canvas false-2-faces, illustration false-0-faces) = the plan's predicted YuNet weakness → shipped the contingency: Fly probe only on PHOTOREAL mediums (`photography`/`hyperreal`/`render`, the `PHOTOREAL_PROBE_MEDIUMS` set in singleSwapGuard.ts), Haiku keeps every stylized medium + remains the automatic in-request fallback on /detect transport errors. Note: nightly re-rolls those 3 mediums away for character dreams, so this effectively fires on Create solos only. Rollback: unset the secret |
+| 4 | dual engine: Fly → easel (canary %) | | 48h per % step | bench IN FLIGHT 2026-07-08 (scripts/bench-dual-engines.js, combined with 5b: 4 safe + 6 contact poses, Fly vs easel-on-fal, both +CodeFormer) — first run lost to fal.run sync-gateway hangs; rerun uses the queue.fal.run API |
+| 5a | dual retry prompt mutation | 2026-07-08 (deployed unconditionally, no flag — owner fail-forward call; mutation only engages on attempt ≥2 of an already-failing ladder, so attempt-1 behavior is byte-identical) | n/a | ✅ LIVE: dual rerender ladder prepends "two people side by side, both faces clearly visible and unobstructed, heads apart, " from attempt 2 (dualSwapPipeline `rerender(attempt)`, generate-dream + nightly). Verdict on effectiveness rides the weekly baseline's `dual_attempts:` distribution |
 | 5b | contact poses (pct) | | 72h per % step | |
 | 5c | expanded single compositions (pct) | | 72h | |
 | 6 | stylized swap unify (per medium) | | 72h per medium | |
@@ -144,6 +144,13 @@ set the flag — shadow it first, because its rejection behavior changes cost an
 6. **Rollback:** config off; no deploy.
 
 ## Stage 3 — Solo probe on Fly /detect (shadow → flip, ~2 days)
+
+> **EXECUTED 2026-07-08** — see ledger. Implementation deviated from the sketch below in
+> two ways: (a) the selector is the Supabase secret `SOLO_PROBE_ENGINE` (not engine_config)
+> since it's a server-only routing choice; (b) instead of a multi-day shadow, a one-shot
+> offline agreement bench on 12 real swapped renders (10/12, misses both stylized) went
+> straight to the predicted contingency: medium-gate to photoreal (`PHOTOREAL_PROBE_MEDIUMS`
+> in singleSwapGuard.ts), Haiku everywhere else + as transport fallback.
 
 1. Add `GET/POST /detect` to the Fly service (YuNet + genderage already in-process;
    return `{faces:[{box,gender,score}]}`). Deploy — additive endpoint, no consumer yet.

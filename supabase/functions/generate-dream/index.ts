@@ -1656,10 +1656,15 @@ Output ONLY the prompt.`;
             ),
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
-          rerender: async () => {
+          rerender: async (attempt: number) => {
             const cg = await generateImage(
               effectiveMode,
-              finalPrompt,
+              // Stage 5a: final retry MUTATES the prompt — prepend face-separation
+              // framing (subject-led, Hard-Rule safe) instead of re-rolling the
+              // same prompt for a third identical layout.
+              attempt >= 2
+                ? `two people side by side, both faces clearly visible and unobstructed, heads apart, ${finalPrompt}`
+                : finalPrompt,
               effectiveInputImage,
               { replicateToken: REPLICATE_TOKEN, openaiKey: OPENAI_KEY, geminiKey: GEMINI_KEY },
               pickedModel,
@@ -1717,7 +1722,7 @@ Output ONLY the prompt.`;
           },
           log: (m) => console.log(`[generate-dream] ${m}`),
         },
-        { deadlineMs: t0 + 140_000 }
+        { deadlineMs: t0 + 140_000, mediumKey: resolvedMediumKey }
       );
       fallbackReasons.push(...soloGuard.reasons);
       logAxes.soloFaceCount = soloGuard.faceCount;
