@@ -5,7 +5,7 @@
  * when a user paginates back to a previously-visited bot).
  */
 
-import { useInfiniteQuery, type QueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, keepPreviousData, type QueryClient } from '@tanstack/react-query';
 import { Image as ExpoImage } from 'expo-image';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
@@ -81,6 +81,9 @@ export function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
     initialPageParam: null as FeedCursor | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     enabled: !!useAuthStore.getState().user,
+    // Keep the current feed on screen while a new seed loads (pull-to-refresh),
+    // so isLoading never flips → the full-page spinner never blanks the feed.
+    placeholderData: keepPreviousData,
     // Freeze loaded pages for the session (2026-07-06): feed_score is LIVE
     // (age decay + engagement), so any background refetch of already-loaded
     // pages returns shifted rows and swaps the post under the index-anchored

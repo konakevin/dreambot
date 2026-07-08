@@ -14,6 +14,9 @@ export interface FeedStore {
   // Session seed for feed shuffle
   feedSeed: number;
   regenerateSeed: () => void;
+  /** Set a SPECIFIC seed (used by pull-to-refresh: prefetch the new seed's feed,
+   *  then swap to it here so the reshuffle is instant with no loading flash). */
+  setFeedSeed: (seed: number) => void;
   // Profile tab reset
   profileResetToken: number;
   bumpProfileReset: () => void;
@@ -59,6 +62,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
   feedSeed: Math.random(),
   regenerateSeed: () => set({ feedSeed: Math.random() }),
+  setFeedSeed: (seed) => set({ feedSeed: seed }),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
   homeFeedResetToken: 0,

@@ -40,9 +40,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useQueryClient } from '@tanstack/react-query';
+import { useFeedStore } from '@/store/feed';
 import { FullScreenFeed } from '@/components/FullScreenFeed';
-import { useDreamFeed } from '@/hooks/useDreamFeed';
+import { useDreamFeed, prefetchDreamFeed } from '@/hooks/useDreamFeed';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/store/auth';
 import type { BotUser } from '@/hooks/useBotUsers';
 import type { DreamPostItem } from '@/components/DreamCard';
 
@@ -258,6 +260,8 @@ function BotFeedPage({
     'bots',
     botId
   );
+  const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
+  const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
 
   // Dedup posts by id (same protection HomeScreen has against cursor-boundary repeats)
@@ -271,16 +275,15 @@ function BotFeedPage({
     });
   }, [data]);
 
-  // Pulling down on ANY bot feed should refresh the WHOLE bot section
-  // (Kevin's launch ask). Invalidate every 'bots' query: TanStack
-  // refetches the currently-mounted pages (visible bot + the two
-  // adjacent ones the pager keeps warm) AND marks unmounted ones stale
-  // so they fetch fresh on next swipe-in. The awaited promise resolves
-  // once the active refetches land, so the pull-to-refresh spinner
-  // accurately waits for fresh data on screen.
+  // Pull-to-refresh = PREFETCH the visible bot's feed under a NEW random seed,
+  // then swap to it — instant reshuffle, no loading flash (bot query keys include
+  // feedSeed). Other bot pages reshuffle on next swipe-in with the same new seed.
   const handleRefresh = useCallback(async () => {
-    await queryClient.invalidateQueries({ queryKey: ['dreamFeed', 'bots'] });
-  }, [queryClient]);
+    if (!user) return;
+    const newSeed = Math.random();
+    await prefetchDreamFeed(queryClient, 'bots', user.id, newSeed, botId);
+    setFeedSeed(newSeed);
+  }, [user, queryClient, botId, setFeedSeed]);
 
   return (
     <FullScreenFeed

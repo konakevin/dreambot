@@ -347,6 +347,11 @@ export function FullScreenFeed({
   // refreshed the feed UNDER a still-open sheet (Kevin 2026-07-05: long-press
   // a comment, tap Home, feed resets behind the orphaned sheet).
   const skipFirstScrollToTop = useRef(true);
+  // Latest-ref so the effect below keys ONLY on the token — onRefreshProp is
+  // often an inline arrow (new identity per parent render) and putting it in
+  // the deps would re-fire the refresh on every re-render.
+  const onRefreshPropRef = useRef(onRefreshProp);
+  onRefreshPropRef.current = onRefreshProp;
   useEffect(() => {
     if (skipFirstScrollToTop.current) {
       skipFirstScrollToTop.current = false;
@@ -358,16 +363,25 @@ export function FullScreenFeed({
     // a re-tap dismissal strands the pills hidden and untouchable.
     onHudToggle?.(true);
     currentIndex.current = 0;
-    scrollToTopImpl(true);
-  }, [scrollToTopToken, scrollToTopImpl, onHudToggle]);
+    // Re-tap = the SAME refresh flow as a finger pull (jump to top, park with
+    // the spinner, new-seed prefetch+swap, settle on the new top post). The
+    // old scrollToTop + parent refetch() pair refetched the SAME seed and the
+    // pager's id-anchor followed the old top post through it → looked dead.
+    if (onRefreshPropRef.current) {
+      pagerRef.current?.refresh();
+    } else {
+      scrollToTopImpl(true);
+    }
+  }, [scrollToTopToken, scrollToTopImpl, onHudToggle, pagerRef]);
 
-  // Pull-to-refresh: the pager owns the spinner, so we just run the refetch
-  // and jump back to the top once it lands.
+  // Pull-to-refresh: the pager owns the whole lifecycle — spinner, parked
+  // strip, and settling onto the NEW top post when the promise resolves
+  // (it drops its key-anchor so the reshuffle is actually visible). No
+  // scroll-to-top here; a second scroll would fight the pager's own reset.
   const handleRefresh = useCallback(async () => {
     if (!onRefreshProp) return;
     await onRefreshProp();
-    setTimeout(() => scrollToTopImpl(true), 300);
-  }, [onRefreshProp, scrollToTopImpl]);
+  }, [onRefreshProp]);
 
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin);

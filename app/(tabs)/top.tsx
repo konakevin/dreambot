@@ -26,7 +26,7 @@ import { Text, TextInput } from '@/components/AppText';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, keepPreviousData } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
@@ -98,6 +98,9 @@ function useExploreDreams(mediums: string[], vibes: string[]) {
       return { score: last.feed_score, id: last.id } as ExploreCursor;
     },
     enabled: !!user,
+    // Keep the current grid on screen while a new seed loads (pull-to-refresh),
+    // so it never blanks to a loading state — the grid reshuffles in place.
+    placeholderData: keepPreviousData,
     // Freeze loaded pages for the session — see hooks/useDreamFeed.ts
     // (2026-07-06): background refetches recompute LIVE feed_scores and
     // reshuffle already-rendered grid content. Pull-to-refresh + the
@@ -418,6 +421,7 @@ export default function SearchExploreScreen() {
 
   // ── Browse feed (grid mode) ──
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const regenerateSeed = useFeedStore((s) => s.regenerateSeed);
   const topGridResetToken = useFeedStore((s) => s.topGridResetToken);
   const gridRef = useRef<RNFlatList>(null);
 
@@ -459,14 +463,15 @@ export default function SearchExploreScreen() {
 
   // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
   const [isPulling, setIsPulling] = useState(false);
+  // Pull-to-refresh RESEEDS the browse grid (new random order) — a plain refetch
+  // kept the same seed → identical grid. Hold the native spinner a beat so it
+  // doesn't flash off before the reshuffled grid lands.
   const handlePullToRefresh = useCallback(async () => {
     setIsPulling(true);
-    try {
-      await refetch();
-    } finally {
-      setIsPulling(false);
-    }
-  }, [refetch]);
+    regenerateSeed();
+    await new Promise((r) => setTimeout(r, 650));
+    setIsPulling(false);
+  }, [regenerateSeed]);
 
   const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 

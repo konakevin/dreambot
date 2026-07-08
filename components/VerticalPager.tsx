@@ -26,6 +26,7 @@ import {
   useState,
 } from 'react';
 import { ActivityIndicator, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
@@ -42,12 +43,25 @@ const SNAP_EASING = Easing.out(Easing.quad); // mild ease-out, no long tail
 const FLICK_VELOCITY = 350; // px/s — above this a flick advances a page
 const DISTANCE_FRACTION = 0.18; // drag past this fraction of a page advances it
 const EDGE_RESISTANCE = 0.4; // rubber-band past first/last page
-const PULL_TRIGGER = 70; // overscroll-down (px) at the top to fire refresh
-const PULL_REST = 60; // where the strip holds while refreshing
+// Pull-to-refresh feel. The strip follows the finger nearly 1:1 so the pull
+// reads as "the image comes down with me" (the old 0.4–0.75 resistance made
+// it feel stuck and snap back). Refresh fires on distance OR a quick
+// downward flick, Instagram-style.
+const PULL_RESISTANCE = 0.85;
+const PULL_TRIGGER = 110; // strip-px past the top to fire refresh (~130px finger)
+const PULL_FLICK_VELOCITY = 900; // px/s downward release that fires from ≥ half-trigger
+// While refreshing, the strip parks at insets.top + PULL_REST_BELOW_INSET so the
+// revealed gap clears the floating top chrome (feed pills sit at insets.top..~+40)
+// and the spinner is fully visible inside it.
+const PULL_REST_BELOW_INSET = 76;
 
 export interface VerticalPagerHandle {
   scrollToIndex: (index: number, animated?: boolean) => void;
   scrollToOffset: (offset: number, animated?: boolean) => void;
+  /** Programmatic pull-to-refresh (tab re-tap): jump to the top, park the strip
+   *  with the spinner, run onRefresh, settle on the NEW top post — identical to
+   *  a finger pull. Falls back to a plain scroll-to-top when no onRefresh. */
+  refresh: () => void;
 }
 
 interface VerticalPagerProps<T> {
@@ -168,6 +182,9 @@ function VerticalPagerInner<T>(
   const keyExtractorRef = useRef(keyExtractor);
   keyExtractorRef.current = keyExtractor;
   const activeKeyRef = useRef<string | null>(null);
+  // True while a pull-to-refresh is in flight (declared here because the
+  // anchor effects below consult it; owned by the pull-to-refresh block).
+  const refreshingRef = useRef(false);
 
   // User navigation (swipe / scrollToIndex) adopts the new card as the anchor.
   // Runs on index changes only — declared BEFORE the data-shift effect so that
@@ -183,6 +200,11 @@ function VerticalPagerInner<T>(
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
   useEffect(() => {
+    // During a pull-to-refresh the data swap is INTENTIONAL — following the old
+    // top post to its new index would visually undo the refresh (the user would
+    // see the exact same post and conclude nothing happened). startRefresh
+    // resets to the new top instead.
+    if (refreshingRef.current) return;
     const key = activeKeyRef.current;
     if (key == null) return;
     const idx = activeIndexRef.current;
@@ -205,21 +227,36 @@ function VerticalPagerInner<T>(
   }, [data]);
 
   // ── Pull-to-refresh ──
+  const insets = useSafeAreaInsets();
+  const pullRestY = insets.top + PULL_REST_BELOW_INSET;
   const onRefreshRef = useRef(onRefresh);
   onRefreshRef.current = onRefresh;
   const hasRefreshSV = useSharedValue(!!onRefresh);
   useEffect(() => {
     hasRefreshSV.value = !!onRefresh;
   }, [onRefresh, hasRefreshSV]);
-  const refreshingRef = useRef(false);
+  // 1 while refreshing → the indicator holds at full opacity + the strip stays
+  // parked at pullRestY until onRefresh resolves.
+  const refreshingSV = useSharedValue(0);
   const startRefresh = useCallback(() => {
     if (refreshingRef.current || !onRefreshRef.current) return;
     refreshingRef.current = true;
+    refreshingSV.value = 1;
+    // onRefresh AWAITS its work (e.g. prefetch-then-swap), so the spinner stays
+    // up exactly as long as the refresh takes — no arbitrary floor, no flash.
     Promise.resolve(onRefreshRef.current()).finally(() => {
       refreshingRef.current = false;
-      translateY.value = withTiming(0, { duration: 200, easing: SNAP_EASING });
+      refreshingSV.value = 0;
+      // Refresh only fires from index 0; if the user is still there, drop the
+      // key anchor so the data-change effect does NOT chase the old top post
+      // into the reshuffled order — the strip settles onto the NEW top post.
+      // (If they swiped away mid-refresh, leave their position alone.)
+      if (indexSV.value === 0) {
+        activeKeyRef.current = null;
+        translateY.value = withTiming(0, { duration: 250, easing: SNAP_EASING });
+      }
     });
-  }, [translateY]);
+  }, [translateY, refreshingSV, indexSV]);
 
   useImperativeHandle(
     ref,
@@ -244,8 +281,20 @@ function VerticalPagerInner<T>(
           ? withTiming(targetY, { duration: SNAP_MS, easing: SNAP_EASING })
           : targetY;
       },
+      refresh: () => {
+        if (refreshingRef.current) return;
+        indexSV.value = 0;
+        setActiveIndex(0);
+        cancelAnimation(translateY);
+        if (!onRefreshRef.current) {
+          translateY.value = withTiming(0, { duration: SNAP_MS, easing: SNAP_EASING });
+          return;
+        }
+        translateY.value = withTiming(pullRestY, { duration: 250, easing: SNAP_EASING });
+        startRefresh();
+      },
     }),
-    [count, pageHeight, indexSV, translateY]
+    [count, pageHeight, indexSV, translateY, pullRestY, startRefresh]
   );
 
   const pan = useMemo(() => {
@@ -276,18 +325,28 @@ function VerticalPagerInner<T>(
         const ph = pageHeightSV.value;
         const minY = -(countSV.value - 1) * ph;
         let y = startTranslateY.value + e.translationY;
-        if (y > 0)
-          y = y * EDGE_RESISTANCE; // before first page
-        else if (y < minY) y = minY + (y - minY) * EDGE_RESISTANCE; // past last
+        if (y > 0) {
+          // Top overscroll. Gentler resistance when pull-to-refresh is available
+          // at the first page (so it reaches the trigger); firm rubber-band
+          // otherwise.
+          const r = hasRefreshSV.value && indexSV.value === 0 ? PULL_RESISTANCE : EDGE_RESISTANCE;
+          y = y * r;
+        } else if (y < minY) y = minY + (y - minY) * EDGE_RESISTANCE; // past last
         translateY.value = y;
       })
       .onEnd((e) => {
         'worklet';
         const ph = pageHeightSV.value;
         const base = indexSV.value;
-        // Pull-to-refresh: at the very top, pulled down past the trigger.
-        if (base === 0 && hasRefreshSV.value && translateY.value > PULL_TRIGGER) {
-          translateY.value = withTiming(PULL_REST, { duration: 140, easing: SNAP_EASING });
+        // Pull-to-refresh: at the very top, pulled past the trigger distance —
+        // or released with a quick downward flick from at least half of it.
+        if (
+          base === 0 &&
+          hasRefreshSV.value &&
+          (translateY.value > PULL_TRIGGER ||
+            (translateY.value > PULL_TRIGGER / 2 && e.velocityY > PULL_FLICK_VELOCITY))
+        ) {
+          translateY.value = withTiming(pullRestY, { duration: 180, easing: SNAP_EASING });
           runOnJS(startRefresh)();
           runOnJS(setActive)(false);
           return;
@@ -316,6 +375,7 @@ function VerticalPagerInner<T>(
     indexSV,
     pageHeightSV,
     panRef,
+    pullRestY,
     setActive,
     simultaneousRef,
     startRefresh,
@@ -327,11 +387,21 @@ function VerticalPagerInner<T>(
     transform: [{ translateY: translateY.value }],
   }));
 
-  // Pull-to-refresh spinner — fades in with the top overscroll, stays while
-  // refreshing (the strip is held at PULL_REST).
-  const spinnerStyle = useAnimatedStyle(() => {
+  // Pull-to-refresh indicator: a plain (always-spinning) spinner that rides
+  // down at half the pull speed into the revealed gap, settling BELOW the
+  // floating top chrome (its base sits at insets.top + 12 and it shifts down up
+  // to 36px → final resting spot ~insets.top + 48, clear of the feed pills
+  // which end around insets.top + 40). HIDDEN until the pull crosses the
+  // trigger — the spinner appearing = "release now and it WILL refresh"
+  // (showing it earlier promised a refresh that a short pull never delivered).
+  // A 12px ramp past the trigger softens the pop-in. Full opacity while
+  // refreshing.
+  const indicatorStyle = useAnimatedStyle(() => {
     const pull = translateY.value > 0 ? translateY.value : 0;
-    return { opacity: Math.min(1, pull / PULL_TRIGGER) };
+    return {
+      opacity: refreshingSV.value === 1 ? 1 : Math.min(1, Math.max(0, (pull - PULL_TRIGGER) / 12)),
+      transform: [{ translateY: Math.min(pull * 0.5, 36) }],
+    };
   });
 
   const windowItems = useMemo(() => {
@@ -346,7 +416,10 @@ function VerticalPagerInner<T>(
     <GestureDetector gesture={pan}>
       <View style={[styles.viewport, style]}>
         {onRefresh ? (
-          <Animated.View pointerEvents="none" style={[styles.spinner, spinnerStyle]}>
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.spinnerWrap, { top: insets.top + 12 }, indicatorStyle]}
+          >
             <ActivityIndicator color={refreshTint} />
           </Animated.View>
         ) : null}
@@ -372,5 +445,6 @@ export const VerticalPager = forwardRef(VerticalPagerInner) as <T>(
 const styles = StyleSheet.create({
   viewport: { flex: 1, overflow: 'hidden' },
   page: { position: 'absolute', left: 0, right: 0 },
-  spinner: { position: 'absolute', top: 20, left: 0, right: 0, alignItems: 'center', zIndex: 2 },
+  // top is set inline from the safe-area inset.
+  spinnerWrap: { position: 'absolute', left: 0, right: 0, alignItems: 'center', zIndex: 2 },
 });

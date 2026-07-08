@@ -11,13 +11,17 @@ import { trackFeedTabSelected } from '@/lib/analytics';
 import { useFeedStore } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
+import { useQueryClient } from '@tanstack/react-query';
+// The feed query itself lives in hooks/useDreamFeed — the SAME hook + query
+// keys the prefetchers write into. (A local copy with a 4-element key used to
+// live here; pull-to-refresh prefetched into the shared 5-element key that
+// this screen never read, so the "instant swap" never happened on home.)
+import { useDreamFeed, prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { reconcileWelcomeBonus } from '@/lib/welcomeBonus';
-import { POST_SELECT, mapToDreamPost, mapRpcToDreamPost, castRows } from '@/lib/mapPost';
+import { POST_SELECT, mapToDreamPost } from '@/lib/mapPost';
 // POST_SELECT and mapToDreamPost still used by deep-link fetch below
 import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { UsernameNudge } from '@/components/UsernameNudge';
@@ -27,77 +31,7 @@ import { OverlayPill } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAnnouncement } from '@/hooks/useAnnouncement';
 import { AnnouncementSheet } from '@/components/AnnouncementSheet';
-import type { DreamPostItem } from '@/components/DreamCard';
-
-// Content diversity post-processing — extracted to lib/feedDiversity.ts for unit testing.
-import { applyDiversity } from '@/lib/feedDiversity';
-
 type FeedTab = 'forYou' | 'following';
-const PAGE_SIZE = 20;
-
-interface FeedCursor {
-  score: number;
-  id: string;
-}
-
-type FeedRow = DreamPostItem & { feed_score?: number };
-type FeedPage = { rows: FeedRow[]; nextCursor: FeedCursor | null };
-
-function useDreamFeed(tab: FeedTab) {
-  const user = useAuthStore((s) => s.user);
-  const feedSeed = useFeedStore((s) => s.feedSeed);
-
-  return useInfiniteQuery({
-    queryKey: ['dreamFeed', tab, user?.id, feedSeed],
-    queryFn: async ({ pageParam }): Promise<FeedPage> => {
-      const { data, error } = await supabase.rpc('get_feed', {
-        p_user_id: user!.id,
-        p_limit: PAGE_SIZE,
-        p_seed: feedSeed,
-        p_tab: tab,
-        ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
-      });
-      if (error) throw error;
-      const rawRows = castRows(data).map((row) => ({
-        ...mapRpcToDreamPost(row),
-        feed_score: row.feed_score as number,
-      }));
-      // Diversify PER-PAGE so each page is order-stable on its own.
-      // Earlier pages never reshuffle when fetchNextPage arrives — fixes the
-      // "wrong post pops in mid-scroll at the page boundary" bug. Trade-off:
-      // streak detection is within-page only, so cross-page-boundary streaks
-      // are possible (acceptable at PAGE_SIZE=20).
-      const rows: FeedRow[] = applyDiversity(rawRows) as FeedRow[];
-      // Compute cursor at FETCH time from raw RPC result, NOT from current
-      // cached row count. Otherwise optimistic deletes shrink lastPage.length
-      // below PAGE_SIZE → getNextPageParam returns undefined → pagination
-      // dies. Cursor is fixed at the moment the page lands and never changes,
-      // so deletes can't break "has more pages" detection.
-      const last = rawRows[rawRows.length - 1];
-      // Terminate ONLY on a genuinely empty page. An undersized page does NOT
-      // mean we're at the end — the server-side get_feed filter (blocked
-      // users, hidden posts, dedup) can return fewer rows than requested even
-      // when more are available below. The old PAGE_SIZE check stranded
-      // users at a fake bottom 30 posts in. Trade-off: one trailing empty
-      // fetch when the feed is actually exhausted.
-      const nextCursor: FeedCursor | null =
-        last?.feed_score != null ? { score: last.feed_score, id: last.id } : null;
-      return { rows, nextCursor };
-    },
-    initialPageParam: null as FeedCursor | null,
-    getNextPageParam: (lastPage) => {
-      // Use the cursor stored at fetch time — survives optimistic deletes.
-      return lastPage.nextCursor ?? undefined;
-    },
-    enabled: !!useAuthStore.getState().user,
-    // Freeze loaded pages for the session — see hooks/useDreamFeed.ts
-    // (2026-07-06): background refetches recompute LIVE feed_scores and
-    // reshuffle the prefix under the index-anchored pager mid-scroll.
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
-}
 
 function FeedTabs({ active, onChange }: { active: FeedTab; onChange: (tab: FeedTab) => void }) {
   const tabs: { key: FeedTab; label: string }[] = [
@@ -174,6 +108,7 @@ export default function HomeScreen() {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const setFeedSeed = useFeedStore((s) => s.setFeedSeed);
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const { data: botUsers } = useBotUsers();
 
@@ -243,7 +178,7 @@ export default function HomeScreen() {
   // feed refetch + remount lags behind the pill animation by a frame or
   // two instead of blocking it. Pill highlight feels snappy.
   const deferredTab = useDeferredValue(activeTab);
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useDreamFeed(deferredTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
@@ -318,16 +253,11 @@ export default function HomeScreen() {
   }
 
   // ── Tap-active-tab gesture (Instagram-style) ──
-  // FullScreenFeed handles the scroll-to-top via its scrollToTopToken prop.
-  // Here we just trigger the refetch.
-  const skipFirstFeedReset = useRef(true);
-  useEffect(() => {
-    if (skipFirstFeedReset.current) {
-      skipFirstFeedReset.current = false;
-      return;
-    }
-    refetch();
-  }, [homeFeedResetToken, refetch]);
+  // FullScreenFeed handles the whole re-tap via its scrollToTopToken prop: it
+  // runs the pager's programmatic refresh(), which invokes our onRefresh below
+  // (new-seed prefetch + swap) with the pull-to-refresh spinner. No separate
+  // refetch() here — refetching the SAME seed changed almost nothing and the
+  // pager's id-anchor hid what little did change.
 
   return (
     <View style={s.root}>
@@ -335,7 +265,16 @@ export default function HomeScreen() {
         key={activeTab}
         posts={posts}
         isLoading={isLoading}
-        onRefresh={() => refetch()}
+        // Pull-to-refresh = PREFETCH a new random seed's feed, THEN swap to it,
+        // so the reshuffle is instant with no loading flash (the old feed stays
+        // on screen the whole time; the spinner in the pull gap tracks the
+        // prefetch). Swapping only refetched the same seed before → no change.
+        onRefresh={async () => {
+          if (!user) return;
+          const newSeed = Math.random();
+          await prefetchDreamFeed(queryClient, activeTab, user.id, newSeed);
+          setFeedSeed(newSeed);
+        }}
         listRef={listRef}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) fetchNextPage();
