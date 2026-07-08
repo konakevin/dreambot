@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { PRIVATE_BOT_USERNAMES } from '@/hooks/useBotUsers';
-import type { FollowUser } from './useFollowersList';
+import { sortPeopleThenBots, type FollowUser } from './useFollowersList';
 
 export function useFollowingList(userId: string) {
   return useQuery({
@@ -14,7 +14,7 @@ export function useFollowingList(userId: string) {
       for (let offset = 0; ; offset += PAGE) {
         const { data, error } = await supabase
           .from('follows')
-          .select('users!following_id(id, username, avatar_url)')
+          .select('users!following_id(id, username, avatar_url, is_bot)')
           .eq('follower_id', userId)
           .order('created_at', { ascending: false })
           .range(offset, offset + PAGE - 1);
@@ -34,7 +34,7 @@ export function useFollowingList(userId: string) {
         }
         if (data.length < PAGE) break;
       }
-      return all;
+      return sortPeopleThenBots(all);
     },
     enabled: !!userId,
     staleTime: 60_000,

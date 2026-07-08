@@ -5,6 +5,20 @@ export interface FollowUser {
   id: string;
   username: string;
   avatar_url: string | null;
+  is_bot?: boolean;
+}
+
+/**
+ * Shared follow-list ordering (Kevin 2026-07-08): people first, alphabetical,
+ * then bots, alphabetical, at the bottom. One flat list — no section headers.
+ */
+export function sortPeopleThenBots(list: FollowUser[]): FollowUser[] {
+  return [...list].sort((a, b) => {
+    if (!!a.is_bot !== !!b.is_bot) return a.is_bot ? 1 : -1;
+    return (a.username ?? '').localeCompare(b.username ?? '', undefined, {
+      sensitivity: 'base',
+    });
+  });
 }
 
 export function useFollowersList(userId: string) {
@@ -18,7 +32,7 @@ export function useFollowersList(userId: string) {
       for (let offset = 0; ; offset += PAGE) {
         const { data, error } = await supabase
           .from('follows')
-          .select('users!follower_id(id, username, avatar_url)')
+          .select('users!follower_id(id, username, avatar_url, is_bot)')
           .eq('following_id', userId)
           .order('created_at', { ascending: false })
           .range(offset, offset + PAGE - 1);
@@ -32,7 +46,7 @@ export function useFollowersList(userId: string) {
         for (const r of data) if (r.users) all.push(r.users as FollowUser);
         if (data.length < PAGE) break;
       }
-      return all;
+      return sortPeopleThenBots(all);
     },
     enabled: !!userId,
     staleTime: 60_000,
