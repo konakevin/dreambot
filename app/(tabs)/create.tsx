@@ -1181,21 +1181,35 @@ export default function CreateScreen() {
               text-only). Folds into the summary row while the keyboard is up. */}
                 {!hasPhoto && (
                   <View className="mb-4">
-                    {/* Mode label + contextual info icon (DreamBot → medium sheet,
-                  Direct → Direct explainer). */}
+                    {/* Mode label + contextual info CTA (DreamBot → medium sheet,
+                  Direct → Direct explainer). The CTA carries WORDS, not just
+                  the ⓘ glyph — a bare 16px icon read as decoration and users
+                  never found the explainer (Kevin 2026-07-09). Accent-colored,
+                  eyebrow-sized: visible without competing with the controls. */}
                     <View className="flex-row items-center mb-1.5 ml-1">
                       <FormLabel>Mode</FormLabel>
                       <TouchableOpacity
                         onPress={handleModeInfo}
                         activeOpacity={0.6}
                         hitSlop={10}
-                        className="ml-1.5"
+                        className="ml-2 flex-row items-center"
                       >
                         <Ionicons
                           name="information-circle-outline"
-                          size={16}
+                          size={13}
                           color={colors.accent}
                         />
+                        <Text
+                          style={{
+                            color: colors.accent,
+                            fontSize: fontScale(11),
+                            fontWeight: '700',
+                            letterSpacing: 0.4,
+                            marginLeft: 3,
+                          }}
+                        >
+                          How it works
+                        </Text>
                       </TouchableOpacity>
                     </View>
                     <View
