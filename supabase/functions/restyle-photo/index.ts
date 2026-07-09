@@ -39,6 +39,7 @@ import {
 } from '../_shared/modelPricing.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
+import { classifyFailure } from '../_shared/classifyFailure.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
@@ -419,7 +420,9 @@ async function handleRequest(req: Request): Promise<Response> {
     restylePool && restylePool.length > 0
       ? restylePool[Math.floor(Math.random() * restylePool.length)]
       : medium.restyleModel;
-  const pickedModel = force_model || restyleChoice || autoPicked.model;
+  // let (not const): provider failover inside generateImage can swap the model
+  // that actually rendered — downstream cost/log bookkeeping follows it.
+  let pickedModel = force_model || restyleChoice || autoPicked.model;
   logAxes.model = pickedModel;
 
   console.log(
@@ -449,6 +452,15 @@ async function handleRequest(req: Request): Promise<Response> {
       console.log(
         `[restyle-photo] Generation passed after ${genResult.nsfwRetries} NSFW retry/retries`
       );
+    }
+    // Provider failover happened inside generateImage — surface it in the
+    // audit log + keep the model bookkeeping honest.
+    if (genResult.failover) {
+      fallbackReasons.push(genResult.failover);
+      if (genResult.model && genResult.model !== pickedModel) {
+        pickedModel = genResult.model;
+        logAxes.providerFailoverModel = genResult.model;
+      }
     }
     lap('image-gen');
     console.log(
@@ -662,6 +674,7 @@ async function handleRequest(req: Request): Promise<Response> {
       vision_description: visionDescription,
       fallback_reasons: [...fallbackReasons, `generation_failed:${errMsg}`],
       replicate_prediction_id: replicatePredictionId,
+      error_message: errMsg.slice(0, 500),
     }).then(
       () => {},
       (e: unknown) =>
@@ -810,16 +823,6 @@ Deno.serve((req) => {
   return task;
 });
 
-function classifyFailure(errMsg: string): string {
-  const m = errMsg.toLowerCase();
-  if (m.startsWith('nsfw_content') || m.includes('nsfw') || m.includes('safety')) return 'nsfw';
-  if (m.includes('flux') && (m.includes('failed') || m.includes('timed out'))) return 'flux_gen';
-  if (m.includes('replicate') && (m.includes('failed') || m.includes('5'))) return 'flux_gen';
-  if (m.includes('persiststorage') || m.includes('storage upload')) return 'storage_upload';
-  if (m.includes('upload') && m.includes('failed')) return 'storage_upload';
-  if (m.includes('uploads insert') || m.includes('db insert')) return 'db_insert';
-  if (m.includes('face swap') || m.includes('face_swap')) return 'face_swap';
-  if (m.includes('rate limit') || m.includes('rate-limit')) return 'rate_limit';
-  if (m.includes('timed out') || m.includes('deadline')) return 'timeout';
-  return 'unknown';
-}
+// classifyFailure moved to _shared/classifyFailure.ts (2026-07-09) — it was
+// duplicated here + generate-dream and the copies had already drifted (this
+// one lacked source_missing, so a dead cast URL burned 5 retries here).

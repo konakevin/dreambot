@@ -42,6 +42,12 @@ export interface GenerationLogEntry {
   vision_description: string | null;
   fallback_reasons: string[];
   replicate_prediction_id: string | null;
+  /** The actual error text for status='failed' rows. The column has existed
+   *  since the table's creation but NO writer ever populated it — failure
+   *  audits had to fish the message out of rolled_axes, and hard_fail:unknown
+   *  rows carried no detail at all (2026-07-09 dreamer2927 investigation).
+   *  Callers pass the raw error sliced to ~500 chars. */
+  error_message?: string | null;
 }
 
 /**

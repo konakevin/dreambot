@@ -43,6 +43,7 @@
     "__tests__/lib/firstDreamReady.test.ts",
     "__tests__/lib/singleSwapGuard.test.ts",
     "__tests__/lib/surpriseResolver.test.ts",
-    "__tests__/lib/newSceneRoute.test.ts"
+    "__tests__/lib/newSceneRoute.test.ts",
+    "__tests__/lib/classifyFailure.test.ts"
   ]
 }

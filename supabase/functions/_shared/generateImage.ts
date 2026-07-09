@@ -24,6 +24,10 @@ export interface GenerateImageResult {
   /** Which provider/model produced this render — for observability + sparkle pricing. */
   provider?: 'replicate' | 'openai' | 'gemini';
   model?: string;
+  /** Set when this render survived a provider failure — either a same-model
+   *  retry after a transient error or a cross-provider model fallback.
+   *  Callers append it to ai_generation_log.fallback_reasons. */
+  failover?: string;
 }
 
 export interface GenerateImageCredentials {
@@ -53,6 +57,53 @@ function asCredentials(arg: string | GenerateImageCredentials): GenerateImageCre
   return arg;
 }
 
+// ── Provider failover (2026-07-09) ───────────────────────────────────────────
+// A provider being down must not fail the dream (the dreamer2927 incident:
+// 3× Gemini 503 + 1× Gemini 500 + an OpenAI billing cap = 5 charged renders
+// failed + refunded in one day, all recoverable). Scope is deliberately narrow:
+// SUBMIT-PHASE failures only (they fail fast, so there's render budget left) —
+// a poll-phase timeout has already burned the budget and must not start a
+// second full render under the worker's 120s abort.
+const FAILOVER_BACKOFF_MS = 2500;
+
+/** Fast provider-side failure where a retry/fallback is worth it. */
+function isSubmitPhaseFailure(msg: string): boolean {
+  return /submit failed \((429|500|502|503|504)\)/i.test(msg);
+}
+
+/** The Replicate submit path already retried 429s MAX_429_RETRIES times
+ *  internally — a same-model retry on top would double the submit storm
+ *  (locked by generateImage.test.ts), so this class goes STRAIGHT to the
+ *  cross-provider fallback. */
+function isExhausted429(msg: string): boolean {
+  return /rate-limited \(429\) after/i.test(msg);
+}
+
+/** Capped/broke provider account — retrying the SAME provider is pointless;
+ *  go straight to the cross-provider fallback. */
+function isBillingFailure(msg: string): boolean {
+  return msg.includes('submit failed') && /billing|quota|insufficient credit/i.test(msg);
+}
+
+/** Equivalent model on a DIFFERENT provider. Edit renders (mode flux-kontext +
+ *  source image) must fall to another EDITOR; text renders fall between the
+ *  cost-matched pair flux-1.1-pro ($0.040) ↔ gemini-2-image ($0.039). */
+function failoverModelFor(msg: string, mode: string, inputImage: string | undefined): string {
+  const failedGoogleOrOpenAI = /gemini|openai/i.test(msg);
+  const isEdit = mode === 'flux-kontext' && !!inputImage;
+  if (isEdit) {
+    return failedGoogleOrOpenAI ? 'black-forest-labs/flux-kontext-pro' : 'google/gemini-2-image';
+  }
+  return failedGoogleOrOpenAI ? 'black-forest-labs/flux-1.1-pro' : 'google/gemini-2-image';
+}
+
+/** Does the credentials object carry the key the fallback model needs? */
+function canRunModel(model: string, creds: GenerateImageCredentials): boolean {
+  if (isOpenAIModel(model)) return !!creds.openaiKey;
+  if (isGeminiModel(model)) return !!creds.geminiKey;
+  return !!creds.replicateToken;
+}
+
 export async function generateImage(
   mode: string,
   prompt: string,
@@ -62,6 +113,70 @@ export async function generateImage(
   outputFormat: 'png' | 'jpg' = 'png'
 ): Promise<GenerateImageResult> {
   const creds = asCredentials(credentials);
+  try {
+    return await generateWithNsfwRetries(
+      mode,
+      prompt,
+      inputImage,
+      creds,
+      modelOverride,
+      outputFormat
+    );
+  } catch (err) {
+    const msg = (err as Error).message || '';
+    const billing = isBillingFailure(msg);
+    const exhausted429 = isExhausted429(msg);
+    if (!billing && !exhausted429 && !isSubmitPhaseFailure(msg)) throw err;
+
+    // Transient (503 spike / 500 blip): one same-model retry after a short
+    // backoff — capacity spikes often clear in seconds. Skipped for billing
+    // caps (same provider = same cap) and exhausted 429s (already retried).
+    if (!billing && !exhausted429) {
+      await new Promise((r) => setTimeout(r, FAILOVER_BACKOFF_MS));
+      try {
+        const retried = await generateWithNsfwRetries(
+          mode,
+          prompt,
+          inputImage,
+          creds,
+          modelOverride,
+          outputFormat
+        );
+        return { ...retried, failover: `provider_retry_ok:${msg.slice(0, 80)}` };
+      } catch (retryErr) {
+        console.warn(
+          '[generateImage] same-model retry also failed:',
+          ((retryErr as Error).message || '').slice(0, 120)
+        );
+      }
+    }
+
+    // Cross-provider fallback: one attempt on an equivalent model. Guarded so
+    // it can't loop (fallback == the model that just failed → rethrow) and
+    // can't dispatch to a provider we hold no key for.
+    const fbModel = failoverModelFor(msg, mode, inputImage);
+    if (fbModel === modelOverride || !canRunModel(fbModel, creds)) throw err;
+    console.warn(`[generateImage] provider failover → ${fbModel} after: ${msg.slice(0, 140)}`);
+    const fb = await generateWithNsfwRetries(
+      mode,
+      prompt,
+      inputImage,
+      creds,
+      fbModel,
+      outputFormat
+    );
+    return { ...fb, failover: `provider_failover:${fbModel}:${msg.slice(0, 80)}` };
+  }
+}
+
+async function generateWithNsfwRetries(
+  mode: string,
+  prompt: string,
+  inputImage: string | undefined,
+  creds: GenerateImageCredentials,
+  modelOverride?: string,
+  outputFormat: 'png' | 'jpg' = 'png'
+): Promise<GenerateImageResult> {
   let lastErr: Error | null = null;
   for (let attempt = 0; attempt <= NSFW_MAX_RETRIES; attempt++) {
     try {

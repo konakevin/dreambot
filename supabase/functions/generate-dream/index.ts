@@ -79,6 +79,7 @@ import {
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
+import { classifyFailure } from '../_shared/classifyFailure.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { validateRecipe, resolveRecipeAnchors } from '../_shared/recipeReplay.ts';
 import { pickCreateFaceSwapOverride } from '../_shared/createFaceSwapOverrides.ts';
@@ -1636,6 +1637,16 @@ Output ONLY the prompt.`;
         `[generate-dream] Generation passed after ${genResult.nsfwRetries} NSFW retry/retries`
       );
     }
+    // Provider failover happened inside generateImage (retry or cross-provider
+    // model swap) — surface it in the audit log + track the model that actually
+    // rendered so downstream cost/model bookkeeping stays honest.
+    if (genResult.failover) {
+      fallbackReasons.push(genResult.failover);
+      if (genResult.model && genResult.model !== pickedModel) {
+        pickedModel = genResult.model;
+        logAxes.providerFailoverModel = genResult.model;
+      }
+    }
     lap('image-gen');
     console.log(
       `[generate-dream] ⏱ Image generation complete (prediction: ${genResult.predictionId})`
@@ -2211,6 +2222,7 @@ Output ONLY the prompt.`;
           vision_description: visionDescription,
           fallback_reasons: [...fallbackReasons, `hard_fail:${refundClass}`],
           replicate_prediction_id: replicatePredictionId,
+          error_message: errMsg.slice(0, 500),
         });
       } catch {
         /* best-effort */
@@ -2282,6 +2294,7 @@ Output ONLY the prompt.`;
         vision_description: visionDescription,
         fallback_reasons: [...fallbackReasons, `hard_fail:${refundClass}`],
         replicate_prediction_id: replicatePredictionId,
+        error_message: errMsg.slice(0, 500),
       });
     } catch {
       /* logging is best-effort */
@@ -2383,34 +2396,8 @@ Deno.serve((req) => {
 // sparkle_transactions.reason as `refund:hard_fail:<class>` so we can audit
 // which failure mode is most common and where to invest reliability work.
 
-function classifyFailure(errMsg: string): string {
-  const m = errMsg.toLowerCase();
-  if (m.startsWith('nsfw_content') || m.includes('nsfw') || m.includes('safety')) return 'nsfw';
-  if (m.includes('flux') && (m.includes('failed') || m.includes('timed out'))) return 'flux_gen';
-  if (m.includes('replicate') && (m.includes('failed') || m.includes('5'))) return 'flux_gen';
-  if (m.includes('persiststorage') || m.includes('storage upload')) return 'storage_upload';
-  if (m.includes('upload') && m.includes('failed')) return 'storage_upload';
-  if (m.includes('uploads insert') || m.includes('db insert')) return 'db_insert';
-  // A missing/unreachable cast source photo is PERMANENT — the file is gone (e.g.
-  // the user re-uploaded their cast photo after this dream was queued, deleting
-  // the old one). Retrying just re-fails on the same dead URL, so this is treated
-  // as TERMINAL (immediate dead-letter + refund) rather than burning 5 retries
-  // over ~2h. Checked before the generic face_swap class since the message
-  // carries a `face_swap:` prefix.
-  if (
-    m.includes('source unreachable') ||
-    m.includes('source fetch failed') ||
-    m.includes('source not an image') ||
-    m.includes('invalid source url') ||
-    m.includes('object not found')
-  ) {
-    return 'source_missing';
-  }
-  if (m.includes('face swap') || m.includes('face_swap')) return 'face_swap';
-  if (m.includes('rate limit') || m.includes('rate-limit')) return 'rate_limit';
-  if (m.includes('timed out') || m.includes('deadline')) return 'timeout';
-  return 'unknown';
-}
+// classifyFailure moved to _shared/classifyFailure.ts (2026-07-09) — it was
+// duplicated here + restyle-photo and the copies had already drifted.
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
