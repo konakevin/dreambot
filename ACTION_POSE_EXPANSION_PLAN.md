@@ -113,6 +113,26 @@ deploy. Not part of the MVP.
 - The Create path keeps its neutral relationship poses until nightly proves the pool
   (nightly-before-Create, per the staged contract).
 
+## Execution status (2026-07-09)
+
+BUILT + PRODUCTION-VERIFIED, awaiting owner pct verdicts:
+- Identity enforcement LIVE at 0.35 (IDENTITY_MIN_SIM secret) — caught 2 dead
+  first-takes in the 20-render pose bench and re-rendered both to passing
+  (0.056→0.764, 0→0.608). 19/19 delivered duals ≥ 0.35, median 0.647.
+- Gender-confirm fallback + active-pool lint live.
+- Phase A pose pool: 27 entries wired behind dual_action_pose_pct (0). Bench:
+  20 production renders across hawaii/aspen/nyc/yosemite — biome matching
+  correct wherever a card biome exists; no-biome places (aspen) correctly fall
+  back to universal poses; 1/20 exhausted→degraded (baseline-consistent).
+- Active scenario pool: 26 rows seeded (lint-green), roll split config-tunable
+  (20/20/0), 3/3 verification renders through force_active passed the gate.
+- Known granularity limit: biome-right ≠ spot-right (a rollercoaster can roll
+  at a library-steps anchor — dream-logic surreal; owner judgment whether a
+  spot-congruence filter is ever needed).
+- Rollout proposal: dual_action_pose_pct=10 + dual_scene_active_pct=10 on
+  owner verdict, watch dual_reject:* + identity_sim + active_pose reasons vs
+  baseline, then 25.
+
 ## Dependencies / order
 
 Stage 8c enforcement (identity gate) → R2 gender fallback (recovers ~half the action
