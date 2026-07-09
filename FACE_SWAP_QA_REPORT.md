@@ -120,8 +120,40 @@ cost and interactive-compatible latency. **Gate: does the grid clear "that's rea
 me"?** (PuLID's composition drag makes InfiniteYou the primary candidate despite 2-3×
 latency.)
 
+### 6. Stage 8 — identity verification (added 2026-07-08 after the owner's review)
+
+The owner's grid review invalidated the depth QA's pass metric: "pass" measured
+mechanical completion, and several passes carried a face that wasn't the cast member.
+Built + shipped same-day (measurement in shadow): ArcFace embeddings on the Fly service
+(YuNet landmarks → umeyama alignment → MobileFaceNet 512-d → cosine vs the cast photo),
+`/verify` endpoint, and `identity_sim:L…/R…` logged on every production dual
+(live-verified: `identity_sim:L0.739/R0.638`).
+
+**Calibration on the depth-QA corpus (owner ground truth):**
+- Unswapped faces score ≈ 0 (ceiling 0.073) — a face the swap never touched is
+  unmistakable.
+- Owner's line: **min-sim ≥ 0.35** ("everything from the yellow scores up looks good").
+- At that line, **11 of 49 mechanical passes fail identity** (~22%) — including two
+  where the second face wasn't even detectable (occlusion; the skiing-4 case the owner
+  caught after my first aggregation skipped unmeasured faces — a missing face now
+  scores 0, fail).
+- CORRECTED Stage 5b truth: single-shot *delivered-likeness* rate on action families is
+  38/60 (63%), not 82% — the retry ladder + the identity gate is what closes the gap.
+
+**Medium scope (owner's concern, correct):** the 0.35 line is valid ONLY for photoreal
+render bases — stylized mediums score structurally lower against a photo, and YuNet
+under-detects painted faces, so enforcement is per-medium-class with unset = shadow.
+`scripts/bench-identity-stylized.js` measures per-medium distributions (photography
+control + watercolor/canvas/illustration/storybook/fairytale) to set or withhold each
+medium's line; production shadow telemetry accrues the same data from real traffic.
+
 ## Recommendations (ranked, each with its safety mechanism)
 
+0. **R0 — Identity enforcement (supersedes all: this IS the quality guarantee).**
+   Enforce min-sim ≥ 0.35 + two-measurable-faces on REALISTIC render bases (threshold
+   via secret, unset = shadow); stylized mediums shadow-only until their per-medium
+   calibration names a line. Sub-threshold swap → rerender signal → existing ladder.
+   Fail-open only on verifier infrastructure errors, never on measured absence.
 1. **R1 — Seed the contact/action pose pool** from the 8 families at ≥4/5 (surfing,
    jetski, swing-dance, salsa, kayak, bikes, skiing, ocean-play + ice-skating and
    rollercoaster at your call), MVP-25 first, behind `engine_config.dual_contact_pose_pct`

@@ -84,16 +84,31 @@ const OUT = path.join(os.homedir(), 'Desktop', 'identity-calibration');
     try {
       const j = await verify(path.join(SRC, f));
       if (!j.faces) throw new Error(JSON.stringify(j).slice(0, 80));
-      // Left face ↔ Kevin (refs[0]), right face ↔ Steph (refs[1]) — the swap's
-      // side assignment. For targets we still record (they're negatives).
+      // Score BOTH pairings (straight: left↔Kevin/right↔Steph, flipped:
+      // left↔Steph/right↔Kevin) and keep the better one — Flux sometimes
+      // renders the couple side-flipped and the engine gender-routes the
+      // sources correctly, so x-order alone mis-pairs a correct swap.
       const byX = [...j.faces].sort((a, b) => a.x - b.x);
-      const left = byX[0]?.sims?.[0] ?? null;
-      const right = byX[1]?.sims?.[1] ?? null;
-      const vals = [left, right].filter((v) => v !== null);
-      const min = vals.length ? Math.min(...vals) : null;
-      rows.push({ f, isTarget, left, right, min, faces: j.faces.length });
+      const s00 = byX[0]?.sims?.[0] ?? null; // left face vs Kevin
+      const s01 = byX[0]?.sims?.[1] ?? null; // left face vs Steph
+      const s10 = byX[1]?.sims?.[0] ?? null; // right face vs Kevin
+      const s11 = byX[1]?.sims?.[1] ?? null; // right face vs Steph
+      const sum = (a, b) => (a ?? 0) + (b ?? 0);
+      const flipped = sum(s01, s10) > sum(s00, s11);
+      const left = flipped ? s01 : s00;
+      const right = flipped ? s10 : s11;
+      // A dual cell must yield TWO measurable faces. A missing/unembeddable
+      // face is a FAILED face (score 0), not a skipped one — skiing-4
+      // (2026-07-08) scored green on Steph alone while Kevin's occluded face
+      // was never swapped. Only infrastructure errors are fail-open.
+      const min = isTarget
+        ? Math.min(...[left, right].filter((v) => v !== null).concat([Infinity])) === Infinity
+          ? null
+          : Math.min(...[left, right].filter((v) => v !== null))
+        : Math.min(left ?? 0, right ?? 0);
+      rows.push({ f, isTarget, left, right, min, flipped, faces: j.faces.length });
       console.log(
-        `${f.padEnd(28)} L=${left ?? '—'} R=${right ?? '—'} faces=${j.faces.length}${isTarget ? '  [unswapped target]' : ''}`
+        `${f.padEnd(28)} L=${left ?? '—'} R=${right ?? '—'}${flipped ? ' [sides flipped]' : ''} faces=${j.faces.length}${isTarget ? '  [unswapped target]' : ''}`
       );
     } catch (e) {
       rows.push({ f, isTarget, left: null, right: null, min: null, error: e.message.slice(0, 60) });
@@ -122,7 +137,7 @@ h1{font-size:18px}
 ${sorted
   .map((r) => {
     const cls = r.min === null ? 'low' : r.min < 0.35 ? 'low' : r.min < 0.5 ? 'mid' : 'high';
-    return `<div class="cell ${cls} ${r.isTarget ? 'tgt' : ''}"><a href="${path.join(SRC, r.f)}" target="_blank"><img src="${path.join(SRC, r.f)}" loading="lazy"></a><div class="sim">min ${r.min ?? '—'} (L ${r.left ?? '—'} / R ${r.right ?? '—'})</div><div class="lbl">${r.f}${r.isTarget ? ' — unswapped' : ''}</div></div>`;
+    return `<div class="cell ${cls} ${r.isTarget ? 'tgt' : ''}"><a href="${path.join(SRC, r.f)}" target="_blank"><img src="${path.join(SRC, r.f)}" loading="lazy"></a><div class="sim">min ${r.min ?? '—'} (L ${r.left ?? '—'} / R ${r.right ?? '—'})${r.flipped ? ' ⇄' : ''}</div><div class="lbl">${r.f}${r.isTarget ? ' — unswapped' : ''}</div></div>`;
   })
   .join('\n')}
 </div>`;
