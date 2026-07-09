@@ -60,3 +60,4 @@ scripts/*-bench-results.json
 
 # Supabase CLI local state (per-machine: project link + tool versions)
 supabase/.temp/
+scripts/out/
