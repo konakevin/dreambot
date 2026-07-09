@@ -128,6 +128,26 @@ Create never gets pose history (latency + user-driven repeats are acceptable the
   arrays, ever (they are the fallback and the parity reference).
 - Bot pools, biome axes, composition presets, scene-engine internals: not in scope.
 
+## Execution status — COMPLETE 2026-07-09, all gates green
+
+- Step 0: 7 tripwire tests pinned pickers before the refactor; green throughout.
+- Step 1 clusters: 944 rows, parity exact; loader confirmed serving DB records with
+  picks ⊆ code set (deterministic Deno check); 3 production renders through the hot
+  path unharmed. (Lesson: cluster lines only ride the LEGACY freeform briefs, not the
+  slot pipeline — canary detection must match the leg.)
+- Step 2 solo: 348 rows, parity exact; canaries 2/3 classic-verbatim + 1/3 explained
+  (active-scenario roll). Lint refinement en route: "hands/palms pressed together" is
+  a solo gesture, not couple proximity (shared regex fixed + negative-tested; scanner
+  stayed green).
+- Step 3 dual: 247 rows, parity exact; 3/3 nightly duals classic-verbatim; CREATE
+  canary (real prior Create dual payload replayed through the live queue) completed
+  in 51s e2e / 28s render with pose verbatim + full quality stack
+  (identity_sim L0.704/R0.635, restore ok).
+- Step 4 (shuffle-bag on classic poses, nightly-only) remains DEFERRED by design —
+  after a clean week, one variable at a time.
+- Standing: scripts/verify-pool-parity.js is now the drift detector — run it after
+  any dashboard edit session; code arrays remain the fallback + parity reference.
+
 ## Effort + order of operations for Kevin
 
 One migration to apply (351). Everything else is mine: ~1 day total across the three

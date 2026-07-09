@@ -16,7 +16,7 @@
 
 // Couple-too-close phrasings that cause overlapping faces (→ no_dual_split).
 const VIOLATION =
-  /\b(?:standing|sitting|seated|stand|sit|perched|leaning|nestled|huddled)\s+close\b|\bclose\s+(?:together|beside|on\s+a|on\s+the|to\s+each\s+other)\b|\bshoulders?\s+(?:nearly\s+)?touching\b|\bshoulder[-\s]to[-\s]shoulder\b|\bcheek[-\s]to[-\s]cheek\b|\bcheeks?\s+touching\b|\bheads?\s+(?:close|together|touching|nearly\s+touching)\b|\bfaces?\s+(?:close|together|touching|inches\s+apart)\b|\bleaning\s+(?:in|into)\s+(?:each\s+other|one\s+another|the\s+other|close)\b|\bnuzzl|\bnestl|\bhuddl|\bpressed\s+(?:together|against\s+each\s+other)\b|\bforeheads?\s+touching\b|\btemple[-\s]to[-\s]temple\b|\barms?\s+(?:around|round)\s+(?:each\s+other|one\s+another|the\s+other)\b|\bwrapped\s+around\s+each\s+other\b|\bembrac|\bcuddl|\bhugging\b/i;
+  /\b(?:standing|sitting|seated|stand|sit|perched|leaning|nestled|huddled)\s+close\b|\bclose\s+(?:together|beside|on\s+a|on\s+the|to\s+each\s+other)\b|\bshoulders?\s+(?:nearly\s+)?touching\b|\bshoulder[-\s]to[-\s]shoulder\b|\bcheek[-\s]to[-\s]cheek\b|\bcheeks?\s+touching\b|\bheads?\s+(?:close|together|touching|nearly\s+touching)\b|\bfaces?\s+(?:close|together|touching|inches\s+apart)\b|\bleaning\s+(?:in|into)\s+(?:each\s+other|one\s+another|the\s+other|close)\b|\bnuzzl|\bnestl|\bhuddl|\bpressed\s+against\s+each\s+other\b|\b(?<!hands\s)(?<!palms\s)(?<!fingertips\s)pressed\s+together\b|\bforeheads?\s+touching\b|\btemple[-\s]to[-\s]temple\b|\barms?\s+(?:around|round)\s+(?:each\s+other|one\s+another|the\s+other)\b|\bwrapped\s+around\s+each\s+other\b|\bembrac|\bcuddl|\bhugging\b/i;
 
 // A proximity phrase is exempt when the same line pins the faces apart or
 // to-camera (deliberate, mitigated phrasing).
