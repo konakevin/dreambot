@@ -49,6 +49,11 @@ export interface EngineConfig {
   /** Phase A (ACTION_POSE_EXPANSION_PLAN.md): % of plain-location dual dreams
    *  that try the biome-tagged ACTIVE pose pool. 0 = off (default). */
   dualActionPosePct: number;
+  /** Special-scene roll split for dual face-swap nightlies (was hardcoded
+   *  20/20; remainder = the user's location). active defaults 0 (dark). */
+  dualSceneGoofyPct: number;
+  dualSceneElegantPct: number;
+  dualSceneActivePct: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -74,6 +79,9 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   faceRestoreCreateEnabled: false,
   faceRestoreFidelity: 0.9,
   dualActionPosePct: 0,
+  dualSceneGoofyPct: 20,
+  dualSceneElegantPct: 20,
+  dualSceneActivePct: 0,
 };
 
 let cached: EngineConfig | null = null;
@@ -130,6 +138,13 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.face_restore_fidelity ?? DEFAULT_ENGINE_CONFIG.faceRestoreFidelity
     ),
     dualActionPosePct: Number(data.dual_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.dualActionPosePct),
+    dualSceneGoofyPct: Number(data.dual_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneGoofyPct),
+    dualSceneElegantPct: Number(
+      data.dual_scene_elegant_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneElegantPct
+    ),
+    dualSceneActivePct: Number(
+      data.dual_scene_active_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneActivePct
+    ),
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

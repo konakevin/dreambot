@@ -20,6 +20,11 @@ export interface DualScenario {
 export interface DualScenarioPools {
   goofy: DualScenario[];
   elegant: DualScenario[];
+  /** ACTIVE scenarios (ACTION_POSE_EXPANSION_PLAN.md, 2026-07-09): full action
+   *  scenes with the body action embedded in the scene text (go-karts, bumper
+   *  boats, batting cages...). DB-only — no code fallback; empty = the roll
+   *  never lands here (dual_scene_active_pct also defaults to 0). */
+  active: DualScenario[];
 }
 
 let cache: DualScenarioPools | null = null;
@@ -32,6 +37,7 @@ const FALLBACK: DualScenarioPools = {
     attire: 'normal scene-appropriate everyday clothes',
   })),
   elegant: DUAL_SCENARIOS_ELEGANT.map((e) => ({ scene: e.scene, attire: e.attire })),
+  active: [],
 };
 
 export async function loadDualScenarios(supabase: SupabaseClient): Promise<DualScenarioPools> {
@@ -39,7 +45,7 @@ export async function loadDualScenarios(supabase: SupabaseClient): Promise<DualS
   try {
     // Separate query per pool — each is ~500, comfortably under PostgREST's
     // silent 1000-row cap (one combined query of ~1000 could truncate).
-    const [g, e] = await Promise.all([
+    const [g, e, a] = await Promise.all([
       supabase
         .from('dual_scenarios')
         .select('scene,attire')
@@ -50,6 +56,11 @@ export async function loadDualScenarios(supabase: SupabaseClient): Promise<DualS
         .select('scene,attire')
         .eq('pool', 'elegant')
         .eq('disabled', false),
+      supabase
+        .from('dual_scenarios')
+        .select('scene,attire')
+        .eq('pool', 'active')
+        .eq('disabled', false),
     ]);
     const goofy = (g.data ?? []).map((r) => ({
       scene: r.scene as string,
@@ -59,8 +70,12 @@ export async function loadDualScenarios(supabase: SupabaseClient): Promise<DualS
       scene: r.scene as string,
       attire: r.attire as string,
     }));
+    const active = (a.data ?? []).map((r) => ({
+      scene: r.scene as string,
+      attire: r.attire as string,
+    }));
     if (goofy.length >= 10 && elegant.length >= 10) {
-      cache = { goofy, elegant };
+      cache = { goofy, elegant, active };
       return cache;
     }
   } catch (_err) {

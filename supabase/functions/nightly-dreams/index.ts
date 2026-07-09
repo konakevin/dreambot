@@ -210,6 +210,7 @@ Deno.serve(async (req) => {
   // force the SOLO special pools (single_scenarios) on a single-cast face swap.
   const force_playful = body.force_playful === true;
   const force_elegant = body.force_elegant === true;
+  const force_active = body.force_active === true;
   const force_single_playful = body.force_single_playful === true;
   const force_single_elegant = body.force_single_elegant === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
@@ -1093,24 +1094,40 @@ Deno.serve(async (req) => {
     // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
     let dualSpecialScene: string | null = null;
     let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
+    // ACTIVE scenario (ACTION_POSE_EXPANSION_PLAN.md): the scene text embeds
+    // the body action, so the pose slot gets a fixed face-mandate string
+    // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
+    let dualActiveScene = false;
     // A MANDATED location (force_place) suppresses the goofy/elegant special-scene
     // roll entirely. force_place is set ONLY by the onboarding FIRST DREAM, which
     // must put the user in the place they JUST picked — the "here's you in YOUR
     // spot" showcase moment — never a random rodeo/ballroom from the pools.
-    // Regular nightly dreams pass no force_place, so they keep the 60% location /
-    // 20% goofy / 20% elegant variety mix below.
+    // Regular nightly dreams pass no force_place, so they keep the special-
+    // scene variety mix below (engine_config-tunable since migration 347;
+    // defaults 20 goofy / 20 elegant / 0 active — remainder = the location).
     if (!force_place) {
       if (isDualFaceSwap) {
         const pools = await loadDualScenarios(supabase);
+        const splitCfg = await fetchEngineConfig(supabase);
+        const goofyCut = splitCfg.dualSceneGoofyPct / 100;
+        const elegantCut = goofyCut + splitCfg.dualSceneElegantPct / 100;
+        const activeCut =
+          elegantCut + (pools.active.length >= 10 ? splitCfg.dualSceneActivePct / 100 : 0);
         const roll = Math.random();
-        if (force_playful || (!force_elegant && roll < 0.2)) {
+        if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
           const s = pickDualScenario(pools.goofy);
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
-        } else if (force_elegant || roll < 0.4) {
+        } else if (force_elegant || (!force_active && roll < elegantCut)) {
           const s = pickDualScenario(pools.elegant);
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+        } else if ((force_active && pools.active.length > 0) || roll < activeCut) {
+          const s = pickDualScenario(pools.active);
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+          dualActiveScene = true;
+          fallbackReasons.push('active_scenario');
         }
       } else if (isSingleHumanFaceSwap) {
         const pools = await loadSingleScenarios(supabase);
@@ -1161,14 +1178,16 @@ Deno.serve(async (req) => {
         }
         const action =
           selectedCast.length === 2
-            ? dualSpecialWardrobe
-              ? pickDualAction(
-                  selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-                  'partner'
-                )
-              : dualSpecialScene
-                ? pickDualAction(undefined, 'playful')
-                : (activePose ?? dualAction)
+            ? dualActiveScene
+              ? 'caught mid-action exactly as the scene describes, with a clear gap between them, both faces toward the camera'
+              : dualSpecialWardrobe
+                ? pickDualAction(
+                    selectedCast.find((c) => c.role === 'plus_one')?.relationship,
+                    'partner'
+                  )
+                : dualSpecialScene
+                  ? pickDualAction(undefined, 'playful')
+                  : (activePose ?? dualAction)
             : (singleAction ?? null);
         const slotResult = await runCharacterSlotPipeline(
           {
