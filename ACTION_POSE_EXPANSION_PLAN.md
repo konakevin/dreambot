@@ -136,6 +136,20 @@ BUILT + PRODUCTION-VERIFIED, awaiting owner pct verdicts:
   (weekly scripts/faceswap-baseline.js), then raise to 25 and extend to
   Create. Rollback = both pcts to 0 (dashboard, no deploy).
 
+## Phase B execution status (2026-07-09)
+
+COMPLETE + LIVE (owner verdict "they look good" on the 15-render solo batch):
+- Solo pose pool (26, code) behind single_action_pose_pct — 12/12 production
+  bench renders across hawaii/nyc/yosemite. Solo scenarios (26, DB) — 3/3
+  through force_single_active (go-kart, mechanical bull, cooking class), all
+  solo_probes:1 + restore ok. Migration 348 applied.
+- LIVE SETTINGS (dual + solo symmetric): action_pose_pct 10 / scene split
+  15 goofy / 15 elegant / 15 active / 55 location.
+- Scale-up deferred by design: all four active pools at MVP (~26) vs siblings
+  at ~500; grow scenarios via generation script (equal-share, lint-at-insert,
+  --append) and poses family-by-family (5-rep bench per new family) when the
+  soak holds / repetition shows.
+
 ## Dependencies / order
 
 Stage 8c enforcement (identity gate) → R2 gender fallback (recovers ~half the action
