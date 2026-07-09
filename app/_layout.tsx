@@ -36,6 +36,7 @@ import { retryDream } from '@/lib/retryDream';
 import { resumeInFlightDream } from '@/lib/dreamResumeStore';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { syncDreamWidget } from '@/lib/widgetSync';
+import { isFirstJsLoad } from '@/modules/dreambot-widget';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
@@ -152,10 +153,15 @@ function AuthInitializer() {
     // App already open when link is tapped
     const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url, true));
 
-    // App was closed and opened via the link
-    Linking.getInitialURL().then((url) => {
-      if (url) handleUrl(url, false);
-    });
+    // App was closed and opened via the link. First JS load ONLY — iOS
+    // re-reports the launch URL to every reloaded JS context, so without the
+    // gate a dev reload replays the link (see app/+native-intent.ts, which
+    // does the same for Expo Router's own initial-URL handling).
+    if (isFirstJsLoad) {
+      Linking.getInitialURL().then((url) => {
+        if (url) handleUrl(url, false);
+      });
+    }
 
     return () => subscription.remove();
   }, []);

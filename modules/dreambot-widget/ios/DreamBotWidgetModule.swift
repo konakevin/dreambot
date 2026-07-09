@@ -15,8 +15,20 @@ import WidgetKit
 public class DreamBotWidgetModule: Module {
   private let appGroup = "group.com.konakevin.radorbad"
 
+  // Process-lifetime JS-load counter (survives Metro/dev reloads, resets on a
+  // real relaunch). modules/dreambot-widget/index.ts calls countJsLoad() once
+  // per JS context; app/+native-intent.ts uses it to swallow the launch URL's
+  // REPLAY on reload (iOS re-reports the widget deep link on every JS reload,
+  // which kept yanking dev reloads back to the widget's dream).
+  private static var jsLoadCount = 0
+
   public func definition() -> ModuleDefinition {
     Name("DreamBotWidget")
+
+    Function("countJsLoad") { () -> Int in
+      DreamBotWidgetModule.jsLoadCount += 1
+      return DreamBotWidgetModule.jsLoadCount
+    }
 
     // Absolute path of the shared directory widget images live in (created on
     // first call). Returns nil if the App Group entitlement is missing (old

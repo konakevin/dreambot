@@ -12,12 +12,30 @@ import { requireOptionalNativeModule } from 'expo-modules-core';
 interface DreamBotWidgetNativeModule {
   getAppGroupWidgetDir(): string | null;
   setWidgetState(json: string): void;
+  countJsLoad(): number;
 }
 
 const native =
   Platform.OS === 'ios'
     ? requireOptionalNativeModule<DreamBotWidgetNativeModule>('DreamBotWidget')
     : null;
+
+/**
+ * True on the FIRST JS load of this native process, false after a dev/Metro
+ * reload. iOS re-reports the launch deep link (e.g. a widget tap's
+ * dreambot://photo/<id>) to every reloaded JS context; app/+native-intent.ts
+ * uses this to honor the URL exactly once per process. Evaluated at module
+ * scope so the native counter ticks exactly once per JS context. Defaults to
+ * true when the native module is absent (Android / pre-widget binaries) —
+ * never suppress real launches.
+ */
+export const isFirstJsLoad: boolean = (() => {
+  try {
+    return (native?.countJsLoad() ?? 1) === 1;
+  } catch {
+    return true;
+  }
+})();
 
 /** Whether this binary supports the widget bridge. */
 export function isWidgetSupported(): boolean {
