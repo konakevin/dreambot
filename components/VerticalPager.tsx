@@ -25,7 +25,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ActivityIndicator, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
@@ -52,8 +53,11 @@ const PULL_TRIGGER = 110; // strip-px past the top to fire refresh (~130px finge
 const PULL_FLICK_VELOCITY = 900; // px/s downward release that fires from ≥ half-trigger
 // While refreshing, the strip parks at insets.top + PULL_REST_BELOW_INSET so the
 // revealed gap clears the floating top chrome (feed pills sit at insets.top..~+40)
-// and the spinner is fully visible inside it.
-const PULL_REST_BELOW_INSET = 76;
+// and the spinner is fully visible inside it with breathing room: the
+// BrandSpinner rests around insets.top+48 and is 26 tall → bottom ≈ +74, so
+// 96 leaves ~22px between the swirl and the parked image (76 left ~2px —
+// Kevin 2026-07-09: "barely any margin").
+const PULL_REST_BELOW_INSET = 96;
 
 export interface VerticalPagerHandle {
   scrollToIndex: (index: number, animated?: boolean) => void;
@@ -420,7 +424,7 @@ function VerticalPagerInner<T>(
             pointerEvents="none"
             style={[styles.spinnerWrap, { top: insets.top + 12 }, indicatorStyle]}
           >
-            <ActivityIndicator color={refreshTint} />
+            <BrandSpinner size={26} />
           </Animated.View>
         ) : null}
         <Animated.View style={[StyleSheet.absoluteFill, stripStyle]}>

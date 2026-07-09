@@ -29,26 +29,37 @@ function buildQueryKey(
   tab: FeedTab,
   userId: string | undefined,
   feedSeed: number,
+  feedShuffle: number,
   botUserId: string | null
 ) {
-  return ['dreamFeed', tab, userId, feedSeed, botUserId] as const;
+  return ['dreamFeed', tab, userId, feedSeed, feedShuffle, botUserId] as const;
 }
 
 async function fetchFeedPage(
   tab: FeedTab,
   userId: string,
   feedSeed: number,
+  feedShuffle: number,
   botUserId: string | null,
   pageParam: FeedCursor | null
 ): Promise<FeedPage> {
-  const { data, error } = await supabase.rpc('get_feed', {
+  const rpcArgs = {
     p_user_id: userId,
     p_limit: PAGE_SIZE,
     p_seed: feedSeed,
     p_tab: tab,
     ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
     ...(tab === 'bots' && botUserId ? { p_bot_user_id: botUserId } : {}),
-  });
+  };
+  // Shuffle strength (mig 352): manual refreshes pass 0.45 so the reshuffle
+  // genuinely reorders. EXPLICIT param (never a store peek) — prefetch and
+  // the mounted query must produce byte-identical pages or the swap double-
+  // renders (the 2026-07-09 "double flicker"). Retry WITHOUT the param on
+  // PGRST202 so the app works against a pre-352 database.
+  let { data, error } = await supabase.rpc('get_feed', { ...rpcArgs, p_shuffle: feedShuffle });
+  if (error && error.code === 'PGRST202') {
+    ({ data, error } = await supabase.rpc('get_feed', rpcArgs));
+  }
   if (error) throw error;
   const rawRows = castRows(data).map((row) => ({
     ...mapRpcToDreamPost(row),
@@ -73,11 +84,12 @@ async function fetchFeedPage(
 export function useDreamFeed(tab: FeedTab, botUserId?: string | null) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const feedShuffle = useFeedStore((s) => s.feedShuffle);
 
   return useInfiniteQuery({
-    queryKey: buildQueryKey(tab, user?.id, feedSeed, botUserId ?? null),
+    queryKey: buildQueryKey(tab, user?.id, feedSeed, feedShuffle, botUserId ?? null),
     queryFn: ({ pageParam }) =>
-      fetchFeedPage(tab, user!.id, feedSeed, botUserId ?? null, pageParam),
+      fetchFeedPage(tab, user!.id, feedSeed, feedShuffle, botUserId ?? null, pageParam),
     initialPageParam: null as FeedCursor | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     enabled: !!useAuthStore.getState().user,
@@ -110,12 +122,20 @@ export async function prefetchDreamFeed(
   botUserId: string | null = null,
   imageCount = 5
 ): Promise<void> {
-  const queryKey = buildQueryKey(tab, userId, feedSeed, botUserId);
+  const feedShuffle = useFeedStore.getState().feedShuffle;
+  const queryKey = buildQueryKey(tab, userId, feedSeed, feedShuffle, botUserId);
   try {
     await queryClient.prefetchInfiniteQuery({
       queryKey,
       queryFn: ({ pageParam }) =>
-        fetchFeedPage(tab, userId, feedSeed, botUserId, pageParam as FeedCursor | null),
+        fetchFeedPage(
+          tab,
+          userId,
+          feedSeed,
+          feedShuffle,
+          botUserId,
+          pageParam as FeedCursor | null
+        ),
       initialPageParam: null as FeedCursor | null,
     });
     const cached = queryClient.getQueryData<{ pages: FeedPage[] }>(queryKey);

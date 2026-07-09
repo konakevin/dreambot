@@ -102,10 +102,11 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: () => {
-            // Re-tap active Home tab → IG-style scroll-to-top + refetch
-            // (the screen subscribes to homeFeedResetToken to do both).
+            // Re-tap active Home tab → IG-style scroll-to-top + quiet reshuffle
+            // (the screen subscribes to homeFeedResetToken; its onRefresh owns
+            // the reseed — a second regenerateSeed() here double-refetched:
+            // instant refetch on seed A while the quiet flow prefetched seed B).
             if (activeTab === 'index') {
-              regenerateSeed();
               useFeedStore.getState().bumpHomeFeedReset();
             }
             setActiveTab('index');
@@ -153,6 +154,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="top"
         options={{
+          // Solid black bar (matches profile): the search grid is a browsing
+          // surface, not the immersive feed — content showing through the
+          // translucent default reads as clutter here (Kevin 2026-07-09).
+          tabBarStyle: {
+            backgroundColor: '#000000',
+            borderTopColor: 'rgba(255,255,255,0.08)',
+            borderTopWidth: StyleSheet.hairlineWidth,
+            position: 'absolute',
+            paddingTop: verticalScale(8),
+            paddingBottom: tabBarBottomPad,
+          },
           tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
         }}
         listeners={{

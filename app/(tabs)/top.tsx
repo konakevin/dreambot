@@ -10,6 +10,7 @@
  * to dismiss that individual filter. Search results respect active filters.
  */
 
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
@@ -26,7 +27,7 @@ import { Text, TextInput } from '@/components/AppText';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useInfiniteQuery, keepPreviousData } from '@tanstack/react-query';
+import { useInfiniteQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
@@ -60,30 +61,55 @@ interface ExploreCursor {
   id: string;
 }
 
+async function fetchExplorePage(
+  userId: string,
+  medium: string | null,
+  vibe: string | null,
+  feedSeed: number,
+  feedShuffle: number,
+  pageParam: ExploreCursor | null
+): Promise<(DreamPostItem & { feed_score?: number })[]> {
+  const args = {
+    p_user_id: userId,
+    p_limit: FEED_PAGE_SIZE,
+    p_seed: feedSeed,
+    p_tab: 'forYou',
+    ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
+    ...(medium ? { p_medium: medium } : {}),
+    ...(vibe ? { p_vibe: vibe } : {}),
+  };
+  // p_shuffle: mig 352 reshuffle strength; retry without it pre-migration.
+  let { data, error } = await supabase.rpc('get_feed', { ...args, p_shuffle: feedShuffle });
+  if (error && error.code === 'PGRST202') {
+    ({ data, error } = await supabase.rpc('get_feed', args));
+  }
+  if (error) throw error;
+  return castRows(data).map((row) => ({
+    ...mapRpcToDreamPost(row),
+    feed_score: row.feed_score as number,
+  }));
+}
+
+function exploreQueryKey(
+  medium: string | null,
+  vibe: string | null,
+  feedSeed: number,
+  feedShuffle: number
+) {
+  return ['explore', medium ?? '', vibe ?? '', feedSeed, feedShuffle] as const;
+}
+
 function useExploreDreams(mediums: string[], vibes: string[]) {
   const user = useAuthStore((s) => s.user);
   const feedSeed = useFeedStore((s) => s.feedSeed);
+  const feedShuffle = useFeedStore((s) => s.feedShuffle);
   const medium = mediums[0] ?? null;
   const vibe = vibes[0] ?? null;
 
   return useInfiniteQuery({
-    queryKey: ['explore', medium ?? '', vibe ?? '', feedSeed],
-    queryFn: async ({ pageParam }): Promise<(DreamPostItem & { feed_score?: number })[]> => {
-      const { data, error } = await supabase.rpc('get_feed', {
-        p_user_id: user!.id,
-        p_limit: FEED_PAGE_SIZE,
-        p_seed: feedSeed,
-        p_tab: 'forYou',
-        ...(pageParam ? { p_cursor_score: pageParam.score, p_cursor_id: pageParam.id } : {}),
-        ...(medium ? { p_medium: medium } : {}),
-        ...(vibe ? { p_vibe: vibe } : {}),
-      });
-      if (error) throw error;
-      return castRows(data).map((row) => ({
-        ...mapRpcToDreamPost(row),
-        feed_score: row.feed_score as number,
-      }));
-    },
+    queryKey: exploreQueryKey(medium, vibe, feedSeed, feedShuffle),
+    queryFn: ({ pageParam }) =>
+      fetchExplorePage(user!.id, medium, vibe, feedSeed, feedShuffle, pageParam),
     initialPageParam: null as ExploreCursor | null,
     getNextPageParam: (lastPage) => {
       // Terminate ONLY on a genuinely empty page. An undersized page (< limit)
@@ -463,15 +489,40 @@ export default function SearchExploreScreen() {
 
   // Local pull-to-refresh spinner — see FullScreenFeed for rationale.
   const [isPulling, setIsPulling] = useState(false);
-  // Pull-to-refresh RESEEDS the browse grid (new random order) — a plain refetch
-  // kept the same seed → identical grid. Hold the native spinner a beat so it
-  // doesn't flash off before the reshuffled grid lands.
+  const queryClient = useQueryClient();
+  // Pull-to-refresh RESEEDS the browse grid — PREFETCH the new seed's page 1,
+  // THEN swap the seed, so the old grid never reflows under the held-open gap
+  // (the old reseed-first flow swapped mid-gap: the grid popped back up while
+  // the spinner kept spinning over the top row — Kevin 2026-07-09). Gap +
+  // overlay release together, one frame after the swap commits.
   const handlePullToRefresh = useCallback(async () => {
+    const userId = useAuthStore.getState().user?.id;
+    if (!userId) return;
     setIsPulling(true);
-    regenerateSeed();
-    await new Promise((r) => setTimeout(r, 650));
-    setIsPulling(false);
-  }, [regenerateSeed]);
+    try {
+      useFeedStore.getState().bumpShuffle();
+      const newSeed = Math.random();
+      const shuffle = useFeedStore.getState().feedShuffle;
+      const medium = activeMediums[0] ?? null;
+      const vibe = activeVibes[0] ?? null;
+      await queryClient.prefetchInfiniteQuery({
+        queryKey: exploreQueryKey(medium, vibe, newSeed, shuffle),
+        queryFn: ({ pageParam }) =>
+          fetchExplorePage(
+            userId,
+            medium,
+            vibe,
+            newSeed,
+            shuffle,
+            pageParam as ExploreCursor | null
+          ),
+        initialPageParam: null as ExploreCursor | null,
+      });
+      useFeedStore.getState().setFeedSeed(newSeed);
+    } finally {
+      requestAnimationFrame(() => setIsPulling(false));
+    }
+  }, [queryClient, activeMediums, activeVibes]);
 
   const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
@@ -479,6 +530,23 @@ export default function SearchExploreScreen() {
 
   return (
     <View style={s.root}>
+      {/* Pull-to-refresh visual — brand swirl parked below the search box at
+          the top of the grid container (matches home/profile treatment). */}
+      {!searchActive && isPulling && !isFetchingNextPage && (
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: overlayHeight + verticalScale(14),
+            left: 0,
+            right: 0,
+            zIndex: 5,
+            alignItems: 'center',
+          }}
+        >
+          <BrandSpinner size={26} />
+        </View>
+      )}
       {/* Browse mode: 2-column thumbnail grid */}
       {!searchActive && (
         <RNFlatList<DreamPostItem>
@@ -492,11 +560,13 @@ export default function SearchExploreScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={10}
           removeClippedSubviews
+          // Native spinner hidden — the BrandSpinner overlay below the search
+          // box is the visual (same treatment as home/profile pulls).
           refreshControl={
             <RefreshControl
               refreshing={isPulling && !isFetchingNextPage}
               onRefresh={handlePullToRefresh}
-              tintColor={colors.accent}
+              tintColor="transparent"
               progressViewOffset={overlayHeight}
             />
           }

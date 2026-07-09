@@ -9,6 +9,7 @@
 import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Dimensions, InteractionManager, AppState, View } from 'react-native';
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
@@ -347,6 +348,10 @@ export function FullScreenFeed({
   // refreshed the feed UNDER a still-open sheet (Kevin 2026-07-05: long-press
   // a comment, tap Home, feed resets behind the orphaned sheet).
   const skipFirstScrollToTop = useRef(true);
+  // Home re-tap refresh runs QUIETLY: centered overlay spinner while the new
+  // seed prefetches, then the swap — the pull-down gap + RefreshControl are
+  // reserved for a deliberate finger pull (Kevin 2026-07-09).
+  const [quietRefreshing, setQuietRefreshing] = useState(false);
   // Latest-ref so the effect below keys ONLY on the token — onRefreshProp is
   // often an inline arrow (new identity per parent render) and putting it in
   // the deps would re-fire the refresh on every re-render.
@@ -362,17 +367,25 @@ export function FullScreenFeed({
     // Both overlays mask the host screen's chrome while open — restore it, or
     // a re-tap dismissal strands the pills hidden and untouchable.
     onHudToggle?.(true);
-    currentIndex.current = 0;
-    // Re-tap = the SAME refresh flow as a finger pull (jump to top, park with
-    // the spinner, new-seed prefetch+swap, settle on the new top post). The
-    // old scrollToTop + parent refetch() pair refetched the SAME seed and the
-    // pager's id-anchor followed the old top post through it → looked dead.
+    // Re-tap = QUIET new-seed refresh behind a centered overlay spinner. The
+    // CURRENT pic stays exactly where it is while the new feed prefetches
+    // (Kevin 2026-07-09: no visual movement until the swap is ready); when
+    // the promise resolves we jump to top + swap in the same covered beat,
+    // and the spinner lifts one frame after the swap commits. (This used to
+    // drive the pager's pull-refresh UI — the feed yanked itself down and
+    // parked on the RefreshControl; the pull gap is now finger-only.)
     if (onRefreshPropRef.current) {
-      pagerRef.current?.refresh();
+      setQuietRefreshing(true);
+      Promise.resolve(onRefreshPropRef.current()).finally(() => {
+        currentIndex.current = 0;
+        scrollToTopImpl(false);
+        requestAnimationFrame(() => setQuietRefreshing(false));
+      });
     } else {
+      currentIndex.current = 0;
       scrollToTopImpl(true);
     }
-  }, [scrollToTopToken, scrollToTopImpl, onHudToggle, pagerRef]);
+  }, [scrollToTopToken, scrollToTopImpl, onHudToggle]);
 
   // Pull-to-refresh: the pager owns the whole lifecycle — spinner, parked
   // strip, and settling onto the NEW top post when the promise resolves
@@ -585,6 +598,30 @@ export function FullScreenFeed({
           onRefresh={onRefreshProp ? handleRefresh : undefined}
           refreshTint={colors.textPrimary}
         />
+        {quietRefreshing && (
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: 'rgba(10,10,18,0.72)',
+                borderRadius: 28,
+                padding: 14,
+              }}
+            >
+              <BrandSpinner size={44} />
+            </View>
+          </View>
+        )}
       </View>
       {commentPost && (
         /* Inline overlay ON PURPOSE (not a Modal): profile pushes from

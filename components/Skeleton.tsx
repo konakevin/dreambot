@@ -6,7 +6,8 @@
 
 import { useEffect } from 'react';
 import { verticalScale } from '@/lib/responsive';
-import { View, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { BrandSpinner } from '@/components/BrandSpinner';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -44,7 +45,7 @@ export function FeedCardSkeleton() {
           (Kevin, 2026-07-05, home-tab re-tap refresh). A real spinner says
           "loading" unambiguously; the shimmer stays for the card silhouette. */}
       <View style={s.feedSpinner} pointerEvents="none">
-        <ActivityIndicator size="large" color={colors.textSecondary} />
+        <BrandSpinner size={44} />
       </View>
       <View style={s.feedBottom}>
         <View style={s.feedUserRow}>

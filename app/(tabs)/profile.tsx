@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@/components/AppText';
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -169,6 +170,14 @@ export default function ProfileScreen() {
     } finally {
       setIsPulling(false);
     }
+  }, [refetchProfile, queryClient]);
+  // Grid pulls refresh the WHOLE profile (header counts/bio/avatar), not just
+  // the grid's posts — PostGrid awaits this alongside its own invalidation.
+  const refreshHeaderData = useCallback(async () => {
+    await Promise.all([
+      refetchProfile(),
+      queryClient.invalidateQueries({ queryKey: ['publicProfile'] }),
+    ]);
   }, [refetchProfile, queryClient]);
 
   function handleFollowUser(targetId: string) {
@@ -525,6 +534,7 @@ export default function ProfileScreen() {
         {avatarPreview}
         {stickyTopBar}
         <PostGrid
+          onRefreshExtra={refreshHeaderData}
           source={sourceMap[activeTab]}
           isOwn={activeTab === 'posts' || activeTab === 'dreams'}
           emptyText={emptyMap[activeTab]}
@@ -555,7 +565,7 @@ export default function ProfileScreen() {
           <RefreshControl
             refreshing={isPulling}
             onRefresh={handleRefresh}
-            tintColor={colors.accent}
+            tintColor="transparent"
           />
         }
         keyExtractor={(item) => item.id}
@@ -584,6 +594,20 @@ export default function ProfileScreen() {
           />
         )}
       />
+      {isPulling && (
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: verticalScale(64),
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+          }}
+        >
+          <BrandSpinner size={26} />
+        </View>
+      )}
       {picSheet}
     </SafeAreaView>
   );

@@ -271,6 +271,12 @@ export default function HomeScreen() {
         // prefetch). Swapping only refetched the same seed before → no change.
         onRefresh={async () => {
           if (!user) return;
+          // Shuffle strength FIRST (mig 352): the prefetch below must run at
+          // the manual-refresh 0.45, not the cold-load 0.1 — bumping after
+          // meant the first re-tap re-served the welded top post ("same
+          // image"), and the key change re-fetched at a different strength
+          // (the flicker-into-a-different-image).
+          useFeedStore.getState().bumpShuffle();
           const newSeed = Math.random();
           await prefetchDreamFeed(queryClient, activeTab, user.id, newSeed);
           setFeedSeed(newSeed);

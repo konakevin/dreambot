@@ -1,3 +1,4 @@
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -40,6 +41,10 @@ export type PostGridSource =
 interface PostGridProps {
   source: PostGridSource;
   isOwn?: boolean;
+  /** Awaited alongside the grid's own invalidation on pull-to-refresh — the
+   *  profile passes its header refetch here so a pull refreshes the WHOLE
+   *  screen's data (counts/bio/avatar), not just the grid (2026-07-09). */
+  onRefreshExtra?: () => Promise<unknown>;
   emptyText?: string;
   ListHeaderComponent?: React.ReactElement;
   highlightPostId?: string;
@@ -64,6 +69,7 @@ export function PostGrid({
   scrollToTopToken,
   showPrivateBadge = false,
   onScrollProgress,
+  onRefreshExtra,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -151,11 +157,14 @@ export function PostGrid({
       queryClient.setQueryData<InfiniteData<unknown>>(activeQueryKey, (old) =>
         old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old
       );
-      await queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' }),
+        onRefreshExtra?.(),
+      ]);
     } finally {
       setIsPulling(false);
     }
-  }, [queryClient, activeQueryKey]);
+  }, [queryClient, activeQueryKey, onRefreshExtra]);
 
   const posts: DreamPostItem[] = useMemo(
     () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],
@@ -377,8 +386,14 @@ export function PostGrid({
         maxToRenderPerBatch={6}
         initialNumToRender={12}
         removeClippedSubviews={false}
+        // Native spinner hidden — the BrandSpinner overlay below is the visual
+        // (the RefreshControl still owns the pull gesture + held-open gap).
         refreshControl={
-          <RefreshControl refreshing={isPulling} onRefresh={handleRefresh} tintColor="#fff" />
+          <RefreshControl
+            refreshing={isPulling}
+            onRefresh={handleRefresh}
+            tintColor="transparent"
+          />
         }
         ListHeaderComponent={
           ListHeaderComponent ? (
@@ -426,6 +441,14 @@ export function PostGrid({
           />
         )}
       />
+      {isPulling && (
+        <View
+          pointerEvents="none"
+          style={{ position: 'absolute', top: 14, left: 0, right: 0, alignItems: 'center' }}
+        >
+          <BrandSpinner size={26} />
+        </View>
+      )}
       {showJustViewedButton && (
         <TouchableOpacity
           style={styles.justViewedButton}

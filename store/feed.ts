@@ -13,7 +13,13 @@ export interface FeedStore {
   bumpRefresh: () => void;
   // Session seed for feed shuffle
   feedSeed: number;
+  /** Seed jitter weight passed to get_feed (mig 352): 0.10 cold-load default,
+   *  0.45 after any manual refresh so reshuffles visibly reorder. */
+  feedShuffle: number;
   regenerateSeed: () => void;
+  /** Raise shuffle strength to the manual-refresh level BEFORE prefetching —
+   *  the prefetch and the mounted query must see the same value. */
+  bumpShuffle: () => void;
   /** Set a SPECIFIC seed (used by pull-to-refresh: prefetch the new seed's feed,
    *  then swap to it here so the reshuffle is instant with no loading flash). */
   setFeedSeed: (seed: number) => void;
@@ -61,8 +67,15 @@ export const useFeedStore = create<FeedStore>((set) => ({
   refreshToken: 0,
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
   feedSeed: Math.random(),
-  regenerateSeed: () => set({ feedSeed: Math.random() }),
-  setFeedSeed: (seed) => set({ feedSeed: seed }),
+  // 0.10 = the ranking's gentle cold-load jitter; manual refreshes bump to
+  // 0.45 so a reshuffle visibly reshuffles (mig 352 — the old fixed 0.10
+  // couldn't unseat a top post whose score led by >0.1: "first pic never
+  // changed"). One-way ratchet per session: once the user asks for shuffle,
+  // every subsequent seed is a real shuffle.
+  feedShuffle: 0.1,
+  regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: 0.45 }),
+  bumpShuffle: () => set({ feedShuffle: 0.45 }),
+  setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: 0.45 }),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
   homeFeedResetToken: 0,
