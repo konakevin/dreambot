@@ -129,9 +129,12 @@ BUILT + PRODUCTION-VERIFIED, awaiting owner pct verdicts:
 - Known granularity limit: biome-right ≠ spot-right (a rollercoaster can roll
   at a library-steps anchor — dream-logic surreal; owner judgment whether a
   spot-congruence filter is ever needed).
-- Rollout proposal: dual_action_pose_pct=10 + dual_scene_active_pct=10 on
-  owner verdict, watch dual_reject:* + identity_sim + active_pose reasons vs
-  baseline, then 25.
+- ROLLED OUT 2026-07-09 (owner verdict on the 23-render review batch: "they
+  look good"): dual_action_pose_pct=10 + dual_scene_active_pct=10 LIVE on
+  nightly. Soak: watch dual_reject:* / identity_sim distribution /
+  identity_shipped_best / active_pose+active_scenario reasons vs baseline
+  (weekly scripts/faceswap-baseline.js), then raise to 25 and extend to
+  Create. Rollback = both pcts to 0 (dashboard, no deploy).
 
 ## Dependencies / order
 
