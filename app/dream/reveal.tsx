@@ -25,6 +25,7 @@ import { useDreamStore } from '@/store/dream';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { saveDream } from '@/lib/dreamSave';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
+import { syncDreamWidget } from '@/lib/widgetSync';
 import { Toast } from '@/components/Toast';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -73,9 +74,11 @@ export default function DreamRevealScreen() {
 
   // Reaching reveal means the user has seen this render (normal flow OR a
   // cold-start resume) — drop the in-flight marker so the next launch won't
-  // re-pop it.
+  // re-pop it. Also rotate the fresh dream onto the iOS Home Screen widget
+  // (self-guarded no-op on Android / binaries without the widget module).
   useEffect(() => {
     void clearDreamInFlight();
+    void syncDreamWidget();
   }, []);
 
   if (!result) {

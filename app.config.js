@@ -32,7 +32,18 @@ module.exports = {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.konakevin.radorbad',
+      // Apple Developer Team (Kevin McHenry) — required by @bacons/apple-targets
+      // to sign the widget extension target it generates.
+      appleTeamId: '43VMZ5KMW4',
       associatedDomains: ['applinks:dreambotapp.com'],
+      // App Group shared with the Home Screen widget extension (targets/widget):
+      // the app writes the latest-dreams state + image files into the group
+      // container; the widget's TimelineProvider reads them. Both the app and
+      // the widget target declare the SAME group id (see targets/widget/
+      // expo-target.config.js + modules/dreambot-widget APP_GROUP).
+      entitlements: {
+        'com.apple.security.application-groups': ['group.com.konakevin.radorbad'],
+      },
       infoPlist: {
         // No non-exempt encryption (standard HTTPS only) — skips the App Store
         // export-compliance prompt on every submission.
@@ -147,6 +158,11 @@ module.exports = {
       // expo-localization — required peer dep of posthog-react-native (device
       // locale for analytics context). See lib/posthog.ts.
       'expo-localization',
+      // Home Screen widget extension — generates + links the WidgetKit target
+      // from targets/widget/ on every prebuild (survives `dreambot --clean`).
+      // Widget UI is SwiftUI (targets/widget/DreamWidget.swift); data flows
+      // through the App Group via modules/dreambot-widget + lib/widgetSync.ts.
+      '@bacons/apple-targets',
     ],
     experiments: {
       typedRoutes: true,

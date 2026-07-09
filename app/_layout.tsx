@@ -35,6 +35,7 @@ import * as nav from '@/lib/navigate';
 import { retryDream } from '@/lib/retryDream';
 import { resumeInFlightDream } from '@/lib/dreamResumeStore';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
+import { syncDreamWidget } from '@/lib/widgetSync';
 import { useFeedStore } from '@/store/feed';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
@@ -403,6 +404,9 @@ function DataPrefetcher() {
 
   useEffect(() => {
     touchLastActive('signin');
+    // Push the latest dreams into the iOS Home Screen widget (no-op on
+    // Android / pre-widget binaries; self-guarded + fire-and-forget).
+    void syncDreamWidget();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
@@ -508,6 +512,10 @@ function DataPrefetcher() {
       // back), we still clear the stale banner.
       touchLastActive('foreground');
       Notifications.dismissAllNotificationsAsync().catch(() => {});
+      // Refresh the Home Screen widget's dream rotation (e.g. a nightly dream
+      // landed overnight). Cheap: images are cached by id, so an unchanged
+      // set downloads nothing.
+      void syncDreamWidget();
 
       // EVERY foreground re-syncs the notification count → the iOS app-icon
       // badge (via useBadgeSync). A push set the OS badge while backgrounded;
