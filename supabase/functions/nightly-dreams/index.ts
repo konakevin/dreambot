@@ -25,8 +25,15 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
-import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
-import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
+import {
+  pickActiveDualAction,
+  eligibleDualActionsActive,
+} from '../_shared/pools/dual_actions_active.ts';
+import {
+  pickActiveSingleAction,
+  eligibleSingleActionsActive,
+} from '../_shared/pools/single_actions_active.ts';
+import { filterUnseen, recordPick } from '../_shared/poolPickHistory.ts';
 import {
   fetchChaosConfig,
   getChaosTier,
@@ -71,7 +78,11 @@ import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
 import { loadDualScenarios, pickDualScenario } from '../_shared/pools/dualScenarioLoader.ts';
-import { loadSingleScenarios, pickSingleScenario } from '../_shared/pools/singleScenarioLoader.ts';
+import {
+  loadSingleScenarios,
+  pickSingleScenario,
+  singleScenarioCandidates,
+} from '../_shared/pools/singleScenarioLoader.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -1120,20 +1131,31 @@ Deno.serve(async (req) => {
         const activeCut =
           elegantCut + (pools.active.length >= 10 ? splitCfg.dualSceneActivePct / 100 : 0);
         const roll = Math.random();
+        // Shuffle-bag (mig 349): filter each pool to this user's UNSEEN
+        // entries before picking; record what was served. Fail-open.
         if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
-          const s = pickDualScenario(pools.goofy);
+          const s = pickDualScenario(
+            await filterUnseen(supabase, userId, 'dual_scn_goofy', pools.goofy, (x) => x.scene)
+          );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+          recordPick(supabase, userId, 'dual_scn_goofy', s.scene);
         } else if (force_elegant || (!force_active && roll < elegantCut)) {
-          const s = pickDualScenario(pools.elegant);
+          const s = pickDualScenario(
+            await filterUnseen(supabase, userId, 'dual_scn_elegant', pools.elegant, (x) => x.scene)
+          );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+          recordPick(supabase, userId, 'dual_scn_elegant', s.scene);
         } else if ((force_active && pools.active.length > 0) || roll < activeCut) {
-          const s = pickDualScenario(pools.active);
+          const s = pickDualScenario(
+            await filterUnseen(supabase, userId, 'dual_scn_active', pools.active, (x) => x.scene)
+          );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
           dualActiveScene = true;
           fallbackReasons.push('active_scenario');
+          recordPick(supabase, userId, 'dual_scn_active', s.scene);
         }
       } else if (isSingleHumanFaceSwap) {
         const pools = await loadSingleScenarios(supabase);
@@ -1144,23 +1166,36 @@ Deno.serve(async (req) => {
         const activeCut =
           elegantCut + (pools.active.any.length >= 10 ? splitCfg.singleSceneActivePct / 100 : 0);
         const roll = Math.random();
+        const pickSolo = async (pool: 'goofy' | 'elegant' | 'active') => {
+          const candidates = await filterUnseen(
+            supabase,
+            userId,
+            `solo_scn_${pool}`,
+            singleScenarioCandidates(pools, pool, g),
+            (x) => x.scene
+          );
+          if (candidates.length === 0) return null;
+          const s = candidates[Math.floor(Math.random() * candidates.length)];
+          recordPick(supabase, userId, `solo_scn_${pool}`, s.scene);
+          return s;
+        };
         if (
           force_single_playful ||
           (!force_single_elegant && !force_single_active && roll < goofyCut)
         ) {
-          const s = pickSingleScenario(pools, 'goofy', g);
+          const s = await pickSolo('goofy');
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
           }
         } else if (force_single_elegant || (!force_single_active && roll < elegantCut)) {
-          const s = pickSingleScenario(pools, 'elegant', g);
+          const s = await pickSolo('elegant');
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
           }
         } else if (force_single_active || roll < activeCut) {
-          const s = pickSingleScenario(pools, 'active', g);
+          const s = await pickSolo('active');
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
@@ -1197,9 +1232,18 @@ Deno.serve(async (req) => {
             force_active_pose ||
             (poseCfg.singleActionPosePct > 0 && Math.random() * 100 < poseCfg.singleActionPosePct);
           if (rollActive) {
-            activeSinglePose = pickActiveSingleAction(biomeKey);
-            if (activeSinglePose)
+            const cands = await filterUnseen(
+              supabase,
+              userId,
+              'solo_pose_active',
+              eligibleSingleActionsActive(biomeKey),
+              (x) => x.text
+            );
+            activeSinglePose = pickActiveSingleAction(biomeKey, cands);
+            if (activeSinglePose) {
               fallbackReasons.push(`active_pose_solo:${biomeKey ?? 'universal'}`);
+              recordPick(supabase, userId, 'solo_pose_active', activeSinglePose);
+            }
           }
         }
         let activePose: string | null = null;
@@ -1209,8 +1253,18 @@ Deno.serve(async (req) => {
             force_active_pose ||
             (poseCfg.dualActionPosePct > 0 && Math.random() * 100 < poseCfg.dualActionPosePct);
           if (rollActive) {
-            activePose = pickActiveDualAction(biomeKey);
-            if (activePose) fallbackReasons.push(`active_pose:${biomeKey ?? 'universal'}`);
+            const cands = await filterUnseen(
+              supabase,
+              userId,
+              'dual_pose_active',
+              eligibleDualActionsActive(biomeKey),
+              (x) => x.text
+            );
+            activePose = pickActiveDualAction(biomeKey, cands);
+            if (activePose) {
+              fallbackReasons.push(`active_pose:${biomeKey ?? 'universal'}`);
+              recordPick(supabase, userId, 'dual_pose_active', activePose);
+            }
           }
         }
         const action =

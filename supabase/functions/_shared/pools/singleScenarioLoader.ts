@@ -56,6 +56,17 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
  * gender-neutral entries UNION the cast member's own gender. Returns null if the
  * combined pool is empty (→ caller uses a normal location scene).
  */
+/** The candidate union for a pool+gender (any ∪ own gender) — exported so the
+ *  caller can shuffle-bag-filter before picking (poolPickHistory). */
+export function singleScenarioCandidates(
+  loaded: Loaded,
+  pool: 'goofy' | 'elegant' | 'active',
+  gender: 'male' | 'female' | null
+): SingleScenario[] {
+  const byGender = loaded[pool];
+  return gender ? [...byGender.any, ...byGender[gender]] : [...byGender.any];
+}
+
 export function pickSingleScenario(
   loaded: Loaded,
   pool: 'goofy' | 'elegant' | 'active',
