@@ -35,7 +35,9 @@ const {
 const POOL_DIR = path.join(__dirname, '..', 'supabase/functions/_shared/pools');
 const DUAL_POOL_FILES = fs
   .readdirSync(POOL_DIR)
-  .filter((f) => /^dual_.*\.ts$/.test(f))
+  // dual_* pools + ALL *_active.ts pools (solo active pools carry the same
+  // face-visibility contract — Phase B).
+  .filter((f) => /^dual_.*\.ts$/.test(f) || /_active\.ts$/.test(f))
   .map((f) => path.join(POOL_DIR, f));
 
 // Coverage gap closed (Stage 0, 2026-07-08): dualBriefBuilder.ts embeds pose

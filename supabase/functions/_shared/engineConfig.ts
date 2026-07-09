@@ -54,6 +54,11 @@ export interface EngineConfig {
   dualSceneGoofyPct: number;
   dualSceneElegantPct: number;
   dualSceneActivePct: number;
+  /** Phase B: solo-side twins of the above. */
+  singleActionPosePct: number;
+  singleSceneGoofyPct: number;
+  singleSceneElegantPct: number;
+  singleSceneActivePct: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -82,6 +87,10 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   dualSceneGoofyPct: 20,
   dualSceneElegantPct: 20,
   dualSceneActivePct: 0,
+  singleActionPosePct: 0,
+  singleSceneGoofyPct: 20,
+  singleSceneElegantPct: 20,
+  singleSceneActivePct: 0,
 };
 
 let cached: EngineConfig | null = null;
@@ -144,6 +153,18 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     dualSceneActivePct: Number(
       data.dual_scene_active_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneActivePct
+    ),
+    singleActionPosePct: Number(
+      data.single_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.singleActionPosePct
+    ),
+    singleSceneGoofyPct: Number(
+      data.single_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.singleSceneGoofyPct
+    ),
+    singleSceneElegantPct: Number(
+      data.single_scene_elegant_pct ?? DEFAULT_ENGINE_CONFIG.singleSceneElegantPct
+    ),
+    singleSceneActivePct: Number(
+      data.single_scene_active_pct ?? DEFAULT_ENGINE_CONFIG.singleSceneActivePct
     ),
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard

@@ -20,6 +20,8 @@ export interface SingleScenario {
 interface Loaded {
   goofy: { any: SingleScenario[]; male: SingleScenario[]; female: SingleScenario[] };
   elegant: { any: SingleScenario[]; male: SingleScenario[]; female: SingleScenario[] };
+  /** ACTIVE solo scenarios (Phase B) — action scenes, mostly gender='any'. */
+  active: { any: SingleScenario[]; male: SingleScenario[]; female: SingleScenario[] };
 }
 
 let cache: Loaded | null = null;
@@ -28,10 +30,10 @@ const empty = (): Loaded['goofy'] => ({ any: [], male: [], female: [] });
 
 export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loaded> {
   if (cache) return cache;
-  const out: Loaded = { goofy: empty(), elegant: empty() };
+  const out: Loaded = { goofy: empty(), elegant: empty(), active: empty() };
   try {
     // Per-pool queries (each well under the 1000-row cap at ~500).
-    for (const pool of ['goofy', 'elegant'] as const) {
+    for (const pool of ['goofy', 'elegant', 'active'] as const) {
       const { data } = await supabase
         .from('single_scenarios')
         .select('scene,attire,gender')
@@ -56,7 +58,7 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
  */
 export function pickSingleScenario(
   loaded: Loaded,
-  pool: 'goofy' | 'elegant',
+  pool: 'goofy' | 'elegant' | 'active',
   gender: 'male' | 'female' | null
 ): SingleScenario | null {
   const byGender = loaded[pool];

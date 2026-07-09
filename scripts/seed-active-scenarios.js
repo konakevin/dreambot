@@ -13,6 +13,8 @@
  * by pool per the bot_seeds hard rule).
  *
  * Usage: node scripts/seed-active-scenarios.js [--append|--wipe-active]
+ *        node scripts/seed-active-scenarios.js --solo [--append|--wipe-active]
+ *        (--solo targets single_scenarios with the solo row set, gender='any')
  */
 
 require('dotenv').config({ path: '/Users/kevinmchenry/Development/apps/dreambot/.env.local' });
@@ -158,12 +160,143 @@ const ROWS = [
   },
 ];
 
+const SOLO_ROWS = [
+  {
+    scene:
+      'racing a go-kart through the final hairpin of a seaside track, hair in the wind, grinning at the camera',
+    attire: CASUAL,
+  },
+  {
+    scene: 'swinging hard in a batting cage, bat blurred mid-swing, face toward the camera',
+    attire: 'sporty casual clothes',
+  },
+  {
+    scene: 'celebrating a strike at a retro bowling alley mid fist-pump, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'scaling a colorful climbing gym wall mid-reach for the next hold, face turned toward the camera',
+    attire: 'athletic climbing wear with a harness',
+  },
+  {
+    scene:
+      'caught at the top of a trampoline park jump with knees tucked, laughing toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'mid-step on an arcade dance machine with arrows lighting up, laughing toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene: 'riding a mechanical bull mid-buck with one arm high, face still toward the camera',
+    attire: 'casual western wear',
+  },
+  {
+    scene:
+      'standing at the rail of a hot air balloon basket at sunrise, arms spread wide, face toward the camera',
+    attire: 'cozy layered morning clothes',
+  },
+  {
+    scene: 'drawing a bow at an archery target at full draw, face turned toward the camera',
+    attire: 'sporty casual clothes with an arm guard',
+  },
+  {
+    scene:
+      'shaping spinning clay at a pottery wheel with clay-streaked hands, laughing toward the camera',
+    attire: 'an apron over casual clothes',
+  },
+  {
+    scene:
+      'flipping a pan over a flaming burner at a cooking class station, face toward the camera',
+    attire: 'a chef apron over casual clothes',
+  },
+  {
+    scene:
+      'belting the final chorus on a small karaoke stage, free arm flung wide, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'mid laser tag sprint through a glowing neon arena, dodging sideways, grinning at the camera',
+    attire: 'casual clothes with a glowing laser tag vest',
+  },
+  {
+    scene:
+      'skipping a stone across a still lake at dusk, caught mid-release, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene: 'hoisting a giant stuffed prize at a carnival ring-toss booth, smiling at the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'rolling through a retro roller rink under a disco ball with arms out, face toward the camera',
+    attire: 'a retro 70s roller disco outfit',
+  },
+  {
+    scene:
+      'flying a giant rainbow kite on a breezy hillside, spool in hand and line taut, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'swinging on a rope swing out over a swimming hole, at the top of the arc, laughing toward the camera',
+    attire: 'bright swimwear',
+  },
+  {
+    scene:
+      'racing down a water park slide in a tube with arms up mid-splashdown, face toward the camera',
+    attire: 'bright swimwear',
+  },
+  {
+    scene:
+      'gliding on a segway along a waterfront boardwalk, leaning into the turn, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'mid-putt on a wild neon mini golf course as the ball drops, celebrating, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'riding a ferris wheel at golden hour with arms stretched along the gondola rail, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'mid-drop in the front row of a rollercoaster with hands thrown high, face toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'driving a bumper car through a neon carnival collision, sparks of light around, laughing toward the camera',
+    attire: CASUAL,
+  },
+  {
+    scene: 'mid-roll at a skee ball lane under carnival lights, grinning at the camera',
+    attire: CASUAL,
+  },
+  {
+    scene:
+      'teeing off at a driving range at sunset, club at the top of the follow-through, face toward the camera',
+    attire: 'sporty casual clothes',
+  },
+];
+
 (async () => {
-  const mode = process.argv[2] ?? '';
+  const args = process.argv.slice(2);
+  const solo = args.includes('--solo');
+  const mode = args.find((a) => a === '--append' || a === '--wipe-active') ?? '';
+  const TABLE = solo ? 'single_scenarios' : 'dual_scenarios';
+  const ROWSET = solo ? SOLO_ROWS : ROWS;
 
   // Lint EVERY row before touching the DB — abort on any violation.
   let bad = 0;
-  for (const r of ROWS) {
+  for (const r of ROWSET) {
     const problems = lintActivePoseEntry(r.scene);
     if (problems.length) {
       bad++;
@@ -176,7 +309,7 @@ const ROWS = [
   }
 
   const { count } = await sb
-    .from('dual_scenarios')
+    .from(TABLE)
     .select('*', { count: 'exact', head: true })
     .eq('pool', 'active');
   if (count > 0 && mode !== '--append' && mode !== '--wipe-active') {
@@ -185,7 +318,7 @@ const ROWS = [
   }
   if (mode === '--wipe-active') {
     // SCOPED delete — active pool only (never goofy/elegant; hard rule).
-    const { error } = await sb.from('dual_scenarios').delete().eq('pool', 'active');
+    const { error } = await sb.from(TABLE).delete().eq('pool', 'active');
     if (error) {
       console.error('wipe failed:', error.message);
       process.exit(1);
@@ -193,20 +326,24 @@ const ROWS = [
     console.log(`wiped ${count} active rows`);
   }
 
-  const { error } = await sb
-    .from('dual_scenarios')
-    .insert(
-      ROWS.map((r) => ({ pool: 'active', scene: r.scene, attire: r.attire, disabled: false }))
-    );
+  const { error } = await sb.from(TABLE).insert(
+    ROWSET.map((r) => ({
+      pool: 'active',
+      scene: r.scene,
+      attire: r.attire,
+      disabled: false,
+      ...(solo ? { gender: 'any' } : {}),
+    }))
+  );
   if (error) {
     console.error('insert failed:', error.message);
     process.exit(1);
   }
   const { count: after } = await sb
-    .from('dual_scenarios')
+    .from(TABLE)
     .select('*', { count: 'exact', head: true })
     .eq('pool', 'active');
   console.log(
-    `✓ ${ROWS.length} active scenarios inserted (pool total: ${after}) — all lint-green.`
+    `✓ ${ROWSET.length} active scenarios inserted into ${TABLE} (pool total: ${after}) — all lint-green.`
   );
 })();

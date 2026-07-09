@@ -33,7 +33,7 @@ const COMMENT = /^\s*(\/\/|\*|\/\*)/;
 // ── ACTIVE-pool entry rules ──────────────────────────────────────────────
 
 const FACE_VISIBILITY =
-  /both faces\s+(?:fully\s+|clearly\s+)?(?:visible|toward|turned toward)|faces?\s+(?:turned\s+)?toward\s+(?:the\s+)?camera|(?:grinning|smiling|laughing|looking)\s+(?:at|toward|back at|into)\s+the\s+camera/i;
+  /both faces\s+(?:fully\s+|clearly\s+)?(?:visible|toward|turned toward)|faces?\s+(?:clearly\s+|still\s+|turned\s+|fully\s+)?toward\s+(?:the\s+)?camera|(?:grinning|smiling|laughing|looking)\s+(?:at|toward|back at|into)\s+the\s+camera/i;
 
 const REACH_BACK = /reach(?:es|ing)?\s+back|pull(?:s|ing)?\s+(?:her|him|them|each other)\s+up/i;
 

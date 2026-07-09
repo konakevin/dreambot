@@ -26,6 +26,7 @@ import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
+import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
 import {
   fetchChaosConfig,
   getChaosTier,
@@ -211,6 +212,7 @@ Deno.serve(async (req) => {
   const force_playful = body.force_playful === true;
   const force_elegant = body.force_elegant === true;
   const force_active = body.force_active === true;
+  const force_single_active = body.force_single_active === true;
   // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
   // (production-prompt benching — the pencil lesson).
   const force_active_pose = body.force_active_pose === true;
@@ -1101,6 +1103,7 @@ Deno.serve(async (req) => {
     // the body action, so the pose slot gets a fixed face-mandate string
     // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
     let dualActiveScene = false;
+    let soloActiveScene = false;
     // A MANDATED location (force_place) suppresses the goofy/elegant special-scene
     // roll entirely. force_place is set ONLY by the onboarding FIRST DREAM, which
     // must put the user in the place they JUST picked — the "here's you in YOUR
@@ -1135,18 +1138,34 @@ Deno.serve(async (req) => {
       } else if (isSingleHumanFaceSwap) {
         const pools = await loadSingleScenarios(supabase);
         const g = castGender === 'male' || castGender === 'female' ? castGender : null;
+        const splitCfg = await fetchEngineConfig(supabase);
+        const goofyCut = splitCfg.singleSceneGoofyPct / 100;
+        const elegantCut = goofyCut + splitCfg.singleSceneElegantPct / 100;
+        const activeCut =
+          elegantCut + (pools.active.any.length >= 10 ? splitCfg.singleSceneActivePct / 100 : 0);
         const roll = Math.random();
-        if (force_single_playful || (!force_single_elegant && roll < 0.2)) {
+        if (
+          force_single_playful ||
+          (!force_single_elegant && !force_single_active && roll < goofyCut)
+        ) {
           const s = pickSingleScenario(pools, 'goofy', g);
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
           }
-        } else if (force_single_elegant || roll < 0.4) {
+        } else if (force_single_elegant || (!force_single_active && roll < elegantCut)) {
           const s = pickSingleScenario(pools, 'elegant', g);
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
+          }
+        } else if (force_single_active || roll < activeCut) {
+          const s = pickSingleScenario(pools, 'active', g);
+          if (s) {
+            dualSpecialScene = s.scene;
+            dualSpecialWardrobe = s.attire;
+            soloActiveScene = true;
+            fallbackReasons.push('active_scenario_solo');
           }
         }
       }
@@ -1171,6 +1190,18 @@ Deno.serve(async (req) => {
         // biome-tagged ACTIVE pose pool with dual_action_pose_pct probability —
         // jetski only where the resolved biome is coastal, skiing only alpine,
         // untagged entries anywhere. Miss/off → classic pools, byte-identical.
+        let activeSinglePose: string | null = null;
+        if (selectedCast.length === 1 && !dualSpecialScene && !dualSpecialWardrobe) {
+          const poseCfg = await fetchEngineConfig(supabase);
+          const rollActive =
+            force_active_pose ||
+            (poseCfg.singleActionPosePct > 0 && Math.random() * 100 < poseCfg.singleActionPosePct);
+          if (rollActive) {
+            activeSinglePose = pickActiveSingleAction(biomeKey);
+            if (activeSinglePose)
+              fallbackReasons.push(`active_pose_solo:${biomeKey ?? 'universal'}`);
+          }
+        }
         let activePose: string | null = null;
         if (selectedCast.length === 2 && !dualSpecialScene && !dualSpecialWardrobe) {
           const poseCfg = await fetchEngineConfig(supabase);
@@ -1194,7 +1225,9 @@ Deno.serve(async (req) => {
                 : dualSpecialScene
                   ? pickDualAction(undefined, 'playful')
                   : (activePose ?? dualAction)
-            : (singleAction ?? null);
+            : soloActiveScene
+              ? 'caught mid-action exactly as the scene describes, face toward the camera'
+              : (activeSinglePose ?? singleAction ?? null);
         const slotResult = await runCharacterSlotPipeline(
           {
             cast: resolvedCast.map((rc, i) => ({
