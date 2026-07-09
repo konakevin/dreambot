@@ -63,3 +63,19 @@ function lintActivePoseEntry(text) {
 }
 
 module.exports = { VIOLATION, MITIGATED, ALLOW, BAN_LIST, COMMENT, lintActivePoseEntry };
+
+/**
+ * CLASSIC-pool lint (POSE_POOLS_DB_MIGRATION_PLAN.md I5): proximity rule ONLY.
+ * Classic poses are scene-neutral body poses — forcing the active-pool
+ * face-phrase rules onto them would change their register, which is itself a
+ * way to break dreams. Swap-breaking closeness is still rejected.
+ */
+function lintClassicPoseEntry(text) {
+  const stripped = text.replace(ALLOW, '');
+  if (VIOLATION.test(stripped) && !MITIGATED.test(text)) {
+    return ['couple-too-close phrasing without head-separation mitigation'];
+  }
+  return [];
+}
+
+module.exports.lintClassicPoseEntry = lintClassicPoseEntry;

@@ -27,7 +27,12 @@ import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
 import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
-import { loadActionPoses, eligibleActionPoses } from '../_shared/pools/actionPoseLoader.ts';
+import {
+  loadActionPoses,
+  eligibleActionPoses,
+  loadClassicPools,
+} from '../_shared/pools/actionPoseLoader.ts';
+import { loadLocationSpots } from '../_shared/pools/locationSpotsLoader.ts';
 import { filterUnseen, recordPick } from '../_shared/poolPickHistory.ts';
 import {
   fetchChaosConfig,
@@ -820,10 +825,13 @@ Deno.serve(async (req) => {
       isDualFaceSwap || isDualCharacter
         ? pickDualAction(
             selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-            force_dual_pool
+            force_dual_pool,
+            (await loadClassicPools(supabase)).dual
           )
         : null;
-    const singleActionObj = isSingleCharacter ? pickSingleAction(force_single_pool) : null;
+    const singleActionObj = isSingleCharacter
+      ? pickSingleAction(force_single_pool, (await loadClassicPools(supabase)).single)
+      : null;
     const singleAction = singleActionObj?.pose ?? null;
     const needsEpicBackdrop = singleActionObj?.needsEpicBackdrop ?? false;
     console.log(
@@ -886,7 +894,11 @@ Deno.serve(async (req) => {
     // borders, ice storms in tropics) producing kitchen-sink AI collages.
     // Cohesion > entropy. The location-specific scene cluster is the one
     // signal worth keeping.
-    const sceneCluster = pickSceneCluster(userPlace, force_cluster_kind);
+    const sceneCluster = pickSceneCluster(
+      userPlace,
+      force_cluster_kind,
+      await loadLocationSpots(supabase)
+    );
     console.log(
       `[nightly-dreams] scene cluster (${force_cluster_kind ?? 'blended'}): "${sceneCluster?.slice(0, 80) ?? 'none'}"`
     );
@@ -1280,10 +1292,11 @@ Deno.serve(async (req) => {
               : dualSpecialWardrobe
                 ? pickDualAction(
                     selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-                    'partner'
+                    'partner',
+                    (await loadClassicPools(supabase)).dual
                   )
                 : dualSpecialScene
-                  ? pickDualAction(undefined, 'playful')
+                  ? pickDualAction(undefined, 'playful', (await loadClassicPools(supabase)).dual)
                   : (activePose ?? dualAction)
             : soloActiveScene
               ? 'caught mid-action exactly as the scene describes, face toward the camera'

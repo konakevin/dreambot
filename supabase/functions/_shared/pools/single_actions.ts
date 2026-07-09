@@ -369,16 +369,26 @@ export const PORTRAIT_ACTIONS: string[] = [
   'sitting on a wooden step with both feet on lower level, hands on upper step',
 ];
 
-export function pickSingleAction(forcePool?: 'portrait' | 'candid'): SingleAction {
+export interface SingleActionPools {
+  candid: string[];
+  portrait: string[];
+}
+
+export function pickSingleAction(
+  forcePool?: 'portrait' | 'candid',
+  // DB-loadable arrays; default = code arrays (byte-identical when omitted).
+  // needsEpicBackdrop stays derived from POOL membership — never a DB column.
+  pools: SingleActionPools = { candid: CANDID_ACTIONS, portrait: PORTRAIT_ACTIONS }
+): SingleAction {
   const isPortrait = forcePool ? forcePool === 'portrait' : Math.random() < 0.5;
   if (isPortrait) {
     return {
-      pose: PORTRAIT_ACTIONS[Math.floor(Math.random() * PORTRAIT_ACTIONS.length)],
+      pose: pools.portrait[Math.floor(Math.random() * pools.portrait.length)],
       needsEpicBackdrop: true,
     };
   }
   return {
-    pose: CANDID_ACTIONS[Math.floor(Math.random() * CANDID_ACTIONS.length)],
+    pose: pools.candid[Math.floor(Math.random() * pools.candid.length)],
     needsEpicBackdrop: false,
   };
 }

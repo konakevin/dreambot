@@ -1099,16 +1099,27 @@ export type ClusterKind = 'spot' | 'activity';
  * @param locationName — case-insensitive location key
  * @param kind — optional force "spot" or "activity" (default: blended)
  */
+export interface SceneClusterRecords {
+  spots: Record<string, string[]>;
+  activities: Record<string, string[]>;
+}
+
 export function pickSceneCluster(
   locationName: string | undefined,
-  kind?: ClusterKind
+  kind?: ClusterKind,
+  // DB-loadable records; default = code records (byte-identical when omitted).
+  // The exact-lowercase-key matcher below never changes.
+  records: SceneClusterRecords = {
+    spots: SCENE_CLUSTERS_SPOTS,
+    activities: SCENE_CLUSTERS_ACTIVITIES,
+  }
 ): string | null {
   if (!locationName) return null;
   const key = locationName.toLowerCase();
   let pool: string[] = [];
-  if (kind === 'spot') pool = SCENE_CLUSTERS_SPOTS[key] ?? [];
-  else if (kind === 'activity') pool = SCENE_CLUSTERS_ACTIVITIES[key] ?? [];
-  else pool = SCENE_CLUSTERS[key] ?? [];
+  if (kind === 'spot') pool = records.spots[key] ?? [];
+  else if (kind === 'activity') pool = records.activities[key] ?? [];
+  else pool = [...(records.spots[key] ?? []), ...(records.activities[key] ?? [])];
   if (pool.length === 0) return null;
   return pool[Math.floor(Math.random() * pool.length)];
 }

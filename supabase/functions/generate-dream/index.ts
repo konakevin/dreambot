@@ -45,6 +45,7 @@ import {
 } from '../_shared/promptCompiler.ts';
 import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
+import { loadClassicPools } from '../_shared/pools/actionPoseLoader.ts';
 import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
@@ -1299,15 +1300,20 @@ Output ONLY the prompt.`;
                   // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
                   // injected onto someone's serious request. (Goofy/elegant scenes are
                   // nightly-only and never touch the user's Create prompt either.)
-                  action: (() => {
+                  action: await (async () => {
                     const rel = String(
                       castMembers.find((m: DreamCastMember) => m.role === 'plus_one')
                         ?.relationship ?? ''
                     );
-                    return pickDualAction(
-                      rel,
-                      rel === 'partner' || rel === 'significant_other' ? 'partner' : 'companion'
-                    );
+                    const pool =
+                      rel === 'partner' || rel === 'significant_other' ? 'partner' : 'companion';
+                    // PAID path: belt on top of the loader's own fallback —
+                    // even a thrown loader must not touch a Create dream (I4).
+                    try {
+                      return pickDualAction(rel, pool, (await loadClassicPools(supabase)).dual);
+                    } catch (_e) {
+                      return pickDualAction(rel, pool);
+                    }
                   })(),
                 },
                 ANTHROPIC_KEY!

@@ -289,25 +289,39 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
  * forces partner/companion so a user's specific prompt never gets a random goofy
  * pose). Nightly uses the default, which includes the 18% playful mix.
  */
+export interface DualActionPools {
+  companion: string[];
+  partner: string[];
+  playful: string[];
+}
+
 export function pickDualAction(
   relationship: string | undefined,
-  forcePool?: 'partner' | 'companion' | 'playful'
+  forcePool?: 'partner' | 'companion' | 'playful',
+  // DB-loadable arrays (POSE_POOLS_DB_MIGRATION_PLAN.md). Default = the code
+  // arrays — omitting `pools` is byte-identical to the pre-DB behavior. The
+  // DISTRIBUTION below never moves to the DB.
+  pools: DualActionPools = {
+    companion: DUAL_ACTIONS_COMPANION,
+    partner: DUAL_ACTIONS_PARTNER,
+    playful: DUAL_ACTIONS_PLAYFUL,
+  }
 ): string {
   if (forcePool === 'playful') {
-    return DUAL_ACTIONS_PLAYFUL[Math.floor(Math.random() * DUAL_ACTIONS_PLAYFUL.length)];
+    return pools.playful[Math.floor(Math.random() * pools.playful.length)];
   }
   if (forcePool === 'partner') {
-    return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
+    return pools.partner[Math.floor(Math.random() * pools.partner.length)];
   }
   if (forcePool === 'companion') {
-    return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
+    return pools.companion[Math.floor(Math.random() * pools.companion.length)];
   }
   if (Math.random() < 0.18) {
-    return DUAL_ACTIONS_PLAYFUL[Math.floor(Math.random() * DUAL_ACTIONS_PLAYFUL.length)];
+    return pools.playful[Math.floor(Math.random() * pools.playful.length)];
   }
   const isPartner = relationship === 'partner' || relationship === 'significant_other';
   if (isPartner && Math.random() < 0.3) {
-    return DUAL_ACTIONS_PARTNER[Math.floor(Math.random() * DUAL_ACTIONS_PARTNER.length)];
+    return pools.partner[Math.floor(Math.random() * pools.partner.length)];
   }
-  return DUAL_ACTIONS_COMPANION[Math.floor(Math.random() * DUAL_ACTIONS_COMPANION.length)];
+  return pools.companion[Math.floor(Math.random() * pools.companion.length)];
 }
