@@ -117,6 +117,7 @@ export async function genderSafeDualSwap(
       engine?: string;
       swapMs?: number;
       rejectReason?: string | null;
+      identity?: { left: number | null; right: number | null; ms: number } | null;
     };
     try {
       res = await deps.dispatchDual(target);
@@ -133,6 +134,10 @@ export async function genderSafeDualSwap(
       // log nothing, which let an audit misread the live dynamic engine as
       // dormant. These reasons ride the caller's fallbackReasons into the log.
       reasons.push(`dual_engine:${res.engine ?? 'unknown'}`);
+      // Stage 8 shadow: identity sims of the delivered swap (calibration data
+      // accrues in production forensics before any enforcement flips).
+      if (res.identity)
+        reasons.push(`identity_sim:L${res.identity.left ?? '?'}/R${res.identity.right ?? '?'}`);
       reasons.push(`dual_attempts:${attempt + 1}`);
       if (typeof res.swapMs === 'number') reasons.push(`dual_swap_ms:${res.swapMs}`);
       return { url: res.swappedUrl, outcome: 'dual', faceCount, predictionId, reasons };

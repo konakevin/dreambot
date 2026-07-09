@@ -18,6 +18,10 @@ export interface FaceBox {
   w: number;
   h: number;
   score: number;
+  /** 5-point landmarks [x0,y0,...,x4,y4] (right eye, left eye, nose, right
+   *  mouth corner, left mouth corner), same coordinate space as the box.
+   *  Present when the kps heads were decoded (Stage 8 identity verify). */
+  kps?: number[];
 }
 
 export const YUNET_INPUT = 640;
@@ -28,6 +32,9 @@ export interface YuNetHeads {
   cls: Float32Array; // [rows*cols] face confidence (post-sigmoid, 0..1)
   obj: Float32Array; // [rows*cols] objectness (post-sigmoid, 0..1)
   bbox: Float32Array; // [rows*cols*4] (dx, dy, log-w, log-h) per anchor
+  /** [rows*cols*10] optional 5-point landmark offsets ((dx,dy) per point,
+   *  anchor-relative like bbox). The 2023mar ONNX exports kps_8/16/32. */
+  kps?: Float32Array;
 }
 
 /** Intersection-over-union of two axis-aligned boxes. */
@@ -79,7 +86,16 @@ export function decodeYuNet(
         const cy = (r + bbox[i * 4 + 1]) * stride;
         const w = Math.exp(bbox[i * 4 + 2]) * stride;
         const h = Math.exp(bbox[i * 4 + 3]) * stride;
-        out.push({ x: cx - w / 2, y: cy - h / 2, w, h, score });
+        const box: FaceBox = { x: cx - w / 2, y: cy - h / 2, w, h, score };
+        if (heads.kps) {
+          const kps: number[] = [];
+          for (let k = 0; k < 5; k++) {
+            kps.push((c + heads.kps[i * 10 + k * 2]) * stride);
+            kps.push((r + heads.kps[i * 10 + k * 2 + 1]) * stride);
+          }
+          box.kps = kps;
+        }
+        out.push(box);
       }
     }
   }
@@ -101,6 +117,7 @@ export function scaleBoxes(
     w: Math.round(b.w * sx),
     h: Math.round(b.h * sy),
     score: b.score,
+    ...(b.kps ? { kps: b.kps.map((v, i) => v * (i % 2 === 0 ? sx : sy)) } : {}),
   }));
 }
 

@@ -19,6 +19,7 @@
 // deno-lint-ignore-file no-explicit-any
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { decodeImage, encodeJpeg } from './imageCodec.ts';
+import { verifyDualIdentity, type DualIdentityRead } from './faceEmbed.ts';
 import { detectFacesWithGender, type GenderedFace } from './faceDetect.ts';
 import {
   planDualSplit,
@@ -783,6 +784,24 @@ export interface DualSwapResult {
   /** Why swappedUrl is null (re-render signal) — distinguishes a detection
    *  shortfall from a gender-guard refusal in bench stats + forensics. */
   reason?: string;
+  /** ArcFace identity similarities of the swapped faces vs their intended
+   *  sources (Stage 8, IDENTITY_VERIFY=shadow|enforce). MEASUREMENT only —
+   *  enforcement policy lives in the edge pipeline, which knows the medium. */
+  identity?: DualIdentityRead | null;
+}
+
+/** Measure identity on a successful swap when IDENTITY_VERIFY is on. Never
+ *  throws; ~1-2s (3 fetches + detect + 4 embeds), skipped entirely when off. */
+async function maybeMeasureIdentity(
+  swappedUrl: string,
+  leftSrc: string,
+  rightSrc: string
+): Promise<DualIdentityRead | null | undefined> {
+  const mode = Deno.env.get('IDENTITY_VERIFY');
+  if (mode !== 'shadow' && mode !== 'enforce') return undefined;
+  const read = await verifyDualIdentity(swappedUrl, leftSrc, rightSrc);
+  if (read) console.log(`[identity] L=${read.left ?? '?'} R=${read.right ?? '?'} ${read.ms}ms`);
+  return read;
 }
 
 /**
@@ -892,7 +911,11 @@ export async function dualFaceSwap(
         );
         if (!composedUrl) return { swappedUrl: null, faceCount, reason: 'perface_swap_failed' };
         console.log(`[dualFaceSwap] per-face composite complete faces=${faceCount}`);
-        return { swappedUrl: composedUrl, faceCount };
+        return {
+          swappedUrl: composedUrl,
+          faceCount,
+          identity: await maybeMeasureIdentity(composedUrl, lSrc, rSrc),
+        };
       }
       const fL = split.leftBox as GenderedFace;
       const fR = split.rightBox as GenderedFace;
@@ -1050,5 +1073,9 @@ export async function dualFaceSwap(
     .remove([leftPath, rightPath])
     .catch(() => {});
   console.log('[dualFaceSwap] Pipeline complete');
-  return { swappedUrl: urlData.publicUrl, faceCount };
+  return {
+    swappedUrl: urlData.publicUrl,
+    faceCount,
+    identity: await maybeMeasureIdentity(urlData.publicUrl, leftSrc, rightSrc),
+  };
 }

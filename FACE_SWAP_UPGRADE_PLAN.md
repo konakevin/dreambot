@@ -39,8 +39,8 @@ Stage ledger (fill in as executed):
 | 5a | dual retry prompt mutation | 2026-07-08 (deployed unconditionally, no flag — owner fail-forward call; mutation only engages on attempt ≥2 of an already-failing ladder, so attempt-1 behavior is byte-identical) | n/a | ✅ LIVE: dual rerender ladder prepends "two people side by side, both faces clearly visible and unobstructed, heads apart, " from attempt 2 (dualSwapPipeline `rerender(attempt)`, generate-dream + nightly). Verdict on effectiveness rides the weekly baseline's `dual_attempts:` distribution |
 | 5b | contact poses (pct) | | 72h per % step | BENCHES COMPLETE 2026-07-08 — 49/60 (82%) across 12 action families, taxonomy + rec in FACE_SWAP_QA_REPORT.md (R1-R3); awaiting owner grid verdicts to seed. OWNER GREENLIT DIRECTION 2026-07-08 (Kevin: seed the couple pose pools with more "loose and fun" scenes/poses — surfing, jetski, dancing together — "but only if we can guarantee quality, so we need to do our due diligence and QA this heavily as we go"). QA ladder: (1) action-family bench `scripts/bench-dynamic-actions.js` (12 dynamic scenes, our engine + restore) → (2) ~10 renders per surviving family → (3) MVP-25 seed of a contact/action pool behind `dual_contact_pose_pct` → (4) pct=10 nightly, watch no_dual_split vs baseline. First bench data point: contact-sidehug + several contact poses swap cleanly; contact-dance rejected at faces=1 (target render hid a face — pose wording matter, not engine limit) |
 | 5c | expanded single compositions (pct) | | 72h | |
-| 6 | stylized swap unify (per medium) | | 72h per medium | SPIKE BENCHED 2026-07-08 (scripts/bench-style-unify.js): the dormant per-medium kontext_directive over swapped+restored faces makes them genuinely SIT in watercolor/canvas/storybook, structure preserved; ~$0.04 + ~10s per stylized swap. Gate: owner likeness verdict on ~/Desktop/style-unify-bench. Report R4 |
-| 7 | solo hybrid pipeline (pct, photoreal only) | | 72h | SPIKE BENCHED 2026-07-08 (scripts/bench-identity-hybrid.js): InfiniteYou delivered ALL 8 expressive compositions (true profile, low-angle, over-shoulder) at 33-46s; current pipeline failed 2/8 outright; PuLID fast (14-15s) but drags composition toward the reference pose. Gate: owner "that's really me" verdict on ~/Desktop/identity-hybrid-bench. Report R5 |
+| 6 | stylized swap unify (per medium) | never | — | ❌ REJECTED 2026-07-08 by owner on LIKENESS: "the kontext rendering is not me, so the style unify bench shows that our face swap is better." Repainting the face — even style-transfer with identity-preserve instructions — loses the user. The photoreal-face-on-painted-scene look IS the acceptable trade; swapped face pixels are sacred. kontextPass.ts stays mothballed; don't re-propose face-repainting passes. (Spike: scripts/bench-style-unify.js, grid ~/Desktop/style-unify-bench) |
+| 7 | solo hybrid pipeline (pct, photoreal only) | never | — | ❌ REJECTED 2026-07-08 by owner on LIKENESS — BOTH candidates: "InfiniteYou is out, our face swap clearly wins every one" + "pulid is out too, stick with our face swap engine." Identity-conditioned output doesn't clear the "that's really me" bar vs the swap+restore pipeline. Composition freedom doesn't matter if the person isn't recognizably the user. Re-open only when a materially better identity-conditioned model ships (re-bench with scripts/bench-identity-hybrid.js). SPIKE BENCHED 2026-07-08 (scripts/bench-identity-hybrid.js): InfiniteYou delivered ALL 8 expressive compositions (true profile, low-angle, over-shoulder) at 33-46s; current pipeline failed 2/8 outright; PuLID fast (14-15s) but drags composition toward the reference pose. Gate: owner "that's really me" verdict on ~/Desktop/identity-hybrid-bench. Report R5 |
 
 ## Ground rules (apply to every stage)
 
@@ -224,6 +224,54 @@ Fully additive new pipeline; touches no existing path until proven.
    yes → integrate as a new render branch (`solo_hybrid_pct`, photoreal mediums only,
    expressive presets only routed here), nightly-first as always.
 3. ID-Patch/dual spike only after solo hybrid wins.
+
+## Stage 8 — ArcFace identity verification ("did the face actually take?") — PLANNED 2026-07-08, owner-approved ("plan it first, then build it")
+
+**Motivation.** The action depth QA's owner review (2026-07-08) found PASS cells where a
+character wasn't the real face: "pass" everywhere in this program has meant *the engine
+returned an image*, never *the face verifiably took*. Production has the same blind
+spot — a swap that lands weakly (small face, rotated face) ships silently. This stage
+gives the engine a measured identity check so likeness failures become ordinary rejects
+that feed the existing retry ladder. This is the mechanism behind the owner's standing
+"only if we can guarantee quality" directive for pose expansion — it gates Stage 5b's
+pool seeding.
+
+**Approach.** The Fly service already runs YuNet + genderage in-process via
+onnxruntime-web, and YuNet's ONNX exports the 5-point landmark heads (`kps_8/16/32` —
+verified 2026-07-08), so proper ArcFace alignment is available. Add InsightFace's
+MobileFaceNet recognition model (`w600k_mbf.onnx`, ~13 MB, 512-d embeddings, 112×112
+aligned input — the buffalo_s recognizer): embed each swapped face, cosine-compare
+against its intended cast source's embedding, below-threshold = the swap did not carry
+the identity.
+
+**Phases (each independently shippable, flag `IDENTITY_VERIFY=off|shadow|enforce`):**
+
+1. **8a — capability + shadow.** Decode the kps heads (pure math + unit tests beside
+   `decodeYuNet`); new `faceEmbed.ts` (session load, umeyama similarity transform to
+   the ArcFace 112×112 template, bilinear warp, L2-normalized embed, cosine); new
+   `/verify` endpoint {targetUrl, refs[]} → per-face similarities; `dualFaceSwap` in
+   shadow mode computes + logs + returns `identity:{left,right}` similarities on every
+   successful swap (dispatcher persists `identity_sim:L…/R…` into fallback_reasons).
+   ZERO behavior change; adds ~0.5-1.5s per dual.
+2. **8b — calibration bench.** `scripts/bench-identity-verify.js` runs /verify over the
+   depth-QA corpus (49 owner-judged passes incl. the flagged likeness failures, +
+   unswapped targets as known negatives) → similarity distribution grid sorted by
+   score. The threshold is picked where the numbers agree with KEVIN'S eyeball, not a
+   paper value. Owner confirms.
+3. **8c — enforce on the dual path.** `IDENTITY_VERIFY=enforce` +
+   `IDENTITY_THRESHOLD`: below-threshold swap → rerender signal with reason
+   `identity_unverified:left:0.18` → existing ladder (retry → mutate prompt → degrade).
+   Fail-OPEN on verifier errors (model load/timeout → ship as today + reason). PHOTOREAL
+   mediums enforce first; stylized stays shadow (painted faces depress embeddings — the
+   Stage-3 medium-gate lesson).
+4. **8d — solo path.** `singleSwapGuard` (or the swap call sites) verify via `/verify`
+   post-swap under the same medium gate.
+5. **8e — bench metric redefinition.** `bench-action-depth.js` pass = swapped AND both
+   sims ≥ threshold. All future pose-family QA inherits the honest metric.
+
+**Rollback:** env flag to `shadow`/`off` (no deploy). **Cost:** $0 (in-process CPU).
+**Risk:** enforcement converts silent likeness failures into retries — pays latency on
+the failure path only, gender guarantee untouched.
 
 ## Sequencing + effort
 

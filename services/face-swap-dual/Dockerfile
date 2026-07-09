@@ -17,12 +17,15 @@ COPY src/deno.json src/deno.json
 COPY src/imageCodec.ts src/imageCodec.ts
 COPY src/faceDetectMath.ts src/faceDetectMath.ts
 COPY src/faceDetect.ts src/faceDetect.ts
+COPY src/faceEmbed.ts src/faceEmbed.ts
 COPY src/faceSwap.ts src/faceSwap.ts
 COPY src/index.ts src/index.ts
 ## In-process face-detection models (YuNet ~230KB + InsightFace genderage ~1.3MB).
 ## Loaded once at boot via import.meta.url — no Replicate call, no cold start.
 COPY src/yunet.onnx src/yunet.onnx
 COPY src/genderage.onnx src/genderage.onnx
+## ArcFace recognition (Stage 8 identity verify): MobileFaceNet 512-d (~13MB).
+COPY src/w600k_mbf.onnx src/w600k_mbf.onnx
 
 ## Pre-warm the dep cache during build so cold starts don't pay the
 ## one-time esm.sh fetch tax (Replicate + Supabase clients + jpeg WASM +

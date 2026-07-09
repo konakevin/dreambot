@@ -39,6 +39,9 @@ export interface DualDispatchResult {
    *  no_split:lt2_faces, gender_unconfirmed:male/male). Null on success or
    *  when the engine predates the field. */
   rejectReason: string | null;
+  /** ArcFace identity sims of the swapped faces vs their sources (Stage 8
+   *  shadow measurement on the Fly engine; null when off/unavailable). */
+  identity: { left: number | null; right: number | null; ms: number } | null;
 }
 
 export async function dispatchDualFaceSwap(
@@ -97,6 +100,7 @@ export async function dispatchDualFaceSwap(
         engine: 'in-process-legacy',
         swapMs: Date.now() - tInProc,
         rejectReason: null,
+        identity: null,
       };
     }
 
@@ -152,6 +156,7 @@ export async function dispatchDualFaceSwap(
       faceCount?: number;
       status?: string;
       reason?: string | null;
+      identity?: { left: number | null; right: number | null; ms: number } | null;
       error?: string;
       variant?: string;
     };
@@ -190,6 +195,7 @@ export async function dispatchDualFaceSwap(
       engine,
       swapMs: elapsedMs,
       rejectReason: swappedUrl ? null : (parsed.reason ?? null),
+      identity: parsed.identity ?? null,
     };
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget.

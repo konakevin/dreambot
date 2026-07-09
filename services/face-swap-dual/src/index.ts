@@ -14,6 +14,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { dualFaceSwap } from './faceSwap.ts';
 import { detectFacesWithGender } from './faceDetect.ts';
 import { decodeImage } from './imageCodec.ts';
+import { embedFace, embedReference, cosine } from './faceEmbed.ts';
+import { detectFaces } from './faceDetect.ts';
 
 /**
  * Constant-time string equality — mirrors supabase/functions/_shared/timingSafe.ts
@@ -165,6 +167,53 @@ Deno.serve({ port: PORT }, async (req) => {
     }
   }
 
+  // ── /verify — ArcFace identity read (Stage 8). Detects faces in imageUrl
+  // (x-ordered), embeds each, and cosine-compares against each reference
+  // photo's largest face. Powers the calibration bench + the solo path.
+  if (url.pathname === '/verify') {
+    try {
+      const { imageUrl, refs } = (await req.json()) as { imageUrl?: string; refs?: string[] };
+      if (!imageUrl || !Array.isArray(refs) || refs.length === 0) {
+        return new Response(JSON.stringify({ error: 'imageUrl + refs[] required' }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        });
+      }
+      const t0v = Date.now();
+      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      if (!resp.ok) throw new Error(`fetch ${resp.status}`);
+      const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
+      const faces = (await detectFaces(img.data, img.width, img.height))
+        .slice(0, 4)
+        .sort((a, b) => a.x - b.x);
+      const refEmbeds = await Promise.all(refs.slice(0, 4).map((r) => embedReference(r)));
+      const out = [];
+      for (const f of faces) {
+        const e = await embedFace(img.data, img.width, img.height, f);
+        out.push({
+          x: f.x,
+          y: f.y,
+          w: f.w,
+          h: f.h,
+          sims: refEmbeds.map((re) => (e && re ? Math.round(cosine(e, re) * 1000) / 1000 : null)),
+        });
+      }
+      console.log(
+        `[verify] faces=${out.length} sims=${JSON.stringify(out.map((o) => o.sims))} ${Date.now() - t0v}ms`
+      );
+      return new Response(JSON.stringify({ faces: out, ms: Date.now() - t0v }), {
+        status: 200,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    } catch (err) {
+      console.error(`[verify] error: ${(err as Error).message}`);
+      return new Response(JSON.stringify({ error: (err as Error).message }), {
+        status: 500,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   if (!REPLICATE_TOKEN) {
     return new Response(JSON.stringify({ error: 'missing REPLICATE_API_TOKEN' }), {
@@ -220,7 +269,7 @@ Deno.serve({ port: PORT }, async (req) => {
   const effectiveDeadlineMs = Math.max(deadlineMs ?? 0, t0 + MIN_SWAP_BUDGET_MS);
 
   try {
-    const { swappedUrl, faceCount, reason } = await dualFaceSwap(
+    const { swappedUrl, faceCount, reason, identity } = await dualFaceSwap(
       leftSourceUrl,
       rightSourceUrl,
       targetUrl,
@@ -243,6 +292,9 @@ Deno.serve({ port: PORT }, async (req) => {
         // Why the engine asked for a re-render (null on success) — lets the
         // dispatcher + benches split "no second face" from "gender misread".
         reason: reason ?? null,
+        // ArcFace identity read (Stage 8, shadow) — null when measurement is
+        // off or failed; {left,right,ms} cosine sims when on.
+        identity: identity ?? null,
         // Engine variant + timing ride every response so the DISPATCHER can
         // persist them into ai_generation_log (Stage 0 telemetry) — Fly's own
         // log buffer is ephemeral and invisible to forensics.

@@ -88,6 +88,8 @@ export async function detectFaces(
       cls: out['cls_' + s].data as Float32Array,
       obj: out['obj_' + s].data as Float32Array,
       bbox: out['bbox_' + s].data as Float32Array,
+      // Landmarks feed ArcFace alignment (Stage 8); absent on older exports.
+      kps: out['kps_' + s] ? (out['kps_' + s].data as Float32Array) : undefined,
     };
   }
   const decoded = decodeYuNet(heads, opts.scoreThreshold ?? 0.6);
