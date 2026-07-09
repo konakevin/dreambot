@@ -269,7 +269,19 @@ ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
 - WEATHER: ${input.weatherAxis}
 - PHENOMENON: ${input.phenomenaAxis}
 
-VIBE (use for the mood field): ${input.vibeDirective}`;
+VIBE (use for the mood field): ${input.vibeDirective}${
+    input.action
+      ? `
+
+ACTION CONTEXT (read-only — the pose itself is LOCKED by code, never describe it):
+The person${input.cast.length === 2 ? 's' : ''} will be caught mid-action: "${input.action}".
+Write scene_description as a place where this action makes sense. If the action implies
+an object, prop, or creature, DECIDE what it concretely is AT THIS LOCATION and name it
+in scene_description or props — never leave a noun like "giant"/"monster"/"someone"
+ambiguous for the image model to guess at (an ambiguous "sleeping giant" at a zoo
+renders as a literal colossal beast). Keep it environment-only: no people, no pose.`
+      : ''
+  }`;
 
   // Cast-count-specific brief structure
   if (input.cast.length === 1) {
