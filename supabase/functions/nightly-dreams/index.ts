@@ -211,6 +211,9 @@ Deno.serve(async (req) => {
   const force_playful = body.force_playful === true;
   const force_elegant = body.force_elegant === true;
   const force_active = body.force_active === true;
+  // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
+  // (production-prompt benching — the pencil lesson).
+  const force_active_pose = body.force_active_pose === true;
   const force_single_playful = body.force_single_playful === true;
   const force_single_elegant = body.force_single_elegant === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
@@ -1171,7 +1174,10 @@ Deno.serve(async (req) => {
         let activePose: string | null = null;
         if (selectedCast.length === 2 && !dualSpecialScene && !dualSpecialWardrobe) {
           const poseCfg = await fetchEngineConfig(supabase);
-          if (poseCfg.dualActionPosePct > 0 && Math.random() * 100 < poseCfg.dualActionPosePct) {
+          const rollActive =
+            force_active_pose ||
+            (poseCfg.dualActionPosePct > 0 && Math.random() * 100 < poseCfg.dualActionPosePct);
+          if (rollActive) {
             activePose = pickActiveDualAction(biomeKey);
             if (activePose) fallbackReasons.push(`active_pose:${biomeKey ?? 'universal'}`);
           }
