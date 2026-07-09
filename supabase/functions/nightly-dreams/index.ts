@@ -25,6 +25,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
+import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
 import {
   fetchChaosConfig,
   getChaosTier,
@@ -1146,6 +1147,18 @@ Deno.serve(async (req) => {
         // Match the pose to the scene: elegant/dressed-up → refined partner pose
         // (a thumbs-up clashes with formal wear); goofy → playful pose; location →
         // the already-rolled dualAction.
+        // Phase A (ACTION_POSE_EXPANSION_PLAN.md): plain-location duals roll the
+        // biome-tagged ACTIVE pose pool with dual_action_pose_pct probability —
+        // jetski only where the resolved biome is coastal, skiing only alpine,
+        // untagged entries anywhere. Miss/off → classic pools, byte-identical.
+        let activePose: string | null = null;
+        if (selectedCast.length === 2 && !dualSpecialScene && !dualSpecialWardrobe) {
+          const poseCfg = await fetchEngineConfig(supabase);
+          if (poseCfg.dualActionPosePct > 0 && Math.random() * 100 < poseCfg.dualActionPosePct) {
+            activePose = pickActiveDualAction(biomeKey);
+            if (activePose) fallbackReasons.push(`active_pose:${biomeKey ?? 'universal'}`);
+          }
+        }
         const action =
           selectedCast.length === 2
             ? dualSpecialWardrobe
@@ -1155,7 +1168,7 @@ Deno.serve(async (req) => {
                 )
               : dualSpecialScene
                 ? pickDualAction(undefined, 'playful')
-                : dualAction
+                : (activePose ?? dualAction)
             : (singleAction ?? null);
         const slotResult = await runCharacterSlotPipeline(
           {
