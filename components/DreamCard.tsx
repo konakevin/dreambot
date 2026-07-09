@@ -512,8 +512,13 @@ export const DreamCard = memo(function DreamCard({
                         2026-07-01, read as a stranded button; reverted). */}
                     <View style={s.usernameLine}>
                       <Text style={s.username}>{item.username ?? 'dreamer'}</Text>
+                      {/* Public posts show WHEN THEY WERE POSTED (posted_at,
+                          stamped at first publish); private/unposted dreams
+                          show their creation time. Without the fallback order
+                          a dream created days ago read "3d" the moment it was
+                          posted (Kevin 2026-07-09). */}
                       <Text style={[s.timestamp, { marginLeft: 6, marginTop: 0 }]}>
-                        · {timeAgo(item.created_at)}
+                        · {timeAgo(item.posted_at ?? item.created_at)}
                       </Text>
                       {showAuthorControls && (
                         <TouchableOpacity
