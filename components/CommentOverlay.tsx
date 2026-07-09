@@ -9,18 +9,22 @@ import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
-  FlatList,
   ActivityIndicator,
   StyleSheet,
   Dimensions,
   Platform,
   Keyboard,
+  Pressable,
 } from 'react-native';
-import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+// FlatList from RNGH (not core RN) so its native scroll gesture can declare
+// simultaneity with the sheet's dismiss pan — the core list WON the gesture
+// negotiation whenever it had content, which killed swipe-down-to-close (and
+// with it keyboard drag-dismiss) on any thread with comments.
+import { Gesture, GestureDetector, FlatList, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -82,16 +86,43 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
     });
   }, [onClose, progress]);
 
-  // Swipe down to dismiss
+  // ── Swipe down: dismiss the KEYBOARD if it's up, else the SHEET ──────────
+  // The pan runs SIMULTANEOUSLY with the comment list's scroll (withRef +
+  // simultaneousHandlers on the FlatList) — as exclusive gestures, the list's
+  // native scroll won the negotiation whenever it had content, so swipe-down
+  // only ever worked on empty threads (Kevin 2026-07-09). The sheet follows
+  // only drags that STARTED with the list at the top (captured in onBegin);
+  // mid-list scrolling never moves the sheet.
+  const listScrollY = useSharedValue(0);
+  const panStartedAtTop = useSharedValue(true);
+  const kbOpenSV = useSharedValue(false);
+  const kbDismissRequested = useSharedValue(false);
+  const panRef = useRef<GestureType | undefined>(undefined);
+  const dismissKeyboard = useCallback(() => Keyboard.dismiss(), []);
   const panGesture = Gesture.Pan()
+    .withRef(panRef)
     .activeOffsetY([10, 300])
     .failOffsetX([-20, 20])
+    .onBegin(() => {
+      'worklet';
+      panStartedAtTop.value = listScrollY.value <= 4;
+      kbDismissRequested.value = false;
+    })
     .onUpdate((e) => {
-      if (e.translationY > 0) {
+      // Keyboard up → a downward swipe closes IT (one-shot), not the sheet.
+      if (kbOpenSV.value) {
+        if (e.translationY > 12 && !kbDismissRequested.value) {
+          kbDismissRequested.value = true;
+          runOnJS(dismissKeyboard)();
+        }
+        return;
+      }
+      if (panStartedAtTop.value && e.translationY > 0) {
         dragY.value = e.translationY;
       }
     })
     .onEnd((e) => {
+      if (kbOpenSV.value || !panStartedAtTop.value) return;
       if (e.translationY > 100 || e.velocityY > 500) {
         runOnJS(dismiss)();
       } else {
@@ -202,14 +233,53 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   useEffect(() => {
     const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
-    const s1 = Keyboard.addListener(showEvt, () => setKbOpen(true));
-    const s2 = Keyboard.addListener(hideEvt, () => setKbOpen(false));
+    const s1 = Keyboard.addListener(showEvt, () => {
+      setKbOpen(true);
+      kbOpenSV.value = true; // mirrored for the pan worklet (swipe = close keyboard)
+    });
+    const s2 = Keyboard.addListener(hideEvt, () => {
+      setKbOpen(false);
+      kbOpenSV.value = false;
+    });
     return () => {
       s1.remove();
       s2.remove();
     };
-  }, []);
+  }, [kbOpenSV]);
 
+  // ── Input-bar stickiness (2026-07-09) ────────────────────────────────────
+  // OWN implementation replacing KeyboardStickyView. Debug logging proved the
+  // JS keyboard events all fire correctly on tap-dismissal, yet the bar landed
+  // displaced by MORE than the keyboard height — KeyboardStickyView rides a
+  // core-Animated value fed by a separate native event stream (onKeyboardMove)
+  // that ends up corrupted in this absolutely-positioned pane. This version
+  // tracks the reanimated keyboard height while OUR listeners say the keyboard
+  // is open, and is FORCED home (0) the moment they say it closed — the bar
+  // can never strand, whatever the controller value does.
+  const { height: kcHeightSV } = useReanimatedKeyboardAnimation(); // 0 closed → -H open
+  // CONTINUOUS follow (no keyboard-state branch — a branch flipped the style
+  // between two sources mid-animation and flickered on open). Clamped so a
+  // corrupted value can never fling the bar past ~70% of the screen.
+  const inputStickyStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: Math.min(0, Math.max(kcHeightSV.value, -SCREEN_HEIGHT * 0.7)) }],
+  }));
+  // Watchdog: if the controller's height value is still displaced after the
+  // close animation has had time to land (the stranded-bar bug), force it home.
+  // Writing the shared value directly is safe — the next keyboard event
+  // overwrites it anyway.
+  useEffect(() => {
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const sub = Keyboard.addListener(hideEvt, () => {
+      setTimeout(() => {
+        const v = kcHeightSV.value;
+        if (Math.abs(v) > 1) {
+          if (__DEV__) console.log('[CMT] KC height STRANDED at', Math.round(v), '→ forcing 0');
+          kcHeightSV.value = withTiming(0, { duration: 150 });
+        }
+      }, 380);
+    });
+    return () => sub.remove();
+  }, [kcHeightSV]);
   // Persist WIP text as a per-post draft so it survives closing + reopening the
   // overlay. Empty text drops the draft; a successful post clears text → drops it.
   useEffect(() => {
@@ -280,6 +350,11 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
       setOptimisticComments((prev) => [optimistic, ...prev]);
     }
     setText('');
+    // Belt + suspenders: a controlled multiline TextInput can ignore a value
+    // change that lands in the same tick as Keyboard.dismiss() (the native
+    // field keeps its composed text) — clear() empties it natively too, or the
+    // just-posted comment stayed sitting in the box (Kevin 2026-07-09).
+    inputRef.current?.clear();
     const savedReply = replyTo;
     setReplyTo(null);
     // Drop the keyboard so the thread (with the new comment) is immediately
@@ -378,6 +453,25 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
           </TouchableOpacity>
         </Animated.View>
 
+        {/* Keyboard-open tap-catcher for the HEADER (thumbnail + username +
+            count + backdrop): while typing, the first tap up there dismisses
+            the keyboard instead of falling through (username/count had no
+            handler → tap did nothing) or closing the whole sheet (thumbnail).
+            zIndex 20 beats the thumbnail's 10. */}
+        {kbOpen && (
+          <Pressable
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: HEADER_HEIGHT,
+              zIndex: 20,
+            }}
+            onPress={() => Keyboard.dismiss()}
+          />
+        )}
+
         {/* Comment pane */}
         <Animated.View style={[styles.pane, { top: HEADER_HEIGHT }, paneStyle]}>
           {/* The comment list fills the pane; the input bar rides ABOVE the
@@ -438,15 +532,39 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                       )}
                     </View>
                   }
+                  // Let the sheet's dismiss pan run ALONGSIDE the list scroll —
+                  // without this the native scroll gesture wins outright and
+                  // swipe-down-to-close only worked on empty threads.
+                  simultaneousHandlers={panRef}
+                  // No rubber-band at the top: the overscroll IS the sheet drag.
+                  bounces={false}
+                  onScroll={(e) => {
+                    listScrollY.value = e.nativeEvent.contentOffset.y;
+                  }}
+                  scrollEventThrottle={16}
+                  // Keyboard dismissal is handled EXPLICITLY (the tap-catcher
+                  // below + the pan's keyboard branch) — NOT via persist-taps
+                  // "never" or dismissMode "interactive": both hand dismissal to
+                  // native scroll-view machinery that KeyboardStickyView failed
+                  // to track, stranding the input bar mid-screen at its
+                  // keyboard-open translation (Kevin 2026-07-09 screenshot).
                   keyboardShouldPersistTaps="handled"
                   keyboardDismissMode="on-drag"
                   contentContainerStyle={styles.listContent}
                 />
+                {/* Tap-catcher: while the keyboard is up, the FIRST tap anywhere
+                    on the thread just dismisses it (and is swallowed) — the
+                    Instagram behavior. Only exists while kbOpen, so normal
+                    row interaction is untouched otherwise. Sits over the list
+                    ONLY (the input bar + mention list are siblings outside). */}
+                {kbOpen && (
+                  <Pressable style={StyleSheet.absoluteFill} onPress={() => Keyboard.dismiss()} />
+                )}
               </Animated.View>
             </GestureDetector>
           </View>
 
-          <KeyboardStickyView offset={{ closed: 0 }}>
+          <Animated.View style={inputStickyStyle}>
             {/* Reply indicator */}
             {replyTo && (
               <View style={styles.replyBar}>
@@ -537,7 +655,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                 <Text style={styles.signInPrompt}>Sign in to comment</Text>
               )}
             </View>
-          </KeyboardStickyView>
+          </Animated.View>
         </Animated.View>
       </Animated.View>
     </View>

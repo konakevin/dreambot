@@ -82,6 +82,7 @@ import { classifyPhoto } from '@/lib/dreamApi';
 import { cropToPortrait } from '@/lib/cropPhoto';
 import { isSoloSwapPhoto } from '@/lib/newSceneRoute';
 import { FormLabel } from '@/components/FormLabel';
+import { KeyboardSwipeDismiss } from '@/components/KeyboardSwipeDismiss';
 
 // Sticky medium/vibe — last explicit Create-tab pick, remembered across app
 // launches (local, like the useExactPrompt toggle; the model has its own DB
@@ -853,325 +854,334 @@ export default function CreateScreen() {
             above the keyboard AND lets the whole form scroll under it, so every
             control below the prompt (Medium/Vibe/tier) is reachable while typing.
             `keyboardDismissMode="interactive"` gives the native drag-to-dismiss
-            (Instagram-style) instead of dismissing the moment a scroll begins. */}
-        <KeyboardAwareScrollView
-          className="flex-1 px-5"
-          bottomOffset={footerHeight + verticalScale(16)}
-          // Auto scroll-into-view OFF (2026-07-09): it computes its offset from
-          // the PRE-fold layout, so the first keyboard open over-scrolled by
-          // ~the folded controls' height (reference photo shoved off-screen).
-          // The fold + exact prompt-height math already guarantee the input
-          // sits above the keyboard — the auto-scroll is redundant here.
-          enabled={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive"
-          showsVerticalScrollIndicator={false}
-          // No rubber-banding — the prompt is sized to fit exactly, so the form
-          // should not over-scroll into empty space.
-          bounces={false}
-          onLayout={measurePromptTop}
-          contentContainerStyle={[
-            {
-              // The prompt is sized to reach the Dream CTA, so the content fits;
-              // only a small bottom gap is needed (tab-bar clearance when the
-              // keyboard is down).
-              paddingBottom: kbOpen ? verticalScale(8) : tabBarHeight + verticalScale(16),
-            },
-            // iPad: vertically center the form + CTA group so a short form isn't
-            // top-anchored above a big empty void (no-op on phone).
-            isTabletDevice && { flexGrow: 1, justifyContent: 'center' },
-          ]}
-        >
-          {/* iPad: keep the form a centered ~600 column instead of stretching the
-              fields edge-to-edge (no-op on phone). */}
-          <ResponsiveContainer
-            maxWidth={600}
-            style={[
-              { width: '100%' },
-              // iPad: contain the centered form group in a subtle card (faint
-              // lift + defining border) so it reads as an intentional panel
-              // rather than controls floating in a void (no-op on phone).
-              isTabletDevice && {
-                backgroundColor: 'rgba(255,255,255,0.03)',
-                borderWidth: 1,
-                borderColor: colors.border,
-                borderRadius: 24,
-                padding: 24,
+            (Instagram-style) instead of dismissing the moment a scroll begins.
+            KeyboardSwipeDismiss covers where interactive can't engage: the form
+            fits the viewport (nothing to scroll) and drags inside the prompt
+            box hit the TextInput — a deliberate downward swipe anywhere now
+            drops the keyboard (Kevin 2026-07-09). */}
+        <KeyboardSwipeDismiss>
+          <KeyboardAwareScrollView
+            className="flex-1 px-5"
+            bottomOffset={footerHeight + verticalScale(16)}
+            // Auto scroll-into-view OFF (2026-07-09): it computes its offset from
+            // the PRE-fold layout, so the first keyboard open over-scrolled by
+            // ~the folded controls' height (reference photo shoved off-screen).
+            // The fold + exact prompt-height math already guarantee the input
+            // sits above the keyboard — the auto-scroll is redundant here.
+            enabled={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
+            showsVerticalScrollIndicator={false}
+            // No rubber-banding — the prompt is sized to fit exactly, so the form
+            // should not over-scroll into empty space.
+            bounces={false}
+            onLayout={measurePromptTop}
+            contentContainerStyle={[
+              {
+                // The prompt is sized to reach the Dream CTA, so the content fits;
+                // only a small bottom gap is needed (tab-bar clearance when the
+                // keyboard is down).
+                paddingBottom: kbOpen ? verticalScale(8) : tabBarHeight + verticalScale(16),
               },
+              // iPad: vertically center the form + CTA group so a short form isn't
+              // top-anchored above a big empty void (no-op on phone).
+              isTabletDevice && { flexGrow: 1, justifyContent: 'center' },
             ]}
           >
-            {/* Photo attachment card */}
-            {/* Photo attachment card */}
-            {hasPhoto && (
-              <View
-                className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
-                style={{
-                  backgroundColor: colors.surface,
+            {/* iPad: keep the form a centered ~600 column instead of stretching the
+              fields edge-to-edge (no-op on phone). */}
+            <ResponsiveContainer
+              maxWidth={600}
+              style={[
+                { width: '100%' },
+                // iPad: contain the centered form group in a subtle card (faint
+                // lift + defining border) so it reads as an intentional panel
+                // rather than controls floating in a void (no-op on phone).
+                isTabletDevice && {
+                  backgroundColor: 'rgba(255,255,255,0.03)',
                   borderWidth: 1,
                   borderColor: colors.border,
-                }}
-              >
-                <TouchableOpacity onPress={() => setPreviewPhoto(true)}>
-                  <Image
-                    source={{ uri: config.photoUri! }}
-                    className="rounded-lg"
-                    style={{ width: 48, height: 48 }}
-                    contentFit="cover"
-                  />
-                </TouchableOpacity>
-                <View className="flex-1">
-                  <Text className="text-sm font-semibold" style={{ color: colors.textPrimary }}>
-                    Reference Photo
-                  </Text>
-                  <Text className="text-xs" style={{ color: colors.textSecondary }}>
-                    Tap to preview
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    clearPhoto();
+                  borderRadius: 24,
+                  padding: 24,
+                },
+              ]}
+            >
+              {/* Photo attachment card */}
+              {/* Photo attachment card */}
+              {hasPhoto && (
+                <View
+                  className="flex-row items-center gap-3 p-3 mb-4 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                   }}
-                  hitSlop={8}
                 >
-                  <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-                </TouchableOpacity>
-              </View>
-            )}
+                  <TouchableOpacity onPress={() => setPreviewPhoto(true)}>
+                    <Image
+                      source={{ uri: config.photoUri! }}
+                      className="rounded-lg"
+                      style={{ width: 48, height: 48 }}
+                      contentFit="cover"
+                    />
+                  </TouchableOpacity>
+                  <View className="flex-1">
+                    <Text className="text-sm font-semibold" style={{ color: colors.textPrimary }}>
+                      Reference Photo
+                    </Text>
+                    <Text className="text-xs" style={{ color: colors.textSecondary }}>
+                      Tap to preview
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      clearPhoto();
+                    }}
+                    hitSlop={8}
+                  >
+                    <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+              )}
 
-            {/* ── Collapsible controls ─────────────────────────────────────
+              {/* ── Collapsible controls ─────────────────────────────────────
               Everything inside folds in lockstep with the keyboard (UI-thread
               progress interpolation, see hooks above). Both states stay
               MOUNTED — the container's height tweens between their measured
               heights while they crossfade; pointerEvents follows kbOpen. */}
-            <Animated.View style={[{ overflow: 'hidden' }, controlsContainerStyle]}>
-              <Animated.View
-                pointerEvents={kbOpen ? 'none' : 'auto'}
-                style={expandedControlsStyle}
-                onLayout={(e) => {
-                  expandedControlsH.value = e.nativeEvent.layout.height;
-                }}
-              >
-                {/* Photo mode toggle — only when a photo is attached. Folds away while
+              <Animated.View style={[{ overflow: 'hidden' }, controlsContainerStyle]}>
+                <Animated.View
+                  pointerEvents={kbOpen ? 'none' : 'auto'}
+                  style={expandedControlsStyle}
+                  onLayout={(e) => {
+                    expandedControlsH.value = e.nativeEvent.layout.height;
+                  }}
+                >
+                  {/* Photo mode toggle — only when a photo is attached. Folds away while
               the keyboard is up (collapsed into the summary row below the pickers)
               so the prompt can take the freed space. */}
-                {hasPhoto && (
-                  <View className="mb-3">
-                    {/* Row label — matches the Medium/Vibe label style so every
+                  {hasPhoto && (
+                    <View className="mb-3">
+                      {/* Row label — matches the Medium/Vibe label style so every
                   control row on the form reads consistently (Kevin 2026-07-08). */}
-                    <View className="flex-row items-center mb-1.5 ml-1">
-                      <FormLabel>Photo mode</FormLabel>
-                    </View>
-                    <View
-                      className="flex-row rounded-xl p-1"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }}
-                    >
-                      <TouchableOpacity
-                        className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                      <View className="flex-row items-center mb-1.5 ml-1">
+                        <FormLabel>Photo mode</FormLabel>
+                      </View>
+                      <View
+                        className="flex-row rounded-xl p-1"
                         style={{
-                          // Tonal moon-purple when active — matches the DreamBot/Direct
-                          // mode tabs so it doesn't compete with the gradient Dream CTA.
-                          backgroundColor:
-                            config.photoStyle === 'new_scene'
-                              ? 'rgba(167,139,250,0.18)'
-                              : 'transparent',
+                          backgroundColor: colors.surface,
                           borderWidth: 1,
-                          borderColor:
-                            config.photoStyle === 'new_scene'
-                              ? 'rgba(167,139,250,0.55)'
-                              : 'transparent',
+                          borderColor: colors.border,
                         }}
-                        onPress={() => {
-                          Haptics.selectionAsync();
-                          setPhotoStyle('new_scene');
-                        }}
-                        activeOpacity={0.7}
                       >
-                        <Ionicons
-                          name="sparkles-outline"
-                          size={14}
-                          color={
-                            config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary
-                          }
-                        />
-                        <Text
-                          className="text-xs font-semibold"
+                        <TouchableOpacity
+                          className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
                           style={{
-                            color:
-                              config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary,
+                            // Tonal moon-purple when active — matches the DreamBot/Direct
+                            // mode tabs so it doesn't compete with the gradient Dream CTA.
+                            backgroundColor:
+                              config.photoStyle === 'new_scene'
+                                ? 'rgba(167,139,250,0.18)'
+                                : 'transparent',
+                            borderWidth: 1,
+                            borderColor:
+                              config.photoStyle === 'new_scene'
+                                ? 'rgba(167,139,250,0.55)'
+                                : 'transparent',
                           }}
+                          onPress={() => {
+                            Haptics.selectionAsync();
+                            setPhotoStyle('new_scene');
+                          }}
+                          activeOpacity={0.7}
                         >
-                          New Scene
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
-                        style={{
-                          backgroundColor:
-                            config.photoStyle === 'restyle'
-                              ? 'rgba(167,139,250,0.18)'
-                              : 'transparent',
-                          borderWidth: 1,
-                          borderColor:
-                            config.photoStyle === 'restyle'
-                              ? 'rgba(167,139,250,0.55)'
-                              : 'transparent',
-                        }}
-                        onPress={() => {
-                          Haptics.selectionAsync();
-                          setPhotoStyle('restyle');
-                        }}
-                        activeOpacity={0.7}
-                      >
-                        <Ionicons
-                          name="color-palette-outline"
-                          size={14}
-                          color={config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary}
-                        />
-                        <Text
-                          className="text-xs font-semibold"
+                          <Ionicons
+                            name="sparkles-outline"
+                            size={14}
+                            color={
+                              config.photoStyle === 'new_scene' ? '#A78BFA' : colors.textSecondary
+                            }
+                          />
+                          <Text
+                            className="text-xs font-semibold"
+                            style={{
+                              color:
+                                config.photoStyle === 'new_scene'
+                                  ? '#A78BFA'
+                                  : colors.textSecondary,
+                            }}
+                          >
+                            New Scene
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
                           style={{
-                            color:
-                              config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary,
+                            backgroundColor:
+                              config.photoStyle === 'restyle'
+                                ? 'rgba(167,139,250,0.18)'
+                                : 'transparent',
+                            borderWidth: 1,
+                            borderColor:
+                              config.photoStyle === 'restyle'
+                                ? 'rgba(167,139,250,0.55)'
+                                : 'transparent',
                           }}
+                          onPress={() => {
+                            Haptics.selectionAsync();
+                            setPhotoStyle('restyle');
+                          }}
+                          activeOpacity={0.7}
                         >
-                          Restyle
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    {/* Mode subtext — a quiet one-liner explaining the mode. Muted so
+                          <Ionicons
+                            name="color-palette-outline"
+                            size={14}
+                            color={
+                              config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary
+                            }
+                          />
+                          <Text
+                            className="text-xs font-semibold"
+                            style={{
+                              color:
+                                config.photoStyle === 'restyle' ? '#A78BFA' : colors.textSecondary,
+                            }}
+                          >
+                            Restyle
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      {/* Mode subtext — a quiet one-liner explaining the mode. Muted so
                   it reads as a hint, not a headline. */}
-                    <Text
-                      className="mt-1.5 px-1"
-                      style={{
-                        color: colors.textSecondary,
-                        fontSize: fontScale(12.5),
-                        lineHeight: fontScale(17),
-                      }}
-                    >
-                      {config.photoStyle === 'new_scene'
-                        ? 'Reimagines your photo into a new scene you describe.'
-                        : 'Repaints your photo, keeping its composition.'}
-                    </Text>
-
-                    {/* Early group-size feedback (attach-time classification): the
-                  submit path hard-blocks over-cap photos pre-charge; surfacing
-                  it here saves the user from composing a prompt first. */}
-                    {config.photoStyle === 'new_scene' && overPeopleCap && (
                       <Text
                         className="mt-1.5 px-1"
                         style={{
-                          color: '#FBBF24',
+                          color: colors.textSecondary,
                           fontSize: fontScale(12.5),
                           lineHeight: fontScale(17),
                         }}
                       >
-                        New Scene keeps up to {engineConfig.newSceneMaxPeople} people looking like
-                        themselves. Restyle keeps your whole group.
+                        {config.photoStyle === 'new_scene'
+                          ? 'Reimagines your photo into a new scene you describe.'
+                          : 'Repaints your photo, keeping its composition.'}
                       </Text>
-                    )}
 
-                    {/* New Scene — quality tier (Standard vs Ultra / Nano Banana
+                      {/* Early group-size feedback (attach-time classification): the
+                  submit path hard-blocks over-cap photos pre-charge; surfacing
+                  it here saves the user from composing a prompt first. */}
+                      {config.photoStyle === 'new_scene' && overPeopleCap && (
+                        <Text
+                          className="mt-1.5 px-1"
+                          style={{
+                            color: '#FBBF24',
+                            fontSize: fontScale(12.5),
+                            lineHeight: fontScale(17),
+                          }}
+                        >
+                          New Scene keeps up to {engineConfig.newSceneMaxPeople} people looking like
+                          themselves. Restyle keeps your whole group.
+                        </Text>
+                      )}
+
+                      {/* New Scene — quality tier (Standard vs Ultra / Nano Banana
                   Pro), which the server maps to the reference model + price.
                   HIDDEN for solo-swap photos: that branch renders the exact-face
                   swap on both tiers, so the toggle would charge more for the
                   same result (always priced Standard instead). */}
-                    {config.photoStyle === 'new_scene' && !soloSwapPhoto && (
-                      <View className="mt-3">
-                        {/* Row label — "Quality" not "Likeness": objects/scenery have
+                      {config.photoStyle === 'new_scene' && !soloSwapPhoto && (
+                        <View className="mt-3">
+                          {/* Row label — "Quality" not "Likeness": objects/scenery have
                       no likeness, and quality is the dimension both tiers share. */}
-                        <View className="flex-row items-center mb-1.5 ml-1">
-                          <FormLabel>Quality</FormLabel>
-                        </View>
-                        <View
-                          className="flex-row rounded-xl p-1"
-                          style={{
-                            backgroundColor: colors.surface,
-                            borderWidth: 1,
-                            borderColor: colors.border,
-                          }}
-                        >
-                          {[
-                            {
-                              tier: 'standard' as const,
-                              label: 'Standard',
-                              price: engineConfig.newScenePriceStandard,
-                            },
-                            {
-                              tier: 'best' as const,
-                              label: 'Ultra',
-                              price: engineConfig.newScenePriceBest,
-                            },
-                          ].map((opt) => {
-                            const active = config.newSceneTier === opt.tier;
-                            return (
-                              <TouchableOpacity
-                                key={opt.tier}
-                                className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
-                                style={{
-                                  backgroundColor: active
-                                    ? 'rgba(167,139,250,0.18)'
-                                    : 'transparent',
-                                  borderWidth: 1,
-                                  borderColor: active ? 'rgba(167,139,250,0.55)' : 'transparent',
-                                }}
-                                onPress={() => {
-                                  Haptics.selectionAsync();
-                                  setNewSceneTier(opt.tier);
-                                }}
-                                activeOpacity={0.7}
-                              >
-                                <Text
-                                  className="text-xs font-semibold"
-                                  style={{ color: active ? '#A78BFA' : colors.textSecondary }}
+                          <View className="flex-row items-center mb-1.5 ml-1">
+                            <FormLabel>Quality</FormLabel>
+                          </View>
+                          <View
+                            className="flex-row rounded-xl p-1"
+                            style={{
+                              backgroundColor: colors.surface,
+                              borderWidth: 1,
+                              borderColor: colors.border,
+                            }}
+                          >
+                            {[
+                              {
+                                tier: 'standard' as const,
+                                label: 'Standard',
+                                price: engineConfig.newScenePriceStandard,
+                              },
+                              {
+                                tier: 'best' as const,
+                                label: 'Ultra',
+                                price: engineConfig.newScenePriceBest,
+                              },
+                            ].map((opt) => {
+                              const active = config.newSceneTier === opt.tier;
+                              return (
+                                <TouchableOpacity
+                                  key={opt.tier}
+                                  className="flex-1 flex-row items-center justify-center gap-1.5 py-2 rounded-lg"
+                                  style={{
+                                    backgroundColor: active
+                                      ? 'rgba(167,139,250,0.18)'
+                                      : 'transparent',
+                                    borderWidth: 1,
+                                    borderColor: active ? 'rgba(167,139,250,0.55)' : 'transparent',
+                                  }}
+                                  onPress={() => {
+                                    Haptics.selectionAsync();
+                                    setNewSceneTier(opt.tier);
+                                  }}
+                                  activeOpacity={0.7}
                                 >
-                                  {opt.label}
-                                </Text>
-                                <View className="flex-row items-center">
-                                  <Ionicons
-                                    name="sparkles"
-                                    size={10}
-                                    color={active ? '#A78BFA' : colors.textSecondary}
-                                  />
                                   <Text
-                                    className="text-xs"
-                                    style={{
-                                      color: active ? '#A78BFA' : colors.textSecondary,
-                                      marginLeft: 2,
-                                    }}
+                                    className="text-xs font-semibold"
+                                    style={{ color: active ? '#A78BFA' : colors.textSecondary }}
                                   >
-                                    {opt.price}
+                                    {opt.label}
                                   </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          })}
+                                  <View className="flex-row items-center">
+                                    <Ionicons
+                                      name="sparkles"
+                                      size={10}
+                                      color={active ? '#A78BFA' : colors.textSecondary}
+                                    />
+                                    <Text
+                                      className="text-xs"
+                                      style={{
+                                        color: active ? '#A78BFA' : colors.textSecondary,
+                                        marginLeft: 2,
+                                      }}
+                                    >
+                                      {opt.price}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            })}
+                          </View>
                         </View>
-                      </View>
-                    )}
-                  </View>
-                )}
+                      )}
+                    </View>
+                  )}
 
-                {/* Unified AI-model picker — top-level. The model is orthogonal to the
+                  {/* Unified AI-model picker — top-level. The model is orthogonal to the
               engine: any model can render a raw (Direct) prompt or a full DreamBot
               dream. Hidden for BOTH photo modes: New Scene routes to a fixed
               reference model (Standard/Best tier picks it), and Restyle is an
               img2img transform with its OWN edit-capable picker below.
               Folds into the summary row while the keyboard is up. */}
-                {!hasPhoto && (
-                  <View className="mb-4">
-                    <ModelPicker
-                      onChange={setSelectedModelId}
-                      dreamBotMode={!config.useExactPrompt}
-                    />
-                  </View>
-                )}
+                  {!hasPhoto && (
+                    <View className="mb-4">
+                      <ModelPicker
+                        onChange={setSelectedModelId}
+                        dreamBotMode={!config.useExactPrompt}
+                      />
+                    </View>
+                  )}
 
-                {/* Engine selector — two named engines (no photo attached):
+                  {/* Engine selector — two named engines (no photo attached):
               • DreamBot (config.useExactPrompt = false) — our engine: custom
                 mediums/vibes, prompt polish, and cast-photo face swap.
               • Direct (config.useExactPrompt = true) — prompt goes verbatim to
@@ -1179,110 +1189,110 @@ export default function CreateScreen() {
               State is sticky per-user via AsyncStorage (USE_EXACT_PROMPT_KEY).
               Photo path hides this and shows the inline note above (Direct is
               text-only). Folds into the summary row while the keyboard is up. */}
-                {!hasPhoto && (
-                  <View className="mb-4">
-                    {/* Mode label + contextual info CTA (DreamBot → medium sheet,
+                  {!hasPhoto && (
+                    <View className="mb-4">
+                      {/* Mode label + contextual info CTA (DreamBot → medium sheet,
                   Direct → Direct explainer). The CTA carries WORDS, not just
                   the ⓘ glyph — a bare 16px icon read as decoration and users
                   never found the explainer (Kevin 2026-07-09). Accent-colored,
                   eyebrow-sized: visible without competing with the controls. */}
-                    <View className="flex-row items-center mb-1.5 ml-1">
-                      <FormLabel>Mode</FormLabel>
-                      <TouchableOpacity
-                        onPress={handleModeInfo}
-                        activeOpacity={0.6}
-                        hitSlop={10}
-                        className="ml-2 flex-row items-center"
-                      >
-                        <Ionicons
-                          name="information-circle-outline"
-                          size={13}
-                          color={colors.accent}
-                        />
-                        <Text
-                          style={{
-                            color: colors.accent,
-                            fontSize: fontScale(11),
-                            fontWeight: '700',
-                            letterSpacing: 0.4,
-                            marginLeft: 3,
-                          }}
+                      <View className="flex-row items-center mb-1.5 ml-1">
+                        <FormLabel>Mode</FormLabel>
+                        <TouchableOpacity
+                          onPress={handleModeInfo}
+                          activeOpacity={0.6}
+                          hitSlop={10}
+                          className="ml-2 flex-row items-center"
                         >
-                          How it works
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View
-                      className="flex-row rounded-xl p-1"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }}
-                    >
-                      <TouchableOpacity
-                        className="flex-row items-center justify-center py-2 rounded-lg"
+                          <Ionicons
+                            name="information-circle-outline"
+                            size={13}
+                            color={colors.accent}
+                          />
+                          <Text
+                            style={{
+                              color: colors.accent,
+                              fontSize: fontScale(11),
+                              fontWeight: '700',
+                              letterSpacing: 0.4,
+                              marginLeft: 3,
+                            }}
+                          >
+                            How it works
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        className="flex-row rounded-xl p-1"
                         style={{
-                          flex: 1,
-                          // Tonal moon-purple when active (selected) — a quiet selector,
-                          // so it doesn't compete with the gradient Dream CTA. Border on
-                          // both (transparent when inactive) to avoid a 1px toggle shift.
-                          backgroundColor: !config.useExactPrompt
-                            ? 'rgba(167,139,250,0.18)'
-                            : 'transparent',
+                          backgroundColor: colors.surface,
                           borderWidth: 1,
-                          borderColor: !config.useExactPrompt
-                            ? 'rgba(167,139,250,0.55)'
-                            : 'transparent',
+                          borderColor: colors.border,
                         }}
-                        onPress={() => {
-                          Haptics.selectionAsync();
-                          toggleUseExactPrompt(false);
-                        }}
-                        activeOpacity={0.7}
                       >
-                        <Text
-                          className="text-sm font-semibold"
+                        <TouchableOpacity
+                          className="flex-row items-center justify-center py-2 rounded-lg"
                           style={{
-                            color: !config.useExactPrompt ? '#A78BFA' : colors.textSecondary,
+                            flex: 1,
+                            // Tonal moon-purple when active (selected) — a quiet selector,
+                            // so it doesn't compete with the gradient Dream CTA. Border on
+                            // both (transparent when inactive) to avoid a 1px toggle shift.
+                            backgroundColor: !config.useExactPrompt
+                              ? 'rgba(167,139,250,0.18)'
+                              : 'transparent',
+                            borderWidth: 1,
+                            borderColor: !config.useExactPrompt
+                              ? 'rgba(167,139,250,0.55)'
+                              : 'transparent',
                           }}
+                          onPress={() => {
+                            Haptics.selectionAsync();
+                            toggleUseExactPrompt(false);
+                          }}
+                          activeOpacity={0.7}
                         >
-                          DreamBot
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        className="flex-row items-center justify-center py-2 rounded-lg"
-                        style={{
-                          flex: 1,
-                          backgroundColor: config.useExactPrompt
-                            ? 'rgba(167,139,250,0.18)'
-                            : 'transparent',
-                          borderWidth: 1,
-                          borderColor: config.useExactPrompt
-                            ? 'rgba(167,139,250,0.55)'
-                            : 'transparent',
-                        }}
-                        onPress={() => {
-                          Haptics.selectionAsync();
-                          toggleUseExactPrompt(true);
-                        }}
-                        activeOpacity={0.7}
-                      >
-                        <Text
-                          className="text-sm font-semibold"
+                          <Text
+                            className="text-sm font-semibold"
+                            style={{
+                              color: !config.useExactPrompt ? '#A78BFA' : colors.textSecondary,
+                            }}
+                          >
+                            DreamBot
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          className="flex-row items-center justify-center py-2 rounded-lg"
                           style={{
-                            color: config.useExactPrompt ? '#A78BFA' : colors.textSecondary,
+                            flex: 1,
+                            backgroundColor: config.useExactPrompt
+                              ? 'rgba(167,139,250,0.18)'
+                              : 'transparent',
+                            borderWidth: 1,
+                            borderColor: config.useExactPrompt
+                              ? 'rgba(167,139,250,0.55)'
+                              : 'transparent',
                           }}
+                          onPress={() => {
+                            Haptics.selectionAsync();
+                            toggleUseExactPrompt(true);
+                          }}
+                          activeOpacity={0.7}
                         >
-                          Direct
-                        </Text>
-                      </TouchableOpacity>
+                          <Text
+                            className="text-sm font-semibold"
+                            style={{
+                              color: config.useExactPrompt ? '#A78BFA' : colors.textSecondary,
+                            }}
+                          >
+                            Direct
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  </View>
-                )}
-              </Animated.View>
+                  )}
+                </Animated.View>
 
-              {/* Collapsed engine summary — replaces the folded controls (Model +
+                {/* Collapsed engine summary — replaces the folded controls (Model +
               Mode for text; New Scene toggle + tier for photo) while the keyboard
               is up, so their vertical space goes to the prompt. Tap to dismiss the
               keyboard and bring the full controls back. ABSOLUTE layer inside the
@@ -1290,343 +1300,344 @@ export default function CreateScreen() {
               its measured height (paddingBottom stands in for the old mb-4 so
               the measurement includes the gap). Restyle has no summary — the
               container folds to 0. */}
-              {!isRestyle && (
-                <Animated.View
-                  pointerEvents={kbOpen ? 'auto' : 'none'}
-                  style={[
-                    collapsedControlsStyle,
-                    {
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      paddingBottom: verticalScale(16),
-                    },
-                  ]}
-                  onLayout={(e) => {
-                    collapsedControlsH.value = e.nativeEvent.layout.height;
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      Haptics.selectionAsync();
-                      Keyboard.dismiss();
-                    }}
-                    activeOpacity={0.7}
-                    // py-2 (not py-3): the stacked label+value columns add a line of
-                    // height, so tighter padding keeps the row near its old size.
-                    className="flex-row items-center justify-between px-4 py-2 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
+                {!isRestyle && (
+                  <Animated.View
+                    pointerEvents={kbOpen ? 'auto' : 'none'}
+                    style={[
+                      collapsedControlsStyle,
+                      {
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        paddingBottom: verticalScale(16),
+                      },
+                    ]}
+                    onLayout={(e) => {
+                      collapsedControlsH.value = e.nativeEvent.layout.height;
                     }}
                   >
-                    {/* Stacked label-over-value columns — the old inline
+                    <TouchableOpacity
+                      onPress={() => {
+                        Haptics.selectionAsync();
+                        Keyboard.dismiss();
+                      }}
+                      activeOpacity={0.7}
+                      // py-2 (not py-3): the stacked label+value columns add a line of
+                      // height, so tighter padding keeps the row near its old size.
+                      className="flex-row items-center justify-between px-4 py-2 rounded-xl"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                    >
+                      {/* Stacked label-over-value columns — the old inline
                   "Model Flux 1.1 Pro · Engine DreamBot" run-on blurred labels
                   into values (Kevin 2026-07-09). */}
-                    <View className="flex-row items-center flex-shrink mr-2" style={{ gap: 20 }}>
-                      {collapsedEngineSegments.map((seg) => (
-                        <View key={seg.label} style={{ flexShrink: 1 }}>
-                          <FormLabel style={{ fontSize: fontScale(9.5), letterSpacing: 1 }}>
-                            {seg.label}
-                          </FormLabel>
-                          <Text
-                            className="text-sm font-semibold"
-                            style={{ color: colors.textPrimary, marginTop: verticalScale(2) }}
-                            numberOfLines={1}
-                          >
-                            {seg.value}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                    <View className="flex-row items-center">
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginRight: 8,
-                          paddingHorizontal: 6,
-                          paddingVertical: verticalScale(2),
-                          borderRadius: 6,
-                          borderWidth: 1,
-                          borderColor: colors.border,
-                        }}
-                      >
-                        <Ionicons name="sparkles" size={11} color="#A78BFA" />
-                        <Text
+                      <View className="flex-row items-center flex-shrink mr-2" style={{ gap: 20 }}>
+                        {collapsedEngineSegments.map((seg) => (
+                          <View key={seg.label} style={{ flexShrink: 1 }}>
+                            <FormLabel style={{ fontSize: fontScale(9.5), letterSpacing: 1 }}>
+                              {seg.label}
+                            </FormLabel>
+                            <Text
+                              className="text-sm font-semibold"
+                              style={{ color: colors.textPrimary, marginTop: verticalScale(2) }}
+                              numberOfLines={1}
+                            >
+                              {seg.value}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                      <View className="flex-row items-center">
+                        <View
                           style={{
-                            color: '#A78BFA',
-                            fontSize: fontScale(11),
-                            fontWeight: '700',
-                            marginLeft: 2,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 8,
+                            paddingHorizontal: 6,
+                            paddingVertical: verticalScale(2),
+                            borderRadius: 6,
+                            borderWidth: 1,
+                            borderColor: colors.border,
                           }}
                         >
-                          {sparkleCost}
-                        </Text>
+                          <Ionicons name="sparkles" size={11} color="#A78BFA" />
+                          <Text
+                            style={{
+                              color: '#A78BFA',
+                              fontSize: fontScale(11),
+                              fontWeight: '700',
+                              marginLeft: 2,
+                            }}
+                          >
+                            {sparkleCost}
+                          </Text>
+                        </View>
+                        <Ionicons name="chevron-expand" size={16} color={colors.textSecondary} />
                       </View>
-                      <Ionicons name="chevron-expand" size={16} color={colors.textSecondary} />
-                    </View>
-                  </TouchableOpacity>
-                </Animated.View>
-              )}
-            </Animated.View>
+                    </TouchableOpacity>
+                  </Animated.View>
+                )}
+              </Animated.View>
 
-            {/* Restyle model picker — Kontext (default, 1✦) vs Nano Banana Pro
+              {/* Restyle model picker — Kontext (default, 1✦) vs Nano Banana Pro
               (5✦, strongest likeness). Separate from the main picker: img2img
               models only, own sticky pick, never touches the main model. Lives
               OUTSIDE the keyboard-collapse container — it does not fold. */}
-            {isRestyle && !restylePoolManaged && (
-              <View className="mb-4">
-                <RestyleModelPicker onChange={setRestyleModelId} />
-              </View>
-            )}
+              {isRestyle && !restylePoolManaged && (
+                <View className="mb-4">
+                  <RestyleModelPicker onChange={setRestyleModelId} />
+                </View>
+              )}
 
-            {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
+              {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
               AND whenever a photo is attached (photo dreams always use the
               engine). Vibe is hidden for Restyle — that path is a Kontext img2img
               edit driven by the medium only. Direct text dreams hide both. */}
-            {!effectiveExactPrompt && (
-              <View className="flex-row gap-3 mb-4">
-                <View className="flex-1">
-                  <View className="flex-row items-center mb-1.5 ml-1">
-                    <FormLabel>Medium</FormLabel>
-                    {/* Live face-swap lamp. Gray = no cast reference in the
+              {!effectiveExactPrompt && (
+                <View className="flex-row gap-3 mb-4">
+                  <View className="flex-1">
+                    <View className="flex-row items-center mb-1.5 ml-1">
+                      <FormLabel>Medium</FormLabel>
+                      {/* Live face-swap lamp. Gray = no cast reference in the
                       prompt; lit = this dream casts YOU, colored by the medium
                       family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
                       colors from the medium picker). New Scene photo dreams are
                       always lit. Hidden for Restyle (img2img — never swaps; the
                       Direct case is already excluded by this section's guard).
                       Tap opens the face-vs-art teaching sheet. */}
-                    {!isRestyle && (
-                      <TouchableOpacity
-                        onPress={handleModeInfo}
-                        activeOpacity={0.7}
-                        hitSlop={10}
-                        className="ml-1.5"
-                      >
-                        <Ionicons
-                          name={faceSwapLit ? 'happy' : 'happy-outline'}
-                          size={15}
-                          color={
-                            faceSwapLit
-                              ? mediumFaceSwaps
-                                ? MEDIUM_BADGE.face.color
-                                : MEDIUM_BADGE.art.color
-                              : (colors.textMuted ?? colors.textSecondary)
-                          }
-                        />
-                      </TouchableOpacity>
-                    )}
+                      {!isRestyle && (
+                        <TouchableOpacity
+                          onPress={handleModeInfo}
+                          activeOpacity={0.7}
+                          hitSlop={10}
+                          className="ml-1.5"
+                        >
+                          <Ionicons
+                            name={faceSwapLit ? 'happy' : 'happy-outline'}
+                            size={15}
+                            color={
+                              faceSwapLit
+                                ? mediumFaceSwaps
+                                  ? MEDIUM_BADGE.face.color
+                                  : MEDIUM_BADGE.art.color
+                                : (colors.textMuted ?? colors.textSecondary)
+                            }
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                      onPress={openMediumPicker}
+                      activeOpacity={0.7}
+                    >
+                      <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                        <Text
+                          className="text-sm font-semibold"
+                          style={{ color: colors.textPrimary }}
+                          numberOfLines={1}
+                        >
+                          {mediumLabel}
+                        </Text>
+                        {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
+                        so the medium's type is always visible on the picker. */}
+                        {(isSurpriseMedium || selectedMediumRow) && (
+                          <View
+                            style={{
+                              paddingHorizontal: 5,
+                              paddingVertical: verticalScale(1),
+                              borderRadius: 5,
+                              backgroundColor: mediumFaceSwaps
+                                ? MEDIUM_BADGE.face.bg
+                                : MEDIUM_BADGE.art.bg,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: fontScale(8),
+                                fontWeight: '700',
+                                color: mediumFaceSwaps
+                                  ? MEDIUM_BADGE.face.color
+                                  : MEDIUM_BADGE.art.color,
+                                textTransform: 'uppercase',
+                                letterSpacing: 0.5,
+                              }}
+                            >
+                              {mediumFaceSwaps ? 'face' : 'art'}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity
-                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={openMediumPicker}
-                    activeOpacity={0.7}
-                  >
-                    <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+
+                  {/* Vibe — shown for Restyle too; the selected vibe modulates the
+                  restyle (Kevin's choice to keep vibe applying). */}
+                  <View className="flex-1">
+                    <View className="mb-1.5 ml-1">
+                      <FormLabel>Vibe</FormLabel>
+                    </View>
+                    <TouchableOpacity
+                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        setPickerType('vibe');
+                      }}
+                      activeOpacity={0.7}
+                    >
                       <Text
                         className="text-sm font-semibold"
                         style={{ color: colors.textPrimary }}
                         numberOfLines={1}
                       >
-                        {mediumLabel}
+                        {vibeLabel}
                       </Text>
-                      {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
-                        so the medium's type is always visible on the picker. */}
-                      {(isSurpriseMedium || selectedMediumRow) && (
-                        <View
-                          style={{
-                            paddingHorizontal: 5,
-                            paddingVertical: verticalScale(1),
-                            borderRadius: 5,
-                            backgroundColor: mediumFaceSwaps
-                              ? MEDIUM_BADGE.face.bg
-                              : MEDIUM_BADGE.art.bg,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: fontScale(8),
-                              fontWeight: '700',
-                              color: mediumFaceSwaps
-                                ? MEDIUM_BADGE.face.color
-                                : MEDIUM_BADGE.art.color,
-                              textTransform: 'uppercase',
-                              letterSpacing: 0.5,
-                            }}
-                          >
-                            {mediumFaceSwaps ? 'face' : 'art'}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-
-                {/* Vibe — shown for Restyle too; the selected vibe modulates the
-                  restyle (Kevin's choice to keep vibe applying). */}
-                <View className="flex-1">
-                  <View className="mb-1.5 ml-1">
-                    <FormLabel>Vibe</FormLabel>
+                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity
-                    className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      setPickerType('vibe');
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <Text
-                      className="text-sm font-semibold"
-                      style={{ color: colors.textPrimary }}
-                      numberOfLines={1}
-                    >
-                      {vibeLabel}
-                    </Text>
-                    <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                  </TouchableOpacity>
                 </View>
-              </View>
-            )}
+              )}
 
-            {/* Prompt input — hidden when a photo is in Restyle mode, since
+              {/* Prompt input — hidden when a photo is in Restyle mode, since
               that path is medium+vibe only (no prompt influence). The
               underlying `config.userPrompt` is preserved so flipping back
               to New Scene restores whatever the user had typed. */}
-            {!(hasPhoto && config.photoStyle === 'restyle') && (
-              <View
-                ref={promptWrapRef}
-                onLayout={measurePromptTop}
-                className="rounded-xl mb-4"
-                style={{
-                  backgroundColor: colors.surface,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  // Phone: exact computed height so the box bottom lands just above
-                  // the Dream button (down to the keyboard when it's up). Falls back
-                  // to a scaled default until the first measure lands. iPad: a
-                  // scaled fixed height in its centered card.
-                  height: fillPrompt
-                    ? (computedPromptHeight ?? verticalScale(160))
-                    : verticalScale(144),
-                }}
-              >
-                <TextInput
-                  ref={promptRef}
-                  className="px-4 py-4"
+              {!(hasPhoto && config.photoStyle === 'restyle') && (
+                <View
+                  ref={promptWrapRef}
+                  onLayout={measurePromptTop}
+                  className="rounded-xl mb-4"
                   style={{
-                    // Responsive type instead of fixed text-base, at a smaller
-                    // 14pt base — 16 read oversized even at the design size
-                    // (Kevin 2026-07-02). Placeholder overlay below must stay in
-                    // lockstep so the hint aligns exactly where typed text begins.
-                    fontSize: fontScale(14),
-                    lineHeight: fontScale(20),
-                    color: colors.textPrimary,
-                    // Fill the wrapper (which carries the scaled/computed height);
-                    // long prompts scroll internally.
-                    flex: 1,
-                    textAlignVertical: 'top',
+                    backgroundColor: colors.surface,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                    // Phone: exact computed height so the box bottom lands just above
+                    // the Dream button (down to the keyboard when it's up). Falls back
+                    // to a scaled default until the first measure lands. iPad: a
+                    // scaled fixed height in its centered card.
+                    height: fillPrompt
+                      ? (computedPromptHeight ?? verticalScale(160))
+                      : verticalScale(144),
                   }}
-                  value={config.userPrompt}
-                  onChangeText={setPrompt}
-                  maxLength={engineConfig.promptMaxLength}
-                  multiline
-                  scrollEnabled
-                  returnKeyType="default"
-                />
-                {/* Custom placeholder overlay instead of the native one. iOS's
+                >
+                  <TextInput
+                    ref={promptRef}
+                    className="px-4 py-4"
+                    style={{
+                      // Responsive type instead of fixed text-base, at a smaller
+                      // 14pt base — 16 read oversized even at the design size
+                      // (Kevin 2026-07-02). Placeholder overlay below must stay in
+                      // lockstep so the hint aligns exactly where typed text begins.
+                      fontSize: fontScale(14),
+                      lineHeight: fontScale(20),
+                      color: colors.textPrimary,
+                      // Fill the wrapper (which carries the scaled/computed height);
+                      // long prompts scroll internally.
+                      flex: 1,
+                      textAlignVertical: 'top',
+                    }}
+                    value={config.userPrompt}
+                    onChangeText={setPrompt}
+                    maxLength={engineConfig.promptMaxLength}
+                    multiline
+                    scrollEnabled
+                    returnKeyType="default"
+                  />
+                  {/* Custom placeholder overlay instead of the native one. iOS's
                   multiline placeholder ignores textAlignVertical:'top' until focus
                   (it floats vertically centered) AND won't re-wrap when the text
                   changes while unfocused. A top-aligned Text overlay (taps pass
                   through) sits exactly where typed text begins, so the hint is
                   stable across the photo toggle and on focus. */}
-                {!config.userPrompt && (
-                  <View
-                    pointerEvents="none"
-                    className="px-4 py-4"
-                    style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: fontScale(14),
-                        lineHeight: fontScale(20),
-                        color: colors.textMuted ?? '#6B7280',
-                      }}
+                  {!config.userPrompt && (
+                    <View
+                      pointerEvents="none"
+                      className="px-4 py-4"
+                      style={{ position: 'absolute', top: 0, left: 0, right: 0 }}
                     >
-                      {placeholder}
-                    </Text>
-                  </View>
-                )}
-                {/* Footer: Clear + live character count. Only rendered when the
+                      <Text
+                        style={{
+                          fontSize: fontScale(14),
+                          lineHeight: fontScale(20),
+                          color: colors.textMuted ?? '#6B7280',
+                        }}
+                      >
+                        {placeholder}
+                      </Text>
+                    </View>
+                  )}
+                  {/* Footer: Clear + live character count. Only rendered when the
                   box has text (so an empty box stays clean and shows just the
                   placeholder). Sits below the input with a hairline divider so
                   it never overlaps the typed prompt. Clear keeps focus so you
                   can immediately retype. */}
-                {config.userPrompt.length > 0 && (
-                  <View
-                    className="flex-row items-center justify-end px-4 py-2"
-                    style={{ borderTopWidth: 1, borderTopColor: colors.border, gap: 14 }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: fontScale(12),
-                        fontVariant: ['tabular-nums'],
-                        color:
-                          config.userPrompt.length >= engineConfig.promptMaxLength
-                            ? colors.error
-                            : (colors.textMuted ?? '#6B7280'),
-                      }}
-                    >
-                      {config.userPrompt.length} / {engineConfig.promptMaxLength}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        setPrompt('');
-                        promptRef.current?.focus();
-                      }}
-                      hitSlop={{ top: 8, bottom: 8, left: 12, right: 8 }}
-                      activeOpacity={0.6}
+                  {config.userPrompt.length > 0 && (
+                    <View
+                      className="flex-row items-center justify-end px-4 py-2"
+                      style={{ borderTopWidth: 1, borderTopColor: colors.border, gap: 14 }}
                     >
                       <Text
                         style={{
-                          fontSize: fontScale(13),
-                          fontWeight: '600',
-                          color: colors.textSecondary,
+                          fontSize: fontScale(12),
+                          fontVariant: ['tabular-nums'],
+                          color:
+                            config.userPrompt.length >= engineConfig.promptMaxLength
+                              ? colors.error
+                              : (colors.textMuted ?? '#6B7280'),
                         }}
                       >
-                        Clear
+                        {config.userPrompt.length} / {engineConfig.promptMaxLength}
                       </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            )}
+                      <TouchableOpacity
+                        onPress={() => {
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          setPrompt('');
+                          promptRef.current?.focus();
+                        }}
+                        hitSlop={{ top: 8, bottom: 8, left: 12, right: 8 }}
+                        activeOpacity={0.6}
+                      >
+                        <Text
+                          style={{
+                            fontSize: fontScale(13),
+                            fontWeight: '600',
+                            color: colors.textSecondary,
+                          }}
+                        >
+                          Clear
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              )}
 
-            {/* iPad: the Dream CTA lives WITH the form as one centered group,
+              {/* iPad: the Dream CTA lives WITH the form as one centered group,
                 instead of pinned to the far bottom like the phone sticky footer. */}
-            {isTabletDevice && (
-              <View style={{ marginTop: verticalScale(28) }}>
-                <GradientButton label="Dream" variant="solid" onPress={handleDream} />
-              </View>
-            )}
-          </ResponsiveContainer>
-        </KeyboardAwareScrollView>
+              {isTabletDevice && (
+                <View style={{ marginTop: verticalScale(28) }}>
+                  <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+                </View>
+              )}
+            </ResponsiveContainer>
+          </KeyboardAwareScrollView>
+        </KeyboardSwipeDismiss>
 
         {/* Dream CTA — pinned in a sticky footer that rides ABOVE the keyboard
             on every device (KeyboardStickyView reads the real native keyboard
