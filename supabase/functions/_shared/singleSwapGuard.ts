@@ -157,6 +157,51 @@ async function flyProbe(
 }
 
 /**
+ * Stage 8d (2026-07-09): post-swap identity read for SOLO swaps — did the
+ * swapped face actually carry the cast identity? Calls the Fly /verify
+ * endpoint (ArcFace) with the cast source photo as the reference and returns
+ * the best face's similarity. `sim: 0` = faces were measured and none carried
+ * the identity (fail); `null` return = the measurement itself was unavailable
+ * (transport/model error — fail-OPEN, mirror of the dual pipeline's rule).
+ */
+export async function verifySoloIdentity(
+  swappedUrl: string,
+  sourceUrl: string
+): Promise<{ sim: number; ms: number } | null> {
+  if (typeof Deno === 'undefined') return null;
+  const flyUrl = Deno.env.get('DUAL_SWAP_FLY_URL');
+  const flyToken = Deno.env.get('DUAL_SWAP_FLY_TOKEN');
+  if (!flyUrl || !flyToken) return null;
+  const t0 = Date.now();
+  try {
+    const res = await fetch(`${new URL(flyUrl).origin}/verify`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${flyToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrl: swappedUrl, refs: [sourceUrl] }),
+      signal: AbortSignal.timeout(25_000),
+    });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { faces?: { sims?: (number | null)[] }[] };
+    if (!Array.isArray(j.faces)) return null;
+    const sims = j.faces.map((f) => f.sims?.[0]).filter((v): v is number => typeof v === 'number');
+    // No measurable face in a swapped render = the swap did not deliver a
+    // face — that's a measured 0, not an unknown (the skiing-4 rule).
+    return { sim: sims.length ? Math.max(...sims) : 0, ms: Date.now() - t0 };
+  } catch {
+    return null;
+  }
+}
+
+/** IDENTITY_MIN_SIM (same secret as the dual gate); null = shadow. */
+export function soloIdentityThreshold(): number | null {
+  if (typeof Deno === 'undefined') return null;
+  const raw = Deno.env.get('IDENTITY_MIN_SIM');
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 && n < 1 ? n : null;
+}
+
+/**
  * Probe (and if needed re-render) a solo-cast pre-swap render until it is
  * safe to paste the cast face, or report that it never became safe.
  * Attempt 0 probes the original render; each further attempt re-renders.

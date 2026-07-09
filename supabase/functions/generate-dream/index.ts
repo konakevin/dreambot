@@ -51,7 +51,11 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
-import { ensureSoloSwapTarget } from '../_shared/singleSwapGuard.ts';
+import {
+  ensureSoloSwapTarget,
+  verifySoloIdentity,
+  soloIdentityThreshold,
+} from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
@@ -1772,7 +1776,43 @@ Output ONLY the prompt.`;
         }
         console.log('[generate-dream] ⏱ Face swap upload done, starting swap...');
 
+        const preSwapTarget = tempUrl;
         tempUrl = await faceSwap(sourceUrl, tempUrl, REPLICATE_TOKEN, supabase, userId);
+
+        // Stage 8d: post-swap identity gate for SOLOS — same 0.35 secret as
+        // the dual gate. Below threshold → ONE re-swap via the fallback model
+        // chain (a different paster genuinely re-takes the face), ship the
+        // better of the two. Measurement absent → fail-open.
+        const soloThr = soloIdentityThreshold();
+        if (soloThr !== null) {
+          const v1 = await verifySoloIdentity(tempUrl, sourceUrl);
+          if (v1) {
+            fallbackReasons.push(`identity_sim_solo:${v1.sim}`);
+            if (v1.sim < soloThr) {
+              fallbackReasons.push(`identity_below_threshold_solo:${v1.sim}<${soloThr}`);
+              try {
+                const reswap = await faceSwap(
+                  sourceUrl,
+                  preSwapTarget,
+                  REPLICATE_TOKEN,
+                  supabase,
+                  userId,
+                  {
+                    skipPrimary: true,
+                  }
+                );
+                const v2 = await verifySoloIdentity(reswap, sourceUrl);
+                if (v2 && v2.sim > v1.sim) {
+                  tempUrl = reswap;
+                  fallbackReasons.push(`identity_solo_reswap:${v2.sim}`);
+                }
+              } catch (e) {
+                fallbackReasons.push('identity_solo_reswap_failed');
+                console.warn('[generate-dream] identity re-swap failed:', (e as Error).message);
+              }
+            }
+          }
+        }
 
         if (swapFileName) {
           supabase.storage

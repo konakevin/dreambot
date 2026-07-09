@@ -57,7 +57,11 @@ import { pickModel } from '../_shared/modelPicker.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
-import { ensureSoloSwapTarget } from '../_shared/singleSwapGuard.ts';
+import {
+  ensureSoloSwapTarget,
+  verifySoloIdentity,
+  soloIdentityThreshold,
+} from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { classifyDualGenders } from '../_shared/vision.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
@@ -2133,6 +2137,7 @@ Output ONLY the prompt.`;
       } else {
         tempUrl = soloGuard.url;
         if (soloGuard.predictionId) replicatePredictionId = soloGuard.predictionId;
+        const preSwapTarget = tempUrl;
         let swapSuccessSingle = false;
         for (let attempt = 1; attempt <= FACE_SWAP_MAX_RETRIES; attempt++) {
           try {
@@ -2154,6 +2159,7 @@ Output ONLY the prompt.`;
             logAxes.faceSwapAttempts = attempt;
             swapSuccessSingle = true;
             break;
+            // (Stage 8d identity gate runs after this loop.)
           } catch (err) {
             console.warn(
               `[nightly-dreams] Face swap attempt ${attempt}/${FACE_SWAP_MAX_RETRIES} failed:`,
@@ -2164,6 +2170,39 @@ Output ONLY the prompt.`;
               logAxes.faceSwapResult = 'failed';
               logAxes.faceSwapError = (err as Error).message;
               logAxes.faceSwapAttempts = attempt;
+            }
+          }
+        }
+        // Stage 8d: post-swap identity gate for SOLOS — same 0.35 secret as
+        // the dual gate. Below threshold → ONE re-swap via the fallback model
+        // chain, ship the better take. Measurement absent → fail-open.
+        if (swapSuccessSingle) {
+          const soloThr = soloIdentityThreshold();
+          if (soloThr !== null) {
+            const v1 = await verifySoloIdentity(tempUrl, faceSwapSource);
+            if (v1) {
+              fallbackReasons.push(`identity_sim_solo:${v1.sim}`);
+              if (v1.sim < soloThr) {
+                fallbackReasons.push(`identity_below_threshold_solo:${v1.sim}<${soloThr}`);
+                try {
+                  const reswap = await faceSwap(
+                    faceSwapSource,
+                    preSwapTarget,
+                    REPLICATE_TOKEN,
+                    supabase,
+                    userId,
+                    { retry: false, skipPrimary: true }
+                  );
+                  const v2 = await verifySoloIdentity(reswap, faceSwapSource);
+                  if (v2 && v2.sim > v1.sim) {
+                    tempUrl = reswap;
+                    fallbackReasons.push(`identity_solo_reswap:${v2.sim}`);
+                  }
+                } catch (e) {
+                  fallbackReasons.push('identity_solo_reswap_failed');
+                  console.warn('[nightly-dreams] identity re-swap failed:', (e as Error).message);
+                }
+              }
             }
           }
         }
