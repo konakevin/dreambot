@@ -638,6 +638,11 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'sitting side-by-side at dodgers game bleacher seats holding foam fingers',
     'standing side-by-side at observatory planetarium entrance checking show schedules',
     'walking side-by-side through silver lake reservoir path with downtown backdrop',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'riding beach cruisers along the Venice Beach boardwalk at golden hour',
+    'rollerblading the Venice skate plaza with palms overhead',
+    'a beach volleyball rally on the sand courts at Santa Monica',
+    'cruising an open-top car down the Sunset Strip at dusk',
   ],
   'las vegas': [
     'standing side-by-side at slot machines in casino, pulling handles',
@@ -690,6 +695,11 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'walking side-by-side through cosmopolitan terrace gardens',
     'standing side-by-side at vintage vegas car show, classic automobiles displayed',
     'sitting side-by-side at wine tasting bar, glasses lined up',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'racing go-karts on a neon-lit indoor track off the Strip',
+    'riding the High Roller observation wheel at night',
+    'a hot streak at the retro arcade in a neon-soaked casino corridor',
+    'ziplining down Fremont Street under the canopy of lights',
   ],
   hawaii: [
     'standing side-by-side holding surfboards upright on waikiki beach',
@@ -742,6 +752,11 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'walking side-by-side through kauai botanical gardens pathway',
     'standing side-by-side holding fresh coconut water on beach',
     'sitting side-by-side watching hula dancers at hotel performance',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'a jet ski run along the reef line with the green mountains behind',
+    'a longboard session in gentle rolling surf at Waikiki',
+    'paddleboarding a glassy turquoise lagoon at sunrise',
+    'splashing through the shore break on a bright bodyboard',
   ],
   'bora bora tahiti': [
     'standing side-by-side on overwater bungalow deck looking toward lagoon',
@@ -794,6 +809,10 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'sitting side-by-side on traditional polynesian bench under breadfruit tree',
     'standing side-by-side at aqua safari helmet diving preparation station',
     'sitting side-by-side on floating platform in middle of lagoon',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'paddling an outrigger canoe across the turquoise lagoon',
+    'a jet ski loop around the motu islets in crystal water',
+    'snorkeling at the surface of a coral garden, faces above the water',
   ],
   'caribbean island': [
     'standing side-by-side holding snorkel gear on white sand beach',
@@ -846,6 +865,10 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'walking side-by-side through historic plantation house grounds',
     'standing side-by-side at zipline platform overlooking jungle canopy',
     'sitting side-by-side at ferry dock waiting for inter-island transport',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'a banana boat ride bouncing across the turquoise bay',
+    'beach paddleball at the waterline of a white-sand cove',
+    'sailing a small catamaran in the bay breeze',
   ],
   'moab arches': [
     'standing side-by-side beneath delicate arch looking up at the natural stone formation',
@@ -898,6 +921,9 @@ export const SCENE_CLUSTERS_ACTIVITIES: Record<string, string[]> = {
     'sitting side-by-side on petrified sand dune admiring vast desert landscape',
     'standing side-by-side at navajo arch secluded opening in remote canyon',
     'walking side-by-side returning from backcountry exploration carrying hiking gear',
+    // Phase C garnish 2026-07-09 — action-flavored spots (ACTION_POSE_EXPANSION_PLAN.md)
+    'mountain biking the slickrock trail beneath the red fins',
+    'scrambling up a slickrock bowl with the arches behind',
   ],
   'space station': [],
   'alien planet': [

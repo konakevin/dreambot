@@ -59,6 +59,9 @@ export interface EngineConfig {
   singleSceneGoofyPct: number;
   singleSceneElegantPct: number;
   singleSceneActivePct: number;
+  /** Stage 5c: % of solo face-swap renders using an expanded composition
+   *  preset (three-quarter / environmental-wide). 0 = classic waist-up only. */
+  singleCompositionExpandedPct: number;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -91,6 +94,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneGoofyPct: 20,
   singleSceneElegantPct: 20,
   singleSceneActivePct: 0,
+  singleCompositionExpandedPct: 0,
 };
 
 let cached: EngineConfig | null = null;
@@ -165,6 +169,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     singleSceneActivePct: Number(
       data.single_scene_active_pct ?? DEFAULT_ENGINE_CONFIG.singleSceneActivePct
+    ),
+    singleCompositionExpandedPct: Number(
+      data.single_composition_expanded_pct ?? DEFAULT_ENGINE_CONFIG.singleCompositionExpandedPct
     ),
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard

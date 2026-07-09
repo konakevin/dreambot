@@ -82,6 +82,12 @@ export interface CharacterSlotPipelineInput {
   avoidList: string;
   // Pose
   action: string | null;
+  /** Stage 5c (2026-07-09): expanded SOLO composition preset. null/undefined =
+   *  the classic waist-up frontal contract. Only meaningful for cast.length 1;
+   *  gated upstream by engine_config.single_composition_expanded_pct. The
+   *  Stage-8 identity gates (restore + post-swap verify) are what make the
+   *  smaller-face presets safe to ship. */
+  soloComposition?: 'three_quarter' | 'enviro_wide' | null;
 }
 
 export interface CharacterSlotPipelineResult {
@@ -515,12 +521,30 @@ export function assembleCharacterPrompt(
     const singleAnchor =
       'ONE person alone in the scene, the only person in the image, frontal portrait, the character is looking out at the camera in three-quarter view, face turned toward the viewer';
 
-    // Framing — single doesn't need the L/R clear-gap line
-    const framingBlock = [
-      'shown from the waist up, fully visible',
-      'face unobstructed and clearly visible to the viewer',
-      'frontal portrait composition, face turned to the camera',
-    ].join(', ');
+    // Framing — single doesn't need the L/R clear-gap line. Stage 5c presets
+    // trade face size for composition freedom; the classic waist-up stays the
+    // default. Face-priority language is load-bearing in both presets — the
+    // swap needs a big readable frontal face (Hard Rule: never let the scene
+    // shrink the subject).
+    const framingBlock = (
+      input.soloComposition === 'three_quarter'
+        ? [
+            'shown from the knees up in a three-quarter length composition, fully visible',
+            'face large, unobstructed and clearly visible to the viewer',
+            'frontal composition, face turned to the camera',
+          ]
+        : input.soloComposition === 'enviro_wide'
+          ? [
+              'full figure visible, standing prominent in the foreground third of a sweeping environment',
+              'the person is the unmistakable subject, face large enough to read clearly',
+              'face unobstructed, frontal, turned to the camera',
+            ]
+          : [
+              'shown from the waist up, fully visible',
+              'face unobstructed and clearly visible to the viewer',
+              'frontal portrait composition, face turned to the camera',
+            ]
+    ).join(', ');
 
     const parts = [
       genderLock,

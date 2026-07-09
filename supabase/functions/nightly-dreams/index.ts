@@ -25,14 +25,9 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
-import {
-  pickActiveDualAction,
-  eligibleDualActionsActive,
-} from '../_shared/pools/dual_actions_active.ts';
-import {
-  pickActiveSingleAction,
-  eligibleSingleActionsActive,
-} from '../_shared/pools/single_actions_active.ts';
+import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
+import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
+import { loadActionPoses, eligibleActionPoses } from '../_shared/pools/actionPoseLoader.ts';
 import { filterUnseen, recordPick } from '../_shared/poolPickHistory.ts';
 import {
   fetchChaosConfig,
@@ -228,6 +223,11 @@ Deno.serve(async (req) => {
   const force_elegant = body.force_elegant === true;
   const force_active = body.force_active === true;
   const force_single_active = body.force_single_active === true;
+  // Test hook: force a Stage-5c solo composition preset ('three_quarter' | 'enviro_wide').
+  const force_solo_comp =
+    body.force_solo_comp === 'three_quarter' || body.force_solo_comp === 'enviro_wide'
+      ? (body.force_solo_comp as 'three_quarter' | 'enviro_wide')
+      : null;
   // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
   // (production-prompt benching — the pencil lesson).
   const force_active_pose = body.force_active_pose === true;
@@ -1236,11 +1236,12 @@ Deno.serve(async (req) => {
             force_active_pose ||
             (poseCfg.singleActionPosePct > 0 && Math.random() * 100 < poseCfg.singleActionPosePct);
           if (rollActive) {
+            const poseDb = await loadActionPoses(supabase);
             const cands = await filterUnseen(
               supabase,
               userId,
               'solo_pose_active',
-              eligibleSingleActionsActive(biomeKey),
+              eligibleActionPoses(poseDb.solo, biomeKey),
               (x) => x.text
             );
             activeSinglePose = pickActiveSingleAction(biomeKey, cands);
@@ -1257,11 +1258,12 @@ Deno.serve(async (req) => {
             force_active_pose ||
             (poseCfg.dualActionPosePct > 0 && Math.random() * 100 < poseCfg.dualActionPosePct);
           if (rollActive) {
+            const poseDb = await loadActionPoses(supabase);
             const cands = await filterUnseen(
               supabase,
               userId,
               'dual_pose_active',
-              eligibleDualActionsActive(biomeKey),
+              eligibleActionPoses(poseDb.dual, biomeKey),
               (x) => x.text
             );
             activePose = pickActiveDualAction(biomeKey, cands);
@@ -1321,6 +1323,26 @@ Deno.serve(async (req) => {
             ),
             avoidList,
             action,
+            // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
+            // with singleCompositionExpandedPct probability; classic waist-up
+            // otherwise. Identity gates (restore + post-swap verify) backstop
+            // the smaller faces.
+            soloComposition:
+              selectedCast.length === 1
+                ? (force_solo_comp ??
+                  (await (async () => {
+                    const cfg = await fetchEngineConfig(supabase);
+                    if (
+                      cfg.singleCompositionExpandedPct > 0 &&
+                      Math.random() * 100 < cfg.singleCompositionExpandedPct
+                    ) {
+                      const preset = Math.random() < 0.5 ? 'three_quarter' : 'enviro_wide';
+                      fallbackReasons.push(`solo_comp:${preset}`);
+                      return preset as 'three_quarter' | 'enviro_wide';
+                    }
+                    return null;
+                  })()))
+                : null,
           },
           ANTHROPIC_KEY!
         );
