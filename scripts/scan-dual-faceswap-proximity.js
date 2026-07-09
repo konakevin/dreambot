@@ -20,6 +20,16 @@
  */
 const fs = require('fs');
 const path = require('path');
+// Shared rules — also used by scenario seeding scripts to lint DB rows the
+// file scan can't see. Keep ALL regexes in scripts/lib/posePoolLint.js.
+const {
+  VIOLATION,
+  MITIGATED,
+  ALLOW,
+  BAN_LIST,
+  COMMENT,
+  lintActivePoseEntry,
+} = require('./lib/posePoolLint');
 
 // Dual face-swap pose/scene pools. Add any new dual-cast seed file here.
 const POOL_DIR = path.join(__dirname, '..', 'supabase/functions/_shared/pools');
@@ -42,28 +52,34 @@ const BRIEF_BUILDER = path.join(__dirname, '..', 'supabase/functions/_shared/dua
 // line-level facing-camera language + the global mandate together keep the
 // overlap failure out). Comments and Sonnet-facing BAN lists (which name the
 // forbidden contact verbs on purpose) are not pose text.
-const MITIGATED =
-  /FROM THE SIDE|heads apart|clear gap|a step apart|arm's length|heads on separate sides|band of background|facing camera|facing forward|toward camera|not an embrace/i;
-const BAN_LIST = /\bNO\s|DO NOT|impossible to render|Even though the user typed/;
-const COMMENT = /^\s*(\/\/|\*|\/\*)/;
 const SCAN_ALL_LINES = new Set([BRIEF_BUILDER]);
 DUAL_POOL_FILES.push(BRIEF_BUILDER);
-
-// Couple-too-close phrasings that cause overlapping faces (→ no_dual_split).
-const VIOLATION =
-  /\b(?:standing|sitting|seated|stand|sit|perched|leaning|nestled|huddled)\s+close\b|\bclose\s+(?:together|beside|on\s+a|on\s+the|to\s+each\s+other)\b|\bshoulders?\s+(?:nearly\s+)?touching\b|\bshoulder[-\s]to[-\s]shoulder\b|\bcheek[-\s]to[-\s]cheek\b|\bcheeks?\s+touching\b|\bheads?\s+(?:close|together|touching|nearly\s+touching)\b|\bfaces?\s+(?:close|together|touching|inches\s+apart)\b|\bleaning\s+(?:in|into)\s+(?:each\s+other|one\s+another|the\s+other|close)\b|\bnuzzl|\bnestl|\bhuddl|\bpressed\s+(?:together|against\s+each\s+other)\b|\bforeheads?\s+touching\b|\btemple[-\s]to[-\s]temple\b|\barms?\s+(?:around|round)\s+(?:each\s+other|one\s+another|the\s+other)\b|\bwrapped\s+around\s+each\s+other\b|\bembrac|\bcuddl|\bhugging\b/i;
-
-// Known false positives (proximity to an OBJECT, not the partner).
-const ALLOW = /close\s+to\s+(?:a|an|the|it|its)\b|close-up|close\s+attention|\bclosed\b/i;
 
 const violations = [];
 for (const file of DUAL_POOL_FILES) {
   const lines = fs.readFileSync(file, 'utf8').split('\n');
   const scanAll = SCAN_ALL_LINES.has(file);
+  // ACTIVE pools (dual_actions_active.ts etc.) carry action poses — they get
+  // the STRICTER entry lint (face-visibility mandate + reach-back + particle
+  // bans) in addition to the proximity rule (2026-07-09 failure taxonomy).
+  const isActivePool = /_active\.ts$/.test(file);
   lines.forEach((line, i) => {
     // pool files: only string-literal entries; brief builder: every line
-    if (!scanAll && !/^\s*['"`]/.test(line)) return;
+    if (!scanAll && !/^\s*['"`]/.test(line) && !(isActivePool && /text:\s*['"`]/.test(line)))
+      return;
     if (scanAll && (COMMENT.test(line) || BAN_LIST.test(line) || MITIGATED.test(line))) return;
+    if (isActivePool) {
+      const m = line.match(/(?:text:\s*)?['"`](.+?)['"`],?\s*$/);
+      if (!m) return;
+      for (const problem of lintActivePoseEntry(m[1])) {
+        violations.push({
+          file: path.basename(file),
+          line: i + 1,
+          text: `${problem}: ${m[1].slice(0, 90)}`,
+        });
+      }
+      return;
+    }
     const stripped = line.replace(ALLOW, '');
     if (VIOLATION.test(stripped)) {
       violations.push({ file: path.basename(file), line: i + 1, text: line.trim() });

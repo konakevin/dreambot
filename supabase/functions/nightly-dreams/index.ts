@@ -50,6 +50,7 @@ import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import { ensureSoloSwapTarget } from '../_shared/singleSwapGuard.ts';
 import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
+import { classifyDualGenders } from '../_shared/vision.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
 import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
@@ -1891,7 +1892,7 @@ Output ONLY the prompt.`;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
-          dispatchDual: (target) =>
+          dispatchDual: (target, genderOverride) =>
             dispatchDualFaceSwap(
               s0.sourceUrl,
               s1.sourceUrl,
@@ -1902,8 +1903,13 @@ Output ONLY the prompt.`;
               t0 + 140_000,
               false,
               { left: s0.gender, right: s1.gender },
-              queueJobId
+              queueJobId,
+              genderOverride ?? null
             ),
+          confirmGenders: async (target) => {
+            const r = await classifyDualGenders(target, REPLICATE_TOKEN);
+            return { left: r.left, right: r.right };
+          },
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId, { retry: false }),
           rerender: async (attempt: number) => {

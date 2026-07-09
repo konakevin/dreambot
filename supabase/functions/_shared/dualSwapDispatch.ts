@@ -61,7 +61,10 @@ export async function dispatchDualFaceSwap(
   genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null },
   // dream_queue.id — forwarded so the Fly/edge swap logs prefix the same id,
   // letting one grep follow a render across Supabase + Fly logs.
-  traceId?: string | null
+  traceId?: string | null,
+  // R2: Haiku-confirmed genders of the rendered faces (left/right by x-order),
+  // substituting for genderage on this attempt (see dualSwapPipeline).
+  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
 ): Promise<DualDispatchResult> {
   const useFanout = Deno.env.get('DUAL_SWAP_FANOUT') === 'true';
 
@@ -137,6 +140,7 @@ export async function dispatchDualFaceSwap(
         leftGender: genders?.left ?? null,
         rightGender: genders?.right ?? null,
         traceId: traceId ?? null,
+        genderOverride: genderOverride ?? null,
       }),
     });
 

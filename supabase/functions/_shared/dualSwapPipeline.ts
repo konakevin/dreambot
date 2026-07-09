@@ -32,12 +32,16 @@ export interface DualSwapDeps {
    * gender, splits at the gap, and routes each source to its matching face).
    * Returns the swapped url, or null when there was no clean 2-face split.
    */
-  dispatchDual: (target: string) => Promise<{
+  dispatchDual: (
+    target: string,
+    genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
+  ) => Promise<{
     swappedUrl: string | null;
     faceCount: number;
     engine?: string;
     swapMs?: number;
     rejectReason?: string | null;
+    identity?: { left: number | null; right: number | null; ms: number } | null;
   }>;
   /** Single-swap one source onto the dominant face (the gender-safe degrade). */
   singleSwap: (source: string, target: string) => Promise<string>;
@@ -48,6 +52,15 @@ export interface DualSwapDeps {
   rerender: (attempt: number) => Promise<{ url: string; predictionId?: string }>;
   /** The user's own face URL — the gender-safe source for a single-swap degrade. */
   selfSource: string;
+  /** R2 (2026-07-09): one Haiku vision read of the RENDERED faces' genders,
+   *  consulted only after a gender_unconfirmed reject — genderage misreads
+   *  athletes/wet hair/mid-spin where Haiku reads fine (5/11 depth-QA rejects).
+   *  Returning distinct left/right genders re-dispatches the SAME target with
+   *  the override; anything else falls through to the re-render ladder. */
+  confirmGenders?: (target: string) => Promise<{
+    left: 'male' | 'female' | null;
+    right: 'male' | 'female' | null;
+  } | null>;
   log?: (msg: string) => void;
 }
 
@@ -73,6 +86,30 @@ export interface DualSwapOutcome {
 // stop re-rendering and degrade — so a backed-up/slow system sheds load.
 const RECOVER_BUDGET_MS = 85_000;
 
+/**
+ * Stage 8c (2026-07-09): identity enforcement threshold. When the secret is a
+ * number, a delivered dual whose min per-face ArcFace sim is below it is
+ * treated as a reject (→ the re-render ladder tries for a better take). Unset
+ * → shadow (measure + log only). Owner-calibrated at 0.35 across all 9 live
+ * face-swap mediums on production prompts (identity-calibration + identity-
+ * stylized benches). typeof guard: this module also runs under jest.
+ */
+function identityThreshold(): number | null {
+  if (typeof Deno === 'undefined') return null;
+  const raw = Deno.env.get('IDENTITY_MIN_SIM');
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 && n < 1 ? n : null;
+}
+
+/** Min per-face sim; a MISSING side scores 0 (the skiing-4 rule: a face the
+ *  verifier measured-and-found-absent is a failed face). BOTH sides null =
+ *  the measurement itself didn't happen → null (fail-open). */
+function minIdentity(id: { left: number | null; right: number | null }): number | null {
+  if (id.left === null && id.right === null) return null;
+  return Math.min(id.left ?? 0, id.right ?? 0);
+}
+
 export async function genderSafeDualSwap(
   renderUrl: string,
   deps: DualSwapDeps,
@@ -84,6 +121,9 @@ export async function genderSafeDualSwap(
   let target = renderUrl;
   let predictionId: string | null = null;
   let faceCount = 2;
+  // Best sub-threshold dual seen (Stage 8c) — shipped at exhaustion in
+  // preference to any degrade path.
+  let best: { url: string; faceCount: number; minSim: number; attempt: number } | null = null;
 
   const haveBudget = (): boolean => {
     if (!opts.deadlineMs) return true;
@@ -121,6 +161,30 @@ export async function genderSafeDualSwap(
     };
     try {
       res = await deps.dispatchDual(target);
+      // R2: a gender_unconfirmed reject means genderage couldn't read one-of-each
+      // on the rendered faces. Before burning a re-render, ask Haiku to read the
+      // SAME render once; a confirmed one-of-each re-dispatches with the override
+      // (costs ~$0.002 + one swap, saves a 30-60s re-render). Any other read —
+      // null, same-gender, unreadable — falls through to the ladder as before.
+      if (
+        !res.swappedUrl &&
+        res.rejectReason?.startsWith('gender_unconfirmed') &&
+        deps.confirmGenders
+      ) {
+        try {
+          const read = await deps.confirmGenders(target);
+          if (read && read.left && read.right && read.left !== read.right) {
+            reasons.push(`gender_confirm_haiku:${read.left}/${read.right}`);
+            log(`haiku confirmed genders ${read.left}/${read.right} — re-dispatch with override`);
+            res = await deps.dispatchDual(target, { left: read.left, right: read.right });
+          } else {
+            reasons.push('gender_confirm_haiku_unresolved');
+          }
+        } catch (e) {
+          reasons.push('gender_confirm_haiku_error');
+          log(`gender confirm failed: ${(e as Error).message}`);
+        }
+      }
     } catch (e) {
       // Engine / swap error → retry within budget (a fresh render usually clears it).
       log(`dual swap error: ${(e as Error).message}`);
@@ -138,6 +202,28 @@ export async function genderSafeDualSwap(
       // accrues in production forensics before any enforcement flips).
       if (res.identity)
         reasons.push(`identity_sim:L${res.identity.left ?? '?'}/R${res.identity.right ?? '?'}`);
+
+      // Stage 8c enforcement: a measured dual below the identity threshold is
+      // a QUALITY reject — try the ladder for a better take. We KEEP the best
+      // sub-threshold dual and ship it at exhaustion: a weak dual still beats
+      // a degrade (never worse than pre-enforcement behavior). Fail-open when
+      // the measurement itself is absent (infra error / shadow off).
+      const thr = identityThreshold();
+      const min = res.identity ? minIdentity(res.identity) : null;
+      if (thr !== null && min !== null && min < thr) {
+        reasons.push(`identity_below_threshold:${min}<${thr}`);
+        log(`identity below threshold (min=${min} < ${thr}) — re-render`);
+        if (!best || min > best.minSim) {
+          best = {
+            url: res.swappedUrl,
+            faceCount,
+            minSim: min,
+            attempt: attempt + 1,
+          };
+        }
+        continue;
+      }
+
       reasons.push(`dual_attempts:${attempt + 1}`);
       if (typeof res.swapMs === 'number') reasons.push(`dual_swap_ms:${res.swapMs}`);
       return { url: res.swappedUrl, outcome: 'dual', faceCount, predictionId, reasons };
@@ -152,6 +238,14 @@ export async function genderSafeDualSwap(
   }
 
   // ── Could not deliver a verified dual ──
+  // Stage 8c: a sub-threshold dual in hand beats every degrade — both faces
+  // are at least PRESENT and gender-routed; the threshold miss is a likeness
+  // quality miss, not a safety failure.
+  if (best) {
+    reasons.push(`identity_shipped_best:${best.minSim}(attempt ${best.attempt})`);
+    log(`identity enforcement exhausted — shipping best dual (min=${best.minSim})`);
+    return { url: best.url, outcome: 'dual', faceCount: best.faceCount, predictionId, reasons };
+  }
   if (opts.strict) {
     reasons.push('dual_degrade_cascade');
     return { url: target, outcome: 'cascade', faceCount, predictionId, reasons };

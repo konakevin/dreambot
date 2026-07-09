@@ -50,6 +50,9 @@ interface RequestBody {
    *  matching-gender detected face (dynamic-split path). */
   leftGender?: 'male' | 'female' | null;
   rightGender?: 'male' | 'female' | null;
+  /** R2: Haiku-confirmed genders of the RENDERED faces (left/right by
+   *  x-order) — substitutes for genderage on this attempt. */
+  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null;
 }
 
 const CORS_HEADERS = {
@@ -245,6 +248,7 @@ Deno.serve({ port: PORT }, async (req) => {
     skipPrimary,
     leftGender,
     rightGender,
+    genderOverride,
   } = body;
   if (!targetUrl || !leftSourceUrl || !rightSourceUrl || !userId) {
     return new Response(JSON.stringify({ error: 'Missing required field' }), {
@@ -278,7 +282,8 @@ Deno.serve({ port: PORT }, async (req) => {
       userId,
       effectiveDeadlineMs,
       skipPrimary ?? false,
-      { left: leftGender ?? null, right: rightGender ?? null }
+      { left: leftGender ?? null, right: rightGender ?? null },
+      genderOverride ?? null
     );
     const elapsed = Date.now() - t0;
     // swappedUrl=null is NOT an error — the render had no clean 2-face split, so

@@ -95,3 +95,200 @@ it('non-strict, dual fails AND single fails → cascade', async () => {
   const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 0 });
   expect(r.outcome).toBe('cascade');
 });
+
+// ── Stage 8c — identity enforcement (IDENTITY_MIN_SIM) ──────────────────────
+// The pipeline reads the threshold from Deno.env, which doesn't exist under
+// jest → identityThreshold() returns null → these tests exercise the SHADOW
+// (no-enforcement) behavior unless we polyfill Deno.
+
+describe('identity enforcement (Stage 8c)', () => {
+  const withDeno = (value: string | undefined, fn: () => Promise<void>) => async () => {
+    (globalThis as Record<string, unknown>).Deno = {
+      env: { get: (k: string) => (k === 'IDENTITY_MIN_SIM' ? value : undefined) },
+    };
+    try {
+      await fn();
+    } finally {
+      delete (globalThis as Record<string, unknown>).Deno;
+    }
+  };
+
+  it(
+    'below-threshold dual → re-render; a passing take ships',
+    withDeno('0.35', async () => {
+      const dispatchDual = jest
+        .fn()
+        .mockResolvedValueOnce({
+          swappedUrl: 'WEAK.jpg',
+          faceCount: 2,
+          identity: { left: 0.6, right: 0.1, ms: 900 },
+        })
+        .mockResolvedValueOnce({
+          swappedUrl: 'GOOD.jpg',
+          faceCount: 2,
+          identity: { left: 0.62, right: 0.55, ms: 900 },
+        });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(r.outcome).toBe('dual');
+      expect(r.url).toBe('GOOD.jpg');
+      expect(r.reasons.some((x) => x.startsWith('identity_below_threshold:'))).toBe(true);
+      expect(deps.rerender).toHaveBeenCalledTimes(1);
+    })
+  );
+
+  it(
+    'every attempt below threshold → ships the BEST sub-threshold dual, not a degrade',
+    withDeno('0.35', async () => {
+      const dispatchDual = jest
+        .fn()
+        .mockResolvedValueOnce({
+          swappedUrl: 'A.jpg',
+          faceCount: 2,
+          identity: { left: 0.2, right: 0.1, ms: 900 },
+        })
+        .mockResolvedValueOnce({
+          swappedUrl: 'B.jpg',
+          faceCount: 2,
+          identity: { left: 0.3, right: 0.25, ms: 900 }, // best
+        })
+        .mockResolvedValueOnce({
+          swappedUrl: 'C.jpg',
+          faceCount: 2,
+          identity: { left: 0.15, right: 0.2, ms: 900 },
+        });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(r.outcome).toBe('dual');
+      expect(r.url).toBe('B.jpg');
+      expect(r.reasons.some((x) => x.startsWith('identity_shipped_best:0.25'))).toBe(true);
+      expect(deps.singleSwap).not.toHaveBeenCalled();
+    })
+  );
+
+  it(
+    'a MISSING side counts as 0 (skiing-4 rule) → reject',
+    withDeno('0.35', async () => {
+      const dispatchDual = jest
+        .fn()
+        .mockResolvedValueOnce({
+          swappedUrl: 'ONEFACE.jpg',
+          faceCount: 2,
+          identity: { left: 0.6, right: null, ms: 900 },
+        })
+        .mockResolvedValueOnce({
+          swappedUrl: 'GOOD.jpg',
+          faceCount: 2,
+          identity: { left: 0.5, right: 0.5, ms: 900 },
+        });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(r.url).toBe('GOOD.jpg');
+    })
+  );
+
+  it(
+    'BOTH sides null = measurement absent → fail-open, ships as today',
+    withDeno('0.35', async () => {
+      const dispatchDual = jest.fn().mockResolvedValueOnce({
+        swappedUrl: 'SWAP.jpg',
+        faceCount: 2,
+        identity: { left: null, right: null, ms: 900 },
+      });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(r.url).toBe('SWAP.jpg');
+      expect(deps.rerender).not.toHaveBeenCalled();
+    })
+  );
+
+  it(
+    'threshold unset → shadow: weak dual ships untouched',
+    withDeno(undefined, async () => {
+      const dispatchDual = jest.fn().mockResolvedValueOnce({
+        swappedUrl: 'WEAK.jpg',
+        faceCount: 2,
+        identity: { left: 0.1, right: 0.05, ms: 900 },
+      });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+      expect(r.url).toBe('WEAK.jpg');
+      expect(deps.rerender).not.toHaveBeenCalled();
+    })
+  );
+});
+
+// ── R2 — Haiku gender-confirm fallback ──────────────────────────────────────
+
+describe('gender-confirm fallback (R2)', () => {
+  it('gender_unconfirmed reject + Haiku confirms one-of-each → re-dispatch with override, same target', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({
+        swappedUrl: null,
+        faceCount: 2,
+        rejectReason: 'gender_unconfirmed:male/male',
+      })
+      .mockResolvedValueOnce({ swappedUrl: 'OVERRIDE.jpg', faceCount: 2 });
+    const confirmGenders = jest.fn().mockResolvedValue({ left: 'male', right: 'female' });
+    const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.outcome).toBe('dual');
+    expect(r.url).toBe('OVERRIDE.jpg');
+    expect(confirmGenders).toHaveBeenCalledWith('render.jpg');
+    expect(dispatchDual).toHaveBeenNthCalledWith(2, 'render.jpg', {
+      left: 'male',
+      right: 'female',
+    });
+    expect(deps.rerender).not.toHaveBeenCalled(); // no re-render burned
+    expect(r.reasons).toContain('gender_confirm_haiku:male/female');
+  });
+
+  it('Haiku reads same-gender → unresolved, falls through to the re-render ladder', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({
+        swappedUrl: null,
+        faceCount: 2,
+        rejectReason: 'gender_unconfirmed:male/male',
+      })
+      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
+    const confirmGenders = jest.fn().mockResolvedValue({ left: 'male', right: 'male' });
+    const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.url).toBe('FRESH.jpg');
+    expect(deps.rerender).toHaveBeenCalledTimes(1);
+    expect(r.reasons).toContain('gender_confirm_haiku_unresolved');
+  });
+
+  it('confirm throws → reason logged, ladder continues (fail-open)', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({
+        swappedUrl: null,
+        faceCount: 2,
+        rejectReason: 'gender_unconfirmed:female/female',
+      })
+      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
+    const confirmGenders = jest.fn().mockRejectedValue(new Error('vision down'));
+    const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.url).toBe('FRESH.jpg');
+    expect(r.reasons).toContain('gender_confirm_haiku_error');
+  });
+
+  it('no_split rejects do NOT trigger the confirm (wrong failure class)', async () => {
+    const dispatchDual = jest
+      .fn()
+      .mockResolvedValueOnce({
+        swappedUrl: null,
+        faceCount: 1,
+        rejectReason: 'no_split:lt2_faces',
+      })
+      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
+    const confirmGenders = jest.fn();
+    const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
+    await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(confirmGenders).not.toHaveBeenCalled();
+  });
+});

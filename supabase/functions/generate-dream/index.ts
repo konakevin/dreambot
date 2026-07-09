@@ -18,7 +18,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
 import { buildReimaginePrompt } from '../_shared/photoPrompts.ts';
-import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { describeWithVision, VISION_PROMPTS, classifyDualGenders } from '../_shared/vision.ts';
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { genderFromLock } from '../_shared/genderLock.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
@@ -1652,7 +1652,7 @@ Output ONLY the prompt.`;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
-          dispatchDual: (target) =>
+          dispatchDual: (target, genderOverride) =>
             dispatchDualFaceSwap(
               s0.sourceUrl,
               s1.sourceUrl,
@@ -1663,8 +1663,13 @@ Output ONLY the prompt.`;
               t0 + 140_000,
               false,
               { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) },
-              jobId
+              jobId,
+              genderOverride ?? null
             ),
+          confirmGenders: async (target) => {
+            const r = await classifyDualGenders(target, REPLICATE_TOKEN);
+            return { left: r.left, right: r.right };
+          },
           singleSwap: (source, target) =>
             faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
           rerender: async (attempt: number) => {

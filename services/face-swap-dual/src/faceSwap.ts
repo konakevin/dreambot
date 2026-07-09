@@ -830,7 +830,13 @@ export async function dualFaceSwap(
   userId: string,
   deadlineMs?: number,
   skipPrimary = false,
-  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null }
+  genders?: { left?: 'male' | 'female' | null; right?: 'male' | 'female' | null },
+  // R2 (2026-07-09): caller-supplied read of the RENDERED faces' genders
+  // (left/right by x-order), from a Haiku vision confirm after a
+  // gender_unconfirmed reject. Substitutes for genderage on THIS attempt —
+  // genderage misreads athletes/stylized faces where Haiku reads fine
+  // (2026-07-08 action bench: 5/11 rejects were genderage misreads).
+  genderOverride?: { left: 'male' | 'female'; right: 'male' | 'female' } | null
 ): Promise<DualSwapResult> {
   const deadline = deadlineMs ?? Date.now() + DEFAULT_MAX_WAIT_MS + 15_000;
   const dynamicSplit = Deno.env.get('DUAL_SWAP_DYNAMIC_SPLIT') === 'true';
@@ -873,26 +879,28 @@ export async function dualFaceSwap(
         // COMPOSITE path, which crops + swaps + composites each face independently.
         const fL = split.leftBox as GenderedFace;
         const fR = split.rightBox as GenderedFace;
+        const gL = genderOverride?.left ?? fL.gender;
+        const gR = genderOverride?.right ?? fR.gender;
         let lSrc = leftSourceUrl;
         let rSrc = rightSourceUrl;
         const mixed =
           (genders?.left === 'male' && genders?.right === 'female') ||
           (genders?.left === 'female' && genders?.right === 'male');
         if (mixed) {
-          if (!(fL.gender && fR.gender && fL.gender !== fR.gender)) {
+          if (!(gL && gR && gL !== gR)) {
             console.log(
-              `[dualFaceSwap] per-face: mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
+              `[dualFaceSwap] per-face: mixed cast but detected genders ${gL}/${gR}${genderOverride ? ' (override)' : ''} — re-render`
             );
             return {
               swappedUrl: null,
               faceCount,
-              reason: `gender_unconfirmed:${fL.gender ?? '?'}/${fR.gender ?? '?'}`,
+              reason: `gender_unconfirmed:${gL ?? '?'}/${gR ?? '?'}`,
             };
           }
           const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
           const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;
-          lSrc = fL.gender === 'male' ? maleSrc : femaleSrc;
-          rSrc = fL.gender === 'male' ? femaleSrc : maleSrc;
+          lSrc = gL === 'male' ? maleSrc : femaleSrc;
+          rSrc = gL === 'male' ? femaleSrc : maleSrc;
         }
         const perFaceBudgetMs = Math.max(deadline - Date.now() - 15_000, 20_000);
         const composedUrl = await perFaceCompositeSwap(
@@ -919,26 +927,28 @@ export async function dualFaceSwap(
       }
       const fL = split.leftBox as GenderedFace;
       const fR = split.rightBox as GenderedFace;
+      const gL = genderOverride?.left ?? fL.gender;
+      const gR = genderOverride?.right ?? fR.gender;
       const mixedCast =
         (genders?.left === 'male' && genders?.right === 'female') ||
         (genders?.left === 'female' && genders?.right === 'male');
       if (mixedCast) {
         // Detected faces must read one-of-each, else we can't place correctly
         // (genderage misread, or the render produced two same-gender bodies) → re-render.
-        if (!(fL.gender && fR.gender && fL.gender !== fR.gender)) {
+        if (!(gL && gR && gL !== gR)) {
           console.log(
-            `[dualFaceSwap] mixed cast but detected genders ${fL.gender}/${fR.gender} — re-render`
+            `[dualFaceSwap] mixed cast but detected genders ${gL}/${gR}${genderOverride ? ' (override)' : ''} — re-render`
           );
           return {
             swappedUrl: null,
             faceCount,
-            reason: `gender_unconfirmed:${fL.gender ?? '?'}/${fR.gender ?? '?'}`,
+            reason: `gender_unconfirmed:${gL ?? '?'}/${gR ?? '?'}`,
           };
         }
         const maleSrc = genders!.left === 'male' ? leftSourceUrl : rightSourceUrl;
         const femaleSrc = genders!.left === 'female' ? leftSourceUrl : rightSourceUrl;
-        leftSrc = fL.gender === 'male' ? maleSrc : femaleSrc;
-        rightSrc = fL.gender === 'male' ? femaleSrc : maleSrc;
+        leftSrc = gL === 'male' ? maleSrc : femaleSrc;
+        rightSrc = gL === 'male' ? femaleSrc : maleSrc;
       } // else same-sex / unknown → positional (leftSource→left face by x-order)
       leftW = Math.min(W, split.splitX + split.overlap);
       rightStart = Math.max(0, split.splitX - split.overlap);
