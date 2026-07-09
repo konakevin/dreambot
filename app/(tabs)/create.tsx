@@ -601,8 +601,8 @@ export default function CreateScreen() {
   const placeholder = effectiveExactPrompt
     ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, mediums, or vibes in Direct mode.'
     : hasPhoto
-      ? "Set the scene and we'll dream you into it. A glowing forest at dusk? Coffee in a Paris café?"
-      : 'Describe any dream. Say "me" or "my partner" to paint your Dream Cast in, or leave blank for a surprise.';
+      ? "Set the scene and we'll dream you into it. A glowing forest at dusk? Coffee in a Paris café? Leave blank and we'll pick the scene."
+      : 'Describe any dream. Say "me" or "my partner" to paint your Dream Cast in, or leave blank and DreamBot dreams one up for you.';
 
   // Process a picked/captured image asset
   async function processPhotoAsset(asset: ImagePicker.ImagePickerAsset) {
