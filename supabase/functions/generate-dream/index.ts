@@ -506,9 +506,20 @@ async function handleRequest(req: Request): Promise<Response> {
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
+    // Price backstop (mirrors enqueue-dream): a solo-swap photo renders the
+    // exact-face swap identically on BOTH tiers — never charge Ultra for it.
+    const newSceneSoloSwap =
+      isNewScenePhoto && newSceneTierReq
+        ? routeNewSceneSubject({
+            type: typeof body.subject_type === 'string' ? body.subject_type : '',
+            num_people: typeof num_people === 'number' ? num_people : 0,
+            num_animals: typeof num_animals === 'number' ? num_animals : 0,
+            face: typeof face === 'string' ? face : '',
+          }).mode === 'solo_swap'
+        : false;
     const dreamCost =
       isNewScenePhoto && newSceneTierReq
-        ? newSceneTierReq === 'best'
+        ? newSceneTierReq === 'best' && !newSceneSoloSwap
           ? cfg.newScenePriceBest
           : cfg.newScenePriceStandard
         : force_model

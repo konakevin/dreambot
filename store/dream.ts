@@ -9,8 +9,19 @@
  */
 
 import { create } from 'zustand';
+import type { PhotoClassification } from '@/lib/dreamApi';
 
 export type DreamFlowMode = 'surprise' | 'photo' | 'prompt';
+
+/** classify-photo result for the CURRENTLY attached photo, resolved at ATTACH
+ *  time (fire-and-forget from the Create screen) so the UI can adapt to the
+ *  render branch before submit (hide the moot Quality tier on solo-swap photos,
+ *  early group-size feedback). `uri` ties it to config.photoUri — a photo swap
+ *  makes it stale and useDreamCreate falls back to classifying inline. */
+export interface AttachedPhotoClassification {
+  uri: string;
+  classification: PhotoClassification;
+}
 
 /**
  * Photo modes — set by user toggle on the Create screen when a photo is attached.
@@ -105,8 +116,11 @@ interface DreamStore {
   activeJobFailure: DreamFailure | null;
   // One-shot "Dream this again" hand-off to the Create screen (see CreatePreset).
   pendingCreatePreset: CreatePreset | null;
+  // Attach-time classify-photo result for the current photo (see the type doc).
+  photoClassification: AttachedPhotoClassification | null;
   // Actions
   setPendingCreatePreset: (preset: CreatePreset | null) => void;
+  setPhotoClassification: (value: AttachedPhotoClassification | null) => void;
   setMode: (mode: DreamFlowMode) => void;
   setPhoto: (base64: string, uri: string) => void;
   setPhotoStyle: (style: PhotoStyle) => void;
@@ -150,11 +164,18 @@ export const useDreamStore = create<DreamStore>((set) => ({
   activeJobId: null,
   activeJobFailure: null,
   pendingCreatePreset: null,
+  photoClassification: null,
 
   setPendingCreatePreset: (preset) => set({ pendingCreatePreset: preset }),
-  setMode: (mode) => set((s) => ({ config: { ...s.config, mode } })),
+  setPhotoClassification: (value) => set({ photoClassification: value }),
+  // A new photo invalidates the previous photo's classification immediately —
+  // the attach-time classify writes the fresh one when (and if) it lands.
   setPhoto: (base64, uri) =>
-    set((s) => ({ config: { ...s.config, photoBase64: base64, photoUri: uri, mode: 'photo' } })),
+    set((s) => ({
+      config: { ...s.config, photoBase64: base64, photoUri: uri, mode: 'photo' },
+      photoClassification: null,
+    })),
+  setMode: (mode) => set((s) => ({ config: { ...s.config, mode } })),
   setPhotoStyle: (style) => set((s) => ({ config: { ...s.config, photoStyle: style } })),
   setNewSceneTier: (tier) => set((s) => ({ config: { ...s.config, newSceneTier: tier } })),
   setMedium: (key) => set((s) => ({ config: { ...s.config, selectedMedium: key } })),
@@ -175,6 +196,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
         photoStyle: 'new_scene',
         newSceneTier: 'standard',
       },
+      photoClassification: null,
     })),
   setActiveJobId: (id) => set({ activeJobId: id }),
   setActiveJobFailure: (failure) => set({ activeJobFailure: failure }),
@@ -185,5 +207,6 @@ export const useDreamStore = create<DreamStore>((set) => ({
       activeJobId: null,
       activeJobFailure: null,
       pendingCreatePreset: null,
+      photoClassification: null,
     }),
 }));

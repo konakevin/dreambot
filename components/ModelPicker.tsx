@@ -406,9 +406,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 10,
   },
+  // Eyebrow treatment — matches components/FormLabel.tsx (the Create form's
+  // unified row-label style).
   pillLabel: {
-    fontSize: fontScale(12),
-    fontWeight: '500',
+    fontSize: fontScale(11),
+    fontWeight: '700',
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
     marginBottom: verticalScale(6),
     marginLeft: 4,
   },

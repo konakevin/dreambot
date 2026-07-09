@@ -40,6 +40,7 @@ import {
 } from '@/lib/dreamApi';
 import { DREAM_QUEUE_ENABLED } from '@/constants/features';
 import { markDreamInFlight } from '@/lib/dreamInFlightMarker';
+import { isSoloSwapPhoto } from '@/lib/newSceneRoute';
 import type { DreamMedium } from '@/hooks/useDreamStyles';
 
 type GenerateStatus =
@@ -76,7 +77,12 @@ export function useDreamCreate() {
     const isRestyle = !!cfg.photoUri && cfg.photoStyle === 'restyle';
     const isNewScenePhoto = !!cfg.photoUri && cfg.photoStyle === 'new_scene';
     if (isNewScenePhoto) {
-      return cfg.newSceneTier === 'best'
+      // Solo-swap photos always price Standard (tier is moot on that branch —
+      // mirrors the create screen's hidden toggle + the payload's forced tier).
+      const attached = useDreamStore.getState().photoClassification;
+      const soloSwap =
+        !!attached && attached.uri === cfg.photoUri && isSoloSwapPhoto(attached.classification);
+      return cfg.newSceneTier === 'best' && !soloSwap
         ? engineConfig.newScenePriceBest
         : engineConfig.newScenePriceStandard;
     }
@@ -171,7 +177,16 @@ export function useDreamCreate() {
         try {
           const croppedBase64 = await cropToPortrait(config.photoUri);
           preparedRefUrl = `data:image/jpeg;base64,${croppedBase64}`;
-          classification = await classifyPhoto(preparedRefUrl);
+          // Reuse the attach-time classification when it's for THIS photo
+          // (create.tsx classifies on attach so the screen can adapt pre-
+          // submit) — skips a vision round-trip on the critical path. Falls
+          // back to classifying inline if it's missing/stale (attach classify
+          // failed, or the user hit Dream before it landed).
+          const attached = useDreamStore.getState().photoClassification;
+          classification =
+            attached && attached.uri === config.photoUri
+              ? attached.classification
+              : await classifyPhoto(preparedRefUrl);
           if (__DEV__) console.log('[useDreamCreate] classification:', classification.type);
 
           // Group-size cap (NEW_SCENE_QUALITY_PLAN.md): New Scene keeps up to N
@@ -271,10 +286,18 @@ export function useDreamCreate() {
               num_people: classification?.num_people,
               num_animals: classification?.num_animals,
               face: classification?.face,
-              // Likeness tier from the Create-screen toggle (Standard vs Best).
+              // Quality tier from the Create-screen toggle (Standard vs Ultra).
               // Only sent alongside the classification signals so the server
-              // reference path stays fully client-gated.
-              new_scene_tier: classification ? config.newSceneTier : undefined,
+              // reference path stays fully client-gated. Solo-swap photos force
+              // Standard: that branch renders the exact-face swap identically on
+              // both tiers, so Ultra would charge more for the same result (the
+              // create screen hides the toggle; enqueue-dream backstops the
+              // price server-side too).
+              new_scene_tier: classification
+                ? isSoloSwapPhoto(classification)
+                  ? 'standard'
+                  : config.newSceneTier
+                : undefined,
               job_id: jobId,
               style_prompt: config.stylePrompt || undefined,
               dlt_recipe: config.dltRecipe ?? undefined,

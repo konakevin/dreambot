@@ -68,6 +68,10 @@ import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
+import { classifyPhoto } from '@/lib/dreamApi';
+import { cropToPortrait } from '@/lib/cropPhoto';
+import { isSoloSwapPhoto } from '@/lib/newSceneRoute';
+import { FormLabel } from '@/components/FormLabel';
 
 // Sticky medium/vibe — last explicit Create-tab pick, remembered across app
 // launches (local, like the useExactPrompt toggle; the model has its own DB
@@ -90,6 +94,8 @@ export default function CreateScreen() {
   const setNewSceneTier = useDreamStore((s) => s.setNewSceneTier);
   const setUseExactPrompt = useDreamStore((s) => s.setUseExactPrompt);
   const setForceModel = useDreamStore((s) => s.setForceModel);
+  const setPhotoClassification = useDreamStore((s) => s.setPhotoClassification);
+  const photoClassification = useDreamStore((s) => s.photoClassification);
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
   const { data: dbMediums = [] } = useDreamMediums();
@@ -471,12 +477,40 @@ export default function CreateScreen() {
   const vibeLabel =
     vibeOptions.find((v) => v.key === config.selectedVibe)?.label ?? config.selectedVibe;
   const modelLabel = imageModels.find((m) => m.id === selectedModelId)?.label ?? 'Flux 1.1 Pro';
+  // Attach-time classification for the CURRENT photo (null while the classify
+  // is in flight or if it failed — the UI then shows the default controls).
+  // Solo-swap photos render identically on both Quality tiers (the tier only
+  // picks a reference model, which the solo-swap path never uses), so the
+  // Quality toggle hides and the price is always Standard.
+  const attachedClassification =
+    photoClassification && photoClassification.uri === config.photoUri
+      ? photoClassification.classification
+      : null;
+  const soloSwapPhoto = !!attachedClassification && isSoloSwapPhoto(attachedClassification);
+  const overPeopleCap =
+    !!attachedClassification && attachedClassification.num_people > engineConfig.newSceneMaxPeople;
   // Compact one-line summary of the collapsed engine controls, shown while the
   // keyboard is up so the prompt can take the freed vertical space. Text dreams
   // fold Model + Mode; New Scene folds the mode toggle + likeness tier.
-  const collapsedEngineSummary = isNewScene
-    ? `New Scene · ${config.newSceneTier === 'best' ? 'Best likeness' : 'Standard'}`
-    : `${modelLabel} · ${config.useExactPrompt ? 'Direct' : 'DreamBot'}`;
+  // Label + value segments so the compact row keeps the expanded form's row
+  // labels ("what am I looking at" without expanding — Kevin 2026-07-08).
+  const collapsedEngineSegments: { label: string; value: string }[] = isNewScene
+    ? [
+        { label: 'Mode', value: 'New Scene' },
+        // Solo-swap photos have no Quality tier (the row is hidden) — omit it.
+        ...(soloSwapPhoto
+          ? []
+          : [
+              {
+                label: 'Quality',
+                value: config.newSceneTier === 'best' ? 'Ultra' : 'Standard',
+              },
+            ]),
+      ]
+    : [
+        { label: 'Model', value: modelLabel },
+        { label: 'Engine', value: config.useExactPrompt ? 'Direct' : 'DreamBot' },
+      ];
   // Phone: the prompt is the last field and stretches down to the Dream CTA
   // (keyboard-up: down to the keyboard). iPad keeps its centered fixed-height
   // card, so it opts out.
@@ -497,8 +531,10 @@ export default function CreateScreen() {
   // mediums (LEGO/Vinyl) send no force_model and stay at the flat base cost.
   const sparkleCost = isNewScene
     ? // New Scene is flat-priced by tier server-side (the model picker doesn't
-      // apply); Best-likeness routes to Nano Banana Pro at the higher price.
-      config.newSceneTier === 'best'
+      // apply); Ultra routes to Nano Banana Pro at the higher price. Solo-swap
+      // photos always price Standard (the tier does nothing on that branch —
+      // useDreamCreate + enqueue-dream both force it).
+      config.newSceneTier === 'best' && !soloSwapPhoto
       ? engineConfig.newScenePriceBest
       : engineConfig.newScenePriceStandard
     : isRestyle
@@ -585,8 +621,28 @@ export default function CreateScreen() {
         return;
       }
       setPhoto(compressed.base64, compressed.uri);
+      void classifyAttachedPhoto(compressed.uri);
     } catch {
       Toast.show('Could not process photo', 'close-circle');
+    }
+  }
+
+  // Classify at ATTACH time (moved off the Dream-press path 2026-07-08) so the
+  // screen knows the New Scene render branch while the user is still composing:
+  // solo-swap photos hide the moot Quality tier, over-cap groups get feedback
+  // before they invest in a prompt, and submit skips this vision round-trip.
+  // Fire-and-forget: on failure (or a race with Dream-press) useDreamCreate
+  // classifies inline exactly as before. The uri check drops stale results if
+  // the user swapped photos while this was in flight.
+  async function classifyAttachedPhoto(uri: string) {
+    try {
+      const croppedBase64 = await cropToPortrait(uri);
+      const classification = await classifyPhoto(`data:image/jpeg;base64,${croppedBase64}`);
+      if (useDreamStore.getState().config.photoUri === uri) {
+        setPhotoClassification({ uri, classification });
+      }
+    } catch {
+      // Silent by design — the submit path classifies inline as a fallback.
     }
   }
 
@@ -842,6 +898,11 @@ export default function CreateScreen() {
               so the prompt can take the freed space. */}
             {hasPhoto && !kbOpen && (
               <View className="mb-3">
+                {/* Row label — matches the Medium/Vibe label style so every
+                  control row on the form reads consistently (Kevin 2026-07-08). */}
+                <View className="flex-row items-center mb-1.5 ml-1">
+                  <FormLabel>Photo mode</FormLabel>
+                </View>
                 <View
                   className="flex-row rounded-xl p-1"
                   style={{
@@ -930,11 +991,35 @@ export default function CreateScreen() {
                     : 'Repaints your photo, keeping its composition.'}
                 </Text>
 
-                {/* New Scene — likeness tier (Standard vs Best-likeness / Nano
-                  Banana Pro), which the server maps to the reference model +
-                  price. */}
-                {config.photoStyle === 'new_scene' && (
+                {/* Early group-size feedback (attach-time classification): the
+                  submit path hard-blocks over-cap photos pre-charge; surfacing
+                  it here saves the user from composing a prompt first. */}
+                {config.photoStyle === 'new_scene' && overPeopleCap && (
+                  <Text
+                    className="mt-1.5 px-1"
+                    style={{
+                      color: '#FBBF24',
+                      fontSize: fontScale(12.5),
+                      lineHeight: fontScale(17),
+                    }}
+                  >
+                    New Scene keeps up to {engineConfig.newSceneMaxPeople} people looking like
+                    themselves. Restyle keeps your whole group.
+                  </Text>
+                )}
+
+                {/* New Scene — quality tier (Standard vs Ultra / Nano Banana
+                  Pro), which the server maps to the reference model + price.
+                  HIDDEN for solo-swap photos: that branch renders the exact-face
+                  swap on both tiers, so the toggle would charge more for the
+                  same result (always priced Standard instead). */}
+                {config.photoStyle === 'new_scene' && !soloSwapPhoto && (
                   <View className="mt-3">
+                    {/* Row label — "Quality" not "Likeness": objects/scenery have
+                      no likeness, and quality is the dimension both tiers share. */}
+                    <View className="flex-row items-center mb-1.5 ml-1">
+                      <FormLabel>Quality</FormLabel>
+                    </View>
                     <View
                       className="flex-row rounded-xl p-1"
                       style={{
@@ -951,7 +1036,7 @@ export default function CreateScreen() {
                         },
                         {
                           tier: 'best' as const,
-                          label: 'Best likeness',
+                          label: 'Ultra',
                           price: engineConfig.newScenePriceBest,
                         },
                       ].map((opt) => {
@@ -1038,9 +1123,7 @@ export default function CreateScreen() {
                 {/* Mode label + contextual info icon (DreamBot → medium sheet,
                   Direct → Direct explainer). */}
                 <View className="flex-row items-center mb-1.5 ml-1">
-                  <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
-                    Mode
-                  </Text>
+                  <FormLabel>Mode</FormLabel>
                   <TouchableOpacity
                     onPress={handleModeInfo}
                     activeOpacity={0.6}
@@ -1124,20 +1207,34 @@ export default function CreateScreen() {
                   Keyboard.dismiss();
                 }}
                 activeOpacity={0.7}
-                className="flex-row items-center justify-between px-4 py-3 rounded-xl mb-4"
+                // py-2 (not py-3): the stacked label+value columns add a line of
+                // height, so tighter padding keeps the row near its old size.
+                className="flex-row items-center justify-between px-4 py-2 rounded-xl mb-4"
                 style={{
                   backgroundColor: colors.surface,
                   borderWidth: 1,
                   borderColor: colors.border,
                 }}
               >
-                <Text
-                  className="text-sm font-semibold flex-shrink mr-2"
-                  style={{ color: colors.textPrimary }}
-                  numberOfLines={1}
-                >
-                  {collapsedEngineSummary}
-                </Text>
+                {/* Stacked label-over-value columns — the old inline
+                  "Model Flux 1.1 Pro · Engine DreamBot" run-on blurred labels
+                  into values (Kevin 2026-07-09). */}
+                <View className="flex-row items-center flex-shrink mr-2" style={{ gap: 20 }}>
+                  {collapsedEngineSegments.map((seg) => (
+                    <View key={seg.label} style={{ flexShrink: 1 }}>
+                      <FormLabel style={{ fontSize: fontScale(9.5), letterSpacing: 1 }}>
+                        {seg.label}
+                      </FormLabel>
+                      <Text
+                        className="text-sm font-semibold"
+                        style={{ color: colors.textPrimary, marginTop: verticalScale(2) }}
+                        numberOfLines={1}
+                      >
+                        {seg.value}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
                 <View className="flex-row items-center">
                   <View
                     style={{
@@ -1176,9 +1273,7 @@ export default function CreateScreen() {
               <View className="flex-row gap-3 mb-4">
                 <View className="flex-1">
                   <View className="flex-row items-center mb-1.5 ml-1">
-                    <Text className="text-xs font-medium" style={{ color: colors.textSecondary }}>
-                      Medium
-                    </Text>
+                    <FormLabel>Medium</FormLabel>
                     {/* Live face-swap lamp. Gray = no cast reference in the
                       prompt; lit = this dream casts YOU, colored by the medium
                       family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
@@ -1261,12 +1356,9 @@ export default function CreateScreen() {
                 {/* Vibe — shown for Restyle too; the selected vibe modulates the
                   restyle (Kevin's choice to keep vibe applying). */}
                 <View className="flex-1">
-                  <Text
-                    className="text-xs font-medium mb-1.5 ml-1"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    Vibe
-                  </Text>
+                  <View className="mb-1.5 ml-1">
+                    <FormLabel>Vibe</FormLabel>
+                  </View>
                   <TouchableOpacity
                     className="flex-row items-center justify-between px-4 py-3 rounded-xl"
                     style={{

@@ -20,6 +20,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
+import { routeNewSceneSubject } from '../_shared/newSceneDirective.ts';
 import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
 
 const CORS = {
@@ -247,9 +248,22 @@ Deno.serve(async (req) => {
   ) {
     return json({ error: 'new_scene_too_many_people', max: cfg.newSceneMaxPeople }, 400);
   }
+  // Price backstop: a solo-swap photo renders the exact-face swap identically
+  // on BOTH tiers (the tier only picks the reference model, which solo swap
+  // never uses) — never charge the Ultra price for it, whatever the client
+  // sent. Same routing fork the render itself uses (routeNewSceneSubject).
+  const newSceneSoloSwap =
+    isNewScenePhoto && newSceneTierReq
+      ? routeNewSceneSubject({
+          type: typeof body.subject_type === 'string' ? body.subject_type : '',
+          num_people: typeof body.num_people === 'number' ? body.num_people : 0,
+          num_animals: typeof body.num_animals === 'number' ? body.num_animals : 0,
+          face: typeof body.face === 'string' ? body.face : '',
+        }).mode === 'solo_swap'
+      : false;
   const dreamCost =
     isNewScenePhoto && newSceneTierReq
-      ? newSceneTierReq === 'best'
+      ? newSceneTierReq === 'best' && !newSceneSoloSwap
         ? cfg.newScenePriceBest
         : cfg.newScenePriceStandard
       : forceModel
