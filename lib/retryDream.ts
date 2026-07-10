@@ -1,47 +1,56 @@
 /**
- * Retry a FAILED dream by re-enqueuing its exact stored payload (server-side),
- * then watch the fresh job on the loading screen. The failure already refunded
- * the sparkle, so this is a clean fresh charge. Used by the failure toast and
- * the inbox dream_failed row.
+ * Reopen a FAILED dream in the Create screen, prefilled with its original inputs
+ * (prompt + medium + vibe + model) so the user can tweak and re-run — the
+ * "Dream Again" pattern applied to a failure. Used by the failure toast and the
+ * inbox dream_failed row.
  *
- * `enqueue-dream` (retry_job_id branch) loads the prior dream_queue.payload —
- * the verbatim RequestBody — so prompt/model/medium/vibe/photo reproduce
- * exactly. It rejects content/NSFW rejections server-side; the UI only offers
- * retry for render/infra failures anyway.
+ * WHY NOT a silent server retry: the old flow re-enqueued via
+ * enqueue-dream(retry_job_id), which loads dream_queue.payload. But that queue
+ * row is GONE for effectively every real failure — store builds bypass the queue
+ * (EXPO_PUBLIC_DREAM_QUEUE_ENABLED) and terminal queue rows prune at 30 days — so
+ * the retry always failed with "couldn't retry that dream" (Kevin 2026-07-10).
+ * The original request survives on dream_jobs.payload (owner-readable via RLS),
+ * so we read it and hand it to Create instead. The failure already refunded the
+ * sparkle; the re-run charges fresh like any Create dream, and the user sees the
+ * inputs and can adjust before spending.
  */
 import { supabase } from '@/lib/supabase';
-import { invokeEdge } from '@/lib/edgeFunction';
 import { useDreamStore } from '@/store/dream';
 import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
 import * as nav from '@/lib/navigate';
 
-export async function retryDream(jobId: string): Promise<void> {
-  try {
-    const { data, error } = await invokeEdge('enqueue-dream', {
-      body: { retry_job_id: jobId },
-    });
-    const newId = (data as { dream_id?: string } | null)?.dream_id;
-    if (error || !newId) {
-      throw new Error((data as { error?: string } | null)?.error ?? 'retry_failed');
-    }
-    // Point the loading screen at the fresh job + clear any stale failure.
-    useDreamStore.getState().setActiveJobId(newId);
-    useDreamStore.getState().setActiveJobFailure(null);
-    nav.replace(`/dream/loading?watch=${newId}`);
-  } catch (e) {
-    Toast.show("Couldn't retry that dream — try again from Create", 'close-circle');
-    if (__DEV__) console.warn('[retryDream]', (e as Error).message);
+const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+/** Prefill Create from a failed job's stored payload, then navigate there. */
+export async function reopenFailedDreamInCreate(jobId: string): Promise<void> {
+  const { data, error } = await supabase
+    .from('dream_jobs')
+    .select('payload')
+    .eq('id', jobId)
+    .maybeSingle();
+  const p = (data?.payload ?? null) as Record<string, unknown> | null;
+  if (error || !p) {
+    // No stored inputs to reload — still drop them into Create to start fresh.
+    if (__DEV__) console.warn('[reopenFailedDream] no payload for', jobId, error?.message);
+    Toast.show("Couldn't find that dream's settings — starting fresh", 'information-circle');
+    nav.push('/(tabs)/create');
+    return;
   }
+  useDreamStore.getState().setPendingCreatePreset({
+    prompt: str(p.hint),
+    medium: str(p.medium_key),
+    vibe: str(p.vibe_key),
+    model: typeof p.force_model === 'string' ? p.force_model : null,
+  });
+  nav.push('/(tabs)/create');
 }
 
 /**
- * Retry from the INBOX, where the row doesn't carry the job id: resolve the
- * user's most-recent failed dream that has a job reference, then retry it.
- * (The live failure toast is precise — it has reference_id at the moment of
- * failure; this is the catch-up path for a failure found later in the inbox.)
+ * Inbox catch-up: resolve the user's most-recent failed dream (notification rows
+ * that predate reference_id carry no job id) and reopen it in Create.
  */
-export async function retryLatestFailedDream(): Promise<void> {
+export async function reopenLatestFailedDream(): Promise<void> {
   const userId = useAuthStore.getState().user?.id;
   if (!userId) return;
   const { data } = await supabase
@@ -54,8 +63,9 @@ export async function retryLatestFailedDream(): Promise<void> {
     .limit(1)
     .maybeSingle();
   if (data?.reference_id) {
-    await retryDream(data.reference_id);
+    await reopenFailedDreamInCreate(data.reference_id);
   } else {
-    Toast.show("Couldn't find that dream to retry", 'close-circle');
+    // Nothing with stored inputs — just open Create fresh rather than dead-end.
+    nav.push('/(tabs)/create');
   }
 }

@@ -21,7 +21,7 @@ import ReanimatedSwipeable, {
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { avatarUrl as resizeAvatar } from '@/lib/imageUrl';
 import * as nav from '@/lib/navigate';
-import { retryLatestFailedDream } from '@/lib/retryDream';
+import { reopenFailedDreamInCreate, reopenLatestFailedDream } from '@/lib/retryDream';
 import { routeFromNotification } from '@/lib/notificationRouting';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -756,7 +756,14 @@ export default function InboxScreen() {
     //   "Your dream couldn't render — sparkle refunded (<class>)"
     //   "Your dream couldn't render (<class>)"  (refund pending / none)
     if (g.type === 'dream_failed') {
-      // Content/NSFW rejection — re-running won't help; offer to tweak it.
+      // Reopen this dream in Create, prefilled with its saved inputs (prompt +
+      // medium + vibe + model). Prefer the tapped row's job id; older rows with
+      // no reference_id fall back to the latest failed dream.
+      const reopenInCreate = () =>
+        void (g.referenceId ? reopenFailedDreamInCreate(g.referenceId) : reopenLatestFailedDream());
+
+      // Content/NSFW rejection — re-running the same prompt just re-fails, so
+      // reopen it in Create with the prompt loaded, ready to tweak.
       if (g.subtype === 'rejected') {
         showAlert(
           'A little too spicy',
@@ -764,7 +771,7 @@ export default function InboxScreen() {
             "That one leaned a little too spicy for our filters. Your sparkle's back, tweak the prompt and give it another go.",
           [
             { text: 'Not now', style: 'cancel' },
-            { text: 'Tweak it', onPress: () => nav.push('/(tabs)/create') },
+            { text: 'Tweak it', onPress: reopenInCreate },
           ]
         );
         return;
@@ -779,13 +786,14 @@ export default function InboxScreen() {
         );
         return;
       }
-      // Render/infra failure → offer a one-tap retry of the exact dream.
+      // Render/infra failure → reopen in Create prefilled so they can re-run it
+      // (the old one-tap server retry couldn't work — its queue payload is gone).
       showAlert(
         'That dream got away',
-        "Oops, that dream got away from us before it finished. Your sparkle's back in your pocket. Want to take another swing?",
+        "Oops, that dream got away from us before it finished. Your sparkle's back in your pocket. Want to open it up in Create and take another swing?",
         [
           { text: 'Not now', style: 'cancel' },
-          { text: 'Retry', onPress: () => void retryLatestFailedDream() },
+          { text: 'Try again', onPress: reopenInCreate },
         ]
       );
       return;

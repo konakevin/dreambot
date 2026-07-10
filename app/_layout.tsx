@@ -32,7 +32,7 @@ import {
   type NotificationRowLike,
 } from '@/lib/notificationToast';
 import * as nav from '@/lib/navigate';
-import { retryDream } from '@/lib/retryDream';
+import { reopenFailedDreamInCreate } from '@/lib/retryDream';
 import { resumeInFlightDream } from '@/lib/dreamResumeStore';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { syncDreamWidget } from '@/lib/widgetSync';
@@ -266,7 +266,7 @@ function runToastAction(action: ToastAction): void {
       nav.push('/inbox');
       break;
     case 'retry':
-      void retryDream(action.jobId);
+      void reopenFailedDreamInCreate(action.jobId);
       break;
     case 'create':
       // Content/NSFW rejection → go tweak the prompt.
