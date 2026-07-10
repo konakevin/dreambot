@@ -29,6 +29,7 @@ import {
 } from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -236,7 +237,11 @@ export default function NewPostScreen() {
             {step === 'compose' && !params.fromOnboarding ? 'Back' : 'Cancel'}
           </Text>
         </TouchableOpacity>
-        <GradientTitle>{step === 'compose' ? 'New Post' : 'Select images'}</GradientTitle>
+        {/* Absolutely centered so the title sits at the true screen center
+            regardless of the (unequal-width) Back / Post buttons flanking it. */}
+        <View style={styles.headerTitle} pointerEvents="none">
+          <GradientTitle>{step === 'compose' ? 'New Post' : 'Select images'}</GradientTitle>
+        </View>
         {step === 'select' ? (
           <TouchableOpacity
             onPress={() => canAdvance && setStep('compose')}
@@ -338,43 +343,72 @@ export default function NewPostScreen() {
       ) : (
         // ── Multi-image compose: ordered strip ──
         <View style={{ flex: 1 }}>
-          <FlatList
-            horizontal
-            data={selected}
-            keyExtractor={(s) => s.id}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.strip}
-            ListFooterComponent={
-              selected.length < galleryMaxImages ? (
-                <TouchableOpacity style={styles.addTile} onPress={() => setStep('select')}>
-                  <Ionicons name="add" size={26} color={colors.textSecondary} />
-                </TouchableOpacity>
-              ) : null
-            }
-            renderItem={({ item, index }) => (
-              <View style={styles.stripItem}>
-                <Image
-                  source={{ uri: thumbnailUrl(item.url) }}
-                  style={styles.stripImg}
-                  contentFit="cover"
-                  cachePolicy="memory-disk"
-                  placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
-                />
-                <TouchableOpacity
-                  style={styles.stripRemove}
-                  onPress={() => setSelected((p) => p.filter((s) => s.id !== item.id))}
-                  hitSlop={8}
-                >
-                  <Ionicons name="close" size={14} color="#FFFFFF" />
-                </TouchableOpacity>
-                {index === 0 && (
-                  <View style={styles.coverTag} pointerEvents="none">
-                    <Text style={styles.coverTagText}>Cover</Text>
-                  </View>
-                )}
-              </View>
+          {/* Count + always-visible Add — so it's clear how many are selected
+              (even when only ~4 fit on screen) and how to add more. */}
+          <View style={styles.stripHeader}>
+            <Text style={styles.stripCount}>
+              {selected.length} image{selected.length === 1 ? '' : 's'}
+            </Text>
+            {selected.length < galleryMaxImages && (
+              <TouchableOpacity
+                style={styles.addMoreBtn}
+                onPress={() => setStep('select')}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="add" size={16} color={colors.accent} />
+                <Text style={styles.addMoreText}>Add more</Text>
+              </TouchableOpacity>
             )}
-          />
+          </View>
+          <View style={styles.stripRow}>
+            <FlatList
+              horizontal
+              data={selected}
+              keyExtractor={(s) => s.id}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.strip}
+              ListFooterComponent={
+                selected.length < galleryMaxImages ? (
+                  <TouchableOpacity style={styles.addTile} onPress={() => setStep('select')}>
+                    <Ionicons name="add" size={26} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                ) : null
+              }
+              renderItem={({ item, index }) => (
+                <View style={styles.stripItem}>
+                  <Image
+                    source={{ uri: thumbnailUrl(item.url) }}
+                    style={styles.stripImg}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+                  />
+                  <TouchableOpacity
+                    style={styles.stripRemove}
+                    onPress={() => setSelected((p) => p.filter((s) => s.id !== item.id))}
+                    hitSlop={8}
+                  >
+                    <Ionicons name="close" size={14} color="#FFFFFF" />
+                  </TouchableOpacity>
+                  {index === 0 && (
+                    <View style={styles.coverTag} pointerEvents="none">
+                      <Text style={styles.coverTagText}>Cover</Text>
+                    </View>
+                  )}
+                </View>
+              )}
+            />
+            {/* Right-edge fade hints the strip scrolls when it overflows. */}
+            {selected.length > 3 && (
+              <LinearGradient
+                colors={['transparent', colors.background]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.stripFade}
+                pointerEvents="none"
+              />
+            )}
+          </View>
           <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View style={styles.inputContainer}>
               <TextInput
@@ -405,6 +439,11 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
+  },
+  headerTitle: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelText: { color: colors.textSecondary, fontSize: fontScale(16) },
   actionBtn: {
@@ -443,7 +482,18 @@ const styles = StyleSheet.create({
   },
   addMoreText: { color: colors.accent, fontSize: fontScale(14), fontWeight: '600' },
   // multi compose
-  strip: { gap: 10, paddingHorizontal: 16, paddingVertical: verticalScale(16) },
+  stripHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: verticalScale(14),
+  },
+  stripCount: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
+  addMoreBtn: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  stripRow: { position: 'relative' },
+  stripFade: { position: 'absolute', right: 0, top: 0, bottom: 0, width: 44 },
+  strip: { gap: 10, paddingHorizontal: 16, paddingVertical: verticalScale(12) },
   stripItem: { width: 84, height: 108, borderRadius: 10, overflow: 'hidden' },
   stripImg: { width: '100%', height: '100%' },
   stripRemove: {

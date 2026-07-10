@@ -43,6 +43,15 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     .eq('id', uploadId)
     .single();
 
+  // Gallery posts (migration 356) own COPIED slide files under upload_media;
+  // the FK cascade removes the rows but not their storage — grab them here so
+  // deleting a gallery frees its own files (and, because the gallery owns
+  // copies, this never touches the source dreams). Empty for single posts.
+  const { data: media } = await supabase
+    .from('upload_media')
+    .select('image_url, image_url_display, image_url_hq')
+    .eq('upload_id', uploadId);
+
   if (isAdmin) {
     const { error } = await supabase.rpc(
       'admin_delete_upload' as never,
@@ -54,15 +63,24 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     if (error) throw error;
   }
 
-  // Clean up storage (fire-and-forget). Both base + HQ paths.
-  const paths: string[] = [];
-  for (const url of [row?.image_url, row?.image_url_hq]) {
-    if (!url) continue;
+  // Clean up storage (fire-and-forget). Host base + HQ, plus every gallery
+  // slide variant. Dedup — the cover copy is referenced by both the host and
+  // upload_media[0].
+  const paths = new Set<string>();
+  const addPath = (url: string | null | undefined) => {
+    if (!url) return;
     const match = url.match(/\/uploads\/(.+)$/);
-    if (match?.[1]) paths.push(decodeURIComponent(match[1]));
+    if (match?.[1]) paths.add(decodeURIComponent(match[1]));
+  };
+  addPath(row?.image_url);
+  addPath(row?.image_url_hq);
+  for (const m of media ?? []) {
+    addPath(m.image_url as string | null);
+    addPath(m.image_url_display as string | null);
+    addPath(m.image_url_hq as string | null);
   }
-  if (paths.length > 0) {
-    supabase.storage.from('uploads').remove(paths);
+  if (paths.size > 0) {
+    supabase.storage.from('uploads').remove([...paths]);
   }
 }
 

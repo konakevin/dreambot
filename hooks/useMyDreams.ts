@@ -22,7 +22,14 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       if (!userId) return { rows: [], offset, hasMore: false };
-      let query = supabase.from('uploads').select(POST_SELECT).eq('user_id', userId);
+      let query = supabase
+        .from('uploads')
+        .select(POST_SELECT)
+        .eq('user_id', userId)
+        // Dreams = individual generated images. Multi-image GALLERIES (media_count
+        // > 1, migration 356) are compositions, not raw dreams — they live in the
+        // Posts album only, and are never a pickable source for another gallery.
+        .lte('media_count', 1);
       // 'private' = unposted (not live on the feed); 'posted' = live on the feed.
       if (filter === 'private') query = query.eq('is_public', false);
       else if (filter === 'posted') query = query.eq('is_public', true);
