@@ -15,6 +15,17 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.
 export interface SingleScenario {
   scene: string;
   attire: string;
+  /** Bespoke pose pool this scenario's renders draw from (migration 353) —
+   *  e.g. 'glamour' for the glamour_shot_retro seeds. Null/undefined = the
+   *  default pose behavior. */
+  posePool?: string | null;
+  /** Forced medium for this scenario's renders (migration 354) — e.g.
+   *  'photography' for the photo-genre parody seeds. Null/undefined = the
+   *  rolled medium. Only face-swap-capable natural mediums are honored. */
+  mediumKey?: string | null;
+  /** Banned medium (migration 355) — if the roll lands on it, the engine
+   *  re-rolls from the face-swap pool minus this key. */
+  mediumBan?: string | null;
 }
 
 interface Loaded {
@@ -34,14 +45,43 @@ export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loa
   try {
     // Per-pool queries (each well under the 1000-row cap at ~500).
     for (const pool of ['goofy', 'elegant', 'active'] as const) {
-      const { data } = await supabase
+      // Column ladder (deploy-order safety — newer optional columns may not
+      // exist yet in prod): full select → without medium_key (354) → without
+      // pose_pool (353). A missing column must never empty the pools.
+      let rows: Record<string, unknown>[] = [];
+      const full = await supabase
         .from('single_scenarios')
-        .select('scene,attire,gender')
+        .select('scene,attire,gender,pose_pool,medium_key,medium_ban')
         .eq('pool', pool)
         .eq('disabled', false);
-      for (const r of data ?? []) {
+      if (!full.error) {
+        rows = full.data ?? [];
+      } else {
+        const withPose = await supabase
+          .from('single_scenarios')
+          .select('scene,attire,gender,pose_pool')
+          .eq('pool', pool)
+          .eq('disabled', false);
+        if (!withPose.error) {
+          rows = withPose.data ?? [];
+        } else {
+          const plain = await supabase
+            .from('single_scenarios')
+            .select('scene,attire,gender')
+            .eq('pool', pool)
+            .eq('disabled', false);
+          rows = plain.data ?? [];
+        }
+      }
+      for (const r of rows) {
         const g = (r.gender as 'any' | 'male' | 'female') ?? 'any';
-        out[pool][g].push({ scene: r.scene as string, attire: r.attire as string });
+        out[pool][g].push({
+          scene: r.scene as string,
+          attire: r.attire as string,
+          posePool: (r.pose_pool as string | null | undefined) ?? null,
+          mediumKey: (r.medium_key as string | null | undefined) ?? null,
+          mediumBan: (r.medium_ban as string | null | undefined) ?? null,
+        });
       }
     }
   } catch (_err) {

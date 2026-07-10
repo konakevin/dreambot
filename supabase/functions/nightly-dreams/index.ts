@@ -236,8 +236,16 @@ Deno.serve(async (req) => {
   // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
   // (production-prompt benching — the pencil lesson).
   const force_active_pose = body.force_active_pose === true;
+  // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
+  // a specific historical pose against the action-grounded brief).
+  const force_action = typeof body.force_action === 'string' ? body.force_action : null;
   const force_single_playful = body.force_single_playful === true;
   const force_single_elegant = body.force_single_elegant === true;
+  // Test hook: force a special scene from a specific goofy CATEGORY (bucket) —
+  // QA for newly seeded scenario buckets (funny audit 2026-07-09). Queries the
+  // scenario table by category directly; applies to dual or solo per cast.
+  const force_scene_category =
+    typeof body.force_scene_category === 'string' ? body.force_scene_category : null;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -1126,6 +1134,20 @@ Deno.serve(async (req) => {
     // pools by the cast's gender (any ∪ gender), so attire matches the locked body.
     let dualSpecialScene: string | null = null;
     let dualSpecialWardrobe: string | null = null; // the scene's attire (costume/formal/normal)
+    // Which special pool the scene came from — the pose pick branches on THIS,
+    // not on wardrobe truthiness (goofy rows carry a literal 'normal…clothes'
+    // attire string, so `dualSpecialWardrobe ?` mis-routed all goofy scenes to
+    // the partner pose pool; found while wiring pose_pool, 2026-07-09).
+    let dualSceneKind: 'goofy' | 'elegant' | null = null;
+    // Bespoke pose pool named by the picked scenario row (migration 353) —
+    // e.g. 'glamour'. Null = default pose behavior for the scene kind.
+    let dualScenePosePool: string | null = null;
+    // Forced medium named by the picked scenario row (migration 354) — e.g.
+    // 'photography' for the photo-genre parody seeds. Null = rolled medium.
+    let dualSceneMediumKey: string | null = null;
+    // Banned medium named by the picked scenario row (migration 355) — if the
+    // roll landed on it, re-roll from the face-swap pool minus this key.
+    let dualSceneMediumBan: string | null = null;
     // ACTIVE scenario (ACTION_POSE_EXPANSION_PLAN.md): the scene text embeds
     // the body action, so the pose slot gets a fixed face-mandate string
     // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
@@ -1139,7 +1161,30 @@ Deno.serve(async (req) => {
     // scene variety mix below (engine_config-tunable since migration 347;
     // defaults 20 goofy / 20 elegant / 0 active — remainder = the location).
     if (!force_place) {
-      if (isDualFaceSwap) {
+      // QA hook: pull a random scenario from an exact goofy bucket (category
+      // column), bypassing the roll + shuffle-bag entirely. Test-only path.
+      if (force_scene_category && (isDualFaceSwap || isSingleHumanFaceSwap)) {
+        const table = isDualFaceSwap ? 'dual_scenarios' : 'single_scenarios';
+        const { data: catRows } = await supabase
+          .from(table)
+          .select('scene,attire,pose_pool,medium_key,medium_ban')
+          .eq('pool', 'goofy')
+          .eq('category', force_scene_category)
+          .eq('disabled', false);
+        if (catRows && catRows.length > 0) {
+          const s = catRows[Math.floor(Math.random() * catRows.length)];
+          dualSpecialScene = s.scene as string;
+          dualSpecialWardrobe = s.attire as string;
+          dualSceneKind = 'goofy';
+          dualScenePosePool = (s.pose_pool as string | null) ?? null;
+          dualSceneMediumKey = (s.medium_key as string | null) ?? null;
+          dualSceneMediumBan = (s.medium_ban as string | null) ?? null;
+          fallbackReasons.push(`forced_scene_category:${force_scene_category}`);
+        }
+      }
+      if (dualSpecialScene) {
+        // forced above — skip the roll
+      } else if (isDualFaceSwap) {
         const pools = await loadDualScenarios(supabase);
         const splitCfg = await fetchEngineConfig(supabase);
         const goofyCut = splitCfg.dualSceneGoofyPct / 100;
@@ -1155,6 +1200,10 @@ Deno.serve(async (req) => {
           );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+          dualSceneKind = 'goofy';
+          dualScenePosePool = s.posePool ?? null;
+          dualSceneMediumKey = s.mediumKey ?? null;
+          dualSceneMediumBan = s.mediumBan ?? null;
           recordPick(supabase, userId, 'dual_scn_goofy', s.scene);
         } else if (force_elegant || (!force_active && roll < elegantCut)) {
           const s = pickDualScenario(
@@ -1162,6 +1211,10 @@ Deno.serve(async (req) => {
           );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+          dualSceneKind = 'elegant';
+          dualScenePosePool = s.posePool ?? null;
+          dualSceneMediumKey = s.mediumKey ?? null;
+          dualSceneMediumBan = s.mediumBan ?? null;
           recordPick(supabase, userId, 'dual_scn_elegant', s.scene);
         } else if ((force_active && pools.active.length > 0) || roll < activeCut) {
           const s = pickDualScenario(
@@ -1203,12 +1256,20 @@ Deno.serve(async (req) => {
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
+            dualSceneKind = 'goofy';
+            dualScenePosePool = s.posePool ?? null;
+            dualSceneMediumKey = s.mediumKey ?? null;
+            dualSceneMediumBan = s.mediumBan ?? null;
           }
         } else if (force_single_elegant || (!force_single_active && roll < elegantCut)) {
           const s = await pickSolo('elegant');
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
+            dualSceneKind = 'elegant';
+            dualScenePosePool = s.posePool ?? null;
+            dualSceneMediumKey = s.mediumKey ?? null;
+            dualSceneMediumBan = s.mediumBan ?? null;
           }
         } else if (force_single_active || roll < activeCut) {
           const s = await pickSolo('active');
@@ -1219,6 +1280,81 @@ Deno.serve(async (req) => {
             fallbackReasons.push('active_scenario_solo');
           }
         }
+      }
+    }
+    // Scenario-forced medium (migration 354): photo-genre parody seeds (80s
+    // glamour shots, decade eras) force 'photography' so the joke reads as an
+    // actual photo instead of the rolled art medium. Re-resolve the medium the
+    // same way the earlier face-swap block built it: base row → face-swap
+    // override (no-op for photography) → curated per-model fragment override
+    // for the ALREADY-picked model (all rotation models are in photography's
+    // allowed_models). Explicit force_medium wins; any resolution problem
+    // keeps the rolled medium (fail-open — a bad medium_key can't break a
+    // dream). Safe to swap post-roll: scenario rolls only happen on face-swap
+    // renders and only face-swap-capable natural mediums are honored, so the
+    // eligibility flags computed earlier stay truthful.
+    if (dualSceneMediumKey && !force_medium && dualSceneMediumKey !== nightlyMedium.key) {
+      try {
+        const forced = await resolveMediumFromDb(dualSceneMediumKey);
+        if (
+          forced &&
+          forced.key === dualSceneMediumKey && // unknown keys fall back — reject
+          forced.faceSwaps &&
+          forced.characterRenderMode === 'natural'
+        ) {
+          nightlyMedium = forced;
+          resolvedMediumKey = forced.key; // feeds the model ban/scene gates + persist
+          baseMedium = applyFaceSwapOverride(forced);
+          if (faceSwapPrePickedModel) {
+            const modelOverride = pickFaceSwapModelOverride(
+              faceSwapPrePickedModel,
+              nightlyVibe?.key ?? null
+            );
+            if (modelOverride) baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+          }
+          fallbackReasons.push(`scene_medium:${dualSceneMediumKey}`);
+          console.log(`[nightly] scenario forced medium: ${dualSceneMediumKey}`);
+        }
+      } catch (_e) {
+        // keep the rolled medium
+      }
+    } else if (dualSceneMediumBan && !force_medium && dualSceneMediumBan === nightlyMedium.key) {
+      // Scenario-banned medium (migration 355): the roll landed on a medium
+      // this scenario reads badly in (e.g. fantastical buckets + photography
+      // → creepy photoreal yetis/giant props). Re-roll from the face-swap
+      // pool minus the banned key; any problem keeps the rolled medium
+      // (fail-open — a bad medium_ban can't break a dream).
+      // Exclude ONLY the banned key — adding recentMediums could shrink the
+      // pool under filterRecent's ≥2 floor, which falls back to the FULL pool
+      // and could re-serve the banned medium. A possible recency repeat beats
+      // shipping the banned medium.
+      try {
+        const rerolled = await resolveMediumFromDb('dream_eligible_face_swap', [
+          dualSceneMediumBan,
+        ]);
+        if (
+          rerolled &&
+          rerolled.key !== dualSceneMediumBan &&
+          rerolled.faceSwaps &&
+          rerolled.characterRenderMode === 'natural'
+        ) {
+          nightlyMedium = rerolled;
+          resolvedMediumKey = rerolled.key;
+          baseMedium = applyFaceSwapOverride(rerolled);
+          if (faceSwapPrePickedModel) {
+            const modelOverride = pickFaceSwapModelOverride(
+              faceSwapPrePickedModel,
+              nightlyVibe?.key ?? null
+            );
+            if (modelOverride) baseMedium = { ...baseMedium, fluxFragment: modelOverride };
+          }
+          fallbackReasons.push(`scene_medium_ban:${dualSceneMediumBan}->${rerolled.key}`);
+          console.log(
+            `[nightly] scenario banned medium ${dualSceneMediumBan}; re-rolled ${rerolled.key}`
+          );
+        }
+      } catch (_e) {
+        // keep the rolled medium
       }
     }
     const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;
@@ -1285,22 +1421,51 @@ Deno.serve(async (req) => {
             }
           }
         }
-        const action =
-          selectedCast.length === 2
-            ? dualActiveScene
-              ? 'caught mid-action exactly as the scene describes, with a clear gap between them, both faces toward the camera'
-              : dualSpecialWardrobe
-                ? pickDualAction(
-                    selectedCast.find((c) => c.role === 'plus_one')?.relationship,
-                    'partner',
-                    (await loadClassicPools(supabase)).dual
-                  )
-                : dualSpecialScene
-                  ? pickDualAction(undefined, 'playful', (await loadClassicPools(supabase)).dual)
-                  : (activePose ?? dualAction)
-            : soloActiveScene
-              ? 'caught mid-action exactly as the scene describes, face toward the camera'
-              : (activeSinglePose ?? singleAction ?? null);
+        // Scene-matched pose. Precedence per cast size:
+        //   active scene → the fixed mid-action framing text
+        //   scenario names a bespoke pose pool (migration 353) → pick from it
+        //   goofy scenario → playful pool (branch on the scene KIND — goofy
+        //     rows carry a literal 'normal…clothes' attire string, so the old
+        //     `dualSpecialWardrobe ?` check mis-routed all goofy to partner)
+        //   elegant scenario → refined partner pool
+        //   plain location → the pre-rolled active/classic pose
+        const classicPools = await loadClassicPools(supabase);
+        const bespokePoses = dualScenePosePool
+          ? ((selectedCast.length === 2
+              ? classicPools.bespoke.dual[dualScenePosePool]
+              : classicPools.bespoke.solo[dualScenePosePool]) ?? [])
+          : [];
+        let action: string | null;
+        if (force_action) {
+          action = force_action;
+        } else if (selectedCast.length === 2) {
+          if (dualActiveScene) {
+            action =
+              'caught mid-action exactly as the scene describes, with a clear gap between them, both faces toward the camera';
+          } else if (bespokePoses.length > 0) {
+            action = bespokePoses[Math.floor(Math.random() * bespokePoses.length)];
+            fallbackReasons.push(`bespoke_pose:${dualScenePosePool}`);
+          } else if (dualSceneKind === 'goofy') {
+            action = pickDualAction(undefined, 'playful', classicPools.dual);
+          } else if (dualSpecialWardrobe) {
+            action = pickDualAction(
+              selectedCast.find((c) => c.role === 'plus_one')?.relationship,
+              'partner',
+              classicPools.dual
+            );
+          } else if (dualSpecialScene) {
+            action = pickDualAction(undefined, 'playful', classicPools.dual);
+          } else {
+            action = activePose ?? dualAction;
+          }
+        } else if (soloActiveScene) {
+          action = 'caught mid-action exactly as the scene describes, face toward the camera';
+        } else if (bespokePoses.length > 0) {
+          action = bespokePoses[Math.floor(Math.random() * bespokePoses.length)];
+          fallbackReasons.push(`bespoke_pose_solo:${dualScenePosePool}`);
+        } else {
+          action = activeSinglePose ?? singleAction ?? null;
+        }
         const slotResult = await runCharacterSlotPipeline(
           {
             cast: resolvedCast.map((rc, i) => ({

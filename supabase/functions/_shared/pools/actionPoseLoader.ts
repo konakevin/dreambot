@@ -33,6 +33,11 @@ let cache: LoadedActionPoses | null = null;
 export interface LoadedClassicPools {
   dual: DualActionPools;
   single: SingleActionPools;
+  /** DB-ONLY bespoke pose pools (migration 353) — targets of a scenario row's
+   *  `pose_pool` column (e.g. 'glamour' for the glamour_shot_retro seeds). No
+   *  code fallback and no floor: a missing/empty pool = the feature is simply
+   *  off and the caller uses its normal pose behavior. */
+  bespoke: { dual: Record<string, string[]>; solo: Record<string, string[]> };
 }
 
 const CLASSIC_CODE: Record<string, string[]> = {
@@ -43,11 +48,15 @@ const CLASSIC_CODE: Record<string, string[]> = {
   portrait: PORTRAIT_ACTIONS,
 };
 
+// Bespoke pools fetched for BOTH cast types (scenario pose_pool values).
+const BESPOKE_POOL_KEYS = ['glamour'];
+
 let classicCache: LoadedClassicPools | null = null;
 
 export async function loadClassicPools(supabase: SupabaseClient): Promise<LoadedClassicPools> {
   if (classicCache) return classicCache;
   const out: Record<string, string[]> = { ...CLASSIC_CODE };
+  const bespoke: LoadedClassicPools['bespoke'] = { dual: {}, solo: {} };
   try {
     // One query PER pool — each far under PostgREST's silent 1000-row cap.
     for (const pool of Object.keys(CLASSIC_CODE)) {
@@ -63,12 +72,26 @@ export async function loadClassicPools(supabase: SupabaseClient): Promise<Loaded
       const floor = Math.floor(CLASSIC_CODE[pool].length * 0.8);
       if (data.length >= floor) out[pool] = data.map((r) => r.text as string);
     }
+    for (const pool of BESPOKE_POOL_KEYS) {
+      for (const castType of ['dual', 'solo'] as const) {
+        const { data, error } = await supabase
+          .from('action_poses')
+          .select('text')
+          .eq('cast_type', castType)
+          .eq('pool', pool)
+          .eq('disabled', false)
+          .limit(1000);
+        if (error || !data) continue; // absent pool = feature off
+        bespoke[castType][pool] = data.map((r) => r.text as string);
+      }
+    }
   } catch (_e) {
     // any failure → whatever already resolved + code arrays for the rest
   }
   classicCache = {
     dual: { companion: out.companion, partner: out.partner, playful: out.playful },
     single: { candid: out.candid, portrait: out.portrait },
+    bespoke,
   };
   return classicCache;
 }

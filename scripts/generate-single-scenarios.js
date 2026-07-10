@@ -40,6 +40,9 @@ const arg = (k, d) => {
 const POOL = arg('--pool', 'both');
 const DRY = args.includes('--dry-run');
 const BUCKET_FILTER = arg('--buckets', null);
+// Optional per-bucket count override (applies to every selected bucket) —
+// used for append runs, e.g. --count 60 to scale a 25-bucket to 85.
+const COUNT_OVERRIDE = arg('--count', null) ? parseInt(arg('--count', null), 10) : null;
 
 // count = entries for that bucket. Goofy ~500 (mostly 'any'); elegant ~500 (even M/F).
 const GOOFY_BUCKETS = [
@@ -66,6 +69,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'absurd_giant',
+    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
     gender: 'any',
     count: 85,
     label: 'Absurd & oversized',
@@ -73,6 +77,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'fantastical',
+    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
     gender: 'any',
     count: 60,
     label: 'Fantastical & silly',
@@ -91,6 +96,36 @@ const GOOFY_BUCKETS = [
     count: 45,
     label: 'Guy fun',
     desc: 'Playful, fun-guy scenes — an air-guitar rockstar moment under stage lights, at a roaring monster-truck rally, proudly holding up a comically huge fish, a chaotic backyard BBQ grill-master moment, a gearhead in a cool garage with a muscle car.',
+  },
+  {
+    key: 'glamour_shot_retro',
+    gender: 'any',
+    posePool: 'glamour', // migration 353: renders draw from the curated glamour pose pool
+    mediumKey: 'photography', // migration 354: photo-genre parody — force the photo medium
+    count: 25,
+    label: 'Retro glamour-shot studio',
+    desc: 'A cheesy 1980s/90s mall GLAMOUR SHOTS photo studio, played completely straight — soft-focus dreamy glow, an airbrushed studio backdrop (laser grid, misty pastel clouds, marbled gray, glittery starburst), wind-machine hair, dramatic studio spotlights, a white column or draped fake-fur prop nearby. The earnest cheese IS the joke. Attire carries it: acid-wash denim jacket off the shoulder, chunky pearls, a sequined top, teased/feathered hair, or a white suit with big shoulder pads.',
+  },
+  {
+    key: 'decade_eras',
+    gender: 'any',
+    count: 25,
+    label: 'Decade eras fashion',
+    desc: "A stylized 20th-century DECADE portrait with the era's wild fashion played straight — 1940s swing-dance hall in victory rolls or high-waist trousers and suspenders, 1950s pastel diner with a milkshake in a poodle skirt or letterman jacket, 1960s mod go-go set in a geometric shift dress or slim suit, 1970s roller-disco rink in a flared jumpsuit under a disco ball, 1980s neon aerobics studio in leotard leg-warmers and headband, 1990s mall photo booth in a windbreaker and frosted denim, Y2K house party in metallic fashion and tiny sunglasses. The over-the-top era-accurate fashion is the fun; era-accurate setting details around them.",
+  },
+  {
+    key: 'surreal_absurd',
+    gender: 'any',
+    count: 25,
+    label: 'Surreal absurd (deadpan impossible)',
+    desc: "A DEADPAN IMPOSSIBLE scene treated like a totally normal photo, normal clothes — sitting in a giant bowl of breakfast cereal with a huge spoon, lounging on an inflatable flamingo pool float on the gray surface of the moon with Earth in the sky, a fancy candlelit dinner at a tiny table on top of a highway billboard, an office cubicle set up underwater with fish swimming past, toasting a marshmallow over a tiny campfire in a fancy hotel lobby, waiting at a bus stop bench in the middle of a desert with a single traffic light. Every noun CONCRETE (a specific object, never a vague 'creature/figure'); ONE impossible idea per scene, played straight.",
+  },
+  {
+    key: 'out_and_about',
+    gender: 'any',
+    count: 25,
+    label: 'Out and about (classic fun outings)',
+    desc: 'A wholesome classic FUN OUTING, normal everyday clothes — at the amusement park with a ferris wheel behind them, cotton candy at the county fair midway, on a picnic blanket with a wicker basket in a sunny park, a beach day with striped umbrellas and sandcastles, at the aquarium in front of a glowing floor-to-ceiling fish tank, at a pumpkin patch with wheelbarrows of pumpkins, apple picking in an orchard with a basket, at the zoo by the giraffe enclosure, a museum trip beside dinosaur skeletons, at a farmers market with armfuls of flowers and produce, mini golf by the windmill hole, a drive-in movie leaning on a classic car. Joyful, sunny, postcard-fun.',
   },
 ];
 
@@ -236,18 +271,32 @@ Output ONLY the JSON array, no markdown, no commentary.`,
     const all = [];
     const seen = new Set();
     for (const bucket of buckets) {
-      const target = DRY ? Math.min(bucket.count, 6) : bucket.count;
+      const target = DRY ? Math.min(bucket.count, 6) : (COUNT_OVERRIDE ?? bucket.count);
+      // Cross-run append safety: dedup + ban against what's ALREADY seeded.
+      const { data: existingRows } = await supabase
+        .from('single_scenarios')
+        .select('scene')
+        .eq('pool', pool)
+        .eq('category', bucket.key);
+      const existingScenes = (existingRows ?? []).map((r) => r.scene);
+      existingScenes.forEach((s) =>
+        seen.add(
+          s
+            .toLowerCase()
+            .replace(/[^a-z0-9 ]/g, '')
+            .trim()
+        )
+      );
+      if (existingScenes.length) console.log(`  (${existingScenes.length} existing — appending)`);
       console.log(`\n=== ${pool}/${bucket.key} [${bucket.gender}] (${bucket.label}) ===`);
       const got = [];
       let tries = 0;
       while (got.length < target && tries < 7) {
         tries++;
-        const batch = await genBatch(
-          pool,
-          bucket,
-          Math.min(target - got.length + 3, 20),
-          all.map((x) => x.scene)
-        );
+        const batch = await genBatch(pool, bucket, Math.min(target - got.length + 3, 20), [
+          ...all.map((x) => x.scene),
+          ...existingScenes,
+        ]);
         for (const o of batch) {
           const key = o.scene
             .toLowerCase()
@@ -266,6 +315,9 @@ Output ONLY the JSON array, no markdown, no commentary.`,
           category: bucket.key,
           scene: o.scene,
           attire: o.attire,
+          pose_pool: bucket.posePool ?? null,
+          medium_key: bucket.mediumKey ?? null,
+          medium_ban: bucket.mediumBan ?? null,
         });
         console.log(`  [${bucket.gender}] ${o.scene}  [${o.attire}]`);
       });

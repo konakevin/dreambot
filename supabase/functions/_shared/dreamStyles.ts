@@ -339,13 +339,15 @@ export async function resolveMediumFromDb(
     return resolveMediumFromDb('dream_eligible', excludeRecent);
   }
   // Nightly auto-roll for character/face-swap renders: filter to mediums
-  // that face-swap WELL on auto-roll. Photoreal mediums (hyperreal /
-  // render / photography) keep face_swaps=true so users can manually pick
-  // them, but auto-rolling them onto cast photos produces uncanny
-  // composites. The exclusion list is hardcoded — small, stable, no
-  // schema needed.
+  // that face-swap WELL on auto-roll. hyperreal/render keep face_swaps=true
+  // so users can manually pick them, but auto-rolling them onto cast photos
+  // produces uncanny composites. The exclusion list is hardcoded — small,
+  // stable, no schema needed. photography REMOVED 2026-07-09 (migration 354):
+  // the uncanny-composite rationale predated the identity gate + face
+  // sharpening, and owner-reviewed photography swap batches read clean —
+  // is_dream_eligible on the row is the remaining gate.
   if (key === 'dream_eligible_face_swap') {
-    const NIGHTLY_FACE_SWAP_INELIGIBLE = new Set(['hyperreal', 'render', 'photography']);
+    const NIGHTLY_FACE_SWAP_INELIGIBLE = new Set(['hyperreal', 'render']);
     const eligibleKeys = mediums
       .filter((m) => m.isDreamEligible && m.faceSwaps && !NIGHTLY_FACE_SWAP_INELIGIBLE.has(m.key))
       .map((m) => m.key);

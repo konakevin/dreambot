@@ -10,7 +10,10 @@
  *   node scripts/test-nightly-simulation.js 10     # fewer for a quick check
  */
 const { createClient } = require('@supabase/supabase-js');
-const sb = createClient('https://jimftynwrinwenonjrlj.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
+const sb = createClient(
+  'https://jimftynwrinwenonjrlj.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 const EMAIL = 'konakevin@gmail.com';
 const URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const USER_ID = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
@@ -94,14 +97,18 @@ function fmtDistribution(counts, total) {
   const recipe = recipeRow.recipe;
 
   console.log(`>>> 20-NIGHT NIGHTLY DREAM SIMULATION`);
-  console.log(`>>> Profile: ${recipe.art_styles.length} mediums, ${recipe.aesthetics.length} vibes, ${recipe.dream_cast.length} cast, ${(recipe.dream_seeds?.places || []).length} places, ${(recipe.dream_seeds?.things || []).length} things`);
+  console.log(
+    `>>> Profile: ${(recipe.dream_cast || []).length} cast, ${(recipe.dream_seeds?.places || []).length} places (mediums/vibes auto-roll from the DB dream_eligible pools — favorites removed 2026-06-02)`
+  );
   console.log(`>>> Running ${NIGHTS} nights sequentially...\n`);
 
   const results = [];
   for (let n = 1; n <= NIGHTS; n++) {
     const r = await runNight(n, recipe);
     const icon = r.ok ? '✓' : '✗';
-    console.log(`  ${icon} Night ${String(n).padStart(2)} (${r.elapsed}s): ${r.ok ? `${r.medium}/${r.vibe}` : r.error}`);
+    console.log(
+      `  ${icon} Night ${String(n).padStart(2)} (${r.elapsed}s): ${r.ok ? `${r.medium}/${r.vibe}` : r.error}`
+    );
     results.push(r);
   }
 
@@ -127,9 +134,13 @@ function fmtDistribution(counts, total) {
   // ── Diversity stats ──────────────────────────────────────────────────
   console.log(`\n━━━ CHARACTER INCLUSION ━━━  (target: ~50%)`);
   const hasCharacter = axesList.filter((a) => a.nightlyPath?.startsWith('char')).length;
-  console.log(`  Character included:  ${hasCharacter} / ${axesList.length}  (${pct(hasCharacter, axesList.length)})`);
+  console.log(
+    `  Character included:  ${hasCharacter} / ${axesList.length}  (${pct(hasCharacter, axesList.length)})`
+  );
 
-  console.log(`\n━━━ CAST ROLES  (when character fired) ━━━  (target: self 75% / plus_one 25% — no pet in profile)`);
+  console.log(
+    `\n━━━ CAST ROLES  (when character fired) ━━━  (target: self 75% / plus_one 25% — no pet in profile)`
+  );
   const castCounts = {};
   for (const a of axesList) {
     const roles = a.castRoles || [];
@@ -139,36 +150,52 @@ function fmtDistribution(counts, total) {
 
   console.log(`\n━━━ LOCATION ━━━`);
   const hasLoc = axesList.filter((a) => a.nightlyPath?.includes('loc')).length;
-  console.log(`  Location included:  ${hasLoc} / ${axesList.length}  (${pct(hasLoc, axesList.length)})  (target: ~100%)`);
+  console.log(
+    `  Location included:  ${hasLoc} / ${axesList.length}  (${pct(hasLoc, axesList.length)})  (target: ~100%)`
+  );
 
   console.log(`\n━━━ OBJECT ━━━  (target: ~50%)`);
   const hasObj = axesList.filter((a) => a.nightlyPath?.includes('obj')).length;
-  console.log(`  Object included:  ${hasObj} / ${axesList.length}  (${pct(hasObj, axesList.length)})`);
+  console.log(
+    `  Object included:  ${hasObj} / ${axesList.length}  (${pct(hasObj, axesList.length)})`
+  );
 
   console.log(`\n━━━ COMPOSITION ━━━`);
-  console.log(fmtDistribution(countBy(axesList, (a) => a.composition), axesList.length));
+  console.log(
+    fmtDistribution(
+      countBy(axesList, (a) => a.composition),
+      axesList.length
+    )
+  );
 
   console.log(`\n━━━ COMPOSITION MODE ━━━`);
-  console.log(fmtDistribution(countBy(axesList, (a) => a.compositionMode), axesList.length));
+  console.log(
+    fmtDistribution(
+      countBy(axesList, (a) => a.compositionMode),
+      axesList.length
+    )
+  );
 
-  console.log(`\n━━━ MEDIUM DISTRIBUTION ━━━  (${recipe.art_styles.length} in profile)`);
+  console.log(`\n━━━ MEDIUM DISTRIBUTION ━━━`);
   const mediumCounts = countBy(axesList, (a) => a.medium);
   console.log(fmtDistribution(mediumCounts, axesList.length));
   const mediumsUsed = Object.keys(mediumCounts).length;
-  console.log(`  Unique mediums:  ${mediumsUsed} / ${recipe.art_styles.length} (${pct(mediumsUsed, recipe.art_styles.length)} coverage)`);
-  const missingMediums = recipe.art_styles.filter((m) => !mediumCounts[m]);
+  console.log(`  Unique mediums:  ${mediumsUsed}`);
+  const missingMediums = [];
   if (missingMediums.length) console.log(`  NOT chosen: ${missingMediums.join(', ')}`);
 
-  console.log(`\n━━━ VIBE DISTRIBUTION ━━━  (${recipe.aesthetics.length} in profile)`);
+  console.log(`\n━━━ VIBE DISTRIBUTION ━━━`);
   const vibeCounts = countBy(axesList, (a) => a.vibe);
   console.log(fmtDistribution(vibeCounts, axesList.length));
   const vibesUsed = Object.keys(vibeCounts).length;
-  console.log(`  Unique vibes:  ${vibesUsed} / ${recipe.aesthetics.length} (${pct(vibesUsed, recipe.aesthetics.length)} coverage)`);
-  const missingVibes = recipe.aesthetics.filter((v) => !vibeCounts[v]);
+  console.log(`  Unique vibes:  ${vibesUsed}`);
+  const missingVibes = [];
   if (missingVibes.length) console.log(`  NOT chosen: ${missingVibes.join(', ')}`);
 
   // Locations actually appearing in prompts
-  console.log(`\n━━━ LOCATION USAGE  (parsed from final prompts) ━━━  (${(recipe.dream_seeds?.places || []).length} in profile)`);
+  console.log(
+    `\n━━━ LOCATION USAGE  (parsed from final prompts) ━━━  (${(recipe.dream_seeds?.places || []).length} in profile)`
+  );
   const places = recipe.dream_seeds?.places || [];
   const placeCounts = {};
   for (const p of places) placeCounts[p] = 0;
@@ -183,7 +210,9 @@ function fmtDistribution(counts, total) {
   }
   console.log(fmtDistribution(placeCounts, axesList.length));
 
-  console.log(`\n━━━ OBJECT USAGE  (parsed from final prompts) ━━━  (${(recipe.dream_seeds?.things || []).length} in profile)`);
+  console.log(
+    `\n━━━ OBJECT USAGE  (parsed from final prompts) ━━━  (${(recipe.dream_seeds?.things || []).length} in profile)`
+  );
   const things = recipe.dream_seeds?.things || [];
   const thingCounts = {};
   for (const t of things) thingCounts[t] = 0;

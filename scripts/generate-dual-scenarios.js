@@ -96,6 +96,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'giant_scale',
+    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
     label: 'Giant / oversized props',
     desc: 'Comically OVERSIZED props, normal clothes — perched on a giant rubber duck, beside a donut taller than them, on a giant slice of pizza, holding a colossal ice-cream cone, on an enormous beanbag.',
   },
@@ -106,6 +107,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'fantastical_silly',
+    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
     label: 'Fantastical & silly',
     desc: 'Light-hearted fantasy/sci-fi comedy, readable — taking a selfie with a friendly cartoonish alien, a tiny dragon perched nearby, a goofy robot butler serving them, a friendly yeti leaning in, riding a slow cartoon dinosaur.',
   },
@@ -118,6 +120,28 @@ const GOOFY_BUCKETS = [
     key: 'fun_activities',
     label: 'Fun activities & adventures',
     desc: 'The couple doing a fun/silly ACTIVITY together in normal (activity-appropriate) clothes — bungee jumping, cruising in a candy-colored lowrider convertible, jamming together in a garage rock band with instruments, on a wild rollercoaster mid-drop, go-karting, at a carnival midway with prizes, riding a mechanical bull, on a tandem skydive, in a paddle boat shaped like a swan.',
+  },
+  {
+    key: 'glamour_shot_retro',
+    posePool: 'glamour', // migration 353: renders draw from the curated glamour pose pool
+    mediumKey: 'photography', // migration 354: photo-genre parody — force the photo medium
+    label: 'Retro glamour-shot studio',
+    desc: 'A cheesy 1980s/90s mall GLAMOUR SHOTS photo studio, played completely straight — soft-focus dreamy glow, an airbrushed studio backdrop (laser grid, misty pastel clouds, marbled gray, glittery starburst), wind-machine hair, dramatic studio spotlights, maybe a white column or fake fur prop to lean territory near. The earnest cheese IS the joke. Attire carries it: acid-wash denim jackets off the shoulder, chunky pearls, sequined tops, teased/feathered hair, white suits with shoulder pads.',
+  },
+  {
+    key: 'decade_eras',
+    label: 'Decade eras fashion',
+    desc: "A stylized 20th-century DECADE portrait with the era's wild fashion played straight — 1940s swing-dance hall in victory rolls and high-waist trousers, 1950s pastel diner with milkshakes in poodle skirt and letterman jacket, 1960s mod go-go set in geometric shift dress and slim suit, 1970s roller-disco rink in flared jumpsuits under a disco ball, 1980s neon aerobics studio in leotards leg-warmers and headbands, 1990s mall photo booth in windbreakers and frosted denim, Y2K house party in metallic fashion and tiny sunglasses. The over-the-top era-accurate fashion is the fun; era-accurate setting details around them.",
+  },
+  {
+    key: 'surreal_absurd',
+    label: 'Surreal absurd (deadpan impossible)',
+    desc: "A DEADPAN IMPOSSIBLE scene treated like a totally normal couple photo, normal clothes — sitting in a giant bowl of breakfast cereal with a huge spoon, lounging on an inflatable flamingo pool float on the gray surface of the moon with Earth in the sky, having a fancy candlelit dinner at a tiny table on top of a highway billboard, in an office cubicle set up underwater with fish swimming past, toasting marshmallows over a tiny campfire in a fancy hotel lobby, waiting at a bus stop bench in the middle of a desert with a single traffic light. Every noun CONCRETE (a specific object, never a vague 'creature/figure'); one impossible idea per scene, played straight.",
+  },
+  {
+    key: 'out_and_about',
+    label: 'Out and about (classic fun outings)',
+    desc: 'A wholesome classic FUN OUTING, normal everyday clothes — at the amusement park with a ferris wheel behind them, sharing cotton candy at the county fair midway, on a picnic blanket with a wicker basket in a sunny park, a beach day with striped umbrellas and sandcastles, at the aquarium in front of a glowing floor-to-ceiling fish tank, at a pumpkin patch with wheelbarrows of pumpkins, apple picking in an orchard with baskets, at the zoo by the giraffe enclosure, a museum trip beside dinosaur skeletons, at a farmers market with armfuls of flowers and produce, mini golf by the windmill hole, a drive-in movie leaning on a classic car. Joyful, sunny, postcard-fun.',
   },
 ];
 
@@ -190,16 +214,31 @@ const fs = require('fs');
     const seen = new Set();
     for (const bucket of buckets) {
       console.log(`\n=== ${pool}/${bucket.key} (${bucket.label}) ===`);
+      // Cross-run append safety: dedup + ban against what's ALREADY seeded
+      // for this bucket, not just this run.
+      const { data: existingRows } = await supabase
+        .from('dual_scenarios')
+        .select('scene')
+        .eq('pool', pool)
+        .eq('category', bucket.key);
+      const existingScenes = (existingRows ?? []).map((r) => r.scene);
+      existingScenes.forEach((s) =>
+        seen.add(
+          s
+            .toLowerCase()
+            .replace(/[^a-z0-9 ]/g, '')
+            .trim()
+        )
+      );
+      if (existingScenes.length) console.log(`  (${existingScenes.length} existing — appending)`);
       const got = [];
       let tries = 0;
       while (got.length < PER && tries < 6) {
         tries++;
-        const batch = await genBatch(
-          pool,
-          bucket,
-          Math.min(PER - got.length + 3, 20),
-          all.map((x) => x.scene)
-        );
+        const batch = await genBatch(pool, bucket, Math.min(PER - got.length + 3, 20), [
+          ...all.map((x) => x.scene),
+          ...existingScenes,
+        ]);
         for (const o of batch) {
           const key = o.scene
             .toLowerCase()
@@ -212,7 +251,15 @@ const fs = require('fs');
         }
       }
       got.forEach((o) => {
-        all.push({ pool, category: bucket.key, scene: o.scene, attire: o.attire });
+        all.push({
+          pool,
+          category: bucket.key,
+          scene: o.scene,
+          attire: o.attire,
+          pose_pool: bucket.posePool ?? null,
+          medium_key: bucket.mediumKey ?? null,
+          medium_ban: bucket.mediumBan ?? null,
+        });
         console.log(`  • ${o.scene}  [${o.attire}]`);
       });
     }
