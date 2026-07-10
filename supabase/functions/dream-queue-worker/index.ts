@@ -334,7 +334,7 @@ Deno.serve(async (req) => {
                 recipient_id: job.user_id,
                 type: 'dream_failed',
                 subtype: 'nightly_failed',
-                body: "Your nightly dream couldn't render tonight — we've added a sparkle to your balance to make up for it.",
+                body: "Your nightly dream slipped away tonight, so we've added a sparkle to your balance to make up for it.",
               });
               if (notifErr) {
                 console.error(

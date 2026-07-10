@@ -759,9 +759,9 @@ export default function InboxScreen() {
       // Content/NSFW rejection — re-running won't help; offer to tweak it.
       if (g.subtype === 'rejected') {
         showAlert(
-          'Tipped the NSFW scale',
+          'A little too spicy',
           g.body ||
-            'Looks like that one tipped the NSFW scale — your sparkle was refunded. Tweak the prompt and give it another go.',
+            "That one leaned a little too spicy for our filters. Your sparkle's back, tweak the prompt and give it another go.",
           [
             { text: 'Not now', style: 'cancel' },
             { text: 'Tweak it', onPress: () => nav.push('/(tabs)/create') },
@@ -772,17 +772,17 @@ export default function InboxScreen() {
       // Nightly auto-dream — system dream, not retryable; just inform.
       if (g.subtype === 'nightly_failed') {
         showAlert(
-          'Nightly dream hiccuped',
+          'Nightly dream slipped away',
           g.body ||
-            "Your nightly dream couldn't render tonight — we added a sparkle to your balance to make up for it.",
+            'Your nightly dream slipped away tonight, so we added a sparkle to your balance to make up for it.',
           [{ text: 'OK' }]
         );
         return;
       }
       // Render/infra failure → offer a one-tap retry of the exact dream.
       showAlert(
-        "Your dream couldn't render",
-        "Something hiccuped while rendering, so this dream didn't make it through. Your sparkle was refunded — want to try that dream again?",
+        'That dream got away',
+        "Oops, that dream got away from us before it finished. Your sparkle's back in your pocket. Want to take another swing?",
         [
           { text: 'Not now', style: 'cancel' },
           { text: 'Retry', onPress: () => void retryLatestFailedDream() },

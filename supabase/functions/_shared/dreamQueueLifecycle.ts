@@ -27,8 +27,9 @@ const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 //     re-enqueues the stored payload as a fresh job).
 // `reference_id = jobId` lets the failure toast/inbox retry the EXACT dream.
 const NSFW_REJECT_BODY =
-  'Looks like that one tipped the NSFW scale — sparkle refunded, tweak the prompt and try again';
-const RENDER_FAIL_BODY = "Your dream couldn't render — sparkle refunded";
+  "That one leaned a little too spicy for our filters. Sparkle's back, tweak the prompt and try again.";
+const RENDER_FAIL_BODY =
+  "Oops, that dream got away from us. Sparkle's back in your pocket, take another swing.";
 
 /**
  * Stage breadcrumb — stamp the render's progress into dream_queue BEFORE each
