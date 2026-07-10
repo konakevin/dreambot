@@ -1549,28 +1549,29 @@ Output ONLY the prompt.`;
   );
   let pickedModel = newSceneRefModel || force_model || autoPicked.model;
 
-  // ── Dual-face-swap safety clamp: Flux 1.1 Pro Ultra → Flux 1.1 Pro ──
-  // Flux 1.1 Pro Ultra renders at 4MP. The dual-swap pipeline has to decode
-  // that output, crop it in half, encode each half, swap each half, then
-  // stitch — at 4MP that blows the Supabase Edge Function's 150MB
-  // per-isolate memory ceiling and returns 546 WORKER_RESOURCE_LIMIT
-  // (confirmed 2026-05-30 — 3/3 dual renders on Ultra failed even with
-  // DUAL_SWAP_FANOUT enabled). Single face-swap is fine because there's
-  // no halving step. Drop Ultra → Pro for dual face-swap only; Ultra is
-  // still picked for single + non-face-swap mediums (landscapes etc).
-  // faceSwapSources is only populated when the cast-injection branch
-  // resolved 2 face-swap-eligible cast members, so this implicitly gates
-  // on dual+face-swap-eligible without needing the (out-of-scope) local
-  // isFaceSwapEligible flag.
-  if (
-    faceSwapSources &&
-    faceSwapSources.length === 2 &&
-    pickedModel === 'black-forest-labs/flux-1.1-pro-ultra'
-  ) {
+  // ── Face-swap safety clamp: Flux 1.1 Pro Ultra → Flux 1.1 Pro ──
+  // Ultra renders at 4MP, which breaks face swaps two ways:
+  //   (1) DUAL — the pipeline decodes the output, crops it in half, encodes
+  //       each half, swaps each, then stitches; at 4MP that blows the Supabase
+  //       Edge 150MB per-isolate ceiling → 546 WORKER_RESOURCE_LIMIT (confirmed
+  //       2026-05-30, 3/3 dual renders on Ultra failed).
+  //   (2) SINGLE — the 4MP render is handed to the swap providers
+  //       (cdingram/yan-ops/pikachupichu25), which downscale it until the face
+  //       is undetectable, or time out → "no face found" → hard-fail + refund.
+  //       This disproves the old "single face-swap is fine, no halving step"
+  //       assumption: 2026-07-10 A/B — the SAME beach scene COMPLETED on
+  //       flux-1.1-pro (08:04) and hard-failed on -ultra (08:10), minutes apart.
+  // So clamp Ultra → Pro whenever a face swap (single OR dual) will run. Ultra
+  // is still picked for non-face-swap mediums (landscapes etc). faceSwapSource
+  // (single) + faceSwapSources (dual) are both populated by the cast/photo
+  // branches above, before this point.
+  const willFaceSwapRender = (faceSwapSources && faceSwapSources.length === 2) || !!faceSwapSource;
+  if (willFaceSwapRender && pickedModel === 'black-forest-labs/flux-1.1-pro-ultra') {
+    const arity = faceSwapSources && faceSwapSources.length === 2 ? 'dual' : 'single';
     console.warn(
-      `[generate-dream] CLAMP: flux-1.1-pro-ultra → flux-1.1-pro for dual face swap (Ultra's 4MP output exceeds dual-swap memory ceiling)`
+      `[generate-dream] CLAMP: flux-1.1-pro-ultra → flux-1.1-pro for ${arity} face swap (Ultra's 4MP output breaks the swap)`
     );
-    fallbackReasons.push('dual_ultra_clamped_to_pro');
+    fallbackReasons.push(`${arity}_ultra_clamped_to_pro`);
     pickedModel = 'black-forest-labs/flux-1.1-pro';
   }
 

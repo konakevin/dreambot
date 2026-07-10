@@ -450,6 +450,14 @@ export async function faceSwap(
   const maxPrimaryAttempts = retry ? MAX_PRIMARY_ATTEMPTS : 1;
 
   let lastErr: Error | null = null;
+  // Record every provider outcome so the surfaced error names the WHOLE chain
+  // (cdingram → yan-ops → pikachupichu25), not just the last. Otherwise a
+  // breadcrumb reads "pikachupichu25: no face found" and hides that cdingram +
+  // yan-ops already failed the same way — i.e. it's the RENDER (no detectable
+  // face), not one broken model. See 2026-07-10 -ultra 4MP investigation.
+  const providerAttempts: string[] = [];
+  const classifyFail = (m: string): string =>
+    /no face found/i.test(m) ? 'no_face' : /timed out|deadline/i.test(m) ? 'timeout' : 'err';
 
   try {
     // ── Primary with retries (skipped when skipPrimary is set) ──
@@ -485,6 +493,7 @@ export async function faceSwap(
           console.warn(
             `[faceSwap] primary ${primary.name} exhausted after ${attempt}/${maxPrimaryAttempts} (${msg.slice(0, 80)})`
           );
+          providerAttempts.push(`${primary.name}:${classifyFail(msg)}`);
           break;
         }
       }
@@ -514,6 +523,7 @@ export async function faceSwap(
         return url;
       } catch (err) {
         lastErr = err as Error;
+        providerAttempts.push(`${fb.name}:${classifyFail((err as Error).message || '')}`);
         console.warn(
           `[faceSwap] fallback ${fb.name} failed: ${(err as Error).message?.slice(0, 80)}`
         );
@@ -521,6 +531,11 @@ export async function faceSwap(
       }
     }
 
+    // Enrich the surfaced error with the full attempt chain, as a SUFFIX so
+    // callers still substring-match the original "no face found" / "timed out".
+    if (lastErr && providerAttempts.length > 0) {
+      lastErr.message = `${lastErr.message} [providers: ${providerAttempts.join(' → ')}]`;
+    }
     throw lastErr ?? new Error('faceSwap: all models exhausted');
   } finally {
     // Clean up the temp data-URL conversion if we made one. Fire-and-forget;
