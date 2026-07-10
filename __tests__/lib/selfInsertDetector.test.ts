@@ -213,6 +213,122 @@ describe('detectSelfInsert', () => {
     });
   });
 
+  // ── COUPLE CONSTRUCTION — "me and my/the wife" hardened against a garbled
+  //    "and" (an / nd / 'n / n / & / +). Root cause 2026-07-10: "show me an my
+  //    wife at the beach" hit the imperative filter ("an" is an article, like
+  //    "show me an apple"), silently DROPPED self, and rendered a SOLO of the
+  //    partner — then that couple-coded solo render broke the single face swap.
+  //    These lock the fix: a garbled connector must never write the user out of
+  //    their own couple dream (either word order), while the genuine imperative
+  //    "show me a photo of my wife" must STAY a solo of the partner.
+  describe('couple construction (garbled-"and" hardening)', () => {
+    const rolesOf = (p: string) => [...detectSelfInsert(p).referencedRoles].sort();
+
+    // Every connector variant, both word orders → the user + their partner.
+    const couples = [
+      'me and my wife at the beach', // canonical (still works)
+      'show me and my wife at the beach',
+      'show me an my wife at the beach', // the exact reported bug
+      'me an my wife at the beach',
+      'me an the wife at the beach',
+      'me and the wife',
+      "me 'n the wife at the beach",
+      'me ’n the wife', // curly apostrophe
+      'me n the wife at sunset',
+      'me & my wife',
+      'me + my wife',
+      'me nd my wife',
+      'me an my husband',
+      'me and our daughter',
+      'me n my girlfriend downtown',
+      'me & the boyfriend on a rooftop',
+      'me an my beautiful wife', // one descriptor
+      'me and the absolutely lovely wife', // two descriptors
+      'a photo of me an my wife on a boat', // embedded
+      'come fly with me and my wife',
+      'ME AN MY WIFE AT THE BEACH', // case-insensitive
+      'me at the beach with my wife', // distributed (via existing rules)
+      // reverse order
+      'the wife and me at the beach',
+      'my wife an me at the beach',
+      'my husband & me',
+      'our daughter n me at the park',
+    ];
+    it.each(couples)('casts BOTH the user and partner: "%s"', (p) => {
+      expect(rolesOf(p)).toEqual(['plus_one', 'self']);
+    });
+
+    // The whole point: the typo must resolve to the SAME two-person cast as the
+    // correctly-spelled version — never a solo.
+    it('a garbled connector yields the identical cast to "and"', () => {
+      const canonical = rolesOf('me and my wife at the beach');
+      for (const p of [
+        'me an my wife at the beach',
+        'me nd my wife at the beach',
+        "me 'n my wife at the beach",
+        'me & my wife at the beach',
+      ]) {
+        expect(rolesOf(p)).toEqual(canonical);
+      }
+    });
+
+    // Couple + pet → all three roles.
+    it.each(['me and my wife and my dog at the park', 'me an the wife with my cat'])(
+      'couple + pet → self + plus_one + pet: "%s"',
+      (p) => {
+        expect(rolesOf(p)).toEqual(['pet', 'plus_one', 'self']);
+      }
+    );
+
+    // ── FALSE POSITIVES — the connector guard must NOT over-fire ──
+    // "show me a photo of my wife" is an imperative ABOUT the partner → a solo
+    // of the wife (plus_one), NOT the user. "a" is not a connector, so the
+    // couple rule stays silent and the render remains a solo of the partner.
+    it('"show me a photo of my wife" stays plus_one only (imperative, not couple)', () => {
+      expect(rolesOf('show me a photo of my wife')).toEqual(['plus_one']);
+    });
+
+    it.each([
+      'show me an apple', // an + noun, not a relationship
+      'show me an hour with the dragons',
+      'give me a break',
+      'the wife at the beach', // standalone "the wife" is intentionally NOT cast
+    ])('does NOT invent a partner: "%s"', (p) => {
+      expect(rolesOf(p)).not.toContain('plus_one');
+    });
+
+    // Words that merely CONTAIN "me" must not trigger the couple rule.
+    it('"men and my wife dancing" → plus_one only (no false self from "men")', () => {
+      expect(rolesOf('men and my wife dancing')).toEqual(['plus_one']);
+    });
+    it('"someone and my wife" → plus_one only (no false self)', () => {
+      expect(rolesOf('someone and my wife')).toEqual(['plus_one']);
+    });
+
+    // A PET in the couple slot is a pet, never a partner.
+    it('"me and my dog" → self + pet, never plus_one', () => {
+      expect(rolesOf('me and my dog')).toEqual(['pet', 'self']);
+    });
+    it('"my dog and me hiking" → self + pet, never plus_one', () => {
+      expect(rolesOf('my dog and me hiking')).toEqual(['pet', 'self']);
+    });
+
+    // Config-driven relationship words flow into the couple rule too.
+    it('honors custom relationshipWords in the couple rule', () => {
+      const roles = [
+        ...detectSelfInsert('me an my sidekick on a quest', {
+          relationshipWords: 'sidekick|henchman',
+        }).referencedRoles,
+      ].sort();
+      expect(roles).toEqual(['plus_one', 'self']);
+    });
+
+    // A non-relationship noun after the connector must not fabricate a partner.
+    it('"me and a castle" → self only (no partner)', () => {
+      expect(rolesOf('me and a castle')).toEqual(['self']);
+    });
+  });
+
   // ── CLEANED PROMPT ──────────────────────────────────────────────────
 
   it('strips "put me" from cleaned prompt', () => {

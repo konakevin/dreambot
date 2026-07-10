@@ -65,6 +65,32 @@ const PROMPTS = [
   'my absolutely gorgeous girlfriend at sunset',
   'my fluffy dog on a surfboard',
   'my beautiful long hair flowing',
+  // couple construction + garbled "and" (2026-07-10) — must agree in BOTH runtimes
+  'me and my wife at the beach',
+  'show me an my wife at the beach',
+  'me an the wife at the beach',
+  "me 'n the wife",
+  'me ’n the wife',
+  'me n the wife at sunset',
+  'me & my wife',
+  'me + my wife',
+  'me nd my wife',
+  'me an my beautiful wife',
+  'a photo of me an my wife on a boat',
+  'the wife and me at the beach',
+  'my husband & me',
+  'our daughter n me at the park',
+  'me and my wife and my dog',
+  // couple false-positives — the connector guard must agree it did NOT fire
+  'show me a photo of my wife',
+  'show me an apple',
+  'show me an hour with the dragons',
+  'the wife at the beach',
+  'men and my wife dancing',
+  'someone and my wife',
+  'me and my dog',
+  'my dog and me hiking',
+  'me and a castle',
 ];
 
 describe('client detector parity with engine selfInsertDetector', () => {

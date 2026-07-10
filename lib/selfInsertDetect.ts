@@ -85,10 +85,31 @@ export function detectCastRoles(prompt: string, words: DetectWords = {}): Set<Ca
   // generic possessive ("my annoying car") isn't a self-insert.
   const MY_SELF = new RegExp(`\\bmy\\s+${MY_GAP}(${selfParts})\\b`, 'i');
   const SELF_RE = buildSelfRegex(words.selfRefRegex);
+  // Couple construction "me <connector> my/the <relationship>", robust to a
+  // garbled/dropped "and": "me and my wife", "me an the wife", "me 'n the wife",
+  // "me n the wife", "me & my wife", "me + my wife". A typo'd "an" used to make
+  // the imperative filter (step 4) read "show me an ..." as "show me a[n apple]"
+  // and silently drop SELF, rendering a solo of the partner (2026-07-10). This
+  // positive signal adds BOTH roles up front so the connector's spelling can't
+  // write the user out of their own couple dream; it also accepts the colloquial
+  // "the wife" (not only "my wife"). The my/the/our + relationship-word guard
+  // keeps it from firing on "show me an apple" / "give me a break".
+  // Connector accepts a garbled/dropped "and": and | an | nd | 'n | n | & | +.
+  const CONN = `(?:and|an|nd|['’]n|n|&|\\+)`;
+  // A partner phrase: my/the/our (+ up to two descriptors) + relationship word.
+  const REL = `(?:my|the|our)\\s+${MY_GAP}(?:${relWords})`;
+  // Both orders: "me <conn> my/the wife" and "the wife <conn> me".
+  const ME_COUPLE = new RegExp(`\\bme\\s+${CONN}\\s+${REL}\\b`, 'i');
+  const COUPLE_ME = new RegExp(`\\b${REL}\\s+${CONN}\\s+me\\b`, 'i');
 
   // 1. Relationship references ("my wife", "my dog", "me and +1")
   if (MY_PLUS_ONE.test(text) || PLUS_ONE_STANDALONE.test(text)) roles.add('plus_one');
   if (MY_PET.test(text)) roles.add('pet');
+  // 1b. Couple construction → the user + their partner, even with a garbled "and".
+  if (ME_COUPLE.test(text) || COUPLE_ME.test(text)) {
+    roles.add('self');
+    roles.add('plus_one');
+  }
 
   // 2. Self-pronouns (I, I'm, myself, selfie) — admin-overridable.
   if (SELF_RE.test(text)) roles.add('self');
