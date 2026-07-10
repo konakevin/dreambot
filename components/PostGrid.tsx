@@ -58,6 +58,14 @@ interface PostGridProps {
    * fires.
    */
   onScrollProgress?: (y: number) => void;
+  /** Multi-select wiring (bulk delete, 2026-07-10) — see PostTileSelection.
+   *  Provided only by grids that support it (the owner's Dreams grid). */
+  selection?: {
+    active: boolean;
+    selectedIds: ReadonlySet<string>;
+    onToggle: (id: string) => void;
+    onEnter: (id: string) => void;
+  };
 }
 
 export function PostGrid({
@@ -70,6 +78,7 @@ export function PostGrid({
   showPrivateBadge = false,
   onScrollProgress,
   onRefreshExtra,
+  selection,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -430,6 +439,9 @@ export function PostGrid({
             </View>
           ) : null
         }
+        // Selection state lives outside the items — extraData makes the
+        // FlatList re-render rows when the selected set / mode changes.
+        extraData={selection && [selection.active, selection.selectedIds]}
         renderItem={({ item }) => (
           <PostTile
             item={item}
@@ -438,6 +450,16 @@ export function PostGrid({
             isHighlighted={!highlightDismissed && item.id === highlightPostId}
             showPrivateBadge={showPrivateBadge}
             allPosts={posts}
+            selection={
+              selection
+                ? {
+                    active: selection.active,
+                    selected: selection.selectedIds.has(item.id),
+                    onToggle: selection.onToggle,
+                    onEnter: selection.onEnter,
+                  }
+                : undefined
+            }
           />
         )}
       />

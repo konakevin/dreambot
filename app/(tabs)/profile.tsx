@@ -37,6 +37,8 @@ import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
+import { showAlert } from '@/components/CustomAlert';
+import { useBulkDeletePosts, useBulkMakePrivate } from '@/hooks/useDeletePost';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -54,6 +56,76 @@ export default function ProfileScreen() {
   // Dreams album filter (segmented control on the right of the subheader):
   // All / Posted (live on feed) / Private (unposted). Persisted per migration 306.
   const [dreamsFilter, setDreamsFilter] = useState<DreamsFilter>('all');
+
+  // ── Grid multi-select (bulk edit: Posts + Dreams albums, 2026-07-10) ──────
+  // Entered via the tile long-press sheet's "Select" row; tap toggles tiles;
+  // Done / tab switch / completing an action exit. Two verbs in one bottom
+  // row: Make Private (reversible — no confirm) and Delete (confirm; batched;
+  // one summary toast; partial failures resync from the server).
+  const [gridSelecting, setGridSelecting] = useState(false);
+  const [gridSelectedIds, setGridSelectedIds] = useState<Set<string>>(new Set());
+  const bulkDelete = useBulkDeletePosts();
+  const bulkPrivate = useBulkMakePrivate();
+  const exitGridSelection = useCallback(() => {
+    setGridSelecting(false);
+    setGridSelectedIds(new Set());
+  }, []);
+  // Any tab change exits the mode (covers posts↔dreams too — a selection
+  // must never silently carry across albums).
+  useEffect(() => {
+    exitGridSelection();
+  }, [activeTab, exitGridSelection]);
+  const enterGridSelection = useCallback((id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setGridSelecting(true);
+    setGridSelectedIds(new Set([id]));
+  }, []);
+  const toggleGridSelected = useCallback((id: string) => {
+    setGridSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      // Deselecting the LAST tile exits selection mode (the Gmail behavior) —
+      // otherwise the user is stranded at "0 selected" hunting for the ✕.
+      if (next.size === 0) setGridSelecting(false);
+      return next;
+    });
+  }, []);
+  const handleBulkDelete = useCallback(() => {
+    const count = gridSelectedIds.size;
+    if (count === 0 || bulkDelete.isPending) return;
+    showAlert(
+      `Delete ${count} dream${count === 1 ? '' : 's'}?`,
+      "They'll be removed everywhere, including the feed. This can't be undone.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            bulkDelete.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+          },
+        },
+      ]
+    );
+  }, [gridSelectedIds, bulkDelete, exitGridSelection]);
+  const handleBulkMakePrivate = useCallback(() => {
+    const count = gridSelectedIds.size;
+    if (count === 0 || bulkPrivate.isPending) return;
+    showAlert(
+      `Make ${count} dream${count === 1 ? '' : 's'} private?`,
+      "They'll come off the public feed. You can post them again anytime.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Make Private',
+          onPress: () => {
+            bulkPrivate.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+          },
+        },
+      ]
+    );
+  }, [gridSelectedIds, bulkPrivate, exitGridSelection]);
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
@@ -469,29 +541,46 @@ export default function ProfileScreen() {
 
       {/* Dreams album: a slim right-aligned All / Posted / Private segmented
           filter. The other albums show no subheader — the icons speak for
-          themselves. */}
-      {activeTab === 'dreams' && (
-        <View style={styles.dreamsFilterRow}>
-          <View style={styles.segmented}>
-            {(['all', 'posted', 'private'] as const).map((f) => {
-              const active = dreamsFilter === f;
-              const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
-              return (
-                <TouchableOpacity
-                  key={f}
-                  style={[styles.segment, active && styles.segmentActive]}
-                  onPress={() => applyDreamsFilter(f)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                    {label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+          themselves. While MULTI-SELECTING, this row (the grid's own chrome,
+          sitting directly on the grid) BECOMES the selection bar — count on
+          the left, Done on the right — so it reads as the grid's edit mode,
+          not detached screen chrome (Kevin 2026-07-10: the top-left ✕ was
+          hard to associate with the grid). */}
+      {(activeTab === 'dreams' || (activeTab === 'posts' && gridSelecting)) &&
+        (gridSelecting ? (
+          <View style={[styles.dreamsFilterRow, styles.selectionRow]}>
+            <Text style={styles.selectionCountText}>{gridSelectedIds.size} selected</Text>
+            <TouchableOpacity
+              style={styles.selectionDoneButton}
+              onPress={exitGridSelection}
+              activeOpacity={0.8}
+              hitSlop={8}
+            >
+              <Text style={styles.selectionDoneText}>Done</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-      )}
+        ) : (
+          <View style={styles.dreamsFilterRow}>
+            <View style={styles.segmented}>
+              {(['all', 'posted', 'private'] as const).map((f) => {
+                const active = dreamsFilter === f;
+                const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
+                return (
+                  <TouchableOpacity
+                    key={f}
+                    style={[styles.segment, active && styles.segmentActive]}
+                    onPress={() => applyDreamsFilter(f)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+                      {label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        ))}
 
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
@@ -543,7 +632,72 @@ export default function ProfileScreen() {
           showPrivateBadge={activeTab === 'dreams'}
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
+          // Multi-select (bulk edit) — own Posts + Dreams albums. Present-but-
+          // inactive adds the "Select" row to tile long-press sheets.
+          selection={
+            activeTab === 'dreams' || activeTab === 'posts'
+              ? {
+                  active: gridSelecting,
+                  selectedIds: gridSelectedIds,
+                  onToggle: toggleGridSelected,
+                  onEnter: enterGridSelection,
+                }
+              : undefined
+          }
         />
+        {/* Selection chrome — the count + Done live in the grid's own filter
+            row (the subheader above the grid); the ACTION ROW floats at the
+            bottom — the Gmail-toolbar shape (Kevin 2026-07-10). Posts album:
+            [Make Private][Delete]; Dreams album: [Delete] only (its grid is
+            mostly private already — the extra verb read as noise). */}
+        {gridSelecting && (
+          <View style={[styles.selectionActions, { bottom: tabBarHeight + verticalScale(12) }]}>
+            <View style={styles.selectionActionsRow}>
+              {activeTab === 'posts' && (
+                <TouchableOpacity
+                  style={[
+                    styles.actionPill,
+                    (gridSelectedIds.size === 0 || bulkPrivate.isPending) &&
+                      styles.actionPillDisabled,
+                  ]}
+                  onPress={handleBulkMakePrivate}
+                  disabled={gridSelectedIds.size === 0 || bulkPrivate.isPending}
+                  activeOpacity={0.85}
+                >
+                  {bulkPrivate.isPending ? (
+                    <ActivityIndicator color="#FFFFFF" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="eye-off-outline" size={16} color="#FFFFFF" />
+                      <Text style={styles.actionPillText}>Make Private</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={[
+                  styles.actionPill,
+                  styles.deletePill,
+                  (gridSelectedIds.size === 0 || bulkDelete.isPending) && styles.actionPillDisabled,
+                ]}
+                onPress={handleBulkDelete}
+                disabled={gridSelectedIds.size === 0 || bulkDelete.isPending}
+                activeOpacity={0.85}
+              >
+                {bulkDelete.isPending ? (
+                  <ActivityIndicator color="#FFFFFF" size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="trash-outline" size={16} color="#FFFFFF" />
+                    <Text style={styles.actionPillText}>
+                      Delete{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                    </Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
         {picSheet}
       </SafeAreaView>
     );
@@ -615,6 +769,72 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  // ── Dreams multi-select chrome ─────────────────────────────────────────────
+  // The count + Done REPLACE the All/Posted/Private segmented control in the
+  // grid's own subheader row while selecting (framing the mode around the
+  // grid); the red Delete pill floats above the tab bar.
+  selectionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  selectionCountText: {
+    color: colors.textPrimary,
+    fontSize: fontScale(14),
+    fontWeight: '700',
+  },
+  selectionDoneButton: {
+    paddingHorizontal: 16,
+    paddingVertical: verticalScale(6),
+    borderRadius: 999,
+    backgroundColor: colors.accentBg,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
+  },
+  selectionDoneText: {
+    color: colors.accent,
+    fontSize: fontScale(13),
+    fontWeight: '700',
+  },
+  selectionActions: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  selectionActionsRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  actionPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    backgroundColor: 'rgba(30,30,44,0.96)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+    borderRadius: 999,
+    paddingHorizontal: 20,
+    paddingVertical: verticalScale(12),
+    minWidth: 140,
+    shadowColor: '#000',
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  deletePill: {
+    backgroundColor: colors.like,
+    borderColor: colors.like,
+  },
+  actionPillDisabled: {
+    opacity: 0.5,
+  },
+  actionPillText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(14),
+    fontWeight: '700',
+  },
   // Sparkle balance chip in the own-profile header — shows the balance and
   // taps through to the Sparkle Store (a passive IAP discovery point).
   sparkleChip: {

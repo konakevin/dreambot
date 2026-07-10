@@ -153,6 +153,11 @@ interface LongPressOpts extends SaveOpts {
    * owner's own posts on the profile grid. */
   isPinned?: boolean;
   onTogglePin?: () => void;
+  /** Enter multi-select mode on the hosting grid (bulk delete, 2026-07-10) —
+   * provided only by the owner's Dreams grid tiles. Rendered as the sheet's
+   * FIRST row (iOS-Photos "Select" pattern; long-press itself keeps opening
+   * this sheet, so selection can't hijack the existing gesture). */
+  onSelect?: () => void;
 }
 type SheetButton = { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void };
 
@@ -263,6 +268,18 @@ const iconForDownload = (label: string): string =>
  */
 export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] {
   const rows: PostActionRow[] = [];
+
+  // Select — enter the grid's multi-select mode (bulk delete). First row so
+  // the mode switch is discoverable without scanning the whole sheet.
+  if (opts.onSelect) {
+    rows.push({
+      key: 'select',
+      label: 'Select',
+      icon: 'checkmark-circle-outline',
+      group: 'primary',
+      onPress: opts.onSelect,
+    });
+  }
 
   // Save / Save in HD (or single "Save" for face-swap dreams).
   for (const b of downloadOptionButtons(opts)) {

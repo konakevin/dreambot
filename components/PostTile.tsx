@@ -19,6 +19,18 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
 
+/** Multi-select wiring (bulk delete, 2026-07-10) — provided only by grids that
+ *  support it (the owner's Dreams grid). While `active`, tap/long-press TOGGLE
+ *  selection instead of navigating; while inactive, its presence adds a
+ *  "Select" row to the long-press sheet (entry point — the long-press gesture
+ *  itself already belongs to the action sheet). */
+export interface PostTileSelection {
+  active: boolean;
+  selected: boolean;
+  onToggle: (id: string) => void;
+  onEnter: (id: string) => void;
+}
+
 interface PostTileProps {
   item: DreamPostItem;
   isOwn?: boolean;
@@ -33,6 +45,7 @@ interface PostTileProps {
   // triplet passes its own (always-3-up) width so it doesn't shrink when the
   // grid runs more columns on iPad. Height derives from the 4:5 portrait ratio.
   width?: number;
+  selection?: PostTileSelection;
 }
 
 export const PostTile = memo(function PostTile({
@@ -43,6 +56,7 @@ export const PostTile = memo(function PostTile({
   showPrivateBadge = false,
   allPosts,
   width = TILE_WIDTH,
+  selection,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const { pin, unpin } = usePinPost();
@@ -52,6 +66,12 @@ export const PostTile = memo(function PostTile({
   const dreamAgain = useDreamAgain(item);
 
   async function handlePress() {
+    // Selection mode: tap TOGGLES instead of navigating.
+    if (selection?.active) {
+      Haptics.selectionAsync();
+      selection.onToggle(item.id);
+      return;
+    }
     // Stash the source array + source type so PhotoDetailScreen can reuse
     // the grid's TanStack query (shared cache) and fetchNextPage as the
     // user scrolls past the grid's currently-loaded pages.
@@ -75,6 +95,12 @@ export const PostTile = memo(function PostTile({
   const [actionsOpen, setActionsOpen] = useState(false);
 
   function handleLongPress() {
+    // Selection mode: long-press toggles too (no nested modes).
+    if (selection?.active) {
+      Haptics.selectionAsync();
+      selection.onToggle(item.id);
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setActionsOpen(true);
   }
@@ -124,6 +150,18 @@ export const PostTile = memo(function PostTile({
           <Text style={styles.publicBadgeText}>Public</Text>
         </View>
       )}
+      {/* Multi-select state — selected tiles get a dim + accent ring + filled
+          check; unselected show an empty circle so the mode is unmistakable. */}
+      {selection?.active && (
+        <View
+          pointerEvents="none"
+          style={[styles.selectOverlay, selection.selected && styles.selectOverlaySelected]}
+        >
+          <View style={[styles.selectBadge, selection.selected && styles.selectBadgeOn]}>
+            {selection.selected && <Ionicons name="checkmark" size={13} color="#000000" />}
+          </View>
+        </View>
+      )}
       {actionsOpen && (
         <Modal
           transparent
@@ -146,6 +184,8 @@ export const PostTile = memo(function PostTile({
               imageUrlHq: item.image_url_hq ?? null,
               isOwn,
               faceSwapMode: item.face_swap_mode ?? null,
+              // Bulk-select entry point — grids that support it pass `selection`.
+              onSelect: selection ? () => selection.onEnter(item.id) : undefined,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
               onDreamAgain: isOwn && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
               // Profile pin toggle (migration 330) — own PUBLIC posts only (the
@@ -238,5 +278,33 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(10),
     fontWeight: '800',
+  },
+  // Multi-select overlays — accent ring + dim on selected tiles; the badge
+  // circle top-right flips from hollow (unselected) to accent-filled + check.
+  selectOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderWidth: 0,
+  },
+  selectOverlaySelected: {
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderWidth: 2,
+    borderColor: colors.accent,
+  },
+  selectBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.85)',
+  },
+  selectBadgeOn: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
 });
