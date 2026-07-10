@@ -620,21 +620,54 @@ export default function SettingsScreen() {
             <Switch
               value={isPublic}
               onValueChange={async (val) => {
-                const prev = isPublic;
-                setIsPublic(val); // optimistic
-                const { error } = await supabase
-                  .from('users')
-                  .update({ is_public: val })
-                  .eq('id', user!.id);
-                if (error) {
-                  setIsPublic(prev); // revert — don't leave the UI lying
-                  showAlert("Couldn't update", 'Please try again.');
+                // Writes is_public, reverting the switch if the update fails.
+                // `approvedCount` (>0) drives the success toast so it only claims
+                // approvals that actually happened.
+                const applyIsPublic = async (approvedCount: number) => {
+                  const prev = isPublic;
+                  setIsPublic(val); // optimistic
+                  const { error } = await supabase
+                    .from('users')
+                    .update({ is_public: val })
+                    .eq('id', user!.id);
+                  if (error) {
+                    setIsPublic(prev); // revert — don't leave the UI lying
+                    showAlert("Couldn't update", 'Please try again.');
+                    return;
+                  }
+                  queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
+                  if (val && approvedCount > 0) {
+                    Toast.show(
+                      `${approvedCount} follow ${approvedCount === 1 ? 'request' : 'requests'} approved`,
+                      'checkmark-circle'
+                    );
+                  }
+                };
+
+                // Turning OFF (going private) is instant. Turning ON (going
+                // public) needs a heads-up: the server auto-approves EVERY
+                // pending follow request the moment you flip (migration 098
+                // on_user_goes_public trigger), which is irreversible — so
+                // confirm first and tailor the copy to the actual pending count.
+                if (!val) {
+                  await applyIsPublic(0);
                   return;
                 }
-                queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
-                if (val) {
-                  Toast.show('All pending follow requests approved', 'checkmark-circle');
-                }
+                const { count, error: cErr } = await supabase
+                  .from('follow_requests')
+                  .select('id', { count: 'exact', head: true })
+                  .eq('target_id', user!.id);
+                const pending = cErr ? 0 : (count ?? 0);
+                const detail =
+                  pending > 0
+                    ? `This approves your ${pending} pending follow ${
+                        pending === 1 ? 'request' : 'requests'
+                      } right away, and anyone will be able to follow you and see your posts.`
+                    : 'Anyone will be able to follow you and see your posts.';
+                showAlert('Make profile public?', detail, [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Go Public', onPress: () => applyIsPublic(pending) },
+                ]);
               }}
               trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor="#FFFFFF"
