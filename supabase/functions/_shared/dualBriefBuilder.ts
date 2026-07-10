@@ -58,6 +58,23 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
   const plusOneRelationship = cast.find((c) => c.role === 'plus_one')?.relationship;
   const dualAction = pickDualAction(plusOneRelationship, undefined);
 
+  // ── When to inject the curated fallback pose ──
+  // The pool poses NAME A SETTING ("sitting on a blanket", "seated on a bench",
+  // "under a large tree"). On a no-prompt dream (nightly / surprise) that's
+  // fine — the pose PROVIDES the scene. But on a dream where the user typed an
+  // explicit scene, a setting-anchored pose CONTRADICTS it: Sonnet stapled
+  // "sitting on a blanket" onto "me and my partner in a bronco in candyland",
+  // Flux got two settings and rendered the picnic — the Bronco vanished
+  // (Tiffany 2026-07-10). So inject the fallback pose ONLY when the user gave
+  // no scene of their own, OR their action is 'breaking' (center-contact like
+  // kissing that the half-frame swap can't render → we still need a concrete
+  // safe L/R anchor to translate it onto). Otherwise the user's scene drives
+  // the pose and the COMPOSITION RULES below impose the face-swap-safe L/R
+  // geometry (separate halves, clear head gap, ¾ view) — which never depended
+  // on this pool pose in the first place.
+  const includeFallbackPose =
+    !!dualAction && (!scene.userPrompt || userActionClass.kind === 'breaking');
+
   // ── Composition path: pick once, prepend at end via postProcess ──
   const dualPath = pickDualCompositionPath();
   const realisticFaceTag = '';
@@ -194,7 +211,7 @@ COMPOSITION RULES:
 - Characters grounded in the scene — environmental lighting, casting shadows. They exist IN this world.
 - Describe BODY POSE and CLOTHING only. NEVER describe eye direction, gaze, or where they are looking.
 - DO NOT include any face-bearing decorative objects in the same frame as the two characters: NO statues, busts, mannequins, dolls, masks, helmets with visible faceplates, totems, idols, gargoyles, carved figures, painted portraits, sculpted heads, or cartoon/character imagery on signs/billboards. These compete with the character faces during the face swap step and cause swap failures. If the scene calls for them, describe equivalent decoration that has no face (urns, banners, abstract carvings, geometric patterns, plants, lanterns, etc.).${faceRealismRule}
-${swapBreakingReframe}${dualAction ? `\nFALLBACK BODY LANGUAGE (use ONLY if user prompt doesn't specify what characters are doing — if they did, ignore this and use theirs):\n"${dualAction}"\n` : ''}${
+${swapBreakingReframe}${includeFallbackPose ? `\nFALLBACK BODY LANGUAGE (use ONLY if user prompt doesn't specify what characters are doing — if they did, ignore this and use theirs):\n"${dualAction}"\n` : ''}${
     scene.userPrompt
       ? `
 USER INTENT — EXPRESSION & POSE:
