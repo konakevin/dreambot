@@ -135,20 +135,22 @@ async function generateBotMessage(
         messages: [
           {
             role: 'user',
-            content: `You are captioning a dream image for its owner's inbox — a short, factual description of the scene so they can tell their dreams apart at a glance.
+            content: `You are titling a dream image for its owner's inbox — a short postcard-style title for WHERE the dream took place, so they can tell their dreams apart at a glance.
 
-Dream prompt: "${promptUsed.slice(0, 200)}"
+Dream prompt: "${promptUsed.slice(0, 600)}"
 
-Write ONE short caption describing the SCENE: its setting and main subject.
+Write ONE title, 2-6 words (≤56 characters).
 
 RULES:
-- A concise descriptive phrase, about 4-8 words (≤56 characters). It shows as one inbox line.
-- THIRD PERSON, describing the image. NEVER use "I", "me", "my", "you", or "your".
-- Name a concrete place/setting and/or the main subject. Examples: "A misty pine forest at dawn", "A woman by a sunlit barn window", "Neon Tokyo rooftop in the rain".
-- Just describe — no greeting, no reaction, no opinion, no personality.
+- If the prompt names a real place (city, island, landmark, region), LEAD with it: "Waikiki Beach at golden hour", "Queenstown under dawn mist", "Santorini rooftops at dusk".
+- No named place → name the setting vividly and specifically: "Misty pine forest at dawn", "Neon-soaked midnight rooftop", "Torchlit beach luau".
+- NEVER mention people — no "a man", "a woman", "a couple", "two people". Every dream stars its owner; they know who is in it. Title the world around them. (BAD: "man and a woman in hawaiian setting". GOOD: "Torchlit luau on a Hawaiian beach".)
+- Ignore camera/framing/face language in the prompt (side by side, frontal, portrait, faces) — that is render plumbing. The place is usually described after it.
+- Never the words "setting", "scene", or "image". Never "I", "me", "my", "you", "your".
+- Start with a capital letter. No greeting, reaction, or opinion.
 - No emojis, no quotation marks, no trailing punctuation.
 
-Output ONLY the caption, nothing else.`,
+Output ONLY the title, nothing else.`,
           },
         ],
       }),
