@@ -611,11 +611,14 @@ export function FullScreenFeed({
               justifyContent: 'center',
             }}
           >
+            {/* CIRCULAR scrim, tight to the ring (radius = half the 44+2×8 box).
+                The old rounded-square squircle read as an app-icon badge
+                rather than a spinner puck (Kevin 2026-07-10). */}
             <View
               style={{
                 backgroundColor: 'rgba(10,10,18,0.72)',
-                borderRadius: 28,
-                padding: 14,
+                borderRadius: 30,
+                padding: 8,
               }}
             >
               <BrandSpinner size={44} />
