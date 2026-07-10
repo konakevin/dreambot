@@ -43,6 +43,7 @@ import {
   useApproveFollowRequest,
   useApproveFollowAndFollowBack,
   useDenyFollowRequest,
+  useIncomingFollowRequestIds,
 } from '@/hooks/useFollowRequests';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
@@ -417,6 +418,13 @@ function GroupRow({
   // actually tapped.
   const isNew = group.isNewSinceView;
   const firstActorId = group.previewActorIds[0] ?? null;
+  // Follow-request actions show whenever the request is still PENDING — not
+  // gated on isNew, which flips false the moment the inbox is opened and used
+  // to hide the buttons on a still-open request (Kevin 2026-07-10). Cleared
+  // once the request is approved/denied (or auto-approved when they go public).
+  const { data: incomingRequestIds = new Set<string>() } = useIncomingFollowRequestIds();
+  const requestPending =
+    group.type === 'follow_request' && !!firstActorId && incomingRequestIds.has(firstActorId);
   // Lead with the actor's face when we have one (likes / comments / follows);
   // system pings (dream ready, downloads, milestones) have no actor → fall
   // back to the tinted type tile.
@@ -521,9 +529,7 @@ function GroupRow({
         </TouchableOpacity>
 
         {/* Follow-request approve/deny — only on the actor's own follow request. */}
-        {group.type === 'follow_request' && isNew && firstActorId && (
-          <FollowRequestActions actorId={firstActorId} />
-        )}
+        {requestPending && firstActorId && <FollowRequestActions actorId={firstActorId} />}
 
         {/* Post thumbnail — its own tap zone, routes straight to the post
             (like / download live there) regardless of what the left zone does. */}

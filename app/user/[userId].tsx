@@ -32,7 +32,12 @@ import { useFollowersList } from '@/hooks/useFollowersList';
 import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
-import { useOutgoingFollowRequestIds } from '@/hooks/useFollowRequests';
+import {
+  useOutgoingFollowRequestIds,
+  useIncomingFollowRequestIds,
+  useApproveFollowRequest,
+  useDenyFollowRequest,
+} from '@/hooks/useFollowRequests';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
@@ -102,6 +107,9 @@ export default function PublicProfileScreen() {
   const { data: following = [], isLoading: loadingFollowing } = useFollowingList(userId);
   const { data: followingIds = new Set<string>() } = useFollowingIds();
   const { data: requestIds = new Set<string>() } = useOutgoingFollowRequestIds();
+  const { data: incomingRequestIds = new Set<string>() } = useIncomingFollowRequestIds();
+  const { mutate: approveRequest } = useApproveFollowRequest();
+  const { mutate: denyRequest } = useDenyFollowRequest();
   const { mutate: toggleFollow } = useToggleFollow();
   const { mutate: report } = useReport();
   const { data: blockedIds = new Set<string>() } = useBlockedIds();
@@ -241,6 +249,9 @@ export default function PublicProfileScreen() {
   const isFollowing = profile?.isFollowing ?? followingIds.has(userId);
   const hasRequest = profile?.hasRequest ?? requestIds.has(userId);
   const isTargetPublic = profile?.is_public ?? true;
+  // This user has requested to follow ME (pending). The follow-request
+  // notification routes to this profile, so Accept/Deny must be reachable here.
+  const hasIncomingRequest = !isOwnProfile && incomingRequestIds.has(userId);
 
   function handleFollow() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -250,6 +261,16 @@ export default function PublicProfileScreen() {
       isPublic: isTargetPublic,
       hasRequest,
     });
+  }
+
+  function handleAcceptRequest() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    approveRequest(userId);
+  }
+
+  function handleDenyRequest() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    denyRequest(userId);
   }
 
   function handleFollowUser(targetId: string) {
@@ -342,18 +363,29 @@ export default function PublicProfileScreen() {
           its full-width follow button) has scrolled away. */}
       {!isOwnProfile && !isBlocked && (
         <Animated.View style={compactNameStyle} pointerEvents={barCollapsed ? 'auto' : 'none'}>
+          {/* Incoming request → quick Accept in the sticky bar (Deny lives in the
+              full header CTA the user landed on). Otherwise the normal follow pill. */}
           <TouchableOpacity
-            style={[styles.followButton, (isFollowing || hasRequest) && styles.followingButton]}
-            onPress={handleFollow}
+            style={[
+              styles.followButton,
+              !hasIncomingRequest && (isFollowing || hasRequest) && styles.followingButton,
+            ]}
+            onPress={hasIncomingRequest ? handleAcceptRequest : handleFollow}
             activeOpacity={0.8}
           >
             <Text
               style={[
                 styles.followButtonText,
-                (isFollowing || hasRequest) && styles.followingButtonText,
+                !hasIncomingRequest && (isFollowing || hasRequest) && styles.followingButtonText,
               ]}
             >
-              {isFollowing ? 'Following' : hasRequest ? 'Requested' : 'Follow'}
+              {hasIncomingRequest
+                ? 'Accept'
+                : isFollowing
+                  ? 'Following'
+                  : hasRequest
+                    ? 'Requested'
+                    : 'Follow'}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -384,6 +416,9 @@ export default function PublicProfileScreen() {
         isPrivate={!isTargetPublic}
         isBot={isBot}
         isSelf={isOwnProfile}
+        hasIncomingRequest={hasIncomingRequest}
+        onAcceptRequest={handleAcceptRequest}
+        onDenyRequest={handleDenyRequest}
         activeStat={activeTab}
         onStatsPress={(tab) => setActiveTab(tab as Tab)}
         onAvatarPress={() => setShowAvatarPreview(true)}

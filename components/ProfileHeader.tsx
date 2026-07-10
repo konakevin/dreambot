@@ -80,6 +80,12 @@ interface OtherVariant extends BaseProps {
   /** Hide Message + ellipsis on your OWN profile reached via /user/[me]. */
   isSelf?: boolean;
   onFollowPress: () => void;
+  /** This user has requested to follow ME (pending incoming request). When true,
+   *  the CTA row shows Accept / Deny instead of Follow — so tapping a follow-
+   *  request notification (which lands here) surfaces the response inline. */
+  hasIncomingRequest?: boolean;
+  onAcceptRequest?: () => void;
+  onDenyRequest?: () => void;
   /** Optional — the Message pill renders ONLY when provided. Left unwired
    *  2026-07-05 (Kevin): no in-app messaging exists; a silent no-op button
    *  shipped to profiles. Re-wire when the DM flow (DM_FEATURE_PLAN.md) ships. */
@@ -250,26 +256,47 @@ export function ProfileHeader(props: Props) {
         </View>
       ) : (
         <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={[
-              styles.actionPill,
-              styles.actionPillFollow,
-              (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
-            ]}
-            onPress={props.onFollowPress}
-            activeOpacity={0.7}
-          >
-            <Text
+          {props.hasIncomingRequest ? (
+            // This user requested to follow ME → respond inline (the follow-
+            // request notification routes here, so Accept/Deny must live here).
+            <>
+              <TouchableOpacity
+                style={[styles.actionPill, styles.actionPillFollow]}
+                onPress={props.onAcceptRequest}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.actionText, styles.actionTextFollow]}>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.actionPill, styles.actionPillSecondary]}
+                onPress={props.onDenyRequest}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.actionText, styles.actionTextSecondary]}>Deny</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity
               style={[
-                styles.actionText,
-                props.isFollowing || props.hasRequest
-                  ? styles.actionTextFollowing
-                  : styles.actionTextFollow,
+                styles.actionPill,
+                styles.actionPillFollow,
+                (props.isFollowing || props.hasRequest) && styles.actionPillFollowing,
               ]}
+              onPress={props.onFollowPress}
+              activeOpacity={0.7}
             >
-              {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.actionText,
+                  props.isFollowing || props.hasRequest
+                    ? styles.actionTextFollowing
+                    : styles.actionTextFollow,
+                ]}
+              >
+                {props.hasRequest ? 'Requested' : props.isFollowing ? 'Following' : 'Follow'}
+              </Text>
+            </TouchableOpacity>
+          )}
           {!props.isBot && !props.isSelf && (
             <>
               {props.onMessagePress && (

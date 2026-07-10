@@ -26,6 +26,25 @@ export function useOutgoingFollowRequestIds() {
   });
 }
 
+/** IDs of users who've requested to follow US (pending, incoming). Drives the
+ *  Accept/Deny affordance on a requester's profile + the inbox row actions. */
+export function useIncomingFollowRequestIds() {
+  const userId = useAuthStore((s) => s.user?.id);
+  return useQuery({
+    queryKey: ['incomingFollowRequests', userId],
+    queryFn: async (): Promise<Set<string>> => {
+      const { data, error } = await supabase
+        .from('follow_requests')
+        .select('requester_id')
+        .eq('target_id', userId!);
+      if (error) throw error;
+      return new Set((data ?? []).map((r) => r.requester_id));
+    },
+    enabled: !!userId,
+    staleTime: 30_000,
+  });
+}
+
 /** Approve a follow request (called by the target user) */
 export function useApproveFollowRequest() {
   const queryClient = useQueryClient();
@@ -40,6 +59,7 @@ export function useApproveFollowRequest() {
     onSuccess: (_data, requesterId) => {
       const userId = useAuthStore.getState().user?.id;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      queryClient.invalidateQueries({ queryKey: ['incomingFollowRequests', userId] });
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
       queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
       queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
@@ -66,6 +86,7 @@ export function useDenyFollowRequest() {
     onSuccess: () => {
       const userId = useAuthStore.getState().user?.id;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      queryClient.invalidateQueries({ queryKey: ['incomingFollowRequests', userId] });
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
       queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
     },
@@ -86,6 +107,7 @@ export function useApproveFollowAndFollowBack() {
     onSuccess: (_data, requesterId) => {
       const userId = useAuthStore.getState().user?.id;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      queryClient.invalidateQueries({ queryKey: ['incomingFollowRequests', userId] });
       queryClient.invalidateQueries({ queryKey: ['inboxGrouped', userId] });
       queryClient.invalidateQueries({ queryKey: ['newNotificationCount', userId] });
       queryClient.invalidateQueries({ queryKey: ['followersList', userId] });
