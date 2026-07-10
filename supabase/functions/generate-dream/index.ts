@@ -1294,7 +1294,15 @@ Output ONLY the prompt.`;
                   // ("as superheroes") reaches the wardrobe slot, not just the scene.
                   wardrobeAnchor: cleanedPrompt || null,
                   mediumFluxFragment: medium.fluxFragment ?? medium.key,
-                  vibeDirective: applyVibeGenderModifier(vibe.key, vibe.directive ?? '', null),
+                  // On the face-swap slot path, prefer the vibe's FACE-SWAP
+                  // directive (kawaii etc. carry a "render the human face
+                  // realistically despite the stylized scene" rule) — matches
+                  // dualBriefBuilder. Falls back to the normal directive.
+                  vibeDirective: applyVibeGenderModifier(
+                    vibe.key,
+                    vibe.faceSwapDirective ?? vibe.directive ?? '',
+                    null
+                  ),
                   avoidList: vibeProfile?.avoid?.join(', ') ?? '',
                   // Create: NEUTRAL pose only — force the relationship-appropriate
                   // partner/companion pool (NOT the 18% playful roll). Create is the

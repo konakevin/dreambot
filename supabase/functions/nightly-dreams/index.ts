@@ -1494,9 +1494,12 @@ Deno.serve(async (req) => {
                 ? pickAxis(bespokeBiome.WARDROBE)
                 : null,
             mediumFluxFragment: baseMedium.fluxFragment,
+            // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
+            // human face despite a stylized scene — the kawaii big-eyes fix);
+            // matches dualBriefBuilder + the create path. Falls back to normal.
             vibeDirective: applyVibeGenderModifier(
               nightlyVibe.key,
-              nightlyVibe.directive,
+              nightlyVibe.faceSwapDirective ?? nightlyVibe.directive,
               castGender ?? null
             ),
             avoidList,
