@@ -2410,7 +2410,16 @@ Deno.serve((req) => {
 function scheduleBackground(p: Promise<unknown>): void {
   const er = (globalThis as { EdgeRuntime?: { waitUntil?: (q: Promise<unknown>) => void } })
     .EdgeRuntime;
-  if (er && er.waitUntil) er.waitUntil(p.catch(() => {}));
+  // Log deferred-task failures instead of swallowing them silently (Architect
+  // audit A5, 2026-07-10). Still fire-and-forget — never throws into the
+  // response path — but a failed display-variant build is now visible in logs
+  // instead of a silent perf regression (feed then serves the full-res image).
+  if (er && er.waitUntil)
+    er.waitUntil(
+      p.catch((e) =>
+        console.error('[scheduleBackground] deferred task failed:', (e as Error)?.message)
+      )
+    );
 }
 
 // The dreamcast `castPerson` prompt returns "<prose>\nAGE: N\nTRAITS: ...", with

@@ -13,18 +13,10 @@
 // see the SUBSCRIPTION_TIERS handling below.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-
-// Constant-time string comparison for the webhook bearer secret, so a timing
-// side-channel can't be used to recover it byte-by-byte.
-function timingSafeEqualStr(a: string, b: string): boolean {
-  const enc = new TextEncoder();
-  const ab = enc.encode(a);
-  const bb = enc.encode(b);
-  if (ab.length !== bb.length) return false;
-  let diff = 0;
-  for (let i = 0; i < ab.length; i++) diff |= ab[i] ^ bb[i];
-  return diff === 0;
-}
+// Constant-time comparison for the webhook bearer secret. Was a byte-identical
+// local copy (timingSafeEqualStr); de-duped to the shared helper 2026-07-10
+// (Architect audit A7) so the two can't drift.
+import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 // Product ID → sparkle amount FALLBACK. Source of truth is the sparkle_packs DB
 // table (migration 255), loaded per-request below; this fallback only kicks in if
@@ -178,7 +170,7 @@ Deno.serve(async (req) => {
   const webhookSecret = Deno.env.get('REVENUECAT_WEBHOOK_SECRET');
   const providedToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
-  if (!webhookSecret || !timingSafeEqualStr(providedToken, webhookSecret)) {
+  if (!webhookSecret || !timingSafeEqual(providedToken, webhookSecret)) {
     console.error('[RevenueCat] Unauthorized request');
     return new Response('Unauthorized', { status: 401 });
   }
