@@ -21,6 +21,21 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config({ path: '.env.local' });
 
+// Page through a full-set read — PostgREST silently caps an un-ranged select at
+// 1000 rows, which would leave orphaned cast-* storage files from users 1001+
+// undetected (Architect audit A4, 2026-07-10). Mirrors scripts/nightly-dreams.js.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
+
 const EXECUTE = process.argv.includes('--execute');
 const sb = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_URL,
@@ -37,8 +52,13 @@ function avatarsPath(url) {
   console.log(EXECUTE ? '=== EXECUTE ===\n' : '=== DRY-RUN (pass --execute) ===\n');
 
   // ── Step 1: clear legacy thumb_url where storage_path exists ──────────────
-  const { data: recipes, error } = await sb.from('user_recipes').select('user_id, recipe');
-  if (error) { console.error(error); process.exit(1); }
+  const { data: recipes, error } = await fetchAllPages(() =>
+    sb.from('user_recipes').select('user_id, recipe')
+  );
+  if (error) {
+    console.error(error);
+    process.exit(1);
+  }
 
   let cleared = 0;
   for (const r of recipes || []) {
@@ -60,13 +80,14 @@ function avatarsPath(url) {
         .from('user_recipes')
         .update({ recipe })
         .eq('user_id', r.user_id);
-      if (upErr) console.log(`  ⚠️  recipe update failed ${r.user_id.slice(0, 8)}…: ${upErr.message}`);
+      if (upErr)
+        console.log(`  ⚠️  recipe update failed ${r.user_id.slice(0, 8)}…: ${upErr.message}`);
     }
   }
   console.log(`\nstep 1: ${EXECUTE ? 'cleared' : 'would clear'} ${cleared} legacy thumb_url(s)\n`);
 
   // ── Recompute referenced avatars cast paths (should be ~0 after step 1) ───
-  const { data: recipes2 } = await sb.from('user_recipes').select('recipe');
+  const { data: recipes2 } = await fetchAllPages(() => sb.from('user_recipes').select('recipe'));
   const referenced = new Set();
   for (const r of recipes2 || []) {
     for (const m of (r.recipe && r.recipe.dream_cast) || []) {
@@ -89,7 +110,9 @@ function avatarsPath(url) {
       toDelete.push(path);
     }
   }
-  console.log(`step 2: ${EXECUTE ? 'deleting' : 'would delete'} ${toDelete.length} unreferenced cast-* file(s) from avatars`);
+  console.log(
+    `step 2: ${EXECUTE ? 'deleting' : 'would delete'} ${toDelete.length} unreferenced cast-* file(s) from avatars`
+  );
   toDelete.slice(0, 5).forEach((p) => console.log(`   e.g. ${p}`));
   if (toDelete.length > 5) console.log(`   …and ${toDelete.length - 5} more`);
 

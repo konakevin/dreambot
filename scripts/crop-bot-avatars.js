@@ -10,7 +10,25 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
 const sharp = require('sharp');
 const { createClient } = require('@supabase/supabase-js');
 
-const sb = createClient('https://jimftynwrinwenonjrlj.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
+const sb = createClient(
+  'https://jimftynwrinwenonjrlj.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+// Page through a full-set read — PostgREST silently caps an un-ranged select at
+// 1000 rows, so a bot roster past 1000 would be truncated (Architect audit A4,
+// 2026-07-10). Mirrors scripts/nightly-dreams.js.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
 const KEVIN = 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 const OUT = '/tmp/bot-avatars-final';
 const HIDDEN = ['glowbot', 'humanbot'];
@@ -19,12 +37,17 @@ const HIDDEN = ['glowbot', 'humanbot'];
   fs.mkdirSync(OUT, { recursive: true });
   const since = new Date(Date.now() - 30 * 60 * 1000).toISOString();
   const { data: likes } = await sb
-    .from('likes').select('created_at, upload_id').eq('user_id', KEVIN)
-    .gte('created_at', since).order('created_at', { ascending: false });
+    .from('likes')
+    .select('created_at, upload_id')
+    .eq('user_id', KEVIN)
+    .gte('created_at', since)
+    .order('created_at', { ascending: false });
   const ids = [...new Set((likes || []).map((l) => l.upload_id))];
   const { data: ups } = await sb.from('uploads').select('id, user_id, image_url').in('id', ids);
   const upById = new Map((ups || []).map((u) => [u.id, u]));
-  const { data: bots } = await sb.from('users').select('id, username').eq('is_bot', true);
+  const { data: bots } = await fetchAllPages(() =>
+    sb.from('users').select('id, username').eq('is_bot', true)
+  );
   const botById = new Map((bots || []).map((b) => [b.id, b.username]));
 
   const perBot = new Map(); // username -> { botId, imageUrl }
@@ -53,5 +76,7 @@ const HIDDEN = ['glowbot', 'humanbot'];
     }
   }
   fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  console.log(`\n${Object.keys(manifest).length} avatars cropped. manifest -> ${OUT}/manifest.json`);
+  console.log(
+    `\n${Object.keys(manifest).length} avatars cropped. manifest -> ${OUT}/manifest.json`
+  );
 })();

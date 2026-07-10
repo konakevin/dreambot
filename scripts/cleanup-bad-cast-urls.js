@@ -23,6 +23,21 @@
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
 
+// Page through a full-set read — PostgREST silently caps an un-ranged select at
+// 1000 rows, which would leave users 1001+ with corrupt cast records silently
+// ignored (Architect audit A4, 2026-07-10). Mirrors scripts/nightly-dreams.js.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
+
 function readEnvFile() {
   try {
     const lines = fs.readFileSync('.env.local', 'utf8').split('\n');
@@ -55,7 +70,9 @@ function isFetchable(url) {
 
 (async () => {
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-  const { data: rows, error } = await sb.from('user_recipes').select('user_id, recipe');
+  const { data: rows, error } = await fetchAllPages(() =>
+    sb.from('user_recipes').select('user_id, recipe')
+  );
   if (error) {
     console.error('Failed to fetch recipes:', error.message);
     process.exit(1);

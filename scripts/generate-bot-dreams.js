@@ -34,6 +34,21 @@ function getKey(name) {
 
 const SUPABASE_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
+
+// Page through a full-set read — PostgREST silently caps an un-ranged select at
+// 1000 rows, so a bot/user roster past 1000 would be truncated (Architect audit
+// A4, 2026-07-10). Mirrors scripts/nightly-dreams.js.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
 const sbAuth = createClient(SUPABASE_URL, getKey('SUPABASE_SERVICE_ROLE_KEY'));
 
 const BOT_PASSWORD_PREFIX = getKey('BOT_PASSWORD_PREFIX');
@@ -110,7 +125,7 @@ async function regenSeeds(username, prefix) {
 
   try {
     const { rows } = await generateSeedsForBot(username, { anthropicApiKey });
-    const tagged = rows.map(r => ({ ...r, disabled: false, generation: nextGen }));
+    const tagged = rows.map((r) => ({ ...r, disabled: false, generation: nextGen }));
     const { error } = await sb.from('bot_seeds').insert(tagged);
     if (error) throw new Error(error.message);
     console.log(`   ✅ ${tagged.length} new seeds generated (gen ${nextGen})`);
@@ -136,7 +151,7 @@ async function regenSeeds(username, prefix) {
   const botUsernames = Object.keys(BOTS).filter((b) => !ONLY_BOT || b === ONLY_BOT);
   // Fetch ALL users and match case-insensitively — DB stores PascalCase
   // display names but BOTS keys are lowercase
-  const { data: allUsers } = await sb.from('users').select('id, username');
+  const { data: allUsers } = await fetchAllPages(() => sb.from('users').select('id, username'));
   const botUsers = (allUsers ?? []).filter((u) =>
     botUsernames.some((b) => u.username && u.username.toLowerCase() === b.toLowerCase())
   );
@@ -193,7 +208,9 @@ async function regenSeeds(username, prefix) {
         const mediumKey = pick(bot.mediums);
         const pinned = bot.pinVibes && bot.pinVibes[mediumKey];
         const vibeKey = pinned
-          ? (Array.isArray(pinned) ? pick(pinned) : pinned)
+          ? Array.isArray(pinned)
+            ? pick(pinned)
+            : pinned
           : pick(botVibeKeys);
 
         // Pick a random unused seed
@@ -248,7 +265,9 @@ async function regenSeeds(username, prefix) {
               posted_at: new Date().toISOString(),
             })
             .eq('id', result.upload_id);
-          console.log(`   ✅ Posted! (${++totalGenerated} total) [${seedPool.length} seeds remaining]`);
+          console.log(
+            `   ✅ Posted! (${++totalGenerated} total) [${seedPool.length} seeds remaining]`
+          );
         }
 
         await new Promise((r) => setTimeout(r, 2000));

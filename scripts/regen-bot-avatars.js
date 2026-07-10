@@ -12,7 +12,25 @@ const sharp = require('sharp');
 const { createClient } = require('@supabase/supabase-js');
 const { flux } = require('./lib/botEngine');
 
-const sb = createClient('https://jimftynwrinwenonjrlj.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
+const sb = createClient(
+  'https://jimftynwrinwenonjrlj.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+// Page through a full-set read — PostgREST silently caps an un-ranged select at
+// 1000 rows, so a bot roster past 1000 would be truncated (Architect audit A4,
+// 2026-07-10). Mirrors scripts/nightly-dreams.js.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const all = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return { data: all, error: null };
+}
 const OUT = '/tmp/bot-avatars-final';
 const MODEL = 'black-forest-labs/flux-1.1-pro';
 const KEY = process.env.REPLICATE_API_TOKEN;
@@ -21,27 +39,49 @@ const TAIL =
 
 // Subject + style baked per bot (style mirrors each bot's medium / hearted look).
 const SUBJECTS = {
-  bloombot: 'a single vivid red hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow',
-  brickbot: 'a LEGO minifigure astronaut, glossy plastic toy, clear smiling yellow minifig face, white space helmet with visor',
-  chibibot: 'one adorable chibi winged kitten with huge sparkling eyes, fluffy white fur, glossy 3D designer-vinyl render, storybook cute',
-  dinobot: 'a fierce dinosaur head close-up, textured scaly skin, glowing amber eye, sharp teeth, cinematic photoreal prehistoric',
-  dragonbot: 'a majestic dragon head and shoulders, intricate scales, glowing eyes, Frank Frazetta painted fantasy art, dramatic',
-  earthbot: 'one majestic ancient tree backlit by golden sunrise, glowing mist, lush leaves, epic cinematic nature photography',
-  faebot: 'a luminous forest fairy close-up portrait, glowing iridescent butterfly wings, flower crown, soft ethereal painted fantasy',
-  gothbot: 'a gothic vampire woman portrait, glowing magenta eyes, black lace veil, pale skin, dark romantic fantasy art',
-  mangabot: 'an anime girl close-up portrait, big expressive eyes, soft cherry blossom light, vibrant cel-shaded anime art',
-  mechbot: 'a single futuristic mech robot, head and torso, glowing energy core, sleek armored panels, cinematic sci-fi concept art, purple rim light',
-  pixelbot: 'a single 16-bit pixel-art hero character face, bold colorful chunky pixels, clean retro SNES sprite, crisp',
-  retrobot: 'a glowing retro 1980s CRT computer monitor on a desk, warm neon-lit room, nostalgic film grain, vaporwave',
-  starbot: 'a sci-fi astronaut in a glossy reflective helmet, close-up, vibrant retro-futurist sci-fi cover art, cosmic glow',
-  steambot: 'a single majestic steampunk airship, ornate brass and copper, billowing sails, golden sunset clouds, painted illustration',
-  tinybot: 'a tiny tilt-shift miniature mushroom cottage, adorable handcrafted model, macro photography, shallow focus',
-  toybot: 'a single heroic toy action figure, glossy molded plastic, dynamic pose, cinematic toy photography, dramatic light',
-  yumbot: 'an adorable kawaii cupcake with a cute smiling face, pastel pink frosting, candy sprinkles, glossy 3D cute',
+  bloombot:
+    'a single vivid red hibiscus flower in full bloom, dewy fresh petals, lush botanical, soft magical glow',
+  brickbot:
+    'a LEGO minifigure astronaut, glossy plastic toy, clear smiling yellow minifig face, white space helmet with visor',
+  chibibot:
+    'one adorable chibi winged kitten with huge sparkling eyes, fluffy white fur, glossy 3D designer-vinyl render, storybook cute',
+  dinobot:
+    'a fierce dinosaur head close-up, textured scaly skin, glowing amber eye, sharp teeth, cinematic photoreal prehistoric',
+  dragonbot:
+    'a majestic dragon head and shoulders, intricate scales, glowing eyes, Frank Frazetta painted fantasy art, dramatic',
+  earthbot:
+    'one majestic ancient tree backlit by golden sunrise, glowing mist, lush leaves, epic cinematic nature photography',
+  faebot:
+    'a luminous forest fairy close-up portrait, glowing iridescent butterfly wings, flower crown, soft ethereal painted fantasy',
+  gothbot:
+    'a gothic vampire woman portrait, glowing magenta eyes, black lace veil, pale skin, dark romantic fantasy art',
+  mangabot:
+    'an anime girl close-up portrait, big expressive eyes, soft cherry blossom light, vibrant cel-shaded anime art',
+  mechbot:
+    'a single futuristic mech robot, head and torso, glowing energy core, sleek armored panels, cinematic sci-fi concept art, purple rim light',
+  pixelbot:
+    'a single 16-bit pixel-art hero character face, bold colorful chunky pixels, clean retro SNES sprite, crisp',
+  retrobot:
+    'a glowing retro 1980s CRT computer monitor on a desk, warm neon-lit room, nostalgic film grain, vaporwave',
+  starbot:
+    'a sci-fi astronaut in a glossy reflective helmet, close-up, vibrant retro-futurist sci-fi cover art, cosmic glow',
+  steambot:
+    'a single majestic steampunk airship, ornate brass and copper, billowing sails, golden sunset clouds, painted illustration',
+  tinybot:
+    'a tiny tilt-shift miniature mushroom cottage, adorable handcrafted model, macro photography, shallow focus',
+  toybot:
+    'a single heroic toy action figure, glossy molded plastic, dynamic pose, cinematic toy photography, dramatic light',
+  yumbot:
+    'an adorable kawaii cupcake with a cute smiling face, pastel pink frosting, candy sprinkles, glossy 3D cute',
 };
 
 async function genOne(username, botId) {
-  const url = await flux({ prompt: SUBJECTS[username] + TAIL, aspectRatio: '1:1', model: MODEL, replicateKey: KEY });
+  const url = await flux({
+    prompt: SUBJECTS[username] + TAIL,
+    aspectRatio: '1:1',
+    model: MODEL,
+    replicateKey: KEY,
+  });
   const res = await fetch(url);
   const buf = Buffer.from(await res.arrayBuffer());
   const file = path.join(OUT, `${username}.jpg`);
@@ -68,7 +108,9 @@ async function pool(entries, size, fn, manifest) {
 (async () => {
   if (!KEY) throw new Error('REPLICATE_API_TOKEN missing');
   fs.mkdirSync(OUT, { recursive: true });
-  const { data: bots } = await sb.from('users').select('id, username').eq('is_bot', true);
+  const { data: bots } = await fetchAllPages(() =>
+    sb.from('users').select('id, username').eq('is_bot', true)
+  );
   const entries = (bots || [])
     .map((b) => [b.username.toLowerCase(), b.id])
     .filter(([u]) => SUBJECTS[u]);
