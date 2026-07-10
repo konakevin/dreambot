@@ -20,9 +20,7 @@ import {
   Platform,
   Modal,
   Linking,
-  LayoutAnimation,
   useWindowDimensions,
-  type KeyboardEvent,
 } from 'react-native';
 import {
   KeyboardAwareScrollView,
@@ -119,31 +117,29 @@ export default function CreateScreen() {
   const [pickerType, setPickerType] = useState<'medium' | 'vibe' | null>(null);
   const [previewPhoto, setPreviewPhoto] = useState(false);
   const [photoSourceOpen, setPhotoSourceOpen] = useState(false);
-  // Keyboard-open tracking, used to collapse the model + medium/vibe controls
-  // into a one-line summary while typing (so the selected medium/vibe stay
-  // visible and the Dream CTA is one tap away). Core RN Keyboard listeners
-  // (not the keyboard-controller reanimated hook, which crashes if it can't
-  // bind — see feedback_render_crashes_uncovered_prefer_core_apis).
-  //
-  // iOS listens to keyboardWILLShow/Hide — they fire at animation START and
-  // carry the keyboard's duration, which we hand to LayoutAnimation so the
-  // collapse/expand slides in lockstep with the keyboard. The old
-  // keyboardDidShow + runAfterInteractions pair waited for the keyboard to
-  // fully land, then hard-swapped the layout — the "keyboard settles, then
-  // the controls pop a beat later" jank (Kevin 2026-07-03). Android has no
-  // will* events, so it keeps did* (and still gets the animated swap).
+  // kbOpen: a plain boolean for the NON-VISUAL keyboard-dependent logic only
+  // (folded-controls pointerEvents + the prompt placeholder). Set by core RN
+  // Keyboard listeners (iOS keyboardWillShow/Hide, Android did*) — the visual
+  // fold + prompt-fill do NOT read it; they run off the reanimated keyboard
+  // shared values below, so this is just one cheap flip per toggle.
   const [kbOpen, setKbOpen] = useState(false);
-  // ── UI-thread keyboard collapse (2026-07-09, Kevin: "delay then snap ...
-  // doesn't feel award winning"). The controls' fold is driven by the
-  // KEYBOARD'S OWN animation progress (a Reanimated shared value updated
-  // frame-for-frame on the UI thread by keyboard-controller), not by JS
-  // state + LayoutAnimation — so keyboard and collapse are literally the
-  // same animation and can't drift apart under JS-thread load (and Fabric's
-  // patchy LayoutAnimation support stops mattering). kbOpen state remains
-  // for the non-visual logic (prompt math, pointerEvents, placeholders).
-  const { progress: kbProgress } = useReanimatedKeyboardAnimation();
+  // ── UI-thread keyboard layer (rebuilt 2026-07-10). ONE animator: everything
+  // keyboard-reactive (the controls fold AND the prompt's exact fill height) is
+  // an interpolation of the keyboard-controller's own shared values — progress
+  // (0→1) and height (live keyboard height) — inside useAnimatedStyle worklets.
+  // No JS-thread LayoutAnimation racing it, no per-toggle measure/setState
+  // storm. The previous stack ran LayoutAnimation AND Reanimated over the same
+  // folding views + re-measured the prompt on every toggle, which raced under
+  // rapid open/close and crashed ("reading value during render"). kbOpen state
+  // now only drives the non-visual bits (pointerEvents, placeholder).
+  const { progress: kbProgress, height: kbHeightSV } = useReanimatedKeyboardAnimation();
   const expandedControlsH = useSharedValue(0);
   const collapsedControlsH = useSharedValue(0);
+  // Measured once into shared values so the prompt-fill worklet reads them on
+  // the UI thread (no re-render): the sticky Dream CTA height + the prompt's
+  // closed-state top edge in window coords.
+  const footerHeightSV = useSharedValue(0);
+  const promptTopSV = useSharedValue(0);
   const controlsContainerStyle = useAnimatedStyle(() => {
     if (expandedControlsH.value <= 0) return {};
     return {
@@ -163,46 +159,29 @@ export default function CreateScreen() {
   const collapsedControlsStyle = useAnimatedStyle(() => ({
     opacity: interpolate(kbProgress.value, [0.55, 1], [0, 1], Extrapolation.CLAMP),
   }));
-  // Live keyboard height (from the native event) — reserved as bottom padding so
-  // the flex-filled prompt stretches down to the keyboard's top, not behind it.
-  const [kbHeight, setKbHeight] = useState(0);
-  // Measured height of the sticky Dream CTA footer that floats above the
-  // keyboard. Used to compute the exact prompt height (below).
+  // Measured height of the sticky Dream CTA footer. Kept as JS state because the
+  // KeyboardAwareScrollView's `bottomOffset` prop needs a plain number; it's also
+  // mirrored into footerHeightSV (above) for the prompt-fill worklet.
   const [footerHeight, setFooterHeight] = useState(0);
-  // Window Y of the prompt box's top edge (measured in window coords). With the
-  // window height + keyboard + Dream-CTA heights, this lets us compute an EXACT
-  // prompt height that stretches to just above the Dream button, instead of
-  // relying on flaky flex-through-scrollview behavior.
+  // The prompt's closed-state top edge (window coords) feeds the fill worklet.
+  // Measured ONLY while the keyboard is closed — a measure taken mid-fold would
+  // capture the shifted position and corrupt the baseline. kbOpenRef lets the
+  // measure callback read the latest keyboard state without re-creating itself.
   const promptWrapRef = useRef<View>(null);
-  const [promptTopY, setPromptTopY] = useState(0);
+  const kbOpenRef = useRef(false);
   const measurePromptTop = useCallback(() => {
     promptWrapRef.current?.measureInWindow((_x, y) => {
-      if (y > 0) setPromptTopY(y);
+      if (!kbOpenRef.current && y > 0) promptTopSV.value = y;
     });
-  }, []);
-  // Re-measure when the keyboard toggles — the folded controls change the prompt's
-  // top. rAF lets the collapse layout settle first.
-  useEffect(() => {
-    const id = requestAnimationFrame(measurePromptTop);
-    return () => cancelAnimationFrame(id);
-  }, [kbOpen, measurePromptTop]);
+  }, [promptTopSV]);
   useEffect(() => {
     const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
-    const onToggle = (open: boolean) => (e: KeyboardEvent) => {
-      if (open && e?.endCoordinates?.height) setKbHeight(e.endCoordinates.height);
-      LayoutAnimation.configureNext({
-        duration: e?.duration && e.duration > 0 ? e.duration : 250,
-        update: { type: LayoutAnimation.Types.keyboard },
-        create: {
-          type: LayoutAnimation.Types.keyboard,
-          property: LayoutAnimation.Properties.opacity,
-        },
-        delete: {
-          type: LayoutAnimation.Types.keyboard,
-          property: LayoutAnimation.Properties.opacity,
-        },
-      });
+    // One cheap boolean flip per toggle — for pointerEvents + placeholder only.
+    // The fold + prompt-fill are UI-thread worklets (see above), so NO
+    // LayoutAnimation and NO keyboard-height setState here anymore.
+    const onToggle = (open: boolean) => () => {
+      kbOpenRef.current = open;
       setKbOpen(open);
     };
     const s1 = Keyboard.addListener(showEvt, onToggle(true));
@@ -556,15 +535,24 @@ export default function CreateScreen() {
   // (keyboard-up: down to the keyboard). iPad keeps its centered fixed-height
   // card, so it opts out.
   const fillPrompt = !isTabletDevice;
-  // EXACT prompt height so its bottom lands just above the Dream button on any
-  // screen size: (Dream-button top) − (prompt top) − gap. The Dream button rides
-  // above the keyboard when it's up, above the tab bar when it's down.
+  // EXACT prompt fill, on the UI thread. The prompt's bottom lands just above the
+  // Dream CTA on any screen size: (CTA top) − (prompt top) − gap. The CTA rides
+  // above the keyboard when up, above the tab bar when down. Crucially this also
+  // accounts for the fold: as the controls collapse they slide the prompt UP by
+  // (expanded − collapsed)·progress, so we subtract that from the measured
+  // closed-state top instead of re-measuring on every toggle. All shared-value
+  // reads → no re-render, no measurement-timing race.
   const { height: windowHeight } = useWindowDimensions();
-  const dreamButtonTop = windowHeight - (kbOpen ? kbHeight : tabBarHeight) - footerHeight;
-  const computedPromptHeight =
-    fillPrompt && promptTopY > 0
-      ? Math.max(verticalScale(120), dreamButtonTop - promptTopY - verticalScale(20))
-      : undefined;
+  const MIN_PROMPT_H = verticalScale(120);
+  const PROMPT_GAP = verticalScale(20);
+  const promptHeightStyle = useAnimatedStyle(() => {
+    if (promptTopSV.value <= 0) return {};
+    const foldDelta = Math.max(0, expandedControlsH.value - collapsedControlsH.value);
+    const promptTop = promptTopSV.value - foldDelta * kbProgress.value;
+    const subtract = Math.max(Math.abs(kbHeightSV.value), tabBarHeight);
+    const bottomLimit = windowHeight - subtract - footerHeightSV.value;
+    return { height: Math.max(MIN_PROMPT_H, bottomLimit - promptTop - PROMPT_GAP) };
+  });
   // This dream's sparkle cost — shown next to the model name so the price is
   // always visible. Restyle
   // charges by ITS OWN picked model (Kontext 1 / NB Pro 5, sent as force_model
@@ -597,12 +585,6 @@ export default function CreateScreen() {
     }
   }, [isRestyle, restylePoolManaged, restyleModelId, selectedModelId, setForceModel]);
 
-  // Keyboard handling is fully scrollable (Instagram-style): the form shifts up
-  // and stays scrollable so every control below the prompt is reachable while
-  // typing, and a drag dismisses the keyboard. No collapse-to-summary — that
-  // custom fold hid controls and grew fragile as the form did. `kbOpen` only
-  // drives the extra bottom padding that lets the last field clear the sticky
-  // Dream CTA (see the KeyboardAwareScrollView below).
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
@@ -1519,22 +1501,18 @@ export default function CreateScreen() {
               underlying `config.userPrompt` is preserved so flipping back
               to New Scene restores whatever the user had typed. */}
               {!(hasPhoto && config.photoStyle === 'restyle') && (
-                <View
+                <Animated.View
                   ref={promptWrapRef}
                   onLayout={measurePromptTop}
                   className="rounded-xl mb-4"
-                  style={{
-                    backgroundColor: colors.surface,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    // Phone: exact computed height so the box bottom lands just above
-                    // the Dream button (down to the keyboard when it's up). Falls back
-                    // to a scaled default until the first measure lands. iPad: a
-                    // scaled fixed height in its centered card.
-                    height: fillPrompt
-                      ? (computedPromptHeight ?? verticalScale(160))
-                      : verticalScale(144),
-                  }}
+                  style={[
+                    { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+                    // Static fallback height until the first measure lands (and the
+                    // fixed iPad card height). Phone: the worklet below overrides it
+                    // with the exact fill so the box bottom sits just above the CTA.
+                    { height: fillPrompt ? verticalScale(160) : verticalScale(144) },
+                    fillPrompt && promptHeightStyle,
+                  ]}
                 >
                   <TextInput
                     ref={promptRef}
@@ -1625,7 +1603,7 @@ export default function CreateScreen() {
                       </TouchableOpacity>
                     </View>
                   )}
-                </View>
+                </Animated.View>
               )}
 
               {/* iPad: the Dream CTA lives WITH the form as one centered group,
@@ -1650,7 +1628,11 @@ export default function CreateScreen() {
           <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
             <View
               className="px-5"
-              onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+              onLayout={(e) => {
+                const h = e.nativeEvent.layout.height;
+                setFooterHeight(h); // JS — feeds the scroll view's bottomOffset
+                footerHeightSV.value = h; // UI thread — feeds the prompt-fill worklet
+              }}
               style={{
                 backgroundColor: colors.background,
                 paddingTop: verticalScale(10),
