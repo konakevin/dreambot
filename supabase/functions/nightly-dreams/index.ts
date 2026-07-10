@@ -808,6 +808,24 @@ Deno.serve(async (req) => {
         const pool = strict_face_swap ? FIRST_DREAM_MODELS : FACE_SWAP_MODELS;
         faceSwapPrePickedModel = pool[Math.floor(Math.random() * pool.length)];
       }
+      // ── Single-swap Ultra clamp (parity with generate-dream) ──
+      // Ultra renders at 4MP; the SINGLE-cast swap providers (cdingram/yan-ops/
+      // pikachupichu25) downscale that target until the face is undetectable, or
+      // time out → "no face found" → hard-fail. Clamp Ultra → Pro for single.
+      // The DUAL path is left on Ultra: nightly's dual swap runs on Fly.io
+      // (face-swap-dual, 2GB), which handles the 4MP crop/stitch (verified
+      // 2026-06-01). Clamping before the override pick below also lets the
+      // curated Pro fragment library apply (it has no -ultra entries).
+      if (
+        isSingleHumanFaceSwap &&
+        faceSwapPrePickedModel === 'black-forest-labs/flux-1.1-pro-ultra'
+      ) {
+        faceSwapPrePickedModel = 'black-forest-labs/flux-1.1-pro';
+        fallbackReasons.push('single_ultra_clamped_to_pro');
+        console.log(
+          '[nightly] CLAMP: flux-1.1-pro-ultra → flux-1.1-pro for single face swap (Ultra 4MP breaks the swap)'
+        );
+      }
       console.log(
         `[nightly] face-swap character model (${selectedCast.length === 2 ? 'dual' : 'single'}): ${faceSwapPrePickedModel}`
       );
