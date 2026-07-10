@@ -1128,6 +1128,22 @@ Output ONLY the prompt.`;
         castMembers = self && plusOne ? [self, plusOne] : [self ?? castMembers[0]];
       }
 
+      // Forensic breadcrumb (2026-07-10): a "me and my wife" dream rendered as a
+      // SOLO of the wife — the self-insert parser found plus_one but not self, so
+      // castMembers dropped to 1 and it ran the single-cast swap. The raw queue
+      // payload prunes fast, so record what the parser DETECTED vs the cast we
+      // RESOLVED (queryable via ai_generation_log / check-forensics), and echo
+      // the raw subject to the edge log — so the next repro is diagnosable
+      // instead of inferred.
+      if (isFaceSwapEligible) {
+        const detected = Array.from(selfInsertResult.referencedRoles).sort().join('+') || 'none';
+        const resolved = castMembers.map((m: DreamCastMember) => m.role).join('+') || 'none';
+        fallbackReasons.push(`cast_parse:detected=${detected}:resolved=${resolved}`);
+        console.log(
+          `[generate-dream] cast parse: subject="${userSubject.slice(0, 120)}" → detected=${detected} resolved=${resolved}`
+        );
+      }
+
       // Randomize which dual-cast member lands on the LEFT vs RIGHT (~50%) so the
       // same person isn't always on the same side. castMembers order drives BOTH
       // the brief (CHARACTER 1 = LEFT, via resolveCastForPrompt) and the swap
