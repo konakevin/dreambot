@@ -28,6 +28,7 @@ import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import * as Haptics from 'expo-haptics';
+import { useQueryClient } from '@tanstack/react-query';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
 import { useDeleteGroup } from '@/hooks/useDeleteGroup';
 import { useMarkInboxViewed } from '@/hooks/useMarkInboxViewed';
@@ -578,6 +579,7 @@ export default function InboxScreen() {
   const { mutate: deleteGroup } = useDeleteGroup();
   const { mutate: deleteAll } = useDeleteAllNotifications();
   const { mutate: markInboxViewed } = useMarkInboxViewed();
+  const queryClient = useQueryClient();
 
   // "•••" header dropdown — custom branded menu. headerH (measured) positions
   // the dropdown right under the header.
@@ -668,6 +670,14 @@ export default function InboxScreen() {
   // private drafts, doesn't even contain them). The group's member uploads are
   // exactly its notifications rows (same group_key). Falls back to single-dream
   // routing if the group resolves to ≤1 upload.
+  //
+  // Scoped to UNSEEN dreams only (seen_at IS NULL) + marks them seen on open, so
+  // a dream the user already viewed never resurfaces in a later "N dreams are
+  // ready" aggregate — the count (event_count, migration 358) and the badge both
+  // gate on seen_at (Kevin 2026-07-10). "Seen" is thereafter set by two paths:
+  // the Dreams-tab auto-acknowledge (dreams watched as they arrive) and this
+  // open. If every dream in the day-group is already seen, `ids` is empty and we
+  // fall through to a single view of the group's newest so the row still opens.
   async function openScopedDreamAlbum(g: InboxGroup) {
     const uid = useAuthStore.getState().user?.id;
     if (!uid || !g.uploadId) {
@@ -682,26 +692,50 @@ export default function InboxScreen() {
       .select('upload_id, created_at')
       .eq('recipient_id', uid)
       .eq('group_key', g.groupKey)
+      .is('seen_at', null)
       .not('upload_id', 'is', null)
       .order('created_at', { ascending: false });
     const ids = Array.from(new Set((data ?? []).map((r) => r.upload_id as string).filter(Boolean)));
+
+    // Acknowledge every unseen dream in the group so it drops from the count +
+    // badge and can't reappear in a future aggregate. Fire-and-forget; refresh
+    // the inbox + badge once it lands (same contract as the Dreams-tab auto-ack).
+    if (ids.length > 0) {
+      void supabase
+        .from('notifications')
+        .update({ seen_at: new Date().toISOString() })
+        .eq('recipient_id', uid)
+        .eq('group_key', g.groupKey)
+        .is('seen_at', null)
+        .then(({ error }) => {
+          if (error) {
+            if (__DEV__) console.warn('[openScopedDreamAlbum] seen update failed', error);
+            return;
+          }
+          queryClient.invalidateQueries({ queryKey: ['inboxGrouped', uid] });
+          queryClient.invalidateQueries({ queryKey: ['newNotificationCount', uid] });
+        });
+    }
+
     if (ids.length <= 1) {
+      // Prefer the one remaining unseen dream; else the group's newest (history).
+      const target = ids[0] ?? g.uploadId;
       routeFromNotification(
-        { type: g.type, subtype: g.subtype ?? undefined, uploadId: g.uploadId },
+        { type: g.type, subtype: g.subtype ?? undefined, uploadId: target },
         { markSeen: true }
       );
       return;
     }
-    // Scope the pager to exactly these uploads (newest first, so the newest —
-    // the group's representative — opens at index 0).
+    // Scope the pager to exactly these unseen uploads (newest first, so the
+    // freshest opens at index 0).
     const album = useAlbumStore.getState();
     album.setAlbum(ids);
     album.setAlbumPosts([]);
     album.setAlbumSource(null);
-    album.setCurrentPostId(g.uploadId);
+    album.setCurrentPostId(ids[0]);
     void clearDreamInFlight();
     markInboxViewed();
-    nav.push(`/photo/${g.uploadId}`);
+    nav.push(`/photo/${ids[0]}`);
   }
 
   function handleTap(g: InboxGroup) {
@@ -718,7 +752,7 @@ export default function InboxScreen() {
       return;
     }
     // Pooled "N dreams are ready" → scope the pager to just those N new dreams.
-    if (g.type === 'dream_generated' && g.eventCount > 1 && g.uploadId) {
+    if (g.type === 'dream_generated' && g.subtype === 'manual' && g.uploadId) {
       void openScopedDreamAlbum(g);
       return;
     }
@@ -791,7 +825,7 @@ export default function InboxScreen() {
   function handleThumbTap(g: InboxGroup) {
     // Pooled "N dreams are ready" → scope the pager to just those N (same as the
     // row tap), so the thumbnail doesn't drop the user into their whole album.
-    if (g.type === 'dream_generated' && g.eventCount > 1 && g.uploadId) {
+    if (g.type === 'dream_generated' && g.subtype === 'manual' && g.uploadId) {
       void openScopedDreamAlbum(g);
       return;
     }
