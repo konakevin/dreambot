@@ -8,9 +8,19 @@
  * visits — PostHog can't be (client analytics are !__DEV__-gated, so dev/
  * TestFlight sessions never reach it).
  *
- * Per-user activity in the same window: dreams enqueued (create vs nightly),
+ * Per-user activity in the same window: dreams created (create vs nightly),
  * likes, comments, reposts, follows, and sparkles spent (negative ledger).
  * Bots excluded. All reads paginated (PostgREST silently caps at 1000 rows).
+ *
+ * "Dreams created" is counted from the `uploads` table (successful renders),
+ * NOT `dream_queue`: store builds can bypass the queue when
+ * EXPO_PUBLIC_DREAM_QUEUE_ENABLED is off, so their creates never make a
+ * dream_queue row — counting the queue silently reported real users as
+ * "browsed only" (Kevin caught this 2026-07-10). Nightly dreams ALWAYS go
+ * through the queue (server-side cron), so nightly is read from dream_queue
+ * (source='nightly') and create = uploads − nightly. Gallery hosts
+ * (media_count > 1) are compositions of existing dreams, not new renders, so
+ * they're excluded.
  *
  * Usage: node scripts/activity-report.js [hours]   (default 12)
  * Reads SUPABASE_SERVICE_ROLE_KEY + EXPO_PUBLIC_SUPABASE_URL from .env.local.
@@ -76,7 +86,12 @@ const tally = (list, key) => {
     return;
   }
   const inList = `in.(${users.map((u) => u.id).join(',')})`;
-  const [queue, likes, comments, follows, reposts, ledger] = await Promise.all([
+  const [uploads, queue, likes, comments, follows, reposts, ledger] = await Promise.all([
+    // Successful renders = the real "dreams created" record. Exclude gallery
+    // hosts (media_count > 1) — those are compositions, not new renders.
+    pageAll(
+      `uploads?select=user_id,media_count&created_at=gte.${since}&is_ai_generated=eq.true&user_id=${inList}`
+    ),
     pageAll(`dream_queue?select=user_id,source&created_at=gte.${since}&user_id=${inList}`),
     pageAll(`likes?select=user_id&created_at=gte.${since}&user_id=${inList}`),
     pageAll(`comments?select=user_id&created_at=gte.${since}&user_id=${inList}`),
@@ -89,14 +104,21 @@ const tally = (list, key) => {
     ).catch(() => []),
   ]);
 
-  const createDreams = tally(
-    queue.filter((q) => q.source !== 'nightly'),
+  // Nightly always goes through the queue; only user creates on store builds
+  // can bypass it. So total dreams = uploads, nightly = queue(source='nightly'),
+  // and create = the remainder (clamped ≥0 for any timing skew).
+  const totalDreams = tally(
+    uploads.filter((u) => (u.media_count ?? 1) <= 1),
     'user_id'
   );
   const nightly = tally(
     queue.filter((q) => q.source === 'nightly'),
     'user_id'
   );
+  const createDreams = new Map();
+  for (const u of users) {
+    createDreams.set(u.id, Math.max(0, (totalDreams.get(u.id) || 0) - (nightly.get(u.id) || 0)));
+  }
   const likeC = tally(likes, 'user_id');
   const commentC = tally(comments, 'user_id');
   const followC = tally(follows, 'follower_id');
