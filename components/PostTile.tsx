@@ -76,6 +76,15 @@ export const PostTile = memo(function PostTile({
     // the grid's TanStack query (shared cache) and fetchNextPage as the
     // user scrolls past the grid's currently-loaded pages.
     const store = useAlbumStore.getState();
+    // Reset the notification-pager `ids` — set ONLY by the inbox/notification
+    // scoped-album flow (inbox.tsx / notificationRouting.ts), which never
+    // clears them. A grid tap always uses the posts+source (or context) flow,
+    // never the `ids` pager, so a leftover album must not leak in. Without this,
+    // the ONE grid that stashes an EMPTY posts array (Search/Browse — no
+    // `allPosts`) falls into album mode against the stale ids; the tapped id
+    // isn't in them, so findIndex → -1 → index 0 → opens the wrong (first) post
+    // of the last notification album (Kevin 2026-07-10).
+    store.setAlbum([]);
     store.setAlbumPosts(allPosts && allPosts.length > 0 ? allPosts : []);
     store.setAlbumSource(albumSource ?? null);
     // Track currentPostId so PostGrid can auto-scroll back to this row on
