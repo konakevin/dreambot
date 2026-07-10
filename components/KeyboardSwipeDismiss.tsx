@@ -16,7 +16,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Keyboard, Platform, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
 
 export function KeyboardSwipeDismiss({ children }: { children: ReactNode }) {
   const [kbOpen, setKbOpen] = useState(false);
@@ -38,9 +37,16 @@ export function KeyboardSwipeDismiss({ children }: { children: ReactNode }) {
     // never fires on upward drags, so keyboard-open form scrolling is untouched.
     .activeOffsetY([16, 300])
     .failOffsetX([-24, 24])
+    // Run the handler on the JS thread — its ONLY job is Keyboard.dismiss(), a
+    // JS-thread call, so there is no reason to bounce through a UI-thread
+    // worklet. The worklet form (runOnJS(Keyboard.dismiss) inside a 'worklet'
+    // onStart) was crashing FATALLY in production release builds with
+    // "Property 'WorkletsError' doesn't exist" — the worklet runtime's error
+    // path referencing a global that isn't in scope here (reanimated 4.1 /
+    // worklets 0.5). No worklet → no WorkletsError path (Sentry 2026-07-10).
+    .runOnJS(true)
     .onStart(() => {
-      'worklet';
-      runOnJS(Keyboard.dismiss)();
+      Keyboard.dismiss();
     });
 
   return (
