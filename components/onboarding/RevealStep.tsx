@@ -323,9 +323,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
       reset();
       // replace (not push): onboarding is done — there's no stepping back into
       // it. fromOnboarding tells New Post's Cancel to land on the feed.
-      router.replace(
-        `/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(activeDream.url)}&fromOnboarding=1`
-      );
+      router.replace(`/post/new?ids=${uploadId}&fromOnboarding=1`);
       return;
     }
 

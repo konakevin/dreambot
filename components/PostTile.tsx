@@ -141,6 +141,14 @@ export const PostTile = memo(function PostTile({
           <Ionicons name="pin" size={12} color="#FFFFFF" />
         </View>
       )}
+      {/* Gallery/carousel stack badge (migration 356) — top-right (free corner;
+          pin owns top-left, "Public" owns bottom-right). Signals a multi-image
+          post like Instagram's carousel indicator. */}
+      {(item.media_count ?? 1) > 1 && (
+        <View style={styles.stackBadge} pointerEvents="none">
+          <Ionicons name="copy-outline" size={14} color="#FFFFFF" />
+        </View>
+      )}
       {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
           contrast; only the live ones carry the badge. On-brand dark pill +
           icon + text, matching the model / "Just viewed" badges. */}
@@ -251,6 +259,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.78)',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(255,255,255,0.35)',
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  stackBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.55)',
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowRadius: 3,

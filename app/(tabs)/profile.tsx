@@ -39,6 +39,7 @@ import type { DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
 import { useBulkDeletePosts, useBulkMakePrivate } from '@/hooks/useDeletePost';
+import { useBulkUnsave, useBulkUnrepost } from '@/hooks/useBulkUnsaveUnrepost';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -66,6 +67,8 @@ export default function ProfileScreen() {
   const [gridSelectedIds, setGridSelectedIds] = useState<Set<string>>(new Set());
   const bulkDelete = useBulkDeletePosts();
   const bulkPrivate = useBulkMakePrivate();
+  const bulkUnsave = useBulkUnsave();
+  const bulkUnrepost = useBulkUnrepost();
   const exitGridSelection = useCallback(() => {
     setGridSelecting(false);
     setGridSelectedIds(new Set());
@@ -126,6 +129,50 @@ export default function ProfileScreen() {
       ]
     );
   }, [gridSelectedIds, bulkPrivate, exitGridSelection]);
+  // Compose a post from the selected dreams (order = tap order; Set preserves
+  // insertion order). 1 → single post, 2+ → gallery, decided in the compose flow.
+  const handleBulkPost = useCallback(() => {
+    const ids = [...gridSelectedIds];
+    if (ids.length === 0) return;
+    exitGridSelection();
+    nav.push(`/post/new?ids=${ids.join(',')}`);
+  }, [gridSelectedIds, exitGridSelection]);
+  // Unsave / unrepost are reversible, but confirm anyway (same ceremony as
+  // delete / make-private) so a mis-tap on a big selection isn't instant.
+  const handleBulkUnsave = useCallback(() => {
+    const count = gridSelectedIds.size;
+    if (count === 0 || bulkUnsave.isPending) return;
+    showAlert(
+      `Remove ${count} from saved?`,
+      'They come off your saved album. You can save them again anytime.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Unsave',
+          onPress: () => {
+            bulkUnsave.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+          },
+        },
+      ]
+    );
+  }, [gridSelectedIds, bulkUnsave, exitGridSelection]);
+  const handleBulkUnrepost = useCallback(() => {
+    const count = gridSelectedIds.size;
+    if (count === 0 || bulkUnrepost.isPending) return;
+    showAlert(
+      `Remove ${count} repost${count === 1 ? '' : 's'}?`,
+      'They come off your profile. You can repost them again anytime.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Unrepost',
+          onPress: () => {
+            bulkUnrepost.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+          },
+        },
+      ]
+    );
+  }, [gridSelectedIds, bulkUnrepost, exitGridSelection]);
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
   const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
@@ -432,6 +479,10 @@ export default function ProfileScreen() {
         </Animated.Text>
       </TouchableOpacity>
       <View style={styles.topBarActions}>
+        {/* Compose a new post (single or multi-image) from your dreams. */}
+        <TouchableOpacity onPress={() => nav.push('/post/new')} hitSlop={12}>
+          <Ionicons name="add-circle-outline" size={24} color={colors.textSecondary} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
           <View style={styles.inboxBubbleWrap}>
             <Ionicons
@@ -546,7 +597,9 @@ export default function ProfileScreen() {
           the left, Done on the right — so it reads as the grid's edit mode,
           not detached screen chrome (Kevin 2026-07-10: the top-left ✕ was
           hard to associate with the grid). */}
-      {(activeTab === 'dreams' || (activeTab === 'posts' && gridSelecting)) &&
+      {(activeTab === 'dreams' ||
+        ((activeTab === 'posts' || activeTab === 'saved' || activeTab === 'reposts') &&
+          gridSelecting)) &&
         (gridSelecting ? (
           <View style={[styles.dreamsFilterRow, styles.selectionRow]}>
             <Text style={styles.selectionCountText}>{gridSelectedIds.size} selected</Text>
@@ -556,7 +609,7 @@ export default function ProfileScreen() {
               activeOpacity={0.8}
               hitSlop={8}
             >
-              <Text style={styles.selectionDoneText}>Done</Text>
+              <Text style={styles.selectionDoneText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -632,10 +685,14 @@ export default function ProfileScreen() {
           showPrivateBadge={activeTab === 'dreams'}
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
-          // Multi-select (bulk edit) — own Posts + Dreams albums. Present-but-
-          // inactive adds the "Select" row to tile long-press sheets.
+          // Multi-select (bulk edit) — Posts + Dreams (delete/private/post) and
+          // Saved + Reposts (bulk unsave / unrepost). Present-but-inactive adds
+          // the "Select" row to tile long-press sheets.
           selection={
-            activeTab === 'dreams' || activeTab === 'posts'
+            activeTab === 'dreams' ||
+            activeTab === 'posts' ||
+            activeTab === 'saved' ||
+            activeTab === 'reposts'
               ? {
                   active: gridSelecting,
                   selectedIds: gridSelectedIds,
@@ -653,6 +710,27 @@ export default function ProfileScreen() {
         {gridSelecting && (
           <View style={[styles.selectionActions, { bottom: tabBarHeight + verticalScale(12) }]}>
             <View style={styles.selectionActionsRow}>
+              {/* Post the selected dreams — 1 → single, 2+ → gallery. Only on
+                  the PRIVATE sub-filter, where every tile is unposted so "Post"
+                  is unambiguous; on All/Posted the tiles are already live, so
+                  composing goes through the ＋ new-post entry instead. */}
+              {activeTab === 'dreams' && dreamsFilter === 'private' && (
+                <TouchableOpacity
+                  style={[
+                    styles.actionPill,
+                    styles.postPill,
+                    gridSelectedIds.size === 0 && styles.actionPillDisabled,
+                  ]}
+                  onPress={handleBulkPost}
+                  disabled={gridSelectedIds.size === 0}
+                  activeOpacity={0.85}
+                >
+                  <Ionicons name="add-circle-outline" size={16} color="#FFFFFF" />
+                  <Text style={styles.actionPillText}>
+                    Post{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                  </Text>
+                </TouchableOpacity>
+              )}
               {activeTab === 'posts' && (
                 <TouchableOpacity
                   style={[
@@ -674,27 +752,79 @@ export default function ProfileScreen() {
                   )}
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={[
-                  styles.actionPill,
-                  styles.deletePill,
-                  (gridSelectedIds.size === 0 || bulkDelete.isPending) && styles.actionPillDisabled,
-                ]}
-                onPress={handleBulkDelete}
-                disabled={gridSelectedIds.size === 0 || bulkDelete.isPending}
-                activeOpacity={0.85}
-              >
-                {bulkDelete.isPending ? (
-                  <ActivityIndicator color="#FFFFFF" size="small" />
-                ) : (
-                  <>
-                    <Ionicons name="trash-outline" size={16} color="#FFFFFF" />
-                    <Text style={styles.actionPillText}>
-                      Delete{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
-                    </Text>
-                  </>
-                )}
-              </TouchableOpacity>
+              {/* Delete — own content only (Posts + Dreams). */}
+              {(activeTab === 'dreams' || activeTab === 'posts') && (
+                <TouchableOpacity
+                  style={[
+                    styles.actionPill,
+                    styles.deletePill,
+                    (gridSelectedIds.size === 0 || bulkDelete.isPending) &&
+                      styles.actionPillDisabled,
+                  ]}
+                  onPress={handleBulkDelete}
+                  disabled={gridSelectedIds.size === 0 || bulkDelete.isPending}
+                  activeOpacity={0.85}
+                >
+                  {bulkDelete.isPending ? (
+                    <ActivityIndicator color="#FFFFFF" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="trash-outline" size={16} color="#FFFFFF" />
+                      <Text style={styles.actionPillText}>
+                        Delete{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                      </Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+              {/* Saved album → bulk unsave (reversible). */}
+              {activeTab === 'saved' && (
+                <TouchableOpacity
+                  style={[
+                    styles.actionPill,
+                    (gridSelectedIds.size === 0 || bulkUnsave.isPending) &&
+                      styles.actionPillDisabled,
+                  ]}
+                  onPress={handleBulkUnsave}
+                  disabled={gridSelectedIds.size === 0 || bulkUnsave.isPending}
+                  activeOpacity={0.85}
+                >
+                  {bulkUnsave.isPending ? (
+                    <ActivityIndicator color="#FFFFFF" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="bookmark-outline" size={16} color="#FFFFFF" />
+                      <Text style={styles.actionPillText}>
+                        Unsave{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                      </Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+              {/* Reposts album → bulk unrepost (reversible). */}
+              {activeTab === 'reposts' && (
+                <TouchableOpacity
+                  style={[
+                    styles.actionPill,
+                    (gridSelectedIds.size === 0 || bulkUnrepost.isPending) &&
+                      styles.actionPillDisabled,
+                  ]}
+                  onPress={handleBulkUnrepost}
+                  disabled={gridSelectedIds.size === 0 || bulkUnrepost.isPending}
+                  activeOpacity={0.85}
+                >
+                  {bulkUnrepost.isPending ? (
+                    <ActivityIndicator color="#FFFFFF" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="repeat-outline" size={16} color="#FFFFFF" />
+                      <Text style={styles.actionPillText}>
+                        Unrepost{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                      </Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         )}
@@ -826,6 +956,10 @@ const styles = StyleSheet.create({
   deletePill: {
     backgroundColor: colors.like,
     borderColor: colors.like,
+  },
+  postPill: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   actionPillDisabled: {
     opacity: 0.5,

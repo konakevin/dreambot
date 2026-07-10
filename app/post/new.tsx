@@ -1,0 +1,488 @@
+/**
+ * New Post — the unified posting flow (2026-07-10). Compose a SINGLE or a
+ * MULTI-image (carousel) post from your own dreams. Replaces the old split
+ * between dream/newPost (single) and post/new-gallery (multi).
+ *
+ * Two steps:
+ *   1. select  — multi-select from the dream library; tap order = post order.
+ *   2. compose — a single dream shows a large preview (keyboard-smooth); 2+ show
+ *      the ordered strip. Both carry a description + "Add more". Then Post.
+ *
+ * Entry points (all land here):
+ *   • profile "New post" icon        → empty picker
+ *   • a dream's "+" / reveal / onboarding → ?ids=<uploadId>  (preselected, compose)
+ *   • grid multi-select "Post" pill  → ?ids=<id,id,...>       (preselected, compose)
+ *
+ * Publish: 1 image flips that dream's OWN row public (no duplicate row); 2+ builds
+ * a new gallery via publishGallery. Source = own dreams; cap = gallery_max_images.
+ */
+import { useEffect, useMemo, useState } from 'react';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+  StyleSheet,
+  Keyboard,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
+import { Text, TextInput } from '@/components/AppText';
+import { Image } from 'expo-image';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
+import { router, useLocalSearchParams } from 'expo-router';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import { useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
+import { useMyDreams } from '@/hooks/useMyDreams';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { useAuthStore } from '@/store/auth';
+import { publishGallery, type GallerySourceImage } from '@/lib/publishGallery';
+import { pinToFeed } from '@/lib/dreamSave';
+import { moderateText } from '@/lib/moderation';
+import { thumbnailUrl } from '@/lib/imageUrl';
+import type { DreamPostItem } from '@/components/DreamCard';
+import { colors } from '@/constants/theme';
+import { verticalScale, fontScale } from '@/lib/responsive';
+import { Toast } from '@/components/Toast';
+import { GradientTitle } from '@/components/GradientTitle';
+import { NUM_COLUMNS, TILE_GAP, TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const MAX_IMAGE_WIDTH = SCREEN_WIDTH - 64;
+const DEFAULT_ASPECT = 768 / 1344;
+const MIN_IMAGE_HEIGHT = verticalScale(170);
+const HEADER_RESERVE = verticalScale(56);
+const INPUT_RESERVE = verticalScale(120);
+const BOTTOM_GAP = verticalScale(48);
+
+type Selected = GallerySourceImage & { id: string };
+
+function toSelected(item: DreamPostItem): Selected {
+  return {
+    id: item.id,
+    url: item.image_url,
+    display: item.image_url_display ?? null,
+    hq: item.image_url_hq ?? null,
+    thumbhash: item.thumbhash ?? null,
+    caption: item.caption ?? null,
+    dream_medium: item.dream_medium ?? null,
+    dream_vibe: item.dream_vibe ?? null,
+  };
+}
+
+export default function NewPostScreen() {
+  const params = useLocalSearchParams<{ ids?: string; fromOnboarding?: string }>();
+  const user = useAuthStore((s) => s.user);
+  const qc = useQueryClient();
+  const insets = useSafeAreaInsets();
+  const { galleryMaxImages } = useEngineConfig();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyDreams('all');
+
+  const preIds = useMemo(
+    () => (params.ids ? String(params.ids).split(',').filter(Boolean) : []),
+    [params.ids]
+  );
+
+  const [step, setStep] = useState<'select' | 'compose'>(preIds.length ? 'compose' : 'select');
+  const [selected, setSelected] = useState<Selected[]>([]);
+  const [description, setDescription] = useState('');
+  const [posting, setPosting] = useState(false);
+  const [imgAspect, setImgAspect] = useState(DEFAULT_ASPECT);
+
+  // Resolve preselected ids → full Selected rows (order preserved).
+  useEffect(() => {
+    if (!preIds.length) return;
+    let cancelled = false;
+    (async () => {
+      const { data: rows } = await supabase
+        .from('uploads')
+        .select(
+          'id,image_url,image_url_display,image_url_hq,thumbhash,caption,dream_medium,dream_vibe'
+        )
+        .in('id', preIds);
+      if (cancelled || !rows) return;
+      const byId = new Map(rows.map((r) => [r.id as string, r]));
+      const ordered = preIds
+        .map((id) => byId.get(id))
+        .filter((r): r is NonNullable<typeof r> => !!r)
+        .map((r) => ({
+          id: r.id as string,
+          url: r.image_url as string,
+          display: (r.image_url_display as string | null) ?? null,
+          hq: (r.image_url_hq as string | null) ?? null,
+          thumbhash: (r.thumbhash as string | null) ?? null,
+          caption: (r.caption as string | null) ?? null,
+          dream_medium: (r.dream_medium as string | null) ?? null,
+          dream_vibe: (r.dream_vibe as string | null) ?? null,
+        }));
+      setSelected(ordered);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [preIds]);
+
+  const dreams = useMemo(
+    () => (data?.pages ?? []).flatMap((p) => p.rows) as DreamPostItem[],
+    [data]
+  );
+  const orderOf = useMemo(() => {
+    const m = new Map<string, number>();
+    selected.forEach((s, i) => m.set(s.id, i + 1));
+    return m;
+  }, [selected]);
+
+  // Keyboard-smooth single preview (UI-thread, mirrors dream/newPost).
+  const { height: kbHeightSV } = useReanimatedKeyboardAnimation();
+  const insetTop = insets.top;
+  const imgBoxStyle = useAnimatedStyle(() => {
+    'worklet';
+    const kb = Math.abs(kbHeightSV.value);
+    const avail = SCREEN_HEIGHT - insetTop - HEADER_RESERVE - INPUT_RESERVE - kb - BOTTOM_GAP;
+    let w = MAX_IMAGE_WIDTH;
+    let h = w / imgAspect;
+    if (h > avail) {
+      h = Math.max(MIN_IMAGE_HEIGHT, avail);
+      w = h * imgAspect;
+    }
+    return { width: w, height: h };
+  });
+
+  function toggle(item: DreamPostItem) {
+    Haptics.selectionAsync();
+    setSelected((prev) => {
+      const at = prev.findIndex((s) => s.id === item.id);
+      if (at >= 0) return prev.filter((s) => s.id !== item.id);
+      if (prev.length >= galleryMaxImages) {
+        Toast.show(`Up to ${galleryMaxImages} images`, 'information-circle');
+        return prev;
+      }
+      return [...prev, toSelected(item)];
+    });
+  }
+
+  async function handlePost() {
+    if (!user || posting || selected.length < 1) return;
+    setPosting(true);
+    try {
+      const trimmed = description.trim();
+      if (trimmed) {
+        const mod = await moderateText(trimmed);
+        if (!mod.passed) {
+          Toast.show(mod.reason ?? "This contains language we don't allow.", 'close-circle');
+          setPosting(false);
+          return;
+        }
+      }
+
+      if (selected.length === 1) {
+        // Single: publish the dream's OWN row (no duplicate).
+        const one = selected[0];
+        const { error } = await supabase
+          .from('uploads')
+          .update({
+            is_public: true,
+            posted_at: new Date().toISOString(),
+            description: trimmed || null,
+          })
+          .eq('id', one.id)
+          .eq('user_id', user.id);
+        if (error) throw error;
+        pinToFeed({
+          id: one.id,
+          userId: user.id,
+          imageUrl: one.url,
+          username: user.user_metadata?.username ?? '',
+          avatarUrl: user.user_metadata?.avatar_url ?? null,
+          description: trimmed || null,
+        });
+      } else {
+        await publishGallery({ userId: user.id, images: selected, description: trimmed });
+      }
+
+      qc.invalidateQueries({ queryKey: ['userPosts'], refetchType: 'all' });
+      qc.invalidateQueries({ queryKey: ['my-dreams'], refetchType: 'all' });
+      qc.invalidateQueries({ queryKey: ['dreamFeed'] });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show('Posted', 'checkmark-circle');
+      router.replace('/(tabs)');
+    } catch {
+      Toast.show('Failed to post', 'close-circle');
+      setPosting(false);
+    }
+  }
+
+  const single = selected.length === 1;
+  const canAdvance = selected.length >= 1;
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            // Onboarding REPLACED its route with this screen, so there's nothing
+            // to pop back to — land on the feed (the dream stays in the album).
+            if (params.fromOnboarding) return router.replace('/(tabs)');
+            if (step === 'compose') return setStep('select');
+            router.back();
+          }}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.cancelText}>
+            {step === 'compose' && !params.fromOnboarding ? 'Back' : 'Cancel'}
+          </Text>
+        </TouchableOpacity>
+        <GradientTitle>{step === 'compose' ? 'New Post' : 'Select images'}</GradientTitle>
+        {step === 'select' ? (
+          <TouchableOpacity
+            onPress={() => canAdvance && setStep('compose')}
+            disabled={!canAdvance}
+            activeOpacity={0.7}
+            style={[styles.actionBtn, !canAdvance && styles.actionBtnDisabled]}
+          >
+            <Text style={styles.actionText}>
+              Next{selected.length ? ` (${selected.length})` : ''}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={handlePost}
+            disabled={posting}
+            activeOpacity={0.7}
+            style={[styles.actionBtn, posting && styles.actionBtnDisabled]}
+          >
+            <Text style={styles.actionText}>{posting ? 'Posting...' : 'Post'}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {step === 'select' ? (
+        isLoading ? (
+          <ActivityIndicator style={{ marginTop: verticalScale(40) }} color={colors.accent} />
+        ) : (
+          <FlatList
+            data={dreams}
+            keyExtractor={(it) => it.id}
+            numColumns={NUM_COLUMNS}
+            columnWrapperStyle={{ gap: TILE_GAP }}
+            contentContainerStyle={{ gap: TILE_GAP, paddingBottom: verticalScale(24) }}
+            onEndReached={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
+            onEndReachedThreshold={0.6}
+            renderItem={({ item }) => {
+              const n = orderOf.get(item.id);
+              return (
+                <TouchableOpacity activeOpacity={0.85} onPress={() => toggle(item)}>
+                  <Image
+                    source={{ uri: thumbnailUrl(item.image_url) }}
+                    style={{ width: TILE_WIDTH, height: TILE_WIDTH * PORTRAIT_RATIO }}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+                    placeholderContentFit="cover"
+                  />
+                  {n != null && (
+                    <>
+                      <View style={styles.selDim} pointerEvents="none" />
+                      <View style={styles.selBadge} pointerEvents="none">
+                        <Text style={styles.selBadgeText}>{n}</Text>
+                      </View>
+                    </>
+                  )}
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )
+      ) : single ? (
+        // ── Single-image compose: large keyboard-smooth preview ──
+        <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+          <View style={styles.singleContainer}>
+            <Animated.View style={[styles.singleBox, imgBoxStyle]}>
+              <Image
+                source={{ uri: selected[0].display ?? selected[0].url }}
+                style={StyleSheet.absoluteFill}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                onLoad={(e) => {
+                  const src = e.source;
+                  if (src?.width && src?.height) setImgAspect(src.width / src.height);
+                }}
+              />
+            </Animated.View>
+          </View>
+          <TouchableOpacity
+            style={styles.addMore}
+            onPress={() => setStep('select')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="add" size={16} color={colors.accent} />
+            <Text style={styles.addMoreText}>Add more</Text>
+          </TouchableOpacity>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Write a description..."
+              placeholderTextColor={colors.textSecondary}
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              maxLength={500}
+              textAlignVertical="top"
+            />
+          </View>
+        </Pressable>
+      ) : (
+        // ── Multi-image compose: ordered strip ──
+        <View style={{ flex: 1 }}>
+          <FlatList
+            horizontal
+            data={selected}
+            keyExtractor={(s) => s.id}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.strip}
+            ListFooterComponent={
+              selected.length < galleryMaxImages ? (
+                <TouchableOpacity style={styles.addTile} onPress={() => setStep('select')}>
+                  <Ionicons name="add" size={26} color={colors.textSecondary} />
+                </TouchableOpacity>
+              ) : null
+            }
+            renderItem={({ item, index }) => (
+              <View style={styles.stripItem}>
+                <Image
+                  source={{ uri: thumbnailUrl(item.url) }}
+                  style={styles.stripImg}
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
+                  placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+                />
+                <TouchableOpacity
+                  style={styles.stripRemove}
+                  onPress={() => setSelected((p) => p.filter((s) => s.id !== item.id))}
+                  hitSlop={8}
+                >
+                  <Ionicons name="close" size={14} color="#FFFFFF" />
+                </TouchableOpacity>
+                {index === 0 && (
+                  <View style={styles.coverTag} pointerEvents="none">
+                    <Text style={styles.coverTagText}>Cover</Text>
+                  </View>
+                )}
+              </View>
+            )}
+          />
+          <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Write a description..."
+                placeholderTextColor={colors.textSecondary}
+                value={description}
+                onChangeText={setDescription}
+                multiline
+                maxLength={500}
+                textAlignVertical="top"
+              />
+            </View>
+          </Pressable>
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: verticalScale(12),
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+  },
+  cancelText: { color: colors.textSecondary, fontSize: fontScale(16) },
+  actionBtn: {
+    backgroundColor: colors.accent,
+    paddingHorizontal: 18,
+    paddingVertical: verticalScale(8),
+    borderRadius: 20,
+  },
+  actionBtnDisabled: { opacity: 0.4 },
+  actionText: { color: '#FFFFFF', fontSize: fontScale(15), fontWeight: '700' },
+  selDim: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(124,58,237,0.28)' },
+  selBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    minWidth: 22,
+    height: 22,
+    borderRadius: 11,
+    paddingHorizontal: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accent,
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+  },
+  selBadgeText: { color: '#FFFFFF', fontSize: fontScale(12), fontWeight: '800' },
+  // single compose
+  singleContainer: { alignItems: 'center', paddingVertical: verticalScale(16) },
+  singleBox: { borderRadius: 12, overflow: 'hidden', backgroundColor: colors.background },
+  addMore: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    alignSelf: 'center',
+    paddingVertical: verticalScale(6),
+  },
+  addMoreText: { color: colors.accent, fontSize: fontScale(14), fontWeight: '600' },
+  // multi compose
+  strip: { gap: 10, paddingHorizontal: 16, paddingVertical: verticalScale(16) },
+  stripItem: { width: 84, height: 108, borderRadius: 10, overflow: 'hidden' },
+  stripImg: { width: '100%', height: '100%' },
+  stripRemove: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  addTile: {
+    width: 84,
+    height: 108,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  coverTag: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    paddingVertical: verticalScale(2),
+  },
+  coverTagText: { color: '#FFFFFF', fontSize: fontScale(10), fontWeight: '700' },
+  inputContainer: { flex: 1, paddingHorizontal: 16 },
+  input: {
+    color: '#FFFFFF',
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
+    minHeight: 80,
+    padding: 0,
+  },
+});

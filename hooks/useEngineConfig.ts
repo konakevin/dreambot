@@ -42,6 +42,8 @@ export interface EngineConfig {
   newSceneMaxPeople: number;
   newScenePriceStandard: number;
   newScenePriceBest: number;
+  // Max images in a gallery/carousel post (migration 356).
+  galleryMaxImages: number;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -66,6 +68,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   newSceneMaxPeople: 3,
   newScenePriceStandard: 3,
   newScenePriceBest: 5,
+  galleryMaxImages: 10,
 };
 
 function num(v: unknown, d: number): number {
@@ -131,6 +134,7 @@ export function useEngineConfig(): EngineConfig {
           DEFAULT_ENGINE_CONFIG.newScenePriceStandard
         ),
         newScenePriceBest: num(c.new_scene_price_best, DEFAULT_ENGINE_CONFIG.newScenePriceBest),
+        galleryMaxImages: num(c.gallery_max_images, DEFAULT_ENGINE_CONFIG.galleryMaxImages),
       };
     },
     staleTime: 5 * 60_000,

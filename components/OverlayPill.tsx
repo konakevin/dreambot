@@ -8,6 +8,11 @@ import { Text } from '@/components/AppText';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import * as Haptics from 'expo-haptics';
 
+/** Selected-pill background — the dark translucent chip used for the active
+ *  feed tab (Following/Explore) + the active bot pill. Exported so other
+ *  overlays (e.g. the gallery edge chevrons) match it from one source. */
+export const OVERLAY_PILL_ACTIVE_BG = 'rgba(0,0,0,0.6)';
+
 interface Props {
   label: string;
   active: boolean;
@@ -39,7 +44,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
   },
   pillActive: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: OVERLAY_PILL_ACTIVE_BG,
   },
   text: {
     color: 'rgba(255,255,255,0.7)',

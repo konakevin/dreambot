@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo, useDeferredValue } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '@/components/AppText';
 import type { VerticalPagerHandle } from '@/components/VerticalPager';
@@ -173,13 +173,15 @@ export default function HomeScreen() {
     }
   }, [user, feedSeed, queryClient, botUsers]);
 
-  // activeTab updates synchronously for the pill highlight (instant tap
-  // feedback); useDreamFeed reads the deferred copy so the (expensive)
-  // feed refetch + remount lags behind the pill animation by a frame or
-  // two instead of blocking it. Pill highlight feels snappy.
-  const deferredTab = useDeferredValue(activeTab);
+  // Read the feed for the ACTIVE tab (not a deferred copy). The feed is keyed
+  // on activeTab, so it already remounts synchronously on tap — deferring only
+  // the DATA meant the freshly-remounted feed rendered the OLD tab's posts for
+  // a frame (the "Following pill, Explore image" flash, Kevin 2026-07-10). Both
+  // key and data now switch together: cached → instant clean swap, uncached →
+  // the loading state (never a wrong image). The inactive tab is prefetched on
+  // mount below so the first switch is usually already cached.
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useDreamFeed(deferredTab);
+    useDreamFeed(activeTab);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);

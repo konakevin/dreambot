@@ -6,14 +6,43 @@
  * so card rendering is consistent everywhere.
  */
 
-import type { DreamPostItem } from '@/components/DreamCard';
+import type { DreamPostItem, GalleryImage } from '@/components/DreamCard';
+
+/** Normalize gallery images (migration 356) into GalleryImage[]. Handles BOTH
+ *  shapes: the RPC `media` jsonb (`{url, display, hq, ...}`, pre-ordered) and the
+ *  PostgREST `upload_media(...)` embed (DB column names `{image_url,
+ *  image_url_display, ..., position}`, unordered → sort by position here).
+ *  Tolerates null/absent (single-image posts → []); drops entries with no url. */
+function mapMedia(raw: unknown): GalleryImage[] {
+  if (!Array.isArray(raw)) return [];
+  const out: { img: GalleryImage; position: number }[] = [];
+  raw.forEach((e, i) => {
+    if (!e || typeof e !== 'object') return;
+    const r = e as Record<string, unknown>;
+    const url = (r.url as string | undefined) ?? (r.image_url as string | undefined);
+    if (!url) return;
+    out.push({
+      img: {
+        url,
+        display: (r.display as string | null) ?? (r.image_url_display as string | null) ?? null,
+        hq: (r.hq as string | null) ?? (r.image_url_hq as string | null) ?? null,
+        thumbhash: (r.thumbhash as string | null) ?? null,
+        width: (r.width as number | null) ?? null,
+        height: (r.height as number | null) ?? null,
+      },
+      position: (r.position as number | undefined) ?? i,
+    });
+  });
+  return out.sort((a, b) => a.position - b.position).map((x) => x.img);
+}
 
 /**
  * Standard select string for uploads with user join.
  * Uses `*` to avoid TypeScript errors from columns not yet in generated types
  * (dream_medium, dream_vibe, is_posted, visibility were added by later migrations).
  */
-export const POST_SELECT = '*, users!inner(username, avatar_url, allow_reposts)' as const;
+export const POST_SELECT =
+  '*, users!inner(username, avatar_url, allow_reposts), upload_media(position, image_url, image_url_display, image_url_hq, thumbhash, width, height)' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {
@@ -68,6 +97,10 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     reposter_name: (row.reposter_name as string | null) ?? null,
     reposters_more: (row.reposters_more as number) ?? 0,
     reposted_at: (row.reposted_at as string | null) ?? null,
+    // Gallery (migration 356). POST_SELECT embeds `upload_media(...)`; other
+    // selects may return a `media` jsonb. Absent → [] (single-image cover).
+    media: mapMedia(row.upload_media ?? row.media),
+    media_count: (row.media_count as number) ?? 1,
   };
 }
 
@@ -117,5 +150,8 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     reposter_name: (row.reposter_name as string | null) ?? null,
     reposters_more: (row.reposters_more as number) ?? 0,
     reposted_at: (row.reposted_at as string | null) ?? null,
+    // Gallery (migration 356). get_feed returns `media` jsonb + media_count.
+    media: mapMedia(row.media),
+    media_count: (row.media_count as number) ?? 1,
   };
 }

@@ -271,11 +271,10 @@ export default function PhotoDetailScreen() {
       const post = posts.find((p) => p.id === postId);
       if (!post) return;
 
-      // Never posted → route to New Post screen
+      // Never posted → route to the unified New Post screen, this dream
+      // preselected (the user can Add more to make it a gallery).
       if (!post.posted_at) {
-        router.push(
-          `/dream/newPost?uploadId=${postId}&imageUrl=${encodeURIComponent(post.image_url)}`
-        );
+        router.push(`/post/new?ids=${postId}`);
         return;
       }
 

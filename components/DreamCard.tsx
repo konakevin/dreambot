@@ -7,7 +7,15 @@
  */
 
 import { useState, useRef, useEffect, memo } from 'react';
-import { View, TouchableOpacity, Pressable, StyleSheet, Dimensions, TextStyle } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  TextStyle,
+  type GestureResponderEvent,
+} from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,6 +29,8 @@ import Animated, {
   withSequence,
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
+import { GalleryCarousel, GalleryDots } from '@/components/GalleryCarousel';
+import { OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -43,10 +53,29 @@ import { useToggleRepost } from '@/hooks/useToggleRepost';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
+/** One image in a gallery/carousel post (migration 356, upload_media rows).
+ *  A single-image post has no media (empty/absent) and renders the scalar cover
+ *  columns below. Gallery posts carry every image here, ordered, position 0 =
+ *  the cover (which also mirrors into the scalar image_url for backward-compat). */
+export interface GalleryImage {
+  url: string;
+  display?: string | null;
+  hq?: string | null;
+  thumbhash?: string | null;
+  width?: number | null;
+  height?: number | null;
+}
+
 export interface DreamPostItem {
   id: string;
   user_id: string;
   image_url: string;
+  /** Gallery images (migration 356). Empty/absent = single-image post → render
+   *  the scalar cover columns. length > 1 = carousel. */
+  media?: GalleryImage[];
+  /** Denormalized upload_media count (trigger-maintained). 1 for single posts;
+   *  N for galleries. Lets the grid show a stack badge without a join. */
+  media_count?: number;
   /** Profile pin timestamp (migration 330) — non-null means pinned to the
    * owner's profile grid. Set via pin_post/unpin_post RPCs only. */
   pinned_at?: string | null;
@@ -240,6 +269,30 @@ export const DreamCard = memo(function DreamCard({
   const heroUrl =
     retryNonce > 0 ? `${heroBase}${heroBase.includes('?') ? '&' : '?'}r=${retryNonce}` : heroBase;
 
+  // Gallery post (migration 356): render the horizontal carousel instead of the
+  // single hero when there's more than one image. The currently-viewed image
+  // index is tracked so upscale/actions can target it (Phase 3).
+  const galleryImages = item.media ?? [];
+  const isGallery = galleryImages.length > 1;
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  // Measured top (Y within the card) of the right-side action rail, so the
+  // gallery edge chevrons anchor JUST ABOVE it and can never overlap the
+  // like/comment icons — on any screen size or rail length (own posts have
+  // more icons). Falls back to an upper-third % until the rail lays out.
+  const [railTop, setRailTop] = useState<number | null>(null);
+  const chevronTop = railTop != null ? railTop - verticalScale(56) : '32%';
+  // Measured height of the bottom metadata block (username / caption / follow),
+  // so the gallery dots anchor JUST ABOVE it and never overlap — the block
+  // grows with caption length, so a fixed offset would collide on long captions.
+  const [infoHeight, setInfoHeight] = useState<number | null>(null);
+  // The image the user is currently looking at — actions (share, save-HD) and
+  // the share link target THIS one on a gallery, the cover otherwise.
+  const activeImage = isGallery
+    ? galleryImages[Math.min(galleryIndex, galleryImages.length - 1)]
+    : null;
+  const activeImageUrl = activeImage?.url ?? item.image_url;
+  const activeImageHq = activeImage ? (activeImage.hq ?? null) : (item.image_url_hq ?? null);
+
   // HUD visibility — single tap toggles, fades in/out
   const hudOpacity = useSharedValue(1);
   const hudHidden = useRef(false);
@@ -295,10 +348,34 @@ export const DreamCard = memo(function DreamCard({
     scale: savedScale,
   } = useCardGestures({
     onSwipeLeft: goToProfile,
+    // Galleries navigate by EDGE TAP (see handleTap), not swipe — so the normal
+    // swipe-to-profile / vertical-paging gestures are left untouched.
     disableSwipeLeft: disableSwipeToProfile,
   });
 
-  function handleTap() {
+  function handleTap(e?: GestureResponderEvent) {
+    // Gallery edge-tap navigation: tapping the left/right ~28% steps the
+    // carousel prev/next IMMEDIATELY and is independent of the double-tap-like
+    // logic (which stays in the center). This is nav-only so rapid tapping
+    // advances smoothly; swipes are untouched (swipe-to-profile / vertical
+    // paging still work). Center taps fall through to the HUD/like logic below.
+    if (isGallery && e) {
+      const x = e.nativeEvent.locationX;
+      if (x < SCREEN_WIDTH * 0.28) {
+        if (galleryIndex > 0) {
+          setGalleryIndex((i) => i - 1);
+          Haptics.selectionAsync();
+        }
+        return;
+      }
+      if (x > SCREEN_WIDTH * 0.72) {
+        if (galleryIndex < galleryImages.length - 1) {
+          setGalleryIndex((i) => i + 1);
+          Haptics.selectionAsync();
+        }
+        return;
+      }
+    }
     // Single tap toggles HUD (clean-image view). Double tap likes.
     // To disambiguate, schedule the HUD toggle after a short delay and
     // cancel it if a second tap arrives.
@@ -362,7 +439,7 @@ export const DreamCard = memo(function DreamCard({
       <Animated.View style={[s.card, cardHeight ? { height: cardHeight } : undefined]}>
         <Pressable
           style={StyleSheet.absoluteFill}
-          onPress={handleTap}
+          onPress={(e) => handleTap(e)}
           onLongPress={handleLongPress}
           delayLongPress={500}
         >
@@ -371,41 +448,51 @@ export const DreamCard = memo(function DreamCard({
                 aspect — Flux 9:16, GPT 2:3, square Gemini, etc. all crop to
                 fit. Keeps the feed reading as one consistent full-bleed stage
                 rather than a mix of full-bleed + letterboxed cards. */}
-            <Image
-              source={{ uri: heroUrl }}
-              style={s.fullImage}
-              contentFit={fitMode}
-              cachePolicy="memory-disk"
-              recyclingKey={item.id}
-              transition={150}
-              // Tiny blurry preview shown instantly during decode/network,
-              // so the card never reads as "broken black void" while
-              // expo-image is busy. Falls back to the surface-tinted
-              // backgroundColor on fullImage when thumbhash is null
-              // (legacy posts pre-219 — backfilled in a separate pass).
-              placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
-              placeholderContentFit={fitMode}
-              onError={() => {
-                if (retryCountRef.current >= MAX_IMG_RETRIES) {
-                  // Silent auto-retries exhausted — show the user-tappable
-                  // overlay so a persistent failure isn't a dead-end black
-                  // card. Tapping the overlay resets and tries again.
-                  setShowRetryUi(true);
-                  return;
-                }
-                retryCountRef.current += 1;
-                if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
-                // backoff: 0.6s, 1.2s, 1.8s — refetch via cache-busted nonce
-                retryTimerRef.current = setTimeout(
-                  () => setRetryNonce((n) => n + 1),
-                  600 * retryCountRef.current
-                );
-              }}
-              onLoad={() => {
-                retryCountRef.current = 0;
-                if (showRetryUi) setShowRetryUi(false);
-              }}
-            />
+            {isGallery ? (
+              <GalleryCarousel
+                images={galleryImages}
+                index={galleryIndex}
+                fitMode={fitMode}
+                coverThumbhash={item.thumbhash}
+                recyclingKey={item.id}
+              />
+            ) : (
+              <Image
+                source={{ uri: heroUrl }}
+                style={s.fullImage}
+                contentFit={fitMode}
+                cachePolicy="memory-disk"
+                recyclingKey={item.id}
+                transition={150}
+                // Tiny blurry preview shown instantly during decode/network,
+                // so the card never reads as "broken black void" while
+                // expo-image is busy. Falls back to the surface-tinted
+                // backgroundColor on fullImage when thumbhash is null
+                // (legacy posts pre-219 — backfilled in a separate pass).
+                placeholder={item.thumbhash ? { thumbhash: item.thumbhash } : null}
+                placeholderContentFit={fitMode}
+                onError={() => {
+                  if (retryCountRef.current >= MAX_IMG_RETRIES) {
+                    // Silent auto-retries exhausted — show the user-tappable
+                    // overlay so a persistent failure isn't a dead-end black
+                    // card. Tapping the overlay resets and tries again.
+                    setShowRetryUi(true);
+                    return;
+                  }
+                  retryCountRef.current += 1;
+                  if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+                  // backoff: 0.6s, 1.2s, 1.8s — refetch via cache-busted nonce
+                  retryTimerRef.current = setTimeout(
+                    () => setRetryNonce((n) => n + 1),
+                    600 * retryCountRef.current
+                  );
+                }}
+                onLoad={() => {
+                  retryCountRef.current = 0;
+                  if (showRetryUi) setShowRetryUi(false);
+                }}
+              />
+            )}
             {/* Tap-to-retry overlay — only shown after the silent auto-retry
                 budget is exhausted (3 backoffs over ~3.6s). Sits over the
                 thumbhash/surface-tinted placeholder so the user never gets
@@ -456,7 +543,42 @@ export const DreamCard = memo(function DreamCard({
                 pointerEvents="none"
               />
             )}
-            <View style={[s.postInfo, { paddingBottom: bottomPadding }]}>
+            {/* Gallery page dots — anchored just above the measured metadata
+                block so they never overlap it (the block grows with caption
+                length). Centered, so they clear the right action rail. Fades
+                with the HUD. Fallback offset until the block lays out. */}
+            {isGallery && (
+              <View
+                style={[
+                  s.galleryDotsWrap,
+                  { bottom: (infoHeight ?? bottomPadding + verticalScale(60)) + verticalScale(8) },
+                ]}
+              >
+                <GalleryDots count={galleryImages.length} index={galleryIndex} />
+              </View>
+            )}
+            {/* Edge-tap affordance — faint chevrons hint you can tap left/right
+                to move through the album. Hidden at each end; fade with the HUD. */}
+            {isGallery && galleryIndex > 0 && (
+              <View
+                style={[s.galleryChevron, s.galleryChevronLeft, { top: chevronTop }]}
+                pointerEvents="none"
+              >
+                <Ionicons name="chevron-back" size={30} color="#FFFFFF" style={ui.sideIcon} />
+              </View>
+            )}
+            {isGallery && galleryIndex < galleryImages.length - 1 && (
+              <View
+                style={[s.galleryChevron, s.galleryChevronRight, { top: chevronTop }]}
+                pointerEvents="none"
+              >
+                <Ionicons name="chevron-forward" size={30} color="#FFFFFF" style={ui.sideIcon} />
+              </View>
+            )}
+            <View
+              style={[s.postInfo, { paddingBottom: bottomPadding }]}
+              onLayout={(e) => setInfoHeight(e.nativeEvent.layout.height)}
+            >
               {/* Repost attribution — shown when this card reaches the viewer via
                   a followed user's repost (surface_type='repost'). The card still
                   credits the ORIGINAL author below; this line credits the reposter. */}
@@ -556,7 +678,10 @@ export const DreamCard = memo(function DreamCard({
             </View>
 
             {/* Side actions */}
-            <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
+            <View
+              style={[s.sideActions, { bottom: bottomPadding + 10 }]}
+              onLayout={(e) => setRailTop(e.nativeEvent.layout.y)}
+            >
               {showVisibilityToggle && onTogglePosted && (
                 <TouchableOpacity
                   style={ui.sideButton}
@@ -687,7 +812,7 @@ export const DreamCard = memo(function DreamCard({
                       // header (2026-06-06) so the user reaches Copy + Save
                       // from the same surface; thread the image URLs through
                       // as route params so the sheet has what it needs.
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(item.image_url)}${item.image_url_hq ? `&imageUrlHq=${encodeURIComponent(item.image_url_hq)}` : ''}${item.face_swap_mode ? `&faceSwapMode=${encodeURIComponent(item.face_swap_mode)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(activeImageUrl)}${activeImageHq ? `&imageUrlHq=${encodeURIComponent(activeImageHq)}` : ''}${item.face_swap_mode ? `&faceSwapMode=${encodeURIComponent(item.face_swap_mode)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
                     ))
                 }
                 activeOpacity={0.7}
@@ -743,8 +868,9 @@ export const DreamCard = memo(function DreamCard({
           }
           rows={buildPostActionRows({
             id: item.id,
-            imageUrl: item.image_url,
-            imageUrlHq: item.image_url_hq ?? null,
+            // On a gallery, the visible image; the cover otherwise.
+            imageUrl: activeImageUrl,
+            imageUrlHq: activeImageHq,
             isOwn: isOwnPost,
             faceSwapMode: item.face_swap_mode ?? null,
             onDelete,
@@ -841,6 +967,25 @@ const s = StyleSheet.create({
   visibilityCircleActive: {
     backgroundColor: 'rgba(255,255,255,0.15)',
   },
+  galleryDotsWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  galleryChevron: {
+    position: 'absolute',
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Matches the selected feed tab + bot pill (OverlayPill active) from one
+    // source — a dark translucent chip so the white glyph reads on any image.
+    backgroundColor: OVERLAY_PILL_ACTIVE_BG,
+  },
+  galleryChevronLeft: { left: 8 },
+  galleryChevronRight: { right: 8 },
   postInfo: {
     position: 'absolute',
     bottom: 0,

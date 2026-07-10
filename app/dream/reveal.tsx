@@ -126,7 +126,7 @@ export default function DreamRevealScreen() {
     setSaving(true);
     try {
       // Save as private first, then route to New Post screen for description + publish
-      const { uploadId, imageUrl } = await saveDream({
+      const { uploadId } = await saveDream({
         userId: user.id,
         tempImageUrl: result!.imageUrl,
         prompt: result!.prompt,
@@ -137,8 +137,9 @@ export default function DreamRevealScreen() {
       });
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-      // Push (not replace) so Cancel from New Post returns here
-      router.push(`/dream/newPost?uploadId=${uploadId}&imageUrl=${encodeURIComponent(imageUrl)}`);
+      // Push (not replace) so Cancel from New Post returns here. This dream is
+      // preselected in the unified compose (Add more → gallery).
+      router.push(`/post/new?ids=${uploadId}`);
       setSaving(false);
     } catch (err) {
       if (__DEV__) console.error('[Reveal] Post error:', err);
