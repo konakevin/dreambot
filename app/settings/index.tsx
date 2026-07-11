@@ -443,13 +443,22 @@ export default function SettingsScreen() {
                 if (user) {
                   for (const bucket of ['cast-photos', 'avatars'] as const) {
                     try {
-                      const { data: files } = await supabase.storage
-                        .from(bucket)
-                        .list(user.id, { limit: 1000 });
-                      const paths = (files ?? [])
-                        .filter((f) => f.name.startsWith('cast-'))
-                        .map((f) => `${user.id}/${f.name}`);
-                      if (paths.length) await supabase.storage.from(bucket).remove(paths);
+                      // Paginate: a single .list() caps at 1000, so a user with
+                      // more files would leak orphans past the first page. Loop
+                      // until a page returns fewer than the page size, removing
+                      // cast- files per page.
+                      const PAGE = 1000;
+                      for (let offset = 0; ; offset += PAGE) {
+                        const { data: files } = await supabase.storage
+                          .from(bucket)
+                          .list(user.id, { limit: PAGE, offset });
+                        const batch = files ?? [];
+                        const paths = batch
+                          .filter((f) => f.name.startsWith('cast-'))
+                          .map((f) => `${user.id}/${f.name}`);
+                        if (paths.length) await supabase.storage.from(bucket).remove(paths);
+                        if (batch.length < PAGE) break;
+                      }
                     } catch {
                       /* non-fatal */
                     }
