@@ -80,7 +80,7 @@ export function MediumVibeSelector({
   return (
     <>
       <View style={[s.selectorRow, compact && s.selectorRowCompact]}>
-        {!compact && <Text style={s.selectorLabel}>Medium</Text>}
+        {!compact && <Text style={s.selectorLabel}>Style</Text>}
         <ScrollView
           ref={mediumScrollRef}
           horizontal

@@ -732,7 +732,7 @@ export default function SearchExploreScreen() {
         }}
         items={mediumItems}
         selectedKey={selectedMedium}
-        title="Medium"
+        title="Style"
       />
       <FilterPickerSheet
         visible={vibeSheetOpen}

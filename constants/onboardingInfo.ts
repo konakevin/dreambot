@@ -57,12 +57,12 @@ export const CREATE_INFO: InfoStepConfig = {
     {
       icon: 'sparkles',
       title: 'DreamBot mode',
-      body: 'Mention yourself (“me”) or your +1 (“my partner”) and your Dream Cast is painted right into the dream. Add mediums and vibes to shape the look.',
+      body: 'Mention yourself (“me”) or your +1 (“my partner”) and your Dream Cast is painted right into the dream. Add styles and vibes to shape the look.',
     },
     {
       icon: 'flash',
       title: 'Direct mode',
-      body: 'Sends your prompt straight to the model you pick. No personalization, medium, or vibe.',
+      body: 'Sends your prompt straight to the model you pick. No personalization, style, or vibe.',
     },
     {
       icon: 'color-palette',

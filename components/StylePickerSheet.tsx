@@ -369,7 +369,9 @@ export function StylePickerSheet({
 
           {/* Title — shared white display-font H2 (matches the model sheet). */}
           <TitleText style={{ marginBottom: verticalScale(12) }}>
-            {type === 'medium' ? 'Choose Medium' : 'Choose Vibe'}
+            {/* User-facing name is "Style"; the internal type stays 'medium'
+                (keys, columns, analytics — display copy only, 2026-07-11). */}
+            {type === 'medium' ? 'Choose Style' : 'Choose Vibe'}
           </TitleText>
 
           {type === 'medium' && renderMediumToggle()}

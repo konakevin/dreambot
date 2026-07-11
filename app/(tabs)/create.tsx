@@ -622,7 +622,7 @@ export default function CreateScreen() {
   // (first-person + relationship words pull the user's dream-cast photos — self +
   // plus_one — into the render as a face swap).
   const placeholder = effectiveExactPrompt
-    ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, mediums, or vibes in Direct mode.'
+    ? 'Describe any scene. Your prompt goes straight to the model. No Dream Cast, styles, or vibes in Direct mode.'
     : hasPhoto
       ? "Set the scene and we'll dream you into it. A glowing forest at dusk? Coffee in a Paris café? Leave blank and we'll pick the scene."
       : 'Describe any dream. Say "me" or "my partner" to paint your Dream Cast in, or leave blank and DreamBot dreams one up for you.';
@@ -1383,7 +1383,11 @@ export default function CreateScreen() {
                 <View className="flex-row gap-3 mb-4">
                   <View className="flex-1">
                     <View className="flex-row items-center mb-1.5 ml-1">
-                      <FormLabel>Medium</FormLabel>
+                      {/* User-facing label is "Style" (2026-07-11 rename —
+                      "medium" is art jargon and half the catalog are aesthetics,
+                      not mediums). INTERNAL naming stays "medium" everywhere:
+                      keys, columns, types, analytics. Display copy only. */}
+                      <FormLabel>Style</FormLabel>
                       {/* Live face-swap lamp. Gray = no cast reference in the
                       prompt; lit = this dream casts YOU, colored by the medium
                       family (Real Face teal / Dream Art pink — the MEDIUM_BADGE

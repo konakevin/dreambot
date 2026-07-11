@@ -199,7 +199,7 @@ export function PostActionSheet({
         {recipe ? (
           <View style={s.recipeChip}>
             <Text style={s.recipeText} numberOfLines={1}>
-              <Text style={s.recipeEyebrow}>Medium: </Text>
+              <Text style={s.recipeEyebrow}>Style: </Text>
               {recipe.mediumLabel}
               <Text style={s.recipeEyebrow}> · Vibe: </Text>
               {recipe.vibeLabel}

@@ -60,7 +60,7 @@ export const RESTYLE_MODELS: RestyleModel[] = [
     id: 'black-forest-labs/flux-kontext-pro',
     label: 'Flux Kontext',
     sparkleCost: 1,
-    blurb: "Repaints your photo in the medium's style. Artistic and loose.",
+    blurb: 'Repaints your photo in the chosen style. Artistic and loose.',
   },
   {
     id: 'bytedance/seedream-4',

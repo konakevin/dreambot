@@ -383,7 +383,7 @@ export default function DreamLikeThisScreen() {
               <Text style={s.likenessHintText}>
                 {mediumFaceSwaps
                   ? 'Your face will be added into the dream.'
-                  : "This medium can't use your face, so you'll be drawn from your Cast description."}
+                  : "This style can't use your face, so you'll be drawn from your Cast description."}
               </Text>
             </View>
           )}
