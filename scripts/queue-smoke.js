@@ -74,10 +74,15 @@ async function deleteBlobs(uploadId) {
     vibe_profile: { version: 2, dream_cast: [], dream_seeds: { places: [] } },
     job_id: id,
     subject_type: 'scene',
-    // Cheapest/fastest model — the canary tests the PIPELINE (queue → dispatch →
-    // synchronous render → upload → complete), not model selection. Keeps a
-    // frequent schedule near-free. force_model bypasses the picker/ban gates.
-    force_model: 'black-forest-labs/flux-schnell',
+    // The canary tests the PIPELINE (queue → dispatch → synchronous render →
+    // upload → complete), not model selection — so ride a model REAL traffic
+    // keeps warm. flux-schnell's only volume was this canary (~24 calls/day);
+    // Replicate scales idle models to cold, and a cold boot blows the 150s
+    // smoke budget → false alarms (2026-07-11: two failures — a timeout + a
+    // Replicate "Director" E9828 — while every warm model rendered in 20-60s).
+    // flux-1.1-pro is always warm from user + nightly traffic (~$1/day at
+    // hourly cadence). force_model bypasses the picker/ban gates.
+    force_model: 'black-forest-labs/flux-1.1-pro',
   };
   await sb.from('dream_jobs').insert({ id, user_id: userId, status: 'processing', payload });
   await sb.from('dream_queue').insert({
