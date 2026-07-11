@@ -350,3 +350,43 @@ export function useBulkMakePrivate() {
     },
   });
 }
+
+/**
+ * Re-publish a previously-posted dream/album that was hidden ("Make public" on a
+ * Private-tab tile, 2026-07-11). ONLY for rows that carry a posted_at — a
+ * never-posted dream goes through the New Post compose flow instead (the caller
+ * decides via posted_at). A raw is_public flip restores it to its ORIGINAL feed
+ * position: created_at + posted_at are left untouched (the mirror of
+ * useBulkMakePrivate, which preserves posted_at for exactly this round-trip). No
+ * re-notify (notifications fire on the post-creation path, not this flip).
+ */
+export function useBulkMakePublic() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (uploadIds: string[]) => {
+      const uid = useAuthStore.getState().user?.id;
+      if (!uid) throw new Error('not signed in');
+      const { error } = await supabase
+        .from('uploads')
+        .update({ is_public: true })
+        .in('id', uploadIds)
+        .eq('user_id', uid);
+      if (error) throw error;
+      return { count: uploadIds.length };
+    },
+    onSuccess: ({ count }) => {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show(count === 1 ? 'Shared publicly' : `Shared ${count} publicly`, 'earth');
+      // Leaves Private, enters the public grids + feed. Invalidate every surface
+      // (my-dreams filters + userPosts + dreamFeed + explore + profile grids).
+      for (const prefix of INFINITE_QUERY_KEYS) {
+        qc.invalidateQueries({ queryKey: [prefix] });
+      }
+    },
+    onError: (_err) => {
+      if (__DEV__) console.error('[useBulkMakePublic] Error:', _err);
+      Toast.show('Failed to update posts', 'close-circle');
+    },
+  });
+}

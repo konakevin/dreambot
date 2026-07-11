@@ -4,7 +4,12 @@ import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { useDeletePost, useDissolveAlbum } from '@/hooks/useDeletePost';
+import {
+  useDeletePost,
+  useDissolveAlbum,
+  useBulkMakePrivate,
+  useBulkMakePublic,
+} from '@/hooks/useDeletePost';
 import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
@@ -64,6 +69,8 @@ export const PostTile = memo(function PostTile({
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const { mutate: dissolveAlbum } = useDissolveAlbum();
+  const { mutate: makePrivate } = useBulkMakePrivate();
+  const { mutate: makePublic } = useBulkMakePublic();
   const { pin, unpin } = usePinPost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
   const isPinned = !!item.pinned_at;
@@ -216,11 +223,31 @@ export const PostTile = memo(function PostTile({
               isOwn,
               isGallery,
               mediaCount: item.media_count ?? 0,
+              // Grid album thumb → the ONLY save is "Save album to Photos"
+              // (downloads every member at once). No single slide is "in view"
+              // here, so albumThumb suppresses the per-image save/HD rows.
+              albumThumb: isGallery,
+              albumImageUrls: isGallery
+                ? (item.media ?? []).map((m) => m.url).filter(Boolean)
+                : undefined,
               faceSwapMode: item.face_swap_mode ?? null,
               // Bulk-select entry point — grids that support it pass `selection`.
               onSelect: selection ? () => selection.onEnter(item.id) : undefined,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
               onDissolve: isGallery && isOwn ? () => dissolveAlbum(item.id) : undefined,
+              // Own tile visibility (single dreams + album hosts):
+              //  • public          → "Make private" (off the feed → Dreams/top)
+              //  • private + posted → "Make public"  (quick re-publish)
+              //  • private, never   → "Post"         (New Post compose flow)
+              isPublic: item.is_public,
+              wasPosted: !!item.posted_at,
+              onToggleVisibility: !isOwn
+                ? undefined
+                : item.is_public
+                  ? () => makePrivate([item.id])
+                  : item.posted_at
+                    ? () => makePublic([item.id])
+                    : () => nav.push(`/post/new?ids=${item.id}`),
               onDreamAgain: isOwn && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
               // Profile pin toggle (migration 330) — own PUBLIC posts only (the
               // Dreams album shows private dreams; those aren't pinnable).

@@ -65,6 +65,14 @@ export interface GalleryImage {
   thumbhash?: string | null;
   width?: number | null;
   height?: number | null;
+  /** The member's SOURCE dream id (upload_media.source_upload_id, migration
+   *  367). Lets a per-slide "Save in HD" upscale the RIGHT dream (not the album
+   *  host). Absent on the feed's jsonb media shape → HD is suppressed there. */
+  sourceId?: string | null;
+  /** The source dream's face_swap_mode. Cast slides hide HD (upscaling a
+   *  swapped face is uncanny) — the same rule as a single cast dream, applied
+   *  per slide. Only resolvable when the caller can read the source row. */
+  faceSwapMode?: string | null;
 }
 
 export interface DreamPostItem {
@@ -294,6 +302,13 @@ export const DreamCard = memo(function DreamCard({
     : null;
   const activeImageUrl = activeImage?.url ?? item.image_url;
   const activeImageHq = activeImage ? (activeImage.hq ?? null) : (item.image_url_hq ?? null);
+  // Per-slide save context on an album: HD targets the member's SOURCE dream
+  // (not the album host), and the cast-photo HD rule keys off THAT slide's
+  // face_swap_mode. Single post → the post's own values.
+  const activeSourceId = isGallery ? (activeImage?.sourceId ?? undefined) : item.id;
+  const activeFaceSwapMode = isGallery
+    ? (activeImage?.faceSwapMode ?? null)
+    : (item.face_swap_mode ?? null);
 
   // HUD visibility — single tap toggles, fades in/out
   const hudOpacity = useSharedValue(1);
@@ -887,7 +902,13 @@ export const DreamCard = memo(function DreamCard({
             isOwn: isOwnPost,
             isGallery,
             mediaCount: item.media_count ?? 0,
-            faceSwapMode: item.face_swap_mode ?? null,
+            // Per-slide cast rule + HD target (album → the active member's
+            // source dream; single → the post itself).
+            faceSwapMode: activeFaceSwapMode,
+            hdUploadId: activeSourceId,
+            // The dream card has an active slide in view, so it offers BOTH the
+            // slide save (above) and the whole-album save. No albumThumb here.
+            albumImageUrls: isGallery ? galleryImages.map((m) => m.url).filter(Boolean) : undefined,
             onDelete,
             onDissolve: isGallery && isOwnPost ? () => dissolveAlbum(item.id) : undefined,
             onDreamLikeThis,

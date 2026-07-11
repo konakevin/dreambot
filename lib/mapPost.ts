@@ -29,6 +29,12 @@ function mapMedia(raw: unknown): GalleryImage[] {
         thumbhash: (r.thumbhash as string | null) ?? null,
         width: (r.width as number | null) ?? null,
         height: (r.height as number | null) ?? null,
+        // Only present on the PostgREST embed (source_upload_id column + the
+        // nested source row); the RPC jsonb shape omits both → left null, which
+        // safely suppresses per-slide HD on the feed.
+        sourceId: (r.source_upload_id as string | null) ?? null,
+        faceSwapMode:
+          (r.source as { face_swap_mode?: string | null } | null)?.face_swap_mode ?? null,
       },
       position: (r.position as number | undefined) ?? i,
     });
@@ -47,7 +53,12 @@ export const POST_SELECT =
   // relationship, which makes a bare `upload_media(...)` embed ambiguous and
   // errors EVERY album query. We want an album's member images, keyed by
   // upload_id, ordered by position.
-  '*, users!inner(username, avatar_url, allow_reposts), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height)' as const;
+  // The nested `source:uploads!…source_upload_id_fkey(face_swap_mode)` lets a
+  // per-slide "Save in HD" (a) upscale the member's REAL source dream via
+  // source_upload_id and (b) hide HD on cast slides (uncanny), per slide. RLS
+  // only reveals the source row to its owner, so this resolves for the owner's
+  // own album (the case that offers album HD) and is null otherwise — safe.
+  '*, users!inner(username, avatar_url, allow_reposts), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height, source_upload_id, source:uploads!upload_media_source_upload_id_fkey(face_swap_mode))' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {

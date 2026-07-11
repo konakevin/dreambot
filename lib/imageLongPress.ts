@@ -6,7 +6,7 @@ import { UpscaleModal } from '@/components/UpscaleOverlay';
 import { useAuthStore } from '@/store/auth';
 import { invokeEdge } from '@/lib/edgeFunction';
 import { supabase } from '@/lib/supabase';
-import { saveUrlToPhotos } from '@/lib/savePhoto';
+import { saveUrlToPhotos, saveAlbumToPhotos } from '@/lib/savePhoto';
 import { reportContent } from '@/lib/reportContent';
 import { trackHdDownloadTapped } from '@/lib/analytics';
 
@@ -143,8 +143,14 @@ interface SaveOpts {
   /** 'single' | 'dual' when this dream was rendered with a Dream-Cast face
    *  swap. HD upscaling is disabled for these (uncanny AI faces); only native
    *  "Save to Photos" is offered. NULL/undefined → plain render, HD allowed.
-   *  (migration 310; the server enforces the same.) */
+   *  (migration 310; the server enforces the same.) For an album slide this is
+   *  the ACTIVE slide's face_swap_mode, so the cast rule applies per slide. */
   faceSwapMode?: string | null;
+  /** Upload id the on-demand HD upscale should target, when it differs from
+   *  `id`. For an album slide `id` is the album HOST, but HD must upscale the
+   *  member's SOURCE dream — the caller passes that source id here. Undefined ⇒
+   *  upscale `id` (the normal single-post case). */
+  hdUploadId?: string;
 }
 interface LongPressOpts extends SaveOpts {
   onDelete?: () => void;
@@ -206,7 +212,9 @@ function downloadOptionButtons(opts: SaveOpts): SheetButton[] {
     {
       text: canHd ? 'Save in HD' : 'Save in HD (Premium)',
       onPress: () =>
-        canHd ? saveHd(opts.id, cachedHqUrl) : showPremiumGate({ kind: 'hd_premium' }),
+        canHd
+          ? saveHd(opts.hdUploadId ?? opts.id, cachedHqUrl)
+          : showPremiumGate({ kind: 'hd_premium' }),
     },
   ];
 }
@@ -249,10 +257,16 @@ export interface PostActionSheetOpts extends LongPressOpts {
   isBot?: boolean;
   /** useToggleBlock().mutate wrapper from the caller (hooks can't run in a lib). */
   onBlock?: () => void;
-  /** Own-post visibility toggle (album/profile contexts). */
+  /** Own-post visibility toggle (album/profile contexts). The caller wires the
+   *  right action per state: make-private flip, make-public flip, or route to
+   *  the New Post compose flow (never-posted). */
   onToggleVisibility?: () => void;
   /** Current visibility, to label the toggle "Make private" vs "Make public". */
   isPublic?: boolean;
+  /** Whether this dream was EVER posted (posted_at != null). Splits the private
+   *  action: previously-posted → "Make public" (quick re-publish); never-posted
+   *  → "Post" (full compose flow). Ignored when isPublic (always "Make private").*/
+  wasPosted?: boolean;
   /** Owner-only "Dream this again" — reloads this dream's saved inputs into
    *  Create (from useDreamAgain). Present ⇒ the row shows. */
   onDreamAgain?: () => void;
@@ -266,6 +280,15 @@ export interface PostActionSheetOpts extends LongPressOpts {
   /** Album-only: DISSOLVE (ungroup, keep the child dreams). Present ⇒ the row
    *  shows. onDelete is the DESTRUCTIVE path (deletes the children too). */
   onDissolve?: () => void;
+  /** Album member image URLs (native res). Present ⇒ a "Save album to Photos"
+   *  row that downloads ALL of them at once. Passed by BOTH the grid thumb and
+   *  the dream card (Kevin 2026-07-11). */
+  albumImageUrls?: string[];
+  /** This is a GRID album THUMBNAIL — there's no single slide "in view", so the
+   *  per-image save/HD rows are suppressed and only the whole-album save shows.
+   *  The dream card (which has an active carousel slide) omits this, so it gets
+   *  both the slide-in-view save AND the whole-album save. */
+  albumThumb?: boolean;
 }
 
 const iconForDownload = (label: string): string =>
@@ -291,17 +314,38 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Save / Save in HD (or single "Save" for face-swap dreams). For an ALBUM the
-  // per-image HD variant is meaningless (which image?), so keep only a plain
-  // "Save to Photos" of the cover.
-  for (const b of downloadOptionButtons(opts)) {
-    if (opts.isGallery && b.text.startsWith('Save in HD')) continue;
+  // Image-in-view save ("Save to Photos" [+ "Save in HD"]). Shown for single
+  // dreams and for the dream card's ACTIVE album slide; suppressed on the grid
+  // album THUMB (no single slide there — only the whole-album row applies).
+  if (!opts.albumThumb) {
+    // Album slide HD is offered only when we can do it RIGHT: the owner's own
+    // dream (free + uncapped; the private source is upscalable) AND we know the
+    // source id to target. Otherwise (a paid viewer on someone else's album, or
+    // the feed's source-less jsonb) native save only. Cast slides are handled
+    // per slide by downloadOptionButtons via opts.faceSwapMode.
+    const albumSlideNoHd = opts.isGallery && (!opts.isOwn || !opts.hdUploadId);
+    for (const b of downloadOptionButtons(opts)) {
+      if (albumSlideNoHd && b.text.startsWith('Save in HD')) continue;
+      rows.push({
+        key: `save:${b.text}`,
+        label: b.text,
+        icon: iconForDownload(b.text),
+        group: 'primary',
+        onPress: () => b.onPress?.(),
+      });
+    }
+  }
+
+  // Whole-album download — every member image at once. Any album surface that
+  // passes the member URLs (grid thumb + dream card).
+  if (opts.albumImageUrls && opts.albumImageUrls.length > 0) {
+    const urls = opts.albumImageUrls;
     rows.push({
-      key: `save:${b.text}`,
-      label: b.text,
-      icon: iconForDownload(b.text),
+      key: 'save-album',
+      label: 'Save album to Photos',
+      icon: 'download-outline',
       group: 'primary',
-      onPress: () => b.onPress?.(),
+      onPress: () => saveAlbumToPhotos(opts.id, urls),
     });
   }
 
@@ -349,12 +393,19 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Own-post visibility toggle.
+  // Own-post visibility toggle. Public → "Make private". Private splits on
+  // whether it was ever posted: previously-posted → "Make public" (re-publish),
+  // never-posted → "Post" (compose flow). The caller wires onPress to match.
   if (opts.onToggleVisibility) {
+    const privateLabel = opts.wasPosted ? 'Make public' : 'Post';
     rows.push({
       key: 'visibility',
-      label: opts.isPublic ? 'Make private' : 'Make public',
-      icon: opts.isPublic ? 'eye-off-outline' : 'eye-outline',
+      label: opts.isPublic ? 'Make private' : privateLabel,
+      icon: opts.isPublic
+        ? 'eye-off-outline'
+        : opts.wasPosted
+          ? 'earth-outline'
+          : 'add-circle-outline',
       group: 'primary',
       onPress: opts.onToggleVisibility,
     });
