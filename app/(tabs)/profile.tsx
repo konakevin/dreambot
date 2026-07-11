@@ -124,7 +124,10 @@ export default function ProfileScreen() {
     }
 
     showAlert(
-      `Delete ${count} dream${count === 1 ? '' : 's'}?`,
+      // No count in the title: a selection count conflates albums with singles
+      // (2 selected can be 1 album + 1 dream = 5 images). The body spells out
+      // any album impact instead (Kevin 2026-07-11).
+      'Delete dreams?',
       "They'll be removed everywhere, including the feed. This can't be undone." + albumLine,
       [
         { text: 'Cancel', style: 'cancel' },
