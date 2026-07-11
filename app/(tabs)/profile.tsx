@@ -502,9 +502,11 @@ export default function ProfileScreen() {
         </Animated.Text>
       </TouchableOpacity>
       <View style={styles.topBarActions}>
-        {/* Compose a new post (single or multi-image) from your dreams. */}
+        {/* Compose a new post (single or multi-image) from your dreams.
+            duplicate-outline (a + on stacked squares) — deliberately NOT the
+            nav bar's add-circle ⊕, which creates a DREAM; this adds a POST. */}
         <TouchableOpacity onPress={() => nav.push('/post/new')} hitSlop={12}>
-          <Ionicons name="add-circle-outline" size={24} color={colors.textSecondary} />
+          <Ionicons name="duplicate-outline" size={24} color={colors.textSecondary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
           <View style={styles.inboxBubbleWrap}>
@@ -748,7 +750,7 @@ export default function ProfileScreen() {
                   disabled={gridSelectedIds.size === 0}
                   activeOpacity={0.85}
                 >
-                  <Ionicons name="add-circle-outline" size={16} color="#FFFFFF" />
+                  <Ionicons name="duplicate-outline" size={16} color="#FFFFFF" />
                   <Text style={styles.actionPillText}>
                     Post{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
                   </Text>
