@@ -22,14 +22,17 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       if (!userId) return { rows: [], offset, hasMore: false };
-      // Galleries (media_count > 1) live here EXACTLY like single dreams
-      // (Kevin 2026-07-11: "study how we do it for single posts and mimic"):
-      // All/Posted/Private by is_public, Public badge when live, and they show
-      // in the Posts album only while public. The no-gallery-inside-a-gallery
-      // rule is enforced by the PICKER (post/new filters media_count > 1), not
-      // by hiding galleries from this album — hiding them here made a
-      // private gallery invisible everywhere.
-      let query = supabase.from('uploads').select(POST_SELECT).eq('user_id', userId);
+      // Dreams album = your dreams as loose tiles. A dream that's been composed
+      // into an album LEAVES here (album_ref_count > 0) — it lives inside its
+      // album now, not as a duplicate unposted tile (Kevin 2026-07-11). Delete
+      // the album and its members' ref count drops to 0, so they return here at
+      // the top (created_at bumped by the trigger). Galleries themselves
+      // (media_count > 1, album_ref_count = 0) still show like single dreams.
+      let query = supabase
+        .from('uploads')
+        .select(POST_SELECT)
+        .eq('user_id', userId)
+        .eq('album_ref_count', 0);
       // 'private' = unposted (not live on the feed); 'posted' = live on the feed.
       if (filter === 'private') query = query.eq('is_public', false);
       else if (filter === 'posted') query = query.eq('is_public', true);

@@ -2412,6 +2412,7 @@ export type Database = {
         Row: {
           ai_concept: Json | null;
           ai_prompt: string | null;
+          album_ref_count: number;
           bot_message: string | null;
           caption: string | null;
           categories: string[];
@@ -2458,6 +2459,7 @@ export type Database = {
         Insert: {
           ai_concept?: Json | null;
           ai_prompt?: string | null;
+          album_ref_count?: number;
           bot_message?: string | null;
           caption?: string | null;
           categories?: string[];
@@ -2504,6 +2506,7 @@ export type Database = {
         Update: {
           ai_concept?: Json | null;
           ai_prompt?: string | null;
+          album_ref_count?: number;
           bot_message?: string | null;
           caption?: string | null;
           categories?: string[];

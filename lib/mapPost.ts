@@ -42,7 +42,12 @@ function mapMedia(raw: unknown): GalleryImage[] {
  * (dream_medium, dream_vibe, is_posted, visibility were added by later migrations).
  */
 export const POST_SELECT =
-  '*, users!inner(username, avatar_url, allow_reposts), upload_media(position, image_url, image_url_display, image_url_hq, thumbhash, width, height)' as const;
+  // Disambiguate the embed to the MEMBERSHIP fk (upload_id). Migration 367
+  // added upload_media.source_upload_id → a SECOND uploads↔upload_media
+  // relationship, which makes a bare `upload_media(...)` embed ambiguous and
+  // errors EVERY album query. We want an album's member images, keyed by
+  // upload_id, ordered by position.
+  '*, users!inner(username, avatar_url, allow_reposts), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height)' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {

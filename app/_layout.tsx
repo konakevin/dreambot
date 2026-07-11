@@ -371,12 +371,18 @@ function RealtimeSubscriber() {
       )
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
+        { event: '*', schema: 'public', table: 'uploads', filter: `user_id=eq.${user.id}` },
         () => {
-          // New dream generated for this user — refresh the user's OWN
-          // surfaces. Deliberately NOT dreamFeed (2026-07-06): get_feed
-          // excludes your own posts (up.user_id != p_user_id), so the feed
-          // can't contain the row that changed — and invalidating it here
+          // Any change to one of this user's OWN uploads — refresh their OWN
+          // surfaces. INSERT = new dream generated. UPDATE = a visibility flip
+          // (make public/private) OR album_ref_count changing when an album is
+          // dissolved/deleted (members return to the Dreams grid at the top).
+          // DELETE = a removed post/album leaves the grid. Before 2026-07-11
+          // this bound INSERT only, so making an album private didn't live-
+          // refresh the profile grid — it took a full app reload to appear in
+          // the Private tab (Kevin). Deliberately NOT dreamFeed (2026-07-06):
+          // get_feed excludes your own posts (up.user_id != p_user_id), so the
+          // feed can't contain the row that changed — and invalidating it here
           // refetched every loaded page mid-scroll with LIVE feed_scores,
           // reshuffling the prefix under the index-anchored VerticalPager
           // (the "different post pops into view at the page boundary" bug).

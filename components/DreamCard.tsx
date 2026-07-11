@@ -48,6 +48,7 @@ import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useToggleBlock } from '@/hooks/useBlockUser';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { usePinPost } from '@/hooks/usePinPost';
+import { useDissolveAlbum } from '@/hooks/useDeletePost';
 import { useRepostIds } from '@/hooks/useRepostIds';
 import { useToggleRepost } from '@/hooks/useToggleRepost';
 
@@ -216,6 +217,7 @@ export const DreamCard = memo(function DreamCard({
   const [actionsOpen, setActionsOpen] = useState(false);
   // Profile pin toggle (migration 330) — own public posts only.
   const { pin, unpin } = usePinPost();
+  const { mutate: dissolveAlbum } = useDissolveAlbum();
   const isPinned = !!item.pinned_at;
   // Author controls on the card (non-own posts): a Follow/Following toggle pill
   // (so the user can also unfollow from the feed, not just quick-follow) + a
@@ -871,8 +873,9 @@ export const DreamCard = memo(function DreamCard({
           visible={actionsOpen}
           onClose={() => setActionsOpen(false)}
           bottomInset={bottomPadding}
+          mediaCount={isGallery ? (item.media_count ?? 0) : undefined}
           recipe={
-            isOwnPost && dreamAgain.canDreamAgain
+            !isGallery && isOwnPost && dreamAgain.canDreamAgain
               ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
               : undefined
           }
@@ -882,8 +885,11 @@ export const DreamCard = memo(function DreamCard({
             imageUrl: activeImageUrl,
             imageUrlHq: activeImageHq,
             isOwn: isOwnPost,
+            isGallery,
+            mediaCount: item.media_count ?? 0,
             faceSwapMode: item.face_swap_mode ?? null,
             onDelete,
+            onDissolve: isGallery && isOwnPost ? () => dissolveAlbum(item.id) : undefined,
             onDreamLikeThis,
             onDreamAgain:
               isOwnPost && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,

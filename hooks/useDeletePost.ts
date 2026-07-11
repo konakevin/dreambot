@@ -55,9 +55,12 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     .select('image_url, image_url_display, image_url_hq, source_upload_id')
     .eq('upload_id', uploadId);
 
-  const isReferenceGallery = (media ?? []).some(
-    (m) => (m.source_upload_id as string | null) != null
-  );
+  const sourceIds = [
+    ...new Set(
+      (media ?? []).map((m) => m.source_upload_id as string | null).filter((s): s is string => !!s)
+    ),
+  ];
+  const isReferenceGallery = sourceIds.length > 0;
 
   if (isAdmin) {
     const { error } = await supabase.rpc(
@@ -70,9 +73,15 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     if (error) throw error;
   }
 
-  // Reference galleries own no files — deleting their storage would nuke the
-  // SOURCE dreams. Skip cleanup entirely for them.
-  if (isReferenceGallery) return;
+  // Reference gallery = DESTRUCTIVE album delete: "the album owns its images —
+  // as the album goes, so go its children" (Kevin 2026-07-11). The host is
+  // deleted above (its cover file belongs to a source, never touched); now
+  // recurse to delete each CHILD source dream + its files. (Dissolve, which
+  // KEEPS the children, is a separate path — dissolveAlbumRow below.)
+  if (isReferenceGallery) {
+    for (const sid of sourceIds) await deleteUploadRow(sid, isAdmin);
+    return;
+  }
 
   // Clean up storage (fire-and-forget). Single dream: host base + HQ. Legacy
   // copied gallery: host + every copied slide variant (deduped — the cover
@@ -93,6 +102,36 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
   if (paths.size > 0) {
     supabase.storage.from('uploads').remove([...paths]);
   }
+}
+
+/**
+ * DISSOLVE an album: delete only the host row. Its upload_media references
+ * cascade away, releasing the child dreams back to Private (the DB trigger
+ * bumps their created_at so they land at the top). No storage touched — the
+ * children own their files. The non-destructive counterpart to deleteUploadRow
+ * (which, for an album, deletes the children too).
+ */
+async function dissolveAlbumRow(hostId: string): Promise<void> {
+  const { error } = await supabase.from('uploads').delete().eq('id', hostId);
+  if (error) throw error;
+}
+
+export function useDissolveAlbum() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (hostId: string) => dissolveAlbumRow(hostId),
+    onSuccess: () => {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show('Album dissolved', 'checkmark-circle');
+      // Host leaves every post surface; the released children return to Dreams.
+      for (const key of [...INFINITE_QUERY_KEYS, 'albumPosts']) {
+        qc.invalidateQueries({ queryKey: [key] });
+      }
+    },
+    onError: () => {
+      Toast.show('Failed to dissolve album', 'close-circle');
+    },
+  });
 }
 
 export function useDeletePost() {

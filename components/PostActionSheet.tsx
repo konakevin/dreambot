@@ -48,6 +48,9 @@ interface PostActionSheetProps {
    *  ONLY on the owner's own dream (the caller gates it); never on other
    *  people's view of a post. Undefined ⇒ hidden. */
   recipe?: { mediumLabel: string; vibeLabel: string };
+  /** Multi-image ALBUM → header reads "Album · N dreams" instead of the recipe
+   *  (an album has no single recipe). Undefined/≤1 ⇒ not an album. */
+  mediaCount?: number;
   /** Card bottom padding (clears the tab bar) so the last row isn't occluded. */
   bottomInset?: number;
 }
@@ -59,6 +62,7 @@ export function PostActionSheet({
   title,
   titleImageUrl,
   recipe,
+  mediaCount,
   bottomInset,
 }: PostActionSheetProps) {
   const insets = useSafeAreaInsets();
@@ -196,7 +200,14 @@ export function PostActionSheet({
             <Text style={s.title}>{title}</Text>
           </View>
         ) : null}
-        {recipe ? (
+        {mediaCount && mediaCount > 1 ? (
+          <View style={s.recipeChip}>
+            <Text style={s.recipeText} numberOfLines={1}>
+              <Text style={s.recipeEyebrow}>Album</Text>
+              {` · ${mediaCount} dreams`}
+            </Text>
+          </View>
+        ) : recipe ? (
           <View style={s.recipeChip}>
             <Text style={s.recipeText} numberOfLines={1}>
               <Text style={s.recipeEyebrow}>Style: </Text>

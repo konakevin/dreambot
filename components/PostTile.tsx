@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { useDeletePost } from '@/hooks/useDeletePost';
+import { useDeletePost, useDissolveAlbum } from '@/hooks/useDeletePost';
 import { usePinPost } from '@/hooks/usePinPost';
 import { useAuthStore } from '@/store/auth';
 import * as nav from '@/lib/navigate';
@@ -63,9 +63,11 @@ export const PostTile = memo(function PostTile({
   selection,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
+  const { mutate: dissolveAlbum } = useDissolveAlbum();
   const { pin, unpin } = usePinPost();
   const isAdminUser = useAuthStore((s) => s.isAdmin);
   const isPinned = !!item.pinned_at;
+  const isGallery = (item.media_count ?? 1) > 1;
   // Owner-only "Dream this again" reload + recipe labels (gated below on isOwn).
   const dreamAgain = useDreamAgain(item);
 
@@ -199,8 +201,11 @@ export const PostTile = memo(function PostTile({
           <PostActionSheet
             visible
             onClose={() => setActionsOpen(false)}
+            // Album header shows "Album · N dreams"; single dreams keep the
+            // Style/Vibe recipe line (an album has no single recipe).
+            mediaCount={isGallery ? (item.media_count ?? 0) : undefined}
             recipe={
-              isOwn && dreamAgain.canDreamAgain
+              !isGallery && isOwn && dreamAgain.canDreamAgain
                 ? { mediumLabel: dreamAgain.mediumLabel, vibeLabel: dreamAgain.vibeLabel }
                 : undefined
             }
@@ -209,10 +214,13 @@ export const PostTile = memo(function PostTile({
               imageUrl: item.image_url,
               imageUrlHq: item.image_url_hq ?? null,
               isOwn,
+              isGallery,
+              mediaCount: item.media_count ?? 0,
               faceSwapMode: item.face_swap_mode ?? null,
               // Bulk-select entry point — grids that support it pass `selection`.
               onSelect: selection ? () => selection.onEnter(item.id) : undefined,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
+              onDissolve: isGallery && isOwn ? () => dissolveAlbum(item.id) : undefined,
               onDreamAgain: isOwn && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
               // Profile pin toggle (migration 330) — own PUBLIC posts only (the
               // Dreams album shows private dreams; those aren't pinnable).

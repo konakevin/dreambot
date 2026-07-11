@@ -256,6 +256,16 @@ export interface PostActionSheetOpts extends LongPressOpts {
   /** Owner-only "Dream this again" — reloads this dream's saved inputs into
    *  Create (from useDreamAgain). Present ⇒ the row shows. */
   onDreamAgain?: () => void;
+  /** This post is a multi-image ALBUM (media_count > 1). An album is a
+   *  reference GROUPING — single-image actions (Save in HD, Dream this again,
+   *  Dream like this) are hidden, and it gets TWO distinct exits: "Dissolve
+   *  Album" (keeps the images → Private) and destructive "Delete Album". */
+  isGallery?: boolean;
+  /** Image count, for the album confirm copy ("… all 10 dreams inside …"). */
+  mediaCount?: number;
+  /** Album-only: DISSOLVE (ungroup, keep the child dreams). Present ⇒ the row
+   *  shows. onDelete is the DESTRUCTIVE path (deletes the children too). */
+  onDissolve?: () => void;
 }
 
 const iconForDownload = (label: string): string =>
@@ -281,8 +291,11 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Save / Save in HD (or single "Save" for face-swap dreams).
+  // Save / Save in HD (or single "Save" for face-swap dreams). For an ALBUM the
+  // per-image HD variant is meaningless (which image?), so keep only a plain
+  // "Save to Photos" of the cover.
   for (const b of downloadOptionButtons(opts)) {
+    if (opts.isGallery && b.text.startsWith('Save in HD')) continue;
     rows.push({
       key: `save:${b.text}`,
       label: b.text,
@@ -298,7 +311,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // that explains why. Gated the same as the alert disclaimer (faceSwapNoHdMessage):
   // only for users who'd otherwise have HD here (subscribers / own posts), so it
   // isn't noise to a free user on someone else's post.
-  if (faceSwapNoHdMessage(opts)) {
+  if (!opts.isGallery && faceSwapNoHdMessage(opts)) {
     rows.push({
       key: 'hd-unavailable',
       label: 'Save in HD',
@@ -310,8 +323,9 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Dream like this — re-render from this post's style.
-  if (opts.onDreamLikeThis) {
+  // Dream like this — re-render from this post's style. An album has no single
+  // style (it's a mix of N dreams), so it's hidden for galleries.
+  if (opts.onDreamLikeThis && !opts.isGallery) {
     rows.push({
       key: 'dlt',
       label: 'Dream like this',
@@ -324,7 +338,8 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // Dream this again — owner-only reload of this dream's saved inputs into
   // Create (original prompt + medium + vibe + model), editable. The caller only
   // passes onDreamAgain for the owner, so no extra isOwn gate needed here.
-  if (opts.onDreamAgain) {
+  // (Hidden for albums — no single recipe to reload.)
+  if (opts.onDreamAgain && !opts.isGallery) {
     rows.push({
       key: 'dream-again',
       label: 'Dream this again',
@@ -392,15 +407,58 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Delete — own posts (destructive).
+  const n = opts.mediaCount ?? 0;
+
+  // Album DISSOLVE — calm PRIMARY row (an album is a grouping, not content):
+  // ungroups it, the child dreams stay safe in Private. Reassuring confirm.
+  if (opts.isGallery && opts.onDissolve) {
+    const onDissolve = opts.onDissolve;
+    rows.push({
+      key: 'dissolve',
+      label: 'Dissolve Album',
+      subtitle: 'Ungroups it, your dreams go back to Private',
+      icon: 'albums-outline',
+      group: 'primary',
+      onPress: () =>
+        showAlert(
+          'Dissolve this album?',
+          `The album leaves your feed (likes and comments included), and ${
+            n > 0 ? `all ${n} dreams` : 'the dreams'
+          } drift back to your private dreams, safe and sound.`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Dissolve', onPress: onDissolve },
+          ]
+        ),
+    });
+  }
+
+  // Delete — destructive. Single dream: the red trash row (existing behavior).
+  // Album: "Delete Album" DELETES the album AND its child images ("the album
+  // owns its images — as the album goes, so go its children", Kevin
+  // 2026-07-11), behind a confirm that spells out the image deletion.
   if (opts.onDelete) {
+    const onDelete = opts.onDelete;
     rows.push({
       key: 'delete',
-      label: 'Delete',
+      label: opts.isGallery ? 'Delete Album' : 'Delete',
+      subtitle: opts.isGallery ? 'Also deletes the images inside' : undefined,
       icon: 'trash-outline',
       group: 'danger',
       destructive: true,
-      onPress: opts.onDelete,
+      onPress: opts.isGallery
+        ? () =>
+            showAlert(
+              'Delete this album?',
+              `The album and ${
+                n > 0 ? `all ${n} images` : 'all the images'
+              } inside will be permanently deleted. This can't be undone.`,
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete', style: 'destructive', onPress: onDelete },
+              ]
+            )
+        : onDelete,
     });
   }
 

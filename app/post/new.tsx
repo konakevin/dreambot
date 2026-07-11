@@ -83,7 +83,11 @@ export default function NewPostScreen() {
   const qc = useQueryClient();
   const insets = useSafeAreaInsets();
   const { galleryMaxImages } = useEngineConfig();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyDreams('all');
+  // Source pool = your PRIVATE (unposted) dreams only. An album is a fresh
+  // post; already-public dreams aren't offered as source material (Kevin
+  // 2026-07-11). The gallery filter (media_count > 1) still applies below.
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useMyDreams('private');
 
   const preIds = useMemo(
     () => (params.ids ? String(params.ids).split(',').filter(Boolean) : []),

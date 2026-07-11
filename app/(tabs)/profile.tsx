@@ -46,6 +46,7 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
 import { type StatsTab } from '@/components/ProfileStatsRow';
+import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
@@ -65,6 +66,10 @@ export default function ProfileScreen() {
   // one summary toast; partial failures resync from the server).
   const [gridSelecting, setGridSelecting] = useState(false);
   const [gridSelectedIds, setGridSelectedIds] = useState<Set<string>>(new Set());
+  const { galleryMaxImages } = useEngineConfig();
+  // Selection is uncapped (users over-select to bulk-DELETE), but an album
+  // caps at galleryMaxImages — so Post disables past the cap and says why.
+  const overGalleryCap = gridSelectedIds.size > galleryMaxImages;
   const bulkDelete = useBulkDeletePosts();
   const bulkPrivate = useBulkMakePrivate();
   const bulkUnsave = useBulkUnsave();
@@ -99,25 +104,23 @@ export default function ProfileScreen() {
     if (count === 0 || bulkDelete.isPending) return;
     const ids = [...gridSelectedIds];
 
-    // Album-aware warning (migration 367): deleting a dream removes it from
-    // every album that references it, and empties (deletes) an album whose LAST
-    // remaining image this is. Tell the user before they pull the thread.
+    // Album-aware warning: deleting an album deletes the images INSIDE it too
+    // ("the album owns its images", Kevin 2026-07-11). Count how many of the
+    // selected are albums + the total child images that go with them.
     let albumLine = '';
     try {
-      const { data } = await supabase.rpc('describe_album_impact', { p_source_ids: ids });
-      const r = Array.isArray(data) ? data[0] : data;
-      const touched = (r?.albums_touched as number) ?? 0;
-      const deleted = (r?.albums_deleted as number) ?? 0;
-      if (deleted > 0) {
-        albumLine =
-          deleted === touched
-            ? ` This is the last image in ${deleted === 1 ? 'an album' : `${deleted} albums`}, so ${deleted === 1 ? 'that album post' : 'those album posts'} will be deleted too.`
-            : ` It'll be removed from ${touched} album${touched === 1 ? '' : 's'}, and ${deleted} of them will be deleted (last image).`;
-      } else if (touched > 0) {
-        albumLine = ` It'll also be removed from ${touched} album post${touched === 1 ? '' : 's'}.`;
+      const { data } = await supabase
+        .from('uploads')
+        .select('media_count')
+        .in('id', ids)
+        .gt('media_count', 1);
+      const albums = data?.length ?? 0;
+      const images = (data ?? []).reduce((sum, r) => sum + ((r.media_count as number) ?? 0), 0);
+      if (albums > 0) {
+        albumLine = ` This includes ${albums} album${albums === 1 ? '' : 's'}, and the ${images} image${images === 1 ? '' : 's'} inside will be deleted too.`;
       }
     } catch {
-      // best-effort — a failed impact query never blocks the delete confirm.
+      // best-effort — a failed count never blocks the delete confirm.
     }
 
     showAlert(
@@ -156,10 +159,10 @@ export default function ProfileScreen() {
   // insertion order). 1 → single post, 2+ → gallery, decided in the compose flow.
   const handleBulkPost = useCallback(() => {
     const ids = [...gridSelectedIds];
-    if (ids.length === 0) return;
+    if (ids.length === 0 || ids.length > galleryMaxImages) return;
     exitGridSelection();
     nav.push(`/post/new?ids=${ids.join(',')}`);
-  }, [gridSelectedIds, exitGridSelection]);
+  }, [gridSelectedIds, galleryMaxImages, exitGridSelection]);
   // Unsave / unrepost are reversible, but confirm anyway (same ceremony as
   // delete / make-private) so a mis-tap on a big selection isn't instant.
   const handleBulkUnsave = useCallback(() => {
@@ -744,15 +747,17 @@ export default function ProfileScreen() {
                   style={[
                     styles.actionPill,
                     styles.postPill,
-                    gridSelectedIds.size === 0 && styles.actionPillDisabled,
+                    (gridSelectedIds.size === 0 || overGalleryCap) && styles.actionPillDisabled,
                   ]}
                   onPress={handleBulkPost}
-                  disabled={gridSelectedIds.size === 0}
+                  disabled={gridSelectedIds.size === 0 || overGalleryCap}
                   activeOpacity={0.85}
                 >
                   <Ionicons name="duplicate-outline" size={16} color="#FFFFFF" />
                   <Text style={styles.actionPillText}>
-                    Post{gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}
+                    {overGalleryCap
+                      ? `${galleryMaxImages} max`
+                      : `Post${gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}`}
                   </Text>
                 </TouchableOpacity>
               )}
