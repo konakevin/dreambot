@@ -314,6 +314,28 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
+  // Own-post visibility toggle. Public → "Make private". Private splits on
+  // whether it was ever posted: previously-posted → "Make public" (re-publish),
+  // never-posted → "Post" (compose flow). The caller wires onPress to match.
+  // Placed HERE — right after Select, before the variable save/create block — so
+  // it sits at the SAME row on every sheet (Kevin 2026-07-11: it drifted from
+  // row 3 on albums to row 5 on singles because Save-in-HD / Dream-this-again
+  // shifted it down). Anchoring it above that block keeps it fixed.
+  if (opts.onToggleVisibility) {
+    const privateLabel = opts.wasPosted ? 'Make public' : 'Post';
+    rows.push({
+      key: 'visibility',
+      label: opts.isPublic ? 'Make private' : privateLabel,
+      icon: opts.isPublic
+        ? 'eye-off-outline'
+        : opts.wasPosted
+          ? 'earth-outline'
+          : 'add-circle-outline',
+      group: 'primary',
+      onPress: opts.onToggleVisibility,
+    });
+  }
+
   // Image-in-view save ("Save to Photos" [+ "Save in HD"]). Shown for single
   // dreams and for the dream card's ACTIVE album slide; suppressed on the grid
   // album THUMB (no single slide there — only the whole-album row applies).
@@ -390,24 +412,6 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'refresh-outline',
       group: 'primary',
       onPress: opts.onDreamAgain,
-    });
-  }
-
-  // Own-post visibility toggle. Public → "Make private". Private splits on
-  // whether it was ever posted: previously-posted → "Make public" (re-publish),
-  // never-posted → "Post" (compose flow). The caller wires onPress to match.
-  if (opts.onToggleVisibility) {
-    const privateLabel = opts.wasPosted ? 'Make public' : 'Post';
-    rows.push({
-      key: 'visibility',
-      label: opts.isPublic ? 'Make private' : privateLabel,
-      icon: opts.isPublic
-        ? 'eye-off-outline'
-        : opts.wasPosted
-          ? 'earth-outline'
-          : 'add-circle-outline',
-      group: 'primary',
-      onPress: opts.onToggleVisibility,
     });
   }
 
