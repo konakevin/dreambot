@@ -150,7 +150,7 @@ function getServiceClient() {
   return createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 }
 
-/** Fetch active mediums INCLUDING bot-only rows (cached per invocation).
+/** Fetch active mediums INCLUDING bot-only rows (cached ≤60s per isolate).
  *
  * Trusted edge-function side — bot-only mediums must be resolvable here so
  * Dream Like This can replay a bot post's medium (gothic / gothic-realistic /

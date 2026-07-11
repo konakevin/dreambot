@@ -12,7 +12,7 @@
 // downgrade Pro→Basic) sets the new tier's flag AND clears the other tier's —
 // see the SUBSCRIPTION_TIERS handling below.
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
+import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 // Constant-time comparison for the webhook bearer secret. Was a byte-identical
 // local copy (timingSafeEqualStr); de-duped to the shared helper 2026-07-10
 // (Architect audit A7) so the two can't drift.
@@ -32,8 +32,7 @@ const FALLBACK_SPARKLE_PACKS: Record<string, number> = {
 // Resolve a product's sparkle amount from the DB (sparkle_packs), falling back to
 // the constant. Returns undefined for non-pack products (used as the is-pack test).
 async function resolvePackSparkles(
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   productId: string
 ): Promise<number | undefined> {
   const { data, error } = await supabase
@@ -65,16 +64,18 @@ const FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE = 75;
 const FALLBACK_BASIC_MONTHLY_SPARKLE_BUNDLE = 20;
 
 async function resolveMonthlyBundle(
-  // deno-lint-ignore no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   column: string,
   fallback: number
 ): Promise<number> {
   const { data, error } = await supabase.from('engine_config').select(column).eq('id', 1).single();
-  if (error || !data || data[column] == null) {
+  // Single dynamic column — read the one value without dynamic string-indexing
+  // (which trips noImplicitAny now that supabase is typed, not `any`).
+  const value = data ? Object.values(data)[0] : null;
+  if (error || value == null) {
     return fallback;
   }
-  return Number(data[column]);
+  return Number(value);
 }
 
 // Tier descriptors — Pro and Basic share identical subscription lifecycle
