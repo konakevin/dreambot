@@ -734,11 +734,21 @@ export const DreamCard = memo(function DreamCard({
                     every subsequent side-rail button up or down — the "janky
                     reflow + phantom number" Kevin reported. Keeping the slot
                     occupied at all times locks the rail's vertical rhythm. */}
+                {/* A post the viewer has LIKED includes their own like, so its
+                    count can never legitimately be 0 — floor the display at 1
+                    when isLiked. Guards against a stale/behind cached like_count
+                    (the frozen home feed + syncPostCounts can leave the count a
+                    step behind the optimistic like state) rendering a hearted
+                    post with a blank count until an unlike/relike (Kevin
+                    2026-07-11). Unliked posts are unaffected (max(0,0)=0). */}
                 <Text
-                  style={[ui.sideCount, !(item.like_count ?? 0) && hiddenCount]}
+                  style={[
+                    ui.sideCount,
+                    !Math.max(item.like_count ?? 0, isLiked ? 1 : 0) && hiddenCount,
+                  ]}
                   numberOfLines={1}
                 >
-                  {item.like_count ?? 0}
+                  {Math.max(item.like_count ?? 0, isLiked ? 1 : 0)}
                 </Text>
               </TouchableOpacity>
               {onComment && (

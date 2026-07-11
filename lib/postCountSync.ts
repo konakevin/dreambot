@@ -44,13 +44,27 @@ const INFINITE_ROOTS = [
   'explore',
 ];
 
-function mergeItem(p: DreamPostItem, counts: Map<string, Counts>): DreamPostItem {
+function mergeItem(
+  p: DreamPostItem,
+  counts: Map<string, Counts>,
+  likedIds: Set<string>
+): DreamPostItem {
   const c = counts.get(p.id);
   if (!c) return p;
   const next: DreamPostItem = { ...p };
   let changed = false;
   for (const k of ['like_count', 'comment_count', 'repost_count'] as const) {
-    const v = c[k];
+    let v = c[k];
+    // Invariant guard: a post the viewer has LIKED includes their own like, so
+    // like_count can never legitimately be 0. A fresh fetch that races the
+    // read-after-write of an in-flight like can return the pre-like count (0);
+    // writing that onto the FROZEN feed (staleTime Infinity) made a hearted
+    // post render a blank count for the rest of the session (Kevin
+    // 2026-07-11). Floor at 1 for liked posts instead of propagating the
+    // impossible state.
+    if (k === 'like_count' && typeof v === 'number' && likedIds.has(p.id)) {
+      v = Math.max(v, 1);
+    }
     if (typeof v === 'number' && v !== p[k]) {
       next[k] = v;
       changed = true;
@@ -59,11 +73,15 @@ function mergeItem(p: DreamPostItem, counts: Map<string, Counts>): DreamPostItem
   return changed ? next : p;
 }
 
-function mergePages(pages: AnyPage[], counts: Map<string, Counts>): AnyPage[] {
+function mergePages(
+  pages: AnyPage[],
+  counts: Map<string, Counts>,
+  likedIds: Set<string>
+): AnyPage[] {
   return pages.map((page) =>
     Array.isArray(page)
-      ? page.map((p) => mergeItem(p, counts))
-      : { ...page, rows: page.rows.map((p) => mergeItem(p, counts)) }
+      ? page.map((p) => mergeItem(p, counts, likedIds))
+      : { ...page, rows: page.rows.map((p) => mergeItem(p, counts, likedIds)) }
   );
 }
 
@@ -82,11 +100,17 @@ export function syncPostCounts(qc: QueryClient, freshPosts: DreamPostItem[]): vo
     });
   }
 
+  // The viewer's liked set (useLikeIds cache) — feeds the liked-implies-≥1
+  // invariant in mergeItem. Absent/unloaded → empty set (guard inert).
+  const likeIdsQuery = qc.getQueryCache().findAll({ queryKey: ['likeIds'] })[0];
+  const likedIds =
+    (likeIdsQuery && qc.getQueryData<Set<string>>(likeIdsQuery.queryKey)) || new Set<string>();
+
   for (const root of INFINITE_ROOTS) {
     for (const query of qc.getQueryCache().findAll({ queryKey: [root] })) {
       const prev = qc.getQueryData<InfiniteData<AnyPage>>(query.queryKey);
       if (!prev?.pages) continue;
-      const pages = mergePages(prev.pages, counts);
+      const pages = mergePages(prev.pages, counts, likedIds);
       // Cheap identity check: mergeItem returns the SAME object when nothing
       // changed, so unchanged caches keep their reference (no re-renders).
       if (pages.some((pg, i) => pg !== prev.pages[i])) {
@@ -99,17 +123,17 @@ export function syncPostCounts(qc: QueryClient, freshPosts: DreamPostItem[]): vo
   for (const query of qc.getQueryCache().findAll({ queryKey: ['albumPosts'] })) {
     const prev = qc.getQueryData<DreamPostItem[]>(query.queryKey);
     if (!prev) continue;
-    const next = prev.map((p) => mergeItem(p, counts));
+    const next = prev.map((p) => mergeItem(p, counts, likedIds));
     if (next.some((p, i) => p !== prev[i])) qc.setQueryData(query.queryKey, next);
   }
 
   // Zustand snapshots outside TanStack (the "phantom number" carriers).
   const albumPosts = useAlbumStore.getState().posts;
   if (albumPosts.some((p) => counts.has(p.id))) {
-    useAlbumStore.getState().setAlbumPosts(albumPosts.map((p) => mergeItem(p, counts)));
+    useAlbumStore.getState().setAlbumPosts(albumPosts.map((p) => mergeItem(p, counts, likedIds)));
   }
   const pinned = useFeedStore.getState().pinnedPost;
   if (pinned && counts.has(pinned.id)) {
-    useFeedStore.getState().setPinnedPost(mergeItem(pinned, counts));
+    useFeedStore.getState().setPinnedPost(mergeItem(pinned, counts, likedIds));
   }
 }
