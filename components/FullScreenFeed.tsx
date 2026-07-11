@@ -29,6 +29,7 @@ import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost } from '@/hooks/useDeletePost';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
+import { useAlbumStore } from '@/store/album';
 import { useCommentDrafts } from '@/store/commentDrafts';
 import { LikesOverlay } from '@/components/LikesOverlay';
 import { VerticalPager, type VerticalPagerHandle } from '@/components/VerticalPager';
@@ -437,7 +438,22 @@ export function FullScreenFeed({
       deletePost(uploadId, {
         onSuccess: () => {
           if (totalBefore <= 1) {
-            if (router.canGoBack()) router.back();
+            // Deleted the last (or only) item in this view — leave the screen.
+            // Use safeBack, NOT a bare router.back(): at a stack root (certain
+            // deep-link / notification timings) a bare back is a NO-OP, and with
+            // native gestures disabled on photo/[id] that strands the user with a
+            // dead back button + dead swipe (the reported inbox-freeze). safeBack
+            // escapes to home instead of dead-ending.
+            if (__DEV__) {
+              const a = useAlbumStore.getState();
+              console.log('[FullScreenFeed] delete→back', {
+                canGoBack: router.canGoBack(),
+                albumIds: a.ids,
+                albumSource: a.albumSource?.type ?? null,
+                currentPostId: a.currentPostId,
+              });
+            }
+            nav.safeBack();
           } else {
             const newIdx = idx >= totalBefore - 1 ? Math.max(0, idx - 1) : idx;
             currentIndex.current = newIdx;

@@ -56,6 +56,20 @@ export default function PhotoDetailScreen() {
     trackPostViewed({ source: src, is_own: src === 'own' || src === 'dreams' });
   }, []);
 
+  // Clear a notification/deep-link-scoped album (albumSource === null) when this
+  // screen unmounts, so a stale 1-item album — especially one whose only item
+  // was just deleted — can't leak into the next navigation and lock the UI into
+  // album mode (root-caused 2026-07-11: delete-a-dream-from-a-notification left
+  // the user on a frozen inbox with a dead back button). Grid-sourced albums
+  // (albumSource != null) keep their state so PostGrid can re-anchor to
+  // currentPostId on back.
+  useEffect(() => {
+    return () => {
+      const st = useAlbumStore.getState();
+      if (st.albumSource === null) st.clearAlbum();
+    };
+  }, []);
+
   // Arrived from a "download_ready" notification tap (push / inbox / banner) →
   // show a top-right Download badge instead of auto-saving. Tapping it saves the
   // ready HD straight to the device (one simple "Saving…" indicator); we don't
