@@ -1570,7 +1570,11 @@ Deno.serve(async (req) => {
         const dualSepRule = isDualFaceSwap
           ? `\n- ━━━ ROLE-TO-SIDE LOCK (NON-NEGOTIABLE) ━━━\n- The FIRST cast member (${resolvedCast[0]?.role ?? 'self'}) MUST be on the LEFT half of the frame.\n- The SECOND cast member (${resolvedCast[1]?.role ?? 'plus_one'}) MUST be on the RIGHT half of the frame.\n- DO NOT swap their positions. Reversing breaks the face-swap pipeline (faces land on wrong bodies → gender swap disaster).\n- Clear ~2-3 ft gap between them. NO overlap across the midline.\n- BOTH at SAME VERTICAL HEIGHT — both standing OR both sitting OR both crouching. NEVER one tall + one short.\n- BOTH faces three-quarter to camera. NO back views. NO profiles. NO faces away.\n- Both heads at the SAME Y-axis line so the L/R crop captures each face cleanly.`
           : '';
-        const stylizedMediums = new Set(['storybook', 'pencil', 'fairytale', 'anime']);
+        // Stylized FACE-SWAP mediums that need an explicit "keep faces realistic"
+        // rule so Flux doesn't cartoon-ify the swapped face. Only 'pencil' remains
+        // here: storybook/fairytale/anime moved to embodied (drawn-as-character,
+        // never face-swapped), so they can never reach this face-swap branch.
+        const stylizedMediums = new Set(['pencil']);
         const needsRealisticFaces = stylizedMediums.has(baseMedium.key) && faceSwapEligible;
         const faceRealismRule = needsRealisticFaces
           ? '\nFACE REALISM — CRITICAL: faces must have realistic human proportions with detailed eyes, nose, mouth, and jawline. Do NOT simplify faces into cartoon, chibi, or dot-eye proportions. Do NOT draw thick or prominent eyebrows — keep eyebrows subtle, thin, and natural. Scene and clothing can be fully stylized but FACES must look like real people with natural brow lines.'
@@ -1644,6 +1648,46 @@ RULES:
 - Include "foreground midground background stacked top to bottom, layered depth" in the prompt. Compose with depth — stack layers top to bottom, not left to right.
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
+      } else if (isEmbodiedMedium) {
+        // ━━━ EMBODIED "you AS a character" brief — CHARACTER-DOMINANT ━━━
+        // Dream Art mediums (kawaii, fairytale, …): the user is DRAWN as the cute
+        // hero — large, front and center, face clearly visible — with the setting as
+        // only a soft backdrop. This deliberately does NOT use the scene-first /
+        // "wide and far shots welcome" / epic-backdrop structure in the else branch
+        // below. That scene-dominance shrinks or DROPS the embodied person: unlike a
+        // face swap (where the real face is pasted in afterward regardless of scale),
+        // an embodied hero only exists if Flux actually renders them big — a sweeping
+        // vista leaves no hero at all. Root-caused 2026-07-10 (fairytale + kawaii
+        // scene-only / tiny-back-turned-figure dropout, ~40-50% of single casts).
+        const isDualCast = resolvedCast.length === 2;
+        nightlyBrief = `You are a ${mediumStyle} artist drawing ${isDualCast ? 'two people' : 'a person'} AS ${isDualCast ? 'adorable characters' : 'an adorable character'}. Write a Flux AI prompt (75-110 words, comma-separated).
+
+THE GOAL: the DESCRIBED PERSON${isDualCast ? 'S' : ''} below, drawn as the HERO of the image — large, front and center, face${isDualCast ? 's' : ''} clearly visible. This is a CHARACTER PORTRAIT, not a landscape. The person is the subject; the setting is only a soft, cozy backdrop behind them.
+
+STRUCTURE — follow this order EXACTLY:
+1. Start with: "${baseMedium.fluxFragment}"
+2. THE CHARACTER${isDualCast ? 'S' : ''} — the MAJORITY of the prompt (${isDualCast ? '45-55' : '40-50'} words): render the cast below with EVERY identifying trait, a warm expressive face, and a natural pose. ${isDualCast ? 'BOTH people together, side by side, a clear gap between their heads, both faces LARGE and clearly visible.' : 'One person, filling much of the frame, face LARGE and clearly visible.'}
+3. A SIMPLE BACKDROP (20-25 words MAX): a soft, cozy, gently-suggested setting behind them inspired by ${iconicAnchor || userPlace || 'a warm cozy place'} — just enough to set the mood, kept subordinate to the character${isDualCast ? 's' : ''}.
+4. End with: no text, no words, no letters, no watermarks, ultra detailed
+
+CHARACTER${isDualCast ? 'S' : ''} TO DRAW:
+${castDescBlock}
+${castInstruction}
+${singleAction ? `\nBODY POSE (use the verbs, keep it a close/medium shot):\n"${singleAction}"\n` : ''}${dualAction ? `\nBODY POSE (both characters):\n"${dualAction}"\n` : ''}
+CAST RULES — NON-NEGOTIABLE:
+- PRESERVE every identifying trait: age, gender, hair color and length, beard/no beard, glasses, build, complexion. This is how the user recognizes ${isDualCast ? 'themselves and their loved one' : 'themselves'}.
+- Be SPECIFIC, never "a man" / "a woman".
+${isDualCast ? '- BOTH people fully visible, both faces clear, neither cropped, neither merged, a clear gap between their heads.' : ''}
+
+MOOD (light + palette only): ${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
+${avoidList}
+
+FRAMING LOCK — NON-NEGOTIABLE:
+- CLOSE-UP or MEDIUM shot. The character${isDualCast ? 's' : ''} fill${isDualCast ? '' : 's'} at least 60% of the frame. Face${isDualCast ? 's' : ''} large and clearly visible, front or three-quarter angle, NEVER back-turned, NEVER a silhouette.
+- The person is ALWAYS present and dominant. This is NOT an empty landscape, NOT a wide establishing shot, NOT a tiny distant figure, NOT a sweeping vista. Do NOT use "monumentally vast", "enormous", "sweeping", "stretching away", or any scale-dominant scenery language.
+- The setting stays a soft, simple backdrop — always subordinate to the character${isDualCast ? 's' : ''}.
+- Every word must be something a camera can see. No feelings, no metaphors.
+Output ONLY the prompt.`;
       } else {
         // Non-face-swap brief: scene + character description must come through accurately
         const isDualCast = resolvedCast.length === 2;
@@ -1696,8 +1740,8 @@ RULES:
 - Character${isDualCast ? 's' : ''} visible from front or three-quarter angle — never back-turned or rear-view.
 - ${
           isDualCast
-            ? 'BOTH characters MUST be present in the scene. Wide and far shots are welcome — be creative with framing — but two distinct people must be visible somewhere in the frame. NOT one person alone. NOT empty scenery. The cast description above is non-negotiable: both individuals must appear.'
-            : 'The character MUST be present and visible in the scene. Wide and far shots are welcome.'
+            ? 'BOTH characters MUST be FULLY visible as COMPLETE figures, positioned TOGETHER within the frame, NEITHER cropped, cut off, or pushed off the edge. Both stand near the center of the composition, side by side, both fully inside the frame — do NOT place one at the far edge. NOT one person alone. NOT empty scenery. The cast description above is non-negotiable: both individuals must appear fully.'
+            : 'The character MUST be present and clearly visible in the scene, fully within the frame (not cropped at the edge). Wide and far shots are welcome.'
         }
 - Every word must be something a camera can see. No feelings, no metaphors.
 Output ONLY the prompt.`;
@@ -1882,9 +1926,15 @@ Output ONLY the prompt.`;
     // Post-process: ensure location name appears in final prompt (Sonnet sometimes
     // drifts). Uses the effective place — for a playful scenario that's the scenario
     // (already in the prompt → no-op), so the real location is never injected onto it.
+    // NOTE: embodied Dream Art renders are CHARACTER-DOMINANT — never front-load the
+    // location. Leading with "set in <place>," gives the place noun CLIP's first-noun
+    // dominance → Flux renders the landscape and shrinks/drops the drawn hero (the
+    // person isn't pasted in afterward). The embodied brief already carries the place
+    // as a subordinate backdrop clause, so skip the prepend entirely here.
     if (
       includeLocation &&
       effectiveUserPlace &&
+      !isEmbodiedMedium &&
       !finalPrompt.toLowerCase().includes(effectiveUserPlace.toLowerCase())
     ) {
       finalPrompt = `set in ${effectiveUserPlace}, ` + finalPrompt;

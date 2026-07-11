@@ -28,7 +28,13 @@ export type NightlyDreamType =
   | 'face_swap_plus_one'
   | 'pure_scene'
   | 'epic_tiny'
-  | 'embodied';
+  | 'embodied'
+  // Dream Art: the user is DRAWN AS a character in an embodied medium
+  // (kawaii / fairytale / storybook) — no real-face paste. Distinct from
+  // 'embodied' above, which is scene-only (lego/pixels scenery, no person).
+  | 'dream_art_self'
+  | 'dream_art_plus_one'
+  | 'dream_art_dual';
 
 export interface ChaosConfig {
   low: number;
@@ -46,6 +52,12 @@ export interface ChaosConfig {
   face_swap_share_with_plus_one: number;
   face_swap_dual_rate: number;
   face_swap_self_rate: number;
+  // Dream Art (character-embodied) share of the has-cast nightly roll. Reuses
+  // the face_swap dual/self split for which cast member(s) star. WHICH embodied
+  // mediums are eligible is NOT configured here — it derives from the medium's
+  // own flags (character_render_mode='embodied' && is_dream_eligible), resolved
+  // in dreamStyles.resolveMediumFromDb('dream_eligible_dream_art').
+  dream_art_share: number;
 }
 
 const DEFAULT_CONFIG: ChaosConfig = {
@@ -66,23 +78,36 @@ const DEFAULT_CONFIG: ChaosConfig = {
   face_swap_share_with_plus_one: 0.9,
   face_swap_dual_rate: 0.6,
   face_swap_self_rate: 0.2,
+  dream_art_share: 0.3,
 };
 
 let cachedConfig: ChaosConfig | null = null;
+let cachedConfigAt = 0;
+// Module state persists for the ISOLATE lifetime (not per invocation) in the
+// Deno edge runtime — an uncapped cache serves stale knobs long after a
+// dashboard change (2026-07-11: warm isolates kept dream_art_share=1.0 from a
+// test window after the DB was restored to 0.30, skewing the nightly roll).
+// A short TTL keeps the read-amplification win while making engine_config
+// tuning propagate within a minute.
+const CONFIG_CACHE_TTL_MS = 60_000;
 
-/** Loads chaos knobs from engine_config (singleton). Cached per invocation. */
+/** Loads chaos knobs from engine_config (singleton). Cached ≤60s per isolate. */
 export async function fetchChaosConfig(sb: SupabaseClient): Promise<ChaosConfig> {
-  if (cachedConfig) return cachedConfig;
+  if (cachedConfig && Date.now() - cachedConfigAt < CONFIG_CACHE_TTL_MS) return cachedConfig;
   const { data, error } = await sb
     .from('engine_config')
     .select(
-      'chaos_low_threshold, chaos_high_threshold, scene_embodied_rate_low, scene_embodied_rate_mid, scene_embodied_rate_high, embodied_mediums_mid, embodied_mediums_high, extra_models_mid, extra_models_high, face_swap_share, face_swap_share_with_plus_one, face_swap_dual_rate, face_swap_self_rate'
+      // dream_art_share: engine_config column (migration 361). Dashboard-tunable;
+      // DEFAULT_CONFIG covers a missing-column fallback. (dream_art_mediums is no
+      // longer read — the Dream Art pool derives from per-medium flags now.)
+      'chaos_low_threshold, chaos_high_threshold, scene_embodied_rate_low, scene_embodied_rate_mid, scene_embodied_rate_high, embodied_mediums_mid, embodied_mediums_high, extra_models_mid, extra_models_high, face_swap_share, face_swap_share_with_plus_one, face_swap_dual_rate, face_swap_self_rate, dream_art_share'
     )
     .eq('id', 1)
     .single();
   if (error || !data) {
     console.warn('[chaosTier] engine_config missing — using defaults:', error?.message);
     cachedConfig = DEFAULT_CONFIG;
+    cachedConfigAt = Date.now();
     return cachedConfig;
   }
   cachedConfig = {
@@ -103,7 +128,9 @@ export async function fetchChaosConfig(sb: SupabaseClient): Promise<ChaosConfig>
     ),
     face_swap_dual_rate: Number(data.face_swap_dual_rate ?? DEFAULT_CONFIG.face_swap_dual_rate),
     face_swap_self_rate: Number(data.face_swap_self_rate ?? DEFAULT_CONFIG.face_swap_self_rate),
+    dream_art_share: Number(data.dream_art_share ?? DEFAULT_CONFIG.dream_art_share),
   };
+  cachedConfigAt = Date.now();
   return cachedConfig;
 }
 
@@ -186,6 +213,19 @@ export function rollNightlyDreamType({
     return Math.random() < embRate ? 'embodied' : 'pure_scene';
   }
 
+  // Dream Art (you DRAWN AS a character in an embodied medium) — carve
+  // dream_art_share off the top of the has-cast roll. Which cast member(s)
+  // star mirrors the face-swap dual/self/+1 split. Short-circuit at share=0 so
+  // no Math.random() is consumed when the feature is off (keeps the downstream
+  // face-swap/scene rolls deterministic when disabled).
+  if (cfg.dream_art_share > 0 && Math.random() < cfg.dream_art_share) {
+    if (!hasPlusOne) return 'dream_art_self';
+    const r = Math.random();
+    if (r < cfg.face_swap_dual_rate) return 'dream_art_dual';
+    if (r < cfg.face_swap_dual_rate + cfg.face_swap_self_rate) return 'dream_art_self';
+    return 'dream_art_plus_one';
+  }
+
   // Face-swap branch. With both self + a +1 the showcase share is higher
   // (face_swap_share_with_plus_one, default 0.9); self-only uses the base
   // face_swap_share (default 0.7). The dual/self/+1 split is unchanged —
@@ -241,6 +281,28 @@ export function mapDreamTypeToInputs(
     case 'face_swap_plus_one':
       return {
         mediumToken: 'dream_eligible_face_swap',
+        forceCastRole: 'plus_one',
+        forceComposition: 'character',
+      };
+    // Dream Art: cast the user (character composition) into an embodied medium —
+    // the render DRAWS them as the character (no face-swap), handled by the
+    // nightly embodied-character branch. The pool derives from per-medium flags
+    // (embodied && is_dream_eligible) inside resolveMediumFromDb.
+    case 'dream_art_dual':
+      return {
+        mediumToken: 'dream_eligible_dream_art',
+        forceCastRole: 'dual',
+        forceComposition: 'character',
+      };
+    case 'dream_art_self':
+      return {
+        mediumToken: 'dream_eligible_dream_art',
+        forceCastRole: 'self',
+        forceComposition: 'character',
+      };
+    case 'dream_art_plus_one':
+      return {
+        mediumToken: 'dream_eligible_dream_art',
         forceCastRole: 'plus_one',
         forceComposition: 'character',
       };

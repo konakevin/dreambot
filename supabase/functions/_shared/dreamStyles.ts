@@ -15,7 +15,6 @@ interface DbMediumRow {
   is_scene_only: boolean;
   is_scene_eligible: boolean;
   face_swaps: boolean;
-  nightly_skip: boolean;
   is_dream_eligible: boolean;
   character_render_mode: string;
   kontext_directive: string | null;
@@ -44,7 +43,6 @@ export interface ResolvedMedium {
    * "this medium can only render scenes, never characters"). */
   isSceneEligible: boolean;
   faceSwaps: boolean;
-  nightlySkip: boolean;
   isDreamEligible: boolean;
   characterRenderMode: 'natural' | 'embodied';
   kontextDirective: string | null;
@@ -108,7 +106,6 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     isSceneOnly: !!row.is_scene_only,
     isSceneEligible: !!row.is_scene_eligible,
     faceSwaps: row.face_swaps,
-    nightlySkip: !!row.nightly_skip,
     isDreamEligible: !!row.is_dream_eligible,
     characterRenderMode: (row.character_render_mode === 'embodied' ? 'embodied' : 'natural') as
       | 'natural'
@@ -139,7 +136,15 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
 }
 
 let cachedMediums: ResolvedMedium[] | null = null;
+let cachedMediumsAt = 0;
 let cachedVibes: ResolvedVibe[] | null = null;
+let cachedVibesAt = 0;
+// Module state persists for the ISOLATE lifetime (not per invocation) in the
+// Deno edge runtime — an uncapped cache serves stale medium/vibe rows (incl.
+// is_dream_eligible / is_active flags) long after a dashboard change. Short
+// TTL so catalog edits propagate within a minute (same fix as chaosTier's
+// config cache, 2026-07-11).
+const STYLES_CACHE_TTL_MS = 60_000;
 
 function getServiceClient() {
   return createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
@@ -154,12 +159,12 @@ function getServiceClient() {
  * is_bot_only=false — that filter only belongs in pickers, not in resolvers.
  */
 export async function fetchMediums(): Promise<ResolvedMedium[]> {
-  if (cachedMediums) return cachedMediums;
+  if (cachedMediums && Date.now() - cachedMediumsAt < STYLES_CACHE_TTL_MS) return cachedMediums;
   const sb = getServiceClient();
   const { data, error } = await sb
     .from('dream_mediums')
     .select(
-      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,nightly_skip,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models,scene_eligible_models,client_meta'
+      'key,label,directive,flux_fragment,is_character_only,is_scene_only,is_scene_eligible,face_swaps,is_dream_eligible,character_render_mode,kontext_directive,flux_dev_prompt_template,face_swap_directive,face_swap_flux_fragment,render_base,engine,allowed_models,scene_eligible_models,client_meta'
     )
     .or('is_active.eq.true,is_bot_only.eq.true');
   if (error) {
@@ -167,6 +172,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
     return [];
   }
   cachedMediums = ((data ?? []) as DbMediumRow[]).map(toMedium);
+  cachedMediumsAt = Date.now();
   return cachedMediums;
 }
 
@@ -174,7 +180,7 @@ export async function fetchMediums(): Promise<ResolvedMedium[]> {
  *  Queries the table directly (not the RPC) so we can pull is_dream_eligible.
  *  Migration 160 added the curation column. */
 export async function fetchVibes(): Promise<ResolvedVibe[]> {
-  if (cachedVibes) return cachedVibes;
+  if (cachedVibes && Date.now() - cachedVibesAt < STYLES_CACHE_TTL_MS) return cachedVibes;
   const sb = getServiceClient();
   const { data, error } = await sb
     .from('dream_vibes')
@@ -205,6 +211,7 @@ export async function fetchVibes(): Promise<ResolvedVibe[]> {
           : null,
     })
   );
+  cachedVibesAt = Date.now();
   return cachedVibes;
 }
 
@@ -347,9 +354,12 @@ export async function resolveMediumFromDb(
   // sharpening, and owner-reviewed photography swap batches read clean —
   // is_dream_eligible on the row is the remaining gate.
   if (key === 'dream_eligible_face_swap') {
-    const NIGHTLY_FACE_SWAP_INELIGIBLE = new Set(['hyperreal', 'render']);
+    // Single source of truth: a Real-Face medium is nightly-eligible iff
+    // is_dream_eligible && face_swaps && !is_scene_only. (The old hardcoded
+    // {hyperreal, render} exclusion is gone — both are deactivated +
+    // is_dream_eligible=false, so the flag filter already excludes them.)
     const eligibleKeys = mediums
-      .filter((m) => m.isDreamEligible && m.faceSwaps && !NIGHTLY_FACE_SWAP_INELIGIBLE.has(m.key))
+      .filter((m) => m.isDreamEligible && m.faceSwaps && !m.isSceneOnly)
       .map((m) => m.key);
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
@@ -420,6 +430,27 @@ export async function resolveMediumFromDb(
     const pool = filterRecent(subset, excludeRecent);
     const picked = pick(pool);
     console.log(`[dreamStyles] dream_eligible_embodied (${allowedKeys.join(',')}) -> ${picked}`);
+    return mediums.find((m) => m.key === picked)!;
+  }
+  // Dream Art (character-embodied) pool — the user is DRAWN AS a character in
+  // an embodied medium (no face swap; rendered by the nightly embodied-character
+  // branch). Single source of truth: any medium that is embodied AND
+  // is_dream_eligible. (Previously gated by an engine_config.dream_art_mediums
+  // csv that ignored is_dream_eligible — that dual-source drift is removed; the
+  // flag now tells the truth for every lane.)
+  if (key === 'dream_eligible_dream_art') {
+    const subset = mediums
+      .filter((m) => m.characterRenderMode === 'embodied' && m.isDreamEligible)
+      .map((m) => m.key);
+    if (subset.length === 0) {
+      console.warn(
+        '[dreamStyles] dream_eligible_dream_art pool empty; falling back to dream_eligible_face_swap'
+      );
+      return resolveMediumFromDb('dream_eligible_face_swap', excludeRecent);
+    }
+    const pool = filterRecent(subset, excludeRecent);
+    const picked = pick(pool);
+    console.log(`[dreamStyles] dream_eligible_dream_art -> ${picked}`);
     return mediums.find((m) => m.key === picked)!;
   }
   // Natural-only scene pool — used by epic_tiny composition (tiny character

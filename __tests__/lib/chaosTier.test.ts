@@ -43,7 +43,15 @@ const CFG: ChaosConfig = {
   face_swap_share_with_plus_one: 0.9,
   face_swap_dual_rate: 0.6,
   face_swap_self_rate: 0.2,
+  // Dream Art OFF in the base config — the existing roll/distribution tests
+  // assert the pre-dream-art behavior, and share=0 short-circuits before any
+  // Math.random() so their deterministic sequences are unchanged. A separate
+  // CFG_DA below turns it on to test the dream_art branch.
+  dream_art_share: 0,
 };
+
+// Dream Art enabled — used only by the dream_art describe block.
+const CFG_DA: ChaosConfig = { ...CFG, dream_art_share: 0.15 };
 
 describe('getChaosTier', () => {
   it('returns low for values below the low threshold', () => {
@@ -290,6 +298,84 @@ describe('mapDreamTypeToInputs', () => {
       forceComposition: 'pure_scene',
     });
   });
+
+  // Dream Art: cast the user (character composition) into an embodied medium.
+  // The token is flag-derived (embodied && is_dream_eligible resolved in
+  // dreamStyles) — no medium list is baked into the token anymore.
+  it('dream_art_dual → dream_art token, dual cast, character composition', () => {
+    expect(mapDreamTypeToInputs('dream_art_dual', 'mid', CFG)).toEqual({
+      mediumToken: 'dream_eligible_dream_art',
+      forceCastRole: 'dual',
+      forceComposition: 'character',
+    });
+  });
+  it('dream_art_self → dream_art token, self cast, character composition', () => {
+    expect(mapDreamTypeToInputs('dream_art_self', 'low', CFG)).toEqual({
+      mediumToken: 'dream_eligible_dream_art',
+      forceCastRole: 'self',
+      forceComposition: 'character',
+    });
+  });
+  it('dream_art_plus_one → dream_art token, plus_one cast, character composition', () => {
+    expect(mapDreamTypeToInputs('dream_art_plus_one', 'high', CFG)).toEqual({
+      mediumToken: 'dream_eligible_dream_art',
+      forceCastRole: 'plus_one',
+      forceComposition: 'character',
+    });
+  });
+});
+
+describe('rollNightlyDreamType — Dream Art branch', () => {
+  const seq = (...values: number[]) => {
+    let i = 0;
+    return jest.spyOn(Math, 'random').mockImplementation(() => values[i++ % values.length]);
+  };
+  afterEach(() => jest.restoreAllMocks());
+
+  it('fires before face-swap when the first roll is under dream_art_share', () => {
+    seq(0.1, 0.0); // 0.1 < 0.15 → dream_art; 0.0 < 0.6 → dual
+    expect(
+      rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'mid', cfg: CFG_DA })
+    ).toBe('dream_art_dual');
+  });
+
+  it('self-only casts self (no +1 split)', () => {
+    seq(0.1); // 0.1 < 0.15 → dream_art; no +1 → dream_art_self
+    expect(
+      rollNightlyDreamType({ hasSelf: true, hasPlusOne: false, tier: 'mid', cfg: CFG_DA })
+    ).toBe('dream_art_self');
+  });
+
+  it('cast split mirrors face-swap: 0.7 second roll → +1', () => {
+    seq(0.1, 0.9); // dream_art; 0.9 > 0.8 → plus_one
+    expect(
+      rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'mid', cfg: CFG_DA })
+    ).toBe('dream_art_plus_one');
+  });
+
+  it('does NOT fire when the first roll exceeds the share — falls through to face-swap', () => {
+    seq(0.5, 0.0, 0.0); // 0.5 > 0.15 (no dream_art); 0.0 < 0.9 face-swap; 0.0 < 0.6 dual
+    expect(
+      rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'mid', cfg: CFG_DA })
+    ).toBe('face_swap_dual');
+  });
+
+  it('never fires without a cast (needs a user to draw as a character)', () => {
+    seq(0.0, 0.99); // no-cast branch bypasses dream_art entirely
+    expect(
+      rollNightlyDreamType({ hasSelf: false, hasPlusOne: false, tier: 'high', cfg: CFG_DA })
+    ).toBe('embodied');
+  });
+
+  it('~15% of has-cast rolls become Dream Art (statistical)', () => {
+    let dreamArt = 0;
+    for (let i = 0; i < 5000; i++) {
+      const t = rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'low', cfg: CFG_DA });
+      if (t.startsWith('dream_art')) dreamArt++;
+    }
+    expect(dreamArt / 5000).toBeGreaterThan(0.11);
+    expect(dreamArt / 5000).toBeLessThan(0.19);
+  });
 });
 
 describe('distribution sanity (statistical, 5000 samples)', () => {
@@ -301,6 +387,9 @@ describe('distribution sanity (statistical, 5000 samples)', () => {
       pure_scene: 0,
       epic_tiny: 0,
       embodied: 0,
+      dream_art_self: 0,
+      dream_art_plus_one: 0,
+      dream_art_dual: 0,
     };
     for (let i = 0; i < 5000; i++) {
       const t = rollNightlyDreamType({ hasSelf: true, hasPlusOne: true, tier: 'low', cfg: CFG });

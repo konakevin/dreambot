@@ -77,7 +77,19 @@ export function buildDualBrief(input: CompilerInput): CompilerOutput {
 
   // ── Composition path: pick once, prepend at end via postProcess ──
   const dualPath = pickDualCompositionPath();
-  const realisticFaceTag = '';
+  // Stylized face-swap mediums (pencil today; fairytale/storybook/anime hit
+  // this too before moving to embodied) render the FEMALE with big
+  // anime/Disney eyes in the dual path, because the medium fragment's
+  // realistic-face lead sits in the prompt TAIL and loses to the
+  // cartoon-female prior. This injects a POSITIVE, per-character realistic-eye
+  // lock into the 2nd-token framing slot (highest CLIP weight) so BOTH faces
+  // stay photographic — the man already came out clean; this is for the woman
+  // (2026-07-10 QA). Only fires when applyFaceSwapOverride actually swapped the
+  // medium (i.e. a stylized face-swap medium); plain mediums keep it empty.
+  const realisticFaceTag =
+    medium !== rawMedium
+      ? 'both people are real adults with photographic lifelike faces, true-to-life natural human proportions, natural normal-sized eyes, and realistic natural body proportions, '
+      : '';
 
   // ── Gender front-load (2026-06-09 incident fix) ──
   // Deterministically front-load each side's gender from the STORED cast
