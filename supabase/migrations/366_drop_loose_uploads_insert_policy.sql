@@ -1,0 +1,21 @@
+-- 366_drop_loose_uploads_insert_policy.sql (2026-07-11)
+--
+-- Drop "Upload bucket policy 1va6avm_0" — a dashboard-wizard-created INSERT
+-- policy (the auto-generated name is the tell; it exists in no migration) that
+-- let any authenticated user write ANYWHERE under their own folder in the
+-- `uploads` bucket: root render paths (`<uid>/<ts>.png`), the `hq/` folder,
+-- anything. Found 2026-07-11 by a negative-control probe while fixing gallery
+-- publishing (migration 365).
+--
+-- After this drop, client writes to the uploads bucket are ONLY:
+--   • `<uid>/gallery/...` (migration 363 — the gallery-publish snapshot copies)
+-- Render/display/HQ paths become service-role-only, so a tampered client can't
+-- plant fake "render" files or burn storage quota outside its gallery.
+--
+-- Legacy dependency, verified dead in practice: lib/dreamApi.ts persistImage()
+-- uploads to `<uid>/<ts>.<ext>` as the user, but its only caller (saveDream)
+-- skips it whenever the render URL is already Supabase storage — which is
+-- always true in the queue era (renders persist server-side). If a straggler
+-- temp-URL path ever fires, saveDream throws loudly and Sentry will tell us.
+
+DROP POLICY IF EXISTS "Upload bucket policy 1va6avm_0" ON storage.objects;

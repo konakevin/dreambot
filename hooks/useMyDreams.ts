@@ -22,14 +22,14 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
     queryFn: async ({ pageParam }) => {
       const offset = pageParam as number;
       if (!userId) return { rows: [], offset, hasMore: false };
-      let query = supabase
-        .from('uploads')
-        .select(POST_SELECT)
-        .eq('user_id', userId)
-        // Dreams = individual generated images. Multi-image GALLERIES (media_count
-        // > 1, migration 356) are compositions, not raw dreams — they live in the
-        // Posts album only, and are never a pickable source for another gallery.
-        .lte('media_count', 1);
+      // Galleries (media_count > 1) live here EXACTLY like single dreams
+      // (Kevin 2026-07-11: "study how we do it for single posts and mimic"):
+      // All/Posted/Private by is_public, Public badge when live, and they show
+      // in the Posts album only while public. The no-gallery-inside-a-gallery
+      // rule is enforced by the PICKER (post/new filters media_count > 1), not
+      // by hiding galleries from this album — hiding them here made a
+      // private gallery invisible everywhere.
+      let query = supabase.from('uploads').select(POST_SELECT).eq('user_id', userId);
       // 'private' = unposted (not live on the feed); 'posted' = live on the feed.
       if (filter === 'private') query = query.eq('is_public', false);
       else if (filter === 'posted') query = query.eq('is_public', true);

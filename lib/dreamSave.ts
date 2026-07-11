@@ -96,3 +96,15 @@ export function pinToFeed(opts: {
     description: opts.description ?? null,
   });
 }
+
+/**
+ * Pin a fully-mapped post row to the feed — the gallery-post variant of
+ * pinToFeed. Galleries need the complete row (media[] + media_count) so the
+ * pinned card renders the carousel; the minimal pinToFeed shape would flatten
+ * the album to its cover. Without ANY pin, posting a gallery dropped the user
+ * onto a feed that never shows their own posts (get_feed excludes them) — the
+ * post "vanished" (Kevin 2026-07-11).
+ */
+export function pinPostRowToFeed(post: import('@/components/DreamCard').DreamPostItem) {
+  useFeedStore.getState().setPinnedPost(post);
+}

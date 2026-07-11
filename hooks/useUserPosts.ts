@@ -19,6 +19,9 @@ export function useUserPosts(enabled = true) {
         .from('uploads')
         .select(POST_SELECT)
         .eq('user_id', user!.id)
+        // PUBLIC only — even for the owner (intentional: this album is the
+        // public storefront). Private posts, galleries included, live in the
+        // Dreams album like every other private dream (Kevin 2026-07-11).
         .eq('is_public', true)
         // Pins first (migration 330) — see usePublicProfilePosts.
         .order('pinned_at', { ascending: false, nullsFirst: false })

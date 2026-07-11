@@ -989,6 +989,8 @@ export type Database = {
           basic_monthly_sparkle_bundle: number;
           chaos_high_threshold: number;
           chaos_low_threshold: number;
+          dream_art_mediums: string[];
+          dream_art_share: number;
           dream_queue_max_concurrent: number;
           dream_queue_max_concurrent_heavy: number;
           dream_queue_max_jobs_per_tick: number;
@@ -1053,6 +1055,8 @@ export type Database = {
           basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          dream_art_mediums?: string[];
+          dream_art_share?: number;
           dream_queue_max_concurrent?: number;
           dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
@@ -1117,6 +1121,8 @@ export type Database = {
           basic_monthly_sparkle_bundle?: number;
           chaos_high_threshold?: number;
           chaos_low_threshold?: number;
+          dream_art_mediums?: string[];
+          dream_art_share?: number;
           dream_queue_max_concurrent?: number;
           dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
@@ -2352,6 +2358,7 @@ export type Database = {
           image_url_hq: string | null;
           image_url_hq_generated_at: string | null;
           position: number;
+          source_upload_id: string | null;
           thumbhash: string | null;
           upload_id: string;
           width: number | null;
@@ -2365,6 +2372,7 @@ export type Database = {
           image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
           position: number;
+          source_upload_id?: string | null;
           thumbhash?: string | null;
           upload_id: string;
           width?: number | null;
@@ -2378,11 +2386,19 @@ export type Database = {
           image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
           position?: number;
+          source_upload_id?: string | null;
           thumbhash?: string | null;
           upload_id?: string;
           width?: number | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'upload_media_source_upload_id_fkey';
+            columns: ['source_upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'upload_media_upload_id_fkey';
             columns: ['upload_id'];
@@ -3008,6 +3024,13 @@ export type Database = {
       deny_follow_request: {
         Args: { p_requester_id: string };
         Returns: undefined;
+      };
+      describe_album_impact: {
+        Args: { p_source_ids: string[] };
+        Returns: {
+          albums_deleted: number;
+          albums_touched: number;
+        }[];
       };
       drain_pending_push_groups: { Args: never; Returns: undefined };
       dream_forensics: { Args: { p_job_id: string }; Returns: Json };

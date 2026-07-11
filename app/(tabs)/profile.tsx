@@ -94,19 +94,42 @@ export default function ProfileScreen() {
       return next;
     });
   }, []);
-  const handleBulkDelete = useCallback(() => {
+  const handleBulkDelete = useCallback(async () => {
     const count = gridSelectedIds.size;
     if (count === 0 || bulkDelete.isPending) return;
+    const ids = [...gridSelectedIds];
+
+    // Album-aware warning (migration 367): deleting a dream removes it from
+    // every album that references it, and empties (deletes) an album whose LAST
+    // remaining image this is. Tell the user before they pull the thread.
+    let albumLine = '';
+    try {
+      const { data } = await supabase.rpc('describe_album_impact', { p_source_ids: ids });
+      const r = Array.isArray(data) ? data[0] : data;
+      const touched = (r?.albums_touched as number) ?? 0;
+      const deleted = (r?.albums_deleted as number) ?? 0;
+      if (deleted > 0) {
+        albumLine =
+          deleted === touched
+            ? ` This is the last image in ${deleted === 1 ? 'an album' : `${deleted} albums`}, so ${deleted === 1 ? 'that album post' : 'those album posts'} will be deleted too.`
+            : ` It'll be removed from ${touched} album${touched === 1 ? '' : 's'}, and ${deleted} of them will be deleted (last image).`;
+      } else if (touched > 0) {
+        albumLine = ` It'll also be removed from ${touched} album post${touched === 1 ? '' : 's'}.`;
+      }
+    } catch {
+      // best-effort — a failed impact query never blocks the delete confirm.
+    }
+
     showAlert(
       `Delete ${count} dream${count === 1 ? '' : 's'}?`,
-      "They'll be removed everywhere, including the feed. This can't be undone.",
+      "They'll be removed everywhere, including the feed. This can't be undone." + albumLine,
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            bulkDelete.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+            bulkDelete.mutate(ids, { onSettled: exitGridSelection });
           },
         },
       ]

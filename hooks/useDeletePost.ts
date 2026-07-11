@@ -43,14 +43,21 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     .eq('id', uploadId)
     .single();
 
-  // Gallery posts (migration 356) own COPIED slide files under upload_media;
-  // the FK cascade removes the rows but not their storage — grab them here so
-  // deleting a gallery frees its own files (and, because the gallery owns
-  // copies, this never touches the source dreams). Empty for single posts.
+  // Media rows tell us what KIND of post this is (migration 367):
+  //  - none            → a single dream: it OWNS its files → clean them.
+  //  - source_upload_id set (any row) → a REFERENCE gallery: it owns NO files;
+  //    the members (and the host cover) point at SOURCE dreams' storage, so we
+  //    must NOT delete any storage here — the sources keep their files.
+  //  - all source_upload_id NULL → a LEGACY copied gallery (pre-367): it owns
+  //    copied files → clean the host + slide files as before.
   const { data: media } = await supabase
     .from('upload_media')
-    .select('image_url, image_url_display, image_url_hq')
+    .select('image_url, image_url_display, image_url_hq, source_upload_id')
     .eq('upload_id', uploadId);
+
+  const isReferenceGallery = (media ?? []).some(
+    (m) => (m.source_upload_id as string | null) != null
+  );
 
   if (isAdmin) {
     const { error } = await supabase.rpc(
@@ -63,9 +70,13 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
     if (error) throw error;
   }
 
-  // Clean up storage (fire-and-forget). Host base + HQ, plus every gallery
-  // slide variant. Dedup — the cover copy is referenced by both the host and
-  // upload_media[0].
+  // Reference galleries own no files — deleting their storage would nuke the
+  // SOURCE dreams. Skip cleanup entirely for them.
+  if (isReferenceGallery) return;
+
+  // Clean up storage (fire-and-forget). Single dream: host base + HQ. Legacy
+  // copied gallery: host + every copied slide variant (deduped — the cover
+  // copy is referenced by both the host and upload_media[0]).
   const paths = new Set<string>();
   const addPath = (url: string | null | undefined) => {
     if (!url) return;
@@ -250,9 +261,14 @@ export function useBulkMakePrivate() {
     mutationFn: async (uploadIds: string[]) => {
       const uid = useAuthStore.getState().user?.id;
       if (!uid) throw new Error('not signed in');
+      // created_at bump: going private surfaces the dream at the TOP of the
+      // Dreams album (created_at-ordered) instead of buried at its original
+      // generation date — same contract as the single-post toggle
+      // (photo/[id], 2026-07-11). posted_at stays untouched so a later
+      // re-publish restores the original feed position.
       const { error } = await supabase
         .from('uploads')
-        .update({ is_public: false })
+        .update({ is_public: false, created_at: new Date().toISOString() })
         .in('id', uploadIds)
         .eq('user_id', uid);
       if (error) throw error;

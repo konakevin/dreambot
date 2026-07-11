@@ -327,9 +327,19 @@ export default function PhotoDetailScreen() {
       };
       applyToCaches(newPublic);
 
+      // Going PRIVATE also bumps created_at → the dream surfaces at the TOP of
+      // the Dreams album (created_at-ordered) instead of buried at its original
+      // generation date — "I just moved this here" (Kevin 2026-07-11). Safe:
+      // feed scoring/decay runs on posted_at (untouched, so a later re-publish
+      // still restores the original feed position), and the private card's
+      // timestamp reading "now" matches the mental model.
       const { error } = await supabase
         .from('uploads')
-        .update({ is_public: newPublic })
+        .update(
+          newPublic
+            ? { is_public: true }
+            : { is_public: false, created_at: new Date().toISOString() }
+        )
         .eq('id', postId)
         .eq('user_id', user.id);
 

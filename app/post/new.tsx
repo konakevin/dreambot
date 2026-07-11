@@ -42,7 +42,9 @@ import { useMyDreams } from '@/hooks/useMyDreams';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useAuthStore } from '@/store/auth';
 import { publishGallery, type GallerySourceImage } from '@/lib/publishGallery';
-import { pinToFeed } from '@/lib/dreamSave';
+import { pinToFeed, pinPostRowToFeed } from '@/lib/dreamSave';
+import { BrandSpinner } from '@/components/BrandSpinner';
+import { POST_SELECT, mapToDreamPost, castRow } from '@/lib/mapPost';
 import { moderateText } from '@/lib/moderation';
 import { thumbnailUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -102,9 +104,13 @@ export default function NewPostScreen() {
       const { data: rows } = await supabase
         .from('uploads')
         .select(
-          'id,image_url,image_url_display,image_url_hq,thumbhash,caption,dream_medium,dream_vibe'
+          'id,image_url,image_url_display,image_url_hq,thumbhash,caption,dream_medium,dream_vibe,media_count'
         )
-        .in('id', preIds);
+        .in('id', preIds)
+        // No gallery inside a gallery — a gallery id arriving via the Dreams
+        // grid's bulk-Post pill is silently dropped (galleries now live in the
+        // Dreams album like singles, so they're selectable there).
+        .lte('media_count', 1);
       if (cancelled || !rows) return;
       const byId = new Map(rows.map((r) => [r.id as string, r]));
       const ordered = preIds
@@ -128,7 +134,13 @@ export default function NewPostScreen() {
   }, [preIds]);
 
   const dreams = useMemo(
-    () => (data?.pages ?? []).flatMap((p) => p.rows) as DreamPostItem[],
+    () =>
+      // Galleries live in the Dreams album now (like singles), but a gallery
+      // can't be source material for another gallery — filter them from the
+      // picker grid.
+      ((data?.pages ?? []).flatMap((p) => p.rows) as DreamPostItem[]).filter(
+        (d) => (d.media_count ?? 1) <= 1
+      ),
     [data]
   );
   const orderOf = useMemo(() => {
@@ -202,7 +214,29 @@ export default function NewPostScreen() {
           description: trimmed || null,
         });
       } else {
-        await publishGallery({ userId: user.id, images: selected, description: trimmed });
+        const { uploadId } = await publishGallery({
+          userId: user.id,
+          images: selected,
+          description: trimmed,
+        });
+        // Pin the new gallery to the top of the feed, same as the single-post
+        // branch — your own posts never appear in get_feed, so without a pin
+        // the fresh album is invisible on landing. Fetch the full host row so
+        // the pinned card renders the carousel (media[] + media_count); the
+        // pin is best-effort — a failed fetch must not fail the post.
+        const { data: hostRow } = await supabase
+          .from('uploads')
+          .select(POST_SELECT)
+          .eq('id', uploadId)
+          .single();
+        if (hostRow) {
+          pinPostRowToFeed({
+            ...mapToDreamPost(castRow(hostRow)),
+            is_public: true,
+            posted_at: new Date().toISOString(),
+            description: trimmed || null,
+          });
+        }
       }
 
       qc.invalidateQueries({ queryKey: ['userPosts'], refetchType: 'all' });
@@ -211,7 +245,10 @@ export default function NewPostScreen() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted', 'checkmark-circle');
       router.replace('/(tabs)');
-    } catch {
+    } catch (e) {
+      // Always log the real failure — a silent catch here hid a storage-copy
+      // outage entirely ("Failed to post" with zero diagnostics, 2026-07-11).
+      console.warn('[post/new] publish failed:', (e as Error)?.message ?? e);
       Toast.show('Failed to post', 'close-circle');
       setPosting(false);
     }
@@ -231,6 +268,9 @@ export default function NewPostScreen() {
             if (step === 'compose') return setStep('select');
             router.back();
           }}
+          // Locked while publishing — navigating away mid-snapshot would leave
+          // the in-flight post ownerless on screen (it still completes + toasts).
+          disabled={posting}
           activeOpacity={0.7}
         >
           <Text style={styles.cancelText}>
@@ -258,9 +298,17 @@ export default function NewPostScreen() {
             onPress={handlePost}
             disabled={posting}
             activeOpacity={0.7}
-            style={[styles.actionBtn, posting && styles.actionBtnDisabled]}
+            style={[styles.actionBtn, posting && styles.actionBtnPosting]}
           >
-            <Text style={styles.actionText}>{posting ? 'Posting...' : 'Post'}</Text>
+            {posting ? (
+              // Brand swirl while the two inserts land (reference-model publish
+              // is near-instant — no copies — so a plain spinner is honest).
+              <View style={styles.postingRow}>
+                <BrandSpinner size={16} />
+              </View>
+            ) : (
+              <Text style={styles.actionText}>Post</Text>
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -453,6 +501,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   actionBtnDisabled: { opacity: 0.4 },
+  // Working state — full-opacity pill (it's busy, not disabled) with a stable
+  // min width so swapping "Post" → spinner + count doesn't shift the header.
+  actionBtnPosting: { minWidth: 88, alignItems: 'center' },
+  postingRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   actionText: { color: '#FFFFFF', fontSize: fontScale(15), fontWeight: '700' },
   selDim: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(124,58,237,0.28)' },
   selBadge: {

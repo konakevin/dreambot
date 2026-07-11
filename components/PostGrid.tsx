@@ -81,6 +81,17 @@ export function PostGrid({
   selection,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
+  // Selection order (1-based) from the selected-ids Set's insertion order —
+  // drives the numbered badges (see renderItem). Rebuilt per toggle (each
+  // toggle produces a fresh Set).
+  const selectionOrder = useMemo(() => {
+    const m = new Map<string, number>();
+    if (selection) {
+      let i = 1;
+      for (const id of selection.selectedIds) m.set(id, i++);
+    }
+    return m;
+  }, [selection]);
   const [headerHeight, setHeaderHeight] = useState(0);
   // Mirror of headerHeight readable inside the onScroll callback without making
   // it a dependency (keeps the callback identity stable).
@@ -455,6 +466,11 @@ export function PostGrid({
                 ? {
                     active: selection.active,
                     selected: selection.selectedIds.has(item.id),
+                    // 1-based selection order (JS Sets iterate in insertion
+                    // order) — the badge shows the number and renumbers live
+                    // as tiles toggle, matching the gallery picker. This order
+                    // is exactly the album order bulk-Post hands to post/new.
+                    order: selectionOrder.get(item.id) ?? null,
                     onToggle: selection.onToggle,
                     onEnter: selection.onEnter,
                   }

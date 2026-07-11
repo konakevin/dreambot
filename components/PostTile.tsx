@@ -27,6 +27,10 @@ import { TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
 export interface PostTileSelection {
   active: boolean;
   selected: boolean;
+  /** 1-based selection order — shown in the badge instead of a checkmark so
+   *  multi-select reads like the gallery picker (order = album order for the
+   *  bulk-Post flow), renumbering live as tiles are toggled. */
+  order?: number | null;
   onToggle: (id: string) => void;
   onEnter: (id: string) => void;
 }
@@ -175,7 +179,12 @@ export const PostTile = memo(function PostTile({
           style={[styles.selectOverlay, selection.selected && styles.selectOverlaySelected]}
         >
           <View style={[styles.selectBadge, selection.selected && styles.selectBadgeOn]}>
-            {selection.selected && <Ionicons name="checkmark" size={13} color="#000000" />}
+            {selection.selected &&
+              (selection.order != null ? (
+                <Text style={styles.selectBadgeNum}>{selection.order}</Text>
+              ) : (
+                <Ionicons name="checkmark" size={13} color="#000000" />
+              ))}
           </View>
         </View>
       )}
@@ -338,5 +347,12 @@ const styles = StyleSheet.create({
   selectBadgeOn: {
     backgroundColor: colors.accent,
     borderColor: colors.accent,
+  },
+  // Selection-order number inside the badge — matches the gallery picker's
+  // selBadgeText (white 800) so the two multi-select surfaces read identically.
+  selectBadgeNum: {
+    color: '#FFFFFF',
+    fontSize: fontScale(12),
+    fontWeight: '800',
   },
 });
