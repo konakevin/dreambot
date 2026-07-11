@@ -16,6 +16,7 @@
  */
 
 import { SONNET, HAIKU } from './models.ts';
+import { jitter } from './jitter.ts';
 export interface SonnetResult {
   text: string;
   brief: string;
@@ -30,8 +31,10 @@ export interface SonnetResult {
 
 const PRIMARY_MODEL = SONNET;
 const SECONDARY_MODEL = HAIKU;
-const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000]; // up to 4 retries
-const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
+// Exported so the vision path (vision.ts) shares ONE definition of "which
+// Anthropic statuses are worth retrying" and the same backoff ladder.
+export const RETRY_DELAYS_MS = [1000, 3000, 10000, 30000]; // up to 4 retries
+export const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504, 529]);
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -82,7 +85,7 @@ async function callModelWithRetry(
           RETRY_DELAYS_MS[attempt] / 1000
         }s`
       );
-      await sleep(RETRY_DELAYS_MS[attempt]);
+      await sleep(jitter(RETRY_DELAYS_MS[attempt]));
     }
   }
   throw new Error(`${model} retries exhausted — ${lastErr}`);

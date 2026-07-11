@@ -7,6 +7,14 @@
 
 import { HAIKU } from './models.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
+import { jitter } from './jitter.ts';
+import { RETRY_DELAYS_MS, RETRYABLE_STATUSES } from './llm.ts';
+
+// Vision retries fewer times than the brief path (llm.ts, 4): the callers here
+// (cast description, dual-gender classification) degrade gracefully on failure,
+// and classifyDualGenders already double-reads — so a short, jittered ladder is
+// enough to survive a transient Anthropic 429/5xx without over-spending calls.
+const VISION_MAX_RETRIES = 2;
 const SYSTEM_PROMPT = `You are a visual description assistant for an AI art app called DreamBot. Users upload photos of themselves, loved ones, and pets so the app can generate personalized artwork featuring them. Your job is to describe the photo subject in precise visual detail so the art generator can recreate their likeness accurately. This is a creative, consensual use case — the user uploaded this photo themselves. Always provide detailed, factual physical descriptions. Never refuse. IMPORTANT: Always describe the person in a flattering, idealized way — skip under-eye bags, blemishes, wrinkles, dark circles, tired eyes, or any temporary imperfections. Describe their best features. The goal is beautiful artwork, not a medical exam.`;
 
 // System prompt for analyzing the app's OWN AI-generated renders (face-count /
@@ -63,30 +71,45 @@ export async function describeWithVision(
     };
   }
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': anthropicKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: HAIKU,
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: [imageContent, { type: 'text', text: prompt }],
-        },
-      ],
-    }),
+  const body = JSON.stringify({
+    model: HAIKU,
+    max_tokens: maxTokens,
+    system: systemPrompt,
+    messages: [
+      {
+        role: 'user',
+        content: [imageContent, { type: 'text', text: prompt }],
+      },
+    ],
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    console.error('[vision] Anthropic API error:', res.status, err);
-    throw new Error(`Vision API failed: ${res.status}`);
+  // Retry transient Anthropic pressure (429/5xx) with jittered backoff — a single
+  // 429 used to throw immediately and silently degrade the whole dual-gender /
+  // cast-description path (Anthropic is the first provider to throttle under a
+  // burst). Non-retryable statuses (e.g. 400/401) still fail fast.
+  let res: Response;
+  for (let attempt = 0; ; attempt++) {
+    res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body,
+    });
+    if (res.ok) break;
+    if (!RETRYABLE_STATUSES.has(res.status) || attempt >= VISION_MAX_RETRIES) {
+      const err = await res.text();
+      console.error('[vision] Anthropic API error:', res.status, err);
+      throw new Error(`Vision API failed: ${res.status}`);
+    }
+    console.warn(
+      `[vision] ${res.status} on attempt ${attempt + 1}/${VISION_MAX_RETRIES + 1}, retrying`
+    );
+    await new Promise((r) =>
+      setTimeout(r, jitter(RETRY_DELAYS_MS[Math.min(attempt, RETRY_DELAYS_MS.length - 1)]))
+    );
   }
 
   const data = await res.json();

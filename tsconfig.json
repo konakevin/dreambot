@@ -39,6 +39,7 @@
     "__tests__/lib/newSceneDirective.test.ts",
     "__tests__/lib/dreamQueueWeight.test.ts",
     "__tests__/lib/generateImage.test.ts",
+    "__tests__/lib/jitter.test.ts",
     "__tests__/lib/firstDreamTiers.test.ts",
     "__tests__/lib/firstDreamReady.test.ts",
     "__tests__/lib/singleSwapGuard.test.ts",

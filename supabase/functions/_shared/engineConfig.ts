@@ -78,7 +78,13 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
   petWords: DEFAULT_PET_WORDS,
   dreamQueueMaxConcurrent: 40,
-  dreamQueueMaxConcurrentHeavy: 15,
+  // HEAVY (dual/face-swap) cap default = 10, the load-tested ceiling of ONE
+  // face-swap-dual Fly machine (2GB/1vCPU): 10 = clean, 15 = exhausts/OOMs it
+  // (QUEUE_WORKERS_REFACTOR.md). The live engine_config row is 10; this fallback
+  // was 15 — a latent landmine that would over-admit into the single machine if
+  // the row were ever reset/missing. Aligned to 10 (2026-07-11). To raise real
+  // heavy throughput, `fly scale count N` FIRST, then set the row to ~10×N.
+  dreamQueueMaxConcurrentHeavy: 10,
   dreamQueueMaxJobsPerTick: 10,
   newSceneMaxPeople: 3,
   newScenePriceStandard: 3,

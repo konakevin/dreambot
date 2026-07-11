@@ -15,6 +15,7 @@
 import { pickModel } from './modelPicker.ts';
 import { generateOpenAIImage, isOpenAIModel } from './providers/openai.ts';
 import { generateGeminiImage, isGeminiModel } from './providers/gemini.ts';
+import { jitter } from './jitter.ts';
 
 export interface GenerateImageResult {
   url: string;
@@ -79,6 +80,15 @@ function isExhausted429(msg: string): boolean {
   return /rate-limited \(429\) after/i.test(msg);
 }
 
+/** Replicate is erroring our POLL GETs (429/5xx), not the prediction — the poll
+ *  loop bailed EARLY (budget intact), so unlike a genuine 90s poll TIMEOUT this
+ *  is safe to cross-provider-failover. Retrying the SAME model's throttled
+ *  predictions endpoint would just re-throttle, so it skips the same-model
+ *  retry and goes straight to the fallback (like an exhausted 429). */
+function isPollTransportFailure(msg: string): boolean {
+  return /poll unavailable/i.test(msg);
+}
+
 /** Capped/broke provider account — retrying the SAME provider is pointless;
  *  go straight to the cross-provider fallback. */
 function isBillingFailure(msg: string): boolean {
@@ -126,13 +136,16 @@ export async function generateImage(
     const msg = (err as Error).message || '';
     const billing = isBillingFailure(msg);
     const exhausted429 = isExhausted429(msg);
-    if (!billing && !exhausted429 && !isSubmitPhaseFailure(msg)) throw err;
+    const pollFail = isPollTransportFailure(msg);
+    if (!billing && !exhausted429 && !pollFail && !isSubmitPhaseFailure(msg)) throw err;
 
     // Transient (503 spike / 500 blip): one same-model retry after a short
     // backoff — capacity spikes often clear in seconds. Skipped for billing
-    // caps (same provider = same cap) and exhausted 429s (already retried).
-    if (!billing && !exhausted429) {
-      await new Promise((r) => setTimeout(r, FAILOVER_BACKOFF_MS));
+    // caps (same provider = same cap), exhausted 429s (already retried), and
+    // poll-transport failures (the same model's poll is throttled → retrying it
+    // just re-throttles; go straight to the cross-provider fallback).
+    if (!billing && !exhausted429 && !pollFail) {
+      await new Promise((r) => setTimeout(r, jitter(FAILOVER_BACKOFF_MS)));
       try {
         const retried = await generateWithNsfwRetries(
           mode,
@@ -349,7 +362,7 @@ async function generateImageOnce(
     }
     const json = await res.json().catch(() => ({}));
     const retryAfter = json.retry_after ?? 6;
-    await new Promise((r) => setTimeout(r, retryAfter * 1000));
+    await new Promise((r) => setTimeout(r, jitter(retryAfter * 1000)));
     // Preserve outputFormat (the old call dropped it → a JPEG-required dual-swap
     // render would have retried as PNG and risked 546) + carry the retry count.
     return generateImageOnce(
@@ -394,11 +407,30 @@ async function generateImageOnce(
   const maxPolls = mode === 'flux-kontext' ? 30 : 60;
   const intervalMs = mode === 'flux-kontext' ? 2000 : 1500;
 
+  // A throttled/5xx poll GET is Replicate erroring OUR polls — NOT the prediction
+  // "still processing". The old loop swallowed a non-2xx poll as pending and
+  // waited out the entire ~90s budget → a `Generation timed out` with no
+  // failover. We tolerate a lone blip but bail after N CONSECUTIVE poll errors
+  // (~a few seconds in, budget intact) with a failover-eligible error, so a
+  // Replicate brownout cross-provider-fails-over fast instead of eating 90s.
+  let consecutivePollErrors = 0;
+  const MAX_CONSECUTIVE_POLL_ERRORS = 3;
+
   for (let i = 0; i < maxPolls; i++) {
     await new Promise((r) => setTimeout(r, intervalMs));
     const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${data.id}`, {
       headers: { Authorization: `Bearer ${replicateToken}` },
     });
+    if (!pollRes.ok) {
+      consecutivePollErrors++;
+      if (consecutivePollErrors >= MAX_CONSECUTIVE_POLL_ERRORS) {
+        throw new Error(
+          `Replicate poll unavailable (${pollRes.status}) after ${consecutivePollErrors} attempts`
+        );
+      }
+      continue; // the top-of-loop interval is the backoff before the next poll
+    }
+    consecutivePollErrors = 0;
     const pollData = await pollRes.json();
     if (pollData.status === 'succeeded') {
       const outUrl = typeof pollData.output === 'string' ? pollData.output : pollData.output?.[0];

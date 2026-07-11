@@ -27,6 +27,7 @@ import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
+import { jitter } from '../_shared/jitter.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -400,7 +401,10 @@ Deno.serve(async (req) => {
 
           // Exponential backoff: push created_at into the future so the claim
           // RPC's `created_at <= now()` gate holds the job until the delay elapses.
-          const backoffMs = BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)];
+          // Jitter the backoff so a wave of jobs that all failed at the same
+          // instant (a provider brownout) don't re-queue to the SAME retry time
+          // and thundering-herd the provider again when they drain together.
+          const backoffMs = jitter(BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)]);
           const retryAt = new Date(Date.now() + backoffMs).toISOString();
           await supabase
             .from('dream_queue')
