@@ -478,6 +478,7 @@ export default function CreateScreen() {
     // the "Surprise Me always becomes Watercolor" bug (2026-07-06): the token
     // isn't in restyleMediumKeys, so this effect instantly overwrote it.
     if (
+      config.selectedMedium === 'surprise_me' ||
       config.selectedMedium === 'surprise_me_face' ||
       config.selectedMedium === 'surprise_me_art'
     ) {
@@ -490,7 +491,9 @@ export default function CreateScreen() {
   }, [isRestyle, config.selectedMedium, restyleKeysSig, setMedium]);
 
   const isSurpriseMedium =
-    config.selectedMedium === 'surprise_me_face' || config.selectedMedium === 'surprise_me_art';
+    config.selectedMedium === 'surprise_me' ||
+    config.selectedMedium === 'surprise_me_face' ||
+    config.selectedMedium === 'surprise_me_art';
   const mediumLabel = isSurpriseMedium
     ? 'Surprise Me'
     : (mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium);
@@ -588,8 +591,15 @@ export default function CreateScreen() {
   // Whether the selected medium face-swaps (composites real face into scene)
   const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
-    ? config.selectedMedium === 'surprise_me_face'
+    ? config.selectedMedium !== 'surprise_me_art' // art-typed → art; face-typed + unified → face
     : (selectedMediumRow?.face_swaps ?? true);
+  // The unified Surprise Me rolls across ALL mediums, so it has no single
+  // FACE / DREAM ART identity → hide the badge for it. A concrete medium (or a
+  // legacy typed surprise) still shows its badge.
+  const showMediumBadge =
+    config.selectedMedium === 'surprise_me_face' ||
+    config.selectedMedium === 'surprise_me_art' ||
+    !!selectedMediumRow;
   // Live cast detection on the prompt — powers the face lamp on the Medium
   // label. Client mirror of the engine's detector (lib/selfInsertDetect.ts)
   // fed the same live-tunable engine_config word lists, so the indicator and
@@ -1436,7 +1446,7 @@ export default function CreateScreen() {
                         </Text>
                         {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
                         so the medium's type is always visible on the picker. */}
-                        {(isSurpriseMedium || selectedMediumRow) && (
+                        {showMediumBadge && (
                           <View
                             style={{
                               paddingHorizontal: 5,
@@ -1458,7 +1468,7 @@ export default function CreateScreen() {
                                 letterSpacing: 0.5,
                               }}
                             >
-                              {mediumFaceSwaps ? 'face' : 'art'}
+                              {mediumFaceSwaps ? 'Face' : 'Dream Art'}
                             </Text>
                           </View>
                         )}
@@ -1665,7 +1675,6 @@ export default function CreateScreen() {
         }}
         onClose={() => setPickerType(null)}
         options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
-        mediumIsFace={mediumFaceSwaps}
       />
 
       {/* Photo fullscreen preview */}

@@ -105,7 +105,9 @@ export default function DreamRevealScreen() {
   // don't tell them it's Watercolor). Creator-only by nature (their own reveal).
   const prettify = (k: string) => k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   const mediumWasSurprise =
-    config.selectedMedium === 'surprise_me_face' || config.selectedMedium === 'surprise_me_art';
+    config.selectedMedium === 'surprise_me' ||
+    config.selectedMedium === 'surprise_me_face' ||
+    config.selectedMedium === 'surprise_me_art';
   const vibeWasSurprise = config.selectedVibe === 'surprise_me';
   const revealParts: string[] = [];
   if (mediumWasSurprise && result.resolvedMedium) {

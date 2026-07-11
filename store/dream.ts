@@ -149,7 +149,7 @@ const INITIAL_CONFIG: DreamConfig = {
   // can toggle to 'restyle'.
   photoStyle: 'new_scene',
   newSceneTier: 'standard',
-  selectedMedium: 'surprise_me_face',
+  selectedMedium: 'surprise_me',
   selectedVibe: 'surprise_me',
   userPrompt: '',
   stylePrompt: null,

@@ -133,10 +133,22 @@ export function useDreamCreate() {
 
       const { config } = useDreamStore.getState();
 
-      // Resolve surprise_me_face / surprise_me_art to a concrete medium key
+      // Resolve a Surprise Me token to a concrete medium key. The unified
+      // `surprise_me` rolls across ALL mediums; the legacy typed tokens
+      // (surprise_me_face / surprise_me_art) still scope to their family so any
+      // value persisted before the single-Surprise redesign keeps working.
       let resolvedMediumKey = config.selectedMedium;
-      if (resolvedMediumKey === 'surprise_me_face' || resolvedMediumKey === 'surprise_me_art') {
-        const wantFace = resolvedMediumKey === 'surprise_me_face';
+      if (
+        resolvedMediumKey === 'surprise_me' ||
+        resolvedMediumKey === 'surprise_me_face' ||
+        resolvedMediumKey === 'surprise_me_art'
+      ) {
+        const wantFace =
+          resolvedMediumKey === 'surprise_me_face'
+            ? true
+            : resolvedMediumKey === 'surprise_me_art'
+              ? false
+              : null; // null = unified surprise_me → roll every medium
         const cachedMediums = queryClient.getQueryData<DreamMedium[]>(['dreamMediums']) ?? [];
         // RESTYLE rolls only restyle-eligible mediums (client_meta.restyle_enabled,
         // migration 294 — most mediums transform badly), and excludes the
@@ -153,9 +165,7 @@ export function useDreamCreate() {
                 )
             )
           : cachedMediums;
-        const pool = base.filter((m) =>
-          wantFace ? m.face_swaps === true : m.face_swaps === false
-        );
+        const pool = wantFace === null ? base : base.filter((m) => m.face_swaps === wantFace);
         // Restyle's face/art split can leave an empty side — fall back to the
         // whole eligible base rather than a token the server can't scope.
         const rollFrom = pool.length > 0 ? pool : base;
