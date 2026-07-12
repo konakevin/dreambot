@@ -560,11 +560,14 @@ export default function SearchExploreScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={10}
           removeClippedSubviews
-          // Native spinner hidden — the BrandSpinner overlay below the search
-          // box is the visual (same treatment as home/profile pulls).
+          // Native spinner suppressed — the BrandSpinner overlay below the
+          // search box is the only visual. `refreshing` pinned FALSE so iOS
+          // never draws its native spinner; tintColor="transparent" no longer
+          // hides it under Fabric/RN 0.81 (react-native#56343). onRefresh still
+          // fires on pull; isPulling drives the BrandSpinner above.
           refreshControl={
             <RefreshControl
-              refreshing={isPulling && !isFetchingNextPage}
+              refreshing={false}
               onRefresh={handlePullToRefresh}
               tintColor="transparent"
               progressViewOffset={overlayHeight}

@@ -416,14 +416,16 @@ export function PostGrid({
         maxToRenderPerBatch={6}
         initialNumToRender={12}
         removeClippedSubviews={false}
-        // Native spinner hidden — the BrandSpinner overlay below is the visual
-        // (the RefreshControl still owns the pull gesture + held-open gap).
+        // Native spinner suppressed — the BrandSpinner overlay below is the ONLY
+        // visual. `refreshing` is pinned FALSE (not isPulling) on purpose: iOS
+        // only draws the native spinner while refreshing===true, so keeping it
+        // false means it never appears. tintColor="transparent" USED to hide it,
+        // but the New Architecture (Fabric, RN 0.81) ignores tintColor on
+        // RefreshControl (facebook/react-native#56343) → iOS rendered its default
+        // gray spinner alongside ours (the double-spinner, 2026-07-11). onRefresh
+        // still fires on pull; isPulling still drives the BrandSpinner.
         refreshControl={
-          <RefreshControl
-            refreshing={isPulling}
-            onRefresh={handleRefresh}
-            tintColor="transparent"
-          />
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} tintColor="transparent" />
         }
         ListHeaderComponent={
           ListHeaderComponent ? (

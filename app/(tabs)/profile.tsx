@@ -878,12 +878,12 @@ export default function ProfileScreen() {
         key="users"
         ref={userListRef}
         data={listData}
+        // `refreshing` pinned FALSE so iOS never draws its native spinner (the
+        // BrandSpinner overlay below is the only visual). tintColor="transparent"
+        // no longer hides it under Fabric/RN 0.81 (react-native#56343), so we
+        // suppress via the refreshing flag instead. onRefresh still fires on pull.
         refreshControl={
-          <RefreshControl
-            refreshing={isPulling}
-            onRefresh={handleRefresh}
-            tintColor="transparent"
-          />
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} tintColor="transparent" />
         }
         keyExtractor={(item) => item.id}
         ListHeaderComponent={header}
