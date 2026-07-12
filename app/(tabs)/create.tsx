@@ -975,6 +975,133 @@ export default function CreateScreen() {
                 </View>
               )}
 
+              {/* Style + Vibe — the PRIMARY, top-level selects (medium-first,
+              2026-07-12). Moved ABOVE the model picker so the user picks the look
+              first and the AI Model list curates to it (DreamSmart). Sits OUTSIDE
+              the keyboard-fold container so the style stays visible while typing.
+              Shown for the DreamBot route and all photo dreams; Vibe is hidden for
+              Restyle (Kontext img2img, medium-only); Direct text dreams hide both. */}
+              {!effectiveExactPrompt && (
+                <View className="flex-row gap-3 mb-4">
+                  <View className="flex-1">
+                    <View className="flex-row items-center mb-1.5 ml-1">
+                      {/* User-facing label is "Style" (2026-07-11 rename —
+                      "medium" is art jargon and half the catalog are aesthetics,
+                      not mediums). INTERNAL naming stays "medium" everywhere:
+                      keys, columns, types, analytics. Display copy only. */}
+                      <FormLabel>Style</FormLabel>
+                      {/* Live face-swap lamp. Gray = no cast reference in the
+                      prompt; lit = this dream casts YOU, colored by the medium
+                      family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
+                      colors from the medium picker). New Scene photo dreams are
+                      always lit. Hidden for Restyle (img2img — never swaps; the
+                      Direct case is already excluded by this section's guard).
+                      Tap opens the face-vs-art teaching sheet. */}
+                      {!isRestyle && (
+                        <TouchableOpacity
+                          onPress={handleModeInfo}
+                          activeOpacity={0.7}
+                          hitSlop={10}
+                          className="ml-1.5"
+                        >
+                          <Ionicons
+                            name={faceSwapLit ? 'happy' : 'happy-outline'}
+                            size={15}
+                            color={
+                              faceSwapLit
+                                ? mediumFaceSwaps
+                                  ? MEDIUM_BADGE.face.color
+                                  : MEDIUM_BADGE.art.color
+                                : (colors.textMuted ?? colors.textSecondary)
+                            }
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                      onPress={openMediumPicker}
+                      activeOpacity={0.7}
+                    >
+                      <View className="flex-row items-center gap-1.5 flex-1 mr-1">
+                        <Text
+                          className="text-sm font-semibold"
+                          style={{ color: colors.textPrimary }}
+                          numberOfLines={1}
+                        >
+                          {mediumLabel}
+                        </Text>
+                        {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
+                        so the medium's type is always visible on the picker. */}
+                        {showMediumBadge && (
+                          <View
+                            style={{
+                              paddingHorizontal: 5,
+                              paddingVertical: verticalScale(1),
+                              borderRadius: 5,
+                              backgroundColor: mediumFaceSwaps
+                                ? MEDIUM_BADGE.face.bg
+                                : MEDIUM_BADGE.art.bg,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: fontScale(8),
+                                fontWeight: '700',
+                                color: mediumFaceSwaps
+                                  ? MEDIUM_BADGE.face.color
+                                  : MEDIUM_BADGE.art.color,
+                                textTransform: 'uppercase',
+                                letterSpacing: 0.5,
+                              }}
+                            >
+                              {mediumFaceSwaps ? 'Face' : 'Dream Art'}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Vibe — shown for Restyle too; the selected vibe modulates the
+                  restyle (Kevin's choice to keep vibe applying). */}
+                  <View className="flex-1">
+                    <View className="mb-1.5 ml-1">
+                      <FormLabel>Vibe</FormLabel>
+                    </View>
+                    <TouchableOpacity
+                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      }}
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        setPickerType('vibe');
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        className="text-sm font-semibold"
+                        style={{ color: colors.textPrimary }}
+                        numberOfLines={1}
+                      >
+                        {vibeLabel}
+                      </Text>
+                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+
               {/* ── Collapsible controls ─────────────────────────────────────
               Everything inside folds in lockstep with the keyboard (UI-thread
               progress interpolation, see hooks above). Both states stay
@@ -1453,131 +1580,6 @@ export default function CreateScreen() {
               {isRestyle && !restylePoolManaged && (
                 <View className="mb-4">
                   <RestyleModelPicker onChange={setRestyleModelId} />
-                </View>
-              )}
-
-              {/* Medium/Vibe pills (engine directives). Shown for the DreamBot route
-              AND whenever a photo is attached (photo dreams always use the
-              engine). Vibe is hidden for Restyle — that path is a Kontext img2img
-              edit driven by the medium only. Direct text dreams hide both. */}
-              {!effectiveExactPrompt && (
-                <View className="flex-row gap-3 mb-4">
-                  <View className="flex-1">
-                    <View className="flex-row items-center mb-1.5 ml-1">
-                      {/* User-facing label is "Style" (2026-07-11 rename —
-                      "medium" is art jargon and half the catalog are aesthetics,
-                      not mediums). INTERNAL naming stays "medium" everywhere:
-                      keys, columns, types, analytics. Display copy only. */}
-                      <FormLabel>Style</FormLabel>
-                      {/* Live face-swap lamp. Gray = no cast reference in the
-                      prompt; lit = this dream casts YOU, colored by the medium
-                      family (Real Face teal / Dream Art pink — the MEDIUM_BADGE
-                      colors from the medium picker). New Scene photo dreams are
-                      always lit. Hidden for Restyle (img2img — never swaps; the
-                      Direct case is already excluded by this section's guard).
-                      Tap opens the face-vs-art teaching sheet. */}
-                      {!isRestyle && (
-                        <TouchableOpacity
-                          onPress={handleModeInfo}
-                          activeOpacity={0.7}
-                          hitSlop={10}
-                          className="ml-1.5"
-                        >
-                          <Ionicons
-                            name={faceSwapLit ? 'happy' : 'happy-outline'}
-                            size={15}
-                            color={
-                              faceSwapLit
-                                ? mediumFaceSwaps
-                                  ? MEDIUM_BADGE.face.color
-                                  : MEDIUM_BADGE.art.color
-                                : (colors.textMuted ?? colors.textSecondary)
-                            }
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                    <TouchableOpacity
-                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }}
-                      onPress={openMediumPicker}
-                      activeOpacity={0.7}
-                    >
-                      <View className="flex-row items-center gap-1.5 flex-1 mr-1">
-                        <Text
-                          className="text-sm font-semibold"
-                          style={{ color: colors.textPrimary }}
-                          numberOfLines={1}
-                        >
-                          {mediumLabel}
-                        </Text>
-                        {/* FACE/ART tag — shown in ALL modes (text, New Scene, Restyle)
-                        so the medium's type is always visible on the picker. */}
-                        {showMediumBadge && (
-                          <View
-                            style={{
-                              paddingHorizontal: 5,
-                              paddingVertical: verticalScale(1),
-                              borderRadius: 5,
-                              backgroundColor: mediumFaceSwaps
-                                ? MEDIUM_BADGE.face.bg
-                                : MEDIUM_BADGE.art.bg,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontSize: fontScale(8),
-                                fontWeight: '700',
-                                color: mediumFaceSwaps
-                                  ? MEDIUM_BADGE.face.color
-                                  : MEDIUM_BADGE.art.color,
-                                textTransform: 'uppercase',
-                                letterSpacing: 0.5,
-                              }}
-                            >
-                              {mediumFaceSwaps ? 'Face' : 'Dream Art'}
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* Vibe — shown for Restyle too; the selected vibe modulates the
-                  restyle (Kevin's choice to keep vibe applying). */}
-                  <View className="flex-1">
-                    <View className="mb-1.5 ml-1">
-                      <FormLabel>Vibe</FormLabel>
-                    </View>
-                    <TouchableOpacity
-                      className="flex-row items-center justify-between px-4 py-3 rounded-xl"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }}
-                      onPress={() => {
-                        Keyboard.dismiss();
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        setPickerType('vibe');
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        className="text-sm font-semibold"
-                        style={{ color: colors.textPrimary }}
-                        numberOfLines={1}
-                      >
-                        {vibeLabel}
-                      </Text>
-                      <Ionicons name="chevron-down" size={14} color={colors.textSecondary} />
-                    </TouchableOpacity>
-                  </View>
                 </View>
               )}
 
