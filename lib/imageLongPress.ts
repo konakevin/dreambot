@@ -322,6 +322,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // row 3 on albums to row 5 on singles because Save-in-HD / Dream-this-again
   // shifted it down). Anchoring it above that block keeps it fixed.
   if (opts.onToggleVisibility) {
+    const toggle = opts.onToggleVisibility;
     const privateLabel = opts.wasPosted ? 'Make public' : 'Post';
     rows.push({
       key: 'visibility',
@@ -332,7 +333,19 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
           ? 'earth-outline'
           : 'add-circle-outline',
       group: 'primary',
-      onPress: opts.onToggleVisibility,
+      // Make-private comes off the public feed → confirm first (going public /
+      // posting doesn't need one; it's not a takedown).
+      onPress: opts.isPublic
+        ? () =>
+            showAlert(
+              'Make this dream private?',
+              "It'll come off the public feed. You can post it again anytime.",
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Make Private', onPress: toggle },
+              ]
+            )
+        : toggle,
     });
   }
 
@@ -488,10 +501,10 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
-  // Delete — destructive. Single dream: the red trash row (existing behavior).
-  // Album: "Delete Album" DELETES the album AND its child images ("the album
-  // owns its images — as the album goes, so go its children", Kevin
-  // 2026-07-11), behind a confirm that spells out the image deletion.
+  // Delete — destructive, ALWAYS behind a confirm (delete is irreversible).
+  // Single dream: "Delete this dream?". Album: "Delete Album" deletes the album
+  // AND its child images ("the album owns its images — as the album goes, so go
+  // its children", Kevin 2026-07-11), with a confirm that spells that out.
   if (opts.onDelete) {
     const onDelete = opts.onDelete;
     rows.push({
@@ -513,7 +526,11 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
                 { text: 'Delete', style: 'destructive', onPress: onDelete },
               ]
             )
-        : onDelete,
+        : () =>
+            showAlert('Delete this dream?', "It'll be gone for good. This can't be undone.", [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Delete', style: 'destructive', onPress: onDelete },
+            ]),
     });
   }
 

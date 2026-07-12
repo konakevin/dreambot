@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { BRAND_GRADIENT } from '@/components/GradientTitle';
-import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 // Primary dialog button = the soft purple at the gradient's left end (matches the
 // solid Dream button). The full brand gradient is reserved for one-shot
@@ -135,7 +135,12 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                     {isDefault ? (
                       // Primary action = solid soft-purple (matches the Dream button).
                       <View style={[styles.fill, styles.buttonDefault]}>
-                        <Text style={[styles.buttonText, styles.buttonTextDefault]}>
+                        <Text
+                          style={[styles.buttonText, styles.buttonTextDefault]}
+                          numberOfLines={1}
+                          adjustsFontSizeToFit
+                          minimumFontScale={0.8}
+                        >
                           {btn.text}
                         </Text>
                       </View>
@@ -153,6 +158,9 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                             styles.buttonText,
                             btn.style === 'cancel' && styles.buttonTextCancel,
                           ]}
+                          numberOfLines={1}
+                          adjustsFontSizeToFit
+                          minimumFontScale={0.8}
                         >
                           {btn.text}
                         </Text>
@@ -175,7 +183,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 40,
+    // Less horizontal squeeze so the card (and its side-by-side buttons) has
+    // room on narrow devices; generous vertical still keeps it centered.
+    paddingHorizontal: horizontalScale(20),
+    paddingVertical: verticalScale(40),
   },
   card: {
     width: '100%',
@@ -246,7 +257,7 @@ const styles = StyleSheet.create({
   // Inner fill (gradient or solid) — owns the padding + centering.
   fill: {
     paddingVertical: verticalScale(13),
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(12),
     alignItems: 'center',
     justifyContent: 'center',
   },
