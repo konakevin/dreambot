@@ -121,8 +121,18 @@ export function PostGrid({
   const hashtag = source.type === 'hashtag' ? source.tag : '';
 
   const dreamsFilter = source.type === 'dreams' ? (source.dreamsFilter ?? 'all') : 'all';
-  const ownQuery = useUserPosts(isOwn_);
-  const savedQuery = useFavoritePosts(isSaved);
+  // Keep the owner's Posts + Saved grids ENABLED across ALL of their own-profile
+  // tabs, not only when that tab is the active one. A disabled (`enabled:false`)
+  // query cannot be refetched by invalidateQueries — not even refetchType:'all'
+  // — so gating these on `isOwn_`/`isSaved` meant a post/visibility mutation
+  // fired from another tab (or the viewer) left them stale until a hard reload
+  // (the "albums don't live-update" bug, 2026-07-11). Enabling them across the
+  // own-profile tabs makes them inactive-but-enabled, which refetchType:'all'
+  // DOES refresh. Still disabled on other users' profiles + hashtag views (no
+  // waste there); `my-dreams` is already always-enabled for the same reason.
+  const isOwnProfile = isOwn_ || isSaved || isDreams || isReposts;
+  const ownQuery = useUserPosts(isOwnProfile);
+  const savedQuery = useFavoritePosts(isOwnProfile);
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams(dreamsFilter);
   const repostsQuery = useUserReposts(userId, isReposts);

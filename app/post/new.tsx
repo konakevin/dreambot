@@ -42,6 +42,7 @@ import { useMyDreams } from '@/hooks/useMyDreams';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { useAuthStore } from '@/store/auth';
 import { publishGallery, type GallerySourceImage } from '@/lib/publishGallery';
+import { invalidateProfileGrids } from '@/lib/gridInvalidation';
 import { pinToFeed, pinPostRowToFeed } from '@/lib/dreamSave';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import { POST_SELECT, mapToDreamPost, castRow } from '@/lib/mapPost';
@@ -243,9 +244,10 @@ export default function NewPostScreen() {
         }
       }
 
-      qc.invalidateQueries({ queryKey: ['userPosts'], refetchType: 'all' });
-      qc.invalidateQueries({ queryKey: ['my-dreams'], refetchType: 'all' });
-      qc.invalidateQueries({ queryKey: ['dreamFeed'] });
+      // Refetch EVERY grid the new post can land in (Posts + the album host's
+      // membership flips move members out of Dreams via album_ref_count). One
+      // helper, refetchType:'all', so inactive grids refresh too.
+      invalidateProfileGrids(qc);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted', 'checkmark-circle');
       router.replace('/(tabs)');

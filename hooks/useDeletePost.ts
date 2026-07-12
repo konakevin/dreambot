@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/auth';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { removeUploadFromPages } from '@/lib/feedHelpers';
+import { invalidateProfileGrids } from '@/lib/gridInvalidation';
 
 // Page shape used by hooks that delete-post needs to mutate. Both shapes
 // are still in the codebase (paginated infinite queries returning {rows,...}
@@ -124,9 +125,9 @@ export function useDissolveAlbum() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Album dissolved', 'checkmark-circle');
       // Host leaves every post surface; the released children return to Dreams.
-      for (const key of [...INFINITE_QUERY_KEYS, 'albumPosts']) {
-        qc.invalidateQueries({ queryKey: [key] });
-      }
+      // refetchType:'all' (via the helper) so inactive grids refresh too.
+      invalidateProfileGrids(qc);
+      qc.invalidateQueries({ queryKey: ['albumPosts'], refetchType: 'all' });
     },
     onError: () => {
       Toast.show('Failed to dissolve album', 'close-circle');
@@ -336,8 +337,10 @@ export function useBulkMakePrivate() {
     onSuccess: ({ count }) => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show(`Moved ${count} to private`, 'eye-off');
-      // The dreams album (and its Posted/Private filters) reflect the flips.
-      qc.invalidateQueries({ queryKey: ['my-dreams'] });
+      // The optimistic onMutate already pulled these from the public grids; the
+      // full refetch (refetchType:'all') confirms + surfaces them back in Dreams
+      // even when that grid is inactive (the album live-update fix, 2026-07-11).
+      invalidateProfileGrids(qc);
     },
     onError: (_err, _vars, ctx) => {
       if (__DEV__) console.error('[useBulkMakePrivate] Error:', _err);
@@ -378,11 +381,10 @@ export function useBulkMakePublic() {
     onSuccess: ({ count }) => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show(count === 1 ? 'Shared publicly' : `Shared ${count} publicly`, 'earth');
-      // Leaves Private, enters the public grids + feed. Invalidate every surface
-      // (my-dreams filters + userPosts + dreamFeed + explore + profile grids).
-      for (const prefix of INFINITE_QUERY_KEYS) {
-        qc.invalidateQueries({ queryKey: [prefix] });
-      }
+      // Leaves Private, enters the public grids + feed. refetchType:'all' (via
+      // the helper) so the Posts grid refreshes even when you re-published from
+      // the Dreams tab / viewer and the Posts grid is inactive (2026-07-11).
+      invalidateProfileGrids(qc);
     },
     onError: (_err) => {
       if (__DEV__) console.error('[useBulkMakePublic] Error:', _err);

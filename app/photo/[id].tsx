@@ -11,6 +11,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { safeBack } from '@/lib/navigate';
 import { useAlbumStore } from '@/store/album';
 import { syncPostCounts } from '@/lib/postCountSync';
+import { invalidateProfileGrids } from '@/lib/gridInvalidation';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { showPremiumGate } from '@/lib/premiumGate';
@@ -365,9 +366,9 @@ export default function PhotoDetailScreen() {
           newPublic ? 'Shared publicly' : 'Moved to private',
           newPublic ? 'checkmark-circle' : 'lock-closed'
         );
-        queryClient.invalidateQueries({ queryKey: ['userPosts'] });
-        queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
-        queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+        // refetchType:'all' (via the helper) so the profile grids refresh even
+        // though they're inactive behind this full-screen viewer (2026-07-11).
+        invalidateProfileGrids(queryClient);
       }
     },
     [user, posts, queryClient, albumIds, id]
