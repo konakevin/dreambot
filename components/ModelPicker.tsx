@@ -52,6 +52,16 @@ interface Props {
    * breaks the swap — 2026-06-13 audit) are hidden. Direct mode shows them all.
    */
   dreamBotMode?: boolean;
+  /**
+   * Smart Dream (DreamBot mode only): the approved model set for the chosen
+   * style (client_meta.smart_dream_models). Non-empty → the picker only lists
+   * these, and a disallowed/sticky pick falls back to `smartDefault`. Empty or
+   * undefined → inert (all models, current behavior). See SMART_DREAM_PLAN.md.
+   */
+  smartModels?: string[];
+  smartDefault?: string;
+  /** Display label of the chosen style, for the "optimized for {style}" hint. */
+  styleLabel?: string;
 }
 
 // Session cache of the account-sticky pick: the DB column is fetched once per
@@ -60,11 +70,25 @@ interface Props {
 let sessionModelId: string | null = null;
 let sessionUserId: string | null = null;
 
-export function ModelPicker({ onChange, dreamBotMode }: Props) {
+export function ModelPicker({
+  onChange,
+  dreamBotMode,
+  smartModels,
+  smartDefault,
+  styleLabel,
+}: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
-  // In DreamBot mode, drop models that aren't swap-quality from the picker.
-  const visibleModels = dreamBotMode ? models.filter((m) => m.dreamBotEnabled !== false) : models;
+  // Smart Dream is active when we're in DreamBot mode AND the chosen style
+  // carries an approved model set. Then the picker lists ONLY those models (on
+  // top of the DreamBot swap-quality filter) so a customer can't pick a model
+  // that would flatten the style.
+  const smartActive = !!dreamBotMode && Array.isArray(smartModels) && smartModels.length > 0;
+  const visibleModels = models.filter((m) => {
+    if (dreamBotMode && m.dreamBotEnabled === false) return false;
+    if (smartActive && !smartModels!.includes(m.id)) return false;
+    return true;
+  });
   const [selected, setSelected] = useState<string>(() => sessionModelId ?? DEFAULT_MODEL_ID);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -131,16 +155,27 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
   const standard = order(STANDARD_MODEL_IDS);
   const premium = order(PREMIUM_MODEL_IDS);
 
-  // If the saved pick is hidden in DreamBot mode (e.g. a Direct-mode flux-schnell
-  // choice), fall back to the default for face-swap dreams WITHOUT overwriting
-  // the saved column — so switching back to Direct restores their pick.
-  const savedHidden =
-    dreamBotMode && models.find((m) => m.id === selected)?.dreamBotEnabled === false;
-  const effectiveSelected = savedHidden ? DEFAULT_MODEL_ID : selected;
+  // A pick is UNAVAILABLE if it's DreamBot-hidden (a Direct-mode flux-schnell
+  // choice) OR not in the active Smart Dream set for this style (e.g. a photoreal
+  // sticky pro_mode pick on a watercolor style). Fall back to the style's default
+  // (or the global default) WITHOUT overwriting the saved column — switching
+  // styles or back to Direct restores the real pick.
+  const smartFallback = smartActive
+    ? smartDefault && smartModels!.includes(smartDefault)
+      ? smartDefault
+      : smartModels![0]
+    : DEFAULT_MODEL_ID;
+  const selectedUnavailable =
+    (dreamBotMode && models.find((m) => m.id === selected)?.dreamBotEnabled === false) ||
+    (smartActive && !smartModels!.includes(selected));
+  const effectiveSelected = selectedUnavailable ? smartFallback : selected;
+  // The "Default" badge points at the style's recommended model under Smart
+  // Dream, else the global recommended pick.
+  const recommendedId = smartActive ? smartFallback : RECOMMENDED_MODEL_ID;
   useEffect(() => {
-    if (savedHidden) onChange?.(effectiveSelected);
+    if (selectedUnavailable) onChange?.(effectiveSelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedHidden, effectiveSelected]);
+  }, [selectedUnavailable, effectiveSelected]);
   // Scroll-into-view: rows have variable heights (blurbs wrap), so the selected
   // row's position can't be computed from its index. Capture each row's y within
   // its tier section + each section's y within the scroll content via onLayout,
@@ -221,7 +256,7 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
             >
               {opt.label}
             </Text>
-            {opt.id === RECOMMENDED_MODEL_ID && (
+            {opt.id === recommendedId && (
               <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Default</Text>
             )}
           </View>
@@ -330,8 +365,9 @@ export function ModelPicker({ onChange, dreamBotMode }: Props) {
               </TouchableOpacity>
             </View>
             <Text style={styles.modalSubtitle}>
-              Each one gives your dream a slightly different look. The cost varies by model
-              depending on compute.
+              {smartActive
+                ? `✨ DreamSmart, tuned for ${styleLabel ?? 'this style'}. Every style dreams best in certain models, so these are the ones we picked. Cost varies by model.`
+                : 'Each one gives your dream a slightly different look. The cost varies by model depending on compute.'}
             </Text>
             <ScrollView
               ref={scrollRef}

@@ -369,6 +369,7 @@ export function useDreamCreate() {
             style_prompt: config.stylePrompt || undefined,
             dlt_recipe: config.dltRecipe ?? undefined,
             use_exact_prompt: config.useExactPrompt,
+            dream_smart: config.dreamSmart,
             force_model: config.forceModel ?? undefined,
           };
           if (DREAM_QUEUE_ENABLED) {

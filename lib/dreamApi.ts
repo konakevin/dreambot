@@ -54,6 +54,10 @@ export interface GenerateDreamOpts {
    *  no Sonnet expansion, no chaos, no medium/vibe directive merging. For
    *  power users with fully-polished prompts. */
   use_exact_prompt?: boolean;
+  /** DreamSmart toggle. false → user opted out of style-based model curation;
+   *  the server skips the coercion and renders exactly the picked model.
+   *  Absent/true → DreamSmart on (default). SMART_DREAM_PLAN.md §7b. */
+  dream_smart?: boolean;
   /** Override the model picker. DLT uses this to inherit the source post's
    *  `model_used` so a render that landed on a particular Flux variant
    *  doesn't get re-rolled. The Edge Function falls back to its picker if

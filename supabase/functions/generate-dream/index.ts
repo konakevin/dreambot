@@ -78,6 +78,7 @@ import {
 } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
+import { smartDreamApplies, coerceSmartDream, type SmartDreamSet } from '../_shared/smartDream.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
 import { classifyFailure } from '../_shared/classifyFailure.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
@@ -146,6 +147,11 @@ interface RequestBody {
    *  the prompt verbatim to flux-1.1-pro with NO Sonnet expansion / chaos /
    *  medium / vibe directive merging. Power-user mode. */
   use_exact_prompt?: boolean;
+  /** DreamSmart toggle. false → the user opted out of style-based model curation
+   *  (the picker showed the full model list); skip the Smart Dream coercion and
+   *  render exactly the model they picked. Absent/true → DreamSmart on (default).
+   *  See SMART_DREAM_PLAN.md §7b. */
+  dream_smart?: boolean;
   /** When false, render + return WITHOUT inserting an uploads row — the caller
    *  persists its own (onboarding RevealStep). Defaults to true. Fixes the
    *  duplicate-first-dream (gen + "Post my Dream" both inserting a row). */
@@ -589,6 +595,9 @@ async function handleRequest(req: Request): Promise<Response> {
   // section below forces mode='flux-kontext' + keeps input_image + uses this
   // model (Seedream / Nano Banana), with NO face swap. Null = not a reference render.
   let newSceneRefModel: string | null = null;
+  // Smart Dream approved set for the resolved style (captured once the medium is
+  // resolved) — used by the render-model backstop below.
+  let smartDreamCfg: SmartDreamSet | null = null;
 
   // ── Observability (Phase 1 of V4 hardening) ─────────────────────────────────
   // Capture the full LLM exchange + fallback audit trail so every generation
@@ -660,6 +669,12 @@ async function handleRequest(req: Request): Promise<Response> {
     }
 
     resolvedMediumKey = medium.key;
+    smartDreamCfg = medium.smartDreamModels.length
+      ? {
+          models: medium.smartDreamModels,
+          default: medium.smartDreamDefault ?? medium.smartDreamModels[0],
+        }
+      : null;
     resolvedVibeKey = vibe.key;
 
     // Log unknown-key fallbacks to ai_generation_log.fallback_reasons so we
@@ -1589,6 +1604,23 @@ Output ONLY the prompt.`;
     );
     fallbackReasons.push(`${arity}_ultra_clamped_to_pro`);
     pickedModel = 'black-forest-labs/flux-1.1-pro';
+  }
+
+  // ── Smart Dream backstop — guarantee the RENDERED model is in the chosen
+  // style's approved set (SMART_DREAM_PLAN.md). On the normal queue path
+  // enqueue-dream already coerced force_model before charging, so this is a
+  // no-op; it closes the edge/hostile vectors — a direct (non-enqueue)
+  // generate call, or a null force_model that fell through to the auto-picker
+  // (which reads the shared allowed_models pool, not the Smart Dream set).
+  // DreamBot mode only; New Scene uses its own model universe (skipped). Stylized
+  // Smart Dream sets never include flux-1.1-pro-ultra, so no Ultra re-clamp is
+  // needed here.
+  if (smartDreamCfg && !newSceneRefModel && smartDreamApplies(body)) {
+    const { model, coerced } = coerceSmartDream(pickedModel, smartDreamCfg);
+    if (coerced && model) {
+      fallbackReasons.push(`smart_dream_coerce:${pickedModel}→${model}`);
+      pickedModel = model;
+    }
   }
 
   logAxes.model = pickedModel;

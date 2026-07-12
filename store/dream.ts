@@ -59,6 +59,11 @@ interface DreamConfig {
    *  Sonnet expansion, NO chaos layer, NO medium/vibe directive merging.
    *  Power-user mode for people pasting fully polished prompts. */
   useExactPrompt: boolean;
+  /** DreamSmart toggle (default true). On → the model picker is curated to the
+   *  models that render the chosen style well, and the server enforces it. Off →
+   *  full model list, no coercion (render exactly what's picked). See
+   *  SMART_DREAM_PLAN.md §7b. */
+  dreamSmart: boolean;
   /** DLT only — the source post's Flux model, read from `recipe.model`
    *  (uploads has no model_used column). Threaded through to the Edge Function
    *  as `force_model` so a render that landed perfectly on e.g. flux-1.1-pro
@@ -131,6 +136,7 @@ interface DreamStore {
   setStylePrompt: (prompt: string | null) => void;
   setDltRecipe: (recipe: Record<string, unknown> | null) => void;
   setUseExactPrompt: (value: boolean) => void;
+  setDreamSmart: (value: boolean) => void;
   setForceModel: (model: string | null) => void;
   setResult: (result: DreamResult) => void;
   clearResult: () => void;
@@ -155,6 +161,7 @@ const INITIAL_CONFIG: DreamConfig = {
   stylePrompt: null,
   dltRecipe: null,
   useExactPrompt: false,
+  dreamSmart: true,
   forceModel: null,
 };
 
@@ -184,6 +191,7 @@ export const useDreamStore = create<DreamStore>((set) => ({
   setStylePrompt: (prompt) => set((s) => ({ config: { ...s.config, stylePrompt: prompt } })),
   setDltRecipe: (recipe) => set((s) => ({ config: { ...s.config, dltRecipe: recipe } })),
   setUseExactPrompt: (value) => set((s) => ({ config: { ...s.config, useExactPrompt: value } })),
+  setDreamSmart: (value) => set((s) => ({ config: { ...s.config, dreamSmart: value } })),
   setForceModel: (model) => set((s) => ({ config: { ...s.config, forceModel: model } })),
   setResult: (result) => set({ result }),
   clearResult: () => set({ result: null }),

@@ -75,6 +75,13 @@ export interface ResolvedMedium {
    * precedence over restyleModel. LEGO/Vinyl use this to peg restyle to
    * flux-1.1-pro / -ultra without touching the shared allowedModels. */
   restyleModels: string[] | null;
+  /** Smart Dream — the per-STYLE approved model set for DreamBot-mode create
+   *  renders (SMART_DREAM_PLAN.md). Lives in client_meta.smart_dream_models so
+   *  the bot picker (which reads allowed_models only) never sees it → bots
+   *  untouched. Empty → feature inert for this style. `smartDreamDefault` is the
+   *  coercion target + client auto-select pick. */
+  smartDreamModels: string[];
+  smartDreamDefault: string | null;
 }
 
 export interface ResolvedVibe {
@@ -131,6 +138,16 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
     restyleModels:
       row.client_meta && Array.isArray(row.client_meta.restyle_models)
         ? row.client_meta.restyle_models.filter((x): x is string => typeof x === 'string')
+        : null,
+    // Smart Dream approved set (client_meta.smart_dream_models) — create-scoped,
+    // invisible to bots (they read allowed_models). Empty → inert for this style.
+    smartDreamModels:
+      row.client_meta && Array.isArray(row.client_meta.smart_dream_models)
+        ? row.client_meta.smart_dream_models.filter((x): x is string => typeof x === 'string')
+        : [],
+    smartDreamDefault:
+      row.client_meta && typeof row.client_meta.smart_dream_default === 'string'
+        ? row.client_meta.smart_dream_default
         : null,
   };
 }

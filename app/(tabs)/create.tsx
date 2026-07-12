@@ -102,6 +102,7 @@ export default function CreateScreen() {
   const setPhotoStyle = useDreamStore((s) => s.setPhotoStyle);
   const setNewSceneTier = useDreamStore((s) => s.setNewSceneTier);
   const setUseExactPrompt = useDreamStore((s) => s.setUseExactPrompt);
+  const setDreamSmart = useDreamStore((s) => s.setDreamSmart);
   const setForceModel = useDreamStore((s) => s.setForceModel);
   const setPhotoClassification = useDreamStore((s) => s.setPhotoClassification);
   const photoClassification = useDreamStore((s) => s.photoClassification);
@@ -246,6 +247,28 @@ export default function CreateScreen() {
       });
     },
     [setUseExactPrompt]
+  );
+
+  // DreamSmart toggle — default ON; rehydrate on mount (only override to off if
+  // the user previously turned it off) + persist on changes. SMART_DREAM_PLAN §7b.
+  const DREAM_SMART_KEY = 'create.dreamSmart.v1';
+  useEffect(() => {
+    AsyncStorage.getItem(DREAM_SMART_KEY)
+      .then((val) => {
+        if (val === '0') setDreamSmart(false);
+      })
+      .catch((e) => {
+        if (__DEV__) console.warn('[create] pref persist failed', e);
+      });
+  }, [setDreamSmart]);
+  const toggleDreamSmart = useCallback(
+    (next: boolean) => {
+      setDreamSmart(next);
+      AsyncStorage.setItem(DREAM_SMART_KEY, next ? '1' : '0').catch((e) => {
+        if (__DEV__) console.warn('[create] pref persist failed', e);
+      });
+    },
+    [setDreamSmart]
   );
 
   // Persisting setters for medium/vibe — store the deliberate pick so it
@@ -593,6 +616,21 @@ export default function CreateScreen() {
   const mediumFaceSwaps = isSurpriseMedium
     ? config.selectedMedium !== 'surprise_me_art' // art-typed → art; face-typed + unified → face
     : (selectedMediumRow?.face_swaps ?? true);
+
+  // Smart Dream — the approved model set for the chosen style (client_meta,
+  // SMART_DREAM_PLAN.md), fed to ModelPicker so it only offers models that
+  // render this style well. Empty for Surprise Me / styles with no config →
+  // picker stays wide open (the server backstop still governs at render).
+  const smartModels = useMemo(() => {
+    const cm = selectedMediumRow?.client_meta;
+    return cm && Array.isArray(cm.smart_dream_models)
+      ? cm.smart_dream_models.filter((x): x is string => typeof x === 'string')
+      : [];
+  }, [selectedMediumRow]);
+  const smartDefault =
+    typeof selectedMediumRow?.client_meta?.smart_dream_default === 'string'
+      ? (selectedMediumRow.client_meta.smart_dream_default as string)
+      : undefined;
   // The unified Surprise Me rolls across ALL mediums, so it has no single
   // FACE / DREAM ART identity → hide the badge for it. A concrete medium (or a
   // legacy typed surprise) still shows its badge.
@@ -1169,7 +1207,40 @@ export default function CreateScreen() {
                       <ModelPicker
                         onChange={setSelectedModelId}
                         dreamBotMode={!config.useExactPrompt}
+                        smartModels={config.dreamSmart ? smartModels : []}
+                        smartDefault={smartDefault}
+                        styleLabel={selectedMediumRow?.label}
                       />
+                      {/* DreamSmart toggle — shown only in DreamBot mode when the
+                          chosen style has a curated set. Off → full model list. */}
+                      {!config.useExactPrompt && smartModels.length > 0 && (
+                        <TouchableOpacity
+                          onPress={() => toggleDreamSmart(!config.dreamSmart)}
+                          activeOpacity={0.7}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: verticalScale(10),
+                            paddingHorizontal: 4,
+                          }}
+                        >
+                          <Ionicons
+                            name={config.dreamSmart ? 'checkbox' : 'square-outline'}
+                            size={18}
+                            color={config.dreamSmart ? '#A78BFA' : colors.textSecondary}
+                          />
+                          <Text style={{ marginLeft: 8, fontSize: fontScale(12) }}>
+                            <Text style={{ color: '#A78BFA', fontWeight: '700' }}>
+                              ✨ DreamSmart
+                            </Text>
+                            <Text style={{ color: colors.textSecondary }}>
+                              {config.dreamSmart
+                                ? '   models tuned for your style'
+                                : '   showing all models'}
+                            </Text>
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   )}
 

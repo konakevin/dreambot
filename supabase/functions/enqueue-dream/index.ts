@@ -22,6 +22,7 @@ import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
 import { routeNewSceneSubject } from '../_shared/newSceneDirective.ts';
 import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
+import { smartDreamApplies, smartDreamSet, coerceSmartDream } from '../_shared/smartDream.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -228,6 +229,30 @@ Deno.serve(async (req) => {
   // the price stays server-driven. The render's own charge is then a no-op.
   await loadModelCosts(supabase);
   const cfg = await fetchEngineConfig(supabase);
+
+  // ── Smart Dream: coerce the model into the chosen style's approved set BEFORE
+  // the charge, so charge == rendered model stays exact (SMART_DREAM_PLAN.md).
+  // DreamBot mode only — Direct / DLT / restyle / New-Scene are exempt. Inert
+  // (no coercion) when the style carries no smart_dream_models config. Bots are
+  // untouched: this reads client_meta, which the bot picker never reads.
+  let effectiveForceModel = forceModel;
+  if (forceModel && smartDreamApplies(body) && typeof body.medium_key === 'string') {
+    const { data: medRow } = await supabase
+      .from('dream_mediums')
+      .select('client_meta')
+      .eq('key', body.medium_key)
+      .maybeSingle();
+    const set = smartDreamSet((medRow?.client_meta ?? null) as Record<string, unknown> | null);
+    if (set) {
+      const { model, coerced } = coerceSmartDream(forceModel, set);
+      if (coerced) {
+        console.log(
+          `[enqueue-dream] Smart Dream coerce ${forceModel} → ${model} (style=${body.medium_key})`
+        );
+        effectiveForceModel = model;
+      }
+    }
+  }
   // New Scene tier pricing (mirrors generate-dream): a new_scene photo from a
   // tier-aware client charges the flat Standard/Best price by a server-validated
   // enum (never force_model). Old clients (no new_scene_tier) → legacy cost.
@@ -266,8 +291,8 @@ Deno.serve(async (req) => {
       ? newSceneTierReq === 'best' && !newSceneSoloSwap
         ? cfg.newScenePriceBest
         : cfg.newScenePriceStandard
-      : forceModel
-        ? getSparkleCost(forceModel)
+      : effectiveForceModel
+        ? getSparkleCost(effectiveForceModel)
         : cfg.baseSparkleCost;
   const { data: chargeStatus } = await supabase.rpc('charge_sparkles', {
     p_user_id: userId,
@@ -283,7 +308,13 @@ Deno.serve(async (req) => {
 
   // The payload IS the render's RequestBody, with job_id stamped so the
   // x-dream-queue render path resolves the user + reuses the idempotency key.
-  const payload = { ...body, job_id: jobId };
+  // Thread the Smart-Dream-coerced model through so the render uses exactly the
+  // model we charged for (charge == render).
+  const payload = {
+    ...body,
+    job_id: jobId,
+    ...(effectiveForceModel !== forceModel ? { force_model: effectiveForceModel } : {}),
+  };
 
   // Classify render WEIGHT for the per-weight concurrency cap (extracted to a
   // pure, unit-tested helper). HEAVY = face-swap-likely (Fly.io swap service);
