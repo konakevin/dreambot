@@ -53,13 +53,17 @@ interface Props {
    */
   dreamBotMode?: boolean;
   /**
-   * Smart Dream (DreamBot mode only): the approved model set for the chosen
-   * style (client_meta.smart_dream_models). Non-empty → the picker only lists
-   * these, and a disallowed/sticky pick falls back to `smartDefault`. Empty or
-   * undefined → inert (all models, current behavior). See SMART_DREAM_PLAN.md.
+   * DreamSmart (DreamBot mode only): the approved model set for the chosen style
+   * (client_meta.smart_dream_models) — passed RAW (regardless of the on/off
+   * toggle) so the picker can show the toggle even when off. Empty/undefined →
+   * no curated set for this style (toggle hidden, all models). SMART_DREAM_PLAN.
    */
   smartModels?: string[];
   smartDefault?: string;
+  /** DreamSmart on/off (default on). On → filter to smartModels; off → full list. */
+  dreamSmartOn?: boolean;
+  /** Toggle handler — renders the inline checkbox on the AI Model header row. */
+  onToggleDreamSmart?: () => void;
   /** Display label of the chosen style, for the "optimized for {style}" hint. */
   styleLabel?: string;
 }
@@ -75,15 +79,19 @@ export function ModelPicker({
   dreamBotMode,
   smartModels,
   smartDefault,
+  dreamSmartOn,
+  onToggleDreamSmart,
   styleLabel,
 }: Props) {
   const user = useAuthStore((s) => s.user);
   const models = useImageModels();
-  // Smart Dream is active when we're in DreamBot mode AND the chosen style
-  // carries an approved model set. Then the picker lists ONLY those models (on
-  // top of the DreamBot swap-quality filter) so a customer can't pick a model
-  // that would flatten the style.
-  const smartActive = !!dreamBotMode && Array.isArray(smartModels) && smartModels.length > 0;
+  // The chosen style has a curated set (in DreamBot mode) → DreamSmart is
+  // available (the toggle shows). It's ACTIVE (filters the list) only when the
+  // toggle is on. Off → full list, but the toggle stays visible so it can be
+  // turned back on.
+  const hasSmartSet = !!dreamBotMode && Array.isArray(smartModels) && smartModels.length > 0;
+  const smartOn = dreamSmartOn !== false; // default on
+  const smartActive = hasSmartSet && smartOn;
   const visibleModels = models.filter((m) => {
     if (dreamBotMode && m.dreamBotEnabled === false) return false;
     if (smartActive && !smartModels!.includes(m.id)) return false;
@@ -293,7 +301,24 @@ export function ModelPicker({
 
   return (
     <View>
-      <Text style={[styles.pillLabel, { color: colors.textSecondary }]}>AI Model</Text>
+      <View style={styles.modelHeaderRow}>
+        <Text style={[styles.pillLabel, { color: colors.textSecondary }]}>AI Model</Text>
+        {hasSmartSet && onToggleDreamSmart && (
+          <TouchableOpacity
+            onPress={onToggleDreamSmart}
+            activeOpacity={0.7}
+            hitSlop={8}
+            style={styles.smartToggle}
+          >
+            <Ionicons
+              name={smartOn ? 'checkbox' : 'square-outline'}
+              size={16}
+              color={smartOn ? '#A78BFA' : colors.textSecondary}
+            />
+            <Text style={styles.smartToggleLabel}>✨ DreamSmart</Text>
+          </TouchableOpacity>
+        )}
+      </View>
       <TouchableOpacity
         onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -451,6 +476,23 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: verticalScale(6),
     marginLeft: 4,
+  },
+  modelHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  smartToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: verticalScale(6),
+    marginRight: 4,
+  },
+  smartToggleLabel: {
+    marginLeft: 6,
+    fontSize: fontScale(12),
+    fontWeight: '700',
+    color: '#A78BFA',
   },
   pill: {
     flexDirection: 'row',

@@ -1334,40 +1334,12 @@ export default function CreateScreen() {
                       <ModelPicker
                         onChange={setSelectedModelId}
                         dreamBotMode={!config.useExactPrompt}
-                        smartModels={config.dreamSmart ? smartModels : []}
+                        smartModels={smartModels}
                         smartDefault={smartDefault}
+                        dreamSmartOn={config.dreamSmart}
+                        onToggleDreamSmart={() => toggleDreamSmart(!config.dreamSmart)}
                         styleLabel={selectedMediumRow?.label}
                       />
-                      {/* DreamSmart toggle — shown only in DreamBot mode when the
-                          chosen style has a curated set. Off → full model list. */}
-                      {!config.useExactPrompt && smartModels.length > 0 && (
-                        <TouchableOpacity
-                          onPress={() => toggleDreamSmart(!config.dreamSmart)}
-                          activeOpacity={0.7}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: verticalScale(10),
-                            paddingHorizontal: 4,
-                          }}
-                        >
-                          <Ionicons
-                            name={config.dreamSmart ? 'checkbox' : 'square-outline'}
-                            size={18}
-                            color={config.dreamSmart ? '#A78BFA' : colors.textSecondary}
-                          />
-                          <Text style={{ marginLeft: 8, fontSize: fontScale(12) }}>
-                            <Text style={{ color: '#A78BFA', fontWeight: '700' }}>
-                              ✨ DreamSmart
-                            </Text>
-                            <Text style={{ color: colors.textSecondary }}>
-                              {config.dreamSmart
-                                ? '   models tuned for your style'
-                                : '   showing all models'}
-                            </Text>
-                          </Text>
-                        </TouchableOpacity>
-                      )}
                     </View>
                   )}
 
