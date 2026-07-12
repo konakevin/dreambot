@@ -217,6 +217,16 @@ export default function ProfileScreen() {
     }, [])
   );
 
+  // Leaving the profile (tab-away, push into a detail screen) exits grid select
+  // mode — returning shouldn't strand you mid-selection (Kevin 2026-07-11). The
+  // cleanup fires on blur; exitGridSelection is idempotent so the paths that
+  // already exit before navigating (bulk Post/Delete) are unaffected.
+  useFocusEffect(
+    useCallback(() => {
+      return () => exitGridSelection();
+    }, [exitGridSelection])
+  );
+
   // Dreams-tab auto-acknowledge (migration 340): flag the store while the user
   // is focused on THIS (own) profile with the Dreams sub-tab active, so a dream
   // arriving via realtime is marked seen silently (no bell/badge/toast) — they
