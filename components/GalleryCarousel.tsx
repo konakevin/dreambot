@@ -12,13 +12,20 @@
  * the tap's X and must coexist with double-tap-to-like); this component is a
  * pure index-controlled slide.
  */
-import React from 'react';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Image, type ImageContentFit } from 'expo-image';
-import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import type { GalleryImage } from '@/components/DreamCard';
 import { OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
-import { verticalScale } from '@/lib/responsive';
+import { horizontalScale, verticalScale, fontScale } from '@/lib/responsive';
 
 interface Props {
   images: GalleryImage[];
@@ -81,35 +88,163 @@ function GalleryCarouselImpl({ images, index, fitMode, coverThumbhash, recycling
 
 export const GalleryCarousel = React.memo(GalleryCarouselImpl);
 
+// Max dot-slots shown at once. Beyond this the window slides and the outer
+// dots shrink to "peek" size, so a 10-image album never renders a cramped row
+// and the capsule width stays constant regardless of count.
+const DOT_WINDOW = 5;
+
+type DotKind = 'active' | 'idle' | 'peek';
+
+/** The visible dot slots for the current index — a sliding window of the album
+ *  with peek dots at the edges when there's more beyond the window. */
+function windowedDots(count: number, index: number): { key: number; kind: DotKind }[] {
+  if (count <= DOT_WINDOW) {
+    return Array.from({ length: count }, (_, i) => ({
+      key: i,
+      kind: i === index ? 'active' : 'idle',
+    }));
+  }
+  const start = Math.max(0, Math.min(index - Math.floor(DOT_WINDOW / 2), count - DOT_WINDOW));
+  const slots: { key: number; kind: DotKind }[] = [];
+  for (let i = start; i < start + DOT_WINDOW; i++) {
+    let kind: DotKind = i === index ? 'active' : 'idle';
+    const moreLeft = i === start && start > 0;
+    const moreRight = i === start + DOT_WINDOW - 1 && start + DOT_WINDOW < count;
+    if ((moreLeft || moreRight) && kind !== 'active') kind = 'peek';
+    slots.push({ key: i, kind });
+  }
+  return slots;
+}
+
 /**
- * Dot indicator — rendered separately by DreamCard inside the HUD so it fades
- * with the caption/actions and sits at the right z-order above the scrim.
+ * GalleryNav — the album's all-in-one navigation control (2026-07-11).
+ *
+ * One translucent capsule, bottom-center above the metadata: `‹  ● ▬ ● ●  ›`.
+ * Replaces the old floating mid-card chevrons + separate dots. Two ways to move:
+ * tap a chevron here, or (still, in DreamCard) tap the left/right image edge —
+ * the image edge IS the big swipe-like target, so the capsule stays a compact
+ * tap-only control (no in-capsule scrub, which would just duplicate edge-tap in
+ * a smaller, worse zone).
+ *
+ * Responsive + stable: the chevron slots are ALWAYS reserved (fixed width) and
+ * the chevron fades within its slot at the ends, so the indicator stays exactly
+ * centered and never jumps. The indicator windows to DOT_WINDOW so the capsule
+ * width is constant from 2 to 10 images.
  */
-export function GalleryDots({ count, index }: { count: number; index: number }) {
+export function GalleryNav({
+  count,
+  index,
+  onStep,
+}: {
+  count: number;
+  index: number;
+  onStep: (next: number) => void;
+}) {
+  const canPrev = index > 0;
+  const canNext = index < count - 1;
+
+  const stepTo = (next: number) => {
+    const clamped = Math.max(0, Math.min(count - 1, next));
+    if (clamped !== index) {
+      onStep(clamped);
+      Haptics.selectionAsync();
+    }
+  };
+
+  // Fade the chevrons in/out within their (reserved) slots at the ends.
+  const leftOpacity = useSharedValue(canPrev ? 1 : 0);
+  const rightOpacity = useSharedValue(canNext ? 1 : 0);
+  useEffect(() => {
+    leftOpacity.value = withTiming(canPrev ? 1 : 0, { duration: 160 });
+  }, [canPrev, leftOpacity]);
+  useEffect(() => {
+    rightOpacity.value = withTiming(canNext ? 1 : 0, { duration: 160 });
+  }, [canNext, rightOpacity]);
+  const leftStyle = useAnimatedStyle(() => ({ opacity: leftOpacity.value }));
+  const rightStyle = useAnimatedStyle(() => ({ opacity: rightOpacity.value }));
+
+  const slots = windowedDots(count, index);
+
   return (
-    <View style={styles.dots} pointerEvents="none">
-      {Array.from({ length: count }).map((_, i) => (
-        <View key={i} style={[styles.dot, i === index ? styles.dotActive : styles.dotIdle]} />
-      ))}
+    <View style={styles.navCapsule}>
+      <Pressable
+        onPress={() => stepTo(index - 1)}
+        disabled={!canPrev}
+        hitSlop={14}
+        style={styles.navSlot}
+      >
+        <Animated.View style={leftStyle}>
+          <Ionicons name="chevron-back" size={fontScale(26)} color="#FFFFFF" />
+        </Animated.View>
+      </Pressable>
+      <View style={styles.navDots}>
+        {slots.map((s) => (
+          <View
+            key={s.key}
+            style={[
+              styles.dotBase,
+              s.kind === 'active'
+                ? styles.dotActive
+                : s.kind === 'peek'
+                  ? styles.dotPeek
+                  : styles.dotIdle,
+            ]}
+          />
+        ))}
+      </View>
+      <Pressable
+        onPress={() => stepTo(index + 1)}
+        disabled={!canNext}
+        hitSlop={14}
+        style={styles.navSlot}
+      >
+        <Animated.View style={rightStyle}>
+          <Ionicons name="chevron-forward" size={fontScale(26)} color="#FFFFFF" />
+        </Animated.View>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   track: { flexDirection: 'row', height: '100%' },
-  dots: {
+  // One dark translucent capsule (matches the feed/bot pill + bottom scrim).
+  navCapsule: {
     flexDirection: 'row',
-    alignSelf: 'center',
     alignItems: 'center',
-    gap: 6,
-    // Dark translucent pill (same as the selected feed/bot pill + the edge
-    // chevrons) so the dots read on any image color.
+    alignSelf: 'center',
     backgroundColor: OVERLAY_PILL_ACTIVE_BG,
-    paddingHorizontal: 10,
-    paddingVertical: verticalScale(7),
-    borderRadius: 12,
+    borderRadius: 999,
+    height: verticalScale(40),
+    paddingHorizontal: horizontalScale(4),
   },
-  dot: { height: 6, borderRadius: 3 },
-  dotActive: { width: 18, backgroundColor: '#FFFFFF' },
-  dotIdle: { width: 6, backgroundColor: 'rgba(255,255,255,0.5)' },
+  // Fixed-width chevron slot — always present so the indicator stays centered.
+  navSlot: {
+    width: horizontalScale(38),
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navDots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(6),
+    paddingHorizontal: horizontalScale(2),
+  },
+  dotBase: { borderRadius: 999 },
+  dotActive: {
+    width: horizontalScale(18),
+    height: horizontalScale(7),
+    backgroundColor: '#FFFFFF',
+  },
+  dotIdle: {
+    width: horizontalScale(7),
+    height: horizontalScale(7),
+    backgroundColor: 'rgba(255,255,255,0.5)',
+  },
+  dotPeek: {
+    width: horizontalScale(5),
+    height: horizontalScale(5),
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
 });

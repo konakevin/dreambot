@@ -29,8 +29,7 @@ import Animated, {
   withSequence,
 } from 'react-native-reanimated';
 import { useCardGestures } from '@/hooks/gestures/useCardGestures';
-import { GalleryCarousel, GalleryDots } from '@/components/GalleryCarousel';
-import { OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
+import { GalleryCarousel, GalleryNav } from '@/components/GalleryCarousel';
 import { ExpandableDescription } from '@/components/dreamCardBits/ExpandableDescription';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -285,12 +284,6 @@ export const DreamCard = memo(function DreamCard({
   const galleryImages = item.media ?? [];
   const isGallery = galleryImages.length > 1;
   const [galleryIndex, setGalleryIndex] = useState(0);
-  // Measured top (Y within the card) of the right-side action rail, so the
-  // gallery edge chevrons anchor JUST ABOVE it and can never overlap the
-  // like/comment icons — on any screen size or rail length (own posts have
-  // more icons). Falls back to an upper-third % until the rail lays out.
-  const [railTop, setRailTop] = useState<number | null>(null);
-  const chevronTop = railTop != null ? railTop - verticalScale(56) : '32%';
   // Measured height of the bottom metadata block (username / caption / follow),
   // so the gallery dots anchor JUST ABOVE it and never overlap — the block
   // grows with caption length, so a fixed offset would collide on long captions.
@@ -560,10 +553,12 @@ export const DreamCard = memo(function DreamCard({
                 pointerEvents="none"
               />
             )}
-            {/* Gallery page dots — anchored just above the measured metadata
-                block so they never overlap it (the block grows with caption
-                length). Centered, so they clear the right action rail. Fades
-                with the HUD. Fallback offset until the block lays out. */}
+            {/* Album nav — the all-in-one capsule (‹ ●●● ›), anchored just above
+                the measured metadata block so it never overlaps it (the block
+                grows with caption length). Centered, so it clears the right
+                action rail. Fades with the HUD. Chevrons + horizontal scrub;
+                edge-tap (handleTap) still works too. Fallback offset until the
+                block lays out. */}
             {isGallery && (
               <View
                 style={[
@@ -571,25 +566,11 @@ export const DreamCard = memo(function DreamCard({
                   { bottom: (infoHeight ?? bottomPadding + verticalScale(60)) + verticalScale(8) },
                 ]}
               >
-                <GalleryDots count={galleryImages.length} index={galleryIndex} />
-              </View>
-            )}
-            {/* Edge-tap affordance — faint chevrons hint you can tap left/right
-                to move through the album. Hidden at each end; fade with the HUD. */}
-            {isGallery && galleryIndex > 0 && (
-              <View
-                style={[s.galleryChevron, s.galleryChevronLeft, { top: chevronTop }]}
-                pointerEvents="none"
-              >
-                <Ionicons name="chevron-back" size={30} color="#FFFFFF" style={ui.sideIcon} />
-              </View>
-            )}
-            {isGallery && galleryIndex < galleryImages.length - 1 && (
-              <View
-                style={[s.galleryChevron, s.galleryChevronRight, { top: chevronTop }]}
-                pointerEvents="none"
-              >
-                <Ionicons name="chevron-forward" size={30} color="#FFFFFF" style={ui.sideIcon} />
+                <GalleryNav
+                  count={galleryImages.length}
+                  index={galleryIndex}
+                  onStep={setGalleryIndex}
+                />
               </View>
             )}
             <View
@@ -695,10 +676,7 @@ export const DreamCard = memo(function DreamCard({
             </View>
 
             {/* Side actions */}
-            <View
-              style={[s.sideActions, { bottom: bottomPadding + 10 }]}
-              onLayout={(e) => setRailTop(e.nativeEvent.layout.y)}
-            >
+            <View style={[s.sideActions, { bottom: bottomPadding + 10 }]}>
               {showVisibilityToggle && onTogglePosted && (
                 <TouchableOpacity
                   style={ui.sideButton}
@@ -1010,19 +988,6 @@ const s = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  galleryChevron: {
-    position: 'absolute',
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // Matches the selected feed tab + bot pill (OverlayPill active) from one
-    // source — a dark translucent chip so the white glyph reads on any image.
-    backgroundColor: OVERLAY_PILL_ACTIVE_BG,
-  },
-  galleryChevronLeft: { left: 8 },
-  galleryChevronRight: { right: 8 },
   postInfo: {
     position: 'absolute',
     bottom: 0,
