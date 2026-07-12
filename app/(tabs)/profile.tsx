@@ -93,9 +93,9 @@ export default function ProfileScreen() {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
-      // Deselecting the LAST tile exits selection mode (the Gmail behavior) —
-      // otherwise the user is stranded at "0 selected" hunting for the ✕.
-      if (next.size === 0) setGridSelecting(false);
+      // Deselecting the last tile keeps you IN select mode at "0 selected" so you
+      // can pick a different first image (Kevin 2026-07-11). Only the Cancel
+      // button above the grid exits — the bottom action pills disable at 0.
       return next;
     });
   }, []);
