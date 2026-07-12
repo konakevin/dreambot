@@ -612,7 +612,10 @@ export function FullScreenFeed({
           panRef={panRef}
           simultaneousRef={simultaneousRef}
           onRefresh={onRefreshProp ? handleRefresh : undefined}
-          refreshTint={colors.textPrimary}
+          // Standard light-gray pull spinner, uniform with the native
+          // RefreshControl spinners on the profile / explore grids (Kevin
+          // 2026-07-11). Was colors.textPrimary (white) + a gradient swirl.
+          refreshTint={colors.textSecondary}
         />
         {quietRefreshing && (
           <View

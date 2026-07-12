@@ -1,4 +1,3 @@
-import { BrandSpinner } from '@/components/BrandSpinner';
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -27,6 +26,7 @@ import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
+import { minRefreshHold } from '@/lib/minRefresh';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
 
@@ -190,6 +190,7 @@ export function PostGrid({
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: activeQueryKey, refetchType: 'active' }),
         onRefreshExtra?.(),
+        minRefreshHold(),
       ]);
     } finally {
       setIsPulling(false);
@@ -416,16 +417,18 @@ export function PostGrid({
         maxToRenderPerBatch={6}
         initialNumToRender={12}
         removeClippedSubviews={false}
-        // Native spinner suppressed — the BrandSpinner overlay below is the ONLY
-        // visual. `refreshing` is pinned FALSE (not isPulling) on purpose: iOS
-        // only draws the native spinner while refreshing===true, so keeping it
-        // false means it never appears. tintColor="transparent" USED to hide it,
-        // but the New Architecture (Fabric, RN 0.81) ignores tintColor on
-        // RefreshControl (facebook/react-native#56343) → iOS rendered its default
-        // gray spinner alongside ours (the double-spinner, 2026-07-11). onRefresh
-        // still fires on pull; isPulling still drives the BrandSpinner.
+        // Native pull-to-refresh. tintColor="transparent" is deliberate: on the
+        // New Architecture (Fabric, RN 0.81) the RefreshControl ignores it and
+        // falls back to iOS's DEFAULT gray spinner — which is exactly the standard
+        // gray we want. (An explicit gray hex renders nothing / erratically here;
+        // "transparent" reliably yields the default gray, react-native#56343.)
+        // iOS owns the held-open gap for free; no custom overlay to double up.
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} tintColor="transparent" />
+          <RefreshControl
+            refreshing={isPulling}
+            onRefresh={handleRefresh}
+            tintColor="transparent"
+          />
         }
         ListHeaderComponent={
           ListHeaderComponent ? (
@@ -491,12 +494,19 @@ export function PostGrid({
           />
         )}
       />
+      {/* Reliable gray refresh spinner. The native RefreshControl still owns the
+          pull gesture + the held-open gap (refreshing={isPulling}), but its own
+          spinner renders erratically on Fabric/RN 0.81 (react-native#56343 — we
+          watched it show purple, gray, then nothing across identical configs), so
+          we render our OWN ActivityIndicator in the gap — same reliable approach
+          the home feed (VerticalPager) uses. Gated on isPulling so it only shows
+          during a user pull, and the ~600ms minRefreshHold keeps it visible. */}
       {isPulling && (
         <View
           pointerEvents="none"
           style={{ position: 'absolute', top: 14, left: 0, right: 0, alignItems: 'center' }}
         >
-          <BrandSpinner size={26} />
+          <ActivityIndicator size="small" color={colors.textSecondary} />
         </View>
       )}
       {showJustViewedButton && (

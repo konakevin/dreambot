@@ -10,7 +10,6 @@
  * to dismiss that individual filter. Search results respect active filters.
  */
 
-import { BrandSpinner } from '@/components/BrandSpinner';
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
@@ -32,6 +31,7 @@ import { supabase } from '@/lib/supabase';
 import { mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
+import { minRefreshHold } from '@/lib/minRefresh';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
@@ -505,19 +505,22 @@ export default function SearchExploreScreen() {
       const shuffle = useFeedStore.getState().feedShuffle;
       const medium = activeMediums[0] ?? null;
       const vibe = activeVibes[0] ?? null;
-      await queryClient.prefetchInfiniteQuery({
-        queryKey: exploreQueryKey(medium, vibe, newSeed, shuffle),
-        queryFn: ({ pageParam }) =>
-          fetchExplorePage(
-            userId,
-            medium,
-            vibe,
-            newSeed,
-            shuffle,
-            pageParam as ExploreCursor | null
-          ),
-        initialPageParam: null as ExploreCursor | null,
-      });
+      await Promise.all([
+        queryClient.prefetchInfiniteQuery({
+          queryKey: exploreQueryKey(medium, vibe, newSeed, shuffle),
+          queryFn: ({ pageParam }) =>
+            fetchExplorePage(
+              userId,
+              medium,
+              vibe,
+              newSeed,
+              shuffle,
+              pageParam as ExploreCursor | null
+            ),
+          initialPageParam: null as ExploreCursor | null,
+        }),
+        minRefreshHold(),
+      ]);
       useFeedStore.getState().setFeedSeed(newSeed);
     } finally {
       requestAnimationFrame(() => setIsPulling(false));
@@ -530,8 +533,9 @@ export default function SearchExploreScreen() {
 
   return (
     <View style={s.root}>
-      {/* Pull-to-refresh visual — brand swirl parked below the search box at
-          the top of the grid container (matches home/profile treatment). */}
+      {/* Reliable gray refresh spinner parked below the search box — the native
+          RefreshControl spinner renders erratically on Fabric/RN 0.81
+          (react-native#56343), so we own the indicator (matches profile + feed). */}
       {!searchActive && isPulling && !isFetchingNextPage && (
         <View
           pointerEvents="none"
@@ -544,7 +548,7 @@ export default function SearchExploreScreen() {
             alignItems: 'center',
           }}
         >
-          <BrandSpinner size={26} />
+          <ActivityIndicator size="small" color={colors.textSecondary} />
         </View>
       )}
       {/* Browse mode: 2-column thumbnail grid */}
@@ -560,14 +564,13 @@ export default function SearchExploreScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={10}
           removeClippedSubviews
-          // Native spinner suppressed — the BrandSpinner overlay below the
-          // search box is the only visual. `refreshing` pinned FALSE so iOS
-          // never draws its native spinner; tintColor="transparent" no longer
-          // hides it under Fabric/RN 0.81 (react-native#56343). onRefresh still
-          // fires on pull; isPulling drives the BrandSpinner above.
+          // Native pull-to-refresh. tintColor="transparent" is deliberate: Fabric
+          // (RN 0.81) ignores it and falls back to iOS's DEFAULT gray spinner —
+          // exactly the standard gray we want (react-native#56343). progressView-
+          // Offset parks it below the search box; iOS owns the held-open gap.
           refreshControl={
             <RefreshControl
-              refreshing={false}
+              refreshing={isPulling && !isFetchingNextPage}
               onRefresh={handlePullToRefresh}
               tintColor="transparent"
               progressViewOffset={overlayHeight}

@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@/components/AppText';
-import { BrandSpinner } from '@/components/BrandSpinner';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,6 +32,7 @@ import { PostActionSheet } from '@/components/PostActionSheet';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
+import { minRefreshHold } from '@/lib/minRefresh';
 import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
@@ -314,6 +314,7 @@ export default function ProfileScreen() {
         queryClient.invalidateQueries({ queryKey: ['userPosts'] }),
         queryClient.invalidateQueries({ queryKey: ['publicProfile'] }),
         queryClient.invalidateQueries({ queryKey: ['my-dreams'] }),
+        minRefreshHold(),
       ]);
     } finally {
       setIsPulling(false);
@@ -878,12 +879,16 @@ export default function ProfileScreen() {
         key="users"
         ref={userListRef}
         data={listData}
-        // `refreshing` pinned FALSE so iOS never draws its native spinner (the
-        // BrandSpinner overlay below is the only visual). tintColor="transparent"
-        // no longer hides it under Fabric/RN 0.81 (react-native#56343), so we
-        // suppress via the refreshing flag instead. onRefresh still fires on pull.
+        // Native pull-to-refresh. tintColor="transparent" is deliberate: Fabric
+        // (RN 0.81) ignores it and falls back to iOS's DEFAULT gray spinner —
+        // exactly the standard gray we want (an explicit gray hex renders nothing
+        // here; react-native#56343). iOS owns the held-open gap.
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} tintColor="transparent" />
+          <RefreshControl
+            refreshing={isPulling}
+            onRefresh={handleRefresh}
+            tintColor="transparent"
+          />
         }
         keyExtractor={(item) => item.id}
         ListHeaderComponent={header}
@@ -911,6 +916,9 @@ export default function ProfileScreen() {
           />
         )}
       />
+      {/* Reliable gray refresh spinner in the native-held gap — the native
+          RefreshControl spinner renders erratically on Fabric/RN 0.81
+          (react-native#56343), so we own the indicator (matches PostGrid + feed). */}
       {isPulling && (
         <View
           pointerEvents="none"
@@ -922,7 +930,7 @@ export default function ProfileScreen() {
             alignItems: 'center',
           }}
         >
-          <BrandSpinner size={26} />
+          <ActivityIndicator size="small" color={colors.textSecondary} />
         </View>
       )}
       {picSheet}
