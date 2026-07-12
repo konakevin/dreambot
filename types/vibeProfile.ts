@@ -43,6 +43,29 @@ export interface DreamSeeds {
 /** Relationship type for the +1 cast member — affects how they appear in dreams */
 export type CastRelationship = 'partner' | 'friend' | 'family';
 
+/** Max loved ones in the Dream Cast roster (Settings). The onboarding +1 is the
+ *  first entry; up to 4 more can be added. */
+export const MAX_DREAM_PARTNERS = 5;
+
+/**
+ * A loved one in the Dream Cast roster (Settings, up to 5) — same photo-described
+ * shape as a plus_one cast member, but with a STABLE `id` (the roster is
+ * id-keyed, unlike the role-keyed `dream_cast`) and a required relationship.
+ *
+ * The ACTIVE partner is mirrored into `dream_cast`'s `plus_one` slot, so the
+ * render pipeline (nightly + create + swap) reads it with zero engine change.
+ */
+export interface DreamPartner {
+  id: string;
+  storage_path?: string;
+  thumb_url?: string;
+  description: string;
+  gender?: 'male' | 'female';
+  age?: number;
+  physical_summary?: string;
+  relationship: 'partner' | 'friend';
+}
+
 /** A person or pet the user uploads — photo gets described once, description used in dreams */
 export interface DreamCastMember {
   /** 'self' | 'plus_one' | 'pet' */
@@ -87,8 +110,18 @@ export interface VibeProfile {
   /** Two categories of dream ingredients the engine remixes (objects/things
    *  were removed 2026-06-02 — see project_objects_removed_2026-06-02). */
   dream_seeds: DreamSeeds;
-  /** Photos described as text — randomly appear in dreams as stylized characters */
+  /** Photos described as text — randomly appear in dreams as stylized characters.
+   *  The `plus_one` member here is a MIRROR of the active Dream Partner (kept in
+   *  sync from `partner_library`), so the engine reads it unchanged. */
   dream_cast: DreamCastMember[];
+  /** Dream Cast roster — up to 5 loved ones, managed in Settings (the onboarding
+   *  +1 becomes the first entry). The ACTIVE one is mirrored into the `plus_one`
+   *  slot above. Absent on legacy recipes → migrated lazily from the existing
+   *  plus_one on load (see lib/dreamCastRoster.ts). */
+  partner_library?: DreamPartner[];
+  /** id (into `partner_library`) of the current Dream Partner — the one mirrored
+   *  to `plus_one`. null = no current partner (self-only dreams). */
+  active_partner_id?: string | null;
   avoid: string[];
 }
 

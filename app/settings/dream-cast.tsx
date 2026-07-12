@@ -4,7 +4,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
+import { DreamCastRoster } from '@/components/DreamCastRoster';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { useOnboardingStore } from '@/store/onboarding';
 import { Toast } from '@/components/Toast';
@@ -60,7 +60,7 @@ export default function DreamCastStepSettings() {
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
-      <DreamCastStep settingsCopy onNext={handleBack} onBack={handleBack} />
+      <DreamCastRoster />
     </SafeAreaView>
   );
 }

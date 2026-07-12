@@ -35,7 +35,6 @@ import { showAlert } from '@/components/CustomAlert';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
-import { DreamCastStep } from '@/components/onboarding/DreamCastStep';
 import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
 
 const DISPLAY_NAME_MAX = 50;
@@ -54,6 +53,10 @@ interface DrillRow {
 // swap face photos directly on this screen instead of pushing a separate
 // route.
 const DREAM_IDENTITY_ROWS: DrillRow[] = [
+  // Dream Cast is now a drill-in to the roster screen (up to 5 loved ones +
+  // current partner) — the single place cast photos are managed, so editing it
+  // here can't desync from the roster's active-partner mirror.
+  { icon: 'people-outline', label: 'Dream Cast', route: '/settings/dream-cast' },
   { icon: 'location-outline', label: 'Locations', route: '/settings/locations' },
   { icon: 'options-outline', label: 'Mood', route: '/settings/mood' },
 ];
@@ -304,11 +307,9 @@ export default function EditProfileScreen() {
             </Text>
           </View>
 
-          {/* All dream settings grouped under ONE header. Compact drill-ins
-              (Locations / Mood) first so every option is visible above the fold,
-              then the taller inline Dream Cast editor (embedded=true skips
-              DreamCastStep's outer ScrollView + onboarding chrome; auto-saves via
-              useAutoSaveProfile above). */}
+          {/* All dream settings grouped under ONE header as compact drill-ins
+              (Dream Cast / Locations / Mood). Dream Cast opens the roster screen
+              (/settings/dream-cast). */}
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>DREAM SETTINGS</Text>
             <View style={styles.sectionCard}>
@@ -327,9 +328,6 @@ export default function EditProfileScreen() {
                   <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
                 </TouchableOpacity>
               ))}
-            </View>
-            <View style={{ marginTop: verticalScale(8) }}>
-              <DreamCastStep embedded onNext={() => {}} onBack={() => {}} />
             </View>
           </View>
         </KeyboardAwareScrollView>

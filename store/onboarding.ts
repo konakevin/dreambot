@@ -1,6 +1,13 @@
 import { create } from 'zustand';
-import type { VibeProfile, MoodAxes, DreamSeeds, DreamCastMember } from '@/types/vibeProfile';
-import { DEFAULT_VIBE_PROFILE } from '@/types/vibeProfile';
+import type {
+  VibeProfile,
+  MoodAxes,
+  DreamSeeds,
+  DreamCastMember,
+  DreamPartner,
+} from '@/types/vibeProfile';
+import { DEFAULT_VIBE_PROFILE, MAX_DREAM_PARTNERS } from '@/types/vibeProfile';
+import { syncActivePartnerMirror, migrateLegacyPlusOne } from '@/lib/dreamCastRoster';
 
 const MAX_SEEDS_PER_CATEGORY = 10;
 // Locations are effectively UNCAPPED (2026-06-18, Kevin): the old 10/25 limit had
@@ -38,6 +45,14 @@ interface OnboardingStore {
   // Dream cast (photo descriptions)
   setCastMember: (member: DreamCastMember) => void;
   removeCastMember: (role: DreamCastMember['role']) => void;
+
+  // Dream Cast roster (Settings — up to 5 loved ones). The ACTIVE partner is
+  // mirrored into dream_cast's plus_one slot (see lib/dreamCastRoster.ts), so
+  // every setter re-syncs that mirror.
+  addPartner: (partner: DreamPartner) => void;
+  updatePartner: (id: string, patch: Partial<DreamPartner>) => void;
+  removePartner: (id: string) => void;
+  setActivePartner: (id: string | null) => void;
 
   /** Number of cast-photo uploads (storage upload + describe) currently in
    *  flight. The first-dream cutoff (SaveContinueStep) waits for this to reach 0
@@ -150,6 +165,51 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       profile: { ...s.profile, dream_cast: s.profile.dream_cast.filter((m) => m.role !== role) },
     })),
 
+  addPartner: (partner) =>
+    set((s) => {
+      const lib = s.profile.partner_library ?? [];
+      if (lib.length >= MAX_DREAM_PARTNERS) return s;
+      // The first partner added auto-becomes the current Dream Partner.
+      const active = s.profile.active_partner_id ?? partner.id;
+      return {
+        profile: syncActivePartnerMirror({
+          ...s.profile,
+          partner_library: [...lib, partner],
+          active_partner_id: active,
+        }),
+      };
+    }),
+
+  updatePartner: (id, patch) =>
+    set((s) => ({
+      profile: syncActivePartnerMirror({
+        ...s.profile,
+        partner_library: (s.profile.partner_library ?? []).map((p) =>
+          p.id === id ? { ...p, ...patch } : p
+        ),
+      }),
+    })),
+
+  removePartner: (id) =>
+    set((s) => {
+      const lib = (s.profile.partner_library ?? []).filter((p) => p.id !== id);
+      // Removing the current partner promotes the first remaining one (or none).
+      let active = s.profile.active_partner_id ?? null;
+      if (active === id) active = lib[0]?.id ?? null;
+      return {
+        profile: syncActivePartnerMirror({
+          ...s.profile,
+          partner_library: lib,
+          active_partner_id: active,
+        }),
+      };
+    }),
+
+  setActivePartner: (id) =>
+    set((s) => ({
+      profile: syncActivePartnerMirror({ ...s.profile, active_partner_id: id }),
+    })),
+
   castUploadsInFlight: 0,
   beginCastUpload: () => set((s) => ({ castUploadsInFlight: s.castUploadsInFlight + 1 })),
   endCastUpload: () =>
@@ -228,13 +288,17 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   // extra keys ride along harmlessly; the defaults only fill gaps.
   loadProfile: (profile) =>
     set({
-      profile: {
+      // migrateLegacyPlusOne seeds the roster from a legacy single +1 on first
+      // load (idempotent) so returning users see their existing +1 as partner #1.
+      profile: migrateLegacyPlusOne({
         ...DEFAULT_VIBE_PROFILE,
         ...profile,
         moods: { ...DEFAULT_VIBE_PROFILE.moods, ...(profile.moods ?? {}) },
         dream_seeds: { ...DEFAULT_VIBE_PROFILE.dream_seeds, ...(profile.dream_seeds ?? {}) },
         dream_cast: profile.dream_cast ?? [],
-      },
+        partner_library: profile.partner_library ?? [],
+        active_partner_id: profile.active_partner_id ?? null,
+      }),
       isHydrated: true,
     }),
 
