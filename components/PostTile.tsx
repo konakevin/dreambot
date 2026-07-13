@@ -103,6 +103,12 @@ export const PostTile = memo(function PostTile({
     // Track currentPostId so PostGrid can auto-scroll back to this row on
     // swipe-back. FullScreenFeed updates this as the user scrolls in detail.
     store.setCurrentPostId(item.id);
+    // Warm the fullscreen's image BEFORE we navigate. The grid renders a small
+    // thumbnailUrl(), but /photo shows image_url_display ?? image_url — a
+    // DIFFERENT URL that isn't cached, so the detail card would blur in from its
+    // thumbhash after opening. Kick the prefetch on tap (the card mounts ~1
+    // transition later, so this is usually warm by then). Fire-and-forget.
+    Image.prefetch([item.image_url_display ?? item.image_url]);
     nav.push(`/photo/${item.id}`);
   }
 
