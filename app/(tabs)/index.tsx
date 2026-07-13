@@ -273,6 +273,13 @@ export default function HomeScreen() {
         // prefetch). Swapping only refetched the same seed before → no change.
         onRefresh={async () => {
           if (!user) return;
+          // Drop the pinned self-post. It's shown ONCE right after posting (the
+          // feed never shows your own posts otherwise — get_feed excludes them),
+          // so any refresh should clear it. This covers BOTH pull-to-refresh and
+          // the home-icon re-tap (the re-tap runs through this same onRefresh via
+          // scrollToTopToken). Was only cleared on tab change, so it stayed welded
+          // to the top until an app restart (Kevin 2026-07-12).
+          setPinnedPost(null);
           // Shuffle strength FIRST (mig 352): the prefetch below must run at
           // the manual-refresh 0.45, not the cold-load 0.1 — bumping after
           // meant the first re-tap re-served the welded top post ("same
