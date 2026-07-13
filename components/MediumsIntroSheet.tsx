@@ -174,6 +174,26 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
               </Text>
             </View>
           </View>
+
+          {/* DreamSmart — model↔style curation. Explained here so the ⓘ next to
+              the AI Model list (and MODE) teaches what it does. */}
+          <Text style={s.sectionLabel}>DreamSmart</Text>
+          <View style={s.cards}>
+            <View style={s.card}>
+              <View style={s.cardHead}>
+                <View style={[s.cardIcon, { backgroundColor: 'rgba(167,139,250,0.14)' }]}>
+                  <Ionicons name="sparkles" size={20} color={colors.accent} />
+                </View>
+                <Text style={s.cardTitle}>DreamSmart</Text>
+              </View>
+              <Text style={s.cardBody}>
+                Every AI model has its own strengths, so a model that nails one style can fall flat
+                on another. DreamSmart tunes the model list to the style you pick, so a watercolor
+                comes out watercolor and a comic comes out a comic. Leave it on for the best match,
+                or switch it off to choose any model yourself.
+              </Text>
+            </View>
+          </View>
         </ScrollView>
 
         {/* Floating CTA — pinned over the scroll so it's ALWAYS visible; the

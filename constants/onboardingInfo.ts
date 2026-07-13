@@ -50,7 +50,7 @@ export const MOOD_INFO: InfoStepConfig = {
 export const CREATE_INFO: InfoStepConfig = {
   eyebrow: 'how create works',
   headline: 'A full AI image studio',
-  body: 'Enter your prompt, pick an AI model, and tap Dream. There are four ways to create:',
+  body: 'Enter your prompt, pick a style, and tap Dream. A few things to know:',
   // Filled icon variants (not -outline) — the outline glyphs carry so little
   // ink at 20px that the accent tint reads as disabled-gray.
   subFeatures: [
@@ -58,6 +58,11 @@ export const CREATE_INFO: InfoStepConfig = {
       icon: 'sparkles',
       title: 'DreamBot mode',
       body: 'Mention yourself (“me”) or your +1 (“my partner”) and your Dream Cast is painted right into the dream. Add styles and vibes to shape the look.',
+    },
+    {
+      icon: 'color-wand',
+      title: 'DreamSmart',
+      body: 'We match the AI model to your chosen style automatically, so the look lands. Toggle it off any time to pick from every model.',
     },
     {
       icon: 'flash',

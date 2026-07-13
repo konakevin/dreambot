@@ -507,15 +507,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // Matches the eyebrow titles (AI MODEL / STYLE / VIBE): muted gray, uppercase.
-  // NOT accent-purple — that read as a tappable link. The checkbox + ⓘ carry
-  // the interactivity.
+  // Muted gray like the eyebrow titles (so it doesn't read as a tappable link),
+  // but keeps the brand casing "DreamSmart" (not UPPERCASE). The checkbox + ⓘ
+  // carry the interactivity.
   smartToggleLabel: {
     marginLeft: 6,
-    fontSize: fontScale(11),
+    fontSize: fontScale(12),
     fontWeight: '700',
-    letterSpacing: 1.1,
-    textTransform: 'uppercase',
+    letterSpacing: 0.3,
     color: colors.textSecondary,
   },
   pill: {
