@@ -567,7 +567,19 @@ function DataPrefetcher() {
       if (backgroundedAt.current === 0) return;
       const elapsed = Date.now() - backgroundedAt.current;
       if (elapsed > 60 * 1000) {
-        queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+        // RESEED the feed instead of invalidating it. invalidateQueries only
+        // refetches ACTIVE queries, and the feed is deliberately frozen
+        // (staleTime Infinity, refetchOnWindowFocus/Reconnect false) — so when
+        // the query was inactive, GC'd, or its in-flight fetch was cancelled on
+        // background (queryClient.ts cancels on background), the invalidate did
+        // nothing and the feed sat empty ("Your feed is warming up") until an app
+        // restart (Kevin 2026-07-12). A fresh seed changes EVERY feed query key
+        // (home forYou/following + all bot feeds share feedSeed), so the active
+        // observer starts a clean fetch — the same reliable path pull-to-refresh
+        // uses. placeholderData:keepPreviousData keeps the old feed on screen
+        // while the new seed loads (no blank flash) in the normal case; in the
+        // stuck-empty case there's nothing to keep, so it fetches fresh.
+        useFeedStore.getState().regenerateSeed();
         if (user) {
           queryClient.invalidateQueries({ queryKey: ['inboxGrouped', user.id] });
           queryClient.invalidateQueries({ queryKey: ['sparkleBalance', user.id] });

@@ -81,11 +81,16 @@ describe('cache key alignment', () => {
     }
   });
 
-  it('dreamFeed invalidation uses prefix matching (no tab/seed required)', () => {
+  it('foreground-after-idle RESEEDS the feed (reliable reload, not a frozen-query invalidate)', () => {
     const src = fs.readFileSync(layoutPath, 'utf-8');
-    const feedInvalidation = src
-      .split('\n')
-      .filter((l) => l.includes('dreamFeed') && l.includes('invalidateQueries'));
-    expect(feedInvalidation.length).toBeGreaterThan(0);
+    // The >60s-foreground handler must trigger a feed RESEED. The feed is
+    // deliberately frozen (staleTime Infinity, refetchOnWindowFocus/Reconnect
+    // off), so invalidateQueries — which only refetches ACTIVE queries — left it
+    // stuck on "Your feed is warming up" when the query was inactive / GC'd /
+    // cancelled on background. A new seed re-keys every feed query (home + bots
+    // share feedSeed), forcing a clean fetch on the active observer. Locks the
+    // 2026-07-12 fix so a future edit can't silently drop back to invalidate.
+    const reseed = src.split('\n').filter((l) => l.includes('regenerateSeed'));
+    expect(reseed.length).toBeGreaterThan(0);
   });
 });
