@@ -1338,6 +1338,7 @@ export default function CreateScreen() {
                         smartDefault={smartDefault}
                         dreamSmartOn={config.dreamSmart}
                         onToggleDreamSmart={() => toggleDreamSmart(!config.dreamSmart)}
+                        onInfo={handleModeInfo}
                         styleLabel={selectedMediumRow?.label}
                       />
                     </View>
@@ -1364,24 +1365,13 @@ export default function CreateScreen() {
                           onPress={handleModeInfo}
                           activeOpacity={0.6}
                           hitSlop={10}
-                          className="ml-2 flex-row items-center"
+                          className="ml-2"
                         >
                           <Ionicons
                             name="information-circle-outline"
-                            size={13}
+                            size={16}
                             color={colors.accent}
                           />
-                          <Text
-                            style={{
-                              color: colors.accent,
-                              fontSize: fontScale(11),
-                              fontWeight: '700',
-                              letterSpacing: 0.4,
-                              marginLeft: 3,
-                            }}
-                          >
-                            How it works
-                          </Text>
                         </TouchableOpacity>
                       </View>
                       <View

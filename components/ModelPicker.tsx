@@ -64,6 +64,8 @@ interface Props {
   dreamSmartOn?: boolean;
   /** Toggle handler — renders the inline checkbox on the AI Model header row. */
   onToggleDreamSmart?: () => void;
+  /** Opens the "how it works" explainer — renders a small ⓘ next to DreamSmart. */
+  onInfo?: () => void;
   /** Display label of the chosen style, for the "optimized for {style}" hint. */
   styleLabel?: string;
 }
@@ -81,6 +83,7 @@ export function ModelPicker({
   smartDefault,
   dreamSmartOn,
   onToggleDreamSmart,
+  onInfo,
   styleLabel,
 }: Props) {
   const user = useAuthStore((s) => s.user);
@@ -304,19 +307,31 @@ export function ModelPicker({
       <View style={styles.modelHeaderRow}>
         <Text style={[styles.pillLabel, { color: colors.textSecondary }]}>AI Model</Text>
         {hasSmartSet && onToggleDreamSmart && (
-          <TouchableOpacity
-            onPress={onToggleDreamSmart}
-            activeOpacity={0.7}
-            hitSlop={8}
-            style={styles.smartToggle}
-          >
-            <Ionicons
-              name={smartOn ? 'checkbox' : 'square-outline'}
-              size={16}
-              color={smartOn ? '#A78BFA' : colors.textSecondary}
-            />
-            <Text style={styles.smartToggleLabel}>✨ DreamSmart</Text>
-          </TouchableOpacity>
+          <View style={styles.smartToggle}>
+            <TouchableOpacity
+              onPress={onToggleDreamSmart}
+              activeOpacity={0.7}
+              hitSlop={8}
+              style={styles.smartToggleTap}
+            >
+              <Ionicons
+                name={smartOn ? 'checkbox' : 'square-outline'}
+                size={16}
+                color={smartOn ? '#A78BFA' : colors.textSecondary}
+              />
+              <Text style={styles.smartToggleLabel}>✨ DreamSmart</Text>
+            </TouchableOpacity>
+            {onInfo && (
+              <TouchableOpacity
+                onPress={onInfo}
+                activeOpacity={0.6}
+                hitSlop={10}
+                style={{ marginLeft: 5 }}
+              >
+                <Ionicons name="information-circle-outline" size={16} color={colors.accent} />
+              </TouchableOpacity>
+            )}
+          </View>
         )}
       </View>
       <TouchableOpacity
@@ -488,11 +503,20 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(6),
     marginRight: 4,
   },
+  smartToggleTap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  // Matches the eyebrow titles (AI MODEL / STYLE / VIBE): muted gray, uppercase.
+  // NOT accent-purple — that read as a tappable link. The checkbox + ⓘ carry
+  // the interactivity.
   smartToggleLabel: {
     marginLeft: 6,
-    fontSize: fontScale(12),
+    fontSize: fontScale(11),
     fontWeight: '700',
-    color: '#A78BFA',
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    color: colors.textSecondary,
   },
   pill: {
     flexDirection: 'row',
