@@ -52,7 +52,7 @@ function AvatarCircle({
   // Fallback: initial letter on a dark circle
   return (
     <View style={[styles.avatarFallback, { width: size, height: size, borderRadius: size / 2 }]}>
-      <Text style={[styles.avatarInitial, { fontSize: size * 0.45 }]}>
+      <Text allowFontScaling={false} style={[styles.avatarInitial, { fontSize: size * 0.45 }]}>
         {(username || '?')[0].toUpperCase()}
       </Text>
     </View>
@@ -81,17 +81,34 @@ export function GradientUsername({
     );
   }
 
+  // allowFontScaling={false} on every render path below: usernames are identity
+  // chrome that sit in dense fixed-height feed/comment rows, and the gradient
+  // paths are MaskedViews whose height can't grow — so Dynamic Type scaling would
+  // clip descenders (same class as the "Dreaming" wordmark). Keep all three paths
+  // (plain / no-rank gradient / ranked gradient) rendering at one size.
   if (hideRank) {
-    return wrapWithAvatar(<Text style={[style, { color: 'rgba(255,255,255,0.9)' }]}>{text}</Text>);
+    return wrapWithAvatar(
+      <Text allowFontScaling={false} style={[style, { color: 'rgba(255,255,255,0.9)' }]}>
+        {text}
+      </Text>
+    );
   }
 
   const meta = rank ? RANK_META[rank as UserRank] : null;
 
   if (!meta) {
     return wrapWithAvatar(
-      <MaskedView maskElement={<Text style={style}>{text}</Text>}>
+      <MaskedView
+        maskElement={
+          <Text allowFontScaling={false} style={style}>
+            {text}
+          </Text>
+        }
+      >
         <LinearGradient colors={['#999999', '#666666']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-          <Text style={[style, { opacity: 0 }]}>{text}</Text>
+          <Text allowFontScaling={false} style={[style, { opacity: 0 }]}>
+            {text}
+          </Text>
         </LinearGradient>
       </MaskedView>
     );
@@ -109,13 +126,21 @@ export function GradientUsername({
     : style;
 
   return wrapWithAvatar(
-    <MaskedView maskElement={<Text style={maskStyle}>{text}</Text>}>
+    <MaskedView
+      maskElement={
+        <Text allowFontScaling={false} style={maskStyle}>
+          {text}
+        </Text>
+      }
+    >
       <LinearGradient
         colors={meta.colors as [string, string, ...string[]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
       >
-        <Text style={[style, { opacity: 0 }]}>{text}</Text>
+        <Text allowFontScaling={false} style={[style, { opacity: 0 }]}>
+          {text}
+        </Text>
       </LinearGradient>
     </MaskedView>
   );
