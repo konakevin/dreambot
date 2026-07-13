@@ -51,7 +51,15 @@ const MODELS = [
   'google/gemini-2-image',
   'google/gemini-3-image-preview',
 ];
-const MEDIUMS = ['photography', 'watercolor', 'pop_art', 'comics', 'pencil', 'illustration', 'canvas'];
+const MEDIUMS = [
+  'photography',
+  'watercolor',
+  'pop_art',
+  'comics',
+  'pencil',
+  'illustration',
+  'canvas',
+];
 const ROLES = ['self', 'plus_one', 'dual'];
 
 // Held constant across the whole matrix.
@@ -74,6 +82,23 @@ const SCENE_BY_MEDIUM = {
     'in an enchanted forest clearing at dusk with glowing mushrooms, floating fireflies, and a little stone cottage',
   canvas:
     'on the deck of a tall wooden sailing ship crossing a dramatic stormy sea at sunset, billowing sails overhead',
+  // ── Dream Art (embodied) styles — settings only, style owned by the medium ──
+  anime:
+    'on a rooftop overlooking a bustling Tokyo street at dusk, glowing neon signs everywhere and a train crossing an elevated track in the distance',
+  animation:
+    'in a cozy cluttered treehouse workshop full of maps and gadgets, warm lantern light, a big round window looking out over a green forest',
+  claymation:
+    'in a whimsical backyard vegetable garden with oversized carrots and pumpkins beside a little wooden potting shed, soft morning light',
+  fairytale:
+    'in a flower-filled meadow below a castle on a hill, butterflies drifting over a winding cobblestone path, distant mountains',
+  handcrafted:
+    'at a rustic outdoor craft market stall surrounded by handmade wares, wooden crates and warm string lights strung overhead',
+  kawaii:
+    'inside a pastel bakery packed with oversized cupcakes and macarons, polka-dot walls and a tiny round cafe table by the window',
+  pixels:
+    'in a glowing retro arcade lined with cabinet screens, a checkerboard floor and bright neon signage overhead',
+  storybook:
+    'in a snowy village square at night with a decorated tree, little shops glowing warm through their windows and snow softly falling',
 };
 const DEFAULT_SCENE = 'at a cozy cafe';
 
@@ -96,6 +121,7 @@ function buildMatrix() {
   }
   if (has('--pilot')) mediums = ['pop_art'];
   if (val('--mediums')) mediums = val('--mediums').split(',');
+  if (val('--models')) models = val('--models').split(',');
   if (val('--only-model')) models = [val('--only-model')];
   if (val('--only-medium')) mediums = [val('--only-medium')];
   if (val('--only-role')) roles = [val('--only-role')];
@@ -128,10 +154,12 @@ async function seedJob({ model, medium, role }, recipe) {
     vibe_profile: recipe,
     hint: SCENE_BY_MEDIUM[medium] || DEFAULT_SCENE,
   };
-  await sb.from('dream_jobs').upsert(
-    { id: jobId, user_id: KEV, status: 'processing', payload },
-    { onConflict: 'id', ignoreDuplicates: true }
-  );
+  await sb
+    .from('dream_jobs')
+    .upsert(
+      { id: jobId, user_id: KEV, status: 'processing', payload },
+      { onConflict: 'id', ignoreDuplicates: true }
+    );
   const { error } = await sb.from('dream_queue').insert({
     id: jobId,
     user_id: KEV,
@@ -180,7 +208,11 @@ async function kickWorker() {
   const deadline = Date.now() + 75 * 60 * 1000; // 75 min cap for the whole batch (216 renders)
   let kickBusy = null;
   while (done.size < jobs.length && Date.now() < deadline) {
-    if (!kickBusy) kickBusy = kickWorker().then((s) => { kickBusy = null; return s; });
+    if (!kickBusy)
+      kickBusy = kickWorker().then((s) => {
+        kickBusy = null;
+        return s;
+      });
     const pending = jobs.filter((j) => !done.has(j.jobId)).map((j) => j.jobId);
     const { data: rows } = await sb
       .from('dream_queue')
@@ -227,7 +259,9 @@ async function kickWorker() {
         }
       }
     }
-    console.log(`${r.ok ? '✓' : '✗'} ${j.medium} | ${j.model.split('/').pop()} | ${j.role} — ${r.status}`);
+    console.log(
+      `${r.ok ? '✓' : '✗'} ${j.medium} | ${j.model.split('/').pop()} | ${j.role} — ${r.status}`
+    );
     results.push(r);
   }
   const outFile = path.join(OUT_DIR, `results-${combos.length}.json`);
