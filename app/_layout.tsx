@@ -712,6 +712,13 @@ function RootLayout() {
                             ...SCREEN_PRESETS.MODAL_SWIPEABLE,
                             gestureEnabled: false,
                             fullScreenGestureEnabled: false,
+                            // Fade in (not the card slide) so tapping a grid thumb
+                            // pops straight into the fullscreen viewer like a
+                            // lightbox, instead of sliding in like a new page
+                            // (Kevin 2026-07-12). Native swipe-back is already off
+                            // here (custom useAxisLockSwipeBack), so dropping the
+                            // slide costs no gesture behavior.
+                            animation: 'fade',
                           }}
                         />
                         {/* user/[userId] is a full-screen posts GRID. The native
