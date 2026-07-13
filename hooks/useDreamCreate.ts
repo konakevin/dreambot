@@ -169,8 +169,24 @@ export function useDreamCreate() {
         // Restyle's face/art split can leave an empty side — fall back to the
         // whole eligible base rather than a token the server can't scope.
         const rollFrom = pool.length > 0 ? pool : base;
-        if (rollFrom.length > 0) {
-          resolvedMediumKey = rollFrom[Math.floor(Math.random() * rollFrom.length)].key;
+        // DreamSmart on Surprise Me: honor the user's chosen model by rolling
+        // ONLY mediums whose curated set includes it, so the rolled style suits
+        // that model AND the model is never coerced away downstream (keeps
+        // charge==render). Widen back to the full pool if nothing matches; skip
+        // entirely when DreamSmart is off or no model was actively chosen
+        // (config.forceModel null). Kevin 2026-07-12.
+        let modelPool = rollFrom;
+        if (config.dreamSmart !== false && config.forceModel) {
+          const chosen = config.forceModel;
+          const modelSafe = rollFrom.filter(
+            (m) =>
+              Array.isArray(m.client_meta?.smart_dream_models) &&
+              (m.client_meta.smart_dream_models as unknown[]).includes(chosen)
+          );
+          if (modelSafe.length > 0) modelPool = modelSafe;
+        }
+        if (modelPool.length > 0) {
+          resolvedMediumKey = modelPool[Math.floor(Math.random() * modelPool.length)].key;
         } else {
           resolvedMediumKey = isRestyleRoll ? 'watercolor' : 'surprise_me';
         }

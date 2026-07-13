@@ -632,7 +632,14 @@ async function handleRequest(req: Request): Promise<Response> {
     // 2026-06-02 — art_styles / aesthetics favorites removed from VibeProfile
     // + the resolver branches that consumed them. Client always passes a
     // concrete key here.
-    let medium = await resolveMediumFromDb(medium_key);
+    // DreamSmart on Surprise Me: if the client didn't pre-roll (cold cache /
+    // raw surprise_me token reaches the server) and the user picked a model
+    // with DreamSmart on, constrain the server-side roll to mediums that model
+    // renders well — so the model is honored (not coerced) and charge==render
+    // holds. Concrete keys ignore this (already chosen). smartDreamApplies gates
+    // out use_exact_prompt / restyle / new_scene photo / opt-out.
+    const smartRollModel = smartDreamApplies(body) && force_model ? force_model : null;
+    let medium = await resolveMediumFromDb(medium_key, undefined, smartRollModel);
     const vibe = await resolveVibeFromDb(vibe_key);
 
     // DLT: bot mediums carry scene/cast directives that would replace the

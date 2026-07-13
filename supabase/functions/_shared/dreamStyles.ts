@@ -329,7 +329,14 @@ function filterRecent(pool: string[], excludeRecent?: string[]): string[] {
  */
 export async function resolveMediumFromDb(
   key: string | undefined,
-  excludeRecent?: string[]
+  excludeRecent?: string[],
+  // DreamSmart: when the user picked a model on Surprise Me, the caller passes
+  // it here so the roll draws ONLY from mediums whose curated set includes that
+  // model (honor the model instead of coercing it away). Only the create-screen
+  // surprise path passes this; nightly/first-dream/DLT leave it undefined (no
+  // change). Applied in the dream_eligible / surprise_me pools; widens back to
+  // the full pool if no medium matches.
+  constrainToModel?: string | null
 ): Promise<ResolvedMedium> {
   const mediums = await fetchMediums();
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
@@ -345,9 +352,16 @@ export async function resolveMediumFromDb(
   // re-roll triggered by pure_scene composition. Keeps embodied as a
   // scene-only artistic register, never the user's body.
   if (key === 'dream_eligible') {
-    const eligibleKeys = mediums
-      .filter((m) => m.isDreamEligible && m.characterRenderMode !== 'embodied')
-      .map((m) => m.key);
+    let eligible = mediums.filter((m) => m.isDreamEligible && m.characterRenderMode !== 'embodied');
+    // DreamSmart model constraint (create Surprise Me only). Roll just the
+    // mediums the chosen model renders well; widen back to the full eligible
+    // pool if none match, so the user always gets a dream.
+    if (constrainToModel) {
+      const model = constrainToModel;
+      const modelSafe = eligible.filter((m) => m.smartDreamModels.includes(model));
+      if (modelSafe.length > 0) eligible = modelSafe;
+    }
+    const eligibleKeys = eligible.map((m) => m.key);
     const pool = filterRecent(eligibleKeys, excludeRecent);
     const picked = pick(pool);
     return mediums.find((m) => m.key === picked)!;
@@ -360,7 +374,7 @@ export async function resolveMediumFromDb(
   // (users reported it as "stuck on the previous medium", 2026-07-05). Roll
   // from the curated pool instead — same pool the nightly auto-roll trusts.
   if (key === 'surprise_me' || key === 'my_mediums') {
-    return resolveMediumFromDb('dream_eligible', excludeRecent);
+    return resolveMediumFromDb('dream_eligible', excludeRecent, constrainToModel);
   }
   // Nightly auto-roll for character/face-swap renders: filter to mediums
   // that face-swap WELL on auto-roll. hyperreal/render keep face_swaps=true
