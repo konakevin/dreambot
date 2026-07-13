@@ -406,7 +406,7 @@ export function ModelPicker({
             </View>
             <Text style={styles.modalSubtitle}>
               {smartActive
-                ? `✨ DreamSmart, tuned for ${styleLabel ?? 'this style'}. Every style looks best in certain models, so the list is curated to those. Cost varies by model.`
+                ? `DreamSmart, tuned for ${styleLabel ?? 'this style'}. Every style looks best in certain models, so the list is curated to those. Cost varies by model.`
                 : 'Each one gives your dream a slightly different look. The cost varies by model depending on compute.'}
             </Text>
             <ScrollView
