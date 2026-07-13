@@ -25,7 +25,14 @@ import {
   useRef,
   useState,
 } from 'react';
-import { View, StyleSheet, ActivityIndicator, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  InteractionManager,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
@@ -134,6 +141,18 @@ function VerticalPagerInner<T>(
   const pageHeightSV = useSharedValue(pageHeight);
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
+
+  // Deferred hydration: on first mount render ONLY the active card (see
+  // windowItems), then expand to the full ±windowSize once the nav transition
+  // settles. Mounting all 5 full-screen cards synchronously during the push
+  // commit was the tap-to-open lag — the native transition couldn't start until
+  // that render finished (Kevin 2026-07-12). Once true it stays true, so only
+  // the first open pays the deferral.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    const handle = InteractionManager.runAfterInteractions(() => setHydrated(true));
+    return () => handle.cancel();
+  }, []);
 
   useEffect(() => {
     countSV.value = count;
@@ -408,12 +427,16 @@ function VerticalPagerInner<T>(
   });
 
   const windowItems = useMemo(() => {
-    const lo = Math.max(0, activeIndex - windowSize);
-    const hi = Math.min(count - 1, activeIndex + windowSize);
+    // Active-only until hydrated (window 0), then the full ±windowSize. Keeps the
+    // first render — and therefore the nav push transition — cheap; neighbors
+    // mount right after the transition so a swipe is still ready in time.
+    const w = hydrated ? windowSize : 0;
+    const lo = Math.max(0, activeIndex - w);
+    const hi = Math.min(count - 1, activeIndex + w);
     const out: number[] = [];
     for (let i = lo; i <= hi; i++) out.push(i);
     return out;
-  }, [activeIndex, windowSize, count]);
+  }, [activeIndex, windowSize, count, hydrated]);
 
   return (
     <GestureDetector gesture={pan}>
