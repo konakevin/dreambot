@@ -58,8 +58,14 @@ export function TitleText({
   if (uppercase) base.textTransform = 'uppercase';
   if (letterSpacing != null) base.letterSpacing = letterSpacing;
 
+  // allowFontScaling={false}: display wordmark with a device-scaled (not
+  // Dynamic-Type-scaled) lineHeight — same fixed-box clip class as the gradient
+  // siblings (GradientTitle/AnimatedGradientTitle). The title already scales
+  // per-device via fontScale; OS "Larger Text" would grow glyphs past the fixed
+  // line box and clip them.
   return (
     <Text
+      allowFontScaling={false}
       style={[base, style]}
       numberOfLines={numberOfLines}
       adjustsFontSizeToFit={adjustsFontSizeToFit}
