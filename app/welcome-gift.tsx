@@ -63,6 +63,13 @@ export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
   const insets = useSafeAreaInsets();
   const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
+  // Prefer "N WEEKS" framing when the trial is a clean week multiple (Kevin
+  // 2026-07-12: "2 weeks" reads warmer than "14 days"); fall back to days.
+  const trialWeeks = proTrialDays / 7;
+  const trialFree =
+    proTrialDays % 7 === 0
+      ? `${trialWeeks} ${trialWeeks === 1 ? 'WEEK' : 'WEEKS'} FREE`
+      : `${proTrialDays} DAYS FREE`;
   // from=onboarding → auto-presented at the end of onboarding (RevealStep):
   // the user has never seen the inbox, so "back" means the feed.
   const { from } = useLocalSearchParams<{ from?: string }>();
@@ -119,7 +126,7 @@ export default function WelcomeGiftScreen() {
             <Text style={s.cardEmoji}>🌙</Text>
             <Text style={s.cardTitle}>Nightly Dreams</Text>
             <View style={s.freePill}>
-              <Text style={s.freePillText}>{proTrialDays} DAYS FREE</Text>
+              <Text style={s.freePillText}>{trialFree}</Text>
             </View>
           </View>
           <Text style={s.cardBody}>
