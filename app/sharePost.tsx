@@ -64,7 +64,9 @@ function ViberBubble({
           />
         ) : (
           <View style={[styles.avatarFallback, selected && styles.avatarSelected]}>
-            <Text style={styles.avatarInitial}>{(item.username || '?')[0].toUpperCase()}</Text>
+            <Text allowFontScaling={false} style={styles.avatarInitial}>
+              {(item.username || '?')[0].toUpperCase()}
+            </Text>
           </View>
         )}
         {selected && (

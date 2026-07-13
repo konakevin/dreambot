@@ -346,7 +346,7 @@ function GroupActorsSheet({
                     />
                   ) : (
                     <View style={styles.sheetAvatarFallback}>
-                      <Text style={styles.avatarText}>
+                      <Text allowFontScaling={false} style={styles.avatarText}>
                         {(item.username || '?')[0].toUpperCase()}
                       </Text>
                     </View>

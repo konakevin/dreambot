@@ -233,14 +233,15 @@ export const DreamCard = memo(function DreamCard({
   const showAuthorControls = !isOwnPost && followingSet !== undefined;
   const isFollowing = !!followingSet?.has(item.user_id);
   // Repost — self-contained (membership Set is one shared cached query; the
-  // mutation toggles via the toggle_repost RPC). Hidden on own posts AND on posts
-  // whose author opted out (allow_reposts === false) — the server also rejects
-  // those, but hiding the button is the correct UX. `!== false` so a surface that
-  // hasn't wired the flag through (undefined) still shows it.
+  // mutation toggles via the toggle_repost RPC). Twitter-style: you CAN repost
+  // your own post (re-broadcasts it to your followers' feeds), so own posts are
+  // no longer excluded — only posts whose author opted out (allow_reposts ===
+  // false) hide the button (the server also rejects those). `!== false` so a
+  // surface that hasn't wired the flag through (undefined) still shows it.
   const { data: repostIdsSet } = useRepostIds();
   const toggleRepost = useToggleRepost();
   const isReposted = repostIdsSet?.has(item.id) ?? false;
-  const canRepost = !isOwnPost && item.allow_reposts !== false;
+  const canRepost = item.allow_reposts !== false;
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -623,7 +624,9 @@ export const DreamCard = memo(function DreamCard({
                     />
                   ) : (
                     <View style={s.avatarFallback}>
-                      <Text style={s.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
+                      <Text allowFontScaling={false} style={s.avatarText}>
+                        {(item.username || '?')[0].toUpperCase()}
+                      </Text>
                     </View>
                   )}
                   <View style={{ flex: 1 }}>
@@ -762,10 +765,13 @@ export const DreamCard = memo(function DreamCard({
                   </Text>
                 </TouchableOpacity>
               )}
-              {/* Repost — above bookmark. Hidden on own posts. No count. Stays
-                  white in both states; the reposted state is signalled by a bold
-                  white checkmark dropped into the icon's center (MCI check-bold —
-                  Ionicons has no bold check). */}
+              {/* Repost — above bookmark. Shown on all posts incl. your own
+                  (Twitter-style self-repost). Stays white in both states; the
+                  reposted state is signalled by a bold white checkmark dropped
+                  into the icon's center (MCI check-bold — Ionicons has no bold
+                  check). Count below mirrors the like/comment rail: floored at 1
+                  when isReposted (your repost counts), opacity-hidden at 0 so the
+                  rail's vertical rhythm never reflows. */}
               {canRepost && (
                 <TouchableOpacity
                   style={ui.sideButton}
@@ -788,6 +794,15 @@ export const DreamCard = memo(function DreamCard({
                       </View>
                     )}
                   </View>
+                  <Text
+                    style={[
+                      ui.sideCount,
+                      !Math.max(item.repost_count ?? 0, isReposted ? 1 : 0) && hiddenCount,
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {Math.max(item.repost_count ?? 0, isReposted ? 1 : 0)}
+                  </Text>
                 </TouchableOpacity>
               )}
               {onToggleSave && (

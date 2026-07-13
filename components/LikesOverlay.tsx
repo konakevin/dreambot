@@ -178,7 +178,7 @@ export function LikesOverlay({ post, onClose }: Props) {
                 />
               ) : (
                 <View style={styles.thumbAvatarFallback}>
-                  <Text style={styles.thumbAvatarText}>
+                  <Text allowFontScaling={false} style={styles.thumbAvatarText}>
                     {(post.username || '?')[0].toUpperCase()}
                   </Text>
                 </View>

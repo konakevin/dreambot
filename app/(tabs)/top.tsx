@@ -162,7 +162,9 @@ function TagRow({ tag, count }: { tag: string; count: number }) {
       activeOpacity={0.7}
     >
       <View style={s.searchAvatarFallback}>
-        <Text style={s.tagGlyph}>#</Text>
+        <Text allowFontScaling={false} style={s.tagGlyph}>
+          #
+        </Text>
       </View>
       <View style={s.searchUserInfo}>
         <Text style={s.searchUsername}>#{tag}</Text>
@@ -193,7 +195,9 @@ function SearchRow({ user }: { user: SearchUser }) {
         />
       ) : (
         <View style={s.searchAvatarFallback}>
-          <Text style={s.searchAvatarText}>{(user.username || '?')[0].toUpperCase()}</Text>
+          <Text allowFontScaling={false} style={s.searchAvatarText}>
+            {(user.username || '?')[0].toUpperCase()}
+          </Text>
         </View>
       )}
       <View style={s.searchUserInfo}>

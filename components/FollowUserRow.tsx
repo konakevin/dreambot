@@ -32,7 +32,9 @@ export function FollowUserRow({ item, isFollowing, onFollow }: Props) {
         />
       ) : (
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{(item.username || '?')[0].toUpperCase()}</Text>
+          <Text allowFontScaling={false} style={styles.avatarText}>
+            {(item.username || '?')[0].toUpperCase()}
+          </Text>
         </View>
       )}
       <Text style={styles.username}>{item.username}</Text>

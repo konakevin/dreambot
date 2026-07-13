@@ -215,7 +215,9 @@ export function CommentRow({
             />
           ) : (
             <View style={[styles.avatarFallback, isReply && styles.replyAvatar]}>
-              <Text style={styles.avatarText}>{(comment.username || '?')[0].toUpperCase()}</Text>
+              <Text allowFontScaling={false} style={styles.avatarText}>
+                {(comment.username || '?')[0].toUpperCase()}
+              </Text>
             </View>
           )}
         </TouchableOpacity>

@@ -167,7 +167,7 @@ export default function CommentsScreen() {
                       <Image source={{ uri: decodedAvatarUrl }} style={styles.thumbAvatar} />
                     ) : (
                       <View style={styles.thumbAvatarFallback}>
-                        <Text style={styles.thumbAvatarText}>
+                        <Text allowFontScaling={false} style={styles.thumbAvatarText}>
                           {(decodedUsername || '?')[0].toUpperCase()}
                         </Text>
                       </View>
@@ -265,7 +265,7 @@ export default function CommentsScreen() {
                       <Image source={{ uri: user.avatarUrl }} style={styles.mentionAvatar} />
                     ) : (
                       <View style={styles.mentionAvatarFallback}>
-                        <Text style={styles.mentionAvatarText}>
+                        <Text allowFontScaling={false} style={styles.mentionAvatarText}>
                           {(user.username || '?')[0].toUpperCase()}
                         </Text>
                       </View>

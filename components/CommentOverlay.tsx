@@ -435,7 +435,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                 />
               ) : (
                 <View style={styles.thumbAvatarFallback}>
-                  <Text style={styles.thumbAvatarText}>
+                  <Text allowFontScaling={false} style={styles.thumbAvatarText}>
                     {(post.username || '?')[0].toUpperCase()}
                   </Text>
                 </View>
@@ -598,7 +598,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                       <Image source={{ uri: u.avatarUrl }} style={styles.mentionAvatar} />
                     ) : (
                       <View style={styles.mentionAvatarFallback}>
-                        <Text style={styles.mentionAvatarInitial}>
+                        <Text allowFontScaling={false} style={styles.mentionAvatarInitial}>
                           {(u.username || '?')[0].toUpperCase()}
                         </Text>
                       </View>
