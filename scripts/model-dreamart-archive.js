@@ -45,12 +45,12 @@ const ROLES = [
 const SETS = {
   anime: ALL,
   claymation: ALL,
-  animation: ['f11pro', 'f11ultra', 'f2flex', 'gpt1', 'gpt2', 'nbpro'],
-  fairytale: ['f11pro', 'f11ultra', 'f2dev', 'f2max', 'gpt1', 'nbpro'],
+  animation: ['f11pro', 'f11ultra', 'f2flex', 'nbpro'],
+  fairytale: ALL,
   storybook: ['f11pro', 'f2max', 'gpt2', 'nb', 'nbpro'],
   pixels: ['gpt1', 'gpt2', 'nb', 'nbpro'],
-  handcrafted: ['gpt1', 'gpt2', 'f2dev', 'f2max', 'nbpro'],
-  kawaii: ['f2flex', 'f2dev', 'nbpro'],
+  handcrafted: ALL,
+  kawaii: ALL,
 };
 const STYLE_ORDER = [
   'anime',
@@ -65,12 +65,16 @@ const STYLE_ORDER = [
 const STYLE_NOTE = {
   anime: 'Every model nails anime and keeps the beard — all pass.',
   claymation: 'Clay holds the likeness across the board — all pass.',
-  animation: 'Pixar “cute-kid” prior turns the adult into a boy on the excluded models.',
-  fairytale: 'Excluded models go clean-shaven-prince / drop the person.',
+  animation:
+    'MEDIUM PROMPT CLEANED (dropped Pixar/Disney/Dreamworks + the "cute-kid" language, added a keep-adult lock). Renders adults now; kept the models that clearly ANIMATE (the rest go semi-photoreal).',
+  fairytale:
+    'MEDIUM PROMPT CLEANED (dropped "Disney", added a gender+beard lock). Was princes/princesses/wrong-gender; now all models hold a bearded-you in the storybook style.',
   storybook: 'Excluded models skew too young / clean-shaven.',
   pixels: 'Only GPT + Gemini truly pixelate a person; Flux renders smooth illustration.',
-  handcrafted: 'Yarn-doll look — resemblance is loose for ALL models; passes are best-quality.',
-  kawaii: 'Chibi erases the beard; only these read as an adult male.',
+  handcrafted:
+    'MEDIUM PROMPT CLEANED (dropped "craft world/diorama", cast-count lock). Was a doll-crowd; now a single/dual hero doll, correct count, LBP/Sackboy look kept.',
+  kawaii:
+    'MEDIUM PROMPT CLEANED (dropped Sanrio/Pop-Mart, added a prominent-beard lock). Was beardless chibi; now every model keeps the bearded adult you.',
 };
 
 const slug = (id) => id.replace(/[^a-z0-9]/gi, '-');
