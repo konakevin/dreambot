@@ -250,7 +250,10 @@ export default function NewPostScreen() {
       invalidateProfileGrids(qc);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Posted', 'checkmark-circle');
-      router.replace('/(tabs)');
+      // Onboarding first-dream POST lands on the welcome-gift screen (sparkle
+      // bonus + Pro trial), same as the Skip path, so BOTH first-dream exits see
+      // it (Kevin 2026-07-12). Normal posts go straight to the feed.
+      router.replace(params.fromOnboarding ? '/welcome-gift?from=onboarding' : '/(tabs)');
     } catch (e) {
       // Always log the real failure — a silent catch here hid a storage-copy
       // outage entirely ("Failed to post" with zero diagnostics, 2026-07-11).
@@ -269,8 +272,10 @@ export default function NewPostScreen() {
         <TouchableOpacity
           onPress={() => {
             // Onboarding REPLACED its route with this screen, so there's nothing
-            // to pop back to — land on the feed (the dream stays in the album).
-            if (params.fromOnboarding) return router.replace('/(tabs)');
+            // to pop back to. Cancelling the post = same as Skip: still show the
+            // welcome-gift screen (Kevin 2026-07-12), not straight to the feed.
+            // The dream stays in the album regardless.
+            if (params.fromOnboarding) return router.replace('/welcome-gift?from=onboarding');
             if (step === 'compose') return setStep('select');
             router.back();
           }}

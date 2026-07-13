@@ -331,9 +331,10 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     // Route the feed exit THROUGH the welcome-gift screen (2026-07-05): it's
     // the one surface that explains the sparkle bonus + the Pro trial, and as
     // an inbox-notification-only destination almost nobody saw it. The
-    // from=onboarding param makes its back/CTA land on the feed, not /inbox.
-    // (The "Post to my feed" fork above skips it — those users still have the
-    // welcome_gift inbox row.)
+    // from=onboarding param makes its CTA land on the feed, not /inbox.
+    // The "Post to my feed" fork also lands here now — New Post routes its
+    // onboarding exit (publish OR cancel) to welcome-gift too, so BOTH the post
+    // and skip paths see it (Kevin 2026-07-12).
     router.replace('/welcome-gift?from=onboarding');
   }
 
@@ -429,7 +430,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage subtext="Good dreams come to those who wait" />
+        <MagicalLoadingStage subtext="DreamBot is busy painting your very first dream, hang tight!" />
       </View>
     );
   }

@@ -22,10 +22,11 @@
  * now the guaranteed trial + sparkle education moment) AND via the inbox
  * notification tap forever after.
  *
- * Tap dismiss flow: back arrow top-left routes to /inbox (where they
- * came from) — or straight to the feed when from=onboarding (they've
- * never seen the inbox yet). Primary CTA routes to /create. The
- * welcome_gift notification stays in the inbox as a sentimental keepsake.
+ * Dismiss flow: onboarding arrivals (from=onboarding) have NO back arrow (the
+ * route was replaced and there's nowhere to go back to), so the "Let's go" CTA
+ * is the only way out and it lands on the feed. Inbox-tap arrivals keep a
+ * top-left back arrow (routes to /inbox) and a "Let's dream" CTA (routes to
+ * /create). The welcome_gift notification stays in the inbox as a keepsake.
  */
 
 import { useMemo } from 'react';
@@ -92,12 +93,16 @@ export default function WelcomeGiftScreen() {
 
   return (
     <SafeAreaView style={s.root} edges={['top', 'bottom']}>
-      {/* Back arrow — top-left, lets the user return to inbox without
-          having to fire the primary CTA. Routes to /inbox explicitly so
-          cold-start opens from a push tap have a sane destination. */}
-      <Pressable onPress={handleBack} style={s.backBtn} hitSlop={12}>
-        <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
-      </Pressable>
+      {/* Back arrow — ONLY for inbox-tap arrivals, where "back" has a real
+          destination (the inbox they came from). On the onboarding arrival
+          there is nowhere to go back to (the route was replaced, and back would
+          confusingly jump to a feed they were never on), so it's hidden and the
+          "Let's go" CTA is the only way out (Kevin 2026-07-12). */}
+      {!fromOnboarding && (
+        <Pressable onPress={handleBack} style={s.backBtn} hitSlop={12}>
+          <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
+        </Pressable>
+      )}
 
       <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Mascot — rotates one of 5 painter variants per mount. */}
@@ -117,8 +122,9 @@ export default function WelcomeGiftScreen() {
           <Text style={s.giftSubtitle}>to get you started</Text>
         </View>
 
-        {/* Intro line, then 3 feature rows. */}
-        <Text style={s.intro}>One sparkle, one dream. Use them to:</Text>
+        {/* Intro line, then 3 feature rows. (Not "one sparkle, one dream" — a
+            dream costs a few sparkles depending on the model.) */}
+        <Text style={s.intro}>Sparkles bring your dreams to life. Use them to:</Text>
         <View style={s.featureList}>
           <FeatureRow emoji="🎨" text="Turn words into pictures" />
           <FeatureRow emoji="📸" text="Reimagine your photos" />
