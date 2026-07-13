@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import { colors } from '@/constants/theme';
@@ -18,7 +18,14 @@ const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
 export function WelcomeStep({ onNext, onBack }: Props) {
   return (
     <View style={s.root}>
-      <View style={s.content}>
+      {/* ScrollView (not a plain flex column) so that at large OS "Larger Text"
+          sizes the centered stack can scroll instead of overflowing/clipping on
+          short devices. Content stays centered when it fits (flexGrow + center). */}
+      <ScrollView
+        style={s.scroll}
+        contentContainerStyle={s.content}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={s.iconStack}>
           {/* The original robot-reaching-for-a-star mascot — kept on this screen
               even after the app icon switched to the gradient star-field design. */}
@@ -39,7 +46,7 @@ export function WelcomeStep({ onNext, onBack }: Props) {
         <Text style={s.tagline}>Where bots dream and you’re invited</Text>
 
         <Text style={s.body}>Let’s set up your dream world</Text>
-      </View>
+      </ScrollView>
 
       {/* First step — no previous screen to go back to. */}
       <OnboardingFooter onNext={onNext} onBack={onBack} hideBack nextVariant="gradient" />
@@ -49,9 +56,11 @@ export function WelcomeStep({ onNext, onBack }: Props) {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  scroll: { flex: 1 },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 28,
+    paddingVertical: verticalScale(24),
     justifyContent: 'center',
     alignItems: 'center',
   },

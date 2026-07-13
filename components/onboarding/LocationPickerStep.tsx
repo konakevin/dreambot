@@ -136,7 +136,13 @@ function LocationTile({
 
       <LinearGradient colors={['transparent', 'rgba(0,0,0,0.7)']} style={s.tileOverlay} />
 
-      <Text style={s.tileLabel}>{item.label}</Text>
+      {/* numberOfLines={1}: the label is bottom-anchored inside a fixed-height,
+          overflow:hidden tile. Without a line cap, OS "Larger Text" (or a long
+          name) wraps it upward and the top lines clip against the tile edge.
+          One line + tail-ellipsis bounds the growth. */}
+      <Text style={s.tileLabel} numberOfLines={1} ellipsizeMode="tail">
+        {item.label}
+      </Text>
 
       {selected && (
         <View style={s.heartBadge}>
@@ -350,7 +356,10 @@ const s = StyleSheet.create({
     fontWeight: '600',
     color: colors.accent,
     marginTop: verticalScale(4),
-    height: 18,
+    // minHeight (not a hard height) reserves the row so layout doesn't jump when
+    // 0 are selected, but still lets the line grow under OS "Larger Text" instead
+    // of clipping the glyphs.
+    minHeight: 18,
   },
   sectionBadgeHidden: { opacity: 0 },
 
