@@ -319,7 +319,7 @@ export function ModelPicker({
                 size={16}
                 color={smartOn ? '#A78BFA' : colors.textSecondary}
               />
-              <Text style={styles.smartToggleLabel}>✨ DreamSmart</Text>
+              <Text style={styles.smartToggleLabel}>DreamSmart</Text>
             </TouchableOpacity>
             {onInfo && (
               <TouchableOpacity
