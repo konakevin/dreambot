@@ -92,7 +92,7 @@ const SCENE_BY_MEDIUM = {
   fairytale:
     'in a flower-filled meadow below a castle on a hill, butterflies drifting over a winding cobblestone path, distant mountains',
   handcrafted:
-    'at a rustic outdoor craft market stall surrounded by handmade wares, wooden crates and warm string lights strung overhead',
+    'in a sunny cottage flower garden with a low wooden fence, a few potted plants and soft string lights overhead',
   kawaii:
     'inside a pastel bakery packed with oversized cupcakes and macarons, polka-dot walls and a tiny round cafe table by the window',
   pixels:
