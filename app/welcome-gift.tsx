@@ -33,7 +33,8 @@ import { useMemo } from 'react';
 import { View, StyleSheet, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as nav from '@/lib/navigate';
@@ -54,19 +55,13 @@ const MASCOTS = [
   require('@/assets/images/mascots/mascot-5.jpg'),
 ];
 
-const MASCOT_SIZE = verticalScaleClamped(140, 110, 160);
-
-function FeatureRow({ emoji, text }: { emoji: string; text: string }) {
-  return (
-    <View style={s.featureRow}>
-      <Text style={s.featureEmoji}>{emoji}</Text>
-      <Text style={s.featureText}>{text}</Text>
-    </View>
-  );
-}
+// Small hero mascot — shrunk from 140 so both feature pillars + the CTA fit
+// without a messy half-scrolled card (Kevin 2026-07-12).
+const MASCOT_SIZE = verticalScaleClamped(92, 78, 104);
 
 export default function WelcomeGiftScreen() {
   const mascot = useMemo(() => MASCOTS[Math.floor(Math.random() * MASCOTS.length)], []);
+  const insets = useSafeAreaInsets();
   const { welcomeSparkleBonus, proTrialDays } = useEngineConfig();
   // from=onboarding → auto-presented at the end of onboarding (RevealStep):
   // the user has never seen the inbox, so "back" means the feed.
@@ -92,7 +87,7 @@ export default function WelcomeGiftScreen() {
   }
 
   return (
-    <SafeAreaView style={s.root} edges={['top', 'bottom']}>
+    <SafeAreaView style={s.root} edges={['top']}>
       {/* Back arrow — ONLY for inbox-tap arrivals, where "back" has a real
           destination (the inbox they came from). On the onboarding arrival
           there is nowhere to go back to (the route was replaced, and back would
@@ -110,43 +105,59 @@ export default function WelcomeGiftScreen() {
 
         {/* Gradient wordmark hero — matches onboarding's brand treatment. */}
         <Text style={s.eyebrow}>You&rsquo;re in</Text>
-        <GradientTitle size={40} weight={700} letterSpacing={-0.5}>
+        <GradientTitle size={38} weight={700} letterSpacing={-0.5}>
           Welcome ✨
         </GradientTitle>
+        <Text style={s.lede}>Two ways to dream, both free to start</Text>
 
-        {/* Gift card — the headline moment. Accent-bordered pill so the
-            "25 sparkles" reads as a discrete artifact, not buried prose. */}
-        <View style={s.giftCard}>
-          <Text style={s.giftEmoji}>🎁</Text>
-          <Text style={s.giftBig}>{welcomeSparkleBonus} sparkles</Text>
-          <Text style={s.giftSubtitle}>to get you started</Text>
+        {/* Pillar 1 — Nightly Dreams (the flagship). Accent-bordered so it reads
+            as the headline feature, with the free-trial term on the pill + a
+            quiet footnote so the user knows it's a trial that continues on Pro.
+            {proTrialDays} is engine_config-driven (same window the gates read). */}
+        <View style={s.nightlyCard}>
+          <View style={s.cardHead}>
+            <Text style={s.cardEmoji}>🌙</Text>
+            <Text style={s.cardTitle}>Nightly Dreams</Text>
+            <View style={s.freePill}>
+              <Text style={s.freePillText}>{proTrialDays} DAYS FREE</Text>
+            </View>
+          </View>
+          <Text style={s.cardBody}>
+            While you sleep, DreamBot paints you a fresh dream, set in your favorite places and
+            starring your Dream Cast. Wake up to a new one every morning.
+          </Text>
+          <Text style={s.cardFoot}>Then keep them coming with Pro</Text>
         </View>
 
-        {/* Intro line, then 3 feature rows. (Not "one sparkle, one dream" — a
-            dream costs a few sparkles depending on the model.) */}
-        <Text style={s.intro}>Sparkles bring your dreams to life. Use them to:</Text>
-        <View style={s.featureList}>
-          <FeatureRow emoji="🎨" text="Turn words into pictures" />
-          <FeatureRow emoji="📸" text="Reimagine your photos" />
-          <FeatureRow emoji="🌙" text="Cast yourself in dream worlds" />
-        </View>
-
-        {/* Pro-trial card — promoted from a buried footnote to its own
-            artifact (2026-07-05) so the trial terms actually register:
-            when it ends in {proTrialDays} days, the user should already
-            know it was a trial. Length from engine_config (the same
-            admin-tunable window the entitlement gates read). */}
-        <View style={s.trialCard}>
-          <Text style={s.giftEmoji}>🌙</Text>
-          <Text style={s.trialBig}>{proTrialDays}-day Pro trial</Text>
-          <Text style={s.giftSubtitle}>nightly dreams land every morning, on us</Text>
-          <Text style={s.trialFoot}>After that, keep them coming with Pro</Text>
+        {/* Pillar 2 — Sparkles (dream on your own). Quieter card. */}
+        <View style={s.sparkleCard}>
+          <View style={s.cardHead}>
+            <Text style={s.cardEmoji}>🎁</Text>
+            <Text style={s.cardTitle}>{welcomeSparkleBonus} sparkles</Text>
+            <View style={s.giftPill}>
+              <Text style={s.giftPillText}>OUR GIFT</Text>
+            </View>
+          </View>
+          <Text style={s.cardBody}>
+            For dreaming on your own, anytime. Turn words into pictures, reimagine a photo, or cast
+            yourself somewhere new.
+          </Text>
         </View>
       </ScrollView>
 
-      {/* CTA pill — full-width, accent background. Replaces history so
-          back-button doesn't return to the welcome screen. */}
-      <View style={s.ctaWrap}>
+      {/* Floating CTA over a scrim — the content fades under the button and can
+          scroll clear, instead of hard-cutting a card into a stray icon at the
+          bottom edge (Kevin 2026-07-12). Footer owns the bottom inset, so the
+          SafeAreaView only claims the top edge. */}
+      <View
+        style={[s.ctaWrap, { paddingBottom: Math.max(insets.bottom, verticalScale(12)) }]}
+        pointerEvents="box-none"
+      >
+        <LinearGradient
+          colors={['transparent', colors.background]}
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none"
+        />
         {/* TouchableOpacity + plain style, NOT a function-form Pressable style —
             with reactCompiler enabled the function style never gets applied
             (see ProfileHeader stats fix, 2026-07-01) and the pill rendered bare. */}
@@ -173,116 +184,117 @@ const s = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 28,
-    paddingTop: verticalScale(48),
-    paddingBottom: verticalScale(32),
+    paddingTop: verticalScale(40),
+    // Clear the floating CTA + scrim so the last card scrolls fully into view.
+    paddingBottom: verticalScale(128),
     alignItems: 'center',
   },
 
   mascot: {
     width: MASCOT_SIZE,
     height: MASCOT_SIZE,
-    borderRadius: 28,
-    marginBottom: verticalScale(20),
+    borderRadius: 22,
+    marginBottom: verticalScale(12),
   },
 
   eyebrow: {
     color: colors.textPrimary,
-    fontSize: fontScale(17),
+    fontSize: fontScale(16),
     fontWeight: '500',
     textAlign: 'center',
     marginBottom: verticalScale(4),
     opacity: 0.92,
   },
-  giftCard: {
-    marginTop: verticalScale(28),
-    paddingHorizontal: 24,
-    paddingVertical: verticalScale(18),
-    borderRadius: 18,
-    borderWidth: 1.5,
-    borderColor: colors.accent,
-    backgroundColor: 'rgba(167,139,250,0.10)',
-    alignItems: 'center',
-    minWidth: 240,
-  },
-  giftEmoji: {
-    fontSize: fontScale(32),
-    marginBottom: verticalScale(4),
-  },
-  giftBig: {
-    color: colors.textPrimary,
-    fontSize: fontScale(26),
-    fontWeight: '800',
-    letterSpacing: -0.3,
-  },
-  giftSubtitle: {
+  lede: {
     color: colors.textSecondary,
     fontSize: fontScale(14),
     fontWeight: '500',
-    marginTop: verticalScale(2),
-  },
-
-  intro: {
-    color: colors.textPrimary,
-    fontSize: fontScale(15),
-    fontWeight: '600',
-    textAlign: 'center',
-    marginTop: verticalScale(28),
-    marginBottom: verticalScale(14),
-    opacity: 0.92,
-  },
-  featureList: {
-    alignSelf: 'stretch',
-    gap: verticalScale(12),
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    paddingHorizontal: 8,
-  },
-  featureEmoji: {
-    fontSize: fontScale(22),
-    width: 30,
-    textAlign: 'center',
-  },
-  featureText: {
-    color: colors.textPrimary,
-    fontSize: fontScale(15),
-    fontWeight: '500',
-    flex: 1,
-  },
-
-  // Trial card — same artifact treatment as the gift card, quieter border
-  // (it's the terms, not the present).
-  trialCard: {
-    marginTop: verticalScale(24),
-    paddingHorizontal: 24,
-    paddingVertical: verticalScale(16),
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: 'rgba(167,139,250,0.06)',
-    alignItems: 'center',
-    minWidth: 240,
-  },
-  trialBig: {
-    color: colors.textPrimary,
-    fontSize: fontScale(20),
-    fontWeight: '800',
-    letterSpacing: -0.3,
-  },
-  trialFoot: {
-    color: colors.accentLight,
-    fontSize: fontScale(13),
-    fontWeight: '600',
     textAlign: 'center',
     marginTop: verticalScale(8),
   },
 
+  // ── Feature pillars ────────────────────────────────────────────────────────
+  // Nightly = the flagship (accent border); sparkles = quieter companion card.
+  nightlyCard: {
+    alignSelf: 'stretch',
+    marginTop: verticalScale(24),
+    paddingHorizontal: 18,
+    paddingVertical: verticalScale(16),
+    borderRadius: 18,
+    borderWidth: 1.5,
+    borderColor: colors.accent,
+    backgroundColor: 'rgba(167,139,250,0.10)',
+  },
+  sparkleCard: {
+    alignSelf: 'stretch',
+    marginTop: verticalScale(14),
+    paddingHorizontal: 18,
+    paddingVertical: verticalScale(16),
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: 'rgba(167,139,250,0.05)',
+  },
+  cardHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: verticalScale(8),
+  },
+  cardEmoji: {
+    fontSize: fontScale(22),
+  },
+  cardTitle: {
+    flex: 1,
+    color: colors.textPrimary,
+    fontSize: fontScale(18),
+    fontWeight: '800',
+    letterSpacing: -0.2,
+  },
+  freePill: {
+    paddingHorizontal: 9,
+    paddingVertical: verticalScale(4),
+    borderRadius: 7,
+    backgroundColor: 'rgba(167,139,250,0.20)',
+  },
+  freePillText: {
+    color: colors.accentLight,
+    fontSize: fontScale(10),
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  giftPill: {
+    paddingHorizontal: 9,
+    paddingVertical: verticalScale(4),
+    borderRadius: 7,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
+  giftPillText: {
+    color: colors.textSecondary,
+    fontSize: fontScale(10),
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  cardBody: {
+    color: colors.textSecondary,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
+  },
+  cardFoot: {
+    color: colors.accentLight,
+    fontSize: fontScale(12),
+    fontWeight: '600',
+    marginTop: verticalScale(8),
+  },
+
   ctaWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     paddingHorizontal: 24,
-    paddingBottom: verticalScale(12),
-    paddingTop: verticalScale(8),
+    paddingTop: verticalScale(24),
+    // paddingBottom applied inline from the safe-area inset (footer owns it).
   },
   ctaBtn: {
     backgroundColor: colors.accent,
