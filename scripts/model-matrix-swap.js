@@ -119,6 +119,11 @@ function buildMatrix() {
   if (has('--test')) {
     return [{ model: 'google/gemini-2-image', medium: 'pop_art', role: 'dual' }];
   }
+  // Exact combo list (JSON array of {medium,model,role}) — used to re-render only
+  // specific failed cells (e.g. freeze casualties) instead of a full cross-product.
+  if (val('--combos-file')) {
+    return JSON.parse(fs.readFileSync(val('--combos-file'), 'utf8'));
+  }
   if (has('--pilot')) mediums = ['pop_art'];
   if (val('--mediums')) mediums = val('--mediums').split(',');
   if (val('--models')) models = val('--models').split(',');
