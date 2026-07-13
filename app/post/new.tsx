@@ -347,7 +347,9 @@ export default function NewPostScreen() {
                     <>
                       <View style={styles.selDim} pointerEvents="none" />
                       <View style={styles.selBadge} pointerEvents="none">
-                        <Text style={styles.selBadgeText}>{n}</Text>
+                        <Text allowFontScaling={false} style={styles.selBadgeText}>
+                          {n}
+                        </Text>
                       </View>
                     </>
                   )}

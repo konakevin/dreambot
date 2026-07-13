@@ -534,7 +534,9 @@ export default function ProfileScreen() {
             />
             {unreadCount > 0 && (
               <View style={styles.inboxBadge} pointerEvents="none">
-                <Text style={styles.inboxBadgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+                <Text allowFontScaling={false} style={styles.inboxBadgeText}>
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </Text>
               </View>
             )}
           </View>
@@ -585,7 +587,9 @@ export default function ProfileScreen() {
           style={styles.sparkleChip}
         >
           <Ionicons name="sparkles" size={15} color={colors.accent} />
-          <Text style={styles.sparkleChipText}>{formatCompact(sparkleBalance)}</Text>
+          <Text allowFontScaling={false} style={styles.sparkleChipText}>
+            {formatCompact(sparkleBalance)}
+          </Text>
         </TouchableOpacity>
       </ProfileHeader>
 

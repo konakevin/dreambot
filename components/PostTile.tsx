@@ -190,7 +190,9 @@ export const PostTile = memo(function PostTile({
           <View style={[styles.selectBadge, selection.selected && styles.selectBadgeOn]}>
             {selection.selected &&
               (selection.order != null ? (
-                <Text style={styles.selectBadgeNum}>{selection.order}</Text>
+                <Text allowFontScaling={false} style={styles.selectBadgeNum}>
+                  {selection.order}
+                </Text>
               ) : (
                 <Ionicons name="checkmark" size={13} color="#000000" />
               ))}

@@ -852,7 +852,11 @@ export default function CreateScreen() {
               }}
             >
               <Ionicons name="sparkles" size={15} color="#A78BFA" />
-              <Text className="text-sm font-extrabold" style={{ color: '#A78BFA' }}>
+              <Text
+                allowFontScaling={false}
+                className="text-sm font-extrabold"
+                style={{ color: '#A78BFA' }}
+              >
                 {formatCompact(sparkleBalance)}
               </Text>
             </TouchableOpacity>
