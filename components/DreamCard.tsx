@@ -1094,7 +1094,10 @@ const s = StyleSheet.create({
   // Inline "username  [Follow]" — Follow is a readable white chip (the lavender
   // accent washed out on bright images).
   followPill: {
-    height: verticalScale(26),
+    // minHeight (not a hard height) + vertical padding so the readable label
+    // grows under OS "Larger Text" instead of clipping.
+    minHeight: verticalScale(26),
+    paddingVertical: verticalScale(4),
     paddingHorizontal: 10,
     borderRadius: 7,
     backgroundColor: 'rgba(0,0,0,0.35)',

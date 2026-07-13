@@ -80,7 +80,10 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     width: '100%',
-    height: 48,
+    // minHeight so the label grows under OS "Larger Text" (gradient is
+    // absoluteFill, so it fills the grown button).
+    minHeight: 48,
+    paddingVertical: verticalScale(6),
     borderRadius: 14,
     overflow: 'hidden',
     alignItems: 'center',
@@ -95,7 +98,8 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     width: '100%',
-    height: 44,
+    minHeight: 44,
+    paddingVertical: verticalScale(6),
     alignItems: 'center',
     justifyContent: 'center',
   },
