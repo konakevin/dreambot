@@ -187,10 +187,9 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
                 <Text style={s.cardTitle}>DreamSmart</Text>
               </View>
               <Text style={s.cardBody}>
-                Every AI model has its own strengths, so a model that nails one style can fall flat
-                on another. DreamSmart curates the model list to the ones tuned for your chosen
-                style, so a watercolor comes out watercolor and a comic comes out a comic. Leave it
-                on for the best options, or switch it off to choose any model yourself.
+                Different AI models are great at different looks. DreamSmart narrows the list to the
+                ones tuned for your style, so a watercolor comes out watercolor. Switch it off any
+                time to browse them all.
               </Text>
             </View>
           </View>
