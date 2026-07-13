@@ -336,7 +336,10 @@ export default function CreateScreen() {
             AsyncStorage.getItem(SELECTED_VIBE_KEY),
           ]);
           if (cancelled) return;
-          if (m) setMedium(m);
+          // Legacy unified 'surprise_me' (pre-split picker) → the Real Face
+          // section's scoped Surprise Me, so a returning user lands cleanly on a
+          // valid tab instead of a token the two-section sheet can't place.
+          if (m) setMedium(m === 'surprise_me' ? 'surprise_me_face' : m);
           if (v) setVibe(v);
         } catch (e) {
           if (__DEV__) console.warn('[create] medium/vibe rehydrate failed', e);

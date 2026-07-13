@@ -155,7 +155,12 @@ const INITIAL_CONFIG: DreamConfig = {
   // can toggle to 'restyle'.
   photoStyle: 'new_scene',
   newSceneTier: 'standard',
-  selectedMedium: 'surprise_me',
+  // Default to the Real Face section's scoped Surprise Me (rolls face mediums
+  // only). The style picker is split Real Face / Dream Art, each with its own
+  // Surprise Me (surprise_me_face / surprise_me_art) — there is no unified
+  // 'surprise_me' pick anymore (legacy value still rolls all + maps to the
+  // Real Face tab on rehydrate). Vibes have no split, so keep 'surprise_me'.
+  selectedMedium: 'surprise_me_face',
   selectedVibe: 'surprise_me',
   userPrompt: '',
   stylePrompt: null,

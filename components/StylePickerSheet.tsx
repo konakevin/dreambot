@@ -1,18 +1,20 @@
 /**
- * StylePickerSheet — animated bottom sheet for selecting a medium or vibe.
+ * StylePickerSheet — animated bottom sheet for selecting a medium (style) or vibe.
  * Reuses the QuickSettingsSheet pattern (Reanimated + Gesture Handler).
  * Dismisses on selection or drag-down.
  *
- * Medium picker is ONE flat list (no Real Face / Dream Art tabs — users kept
- * missing the Dream Art mediums behind the second tab). A single Surprise Me
- * (rolls across ALL mediums) sits on top, then Real Face mediums (A–Z), then
- * Dream Art (A–Z); every non-surprise medium row carries a FACE / DREAM ART
- * badge so the grouping reads without section headers. The selected-row
- * highlight is ONE neutral color (brand purple) for every medium — the
- * teal/pink meaning lives only in the badge, never the selection state.
+ * The MEDIUM picker is split into two sections via a segmented toggle:
+ *   • Real Face (teal)  — face-swap mediums (face_swaps === true)
+ *   • Dream Art (pink)  — art mediums (face_swaps === false)
+ * Each section has its OWN "Surprise Me" on top that rolls ONLY within that
+ * section: Real Face → `surprise_me_face` (face mediums only), Dream Art →
+ * `surprise_me_art` (art mediums only). The roll itself lives in
+ * useDreamCreate (the token → a concrete medium at submit). Each tab remembers
+ * its last pick (sticky), and the toggle auto-syncs to the current selection
+ * when the sheet opens. The VIBE picker has no split — one flat list.
  */
 
-import { useCallback, useRef, useEffect, useMemo } from 'react';
+import { useCallback, useRef, useEffect, useMemo, useState } from 'react';
 import { View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { TitleText } from '@/components/TitleText';
@@ -35,23 +37,22 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 // edge-to-edge sheet); phones keep the full-width drawer.
 const SHEET_SIDE_INSET = isTabletDevice ? Math.max(0, (SCREEN_WIDTH - 600) / 2) : 0;
 // On smaller phones (iPhone SE class) bump the sheet to 60% so 6+ options
-// don't get clipped behind the rounded bottom. Larger phones stay at 50%
-// — they have plenty of headroom.
+// don't get clipped behind the rounded bottom. Larger phones stay at 50%.
 const SHEET_HEIGHT = SCREEN_HEIGHT < 700 ? SCREEN_HEIGHT * 0.6 : SCREEN_HEIGHT * 0.5;
 
-// Subtle, mode-agnostic fill/outline for the selected row.
+// Subtle, mode-agnostic fill/outline for the selected row + active tab. The
+// COLOR meaning (teal = Real Face, pink = Dream Art) lives only in the text +
+// checkmark, never the fill/outline.
 const HILITE_BG = 'rgba(255,255,255,0.05)';
 const HILITE_BORDER = 'rgba(255,255,255,0.16)';
-// ONE neutral highlight color for the selected row's text + checkmark, shared
-// by every medium and vibe. NOT color-coded to face/art — that meaning is
-// carried entirely by the FACE / DREAM ART badge.
-const SELECTED_COLOR = colors.accent;
+
+type Segment = 'face' | 'art';
 
 interface StyleOption {
   key: string;
   label: string;
   face_swaps?: boolean;
-  /** Short DB-authored blurb (dream_vibes.description) shown in the vibe sheet. */
+  /** Short DB-authored blurb (dream_mediums/dream_vibes.description). */
   description?: string;
 }
 
@@ -63,6 +64,13 @@ interface Props {
   onClose: () => void;
   /** Full list of available options (from DB) */
   options: StyleOption[];
+}
+
+/** Which segment a selection belongs to. Legacy unified `surprise_me` → face. */
+function segmentForSelection(key: string, options: StyleOption[]): Segment {
+  if (key === 'surprise_me_art') return 'art';
+  if (key === 'surprise_me_face' || key === 'surprise_me') return 'face';
+  return options.find((o) => o.key === key)?.face_swaps === false ? 'art' : 'face';
 }
 
 export function StylePickerSheet({
@@ -79,6 +87,17 @@ export function StylePickerSheet({
   const closing = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
+  // Active medium segment. Seeded from the current selection; re-synced on open.
+  const [mediumSegment, setMediumSegment] = useState<Segment>(() =>
+    segmentForSelection(selected, allAvailable)
+  );
+  // Sticky per-tab selections — each tab remembers the last medium picked on it.
+  const [lastFace, setLastFace] = useState<string>('surprise_me_face');
+  const [lastArt, setLastArt] = useState<string>('surprise_me_art');
+
+  // The teal/pink accent for the CURRENT medium segment (vibe sheet stays neutral).
+  const segAccent = mediumSegment === 'face' ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
+
   // Vibe list: Surprise Me first, then A–Z. (Vibes have no face/art split.)
   const vibeOptions = useMemo(
     () =>
@@ -90,20 +109,37 @@ export function StylePickerSheet({
     [allAvailable]
   );
 
-  // Medium list: ONE flat list. A single Surprise Me (rolls across ALL mediums)
-  // sits on top, then Real Face group (A–Z), then Dream Art group (A–Z). No
-  // tabs, no section headers; the per-row badge carries the grouping.
-  const mediumList = useMemo<StyleOption[]>(() => {
-    const face = allAvailable
-      .filter((o) => o.key !== 'surprise_me' && o.face_swaps === true)
-      .sort((a, b) => a.label.localeCompare(b.label));
-    const art = allAvailable
-      .filter((o) => o.key !== 'surprise_me' && o.face_swaps === false)
-      .sort((a, b) => a.label.localeCompare(b.label));
-    return [{ key: 'surprise_me', label: 'Surprise Me' }, ...face, ...art];
-  }, [allAvailable]);
+  // Medium lists, split by face_swaps and A–Z sorted within each section.
+  const faceSwapMediums = useMemo(
+    () =>
+      allAvailable
+        .filter((o) => o.key !== 'surprise_me' && o.face_swaps === true)
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [allAvailable]
+  );
+  const artisticMediums = useMemo(
+    () =>
+      allAvailable
+        .filter((o) => o.key !== 'surprise_me' && o.face_swaps === false)
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [allAvailable]
+  );
+  const filteredMediums = mediumSegment === 'face' ? faceSwapMediums : artisticMediums;
 
-  const displayList = type === 'medium' ? mediumList : vibeOptions;
+  // The displayed medium list = the section's own Surprise Me + that section's
+  // mediums. The surprise key is what makes the roll section-scoped.
+  const mediumDisplayList = useMemo<StyleOption[]>(
+    () => [
+      {
+        key: mediumSegment === 'face' ? 'surprise_me_face' : 'surprise_me_art',
+        label: 'Surprise Me',
+      },
+      ...filteredMediums,
+    ],
+    [mediumSegment, filteredMediums]
+  );
+
+  const displayList = type === 'medium' ? mediumDisplayList : vibeOptions;
 
   // Animate in when visible changes
   if (visible && progress.value === 0) {
@@ -111,9 +147,27 @@ export function StylePickerSheet({
     progress.value = withTiming(1, { duration: 300 });
   }
 
+  // Sync the segment + sticky state to `selected` ONLY on the closed→open
+  // transition — NOT when `selected` changes during the dismiss animation
+  // (handleSelect updates `selected` then closes while `visible` is briefly
+  // still true), which would re-sync the segment mid-close.
+  const didSyncOnOpen = useRef(false);
+  useEffect(() => {
+    if (!visible) {
+      didSyncOnOpen.current = false;
+      return;
+    }
+    if (didSyncOnOpen.current || type !== 'medium') return;
+    didSyncOnOpen.current = true;
+    const seg = segmentForSelection(selected, allAvailable);
+    setMediumSegment(seg);
+    if (seg === 'face') setLastFace(selected === 'surprise_me' ? 'surprise_me_face' : selected);
+    else setLastArt(selected);
+  }, [visible, type, selected, allAvailable]);
+
   // Latest `selected` for the scroll-to-selected effect. Kept in a ref so that
   // effect does NOT re-run and re-scroll when `selected` changes during the
-  // dismiss animation — only visible / list changes should drive a scroll.
+  // dismiss animation — only visible / segment / list changes should scroll.
   const selectedRef = useRef(selected);
   selectedRef.current = selected;
 
@@ -128,10 +182,14 @@ export function StylePickerSheet({
   const handleSelect = useCallback(
     (key: string) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      if (type === 'medium') {
+        if (mediumSegment === 'face') setLastFace(key);
+        else setLastArt(key);
+      }
       onSelect(key);
       dismiss();
     },
-    [onSelect, dismiss]
+    [onSelect, dismiss, type, mediumSegment]
   );
 
   // Pan gesture for drag-to-dismiss
@@ -165,11 +223,9 @@ export function StylePickerSheet({
 
   function renderRow(opt: StyleOption) {
     const isSelected = opt.key === selected;
-    const isFaceRow = opt.face_swaps === true;
-    // Accurate DB-authored blurb to the right of each label — sourced from
-    // dream_vibes.description / dream_mediums.description so it matches what the
-    // option actually does to renders. The Surprise Me rows have no DB row, so
-    // give them a fun fallback.
+    // The selected color is teal/pink for a medium (per section), neutral for a
+    // vibe. Surprise rows have no DB row → fun fallback blurb.
+    const selColor = type === 'medium' ? segAccent : colors.accent;
     const isAnySurprise =
       opt.key === 'surprise_me' || opt.key === 'surprise_me_face' || opt.key === 'surprise_me_art';
     const blurb = opt.description ?? (isAnySurprise ? 'Roll the dice' : undefined);
@@ -190,36 +246,13 @@ export function StylePickerSheet({
             className="text-base"
             numberOfLines={1}
             style={{
-              color: isSelected ? SELECTED_COLOR : colors.textPrimary,
+              color: isSelected ? selColor : colors.textPrimary,
               fontWeight: isSelected ? '700' : '500',
               flexShrink: 1,
             }}
           >
             {opt.label}
           </Text>
-          {type === 'medium' && opt.key !== 'surprise_me' ? (
-            <View
-              style={{
-                paddingHorizontal: 6,
-                paddingVertical: verticalScale(2),
-                borderRadius: 5,
-                flexShrink: 0,
-                backgroundColor: isFaceRow ? MEDIUM_BADGE.face.bg : MEDIUM_BADGE.art.bg,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: fontScale(9),
-                  fontWeight: '700',
-                  letterSpacing: 0.5,
-                  textTransform: 'uppercase',
-                  color: isFaceRow ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color,
-                }}
-              >
-                {isFaceRow ? 'Face' : 'Dream Art'}
-              </Text>
-            </View>
-          ) : null}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 }}>
           {blurb ? (
@@ -230,19 +263,83 @@ export function StylePickerSheet({
               {blurb}
             </Text>
           ) : null}
-          {isSelected && <Ionicons name="checkmark-circle" size={20} color={SELECTED_COLOR} />}
+          {isSelected && <Ionicons name="checkmark-circle" size={20} color={selColor} />}
         </View>
       </TouchableOpacity>
     );
   }
 
-  // Scroll to the selected item when the sheet opens. `selected` is read from a
-  // ref (see above) so picking an item — which updates `selected` while the
-  // sheet animates closed — does not re-scroll.
+  function renderMediumToggle() {
+    const segments: { key: Segment; label: string }[] = [
+      { key: 'face', label: 'Real Face' },
+      { key: 'art', label: 'Dream Art' },
+    ];
+    return (
+      <View style={{ paddingHorizontal: 16, marginBottom: verticalScale(8) }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: colors.background,
+            borderRadius: 10,
+            padding: 3,
+          }}
+        >
+          {segments.map((seg) => {
+            const active = mediumSegment === seg.key;
+            // Only the active tab's TEXT carries its brand color (Real Face =
+            // teal, Dream Art = pink); the fill/outline stay subtle + common.
+            const segColor = seg.key === 'face' ? MEDIUM_BADGE.face.color : MEDIUM_BADGE.art.color;
+            return (
+              <TouchableOpacity
+                key={seg.key}
+                style={{
+                  flex: 1,
+                  paddingVertical: verticalScale(8),
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  backgroundColor: active ? HILITE_BG : 'transparent',
+                  borderWidth: 1,
+                  borderColor: active ? HILITE_BORDER : 'transparent',
+                }}
+                onPress={() => {
+                  if (seg.key === mediumSegment) return;
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  // Save the current pick as sticky for the tab we're leaving,
+                  // then switch and apply the tab we're entering's sticky pick
+                  // (so the selection always matches the visible section).
+                  if (mediumSegment === 'face') setLastFace(selected);
+                  else setLastArt(selected);
+                  setMediumSegment(seg.key);
+                  onSelect(seg.key === 'face' ? lastFace : lastArt);
+                }}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={{
+                    fontSize: fontScale(13),
+                    fontWeight: active ? '700' : '500',
+                    color: active ? segColor : colors.textSecondary,
+                  }}
+                >
+                  {seg.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
+  }
+
+  // Scroll to the selected item when the sheet opens or the segment switches.
+  // `selected` is read from a ref (see above) so picking an item — which updates
+  // `selected` while the sheet animates closed — does not re-scroll.
   useEffect(() => {
     if (!visible) return;
     const sel = selectedRef.current;
-    const idx = displayList.findIndex((o) => o.key === sel);
+    const isSurprise =
+      sel === 'surprise_me' || sel === 'surprise_me_face' || sel === 'surprise_me_art';
+    const idx = isSurprise ? 0 : displayList.findIndex((o) => o.key === sel);
     const ROW_HEIGHT = 52;
     setTimeout(() => {
       scrollRef.current?.scrollTo({
@@ -250,7 +347,7 @@ export function StylePickerSheet({
         animated: false,
       });
     }, 50);
-  }, [visible, type, displayList]);
+  }, [visible, type, mediumSegment, displayList]);
 
   if (!visible && progress.value === 0) return null;
 
@@ -292,6 +389,9 @@ export function StylePickerSheet({
                 (keys, columns, analytics — display copy only, 2026-07-11). */}
             {type === 'medium' ? 'Choose Style' : 'Choose Vibe'}
           </TitleText>
+
+          {/* Real Face / Dream Art segmented toggle (medium sheet only). */}
+          {type === 'medium' && renderMediumToggle()}
 
           {/* Options list */}
           <ScrollView
