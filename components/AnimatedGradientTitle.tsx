@@ -104,9 +104,15 @@ export function AnimatedGradientTitle({
   };
 
   // Pass 1: measure the wordmark width invisibly.
+  // allowFontScaling={false}: this is a brand wordmark inside a FIXED-HEIGHT mask
+  // (height = base.lineHeight, which is device-scaled but NOT Dynamic-Type-scaled).
+  // If the OS "Larger Text" setting scaled the glyphs, fontSize would grow while
+  // lineHeight/the mask height stayed put, clipping the descenders (the "Dreaming"
+  // 'g' cut off at the bottom that users reported). Lock it off on both passes.
   if (textW === 0) {
     return (
       <Text
+        allowFontScaling={false}
         style={[base, { opacity: 0 }]}
         numberOfLines={1}
         onLayout={(e) => setTextW(e.nativeEvent.layout.width)}
@@ -121,7 +127,7 @@ export function AnimatedGradientTitle({
     <MaskedView
       style={{ width: textW, height: base.lineHeight }}
       maskElement={
-        <Text style={[base, { color: '#FFFFFF' }]} numberOfLines={1}>
+        <Text allowFontScaling={false} style={[base, { color: '#FFFFFF' }]} numberOfLines={1}>
           {children}
         </Text>
       }

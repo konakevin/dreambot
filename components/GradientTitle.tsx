@@ -65,10 +65,16 @@ export function GradientTitle({
   if (letterSpacing != null) base.letterSpacing = letterSpacing;
   if (maxWidth != null) base.maxWidth = maxWidth;
 
+  // allowFontScaling={false}: display wordmark with a device-scaled (but NOT
+  // Dynamic-Type-scaled) lineHeight. If the OS "Larger Text" setting grew the
+  // glyphs past the fixed line box, descenders would clip (the "Dreaming" 'g'
+  // cut-off users reported on the animated sibling). The title already scales
+  // per-device via fontScale, so keep it off here too.
   return (
     <MaskedView
       maskElement={
         <Text
+          allowFontScaling={false}
           style={[base, style, { color: '#FFFFFF' }]}
           numberOfLines={numberOfLines}
           adjustsFontSizeToFit={adjustsFontSizeToFit}
@@ -79,6 +85,7 @@ export function GradientTitle({
     >
       <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
         <Text
+          allowFontScaling={false}
           style={[base, style, { opacity: 0 }]}
           numberOfLines={numberOfLines}
           adjustsFontSizeToFit={adjustsFontSizeToFit}
