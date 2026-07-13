@@ -133,7 +133,7 @@ export default function WelcomeGiftScreen() {
             While you sleep, DreamBot paints you a fresh dream, set in your favorite places and
             starring your Dream Cast. Wake up to a new one every morning.
           </Text>
-          <Text style={s.cardFoot}>Then keep them coming with Pro</Text>
+          <Text style={s.cardFoot}>Then keep them going on any plan</Text>
         </View>
 
         {/* Pillar 2 — Sparkles (dream on your own). Quieter card. */}
@@ -169,7 +169,7 @@ export default function WelcomeGiftScreen() {
             with reactCompiler enabled the function style never gets applied
             (see ProfileHeader stats fix, 2026-07-01) and the pill rendered bare. */}
         <TouchableOpacity onPress={handleStart} style={s.ctaBtn} activeOpacity={0.85}>
-          <Text style={s.ctaText}>{fromOnboarding ? 'Let’s go ✨' : 'Let’s dream ✨'}</Text>
+          <Text style={s.ctaText}>{fromOnboarding ? 'Go to feed' : 'Let’s dream'}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -213,24 +213,28 @@ const s = StyleSheet.create({
     opacity: 0.92,
   },
   lede: {
-    color: colors.textSecondary,
-    fontSize: fontScale(14),
-    fontWeight: '500',
+    // Bright, not muted — textSecondary read as too subdued on black
+    // (Kevin 2026-07-12). Matches the onboarding "0.92-white body" cadence.
+    color: 'rgba(255,255,255,0.92)',
+    fontSize: fontScale(15),
+    fontWeight: '600',
     textAlign: 'center',
     marginTop: verticalScale(8),
   },
 
   // ── Feature pillars ────────────────────────────────────────────────────────
-  // Nightly = the flagship (accent border); sparkles = quieter companion card.
+  // Both cards get the SAME neutral treatment — an accent border on the nightly
+  // card read as "selectable / pick me" (Kevin 2026-07-12). The pills carry the
+  // hierarchy instead.
   nightlyCard: {
     alignSelf: 'stretch',
     marginTop: verticalScale(24),
     paddingHorizontal: 18,
     paddingVertical: verticalScale(16),
     borderRadius: 18,
-    borderWidth: 1.5,
-    borderColor: colors.accent,
-    backgroundColor: 'rgba(167,139,250,0.10)',
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: 'rgba(167,139,250,0.06)',
   },
   sparkleCard: {
     alignSelf: 'stretch',
@@ -240,7 +244,7 @@ const s = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: 'rgba(167,139,250,0.05)',
+    backgroundColor: 'rgba(167,139,250,0.06)',
   },
   cardHead: {
     flexDirection: 'row',
@@ -283,7 +287,8 @@ const s = StyleSheet.create({
     letterSpacing: 0.5,
   },
   cardBody: {
-    color: colors.textSecondary,
+    // Brighter than textSecondary for readability on black (Kevin 2026-07-12).
+    color: 'rgba(255,255,255,0.85)',
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
   },
