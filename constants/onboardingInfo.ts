@@ -62,7 +62,7 @@ export const CREATE_INFO: InfoStepConfig = {
     {
       icon: 'color-wand',
       title: 'DreamSmart',
-      body: 'We match the AI model to your chosen style automatically, so the look lands. Toggle it off any time to pick from every model.',
+      body: 'We curate the AI Model list to the ones tuned for your chosen style, so the look lands. Toggle it off any time to browse every model.',
     },
     {
       icon: 'flash',
