@@ -409,11 +409,22 @@ export function ModelPicker({
                 ? `DreamSmart, tuned for ${styleLabel ?? 'this style'}. Every style looks best in certain models, so the list is curated to those. Cost varies by model.`
                 : 'Each one gives your dream a slightly different look. The cost varies by model depending on compute.'}
             </Text>
+            {/* Divider — a hard line between the fixed header (title + subtitle)
+                and the scrolling list, so a row scrolling up clips cleanly at the
+                line instead of peeking under the subtitle and reading as a broken
+                header line (Kevin 2026-07-12). */}
             <ScrollView
               ref={scrollRef}
-              style={{ maxHeight: 460 }}
+              style={{
+                maxHeight: 460,
+                borderTopWidth: 1,
+                borderTopColor: colors.border,
+              }}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: verticalScale(24) }}
+              contentContainerStyle={{
+                paddingTop: verticalScale(14),
+                paddingBottom: verticalScale(24),
+              }}
               onContentSizeChange={scrollToSelected}
             >
               {standard.length > 0 && (
@@ -572,6 +583,6 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     lineHeight: fontScale(17),
     textAlign: 'center',
-    marginBottom: verticalScale(4),
+    marginBottom: verticalScale(14),
   },
 });
