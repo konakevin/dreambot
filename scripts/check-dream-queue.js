@@ -36,6 +36,12 @@ const SUPABASE_URL = getKey('SUPABASE_URL') || 'https://jimftynwrinwenonjrlj.sup
 const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 const STUCK_MIN = parseInt(getKey('QUEUE_STUCK_MIN') || '60', 10);
 const DEAD_LETTER_ALARM = parseInt(getKey('QUEUE_DEAD_LETTER_ALARM') || '10', 10);
+// The owner/dev account — its dreams are dev/test batches (model-matrix QA,
+// medium tests), NOT real-user traffic. Excluded from the "renders failing
+// systemically" dead-letter signal so a dev test session can't page us; the
+// stuck-queue / worker-liveness alarms are unaffected. Override via env.
+const OWNER_USER_ID =
+  getKey('MONITOR_EXCLUDE_USER_ID') || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 
 if (!SUPABASE_KEY) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
@@ -86,14 +92,16 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
     alarm = true;
   }
 
-  // Recent dead-letters (systemic render failures).
+  // Recent dead-letters on REAL-USER dreams (systemic render failures). Excludes
+  // the owner/dev account so dev test batches don't trip the alarm.
   const dayAgo = new Date(Date.now() - 24 * 3600_000).toISOString();
   const { count: dead } = await sb
     .from('dream_queue')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'dead_letter')
+    .neq('user_id', OWNER_USER_ID)
     .gte('completed_at', dayAgo);
-  console.log(`dead_letter (last 24h): ${dead || 0}`);
+  console.log(`dead_letter (last 24h, excl. dev): ${dead || 0}`);
   if (dead && dead >= DEAD_LETTER_ALARM) {
     console.error(
       `::error::${dead} dead_letter jobs in the last 24h (>= ${DEAD_LETTER_ALARM}) — renders failing systemically.`
