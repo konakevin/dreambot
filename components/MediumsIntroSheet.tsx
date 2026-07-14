@@ -13,12 +13,12 @@
  * The badge chip colors here match the face/art badge on the Create medium row.
  */
 
-import { View, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal, Animated, TouchableOpacity } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { hasSeenFlag, markFlagSeen, resetFlag } from '@/lib/firstRunFlags';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen, isTabletDevice } from '@/lib/responsive';
@@ -103,6 +103,40 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
     onClose();
   }
 
+  // Scroll-more cue: a chevron above the CTA that shows while there's content
+  // below the fold (the DreamSmart section) and fades once you reach the bottom.
+  // Hidden scroll indicator + a fully-formed last card made the sheet read as
+  // "complete" — users missed the section below (Kevin 2026-07-13).
+  const [viewportH, setViewportH] = useState(0);
+  const [contentH, setContentH] = useState(0);
+  const [atBottom, setAtBottom] = useState(false);
+  const showCue = contentH > viewportH + 4 && !atBottom;
+  const cueOpacity = useRef(new Animated.Value(0)).current;
+  const cueBounce = useRef(new Animated.Value(0)).current;
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollToBottom = () => {
+    Haptics.selectionAsync();
+    scrollRef.current?.scrollToEnd({ animated: true });
+  };
+  useEffect(() => {
+    Animated.timing(cueOpacity, {
+      toValue: showCue ? 1 : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+  }, [showCue, cueOpacity]);
+  useEffect(() => {
+    // Gentle down-bounce to draw the eye. Loops while mounted.
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(cueBounce, { toValue: 1, duration: 650, useNativeDriver: true }),
+        Animated.timing(cueBounce, { toValue: 0, duration: 650, useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [cueBounce]);
+
   return (
     <Modal
       visible={visible}
@@ -115,9 +149,17 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
       <SafeAreaView style={s.root} edges={['top']}>
         {/* No X — the only way out is the bottom CTA (one-shot teaching sheet). */}
         <ScrollView
+          ref={scrollRef}
           style={s.scroll}
           contentContainerStyle={s.content}
           showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
+          onLayout={(e) => setViewportH(e.nativeEvent.layout.height)}
+          onContentSizeChange={(_w, h) => setContentH(h)}
+          onScroll={(e) => {
+            const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
+            setAtBottom(contentOffset.y + layoutMeasurement.height >= contentSize.height - 24);
+          }}
         >
           <Text style={s.eyebrow}>Two ways to dream</Text>
 
@@ -213,6 +255,34 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
             <GradientButton label={ctaLabel} onPress={handleClose} />
           </ResponsiveContainer>
         </View>
+
+        {/* Scroll-more cue — a bouncing accent chip in the fade zone above the
+            CTA; TAP it to jump to the bottom (the DreamSmart section). Fades out
+            + goes untouchable once you've reached the bottom. */}
+        <Animated.View
+          pointerEvents={showCue ? 'box-none' : 'none'}
+          style={[
+            s.scrollCue,
+            {
+              bottom: insets.bottom + verticalScale(84),
+              opacity: cueOpacity,
+              transform: [
+                { translateY: cueBounce.interpolate({ inputRange: [0, 1], outputRange: [0, 9] }) },
+              ],
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={scrollToBottom}
+            activeOpacity={0.7}
+            hitSlop={12}
+            accessibilityLabel="Scroll to see more"
+          >
+            <View style={s.scrollCueChip}>
+              <Ionicons name="chevron-down" size={26} color={colors.accent} />
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
       </SafeAreaView>
     </Modal>
   );
@@ -220,6 +290,17 @@ export function MediumsIntroSheet({ visible, onClose, ctaLabel = 'Got it, let’
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  scrollCue: { position: 'absolute', left: 0, right: 0, alignItems: 'center' },
+  scrollCueChip: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(167,139,250,0.14)',
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   scroll: { flex: 1 },
   content: {
     flexGrow: 1,
