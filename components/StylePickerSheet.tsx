@@ -30,7 +30,7 @@ import Animated, {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale, isTabletDevice } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale, isTabletDevice } from '@/lib/responsive';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 // iPad: constrain the whole drawer to a centered ~600 card (not a full-width
@@ -54,6 +54,9 @@ interface StyleOption {
   face_swaps?: boolean;
   /** Short DB-authored blurb (dream_mediums/dream_vibes.description). */
   description?: string;
+  /** Optional segment-lock badge (e.g. a Dream-Art-only vibe like Kawaii). The
+   *  segment colors the pill (teal = Real Face, pink = Dream Art). */
+  badge?: { label: string; segment: Segment };
 }
 
 interface Props {
@@ -248,11 +251,32 @@ export function StylePickerSheet({
             style={{
               color: isSelected ? selColor : colors.textPrimary,
               fontWeight: isSelected ? '700' : '500',
-              flexShrink: 1,
+              flexShrink: 0,
             }}
           >
             {opt.label}
           </Text>
+          {opt.badge ? (
+            <View
+              style={{
+                paddingHorizontal: horizontalScale(7),
+                paddingVertical: verticalScale(2),
+                borderRadius: 6,
+                backgroundColor: `${MEDIUM_BADGE[opt.badge.segment].color}22`,
+              }}
+            >
+              <Text
+                numberOfLines={1}
+                style={{
+                  color: MEDIUM_BADGE[opt.badge.segment].color,
+                  fontSize: fontScale(10),
+                  fontWeight: '700',
+                }}
+              >
+                {opt.badge.label}
+              </Text>
+            </View>
+          ) : null}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 1 }}>
           {blurb ? (

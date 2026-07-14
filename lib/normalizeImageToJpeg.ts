@@ -53,3 +53,27 @@ export async function normalizeImageToJpeg(sourceUri: string): Promise<{
   );
   return { uri: result.uri, width: result.width, height: result.height };
 }
+
+// Avatars display at ≤128px circles (plus the profile hero + the tap-to-view
+// modal); 512px is retina-sharp everywhere while staying ~30-50 KB.
+const AVATAR_MAX_PX = 512;
+
+/**
+ * Like normalizeImageToJpeg, but ALSO downscales to ≤512px for a profile avatar
+ * so `avatar_url` can be served DIRECTLY (no Storage image transform — the Pro
+ * plan meters those at only 100/cycle; see project_image_transform_quota). Do
+ * NOT use this for cast photos — those keep full resolution for face-swap
+ * quality (they go through normalizeImageToJpeg).
+ */
+export async function normalizeAvatarToJpeg(sourceUri: string): Promise<{
+  uri: string;
+  width: number;
+  height: number;
+}> {
+  const result = await ImageManipulator.manipulateAsync(
+    sourceUri,
+    [{ resize: { width: AVATAR_MAX_PX } }], // aspect preserved; the circle crops
+    { format: ImageManipulator.SaveFormat.JPEG, compress: 0.8 }
+  );
+  return { uri: result.uri, width: result.width, height: result.height };
+}

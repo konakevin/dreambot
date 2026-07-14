@@ -19,7 +19,7 @@ import { PostActionSheet } from '@/components/PostActionSheet';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
-import { thumbnailUrl } from '@/lib/imageUrl';
+import { tileImageUrl } from '@/lib/imageUrl';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
@@ -103,11 +103,12 @@ export const PostTile = memo(function PostTile({
     // Track currentPostId so PostGrid can auto-scroll back to this row on
     // swipe-back. FullScreenFeed updates this as the user scrolls in detail.
     store.setCurrentPostId(item.id);
-    // Warm the fullscreen's image BEFORE we navigate. The grid renders a small
-    // thumbnailUrl(), but /photo shows image_url_display ?? image_url — a
-    // DIFFERENT URL that isn't cached, so the detail card would blur in from its
-    // thumbhash after opening. Kick the prefetch on tap (the card mounts ~1
-    // transition later, so this is usually warm by then). Fire-and-forget.
+    // Warm the fullscreen's image BEFORE we navigate. The tile now renders the
+    // SAME image_url_display the detail card shows (via tileImageUrl), so it's
+    // usually already cached — but for an image with no display variant the tile
+    // falls back to a transform URL while /photo uses image_url (a DIFFERENT,
+    // uncached URL), so this prefetch still saves a thumbhash blur-in. Fire-and-
+    // forget; the card mounts ~1 transition later, usually warm by then.
     Image.prefetch([item.image_url_display ?? item.image_url]);
     nav.push(`/photo/${item.id}`);
   }
@@ -142,7 +143,7 @@ export const PostTile = memo(function PostTile({
       activeOpacity={0.9}
     >
       <Image
-        source={{ uri: thumbnailUrl(item.image_url) }}
+        source={{ uri: tileImageUrl(item.image_url_display, item.image_url) }}
         style={styles.image}
         contentFit="cover"
         transition={0}

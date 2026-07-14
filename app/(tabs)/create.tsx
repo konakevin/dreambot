@@ -55,6 +55,7 @@ import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
+import { vibeAllowedInSegment, vibeSegmentLock } from '@/lib/vibeGating';
 import { ModelPicker } from '@/components/ModelPicker';
 import {
   RestyleModelPicker,
@@ -619,6 +620,45 @@ export default function CreateScreen() {
   const mediumFaceSwaps = isSurpriseMedium
     ? config.selectedMedium !== 'surprise_me_art' // art-typed → art; face-typed + unified → face
     : (selectedMediumRow?.face_swaps ?? true);
+
+  // Medium-gated vibes: some vibes are offered only in one Style segment (Kawaii
+  // is Dream-Art-only). The vibe selector shows Surprise Me + only the vibes
+  // allowed in the current segment; a vibe locked to the other segment is hidden.
+  // (lib/vibeGating.ts — client_meta.medium_segment.)
+  const currentVibeSegment = mediumFaceSwaps ? 'face' : 'art';
+  const gatedVibeOptions = useMemo(
+    () => [
+      { key: 'surprise_me', label: 'Surprise Me' },
+      ...dbVibes
+        .filter((v) => vibeAllowedInSegment(v.client_meta, currentVibeSegment))
+        .map((v) => {
+          // A segment-locked vibe (e.g. Kawaii = Dream Art only) carries a badge
+          // so users see WHY it's scoped — and why it's gone in the other segment.
+          const lock = vibeSegmentLock(v.client_meta);
+          return lock
+            ? {
+                ...v,
+                badge: {
+                  label: lock === 'art' ? 'Dream Art Only' : 'Real Face Only',
+                  segment: lock,
+                },
+              }
+            : v;
+        }),
+    ],
+    [dbVibes, currentVibeSegment]
+  );
+  // If an out-of-segment vibe is selected (e.g. Kawaii was picked on a Dream Art
+  // style, then the user switches to a Real Face style), drop back to Surprise Me
+  // so it never rides along on a render it doesn't suit. Transient (setVibe, not
+  // persistVibe) so the sticky pick is preserved for when they return to its
+  // segment.
+  useEffect(() => {
+    const row = dbVibes.find((v) => v.key === config.selectedVibe);
+    if (row && !vibeAllowedInSegment(row.client_meta, currentVibeSegment)) {
+      setVibe('surprise_me');
+    }
+  }, [currentVibeSegment, config.selectedVibe, dbVibes, setVibe]);
 
   // Smart Dream — the approved model set for the chosen style (client_meta,
   // SMART_DREAM_PLAN.md), fed to ModelPicker so it only offers models that
@@ -1716,7 +1756,7 @@ export default function CreateScreen() {
           else persistMedium(key);
         }}
         onClose={() => setPickerType(null)}
-        options={pickerType === 'vibe' ? vibeOptions : mediumOptions}
+        options={pickerType === 'vibe' ? gatedVibeOptions : mediumOptions}
       />
 
       {/* Photo fullscreen preview */}

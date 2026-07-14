@@ -54,7 +54,30 @@ export function thumbnailUrl(url: string): string {
   return transform(url, 400, 500, 'cover', 80);
 }
 
-/** Avatar — small circle, 128px is plenty for 64pt × 2x */
+/**
+ * Grid-TILE image source. Prefers the pre-generated STATIC display variant
+ * (`image_url_display` — a ~150KB JPEG built at render time in persistence.ts),
+ * so a tile costs ZERO Storage Image Transformations. The Pro plan includes only
+ * 100 transforms/cycle and the app blew ~16,000 by transforming every tile's
+ * ORIGINAL on display (2026-07-12 spend-cap lockout). Falls back to a server
+ * transform ONLY for an image with no variant (a best-effort decode/upload miss,
+ * or content predating the variant). expo-image downscales the variant to the
+ * tile size client-side — egress has ample headroom; the transform quota does not.
+ */
+export function tileImageUrl(displayUrl: string | null | undefined, originalUrl: string): string {
+  return displayUrl ?? thumbnailUrl(originalUrl);
+}
+
+/**
+ * Avatar source — served DIRECTLY, no Storage image transform. Avatars are
+ * uploaded pre-resized to ≤512px (normalizeAvatarToJpeg) and bot avatars are
+ * already small, so a passthrough is retina-sharp at every circle size while
+ * costing ZERO transform quota (the Pro plan includes only 100/cycle — see
+ * project_image_transform_quota). expo-image downscales client-side. The
+ * `?v=` cache-buster rides on avatar_url itself, so "change photo" still busts.
+ * (Legacy full-res avatars uploaded before the resize serve at full res until
+ * re-uploaded — fine: only ~30, cached, egress has ample headroom.)
+ */
 export function avatarUrl(url: string): string {
-  return transform(url, 128, 128, 'cover', 80);
+  return url;
 }

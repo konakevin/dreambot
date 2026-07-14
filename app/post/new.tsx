@@ -47,7 +47,7 @@ import { pinToFeed, pinPostRowToFeed } from '@/lib/dreamSave';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import { POST_SELECT, mapToDreamPost, castRow } from '@/lib/mapPost';
 import { moderateText } from '@/lib/moderation';
-import { thumbnailUrl } from '@/lib/imageUrl';
+import { tileImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -341,7 +341,7 @@ export default function NewPostScreen() {
               return (
                 <TouchableOpacity activeOpacity={0.85} onPress={() => toggle(item)}>
                   <Image
-                    source={{ uri: thumbnailUrl(item.image_url) }}
+                    source={{ uri: tileImageUrl(item.image_url_display, item.image_url) }}
                     style={{ width: TILE_WIDTH, height: TILE_WIDTH * PORTRAIT_RATIO }}
                     contentFit="cover"
                     cachePolicy="memory-disk"
@@ -438,7 +438,7 @@ export default function NewPostScreen() {
               renderItem={({ item, index }) => (
                 <View style={styles.stripItem}>
                   <Image
-                    source={{ uri: thumbnailUrl(item.url) }}
+                    source={{ uri: tileImageUrl(item.display, item.url) }}
                     style={styles.stripImg}
                     contentFit="cover"
                     cachePolicy="memory-disk"
