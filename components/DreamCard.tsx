@@ -905,8 +905,19 @@ export const DreamCard = memo(function DreamCard({
             onDelete,
             onDissolve: isGallery && isOwnPost ? () => dissolveAlbum(item.id) : undefined,
             onDreamLikeThis,
-            onDreamAgain:
-              isOwnPost && dreamAgain.canDreamAgain ? dreamAgain.onDreamAgain : undefined,
+            // Single dream → reload the post's own inputs. Album slide → reload
+            // the ACTIVE member's source dream (its inputs aren't on the host,
+            // so useDreamAgain lazily fetches them by id). Only when we know the
+            // slide's source id (absent on the feed's jsonb media shape).
+            onDreamAgain: isOwnPost
+              ? isGallery
+                ? activeSourceId
+                  ? () => dreamAgain.dreamAgainFromUpload(activeSourceId)
+                  : undefined
+                : dreamAgain.canDreamAgain
+                  ? dreamAgain.onDreamAgain
+                  : undefined
+              : undefined,
             authorName: item.username ?? undefined,
             isBot: isBotAuthor,
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),

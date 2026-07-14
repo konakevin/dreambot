@@ -174,7 +174,7 @@ export function GalleryNav({
         style={styles.navSlot}
       >
         <Animated.View style={leftStyle}>
-          <Ionicons name="chevron-back" size={fontScale(23)} color="#FFFFFF" />
+          <Ionicons name="chevron-back" size={fontScale(24)} color="#FFFFFF" />
         </Animated.View>
       </Pressable>
       <View style={styles.navDots}>
@@ -199,7 +199,7 @@ export function GalleryNav({
         style={styles.navSlot}
       >
         <Animated.View style={rightStyle}>
-          <Ionicons name="chevron-forward" size={fontScale(23)} color="#FFFFFF" />
+          <Ionicons name="chevron-forward" size={fontScale(24)} color="#FFFFFF" />
         </Animated.View>
       </Pressable>
     </View>
@@ -215,12 +215,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: OVERLAY_PILL_ACTIVE_BG,
     borderRadius: 999,
-    height: verticalScale(36),
-    paddingHorizontal: horizontalScale(4),
+    height: verticalScale(37),
+    paddingHorizontal: horizontalScale(5),
   },
   // Fixed-width chevron slot — always present so the indicator stays centered.
   navSlot: {
-    width: horizontalScale(34),
+    width: horizontalScale(35),
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -228,23 +228,23 @@ const styles = StyleSheet.create({
   navDots: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: horizontalScale(5),
-    paddingHorizontal: horizontalScale(2),
+    gap: horizontalScale(6),
+    paddingHorizontal: horizontalScale(3),
   },
   dotBase: { borderRadius: 999 },
   dotActive: {
-    width: horizontalScale(16),
-    height: horizontalScale(6),
+    width: horizontalScale(17),
+    height: horizontalScale(7),
     backgroundColor: '#FFFFFF',
   },
   dotIdle: {
-    width: horizontalScale(6),
-    height: horizontalScale(6),
+    width: horizontalScale(7),
+    height: horizontalScale(7),
     backgroundColor: 'rgba(255,255,255,0.5)',
   },
   dotPeek: {
-    width: horizontalScale(4),
-    height: horizontalScale(4),
+    width: horizontalScale(5),
+    height: horizontalScale(5),
     backgroundColor: 'rgba(255,255,255,0.3)',
   },
 });

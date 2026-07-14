@@ -12,6 +12,8 @@
  */
 import { useCallback } from 'react';
 import * as nav from '@/lib/navigate';
+import { supabase } from '@/lib/supabase';
+import { Toast } from '@/components/Toast';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -34,6 +36,12 @@ export interface DreamAgain {
   vibeLabel: string;
   /** Load this dream's inputs into Create + navigate there. */
   onDreamAgain: () => void;
+  /**
+   * Like onDreamAgain, but for a DIFFERENT dream resolved by id — used for an
+   * album slide, whose inputs aren't on the host `item`. Lazily fetches the
+   * source dream's inputs on tap (no feed-payload cost), then loads Create.
+   */
+  dreamAgainFromUpload: (uploadId: string) => void;
 }
 
 export function useDreamAgain(item: DreamPostItem): DreamAgain {
@@ -55,5 +63,26 @@ export function useDreamAgain(item: DreamPostItem): DreamAgain {
     nav.push('/(tabs)/create');
   }, [canDreamAgain, item.recipe, item.model, mediumKey, vibeKey, setPreset]);
 
-  return { canDreamAgain, mediumLabel, vibeLabel, onDreamAgain };
+  const dreamAgainFromUpload = useCallback(
+    async (uploadId: string) => {
+      const { data } = await supabase
+        .from('uploads')
+        .select('dream_medium, dream_vibe, model, recipe')
+        .eq('id', uploadId)
+        .maybeSingle();
+      const medium = (data?.dream_medium as string | null) ?? '';
+      const vibe = (data?.dream_vibe as string | null) ?? '';
+      if (!medium || !vibe) {
+        Toast.show("This dream can't be remade", 'information-circle');
+        return;
+      }
+      const recipe = data?.recipe as { hint?: unknown } | null;
+      const hint = recipe && typeof recipe.hint === 'string' ? recipe.hint : '';
+      setPreset({ prompt: hint, medium, vibe, model: (data?.model as string | null) ?? null });
+      nav.push('/(tabs)/create');
+    },
+    [setPreset]
+  );
+
+  return { canDreamAgain, mediumLabel, vibeLabel, onDreamAgain, dreamAgainFromUpload };
 }

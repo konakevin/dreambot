@@ -416,9 +416,10 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
 
   // Dream this again — owner-only reload of this dream's saved inputs into
   // Create (original prompt + medium + vibe + model), editable. The caller only
-  // passes onDreamAgain for the owner, so no extra isOwn gate needed here.
-  // (Hidden for albums — no single recipe to reload.)
-  if (opts.onDreamAgain && !opts.isGallery) {
+  // passes onDreamAgain for the owner, so no extra isOwn gate needed here. On an
+  // album it reloads the ACTIVE SLIDE's source dream (the caller resolves that);
+  // suppressed only on the grid album THUMB, which has no single slide in view.
+  if (opts.onDreamAgain && !opts.albumThumb) {
     rows.push({
       key: 'dream-again',
       label: 'Dream this again',

@@ -564,7 +564,14 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
             </GestureDetector>
           </View>
 
-          <Animated.View style={inputStickyStyle}>
+          {/* zIndex ABOVE the kbOpen list tap-catcher (StyleSheet.absoluteFill,
+              zIndex 0). When the keyboard is up, inputStickyStyle translates this
+              bar UP over the list area — right on top of that catcher. Without an
+              explicit zIndex, RN's touch routing for a transform-moved sibling
+              over an absoluteFill didn't reliably follow paint order, so the first
+              tap on the send arrow hit the catcher (dismiss keyboard) instead of
+              the button — you had to tap twice to submit (Kevin 2026-07-12). */}
+          <Animated.View style={[inputStickyStyle, styles.inputSticky]}>
             {/* Reply indicator */}
             {replyTo && (
               <View style={styles.replyBar}>
@@ -821,6 +828,11 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(14),
     fontWeight: '600',
+  },
+  inputSticky: {
+    // Above the kbOpen list tap-catcher so a tap on Send always hits the button,
+    // never the keyboard-dismiss catcher underneath it (2026-07-12).
+    zIndex: 30,
   },
   inputBar: {
     flexDirection: 'row',
