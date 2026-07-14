@@ -31,12 +31,20 @@ export interface CreateDispatcherArgs {
   payload: Record<string, unknown>;
 }
 
-// A render that sends no response bytes for 150s gets gateway-504'd + the
-// isolate reaped anyway (request-idle limit), so 180s was never really reachable.
-// 120s keeps the worker's own abort UNDER that ceiling: a heavy dual is ~60-90s,
-// so this still has headroom; a truly-hung render aborts → throw → worker
-// re-queues (status-guarded). Also keeps a worker SYNC tick under SYNC_TICK_BUDGET.
-const RENDER_TIMEOUT_MS = 120_000;
+// The worker AWAITS this dispatch; generate-dream renders synchronously and only
+// responds AFTER writing its own dream_queue terminal state. A render that sends
+// no bytes for 150s gets gateway-504'd + the isolate reaped (request-idle limit),
+// so the worker's own abort must stay UNDER that ceiling. 140s (10s gateway
+// margin, up from 120s) stops the worker abandoning a still-valid SLOW render:
+// the slowest model+heavy-prompt+dual combos (GPT Image / Nano Banana) can
+// approach ~2min, and aborting one at 120s burned a needless retry (attempt
+// inflation + a spurious dispatch_unreachable) even though the SEPARATE render
+// isolate finished fine and wrote its terminal state. A truly-hung render still
+// aborts → throw → worker re-queues (status-guarded, so a render that actually
+// completed is left alone). This is decoupled from the SYNC backstop's own
+// SYNC_TICK_BUDGET (120s, enforced independently via Promise.race): generate-dream
+// runs in its own isolate and completes regardless of when the worker responds.
+const RENDER_TIMEOUT_MS = 140_000;
 
 export async function dispatchCreateJob(args: CreateDispatcherArgs): Promise<void> {
   const { supabaseUrl, serviceRoleKey, payload } = args;

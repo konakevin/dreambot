@@ -28,6 +28,7 @@ import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { jitter } from '../_shared/jitter.ts';
+import { decideStaleRecovery } from '../_shared/staleRecovery.ts';
 
 const STALE_THRESHOLD_MIN = 5; // in_progress jobs older than this are reset
 // Jobs claimed + processed per tick, IN PARALLEL. The nightly concurrency
@@ -55,6 +56,97 @@ interface QueueRow {
   attempt_count: number;
   created_at: string;
   started_at: string | null;
+}
+
+/**
+ * After a job's dream_queue row is flipped to `dead_letter`, run the
+ * source-appropriate aftermath: nightly → goodwill sparkle credit + notify;
+ * create/dlt → refund the paid sparkle (idempotent on jobId) + flip dream_jobs +
+ * notify; first_dream → nothing (it's free). Shared by BOTH the catch path
+ * (dispatch threw) and the stale-recovery path (isolate hard-died) so a
+ * hard-killed dream refunds identically to a caught failure. Every write is
+ * non-fatal but NEVER silent (a dropped refund/notify/flip is logged for the
+ * monitors — CLAUDE.md no-silent-catch rule). `isNsfw` drives the copy + reason.
+ */
+async function deadLetterAftermath(
+  supabase: SupabaseClient,
+  workerId: string,
+  job: { id: string; source: QueueRow['source']; user_id: string },
+  message: string,
+  isNsfw: boolean
+): Promise<void> {
+  if (job.source === 'nightly' && !isNsfw) {
+    // Nightly is free (membership-included) — no sparkle to refund. CREDIT a
+    // goodwill sparkle for the trouble instead. Idempotent on the job id so a
+    // re-run can't double-grant. Stay silent on NSFW (no point flagging a safety
+    // block on an auto-generated dream).
+    const { error: grantErr } = await supabase.rpc('grant_sparkles', {
+      p_user_id: job.user_id,
+      p_amount: 1,
+      p_reason: `nightly_fail_credit:${job.id}`,
+    });
+    if (grantErr) {
+      console.error(`[worker:${workerId}] nightly fail sparkle credit failed:`, grantErr.message);
+    }
+    const { error: notifErr } = await supabase.from('notifications').insert({
+      recipient_id: job.user_id,
+      type: 'dream_failed',
+      subtype: 'nightly_failed',
+      body: "Your nightly dream slipped away tonight, so we've added a sparkle to your balance to make up for it.",
+    });
+    if (notifErr) {
+      console.error(
+        `[worker:${workerId}] nightly dream_failed notify insert failed:`,
+        notifErr.message
+      );
+    }
+  } else if (job.source === 'create' || job.source === 'dlt') {
+    // Paid user dream. The render did NOT refund in-function for queued jobs
+    // (the worker owns it), so refund now — idempotent on the job id, and
+    // refund_sparkles returns the ACTUAL amount debited (1/2/3/5 by model), not
+    // the p_amount fallback. Then mark dream_jobs failed (resolves the client's
+    // polling fallback) + inbox notification.
+    const { error: refundErr } = await supabase.rpc('refund_sparkles', {
+      p_user_id: job.user_id,
+      p_amount: 1,
+      p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+      p_reference_id: job.id,
+    });
+    if (refundErr) {
+      console.error(`[worker:${workerId}] create dead-letter refund failed:`, refundErr.message);
+    }
+    await supabase
+      .from('dream_jobs')
+      .update({
+        status: isNsfw ? 'nsfw' : 'failed',
+        error: message,
+        completed_at: new Date().toISOString(),
+      })
+      .eq('id', job.id)
+      .then(
+        () => {},
+        // Non-fatal, but NEVER silent: a dropped dream_jobs flip strands the
+        // client's polling fallback on "processing…" forever.
+        (e: unknown) =>
+          console.error(
+            `[worker:${workerId}] dream_jobs terminal flip FAILED for job ${job.id}:`,
+            (e as Error)?.message
+          )
+      );
+    await supabase
+      .from('notifications')
+      .insert(dreamFailedNotification(job.id, job.user_id, isNsfw))
+      .then(
+        () => {},
+        // Non-fatal, but NEVER silent: a dropped notification means the user
+        // never learns the dream failed (or that they were refunded).
+        (e: unknown) =>
+          console.error(
+            `[worker:${workerId}] dream_failed notification insert FAILED for job ${job.id}:`,
+            (e as Error)?.message
+          )
+      );
+  }
 }
 
 Deno.serve(async (req) => {
@@ -99,37 +191,80 @@ Deno.serve(async (req) => {
 
   const runTick = async () => {
     // ── Stale-job recovery ─────────────────────────────────────────────────
-    // Reset in_progress jobs whose started_at is more than 5 min ago. Worker
-    // isolate likely died mid-job (Supabase 150 s wall-clock timeout).
+    // in_progress jobs whose started_at is older than the stale threshold — the
+    // render isolate almost certainly HARD-died mid-job (546/OOM/150s wall-clock
+    // kill SKIPS every catch, so neither the render nor the worker recorded a
+    // terminal state). Recover each: a hard-kill IS a real attempt, so BUMP
+    // attempt_count and dead-letter (refund + notify) once attempts are
+    // exhausted — otherwise a job that reliably kills its isolate loops here
+    // forever, never dead-letters, never refunds, and rotates through a
+    // concurrency slot every sweep. (The old bulk reset re-queued with NO bump.)
     const staleCutoff = new Date(Date.now() - STALE_THRESHOLD_MIN * 60 * 1000).toISOString();
+    // Pull the migration-272 breadcrumbs so we can report WHERE the dead isolate
+    // died — current_stage/model survived the kill on this row.
     const { data: staleRows } = await supabase
       .from('dream_queue')
-      .update({ status: 'queued', started_at: null, worker_id: null })
+      .select('id, current_stage, model, source, user_id, attempt_count')
       .eq('status', 'in_progress')
-      .lt('started_at', staleCutoff)
-      // Pull the migration-272 breadcrumbs so we can report WHERE the dead
-      // isolate died — current_stage/model survived the kill on this row.
-      .select('id, current_stage, model, source, user_id, attempt_count');
-    if (staleRows && staleRows.length > 0) {
-      console.log(`[worker:${workerId}] Reset ${staleRows.length} stale in_progress jobs`);
-      // The dead isolate couldn't report itself (a 546/OOM kill skips every
-      // catch). WE report on its behalf — this is the ONLY path that gets hard
-      // kills into Sentry, tagged with the exact stage that killed it.
-      for (const row of staleRows) {
-        await captureRenderError(
-          new Error(
-            `render isolate died at stage=${row.current_stage ?? 'unknown'} (in_progress > ${STALE_THRESHOLD_MIN}min) — re-queued`
-          ),
-          {
-            fn: 'dream-queue-worker:stale-recovery',
-            jobId: row.id,
-            userId: row.user_id,
-            stage: row.current_stage,
-            model: row.model,
-            source: row.source,
-            weight: undefined,
+      .lt('started_at', staleCutoff);
+    for (const row of staleRows ?? []) {
+      const { nextAttempt, dead } = decideStaleRecovery(
+        row.attempt_count,
+        MAX_ATTEMPTS_BEFORE_DEAD_LETTER
+      );
+      const staleMsg = `render isolate died at stage=${row.current_stage ?? 'unknown'} (in_progress > ${STALE_THRESHOLD_MIN}min)`;
+      const patch = dead
+        ? {
+            status: 'dead_letter',
+            attempt_count: nextAttempt,
+            last_error: `${staleMsg} — dead-lettered (attempts exhausted)`,
+            completed_at: new Date().toISOString(),
+            worker_id: null,
           }
-        );
+        : {
+            status: 'queued',
+            attempt_count: nextAttempt,
+            last_error: `${staleMsg} — re-queued`,
+            started_at: null,
+            worker_id: null,
+            // Backoff: hold the re-queued job off the claimable set (created_at
+            // in the future) so a job that reliably kills its isolate doesn't
+            // re-claim instantly + thrash a slot.
+            created_at: new Date(
+              Date.now() + jitter(BACKOFF_MS[Math.min(nextAttempt - 1, BACKOFF_MS.length - 1)])
+            ).toISOString(),
+          };
+      // Guarded atomic transition: the `.eq('status','in_progress')` guard means
+      // only ONE invoker wins the move out of in_progress — an overlapping tick's
+      // sweep, or a late render write, is a no-op for the losers. So we never
+      // double-refund or double-requeue the same stale row.
+      const { data: claimed } = await supabase
+        .from('dream_queue')
+        .update(patch)
+        .eq('id', row.id)
+        .eq('status', 'in_progress')
+        .select('id');
+      if (!claimed || claimed.length === 0) continue;
+
+      console.log(
+        `[worker:${workerId}] Stale job ${row.id} (attempt ${nextAttempt}/${MAX_ATTEMPTS_BEFORE_DEAD_LETTER}) — ${dead ? 'dead-lettered' : 're-queued'}`
+      );
+      // The dead isolate couldn't report itself (a hard kill skips every catch).
+      // WE report on its behalf — this is the ONLY path that gets hard kills into
+      // Sentry, tagged with the exact stage that killed it.
+      await captureRenderError(new Error(`${staleMsg} — ${dead ? 'dead-lettered' : 're-queued'}`), {
+        fn: 'dream-queue-worker:stale-recovery',
+        jobId: row.id,
+        userId: row.user_id,
+        stage: row.current_stage,
+        model: row.model,
+        source: row.source,
+        weight: undefined,
+      });
+      // Exhausted → the user still owes a refund (their dream died with no
+      // terminal state). isNsfw=false: a dead isolate isn't a safety rejection.
+      if (dead) {
+        await deadLetterAftermath(supabase, workerId, row, staleMsg, false);
       }
     }
 
@@ -314,88 +449,10 @@ Deno.serve(async (req) => {
                 completed_at: new Date().toISOString(),
               })
               .eq('id', job.id);
-            // Nightly dream exhausted all retries. It's free (membership-included),
-            // so there's no sparkle to refund — instead CREDIT a goodwill sparkle
-            // for the trouble, and say so. Idempotent on the job id so a re-run
-            // can't double-grant. Stay silent on NSFW dead-letters (no point
-            // flagging a safety block on an auto-generated dream).
-            if (job.source === 'nightly' && !isNsfw) {
-              const { error: grantErr } = await supabase.rpc('grant_sparkles', {
-                p_user_id: job.user_id,
-                p_amount: 1,
-                p_reason: `nightly_fail_credit:${job.id}`,
-              });
-              if (grantErr) {
-                console.error(
-                  `[worker:${workerId}] nightly fail sparkle credit failed:`,
-                  grantErr.message
-                );
-              }
-              const { error: notifErr } = await supabase.from('notifications').insert({
-                recipient_id: job.user_id,
-                type: 'dream_failed',
-                subtype: 'nightly_failed',
-                body: "Your nightly dream slipped away tonight, so we've added a sparkle to your balance to make up for it.",
-              });
-              if (notifErr) {
-                console.error(
-                  `[worker:${workerId}] nightly dream_failed notify insert failed:`,
-                  notifErr.message
-                );
-              }
-            } else if (job.source === 'create' || job.source === 'dlt') {
-              // Paid user dream is dead (retries exhausted OR a safety block).
-              // The render did NOT refund in-function for queued jobs (the
-              // worker owns it), so refund now — idempotent on the job id, and
-              // refund_sparkles returns the ACTUAL amount debited (1/2/3/5 by
-              // model), not the fallback. Then mark dream_jobs failed (resolves
-              // the client's polling fallback) + inbox notification.
-              const { error: refundErr } = await supabase.rpc('refund_sparkles', {
-                p_user_id: job.user_id,
-                p_amount: 1,
-                p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
-                p_reference_id: job.id,
-              });
-              if (refundErr) {
-                console.error(
-                  `[worker:${workerId}] create dead-letter refund failed:`,
-                  refundErr.message
-                );
-              }
-              await supabase
-                .from('dream_jobs')
-                .update({
-                  status: isNsfw ? 'nsfw' : 'failed',
-                  error: message,
-                  completed_at: new Date().toISOString(),
-                })
-                .eq('id', job.id)
-                .then(
-                  () => {},
-                  // Non-fatal, but NEVER silent: a dropped dream_jobs flip
-                  // strands the client's polling fallback on "processing…"
-                  // forever (CLAUDE.md no-silent-catch rule).
-                  (e: unknown) =>
-                    console.error(
-                      `[worker:${workerId}] dream_jobs terminal flip FAILED for job ${job.id}:`,
-                      (e as Error)?.message
-                    )
-                );
-              await supabase
-                .from('notifications')
-                .insert(dreamFailedNotification(job.id, job.user_id, isNsfw))
-                .then(
-                  () => {},
-                  // Non-fatal, but NEVER silent: a dropped notification means
-                  // the user never learns the dream failed (or that they were
-                  // refunded) and can't hit retry.
-                  (e: unknown) =>
-                    console.error(
-                      `[worker:${workerId}] dream_failed notification insert FAILED for job ${job.id}:`,
-                      (e as Error)?.message
-                    )
-                );
-            }
+            // Source-appropriate aftermath (nightly goodwill credit / create-dlt
+            // refund + dream_jobs flip + notify) — shared with the stale-recovery
+            // path so a hard-killed dream refunds identically to a caught failure.
+            await deadLetterAftermath(supabase, workerId, job, message, isNsfw);
             return { id: job.id, status: 'dead_letter', ms: Date.now() - jobT0, error: message };
           }
 
