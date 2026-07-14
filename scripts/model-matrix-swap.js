@@ -106,11 +106,14 @@ const CONCURRENCY = 3; // protect the Fly dual-swap service (2 machines)
 const RENDER_TIMEOUT_MS = 150_000;
 
 const args = process.argv.slice(2);
+// --scene "..." forces one fixed scene/hint for the whole batch (overrides the
+// per-medium SCENE_BY_MEDIUM) — handy for testing a specific scene across styles.
 const has = (f) => args.includes(f);
 const val = (f) => {
   const i = args.indexOf(f);
   return i >= 0 ? args[i + 1] : null;
 };
+const SCENE_OVERRIDE = val('--scene');
 
 function buildMatrix() {
   let models = MODELS,
@@ -157,7 +160,7 @@ async function seedJob({ model, medium, role }, recipe) {
     force_model: model,
     force_cast_role: role,
     vibe_profile: recipe,
-    hint: SCENE_BY_MEDIUM[medium] || DEFAULT_SCENE,
+    hint: SCENE_OVERRIDE || SCENE_BY_MEDIUM[medium] || DEFAULT_SCENE,
   };
   await sb
     .from('dream_jobs')
