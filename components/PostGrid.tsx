@@ -6,6 +6,7 @@ import {
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,6 +28,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import { minRefreshHold } from '@/lib/minRefresh';
+import { useRefreshGap } from '@/hooks/useRefreshGap';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
 
@@ -181,6 +183,9 @@ export function PostGrid({
   // the spinner showing forever (Kevin 2026-07-07). This mirrors the fix the
   // profile Followers list already uses.
   const [isPulling, setIsPulling] = useState(false);
+  // Self-held pull gap the spinner rests in (native RefreshControl is unreliable
+  // on Fabric — see useRefreshGap).
+  const gapHeight = useRefreshGap(isPulling);
   const handleRefresh = useCallback(async () => {
     setIsPulling(true);
     try {
@@ -417,31 +422,28 @@ export function PostGrid({
         maxToRenderPerBatch={6}
         initialNumToRender={12}
         removeClippedSubviews={false}
-        // Native pull-to-refresh. tintColor="transparent" is deliberate: on the
-        // New Architecture (Fabric, RN 0.81) the RefreshControl ignores it and
-        // falls back to iOS's DEFAULT gray spinner — which is exactly the standard
-        // gray we want. (An explicit gray hex renders nothing / erratically here;
-        // "transparent" reliably yields the default gray, react-native#56343.)
-        // iOS owns the held-open gap for free; no custom overlay to double up.
-        refreshControl={
-          <RefreshControl
-            refreshing={isPulling}
-            onRefresh={handleRefresh}
-            tintColor="transparent"
-          />
-        }
+        // `refreshing` pinned FALSE: the native spinner is unreliable on Fabric
+        // (react-native#56343) so we never let it try — we render our own spinner
+        // in the self-held gap below. The RefreshControl stays only for its pull
+        // GESTURE (onRefresh still fires on a pull-release).
+        refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}
         ListHeaderComponent={
-          ListHeaderComponent ? (
-            <View
-              onLayout={(e) => {
-                const h = e.nativeEvent.layout.height;
-                setHeaderHeight(h);
-                headerHeightRef.current = h;
-              }}
-            >
-              {ListHeaderComponent}
-            </View>
-          ) : undefined
+          <>
+            {/* Self-held refresh gap — expands while pulling so the spinner has a
+                clean space above the content (mirrors the native refresh gap). */}
+            <Animated.View style={{ height: gapHeight }} />
+            {ListHeaderComponent ? (
+              <View
+                onLayout={(e) => {
+                  const h = e.nativeEvent.layout.height;
+                  setHeaderHeight(h);
+                  headerHeightRef.current = h;
+                }}
+              >
+                {ListHeaderComponent}
+              </View>
+            ) : null}
+          </>
         }
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -494,17 +496,12 @@ export function PostGrid({
           />
         )}
       />
-      {/* Reliable gray refresh spinner. The native RefreshControl still owns the
-          pull gesture + the held-open gap (refreshing={isPulling}), but its own
-          spinner renders erratically on Fabric/RN 0.81 (react-native#56343 — we
-          watched it show purple, gray, then nothing across identical configs), so
-          we render our OWN ActivityIndicator in the gap — same reliable approach
-          the home feed (VerticalPager) uses. Gated on isPulling so it only shows
-          during a user pull, and the ~600ms minRefreshHold keeps it visible. */}
+      {/* Our own gray spinner, resting in the self-held gap (top ≈ gap center).
+          Reliable where the native RefreshControl spinner is not (Fabric). */}
       {isPulling && (
         <View
           pointerEvents="none"
-          style={{ position: 'absolute', top: 14, left: 0, right: 0, alignItems: 'center' }}
+          style={{ position: 'absolute', top: 18, left: 0, right: 0, alignItems: 'center' }}
         >
           <ActivityIndicator size="small" color={colors.textSecondary} />
         </View>

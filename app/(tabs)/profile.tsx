@@ -33,6 +33,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { minRefreshHold } from '@/lib/minRefresh';
+import { useRefreshGap } from '@/hooks/useRefreshGap';
 import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
 import type { DreamsFilter } from '@/hooks/useMyDreams';
@@ -135,7 +136,13 @@ export default function ProfileScreen() {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            bulkDelete.mutate(ids, { onSettled: exitGridSelection });
+            // Exit select mode IMMEDIATELY (the delete is optimistic — the tiles
+            // are already gone) so the selection bar clears and the success toast
+            // is visible right away, instead of the bar hanging with no toast
+            // until the BATCHED delete resolves seconds later, forcing a manual
+            // Cancel (Kevin 2026-07-12). Mirrors handleBulkPost.
+            bulkDelete.mutate(ids);
+            exitGridSelection();
           },
         },
       ]
@@ -152,7 +159,8 @@ export default function ProfileScreen() {
         {
           text: 'Make Private',
           onPress: () => {
-            bulkPrivate.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+            bulkPrivate.mutate([...gridSelectedIds]);
+            exitGridSelection();
           },
         },
       ]
@@ -179,7 +187,8 @@ export default function ProfileScreen() {
         {
           text: 'Unsave',
           onPress: () => {
-            bulkUnsave.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+            bulkUnsave.mutate([...gridSelectedIds]);
+            exitGridSelection();
           },
         },
       ]
@@ -196,7 +205,8 @@ export default function ProfileScreen() {
         {
           text: 'Unrepost',
           onPress: () => {
-            bulkUnrepost.mutate([...gridSelectedIds], { onSettled: exitGridSelection });
+            bulkUnrepost.mutate([...gridSelectedIds]);
+            exitGridSelection();
           },
         },
       ]
@@ -215,6 +225,29 @@ export default function ProfileScreen() {
     useCallback(() => {
       trackProfileViewed({ is_self: true });
     }, [])
+  );
+
+  // Refetch the OWN-profile grids on every RE-focus (skipping the initial mount,
+  // which already fetches). A mutation that changes grid membership — posting a
+  // new dream/album, or setting a post/album to private — often fires while THIS
+  // screen is DETACHED behind a pushed full-screen viewer (the album viewer), or
+  // after we've navigated away to compose. The native stack detaches the screen
+  // below the top one, so the grid isn't a live observer and the mutation's
+  // invalidateProfileGrids refetch doesn't land — the change only showed after a
+  // full app refresh (Kevin 2026-07-12). Refetching on return makes it live.
+  // refetchType:'active' → only the mounted own-profile grids (they stay enabled
+  // across the sub-tabs), never the feed/explore/other-user queries.
+  const skipFirstGridRefocus = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (skipFirstGridRefocus.current) {
+        skipFirstGridRefocus.current = false;
+        return;
+      }
+      for (const key of ['userPosts', 'my-dreams', 'favoritePosts', 'userReposts']) {
+        queryClient.invalidateQueries({ queryKey: [key], refetchType: 'active' });
+      }
+    }, [queryClient])
   );
 
   // Leaving the profile (tab-away, push into a detail screen) exits grid select
@@ -316,6 +349,9 @@ export default function ProfileScreen() {
   // Programmatic refetches (AppState resume invalidation) won't trigger the
   // spinner — fixes the post-background "scrolled down ~60px until tap" bug.
   const [isPulling, setIsPulling] = useState(false);
+  // Self-held pull gap for the followers/following list (native RefreshControl
+  // spinner is unreliable on Fabric — see useRefreshGap).
+  const followersGap = useRefreshGap(isPulling);
   const handleRefresh = useCallback(async () => {
     setIsPulling(true);
     try {
@@ -485,66 +521,86 @@ export default function ProfileScreen() {
   // mark the boundary visually.
   const stickyTopBar = (
     <Animated.View style={styles.topBar}>
-      {/* TouchableOpacity hosts the tap-to-top gesture. Its hit area
+      {/* While multi-selecting, the ALWAYS-VISIBLE top bar becomes the selection
+          bar (count + Cancel) so you can always exit — the old count/Cancel lived
+          in the grid's scrolling subheader and vanished once you scrolled the
+          album (Kevin 2026-07-12: "can't see the cancel button"). */}
+      {gridSelecting ? (
+        <>
+          <Text style={styles.selectionCountText}>{gridSelectedIds.size} selected</Text>
+          <TouchableOpacity
+            style={styles.selectionDoneButton}
+            onPress={exitGridSelection}
+            activeOpacity={0.8}
+            hitSlop={8}
+          >
+            <Text style={styles.selectionDoneText}>Cancel</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          {/* TouchableOpacity hosts the tap-to-top gesture. Its hit area
           tracks the visible content — at scrollY=0 the avatar collapses
           to width 0 and the handle is opacity 0 (text still has layout
           width but is invisible), so the tap target is effectively
           empty. Once scrolled past the threshold the area grows and
           the gesture becomes meaningfully discoverable. */}
-      <TouchableOpacity
-        onPress={handleTopBarTap}
-        style={styles.topBarLeft}
-        activeOpacity={0.7}
-        accessibilityLabel="Scroll to top"
-      >
-        <Animated.View
-          style={[
-            styles.compactAvatarWrap,
-            { width: compactAvatarWidth, opacity: compactAvatarOpacity },
-          ]}
-        >
-          {profile?.avatar_url && (
-            <Image
-              source={{ uri: profile.avatar_url }}
-              style={styles.compactAvatar}
-              contentFit="cover"
-            />
-          )}
-        </Animated.View>
-        <Animated.Text
-          style={[styles.topBarHandle, { opacity: compactHandleOpacity }]}
-          numberOfLines={1}
-        >
-          @{user?.user_metadata?.username ?? 'you'}
-        </Animated.Text>
-      </TouchableOpacity>
-      <View style={styles.topBarActions}>
-        {/* Compose a new post (single or multi-image) from your dreams.
+          <TouchableOpacity
+            onPress={handleTopBarTap}
+            style={styles.topBarLeft}
+            activeOpacity={0.7}
+            accessibilityLabel="Scroll to top"
+          >
+            <Animated.View
+              style={[
+                styles.compactAvatarWrap,
+                { width: compactAvatarWidth, opacity: compactAvatarOpacity },
+              ]}
+            >
+              {profile?.avatar_url && (
+                <Image
+                  source={{ uri: profile.avatar_url }}
+                  style={styles.compactAvatar}
+                  contentFit="cover"
+                />
+              )}
+            </Animated.View>
+            <Animated.Text
+              style={[styles.topBarHandle, { opacity: compactHandleOpacity }]}
+              numberOfLines={1}
+            >
+              @{user?.user_metadata?.username ?? 'you'}
+            </Animated.Text>
+          </TouchableOpacity>
+          <View style={styles.topBarActions}>
+            {/* Compose a new post (single or multi-image) from your dreams.
             duplicate-outline (a + on stacked squares) — deliberately NOT the
             nav bar's add-circle ⊕, which creates a DREAM; this adds a POST. */}
-        <TouchableOpacity onPress={() => nav.push('/post/new')} hitSlop={12}>
-          <Ionicons name="duplicate-outline" size={24} color={colors.textSecondary} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
-          <View style={styles.inboxBubbleWrap}>
-            <Ionicons
-              name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
-              size={26}
-              color={unreadCount > 0 ? colors.accent : colors.textSecondary}
-            />
-            {unreadCount > 0 && (
-              <View style={styles.inboxBadge} pointerEvents="none">
-                <Text allowFontScaling={false} style={styles.inboxBadgeText}>
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </Text>
+            <TouchableOpacity onPress={() => nav.push('/post/new')} hitSlop={12}>
+              <Ionicons name="duplicate-outline" size={24} color={colors.textSecondary} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleInboxPress} hitSlop={12}>
+              <View style={styles.inboxBubbleWrap}>
+                <Ionicons
+                  name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
+                  size={26}
+                  color={unreadCount > 0 ? colors.accent : colors.textSecondary}
+                />
+                {unreadCount > 0 && (
+                  <View style={styles.inboxBadge} pointerEvents="none">
+                    <Text allowFontScaling={false} style={styles.inboxBadgeText}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
               </View>
-            )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
+              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => nav.push('/settings')} hitSlop={12}>
-          <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+        </>
+      )}
       {/* Bottom-border hairline fades in on scroll so the bar reads as
           a separate surface from the grid scrolling beneath it. */}
       <Animated.View
@@ -643,43 +699,31 @@ export default function ProfileScreen() {
           the left, Done on the right — so it reads as the grid's edit mode,
           not detached screen chrome (Kevin 2026-07-10: the top-left ✕ was
           hard to associate with the grid). */}
-      {(activeTab === 'dreams' ||
-        ((activeTab === 'posts' || activeTab === 'saved' || activeTab === 'reposts') &&
-          gridSelecting)) &&
-        (gridSelecting ? (
-          <View style={[styles.dreamsFilterRow, styles.selectionRow]}>
-            <Text style={styles.selectionCountText}>{gridSelectedIds.size} selected</Text>
-            <TouchableOpacity
-              style={styles.selectionDoneButton}
-              onPress={exitGridSelection}
-              activeOpacity={0.8}
-              hitSlop={8}
-            >
-              <Text style={styles.selectionDoneText}>Cancel</Text>
-            </TouchableOpacity>
+      {/* Dreams album filter — hidden while multi-selecting (the selection
+          count + Cancel now live in the always-visible top bar, and you can't
+          re-filter mid-selection anyway). */}
+      {activeTab === 'dreams' && !gridSelecting && (
+        <View style={styles.dreamsFilterRow}>
+          <View style={styles.segmented}>
+            {(['all', 'posted', 'private'] as const).map((f) => {
+              const active = dreamsFilter === f;
+              const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
+              return (
+                <TouchableOpacity
+                  key={f}
+                  style={[styles.segment, active && styles.segmentActive]}
+                  onPress={() => applyDreamsFilter(f)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+                    {label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
-        ) : (
-          <View style={styles.dreamsFilterRow}>
-            <View style={styles.segmented}>
-              {(['all', 'posted', 'private'] as const).map((f) => {
-                const active = dreamsFilter === f;
-                const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
-                return (
-                  <TouchableOpacity
-                    key={f}
-                    style={[styles.segment, active && styles.segmentActive]}
-                    onPress={() => applyDreamsFilter(f)}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                      {label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
-        ))}
+        </View>
+      )}
 
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
@@ -893,19 +937,17 @@ export default function ProfileScreen() {
         key="users"
         ref={userListRef}
         data={listData}
-        // Native pull-to-refresh. tintColor="transparent" is deliberate: Fabric
-        // (RN 0.81) ignores it and falls back to iOS's DEFAULT gray spinner —
-        // exactly the standard gray we want (an explicit gray hex renders nothing
-        // here; react-native#56343). iOS owns the held-open gap.
-        refreshControl={
-          <RefreshControl
-            refreshing={isPulling}
-            onRefresh={handleRefresh}
-            tintColor="transparent"
-          />
-        }
+        // `refreshing` pinned FALSE — the native spinner is unreliable on Fabric
+        // (react-native#56343); we render our own in the self-held gap below.
+        // The control stays only for its pull gesture (onRefresh).
+        refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={header}
+        ListHeaderComponent={
+          <>
+            <Animated.View style={{ height: followersGap }} />
+            {header}
+          </>
+        }
         // Clear the floating tab bar so the last row isn't trapped under it
         // (mirrors PostGrid's bottom padding).
         contentContainerStyle={{ paddingBottom: verticalScale(90) }}
@@ -930,9 +972,8 @@ export default function ProfileScreen() {
           />
         )}
       />
-      {/* Reliable gray refresh spinner in the native-held gap — the native
-          RefreshControl spinner renders erratically on Fabric/RN 0.81
-          (react-native#56343), so we own the indicator (matches PostGrid + feed). */}
+      {/* Our own gray spinner, resting in the self-held gap (native
+          RefreshControl spinner unreliable on Fabric — see useRefreshGap). */}
       {isPulling && (
         <View
           pointerEvents="none"
@@ -954,15 +995,9 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  // ── Dreams multi-select chrome ─────────────────────────────────────────────
-  // The count + Done REPLACE the All/Posted/Private segmented control in the
-  // grid's own subheader row while selecting (framing the mode around the
-  // grid); the red Delete pill floats above the tab bar.
-  selectionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  // ── Multi-select chrome ────────────────────────────────────────────────────
+  // The count + Cancel take over the always-visible top bar while selecting (so
+  // they never scroll out of reach); the action pills float above the tab bar.
   selectionCountText: {
     color: colors.textPrimary,
     fontSize: fontScale(14),

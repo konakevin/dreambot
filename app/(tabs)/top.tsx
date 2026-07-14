@@ -20,6 +20,7 @@ import {
   ActivityIndicator,
   FlatList as RNFlatList,
   RefreshControl,
+  Animated,
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
@@ -32,6 +33,7 @@ import { mapRpcToDreamPost, castRows } from '@/lib/mapPost';
 import { useAuthStore } from '@/store/auth';
 import { useFeedStore } from '@/store/feed';
 import { minRefreshHold } from '@/lib/minRefresh';
+import { useRefreshGap } from '@/hooks/useRefreshGap';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
 import { useSearchPosts } from '@/hooks/useSearchPosts';
@@ -533,13 +535,17 @@ export default function SearchExploreScreen() {
 
   const overlayHeight = insets.top + 4 + 40 + 8 + (hasFilters ? 36 : 0);
 
+  // Self-held pull gap for the browse grid (native RefreshControl spinner is
+  // unreliable on Fabric — see useRefreshGap). Gated with the same condition the
+  // spinner uses so the gap never opens mid-pagination.
+  const exploreGap = useRefreshGap(isPulling && !isFetchingNextPage);
+
   // ── Render ──
 
   return (
     <View style={s.root}>
-      {/* Reliable gray refresh spinner parked below the search box — the native
-          RefreshControl spinner renders erratically on Fabric/RN 0.81
-          (react-native#56343), so we own the indicator (matches profile + feed). */}
+      {/* Our own gray refresh spinner, resting in the self-held gap below the
+          search box (native RefreshControl spinner unreliable on Fabric). */}
       {!searchActive && isPulling && !isFetchingNextPage && (
         <View
           pointerEvents="none"
@@ -568,18 +574,12 @@ export default function SearchExploreScreen() {
           maxToRenderPerBatch={8}
           initialNumToRender={10}
           removeClippedSubviews
-          // Native pull-to-refresh. tintColor="transparent" is deliberate: Fabric
-          // (RN 0.81) ignores it and falls back to iOS's DEFAULT gray spinner —
-          // exactly the standard gray we want (react-native#56343). progressView-
-          // Offset parks it below the search box; iOS owns the held-open gap.
-          refreshControl={
-            <RefreshControl
-              refreshing={isPulling && !isFetchingNextPage}
-              onRefresh={handlePullToRefresh}
-              tintColor="transparent"
-              progressViewOffset={overlayHeight}
-            />
-          }
+          // `refreshing` pinned FALSE — native spinner unreliable on Fabric
+          // (react-native#56343); our own spinner rests in the self-held gap
+          // (the ListHeaderComponent spacer below, under the search box). The
+          // control stays only for its pull gesture (onRefresh).
+          refreshControl={<RefreshControl refreshing={false} onRefresh={handlePullToRefresh} />}
+          ListHeaderComponent={<Animated.View style={{ height: exploreGap }} />}
           onEndReachedThreshold={0.5}
           onEndReached={() => hasNextPage && fetchNextPage()}
           ListEmptyComponent={
