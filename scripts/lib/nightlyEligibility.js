@@ -3,9 +3,12 @@
  * scripts/nightly-dreams.js (the GitHub Actions cron entry). Mirrors
  * lib/proStatus.ts (client) and the is_pro_active() Postgres function.
  *
- * Nightly dreams are a PRO feature: only Pro users (active paid OR within the
- * 14-day trial) get an auto-dream each night. When a subscription expires or
- * the trial lapses, the user falls back to FREE and stops receiving them.
+ * Nightly dreams are a PAID-MEMBERSHIP feature: Pro users (active paid OR within
+ * the 14-day trial) AND Basic users (active paid) get an auto-dream each night —
+ * see isDreamEligible() below (= isProActive || isBasicActive), which mirrors the
+ * is_dream_eligible() SQL fn (migrations 257 + 262) + lib/proStatus.ts. When the
+ * subscription expires or the trial lapses, the user falls back to FREE and stops
+ * receiving them. (Basic was added in mig 257; do NOT re-narrow this to Pro-only.)
  *
  * `now` (ms) is injectable for deterministic tests.
  */

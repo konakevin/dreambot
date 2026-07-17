@@ -78,7 +78,11 @@ const DEFAULT_CONFIG: ChaosConfig = {
   face_swap_share_with_plus_one: 0.9,
   face_swap_dual_rate: 0.6,
   face_swap_self_rate: 0.2,
-  dream_art_share: 0.3,
+  // 0 = Dream Art (cast drawn AS a character in an embodied medium) is DISABLED
+  // for nightly. Cast-photo nightly dreams (self / partner / dual) all use Real
+  // Face mediums (2026-07-16, Kevin). The live engine_config value is also 0;
+  // this fallback keeps it off if the column read ever fails / on a fresh DB.
+  dream_art_share: 0,
 };
 
 let cachedConfig: ChaosConfig | null = null;
