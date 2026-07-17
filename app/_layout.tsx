@@ -5,7 +5,7 @@ import { AppState, InteractionManager } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import 'react-native-reanimated';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
@@ -46,7 +46,7 @@ import { AvatarConfirmProvider } from '@/components/AvatarConfirm';
 import { Toast, ToastHost } from '@/components/Toast';
 import { UpscaleModalHost, UpscaleModal } from '@/components/UpscaleOverlay';
 
-import { queryClient } from '@/lib/queryClient';
+import { queryClient, persistOptions } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { ForceUpdateGate } from '@/components/ForceUpdateGate';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
@@ -684,7 +684,17 @@ function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider>
         <Analytics>
-          <QueryClientProvider client={queryClient}>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={persistOptions}
+            onSuccess={() => {
+              // The persisted feed painted instantly; now revalidate it in the
+              // background so a staleTime:Infinity feed doesn't show a stale cache
+              // forever. invalidate marks it stale → refetchOnMount refreshes it
+              // when Home mounts, while the restored data is already on screen.
+              void queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
+            }}
+          >
             <AppErrorBoundary>
               <AlertProvider>
                 <AiConsentProvider>
@@ -770,7 +780,7 @@ function RootLayout() {
                 </AiConsentProvider>
               </AlertProvider>
             </AppErrorBoundary>
-          </QueryClientProvider>
+          </PersistQueryClientProvider>
         </Analytics>
       </KeyboardProvider>
     </GestureHandlerRootView>

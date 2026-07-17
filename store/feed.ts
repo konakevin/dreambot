@@ -59,6 +59,17 @@ export interface FeedStore {
   setViewingOwnDreams: (viewing: boolean) => void;
 }
 
+// Cold-start feed seed: a FIXED constant, not Math.random(). The feed query key
+// includes feedSeed, so a random-per-launch seed would change the key every cold
+// start and defeat the persisted-cache restore (nothing would match → spinner).
+// A stable cold seed keeps the key identical across launches so the persisted
+// feed paints instantly; regenerateSeed/setFeedSeed still randomize on an
+// explicit pull-to-refresh (mig 352 reshuffle). Trade-off: the pre-refresh cold
+// ordering is deterministic (the ranking's near-tie jitter is the same each cold
+// launch) — acceptable, and arguably steadier, since the feed is already
+// user-specific via follows/blocks/recency.
+const FEED_COLD_SEED = 0.5;
+
 export const useFeedStore = create<FeedStore>((set) => ({
   pinnedPost: null,
   setPinnedPost: (post) => set({ pinnedPost: post }),
@@ -66,7 +77,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpReset: () => set((s) => ({ resetToken: s.resetToken + 1 })),
   refreshToken: 0,
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
-  feedSeed: Math.random(),
+  feedSeed: FEED_COLD_SEED,
   // 0.10 = the ranking's gentle cold-load jitter; manual refreshes bump to
   // 0.45 so a reshuffle visibly reshuffles (mig 352 — the old fixed 0.10
   // couldn't unseat a top post whose score led by >0.1: "first pic never

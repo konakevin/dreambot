@@ -148,6 +148,10 @@ export const PostTile = memo(function PostTile({
         contentFit="cover"
         transition={0}
         cachePolicy="memory-disk"
+        // Tie the image to the post id so FlatList cell recycling swaps the
+        // source cleanly instead of briefly showing the previous post's image
+        // in a reused cell (the viewer + carousel already set this).
+        recyclingKey={item.id}
         // Thumbhash placeholder shows a sharp blurry preview the instant
         // the tile mounts — replaces the surface-tinted card-color flash
         // while the Supabase transform endpoint round-trips.

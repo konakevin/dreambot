@@ -7,7 +7,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useDreamStore } from '@/store/dream';
 import { useAlbumStore } from '@/store/album';
 import { useExploreStore } from '@/store/explore';
-import { queryClient } from '@/lib/queryClient';
+import { queryClient, asyncStoragePersister } from '@/lib/queryClient';
 import {
   isProActive,
   isPaidProActive,
@@ -133,8 +133,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     useDreamStore.getState().reset();
     useAlbumStore.getState().clearAlbum();
     useExploreStore.getState().clearPending();
-    // Clear TanStack Query cache
+    // Clear TanStack Query cache — in-memory AND the persisted-to-disk copy, so
+    // the next user on this shared device can't restore the previous user's feed
+    // on cold start.
     queryClient.clear();
+    void asyncStoragePersister.removeClient();
     // Drop any in-flight dream marker so the next user on this device can't
     // resume the previous user's render.
     void clearDreamInFlight();

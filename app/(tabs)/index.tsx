@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
 import { Text } from '@/components/AppText';
 import type { VerticalPagerHandle } from '@/components/VerticalPager';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -154,8 +154,16 @@ export default function HomeScreen() {
   // forget — best-effort, silent on failure.
   useEffect(() => {
     if (!user) return;
-    prefetchDreamFeed(queryClient, 'following', user.id, feedSeed);
-    prefetchDreamFeed(queryClient, 'forYou', user.id, feedSeed);
+    // Deferred until AFTER the first paint + interactions settle, so warming
+    // both home feeds doesn't contend with the ACTIVE tab's own initial fetch on
+    // cold start (a big contributor to "spinner for seconds"). The active tab is
+    // already served by the mounted useDreamFeed below; this just pre-warms the
+    // other tab for an instant switch.
+    const handle = InteractionManager.runAfterInteractions(() => {
+      prefetchDreamFeed(queryClient, 'following', user.id, feedSeed);
+      prefetchDreamFeed(queryClient, 'forYou', user.id, feedSeed);
+    });
+    return () => handle.cancel();
   }, [user, feedSeed, queryClient]);
 
   // Also prebuffer the Bots tab on app load — both the "All bots" mixed
@@ -165,12 +173,18 @@ export default function HomeScreen() {
   // images are already resident.
   useEffect(() => {
     if (!user || !botUsers?.length) return;
-    // "All bots" mixed feed (selectedBotId = null)
-    prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
-    // Each individual bot's first page + first 5 images
-    for (const bot of botUsers) {
-      prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);
-    }
+    // Deferred behind interactions like the home-feed warming above — the Bots
+    // prefetch is a large fan-out (all-bots + one page per bot) that must never
+    // block the first paint.
+    const handle = InteractionManager.runAfterInteractions(() => {
+      // "All bots" mixed feed (selectedBotId = null)
+      prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
+      // Each individual bot's first page + first 5 images
+      for (const bot of botUsers) {
+        prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);
+      }
+    });
+    return () => handle.cancel();
   }, [user, feedSeed, queryClient, botUsers]);
 
   // Read the feed for the ACTIVE tab (not a deferred copy). The feed is keyed
