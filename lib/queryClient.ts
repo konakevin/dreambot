@@ -5,12 +5,14 @@ import Constants from 'expo-constants';
 import { AppState, type AppStateStatus } from 'react-native';
 
 // Cold-start feed paint: a curated slice of the query cache is persisted to disk
-// so a fresh launch renders the LAST feed INSTANTLY (from AsyncStorage) and
-// revalidates in the background, instead of showing a spinner until a live
-// get_feed round-trip returns. Wired via PersistQueryClientProvider in
-// app/_layout.tsx; purged on sign-out (store/auth.ts). gcTime MUST be >= the
-// persister maxAge, or a cached query is garbage-collected before it's written to
-// disk and nothing survives the cold start.
+// so a fresh launch renders the LAST feed INSTANTLY (from AsyncStorage) instead of
+// showing a spinner until a live get_feed round-trip returns. The restored feed is
+// NOT auto-refreshed on launch (TikTok/IG model — never yank the feed under the
+// user); fresh content arrives as they scroll (fetchNextPage) and via pull-to-
+// refresh / Home re-tap / foreground-after-idle. Wired via
+// PersistQueryClientProvider in app/_layout.tsx; purged on sign-out
+// (store/auth.ts). gcTime MUST be >= the persister maxAge, or a cached query is
+// garbage-collected before it's written to disk and nothing survives the launch.
 const PERSIST_MAX_AGE = 1000 * 60 * 60 * 24; // 24h
 
 export const queryClient = new QueryClient({

@@ -143,7 +143,7 @@ export const PostTile = memo(function PostTile({
       activeOpacity={0.9}
     >
       <Image
-        source={{ uri: tileImageUrl(item.image_url_display, item.image_url) }}
+        source={{ uri: tileImageUrl(item.image_url_display, item.image_url, item.image_url_thumb) }}
         style={styles.image}
         contentFit="cover"
         transition={0}

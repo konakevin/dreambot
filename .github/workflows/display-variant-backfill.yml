@@ -8,6 +8,11 @@ name: Display Variant Backfill
 # original, and the full-screen view always uses the full-res original — so the
 # dream's quality is never affected. Idempotent + resumable (only touches NULL
 # rows). See scripts/backfill-display-variants.js.
+#
+# Second pass: builds uploads.image_url_thumb (a ~400x500 grid tile thumbnail,
+# ~3x smaller than the 768px display variant) so the 3-col grid stops downloading
+# oversized images. Same idempotent/resumable contract; the grid falls back to
+# the display variant until a thumb lands. See scripts/backfill-grid-thumbs.js.
 
 on:
   schedule:
@@ -35,3 +40,7 @@ jobs:
         env:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: node scripts/backfill-display-variants.js --limit 1000
+      - name: Build missing grid thumbnails
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/backfill-grid-thumbs.js --limit 1000

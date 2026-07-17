@@ -95,6 +95,9 @@ export interface DreamPostItem {
   /** Small JPEG display variant served to the feed (~150KB). NULL until the
    * render pipeline / backfill populates it; the card coalesces to image_url. */
   image_url_display?: string | null;
+  /** ~400x500 grid-tile thumbnail (~35KB), smaller than the display variant.
+   * Used only by the grid tile (PostTile); NULL until backfill-grid-thumbs runs. */
+  image_url_thumb?: string | null;
   /** ~25-byte base64 thumbhash preview hash. Fed to expo-image's `placeholder`
    * prop so the card shows a sharp blurry preview the instant it mounts,
    * instead of a surface-tinted void while the image loads. NULL until the

@@ -684,17 +684,13 @@ function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider>
         <Analytics>
-          <PersistQueryClientProvider
-            client={queryClient}
-            persistOptions={persistOptions}
-            onSuccess={() => {
-              // The persisted feed painted instantly; now revalidate it in the
-              // background so a staleTime:Infinity feed doesn't show a stale cache
-              // forever. invalidate marks it stale → refetchOnMount refreshes it
-              // when Home mounts, while the restored data is already on screen.
-              void queryClient.invalidateQueries({ queryKey: ['dreamFeed'] });
-            }}
-          >
+          {/* No onSuccess feed-invalidate on restore: the persisted feed shows
+              instantly and is NOT auto-refreshed on cold start (the TikTok/IG
+              model — never yank the feed under the user). Fresh content arrives
+              as they scroll (fetchNextPage hits the network) and via the existing
+              refresh triggers: pull-to-refresh, Home re-tap, foreground-after-idle
+              (regenerateSeed). staleTime:Infinity keeps the restored page steady. */}
+          <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
             <AppErrorBoundary>
               <AlertProvider>
                 <AiConsentProvider>

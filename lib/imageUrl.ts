@@ -64,8 +64,17 @@ export function thumbnailUrl(url: string): string {
  * or content predating the variant). expo-image downscales the variant to the
  * tile size client-side — egress has ample headroom; the transform quota does not.
  */
-export function tileImageUrl(displayUrl: string | null | undefined, originalUrl: string): string {
-  return displayUrl ?? thumbnailUrl(originalUrl);
+export function tileImageUrl(
+  displayUrl: string | null | undefined,
+  originalUrl: string,
+  // Optional dedicated grid thumbnail (~400x500, image_url_thumb) — ~3x smaller
+  // than the 768px display variant, which is oversized for a 3-col tile. Preferred
+  // when present; falls back to the display variant, then a transform. Populated
+  // by scripts/backfill-grid-thumbs.js, so it's null until that runs — the
+  // fallback keeps the grid working meanwhile.
+  thumbUrl?: string | null
+): string {
+  return thumbUrl ?? displayUrl ?? thumbnailUrl(originalUrl);
 }
 
 /**
