@@ -336,9 +336,23 @@ export async function resolveMediumFromDb(
   // surprise path passes this; nightly/first-dream/DLT leave it undefined (no
   // change). Applied in the dream_eligible / surprise_me pools; widens back to
   // the full pool if no medium matches.
-  constrainToModel?: string | null
+  constrainToModel?: string | null,
+  // First-dream medium curation: when set, the medium pool is restricted to these
+  // keys UP-FRONT, so EVERY branch (initial pick + the character/scene/scenario
+  // re-rolls) AND the stable-default all draw ONLY from the approved styles.
+  // Undefined — which is EVERY create/nightly/DLT caller — means no filtering and
+  // byte-identical behavior. Only the first-dream render passes it. See
+  // _shared/firstDreamMediums.ts.
+  restrictKeys?: string[]
 ): Promise<ResolvedMedium> {
-  const mediums = await fetchMediums();
+  let mediums = await fetchMediums();
+  if (restrictKeys && restrictKeys.length > 0) {
+    const allow = new Set(restrictKeys);
+    const restricted = mediums.filter((m) => allow.has(m.key));
+    // Degrade to the full pool only if the allow-list matches nothing active
+    // (never in practice — the keys ARE active mediums) rather than empty-pool.
+    if (restricted.length > 0) mediums = restricted;
+  }
   const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
   const rand = () => mediums[Math.floor(Math.random() * mediums.length)];
 

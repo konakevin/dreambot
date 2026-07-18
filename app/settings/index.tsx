@@ -28,8 +28,6 @@ import { resetAiConsent } from '@/lib/aiConsent';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { LinearGradient } from 'expo-linear-gradient';
-import { BRAND_GRADIENT } from '@/components/GradientTitle';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
@@ -39,15 +37,23 @@ function SettingsRow({
   onPress,
   destructive,
   trailing,
+  dividerColor,
 }: {
   icon: string;
   label: string;
   onPress: () => void;
   destructive?: boolean;
   trailing?: React.ReactNode;
+  // Override the row's bottom-hairline color (e.g. the purple-tinted STORE panel
+  // divider). Defaults to the neutral colors.border used everywhere else.
+  dividerColor?: string;
 }) {
   return (
-    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={[styles.row, dividerColor ? { borderBottomColor: dividerColor } : null]}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.accent} />
       <Text style={[styles.rowLabel, destructive && styles.destructiveText]}>{label}</Text>
       {trailing === null ? null : (
@@ -508,57 +514,52 @@ export default function SettingsScreen() {
           </View>
         )}
 
-        {/* Store — surfaced at the TOP as the one brand-gradient moment in
-            Settings (this is how the app makes money). Gradient hairline
-            border + STORE eyebrow + live sparkle balance on the shop row.
-            Sell line for non-payers; calmer "Manage plan" for paid. */}
+        {/* Store — surfaced at the TOP as the revenue section (this is how the
+            app makes money). A soft purple-tinted panel (not a gradient outline)
+            marks it as a distinct "store" area, with a live sparkle balance on the
+            shop row. Sell line for non-payers; calmer "Manage plan" for paid. */}
         <Text style={styles.sectionHeader}>STORE</Text>
-        <LinearGradient
-          colors={BRAND_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.storeCardBorder}
-        >
-          <View style={styles.premiumCard}>
-            {!isPaidPro && !isBasic && (
-              <View style={styles.premiumHeader}>
-                <Text style={styles.premiumTitle}>
-                  {isPro ? "You're on the free trial" : 'Go Premium'}
-                </Text>
-                <Text style={styles.premiumSub}>
-                  {isPro && proTrialEndsAt
-                    ? `${trialDaysLeftLabel(proTrialEndsAt)} on your free trial`
-                    : 'Nightly dreams, more sparkles, and HD downloads'}
-                </Text>
-              </View>
-            )}
-            <SettingsRow
-              icon="diamond"
-              label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
-              trailing={
-                isPaidPro ? (
-                  <Text style={styles.trailingSummary}>Pro</Text>
-                ) : isBasic ? (
-                  <Text style={styles.trailingSummary}>Basic</Text>
-                ) : null
-              }
-              onPress={() => nav.push('/subscribe')}
-            />
-            <SettingsRow
-              icon="sparkles"
-              label="Sparkle Shop"
-              trailing={
-                sparkleBalance !== undefined ? (
-                  <View style={styles.balanceChip}>
-                    <Ionicons name="sparkles" size={12} color={colors.accentLight} />
-                    <Text style={styles.balanceChipText}>{sparkleBalance.toLocaleString()}</Text>
-                  </View>
-                ) : null
-              }
-              onPress={() => nav.push('/sparkleStore')}
-            />
-          </View>
-        </LinearGradient>
+        <View style={styles.premiumCard}>
+          {!isPaidPro && !isBasic && (
+            <View style={styles.premiumHeader}>
+              <Text style={styles.premiumTitle}>
+                {isPro ? "You're on the free trial" : 'Go Premium'}
+              </Text>
+              <Text style={styles.premiumSub}>
+                {isPro && proTrialEndsAt
+                  ? `${trialDaysLeftLabel(proTrialEndsAt)} on your free trial`
+                  : 'Nightly dreams, more sparkles, and HD downloads'}
+              </Text>
+            </View>
+          )}
+          <SettingsRow
+            icon="diamond"
+            dividerColor="rgba(167,139,250,0.22)"
+            label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
+            trailing={
+              isPaidPro ? (
+                <Text style={styles.trailingSummary}>Pro</Text>
+              ) : isBasic ? (
+                <Text style={styles.trailingSummary}>Basic</Text>
+              ) : null
+            }
+            onPress={() => nav.push('/subscribe')}
+          />
+          <SettingsRow
+            icon="sparkles"
+            dividerColor="rgba(167,139,250,0.22)"
+            label="Sparkle Shop"
+            trailing={
+              sparkleBalance !== undefined ? (
+                <View style={styles.balanceChip}>
+                  <Ionicons name="sparkles" size={12} color={colors.accentLight} />
+                  <Text style={styles.balanceChipText}>{sparkleBalance.toLocaleString()}</Text>
+                </View>
+              ) : null
+            }
+            onPress={() => nav.push('/sparkleStore')}
+          />
+        </View>
 
         {/* Avatar + "Change photo" moved to the Profile screen (under the
             avatar) — it doesn't belong in Settings. Edit Profile is the
@@ -891,21 +892,18 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
     marginBottom: verticalScale(24),
   },
-  // Brand-gradient hairline border: the LinearGradient wrapper shows through
-  // a 1px padding ring around the solid inner card.
-  storeCardBorder: {
+  // STORE panel — a soft filled surface with a faint brand tint + neutral
+  // hairline. Replaced the brand-gradient outline, which read as "selected",
+  // not "store" (Kevin 2026-07-18). The inner SettingsRows' own bottom borders
+  // form the divider between Manage plan and Sparkle Shop; overflow clips them
+  // to the panel radius.
+  premiumCard: {
     marginHorizontal: 16,
     marginBottom: verticalScale(24),
     borderRadius: 14,
-    padding: 1,
-  },
-  // Premium upgrade card — solid near-black w/ faint purple tint (must be
-  // OPAQUE: it sits on the gradient border wrapper, and any translucency
-  // would bleed the gradient through the card face). Inner SettingsRows
-  // render full-bleed and clip to the radius via overflow:hidden.
-  premiumCard: {
-    borderRadius: 13,
-    backgroundColor: '#0B0812',
+    backgroundColor: 'rgba(167,139,250,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.30)',
     overflow: 'hidden',
   },
   premiumHeader: {

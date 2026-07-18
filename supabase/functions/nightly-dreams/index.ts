@@ -19,7 +19,9 @@ import {
   resolveMediumFromDb,
   resolveVibeFromDb,
   fetchSceneEligibleModels,
+  fetchMediums,
 } from '../_shared/dreamStyles.ts';
+import { firstDreamMediumMode, firstDreamAllowedMediums } from '../_shared/firstDreamMediums.ts';
 import { getBiomeConfig, resolveBiomeFromTags, isValidBiomeConfig } from '../_shared/biomeAxes.ts';
 import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
@@ -467,7 +469,29 @@ Deno.serve(async (req) => {
     // as the auto-gen quality gate. The user's create-screen options stay
     // broad; nightly is curated. recentMediums/recentVibes still apply for
     // rotation across the eligible pool.
-    let nightlyMedium = await resolveMediumFromDb(preRolledMediumToken, recentMediums);
+    // First-dream medium curation (2026-07-18): restrict the STARTER dream a new
+    // user sees to an approved style set — CAST tiers → List A (face-swap styles),
+    // the scene FALLBACK tier → List A + active Dream Art. First-dream ONLY: the
+    // gate returns null for a normal nightly / create / QA force_medium, so those
+    // pass `undefined` (no restriction, unchanged behavior). The allow-list is
+    // threaded into EVERY medium resolution below (initial + char-ban + scene +
+    // scenario re-rolls) so no re-roll can reintroduce a non-approved style.
+    // See _shared/firstDreamMediums.ts.
+    const fdMode = firstDreamMediumMode({
+      forceFaceSwapEligible: force_face_swap_eligible,
+      forceCastRole: force_cast_role,
+      forceMedium: force_medium,
+    });
+    const firstDreamAllow = fdMode
+      ? firstDreamAllowedMediums(fdMode, await fetchMediums())
+      : undefined;
+
+    let nightlyMedium = await resolveMediumFromDb(
+      preRolledMediumToken,
+      recentMediums,
+      undefined,
+      firstDreamAllow
+    );
     if (force_medium) {
       nightlyMedium = await resolveMediumFromDb(force_medium);
     }
@@ -613,7 +637,12 @@ Deno.serve(async (req) => {
       REALISTIC_BANNED_FOR_CHARACTER.has(nightlyMedium.key)
     ) {
       const oldKey = nightlyMedium.key;
-      nightlyMedium = await resolveMediumFromDb('dream_eligible_face_swap', recentMediums);
+      nightlyMedium = await resolveMediumFromDb(
+        'dream_eligible_face_swap',
+        recentMediums,
+        undefined,
+        firstDreamAllow
+      );
       baseMedium = nightlyMedium;
       resolvedMediumKey = nightlyMedium.key;
       console.log(
@@ -639,7 +668,12 @@ Deno.serve(async (req) => {
       const oldKey = nightlyMedium.key;
       const sceneToken =
         composition === 'pure_scene' ? 'dream_eligible_scene' : 'dream_eligible_scene_natural';
-      nightlyMedium = await resolveMediumFromDb(sceneToken, recentMediums);
+      nightlyMedium = await resolveMediumFromDb(
+        sceneToken,
+        recentMediums,
+        undefined,
+        firstDreamAllow
+      );
       baseMedium = nightlyMedium;
       resolvedMediumKey = nightlyMedium.key;
       console.log(
@@ -1313,7 +1347,12 @@ Deno.serve(async (req) => {
     // eligibility flags computed earlier stay truthful.
     if (dualSceneMediumKey && !force_medium && dualSceneMediumKey !== nightlyMedium.key) {
       try {
-        const forced = await resolveMediumFromDb(dualSceneMediumKey);
+        const forced = await resolveMediumFromDb(
+          dualSceneMediumKey,
+          undefined,
+          undefined,
+          firstDreamAllow
+        );
         if (
           forced &&
           forced.key === dualSceneMediumKey && // unknown keys fall back — reject
@@ -1347,9 +1386,12 @@ Deno.serve(async (req) => {
       // and could re-serve the banned medium. A possible recency repeat beats
       // shipping the banned medium.
       try {
-        const rerolled = await resolveMediumFromDb('dream_eligible_face_swap', [
-          dualSceneMediumBan,
-        ]);
+        const rerolled = await resolveMediumFromDb(
+          'dream_eligible_face_swap',
+          [dualSceneMediumBan],
+          undefined,
+          firstDreamAllow
+        );
         if (
           rerolled &&
           rerolled.key !== dualSceneMediumBan &&
