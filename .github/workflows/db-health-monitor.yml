@@ -1,0 +1,36 @@
+name: DB Health Monitor
+
+# Pages us at the ONSET of a Supabase connection pinch — the recurring "Unhealthy"
+# incidents are PostgREST connection-pool saturation (bursts spike connections
+# toward the 60 ceiling until queries queue), NOT a code leak. Reads the
+# db_health_log forensics (migration 372) and fails the run — → GitHub failure
+# email — when connections near the ceiling, idle-in-transaction climbs (a real
+# leak), locks contend, or the snapshot is stale (DB already unreachable).
+# Root-caused 2026-07-18. See scripts/check-db-health.js.
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # every 5 minutes — catch the onset, not the aftermath
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check DB connection health
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-db-health.js
