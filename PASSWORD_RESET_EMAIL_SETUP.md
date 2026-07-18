@@ -79,3 +79,63 @@ Dashboard → **Authentication → Emails → SMTP Settings** → enable custom 
 **Resend**: add `dreambotapp.com` + a couple DNS records, send from
 `support@dreambotapp.com` — real branded sender + better deliverability. Free
 tier easily covers reset volume. Swap this in for SMTP step 2 whenever you want.
+
+---
+
+## Copy-paste values
+
+**URL Configuration**
+- Redirect URL: `https://dreambotapp.com/reset-password`
+- Site URL: `https://dreambotapp.com`
+
+**SMTP (Gmail)**
+- Host: `smtp.gmail.com`  ·  Port: `587`
+- Username: `<your-gmail-address>`
+- Password: `<google-app-password>` (myaccount.google.com → Security → 2-Step
+  Verification must be ON → App passwords → generate one for "Mail")
+- Sender name: `DreamBot`
+- Sender email: `<your-gmail-address>`
+
+**Reset Password template — Subject**
+```
+Reset your DreamBot password
+```
+
+**Reset Password template — Message body (HTML, email-safe)**
+```html
+<!DOCTYPE html>
+<html>
+  <body style="margin:0;padding:0;background-color:#0d0d0f;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0d0d0f;padding:32px 16px;">
+      <tr><td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:440px;background-color:#161618;border-radius:16px;border:1px solid #262629;">
+          <tr><td style="padding:32px 32px 4px;text-align:center;">
+            <span style="font-size:26px;font-weight:700;color:#A78BFA;letter-spacing:-0.5px;">DreamBot</span>
+          </td></tr>
+          <tr><td style="padding:4px 32px;text-align:center;">
+            <div style="font-size:40px;line-height:1;">&#128274;</div>
+            <h1 style="margin:12px 0 4px;font-size:20px;color:#ffffff;">Reset your password</h1>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:#a0a0aa;">
+              Tap the button below to choose a new password. This link expires soon and can only be used once.
+            </p>
+          </td></tr>
+          <tr><td style="padding:24px 32px;text-align:center;">
+            <a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#A78BFA;color:#0d0d0f;font-size:16px;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:999px;">
+              Reset password
+            </a>
+          </td></tr>
+          <tr><td style="padding:0 32px 28px;text-align:center;">
+            <p style="margin:0;font-size:12px;line-height:1.5;color:#6b6b74;">
+              If you didn&#39;t request this, you can safely ignore this email &mdash; your password won&#39;t change.
+            </p>
+          </td></tr>
+        </table>
+        <p style="margin:16px 0 0;font-size:12px;color:#5a5a62;">DreamBot</p>
+      </td></tr>
+    </table>
+  </body>
+</html>
+```
+
+> Keep `{{ .ConfirmationURL }}` exactly as-is — Supabase swaps in the real
+> recovery link (which redirects to `https://dreambotapp.com/reset-password`).
