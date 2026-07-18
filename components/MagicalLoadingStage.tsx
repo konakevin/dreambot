@@ -104,11 +104,13 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     overflow: 'hidden',
   },
-  // Optional wait-hint shown when the caller passes `subtext`. Muted vs.
-  // the title so it reads as supporting info, not a competing headline.
+  // Optional wait-hint shown when the caller passes `subtext`. Uses the shared
+  // bodyOnDark token (readability pass 2026-07-18) — brighter than the old dim
+  // textSecondary while still supporting, not competing with, the title.
   subtext: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(14),
+    lineHeight: fontScale(20),
     textAlign: 'center',
     maxWidth: byDevice(260, 460),
     marginTop: verticalScale(-12), // tighten against the gap:24 the parent set

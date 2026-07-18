@@ -93,18 +93,6 @@ export default function WelcomeGiftScreen() {
     nav.replace(fromOnboarding ? '/(tabs)' : '/inbox');
   }
 
-  // Card foot links — push (not replace) so a curious tap can back out to this
-  // welcome moment. Plans = the same storefront Settings → Manage plan opens.
-  function handlePlans() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    nav.push('/subscribe');
-  }
-
-  function handleCreate() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    nav.push('/(tabs)/create');
-  }
-
   return (
     <SafeAreaView style={s.root} edges={['top']}>
       {/* Back arrow — ONLY for inbox-tap arrivals, where "back" has a real
@@ -145,10 +133,7 @@ export default function WelcomeGiftScreen() {
             While you sleep, DreamBot paints you a fresh dream, set in your favorite places and
             starring your Dream Cast. Wake up to a new one every morning.
           </Text>
-          <TouchableOpacity onPress={handlePlans} activeOpacity={0.7} style={s.footLink}>
-            <Text style={s.cardFoot}>Then keep them going on any plan</Text>
-            <Ionicons name="arrow-forward" size={fontScale(14)} color={colors.accentLight} />
-          </TouchableOpacity>
+          <Text style={s.cardFoot}>Then keep them going on any plan</Text>
         </View>
 
         {/* Pillar 2 — Sparkles (dream on your own). Quieter card. */}
@@ -164,10 +149,7 @@ export default function WelcomeGiftScreen() {
             For dreaming on your own, anytime. Turn words into pictures, reimagine a photo, or cast
             yourself somewhere new.
           </Text>
-          <TouchableOpacity onPress={handleCreate} activeOpacity={0.7} style={s.footLink}>
-            <Text style={s.cardFoot}>Spend them on the Create screen</Text>
-            <Ionicons name="arrow-forward" size={fontScale(14)} color={colors.accentLight} />
-          </TouchableOpacity>
+          <Text style={s.cardFoot}>Spend them on the Create screen</Text>
         </View>
       </ScrollView>
 
@@ -301,12 +283,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: verticalScale(4),
     borderRadius: 7,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    // Warm gold — reads as a celebratory "gift" and pops off the dark card,
+    // distinct from the purple "N WEEKS FREE" pill (Kevin 2026-07-18).
+    backgroundColor: 'rgba(253,211,77,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(253,211,77,0.35)',
   },
   giftPillText: {
-    color: colors.textSecondary,
+    color: '#FCD34D',
     fontSize: fontScale(10),
-    fontWeight: '700',
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
   cardBody: {
@@ -315,16 +301,14 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
   },
+  // Plain, non-tappable caption (not a link) — this screen keeps the user put
+  // until "Go to feed" (Kevin 2026-07-18). Dim so it reads as a quiet footnote,
+  // not the old purple link.
   cardFoot: {
-    color: colors.accentLight,
-    fontSize: fontScale(14),
+    color: colors.subtleOnDark,
+    fontSize: fontScale(13),
     fontWeight: '600',
-    lineHeight: fontScale(20),
-  },
-  footLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
+    lineHeight: fontScale(18),
     marginTop: verticalScale(10),
   },
 
