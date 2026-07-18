@@ -512,7 +512,7 @@ export default function SettingsScreen() {
             Settings (this is how the app makes money). Gradient hairline
             border + STORE eyebrow + live sparkle balance on the shop row.
             Sell line for non-payers; calmer "Manage plan" for paid. */}
-        <Text style={[styles.sectionHeader, styles.storeHeader]}>STORE</Text>
+        <Text style={styles.sectionHeader}>STORE</Text>
         <LinearGradient
           colors={BRAND_GRADIENT}
           start={{ x: 0, y: 0 }}
@@ -890,12 +890,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: colors.border,
     marginBottom: verticalScale(24),
-  },
-  // STORE eyebrow — accent-tinted variant of the plain section headers so the
-  // revenue section reads as a highlight, not another gray settings group.
-  storeHeader: {
-    color: colors.accentLight,
-    letterSpacing: 2,
   },
   // Brand-gradient hairline border: the LinearGradient wrapper shows through
   // a 1px padding ring around the solid inner card.
