@@ -126,7 +126,7 @@ Reset your DreamBot password
           </td></tr>
           <tr><td style="padding:0 32px 28px;text-align:center;">
             <p style="margin:0;font-size:12px;line-height:1.5;color:#6b6b74;">
-              If you didn&#39;t request this, you can safely ignore this email &mdash; your password won&#39;t change.
+              If you didn&#39;t request this, you can safely ignore this email. Your password won&#39;t change.
             </p>
           </td></tr>
         </table>
