@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { adjustCommentCount } from '@/lib/commentCountCache';
+import { trackCommentDeleted } from '@/lib/analytics';
 
 interface DeleteCommentArgs {
   commentId: string;
@@ -16,6 +17,7 @@ export function useDeleteComment() {
       const { error } = await supabase.from('comments').delete().eq('id', commentId);
 
       if (error) throw error;
+      trackCommentDeleted({ is_admin: false });
     },
     onSuccess: (_, { uploadId, parentId }) => {
       // Mirror useAddComment's +1 so the card's comment_count actually drops
@@ -43,6 +45,7 @@ export function useAdminDeleteComment() {
     mutationFn: async ({ commentId }: DeleteCommentArgs) => {
       const { error } = await supabase.rpc('admin_delete_comment', { p_comment_id: commentId });
       if (error) throw error;
+      trackCommentDeleted({ is_admin: true });
     },
     onSuccess: (_, { uploadId, parentId }) => {
       // Mirror useAddComment's +1 so the card's comment_count actually drops

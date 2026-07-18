@@ -92,3 +92,74 @@ export function trackProSubscribeTapped(p: { period?: string }): void {
 export function trackHdDownloadTapped(p: { cached: boolean }): void {
   capture('hd_download_tapped', p);
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// P2 client-immediate events (2026-07-18) — the interaction gaps from the
+// instrumentation audit. All fire synchronously on the user's tap (the user is
+// present), so client-side is reliable here; async COMPLETIONS live server-side
+// (supabase/functions/_shared/posthogCapture.ts). See ANALYTICS_INSTRUMENTATION_PLAN.md.
+// ─────────────────────────────────────────────────────────────────────────────
+
+type AuthMethod = 'email' | 'google' | 'apple' | 'facebook';
+
+// ── Auth (funnel top — was entirely untracked) ───────────────────────────────
+export function trackSignupCompleted(p: { method: AuthMethod }): void {
+  capture('signup_completed', p);
+}
+export function trackLoginCompleted(p: { method: AuthMethod }): void {
+  capture('login_completed', p);
+}
+
+// ── Social — the missing halves (undo actions + comment-likes + safety) ──────
+export function trackPostUnliked(): void {
+  capture('post_unliked');
+}
+export function trackCommentLiked(): void {
+  capture('comment_liked');
+}
+export function trackCommentUnliked(): void {
+  capture('comment_unliked');
+}
+export function trackPostSaved(): void {
+  capture('post_saved');
+}
+export function trackPostUnsaved(): void {
+  capture('post_unsaved');
+}
+export function trackFollowRemoved(p: { target_is_bot: boolean }): void {
+  capture('follow_removed', p);
+}
+export function trackCommentDeleted(p: { is_admin: boolean }): void {
+  capture('comment_deleted', p);
+}
+export function trackUserBlocked(): void {
+  capture('user_blocked');
+}
+export function trackContentReported(p: {
+  reason: string;
+  target_type: 'post' | 'user' | 'comment';
+}): void {
+  capture('content_reported', p);
+}
+
+// ── Notifications / discovery ────────────────────────────────────────────────
+export function trackPushOpened(p: { type: string }): void {
+  capture('push_opened', p);
+}
+export function trackInboxOpened(): void {
+  capture('inbox_opened');
+}
+export function trackSearchInitiated(p: { type: 'users' | 'posts' | 'hashtags' }): void {
+  capture('search_initiated', p);
+}
+export function trackSearchResultTapped(p: { type: 'user' | 'post' | 'hashtag' }): void {
+  capture('search_result_tapped', p);
+}
+
+// ── Own-dream management ─────────────────────────────────────────────────────
+export function trackDreamDeleted(p: { is_album: boolean }): void {
+  capture('dream_deleted', p);
+}
+export function trackDreamPinned(p: { pinned: boolean }): void {
+  capture('dream_pinned', p);
+}

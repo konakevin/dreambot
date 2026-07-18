@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { useFeedStore } from '@/store/feed';
-import { trackPostLiked } from '@/lib/analytics';
+import { trackPostLiked, trackPostUnliked } from '@/lib/analytics';
 import type { DreamPostItem } from '@/components/DreamCard';
 
 interface ToggleArgs {
@@ -48,6 +48,7 @@ export function useToggleLike() {
           .eq('user_id', user!.id)
           .eq('upload_id', uploadId);
         if (error) throw error;
+        trackPostUnliked();
       } else {
         // Idempotent insert — if a like row already exists for this (user, upload),
         // upsert is a no-op instead of throwing on the UNIQUE constraint. Fixes the

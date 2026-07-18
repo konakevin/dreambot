@@ -3,7 +3,7 @@ import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import { useBotUsers } from '@/hooks/useBotUsers';
-import { trackFollowAdded } from '@/lib/analytics';
+import { trackFollowAdded, trackFollowRemoved } from '@/lib/analytics';
 
 interface ToggleArgs {
   userId: string;
@@ -31,6 +31,7 @@ export function useToggleFollow() {
           .eq('follower_id', user!.id)
           .eq('following_id', userId);
         if (error) throw error;
+        trackFollowRemoved({ target_is_bot: (botUsers ?? []).some((b) => b.id === userId) });
       } else if (hasRequest) {
         // Cancel pending request
         const { error } = await supabase

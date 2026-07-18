@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { trackPostSaved, trackPostUnsaved } from '@/lib/analytics';
 
 interface ToggleArgs {
   uploadId: string;
@@ -21,11 +22,13 @@ export function useToggleFavorite() {
           .eq('user_id', user!.id)
           .eq('upload_id', uploadId);
         if (error) throw error;
+        trackPostUnsaved();
       } else {
         const { error } = await supabase
           .from('favorites')
           .insert({ user_id: user!.id, upload_id: uploadId });
         if (error) throw error;
+        trackPostSaved();
       }
     },
     // Optimistically update the favoriteIds set before the request completes

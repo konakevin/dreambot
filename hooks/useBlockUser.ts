@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
+import { trackUserBlocked } from '@/lib/analytics';
 
 export interface BlockedUser {
   user_id: string;
@@ -69,6 +70,7 @@ export function useToggleBlock() {
         // requests in both directions (a raw insert would skip that).
         const { error } = await supabase.rpc('block_user', { p_blocked_id: userId });
         if (error) throw error;
+        trackUserBlocked();
       }
     },
     onSuccess: () => {

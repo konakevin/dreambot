@@ -2,6 +2,7 @@ import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import type { Comment, CommentsPage } from '@/hooks/useComments';
+import { trackCommentLiked, trackCommentUnliked } from '@/lib/analytics';
 
 interface ToggleLikeArgs {
   commentId: string;
@@ -41,11 +42,13 @@ export function useToggleCommentLike() {
           .eq('user_id', user!.id)
           .eq('comment_id', commentId);
         if (error) throw error;
+        trackCommentUnliked();
       } else {
         const { error } = await supabase
           .from('comment_likes')
           .insert({ user_id: user!.id, comment_id: commentId });
         if (error) throw error;
+        trackCommentLiked();
       }
     },
     onMutate: async ({ commentId, uploadId, parentId, currentlyLiked }) => {

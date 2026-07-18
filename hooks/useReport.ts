@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
 import type { Database } from '@/types/database';
+import { trackContentReported } from '@/lib/analytics';
 
 interface ReportArgs {
   reason: string;
@@ -31,6 +32,10 @@ export function useReport() {
       if (commentId) row.comment_id = commentId;
       const { error } = await supabase.from('reports').insert(row);
       if (error) throw error;
+      trackContentReported({
+        reason,
+        target_type: commentId ? 'comment' : reportedUserId ? 'user' : 'post',
+      });
     },
   });
 }
