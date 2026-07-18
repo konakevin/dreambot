@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(4),
   },
   introBody: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
   },
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   pkgMeta: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     marginTop: verticalScale(2),
   },
@@ -232,13 +232,13 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   licenseText: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     lineHeight: fontScale(18),
     fontFamily: 'Courier',
   },
   empty: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     textAlign: 'center',
     marginTop: verticalScale(40),
     fontSize: fontScale(14),

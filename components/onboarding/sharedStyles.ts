@@ -21,15 +21,15 @@ export const onboardingStyles = StyleSheet.create({
     marginBottom: verticalScale(6),
   },
   heroSubtitle: {
-    fontSize: fontScale(14),
-    color: colors.textSecondary,
-    lineHeight: fontScale(20),
+    fontSize: fontScale(15),
+    color: colors.bodyOnDark,
+    lineHeight: fontScale(22),
   },
 
   selectedCount: {
     fontSize: fontScale(13),
     fontWeight: '600',
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     textAlign: 'center',
   },
   selectedCountMet: { color: '#4ADE80' },

@@ -11,7 +11,8 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useMoodAxes } from '@/hooks/useMoodAxes';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped, screen, byDevice } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
+import { TitleText } from '@/components/TitleText';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 
@@ -44,11 +45,10 @@ function lerpColor(from: string, to: string, t: number): string {
 // lean visible while keeping BOTH labels half-lit at dead center (0.5 each).
 const LEAN_GAIN = 2.2;
 
-// Lerp endpoints for the pole labels — deliberately wider than
-// textMuted→accentLight so a committed lean reads at a glance: the losing
-// side falls nearly to the card background, the winning side outshines
-// accentLight itself.
-const POLE_DIM = '#4A4A56';
+// Lerp endpoints for the pole labels: the winning side outshines accentLight,
+// the losing side stays a legible soft gray. Raised from the old near-background
+// #4A4A56 so an unselected pole is still readable (readability pass 2026-07-18).
+const POLE_DIM = '#8E8AA0';
 const POLE_BRIGHT = '#DDD2FF';
 function poleIntensities(value: number) {
   const lean = value - 0.5; // -0.5 (full left) … +0.5 (full right)
@@ -176,16 +176,30 @@ export function MoodSlidersStep({ onNext, onBack }: Props) {
           scroll underneath it (matches BotSelectorStep / Locations).
           Title kept to one line so all 4 sliders fit above the fold. */}
       <View style={s.stickyHeader}>
-        <GradientTitle
-          size={24}
-          numberOfLines={1}
-          align="center"
-          maxWidth={screen.width - 40}
-          lineHeight={30}
-          style={{ marginBottom: verticalScale(6) }}
-        >
-          What kind of dreams?
-        </GradientTitle>
+        {/* In Settings the gradient wordmark is the "Mood" nav-bar title
+            (app/settings/mood.tsx), so demote this to plain text; onboarding
+            (isEditing=false) keeps the gradient hero. Mirrors the Dream Cast screen. */}
+        {isEditing ? (
+          <TitleText
+            size={18}
+            color={colors.bodyOnDark}
+            numberOfLines={1}
+            align="center"
+            style={{ marginBottom: verticalScale(6), maxWidth: screen.width - 40 }}
+          >
+            What kind of dreams?
+          </TitleText>
+        ) : (
+          <GradientTitle
+            size={TITLE_SIZE.page}
+            numberOfLines={1}
+            align="center"
+            maxWidth={screen.width - 40}
+            style={{ marginBottom: verticalScale(6) }}
+          >
+            What kind of dreams?
+          </GradientTitle>
+        )}
         <Text style={[shared.heroSubtitle, s.heroSub]}>No wrong answers, just vibes</Text>
       </View>
 
@@ -235,8 +249,7 @@ const s = StyleSheet.create({
   // Near-white per the onboarding text cadence (gray reads washed-out on black).
   heroSub: {
     textAlign: 'center',
-    color: colors.textPrimary,
-    opacity: 0.92,
+    color: colors.bodyOnDark,
   },
 
   // Tightened so all 4 cards fit above the fold without scrolling.
@@ -255,9 +268,9 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(2),
   },
   cardDesc: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    lineHeight: fontScale(18),
+    color: colors.subtleOnDark,
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
     marginBottom: verticalScale(10),
   },
 

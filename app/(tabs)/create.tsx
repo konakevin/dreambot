@@ -62,7 +62,7 @@ import {
   DEFAULT_RESTYLE_MODEL_ID,
   resolveRestyleCost,
 } from '@/components/RestyleModelPicker';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
 import { showAlert } from '@/components/CustomAlert';
 import { CreateIntroSheet, hasSeenCreateIntro } from '@/components/CreateIntroSheet';
@@ -882,7 +882,7 @@ export default function CreateScreen() {
         <View className="flex-row items-center px-5 py-3">
           <View className="flex-1" />
           <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
-            <GradientTitle size={24}>Create</GradientTitle>
+            <GradientTitle size={TITLE_SIZE.nav}>Create</GradientTitle>
           </View>
           <View className="flex-row items-center gap-2">
             <TouchableOpacity

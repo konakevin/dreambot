@@ -341,13 +341,7 @@ export default function SettingsScreen() {
                 <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.rowLabel}>One-tap delete button</Text>
-                  <Text
-                    style={{
-                      color: colors.textSecondary,
-                      fontSize: fontScale(12),
-                      marginTop: verticalScale(2),
-                    }}
-                  >
+                  <Text style={styles.rowDesc}>
                     {showAdminDelete
                       ? 'Red X visible above heart. Single tap deletes (no confirm).'
                       : 'Hidden. Enable for bulk cleanup.'}
@@ -370,13 +364,7 @@ export default function SettingsScreen() {
                   <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
                   <View style={{ flex: 1 }}>
                     <Text style={styles.rowLabel}>AI model badge</Text>
-                    <Text
-                      style={{
-                        color: colors.textSecondary,
-                        fontSize: fontScale(12),
-                        marginTop: verticalScale(2),
-                      }}
-                    >
+                    <Text style={styles.rowDesc}>
                       {showModelBadge
                         ? 'Shown on every card: which AI rendered it'
                         : 'Hidden. Flip on to see the render model.'}
@@ -616,13 +604,7 @@ export default function SettingsScreen() {
             <Ionicons name="lock-closed-outline" size={20} color={colors.accent} />
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Public Profile</Text>
-              <Text
-                style={{
-                  color: colors.textSecondary,
-                  fontSize: fontScale(12),
-                  marginTop: verticalScale(2),
-                }}
-              >
+              <Text style={styles.rowDesc}>
                 {isPublic ? 'Everyone can see your posts' : 'Only friends can see your posts'}
               </Text>
             </View>
@@ -686,13 +668,7 @@ export default function SettingsScreen() {
             <Ionicons name="repeat-outline" size={20} color={colors.accent} />
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Allow Reposts</Text>
-              <Text
-                style={{
-                  color: colors.textSecondary,
-                  fontSize: fontScale(12),
-                  marginTop: verticalScale(2),
-                }}
-              >
+              <Text style={styles.rowDesc}>
                 {allowReposts
                   ? 'Others can repost your dreams to their followers'
                   : 'No one can repost your dreams'}
@@ -752,13 +728,7 @@ export default function SettingsScreen() {
             <Ionicons name="help-circle-outline" size={20} color={colors.accent} />
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Confirm surprise dreams</Text>
-              <Text
-                style={{
-                  color: colors.textSecondary,
-                  fontSize: fontScale(12),
-                  marginTop: verticalScale(2),
-                }}
-              >
+              <Text style={styles.rowDesc}>
                 {confirmSurprise
                   ? 'Ask before dreaming with no prompt'
                   : 'Dream a surprise right away, no prompt needed'}
@@ -954,8 +924,13 @@ const styles = StyleSheet.create({
     fontSize: fontScale(16),
     fontWeight: '700',
   },
+  rowDesc: {
+    color: colors.subtleOnDark,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
+  },
   premiumSub: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(13),
     lineHeight: fontScale(18),
     marginTop: verticalScale(2),
@@ -976,7 +951,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   destructiveText: { color: colors.textPrimary },
-  trailingSummary: { color: colors.textSecondary, fontSize: fontScale(13), maxWidth: 160 },
+  trailingSummary: { color: colors.subtleOnDark, fontSize: fontScale(13), maxWidth: 160 },
   // Live sparkle balance on the Sparkle Shop row — wallet treatment.
   balanceChip: {
     flexDirection: 'row',
@@ -998,7 +973,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   rowValue: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(14),
   },
 });

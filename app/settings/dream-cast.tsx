@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { DreamCastRoster } from '@/components/DreamCastRoster';
+import { GradientTitle } from '@/components/GradientTitle';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { useOnboardingStore } from '@/store/onboarding';
 import { Toast } from '@/components/Toast';
@@ -56,9 +57,11 @@ export default function DreamCastStepSettings() {
   return (
     <SafeAreaView style={s.root}>
       <View style={s.header}>
-        <TouchableOpacity onPress={handleBack} hitSlop={12}>
+        <TouchableOpacity onPress={handleBack} hitSlop={12} style={s.headerIcon}>
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
+        <GradientTitle>Dream Cast</GradientTitle>
+        <View style={s.headerIcon} />
       </View>
       <DreamCastRoster />
     </SafeAreaView>
@@ -67,5 +70,12 @@ export default function DreamCastStepSettings() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 16, paddingVertical: verticalScale(8) },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: verticalScale(8),
+  },
+  headerIcon: { minWidth: 56, alignItems: 'center' },
 });

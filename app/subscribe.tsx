@@ -34,7 +34,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { PRO_PERKS, PRO_TIERS, type ProPlanTier } from '@/constants/proPlan';
@@ -185,7 +185,7 @@ export default function SubscribeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={s.hero}>
-            <GradientTitle size={22} weight={700}>
+            <GradientTitle size={TITLE_SIZE.page} weight={700}>
               Choose a plan
             </GradientTitle>
           </View>

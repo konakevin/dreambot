@@ -84,7 +84,7 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(18),
   },
   body: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(15),
     lineHeight: fontScale(22),
     textAlign: 'center',

@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   masterSublabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     marginTop: verticalScale(2),
   },
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   rowSublabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     marginTop: verticalScale(2),
   },
@@ -285,13 +285,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   calloutSublabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     marginTop: verticalScale(2),
     lineHeight: fontScale(17),
   },
   footerCopy: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     paddingHorizontal: 16,
     paddingTop: verticalScale(8),

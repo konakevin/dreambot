@@ -16,7 +16,7 @@ import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 import { useOnboardingStore } from '@/store/onboarding';
 import { useAuthStore } from '@/store/auth';
@@ -154,7 +154,7 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
 
         <Text style={s.eyebrow}>last step</Text>
 
-        <GradientTitle size={24} weight={800} lineHeight={30} maxWidth={340} numberOfLines={0}>
+        <GradientTitle size={TITLE_SIZE.page} weight={800} maxWidth={340} numberOfLines={0}>
           You&apos;re all set
         </GradientTitle>
 
@@ -200,8 +200,7 @@ const s = StyleSheet.create({
   // Mirrors the InfoStep text cadence (purple eyebrow / gradient headline /
   // near-white body / accent footnote) so this reads as part of the same set.
   body: {
-    color: colors.textPrimary,
-    opacity: 0.92,
+    color: colors.bodyOnDark,
     fontSize: fontScale(16),
     lineHeight: fontScale(24),
     textAlign: 'center',
@@ -210,11 +209,11 @@ const s = StyleSheet.create({
   },
   reassure: {
     color: colors.accentLight,
-    fontSize: fontScale(13),
+    fontSize: fontScale(14),
     fontWeight: '600',
-    lineHeight: fontScale(19),
+    lineHeight: fontScale(20),
     textAlign: 'center',
-    marginTop: verticalScale(16),
-    maxWidth: 320,
+    marginTop: verticalScale(22),
+    maxWidth: 300,
   },
 });

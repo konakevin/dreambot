@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Text, TextInput } from '@/components/AppText';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import * as Clipboard from 'expo-clipboard';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -220,9 +220,7 @@ export default function SharePostScreen() {
                 wider Copy+Save cluster on the right doesn't shove it left
                 (space-between would otherwise center it in the leftover gap). */}
               <View style={styles.headerTitleWrap} pointerEvents="none">
-                <GradientTitle size={18} weight={800}>
-                  Share
-                </GradientTitle>
+                <GradientTitle size={TITLE_SIZE.nav}>Share</GradientTitle>
               </View>
               <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
                 <Ionicons name="close" size={24} color={colors.textSecondary} />

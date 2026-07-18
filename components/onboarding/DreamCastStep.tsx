@@ -22,7 +22,7 @@ import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
@@ -619,11 +619,10 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
     <View style={shared.root}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <GradientTitle
-          size={24}
+          size={TITLE_SIZE.page}
           numberOfLines={2}
           align="center"
           maxWidth={screen.width - 40}
-          lineHeight={30}
           style={{ marginBottom: verticalScale(6) }}
         >
           {settingsCopy ? 'Your Dream Cast' : "Who's coming along?"}
@@ -668,8 +667,7 @@ const s = StyleSheet.create({
   // washed-out on the pure-black canvas (gray is reserved for true captions
   // like the privacy note below).
   heroBody: {
-    color: colors.textPrimary,
-    opacity: 0.92,
+    color: colors.bodyOnDark,
     fontSize: fontScale(15),
     lineHeight: fontScale(22),
     textAlign: 'center',
@@ -677,8 +675,9 @@ const s = StyleSheet.create({
   },
   funPart: {
     color: colors.accentLight,
-    fontSize: fontScale(13),
+    fontSize: fontScale(14),
     fontWeight: '600',
+    lineHeight: fontScale(20),
     textAlign: 'center',
     marginTop: verticalScale(10),
   },
@@ -739,7 +738,7 @@ const s = StyleSheet.create({
   },
   privacyNoteText: {
     flex: 1,
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     lineHeight: fontScale(17),
   },
@@ -764,7 +763,7 @@ const s = StyleSheet.create({
     fontWeight: '700',
   },
   slotTip: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(13),
     marginBottom: verticalScale(12),
   },
@@ -820,7 +819,7 @@ const s = StyleSheet.create({
     borderTopColor: colors.border,
   },
   relLabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(13),
     fontWeight: '600',
     marginBottom: verticalScale(8),
@@ -843,7 +842,7 @@ const s = StyleSheet.create({
     borderColor: colors.accent,
   },
   relPillText: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(13),
     fontWeight: '600',
   },

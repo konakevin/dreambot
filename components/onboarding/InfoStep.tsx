@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, verticalScaleClamped, byDevice } from '@/lib/responsive';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { OnboardingFooter } from './OnboardingFooter';
 
 const MASCOT_SIZE = verticalScaleClamped(160, 120, 180);
@@ -109,9 +109,8 @@ export function InfoStep({
         {/* Gradient headline — wraps freely (0 = unlimited lines), matching
             the prior unbounded Text. */}
         <GradientTitle
-          size={22}
+          size={TITLE_SIZE.page}
           weight={800}
-          lineHeight={28}
           maxWidth={byDevice(340, 520)}
           numberOfLines={0}
         >
@@ -197,8 +196,7 @@ const s = StyleSheet.create({
   // captions, and the footnote gets the eyebrow's accent so the stack has a
   // deliberate cadence (purple / gradient / white / purple).
   body: {
-    color: colors.textPrimary,
-    opacity: 0.92,
+    color: colors.bodyOnDark,
     fontSize: fontScale(16),
     lineHeight: fontScale(24),
     textAlign: 'center',
@@ -210,13 +208,15 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginTop: verticalScale(16),
+    marginTop: verticalScale(22),
   },
   footnote: {
     color: colors.accentLight,
-    fontSize: fontScale(13),
+    fontSize: fontScale(14),
     fontWeight: '600',
+    lineHeight: fontScale(20),
     textAlign: 'center',
+    maxWidth: 300,
   },
 
   subFeatures: { width: '100%', marginTop: verticalScale(28), gap: verticalScale(14) },
@@ -239,7 +239,7 @@ const s = StyleSheet.create({
   subFeatureText: { flex: 1, gap: 4 },
   subFeatureTitle: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
   subFeatureBody: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(13),
     lineHeight: fontScale(19),
   },

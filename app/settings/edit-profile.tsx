@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   fieldLabel: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(12),
     fontWeight: '600',
     letterSpacing: 0.5,
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   charCount: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(11),
     alignSelf: 'flex-end',
   },

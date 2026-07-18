@@ -93,6 +93,18 @@ export default function WelcomeGiftScreen() {
     nav.replace(fromOnboarding ? '/(tabs)' : '/inbox');
   }
 
+  // Card foot links — push (not replace) so a curious tap can back out to this
+  // welcome moment. Plans = the same storefront Settings → Manage plan opens.
+  function handlePlans() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    nav.push('/subscribe');
+  }
+
+  function handleCreate() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    nav.push('/(tabs)/create');
+  }
+
   return (
     <SafeAreaView style={s.root} edges={['top']}>
       {/* Back arrow — ONLY for inbox-tap arrivals, where "back" has a real
@@ -133,7 +145,10 @@ export default function WelcomeGiftScreen() {
             While you sleep, DreamBot paints you a fresh dream, set in your favorite places and
             starring your Dream Cast. Wake up to a new one every morning.
           </Text>
-          <Text style={s.cardFoot}>Then keep them going on any plan</Text>
+          <TouchableOpacity onPress={handlePlans} activeOpacity={0.7} style={s.footLink}>
+            <Text style={s.cardFoot}>Then keep them going on any plan</Text>
+            <Ionicons name="arrow-forward" size={fontScale(14)} color={colors.accentLight} />
+          </TouchableOpacity>
         </View>
 
         {/* Pillar 2 — Sparkles (dream on your own). Quieter card. */}
@@ -149,6 +164,10 @@ export default function WelcomeGiftScreen() {
             For dreaming on your own, anytime. Turn words into pictures, reimagine a photo, or cast
             yourself somewhere new.
           </Text>
+          <TouchableOpacity onPress={handleCreate} activeOpacity={0.7} style={s.footLink}>
+            <Text style={s.cardFoot}>Spend them on the Create screen</Text>
+            <Ionicons name="arrow-forward" size={fontScale(14)} color={colors.accentLight} />
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -205,12 +224,16 @@ const s = StyleSheet.create({
   },
 
   eyebrow: {
-    color: colors.textPrimary,
-    fontSize: fontScale(16),
-    fontWeight: '500',
+    // Celebratory kicker above the "Welcome ✨" hero — an uppercase accent
+    // kicker (matches the onboarding eyebrow cadence) reads more exciting than
+    // the old plain-white sentence (Kevin 2026-07-18).
+    color: colors.accentLight,
+    fontSize: fontScale(13),
+    fontWeight: '800',
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
     textAlign: 'center',
-    marginBottom: verticalScale(4),
-    opacity: 0.92,
+    marginBottom: verticalScale(6),
   },
   lede: {
     // Bright, not muted — textSecondary read as too subdued on black
@@ -294,9 +317,15 @@ const s = StyleSheet.create({
   },
   cardFoot: {
     color: colors.accentLight,
-    fontSize: fontScale(12),
+    fontSize: fontScale(14),
     fontWeight: '600',
-    marginTop: verticalScale(8),
+    lineHeight: fontScale(20),
+  },
+  footLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: verticalScale(10),
   },
 
   ctaWrap: {

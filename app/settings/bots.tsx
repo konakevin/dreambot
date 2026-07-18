@@ -114,7 +114,7 @@ const s = StyleSheet.create({
     paddingBottom: verticalScale(12),
   },
   subtitle: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
   },
@@ -129,7 +129,7 @@ const s = StyleSheet.create({
     gap: 12,
   },
   emptyText: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(14),
     textAlign: 'center',
     paddingVertical: verticalScale(30),

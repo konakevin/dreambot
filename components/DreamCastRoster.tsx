@@ -27,7 +27,7 @@ import {
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { newPartnerId } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
-import { GradientTitle } from '@/components/GradientTitle';
+import { TitleText } from '@/components/TitleText';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { MAX_DREAM_PARTNERS, type DreamPartner } from '@/types/vibeProfile';
@@ -237,7 +237,12 @@ export function DreamCastRoster() {
 
   return (
     <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
-      <GradientTitle>Who do you want to dream with?</GradientTitle>
+      {/* Plain (non-gradient) here: the gradient wordmark on this settings screen
+          is the "Dream Cast" nav-bar title (app/settings/dream-cast.tsx). Onboarding
+          uses a SEPARATE component (DreamCastStep), which keeps its gradient title. */}
+      <TitleText size={18} color="rgba(255,255,255,0.92)">
+        Who do you want to dream with?
+      </TitleText>
       <Text style={s.subtitle}>
         Add yourself, then build a cast of up to {MAX_DREAM_PARTNERS} loved ones. Pick your current
         Dream Partner to star alongside you in your dreams.
@@ -422,7 +427,7 @@ export function DreamCastRoster() {
 const s = StyleSheet.create({
   container: { padding: 16, paddingBottom: verticalScale(48) },
   subtitle: {
-    color: colors.textSecondary,
+    color: colors.bodyOnDark,
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
     marginTop: verticalScale(8),

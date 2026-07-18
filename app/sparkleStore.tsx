@@ -15,7 +15,7 @@ import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams } from 'expo-router';
 import { supabase } from '@/lib/supabase';
@@ -299,7 +299,7 @@ export default function SparkleStoreScreen() {
               the shared GradientTitle primitive). The balance lives in the
               header's rightAction slot, opposite the back button. */}
           <View style={s.hero}>
-            <GradientTitle size={22} weight={700}>
+            <GradientTitle size={TITLE_SIZE.page} weight={700}>
               Choose a pack
             </GradientTitle>
           </View>

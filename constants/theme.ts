@@ -28,6 +28,11 @@ export const colors = {
   textSecondary: '#8E8E9E',
   textTertiary: '#3E3E4E',
   textMuted: '#6E6E7E',
+  // Readable subtext on dark backgrounds — brighter than textSecondary for
+  // legibility. bodyOnDark = subtitle / body paragraphs; subtleOnDark = section
+  // descriptions / tips / helper copy. (Onboarding readability pass 2026-07-18.)
+  bodyOnDark: 'rgba(255,255,255,0.88)',
+  subtleOnDark: 'rgba(255,255,255,0.68)',
 
   // Overlay
   overlay: 'rgba(0,0,0,0.6)',

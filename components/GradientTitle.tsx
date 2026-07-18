@@ -20,9 +20,23 @@ import { displayFontFamily } from '@/constants/fonts';
 /** Brand gradient (moon purple → cloud pink → star teal). */
 export const BRAND_GRADIENT: [string, string, string] = ['#A78BFA', '#F9A8D4', '#5EEAD4'];
 
+/**
+ * Canonical brand-title sizes — the ONE place to resize a title role app-wide.
+ * Change a value here and every title of that role updates in one shot.
+ *   • nav  → the small title in a screen's top header bar, beside the back
+ *            chevron (Settings, Inbox, Edit Profile, New Post, Create, Share,
+ *            Dream Cast). This is also GradientTitle's default size, so bare
+ *            `<GradientTitle>` usages track it with no `size` prop.
+ *   • page → the large gradient hero at the top of a screen body / onboarding
+ *            step (Choose a plan / pack, onboarding step headers, …).
+ * One-off brand/emotional heroes (welcome-gift, the "DreamBot" wordmark,
+ * OopsScreen) intentionally set their own size and do NOT use these.
+ */
+export const TITLE_SIZE = { nav: 24, page: 24 } as const;
+
 interface Props {
   children: string;
-  /** Design point size, run through fontScale. Default 17 (nav-title size). */
+  /** Design point size, run through fontScale. Default TITLE_SIZE.nav (nav-title size). */
   size?: number;
   /** Design weight; selects the display face (>= 700 → bold). Default 700. */
   weight?: number;
@@ -42,7 +56,7 @@ interface Props {
 
 export function GradientTitle({
   children,
-  size = 17,
+  size = TITLE_SIZE.nav,
   weight = 700,
   gradient = BRAND_GRADIENT,
   lineHeight,

@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   value: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(14),
   },
 });

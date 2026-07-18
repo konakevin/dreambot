@@ -285,7 +285,7 @@ export default function AdminReportsScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
-  muted: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  muted: { color: colors.bodyOnDark, fontSize: fontScale(15), textAlign: 'center' },
   list: { paddingVertical: verticalScale(8) },
   card: {
     flexDirection: 'row',
@@ -299,10 +299,10 @@ const styles = StyleSheet.create({
   cardBody: { flex: 1, gap: 2 },
   cardHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   reason: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
-  time: { color: colors.textSecondary, fontSize: fontScale(12) },
-  meta: { color: colors.textSecondary, fontSize: fontScale(13) },
+  time: { color: colors.subtleOnDark, fontSize: fontScale(12) },
+  meta: { color: colors.subtleOnDark, fontSize: fontScale(13) },
   preview: { color: colors.textPrimary, fontSize: fontScale(13), fontStyle: 'italic' },
-  reporter: { color: colors.textTertiary, fontSize: fontScale(12), marginTop: verticalScale(2) },
+  reporter: { color: colors.subtleOnDark, fontSize: fontScale(12), marginTop: verticalScale(2) },
   sep: { height: 1, backgroundColor: colors.border, marginLeft: 80 },
   retryBtn: {
     paddingHorizontal: 20,

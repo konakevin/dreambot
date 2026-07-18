@@ -20,7 +20,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useBotThumbnails } from '@/hooks/useBotThumbnails';
 import { BotCard } from '@/components/BotCard';
 import { BotImageViewer } from '@/components/BotImageViewer';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { OnboardingFooter } from './OnboardingFooter';
 
@@ -81,11 +81,10 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
     <View style={s.root}>
       <View style={s.header}>
         <GradientTitle
-          size={24}
+          size={TITLE_SIZE.page}
           weight={700}
           letterSpacing={0.5}
           numberOfLines={2}
-          lineHeight={30}
           maxWidth={screen.width - 56}
           style={s.title}
         >
@@ -165,10 +164,9 @@ const s = StyleSheet.create({
   },
   // Near-white per the onboarding text cadence (gray reads washed-out on black).
   subtitle: {
-    color: colors.textPrimary,
-    opacity: 0.92,
-    fontSize: fontScale(14),
-    lineHeight: fontScale(20),
+    color: colors.bodyOnDark,
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     textAlign: 'center',
   },
   loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -179,7 +177,7 @@ const s = StyleSheet.create({
     gap: verticalScale(12),
   },
   emptyText: {
-    color: colors.textSecondary,
+    color: colors.subtleOnDark,
     fontSize: fontScale(14),
     textAlign: 'center',
     paddingVertical: verticalScale(30),

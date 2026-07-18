@@ -18,7 +18,8 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
+import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
 import { supabase } from '@/lib/supabase';
 
@@ -227,16 +228,30 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       {/* Sticky header — sits outside the ScrollView so the location grid
           scrolls underneath it (matches BotSelectorStep's pattern). */}
       <View style={s.stickyHeader}>
-        <GradientTitle
-          size={24}
-          numberOfLines={2}
-          align="center"
-          maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
-          lineHeight={30}
-          style={{ marginBottom: verticalScale(6) }}
-        >
-          Where do you want to dream?
-        </GradientTitle>
+        {/* In Settings the gradient wordmark is the "Locations" nav-bar title
+            (app/settings/locations.tsx), so demote this to plain text; onboarding
+            (isEditing=false) keeps the gradient hero. Mirrors the Dream Cast screen. */}
+        {isEditing ? (
+          <TitleText
+            size={18}
+            color={colors.bodyOnDark}
+            numberOfLines={2}
+            align="center"
+            style={{ marginBottom: verticalScale(6), maxWidth: SCREEN_WIDTH - TILE_PADDING * 2 }}
+          >
+            Where do you want to dream?
+          </TitleText>
+        ) : (
+          <GradientTitle
+            size={TITLE_SIZE.page}
+            numberOfLines={2}
+            align="center"
+            maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
+            style={{ marginBottom: verticalScale(6) }}
+          >
+            Where do you want to dream?
+          </GradientTitle>
+        )}
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
           Places you love, or anywhere you’d love to go.
         </Text>
@@ -350,7 +365,7 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(3),
   },
   sectionTitle: { fontSize: fontScale(19), fontWeight: '700', color: '#FFFFFF' },
-  sectionDesc: { fontSize: fontScale(13), color: colors.textSecondary },
+  sectionDesc: { fontSize: fontScale(14), color: colors.subtleOnDark, lineHeight: fontScale(20) },
   sectionBadge: {
     fontSize: fontScale(12),
     fontWeight: '600',

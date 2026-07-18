@@ -105,7 +105,7 @@ export default function BlockedUsersScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
-  muted: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  muted: { color: colors.bodyOnDark, fontSize: fontScale(15), textAlign: 'center' },
   list: { paddingVertical: verticalScale(8) },
   row: {
     flexDirection: 'row',

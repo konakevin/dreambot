@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { MoodSlidersStep } from '@/components/onboarding/MoodSlidersStep';
+import { GradientTitle } from '@/components/GradientTitle';
 import { useAutoSaveProfile } from '@/hooks/useAutoSaveProfile';
 import { useOnboardingStore } from '@/store/onboarding';
 import { colors } from '@/constants/theme';
@@ -18,9 +19,11 @@ export default function MoodSlidersStepSettings() {
   return (
     <SafeAreaView style={s.root}>
       <View style={s.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={s.headerIcon}>
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
+        <GradientTitle>Mood</GradientTitle>
+        <View style={s.headerIcon} />
       </View>
       <MoodSlidersStep onNext={() => router.back()} onBack={() => router.back()} />
     </SafeAreaView>
@@ -29,5 +32,12 @@ export default function MoodSlidersStepSettings() {
 
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 16, paddingVertical: verticalScale(8) },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: verticalScale(8),
+  },
+  headerIcon: { minWidth: 56, alignItems: 'center' },
 });

@@ -14,7 +14,7 @@ import { useAuthStore } from '@/store/auth';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { GradientButton } from '@/components/GradientButton';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { supabase } from '@/lib/supabase';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import {
@@ -393,7 +393,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
       <View style={s.root}>
         <View style={s.centeredContent}>
           <Image source={MASCOT} style={s.idleMascot} contentFit="cover" />
-          <GradientTitle size={22} weight={800} lineHeight={28} numberOfLines={2}>
+          <GradientTitle size={TITLE_SIZE.page} weight={800} numberOfLines={2}>
             Time for your first dream!
           </GradientTitle>
           <Text style={s.centeredSub}>
@@ -628,7 +628,7 @@ const s = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
   },
-  centeredSub: { color: colors.textSecondary, fontSize: fontScale(15), textAlign: 'center' },
+  centeredSub: { color: colors.bodyOnDark, fontSize: fontScale(15), textAlign: 'center' },
   revealTitle: {
     color: '#FFFFFF',
     fontSize: fontScale(22),
@@ -716,7 +716,7 @@ const s = StyleSheet.create({
   },
 
   errorContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  errorText: { color: colors.textSecondary, fontSize: fontScale(15) },
+  errorText: { color: colors.subtleOnDark, fontSize: fontScale(15) },
 
   footer: { paddingHorizontal: 20, paddingBottom: verticalScale(16), gap: 10 },
   footerRow: { flexDirection: 'row', gap: 10 },
