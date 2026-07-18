@@ -28,7 +28,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useStandardSwipeBack } from '@/hooks/gestures/useStandardSwipeBack';
 import { safeBack } from '@/lib/navigate';
-import { GradientTitle } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { fontScale } from '@/lib/responsive';
 import { HEADER_H_PAD, HEADER_V_PAD, NAV_ICON_SIZE, NAV_HIT_SLOP } from '@/constants/layout';
@@ -93,7 +93,7 @@ export function ScreenLayout({
           {title && !centerTitle ? (
             titleGradient ? (
               <View style={s.titleGradientWrap}>
-                <GradientTitle size={17}>{title}</GradientTitle>
+                <GradientTitle size={TITLE_SIZE.nav}>{title}</GradientTitle>
               </View>
             ) : (
               <Text style={s.title} numberOfLines={1}>
