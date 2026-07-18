@@ -6,7 +6,6 @@ import { View, TouchableOpacity, ScrollView, StyleSheet, Switch } from 'react-na
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import * as Linking from 'expo-linking';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { showForceUpdatePreview } from '@/components/ForceUpdateGate';
@@ -185,29 +184,6 @@ export default function SettingsScreen() {
   // locationCount, objectCount, castSummary) used to live here for the
   // inline DREAM ENGINE rows; those rows moved to the Edit Profile
   // screen so the summaries went with them.
-
-  function handleChangePassword() {
-    showAlert('Reset password', `We'll send a reset link to ${user?.email}`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Send link',
-        onPress: async () => {
-          // redirectTo deep-links the recovery email back into the app
-          // (dreambot://reset-password) where the user actually sets the new
-          // password. Without it the link dead-ends on Supabase's Site URL.
-          const { error } = await supabase.auth.resetPasswordForEmail(user!.email!, {
-            redirectTo: Linking.createURL('reset-password'),
-          });
-          if (error) {
-            showAlert('Couldn’t send link', error.message);
-            return;
-          }
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          showAlert('Sent', 'Check your email for the reset link.');
-        },
-      },
-    ]);
-  }
 
   function handleRefreshAll() {
     showAlert('Refresh App', 'Refresh all app data?', [
@@ -761,7 +737,7 @@ export default function SettingsScreen() {
             <SettingsRow
               icon="lock-closed-outline"
               label="Change password"
-              onPress={handleChangePassword}
+              onPress={() => nav.push('/settings/change-password')}
             />
           ) : (
             <SettingsRow

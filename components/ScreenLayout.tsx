@@ -60,7 +60,10 @@ interface ScreenLayoutProps {
 export function ScreenLayout({
   header = 'back',
   title,
-  titleGradient = false,
+  // Gradient brand title by default — every nav screen (About, Plans, Sparkles,
+  // Reports, …) matches Settings/Create. Pass titleGradient={false} for a plain
+  // white title on a specific screen.
+  titleGradient = true,
   rightAction,
   centerTitle = false,
   leftAction,

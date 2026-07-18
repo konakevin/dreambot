@@ -8,7 +8,6 @@ import { TermsAgreementFooter } from '@/components/TermsAgreementFooter';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import * as Linking from 'expo-linking';
 import { getPostAuthRoute } from '@/lib/postAuthRoute';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -29,11 +28,16 @@ export default function LoginScreen() {
     }
     setLoading(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // Sends a recovery email; the link deep-links to dreambot://reset-password
-    // (handled in _layout.tsx) where the user sets a new password. Same pattern
-    // as settings/index.tsx, but here the email comes from the field (no session).
+    // Sends a recovery email whose link points at the https universal link
+    // https://dreambotapp.com/reset-password. On a device with the app installed
+    // iOS opens the app directly (associatedDomains: applinks:dreambotapp.com);
+    // otherwise the website's /reset-password page bounces into the app via the
+    // dreambot:// scheme. Either way _layout.tsx handles path === 'reset-password',
+    // exchanges the recovery code, and routes to the set-new-password screen.
+    // NOTE: this https URL must be allow-listed in Supabase → Auth → URL
+    // Configuration → Redirect URLs, or Supabase falls back to the Site URL.
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: Linking.createURL('reset-password'),
+      redirectTo: 'https://dreambotapp.com/reset-password',
     });
     setLoading(false);
     // Always show the same confirmation — never reveal whether an email is
