@@ -23,6 +23,7 @@ import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
 import { routeNewSceneSubject } from '../_shared/newSceneDirective.ts';
 import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
 import { smartDreamApplies, smartDreamSet, coerceSmartDream } from '../_shared/smartDream.ts';
+import { captureServer } from '../_shared/posthogCapture.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -152,6 +153,20 @@ Deno.serve(async (req) => {
       }
       return json({ error: `enqueue_failed: ${fdEnqErr.message}` }, 500);
     }
+
+    // AUTHORITATIVE onboarding_completed — a first_dream is enqueued exactly ONCE
+    // per account (the unique index enforces it), at the END of onboarding (the
+    // cutoff step kicks it off). The client event fired ~once in 9 days; this is
+    // the reliable server signal. Emitted only on a genuinely-new first dream
+    // (the already-claimed paths return above).
+    await captureServer(
+      userId,
+      'onboarding_completed',
+      {},
+      {
+        dedupKey: `onboarding_completed:${userId}`,
+      }
+    );
 
     const fdWorkerToken = Deno.env.get('DREAM_QUEUE_WORKER_TOKEN');
     if (fdWorkerToken) {
@@ -367,6 +382,17 @@ Deno.serve(async (req) => {
       );
     return json({ error: `enqueue_failed: ${enqErr.message}` }, 500);
   }
+
+  // AUTHORITATIVE sparkles_spent — the charge succeeded and the dream is queued
+  // (the 23505 idempotent-retry path returned above, so this fires once per real
+  // paid dream). dream_created follows on completion; pairing them gives spend →
+  // render funnel + economy analysis.
+  await captureServer(
+    userId,
+    'sparkles_spent',
+    { amount: dreamCost, reason: 'dream', source: isDlt ? 'dlt' : 'create', dream_id: jobId },
+    { dedupKey: `sparkles_spent:${jobId}` }
+  );
 
   // Kick the worker for fast pickup (~1-3s); the 1-min cron is the backstop.
   // The worker acks 202 immediately (runs its tick in the background), so this

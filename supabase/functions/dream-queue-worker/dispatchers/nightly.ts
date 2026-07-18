@@ -18,6 +18,7 @@
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { HAIKU } from '../../_shared/models.ts';
+import { captureServer } from '../../_shared/posthogCapture.ts';
 
 export interface NightlyDispatcherArgs {
   supabase: SupabaseClient;
@@ -97,6 +98,31 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
     p_bot_message: botMessage,
   });
   if (rpcErr) console.error(`[nightly] finalize_nightly_upload failed: ${rpcErr.message}`);
+
+  // AUTHORITATIVE dream_created for the NIGHTLY source — nightly renders never
+  // touch a client screen, so this server emit is the ONLY signal for them.
+  // (create/dlt/first_dream flow through completeQueueJob; nightly does not.)
+  // Best-effort; captureServer never throws. dedupKey mirrors completeQueueJob.
+  try {
+    const { data: up } = await supabase
+      .from('uploads')
+      .select('dream_medium, dream_vibe, model')
+      .eq('id', uploadId)
+      .single();
+    await captureServer(
+      userId,
+      'dream_created',
+      {
+        source: 'nightly',
+        medium: up?.dream_medium ?? null,
+        vibe: up?.dream_vibe ?? null,
+        model: up?.model ?? null,
+      },
+      { dedupKey: `dream_created:${queueJobId}` }
+    );
+  } catch (e) {
+    console.warn(`[nightly] dream_created emit skipped: ${(e as Error).message}`);
+  }
 
   // 4. Notify the dreamer. body is the scene caption (inbox subtext).
   await supabase

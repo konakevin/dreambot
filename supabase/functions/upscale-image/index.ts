@@ -35,6 +35,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { upscaleAndCache } from '../_shared/upscaleClarity.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
+import { captureServer } from '../_shared/posthogCapture.ts';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -285,6 +286,17 @@ Deno.serve(async (req) => {
             upload_id: uploadId,
             body: 'Your HD download is ready',
           });
+          // AUTHORITATIVE hd_download_completed — the on-demand upscale renders
+          // async (server-side) after the tap; this fires per requester when their
+          // HD is actually ready, independent of the app being open.
+          await captureServer(
+            userId,
+            'hd_download_completed',
+            { upload_id: uploadId },
+            {
+              dedupKey: `hd_completed:${uploadId}:${userId}`,
+            }
+          );
         }
         await supabase
           .from('upscale_requests')

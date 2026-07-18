@@ -633,18 +633,34 @@ function ScreenTracker() {
 // isAdmin resolves async after login; the effect re-runs when it lands, and
 // optOut() persists across launches.
 function AnalyticsIdentity() {
+  const initialized = useAuthStore((s) => s.initialized);
   const userId = useAuthStore((s) => s.user?.id);
   const isAdmin = useAuthStore((s) => s.isAdmin);
   useEffect(() => {
+    // Wait for the auth session to finish restoring before touching analytics
+    // identity. Before `initialized`, `userId` is transiently undefined on EVERY
+    // cold start — the old code called resetAnalytics() here, minting a FRESH
+    // anonymous distinct_id each launch and orphaning any session that ended
+    // before identify re-ran (2026-07-17 audit: ~86% of persons were anonymous
+    // hashes). Do nothing until hydration completes so we can tell "logged out"
+    // apart from "session not restored yet".
+    if (!initialized) return;
+
     setAnalyticsOptOut(isAdmin);
+
     if (!userId) {
+      // Genuinely logged out (hydration done, no user) — clear the identity link.
       resetAnalytics();
       return;
     }
-    // Attach username as a person property — without it PostHog persons are
-    // anonymous UUIDs and activity reports can't be joined to accounts
-    // (2026-07-07 analytics audit). identify is idempotent; re-running with
-    // the property enriches the same person.
+
+    // Identify IMMEDIATELY so events attach to the stable user id (matching the
+    // server-side captureServer distinct_id) from the first tick — not the
+    // anonymous bootstrap id. Then enrich with `username` when the fetch returns;
+    // identify is idempotent, so re-running adds the property to the SAME person.
+    // Previously the identify was BLOCKED on this fetch, widening the anonymous
+    // window on every launch.
+    identifyUser(userId);
     let cancelled = false;
     supabase
       .from('users')
@@ -652,13 +668,13 @@ function AnalyticsIdentity() {
       .eq('id', userId)
       .maybeSingle()
       .then(({ data }) => {
-        if (cancelled) return;
-        identifyUser(userId, data?.username ? { username: data.username } : undefined);
+        if (cancelled || !data?.username) return;
+        identifyUser(userId, { username: data.username });
       });
     return () => {
       cancelled = true;
     };
-  }, [userId, isAdmin]);
+  }, [initialized, userId, isAdmin]);
   return null;
 }
 

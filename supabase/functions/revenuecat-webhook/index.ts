@@ -17,6 +17,7 @@ import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supa
 // local copy (timingSafeEqualStr); de-duped to the shared helper 2026-07-10
 // (Architect audit A7) so the two can't drift.
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
+import { captureServer } from '../_shared/posthogCapture.ts';
 
 // Product ID → sparkle amount FALLBACK. Source of truth is the sparkle_packs DB
 // table (migration 255), loaded per-request below; this fallback only kicks in if
@@ -322,6 +323,16 @@ Deno.serve(async (req) => {
             .eq('id', appUserId);
         }
 
+        // Refund/clawback completed (Apple Support) — revenue accuracy + churn.
+        await captureServer(
+          appUserId,
+          'purchase_refunded',
+          {
+            kind: isSubscription ? 'subscription' : 'sparkle_pack',
+            sparkles_revoked: clawbackAmount,
+          },
+          { dedupKey: `refund:${transactionId}` }
+        );
         return new Response(
           JSON.stringify({
             refunded: true,
@@ -361,6 +372,15 @@ Deno.serve(async (req) => {
       }
 
       console.log(`[RevenueCat] Granted ${sparkleAmount} sparkles to ${appUserId}`);
+      // AUTHORITATIVE sparkles_purchased — the pack grant landed (server-side, so
+      // it fires even if the app was closed after the Apple sheet). Dedup on the
+      // RC transaction id against at-least-once webhook redelivery.
+      await captureServer(
+        appUserId,
+        'sparkles_purchased',
+        { pack: productId, amount: sparkleAmount },
+        { dedupKey: `sparkles_purchased:${transactionId}` }
+      );
       return new Response(JSON.stringify({ granted: sparkleAmount }), { status: 200 });
     }
 
@@ -456,6 +476,25 @@ Deno.serve(async (req) => {
         console.log(
           `[RevenueCat] ${tier.name} entitlement set for ${appUserId} (${eventType}, expires ${expiresAt}, sparkles ${sparklesGranted})`
         );
+        // AUTHORITATIVE subscription grant — the ONLY reliable purchase signal
+        // (the client's pro_subscribe_tapped is intent, not completion; the Apple
+        // sheet often outlives the app foreground). Distinct event per lifecycle
+        // moment; tier + period as props so Pro/Basic + monthly/yearly are one funnel.
+        await captureServer(
+          appUserId,
+          eventType === 'INITIAL_PURCHASE'
+            ? 'subscription_started'
+            : eventType === 'RENEWAL'
+              ? 'subscription_renewed'
+              : 'subscription_changed',
+          {
+            tier: tier.name,
+            period: productId === tier.yearlyProduct ? 'yearly' : 'monthly',
+            event: eventType,
+            sparkles_granted: sparklesGranted,
+          },
+          { dedupKey: `sub_grant:${eventType}:${transactionId}` }
+        );
         return new Response(
           JSON.stringify({
             tier: tier.name,
@@ -479,6 +518,13 @@ Deno.serve(async (req) => {
         }
         console.log(
           `[RevenueCat] ${tier.name} entitlement revoked for ${appUserId} (${eventType})`
+        );
+        // Churn signal — access actually ended (EXPIRATION / grace-period end).
+        await captureServer(
+          appUserId,
+          'subscription_expired',
+          { tier: tier.name, event: eventType },
+          { dedupKey: `sub_expired:${transactionId}` }
         );
         return new Response(JSON.stringify({ tier: tier.name, active: false }), { status: 200 });
       }
@@ -511,6 +557,16 @@ Deno.serve(async (req) => {
           }
         }
         console.log(`[RevenueCat] ${tier.name} info event for ${appUserId}: ${eventType}`);
+        // Cancel INTENT (access remains until EXPIRATION) — the leading churn
+        // indicator. Only CANCELLATION, not BILLING_ISSUE (a recoverable retry).
+        if (eventType === 'CANCELLATION') {
+          await captureServer(
+            appUserId,
+            'subscription_cancelled',
+            { tier: tier.name },
+            { dedupKey: `sub_cancelled:${transactionId}` }
+          );
+        }
         return new Response(JSON.stringify({ message: `Logged ${eventType}` }), { status: 200 });
       }
     }

@@ -14,6 +14,7 @@
  */
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
+import { captureServer } from './posthogCapture.ts';
 
 const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
@@ -103,6 +104,40 @@ export async function completeQueueJob(
       last_error: null,
     })
     .eq('id', jobId);
+
+  // AUTHORITATIVE dream_created — every completed create/dlt/first_dream/restyle
+  // render flows through here, so this fires regardless of whether the user is
+  // still on the loading screen (the client-side event missed ~83%). `source`
+  // (create/dlt/first_dream) comes off the queue row; medium/vibe/model off the
+  // upload. Best-effort; captureServer never throws. `insertId` dedups a retry.
+  // (Nightly does NOT route through here — it's emitted from the nightly worker.)
+  try {
+    const { data: job } = await sb
+      .from('dream_queue')
+      .select('user_id, source')
+      .eq('id', jobId)
+      .single();
+    const { data: up } = await sb
+      .from('uploads')
+      .select('dream_medium, dream_vibe, model')
+      .eq('id', uploadId)
+      .single();
+    if (job?.user_id) {
+      await captureServer(
+        job.user_id,
+        'dream_created',
+        {
+          source: job.source ?? null,
+          medium: up?.dream_medium ?? null,
+          vibe: up?.dream_vibe ?? null,
+          model: up?.model ?? null,
+        },
+        { dedupKey: `dream_created:${jobId}` }
+      );
+    }
+  } catch (e) {
+    console.warn(`[completeQueueJob] dream_created emit skipped: ${(e as Error).message}`);
+  }
 }
 
 /**
@@ -127,7 +162,7 @@ export async function failQueueJob(
   const message = (errMsg || 'unknown').slice(0, 1000);
   const { data: job } = await sb
     .from('dream_queue')
-    .select('attempt_count')
+    .select('attempt_count, source')
     .eq('id', jobId)
     .single();
   const nextAttempt = (job?.attempt_count ?? 0) + 1;
@@ -201,4 +236,15 @@ export async function failQueueJob(
       notifyErr.message
     );
   }
+
+  // AUTHORITATIVE dream_failed — fires only on the terminal (dead-letter) failure,
+  // server-side, so a queue-path failure is visible in analytics (the client
+  // sync-path catch never runs when queued). reason distinguishes nsfw vs
+  // render-infra; `source` off the queue row. Best-effort; never throws.
+  await captureServer(
+    userId,
+    'dream_failed',
+    { reason: isNsfw ? 'nsfw' : 'render_failed', source: job?.source ?? null },
+    { dedupKey: `dream_failed:${jobId}` }
+  );
 }
