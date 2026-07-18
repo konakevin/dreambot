@@ -110,32 +110,29 @@ Reset your DreamBot password
       <tr><td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:460px;background-color:#15131c;border-radius:20px;border:1px solid #2a2733;">
           <tr><td style="padding:28px 32px 0;text-align:center;">
-            <span style="font-size:13px;font-weight:700;letter-spacing:2px;color:#C4B5FD;text-transform:uppercase;">&#10024; DreamBot</span>
+            <span style="font-size:13px;font-weight:700;letter-spacing:2px;color:#C4B5FD;text-transform:uppercase;">DreamBot</span>
           </td></tr>
-          <tr><td style="padding:16px 32px 0;text-align:center;">
-            <img src="https://dreambotapp.com/mascot.png" width="132" height="132" alt="DreamBot, a little dreaming robot" style="width:132px;height:132px;border-radius:26px;display:inline-block;" />
+          <tr><td style="padding:18px 32px 0;text-align:center;">
+            <img src="https://dreambotapp.com/mascot.png" width="120" height="120" alt="DreamBot" style="width:120px;height:120px;border-radius:24px;display:inline-block;" />
           </td></tr>
-          <tr><td style="padding:16px 32px 0;text-align:center;">
-            <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:#ffffff;">Let&#39;s get you back to dreaming</h1>
+          <tr><td style="padding:18px 32px 0;text-align:center;">
+            <h1 style="margin:0 0 8px;font-size:21px;font-weight:800;color:#ffffff;">Reset your password</h1>
             <p style="margin:0;font-size:15px;line-height:1.6;color:#b7b3c4;">
-              Looks like you&#39;re locked out. Tap below to set a fresh password and get right back to painting your dreams.
+              Tap the button below to choose a new password and get back to your dreams. For your security, this link works once and expires soon.
             </p>
           </td></tr>
           <tr><td style="padding:24px 32px 4px;text-align:center;">
             <a href="{{ .ConfirmationURL }}" style="display:inline-block;background-color:#A78BFA;color:#0b0a0f;font-size:16px;font-weight:800;text-decoration:none;padding:15px 34px;border-radius:999px;">
-              Reset my password &#10024;
+              Reset password
             </a>
           </td></tr>
-          <tr><td style="padding:8px 32px 0;text-align:center;">
-            <p style="margin:0;font-size:12px;color:#6f6b7d;">This magic link only works once, and not for long, so use it soon.</p>
-          </td></tr>
-          <tr><td style="padding:20px 32px 28px;text-align:center;">
+          <tr><td style="padding:22px 32px 28px;text-align:center;">
             <p style="margin:0;font-size:12px;line-height:1.6;color:#6f6b7d;border-top:1px solid #2a2733;padding-top:18px;">
-              Didn&#39;t ask for this? You can ignore it and drift back to sleep. &#127769; Nothing changes.
+              Didn&#39;t request this? You can safely ignore this email. Your password won&#39;t change.
             </p>
           </td></tr>
         </table>
-        <p style="margin:18px 0 0;font-size:12px;color:#57545f;">Sweet dreams, DreamBot &#127769;</p>
+        <p style="margin:18px 0 0;font-size:12px;color:#57545f;">DreamBot</p>
       </td></tr>
     </table>
   </body>
