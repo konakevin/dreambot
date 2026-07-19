@@ -844,6 +844,7 @@ async function postAsBot({
   recipe,
   fluxSeed,
   model,
+  shadow = false,
 }) {
   const bytes = fs.readFileSync(localPath);
   // Pipeline produces JPG (post 2026-05-09 webp revert). PNG kept as a
@@ -923,14 +924,22 @@ async function postAsBot({
       width: 768,
       height: 1344,
       is_active: true,
-      is_posted: true,
-      is_public: true,
+      // Dark-launch: a shadow render posts HIDDEN — is_public=false/is_posted=false
+      // keep it out of every public surface (get_feed / profile grid / search all
+      // require is_public=true), fail-closed. See BOT_DARK_LAUNCH_PLAN.md.
+      is_posted: !shadow,
+      is_public: !shadow,
       is_ai_generated: true,
       posted_at: new Date().toISOString(),
       caption: caption || null,
       recipe: recipe || null,
       flux_seed: fluxSeed ?? null,
       model: model || null,
+      // Only reference the `shadow` column when actually shadowing. This keeps
+      // NORMAL bot inserts working even before migration 376 is applied (an
+      // unknown column would fail the PostgREST insert). Shadow renders only
+      // fire manually via iter-bot AFTER the migration lands.
+      ...(shadow ? { shadow: true } : {}),
     })
     .select('id')
     .single();
@@ -1087,11 +1096,21 @@ async function runBot(opts) {
       pushBatchPath(bot.username, resolvedPath);
     }
   } else {
-    if (!bot.paths.includes(pathArg)) {
+    // A path is renderable if it's in the live rotation (bot.paths) OR in the
+    // dark-launch set (bot.shadowPaths). Shadow paths are reachable ONLY by
+    // explicit --path/--mode — the random shuffle-bag above draws from bot.paths
+    // alone, so the dispatcher never auto-posts a shadow path publicly.
+    const known = bot.paths.includes(pathArg) || (bot.shadowPaths || []).includes(pathArg);
+    if (!known) {
       throw new Error(`Path '${pathArg}' not in bot.paths: ${bot.paths.join(', ')}`);
     }
     resolvedPath = pathArg;
   }
+  // Dark-launch (BOT_DARK_LAUNCH_PLAN.md): a shadow-path render posts hidden
+  // (is_public=false, is_posted=false, shadow=true) — visible only to the
+  // supreme admin via get_shadow_feed. Going live = move the path string from
+  // bot.shadowPaths[] to bot.paths[].
+  const isShadowPath = (bot.shadowPaths || []).includes(resolvedPath);
   let medium = resolveMedium({ bot, path: resolvedPath });
   const vibeKey = vibeArg === 'random' ? resolveVibe({ bot, medium, path: resolvedPath }) : vibeArg;
 
@@ -1702,6 +1721,9 @@ async function runBot(opts) {
       errorStage = 'post-to-db';
       const userId = await lookupBotUserId(sb, bot.username);
       const caption = bot.caption ? bot.caption({ sharedDNA, path: resolvedPath }) : null;
+      if (isShadowPath) {
+        console.log(`  🕶️  SHADOW render (${resolvedPath}) — hidden from public, admin-only review`);
+      }
       imageUrl = await postAsBot({
         sb,
         userId,
@@ -1714,6 +1736,7 @@ async function runBot(opts) {
         recipe,
         fluxSeed: null,
         model: renderModel,
+        shadow: isShadowPath,
       });
 
       // 13. Commit dedup picks ONLY on successful post
