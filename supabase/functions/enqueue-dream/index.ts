@@ -195,7 +195,13 @@ Deno.serve(async (req) => {
         body: '{}',
       }).then(
         () => {},
-        () => {}
+        // Non-fatal: the 1-min cron backstops a missed kick. Log so a persistent
+        // kick outage (which would make dreams feel stuck) is visible (A5).
+        (err: unknown) =>
+          console.warn(
+            `[enqueue-dream] first-dream worker kick failed for job ${jobId}:`,
+            err instanceof Error ? err.message : String(err)
+          )
       );
     }
 
@@ -397,7 +403,14 @@ Deno.serve(async (req) => {
       })
       .then(
         () => {},
-        () => {}
+        // A failed refund AFTER a successful charge is a silent lost sparkle —
+        // log it loudly so it's diagnosable (Architect audit A5, hard rule: never
+        // fire-and-forget a critical money RPC without a logging .catch).
+        (err: unknown) =>
+          console.error(
+            `[enqueue-dream] refund_sparkles FAILED after enqueue error — user ${userId} job ${jobId}:`,
+            err instanceof Error ? err.message : String(err)
+          )
       );
     return json({ error: `enqueue_failed: ${enqErr.message}` }, 500);
   }
@@ -424,7 +437,13 @@ Deno.serve(async (req) => {
       body: '{}',
     }).then(
       () => {},
-      () => {}
+      // Non-fatal: the 1-min cron backstops a missed kick. Log so a persistent
+      // kick outage (which would make dreams feel stuck) is visible (A5).
+      (err: unknown) =>
+        console.warn(
+          `[enqueue-dream] worker kick failed for job ${jobId}:`,
+          err instanceof Error ? err.message : String(err)
+        )
     );
   }
 

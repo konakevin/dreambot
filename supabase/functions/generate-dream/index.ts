@@ -2028,7 +2028,13 @@ Output ONLY the prompt.`;
       )
       .then(
         () => {},
-        () => {}
+        // Non-critical (analytics/abuse-visibility only, never blocks the render)
+        // but log it so a persistent budget-tracking outage is diagnosable (A5).
+        (err: unknown) =>
+          console.warn(
+            '[generate-dream] ai_generation_budget upsert failed (non-critical):',
+            err instanceof Error ? err.message : String(err)
+          )
       );
 
     if (persist) {
