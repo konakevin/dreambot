@@ -215,7 +215,9 @@ const tabStyles = StyleSheet.create({
     width: 9,
     height: 9,
     borderRadius: 5,
-    backgroundColor: colors.accent,
+    // Match the red inbox/bell badge on the profile screen (colors.like), not
+    // the purple accent — same "you have notifications" signal, same color.
+    backgroundColor: colors.like,
     // Subtle dark ring keeps the dot readable when the tab bar
     // background lightens (active tint state)
     borderWidth: 1,
