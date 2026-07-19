@@ -183,19 +183,19 @@ Deno.serve(async (req) => {
     .eq('user_id', user.id)
     .gte('created_at', monthStart.toISOString());
 
-  // Per-tier monthly cap: Pro = 100; Basic-only = engine_config
-  // basic_hd_downloads_per_month (default 20). A user who is both (shouldn't
-  // happen — mutually exclusive group) gets the Pro cap (Pro wins).
-  const PRO_HQ_CAP_PER_MONTH = 100;
-  let HQ_CAP_PER_MONTH = PRO_HQ_CAP_PER_MONTH;
-  if (!isPro && isBasic) {
-    const { data: ec } = await supabase
-      .from('engine_config')
-      .select('basic_hd_downloads_per_month')
-      .eq('id', 1)
-      .single();
-    HQ_CAP_PER_MONTH = Number(ec?.basic_hd_downloads_per_month ?? 20);
-  }
+  // Per-tier monthly cap, both DB-driven from engine_config (migration 380 moved
+  // the Pro cap off a hardcoded 100 for parity with Basic — tunable, no redeploy).
+  // Pro = pro_hd_downloads_per_month (default 100); Basic-only =
+  // basic_hd_downloads_per_month (default 20). A user who is somehow both gets the
+  // Pro cap (Pro wins — the groups are meant to be mutually exclusive).
+  const { data: ec } = await supabase
+    .from('engine_config')
+    .select('pro_hd_downloads_per_month, basic_hd_downloads_per_month')
+    .eq('id', 1)
+    .single();
+  const proCap = Number(ec?.pro_hd_downloads_per_month ?? 100);
+  const basicCap = Number(ec?.basic_hd_downloads_per_month ?? 20);
+  const HQ_CAP_PER_MONTH = !isPro && isBasic ? basicCap : proCap;
   // Own dreams are always free + uncapped — only meter downloads of OTHERS'.
   if (!isOwn && (downloadsThisMonth ?? 0) >= HQ_CAP_PER_MONTH) {
     console.warn(

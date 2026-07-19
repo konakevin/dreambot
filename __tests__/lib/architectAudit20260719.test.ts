@@ -83,3 +83,21 @@ describe('A5 — enqueue-dream no longer swallows a failed post-charge refund', 
     expect(src).toMatch(/worker kick failed for job/);
   });
 });
+
+describe('A7 — Pro HD monthly cap is DB-driven (migration 380), no longer hardcoded', () => {
+  it('migration 380 adds engine_config.pro_hd_downloads_per_month (default 100)', () => {
+    const mig = read('supabase/migrations/380_pro_hd_cap_config.sql');
+    expect(mig).toMatch(
+      /ADD COLUMN IF NOT EXISTS pro_hd_downloads_per_month integer NOT NULL DEFAULT 100/
+    );
+  });
+
+  it('upscale-image reads the Pro cap from engine_config, not a hardcoded 100', () => {
+    const src = read('supabase/functions/upscale-image/index.ts');
+    expect(src).toContain('pro_hd_downloads_per_month');
+    // The old hardcoded constant must be gone (that was the whole point).
+    expect(src).not.toContain('PRO_HQ_CAP_PER_MONTH = 100');
+    // Still falls back to 100 if the row/column is somehow missing.
+    expect(src).toMatch(/pro_hd_downloads_per_month \?\? 100/);
+  });
+});
