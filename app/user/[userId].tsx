@@ -398,6 +398,13 @@ export default function PublicProfileScreen() {
   // A blocked user's content is hidden even if their account is public — so the
   // live session reflects the block immediately, not just after a refetch.
   const canSeePosts = !isBlocked && (profile.is_public || isFollowing || isOwnProfile);
+  // The reposts album is PUBLIC: reposted dreams are already-public content,
+  // gated by each ORIGINAL author's privacy at the DB level (uploads RLS), so a
+  // user's reposts stay viewable even on a private account we don't follow — only
+  // a block hides them. The Posts album stays gated by canSeePosts (Kevin 2026-07-18).
+  const canSeeReposts = !isBlocked;
+  const viewingReposts = gridView === 'reposts';
+  const canSeeCurrentGrid = viewingReposts ? canSeeReposts : canSeePosts;
 
   const header = (
     <>
@@ -425,10 +432,10 @@ export default function PublicProfileScreen() {
         onFollowPress={handleFollow}
         onMorePress={() => setMoreOpen(true)}
       />
-      {/* Posts / Reposts icon toggle — own profile only. On every other
-          profile (bots and regular users) we only show their public posts,
-          so there's a single Posts album and no toggle is needed. */}
-      {activeTab === 'posts' && canSeePosts && isOwnProfile && (
+      {/* Posts / Reposts icon toggle — shown on every profile (not blocked).
+          Reposts are viewable even on private accounts we don't follow, so the
+          toggle stays available even when the Posts album itself is locked. */}
+      {activeTab === 'posts' && !isBlocked && (
         <View style={styles.gridToggleRow}>
           {(
             [
@@ -452,15 +459,6 @@ export default function PublicProfileScreen() {
             );
           })}
         </View>
-      )}
-      {/* One-line explainer under the Posts/Reposts toggle — own profile only.
-          On other users' profiles the help text is suppressed. */}
-      {activeTab === 'posts' && canSeePosts && isOwnProfile && (
-        <Text style={styles.albumSubheader}>
-          {gridView === 'reposts'
-            ? 'Dreams this user has reposted'
-            : 'Public dreams shared to the feed'}
-        </Text>
       )}
       {/* Section heading for the followers/following sub-views. Repeats the
           tab label + count above the list so the user can tell which list
@@ -650,16 +648,10 @@ export default function PublicProfileScreen() {
             {backButton}
             {avatarModal}
             {stickyTopBar}
-            {canSeePosts ? (
+            {canSeeCurrentGrid ? (
               <PostGrid
-                source={
-                  gridView === 'reposts' && isOwnProfile
-                    ? { type: 'reposts', userId }
-                    : { type: 'user', userId }
-                }
-                emptyText={
-                  gridView === 'reposts' && isOwnProfile ? 'No reposts yet' : 'No posts yet'
-                }
+                source={viewingReposts ? { type: 'reposts', userId } : { type: 'user', userId }}
+                emptyText={viewingReposts ? 'No reposts yet' : 'No posts yet'}
                 ListHeaderComponent={header}
                 highlightPostId={viewedPost}
                 onScrollProgress={handleScrollProgress}
@@ -790,13 +782,6 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 2,
     backgroundColor: colors.accent,
-  },
-  albumSubheader: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
-    paddingHorizontal: 16,
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(8),
   },
   // Section header above the followers / following user list. Mirrors the
   // hairline-separated row Instagram uses above its user list — gives the

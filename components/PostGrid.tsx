@@ -60,8 +60,10 @@ interface PostGridProps {
    * fires.
    */
   onScrollProgress?: (y: number) => void;
-  /** Multi-select wiring (bulk delete, 2026-07-10) — see PostTileSelection.
-   *  Provided only by grids that support it (the owner's Dreams grid). */
+  /** Multi-select wiring (bulk delete, 2026-07-10). Provided only by grids that
+   *  support it (the owner's Dreams/Posts/Saved/Reposts). PostGrid flattens this
+   *  into per-tile primitive props (selActive/selSelected/…) so PostTile's memo
+   *  holds. Reference-stable (memoize it in the caller). */
   selection?: {
     active: boolean;
     selectedIds: ReadonlySet<string>;
@@ -467,9 +469,12 @@ export function PostGrid({
             </View>
           ) : null
         }
-        // Selection state lives outside the items — extraData makes the
-        // FlatList re-render rows when the selected set / mode changes.
-        extraData={selection && [selection.active, selection.selectedIds]}
+        // Selection state lives outside the items — extraData makes the FlatList
+        // re-render rows when the selected set changes. The Set is a fresh
+        // reference on every toggle / enter / exit (profile.tsx rebuilds it), so
+        // this one primitive-ish ref covers all selection transitions without the
+        // old fresh-array-every-render that forced a full re-render each frame.
+        extraData={selection?.selectedIds}
         renderItem={({ item }) => (
           <PostTile
             item={item}
@@ -478,21 +483,16 @@ export function PostGrid({
             isHighlighted={!highlightDismissed && item.id === highlightPostId}
             showPrivateBadge={showPrivateBadge}
             allPosts={posts}
-            selection={
-              selection
-                ? {
-                    active: selection.active,
-                    selected: selection.selectedIds.has(item.id),
-                    // 1-based selection order (JS Sets iterate in insertion
-                    // order) — the badge shows the number and renumbers live
-                    // as tiles toggle, matching the gallery picker. This order
-                    // is exactly the album order bulk-Post hands to post/new.
-                    order: selectionOrder.get(item.id) ?? null,
-                    onToggle: selection.onToggle,
-                    onEnter: selection.onEnter,
-                  }
-                : undefined
-            }
+            // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
+            // React.memo holds — the old object literal here defeated memo and
+            // re-rendered every mounted tile on each toggle/scroll (Kevin
+            // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
+            // insertion order) = the album order bulk-Post hands to post/new.
+            selActive={selection?.active ?? false}
+            selSelected={selection ? selection.selectedIds.has(item.id) : false}
+            selOrder={selectionOrder.get(item.id) ?? null}
+            onSelectToggle={selection?.onToggle}
+            onSelectEnter={selection?.onEnter}
           />
         )}
       />

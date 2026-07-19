@@ -521,17 +521,21 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
               'Delete this album?',
               `The album and ${
                 n > 0 ? `all ${n} images` : 'all the images'
-              } inside will be permanently deleted. This can't be undone.`,
+              } inside go with it. Once they're gone, they're gone, with no dreaming them back.`,
               [
                 { text: 'Cancel', style: 'cancel' },
                 { text: 'Delete', style: 'destructive', onPress: onDelete },
               ]
             )
         : () =>
-            showAlert('Delete this dream?', "It'll be gone for good. This can't be undone.", [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'Delete', style: 'destructive', onPress: onDelete },
-            ]),
+            showAlert(
+              'Delete this dream?',
+              "Once it's gone, it's gone. There's no dreaming it back.",
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete', style: 'destructive', onPress: onDelete },
+              ]
+            ),
     });
   }
 

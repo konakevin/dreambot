@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFeedStore } from '@/store/feed';
 import { useAlbumStore } from '@/store/album';
@@ -100,6 +100,25 @@ export default function ProfileScreen() {
       return next;
     });
   }, []);
+  // Reference-stable selection object for PostGrid: only a NEW identity when the
+  // active tab, mode, or selected set actually changes — NOT on every render.
+  // A fresh object each render defeated PostTile's memo and janked select-mode
+  // scrolling (Kevin 2026-07-18).
+  const gridSelection = useMemo(
+    () =>
+      activeTab === 'dreams' ||
+      activeTab === 'posts' ||
+      activeTab === 'saved' ||
+      activeTab === 'reposts'
+        ? {
+            active: gridSelecting,
+            selectedIds: gridSelectedIds,
+            onToggle: toggleGridSelected,
+            onEnter: enterGridSelection,
+          }
+        : undefined,
+    [activeTab, gridSelecting, gridSelectedIds, toggleGridSelected, enterGridSelection]
+  );
   const handleBulkDelete = useCallback(async () => {
     const count = gridSelectedIds.size;
     if (count === 0 || bulkDelete.isPending) return;
@@ -118,7 +137,7 @@ export default function ProfileScreen() {
       const albums = data?.length ?? 0;
       const images = (data ?? []).reduce((sum, r) => sum + ((r.media_count as number) ?? 0), 0);
       if (albums > 0) {
-        albumLine = ` This includes ${albums} album${albums === 1 ? '' : 's'}, and the ${images} image${images === 1 ? '' : 's'} inside will be deleted too.`;
+        albumLine = ` That includes ${albums} album${albums === 1 ? '' : 's'}, so the ${images} image${images === 1 ? '' : 's'} inside go too.`;
       }
     } catch {
       // best-effort — a failed count never blocks the delete confirm.
@@ -128,8 +147,9 @@ export default function ProfileScreen() {
       // No count in the title: a selection count conflates albums with singles
       // (2 selected can be 1 album + 1 dream = 5 images). The body spells out
       // any album impact instead (Kevin 2026-07-11).
-      'Delete dreams?',
-      "They'll be removed everywhere, including the feed. This can't be undone." + albumLine,
+      'Delete these dreams?',
+      "They'll disappear everywhere, including the feed. Once they're gone, they're gone, with no dreaming them back." +
+        albumLine,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -778,19 +798,7 @@ export default function ProfileScreen() {
           // Multi-select (bulk edit) — Posts + Dreams (delete/private/post) and
           // Saved + Reposts (bulk unsave / unrepost). Present-but-inactive adds
           // the "Select" row to tile long-press sheets.
-          selection={
-            activeTab === 'dreams' ||
-            activeTab === 'posts' ||
-            activeTab === 'saved' ||
-            activeTab === 'reposts'
-              ? {
-                  active: gridSelecting,
-                  selectedIds: gridSelectedIds,
-                  onToggle: toggleGridSelected,
-                  onEnter: enterGridSelection,
-                }
-              : undefined
-          }
+          selection={gridSelection}
         />
         {/* Selection chrome — the count + Done live in the grid's own filter
             row (the subheader above the grid); the ACTION ROW floats at the

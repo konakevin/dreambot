@@ -24,22 +24,6 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { TILE_WIDTH, PORTRAIT_RATIO } from '@/constants/grid';
 
-/** Multi-select wiring (bulk delete, 2026-07-10) — provided only by grids that
- *  support it (the owner's Dreams grid). While `active`, tap/long-press TOGGLE
- *  selection instead of navigating; while inactive, its presence adds a
- *  "Select" row to the long-press sheet (entry point — the long-press gesture
- *  itself already belongs to the action sheet). */
-export interface PostTileSelection {
-  active: boolean;
-  selected: boolean;
-  /** 1-based selection order — shown in the badge instead of a checkmark so
-   *  multi-select reads like the gallery picker (order = album order for the
-   *  bulk-Post flow), renumbering live as tiles are toggled. */
-  order?: number | null;
-  onToggle: (id: string) => void;
-  onEnter: (id: string) => void;
-}
-
 interface PostTileProps {
   item: DreamPostItem;
   isOwn?: boolean;
@@ -54,7 +38,19 @@ interface PostTileProps {
   // triplet passes its own (always-3-up) width so it doesn't shrink when the
   // grid runs more columns on iPad. Height derives from the 4:5 portrait ratio.
   width?: number;
-  selection?: PostTileSelection;
+  // Multi-select wiring (bulk delete) — provided only by grids that support it.
+  // FLAT PRIMITIVES (not an object) so PostTile's React.memo default shallow
+  // compare holds: a fresh per-tile selection object every render defeated memo
+  // and re-rendered every mounted tile on each toggle/scroll, janking select-mode
+  // scrolling (Kevin 2026-07-18). While selActive, tap/long-press toggle instead
+  // of navigating; while inactive but present (onSelectEnter set), the long-press
+  // sheet gets a "Select" row.
+  selActive?: boolean;
+  selSelected?: boolean;
+  /** 1-based selection order shown in the badge (renumbers live), or null. */
+  selOrder?: number | null;
+  onSelectToggle?: (id: string) => void;
+  onSelectEnter?: (id: string) => void;
 }
 
 export const PostTile = memo(function PostTile({
@@ -65,7 +61,11 @@ export const PostTile = memo(function PostTile({
   showPrivateBadge = false,
   allPosts,
   width = TILE_WIDTH,
-  selection,
+  selActive = false,
+  selSelected = false,
+  selOrder = null,
+  onSelectToggle,
+  onSelectEnter,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const { mutate: dissolveAlbum } = useDissolveAlbum();
@@ -80,9 +80,9 @@ export const PostTile = memo(function PostTile({
 
   async function handlePress() {
     // Selection mode: tap TOGGLES instead of navigating.
-    if (selection?.active) {
+    if (selActive) {
       Haptics.selectionAsync();
-      selection.onToggle(item.id);
+      onSelectToggle?.(item.id);
       return;
     }
     // Stash the source array + source type so PhotoDetailScreen can reuse
@@ -125,9 +125,9 @@ export const PostTile = memo(function PostTile({
 
   function handleLongPress() {
     // Selection mode: long-press toggles too (no nested modes).
-    if (selection?.active) {
+    if (selActive) {
       Haptics.selectionAsync();
-      selection.onToggle(item.id);
+      onSelectToggle?.(item.id);
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -193,16 +193,16 @@ export const PostTile = memo(function PostTile({
       )}
       {/* Multi-select state — selected tiles get a dim + accent ring + filled
           check; unselected show an empty circle so the mode is unmistakable. */}
-      {selection?.active && (
+      {selActive && (
         <View
           pointerEvents="none"
-          style={[styles.selectOverlay, selection.selected && styles.selectOverlaySelected]}
+          style={[styles.selectOverlay, selSelected && styles.selectOverlaySelected]}
         >
-          <View style={[styles.selectBadge, selection.selected && styles.selectBadgeOn]}>
-            {selection.selected &&
-              (selection.order != null ? (
+          <View style={[styles.selectBadge, selSelected && styles.selectBadgeOn]}>
+            {selSelected &&
+              (selOrder != null ? (
                 <Text allowFontScaling={false} style={styles.selectBadgeNum}>
-                  {selection.order}
+                  {selOrder}
                 </Text>
               ) : (
                 <Ionicons name="checkmark" size={13} color="#000000" />
@@ -245,7 +245,7 @@ export const PostTile = memo(function PostTile({
                 : undefined,
               faceSwapMode: item.face_swap_mode ?? null,
               // Bulk-select entry point — grids that support it pass `selection`.
-              onSelect: selection ? () => selection.onEnter(item.id) : undefined,
+              onSelect: onSelectEnter ? () => onSelectEnter(item.id) : undefined,
               onDelete: isOwn || isAdminUser ? () => deletePost(item.id) : undefined,
               onDissolve: isGallery && isOwn ? () => dissolveAlbum(item.id) : undefined,
               // Own tile visibility (single dreams + album hosts):
