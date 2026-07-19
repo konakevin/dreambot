@@ -68,6 +68,13 @@ beforeAll(async () => {
   await db.query(`CREATE OR REPLACE FUNCTION public.block_exists(uuid, uuid) RETURNS boolean
     LANGUAGE sql IMMUTABLE AS 'SELECT false'`);
 
+  // Shared DB (see _support/pg.ts): migration 317's get_comments/get_replies are
+  // plain non-idempotent CREATEs (we extract the CREATE, not its DROP). Another
+  // comment spec (getCommentsOrder) also creates get_replies, so drop both first
+  // — mirroring the DROP TABLE lines above — to stay collision-free regardless of
+  // jest file order. (2026-07-19)
+  await db.query('DROP FUNCTION IF EXISTS public.get_comments(uuid, integer, integer) CASCADE');
+  await db.query('DROP FUNCTION IF EXISTS public.get_replies(uuid, integer) CASCADE');
   await db.query(extract(sql, 'CREATE FUNCTION public.get_comments', '$$;'));
   await db.query(extract(sql, 'CREATE FUNCTION public.get_replies', '$$;'));
 });

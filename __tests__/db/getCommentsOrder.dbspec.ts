@@ -56,6 +56,15 @@ beforeAll(async () => {
   await db.query(`CREATE OR REPLACE FUNCTION public.block_exists(uuid, uuid) RETURNS boolean
     LANGUAGE sql IMMUTABLE AS 'SELECT false'`);
 
+  // All dbspecs share ONE database (see _support/pg.ts). Migration 317's
+  // get_replies is a plain non-idempotent CREATE (we extract the CREATE, not its
+  // DROP), so a sibling comment spec (commentReportFilter) that already created it
+  // makes our CREATE collide with "function already exists" — order-dependent.
+  // Drop both first, mirroring the DROP TABLE lines above, so this spec is
+  // idempotent regardless of jest file order. (2026-07-19)
+  await db.query('DROP FUNCTION IF EXISTS public.get_comments(uuid, integer, integer) CASCADE');
+  await db.query('DROP FUNCTION IF EXISTS public.get_replies(uuid, integer) CASCADE');
+
   // get_comments from 379 (ASC), get_replies from 317 (ASC).
   await db.query(
     extract(
