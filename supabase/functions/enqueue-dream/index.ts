@@ -154,6 +154,25 @@ Deno.serve(async (req) => {
       return json({ error: `enqueue_failed: ${fdEnqErr.message}` }, 500);
     }
 
+    // Start the FREE-TRIAL clock at ONBOARDING COMPLETION, not signup. The signup
+    // trigger (migration 176) sets pro_trial_started_at = now() on the users INSERT,
+    // so a user who signs up then delays onboarding would burn trial days before
+    // ever using the app (Kevin 2026-07-18: kathryn signed up 07-05, onboarded
+    // 07-16 → only ~3 of 14 days left). The first_dream enqueue IS the onboarding
+    // cutoff and runs exactly ONCE per account (guarded above), so reset the trial
+    // to start NOW — the user gets the full pro_trial_days of nightly dreams from
+    // onboarding. Service-role write bypasses the frozen-column trigger (migration
+    // 281: role='service_role'), the same path revenuecat-webhook uses for pro_*.
+    const { error: trialErr } = await supabase
+      .from('users')
+      .update({ pro_trial_started_at: new Date().toISOString() })
+      .eq('id', userId);
+    if (trialErr) {
+      console.error(
+        `[enqueue-dream] pro_trial_started_at reset failed for ${userId}: ${trialErr.message}`
+      );
+    }
+
     // AUTHORITATIVE onboarding_completed — a first_dream is enqueued exactly ONCE
     // per account (the unique index enforces it), at the END of onboarding (the
     // cutoff step kicks it off). The client event fired ~once in 9 days; this is
