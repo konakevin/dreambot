@@ -92,14 +92,18 @@ export default function SharePostScreen() {
   // longer consumed here — was previously used in the Share.share() copy
   // label ("View kevin's dream"). Kept on the type so the navigate call
   // doesn't have to change.
-  const { uploadId, imageUrl, imageUrlHq, faceSwapMode, isOwn } = useLocalSearchParams<{
-    uploadId: string;
-    username?: string;
-    imageUrl?: string;
-    imageUrlHq?: string;
-    faceSwapMode?: string;
-    isOwn?: string;
-  }>();
+  const { uploadId, imageUrl, imageUrlHq, faceSwapMode, isOwn, allowDownloads } =
+    useLocalSearchParams<{
+      uploadId: string;
+      username?: string;
+      imageUrl?: string;
+      imageUrlHq?: string;
+      faceSwapMode?: string;
+      isOwn?: string;
+      // Author's download opt-out, threaded from the caller ('0' = disabled).
+      // Absent → allowed. The owner always keeps Save (isOwn wins downstream).
+      allowDownloads?: string;
+    }>();
   const { data: vibers = [], isLoading } = useShareableVibers();
   const { mutate: sendShare, isPending } = useSendShare();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -192,6 +196,7 @@ export default function SharePostScreen() {
         imageUrlHq: imageUrlHq ?? null,
         faceSwapMode: faceSwapMode ?? null,
         isOwn: isOwn === '1',
+        allowDownloads: allowDownloads !== '0',
       });
     }, 220);
   }
@@ -236,7 +241,7 @@ export default function SharePostScreen() {
                   </View>
                   <Text style={styles.linkLabel}>Copy</Text>
                 </TouchableOpacity>
-                {!!imageUrl && (
+                {!!imageUrl && (isOwn === '1' || allowDownloads !== '0') && (
                   <TouchableOpacity
                     onPress={handleSave}
                     style={styles.linkButton}

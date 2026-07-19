@@ -126,6 +126,22 @@ Deno.serve(async (req) => {
 
   const isOwn = uploadRow.user_id === user.id;
 
+  // Account-level download opt-out (users.allow_downloads, migration 378). When
+  // the author disabled downloads, no one but the owner may HD-download their
+  // posts. The client already hides "Save in HD" for these, but enforce it
+  // server-side so a stale/forged client can't upscale on the author's behalf.
+  // Owners always keep HD on their own dreams, so only check for non-owners.
+  if (!isOwn) {
+    const { data: authorRow } = await supabase
+      .from('users')
+      .select('allow_downloads')
+      .eq('id', uploadRow.user_id)
+      .maybeSingle();
+    if (authorRow && authorRow.allow_downloads === false) {
+      return json({ error: 'downloads_disabled' }, 403);
+    }
+  }
+
   // Subscription gate: Pro (paid OR trial) and DreamBot Basic (paid) can HD-
   // download ANY dream (at per-tier monthly caps). Everyone — including free /
   // expired-sub users — can always HD-download their OWN dreams, so owners skip

@@ -563,6 +563,57 @@ export type Database = {
           },
         ];
       };
+      db_health_log: {
+        Row: {
+          active_conn: number | null;
+          by_application: Json | null;
+          by_wait_event: Json | null;
+          captured_at: string;
+          id: number;
+          idle_conn: number | null;
+          idle_in_txn_conn: number | null;
+          lock_waiters: number | null;
+          longest_active_query: string | null;
+          longest_active_secs: number | null;
+          longest_idle_txn_query: string | null;
+          longest_idle_txn_secs: number | null;
+          max_connections: number | null;
+          total_conn: number | null;
+        };
+        Insert: {
+          active_conn?: number | null;
+          by_application?: Json | null;
+          by_wait_event?: Json | null;
+          captured_at?: string;
+          id?: number;
+          idle_conn?: number | null;
+          idle_in_txn_conn?: number | null;
+          lock_waiters?: number | null;
+          longest_active_query?: string | null;
+          longest_active_secs?: number | null;
+          longest_idle_txn_query?: string | null;
+          longest_idle_txn_secs?: number | null;
+          max_connections?: number | null;
+          total_conn?: number | null;
+        };
+        Update: {
+          active_conn?: number | null;
+          by_application?: Json | null;
+          by_wait_event?: Json | null;
+          captured_at?: string;
+          id?: number;
+          idle_conn?: number | null;
+          idle_in_txn_conn?: number | null;
+          lock_waiters?: number | null;
+          longest_active_query?: string | null;
+          longest_active_secs?: number | null;
+          longest_idle_txn_query?: string | null;
+          longest_idle_txn_secs?: number | null;
+          max_connections?: number | null;
+          total_conn?: number | null;
+        };
+        Relationships: [];
+      };
       dlt_clean_mediums: {
         Row: {
           clean_directive: string;
@@ -2429,6 +2480,7 @@ export type Database = {
           image_url_display: string | null;
           image_url_hq: string | null;
           image_url_hq_generated_at: string | null;
+          image_url_thumb: string | null;
           is_active: boolean;
           is_ai_generated: boolean;
           is_approved: boolean | null;
@@ -2448,6 +2500,7 @@ export type Database = {
           repost_count: number;
           save_count: number;
           search_tsv: unknown;
+          shadow: boolean;
           share_count: number;
           style_summary: string | null;
           thumbhash: string | null;
@@ -2476,6 +2529,7 @@ export type Database = {
           image_url_display?: string | null;
           image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
+          image_url_thumb?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
           is_approved?: boolean | null;
@@ -2495,6 +2549,7 @@ export type Database = {
           repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
+          shadow?: boolean;
           share_count?: number;
           style_summary?: string | null;
           thumbhash?: string | null;
@@ -2523,6 +2578,7 @@ export type Database = {
           image_url_display?: string | null;
           image_url_hq?: string | null;
           image_url_hq_generated_at?: string | null;
+          image_url_thumb?: string | null;
           is_active?: boolean;
           is_ai_generated?: boolean;
           is_approved?: boolean | null;
@@ -2542,6 +2598,7 @@ export type Database = {
           repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
+          shadow?: boolean;
           share_count?: number;
           style_summary?: string | null;
           thumbhash?: string | null;
@@ -2742,6 +2799,7 @@ export type Database = {
       };
       users: {
         Row: {
+          allow_downloads: boolean;
           allow_reposts: boolean;
           avatar_url: string | null;
           banned_at: string | null;
@@ -2774,6 +2832,7 @@ export type Database = {
           username_confirmed: boolean;
         };
         Insert: {
+          allow_downloads?: boolean;
           allow_reposts?: boolean;
           avatar_url?: string | null;
           banned_at?: string | null;
@@ -2806,6 +2865,7 @@ export type Database = {
           username_confirmed?: boolean;
         };
         Update: {
+          allow_downloads?: boolean;
           allow_reposts?: boolean;
           avatar_url?: string | null;
           banned_at?: string | null;
@@ -2909,6 +2969,7 @@ export type Database = {
         Args: { p_upload_id: string };
         Returns: undefined;
       };
+      capture_db_health: { Args: never; Returns: undefined };
       category_enabled_for: {
         Args: { p_category: string; p_channel: string; p_user_id: string };
         Returns: boolean;
@@ -3139,6 +3200,7 @@ export type Database = {
         Returns: {
           ai_concept: Json;
           ai_prompt: string;
+          allow_downloads: boolean;
           allow_reposts: boolean;
           avatar_url: string;
           bot_message: string;
@@ -3155,7 +3217,6 @@ export type Database = {
           image_url_display: string;
           image_url_hq: string;
           like_count: number;
-          media: Json;
           model: string;
           posted_at: string;
           repost_count: number;
@@ -3323,6 +3384,64 @@ export type Database = {
           user_id: string;
           username: string;
         }[];
+      };
+      get_shadow_feed: {
+        Args: { p_bot_user_id?: string; p_limit?: number; p_offset?: number };
+        Returns: {
+          ai_concept: Json | null;
+          ai_prompt: string | null;
+          album_ref_count: number;
+          bot_message: string | null;
+          caption: string | null;
+          categories: string[];
+          comment_count: number;
+          created_at: string;
+          description: string | null;
+          dream_medium: string | null;
+          dream_vibe: string | null;
+          face_swap_mode: string | null;
+          flux_seed: number | null;
+          height: number | null;
+          id: string;
+          image_url: string;
+          image_url_display: string | null;
+          image_url_hq: string | null;
+          image_url_hq_generated_at: string | null;
+          image_url_thumb: string | null;
+          is_active: boolean;
+          is_ai_generated: boolean;
+          is_approved: boolean | null;
+          is_moderated: boolean;
+          is_posted: boolean;
+          is_public: boolean;
+          like_count: number;
+          media_count: number;
+          media_type: string;
+          model: string | null;
+          output_hash: string | null;
+          output_phash: string | null;
+          pinned_at: string | null;
+          posted_at: string | null;
+          recipe: Json | null;
+          recipe_id: string | null;
+          repost_count: number;
+          save_count: number;
+          search_tsv: unknown;
+          shadow: boolean;
+          share_count: number;
+          style_summary: string | null;
+          thumbhash: string | null;
+          thumbnail_url: string | null;
+          user_id: string;
+          view_count: number;
+          width: number | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'uploads';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
       };
       get_shareable_vibers: {
         Args: { p_user_id: string };

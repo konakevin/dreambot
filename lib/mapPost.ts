@@ -58,7 +58,7 @@ export const POST_SELECT =
   // source_upload_id and (b) hide HD on cast slides (uncanny), per slide. RLS
   // only reveals the source row to its owner, so this resolves for the owner's
   // own album (the case that offers album HD) and is null otherwise — safe.
-  '*, users!inner(username, avatar_url, allow_reposts), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height, source_upload_id, source:uploads!upload_media_source_upload_id_fkey(face_swap_mode))' as const;
+  '*, users!inner(username, avatar_url, allow_reposts, allow_downloads), upload_media!upload_media_upload_id_fkey(position, image_url, image_url_display, image_url_hq, thumbhash, width, height, source_upload_id, source:uploads!upload_media_source_upload_id_fkey(face_swap_mode))' as const;
 
 /** Cast Supabase query result rows to untyped records for mapping */
 export function castRows(data: unknown): Record<string, unknown>[] {
@@ -87,6 +87,9 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     // Author's repost opt-out (users.allow_reposts). Default TRUE when absent so
     // a surface that doesn't return it never wrongly hides the repost button.
     allow_reposts: (u.allow_reposts as boolean | undefined) ?? true,
+    // Author's download opt-out (users.allow_downloads). Default TRUE when absent
+    // so a surface that doesn't return it never wrongly hides the save actions.
+    allow_downloads: (u.allow_downloads as boolean | undefined) ?? true,
     created_at: row.created_at as string,
     comment_count: (row.comment_count as number) ?? 0,
     like_count: (row.like_count as number) ?? 0,
@@ -139,6 +142,8 @@ export function mapRpcToDreamPost(row: Record<string, unknown>): DreamPostItem {
     avatar_url: (row.avatar_url as string | null) ?? null,
     // Author's repost opt-out (flat get_feed column). Default TRUE when absent.
     allow_reposts: (row.allow_reposts as boolean | undefined) ?? true,
+    // Author's download opt-out (flat get_feed column). Default TRUE when absent.
+    allow_downloads: (row.allow_downloads as boolean | undefined) ?? true,
     created_at: row.created_at as string,
     comment_count: (row.comment_count as number) ?? 0,
     like_count: (row.like_count as number) ?? 0,

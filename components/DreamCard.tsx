@@ -116,6 +116,10 @@ export interface DreamPostItem {
   /** Author's repost opt-out (users.allow_reposts). false = this author disabled
    *  reposts → hide the repost button. Defaults to true (allow) when absent. */
   allow_reposts?: boolean;
+  /** Author's download opt-out (users.allow_downloads). false = this author
+   *  disabled downloads → hide the save actions (Save to Photos / Save in HD /
+   *  Save album) for everyone but the owner. Defaults to true when absent. */
+  allow_downloads?: boolean;
   recipe_id?: string | null;
   bot_message?: string | null;
   dream_medium?: string | null;
@@ -241,10 +245,12 @@ export const DreamCard = memo(function DreamCard({
   // no longer excluded — only posts whose author opted out (allow_reposts ===
   // false) hide the button (the server also rejects those). `!== false` so a
   // surface that hasn't wired the flag through (undefined) still shows it.
+  // Private dreams (is_public === false) also hide it — a repost broadcasts the
+  // post into followers' feeds, which would leak a post the author kept private.
   const { data: repostIdsSet } = useRepostIds();
   const toggleRepost = useToggleRepost();
   const isReposted = repostIdsSet?.has(item.id) ?? false;
-  const canRepost = item.allow_reposts !== false;
+  const canRepost = item.allow_reposts !== false && item.is_public !== false;
   const lastTap = useRef(0);
   const swiped = useRef(false);
 
@@ -835,7 +841,7 @@ export const DreamCard = memo(function DreamCard({
                       // header (2026-06-06) so the user reaches Copy + Save
                       // from the same surface; thread the image URLs through
                       // as route params so the sheet has what it needs.
-                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(activeImageUrl)}${activeImageHq ? `&imageUrlHq=${encodeURIComponent(activeImageHq)}` : ''}${item.face_swap_mode ? `&faceSwapMode=${encodeURIComponent(item.face_swap_mode)}` : ''}${isOwnPost ? '&isOwn=1' : ''}`
+                      `/sharePost?uploadId=${item.id}&username=${encodeURIComponent(item.username)}&imageUrl=${encodeURIComponent(activeImageUrl)}${activeImageHq ? `&imageUrlHq=${encodeURIComponent(activeImageHq)}` : ''}${item.face_swap_mode ? `&faceSwapMode=${encodeURIComponent(item.face_swap_mode)}` : ''}${isOwnPost ? '&isOwn=1' : ''}${item.allow_downloads === false ? '&allowDownloads=0' : ''}`
                     ))
                 }
                 activeOpacity={0.7}
@@ -896,6 +902,9 @@ export const DreamCard = memo(function DreamCard({
             imageUrl: activeImageUrl,
             imageUrlHq: activeImageHq,
             isOwn: isOwnPost,
+            // Author's account-level download opt-out. When false and the viewer
+            // isn't the owner, the save rows are omitted (mirrors allow_reposts).
+            allowDownloads: item.allow_downloads !== false,
             isGallery,
             mediaCount: item.media_count ?? 0,
             // Per-slide cast rule + HD target (album → the active member's

@@ -86,6 +86,7 @@ export default function SettingsScreen() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const [isPublic, setIsPublic] = useState(false);
   const [allowReposts, setAllowReposts] = useState(true);
+  const [allowDownloads, setAllowDownloads] = useState(true);
   const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
@@ -112,16 +113,18 @@ export default function SettingsScreen() {
     if (!user) return;
     supabase
       .from('users')
-      .select('is_public, allow_reposts')
+      .select('is_public, allow_reposts, allow_downloads')
       .eq('id', user.id)
       .single()
       .then(({ data }) => {
         const row = asDbResult<{
           is_public?: boolean;
           allow_reposts?: boolean;
+          allow_downloads?: boolean;
         }>(data);
         if (row?.is_public) setIsPublic(true);
         setAllowReposts(row?.allow_reposts ?? true);
+        setAllowDownloads(row?.allow_downloads ?? true);
       });
   }, [user]);
   const queryClient = useQueryClient();
@@ -656,6 +659,26 @@ export default function SettingsScreen() {
               onValueChange={async (val) => {
                 setAllowReposts(val);
                 await supabase.from('users').update({ allow_reposts: val }).eq('id', user!.id);
+              }}
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.row}>
+            <Ionicons name="download-outline" size={20} color={colors.accent} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rowLabel}>Allow Downloads</Text>
+              <Text style={styles.rowDesc}>
+                {allowDownloads
+                  ? 'Others can save your posts to their device'
+                  : 'No one can save your posts'}
+              </Text>
+            </View>
+            <Switch
+              value={allowDownloads}
+              onValueChange={async (val) => {
+                setAllowDownloads(val);
+                await supabase.from('users').update({ allow_downloads: val }).eq('id', user!.id);
               }}
               trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor="#FFFFFF"

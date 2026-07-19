@@ -140,6 +140,13 @@ interface SaveOpts {
    *  HD-download their own dreams (nightly or created), free + uncapped —
    *  no subscription required. The server (upscale-image) enforces the same. */
   isOwn?: boolean;
+  /** Author's account-level download opt-out (users.allow_downloads). false ⇒
+   *  this author disabled downloads → the save actions are omitted for everyone
+   *  but the owner (opts.isOwn always wins — you can save your own posts). The
+   *  server (upscale-image) enforces the HD path the same way. Defaults to
+   *  allowed when absent, so a surface that doesn't thread it never wrongly
+   *  hides the save. Mirrors allow_reposts. */
+  allowDownloads?: boolean;
   /** 'single' | 'dual' when this dream was rendered with a Dream-Cast face
    *  swap. HD upscaling is disabled for these (uncanny AI faces); only native
    *  "Save to Photos" is offered. NULL/undefined → plain render, HD allowed.
@@ -349,10 +356,16 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
     });
   }
 
+  // Author's account-level download opt-out (users.allow_downloads). When the
+  // author disabled downloads and the viewer isn't the owner, every save row is
+  // omitted (the owner can always save their own posts). Mirrors allow_reposts;
+  // `!== false` so a surface that didn't thread the flag stays "allowed".
+  const canDownload = !!opts.isOwn || opts.allowDownloads !== false;
+
   // Image-in-view save ("Save to Photos" [+ "Save in HD"]). Shown for single
   // dreams and for the dream card's ACTIVE album slide; suppressed on the grid
   // album THUMB (no single slide there — only the whole-album row applies).
-  if (!opts.albumThumb) {
+  if (canDownload && !opts.albumThumb) {
     // Album slide HD is offered only when we can do it RIGHT: the owner's own
     // dream (free + uncapped; the private source is upscalable) AND we know the
     // source id to target. Otherwise (a paid viewer on someone else's album, or
@@ -372,8 +385,9 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   }
 
   // Whole-album download — every member image at once. Any album surface that
-  // passes the member URLs (grid thumb + dream card).
-  if (opts.albumImageUrls && opts.albumImageUrls.length > 0) {
+  // passes the member URLs (grid thumb + dream card). Gated by the same
+  // download opt-out as the single-slide save above.
+  if (canDownload && opts.albumImageUrls && opts.albumImageUrls.length > 0) {
     const urls = opts.albumImageUrls;
     rows.push({
       key: 'save-album',
@@ -390,7 +404,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // that explains why. Gated the same as the alert disclaimer (faceSwapNoHdMessage):
   // only for users who'd otherwise have HD here (subscribers / own posts), so it
   // isn't noise to a free user on someone else's post.
-  if (!opts.isGallery && faceSwapNoHdMessage(opts)) {
+  if (canDownload && !opts.isGallery && faceSwapNoHdMessage(opts)) {
     rows.push({
       key: 'hd-unavailable',
       label: 'Save in HD',
