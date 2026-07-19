@@ -380,7 +380,12 @@ export function FullScreenFeed({
       Promise.resolve(onRefreshPropRef.current()).finally(() => {
         currentIndex.current = 0;
         scrollToTopImpl(false);
-        requestAnimationFrame(() => setQuietRefreshing(false));
+        // Hold the opaque cover until the new seed has COMMITTED and the pager
+        // has laid out at the top — double rAF = after the next paint — so the
+        // reshuffle + jump-to-top are never visible (no "swapping between a few
+        // pics" on a Home re-tap; Kevin 2026-07-19). Lifting after a single
+        // frame revealed the pager mid-reconcile.
+        requestAnimationFrame(() => requestAnimationFrame(() => setQuietRefreshing(false)));
       });
     } else {
       currentIndex.current = 0;
@@ -628,6 +633,12 @@ export function FullScreenFeed({
               bottom: 0,
               alignItems: 'center',
               justifyContent: 'center',
+              // OPAQUE cover: the reshuffle + jump-to-top happen entirely behind
+              // this, so the feed never visibly swaps through a few pics during a
+              // Home re-tap. Reveals the settled new top once the swap commits
+              // (Kevin 2026-07-19). Was a tiny transparent puck that left the
+              // messy swap on full display.
+              backgroundColor: colors.background,
             }}
           >
             {/* CIRCULAR scrim, tight to the ring (radius = half the 44+2×8 box).

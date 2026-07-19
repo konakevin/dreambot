@@ -182,7 +182,7 @@ async function markInboxViewed(): Promise<void> {
  */
 export function routeFromNotification(
   data: NotificationRouteData | null | undefined,
-  opts: { deferUntilReady?: boolean; markSeen?: boolean } = {}
+  opts: { deferUntilReady?: boolean; markSeen?: boolean; fromPush?: boolean } = {}
 ): boolean {
   if (!data) return false;
   const target = computeNotificationRoute(data);
@@ -230,10 +230,20 @@ export function routeFromNotification(
     void markInboxViewed();
   }
 
+  // A PUSH tap has no in-app history, so a photo opened this way should return
+  // the user to their INBOX on back (to keep working through their other
+  // notifications), not the home feed. Tag /photo/ targets; app/photo/[id].tsx
+  // reads ?fromNotification=1 and routes back to /inbox on chevron/swipe. Inbox
+  // ROW taps don't set fromPush — their natural back already pops to the inbox.
+  const finalTarget =
+    opts.fromPush && target.startsWith('/photo/')
+      ? `${target}${target.includes('?') ? '&' : '?'}fromNotification=1`
+      : target;
+
   if (opts.deferUntilReady) {
-    InteractionManager.runAfterInteractions(() => nav.push(target));
+    InteractionManager.runAfterInteractions(() => nav.push(finalTarget));
   } else {
-    nav.push(target);
+    nav.push(finalTarget);
   }
   return true;
 }

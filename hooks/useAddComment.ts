@@ -89,14 +89,18 @@ export function useAddComment() {
           };
         });
       } else {
-        // Add top-level comment optimistically — prepend (newest first).
+        // Add top-level comment optimistically — APPEND to the last loaded page.
+        // Comments read oldest → newest (get_comments ORDER BY created_at ASC,
+        // migration 379), so a brand-new comment (the newest) belongs at the very
+        // bottom of the thread, i.e. the end of the last page.
         const commentsKey = ['comments', uploadId];
         queryClient.setQueryData<InfiniteData<CommentsPage>>(commentsKey, (prev) => {
           if (!prev) return prev;
+          const lastIndex = prev.pages.length - 1;
           return {
             ...prev,
             pages: prev.pages.map((page, i) =>
-              i === 0 ? { ...page, rows: [newComment, ...page.rows] } : page
+              i === lastIndex ? { ...page, rows: [...page.rows, newComment] } : page
             ),
           };
         });

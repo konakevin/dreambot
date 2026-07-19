@@ -7,6 +7,7 @@
 import { useEffect } from 'react';
 import { verticalScale } from '@/lib/responsive';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import { Image } from 'expo-image';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import Animated, {
   useSharedValue,
@@ -35,31 +36,27 @@ function ShimmerBlock({ style }: { style?: Record<string, unknown> }) {
   );
 }
 
-/** Full-screen card skeleton — matches DreamCard layout */
+/** Full-screen cold-load screen — brand wordmark + spinner on pure black. */
 export function FeedCardSkeleton() {
   return (
     <View style={s.feedCard}>
-      <ShimmerBlock style={{ ...StyleSheet.absoluteFillObject, borderRadius: 0 }} />
-      {/* The shimmer alone is invisible here — surface #0F0F14 pulsing at
-          0.3-0.7 opacity over the #000 card reads as a plain black screen
-          (Kevin, 2026-07-05, home-tab re-tap refresh). A real spinner says
-          "loading" unambiguously; the shimmer stays for the card silhouette. */}
+      {/* Brand wordmark, dead-centered to match StartupLogo + the native splash
+          (the SAME 220pt image → no size/position pop at the cold-start handoff),
+          so the startup logo simply STAYS and the spinner appears below it,
+          instead of the logo vanishing to a bare spinner (Kevin 2026-07-19). Do
+          NOT swap the image for GradientTitle text — it renders a different width
+          and pops (see StartupLogo). */}
+      <View style={s.feedLogo} pointerEvents="none">
+        <Image
+          source={require('@/assets/images/splash-wordmark.png')}
+          style={s.feedWordmark}
+          contentFit="contain"
+        />
+      </View>
       <View style={s.feedSpinner} pointerEvents="none">
-        <BrandSpinner size={44} />
-      </View>
-      <View style={s.feedBottom}>
-        <View style={s.feedUserRow}>
-          <ShimmerBlock style={{ width: 32, height: 32, borderRadius: 16 }} />
-          <View style={{ gap: 4 }}>
-            <ShimmerBlock style={{ width: 100, height: 14 }} />
-            <ShimmerBlock style={{ width: 60, height: 10 }} />
-          </View>
+        <View style={{ transform: [{ translateY: verticalScale(64) }] }}>
+          <BrandSpinner size={44} />
         </View>
-      </View>
-      <View style={s.feedSide}>
-        <ShimmerBlock style={{ width: 28, height: 28, borderRadius: 14 }} />
-        <ShimmerBlock style={{ width: 28, height: 28, borderRadius: 14 }} />
-        <ShimmerBlock style={{ width: 28, height: 28, borderRadius: 14 }} />
       </View>
     </View>
   );
@@ -110,28 +107,22 @@ const s = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     backgroundColor: '#000',
-    justifyContent: 'flex-end',
-  },
-  feedBottom: {
-    paddingHorizontal: 16,
-    paddingBottom: verticalScale(100),
-  },
-  feedUserRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  feedSide: {
-    position: 'absolute',
-    right: 12,
-    bottom: 110,
-    gap: 20,
-    alignItems: 'center',
   },
   feedSpinner: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  feedLogo: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // 220pt = a literal match to StartupLogo + the native splash imageWidth, so the
+  // wordmark is pixel-identical across the handoff (no pop).
+  feedWordmark: {
+    width: 220,
+    aspectRatio: 1812 / 304,
   },
   grid: {
     flexDirection: 'row',

@@ -33,7 +33,7 @@ import { Toast } from '@/components/Toast';
 import * as Haptics from 'expo-haptics';
 
 export default function PhotoDetailScreen() {
-  const { id, downloadReady, comment, fromDeepLink } = useLocalSearchParams<{
+  const { id, downloadReady, comment, fromDeepLink, fromNotification } = useLocalSearchParams<{
     id: string;
     downloadReady?: string;
     /** Present when arriving from a comment notification — auto-open the thread. */
@@ -41,6 +41,10 @@ export default function PhotoDetailScreen() {
     /** '1' when opened via a shared deep link — back/swipe return to the home
      *  feed instead of popping to whatever the user had open. */
     fromDeepLink?: string;
+    /** '1' when opened via a PUSH notification tap — back/swipe return to the
+     *  INBOX (so the user can keep working through their other notifications),
+     *  not the home feed. */
+    fromNotification?: string;
   }>();
   const user = useAuthStore((s) => s.user);
   const isPro = useAuthStore((s) => s.isPro);
@@ -225,10 +229,15 @@ export default function PhotoDetailScreen() {
   // deep-linked post has no in-app history to pop back to, so back returns to the
   // home feed; otherwise normal safe-back.
   const deepLinked = fromDeepLink === '1';
+  const fromNotif = fromNotification === '1';
   const goBack = useCallback(() => {
-    if (deepLinked) router.replace('/(tabs)');
+    // Push-notification tap → return to the INBOX (which refreshes on focus) so
+    // the user can keep working through their other notifications, not the home
+    // feed (Kevin 2026-07-19). A shared deep link → home; otherwise safe-back.
+    if (fromNotif) router.replace('/inbox');
+    else if (deepLinked) router.replace('/(tabs)');
     else safeBack();
-  }, [deepLinked]);
+  }, [fromNotif, deepLinked]);
   const {
     gesture: backGesture,
     animatedStyle: backStyle,

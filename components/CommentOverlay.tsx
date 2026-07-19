@@ -101,14 +101,24 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   const dismissKeyboard = useCallback(() => Keyboard.dismiss(), []);
   const panGesture = Gesture.Pan()
     .withRef(panRef)
-    .activeOffsetY([10, 300])
-    .failOffsetX([-20, 20])
+    // Activate ONLY on a deliberate downward drag, and FAIL (yield to the list's
+    // scroll) the moment the finger moves up. The old `.activeOffsetY([10, 300])`
+    // was misconfigured: a 2-element array activates when translationY < 10 OR
+    // > 300 — i.e. on the first ~1px in EITHER direction — so the pan grabbed
+    // upward scrolls too and fought the FlatList whenever the thread had content.
+    // That's the long-standing "pulls down a little but won't dismiss, and only
+    // works on empty threads" bug. A single positive value = down-only; the
+    // negative failOffsetY cleanly hands upward motion to the scroll.
+    .activeOffsetY(12)
+    .failOffsetY(-12)
+    .failOffsetX([-24, 24])
     .onBegin(() => {
       'worklet';
       panStartedAtTop.value = listScrollY.value <= 4;
       kbDismissRequested.value = false;
     })
     .onUpdate((e) => {
+      'worklet';
       // Keyboard up → a downward swipe closes IT (one-shot), not the sheet.
       if (kbOpenSV.value) {
         if (e.translationY > 12 && !kbDismissRequested.value) {
@@ -117,13 +127,22 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         }
         return;
       }
-      if (panStartedAtTop.value && e.translationY > 0) {
+      // Follow the finger only for a downward drag that began — and remains — at
+      // the top of the list. Re-checking listScrollY live (not just the onBegin
+      // snapshot) means a drag that isn't genuinely at the top never budges the
+      // sheet, so mid-list scrolling can't half-drag it.
+      if (panStartedAtTop.value && listScrollY.value <= 4 && e.translationY > 0) {
         dragY.value = e.translationY;
       }
     })
     .onEnd((e) => {
-      if (kbOpenSV.value || !panStartedAtTop.value) return;
-      if (e.translationY > 100 || e.velocityY > 500) {
+      'worklet';
+      if (kbOpenSV.value || !panStartedAtTop.value) {
+        return;
+      }
+      // Dismiss on a modest pull OR a quick flick — either alone is enough, so a
+      // fast short swipe closes it just as reliably as a long slow one.
+      if (dragY.value > 80 || e.velocityY > 500) {
         runOnJS(dismiss)();
       } else {
         dragY.value = withTiming(0, { duration: 200 });
@@ -211,8 +230,10 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
       setOptimisticComments((prev) => (prev.length > 0 ? [] : prev));
     }
   }, [serverCount]);
+  // Oldest → newest (get_comments ORDER BY created_at ASC, migration 379), so the
+  // just-posted optimistic comment goes at the BOTTOM, after the server rows.
   const comments = useMemo(
-    () => [...optimisticComments, ...serverComments],
+    () => [...serverComments, ...optimisticComments],
     [optimisticComments, serverComments]
   );
 
@@ -224,6 +245,9 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   const [mentionQuery, setMentionQuery] = useState('');
   const mentionStart = useRef(-1);
   const inputRef = useRef<TextInput>(null);
+  // The comment list — scrolled to the end after posting so the new (bottom-most,
+  // newest) comment is visible.
+  const listRef = useRef<FlatList<Comment>>(null);
   const { data: mentionResults = [] } = useSearchUsers(mentionQuery);
 
   // Keyboard open state — drives the input bar's bottom padding. When the
@@ -347,7 +371,11 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
         isLiked: false,
         parentId: undefined,
       };
-      setOptimisticComments((prev) => [optimistic, ...prev]);
+      // Append (newest last) — the thread reads oldest → newest, so the new
+      // comment lands at the bottom, right above the input bar.
+      setOptimisticComments((prev) => [...prev, optimistic]);
+      // Scroll the new comment into view at the bottom once it's laid out.
+      requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
     }
     setText('');
     // Belt + suspenders: a controlled multiline TextInput can ignore a value
@@ -494,6 +522,7 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
                 {/* Comments list */}
                 <FlatList
+                  ref={listRef}
                   data={comments}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
@@ -643,7 +672,14 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                   />
                   <TouchableOpacity
                     style={[styles.sendBtn, !text.trim() && styles.sendBtnDisabled]}
-                    onPress={handleSend}
+                    // Fire on touch-DOWN, not touch-up. With the keyboard up and a
+                    // focused multiline TextInput next door, iOS spends the first
+                    // tap resolving first-responder/dismiss and EATS the button's
+                    // onPress (touch-up) — the long-standing "tap once, nothing;
+                    // tap again, it posts" bug (the zIndex fix alone wasn't enough).
+                    // onPressIn lands before that race. `disabled` still gates empty
+                    // text, and one touch = one fire, so there's no double-post.
+                    onPressIn={handleSend}
                     disabled={!text.trim() || isPending}
                     activeOpacity={0.7}
                   >
