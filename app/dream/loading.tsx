@@ -21,8 +21,6 @@ import { DreamFailureCard } from '@/components/DreamFailureCard';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
-import { trackDreamCreated, trackDreamFailed } from '@/lib/analytics';
-import { useOnboardingStore } from '@/store/onboarding';
 
 // How long recovery polls without ever seeing a dream_jobs row before
 // concluding the Edge Function never started (connect/boot failure) and failing
@@ -53,13 +51,6 @@ export default function DreamLoadingScreen() {
   // row, the Edge Function never started → fail fast instead of spinning the
   // full 90s. 0 = not in recovery.
   const recoveryStartedAt = useRef(0);
-  // Fire dream_created / dream_failed EXACTLY once per dream, whichever terminal
-  // path wins (queue realtime UPDATE, poll-recovery, or the timeout backstop).
-  // The queue migration left useDreamCreate's own trackDreamCreated/Failed calls
-  // stranded in the now-dead synchronous branch (it returns 'queued' first), so
-  // completion analytics MUST fire here — where the queue's terminal status is
-  // actually observed. Reset on retry (re-mount may not clear the ref).
-  const terminalTracked = useRef(false);
   const [showQueue, setShowQueue] = useState(false);
   // Set to the dream_queue job id when a dream is ENQUEUED (DREAM_QUEUE_ENABLED).
   // Drives the realtime-wait effect below. Null on the synchronous path.
@@ -112,30 +103,6 @@ export default function DreamLoadingScreen() {
     confirmResolver.current?.(false);
     confirmResolver.current = null;
   }
-
-  // Completion analytics — fired from the terminal-status handlers below. Both
-  // read their context from the store (still populated at completion) so they
-  // stay decoupled from whichever effect observed the terminal state. Resolved
-  // medium/vibe come from the completed upload when available (most accurate),
-  // else the picker selection. Guarded so no dream is counted twice.
-  const fireCreated = useCallback((medium: string | null, vibe: string | null) => {
-    if (terminalTracked.current) return;
-    terminalTracked.current = true;
-    const { config } = useDreamStore.getState();
-    const hasCast = (useOnboardingStore.getState().profile.dream_cast?.length ?? 0) > 0;
-    trackDreamCreated({
-      mode: config.mode,
-      medium: medium ?? config.selectedMedium,
-      vibe: vibe ?? config.selectedVibe,
-      has_photo: !!config.photoBase64,
-      has_cast: hasCast,
-    });
-  }, []);
-  const fireFailed = useCallback((reason: string) => {
-    if (terminalTracked.current) return;
-    terminalTracked.current = true;
-    trackDreamFailed({ mode: useDreamStore.getState().config.mode, reason });
-  }, []);
 
   useEffect(() => {
     if (started.current) return;
@@ -214,7 +181,6 @@ export default function DreamLoadingScreen() {
         resolvedVibe: up.dream_vibe ?? null,
         uploadId: up.id,
       });
-      fireCreated(up.dream_medium, up.dream_vibe);
       router.replace('/dream/reveal');
     };
 
@@ -224,7 +190,6 @@ export default function DreamLoadingScreen() {
         void finishCompleted(row.upload_id);
       } else if (row.status === 'dead_letter') {
         settled = true;
-        fireFailed('dead_letter');
         setActiveJobFailure({
           jobId: queueWaitId,
           message: "Your dream couldn't render",
@@ -273,7 +238,7 @@ export default function DreamLoadingScreen() {
       supabase.removeChannel(channel);
       clearInterval(poll);
     };
-  }, [queueWaitId, setResult, setActiveJobFailure, fireCreated, fireFailed]);
+  }, [queueWaitId, setResult, setActiveJobFailure]);
 
   function handleRetry() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -281,7 +246,6 @@ export default function DreamLoadingScreen() {
     setRecoveryFailed(false);
     setIsRecovering(false);
     recoveryStartedAt.current = 0;
-    terminalTracked.current = false;
     started.current = false;
     // Re-trigger the generation effect by setting started back to false and
     // forcing a re-mount via router.replace to the same path
@@ -338,11 +302,9 @@ export default function DreamLoadingScreen() {
           setResult(decision.result);
           setActiveJobFailure(null);
           setIsRecovering(false);
-          fireCreated(decision.result.resolvedMedium, decision.result.resolvedVibe);
           router.replace('/dream/reveal');
           return;
         case 'fail':
-          fireFailed('recovery_failed');
           setRecoveryFailed(true);
           setIsRecovering(false);
           return;
@@ -357,7 +319,7 @@ export default function DreamLoadingScreen() {
     } catch (e) {
       if (__DEV__) console.warn('[loading] tryRecover failed', e);
     }
-  }, [setResult, setActiveJobFailure, fireCreated, fireFailed]);
+  }, [setResult, setActiveJobFailure]);
 
   // Cold-start resume kickoff: entered via /dream/loading?resume=1 from
   // resumeInFlightDream. The render is already in flight server-side, so enter
@@ -429,7 +391,6 @@ export default function DreamLoadingScreen() {
       if (ticks > 18) {
         clearInterval(interval);
         setIsRecovering(false);
-        fireFailed('render_timeout');
         // Polling window elapsed — recovery is over, so let the failure card
         // show now (the refund-stuck-jobs sweeper takes it from here).
         setRecoveryFailed(true);
@@ -453,7 +414,7 @@ export default function DreamLoadingScreen() {
       void tryRecover();
     }, 5_000);
     return () => clearInterval(interval);
-  }, [isRecovering, setActiveJobFailure, tryRecover, fireFailed]);
+  }, [isRecovering, setActiveJobFailure, tryRecover]);
 
   function handleQueue() {
     queued.current = true;
