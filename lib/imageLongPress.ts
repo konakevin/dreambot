@@ -268,12 +268,16 @@ export interface PostActionSheetOpts extends LongPressOpts {
    *  right action per state: make-private flip, make-public flip, or route to
    *  the New Post compose flow (never-posted). */
   onToggleVisibility?: () => void;
-  /** Current visibility, to label the toggle "Make private" vs "Make public". */
+  /** Current visibility, to label the toggle "Make private" vs "Share again". */
   isPublic?: boolean;
   /** Whether this dream was EVER posted (posted_at != null). Splits the private
-   *  action: previously-posted → "Make public" (quick re-publish); never-posted
-   *  → "Post" (full compose flow). Ignored when isPublic (always "Make private").*/
+   *  action: previously-posted → "Share again" (quick re-publish, restores it to
+   *  its original feed spot); never-posted → "Post" (full compose flow). Ignored
+   *  when isPublic (always "Make private"). */
   wasPosted?: boolean;
+  /** Owner-only "Edit description" — opens the caption editor for this post
+   *  (uploads.description). Silent: no reposition, no re-notify. Present ⇒ shows.*/
+  onEditDescription?: () => void;
   /** Owner-only "Dream this again" — reloads this dream's saved inputs into
    *  Create (from useDreamAgain). Present ⇒ the row shows. */
   onDreamAgain?: () => void;
@@ -322,7 +326,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   }
 
   // Own-post visibility toggle. Public → "Make private". Private splits on
-  // whether it was ever posted: previously-posted → "Make public" (re-publish),
+  // whether it was ever posted: previously-posted → "Share again" (re-publish),
   // never-posted → "Post" (compose flow). The caller wires onPress to match.
   // Placed HERE — right after Select, before the variable save/create block — so
   // it sits at the SAME row on every sheet (Kevin 2026-07-11: it drifted from
@@ -330,7 +334,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   // shifted it down). Anchoring it above that block keeps it fixed.
   if (opts.onToggleVisibility) {
     const toggle = opts.onToggleVisibility;
-    const privateLabel = opts.wasPosted ? 'Make public' : 'Post';
+    const privateLabel = opts.wasPosted ? 'Share again' : 'Post';
     rows.push({
       key: 'visibility',
       label: opts.isPublic ? 'Make private' : privateLabel,
@@ -451,6 +455,19 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
       icon: 'pin-outline',
       group: 'primary',
       onPress: opts.onTogglePin,
+    });
+  }
+
+  // Edit description — owner-only caption edit (uploads.description). Grouped
+  // with the other owner post-management rows, above the danger group. Silent
+  // (no reposition, no re-notify); the caller opens the editor sheet.
+  if (opts.onEditDescription) {
+    rows.push({
+      key: 'edit-description',
+      label: 'Edit description',
+      icon: 'create-outline',
+      group: 'primary',
+      onPress: opts.onEditDescription,
     });
   }
 

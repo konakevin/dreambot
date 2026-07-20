@@ -38,6 +38,7 @@ import { verticalScale, fontScale } from '@/lib/responsive';
 import { buildPostActionRows } from '@/lib/imageLongPress';
 import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
+import { EditDescriptionModal } from '@/components/EditDescriptionModal';
 import { avatarUrl } from '@/lib/imageUrl';
 import { getModelDisplayName } from '@/constants/imageModels';
 import { useAuthStore } from '@/store/auth';
@@ -935,6 +936,10 @@ export const DreamCard = memo(function DreamCard({
             onBlock: () => toggleBlock.mutate({ userId: item.user_id, currentlyBlocked: false }),
             onToggleVisibility: showVisibilityToggle ? onTogglePosted : undefined,
             isPublic: item.is_public,
+            // Owner-only caption edit — opens the silent Edit-description sheet.
+            onEditDescription: isOwnPost
+              ? () => EditDescriptionModal.show(item.id, item.description ?? null)
+              : undefined,
             // Profile pin toggle (migration 330) — own public posts only.
             isPinned,
             onTogglePin:

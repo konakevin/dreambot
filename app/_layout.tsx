@@ -45,6 +45,7 @@ import { PremiumGateProvider } from '@/components/PremiumGateSheet';
 import { AvatarConfirmProvider } from '@/components/AvatarConfirm';
 import { Toast, ToastHost } from '@/components/Toast';
 import { UpscaleModalHost, UpscaleModal } from '@/components/UpscaleOverlay';
+import { EditDescriptionModalHost } from '@/components/EditDescriptionModal';
 
 import { queryClient, persistOptions } from '@/lib/queryClient';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
@@ -812,6 +813,7 @@ function RootLayout() {
                       <StatusBar style="light" />
                       <ToastHost />
                       <UpscaleModalHost />
+                      <EditDescriptionModalHost />
                     </AvatarConfirmProvider>
                   </PremiumGateProvider>
                 </AiConsentProvider>

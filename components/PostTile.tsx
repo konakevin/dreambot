@@ -16,6 +16,7 @@ import * as nav from '@/lib/navigate';
 import { buildPostActionRows } from '@/lib/imageLongPress';
 import { useDreamAgain } from '@/hooks/useDreamAgain';
 import { PostActionSheet } from '@/components/PostActionSheet';
+import { EditDescriptionModal } from '@/components/EditDescriptionModal';
 import { useAlbumStore } from '@/store/album';
 import type { DreamPostItem } from '@/components/DreamCard';
 import type { PostGridSource } from '@/components/PostGrid';
@@ -254,6 +255,10 @@ export const PostTile = memo(function PostTile({
               //  • private, never   → "Post"         (New Post compose flow)
               isPublic: item.is_public,
               wasPosted: !!item.posted_at,
+              // Owner-only caption edit — opens the silent Edit-description sheet.
+              onEditDescription: isOwn
+                ? () => EditDescriptionModal.show(item.id, item.description ?? null)
+                : undefined,
               onToggleVisibility: !isOwn
                 ? undefined
                 : item.is_public
