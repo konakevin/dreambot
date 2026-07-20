@@ -113,6 +113,8 @@ function getNotificationContent(
       return { title: `${actorName} replied to your comment`, body: '' };
     case 'comment_mention':
       return { title: `${actorName} mentioned you`, body: '' };
+    case 'post_mention':
+      return { title: `${actorName} mentioned you in a caption`, body: '' };
     case 'post_share':
       return { title: `${actorName} sent you a post`, body: 'Tap to check it out' };
     case 'friend_request':
@@ -221,6 +223,8 @@ function getAggregatedNotificationContent(
       return { title: `${actors2} replied to your comment`, body: '' };
     case 'comment_mention':
       return { title: `${actors2} mentioned you`, body: '' };
+    case 'post_mention':
+      return { title: `${actors2} mentioned you in a caption`, body: '' };
     case 'post_share':
       return { title: `${actors2} sent you posts`, body: 'Tap to check them out' };
     case 'friend_request':

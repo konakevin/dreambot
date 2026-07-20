@@ -96,6 +96,7 @@ function iconForGroup(g: InboxGroup): IconSpec {
     case 'comment_reply':
       return { name: 'chatbubble', color: colors.accent };
     case 'comment_mention':
+    case 'post_mention':
       return { name: 'at', color: colors.accent };
     case 'post_share':
       return { name: 'paper-plane', color: colors.accent };
@@ -191,6 +192,12 @@ function getGroupText(g: InboxGroup): {
     case 'comment_mention':
       return {
         subject: `${first} mentioned you`,
+        subtext: capSubtext(g.body),
+        isAggregable: false,
+      };
+    case 'post_mention':
+      return {
+        subject: `${first} mentioned you in a caption`,
         subtext: capSubtext(g.body),
         isAggregable: false,
       };

@@ -19,6 +19,7 @@ export type NotificationType =
   | 'post_comment'
   | 'comment_reply'
   | 'comment_mention'
+  | 'post_mention' // @mention in a post caption (mig 383) — routes to /photo/<id>
   | 'comment_like'
   | 'post_share'
   | 'friend_request'
