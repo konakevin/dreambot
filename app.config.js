@@ -5,19 +5,32 @@
 // EAS Build: required env vars must be set via `eas secret:create` or
 //   eas.json's `build.<profile>.env` block. See README / ROTATION.md.
 
-require('dotenv').config({ path: '.env.local' });
+const parsedLocalEnv = require('dotenv').config({ path: '.env.local' }).parsed ?? {};
+
+// `eas build --local` can NOT read EAS *secret* env vars (FACEBOOK_APP_ID /
+// FACEBOOK_CLIENT_TOKEN are secrets), so eas.json's "$FACEBOOK_APP_ID" reaches
+// here UNRESOLVED as the literal string "$FACEBOOK_APP_ID" — and it clobbers the
+// shell/.env.local value in process.env. Fall back to the .env.local value
+// whenever the env var is missing or still an unresolved "$..." literal. In the
+// CLOUD the secrets resolve to real values (and there's no .env.local), so this
+// is a no-op there. Without it, a local build baked the URL scheme
+// "fb$FACEBOOK_APP_ID" and App Store validation rejected the upload (2026-07-20).
+const envVar = (name) => {
+  const v = process.env[name];
+  return !v || v.startsWith('$') ? parsedLocalEnv[name] : v;
+};
 
 const requiredVars = ['FACEBOOK_APP_ID', 'FACEBOOK_CLIENT_TOKEN'];
 for (const v of requiredVars) {
-  if (!process.env[v]) {
+  if (!envVar(v)) {
     throw new Error(
       `Missing required env var: ${v}. Set it in .env.local (local dev) or via EAS secrets (CI).`
     );
   }
 }
 
-const FB_APP_ID = process.env.FACEBOOK_APP_ID;
-const FB_CLIENT_TOKEN = process.env.FACEBOOK_CLIENT_TOKEN;
+const FB_APP_ID = envVar('FACEBOOK_APP_ID');
+const FB_CLIENT_TOKEN = envVar('FACEBOOK_CLIENT_TOKEN');
 
 module.exports = {
   expo: {
