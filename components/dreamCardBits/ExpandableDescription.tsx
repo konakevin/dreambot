@@ -24,13 +24,18 @@ interface Props {
 
 export function ExpandableDescription({ text, style }: Props) {
   const [expanded, setExpanded] = useState(false);
+  // Collapse ALL whitespace runs (newlines/tabs/repeats) to single spaces at the
+  // DISPLAY layer, so a caption renders as one paragraph no matter what's stored —
+  // a user can't stretch it up the whole screen with return-spam, and this holds
+  // for legacy rows + anything that bypassed input scrubbing (Kevin 2026-07-20).
+  const oneLine = text.replace(/\s+/g, ' ').trim();
   return (
     <Text
       style={style}
       numberOfLines={expanded ? undefined : 1}
       onPress={() => setExpanded((v) => !v)}
     >
-      {splitCaption(text).map((part, i) => {
+      {splitCaption(oneLine).map((part, i) => {
         if (isHashtagToken(part)) {
           return (
             <Text

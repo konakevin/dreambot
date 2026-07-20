@@ -347,7 +347,12 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   }
 
   function handleSend() {
-    const body = text.trim();
+    // Collapse ALL whitespace runs (newlines, tabs, repeated spaces) to single
+    // spaces so a comment posts as one clean paragraph — a user can't stretch a
+    // comment sky-high by hammering return (Kevin 2026-07-20). Applied here so BOTH
+    // the optimistic render and the stored value are collapsed; length stays capped
+    // by MAX_COMMENT_LENGTH.
+    const body = text.replace(/\s+/g, ' ').trim();
     if (!body) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 

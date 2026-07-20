@@ -235,15 +235,27 @@ export function CommentRow({
             <Text style={styles.time}> {formatTimeAgo(comment.createdAt)}</Text>
           </Text>
           <Text style={styles.commentText}>
-            {comment.body.split(/(@[a-zA-Z0-9_.]+)/g).map((part, i) =>
-              part.startsWith('@') ? (
-                <Text key={i} style={styles.mention} onPress={() => void openMentionProfile(part)}>
-                  {part}
-                </Text>
-              ) : (
-                part
-              )
-            )}
+            {/* Collapse ALL whitespace runs (newlines/tabs/repeats) to single
+                spaces at the DISPLAY layer — a comment renders as one paragraph
+                no matter what's stored, so return-spam can't stretch it up the
+                screen (holds for legacy rows too). (Kevin 2026-07-20) */}
+            {comment.body
+              .replace(/\s+/g, ' ')
+              .trim()
+              .split(/(@[a-zA-Z0-9_.]+)/g)
+              .map((part, i) =>
+                part.startsWith('@') ? (
+                  <Text
+                    key={i}
+                    style={styles.mention}
+                    onPress={() => void openMentionProfile(part)}
+                  >
+                    {part}
+                  </Text>
+                ) : (
+                  part
+                )
+              )}
           </Text>
 
           {/* Actions */}
