@@ -12,18 +12,15 @@
  */
 
 import { useRef, useEffect, useCallback } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+// FlatList from RNGH (not core RN) so its native scroll gesture can declare
+// simultaneity with the sheet's dismiss pan — the core list WON the gesture
+// whenever the likes list had content, so swipe-down-to-dismiss only worked on
+// short/empty lists (mirrors the CommentOverlay fix).
+import { Gesture, GestureDetector, FlatList, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -75,17 +72,42 @@ export function LikesOverlay({ post, onClose }: Props) {
     });
   }, [onClose, progress]);
 
-  // Swipe down to dismiss — whole pane (no input bar to protect here).
+  // Swipe down to dismiss — the pan runs SIMULTANEOUSLY with the like list's
+  // scroll (withRef + simultaneousHandlers on the FlatList). The sheet follows
+  // only drags that STARTED with the list at the top (captured in onBegin);
+  // mid-list scrolling never moves it.
+  const listScrollY = useSharedValue(0);
+  const panStartedAtTop = useSharedValue(true);
+  const panRef = useRef<GestureType | undefined>(undefined);
   const panGesture = Gesture.Pan()
-    .activeOffsetY([10, 300])
-    .failOffsetX([-20, 20])
+    .withRef(panRef)
+    // Activate ONLY on a deliberate downward drag, and FAIL (yield to the list's
+    // scroll) the moment the finger moves up. The old `.activeOffsetY([10, 300])`
+    // activated on the first ~1px in EITHER direction and fought the list; a
+    // single positive value = down-only, and failOffsetY hands upward motion to
+    // the scroll (mirrors the CommentOverlay fix).
+    .activeOffsetY(12)
+    .failOffsetY(-12)
+    .failOffsetX([-24, 24])
+    .onBegin(() => {
+      'worklet';
+      panStartedAtTop.value = listScrollY.value <= 4;
+    })
     .onUpdate((e) => {
-      if (e.translationY > 0) {
+      'worklet';
+      // Follow the finger only for a downward drag that began — and remains — at
+      // the top of the list, so mid-list scrolling can't half-drag the sheet.
+      if (panStartedAtTop.value && listScrollY.value <= 4 && e.translationY > 0) {
         dragY.value = e.translationY;
       }
     })
     .onEnd((e) => {
-      if (e.translationY > 100 || e.velocityY > 500) {
+      'worklet';
+      if (!panStartedAtTop.value) {
+        return;
+      }
+      // Dismiss on a modest pull OR a quick flick — either alone is enough.
+      if (dragY.value > 80 || e.velocityY > 500) {
         runOnJS(dismiss)();
       } else {
         dragY.value = withTiming(0, { duration: 200 });
@@ -247,6 +269,16 @@ export function LikesOverlay({ post, onClose }: Props) {
                     styles.listContent,
                     { paddingBottom: insets.bottom + 24 },
                   ]}
+                  // Let the sheet's dismiss pan run ALONGSIDE the list scroll —
+                  // without this the native scroll gesture wins outright and
+                  // swipe-down-to-close only worked on short/empty lists.
+                  simultaneousHandlers={panRef}
+                  // No rubber-band at the top: the overscroll IS the sheet drag.
+                  bounces={false}
+                  onScroll={(e) => {
+                    listScrollY.value = e.nativeEvent.contentOffset.y;
+                  }}
+                  scrollEventThrottle={16}
                 />
               )}
             </Animated.View>
