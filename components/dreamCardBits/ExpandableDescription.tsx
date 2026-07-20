@@ -16,11 +16,13 @@
  */
 
 import { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, type TextStyle, type StyleProp } from 'react-native';
+import { View, StyleSheet, Dimensions, type TextStyle, type StyleProp } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 // RNGH ScrollView so the caption's internal scroll arbitrates cleanly with the
 // card's gesture system (pan/pinch/double-tap) instead of fighting it.
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/components/AppText';
+import { verticalScale } from '@/lib/responsive';
 import * as nav from '@/lib/navigate';
 import { openMentionProfile } from '@/lib/mentions';
 import { splitCaption, isHashtagToken, isMentionToken, normalizeTag } from '@/lib/hashtags';
@@ -87,15 +89,27 @@ export function ExpandableDescription({ text, style }: Props) {
 
   // Collapsed: the plain 2-line preview. Expanded: a bounded panel — it sizes to
   // the caption up to MAX_EXPANDED_HEIGHT, then scrolls internally beyond that.
+  // A gradient scrim sits behind it (feathered at the TOP so it blends into the
+  // art, solid toward the bottom) so a long caption stays legible over bright
+  // artwork without a hard box edge.
   if (!expanded) return body;
   return (
-    <ScrollView
-      style={{ maxHeight: MAX_EXPANDED_HEIGHT }}
-      showsVerticalScrollIndicator
-      nestedScrollEnabled
-    >
-      {body}
-    </ScrollView>
+    <View>
+      <LinearGradient
+        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.55)']}
+        locations={[0, 0.18]}
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
+      />
+      <ScrollView
+        style={{ maxHeight: MAX_EXPANDED_HEIGHT }}
+        contentContainerStyle={styles.expandedContent}
+        showsVerticalScrollIndicator
+        nestedScrollEnabled
+      >
+        {body}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -106,5 +120,10 @@ const styles = StyleSheet.create({
   link: {
     color: '#FFFFFF',
     fontWeight: '700',
+  },
+  // A little breathing room so the text isn't flush against the scrim edges.
+  expandedContent: {
+    paddingTop: verticalScale(4),
+    paddingBottom: verticalScale(6),
   },
 });
