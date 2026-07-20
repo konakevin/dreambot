@@ -47,35 +47,36 @@ the SAME `production` EAS environment).
 # "spawn fastlane ENOENT". Homebrew installs a self-contained copy (no sudo):
 brew install fastlane
 
-# CRITICAL: export the Facebook vars into the shell FIRST (see the gotcha below).
-# eas.json's "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID" interpolates from the SHELL on
-# a local build (from EAS server secrets in the cloud), so without these the FB
-# URL scheme bakes as the literal "fb$FACEBOOK_APP_ID" and Apple REJECTS the upload.
-export FACEBOOK_APP_ID="$(grep -E '^FACEBOOK_APP_ID=' .env.local | cut -d= -f2- | tr -d '\"'"'"'')"
-export FACEBOOK_CLIENT_TOKEN="$(grep -E '^FACEBOOK_CLIENT_TOKEN=' .env.local | cut -d= -f2- | tr -d '\"'"'"'')"
-
-# Build the signed IPA locally (~15-30 min: prebuild → pods → archive → export):
+# Build the signed IPA locally (~15-30 min: prebuild → pods → archive → export).
+# The Facebook app id resolves from .env.local automatically (see the FB gotcha
+# below) — no manual env export needed.
 eas build --local -p ios --profile production --non-interactive --output ./build-<X.Y.Z>.ipa
 
 # Upload that IPA to App Store Connect (stored ASC API key, no Apple prompts):
 eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
 ```
 
+Make sure `.env.local` has real `FACEBOOK_APP_ID` + `FACEBOOK_CLIENT_TOKEN`
+values (it does on Kevin's Mac) — the local build reads them from there.
+
 Then finish in ASC exactly as with a cloud build (§4), bump the update gate (§5),
 and log it in `RELEASES.md` (§ How to add a row).
 
 Notes / gotchas for the local path:
-- **`$FACEBOOK_APP_ID` interpolation (the one that WILL bite you).** `eas.json`'s
-  production env has `"FACEBOOK_APP_ID": "$FACEBOOK_APP_ID"` /
-  `"FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN"`. On the CLOUD those `$`-refs
-  resolve from EAS-stored secrets; on a LOCAL build they resolve from the SHELL
-  environment. If they're not exported, `app.config.js` reads the literal string
-  `"$FACEBOOK_APP_ID"` and bakes the URL scheme `fb$FACEBOOK_APP_ID` into
-  Info.plist — the BUILD SUCCEEDS and the IPA signs fine, but `eas submit` fails
-  at Apple validation with a 409: *"URL schemes found in your app are not in the
-  correct format: [fb$FACEBOOK_APP_ID]. URL schemes need to begin with an
-  alphabetic character…"*. Fix = the two `export …` lines above (values live in
-  `.env.local`), then rebuild. This cost a full rebuild the first time (2026-07-20).
+- **The FB URL scheme (already handled in code, but know why).** `FACEBOOK_APP_ID`
+  / `FACEBOOK_CLIENT_TOKEN` are EAS **secret** env vars, referenced in `eas.json`
+  as `"$FACEBOOK_APP_ID"`. EAS secrets **can only be read on the cloud builder** —
+  `eas build --local` can't read them, so eas.json's `"$FACEBOOK_APP_ID"` arrives
+  in `process.env` as the literal string and clobbers any shell/.env.local value.
+  The first 1.0.9 local builds baked the URL scheme `fb$FACEBOOK_APP_ID` and Apple
+  REJECTED the upload at validation (409: *"URL schemes … not in the correct
+  format: [fb$FACEBOOK_APP_ID]"*) — the build + signing succeed, only the ASC
+  upload fails. **Fixed in `app.config.js` (2026-07-20)**: it now falls back to the
+  `.env.local` value whenever `FACEBOOK_APP_ID` is missing or an unresolved
+  `$`-literal (cloud has the real secret + no `.env.local`, so it's a no-op there).
+  So local builds just work now — just keep the real values in `.env.local`.
+  Exporting the vars into the shell does NOT help (eas.json's literal wins over the
+  shell), which is why the code-level fallback was the actual fix.
 - **Build number still auto-increments** from the remote source (`appVersionSource:
   remote`). A FAILED cloud attempt ALSO increments it, so the number can jump
   (1.0.9 landed on build 27 after the quota-failed cloud attempt + retries bumped
