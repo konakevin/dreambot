@@ -171,11 +171,16 @@ export function PostGrid({
   const activeQueryKey = useMemo(() => {
     if (isOwn_) return ['userPosts', authUserId];
     if (isSaved) return ['favoritePosts', authUserId];
-    if (isDreams) return ['my-dreams', authUserId];
+    // Dreams key MUST include the filter — useMyDreams keys on
+    // ['my-dreams', userId, filter]. A 2-segment key here still prefix-matches
+    // for invalidateQueries, but the setQueryData page-1 trim below is an EXACT
+    // write, so a short key silently no-ops the trim and pull-to-refresh refetches
+    // every loaded page instead of just page 1 (Kevin 2026-07-19).
+    if (isDreams) return ['my-dreams', authUserId, dreamsFilter];
     if (isReposts) return ['userReposts', userId];
     if (isHashtag) return ['hashtagPosts', hashtag];
     return ['publicProfilePosts', userId];
-  }, [isOwn_, isSaved, isDreams, isReposts, isHashtag, hashtag, userId, authUserId]);
+  }, [isOwn_, isSaved, isDreams, isReposts, isHashtag, hashtag, userId, authUserId, dreamsFilter]);
   // Spinner state owned LOCALLY so the RefreshControl reflects ONLY a
   // user-initiated pull — never a programmatic refetch. Binding `refreshing` to
   // activeQuery.isRefetching (the old way) meant any background refetch (screen

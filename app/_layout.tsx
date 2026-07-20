@@ -386,7 +386,15 @@ function RealtimeSubscriber() {
           // refetched every loaded page mid-scroll with LIVE feed_scores,
           // reshuffling the prefix under the index-anchored VerticalPager
           // (the "different post pops into view at the page boundary" bug).
+          // refetchType 'all' is load-bearing: the default 'active' only refetches
+          // a grid with a CURRENTLY-MOUNTED observer, so a completion event that
+          // arrives while the user is on Create/Feed/etc. (the common "Queue This
+          // → keep browsing" flow) left the Dreams/Posts grid merely stale, not
+          // refetched — it stayed on its old cached pages until a hard reload.
+          // 'all' reaches the off-screen (but still enabled) owner grids too, the
+          // same rationale as lib/gridInvalidation.ts (2026-07-19).
           queryClient.invalidateQueries({
+            refetchType: 'all',
             predicate: (query) => {
               const key = query.queryKey[0];
               return key === 'userPosts' || key === 'my-dreams';
@@ -562,6 +570,23 @@ function DataPrefetcher() {
       // re-open. Cheap RPC, always worth it for badge correctness.
       if (user) {
         queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
+      }
+
+      // Recover dreams that COMPLETED while the app was backgrounded. Realtime
+      // postgres_changes does NOT replay events missed while the socket was
+      // suspended (iOS drops it on background), so the global uploads→grid
+      // invalidation never fires for a queued/nightly dream that finished
+      // off-screen — the profile Dreams/Posts grid then sits on its stale cached
+      // pages until an app RESTART (the reported bug, Kevin 2026-07-19). Refetch
+      // the owner's own dream grids on every foreground so a dream that landed
+      // while away is already there when they open their profile. refetchType
+      // 'all' reaches them even when their tab isn't the active observer (same
+      // rationale as lib/gridInvalidation.ts). Kept to just these two keys — NOT
+      // the full feed/explore set (the feed has its own >60s reseed below) — so
+      // it stays cheap on every foreground.
+      if (user) {
+        queryClient.invalidateQueries({ queryKey: ['my-dreams'], refetchType: 'all' });
+        queryClient.invalidateQueries({ queryKey: ['userPosts'], refetchType: 'all' });
       }
 
       if (backgroundedAt.current === 0) return;
