@@ -156,25 +156,13 @@ function withTimeout(promise, ms, label) {
     alarm = true;
   }
 
-  // Idle-connection CREEP — the leak signal (mig 381 columns). With
-  // idle_session_timeout=10min in place, no plain-idle connection should outlive
-  // ~11min; one much older means idle connections are accumulating faster than
-  // they're reaped (a genuine connection leak) or the reaper isn't applied. This
-  // pages us on the leak ONSET, hours before it eats the headroom and wedges the
-  // DB. Guarded with `?? 0` so it's a no-op until 381 populates the column.
-  const IDLE_AGE_ALARM = parseInt(getKey('DB_IDLE_AGE_ALARM_SEC') || '1500', 10); // 25 min
-  const peakIdleAge = rows.reduce((a, b) =>
-    (b.oldest_idle_secs ?? 0) > (a.oldest_idle_secs ?? 0) ? b : a
-  );
-  if ((peakIdleAge.oldest_idle_secs ?? 0) > IDLE_AGE_ALARM) {
-    console.error(
-      `::error::oldest IDLE connection is ${Math.round(peakIdleAge.oldest_idle_secs / 60)}min old @ ${peakIdleAge.captured_at} ` +
-        `(> ${Math.round(IDLE_AGE_ALARM / 60)}min) — idle connections accumulating (leak, or the idle_session_timeout reaper isn't applied). ` +
-        `idle_age_by_application: ${JSON.stringify(peakIdleAge.idle_age_by_application)}`
-    );
-    console.error('  → run `node scripts/db-connections.js` to see the offending connections.');
-    alarm = true;
-  }
+  // NOTE: no alarm on the OLDEST idle connection's age. Several infra connections
+  // are idle for HOURS by design (PostgREST's LISTEN "pgrst" schema-reload conn,
+  // realtime's replication slot), so `oldest_idle_secs` is always large and says
+  // nothing about a leak — a leak is many connections PILING UP idle, which the
+  // connection-% alarm above already catches when the total climbs. The mig-381
+  // idle-age columns are still captured (forensics) for post-incident analysis.
+  // (Removed 2026-07-20 after it false-alarmed all day on the 12h-idle LISTEN conn.)
 
   console.log(
     `db-health: newest ${newest.total_conn}/${maxConn} conn (${((newest.total_conn / maxConn) * 100).toFixed(0)}%), ` +
