@@ -69,7 +69,9 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
 function withTimeout(promise, ms, label) {
   return Promise.race([
     promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+    ),
   ]);
 }
 
@@ -79,9 +81,10 @@ function withTimeout(promise, ms, label) {
     const { data, error } = await withTimeout(
       sb
         .from('db_health_log')
-        .select(
-          'captured_at, total_conn, active_conn, idle_conn, idle_in_txn_conn, max_connections, lock_waiters, longest_active_secs, longest_active_query, by_application'
-        )
+        // select('*') so the new mig-381 idle-age columns are picked up whether or
+        // not that migration is applied yet (naming a not-yet-existing column would
+        // error the whole read and false-alarm the monitor).
+        .select('*')
         .order('captured_at', { ascending: false })
         .limit(WINDOW),
       READ_TIMEOUT_MS,
@@ -92,12 +95,16 @@ function withTimeout(promise, ms, label) {
   } catch (e) {
     // A read that errors or hangs is the incident itself — the DB is refusing
     // connections right now. Alarm.
-    console.error(`::error::db-health read FAILED (${e.message}) — the DB may be refusing connections RIGHT NOW.`);
+    console.error(
+      `::error::db-health read FAILED (${e.message}) — the DB may be refusing connections RIGHT NOW.`
+    );
     process.exit(1);
   }
 
   if (!rows || rows.length === 0) {
-    console.error('::error::db_health_log is EMPTY — migration 372 not applied, or the snapshot cron never ran.');
+    console.error(
+      '::error::db_health_log is EMPTY — migration 372 not applied, or the snapshot cron never ran.'
+    );
     process.exit(1);
   }
 
@@ -124,7 +131,9 @@ function withTimeout(promise, ms, label) {
     );
     console.error(`  by_application: ${JSON.stringify(peak.by_application)}`);
     if (peak.longest_active_secs > 30 && peak.longest_active_query) {
-      console.error(`  longest active (${Math.round(peak.longest_active_secs)}s): ${String(peak.longest_active_query).slice(0, 200)}`);
+      console.error(
+        `  longest active (${Math.round(peak.longest_active_secs)}s): ${String(peak.longest_active_query).slice(0, 200)}`
+      );
     }
     alarm = true;
   }
@@ -144,6 +153,26 @@ function withTimeout(promise, ms, label) {
     console.error(
       `::error::${peakLocks.lock_waiters} backends waiting on a lock @ ${peakLocks.captured_at} — lock contention.`
     );
+    alarm = true;
+  }
+
+  // Idle-connection CREEP — the leak signal (mig 381 columns). With
+  // idle_session_timeout=10min in place, no plain-idle connection should outlive
+  // ~11min; one much older means idle connections are accumulating faster than
+  // they're reaped (a genuine connection leak) or the reaper isn't applied. This
+  // pages us on the leak ONSET, hours before it eats the headroom and wedges the
+  // DB. Guarded with `?? 0` so it's a no-op until 381 populates the column.
+  const IDLE_AGE_ALARM = parseInt(getKey('DB_IDLE_AGE_ALARM_SEC') || '1500', 10); // 25 min
+  const peakIdleAge = rows.reduce((a, b) =>
+    (b.oldest_idle_secs ?? 0) > (a.oldest_idle_secs ?? 0) ? b : a
+  );
+  if ((peakIdleAge.oldest_idle_secs ?? 0) > IDLE_AGE_ALARM) {
+    console.error(
+      `::error::oldest IDLE connection is ${Math.round(peakIdleAge.oldest_idle_secs / 60)}min old @ ${peakIdleAge.captured_at} ` +
+        `(> ${Math.round(IDLE_AGE_ALARM / 60)}min) — idle connections accumulating (leak, or the idle_session_timeout reaper isn't applied). ` +
+        `idle_age_by_application: ${JSON.stringify(peakIdleAge.idle_age_by_application)}`
+    );
+    console.error('  → run `node scripts/db-connections.js` to see the offending connections.');
     alarm = true;
   }
 
