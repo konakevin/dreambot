@@ -1,21 +1,35 @@
 /**
- * ExpandableDescription — tap-to-expand the truncated caption beneath a
- * DreamCard. Extracted from DreamCard (2026-06-06).
+ * ExpandableDescription — tap-to-expand the caption beneath a DreamCard.
+ * Extracted from DreamCard (2026-06-06).
  *
- * Hashtags + mentions (2026-07-05): #tags and @mentions render as tappable
- * links (same treatment as CommentRow's comment mentions). Nested Text
- * onPress wins over the parent's expand-toggle, so tapping a link navigates
- * and tapping plain text still expands. PUSH, not replace — see CommentRow's
- * comment-nav lesson (replace destroys the screen underneath, so back lands
- * on the home feed).
+ * Collapsed: a 2-line preview. Tap to expand into a HEIGHT-CAPPED panel that
+ * scrolls internally when the caption is taller than the cap — so a long (up to
+ * 500-char) caption never grows up the whole card; the art stays the hero and the
+ * text lives in a bounded reading window (Kevin 2026-07-20). Newlines are
+ * collapsed to spaces at render (return-spam can't stretch it); the tap toggle
+ * suppresses RN's gray press-highlight.
+ *
+ * Hashtags + mentions (2026-07-05): #tags and @mentions render as tappable links.
+ * Nested Text onPress wins over the parent's expand-toggle, so tapping a link
+ * navigates and tapping plain text still expands. PUSH, not replace — see
+ * CommentRow's comment-nav lesson.
  */
 
-import { useState } from 'react';
-import { StyleSheet, type TextStyle, type StyleProp } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Dimensions, type TextStyle, type StyleProp } from 'react-native';
+// RNGH ScrollView so the caption's internal scroll arbitrates cleanly with the
+// card's gesture system (pan/pinch/double-tap) instead of fighting it.
+import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/components/AppText';
 import * as nav from '@/lib/navigate';
 import { openMentionProfile } from '@/lib/mentions';
 import { splitCaption, isHashtagToken, isMentionToken, normalizeTag } from '@/lib/hashtags';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+// Lines shown before expanding, and the max height the expanded panel may take
+// (a comfortable reading window that never covers the focal subject). Tunable.
+const COLLAPSED_LINES = 2;
+const MAX_EXPANDED_HEIGHT = Math.round(SCREEN_HEIGHT * 0.34);
 
 interface Props {
   text: string;
@@ -26,16 +40,19 @@ export function ExpandableDescription({ text, style }: Props) {
   const [expanded, setExpanded] = useState(false);
   // Collapse ALL whitespace runs (newlines/tabs/repeats) to single spaces at the
   // DISPLAY layer, so a caption renders as one paragraph no matter what's stored —
-  // a user can't stretch it up the whole screen with return-spam, and this holds
-  // for legacy rows + anything that bypassed input scrubbing (Kevin 2026-07-20).
+  // holds for legacy rows + anything that bypassed input scrubbing.
   const oneLine = text.replace(/\s+/g, ' ').trim();
-  return (
+
+  // Reset to the collapsed preview when the card recycles to a different caption
+  // (FlatList reuses this instance across items).
+  useEffect(() => setExpanded(false), [text]);
+
+  const body = (
     <Text
       style={style}
-      numberOfLines={expanded ? undefined : 1}
+      numberOfLines={expanded ? undefined : COLLAPSED_LINES}
       onPress={() => setExpanded((v) => !v)}
-      // No gray press-highlight flash when tapping to expand/collapse — RN's
-      // default Text onPress highlight (Kevin 2026-07-20).
+      // No gray press-highlight flash when tapping to expand/collapse.
       suppressHighlighting
     >
       {splitCaption(oneLine).map((part, i) => {
@@ -44,6 +61,7 @@ export function ExpandableDescription({ text, style }: Props) {
             <Text
               key={i}
               style={styles.link}
+              suppressHighlighting
               onPress={() => nav.push(`/hashtag/${normalizeTag(part)}`)}
             >
               {part}
@@ -52,7 +70,12 @@ export function ExpandableDescription({ text, style }: Props) {
         }
         if (isMentionToken(part)) {
           return (
-            <Text key={i} style={styles.link} onPress={() => void openMentionProfile(part)}>
+            <Text
+              key={i}
+              style={styles.link}
+              suppressHighlighting
+              onPress={() => void openMentionProfile(part)}
+            >
               {part}
             </Text>
           );
@@ -60,6 +83,19 @@ export function ExpandableDescription({ text, style }: Props) {
         return part;
       })}
     </Text>
+  );
+
+  // Collapsed: the plain 2-line preview. Expanded: a bounded panel — it sizes to
+  // the caption up to MAX_EXPANDED_HEIGHT, then scrolls internally beyond that.
+  if (!expanded) return body;
+  return (
+    <ScrollView
+      style={{ maxHeight: MAX_EXPANDED_HEIGHT }}
+      showsVerticalScrollIndicator
+      nestedScrollEnabled
+    >
+      {body}
+    </ScrollView>
   );
 }
 
