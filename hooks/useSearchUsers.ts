@@ -26,6 +26,14 @@ export function useSearchUsers(query: string) {
         .select('id, username, avatar_url, is_public')
         .ilike('username', `%${query}%`)
         .neq('id', user!.id)
+        // Hide PRIVATE BOTS (retired / AlphaBot / MechBot) from search by their
+        // is_public flag — so a bot retired via is_public=false is auto-hidden and
+        // can't drift out of the hardcoded SEARCH_HIDDEN list below (that's how
+        // OutlawBot + RetroBot leaked, 2026-07-20). Private HUMANS stay findable
+        // (needed to send a follow request): show a row when it's NOT a bot OR it's
+        // public. The hardcoded list still covers public-but-retired bots (GlowBot,
+        // HumanBot, whose old posts stay public).
+        .or('is_bot.eq.false,is_public.eq.true')
         .limit(20);
 
       if (error) throw error;
