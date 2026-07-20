@@ -34,6 +34,9 @@ export function ExpandableDescription({ text, style }: Props) {
       style={style}
       numberOfLines={expanded ? undefined : 1}
       onPress={() => setExpanded((v) => !v)}
+      // No gray press-highlight flash when tapping to expand/collapse — RN's
+      // default Text onPress highlight (Kevin 2026-07-20).
+      suppressHighlighting
     >
       {splitCaption(oneLine).map((part, i) => {
         if (isHashtagToken(part)) {
