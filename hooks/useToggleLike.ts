@@ -71,8 +71,14 @@ export function useToggleLike() {
       // like_count bumps across feed queries leaked on error and counts drifted.
       const snapshots: Array<{ key: readonly unknown[]; data: unknown }> = [];
 
-      // Toggle likeIds set
-      await qc.cancelQueries({ queryKey: key });
+      // Flip the likeIds set FIRST, synchronously — before any `await`. This set
+      // is what drives the heart icon, so updating it here (in the tap's own tick)
+      // lets the heart light up INSTANTLY, in parallel with the double-tap burst,
+      // instead of waiting on `await cancelQueries` (which blocks on an in-flight
+      // likeIds refetch) and the heavier like_count cache-bumps below — those had
+      // been batched into one deferred render, so the heart only lit up ~after the
+      // burst finished (Kevin 2026-07-20). The heart paints at the first `await`
+      // yield below; the count work follows in a later render (not time-critical).
       const previousLikeIds = qc.getQueryData<Set<string>>(key);
       snapshots.push({ key, data: previousLikeIds });
       qc.setQueryData<Set<string>>(key, (old = new Set()) => {
@@ -81,6 +87,9 @@ export function useToggleLike() {
         else next.add(uploadId);
         return next;
       });
+
+      // Then cancel any in-flight likeIds refetch so it can't clobber the flip above.
+      await qc.cancelQueries({ queryKey: key });
 
       // Bump like_count on the post across all feed caches.
       // Infinite queries with {rows, ...} page shape: dreamFeed, userContextFeed,
