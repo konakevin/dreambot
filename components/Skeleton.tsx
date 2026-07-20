@@ -7,7 +7,6 @@
 import { useEffect } from 'react';
 import { verticalScale } from '@/lib/responsive';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import Animated, {
   useSharedValue,
@@ -36,27 +35,14 @@ function ShimmerBlock({ style }: { style?: Record<string, unknown> }) {
   );
 }
 
-/** Full-screen cold-load screen — brand wordmark + spinner on pure black. */
+/** Full-screen cold-load screen — just the brand spinner on pure black. The
+ *  wordmark was removed 2026-07-20 (Kevin): the cold-start now hands off from the
+ *  native splash (StartupLogo) to a bare centered spinner, no doubled-up logo. */
 export function FeedCardSkeleton() {
   return (
     <View style={s.feedCard}>
-      {/* Brand wordmark, dead-centered to match StartupLogo + the native splash
-          (the SAME 220pt image → no size/position pop at the cold-start handoff),
-          so the startup logo simply STAYS and the spinner appears below it,
-          instead of the logo vanishing to a bare spinner (Kevin 2026-07-19). Do
-          NOT swap the image for GradientTitle text — it renders a different width
-          and pops (see StartupLogo). */}
-      <View style={s.feedLogo} pointerEvents="none">
-        <Image
-          source={require('@/assets/images/splash-wordmark.png')}
-          style={s.feedWordmark}
-          contentFit="contain"
-        />
-      </View>
       <View style={s.feedSpinner} pointerEvents="none">
-        <View style={{ transform: [{ translateY: verticalScale(64) }] }}>
-          <BrandSpinner size={44} />
-        </View>
+        <BrandSpinner size={44} />
       </View>
     </View>
   );
@@ -112,17 +98,6 @@ const s = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  feedLogo: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  // 220pt = a literal match to StartupLogo + the native splash imageWidth, so the
-  // wordmark is pixel-identical across the handoff (no pop).
-  feedWordmark: {
-    width: 220,
-    aspectRatio: 1812 / 304,
   },
   grid: {
     flexDirection: 'row',
