@@ -391,7 +391,7 @@ export default function NewPostScreen() {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Write a description..."
+              placeholder="Write a caption..."
               placeholderTextColor={colors.textSecondary}
               value={description}
               onChangeText={setDescription}
@@ -474,7 +474,7 @@ export default function NewPostScreen() {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Write a description..."
+                placeholder="Write a caption..."
                 placeholderTextColor={colors.textSecondary}
                 value={description}
                 onChangeText={setDescription}

@@ -464,7 +464,7 @@ export function buildPostActionRows(opts: PostActionSheetOpts): PostActionRow[] 
   if (opts.onEditDescription) {
     rows.push({
       key: 'edit-description',
-      label: 'Edit description',
+      label: 'Edit caption',
       icon: 'create-outline',
       group: 'primary',
       onPress: opts.onEditDescription,

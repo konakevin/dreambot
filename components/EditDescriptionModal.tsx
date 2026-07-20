@@ -89,13 +89,13 @@ export function EditDescriptionModalHost() {
         pointerEvents="box-none"
       >
         <View style={styles.card}>
-          <Text style={styles.title}>Edit description</Text>
+          <Text style={styles.title}>Edit caption</Text>
           <TextInput
             ref={inputRef}
             style={styles.input}
             value={text}
             onChangeText={setText}
-            placeholder="Write a description..."
+            placeholder="Write a caption..."
             placeholderTextColor={colors.textSecondary}
             multiline
             maxLength={MAX_DESCRIPTION_LENGTH}
