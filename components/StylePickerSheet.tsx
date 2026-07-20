@@ -144,11 +144,26 @@ export function StylePickerSheet({
 
   const displayList = type === 'medium' ? mediumDisplayList : vibeOptions;
 
-  // Animate in when visible changes
-  if (visible && progress.value === 0) {
-    closing.current = false;
-    progress.value = withTiming(1, { duration: 300 });
-  }
+  // Animate in on open / out on close — in an EFFECT, not the render body. The
+  // old render-body `if (visible && progress.value === 0) progress = withTiming(1)`
+  // re-fired on ANY re-render that landed the frame `progress` hit 0 during the
+  // dismiss animation — and selecting a style re-renders the parent (persistMedium
+  // + the return-to-Create rehydrate cycle). That REOPENED the sheet mid-close and
+  // then stranded it: visible=false but progress>0, so the render gate never
+  // unmounted and the full-screen backdrop stayed mounted with pointerEvents
+  // 'auto', freezing the whole Create screen (Kevin 2026-07-19: "dream → queue →
+  // back → pick style → frozen"). Keying on `visible` opens only on a real
+  // closed→open transition, so a mid-dismiss re-render can't reopen it.
+  useEffect(() => {
+    if (visible) {
+      closing.current = false;
+      progress.value = withTiming(1, { duration: 300 });
+    } else {
+      // Parent closed us (onClose, or a hand-off like "dream again") — animate out
+      // so the render gate unmounts and the backdrop stops capturing touches.
+      progress.value = withTiming(0, { duration: 250 });
+    }
+  }, [visible, progress]);
 
   // Sync the segment + sticky state to `selected` ONLY on the closed→open
   // transition — NOT when `selected` changes during the dismiss animation
@@ -376,7 +391,11 @@ export function StylePickerSheet({
   if (!visible && progress.value === 0) return null;
 
   return (
-    <View className="absolute inset-0" style={{ zIndex: 100 }}>
+    // box-none: the container itself never captures touches — only the interactive
+    // backdrop (when open) + the sheet do. Defense-in-depth so that if this ever
+    // lingers mounted at progress=0 (backdrop pointerEvents 'none'), taps still
+    // pass through to Create instead of freezing it.
+    <View className="absolute inset-0" style={{ zIndex: 100 }} pointerEvents="box-none">
       {/* Overlay */}
       <Animated.View className="absolute inset-0 bg-black" style={overlayStyle}>
         <TouchableOpacity className="flex-1" onPress={dismiss} activeOpacity={1} />
