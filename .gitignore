@@ -61,3 +61,7 @@ scripts/*-bench-results.json
 # Supabase CLI local state (per-machine: project link + tool versions)
 supabase/.temp/
 scripts/out/
+
+# Local App Store build artifacts (eas build --local output; ~35 MB, never commit)
+build-*.ipa
+*.ipa

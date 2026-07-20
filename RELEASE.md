@@ -25,6 +25,77 @@ Then finish in ASC (attach build, screenshots, review notes, Submit), bump the
 `engine_config` update gate, and add a row to `RELEASES.md`. Full ordered
 checklist below.
 
+## Local build + submit (when the EAS cloud quota is exhausted)
+
+The Expo account is on the **Free plan**, which caps **iOS CLOUD builds per
+month**. When it's used up, `eas build -p ios ...` fails at scheduling with:
+
+```
+This account has used its iOS builds from the Free plan this month,
+which will reset in N days (on the 1st).
+Error: build command failed.
+```
+
+That is NOT a code failure. Build LOCALLY instead — same pipeline, same signing,
+runs on this Mac instead of Expo's servers. It produces the identical
+App-Store-signed IPA (it uses the SAME remote credentials — the Distribution
+Certificate + provisioning profiles pulled from the Expo server — and resolves
+the SAME `production` EAS environment).
+
+```sh
+# One-time prereq: eas build --local needs fastlane on PATH, or it dies with
+# "spawn fastlane ENOENT". Homebrew installs a self-contained copy (no sudo):
+brew install fastlane
+
+# CRITICAL: export the Facebook vars into the shell FIRST (see the gotcha below).
+# eas.json's "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID" interpolates from the SHELL on
+# a local build (from EAS server secrets in the cloud), so without these the FB
+# URL scheme bakes as the literal "fb$FACEBOOK_APP_ID" and Apple REJECTS the upload.
+export FACEBOOK_APP_ID="$(grep -E '^FACEBOOK_APP_ID=' .env.local | cut -d= -f2- | tr -d '\"'"'"'')"
+export FACEBOOK_CLIENT_TOKEN="$(grep -E '^FACEBOOK_CLIENT_TOKEN=' .env.local | cut -d= -f2- | tr -d '\"'"'"'')"
+
+# Build the signed IPA locally (~15-30 min: prebuild → pods → archive → export):
+eas build --local -p ios --profile production --non-interactive --output ./build-<X.Y.Z>.ipa
+
+# Upload that IPA to App Store Connect (stored ASC API key, no Apple prompts):
+eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
+```
+
+Then finish in ASC exactly as with a cloud build (§4), bump the update gate (§5),
+and log it in `RELEASES.md` (§ How to add a row).
+
+Notes / gotchas for the local path:
+- **`$FACEBOOK_APP_ID` interpolation (the one that WILL bite you).** `eas.json`'s
+  production env has `"FACEBOOK_APP_ID": "$FACEBOOK_APP_ID"` /
+  `"FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN"`. On the CLOUD those `$`-refs
+  resolve from EAS-stored secrets; on a LOCAL build they resolve from the SHELL
+  environment. If they're not exported, `app.config.js` reads the literal string
+  `"$FACEBOOK_APP_ID"` and bakes the URL scheme `fb$FACEBOOK_APP_ID` into
+  Info.plist — the BUILD SUCCEEDS and the IPA signs fine, but `eas submit` fails
+  at Apple validation with a 409: *"URL schemes found in your app are not in the
+  correct format: [fb$FACEBOOK_APP_ID]. URL schemes need to begin with an
+  alphabetic character…"*. Fix = the two `export …` lines above (values live in
+  `.env.local`), then rebuild. This cost a full rebuild the first time (2026-07-20).
+- **Build number still auto-increments** from the remote source (`appVersionSource:
+  remote`). A FAILED cloud attempt ALSO increments it, so the number can jump
+  (1.0.9 landed on build 27 after the quota-failed cloud attempt + retries bumped
+  it past 25/26). Harmless — ASC only needs each upload's build number to be
+  higher than the last one it accepted.
+- **Ignore the transient widget-version warning** during the build:
+  `The CFBundleVersion of an app extension ('1') must match that of its
+  containing parent app ('27')`. It fires mid-build BEFORE the version-sync step;
+  the final signed IPA has the app AND the `DreamBotWidget.appex` at the SAME
+  build number (verify if paranoid: `unzip -p build-<ver>.ipa
+  'Payload/*.app/PlugIns/*.appex/Info.plist'` → CFBundleVersion). Not fatal; the
+  archive that gets signed is correct.
+- **Sentry source-maps**: a local build may SKIP the debug-symbol upload
+  (`SENTRY_DISABLE_AUTO_UPLOAD=true` in the gitignored `ios/.xcode.env.local`, or
+  a missing auth token), so crash traces FROM A LOCAL BUILD are less symbolicated
+  in Sentry. Signing / App Store validity / runtime behavior are unaffected — this
+  is purely internal crash-report readability. Cloud builds upload maps reliably.
+- The `.ipa` (~35 MB) lands at `./build-<ver>.ipa` and is **gitignored**
+  (`build-*.ipa`) — don't commit it; delete it after submitting if you like.
+
 ## The full ordered checklist (a new marketing version)
 
 1. **Green `main`.** Clean tree, pushed, CI green. The build bakes COMMITTED code.
@@ -70,13 +141,13 @@ gets an **annotated** git tag so the exact commit is a permanent, findable point
 - **ASC app ID:** `6761505205`
 - **Apple Team ID:** `43VMZ5KMW4`
 - **EAS project:** `014926a1-297b-4abf-9184-a01979a83879` (owner `konakevin`)
-- **Marketing version:** `app.config.js` -> `expo.version` (currently `1.0.1`;
-  bump via `scripts/release.sh`)
+- **Marketing version:** `app.config.js` -> `expo.version` (bump via
+  `scripts/release.sh`; current value is whatever the latest `RELEASES.md` row says)
 - **Build number:** owned by EAS (`appVersionSource: remote` in `eas.json`, plus
   `autoIncrement: true` on the production profile). Do NOT set it locally.
 - **Release helper:** `scripts/release.sh <X.Y.Z>` — bump + check + commit + tag + push.
 - **Release ledger:** `RELEASES.md` — every shipped build (tag ↔ build ↔ commit ↔ ASC status).
-- **Latest shipped:** 1.0.1 (build 9). Tags: `git tag -n1 -l 'v*'`.
+- **Latest shipped:** see `RELEASES.md` (top row). Tags: `git tag -n1 -l 'v*'`.
 
 ## 0. Pre-flight (before building)
 
