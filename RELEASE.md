@@ -63,20 +63,26 @@ Then finish in ASC exactly as with a cloud build (§4), bump the update gate (§
 and log it in `RELEASES.md` (§ How to add a row).
 
 Notes / gotchas for the local path:
-- **The FB URL scheme (already handled in code, but know why).** `FACEBOOK_APP_ID`
-  / `FACEBOOK_CLIENT_TOKEN` are EAS **secret** env vars, referenced in `eas.json`
-  as `"$FACEBOOK_APP_ID"`. EAS secrets **can only be read on the cloud builder** —
-  `eas build --local` can't read them, so eas.json's `"$FACEBOOK_APP_ID"` arrives
-  in `process.env` as the literal string and clobbers any shell/.env.local value.
-  The first 1.0.9 local builds baked the URL scheme `fb$FACEBOOK_APP_ID` and Apple
-  REJECTED the upload at validation (409: *"URL schemes … not in the correct
-  format: [fb$FACEBOOK_APP_ID]"*) — the build + signing succeed, only the ASC
-  upload fails. **Fixed in `app.config.js` (2026-07-20)**: it now falls back to the
-  `.env.local` value whenever `FACEBOOK_APP_ID` is missing or an unresolved
-  `$`-literal (cloud has the real secret + no `.env.local`, so it's a no-op there).
-  So local builds just work now — just keep the real values in `.env.local`.
-  Exporting the vars into the shell does NOT help (eas.json's literal wins over the
-  shell), which is why the code-level fallback was the actual fix.
+- **The FB URL scheme (root-caused + fixed 2026-07-20; know why it took 5 builds).**
+  `FACEBOOK_APP_ID` / `FACEBOOK_CLIENT_TOKEN` were EAS **secret** env vars,
+  referenced in `eas.json` as `"$FACEBOOK_APP_ID"`. Two problems stacked:
+  (a) EAS **secrets can't be read by `eas build --local`** (only on the cloud
+  builder), and (b) even after fixing (a), eas.json's build-profile `env` block
+  **overrides** the environment var with its own value — and `"$FACEBOOK_APP_ID"`
+  does NOT interpolate locally, so it stayed the literal string. Either way the
+  build baked the URL scheme `fb$FACEBOOK_APP_ID`; the build + signing SUCCEED but
+  `eas submit` fails at Apple validation (409: *"URL schemes … not in the correct
+  format: [fb$FACEBOOK_APP_ID]"*). **The actual fix (two parts, both done):**
+  1. Changed both vars from **secret → sensitive** on EAS (a FB App ID is public —
+     it's in the app binary — so it never needed to be secret). Secrets can't be
+     downgraded in place, so it was `eas env:delete` + `eas env:create --visibility
+     sensitive` across production/preview/development. Now readable by local builds.
+  2. **Removed** the `FACEBOOK_APP_ID` / `FACEBOOK_CLIENT_TOKEN` lines from all three
+     `eas.json` `env` blocks, so the real EAS-stored values flow through instead of
+     being clobbered by the un-interpolated `"$..."` literal (cloud + local both).
+  `app.config.js` also has a `.env.local` fallback for pure local dev, but the two
+  changes above are what make `eas build --local` produce a submittable IPA.
+  (Exporting the vars into the shell does NOT help — eas.json's env wins over it.)
 - **Build number still auto-increments** from the remote source (`appVersionSource:
   remote`). A FAILED cloud attempt ALSO increments it, so the number can jump
   (1.0.9 landed on build 27 after the quota-failed cloud attempt + retries bumped
