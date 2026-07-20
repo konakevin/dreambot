@@ -206,7 +206,13 @@ function SearchRow({ user }: { user: SearchUser }) {
         <Text style={s.searchUsername}>{user.username}</Text>
       </View>
       <View style={s.searchActions}>
-        {isFollowing ? (
+        {user.isMe ? (
+          // Your own account — no Follow (can't follow yourself); a muted, non-
+          // interactive "You" chip marks the row as yours.
+          <View style={s.youPill}>
+            <Text style={s.youPillText}>You</Text>
+          </View>
+        ) : isFollowing ? (
           <TouchableOpacity
             style={s.followingPill}
             onPress={() => {
@@ -357,7 +363,9 @@ export default function SearchExploreScreen() {
   // Search hooks — pass medium/vibe filters so search results are scoped
   const hasQuery = debouncedQuery.trim().length >= 2;
   const { data: userResults = [], isLoading: usersLoading } = useSearchUsers(
-    searchActive ? debouncedQuery : ''
+    searchActive ? debouncedQuery : '',
+    // Show the user their OWN account in search results (marked "You").
+    { includeSelf: true }
   );
   const {
     data: postPages,
@@ -882,6 +890,14 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(5),
   },
   followingPillText: { color: colors.textSecondary, fontSize: fontScale(12), fontWeight: '600' },
+  // "You" marker on your own search row — muted, borderless (non-interactive, so
+  // it reads as a label, not a tappable pill like Follow/Following).
+  youPill: {
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: verticalScale(5),
+  },
+  youPillText: { color: colors.textSecondary, fontSize: fontScale(12), fontWeight: '700' },
 
   // Search results — posts
   postTripletRow: { flexDirection: 'row', gap: TILE_GAP },

@@ -9,23 +9,29 @@ export interface SearchUser {
   username: string;
   avatarUrl: string | null;
   isPublic: boolean;
+  /** True when this result IS the current user — the search tab marks it "You". */
+  isMe: boolean;
 }
 
-export function useSearchUsers(query: string) {
+export function useSearchUsers(query: string, opts?: { includeSelf?: boolean }) {
   const user = useAuthStore((s) => s.user);
   // Users I've blocked shouldn't surface in search. (The reverse direction —
   // someone who blocked me — is already invisible: their blocked_users rows are
   // RLS-hidden from me, and get_public_profile blocks opening their profile.)
   const { data: blockedIds } = useBlockedIds();
+  // The search tab shows YOU in your own results (marked "You"); @mentions + the
+  // gift picker leave this off so you can't mention or gift yourself.
+  const includeSelf = opts?.includeSelf ?? false;
 
   return useQuery({
-    queryKey: ['searchUsers', query, blockedIds ? blockedIds.size : 0],
+    queryKey: ['searchUsers', query, blockedIds ? blockedIds.size : 0, includeSelf],
     queryFn: async (): Promise<SearchUser[]> => {
-      const { data, error } = await supabase
+      let builder = supabase
         .from('users')
         .select('id, username, avatar_url, is_public')
-        .ilike('username', `%${query}%`)
-        .neq('id', user!.id)
+        .ilike('username', `%${query}%`);
+      if (!includeSelf) builder = builder.neq('id', user!.id);
+      const { data, error } = await builder
         // Hide PRIVATE BOTS (retired / AlphaBot / MechBot) from search by their
         // is_public flag — so a bot retired via is_public=false is auto-hidden and
         // can't drift out of the hardcoded SEARCH_HIDDEN list below (that's how
@@ -48,6 +54,7 @@ export function useSearchUsers(query: string) {
             username: u.username,
             avatarUrl: u.avatar_url,
             isPublic: ((u as Record<string, unknown>).is_public as boolean) ?? true,
+            isMe: u.id === user!.id,
           }))
       );
     },
