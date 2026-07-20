@@ -62,14 +62,22 @@ beforeAll(async () => {
     created_at timestamptz NOT NULL DEFAULT clock_timestamp()
   )`);
 
-  // Real block_exists (migration 186) + the trigger fn & trigger (migration 383).
-  await db.query(
-    extract(
-      migrationSql('186_blocking_write_enforcement.sql'),
-      'CREATE OR REPLACE FUNCTION public.block_exists',
-      '$$;'
-    )
-  );
+  // block_exists — hand-declared with the SAME UNNAMED (uuid, uuid) signature the
+  // sibling comment dbspecs use, NOT migration 186's body. All dbspecs share one
+  // DB; 186's named params (a/b) make a later sibling `CREATE OR REPLACE
+  // block_exists(uuid, uuid)` fail with "cannot change name of input parameter a".
+  // Same symmetric logic via positional args; block_exists isn't the object under
+  // test here (the trigger is), so a matching stub is correct.
+  await db.query('DROP FUNCTION IF EXISTS public.block_exists(uuid, uuid) CASCADE');
+  await db.query(`CREATE FUNCTION public.block_exists(uuid, uuid) RETURNS boolean
+    LANGUAGE sql STABLE AS $$
+      SELECT EXISTS (
+        SELECT 1 FROM public.blocked_users
+        WHERE (blocker_id = $1 AND blocked_id = $2)
+           OR (blocker_id = $2 AND blocked_id = $1)
+      );
+    $$`);
+  // The trigger fn & trigger loaded from the real migration 383 (object under test).
   await db.query(
     extract(
       migrationSql('383_post_description_mentions.sql'),
