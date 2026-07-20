@@ -11,8 +11,6 @@
         "simulator": true
       },
       "env": {
-        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
-        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
         "EXPO_PUBLIC_APP_ENV": "development"
       }
     },
@@ -22,8 +20,6 @@
         "simulator": false
       },
       "env": {
-        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
-        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
         "EXPO_PUBLIC_APP_ENV": "preview",
         "EXPO_PUBLIC_DREAM_QUEUE_ENABLED": "true"
       }
@@ -31,8 +27,6 @@
     "production": {
       "autoIncrement": true,
       "env": {
-        "FACEBOOK_APP_ID": "$FACEBOOK_APP_ID",
-        "FACEBOOK_CLIENT_TOKEN": "$FACEBOOK_CLIENT_TOKEN",
         "EXPO_PUBLIC_APP_ENV": "production",
         "EXPO_PUBLIC_DREAM_QUEUE_ENABLED": "true"
       }
