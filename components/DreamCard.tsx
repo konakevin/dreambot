@@ -937,9 +937,12 @@ export const DreamCard = memo(function DreamCard({
             onToggleVisibility: showVisibilityToggle ? onTogglePosted : undefined,
             isPublic: item.is_public,
             // Owner-only caption edit — opens the silent Edit-description sheet.
-            onEditDescription: isOwnPost
-              ? () => EditDescriptionModal.show(item.id, item.description ?? null)
-              : undefined,
+            // Only for POSTED (currently public) dreams: an unposted/private draft
+            // has no public caption to edit, and gets a description when it's shared.
+            onEditDescription:
+              isOwnPost && item.is_public
+                ? () => EditDescriptionModal.show(item.id, item.description ?? null)
+                : undefined,
             // Profile pin toggle (migration 330) — own public posts only.
             isPinned,
             onTogglePin:

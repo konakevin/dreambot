@@ -256,9 +256,12 @@ export const PostTile = memo(function PostTile({
               isPublic: item.is_public,
               wasPosted: !!item.posted_at,
               // Owner-only caption edit — opens the silent Edit-description sheet.
-              onEditDescription: isOwn
-                ? () => EditDescriptionModal.show(item.id, item.description ?? null)
-                : undefined,
+              // Only for POSTED (currently public) dreams: an unposted/private draft
+              // has no public caption to edit (it gets one when it's shared).
+              onEditDescription:
+                isOwn && item.is_public
+                  ? () => EditDescriptionModal.show(item.id, item.description ?? null)
+                  : undefined,
               onToggleVisibility: !isOwn
                 ? undefined
                 : item.is_public
