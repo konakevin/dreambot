@@ -1,5 +1,5 @@
 import { showAlert } from '@/components/CustomAlert';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -12,7 +12,7 @@ import {
 import { Text, TextInput } from '@/components/AppText';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import * as Clipboard from 'expo-clipboard';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -108,8 +108,25 @@ export default function SharePostScreen() {
   const { mutate: sendShare, isPending } = useSendShare();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
-  const { gesture, animatedStyle } = useStandardSheetDismiss();
+  const { gesture, animatedStyle, translateY } = useStandardSheetDismiss();
   const insets = useSafeAreaInsets();
+
+  // ── Slide-up entrance (2026-07-21) ──
+  // Drive the entrance through the SAME translateY the drag-dismiss owns: one
+  // transform, one owner. (A Reanimated `entering` layout animation on this
+  // view fought the drag/keyboard useAnimatedStyle transforms and the slide
+  // didn't reliably run.) Start off-screen BEFORE the first commit (the
+  // ref-guarded body write runs pre-paint, so there's no at-rest flash), then
+  // ease up on mount. The route-level fade brings the backdrop in IN PLACE
+  // underneath — same anatomy as the long-press PostActionSheet.
+  const entranceStarted = useRef(false);
+  if (!entranceStarted.current) {
+    entranceStarted.current = true;
+    translateY.value = SHEET_HEIGHT;
+  }
+  useEffect(() => {
+    translateY.value = withTiming(0, { duration: 320, easing: Easing.out(Easing.cubic) });
+  }, [translateY]);
 
   // ── Keyboard-reactive sheet (2026-07-06) ──
   // The old layout was a FIXED-height 0.65 sheet with only the send button
@@ -206,7 +223,8 @@ export default function SharePostScreen() {
       {/* Tap backdrop to dismiss */}
       <Pressable style={styles.backdrop} onPress={() => router.back()} />
 
-      {/* Bottom sheet */}
+      {/* Bottom sheet — slides up via the shared translateY (see the entrance
+          block above); the route-level fade settles the backdrop in place. */}
       <Animated.View style={[styles.sheet, animatedStyle, sheetGrowStyle]}>
         {/* Drag-to-dismiss is scoped to the handle + header ONLY. Wrapping the
             whole sheet (incl. the grid) in the Pan made it arbitrate against
@@ -350,9 +368,16 @@ export default function SharePostScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    // Bottom-anchor the sheet: the backdrop is absolute (below), so the sheet
+    // is the only in-flow child and must sit at the screen's bottom edge.
+    justifyContent: 'flex-end',
   },
   backdrop: {
-    flex: 1,
+    // FULL-SCREEN mask, including BEHIND the sheet. As a flex:1 sibling it
+    // only dimmed the area ABOVE the sheet, so the sheet's rounded corners
+    // exposed bright undimmed feed at the notches (Kevin 2026-07-21).
+    // Absolute-fill dims everything; the sheet slides up OVER the mask.
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   sheet: {
