@@ -31,7 +31,7 @@ const ReanimatedView = Reanimated.View;
 // the React Compiler silently drops those (project memory 2026-07-01). Props
 // are hand-picked (not spread): the bottom-tabs button prop shape isn't
 // assignable to Pressable's.
-const TAB_PRESS_SCALE = 0.86;
+const TAB_PRESS_SCALE = 0.92;
 function TabBarPressButton(props: BottomTabBarButtonProps) {
   const scale = useSharedValue(1);
   const squishStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
