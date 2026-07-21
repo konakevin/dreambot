@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/AppText';
 import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
+import { TitleText } from '@/components/TitleText';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
@@ -198,7 +199,14 @@ export function UpscaleModalHost() {
             ) : (
               <>
                 <Ionicons name={copy.icon} size={40} color={colors.accent} />
-                <Text style={styles.title}>{title}</Text>
+                {/* TitleText = the solid sibling of the gradient title above —
+                  SAME Quicksand display face + size 18, so the modal's title
+                  doesn't visibly switch typeface/size between the spinner state
+                  and the done/timeout states (it used to fall through to the DM
+                  Sans body font at 17 — style-consistency audit 2026-07-21). */}
+                <TitleText size={18} numberOfLines={2} style={styles.titleSpacing}>
+                  {title}
+                </TitleText>
               </>
             )}
             <Text style={styles.subtitle}>{copy.sub}</Text>
@@ -243,20 +251,17 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     maxWidth: 320,
   },
-  title: {
-    color: colors.textPrimary,
-    fontSize: fontScale(17),
-    fontWeight: '700',
-    marginTop: verticalScale(18),
-    textAlign: 'center',
-  },
+  // Terminal-state title spacing (TitleText owns the typography).
+  titleSpacing: { marginTop: verticalScale(18) },
   waveBelowTitle: { marginTop: verticalScale(16) },
   subtitle: {
     color: colors.textSecondary,
-    fontSize: fontScale(13),
+    // 14/20 — matches the app's modal-card body convention (e.g. the
+    // classification modal on dream/loading) instead of a one-off 13/18.
+    fontSize: fontScale(14),
     marginTop: verticalScale(8),
     textAlign: 'center',
-    lineHeight: fontScale(18),
+    lineHeight: fontScale(20),
   },
   dismissBtn: {
     marginTop: verticalScale(18),

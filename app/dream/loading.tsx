@@ -582,15 +582,17 @@ const s = StyleSheet.create({
     alignItems: 'center',
     gap: verticalScale(26),
   },
-  // Casual queue prompt above the Queue This button — muted gray so it
-  // doesn't compete with the lavender pill, with breathing room to the
-  // button below.
+  // Casual queue prompt above the Queue This button. bodyOnDark 14/20 — the
+  // SAME support-text treatment as MagicalLoadingStage.subtext (the first-dream
+  // flow's hint under this identical stage), so the two dream-loading contexts
+  // read as one design (style-consistency audit 2026-07-21; was a dimmer
+  // one-off textSecondary 13/18 predating the readability pass).
   queueHint: {
-    color: colors.textSecondary,
-    fontSize: fontScale(13),
+    color: colors.bodyOnDark,
+    fontSize: fontScale(14),
     textAlign: 'center',
     maxWidth: 300,
-    lineHeight: fontScale(18),
+    lineHeight: fontScale(20),
   },
   failureWrap: {
     flex: 1,
