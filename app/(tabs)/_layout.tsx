@@ -1,7 +1,14 @@
 import { useRef, useEffect } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, Pressable } from 'react-native';
 import { Tabs, Redirect } from 'expo-router';
-import { BottomTabBar } from '@react-navigation/bottom-tabs';
+import { BottomTabBar, type BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+// Aliased: this file already uses core RN `Animated` for the tab-bar fade.
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
@@ -11,6 +18,54 @@ import { ANIM, colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { BrandSpinner } from '@/components/BrandSpinner';
+
+const ReanimatedView = Reanimated.View;
+
+// Tab-bar button with the TikTok-style pressed "squish": the icon scales down
+// while the finger is DOWN and returns to form on lift. No opacity/darken — the
+// 5-star tab bars (TikTok's squish, IG's instant selection flip) never dim
+// (Kevin 2026-07-21). The squish fires on press-IN, i.e. BEFORE release can
+// trigger a first-visit screen mount, so the down-state is always instant;
+// worst case on a heavy first mount the icon stays squished a beat longer,
+// which reads as "held", not broken. NOT a function-form Pressable style —
+// the React Compiler silently drops those (project memory 2026-07-01). Props
+// are hand-picked (not spread): the bottom-tabs button prop shape isn't
+// assignable to Pressable's.
+const TAB_PRESS_SCALE = 0.86;
+function TabBarPressButton(props: BottomTabBarButtonProps) {
+  const scale = useSharedValue(1);
+  const squishStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={props.accessibilityState}
+      accessibilityLabel={props.accessibilityLabel}
+      testID={props.testID}
+      onPress={props.onPress ?? undefined}
+      onLongPress={props.onLongPress ?? undefined}
+      style={props.style}
+      onPressIn={() => {
+        // One quick squish down… (timing, not springs — a bouncy release
+        // oscillated like a rubber icon; TikTok's is a single clean
+        // down-and-back with zero overshoot. Kevin 2026-07-21.)
+        scale.value = withTiming(TAB_PRESS_SCALE, {
+          duration: 80,
+          easing: Easing.out(Easing.quad),
+        });
+      }}
+      onPressOut={() => {
+        // …and straight back to form. No spring, no wobble.
+        scale.value = withTiming(1, { duration: 130, easing: Easing.out(Easing.quad) });
+      }}
+    >
+      <ReanimatedView
+        style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }, squishStyle]}
+      >
+        {props.children}
+      </ReanimatedView>
+    </Pressable>
+  );
+}
 
 // Pure render — receives unreadCount as a prop. The subscription lives at
 // TabLayout level so parent re-renders propagate new options to RN's tab
@@ -85,6 +140,8 @@ export default function TabLayout() {
       )}
       screenOptions={{
         headerShown: false,
+        // Pressed "down" state on every tab (quick squish while the finger is down).
+        tabBarButton: (props) => <TabBarPressButton {...props} />,
         tabBarStyle: {
           backgroundColor: 'rgba(0,0,0,0.4)',
           borderTopColor: 'rgba(255,255,255,0.08)',
