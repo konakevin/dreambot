@@ -8,10 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { trackFeedTabSelected } from '@/lib/analytics';
-import { useFeedStore, MANUAL_FEED_SHUFFLE, FEED_COLD_SEED } from '@/store/feed';
-
-// Launch reshuffle fires ONCE per cold JS load (module flag survives remounts).
-let launchReshuffleFired = false;
+import { useFeedStore, MANUAL_FEED_SHUFFLE } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useQueryClient } from '@tanstack/react-query';
@@ -212,59 +209,12 @@ export default function HomeScreen() {
   // it — the pull spinner strip owns that transition and settles in place.
   const [reshuffleEpoch, setReshuffleEpoch] = useState(0);
 
-  // ── Launch reshuffle (feed-algorithm audit Phase 2, 2026-07-21) ──
-  // The cold seed is FIXED (persisted-cache key must match for the instant
-  // first paint), so without this every app open computed the IDENTICAL
-  // ordering until a manual pull. Prefetch a fresh seed behind the visible
-  // persisted feed and swap in one frame — BUT only if it's ready within a
-  // LAUNCH DEADLINE (2s): inside that window the swap reads as the app
-  // finishing its open; past it the user has settled on the top post and the
-  // swap yanks content they're reading (Kevin's report, 2026-07-21). Too
-  // slow → skip entirely for this session; the impression penalty (mig 388)
-  // already varies cold ordering between sessions, so nothing is lost.
-  // Gates: once per JS load; deep-link/pinned landings skipped (the swap
-  // clears pinnedPost — it would wipe the landing content); skipped if the
-  // seed already rotated (user pulled/re-tapped first).
-  const activeTabRef = useRef(activeTab);
-  activeTabRef.current = activeTab;
-  useEffect(() => {
-    if (launchReshuffleFired) return;
-    launchReshuffleFired = true;
-    const t = setTimeout(async () => {
-      const st = useFeedStore.getState();
-      const uid = useAuthStore.getState().user?.id;
-      if (!uid) return;
-      if (st.pendingPostId || st.pinnedPost) return;
-      if (st.feedSeed !== FEED_COLD_SEED || st.homeFeedRefreshing) return;
-      const started = Date.now();
-      const newSeed = Math.random();
-      st.setHomeFeedRefreshing(true); // tab-icon spinner while it loads
-      try {
-        await prefetchDreamFeed(
-          queryClient,
-          activeTabRef.current,
-          uid,
-          newSeed,
-          null,
-          5,
-          MANUAL_FEED_SHUFFLE
-        );
-      } finally {
-        useFeedStore.getState().setHomeFeedRefreshing(false);
-      }
-      const now = useFeedStore.getState();
-      // Re-check every gate at commit time — and enforce the deadline.
-      if (Date.now() - started > 2000) return;
-      if (now.feedSeed !== FEED_COLD_SEED) return;
-      if (now.pendingPostId || now.pinnedPost) return;
-      now.setFeedSeed(newSeed);
-      pruneStaleFeedCaches(queryClient, newSeed);
-      setReshuffleEpoch((e) => e + 1); // one-frame remount at the new top
-    }, 400);
-    return () => clearTimeout(t);
-    // Fire-once launch effect — reads live state via getState/refs on purpose.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // NOTE (2026-07-21): a "launch reshuffle" lived here briefly — prefetch a
+  // fresh seed on boot and swap it in behind the persisted paint. Reverted:
+  // it lit the Home tab spinner unprompted at launch and, when the prefetch
+  // ran slow, swapped the post the user was already viewing. Landing variety
+  // now comes from the server-side impression penalty (migration 388) on
+  // every refetch; revisit the launch UX deliberately, not incrementally.
   // Dedup by id in case the paginated RPC's cursor boundary lets the same post
   // appear on two adjacent pages (can happen when many posts share the same
   // feed_score and the tiebreaker overlaps). Kills both data-level duplicates

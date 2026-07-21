@@ -70,10 +70,11 @@ export interface FeedStore {
 // start and defeat the persisted-cache restore (nothing would match → spinner).
 // A stable cold seed keeps the key identical across launches so the persisted
 // feed paints instantly; regenerateSeed/setFeedSeed still randomize on an
-// explicit pull-to-refresh (mig 352 reshuffle). Trade-off: the pre-refresh cold
-// ordering is deterministic (the ranking's near-tie jitter is the same each cold
-// launch) — acceptable, and arguably steadier, since the feed is already
-// user-specific via follows/blocks/recency.
+// explicit pull-to-refresh (mig 352 reshuffle). KNOWN TRADE-OFF (2026-07-21
+// audit): the landing content repeats across launches until a refresh — the
+// launch-reshuffle experiment that tried to fix this in-place was reverted
+// (unprompted spinner + content swaps under the viewer); see the audit notes
+// before re-attempting.
 export const FEED_COLD_SEED = 0.5;
 
 /** Manual-refresh shuffle strength (mig 352) — vs the 0.10 cold-load jitter.
