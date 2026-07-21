@@ -484,6 +484,13 @@ export const DreamCard = memo(function DreamCard({
                 contentFit={fitMode}
                 cachePolicy="memory-disk"
                 recyclingKey={item.id}
+                // The card the user is LOOKING AT must win the network. Launch
+                // kicks off a large background prefetch fan-out (bots feeds +
+                // next-cards) at default priority; without this the visible hero
+                // queued behind it ("images slow to load", 2026-07-21).
+                // expo-image's prefetch() API has no priority option, so
+                // elevating the on-screen card is the one available lever.
+                priority="high"
                 transition={150}
                 // Tiny blurry preview shown instantly during decode/network,
                 // so the card never reads as "broken black void" while

@@ -137,6 +137,15 @@ export async function prefetchDreamFeed(
           pageParam as FeedCursor | null
         ),
       initialPageParam: null as FeedCursor | null,
+      // staleTime is LOAD-BEARING here. prefetchQuery only skips the network
+      // when cached data is FRESH — and the client default staleTime is 0, so
+      // without this every launch + every home/Bots mount re-ran the ENTIRE
+      // fan-out (~19 get_feed RPCs + ~95 image prefetches ≈ 13MB) even with a
+      // fully warm cache, competing with the visible card's own download and
+      // spiking PostgREST connections (Kevin "laggy at launch", 2026-07-21).
+      // 15 min: within a session the fan-out runs once; fresh content still
+      // arrives via pull-to-refresh / reseed (new feedSeed = new key entirely).
+      staleTime: 15 * 60 * 1000,
     });
     const cached = queryClient.getQueryData<{ pages: FeedPage[] }>(queryKey);
     const urls = (cached?.pages?.[0]?.rows ?? [])
