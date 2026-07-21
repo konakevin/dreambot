@@ -32,6 +32,11 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
+// RNGH's TouchableOpacity fires via a native tap recognizer, so it registers the
+// FIRST tap even while a TextInput is focused (RN-core Touchable can drop that
+// first tap to the keyboard's first-responder resignation) — used for the Post
+// button, which is tapped straight from the caption field (Kevin 2026-07-20).
+import { TouchableOpacity as GHTouchableOpacity } from 'react-native-gesture-handler';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -305,7 +310,7 @@ export default function NewPostScreen() {
             </Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
+          <GHTouchableOpacity
             onPress={handlePost}
             disabled={posting}
             activeOpacity={0.7}
@@ -320,7 +325,7 @@ export default function NewPostScreen() {
             ) : (
               <Text style={styles.actionText}>Post</Text>
             )}
-          </TouchableOpacity>
+          </GHTouchableOpacity>
         )}
       </View>
 
