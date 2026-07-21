@@ -77,6 +77,16 @@ beforeAll(async () => {
     reposter_id uuid NOT NULL, upload_id uuid NOT NULL, created_at timestamptz NOT NULL DEFAULT now()
   )`);
 
+  // Drop EVERY get_feed overload before creating the 253-era one. The
+  // feedSeenPenalty spec creates the 11-arg (388) version; with both overloads
+  // in the shared DB, this spec's named-arg calls become AMBIGUOUS ("function
+  // ... is not unique") whenever it runs second. Both feed specs clear the
+  // overload set first so suite order can't matter (2026-07-21).
+  await db.query(`DO $do$ DECLARE r record; BEGIN
+    FOR r IN SELECT oid::regprocedure AS sig FROM pg_proc
+      WHERE proname = 'get_feed' AND pronamespace = 'public'::regnamespace
+    LOOP EXECUTE 'DROP FUNCTION ' || r.sig; END LOOP;
+  END $do$`);
   await db.query(extract(sql, 'CREATE FUNCTION public.get_feed', '$$;'));
 });
 

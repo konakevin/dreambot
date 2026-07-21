@@ -95,9 +95,19 @@ beforeAll(async () => {
     UNIQUE(user_id, upload_id)
   )`);
 
+  // Drop EVERY get_feed overload first. The sibling feed spec creates a
+  // 253-era get_feed with a different arity; once two overloads coexist in the
+  // shared test DB, named-arg calls become AMBIGUOUS ("function ... is not
+  // unique") and whichever spec runs second fails. Both feed specs start by
+  // clearing the overload set, so suite order can't matter.
+  await db.query(`DO $do$ DECLARE r record; BEGIN
+    FOR r IN SELECT oid::regprocedure AS sig FROM pg_proc
+      WHERE proname = 'get_feed' AND pronamespace = 'public'::regnamespace
+    LOOP EXECUTE 'DROP FUNCTION ' || r.sig; END LOOP;
+  END $do$`);
+
   // The real 388 definition: its own DROP (11-arg) + CREATE, straight from the
-  // migration file. The sibling feed spec's 253-era get_feed has a different
-  // arity, so the two overloads coexist regardless of suite order.
+  // migration file.
   await db.query(
     extract(
       migrationSql('388_feed_impression_discounting.sql'),
