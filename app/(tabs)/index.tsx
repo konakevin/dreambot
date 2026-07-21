@@ -8,7 +8,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { trackFeedTabSelected } from '@/lib/analytics';
-import { useFeedStore, MANUAL_FEED_SHUFFLE } from '@/store/feed';
+import { useFeedStore, MANUAL_FEED_SHUFFLE, FEED_COLD_SEED } from '@/store/feed';
+
+// Launch reshuffle fires ONCE per cold JS load (module flag survives remounts).
+let launchReshuffleFired = false;
 import { colors, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useQueryClient } from '@tanstack/react-query';
@@ -208,6 +211,27 @@ export default function HomeScreen() {
   // still read as a black flash). Pull-to-refresh deliberately does NOT bump
   // it — the pull spinner strip owns that transition and settles in place.
   const [reshuffleEpoch, setReshuffleEpoch] = useState(0);
+
+  // ── Launch reshuffle (feed-algorithm audit Phase 2, 2026-07-21) ──
+  // The cold seed is FIXED (persisted-cache key must match for the instant
+  // first paint), so without this every app open computed the IDENTICAL
+  // ordering until a manual pull — one of the three "same posts every session"
+  // mechanisms. Reuse the quiet re-tap reshuffle (token bump → prefetch behind
+  // the visible feed → one-frame remount swap): the persisted feed paints
+  // instantly, then ~1s later the ordering is fresh. Gates: once per JS load;
+  // skip deep-link/pinned landings (the commit clears pinnedPost — it would
+  // wipe the landing content); skip if the seed already rotated this session.
+  useEffect(() => {
+    if (launchReshuffleFired) return;
+    launchReshuffleFired = true;
+    const t = setTimeout(() => {
+      const st = useFeedStore.getState();
+      if (st.pendingPostId || st.pinnedPost) return;
+      if (st.feedSeed !== FEED_COLD_SEED) return;
+      st.bumpHomeFeedReset();
+    }, 900);
+    return () => clearTimeout(t);
+  }, []);
   // Dedup by id in case the paginated RPC's cursor boundary lets the same post
   // appear on two adjacent pages (can happen when many posts share the same
   // feed_score and the tiebreaker overlaps). Kills both data-level duplicates

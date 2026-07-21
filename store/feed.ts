@@ -74,7 +74,7 @@ export interface FeedStore {
 // ordering is deterministic (the ranking's near-tie jitter is the same each cold
 // launch) — acceptable, and arguably steadier, since the feed is already
 // user-specific via follows/blocks/recency.
-const FEED_COLD_SEED = 0.5;
+export const FEED_COLD_SEED = 0.5;
 
 /** Manual-refresh shuffle strength (mig 352) — vs the 0.10 cold-load jitter.
  *  Exported so the reshuffle prefetch can build its cache key at this strength
