@@ -106,11 +106,11 @@ beforeAll(async () => {
     LOOP EXECUTE 'DROP FUNCTION ' || r.sig; END LOOP;
   END $do$`);
 
-  // The real definition (389 = 388 + the jitter clamp): its own DROP (11-arg)
-  // + CREATE, straight from the migration file.
+  // The real definition (390 = 388 penalty + 389 jitter clamp + age-aware
+  // waiver): its own DROP (11-arg) + CREATE, straight from the migration file.
   await db.query(
     extract(
-      migrationSql('389_feed_jitter_clamp.sql'),
+      migrationSql('390_feed_age_aware_penalty.sql'),
       'DROP FUNCTION IF EXISTS public.get_feed',
       '$$;'
     )
@@ -142,15 +142,17 @@ beforeEach(async () => {
 });
 
 /** Insert identical public posts by AUTHOR (same age/engagement, differing only
- *  by id) so any score difference is purely the seen-penalty. */
-async function insertIdenticalPosts(ids: string[], authorId = AUTHOR) {
+ *  by id) so any score difference is purely the seen-penalty. Default age is 5
+ *  days — PAST the 72h youth window, so the full penalty applies (migration
+ *  390's waiver only affects younger posts). */
+async function insertIdenticalPosts(ids: string[], authorId = AUTHOR, age = '5 days') {
   for (const id of ids) {
     await db.query(
       `INSERT INTO public.uploads
          (id, user_id, image_url, posted_at, created_at, like_count, view_count, is_ai_generated)
-       VALUES ($1, $2, 'https://x/i.png', now() - interval '5 days',
-               now() - interval '5 days', 40, 200, $3)`,
-      [id, authorId, authorId === BOT]
+       VALUES ($1, $2, 'https://x/i.png', now() - $4::interval,
+               now() - $4::interval, 40, 200, $3)`,
+      [id, authorId, authorId === BOT, age]
     );
   }
 }
@@ -194,6 +196,20 @@ it('following: gentler penalty (x0.75 after one view)', async () => {
   );
   const scores = await feedScores('following');
   expect(scores.get(P_SEEN1)! / scores.get(P_UNSEEN)!).toBeCloseTo(0.75, 5);
+});
+
+it('age-aware waiver: a 12h-old post seen 3x keeps ~87% of its score (migration 390)', async () => {
+  // youth = 1 - 12/72 = 0.8333 → factor = 0.20 + 0.80 * 0.8333 = 0.8667.
+  // Fresh posts may repeat (small-catalog reality); the full x0.20 suppression
+  // only applies once a post ages past the 72h window (see the 5-day tests).
+  await insertIdenticalPosts([P_UNSEEN, P_SEEN3], AUTHOR, '12 hours');
+  await db.query(
+    `INSERT INTO public.post_impressions (user_id, upload_id, view_count, last_seen)
+     VALUES ($1, $2, 3, now())`,
+    [VIEWER, P_SEEN3]
+  );
+  const scores = await feedScores('forYou');
+  expect(scores.get(P_SEEN3)! / scores.get(P_UNSEEN)!).toBeCloseTo(0.8667, 3);
 });
 
 it('jitter is clamped: shuffle 0.45 scores identically to 0.15 (migration 389)', async () => {
