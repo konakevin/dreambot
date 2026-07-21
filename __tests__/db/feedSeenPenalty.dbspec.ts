@@ -106,11 +106,13 @@ beforeAll(async () => {
     LOOP EXECUTE 'DROP FUNCTION ' || r.sig; END LOOP;
   END $do$`);
 
-  // The real definition (390 = 388 penalty + 389 jitter clamp + age-aware
-  // waiver): its own DROP (11-arg) + CREATE, straight from the migration file.
+  // The real definition (391 = 388 penalty + 389 jitter clamp + 390 age-aware
+  // waiver + candidate windowing): its own DROP (11-arg) + CREATE, straight
+  // from the migration file. Test posts are 12h-5d old — inside the 60d
+  // window, so the windowing never filters them.
   await db.query(
     extract(
-      migrationSql('390_feed_age_aware_penalty.sql'),
+      migrationSql('391_feed_candidate_windowing.sql'),
       'DROP FUNCTION IF EXISTS public.get_feed',
       '$$;'
     )
