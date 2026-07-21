@@ -34,6 +34,7 @@ export type NotificationType =
   | 'download_ready'
   | 'trial_reminder' // Pro-trial expiry pings (3-day + last-night), migration 215 commit
   | 'pro_reminder' // Paid Pro expiry pings (cancelled but still in paid period)
+  | 'basic_reminder' // Basic-tier expiry pings (cancelled but still in paid period), migration 385
   | 'welcome_gift' // Onboarding welcome ping (mig 223) — routes to /welcome-gift
   | 'sparkle_gift' // Gift Sparkles (mig 334) — 'received' → /giftUnwrap, 'thanks' → profile
   | 'comment'; // legacy rows kept queryable

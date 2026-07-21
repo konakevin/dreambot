@@ -89,9 +89,11 @@ interface TierConfig {
   products: Set<string>;
   flagColumn: 'pro_subscription' | 'basic_subscription';
   expiresColumn: 'pro_subscription_expires_at' | 'basic_subscription_expires_at';
-  // will_renew is Pro-only for now (drives the "your Pro ends soon" reminders in
-  // nightly-dreams.js, migration 215). Basic has no such column yet → null.
-  willRenewColumn: 'pro_subscription_will_renew' | null;
+  // will_renew drives the "your subscription ends soon" reminders in
+  // nightly-dreams.js (Pro migration 215, Basic migration 385). Set per tier
+  // so CANCELLATION flips the right column; null only if a tier has no such
+  // column.
+  willRenewColumn: 'pro_subscription_will_renew' | 'basic_subscription_will_renew' | null;
   bundleReasonPrefix: 'pro_bundle' | 'basic_bundle';
   bundleColumn: 'pro_monthly_sparkle_bundle' | 'basic_monthly_sparkle_bundle';
   bundleFallback: number;
@@ -117,7 +119,7 @@ const SUBSCRIPTION_TIERS: TierConfig[] = [
     products: new Set([BASIC_MONTHLY_PRODUCT, BASIC_YEARLY_PRODUCT]),
     flagColumn: 'basic_subscription',
     expiresColumn: 'basic_subscription_expires_at',
-    willRenewColumn: null,
+    willRenewColumn: 'basic_subscription_will_renew',
     bundleReasonPrefix: 'basic_bundle',
     bundleColumn: 'basic_monthly_sparkle_bundle',
     bundleFallback: FALLBACK_BASIC_MONTHLY_SPARKLE_BUNDLE,

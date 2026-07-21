@@ -791,6 +791,12 @@ function RootLayout() {
                           name="sharePost"
                           options={{
                             ...SCREEN_PRESETS.OVERLAY_TRANSPARENT,
+                            // Keep the preset's FADE at the route level: the
+                            // backdrop mask must fade IN PLACE. The slide-up
+                            // lives on the SHEET inside the screen (Reanimated
+                            // SlideInDown) — a route-level slide_from_bottom
+                            // moved the mask up with the sheet and left the
+                            // rounded corners unmasked (Kevin 2026-07-21).
                             contentStyle: { backgroundColor: 'transparent' },
                           }}
                         />
@@ -808,6 +814,10 @@ function RootLayout() {
                         <Stack.Screen name="dream/loading" options={SCREEN_PRESETS.MODAL_LOCKED} />
                         <Stack.Screen name="dream/reveal" options={SCREEN_PRESETS.MODAL_LOCKED} />
                         <Stack.Screen name="inbox" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                        <Stack.Screen
+                          name="welcome-gift"
+                          options={SCREEN_PRESETS.MODAL_SWIPEABLE}
+                        />
                         <Stack.Screen name="reset-password" options={SCREEN_PRESETS.MODAL_LOCKED} />
                       </Stack>
                       <StatusBar style="light" />

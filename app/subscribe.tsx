@@ -40,6 +40,8 @@ import { colors } from '@/constants/theme';
 import { PRO_PERKS, PRO_TIERS, type ProPlanTier } from '@/constants/proPlan';
 import { BASIC_PERKS, BASIC_TIERS } from '@/constants/basicPlan';
 import { useProPackages, usePurchasePro, useRestorePurchases } from '@/hooks/useSparkles';
+import { useSubscriptionStatus } from '@/hooks/useSubscriptionStatus';
+import { openManageSubscriptions } from '@/lib/revenuecat';
 import { useAuthStore } from '@/store/auth';
 import { trackProStoreOpened, trackProSubscribeTapped } from '@/lib/analytics';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -122,6 +124,11 @@ export default function SubscribeScreen() {
   const { data: packages = [], isLoading } = useProPackages();
   const { mutate: purchase } = usePurchasePro();
   const { mutate: restore, isPending: restoring } = useRestorePurchases();
+  // Live auto-renew state (RevenueCat). willRenew === false on the active plan
+  // means "subscribed but cancelled" — Apple won't let us re-purchase or flip
+  // auto-renew in-app, so the current-plan CTA becomes "Turn on auto-renew"
+  // which opens the App Store manage-subscriptions sheet.
+  const { data: subStatus } = useSubscriptionStatus();
   const insets = useSafeAreaInsets();
 
   // Default to monthly (lower entry price). Tap the toggle to switch to yearly.
@@ -157,6 +164,14 @@ export default function SubscribeScreen() {
       },
       onSettled: () => setPurchasingPlan(null),
     });
+  }
+
+  /** Open Apple's manage-subscriptions sheet — the only place auto-renew can be
+   *  toggled (StoreKit has no API to flip it in-app). Used for the "Turn on
+   *  auto-renew" CTA on a subscribed-but-cancelled current plan. */
+  function handleManage() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    void openManageSubscriptions();
   }
 
   /** Is the user already paying for this plan (so we show "Current plan")? */
@@ -301,9 +316,20 @@ export default function SubscribeScreen() {
                     </View>
 
                     {current ? (
-                      <View style={[s.cta, s.ctaDisabled]}>
-                        <Text style={[s.ctaText, { color: colors.textMuted }]}>Current plan</Text>
-                      </View>
+                      subStatus?.willRenew === false ? (
+                        // Subscribed but auto-renew is OFF (winding down) — offer a
+                        // way to re-enable it via Apple's sheet, instead of a dead
+                        // "Current plan" button.
+                        <TouchableOpacity onPress={handleManage} activeOpacity={0.85}>
+                          <View style={[s.cta, s.ctaRenew]}>
+                            <Text style={[s.ctaText, s.ctaTextLit]}>Turn on auto-renew</Text>
+                          </View>
+                        </TouchableOpacity>
+                      ) : (
+                        <View style={[s.cta, s.ctaDisabled]}>
+                          <Text style={[s.ctaText, { color: colors.textMuted }]}>Current plan</Text>
+                        </View>
+                      )
                     ) : (
                       <TouchableOpacity
                         onPress={() => handleSubscribe(plan)}
@@ -562,6 +588,11 @@ const s = StyleSheet.create({
   },
   ctaDisabled: {
     backgroundColor: colors.border,
+  },
+  // Solid-accent CTA for "Turn on auto-renew" on a cancelled current plan —
+  // actionable (unlike the muted "Current plan" state).
+  ctaRenew: {
+    backgroundColor: colors.accent,
   },
   ctaText: {
     fontSize: fontScale(15),

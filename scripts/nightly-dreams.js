@@ -27,6 +27,8 @@ const {
   shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
+  shouldSend3DayBasicReminder,
+  shouldSendLastNightBasicReminder,
 } = require('./lib/nightlyEligibility');
 const { fetchEngineConfig } = require('./lib/engineConfig');
 
@@ -89,6 +91,42 @@ async function fetchAllPages(buildQuery, pageSize = 1000) {
   }
   return { data: all, error: null };
 }
+
+// Paid-subscription expiry reminders. Pro + Basic are structurally identical —
+// only the tier's columns / type / subtypes differ, and both share the exact
+// same tier-agnostic copy (we never name the tier, so the user renews whichever
+// subscription they choose). One config-driven sender, one entry per tier.
+const PAID_REMINDER_BODY_3DAY = 'Renew your subscription now to keep your nightly dreams coming.';
+const PAID_REMINDER_BODY_LAST =
+  'Your subscription ends tomorrow. Renew now to keep your nightly dreams coming.';
+const PAID_REMINDER_BODY_ENDED = 'Renew your subscription to start dreaming every night again.';
+
+const PAID_REMINDER_TIERS = [
+  {
+    label: 'Pro',
+    type: 'pro_reminder',
+    flagColumn: 'pro_subscription',
+    willRenewColumn: 'pro_subscription_will_renew',
+    expiresColumn: 'pro_subscription_expires_at',
+    subtype3Day: 'paid_3day',
+    subtypeLast: 'paid_last_night',
+    subtypeEnded: 'paid_ended',
+    should3Day: shouldSend3DayPaidProReminder,
+    shouldLast: shouldSendLastNightPaidProReminder,
+  },
+  {
+    label: 'Basic',
+    type: 'basic_reminder',
+    flagColumn: 'basic_subscription',
+    willRenewColumn: 'basic_subscription_will_renew',
+    expiresColumn: 'basic_subscription_expires_at',
+    subtype3Day: 'basic_3day',
+    subtypeLast: 'basic_last_night',
+    subtypeEnded: 'basic_ended',
+    should3Day: shouldSend3DayBasicReminder,
+    shouldLast: shouldSendLastNightBasicReminder,
+  },
+];
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
@@ -269,11 +307,14 @@ async function fetchAllPages(buildQuery, pageSize = 1000) {
   // Paid Pro users are excluded — they aren't on the trial-expiry path.
   await sendTrialReminders(sb, pool);
 
-  // Same windows + accuracy guarantee, against paid Pro users who have
-  // CANCELLED auto-renewal (pro_subscription_will_renew=false from the
-  // revenuecat-webhook on a CANCELLATION event). Auto-renewing users
-  // skip — they aren't actually going to lose access at expires_at.
-  await sendPaidProReminders(sb, pool);
+  // Paid subscription reminders (Pro + Basic), one config-driven pass per tier.
+  // Only cancelled-and-winding-down subs (will_renew=false from the
+  // revenuecat-webhook CANCELLATION event) get pinged — auto-renewing users
+  // skip, since they aren't actually losing access at expires_at. Both tiers
+  // share the exact same tier-agnostic copy.
+  for (const tier of PAID_REMINDER_TIERS) {
+    await sendPaidSubscriptionReminders(sb, pool, tier);
+  }
 })();
 
 async function sendTrialReminders(sb, enqueuedPool) {
@@ -354,15 +395,14 @@ async function sendTrialReminders(sb, enqueuedPool) {
     if (!sentSet.has(`${id}:3day`)) {
       rows.push({
         recipient_id: id,
-        actor_id: null,
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
         type: 'trial_reminder',
         subtype: '3day',
-        // Subject-only inbox row — kept ≤39 chars for the single-line "no
-        // ellipsis" inbox layout (migration 223 / 2026-06-04). Push body
-        // uses the same string; iOS truncates long titles anyway. Warmed
-        // 2026-07-05 (was "Trial ends in 3 days — tap to subscribe") —
-        // tap already routes to /subscribe, the string can afford charm.
-        body: '3 dream nights left in your trial ✨',
+        // `body` is the friendly reminder + CTA (the row subtext / push body).
+        // The TITLE line is derived by subtype in the client (app/inbox.tsx
+        // reminderTitle) + push (send-push getNotificationContent) — keep those
+        // in sync. Copy refreshed 2026-07-21 (DreamBot voice, no em dashes).
+        body: 'Subscribe now to keep your nightly dreams coming.',
       });
     }
   }
@@ -370,10 +410,10 @@ async function sendTrialReminders(sb, enqueuedPool) {
     if (!sentSet.has(`${id}:last_night`)) {
       rows.push({
         recipient_id: id,
-        actor_id: null,
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
         type: 'trial_reminder',
         subtype: 'last_night',
-        body: 'Tonight’s your last trial dream ✨',
+        body: 'Your trial ends tomorrow. Subscribe now to keep your nightly dreams coming.',
       });
     }
   }
@@ -381,12 +421,12 @@ async function sendTrialReminders(sb, enqueuedPool) {
     if (!sentSet.has(`${id}:ended`)) {
       rows.push({
         recipient_id: id,
-        actor_id: null,
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
         type: 'trial_reminder',
         subtype: 'ended',
         // The post-expiry notice — routes to /subscribe like the others
         // (lib/notificationRouting.ts keys on type, so no client change).
-        body: 'Trial ended — keep your dreams going',
+        body: 'Subscribe to start dreaming every night again.',
       });
     }
   }
@@ -418,86 +458,125 @@ async function sendTrialReminders(sb, enqueuedPool) {
   );
 }
 
-async function sendPaidProReminders(sb, enqueuedPool) {
+// Config-driven paid-subscription expiry reminders (called once per tier via
+// PAID_REMINDER_TIERS). Candidates: onboarded non-bot users on THIS tier who
+// have cancelled auto-renewal (will_renew=false → they ARE losing access at
+// expires_at). Auto-renewing subs are excluded, so we never false-alarm.
+async function sendPaidSubscriptionReminders(sb, enqueuedPool, tier) {
   const now = Date.now();
 
-  // Candidates: onboarded paid Pro users who have cancelled auto-renewal
-  // (will_renew=false → they ARE going to lose access at expires_at). Bots
-  // and trial users excluded.
-  const { data: paidUsers, error: pErr } = await fetchAllPages(() =>
+  // Active-window candidates: on THIS tier, cancelled (will_renew=false), with
+  // the sub still active and a future expiry.
+  const { data: users, error } = await fetchAllPages(() =>
     sb
       .from('user_recipes')
       .select(
         `user_id,
-       users!inner(pro_subscription, pro_subscription_expires_at, pro_subscription_will_renew, pro_trial_started_at, is_bot)`
+       users!inner(${tier.flagColumn}, ${tier.expiresColumn}, ${tier.willRenewColumn}, is_bot)`
       )
       .eq('onboarding_completed', true)
       .eq('users.is_bot', false)
-      .eq('users.pro_subscription', true)
-      .eq('users.pro_subscription_will_renew', false)
-      .not('users.pro_subscription_expires_at', 'is', null)
+      .eq(`users.${tier.flagColumn}`, true)
+      .eq(`users.${tier.willRenewColumn}`, false)
+      .not(`users.${tier.expiresColumn}`, 'is', null)
   );
-  if (pErr) {
-    console.warn(`⚠️  paid-pro-reminder user lookup failed: ${pErr.message}`);
+  if (error) {
+    console.warn(`⚠️  ${tier.label}-reminder user lookup failed: ${error.message}`);
     return;
+  }
+
+  // Ended-window candidates: a cancelled sub that LAPSED in the last 36h. This
+  // query is FLAG-AGNOSTIC — once a sub expires the tier flag flips to false
+  // (the RevenueCat EXPIRATION webhook), so we key only on will_renew=false + a
+  // recent past expiry. The query bounds ARE the [-36h, 0] window; anything
+  // older means we already had our chance (dedup makes a re-run a no-op).
+  const endedFloorIso = new Date(now - 36 * 3600000).toISOString();
+  const nowIso = new Date(now).toISOString();
+  const { data: endedUsers, error: endErr } = await fetchAllPages(() =>
+    sb
+      .from('user_recipes')
+      .select(`user_id, users!inner(is_bot)`)
+      .eq('onboarding_completed', true)
+      .eq('users.is_bot', false)
+      .eq(`users.${tier.willRenewColumn}`, false)
+      .gte(`users.${tier.expiresColumn}`, endedFloorIso)
+      .lte(`users.${tier.expiresColumn}`, nowIso)
+  );
+  if (endErr) {
+    console.warn(`⚠️  ${tier.label}-ended lookup failed: ${endErr.message}`);
   }
 
   const enqueuedIds = new Set((enqueuedPool || []).map((u) => u.user_id));
   const need3Day = [];
   const needLast = [];
-  for (const row of paidUsers || []) {
+  for (const row of users || []) {
     const u = row.users;
-    if (shouldSend3DayPaidProReminder(u, now)) need3Day.push(row.user_id);
-    if (shouldSendLastNightPaidProReminder(u, now) && enqueuedIds.has(row.user_id)) {
+    if (tier.should3Day(u, now)) need3Day.push(row.user_id);
+    if (tier.shouldLast(u, now) && enqueuedIds.has(row.user_id)) {
       needLast.push(row.user_id);
     }
   }
-  if (need3Day.length === 0 && needLast.length === 0) {
-    console.log('Paid Pro reminders: nobody in either window.');
+  // Ended has no enqueue gate — the whole point is that dreams have STOPPED.
+  const needEnded = (endedUsers || []).map((r) => r.user_id);
+
+  if (need3Day.length === 0 && needLast.length === 0 && needEnded.length === 0) {
+    console.log(`${tier.label} reminders: nobody in any window.`);
     return;
   }
 
-  // Idempotency: dedup on (recipient × subtype). Subtypes are namespaced
-  // ('paid_3day', 'paid_last_night') so they don't collide with trial
-  // reminders if the same user trialed-then-paid-then-cancelled.
-  const candidateIds = [...new Set([...need3Day, ...needLast])];
+  // Idempotency: dedup on (recipient × subtype), scoped to this tier's type.
+  // Subtypes are namespaced per tier so they never collide for a user who
+  // moved between tiers.
+  const candidateIds = [...new Set([...need3Day, ...needLast, ...needEnded])];
   const { data: alreadySent, error: dupErr } = await sb
     .from('notifications')
     .select('recipient_id, subtype')
     .in('recipient_id', candidateIds)
-    .eq('type', 'pro_reminder');
+    .eq('type', tier.type);
   if (dupErr) {
-    console.warn(`⚠️  paid-pro-reminder dedup lookup failed: ${dupErr.message}`);
+    console.warn(`⚠️  ${tier.label}-reminder dedup lookup failed: ${dupErr.message}`);
     return;
   }
   const sentSet = new Set((alreadySent || []).map((r) => `${r.recipient_id}:${r.subtype}`));
 
   const rows = [];
   for (const id of need3Day) {
-    if (!sentSet.has(`${id}:paid_3day`)) {
+    if (!sentSet.has(`${id}:${tier.subtype3Day}`)) {
       rows.push({
         recipient_id: id,
-        actor_id: null,
-        type: 'pro_reminder',
-        subtype: 'paid_3day',
-        body: 'Pro ends in 3 days — tap to renew',
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
+        type: tier.type,
+        subtype: tier.subtype3Day,
+        body: PAID_REMINDER_BODY_3DAY,
       });
     }
   }
   for (const id of needLast) {
-    if (!sentSet.has(`${id}:paid_last_night`)) {
+    if (!sentSet.has(`${id}:${tier.subtypeLast}`)) {
       rows.push({
         recipient_id: id,
-        actor_id: null,
-        type: 'pro_reminder',
-        subtype: 'paid_last_night',
-        body: 'Pro ends tomorrow — tap to renew',
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
+        type: tier.type,
+        subtype: tier.subtypeLast,
+        body: PAID_REMINDER_BODY_LAST,
+      });
+    }
+  }
+  for (const id of needEnded) {
+    if (!sentSet.has(`${id}:${tier.subtypeEnded}`)) {
+      rows.push({
+        recipient_id: id,
+        actor_id: id, // self (actor_id is NOT NULL; null silently failed the insert)
+        type: tier.type,
+        subtype: tier.subtypeEnded,
+        body: PAID_REMINDER_BODY_ENDED,
       });
     }
   }
   if (rows.length === 0) {
     console.log(
-      `Paid Pro reminders: ${need3Day.length} matched 3day + ${needLast.length} matched last_night, all already sent.`
+      `${tier.label} reminders: ${need3Day.length} matched 3day + ${needLast.length} matched last_night ` +
+        `+ ${needEnded.length} matched ended, all already sent.`
     );
     return;
   }
@@ -506,17 +585,18 @@ async function sendPaidProReminders(sb, enqueuedPool) {
     rows.forEach((r) =>
       console.log(`  would notify ${r.recipient_id.slice(0, 8)}... ${r.subtype}`)
     );
-    console.log(`\n(dry run — ${rows.length} paid Pro reminders not inserted)`);
+    console.log(`\n(dry run — ${rows.length} ${tier.label} reminders not inserted)`);
     return;
   }
 
   const { error: insErr } = await sb.from('notifications').insert(rows);
   if (insErr) {
-    console.warn(`⚠️  paid-pro-reminder insert failed: ${insErr.message}`);
+    console.warn(`⚠️  ${tier.label}-reminder insert failed: ${insErr.message}`);
     return;
   }
   console.log(
-    `📬 Paid Pro reminders sent: ${rows.filter((r) => r.subtype === 'paid_3day').length}× 3day, ` +
-      `${rows.filter((r) => r.subtype === 'paid_last_night').length}× last_night`
+    `📬 ${tier.label} reminders sent: ${rows.filter((r) => r.subtype === tier.subtype3Day).length}× 3day, ` +
+      `${rows.filter((r) => r.subtype === tier.subtypeLast).length}× last_night, ` +
+      `${rows.filter((r) => r.subtype === tier.subtypeEnded).length}× ended`
   );
 }

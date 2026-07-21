@@ -13,6 +13,7 @@ import * as nav from '@/lib/navigate';
 import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
+import { useSubscriptionStatus } from '@/hooks/useSubscriptionStatus';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 import { UsernameNudge } from '@/components/UsernameNudge';
@@ -80,6 +81,10 @@ export default function SettingsScreen() {
   const isPro = useAuthStore((s) => s.isPro);
   const isPaidPro = useAuthStore((s) => s.isPaidPro);
   const isBasic = useAuthStore((s) => s.isBasic);
+  // Auto-renew state (RevenueCat) — so a cancelled-but-active sub reads
+  // "Auto-renew off" here, and the Plans screen it links to offers re-enable.
+  const { data: subStatus } = useSubscriptionStatus();
+  const autoRenewOff = (isPaidPro || isBasic) && subStatus?.willRenew === false;
   const proTrialEndsAt = useAuthStore((s) => s.proTrialEndsAt);
   // is_admin is no longer client-readable from the users table (migration 280) —
   // it comes from the auth store, populated via the get_my_account RPC.
@@ -516,7 +521,9 @@ export default function SettingsScreen() {
             dividerColor="rgba(167,139,250,0.22)"
             label={isPaidPro || isBasic ? 'Manage plan' : isPro ? 'Choose a plan' : 'Get Premium'}
             trailing={
-              isPaidPro ? (
+              autoRenewOff ? (
+                <Text style={styles.autoRenewOff}>Auto-renew off</Text>
+              ) : isPaidPro ? (
                 <Text style={styles.trailingSummary}>Pro</Text>
               ) : isBasic ? (
                 <Text style={styles.trailingSummary}>Basic</Text>
@@ -943,6 +950,9 @@ const styles = StyleSheet.create({
   },
   destructiveText: { color: colors.textPrimary },
   trailingSummary: { color: colors.subtleOnDark, fontSize: fontScale(13), maxWidth: 160 },
+  // Cancelled-but-active sub — amber so it reads as "needs attention" (tap →
+  // Plans → turn auto-renew back on).
+  autoRenewOff: { color: '#FFB84D', fontSize: fontScale(13), fontWeight: '600', maxWidth: 160 },
   // Live sparkle balance on the Sparkle Shop row — wallet treatment.
   balanceChip: {
     flexDirection: 'row',

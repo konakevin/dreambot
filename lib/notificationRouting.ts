@@ -63,7 +63,7 @@ const FRIEND_FOLLOW_TYPES = new Set([
 /**
  * Resolve the route path for a notification, or null if no route applies.
  * Precedence matches the existing inbox behavior:
- *   1. trial_reminder / pro_reminder → /subscribe (no upload/actor needed)
+ *   1. trial_reminder / pro_reminder / basic_reminder → /subscribe (no upload/actor needed)
  *   2. friend/follow + actorId → /user/[id]   (these can have uploadId too;
  *      friend/follow takes precedence)
  *   3. download_ready + uploadId → /photo/[id]?downloadReady=1
@@ -74,7 +74,11 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
   // the user to the plans paywall to subscribe / re-enable auto-renew. These
   // notifications carry no uploadId / actorId so this branch must come
   // before the upload-based routes.
-  if (data.type === 'trial_reminder' || data.type === 'pro_reminder') {
+  if (
+    data.type === 'trial_reminder' ||
+    data.type === 'pro_reminder' ||
+    data.type === 'basic_reminder'
+  ) {
     return '/subscribe';
   }
 

@@ -20,11 +20,14 @@ const {
   nightlyDreamedUserIds,
   hoursUntilTrialEnds,
   hoursUntilProSubscriptionEnds,
+  hoursUntilBasicSubscriptionEnds,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
   shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
+  shouldSend3DayBasicReminder,
+  shouldSendLastNightBasicReminder,
   TRIAL_DURATION_DAYS,
 } = require('../../scripts/lib/nightlyEligibility');
 
@@ -286,6 +289,58 @@ describe('paid-Pro reminder windows — mirror trial windows but key on pro_subs
   });
 });
 
+describe('Basic reminder windows — mirror paid-Pro but key on basic_subscription_expires_at', () => {
+  const basicExpiringIn = (hUntilEnd: number) => ({
+    basic_subscription: true,
+    basic_subscription_expires_at: new Date(NOW + hUntilEnd * 3_600_000).toISOString(),
+  });
+
+  describe('3-day window', () => {
+    it('fires at 66h (mid-window)', () => {
+      expect(shouldSend3DayBasicReminder(basicExpiringIn(66), NOW)).toBe(true);
+    });
+
+    it('does NOT fire above upper bound (84.5h)', () => {
+      expect(shouldSend3DayBasicReminder(basicExpiringIn(84.5), NOW)).toBe(false);
+    });
+
+    it('does NOT fire when not Basic', () => {
+      expect(
+        shouldSend3DayBasicReminder(
+          {
+            basic_subscription: false,
+            basic_subscription_expires_at: new Date(NOW + 66 * 3_600_000).toISOString(),
+          },
+          NOW
+        )
+      ).toBe(false);
+    });
+
+    it('does NOT fire when no expires_at (indefinite access)', () => {
+      expect(
+        shouldSend3DayBasicReminder(
+          { basic_subscription: true, basic_subscription_expires_at: null },
+          NOW
+        )
+      ).toBe(false);
+    });
+  });
+
+  describe('last-night window', () => {
+    it('fires at 12h before expiry', () => {
+      expect(shouldSendLastNightBasicReminder(basicExpiringIn(12), NOW)).toBe(true);
+    });
+
+    it('does NOT fire after expiry', () => {
+      expect(shouldSendLastNightBasicReminder(basicExpiringIn(-0.5), NOW)).toBe(false);
+    });
+
+    it('does NOT fire above upper bound (37h)', () => {
+      expect(shouldSendLastNightBasicReminder(basicExpiringIn(37), NOW)).toBe(false);
+    });
+  });
+});
+
 describe('hour calculators — null-safe + correct sign', () => {
   it('hoursUntilTrialEnds is null when no trial started', () => {
     expect(hoursUntilTrialEnds({}, NOW)).toBeNull();
@@ -304,6 +359,16 @@ describe('hour calculators — null-safe + correct sign', () => {
     expect(
       hoursUntilProSubscriptionEnds(
         { pro_subscription: true, pro_subscription_expires_at: null },
+        NOW
+      )
+    ).toBeNull();
+  });
+
+  it('hoursUntilBasicSubscriptionEnds is null when not Basic', () => {
+    expect(hoursUntilBasicSubscriptionEnds({ basic_subscription: false }, NOW)).toBeNull();
+    expect(
+      hoursUntilBasicSubscriptionEnds(
+        { basic_subscription: true, basic_subscription_expires_at: null },
         NOW
       )
     ).toBeNull();

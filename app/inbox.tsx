@@ -30,6 +30,7 @@ import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import * as Haptics from 'expo-haptics';
 import { useQueryClient } from '@tanstack/react-query';
 import { useInboxGrouped, type InboxGroup } from '@/hooks/useInboxGrouped';
+import { isDreamBotSystemNotification, DREAMBOT_SYSTEM_TYPES } from '@/lib/systemNotifications';
 import { useDeleteGroup } from '@/hooks/useDeleteGroup';
 import { useMarkInboxViewed } from '@/hooks/useMarkInboxViewed';
 import { useGroupActors } from '@/hooks/useGroupActors';
@@ -70,6 +71,11 @@ const MASCOTS = [
   require('@/assets/images/mascots/mascot-4.jpg'),
   require('@/assets/images/mascots/mascot-5.jpg'),
 ];
+
+// The DreamBot mascot (robot reaching for a star — the sign-in logo). Shown as
+// the avatar on SYSTEM notifications (isDreamBotSystemNotification) so the row
+// reads as an official message from DreamBot rather than from the user.
+const DREAMBOT_MASCOT = require('@/assets/images/onboarding/mascot-welcome.png');
 
 // Inline message preview length. Bumped from 28 → 90 so comment / reply /
 // mention / dream bodies read like a real message snippet across up to two
@@ -121,6 +127,7 @@ function iconForGroup(g: InboxGroup): IconSpec {
       return { name: 'arrow-down-circle', color: colors.accent };
     case 'trial_reminder':
     case 'pro_reminder':
+    case 'basic_reminder':
       return { name: 'diamond', color: colors.accent };
     case 'welcome_gift':
       return { name: 'gift', color: colors.accent };
@@ -143,6 +150,36 @@ function iconForGroup(g: InboxGroup): IconSpec {
  * `isAggregable` flags the rows that open the actor sheet on tap when
  * count > 1 (likes / reposts / follow-accepted / friend-accepted).
  */
+/**
+ * Title line for a trial/pro expiry reminder, keyed by subtype. MUST stay in
+ * sync with getNotificationContent() in supabase/functions/send-push/index.ts
+ * (the push banner) — same title in the tray and the inbox. The friendly
+ * reminder + CTA rides in the row's `body` (subtext).
+ */
+function reminderTitle(type: string, subtype: string | null): string {
+  switch (subtype) {
+    case '3day':
+    case 'paid_3day':
+    case 'basic_3day':
+      return '3 dream nights left 🌙';
+    case 'last_night':
+      return "Tonight's your last trial dream 🌙";
+    case 'paid_last_night':
+    case 'basic_last_night':
+      return "Tonight's your last nightly dream 🌙";
+    case 'ended':
+    case 'paid_ended':
+    case 'basic_ended':
+      return 'Your nightly dreams have ended';
+    default:
+      // Paid tiers (Pro + Basic) share tier-agnostic copy — we never name the
+      // tier, so the user renews whichever subscription they want.
+      if (type === 'pro_reminder' || type === 'basic_reminder')
+        return 'Your subscription is ending';
+      return 'Your trial is ending';
+  }
+}
+
 function getGroupText(g: InboxGroup): {
   subject: string;
   subtext: string | null;
@@ -238,18 +275,24 @@ function getGroupText(g: InboxGroup): {
     case 'download_ready':
       return { subject: 'Your HD download is ready', subtext: null, isAggregable: false };
 
-    // Reminders: body IS the subject (already shortened in nightly-dreams.js
-    // to ≤39 chars by migration 223 — fits single line cleanly).
+    // Reminders (2026-07-21): a DreamBot-voice title line by subtype + the
+    // friendly reminder/CTA as the subtext (stored in `body`). Was a single
+    // body-as-subject line; now reads title + message like a real ping.
     case 'trial_reminder':
     case 'pro_reminder':
+    case 'basic_reminder':
       return {
-        subject: g.body || 'Pro reminder',
-        subtext: null,
+        subject: reminderTitle(g.type, g.subtype),
+        subtext: capSubtext(g.body),
         isAggregable: false,
       };
 
     case 'welcome_gift':
-      return { subject: "Welcome, here's a gift", subtext: null, isAggregable: false };
+      return {
+        subject: 'Welcome to DreamBot 🌙',
+        subtext: 'Tap to see how it works and grab your welcome gift.',
+        isAggregable: false,
+      };
 
     case 'sparkle_gift':
       // 'received' body = the gifter's optional message (surface as subtext);
@@ -416,8 +459,14 @@ function GroupRow({
   // actor sheet, dream_failed → retry/tweak alert.
   const [expanded, setExpanded] = useState(false);
   const fullBody = group.body?.trim() || null;
+  // Expiry reminders (trial/pro/basic) have a CTA subtext, but tapping them
+  // must ROUTE to the plans screen (/subscribe), not expand — so exclude them
+  // from the expand path. Their CTA is short enough to show fully at 2 lines.
   const canExpand =
-    !!subtext && !(isAggregable && group.actorCount > 1) && group.type !== 'dream_failed';
+    !!subtext &&
+    !(isAggregable && group.actorCount > 1) &&
+    group.type !== 'dream_failed' &&
+    !DREAMBOT_SYSTEM_TYPES.has(group.type);
   // "New since last inbox view" — drives the pip overlay on the icon
   // tile. Migration 223 swapped per-row seen_at into a time-window flag
   // off `users.last_inbox_view_at` so the inbox is reliably empty-of-pips
@@ -436,6 +485,15 @@ function GroupRow({
   // system pings (dream ready, downloads, milestones) have no actor → fall
   // back to the tinted type tile.
   const avatar = group.previewAvatars[0] ?? null;
+  // System notifications (reminders + nightly dreams) render with the DreamBot
+  // mascot instead of the user's own avatar. See lib/systemNotifications.
+  const isDreamBotSystem = isDreamBotSystemNotification(group.type, group.subtype);
+  // Expiry reminders show a purple "go" arrow (→ plans) in the right column
+  // instead of a timestamp.
+  const isReminder =
+    group.type === 'trial_reminder' ||
+    group.type === 'pro_reminder' ||
+    group.type === 'basic_reminder';
 
   return (
     <ReanimatedSwipeable
@@ -497,7 +555,18 @@ function GroupRow({
               (heart / comment / follow…), or the tinted type tile when there's
               no actor. "New" pip rides top-right. */}
           <View style={styles.iconTileWrap}>
-            {avatar ? (
+            {isDreamBotSystem ? (
+              <>
+                <Image
+                  source={DREAMBOT_MASCOT}
+                  style={[styles.avatarImg, styles.dreambotAvatar]}
+                  contentFit="cover"
+                />
+                <View style={[styles.typeBadge, { backgroundColor: icon.color }]}>
+                  <Ionicons name={icon.name} size={11} color="#FFFFFF" />
+                </View>
+              </>
+            ) : avatar ? (
               <>
                 <Image
                   source={{ uri: resizeAvatar(avatar) }}
@@ -559,7 +628,20 @@ function GroupRow({
           </TouchableOpacity>
         )}
 
-        <Text style={[styles.time, isNew && styles.timeUnread]}>{formatTimeAgo(group.lastAt)}</Text>
+        {isReminder ? (
+          <TouchableOpacity
+            style={styles.ctaArrow}
+            onPress={() => (selectMode ? onToggleSelect() : onPress())}
+            activeOpacity={0.7}
+            hitSlop={10}
+          >
+            <Ionicons name="arrow-forward" size={fontScale(18)} color="#A78BFA" />
+          </TouchableOpacity>
+        ) : (
+          <Text style={[styles.time, isNew && styles.timeUnread]}>
+            {formatTimeAgo(group.lastAt)}
+          </Text>
+        )}
       </View>
     </ReanimatedSwipeable>
   );
@@ -1209,6 +1291,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: colors.card,
   },
+  // The DreamBot mascot PNG has a transparent background — sit it on a dark
+  // brand tile so the little robot reads cleanly in the circular avatar slot.
+  dreambotAvatar: {
+    backgroundColor: colors.surface,
+  },
   // Type-glyph badge riding the avatar's bottom-right — the pop of brand
   // colour that tells you at a glance whether it's a like / comment / follow.
   typeBadge: {
@@ -1283,6 +1370,16 @@ const styles = StyleSheet.create({
   timeUnread: {
     color: colors.accent,
     fontWeight: '700',
+  },
+  // Purple "go" arrow in the right column of expiry-reminder rows — a subtle
+  // circular button (translucent purple) that denotes "tap to subscribe/renew".
+  ctaArrow: {
+    width: horizontalScale(34),
+    height: horizontalScale(34),
+    borderRadius: 999,
+    backgroundColor: 'rgba(167,139,250,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   // The expand sheet's larger actor avatars (rows show their own avatar +
   // type badge inline).

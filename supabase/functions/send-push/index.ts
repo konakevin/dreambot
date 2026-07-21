@@ -56,47 +56,66 @@ function getNotificationContent(
   subtype: string | null = null
 ) {
   // Trial-expiry reminders inserted by scripts/nightly-dreams.js.
-  // Subtype routes the push title; body is the in-app copy as inserted.
+  // Subtype routes the push title; body is the friendly reminder/CTA as
+  // inserted. TITLES MUST MATCH reminderTitle() in app/inbox.tsx so the tray
+  // banner and the in-app row read identically. (Copy refreshed 2026-07-21:
+  // DreamBot voice, no em dashes; trial uses a generic "Subscribe" CTA since a
+  // trial user can pick Basic OR Pro, paid tiers use "Renew".)
   if (type === 'trial_reminder') {
     if (subtype === '3day') {
       return {
-        title: 'Your Pro trial ends in 3 days',
-        body: body ?? 'Subscribe to keep nightly dreams coming',
+        title: '3 dream nights left 🌙',
+        body: body ?? 'Subscribe now to keep your nightly dreams coming.',
       };
     }
     if (subtype === 'last_night') {
       return {
-        title: 'Tonight is your last Pro nightly dream',
-        body: body ?? 'Your trial ends tomorrow — subscribe to keep nightly dreams coming',
+        title: "Tonight's your last trial dream 🌙",
+        body: body ?? 'Your trial ends tomorrow. Subscribe now to keep your nightly dreams coming.',
       };
     }
-    // Post-expiry notice (2026-07-05, nightly-dreams.js 'ended' subtype) —
-    // dreams have already stopped; the tap routes to the /subscribe paywall.
+    // Post-expiry notice ('ended' subtype) — dreams have already stopped; the
+    // tap routes to the /subscribe paywall.
     if (subtype === 'ended') {
       return {
-        title: 'Your Pro trial has ended',
-        body: body ?? 'Subscribe to keep nightly dreams coming',
+        title: 'Your nightly dreams have ended',
+        body: body ?? 'Subscribe to start dreaming every night again.',
       };
     }
-    return { title: 'Your Pro trial is ending', body: body ?? 'Tap to learn more' };
+    return {
+      title: 'Your trial is ending',
+      body: body ?? 'Subscribe to keep your nightly dreams.',
+    };
   }
-  // Paid Pro expiry reminders (sub cancelled but still in paid period).
-  // Same windows as trial_reminder; different copy ("resubscribe" not
-  // "subscribe").
-  if (type === 'pro_reminder') {
-    if (subtype === 'paid_3day') {
+  // Paid subscription expiry (Pro + Basic — sub cancelled but still in the paid
+  // period). Both tiers share the exact SAME tier-agnostic copy: we never name
+  // the tier, so the user renews whichever subscription they choose. TITLES
+  // MUST MATCH reminderTitle() in app/inbox.tsx.
+  if (type === 'pro_reminder' || type === 'basic_reminder') {
+    if (subtype === 'paid_3day' || subtype === 'basic_3day') {
       return {
-        title: 'Your Pro subscription ends in 3 days',
-        body: body ?? 'Resubscribe to keep nightly dreams coming',
+        title: '3 dream nights left 🌙',
+        body: body ?? 'Renew your subscription now to keep your nightly dreams coming.',
       };
     }
-    if (subtype === 'paid_last_night') {
+    if (subtype === 'paid_last_night' || subtype === 'basic_last_night') {
       return {
-        title: 'Tonight is your last Pro nightly dream',
-        body: body ?? 'Your subscription ends tomorrow — resubscribe to keep nightly dreams coming',
+        title: "Tonight's your last nightly dream 🌙",
+        body:
+          body ?? 'Your subscription ends tomorrow. Renew now to keep your nightly dreams coming.',
       };
     }
-    return { title: 'Your Pro subscription is ending', body: body ?? 'Tap to learn more' };
+    // Post-lapse notice ('paid_ended' / 'basic_ended') — dreams have stopped.
+    if (subtype === 'paid_ended' || subtype === 'basic_ended') {
+      return {
+        title: 'Your nightly dreams have ended',
+        body: body ?? 'Renew your subscription to start dreaming every night again.',
+      };
+    }
+    return {
+      title: 'Your subscription is ending',
+      body: body ?? 'Renew to keep your nightly dreams.',
+    };
   }
   switch (type) {
     case 'post_like':

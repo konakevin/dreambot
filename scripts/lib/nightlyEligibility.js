@@ -176,6 +176,42 @@ function shouldSendTrialEndedNotice(u, now = Date.now(), trialDays = TRIAL_DURAT
   return h <= 0 && h >= -36;
 }
 
+/**
+ * Hours until a paid Basic subscription lapses. Mirror of
+ * hoursUntilProSubscriptionEnds for the Basic tier. Null unless the user is a
+ * paid Basic subscriber with an expiry set.
+ */
+function hoursUntilBasicSubscriptionEnds(u, now = Date.now()) {
+  if (!u || u.basic_subscription !== true) return null;
+  if (!u.basic_subscription_expires_at) return null;
+  const endsMs = new Date(u.basic_subscription_expires_at).getTime();
+  return (endsMs - now) / (60 * 60 * 1000);
+}
+
+/**
+ * 3-day Basic expiry reminder. Same (48, 84]h window as the paid-Pro version,
+ * reading basic_subscription_expires_at. The caller MUST additionally check
+ * basic_subscription_will_renew === false — auto-renewing subs aren't losing
+ * access, so reminding them is a false alarm.
+ */
+function shouldSend3DayBasicReminder(u, now = Date.now()) {
+  const h = hoursUntilBasicSubscriptionEnds(u, now);
+  if (h === null) return false;
+  return h > 48 && h <= 84;
+}
+
+/**
+ * Last-night Basic expiry reminder. Mirrors the paid-Pro version (0, 36]h.
+ * Caller MUST also check basic_subscription_will_renew === false AND that the
+ * user is being enqueued for a dream this same cron run (so "tonight is your
+ * last nightly dream" is accurate).
+ */
+function shouldSendLastNightBasicReminder(u, now = Date.now()) {
+  const h = hoursUntilBasicSubscriptionEnds(u, now);
+  if (h === null) return false;
+  return h > 0 && h <= 36;
+}
+
 module.exports = {
   isProActive,
   isPaidProActive,
@@ -185,10 +221,13 @@ module.exports = {
   nightlyDreamedUserIds,
   hoursUntilTrialEnds,
   hoursUntilProSubscriptionEnds,
+  hoursUntilBasicSubscriptionEnds,
   shouldSend3DayTrialReminder,
   shouldSendLastNightTrialReminder,
   shouldSendTrialEndedNotice,
   shouldSend3DayPaidProReminder,
   shouldSendLastNightPaidProReminder,
+  shouldSend3DayBasicReminder,
+  shouldSendLastNightBasicReminder,
   TRIAL_DURATION_DAYS,
 };

@@ -101,7 +101,11 @@ export default function WelcomeGiftScreen() {
           confusingly jump to a feed they were never on), so it's hidden and the
           "Let's go" CTA is the only way out (Kevin 2026-07-12). */}
       {!fromOnboarding && (
-        <Pressable onPress={handleBack} style={s.backBtn} hitSlop={12}>
+        <Pressable
+          onPress={handleBack}
+          style={[s.backBtn, { top: insets.top + verticalScale(4) }]}
+          hitSlop={12}
+        >
           <Ionicons name="chevron-back" size={26} color={colors.textPrimary} />
         </Pressable>
       )}
