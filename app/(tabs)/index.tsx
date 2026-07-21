@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { trackFeedTabSelected } from '@/lib/analytics';
-import { useFeedStore } from '@/store/feed';
+import { useFeedStore, MANUAL_FEED_SHUFFLE } from '@/store/feed';
 import { colors, ANIM } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useQueryClient } from '@tanstack/react-query';
@@ -201,6 +201,13 @@ export default function HomeScreen() {
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
   const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const homeFeedResetToken = useFeedStore((s) => s.homeFeedResetToken);
+  // Bumped when a re-tap reshuffle COMMITS. It's part of FullScreenFeed's key,
+  // so the commit REMOUNTS the pager: new posts + top position land in one
+  // mount, exactly like a tab switch (the same key mechanism) — no reconcile
+  // frames, no jump-to-top, no cover mask (Kevin 2026-07-21: the masked swap
+  // still read as a black flash). Pull-to-refresh deliberately does NOT bump
+  // it — the pull spinner strip owns that transition and settles in place.
+  const [reshuffleEpoch, setReshuffleEpoch] = useState(0);
   // Dedup by id in case the paginated RPC's cursor boundary lets the same post
   // appear on two adjacent pages (can happen when many posts share the same
   // feed_score and the tiebreaker overlaps). Kills both data-level duplicates
@@ -278,31 +285,59 @@ export default function HomeScreen() {
   return (
     <View style={s.root}>
       <FullScreenFeed
-        key={activeTab}
+        key={`${activeTab}:${reshuffleEpoch}`}
         posts={posts}
         isLoading={isLoading}
         // Pull-to-refresh = PREFETCH a new random seed's feed, THEN swap to it,
         // so the reshuffle is instant with no loading flash (the old feed stays
         // on screen the whole time; the spinner in the pull gap tracks the
         // prefetch). Swapping only refetched the same seed before → no change.
-        onRefresh={async () => {
+        onRefresh={async (opts?: { deferSwap?: boolean }) => {
           if (!user) return;
-          // Drop the pinned self-post. It's shown ONCE right after posting (the
-          // feed never shows your own posts otherwise — get_feed excludes them),
-          // so any refresh should clear it. This covers BOTH pull-to-refresh and
-          // the home-icon re-tap (the re-tap runs through this same onRefresh via
-          // scrollToTopToken). Was only cleared on tab change, so it stayed welded
-          // to the top until an app restart (Kevin 2026-07-12).
-          setPinnedPost(null);
-          // Shuffle strength FIRST (mig 352): the prefetch below must run at
-          // the manual-refresh 0.45, not the cold-load 0.1 — bumping after
-          // meant the first re-tap re-served the welded top post ("same
-          // image"), and the key change re-fetched at a different strength
-          // (the flicker-into-a-different-image).
-          useFeedStore.getState().bumpShuffle();
+          // In-flight guard: a re-tap while a reshuffle is already prefetching
+          // is a no-op (double prefetch + double remount otherwise).
+          if (useFeedStore.getState().homeFeedRefreshing) return;
           const newSeed = Math.random();
-          await prefetchDreamFeed(queryClient, activeTab, user.id, newSeed);
-          setFeedSeed(newSeed);
+          // Tab-bar signal: the home icon shows a small spinner for the whole
+          // network wait — the feed itself stays fully visible + interactive
+          // (2026-07-21; replaces the heavy opaque cover during prefetch).
+          useFeedStore.getState().setHomeFeedRefreshing(true);
+          try {
+            // Prefetch AT the manual-refresh shuffle strength, passed explicitly.
+            // Do NOT bumpShuffle() here: feedShuffle is part of the MOUNTED
+            // feed's query key, so a store bump mid-flow re-pointed the visible
+            // feed at an empty (oldSeed, 0.45) entry whose stray fetch swapped a
+            // random card under the user on the first re-tap after launch
+            // (Kevin 2026-07-21). setFeedSeed in commit() sets seed + shuffle
+            // in ONE store update, landing the mounted key directly on this
+            // prefetched entry.
+            await prefetchDreamFeed(
+              queryClient,
+              activeTab,
+              user.id,
+              newSeed,
+              null,
+              5,
+              MANUAL_FEED_SHUFFLE
+            );
+          } finally {
+            useFeedStore.getState().setHomeFeedRefreshing(false);
+          }
+          // The ATOMIC swap: clear the pinned self-post (it's shown once right
+          // after posting — any refresh clears it, Kevin 2026-07-12), flip to
+          // the prefetched seed, and (re-tap only) bump the epoch so the pager
+          // REMOUNTS at the new top — one frame, old feed → new feed, the same
+          // mechanism as a tab switch. All three land in one React commit.
+          const commit = () => {
+            setPinnedPost(null);
+            setFeedSeed(newSeed);
+            if (opts?.deferSwap) setReshuffleEpoch((e) => e + 1);
+          };
+          // Re-tap path (deferSwap): hand the swap back to FullScreenFeed so it
+          // fires only after the prefetch resolved. Pull path: commit now — the
+          // pull spinner strip owns that transition and settles in place.
+          if (opts?.deferSwap) return commit;
+          commit();
         }}
         listRef={listRef}
         onEndReached={() => {

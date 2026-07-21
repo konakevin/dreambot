@@ -120,9 +120,17 @@ export async function prefetchDreamFeed(
   userId: string,
   feedSeed: number,
   botUserId: string | null = null,
-  imageCount = 5
+  imageCount = 5,
+  // Explicit shuffle strength for the prefetched key. The reshuffle flow MUST
+  // pass this instead of pre-bumping the store: feedShuffle is part of the
+  // MOUNTED feed's query key, so a store bump mid-flow re-pointed the visible
+  // feed at an empty (oldSeed, 0.45) entry and its stray fetch swapped a random
+  // card under the user on the FIRST re-tap after launch (Kevin 2026-07-21).
+  // The commit then sets seed + shuffle atomically (setFeedSeed does both), so
+  // the mounted key changes ONCE — straight onto this prefetched entry.
+  shuffle?: number
 ): Promise<void> {
-  const feedShuffle = useFeedStore.getState().feedShuffle;
+  const feedShuffle = shuffle ?? useFeedStore.getState().feedShuffle;
   const queryKey = buildQueryKey(tab, userId, feedSeed, feedShuffle, botUserId);
   try {
     await queryClient.prefetchInfiniteQuery({

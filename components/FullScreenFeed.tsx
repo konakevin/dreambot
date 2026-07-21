@@ -9,7 +9,6 @@
 import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Dimensions, InteractionManager, AppState, View } from 'react-native';
-import { BrandSpinner } from '@/components/BrandSpinner';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
@@ -43,7 +42,11 @@ interface Props {
   isLoading?: boolean;
   /** Pull-down-at-top to refresh. The pager owns the spinner; this just runs
    *  the refetch (and jumps to the top once it lands). */
-  onRefresh?: () => void | Promise<unknown>;
+  /** Refresh the feed. `deferSwap` (home re-tap path): prefetch only, then
+   *  resolve with a commit() callback that performs the visible swap — the
+   *  pager runs it behind a one-beat mask so the reshuffle is a single clean
+   *  cut. Without it (finger pull), the swap happens before resolve. */
+  onRefresh?: (opts?: { deferSwap?: boolean }) => void | Promise<unknown>;
   onEndReached?: () => void;
   /** Index to scroll to on mount (for album deep links) */
   initialIndex?: number;
@@ -349,10 +352,6 @@ export function FullScreenFeed({
   // refreshed the feed UNDER a still-open sheet (Kevin 2026-07-05: long-press
   // a comment, tap Home, feed resets behind the orphaned sheet).
   const skipFirstScrollToTop = useRef(true);
-  // Home re-tap refresh runs QUIETLY: centered overlay spinner while the new
-  // seed prefetches, then the swap — the pull-down gap + RefreshControl are
-  // reserved for a deliberate finger pull (Kevin 2026-07-09).
-  const [quietRefreshing, setQuietRefreshing] = useState(false);
   // Latest-ref so the effect below keys ONLY on the token — onRefreshProp is
   // often an inline arrow (new identity per parent render) and putting it in
   // the deps would re-fire the refresh on every re-render.
@@ -368,25 +367,28 @@ export function FullScreenFeed({
     // Both overlays mask the host screen's chrome while open — restore it, or
     // a re-tap dismissal strands the pills hidden and untouchable.
     onHudToggle?.(true);
-    // Re-tap = QUIET new-seed refresh behind a centered overlay spinner. The
-    // CURRENT pic stays exactly where it is while the new feed prefetches
-    // (Kevin 2026-07-09: no visual movement until the swap is ready); when
-    // the promise resolves we jump to top + swap in the same covered beat,
-    // and the spinner lifts one frame after the swap commits. (This used to
-    // drive the pager's pull-refresh UI — the feed yanked itself down and
-    // parked on the RefreshControl; the pull gap is now finger-only.)
+    // Re-tap = QUIET new-seed refresh in two phases (2026-07-21):
+    //   1. PREFETCH — nothing on screen changes. The current feed stays fully
+    //      visible + interactive; the tab-bar home icon carries the loading
+    //      signal (feedStore.homeFeedRefreshing, set by the parent's onRefresh).
+    //      deferSwap makes the parent hold the seed swap and hand it back as a
+    //      commit() callback, so no data changes under the visible pager.
+    //   2. SWAP — commit() flips the seed AND bumps the parent's reshuffle
+    //      epoch, which is part of this component's `key`: React REMOUNTS the
+    //      pager with the new posts already at the top. One frame, old feed →
+    //      new feed — the exact mechanism a tab switch uses, which is why tab
+    //      switches never flash. This replaced two generations of masking (a
+    //      cover for the whole network wait, then a 3-frame swap mask) that
+    //      both read as a black flash (Kevin 2026-07-21). No jump-to-top and
+    //      no index reset needed: the fresh mount starts at 0.
     if (onRefreshPropRef.current) {
-      setQuietRefreshing(true);
-      Promise.resolve(onRefreshPropRef.current()).finally(() => {
-        currentIndex.current = 0;
-        scrollToTopImpl(false);
-        // Hold the opaque cover until the new seed has COMMITTED and the pager
-        // has laid out at the top — double rAF = after the next paint — so the
-        // reshuffle + jump-to-top are never visible (no "swapping between a few
-        // pics" on a Home re-tap; Kevin 2026-07-19). Lifting after a single
-        // frame revealed the pager mid-reconcile.
-        requestAnimationFrame(() => requestAnimationFrame(() => setQuietRefreshing(false)));
-      });
+      Promise.resolve(onRefreshPropRef.current({ deferSwap: true }))
+        .then((commit) => {
+          if (typeof commit === 'function') (commit as () => void)();
+        })
+        .catch(() => {
+          // Prefetch failed — leave the current feed exactly as it is.
+        });
     } else {
       currentIndex.current = 0;
       scrollToTopImpl(true);
@@ -622,39 +624,6 @@ export function FullScreenFeed({
           // 2026-07-11). Was colors.textPrimary (white) + a gradient swirl.
           refreshTint={colors.textSecondary}
         />
-        {quietRefreshing && (
-          <View
-            pointerEvents="none"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              // OPAQUE cover: the reshuffle + jump-to-top happen entirely behind
-              // this, so the feed never visibly swaps through a few pics during a
-              // Home re-tap. Reveals the settled new top once the swap commits
-              // (Kevin 2026-07-19). Was a tiny transparent puck that left the
-              // messy swap on full display.
-              backgroundColor: colors.background,
-            }}
-          >
-            {/* CIRCULAR scrim, tight to the ring (radius = half the 44+2×8 box).
-                The old rounded-square squircle read as an app-icon badge
-                rather than a spinner puck (Kevin 2026-07-10). */}
-            <View
-              style={{
-                backgroundColor: 'rgba(10,10,18,0.72)',
-                borderRadius: 30,
-                padding: 8,
-              }}
-            >
-              <BrandSpinner size={44} />
-            </View>
-          </View>
-        )}
       </View>
       {commentPost && (
         /* Inline overlay ON PURPOSE (not a Modal): profile pushes from

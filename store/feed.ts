@@ -36,6 +36,12 @@ export interface FeedStore {
   // + clear per-bot scroll memory (feed refresh rides on regenerateSeed).
   botsResetToken: number;
   bumpBotsReset: () => void;
+  // True while a Home-feed reshuffle (re-tap or pull) is prefetching the new
+  // seed. The tab bar swaps the home icon for a small spinner; the feed itself
+  // stays fully visible and untouched until the swap commits (2026-07-21 —
+  // replaces the heavy full-screen opaque cover during the network wait).
+  homeFeedRefreshing: boolean;
+  setHomeFeedRefreshing: (v: boolean) => void;
   // Active tab tracking (for programmatic navigation)
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -70,6 +76,12 @@ export interface FeedStore {
 // user-specific via follows/blocks/recency.
 const FEED_COLD_SEED = 0.5;
 
+/** Manual-refresh shuffle strength (mig 352) — vs the 0.10 cold-load jitter.
+ *  Exported so the reshuffle prefetch can build its cache key at this strength
+ *  WITHOUT pre-bumping the store (the store bump lands atomically at commit
+ *  time via setFeedSeed). */
+export const MANUAL_FEED_SHUFFLE = 0.45;
+
 export const useFeedStore = create<FeedStore>((set) => ({
   pinnedPost: null,
   setPinnedPost: (post) => set({ pinnedPost: post }),
@@ -84,9 +96,9 @@ export const useFeedStore = create<FeedStore>((set) => ({
   // changed"). One-way ratchet per session: once the user asks for shuffle,
   // every subsequent seed is a real shuffle.
   feedShuffle: 0.1,
-  regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: 0.45 }),
-  bumpShuffle: () => set({ feedShuffle: 0.45 }),
-  setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: 0.45 }),
+  regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: MANUAL_FEED_SHUFFLE }),
+  bumpShuffle: () => set({ feedShuffle: MANUAL_FEED_SHUFFLE }),
+  setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: MANUAL_FEED_SHUFFLE }),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
   homeFeedResetToken: 0,
@@ -95,6 +107,8 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpTopGridReset: () => set((s) => ({ topGridResetToken: s.topGridResetToken + 1 })),
   botsResetToken: 0,
   bumpBotsReset: () => set((s) => ({ botsResetToken: s.botsResetToken + 1 })),
+  homeFeedRefreshing: false,
+  setHomeFeedRefreshing: (v) => set({ homeFeedRefreshing: v }),
   activeTab: 'index',
   setActiveTab: (tab) => set({ activeTab: tab }),
   pendingPostId: null,
