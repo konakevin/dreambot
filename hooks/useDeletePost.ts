@@ -6,6 +6,38 @@ import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { removeUploadFromPages } from '@/lib/feedHelpers';
 import { invalidateProfileGrids } from '@/lib/gridInvalidation';
+import { useFeedStore } from '@/store/feed';
+import { useAlbumStore } from '@/store/album';
+
+/**
+ * Remove deleted upload(s) from the two Zustand snapshots the query-cache
+ * removal can't reach: the home feed's pinned self-post
+ * (useFeedStore.pinnedPost — a just-posted dream shows pinned because get_feed
+ * excludes your own posts) and the full-screen album viewer's stashed list
+ * (useAlbumStore.posts/ids, which photo/[id] falls back to). Without this a
+ * deleted card lingered on the feed / in the viewer even though the DB row was
+ * gone (Kevin 2026-07-20). Returns a restore() so onError rolls these back with
+ * the query caches.
+ */
+function prunePostFromSnapshots(ids: Set<string>): () => void {
+  const feed = useFeedStore.getState();
+  const album = useAlbumStore.getState();
+  const prevPinned = feed.pinnedPost;
+  const prevAlbumPosts = album.posts;
+  const prevAlbumIds = album.ids;
+  if (prevPinned && ids.has(prevPinned.id)) feed.setPinnedPost(null);
+  if (prevAlbumPosts.some((p) => ids.has(p.id))) {
+    album.setAlbumPosts(prevAlbumPosts.filter((p) => !ids.has(p.id)));
+  }
+  if (prevAlbumIds.some((id) => ids.has(id))) {
+    album.setAlbum(prevAlbumIds.filter((id) => !ids.has(id)));
+  }
+  return () => {
+    useFeedStore.getState().setPinnedPost(prevPinned);
+    useAlbumStore.getState().setAlbumPosts(prevAlbumPosts);
+    useAlbumStore.getState().setAlbum(prevAlbumIds);
+  };
+}
 
 // Page shape used by hooks that delete-post needs to mutate. Both shapes
 // are still in the codebase (paginated infinite queries returning {rows,...}
@@ -173,7 +205,10 @@ export function useDeletePost() {
         }
       }
 
-      return { snapshots };
+      // Zustand snapshots (pinned self-post + album viewer) the caches miss.
+      const restoreSnapshots = prunePostFromSnapshots(new Set([uploadId]));
+
+      return { snapshots, restoreSnapshots };
     },
     onSuccess: () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -187,6 +222,7 @@ export function useDeletePost() {
           qc.setQueryData(JSON.parse(keyStr), data);
         }
       }
+      ctx?.restoreSnapshots?.();
     },
   });
 }
@@ -247,7 +283,9 @@ export function useBulkDeletePosts() {
         }
       }
 
-      return { snapshots };
+      const restoreSnapshots = prunePostFromSnapshots(ids);
+
+      return { snapshots, restoreSnapshots };
     },
     onSuccess: ({ failed, deleted }) => {
       if (deleted > 0) {
@@ -272,6 +310,7 @@ export function useBulkDeletePosts() {
           qc.setQueryData(JSON.parse(keyStr), data);
         }
       }
+      ctx?.restoreSnapshots?.();
     },
   });
 }
