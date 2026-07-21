@@ -25,6 +25,26 @@ export interface FeedCursor {
 export type FeedRow = DreamPostItem & { feed_score?: number };
 export type FeedPage = { rows: FeedRow[]; nextCursor: FeedCursor | null };
 
+/**
+ * Drop every cached feed entry from a PREVIOUS seed. Feed keys include
+ * feedSeed, so each reshuffle mints a whole new key family and ORPHANS the old
+ * one — and the bots prefetch re-warms ~17 more per seed. With a 24h gcTime
+ * nothing ever left the cache: a heavy session accumulated ~1,600 feed entries,
+ * and every optimistic sweep (likes, counts) walked ALL of them with full page
+ * copies — 6+ seconds of blocked JS per double-tap, universal button lag
+ * (Kevin 2026-07-21, [like-perf] logs). Call at every seed rotation; steady
+ * state returns to ~20 live entries. 'explore' keys also carry the seed
+ * (position 3) — same treatment.
+ */
+export function pruneStaleFeedCaches(queryClient: QueryClient, activeSeed: number): void {
+  for (const root of ['dreamFeed', 'explore']) {
+    queryClient.removeQueries({
+      queryKey: [root],
+      predicate: (q) => q.queryKey[3] !== activeSeed,
+    });
+  }
+}
+
 function buildQueryKey(
   tab: FeedTab,
   userId: string | undefined,

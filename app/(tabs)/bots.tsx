@@ -28,7 +28,7 @@ import { useBotUsers } from '@/hooks/useBotUsers';
 import { trackBotViewed } from '@/lib/analytics';
 import { BotsHorizontalPager } from '@/components/BotsHorizontalPager';
 import { BotPillRow } from '@/components/BotPillRow';
-import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
+import { prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
 
 function EmptyBots() {
   return (
@@ -106,6 +106,11 @@ export default function BotsScreen() {
   // call is a cheap no-op when the cache is already warm.
   useEffect(() => {
     if (!botUsers?.length || !user) return;
+    // Prune the previous seed's orphaned entries BEFORE re-warming ~17 more —
+    // this effect re-runs on every feedSeed rotation, and unpruned it was the
+    // main driver of the ~1,600-entry cache bloat behind the universal button
+    // lag (Kevin 2026-07-21).
+    pruneStaleFeedCaches(queryClient, feedSeed);
     prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
     for (const bot of botUsers) {
       prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);

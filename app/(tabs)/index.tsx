@@ -16,7 +16,7 @@ import { useQueryClient } from '@tanstack/react-query';
 // keys the prefetchers write into. (A local copy with a 4-element key used to
 // live here; pull-to-refresh prefetched into the shared 5-element key that
 // this screen never read, so the "instant swap" never happened on home.)
-import { useDreamFeed, prefetchDreamFeed } from '@/hooks/useDreamFeed';
+import { useDreamFeed, prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
@@ -331,6 +331,11 @@ export default function HomeScreen() {
           const commit = () => {
             setPinnedPost(null);
             setFeedSeed(newSeed);
+            // Drop the previous seed's entire feed-cache family — without this
+            // every reshuffle ORPHANED ~19 seed-keyed entries (24h gcTime) and
+            // the optimistic sweeps ground to multi-second stalls once ~1,600
+            // piled up (Kevin 2026-07-21, "1597 caches patched").
+            pruneStaleFeedCaches(queryClient, newSeed);
             if (opts?.deferSwap) setReshuffleEpoch((e) => e + 1);
           };
           // Re-tap path (deferSwap): hand the swap back to FullScreenFeed so it

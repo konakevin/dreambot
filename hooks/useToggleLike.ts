@@ -21,6 +21,18 @@ function bumpItem(p: DreamPostItem, uploadId: string, delta: number): DreamPostI
   return p.id === uploadId ? { ...p, like_count: Math.max(0, (p.like_count ?? 0) + delta) } : p;
 }
 
+/** Cheap reference-read scan: does this cache entry contain the post at all?
+ *  Lets the onMutate sweep SKIP entries that can't change — a miss costs an id
+ *  scan instead of a full page/row copy + snapshot. With many cached feeds the
+ *  copies were the multi-second stall (Kevin 2026-07-21). */
+function pagesContain(pages: AnyPage<DreamPostItem>[], uploadId: string): boolean {
+  for (const page of pages) {
+    const rows = Array.isArray(page) ? page : page.rows;
+    for (const p of rows) if (p.id === uploadId) return true;
+  }
+  return false;
+}
+
 function bumpLikeCount(
   pages: AnyPage<DreamPostItem>[],
   uploadId: string,
@@ -116,7 +128,9 @@ export function useToggleLike() {
         const queries = qc.getQueryCache().findAll({ queryKey: [root] });
         for (const query of queries) {
           const prev = qc.getQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey);
-          if (prev) {
+          // Skip entries that don't contain this post: a miss costs a cheap id
+          // scan, not a full copy + snapshot (the multi-second-stall fix).
+          if (prev && pagesContain(prev.pages, uploadId)) {
             snapshots.push({ key: query.queryKey, data: prev });
             qc.setQueryData<InfiniteData<AnyPage<DreamPostItem>>>(query.queryKey, {
               ...prev,
@@ -129,7 +143,7 @@ export function useToggleLike() {
       const albumKeys = qc.getQueryCache().findAll({ queryKey: ['albumPosts'] });
       for (const query of albumKeys) {
         const prev = qc.getQueryData<DreamPostItem[]>(query.queryKey);
-        if (prev) {
+        if (prev && prev.some((p) => p.id === uploadId)) {
           snapshots.push({ key: query.queryKey, data: prev });
           qc.setQueryData<DreamPostItem[]>(
             query.queryKey,
