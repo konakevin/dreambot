@@ -40,7 +40,15 @@ export function pruneStaleFeedCaches(queryClient: QueryClient, activeSeed: numbe
   for (const root of ['dreamFeed', 'explore']) {
     queryClient.removeQueries({
       queryKey: [root],
-      predicate: (q) => q.queryKey[3] !== activeSeed,
+      // OBSERVER GUARD is load-bearing: the Bots re-tap rotates the seed FIRST
+      // and refetches after, so the pager keeps SHOWING the old seed's rows via
+      // keepPreviousData while the new fetch runs. Pruning those observer-backed
+      // entries orphaned the visible data — the like-count sweep couldn't find
+      // the entry to bump, so the badge froze (heart flipped via the separate
+      // likeIds cache) until the refetch landed (Kevin 2026-07-21). Entries
+      // still observed survive this prune and are collected on a LATER rotation
+      // once their observers have re-keyed — the ~20-entry steady state holds.
+      predicate: (q) => q.queryKey[3] !== activeSeed && q.getObserversCount() === 0,
     });
   }
 }
