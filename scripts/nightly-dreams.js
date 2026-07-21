@@ -363,7 +363,6 @@ async function sendTrialReminders(sb, enqueuedPool) {
         // 2026-07-05 (was "Trial ends in 3 days — tap to subscribe") —
         // tap already routes to /subscribe, the string can afford charm.
         body: '3 dream nights left in your trial ✨',
-        is_read: false,
       });
     }
   }
@@ -375,7 +374,6 @@ async function sendTrialReminders(sb, enqueuedPool) {
         type: 'trial_reminder',
         subtype: 'last_night',
         body: 'Tonight’s your last trial dream ✨',
-        is_read: false,
       });
     }
   }
@@ -389,7 +387,6 @@ async function sendTrialReminders(sb, enqueuedPool) {
         // The post-expiry notice — routes to /subscribe like the others
         // (lib/notificationRouting.ts keys on type, so no client change).
         body: 'Trial ended — keep your dreams going',
-        is_read: false,
       });
     }
   }
@@ -484,7 +481,6 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         type: 'pro_reminder',
         subtype: 'paid_3day',
         body: 'Pro ends in 3 days — tap to renew',
-        is_read: false,
       });
     }
   }
@@ -496,7 +492,6 @@ async function sendPaidProReminders(sb, enqueuedPool) {
         type: 'pro_reminder',
         subtype: 'paid_last_night',
         body: 'Pro ends tomorrow — tap to renew',
-        is_read: false,
       });
     }
   }
