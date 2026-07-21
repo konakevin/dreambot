@@ -1739,7 +1739,17 @@ export default function CreateScreen() {
                 selector now, so the CTA stays clean. iPad: capped to the same
                 centered 600 column as the form so it isn't absurdly wide. */}
               <ResponsiveContainer maxWidth={600}>
-                <GradientButton label="Dream" variant="solid" onPress={handleDream} />
+                {/* gestureHandler: this footer rides above the keyboard via
+                    KeyboardStickyView's transform; RN-core Touchable measures the
+                    UN-transformed position and misses the first tap after typing.
+                    RNGH's Touchable hit-tests transform-aware, so it registers on
+                    the first tap (Kevin 2026-07-20). */}
+                <GradientButton
+                  label="Dream"
+                  variant="solid"
+                  onPress={handleDream}
+                  gestureHandler
+                />
               </ResponsiveContainer>
             </View>
           </KeyboardStickyView>

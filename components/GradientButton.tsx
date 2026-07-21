@@ -8,6 +8,13 @@
  */
 
 import { TouchableOpacity, View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+// RNGH's TouchableOpacity hit-tests through the gesture-handler native system
+// (transform/presentation-aware), unlike RN-core Touchable which measures the
+// view at its UN-transformed layout position — so a button inside a transform-
+// translated container (e.g. a KeyboardStickyView footer riding above the
+// keyboard) misses the first tap with RN-core but not with this. Opt in via
+// `gestureHandler` only where that matters, to keep the blast radius tiny.
+import { TouchableOpacity as GHTouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from '@/components/AppText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,6 +37,13 @@ interface Props {
    */
   variant?: 'gradient' | 'solid';
   style?: StyleProp<ViewStyle>;
+  /**
+   * Use react-native-gesture-handler's TouchableOpacity instead of RN-core's.
+   * Needed when this button lives inside a transform-translated container (a
+   * KeyboardStickyView footer above the keyboard) — RN-core Touchable misses the
+   * first tap there because it measures the un-transformed position. Default off.
+   */
+  gestureHandler?: boolean;
 }
 
 // The soft purple at the left of the brand gradient — used for the solid variant.
@@ -42,10 +56,12 @@ export function GradientButton({
   disabled = false,
   variant = 'gradient',
   style,
+  gestureHandler = false,
 }: Props) {
   const solid = variant === 'solid';
+  const Touchable = gestureHandler ? GHTouchableOpacity : TouchableOpacity;
   return (
-    <TouchableOpacity
+    <Touchable
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
       activeOpacity={0.9}
@@ -72,7 +88,7 @@ export function GradientButton({
           {icon ? <Ionicons name={icon} size={18} color={CTA_TEXT_COLOR} /> : null}
         </LinearGradient>
       )}
-    </TouchableOpacity>
+    </Touchable>
   );
 }
 
