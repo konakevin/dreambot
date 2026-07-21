@@ -16,6 +16,7 @@ import { useFocusEffect } from 'expo-router';
 import {
   View,
   TouchableOpacity,
+  Pressable,
   Keyboard,
   Platform,
   Modal,
@@ -879,7 +880,16 @@ export default function CreateScreen() {
         {/* Header — centered gradient title (absolutely centered so the
             right-side actions don't push it off-center), matching the shared
             nav-title treatment used across Settings/Inbox/Edit Profile. */}
-        <View className="flex-row items-center px-5 py-3">
+        {/* The header row doubles as a keyboard-dismiss target: tapping the
+            "Create" title or the empty space around it drops the keyboard
+            (Kevin 2026-07-20). The sparkle + camera buttons still fire their own
+            onPress (they claim the tap first); this only catches taps that miss
+            them. Keyboard.dismiss() is a no-op when the keyboard is already down. */}
+        <Pressable
+          onPress={() => Keyboard.dismiss()}
+          accessible={false}
+          className="flex-row items-center px-5 py-3"
+        >
           <View className="flex-1" />
           <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
             <GradientTitle size={TITLE_SIZE.nav}>Create</GradientTitle>
@@ -925,7 +935,7 @@ export default function CreateScreen() {
               </TouchableOpacity>
             )}
           </View>
-        </View>
+        </Pressable>
 
         {/* Scrollable content — KeyboardAwareScrollView keeps the focused prompt
             above the keyboard AND lets the whole form scroll under it, so every
