@@ -106,11 +106,11 @@ beforeAll(async () => {
     LOOP EXECUTE 'DROP FUNCTION ' || r.sig; END LOOP;
   END $do$`);
 
-  // The real 388 definition: its own DROP (11-arg) + CREATE, straight from the
-  // migration file.
+  // The real definition (389 = 388 + the jitter clamp): its own DROP (11-arg)
+  // + CREATE, straight from the migration file.
   await db.query(
     extract(
-      migrationSql('388_feed_impression_discounting.sql'),
+      migrationSql('389_feed_jitter_clamp.sql'),
       'DROP FUNCTION IF EXISTS public.get_feed',
       '$$;'
     )
@@ -194,6 +194,20 @@ it('following: gentler penalty (x0.75 after one view)', async () => {
   );
   const scores = await feedScores('following');
   expect(scores.get(P_SEEN1)! / scores.get(P_UNSEEN)!).toBeCloseTo(0.75, 5);
+});
+
+it('jitter is clamped: shuffle 0.45 scores identically to 0.15 (migration 389)', async () => {
+  await insertIdenticalPosts([P_UNSEEN, P_SEEN1]);
+  const at = async (shuffle: number) => {
+    const { rows } = await db.query(
+      `SELECT id, feed_score FROM public.get_feed($1, 50, 0, 0.7, $2, 'forYou', NULL, NULL, NULL, NULL, NULL)`,
+      [VIEWER, shuffle]
+    );
+    return new Map(rows.map((r) => [r.id as string, Number(r.feed_score)]));
+  };
+  const wild = await at(0.45);
+  const clamped = await at(0.15);
+  for (const [id, score] of wild) expect(clamped.get(id)!).toBeCloseTo(score, 8);
 });
 
 it('bots timeline: NO seen penalty (chronological order untouched)', async () => {

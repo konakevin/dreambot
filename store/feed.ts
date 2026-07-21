@@ -14,7 +14,7 @@ export interface FeedStore {
   // Session seed for feed shuffle
   feedSeed: number;
   /** Seed jitter weight passed to get_feed (mig 352): 0.10 cold-load default,
-   *  0.45 after any manual refresh so reshuffles visibly reorder. */
+   *  MANUAL_FEED_SHUFFLE after any manual refresh so reshuffles visibly reorder. */
   feedShuffle: number;
   regenerateSeed: () => void;
   /** Raise shuffle strength to the manual-refresh level BEFORE prefetching —
@@ -77,11 +77,13 @@ export interface FeedStore {
 // before re-attempting.
 export const FEED_COLD_SEED = 0.5;
 
-/** Manual-refresh shuffle strength (mig 352) — vs the 0.10 cold-load jitter.
- *  Exported so the reshuffle prefetch can build its cache key at this strength
- *  WITHOUT pre-bumping the store (the store bump lands atomically at commit
- *  time via setFeedSeed). */
-export const MANUAL_FEED_SHUFFLE = 0.45;
+/** Manual-refresh shuffle strength. Was 0.45 (mig 352, pre-seen-penalty brute
+ *  variety); with impression discounting live (mig 388) that much noise made
+ *  the mid-feed a random draw over months-old catalog, so the server clamps
+ *  jitter to 0.15 (mig 389) and the client constant matches. Exported so the
+ *  reshuffle prefetch can build its cache key at this strength WITHOUT
+ *  pre-bumping the store (the bump lands atomically via setFeedSeed). */
+export const MANUAL_FEED_SHUFFLE = 0.15;
 
 export const useFeedStore = create<FeedStore>((set) => ({
   pinnedPost: null,
@@ -92,7 +94,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
   feedSeed: FEED_COLD_SEED,
   // 0.10 = the ranking's gentle cold-load jitter; manual refreshes bump to
-  // 0.45 so a reshuffle visibly reshuffles (mig 352 — the old fixed 0.10
+  // the manual strength so a reshuffle visibly reshuffles (mig 352 — the old fixed 0.10
   // couldn't unseat a top post whose score led by >0.1: "first pic never
   // changed"). One-way ratchet per session: once the user asks for shuffle,
   // every subsequent seed is a real shuffle.

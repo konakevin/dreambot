@@ -527,6 +527,21 @@ export function FullScreenFeed({
     [posts, onIndexChange, user, onHudToggle]
   );
 
+  // Fire the shared active-card path ONCE for the INITIAL card. The pager only
+  // emits onActiveIndexChange when the index CHANGES — the landing card at
+  // mount never fired it, so the post at the top of every launch/reshuffle
+  // never recorded an impression and thus fully ESCAPED the mig-388
+  // seen-penalty: the exact posts pinning the top were the ones the penalty
+  // could never touch ("same exact post at the top regardless of refreshes",
+  // Kevin 2026-07-21). The 1s dwell timer + per-mount dedup inside still
+  // apply, so a quick bounce away doesn't count as a view.
+  const initialActiveFired = useRef(false);
+  useEffect(() => {
+    if (initialActiveFired.current || posts.length === 0) return;
+    initialActiveFired.current = true;
+    handleActiveIndex(currentIndex.current);
+  }, [posts, handleActiveIndex]);
+
   const bottomPadding = hideTabBar ? 16 + insets.bottom : 60 + insets.bottom;
 
   // Stable renderItem. Per-item closures live inside the memoized FeedCard, so
