@@ -1,9 +1,17 @@
 # Supabase CDN ticket — images served `no-cache`, no edge caching (2026-07-21)
 
-**Status: WAITING on Supabase support.** Kevin emailed the ticket 2026-07-21.
-This doc is the full context + the exact pickup steps for whichever session
-handles the response. Related: `project_image_transform_quota` memory (the
-earlier, SEPARATE transform-quota incident — do not conflate them).
+**Status: RESOLVED 2026-07-21 — FALSE ALARM (our measurement error).** Supabase
+support asked how we measured; re-testing with GET requests showed the CDN is
+healthy: `cache-control: public, max-age=2592000` served correctly,
+`cf-cache-status: HIT` warm (~56-160ms TTFB), MISS→HIT on cold objects (normal
+per-PoP fill/eviction). The original "no-cache / perpetual MISS" readings were a
+**HEAD-request artifact** — `curl -sI` sends HEAD, and the edge answers HEAD
+with `no-cache`/`MISS` while GETs cache normally. **Lesson: always verify CDN
+cache behavior with GET (`curl -s -o /dev/null -D - <url>`), never `curl -I`.**
+The real slow-image causes were client-side (prefetch storm + hero priority,
+fixed in commit `1702f274`, shipped in build 37). No Supabase-side action
+needed; ticket closed with thanks. Historical context below is kept for the
+record — read it knowing the headline claim was wrong.
 
 ## The problem (verified, reproducible)
 
