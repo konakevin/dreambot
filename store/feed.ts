@@ -65,17 +65,15 @@ export interface FeedStore {
   setViewingOwnDreams: (viewing: boolean) => void;
 }
 
-// Cold-start feed seed: a FIXED constant, not Math.random(). The feed query key
-// includes feedSeed, so a random-per-launch seed would change the key every cold
-// start and defeat the persisted-cache restore (nothing would match → spinner).
-// A stable cold seed keeps the key identical across launches so the persisted
-// feed paints instantly; regenerateSeed/setFeedSeed still randomize on an
-// explicit pull-to-refresh (mig 352 reshuffle). KNOWN TRADE-OFF (2026-07-21
-// audit): the landing content repeats across launches until a refresh — the
-// launch-reshuffle experiment that tried to fix this in-place was reverted
-// (unprompted spinner + content swaps under the viewer); see the audit notes
-// before re-attempting.
-export const FEED_COLD_SEED = 0.5;
+// TIKTOK-STYLE COLD OPEN (2026-07-21, Kevin's call after the fossil saga): the
+// feed seed is RANDOM per launch, so every app open fetches a fresh,
+// impression-penalty-aware ordering — the brand spinner covers the ~0.5-1s
+// cold fetch. The old FIXED cold seed existed to key-match the persisted feed
+// cache for an instant first paint, but that instant paint was the root of
+// "the same landing feed on every open, 10/10 times": staleTime Infinity
+// meant the cached entry NEVER refetched, and every in-place/swap scheme to
+// freshen it behind the paint janked (see the reverted launch-reshuffle).
+// The feed is no longer persisted at all (lib/queryClient.ts PERSISTED_ROOTS).
 
 /** Manual-refresh shuffle strength. Was 0.45 (mig 352, pre-seen-penalty brute
  *  variety); with impression discounting live (mig 388) that much noise made
@@ -92,13 +90,11 @@ export const useFeedStore = create<FeedStore>((set) => ({
   bumpReset: () => set((s) => ({ resetToken: s.resetToken + 1 })),
   refreshToken: 0,
   bumpRefresh: () => set((s) => ({ refreshToken: s.refreshToken + 1 })),
-  feedSeed: FEED_COLD_SEED,
-  // 0.10 = the ranking's gentle cold-load jitter; manual refreshes bump to
-  // the manual strength so a reshuffle visibly reshuffles (mig 352 — the old fixed 0.10
-  // couldn't unseat a top post whose score led by >0.1: "first pic never
-  // changed"). One-way ratchet per session: once the user asks for shuffle,
-  // every subsequent seed is a real shuffle.
-  feedShuffle: 0.1,
+  feedSeed: Math.random(), // fresh ordering every launch (cold-open model)
+  // One shuffle strength everywhere now (the cold-vs-manual split existed to
+  // keep the FIXED cold seed deterministic — moot with a random launch seed).
+  // The server clamps to 0.15 regardless (mig 389).
+  feedShuffle: MANUAL_FEED_SHUFFLE,
   regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: MANUAL_FEED_SHUFFLE }),
   bumpShuffle: () => set({ feedShuffle: MANUAL_FEED_SHUFFLE }),
   setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: MANUAL_FEED_SHUFFLE }),

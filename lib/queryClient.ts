@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { AppState, type AppStateStatus } from 'react-native';
 
-// Cold-start feed paint: a curated slice of the query cache is persisted to disk
-// so a fresh launch renders the LAST feed INSTANTLY (from AsyncStorage) instead of
-// showing a spinner until a live get_feed round-trip returns. The restored feed is
-// NOT auto-refreshed on launch (TikTok/IG model — never yank the feed under the
-// user); fresh content arrives as they scroll (fetchNextPage) and via pull-to-
-// refresh / Home re-tap / foreground-after-idle. Wired via
+// Cold-start persistence: a curated slice of the query cache is persisted to
+// disk so a fresh launch paints stable chrome (inbox, badge, mediums/vibes)
+// instantly. THE FEED IS DELIBERATELY NOT PERSISTED (2026-07-21, Kevin's
+// "TikTok-style cold open" decision): the feed seed is random per launch, so
+// every open fetches a FRESH, impression-penalty-aware ordering behind the
+// brand spinner (~0.5-1s in release) — the persisted-feed instant paint was
+// the root of the "same landing feed on every open" fossil. Wired via
 // PersistQueryClientProvider in app/_layout.tsx; purged on sign-out
 // (store/auth.ts). gcTime MUST be >= the persister maxAge, or a cached query is
 // garbage-collected before it's written to disk and nothing survives the launch.
@@ -28,7 +29,7 @@ export const queryClient = new QueryClient({
 // paint instant. Everything else stays memory-only (keeps the blob small and
 // avoids persisting volatile per-scroll or large one-off data).
 const PERSISTED_ROOTS = new Set<string>([
-  'dreamFeed',
+  // 'dreamFeed' intentionally absent — see the cold-open note above.
   'inboxGrouped',
   'newNotificationCount',
   'dreamMediums',
