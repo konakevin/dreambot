@@ -74,15 +74,18 @@ function TabBarPressButton(props: BottomTabBarButtonProps) {
 function ProfileTabIcon({
   color,
   size,
+  focused,
   unreadCount,
 }: {
   color: string;
   size: number;
+  focused: boolean;
   unreadCount: number;
 }) {
   return (
     <View>
-      <Ionicons name="person-outline" size={size} color={color} />
+      {/* Filled when active, outline at rest — matches every other tab. */}
+      <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
       {unreadCount > 0 && <View style={tabStyles.dot} />}
     </View>
   );
@@ -163,11 +166,11 @@ export default function TabLayout() {
           // While a reshuffle prefetches, the icon itself is the loading
           // indicator — the feed stays fully visible with no overlay
           // (Kevin 2026-07-21: the full-screen cover felt heavy).
-          tabBarIcon: ({ color, size }) =>
+          tabBarIcon: ({ color, size, focused }) =>
             homeFeedRefreshing ? (
               <BrandSpinner size={size} />
             ) : (
-              <Ionicons name="home" size={size} color={color} />
+              <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
             ),
         }}
         listeners={{
@@ -211,8 +214,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="create"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'add-circle' : 'add-circle-outline'}
+              size={size}
+              color={color}
+            />
           ),
         }}
         listeners={{
@@ -235,7 +242,14 @@ export default function TabLayout() {
             paddingTop: verticalScale(8),
             paddingBottom: tabBarBottomPad,
           },
-          tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
+          // 'search' has no true filled sibling — 'sharp' is its bolder variant.
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'search-sharp' : 'search-outline'}
+              size={size}
+              color={color}
+            />
+          ),
         }}
         listeners={{
           tabPress: () => {
@@ -262,8 +276,8 @@ export default function TabLayout() {
             paddingTop: verticalScale(8),
             paddingBottom: tabBarBottomPad,
           },
-          tabBarIcon: ({ color, size }) => (
-            <ProfileTabIcon color={color} size={size} unreadCount={unreadCount} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <ProfileTabIcon color={color} size={size} focused={focused} unreadCount={unreadCount} />
           ),
         }}
         listeners={{
