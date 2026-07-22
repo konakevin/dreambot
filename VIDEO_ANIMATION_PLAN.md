@@ -285,8 +285,15 @@ layers reuse infra that already exists (migration 276 + Haiku).
 ## 11. Playback + download
 
 - **Playback:** `expo-video` (~3.0.16, already installed, currently unused).
-  DreamCard/GalleryCarousel render a `VideoView` + `useVideoPlayer` when
-  `media_type==='video'`, else the existing `expo-image`. Show `video_poster_url`
+  **RISK — the biggest client unknown:** video in a virtualized pager
+  (FlatList/VerticalPager with cell recycling) is notoriously finicky —
+  autoplay-muted-on-active requires EXACTLY ONE player active at a time, pausing
+  + releasing off-screen players, or you leak memory / get multiple audio
+  tracks / jank. Needs a dedicated spike (a `useActiveVideoPlayer` hook keyed to
+  the pager's active index, mirroring how the active-card `isActive` flag
+  already works). Do this spike in Phase 1 BEFORE wiring the rest of playback.
+  DreamCard/GalleryCarousel render a `VideoView` when `media_type==='video'`,
+  else the existing `expo-image`. Show `video_poster_url`
   until play; loop; muted-autoplay-on-active-card is the TikTok/IG convention
   (decide at build — autoplay-on-active vs tap-to-play). The pager's
   active-index logic already exists to drive "play only the visible card."
@@ -392,8 +399,10 @@ allotment, cross-provider failover, autoplay tuning.
 - Animation is a NEW first-class post beside its source (not a replace). (§12)
 
 **Still open (need Kevin):**
-- **Autoplay on the active feed card, or tap-to-play?** (IG autoplays muted;
-  cleaner but more egress + battery.)
 - **Final launch model(s)** — pending Phase 0 renders.
-- **Pro free allotment: 3×5s (recommended) or 1×10s?**
+- **Pro free allotment: 3×5s (recommended) or 1×10s?** — decide after Phase 0.
 - **Confirm the source dream still shows in the grid alongside the animation.**
+
+**Resolved (2026-07-22, cont.):**
+- **Autoplay muted on the active feed card** (IG/TikTok convention). Requires
+  EXACTLY-ONE-PLAYING discipline in the virtualized pager (see §11 risk).
