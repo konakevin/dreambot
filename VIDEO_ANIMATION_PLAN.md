@@ -49,6 +49,20 @@ already own both halves of this pattern:
 - A **`--no-verify-jwt` webhook receiver** (`revenuecat-webhook`) — the shape
   for the new `replicate-video-webhook`.
 
+**Infrastructure: ZERO new infra — Replicate runs the GPU work, not us.** This
+is the key distinction from face swaps. `face-swap-dual` needed **Fly.io**
+because that's OUR pixel compute in-process, which blew the Edge 150MB/2s
+ceiling (HTTP 546). Video generation is the opposite: the expensive GPU compute
+is entirely on **Replicate's** side. Both our functions are plain **Supabase
+Edge Functions** (Deno), same as everything else:
+- `generate-video` — submits the job, returns instantly (no held connection).
+- `replicate-video-webhook` — receives completion, downloads the finished mp4
+  (~2-5 MB) from Replicate's URL, persists, notifies. NO in-process pixel work,
+  so it stays well under the 150MB/2s ceiling — it's just moving a file
+  Replicate already made.
+No Fly.io / Modal / new runtime to stand up or manage. All composition on the
+Supabase stack we already operate (dream_queue, charge_sparkles, send-push).
+
 Replicate supports webhooks natively: submit the prediction with a `webhook`
 URL + `webhook_events_filter: ["completed"]`, get a prediction id back in <1s,
 Replicate POSTs us on completion. No polling, no held connection.
@@ -131,7 +145,8 @@ detail, notifications) already flows `DreamPostItem` — adding fields is additi
 **`generate-video`** (`--no-verify-jwt`, authenticates the caller itself):
 1. Auth the user, re-check they own the source dream (isOwn), re-check sparkle
    balance already charged (idempotent on job_id — charge happens in enqueue).
-2. Moderation gate (see §10).
+2. Moderation gate — regex (`text_is_blocked`) THEN Haiku intent classifier,
+   fail-closed; cast-source forces Surprise-Me (see §10).
 3. Resolve the motion prompt: use the typed prompt (sanitized) OR call Haiku
    vision on the source image to author one (Surprise Me).
 4. Submit to Replicate (Kling) with `webhook: <project>/functions/v1/replicate-video-webhook?job=<id>`,
@@ -214,25 +229,56 @@ attract — defer non-owner animation entirely.
 
 ---
 
-## 10. Moderation & safety (the real gap)
+## 10. Moderation & safety (the prompt gate + layered defense)
 
-You can't NSFW-retry a video the way `generateImage` retries a Flux image.
-Layered defense:
-1. **Source image is already moderated** — it's an existing dream that passed
-   render-time NSFW checks. Animating a clean still with a clean prompt is very
-   likely to stay clean. This is the primary safety.
-2. **Motion prompt moderated** — `moderateText` (client) + `sanitizeUserText`
-   (server) before submit, same gate as dream prompts. Blocks "make them do X"
-   abuse text.
-3. **Output frame-sampling (phase 2, recommended before scale):** in the
-   webhook, extract 2-3 frames from the mp4 and run them through the same image
-   moderation the render path uses; quarantine (`is_moderated=true,
-   is_approved=null`) on a hit. Launch can ship with (1)+(2) and add (3) fast.
+You can't NSFW-retry a video the way `generateImage` retries a Flux image, so
+the motion prompt is pre-screened BEFORE submit, plus structural defenses. We
+REUSE the existing two-layer text-moderation infra — no new system.
+
+**The prompt gate — regex THEN Haiku (both, in that order; each covers the
+other's blind spot):**
+
+1. **Regex wordlist (free, instant, pre-submit)** — the existing
+   `lib/moderation.ts` `containsBlockedWord` (client) mirrored by the DB-tunable
+   `moderation_words` table + `text_is_blocked()` server function (migration
+   276, the real bypass-proof gate). Today the table is seeded for slurs/hate;
+   **extend it with the violence + sexual-motion vocabulary** this feature needs
+   ("strangle", "undress", "thrust", etc.). It's a DB table → dashboard `INSERT`,
+   no code change. Catches lazy/obvious attempts at zero cost.
+2. **Haiku intent classifier (only if regex passes)** — one cheap call in
+   `generate-video`: pass the motion prompt AND whether the source is a cast
+   image, ask "Is this requesting violence, sexual content, or degradation of a
+   person? BLOCK/ALLOW." ~$0.001, ~300ms. Catches what regex STRUCTURALLY can't:
+   - **Euphemism/obfuscation** — "dance seductively and slowly remove the
+     jacket" trips no wordlist but is clearly the blocked intent.
+   - **Prompt × image context** — "move closer / turn toward each other" is
+     innocent on a landscape, loaded on a face-swapped portrait of a real
+     person. Regex is blind to the combination; Haiku sees both.
+
+   Reuses the `callSonnet`/Haiku plumbing already in `_shared`. Fail-closed:
+   a Haiku error or ambiguous verdict blocks (better a false reject than a bad
+   video). The motion prompt still passes `sanitizeUserText` (hard rule) after
+   the gate, before it reaches Replicate.
+
+**Structural defenses (not prompt-dependent):**
+
+3. **Source image is already moderated** — it's an existing dream that passed
+   render-time NSFW checks. A clean still + a gated clean prompt is very likely
+   to stay clean. Primary safety.
 4. **Cast-photo animations: Surprise-Me-only at launch.** If the source dream
-   used a face swap (`face_swap_mode` non-null), DISABLE the free-text motion
-   prompt — force the AI-authored safe prompt. "Type what this real person's
-   face does in a video" is the single highest-risk path; gate it until trust
-   is established. (Non-cast dreams get the full prompt field.)
+   used a face swap (`face_swap_mode` non-null), DISABLE the free-text prompt —
+   force the AI-authored safe prompt. "Type what this real person's face does in
+   a video" is the single highest-risk path; gate it until trust is established.
+   (Non-cast dreams get the full prompt field + the gate above.)
+5. **Output frame-sampling (phase 2, before scale):** in the webhook, extract
+   2-3 frames from the mp4 and run them through the render path's image
+   moderation; quarantine (`is_moderated=true, is_approved=null`) on a hit.
+   Launch ships with 1-4; add 5 fast.
+
+**Net:** regex kills obvious cases free/instant; Haiku catches euphemism +
+image-context intent for ~$0.001; cast-gating removes the worst combination
+structurally; frame-sampling is the defense-in-depth backstop. The two prompt
+layers reuse infra that already exists (migration 276 + Haiku).
 
 ---
 
@@ -318,8 +364,10 @@ true cost → lock the matrix.
 **Phase 1 — MVP (owner-only, sparkle-gated):**
 1. Migration: `uploads` video columns + grants + `video_model_pricing` +
    `get_feed`/`POST_SELECT` carry-through.
-2. `generate-video` + `replicate-video-webhook` edge fns (webhook signature,
-   Haiku motion prompt, moderation (1)+(2), storage, notify).
+2. `generate-video` + `replicate-video-webhook` edge fns (Supabase Edge, NO new
+   infra — Replicate runs the GPU): webhook signature verify, Haiku motion
+   prompt, moderation gate (regex→Haiku + cast-gate), storage, notify. Extend
+   `moderation_words` with violence/sexual-motion vocab in the migration.
 3. Queue: `source='animate'`, `weight='video'`, video concurrency cap, stuck
    reaper extension.
 4. Client: `videoModels.ts`, the Animate sheet, the long-press `'animate'` row,
@@ -333,13 +381,19 @@ allotment, cross-provider failover, autoplay tuning.
 
 ---
 
-## 17. Open decisions (need Kevin)
+## 17. Decisions
 
+**Resolved (2026-07-22):**
+- **Moderation = regex (`text_is_blocked`, mig 276) THEN Haiku intent
+  classifier, fail-closed; extend `moderation_words` with violence/sexual-motion
+  vocab; cast-source forces Surprise-Me.** (§10)
+- **Infrastructure = zero new — Replicate runs the GPU; both edge fns are plain
+  Supabase Edge Functions.** (§2)
+- Animation is a NEW first-class post beside its source (not a replace). (§12)
+
+**Still open (need Kevin):**
 - **Autoplay on the active feed card, or tap-to-play?** (IG autoplays muted;
   cleaner but more egress + battery.)
 - **Final launch model(s)** — pending Phase 0 renders.
-- **Cast-photo free-text prompt: gated at launch (recommended) or allowed?**
-- **Does an animation REPLACE its source dream in the grid, or sit beside it as
-  a new post?** (Kevin said new first-class post → beside it. Confirm the source
-  still shows too.)
 - **Pro free allotment: 3×5s (recommended) or 1×10s?**
+- **Confirm the source dream still shows in the grid alongside the animation.**
