@@ -1,13 +1,64 @@
 # Video Animation ("Animate") — Feature Plan
 
 Turn any of a user's own dream images into a ~5-10s AI animation. Status:
-**PLANNED, not built.** This is the spec of record; build in the phases at the
-bottom. Companion economics live in `SPARKLE_PRICING_STRATEGY.md`.
+**PARKED — not being built (2026-07-22).** Kevin's call: the concept and
+economics are sound, but the risk/effort is too high to take on right now
+(chief risk: video playback in the virtualized feed; secondary: cost exposure,
+App Store scrutiny, egress). This doc is the **complete, self-contained spec +
+research** so the feature can be picked up cold later without re-deriving
+anything. Companion economics live in `SPARKLE_PRICING_STRATEGY.md`.
+
+> **If you're resuming this:** read §0 (why it was parked + the resume
+> checklist) first, then §16 Phase 0 — the ~$3 test renders are the mandatory
+> first step; do NOT write feature code before seeing real output on your own
+> dreams. Everything below is design; nothing has been built.
 
 Prime directive from the audit hard-rules that this feature must honor:
 server-computed cost (never trust the client), all user text through
 `_shared/sanitizeUserText.ts`, no unscoped abuse surface, cast-photo content
 handled with extra care.
+
+---
+
+## 0. Why this was parked + resume checklist (read first)
+
+**Parked 2026-07-22.** Nothing built — no code, no migrations, no edge fns, no
+DB objects. Purely a plan. Safe to ignore indefinitely; safe to resume cold.
+
+**Why parked (Kevin):** too risky/effortful to take on now. The concentrated
+risks (detail in §18):
+1. **Video in the virtualized feed** — the single biggest build risk. Autoplay
+   in a recycling pager needs exactly-one-player discipline or it leaks
+   memory / stacks audio / janks. This is where a build would burn the most time.
+2. **Cost exposure** — video is ~20-50× an image call ($0.42-0.84/clip); a bug
+   or scripted user runs a real Replicate bill fast. Needs a hard spend ceiling.
+3. **Egress/storage** — a 10s mp4 is 15-30× heavier than a display image;
+   autoplay-on-active streams a clip on every scroll-past.
+4. **App Store review** — UGC + AI + video + real faces is Apple's
+   highest-scrutiny combination; expect extra review cycles.
+
+**What was already DE-RISKED (don't re-investigate):**
+- Aspect ratio: dreams are 9:16, Kling/Hailuo output 9:16 → no crop/letterbox.
+- Infra: zero new — Replicate runs the GPU; both edge fns are plain Supabase
+  Edge Functions (§2). No Fly.io/Modal.
+- Moderation: solved — regex (`text_is_blocked`, mig 276) → Haiku ladder (§10).
+- Social features (like/comment/repost/post): free, because it's an `uploads`
+  row (§12). Only render + download are media-type-aware.
+- Sparkle economy + async webhook UX (UpscaleModal pattern): already exist.
+- `expo-video ~3.0.16` already installed (unused).
+- `REPLICATE_API_TOKEN` present in `.env.local` (verified 2026-07-22).
+
+**Resume checklist (in order):**
+1. Confirm Replicate billing is enabled + no low spend cap (video needs it).
+2. **Phase 0 (§16): write `scripts/test-video-models.js`, render 4-5 real
+   dreams through Kling + Hailuo, both no-prompt and Haiku-prompted, ~$3.**
+   Judge quality (is "Surprise Me" good on stylized/face-swapped content?) and
+   measure true per-clip cost. This gates everything.
+3. Only after Phase 0: lock the model list + cost matrix (§13), decide the Pro
+   allotment (§14), then build Phase 1 (§16) starting with the video-in-pager
+   spike (§11/§18).
+4. Re-verify the model landscape/pricing — this doc's model facts are from
+   July 2026 and this category moves monthly.
 
 ---
 
@@ -406,3 +457,85 @@ allotment, cross-provider failover, autoplay tuning.
 **Resolved (2026-07-22, cont.):**
 - **Autoplay muted on the active feed card** (IG/TikTok convention). Requires
   EXACTLY-ONE-PLAYING discipline in the virtualized pager (see §11 risk).
+
+---
+
+## 18. Risks & gotchas (consolidated — the "what could bite you" list)
+
+Everything that could go wrong or surprise a future builder, in rough
+severity order. Cross-references to the section with the detail.
+
+**High — the reasons this was parked:**
+
+1. **Video in the virtualized feed (§11).** THE build risk. `expo-video` in a
+   recycling FlatList/VerticalPager with autoplay-muted-on-active requires
+   exactly one active player at a time + pausing/releasing off-screen players.
+   Get it wrong → memory leaks, multiple simultaneous audio tracks, scroll jank.
+   Mitigation: a `useActiveVideoPlayer` hook keyed to the pager's active index
+   (the `isActive` flag already exists). **Do this spike FIRST in Phase 1**,
+   before anything else — it's the highest-uncertainty piece and could invalidate
+   the whole autoplay UX if expo-video can't do it cleanly at scale.
+
+2. **Cost runaway (§13, §15).** Video is ~20-50× an image call. A bug or a
+   scripted client runs a real Replicate bill fast. Needs BOTH per-user
+   video-jobs/hour limits AND a **global daily spend ceiling** — an
+   `engine_config` kill-switch that disables new animations once the day's video
+   spend crosses $X. Fail-loud, same discipline as the queue monitors. The
+   sparkle charge is the primary economic throttle but is not a hard ceiling.
+
+3. **Egress + storage cost (§4, §11).** A 10s mp4 ≈ 2-5 MB vs ~150 KB for a
+   display image = 15-30× heavier. Autoplay-on-active streams a clip on every
+   scroll-past, multiplying egress. Not a launch blocker but a metric to watch;
+   reinforces why creator-only-download + rate caps matter. Confirm the CDN
+   caches mp4s on GET (images do — verify, don't assume).
+
+4. **App Store review (§10).** UGC + AI + video + real faces (cast photos) is
+   Apple's highest-scrutiny content combination. Cast-gating + moderation help,
+   but expect the review to look hard and possibly need an extra cycle / age-
+   rating adjustment. Budget schedule for it; don't ship it in a hotfix release.
+
+**Medium — real, but solvable if remembered:**
+
+5. **Webhook signing secret (§6).** `replicate-video-webhook` is a public
+   `--no-verify-jwt` endpoint that MINTS content. It MUST verify the Replicate
+   webhook signature (constant-time compare, like `revenuecat-webhook`). The
+   signing key is issued when you configure the webhook → store in Supabase Edge
+   secrets. Skipping this = an unauthenticated content-minting/forgery hole.
+
+6. **Poster / thumbnail frame (§4, §11).** Grid tiles + the pre-play state need
+   a still. Cleanest: reuse the SOURCE dream image as the poster (it's the exact
+   first frame, already stored). Don't forget `video_poster_url` exists.
+
+7. **Stuck-job reaper (§5).** A video prediction that never webhooks (Replicate
+   drop) hangs the queue row forever. `refund-stuck-jobs` must be extended with
+   a LONGER ceiling for `awaiting_webhook` video jobs (~15 min vs the image
+   5 min) → refund + notify. Don't reuse the 5-min image timeout.
+
+8. **Server-authoritative cost (§13).** The client's displayed sparkle cost is
+   confirmation only. `enqueue-dream` MUST recompute `cost(model, duration)`
+   from the DB and charge that (idempotent on job_id). A curl with a spoofed
+   cheap cost otherwise = free premium video. This is audit hard-rule S2.
+
+9. **Column-level grants (§4).** Per migration 278, new `uploads`/`users`
+   columns are silently client-invisible until `GRANT SELECT (col)`. Every new
+   video column (media_type, video_url, poster, duration, source_upload_id) needs
+   its grant IN THE SAME migration, or the client can't read it.
+
+10. **Video moderation ≠ image moderation (§10).** You can't NSFW-retry a video
+    like a Flux image. The prompt gate (regex→Haiku) + already-moderated source
+    + cast-gating cover launch; frame-sampling is the phase-2 backstop. Don't
+    assume the image NSFW path "just works" for video output.
+
+**Low — nice-to-remember:**
+
+11. **Feed interaction (§12).** Source + animation are two posts from the same
+    user, minutes apart. The diversity pass (max 2 consecutive same-author) +
+    the impression penalty (mig 388/390) should keep them from stacking, but
+    verify the pair behaves in Phase 0/1.
+
+12. **Model landscape is stale-by-months.** This doc's model/price facts are
+    July 2026. Re-verify Kling/Hailuo slugs, versions, and per-second pricing at
+    resume time — this category changes monthly.
+
+13. **Aspect ratio is NOT a risk** (dreams 9:16 = model output 9:16). Noted here
+    only so a future reader doesn't re-open it.
