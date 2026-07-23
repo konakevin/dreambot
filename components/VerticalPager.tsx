@@ -150,8 +150,30 @@ function VerticalPagerInner<T>(
   // the first open pays the deferral.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const handle = InteractionManager.runAfterInteractions(() => setHydrated(true));
-    return () => handle.cancel();
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      setHydrated(true);
+    };
+    // InteractionManager settles hydration in the NORMAL case (after the nav
+    // push transition, keeping the initial open fast — see above). But
+    // runAfterInteractions NEVER fires its callback if a leaked interaction
+    // handle is stuck — common after the app sits idle/backgrounded with an
+    // in-flight gesture/animation. When a reshuffle REMOUNTS this pager (the
+    // reshuffleEpoch key), the fresh mount schedules into that wedged queue and
+    // hydration never happens → window stays 0 → only the active card renders,
+    // can't swipe, and re-tapping just remounts into the same stuck manager
+    // (only an app restart cleared it). The 600ms timer is a guaranteed
+    // backstop — well past any push transition, so it never interferes with the
+    // fast-open path, but always recovers hydration if the manager is wedged
+    // (Kevin 2026-07-22).
+    const handle = InteractionManager.runAfterInteractions(finish);
+    const timer = setTimeout(finish, 600);
+    return () => {
+      handle.cancel();
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
