@@ -52,6 +52,7 @@ import { detectCastRoles } from '@/lib/selfInsertDetect';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { useDreamStore } from '@/store/dream';
+import { useRenderDockHeight } from '@/store/renderDock';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
@@ -218,6 +219,7 @@ export default function CreateScreen() {
   // footer rests at the screen's bottom edge, so without this it sits BEHIND the
   // tab bar when the keyboard is closed — offset it up by exactly this much.
   const tabBarHeight = useBottomTabBarHeight();
+  const dockHeight = useRenderDockHeight();
 
   // Restyle-scoped model pick (Kontext default / Nano Banana Pro) — separate
   // state from selectedModelId ON PURPOSE: restyle is img2img with its own
@@ -1029,7 +1031,9 @@ export default function CreateScreen() {
                 // The prompt is sized to reach the Dream CTA, so the content fits;
                 // only a small bottom gap is needed (tab-bar clearance when the
                 // keyboard is down).
-                paddingBottom: kbOpen ? verticalScale(8) : tabBarHeight + verticalScale(16),
+                paddingBottom: kbOpen
+                  ? verticalScale(8)
+                  : tabBarHeight + verticalScale(16) + dockHeight,
               },
               // iPad: vertically center the form + CTA group so a short form isn't
               // top-anchored above a big empty void (no-op on phone).
@@ -1792,7 +1796,7 @@ export default function CreateScreen() {
             is down; when the keyboard is up it covers the tab bar, so the footer
             sits right above the keyboard (opened offset 0). */}
         {!isTabletDevice && (
-          <KeyboardStickyView offset={{ closed: -tabBarHeight }}>
+          <KeyboardStickyView offset={{ closed: -(tabBarHeight + dockHeight) }}>
             <View
               className="px-5"
               onLayout={(e) => {

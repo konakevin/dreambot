@@ -17,6 +17,7 @@ import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
+import { RenderDock } from '@/components/RenderDock';
 
 const ReanimatedView = Reanimated.View;
 
@@ -113,6 +114,9 @@ export default function TabLayout() {
   // against the screen edge on devices without a home indicator (older
   // iPhones, iPhone SE 3rd gen with `Display Zoom: Default`).
   const tabBarBottomPad = insets.bottom > 0 ? insets.bottom : verticalScale(8);
+  // Approx tab-bar height (paddingTop + icon row + bottom pad) — used to sit the
+  // render dock just above the bar. A few px off is harmless (see RenderDock).
+  const tabBarApproxHeight = verticalScale(8) + 30 + tabBarBottomPad;
   const tabBarOpacity = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(tabBarOpacity, {
@@ -132,6 +136,10 @@ export default function TabLayout() {
         <Animated.View
           style={{ opacity: tabBarOpacity, pointerEvents: hudVisible ? 'auto' : 'none' }}
         >
+          {/* Render dock — the "N dreams cooking" pill, floated just above the
+            bar. Fades with the tab bar (this wrapper's opacity/pointerEvents) so
+            it never clutters the immersive feed. */}
+          <RenderDock bottomOffset={tabBarApproxHeight} />
           {/* Default bottom tab bar from Expo Router */}
           <BottomTabBar {...props} />
         </Animated.View>

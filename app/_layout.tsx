@@ -38,6 +38,7 @@ import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { syncDreamWidget } from '@/lib/widgetSync';
 import { isFirstJsLoad } from '@/modules/dreambot-widget';
 import { useFeedStore } from '@/store/feed';
+import { useRenderDockStore } from '@/store/renderDock';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { AiConsentProvider } from '@/components/AiConsentSheet';
@@ -400,6 +401,43 @@ function RealtimeSubscriber() {
               const key = query.queryKey[0];
               return key === 'userPosts' || key === 'my-dreams';
             },
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'dream_queue', filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          // Terminal transitions raise the dock's completion/failure flash.
+          // completeQueueJob sets status='completed' (+ upload_id); the
+          // dead-letter branch of failQueueJob sets status='dead_letter'. The
+          // dock only renders on the 5 tabs, so a flash raised while the user
+          // is watching the loading screen simply expires (TTL) unseen.
+          const row = payload.new as {
+            status?: string;
+            upload_id?: string | null;
+          } | null;
+          if (row?.status === 'completed') {
+            useRenderDockStore.getState().setFlash({
+              kind: 'ready',
+              uploadId: row.upload_id ?? null,
+              at: Date.now(),
+            });
+          } else if (row?.status === 'dead_letter') {
+            useRenderDockStore
+              .getState()
+              .setFlash({ kind: 'failed', uploadId: null, at: Date.now() });
+          }
+          // Drive the render dock + album pending tiles (useInFlightDreams).
+          // Any INSERT (enqueue) / UPDATE (stage advance, terminal) / DELETE
+          // changes the user's in-flight set or a stage — invalidate so the
+          // small (<=5 row) list refetches. dream_queue IS in the
+          // supabase_realtime publication, so this binding is safe (see the
+          // publication caveat in the subscribe handler below). refetchType
+          // 'all' so an off-screen pill/tile updates too.
+          queryClient.invalidateQueries({
+            queryKey: ['inFlightDreams', user.id],
+            refetchType: 'all',
           });
         }
       )

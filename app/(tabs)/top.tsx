@@ -26,6 +26,7 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { Text, TextInput } from '@/components/AppText';
 import { useExploreStore } from '@/store/explore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRenderDockHeight } from '@/store/renderDock';
 import { Ionicons } from '@expo/vector-icons';
 import { useInfiniteQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -298,6 +299,7 @@ function SectionHeader({ title }: { title: string }) {
 
 export default function SearchExploreScreen() {
   const insets = useSafeAreaInsets();
+  const dockHeight = useRenderDockHeight();
   const searchInputRef = useRef<TextInput>(null);
 
   // ── Medium/vibe data for filter pickers ──
@@ -577,7 +579,10 @@ export default function SearchExploreScreen() {
           keyExtractor={(item) => item.id}
           numColumns={NUM_COLUMNS}
           columnWrapperStyle={s.gridRow}
-          contentContainerStyle={{ paddingTop: overlayHeight, paddingBottom: verticalScale(90) }}
+          contentContainerStyle={{
+            paddingTop: overlayHeight,
+            paddingBottom: verticalScale(90) + dockHeight,
+          }}
           windowSize={7}
           maxToRenderPerBatch={8}
           initialNumToRender={10}

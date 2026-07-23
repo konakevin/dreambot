@@ -70,6 +70,10 @@ interface PostGridProps {
     onToggle: (id: string) => void;
     onEnter: (id: string) => void;
   };
+  /** Extra bottom padding beyond the tab-bar clearance — the profile tab passes
+   *  the render-dock height so the last row clears the dock. Omitted (0) on the
+   *  pushed user-profile modal, where no dock is visible. */
+  extraBottomInset?: number;
 }
 
 export function PostGrid({
@@ -83,6 +87,7 @@ export function PostGrid({
   onScrollProgress,
   onRefreshExtra,
   selection,
+  extraBottomInset = 0,
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   // Selection order (1-based) from the selected-ids Set's insertion order —
@@ -421,7 +426,7 @@ export function PostGrid({
         // evicted and remounted during slow drags. Letting FlatList
         // measure is correct and we don't use scrollToIndex anywhere.
         columnWrapperStyle={styles.row}
-        contentContainerStyle={{ paddingBottom: verticalScale(90) }}
+        contentContainerStyle={{ paddingBottom: verticalScale(90) + extraBottomInset }}
         // Lock scrolling to one axis (iOS): a vertical flick won't pan
         // diagonally and leak horizontal movement into the parent swipe-back.
         directionalLockEnabled

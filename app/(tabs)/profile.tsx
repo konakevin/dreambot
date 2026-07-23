@@ -45,6 +45,7 @@ import { useBulkUnsave, useBulkUnrepost } from '@/hooks/useBulkUnsaveUnrepost';
 import { AvatarPreviewModal } from '@/components/AvatarPreviewModal';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
+import { useRenderDockHeight, useRenderDockStore } from '@/store/renderDock';
 import { useFocusEffect } from '@react-navigation/native';
 import { trackProfileViewed } from '@/lib/analytics';
 import { type StatsTab } from '@/components/ProfileStatsRow';
@@ -294,6 +295,21 @@ export default function ProfileScreen() {
     }, [activeTab, setViewingOwnDreams])
   );
 
+  // The render dock routes here on tap and asks for the Dreams sub-tab (where
+  // the pending/finished tiles live). Honor it on focus — and, since the
+  // callback deps include the flag, immediately if the screen is already
+  // focused. Then clear so a later manual tab switch sticks.
+  const wantsDreamsTab = useRenderDockStore((s) => s.wantsDreamsTab);
+  const clearDreamsTab = useRenderDockStore((s) => s.clearDreamsTab);
+  useFocusEffect(
+    useCallback(() => {
+      if (wantsDreamsTab) {
+        setActiveTab('dreams');
+        clearDreamsTab();
+      }
+    }, [wantsDreamsTab, clearDreamsTab])
+  );
+
   // Tapping the inbox bubble just navigates — the inbox screen owns its
   // own mark-viewed firing on focus (mig 223 viewed=read model). No more
   // duplicate "mark seen" call site here; the badge clears via the
@@ -357,6 +373,9 @@ export default function ProfileScreen() {
     uploading: avatarUploading,
   } = useChangeAvatar(profile?.avatar_url);
   const tabBarHeight = useBottomTabBarHeight();
+  // Render dock clearance — added to the grid / followers list / floating
+  // selection bar so none sit under the dock. 0 at rest.
+  const dockHeight = useRenderDockHeight();
   const [showPicSheet, setShowPicSheet] = useState(false);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
@@ -773,6 +792,7 @@ export default function ProfileScreen() {
           showPrivateBadge={activeTab === 'dreams'}
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
+          extraBottomInset={dockHeight}
           // Multi-select (bulk edit) — Posts + Dreams (delete/private/post) and
           // Saved + Reposts (bulk unsave / unrepost). Present-but-inactive adds
           // the "Select" row to tile long-press sheets.
@@ -784,7 +804,12 @@ export default function ProfileScreen() {
             [Make Private][Delete]; Dreams album: [Delete] only (its grid is
             mostly private already — the extra verb read as noise). */}
         {gridSelecting && (
-          <View style={[styles.selectionActions, { bottom: tabBarHeight + verticalScale(12) }]}>
+          <View
+            style={[
+              styles.selectionActions,
+              { bottom: tabBarHeight + verticalScale(12) + dockHeight },
+            ]}
+          >
             <View style={styles.selectionActionsRow}>
               {/* Post the selected dreams — 1 → single, 2+ → gallery. Only on
                   the PRIVATE sub-filter, where every tile is unposted so "Post"
@@ -935,8 +960,8 @@ export default function ProfileScreen() {
           </>
         }
         // Clear the floating tab bar so the last row isn't trapped under it
-        // (mirrors PostGrid's bottom padding).
-        contentContainerStyle={{ paddingBottom: verticalScale(90) }}
+        // (mirrors PostGrid's bottom padding). + dock clearance (0 at rest).
+        contentContainerStyle={{ paddingBottom: verticalScale(90) + dockHeight }}
         // Mirror the PostGrid path's scroll-progress wiring so the same
         // sticky top bar collapses identically on this sub-view.
         onScroll={(e) => handleScrollProgress(e.nativeEvent.contentOffset.y)}

@@ -10,6 +10,7 @@ import { memo, useCallback, useRef, useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Dimensions, InteractionManager, AppState, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRenderDockHeight } from '@/store/renderDock';
 import { Image as ExpoImage } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -222,6 +223,11 @@ export function FullScreenFeed({
   showBottomScrim,
 }: Props) {
   const insets = useSafeAreaInsets();
+  // Render dock lifts the feed HUD metadata (username/caption) so it clears the
+  // dock — but only on tab feeds (dock is hidden behind full-screen modals like
+  // photo/[id], which set hideTabBar). The image stays full-bleed; only the HUD
+  // inset grows. 0 at rest, so no change when no dream is rendering.
+  const dockHeight = useRenderDockHeight();
   const internalPagerRef = useRef<VerticalPagerHandle>(null);
   const pagerRef = listRef ?? internalPagerRef;
 
@@ -542,7 +548,7 @@ export function FullScreenFeed({
     handleActiveIndex(currentIndex.current);
   }, [posts, handleActiveIndex]);
 
-  const bottomPadding = hideTabBar ? 16 + insets.bottom : 60 + insets.bottom;
+  const bottomPadding = hideTabBar ? 16 + insets.bottom : 60 + insets.bottom + dockHeight;
 
   // Stable renderItem. Per-item closures live inside the memoized FeedCard, so
   // only cards whose own flags (isActive / isLiked / isSaved) changed re-render.
