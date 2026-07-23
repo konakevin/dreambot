@@ -237,13 +237,17 @@ users off old builds WITHOUT an App Store change:
   "Update Required" wall. Only raise this to kill a genuinely broken/unsafe old
   build. Leave it well behind `latest` normally.
 
-Both are currently `NULL` (gate inert — no nudges, no forced updates). Set them
-from the dashboard SQL editor:
+Current values (2026-07-23): **`min_app_version = '1.0.10'`** and
+**`latest_app_version = '1.0.10'`** — every client below 1.0.10 is HARD-blocked
+(forced upgrade to the latest build). Set them from the dashboard SQL editor:
 
 ```sql
-UPDATE public.engine_config SET latest_app_version = '1.0.2';   -- after 1.0.2 is live
--- UPDATE public.engine_config SET min_app_version = '1.0.2';   -- only to force-kill an old build
+UPDATE public.engine_config SET latest_app_version = '1.0.10';  -- after 1.0.10 is live
+UPDATE public.engine_config SET min_app_version   = '1.0.10';   -- forces the upgrade
 ```
+
+⚠️ `min_app_version` must never exceed the version actually LIVE on the App Store,
+or users are locked out with no upgrade path. Revert with `= '<prev>'` (e.g. `'1.0.9'`).
 
 Version strings are compared with `lib/appVersion.ts` (`parseVersion` →
 dotted-digit runs; `v`-prefix and pre-release suffixes are rejected, so use a
