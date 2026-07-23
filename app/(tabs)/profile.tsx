@@ -27,6 +27,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
+import { PendingDreamsRow } from '@/components/PendingDreamsRow';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { photoSourceRows } from '@/lib/photoSourceRows';
@@ -740,6 +741,13 @@ export default function ProfileScreen() {
             })}
           </View>
         </View>
+      )}
+
+      {/* Live "cooking" tiles at the top of the Dreams grid (queued/in-progress
+          renders). Hidden under the Posted filter (pending dreams aren't posted)
+          and during multi-select. */}
+      {activeTab === 'dreams' && !gridSelecting && dreamsFilter !== 'posted' && (
+        <PendingDreamsRow />
       )}
 
       {/* Section heading for the followers/following sub-views — repeats
