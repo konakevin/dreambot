@@ -21,6 +21,7 @@ import { DreamFailureCard } from '@/components/DreamFailureCard';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
+import { getDreamStageInfo } from '@/lib/dreamStageLabels';
 
 // How long recovery polls without ever seeing a dream_jobs row before
 // concluding the Edge Function never started (connect/boot failure) and failing
@@ -55,6 +56,12 @@ export default function DreamLoadingScreen() {
   // Set to the dream_queue job id when a dream is ENQUEUED (DREAM_QUEUE_ENABLED).
   // Drives the realtime-wait effect below. Null on the synchronous path.
   const [queueWaitId, setQueueWaitId] = useState<string | null>(null);
+  // Live render progress from the dream_queue row (status + current_stage),
+  // fed to the staged progress bar. Updated by the realtime handler, the
+  // catch-up fetch, and the backstop poll below, so the bar stays truthful
+  // even after backgrounding and returning.
+  const [queueStatus, setQueueStatus] = useState<string | null>(null);
+  const [queueStage, setQueueStage] = useState<string | null>(null);
 
   // Failure state set by useDreamCreate's catch block. When non-null, the
   // failure card is rendered and the spinner is hidden — UNLESS isRecovering
@@ -184,8 +191,15 @@ export default function DreamLoadingScreen() {
       router.replace('/dream/reveal');
     };
 
-    const handleRow = (row: { status?: string; upload_id?: string | null }) => {
+    const handleRow = (row: {
+      status?: string;
+      upload_id?: string | null;
+      current_stage?: string | null;
+    }) => {
       if (settled || queued.current) return;
+      // Surface progress for the bar even on non-terminal updates.
+      if (row.status !== undefined) setQueueStatus(row.status);
+      if (row.current_stage !== undefined) setQueueStage(row.current_stage);
       if (row.status === 'completed') {
         void finishCompleted(row.upload_id);
       } else if (row.status === 'dead_letter') {
@@ -206,14 +220,21 @@ export default function DreamLoadingScreen() {
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'dream_queue', filter: `id=eq.${queueWaitId}` },
-        (payload) => handleRow(payload.new as { status?: string; upload_id?: string | null })
+        (payload) =>
+          handleRow(
+            payload.new as {
+              status?: string;
+              upload_id?: string | null;
+              current_stage?: string | null;
+            }
+          )
       )
       .subscribe();
 
     // Catch-up: the render may have finished in the gap before we subscribed.
     void supabase
       .from('dream_queue')
-      .select('status, upload_id')
+      .select('status, upload_id, current_stage')
       .eq('id', queueWaitId)
       .maybeSingle()
       .then(({ data }) => {
@@ -226,7 +247,7 @@ export default function DreamLoadingScreen() {
       if (settled || queued.current) return;
       void supabase
         .from('dream_queue')
-        .select('status, upload_id')
+        .select('status, upload_id, current_stage')
         .eq('id', queueWaitId)
         .maybeSingle()
         .then(({ data }) => {
@@ -476,6 +497,12 @@ export default function DreamLoadingScreen() {
     !!failure && !failure.refunded && !failure.isNsfw && !failure.isPreFlightModeration;
   const showSpinner = !failure || isRecovering || (isRecoverableFailure && !recoveryFailed);
 
+  // Staged progress for the bar. Driven by the dream_queue row (queue path);
+  // on the synchronous/recovery path with no queue row it defaults to a gentle
+  // "Dreaming…" state. Never null so the bar (not the wave dots) always shows
+  // on the create loading screen.
+  const stageInfo = getDreamStageInfo(queueStatus, queueStage);
+
   return (
     <View style={s.container}>
       {showSpinner ? (
@@ -486,7 +513,7 @@ export default function DreamLoadingScreen() {
         // of the home indicator since the button is no longer absolutely
         // positioned.
         <SafeAreaView style={s.scene} edges={['bottom']}>
-          <MagicalLoadingStage />
+          <MagicalLoadingStage progressStage={stageInfo} />
           <View style={s.cta}>
             {showQueue && (
               <>

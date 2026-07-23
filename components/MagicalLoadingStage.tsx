@@ -21,6 +21,8 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, byDevice } from '@/lib/responsive';
 import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
 import { WaveLoader } from '@/components/WaveLoader';
+import { DreamProgressBar } from '@/components/DreamProgressBar';
+import type { DreamStageInfo } from '@/lib/dreamStageLabels';
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
 // lavender/cloud/star scene, different painting poses (standing
@@ -54,9 +56,16 @@ interface MagicalLoadingStageProps {
    * elsewhere (Create tab) leave it unset.
    */
   subtext?: string;
+  /**
+   * When provided, renders the staged {@link DreamProgressBar} in place of the
+   * ambient WaveLoader dots — the Create loading screen passes live render
+   * stage; the onboarding first-dream flow omits it and keeps the wave dots.
+   * `null` is allowed (shows the bar in its default "Dreaming…" state).
+   */
+  progressStage?: DreamStageInfo | null;
 }
 
-export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) {
+export function MagicalLoadingStage({ subtext, progressStage }: MagicalLoadingStageProps = {}) {
   // Stable across re-renders of the same mount (no re-roll on parent
   // updates); fresh pick each time the stage mounts.
   const mascotSource = useMemo(
@@ -72,8 +81,9 @@ export function MagicalLoadingStage({ subtext }: MagicalLoadingStageProps = {}) 
       <AnimatedGradientTitle size={24} weight={700} letterSpacing={0.3}>
         Dreaming
       </AnimatedGradientTitle>
-      {/* Loading dots sit below the title. */}
-      <WaveLoader />
+      {/* Below the title: the staged progress bar when a render stage is
+        supplied (Create loading), else the ambient wave dots (onboarding). */}
+      {progressStage !== undefined ? <DreamProgressBar stage={progressStage} /> : <WaveLoader />}
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );
