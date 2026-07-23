@@ -51,6 +51,7 @@ export const MODEL_SPARKLE_COSTS: Record<string, number> = {
   'black-forest-labs/flux-kontext-pro': 1, // ~$0.040
   'bytedance/seedream-4': 1, // ~$0.030 (2K, restyle editor 2026-07-06)
   'google/gemini-2-image': 1, // Nano Banana ~$0.039
+  'xai/grok-imagine-image': 1, // Grok Imagine ~$0.02 (1k)
   sdxl: 1, // ~$0.020
 
   // ── 2 sparkles — ~$0.05–0.065/img ─────────────────────────────────────
@@ -102,6 +103,9 @@ export const MODEL_COST_CENTS: Record<string, number> = {
   // ── OpenAI — gpt-image medium quality, portrait (~$0.05–0.08) ──────────
   'openai/gpt-image-1': 7, // ~$0.07 (deprecating Oct 2026)
   'openai/gpt-image-2': 6, // ~$0.06
+
+  // ── xAI (Grok) — grok-imagine-image 1k (~$0.02) ───────────────────────
+  'xai/grok-imagine-image': 2, // ~$0.02
 
   // ── Google Gemini (ai.google.dev/pricing, 2026-05-25) ─────────────────
   'google/gemini-2-image': 4, // Nano Banana (gemini-2.5-flash-image) ~$0.039
@@ -159,6 +163,20 @@ export function getSparkleCost(modelId: string): number {
 export function isKnownModel(modelId: string): boolean {
   if (dbCostCache && dbCostCache.has(modelId)) return true;
   return Object.prototype.hasOwnProperty.call(MODEL_SPARKLE_COSTS, modelId);
+}
+
+/**
+ * Models that exist in the catalog but must NOT be usable by regular users yet
+ * (hidden from the picker AND rejected server-side, so a raw API call can't
+ * force them). Callers drop a force_model that's admin-only when the caller
+ * isn't an admin. When a model is ready for everyone, remove it here. Empty
+ * today — Grok went fully public 2026-07-22. Keep the mechanism for the next
+ * model that needs a staged rollout.
+ */
+export const ADMIN_ONLY_MODELS: ReadonlySet<string> = new Set([]);
+
+export function isAdminOnlyModel(modelId: string): boolean {
+  return ADMIN_ONLY_MODELS.has(modelId);
 }
 
 /** API cost estimate for the render, in cents (integer). Used for logging. */

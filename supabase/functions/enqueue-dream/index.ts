@@ -17,7 +17,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
+import { getSparkleCost, loadModelCosts, isAdminOnlyModel } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
 import { routeNewSceneSubject } from '../_shared/newSceneDirective.ts';
@@ -247,8 +247,27 @@ Deno.serve(async (req) => {
   // subscribe to its own row. Fall back to a server UUID for direct callers.
   const jobId =
     typeof body.job_id === 'string' && body.job_id.length > 0 ? body.job_id : crypto.randomUUID();
-  const forceModel = typeof body.force_model === 'string' ? body.force_model : null;
+  let forceModel = typeof body.force_model === 'string' ? body.force_model : null;
   const isDlt = body.dlt_recipe != null;
+
+  // Admin-only model gate. Some catalog models (e.g. Grok while its face-swap
+  // quality is being validated) must not be usable by regular users — hidden
+  // from the picker AND rejected here so a raw API call can't force them. Drop
+  // the force_model if it's admin-only and the caller isn't an admin; the dream
+  // then renders as a normal DreamBot dream (default model + base cost).
+  if (forceModel && isAdminOnlyModel(forceModel)) {
+    const { data: adminRow } = await supabase
+      .from('users')
+      .select('is_admin')
+      .eq('id', userId)
+      .single();
+    if (!adminRow?.is_admin) {
+      console.warn(
+        `[enqueue-dream] dropping admin-only force_model ${forceModel} for non-admin ${userId}`
+      );
+      forceModel = null;
+    }
+  }
 
   // Per-user in-flight cap — sparkles are otherwise the only throttle, so bound
   // how many dreams one user can have queued/rendering at once (accidental

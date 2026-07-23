@@ -50,6 +50,7 @@ import { HAIKU } from '../_shared/models.ts';
 // Shared post-processing (extracted Phase 3.1)
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { generateImage } from '../_shared/generateImage.ts';
+import { isXaiModel } from '../_shared/providers/xai.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
 import {
@@ -75,6 +76,7 @@ import {
   getSparkleCost,
   loadModelCosts,
   isKnownModel,
+  isAdminOnlyModel,
 } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
@@ -182,6 +184,7 @@ async function handleRequest(req: Request): Promise<Response> {
   // Replicate-only paths still work without these.
   const OPENAI_KEY = Deno.env.get('OPENAI_API_KEY');
   const GEMINI_KEY = Deno.env.get('GEMINI_API_KEY');
+  const XAI_KEY = Deno.env.get('XAI_API_KEY');
 
   if (!REPLICATE_TOKEN) {
     return new Response(
@@ -490,6 +493,23 @@ async function handleRequest(req: Request): Promise<Response> {
     if (force_model && !isKnownModel(force_model)) {
       console.warn(`[generate-dream] ignoring unknown force_model: ${force_model}`);
       force_model = undefined;
+    }
+    // Admin-only model defense. The direct user-JWT path (not isQueue) could
+    // otherwise force an admin-only model (e.g. Grok mid-validation) bypassing
+    // the enqueue-dream gate. Worker path (isQueue) is trusted — its payload was
+    // already gated at enqueue. Drop it for a non-admin direct caller.
+    if (force_model && isAdminOnlyModel(force_model) && !isQueue) {
+      const { data: adminRow } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', userId)
+        .single();
+      if (!adminRow?.is_admin) {
+        console.warn(
+          `[generate-dream] dropping admin-only force_model ${force_model} for non-admin ${userId}`
+        );
+        force_model = undefined;
+      }
     }
     // DreamBot (no force_model) → engine_config.base_sparkle_cost (admin-tunable,
     // default 1); Direct/DLT → the picked model's cost. Mirrors the client.
@@ -1641,6 +1661,16 @@ Output ONLY the prompt.`;
 
   // ── Generate image via Replicate ──────────────────────────────────────────
   try {
+    // Grok (xAI) is TEXT-TO-IMAGE only — it can't take an input image. If a
+    // forced Grok model lands on an input-image mode (restyle/Kontext), fall
+    // back to Replicate's Kontext so the render doesn't fail on dispatch.
+    if (isXaiModel(pickedModel) && effectiveInputImage) {
+      fallbackReasons.push(`xai_img2img_block:${pickedModel}->flux-kontext-pro`);
+      console.warn(
+        `[generate-dream] Grok can't do img2img; using flux-kontext-pro instead of ${pickedModel}`
+      );
+      pickedModel = 'black-forest-labs/flux-kontext-pro';
+    }
     console.log(`[generate-dream] ⏱ Starting image generation (model: ${pickedModel})...`);
     // Force JPEG when this dream will go through dual-face-swap (preserves
     // the 2026-05-09 HTTP 546 fix). Otherwise PNG for lossless quality.
@@ -1649,6 +1679,7 @@ Output ONLY the prompt.`;
       replicateToken: REPLICATE_TOKEN,
       openaiKey: OPENAI_KEY,
       geminiKey: GEMINI_KEY,
+      xaiKey: XAI_KEY,
     };
     // New Scene reference render: on a refusal/failure, retry the bucket's other
     // model ONCE (visible fallback) before the outer catch refunds. Never

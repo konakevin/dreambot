@@ -22,6 +22,7 @@ import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { shouldSendCompletionNotification } from '../_shared/notify.ts';
 import { pickModel } from '../_shared/modelPicker.ts';
 import { generateImage } from '../_shared/generateImage.ts';
+import { isXaiModel } from '../_shared/providers/xai.ts';
 import { persistToStorage, buildDisplayVariant } from '../_shared/persistence.ts';
 import {
   completeQueueJob,
@@ -434,7 +435,13 @@ async function handleRequest(req: Request): Promise<Response> {
 
   // ── Generate image via Replicate ────────────────────────────────────────
   try {
-    console.log(`[restyle-photo] ⏱ Starting image generation (model: ${pickedModel})...`);
+    // Grok (xAI) is text-to-image only — never valid for a restyle (always
+    // img2img). Guard so a forced Grok model falls back to Kontext rather than
+    // failing on dispatch. (Grok isn't in restyle pools, so this is defense.)
+    const renderModel = isXaiModel(pickedModel)
+      ? 'black-forest-labs/flux-kontext-pro'
+      : pickedModel;
+    console.log(`[restyle-photo] ⏱ Starting image generation (model: ${renderModel})...`);
     const genResult = await generateImage(
       effectiveMode,
       finalPrompt,
@@ -444,7 +451,7 @@ async function handleRequest(req: Request): Promise<Response> {
         openaiKey: Deno.env.get('OPENAI_API_KEY'),
         geminiKey: Deno.env.get('GEMINI_API_KEY'),
       },
-      pickedModel
+      renderModel
     );
     replicatePredictionId = genResult.predictionId;
     if (genResult.nsfwRetries && genResult.nsfwRetries > 0) {

@@ -39,6 +39,7 @@ const { pickFromBag, withRetry } = require('./botCycle');
 const { resolveCleanMedium } = require('./cleanMediumByModel');
 const { isOpenAIModel, generateOpenAIImage } = require('./providers/openai');
 const { isGeminiModel, generateGeminiImage } = require('./providers/gemini');
+const { isXaiModel, generateXaiImage } = require('./providers/xai');
 const { rollChaos, buildChaosBriefBlock } = require('./chaosLayer');
 const { rollSensoryAnchors, buildSensoryBriefBlock } = require('./sensoryAnchors');
 const { extendBriefForConcept, buildPolishBrief } = require('./twoPassPolish');
@@ -377,6 +378,18 @@ async function flux({
     if (!key) throw new Error('GEMINI_API_KEY missing — set it in .env.local or env');
     return await withNsfwRetry(nsfwRetries, async () => {
       const r = await generateGeminiImage(model, prompt, key);
+      return r.url;
+    });
+  }
+
+  // Native xAI (Grok) route — grok-imagine-image. AlphaBot QA only for now.
+  if (isXaiModel(model)) {
+    const key = getKey('XAI_API_KEY');
+    if (!key) throw new Error('XAI_API_KEY missing — set it in .env.local or env');
+    return await withNsfwRetry(nsfwRetries, async () => {
+      // Provider default (2:3 portrait) for the controlled QA run — bots pass
+      // '9:16' which xAI may not accept; the QA batch will confirm the ratio.
+      const r = await generateXaiImage(model, prompt, key);
       return r.url;
     });
   }

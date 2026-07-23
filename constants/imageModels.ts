@@ -19,7 +19,7 @@
  * The hosting provider (Replicate, etc.) is internal and never surfaced.
  */
 
-export type ModelFamily = 'flux-1' | 'flux-2' | 'openai' | 'google';
+export type ModelFamily = 'flux-1' | 'flux-2' | 'openai' | 'google' | 'xai';
 
 export interface ImageModel {
   /** Stable identifier — matches MODEL_SPARKLE_COSTS keys server-side. */
@@ -29,7 +29,7 @@ export interface ImageModel {
   /** Backing provider — internal only (server routing); never shown to users.
    *  Optional: the DB catalog (image_models) doesn't carry it; only the bundled
    *  fallback list below sets it. The client never uses it for display. */
-  provider?: 'replicate' | 'openai' | 'gemini';
+  provider?: 'replicate' | 'openai' | 'gemini' | 'xai';
   /** Family bucket the picker groups under (Flux 1 / Flux 2 / OpenAI / Google). */
   family: ModelFamily;
   /** Sparkle cost for one render with this model (shown inline per model). */
@@ -158,6 +158,16 @@ export const IMAGE_MODELS: ImageModel[] = [
     sparkleCost: 5,
     description: 'Flagship quality, with accurate text + fine detail.',
   },
+
+  // ── xAI ───────────────────────────────────────────────────────────────
+  {
+    id: 'xai/grok-imagine-image',
+    label: 'Grok Imagine',
+    provider: 'xai',
+    family: 'xai',
+    sparkleCost: 1,
+    description: 'xAI Grok — fast, vivid, imaginative renders.',
+  },
 ];
 
 /** Default model when the user hasn't picked one. */
@@ -204,13 +214,14 @@ export function sparkleCostFrom(
 }
 
 /** Family display order + labels for the picker. */
-export const FAMILY_ORDER: ModelFamily[] = ['flux-1', 'flux-2', 'openai', 'google'];
+export const FAMILY_ORDER: ModelFamily[] = ['flux-1', 'flux-2', 'openai', 'google', 'xai'];
 
 export const FAMILY_LABELS: Record<ModelFamily, string> = {
   'flux-1': 'Flux 1',
   'flux-2': 'Flux 2',
   openai: 'OpenAI',
   google: 'Google',
+  xai: 'xAI',
 };
 
 /**
@@ -234,6 +245,7 @@ export const MODEL_BLURBS: Record<string, string> = {
   'openai/gpt-image-1': 'Very lifelike and real',
   'openai/gpt-image-2': 'Great with text in images',
   'google/gemini-3-image-preview': 'Top quality, crisp detail',
+  'xai/grok-imagine-image': 'Bold and imaginative',
 };
 
 /** Picker groups in explicit display order (curated, NOT cost-sorted).
@@ -247,6 +259,7 @@ export const STANDARD_MODEL_IDS: string[] = [
   'black-forest-labs/flux-2-dev',
   'black-forest-labs/flux-krea-dev',
   'black-forest-labs/flux-schnell',
+  'xai/grok-imagine-image',
 ];
 export const PREMIUM_MODEL_IDS: string[] = [
   'black-forest-labs/flux-1.1-pro-ultra',

@@ -41,7 +41,6 @@ import {
   getChaosTier,
   rollNightlyDreamType,
   mapDreamTypeToInputs,
-  extraModelsForTier,
   type NightlyDreamType,
 } from '../_shared/chaosTier.ts';
 import { assembleScene } from '../_shared/sceneEngine.ts';
@@ -51,11 +50,11 @@ import { isBannedLocationName } from '../_shared/locationFilters.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
-import { getCostCents } from '../_shared/modelPricing.ts';
+import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
+import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
-import { pickModel } from '../_shared/modelPicker.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
 import { faceSwap } from '../_shared/faceSwap.ts';
@@ -97,6 +96,11 @@ import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
 
+// Models nightly must never render. flux-2-dev over-smooths under the nightly
+// slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
+// pick (face-swap + scene) and the downstream ban-gate backstop share one list.
+const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set(['black-forest-labs/flux-2-dev']);
+
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
@@ -112,6 +116,10 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   // Service role client for DB operations (bypasses RLS)
   const supabase: SupabaseClient = createClient(supabaseUrl, serviceRoleKey);
+
+  // Warm the model-cost cache so the DreamSmart ≤2✦ pool filter uses the live
+  // image_models.sparkle_cost (static map is the fallback). Per-isolate, 60s TTL.
+  await loadModelCosts(supabase);
 
   // ── Parse request body (needed by both auth paths) ──────────────────────
   let body: Record<string, unknown>;
@@ -305,6 +313,10 @@ Deno.serve(async (req) => {
   // Per-medium scene-eligible model override (mig 214). NULL → fall back to
   // engine_config.scene_eligible_models global. Captured for the post-try gate.
   let resolvedMediumSceneModels: string[] | null = null;
+  // The FINAL medium's DreamSmart set — the source for the nightly ≤2✦ model
+  // pick (2026-07-22). Captured out here (the medium object is try-scoped) and
+  // re-synced after every medium re-roll so the pick reflects the real style.
+  let resolvedMediumSmartModels: string[] = [];
   let faceSwapSource: string | undefined;
   // Cast gender for the SOLO swap guard (singleSwapGuard.ts) — set where
   // faceSwapSource is set. null = unknown → the guard checks face count only.
@@ -335,7 +347,6 @@ Deno.serve(async (req) => {
   // fetchSceneEligibleModels. Resolved inside the try block from the user's
   // mood slider; defaults preserve pre-mig-239 behavior when missing.
   let chaosTierOuter: 'low' | 'mid' | 'high' = 'low';
-  let chaosCfgOuter: Awaited<ReturnType<typeof fetchChaosConfig>> | null = null;
 
   // Budget tracking
   const today = new Date().toISOString().slice(0, 10);
@@ -414,7 +425,6 @@ Deno.serve(async (req) => {
         : 0.5;
     const chaosTier = getChaosTier(chaosValue, chaosCfg);
     chaosTierOuter = chaosTier;
-    chaosCfgOuter = chaosCfg;
     const describedCastForRoll = (nightlyProfile.dream_cast ?? []).filter(
       (m: DreamCastMember) => m.description && m.thumb_url && m.thumb_url.startsWith('http')
     );
@@ -685,6 +695,7 @@ Deno.serve(async (req) => {
     resolvedComposition = composition;
     resolvedMediumAllowedModels = nightlyMedium.allowedModels;
     resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
+    resolvedMediumSmartModels = nightlyMedium.smartDreamModels;
     // Tell the post-try GPT-image-2 prefix step to skip when the medium is
     // embodied — its directive (LEGO bricks / pixel tiles / Sackboy felt) is
     // already the CLIP anchor; canvas-illustration prefix would fight it.
@@ -818,50 +829,35 @@ Deno.serve(async (req) => {
     // Same rotation + override library applies to single and dual so the
     // two paths stay in parity. For non-Flux models the override library
     // is a no-op (they don't use flux_fragment).
-    if (isFaceSwapCharacter) {
-      if (force_model) {
-        faceSwapPrePickedModel = force_model;
-      } else {
-        // First dreams (strict_face_swap — set only by the onboarding first-dream
-        // tiers) random between the two Flux pro models — the most reliable,
-        // highest-quality face swap for the make-or-break showcase. Both render
-        // dual couple swaps cleanly (verified: ultra dual swaps in nightly).
-        // gemini + gpt-image-2 are banned here (they re-render/restyle and weaken
-        // the "that's really me" moment).
-        const FIRST_DREAM_MODELS = [
-          'black-forest-labs/flux-1.1-pro',
-          'black-forest-labs/flux-1.1-pro-ultra',
-        ];
-        const FACE_SWAP_MODELS = [
-          'black-forest-labs/flux-dev',
-          'black-forest-labs/flux-1.1-pro',
-          'black-forest-labs/flux-1.1-pro-ultra',
-          'google/gemini-2-image',
-          'openai/gpt-image-2',
-        ];
-        const pool = strict_face_swap ? FIRST_DREAM_MODELS : FACE_SWAP_MODELS;
-        faceSwapPrePickedModel = pool[Math.floor(Math.random() * pool.length)];
-      }
-      // ── Single-swap Ultra clamp (parity with generate-dream) ──
-      // Ultra renders at 4MP; the SINGLE-cast swap providers (cdingram/yan-ops/
-      // pikachupichu25) downscale that target until the face is undetectable, or
-      // time out → "no face found" → hard-fail. Clamp Ultra → Pro for single.
-      // The DUAL path is left on Ultra: nightly's dual swap runs on Fly.io
-      // (face-swap-dual, 2GB), which handles the 4MP crop/stitch (verified
-      // 2026-06-01). Clamping before the override pick below also lets the
-      // curated Pro fragment library apply (it has no -ultra entries).
-      if (
-        isSingleHumanFaceSwap &&
-        faceSwapPrePickedModel === 'black-forest-labs/flux-1.1-pro-ultra'
-      ) {
-        faceSwapPrePickedModel = 'black-forest-labs/flux-1.1-pro';
+    // (Re-)pick the face-swap render model from a medium's DreamSmart ≤2✦ pool
+    // + apply the single-swap Ultra clamp. A closure so a scenario medium
+    // re-roll (below) can re-pick from the FINAL medium's smart set — the pool
+    // is now medium-dependent (unlike the old fixed FACE_SWAP_MODELS rotation).
+    const pickFaceSwapModelFor = (medium: typeof baseMedium): string => {
+      const pool = nightlyModelPool({
+        smartDreamModels: medium.smartDreamModels,
+        allowedModels: medium.allowedModels,
+        costOf: getSparkleCost,
+        bans: NIGHTLY_BANNED_MODELS,
+      });
+      let m = pickFromPool(pool);
+      // Single-swap Ultra clamp: Ultra renders at 4MP; the single-cast swap
+      // providers downscale it until the face is undetectable → hard-fail. Dual
+      // is left on Ultra — nightly's dual swap runs on Fly (face-swap-dual, 2GB).
+      if (isSingleHumanFaceSwap && m === 'black-forest-labs/flux-1.1-pro-ultra') {
+        m = 'black-forest-labs/flux-1.1-pro';
         fallbackReasons.push('single_ultra_clamped_to_pro');
-        console.log(
-          '[nightly] CLAMP: flux-1.1-pro-ultra → flux-1.1-pro for single face swap (Ultra 4MP breaks the swap)'
-        );
       }
+      return m;
+    };
+    if (isFaceSwapCharacter) {
+      // DreamSmart pool (2026-07-22): a model proven to render THIS style, ≤2✦,
+      // minus nightly bans. Replaces the old hardcoded FACE_SWAP_MODELS /
+      // FIRST_DREAM_MODELS rotations. First-dream uses the same pool (per Kevin);
+      // the too-slow gpt-image-2 is still dropped for first dreams downstream.
+      faceSwapPrePickedModel = force_model ? force_model : pickFaceSwapModelFor(baseMedium);
       console.log(
-        `[nightly] face-swap character model (${selectedCast.length === 2 ? 'dual' : 'single'}): ${faceSwapPrePickedModel}`
+        `[nightly] face-swap character model (${selectedCast.length === 2 ? 'dual' : 'single'}) for '${baseMedium.key}': ${faceSwapPrePickedModel}`
       );
       // Per-model curated medium-fragment override library. Same library
       // serves single and dual — fragments are subject-agnostic.
@@ -1362,6 +1358,16 @@ Deno.serve(async (req) => {
           nightlyMedium = forced;
           resolvedMediumKey = forced.key; // feeds the model ban/scene gates + persist
           baseMedium = applyFaceSwapOverride(forced);
+          // Re-sync the captured medium metadata so the model pick + gates use
+          // the NEW medium (was a pre-existing staleness hazard).
+          resolvedMediumAllowedModels = nightlyMedium.allowedModels;
+          resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
+          resolvedMediumSmartModels = nightlyMedium.smartDreamModels;
+          if (faceSwapPrePickedModel && !force_model) {
+            // Medium changed → re-pick from the NEW medium's DreamSmart ≤2✦ pool
+            // so the model still matches the style we're actually rendering.
+            faceSwapPrePickedModel = pickFaceSwapModelFor(nightlyMedium);
+          }
           if (faceSwapPrePickedModel) {
             const modelOverride = pickFaceSwapModelOverride(
               faceSwapPrePickedModel,
@@ -1401,6 +1407,14 @@ Deno.serve(async (req) => {
           nightlyMedium = rerolled;
           resolvedMediumKey = rerolled.key;
           baseMedium = applyFaceSwapOverride(rerolled);
+          resolvedMediumAllowedModels = nightlyMedium.allowedModels;
+          resolvedMediumSceneModels = nightlyMedium.sceneEligibleModels;
+          resolvedMediumSmartModels = nightlyMedium.smartDreamModels;
+          if (faceSwapPrePickedModel && !force_model) {
+            // Medium changed → re-pick from the NEW medium's DreamSmart ≤2✦ pool
+            // so the model still matches the style we're actually rendering.
+            faceSwapPrePickedModel = pickFaceSwapModelFor(nightlyMedium);
+          }
           if (faceSwapPrePickedModel) {
             const modelOverride = pickFaceSwapModelOverride(
               faceSwapPrePickedModel,
@@ -2115,13 +2129,20 @@ Output ONLY the prompt.`;
     m.toLowerCase().endsWith('s') ? 'lava caves' : 'lava cave'
   );
 
-  const autoPicked = await pickModel('flux-dev', finalPrompt, resolvedMediumKey, resolvedVibeKey);
-  // Face-swap character paths (single human OR dual) use the pre-picked
-  // model rolled earlier so the medium fragment could be overridden before
-  // the slot pipeline assembled the prompt. 3-way rotation: flux-dev /
-  // flux-2-dev / flux-1.1-pro. Scene-only + pet single use the per-medium
-  // model resolver as before.
-  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || autoPicked.model;
+  // Scene / pet (non-face-swap) base pick: from the FINAL rolled medium's
+  // DreamSmart set, ≤2✦, minus nightly bans (2026-07-22 — replaces the legacy
+  // pickModel/allowed_models resolver). Face-swap dreams already picked their
+  // model above (faceSwapPrePickedModel); the scene-composition gate below
+  // narrows this further to scene-eligible models.
+  const sceneBaseModel = pickFromPool(
+    nightlyModelPool({
+      smartDreamModels: resolvedMediumSmartModels,
+      allowedModels: resolvedMediumAllowedModels,
+      costOf: getSparkleCost,
+      bans: NIGHTLY_BANNED_MODELS,
+    })
+  );
+  let pickedModel = force_model ? force_model : faceSwapPrePickedModel || sceneBaseModel;
 
   // Scene-composition model gate (mig 213). For pure_scene + epic_tiny, the
   // pickedModel is intersected with engine_config.scene_eligible_models.
@@ -2135,13 +2156,12 @@ Output ONLY the prompt.`;
     (resolvedComposition === 'pure_scene' || resolvedComposition === 'epic_tiny')
   ) {
     // Per-medium override (mig 214) wins over engine_config global (mig 213).
-    // NULL or empty → fall back to the global list. Either way the result is
-    // then intersected with the medium's own allowed_models as a safety net.
-    // Pass chaos-tier extras (flux-2-pro at MID, flux-2-pro/flex/max at HIGH)
-    // so high-chaos users unlock weirder models in the scene gate. Migration 239.
-    const tierExtras =
-      chaosCfgOuter != null ? extraModelsForTier(chaosTierOuter, chaosCfgOuter) : [];
-    const globalSceneModels = await fetchSceneEligibleModels(tierExtras);
+    // NULL or empty → fall back to the global list. HARD ≤2✦ cap for nightly:
+    // no chaos-tier model expansion (dropped 2026-07-22). We narrow the
+    // DreamSmart ≤2✦ pool to models that are ALSO scene-eligible; if that
+    // intersection is empty, nightlyModelPool falls back to the ≤2✦ smart set
+    // (never scene-inappropriate-empty).
+    const globalSceneModels = await fetchSceneEligibleModels([]);
     const sceneEligibleModels =
       resolvedMediumSceneModels && resolvedMediumSceneModels.length > 0
         ? resolvedMediumSceneModels
@@ -2151,17 +2171,18 @@ Output ONLY the prompt.`;
         ? 'medium-override'
         : 'global';
     if (sceneEligibleModels.length > 0) {
-      const mediumAllowed = new Set(resolvedMediumAllowedModels);
-      const intersection = sceneEligibleModels.filter((m) => mediumAllowed.has(m));
-      if (intersection.length > 0 && !intersection.includes(pickedModel)) {
+      const scenePool = nightlyModelPool({
+        smartDreamModels: resolvedMediumSmartModels,
+        allowedModels: resolvedMediumAllowedModels,
+        costOf: getSparkleCost,
+        bans: NIGHTLY_BANNED_MODELS,
+        intersectWith: sceneEligibleModels,
+      });
+      if (!scenePool.includes(pickedModel)) {
         const oldModel = pickedModel;
-        pickedModel = intersection[Math.floor(Math.random() * intersection.length)];
+        pickedModel = pickFromPool(scenePool);
         console.log(
-          `[nightly-dreams] scene path (${resolvedComposition}): re-picked model '${oldModel}' -> scene-eligible '${pickedModel}' (intersection of ${intersection.length}, source=${sceneSrcLabel})`
-        );
-      } else if (intersection.length === 0) {
-        console.warn(
-          `[nightly-dreams] scene gate: NO intersection between scene_eligible_models (${sceneSrcLabel}) and medium '${resolvedMediumKey}' allowed_models. Falling through to picker default '${pickedModel}'.`
+          `[nightly-dreams] scene path (${resolvedComposition}): re-picked model '${oldModel}' -> scene-eligible DreamSmart '${pickedModel}' (pool ${scenePool.length}, source=${sceneSrcLabel})`
         );
       }
     }
@@ -2177,7 +2198,8 @@ Output ONLY the prompt.`;
   // Per-medium bans layered on top (2026-06-06): LEGO renders look pasty +
   // over-smoothed under flux-2-max; banned for lego nightlies only (still
   // allowed for create-screen renders via medium.allowed_models).
-  const NIGHTLY_BANNED_MODELS = new Set(['black-forest-labs/flux-2-dev']);
+  // NIGHTLY_BANNED_MODELS is module-scoped (also folded into the DreamSmart
+  // pool pick upstream); this gate is the backstop.
   const NIGHTLY_BANNED_MODELS_BY_MEDIUM: Record<string, Set<string>> = {};
   // Per-medium hard model pins: when set, that medium ALWAYS renders with
   // the pinned model for nightlies (force_model still wins for QA). LEGO +
@@ -2289,6 +2311,7 @@ Output ONLY the prompt.`;
         replicateToken: REPLICATE_TOKEN,
         openaiKey: Deno.env.get('OPENAI_API_KEY'),
         geminiKey: Deno.env.get('GEMINI_API_KEY'),
+        xaiKey: Deno.env.get('XAI_API_KEY'),
       },
       pickedModel,
       // Force JPEG when this dream will go through the dual-face-swap
@@ -2366,6 +2389,7 @@ Output ONLY the prompt.`;
                 replicateToken: REPLICATE_TOKEN,
                 openaiKey: Deno.env.get('OPENAI_API_KEY'),
                 geminiKey: Deno.env.get('GEMINI_API_KEY'),
+                xaiKey: Deno.env.get('XAI_API_KEY'),
               },
               pickedModel,
               isDualFaceSwap ? 'jpg' : 'png'
@@ -2424,6 +2448,7 @@ Output ONLY the prompt.`;
                 replicateToken: REPLICATE_TOKEN,
                 openaiKey: Deno.env.get('OPENAI_API_KEY'),
                 geminiKey: Deno.env.get('GEMINI_API_KEY'),
+                xaiKey: Deno.env.get('XAI_API_KEY'),
               },
               pickedModel,
               'png'
@@ -2717,6 +2742,9 @@ Output ONLY the prompt.`;
           prompt_used: finalPrompt,
           resolved_medium: resolvedMediumKey ?? null,
           resolved_vibe: resolvedVibeKey ?? null,
+          // Surfaced for QA of the DreamSmart nightly model pick (dry-run only).
+          model_used: pickedModel,
+          fallback_reasons: fallbackReasons,
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );

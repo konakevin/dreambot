@@ -15,6 +15,7 @@
 import { pickModel } from './modelPicker.ts';
 import { generateOpenAIImage, isOpenAIModel } from './providers/openai.ts';
 import { generateGeminiImage, isGeminiModel } from './providers/gemini.ts';
+import { generateXaiImage, isXaiModel } from './providers/xai.ts';
 import { jitter } from './jitter.ts';
 
 export interface GenerateImageResult {
@@ -23,7 +24,7 @@ export interface GenerateImageResult {
   /** Number of NSFW retries that occurred before success. 0 = passed on first try. */
   nsfwRetries?: number;
   /** Which provider/model produced this render — for observability + sparkle pricing. */
-  provider?: 'replicate' | 'openai' | 'gemini';
+  provider?: 'replicate' | 'openai' | 'gemini' | 'xai';
   model?: string;
   /** Set when this render survived a provider failure — either a same-model
    *  retry after a transient error or a cross-provider model fallback.
@@ -35,6 +36,7 @@ export interface GenerateImageCredentials {
   replicateToken: string;
   openaiKey?: string;
   geminiKey?: string;
+  xaiKey?: string;
 }
 
 const SDXL_VERSION = '7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc';
@@ -111,6 +113,7 @@ function failoverModelFor(msg: string, mode: string, inputImage: string | undefi
 function canRunModel(model: string, creds: GenerateImageCredentials): boolean {
   if (isOpenAIModel(model)) return !!creds.openaiKey;
   if (isGeminiModel(model)) return !!creds.geminiKey;
+  if (isXaiModel(model)) return !!creds.xaiKey;
   return !!creds.replicateToken;
 }
 
@@ -243,6 +246,12 @@ async function generateImageOnce(
     // generation paths pass inputImage=undefined (unchanged behavior).
     const r = await generateGeminiImage(model, prompt, creds.geminiKey ?? '', inputImage);
     return { url: r.url, predictionId: r.predictionId, provider: 'gemini', model };
+  }
+  if (isXaiModel(model)) {
+    // xAI (Grok) is TEXT-TO-IMAGE only — callers must guard it out of
+    // input-image modes (restyle/Kontext) before reaching here. No inputImage.
+    const r = await generateXaiImage(model, prompt, creds.xaiKey ?? '');
+    return { url: r.url, predictionId: r.predictionId, provider: 'xai', model };
   }
 
   // ── Default: Replicate ────────────────────────────────────────────────
