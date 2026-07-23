@@ -25,15 +25,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  InteractionManager,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import { View, StyleSheet, ActivityIndicator, type StyleProp, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDeferredHydration } from '@/lib/deferredHydration';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
@@ -143,38 +137,20 @@ function VerticalPagerInner<T>(
   const [activeIndex, setActiveIndex] = useState(initialIndex);
 
   // Deferred hydration: on first mount render ONLY the active card (see
-  // windowItems), then expand to the full ±windowSize once the nav transition
-  // settles. Mounting all 5 full-screen cards synchronously during the push
-  // commit was the tap-to-open lag — the native transition couldn't start until
-  // that render finished (Kevin 2026-07-12). Once true it stays true, so only
-  // the first open pays the deferral.
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      setHydrated(true);
-    };
-    // InteractionManager settles hydration in the NORMAL case (after the nav
-    // push transition, keeping the initial open fast — see above). But
-    // runAfterInteractions NEVER fires its callback if a leaked interaction
-    // handle is stuck — common after the app sits idle/backgrounded with an
-    // in-flight gesture/animation. When a reshuffle REMOUNTS this pager (the
-    // reshuffleEpoch key), the fresh mount schedules into that wedged queue and
-    // hydration never happens → window stays 0 → only the active card renders,
-    // can't swipe, and re-tapping just remounts into the same stuck manager
-    // (only an app restart cleared it). The 600ms timer is a guaranteed
-    // backstop — well past any push transition, so it never interferes with the
-    // fast-open path, but always recovers hydration if the manager is wedged
-    // (Kevin 2026-07-22).
-    const handle = InteractionManager.runAfterInteractions(finish);
-    const timer = setTimeout(finish, 600);
-    return () => {
-      handle.cancel();
-      clearTimeout(timer);
-    };
-  }, []);
+  // windowItems), then expand to the full ±windowSize once things settle.
+  // Mounting all 5 full-screen cards synchronously during the push commit was
+  // the tap-to-open lag — the native transition couldn't start until that
+  // render finished (Kevin 2026-07-12). Once true it stays true, so only the
+  // first open pays the deferral.
+  //
+  // Uses the adaptive InteractionManager signal WHEN HEALTHY (fires right after
+  // the real settle, so it adapts to slow devices) but BOUNDS it with a timer:
+  // runAfterInteractions never fires if a leaked interaction handle is stuck
+  // (common after idle/background), which wedged this pager at window 0 — one
+  // card, un-swipeable — after a reshuffle remount until an app restart (Kevin
+  // 2026-07-22). Extracted + unit-tested in lib/deferredHydration.ts; the timer
+  // is an upper bound on an unbounded wait, not a band-aid.
+  const hydrated = useDeferredHydration();
 
   useEffect(() => {
     countSV.value = count;
