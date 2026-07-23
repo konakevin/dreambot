@@ -82,6 +82,12 @@ export interface ResolvedMedium {
    *  coercion target + client auto-select pick. */
   smartDreamModels: string[];
   smartDreamDefault: string | null;
+  /** Per-model flux_fragment override (client_meta.flux_fragment_by_model): a
+   *  map of model id → replacement fragment, for models that literalize a
+   *  medium's surface nouns (Nano Banana Pro renders canvas's "stretched canvas"
+   *  as a physical easel). Only the render model's own entry is applied, so every
+   *  other model keeps the base fluxFragment. Empty/absent → no override. */
+  fluxFragmentByModel: Record<string, string> | null;
 }
 
 export interface ResolvedVibe {
@@ -149,7 +155,27 @@ function toMedium(row: DbMediumRow): ResolvedMedium {
       row.client_meta && typeof row.client_meta.smart_dream_default === 'string'
         ? row.client_meta.smart_dream_default
         : null,
+    // Per-model flux_fragment override map. Keep only string→string entries so a
+    // malformed value can never inject a non-string into the prompt.
+    fluxFragmentByModel: parseFluxFragmentByModel(row.client_meta),
   };
+}
+
+/** Extract client_meta.flux_fragment_by_model as a clean {model: fragment} map.
+ *  Returns null unless it's a plain object with at least one string value. No
+ *  optional chaining (Deno edge top-level rule doesn't apply in a fn, but we keep
+ *  the explicit-check house style). */
+function parseFluxFragmentByModel(
+  clientMeta: DbMediumRow['client_meta']
+): Record<string, string> | null {
+  if (!clientMeta) return null;
+  const raw = clientMeta.flux_fragment_by_model;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const out: Record<string, string> = {};
+  for (const [model, frag] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof frag === 'string' && frag.trim().length > 0) out[model] = frag;
+  }
+  return Object.keys(out).length > 0 ? out : null;
 }
 
 let cachedMediums: ResolvedMedium[] | null = null;

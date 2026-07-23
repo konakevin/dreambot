@@ -695,6 +695,20 @@ async function handleRequest(req: Request): Promise<Response> {
       }
     }
 
+    // Per-model flux_fragment override (client_meta.flux_fragment_by_model).
+    // SURGICAL: only the model forced for THIS render gets a swapped fragment;
+    // every other model keeps the base medium.fluxFragment, so this can never
+    // regress them. Fixes models that literalize a medium's surface nouns — Nano
+    // Banana Pro renders canvas's "on stretched canvas" as a physical easel
+    // object instead of making the whole image a painting. Keyed on force_model
+    // (the create-path render model; nightly can't reach 5✦ models like NB Pro).
+    if (force_model && medium.fluxFragmentByModel && medium.fluxFragmentByModel[force_model]) {
+      medium = { ...medium, fluxFragment: medium.fluxFragmentByModel[force_model] };
+      console.log(
+        `[generate-dream] per-model flux_fragment override applied for ${force_model} on medium "${medium.key}"`
+      );
+    }
+
     resolvedMediumKey = medium.key;
     smartDreamCfg = medium.smartDreamModels.length
       ? {
