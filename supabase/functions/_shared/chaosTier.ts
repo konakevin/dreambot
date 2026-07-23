@@ -76,8 +76,11 @@ const DEFAULT_CONFIG: ChaosConfig = {
   ],
   face_swap_share: 0.7,
   face_swap_share_with_plus_one: 0.9,
-  face_swap_dual_rate: 0.6,
-  face_swap_self_rate: 0.2,
+  face_swap_dual_rate: 0.4,
+  face_swap_self_rate: 0.3,
+  // → +1 gets the remainder (1 - 0.4 - 0.3 = 0.3). Full-cast nightly split is
+  // 40% dual / 30% self / 30% +1 (2026-07-23, Kevin). Mirrors the live
+  // engine_config row; this default keeps a fresh DB seeding at the same split.
   // 0 = Dream Art (cast drawn AS a character in an embodied medium) is DISABLED
   // for nightly. Cast-photo nightly dreams (self / partner / dual) all use Real
   // Face mediums (2026-07-16, Kevin). The live engine_config value is also 0;
