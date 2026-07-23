@@ -443,12 +443,13 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 20,
   },
-  // Rounded chip behind the spinner — same dark bg as the active Explore pill
-  // (OVERLAY_PILL_ACTIVE_BG) so it reads against busy feed images.
+  // Round chip behind the spinner — same dark bg as the active Explore pill
+  // (OVERLAY_PILL_ACTIVE_BG) so it reads against busy feed images. A tight
+  // circle that just encompasses the 44px spinner (Kevin 2026-07-22).
   reshuffleSpinnerChip: {
     backgroundColor: OVERLAY_PILL_ACTIVE_BG,
-    borderRadius: 20,
-    padding: 16,
+    borderRadius: 999,
+    padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
