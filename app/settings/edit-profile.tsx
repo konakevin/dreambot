@@ -33,6 +33,7 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { showAlert } from '@/components/CustomAlert';
 import { PostActionSheet } from '@/components/PostActionSheet';
+import { photoSourceRows } from '@/lib/photoSourceRows';
 import { GradientTitle } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { moderateText, isModerationError, MODERATION_BLOCKED_MESSAGE } from '@/lib/moderation';
@@ -338,22 +339,10 @@ export default function EditProfileScreen() {
         onClose={() => setPhotoSheetOpen(false)}
         title="Profile picture"
         titleImageUrl={profile?.avatar_url ?? null}
-        rows={[
-          {
-            key: 'library',
-            label: 'Choose from library',
-            icon: 'images-outline',
-            group: 'primary',
-            onPress: () => void chooseFromLibrary(),
-          },
-          {
-            key: 'camera',
-            label: 'Take photo',
-            icon: 'camera-outline',
-            group: 'primary',
-            onPress: () => void takePhoto(),
-          },
-        ]}
+        rows={photoSourceRows({
+          onLibrary: () => void chooseFromLibrary(),
+          onCamera: () => void takePhoto(),
+        })}
       />
     </SafeAreaView>
   );

@@ -29,6 +29,7 @@ import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { PostActionSheet } from '@/components/PostActionSheet';
+import { photoSourceRows } from '@/lib/photoSourceRows';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
@@ -448,34 +449,11 @@ export default function ProfileScreen() {
       title="Update Profile Photo"
       titleImageUrl={profile?.avatar_url ? avatarUrl(profile.avatar_url) : null}
       bottomInset={tabBarHeight}
-      rows={[
-        {
-          key: 'library',
-          label: 'Choose from library',
-          icon: 'images-outline',
-          group: 'primary',
-          onPress: chooseFromLibrary,
-        },
-        {
-          key: 'camera',
-          label: 'Take photo',
-          icon: 'camera-outline',
-          group: 'primary',
-          onPress: takePhoto,
-        },
-        ...(hasAvatar
-          ? [
-              {
-                key: 'delete',
-                label: 'Delete photo',
-                icon: 'trash-outline',
-                group: 'danger' as const,
-                destructive: true,
-                onPress: deletePhoto,
-              },
-            ]
-          : []),
-      ]}
+      rows={photoSourceRows({
+        onLibrary: chooseFromLibrary,
+        onCamera: takePhoto,
+        onDelete: hasAvatar ? deletePhoto : undefined,
+      })}
     />
   );
   const userListRef = useRef<FlatList<FollowUser>>(null);

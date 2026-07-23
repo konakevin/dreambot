@@ -57,6 +57,8 @@ import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
 import { DreamSmartSwapSheet, type SwapNotice } from '@/components/DreamSmartSwapSheet';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
+import { PostActionSheet } from '@/components/PostActionSheet';
+import { photoSourceRows } from '@/lib/photoSourceRows';
 import { vibeAllowedInSegment, vibeSegmentLock } from '@/lib/vibeGating';
 import { ModelPicker } from '@/components/ModelPicker';
 import {
@@ -196,14 +198,6 @@ export default function CreateScreen() {
       s2.remove();
     };
   }, []);
-  // The image picker can't present while this Modal is still dismissing (iOS),
-  // so stash the chosen action and fire it AFTER the modal is gone.
-  const pendingPhotoAction = useRef<null | (() => void)>(null);
-  const runPendingPhotoAction = () => {
-    const action = pendingPhotoAction.current;
-    pendingPhotoAction.current = null;
-    action?.();
-  };
   // Unified AI model — the single top-level model choice shared by BOTH routes
   // (DreamBot engine + Direct). Synced from <ModelPicker> (persisted to
   // users.pro_mode_flux_model, cross-device). Drives force_model + the Dream
@@ -1916,103 +1910,17 @@ export default function CreateScreen() {
         }}
       />
 
-      {/* Photo source sheet — themed replacement for the native iOS action
-          sheet (Take Photo / Choose from Library), matching the dark app UI. */}
-      <Modal
+      {/* Photo source sheet — the shared PostActionSheet (same component + rows
+          as the profile/edit-profile avatar sheets, via photoSourceRows). It
+          fires the action after its own slide-out, so the iOS picker-presentation
+          collision the old bespoke Modal worked around no longer applies. */}
+      <PostActionSheet
         visible={photoSourceOpen}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setPhotoSourceOpen(false)}
-        onDismiss={runPendingPhotoAction}
-      >
-        <TouchableOpacity
-          className="flex-1 justify-end"
-          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-          activeOpacity={1}
-          onPress={() => setPhotoSourceOpen(false)}
-        >
-          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
-            <View
-              className="rounded-t-3xl px-5 pt-3"
-              style={{
-                backgroundColor: colors.background,
-                paddingBottom: verticalScale(40),
-                borderTopWidth: 1,
-                borderColor: colors.border,
-              }}
-            >
-              {/* Sheet bg stays full-bleed; content capped to the standardized
-                  600 column on iPad so the buttons aren't absurdly wide. */}
-              <ResponsiveContainer maxWidth={600}>
-                <View
-                  className="self-center rounded-full mb-4"
-                  style={{
-                    width: 40,
-                    height: 4,
-                    backgroundColor: colors.border,
-                    marginTop: verticalScale(2),
-                  }}
-                />
-                <Text
-                  className="text-base font-bold mb-3 ml-1"
-                  style={{ color: colors.textPrimary }}
-                >
-                  Add a photo
-                </Text>
-                {(
-                  [
-                    { icon: 'camera', label: 'Take Photo', action: launchCamera },
-                    { icon: 'images', label: 'Choose from Library', action: launchLibrary },
-                  ] as const
-                ).map((opt) => (
-                  <TouchableOpacity
-                    key={opt.label}
-                    className="flex-row items-center gap-3 px-4 py-3.5 rounded-xl mb-2.5"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                    }}
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      if (Platform.OS === 'ios') {
-                        // iOS: the picker can't present while the modal is still
-                        // dismissing — launch from the Modal's onDismiss instead.
-                        pendingPhotoAction.current = opt.action;
-                        setPhotoSourceOpen(false);
-                      } else {
-                        // Android has no presentation collision; launch directly.
-                        setPhotoSourceOpen(false);
-                        opt.action();
-                      }
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <View
-                      className="w-9 h-9 rounded-full items-center justify-center"
-                      style={{ backgroundColor: 'rgba(167,139,250,0.18)' }}
-                    >
-                      <Ionicons name={opt.icon} size={18} color="#A78BFA" />
-                    </View>
-                    <Text className="text-base font-semibold" style={{ color: colors.textPrimary }}>
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-                <TouchableOpacity
-                  className="items-center py-3.5 rounded-xl mt-1"
-                  onPress={() => setPhotoSourceOpen(false)}
-                  activeOpacity={0.7}
-                >
-                  <Text className="text-base font-semibold" style={{ color: colors.textSecondary }}>
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-              </ResponsiveContainer>
-            </View>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+        onClose={() => setPhotoSourceOpen(false)}
+        title="Add a photo"
+        bottomInset={tabBarHeight}
+        rows={photoSourceRows({ onLibrary: launchLibrary, onCamera: launchCamera })}
+      />
     </SafeAreaView>
   );
 }
