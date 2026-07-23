@@ -449,7 +449,7 @@ const s = StyleSheet.create({
   reshuffleSpinnerChip: {
     backgroundColor: OVERLAY_PILL_ACTIVE_BG,
     borderRadius: 999,
-    padding: 6,
+    padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
