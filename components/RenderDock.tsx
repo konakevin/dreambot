@@ -1,82 +1,83 @@
 /**
  * RenderDock — the ambient "your dreams are cooking" pill above the tab bar.
  *
- * Mounted inside the tab navigator's tabBar (so it's on all 5 tabs and fades
- * with the HUD on the immersive feed), positioned just above the bar. Shows the
- * user's in-flight dream count + current stage, or a brief "ready ✨" / failed
- * flash when one finishes. Tapping it opens Profile ▸ Dreams (the pending-tile
- * tracker). It reserves layout space via the renderDock store's `dockHeight`, so
- * every tab surface eases content up to clear it. See DREAM_TRACKING_PLAN.md.
- *
- * v1 notes: the ready-flash routes to Profile ▸ Dreams (consistent with the
- * rendering tap) rather than jumping straight to the finished dream's fullscreen
- * — a follow-up can add the direct-to-reveal path. The `bottomOffset` is an
- * approximation of the tab-bar height (paddingTop + icon + safe-area pad); tune
- * if a hairline gap/overlap appears.
+ * A DreamBot mascot glyph (branding + whimsy) followed by one ring per in-flight
+ * dream, each filling to its render stage. No changing text — the ring count is
+ * the count, the fill is the progress. When a dream finishes its ring fills,
+ * shows a check (or alert on failure) with a little pop, then drops off. Past 5
+ * dreams it shows 5 rings + "+N"; tapping anywhere opens Profile ▸ Dreams (the
+ * full pending-tile tracker). Mounted in the tab bar so it's on all 5 tabs and
+ * fades with the HUD on the immersive feed. See DREAM_TRACKING_PLAN.md.
  */
 
 import React, { useEffect } from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
-import { BrandSpinner } from '@/components/BrandSpinner';
+import { ProgressRing } from '@/components/ProgressRing';
 import { colors } from '@/constants/theme';
-import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
+import { fontScale, verticalScale } from '@/lib/responsive';
 import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { getDreamStageInfo } from '@/lib/dreamStageLabels';
-import { DOCK_HEIGHT, useRenderDockStore } from '@/store/renderDock';
+import { DOCK_HEIGHT, useRenderDockStore, type FinishedRing } from '@/store/renderDock';
 
-const FLASH_TTL_MS = 4200;
+const MASCOT = require('@/assets/images/icon.png');
+const MAX_RINGS = 5;
+const RING_SIZE = 26;
+const RING_STROKE = 3;
+const FINISHED_TTL_MS = 1500;
+
+/** A finished dream's ring — plays its completion then removes itself. */
+function CompletingRing({ item, onExpire }: { item: FinishedRing; onExpire: () => void }) {
+  useEffect(() => {
+    const id = setTimeout(onExpire, FINISHED_TTL_MS);
+    return () => clearTimeout(id);
+  }, [onExpire]);
+  return (
+    <ProgressRing
+      size={RING_SIZE}
+      strokeWidth={RING_STROKE}
+      target={1}
+      state={item.kind === 'ready' ? 'complete' : 'failed'}
+      sweep={false}
+    />
+  );
+}
 
 export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
   const { data: inFlight = [] } = useInFlightDreams();
-  const flash = useRenderDockStore((s) => s.flash);
-  const clearFlash = useRenderDockStore((s) => s.clearFlash);
+  const finished = useRenderDockStore((s) => s.finished);
+  const removeFinished = useRenderDockStore((s) => s.removeFinished);
   const setDockHeight = useRenderDockStore((s) => s.setDockHeight);
   const requestDreamsTab = useRenderDockStore((s) => s.requestDreamsTab);
 
-  const count = inFlight.length;
-  const visible = count > 0 || flash !== null;
+  // A dream that just went terminal is briefly in BOTH sets (finished pushed by
+  // realtime before useInFlightDreams refetches) — dedup so its ring doesn't
+  // double up. Completing rings render first (they own the animation slot).
+  const finishedIds = new Set(finished.map((f) => f.jobId));
+  const active = inFlight.filter((d) => !finishedIds.has(d.id));
+  const total = finished.length + active.length;
+  const visible = total > 0;
 
-  // Reserve / release layout space so tab surfaces make room (0 at rest).
   useEffect(() => {
     setDockHeight(visible ? DOCK_HEIGHT : 0);
     return () => setDockHeight(0);
   }, [visible, setDockHeight]);
 
-  // Auto-clear the completion/failure flash after its dwell.
-  useEffect(() => {
-    if (!flash) return;
-    const id = setTimeout(() => clearFlash(), FLASH_TTL_MS);
-    return () => clearTimeout(id);
-  }, [flash, clearFlash]);
-
   if (!visible) return null;
 
-  // Flash takes precedence over the rendering summary.
-  let icon: React.ReactNode;
-  let label: string;
-  if (flash?.kind === 'ready') {
-    icon = <Ionicons name="sparkles" size={16} color={colors.accentLight} />;
-    label = 'Dream ready — tap to view';
-  } else if (flash?.kind === 'failed') {
-    icon = <Ionicons name="alert-circle-outline" size={16} color={colors.warning} />;
-    label = "Couldn't render — tap to check";
-  } else if (count === 1) {
-    icon = <BrandSpinner size={18} />;
-    const s = getDreamStageInfo(inFlight[0].status, inFlight[0].currentStage);
-    label = `${s.label}…`;
-  } else {
-    icon = <BrandSpinner size={18} />;
-    label = `${count} dreams rendering`;
-  }
+  // Fill up to MAX_RINGS: completing rings first, then active; the rest → "+N".
+  const shownFinished = finished.slice(0, MAX_RINGS);
+  const activeSlots = Math.max(0, MAX_RINGS - shownFinished.length);
+  const shownActive = active.slice(0, activeSlots);
+  const overflow = total - (shownFinished.length + shownActive.length);
 
   const onPress = () => {
     Haptics.selectionAsync();
-    clearFlash();
     requestDreamsTab();
     router.navigate('/(tabs)/profile');
   };
@@ -89,10 +90,22 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
       pointerEvents="box-none"
     >
       <Pressable style={styles.pill} onPress={onPress} accessibilityRole="button">
-        {icon}
-        <Text style={styles.label} numberOfLines={1} allowFontScaling={false}>
-          {label}
-        </Text>
+        <Image source={MASCOT} style={styles.mascot} contentFit="cover" />
+        <View style={styles.rings}>
+          {shownFinished.map((f) => (
+            <CompletingRing key={f.jobId} item={f} onExpire={() => removeFinished(f.jobId)} />
+          ))}
+          {shownActive.map((d) => (
+            <ProgressRing
+              key={d.id}
+              size={RING_SIZE}
+              strokeWidth={RING_STROKE}
+              target={getDreamStageInfo(d.status, d.currentStage).target}
+              state="active"
+            />
+          ))}
+        </View>
+        {overflow > 0 ? <Text style={styles.overflow}>+{overflow}</Text> : null}
         <Ionicons name="chevron-forward" size={14} color={colors.subtleOnDark} />
       </Pressable>
     </Animated.View>
@@ -112,19 +125,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    maxWidth: horizontalScale(320),
-    paddingLeft: 12,
+    paddingLeft: 8,
     paddingRight: 10,
-    paddingVertical: verticalScale(8),
+    paddingVertical: verticalScale(6),
     borderRadius: 999,
     backgroundColor: 'rgba(0,0,0,0.72)',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.accentBorder,
   },
-  label: {
-    color: colors.textPrimary,
+  mascot: {
+    width: 26,
+    height: 26,
+    borderRadius: 7,
+  },
+  rings: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  overflow: {
+    color: colors.bodyOnDark,
     fontSize: fontScale(13),
-    fontWeight: '600',
-    flexShrink: 1,
+    fontWeight: '700',
   },
 });

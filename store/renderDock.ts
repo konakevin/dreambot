@@ -1,36 +1,37 @@
 /**
- * renderDock store — the tiny shared state behind the render dock pill.
+ * renderDock store — the tiny shared state behind the render dock.
  *
- * `dockHeight` is the vertical space the dock currently occupies above the tab
- * bar (0 when hidden). Every tab surface ADDS `useRenderDockHeight()` to its
- * existing (tuned) bottom padding so content eases up to make room without the
- * dock ever overlapping post metadata / the Create footer / a grid's last row —
- * and so nothing changes at rest (height 0). `flash` is the transient "a dream
- * just finished / failed" beat the pill shows before decrementing or dismissing.
+ * `dockHeight` is the vertical space the dock occupies above the tab bar (0 when
+ * hidden). Every tab surface ADDS `useRenderDockHeight()` to its existing (tuned)
+ * bottom padding so content eases up without the dock ever overlapping content —
+ * and nothing changes at rest (height 0). `finished` holds recently-completed /
+ * failed jobs so the dock can play a per-ring completion (fill + check + pop)
+ * before the ring drops off; entries are removed after their animation TTL.
  * See DREAM_TRACKING_PLAN.md.
  */
 
 import { create } from 'zustand';
 
-/** Height of the pill band above the tab bar when the dock is visible. */
-export const DOCK_HEIGHT = 44;
+/** Height of the dock band above the tab bar when visible. */
+export const DOCK_HEIGHT = 48;
 
-export interface DockFlash {
+export interface FinishedRing {
+  /** dream_queue.id (== job id). */
+  jobId: string;
   kind: 'ready' | 'failed';
-  /** The finished dream's upload id — the ready flash taps to its reveal. */
-  uploadId: string | null;
-  /** ms timestamp the flash was raised (for TTL). */
+  /** ms timestamp raised (for ordering / dedup). */
   at: number;
 }
 
 interface RenderDockState {
   dockHeight: number;
   setDockHeight: (h: number) => void;
-  flash: DockFlash | null;
-  setFlash: (flash: DockFlash) => void;
-  clearFlash: () => void;
-  /** Set when the dock is tapped — the Profile screen consumes it on focus to
-   *  open the Dreams sub-tab (where the pending/finished tiles live). */
+  finished: FinishedRing[];
+  /** Record a terminal transition (dedup by jobId; keeps the most recent few). */
+  pushFinished: (f: FinishedRing) => void;
+  removeFinished: (jobId: string) => void;
+  /** Set when the dock is tapped — Profile consumes it on focus to open the
+   *  Dreams sub-tab (where the pending / finished tiles live). */
   wantsDreamsTab: boolean;
   requestDreamsTab: () => void;
   clearDreamsTab: () => void;
@@ -39,9 +40,14 @@ interface RenderDockState {
 export const useRenderDockStore = create<RenderDockState>((set) => ({
   dockHeight: 0,
   setDockHeight: (h) => set({ dockHeight: h }),
-  flash: null,
-  setFlash: (flash) => set({ flash }),
-  clearFlash: () => set({ flash: null }),
+  finished: [],
+  pushFinished: (f) =>
+    set((s) => {
+      if (s.finished.some((e) => e.jobId === f.jobId)) return s;
+      return { finished: [...s.finished, f].slice(-8) };
+    }),
+  removeFinished: (jobId) =>
+    set((s) => ({ finished: s.finished.filter((e) => e.jobId !== jobId) })),
   wantsDreamsTab: false,
   requestDreamsTab: () => set({ wantsDreamsTab: true }),
   clearDreamsTab: () => set({ wantsDreamsTab: false }),

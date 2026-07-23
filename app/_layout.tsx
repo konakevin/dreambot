@@ -408,25 +408,22 @@ function RealtimeSubscriber() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'dream_queue', filter: `user_id=eq.${user.id}` },
         (payload) => {
-          // Terminal transitions raise the dock's completion/failure flash.
-          // completeQueueJob sets status='completed' (+ upload_id); the
-          // dead-letter branch of failQueueJob sets status='dead_letter'. The
-          // dock only renders on the 5 tabs, so a flash raised while the user
-          // is watching the loading screen simply expires (TTL) unseen.
+          // Terminal transitions record a per-job finished ring so the dock can
+          // play that ring's completion (fill + check + pop) before it drops
+          // off. completeQueueJob sets status='completed'; the dead-letter
+          // branch of failQueueJob sets status='dead_letter'. The dock only
+          // renders on the 5 tabs, so a ring recorded while the user watches the
+          // loading screen simply ages out (TTL) unseen.
           const row = payload.new as {
+            id?: string;
             status?: string;
-            upload_id?: string | null;
           } | null;
-          if (row?.status === 'completed') {
-            useRenderDockStore.getState().setFlash({
-              kind: 'ready',
-              uploadId: row.upload_id ?? null,
+          if (row?.id && (row.status === 'completed' || row.status === 'dead_letter')) {
+            useRenderDockStore.getState().pushFinished({
+              jobId: row.id,
+              kind: row.status === 'completed' ? 'ready' : 'failed',
               at: Date.now(),
             });
-          } else if (row?.status === 'dead_letter') {
-            useRenderDockStore
-              .getState()
-              .setFlash({ kind: 'failed', uploadId: null, at: Date.now() });
           }
           // Drive the render dock + album pending tiles (useInFlightDreams).
           // Any INSERT (enqueue) / UPDATE (stage advance, terminal) / DELETE
