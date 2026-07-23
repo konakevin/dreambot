@@ -17,7 +17,6 @@ import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
-import { BrandSpinner } from '@/components/BrandSpinner';
 
 const ReanimatedView = Reanimated.View;
 
@@ -108,10 +107,6 @@ export default function TabLayout() {
   // badge), so the home-screen badge and this profile-tab dot are always
   // identical.
   const { data: unreadCount = 0 } = useNewNotificationCount();
-  // Home-feed reshuffle in flight (re-tap or pull): swap the home icon for a
-  // small brand spinner. Subscribed HERE (not inside the icon) for the same
-  // options-memoization reason as unreadCount above.
-  const homeFeedRefreshing = useFeedStore((s) => s.homeFeedRefreshing);
   const insets = useSafeAreaInsets();
   // Tab-bar bottom padding: prefer the safe-area inset (home indicator on
   // newer phones), fall back to a sensible floor so icons don't sit flush
@@ -163,15 +158,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          // While a reshuffle prefetches, the icon itself is the loading
-          // indicator — the feed stays fully visible with no overlay
-          // (Kevin 2026-07-21: the full-screen cover felt heavy).
-          tabBarIcon: ({ color, size, focused }) =>
-            homeFeedRefreshing ? (
-              <BrandSpinner size={size} />
-            ) : (
-              <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
+          ),
         }}
         listeners={{
           tabPress: () => {

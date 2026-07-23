@@ -17,6 +17,7 @@ import { useQueryClient } from '@tanstack/react-query';
 // live here; pull-to-refresh prefetched into the shared 5-element key that
 // this screen never read, so the "instant swap" never happened on home.)
 import { useDreamFeed, prefetchDreamFeed, pruneStaleFeedCaches } from '@/hooks/useDreamFeed';
+import { BrandSpinner } from '@/components/BrandSpinner';
 import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
@@ -201,6 +202,10 @@ export default function HomeScreen() {
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
   const setPendingPostId = useFeedStore((s) => s.setPendingPostId);
   const homeFeedResetToken = useFeedStore((s) => s.homeFeedResetToken);
+  // True while a re-tap reshuffle is prefetching the new seed — drives the
+  // centered brand-spinner overlay below (Kevin 2026-07-22: the colored
+  // DreamBot spinner centered over the feed, not the tab icon).
+  const homeFeedRefreshing = useFeedStore((s) => s.homeFeedRefreshing);
   // Bumped when a re-tap reshuffle COMMITS. It's part of FullScreenFeed's key,
   // so the commit REMOUNTS the pager: new posts + top position land in one
   // mount, exactly like a tab switch (the same key mechanism) — no reconcile
@@ -305,9 +310,9 @@ export default function HomeScreen() {
           // is a no-op (double prefetch + double remount otherwise).
           if (useFeedStore.getState().homeFeedRefreshing) return;
           const newSeed = Math.random();
-          // Tab-bar signal: the home icon shows a small spinner for the whole
-          // network wait — the feed itself stays fully visible + interactive
-          // (2026-07-21; replaces the heavy opaque cover during prefetch).
+          // Loading signal: the centered brand-spinner overlay shows for the
+          // whole network wait (rendered below, gated on homeFeedRefreshing).
+          // The feed stays interactive underneath (2026-07-22).
           useFeedStore.getState().setHomeFeedRefreshing(true);
           try {
             // Prefetch AT the manual-refresh shuffle strength, passed explicitly.
@@ -359,6 +364,16 @@ export default function HomeScreen() {
         onHudToggle={handleHudToggle}
         scrollToTopToken={homeFeedResetToken}
       />
+
+      {/* Re-tap reshuffle: the colored DreamBot spinner centered over the feed
+          (the standard startup/loading spinner, size 44), while the new seed
+          prefetches. Non-blocking — the feed stays interactive underneath; the
+          one-frame remount swap lifts it (Kevin 2026-07-22). */}
+      {homeFeedRefreshing && (
+        <View style={s.reshuffleSpinner} pointerEvents="none">
+          <BrandSpinner size={44} />
+        </View>
+      )}
 
       <Animated.View
         style={[
@@ -418,6 +433,12 @@ const s = StyleSheet.create({
   },
   emptyCtaText: { color: '#FFFFFF', fontSize: fontScale(15), fontWeight: '700' },
   topOverlayWrap: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
+  reshuffleSpinner: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 20,
+  },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
