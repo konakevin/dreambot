@@ -28,7 +28,7 @@ import { FullScreenFeed } from '@/components/FullScreenFeed';
 import { UsernameNudge } from '@/components/UsernameNudge';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OverlayPill } from '@/components/OverlayPill';
+import { OverlayPill, OVERLAY_PILL_ACTIVE_BG } from '@/components/OverlayPill';
 import { useBotUsers } from '@/hooks/useBotUsers';
 import { useAnnouncement } from '@/hooks/useAnnouncement';
 import { AnnouncementSheet } from '@/components/AnnouncementSheet';
@@ -366,12 +366,16 @@ export default function HomeScreen() {
       />
 
       {/* Re-tap reshuffle: the colored DreamBot spinner centered over the feed
-          (the standard startup/loading spinner, size 44), while the new seed
-          prefetches. Non-blocking — the feed stays interactive underneath; the
-          one-frame remount swap lifts it (Kevin 2026-07-22). */}
+          (the standard startup/loading spinner, size 44), on a rounded chip in
+          the SAME dark background as the active Explore pill so it stands out
+          against busy feed images while it spins. Non-blocking — the feed stays
+          interactive underneath; the one-frame remount swap lifts it (Kevin
+          2026-07-22). */}
       {homeFeedRefreshing && (
         <View style={s.reshuffleSpinner} pointerEvents="none">
-          <BrandSpinner size={44} />
+          <View style={s.reshuffleSpinnerChip}>
+            <BrandSpinner size={44} />
+          </View>
         </View>
       )}
 
@@ -438,6 +442,15 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 20,
+  },
+  // Rounded chip behind the spinner — same dark bg as the active Explore pill
+  // (OVERLAY_PILL_ACTIVE_BG) so it reads against busy feed images.
+  reshuffleSpinnerChip: {
+    backgroundColor: OVERLAY_PILL_ACTIVE_BG,
+    borderRadius: 20,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   topRow: {
     flexDirection: 'row',
