@@ -55,6 +55,7 @@ import { useDreamStore } from '@/store/dream';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { formatCompact } from '@/lib/formatNumber';
 import { Toast } from '@/components/Toast';
+import { DreamSmartSwapSheet, type SwapNotice } from '@/components/DreamSmartSwapSheet';
 import { StylePickerSheet } from '@/components/StylePickerSheet';
 import { vibeAllowedInSegment, vibeSegmentLock } from '@/lib/vibeGating';
 import { ModelPicker } from '@/components/ModelPicker';
@@ -74,6 +75,7 @@ import {
 } from '@/components/MediumsIntroSheet';
 import { SparkleIntroSheet, hasSeenSparkleIntro } from '@/components/SparkleIntroSheet';
 import { sparkleCostFrom, DEFAULT_MODEL_ID } from '@/constants/imageModels';
+import { resolveDreamSmartModel } from '@/lib/dreamSmartModel';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
@@ -207,6 +209,14 @@ export default function CreateScreen() {
   // users.pro_mode_flux_model, cross-device). Drives force_model + the Dream
   // button's sparkle cost for both routes.
   const [selectedModelId, setSelectedModelId] = useState(DEFAULT_MODEL_ID);
+  // DreamSmart auto-swap notice — a slide-up sheet shown when a style change
+  // dropped the selected model (see the effect below). Null = hidden.
+  const [swapNotice, setSwapNotice] = useState<SwapNotice | null>(null);
+  // Armed by the two USER actions that can trigger an auto-select worth
+  // announcing: picking a new style (persistMedium) or turning DreamSmart ON
+  // (toggleDreamSmart). Lets the notice effect tell a deliberate action from the
+  // store hydrating on mount — so the sheet never pops on app open. Effect-consumed.
+  const announceSwapRef = useRef(false);
   const imageModels = useImageModels();
   const engineConfig = useEngineConfig();
   const promptRef = useRef<TextInput>(null);
@@ -263,7 +273,10 @@ export default function CreateScreen() {
         if (__DEV__) console.warn('[create] pref persist failed', e);
       });
   }, [setDreamSmart]);
-  const toggleDreamSmart = useCallback(
+  // Raw setter + persistence — no model side effects. Used by the sheet's
+  // "Use it anyway" (which sets the model itself) so it can flip the toggle
+  // WITHOUT the commit-the-shown-model behavior below.
+  const persistDreamSmart = useCallback(
     (next: boolean) => {
       setDreamSmart(next);
       AsyncStorage.setItem(DREAM_SMART_KEY, next ? '1' : '0').catch((e) => {
@@ -272,11 +285,23 @@ export default function CreateScreen() {
     },
     [setDreamSmart]
   );
+  // The DreamSmart checkbox/switch handler. Turning it ON can auto-select a model
+  // for the current style (if the current one isn't in the set) → arm the sheet so
+  // the auto-select effect announces that swap. Turning it OFF just drops the
+  // filter — the committed model stays exactly as-is (the effect no-ops when off).
+  const toggleDreamSmart = useCallback(
+    (next: boolean) => {
+      if (next) announceSwapRef.current = true;
+      persistDreamSmart(next);
+    },
+    [persistDreamSmart]
+  );
 
   // Persisting setters for medium/vibe — store the deliberate pick so it
   // survives app relaunches + the per-dream reset(). Used by the picker below.
   const persistMedium = useCallback(
     (key: string) => {
+      announceSwapRef.current = true; // a deliberate style change → sheet may fire
       setMedium(key);
       AsyncStorage.setItem(SELECTED_MEDIUM_KEY, key).catch((e) => {
         if (__DEV__) console.warn('[create] medium persist failed', e);
@@ -522,6 +547,21 @@ export default function CreateScreen() {
     config.selectedMedium === 'surprise_me' ||
     config.selectedMedium === 'surprise_me_face' ||
     config.selectedMedium === 'surprise_me_art';
+
+  // The selected style's row + its DreamSmart set (client_meta, SMART_DREAM_PLAN.md).
+  const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
+  const smartModels = useMemo(() => {
+    const cm = selectedMediumRow?.client_meta;
+    return cm && Array.isArray(cm.smart_dream_models)
+      ? cm.smart_dream_models.filter((x): x is string => typeof x === 'string')
+      : [];
+  }, [selectedMediumRow]);
+
+  // COMMITTED-FORWARD model: `selectedModelId` is THE active model — whatever the
+  // user last picked OR we last auto-selected. It's never a display-only overlay
+  // and there's no preserved "original pick" to resurrect: a style change only
+  // moves it when the current model isn't in the new style's set (see the
+  // auto-select effect below, which COMMITS the swap target via setSelectedModelId).
   const mediumLabel = isSurpriseMedium
     ? 'Surprise Me'
     : (mediumOptions.find((m) => m.key === config.selectedMedium)?.label ?? config.selectedMedium);
@@ -617,7 +657,6 @@ export default function CreateScreen() {
   }, [isRestyle, restylePoolManaged, restyleModelId, selectedModelId, setForceModel]);
 
   // Whether the selected medium face-swaps (composites real face into scene)
-  const selectedMediumRow = dbMediums.find((m) => m.key === config.selectedMedium);
   const mediumFaceSwaps = isSurpriseMedium
     ? config.selectedMedium !== 'surprise_me_art' // art-typed → art; face-typed + unified → face
     : (selectedMediumRow?.face_swaps ?? true);
@@ -661,20 +700,48 @@ export default function CreateScreen() {
     }
   }, [currentVibeSegment, config.selectedVibe, dbVibes, setVibe]);
 
-  // Smart Dream — the approved model set for the chosen style (client_meta,
-  // SMART_DREAM_PLAN.md), fed to ModelPicker so it only offers models that
-  // render this style well. Empty for Surprise Me / styles with no config →
-  // picker stays wide open (the server backstop still governs at render).
-  const smartModels = useMemo(() => {
-    const cm = selectedMediumRow?.client_meta;
-    return cm && Array.isArray(cm.smart_dream_models)
-      ? cm.smart_dream_models.filter((x): x is string => typeof x === 'string')
-      : [];
-  }, [selectedMediumRow]);
-  const smartDefault =
-    typeof selectedMediumRow?.client_meta?.smart_dream_default === 'string'
-      ? (selectedMediumRow.client_meta.smart_dream_default as string)
-      : undefined;
+  // DreamSmart auto-select — COMMITS the model forward. When DreamSmart is on and
+  // the current model isn't in the style's set, we swap it to the first model
+  // shown in the picker for that set and make THAT the active model (destructive
+  // setSelectedModelId — no preserved original pick, so a later style never
+  // resurrects a model from turns ago). Runs on mount too (silently) so the model
+  // is always valid for the current style; the SHEET fires only on a deliberate
+  // user action (armed via announceSwapRef — a style pick or turning DreamSmart
+  // ON, never mount hydration). "Use [old] anyway" is a one-step undo back to the
+  // model we just replaced (+ flips DreamSmart off so it's allowed).
+  useEffect(() => {
+    const { effectiveModelId: target, swapped } = resolveDreamSmartModel({
+      currentModel: selectedModelId,
+      smartModels,
+      models: imageModels,
+      dreamSmartOn: config.dreamSmart,
+      exempt: config.useExactPrompt || isRestyle || isNewScene,
+    });
+    if (!swapped || target === selectedModelId) {
+      announceSwapRef.current = false; // model already valid → nothing to announce
+      return;
+    }
+    const from = selectedModelId;
+    setSelectedModelId(target); // commit the swap forward
+    if (announceSwapRef.current) {
+      setSwapNotice({
+        fromId: from,
+        fromLabel: imageModels.find((m) => m.id === from)?.label ?? 'That model',
+        toLabel: imageModels.find((m) => m.id === target)?.label ?? 'another model',
+        styleLabel: selectedMediumRow?.label ?? 'this style',
+      });
+    }
+    announceSwapRef.current = false; // consume — one sheet per user action
+  }, [
+    selectedModelId,
+    smartModels,
+    config.dreamSmart,
+    config.useExactPrompt,
+    isRestyle,
+    isNewScene,
+    imageModels,
+    selectedMediumRow,
+  ]);
   // The unified Surprise Me rolls across ALL mediums, so it has no single
   // FACE / DREAM ART identity → hide the badge for it. A concrete medium (or a
   // legacy typed surprise) still shows its badge.
@@ -1390,9 +1457,9 @@ export default function CreateScreen() {
                     <View className="mb-4">
                       <ModelPicker
                         onChange={setSelectedModelId}
+                        value={selectedModelId}
                         dreamBotMode={!config.useExactPrompt}
                         smartModels={smartModels}
-                        smartDefault={smartDefault}
                         dreamSmartOn={config.dreamSmart}
                         onToggleDreamSmart={() => toggleDreamSmart(!config.dreamSmart)}
                         onInfo={handleModeInfo}
@@ -1806,6 +1873,22 @@ export default function CreateScreen() {
 
       {/* First-Create-tap teaching sheet — see effect above. */}
       <CreateIntroSheet visible={introVisible} onClose={() => setIntroVisible(false)} />
+
+      {/* DreamSmart auto-select notice — a style change committed a new model
+          (the current one wasn't supported). "Use it anyway" is a one-step undo:
+          set the model back to the one we just replaced + flip DreamSmart off so
+          it's allowed. OK keeps the committed model. */}
+      <DreamSmartSwapSheet
+        notice={swapNotice}
+        onUseAnyway={() => {
+          if (swapNotice) {
+            setSelectedModelId(swapNotice.fromId);
+            persistDreamSmart(false);
+          }
+          setSwapNotice(null);
+        }}
+        onDismiss={() => setSwapNotice(null)}
+      />
 
       {/* First-Dream-tap sparkle teaching sheet. "Got it" dismisses + proceeds
           with the dream. Shows once (flag set on the sheet's mount). */}

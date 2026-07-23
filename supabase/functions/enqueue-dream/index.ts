@@ -303,7 +303,9 @@ Deno.serve(async (req) => {
       .maybeSingle();
     const set = smartDreamSet((medRow?.client_meta ?? null) as Record<string, unknown> | null);
     if (set) {
-      const { model, coerced } = coerceSmartDream(forceModel, set);
+      // getSparkleCost → coerce to the LOWEST-PRICED model in the set (matches
+      // the client's auto-swap; a coercion never raises the charge).
+      const { model, coerced } = coerceSmartDream(forceModel, set, getSparkleCost);
       if (coerced) {
         console.log(
           `[enqueue-dream] Smart Dream coerce ${forceModel} → ${model} (style=${body.medium_key})`

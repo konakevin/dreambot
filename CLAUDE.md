@@ -281,4 +281,8 @@ for the public feed + serves deep-link share targets.**
 - **Features:** `MEDIUMS_FAQ.md`, `DLT_FIDELITY_PLAN.md`, `DLT_PUT_ME_IN_SCENE_PLAN.md`,
   `COMMENTS_IMPLEMENTATION.md`, `UPSCALE_QUEUE_PLAN.md`, `NOTIFICATIONS_ARCHITECTURE.md`,
   `ADMIN_CONFIG_PLAN.md`, `ANALYTICS_PLAN.md`.
+- **DreamSmart (model↔style):** `SMART_DREAM_PLAN.md` (strategy),
+  `DREAMSMART_MODEL_VALIDATION.md` (the RUNBOOK — "go set up the DreamSmart config for `<model>`" =
+  run `scripts/model-matrix-swap.js` self matrix across every style → grade in an HTML page → set that
+  model's per-style `smart_dream_models` membership).
 - **Personality:** `DREAMBOT.md`, `DREAMBOT_CHARACTER.md`.

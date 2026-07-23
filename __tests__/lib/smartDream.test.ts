@@ -1,6 +1,27 @@
 // Smart Dream model↔style compatibility guard (SMART_DREAM_PLAN.md).
 // Deno source resolved by the jest moduleNameMapper (@engine/* → _shared/*).
-import { smartDreamSet, smartDreamApplies, coerceSmartDream } from '@engine/smartDream';
+import {
+  smartDreamSet,
+  smartDreamApplies,
+  coerceSmartDream,
+  lowestPricedModel,
+  MODEL_DISPLAY_ORDER as edgeDisplayOrder,
+} from '@engine/smartDream';
+// Client mirror — must agree with the edge rule (price-shown == price-charged).
+import {
+  lowestPricedModel as clientLowestPricedModel,
+  MODEL_DISPLAY_ORDER as clientDisplayOrder,
+} from '@/constants/imageModels';
+
+// Cost map used by the lowest-priced tests (mirrors modelPricing sparkle costs).
+const COST: Record<string, number> = {
+  'google/gemini-2-image': 1,
+  'openai/gpt-image-2': 2,
+  'black-forest-labs/flux-2-max': 3,
+  'xai/grok-imagine-image': 1,
+  'black-forest-labs/flux-1.1-pro': 1,
+};
+const costOf = (id: string) => COST[id] ?? 1;
 
 const SET = {
   smart_dream_models: [
@@ -78,5 +99,49 @@ describe('coerceSmartDream', () => {
   it('leaves null models alone (auto-pick path handled separately)', () => {
     expect(coerceSmartDream(null, set)).toEqual({ model: null, coerced: false });
     expect(coerceSmartDream(undefined, set)).toEqual({ model: null, coerced: false });
+  });
+  it('coerces to the LOWEST-PRICED model (not the default) when costOf is supplied', () => {
+    // default is gpt-image-2 (2✦), but gemini-2-image (1✦) is cheaper → picked.
+    expect(coerceSmartDream('black-forest-labs/flux-1.1-pro-ultra', set, costOf)).toEqual({
+      model: 'google/gemini-2-image',
+      coerced: true,
+    });
+  });
+});
+
+describe('lowestPricedModel', () => {
+  it('picks the cheapest model in the set', () => {
+    expect(lowestPricedModel(smartDreamSet(SET)!.models, costOf)).toBe('google/gemini-2-image');
+  });
+  it('tie → picks the model shown FIRST in the picker (display order)', () => {
+    // both 1✦; flux-1.1-pro leads the picker, grok is last in Standard — the
+    // auto-select must land on what the user sees first, NOT the array order.
+    const models = ['xai/grok-imagine-image', 'black-forest-labs/flux-1.1-pro'];
+    expect(lowestPricedModel(models, costOf)).toBe('black-forest-labs/flux-1.1-pro');
+  });
+  it('cost beats display order (a cheaper, later-in-picker model still wins)', () => {
+    // gpt-image-2 (2✦) sits earlier in Premium, but gemini (1✦) is cheaper.
+    const models = ['openai/gpt-image-2', 'google/gemini-2-image'];
+    expect(lowestPricedModel(models, costOf)).toBe('google/gemini-2-image');
+  });
+  it('handles a single-model set', () => {
+    expect(lowestPricedModel(['openai/gpt-image-2'], costOf)).toBe('openai/gpt-image-2');
+  });
+});
+
+describe('lowestPricedModel — client/edge parity (must stay in sync)', () => {
+  const CATALOG = Object.entries(COST).map(([id, sparkleCost]) => ({ id, sparkleCost }));
+  const cases: Array<[string[]]> = [
+    [Object.keys(COST)],
+    [['google/gemini-2-image', 'openai/gpt-image-2', 'black-forest-labs/flux-2-max']],
+    [['xai/grok-imagine-image', 'black-forest-labs/flux-1.1-pro']],
+    [['openai/gpt-image-2']],
+  ];
+  it.each(cases)('client === edge for %j', (models) => {
+    expect(clientLowestPricedModel(models, CATALOG)).toBe(lowestPricedModel(models, costOf));
+  });
+
+  it('MODEL_DISPLAY_ORDER is identical client ↔ edge (the tie-break source)', () => {
+    expect(edgeDisplayOrder).toEqual(clientDisplayOrder);
   });
 });

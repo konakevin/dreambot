@@ -1643,7 +1643,7 @@ Output ONLY the prompt.`;
   // Smart Dream sets never include flux-1.1-pro-ultra, so no Ultra re-clamp is
   // needed here.
   if (smartDreamCfg && !newSceneRefModel && smartDreamApplies(body)) {
-    const { model, coerced } = coerceSmartDream(pickedModel, smartDreamCfg);
+    const { model, coerced } = coerceSmartDream(pickedModel, smartDreamCfg, getSparkleCost);
     if (coerced && model) {
       fallbackReasons.push(`smart_dream_coerce:${pickedModel}→${model}`);
       pickedModel = model;

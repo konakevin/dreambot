@@ -99,6 +99,19 @@ const SCENE_BY_MEDIUM = {
     'in a glowing retro arcade lined with cabinet screens, a checkerboard floor and bright neon signage overhead',
   storybook:
     'in a snowy village square at night with a decorated tree, little shops glowing warm through their windows and snow softly falling',
+  // ── Added 2026-07-23 (flux-1.1 regrade) — settings only, style owned by medium ──
+  film_noir:
+    'standing under a lone streetlamp on a rain-slicked city street at night, wet cobblestones and distant neon reflections',
+  vintage_film:
+    'sitting at an outdoor Parisian cafe table in summer, old storefronts and a row of bicycles along the street',
+  double_exposure:
+    'standing still against the sky with a sweeping mountain forest behind them, mist rolling over pine ridges',
+  heirloom:
+    'seated in a warm sunlit vintage parlor with lace curtains, an old armchair and framed photos on the wall',
+  lego: 'in a bustling little town square with a fountain, market stalls and a tall clock tower',
+  vinyl: 'in a bright shop-window display with playful props and colorful shelves',
+  glamour:
+    'on a sunlit rooftop terrace overlooking a glittering city skyline, elegant lounge furniture and potted palms',
 };
 const DEFAULT_SCENE = 'at a cozy cafe';
 

@@ -19,7 +19,9 @@
 export interface SmartDreamSet {
   /** Models approved for this style. Non-empty. */
   models: string[];
-  /** Preferred model — coercion target + client auto-select. Always ∈ models. */
+  /** Declared preferred model. Back-compat coercion target when no cost fn is
+   *  supplied; otherwise the auto-select is the first-in-picker (lowestPricedModel).
+   *  Always ∈ models. */
   default: string;
 }
 
@@ -68,16 +70,70 @@ export function smartDreamApplies(body: {
 }
 
 /**
+ * Flat picker display order (Standard then Premium) — MIRRORS the client's
+ * MODEL_DISPLAY_ORDER in constants/imageModels.ts (STANDARD_MODEL_IDS then
+ * PREMIUM_MODEL_IDS). Keep the two in sync; a parity test locks it. Used only as
+ * the tie-break in lowestPricedModel so the server lands on the SAME model the
+ * client shows first.
+ */
+export const MODEL_DISPLAY_ORDER: string[] = [
+  // Standard (1✦)
+  'black-forest-labs/flux-1.1-pro',
+  'black-forest-labs/flux-2-pro',
+  'google/gemini-2-image',
+  'black-forest-labs/flux-dev',
+  'black-forest-labs/flux-2-dev',
+  'black-forest-labs/flux-krea-dev',
+  'black-forest-labs/flux-schnell',
+  'xai/grok-imagine-image',
+  // Premium (2✦+)
+  'black-forest-labs/flux-1.1-pro-ultra',
+  'openai/gpt-image-2',
+  'black-forest-labs/flux-2-flex',
+  'black-forest-labs/flux-2-max',
+  'openai/gpt-image-1',
+  'google/gemini-3-image-preview',
+];
+
+/**
+ * The auto-select model in a set — the model that appears FIRST in the picker
+ * for this set. Deterministic tie-break so the client and server always land on
+ * the SAME model (price-shown == price-charged): min cost → lowest index in
+ * MODEL_DISPLAY_ORDER (the picker order) → else the first entry in `models`.
+ * Because the picker lists Standard (1✦) before Premium (2✦+), "first shown" is
+ * always the cheapest tier — an auto-select can only hold/lower the cost.
+ * `costOf` returns a model's sparkle cost (pass `getSparkleCost` from
+ * modelPricing.ts on the edge; the client mirror lives in constants/imageModels.ts).
+ */
+export function lowestPricedModel(models: string[], costOf: (id: string) => number): string {
+  const rank = (id: string) => {
+    const i = MODEL_DISPLAY_ORDER.indexOf(id);
+    return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+  };
+  return [...models].sort((a, b) => {
+    const dc = costOf(a) - costOf(b);
+    if (dc !== 0) return dc; // cheapest first
+    const dr = rank(a) - rank(b);
+    if (dr !== 0) return dr; // then picker display order
+    return models.indexOf(a) - models.indexOf(b); // stable: original order
+  })[0];
+}
+
+/**
  * Coerce a model into the approved set. A model already in the set passes
- * through unchanged (coerced=false). A disallowed model (or the sticky
- * pro_mode pin) is swapped to the style's default (coerced=true). A null model
- * is left null — the auto-picker handles that path and is governed separately.
+ * through unchanged (coerced=false). A disallowed model is swapped (coerced=true):
+ * to the LOWEST-PRICED model in the set when `costOf` is supplied — so a coercion
+ * can only hold or lower the sparkle cost, never raise it, and matches what the
+ * client's auto-swap picked — else to the style's default (back-compat). A null
+ * model is left null — the auto-picker handles that path, governed separately.
  */
 export function coerceSmartDream(
   model: string | null | undefined,
-  set: SmartDreamSet
+  set: SmartDreamSet,
+  costOf?: (id: string) => number
 ): { model: string | null; coerced: boolean } {
   if (!model) return { model: model ?? null, coerced: false };
   if (set.models.includes(model)) return { model, coerced: false };
-  return { model: set.default, coerced: true };
+  const target = costOf ? lowestPricedModel(set.models, costOf) : set.default;
+  return { model: target, coerced: true };
 }

@@ -10,8 +10,7 @@
  *
  * Built for non-technical users first: every model is simply listed in two
  * cost tiers — Standard (1✦) and Premium (2✦+) — with short plain-English
- * blurbs, so people can freely experiment with any look. No per-medium
- * steering; flux-1.1-pro just carries a small "Default" hint. Each row shows
+ * blurbs, so people can freely experiment with any look. Each row shows
  * the model's sparkle cost (costs vary 1–5 and the Dream button reflects it).
  *
  * ACCOUNT-STICKY + cross-device: persists to users.pro_mode_flux_model —
@@ -24,7 +23,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Modal, ScrollView, Switch } from 'react-native';
 import { Text } from '@/components/AppText';
 import { TitleText } from '@/components/TitleText';
 import * as Haptics from 'expo-haptics';
@@ -37,15 +36,21 @@ import {
   DEFAULT_MODEL_ID,
   STANDARD_MODEL_IDS,
   PREMIUM_MODEL_IDS,
-  RECOMMENDED_MODEL_ID,
   modelBlurb,
   type ImageModel,
 } from '@/constants/imageModels';
 import { useImageModels } from '@/hooks/useImageModels';
 
 interface Props {
-  /** Fires on mount, after the once-per-session DB restore, and on each selection. */
+  /** Fires on mount, after the once-per-session DB restore, and on each USER
+   *  selection. ModelPicker never fires this for an auto-select — the parent owns
+   *  DreamSmart and commits those itself, then feeds the result back via `value`. */
   onChange?: (modelId: string) => void;
+  /** The parent's committed model — the single source of truth for what's shown
+   *  (pill + highlighted row). When the parent auto-selects on a style change it
+   *  updates this, and ModelPicker adopts it into its own state so a remount stays
+   *  consistent. ModelPicker never computes its own fallback. */
+  value?: string;
   /**
    * True when the Create screen is in DreamBot mode (the face-swap engine).
    * In that mode models flagged dreamBotEnabled=false (e.g. flux-schnell, which
@@ -59,7 +64,6 @@ interface Props {
    * no curated set for this style (toggle hidden, all models). SMART_DREAM_PLAN.
    */
   smartModels?: string[];
-  smartDefault?: string;
   /** DreamSmart on/off (default on). On → filter to smartModels; off → full list. */
   dreamSmartOn?: boolean;
   /** Toggle handler — renders the inline checkbox on the AI Model header row. */
@@ -78,9 +82,9 @@ let sessionUserId: string | null = null;
 
 export function ModelPicker({
   onChange,
+  value,
   dreamBotMode,
   smartModels,
-  smartDefault,
   dreamSmartOn,
   onToggleDreamSmart,
   onInfo,
@@ -102,6 +106,22 @@ export function ModelPicker({
   });
   const [selected, setSelected] = useState<string>(() => sessionModelId ?? DEFAULT_MODEL_ID);
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Adopt the parent's committed model (e.g. a DreamSmart auto-select) into our own
+  // state + the session cache, so the pill/highlight and a later remount stay
+  // consistent. This does NOT fire onChange (no loop — the parent already owns it).
+  // Skipped on first run: on mount our sticky pick is authoritative and flows UP.
+  const didValueSync = useRef(false);
+  useEffect(() => {
+    if (!didValueSync.current) {
+      didValueSync.current = true;
+      return;
+    }
+    if (value != null && value !== selected) {
+      setSelected(value);
+      sessionModelId = value;
+    }
+  }, [value, selected]);
 
   // Sync the parent's force_model + cost with the cached session pick once on
   // mount — the parent's own state resets on remount, this module's doesn't.
@@ -160,33 +180,18 @@ export function ModelPicker({
   // Two tiers in explicit curated order: Standard (1✦) + Premium (2✦+).
   // Draws from visibleModels so DreamBot-hidden models (flux-schnell) drop out.
   // No per-medium steering — every model is listed so people can experiment
-  // however they want; flux-1.1-pro just carries a "Default" hint.
+  // however they want.
   const order = (ids: string[]) =>
     ids.map((id) => visibleModels.find((m) => m.id === id)).filter((m): m is ImageModel => !!m);
   const standard = order(STANDARD_MODEL_IDS);
   const premium = order(PREMIUM_MODEL_IDS);
 
-  // A pick is UNAVAILABLE if it's DreamBot-hidden (a Direct-mode flux-schnell
-  // choice) OR not in the active Smart Dream set for this style (e.g. a photoreal
-  // sticky pro_mode pick on a watercolor style). Fall back to the style's default
-  // (or the global default) WITHOUT overwriting the saved column — switching
-  // styles or back to Direct restores the real pick.
-  const smartFallback = smartActive
-    ? smartDefault && smartModels!.includes(smartDefault)
-      ? smartDefault
-      : smartModels![0]
-    : DEFAULT_MODEL_ID;
-  const selectedUnavailable =
-    (dreamBotMode && models.find((m) => m.id === selected)?.dreamBotEnabled === false) ||
-    (smartActive && !smartModels!.includes(selected));
-  const effectiveSelected = selectedUnavailable ? smartFallback : selected;
-  // The "Default" badge points at the style's recommended model under Smart
-  // Dream, else the global recommended pick.
-  const recommendedId = smartActive ? smartFallback : RECOMMENDED_MODEL_ID;
-  useEffect(() => {
-    if (selectedUnavailable) onChange?.(effectiveSelected);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUnavailable, effectiveSelected]);
+  // What to show as selected: the parent-supplied EFFECTIVE model (it owns the
+  // DreamSmart resolution) — falling back to our own pick only if the parent
+  // didn't pass one. ModelPicker NEVER computes a fallback or pushes one up via
+  // onChange (that once clobbered the saved pick + broke "Use it anyway"); the
+  // saved pick changes only on a real user selection.
+  const shown = value ?? selected;
   // Scroll-into-view: rows have variable heights (blurbs wrap), so the selected
   // row's position can't be computed from its index. Capture each row's y within
   // its tier section + each section's y within the scroll content via onLayout,
@@ -205,7 +210,7 @@ export function ModelPicker({
 
   const scrollToSelected = () => {
     if (didAutoScroll.current) return;
-    const row = rowTops.current[effectiveSelected];
+    const row = rowTops.current[shown];
     if (!row) return;
     const sectionY = sectionTops.current[row.tier];
     if (sectionY == null) return;
@@ -233,7 +238,7 @@ export function ModelPicker({
   );
 
   const renderRow = (opt: ImageModel, tier: string) => {
-    const isSelected = opt.id === effectiveSelected;
+    const isSelected = opt.id === shown;
     return (
       <TouchableOpacity
         key={opt.id}
@@ -242,7 +247,7 @@ export function ModelPicker({
           rowTops.current[opt.id] = { tier, y: e.nativeEvent.layout.y };
           // Retry the auto-scroll — this row might be the selected one and
           // the last measurement the jump was waiting on.
-          if (opt.id === effectiveSelected) scrollToSelected();
+          if (opt.id === shown) scrollToSelected();
         }}
         activeOpacity={0.7}
         style={[
@@ -267,9 +272,6 @@ export function ModelPicker({
             >
               {opt.label}
             </Text>
-            {opt.id === recommendedId && (
-              <Text style={[styles.recLabel, { color: '#A78BFA' }]}>Default</Text>
-            )}
           </View>
           <Text
             style={{
@@ -300,7 +302,7 @@ export function ModelPicker({
     );
   };
 
-  const current = models.find((m) => m.id === effectiveSelected);
+  const current = models.find((m) => m.id === shown);
 
   return (
     <View>
@@ -404,11 +406,36 @@ export function ModelPicker({
                 <Ionicons name="close" size={22} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.modalSubtitle}>
-              {smartActive
-                ? `DreamSmart, tuned for ${styleLabel ?? 'this style'}. Every style looks best in certain models, so the list is curated to those. Cost varies by model.`
-                : 'Each one gives your dream a slightly different look. The cost varies by model depending on compute.'}
-            </Text>
+            {hasSmartSet ? (
+              // DreamSmart toggle IS the sheet's lens — it shows on/off state and
+              // flipping it re-filters the list live (curated ↔ full).
+              <View style={styles.dsRow}>
+                <View style={styles.dsLeft}>
+                  <View style={styles.dsTitleLine}>
+                    <Ionicons name="sparkles" size={fontScale(14)} color={colors.accentLight} />
+                    <Text style={styles.dsTitle}>DreamSmart</Text>
+                  </View>
+                  <Text style={styles.dsCaption}>
+                    {smartOn
+                      ? `Showing models tuned for ${styleLabel ?? 'this style'}`
+                      : 'Showing all models'}
+                  </Text>
+                </View>
+                <Switch
+                  value={smartOn}
+                  onValueChange={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    onToggleDreamSmart?.();
+                  }}
+                  trackColor={{ false: colors.border, true: colors.accent }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+            ) : (
+              <Text style={styles.modalSubtitle}>
+                Every model renders a little differently. Pick whichever you like.
+              </Text>
+            )}
             {/* Divider — a hard line between the fixed header (title + subtitle)
                 and the scrolling list, so a row scrolling up clips cleanly at the
                 line instead of peeking under the subtitle and reading as a broken
@@ -474,7 +501,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  recLabel: { fontSize: fontScale(11), fontWeight: '700' },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -584,5 +610,34 @@ const styles = StyleSheet.create({
     lineHeight: fontScale(17),
     textAlign: 'center',
     marginBottom: verticalScale(14),
+  },
+  // DreamSmart toggle row — the sheet's lens control (on/off + live re-filter).
+  dsRow: {
+    // Flat header content (NOT a card) so the title + this line read as one
+    // header block, above the divider — never as a selectable/selected row.
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: verticalScale(12),
+    marginTop: verticalScale(4),
+    marginBottom: verticalScale(14),
+  },
+  dsLeft: {
+    flex: 1,
+  },
+  dsTitleLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  dsTitle: {
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    fontWeight: '700',
+  },
+  dsCaption: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12),
+    marginTop: verticalScale(2),
   },
 });

@@ -213,6 +213,35 @@ export function sparkleCostFrom(
   return m ? m.sparkleCost : 1;
 }
 
+/**
+ * The auto-select model for a DreamSmart set — the CLIENT mirror of the edge
+ * `lowestPricedModel` in `supabase/functions/_shared/smartDream.ts` (KEEP THE
+ * TWO IN SYNC — same rule guarantees the model the client shows == the one the
+ * server coerces to + charges). Used by the Create screen when a style change
+ * drops the selected model: we pick the model that appears FIRST in the picker
+ * for this set — Standard (all 1✦) is listed before Premium (2✦+), so
+ * "first shown" is inherently the cheapest tier and a swap can only hold/lower
+ * the sparkle cost. Deterministic tie-break: min cost → lowest index in the
+ * picker display order (`MODEL_DISPLAY_ORDER`) → else `modelIds` array order.
+ */
+export function lowestPricedModel(
+  modelIds: string[],
+  models: readonly { id: string; sparkleCost: number }[]
+): string | undefined {
+  if (modelIds.length === 0) return undefined;
+  const rank = (id: string) => {
+    const i = MODEL_DISPLAY_ORDER.indexOf(id);
+    return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+  };
+  return [...modelIds].sort((a, b) => {
+    const dc = sparkleCostFrom(models, a) - sparkleCostFrom(models, b);
+    if (dc !== 0) return dc; // cheapest first
+    const dr = rank(a) - rank(b);
+    if (dr !== 0) return dr; // then picker display order
+    return modelIds.indexOf(a) - modelIds.indexOf(b); // stable: original order
+  })[0];
+}
+
 /** Family display order + labels for the picker. */
 export const FAMILY_ORDER: ModelFamily[] = ['flux-1', 'flux-2', 'openai', 'google', 'xai'];
 
@@ -269,6 +298,12 @@ export const PREMIUM_MODEL_IDS: string[] = [
   'openai/gpt-image-1',
   'google/gemini-3-image-preview',
 ];
+/** Flat picker display order (Standard then Premium) — the single source of
+ *  truth for "which model appears first". `lowestPricedModel` tie-breaks on this
+ *  so an auto-select lands on the model the user actually sees first. Mirrored on
+ *  the edge (`_shared/smartDream.ts` MODEL_DISPLAY_ORDER) — keep the two in sync. */
+export const MODEL_DISPLAY_ORDER: string[] = [...STANDARD_MODEL_IDS, ...PREMIUM_MODEL_IDS];
+
 /** The single model that carries the "Recommended" label (and is the default). */
 export const RECOMMENDED_MODEL_ID = 'black-forest-labs/flux-1.1-pro';
 
