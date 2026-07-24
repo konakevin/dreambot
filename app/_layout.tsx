@@ -249,15 +249,9 @@ function RevenueCatInitializer() {
 // by notification id so a double realtime delivery never double-toasts.
 let lastToastedNotifId: string | undefined;
 
-// A burst of ready dreams (a queued batch draining) fires one toast per dream,
-// all identical ("Your dream is ready"); the single ToastHost REPLACES the
-// visible one on each show(), so 2nd/3rd looked SWALLOWED (Kevin 2026-07-10).
-// Coalesce them: within a short window each new dream bumps a rolling count and
-// re-shows as "N dreams are ready" — the same aggregation the inbox row + badge
-// use. The window resets after a quiet gap so a later batch starts fresh at 1.
-const DREAM_TOAST_WINDOW_MS = 6000;
-let dreamToastCount = 0;
-let dreamToastResetAt = 0;
+// (Removed 2026-07-23, migration 396) The rolling "N dreams are ready" toast
+// coalescer lived here. Dreams no longer toast in-app — the render dock's
+// completion ring is the signal (see maybeShowNotificationToast below).
 
 function runToastAction(action: ToastAction): void {
   switch (action.kind) {
@@ -295,19 +289,15 @@ function maybeShowNotificationToast(row: NotificationRowLike | null | undefined)
   if (!spec) return;
   lastToastedNotifId = row.id;
 
-  // Ready-dream burst → one rolling "N dreams are ready" toast (see the note on
-  // dreamToastCount above). count===1 keeps the singular copy + tap-to-open-that-
-  // dream; count>1 flips to the aggregate copy + opens the inbox (where the
-  // "N dreams are ready" row expands to the scoped album).
-  if (row.type === 'dream_generated') {
-    const now = Date.now();
-    if (now > dreamToastResetAt) dreamToastCount = 0;
-    dreamToastCount += 1;
-    dreamToastResetAt = now + DREAM_TOAST_WINDOW_MS;
-    const many = dreamToastCount > 1;
-    const message = many ? `${dreamToastCount} dreams are ready` : spec.message;
-    const action: ToastAction = many ? { kind: 'inbox' } : spec.action;
-    Toast.show(message, spec.icon, 4500, { onPress: () => runToastAction(action) });
+  // USER-CREATED dreams (subtype 'manual') no longer toast in-app: the render
+  // dock's completion ring (fill → check → pop) is the signal, and they left the
+  // inbox + badge (migration 396), so a toast would double-signal with the dock.
+  // NIGHTLY dreams still toast (they fall through to the generic toast below) —
+  // they arrive while the user is away and aren't in the dock. The completion
+  // PUSH is unchanged for both. dream_FAILED also toasts below.
+  // FUTURE: once the push is decoupled from the notification row (see mig 396),
+  // the manual dream_generated row stops being inserted and this branch goes away.
+  if (row.type === 'dream_generated' && row.subtype === 'manual') {
     return;
   }
 

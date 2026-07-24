@@ -7,8 +7,16 @@ import { useAuthStore } from '@/store/auth';
  *
  * Returns one InboxGroup per (recipient, group_key) within the active window:
  * aggregating types ("Alice and 12 others liked your dream") collapse
- * multi-actor events; individual types (comments, mentions, shares,
- * dream-generated) each have a unique group_key so they pass through 1-to-1.
+ * multi-actor events; individual types (comments, mentions, shares) each have a
+ * unique group_key so they pass through 1-to-1.
+ *
+ * NOTE (migration 396): USER-CREATED dreams (`dream_generated` + subtype
+ * 'manual') are FILTERED OUT of get_inbox + the badge — the render dock + Dreams
+ * album signal those now. NIGHTLY dreams (other subtypes) still show, since they
+ * arrive while the user is away and aren't in the dock. The manual row is still
+ * inserted (so the completion push fires for a queued-and-left dream), just not
+ * shown here. `dream_failed` still shows. See the migration for the future
+ * decouple/album-indicator direction.
  *
  * See NOTIFICATIONS_ARCHITECTURE.md §4b for the per-type aggregation rules.
  *
