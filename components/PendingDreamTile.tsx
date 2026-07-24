@@ -13,18 +13,18 @@ import { BrandSpinner } from '@/components/BrandSpinner';
 import { ProgressRing } from '@/components/ProgressRing';
 import { colors } from '@/constants/theme';
 import { TILE_WIDTH, TILE_HEIGHT } from '@/constants/grid';
-import { getDreamStageInfo } from '@/lib/dreamStageLabels';
+import { useDreamProgress } from '@/hooks/useDreamProgress';
 import type { InFlightDream } from '@/hooks/useInFlightDreams';
 
 const RING_SIZE = 56;
 
 export function PendingDreamTile({ dream }: { dream: InFlightDream }) {
-  const stage = getDreamStageInfo(dream.status, dream.currentStage);
+  const { target } = useDreamProgress(dream);
   return (
     <View style={styles.tile}>
       <View style={styles.ringWrap}>
         {/* Determinate ring = how far; BrandSpinner inside = actively working. */}
-        <ProgressRing size={RING_SIZE} strokeWidth={4} target={stage.target} sweep={false} />
+        <ProgressRing size={RING_SIZE} strokeWidth={4} target={target} sweep={false} />
         <View style={styles.center} pointerEvents="none">
           <BrandSpinner size={26} />
         </View>

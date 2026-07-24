@@ -21,8 +21,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale, byDevice } from '@/lib/responsive';
 import { AnimatedGradientTitle } from '@/components/AnimatedGradientTitle';
 import { WaveLoader } from '@/components/WaveLoader';
-import { DreamProgressBar } from '@/components/DreamProgressBar';
-import type { DreamStageInfo } from '@/lib/dreamStageLabels';
+import { DreamProgressBar, type DreamProgressBarInput } from '@/components/DreamProgressBar';
 
 // 5 DreamBot painter variants — same character DNA, same dreamy
 // lavender/cloud/star scene, different painting poses (standing
@@ -57,15 +56,15 @@ interface MagicalLoadingStageProps {
    */
   subtext?: string;
   /**
-   * When provided, renders the staged {@link DreamProgressBar} in place of the
-   * ambient WaveLoader dots — the Create loading screen passes live render
-   * stage; the onboarding first-dream flow omits it and keeps the wave dots.
-   * `null` is allowed (shows the bar in its default "Dreaming…" state).
+   * When provided, renders the {@link DreamProgressBar} in place of the ambient
+   * WaveLoader dots — the Create loading screen passes the live render progress;
+   * the onboarding first-dream flow omits it and keeps the wave dots. `null` is
+   * allowed (shows the bar in its default "Dreaming…" state).
    */
-  progressStage?: DreamStageInfo | null;
+  progress?: DreamProgressBarInput | null;
 }
 
-export function MagicalLoadingStage({ subtext, progressStage }: MagicalLoadingStageProps = {}) {
+export function MagicalLoadingStage({ subtext, progress }: MagicalLoadingStageProps = {}) {
   // Stable across re-renders of the same mount (no re-roll on parent
   // updates); fresh pick each time the stage mounts.
   const mascotSource = useMemo(
@@ -83,7 +82,7 @@ export function MagicalLoadingStage({ subtext, progressStage }: MagicalLoadingSt
       </AnimatedGradientTitle>
       {/* Below the title: the staged progress bar when a render stage is
         supplied (Create loading), else the ambient wave dots (onboarding). */}
-      {progressStage !== undefined ? <DreamProgressBar stage={progressStage} /> : <WaveLoader />}
+      {progress !== undefined ? <DreamProgressBar progress={progress} /> : <WaveLoader />}
       {subtext ? <Text style={styles.subtext}>{subtext}</Text> : null}
     </View>
   );

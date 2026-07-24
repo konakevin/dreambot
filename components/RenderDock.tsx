@@ -21,8 +21,8 @@ import { Text } from '@/components/AppText';
 import { ProgressRing } from '@/components/ProgressRing';
 import { colors } from '@/constants/theme';
 import { fontScale, verticalScale } from '@/lib/responsive';
-import { useInFlightDreams } from '@/hooks/useInFlightDreams';
-import { getDreamStageInfo } from '@/lib/dreamStageLabels';
+import { useInFlightDreams, type InFlightDream } from '@/hooks/useInFlightDreams';
+import { useDreamProgress } from '@/hooks/useDreamProgress';
 import { DOCK_HEIGHT, useRenderDockStore, type FinishedRing } from '@/store/renderDock';
 
 const MASCOT = require('@/assets/images/icon.png');
@@ -30,6 +30,13 @@ const MAX_RINGS = 5;
 const RING_SIZE = 26;
 const RING_STROKE = 3;
 const FINISHED_TTL_MS = 1500;
+
+/** An in-flight dream's ring — fills via the live time-based progress target so
+ *  a long stage keeps advancing instead of freezing. */
+function ActiveDreamRing({ dream }: { dream: InFlightDream }) {
+  const { target } = useDreamProgress(dream);
+  return <ProgressRing size={RING_SIZE} strokeWidth={RING_STROKE} target={target} sweep={false} />;
+}
 
 /** A finished dream's ring — plays its completion then removes itself. */
 function CompletingRing({ item, onExpire }: { item: FinishedRing; onExpire: () => void }) {
@@ -96,14 +103,7 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
             <CompletingRing key={f.jobId} item={f} onExpire={() => removeFinished(f.jobId)} />
           ))}
           {shownActive.map((d) => (
-            <ProgressRing
-              key={d.id}
-              size={RING_SIZE}
-              strokeWidth={RING_STROKE}
-              target={getDreamStageInfo(d.status, d.currentStage).target}
-              state="active"
-              sweep={false}
-            />
+            <ActiveDreamRing key={d.id} dream={d} />
           ))}
         </View>
         {overflow > 0 ? <Text style={styles.overflow}>+{overflow}</Text> : null}

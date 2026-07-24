@@ -21,7 +21,7 @@ import { DreamFailureCard } from '@/components/DreamFailureCard';
 import { MagicalLoadingStage } from '@/components/MagicalLoadingStage';
 import { decideDreamJobRecovery } from '@/lib/dreamJobRecovery';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
-import { getDreamStageInfo } from '@/lib/dreamStageLabels';
+import { useDreamProgress } from '@/hooks/useDreamProgress';
 
 // How long recovery polls without ever seeing a dream_jobs row before
 // concluding the Edge Function never started (connect/boot failure) and failing
@@ -62,6 +62,7 @@ export default function DreamLoadingScreen() {
   // even after backgrounding and returning.
   const [queueStatus, setQueueStatus] = useState<string | null>(null);
   const [queueStage, setQueueStage] = useState<string | null>(null);
+  const [queueStageAt, setQueueStageAt] = useState<string | null>(null);
 
   // Failure state set by useDreamCreate's catch block. When non-null, the
   // failure card is rendered and the spinner is hidden — UNLESS isRecovering
@@ -195,11 +196,13 @@ export default function DreamLoadingScreen() {
       status?: string;
       upload_id?: string | null;
       current_stage?: string | null;
+      stage_updated_at?: string | null;
     }) => {
       if (settled || queued.current) return;
       // Surface progress for the bar even on non-terminal updates.
       if (row.status !== undefined) setQueueStatus(row.status);
       if (row.current_stage !== undefined) setQueueStage(row.current_stage);
+      if (row.stage_updated_at !== undefined) setQueueStageAt(row.stage_updated_at);
       if (row.status === 'completed') {
         void finishCompleted(row.upload_id);
       } else if (row.status === 'dead_letter') {
@@ -226,6 +229,7 @@ export default function DreamLoadingScreen() {
               status?: string;
               upload_id?: string | null;
               current_stage?: string | null;
+              stage_updated_at?: string | null;
             }
           )
       )
@@ -247,7 +251,7 @@ export default function DreamLoadingScreen() {
       if (settled || queued.current) return;
       void supabase
         .from('dream_queue')
-        .select('status, upload_id, current_stage')
+        .select('status, upload_id, current_stage, stage_updated_at')
         .eq('id', queueWaitId)
         .maybeSingle()
         .then(({ data }) => {
@@ -497,11 +501,16 @@ export default function DreamLoadingScreen() {
     !!failure && !failure.refunded && !failure.isNsfw && !failure.isPreFlightModeration;
   const showSpinner = !failure || isRecovering || (isRecoverableFailure && !recoveryFailed);
 
-  // Staged progress for the bar. Driven by the dream_queue row (queue path);
-  // on the synchronous/recovery path with no queue row it defaults to a gentle
-  // "Dreaming…" state. Never null so the bar (not the wave dots) always shows
-  // on the create loading screen.
-  const stageInfo = getDreamStageInfo(queueStatus, queueStage);
+  // Live, time-based progress for the bar. Driven by the dream_queue row (queue
+  // path); on the synchronous/recovery path with no queue row it defaults to a
+  // gentle "Dreaming…" state. Never null so the bar (not the wave dots) always
+  // shows on the create loading screen. The time-based fill keeps the bar moving
+  // through the long face-swap stage instead of freezing at a checkpoint.
+  const progress = useDreamProgress({
+    status: queueStatus,
+    currentStage: queueStage,
+    stageUpdatedAt: queueStageAt,
+  });
 
   return (
     <View style={s.container}>
@@ -513,7 +522,7 @@ export default function DreamLoadingScreen() {
         // of the home indicator since the button is no longer absolutely
         // positioned.
         <SafeAreaView style={s.scene} edges={['bottom']}>
-          <MagicalLoadingStage progressStage={stageInfo} />
+          <MagicalLoadingStage progress={progress} />
           <View style={s.cta}>
             {showQueue && (
               <>

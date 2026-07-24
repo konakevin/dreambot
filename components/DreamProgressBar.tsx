@@ -22,22 +22,26 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/AppText';
 import { colors, gradients } from '@/constants/theme';
 import { verticalScale, fontScale, horizontalScale } from '@/lib/responsive';
-import type { DreamStageInfo } from '@/lib/dreamStageLabels';
+export interface DreamProgressBarInput {
+  /** Live 0..1 fill target (time-based; see useDreamProgress). */
+  target: number;
+  label: string;
+}
 
-// Cadence of the creep. Each tick nudges the fill a fraction of the remaining
-// gap to the checkpoint, so movement is continuous but decelerating.
+// Cadence of the creep. Each tick eases the fill toward the live target so
+// stage transitions don't jump; the target itself advances over time.
 const TICK_MS = 220;
 const APPROACH = 0.14;
 
-export function DreamProgressBar({ stage }: { stage: DreamStageInfo | null }) {
+export function DreamProgressBar({ progress }: { progress: DreamProgressBarInput | null }) {
   const fill = useSharedValue(0); // 0..1
   const trackW = useSharedValue(0); // measured px
-  const targetRef = useRef(stage?.target ?? 0.05);
+  const targetRef = useRef(progress?.target ?? 0.05);
 
   useEffect(() => {
     // Never let the target retreat — the bar only ever moves forward.
-    targetRef.current = Math.max(targetRef.current, stage?.target ?? 0.05);
-  }, [stage?.target]);
+    targetRef.current = Math.max(targetRef.current, progress?.target ?? 0.05);
+  }, [progress?.target]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -74,9 +78,9 @@ export function DreamProgressBar({ stage }: { stage: DreamStageInfo | null }) {
           />
         </Animated.View>
       </View>
-      {stage?.label ? (
+      {progress?.label ? (
         <Text style={styles.label} allowFontScaling={false}>
-          {stage.label}
+          {progress.label}
         </Text>
       ) : null}
     </View>
