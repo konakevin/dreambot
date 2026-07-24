@@ -9,21 +9,23 @@ describe('dreamProgressTarget', () => {
   });
 
   it('fills across the stage band over the estimate', () => {
-    // face_swap band is [0.72, 0.95]. At stage start → band start.
+    // face_swap band is [0.55, 0.80]. At stage start → band start.
     const atStart = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0);
-    expect(atStart).toBeCloseTo(0.72, 5);
+    expect(atStart).toBeCloseTo(0.55, 5);
     // Partway through → between start and end, strictly increasing.
-    const mid = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 9000);
-    expect(mid).toBeGreaterThan(0.72);
-    expect(mid).toBeLessThan(0.95);
-    const later = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 14000);
+    const mid = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 15000);
+    expect(mid).toBeGreaterThan(0.55);
+    expect(mid).toBeLessThan(0.8);
+    const later = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 22000);
     expect(later).toBeGreaterThan(mid);
   });
 
-  it('HOLDS at the band end when the stage overruns its estimate (the "99%" case)', () => {
-    // Way past the estimate — must clamp to the band end, never exceed it.
+  it('HOLDS at the band end (well below full) when the stage overruns — never looks "done"', () => {
+    // Way past the estimate — must clamp to the band end, never exceed it, and
+    // that ceiling stays clearly below 1.0 so an active ring never reads as full.
     const overrun = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 10 * 60_000);
-    expect(overrun).toBeCloseTo(0.95, 5);
+    expect(overrun).toBeCloseTo(0.8, 5);
+    expect(overrun).toBeLessThan(0.9);
   });
 
   it('advances monotonically across stages (render -> swap -> upload)', () => {
@@ -39,6 +41,6 @@ describe('dreamProgressTarget', () => {
     expect(dreamProgressTarget('queued', null, null, T0)).toBeGreaterThan(0);
     expect(dreamProgressTarget('queued', null, null, T0)).toBeLessThan(0.15);
     // Known stage but no timestamp → hold at the band start (no motion, no crash).
-    expect(dreamProgressTarget('in_progress', 'flux_render', null, T0)).toBeCloseTo(0.3, 5);
+    expect(dreamProgressTarget('in_progress', 'flux_render', null, T0)).toBeCloseTo(0.28, 5);
   });
 });

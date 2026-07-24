@@ -249,9 +249,11 @@ function RevenueCatInitializer() {
 // by notification id so a double realtime delivery never double-toasts.
 let lastToastedNotifId: string | undefined;
 
-// (Removed 2026-07-23, migration 396) The rolling "N dreams are ready" toast
-// coalescer lived here. Dreams no longer toast in-app — the render dock's
-// completion ring is the signal (see maybeShowNotificationToast below).
+// (Simplified 2026-07-23) The rolling "N dreams are ready" toast coalescer lived
+// here; it was dropped when dreams left the inbox (migration 396), since its
+// tap-to-inbox action no longer applied. Dreams still toast INDIVIDUALLY on
+// completion (see maybeShowNotificationToast) — tap opens the finished dream;
+// the render dock's per-ring completion covers a simultaneous burst.
 
 function runToastAction(action: ToastAction): void {
   switch (action.kind) {
@@ -289,17 +291,13 @@ function maybeShowNotificationToast(row: NotificationRowLike | null | undefined)
   if (!spec) return;
   lastToastedNotifId = row.id;
 
-  // USER-CREATED dreams (subtype 'manual') no longer toast in-app: the render
-  // dock's completion ring (fill → check → pop) is the signal, and they left the
-  // inbox + badge (migration 396), so a toast would double-signal with the dock.
-  // NIGHTLY dreams still toast (they fall through to the generic toast below) —
-  // they arrive while the user is away and aren't in the dock. The completion
-  // PUSH is unchanged for both. dream_FAILED also toasts below.
-  // FUTURE: once the push is decoupled from the notification row (see mig 396),
-  // the manual dream_generated row stops being inserted and this branch goes away.
-  if (row.type === 'dream_generated' && row.subtype === 'manual') {
-    return;
-  }
+  // Dreams (manual + nightly) DO toast on completion — the transient "your dream
+  // is ready" popup is a separate signal from the inbox (which dreams LEFT in
+  // migration 396) and complements the render dock. They fall through to the
+  // generic Toast.show below, whose action (kind 'route') opens the finished
+  // dream. (A burst of simultaneous completions shows the last toast; the dock's
+  // per-ring completion covers the multi case — re-add a coalescer here if that
+  // ever reads as noisy.)
 
   // A touch longer than the default so there's comfortable time to tap.
   Toast.show(spec.message, spec.icon, 4500, { onPress: () => runToastAction(spec.action) });

@@ -22,15 +22,23 @@ interface StageBand {
   estMs: number;
 }
 
+// Band ceilings are deliberately kept well BELOW 1.0 for every active stage, so
+// an in-flight ring NEVER looks "done" (a ~0.95 arc reads as a full circle at
+// dock size — it looked complete while the dream was still rendering). Only
+// actual completion (status='completed') fills to 1.0 + the check. The long-tail
+// `face_swap` (dual swaps are slow) gets a LOW ceiling + a LONG estimate, so a
+// slow swap keeps creeping and then holds at ~0.80 — clearly "still working,"
+// not "stuck at 100%." Completion snaps the rest of the way. (Kevin 2026-07-23.)
 const BANDS: Record<string, StageBand> = {
-  queued: { start: 0.02, end: 0.08, estMs: 4000 },
-  claimed: { start: 0.08, end: 0.15, estMs: 2500 },
-  resolve: { start: 0.15, end: 0.3, estMs: 6000 },
+  queued: { start: 0.03, end: 0.08, estMs: 4000 },
+  claimed: { start: 0.08, end: 0.15, estMs: 3000 },
+  resolve: { start: 0.15, end: 0.28, estMs: 6000 },
   // The render itself — the main wait on non-swap dreams.
-  flux_render: { start: 0.3, end: 0.72, estMs: 15000 },
-  // The swap — the long tail on cast dreams (dual is slower; blended estimate).
-  face_swap: { start: 0.72, end: 0.95, estMs: 18000 },
-  upload: { start: 0.95, end: 0.98, estMs: 4000 },
+  flux_render: { start: 0.28, end: 0.55, estMs: 14000 },
+  // The swap — the long tail on cast dreams. Low ceiling + long estimate so a
+  // slow dual swap holds at ~0.80 (clearly in-progress), never near-full.
+  face_swap: { start: 0.55, end: 0.8, estMs: 30000 },
+  upload: { start: 0.8, end: 0.88, estMs: 5000 },
 };
 
 /**
