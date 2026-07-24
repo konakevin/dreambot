@@ -1,13 +1,6 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import {
-  View,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-  RefreshControl,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
+import { View, ActivityIndicator, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
@@ -31,7 +24,7 @@ import { isStaleInFlight } from '@/lib/dockItems';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
+import { NUM_COLUMNS, ROW_HEIGHT } from '@/constants/grid';
 import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -107,7 +100,7 @@ export function PostGrid({
   extraBottomInset = 0,
   pendingDreams = [],
 }: PostGridProps) {
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlashListRef<GridItem>>(null);
   // Selection order (1-based) from the selected-ids Set's insertion order —
   // drives the numbered badges (see renderItem). Rebuilt per toggle (each
   // toggle produces a fresh Set).
@@ -528,33 +521,25 @@ export function PostGrid({
       style={styles.container}
       onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
     >
-      <FlatList<GridItem>
+      <FlashList<GridItem>
         ref={listRef}
         data={gridData}
         keyExtractor={(item) => (isPending(item) ? `pending-${item.pending.id}` : item.id)}
         numColumns={NUM_COLUMNS}
-        // No getItemLayout: with numColumns the only way to express
-        // "items in the same row share an offset" is per-item length =
-        // ROW_HEIGHT with shared offsets, which makes FlatList compute
-        // sum-of-lengths total content height as N_items × ROW_HEIGHT
-        // (3× actual at numColumns=3). That inflated total breaks
-        // virtualization windowing — in-viewport tiles get spuriously
-        // evicted and remounted during slow drags. Letting FlatList
-        // measure is correct and we don't use scrollToIndex anywhere.
-        columnWrapperStyle={styles.row}
+        // Recycle the two cell kinds separately (image tiles vs "cooking" rings).
+        getItemType={(item) => (isPending(item) ? 'pending' : 'post')}
+        // Keep FlatList's behavior: DON'T auto-anchor scroll on top-insertion
+        // (pending "cooking" tiles insert at index 0) — behavior-neutral migration.
+        maintainVisibleContentPosition={{ disabled: true }}
         contentContainerStyle={{ paddingBottom: verticalScale(90) + extraBottomInset }}
         // Lock scrolling to one axis (iOS): a vertical flick won't pan
         // diagonally and leak horizontal movement into the parent swipe-back.
         directionalLockEnabled
-        windowSize={7}
-        maxToRenderPerBatch={6}
-        initialNumToRender={12}
-        removeClippedSubviews={false}
         // `refreshing` pinned FALSE: the native spinner is unreliable on Fabric
-        // (react-native#56343) so we never let it try — we render our own spinner
-        // in the self-held gap below. The RefreshControl stays only for its pull
-        // GESTURE (onRefresh still fires on a pull-release).
-        refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}
+        // (react-native#56343) — FlashList still adds a RefreshControl for the
+        // pull GESTURE; we render our own spinner in the self-held gap below.
+        onRefresh={handleRefresh}
+        refreshing={false}
         ListHeaderComponent={
           <>
             {/* Self-held refresh gap — expands while pulling so the spinner has a
@@ -575,7 +560,9 @@ export function PostGrid({
         }
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        onEndReachedThreshold={0.5}
+        // Fetch the next page ~3 screens BEFORE the end so a fast fling rarely
+        // outruns pagination and slams into the loaded-data boundary (the bounce).
+        onEndReachedThreshold={3}
         onEndReached={handleEndReached}
         viewabilityConfig={viewabilityConfigRef.current}
         onViewableItemsChanged={onGridViewableChanged.current}
@@ -653,7 +640,6 @@ export function PostGrid({
 }
 
 const styles = StyleSheet.create({
-  row: { gap: TILE_GAP, marginBottom: TILE_GAP },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
   footer: { paddingVertical: verticalScale(20), alignItems: 'center' },
