@@ -102,6 +102,7 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
               strokeWidth={RING_STROKE}
               target={getDreamStageInfo(d.status, d.currentStage).target}
               state="active"
+              sweep={false}
             />
           ))}
         </View>

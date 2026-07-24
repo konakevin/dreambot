@@ -22,6 +22,8 @@ import { useHashtagPosts } from '@/hooks/useHashtagPosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
+import { PendingDreamTile } from '@/components/PendingDreamTile';
+import type { InFlightDream } from '@/hooks/useInFlightDreams';
 import { useAlbumStore } from '@/store/album';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
@@ -39,6 +41,12 @@ export type PostGridSource =
   | { type: 'reposts'; userId: string }
   | { type: 'user'; userId: string }
   | { type: 'hashtag'; tag: string };
+
+/** A grid cell is either a finished post or a "cooking" pending-dream slot woven
+ *  in at the top (Dreams tab only). The `pending` discriminator narrows them. */
+type PendingSlot = { pending: InFlightDream };
+type GridItem = DreamPostItem | PendingSlot;
+const isPending = (item: GridItem): item is PendingSlot => 'pending' in item;
 
 interface PostGridProps {
   source: PostGridSource;
@@ -74,6 +82,10 @@ interface PostGridProps {
    *  the render-dock height so the last row clears the dock. Omitted (0) on the
    *  pushed user-profile modal, where no dock is visible. */
   extraBottomInset?: number;
+  /** In-flight ("cooking") dreams woven into the top grid cells — passed only by
+   *  the own Dreams tab. Each becomes a PendingDreamTile that flows with the
+   *  finished tiles and is replaced by the finished tile on completion. */
+  pendingDreams?: InFlightDream[];
 }
 
 export function PostGrid({
@@ -88,6 +100,7 @@ export function PostGrid({
   onRefreshExtra,
   selection,
   extraBottomInset = 0,
+  pendingDreams = [],
 }: PostGridProps) {
   const listRef = useRef<FlatList>(null);
   // Selection order (1-based) from the selected-ids Set's insertion order —
@@ -219,6 +232,17 @@ export function PostGrid({
     [activeQuery.data]
   );
 
+  // Weave "cooking" tiles into the top cells (Dreams tab only). They shift the
+  // finished posts down by `pendingCount`, so highlight-scroll offsets by it.
+  const gridData: GridItem[] = useMemo(
+    () =>
+      pendingDreams.length > 0 ? [...pendingDreams.map((d) => ({ pending: d })), ...posts] : posts,
+    [pendingDreams, posts]
+  );
+  const pendingCount = pendingDreams.length;
+  const pendingCountRef = useRef(0);
+  pendingCountRef.current = pendingCount;
+
   const isLoading = activeQuery.isLoading;
   const hasNextPage = activeQuery.hasNextPage;
   const isFetchingNextPage = activeQuery.isFetchingNextPage;
@@ -267,10 +291,10 @@ export function PostGrid({
   const prefetchedRef = useRef<Set<string>>(new Set());
   const viewabilityConfigRef = useRef({ viewAreaCoveragePercentThreshold: 30 });
   const onGridViewableChanged = useRef(
-    ({ viewableItems }: { viewableItems: { item?: DreamPostItem }[] }) => {
+    ({ viewableItems }: { viewableItems: { item?: GridItem }[] }) => {
       const toPrefetch: string[] = [];
       for (const v of viewableItems) {
-        if (!v.item) continue;
+        if (!v.item || isPending(v.item)) continue;
         if (prefetchedRef.current.has(v.item.id)) continue;
         prefetchedRef.current.add(v.item.id);
         // Prefetch the small JPEG display variant (~150 KB), not the full
@@ -316,7 +340,7 @@ export function PostGrid({
     if (isFetchingHighlight && highlightIndex >= 0) {
       setIsFetchingHighlight(false);
       requestAnimationFrame(() => {
-        scrollToHighlightRow(highlightIndex);
+        scrollToHighlightRow(highlightIndex + pendingCountRef.current);
       });
     }
   }, [isFetchingHighlight, highlightIndex, scrollToHighlightRow]);
@@ -370,7 +394,9 @@ export function PostGrid({
     if (highlightIndex < 0 || containerHeight === 0) return;
     setPendingAutoAnchor(false);
     didAutoScrollForFocus.current = true;
-    requestAnimationFrame(() => scrollToHighlightRow(highlightIndex, { silent: true }));
+    requestAnimationFrame(() =>
+      scrollToHighlightRow(highlightIndex + pendingCountRef.current, { silent: true })
+    );
   }, [pendingAutoAnchor, highlightIndex, containerHeight, scrollToHighlightRow]);
 
   // Keep fetching pages while searching for the highlight post (user tapped badge)
@@ -396,11 +422,11 @@ export function PostGrid({
     !isFetchingHighlight &&
     (highlightIndex === -1
       ? !activeQuery.isLoading
-      : containerHeight > 0 && highlightIndex > maxVisibleIndex);
+      : containerHeight > 0 && highlightIndex + pendingCount > maxVisibleIndex);
 
   const scrollToHighlight = useCallback(() => {
     if (highlightIndex >= 0) {
-      scrollToHighlightRow(highlightIndex);
+      scrollToHighlightRow(highlightIndex + pendingCountRef.current);
     } else if (activeQuery.hasNextPage) {
       setIsFetchingHighlight(true);
       activeQuery.fetchNextPage();
@@ -412,10 +438,10 @@ export function PostGrid({
       style={styles.container}
       onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
     >
-      <FlatList<DreamPostItem>
+      <FlatList<GridItem>
         ref={listRef}
-        data={posts}
-        keyExtractor={(item) => item.id}
+        data={gridData}
+        keyExtractor={(item) => (isPending(item) ? `pending-${item.pending.id}` : item.id)}
         numColumns={NUM_COLUMNS}
         // No getItemLayout: with numColumns the only way to express
         // "items in the same row share an offset" is per-item length =
@@ -485,26 +511,30 @@ export function PostGrid({
         // this one primitive-ish ref covers all selection transitions without the
         // old fresh-array-every-render that forced a full re-render each frame.
         extraData={selection?.selectedIds}
-        renderItem={({ item }) => (
-          <PostTile
-            item={item}
-            isOwn={isOwn}
-            albumSource={source}
-            isHighlighted={!highlightDismissed && item.id === highlightPostId}
-            showPrivateBadge={showPrivateBadge}
-            allPosts={posts}
-            // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
-            // React.memo holds — the old object literal here defeated memo and
-            // re-rendered every mounted tile on each toggle/scroll (Kevin
-            // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
-            // insertion order) = the album order bulk-Post hands to post/new.
-            selActive={selection?.active ?? false}
-            selSelected={selection ? selection.selectedIds.has(item.id) : false}
-            selOrder={selectionOrder.get(item.id) ?? null}
-            onSelectToggle={selection?.onToggle}
-            onSelectEnter={selection?.onEnter}
-          />
-        )}
+        renderItem={({ item }) =>
+          isPending(item) ? (
+            <PendingDreamTile dream={item.pending} />
+          ) : (
+            <PostTile
+              item={item}
+              isOwn={isOwn}
+              albumSource={source}
+              isHighlighted={!highlightDismissed && item.id === highlightPostId}
+              showPrivateBadge={showPrivateBadge}
+              allPosts={posts}
+              // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
+              // React.memo holds — the old object literal here defeated memo and
+              // re-rendered every mounted tile on each toggle/scroll (Kevin
+              // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
+              // insertion order) = the album order bulk-Post hands to post/new.
+              selActive={selection?.active ?? false}
+              selSelected={selection ? selection.selectedIds.has(item.id) : false}
+              selOrder={selectionOrder.get(item.id) ?? null}
+              onSelectToggle={selection?.onToggle}
+              onSelectEnter={selection?.onEnter}
+            />
+          )
+        }
       />
       {/* Our own gray spinner, resting in the self-held gap (top ≈ gap center).
           Reliable where the native RefreshControl spinner is not (Fabric). */}

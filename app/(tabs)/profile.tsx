@@ -27,7 +27,7 @@ import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
 import { PostGrid } from '@/components/PostGrid';
-import { PendingDreamsRow } from '@/components/PendingDreamsRow';
+import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { photoSourceRows } from '@/lib/photoSourceRows';
@@ -377,6 +377,8 @@ export default function ProfileScreen() {
   // Render dock clearance — added to the grid / followers list / floating
   // selection bar so none sit under the dock. 0 at rest.
   const dockHeight = useRenderDockHeight();
+  // In-flight ("cooking") dreams woven into the top of the Dreams grid.
+  const { data: inFlightDreams = [] } = useInFlightDreams();
   const [showPicSheet, setShowPicSheet] = useState(false);
   const { data: followers = [], isLoading: loadingFollowers } = useFollowersList(
     isSocialTab ? (user?.id ?? '') : ''
@@ -743,13 +745,6 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Live "cooking" tiles at the top of the Dreams grid (queued/in-progress
-          renders). Hidden under the Posted filter (pending dreams aren't posted)
-          and during multi-select. */}
-      {activeTab === 'dreams' && !gridSelecting && dreamsFilter !== 'posted' && (
-        <PendingDreamsRow />
-      )}
-
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
           at when the two sets are nearly identical. */}
@@ -801,6 +796,7 @@ export default function ProfileScreen() {
           highlightPostId={currentPostId ?? undefined}
           onScrollProgress={handleScrollProgress}
           extraBottomInset={dockHeight}
+          pendingDreams={activeTab === 'dreams' && dreamsFilter !== 'posted' ? inFlightDreams : []}
           // Multi-select (bulk edit) — Posts + Dreams (delete/private/post) and
           // Saved + Reposts (bulk unsave / unrepost). Present-but-inactive adds
           // the "Select" row to tile long-press sheets.
