@@ -405,11 +405,13 @@ function RealtimeSubscriber() {
           const row = payload.new as {
             id?: string;
             status?: string;
+            created_at?: string;
           } | null;
           if (row?.id && (row.status === 'completed' || row.status === 'dead_letter')) {
             useRenderDockStore.getState().pushFinished({
               jobId: row.id,
               kind: row.status === 'completed' ? 'ready' : 'failed',
+              createdAt: row.created_at ?? new Date().toISOString(),
               at: Date.now(),
             });
           }

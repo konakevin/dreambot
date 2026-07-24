@@ -71,7 +71,10 @@ export function ProgressRing({
       const t = targetRef.current;
       const cur = fill.value;
       if (t >= 1) {
-        fill.value = withTiming(1, { duration: 420, easing: Easing.out(Easing.quad) });
+        // Deliberate final fill from the held value up to full. The ring persists
+        // its fill across active → complete (RenderDock keeps the same instance),
+        // so this reads as a smooth ~80%→100% finish, not a reset-and-resweep.
+        fill.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.cubic) });
         return;
       }
       if (cur >= t) return;

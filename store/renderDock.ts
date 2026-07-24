@@ -19,7 +19,10 @@ export interface FinishedRing {
   /** dream_queue.id (== job id). */
   jobId: string;
   kind: 'ready' | 'failed';
-  /** ms timestamp raised (for ordering / dedup). */
+  /** dream_queue.created_at — used to keep a completing ring in the SAME slot it
+   *  held while active (so it doesn't jump position as it finishes). */
+  createdAt: string;
+  /** ms timestamp raised (for dedup). */
   at: number;
 }
 

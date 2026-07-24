@@ -23,7 +23,7 @@ import { colors } from '@/constants/theme';
 import { fontScale, verticalScale } from '@/lib/responsive';
 import { useInFlightDreams, type InFlightDream } from '@/hooks/useInFlightDreams';
 import { useDreamProgress } from '@/hooks/useDreamProgress';
-import { DOCK_HEIGHT, useRenderDockStore, type FinishedRing } from '@/store/renderDock';
+import { DOCK_HEIGHT, useRenderDockStore } from '@/store/renderDock';
 
 const MASCOT = require('@/assets/images/icon.png');
 const MAX_RINGS = 5;
@@ -31,28 +31,45 @@ const RING_SIZE = 26;
 const RING_STROKE = 3;
 const FINISHED_TTL_MS = 1500;
 
-/** An in-flight dream's ring — fills via the live time-based progress target so
- *  a long stage keeps advancing instead of freezing. */
-function ActiveDreamRing({ dream }: { dream: InFlightDream }) {
-  const { target } = useDreamProgress(dream);
-  return <ProgressRing size={RING_SIZE} strokeWidth={RING_STROKE} target={target} sweep={false} />;
-}
-
-/** A finished dream's ring — plays its completion then removes itself. */
-function CompletingRing({ item, onExpire }: { item: FinishedRing; onExpire: () => void }) {
+/** One dream's ring — persists across active → complete (SAME instance, keyed by
+ *  jobId), so its fill CARRIES OVER: on completion the arc animates from the held
+ *  value up to full instead of resetting to 0 and re-sweeping. Fills to
+ *  check/alert on terminal, then removes itself after the dwell. */
+function DreamRing({
+  dream,
+  finishedKind,
+  onExpire,
+}: {
+  dream: InFlightDream | null;
+  finishedKind: 'ready' | 'failed' | null;
+  onExpire: () => void;
+}) {
+  const { target } = useDreamProgress(
+    dream ?? { status: null, currentStage: null, stageUpdatedAt: null }
+  );
+  const state =
+    finishedKind === 'ready' ? 'complete' : finishedKind === 'failed' ? 'failed' : 'active';
   useEffect(() => {
+    if (!finishedKind) return;
     const id = setTimeout(onExpire, FINISHED_TTL_MS);
     return () => clearTimeout(id);
-  }, [onExpire]);
+  }, [finishedKind, onExpire]);
   return (
     <ProgressRing
       size={RING_SIZE}
       strokeWidth={RING_STROKE}
-      target={1}
-      state={item.kind === 'ready' ? 'complete' : 'failed'}
+      target={state === 'active' ? target : 1}
+      state={state}
       sweep={false}
     />
   );
+}
+
+interface DockItem {
+  jobId: string;
+  createdAt: string;
+  dream: InFlightDream | null;
+  finishedKind: 'ready' | 'failed' | null;
 }
 
 export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
@@ -63,12 +80,29 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
   const requestDreamsTab = useRenderDockStore((s) => s.requestDreamsTab);
 
   // A dream that just went terminal is briefly in BOTH sets (finished pushed by
-  // realtime before useInFlightDreams refetches) — dedup so its ring doesn't
-  // double up. Completing rings render first (they own the animation slot).
+  // realtime before useInFlightDreams refetches) — dedup by jobId; finished wins.
   const finishedIds = new Set(finished.map((f) => f.jobId));
   const active = inFlight.filter((d) => !finishedIds.has(d.id));
-  const total = finished.length + active.length;
-  const visible = total > 0;
+
+  // Unified, jobId-keyed, createdAt-ordered list so a ring KEEPS ITS SLOT (no
+  // position jump) AND its ProgressRing instance (no fill reset) as it goes
+  // active → complete.
+  const items: DockItem[] = [
+    ...active.map((d) => ({
+      jobId: d.id,
+      createdAt: d.createdAt,
+      dream: d as InFlightDream | null,
+      finishedKind: null as 'ready' | 'failed' | null,
+    })),
+    ...finished.map((f) => ({
+      jobId: f.jobId,
+      createdAt: f.createdAt,
+      dream: null as InFlightDream | null,
+      finishedKind: f.kind as 'ready' | 'failed' | null,
+    })),
+  ].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+
+  const visible = items.length > 0;
 
   useEffect(() => {
     setDockHeight(visible ? DOCK_HEIGHT : 0);
@@ -77,11 +111,8 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
 
   if (!visible) return null;
 
-  // Fill up to MAX_RINGS: completing rings first, then active; the rest → "+N".
-  const shownFinished = finished.slice(0, MAX_RINGS);
-  const activeSlots = Math.max(0, MAX_RINGS - shownFinished.length);
-  const shownActive = active.slice(0, activeSlots);
-  const overflow = total - (shownFinished.length + shownActive.length);
+  const shown = items.slice(0, MAX_RINGS);
+  const overflow = items.length - shown.length;
 
   const onPress = () => {
     Haptics.selectionAsync();
@@ -99,11 +130,13 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
       <Pressable style={styles.pill} onPress={onPress} accessibilityRole="button">
         <Image source={MASCOT} style={styles.mascot} contentFit="cover" />
         <View style={styles.rings}>
-          {shownFinished.map((f) => (
-            <CompletingRing key={f.jobId} item={f} onExpire={() => removeFinished(f.jobId)} />
-          ))}
-          {shownActive.map((d) => (
-            <ActiveDreamRing key={d.id} dream={d} />
+          {shown.map((it) => (
+            <DreamRing
+              key={it.jobId}
+              dream={it.dream}
+              finishedKind={it.finishedKind}
+              onExpire={() => removeFinished(it.jobId)}
+            />
           ))}
         </View>
         {overflow > 0 ? <Text style={styles.overflow}>+{overflow}</Text> : null}
