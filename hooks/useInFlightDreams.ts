@@ -52,10 +52,18 @@ export function useInFlightDreams() {
       }));
     },
     enabled: !!userId,
-    // Realtime-backed; the short staleTime + mount/focus refetch are the
-    // catch-up net for missed socket events.
-    staleTime: 5_000,
+    // staleTime 0 so EVERY foreground / mount / reconnect refetches — the
+    // realtime `dream_queue` binding drives live updates while active, but iOS
+    // drops the socket in background and postgres_changes never replays missed
+    // events. A non-zero staleTime would skip the return-to-foreground refetch
+    // for short (<staleTime) backgrounds, leaving a stale/ghost pending tile.
+    // The query is tiny (<=5 rows), so refetching on every resume is cheap and
+    // makes the dock + album resume accurately regardless of how the user
+    // backgrounded/killed the app. Absolute-time progress (stage_updated_at)
+    // means the ring also jumps to the correct fill after a background gap.
+    staleTime: 0,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 }
