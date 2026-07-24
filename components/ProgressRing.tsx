@@ -7,13 +7,14 @@
  * See DREAM_TRACKING_PLAN.md.
  */
 
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, {
   useSharedValue,
   useAnimatedProps,
   useAnimatedStyle,
+  useAnimatedReaction,
   withTiming,
   withRepeat,
   withSequence,
@@ -39,9 +40,6 @@ interface ProgressRingProps {
   sweep?: boolean;
 }
 
-const TICK_MS = 220;
-const APPROACH = 0.14;
-
 export function ProgressRing({
   size,
   strokeWidth,
@@ -54,37 +52,37 @@ export function ProgressRing({
   const circumference = 2 * Math.PI * r;
   const center = size / 2;
 
-  const fill = useSharedValue(0);
-  const targetRef = useRef(target);
+  // Seed the fill at the CURRENT target (not 0) so a remount — e.g. landing on
+  // the Dreams tab mounts a fresh PostGrid — starts already filled to where the
+  // render actually is, instead of re-sweeping from empty (Kevin 2026-07-23).
+  const fill = useSharedValue(state === 'complete' ? 1 : Math.min(Math.max(target, 0), 1));
   const rotate = useSharedValue(0);
   const pop = useSharedValue(1);
 
-  useEffect(() => {
-    if (state === 'complete') targetRef.current = 1;
-    else if (state === 'active') targetRef.current = Math.max(targetRef.current, target);
-  }, [target, state]);
-
-  // Creep toward the checkpoint (snap to full on complete; hold on failed).
+  // Track `target` DIRECTLY (forward-only), not via an independent asymptotic
+  // creep. `target` is already time-based and advances on its own
+  // (useDreamProgress reads stage_updated_at), so the ring stays alive without a
+  // second creep on top — and because every ring for the same dream converges to
+  // the SAME deterministic target, the dock pill ring and the album tile ring
+  // stay in lockstep no matter when each one mounted (Kevin 2026-07-23: the dock
+  // ring ran ahead because it had been creeping since the dream started, while
+  // the tile ring kept restarting its creep from 0). On complete, fill runs from
+  // the held value up to 1 (the tile ring PERSISTS its instance across
+  // active → complete via a stable key, so this reads as a real ~90%→100% finish
+  // with a check, not a reset). On failed it just holds where it was.
   useEffect(() => {
     if (state === 'failed') return;
-    const id = setInterval(() => {
-      const t = targetRef.current;
-      const cur = fill.value;
-      if (t >= 1) {
-        // Deliberate final fill from the held value up to full. The ring persists
-        // its fill across active → complete (RenderDock keeps the same instance),
-        // so this reads as a smooth ~80%→100% finish, not a reset-and-resweep.
-        fill.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.cubic) });
-        return;
-      }
-      if (cur >= t) return;
-      fill.value = withTiming(cur + (t - cur) * APPROACH, {
-        duration: TICK_MS,
-        easing: Easing.linear,
-      });
-    }, TICK_MS);
-    return () => clearInterval(id);
-  }, [fill, state]);
+    const goal = state === 'complete' ? 1 : Math.min(Math.max(target, 0), 1);
+    const cur = fill.value;
+    if (goal <= cur) return; // never animate backward
+    // On complete, deliberately fill ALL the way to full — even from a low value
+    // — over a distance-scaled duration, so the ring visibly "hurries to finish"
+    // (~0.4–1.2s) before the result is revealed, rather than the image popping in
+    // with the ring still short (Kevin 2026-07-23: "if it completes and it's
+    // still not finished, hurry and show it progress to finished, then done").
+    const duration = state === 'complete' ? Math.round(320 + (goal - cur) * 1500) : 420;
+    fill.value = withTiming(goal, { duration, easing: Easing.out(Easing.cubic) });
+  }, [target, state, fill]);
 
   // Orbiting head while active.
   useEffect(() => {
@@ -96,21 +94,46 @@ export function ProgressRing({
     return () => cancelAnimation(rotate);
   }, [sweep, state, rotate]);
 
-  // Pop on entering a terminal state.
+  // Pop when the terminal state "lands": failed pops at once (the ring holds
+  // where it stopped); complete pops as the fill reaches full — together with the
+  // check fade-in below — so the bounce reads as the finish landing, not a bounce
+  // mid-fill during the deliberate ~1s finish.
+  const didPop = useSharedValue(0);
   useEffect(() => {
-    if (state === 'complete' || state === 'failed') {
+    if (state === 'failed') {
       pop.value = withSequence(
         withTiming(1.18, { duration: 150, easing: Easing.out(Easing.quad) }),
         withTiming(1, { duration: 190, easing: Easing.out(Easing.quad) })
       );
     }
-  }, [state, pop]);
+    if (state === 'active') didPop.value = 0;
+  }, [state, pop, didPop]);
+  useAnimatedReaction(
+    () => fill.value,
+    (f) => {
+      if (state === 'complete' && f >= 0.985 && didPop.value === 0) {
+        didPop.value = 1;
+        pop.value = withSequence(
+          withTiming(1.18, { duration: 150, easing: Easing.out(Easing.quad) }),
+          withTiming(1, { duration: 190, easing: Easing.out(Easing.quad) })
+        );
+      }
+    }
+  );
 
   const arcProps = useAnimatedProps(() => ({
     strokeDashoffset: circumference * (1 - Math.min(fill.value, 1)),
   }));
   const headStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${rotate.value}deg` }] }));
   const popStyle = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
+  // Glyph reveals in step with the ring: on complete it fades in only as the fill
+  // nears full (never sits over a half-empty ring during the finish); on failed
+  // it shows immediately.
+  const glyphStyle = useAnimatedStyle(() => {
+    if (state === 'failed') return { opacity: 1 };
+    if (state !== 'complete') return { opacity: 0 };
+    return { opacity: Math.max(0, Math.min(1, (fill.value - 0.9) / 0.09)) };
+  });
 
   const strokeColor =
     state === 'failed' ? colors.warning : state === 'complete' ? colors.success : color;
@@ -155,13 +178,13 @@ export function ProgressRing({
         </Animated.View>
       ) : null}
       {state !== 'active' ? (
-        <View style={[StyleSheet.absoluteFill, styles.center]}>
+        <Animated.View style={[StyleSheet.absoluteFill, styles.center, glyphStyle]}>
           <Ionicons
             name={state === 'complete' ? 'checkmark' : 'alert'}
             size={size * 0.5}
             color={strokeColor}
           />
-        </View>
+        </Animated.View>
       ) : null}
     </Animated.View>
   );

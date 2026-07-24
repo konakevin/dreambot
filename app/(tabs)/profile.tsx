@@ -26,6 +26,9 @@ import { useFollowingList } from '@/hooks/useFollowingList';
 import { useFollowingIds } from '@/hooks/useFollowingIds';
 import { useToggleFollow } from '@/hooks/useToggleFollow';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
+import { useUnseenDreamsCount } from '@/hooks/useUnseenDreamsCount';
+import { useMarkDreamsViewed } from '@/hooks/useMarkDreamsViewed';
+import { useDreamsSeenStore } from '@/store/dreamsSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { ProfileHeader } from '@/components/ProfileHeader';
@@ -295,6 +298,33 @@ export default function ProfileScreen() {
       return () => setViewingOwnDreams(false);
     }, [activeTab, setViewingOwnDreams])
   );
+
+  // "New dreams" album signal (migration 397). Count drives the Dreams sub-tab
+  // dot (below) and feeds the Profile tab dot (app/(tabs)/_layout.tsx).
+  const { data: unseenDreams = 0 } = useUnseenDreamsCount();
+  const markDreamsViewed = useMarkDreamsViewed();
+  const setDreamsViewBaseline = useDreamsSeenStore((s) => s.setViewBaseline);
+
+  // On OPENING the Dreams sub-tab: capture the pre-view timestamp as the New-
+  // marker baseline (mark returns the previous last_dreams_view_at) and advance
+  // the mark to now — clearing the dots. On LEAVING, advance again so a render
+  // that finished while they watched counts as seen (baseline untouched).
+  //
+  // Keyed on activeTab (NOT useFocusEffect): a detail-view round trip (tap a
+  // tile → view → back) is a router push that does NOT change activeTab, so it
+  // must NOT re-capture the baseline and wipe the markers the user is looking at.
+  // A real sub-tab switch (Posts↔Dreams) is a genuine new visit and re-captures.
+  useEffect(() => {
+    if (activeTab !== 'dreams') return;
+    let cancelled = false;
+    markDreamsViewed().then((prev) => {
+      if (!cancelled) setDreamsViewBaseline(prev);
+    });
+    return () => {
+      cancelled = true;
+      markDreamsViewed();
+    };
+  }, [activeTab, markDreamsViewed, setDreamsViewBaseline]);
 
   // The render dock routes here on tap and asks for the Dreams sub-tab (where
   // the pending/finished tiles live). Read the request from the store at FOCUS
@@ -710,6 +740,12 @@ export default function ProfileScreen() {
                   size={23}
                   color={active ? colors.textPrimary : colors.textSecondary}
                 />
+                {/* Red dot on the Dreams sub-tab when renders finished since the
+                    last album view. Suppressed while it's the active tab (you're
+                    looking at them; opening it clears the count anyway). */}
+                {t.key === 'dreams' && unseenDreams > 0 && !active && (
+                  <View style={styles.subTabDot} />
+                )}
                 {active && <View style={styles.tabUnderline} />}
               </TouchableOpacity>
             );
@@ -1283,6 +1319,19 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 2,
     backgroundColor: colors.accent,
+  },
+  // Red dot over the Dreams (moon) sub-tab icon's upper-right (migration 397).
+  subTabDot: {
+    position: 'absolute',
+    top: verticalScale(11),
+    left: '50%',
+    marginLeft: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.like,
+    borderWidth: 1,
+    borderColor: colors.background,
   },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },

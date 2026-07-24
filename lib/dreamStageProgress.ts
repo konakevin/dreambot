@@ -20,32 +20,39 @@ interface StageBand {
   end: number;
   /** Rough typical duration of this stage, ms — the fill crosses the band over it. */
   estMs: number;
+  /** Asymptotic overrun ceiling: past `estMs` the fill keeps creeping from `end`
+   *  toward this (never reaching it) instead of freezing, so a slow stage never
+   *  looks stuck. Kept < 1.0 so an active ring never reads "done". */
+  ceil: number;
+  /** Time constant (ms) of that overrun creep — bigger = slower. */
+  tau: number;
 }
 
-// Band ceilings are deliberately kept well BELOW 1.0 for every active stage, so
-// an in-flight ring NEVER looks "done" (a ~0.95 arc reads as a full circle at
-// dock size — it looked complete while the dream was still rendering). Only
-// actual completion (status='completed') fills to 1.0 + the check. The long-tail
-// `face_swap` (dual swaps are slow) gets a LOW ceiling + a LONG estimate, so a
-// slow swap keeps creeping and then holds at ~0.80 — clearly "still working,"
-// not "stuck at 100%." Completion snaps the rest of the way. (Kevin 2026-07-23.)
+// Each active stage fills across its [start,end] band over `estMs`, then — if it
+// overruns — keeps creeping ASYMPTOTICALLY from `end` toward `ceil` (never
+// reaching it) so the ring is never frozen (Kevin 2026-07-23: a slow face swap
+// "stalls out there ... then just finishes suddenly"). Ceilings stay < 1.0 so an
+// in-flight ring never looks done; only actual completion fills to 1.0 + the
+// check. The long-tail `face_swap` (dual swaps run minutes) creeps slowly toward
+// ~0.92, so on a long render the ring lands high and completion is a small,
+// smooth final fill — not a jump from 80%.
 const BANDS: Record<string, StageBand> = {
-  queued: { start: 0.03, end: 0.08, estMs: 4000 },
-  claimed: { start: 0.08, end: 0.15, estMs: 3000 },
-  resolve: { start: 0.15, end: 0.28, estMs: 6000 },
+  queued: { start: 0.03, end: 0.08, estMs: 4000, ceil: 0.13, tau: 8000 },
+  claimed: { start: 0.08, end: 0.15, estMs: 3000, ceil: 0.2, tau: 6000 },
+  resolve: { start: 0.15, end: 0.28, estMs: 6000, ceil: 0.34, tau: 8000 },
   // The render itself — the main wait on non-swap dreams.
-  flux_render: { start: 0.28, end: 0.55, estMs: 14000 },
-  // The swap — the long tail on cast dreams. Low ceiling + long estimate so a
-  // slow dual swap holds at ~0.80 (clearly in-progress), never near-full.
-  face_swap: { start: 0.55, end: 0.8, estMs: 30000 },
-  upload: { start: 0.8, end: 0.88, estMs: 5000 },
+  flux_render: { start: 0.28, end: 0.55, estMs: 14000, ceil: 0.62, tau: 18000 },
+  // The swap — the long tail on cast dreams. Long estimate + a slow creep toward
+  // ~0.92 so a multi-minute dual swap keeps inching up instead of freezing.
+  face_swap: { start: 0.55, end: 0.8, estMs: 30000, ceil: 0.92, tau: 45000 },
+  upload: { start: 0.8, end: 0.88, estMs: 5000, ceil: 0.94, tau: 8000 },
 };
 
 /**
  * Live fill fraction (0..1) for a dream given its status, current stage, and
  * when that stage started. `completed` → 1. A known stage fills across its band
- * over `estMs` and holds at the band end past that. Unknown/absent stage falls
- * back to a gentle floor.
+ * over `estMs`, then creeps asymptotically toward the band `ceil` if it overruns.
+ * Unknown/absent stage falls back to a gentle floor.
  */
 export function dreamProgressTarget(
   status: string | null | undefined,
@@ -65,6 +72,12 @@ export function dreamProgressTarget(
   if (!Number.isFinite(startedMs)) return band.start;
 
   const elapsed = Math.max(0, nowMs - startedMs);
-  const frac = Math.min(elapsed / band.estMs, 1);
-  return band.start + (band.end - band.start) * frac;
+  if (elapsed <= band.estMs) {
+    // Linear across the band over its estimate.
+    return band.start + (band.end - band.start) * (elapsed / band.estMs);
+  }
+  // Overrun: asymptotic creep from the band end toward its ceiling, so the ring
+  // keeps moving (slowly) on a stage that runs long, never sitting frozen.
+  const overrun = elapsed - band.estMs;
+  return band.end + (band.ceil - band.end) * (1 - Math.exp(-overrun / band.tau));
 }

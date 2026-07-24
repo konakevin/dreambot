@@ -25,6 +25,9 @@ import { PostTile } from '@/components/PostTile';
 import { PendingDreamTile } from '@/components/PendingDreamTile';
 import type { InFlightDream } from '@/hooks/useInFlightDreams';
 import { useAlbumStore } from '@/store/album';
+import { useRenderDockStore, FINISHED_RING_TTL_MS } from '@/store/renderDock';
+import { useDreamsSeenStore } from '@/store/dreamsSeen';
+import { isStaleInFlight } from '@/lib/dockItems';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
@@ -43,8 +46,10 @@ export type PostGridSource =
   | { type: 'hashtag'; tag: string };
 
 /** A grid cell is either a finished post or a "cooking" pending-dream slot woven
- *  in at the top (Dreams tab only). The `pending` discriminator narrows them. */
-type PendingSlot = { pending: InFlightDream };
+ *  in at the top (Dreams tab only). The `pending` discriminator narrows them.
+ *  `finished` is set for the brief completion beat — the same tile flips from an
+ *  active ring to one that fills to 100% + a check before the real image reveals. */
+type PendingSlot = { pending: InFlightDream; finished?: 'ready' | 'failed' };
 type GridItem = DreamPostItem | PendingSlot;
 const isPending = (item: GridItem): item is PendingSlot => 'pending' in item;
 
@@ -232,16 +237,101 @@ export function PostGrid({
     [activeQuery.data]
   );
 
+  // Recently-finished dreams (completion beat). Only the Dreams grid (non-posted
+  // filter) tracks renders, so only it consumes these. Each lingers ~1.7s so its
+  // ring can deliberately fill to 100% + check before the real image reveals.
+  const trackFinish = isDreams && dreamsFilter !== 'posted';
+  const finishedRings = useRenderDockStore((s) => s.finished);
+  const removeFinished = useRenderDockStore((s) => s.removeFinished);
+
+  // "New since last viewed" markers (migration 397): a Dreams-grid tile whose
+  // created_at is newer than the session baseline gets a "New" pill. Baseline is
+  // captured once on entering the Dreams sub-tab (profile.tsx), so it's stable
+  // across a detail-view round trip. Only the owner's Dreams grid marks.
+  const dreamsViewBaseline = useDreamsSeenStore((s) => s.viewBaseline);
+  const markNew = isDreams && !!dreamsViewBaseline;
+
+  // FlatList re-renders cells only when `data`/`extraData` change. Fold BOTH the
+  // selection set and the New-marker baseline in here so a baseline change (album
+  // opened → markers appear) actually repaints the tiles. Memoized so the ref is
+  // stable except when one of them genuinely changes.
+  const gridExtraData = useMemo(
+    () => ({ sel: selection?.selectedIds, vb: dreamsViewBaseline }),
+    [selection?.selectedIds, dreamsViewBaseline]
+  );
+
   // Weave "cooking" tiles into the top cells (Dreams tab only). They shift the
   // finished posts down by `pendingCount`, so highlight-scroll offsets by it.
-  const gridData: GridItem[] = useMemo(
-    () =>
-      pendingDreams.length > 0 ? [...pendingDreams.map((d) => ({ pending: d })), ...posts] : posts,
-    [pendingDreams, posts]
-  );
-  const pendingCount = pendingDreams.length;
+  // Ordering: newest-first (created_at DESC) so the grid reads newest → oldest
+  // consistently with `posts` (also newest-first).
+  //
+  // A dream that just completed becomes a `finished` slot at the SAME grid key
+  // (`pending-<jobId>`) it held while active, so its tile instance persists and
+  // the ring finishes in place. Its real image (upload_id) is SUPPRESSED from
+  // `posts` for that beat so the image doesn't pop in beside the finishing ring;
+  // when the finished entry clears (TTL below), the tile drops and the image
+  // takes its cell (Kevin 2026-07-23: fill to 100% then reveal, don't pop early).
+  const { pendingSlots, suppressedUploadIds } = useMemo(() => {
+    if (!trackFinish && pendingDreams.length === 0) {
+      return { pendingSlots: [] as PendingSlot[], suppressedUploadIds: new Set<string>() };
+    }
+    const finishedIds = new Set(trackFinish ? finishedRings.map((f) => f.jobId) : []);
+    // Drop zombie in-flight rows (a job that never terminated) here too, so a
+    // dead render can't leave a "cooking" tile spinning in the album forever —
+    // the same self-heal the dock uses (lib/dockItems).
+    const now = Date.now();
+    const activeSlots = pendingDreams
+      .filter((d) => !finishedIds.has(d.id) && !isStaleInFlight(d, now))
+      .map((d) => ({ createdAt: d.createdAt, slot: { pending: d } as PendingSlot }));
+    const completingSlots = trackFinish
+      ? finishedRings.map((f) => ({
+          createdAt: f.createdAt,
+          slot: {
+            pending: {
+              id: f.jobId,
+              status: 'completed',
+              currentStage: null,
+              stageUpdatedAt: null,
+              model: null,
+              createdAt: f.createdAt,
+              attemptCount: 0,
+            },
+            finished: f.kind,
+          } as PendingSlot,
+        }))
+      : [];
+    const combined = [...activeSlots, ...completingSlots].sort((a, b) =>
+      b.createdAt.localeCompare(a.createdAt)
+    );
+    const suppressed = new Set(
+      trackFinish ? finishedRings.map((f) => f.uploadId).filter((id): id is string => !!id) : []
+    );
+    return { pendingSlots: combined.map((c) => c.slot), suppressedUploadIds: suppressed };
+  }, [trackFinish, pendingDreams, finishedRings]);
+
+  const gridData: GridItem[] = useMemo(() => {
+    const visiblePosts =
+      suppressedUploadIds.size > 0 ? posts.filter((p) => !suppressedUploadIds.has(p.id)) : posts;
+    return pendingSlots.length > 0 ? [...pendingSlots, ...visiblePosts] : visiblePosts;
+  }, [pendingSlots, posts, suppressedUploadIds]);
+  const pendingCount = pendingSlots.length;
   const pendingCountRef = useRef(0);
   pendingCountRef.current = pendingCount;
+
+  // Drop each finished entry after its completion beat → the completing tile
+  // leaves and its (previously suppressed) image takes the cell. Scheduled off
+  // each entry's own timestamp so a burst of completions each expire on time,
+  // not reset by re-renders.
+  useEffect(() => {
+    if (!trackFinish || finishedRings.length === 0) return;
+    const timers = finishedRings.map((f) =>
+      setTimeout(
+        () => removeFinished(f.jobId),
+        Math.max(0, FINISHED_RING_TTL_MS - (Date.now() - f.at))
+      )
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [trackFinish, finishedRings, removeFinished]);
 
   const isLoading = activeQuery.isLoading;
   const hasNextPage = activeQuery.hasNextPage;
@@ -510,10 +600,10 @@ export function PostGrid({
         // reference on every toggle / enter / exit (profile.tsx rebuilds it), so
         // this one primitive-ish ref covers all selection transitions without the
         // old fresh-array-every-render that forced a full re-render each frame.
-        extraData={selection?.selectedIds}
+        extraData={gridExtraData}
         renderItem={({ item }) =>
           isPending(item) ? (
-            <PendingDreamTile dream={item.pending} />
+            <PendingDreamTile dream={item.pending} finished={item.finished} />
           ) : (
             <PostTile
               item={item}
@@ -521,6 +611,7 @@ export function PostGrid({
               albumSource={source}
               isHighlighted={!highlightDismissed && item.id === highlightPostId}
               showPrivateBadge={showPrivateBadge}
+              isNew={markNew && !!dreamsViewBaseline && item.created_at > dreamsViewBaseline}
               allPosts={posts}
               // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
               // React.memo holds — the old object literal here defeated memo and

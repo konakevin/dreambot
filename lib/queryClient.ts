@@ -32,6 +32,7 @@ const PERSISTED_ROOTS = new Set<string>([
   // 'dreamFeed' intentionally absent — see the cold-open note above.
   'inboxGrouped',
   'newNotificationCount',
+  'unseenDreamsCount',
   'dreamMediums',
   'dreamVibes',
 ]);

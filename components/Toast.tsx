@@ -47,6 +47,22 @@ interface ToastData {
    *  (instead of plain dismiss). Used to make a toast open the thing it's
    *  about (e.g. a finished dream). Swipe-up still dismisses with no action. */
   onPress?: () => void;
+  /** When true, this toast waits behind whatever's currently showing (and any
+   *  already queued) instead of replacing it — so a burst of independent "your
+   *  X is ready" notifications each show in FULL rather than stomping each other
+   *  (Kevin 2026-07-23). Default (false) keeps the replace behavior transient
+   *  flow toasts rely on (e.g. "Saving…" → "Saved" must replace, not queue). */
+  queue?: boolean;
+  /** Coalesce key. A toast arriving with the SAME key while a toast of that key
+   *  is already on screen MERGES into it — bumping a running count and refreshing
+   *  the timer — instead of queuing. Turns a burst of "your dream is ready" into
+   *  one "N dreams are ready" that grows as more land (Kevin 2026-07-23). */
+  coalesceKey?: string;
+  /** Message for the merged toast at N≥2, given the running count. */
+  coalesceMessage?: (count: number) => string;
+  /** Tap action for the merged toast (N≥2) — e.g. open the album rather than one
+   *  specific dream. Falls back to `onPress` if omitted. */
+  coalesceOnPress?: () => void;
 }
 
 type Listener = (data: ToastData) => void;
@@ -55,11 +71,24 @@ let listener: Listener | null = null;
 
 interface ToastOptions {
   onPress?: () => void;
+  queue?: boolean;
+  coalesceKey?: string;
+  coalesceMessage?: (count: number) => string;
+  coalesceOnPress?: () => void;
 }
 
 export const Toast = {
   show(message: string, icon?: string, duration = 3000, opts?: ToastOptions) {
-    listener?.({ message, icon, duration, onPress: opts?.onPress });
+    listener?.({
+      message,
+      icon,
+      duration,
+      onPress: opts?.onPress,
+      queue: opts?.queue,
+      coalesceKey: opts?.coalesceKey,
+      coalesceMessage: opts?.coalesceMessage,
+      coalesceOnPress: opts?.coalesceOnPress,
+    });
   },
 };
 
@@ -75,42 +104,114 @@ export function ToastHost() {
   // Current toast's tap action, kept in a ref so handleTap (a stable callback)
   // always reads the latest one without re-subscribing the gesture.
   const onPressRef = useRef<(() => void) | undefined>(undefined);
+  // Toasts waiting behind the one on screen (queue-mode arrivals). Drained one at
+  // a time when the current toast exits (timer, tap, or swipe).
+  const queueRef = useRef<ToastData[]>([]);
+  // Whether a toast is currently on screen — read synchronously (state is async)
+  // so a rapid second arrival knows to queue rather than stomp.
+  const activeRef = useRef(false);
+  // Coalescing: the on-screen toast's coalesce key + how many have merged into it
+  // (1 = just itself). A same-key arrival bumps the count instead of queuing.
+  const activeCoalesceKeyRef = useRef<string | undefined>(undefined);
+  const coalesceCountRef = useRef(1);
+  // Latest "show the next queued toast (or clear)" fn, so the gesture handlers
+  // (stable callbacks) can advance the queue without re-subscribing.
+  const advanceRef = useRef<() => void>(() => {});
   const insets = useSafeAreaInsets();
 
-  const dismiss = useCallback(() => {
-    setData(null);
-  }, []);
-
   useEffect(() => {
-    listener = (incoming) => {
+    // Function declarations (hoisted) so they can reference each other in any
+    // order (scheduleDismiss → advance → present).
+    function scheduleDismiss(duration: number) {
       if (timer.current) clearTimeout(timer.current);
-      onPressRef.current = incoming.onPress;
-      setData(incoming);
-      // Spring entry — slight overshoot reads as the "cute" beat Kevin asked
-      // for without ever crossing into wiggly / clown-y territory.
+      timer.current = setTimeout(() => {
+        translateY.value = withTiming(-40, { duration: 220, easing: Easing.in(Easing.cubic) });
+        opacity.value = withTiming(0, { duration: 220, easing: Easing.in(Easing.cubic) });
+        // After the exit anim, reset off-screen and show the next queued toast
+        // (or clear) so the entry spring restarts cleanly from rest.
+        setTimeout(() => {
+          translateY.value = -120;
+          scale.value = 0.94;
+          runOnJS(advance)();
+        }, 260);
+      }, duration);
+    }
+
+    function present(toast: ToastData) {
+      onPressRef.current = toast.onPress;
+      activeRef.current = true;
+      activeCoalesceKeyRef.current = toast.coalesceKey;
+      coalesceCountRef.current = 1;
+      setData(toast);
+      // Spring entry — slight overshoot reads as the "cute" beat Kevin asked for
+      // without ever crossing into wiggly / clown-y territory.
       translateY.value = withSpring(0, { damping: 18, stiffness: 220, mass: 0.7 });
       scale.value = withSequence(
         withSpring(1.02, { damping: 15, stiffness: 220, mass: 0.6 }),
         withSpring(1, { damping: 18, stiffness: 260, mass: 0.6 })
       );
       opacity.value = withTiming(1, { duration: 180, easing: Easing.out(Easing.cubic) });
+      scheduleDismiss(toast.duration ?? 3000);
+    }
 
-      timer.current = setTimeout(() => {
-        translateY.value = withTiming(-40, { duration: 220, easing: Easing.in(Easing.cubic) });
-        opacity.value = withTiming(0, { duration: 220, easing: Easing.in(Easing.cubic) });
-        // After the exit anim, fully unmount so the next show() restarts the
-        // entry spring cleanly from off-screen rest.
-        setTimeout(() => {
-          translateY.value = -120;
-          scale.value = 0.94;
-          runOnJS(dismiss)();
-        }, 260);
-      }, incoming.duration ?? 3000);
+    // Merge a same-key arrival into the on-screen toast: bump the count, rewrite
+    // the message, swap in the group tap action, refresh the timer, and pop the
+    // scale a touch so the changed count catches the eye (no full re-entry).
+    function coalesce(incoming: ToastData) {
+      const n = coalesceCountRef.current + 1;
+      coalesceCountRef.current = n;
+      onPressRef.current = incoming.coalesceOnPress ?? incoming.onPress;
+      const message = incoming.coalesceMessage ? incoming.coalesceMessage(n) : incoming.message;
+      setData((d) => (d ? { ...d, message, icon: incoming.icon ?? d.icon } : d));
+      scale.value = withSequence(
+        withSpring(1.05, { damping: 14, stiffness: 260, mass: 0.5 }),
+        withSpring(1, { damping: 18, stiffness: 260, mass: 0.6 })
+      );
+      scheduleDismiss(incoming.duration ?? 3000);
+    }
+
+    function advance() {
+      const next = queueRef.current.shift();
+      if (next) {
+        present(next);
+      } else {
+        activeRef.current = false;
+        activeCoalesceKeyRef.current = undefined;
+        setData(null);
+      }
+    }
+
+    // Exposed for the gesture handlers: skip the current toast → next (or clear).
+    advanceRef.current = () => {
+      if (timer.current) clearTimeout(timer.current);
+      advance();
+    };
+
+    listener = (incoming) => {
+      // Coalesce-mode: a same-key toast arriving while its group is on screen
+      // merges into a running count ("2 dreams are ready") instead of queuing.
+      if (
+        incoming.coalesceKey &&
+        activeRef.current &&
+        activeCoalesceKeyRef.current === incoming.coalesceKey
+      ) {
+        coalesce(incoming);
+        return;
+      }
+      // Queue-mode: if a toast is already showing, wait behind it (and anything
+      // already queued) so independent notifications don't clobber each other.
+      // Cap the backlog so a big simultaneous burst can't stack up for a minute.
+      if (incoming.queue && activeRef.current) {
+        if (queueRef.current.length < 4) queueRef.current.push(incoming);
+        return;
+      }
+      // Default (or nothing showing): present now, replacing whatever's up.
+      present(incoming);
     };
     return () => {
       listener = null;
     };
-  }, [dismiss, translateY, opacity, scale]);
+  }, [translateY, opacity, scale]);
 
   const animStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }, { scale: scale.value }],
@@ -120,6 +221,10 @@ export function ToastHost() {
   const clearTimer = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
   }, []);
+
+  // Stable wrapper so the gesture handlers can advance the queue (show the next
+  // toast, or clear) after dismissing the current one.
+  const advanceNext = useCallback(() => advanceRef.current(), []);
 
   const handleTap = useCallback(() => {
     // Tap: fire the optional action (e.g. open the finished dream) THEN
@@ -133,9 +238,9 @@ export function ToastHost() {
     setTimeout(() => {
       translateY.value = -120;
       scale.value = 0.94;
-      dismiss();
+      advanceNext();
     }, 200);
-  }, [clearTimer, translateY, opacity, scale, dismiss]);
+  }, [clearTimer, translateY, opacity, scale, advanceNext]);
 
   // Swipe-up-to-dismiss — the toast exits upward, so an upward flick throws it
   // out the way it leaves. Downward drag is heavily damped (rubber-band) so it
@@ -158,7 +263,7 @@ export function ToastHost() {
           (finished) => {
             if (finished) {
               scale.value = 0.94;
-              runOnJS(dismiss)();
+              runOnJS(advanceNext)();
             }
           }
         );

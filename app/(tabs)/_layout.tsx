@@ -17,6 +17,7 @@ import { useExploreStore } from '@/store/explore';
 import { ANIM, colors } from '@/constants/theme';
 import { verticalScale } from '@/lib/responsive';
 import { useNewNotificationCount } from '@/hooks/useNewNotificationCount';
+import { useUnseenDreamsCount } from '@/hooks/useUnseenDreamsCount';
 import { RenderDock } from '@/components/RenderDock';
 
 const ReanimatedView = Reanimated.View;
@@ -75,18 +76,18 @@ function ProfileTabIcon({
   color,
   size,
   focused,
-  unreadCount,
+  showDot,
 }: {
   color: string;
   size: number;
   focused: boolean;
-  unreadCount: number;
+  showDot: boolean;
 }) {
   return (
     <View>
       {/* Filled when active, outline at rest — matches every other tab. */}
       <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
-      {unreadCount > 0 && <View style={tabStyles.dot} />}
+      {showDot && <View style={tabStyles.dot} />}
     </View>
   );
 }
@@ -108,6 +109,11 @@ export default function TabLayout() {
   // badge), so the home-screen badge and this profile-tab dot are always
   // identical.
   const { data: unreadCount = 0 } = useNewNotificationCount();
+  // Same idea for unseen dream renders (migration 397): manual dreams don't hit
+  // the inbox (migration 396), so they'd never dot the Profile tab via the
+  // notification count. OR the two so the dot means "something new in here."
+  // Subscribed at layout level for the same tab-bar propagation reason.
+  const { data: unseenDreams = 0 } = useUnseenDreamsCount();
   const insets = useSafeAreaInsets();
   // Tab-bar bottom padding: prefer the safe-area inset (home indicator on
   // newer phones), fall back to a sensible floor so icons don't sit flush
@@ -138,8 +144,10 @@ export default function TabLayout() {
         >
           {/* Render dock — the "N dreams cooking" pill, floated just above the
             bar. Fades with the tab bar (this wrapper's opacity/pointerEvents) so
-            it never clutters the immersive feed. */}
-          <RenderDock bottomOffset={tabBarApproxHeight} />
+            it never clutters the immersive feed. A small gap above the bar lets
+            it read as its own floating element, not a second nav row, and keeps
+            its tap target clear of the tab icons (Kevin 2026-07-23). */}
+          <RenderDock bottomOffset={tabBarApproxHeight + verticalScale(8)} />
           {/* Default bottom tab bar from Expo Router */}
           <BottomTabBar {...props} />
         </Animated.View>
@@ -274,7 +282,12 @@ export default function TabLayout() {
             paddingBottom: tabBarBottomPad,
           },
           tabBarIcon: ({ color, size, focused }) => (
-            <ProfileTabIcon color={color} size={size} focused={focused} unreadCount={unreadCount} />
+            <ProfileTabIcon
+              color={color}
+              size={size}
+              focused={focused}
+              showDot={unreadCount > 0 || unseenDreams > 0}
+            />
           ),
         }}
         listeners={{

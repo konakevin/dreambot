@@ -31,6 +31,10 @@ interface PostTileProps {
   albumSource?: PostGridSource;
   isHighlighted?: boolean;
   showPrivateBadge?: boolean;
+  /** Dreams album only: this render finished since the user last viewed the
+   *  album (created_at > session baseline) — shows a small "New" pill for the
+   *  visit. Cleared on the next visit. See store/dreamsSeen + migration 397. */
+  isNew?: boolean;
   // Full posts array for this grid — passed down from PostGrid so tap can
   // stash it in the album store without re-fetching. Reference-stable
   // (memoized at PostGrid level) so memo'd PostTile doesn't re-render.
@@ -60,6 +64,7 @@ export const PostTile = memo(function PostTile({
   albumSource,
   isHighlighted = false,
   showPrivateBadge = false,
+  isNew = false,
   allPosts,
   width = TILE_WIDTH,
   selActive = false,
@@ -181,6 +186,14 @@ export const PostTile = memo(function PostTile({
       {(item.media_count ?? 1) > 1 && (
         <View style={styles.stackBadge} pointerEvents="none">
           <Ionicons name="copy-outline" size={14} color="#FFFFFF" />
+        </View>
+      )}
+      {/* "New" pill — a render that finished since the user last opened the
+          Dreams album. Top-left accent pill so it's distinct from the bottom-
+          right "Public" badge; clears on the next visit (migration 397). */}
+      {isNew && (
+        <View style={styles.newBadge} pointerEvents="none">
+          <Text style={styles.newBadgeText}>New</Text>
         </View>
       )}
       {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
@@ -375,6 +388,25 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(10),
     fontWeight: '800',
+  },
+  newBadge: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    paddingHorizontal: 7,
+    paddingVertical: verticalScale(2.5),
+    borderRadius: 999,
+    backgroundColor: colors.accent,
+    shadowColor: '#000',
+    shadowOpacity: 0.35,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  newBadgeText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(10),
+    fontWeight: '800',
+    letterSpacing: 0.3,
   },
   // Multi-select overlays — accent ring + dim on selected tiles; the badge
   // circle top-right flips from hollow (unselected) to accent-filled + check.

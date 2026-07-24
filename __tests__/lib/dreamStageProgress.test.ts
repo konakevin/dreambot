@@ -20,12 +20,17 @@ describe('dreamProgressTarget', () => {
     expect(later).toBeGreaterThan(mid);
   });
 
-  it('HOLDS at the band end (well below full) when the stage overruns — never looks "done"', () => {
-    // Way past the estimate — must clamp to the band end, never exceed it, and
-    // that ceiling stays clearly below 1.0 so an active ring never reads as full.
-    const overrun = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 10 * 60_000);
-    expect(overrun).toBeCloseTo(0.8, 5);
-    expect(overrun).toBeLessThan(0.9);
+  it('keeps CREEPING past the band end on overrun (never frozen) but stays below full', () => {
+    // Past the estimate the fill no longer freezes at the band end — it creeps
+    // asymptotically toward the band ceiling (face_swap ceil 0.92) so a slow swap
+    // never looks stuck, while staying clearly below 1.0 (only real completion
+    // fills to 1). Monotonic and bounded.
+    const justPast = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 60_000);
+    const wayPast = dreamProgressTarget('in_progress', 'face_swap', iso(T0), T0 + 10 * 60_000);
+    expect(justPast).toBeGreaterThan(0.8); // moved past the band end, not frozen
+    expect(wayPast).toBeGreaterThan(justPast); // still advancing
+    expect(wayPast).toBeLessThanOrEqual(0.92); // toward the ceiling, never beyond
+    expect(wayPast).toBeLessThan(1); // an active ring never reads as done
   });
 
   it('advances monotonically across stages (render -> swap -> upload)', () => {

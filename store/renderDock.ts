@@ -15,6 +15,12 @@ import { create } from 'zustand';
 /** Height of the dock band above the tab bar when visible. */
 export const DOCK_HEIGHT = 48;
 
+/** How long a finished ring lingers after completion — long enough for the ring
+ *  to deliberately fill to 100% + show its check before it drops off (dock pill)
+ *  and, in the album, before the real image is revealed in its place. Shared by
+ *  the dock and the Dreams grid so the completing tile and the pill stay in step. */
+export const FINISHED_RING_TTL_MS = 1700;
+
 export interface FinishedRing {
   /** dream_queue.id (== job id). */
   jobId: string;
@@ -22,6 +28,11 @@ export interface FinishedRing {
   /** dream_queue.created_at — used to keep a completing ring in the SAME slot it
    *  held while active (so it doesn't jump position as it finishes). */
   createdAt: string;
+  /** dream_queue.upload_id of the finished render (null on failure). The Dreams
+   *  album uses it to SUPPRESS the freshly-arrived post while its completing tile
+   *  plays the ring finish, so the ring completes in place instead of the image
+   *  popping in beside it, then reveals the real post when the entry clears. */
+  uploadId?: string | null;
   /** ms timestamp raised (for dedup). */
   at: number;
 }

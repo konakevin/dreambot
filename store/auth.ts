@@ -7,6 +7,7 @@ import { useOnboardingStore } from '@/store/onboarding';
 import { useDreamStore } from '@/store/dream';
 import { useAlbumStore } from '@/store/album';
 import { useExploreStore } from '@/store/explore';
+import { useDreamsSeenStore } from '@/store/dreamsSeen';
 import { queryClient, asyncStoragePersister } from '@/lib/queryClient';
 import {
   isProActive,
@@ -133,6 +134,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     useDreamStore.getState().reset();
     useAlbumStore.getState().clearAlbum();
     useExploreStore.getState().clearPending();
+    useDreamsSeenStore.getState().setViewBaseline(null);
     // Clear TanStack Query cache — in-memory AND the persisted-to-disk copy, so
     // the next user on this shared device can't restore the previous user's feed
     // on cold start.

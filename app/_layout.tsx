@@ -293,14 +293,33 @@ function maybeShowNotificationToast(row: NotificationRowLike | null | undefined)
 
   // Dreams (manual + nightly) DO toast on completion — the transient "your dream
   // is ready" popup is a separate signal from the inbox (which dreams LEFT in
-  // migration 396) and complements the render dock. They fall through to the
-  // generic Toast.show below, whose action (kind 'route') opens the finished
-  // dream. (A burst of simultaneous completions shows the last toast; the dock's
-  // per-ring completion covers the multi case — re-add a coalescer here if that
-  // ever reads as noisy.)
-
-  // A touch longer than the default so there's comfortable time to tap.
-  Toast.show(spec.message, spec.icon, 4500, { onPress: () => runToastAction(spec.action) });
+  // migration 396) and complements the render dock. Its action (kind 'route')
+  // opens the finished dream.
+  //
+  // Longer than the default so there's comfortable time to read + tap, and
+  // queue: true so distinct notifications each show in FULL instead of stomping
+  // each other / dropping (Kevin 2026-07-23). The "your dream is ready" and
+  // "your HQ download is ready" toasts share this duration so they stay in step.
+  //
+  // Dream-ready toasts ALSO coalesce (Kevin 2026-07-23): if more dreams finish
+  // while one is still on screen, they merge into a single "N dreams are ready"
+  // that grows the count + refreshes the timer, instead of a train of separate
+  // toasts. The merged tap opens the album (it's about several dreams, not one).
+  const isDream = row.type === 'dream_generated';
+  Toast.show(spec.message, spec.icon, 4500, {
+    onPress: () => runToastAction(spec.action),
+    queue: true,
+    ...(isDream
+      ? {
+          coalesceKey: 'dream_ready',
+          coalesceMessage: (n: number) => `${n} dreams are ready`,
+          coalesceOnPress: () => {
+            useRenderDockStore.getState().requestDreamsTab();
+            nav.navigate('/(tabs)/profile');
+          },
+        }
+      : {}),
+  });
 }
 
 function RealtimeSubscriber() {
@@ -387,7 +406,10 @@ function RealtimeSubscriber() {
             refetchType: 'all',
             predicate: (query) => {
               const key = query.queryKey[0];
-              return key === 'userPosts' || key === 'my-dreams';
+              // 'unseenDreamsCount' (mig 397): a new/removed dream upload changes
+              // the "new since last viewed" count that drives the Profile + Dreams
+              // dots. refetchType 'all' so the off-screen tab bar dot updates too.
+              return key === 'userPosts' || key === 'my-dreams' || key === 'unseenDreamsCount';
             },
           });
         }
@@ -406,14 +428,30 @@ function RealtimeSubscriber() {
             id?: string;
             status?: string;
             created_at?: string;
+            upload_id?: string | null;
           } | null;
           if (row?.id && (row.status === 'completed' || row.status === 'dead_letter')) {
-            useRenderDockStore.getState().pushFinished({
-              jobId: row.id,
-              kind: row.status === 'completed' ? 'ready' : 'failed',
-              createdAt: row.created_at ?? new Date().toISOString(),
-              at: Date.now(),
-            });
+            // Only play a finished ring when the job is TRANSITIONING out of the
+            // in-flight set — it's still in the cached active list at the instant
+            // this terminal event arrives (the invalidation below refetches it
+            // away). Guards against a NON-transition UPDATE re-firing this: later
+            // deleting that finished dream's album pic nulls dream_queue.upload_id
+            // (FK ON DELETE SET NULL), which emits a dream_queue UPDATE whose
+            // status is STILL 'completed'. Without this check that flashed a
+            // phantom "ready" ring on the dock every time Kevin deleted a pic
+            // (2026-07-23). A job we never tracked live (finished while the app
+            // was closed) also correctly gets no ring — it just appears in the album.
+            const active = queryClient.getQueryData<{ id: string }[]>(['inFlightDreams', user.id]);
+            const wasInFlight = active?.some((d) => d.id === row.id) ?? false;
+            if (wasInFlight) {
+              useRenderDockStore.getState().pushFinished({
+                jobId: row.id,
+                kind: row.status === 'completed' ? 'ready' : 'failed',
+                createdAt: row.created_at ?? new Date().toISOString(),
+                uploadId: row.upload_id ?? null,
+                at: Date.now(),
+              });
+            }
           }
           // Drive the render dock + album pending tiles (useInFlightDreams).
           // Any INSERT (enqueue) / UPDATE (stage advance, terminal) / DELETE
@@ -610,6 +648,9 @@ function DataPrefetcher() {
       // re-open. Cheap RPC, always worth it for badge correctness.
       if (user) {
         queryClient.invalidateQueries({ queryKey: ['newNotificationCount', user.id] });
+        // Same for the unseen-dreams count (mig 397) → the Profile + Dreams dots,
+        // in case a dream finished while backgrounded (realtime doesn't replay).
+        queryClient.invalidateQueries({ queryKey: ['unseenDreamsCount', user.id] });
       }
 
       // Recover dreams that COMPLETED while the app was backgrounded. Realtime

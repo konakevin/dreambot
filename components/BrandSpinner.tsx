@@ -8,7 +8,7 @@
  * ActivityIndicator. Pure Reanimated on the UI thread; safe anywhere
  * (no native deps beyond reanimated).
  */
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -90,7 +90,12 @@ function Dot({
 // so the pull-to-refresh minis didn't look like miniatures of the loader.
 const BASE_SIZE = 44;
 
-export function BrandSpinner({ size = BASE_SIZE }: { size?: number }) {
+// Memoized: `size` is effectively constant per mount, so once mounted the
+// spinner never needs to re-render. Without this, a parent that re-renders on a
+// timer (the album pending tile ticks its progress every 400ms) reconciles all
+// 8 animated dots each tick, re-attaching their worklets mid-spin — which read
+// as a stutter (Kevin 2026-07-23 "very janky, doesn't spin smoothly").
+export const BrandSpinner = memo(function BrandSpinner({ size = BASE_SIZE }: { size?: number }) {
   const spin = useSharedValue(0);
   useEffect(() => {
     // 1540ms ≈ 10% slower than the original 1400 (Kevin 2026-07-09).
@@ -120,4 +125,4 @@ export function BrandSpinner({ size = BASE_SIZE }: { size?: number }) {
       </View>
     </View>
   );
-}
+});

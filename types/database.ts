@@ -6,6 +6,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       action_poses: {
@@ -567,9 +592,12 @@ export type Database = {
         Row: {
           active_conn: number | null;
           by_application: Json | null;
+          by_client_addr: Json | null;
           by_wait_event: Json | null;
           captured_at: string;
+          connections: Json | null;
           id: number;
+          idle_age_by_application: Json | null;
           idle_conn: number | null;
           idle_in_txn_conn: number | null;
           lock_waiters: number | null;
@@ -578,14 +606,18 @@ export type Database = {
           longest_idle_txn_query: string | null;
           longest_idle_txn_secs: number | null;
           max_connections: number | null;
+          oldest_idle_secs: number | null;
           total_conn: number | null;
         };
         Insert: {
           active_conn?: number | null;
           by_application?: Json | null;
+          by_client_addr?: Json | null;
           by_wait_event?: Json | null;
           captured_at?: string;
+          connections?: Json | null;
           id?: number;
+          idle_age_by_application?: Json | null;
           idle_conn?: number | null;
           idle_in_txn_conn?: number | null;
           lock_waiters?: number | null;
@@ -594,14 +626,18 @@ export type Database = {
           longest_idle_txn_query?: string | null;
           longest_idle_txn_secs?: number | null;
           max_connections?: number | null;
+          oldest_idle_secs?: number | null;
           total_conn?: number | null;
         };
         Update: {
           active_conn?: number | null;
           by_application?: Json | null;
+          by_client_addr?: Json | null;
           by_wait_event?: Json | null;
           captured_at?: string;
+          connections?: Json | null;
           id?: number;
+          idle_age_by_application?: Json | null;
           idle_conn?: number | null;
           idle_in_txn_conn?: number | null;
           lock_waiters?: number | null;
@@ -610,6 +646,7 @@ export type Database = {
           longest_idle_txn_query?: string | null;
           longest_idle_txn_secs?: number | null;
           max_connections?: number | null;
+          oldest_idle_secs?: number | null;
           total_conn?: number | null;
         };
         Relationships: [];
@@ -1081,6 +1118,7 @@ export type Database = {
           pet_words: string;
           photo_preprocess_quality: number;
           photo_preprocess_width: number;
+          pro_hd_downloads_per_month: number;
           pro_monthly_sparkle_bundle: number;
           pro_trial_days: number;
           prompt_max_length: number;
@@ -1147,6 +1185,7 @@ export type Database = {
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
+          pro_hd_downloads_per_month?: number;
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
@@ -1213,6 +1252,7 @@ export type Database = {
           pet_words?: string;
           photo_preprocess_quality?: number;
           photo_preprocess_width?: number;
+          pro_hd_downloads_per_month?: number;
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
@@ -2806,6 +2846,7 @@ export type Database = {
           banned_by: string | null;
           basic_subscription: boolean;
           basic_subscription_expires_at: string | null;
+          basic_subscription_will_renew: boolean;
           bio: string | null;
           confirm_surprise_dream: boolean;
           created_at: string;
@@ -2821,6 +2862,7 @@ export type Database = {
           is_bot: boolean;
           is_public: boolean;
           last_active_at: string | null;
+          last_dreams_view_at: string;
           last_inbox_view_at: string | null;
           pro_mode_flux_model: string;
           pro_subscription: boolean;
@@ -2839,6 +2881,7 @@ export type Database = {
           banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
+          basic_subscription_will_renew?: boolean;
           bio?: string | null;
           confirm_surprise_dream?: boolean;
           created_at?: string;
@@ -2854,6 +2897,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          last_dreams_view_at?: string;
           last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
@@ -2872,6 +2916,7 @@ export type Database = {
           banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
+          basic_subscription_will_renew?: boolean;
           bio?: string | null;
           confirm_surprise_dream?: boolean;
           created_at?: string;
@@ -2887,6 +2932,7 @@ export type Database = {
           is_bot?: boolean;
           is_public?: boolean;
           last_active_at?: string | null;
+          last_dreams_view_at?: string;
           last_inbox_view_at?: string | null;
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
@@ -2920,6 +2966,22 @@ export type Database = {
     };
     Functions: {
       admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
+      admin_db_connections: {
+        Args: never;
+        Returns: {
+          application_name: string;
+          backend_type: string;
+          client_addr: string;
+          pid: number;
+          query: string;
+          secs_connected: number;
+          secs_idle: number;
+          state: string;
+          usename: string;
+          wait_event: string;
+          wait_event_type: string;
+        }[];
+      };
       admin_delete_comment: {
         Args: { p_comment_id: string };
         Returns: undefined;
@@ -3210,6 +3272,7 @@ export type Database = {
           description: string;
           dream_medium: string;
           dream_vibe: string;
+          face_swap_mode: string;
           feed_score: number;
           height: number;
           id: string;
@@ -3483,6 +3546,7 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: number;
       };
+      get_unseen_dreams_count: { Args: { p_user_id: string }; Returns: number };
       gift_sparkles: {
         Args: {
           p_amount: number;
@@ -3500,6 +3564,7 @@ export type Database = {
       is_dream_eligible: { Args: { p_user_id: string }; Returns: boolean };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
       list_my_upload_paths: { Args: never; Returns: string[] };
+      mark_dreams_viewed: { Args: { p_user_id: string }; Returns: string };
       mark_group_seen: {
         Args: { p_group_key: string; p_user_id: string };
         Returns: undefined;
@@ -3722,6 +3787,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],

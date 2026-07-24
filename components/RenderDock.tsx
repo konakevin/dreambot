@@ -10,7 +10,7 @@
  * fades with the HUD on the immersive feed. See DREAM_TRACKING_PLAN.md.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { StyleSheet, Pressable, View } from 'react-native';
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import { Image } from 'expo-image';
@@ -23,13 +23,16 @@ import { colors } from '@/constants/theme';
 import { fontScale, verticalScale } from '@/lib/responsive';
 import { useInFlightDreams, type InFlightDream } from '@/hooks/useInFlightDreams';
 import { useDreamProgress } from '@/hooks/useDreamProgress';
-import { DOCK_HEIGHT, useRenderDockStore } from '@/store/renderDock';
+import { DOCK_HEIGHT, FINISHED_RING_TTL_MS, useRenderDockStore } from '@/store/renderDock';
+import { deriveDockItems } from '@/lib/dockItems';
 
 const MASCOT = require('@/assets/images/icon.png');
 const MAX_RINGS = 5;
 const RING_SIZE = 26;
 const RING_STROKE = 3;
-const FINISHED_TTL_MS = 1500;
+// How often to re-evaluate the staleness cutoff while dreams are in flight, so a
+// zombie ring ages out and the dock self-heals without waiting on another event.
+const STALE_TICK_MS = 30_000;
 
 /** One dream's ring — persists across active → complete (SAME instance, keyed by
  *  jobId), so its fill CARRIES OVER: on completion the arc animates from the held
@@ -38,22 +41,15 @@ const FINISHED_TTL_MS = 1500;
 function DreamRing({
   dream,
   finishedKind,
-  onExpire,
 }: {
   dream: InFlightDream | null;
   finishedKind: 'ready' | 'failed' | null;
-  onExpire: () => void;
 }) {
   const { target } = useDreamProgress(
     dream ?? { status: null, currentStage: null, stageUpdatedAt: null }
   );
   const state =
     finishedKind === 'ready' ? 'complete' : finishedKind === 'failed' ? 'failed' : 'active';
-  useEffect(() => {
-    if (!finishedKind) return;
-    const id = setTimeout(onExpire, FINISHED_TTL_MS);
-    return () => clearTimeout(id);
-  }, [finishedKind, onExpire]);
   return (
     <ProgressRing
       size={RING_SIZE}
@@ -65,13 +61,6 @@ function DreamRing({
   );
 }
 
-interface DockItem {
-  jobId: string;
-  createdAt: string;
-  dream: InFlightDream | null;
-  finishedKind: 'ready' | 'failed' | null;
-}
-
 export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
   const { data: inFlight = [] } = useInFlightDreams();
   const finished = useRenderDockStore((s) => s.finished);
@@ -79,28 +68,43 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
   const setDockHeight = useRenderDockStore((s) => s.setDockHeight);
   const requestDreamsTab = useRenderDockStore((s) => s.requestDreamsTab);
 
-  // A dream that just went terminal is briefly in BOTH sets (finished pushed by
-  // realtime before useInFlightDreams refetches) — dedup by jobId; finished wins.
-  const finishedIds = new Set(finished.map((f) => f.jobId));
-  const active = inFlight.filter((d) => !finishedIds.has(d.id));
+  // Re-render on a slow tick while anything is in flight, so deriveDockItems'
+  // staleness cutoff is re-evaluated even when nothing else changes — that's what
+  // lets a zombie ring (a job that never reaches a terminal state: worker crash,
+  // a terminal write that never landed, a missed realtime event) age out so the
+  // dock self-heals instead of sitting on a phantom "rendering" ring forever.
+  const [, tick] = useReducer((n: number) => n + 1, 0);
+  const hasInFlight = inFlight.length > 0;
+  useEffect(() => {
+    if (!hasInFlight) return;
+    const id = setInterval(tick, STALE_TICK_MS);
+    return () => clearInterval(id);
+  }, [hasInFlight]);
 
-  // Unified, jobId-keyed, createdAt-ordered list so a ring KEEPS ITS SLOT (no
-  // position jump) AND its ProgressRing instance (no fill reset) as it goes
-  // active → complete.
-  const items: DockItem[] = [
-    ...active.map((d) => ({
-      jobId: d.id,
-      createdAt: d.createdAt,
-      dream: d as InFlightDream | null,
-      finishedKind: null as 'ready' | 'failed' | null,
-    })),
-    ...finished.map((f) => ({
-      jobId: f.jobId,
-      createdAt: f.createdAt,
-      dream: null as InFlightDream | null,
-      finishedKind: f.kind as 'ready' | 'failed' | null,
-    })),
-  ].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  // Robustly drain finished rings: schedule removal for EVERY finished entry off
+  // its own timestamp — not just the ≤5 that are rendered — so an overflow ring,
+  // or one recorded while the dock was unmounted, can never linger in the store
+  // and hold the dock open. Declared BEFORE the early return so it runs even when
+  // the dock shows nothing; removeFinished is idempotent. (Replaces the old
+  // per-ring onExpire timer, which only fired for a mounted, in-view ring.)
+  useEffect(() => {
+    if (finished.length === 0) return;
+    const timers = finished.map((f) =>
+      setTimeout(
+        () => removeFinished(f.jobId),
+        Math.max(0, FINISHED_RING_TTL_MS - (Date.now() - f.at))
+      )
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [finished, removeFinished]);
+
+  // Unified, jobId-keyed, createdAt-ordered list. deriveDockItems dedups a job
+  // that's briefly active+finished (finished wins), drops finished rings past
+  // their TTL, and — critically — drops in-flight jobs idle past the stale window
+  // so a dead render can't pin the dock open (see lib/dockItems + its tests).
+  const items = deriveDockItems(inFlight, finished, Date.now(), {
+    finishedTtlMs: FINISHED_RING_TTL_MS,
+  });
 
   const visible = items.length > 0;
 
@@ -131,12 +135,7 @@ export function RenderDock({ bottomOffset }: { bottomOffset: number }) {
         <Image source={MASCOT} style={styles.mascot} contentFit="cover" />
         <View style={styles.rings}>
           {shown.map((it) => (
-            <DreamRing
-              key={it.jobId}
-              dream={it.dream}
-              finishedKind={it.finishedKind}
-              onExpire={() => removeFinished(it.jobId)}
-            />
+            <DreamRing key={it.jobId} dream={it.dream} finishedKind={it.finishedKind} />
           ))}
         </View>
         {overflow > 0 ? <Text style={styles.overflow}>+{overflow}</Text> : null}
