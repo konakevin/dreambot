@@ -305,26 +305,32 @@ export default function ProfileScreen() {
   const markDreamsViewed = useMarkDreamsViewed();
   const setDreamsViewBaseline = useDreamsSeenStore((s) => s.setViewBaseline);
 
-  // On OPENING the Dreams sub-tab: capture the pre-view timestamp as the New-
-  // marker baseline (mark returns the previous last_dreams_view_at) and advance
-  // the mark to now — clearing the dots. On LEAVING, advance again so a render
-  // that finished while they watched counts as seen (baseline untouched).
+  // On OPENING the Dreams sub-tab (focused): capture the pre-view timestamp as
+  // the New-marker baseline (mark returns the previous last_dreams_view_at) and
+  // advance the mark to now — clearing the dots + showing "New" on renders since
+  // last visit. On LEAVING the album — a sub-tab switch, a tab-bar nav away, OR
+  // tapping a tile into full screen — CLEAR the markers so they're gone and can't
+  // flash on return, and advance the mark again so a render that finished while
+  // viewing counts as seen (Kevin 2026-07-24: "clear them on blur").
   //
-  // Keyed on activeTab (NOT useFocusEffect): a detail-view round trip (tap a
-  // tile → view → back) is a router push that does NOT change activeTab, so it
-  // must NOT re-capture the baseline and wipe the markers the user is looking at.
-  // A real sub-tab switch (Posts↔Dreams) is a genuine new visit and re-captures.
-  useEffect(() => {
-    if (activeTab !== 'dreams') return;
-    let cancelled = false;
-    markDreamsViewed().then((prev) => {
-      if (!cancelled) setDreamsViewBaseline(prev);
-    });
-    return () => {
-      cancelled = true;
-      markDreamsViewed();
-    };
-  }, [activeTab, markDreamsViewed, setDreamsViewBaseline]);
+  // useFocusEffect (not useEffect): its cleanup runs on screen BLUR, which is
+  // exactly "left the album" — including the detail-view push. So tapping a tile
+  // clears the badges too, which Kevin was fine with ("if I see them and leave,
+  // clear all of them").
+  useFocusEffect(
+    useCallback(() => {
+      if (activeTab !== 'dreams') return undefined;
+      let cancelled = false;
+      markDreamsViewed().then((prev) => {
+        if (!cancelled) setDreamsViewBaseline(prev);
+      });
+      return () => {
+        cancelled = true;
+        setDreamsViewBaseline(null);
+        void markDreamsViewed();
+      };
+    }, [activeTab, markDreamsViewed, setDreamsViewBaseline])
+  );
 
   // The render dock routes here on tap and asks for the Dreams sub-tab (where
   // the pending/finished tiles live). Read the request from the store at FOCUS
@@ -447,11 +453,18 @@ export default function ProfileScreen() {
   // Grid pulls refresh the WHOLE profile (header counts/bio/avatar), not just
   // the grid's posts — PostGrid awaits this alongside its own invalidation.
   const refreshHeaderData = useCallback(async () => {
+    // A pull-to-refresh on the Dreams tab counts as "seen everything now" → clear
+    // the New markers + advance the mark (Kevin 2026-07-24: pull-refresh should
+    // definitely clear them).
+    if (activeTab === 'dreams') {
+      setDreamsViewBaseline(null);
+      void markDreamsViewed();
+    }
     await Promise.all([
       refetchProfile(),
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] }),
     ]);
-  }, [refetchProfile, queryClient]);
+  }, [refetchProfile, queryClient, activeTab, markDreamsViewed, setDreamsViewBaseline]);
 
   function handleFollowUser(targetId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

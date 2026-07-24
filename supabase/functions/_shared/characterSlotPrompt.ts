@@ -586,16 +586,28 @@ export function assembleCharacterPrompt(
   // Gender lock SHOUTED at position 1. Non-negotiable for dual.
   const genderLock = `${left.gender.toUpperCase()} on the LEFT, ${right.gender.toUpperCase()} on the RIGHT`;
 
-  // Dual anchor — positive phrasing, no negatives
+  // Dual anchor — positive phrasing. Head separation stated EARLY (this lands at
+  // assembly position 4, ahead of the framing block) so it can counter the
+  // pull-together tokens in the medium fragment + raw user prompt that sit at
+  // positions 2-3 (glamour's "romantic soft-focus portrait", a user's "sexy
+  // companion", etc.). The dual face-swap can only place both faces when the two
+  // HEADS render clearly apart; heads-touching → the detector can't split them.
   const dualAnchor =
-    'TWO people, side by side, both characters looking out at the camera, frontal couple portrait, both faces turned toward the viewer, both heads tilted toward the audience, three-quarter view to camera';
+    'TWO people, side by side with a clear gap between their two heads, both characters looking out at the camera, frontal couple portrait, both faces turned toward the viewer, each head on its own side of the frame, three-quarter view to camera';
 
-  // Framing — includes L/R clear-gap + same-height constraints for crop pipeline
+  // Framing — includes L/R head-gap + same-height constraints for crop pipeline.
+  // The head-gap clause is the load-bearing dual-swap constraint (Kevin
+  // 2026-07-24: a glamour/elf couple rendered cheek-to-cheek and the swap
+  // crossed the faces). Phrased in the proven pool language ("clear gap between
+  // their heads / not cheek to cheek / heads on separate sides"), not the old
+  // weaker "clear gap between them". Same-height is KEPT (the crop pipeline needs
+  // it) but the gap is now the dominant instruction, not "heads at the same level".
   const framingBlock = [
     'both shown from the waist up, fully visible',
     'both faces unobstructed and clearly visible to the viewer',
     'frontal portrait composition, both faces turned to the camera',
-    'clear gap between them, both at the same vertical height, heads at the same level',
+    'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
+    'both at the same vertical height, heads at the same level',
   ].join(', ');
 
   const parts = [

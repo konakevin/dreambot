@@ -64,6 +64,36 @@ it('NON-STRICT + never a clean split → single self-swap', async () => {
   expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
 });
 
+it('STRICT + degradeToSingle + never a clean split → single self-swap (Create degrades, no refund)', async () => {
+  // Kevin 2026-07-24: Create now prefers a gender-safe self-only swap over a
+  // refund / a wrong-face dual. Same inputs as the strict-cascade case above, but
+  // the opt flips the degrade from cascade → single.
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, {
+    strict: true,
+    degradeToSingle: true,
+    maxRerenders: 1,
+  });
+  expect(r.outcome).toBe('single');
+  expect(r.url).toBe('SINGLE.jpg');
+  expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
+  expect(r.reasons).toContain('dual_degrade_single');
+});
+
+it('STRICT + degradeToSingle + single swap ALSO fails → cascade (never ships nothing)', async () => {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const singleSwap = jest.fn().mockRejectedValue(new Error('single engine down'));
+  const deps = makeDeps({ dispatchDual, singleSwap });
+  const r = await genderSafeDualSwap('render.jpg', deps, {
+    strict: true,
+    degradeToSingle: true,
+    maxRerenders: 0,
+  });
+  expect(r.outcome).toBe('cascade');
+  expect(r.reasons.some((x) => x.startsWith('single_fallback_failed'))).toBe(true);
+});
+
 it('engine THROWS → retry via re-render → recovers', async () => {
   const dispatchDual = jest
     .fn()

@@ -86,6 +86,15 @@ export interface DualSwapOutcome {
 // stop re-rendering and degrade — so a backed-up/slow system sheds load.
 const RECOVER_BUDGET_MS = 85_000;
 
+// Below this per-face ArcFace similarity, a "best" sub-threshold dual is not a
+// WEAK likeness — it's the WRONG person (sim near/below 0 = uncorrelated, i.e. a
+// stranger's face). Shipping it is the "wife's face is someone else" failure, so
+// a best this bad degrades to a self-only swap instead of shipping (Kevin
+// 2026-07-24: chose self-only over shipping-broken). A best in [floor, threshold)
+// still ships — a weak-but-present dual beats dropping the +1. Well below the
+// 0.35 enforcement threshold so genuinely-weak likenesses aren't over-degraded.
+const IDENTITY_DEGRADE_FLOOR = 0.15;
+
 /**
  * Stage 8c (2026-07-09): identity enforcement threshold. When the secret is a
  * number, a delivered dual whose min per-face ArcFace sim is below it is
@@ -113,7 +122,18 @@ function minIdentity(id: { left: number | null; right: number | null }): number 
 export async function genderSafeDualSwap(
   renderUrl: string,
   deps: DualSwapDeps,
-  opts: { strict: boolean; maxRerenders?: number; deadlineMs?: number }
+  opts: {
+    strict: boolean;
+    maxRerenders?: number;
+    deadlineMs?: number;
+    /**
+     * Strict callers that would rather DEGRADE to a self-only swap than hard-fail
+     * when a verified dual can't be delivered. Create sets this (Kevin 2026-07-24:
+     * self-only beats a refund / a wrong-face dual). Onboarding leaves it off so
+     * its cascade still re-renders a solo self scene.
+     */
+    degradeToSingle?: boolean;
+  }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
   const reasons: string[] = [];
@@ -237,25 +257,36 @@ export async function genderSafeDualSwap(
     if (res.rejectReason) reasons.push(`dual_reject:${res.rejectReason}`);
   }
 
-  // ── Could not deliver a verified dual ──
-  // Stage 8c: a sub-threshold dual in hand beats every degrade — both faces
-  // are at least PRESENT and gender-routed; the threshold miss is a likeness
-  // quality miss, not a safety failure.
-  if (best) {
+  // ── Could not deliver an above-threshold dual ──
+  // Stage 8c: a WEAK sub-threshold dual (floor ≤ min < threshold) in hand still
+  // beats every degrade — both faces are PRESENT and gender-routed; that miss is
+  // a likeness-quality miss, not a safety failure.
+  if (best && best.minSim >= IDENTITY_DEGRADE_FLOOR) {
     reasons.push(`identity_shipped_best:${best.minSim}(attempt ${best.attempt})`);
     log(`identity enforcement exhausted — shipping best dual (min=${best.minSim})`);
     return { url: best.url, outcome: 'dual', faceCount: best.faceCount, predictionId, reasons };
   }
-  if (opts.strict) {
-    reasons.push('dual_degrade_cascade');
-    return { url: target, outcome: 'cascade', faceCount, predictionId, reasons };
+  // A CATASTROPHIC best (min < floor) is the WRONG person on one side, not a weak
+  // likeness — do NOT ship it. Fall through to the self-only degrade (Kevin
+  // 2026-07-24: the "wife's face is a stranger" render should degrade, not ship).
+  if (best) reasons.push(`identity_degrade_floor:${best.minSim}<${IDENTITY_DEGRADE_FLOOR}`);
+
+  // Degrade to a gender-safe self-only swap (self placed, +1 dropped to a generic
+  // figure) instead of shipping a wrong face. Non-strict callers (nightly) always
+  // do this; strict callers do it only when they opted in (Create). Strict callers
+  // that did NOT opt in (onboarding) keep cascading so the first-dream flow can
+  // re-render a solo self scene.
+  const canDegradeSingle = !opts.strict || opts.degradeToSingle === true;
+  if (canDegradeSingle) {
+    reasons.push('dual_degrade_single');
+    try {
+      const single = await deps.singleSwap(deps.selfSource, target);
+      return { url: single, outcome: 'single', faceCount, predictionId, reasons };
+    } catch (e) {
+      reasons.push(`single_fallback_failed:${(e as Error).message.slice(0, 80)}`);
+      // fall through to cascade
+    }
   }
-  reasons.push('dual_degrade_single');
-  try {
-    const single = await deps.singleSwap(deps.selfSource, target);
-    return { url: single, outcome: 'single', faceCount, predictionId, reasons };
-  } catch (e) {
-    reasons.push(`single_fallback_failed:${(e as Error).message.slice(0, 80)}`);
-    return { url: target, outcome: 'cascade', faceCount, predictionId, reasons };
-  }
+  reasons.push('dual_degrade_cascade');
+  return { url: target, outcome: 'cascade', faceCount, predictionId, reasons };
 }

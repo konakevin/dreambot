@@ -1821,7 +1821,7 @@ Output ONLY the prompt.`;
           selfSource: faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl,
           log: (m) => console.log(`[generate-dream] ${m}`),
         },
-        { strict: true, deadlineMs: t0 + 140_000 }
+        { strict: true, deadlineMs: t0 + 140_000, degradeToSingle: true }
       );
       tempUrl = result.url;
       if (result.predictionId) replicatePredictionId = result.predictionId;
@@ -1830,9 +1830,20 @@ Output ONLY the prompt.`;
       if (result.outcome === 'dual') {
         lap('dual-face-swap');
         logAxes.faceSwapResult = 'dual-success';
+      } else if (result.outcome === 'single') {
+        // The dual couldn't match the +1's identity after retries (or couldn't
+        // split two clean faces), so rather than ship a wrong/stranger face — the
+        // "wife's face on the man" failure — or refund, the pipeline degraded to a
+        // gender-safe self-only swap: the user's own face is placed and the +1 is
+        // dropped to a generic figure. Complete the dream at the single tier
+        // (Kevin 2026-07-24 chose self-only over a refund). 'success' →
+        // face_swap_mode 'single' below, so HD-upscale stays off like any cast render.
+        lap('dual-face-swap-degraded-single');
+        logAxes.faceSwapResult = 'success';
       } else {
-        // Unrecoverable → refund: Create users paid for the couple, so throw
-        // (no solo / stranger) and let the outer catch refund the sparkle.
+        // 'cascade' — couldn't safely deliver anything at all. Refund: Create
+        // users paid for their faces in the scene, so throw and let the outer
+        // catch refund the sparkle.
         logAxes.faceSwapResult = 'dual-refund';
         throw new Error(`face_swap: couldn't render both faces (faces=${result.faceCount})`);
       }
@@ -2138,6 +2149,26 @@ Output ONLY the prompt.`;
         throw new Error(
           `db_insert: uploads insert failed (${uploadResult.error?.message ?? 'no row returned'})`
         );
+      }
+
+      // Link the ai_generation_log row (written above at status:'completed',
+      // keyed by job_id only) to THIS upload, so swap telemetry — identity_sim,
+      // no_dual_split, dual_attempts, fallback_reasons — is lookup-able from the
+      // post itself, not just by job_id. ai_generation_log.upload_id was never
+      // populated (the log insert runs before this uploads insert, so the id
+      // isn't known yet), which is why a broken face-swap post looked like it had
+      // "no log". Awaited (not waitUntil, which the platform drops) but fully
+      // guarded so a link failure can NEVER fail the dream. (Kevin 2026-07-24.)
+      if (jobId) {
+        try {
+          const { error: linkErr } = await supabase
+            .from('ai_generation_log')
+            .update({ upload_id: uploadId })
+            .eq('job_id', jobId);
+          if (linkErr) console.warn('[logging] link upload_id failed:', linkErr.message);
+        } catch (e) {
+          console.warn('[logging] link upload_id threw:', (e as Error)?.message);
+        }
       }
 
       // Background: build the display variant + thumbhash off the render's
