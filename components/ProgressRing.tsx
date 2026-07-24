@@ -119,7 +119,10 @@ export function ProgressRing({
           cx={center}
           cy={center}
           r={r}
-          stroke={colors.overlayWhite}
+          // Track (unfilled part) — a touch brighter than colors.overlayWhite
+          // (0.12) so a barely-filled ring still reads as a full circle on the
+          // black dock, not a lone arc (Kevin 2026-07-23).
+          stroke="rgba(255,255,255,0.24)"
           strokeWidth={strokeWidth}
           fill="none"
         />
