@@ -100,28 +100,30 @@ export default function DreamRevealScreen() {
     );
   }
 
-  // Surprise Me reveal — the payoff for leaving an axis to chance: show ONLY the
-  // axis/axes the user actually surprised (if they picked Watercolor themselves,
-  // don't tell them it's Watercolor). Creator-only by nature (their own reveal).
+  // Dream badge — reinforce what they just dreamed (medium · vibe) on EVERY
+  // reveal, not only surprises. When an axis WAS a Surprise Me roll, a "Surprise
+  // Me ·" eyebrow is prefixed so the leave-it-to-chance payoff still reads.
+  // Creator-only by nature (their own reveal).
   const prettify = (k: string) => k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   const mediumWasSurprise =
     config.selectedMedium === 'surprise_me' ||
     config.selectedMedium === 'surprise_me_face' ||
     config.selectedMedium === 'surprise_me_art';
   const vibeWasSurprise = config.selectedVibe === 'surprise_me';
-  const revealParts: string[] = [];
-  if (mediumWasSurprise && result.resolvedMedium) {
-    revealParts.push(
+  const wasSurprise = mediumWasSurprise || vibeWasSurprise;
+  const badgeParts: string[] = [];
+  if (result.resolvedMedium) {
+    badgeParts.push(
       dbMediums?.find((m) => m.key === result.resolvedMedium)?.label ??
         prettify(result.resolvedMedium)
     );
   }
-  if (vibeWasSurprise && result.resolvedVibe) {
-    revealParts.push(
+  if (result.resolvedVibe) {
+    badgeParts.push(
       dbVibes?.find((v) => v.key === result.resolvedVibe)?.label ?? prettify(result.resolvedVibe)
     );
   }
-  const surpriseReveal = revealParts.join(' · ');
+  const dreamBadge = badgeParts.join(' · ');
 
   async function handlePost() {
     if (!user || saving) return;
@@ -244,12 +246,14 @@ export default function DreamRevealScreen() {
               <ActivityIndicator size="large" color="#fff" />
             ) : (
               <>
-                {surpriseReveal ? (
+                {dreamBadge ? (
                   <View style={s.surpriseChip}>
-                    <Ionicons name="sparkles" size={13} color="#fff" />
+                    <Ionicons name="sparkles" size={13} color={colors.accentLight} />
                     <Text style={s.surpriseChipText}>
-                      <Text style={s.surpriseChipEyebrow}>Surprise Me · </Text>
-                      {surpriseReveal}
+                      {wasSurprise ? (
+                        <Text style={s.surpriseChipEyebrow}>Surprise Me · </Text>
+                      ) : null}
+                      {dreamBadge}
                     </Text>
                   </View>
                 ) : null}
@@ -346,13 +350,24 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: verticalScale(7),
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    // Dark translucent (was white 0.14) so the text stays legible over light
+    // renders too — a white chip vanished on a beige image (Kevin 2026-07-23).
+    backgroundColor: 'rgba(0,0,0,0.55)',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.16)',
     marginBottom: verticalScale(6),
   },
-  surpriseChipText: { color: '#fff', fontSize: fontScale(13), fontWeight: '700' },
-  surpriseChipEyebrow: { color: 'rgba(255,255,255,0.7)', fontWeight: '600' },
+  surpriseChipText: {
+    color: '#fff',
+    fontSize: fontScale(13),
+    fontWeight: '700',
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  // Brighter + on-brand (was a dim 0.7 white that got lost). accentLight reads
+  // clearly on the dark chip and marks the Surprise Me roll.
+  surpriseChipEyebrow: { color: colors.accentLight, fontWeight: '700' },
   savedHintText: { color: 'rgba(255,255,255,0.7)', fontSize: fontScale(13), fontWeight: '600' },
   primaryPill: {
     flexDirection: 'row',
