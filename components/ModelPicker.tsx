@@ -308,7 +308,11 @@ export function ModelPicker({
     <View>
       <View style={styles.modelHeaderRow}>
         <Text style={[styles.pillLabel, { color: colors.textSecondary }]}>AI Model</Text>
-        {hasSmartSet && onToggleDreamSmart && (
+        {/* Always show the DreamSmart toggle in DreamBot mode for consistency —
+          even on Surprise Me, where there's no per-style curated set (the toggle
+          then governs the generation-time style roll, not the visible model
+          list). Hidden only in Direct mode, where DreamSmart doesn't apply. */}
+        {dreamBotMode && onToggleDreamSmart && (
           <View style={styles.smartToggle}>
             <TouchableOpacity
               onPress={onToggleDreamSmart}
@@ -406,9 +410,11 @@ export function ModelPicker({
                 <Ionicons name="close" size={22} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
-            {hasSmartSet ? (
-              // DreamSmart toggle IS the sheet's lens — it shows on/off state and
-              // flipping it re-filters the list live (curated ↔ full).
+            {dreamBotMode ? (
+              // DreamSmart switch — always shown in DreamBot mode for consistency.
+              // With a curated set it's the list's lens (curated ↔ full); on
+              // Surprise Me (no set) the list stays full and it instead governs
+              // the generation-time style roll, so the caption adapts.
               <View style={styles.dsRow}>
                 <View style={styles.dsLeft}>
                   <View style={styles.dsTitleLine}>
@@ -416,9 +422,13 @@ export function ModelPicker({
                     <Text style={styles.dsTitle}>DreamSmart</Text>
                   </View>
                   <Text style={styles.dsCaption}>
-                    {smartOn
-                      ? `Showing models tuned for ${styleLabel ?? 'this style'}`
-                      : 'Showing all models'}
+                    {hasSmartSet
+                      ? smartOn
+                        ? `Showing models tuned for ${styleLabel ?? 'this style'}`
+                        : 'Showing all models'
+                      : smartOn
+                        ? 'Tunes the model + style pairing for you'
+                        : 'Uses your exact picks'}
                   </Text>
                 </View>
                 <Switch
