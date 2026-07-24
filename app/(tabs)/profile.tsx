@@ -297,18 +297,20 @@ export default function ProfileScreen() {
   );
 
   // The render dock routes here on tap and asks for the Dreams sub-tab (where
-  // the pending/finished tiles live). Honor it on focus — and, since the
-  // callback deps include the flag, immediately if the screen is already
-  // focused. Then clear so a later manual tab switch sticks.
-  const wantsDreamsTab = useRenderDockStore((s) => s.wantsDreamsTab);
-  const clearDreamsTab = useRenderDockStore((s) => s.clearDreamsTab);
+  // the pending/finished tiles live). Read the request from the store at FOCUS
+  // time (getState — robust to render/navigation ordering; the subscribed value
+  // could still be stale on the focus tick) and select Dreams. The re-tap reset
+  // below ALSO honors the flag, so whether or not router.navigate fires the tab's
+  // tabPress (→ bumpProfileReset → the posts reset), Dreams wins. Clear on a
+  // microtask so BOTH this effect and the reset observe it, while a later manual
+  // re-tap still lands on Posts.
   useFocusEffect(
     useCallback(() => {
-      if (wantsDreamsTab) {
+      if (useRenderDockStore.getState().wantsDreamsTab) {
         setActiveTab('dreams');
-        clearDreamsTab();
+        setTimeout(() => useRenderDockStore.getState().clearDreamsTab(), 0);
       }
-    }, [wantsDreamsTab, clearDreamsTab])
+    }, [])
   );
 
   // Tapping the inbox bubble just navigates — the inbox screen owns its
@@ -353,10 +355,13 @@ export default function ProfileScreen() {
     [dreamsFilter, user]
   );
 
-  // Reset to posts tab only when profile tab icon is re-tapped
+  // Reset to posts tab only when profile tab icon is re-tapped — UNLESS the
+  // render dock just requested Dreams (its router.navigate can fire this tab's
+  // tabPress → bumpProfileReset). Honoring the flag here means Dreams wins
+  // regardless of whether the tabPress fired.
   useEffect(() => {
     if (profileResetToken > 0) {
-      setActiveTab('posts');
+      setActiveTab(useRenderDockStore.getState().wantsDreamsTab ? 'dreams' : 'posts');
       queryClient.invalidateQueries({ queryKey: ['userPosts'] });
       queryClient.invalidateQueries({ queryKey: ['publicProfile'] });
     }
