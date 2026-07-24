@@ -483,6 +483,20 @@ function DataPrefetcher() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
+  // Foreground heartbeat — keep last_active_at fresh during CONTINUOUS use. The
+  // sign-in + AppState-foreground touches only fire on TRANSITIONS, so a user who
+  // stays foreground (e.g. watching the dock while a queued dream renders) went
+  // stale after 30s → send-push's active gate (30s) stopped suppressing and fired
+  // a push for a dream they'd just watched complete in the dock (Kevin
+  // 2026-07-23). A 20s tick keeps last_active_at under the gate. iOS suspends JS
+  // in background, so this effectively only runs while foreground.
+  useEffect(() => {
+    if (!user) return;
+    const id = setInterval(() => touchLastActive('heartbeat'), 20_000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
   // Prefetch shareable friends after the app is fully interactive
   // so it doesn't compete with navigation, feed loading, etc.
   useEffect(() => {
