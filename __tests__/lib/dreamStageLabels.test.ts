@@ -1,4 +1,9 @@
-import { getDreamStageInfo } from '@/lib/dreamStageLabels';
+import {
+  getDreamStageInfo,
+  EARLY_LABELS,
+  RENDER_LABELS,
+  FACE_SWAP_LABELS,
+} from '@/lib/dreamStageLabels';
 
 describe('getDreamStageInfo', () => {
   it('maps each real render stage to a label + monotonic target', () => {
@@ -8,10 +13,17 @@ describe('getDreamStageInfo', () => {
     const swap = getDreamStageInfo('in_progress', 'face_swap');
     const upload = getDreamStageInfo('in_progress', 'upload');
 
-    expect(resolve.label).toBe('Dreaming up your scene');
-    expect(render.label).toBe('Painting your dream');
-    expect(swap.label).toBe('Adding you in');
+    // The three expressive phases are pooled — the returned label is a static
+    // placeholder from the pool (useDreamProgress swaps in the per-dream pick).
+    expect(resolve.pool).toBe('early');
+    expect(EARLY_LABELS).toContain(resolve.label);
+    expect(render.pool).toBe('render');
+    expect(RENDER_LABELS).toContain(render.label);
+    expect(swap.pool).toBe('face_swap');
+    expect(FACE_SWAP_LABELS).toContain(swap.label);
+    // Upload is a single fixed label (no pool).
     expect(upload.label).toBe('Finishing up');
+    expect(upload.pool).toBeUndefined();
 
     // Targets strictly increase along the pipeline.
     expect(claimed.target).toBeLessThan(resolve.target);
@@ -21,23 +33,35 @@ describe('getDreamStageInfo', () => {
     expect(upload.target).toBeLessThan(1);
   });
 
-  it('completed always wins and fills to 1', () => {
-    expect(getDreamStageInfo('completed', null).target).toBe(1);
-    // Even if a stale stage rides along, completed status takes precedence.
-    expect(getDreamStageInfo('completed', 'flux_render').target).toBe(1);
+  it('completed always wins, reads "Done", and fills to 1', () => {
+    const done = getDreamStageInfo('completed', null);
+    expect(done.label).toBe('Done');
+    expect(done.target).toBe(1);
+    // Even if a stale stage rides along, completed status takes precedence —
+    // never a stray pooled phrase.
+    const doneWithStaleStage = getDreamStageInfo('completed', 'face_swap');
+    expect(doneWithStaleStage.label).toBe('Done');
+    expect(doneWithStaleStage.pool).toBeUndefined();
+    expect(doneWithStaleStage.target).toBe(1);
   });
 
-  it('a bare queued job (no stage yet) shows the in-line state', () => {
+  it('the opening phase (queued / claimed / resolve) all share the early pool', () => {
+    for (const stage of [null, 'claimed', 'resolve'] as const) {
+      const info = getDreamStageInfo(stage === null ? 'queued' : 'in_progress', stage);
+      expect(info.pool).toBe('early');
+      expect(EARLY_LABELS).toContain(info.label);
+    }
+    // A bare queued job (no stage yet) still creeps up from near-zero.
     const q = getDreamStageInfo('queued', null);
-    expect(q.label).toBe('In line…');
     expect(q.target).toBeGreaterThan(0);
     expect(q.target).toBeLessThan(0.18);
   });
 
-  it('falls back gently for an unknown/absent stage', () => {
+  it('falls back to the early pool for an unknown/absent stage', () => {
     const fallback = getDreamStageInfo('in_progress', null);
-    expect(fallback.label).toBe('Dreaming…');
+    expect(fallback.pool).toBe('early');
+    expect(EARLY_LABELS).toContain(fallback.label);
     expect(fallback.target).toBeGreaterThan(0);
-    expect(getDreamStageInfo(undefined, 'some_future_stage').label).toBe('Dreaming…');
+    expect(getDreamStageInfo(undefined, 'some_future_stage').pool).toBe('early');
   });
 });

@@ -8,7 +8,12 @@
 
 import { useEffect, useState } from 'react';
 import { dreamProgressTarget } from '@/lib/dreamStageProgress';
-import { getDreamStageInfo } from '@/lib/dreamStageLabels';
+import {
+  getDreamStageInfo,
+  pickEarlyLabel,
+  pickRenderLabel,
+  pickFaceSwapLabel,
+} from '@/lib/dreamStageLabels';
 
 interface DreamProgressInput {
   status: string | null | undefined;
@@ -26,6 +31,13 @@ export function useDreamProgress({ status, currentStage, stageUpdatedAt }: Dream
     dreamProgressTarget(status, currentStage, stageUpdatedAt, Date.now())
   );
 
+  // Draw ONE magical phrase per pool and hold each for this dream's lifetime, so
+  // they don't reshuffle on every 400ms progress tick. Lazy initializers = one
+  // pick per mount; each is shown only while its own pooled stage is active.
+  const [earlyLabel] = useState(pickEarlyLabel);
+  const [renderLabel] = useState(pickRenderLabel);
+  const [faceSwapLabel] = useState(pickFaceSwapLabel);
+
   useEffect(() => {
     const tick = () =>
       setTarget(dreamProgressTarget(status, currentStage, stageUpdatedAt, Date.now()));
@@ -34,5 +46,17 @@ export function useDreamProgress({ status, currentStage, stageUpdatedAt }: Dream
     return () => clearInterval(id);
   }, [status, currentStage, stageUpdatedAt]);
 
-  return { target, label: getDreamStageInfo(status, currentStage).label };
+  // getDreamStageInfo already applies "completed wins" precedence and tags the
+  // rotating stages with `pool`, so swap in the matching stable pick here.
+  const info = getDreamStageInfo(status, currentStage);
+  const label =
+    info.pool === 'early'
+      ? earlyLabel
+      : info.pool === 'render'
+        ? renderLabel
+        : info.pool === 'face_swap'
+          ? faceSwapLabel
+          : info.label;
+
+  return { target, label };
 }
