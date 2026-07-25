@@ -34,6 +34,7 @@
     "__tests__/lib/notifyActivityGate.test.ts",
     "__tests__/lib/notifySiblingGate.test.ts",
     "__tests__/lib/notifyViewGate.test.ts",
+    "__tests__/lib/notifyAlwaysPush.test.ts",
     "__tests__/lib/genderLock.test.ts",
     "__tests__/lib/faceSwapGenderLock.test.ts",
     "__tests__/lib/faceSwapFallback.test.ts",

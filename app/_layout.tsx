@@ -530,7 +530,17 @@ function DataPrefetcher() {
   // in background, so this effectively only runs while foreground.
   useEffect(() => {
     if (!user) return;
-    const id = setInterval(() => touchLastActive('heartbeat'), 20_000);
+    // Only bump last_active_at while the app is genuinely FOREGROUND. This
+    // interval keeps firing as long as JS runs, and the iOS Simulator (unlike a
+    // real device) never suspends JS when backgrounded — so without this guard
+    // the heartbeat kept last_active_at perpetually fresh even with the app
+    // backgrounded, which made send-push's activity gate suppress EVERY push
+    // (root-caused 2026-07-25). Gating on AppState.currentState === 'active'
+    // means last_active_at freezes the moment the app leaves the foreground, so
+    // the 30s activity gate correctly stops suppressing after backgrounding.
+    const id = setInterval(() => {
+      if (AppState.currentState === 'active') touchLastActive('heartbeat');
+    }, 20_000);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);

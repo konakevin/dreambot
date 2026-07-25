@@ -131,6 +131,12 @@ export async function processNightlyJob(args: NightlyDispatcherArgs): Promise<st
       recipient_id: userId,
       actor_id: userId,
       type: 'dream_generated',
+      // EXPLICIT subtype so the inbox filter (migration 398) never has to infer
+      // "nightly" from a NULL — a NULL subtype was silently trapped out of the
+      // inbox + badge by the `subtype = 'manual'` filter's three-valued logic.
+      // 'nightly' also routes send-push to the nightly copy + the always-push
+      // exemption (isAlwaysPushType). NOT 'manual' → shown in the inbox.
+      subtype: 'nightly',
       upload_id: uploadId,
       // Clamp to the inbox preview length on a WORD boundary so a rare overrun
       // never shows a mid-word fragment. The push banner uses its own curated

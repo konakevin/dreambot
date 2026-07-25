@@ -126,3 +126,37 @@ export function shouldSkipForActivity(args: {
   const threshold = args.thresholdMs ?? 30_000;
   return args.now - lastActiveMs < threshold;
 }
+
+/**
+ * Types that must ALWAYS fire their OS push — exempt from the in-app "noise
+ * suppression" gates (activity / viewed-since-created / seen-sibling).
+ *
+ * Those three gates exist to mute SOCIAL spam (likes, comments, follows) while
+ * the user is actively in the app, since the in-app indicators already cover it.
+ * But the NIGHTLY dream is a once-a-day PAID deliverable that lands while the
+ * user is away/asleep — it is the whole point of the subscription, so it must
+ * push every time, regardless of app activity or inbox-view timing. A
+ * silently-suppressed nightly push is invisible (the gates return 200 with NO
+ * failure logged) and unacceptable for a paid feature — this is exactly how
+ * multiple users missed their nightly push while monitoring showed zero errors
+ * (root-caused 2026-07-25).
+ *
+ * Scope:
+ *   - Nightly dream READY: dream_generated with subtype <> 'manual'. A NULL
+ *     subtype counts as nightly (legacy rows pre-migration-398).
+ *   - Nightly dream FAILED: dream_failed / nightly_failed (the goodwill-sparkle
+ *     notice — same paid signal, equally must-not-miss).
+ *
+ * MANUAL (Create-flow, queued-and-left) dreams are NOT exempt — the render dock
+ * signals those in-app, so the gates correctly suppress a redundant banner.
+ * Everything else (likes/comments/follows/etc.) keeps the gates too.
+ */
+export function isAlwaysPushType(args: {
+  type: string | null | undefined;
+  subtype: string | null | undefined;
+}): boolean {
+  const { type, subtype } = args;
+  if (type === 'dream_generated' && subtype !== 'manual') return true;
+  if (type === 'dream_failed' && subtype === 'nightly_failed') return true;
+  return false;
+}

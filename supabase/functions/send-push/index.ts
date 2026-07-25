@@ -3,7 +3,12 @@
 // Looks up the recipient's Expo push token and sends a push notification.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { hasSeenSibling, shouldSkipForActivity, hasViewedSinceCreated } from '../_shared/notify.ts';
+import {
+  hasSeenSibling,
+  shouldSkipForActivity,
+  hasViewedSinceCreated,
+  isAlwaysPushType,
+} from '../_shared/notify.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
@@ -296,6 +301,14 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ message: 'No push tokens' }), { status: 200 });
     }
 
+    // A nightly dream (ready OR failed) is a once-a-day PAID deliverable, not
+    // social noise — it must ALWAYS push. Exempt it from the three in-app "noise
+    // suppression" gates below (activity / viewed / sibling), each of which
+    // silently returns 200 with no failure logged. Those gates silently ate
+    // nightly pushes (root-caused 2026-07-25). Rule + scope in _shared/notify.ts
+    // (jest-tested). Manual/queued dreams keep the gates — the dock covers them.
+    const alwaysPush = isAlwaysPushType({ type: record.type, subtype: record.subtype });
+
     // Activity gate (migration 224): skip the Expo POST when the recipient is
     // currently active in the app. The notification row is already inserted
     // and the in-app indicators (profile-tab dot, inbox bubble, badge cache)
@@ -308,7 +321,10 @@ Deno.serve(async (req) => {
       .select('last_active_at, last_inbox_view_at')
       .eq('id', record.recipient_id)
       .maybeSingle();
-    if (shouldSkipForActivity({ lastActiveAt: activityRow?.last_active_at, now: Date.now() })) {
+    if (
+      !alwaysPush &&
+      shouldSkipForActivity({ lastActiveAt: activityRow?.last_active_at, now: Date.now() })
+    ) {
       return new Response(
         JSON.stringify({ message: 'Recipient active in-app; skipping push', skipped: 'active' }),
         { status: 200 }
@@ -324,6 +340,7 @@ Deno.serve(async (req) => {
     // push after being viewed. If the inbox was opened at/after this row was
     // created, skip the banner. Decision in _shared/notify.ts (jest-tested).
     if (
+      !alwaysPush &&
       hasViewedSinceCreated({
         createdAt: record.created_at,
         lastInboxViewedAt: activityRow?.last_inbox_view_at,
@@ -344,7 +361,7 @@ Deno.serve(async (req) => {
     // tapped, in-app save still in progress, then a duplicate notification
     // would have fired a second push. Decision lives in
     // _shared/notify.ts:hasSeenSibling so it's unit-tested.
-    if (record.group_key) {
+    if (!alwaysPush && record.group_key) {
       const { data: siblings } = await supabase
         .from('notifications')
         .select('seen_at, created_at')
