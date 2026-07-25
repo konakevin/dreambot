@@ -10,7 +10,7 @@ import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useUserReposts } from '@/hooks/useUserReposts';
-import { usePublicProfilePosts } from '@/hooks/usePublicProfilePosts';
+import { usePublicProfilePosts, loadPublicProfilePostsUntil } from '@/hooks/usePublicProfilePosts';
 import { useHashtagPosts } from '@/hooks/useHashtagPosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { useAuthStore } from '@/store/auth';
@@ -24,7 +24,7 @@ import { isStaleInFlight } from '@/lib/dockItems';
 import { GridSkeleton } from '@/components/Skeleton';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
-import { NUM_COLUMNS, ROW_HEIGHT } from '@/constants/grid';
+import { NUM_COLUMNS, TILE_GAP, ROW_HEIGHT } from '@/constants/grid';
 import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -351,7 +351,9 @@ export function PostGrid({
   const navigation = useNavigation();
   const [highlightDismissed, setHighlightDismissed] = useState(false);
   const [badgeTapped, setBadgeTapped] = useState(false);
-  const [isFetchingHighlight, setIsFetchingHighlight] = useState(false);
+  // True while a "Just viewed" deep-jump is bulk-loading the album down to the
+  // post; the effect below scrolls to it once it lands in the loaded set.
+  const [jumpPending, setJumpPending] = useState(false);
 
   useEffect(() => {
     if (!highlightPostId) return;
@@ -392,41 +394,33 @@ export function PostGrid({
     }
   );
 
-  const scrollToHighlightRow = useCallback(
-    (idx: number, opts?: { silent?: boolean }) => {
-      if (!listRef.current || idx < 0) return;
-      const targetRow = Math.floor(idx / NUM_COLUMNS);
-      // Center the row in the visible grid area (below the sticky header)
-      // so the tile the user was just viewing lands mid-screen, not at the top.
-      const visibleArea = Math.max(ROW_HEIGHT, containerHeight - headerHeight);
-      const centeredOffset = headerHeight + targetRow * ROW_HEIGHT - (visibleArea - ROW_HEIGHT) / 2;
-      const targetOffset = Math.max(0, centeredOffset);
+  // `gridIndex` is the index into `gridData` (i.e. highlightIndex + pendingCount).
+  // FlashList's scrollToIndex lands the tile precisely — viewPosition 0.5 centers
+  // it in the viewport, and the sticky header offset is handled internally — so
+  // the old ROW_HEIGHT / headerHeight / containerHeight offset math (which
+  // under-shot far rows without getItemLayout) is gone. animated on a user
+  // badge-tap, silent (instant) on the background auto-anchor during back-swipe.
+  const scrollToHighlightRow = useCallback((gridIndex: number, opts?: { silent?: boolean }) => {
+    if (!listRef.current || gridIndex < 0) return;
+    void listRef.current.scrollToIndex({
+      index: gridIndex,
+      animated: !opts?.silent,
+      viewPosition: 0.5,
+    });
+    setBadgeTapped(true);
+  }, []);
 
-      // Badge-tap (user-initiated jump) → ANIMATE the scroll. A synchronous
-      // jump-to-row across a long distance shows the virtualizer mid-rebuild,
-      // which the old code masked with a 300ms dim+spinner overlay — but that
-      // overlay sat 300ms after a 1-frame jump, reading as "loading" when
-      // nothing was loading. Animated scroll fixes both: smooth slide, no
-      // virtualizer chaos to hide, no fake loading state.
-      //
-      // Silent (background auto-anchor during the back-swipe transition):
-      // hard jump. The user is watching the detail-screen slide away — the
-      // grid is occluded, so any mid-rebuild garbage is invisible. Animating
-      // a background scroll just wastes ~300ms.
-      listRef.current.scrollToOffset({ offset: targetOffset, animated: !opts?.silent });
-      setBadgeTapped(true);
-    },
-    [headerHeight, containerHeight]
-  );
-
+  // Once the deep-jump bulk-load lands the post in the loaded set, scroll to it.
   useEffect(() => {
-    if (isFetchingHighlight && highlightIndex >= 0) {
-      setIsFetchingHighlight(false);
-      requestAnimationFrame(() => {
-        scrollToHighlightRow(highlightIndex + pendingCountRef.current);
-      });
+    if (jumpPending && highlightIndex >= 0) {
+      setJumpPending(false);
+      // silent = INSTANT jump: the target is hundreds of rows away, so an
+      // animated scroll would travel the whole distance (~seconds). Just pop.
+      requestAnimationFrame(() =>
+        scrollToHighlightRow(highlightIndex + pendingCountRef.current, { silent: true })
+      );
     }
-  }, [isFetchingHighlight, highlightIndex, scrollToHighlightRow]);
+  }, [jumpPending, highlightIndex, scrollToHighlightRow]);
 
   // Auto-anchor on focus enter. The hard case is when the user scrolled past
   // the grid's first page (PAGE_SIZE=18) in detail view: highlightPostId is
@@ -482,18 +476,6 @@ export function PostGrid({
     );
   }, [pendingAutoAnchor, highlightIndex, containerHeight, scrollToHighlightRow]);
 
-  // Keep fetching pages while searching for the highlight post (user tapped badge)
-  useEffect(() => {
-    if (
-      isFetchingHighlight &&
-      highlightIndex === -1 &&
-      activeQuery.hasNextPage &&
-      !activeQuery.isFetchingNextPage
-    ) {
-      activeQuery.fetchNextPage();
-    }
-  }, [isFetchingHighlight, highlightIndex, activeQuery]);
-
   const gridArea = containerHeight - headerHeight;
   const visibleRows = gridArea > 0 ? Math.floor(gridArea / ROW_HEIGHT) : 0;
   const maxVisibleIndex = visibleRows > 0 ? visibleRows * NUM_COLUMNS - 1 : -1;
@@ -502,19 +484,27 @@ export function PostGrid({
     !!highlightPostId &&
     !highlightDismissed &&
     !badgeTapped &&
-    !isFetchingHighlight &&
     (highlightIndex === -1
       ? !activeQuery.isLoading
       : containerHeight > 0 && highlightIndex + pendingCount > maxVisibleIndex);
 
   const scrollToHighlight = useCallback(() => {
     if (highlightIndex >= 0) {
+      // Already loaded (near) → smooth-scroll to it in the grid.
       scrollToHighlightRow(highlightIndex + pendingCountRef.current);
-    } else if (activeQuery.hasNextPage) {
-      setIsFetchingHighlight(true);
-      activeQuery.fetchNextPage();
+    } else if (effectiveHighlightId && isUser && userId) {
+      // Deep in the album (not in the loaded pages). One-shot bulk-load the
+      // profile down to it (one round-trip vs ~30s of page-by-page), then the
+      // effect above scrolls once it resolves. The "Just viewed" anchor only
+      // shows on a public profile, so this path is always the user grid. Keep the
+      // button visible (with a spinner) during the load — badgeTapped flips only
+      // when scrollToHighlightRow finally fires, hiding it.
+      setJumpPending(true);
+      void loadPublicProfilePostsUntil(queryClient, userId, effectiveHighlightId).then((found) => {
+        if (!found) setJumpPending(false); // deeper than the cap → give up cleanly
+      });
     }
-  }, [highlightIndex, activeQuery, scrollToHighlightRow]);
+  }, [highlightIndex, effectiveHighlightId, isUser, userId, queryClient, scrollToHighlightRow]);
 
   return (
     <View
@@ -588,31 +578,37 @@ export function PostGrid({
         // this one primitive-ish ref covers all selection transitions without the
         // old fresh-array-every-render that forced a full re-render each frame.
         extraData={gridExtraData}
-        renderItem={({ item }) =>
-          isPending(item) ? (
-            <PendingDreamTile dream={item.pending} finished={item.finished} />
-          ) : (
-            <PostTile
-              item={item}
-              isOwn={isOwn}
-              albumSource={source}
-              isHighlighted={!highlightDismissed && item.id === highlightPostId}
-              showPrivateBadge={showPrivateBadge}
-              isNew={markNew && !!dreamsViewBaseline && item.created_at > dreamsViewBaseline}
-              allPosts={posts}
-              // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
-              // React.memo holds — the old object literal here defeated memo and
-              // re-rendered every mounted tile on each toggle/scroll (Kevin
-              // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
-              // insertion order) = the album order bulk-Post hands to post/new.
-              selActive={selection?.active ?? false}
-              selSelected={selection ? selection.selectedIds.has(item.id) : false}
-              selOrder={selectionOrder.get(item.id) ?? null}
-              onSelectToggle={selection?.onToggle}
-              onSelectEnter={selection?.onEnter}
-            />
-          )
-        }
+        renderItem={({ item }) => (
+          // FlashList has no columnWrapperStyle; the column gap survives as the
+          // fixed-tile-vs-column-width slack, but the ROW gap (old
+          // columnWrapperStyle marginBottom) needs restoring here. Isolated to the
+          // grid — doesn't touch the shared tile component.
+          <View style={styles.cell}>
+            {isPending(item) ? (
+              <PendingDreamTile dream={item.pending} finished={item.finished} />
+            ) : (
+              <PostTile
+                item={item}
+                isOwn={isOwn}
+                albumSource={source}
+                isHighlighted={!highlightDismissed && item.id === effectiveHighlightId}
+                showPrivateBadge={showPrivateBadge}
+                isNew={markNew && !!dreamsViewBaseline && item.created_at > dreamsViewBaseline}
+                allPosts={posts}
+                // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
+                // React.memo holds — the old object literal here defeated memo and
+                // re-rendered every mounted tile on each toggle/scroll (Kevin
+                // 2026-07-18). selOrder = 1-based insertion order (JS Sets iterate in
+                // insertion order) = the album order bulk-Post hands to post/new.
+                selActive={selection?.active ?? false}
+                selSelected={selection ? selection.selectedIds.has(item.id) : false}
+                selOrder={selectionOrder.get(item.id) ?? null}
+                onSelectToggle={selection?.onToggle}
+                onSelectEnter={selection?.onEnter}
+              />
+            )}
+          </View>
+        )}
       />
       {/* Our own gray spinner, resting in the self-held gap (top ≈ gap center).
           Reliable where the native RefreshControl spinner is not (Fabric). */}
@@ -629,10 +625,15 @@ export function PostGrid({
           style={styles.justViewedButton}
           onPress={scrollToHighlight}
           activeOpacity={0.85}
+          disabled={jumpPending}
         >
           <Ionicons name="eye-outline" size={14} color="#FFFFFF" />
           <Text style={styles.justViewedButtonText}>Just viewed</Text>
-          <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
+          {jumpPending ? (
+            <ActivityIndicator size="small" color="rgba(255,255,255,0.7)" />
+          ) : (
+            <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
+          )}
         </TouchableOpacity>
       )}
     </View>
@@ -640,6 +641,7 @@ export function PostGrid({
 }
 
 const styles = StyleSheet.create({
+  cell: { marginBottom: TILE_GAP },
   center: { alignItems: 'center', justifyContent: 'center', paddingTop: verticalScale(60) },
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
   footer: { paddingVertical: verticalScale(20), alignItems: 'center' },
