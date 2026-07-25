@@ -343,7 +343,14 @@ export default function ProfileScreen() {
   useFocusEffect(
     useCallback(() => {
       if (useRenderDockStore.getState().wantsDreamsTab) {
+        // Keep the bottom-nav tab accurate — router.navigate from the dock does
+        // NOT fire the tab's tabPress, so set it here so the leave-reset below
+        // still fires correctly after a dock arrival.
+        useFeedStore.getState().setActiveTab('profile');
         setActiveTab('dreams');
+        // Dock always lands on the "All" filter, not whatever was last set while
+        // on the profile (Kevin 2026-07-25).
+        setDreamsFilter('all');
         setTimeout(() => useRenderDockStore.getState().clearDreamsTab(), 0);
       }
     }, [])
@@ -358,37 +365,26 @@ export default function ProfileScreen() {
     nav.push('/inbox');
   }, []);
 
-  // Load the persisted Dreams filter (users.dreams_filter, migration 306).
+  // The Dreams filter is NOT persisted (Kevin 2026-07-25: dropped the server-side
+  // users.dreams_filter memory — the column is now vestigial). It defaults to
+  // 'all' and stays sticky WHILE the user is on the profile: sub-tab switches and
+  // detail-view round trips keep the bottom-nav tab = 'profile', so the filter
+  // holds. Leaving the profile bottom tab (a real tabPress to another tab, NOT a
+  // detail-view push, which is a root route that never fires a tabPress) resets it
+  // to 'all' so the next visit starts fresh.
+  const bottomNavTab = useFeedStore((s) => s.activeTab);
   useEffect(() => {
-    if (!user) return;
-    supabase
-      .from('users')
-      .select('dreams_filter')
-      .eq('id', user.id)
-      .single()
-      .then(({ data }) => {
-        const f = (data as { dreams_filter?: string } | null)?.dreams_filter;
-        if (f === 'all' || f === 'posted' || f === 'private') setDreamsFilter(f);
-      });
-  }, [user]);
+    if (bottomNavTab !== 'profile') setDreamsFilter('all');
+  }, [bottomNavTab]);
 
-  // Switch the Dreams filter — optimistic, then persist.
+  // Switch the Dreams filter (in-memory only — see the reset effect above).
   const applyDreamsFilter = useCallback(
     (next: DreamsFilter) => {
       if (next === dreamsFilter) return;
       Haptics.selectionAsync();
       setDreamsFilter(next);
-      if (user) {
-        supabase
-          .from('users')
-          .update({ dreams_filter: next })
-          .eq('id', user.id)
-          .then(({ error }) => {
-            if (error && __DEV__) console.warn('persist dreams_filter failed', error);
-          });
-      }
     },
-    [dreamsFilter, user]
+    [dreamsFilter]
   );
 
   // Reset to posts tab only when profile tab icon is re-tapped — UNLESS the
