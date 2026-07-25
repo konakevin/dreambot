@@ -46,7 +46,7 @@ interface WebhookPayload {
 // Single, fixed copy for the nightly-dream notification — the push is the
 // "announcement" voice; the inbox row is the matching "label" ("Last night's
 // dream" in app/inbox.tsx getGroupText). Keep the two vocabularies paired.
-const NIGHTLY_DREAM_PUSH_TITLE = 'You dreamed something last night';
+const NIGHTLY_DREAM_PUSH_TITLE = 'Your nightly dream is ready';
 const NIGHTLY_DREAM_PUSH_BODY = 'Tap to see it';
 // Copy for a dream the user ACTIVELY created and then left the app before it
 // finished (subtype='manual'). The nightly "while you slept" framing is wrong
