@@ -49,7 +49,8 @@ interface QueueRow {
   user_id: string;
   // 'first_dream' is the onboarding first-dream cascade (re-activated
   // 2026-06-15) — dispatched fire-and-forget to first-dream-render.
-  source: 'first_dream' | 'nightly' | 'create' | 'dlt';
+  // 'dream_off' is a Dream Off game entry — renders exactly like 'create'.
+  source: 'first_dream' | 'nightly' | 'create' | 'dlt' | 'dream_off';
   weight: 'light' | 'heavy';
   payload: Record<string, unknown>;
   status: string;
@@ -143,6 +144,46 @@ async function deadLetterAftermath(
         (e: unknown) =>
           console.error(
             `[worker:${workerId}] dream_failed notification insert FAILED for job ${job.id}:`,
+            (e as Error)?.message
+          )
+      );
+  } else if (job.source === 'dream_off') {
+    // Dream Off game entry. Mirror the render-owned lifecycle: pot-aware refund +
+    // entry-state via the DB (forfeit=nsfw / fail=else — restore the escrow slot or
+    // refund the self-payer, and advance the game), then flip dream_jobs so the
+    // client unsticks. NO generic dream_failed push (its "sparkle's back in your
+    // pocket" copy is wrong for a pot-funded entry; the room surfaces the failure).
+    const { data: q } = await supabase
+      .from('dream_queue')
+      .select('payload')
+      .eq('id', job.id)
+      .single();
+    const gameId = (q?.payload as { game_id?: string } | null)?.game_id ?? null;
+    if (gameId) {
+      const { error: doErr } = await supabase.rpc(
+        isNsfw ? 'dream_off_forfeit_entry' : 'dream_off_fail_entry',
+        { p_game_id: gameId, p_entry_job_id: job.id }
+      );
+      if (doErr) {
+        console.error(
+          `[worker:${workerId}] dream_off dead-letter refund FAILED for job ${job.id}:`,
+          doErr.message
+        );
+      }
+    }
+    await supabase
+      .from('dream_jobs')
+      .update({
+        status: isNsfw ? 'nsfw' : 'failed',
+        error: message,
+        completed_at: new Date().toISOString(),
+      })
+      .eq('id', job.id)
+      .then(
+        () => {},
+        (e: unknown) =>
+          console.error(
+            `[worker:${workerId}] dream_off dream_jobs terminal flip FAILED for job ${job.id}:`,
             (e as Error)?.message
           )
       );
@@ -348,7 +389,8 @@ Deno.serve(async (req) => {
               break;
             }
             case 'create':
-            case 'dlt': {
+            case 'dlt':
+            case 'dream_off': {
               // User-initiated dream (paid). SYNCHRONOUS: generate-dream/
               // restyle-photo render with the connection held open (so the
               // isolate stays alive — the platform stopped honoring waitUntil for
@@ -406,7 +448,12 @@ Deno.serve(async (req) => {
           // already reached a terminal state, DON'T re-handle — that would
           // re-render a success or double dead-letter. Re-check the live status
           // first; only proceed to re-queue if it's still non-terminal.
-          if (job.source === 'create' || job.source === 'dlt' || job.source === 'first_dream') {
+          if (
+            job.source === 'create' ||
+            job.source === 'dlt' ||
+            job.source === 'first_dream' ||
+            job.source === 'dream_off'
+          ) {
             const { data: cur } = await supabase
               .from('dream_queue')
               .select('status')
