@@ -47,8 +47,8 @@ async function mkPlayer(g: string, uid: string) {
 async function mkEntry(g: string, author: string): Promise<string> {
   const r = await db.query(
     `INSERT INTO public.dream_off_entries (game_id, author_id, author_name_snapshot, render_status, moderation_status, completed_at, game_image_ref)
-     VALUES ($1,$2,$3,'completed','clean', now(), 'game/'||$2::text||'.png') RETURNING id`,
-    [g, author, `name-${author.slice(-2)}`]
+     VALUES ($1,$2,$3,'completed','clean', now(), $4) RETURNING id`,
+    [g, author, `name-${author.slice(-2)}`, `game/${author.slice(-2)}.png`]
   );
   return r.rows[0].id;
 }
