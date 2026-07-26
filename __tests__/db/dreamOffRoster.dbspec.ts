@@ -137,7 +137,9 @@ describe('join_game_by_code (migration 404)', () => {
   });
 
   it('rejects when the game is full (cap)', async () => {
-    await makeGame({ code: 'FULLCODE00', maxPlayers: 1 }); // only the owner fits
+    await makeGame({ code: 'FULLCODE00', maxPlayers: 2 }); // owner + 1 seat (min cap is 2)
+    await actAs(CAROL);
+    await db.query(`SELECT public.join_game_by_code('FULLCODE00')`); // fills the last seat
     await actAs(BOB);
     const { rows } = await db.query(`SELECT public.join_game_by_code('FULLCODE00') AS r`);
     expect(rows[0].r.status).toBe('full');
