@@ -22,6 +22,7 @@ async function actAs(uid: string | null) {
 
 beforeAll(async () => {
   db = await pool.connect();
+  await db.query('CREATE EXTENSION IF NOT EXISTS pgcrypto'); // gen_random_bytes (Supabase has it; vanilla PG doesn't)
   for (const t of [
     'dream_off_pot_ledger',
     'dream_off_pot',
@@ -49,15 +50,11 @@ beforeAll(async () => {
     `CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE
      AS $f$ SELECT NULLIF(current_setting('test.uid', true), '')::uuid $f$`
   );
-  // sanitize + blocklist stubs (identity / never-blocked; not under test here).
-  await db.query(
-    `CREATE OR REPLACE FUNCTION public.sanitize_user_text(p text) RETURNS text
-     LANGUAGE sql IMMUTABLE AS $f$ SELECT btrim(p) $f$`
-  );
-  await db.query(
-    `CREATE OR REPLACE FUNCTION public.text_is_blocked(p text) RETURNS boolean
-     LANGUAGE sql IMMUTABLE AS $f$ SELECT false $f$`
-  );
+  // NOTE: we do NOT load the topic-sanitize trigger here — it calls the shared
+  // sanitize_user_text / text_is_blocked, and redefining those as stubs would
+  // clobber sibling dbspecs (textModeration) that share this one CI database.
+  // The trigger reuses those proven functions + is validated by the prod apply;
+  // create_game/deal_topic below insert clean topics, so it isn't needed here.
 
   // Real DDL.
   const m400 = migrationSql('400_dream_off_core_schema.sql');
@@ -75,8 +72,6 @@ beforeAll(async () => {
   await db.query(
     extract(m403, 'CREATE OR REPLACE FUNCTION public.dream_off_gen_invite_code()', '$$;')
   );
-  await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.dream_off_clean_topic()', '$$;'));
-  await db.query(extract(m403, 'CREATE TRIGGER trg_dream_off_clean_topic', 'clean_topic();'));
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.dream_off_setup_pot(', '$$;'));
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.create_game(', '$$;'));
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.deal_topic(', '$$;'));
