@@ -823,15 +823,21 @@ async function main() {
   // Global dedup set — preloaded from existing rows so re-runs top up + never
   // collide cross-pack/cross-category.
   const seen = new Set();
+  const packCounts = {};
   if (!DRY_RUN) {
     // Paginate — PostgREST silently caps a single read at 1000 rows, which would
-    // leave most of an existing deck out of the cross-dedup set.
+    // leave most of an existing deck out of the cross-dedup set. Also tally per
+    // (pack, category) so we can RESUME — skip packs already at their target.
     for (let from = 0; ; from += 1000) {
       const { data } = await supabase
         .from('dream_off_topics')
-        .select('topic_text')
+        .select('pack, category, topic_text')
         .range(from, from + 999);
-      for (const r of data ?? []) seen.add(normKey(r.topic_text));
+      for (const r of data ?? []) {
+        seen.add(normKey(r.topic_text));
+        const k = `${r.pack}/${r.category}`;
+        packCounts[k] = (packCounts[k] || 0) + 1;
+      }
       if (!data || data.length < 1000) break;
     }
     console.log(`Preloaded ${seen.size} existing topics into the dedup set.`);
@@ -840,6 +846,11 @@ async function main() {
 
   let grand = 0;
   for (const spec of specs) {
+    const already = packCounts[`${spec.packKey}/${spec.category}`] || 0;
+    if (!DRY_RUN && already >= spec.count) {
+      console.log(`▶ ${spec.label} / ${spec.category} — already ${already}, skipping ✓`);
+      continue;
+    }
     console.log(`▶ ${spec.label} / ${spec.category} — target ${spec.count}`);
     const { topics, cut } = await genPackCategory(spec, seen);
     console.log(`   → ${topics.length} clean (QA cut ${cut} total)`);
