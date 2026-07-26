@@ -22,7 +22,6 @@ async function actAs(uid: string | null) {
 
 beforeAll(async () => {
   db = await pool.connect();
-  await db.query('CREATE EXTENSION IF NOT EXISTS pgcrypto'); // gen_random_bytes (Supabase has it; vanilla PG doesn't)
   for (const t of [
     'dream_off_pot_ledger',
     'dream_off_pot',

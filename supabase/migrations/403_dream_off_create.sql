@@ -20,17 +20,19 @@ BEGIN;
 CREATE OR REPLACE FUNCTION public.dream_off_gen_invite_code()
 RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
 DECLARE
-  v_alphabet constant text := 'ABCDEFGHJKMNPQRSTVWXYZ23456789'; -- no I/L/O/U/0/1
+  v_alphabet constant text := 'ABCDEFGHJKMNPQRSTVWXYZ23456789'; -- 30 chars, no I/L/O/U/0/1
   v_code text;
-  v_bytes bytea;
   v_try int := 0;
   i int;
 BEGIN
+  -- random() (pg_catalog) — resolves under search_path='' where pgcrypto's
+  -- gen_random_bytes would not. 30^10 (~5.9e14) space + a uniqueness retry; the
+  -- code is not a secret (it only lets you REQUEST to join, RLS-gated), so PRNG
+  -- randomness is sufficient to make enumeration infeasible under rate limits.
   LOOP
     v_code := '';
-    v_bytes := gen_random_bytes(10);
-    FOR i IN 0..9 LOOP
-      v_code := v_code || substr(v_alphabet, 1 + (get_byte(v_bytes, i) % length(v_alphabet)), 1);
+    FOR i IN 1..10 LOOP
+      v_code := v_code || substr(v_alphabet, 1 + floor(random() * length(v_alphabet))::int, 1);
     END LOOP;
     EXIT WHEN NOT EXISTS (SELECT 1 FROM public.dream_offs WHERE invite_code = v_code);
     v_try := v_try + 1;
