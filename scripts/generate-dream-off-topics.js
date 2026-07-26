@@ -419,7 +419,10 @@ function categoryRules(category) {
   if (category === 'scene') {
     return `This is a SCENE pack: each topic is a FULL faceless scene/subject — the scene, object, creature, or moment IS the subject. NO people cast in ("you"/"your +1" must NOT appear). Paint one clear, renderable image.`;
   }
-  return `This is a CAST pack: each topic is a BARE ROLE / CHARACTER as a NOUN PHRASE that grammatically completes the sentence "you as ___" (the app prefixes "you as ___" or "you and your +1 as ___" later — so it must read cleanly after both). GOOD: "a battle-worn knight", "the lone survivor of a sunscreen disaster", "reality-TV royalty". BAD (do NOT do these): a bare action ("dragged from the ocean"), an -ing phrase ("owning the pool party"), or a bare adjective ("absolutely feral") — those break after "you as". Keep it number-flexible (avoid count-locked plurals). The player(s) are the visible face-swapped subject: exactly ONE person or a couple — NEVER a crowd or group of 3+.`;
+  return `This is a CAST pack: each topic is a BARE ROLE / CHARACTER as a NOUN PHRASE that MUST read cleanly as BOTH "you as ___" (single) AND "you and your +1 as ___" (a couple). GOOD: "a battle-worn knight", "the villain in every story", "reality-TV royalty". BAD (do NOT do these):
+- a bare action ("dragged from the ocean"), an -ing phrase ("owning the pool party"), or a bare adjective ("absolutely feral") — they break after "you as".
+- anything SINGULAR-LOCKED that contradicts a couple: "the lone/only/last/sole ___", "a solo ___", "___ by yourself". It must make sense for TWO people too.
+The player(s) are the visible face-swapped subject: exactly ONE person or a couple — NEVER a crowd or group of 3+.`;
 }
 
 async function genBatch(theme, category, n, avoidList) {
@@ -468,6 +471,10 @@ async function qaScan(theme, category, topics) {
     category === 'cast'
       ? ' or implies a GROUP of 3+ people (cast topics must be one person or a couple only)'
       : ' or accidentally casts a specific person ("you") into a scene pack';
+  const castCheck =
+    category === 'cast'
+      ? `\n- (CAST — critical) does NOT transform cleanly into BOTH a single AND a couple prompt: read each as "you as [X]" AND as "you and your +1 as [X]". Flag it if EITHER reading is grammatically broken (it's a bare action / -ing phrase / adjective, not a role noun phrase) OR it is SINGULAR-LOCKED and contradicts a couple ("the lone/only/last/sole ___", "a solo ___", "by yourself")`
+      : '';
   const prompt = `You are the strict QA gate for "Dream Off" party-game topics.
 Pack: "${theme.label}" (${category}). ${categoryRules(category)}
 
@@ -476,7 +483,7 @@ Hold a HIGH bar — we only keep 5-STAR ideas: clever, surprising, genuinely fun
 - crude or gross WITHOUT wit (party-game edge is great, but it must be clever + charming, not shock for its own sake), or off-tone for this pack
 - NOT renderable by an AI image model: explicit sexual content, graphic gore${groupRule}
 - names a real person/celebrity, a trademarked character, or a movie/show/game/brand title
-- a near-duplicate CONCEPT of another topic in the list
+- a near-duplicate CONCEPT of another topic in the list${castCheck}
 
 Topics:
 ${topics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
