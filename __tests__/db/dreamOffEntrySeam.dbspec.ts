@@ -60,6 +60,7 @@ beforeAll(async () => {
     'dream_off_events',
     'dream_off_players',
     'dream_offs',
+    'uploads',
     'engine_config',
     'users',
   ]) {
@@ -70,6 +71,8 @@ beforeAll(async () => {
     `CREATE TABLE public.users (id uuid PRIMARY KEY, sparkle_balance int NOT NULL DEFAULT 0,
        display_name text, username text)`
   );
+  // FK target of dream_off_entries.upload_id.
+  await db.query('CREATE TABLE public.uploads (id uuid PRIMARY KEY)');
   await db.query(
     `CREATE TABLE public.engine_config (id int PRIMARY KEY, dream_off_deadline_hours int)`
   );
