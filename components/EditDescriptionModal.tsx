@@ -22,7 +22,7 @@ import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useUpdateDescription, MAX_DESCRIPTION_LENGTH } from '@/hooks/useUpdateDescription';
-import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { MentionSheet } from '@/components/MentionSheet';
 import { useMentionCandidates } from '@/hooks/useMentionCandidates';
 import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
 
@@ -127,9 +127,10 @@ export function EditDescriptionModalHost() {
             maxLength={MAX_DESCRIPTION_LENGTH}
             textAlignVertical="top"
           />
-          <MentionSuggestions
+          <MentionSheet
             candidates={mentionCandidates}
             onPick={pickMention}
+            query={mention.query}
             style={styles.mentions}
           />
           <View style={styles.footer}>

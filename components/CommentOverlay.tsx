@@ -42,7 +42,7 @@ import { useCommentDrafts } from '@/store/commentDrafts';
 import { useComments, type Comment } from '@/hooks/useComments';
 import { useAddComment } from '@/hooks/useAddComment';
 import { useMentionCandidates } from '@/hooks/useMentionCandidates';
-import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { MentionSheet } from '@/components/MentionSheet';
 import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
 import { CommentRow } from '@/components/CommentRow';
 import { Toast } from '@/components/Toast';
@@ -616,8 +616,13 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
               </View>
             )}
 
-            {/* Mention autocomplete — follows pinned top, global streams in */}
-            <MentionSuggestions candidates={mentionCandidates} onPick={completeMention} />
+            {/* Mention autocomplete — an opaque floating sheet that grows UP above
+                the input (rides the keyboard via the enclosing inputSticky). */}
+            <MentionSheet
+              candidates={mentionCandidates}
+              onPick={completeMention}
+              query={mention.query}
+            />
 
             {/* Input bar */}
             <View
@@ -754,6 +759,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
+    // Above the thumbnail (z10) + thumbMeta (z11) + header tap-catcher (z20) so
+    // the mention sheet (inside the inputSticky, growing up out of the pane)
+    // floats ON TOP of them instead of being painted over (Kevin 2026-07-26).
+    zIndex: 40,
   },
   handleRow: {
     alignItems: 'center',

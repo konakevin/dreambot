@@ -35,10 +35,15 @@ export function useMentionCandidates(query: string, active: boolean): MentionCan
   const { data: blocked } = useBlockedIds();
 
   const q = query.trim().toLowerCase();
+  // Require at least ONE character after '@' before suggesting: a bare '@' has no
+  // query to narrow on, so it would dump the entire follow list (Kevin 2026-07-26).
+  // `detectMention.active` stays true for the empty token so applyMention still
+  // works; we only gate the CANDIDATES (→ the sheet stays hidden until you type).
+  const gated = active && q.length >= 1;
 
   // 1. Instant: prefix-filter the cached following list in memory.
   const local = useMemo<MentionCandidate[]>(() => {
-    if (!active) return [];
+    if (!gated) return [];
     return following
       .filter((u) => u.id !== meId && !blocked?.has(u.id))
       .filter((u) => (u.username ?? '').toLowerCase().startsWith(q))
@@ -49,16 +54,16 @@ export function useMentionCandidates(query: string, active: boolean): MentionCan
         avatarUrl: u.avatar_url,
         isFollowing: true,
       }));
-  }, [active, following, blocked, q, meId]);
+  }, [gated, following, blocked, q, meId]);
 
   // 2. Broaden: global username search, debounced (follows are instant; only the
   //    network half waits) and gated so it fires only when follows are thin.
-  const wantGlobal = active && q.length >= 2 && local.length < BROADEN_WHEN_LOCAL_UNDER;
+  const wantGlobal = gated && q.length >= 2 && local.length < BROADEN_WHEN_LOCAL_UNDER;
   const debouncedQuery = useDebouncedValue(wantGlobal ? query : '', 150);
   const { data: global = [] } = useSearchUsers(debouncedQuery);
 
   return useMemo<MentionCandidate[]>(() => {
-    if (!active) return [];
+    if (!gated) return [];
     const seen = new Set(local.map((u) => u.id));
     const extra = global
       .filter((u) => !u.isMe && !seen.has(u.id))
@@ -72,5 +77,5 @@ export function useMentionCandidates(query: string, active: boolean): MentionCan
         isFollowing: false,
       }));
     return [...local, ...extra].slice(0, MAX);
-  }, [active, local, global, q]);
+  }, [gated, local, global, q]);
 }

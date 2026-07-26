@@ -52,9 +52,10 @@ import { pinToFeed, pinPostRowToFeed } from '@/lib/dreamSave';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import { POST_SELECT, mapToDreamPost, castRow } from '@/lib/mapPost';
 import { moderateText } from '@/lib/moderation';
-import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { MentionSheet } from '@/components/MentionSheet';
 import { useMentionCandidates } from '@/hooks/useMentionCandidates';
 import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
+import { splitCaption, isMentionToken } from '@/lib/hashtags';
 import { tileImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
@@ -84,6 +85,24 @@ function toSelected(item: DreamPostItem): Selected {
     dream_medium: item.dream_medium ?? null,
     dream_vibe: item.dream_vibe ?? null,
   };
+}
+
+// Render the caption with @mentions colored accent, as formatted TextInput
+// children (iOS renders these over the plain value) so a picked handle reads as
+// an active link WHILE typing. Same tokenizer as the posted caption
+// (lib/hashtags) so the composer and the post agree on what's a mention. Returns
+// null on empty text so the TextInput placeholder still shows.
+function renderCaptionWithMentions(text: string) {
+  if (!text) return null;
+  return splitCaption(text).map((part, i) =>
+    isMentionToken(part) ? (
+      <Text key={i} style={styles.captionMention}>
+        {part}
+      </Text>
+    ) : (
+      <Text key={i}>{part}</Text>
+    )
+  );
 }
 
 export default function NewPostScreen() {
@@ -411,8 +430,16 @@ export default function NewPostScreen() {
             <Ionicons name="add" size={16} color={colors.accent} />
             <Text style={styles.addMoreText}>Add more</Text>
           </TouchableOpacity>
-          <MentionSuggestions candidates={mentionCandidates} onPick={pickMention} />
           <View style={styles.inputContainer}>
+            {/* Sheet floats ABSOLUTELY above the input's top (bottom:'100%') so it
+                never consumes the input's reserved space — the caption stays
+                visible above the keyboard while it grows up over the image. */}
+            <MentionSheet
+              candidates={mentionCandidates}
+              onPick={pickMention}
+              query={mention.query}
+              style={styles.captionSheet}
+            />
             <TextInput
               style={styles.input}
               placeholder="Write a caption..."
@@ -427,7 +454,9 @@ export default function NewPostScreen() {
               multiline
               maxLength={500}
               textAlignVertical="top"
-            />
+            >
+              {renderCaptionWithMentions(description)}
+            </TextInput>
           </View>
         </Pressable>
       ) : (
@@ -500,8 +529,13 @@ export default function NewPostScreen() {
             )}
           </View>
           <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-            <MentionSuggestions candidates={mentionCandidates} onPick={pickMention} />
             <View style={styles.inputContainer}>
+              <MentionSheet
+                candidates={mentionCandidates}
+                onPick={pickMention}
+                query={mention.query}
+                style={styles.captionSheet}
+              />
               <TextInput
                 style={styles.input}
                 placeholder="Write a caption..."
@@ -516,7 +550,9 @@ export default function NewPostScreen() {
                 multiline
                 maxLength={500}
                 textAlignVertical="top"
-              />
+              >
+                {renderCaptionWithMentions(description)}
+              </TextInput>
             </View>
           </Pressable>
         </View>
@@ -627,7 +663,12 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(2),
   },
   coverTagText: { color: '#FFFFFF', fontSize: fontScale(10), fontWeight: '700' },
-  inputContainer: { flex: 1, paddingHorizontal: 16 },
+  inputContainer: { flex: 1, paddingHorizontal: 16, position: 'relative' },
+  // The mention sheet floats directly above the caption input's top edge and
+  // grows up; absolute so it never pushes the input toward the keyboard.
+  captionSheet: { position: 'absolute', bottom: '100%', left: 0, right: 0, zIndex: 30 },
+  // A picked @mention renders as an accent "active link" while composing.
+  captionMention: { color: colors.accent, fontWeight: '600' },
   input: {
     color: '#FFFFFF',
     fontSize: fontScale(15),
