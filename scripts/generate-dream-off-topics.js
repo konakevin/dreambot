@@ -48,6 +48,7 @@ const ONLY_HOLIDAY = argVal('--holiday', null); // a holiday key
 const ONLY_CATEGORY = argVal('--category', null); // 'scene' | 'cast'
 const BASE_ONLY = args.includes('--base'); // base themes only
 const HOLIDAYS_ONLY = args.includes('--holidays'); // holiday packs only
+const MAX_PACKS = args.includes('--max') ? parseInt(argVal('--max'), 10) : null; // stop after N packs
 const DRY_RUN = args.includes('--dry-run');
 const NO_QA = args.includes('--no-qa');
 
@@ -845,6 +846,7 @@ async function main() {
   console.log(`${specs.length} pack(s) to seed.\n`);
 
   let grand = 0;
+  let processed = 0;
   for (const spec of specs) {
     const already = packCounts[`${spec.packKey}/${spec.category}`] || 0;
     if (!DRY_RUN && already >= spec.count) {
@@ -877,10 +879,15 @@ async function main() {
     }
     console.log(`   ✓ inserted ${rows.length}`);
     grand += rows.length;
+    processed++;
+    if (MAX_PACKS && processed >= MAX_PACKS) {
+      console.log(`\n(hit --max ${MAX_PACKS} — stopping; re-run to continue)`);
+      break;
+    }
   }
 
   console.log(
-    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grand} topics across ${specs.length} pack(s).`
+    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grand} topics across ${processed} newly-seeded pack(s).`
   );
 }
 
