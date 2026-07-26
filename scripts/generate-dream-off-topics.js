@@ -1,25 +1,29 @@
 #!/usr/bin/env node
 /**
- * Generate the Dream Off topic deck (dream_off_topics).
+ * Generate the Dream Off topic deck (dream_off_topics) — category-aware + QA'd.
  *
- * Design (DREAM_OFF_PLAN.md §6): 6 EVERGREEN packs always on, ~100 topics each.
- * A topic is a SHORT, funny, VISUAL prompt seed — players interpret it by
- * generating an AI dream image, then blind-vote the results. So topics must be
- * evocative, renderable, name-free, and SFW (a per-game Spicy tone is a separate
- * opt-in deck, deferred). Seasonal/holiday packs are a fast-follow.
+ * A THEME (pack) ships in up to two CATEGORIES, seeded separately with a
+ * fundamentally different composition (migration 417):
+ *   • scene — a faceless subject (object / place / creature / moment); the scene
+ *     IS the star, no person appears.
+ *   • cast  — the player(s) ARE the subject (face-swapped in), stored as a BARE
+ *     number-flexible scenario so the game's single/couple setting prefixes it
+ *     ("you as ___" / "you and your +1 as ___") at deal time. NEVER a group.
  *
- * DEDUP-AS-YOU-GO (mirrors the bots' iterative-passback technique in
- * scripts/lib/seed-generator.js): topics are generated in small batches; every
- * batch is deduped against a GLOBAL seen-set (normalized) — which is preloaded
- * from what's already in dream_off_topics (all packs) AND grows across packs and
- * batches — and the running list is fed BACK to Sonnet as an avoid-list so it
- * diversifies instead of repeating. Cross-pack + re-run safe.
+ * Humor bar = Jackbox / Cards Against Humanity: raunchy, gross, savage, adult
+ * SUBJECTS welcome — but always RENDERABLE (no explicit sex, no graphic gore) and
+ * IP-safe (genres/archetypes only, never named characters/titles/real people).
+ *
+ * Quality loop (Sonnet for both): generate in batches → dedup-as-you-go against a
+ * GLOBAL seen-set → QA-scan each batch (cut weak/off-tone/group/IP/dupe) → backfill
+ * until each pack lands a clean `--count` (default 100). Seeds ALL packs.
  *
  * Usage:
- *   node scripts/generate-dream-off-topics.js                 # ~100 per pack
- *   node scripts/generate-dream-off-topics.js --count 5       # trial: 5 per pack
- *   node scripts/generate-dream-off-topics.js --pack cursed   # one pack only
- *   node scripts/generate-dream-off-topics.js --dry-run       # print, don't insert
+ *   node scripts/generate-dream-off-topics.js                       # every pack, 100 each
+ *   node scripts/generate-dream-off-topics.js --pack glam           # one theme (both categories)
+ *   node scripts/generate-dream-off-topics.js --pack glam --category cast
+ *   node scripts/generate-dream-off-topics.js --count 6 --dry-run   # preview, no insert
+ *   node scripts/generate-dream-off-topics.js --no-qa               # skip the QA gate (faster)
  */
 
 const { SONNET } = require('./lib/models');
@@ -34,104 +38,350 @@ const supabase = createClient(
 );
 
 const args = process.argv.slice(2);
-const countIdx = args.indexOf('--count');
-const COUNT = countIdx >= 0 ? parseInt(args[countIdx + 1], 10) : 100;
-const packIdx = args.indexOf('--pack');
-const ONLY_PACK = packIdx >= 0 ? args[packIdx + 1] : null;
+const argVal = (flag, def) => {
+  const i = args.indexOf(flag);
+  return i >= 0 ? args[i + 1] : def;
+};
+const COUNT = parseInt(argVal('--count', '100'), 10);
+const ONLY_PACK = argVal('--pack', null);
+const ONLY_CATEGORY = argVal('--category', null); // 'scene' | 'cast'
 const DRY_RUN = args.includes('--dry-run');
+const NO_QA = args.includes('--no-qa');
 
-const BATCH = 22; // topics requested per Sonnet call
-const MAX_ROUNDS = 12; // safety cap per pack (batches that add nothing → bail)
+const BATCH = 22;
+const MAX_ROUNDS = 16;
 
-// The 6 evergreen packs. `voice` steers the Sonnet call; `examples` anchor the
-// register (short, visual, funny, renderable) without being copied verbatim.
-const PACKS = [
+// Shared rules stitched into every prompt (category-specific bits added below).
+const HUMOR = `Humor bar = a party game (Jackbox / Cards Against Humanity energy) BUT delivered with DreamBot's own whimsy and charm — clever, delightful, a little magical, never just crude for its own sake. Every idea must be 5-STAR: memorable, surprising, the kind that makes people grin or groan-laugh out loud. Raunchy, gross, savage, awkward, and adult SUBJECTS are welcome where they genuinely land — but wit and charm come first.`;
+const RENDER = `Keep it RENDERABLE by an AI image model: NO explicit sexual acts and NO graphic gore/graphic violence (models refuse those). Suggestive / gross / adult SITUATIONS are fine; explicit is not.`;
+const IP = `IP-safe: NEVER a named real person, celebrity, trademarked character, franchise, movie/show/game title, or brand — use the GENRE / STYLE / ARCHETYPE only (e.g. "a film-noir detective", not a named one).`;
+
+// ── The theme grid. Each theme has a scene and/or cast composition. ────────────
+const THEMES = [
   {
-    key: 'cursed',
-    label: 'Cursed 😈',
-    voice:
-      'Unhinged, forbidden, slightly-wrong, haunted, "why does this exist" energy. Delightfully cursed, never gross or mean. The funny is in the wrongness.',
-    examples: [
-      'the most cursed sandwich ever assembled',
-      'a gas station at 3am that should not exist',
-      'a haunted bouncy castle',
-      'the worst possible emotional support animal',
-      'a vending machine that dispenses regret',
-    ],
+    key: 'cute',
+    label: 'Cute',
+    scene: {
+      voice:
+        'Impossibly adorable creatures, tiny things, cozy wholesome moments — often the cutest possible subject dropped somewhere unexpected. Makes people go "awww".',
+      examples: [
+        'a kennel of confused baby animals on a submarine',
+        'the world’s tiniest kitten running a lemonade stand',
+        'a duckling leading a parade of even smaller ducklings',
+        'a hedgehog who has fallen asleep in a teacup',
+      ],
+    },
+    cast: {
+      voice:
+        'Transformed into something impossibly adorable — kawaii, plushie, chibi, storybook-cute. A soft, huggable, cartoon version of the player(s).',
+      examples: [
+        'a kawaii plushie version of themselves',
+        'the roundest chibi character at a snack party',
+        'a soft storybook creature on a cozy adventure',
+        'an adorable mascot who is trying their absolute best',
+      ],
+    },
   },
   {
-    key: 'wholesome',
-    label: 'Wholesome 🥹',
-    voice:
-      'Sweet, cozy, heartwarming, a little magical. The kind of image that makes you go "awww". Warmth and charm, not saccharine.',
-    examples: [
-      'a golden retriever having the best day of its life',
-      'the coziest cabin in the middle of a snowstorm',
-      'two robots slowly falling in love',
-      'a tiny dragon who just wants a hug',
-      'grandmas kitchen on a slow Sunday morning',
-    ],
+    key: 'cursed',
+    label: 'Cursed',
+    scene: {
+      voice:
+        'Gross, wrong, haunted, forbidden objects and places. The ick and the wrongness — "why does this exist and who approved it".',
+      examples: [
+        'a porta-potty that has gained sentience',
+        'a urinal-cake display at a fancy art gallery',
+        'a birthday cake that is deeply, sincerely sorry',
+        'a vending machine that only dispenses regret',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as a cursed, gross, or deeply wrong figure — the thing you do not want to meet in a basement.',
+      examples: [
+        'the thing that lives behind the water heater',
+        'a swamp gremlin caught mid-garbage-snack',
+        'a cursed antique portrait whose eyes follow you',
+        'a bog witch who has fully given up on hygiene',
+      ],
+    },
   },
   {
     key: 'chaotic',
-    label: 'Chaotic 🌀',
-    voice:
-      'Maximum absurd chaos, comedic energy, everything happening at once. Big, loud, ridiculous, kinetic scenes.',
-    examples: [
-      'a birthday party that has completely spiraled out of control',
-      'rush hour, but everyone is a raccoon',
-      'the exact moment the office printer finally snaps',
-      'a wizard duel that got way out of hand at a grocery store',
-      'what the group chat looks like at 2am',
-    ],
+    label: 'Chaotic',
+    scene: {
+      voice:
+        'Absurd chaos — everything going wrong at once, drunk-party mayhem, things on fire that should not be. A single messy MOMENT, not a crowd of faces.',
+      examples: [
+        'the exact moment a food truck explodes',
+        'a wedding cake mid-collapse',
+        'the aftermath of a party nobody can remember',
+        'a kitchen that is somehow entirely on fire and also flooding',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) at the dead center of a disaster they very clearly caused. Panic, mess, guilt, comedic mayhem.',
+      examples: [
+        'the clear cause of this entire disaster',
+        'the last person standing in a total catastrophe',
+        'patient zero of a very avoidable mess',
+        'the prime suspect in one specific kitchen fire',
+      ],
+    },
+  },
+  {
+    key: 'epic',
+    label: 'Epic / Fantasy',
+    scene: {
+      voice:
+        'Grand fantasy worlds, epic vistas, mythic places — swords, dragons, ruins, magic. No people needed; the world is the star.',
+      examples: [
+        'a dragon’s hoard hidden in an abandoned shopping mall',
+        'an epic castle mid-siege at stormy dawn',
+        'a glowing rune-covered gate deep in a canyon',
+        'a battlefield the morning after, mist and banners',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as an epic fantasy hero or villain — knight, wizard, warrior, monarch, rogue. Number-flexible.',
+      examples: [
+        'a battle-worn knight on a clearly doomed quest',
+        'a wizard mid-spell that is going badly wrong',
+        'a warlord surveying a battlefield they may have lost',
+        'a rogue sneaking out of a vault, arms full of loot',
+      ],
+    },
+  },
+  {
+    key: 'glam',
+    label: 'Glam',
+    scene: {
+      voice:
+        'High-fashion, luxe, iconic glamour — red carpet, couture, magazine shoots, awards stages. Dazzling and tasteful.',
+      examples: [
+        'the most extravagant red carpet ever rolled out',
+        'a glossy high-fashion magazine cover shoot',
+        'a diamond-drenched awards-show stage',
+        'a couture gown so dramatic it needs its own zip code',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as untouchable stars — red carpet, magazine cover, old-Hollywood glamour, black-tie icon. Flattering and iconic.',
+      examples: [
+        'an untouchable movie star owning the red carpet',
+        'a glamorous magazine cover icon',
+        'old-Hollywood royalty at a black-tie gala',
+        'a fashion legend mid-photoshoot, wind machine blazing',
+      ],
+    },
+  },
+  {
+    key: 'hot_summer',
+    label: 'Hot Summer',
+    scene: {
+      voice:
+        'Sexy-by-SETTING summer heat — pool parties, tropical beaches, neon nightlife, foam parties, glossy photoshoots. Alluring, fun, a little wild and crazy, never explicit.',
+      examples: [
+        'a rooftop infinity-pool party at golden hour',
+        'a neon beach club going off at midnight',
+        'a wild tropical foam party in full swing',
+        'a yacht deck dripping with champagne and string lights',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) living their hottest, most confident summer — pool, beach, yacht, festival, beach-runway. Flattering, sultry, fun, a bit crazy — tasteful, never explicit.',
+      examples: [
+        'the undisputed king or queen of the pool party',
+        'the effortlessly cool icon on a yacht deck',
+        'a beach-runway legend in wild swim couture',
+        'the undisputed main character of a tropical festival',
+      ],
+    },
+  },
+  {
+    key: 'anime',
+    label: 'Anime',
+    scene: {
+      voice:
+        'Anime / manga AESTHETIC scenes (style only, no named anything) — neon cities, cherry blossoms, mecha, ramen shops, dramatic skies.',
+      examples: [
+        'a neon ramen shop at 2am, dramatic anime style',
+        'a giant mecha standing guard over a cherry-blossom city',
+        'a rooftop at sunset with sweeping anime lighting',
+        'a rain-soaked neon alley, steam and glow',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as an anime ARCHETYPE (style only) — shonen hero, magical girl, mecha pilot, chibi. Big anime energy.',
+      examples: [
+        'a shonen hero mid power-up scream',
+        'a magical girl mid-transformation, full sparkle',
+        'a mecha pilot climbing into the cockpit',
+        'a chibi anime version of themselves being dramatic',
+      ],
+    },
+  },
+  {
+    key: 'movies',
+    label: 'Movies',
+    scene: {
+      voice:
+        'Movie-GENRE scenes (tropes only, no titles) — film noir, horror, western, disaster, heist, sci-fi thriller.',
+      examples: [
+        'a rain-soaked film-noir alley under a flickering sign',
+        'the basement in every single horror movie',
+        'a spaghetti-western standoff at high noon',
+        'a disaster movie’s "the city is doomed" wide shot',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as a movie ARCHETYPE (trope only) — noir detective, slasher final girl, action hero, western outlaw, heist crew.',
+      examples: [
+        'a hard-boiled noir detective in the rain',
+        'the final girl outrunning a slasher',
+        'an action hero walking away from an explosion',
+        'a western outlaw squinting at high noon',
+      ],
+    },
+  },
+  {
+    key: 'video_games',
+    label: 'Video Games',
+    scene: {
+      voice:
+        'Video-game GENRE / aesthetic scenes (no named games) — pixel dungeons, cozy farm sims, fighting stages, retro arcades, open-world vistas.',
+      examples: [
+        'a pixel-art dungeon absolutely stuffed with loot',
+        'a cozy farming-sim village at harvest time',
+        'a neon retro arcade at closing time',
+        'a fighting-game stage with a roaring crowd',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as a game ARCHETYPE (no named games) — 8-bit hero, RPG adventurer, fighting-game fighter, racer, survival looter.',
+      examples: [
+        'an 8-bit platformer hero mid-jump',
+        'an RPG adventurer at a glowing save point',
+        'a fighter posing on the character-select screen',
+        'a survival-game looter overloaded with random junk',
+      ],
+    },
+  },
+  {
+    key: 'scifi',
+    label: 'Sci-fi',
+    scene: {
+      voice:
+        'Sci-fi worlds and moments — neon megacities, deep space, alien planets, retro-futurism, cyberpunk rain.',
+      examples: [
+        'a lonely diner at the edge of a black hole',
+        'a neon megacity in endless rain',
+        'an abandoned space station drifting past a ringed planet',
+        'a retro-futuristic living room from the "world of tomorrow"',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) as sci-fi figures — astronaut, space pirate, cyberpunk merc, alien diplomat, doomed explorer.',
+      examples: [
+        'a doomed deep-space explorer, oxygen blinking red',
+        'a space pirate mid-standoff on a docking bay',
+        'a cyberpunk merc lit by neon in the rain',
+        'an astronaut who has clearly touched something they should not have',
+      ],
+    },
+  },
+  {
+    key: 'era',
+    label: 'Era',
+    scene: {
+      voice:
+        'A specific era rendered vividly (any decade or period) — 80s mall, Victorian fog, 70s disco, roaring 20s, medieval market.',
+      examples: [
+        'a 1980s mall food court at its absolute peak',
+        'a Victorian street lost in thick fog',
+        'a 1970s roller disco in full swing',
+        'a roaring-1920s speakeasy behind a bookshelf',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) dropped into an era — 80s action hero, Victorian ghost, 70s disco royalty, 20s flapper, medieval peasant.',
+      examples: [
+        'an 80s straight-to-VHS action hero',
+        'a Victorian ghost haunting a drafty manor',
+        '70s disco royalty owning the dancefloor',
+        'a medieval peasant deeply unimpressed with everything',
+      ],
+    },
+  },
+  {
+    key: 'cozy',
+    label: 'Cozy',
+    scene: {
+      voice:
+        'The coziest, comfiest vibes imaginable — rainy days, a little cabin in the woods, a crackling fire by a whimsical bookshelf, a candlelit cottage kitchen, a snowed-in village. Warm, soft, inviting, quietly magical (cottagecore / rainy-day / curl-up-forever energy).',
+      examples: [
+        'a tiny cabin glowing warm in the middle of a snowstorm',
+        'a rainy-day window seat buried in blankets and books',
+        'a candlelit cottage kitchen full of bubbling pots',
+        'a whimsical library where the fireplace never goes out',
+      ],
+    },
+    cast: {
+      voice:
+        'The player(s) living the coziest storybook life — a cottage witch, a cabin hermit, a warm little baker. Soft, snug, whimsical, utterly content.',
+      examples: [
+        'a cozy cottage witch brewing a pot of tea',
+        'a cabin hermit who has fully committed to blanket life',
+        'a storybook baker in a warm, flour-dusted kitchen',
+        'the whimsical keeper of a tiny enchanted library',
+      ],
+    },
   },
   {
     key: 'roast',
-    label: 'Us / Roast 🔥',
-    voice:
-      'The friend group / "us" as something funny — playful self-roast energy. STRICTLY NAME-FREE generic templates (never a person\'s name, gender, or real detail) so any group can play. Uses "our group", "us", "this friend group", "the squad".',
-    examples: [
-      'our group chat as an early-2000s boy band album cover',
-      'the vibe of this friend group as a cursed oil painting',
-      'us as the poster for a chaotic reality TV show',
-      'the squad reimagined as medieval peasants',
-      'our friend group as a box of mismatched cereal mascots',
-    ],
-  },
-  {
-    key: 'character',
-    label: 'Character 🎭',
-    voice:
-      'Become / embody a character or archetype ("you as ___", "everyone as ___"). Fun transformations across genres and eras. Keep it an archetype, never a named real celebrity or trademarked character.',
-    examples: [
-      'you as a battle-worn medieval knight',
-      'you as a 1980s straight-to-VHS action hero',
-      'everyone reimagined as cute animated movie characters',
-      'you as a very serious Renaissance oil portrait',
-      'you as a cryptid finally caught on a trail cam',
-    ],
+    label: 'Roast',
+    // Cast-only — you cannot roast a faceless scene.
+    cast: {
+      voice:
+        'The player(s) roasted — a savage, funny disaster. Brutal is good (it is about "us", so it is allowed to sting). Number-flexible; NEVER a group.',
+      examples: [
+        'a cautionary tale they warn kids about',
+        'the villain in everyone else’s story',
+        'a reality-TV disaster nobody can look away from',
+        'the "before" photo in every infomercial',
+      ],
+    },
   },
   {
     key: 'worlds',
-    label: 'Worlds 🌍',
-    voice:
-      'Fantastical settings and impossible places — the scene itself is the star. Wondrous, imaginative, richly renderable worlds.',
-    examples: [
-      'a city built entirely out of candy',
-      'the last diner at the very edge of the universe',
-      'an enormous library hidden underwater',
-      'a floating night market drifting through the clouds',
-      'a train station where every platform leads to a different season',
-    ],
+    label: 'Worlds',
+    // Scene-only — a place is not a person.
+    scene: {
+      voice:
+        'Purely imaginary, impossible, wondrous places — the scene is the whole star. Dreamlike, surreal, beautiful or bizarre. No people.',
+      examples: [
+        'a village where every building is a giant mushroom',
+        'an airport floating on top of a thundercloud',
+        'a library that grows wild like a forest',
+        'a city where the streets are rivers of light',
+      ],
+    },
   },
 ];
 
-// Normalized dedup key: lowercase, drop a leading article, strip punctuation,
-// collapse whitespace. Catches "A haunted bouncy castle" vs "haunted bouncy castle."
 function normKey(t) {
   return t
     .toLowerCase()
-    .replace(/^(a|an|the)\s+/, '')
+    .replace(/^(a|an|the|you as|you and your \+1 as)\s+/, '')
     .replace(/[^a-z0-9\s]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -147,7 +397,7 @@ function parseTopics(text) {
         .replace(/[.\s]+$/, '')
         .trim()
     )
-    .filter((l) => l.length >= 3 && l.length <= 90 && l.split(' ').length <= 14);
+    .filter((l) => l.length >= 3 && l.length <= 90 && l.split(' ').length <= 15);
 }
 
 async function withRetry(fn, maxRetries = 4) {
@@ -159,16 +409,21 @@ async function withRetry(fn, maxRetries = 4) {
       const retryable = err.status === 429 || err.status === 529 || err.status >= 500;
       if (!retryable || attempt === maxRetries) throw err;
       const d = delays[Math.min(attempt, delays.length - 1)];
-      console.log(
-        `   ⏳ ${err.status} overloaded, retry in ${d / 1000}s (${attempt + 1}/${maxRetries})`
-      );
+      console.log(`   ⏳ ${err.status} overloaded, retry in ${d / 1000}s`);
       await new Promise((r) => setTimeout(r, d));
     }
   }
 }
 
-// One batch, with the recent avoid-list fed back so Sonnet diversifies.
-async function genBatch(pack, n, avoidList) {
+function categoryRules(category) {
+  if (category === 'scene') {
+    return `This is a SCENE pack: each topic is a FULL faceless scene/subject — the scene, object, creature, or moment IS the subject. NO people cast in ("you"/"your +1" must NOT appear). Paint one clear, renderable image.`;
+  }
+  return `This is a CAST pack: each topic is a BARE ROLE / CHARACTER as a NOUN PHRASE that grammatically completes the sentence "you as ___" (the app prefixes "you as ___" or "you and your +1 as ___" later — so it must read cleanly after both). GOOD: "a battle-worn knight", "the lone survivor of a sunscreen disaster", "reality-TV royalty". BAD (do NOT do these): a bare action ("dragged from the ocean"), an -ing phrase ("owning the pool party"), or a bare adjective ("absolutely feral") — those break after "you as". Keep it number-flexible (avoid count-locked plurals). The player(s) are the visible face-swapped subject: exactly ONE person or a couple — NEVER a crowd or group of 3+.`;
+}
+
+async function genBatch(theme, category, n, avoidList) {
+  const comp = theme[category];
   const avoid =
     avoidList.length > 0
       ? `\n\nAlready used — DO NOT repeat these or anything close in concept:\n${avoidList
@@ -178,19 +433,22 @@ async function genBatch(pack, n, avoidList) {
       : '';
   const prompt = `You are writing topics for "Dream Off", a party game where friends each generate an AI dream image interpreting the same funny topic, then blind-vote the results.
 
-Generate ${n} FRESH, distinct topics for the "${pack.label}" pack.
+Generate ${n} FRESH, distinct topics for the "${theme.label}" pack.
 
-Pack voice: ${pack.voice}
+${categoryRules(category)}
 
-Good examples (match this register + length, DO NOT reuse them):
-${pack.examples.map((e) => `- ${e}`).join('\n')}
+Pack voice: ${comp.voice}
 
-Hard rules:
-- Each topic is a SHORT phrase (roughly 3-11 words), lowercase, no ending punctuation.
-- VISUAL + renderable — it must paint a clear image a person can generate.
-- Funny, surprising, or evocative. Vary the ideas WIDELY (no two alike).
-- SFW. No real people's names, no trademarked characters, no gore, nothing mean.
-- ${pack.key === 'roast' ? 'NAME-FREE templates only — "our group / us / the squad", never a specific person or gender.' : 'No player names.'}${avoid}
+Good examples (match the register + length, DO NOT reuse them):
+${comp.examples.map((e) => `- ${e}`).join('\n')}
+
+Rules:
+- Each topic is a SHORT phrase (~3-12 words), lowercase, no ending punctuation.
+- VISUAL + renderable — it must paint one clear image.
+- ${HUMOR}
+- ${RENDER}
+- ${IP} No real player names either.
+- Vary the ideas WIDELY (no two alike).${avoid}
 
 Return ONLY the ${n} topics, one per line, no numbering, no commentary.`;
   const msg = await withRetry(() =>
@@ -200,45 +458,93 @@ Return ONLY the ${n} topics, one per line, no numbering, no commentary.`;
       messages: [{ role: 'user', content: prompt }],
     })
   );
-  const text = msg.content.map((c) => (c.type === 'text' ? c.text : '')).join('');
-  return parseTopics(text);
+  return parseTopics(msg.content.map((c) => (c.type === 'text' ? c.text : '')).join(''));
 }
 
-// Accumulate unique topics for a pack until `target`, deduping against the shared
-// global seen-set (cross-pack + existing DB) as we go.
-async function genPack(pack, target, seen) {
-  const fresh = []; // {topic} added this run
-  const avoid = []; // recent topic strings fed back to Sonnet
+// Sonnet QA gate: returns a Set of the exact topic strings that should be CUT.
+async function qaScan(theme, category, topics) {
+  if (topics.length === 0) return new Set();
+  const groupRule =
+    category === 'cast'
+      ? ' or implies a GROUP of 3+ people (cast topics must be one person or a couple only)'
+      : ' or accidentally casts a specific person ("you") into a scene pack';
+  const prompt = `You are the strict QA gate for "Dream Off" party-game topics.
+Pack: "${theme.label}" (${category}). ${categoryRules(category)}
+
+Hold a HIGH bar — we only keep 5-STAR ideas: clever, surprising, genuinely funny, with wit and a bit of DreamBot whimsy/charm. Flag a topic as BAD if it is ANY of:
+- NOT 5-star: merely okay, weak, generic, forgettable, or not actually funny/clever
+- crude or gross WITHOUT wit (party-game edge is great, but it must be clever + charming, not shock for its own sake), or off-tone for this pack
+- NOT renderable by an AI image model: explicit sexual content, graphic gore${groupRule}
+- names a real person/celebrity, a trademarked character, or a movie/show/game/brand title
+- a near-duplicate CONCEPT of another topic in the list
+
+Topics:
+${topics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+
+Return ONLY the exact text of the BAD topics, one per line (return nothing if all are good).`;
+  const msg = await withRetry(() =>
+    client.messages.create({
+      model: SONNET,
+      max_tokens: 1500,
+      messages: [{ role: 'user', content: prompt }],
+    })
+  );
+  const flagged = parseTopics(msg.content.map((c) => (c.type === 'text' ? c.text : '')).join(''));
+  const flaggedKeys = new Set(flagged.map(normKey));
+  return new Set(topics.filter((t) => flaggedKeys.has(normKey(t))));
+}
+
+// Generate a clean `target` for one (theme, category): dedup-as-you-go + per-batch
+// QA, backfilling until the pack is full of QA-passed uniques.
+async function genPackCategory(theme, category, target, seen) {
+  const kept = [];
+  const avoid = [];
   let rounds = 0;
-  while (fresh.length < target && rounds < MAX_ROUNDS) {
+  let cutTotal = 0;
+  while (kept.length < target && rounds < MAX_ROUNDS) {
     rounds++;
-    const need = Math.min(BATCH, target - fresh.length + 4);
-    const batch = await genBatch(pack, need, avoid);
-    let added = 0;
+    const need = Math.min(BATCH, target - kept.length + 6);
+    const batch = await genBatch(theme, category, need, avoid);
+    const uniques = [];
     for (const t of batch) {
       const k = normKey(t);
       if (k.length < 3 || seen.has(k)) continue;
       seen.add(k);
-      fresh.push(t);
       avoid.push(t);
-      added++;
-      if (fresh.length >= target) break;
+      uniques.push(t);
     }
-    process.stdout.write(`   round ${rounds}: +${added} (${fresh.length}/${target})\n`);
-    if (added === 0 && rounds >= 3) break; // diminishing returns → stop
+    let good = uniques;
+    if (!NO_QA && uniques.length) {
+      const bad = await qaScan(theme, category, uniques);
+      cutTotal += bad.size;
+      good = uniques.filter((t) => !bad.has(t));
+    }
+    kept.push(...good);
+    process.stdout.write(
+      `   round ${rounds}: +${good.length}${NO_QA ? '' : ` (QA cut ${uniques.length - good.length})`} → ${kept.length}/${target}\n`
+    );
+    if (uniques.length === 0 && rounds >= 3) break;
   }
-  return fresh;
+  return { topics: kept.slice(0, target), cut: cutTotal };
 }
 
 async function main() {
-  const packs = ONLY_PACK ? PACKS.filter((p) => p.key === ONLY_PACK) : PACKS;
-  if (packs.length === 0) {
-    console.error(`Unknown pack "${ONLY_PACK}". Valid: ${PACKS.map((p) => p.key).join(', ')}`);
+  let jobs = [];
+  for (const theme of THEMES) {
+    for (const category of ['scene', 'cast']) {
+      if (!theme[category]) continue;
+      if (ONLY_PACK && theme.key !== ONLY_PACK) continue;
+      if (ONLY_CATEGORY && category !== ONLY_CATEGORY) continue;
+      jobs.push({ theme, category });
+    }
+  }
+  if (jobs.length === 0) {
+    console.error('No matching packs. Themes:', THEMES.map((t) => t.key).join(', '));
     process.exit(1);
   }
 
-  // Preload the global seen-set from EVERY existing topic (all packs) so re-runs
-  // top up cleanly and never collide cross-pack.
+  // Global dedup set — preloaded from existing rows so re-runs top up + never
+  // collide cross-pack/cross-category.
   const seen = new Set();
   if (!DRY_RUN) {
     const { data: existing } = await supabase.from('dream_off_topics').select('topic_text');
@@ -246,21 +552,22 @@ async function main() {
     console.log(`Preloaded ${seen.size} existing topics into the dedup set.`);
   }
 
-  let grandTotal = 0;
-  for (const pack of packs) {
-    console.log(`\n▶ ${pack.label} — target ${COUNT}`);
-    const topics = await genPack(pack, COUNT, seen);
-    console.log(`   → ${topics.length} unique`);
+  let grand = 0;
+  for (const { theme, category } of jobs) {
+    console.log(`\n▶ ${theme.label} / ${category} — target ${COUNT}`);
+    const { topics, cut } = await genPackCategory(theme, category, COUNT, seen);
+    console.log(`   → ${topics.length} clean (QA cut ${cut} total)`);
 
     if (DRY_RUN) {
-      topics.slice(0, 20).forEach((t) => console.log(`   · ${t}`));
-      if (topics.length > 20) console.log(`   … (+${topics.length - 20} more)`);
-      grandTotal += topics.length;
+      topics.slice(0, 12).forEach((t) => console.log(`   · ${t}`));
+      if (topics.length > 12) console.log(`   … (+${topics.length - 12} more)`);
+      grand += topics.length;
       continue;
     }
     if (topics.length === 0) continue;
     const rows = topics.map((t) => ({
-      pack: pack.key,
+      pack: theme.key,
+      category,
       topic_text: t,
       tone: 'sfw',
       is_active: true,
@@ -271,21 +578,12 @@ async function main() {
       process.exit(1);
     }
     console.log(`   ✓ inserted ${rows.length}`);
-    grandTotal += rows.length;
+    grand += rows.length;
   }
 
   console.log(
-    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grandTotal} topics across ${packs.length} pack(s).`
+    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grand} topics across ${jobs.length} pack(s).`
   );
-  if (!DRY_RUN) {
-    for (const p of PACKS) {
-      const { count } = await supabase
-        .from('dream_off_topics')
-        .select('*', { count: 'exact', head: true })
-        .eq('pack', p.key);
-      console.log(`  ${p.key.padEnd(10)} ${count ?? 0}`);
-    }
-  }
 }
 
 main().catch((e) => {
