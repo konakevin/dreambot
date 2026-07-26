@@ -117,7 +117,14 @@ beforeAll(async () => {
   );
   const m409 = migrationSql('409_dream_off_settle.sql');
   await db.query(extract(m409, 'CREATE OR REPLACE FUNCTION public.dream_off_credit(', '$$;'));
-  await db.query(extract(m409, 'CREATE OR REPLACE FUNCTION public.dream_off_settle_pot(', '$$;'));
+  // settle_pot is superseded by 415 (adds the funder pot-refund notification).
+  await db.query(
+    extract(
+      migrationSql('415_dream_off_settle_notify.sql'),
+      'CREATE OR REPLACE FUNCTION public.dream_off_settle_pot(',
+      '$$;'
+    )
+  );
   await db.query(
     extract(m409, 'CREATE OR REPLACE FUNCTION public.maybe_advance_dream_off(', '$$;')
   );
@@ -148,6 +155,14 @@ describe('dream_off_settle_pot (migration 409)', () => {
       [g]
     );
     expect(pot.rows[0]).toEqual({ balance: 0, status: 'settled' });
+
+    // The funder gets a pot-refund notification (migration 415).
+    const notif = await db.query(
+      `SELECT count(*)::int AS n FROM public.notifications
+       WHERE recipient_id=$1 AND type='dream_off_pot_refund' AND reference_id=$2`,
+      [OWNER, g]
+    );
+    expect(notif.rows[0].n).toBe(1);
 
     await db.query(`SELECT public.dream_off_settle_pot($1)`, [g]); // idempotent
     expect(await balOf(OWNER)).toBe(4);

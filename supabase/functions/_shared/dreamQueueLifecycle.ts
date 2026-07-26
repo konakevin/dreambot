@@ -154,11 +154,32 @@ export async function completeQueueJob(
       const gameId = (q.payload as { game_id?: string } | null)?.game_id ?? null;
       const { data: up } = await sb.from('uploads').select('image_url').eq('id', uploadId).single();
       if (gameId) {
+        // Copy the render into a PERMANENT game/ path so the entry image survives
+        // the user deleting their upload — a game is a permanent shareable archive.
+        // Best-effort: fall back to the raw upload URL if the copy can't be made.
+        let gameImageRef = up?.image_url ?? null;
+        const marker = '/object/public/uploads/';
+        const srcUrl = up?.image_url ?? '';
+        const idx = srcUrl.indexOf(marker);
+        if (idx !== -1) {
+          const srcPath = srcUrl.slice(idx + marker.length).split('?')[0];
+          const destPath = `game/${gameId}/${jobId}.png`;
+          const { error: copyErr } = await sb.storage.from('uploads').copy(srcPath, destPath);
+          // A retry re-completes the same job → dest already exists; treat as success.
+          if (!copyErr || /exist|duplicate/i.test(copyErr.message ?? '')) {
+            gameImageRef = sb.storage.from('uploads').getPublicUrl(destPath).data.publicUrl;
+          } else {
+            console.warn(
+              `[completeQueueJob] dream_off image copy failed for job ${jobId}, using upload url:`,
+              copyErr.message
+            );
+          }
+        }
         const { error: attachErr } = await sb.rpc('dream_off_attach_render', {
           p_game_id: gameId,
           p_entry_job_id: jobId,
           p_upload_id: uploadId,
-          p_game_image_ref: up?.image_url ?? null,
+          p_game_image_ref: gameImageRef,
         });
         if (attachErr) {
           console.error(
