@@ -42,9 +42,12 @@ const argVal = (flag, def) => {
   const i = args.indexOf(flag);
   return i >= 0 ? args[i + 1] : def;
 };
-const COUNT = parseInt(argVal('--count', '100'), 10);
-const ONLY_PACK = argVal('--pack', null);
+const COUNT_OVERRIDE = args.includes('--count') ? parseInt(argVal('--count'), 10) : null;
+const ONLY_PACK = argVal('--pack', null); // a base theme key
+const ONLY_HOLIDAY = argVal('--holiday', null); // a holiday key
 const ONLY_CATEGORY = argVal('--category', null); // 'scene' | 'cast'
+const BASE_ONLY = args.includes('--base'); // base themes only
+const HOLIDAYS_ONLY = args.includes('--holidays'); // holiday packs only
 const DRY_RUN = args.includes('--dry-run');
 const NO_QA = args.includes('--no-qa');
 
@@ -379,6 +382,209 @@ const THEMES = [
   },
 ];
 
+const THEME_BY_KEY = Object.fromEntries(THEMES.map((t) => [t.key, t]));
+// A holiday "standard tone" borrows a base theme's voice/examples (scene + cast)
+// and wears the holiday's soul as an overlay.
+const TONE_TO_THEME = {
+  cute: 'cute',
+  cozy: 'cozy',
+  funny: 'chaotic',
+  glam: 'glam',
+  scary: 'cursed',
+  spicy: 'hot_summer',
+};
+const TONE_LABEL = {
+  cute: 'Cute',
+  cozy: 'Cozy',
+  funny: 'Funny',
+  glam: 'Glam',
+  scary: 'Scary',
+  spicy: 'Spicy',
+};
+
+// ── Seasonal holiday packs. Each carries an authored nostalgic SOUL (injected into
+// every prompt) + standard tones (borrow a base theme) + bespoke tones (their own
+// authored voice). Christmas + Halloween seed to 100; the rest to 50. ────────────
+const HOLIDAYS = [
+  {
+    key: 'halloween',
+    label: 'Halloween',
+    emoji: '🎃',
+    count: 100,
+    seasonStart: '2026-09-15',
+    seasonEnd: '2026-10-31',
+    soul: `Peak Halloween nostalgia: crisp autumn air, turning leaves and crunchy leaf piles, pumpkin patches at dusk, carved jack-o-lanterns flickering on porches, streets strung with orange lights, cobwebs and cardboard tombstones, foggy graveyards, haunted houses, wild costumes, and the electric thrill of trick-or-treat with a pillowcase getting heavy with candy. Spooky-fun and cozy-autumn at once.`,
+    tones: ['cute', 'cozy', 'funny', 'glam', 'scary', 'spicy'],
+    bespoke: [
+      {
+        key: 'trick_or_treat',
+        label: 'Trick-or-Treat',
+        scene: {
+          voice:
+            'The specific childhood magic of trick-or-treat night — porch lights on, leaf-strewn sidewalks under a single streetlight, the one house that goes absurdly all-out, a pillowcase heavy with candy, costumed silhouettes. Warm nostalgia with a spooky edge.',
+          examples: [
+            'the one house on the street that goes absurdly all-out',
+            'a porch overflowing with flickering jack-o-lanterns',
+            'a pillowcase collapsing under the weight of too much candy',
+            'a leaf-strewn sidewalk glowing under a single streetlight',
+          ],
+        },
+        cast: {
+          voice:
+            'Living trick-or-treat night to the fullest — the ultimate costume, the candy haul of legend, the strategist of the perfect route.',
+          examples: [
+            'a trick-or-treater with a strategically unbeatable candy route',
+            'the proud owner of the best homemade costume on the block',
+            'a candy connoisseur deep into an epic haul',
+            'the self-appointed scout of the full-size-candy-bar house',
+          ],
+        },
+      },
+    ],
+  },
+  {
+    key: 'christmas',
+    label: 'Christmas',
+    emoji: '🎄',
+    count: 100,
+    seasonStart: '2026-12-01',
+    seasonEnd: '2026-12-26',
+    soul: `Deep Christmas nostalgia: sledding down a snowy hill, the tree glowing in a dark quiet room late at night, stockings by the fire, the smell of a real pine tree, twinkling lights on snowy streets, cocoa and cookies, waiting up for Santa, that specific cozy magical hush of Christmas Eve. Wonder, warmth, and a little chaos.`,
+    tones: ['cute', 'cozy', 'funny', 'glam', 'spicy'],
+    bespoke: [
+      {
+        key: 'north_pole',
+        label: 'North Pole',
+        scene: {
+          voice:
+            "Santa's North Pole world in full magic — the toy workshop in overdrive, elves on the assembly line, reindeer stables, the sleigh being loaded, candy-cane infrastructure, snow-globe wonder.",
+          examples: [
+            "santa's toy workshop working triple overtime",
+            'a reindeer stable the night before the big flight',
+            'an elf assembly line with minor quality-control issues',
+            'the sleigh being loaded well past any reasonable weight limit',
+          ],
+        },
+        cast: {
+          voice:
+            'A North Pole VIP — Santa, a head elf, a reindeer wrangler, the auditor of the naughty-and-nice list.',
+          examples: [
+            'a wildly overworked head elf',
+            'santa on the single most stressful night of the year',
+            'the reindeer everyone secretly thinks runs the whole operation',
+            'the auditor of the naughty-and-nice list taking it far too seriously',
+          ],
+        },
+      },
+    ],
+  },
+  {
+    key: 'new_years',
+    label: "New Year's",
+    emoji: '🎉',
+    count: 50,
+    seasonStart: '2026-12-27',
+    seasonEnd: '2027-01-02',
+    soul: `New Year's Eve energy: the glittering countdown, confetti raining at midnight, champagne towers and clinking glasses, fireworks bursting over the skyline, the collective roar at zero, sequins and party hats, and the bittersweet magic of one year ending and another starting (plus resolutions already doomed).`,
+    tones: ['cute', 'cozy', 'funny', 'glam', 'spicy'],
+    bespoke: [],
+  },
+  {
+    key: 'st_patricks',
+    label: "St. Patrick's Day",
+    emoji: '☘️',
+    count: 50,
+    seasonStart: '2027-03-10',
+    seasonEnd: '2027-03-17',
+    soul: `St. Patrick's Day: cozy-loud pubs and overflowing pints, shamrocks and four-leaf clovers, mischievous leprechauns, rainbows arcing to a pot of gold, everything dyed impossibly green, parades and lucky charms, and a general air of merry, slightly-chaotic good luck.`,
+    tones: ['cute', 'funny', 'spicy'],
+    bespoke: [],
+  },
+  {
+    key: 'easter',
+    label: 'Easter',
+    emoji: '🐰',
+    count: 50,
+    seasonStart: '2027-03-20',
+    seasonEnd: '2027-04-05',
+    soul: `Easter in full spring bloom: fuzzy chicks and floppy-eared bunnies, pastel everything, egg hunts across dewy grass, baskets of foil-wrapped chocolate, blossoming meadows and gentle morning light, bonnets and Sunday best, the soft pastel magic of spring returning.`,
+    tones: ['cute', 'cozy', 'funny'],
+    bespoke: [],
+  },
+  {
+    key: 'july_4th',
+    label: '4th of July',
+    emoji: '🎆',
+    count: 50,
+    seasonStart: '2027-06-28',
+    seasonEnd: '2027-07-04',
+    soul: `The 4th of July: fireworks blooming over a lake at dusk, backyard BBQ smoke and sizzling grills, red-white-and-blue everything, sparklers trailing in the dark, small-town parades, watermelon and lawn chairs, and the loud, proud, peak-summer heart of Americana.`,
+    tones: ['cute', 'funny', 'spicy'],
+    bespoke: [
+      {
+        key: 'epic',
+        label: 'Epic',
+        scene: {
+          voice:
+            'The most gloriously over-the-top, self-aware "AMERICA, F**K YEAH" spectacle imaginable — bald eagles, walls of fireworks, absurd patriotic grandeur, freedom cranked to eleven. Epic AND hilarious.',
+          examples: [
+            'a bald eagle screaming as a wall of fireworks erupts behind it',
+            'the single most excessive fireworks finale in human history',
+            'a flag-draped monster truck mid-jump over the grand canyon',
+            'a bbq grill roughly the size of an aircraft carrier',
+          ],
+        },
+        cast: {
+          voice:
+            'The most absurdly epic patriot alive — freedom incarnate, saluting the sky, riding eagles into glory. Over-the-top and funny.',
+          examples: [
+            'a hyper-patriotic action hero saluting a sky full of fireworks',
+            'a freedom-loving legend riding a bald eagle into battle',
+            'the self-appointed five-star general of the neighborhood fireworks show',
+            'a star-spangled champion flexing directly at the sun',
+          ],
+        },
+      },
+    ],
+  },
+  {
+    key: 'valentines',
+    label: "Valentine's Day",
+    emoji: '💘',
+    count: 50,
+    seasonStart: '2027-02-07',
+    seasonEnd: '2027-02-14',
+    soul: `Valentine's Day: roses and heart-shaped everything, candlelit dinners, boxes of chocolate, handwritten cards, cupid and his arrows, teddy bears, blushing romance and grand gestures — and all the ways love goes hilariously sideways.`,
+    tones: ['cute', 'cozy', 'funny', 'glam', 'spicy'],
+    bespoke: [
+      {
+        key: 'disaster_date',
+        label: 'Disaster Date',
+        scene: {
+          voice:
+            'Romance gone gloriously, comically wrong — a candlelit dinner on fire, a bouquet that has given up, a heart-shaped everything collapsing, the aftermath of a grand gesture that backfired spectacularly.',
+          examples: [
+            'a candlelit dinner that is now just, technically, on fire',
+            'a bouquet of roses that has completely given up',
+            'a heart-shaped cake mid-structural-failure',
+            'the aftermath of a proposal that did not go as planned',
+          ],
+        },
+        cast: {
+          voice:
+            'Starring in a romance falling apart in real time — the worst date ever, a grand gesture backfiring, love nobody asked for. Number-flexible.',
+          examples: [
+            'a hopeless romantic whose grand gesture just backfired',
+            'the survivor of the worst blind date in history',
+            'a cupid with catastrophically bad aim',
+            'someone whose romantic plans have spectacularly imploded',
+          ],
+        },
+      },
+    ],
+  },
+];
+
 function normKey(t) {
   return t
     .toLowerCase()
@@ -426,8 +632,7 @@ function categoryRules(category) {
 The player(s) are the visible face-swapped subject: exactly ONE person or a couple — NEVER a crowd or group of 3+.`;
 }
 
-async function genBatch(theme, category, n, avoidList) {
-  const comp = theme[category];
+async function genBatch(spec, n, avoidList) {
   const avoid =
     avoidList.length > 0
       ? `\n\nAlready used — DO NOT repeat these or anything close in concept:\n${avoidList
@@ -435,23 +640,26 @@ async function genBatch(theme, category, n, avoidList) {
           .map((a) => `- ${a}`)
           .join('\n')}`
       : '';
+  const holiday = spec.soul
+    ? `\n\nHOLIDAY — this is a ${spec.label} pack. Every topic MUST be an unmistakable ${spec.label} take, dripping with nostalgia. ${spec.soul} Tap genuine, specific, evocative detail; NO generic clichés or random mashups — make people FEEL the holiday.`
+    : '';
   const prompt = `You are writing topics for "Dream Off", a party game where friends each generate an AI dream image interpreting the same funny topic, then blind-vote the results.
 
-Generate ${n} FRESH, distinct topics for the "${theme.label}" pack.
+Generate ${n} FRESH, distinct topics for the "${spec.label}" pack.
 
-${categoryRules(category)}
+${categoryRules(spec.category)}
 
-Pack voice: ${comp.voice}
+Pack voice: ${spec.voice}${holiday}
 
 Good examples (match the register + length, DO NOT reuse them):
-${comp.examples.map((e) => `- ${e}`).join('\n')}
+${spec.examples.map((e) => `- ${e}`).join('\n')}
 
 Rules:
 - Each topic is a SHORT phrase (~3-12 words), lowercase, no ending punctuation.
 - VISUAL + renderable — it must paint one clear image.
 - ${HUMOR}
 - ${RENDER}
-- ${IP} No real player names either.${category === 'scene' ? `\n- ${OPEN}` : ''}
+- ${IP} No real player names either.${spec.category === 'scene' ? `\n- ${OPEN}` : ''}
 - Vary the ideas WIDELY (no two alike).${avoid}
 
 Return ONLY the ${n} topics, one per line, no numbering, no commentary.`;
@@ -466,8 +674,9 @@ Return ONLY the ${n} topics, one per line, no numbering, no commentary.`;
 }
 
 // Sonnet QA gate: returns a Set of the exact topic strings that should be CUT.
-async function qaScan(theme, category, topics) {
+async function qaScan(spec, topics) {
   if (topics.length === 0) return new Set();
+  const category = spec.category;
   const groupRule =
     category === 'cast'
       ? ' or implies a GROUP of 3+ people (cast topics must be one person or a couple only)'
@@ -480,15 +689,21 @@ async function qaScan(theme, category, topics) {
     category === 'scene'
       ? `\n- (SCENE) PINS a character's gender / age / human-ness instead of using an OPEN role ("an old man", "a woman", "a little girl", "a human ___") — a character must be described by ROLE only so the form stays open (naming a specific animal is OK only when the creature itself is the whole subject)`
       : '';
+  const holidayCheck = spec.soul
+    ? `\n- is NOT an unmistakable ${spec.label} topic, OR leans on a generic holiday cliché instead of specific, nostalgic, evocative detail`
+    : '';
+  const holidayCtx = spec.soul
+    ? `\nThis is a HOLIDAY pack — every topic must be a clear, nostalgic ${spec.label} take. ${spec.soul}`
+    : '';
   const prompt = `You are the strict QA gate for "Dream Off" party-game topics.
-Pack: "${theme.label}" (${category}). ${categoryRules(category)}
+Pack: "${spec.label}" (${category}). ${categoryRules(category)}${holidayCtx}
 
 Hold a HIGH bar — we only keep 5-STAR ideas: clever, surprising, genuinely funny, with wit and a bit of DreamBot whimsy/charm. Flag a topic as BAD if it is ANY of:
 - NOT 5-star: merely okay, weak, generic, forgettable, or not actually funny/clever
 - crude or gross WITHOUT wit (party-game edge is great, but it must be clever + charming, not shock for its own sake), or off-tone for this pack
 - NOT renderable by an AI image model: explicit sexual content, graphic gore${groupRule}
 - names a real person/celebrity, a trademarked character, or a movie/show/game/brand title
-- a near-duplicate CONCEPT of another topic in the list${openCheck}${castCheck}
+- a near-duplicate CONCEPT of another topic in the list${holidayCheck}${openCheck}${castCheck}
 
 Topics:
 ${topics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
@@ -508,7 +723,8 @@ Return ONLY the exact text of the BAD topics, one per line (return nothing if al
 
 // Generate a clean `target` for one (theme, category): dedup-as-you-go + per-batch
 // QA, backfilling until the pack is full of QA-passed uniques.
-async function genPackCategory(theme, category, target, seen) {
+async function genPackCategory(spec, seen) {
+  const target = spec.count;
   const kept = [];
   const avoid = [];
   let rounds = 0;
@@ -516,7 +732,7 @@ async function genPackCategory(theme, category, target, seen) {
   while (kept.length < target && rounds < MAX_ROUNDS) {
     rounds++;
     const need = Math.min(BATCH, target - kept.length + 6);
-    const batch = await genBatch(theme, category, need, avoid);
+    const batch = await genBatch(spec, need, avoid);
     const uniques = [];
     for (const t of batch) {
       const k = normKey(t);
@@ -527,7 +743,7 @@ async function genPackCategory(theme, category, target, seen) {
     }
     let good = uniques;
     if (!NO_QA && uniques.length) {
-      const bad = await qaScan(theme, category, uniques);
+      const bad = await qaScan(spec, uniques);
       cutTotal += bad.size;
       good = uniques.filter((t) => !bad.has(t));
     }
@@ -540,18 +756,67 @@ async function genPackCategory(theme, category, target, seen) {
   return { topics: kept.slice(0, target), cut: cutTotal };
 }
 
-async function main() {
-  let jobs = [];
-  for (const theme of THEMES) {
-    for (const category of ['scene', 'cast']) {
-      if (!theme[category]) continue;
-      if (ONLY_PACK && theme.key !== ONLY_PACK) continue;
-      if (ONLY_CATEGORY && category !== ONLY_CATEGORY) continue;
-      jobs.push({ theme, category });
+// Build the full list of pack specs (base themes + holiday tone-combos), honoring
+// the CLI filters. Counts default to base=100 / per-holiday (50 or 100); --count
+// overrides everything.
+function buildSpecs() {
+  const specs = [];
+  if (!HOLIDAYS_ONLY && !ONLY_HOLIDAY) {
+    for (const theme of THEMES) {
+      for (const category of ['scene', 'cast']) {
+        if (!theme[category]) continue;
+        if (ONLY_PACK && theme.key !== ONLY_PACK) continue;
+        if (ONLY_CATEGORY && category !== ONLY_CATEGORY) continue;
+        specs.push({
+          packKey: theme.key,
+          label: theme.label,
+          category,
+          voice: theme[category].voice,
+          examples: theme[category].examples,
+          soul: null,
+          count: 100,
+        });
+      }
     }
   }
-  if (jobs.length === 0) {
-    console.error('No matching packs. Themes:', THEMES.map((t) => t.key).join(', '));
+  if (!BASE_ONLY && !ONLY_PACK) {
+    for (const hol of HOLIDAYS) {
+      if (ONLY_HOLIDAY && hol.key !== ONLY_HOLIDAY) continue;
+      const combos = [
+        ...hol.tones.map((tone) => ({
+          comp: THEME_BY_KEY[TONE_TO_THEME[tone]],
+          key: tone,
+          label: TONE_LABEL[tone],
+        })),
+        ...(hol.bespoke || []).map((b) => ({ comp: b, key: b.key, label: b.label })),
+      ];
+      for (const c of combos) {
+        for (const category of ['scene', 'cast']) {
+          if (!c.comp[category]) continue;
+          if (ONLY_CATEGORY && category !== ONLY_CATEGORY) continue;
+          specs.push({
+            packKey: `${hol.key}_${c.key}`,
+            label: `${hol.emoji} ${hol.label} · ${c.label}`,
+            category,
+            voice: c.comp[category].voice,
+            examples: c.comp[category].examples,
+            soul: hol.soul,
+            count: hol.count,
+            seasonStart: hol.seasonStart,
+            seasonEnd: hol.seasonEnd,
+          });
+        }
+      }
+    }
+  }
+  if (COUNT_OVERRIDE != null) for (const s of specs) s.count = COUNT_OVERRIDE;
+  return specs;
+}
+
+async function main() {
+  const specs = buildSpecs();
+  if (specs.length === 0) {
+    console.error('No matching packs.');
     process.exit(1);
   }
 
@@ -563,11 +828,12 @@ async function main() {
     for (const r of existing ?? []) seen.add(normKey(r.topic_text));
     console.log(`Preloaded ${seen.size} existing topics into the dedup set.`);
   }
+  console.log(`${specs.length} pack(s) to seed.\n`);
 
   let grand = 0;
-  for (const { theme, category } of jobs) {
-    console.log(`\n▶ ${theme.label} / ${category} — target ${COUNT}`);
-    const { topics, cut } = await genPackCategory(theme, category, COUNT, seen);
+  for (const spec of specs) {
+    console.log(`▶ ${spec.label} / ${spec.category} — target ${spec.count}`);
+    const { topics, cut } = await genPackCategory(spec, seen);
     console.log(`   → ${topics.length} clean (QA cut ${cut} total)`);
 
     if (DRY_RUN) {
@@ -578,11 +844,12 @@ async function main() {
     }
     if (topics.length === 0) continue;
     const rows = topics.map((t) => ({
-      pack: theme.key,
-      category,
+      pack: spec.packKey,
+      category: spec.category,
       topic_text: t,
       tone: 'sfw',
       is_active: true,
+      ...(spec.seasonStart ? { season_start: spec.seasonStart, season_end: spec.seasonEnd } : {}),
     }));
     const { error } = await supabase.from('dream_off_topics').insert(rows);
     if (error) {
@@ -594,7 +861,7 @@ async function main() {
   }
 
   console.log(
-    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grand} topics across ${jobs.length} pack(s).`
+    `\n${DRY_RUN ? 'Would generate' : 'Inserted'} ${grand} topics across ${specs.length} pack(s).`
   );
 }
 
