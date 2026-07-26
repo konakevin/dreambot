@@ -23,6 +23,18 @@ export interface FeedStore {
   /** Set a SPECIFIC seed (used by pull-to-refresh: prefetch the new seed's feed,
    *  then swap to it here so the reshuffle is instant with no loading flash). */
   setFeedSeed: (seed: number) => void;
+  /** Remount epoch — part of the home feed component's React key, so bumping it
+   *  REMOUNTS the pager fresh at index 0. Lives in the store (not local React
+   *  state) so a home re-tap can flip the seed AND the epoch in ONE update. */
+  feedReshuffleEpoch: number;
+  /** Home re-tap reshuffle, ATOMIC: new seed + manual shuffle strength + remount
+   *  epoch + cleared pin in a SINGLE store update. Doing these as separate updates
+   *  intermittently split across React commits, so the still-mounted deep-scrolled
+   *  pager re-rendered with the new (shorter) feed for one frame before it
+   *  remounted — stranding the user on the last post ("stuck feed", 2026-07-26).
+   *  One set() = one render = the pager only ever sees the new feed via a fresh
+   *  mount at the top. */
+  reshuffleFeed: (seed: number) => void;
   // Profile tab reset
   profileResetToken: number;
   bumpProfileReset: () => void;
@@ -98,6 +110,14 @@ export const useFeedStore = create<FeedStore>((set) => ({
   regenerateSeed: () => set({ feedSeed: Math.random(), feedShuffle: MANUAL_FEED_SHUFFLE }),
   bumpShuffle: () => set({ feedShuffle: MANUAL_FEED_SHUFFLE }),
   setFeedSeed: (seed) => set({ feedSeed: seed, feedShuffle: MANUAL_FEED_SHUFFLE }),
+  feedReshuffleEpoch: 0,
+  reshuffleFeed: (seed) =>
+    set((s) => ({
+      feedSeed: seed,
+      feedShuffle: MANUAL_FEED_SHUFFLE,
+      feedReshuffleEpoch: s.feedReshuffleEpoch + 1,
+      pinnedPost: null,
+    })),
   profileResetToken: 0,
   bumpProfileReset: () => set((s) => ({ profileResetToken: s.profileResetToken + 1 })),
   homeFeedResetToken: 0,

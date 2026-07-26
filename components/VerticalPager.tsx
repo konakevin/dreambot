@@ -231,9 +231,18 @@ function VerticalPagerInner<T>(
     const cur = data[idx];
     if (cur != null && keyExtractorRef.current(cur, idx) === key) return; // stable — nothing to do
     const newIdx = data.findIndex((it, i) => keyExtractorRef.current(it, i) === key);
-    // Anchored item vanished (deleted/hidden): clamp into range and adopt
-    // whatever sits at the clamped index.
-    const target = newIdx >= 0 ? newIdx : Math.min(idx, Math.max(0, data.length - 1));
+    // Anchored item vanished. Two very different cases (root-caused 2026-07-26
+    // via [FEEDDBG] traces — the intermittent "stuck feed"):
+    //   • REPLACEMENT (home re-tap reshuffle): the whole list is new and our old
+    //     deep index is OUT OF BOUNDS → go to the TOP (0), matching "refresh =
+    //     fresh feed from the top". The old code clamped to data.length-1, which
+    //     stranded the user on the LAST post of the new short feed — where a
+    //     forward swipe can't advance and onEndReached never fires. This lands the
+    //     same place the atomic remount would, so the reshuffle race is harmless
+    //     whichever way React batches the two updates.
+    //   • DELETION (the single post we're viewing was removed): our index is still
+    //     in range → stay put so the next post slides into place.
+    const target = newIdx >= 0 ? newIdx : idx < data.length ? idx : 0;
     if (target === idx) return;
     indexSV.value = target;
     setActiveIndex(target);

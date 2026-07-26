@@ -212,7 +212,7 @@ export default function HomeScreen() {
   // frames, no jump-to-top, no cover mask (Kevin 2026-07-21: the masked swap
   // still read as a black flash). Pull-to-refresh deliberately does NOT bump
   // it — the pull spinner strip owns that transition and settles in place.
-  const [reshuffleEpoch, setReshuffleEpoch] = useState(0);
+  const reshuffleEpoch = useFeedStore((s) => s.feedReshuffleEpoch);
 
   // NOTE (2026-07-21): a "launch reshuffle" lived here briefly — prefetch a
   // fresh seed on boot and swap it in behind the persisted paint. Reverted:
@@ -335,20 +335,27 @@ export default function HomeScreen() {
           } finally {
             useFeedStore.getState().setHomeFeedRefreshing(false);
           }
-          // The ATOMIC swap: clear the pinned self-post (it's shown once right
-          // after posting — any refresh clears it, Kevin 2026-07-12), flip to
-          // the prefetched seed, and (re-tap only) bump the epoch so the pager
-          // REMOUNTS at the new top — one frame, old feed → new feed, the same
-          // mechanism as a tab switch. All three land in one React commit.
           const commit = () => {
-            setPinnedPost(null);
-            setFeedSeed(newSeed);
             // Drop the previous seed's entire feed-cache family — without this
             // every reshuffle ORPHANED ~19 seed-keyed entries (24h gcTime) and
             // the optimistic sweeps ground to multi-second stalls once ~1,600
             // piled up (Kevin 2026-07-21, "1597 caches patched").
             pruneStaleFeedCaches(queryClient, newSeed);
-            if (opts?.deferSwap) setReshuffleEpoch((e) => e + 1);
+            if (opts?.deferSwap) {
+              // Re-tap: seed + shuffle + remount-epoch + cleared pin land in ONE
+              // store update, so the mounted deep-scrolled pager can never
+              // re-render with the new (shorter) feed before it remounts — the
+              // atomic version of "refresh = fresh feed from the top". The old
+              // split (setFeedSeed here + a separate local setReshuffleEpoch)
+              // intermittently landed in two commits → the "stuck feed" bug
+              // (root-caused 2026-07-26 via [FEEDDBG] traces).
+              useFeedStore.getState().reshuffleFeed(newSeed);
+            } else {
+              // Pull-to-refresh fires only at index 0, so an in-place swap (no
+              // remount) is safe — the pager is already at the top.
+              setPinnedPost(null);
+              setFeedSeed(newSeed);
+            }
           };
           // Re-tap path (deferSwap): hand the swap back to FullScreenFeed so it
           // fires only after the prefetch resolved. Pull path: commit now — the
