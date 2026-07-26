@@ -22,6 +22,9 @@ import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useUpdateDescription, MAX_DESCRIPTION_LENGTH } from '@/hooks/useUpdateDescription';
+import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { useMentionCandidates } from '@/hooks/useMentionCandidates';
+import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
 
 type State = { visible: boolean; postId: string | null; initial: string | null };
 type Listener = (s: State) => void;
@@ -41,14 +44,32 @@ export const EditDescriptionModal = {
 export function EditDescriptionModalHost() {
   const [state, setState] = useState<State>({ visible: false, postId: null, initial: null });
   const [text, setText] = useState('');
+  const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
+  const [forcedSelection, setForcedSelection] = useState<Selection | null>(null);
   const inputRef = useRef<TextInput>(null);
   const { mutate } = useUpdateDescription();
   const opacity = useSharedValue(0);
 
+  const mention = detectMention(text, selection);
+  const mentionCandidates = useMentionCandidates(mention.query, mention.active);
+  const pickMention = (username: string) => {
+    const { text: next, cursor } = applyMention(text, selection, username);
+    setText(next);
+    const sel = { start: cursor, end: cursor };
+    setSelection(sel);
+    setForcedSelection(sel);
+  };
+
   useEffect(() => {
     listener = (next) => {
       setState(next);
-      if (next.visible) setText(next.initial ?? '');
+      if (next.visible) {
+        const initial = next.initial ?? '';
+        setText(initial);
+        // Park the caret at the end so a stale caret can't falsely reopen the
+        // mention dropdown before the field is focused.
+        setSelection({ start: initial.length, end: initial.length });
+      }
     };
     return () => {
       listener = null;
@@ -95,11 +116,21 @@ export function EditDescriptionModalHost() {
             style={styles.input}
             value={text}
             onChangeText={setText}
+            selection={forcedSelection ?? undefined}
+            onSelectionChange={(e) => {
+              setSelection(e.nativeEvent.selection);
+              if (forcedSelection) setForcedSelection(null);
+            }}
             placeholder="Write a caption..."
             placeholderTextColor={colors.textSecondary}
             multiline
             maxLength={MAX_DESCRIPTION_LENGTH}
             textAlignVertical="top"
+          />
+          <MentionSuggestions
+            candidates={mentionCandidates}
+            onPick={pickMention}
+            style={styles.mentions}
           />
           <View style={styles.footer}>
             <Text style={styles.counter}>
@@ -156,6 +187,13 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: fontScale(15),
     lineHeight: fontScale(21),
+  },
+  mentions: {
+    marginTop: verticalScale(8),
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
   },
   footer: {
     flexDirection: 'row',

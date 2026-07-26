@@ -52,6 +52,9 @@ import { pinToFeed, pinPostRowToFeed } from '@/lib/dreamSave';
 import { BrandSpinner } from '@/components/BrandSpinner';
 import { POST_SELECT, mapToDreamPost, castRow } from '@/lib/mapPost';
 import { moderateText } from '@/lib/moderation';
+import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { useMentionCandidates } from '@/hooks/useMentionCandidates';
+import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
 import { tileImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
@@ -104,6 +107,21 @@ export default function NewPostScreen() {
   const [selected, setSelected] = useState<Selected[]>([]);
   const [description, setDescription] = useState('');
   const [posting, setPosting] = useState(false);
+
+  // @-mention autocomplete on the caption (both the single + gallery inputs share
+  // this description state, and only one is mounted at a time). forcedSelection
+  // nudges the caret past an inserted "@handle " for one render, then releases.
+  const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
+  const [forcedSelection, setForcedSelection] = useState<Selection | null>(null);
+  const mention = detectMention(description, selection);
+  const mentionCandidates = useMentionCandidates(mention.query, mention.active);
+  function pickMention(username: string) {
+    const { text, cursor } = applyMention(description, selection, username);
+    setDescription(text);
+    const sel = { start: cursor, end: cursor };
+    setSelection(sel);
+    setForcedSelection(sel);
+  }
   const [imgAspect, setImgAspect] = useState(DEFAULT_ASPECT);
 
   // Resolve preselected ids → full Selected rows (order preserved).
@@ -393,6 +411,7 @@ export default function NewPostScreen() {
             <Ionicons name="add" size={16} color={colors.accent} />
             <Text style={styles.addMoreText}>Add more</Text>
           </TouchableOpacity>
+          <MentionSuggestions candidates={mentionCandidates} onPick={pickMention} />
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -400,6 +419,11 @@ export default function NewPostScreen() {
               placeholderTextColor={colors.textSecondary}
               value={description}
               onChangeText={setDescription}
+              selection={forcedSelection ?? undefined}
+              onSelectionChange={(e) => {
+                setSelection(e.nativeEvent.selection);
+                if (forcedSelection) setForcedSelection(null);
+              }}
               multiline
               maxLength={500}
               textAlignVertical="top"
@@ -476,6 +500,7 @@ export default function NewPostScreen() {
             )}
           </View>
           <Pressable style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+            <MentionSuggestions candidates={mentionCandidates} onPick={pickMention} />
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -483,6 +508,11 @@ export default function NewPostScreen() {
                 placeholderTextColor={colors.textSecondary}
                 value={description}
                 onChangeText={setDescription}
+                selection={forcedSelection ?? undefined}
+                onSelectionChange={(e) => {
+                  setSelection(e.nativeEvent.selection);
+                  if (forcedSelection) setForcedSelection(null);
+                }}
                 multiline
                 maxLength={500}
                 textAlignVertical="top"

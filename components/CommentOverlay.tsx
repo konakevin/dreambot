@@ -41,7 +41,9 @@ import { useAuthStore } from '@/store/auth';
 import { useCommentDrafts } from '@/store/commentDrafts';
 import { useComments, type Comment } from '@/hooks/useComments';
 import { useAddComment } from '@/hooks/useAddComment';
-import { useSearchUsers, type SearchUser } from '@/hooks/useSearchUsers';
+import { useMentionCandidates } from '@/hooks/useMentionCandidates';
+import { MentionSuggestions } from '@/components/MentionSuggestions';
+import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
 import { CommentRow } from '@/components/CommentRow';
 import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
@@ -242,13 +244,19 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
   const [text, setText] = useState(() => useCommentDrafts.getState().drafts[post.id] ?? '');
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
   const [expandedCommentId, setExpandedCommentId] = useState<string | null>(null);
-  const [mentionQuery, setMentionQuery] = useState('');
-  const mentionStart = useRef(-1);
+  // Caret tracking drives the @-mention autocomplete (detectMention finds the
+  // token the cursor is IN, not just the last '@'). forcedSelection is applied to
+  // the TextInput for ONE render after we splice in a mention, to move the caret
+  // past it, then released on the next onSelectionChange (the safe way to nudge a
+  // multiline caret without fully controlling selection).
+  const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
+  const [forcedSelection, setForcedSelection] = useState<Selection | null>(null);
   const inputRef = useRef<TextInput>(null);
   // The comment list — scrolled to the end after posting so the new (bottom-most,
   // newest) comment is visible.
   const listRef = useRef<FlatList<Comment>>(null);
-  const { data: mentionResults = [] } = useSearchUsers(mentionQuery);
+  const mention = detectMention(text, selection);
+  const mentionCandidates = useMentionCandidates(mention.query, mention.active);
 
   // Keyboard open state — drives the input bar's bottom padding. When the
   // keyboard is up the input rides above it (KeyboardStickyView), so the tab-bar
@@ -312,31 +320,14 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
 
   function handleTextChange(newText: string) {
     setText(newText.slice(0, MAX_COMMENT_LENGTH));
-    const lastAt = newText.lastIndexOf('@');
-    if (lastAt >= 0) {
-      const afterAt = newText.slice(lastAt + 1);
-      const charBefore = lastAt > 0 ? newText[lastAt - 1] : ' ';
-      if (
-        (charBefore === ' ' || charBefore === '\n' || lastAt === 0) &&
-        !afterAt.includes(' ') &&
-        afterAt.length >= 1
-      ) {
-        mentionStart.current = lastAt;
-        setMentionQuery(afterAt);
-        return;
-      }
-    }
-    mentionStart.current = -1;
-    setMentionQuery('');
   }
 
-  function completeMention(user: SearchUser) {
-    if (mentionStart.current < 0) return;
-    const before = text.slice(0, mentionStart.current);
-    const after = text.slice(mentionStart.current + 1 + mentionQuery.length);
-    setText(`${before}@${user.username} ${after}`);
-    mentionStart.current = -1;
-    setMentionQuery('');
+  function completeMention(username: string) {
+    const { text: next, cursor } = applyMention(text, selection, username);
+    setText(next);
+    const sel = { start: cursor, end: cursor };
+    setSelection(sel);
+    setForcedSelection(sel); // move the caret past the inserted "@handle "
   }
 
   function handleReply(comment: Comment) {
@@ -625,30 +616,8 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
               </View>
             )}
 
-            {/* Mention autocomplete */}
-            {mentionQuery.length >= 1 && mentionResults.length > 0 && (
-              <View style={styles.mentionList}>
-                {mentionResults.slice(0, 5).map((u) => (
-                  <TouchableOpacity
-                    key={u.id}
-                    style={styles.mentionRow}
-                    onPress={() => completeMention(u)}
-                    activeOpacity={0.7}
-                  >
-                    {u.avatarUrl ? (
-                      <Image source={{ uri: u.avatarUrl }} style={styles.mentionAvatar} />
-                    ) : (
-                      <View style={styles.mentionAvatarFallback}>
-                        <Text allowFontScaling={false} style={styles.mentionAvatarInitial}>
-                          {(u.username || '?')[0].toUpperCase()}
-                        </Text>
-                      </View>
-                    )}
-                    <Text style={styles.mentionUsername}>{u.username}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
+            {/* Mention autocomplete — follows pinned top, global streams in */}
+            <MentionSuggestions candidates={mentionCandidates} onPick={completeMention} />
 
             {/* Input bar */}
             <View
@@ -672,6 +641,11 @@ export function CommentOverlay({ post, onClose, hideTabBar }: Props) {
                     placeholderTextColor={colors.textSecondary}
                     value={text}
                     onChangeText={handleTextChange}
+                    selection={forcedSelection ?? undefined}
+                    onSelectionChange={(e) => {
+                      setSelection(e.nativeEvent.selection);
+                      if (forcedSelection) setForcedSelection(null); // release after it lands
+                    }}
                     multiline
                     maxLength={MAX_COMMENT_LENGTH}
                   />
@@ -830,44 +804,6 @@ const styles = StyleSheet.create({
   },
   replyUsername: {
     color: colors.textPrimary,
-    fontWeight: '600',
-  },
-  mentionList: {
-    borderTopWidth: 0.5,
-    borderTopColor: colors.border,
-    backgroundColor: colors.background,
-    maxHeight: 200,
-  },
-  mentionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: verticalScale(10),
-    gap: 10,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.card,
-  },
-  mentionAvatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-  },
-  mentionAvatarFallback: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mentionAvatarInitial: {
-    color: colors.textPrimary,
-    fontSize: fontScale(12),
-    fontWeight: '700',
-  },
-  mentionUsername: {
-    color: colors.textPrimary,
-    fontSize: fontScale(14),
     fontWeight: '600',
   },
   inputSticky: {
