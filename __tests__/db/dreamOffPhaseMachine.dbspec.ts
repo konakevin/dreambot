@@ -19,11 +19,13 @@ let db: PoolClient;
 const OWNER = '00000000-0000-0000-0000-0000000000a1';
 const voters: string[] = [];
 let seq = 0;
+let voteCursor = 0; // per-game cursor into the voter pool (reset in mkGame)
 
 const gid = () => `00000000-0000-0000-0000-0000000f${(seq++).toString().padStart(4, '0')}`;
 
 async function mkGame(phase: string): Promise<string> {
   const id = gid();
+  voteCursor = 0; // each rose in this game must come from a distinct voter
   await db.query(
     `INSERT INTO public.dream_offs (id, owner_id, topic, topic_source, phase, invite_code, phase_expires_at)
      VALUES ($1,$2,'t','custom',$3,$4, now() + interval '1 day')`,
@@ -38,7 +40,9 @@ async function mkPlayer(game: string, uid: string, opts: { voted?: boolean } = {
     [game, uid, opts.voted ? new Date() : null]
   );
 }
-// Insert a completed+clean entry with `roses` votes (each from a distinct voter).
+// Insert a completed+clean entry with `roses` votes. Each rose is one rose_index=0
+// vote from a DISTINCT voter (advancing the per-game cursor) so no two votes in a
+// game collide on the (game_id, voter_id, rose_index) primary key.
 async function mkEntry(game: string, author: string, roses: number): Promise<string> {
   const { rows } = await db.query(
     `INSERT INTO public.dream_off_entries (game_id, author_id, author_name_snapshot, render_status, moderation_status, completed_at)
@@ -49,7 +53,7 @@ async function mkEntry(game: string, author: string, roses: number): Promise<str
   for (let i = 0; i < roses; i++) {
     await db.query(
       `INSERT INTO public.dream_off_votes (game_id, voter_id, entry_id, rose_index) VALUES ($1,$2,$3,0)`,
-      [game, voters[i], entryId]
+      [game, voters[voteCursor++], entryId]
     );
   }
   return entryId;
