@@ -24,6 +24,7 @@ import {
 } from '@/lib/firstDreamQueue';
 import { startFirstDream } from '@/lib/firstDreamKickoff';
 import { decideRevealAction } from '@/lib/firstDreamReveal';
+import { markDreamSeen } from '@/lib/markDreamSeen';
 import { trackFirstDreamGenerated } from '@/lib/analytics';
 // Vibe profile prompt is built inline — no recipe engine needed for onboarding reveal
 import { colors, ui } from '@/constants/theme';
@@ -177,6 +178,9 @@ export function RevealStep({ onBack, isActive = false }: Props) {
     setPhase('reveal');
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     trackFirstDreamGenerated({ medium: result.medium, vibe: result.vibe });
+    // The user is watching their first dream's reveal — mark it seen so it
+    // doesn't red-dot their brand-new album as "new." #58
+    markDreamSeen(result.uploadId);
   }
 
   function handleDreamError(err: unknown) {

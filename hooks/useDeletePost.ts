@@ -6,6 +6,7 @@ import { Toast } from '@/components/Toast';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { removeUploadFromPages } from '@/lib/feedHelpers';
 import { invalidateProfileGrids } from '@/lib/gridInvalidation';
+import { markDreamSeen } from '@/lib/markDreamSeen';
 import { useFeedStore } from '@/store/feed';
 import { useAlbumStore } from '@/store/album';
 
@@ -373,9 +374,12 @@ export function useBulkMakePrivate() {
 
       return { snapshots };
     },
-    onSuccess: ({ count }) => {
+    onSuccess: ({ count }, uploadIds) => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show(`Moved ${count} to private`, 'eye-off');
+      // The owner is acting on these dreams — they've seen them. Mark seen so the
+      // created_at bump above doesn't re-flag them as "new" in the album. #58
+      for (const id of uploadIds) markDreamSeen(id);
       // The optimistic onMutate already pulled these from the public grids; the
       // full refetch (refetchType:'all') confirms + surfaces them back in Dreams
       // even when that grid is inactive (the album live-update fix, 2026-07-11).
@@ -417,9 +421,12 @@ export function useBulkMakePublic() {
       if (error) throw error;
       return { count: uploadIds.length };
     },
-    onSuccess: ({ count }) => {
+    onSuccess: ({ count }, uploadIds) => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show(count === 1 ? 'Shared publicly' : `Shared ${count} publicly`, 'earth');
+      // Posting is a witness action — never let a just-shared dream red-dot the
+      // owner's own album as "new." #58
+      for (const id of uploadIds) markDreamSeen(id);
       // Leaves Private, enters the public grids + feed. refetchType:'all' (via
       // the helper) so the Posts grid refreshes even when you re-published from
       // the Dreams tab / viewer and the Posts grid is inactive (2026-07-11).

@@ -140,6 +140,9 @@ export interface DreamPostItem {
   face_swap_mode?: string | null;
   is_public?: boolean;
   posted_at?: string | null;
+  /** Owner-witnessed marker (migration 399). Set when the owner saw/posted this
+   * dream; gates the album "New" pill so their own dreams don't show as new. */
+  owner_seen_at?: string | null;
   description?: string | null;
   /** Repost surface (get_feed migration 243). 'repost' = this card is reaching
    * the viewer via a followed user's repost; reposter_* carry the attribution. */

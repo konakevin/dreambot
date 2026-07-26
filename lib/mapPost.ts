@@ -106,6 +106,10 @@ export function mapToDreamPost(row: Record<string, unknown>): DreamPostItem {
     face_swap_mode: (row.face_swap_mode as string | null) ?? null,
     is_public: (row.is_public as boolean) ?? false,
     posted_at: (row.posted_at as string | null) ?? null,
+    // Owner-witnessed marker (migration 399) — gates the album "New" pill so a
+    // dream you made/saw/posted doesn't show as new. Only owner queries return it
+    // (SELECT `*` picks it up via the column grant); null elsewhere.
+    owner_seen_at: (row.owner_seen_at as string | null) ?? null,
     // Profile pin (migration 330). Defensive cast — safe before types regen.
     pinned_at: (row.pinned_at as string | null) ?? null,
     description: (row.description as string | null) ?? null,

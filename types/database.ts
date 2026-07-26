@@ -2533,6 +2533,7 @@ export type Database = {
           model: string | null;
           output_hash: string | null;
           output_phash: string | null;
+          owner_seen_at: string | null;
           pinned_at: string | null;
           posted_at: string | null;
           recipe: Json | null;
@@ -2582,6 +2583,7 @@ export type Database = {
           model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
+          owner_seen_at?: string | null;
           pinned_at?: string | null;
           posted_at?: string | null;
           recipe?: Json | null;
@@ -2631,6 +2633,7 @@ export type Database = {
           model?: string | null;
           output_hash?: string | null;
           output_phash?: string | null;
+          owner_seen_at?: string | null;
           pinned_at?: string | null;
           posted_at?: string | null;
           recipe?: Json | null;
@@ -3483,6 +3486,7 @@ export type Database = {
           model: string | null;
           output_hash: string | null;
           output_phash: string | null;
+          owner_seen_at: string | null;
           pinned_at: string | null;
           posted_at: string | null;
           recipe: Json | null;
@@ -3564,6 +3568,7 @@ export type Database = {
       is_dream_eligible: { Args: { p_user_id: string }; Returns: boolean };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
       list_my_upload_paths: { Args: never; Returns: string[] };
+      mark_dream_seen: { Args: { p_upload_id: string }; Returns: undefined };
       mark_dreams_viewed: { Args: { p_user_id: string }; Returns: string };
       mark_group_seen: {
         Args: { p_group_key: string; p_user_id: string };

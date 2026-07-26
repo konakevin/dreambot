@@ -593,7 +593,12 @@ export function PostGrid({
                 albumSource={source}
                 isHighlighted={!highlightDismissed && item.id === effectiveHighlightId}
                 showPrivateBadge={showPrivateBadge}
-                isNew={markNew && !!dreamsViewBaseline && item.created_at > dreamsViewBaseline}
+                isNew={
+                  markNew &&
+                  !!dreamsViewBaseline &&
+                  item.created_at > dreamsViewBaseline &&
+                  !item.owner_seen_at
+                }
                 allPosts={posts}
                 // Flat PRIMITIVE selection props (not a per-tile object) so PostTile's
                 // React.memo holds — the old object literal here defeated memo and

@@ -24,6 +24,7 @@ import { useAuthStore } from '@/store/auth';
 import { useDreamStore } from '@/store/dream';
 import { useDreamMediums, useDreamVibes } from '@/hooks/useDreamStyles';
 import { saveDream } from '@/lib/dreamSave';
+import { markDreamSeen } from '@/lib/markDreamSeen';
 import { clearDreamInFlight } from '@/lib/dreamInFlightMarker';
 import { syncDreamWidget } from '@/lib/widgetSync';
 import { Toast } from '@/components/Toast';
@@ -42,6 +43,13 @@ export default function DreamRevealScreen() {
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
+
+  // Reaching this screen means the user WITNESSED the dream — mark it seen so it
+  // doesn't red-dot the album as "new" (that's reserved for dreams that land
+  // without the owner seeing them: nightly, or a queued create they left). #58
+  useEffect(() => {
+    if (result?.uploadId) markDreamSeen(result.uploadId);
+  }, [result?.uploadId]);
   // Tap the image hides/shows the HUD (Post/Skip chrome). The top-right expand
   // icon toggles the full-dimension preview (whole, non-clipped contain image).
   const [preview, setPreview] = useState(false);
