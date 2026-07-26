@@ -55,6 +55,7 @@ const MAX_ROUNDS = 16;
 const HUMOR = `Humor bar = a party game (Jackbox / Cards Against Humanity energy) BUT delivered with DreamBot's own whimsy and charm — clever, delightful, a little magical, never just crude for its own sake. Every idea must be 5-STAR: memorable, surprising, the kind that makes people grin or groan-laugh out loud. Raunchy, gross, savage, awkward, and adult SUBJECTS are welcome where they genuinely land — but wit and charm come first.`;
 const RENDER = `Keep it RENDERABLE by an AI image model: NO explicit sexual acts and NO graphic gore/graphic violence (models refuse those). Suggestive / gross / adult SITUATIONS are fine; explicit is not.`;
 const IP = `IP-safe: NEVER a named real person, celebrity, trademarked character, franchise, movie/show/game title, or brand — use the GENRE / STYLE / ARCHETYPE only (e.g. "a film-noir detective", not a named one).`;
+const OPEN = `Keep any CHARACTER vague and open — describe them by their ROLE or FUNCTION only ("an old librarian", "a frazzled chef", "a doomed treasure hunter") and NEVER pin their gender, age, or human-ness ("an old man", "a woman", "a little girl", "a human ___"). Leave whether they're a mouse, a human, a deer, an undersea fish entirely open — inspire the creative leap, don't stamp out the details. (Naming a specific animal is fine ONLY when the creature itself IS the subject, e.g. a cute-creatures pack.)`;
 
 // ── The theme grid. Each theme has a scene and/or cast composition. ────────────
 const THEMES = [
@@ -450,7 +451,7 @@ Rules:
 - VISUAL + renderable — it must paint one clear image.
 - ${HUMOR}
 - ${RENDER}
-- ${IP} No real player names either.
+- ${IP} No real player names either.${category === 'scene' ? `\n- ${OPEN}` : ''}
 - Vary the ideas WIDELY (no two alike).${avoid}
 
 Return ONLY the ${n} topics, one per line, no numbering, no commentary.`;
@@ -475,6 +476,10 @@ async function qaScan(theme, category, topics) {
     category === 'cast'
       ? `\n- (CAST — critical) does NOT transform cleanly into BOTH a single AND a couple prompt: read each as "you as [X]" AND as "you and your +1 as [X]". Flag it if EITHER reading is grammatically broken (it's a bare action / -ing phrase / adjective, not a role noun phrase) OR it is SINGULAR-LOCKED and contradicts a couple ("the lone/only/last/sole ___", "a solo ___", "by yourself")`
       : '';
+  const openCheck =
+    category === 'scene'
+      ? `\n- (SCENE) PINS a character's gender / age / human-ness instead of using an OPEN role ("an old man", "a woman", "a little girl", "a human ___") — a character must be described by ROLE only so the form stays open (naming a specific animal is OK only when the creature itself is the whole subject)`
+      : '';
   const prompt = `You are the strict QA gate for "Dream Off" party-game topics.
 Pack: "${theme.label}" (${category}). ${categoryRules(category)}
 
@@ -483,7 +488,7 @@ Hold a HIGH bar — we only keep 5-STAR ideas: clever, surprising, genuinely fun
 - crude or gross WITHOUT wit (party-game edge is great, but it must be clever + charming, not shock for its own sake), or off-tone for this pack
 - NOT renderable by an AI image model: explicit sexual content, graphic gore${groupRule}
 - names a real person/celebrity, a trademarked character, or a movie/show/game/brand title
-- a near-duplicate CONCEPT of another topic in the list${castCheck}
+- a near-duplicate CONCEPT of another topic in the list${openCheck}${castCheck}
 
 Topics:
 ${topics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
