@@ -3,6 +3,8 @@ import {
   EARLY_LABELS,
   RENDER_LABELS,
   FACE_SWAP_LABELS,
+  isWaitingForSlot,
+  QUEUED_LABEL,
 } from '@/lib/dreamStageLabels';
 
 describe('getDreamStageInfo', () => {
@@ -63,5 +65,24 @@ describe('getDreamStageInfo', () => {
     expect(EARLY_LABELS).toContain(fallback.label);
     expect(fallback.target).toBeGreaterThan(0);
     expect(getDreamStageInfo(undefined, 'some_future_stage').pool).toBe('early');
+  });
+});
+
+describe('isWaitingForSlot (the genuine-queue-wait gate)', () => {
+  it('is true only while queued with no stage breadcrumb yet', () => {
+    expect(isWaitingForSlot('queued', null)).toBe(true);
+    expect(isWaitingForSlot('queued', undefined)).toBe(true);
+    // Once claimed, current_stage populates → no longer "waiting for a slot".
+    expect(isWaitingForSlot('queued', 'claimed')).toBe(false);
+    expect(isWaitingForSlot('in_progress', 'claimed')).toBe(false);
+    expect(isWaitingForSlot('completed', 'upload')).toBe(false);
+    expect(isWaitingForSlot(null, null)).toBe(false);
+  });
+
+  it('the queue label is a single stable string (not from a rotating pool)', () => {
+    expect(typeof QUEUED_LABEL).toBe('string');
+    expect(QUEUED_LABEL.length).toBeGreaterThan(0);
+    // It must be distinct from the conjuring pool so a real wait reads differently.
+    expect(EARLY_LABELS).not.toContain(QUEUED_LABEL);
   });
 });

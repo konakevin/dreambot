@@ -118,6 +118,29 @@ export function pickFaceSwapLabel(): string {
   return FACE_SWAP_LABELS[Math.floor(Math.random() * FACE_SWAP_LABELS.length)];
 }
 
+/**
+ * Shown when a dream is genuinely still QUEUED — waiting for a render slot behind
+ * other dreams (e.g. the nightly heavy batch) rather than actively rendering. A
+ * distinct, honest state so a real queue wait reads as "coming up" instead of a
+ * stall. The caller (useDreamProgress) surfaces it only after a short grace, so
+ * the fast path (a slot is free → claimed in <1s) never flashes it. A single
+ * stable label, not a rotating pool — nothing is happening yet, so rotation would
+ * falsely imply progress.
+ */
+export const QUEUED_LABEL = 'Opening a dream portal';
+
+/**
+ * True while the dream is waiting in the queue for a render slot: status `queued`
+ * and not yet claimed (no stage breadcrumb). Once the worker claims it,
+ * `current_stage` populates and this goes false → back to the conjuring pool.
+ */
+export function isWaitingForSlot(
+  status: string | null | undefined,
+  currentStage: string | null | undefined
+): boolean {
+  return status === 'queued' && !currentStage;
+}
+
 // `label` on the pooled stages (early / face_swap) is a static placeholder; the
 // caller swaps in a per-dream pick — see DreamStageInfo.pool + useDreamProgress.
 const STAGES: Record<string, DreamStageInfo> = {
