@@ -239,7 +239,6 @@ export default function ProfileScreen() {
     );
   }, [gridSelectedIds, bulkUnrepost, exitGridSelection]);
   const profileResetToken = useFeedStore((s) => s.profileResetToken);
-  const currentPostId = useAlbumStore((s) => s.currentPostId);
   const queryClient = useQueryClient();
   // New-since-last-view count (mig 223) — same source as the tab badge.
   // The inbox screen itself fires useMarkInboxViewed on focus, so by the
@@ -843,7 +842,9 @@ export default function ProfileScreen() {
           ListHeaderComponent={header}
           scrollToTopToken={combinedScrollToTopToken}
           showPrivateBadge={activeTab === 'dreams'}
-          highlightPostId={currentPostId ?? undefined}
+          // No highlightPostId prop: the own grid uses PostGrid's scoped store
+          // anchor (albumSource-matched) so a stale currentPostId from a
+          // notification/search tap can't light the badge here (audit 2026-07-26).
           onScrollProgress={handleScrollProgress}
           extraBottomInset={dockHeight}
           pendingDreams={activeTab === 'dreams' && dreamsFilter !== 'posted' ? inFlightDreams : []}

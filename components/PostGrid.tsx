@@ -46,6 +46,23 @@ type PendingSlot = { pending: InFlightDream; finished?: 'ready' | 'failed' };
 type GridItem = DreamPostItem | PendingSlot;
 const isPending = (item: GridItem): item is PendingSlot => 'pending' in item;
 
+/**
+ * Does the stored album's source match THIS grid's source? The "return to your
+ * place" anchor (currentPostId) is only valid for the grid it was set from —
+ * PostTile stamps `albumSource` = the grid's source on tap. A currentPostId left
+ * by a notification/inbox open (which set albumSource=null) or by a DIFFERENT
+ * grid must never light this grid's badge / auto-scroll (the leak audited
+ * 2026-07-26). For user/hashtag/reposts the id must match too; own/saved/dreams
+ * are singletons so the type alone identifies the grid.
+ */
+function sameSource(a: PostGridSource | null, b: PostGridSource): boolean {
+  if (!a || a.type !== b.type) return false;
+  if (a.type === 'user' && b.type === 'user') return a.userId === b.userId;
+  if (a.type === 'reposts' && b.type === 'reposts') return a.userId === b.userId;
+  if (a.type === 'hashtag' && b.type === 'hashtag') return a.tag === b.tag;
+  return true; // own / saved / dreams — one grid per app, type match is enough
+}
+
 interface PostGridProps {
   source: PostGridSource;
   isOwn?: boolean;
@@ -341,7 +358,12 @@ export function PostGrid({
   // wins — the prop is only a fallback for screens that don't track via
   // the album store (e.g. user/[userId] with ?viewedPost= URL param).
   const storeCurrentPostId = useAlbumStore((s) => s.currentPostId);
-  const effectiveHighlightId = storeCurrentPostId ?? highlightPostId ?? undefined;
+  const albumSource = useAlbumStore((s) => s.albumSource);
+  // Honor the stored anchor ONLY when it was set from THIS grid (see sameSource).
+  // Otherwise a currentPostId left by a notification/search/other-grid tap would
+  // light this grid's badge and auto-scroll onto a post never viewed here.
+  const anchorId = sameSource(albumSource, source) ? storeCurrentPostId : null;
+  const effectiveHighlightId = anchorId ?? highlightPostId ?? undefined;
 
   const highlightIndex = useMemo(() => {
     if (!effectiveHighlightId) return -1;
@@ -355,12 +377,42 @@ export function PostGrid({
   // post; the effect below scrolls to it once it lands in the loaded set.
   const [jumpPending, setJumpPending] = useState(false);
 
+  // Fade + dismiss the "Just viewed" pill when the user starts scrolling instead
+  // of tapping it — if they're browsing, they've chosen not to jump (Kevin
+  // 2026-07-26). onScrollBeginDrag fires only on a USER drag, so programmatic
+  // scrolls (silent auto-anchor / deep-jump) never trigger the fade.
+  const badgeOpacity = useRef(new Animated.Value(1)).current;
+  const [scrolledAway, setScrolledAway] = useState(false);
+  const jumpPendingRef = useRef(false);
+  jumpPendingRef.current = jumpPending;
+  // A new/changed highlight resets the fade so the pill can appear again.
   useEffect(() => {
-    if (!highlightPostId) return;
+    setScrolledAway(false);
+    badgeOpacity.setValue(1);
+  }, [effectiveHighlightId, badgeOpacity]);
+  const fadeBadgeAway = useCallback(() => {
+    Animated.timing(badgeOpacity, {
+      toValue: 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) setScrolledAway(true);
+    });
+  }, [badgeOpacity]);
+  const handleScrollBeginDrag = useCallback(() => {
+    if (jumpPendingRef.current) return; // let an in-progress deep-jump finish
+    fadeBadgeAway();
+  }, [fadeBadgeAway]);
+
+  // Dismiss the highlight on blur (leaving the screen) for EITHER source — the
+  // scoped store anchor or the ?viewedPost prop. (Was gated on the raw prop, which
+  // the own grid no longer passes; effectiveHighlightId keeps parity.)
+  useEffect(() => {
+    if (!effectiveHighlightId) return;
     return navigation.addListener('blur', () => {
       setHighlightDismissed(true);
     });
-  }, [navigation, highlightPostId]);
+  }, [navigation, effectiveHighlightId]);
 
   // Auto-scroll to the highlighted post on every focus enter — fixes the
   // "lose your place after detail-view scroll" bug. PostTile sets the album
@@ -410,17 +462,44 @@ export function PostGrid({
     setBadgeTapped(true);
   }, []);
 
-  // Once the deep-jump bulk-load lands the post in the loaded set, scroll to it.
-  useEffect(() => {
-    if (jumpPending && highlightIndex >= 0) {
-      setJumpPending(false);
-      // silent = INSTANT jump: the target is hundreds of rows away, so an
-      // animated scroll would travel the whole distance (~seconds). Just pop.
-      requestAnimationFrame(() =>
-        scrollToHighlightRow(highlightIndex + pendingCountRef.current, { silent: true })
-      );
+  // Reliable scroll for the DEEP-JUMP path. After a big one-shot page append,
+  // FlashList v2's data length updates a frame BEFORE its internal layout array +
+  // native content size do, so a single-rAF scrollToIndex to the far, just-loaded
+  // row either throws "index out of bounds" (silently swallowed) or lands on an
+  // estimated offset near the top — the intermittent "spins, finishes, stays at
+  // top" bug (root-caused 2026-07-26). Await the scroll, verify it actually landed
+  // via computeVisibleIndices(), and retry on a capped rAF loop. Returns whether
+  // it landed, so the caller only hides the badge on real success.
+  const scrollToHighlightRowReliable = useCallback(async (gridIndex: number): Promise<boolean> => {
+    const list = listRef.current;
+    if (!list || gridIndex < 0) return false;
+    for (let attempt = 0; attempt < 12; attempt++) {
+      try {
+        await list.scrollToIndex({ index: gridIndex, animated: false, viewPosition: 0.5 });
+      } catch {
+        // Layout array not yet grown to cover gridIndex — retry next frame.
+      }
+      const vis = list.computeVisibleIndices?.();
+      if (vis && gridIndex >= vis.startIndex && gridIndex <= vis.endIndex) return true;
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
-  }, [jumpPending, highlightIndex, scrollToHighlightRow]);
+    return false;
+  }, []);
+
+  // Once the deep-jump bulk-load lands the post in the loaded set, scroll to it —
+  // reliably (retry-until-landed), and only hide the badge once it truly lands, so
+  // a swallowed FlashList miss can't leave the user stranded at the top with the
+  // pill already gone.
+  useEffect(() => {
+    if (!jumpPending || highlightIndex < 0) return;
+    setJumpPending(false);
+    const gridIndex = highlightIndex + pendingCountRef.current;
+    void scrollToHighlightRowReliable(gridIndex).then((landed) => {
+      if (landed) setBadgeTapped(true);
+      // Not landed (deeper than the retry window) → leave the badge so the user
+      // can tap again rather than being silently left at the top.
+    });
+  }, [jumpPending, highlightIndex, scrollToHighlightRowReliable]);
 
   // Auto-anchor on focus enter. The hard case is when the user scrolled past
   // the grid's first page (PAGE_SIZE=18) in detail view: highlightPostId is
@@ -441,10 +520,10 @@ export function PostGrid({
   // Those just light up the "Just viewed" badge; the user has to tap it
   // to scroll, since they didn't actually drill into that post.
   useEffect(() => {
-    if (!storeCurrentPostId) return;
+    if (!anchorId) return;
     setHighlightDismissed(false);
     setPendingAutoAnchor(true);
-  }, [storeCurrentPostId]);
+  }, [anchorId]);
 
   // Reset the focus ref on focus enter (kept so the deep-link badge path
   // remains correct).
@@ -481,9 +560,10 @@ export function PostGrid({
   const maxVisibleIndex = visibleRows > 0 ? visibleRows * NUM_COLUMNS - 1 : -1;
 
   const showJustViewedButton =
-    !!highlightPostId &&
+    !!effectiveHighlightId &&
     !highlightDismissed &&
     !badgeTapped &&
+    !scrolledAway &&
     (highlightIndex === -1
       ? !activeQuery.isLoading
       : containerHeight > 0 && highlightIndex + pendingCount > maxVisibleIndex);
@@ -549,6 +629,7 @@ export function PostGrid({
           </>
         }
         onScroll={handleScroll}
+        onScrollBeginDrag={handleScrollBeginDrag}
         scrollEventThrottle={16}
         // Fetch the next page ~3 screens BEFORE the end so a fast fling rarely
         // outruns pagination and slams into the loaded-data boundary (the bounce).
@@ -626,20 +707,22 @@ export function PostGrid({
         </View>
       )}
       {showJustViewedButton && (
-        <TouchableOpacity
-          style={styles.justViewedButton}
-          onPress={scrollToHighlight}
-          activeOpacity={0.85}
-          disabled={jumpPending}
-        >
-          <Ionicons name="eye-outline" size={14} color="#FFFFFF" />
-          <Text style={styles.justViewedButtonText}>Just viewed</Text>
-          {jumpPending ? (
-            <ActivityIndicator size="small" color="rgba(255,255,255,0.7)" />
-          ) : (
-            <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
-          )}
-        </TouchableOpacity>
+        <Animated.View style={[styles.justViewedWrap, { opacity: badgeOpacity }]}>
+          <TouchableOpacity
+            style={styles.justViewedButton}
+            onPress={scrollToHighlight}
+            activeOpacity={0.85}
+            disabled={jumpPending}
+          >
+            <Ionicons name="eye-outline" size={14} color="#FFFFFF" />
+            <Text style={styles.justViewedButtonText}>Just viewed</Text>
+            {jumpPending ? (
+              <ActivityIndicator size="small" color="rgba(255,255,255,0.7)" />
+            ) : (
+              <Ionicons name="chevron-down" size={14} color="rgba(255,255,255,0.7)" />
+            )}
+          </TouchableOpacity>
+        </Animated.View>
       )}
     </View>
   );
@@ -651,10 +734,12 @@ const styles = StyleSheet.create({
   emptyText: { color: colors.textSecondary, fontSize: fontScale(15) },
   footer: { paddingVertical: verticalScale(20), alignItems: 'center' },
   container: { flex: 1 },
-  justViewedButton: {
+  justViewedWrap: {
     position: 'absolute',
     bottom: 24,
     right: 16,
+  },
+  justViewedButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,

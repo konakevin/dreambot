@@ -46,5 +46,5 @@ export const useAlbumStore = create<AlbumStore>((set) => ({
   setAlbumPosts: (posts) => set({ posts }),
   setAlbumSource: (source) => set({ albumSource: source }),
   setCurrentPostId: (id) => set({ currentPostId: id }),
-  clearAlbum: () => set({ ids: [], posts: [], albumSource: null }),
+  clearAlbum: () => set({ ids: [], posts: [], albumSource: null, currentPostId: null }),
 }));
