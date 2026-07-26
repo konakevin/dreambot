@@ -824,8 +824,16 @@ async function main() {
   // collide cross-pack/cross-category.
   const seen = new Set();
   if (!DRY_RUN) {
-    const { data: existing } = await supabase.from('dream_off_topics').select('topic_text');
-    for (const r of existing ?? []) seen.add(normKey(r.topic_text));
+    // Paginate — PostgREST silently caps a single read at 1000 rows, which would
+    // leave most of an existing deck out of the cross-dedup set.
+    for (let from = 0; ; from += 1000) {
+      const { data } = await supabase
+        .from('dream_off_topics')
+        .select('topic_text')
+        .range(from, from + 999);
+      for (const r of data ?? []) seen.add(normKey(r.topic_text));
+      if (!data || data.length < 1000) break;
+    }
     console.log(`Preloaded ${seen.size} existing topics into the dedup set.`);
   }
   console.log(`${specs.length} pack(s) to seed.\n`);
