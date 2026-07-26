@@ -51,10 +51,19 @@ async function registerForPushNotifications(): Promise<string | null> {
     return null;
   }
 
-  const { data: tokenData } = await Notifications.getExpoPushTokenAsync({ projectId });
-
-  if (__DEV__) console.log('[Push] Token:', tokenData);
-  return tokenData;
+  // The token fetch hits Expo's push service over the network — a transient
+  // offline / flaky connection rejects with "Network request failed". Token
+  // registration is best-effort (retried on the next launch / auth change), so a
+  // network failure returns null rather than throwing an UNHANDLED rejection that
+  // lit up Sentry (issue d898a662, 2026-07-26).
+  try {
+    const { data: tokenData } = await Notifications.getExpoPushTokenAsync({ projectId });
+    if (__DEV__) console.log('[Push] Token:', tokenData);
+    return tokenData;
+  } catch (err) {
+    if (__DEV__) console.warn('[Push] Expo token fetch failed (retries next launch):', err);
+    return null;
+  }
 }
 
 async function savePushToken(userId: string, token: string) {
@@ -149,8 +158,15 @@ export function usePushNotifications() {
   // Effect 2: register + persist push token (user-gated).
   useEffect(() => {
     if (!user) return;
-    registerForPushNotifications().then((token) => {
-      if (token) savePushToken(user.id, token);
-    });
+    registerForPushNotifications()
+      .then((token) => {
+        if (token) savePushToken(user.id, token);
+      })
+      .catch((err) => {
+        // Permission prompts / token fetch can reject transiently (offline, or
+        // Expo's push API returning 503). Best-effort — swallow so it never
+        // bubbles as an unhandled rejection into Sentry (d898a662 / d9427270).
+        if (__DEV__) console.warn('[Push] register failed:', err);
+      });
   }, [user?.id]);
 }
