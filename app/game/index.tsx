@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
-import { GradientButton } from '@/components/GradientButton';
+import { PhaseCta } from '@/components/dreamOff';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
@@ -72,7 +72,7 @@ export default function DreamOffHubScreen() {
           Same funny topic. Everyone makes a dream. You all vote. 🎭
         </Text>
 
-        <GradientButton
+        <PhaseCta
           label="Start a Dream Off"
           icon="game-controller"
           onPress={() => router.push('/game/create')}

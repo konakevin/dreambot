@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   cta: {
-    borderRadius: 999,
+    borderRadius: 14,
     backgroundColor: colors.accentLight,
     alignItems: 'center',
     justifyContent: 'center',

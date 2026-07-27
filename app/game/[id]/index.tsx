@@ -77,7 +77,9 @@ export default function RoomScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.back}>
           <Ionicons name="chevron-back" size={fontScale(26)} color={colors.textPrimary} />
         </TouchableOpacity>
-        <GradientTitle size={TITLE_SIZE.nav}>Dream Off</GradientTitle>
+        <View pointerEvents="none" style={styles.headerTitleAbs}>
+          <GradientTitle size={TITLE_SIZE.nav}>Dream Off</GradientTitle>
+        </View>
         <View style={styles.headerRight}>
           {room?.phase && <PhaseCountdown expiresAt={room.phase_expires_at} />}
         </View>
@@ -570,17 +572,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: horizontalScale(12),
-    paddingBottom: verticalScale(10),
-    gap: horizontalScale(8),
+    paddingVertical: verticalScale(6),
   },
   back: { padding: 2 },
-  headerTitle: {
-    fontFamily: displayFontFamily(700),
-    fontSize: fontScale(18),
-    color: colors.textPrimary,
+  headerTitleAbs: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  headerRight: { marginLeft: 'auto' },
+  headerRight: {},
   body: {
     paddingHorizontal: horizontalScale(16),
     paddingTop: verticalScale(8),

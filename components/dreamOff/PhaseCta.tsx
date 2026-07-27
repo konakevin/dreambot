@@ -1,8 +1,8 @@
 /**
- * PhaseCta — the single big action a phase asks of you ("Make your dream",
- * "Reveal the results", "Share"). One button style across the whole game so the
- * next step always reads the same. Matches the house GradientButton pill, adds a
- * loading spinner and secondary/ghost variants the phases need.
+ * PhaseCta — the single action a phase asks of you ("Make your dream", "Start",
+ * "Reveal the results"). A STANDARD solid button (not the brand gradient — those
+ * are reserved for onboarding / hero CTAs; Dream Off uses plain buttons). One
+ * style across the whole game, with a loading spinner + secondary/ghost variants.
  */
 
 import {
@@ -13,10 +13,8 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/AppText';
-import { BRAND_GRADIENT } from '@/components/GradientTitle';
 import { DISPLAY_FONT } from '@/constants/fonts';
 import { colors } from '@/constants/theme';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -33,7 +31,7 @@ interface Props {
   style?: StyleProp<ViewStyle>;
 }
 
-const PRIMARY_TEXT = '#08080F';
+const PRIMARY_TEXT = '#0C0C12';
 
 export function PhaseCta({
   label,
@@ -48,40 +46,32 @@ export function PhaseCta({
   const textColor =
     variant === 'primary' ? PRIMARY_TEXT : variant === 'ghost' ? colors.accentLight : '#fff';
 
-  const inner = (
-    <>
-      {loading ? (
-        <ActivityIndicator size="small" color={textColor} />
-      ) : (
-        <>
-          {icon ? <Ionicons name={icon} size={fontScale(18)} color={textColor} /> : null}
-          <Text style={[styles.label, { color: textColor }]}>{label}</Text>
-        </>
-      )}
-    </>
-  );
-
   return (
     <TouchableOpacity
       onPress={inert ? undefined : onPress}
       disabled={inert}
-      activeOpacity={0.9}
+      activeOpacity={0.85}
       style={[style, inert && styles.dim]}
     >
-      {variant === 'primary' ? (
-        <LinearGradient
-          colors={BRAND_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[styles.pill, styles.primaryGlow]}
-        >
-          {inner}
-        </LinearGradient>
-      ) : (
-        <View style={[styles.pill, variant === 'secondary' ? styles.secondary : styles.ghost]}>
-          {inner}
-        </View>
-      )}
+      <View
+        style={[
+          styles.pill,
+          variant === 'primary'
+            ? styles.primary
+            : variant === 'secondary'
+              ? styles.secondary
+              : styles.ghost,
+        ]}
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color={textColor} />
+        ) : (
+          <>
+            {icon ? <Ionicons name={icon} size={fontScale(18)} color={textColor} /> : null}
+            <Text style={[styles.label, { color: textColor }]}>{label}</Text>
+          </>
+        )}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -92,19 +82,13 @@ const styles = StyleSheet.create({
     gap: horizontalScale(8),
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: verticalScale(16),
-    paddingHorizontal: horizontalScale(28),
-    borderRadius: 999,
+    paddingVertical: verticalScale(14),
+    paddingHorizontal: horizontalScale(24),
+    borderRadius: 14,
   },
-  primaryGlow: {
-    shadowColor: '#A78BFA',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    elevation: 8,
-  },
+  primary: { backgroundColor: colors.accentLight },
   secondary: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border },
   ghost: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.accentBorder },
-  dim: { opacity: 0.55 },
-  label: { fontSize: fontScale(17), fontFamily: DISPLAY_FONT.semibold },
+  dim: { opacity: 0.5 },
+  label: { fontSize: fontScale(16), fontFamily: DISPLAY_FONT.semibold },
 });
