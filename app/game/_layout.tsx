@@ -15,6 +15,7 @@ export default function DreamOffLayout() {
         animation: 'slide_from_right',
       }}
     >
+      <Stack.Screen name="index" />
       <Stack.Screen name="create" options={{ presentation: 'modal' }} />
       <Stack.Screen name="join" options={{ presentation: 'modal' }} />
       <Stack.Screen name="[id]/index" />
