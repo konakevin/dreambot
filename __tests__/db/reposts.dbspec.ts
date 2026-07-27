@@ -70,6 +70,12 @@ beforeAll(async () => {
   await db.query(extract(sql, 'CREATE TABLE IF NOT EXISTS public.post_reposts', ');'));
   await db.query(extract(sql, 'CREATE OR REPLACE FUNCTION public.update_repost_count', '$$;'));
   await db.query(extract(sql, 'CREATE OR REPLACE FUNCTION public.enforce_repost_rules', '$$;'));
+  // repostBumpLedger.dbspec.ts sorts BEFORE this suite and creates its own
+  // toggle_repost in the shared test DB; migration 242 uses bare CREATE FUNCTION
+  // (not OR REPLACE), so drop any leftover copy first (a DROP TABLE ... CASCADE
+  // does NOT drop the plpgsql function). Mirrors the feed specs' drop-first guard.
+  await db.query('DROP FUNCTION IF EXISTS public.toggle_repost(uuid)');
+  await db.query('DROP FUNCTION IF EXISTS public.get_reposters(uuid, integer, timestamptz)');
   await db.query(extract(sql, 'CREATE FUNCTION public.toggle_repost', '$$;'));
   await db.query(extract(sql, 'CREATE FUNCTION public.get_reposters', '$$;'));
   // Wire the triggers (trivial wiring; functions above carry the logic).
