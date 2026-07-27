@@ -124,7 +124,7 @@ export default function EntryComposeScreen() {
             topic={room.topic}
             packCategory={room.pack_category}
             castMode={room.cast_mode}
-            eyebrow="The base scene"
+            eyebrow="The dream seed"
           />
         )}
 
@@ -146,7 +146,7 @@ export default function EntryComposeScreen() {
           <Text style={styles.spinHint}>✨ funniest wins</Text>
         </View>
         <Text style={styles.spinSub}>
-          Keep the base scene, but make it yours. This twist is what people vote on.
+          Grow the seed into your own dream. This twist is what people vote on.
         </Text>
         <TextInput
           value={spin}

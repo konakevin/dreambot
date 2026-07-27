@@ -31,7 +31,7 @@ export function TopicBanner({
   castMode,
   size = 'full',
   variant = 'card',
-  eyebrow = 'The base scene',
+  eyebrow = 'The dream seed',
   style,
 }: Props) {
   const compact = size === 'compact';
