@@ -207,6 +207,13 @@ function SetupView({
   const canStart = room.is_owner && room.player_count >= 2;
 
   const invitedCount = players?.filter((p) => p.status === 'invited').length ?? 0;
+  const needed = Math.max(0, 2 - room.player_count);
+  // The hint reflects the ACTUAL lobby state: if you've already invited enough
+  // people, you're just waiting on them to accept — not being told to invite more.
+  const lobbyHint =
+    invitedCount >= needed
+      ? 'Waiting for your invited friends to hop in. A game starts once 2 are in.'
+      : `Invite ${needed} more ${needed === 1 ? 'friend' : 'friends'}. You need 2 players to start.`;
 
   return (
     <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
@@ -256,7 +263,7 @@ function SetupView({
                 icon="person-add"
                 onPress={() => setShowInvite(true)}
               />
-              <Text style={styles.hintCenter}>Invite one more — you need 2 players to start.</Text>
+              <Text style={styles.hintCenter}>{lobbyHint}</Text>
             </>
           )}
 

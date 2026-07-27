@@ -1,7 +1,7 @@
 /**
  * Join a Dream Off by code — the "type the room code a friend gave you" screen
  * (Jackbox-style), reachable from the profile. Forgiving input: uppercases,
- * strips spaces/punctuation, paste-friendly, auto-submits at 6 chars. The result
+ * strips spaces/punctuation, paste-friendly, auto-submits at 4 chars. The result
  * runs through the shared interpretJoin mapping so every outcome is a warm line,
  * never a dead-end.
  */
@@ -19,7 +19,7 @@ import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
 import { useJoinGame } from '@/hooks/useDreamOff';
 import { interpretJoin } from '@/lib/dreamOffJoinStatus';
 
-const CODE_LEN = 6;
+const CODE_LEN = 4;
 const clean = (s: string) =>
   s
     .toUpperCase()
@@ -72,7 +72,7 @@ export default function JoinByCodeScreen() {
 
       <View style={styles.body}>
         <Text style={styles.lead}>Got a code from a friend?</Text>
-        <Text style={styles.sub}>Enter the 6-character game code.</Text>
+        <Text style={styles.sub}>Enter the 4-character game code.</Text>
 
         <TextInput
           value={code}
@@ -83,7 +83,7 @@ export default function JoinByCodeScreen() {
           autoComplete="off"
           keyboardType="visible-password"
           maxLength={CODE_LEN}
-          placeholder="ABC123"
+          placeholder="AB12"
           placeholderTextColor={colors.textTertiary}
           style={styles.input}
           onSubmitEditing={() => void submit(code)}

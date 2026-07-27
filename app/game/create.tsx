@@ -15,6 +15,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, TextInput } from '@/components/AppText';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -64,31 +65,33 @@ export default function CreateGameScreen() {
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="close" size={fontScale(26)} color={colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.back}>
+          <Ionicons name="chevron-back" size={fontScale(26)} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>New Dream Off</Text>
-        <View style={{ width: fontScale(26) }} />
+        <View style={styles.titleWrap}>
+          <GradientTitle size={TITLE_SIZE.nav}>New Dream Off</GradientTitle>
+        </View>
+        <View style={styles.back} />
       </View>
 
       <ScrollView
         contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + verticalScale(120) }]}
         keyboardShouldPersistTaps="handled"
       >
-        {/* ── who's in the dream ── */}
-        <Text style={styles.q}>Who&apos;s in the dream?</Text>
+        {/* ── pick a dream type ── */}
+        <Text style={styles.q}>Pick a dream type:</Text>
         <View style={styles.choiceRow}>
           <ChoiceCard
             icon="image-outline"
-            title="A scene"
-            sub="A funny subject — you're not in it"
+            title="Scene"
+            sub="A funny subject, you're not in it"
             selected={category === 'scene'}
             onPress={() => setCategory('scene')}
           />
           <ChoiceCard
             icon="person-outline"
-            title="You're in it"
-            sub="Get cast into the topic"
+            title="Character"
+            sub="You get cast into the topic"
             selected={category === 'cast'}
             onPress={() => setCategory('cast')}
           />
@@ -269,15 +272,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: horizontalScale(16),
-    paddingBottom: verticalScale(10),
+    paddingHorizontal: horizontalScale(12),
+    paddingBottom: verticalScale(8),
   },
-  headerTitle: {
-    fontFamily: displayFontFamily(700),
-    fontSize: fontScale(18),
-    color: colors.textPrimary,
-  },
+  back: { width: fontScale(30), alignItems: 'flex-start' },
+  titleWrap: { flex: 1, alignItems: 'center' },
   body: { paddingHorizontal: horizontalScale(16), gap: verticalScale(12) },
   q: { fontFamily: displayFontFamily(700), fontSize: fontScale(18), color: colors.textPrimary },
   qSpaced: { marginTop: verticalScale(14) },
