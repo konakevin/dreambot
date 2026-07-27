@@ -861,8 +861,9 @@ export default function ProfileScreen() {
         {/* Selection chrome — the count + Done live in the grid's own filter
             row (the subheader above the grid); the ACTION ROW floats at the
             bottom — the Gmail-toolbar shape (Kevin 2026-07-10). Posts album:
-            [Make Private][Delete]; Dreams album: [Delete] only (its grid is
-            mostly private already — the extra verb read as noise). */}
+            [Make Private][Delete]; Dreams album: [Post][Delete] on the Private
+            view (only unposted dreams are eligible to post), [Delete] only on
+            the All + Posted views. */}
         {gridSelecting && (
           <View
             style={[
@@ -871,10 +872,11 @@ export default function ProfileScreen() {
             ]}
           >
             <View style={styles.selectionActionsRow}>
-              {/* Post the selected dreams — 1 → single, 2+ → gallery. Only on
-                  the PRIVATE sub-filter, where every tile is unposted so "Post"
-                  is unambiguous; on All/Posted the tiles are already live, so
-                  composing goes through the ＋ new-post entry instead. */}
+              {/* Post the selected dreams — 1 → single, 2+ → gallery. Only on the
+                  Private view: those are the only eligible (unposted) dreams, so
+                  posting an album is unambiguous there. On All/Posted the grid is
+                  a mix of already-live dreams, so bulk-Post is deliberately not
+                  offered — compose a new post via ＋ instead. (Kevin 2026-07-27.) */}
               {activeTab === 'dreams' && dreamsFilter === 'private' && (
                 <TouchableOpacity
                   style={[
