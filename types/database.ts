@@ -6,31 +6,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
-  graphql_public: {
-    Tables: {
-      [_ in never]: never;
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json;
-          operationName?: string;
-          query?: string;
-          variables?: Json;
-        };
-        Returns: Json;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
   public: {
     Tables: {
       action_poses: {
@@ -893,6 +868,516 @@ export type Database = {
         };
         Relationships: [];
       };
+      dream_off_entries: {
+        Row: {
+          author_id: string | null;
+          author_name_snapshot: string;
+          blind_order_seed: number;
+          completed_at: string | null;
+          created_at: string;
+          game_id: string;
+          game_image_ref: string | null;
+          id: string;
+          moderation_status: string;
+          payment_reference: string | null;
+          render_status: string;
+          upload_id: string | null;
+        };
+        Insert: {
+          author_id?: string | null;
+          author_name_snapshot: string;
+          blind_order_seed?: number;
+          completed_at?: string | null;
+          created_at?: string;
+          game_id: string;
+          game_image_ref?: string | null;
+          id?: string;
+          moderation_status?: string;
+          payment_reference?: string | null;
+          render_status?: string;
+          upload_id?: string | null;
+        };
+        Update: {
+          author_id?: string | null;
+          author_name_snapshot?: string;
+          blind_order_seed?: number;
+          completed_at?: string | null;
+          created_at?: string;
+          game_id?: string;
+          game_image_ref?: string | null;
+          id?: string;
+          moderation_status?: string;
+          payment_reference?: string | null;
+          render_status?: string;
+          upload_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_entries_author_id_fkey';
+            columns: ['author_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_entries_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_offs';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_entries_upload_id_fkey';
+            columns: ['upload_id'];
+            isOneToOne: false;
+            referencedRelation: 'uploads';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_off_events: {
+        Row: {
+          actor_id: string | null;
+          actor_name_snapshot: string | null;
+          created_at: string;
+          game_id: string;
+          id: string;
+          kind: string;
+        };
+        Insert: {
+          actor_id?: string | null;
+          actor_name_snapshot?: string | null;
+          created_at?: string;
+          game_id: string;
+          id?: string;
+          kind: string;
+        };
+        Update: {
+          actor_id?: string | null;
+          actor_name_snapshot?: string | null;
+          created_at?: string;
+          game_id?: string;
+          id?: string;
+          kind?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_events_actor_id_fkey';
+            columns: ['actor_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_events_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_offs';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_off_packs: {
+        Row: {
+          accent: string | null;
+          created_at: string;
+          display_name: string;
+          emoji: string | null;
+          group_key: string | null;
+          group_label: string | null;
+          has_cast: boolean;
+          has_scene: boolean;
+          is_active: boolean;
+          is_holiday: boolean;
+          key: string;
+          season_end: string | null;
+          season_start: string | null;
+          sort_order: number;
+          tagline: string | null;
+          tone_label: string | null;
+        };
+        Insert: {
+          accent?: string | null;
+          created_at?: string;
+          display_name: string;
+          emoji?: string | null;
+          group_key?: string | null;
+          group_label?: string | null;
+          has_cast?: boolean;
+          has_scene?: boolean;
+          is_active?: boolean;
+          is_holiday?: boolean;
+          key: string;
+          season_end?: string | null;
+          season_start?: string | null;
+          sort_order?: number;
+          tagline?: string | null;
+          tone_label?: string | null;
+        };
+        Update: {
+          accent?: string | null;
+          created_at?: string;
+          display_name?: string;
+          emoji?: string | null;
+          group_key?: string | null;
+          group_label?: string | null;
+          has_cast?: boolean;
+          has_scene?: boolean;
+          is_active?: boolean;
+          is_holiday?: boolean;
+          key?: string;
+          season_end?: string | null;
+          season_start?: string | null;
+          sort_order?: number;
+          tagline?: string | null;
+          tone_label?: string | null;
+        };
+        Relationships: [];
+      };
+      dream_off_players: {
+        Row: {
+          created_at: string;
+          game_id: string;
+          joined_via: string;
+          status: string;
+          submitted_at: string | null;
+          user_id: string;
+          voted_at: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          game_id: string;
+          joined_via?: string;
+          status?: string;
+          submitted_at?: string | null;
+          user_id: string;
+          voted_at?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          game_id?: string;
+          joined_via?: string;
+          status?: string;
+          submitted_at?: string | null;
+          user_id?: string;
+          voted_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_players_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_offs';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_players_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_off_pot: {
+        Row: {
+          balance: number;
+          created_at: string;
+          funded_slots: number;
+          game_id: string;
+          prize_balance: number;
+          slot_price: number;
+          status: string;
+          tier_key: string;
+          updated_at: string;
+        };
+        Insert: {
+          balance?: number;
+          created_at?: string;
+          funded_slots?: number;
+          game_id: string;
+          prize_balance?: number;
+          slot_price: number;
+          status?: string;
+          tier_key: string;
+          updated_at?: string;
+        };
+        Update: {
+          balance?: number;
+          created_at?: string;
+          funded_slots?: number;
+          game_id?: string;
+          prize_balance?: number;
+          slot_price?: number;
+          status?: string;
+          tier_key?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_pot_tier_key_fkey';
+            columns: ['tier_key'];
+            isOneToOne: false;
+            referencedRelation: 'dream_off_tiers';
+            referencedColumns: ['key'];
+          },
+        ];
+      };
+      dream_off_pot_ledger: {
+        Row: {
+          actor_id: string | null;
+          amount: number;
+          balance_after: number;
+          created_at: string;
+          entry_id: string | null;
+          game_id: string;
+          id: string;
+          kind: string;
+          reference_id: string | null;
+        };
+        Insert: {
+          actor_id?: string | null;
+          amount: number;
+          balance_after: number;
+          created_at?: string;
+          entry_id?: string | null;
+          game_id: string;
+          id?: string;
+          kind: string;
+          reference_id?: string | null;
+        };
+        Update: {
+          actor_id?: string | null;
+          amount?: number;
+          balance_after?: number;
+          created_at?: string;
+          entry_id?: string | null;
+          game_id?: string;
+          id?: string;
+          kind?: string;
+          reference_id?: string | null;
+        };
+        Relationships: [];
+      };
+      dream_off_superlatives: {
+        Row: {
+          created_at: string;
+          entry_id: string;
+          game_id: string;
+          key: string;
+          rose_count: number;
+        };
+        Insert: {
+          created_at?: string;
+          entry_id: string;
+          game_id: string;
+          key: string;
+          rose_count?: number;
+        };
+        Update: {
+          created_at?: string;
+          entry_id?: string;
+          game_id?: string;
+          key?: string;
+          rose_count?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_superlatives_entry_id_fkey';
+            columns: ['entry_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_off_entries';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_superlatives_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_offs';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_off_tiers: {
+        Row: {
+          is_active: boolean;
+          key: string;
+          label: string;
+          model_ids: string[];
+          slot_price: number;
+          sort_order: number;
+          updated_at: string;
+        };
+        Insert: {
+          is_active?: boolean;
+          key: string;
+          label: string;
+          model_ids: string[];
+          slot_price: number;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Update: {
+          is_active?: boolean;
+          key?: string;
+          label?: string;
+          model_ids?: string[];
+          slot_price?: number;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      dream_off_topics: {
+        Row: {
+          category: string;
+          created_at: string;
+          id: string;
+          is_active: boolean;
+          pack: string;
+          season_end: string | null;
+          season_start: string | null;
+          tone: string;
+          topic_text: string;
+        };
+        Insert: {
+          category?: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          pack: string;
+          season_end?: string | null;
+          season_start?: string | null;
+          tone?: string;
+          topic_text: string;
+        };
+        Update: {
+          category?: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          pack?: string;
+          season_end?: string | null;
+          season_start?: string | null;
+          tone?: string;
+          topic_text?: string;
+        };
+        Relationships: [];
+      };
+      dream_off_votes: {
+        Row: {
+          created_at: string;
+          entry_id: string;
+          game_id: string;
+          rose_index: number;
+          voter_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          entry_id: string;
+          game_id: string;
+          rose_index: number;
+          voter_id: string;
+        };
+        Update: {
+          created_at?: string;
+          entry_id?: string;
+          game_id?: string;
+          rose_index?: number;
+          voter_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_off_votes_entry_id_fkey';
+            columns: ['entry_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_off_entries';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_votes_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'dream_offs';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'dream_off_votes_voter_id_fkey';
+            columns: ['voter_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      dream_offs: {
+        Row: {
+          cast_mode: string | null;
+          created_at: string;
+          id: string;
+          invite_code: string;
+          invite_revoked_at: string | null;
+          join_approval: boolean;
+          max_players: number;
+          owner_id: string | null;
+          pack_category: string;
+          phase: string;
+          phase_expires_at: string | null;
+          pot_reference: string | null;
+          settings: Json;
+          tier_key: string;
+          topic: string;
+          topic_source: string;
+          updated_at: string;
+        };
+        Insert: {
+          cast_mode?: string | null;
+          created_at?: string;
+          id?: string;
+          invite_code: string;
+          invite_revoked_at?: string | null;
+          join_approval?: boolean;
+          max_players?: number;
+          owner_id?: string | null;
+          pack_category?: string;
+          phase?: string;
+          phase_expires_at?: string | null;
+          pot_reference?: string | null;
+          settings?: Json;
+          tier_key?: string;
+          topic: string;
+          topic_source: string;
+          updated_at?: string;
+        };
+        Update: {
+          cast_mode?: string | null;
+          created_at?: string;
+          id?: string;
+          invite_code?: string;
+          invite_revoked_at?: string | null;
+          join_approval?: boolean;
+          max_players?: number;
+          owner_id?: string | null;
+          pack_category?: string;
+          phase?: string;
+          phase_expires_at?: string | null;
+          pot_reference?: string | null;
+          settings?: Json;
+          tier_key?: string;
+          topic?: string;
+          topic_source?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'dream_offs_owner_id_fkey';
+            columns: ['owner_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       dream_queue: {
         Row: {
           attempt_count: number;
@@ -1079,6 +1564,13 @@ export type Database = {
           chaos_low_threshold: number;
           dream_art_mediums: string[];
           dream_art_share: number;
+          dream_off_deadline_hours: number;
+          dream_off_donation_max_per_day: number;
+          dream_off_donations_enabled: boolean;
+          dream_off_enabled: boolean;
+          dream_off_max_prefund_slots: number;
+          dream_off_nudge_window_hours: number;
+          dream_off_prize_enabled: boolean;
           dream_queue_max_concurrent: number;
           dream_queue_max_concurrent_heavy: number;
           dream_queue_max_jobs_per_tick: number;
@@ -1146,6 +1638,13 @@ export type Database = {
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];
           dream_art_share?: number;
+          dream_off_deadline_hours?: number;
+          dream_off_donation_max_per_day?: number;
+          dream_off_donations_enabled?: boolean;
+          dream_off_enabled?: boolean;
+          dream_off_max_prefund_slots?: number;
+          dream_off_nudge_window_hours?: number;
+          dream_off_prize_enabled?: boolean;
           dream_queue_max_concurrent?: number;
           dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
@@ -1213,6 +1712,13 @@ export type Database = {
           chaos_low_threshold?: number;
           dream_art_mediums?: string[];
           dream_art_share?: number;
+          dream_off_deadline_hours?: number;
+          dream_off_donation_max_per_day?: number;
+          dream_off_donations_enabled?: boolean;
+          dream_off_enabled?: boolean;
+          dream_off_max_prefund_slots?: number;
+          dream_off_nudge_window_hours?: number;
+          dream_off_prize_enabled?: boolean;
           dream_queue_max_concurrent?: number;
           dream_queue_max_concurrent_heavy?: number;
           dream_queue_max_jobs_per_tick?: number;
@@ -3028,6 +3534,8 @@ export type Database = {
         Returns: undefined;
       };
       admin_unban_user: { Args: { p_user_id: string }; Returns: undefined };
+      advance_expired_dream_offs: { Args: never; Returns: number };
+      advance_phase: { Args: { p_game_id: string }; Returns: string };
       approve_follow_and_follow_back: {
         Args: { p_requester_id: string };
         Returns: undefined;
@@ -3039,6 +3547,7 @@ export type Database = {
       block_exists: { Args: { a: string; b: string }; Returns: boolean };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
       bulk_unrepost: { Args: { p_upload_ids: string[] }; Returns: undefined };
+      cancel_game: { Args: { p_game_id: string }; Returns: undefined };
       cancel_pending_download_push: {
         Args: { p_upload_id: string };
         Returns: undefined;
@@ -3048,6 +3557,10 @@ export type Database = {
         Returns: undefined;
       };
       capture_db_health: { Args: never; Returns: undefined };
+      cast_votes: {
+        Args: { p_entry_ids: string[]; p_game_id: string };
+        Returns: Json;
+      };
       category_enabled_for: {
         Args: { p_category: string; p_channel: string; p_user_id: string };
         Returns: boolean;
@@ -3158,6 +3671,23 @@ export type Database = {
         };
         Returns: string;
       };
+      create_game: {
+        Args: {
+          p_cast_mode?: string;
+          p_join_approval?: boolean;
+          p_max_players?: number;
+          p_pack_category?: string;
+          p_settings?: Json;
+          p_tier_key?: string;
+          p_topic: string;
+          p_topic_source: string;
+        };
+        Returns: Json;
+      };
+      deal_topic: {
+        Args: { p_game_id: string; p_pack?: string };
+        Returns: Json;
+      };
       delete_group: {
         Args: { p_group_key: string; p_user_id: string };
         Returns: undefined;
@@ -3178,6 +3708,65 @@ export type Database = {
       dream_forensics: { Args: { p_job_id: string }; Returns: Json };
       dream_forensics_recent: {
         Args: { p_hours?: number; p_user_id: string };
+        Returns: Json;
+      };
+      dream_off_attach_render: {
+        Args: {
+          p_entry_job_id: string;
+          p_game_id: string;
+          p_game_image_ref: string;
+          p_upload_id: string;
+        };
+        Returns: undefined;
+      };
+      dream_off_create_entry: {
+        Args: { p_author_id: string; p_entry_job_id: string; p_game_id: string };
+        Returns: string;
+      };
+      dream_off_credit: {
+        Args: {
+          p_amount: number;
+          p_reason: string;
+          p_reference_id: string;
+          p_user_id: string;
+        };
+        Returns: boolean;
+      };
+      dream_off_donate: {
+        Args: { p_amount: number; p_game_id: string; p_reference_id?: string };
+        Returns: Json;
+      };
+      dream_off_fail_entry: {
+        Args: { p_entry_job_id: string; p_game_id: string };
+        Returns: undefined;
+      };
+      dream_off_forfeit_entry: {
+        Args: { p_entry_job_id: string; p_game_id: string };
+        Returns: undefined;
+      };
+      dream_off_fund_pot: {
+        Args: { p_game_id: string; p_reference_id?: string; p_slots: number };
+        Returns: Json;
+      };
+      dream_off_gen_invite_code: { Args: never; Returns: string };
+      dream_off_refund_entry: {
+        Args: { p_entry_job_id: string; p_game_id: string };
+        Returns: undefined;
+      };
+      dream_off_send_nudges: { Args: never; Returns: number };
+      dream_off_settle_pot: { Args: { p_game_id: string }; Returns: undefined };
+      dream_off_setup_pot: {
+        Args: { p_game_id: string; p_tier_key: string };
+        Returns: undefined;
+      };
+      dream_off_stuck_count: { Args: never; Returns: Json };
+      dream_off_submit_entry: {
+        Args: {
+          p_entry_job_id: string;
+          p_game_id: string;
+          p_model_id: string;
+          p_user_id: string;
+        };
         Returns: Json;
       };
       ensure_dream_generated_notification: {
@@ -3220,6 +3809,7 @@ export type Database = {
           username: string;
         }[];
       };
+      get_client_flags: { Args: never; Returns: Json };
       get_comments: {
         Args: { p_limit?: number; p_offset?: number; p_upload_id: string };
         Returns: {
@@ -3249,6 +3839,7 @@ export type Database = {
           sort_order: number;
         }[];
       };
+      get_dream_off_packs: { Args: { p_category?: string }; Returns: Json };
       get_dream_vibes: {
         Args: never;
         Returns: {
@@ -3310,6 +3901,14 @@ export type Database = {
           width: number;
         }[];
       };
+      get_game_activity: {
+        Args: { p_game_id: string; p_limit?: number };
+        Returns: Json;
+      };
+      get_game_gallery: { Args: { p_game_id: string }; Returns: Json };
+      get_game_invite_preview: { Args: { p_code: string }; Returns: Json };
+      get_game_results: { Args: { p_game_id: string }; Returns: Json };
+      get_game_room: { Args: { p_game_id: string }; Returns: Json };
       get_gift: {
         Args: { p_reference_id: string };
         Returns: {
@@ -3419,6 +4018,8 @@ export type Database = {
           sparkle_balance: number;
         }[];
       };
+      get_my_ballot: { Args: { p_game_id: string }; Returns: Json };
+      get_my_games: { Args: never; Returns: Json };
       get_new_notification_count: {
         Args: { p_user_id: string };
         Returns: number;
@@ -3577,9 +4178,15 @@ export type Database = {
         Args: { p_amount: number; p_reason: string; p_user_id: string };
         Returns: undefined;
       };
+      invite_players: {
+        Args: { p_game_id: string; p_user_ids: string[] };
+        Returns: Json;
+      };
       is_basic_active: { Args: { p_user_id: string }; Returns: boolean };
       is_dream_eligible: { Args: { p_user_id: string }; Returns: boolean };
       is_pro_active: { Args: { p_user_id: string }; Returns: boolean };
+      join_game_by_code: { Args: { p_code: string }; Returns: Json };
+      leave_game: { Args: { p_game_id: string }; Returns: undefined };
       list_my_upload_paths: { Args: never; Returns: string[] };
       mark_dream_seen: { Args: { p_upload_id: string }; Returns: undefined };
       mark_dreams_viewed: { Args: { p_user_id: string }; Returns: string };
@@ -3588,6 +4195,10 @@ export type Database = {
         Returns: undefined;
       };
       mark_inbox_viewed: { Args: { p_user_id: string }; Returns: undefined };
+      maybe_advance_dream_off: {
+        Args: { p_force: boolean; p_game_id: string; p_reason: string };
+        Returns: string;
+      };
       notification_category: { Args: { p_type: string }; Returns: string };
       notification_group_key: {
         Args: {
@@ -3668,6 +4279,7 @@ export type Database = {
         };
         Returns: boolean;
       };
+      tally_results: { Args: { p_game_id: string }; Returns: undefined };
       text_is_blocked: { Args: { p_text: string }; Returns: boolean };
       thank_gift: { Args: { p_reference_id: string }; Returns: string };
       toggle_repost: {
@@ -3805,9 +4417,6 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],
