@@ -13,6 +13,7 @@ let db: PoolClient;
 
 const OWNER = '00000000-0000-0000-0000-0000000000a1';
 const BOB = '00000000-0000-0000-0000-0000000000b2';
+const CAROL = '00000000-0000-0000-0000-0000000000c3';
 let seq = 0;
 const gid = () => `00000000-0000-0000-0000-00000000e${(seq++).toString().padStart(3, '0')}`;
 
@@ -76,7 +77,7 @@ beforeAll(async () => {
   const m424 = migrationSql('424_dream_off_accept_invite.sql');
   await db.query(extract(m424, 'CREATE OR REPLACE FUNCTION public.accept_invite(', '$$;'));
 
-  await db.query(`INSERT INTO public.users (id) VALUES ($1),($2)`, [OWNER, BOB]);
+  await db.query(`INSERT INTO public.users (id) VALUES ($1),($2),($3)`, [OWNER, BOB, CAROL]);
 });
 
 afterEach(async () => {
@@ -123,7 +124,8 @@ describe('accept_invite (migration 424)', () => {
 
   it('refuses when the game is full', async () => {
     await actAs(BOB);
-    const g = await mkGame('setup', 1); // owner already fills the single slot
+    const g = await mkGame('setup', 2); // owner fills slot 1 (min max_players is 2)
+    await seat(g, CAROL, 'active'); // slot 2 filled → at cap
     expect((await accept(g)).status).toBe('full');
   });
 
