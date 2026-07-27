@@ -125,6 +125,7 @@ export function parseGamePlayer(o: Record<string, unknown>): GamePlayer {
     user_id: str(o.user_id),
     name: str(o.name),
     avatar_url: strOrNull(o.avatar_url),
+    status: str(o.status) as PlayerStatus,
     submitted: isTrue(o.submitted),
     voted: isTrue(o.voted),
     is_owner: isTrue(o.is_owner),

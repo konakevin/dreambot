@@ -199,10 +199,10 @@ function SetupView({
 
   const canStart = room.is_owner && room.player_count >= 2;
 
+  const invitedCount = players?.filter((p) => p.status === 'invited').length ?? 0;
+
   return (
     <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
-      <Text style={styles.eyebrow}>THE LOBBY</Text>
-
       {room.topic ? (
         <TopicBanner
           variant="bare"
@@ -217,6 +217,7 @@ function SetupView({
       <View style={styles.playersRow}>
         <Text style={styles.playersLabel}>
           {room.player_count} {room.player_count === 1 ? 'player' : 'players'} in
+          {invitedCount > 0 ? `  ·  ${invitedCount} invited` : ''}
         </Text>
         {players && players.length > 0 && <PlayerAvatars players={toChips(players, 'setup')} />}
       </View>
@@ -543,7 +544,9 @@ function toChips(players: GamePlayer[], phase: GameRoom['phase']): PlayerChip[] 
     id: p.user_id,
     name: p.name,
     avatarUrl: p.avatar_url,
-    acted: phase === 'submission' ? p.submitted : phase === 'voting' ? p.voted : true,
+    // Dim = hasn't done the phase's action; in the lobby, an un-accepted invite.
+    acted:
+      phase === 'submission' ? p.submitted : phase === 'voting' ? p.voted : p.status !== 'invited',
   }));
 }
 

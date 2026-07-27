@@ -13,7 +13,9 @@ import { FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-nativ
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/AppText';
+import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -54,7 +56,13 @@ export function InvitePeopleSheet({ gameId, visible, onClose, existingIds = [] }
 
   const send = () => {
     if (selected.size === 0) return;
-    invite.mutate([...selected], { onSuccess: close });
+    invite.mutate([...selected], {
+      onSuccess: (count) => {
+        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        Toast.show(`Invited ${count} ${count === 1 ? 'friend' : 'friends'} 🎭`, 'checkmark-circle');
+        close();
+      },
+    });
   };
 
   return (

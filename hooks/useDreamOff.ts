@@ -158,7 +158,10 @@ export function useInvitePlayers(gameId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (userIds: string[]) => api.invitePlayers(gameId, userIds),
-    onSuccess: () => void qc.invalidateQueries({ queryKey: keys.room(gameId) }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.room(gameId) });
+      void qc.invalidateQueries({ queryKey: keys.players(gameId) });
+    },
   });
 }
 

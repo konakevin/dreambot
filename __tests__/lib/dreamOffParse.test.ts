@@ -208,12 +208,13 @@ describe('parsePack', () => {
 });
 
 describe('parseGamePlayer', () => {
-  it('maps flags + owner', () => {
+  it('maps status + flags + owner', () => {
     expect(
       parseGamePlayer({
         user_id: 'u1',
         name: 'bob',
         avatar_url: null,
+        status: 'invited',
         submitted: true,
         voted: false,
         is_owner: true,
@@ -222,6 +223,7 @@ describe('parseGamePlayer', () => {
       user_id: 'u1',
       name: 'bob',
       avatar_url: null,
+      status: 'invited',
       submitted: true,
       voted: false,
       is_owner: true,

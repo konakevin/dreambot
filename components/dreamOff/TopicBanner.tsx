@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(11),
   },
   bare: { paddingVertical: verticalScale(4) },
-  topicBare: { fontSize: fontScale(26), lineHeight: fontScale(31) },
+  topicBare: { fontSize: fontScale(20), lineHeight: fontScale(26) },
   eyebrow: {
     color: colors.accentLight,
     fontSize: fontScale(10),

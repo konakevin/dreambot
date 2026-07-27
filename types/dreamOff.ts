@@ -156,6 +156,7 @@ export interface GamePlayer {
   user_id: string;
   name: string;
   avatar_url: string | null;
+  status: PlayerStatus;
   submitted: boolean;
   voted: boolean;
   is_owner: boolean;

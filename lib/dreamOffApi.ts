@@ -139,12 +139,14 @@ export async function dealTopic(gameId: string, pack?: string): Promise<string> 
   return str(asObj(data).topic);
 }
 
-export async function invitePlayers(gameId: string, userIds: string[]): Promise<void> {
-  const { error } = await supabase.rpc('invite_players', {
+export async function invitePlayers(gameId: string, userIds: string[]): Promise<number> {
+  const { data, error } = await supabase.rpc('invite_players', {
     p_game_id: gameId,
     p_user_ids: userIds,
   });
   if (error) fail('invite_players', error);
+  const n = asObj(data).invited;
+  return typeof n === 'number' ? n : userIds.length;
 }
 
 export interface JoinResult {
