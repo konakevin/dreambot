@@ -19,6 +19,9 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
+import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
+
+const SPIN_MIN = 3;
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -69,6 +72,13 @@ Deno.serve(async (req) => {
   const modelId = typeof body.force_model === 'string' ? body.force_model : null;
   if (!modelId) return json({ error: 'missing_model' }, 400);
 
+  // The player's embellishment on the shared base scene — the heart of the game,
+  // and REQUIRED (no submitting the bare base). Sanitize up front (NFKC + control/
+  // zero-width/bidi strip + injection-neutralize + cap) BEFORE we charge, so an
+  // empty/garbage spin is rejected free. cap 'hint' (240) — the UI caps at 140.
+  const spin = sanitizeUserText(typeof body.spin === 'string' ? body.spin : '', 'hint');
+  if (spin.length < SPIN_MIN) return json({ error: 'missing_spin' }, 400);
+
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
   // One UUID across dream_queue / dream_jobs / the entry's payment_reference /
@@ -113,6 +123,29 @@ Deno.serve(async (req) => {
     default:
       return json({ error: `submit_${status ?? 'unknown'}` }, 400);
   }
+
+  // Build the render prompt SERVER-SIDE so the base scene is authoritative (read
+  // from the game row, never trusted from the client) — everyone in the game
+  // renders the SAME starting point, and only their spin differs. We hand
+  // generate-dream `base + spin` as the subject; its Sonnet brief fuses them into
+  // one coherent Flux prompt. Wording mirrors components/dreamOff/topicWording.ts.
+  const { data: game } = await supabase
+    .from('dream_offs')
+    .select('topic, pack_category, cast_mode')
+    .eq('id', gameId)
+    .single();
+  const topic = typeof game?.topic === 'string' ? game.topic.trim() : '';
+  const base =
+    game?.pack_category === 'cast'
+      ? `${game?.cast_mode === 'couple' ? 'You and your +1 as' : 'You as'} ${topic}`.trim()
+      : topic;
+  const finalPrompt = base ? `${base}, ${spin}` : spin;
+
+  // Overwrite any client-sent prompt with the server-built one; drop the raw spin
+  // (not a generate-dream field). generate-dream re-sanitizes body.prompt at its
+  // gate, so this is belt-and-suspenders clean before it reaches Flux/Sonnet.
+  body.prompt = finalPrompt;
+  delete body.spin;
 
   // Payload IS the render's RequestBody, stamped with game_id + author_id so the
   // dream_off completion hook in generate-dream attaches the finished upload to the

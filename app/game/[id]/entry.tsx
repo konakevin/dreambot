@@ -1,14 +1,16 @@
 /**
- * Make your dream — the Dream Off entry compose. Shows the worded topic, lets the
- * player pick a model from the game's tier, then fires the render through
- * dream-off-submit (which charges the pot / self-pay, seeds the entry keyed by
- * the job_id, and enqueues). We hand back to the Room, whose submission view
- * shows the pending render; realtime/refetch swaps in the finished image.
+ * Make your dream — the Dream Off entry compose. Shows the shared BASE SCENE
+ * (read-only), makes the player add their own required "spin" on it, and lets
+ * them pick a model from the game's tier. We send the spin (not a full prompt);
+ * dream-off-submit builds the final prompt server-side (authoritative base + spin)
+ * and fires the render through the shared queue (charges the pot / self-pay, seeds
+ * the entry keyed by the job_id). Back in the Room, the submission view shows the
+ * pending render; realtime/refetch swaps in the finished image.
  *
- * NOTE (render QA): the cast (face-swap) render body mirrors the create path
- * (worded "You as…" prompt + vibe_profile). The exact self-insert framing is
- * face-swap-sensitive (see CLAUDE.md hard rules) and wants a render pass before
- * launch; scene entries (no face) are the safe default.
+ * NOTE (render QA): for cast games the server prepends "You as…" to the base and
+ * the render face-swaps against the player's vibe_profile. That self-insert
+ * framing is face-swap-sensitive (see CLAUDE.md hard rules) and wants a render
+ * pass before launch; scene entries (no face) are the safe default.
  */
 
 import { useState } from 'react';
@@ -16,7 +18,7 @@ import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } fro
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text } from '@/components/AppText';
+import { Text, TextInput } from '@/components/AppText';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -26,11 +28,17 @@ import { IMAGE_MODELS, STANDARD_MODEL_IDS } from '@/constants/imageModels';
 import { isVibeProfile } from '@/types/vibeProfile';
 import { useGameRoom } from '@/hooks/useDreamOff';
 import { submitDreamOffEntry } from '@/lib/dreamOffApi';
-import { TopicBanner, wordTopic } from '@/components/dreamOff';
+import { TopicBanner } from '@/components/dreamOff';
 
 const STANDARD = STANDARD_MODEL_IDS.map((id) => IMAGE_MODELS.find((m) => m.id === id)).filter(
   (m): m is (typeof IMAGE_MODELS)[number] => !!m
 );
+
+// The player's embellishment on the base scene. Required — the game is about the
+// spin you add, not the shared starting point. Kept short so it reads as a twist,
+// not a whole new prompt; Sonnet (in generate-dream) fuses base + spin.
+const SPIN_MAX = 140;
+const SPIN_MIN = 3;
 
 function uuidv4(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -47,13 +55,16 @@ export default function EntryComposeScreen() {
   const user = useAuthStore((s) => s.user);
   const { data: room } = useGameRoom(gameId);
   const [modelId, setModelId] = useState<string>(STANDARD[0]?.id ?? '');
+  const [spin, setSpin] = useState('');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   const isCast = room?.pack_category === 'cast';
+  const spinReady = spin.trim().length >= SPIN_MIN;
+  const canDream = !!room && spinReady && !busy;
 
   const dreamIt = async () => {
-    if (!room || !user || busy) return;
+    if (!room || !user || busy || !spinReady) return;
     setBusy(true);
     setErr(null);
     try {
@@ -73,10 +84,12 @@ export default function EntryComposeScreen() {
         }
       }
 
-      const worded = wordTopic(room.topic, room.pack_category, room.cast_mode);
+      // Send only the player's spin — dream-off-submit builds the final prompt
+      // server-side (authoritative base scene from the DB + this sanitized spin),
+      // and generate-dream's Sonnet brief fuses them into one coherent render.
       const render: Record<string, unknown> = {
         mode: 'flux-dev',
-        prompt: isCast ? worded : room.topic,
+        spin: spin.trim(),
         ...(isCast && vibeProfile ? { vibe_profile: vibeProfile } : {}),
       };
 
@@ -111,7 +124,7 @@ export default function EntryComposeScreen() {
             topic={room.topic}
             packCategory={room.pack_category}
             castMode={room.cast_mode}
-            eyebrow="Your topic"
+            eyebrow="The base scene"
           />
         )}
 
@@ -125,6 +138,31 @@ export default function EntryComposeScreen() {
             </Text>
           </View>
         )}
+
+        {/* ── the spin — the whole game. Everyone shares the base scene; the
+            funniest / cutest / wildest embellishment wins the votes. Required. ── */}
+        <View style={styles.spinHead}>
+          <Text style={styles.sectionLabel}>Add your spin</Text>
+          <Text style={styles.spinHint}>✨ funniest wins</Text>
+        </View>
+        <Text style={styles.spinSub}>
+          Keep the base scene, but make it yours. This twist is what people vote on.
+        </Text>
+        <TextInput
+          value={spin}
+          onChangeText={(t) => setSpin(t.slice(0, SPIN_MAX))}
+          placeholder={
+            isCast
+              ? '…riding a giant snail into battle'
+              : '…but run entirely by cats in tiny tuxedos'
+          }
+          placeholderTextColor={colors.textTertiary}
+          style={styles.spinInput}
+          multiline
+        />
+        <Text style={styles.spinCount}>
+          {spin.trim().length}/{SPIN_MAX}
+        </Text>
 
         <Text style={styles.sectionLabel}>Choose a model</Text>
         <View style={styles.modelGrid}>
@@ -148,14 +186,14 @@ export default function EntryComposeScreen() {
       <View style={[styles.footer, { paddingBottom: insets.bottom + verticalScale(12) }]}>
         <TouchableOpacity
           onPress={dreamIt}
-          disabled={busy || !room}
+          disabled={!canDream}
           activeOpacity={0.9}
-          style={[styles.cta, (busy || !room) && styles.ctaDim]}
+          style={[styles.cta, !canDream && styles.ctaDim]}
         >
           {busy ? (
             <ActivityIndicator color="#08080F" />
           ) : (
-            <Text style={styles.ctaLabel}>✨ Dream it</Text>
+            <Text style={styles.ctaLabel}>{spinReady ? '✨ Dream it' : 'Add your spin first'}</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -198,6 +236,36 @@ const styles = StyleSheet.create({
     fontSize: fontScale(15),
     color: colors.textPrimary,
     marginTop: verticalScale(4),
+  },
+  spinHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: verticalScale(4),
+  },
+  spinHint: { color: colors.accentLight, fontSize: fontScale(12), fontWeight: '700' },
+  spinSub: {
+    color: colors.textSecondary,
+    fontSize: fontScale(12.5),
+    lineHeight: fontScale(17),
+    marginTop: verticalScale(-6),
+  },
+  spinInput: {
+    minHeight: verticalScale(64),
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
+    backgroundColor: colors.surface,
+    padding: horizontalScale(14),
+    color: colors.textPrimary,
+    fontSize: fontScale(15),
+    textAlignVertical: 'top',
+  },
+  spinCount: {
+    color: colors.textSecondary,
+    fontSize: fontScale(11.5),
+    textAlign: 'right',
+    marginTop: verticalScale(-6),
   },
   modelGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: horizontalScale(8) },
   modelChip: {
