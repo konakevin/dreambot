@@ -8,9 +8,9 @@ import { wordTopic } from '@/components/dreamOff/topicWording';
 import { SUPERLATIVE_TO_MEDAL, SUPERLATIVE_LABEL } from '@/types/dreamOff';
 
 describe('wordTopic', () => {
-  it('scene topics get a "Show me" directive frame', () => {
+  it('scene topics show the raw base scene, just capitalized (no "Show me" command)', () => {
     expect(wordTopic('a cute taco playing in a mariachi band', 'scene', null)).toBe(
-      'Show me a cute taco playing in a mariachi band'
+      'A cute taco playing in a mariachi band'
     );
   });
   it('cast single → "You as ___"', () => {
@@ -27,9 +27,7 @@ describe('wordTopic', () => {
     );
   });
   it('trims surrounding whitespace', () => {
-    expect(wordTopic('  a haunted bouncy castle  ', 'scene', null)).toBe(
-      'Show me a haunted bouncy castle'
-    );
+    expect(wordTopic('  a haunted bouncy castle  ', 'scene', null)).toBe('A haunted bouncy castle');
   });
 });
 
