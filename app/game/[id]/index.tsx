@@ -44,7 +44,6 @@ import {
   useAcceptInvite,
 } from '@/hooks/useDreamOff';
 import {
-  ActivityFeed,
   EntryCard,
   InvitePeopleSheet,
   Medal,
@@ -195,71 +194,81 @@ function SetupView({
   const canStart = room.is_owner && room.player_count >= 2;
 
   return (
-    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
+    <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
       <Text style={styles.eyebrow}>THE LOBBY</Text>
+
       {room.topic ? (
         <TopicBanner
+          variant="bare"
           topic={room.topic}
           packCategory={room.pack_category}
           castMode={room.cast_mode}
         />
       ) : (
-        <View style={styles.placeholder}>
-          <Text style={styles.muted}>No topic yet.</Text>
-        </View>
+        <Text style={styles.muted}>No topic yet.</Text>
       )}
 
-      <View style={styles.blockRow}>
-        <Text style={styles.sectionLabel}>
+      <View style={styles.playersRow}>
+        <Text style={styles.playersLabel}>
           {room.player_count} {room.player_count === 1 ? 'player' : 'players'} in
         </Text>
-        {players && players.length > 0 && (
-          <PlayerAvatars style={styles.avatarsRow} players={toChips(players, 'setup')} />
-        )}
+        {players && players.length > 0 && <PlayerAvatars players={toChips(players, 'setup')} />}
       </View>
 
-      {room.is_owner && (
-        <PhaseCta label="Invite friends" icon="person-add" onPress={() => setShowInvite(true)} />
-      )}
-
-      {room.is_owner && room.invite_code && (
-        <View style={styles.inviteCard}>
-          <Text style={styles.inviteLabel}>OR SHARE A CODE</Text>
-          <TouchableOpacity onPress={copyCode} hitSlop={8}>
-            <Text style={styles.inviteCode}>{room.invite_code}</Text>
-          </TouchableOpacity>
-          <Text style={styles.inviteHint}>Tap the code to copy, or share the link.</Text>
-          <PhaseCta
-            label="Share invite"
-            icon="share-outline"
-            variant="secondary"
-            onPress={shareInvite}
-          />
-        </View>
-      )}
-
-      <View style={{ height: verticalScale(20) }} />
-      {room.is_owner ? (
+      {!room.is_owner ? (
+        <Text style={styles.hintCenter}>Waiting for the host to start…</Text>
+      ) : (
         <>
-          <PhaseCta
-            label="Start the dream off"
-            icon="play"
-            onPress={() => advance.mutate()}
-            disabled={!canStart}
-            loading={advance.isPending}
-          />
-          {!canStart && (
-            <Text style={styles.hintCenter}>You need at least 2 players to start.</Text>
+          {/* Exactly one gradient at a time: Invite until you can start, then Start. */}
+          {canStart ? (
+            <>
+              <PhaseCta
+                label="Start the dream off"
+                icon="play"
+                onPress={() => advance.mutate()}
+                loading={advance.isPending}
+              />
+              <PhaseCta
+                label="Invite more"
+                icon="person-add"
+                variant="ghost"
+                onPress={() => setShowInvite(true)}
+              />
+            </>
+          ) : (
+            <>
+              <PhaseCta
+                label="Invite friends"
+                icon="person-add"
+                onPress={() => setShowInvite(true)}
+              />
+              <Text style={styles.hintCenter}>Invite one more — you need 2 players to start.</Text>
+            </>
           )}
+
+          {room.invite_code && (
+            <View style={styles.codeBlock}>
+              <Text style={styles.codeEyebrow}>OR SHARE A CODE</Text>
+              <TouchableOpacity
+                onPress={copyCode}
+                hitSlop={8}
+                style={styles.codeRow}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.codeText}>{room.invite_code}</Text>
+                <Ionicons name="copy-outline" size={fontScale(16)} color={colors.textSecondary} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={shareInvite} hitSlop={8} activeOpacity={0.7}>
+                <Text style={styles.shareLink}>Share invite link</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <TouchableOpacity onPress={confirmCancel} style={styles.cancelBtn} hitSlop={8}>
             <Text style={styles.cancelText}>Cancel game</Text>
           </TouchableOpacity>
         </>
-      ) : (
-        <Text style={styles.hintCenter}>Waiting for the host to start…</Text>
       )}
-
-      <ActivityFeed gameId={gameId} />
 
       <InvitePeopleSheet
         gameId={gameId}
@@ -328,8 +337,6 @@ function SubmissionView({ gameId, room, pad }: { gameId: string; room: GameRoom;
           loading={advance.isPending}
         />
       )}
-
-      <ActivityFeed gameId={gameId} />
     </ScrollView>
   );
 }
@@ -542,6 +549,29 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(8),
     gap: verticalScale(14),
   },
+  // Lobby: borderless + generous spacing so nothing reads as a tappable box.
+  lobby: {
+    paddingHorizontal: horizontalScale(20),
+    paddingTop: verticalScale(6),
+    gap: verticalScale(18),
+  },
+  playersRow: { gap: verticalScale(10) },
+  playersLabel: { color: colors.bodyOnDark, fontSize: fontScale(14), fontWeight: '700' },
+  codeBlock: { alignItems: 'center', gap: verticalScale(6), marginTop: verticalScale(6) },
+  codeEyebrow: {
+    color: colors.textSecondary,
+    fontSize: fontScale(10.5),
+    fontWeight: '800',
+    letterSpacing: 1.4,
+  },
+  codeRow: { flexDirection: 'row', alignItems: 'center', gap: horizontalScale(8) },
+  codeText: {
+    fontFamily: displayFontFamily(700),
+    fontSize: fontScale(22),
+    letterSpacing: 4,
+    color: colors.textPrimary,
+  },
+  shareLink: { color: colors.accentLight, fontSize: fontScale(13.5), fontWeight: '700' },
   center: { alignItems: 'center', justifyContent: 'center' },
   grow: { flex: 1 },
   muted: { color: colors.textSecondary, fontSize: fontScale(14), textAlign: 'center' },

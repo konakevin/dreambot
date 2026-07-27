@@ -4,7 +4,7 @@
  * thing everyone in the game is dreaming to, so it leads every phase of the Room.
  */
 
-import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/AppText';
 import { colors } from '@/constants/theme';
@@ -19,6 +19,8 @@ interface Props {
   castMode: CastMode;
   /** 'full' for the Room hero, 'compact' for shelf/list cards. */
   size?: 'full' | 'compact';
+  /** 'card' = soft tinted card; 'bare' = borderless (calm hero, no tap-able look). */
+  variant?: 'card' | 'bare';
   eyebrow?: string;
   style?: StyleProp<ViewStyle>;
 }
@@ -28,18 +30,14 @@ export function TopicBanner({
   packCategory,
   castMode,
   size = 'full',
+  variant = 'card',
   eyebrow = 'Your topic',
   style,
 }: Props) {
   const compact = size === 'compact';
   const worded = wordTopic(topic, packCategory, castMode);
-  return (
-    <LinearGradient
-      colors={['rgba(167,139,250,0.18)', 'rgba(94,234,212,0.07)']}
-      start={{ x: 0.1, y: 0 }}
-      end={{ x: 0.95, y: 1 }}
-      style={[styles.card, compact && styles.cardCompact, style]}
-    >
+  const inner = (
+    <>
       <Text style={[styles.eyebrow, compact && styles.eyebrowCompact]}>
         {eyebrow.toUpperCase()}
       </Text>
@@ -48,10 +46,25 @@ export function TopicBanner({
           styles.topic,
           { fontFamily: displayFontFamily(700) },
           compact && styles.topicCompact,
+          variant === 'bare' && styles.topicBare,
         ]}
       >
         {worded}
       </Text>
+    </>
+  );
+
+  if (variant === 'bare') {
+    return <View style={[styles.bare, style]}>{inner}</View>;
+  }
+  return (
+    <LinearGradient
+      colors={['rgba(167,139,250,0.18)', 'rgba(94,234,212,0.07)']}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.95, y: 1 }}
+      style={[styles.card, compact && styles.cardCompact, style]}
+    >
+      {inner}
     </LinearGradient>
   );
 }
@@ -69,6 +82,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(12),
     paddingVertical: verticalScale(11),
   },
+  bare: { paddingVertical: verticalScale(4) },
+  topicBare: { fontSize: fontScale(26), lineHeight: fontScale(31) },
   eyebrow: {
     color: colors.accentLight,
     fontSize: fontScale(10),
