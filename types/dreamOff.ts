@@ -25,10 +25,14 @@ export type PlayerStatus = 'active' | 'pending' | 'invited' | 'spectator' | 'lef
 export type SuperlativeKey = 'winner' | 'runner_up' | 'dark_horse';
 
 // ── get_game_room ─────────────────────────────────────────────────────────────
+export type TopicSource = 'pack' | 'surprise' | 'custom';
+
 export interface GameRoom {
   status: 'ok' | 'not_member';
   id: string;
   topic: string;
+  /** How the seed was chosen — 'custom' seeds can't be re-rolled. */
+  topic_source: TopicSource;
   pack_category: PackCategory;
   cast_mode: CastMode;
   phase: DreamOffPhase;

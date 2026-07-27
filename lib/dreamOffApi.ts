@@ -139,6 +139,13 @@ export async function dealTopic(gameId: string, pack?: string): Promise<string> 
   return str(asObj(data).topic);
 }
 
+/** Re-roll the dream seed from the same pack (owner + setup only, non-custom). */
+export async function rerollTopic(gameId: string): Promise<string> {
+  const { data, error } = await supabase.rpc('reroll_topic', { p_game_id: gameId });
+  if (error) fail('reroll_topic', error);
+  return str(asObj(data).topic);
+}
+
 export async function invitePlayers(gameId: string, userIds: string[]): Promise<number> {
   const { data, error } = await supabase.rpc('invite_players', {
     p_game_id: gameId,

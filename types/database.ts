@@ -6,6 +6,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       action_poses: {
@@ -1321,6 +1346,7 @@ export type Database = {
           max_players: number;
           owner_id: string | null;
           pack_category: string;
+          pack_key: string | null;
           phase: string;
           phase_expires_at: string | null;
           pot_reference: string | null;
@@ -1340,6 +1366,7 @@ export type Database = {
           max_players?: number;
           owner_id?: string | null;
           pack_category?: string;
+          pack_key?: string | null;
           phase?: string;
           phase_expires_at?: string | null;
           pot_reference?: string | null;
@@ -1359,6 +1386,7 @@ export type Database = {
           max_players?: number;
           owner_id?: string | null;
           pack_category?: string;
+          pack_key?: string | null;
           phase?: string;
           phase_expires_at?: string | null;
           pot_reference?: string | null;
@@ -1598,6 +1626,7 @@ export type Database = {
           gifting_enabled: boolean;
           id: number;
           latest_app_version: string | null;
+          max_inflight_dreams_per_user: number;
           max_pinned_posts: number;
           min_app_version: string | null;
           new_scene_max_people: number;
@@ -1672,6 +1701,7 @@ export type Database = {
           gifting_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
+          max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
           new_scene_max_people?: number;
@@ -1746,6 +1776,7 @@ export type Database = {
           gifting_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
+          max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
           new_scene_max_people?: number;
@@ -4254,6 +4285,7 @@ export type Database = {
         Args: { p_job_id: string };
         Returns: undefined;
       };
+      reroll_topic: { Args: { p_game_id: string }; Returns: Json };
       reset_my_profile: { Args: never; Returns: undefined };
       sanitize_user_multiline_text: {
         Args: { p_text: string };
@@ -4419,6 +4451,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],

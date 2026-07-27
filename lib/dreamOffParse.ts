@@ -42,6 +42,8 @@ export function parseRoom(o: Record<string, unknown>): GameRoom {
     status: str(o.status) === 'not_member' ? 'not_member' : 'ok',
     id: str(o.id),
     topic: str(o.topic),
+    topic_source:
+      o.topic_source === 'surprise' || o.topic_source === 'custom' ? o.topic_source : 'pack',
     pack_category: str(o.pack_category) === 'cast' ? 'cast' : 'scene',
     cast_mode: (o.cast_mode === 'single' || o.cast_mode === 'couple'
       ? o.cast_mode

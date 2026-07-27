@@ -43,6 +43,7 @@ import {
   useAdvancePhase,
   useCancelGame,
   useAcceptInvite,
+  useRerollTopic,
 } from '@/hooks/useDreamOff';
 import {
   EntryCard,
@@ -178,8 +179,14 @@ function SetupView({
 }) {
   const advance = useAdvancePhase(gameId);
   const cancel = useCancelGame(gameId);
+  const reroll = useRerollTopic(gameId);
   const { data: players } = useGamePlayers(gameId);
   const [showInvite, setShowInvite] = useState(false);
+
+  // Owner can re-roll the seed while still in setup (custom seeds are owner-written,
+  // nothing to re-roll). The server also gates this to phase='setup', so it's dead
+  // the moment the game starts.
+  const canReroll = room.is_owner && room.topic_source !== 'custom';
 
   const shareInvite = async () => {
     if (!room.invite_code) return;
@@ -202,6 +209,19 @@ function SetupView({
         onPress: () => cancel.mutate(undefined, { onSuccess: () => router.replace('/game') }),
       },
     ]);
+  };
+
+  // Starting is the LOCK-IN: it freezes the seed (deal/reroll die outside setup)
+  // and opens dreaming for everyone. Confirm so it's a deliberate commit.
+  const confirmStart = () => {
+    showAlert(
+      'Lock in this seed and start?',
+      'The seed is final once you begin, and everyone can start dreaming.',
+      [
+        { text: 'Not yet', style: 'cancel' },
+        { text: 'Lock in & start', onPress: () => advance.mutate() },
+      ]
+    );
   };
 
   const canStart = room.is_owner && room.player_count >= 2;
@@ -228,6 +248,24 @@ function SetupView({
         <Text style={styles.muted}>No topic yet.</Text>
       )}
 
+      {canReroll && (
+        <View style={styles.rerollWrap}>
+          <TouchableOpacity
+            onPress={() => reroll.mutate()}
+            disabled={reroll.isPending}
+            hitSlop={8}
+            activeOpacity={0.7}
+            style={[styles.rerollBtn, reroll.isPending && styles.rerollBtnDim]}
+          >
+            <Text style={styles.rerollDice}>🎲</Text>
+            <Text style={styles.rerollText}>{reroll.isPending ? 'Rolling…' : 'New seed'}</Text>
+          </TouchableOpacity>
+          <Text style={styles.rerollHint}>
+            Re-roll until you like it. The seed locks when you start.
+          </Text>
+        </View>
+      )}
+
       <View style={styles.playersRow}>
         <Text style={styles.playersLabel}>
           {room.player_count} {room.player_count === 1 ? 'player' : 'players'} in
@@ -247,7 +285,7 @@ function SetupView({
           <PhaseCta
             label="Start the dream off"
             icon="play"
-            onPress={() => advance.mutate()}
+            onPress={confirmStart}
             disabled={!canStart}
             loading={advance.isPending}
           />
@@ -600,6 +638,21 @@ const styles = StyleSheet.create({
   },
   playersRow: { gap: verticalScale(10) },
   playersLabel: { color: colors.bodyOnDark, fontSize: fontScale(14), fontWeight: '700' },
+  rerollWrap: { alignItems: 'center', gap: verticalScale(4), marginTop: verticalScale(-2) },
+  rerollBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(6),
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: horizontalScale(12),
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.accentBorder,
+  },
+  rerollBtnDim: { opacity: 0.5 },
+  rerollDice: { fontSize: fontScale(15) },
+  rerollText: { color: colors.accentLight, fontSize: fontScale(14), fontWeight: '700' },
+  rerollHint: { color: colors.textTertiary, fontSize: fontScale(11.5), textAlign: 'center' },
   codeBlock: { alignItems: 'center', gap: verticalScale(6), marginTop: verticalScale(6) },
   codeEyebrow: {
     color: colors.textSecondary,

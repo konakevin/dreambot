@@ -130,6 +130,14 @@ export function useDealTopic(gameId: string) {
   });
 }
 
+export function useRerollTopic(gameId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.rerollTopic(gameId),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: keys.room(gameId) }),
+  });
+}
+
 export function useCastVotes(gameId: string) {
   const qc = useQueryClient();
   return useMutation({
