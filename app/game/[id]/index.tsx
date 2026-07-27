@@ -295,7 +295,10 @@ function SetupView({
         gameId={gameId}
         visible={showInvite}
         onClose={() => setShowInvite(false)}
-        existingIds={players?.map((p) => p.user_id) ?? []}
+        // Joined players drop out of the list; already-invited friends stay but
+        // show marked (so you can see who you already sent to, and can't re-invite).
+        joinedIds={players?.filter((p) => p.status === 'active').map((p) => p.user_id) ?? []}
+        invitedIds={players?.filter((p) => p.status !== 'active').map((p) => p.user_id) ?? []}
       />
     </ScrollView>
   );

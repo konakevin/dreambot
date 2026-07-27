@@ -4,8 +4,10 @@
  * as 'invited' and fires a dream_off_invite push (→ deep-links them to the Room).
  * The share-link + code (in the lobby) stay as the fallback for non-mutuals.
  *
- * Owner-only (invite_players is owner-gated). Friends already in the game are
- * filtered out via `existingIds`.
+ * Owner-only (invite_players is owner-gated). Friends who've JOINED drop out of
+ * the list (`joinedIds`); friends you've already INVITED (`invitedIds`) stay but
+ * show marked + non-selectable, pinned to the bottom, so you can see who you sent
+ * to and can't double-invite.
  */
 
 import { useMemo, useState } from 'react';
@@ -28,18 +30,35 @@ interface Props {
   gameId: string;
   visible: boolean;
   onClose: () => void;
-  /** user_ids already in the game — filtered out of the pickable list. */
-  existingIds?: string[];
+  /** user_ids who've JOINED the game — removed from the list entirely. */
+  joinedIds?: string[];
+  /** user_ids you've already INVITED — shown marked + non-selectable. */
+  invitedIds?: string[];
 }
 
-export function InvitePeopleSheet({ gameId, visible, onClose, existingIds = [] }: Props) {
+export function InvitePeopleSheet({
+  gameId,
+  visible,
+  onClose,
+  joinedIds = [],
+  invitedIds = [],
+}: Props) {
   const insets = useSafeAreaInsets();
   const { data: vibers, isLoading } = useShareableVibers();
   const invite = useInvitePlayers(gameId);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  const already = useMemo(() => new Set(existingIds), [existingIds]);
-  const people = (vibers ?? []).filter((v) => !already.has(v.userId));
+  const joined = useMemo(() => new Set(joinedIds), [joinedIds]);
+  const invited = useMemo(() => new Set(invitedIds), [invitedIds]);
+  // Drop joined players; keep already-invited friends but sort them to the bottom
+  // so the people you can still invite lead the list.
+  const people = useMemo(
+    () =>
+      (vibers ?? [])
+        .filter((v) => !joined.has(v.userId))
+        .sort((a, b) => (invited.has(a.userId) ? 1 : 0) - (invited.has(b.userId) ? 1 : 0)),
+    [vibers, joined, invited]
+  );
 
   const toggle = (id: string) =>
     setSelected((prev) => {
@@ -93,11 +112,13 @@ export function InvitePeopleSheet({ gameId, visible, onClose, existingIds = [] }
             keyExtractor={(v) => v.userId}
             contentContainerStyle={{ paddingBottom: verticalScale(96) }}
             renderItem={({ item }) => {
+              const isInvited = invited.has(item.userId);
               const on = selected.has(item.userId);
               return (
                 <TouchableOpacity
-                  style={styles.row}
-                  activeOpacity={0.7}
+                  style={[styles.row, isInvited && styles.rowInvited]}
+                  activeOpacity={isInvited ? 1 : 0.7}
+                  disabled={isInvited}
                   onPress={() => toggle(item.userId)}
                 >
                   {item.avatarUrl ? (
@@ -114,11 +135,18 @@ export function InvitePeopleSheet({ gameId, visible, onClose, existingIds = [] }
                     </View>
                   )}
                   <Text style={styles.username}>{item.username}</Text>
-                  <Ionicons
-                    name={on ? 'checkmark-circle' : 'ellipse-outline'}
-                    size={fontScale(24)}
-                    color={on ? colors.accent : colors.textTertiary}
-                  />
+                  {isInvited ? (
+                    <View style={styles.invitedTag}>
+                      <Text style={styles.invitedText}>Invited</Text>
+                      <Text style={styles.invitedMask}>🎭</Text>
+                    </View>
+                  ) : (
+                    <Ionicons
+                      name={on ? 'checkmark-circle' : 'ellipse-outline'}
+                      size={fontScale(24)}
+                      color={on ? colors.accent : colors.textTertiary}
+                    />
+                  )}
                 </TouchableOpacity>
               );
             }}
@@ -166,6 +194,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
+  rowInvited: { opacity: 0.55 },
+  invitedTag: { flexDirection: 'row', alignItems: 'center', gap: horizontalScale(5) },
+  invitedText: { color: colors.accentLight, fontSize: fontScale(13), fontWeight: '700' },
+  invitedMask: { fontSize: fontScale(14) },
   avatar: { width: horizontalScale(40), height: horizontalScale(40), borderRadius: 999 },
   avatarFallback: { backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center' },
   avatarText: { color: colors.textPrimary, fontSize: fontScale(15), fontWeight: '700' },
