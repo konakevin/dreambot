@@ -1,37 +1,52 @@
 /**
  * Dream Off hub — the home for the whole feature, opened from the single
- * "Dream Off" button on the profile. Everything that used to crowd the profile
- * header lives here now: Start a Dream Off, Join with a code, and Your Dream Offs
- * (your active games, "your turn" badged). One tidy screen.
+ * "Dream Off" button on the profile. Start a game, join by code, and browse
+ * "Your Dream Offs" as a photo grid: finished games show their WINNING dream;
+ * in-progress ones show a branded tile with a status badge.
  */
 
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { router } from 'expo-router';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
 import { GradientButton } from '@/components/GradientButton';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
 import { useMyGames } from '@/hooks/useDreamOff';
-import { PhaseCountdown } from '@/components/dreamOff';
 import type { DreamOffPhase, MyGame } from '@/types/dreamOff';
 
-const PHASE_LABEL: Record<DreamOffPhase, string> = {
-  setup: 'Lobby',
-  submission: 'Make your dream',
-  voting: 'Voting',
-  results: 'Results',
-  no_contest: 'Results',
-  cancelled: 'Cancelled',
-};
-
-function isYourTurn(g: MyGame): boolean {
-  if (g.phase === 'submission') return !g.my_submitted;
-  if (g.phase === 'voting') return !g.my_voted;
-  return false;
+// Status shown on a tile: label + accent color. "Your turn" wins over the phase.
+function tileStatus(g: MyGame): { label: string; tone: 'turn' | 'live' | 'done' | 'idle' } {
+  if (g.phase === 'submission' && !g.my_submitted) return { label: 'Your turn', tone: 'turn' };
+  if (g.phase === 'voting' && !g.my_voted) return { label: 'Your turn', tone: 'turn' };
+  const map: Record<DreamOffPhase, { label: string; tone: 'live' | 'done' | 'idle' }> = {
+    setup: { label: 'Lobby', tone: 'idle' },
+    submission: { label: 'Dreaming', tone: 'live' },
+    voting: { label: 'Voting', tone: 'live' },
+    results: { label: 'Winner', tone: 'done' },
+    no_contest: { label: 'No contest', tone: 'done' },
+    cancelled: { label: 'Cancelled', tone: 'idle' },
+  };
+  return map[g.phase];
 }
+
+const BADGE_BG: Record<'turn' | 'live' | 'done' | 'idle', string> = {
+  turn: colors.like,
+  live: colors.accent,
+  done: '#FFD36B',
+  idle: 'rgba(0,0,0,0.6)',
+};
+const BADGE_FG: Record<'turn' | 'live' | 'done' | 'idle', string> = {
+  turn: '#fff',
+  live: '#0C0C12',
+  done: '#1a1a1a',
+  idle: '#fff',
+};
 
 export default function DreamOffHubScreen() {
   const insets = useSafeAreaInsets();
@@ -41,11 +56,13 @@ export default function DreamOffHubScreen() {
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.back}>
           <Ionicons name="chevron-back" size={fontScale(26)} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Dream Off</Text>
-        <View style={{ width: fontScale(26) }} />
+        <View style={styles.titleWrap}>
+          <GradientTitle size={TITLE_SIZE.nav}>Dream Off</GradientTitle>
+        </View>
+        <View style={styles.back} />
       </View>
 
       <ScrollView
@@ -71,21 +88,24 @@ export default function DreamOffHubScreen() {
           <Text style={styles.joinText}>Join with a code</Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
-        <Text style={styles.sectionLabel}>YOUR DREAM OFFS</Text>
+        {active.length > 0 && (
+          <>
+            <View style={styles.divider} />
+            <Text style={styles.sectionLabel}>YOUR DREAM OFFS</Text>
+            <View style={styles.grid}>
+              {active.map((g) => (
+                <GameTile key={g.id} game={g} />
+              ))}
+            </View>
+          </>
+        )}
 
-        {active.length === 0 ? (
+        {active.length === 0 && (
           <View style={styles.empty}>
             <Text style={styles.emptyEmoji}>🌙</Text>
             <Text style={styles.emptyText}>
               No games yet. Start one above, or join a friend&apos;s with their code.
             </Text>
-          </View>
-        ) : (
-          <View style={styles.list}>
-            {active.map((g) => (
-              <GameCard key={g.id} game={g} />
-            ))}
           </View>
         )}
       </ScrollView>
@@ -93,40 +113,45 @@ export default function DreamOffHubScreen() {
   );
 }
 
-function GameCard({ game }: { game: MyGame }) {
-  const yourTurn = isYourTurn(game);
-  const live = game.phase !== 'results' && game.phase !== 'no_contest';
+function GameTile({ game }: { game: MyGame }) {
+  const status = tileStatus(game);
   return (
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => router.push(`/game/${game.id}`)}
-      style={[styles.card, yourTurn && styles.cardTurn]}
+      style={styles.tile}
     >
-      <View style={styles.cardTop}>
-        {yourTurn ? (
-          <View style={styles.turnBadge}>
-            <Text style={styles.turnBadgeText}>Your turn</Text>
-          </View>
+      {game.cover_image ? (
+        <Image
+          source={{ uri: game.cover_image }}
+          style={styles.tileImg}
+          contentFit="cover"
+          transition={160}
+        />
+      ) : (
+        <LinearGradient
+          colors={['#2A2340', '#16242B']}
+          start={{ x: 0.1, y: 0 }}
+          end={{ x: 0.95, y: 1 }}
+          style={styles.tileImg}
+        />
+      )}
+      {/* legibility scrim under the topic */}
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.82)']}
+        style={styles.scrim}
+        pointerEvents="none"
+      />
+      <View style={[styles.badge, { backgroundColor: BADGE_BG[status.tone] }]}>
+        {status.tone === 'done' && game.cover_image ? (
+          <Text style={[styles.badgeText, { color: BADGE_FG[status.tone] }]}>🏆 Winner</Text>
         ) : (
-          <Text style={styles.phaseChip}>{PHASE_LABEL[game.phase]}</Text>
+          <Text style={[styles.badgeText, { color: BADGE_FG[status.tone] }]}>{status.label}</Text>
         )}
-        {live && <PhaseCountdown expiresAt={game.phase_expires_at} />}
       </View>
-      <Text numberOfLines={2} style={styles.cardTopic}>
+      <Text numberOfLines={2} style={styles.tileTopic}>
         {game.topic}
       </Text>
-      <View style={styles.cardMeta}>
-        <Ionicons name="people-outline" size={fontScale(14)} color={colors.textSecondary} />
-        <Text style={styles.cardMetaText}>
-          {game.player_count} {game.player_count === 1 ? 'player' : 'players'}
-        </Text>
-        <Ionicons
-          name="chevron-forward"
-          size={fontScale(16)}
-          color={colors.textTertiary}
-          style={styles.cardChevron}
-        />
-      </View>
     </TouchableOpacity>
   );
 }
@@ -136,15 +161,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: horizontalScale(12),
     paddingBottom: verticalScale(8),
   },
-  headerTitle: {
-    fontFamily: displayFontFamily(700),
-    fontSize: fontScale(18),
-    color: colors.textPrimary,
-  },
+  back: { width: fontScale(30), alignItems: 'flex-start' },
+  titleWrap: { flex: 1, alignItems: 'center' },
   body: { paddingHorizontal: horizontalScale(16), gap: verticalScale(12) },
   tagline: {
     color: colors.bodyOnDark,
@@ -162,14 +183,46 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(6),
   },
   joinText: { color: colors.accentLight, fontSize: fontScale(15), fontWeight: '700' },
-  divider: { height: 1, backgroundColor: colors.border, marginVertical: verticalScale(8) },
+  divider: { height: 1, backgroundColor: colors.border, marginVertical: verticalScale(6) },
   sectionLabel: {
     color: colors.accentLight,
     fontSize: fontScale(11),
     fontWeight: '800',
     letterSpacing: 1.4,
   },
-  empty: { alignItems: 'center', gap: verticalScale(8), paddingVertical: verticalScale(28) },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: verticalScale(12),
+  },
+  tile: {
+    width: '48%',
+    aspectRatio: 1,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: colors.card,
+    justifyContent: 'flex-end',
+  },
+  tileImg: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
+  scrim: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '55%' },
+  badge: {
+    position: 'absolute',
+    top: horizontalScale(9),
+    left: horizontalScale(9),
+    borderRadius: 999,
+    paddingHorizontal: horizontalScale(9),
+    paddingVertical: verticalScale(4),
+  },
+  badgeText: { fontSize: fontScale(10.5), fontWeight: '800', letterSpacing: 0.3 },
+  tileTopic: {
+    fontFamily: displayFontFamily(700),
+    fontSize: fontScale(13.5),
+    lineHeight: fontScale(17),
+    color: '#fff',
+    padding: horizontalScale(11),
+  },
+  empty: { alignItems: 'center', gap: verticalScale(8), paddingVertical: verticalScale(36) },
   emptyEmoji: { fontSize: fontScale(40) },
   emptyText: {
     color: colors.textSecondary,
@@ -178,38 +231,4 @@ const styles = StyleSheet.create({
     lineHeight: fontScale(20),
     paddingHorizontal: horizontalScale(24),
   },
-  list: { gap: verticalScale(10) },
-  card: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    padding: horizontalScale(14),
-    gap: verticalScale(8),
-  },
-  cardTurn: { borderColor: colors.accentBorder, backgroundColor: colors.accentBg },
-  cardTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  phaseChip: {
-    color: colors.textSecondary,
-    fontSize: fontScale(11),
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-  },
-  turnBadge: {
-    backgroundColor: colors.like,
-    borderRadius: 999,
-    paddingHorizontal: horizontalScale(9),
-    paddingVertical: verticalScale(3),
-  },
-  turnBadgeText: { color: '#fff', fontSize: fontScale(10.5), fontWeight: '800' },
-  cardTopic: {
-    fontFamily: displayFontFamily(700),
-    fontSize: fontScale(16),
-    color: colors.textPrimary,
-    lineHeight: fontScale(21),
-  },
-  cardMeta: { flexDirection: 'row', alignItems: 'center', gap: horizontalScale(5) },
-  cardMetaText: { color: colors.textSecondary, fontSize: fontScale(13), fontWeight: '600' },
-  cardChevron: { marginLeft: 'auto' },
 });

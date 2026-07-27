@@ -103,6 +103,8 @@ export interface MyGame {
   my_submitted: boolean;
   my_voted: boolean;
   player_count: number;
+  /** Winner's dream image for a finished game; null while in progress. */
+  cover_image: string | null;
   updated_at: string;
 }
 

@@ -27,6 +27,7 @@ import * as Clipboard from 'expo-clipboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
 import { showAlert } from '@/components/CustomAlert';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -76,7 +77,7 @@ export default function RoomScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.back}>
           <Ionicons name="chevron-back" size={fontScale(26)} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Dream Off</Text>
+        <GradientTitle size={TITLE_SIZE.nav}>Dream Off</GradientTitle>
         <View style={styles.headerRight}>
           {room?.phase && <PhaseCountdown expiresAt={room.phase_expires_at} />}
         </View>

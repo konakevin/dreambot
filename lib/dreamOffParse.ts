@@ -96,6 +96,7 @@ export function parseMyGame(o: Record<string, unknown>): MyGame {
     my_submitted: isTrue(o.my_submitted),
     my_voted: isTrue(o.my_voted),
     player_count: numOr(o.player_count),
+    cover_image: strOrNull(o.cover_image),
     updated_at: str(o.updated_at),
   };
 }

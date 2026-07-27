@@ -903,6 +903,7 @@ function RootLayout() {
                         <Stack.Screen name="(auth)" />
                         <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                         <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                        <Stack.Screen name="game" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
                         {/* photo/[id] album: NATIVE back gesture off — it intermittently
                       swallowed the start of a vertical swipe (proven). The screen
                       uses useAxisLockSwipeBack instead, composed
