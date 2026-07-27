@@ -2070,20 +2070,32 @@ export type Database = {
       };
       post_reposts: {
         Row: {
+          activations: number;
+          active: boolean;
           created_at: string;
+          first_reposted_at: string;
           id: string;
+          last_reposted_at: string;
           reposter_id: string;
           upload_id: string;
         };
         Insert: {
+          activations?: number;
+          active?: boolean;
           created_at?: string;
+          first_reposted_at?: string;
           id?: string;
+          last_reposted_at?: string;
           reposter_id: string;
           upload_id: string;
         };
         Update: {
+          activations?: number;
+          active?: boolean;
           created_at?: string;
+          first_reposted_at?: string;
           id?: string;
+          last_reposted_at?: string;
           reposter_id?: string;
           upload_id?: string;
         };
@@ -3026,6 +3038,7 @@ export type Database = {
       };
       block_exists: { Args: { a: string; b: string }; Returns: boolean };
       block_user: { Args: { p_blocked_id: string }; Returns: undefined };
+      bulk_unrepost: { Args: { p_upload_ids: string[] }; Returns: undefined };
       cancel_pending_download_push: {
         Args: { p_upload_id: string };
         Returns: undefined;

@@ -4,9 +4,11 @@
  * optimistic removal from the relevant grid cache + one summary toast, with a
  * snapshot restore on error. Mirrors useBulkMakePrivate's contract.
  *
- * Deletes go direct-to-PostgREST (RLS: favorites delete = own user_id;
- * post_reposts delete = own reposter_id) and the save_count / repost_count
- * counter triggers fire automatically.
+ * Unsave goes direct-to-PostgREST (RLS: favorites delete = own user_id). Unrepost
+ * goes through the bulk_unrepost RPC — post_reposts is a durable one-time-bump
+ * ledger (mig 418), so un-reposting SOFT-deactivates (active=false) rather than
+ * deleting; a direct DELETE would wipe the frozen first_reposted_at + activations
+ * and let the bump be farmed. Both counter triggers fire automatically.
  */
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
@@ -91,12 +93,8 @@ export function useBulkUnrepost() {
     idsKey: 'repostIds',
     noun: 'repost',
     failMsg: 'Failed to remove reposts',
-    run: async (uploadIds, uid) => {
-      const { error } = await supabase
-        .from('post_reposts')
-        .delete()
-        .eq('reposter_id', uid)
-        .in('upload_id', uploadIds);
+    run: async (uploadIds) => {
+      const { error } = await supabase.rpc('bulk_unrepost', { p_upload_ids: uploadIds });
       if (error) throw error;
     },
   });

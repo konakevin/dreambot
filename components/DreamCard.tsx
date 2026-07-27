@@ -598,20 +598,6 @@ export const DreamCard = memo(function DreamCard({
               style={[s.postInfo, { paddingBottom: bottomPadding }]}
               onLayout={(e) => setInfoHeight(e.nativeEvent.layout.height)}
             >
-              {/* Repost attribution — shown when this card reaches the viewer via
-                  a followed user's repost (surface_type='repost'). The card still
-                  credits the ORIGINAL author below; this line credits the reposter. */}
-              {item.surface_type === 'repost' && item.reposter_name && (
-                <View style={s.repostAttribRow}>
-                  <Ionicons name="sync" size={14} color={colors.success} />
-                  <Text style={s.repostAttribText} numberOfLines={1}>
-                    Reposted by @{item.reposter_name}
-                    {(item.reposters_more ?? 0) > 0
-                      ? ` and ${item.reposters_more} ${item.reposters_more === 1 ? 'other' : 'others'}`
-                      : ''}
-                  </Text>
-                </View>
-              )}
               {/* Model badge — owner-only debug chip showing which AI rendered
                   the image. Requires BOTH the supreme-admin designation AND the
                   Settings → ADMIN toggle (so the owner shows/hides it at will).
@@ -625,7 +611,29 @@ export const DreamCard = memo(function DreamCard({
                 </View>
               )}
               {/* Repost moved to the right-side icon rail (between bookmark and
-                  share). The attribution line above still credits a reposter. */}
+                  share). This attribution line sits directly above the username
+                  and credits the reposter; @name links to their profile. Shown
+                  when the card reached the viewer via a followed user's repost. */}
+              {item.surface_type === 'repost' && item.reposter_name && (
+                <View style={s.repostAttribRow}>
+                  <Ionicons name="sync" size={14} color={colors.success} />
+                  <Text style={s.repostAttribText} numberOfLines={1}>
+                    Reposted by{' '}
+                    <Text
+                      style={s.repostAttribLink}
+                      suppressHighlighting
+                      onPress={() => {
+                        if (item.reposter_id) nav.push(`/user/${item.reposter_id}`);
+                      }}
+                    >
+                      @{item.reposter_name}
+                    </Text>
+                    {(item.reposters_more ?? 0) > 0
+                      ? ` and ${item.reposters_more} ${item.reposters_more === 1 ? 'other' : 'others'}`
+                      : ''}
+                  </Text>
+                </View>
+              )}
               <View>
                 <TouchableOpacity
                   style={s.usernameRow}
@@ -1100,6 +1108,13 @@ const s = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.85)',
     textShadowRadius: 3,
     textShadowOffset: { width: 0, height: 1 },
+  },
+  // The @reposter handle inside the attribution line — a tappable link to the
+  // reposter's profile. Underlined so it reads as a link against the image.
+  repostAttribLink: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
   usernameRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: verticalScale(8) },
   avatar: {

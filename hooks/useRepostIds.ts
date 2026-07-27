@@ -21,6 +21,7 @@ export function useRepostIds() {
           .from('post_reposts')
           .select('upload_id')
           .eq('reposter_id', user!.id)
+          .eq('active', true) // ledger keeps un-reposted rows as tombstones (mig 418)
           .range(offset, offset + PAGE - 1);
         if (error) throw error;
         if (!data || data.length === 0) break;

@@ -10,6 +10,10 @@ const PAGE_SIZE = 18;
  * "Reposts" tab on their profile. Reposts are public, so this works for any
  * userId (own profile + others). Mirrors useFavoritePosts but reads post_reposts
  * and follows the upload_id FK to the original upload.
+ *
+ * Filters active=true — post_reposts is a durable ledger (mig 418) that keeps
+ * un-reposted rows as tombstones. Orders by last_reposted_at so a re-repost bumps
+ * the dream back to the top of the album (even though it gets no feed bump).
  */
 export function useUserReposts(userId: string, enabled = true) {
   return useInfiniteQuery({
@@ -20,7 +24,8 @@ export function useUserReposts(userId: string, enabled = true) {
         .from('post_reposts')
         .select('uploads(*, users!inner(username, avatar_url))')
         .eq('reposter_id', userId)
-        .order('created_at', { ascending: false })
+        .eq('active', true)
+        .order('last_reposted_at', { ascending: false })
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = asDbResult<Record<string, unknown>[]>(data ?? [])
