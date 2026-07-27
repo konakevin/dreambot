@@ -86,6 +86,11 @@ beforeAll(async () => {
   const m420 = migrationSql('420_dream_off_pack_category.sql');
   await db.query(extract(m420, 'ALTER TABLE public.dream_offs', ';'));
   await db.query(extract(m420, 'DO $$', 'END $$;'));
+  // Shared CI DB: drop 403's 6-arg create_game so it can't coexist with the
+  // 8-arg version below and make a 2-arg call ambiguous ("is not unique").
+  await db.query(
+    'DROP FUNCTION IF EXISTS public.create_game(text,text,text,integer,boolean,jsonb) CASCADE'
+  );
   await db.query(extract(m420, 'CREATE OR REPLACE FUNCTION public.create_game(', '$$;'));
   await db.query(extract(m420, 'CREATE FUNCTION public.deal_topic(', '$$;'));
   await db.query(extract(m420, 'CREATE OR REPLACE FUNCTION public.get_game_room(', '$$;'));

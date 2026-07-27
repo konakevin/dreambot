@@ -31,9 +31,11 @@ import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
 import { useAuthStore } from '@/store/auth';
+import { toggleStar } from '@/lib/dreamOffVote';
 import {
   useGameRoom,
   useGameGallery,
+  useGamePlayers,
   useMyBallot,
   useGameResults,
   useCastVotes,
@@ -41,14 +43,22 @@ import {
   useCancelGame,
 } from '@/hooks/useDreamOff';
 import {
+  ActivityFeed,
   EntryCard,
   Medal,
   PhaseCountdown,
   PhaseCta,
+  PlayerAvatars,
   StarMeter,
   TopicBanner,
+  type PlayerChip,
 } from '@/components/dreamOff';
-import { SUPERLATIVE_TO_MEDAL, type GameRoom } from '@/types/dreamOff';
+import {
+  SUPERLATIVE_LABEL,
+  SUPERLATIVE_TO_MEDAL,
+  type GamePlayer,
+  type GameRoom,
+} from '@/types/dreamOff';
 
 const JOIN_BASE = 'https://dreambotapp.com/join/';
 
@@ -127,6 +137,7 @@ function SetupView({
 }) {
   const advance = useAdvancePhase(gameId);
   const cancel = useCancelGame(gameId);
+  const { data: players } = useGamePlayers(gameId);
 
   const shareInvite = async () => {
     if (!room.invite_code) return;
@@ -167,6 +178,9 @@ function SetupView({
         <Text style={styles.sectionLabel}>
           {room.player_count} {room.player_count === 1 ? 'player' : 'players'} in
         </Text>
+        {players && players.length > 0 && (
+          <PlayerAvatars style={styles.avatarsRow} players={toChips(players, 'setup')} />
+        )}
       </View>
 
       {room.is_owner && room.invite_code && (
@@ -205,6 +219,8 @@ function SetupView({
       ) : (
         <Text style={styles.hintCenter}>Waiting for the host to start…</Text>
       )}
+
+      <ActivityFeed gameId={gameId} />
     </ScrollView>
   );
 }
@@ -213,6 +229,7 @@ function SetupView({
 function SubmissionView({ gameId, room, pad }: { gameId: string; room: GameRoom; pad: number }) {
   const advance = useAdvancePhase(gameId);
   const { data: gallery } = useGameGallery(gameId);
+  const { data: players } = useGamePlayers(gameId);
   const myEntry = gallery?.find((e) => e.is_mine);
   const waitingOn = Math.max(0, room.player_count - room.entry_count);
 
@@ -251,6 +268,9 @@ function SubmissionView({ gameId, room, pad }: { gameId: string; room: GameRoom;
         <Text style={styles.sectionLabel}>
           {room.entry_count} of {room.player_count} dreamed
         </Text>
+        {players && players.length > 0 && (
+          <PlayerAvatars style={styles.avatarsRow} players={toChips(players, 'submission')} />
+        )}
       </View>
 
       {room.is_owner && (
@@ -262,6 +282,8 @@ function SubmissionView({ gameId, room, pad }: { gameId: string; room: GameRoom;
           loading={advance.isPending}
         />
       )}
+
+      <ActivityFeed gameId={gameId} />
     </ScrollView>
   );
 }
@@ -280,10 +302,9 @@ function VotingView({ gameId, room, pad }: { gameId: string; room: GameRoom; pad
   const current = selected ?? ballot?.entry_ids ?? [];
 
   const toggle = (entryId: string) => {
-    const has = current.includes(entryId);
-    if (!has && current.length >= max) return; // out of stars
-    const next = has ? current.filter((x) => x !== entryId) : [...current, entryId];
-    if (!has) {
+    const next = toggleStar(current, entryId, max);
+    if (next === null) return; // out of stars — no-op
+    if (!current.includes(entryId)) {
       setPlacing(entryId);
       void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
@@ -371,7 +392,9 @@ function ResultsView({ gameId, room, pad }: { gameId: string; room: GameRoom; pa
           )}
           <View style={styles.goldBadge}>
             <Medal place={1} size={horizontalScale(34)} />
-            <Text style={styles.goldName}>{gold.author_name ?? 'Winner'}</Text>
+            <Text style={styles.goldName}>
+              {SUPERLATIVE_LABEL.winner} · {gold.author_name ?? '—'}
+            </Text>
           </View>
         </View>
       )}
@@ -387,9 +410,12 @@ function ResultsView({ gameId, room, pad }: { gameId: string; room: GameRoom; pa
               <View style={styles.podiumMeta}>
                 <Medal place={SUPERLATIVE_TO_MEDAL[p.key]} size={fontScale(20)} />
                 <Text numberOfLines={1} style={styles.podiumName}>
-                  {p.author_name ?? '—'}
+                  {SUPERLATIVE_LABEL[p.key]}
                 </Text>
               </View>
+              <Text numberOfLines={1} style={styles.podiumSubName}>
+                {p.author_name ?? '—'}
+              </Text>
             </View>
           ))}
       </View>
@@ -437,6 +463,16 @@ function chunk<T>(arr: T[], n: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
   return out;
+}
+// Map the roster to avatar chips; "acted" dims a player who still owes the
+// phase's action (a submission / a vote). Setup lights everyone.
+function toChips(players: GamePlayer[], phase: GameRoom['phase']): PlayerChip[] {
+  return players.map((p) => ({
+    id: p.user_id,
+    name: p.name,
+    avatarUrl: p.avatar_url,
+    acted: phase === 'submission' ? p.submitted : phase === 'voting' ? p.voted : true,
+  }));
 }
 
 const styles = StyleSheet.create({
@@ -579,8 +615,15 @@ const styles = StyleSheet.create({
   podiumName: {
     color: colors.bodyOnDark,
     fontSize: fontScale(12),
-    fontWeight: '700',
+    fontWeight: '800',
     flexShrink: 1,
   },
+  podiumSubName: {
+    color: colors.textSecondary,
+    fontSize: fontScale(11.5),
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  avatarsRow: { marginTop: verticalScale(8) },
   actionRow: { flexDirection: 'row', gap: horizontalScale(10), marginTop: verticalScale(8) },
 });

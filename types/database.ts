@@ -3907,6 +3907,7 @@ export type Database = {
       };
       get_game_gallery: { Args: { p_game_id: string }; Returns: Json };
       get_game_invite_preview: { Args: { p_code: string }; Returns: Json };
+      get_game_players: { Args: { p_game_id: string }; Returns: Json };
       get_game_results: { Args: { p_game_id: string }; Returns: Json };
       get_game_room: { Args: { p_game_id: string }; Returns: Json };
       get_gift: {

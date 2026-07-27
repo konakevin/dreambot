@@ -141,3 +141,20 @@ export const SUPERLATIVE_TO_MEDAL: Record<SuperlativeKey, 1 | 2 | 3> = {
   runner_up: 2,
   dark_horse: 3,
 };
+
+/** Flavor label shown alongside the medal (Kevin: keep "Dark Horse"). */
+export const SUPERLATIVE_LABEL: Record<SuperlativeKey, string> = {
+  winner: 'Winner',
+  runner_up: 'Runner-up',
+  dark_horse: 'Dark Horse',
+};
+
+// ── get_game_players (lobby / submission roster; members only) ────────────────
+export interface GamePlayer {
+  user_id: string;
+  name: string;
+  avatar_url: string | null;
+  submitted: boolean;
+  voted: boolean;
+  is_owner: boolean;
+}

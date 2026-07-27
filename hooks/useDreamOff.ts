@@ -20,6 +20,7 @@ const keys = {
   ballot: (id: string) => ['dreamOff', 'ballot', id] as const,
   results: (id: string) => ['dreamOff', 'results', id] as const,
   activity: (id: string) => ['dreamOff', 'activity', id] as const,
+  players: (id: string) => ['dreamOff', 'players', id] as const,
   myGames: ['dreamOff', 'myGames'] as const,
   packs: (c?: PackCategory) => ['dreamOff', 'packs', c ?? 'all'] as const,
 };
@@ -46,6 +47,7 @@ export function useGameRoom(gameId: string) {
           void qc.invalidateQueries({ queryKey: keys.gallery(gameId) });
           void qc.invalidateQueries({ queryKey: keys.results(gameId) });
           void qc.invalidateQueries({ queryKey: keys.activity(gameId) });
+          void qc.invalidateQueries({ queryKey: keys.players(gameId) });
         }
       )
       .subscribe();
@@ -86,6 +88,16 @@ export function useGameActivity(gameId: string, enabled = true) {
     queryKey: keys.activity(gameId),
     queryFn: () => api.getGameActivity(gameId),
     enabled,
+  });
+}
+
+export function useGamePlayers(gameId: string, enabled = true) {
+  return useQuery({
+    queryKey: keys.players(gameId),
+    queryFn: () => api.getGamePlayers(gameId),
+    enabled,
+    // Submitted/voted flags live on un-published tables, so poll while mounted.
+    refetchInterval: 12_000,
   });
 }
 

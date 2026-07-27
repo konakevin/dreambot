@@ -6,6 +6,7 @@ export { Medal, medalLabel, type MedalPlace } from './Medal';
 export { PhaseCountdown, formatCountdown } from './PhaseCountdown';
 export { TopicBanner } from './TopicBanner';
 export { PlayerAvatars, type PlayerChip } from './PlayerAvatars';
+export { ActivityFeed } from './ActivityFeed';
 export { EntryCard } from './EntryCard';
 export { PhaseCta } from './PhaseCta';
 export { wordTopic } from './topicWording';

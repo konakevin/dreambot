@@ -72,6 +72,12 @@ beforeAll(async () => {
     extract(m403, 'CREATE OR REPLACE FUNCTION public.dream_off_gen_invite_code()', '$$;')
   );
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.dream_off_setup_pot(', '$$;'));
+  // 420 introduces an 8-arg create_game overload; in the shared CI DB it can
+  // linger from that spec and make this spec's 2-arg calls ambiguous
+  // ("is not unique"). Drop it so ONLY 403's 6-arg version exists here.
+  await db.query(
+    'DROP FUNCTION IF EXISTS public.create_game(text,text,text,integer,boolean,jsonb,text,text) CASCADE'
+  );
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.create_game(', '$$;'));
   await db.query(extract(m403, 'CREATE OR REPLACE FUNCTION public.deal_topic(', '$$;'));
 
