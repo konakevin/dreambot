@@ -9,3 +9,4 @@ export { PlayerAvatars, type PlayerChip } from './PlayerAvatars';
 export { EntryCard } from './EntryCard';
 export { PhaseCta } from './PhaseCta';
 export { wordTopic } from './topicWording';
+export { DreamOffProfileEntry } from './DreamOffProfileEntry';

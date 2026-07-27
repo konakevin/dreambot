@@ -16,6 +16,7 @@ import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useSubscriptionStatus } from '@/hooks/useSubscriptionStatus';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
+import { useDreamOffEnabled } from '@/hooks/useDreamOffEnabled';
 import { UsernameNudge } from '@/components/UsernameNudge';
 import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
@@ -97,6 +98,7 @@ export default function SettingsScreen() {
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
   const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
   const { data: sparkleBalance } = useSparkleBalance();
+  const dreamOffEnabled = useDreamOffEnabled();
 
   // Which auth providers back this account. OAuth-only users (Google/Apple/
   // Facebook) have no email/password identity — "Change password" is
@@ -496,6 +498,18 @@ export default function SettingsScreen() {
               trailing={null}
             />
           </View>
+        )}
+
+        {/* Dream Off — the party game. Self-gated on the kill-switch. */}
+        {dreamOffEnabled && (
+          <>
+            <Text style={styles.sectionHeader}>PLAY</Text>
+            <SettingsRow
+              icon="game-controller"
+              label="Start a Dream Off"
+              onPress={() => nav.push('/game/create')}
+            />
+          </>
         )}
 
         {/* Store — surfaced at the TOP as the revenue section (this is how the

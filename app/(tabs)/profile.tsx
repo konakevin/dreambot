@@ -32,6 +32,7 @@ import { useDreamsSeenStore } from '@/store/dreamsSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { ProfileHeader } from '@/components/ProfileHeader';
+import { DreamOffProfileEntry } from '@/components/dreamOff';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { photoSourceRows } from '@/lib/photoSourceRows';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -711,6 +712,10 @@ export default function ProfileScreen() {
           </Text>
         </TouchableOpacity>
       </ProfileHeader>
+
+      {/* Dream Off home — one-tap Start + your active games, above the albums.
+          Self-gated on useDreamOffEnabled (renders nothing until launch). */}
+      <DreamOffProfileEntry />
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats
