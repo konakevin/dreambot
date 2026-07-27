@@ -7,6 +7,7 @@ export { PhaseCountdown, formatCountdown } from './PhaseCountdown';
 export { TopicBanner } from './TopicBanner';
 export { PlayerAvatars, type PlayerChip } from './PlayerAvatars';
 export { ActivityFeed } from './ActivityFeed';
+export { InvitePeopleSheet } from './InvitePeopleSheet';
 export { EntryCard } from './EntryCard';
 export { PhaseCta } from './PhaseCta';
 export { wordTopic } from './topicWording';

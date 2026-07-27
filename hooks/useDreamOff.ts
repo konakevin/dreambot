@@ -170,6 +170,18 @@ export function useJoinGame() {
   });
 }
 
+export function useAcceptInvite(gameId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.acceptInvite(gameId),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.room(gameId) });
+      void qc.invalidateQueries({ queryKey: keys.players(gameId) });
+      void qc.invalidateQueries({ queryKey: keys.myGames });
+    },
+  });
+}
+
 export function useLeaveGame(gameId: string) {
   const qc = useQueryClient();
   return useMutation({

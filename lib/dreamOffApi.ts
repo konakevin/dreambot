@@ -147,10 +147,24 @@ export async function invitePlayers(gameId: string, userIds: string[]): Promise<
   if (error) fail('invite_players', error);
 }
 
-export async function joinGameByCode(code: string): Promise<{ gameId: string }> {
+export interface JoinResult {
+  status: string;
+  gameId: string | null;
+}
+
+export async function joinGameByCode(code: string): Promise<JoinResult> {
   const { data, error } = await supabase.rpc('join_game_by_code', { p_code: code });
   if (error) fail('join_game_by_code', error);
-  return { gameId: str(asObj(data).game_id) };
+  const o = asObj(data);
+  return { status: str(o.status), gameId: typeof o.game_id === 'string' ? o.game_id : null };
+}
+
+/** Code-less accept for a push-invited friend (mirrors join_game_by_code's status strings). */
+export async function acceptInvite(gameId: string): Promise<JoinResult> {
+  const { data, error } = await supabase.rpc('accept_invite', { p_game_id: gameId });
+  if (error) fail('accept_invite', error);
+  const o = asObj(data);
+  return { status: str(o.status), gameId: typeof o.game_id === 'string' ? o.game_id : null };
 }
 
 export async function leaveGame(gameId: string): Promise<void> {

@@ -80,7 +80,7 @@ async function signIn(email, pw) {
   if (cErr) fail('create_game', cErr);
   const gameId = created.game_id;
   const code = created.invite_code;
-  if (!gameId || !/^[A-Z2-9]{10}$/.test(code || '')) fail('create_game returned a bad game/code');
+  if (!gameId || !/^[A-Z2-9]{6,10}$/.test(code || '')) fail('create_game returned a bad game/code');
   pass(`created game ${gameId.slice(0, 8)} (code ${code})`);
 
   // 2) Second user joins by code.

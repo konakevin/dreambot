@@ -16,6 +16,7 @@ export default function DreamOffLayout() {
       }}
     >
       <Stack.Screen name="create" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="join" options={{ presentation: 'modal' }} />
       <Stack.Screen name="[id]/index" />
       <Stack.Screen name="[id]/entry" options={{ presentation: 'modal' }} />
     </Stack>

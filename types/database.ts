@@ -3486,6 +3486,7 @@ export type Database = {
       };
     };
     Functions: {
+      accept_invite: { Args: { p_game_id: string }; Returns: Json };
       admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
       admin_db_connections: {
         Args: never;

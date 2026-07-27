@@ -49,6 +49,15 @@ export function DreamOffProfileEntry() {
         onPress={() => router.push('/game/create')}
         style={styles.cta}
       />
+      <TouchableOpacity
+        onPress={() => router.push('/game/join')}
+        activeOpacity={0.7}
+        style={styles.joinBtn}
+        hitSlop={8}
+      >
+        <Ionicons name="enter-outline" size={fontScale(16)} color={colors.accentLight} />
+        <Text style={styles.joinText}>Join with a code</Text>
+      </TouchableOpacity>
 
       {active.length > 0 && (
         <>
@@ -107,6 +116,14 @@ const styles = StyleSheet.create({
     gap: verticalScale(12),
   },
   cta: { alignSelf: 'stretch' },
+  joinBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: horizontalScale(6),
+    paddingVertical: verticalScale(8),
+  },
+  joinText: { color: colors.accentLight, fontSize: fontScale(14), fontWeight: '700' },
   shelfLabel: {
     color: colors.accentLight,
     fontSize: fontScale(10),

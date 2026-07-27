@@ -234,7 +234,11 @@ function PendingInviteReplayer() {
         const { gameId } = await joinGameByCode(code);
         if (cancelled) return;
         useDreamOffStore.getState().clearPendingInviteCode();
-        InteractionManager.runAfterInteractions(() => router.replace(`/game/${gameId}`));
+        // Navigate whenever we resolved a game (the Room renders the right state
+        // for the outcome — joined / spectator / full); a null id = bad/expired
+        // code, so we just clear and drop the user wherever they were.
+        if (gameId)
+          InteractionManager.runAfterInteractions(() => router.replace(`/game/${gameId}`));
       } catch {
         // Stale / invalid / already-ended code — clear so we don't loop.
         useDreamOffStore.getState().clearPendingInviteCode();

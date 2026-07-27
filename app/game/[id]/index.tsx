@@ -41,10 +41,12 @@ import {
   useCastVotes,
   useAdvancePhase,
   useCancelGame,
+  useAcceptInvite,
 } from '@/hooks/useDreamOff';
 import {
   ActivityFeed,
   EntryCard,
+  InvitePeopleSheet,
   Medal,
   PhaseCountdown,
   PhaseCta,
@@ -117,11 +119,43 @@ function PhaseBody({
   uid: string | undefined;
   bottomInset: number;
 }) {
+  // An invited friend (via push) hasn't accepted yet — show the accept CTA
+  // before the normal lobby, while the roster's still open.
+  if (
+    room.my_status === 'invited' &&
+    !room.is_owner &&
+    (room.phase === 'setup' || room.phase === 'submission')
+  ) {
+    return <InvitedView gameId={gameId} room={room} pad={bottomInset} />;
+  }
   if (isTerminal(room.phase)) return <ResultsView gameId={gameId} room={room} pad={bottomInset} />;
   if (room.phase === 'voting') return <VotingView gameId={gameId} room={room} pad={bottomInset} />;
   if (room.phase === 'submission')
     return <SubmissionView gameId={gameId} room={room} pad={bottomInset} />;
   return <SetupView gameId={gameId} room={room} uid={uid} pad={bottomInset} />;
+}
+
+// ── invited (not yet accepted) ────────────────────────────────────────────────
+function InvitedView({ gameId, room, pad }: { gameId: string; room: GameRoom; pad: number }) {
+  const accept = useAcceptInvite(gameId);
+  return (
+    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
+      <Text style={styles.eyebrow}>YOU&apos;RE INVITED</Text>
+      <TopicBanner topic={room.topic} packCategory={room.pack_category} castMode={room.cast_mode} />
+      <Text style={styles.leadCopy}>
+        {room.owner_name ?? 'A friend'} invited you to this Dream Off. Jump in and make your dream.
+      </Text>
+      <PhaseCta
+        label="Join the Dream Off"
+        icon="game-controller"
+        onPress={() => accept.mutate()}
+        loading={accept.isPending}
+      />
+      <TouchableOpacity onPress={() => router.back()} style={styles.cancelBtn} hitSlop={8}>
+        <Text style={styles.hintCenter}>Not now</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
 }
 
 // ── setup lobby ───────────────────────────────────────────────────────────────
@@ -138,6 +172,7 @@ function SetupView({
   const advance = useAdvancePhase(gameId);
   const cancel = useCancelGame(gameId);
   const { data: players } = useGamePlayers(gameId);
+  const [showInvite, setShowInvite] = useState(false);
 
   const shareInvite = async () => {
     if (!room.invite_code) return;
@@ -183,9 +218,13 @@ function SetupView({
         )}
       </View>
 
+      {room.is_owner && (
+        <PhaseCta label="Invite friends" icon="person-add" onPress={() => setShowInvite(true)} />
+      )}
+
       {room.is_owner && room.invite_code && (
         <View style={styles.inviteCard}>
-          <Text style={styles.inviteLabel}>INVITE CODE</Text>
+          <Text style={styles.inviteLabel}>OR SHARE A CODE</Text>
           <TouchableOpacity onPress={copyCode} hitSlop={8}>
             <Text style={styles.inviteCode}>{room.invite_code}</Text>
           </TouchableOpacity>
@@ -221,6 +260,13 @@ function SetupView({
       )}
 
       <ActivityFeed gameId={gameId} />
+
+      <InvitePeopleSheet
+        gameId={gameId}
+        visible={showInvite}
+        onClose={() => setShowInvite(false)}
+        existingIds={players?.map((p) => p.user_id) ?? []}
+      />
     </ScrollView>
   );
 }
