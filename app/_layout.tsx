@@ -903,7 +903,16 @@ function RootLayout() {
                         <Stack.Screen name="(auth)" />
                         <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                         <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        <Stack.Screen name="game" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
+                        {/* Edge-swipe only (NOT full-screen): the nested game stack pops
+                            room→hub first; only the hub (group root) bubbles out to the
+                            profile. Full-screen gesture would hijack every depth → over-pop. */}
+                        <Stack.Screen
+                          name="game"
+                          options={{
+                            ...SCREEN_PRESETS.MODAL_SWIPEABLE,
+                            fullScreenGestureEnabled: false,
+                          }}
+                        />
                         {/* photo/[id] album: NATIVE back gesture off — it intermittently
                       swallowed the start of a vertical swipe (proven). The screen
                       uses useAxisLockSwipeBack instead, composed
