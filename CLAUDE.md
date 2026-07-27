@@ -285,4 +285,5 @@ for the public feed + serves deep-link share targets.**
   `DREAMSMART_MODEL_VALIDATION.md` (the RUNBOOK — "go set up the DreamSmart config for `<model>`" =
   run `scripts/model-matrix-swap.js` self matrix across every style → grade in an HTML page → set that
   model's per-style `smart_dream_models` membership).
-- **Personality:** `DREAMBOT.md`, `DREAMBOT_CHARACTER.md`.
+- **Personality / brand:** `DREAMBOT.md`, `DREAMBOT_CHARACTER.md`, `MASCOT_LORE.md` (canonical
+  Bot & Taco lore + ad voice). Marketing ad-concept snapshots: `marketing/ad-concepts/`.
