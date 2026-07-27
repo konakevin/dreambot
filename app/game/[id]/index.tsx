@@ -240,32 +240,26 @@ function SetupView({
         <Text style={styles.hintCenter}>Waiting for the host to start…</Text>
       ) : (
         <>
-          {/* Exactly one gradient at a time: Invite until you can start, then Start. */}
-          {canStart ? (
-            <>
-              <PhaseCta
-                label="Start the dream off"
-                icon="play"
-                onPress={() => advance.mutate()}
-                loading={advance.isPending}
-              />
-              <PhaseCta
-                label="Invite more"
-                icon="person-add"
-                variant="ghost"
-                onPress={() => setShowInvite(true)}
-              />
-            </>
-          ) : (
-            <>
-              <PhaseCta
-                label="Invite friends"
-                icon="person-add"
-                onPress={() => setShowInvite(true)}
-              />
-              <Text style={styles.hintCenter}>{lobbyHint}</Text>
-            </>
-          )}
+          {/* Start is ALWAYS visible so the mechanic is obvious (an owner starts the
+              game manually — it never auto-starts); it's just disabled until 2 have
+              JOINED, with the hint below explaining why. Invite stays as the way to
+              get there. */}
+          <PhaseCta
+            label="Start the dream off"
+            icon="play"
+            onPress={() => advance.mutate()}
+            disabled={!canStart}
+            loading={advance.isPending}
+          />
+          <Text style={styles.hintCenter}>
+            {canStart ? "Everyone's in. Start whenever you're ready." : lobbyHint}
+          </Text>
+          <PhaseCta
+            label={canStart ? 'Invite more' : 'Invite friends'}
+            icon="person-add"
+            variant="secondary"
+            onPress={() => setShowInvite(true)}
+          />
 
           {room.invite_code && (
             <View style={styles.codeBlock}>
