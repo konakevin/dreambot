@@ -13,7 +13,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Share,
   StyleSheet,
   TouchableOpacity,
@@ -27,6 +26,7 @@ import * as Haptics from 'expo-haptics';
 import * as Clipboard from 'expo-clipboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/AppText';
+import { showAlert } from '@/components/CustomAlert';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -185,9 +185,14 @@ function SetupView({
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
   const confirmCancel = () => {
-    Alert.alert('Cancel this dream off?', "Everyone will be refunded. This can't be undone.", [
+    showAlert('Cancel this dream off?', "Everyone will be refunded. This can't be undone.", [
       { text: 'Keep it', style: 'cancel' },
-      { text: 'Cancel game', style: 'destructive', onPress: () => cancel.mutate() },
+      {
+        text: 'Cancel game',
+        style: 'destructive',
+        // Pop back to the hub — don't leave the owner on a dead cancelled screen.
+        onPress: () => cancel.mutate(undefined, { onSuccess: () => router.replace('/game') }),
+      },
     ]);
   };
 
@@ -425,11 +430,24 @@ function ResultsView({ gameId, room, pad }: { gameId: string; room: GameRoom; pa
     });
   };
 
-  if (room.phase === 'cancelled') {
+  if (room.phase === 'cancelled' || room.phase === 'no_contest') {
+    const cancelled = room.phase === 'cancelled';
     return (
-      <Centered>
-        <Text style={styles.muted}>This dream off was cancelled. Everyone was refunded.</Text>
-      </Centered>
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyEmoji}>{cancelled ? '🌙' : '🎭'}</Text>
+        <Text style={styles.emptyTitle}>{cancelled ? 'Dream off cancelled' : 'No contest'}</Text>
+        <Text style={styles.emptyBody}>
+          {cancelled
+            ? 'Everyone was refunded. No hard feelings.'
+            : 'Not enough dreams came in this round — everyone was refunded.'}
+        </Text>
+        <PhaseCta
+          label="Back to Dream Off"
+          variant="secondary"
+          onPress={() => router.replace('/game')}
+          style={styles.emptyBtn}
+        />
+      </View>
     );
   }
 
@@ -575,6 +593,27 @@ const styles = StyleSheet.create({
   center: { alignItems: 'center', justifyContent: 'center' },
   grow: { flex: 1 },
   muted: { color: colors.textSecondary, fontSize: fontScale(14), textAlign: 'center' },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: horizontalScale(32),
+    gap: verticalScale(10),
+  },
+  emptyEmoji: { fontSize: fontScale(52) },
+  emptyTitle: {
+    fontFamily: displayFontFamily(700),
+    fontSize: fontScale(22),
+    color: colors.textPrimary,
+    textAlign: 'center',
+  },
+  emptyBody: {
+    color: colors.textSecondary,
+    fontSize: fontScale(14.5),
+    lineHeight: fontScale(20),
+    textAlign: 'center',
+  },
+  emptyBtn: { marginTop: verticalScale(16), alignSelf: 'stretch' },
   eyebrow: {
     color: colors.accentLight,
     fontSize: fontScale(10),
