@@ -32,7 +32,7 @@ import { useDreamsSeenStore } from '@/store/dreamsSeen';
 import { PostGrid } from '@/components/PostGrid';
 import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { ProfileHeader } from '@/components/ProfileHeader';
-import { DreamOffProfileEntry } from '@/components/dreamOff';
+import { useDreamOffEnabled } from '@/hooks/useDreamOffEnabled';
 import { PostActionSheet } from '@/components/PostActionSheet';
 import { photoSourceRows } from '@/lib/photoSourceRows';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -675,6 +675,7 @@ export default function ProfileScreen() {
   );
 
   const { data: sparkleBalance = 0 } = useSparkleBalance();
+  const dreamOffEnabled = useDreamOffEnabled();
 
   const header = (
     <>
@@ -699,23 +700,46 @@ export default function ProfileScreen() {
         onEditPress={handleEditProfile}
         onSharePress={handleShareProfile}
         onChangePhoto={() => setShowPicSheet(true)}
+        // When Dream Off is live, the actions become a 2×2 grid: Edit/Share on
+        // top, Dream Off + Sparkles on a second row. Otherwise the sparkle chip
+        // stays inline (unchanged profile).
+        stackChildren={dreamOffEnabled}
       >
-        {/* Sparkle balance + a doorway to the store (own profile only) */}
-        <TouchableOpacity
-          onPress={() => nav.push('/sparkleStore')}
-          activeOpacity={0.8}
-          style={styles.sparkleChip}
-        >
-          <Ionicons name="sparkles" size={15} color={colors.accent} />
-          <Text allowFontScaling={false} style={styles.sparkleChipText}>
-            {formatCompact(sparkleBalance)}
-          </Text>
-        </TouchableOpacity>
+        {dreamOffEnabled ? (
+          <>
+            <TouchableOpacity
+              onPress={() => nav.push('/game')}
+              activeOpacity={0.8}
+              style={styles.actionGridBtn}
+            >
+              <Ionicons name="game-controller" size={16} color={colors.accentLight} />
+              <Text style={styles.actionGridText}>Dream Off</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => nav.push('/sparkleStore')}
+              activeOpacity={0.8}
+              style={[styles.actionGridBtn, styles.actionGridSparkle]}
+            >
+              <Ionicons name="sparkles" size={16} color={colors.accent} />
+              <Text allowFontScaling={false} style={styles.actionGridSparkleText}>
+                {formatCompact(sparkleBalance)}
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          /* Sparkle balance + a doorway to the store (own profile only) */
+          <TouchableOpacity
+            onPress={() => nav.push('/sparkleStore')}
+            activeOpacity={0.8}
+            style={styles.sparkleChip}
+          >
+            <Ionicons name="sparkles" size={15} color={colors.accent} />
+            <Text allowFontScaling={false} style={styles.sparkleChipText}>
+              {formatCompact(sparkleBalance)}
+            </Text>
+          </TouchableOpacity>
+        )}
       </ProfileHeader>
-
-      {/* Dream Off home — one-tap Start + your active games, above the albums.
-          Self-gated on useDreamOffEnabled (renders nothing until launch). */}
-      <DreamOffProfileEntry />
 
       {/* Album tabs — icon-only (IG-style). Visible only on grid sub-views;
           hidden when the user has tapped Followers/Following on the stats
@@ -1150,6 +1174,25 @@ const styles = StyleSheet.create({
     fontSize: fontScale(13),
     fontWeight: '700',
   },
+  // 2×2 action grid — the Dream Off + Sparkles second row (peers of Edit/Share).
+  actionGridBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    paddingVertical: verticalScale(8),
+    borderRadius: 8,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  actionGridText: { color: colors.textPrimary, fontSize: fontScale(14.5), fontWeight: '600' },
+  actionGridSparkle: {
+    backgroundColor: 'rgba(167,139,250,0.18)',
+    borderColor: 'rgba(167,139,250,0.55)',
+  },
+  actionGridSparkleText: { color: colors.accent, fontSize: fontScale(14), fontWeight: '700' },
   // Section header above the followers / following user list. Same shape
   // as the public-profile screen's version so the two surfaces stay
   // visually consistent.

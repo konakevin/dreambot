@@ -57,9 +57,12 @@ interface BaseProps {
   onAvatarPress?: () => void;
   /** Show a spinner overlaid on the avatar while a new photo is uploading. */
   avatarUploading?: boolean;
-  /** Inline slot rendered at the end of the action row (own profile: the
-   *  sparkle-balance chip). */
+  /** Slot rendered with the action pills (own profile: sparkle chip, or the
+   *  Dream Off + sparkles second row). Inline in the pill row by default; set
+   *  `stackChildren` to drop it onto its own row below (for a 2×2 action grid). */
   children?: ReactNode;
+  /** Render `children` as a separate row below Edit/Share instead of inline. */
+  stackChildren?: boolean;
 }
 
 interface OwnVariant extends BaseProps {
@@ -237,23 +240,26 @@ export function ProfileHeader(props: Props) {
 
       {/* Row 3 — action pills (+ sparkle chip via children on own) */}
       {props.variant === 'own' ? (
-        <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={styles.actionPill}
-            onPress={props.onEditPress}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionPill}
-            onPress={props.onSharePress}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>Share</Text>
-          </TouchableOpacity>
-          {props.children}
-        </View>
+        <>
+          <View style={styles.actionRow}>
+            <TouchableOpacity
+              style={styles.actionPill}
+              onPress={props.onEditPress}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionText}>Edit Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionPill}
+              onPress={props.onSharePress}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionText}>Share</Text>
+            </TouchableOpacity>
+            {!props.stackChildren && props.children}
+          </View>
+          {props.stackChildren && <View style={styles.actionRowStacked}>{props.children}</View>}
+        </>
       ) : (
         <View style={styles.actionRow}>
           {props.hasIncomingRequest ? (
@@ -429,6 +435,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     marginTop: verticalScale(14),
+  },
+  // Second action row (2×2 grid) — sits just under Edit/Share.
+  actionRowStacked: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    gap: 8,
+    marginTop: verticalScale(8),
   },
   actionPill: {
     flex: 1,
