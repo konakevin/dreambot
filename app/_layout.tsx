@@ -912,10 +912,7 @@ function RootLayout() {
                           options={SCREEN_PRESETS.MODAL_SWIPEABLE}
                         />
                         <Stack.Screen name="game/create" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        <Stack.Screen
-                          name="game/join"
-                          options={{ presentation: 'modal', headerShown: false }}
-                        />
+                        <Stack.Screen name="game/join" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
                         <Stack.Screen
                           name="game/[id]/entry"
                           options={{ presentation: 'modal', headerShown: false }}

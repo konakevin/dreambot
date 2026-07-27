@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, TextInput } from '@/components/AppText';
+import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { colors } from '@/constants/theme';
 import { displayFontFamily } from '@/constants/fonts';
 import { fontScale, horizontalScale, verticalScale } from '@/lib/responsive';
@@ -63,11 +64,13 @@ export default function JoinByCodeScreen() {
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name="close" size={fontScale(26)} color={colors.textPrimary} />
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12} style={styles.back}>
+          <Ionicons name="chevron-back" size={fontScale(26)} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Join a Dream Off</Text>
-        <View style={{ width: fontScale(26) }} />
+        <View style={styles.titleWrap}>
+          <GradientTitle size={TITLE_SIZE.nav}>Join a Dream Off</GradientTitle>
+        </View>
+        <View style={styles.back} />
       </View>
 
       <View style={styles.body}>
@@ -117,15 +120,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: horizontalScale(16),
-    paddingBottom: verticalScale(10),
+    paddingHorizontal: horizontalScale(12),
+    paddingBottom: verticalScale(8),
   },
-  headerTitle: {
-    fontFamily: displayFontFamily(700),
-    fontSize: fontScale(18),
-    color: colors.textPrimary,
-  },
+  back: { width: fontScale(30), alignItems: 'flex-start' },
+  titleWrap: { flex: 1, alignItems: 'center' },
   body: {
     paddingHorizontal: horizontalScale(24),
     paddingTop: verticalScale(28),
