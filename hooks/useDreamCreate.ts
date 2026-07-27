@@ -50,7 +50,8 @@ type GenerateStatus =
   | 'queued'
   | 'error'
   | 'cancelled'
-  | 'insufficient';
+  | 'insufficient'
+  | 'too_many_inflight';
 
 /**
  * Called BEFORE sparkle is spent when a photo classifies as 'group' or 'unclear'.
@@ -457,6 +458,14 @@ export function useDreamCreate() {
             balance: sparkleBalance,
           });
           return 'insufficient';
+        }
+
+        // At the per-user in-flight cap (429) — the server rejects a 6th BEFORE
+        // charging, so nothing was debited. Route back to Create with a friendly
+        // note, not a failure card. The Create screen also pre-gates on the cap;
+        // this covers a race (e.g. a 6th fired from another device/session).
+        if (msg.includes('too_many_inflight')) {
+          return 'too_many_inflight';
         }
 
         // The server signals refund status via either a structured response

@@ -153,6 +153,12 @@ export default function DreamLoadingScreen() {
         // Not enough sparkles — the premium gate is already showing; return to
         // Create so the user isn't stranded on the loading spinner.
         router.back();
+      } else if (status === 'too_many_inflight') {
+        // Hit the per-user in-flight cap (a 6th dream slipped through the Create
+        // pre-gate, e.g. another device). Nothing charged. Back to Create + a
+        // gentle nudge instead of a failure card.
+        Toast.show('Let a few dreams finish first ✨', 'sparkles');
+        router.back();
       }
       // status === 'error' → stay on this screen and let the failure card
       // (driven by activeJobFailure in the store) take over. The user can

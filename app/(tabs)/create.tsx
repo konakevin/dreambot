@@ -82,6 +82,7 @@ import { resolveDreamSmartModel } from '@/lib/dreamSmartModel';
 import { showPremiumGate } from '@/lib/premiumGate';
 import { useImageModels } from '@/hooks/useImageModels';
 import { useEngineConfig } from '@/hooks/useEngineConfig';
+import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 import { classifyPhoto } from '@/lib/dreamApi';
 import { cropToPortrait } from '@/lib/cropPhoto';
@@ -214,6 +215,9 @@ export default function CreateScreen() {
   const announceSwapRef = useRef(false);
   const imageModels = useImageModels();
   const engineConfig = useEngineConfig();
+  // Dreams currently queued/rendering — used to block a create past the per-user
+  // in-flight cap (engine_config.max_inflight_dreams_per_user, default 5).
+  const { data: inFlightDreams } = useInFlightDreams();
   const promptRef = useRef<TextInput>(null);
   // Height of the floating (position:absolute) bottom tab bar. The sticky Dream
   // footer rests at the screen's bottom edge, so without this it sits BEHIND the
@@ -885,6 +889,18 @@ export default function CreateScreen() {
 
   function handleDream() {
     Keyboard.dismiss();
+    // Per-user in-flight cap: you can have at most N dreams cooking at once
+    // (engine_config.max_inflight_dreams_per_user, default 5). Block the 6th HERE
+    // with a clear nudge — before entering the loading flow, where the server
+    // would otherwise 429. Keeps the "why can't I?" answer on this screen.
+    if ((inFlightDreams?.length ?? 0) >= engineConfig.maxInflightDreams) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      Toast.show(
+        `You've got ${engineConfig.maxInflightDreams} dreams cooking. Let a few finish first ✨`,
+        'sparkles'
+      );
+      return;
+    }
     // Gate on insufficient sparkles HERE (before navigating) so the user gets the
     // premium gate on this screen and never enters the loading flow on a dream
     // they can't afford. The server charge stays authoritative as a backstop.

@@ -35,6 +35,10 @@ export interface EngineConfig {
   dreamQueueMaxConcurrent: number; // LIGHT (text, no-swap) cap
   dreamQueueMaxConcurrentHeavy: number; // HEAVY (face-swap / dual) cap
   dreamQueueMaxJobsPerTick: number;
+  // Per-USER cap (migration 425): the most dreams one user can have
+  // queued/in_progress at once. Enqueueing a 6th (default) is rejected 429.
+  // Live-tunable so we can dial 3↔5↔N with no app build.
+  maxInflightDreamsPerUser: number;
   // New Scene reference path (migration 341). Cap = group-size limit; the two
   // prices are the flat Standard / Best-likeness tiers.
   newSceneMaxPeople: number;
@@ -86,6 +90,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   // heavy throughput, `fly scale count N` FIRST, then set the row to ~10×N.
   dreamQueueMaxConcurrentHeavy: 10,
   dreamQueueMaxJobsPerTick: 10,
+  maxInflightDreamsPerUser: 5,
   newSceneMaxPeople: 3,
   newScenePriceStandard: 3,
   newScenePriceBest: 5,
@@ -145,6 +150,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     dreamQueueMaxJobsPerTick: Number(
       data.dream_queue_max_jobs_per_tick ?? DEFAULT_ENGINE_CONFIG.dreamQueueMaxJobsPerTick
+    ),
+    maxInflightDreamsPerUser: Number(
+      data.max_inflight_dreams_per_user ?? DEFAULT_ENGINE_CONFIG.maxInflightDreamsPerUser
     ),
     newSceneMaxPeople: Number(data.new_scene_max_people ?? DEFAULT_ENGINE_CONFIG.newSceneMaxPeople),
     faceRestoreEnabled: Boolean(

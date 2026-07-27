@@ -274,20 +274,22 @@ Deno.serve(async (req) => {
   // double-taps or abuse). Beyond this, reject 429 BEFORE charging; the user's
   // existing dreams keep draining. Cheap single COUNT; checked here so the
   // first-dream + retry branches above (onboarding / re-run a failure) bypass it.
-  const MAX_INFLIGHT_PER_USER = 5;
+  // Cap is live-tunable via engine_config.max_inflight_dreams_per_user (migration
+  // 425) so we can dial it with no app build; fetchEngineConfig falls back to 5.
+  const cfg = await fetchEngineConfig(supabase);
+  const maxInflight = cfg.maxInflightDreamsPerUser;
   const { count: inflight } = await supabase
     .from('dream_queue')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
     .in('status', ['queued', 'in_progress']);
-  if ((inflight ?? 0) >= MAX_INFLIGHT_PER_USER) {
-    return json({ error: 'too_many_inflight', limit: MAX_INFLIGHT_PER_USER }, 429);
+  if ((inflight ?? 0) >= maxInflight) {
+    return json({ error: 'too_many_inflight', limit: maxInflight }, 429);
   }
 
   // Charge up front (idempotent on jobId), same cost rule as generate-dream so
   // the price stays server-driven. The render's own charge is then a no-op.
   await loadModelCosts(supabase);
-  const cfg = await fetchEngineConfig(supabase);
 
   // ── Smart Dream: coerce the model into the chosen style's approved set BEFORE
   // the charge, so charge == rendered model stays exact (SMART_DREAM_PLAN.md).

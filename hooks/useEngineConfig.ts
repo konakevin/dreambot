@@ -44,6 +44,9 @@ export interface EngineConfig {
   newScenePriceBest: number;
   // Max images in a gallery/carousel post (migration 356).
   galleryMaxImages: number;
+  // Per-user in-flight cap (migration 425): most dreams queued/rendering at once.
+  // Used to pre-empt the 6th create on the Create screen.
+  maxInflightDreams: number;
 }
 
 // Defaults = the values previously hardcoded in the client (behavior unchanged
@@ -69,6 +72,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   newScenePriceStandard: 3,
   newScenePriceBest: 5,
   galleryMaxImages: 10,
+  maxInflightDreams: 5,
 };
 
 function num(v: unknown, d: number): number {
@@ -135,6 +139,10 @@ export function useEngineConfig(): EngineConfig {
         ),
         newScenePriceBest: num(c.new_scene_price_best, DEFAULT_ENGINE_CONFIG.newScenePriceBest),
         galleryMaxImages: num(c.gallery_max_images, DEFAULT_ENGINE_CONFIG.galleryMaxImages),
+        maxInflightDreams: num(
+          c.max_inflight_dreams_per_user,
+          DEFAULT_ENGINE_CONFIG.maxInflightDreams
+        ),
       };
     },
     staleTime: 5 * 60_000,
