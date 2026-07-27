@@ -139,9 +139,14 @@ function PhaseBody({
 function InvitedView({ gameId, room, pad }: { gameId: string; room: GameRoom; pad: number }) {
   const accept = useAcceptInvite(gameId);
   return (
-    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
+    <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
       <Text style={styles.eyebrow}>YOU&apos;RE INVITED</Text>
-      <TopicBanner topic={room.topic} packCategory={room.pack_category} castMode={room.cast_mode} />
+      <TopicBanner
+        variant="bare"
+        topic={room.topic}
+        packCategory={room.pack_category}
+        castMode={room.cast_mode}
+      />
       <Text style={styles.leadCopy}>
         {room.owner_name ?? 'A friend'} invited you to this Dream Off. Jump in and make your dream.
       </Text>
@@ -296,8 +301,13 @@ function SubmissionView({ gameId, room, pad }: { gameId: string; room: GameRoom;
   const waitingOn = Math.max(0, room.player_count - room.entry_count);
 
   return (
-    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
-      <TopicBanner topic={room.topic} packCategory={room.pack_category} castMode={room.cast_mode} />
+    <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
+      <TopicBanner
+        variant="bare"
+        topic={room.topic}
+        packCategory={room.pack_category}
+        castMode={room.cast_mode}
+      />
 
       {!room.my_submitted ? (
         <>
@@ -376,8 +386,13 @@ function VotingView({ gameId, room, pad }: { gameId: string; room: GameRoom; pad
   const rows = useMemo(() => chunk(gallery ?? [], 2), [gallery]);
 
   return (
-    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
-      <TopicBanner topic={room.topic} packCategory={room.pack_category} castMode={room.cast_mode} />
+    <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
+      <TopicBanner
+        variant="bare"
+        topic={room.topic}
+        packCategory={room.pack_category}
+        castMode={room.cast_mode}
+      />
       <View style={styles.starMeterRow}>
         <StarMeter total={max} used={current.length} />
       </View>
@@ -454,7 +469,7 @@ function ResultsView({ gameId, room, pad }: { gameId: string; room: GameRoom; pa
   }
 
   return (
-    <ScrollView contentContainerStyle={[styles.body, { paddingBottom: pad + verticalScale(24) }]}>
+    <ScrollView contentContainerStyle={[styles.lobby, { paddingBottom: pad + verticalScale(24) }]}>
       <Text style={styles.resultsEyebrow}>RESULTS</Text>
       <Text style={styles.resultsTopic}>{room.topic}</Text>
 
