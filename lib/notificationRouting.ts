@@ -98,13 +98,6 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     return '/settings/reports';
   }
 
-  // Dream Off (migration 401 + send-push): every dream_off_* notification
-  // (invite / your_turn / voting_open / results / nudge / pot_refund) carries the
-  // game_id as reference_id. Route to the Room, which resolves the phase on load.
-  if (data.type && data.type.startsWith('dream_off_') && data.referenceId) {
-    return `/game/${data.referenceId}`;
-  }
-
   // Sparkle gift (migration 334): received → the unwrap screen (needs the
   // gift's ledger reference; get_gift is recipient-only so the thanks variant
   // must NOT route there); a 'thanks' ping → the thanker's profile.

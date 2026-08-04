@@ -138,60 +138,6 @@ export async function completeQueueJob(
   } catch (e) {
     console.warn(`[completeQueueJob] dream_created emit skipped: ${(e as Error).message}`);
   }
-
-  // Dream Off (fenced on source='dream_off'): a game entry's render just finished —
-  // attach it to the blind entry + funnel through the phase machine. This is a
-  // SEPARATE fetch so a normal create/dlt/nightly/restyle completion is byte-
-  // identical. Best-effort + never throws (a failed attach can't fail the render;
-  // the deadline cron still resolves the game).
-  try {
-    const { data: q } = await sb
-      .from('dream_queue')
-      .select('source, payload')
-      .eq('id', jobId)
-      .single();
-    if (q?.source === 'dream_off') {
-      const gameId = (q.payload as { game_id?: string } | null)?.game_id ?? null;
-      const { data: up } = await sb.from('uploads').select('image_url').eq('id', uploadId).single();
-      if (gameId) {
-        // Copy the render into a PERMANENT game/ path so the entry image survives
-        // the user deleting their upload — a game is a permanent shareable archive.
-        // Best-effort: fall back to the raw upload URL if the copy can't be made.
-        let gameImageRef = up?.image_url ?? null;
-        const marker = '/object/public/uploads/';
-        const srcUrl = up?.image_url ?? '';
-        const idx = srcUrl.indexOf(marker);
-        if (idx !== -1) {
-          const srcPath = srcUrl.slice(idx + marker.length).split('?')[0];
-          const destPath = `game/${gameId}/${jobId}.png`;
-          const { error: copyErr } = await sb.storage.from('uploads').copy(srcPath, destPath);
-          // A retry re-completes the same job → dest already exists; treat as success.
-          if (!copyErr || /exist|duplicate/i.test(copyErr.message ?? '')) {
-            gameImageRef = sb.storage.from('uploads').getPublicUrl(destPath).data.publicUrl;
-          } else {
-            console.warn(
-              `[completeQueueJob] dream_off image copy failed for job ${jobId}, using upload url:`,
-              copyErr.message
-            );
-          }
-        }
-        const { error: attachErr } = await sb.rpc('dream_off_attach_render', {
-          p_game_id: gameId,
-          p_entry_job_id: jobId,
-          p_upload_id: uploadId,
-          p_game_image_ref: gameImageRef,
-        });
-        if (attachErr) {
-          console.error(
-            `[completeQueueJob] dream_off_attach_render FAILED for job ${jobId}:`,
-            attachErr.message
-          );
-        }
-      }
-    }
-  } catch (e) {
-    console.error(`[completeQueueJob] dream_off attach skipped: ${(e as Error).message}`);
-  }
 }
 
 /**
@@ -259,34 +205,14 @@ export async function failQueueJob(
   // screen, a dropped notification means the user never learns the dream failed.
   // Log every failure so the monitors / Sentry breadcrumbs can catch a pattern.
   //
-  // Dream Off (fenced on source='dream_off'): the refund is POT-AWARE — route it
-  // through forfeit_entry (nsfw) / fail_entry (else), which restore the escrow
-  // slot (or refund the self-payer), mark the entry, and advance the game. The
-  // generic refund_sparkles + "sparkle's back in your pocket" push are WRONG for a
-  // pot-funded entry, so both are skipped; the room surfaces the failed entry.
-  const isDreamOff = job?.source === 'dream_off';
-  const dreamOffGameId = isDreamOff
-    ? ((job?.payload as { game_id?: string } | null)?.game_id ?? null)
-    : null;
-
-  if (isDreamOff && dreamOffGameId) {
-    const { error: doErr } = await sb.rpc(
-      isNsfw ? 'dream_off_forfeit_entry' : 'dream_off_fail_entry',
-      { p_game_id: dreamOffGameId, p_entry_job_id: jobId }
-    );
-    if (doErr) {
-      console.error(`[failQueueJob] dream_off refund FAILED for job ${jobId}:`, doErr.message);
-    }
-  } else {
-    const { error: refundErr } = await sb.rpc('refund_sparkles', {
-      p_user_id: userId,
-      p_amount: 1,
-      p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
-      p_reference_id: jobId,
-    });
-    if (refundErr) {
-      console.error(`[failQueueJob] refund_sparkles FAILED for job ${jobId}:`, refundErr.message);
-    }
+  const { error: refundErr } = await sb.rpc('refund_sparkles', {
+    p_user_id: userId,
+    p_amount: 1,
+    p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+    p_reference_id: jobId,
+  });
+  if (refundErr) {
+    console.error(`[failQueueJob] refund_sparkles FAILED for job ${jobId}:`, refundErr.message);
   }
   const { error: jobsErr } = await sb
     .from('dream_jobs')
@@ -302,17 +228,14 @@ export async function failQueueJob(
       jobsErr.message
     );
   }
-  // Dream Off entries don't get the generic dream_failed push (see above).
-  if (!isDreamOff) {
-    const { error: notifyErr } = await sb
-      .from('notifications')
-      .insert(dreamFailedNotification(jobId, userId, isNsfw));
-    if (notifyErr) {
-      console.error(
-        `[failQueueJob] failure notification FAILED for job ${jobId}:`,
-        notifyErr.message
-      );
-    }
+  const { error: notifyErr } = await sb
+    .from('notifications')
+    .insert(dreamFailedNotification(jobId, userId, isNsfw));
+  if (notifyErr) {
+    console.error(
+      `[failQueueJob] failure notification FAILED for job ${jobId}:`,
+      notifyErr.message
+    );
   }
 
   // AUTHORITATIVE dream_failed — fires only on the terminal (dead-letter) failure,

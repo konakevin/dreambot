@@ -191,32 +191,6 @@ function getNotificationContent(
       // Admin-only: a user filed a content report. Sent to every admin so they
       // can act within 24h (App Store 1.2). Routes to the admin Reports screen.
       return { title: 'New content report', body: 'Tap to review and take action' };
-    // ── Dream Off (game) — one push per game event, reference_id = game_id ──
-    // These RESPECT the noise gates (not in isAlwaysPushType) per decision 25.
-    case 'dream_off_invite':
-      return {
-        title: `${actorName} started a Dream Off`,
-        body: 'Tap to see the topic and jump in',
-      };
-    case 'dream_off_your_turn':
-      return {
-        title: 'Your Dream Off is waiting on you 🎨',
-        body: "Everyone else has entered, make your dream before it's too late",
-      };
-    case 'dream_off_voting_open':
-      return { title: 'Voting is open 🌹', body: 'The entries are in, go rose your favorites' };
-    case 'dream_off_results':
-      return { title: 'The Dream Off results are in 🏆', body: 'Tap to see who took the crown' };
-    case 'dream_off_nudge':
-      return {
-        title: 'The Dream Off clock is ticking ⏳',
-        body: body ?? 'Get your entry in before time runs out',
-      };
-    case 'dream_off_pot_refund':
-      return {
-        title: 'Sparkles back from your Dream Off ✨',
-        body: body ?? 'Leftover pot sparkles are back in your balance',
-      };
     default:
       return { title: 'New notification', body: '' };
   }
@@ -519,12 +493,6 @@ Deno.serve(async (req) => {
       if (record.subtype) data.subtype = record.subtype;
       data.userId = record.actor_id;
     }
-    // Dream Off: reference_id IS the game_id — thread it so a push tap deep-links
-    // straight to the game room (client notificationRouting reads data.gameId).
-    if (record.type.startsWith('dream_off_') && record.reference_id) {
-      data.gameId = record.reference_id;
-    }
-
     // Send to all device tokens
     const messages = tokens.map((t) => ({
       to: t.token,

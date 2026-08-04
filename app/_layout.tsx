@@ -39,7 +39,6 @@ import { syncDreamWidget } from '@/lib/widgetSync';
 import { isFirstJsLoad } from '@/modules/dreambot-widget';
 import { useFeedStore } from '@/store/feed';
 import { useRenderDockStore } from '@/store/renderDock';
-import { useDreamOffStore } from '@/store/dreamOff';
 import { configureRevenueCat } from '@/lib/revenuecat';
 import { AlertProvider } from '@/components/CustomAlert';
 import { AiConsentProvider } from '@/components/AiConsentSheet';
@@ -152,22 +151,6 @@ function AuthInitializer() {
         router.push(`/user/${userMatch[1]}`);
         return;
       }
-      // Dream Off: a direct link to a game room.
-      const gameMatch = path.match(/^game\/([a-f0-9-]+)$/i);
-      if (gameMatch) {
-        const { router } = await import('expo-router');
-        router.push(`/game/${gameMatch[1]}`);
-        return;
-      }
-      // Dream Off invite: dreambot://join/{CODE}. Stash the code; the
-      // PendingInviteReplayer redeems it (join_game_by_code) once signed in,
-      // so a friend can install the app, then tap the link again to join.
-      const joinMatch = path.match(/^join\/([A-Za-z0-9]{6,16})$/);
-      if (joinMatch) {
-        const { useDreamOffStore } = await import('@/store/dreamOff');
-        useDreamOffStore.getState().setPendingInviteCode(joinMatch[1].toUpperCase());
-        return;
-      }
     }
 
     // App already open when link is tapped
@@ -215,39 +198,6 @@ function PendingNotificationReplayer() {
     // once we replay it.
     routeFromNotification(pending, { deferUntilReady: true, markSeen: true });
   }, [user, pending]);
-  return null;
-}
-
-// Dream Off invite replay — a `join/{code}` deep link stashes the code (works
-// pre-auth, so an invited friend can install then re-tap). Once signed in, redeem
-// it and drop into the Room. One-shot per stashed code.
-function PendingInviteReplayer() {
-  const user = useAuthStore((s) => s.user);
-  const code = useDreamOffStore((s) => s.pendingInviteCode);
-  useEffect(() => {
-    if (!user || !code) return;
-    let cancelled = false;
-    void (async () => {
-      const { joinGameByCode } = await import('@/lib/dreamOffApi');
-      const { router } = await import('expo-router');
-      try {
-        const { gameId } = await joinGameByCode(code);
-        if (cancelled) return;
-        useDreamOffStore.getState().clearPendingInviteCode();
-        // Navigate whenever we resolved a game (the Room renders the right state
-        // for the outcome — joined / spectator / full); a null id = bad/expired
-        // code, so we just clear and drop the user wherever they were.
-        if (gameId)
-          InteractionManager.runAfterInteractions(() => router.replace(`/game/${gameId}`));
-      } catch {
-        // Stale / invalid / already-ended code — clear so we don't loop.
-        useDreamOffStore.getState().clearPendingInviteCode();
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user, code]);
   return null;
 }
 
@@ -884,7 +834,6 @@ function RootLayout() {
                       <ScreenTracker />
                       <PushRegistrar />
                       <PendingNotificationReplayer />
-                      <PendingInviteReplayer />
                       <RevenueCatInitializer />
                       <RealtimeSubscriber />
                       <DataPrefetcher />
@@ -903,20 +852,6 @@ function RootLayout() {
                         <Stack.Screen name="(auth)" />
                         <Stack.Screen name="(onboarding)" options={SCREEN_PRESETS.FLOW_LOCKED} />
                         <Stack.Screen name="settings" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        {/* Dream Off — FLAT sibling cards in the root stack (no nested
-                            game/_layout) so gestures behave: each card swipes to the one
-                            before it (room→hub, hub→profile). Create/join/entry are modals. */}
-                        <Stack.Screen name="game/index" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        <Stack.Screen
-                          name="game/[id]/index"
-                          options={SCREEN_PRESETS.MODAL_SWIPEABLE}
-                        />
-                        <Stack.Screen name="game/create" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        <Stack.Screen name="game/join" options={SCREEN_PRESETS.MODAL_SWIPEABLE} />
-                        <Stack.Screen
-                          name="game/[id]/entry"
-                          options={{ presentation: 'modal', headerShown: false }}
-                        />
                         {/* photo/[id] album: NATIVE back gesture off — it intermittently
                       swallowed the start of a vertical swipe (proven). The screen
                       uses useAxisLockSwipeBack instead, composed
