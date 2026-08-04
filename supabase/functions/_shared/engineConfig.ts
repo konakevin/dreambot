@@ -109,10 +109,15 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
 };
 
 let cached: EngineConfig | null = null;
+let cachedAt = 0;
+// 60s TTL so a dashboard edit to engine_config propagates within a minute even to
+// WARM isolates (the module cache persists per-isolate, not per-invocation — see
+// project_edge_isolate_module_cache_staleness). Mirrors chaosTier/dreamStyles.
+const CONFIG_TTL_MS = 60_000;
 
-/** Load engine_config (cached per invocation). Falls back to defaults on error. */
+/** Load engine_config (cached per isolate, 60s TTL). Falls back to defaults on error. */
 export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfig> {
-  if (cached) return cached;
+  if (cached && Date.now() - cachedAt < CONFIG_TTL_MS) return cached;
   // select('*') (not an explicit column list) so adding a column in a later
   // migration can never 400 this fetch before the migration is applied — a
   // missing column just isn't in `data` and falls back to the default below.
@@ -120,6 +125,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
   if (error || !data) {
     console.warn('[engineConfig] engine_config missing — using defaults:', error?.message);
     cached = DEFAULT_ENGINE_CONFIG;
+    cachedAt = Date.now();
     return cached;
   }
   cached = {
@@ -192,5 +198,6 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     newScenePriceBest: Number(data.new_scene_price_best ?? DEFAULT_ENGINE_CONFIG.newScenePriceBest),
   };
+  cachedAt = Date.now();
   return cached;
 }
