@@ -11,8 +11,8 @@ import { makePool, migrationSql, extract } from './_support/pg';
 const pool: Pool = makePool();
 let db: PoolClient;
 
-const WITH_TZ = '00000000-0000-0000-0000-0000000000t1';
-const NO_TZ = '00000000-0000-0000-0000-0000000000t2';
+const WITH_TZ = '00000000-0000-0000-0000-000000000001';
+const NO_TZ = '00000000-0000-0000-0000-000000000002';
 
 beforeAll(async () => {
   db = await pool.connect();
