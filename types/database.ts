@@ -3422,6 +3422,7 @@ export type Database = {
           pro_subscription_will_renew: boolean;
           pro_trial_started_at: string | null;
           sparkle_balance: number;
+          timezone: string | null;
           username: string;
           username_confirmed: boolean;
         };
@@ -3457,6 +3458,7 @@ export type Database = {
           pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
+          timezone?: string | null;
           username: string;
           username_confirmed?: boolean;
         };
@@ -3492,6 +3494,7 @@ export type Database = {
           pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
+          timezone?: string | null;
           username?: string;
           username_confirmed?: boolean;
         };

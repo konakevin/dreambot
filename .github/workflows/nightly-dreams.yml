@@ -2,7 +2,9 @@ name: Nightly Dream Generation
 
 on:
   schedule:
-    - cron: '0 8 * * *'
+    # HOURLY for timezone-aware delivery: each run enqueues only users for whom it's
+    # their local ~4am (nightlyTimezone.js). Reminders still fire once/day at 08:00 UTC.
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 concurrency:

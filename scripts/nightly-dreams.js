@@ -30,7 +30,12 @@ const {
   shouldSend3DayBasicReminder,
   shouldSendLastNightBasicReminder,
 } = require('./lib/nightlyEligibility');
+const { nightlyDelivery } = require('./lib/nightlyTimezone');
 const { fetchEngineConfig } = require('./lib/engineConfig');
+
+// Reminders stay DAILY (once at this UTC hour) even though the dream enqueue now
+// runs hourly for timezone-aware delivery — see the enqueue + reminder blocks below.
+const REMINDER_UTC_HOUR = 8;
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
@@ -150,8 +155,8 @@ const PAID_REMINDER_TIERS = [
     `   Ceiling: ${cfg.nightlyMaxJobs}${HARD_LIMIT != null ? ` | Hard limit: ${HARD_LIMIT}` : ''} | Dry run: ${DRY_RUN}\n`
   );
 
-  const today = new Date().toISOString().slice(0, 10); // UTC day
-  const now = Date.now();
+  const nowDate = new Date();
+  const now = nowDate.getTime();
 
   // Eligible: real users (no bots — never tunable), Pro or in-trial, gated by the
   // config predicates (onboarding / ai_enabled, both default on).
@@ -163,7 +168,7 @@ const PAID_REMINDER_TIERS = [
       .from('user_recipes')
       .select(
         `user_id,
-       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot, is_admin)`
+       users!inner(last_active_at, pro_subscription, pro_subscription_expires_at, pro_trial_started_at, basic_subscription, basic_subscription_expires_at, is_bot, is_admin, timezone)`
       )
       .eq('users.is_bot', false);
     if (cfg.nightlyRequireOnboarding) q = q.eq('onboarding_completed', true);
@@ -185,46 +190,51 @@ const PAID_REMINDER_TIERS = [
   const basicCount = pool.filter(
     (u) => isBasicActive(u.users, now) && !isProActive(u.users, now, cfg.proTrialDays)
   ).length;
-  // ROBUSTNESS (audit M4): never silently drop eligible subscribers. On the
-  // normal cron path enqueue ALL of them — the queue + worker drain the backlog
-  // (FIFO, idempotent, retry/backoff). If the eligible population outgrows the
-  // configured ceiling, ALERT LOUDLY (so we scale worker throughput) instead of
-  // denying a paid perk to the tail.
-  if (HARD_LIMIT != null && pool.length > HARD_LIMIT) {
+  // Timezone-aware firing: this cron runs HOURLY. Enqueue only users for whom it's
+  // their target LOCAL hour right now — fire during THEIR night, not one global
+  // 08:00 UTC instant. No/invalid timezone falls back to 08:00 UTC. Each user's
+  // dedup_key uses their LOCAL day, so they get exactly one dream per local night.
+  let due = pool
+    .map((u) => ({ u, delivery: nightlyDelivery(u.users.timezone, nowDate) }))
+    .filter((x) => x.delivery.shouldEnqueue);
+
+  // ROBUSTNESS (audit M4): never silently drop eligible subscribers. The ceiling
+  // now gates how many fire THIS HOUR (~1/24 of the daily pool, since each user
+  // fires at their own local ~4am) — a nice side benefit that spreads load. If a
+  // single hour's due-set still outgrows the ceiling, ALERT LOUDLY (scale worker
+  // throughput) rather than deny a paid perk to the tail.
+  if (HARD_LIMIT != null && due.length > HARD_LIMIT) {
     // Manual/QA run explicitly limited via --max-jobs.
     console.warn(
-      `⚠️  --max-jobs=${HARD_LIMIT}: limiting this run to ${HARD_LIMIT} of ${pool.length} eligible.`
+      `⚠️  --max-jobs=${HARD_LIMIT}: limiting this run to ${HARD_LIMIT} of ${due.length} due.`
     );
-    pool = pool.slice(0, HARD_LIMIT);
-  } else if (pool.length > cfg.nightlyMaxJobs) {
+    due = due.slice(0, HARD_LIMIT);
+  } else if (due.length > cfg.nightlyMaxJobs) {
     console.error(
-      `🚨 NIGHTLY CEILING EXCEEDED: ${pool.length} eligible users > nightly_max_jobs=${cfg.nightlyMaxJobs}. ` +
-        `Enqueueing ALL of them (the queue drains the backlog over the day), but the eligible population has ` +
-        `outgrown the ceiling — raise worker throughput (dream-queue-worker MAX_JOBS_PER_TICK) and/or ` +
-        `nightly_max_jobs, and watch dream-queue-monitor for backlog.`
+      `🚨 NIGHTLY CEILING EXCEEDED: ${due.length} users due this hour > nightly_max_jobs=${cfg.nightlyMaxJobs}. ` +
+        `Enqueueing ALL of them (the queue drains the backlog), but a single hour's due-set has outgrown the ` +
+        `ceiling — raise worker throughput (dream-queue-worker MAX_JOBS_PER_TICK) and/or nightly_max_jobs, ` +
+        `and watch dream-queue-monitor for backlog.`
     );
   }
   console.log(
-    `Eligible users: ${eligibleCount} (${proCount} pro/trial + ${basicCount} basic)${eligibleCount !== pool.length ? ` (limited to ${pool.length})` : ' — enqueueing all'}`
+    `Eligible: ${eligibleCount} (${proCount} pro/trial + ${basicCount} basic) | due this hour: ${due.length}`
   );
 
-  if (pool.length === 0) {
-    console.log('No eligible users — nothing to enqueue.');
-    return;
-  }
-
-  // One job per user. dedup_key (per-user-per-day) is the idempotency unit:
-  // its unique index makes a same-day re-run a no-op. We pre-filter against
-  // jobs already enqueued today (the index also backstops a race).
-  const allRows = pool.map((u) => ({
+  // One job per DUE user. dedup_key (per-user-per-LOCAL-day) is the idempotency
+  // unit: its unique index makes a re-run within the same local day a no-op. We
+  // pre-filter against jobs already enqueued (the index also backstops a race).
+  const allRows = due.map(({ u, delivery }) => ({
     source: 'nightly',
     user_id: u.user_id,
     status: 'queued',
     payload: {},
-    dedup_key: `nightly:${u.user_id}:${today}`,
+    dedup_key: `nightly:${u.user_id}:${delivery.dayKey}`,
   }));
 
-  if (DRY_RUN) {
+  if (allRows.length === 0) {
+    console.log('No users due this hour — nothing to enqueue.');
+  } else if (DRY_RUN) {
     allRows.forEach((r) => console.log(`  would enqueue ${r.user_id.slice(0, 8)}...`));
     console.log(`\n(dry run — ${allRows.length} jobs not enqueued)`);
     // Fall through to the reminder passes — they have their own DRY_RUN
@@ -305,15 +315,23 @@ const PAID_REMINDER_TIERS = [
   // (a user who re-trials after a paid lapse gets fresh reminders).
   //
   // Paid Pro users are excluded — they aren't on the trial-expiry path.
-  await sendTrialReminders(sb, pool);
+  //
+  // DAILY, not hourly: the enqueue above runs every hour (timezone-aware), but the
+  // reminders must fire ONCE per day, so gate them to a single UTC hour. `pool` is
+  // the full eligible set (never sliced — only `due` is), so the "last nightly
+  // tonight" coupling reads as "eligible today" (true: they get it at their local
+  // night). DRY_RUN bypasses the gate so a dry run at any hour previews reminders.
+  if (DRY_RUN || nowDate.getUTCHours() === REMINDER_UTC_HOUR) {
+    await sendTrialReminders(sb, pool);
 
-  // Paid subscription reminders (Pro + Basic), one config-driven pass per tier.
-  // Only cancelled-and-winding-down subs (will_renew=false from the
-  // revenuecat-webhook CANCELLATION event) get pinged — auto-renewing users
-  // skip, since they aren't actually losing access at expires_at. Both tiers
-  // share the exact same tier-agnostic copy.
-  for (const tier of PAID_REMINDER_TIERS) {
-    await sendPaidSubscriptionReminders(sb, pool, tier);
+    // Paid subscription reminders (Pro + Basic), one config-driven pass per tier.
+    // Only cancelled-and-winding-down subs (will_renew=false from the
+    // revenuecat-webhook CANCELLATION event) get pinged — auto-renewing users
+    // skip, since they aren't actually losing access at expires_at. Both tiers
+    // share the exact same tier-agnostic copy.
+    for (const tier of PAID_REMINDER_TIERS) {
+      await sendPaidSubscriptionReminders(sb, pool, tier);
+    }
   }
 })();
 

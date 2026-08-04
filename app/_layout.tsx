@@ -25,6 +25,7 @@ import { supabase } from '@/lib/supabase';
 import { asDbResult } from '@/lib/dbResult';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useBadgeSync } from '@/hooks/useBadgeSync';
+import { useSyncTimezone } from '@/hooks/useSyncTimezone';
 import { routeFromNotification } from '@/lib/notificationRouting';
 import {
   toastForNotification,
@@ -175,6 +176,13 @@ function AuthInitializer() {
 function PushRegistrar() {
   usePushNotifications();
   useBadgeSync();
+  return null;
+}
+
+// Keeps users.timezone synced to the device zone so nightly dreams fire during the
+// user's own night (scripts/lib/nightlyTimezone.js).
+function TimezoneSync() {
+  useSyncTimezone();
   return null;
 }
 
@@ -833,6 +841,7 @@ function RootLayout() {
                       <AnalyticsIdentity />
                       <ScreenTracker />
                       <PushRegistrar />
+                      <TimezoneSync />
                       <PendingNotificationReplayer />
                       <RevenueCatInitializer />
                       <RealtimeSubscriber />
