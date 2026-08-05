@@ -2,13 +2,21 @@
  * nightlyTimezone.js — decides, for ONE hourly cron tick, whether a user should
  * get their nightly dream now, and the idempotency day-key to use.
  *
- * The nightly cron runs HOURLY. Each tick, a user is enqueued only when it's the
- * target local hour (default 4am — the dream renders overnight and is waiting with
- * its push by morning) in their stored IANA timezone. DST is handled correctly
- * because we compute the local time from the IANA NAME via Intl, not a fixed offset.
+ * The nightly cron runs HOURLY. A user is enqueued on the first tick at OR AFTER
+ * their target local hour (default 4am — the dream renders overnight and is waiting
+ * with its push by morning), and the per-LOCAL-day dedup_key guarantees exactly one
+ * per day. DST is handled correctly because we compute local time from the IANA
+ * NAME via Intl, not a fixed offset.
  *
- * A user with no / invalid timezone falls back to the legacy behavior: a single
- * fire at 08:00 UTC, keyed on the UTC day — so nobody is ever silently dropped.
+ * WHY ">= target" and not "== target": GitHub Actions' scheduled cron is unreliable
+ * and SKIPS hours under load (it ran 07:42 then 10:40 on 2026-08-05, skipping the
+ * whole 08:00 hour). An exact-hour match means a skipped hour = no dream that day.
+ * ">= target" + per-day dedup means the NEXT run that happens still catches everyone
+ * overdue — robust to skipped/irregular runs. (Root-caused 2026-08-05: nobody got a
+ * nightly because every user was on the UTC-8 fallback and GitHub skipped hour 8.)
+ *
+ * A user with no / invalid timezone falls back to: fire at OR AFTER 08:00 UTC, keyed
+ * on the UTC day — so nobody is ever silently dropped.
  *
  * Pure + deterministic (pass `nowUtc` in) so it's fully unit-testable.
  */
@@ -52,11 +60,12 @@ function nightlyDelivery(timezone, nowUtc, opts = {}) {
 
   const lp = timezone ? localParts(timezone, nowUtc) : null;
   if (lp) {
-    return { shouldEnqueue: lp.hour === targetLocalHour, dayKey: lp.dayKey, mode: 'local' };
+    // At OR AFTER their local target hour; per-local-day dedup makes it once/day.
+    return { shouldEnqueue: lp.hour >= targetLocalHour, dayKey: lp.dayKey, mode: 'local' };
   }
-  // No/invalid timezone → legacy single UTC-hour fire, keyed on the UTC day.
+  // No/invalid timezone → fire at or after 08:00 UTC, keyed on the UTC day.
   return {
-    shouldEnqueue: nowUtc.getUTCHours() === fallbackUtcHour,
+    shouldEnqueue: nowUtc.getUTCHours() >= fallbackUtcHour,
     dayKey: nowUtc.toISOString().slice(0, 10),
     mode: 'fallback',
   };

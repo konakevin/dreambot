@@ -26,10 +26,18 @@ describe('nightlyDelivery — local-hour firing', () => {
     expect(r).toEqual({ shouldEnqueue: true, dayKey: '2026-08-04', mode: 'local' });
   });
 
-  it('does NOT fire for Los Angeles on a non-4am tick', () => {
-    // 2026-08-04 12:00Z → LA 05:00 PDT
-    expect(nightlyDelivery('America/Los_Angeles', at('2026-08-04T12:00:00Z')).shouldEnqueue).toBe(
+  it('does NOT fire BEFORE the local target hour', () => {
+    // 2026-08-04 10:00Z → LA 03:00 PDT (before 4am)
+    expect(nightlyDelivery('America/Los_Angeles', at('2026-08-04T10:00:00Z')).shouldEnqueue).toBe(
       false
+    );
+  });
+
+  it('fires at OR AFTER the target hour — robust to a skipped cron hour', () => {
+    // 12:00Z → LA 05:00 PDT (e.g. the 4am run was skipped by GitHub) STILL fires.
+    // The per-local-day dedup_key stops it from also firing again that day.
+    expect(nightlyDelivery('America/Los_Angeles', at('2026-08-04T12:00:00Z')).shouldEnqueue).toBe(
+      true
     );
   });
 
@@ -49,14 +57,18 @@ describe('nightlyDelivery — local-hour firing', () => {
     expect(r).toEqual({ shouldEnqueue: true, dayKey: '2026-08-05', mode: 'local' });
   });
 
-  it('does not fire the same user twice: only ONE UTC hour per day hits their local 4am', () => {
-    const tz = 'America/New_York';
-    let hits = 0;
-    for (let h = 0; h < 24; h++) {
-      const iso = `2026-08-04T${String(h).padStart(2, '0')}:00:00Z`;
-      if (nightlyDelivery(tz, at(iso)).shouldEnqueue) hits++;
-    }
-    expect(hits).toBe(1);
+  it('fires across a contiguous window from the target hour (dedup, not this fn, makes it once/day)', () => {
+    // Once-per-day is enforced by the per-local-day dedup_key at the DB layer, NOT
+    // by this pure function — which must return true on EVERY tick at/after target
+    // so a skipped early hour is still caught. So: false before local 4am, true from
+    // 4am onward, and every "true" that day shares the same dayKey (→ one job).
+    const tz = 'America/New_York'; // EDT = UTC-4
+    expect(nightlyDelivery(tz, at('2026-08-04T07:00:00Z')).shouldEnqueue).toBe(false); // NY 03:00
+    const a = nightlyDelivery(tz, at('2026-08-04T08:00:00Z')); // NY 04:00
+    const b = nightlyDelivery(tz, at('2026-08-04T13:00:00Z')); // NY 09:00 (later same day)
+    expect(a.shouldEnqueue).toBe(true);
+    expect(b.shouldEnqueue).toBe(true);
+    expect(a.dayKey).toBe(b.dayKey); // same local day → dedup collapses to one job
   });
 
   it('uses the target hour override', () => {
@@ -67,13 +79,16 @@ describe('nightlyDelivery — local-hour firing', () => {
 });
 
 describe('nightlyDelivery — fallback (no/invalid timezone)', () => {
-  it('null timezone fires only at 08:00 UTC, keyed on the UTC day', () => {
+  it('null timezone fires at OR AFTER 08:00 UTC, keyed on the UTC day', () => {
     expect(nightlyDelivery(null, at('2026-08-04T08:00:00Z'))).toEqual({
       shouldEnqueue: true,
       dayKey: '2026-08-04',
       mode: 'fallback',
     });
+    // 07:00Z is before the fallback hour → no; 10:40Z (a run AFTER a skipped 08:00
+    // hour, the exact 2026-08-05 failure) still catches everyone → yes.
     expect(nightlyDelivery(null, at('2026-08-04T07:00:00Z')).shouldEnqueue).toBe(false);
+    expect(nightlyDelivery(null, at('2026-08-04T10:40:00Z')).shouldEnqueue).toBe(true);
   });
 
   it('an invalid IANA name falls back (never throws, never drops the user)', () => {
