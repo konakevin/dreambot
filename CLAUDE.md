@@ -90,7 +90,7 @@ cast into one of their places. Free (no charge).
 - **Pro-state is ONE rule across three runtimes** (keep in sync): `lib/proStatus.ts` (client),
   `scripts/lib/nightlyEligibility.js` (cron gate), `is_pro_active()` Postgres fn (Edge). Pro =
   paid+unexpired OR within trial; **trial length = `engine_config.pro_trial_days`** (default 14) — one DB
-  row, read by all three. Change the trial *logic* in all three together.
+  row, read by all three. Change the trial _logic_ in all three together.
 - **DB-driven config** (`engine_config` singleton + config tables) tunes generation/economy/UX from the
   dashboard with NO App Store build. New constant that shapes generation/economy/UX copy → ask "should
   this be an `engine_config` field?" (default yes). Catalog: `ENGINEERING_NOTES.md` / `ADMIN_CONFIG_PLAN.md`.
@@ -115,7 +115,7 @@ a `bot_schedules` row) — workflow + promotion checklist in `ALPHABOT.md`.**
 > bar, the 8 components of a memorable scene, per-bot iteration logs, the failure-mode catalog). Prior
 > session context is NOT a substitute. **Update the playbook with every new lesson the moment you learn
 > it.** When Kevin says "run an HTML matrix on `<bot>`", just run `node scripts/qa-bot-model-matrix.js
-> --bot <name>` (defaults: 1×/(path×model), `--post` on).
+--bot <name>` (defaults: 1×/(path×model), `--post` on).
 
 ---
 
@@ -191,7 +191,7 @@ for the public feed + serves deep-link share targets.**
 ## Hard rules (no exceptions)
 
 - **NEVER unscoped deletes on `bot_seeds` / `nightly_seeds`.** Scope by category prefix; `SELECT category,
-  count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
+count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
 - **NEVER `git add -A` / `git add .`** — explicit paths only (shared working tree).
 - **NEVER edit another agent's WIP files** — only your task's scope.
 - **NEVER use `as Function` / `as any` / `as unknown as <type>`** — regenerate types.
@@ -216,10 +216,18 @@ for the public feed + serves deep-link share targets.**
   update it with every new lesson.
 - **AUDIT bot mediums + prefixes for cruft every ~3 months** (negation cascades, camera-brand stuffing,
   travel-magazine register, stacked intensifiers): medium `flux_fragment` ≤ 250 chars, path prefix ≤ 120.
+- **A monitor/alarm threshold that depends on a tunable config MUST DERIVE from that config — never a
+  hardcoded value — AND a CI test must lock that on-spec behavior never alarms.** (2026-08-05: the bot
+  health monitor's fixed 18h stale threshold false-alarmed the instant fleet cadence went 3×→1×/day,
+  because a bot posting fine every ~24h now exceeded 18h. Fixed: threshold derives from `posts_per_day`
+  via `scripts/lib/botCadence.js`; the invariant "threshold > posting interval for every cadence" is
+  locked by `__tests__/lib/botCadence.test.ts` — which fails in CI if anyone reintroduces a fixed
+  threshold. So changing bot cadence "magically" rescales the monitor.) Apply this pattern to any new
+  config-coupled alarm.
 - **`users` + `uploads` use COLUMN-LEVEL grants (migration 278) — a NEW column is silently
   client-invisible/un-writable until you grant it.** Adding a column to `users` → also `GRANT SELECT
-  (col) ON public.users TO anon, authenticated;`; to `uploads` → also `GRANT UPDATE (col) ON
-  public.uploads TO authenticated;` in the same migration, or the client read/update of it fails. Withheld
+(col) ON public.users TO anon, authenticated;`; to `uploads` → also `GRANT UPDATE (col) ON
+public.uploads TO authenticated;` in the same migration, or the client read/update of it fails. Withheld
   on purpose: `users.email` (PII) + the 6 `uploads` engagement counters (anti-feed-gaming) — don't re-grant.
 - **EVERY new user-text input MUST pass through `_shared/sanitizeUserText.ts`** (NFKC + control/zero-width/
   bidi strip + prompt-injection neutralization + length cap) before it reaches an LLM/Flux prompt or
@@ -260,7 +268,7 @@ for the public feed + serves deep-link share targets.**
   cheap dream + asserts it completes end-to-end, self-cleans; would catch a queue/`waitUntil` outage
   within the hour). **Diagnose a failed dream:** every render stamps stage breadcrumbs
   (`dream_queue.current_stage`, migration 272) + an `ai_generation_log` row; `node scripts/check-forensics.js
-  [userId]` (or the `dream_forensics`/`dream_forensics_recent` RPCs) stitches a failure to its exact
+[userId]` (or the `dream_forensics`/`dream_forensics_recent` RPCs) stitches a failure to its exact
   stage/model/error. Edge errors → Sentry (`_shared/sentry.ts`, gated on the `SENTRY_EDGE_DSN` secret).
   `ai_generation_log` + terminal queue rows auto-prune to 30 days (pg_cron, migration 274). Client
   observability: Sentry + PostHog (`!__DEV__`-gated; PostHog MCP in `.mcp.json`, project 442133).

@@ -16,10 +16,11 @@
  *     (credit exhaustion, Replicate down, dispatcher cron not firing)
  *     before per-bot timers slowly age into auto-deactivation.
  *
- *   • per-bot-stale — any individual ACTIVE bot's last_posted_at is
- *     older than STALE_HOURS (default 18). Catches a single-bot config
- *     bug that's silently failing without tripping the 5-failure
- *     deactivation threshold.
+ *   • per-bot-stale — any individual ACTIVE bot's last_posted_at is older
+ *     than its CADENCE-AWARE threshold (24/posts_per_day + DISPATCHER_GRACE_HOURS,
+ *     via scripts/lib/botCadence.js — locked by __tests__/lib/botCadence.test.ts).
+ *     Catches a single-bot config bug without false-alarming when the fleet's
+ *     posts_per_day is changed. Never a fixed hour (see the 2026-08-05 incident).
  *
  *   • deactivated-spike — total inactive bots ≥ DEACTIVATED_ALARM
  *     (default 8). Catches a wave of auto-deactivations from a single
@@ -35,11 +36,12 @@
  *
  * Usage: SUPABASE_SERVICE_ROLE_KEY=xxx node scripts/check-bot-health.js
  *
- * Tunables (env): INACTIVE_HOURS, STALE_HOURS, DEACTIVATED_ALARM,
+ * Tunables (env): INACTIVE_HOURS, DISPATCHER_GRACE_HOURS, DEACTIVATED_ALARM,
  *                 RECENT_FAILURE_HOURS.
  */
 
 const { createClient } = require('@supabase/supabase-js');
+const { staleThresholdHours } = require('./lib/botCadence');
 
 function readEnvFile() {
   try {
@@ -61,7 +63,13 @@ const SUPABASE_URL = getKey('SUPABASE_URL') || 'https://jimftynwrinwenonjrlj.sup
 const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 
 const INACTIVE_HOURS = parseInt(getKey('INACTIVE_HOURS') || '12', 10);
-const STALE_HOURS = parseInt(getKey('STALE_HOURS') || '18', 10);
+// Per-bot staleness is CADENCE-AWARE: a bot posting N×/day is stale only once it
+// exceeds its OWN interval (24 / posts_per_day hours) by a grace margin that absorbs
+// dispatcher jitter (the */15 dispatcher schedule is throttled by GitHub to ~every
+// 2h, with gaps up to ~6h). So the monitor auto-scales when posts_per_day changes —
+// no more false alarms after a cadence change (2026-08-05: the fixed 18h tripped on
+// the new 1×/day cadence even though every bot was posting fine).
+const DISPATCHER_GRACE_HOURS = parseInt(getKey('DISPATCHER_GRACE_HOURS') || '8', 10);
 const DEACTIVATED_ALARM = parseInt(getKey('DEACTIVATED_ALARM') || '8', 10);
 const RECENT_FAILURE_HOURS = parseInt(getKey('RECENT_FAILURE_HOURS') || '24', 10);
 // ANY auto-deactivation is worth an alarm — the old deactivated-spike (≥8) had
@@ -91,7 +99,7 @@ const CREDIT_PATTERNS = [
   const { data: schedules, error } = await sb
     .from('bot_schedules')
     .select(
-      'bot_name, active, last_posted_at, consecutive_failures, last_failure_at, last_failure_reason, notes'
+      'bot_name, active, posts_per_day, last_posted_at, consecutive_failures, last_failure_at, last_failure_reason, notes'
     )
     .order('bot_name');
 
@@ -101,21 +109,18 @@ const CREDIT_PATTERNS = [
   }
 
   const now = Date.now();
-  const inactiveCutoff = now - INACTIVE_HOURS * 3600_000;
-  const staleCutoff = now - STALE_HOURS * 3600_000;
   const recentFailureCutoff = now - RECENT_FAILURE_HOURS * 3600_000;
 
   const active = schedules.filter((b) => b.active);
   const inactive = schedules.filter((b) => !b.active);
 
   const lastPostAge = (b) => (b.last_posted_at ? now - new Date(b.last_posted_at).getTime() : null);
-  const noRecentPost = (b) => {
-    const age = lastPostAge(b);
-    return age === null || age > staleCutoff - now + STALE_HOURS * 3600_000; // == age > STALE
-  };
+  // Cadence-aware: each bot's stale threshold = its own interval + dispatcher grace,
+  // derived from posts_per_day via the shared botCadence source (never a fixed hour).
+  const staleHoursFor = (b) => staleThresholdHours(b.posts_per_day, DISPATCHER_GRACE_HOURS);
   const cleanNoRecentPost = (b) => {
     const age = lastPostAge(b);
-    return age === null ? true : age > STALE_HOURS * 3600_000;
+    return age === null ? true : age > staleHoursFor(b) * 3600_000;
   };
   const activeStale = active.filter(cleanNoRecentPost);
 
@@ -158,7 +163,9 @@ const CREDIT_PATTERNS = [
   console.log(
     `Active with last_posted_at within ${INACTIVE_HOURS}h: ${activeWithRecentPost.length}`
   );
-  console.log(`Active stale (last_posted > ${STALE_HOURS}h): ${activeStale.length}`);
+  console.log(
+    `Active stale (past cadence threshold: 24/posts_per_day + ${DISPATCHER_GRACE_HOURS}h grace): ${activeStale.length}`
+  );
   console.log(
     `Bots with credit-exhaustion failure in last ${RECENT_FAILURE_HOURS}h: ${creditExhausted.length}`
   );
@@ -174,7 +181,12 @@ const CREDIT_PATTERNS = [
 
   if (activeStale.length > 0) {
     console.error(
-      `::error::${activeStale.length} active bot(s) stale (last_posted > ${STALE_HOURS}h): ${activeStale.map((b) => b.bot_name).join(', ')}`
+      `::error::${activeStale.length} active bot(s) past their cadence-based stale threshold: ${activeStale
+        .map((b) => {
+          const age = lastPostAge(b);
+          return `${b.bot_name} (${age === null ? 'never' : (age / 3.6e6).toFixed(1) + 'h'} > ${staleHoursFor(b).toFixed(0)}h @ ${b.posts_per_day}×/day)`;
+        })
+        .join(', ')}`
     );
     alarm = true;
   }
