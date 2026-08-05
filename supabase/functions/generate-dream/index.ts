@@ -1779,6 +1779,7 @@ Output ONLY the prompt.`;
       // outcome 'cascade' → throw → the outer catch refunds the sparkle.
       const s0 = faceSwapSources[0];
       const s1 = faceSwapSources[1];
+      const selfGender = genderFromLock(faceSwapSources.find((s) => s.role === 'self')?.genderLock);
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -1800,8 +1801,54 @@ Output ONLY the prompt.`;
             const r = await classifyDualGenders(target, REPLICATE_TOKEN);
             return { left: r.left, right: r.right };
           },
-          singleSwap: (source, target) =>
-            faceSwap(source, target, REPLICATE_TOKEN, supabase, userId),
+          singleSwap: async (source, target) => {
+            // GENDER-SAFE degrade + SOLO re-render (#1 + #3 — sunnysteph 2026-08-05
+            // "face on the man"): the single-swap model is FACE-BLIND and pastes
+            // self onto the most-prominent face, which on a couple render is the
+            // partner (wrong gender). Guard it: probe the render (Haiku for stylized
+            // mediums, where genderage misreads painted faces) and paste self ONLY
+            // when it lands on a same-gender face.
+            // #3: on the couple `target` the guard REFUSES (the partner is a
+            // wrong-gender face) — so instead of cascading straight to a refund, we
+            // give the guard a real SOLO re-render (one gender-matching person alone)
+            // and let it place self on THAT clean body. Self lands on a matching-
+            // gender figure rather than "whichever couple-face scored higher." If
+            // budget's gone (guard's recover floor) or it still isn't safe, null →
+            // cascade → refund.
+            const soloNoun =
+              selfGender === 'female' ? 'woman' : selfGender === 'male' ? 'man' : 'person';
+            const guard = await ensureSoloSwapTarget(
+              target,
+              {
+                castGender: selfGender,
+                replicateToken: REPLICATE_TOKEN,
+                rerender: async () => {
+                  const rr = await generateImage(
+                    effectiveMode,
+                    `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+                    effectiveInputImage,
+                    {
+                      replicateToken: REPLICATE_TOKEN,
+                      openaiKey: OPENAI_KEY,
+                      geminiKey: GEMINI_KEY,
+                    },
+                    pickedModel,
+                    'png'
+                  );
+                  return { url: rr.url, predictionId: rr.predictionId };
+                },
+                log: (m) => console.log(`[generate-dream] degrade-guard: ${m}`),
+              },
+              { maxRerenders: 1, mediumKey: resolvedMediumKey, deadlineMs: t0 + 140_000 }
+            );
+            fallbackReasons.push(...guard.reasons.map((r) => `degrade_${r}`));
+            if (!guard.safe) return null;
+            const swapped = await faceSwap(source, guard.url, REPLICATE_TOKEN, supabase, userId);
+            // predictionId of the SOLO re-render (#3) rides back so the pipeline
+            // returns it as result.predictionId → the caller stamps the persisted
+            // render, not the abandoned couple render.
+            return { url: swapped, predictionId: guard.predictionId };
+          },
           rerender: async (attempt: number) => {
             const cg = await generateImage(
               effectiveMode,

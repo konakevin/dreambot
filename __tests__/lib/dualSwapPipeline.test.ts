@@ -13,7 +13,8 @@ const okRender = { url: 'RERENDER.jpg', predictionId: 'p2' };
 const makeDeps = (over: Partial<Record<string, jest.Mock>> = {}) => ({
   dispatchDual:
     over.dispatchDual ?? jest.fn().mockResolvedValue({ swappedUrl: 'SWAP.jpg', faceCount: 2 }),
-  singleSwap: over.singleSwap ?? jest.fn().mockResolvedValue('SINGLE.jpg'),
+  singleSwap:
+    over.singleSwap ?? jest.fn().mockResolvedValue({ url: 'SINGLE.jpg', predictionId: 'solo-pid' }),
   rerender: over.rerender ?? jest.fn().mockResolvedValue(okRender),
   selfSource: 'self.jpg',
 });
@@ -62,6 +63,10 @@ it('NON-STRICT + never a clean split → single self-swap', async () => {
   expect(r.outcome).toBe('single');
   expect(r.url).toBe('SINGLE.jpg');
   expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
+  // #3: singleSwap's own predictionId (its SOLO re-render) rides back as the
+  // outcome's predictionId — forensics point at the render we actually persisted,
+  // not the dual loop's abandoned couple re-render.
+  expect(r.predictionId).toBe('solo-pid');
 });
 
 it('STRICT + degradeToSingle + never a clean split → single self-swap (Create degrades, no refund)', async () => {
@@ -92,6 +97,21 @@ it('STRICT + degradeToSingle + single swap ALSO fails → cascade (never ships n
   });
   expect(r.outcome).toBe('cascade');
   expect(r.reasons.some((x) => x.startsWith('single_fallback_failed'))).toBe(true);
+});
+
+it('NON-STRICT + dual fails + guard REFUSES self (wrong-gender target) → cascade, never pastes on the wrong body', async () => {
+  // 2026-08-05 (sunnysteph "face on the man"): the degrade single swap is now
+  // gender-guarded and returns null when self cannot land on a same-gender face.
+  // The pipeline MUST cascade (ship the unswapped scene) rather than paste self
+  // onto the wrong-gender body.
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const singleSwap = jest.fn().mockResolvedValue(null); // guard refused: no safe same-gender face
+  const deps = makeDeps({ dispatchDual, singleSwap });
+  const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 0 });
+  expect(r.outcome).toBe('cascade');
+  expect(r.reasons).toContain('dual_degrade_single_refused_gender');
+  expect(r.reasons).not.toContain('single_fallback_failed'); // a refusal is not an error
+  expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
 });
 
 it('engine THROWS → retry via re-render → recovers', async () => {
@@ -248,77 +268,84 @@ describe('identity enforcement (Stage 8c)', () => {
   );
 });
 
-// ── R2 — Haiku gender-confirm fallback ──────────────────────────────────────
+// ── #2 — PROACTIVE Haiku gender routing (2026-08-05, sunnysteph) ─────────────
+// Haiku reads the rendered faces' genders BEFORE the swap and, when confident,
+// hands the engine a genderOverride so each source lands on its matching-gender
+// face — instead of trusting the engine's genderage, which misreads painterly
+// faces. Ambiguous/errored reads pass NO override (engine unchanged).
 
-describe('gender-confirm fallback (R2)', () => {
-  it('gender_unconfirmed reject + Haiku confirms one-of-each → re-dispatch with override, same target', async () => {
-    const dispatchDual = jest
-      .fn()
-      .mockResolvedValueOnce({
-        swappedUrl: null,
-        faceCount: 2,
-        rejectReason: 'gender_unconfirmed:male/male',
-      })
-      .mockResolvedValueOnce({ swappedUrl: 'OVERRIDE.jpg', faceCount: 2 });
+describe('proactive Haiku gender routing (#2)', () => {
+  it('confident one-of-each → dispatch WITH the override, first try succeeds (no re-render)', async () => {
+    const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: 'OK.jpg', faceCount: 2 });
     const confirmGenders = jest.fn().mockResolvedValue({ left: 'male', right: 'female' });
     const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
     const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
     expect(r.outcome).toBe('dual');
-    expect(r.url).toBe('OVERRIDE.jpg');
+    expect(r.url).toBe('OK.jpg');
     expect(confirmGenders).toHaveBeenCalledWith('render.jpg');
-    expect(dispatchDual).toHaveBeenNthCalledWith(2, 'render.jpg', {
-      left: 'male',
-      right: 'female',
-    });
-    expect(deps.rerender).not.toHaveBeenCalled(); // no re-render burned
-    expect(r.reasons).toContain('gender_confirm_haiku:male/female');
+    expect(dispatchDual).toHaveBeenCalledWith('render.jpg', { left: 'male', right: 'female' });
+    expect(deps.rerender).not.toHaveBeenCalled();
+    expect(r.reasons).toContain('gender_haiku:male/female');
   });
 
-  it('Haiku reads same-gender → unresolved, falls through to the re-render ladder', async () => {
-    const dispatchDual = jest
-      .fn()
-      .mockResolvedValueOnce({
-        swappedUrl: null,
-        faceCount: 2,
-        rejectReason: 'gender_unconfirmed:male/male',
-      })
-      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
+  it('ambiguous read (same gender) → NO override, engine dispatched as-is', async () => {
+    const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: 'OK.jpg', faceCount: 2 });
     const confirmGenders = jest.fn().mockResolvedValue({ left: 'male', right: 'male' });
     const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
     const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
-    expect(r.url).toBe('FRESH.jpg');
-    expect(deps.rerender).toHaveBeenCalledTimes(1);
-    expect(r.reasons).toContain('gender_confirm_haiku_unresolved');
+    expect(r.outcome).toBe('dual');
+    expect(dispatchDual).toHaveBeenCalledWith('render.jpg'); // single arg — no override
+    expect(r.reasons).toContain('gender_haiku_unresolved');
   });
 
-  it('confirm throws → reason logged, ladder continues (fail-open)', async () => {
-    const dispatchDual = jest
-      .fn()
-      .mockResolvedValueOnce({
-        swappedUrl: null,
-        faceCount: 2,
-        rejectReason: 'gender_unconfirmed:female/female',
-      })
-      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
+  it('null read → NO override, dispatch as-is', async () => {
+    const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: 'OK.jpg', faceCount: 2 });
+    const confirmGenders = jest.fn().mockResolvedValue(null);
+    const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(dispatchDual).toHaveBeenCalledWith('render.jpg');
+    expect(r.reasons).toContain('gender_haiku_unresolved');
+  });
+
+  it('confirm THROWS → NO override, fail-open, dispatch proceeds', async () => {
+    const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: 'OK.jpg', faceCount: 2 });
     const confirmGenders = jest.fn().mockRejectedValue(new Error('vision down'));
     const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
     const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
-    expect(r.url).toBe('FRESH.jpg');
-    expect(r.reasons).toContain('gender_confirm_haiku_error');
+    expect(r.outcome).toBe('dual');
+    expect(dispatchDual).toHaveBeenCalledWith('render.jpg'); // no override
+    expect(r.reasons).toContain('gender_haiku_error');
   });
 
-  it('no_split rejects do NOT trigger the confirm (wrong failure class)', async () => {
+  it('re-read per attempt: a re-render gets a FRESH Haiku read + override', async () => {
     const dispatchDual = jest
       .fn()
-      .mockResolvedValueOnce({
-        swappedUrl: null,
-        faceCount: 1,
-        rejectReason: 'no_split:lt2_faces',
-      })
-      .mockResolvedValueOnce({ swappedUrl: 'FRESH.jpg', faceCount: 2 });
-    const confirmGenders = jest.fn();
+      .mockResolvedValueOnce({ swappedUrl: null, faceCount: 1 }) // attempt 0: no clean split
+      .mockResolvedValueOnce({ swappedUrl: 'OK2.jpg', faceCount: 2 }); // attempt 1: clean
+    const confirmGenders = jest
+      .fn()
+      .mockResolvedValueOnce({ left: 'male', right: 'female' }) // read of original
+      .mockResolvedValueOnce({ left: 'female', right: 'male' }); // read of the re-render
     const deps = { ...makeDeps({ dispatchDual }), confirmGenders };
-    await genderSafeDualSwap('render.jpg', deps, { strict: false });
-    expect(confirmGenders).not.toHaveBeenCalled();
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.outcome).toBe('dual');
+    expect(confirmGenders).toHaveBeenCalledTimes(2); // one per attempt
+    expect(dispatchDual).toHaveBeenNthCalledWith(1, 'render.jpg', {
+      left: 'male',
+      right: 'female',
+    });
+    expect(dispatchDual).toHaveBeenNthCalledWith(2, 'RERENDER.jpg', {
+      left: 'female',
+      right: 'male',
+    });
+  });
+
+  it('no confirmGenders dep → unchanged single-arg dispatch (back-compat)', async () => {
+    const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: 'OK.jpg', faceCount: 2 });
+    const deps = makeDeps({ dispatchDual }); // no confirmGenders
+    const r = await genderSafeDualSwap('render.jpg', deps, { strict: false });
+    expect(r.outcome).toBe('dual');
+    expect(dispatchDual).toHaveBeenCalledWith('render.jpg');
+    expect(r.reasons.some((x) => x.startsWith('gender_haiku'))).toBe(false);
   });
 });

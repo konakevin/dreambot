@@ -8,10 +8,14 @@
  * in-process face detection (YuNet) + gender (genderage) and splits the render at
  * the GAP BETWEEN the two detected faces, putting each cast member on their
  * matching-gender face — correct by CONSTRUCTION (both-on-one and wrong-gender are
- * impossible). So the orchestrator no longer needs the old Haiku route/verify
- * dance; it just:
+ * impossible). So the orchestrator dropped the old Haiku route/verify dance and
+ * just leans on the engine — EXCEPT for one proactive guard: the engine's
+ * in-process genderage misreads painterly/oil-on-canvas faces, so #2 (2026-08-05,
+ * sunnysteph) reads the rendered genders with Haiku FIRST and hands the engine a
+ * genderOverride when it's a confident one-of-each. Flow:
  *
- *   1. Dual-swap via the engine.
+ *   0. (Optional) Haiku pre-reads the two faces' genders → genderOverride.
+ *   1. Dual-swap via the engine (routed by the override when present).
  *   2. If the engine returns a swapped url (it found a clean 2-face split) → DONE.
  *   3. If it returns null (no clean 2-face split — clustered / <2 faces / a
  *      same-gender collision on a mixed cast) → RE-RENDER the couple and retry,
@@ -43,8 +47,19 @@ export interface DualSwapDeps {
     rejectReason?: string | null;
     identity?: { left: number | null; right: number | null; ms: number } | null;
   }>;
-  /** Single-swap one source onto the dominant face (the gender-safe degrade). */
-  singleSwap: (source: string, target: string) => Promise<string>;
+  /**
+   * Place SELF onto the render as a GENDER-SAFE single swap (the degrade path).
+   * MUST be gender-safe: return the swapped url only when self lands on a
+   * same-gender face; return `null` when self can't be placed safely (e.g. a
+   * couple render whose only readable face is the wrong gender), so the pipeline
+   * CASCADES rather than pasting self on the wrong body. Wire this through the
+   * solo swap guard (ensureSoloSwapTarget). 2026-08-05: closes the raw
+   * face-blind single-swap hole that put sunnysteph's face on the man.
+   */
+  singleSwap: (
+    source: string,
+    target: string
+  ) => Promise<{ url: string; predictionId?: string | null } | null>;
   /** Produce a FRESH render of the same couple scene (different layout/seed).
    *  Stage 5a (2026-07-08): receives the attempt number so callers can MUTATE
    *  the prompt on the final retry (prepend face-separation framing) instead
@@ -52,11 +67,14 @@ export interface DualSwapDeps {
   rerender: (attempt: number) => Promise<{ url: string; predictionId?: string }>;
   /** The user's own face URL — the gender-safe source for a single-swap degrade. */
   selfSource: string;
-  /** R2 (2026-07-09): one Haiku vision read of the RENDERED faces' genders,
-   *  consulted only after a gender_unconfirmed reject — genderage misreads
-   *  athletes/wet hair/mid-spin where Haiku reads fine (5/11 depth-QA rejects).
-   *  Returning distinct left/right genders re-dispatches the SAME target with
-   *  the override; anything else falls through to the re-render ladder. */
+  /** #2 (2026-08-05, sunnysteph): one Haiku vision read of the RENDERED faces'
+   *  genders, consulted PROACTIVELY before every dispatch — the engine's
+   *  in-process genderage misreads painterly/oil-on-canvas faces where Haiku
+   *  reads reliably. A CONFIDENT one-of-each read becomes the genderOverride so
+   *  each source lands on its matching-gender face; ambiguous/errored → no
+   *  override (the engine uses its own genderage, unchanged). Read once per
+   *  attempt (re-reads a fresh re-render). Optional: a caller that omits it keeps
+   *  the exact single-arg dispatch. */
   confirmGenders?: (target: string) => Promise<{
     left: 'male' | 'female' | null;
     right: 'male' | 'female' | null;
@@ -171,6 +189,35 @@ export async function genderSafeDualSwap(
       }
     }
 
+    // #2 (2026-08-05, sunnysteph): PROACTIVELY read the rendered faces' genders
+    // with Haiku and route the engine by it — the engine's in-process genderage
+    // misreads painterly faces (oil-on-canvas, the exact mis-route we're fixing),
+    // where Haiku reads reliably. A CONFIDENT one-of-each becomes the
+    // genderOverride so each source lands on its matching-gender face; anything
+    // ambiguous / errored → no override, the engine uses its own genderage exactly
+    // as before (never a regression on the reads it already gets right). Safe by
+    // construction: even a WRONG override yields a low-identity swap → caught by
+    // the identity gate below (re-render / degrade), so it can never SHIP a
+    // wrong-gender dual. One Haiku per attempt (Kevin OK'd the cost 2026-08-05).
+    // Replaces the old reject-only confirm (which only fired after the engine
+    // already produced a swap or a gender_unconfirmed reject — too late for a
+    // confidently-wrong genderage read that still returned a swappedUrl).
+    let override: { left: 'male' | 'female'; right: 'male' | 'female' } | null = null;
+    if (deps.confirmGenders) {
+      try {
+        const read = await deps.confirmGenders(target);
+        if (read && read.left && read.right && read.left !== read.right) {
+          override = { left: read.left, right: read.right };
+          reasons.push(`gender_haiku:${read.left}/${read.right}`);
+        } else {
+          reasons.push('gender_haiku_unresolved');
+        }
+      } catch (e) {
+        reasons.push('gender_haiku_error');
+        log(`gender pre-read failed: ${(e as Error).message}`);
+      }
+    }
+
     let res: {
       swappedUrl: string | null;
       faceCount: number;
@@ -180,31 +227,9 @@ export async function genderSafeDualSwap(
       identity?: { left: number | null; right: number | null; ms: number } | null;
     };
     try {
-      res = await deps.dispatchDual(target);
-      // R2: a gender_unconfirmed reject means genderage couldn't read one-of-each
-      // on the rendered faces. Before burning a re-render, ask Haiku to read the
-      // SAME render once; a confirmed one-of-each re-dispatches with the override
-      // (costs ~$0.002 + one swap, saves a 30-60s re-render). Any other read —
-      // null, same-gender, unreadable — falls through to the ladder as before.
-      if (
-        !res.swappedUrl &&
-        res.rejectReason?.startsWith('gender_unconfirmed') &&
-        deps.confirmGenders
-      ) {
-        try {
-          const read = await deps.confirmGenders(target);
-          if (read && read.left && read.right && read.left !== read.right) {
-            reasons.push(`gender_confirm_haiku:${read.left}/${read.right}`);
-            log(`haiku confirmed genders ${read.left}/${read.right} — re-dispatch with override`);
-            res = await deps.dispatchDual(target, { left: read.left, right: read.right });
-          } else {
-            reasons.push('gender_confirm_haiku_unresolved');
-          }
-        } catch (e) {
-          reasons.push('gender_confirm_haiku_error');
-          log(`gender confirm failed: ${(e as Error).message}`);
-        }
-      }
+      // Pass the override only when confident, so a no-confirmGenders caller (and
+      // the jest suite) keeps the exact single-arg dispatch it had before.
+      res = override ? await deps.dispatchDual(target, override) : await deps.dispatchDual(target);
     } catch (e) {
       // Engine / swap error → retry within budget (a fresh render usually clears it).
       log(`dual swap error: ${(e as Error).message}`);
@@ -280,8 +305,29 @@ export async function genderSafeDualSwap(
   if (canDegradeSingle) {
     reasons.push('dual_degrade_single');
     try {
+      // GENDER-SAFE degrade: singleSwap places self ONLY on a gender-matching
+      // face (via the solo swap guard). A `null` return means the guard REFUSED
+      // — the render has no safe same-gender face for self (e.g. a couple render
+      // where self would land on the wrong-gender partner). We NEVER paste on the
+      // wrong body: cascade instead (nightly ships the unswapped scene). Closes
+      // the 2026-08-05 "sunnysteph's face on the man" hole, where this degrade
+      // used a raw, face-blind single swap. (Kevin: code-red.)
       const single = await deps.singleSwap(deps.selfSource, target);
-      return { url: single, outcome: 'single', faceCount, predictionId, reasons };
+      if (single) {
+        // #3: singleSwap may have re-rendered a fresh SOLO scene and swapped self
+        // onto it — so the returned predictionId (when present) is the one that
+        // matches the delivered url. Prefer it over the dual-loop's tracked id so
+        // forensics point at the render we actually persisted.
+        return {
+          url: single.url,
+          outcome: 'single',
+          faceCount,
+          predictionId: single.predictionId ?? predictionId,
+          reasons,
+        };
+      }
+      reasons.push('dual_degrade_single_refused_gender');
+      // fall through to cascade — a wrong-gender single is worse than no swap.
     } catch (e) {
       reasons.push(`single_fallback_failed:${(e as Error).message.slice(0, 80)}`);
       // fall through to cascade
