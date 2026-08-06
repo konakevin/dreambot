@@ -13,10 +13,11 @@ Background + design: `TRIAL_FARMING_PREVENTION.md`. Memory: `project_trial_farmi
 > grant), so STILL zero user impact right now. Only the native build + App Store
 > metadata remain.
 
-**Progress: 13 / 20 complete.** Server gate armed + credential-verified. Remaining:
-the native build (so clients send a token), the App Store privacy label + privacy-
-policy line, and on-device verification. Nothing can block a real user until the
-build ships, and even then it's fail-open.
+**Progress: 15 / 20 complete.** Server gate armed + credential-verified, privacy
+manifest + privacy-policy done. **Only TWO things left before it enforces:** (1) the
+native EAS build [K], and (2) the App Store Connect App Privacy label toggle [K].
+Then on-device verification. Nothing can block a real user until the build ships,
+and even then it's fail-open.
 
 ---
 
@@ -44,8 +45,8 @@ build ships, and even then it's fail-open.
 ## Phase 4 — Privacy & App Store metadata  **[K]**  (drafts in the Appendix)
 - [ ] App Store Connect → App Privacy: add **Identifiers → Device ID**, purpose **App Functionality** (fraud prevention), **not** linked to identity, **not** used for tracking. (Editable without a new binary.)
 - [x] **[C]** `NSPrivacyCollectedDataTypeDeviceID` entry added via `app.config.js` `ios.privacyManifests` (Expo writes `PrivacyInfo.xcprivacy` on prebuild — ships automatically in the next build)
-- [ ] Add the fraud-prevention sentence to `dreambotapp.com/privacy` (sibling repo `dreambot-web`)
-- [ ] Confirm: NOT declared as tracking, NO ATT prompt added, NO third-party sharing (the exchange is with Apple)
+- [x] **[C]** Fraud-prevention section added to `dreambotapp.com/privacy` (dreambot-web `bfde818`, Vercel auto-deploys)
+- [x] **[C]** Confirmed: NOT declared as tracking, NO ATT prompt added, NO third-party sharing (exchange is with Apple; `FacebookAdvertiserIDCollectionEnabled:false` keeps Tracking=No truthful)
 
 ## Phase 5 — Activation & verification  **[C]** + **[K]**
 - [ ] With secrets + a real build live, run one real onboarding on a **fresh** device → confirm log `first-dream trial gate … reason=fresh_device (grantTrial=true)` and the bit gets set
