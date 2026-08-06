@@ -13,10 +13,10 @@ Background + design: `TRIAL_FARMING_PREVENTION.md`. Memory: `project_trial_farmi
 > grant), so STILL zero user impact right now. Only the native build + App Store
 > metadata remain.
 
-**Progress: 15 / 20 complete.** Server gate armed + credential-verified, privacy
-manifest + privacy-policy done. **Only TWO things left before it enforces:** (1) the
-native EAS build [K], and (2) the App Store Connect App Privacy label toggle [K].
-Then on-device verification. Nothing can block a real user until the build ships,
+**Progress: 16 / 20 complete.** Server gate armed + credential-verified; privacy
+manifest, privacy-policy, and ASC label all done. **The only thing left before it
+enforces is the native EAS build [K]** (which auto-includes the module + manifest),
+then on-device verification. Nothing can block a real user until the build ships,
 and even then it's fail-open.
 
 ---
@@ -43,7 +43,7 @@ and even then it's fail-open.
 - [ ] On a REAL device, confirm `getDeviceCheckToken()` returns non-null (nil on Simulator is expected and safe → fail open)
 
 ## Phase 4 — Privacy & App Store metadata  **[K]**  (drafts in the Appendix)
-- [ ] App Store Connect → App Privacy: add **Identifiers → Device ID**, purpose **App Functionality** (fraud prevention), **not** linked to identity, **not** used for tracking. (Editable without a new binary.)
+- [x] **[K]** App Store Connect → App Privacy: **Device ID → App Functionality** already declared (App Functionality covers fraud prevention). No change needed — our DeviceCheck use is covered by the existing entry.
 - [x] **[C]** `NSPrivacyCollectedDataTypeDeviceID` entry added via `app.config.js` `ios.privacyManifests` (Expo writes `PrivacyInfo.xcprivacy` on prebuild — ships automatically in the next build)
 - [x] **[C]** Fraud-prevention section added to `dreambotapp.com/privacy` (dreambot-web `bfde818`, Vercel auto-deploys)
 - [x] **[C]** Confirmed: NOT declared as tracking, NO ATT prompt added, NO third-party sharing (exchange is with Apple; `FacebookAdvertiserIDCollectionEnabled:false` keeps Tracking=No truthful)
