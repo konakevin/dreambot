@@ -6,15 +6,17 @@ to "100% live and enforcing". Tick boxes as we go. Owner tags: **[C]** = Claude,
 
 Background + design: `TRIAL_FARMING_PREVENTION.md`. Memory: `project_trial_farming_devicecheck`.
 
-> ⏸️ **STATUS: PARKED (deferred by choice 2026-08-05).** All code is shipped and safe
-> to leave dormant indefinitely — with no secrets and no native build, the gate is
-> inert + fail-open, so every user gets their trial exactly like before. Resume any
-> time by starting at **Phase 2**; nothing decays while it waits. Not forgotten,
-> just intentionally paused.
+> ▶️ **STATUS: ACTIVATING (2026-08-05).** Secrets are set and VALIDATED against Apple's
+> real servers (JWT auth accepted; only the fake device token rejected → `.p8` +
+> Key ID `7XAW2V8232` + Team ID `43VMZ5KMW4` all correct). Server gate is armed but
+> still dormant until a native build ships (current apps send no token → fail-open
+> grant), so STILL zero user impact right now. Only the native build + App Store
+> metadata remain.
 
-**Progress: 8 / 20 complete.** Current state: gate is deployed but INERT + fail-open
-(no secrets → every check grants, exactly like before). Nothing below can block a
-real user until Phase 4 activation.
+**Progress: 13 / 20 complete.** Server gate armed + credential-verified. Remaining:
+the native build (so clients send a token), the App Store privacy label + privacy-
+policy line, and on-device verification. Nothing can block a real user until the
+build ships, and even then it's fail-open.
 
 ---
 
@@ -28,11 +30,12 @@ real user until Phase 4 activation.
 - [x] **[C]** Deployed `enqueue-dream`; committed + pushed
 - [x] **[K]** Migration 432 applied (unrelated audit item, done)
 
-## Phase 2 — Apple key + secrets  **[K]**
-- [ ] Apple Developer → Keys → **+** → enable **DeviceCheck** → download the `.p8` (one-time). Record **Key ID** + **Team ID**.
-- [ ] Set Supabase edge secret `DEVICECHECK_KEY_P8` (paste the `.p8` body; escaped `\n` is handled)
-- [ ] Set Supabase edge secret `DEVICECHECK_KEY_ID`
-- [ ] Set Supabase edge secret `DEVICECHECK_TEAM_ID`
+## Phase 2 — Apple key + secrets  ✅
+- [x] **[K]** DeviceCheck `.p8` created (`AuthKey_7XAW2V8232.p8`); Key ID `7XAW2V8232`, Team ID `43VMZ5KMW4`
+- [x] **[C]** Set `DEVICECHECK_KEY_P8` (escaped `\n`, never printed)
+- [x] **[C]** Set `DEVICECHECK_KEY_ID`
+- [x] **[C]** Set `DEVICECHECK_TEAM_ID`
+- [x] **[C]** Credentials smoke-tested against Apple (prod + dev both returned 400 "bad device token" → JWT auth accepted). enqueue-dream redeployed to pick up the secrets.
 
 ## Phase 3 — Native build  **[K]**
 - [ ] New dev/EAS build that includes the `expo-device-check` native module (DeviceCheck can't ship OTA)
@@ -40,7 +43,7 @@ real user until Phase 4 activation.
 
 ## Phase 4 — Privacy & App Store metadata  **[K]**  (drafts in the Appendix)
 - [ ] App Store Connect → App Privacy: add **Identifiers → Device ID**, purpose **App Functionality** (fraud prevention), **not** linked to identity, **not** used for tracking. (Editable without a new binary.)
-- [ ] Add the `NSPrivacyCollectedDataTypeDeviceID` entry to `PrivacyInfo.xcprivacy` (ships in the Phase 3 build — do it in the same build)
+- [x] **[C]** `NSPrivacyCollectedDataTypeDeviceID` entry added via `app.config.js` `ios.privacyManifests` (Expo writes `PrivacyInfo.xcprivacy` on prebuild — ships automatically in the next build)
 - [ ] Add the fraud-prevention sentence to `dreambotapp.com/privacy` (sibling repo `dreambot-web`)
 - [ ] Confirm: NOT declared as tracking, NO ATT prompt added, NO third-party sharing (the exchange is with Apple)
 

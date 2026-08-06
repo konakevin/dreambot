@@ -77,6 +77,26 @@ module.exports = {
           },
         ],
       },
+      // Privacy manifest (PrivacyInfo.xcprivacy, written on prebuild). Declares the
+      // ONLY device identifier we collect: Apple DeviceCheck, used purely to stop
+      // free-trial re-farming (TRIAL_FARMING_PREVENTION.md). App Functionality
+      // purpose, NOT linked to the user's identity (we never store a device→user
+      // map; the bits live at Apple keyed by device), NOT used for tracking.
+      // DeviceCheck is NOT a "Required Reason API", so no NSPrivacyAccessedAPITypes
+      // entry is needed. Keep the ASC App Privacy label in sync (Device ID → App
+      // Functionality, not linked, not tracking).
+      privacyManifests: {
+        NSPrivacyCollectedDataTypes: [
+          {
+            NSPrivacyCollectedDataType: 'NSPrivacyCollectedDataTypeDeviceID',
+            NSPrivacyCollectedDataTypeLinked: false,
+            NSPrivacyCollectedDataTypeTracking: false,
+            NSPrivacyCollectedDataTypePurposes: [
+              'NSPrivacyCollectedDataTypePurposeAppFunctionality',
+            ],
+          },
+        ],
+      },
     },
     android: {
       adaptiveIcon: {
