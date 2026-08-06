@@ -13,11 +13,11 @@ Background + design: `TRIAL_FARMING_PREVENTION.md`. Memory: `project_trial_farmi
 > grant), so STILL zero user impact right now. Only the native build + App Store
 > metadata remain.
 
-**Progress: 16 / 20 complete.** Server gate armed + credential-verified; privacy
-manifest, privacy-policy, and ASC label all done. **The only thing left before it
-enforces is the native EAS build [K]** (which auto-includes the module + manifest),
-then on-device verification. Nothing can block a real user until the build ships,
-and even then it's fail-open.
+**Progress: 17 / 20 complete.** 1.0.12 is LIVE on the App Store (build 41) with a
+forced min-version, so clients are updating and the gate is now activating for real
+onboardings (still fail-open). Remaining: on-device verification (fresh grants /
+same-device re-signup denies) and the eventual fail-open→fail-closed flip after a
+week of clean logs.
 
 ---
 
@@ -39,7 +39,7 @@ and even then it's fail-open.
 - [x] **[C]** Credentials smoke-tested against Apple (prod + dev both returned 400 "bad device token" → JWT auth accepted). enqueue-dream redeployed to pick up the secrets.
 
 ## Phase 3 — Native build  **[K]**
-- [ ] New dev/EAS build that includes the `expo-device-check` native module (DeviceCheck can't ship OTA)
+- [x] 1.0.12 (build 41) shipped to the App Store **live 2026-08-06** with the `expo-device-check` module + privacy manifest; forced min_app_version=1.0.12 so clients update and start sending the token.
 - [ ] On a REAL device, confirm `getDeviceCheckToken()` returns non-null (nil on Simulator is expected and safe → fail open)
 
 ## Phase 4 — Privacy & App Store metadata  **[K]**  (drafts in the Appendix)
