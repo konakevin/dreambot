@@ -101,8 +101,8 @@ cast into one of their places. Free (no charge).
 
 18 image-gen bots (bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot,
 mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot) post to the public feed
-**2×/day** (per-bot, DB-tunable via `bot_schedules.posts_per_day`; fleet-wide bumped to 2 on
-2026-08-06, up from 1×/day set 2026-08-04). Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (every 15 min) reads
+**3×/day** (per-bot, DB-tunable via `bot_schedules.posts_per_day`; fleet-wide set to 3 on
+2026-08-06). Cadence is DB-driven: `.github/workflows/bots-dispatcher.yml` (every 15 min) reads
 `bot_schedules` for due bots → `scripts/run-bot.js`. Each bot is a self-contained module under
 `scripts/bots/<botname>/` (config + paths + pools + seeds); multi-provider (Flux/Gemini/GPT). Full
 architecture, cadence mechanics, entry points (`run-bot.js`, `iter-bot.js`, `qa-bot-model-matrix.js`):

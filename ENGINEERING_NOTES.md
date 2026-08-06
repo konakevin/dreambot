@@ -88,7 +88,7 @@ code); `mood_axes` (onboarding sliders; axis keys are a typed contract); `sparkl
 
 The 18 bots: bloombot, brickbot, chibibot, dinobot, dragonbot, earthbot, faebot, gothbot, mangabot,
 mechbot, oceanbot, pixelbot, retrobot, starbot, steambot, tinybot, toybot, yumbot. Active in
-`bot_schedules` at 2 posts/day (fleet-wide, set 2026-08-06 — up from 1×/day). Multi-provider (Flux + Gemini + GPT Image 2); per-bot model lineups in
+`bot_schedules` at 3 posts/day (fleet-wide, set 2026-08-06). Multi-provider (Flux + Gemini + GPT Image 2); per-bot model lineups in
 `BOT_MODEL_TALLY.md`; the `uploads.model` column records which model rendered each post.
 
 Each bot is a self-contained module under `scripts/bots/<botname>/`: `index.js` (config +
