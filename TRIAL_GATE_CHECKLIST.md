@@ -6,6 +6,12 @@ to "100% live and enforcing". Tick boxes as we go. Owner tags: **[C]** = Claude,
 
 Background + design: `TRIAL_FARMING_PREVENTION.md`. Memory: `project_trial_farming_devicecheck`.
 
+> ⏸️ **STATUS: PARKED (deferred by choice 2026-08-05).** All code is shipped and safe
+> to leave dormant indefinitely — with no secrets and no native build, the gate is
+> inert + fail-open, so every user gets their trial exactly like before. Resume any
+> time by starting at **Phase 2**; nothing decays while it waits. Not forgotten,
+> just intentionally paused.
+
 **Progress: 8 / 20 complete.** Current state: gate is deployed but INERT + fail-open
 (no secrets → every check grants, exactly like before). Nothing below can block a
 real user until Phase 4 activation.
