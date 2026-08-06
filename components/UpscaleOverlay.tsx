@@ -34,7 +34,7 @@ import { WaveLoader } from '@/components/WaveLoader';
 // One clean, static waiting message — mirrors the Create "generating dream"
 // loading copy (app/dream/loading.tsx). No cycling flavor text.
 const WAITING_TITLE = 'Upscaling to HD';
-const WAITING_SUB = "Dismiss to be notified when it's ready.";
+const WAITING_SUB = "Dismiss to be notified when it's ready";
 
 type Phase = 'requesting' | 'processing' | 'saving' | 'done' | 'timeout';
 interface State {
