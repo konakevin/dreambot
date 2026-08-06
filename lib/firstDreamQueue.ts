@@ -14,6 +14,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { fetchEdge } from '@/lib/edgeFunction';
+import { getDeviceCheckToken } from '@/lib/deviceCheck';
 import type { VibeProfile } from '@/types/vibeProfile';
 
 export interface FirstDreamResult {
@@ -39,8 +40,17 @@ export class FirstDreamAlreadyClaimedError extends Error {
 
 /** Enqueue the onboarding first dream (free). Returns the job id to watch. */
 export async function enqueueFirstDream(profile: VibeProfile): Promise<string> {
+  // Device-farming gate: attach the DeviceCheck token so the server can deny a
+  // SECOND free trial to a device that already trialed under another email
+  // (TRIAL_FARMING_PREVENTION.md). null on simulator / pre-native builds → the
+  // server fails open, so onboarding is never blocked on it.
+  const deviceCheckToken = await getDeviceCheckToken();
   // fetchEdge guarantees a fresh access token (proactive refresh + 401 retry).
-  const res = await fetchEdge('enqueue-dream', { first_dream: true, vibe_profile: profile });
+  const res = await fetchEdge('enqueue-dream', {
+    first_dream: true,
+    vibe_profile: profile,
+    ...(deviceCheckToken ? { device_check_token: deviceCheckToken } : {}),
+  });
   if (!res.ok) {
     const t = await res.text().catch(() => '');
     // Already claimed (returning user re-onboarding) is NOT a failure — surface

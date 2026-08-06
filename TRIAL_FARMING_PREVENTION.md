@@ -3,8 +3,9 @@
 **Question (Kevin, 2026-08-05):** how do we stop a user whose trial expired from
 just signing back up with another throwaway email to get a fresh trial?
 
-**Status:** design + recommendation. The interim layers are pure code (can ship
-now); the durable fix needs a small native module + one Apple key (Kevin's hands).
+**Status:** **Anchor A (DeviceCheck) chosen + BUILT, shipping inert/fail-open**
+pending Kevin's Apple key + a native build. Phase 0 (interim) was declined. See
+"Implementation status" at the bottom.
 
 Companion doc: `APP_ATTESTATION_PLAN.md` (bot/headless-signup protection). **These
 are different problems** — see "Why App Attest is not enough" below.
@@ -179,3 +180,38 @@ population once we trust it. One-variable, reversible.
 Open decision for Kevin: **keep the silent frictionless trial + add DeviceCheck
 (Phase 1),** or **move to a StoreKit card-on-file trial (Phase 3, Apple enforces
 it)?** That fork determines the native work.
+
+---
+
+## Implementation status (Anchor A — built 2026-08-05)
+
+**Shipped (live in prod, but INERT + fail-open until the key + native build land):**
+- `_shared/trialEligibility.ts` — the pure fail-open decision (`decideTrial`),
+  unit-tested (`__tests__/lib/trialEligibility.test.ts`).
+- `_shared/deviceCheck.ts` — Apple DeviceCheck REST client (ES256 JWT from the
+  `.p8`, `query_two_bits` / `update_two_bits`, prod→dev fallback). Never throws;
+  missing secrets → `apple_error` → fail open, so the gate does nothing until
+  `DEVICECHECK_*` secrets exist.
+- `enqueue-dream` first-dream branch — queries the signal, `decideTrial`, then
+  stamps `pro_trial_started_at = now()` (eligible) or `NULL` (already trialed →
+  no second free trial; account still fully usable + can subscribe), and burns
+  bit0 only on a genuine fresh-device grant. Deployed.
+- Client: `lib/deviceCheck.ts` (fail-open wrapper) + `lib/firstDreamQueue.ts`
+  passes `device_check_token`; native module `modules/expo-device-check/`
+  (Swift `DCDevice.generateToken`).
+
+**Remaining (Kevin — the gate stays inert until all three are done):**
+1. **DeviceCheck `.p8` key** — Apple Developer → Keys → + → enable DeviceCheck →
+   download once; note Key ID + Team ID.
+2. **Supabase edge secrets:** `DEVICECHECK_KEY_P8` (paste the .p8 body; literal
+   `\n` escapes are handled), `DEVICECHECK_KEY_ID`, `DEVICECHECK_TEAM_ID`.
+3. **A new dev/EAS build** so the native `expo-device-check` module is included
+   (DeviceCheck can't ship OTA). Verify `getDeviceCheckToken()` returns non-null
+   on a real device (nil on Simulator is expected → fail open).
+
+**Not done (deliberately scoped out):** the 25-sparkle **welcome bonus** is still
+account-idempotent only, not device-gated — it's non-cashable and gating it means
+modifying the (CI-only-testable) `grant_sparkles` money RPC + a `users` flag
+column. Worth a separate reviewed change; the trial (the recurring-value prize)
+is the fix that matters. Also **fail-open → fail-closed** flip after watching the
+`fail_open_*` reason rate for a week.

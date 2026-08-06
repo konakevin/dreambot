@@ -24,6 +24,8 @@ import { routeNewSceneSubject, newSceneTierCost } from '../_shared/newSceneDirec
 import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
 import { smartDreamApplies, smartDreamSet, coerceSmartDream } from '../_shared/smartDream.ts';
 import { captureServer } from '../_shared/posthogCapture.ts';
+import { decideTrial } from '../_shared/trialEligibility.ts';
+import { getDeviceTrialSignal, setDeviceTrialBit } from '../_shared/deviceCheck.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -154,23 +156,53 @@ Deno.serve(async (req) => {
       return json({ error: `enqueue_failed: ${fdEnqErr.message}` }, 500);
     }
 
+    // DeviceCheck trial-farming gate (TRIAL_FARMING_PREVENTION.md, Anchor A). A
+    // trial is keyed to the ACCOUNT, so a throwaway email = a fresh 14-day trial.
+    // Apple DeviceCheck bit0 marks "this physical DEVICE already trialed" and
+    // survives reinstall / account-delete / factory reset, so the same phone can't
+    // re-farm the trial with a new email. FAIL-OPEN: no token (simulator / not-yet
+    // -built) or an Apple error → grant as before, so a real new user is never
+    // blocked on an attestation gap (flip to fail-closed once trusted — see doc).
+    const deviceToken =
+      typeof body.device_check_token === 'string' && body.device_check_token.length > 0
+        ? body.device_check_token
+        : null;
+    const trialSignal = await getDeviceTrialSignal(deviceToken);
+    const trialDecision = decideTrial(trialSignal);
+    console.log(
+      `[enqueue-dream] first-dream trial gate for ${userId}: ${trialDecision.reason} (grantTrial=${trialDecision.grantTrial})`
+    );
+
     // Start the FREE-TRIAL clock at ONBOARDING COMPLETION, not signup. The signup
     // trigger (migration 176) sets pro_trial_started_at = now() on the users INSERT,
     // so a user who signs up then delays onboarding would burn trial days before
     // ever using the app (Kevin 2026-07-18: kathryn signed up 07-05, onboarded
     // 07-16 → only ~3 of 14 days left). The first_dream enqueue IS the onboarding
-    // cutoff and runs exactly ONCE per account (guarded above), so reset the trial
-    // to start NOW — the user gets the full pro_trial_days of nightly dreams from
-    // onboarding. Service-role write bypasses the frozen-column trigger (migration
-    // 281: role='service_role'), the same path revenuecat-webhook uses for pro_*.
+    // cutoff and runs exactly ONCE per account (guarded above). When the device is
+    // trial-eligible we (re)start the clock NOW; when it already trialed we set it
+    // NULL so is_pro_active()'s trial branch is false — the account is fully usable
+    // and can still subscribe, it just gets no SECOND free trial. Service-role
+    // write bypasses the frozen-column trigger (migration 281: role='service_role').
     const { error: trialErr } = await supabase
       .from('users')
-      .update({ pro_trial_started_at: new Date().toISOString() })
+      .update({
+        pro_trial_started_at: trialDecision.grantTrial ? new Date().toISOString() : null,
+      })
       .eq('id', userId);
     if (trialErr) {
       console.error(
-        `[enqueue-dream] pro_trial_started_at reset failed for ${userId}: ${trialErr.message}`
+        `[enqueue-dream] pro_trial_started_at ${trialDecision.grantTrial ? 'start' : 'deny'} failed for ${userId}: ${trialErr.message}`
       );
+    }
+
+    // Burn the device bit ONLY on a genuine fresh-device grant (never on a
+    // fail-open grant, so a device that errored once can still claim later).
+    // Best-effort + logged; a missed bit just means one more re-farm slips through.
+    if (trialDecision.setDeviceBit && deviceToken) {
+      const bitSet = await setDeviceTrialBit(deviceToken);
+      if (!bitSet) {
+        console.error(`[enqueue-dream] DeviceCheck bit0 set failed for ${userId} (trial granted)`);
+      }
     }
 
     // AUTHORITATIVE onboarding_completed — a first_dream is enqueued exactly ONCE
