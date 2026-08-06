@@ -20,7 +20,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { getSparkleCost, loadModelCosts, isAdminOnlyModel } from '../_shared/modelPricing.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { classifyDreamWeight } from '../_shared/dreamQueueWeight.ts';
-import { routeNewSceneSubject } from '../_shared/newSceneDirective.ts';
+import { routeNewSceneSubject, newSceneTierCost } from '../_shared/newSceneDirective.ts';
 import { buildFirstDreamTiers, type CastMemberLike } from '../_shared/firstDreamTiers.ts';
 import { smartDreamApplies, smartDreamSet, coerceSmartDream } from '../_shared/smartDream.ts';
 import { captureServer } from '../_shared/posthogCapture.ts';
@@ -199,7 +199,7 @@ Deno.serve(async (req) => {
         // kick outage (which would make dreams feel stuck) is visible (A5).
         (err: unknown) =>
           console.warn(
-            `[enqueue-dream] first-dream worker kick failed for job ${jobId}:`,
+            `[enqueue-dream] first-dream worker kick failed for job ${fdJobId}:`,
             err instanceof Error ? err.message : String(err)
           )
       );
@@ -351,9 +351,12 @@ Deno.serve(async (req) => {
       : false;
   const dreamCost =
     isNewScenePhoto && newSceneTierReq
-      ? newSceneTierReq === 'best' && !newSceneSoloSwap
-        ? cfg.newScenePriceBest
-        : cfg.newScenePriceStandard
+      ? newSceneTierCost(
+          newSceneTierReq,
+          newSceneSoloSwap,
+          cfg.newScenePriceStandard,
+          cfg.newScenePriceBest
+        )
       : effectiveForceModel
         ? getSparkleCost(effectiveForceModel)
         : cfg.baseSparkleCost;

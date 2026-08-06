@@ -140,3 +140,22 @@ export function newSceneFallbackModel(primary: string): string {
     ? NEW_SCENE_MODEL_NANO_BANANA_PRO
     : NEW_SCENE_MODEL_SEEDREAM;
 }
+
+/**
+ * The New Scene charge, single-sourced so CHARGE == RENDER can never drift.
+ * Best tier applies ONLY to a genuine reference scene — a solo face-swap renders
+ * the exact-face swap identically on both tiers (the tier only picks the
+ * reference model, which solo swap never uses), so it is always priced Standard.
+ *
+ * Both server charge sites (enqueue-dream + generate-dream) call this; the RN
+ * client mirrors it in lib/newSceneRoute.ts and __tests__/lib/newSceneCost.test.ts
+ * locks the two in lockstep. Change the rule here and there together.
+ */
+export function newSceneTierCost(
+  tier: NewSceneTier,
+  soloSwap: boolean,
+  priceStandard: number,
+  priceBest: number
+): number {
+  return tier === 'best' && !soloSwap ? priceBest : priceStandard;
+}

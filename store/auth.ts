@@ -77,6 +77,20 @@ interface EntitlementRow {
 // the users table (migration 280, so another user can't snoop your balance /
 // Pro / admin). The RPC returns the same fields, so EntitlementRow is unchanged.
 
+// The zeroed entitlement state. Applied on sign-out, on a signed-out auth event,
+// and on a stale-refresh-token wipe. SINGLE SOURCE so a new entitlement field
+// can't be silently forgotten in one reset path — on a shared device that would
+// flash the previous user's Pro/admin UI to the next signed-in user until the
+// get_my_account RPC lands (server gates still hold; this is a UI-correctness fix).
+const CLEARED_ENTITLEMENTS = {
+  isAdmin: false,
+  isPro: false,
+  isPaidPro: false,
+  proTrialEndsAt: null,
+  isBasic: false,
+  isDreamEligible: false,
+} as const;
+
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
   user: null,
@@ -112,20 +126,13 @@ export const useAuthStore = create<AuthState>((set) => ({
           });
         });
     } else {
-      set({
-        isAdmin: false,
-        isPro: false,
-        isPaidPro: false,
-        proTrialEndsAt: null,
-        isBasic: false,
-        isDreamEligible: false,
-      });
+      set({ ...CLEARED_ENTITLEMENTS });
     }
   },
 
   signOut: async () => {
     await supabase.auth.signOut();
-    set({ session: null, user: null, isSuperAdmin: false });
+    set({ session: null, user: null, isSuperAdmin: false, ...CLEARED_ENTITLEMENTS });
     // Clear ALL per-session in-memory state so the next user on a shared device
     // can't inherit the previous user's feed / onboarding draft / dream-composer
     // selections / album / explore filters.
@@ -201,7 +208,13 @@ export const useAuthStore = create<AuthState>((set) => ({
           await supabase.auth.signOut({ scope: 'local' }).catch((e) => {
             if (__DEV__) console.warn('[auth] local signOut on stale refresh token failed', e);
           });
-          set({ session: null, user: null, initialized: true, isSuperAdmin: false });
+          set({
+            session: null,
+            user: null,
+            initialized: true,
+            isSuperAdmin: false,
+            ...CLEARED_ENTITLEMENTS,
+          });
           return;
         }
         set({

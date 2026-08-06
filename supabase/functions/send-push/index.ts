@@ -285,6 +285,15 @@ Deno.serve(async (req) => {
     const payload: WebhookPayload = await req.json();
     const { record } = payload;
 
+    // Defense-in-depth on the recipient. The notifications table has NO client
+    // INSERT policy (RLS denies it — rows are written only by SECURITY DEFINER
+    // triggers or service_role), so recipient_id is trigger-authored, not
+    // attacker-controlled. Still, validate the shape so a malformed pg_net
+    // payload can't crash the isolate or query push_tokens with a garbage filter.
+    if (!record || typeof record.recipient_id !== 'string' || record.recipient_id.length === 0) {
+      return new Response(JSON.stringify({ error: 'invalid_payload' }), { status: 400 });
+    }
+
     // Create admin client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,

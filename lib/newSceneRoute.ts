@@ -25,3 +25,21 @@ export function isSoloSwapPhoto(sig: NewSceneRouteSignals): boolean {
   const animals = Math.max(0, sig.num_animals || 0);
   return people === 1 && animals === 0 && sig.face === 'clean';
 }
+
+/**
+ * Client mirror of newSceneTierCost in newSceneDirective.ts — the New Scene
+ * price shown on the Create screen. This is PREVIEW only; the server
+ * (enqueue-dream/generate-dream) is authoritative and computes the identical
+ * rule via the engine source. Locked in lockstep by
+ * __tests__/lib/newSceneCost.test.ts (imports the engine fn via @engine/*).
+ * Best tier applies only to a genuine reference scene; a solo swap always
+ * prices Standard. Change this and the engine fn together.
+ */
+export function newSceneTierCost(
+  tier: 'standard' | 'best',
+  soloSwap: boolean,
+  priceStandard: number,
+  priceBest: number
+): number {
+  return tier === 'best' && !soloSwap ? priceBest : priceStandard;
+}

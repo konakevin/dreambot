@@ -40,7 +40,7 @@ import {
 } from '@/lib/dreamApi';
 import { DREAM_QUEUE_ENABLED } from '@/constants/features';
 import { markDreamInFlight } from '@/lib/dreamInFlightMarker';
-import { isSoloSwapPhoto } from '@/lib/newSceneRoute';
+import { isSoloSwapPhoto, newSceneTierCost } from '@/lib/newSceneRoute';
 import type { DreamMedium } from '@/hooks/useDreamStyles';
 
 type GenerateStatus =
@@ -83,9 +83,12 @@ export function useDreamCreate() {
       const attached = useDreamStore.getState().photoClassification;
       const soloSwap =
         !!attached && attached.uri === cfg.photoUri && isSoloSwapPhoto(attached.classification);
-      return cfg.newSceneTier === 'best' && !soloSwap
-        ? engineConfig.newScenePriceBest
-        : engineConfig.newScenePriceStandard;
+      return newSceneTierCost(
+        cfg.newSceneTier === 'best' ? 'best' : 'standard',
+        soloSwap,
+        engineConfig.newScenePriceStandard,
+        engineConfig.newScenePriceBest
+      );
     }
     return isRestyle ? engineConfig.baseSparkleCost : sparkleCostFrom(models, cfg.forceModel);
   }, [

@@ -2924,8 +2924,13 @@ Output ONLY the prompt.`;
             .update({ style_summary: summary })
             .eq('id', targetUploadId);
         })
-        .catch(() => {
-          /* swallow — graceful fallback */
+        .catch((e: unknown) => {
+          // Graceful fallback (style_summary stays NULL), but log it — a spike
+          // signals Anthropic degradation dropping DLT fidelity fleet-wide.
+          console.error(
+            '[nightly-dreams] style_summary distillation failed:',
+            e instanceof Error ? e.message : String(e)
+          );
         });
 
       // NO auto-upscale (2026-05-25) — HD upscale is on-demand only via

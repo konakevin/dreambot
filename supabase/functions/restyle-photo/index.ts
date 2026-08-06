@@ -173,12 +173,15 @@ async function handleRequest(req: Request): Promise<Response> {
   // Per-user rate limit on the DIRECT user path (the queue path is bounded by
   // enqueue-dream's in-flight cap + the worker's concurrency caps). Reuses
   // migration 228's edge_function_invocations trigger (10 expensive edge
-  // calls/min/user). Fail-open on a logging error; the charge below is the gate.
+  // calls/min/user). A TRANSIENT insert failure is RETRIED (a DB blip must not
+  // silently drop the cap); only after retries do we fail open so a real outage
+  // never hard-blocks a paid render (the charge below is the hard gate).
   if (!isQueue) {
-    const { error: rlErr } = await supabase
-      .from('edge_function_invocations')
-      .insert({ user_id: userId, function_name: 'restyle-photo' });
-    if (rlErr) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const { error: rlErr } = await supabase
+        .from('edge_function_invocations')
+        .insert({ user_id: userId, function_name: 'restyle-photo' });
+      if (!rlErr) break;
       const isRl =
         rlErr.message?.includes('rate_limited') ||
         (rlErr as { hint?: string }).hint === 'rate_limited';
@@ -188,7 +191,12 @@ async function handleRequest(req: Request): Promise<Response> {
           headers: { 'Content-Type': 'application/json' },
         });
       }
-      console.error('[restyle-photo] rate-limit log INSERT failed:', rlErr.message);
+      if (attempt === 3) {
+        console.error(
+          '[restyle-photo] rate-limit log INSERT failed after 3 attempts (failing open):',
+          rlErr.message
+        );
+      }
     }
   }
 

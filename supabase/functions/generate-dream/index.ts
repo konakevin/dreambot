@@ -30,6 +30,7 @@ import {
   buildNewScenePrompt,
   newSceneModel,
   newSceneFallbackModel,
+  newSceneTierCost,
   type NewSceneTier,
 } from '../_shared/newSceneDirective.ts';
 import { detectSelfInsert } from '../_shared/selfInsertDetector.ts';
@@ -330,13 +331,15 @@ async function handleRequest(req: Request): Promise<Response> {
   // concurrency caps, so skip it there. Reuses migration 228's
   // edge_function_invocations trigger (10 expensive edge calls/min/user). Closes
   // the "call generate-dream directly to bypass the enqueue in-flight cap" hole.
-  // Fail-open on a logging error (never block a paid dream on infra); the charge
-  // below is the hard gate.
+  // A TRANSIENT insert failure is RETRIED (a DB blip must not silently drop the
+  // cap — the audit's fail-open finding); only after retries do we fail open, so
+  // a genuine outage never hard-blocks a paid dream (the charge is the hard gate).
   if (!isServerInvoked) {
-    const { error: rlErr } = await supabase
-      .from('edge_function_invocations')
-      .insert({ user_id: userId, function_name: 'generate-dream' });
-    if (rlErr) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const { error: rlErr } = await supabase
+        .from('edge_function_invocations')
+        .insert({ user_id: userId, function_name: 'generate-dream' });
+      if (!rlErr) break;
       const isRl =
         rlErr.message?.includes('rate_limited') ||
         (rlErr as { hint?: string }).hint === 'rate_limited';
@@ -346,7 +349,12 @@ async function handleRequest(req: Request): Promise<Response> {
           headers: { 'Content-Type': 'application/json' },
         });
       }
-      console.error('[generate-dream] rate-limit log INSERT failed:', rlErr.message);
+      if (attempt === 3) {
+        console.error(
+          '[generate-dream] rate-limit log INSERT failed after 3 attempts (failing open):',
+          rlErr.message
+        );
+      }
     }
   }
 
@@ -551,9 +559,12 @@ async function handleRequest(req: Request): Promise<Response> {
         : false;
     const dreamCost =
       isNewScenePhoto && newSceneTierReq
-        ? newSceneTierReq === 'best' && !newSceneSoloSwap
-          ? cfg.newScenePriceBest
-          : cfg.newScenePriceStandard
+        ? newSceneTierCost(
+            newSceneTierReq,
+            newSceneSoloSwap,
+            cfg.newScenePriceStandard,
+            cfg.newScenePriceBest
+          )
         : force_model
           ? getSparkleCost(force_model)
           : cfg.baseSparkleCost;
@@ -2253,8 +2264,14 @@ Output ONLY the prompt.`;
         if (!summary || !uploadId) return;
         return supabase.from('uploads').update({ style_summary: summary }).eq('id', uploadId);
       })
-      .catch(() => {
-        /* swallow — style_summary stays NULL, DLT falls back gracefully */
+      .catch((e: unknown) => {
+        // Graceful degradation (style_summary stays NULL → DLT falls back to the
+        // raw prompt), but NOT silent: a spike here means Haiku/Anthropic is
+        // degraded and DLT fidelity is quietly dropping fleet-wide. Log it.
+        console.error(
+          '[generate-dream] style_summary distillation failed:',
+          e instanceof Error ? e.message : String(e)
+        );
       });
 
     // NO auto-upscale (2026-05-25). The HD upscale is on-demand only — it runs
@@ -2303,7 +2320,17 @@ Output ONLY the prompt.`;
             .eq('id', jobId)
             .then(
               () => {},
-              () => {}
+              (e: unknown) => {
+                // CRITICAL: if this flip to 'done' fails silently, the client's
+                // dream_jobs poll fallback sees 'processing' forever — the paying
+                // user is stuck on the loading screen with no result and no alarm.
+                // The realtime dream_queue row is the primary signal, but a lost
+                // dream_jobs flip must be visible so the pattern is diagnosable.
+                console.error(
+                  `[generate-dream] dream_jobs 'done' flip failed for job ${jobId}:`,
+                  e instanceof Error ? e.message : String(e)
+                );
+              }
             )
         : Promise.resolve(),
       // Only notify if the user queued/left — a foreground wait gets no ping.

@@ -86,7 +86,7 @@ import { useInFlightDreams } from '@/hooks/useInFlightDreams';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 import { classifyPhoto } from '@/lib/dreamApi';
 import { cropToPortrait } from '@/lib/cropPhoto';
-import { isSoloSwapPhoto } from '@/lib/newSceneRoute';
+import { isSoloSwapPhoto, newSceneTierCost } from '@/lib/newSceneRoute';
 import { FormLabel } from '@/components/FormLabel';
 import { KeyboardSwipeDismiss } from '@/components/KeyboardSwipeDismiss';
 
@@ -633,10 +633,14 @@ export default function CreateScreen() {
     ? // New Scene is flat-priced by tier server-side (the model picker doesn't
       // apply); Ultra routes to Nano Banana Pro at the higher price. Solo-swap
       // photos always price Standard (the tier does nothing on that branch —
-      // useDreamCreate + enqueue-dream both force it).
-      config.newSceneTier === 'best' && !soloSwapPhoto
-      ? engineConfig.newScenePriceBest
-      : engineConfig.newScenePriceStandard
+      // useDreamCreate + enqueue-dream both force it). newSceneTierCost is the
+      // shared rule mirrored from the engine (parity-locked).
+      newSceneTierCost(
+        config.newSceneTier === 'best' ? 'best' : 'standard',
+        soloSwapPhoto,
+        engineConfig.newScenePriceStandard,
+        engineConfig.newScenePriceBest
+      )
     : isRestyle
       ? restylePoolManaged
         ? engineConfig.baseSparkleCost
