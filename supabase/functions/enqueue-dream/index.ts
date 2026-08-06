@@ -167,8 +167,25 @@ Deno.serve(async (req) => {
       typeof body.device_check_token === 'string' && body.device_check_token.length > 0
         ? body.device_check_token
         : null;
-    const trialSignal = await getDeviceTrialSignal(deviceToken);
-    const trialDecision = decideTrial(trialSignal);
+    // Belt-and-suspenders: getDeviceTrialSignal is written to never throw, but if
+    // it EVER did, a valid first-time user must still get their trial. Any
+    // unexpected error here defaults to a full grant (fail open) — the farm gate
+    // is never allowed to block onboarding.
+    let trialDecision = decideTrial({ kind: 'no_token' });
+    try {
+      trialDecision = decideTrial(await getDeviceTrialSignal(deviceToken));
+    } catch (e) {
+      console.error(
+        `[enqueue-dream] trial gate threw for ${userId}, granting (fail-open):`,
+        e instanceof Error ? e.message : String(e)
+      );
+      trialDecision = {
+        grantTrial: true,
+        grantWelcome: true,
+        setDeviceBit: false,
+        reason: 'fail_open_gate_error',
+      };
+    }
     console.log(
       `[enqueue-dream] first-dream trial gate for ${userId}: ${trialDecision.reason} (grantTrial=${trialDecision.grantTrial})`
     );

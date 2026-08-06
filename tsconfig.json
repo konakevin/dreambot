@@ -51,6 +51,7 @@
     "__tests__/lib/newSceneRoute.test.ts",
     "__tests__/lib/newSceneCost.test.ts",
     "__tests__/lib/trialEligibility.test.ts",
+    "__tests__/lib/deviceCheck.test.ts",
     "__tests__/lib/classifyFailure.test.ts",
     "__tests__/lib/smartDream.test.ts",
     "__tests__/lib/dreamSmartModel.test.ts"

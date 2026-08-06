@@ -20,6 +20,21 @@ import type { DeviceTrialSignal } from './trialEligibility.ts';
 const PROD_BASE = 'https://api.devicecheck.apple.com/v1';
 const DEV_BASE = 'https://api.development.devicecheck.apple.com/v1';
 
+// Bound EVERY Apple call. This gate sits in the first-dream enqueue hot path
+// (<500ms target) — a hung DeviceCheck endpoint must NOT stall onboarding. On
+// timeout the fetch throws → the caller's catch → apple_error → FAIL OPEN (grant).
+const DEVICECHECK_TIMEOUT_MS = 3000;
+
+async function fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), DEVICECHECK_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...init, signal: ctrl.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 interface DeviceCheckCfg {
   p8: string;
   keyId: string;
@@ -81,7 +96,7 @@ type QueryOutcome =
   | { kind: 'error' };
 
 async function queryOnce(base: string, deviceToken: string, jwt: string): Promise<QueryOutcome> {
-  const res = await fetch(`${base}/query_two_bits`, {
+  const res = await fetchWithTimeout(`${base}/query_two_bits`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${jwt}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -127,7 +142,7 @@ export async function getDeviceTrialSignal(deviceToken: string | null): Promise<
 }
 
 async function updateOnce(base: string, deviceToken: string, jwt: string): Promise<boolean> {
-  const res = await fetch(`${base}/update_two_bits`, {
+  const res = await fetchWithTimeout(`${base}/update_two_bits`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${jwt}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
