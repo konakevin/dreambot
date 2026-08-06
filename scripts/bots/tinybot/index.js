@@ -30,7 +30,11 @@ module.exports = {
   username: 'tinybot',
   displayName: 'TinyBot',
 
-  mediums: ['photography', 'animation', 'claymation', 'storybook', 'handcrafted', 'render'],
+  // 'animation' dropped 2026-08-06 (Kevin): its DB flux_fragment is a face-swap
+  // CHARACTER medium ("Disney Pixar character … a bearded adult man, rendered
+  // large in the foreground") that force-injected a person into scene renders.
+  // Monitoring the rest before touching storybook/handcrafted (same failure mode).
+  mediums: ['photography', 'claymation', 'storybook', 'handcrafted', 'render'],
 
   // Banned (2026-06-01 Kevin): flux-2-flex.
   useModelPicker: true,
