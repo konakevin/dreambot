@@ -55,7 +55,6 @@ import { moderateText } from '@/lib/moderation';
 import { MentionSheet } from '@/components/MentionSheet';
 import { useMentionCandidates } from '@/hooks/useMentionCandidates';
 import { detectMention, applyMention, type Selection } from '@/lib/mentionAutocomplete';
-import { splitCaption, isMentionToken } from '@/lib/hashtags';
 import { tileImageUrl } from '@/lib/imageUrl';
 import type { DreamPostItem } from '@/components/DreamCard';
 import { colors } from '@/constants/theme';
@@ -85,24 +84,6 @@ function toSelected(item: DreamPostItem): Selected {
     dream_medium: item.dream_medium ?? null,
     dream_vibe: item.dream_vibe ?? null,
   };
-}
-
-// Render the caption with @mentions colored accent, as formatted TextInput
-// children (iOS renders these over the plain value) so a picked handle reads as
-// an active link WHILE typing. Same tokenizer as the posted caption
-// (lib/hashtags) so the composer and the post agree on what's a mention. Returns
-// null on empty text so the TextInput placeholder still shows.
-function renderCaptionWithMentions(text: string) {
-  if (!text) return null;
-  return splitCaption(text).map((part, i) =>
-    isMentionToken(part) ? (
-      <Text key={i} style={styles.captionMention}>
-        {part}
-      </Text>
-    ) : (
-      <Text key={i}>{part}</Text>
-    )
-  );
 }
 
 export default function NewPostScreen() {
@@ -454,9 +435,7 @@ export default function NewPostScreen() {
               multiline
               maxLength={500}
               textAlignVertical="top"
-            >
-              {renderCaptionWithMentions(description)}
-            </TextInput>
+            />
           </View>
         </Pressable>
       ) : (
@@ -550,9 +529,7 @@ export default function NewPostScreen() {
                 multiline
                 maxLength={500}
                 textAlignVertical="top"
-              >
-                {renderCaptionWithMentions(description)}
-              </TextInput>
+              />
             </View>
           </Pressable>
         </View>
