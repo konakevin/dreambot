@@ -64,9 +64,20 @@ module.exports = {
         // Facebook SDK is used for LOGIN ONLY. Disable its default auto-event
         // logging + advertiser-ID collection so the app does no ad "tracking" —
         // keeps the App Privacy "Tracking" answer truthfully "No" (a tracking=yes
-        // label with no ATT prompt is an auto-reject).
+        // label with no ATT prompt is an auto-reject). These STAY false even with
+        // App-Install ads below: SKAdNetwork attribution needs neither.
         FacebookAutoLogAppEventsEnabled: false,
         FacebookAdvertiserIDCollectionEnabled: false,
+        // SKAdNetwork (2026-08-06): Apple's PRIVACY-PRESERVING install-attribution
+        // network. This is NOT ATT "tracking" — no IDFA, no user prompt, App
+        // Privacy "Tracking" answer stays "No". Lets Meta App-Install ads measure
+        // installs via Apple's aggregated SKAN postbacks (no per-user data).
+        // These are Meta/Facebook's two official SKAdNetwork IDs; add other ad
+        // networks' IDs here if we ever advertise beyond Meta.
+        SKAdNetworkItems: [
+          { SKAdNetworkIdentifier: 'v9wttpbfk9.skadnetwork' },
+          { SKAdNetworkIdentifier: 'n38lu8286q.skadnetwork' },
+        ],
         NSCameraUsageDescription:
           'DreamBot uses your camera to capture photos for AI dream generation.',
         CFBundleURLTypes: [
