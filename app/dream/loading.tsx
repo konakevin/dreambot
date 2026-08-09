@@ -28,6 +28,11 @@ import { useDreamProgress } from '@/hooks/useDreamProgress';
 // fast. Generous enough to cover the upsert race + cold start, far short of the
 // 90s processing-poll backstop.
 const NO_JOB_GRACE_MS = 12_000;
+// On completion, hold this long before the reveal so the progress bar visibly
+// eases to 100% and rests a beat, instead of cutting to the reveal at ~80%
+// (Kevin 2026-08-09). The bar fills over ~420ms once the target hits 1.0, so this
+// gives it time to fill plus a short "finished" hold. Tune here.
+const REVEAL_FILL_HOLD_MS = 800;
 
 export default function DreamLoadingScreen() {
   const { generate } = useDreamCreate();
@@ -112,6 +117,29 @@ export default function DreamLoadingScreen() {
     confirmResolver.current = null;
   }
 
+  // Single reveal path used by every completion route (synchronous, queue
+  // realtime, recovery poll). Drives the bar to 100% (queueStatus='completed' →
+  // useDreamProgress target 1.0), then reveals after REVEAL_FILL_HOLD_MS so the
+  // fill is visible. Guarded to fire exactly once and to not yank a user who
+  // queued during the hold; the timer is cleared on unmount.
+  const revealedRef = useRef(false);
+  const revealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealWhenFilled = useCallback(() => {
+    if (revealedRef.current) return;
+    revealedRef.current = true;
+    setQueueStatus('completed'); // fill the bar to 100%
+    revealTimerRef.current = setTimeout(() => {
+      if (queued.current) return; // user left to queue during the hold
+      router.replace('/dream/reveal');
+    }, REVEAL_FILL_HOLD_MS);
+  }, [setQueueStatus]);
+  useEffect(
+    () => () => {
+      if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
+    },
+    []
+  );
+
   useEffect(() => {
     if (started.current) return;
     // Cold-start resume: the render is already in flight (or done) server-side.
@@ -141,7 +169,7 @@ export default function DreamLoadingScreen() {
       if (queued.current) return;
 
       if (status === 'done') {
-        router.replace('/dream/reveal');
+        revealWhenFilled();
       } else if (status === 'queued') {
         // Enqueued onto dream_queue — don't navigate; wait on its realtime
         // channel (effect below) while the spinner keeps showing.
@@ -164,7 +192,7 @@ export default function DreamLoadingScreen() {
       // (driven by activeJobFailure in the store) take over. The user can
       // tap "Try Again" or "Back to Dream" from there.
     });
-  }, [generate, setActiveJobFailure, isResume, watch]);
+  }, [generate, setActiveJobFailure, isResume, watch, revealWhenFilled]);
 
   // ── Queue path: wait on the dream_queue realtime channel ──────────────────
   // The worker renders the job (globally-capped concurrency + retry) and flips
@@ -195,7 +223,7 @@ export default function DreamLoadingScreen() {
         resolvedVibe: up.dream_vibe ?? null,
         uploadId: up.id,
       });
-      router.replace('/dream/reveal');
+      revealWhenFilled();
     };
 
     const handleRow = (row: {
@@ -269,7 +297,7 @@ export default function DreamLoadingScreen() {
       supabase.removeChannel(channel);
       clearInterval(poll);
     };
-  }, [queueWaitId, setResult, setActiveJobFailure]);
+  }, [queueWaitId, setResult, setActiveJobFailure, revealWhenFilled]);
 
   function handleRetry() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -333,7 +361,7 @@ export default function DreamLoadingScreen() {
           setResult(decision.result);
           setActiveJobFailure(null);
           setIsRecovering(false);
-          router.replace('/dream/reveal');
+          revealWhenFilled();
           return;
         case 'fail':
           setRecoveryFailed(true);
@@ -350,7 +378,7 @@ export default function DreamLoadingScreen() {
     } catch (e) {
       if (__DEV__) console.warn('[loading] tryRecover failed', e);
     }
-  }, [setResult, setActiveJobFailure]);
+  }, [setResult, setActiveJobFailure, revealWhenFilled]);
 
   // Cold-start resume kickoff: entered via /dream/loading?resume=1 from
   // resumeInFlightDream. The render is already in flight server-side, so enter

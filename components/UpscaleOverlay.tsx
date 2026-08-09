@@ -158,8 +158,11 @@ export function UpscaleModalHost() {
     },
     saving: {
       icon: 'download' as const,
-      title: 'Saving to your Photos…',
-      sub: 'Almost there.',
+      // Short enough to fit the gradient title on one line (the longer
+      // "Saving to your Photos…" truncated to "Saving to your…"), and pairs with
+      // the 'done' state's "Saved in HD".
+      title: 'Saving in HD',
+      sub: 'Almost there',
       dismiss: 'hidden' as const,
     },
     done: {
