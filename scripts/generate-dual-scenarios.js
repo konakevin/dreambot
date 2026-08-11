@@ -145,14 +145,83 @@ const GOOFY_BUCKETS = [
   },
 ];
 
+// ACTIVE pool = COOL / EPIC / ADVENTURE / FANTASY scenes (NIGHTLY_FUN_SCENARIOS_PLAN.md).
+// Currently dark (dual_scene_active_pct=0) so seeding here is isolated + zero live impact
+// until we enable it. Every desc is authored so COSTUME + SETTING carry the fantasy while
+// the couple stays waist-up with big clear faces (swap-safe). Fantastical buckets ban
+// photography (photoreal dragons/aliens/giant animals read as creepy CGI, not whimsical).
+const ACTIVE_BUCKETS = [
+  {
+    key: 'swashbuckler',
+    label: 'Swashbuckling pirates',
+    desc: 'A swashbuckling PIRATE adventure — the couple as pirates aboard a tall-ship galleon at sea, on a treasure-island cove with an open chest of gold, or in a lantern-lit dockside tavern. Tricorn hats worn back (faces clear), long coats, sashes, a cutlass at the hip; ship rigging, tattered sails, a parrot or treasure in the background. Rugged and cinematic.',
+  },
+  {
+    key: 'artifact_hunter',
+    label: 'Adventure archaeologists',
+    desc: 'An ADVENTURE-ARCHAEOLOGIST scene (Indiana-Jones energy) — the couple exploring an ancient jungle temple, a torch-lit tomb of golden relics, a sun-baked desert dig site, or a rickety rope bridge over a canyon. Weathered explorer jackets, a fedora tilted back (face clear), leather satchels, coiled rope. Dusty, golden-lit, thrilling.',
+  },
+  {
+    key: 'fantasy_hero',
+    mediumBan: 'photography',
+    label: 'Epic fantasy heroes',
+    desc: 'An EPIC FANTASY / sword-and-sorcery scene — the couple as heroes of a magical realm: warriors at a great castle gate, a ranger and a mage on a cliff above an enchanted glowing valley, elven archers in a luminous forest, or adventurers in a crystal cavern (any dragon or beast kept LARGE in the far background, never near their faces). Fantasy armor, flowing cloaks, leather and rune-etched gear. Painterly and grand.',
+  },
+  {
+    key: 'space_scifi',
+    label: 'Space & sci-fi',
+    desc: 'A SCI-FI / SPACE scene — the couple as astronauts or star explorers: aboard a space station with a glowing planet outside the window, on a ridge of an alien world under twin moons, on the bright bridge of a starship, or beside a sleek rocket on a launchpad. Spacesuits with helmets off or held (faces clear), sleek flight suits. Awe-inspiring and futuristic.',
+  },
+  {
+    key: 'cyberpunk',
+    label: 'Neon cyberpunk',
+    desc: 'A CYBERPUNK future scene — the couple in a neon-drenched, rain-slick megacity: a glowing back-alley of holographic signs, a rooftop over an endless skyline of lights, or a buzzing night market of noodle stalls and drones. Sleek techwear, neon-trimmed jackets, LED accents, a visor pushed up on the forehead (never over the eyes). Moody, electric, cinematic.',
+  },
+  {
+    key: 'superhero',
+    mediumBan: 'photography',
+    label: 'Comic-book superheroes',
+    desc: 'A COMIC-BOOK SUPERHERO scene — the couple as caped heroes: a dramatic rooftop stance over a city at dusk, a heroic two-person landing on a cracked street, or a bold duo pose against an explosive comic-panel sky. Vivid hero suits with chest emblems and capes, wrist gauntlets; a slim domino mask ONLY if the eyes and full face stay clearly visible (never a full cowl or helmet). Dynamic and heroic.',
+  },
+  {
+    key: 'expedition',
+    label: 'Explorers & expeditions',
+    desc: 'An EXPEDITION / EXPLORER scene — the couple as intrepid adventurers: mountaineers near a snowy summit with ropes, arctic explorers by a tent under the aurora, a safari pair in tall golden grass beside an open-top jeep, or divers on a boat deck with a coral reef below. Rugged parkas, safari khakis, climbing harnesses, goggles pushed up on the forehead. Wild and cinematic.',
+  },
+  {
+    key: 'champion',
+    label: 'Sports champions',
+    desc: 'A SPORTS-CHAMPION scene — the couple in a triumphant competition moment: side by side on a winners podium with medals and falling confetti, race-car drivers beside a gleaming Formula car, at the colorful top of a climbing wall, in a boxing-ring corner with gloves up, or tennis stars on a sunlit center court. Team kits, racing suits, athletic gear. Bold, victorious, energetic.',
+  },
+  {
+    key: 'giant_critter',
+    mediumBan: 'photography',
+    label: 'Giant animal companions',
+    desc: 'A whimsical GIANT-ANIMAL companion scene — the couple in the foreground with one adorable OVERSIZED friendly creature filling the background behind them: a house-sized fluffy corgi, a gentle rainbow unicorn, a cuddly baby dragon, or a colossal soft house-cat. The couple stay clearly in front (the giant animal is the delightful backdrop, never covering their faces). Cozy cheerful casual clothes. Charming and funny.',
+  },
+];
+
 async function genBatch(pool, bucket, n, banList) {
   const ban = banList.length
     ? `\n\nDo NOT repeat or closely echo these already-used scenes: ${banList.slice(-40).join(' | ')}`
     : '';
+  const isActive = pool === 'active';
   const dna =
     pool === 'elegant'
       ? `Each entry is a PRETTY, romantic, tasteful DRESSED-UP couple photo. CATEGORY: ${bucket.desc}`
-      : `Each entry is a RANDOM FUNNY / oddball couple photo — genuinely amusing, with a sense of humor, but READABLE (a viewer instantly gets the joke; never so random it's incoherent). CATEGORY: ${bucket.desc}`;
+      : isActive
+        ? `Each entry is a COOL / EXCITING / FANTASTICAL couple photo where BOTH people are caught MID-ACTION doing something with a HANDHELD PROP — an adventure/fantasy/sci-fi/heroic scene, genuinely dynamic and full of character, yet READABLE and composed as a clear couple portrait where the two people dominate. CATEGORY: ${bucket.desc}`
+        : `Each entry is a RANDOM FUNNY / oddball couple photo — genuinely amusing, with a sense of humor, but READABLE (a viewer instantly gets the joke; never so random it's incoherent). CATEGORY: ${bucket.desc}`;
+  // ACTIVE pool: the pose FOLLOWS the scene text (the engine renders "caught
+  // mid-action exactly as the scene describes"), so the scene MUST give each
+  // person a dynamic beat + a handheld prop — that's how we escape stiff
+  // stand-and-pose while staying swap-safe (face stays big + toward camera).
+  const sceneRule = isActive
+    ? `- scene: 12-26 words — WHERE they are + a DYNAMIC action EACH person is doing WITH A HANDHELD PROP (both faces still toward the viewer). Give each an active beat + a prop in hand, e.g. raising a spyglass toward the horizon, hoisting a tankard, one hand on the ship's wheel, drawing a cutlass, unrolling a map between them. Keep hands/props at chest level or lower. Do NOT describe kissing, embracing, or facing each other.`
+    : `- scene: 10-22 words — WHERE they are + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe poses, embracing, kissing, holding, or which way they face (framing is locked elsewhere).`;
+  const activeRule = isActive
+    ? `\n- Both people are MID-ACTION with a handheld prop, BUT each face stays LARGE and toward the camera and is NEVER covered by a prop (no spyglass up to the eye, no pipe in the mouth, no hand/prop over the face); props stay at chest level or lower.`
+    : '';
   const msg = await client.messages.create({
     model: SONNET,
     max_tokens: 2000,
@@ -162,11 +231,11 @@ async function genBatch(pool, bucket, n, banList) {
         content: `Generate ${n} DISTINCT couple-photo scenarios for an AI dream-photo app. ${dna}
 
 Output ONLY a JSON array of ${n} objects, each: {"scene": "...", "attire": "..."}
-- scene: 10-22 words — WHERE they are + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe poses, embracing, kissing, holding, or which way they face (framing is locked elsewhere).
+${sceneRule}
 - attire: 6-14 words — what BOTH are wearing. For period scenes, period-accurate clothing. For normal-clothes scenes, write "normal scene-appropriate everyday clothes".
 
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP couple PORTRAIT, so the two people must dominate the frame with big clear faces):
-- The COUPLE are the ONLY two prominent people and the clear FOREGROUND subjects, read as a normal couple photo (think waist-up, both faces large). NO other prominent people in the shot.
+- The COUPLE are the ONLY two prominent people and the clear FOREGROUND subjects, read as a normal couple photo (think waist-up, both faces large). NO other prominent people in the shot.${activeRule}
 - Any animals, creatures, or background characters stay in the BACKGROUND or off to the side — they must NEVER come between the two people or crowd/cover their faces.
 - Keep it SIMPLE enough to read as a couple photo: the fun is the recognizable SETTING/situation, not a busy action tableau that shrinks the couple. One clear fun idea per scene.
 - Both FACES fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats pulled over the eyes. Hats/headwear are fine ONLY if the face is clearly visible.
@@ -202,7 +271,8 @@ const fs = require('fs');
   const pools = POOL === 'both' ? ['goofy', 'elegant'] : [POOL];
   const everything = [];
   for (const pool of pools) {
-    let buckets = pool === 'elegant' ? ELEGANT_BUCKETS : GOOFY_BUCKETS;
+    let buckets =
+      pool === 'elegant' ? ELEGANT_BUCKETS : pool === 'active' ? ACTIVE_BUCKETS : GOOFY_BUCKETS;
     if (BUCKET_FILTER === 'sample') buckets = buckets.slice(0, 3);
     else if (BUCKET_FILTER)
       buckets = buckets.filter((b) => BUCKET_FILTER.split(',').includes(b.key));

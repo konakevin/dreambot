@@ -49,6 +49,7 @@ import { getLocationCard } from '../_shared/essenceCards.ts';
 import { isBannedLocationName } from '../_shared/locationFilters.ts';
 import type { LocationCard } from '../_shared/essenceCards.ts';
 import { callSonnet } from '../_shared/llm.ts';
+import { generateLocationActionBeat } from '../_shared/locationActionBeat.ts';
 import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
@@ -246,6 +247,9 @@ Deno.serve(async (req) => {
   // Test hook: force the ACTIVE pose pool regardless of dual_action_pose_pct
   // (production-prompt benching — the pencil lesson).
   const force_active_pose = body.force_active_pose === true;
+  // Test hook: force the generative LOCATION-fit action beat (Option B) on a
+  // plain-location dream regardless of location_action_pct.
+  const force_location_action = body.force_location_action === true;
   // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
   // a specific historical pose against the action-grounded brief).
   const force_action = typeof body.force_action === 'string' ? body.force_action : null;
@@ -1209,25 +1213,35 @@ Deno.serve(async (req) => {
     // scene variety mix below (engine_config-tunable since migration 347;
     // defaults 20 goofy / 20 elegant / 0 active — remainder = the location).
     if (!force_place) {
-      // QA hook: pull a random scenario from an exact goofy bucket (category
-      // column), bypassing the roll + shuffle-bag entirely. Test-only path.
+      // QA hook: pull a random scenario from an exact bucket (category column) in
+      // ANY pool (goofy/elegant/active), bypassing the roll + shuffle-bag AND the
+      // isolate scenario cache (this is a live DB query). Test-only path — lets us
+      // QA a freshly-seeded bucket without a redeploy or enabling its pool %.
       if (force_scene_category && (isDualFaceSwap || isSingleHumanFaceSwap)) {
         const table = isDualFaceSwap ? 'dual_scenarios' : 'single_scenarios';
         const { data: catRows } = await supabase
           .from(table)
-          .select('scene,attire,pose_pool,medium_key,medium_ban')
-          .eq('pool', 'goofy')
+          .select('scene,attire,pool,pose_pool,medium_key,medium_ban')
           .eq('category', force_scene_category)
           .eq('disabled', false);
         if (catRows && catRows.length > 0) {
           const s = catRows[Math.floor(Math.random() * catRows.length)];
           dualSpecialScene = s.scene as string;
           dualSpecialWardrobe = s.attire as string;
-          dualSceneKind = 'goofy';
           dualScenePosePool = (s.pose_pool as string | null) ?? null;
           dualSceneMediumKey = (s.medium_key as string | null) ?? null;
           dualSceneMediumBan = (s.medium_ban as string | null) ?? null;
-          fallbackReasons.push(`forced_scene_category:${force_scene_category}`);
+          // Mirror the production per-pool pose behavior so QA reflects the real
+          // render: ACTIVE-pool scenes embed the action in the scene text (the
+          // pose follows the scene, "caught mid-action"); goofy/elegant draw the
+          // pose from their kind's pool.
+          if ((s.pool as string) === 'active') {
+            if (isDualFaceSwap) dualActiveScene = true;
+            else soloActiveScene = true;
+          } else {
+            dualSceneKind = (s.pool as string) === 'elegant' ? 'elegant' : 'goofy';
+          }
+          fallbackReasons.push(`forced_scene_category:${force_scene_category}:${s.pool}`);
         }
       }
       if (dualSpecialScene) {
@@ -1495,6 +1509,28 @@ Deno.serve(async (req) => {
             }
           }
         }
+        // Option B (2026-08-10): generative LOCATION-fit action beat for plain-
+        // location dreams. Covers EVERY place (not just the biome-tagged poses,
+        // whose coverage is thin → most biomes fell back to standing). Rolls only
+        // when the biome ACTIVE pose above did NOT fire; swap-safe by the
+        // authoring envelope in locationActionBeat.ts. Behind location_action_pct
+        // (0 = off) + the force_location_action QA flag.
+        let locationAction: string | null = null;
+        const plainLocation = !dualSpecialScene && !dualSpecialWardrobe;
+        if (plainLocation && !force_active_pose && !activePose && !activeSinglePose) {
+          const locCfg = await fetchEngineConfig(supabase);
+          const rollLoc =
+            force_location_action ||
+            (locCfg.locationActionPct > 0 && Math.random() * 100 < locCfg.locationActionPct);
+          if (rollLoc) {
+            locationAction = await generateLocationActionBeat(
+              iconicAnchor || userPlace || '',
+              selectedCast.length === 2 ? 2 : 1,
+              ANTHROPIC_KEY!
+            );
+            if (locationAction) fallbackReasons.push('location_action');
+          }
+        }
         // Scene-matched pose. Precedence per cast size:
         //   active scene → the fixed mid-action framing text
         //   scenario names a bespoke pose pool (migration 353) → pick from it
@@ -1530,7 +1566,7 @@ Deno.serve(async (req) => {
           } else if (dualSpecialScene) {
             action = pickDualAction(undefined, 'playful', classicPools.dual);
           } else {
-            action = activePose ?? dualAction;
+            action = activePose ?? locationAction ?? dualAction;
           }
         } else if (soloActiveScene) {
           action = 'caught mid-action exactly as the scene describes, face toward the camera';
@@ -1538,7 +1574,7 @@ Deno.serve(async (req) => {
           action = bespokePoses[Math.floor(Math.random() * bespokePoses.length)];
           fallbackReasons.push(`bespoke_pose_solo:${dualScenePosePool}`);
         } else {
-          action = activeSinglePose ?? singleAction ?? null;
+          action = activeSinglePose ?? locationAction ?? singleAction ?? null;
         }
         const slotResult = await runCharacterSlotPipeline(
           {

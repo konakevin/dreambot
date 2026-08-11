@@ -63,6 +63,11 @@ export interface EngineConfig {
   singleSceneGoofyPct: number;
   singleSceneElegantPct: number;
   singleSceneActivePct: number;
+  /** Option B (2026-08-10): % of plain-LOCATION face-swap nightlies (dual + solo)
+   *  that generate a swap-safe, location-fit action beat (locationActionBeat.ts)
+   *  instead of a static pose. Covers EVERY place, not just biome-tagged poses.
+   *  0 = off (default). Rolls only when the biome ACTIVE pose didn't fire. */
+  locationActionPct: number;
   /** Stage 5c: % of solo face-swap renders using an expanded composition
    *  preset (three-quarter / environmental-wide). 0 = classic waist-up only. */
   singleCompositionExpandedPct: number;
@@ -106,6 +111,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneElegantPct: 20,
   singleSceneActivePct: 0,
   singleCompositionExpandedPct: 0,
+  locationActionPct: 0,
 };
 
 let cached: EngineConfig | null = null;
@@ -193,6 +199,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     singleCompositionExpandedPct: Number(
       data.single_composition_expanded_pct ?? DEFAULT_ENGINE_CONFIG.singleCompositionExpandedPct
     ),
+    locationActionPct: Number(data.location_action_pct ?? DEFAULT_ENGINE_CONFIG.locationActionPct),
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

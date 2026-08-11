@@ -202,16 +202,100 @@ const ELEGANT_BUCKETS = [
   },
 ];
 
+// ACTIVE pool = COOL / EPIC / ADVENTURE / FANTASY solo scenes (solo counterpart of the
+// dual active buckets; NIGHTLY_FUN_SCENARIOS_PLAN.md). Gender-neutral (costume works for
+// any gender). Dark until we enable single_scene_active_pct, so isolated for QA.
+const ACTIVE_BUCKETS = [
+  {
+    key: 'swashbuckler',
+    gender: 'any',
+    count: 25,
+    label: 'Swashbuckling pirate',
+    desc: 'A swashbuckling PIRATE adventure — the person as a pirate aboard a tall-ship galleon at sea, on a treasure-island cove with an open chest of gold, or in a lantern-lit dockside tavern. Tricorn hat worn back (face clear), a long coat, a sash, a cutlass at the hip; ship rigging, tattered sails, a parrot or treasure in the background. Rugged and cinematic.',
+  },
+  {
+    key: 'artifact_hunter',
+    gender: 'any',
+    count: 25,
+    label: 'Adventure archaeologist',
+    desc: 'An ADVENTURE-ARCHAEOLOGIST scene (Indiana-Jones energy) — the person exploring an ancient jungle temple, a torch-lit tomb of golden relics, a sun-baked desert dig site, or a rickety rope bridge over a canyon. A weathered explorer jacket, a fedora tilted back (face clear), a leather satchel, coiled rope. Dusty, golden-lit, thrilling.',
+  },
+  {
+    key: 'fantasy_hero',
+    mediumBan: 'photography',
+    gender: 'any',
+    count: 25,
+    label: 'Epic fantasy hero',
+    desc: 'An EPIC FANTASY / sword-and-sorcery scene — the person as a hero of a magical realm: a warrior at a great castle gate, a mage on a cliff above an enchanted glowing valley, an elven archer in a luminous forest, or an adventurer in a crystal cavern (any dragon or beast kept LARGE in the far background, never near the face). Fantasy armor, a flowing cloak, leather and rune-etched gear. Painterly and grand.',
+  },
+  {
+    key: 'space_scifi',
+    gender: 'any',
+    count: 25,
+    label: 'Space & sci-fi',
+    desc: 'A SCI-FI / SPACE scene — the person as an astronaut or star explorer: aboard a space station with a glowing planet outside the window, on a ridge of an alien world under twin moons, on the bright bridge of a starship, or beside a sleek rocket on a launchpad. A spacesuit with the helmet off or held (face clear), a sleek flight suit. Awe-inspiring and futuristic.',
+  },
+  {
+    key: 'cyberpunk',
+    gender: 'any',
+    count: 25,
+    label: 'Neon cyberpunk',
+    desc: 'A CYBERPUNK future scene — the person in a neon-drenched, rain-slick megacity: a glowing back-alley of holographic signs, a rooftop over an endless skyline of lights, or a buzzing night market of noodle stalls and drones. Sleek techwear, a neon-trimmed jacket, LED accents, a visor pushed up on the forehead (never over the eyes). Moody, electric, cinematic.',
+  },
+  {
+    key: 'superhero',
+    mediumBan: 'photography',
+    gender: 'any',
+    count: 25,
+    label: 'Comic-book superhero',
+    desc: 'A COMIC-BOOK SUPERHERO scene — the person as a caped hero: a dramatic rooftop stance over a city at dusk, a heroic landing on a cracked street, or a bold pose against an explosive comic-panel sky. A vivid hero suit with a chest emblem and cape, wrist gauntlets; a slim domino mask ONLY if the eyes and full face stay clearly visible (never a full cowl or helmet). Dynamic and heroic.',
+  },
+  {
+    key: 'expedition',
+    gender: 'any',
+    count: 25,
+    label: 'Explorer & expedition',
+    desc: 'An EXPEDITION / EXPLORER scene — the person as an intrepid adventurer: a mountaineer near a snowy summit with ropes, an arctic explorer by a tent under the aurora, a safari guide in tall golden grass beside an open-top jeep, or a diver on a boat deck with a coral reef below. A rugged parka, safari khakis, a climbing harness, goggles pushed up on the forehead. Wild and cinematic.',
+  },
+  {
+    key: 'champion',
+    gender: 'any',
+    count: 25,
+    label: 'Sports champion',
+    desc: 'A SPORTS-CHAMPION scene — the person in a triumphant competition moment: on a winners podium with a medal and falling confetti, a race-car driver beside a gleaming Formula car, at the colorful top of a climbing wall, a boxer in a ring corner with gloves up, or a tennis star on a sunlit center court. A team kit, a racing suit, athletic gear. Bold, victorious, energetic.',
+  },
+  {
+    key: 'giant_critter',
+    mediumBan: 'photography',
+    gender: 'any',
+    count: 25,
+    label: 'Giant animal companion',
+    desc: 'A whimsical GIANT-ANIMAL companion scene — the person in the foreground with one adorable OVERSIZED friendly creature filling the background behind them: a house-sized fluffy corgi, a gentle rainbow unicorn, a cuddly baby dragon, or a colossal soft house-cat. The person stays clearly in front (the giant animal is the delightful backdrop, never covering the face). Cozy cheerful casual clothes. Charming and funny.',
+  },
+];
+
 async function genBatch(pool, bucket, n, banList) {
   const ban = banList.length
     ? `\n\nDo NOT repeat or closely echo these already-used scenes: ${banList.slice(-40).join(' | ')}`
     : '';
   const subj =
     bucket.gender === 'female' ? 'a woman' : bucket.gender === 'male' ? 'a man' : 'one person';
+  const isActive = pool === 'active';
   const dna =
     pool === 'elegant'
       ? `Each entry is a PRETTY, tasteful, DRESSED-UP solo photo of ${subj}. CATEGORY: ${bucket.desc}`
-      : `Each entry is a RANDOM FUNNY / oddball solo photo of ${subj} — genuinely amusing but READABLE (the joke reads instantly). CATEGORY: ${bucket.desc}`;
+      : isActive
+        ? `Each entry is a COOL / EXCITING / FANTASTICAL solo photo of ${subj} caught MID-ACTION doing something with a HANDHELD PROP — an adventure/fantasy/sci-fi/heroic scene, genuinely dynamic and full of character, yet READABLE and composed as a clear solo portrait where the person dominates. CATEGORY: ${bucket.desc}`
+        : `Each entry is a RANDOM FUNNY / oddball solo photo of ${subj} — genuinely amusing but READABLE (the joke reads instantly). CATEGORY: ${bucket.desc}`;
+  // ACTIVE pool: the pose FOLLOWS the scene text, so the scene MUST give the
+  // person a dynamic beat + a handheld prop — escapes stiff stand-and-pose while
+  // staying swap-safe (face big + toward camera, never covered by the prop).
+  const sceneRule = isActive
+    ? `- scene: 12-26 words — WHERE ${subj} is + a DYNAMIC action they are doing WITH A HANDHELD PROP (face still toward the viewer). Give an active beat + a prop in hand, e.g. raising a spyglass toward the horizon, hoisting a tankard, one hand on the ship's wheel, drawing a cutlass, unrolling a treasure map. Keep the hand/prop at chest level or lower. Do NOT describe gaze or which way they face.`
+    : `- scene: 10-22 words — WHERE ${subj} is + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe pose, gaze, or which way they face (framing is locked elsewhere).`;
+  const activeRule = isActive
+    ? `\n- ${subj} is MID-ACTION with a handheld prop, BUT the face stays LARGE and toward the camera and is NEVER covered by a prop (no spyglass up to the eye, no pipe in the mouth, no hand/prop over the face); the prop stays at chest level or lower.`
+    : '';
   const msg = await client.messages.create({
     model: SONNET,
     max_tokens: 2000,
@@ -221,11 +305,11 @@ async function genBatch(pool, bucket, n, banList) {
         content: `Generate ${n} DISTINCT solo-photo scenarios for an AI dream-photo app. ${dna}
 
 Output ONLY a JSON array of ${n} objects, each: {"scene": "...", "attire": "..."}
-- scene: 10-22 words — WHERE ${subj} is + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe pose, gaze, or which way they face (framing is locked elsewhere).
+${sceneRule}
 - attire: 6-14 words — what ${subj} is wearing${bucket.gender === 'any' ? ' (period-accurate for period scenes; otherwise "normal scene-appropriate everyday clothes")' : ', appropriate for ' + subj}.
 
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP solo PORTRAIT, so the person must dominate the frame with a big clear face):
-- ${subj.toUpperCase ? subj : subj} is the ONLY prominent person and the clear FOREGROUND subject, read as a normal solo portrait (waist-up, big face). NO other prominent people.
+- ${subj.toUpperCase ? subj : subj} is the ONLY prominent person and the clear FOREGROUND subject, read as a normal solo portrait (waist-up, big face). NO other prominent people.${activeRule}
 - Any animals/creatures/background characters stay in the BACKGROUND or to the side — NEVER crowding or covering the face.
 - Keep it SIMPLE: the fun is the recognizable SETTING/situation, not a busy action tableau. One clear idea per scene.
 - Face fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats over the eyes.
@@ -262,7 +346,8 @@ Output ONLY the JSON array, no markdown, no commentary.`,
   const pools = POOL === 'both' ? ['goofy', 'elegant'] : [POOL];
   const everything = [];
   for (const pool of pools) {
-    let buckets = pool === 'elegant' ? ELEGANT_BUCKETS : GOOFY_BUCKETS;
+    let buckets =
+      pool === 'elegant' ? ELEGANT_BUCKETS : pool === 'active' ? ACTIVE_BUCKETS : GOOFY_BUCKETS;
     if (BUCKET_FILTER === 'sample') buckets = buckets.slice(0, 3).concat(buckets.slice(-2));
     else if (BUCKET_FILTER)
       buckets = buckets.filter((b) => BUCKET_FILTER.split(',').includes(b.key));
