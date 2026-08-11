@@ -1284,6 +1284,12 @@ Deno.serve(async (req) => {
           );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
+          // Apply the row's medium ban/key (goofy/elegant branches above do this;
+          // the active branch must too, or fantasy_hero/superhero/giant_critter
+          // render photoreal-creepy instead of painterly). Downstream force/reroll
+          // at ~1358-1441 reads these two vars.
+          dualSceneMediumKey = s.mediumKey ?? null;
+          dualSceneMediumBan = s.mediumBan ?? null;
           dualActiveScene = true;
           fallbackReasons.push('active_scenario');
           recordPick(supabase, userId, 'dual_scn_active', s.scene);
@@ -1338,6 +1344,9 @@ Deno.serve(async (req) => {
           if (s) {
             dualSpecialScene = s.scene;
             dualSpecialWardrobe = s.attire;
+            // Apply the row's medium ban/key (see the dual-active branch note).
+            dualSceneMediumKey = s.mediumKey ?? null;
+            dualSceneMediumBan = s.mediumBan ?? null;
             soloActiveScene = true;
             fallbackReasons.push('active_scenario_solo');
           }
