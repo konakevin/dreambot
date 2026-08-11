@@ -274,6 +274,15 @@ const ACTIVE_BUCKETS = [
   },
 ];
 
+// Production scale-up: `--per N` raises the ACTIVE-bucket target above the MVP
+// default of 25 (append-safe — dedups against existing rows). Non-active buckets
+// keep their own per-bucket `count`.
+const ACTIVE_PER = (() => {
+  const i = process.argv.indexOf('--per');
+  return i >= 0 ? parseInt(process.argv[i + 1], 10) : null;
+})();
+if (ACTIVE_PER) ACTIVE_BUCKETS.forEach((b) => (b.count = ACTIVE_PER));
+
 async function genBatch(pool, bucket, n, banList) {
   const ban = banList.length
     ? `\n\nDo NOT repeat or closely echo these already-used scenes: ${banList.slice(-40).join(' | ')}`
