@@ -29,6 +29,10 @@ const POSE_MODE = args.includes('--pose');
 // --locfit mode: force the generative LOCATION-FIT action beat (Option B) on a
 // normal location dream — a swap-safe action authored to fit the exact place.
 const LOCFIT_MODE = args.includes('--locfit');
+// --natural mode: NO forcing at all — the engine runs its own composition roll
+// (dual/self/+1) + scenario roll (goofy/elegant/active/location) + Option B,
+// exactly like a real nightly. Use to sanity-check the LIVE variety/mix.
+const NATURAL_MODE = args.includes('--natural');
 
 const URL =
   (process.env.SUPABASE_URL || 'https://jimftynwrinwenonjrlj.supabase.co') +
@@ -42,26 +46,28 @@ if (!TOKEN) {
 // force_scene_category targets the exact bucket via a LIVE DB query (any pool) —
 // bypasses the isolate scenario cache, so a freshly-seeded bucket renders without
 // a redeploy or enabling its pool %.
-const body = LOCFIT_MODE
-  ? {
-      user_id: USER,
-      force_cast_role: CAST,
-      force_location_action: true, // generative location-fit action (Option B)
-      ...(MEDIUM ? { force_medium: MEDIUM } : {}),
-    }
-  : POSE_MODE
+const body = NATURAL_MODE
+  ? { user_id: USER, ...(MEDIUM ? { force_medium: MEDIUM } : {}) } // full natural roll
+  : LOCFIT_MODE
     ? {
         user_id: USER,
         force_cast_role: CAST,
-        force_active_pose: true, // dynamic pose pool on a plain location dream
+        force_location_action: true, // generative location-fit action (Option B)
         ...(MEDIUM ? { force_medium: MEDIUM } : {}),
       }
-    : {
-        user_id: USER,
-        force_cast_role: CAST,
-        force_scene_category: BUCKET,
-        ...(MEDIUM ? { force_medium: MEDIUM } : {}),
-      };
+    : POSE_MODE
+      ? {
+          user_id: USER,
+          force_cast_role: CAST,
+          force_active_pose: true, // dynamic pose pool on a plain location dream
+          ...(MEDIUM ? { force_medium: MEDIUM } : {}),
+        }
+      : {
+          user_id: USER,
+          force_cast_role: CAST,
+          force_scene_category: BUCKET,
+          ...(MEDIUM ? { force_medium: MEDIUM } : {}),
+        };
 
 (async () => {
   console.log(`Rendering ${COUNT}x nightly [${BUCKET}] (${CAST}) for ${USER}...\n`);

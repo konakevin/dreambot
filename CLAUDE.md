@@ -59,7 +59,13 @@ job per eligible Pro-or-in-trial user (bots excluded; **paginated** — PostgRES
 1000 rows; per-user-per-day idempotent via `dedup_key`). The worker drains the backlog overnight at the
 heavy cap → **`nightly-dreams`** render edge fn → personalizes from `user_recipes.recipe` JSONB via the
 shared scene engine → Haiku bot message → dreamer notification. It also sends trial / paid-pro-cancel
-reminder pushes. Master kill-switch: `engine_config.nightly_enabled`.
+reminder pushes. Master kill-switch: `engine_config.nightly_enabled`. Each face-swap nightly rolls a
+scene TYPE (live `engine_config` pcts): goofy / elegant / **active** (fun/fantasy adventure buckets +
+legacy recreational, `dual/single_scenarios pool='active'`) / plain-location — and a plain-location dream
+gets a swap-safe **Option B** action fitting the exact place (`_shared/locationActionBeat.ts`, gated by
+`location_action_pct`). To add/scale/tune fun buckets or Option B → **`NIGHTLY_FUN_SCENARIOS_PLAN.md`**
+(playbook + gotchas: seed per-bucket sequentially, run the proximity scan, verify via
+`ai_generation_log.fallback_reasons`).
 
 **Onboarding first-dream** is its own queue source: `enqueue-dream` (first_dream branch) → `dream_queue` →
 **`first-dream-render`**, which runs a cascade (dual → single → scene face-swap) so the user is reliably
@@ -283,7 +289,9 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
-  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `V4_HARDENING_PLAN.md`.
+  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
+  scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
+  `V4_HARDENING_PLAN.md`.
 - **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
   `SPARKLE_PRICING_STRATEGY.md`, `AUTH_PROVIDERS.md`, `BUNDLE_ID_MIGRATION.md`, `APP_STORE_LISTING.md`,
   `LAUNCH.md`. (Website specifics live in `../dreambot-web/CLAUDE.md`.)

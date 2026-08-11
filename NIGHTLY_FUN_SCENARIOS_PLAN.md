@@ -175,7 +175,67 @@ swap-safe and on-theme. So the live active pool = **900 new themed-adventure row
 buckets × 100) + 526 legacy recreational = 1426 dual + 1426 single**, all proximity-clean.
 
 Final nightly mix (both single + dual face-swap dreams): goofy 15 / elegant 15 / **active
-20** / location 50, and 75% of location dreams get an Option B action. All live-tunable via
+30** / location 40, and 75% of location dreams get an Option B action (Kevin nudged active
+20→30 on 2026-08-10 after seeing the live mix — "nudge funner"). All live-tunable via
 `engine_config` (no build). To pull a bucket: `disabled=true` scoped by category. The legacy
 recreational rows can be culled the same way (`category is null`) if we ever want
 themed-only.
+
+---
+
+## Playbook — adding or tuning fun scenarios (for future agents)
+
+**Where things live**
+- Bucket definitions: `ACTIVE_BUCKETS` in BOTH `scripts/generate-dual-scenarios.js` and
+  `scripts/generate-single-scenarios.js` (keep them in sync — dual + single are separate
+  pools/tables `dual_scenarios` / `single_scenarios`, `pool='active'`, keyed by `category`).
+- Option B location actions: `supabase/functions/_shared/locationActionBeat.ts` (the
+  swap-safe action generator) + the wiring in `nightly-dreams/index.ts` (the `locationAction`
+  block on the plain-location path; precedence `activePose ?? locationAction ?? classic`).
+- The roll that decides scenario vs location: `nightly-dreams/index.ts` ~line 1249+ (dual)
+  / ~1291+ (solo). Composition roll (dual vs solo vs scene): `_shared/chaosTier.ts:rollNightlyDreamType`.
+- Tuning knobs: `engine_config` (`dual_scene_active_pct`, `single_scene_active_pct`,
+  `dual/single_scene_goofy_pct`, `..._elegant_pct`, `location_action_pct`), read live w/ 60s TTL.
+
+**To add a NEW bucket** (do dual + single together):
+1. Add `{ key, label, desc, mediumBan? }` to `ACTIVE_BUCKETS` in BOTH scripts. The `desc` is
+   the whole spec — describe setting + costume; the generator bakes in the swap-safe MID-ACTION
+   + handheld-prop authoring (chest level, faces clear). Set `mediumBan: 'photography'` for
+   anything that reads creepy in photoreal (fantasy/creatures/superheroes → painterly instead).
+2. MVP-25 first (HARD RULE): `node scripts/generate-dual-scenarios.js --pool active --buckets
+   <key> --per 25` and the single twin. Then QA:
+   `node scripts/qa-nightly-fun.js --bucket <key> --cast dual` (and `--cast self`) → renders
+   land under Kevin's account (worker-token path). Kevin signs off on the LOOK (his call).
+3. **POST-SEED HOOK (HARD RULE):** `node scripts/scan-dual-faceswap-proximity.js` must exit 0
+   before shipping any dual pool — reword flagged couple poses (see the CLAUDE.md rule).
+4. Scale after sign-off (see below), then it's live at the current `active_pct`.
+
+**To SCALE a bucket to production size** — seed **per-bucket, ONE process at a time**:
+```
+for b in bucketA bucketB; do
+  node scripts/generate-dual-scenarios.js  --pool active --buckets "$b" --per 75 2>&1 | grep inserted
+  node scripts/generate-single-scenarios.js --pool active --buckets "$b" --per 50 2>&1 | grep inserted
+done
+```
+`--per N` = N NEW rows (append-safe, dedups vs existing). We run ~100/bucket. **Do NOT** run a
+big `--per 150` across all buckets concurrently — that HANGS on Sonnet rate-limits (0% CPU,
+insert-is-at-end so a hang loses the whole run). Gotchas that bit us: `for b in $VAR` does NOT
+word-split in zsh (use a literal list); and `.select('category')` hits the PostgREST 1000-row
+cap — count per-category with `count:'exact',head:true`.
+
+**To TUNE the mix** (no build, ~60s to propagate): patch `engine_config` (service key).
+`active_pct` up → more fun, location shrinks. `location_action_pct` → how often location dreams
+get an Option B action. `disabled=true where pool='active' and category='<key>'` pulls a bucket;
+`... and category is null` pulls the legacy recreational scenes.
+
+**To VERIFY it's working** — the render stamps `ai_generation_log.fallback_reasons` (join by
+`upload_id` or `user_id`): look for `location_action` (Option B fired), `active_scenario` /
+`active_scenario_solo` (a fun bucket fired), `forced_scene_category:<k>:<pool>` (a QA force).
+`qa-nightly-fun.js --natural --count N` fires REAL nightly rolls (no forcing) to eyeball the
+live variety; `--bucket <k>` forces one bucket; `--locfit` forces Option B; `--pose` forces the
+biome pose pool.
+
+**Swap-safety is non-negotiable** — every couple pose needs a clear gap between heads (dual swap
+can't split touching faces), props at chest level or lower, faces never occluded. The generation
+prompt + `locationActionBeat.ts` word-filter enforce this; the proximity scan is the backstop.
+See CLAUDE.md's POST-SEED HOOK + face-swap rules.
