@@ -156,9 +156,26 @@ drops any unsafe beat → classic-pose fallback (fail-safe).
 - [x] `expedition` (seed 25)
 - [x] `champion` (seed 25)
 - [x] `giant_critter` (seed 25; medium_ban=photography)
-- [ ] Kevin QA of the 8 new buckets (renders posted to his account)
-- [ ] **Before Phase 3**: wire `medium_ban`/`medium_key` into the PRODUCTION active-pool
-      branches (lines ~1268-1277 / ~1323-1331) — currently only the QA force path applies
-      them, so fantasy_hero/superhero/giant_critter would render photoreal until fixed.
-- [ ] Phase 3: scale winners to ~150-200 + enable `*_scene_active_pct`, `location_action_pct`,
-      and (optionally) `*_action_pose_pct` live
+- [x] Kevin QA of all 9 buckets (renders posted to his account — signed off "all look good")
+- [x] **medium_ban fix**: wired `medium_ban`/`medium_key` into the PRODUCTION dual-active +
+      solo-active branches (commit ff4b50e6) so fantasy_hero/superhero/giant_critter render
+      painterly, not photoreal, once live.
+- [x] **Phase 3 — LIVE (2026-08-10):** scaled all 9 buckets to **100 dual + 100 single** each
+      (per-bucket sequential seeding; the big `--per 150` concurrent runs hung on Sonnet
+      rate-limits — lesson: seed per-bucket, one process at a time). Proximity scan 0
+      violations. Set `engine_config`: **dual_scene_active_pct 20, single_scene_active_pct 20,
+      location_action_pct 75**.
+
+## LIVE state of the active pool (2026-08-10)
+
+The active pool was NOT empty (the old plan note was stale): it already held **526
+legacy `category=null` rows from 2026-07-09** — recreational dynamic-action scenes
+(go-karts, bumper cars, bowling, batting cages, climbing gym, trampoline, arcade dance),
+swap-safe and on-theme. So the live active pool = **900 new themed-adventure rows (9
+buckets × 100) + 526 legacy recreational = 1426 dual + 1426 single**, all proximity-clean.
+
+Final nightly mix (both single + dual face-swap dreams): goofy 15 / elegant 15 / **active
+20** / location 50, and 75% of location dreams get an Option B action. All live-tunable via
+`engine_config` (no build). To pull a bucket: `disabled=true` scoped by category. The legacy
+recreational rows can be culled the same way (`category is null`) if we ever want
+themed-only.
