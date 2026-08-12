@@ -4,6 +4,37 @@ The repeatable runbook for building DreamBot and shipping it to App Store Connec
 For the one-time first-launch history and the wider go-live checklist, see
 `LAUNCH.md`. The shipped-build ledger (tag ↔ build ↔ commit) is `RELEASES.md`.
 
+## STANDING DIRECTIVE (Claude / the agent) — do the WHOLE release yourself
+
+When Kevin says "cut a build", "ship it", "get a build ready for ASC", "build and
+push it", or anything equivalent, **you run the entire pipeline end-to-end without
+asking him to run any step** — he does NOT want to hand-run builds or submits, and
+does NOT want to re-explain this. That means, in order:
+
+1. Bump + tag + push the version (`scripts/release.sh <X.Y.Z>`, or the manual
+   explicit-path equivalent when the tree has another agent's untracked files —
+   `git status --porcelain` non-empty makes `release.sh` refuse; see §1).
+2. **Build it yourself — LOCALLY — in the background**, because a local build takes
+   15-30 min (longer than a foreground Bash timeout):
+   ```sh
+   nohup eas build --local -p ios --profile production --non-interactive \
+     --output ./build-<X.Y.Z>.ipa > /tmp/eas-build-<X.Y.Z>.log 2>&1 &
+   ```
+   Then poll the log until the IPA lands. (A plain `run_in_background` Bash call
+   may be permission-denied in this environment; the detached `nohup … &` form
+   launches it and returns immediately — use that.)
+3. **Submit it yourself** once the IPA exists:
+   ```sh
+   eas submit -p ios --profile production --path ./build-<X.Y.Z>.ipa --non-interactive
+   ```
+4. Log the row in `RELEASES.md` (build number from `eas build:list --limit 1`).
+5. Remind Kevin of the two things only HE can do in the ASC web UI (attach build,
+   screenshots/review notes, Submit for Review) and the post-live `engine_config`
+   update-gate bump — but do everything up to that point yourself.
+
+Only stop and ask if something genuinely fails (signing, quota, a validation 409).
+Building locally is the norm (the Expo Free plan caps cloud builds); see below.
+
 ## TL;DR
 
 **New marketing version** (user-visible, e.g. `1.0.1` → `1.0.2`) — let the helper
