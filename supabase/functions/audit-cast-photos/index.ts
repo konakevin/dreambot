@@ -5,9 +5,10 @@
  * nightly auto-notify uses — and reports who WOULD receive the "your dream face
  * needs a new photo" nudge (planCastPhotoNotify), so the report matches production.
  *
- * Service-role gated (Authorization: Bearer <SERVICE_ROLE_KEY>), deployed
- * --no-verify-jwt, so it authenticates itself. Read-only: it never notifies or
- * mutates — it just returns the verdicts + freshly-signed thumbnail URLs.
+ * Service-role / worker-token gated (Authorization: Bearer), deployed
+ * --no-verify-jwt, so it authenticates itself. Default is read-only (verdicts +
+ * freshly-signed thumbnail URLs); POST { send: true } is the BACKFILL that inserts
+ * the nudge for each flagged user (idempotent via the same dedup as nightly).
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
