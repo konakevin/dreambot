@@ -1471,7 +1471,10 @@ Deno.serve(async (req) => {
     // this dream's real place, empty + atmospheric, never strangers.
     sceneFallbackPrompt = buildSceneFallbackPrompt({
       mediumFragment: baseMedium.fluxFragment,
-      location: dualSpecialScene ?? iconicAnchor ?? userPlace ?? 'a vast dreamlike landscape',
+      // NOT dualSpecialScene — a scenario's scene text describes PEOPLE ("the
+      // couple as pirates"), which would put people back in a people-free scene.
+      // Use the real place; for pure-scenario dreams (no place) fall to a dreamscape.
+      location: iconicAnchor ?? userPlace ?? 'a vast, empty dreamlike landscape',
       timeAxis,
       weatherAxis,
       phenomenaAxis,
@@ -2762,7 +2765,10 @@ Output ONLY the prompt.`;
     // display variant below, so a face-swap render decodes the full image a
     // single time (decoding it twice was the 546 CPU hot-spot).
     let decodedOut: DecodedImage | null = null;
-    if (faceSwapSource || faceSwapSources) {
+    // The pure-scene fallback is a fresh scene, NOT a face-swap output — skip the
+    // yan-ops canned-output dup-detect (which would re-swap the character render
+    // and clobber the scene). It still gets a display variant + phash below.
+    if ((faceSwapSource || faceSwapSources) && !sceneFallbackApplied) {
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data: recent } = await supabase
         .from('uploads')
