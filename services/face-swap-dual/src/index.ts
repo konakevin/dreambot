@@ -217,6 +217,101 @@ Deno.serve({ port: PORT }, async (req) => {
     }
   }
 
+  // ── /analyze — cast-photo swap-suitability probe (DREAM_CAST_HARDENING_PLAN.md).
+  // Runs the SAME YuNet detector + ArcFace embedder that gate the real swap, so a
+  // "suitable" verdict here predicts clearing the 0.35 identity gate at render time.
+  // Returns RAW metrics (for threshold calibration in the log-only phase) + verdict.
+  if (url.pathname === '/analyze') {
+    try {
+      const { imageUrl } = (await req.json()) as { imageUrl?: string };
+      if (!imageUrl) {
+        return new Response(JSON.stringify({ error: 'imageUrl required' }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        });
+      }
+      const t0a = Date.now();
+      const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+      if (!resp.ok) throw new Error(`fetch ${resp.status}`);
+      const img = await decodeImage(new Uint8Array(await resp.arrayBuffer()));
+      const faces = await detectFacesWithGender(img.data, img.width, img.height);
+      // Primary = the LARGEST face (matches embedReference, which embeds the biggest).
+      const primary = faces.slice().sort((a, b) => b.w * b.h - a.w * a.h)[0] ?? null;
+
+      // Calibratable thresholds (env-overridable; these defaults are a starting point
+      // to tune against real cast photos before enforcement).
+      const MIN_BBOX = Number(Deno.env.get('CAST_MIN_BBOX_FRAC') ?? '0.012');
+      const MIN_SCORE = Number(Deno.env.get('CAST_MIN_SCORE') ?? '0.7');
+      const MIN_FRONTAL = Number(Deno.env.get('CAST_MIN_FRONTAL') ?? '0.3');
+
+      let metrics: Record<string, unknown> = { faceCount: faces.length, significantFaces: 0 };
+      let suitable = false;
+      let reason = 'no_face';
+
+      if (primary) {
+        const area = img.width * img.height || 1;
+        const primaryArea = primary.w * primary.h;
+        const bboxFrac = Math.round((primaryArea / area) * 10000) / 10000;
+        // Count faces of comparable size so a tiny background bystander doesn't
+        // trip "multiple_faces", but a real group photo does.
+        const significantFaces = faces.filter((f) => f.w * f.h >= 0.35 * primaryArea).length;
+        const embed = await embedFace(img.data, img.width, img.height, primary);
+        const embeddable = embed !== null;
+        // Frontal-ness from the 5-pt landmarks (YuNet order: rEye,lEye,nose,rMouth,lMouth).
+        let tilt = 1,
+          noseOff = 1;
+        const k = primary.kps;
+        if (k && k.length === 10) {
+          const reX = k[0],
+            reY = k[1],
+            leX = k[2],
+            leY = k[3],
+            noX = k[4];
+          const interoc = Math.hypot(leX - reX, leY - reY) || 1;
+          tilt = Math.abs(leY - reY) / interoc; // 0 = level eyes
+          noseOff = Math.abs(noX - (leX + reX) / 2) / interoc; // 0 = centered; profile → large
+        }
+        const frontalScore = Math.max(0, Math.min(1, 1 - tilt - noseOff));
+        metrics = {
+          faceCount: faces.length,
+          significantFaces,
+          bboxFrac,
+          score: Math.round(primary.score * 1000) / 1000,
+          gender: primary.gender ?? null,
+          embeddable,
+          tilt: Math.round(tilt * 1000) / 1000,
+          noseOff: Math.round(noseOff * 1000) / 1000,
+          frontalScore: Math.round(frontalScore * 1000) / 1000,
+        };
+        // Verdict — first failing condition wins.
+        if (significantFaces > 1) reason = 'multiple_faces';
+        else if (!embeddable) reason = 'not_embeddable';
+        else if (bboxFrac < MIN_BBOX) reason = 'face_too_small';
+        else if (primary.score < MIN_SCORE) reason = 'low_confidence';
+        else if (frontalScore < MIN_FRONTAL) reason = 'not_frontal';
+        else {
+          suitable = true;
+          reason = 'ok';
+        }
+      }
+
+      const ms = Date.now() - t0a;
+      console.log(
+        `[analyze] suitable=${suitable} reason=${reason} ${JSON.stringify(metrics)} ${ms}ms`
+      );
+      return new Response(JSON.stringify({ suitable, reason, ...metrics, ms }), {
+        status: 200,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    } catch (err) {
+      console.error(`[analyze] error: ${(err as Error).message}`);
+      return new Response(JSON.stringify({ error: (err as Error).message }), {
+        status: 500,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   if (!REPLICATE_TOKEN) {
     return new Response(JSON.stringify({ error: 'missing REPLICATE_API_TOKEN' }), {
