@@ -115,6 +115,26 @@ It's their real place as a beautiful empty scene, or it's them. Never strangers.
 **Note:** `epic_tiny` and `embodied` already avoid this (no realistic face swap). This is specifically
 the `character` face-swap path.
 
+### LOCKED decisions (Kevin, 2026-08-11) + implementation architecture
+- **Nightly (`nightly-dreams`)** → re-render a "cool scene": the dream's OWN place + medium + the
+  time/weather/phenomena axes, rendered EMPTY (`_shared/sceneFallbackPrompt.ts`). Not a generic stock
+  landscape. Behind `engine_config.pure_scene_on_swap_fail` (migration 434, default true = kill-switch).
+- **Create (`generate-dream`)** → on an unrecoverable swap, **refund the sparkles** (reuse the existing
+  refund path — the user paid to be IN the scene; an empty scene is worse than a refund + retry). Do
+  NOT ship a peopleless scene there.
+- **First-dream (`first-dream-render`, strict)** → LEAVE ALONE (already hard-fails into its own cascade).
+- **Architecture — CAPTURE, not reach:** the render's scene context (medium fragment, location, the
+  time/weather/phenomena axes) is block-scoped and OUT of scope by the swap-result point. So build the
+  scene-fallback prompt ONCE at brief-build time (where the context is live, axes included) and stash it
+  in a broad-scoped `sceneFallbackPromptText`. At the swap-result point, if the swap is unusable and the
+  flag is on, render that pre-built prompt → `tempUrl`; `logAxes.faceSwapResult='pure-scene-fallback'`
+  (→ `face_swap_mode=null`); persist `ai_prompt = sceneFallbackPromptText`. On a re-render error, fall
+  through to the old ship-the-unswapped behavior. (Do NOT reach for the block-scoped axis vars from the
+  swap-result point — that was the failed first attempt.)
+- **Trigger conditions (unusable):** dual `result.outcome==='cascade'`; solo guard-unsafe; solo swap
+  failed; solo identity far below floor (`soloSimBest < 0.15` — a stranger, e.g. tiffany's 0.024). Not
+  merely-mediocre (0.15–0.35 still ships, it's plausibly them).
+
 ---
 
 ## Rollout

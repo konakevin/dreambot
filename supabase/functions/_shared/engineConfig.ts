@@ -63,6 +63,10 @@ export interface EngineConfig {
   singleSceneGoofyPct: number;
   singleSceneElegantPct: number;
   singleSceneActivePct: number;
+  /** When a face swap is UNUSABLE (dual cascade / solo failed / identity far below
+   *  the floor), re-render the dream as a pure EMPTY scene instead of shipping a
+   *  render with random strangers as the user (DREAM_CAST_HARDENING_PLAN.md). */
+  pureSceneOnSwapFail: boolean;
   /** Option B (2026-08-10): % of plain-LOCATION face-swap nightlies (dual + solo)
    *  that generate a swap-safe, location-fit action beat (locationActionBeat.ts)
    *  instead of a static pose. Covers EVERY place, not just biome-tagged poses.
@@ -112,6 +116,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneActivePct: 0,
   singleCompositionExpandedPct: 0,
   locationActionPct: 0,
+  pureSceneOnSwapFail: true,
 };
 
 let cached: EngineConfig | null = null;
@@ -200,6 +205,8 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.single_composition_expanded_pct ?? DEFAULT_ENGINE_CONFIG.singleCompositionExpandedPct
     ),
     locationActionPct: Number(data.location_action_pct ?? DEFAULT_ENGINE_CONFIG.locationActionPct),
+    pureSceneOnSwapFail:
+      (data.pure_scene_on_swap_fail ?? DEFAULT_ENGINE_CONFIG.pureSceneOnSwapFail) !== false,
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

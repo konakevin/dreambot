@@ -27,6 +27,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
+import { buildSceneFallbackPrompt } from '../_shared/sceneFallbackPrompt.ts';
 import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
 import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
 import {
@@ -306,6 +307,13 @@ Deno.serve(async (req) => {
   let replicatePredictionId: string | null = null;
   const fallbackReasons: string[] = [];
   let logAxes: Record<string, unknown> = {};
+  // Pure-scene fallback (DREAM_CAST_HARDENING_PLAN.md) — declared handler-wide so
+  // the prompt is BUILT at brief-time (scene context is live) and CONSUMED at the
+  // swap-result point (that context is out of scope by then). CAPTURE, not reach.
+  let sceneFallbackPrompt: string | null = null;
+  let sceneFallbackApplied = false;
+  let swapUnusable = false;
+  let soloSimBest: number | null = null;
   let resolvedMediumKey: string | undefined;
   let resolvedVibeKey: string | undefined;
   // Hoisted for the post-try scene-composition model gate (mig 213). The
@@ -1457,6 +1465,18 @@ Deno.serve(async (req) => {
     const dualSpecialLighting = dualSpecialScene ? pickSpecialLighting() : null;
     const effectiveUserPlace = dualSpecialScene ?? userPlace;
 
+    // CAPTURE the pure-scene fallback prompt NOW, while the scene context (medium
+    // + location + time/weather/phenomena axes) is in scope — it's gone by the
+    // swap-result point. Consumed only if the swap turns out unusable, so we ship
+    // this dream's real place, empty + atmospheric, never strangers.
+    sceneFallbackPrompt = buildSceneFallbackPrompt({
+      mediumFragment: baseMedium.fluxFragment,
+      location: dualSpecialScene ?? iconicAnchor ?? userPlace ?? 'a vast dreamlike landscape',
+      timeAxis,
+      weatherAxis,
+      phenomenaAxis,
+    });
+
     // ── Unified character face-swap slot pipeline ──
     // Handles BOTH single-human and dual-character face swap. Sonnet only
     // fills controlled slots; geometry/identity/gender/(side for dual) are
@@ -2518,7 +2538,8 @@ Output ONLY the prompt.`;
           throw new Error('face_swap_failed:dual');
         }
         // Nightly cron → deliver the clean UNSWAPPED scene rather than a wrong face.
-        console.warn('[nightly-dreams] ⚠ Dual unrecoverable — delivering unswapped scene');
+        console.warn('[nightly-dreams] ⚠ Dual unrecoverable — pure-scene fallback');
+        swapUnusable = true;
       }
     } else if (faceSwapSource && tempUrl) {
       // ── Solo-swap safety guard (see _shared/singleSwapGuard.ts) ──
@@ -2567,8 +2588,9 @@ Output ONLY the prompt.`;
         }
         // Nightly cron → deliver the clean UNSWAPPED scene rather than risk
         // pasting the face onto an invented second person.
-        console.warn('[nightly-dreams] ⚠ Solo swap unconfirmed — delivering unswapped scene');
+        console.warn('[nightly-dreams] ⚠ Solo swap unconfirmed — pure-scene fallback');
         logAxes.faceSwapResult = 'solo-unsafe-unswapped';
+        swapUnusable = true;
       } else {
         tempUrl = soloGuard.url;
         if (soloGuard.predictionId) replicatePredictionId = soloGuard.predictionId;
@@ -2617,6 +2639,7 @@ Output ONLY the prompt.`;
             const v1 = await verifySoloIdentity(tempUrl, faceSwapSource);
             if (v1) {
               fallbackReasons.push(`identity_sim_solo:${v1.sim}`);
+              soloSimBest = v1.sim;
               if (v1.sim < soloThr) {
                 fallbackReasons.push(`identity_below_threshold_solo:${v1.sim}<${soloThr}`);
                 try {
@@ -2632,6 +2655,7 @@ Output ONLY the prompt.`;
                   if (v2 && v2.sim > v1.sim) {
                     tempUrl = reswap;
                     fallbackReasons.push(`identity_solo_reswap:${v2.sim}`);
+                    soloSimBest = v2.sim;
                   }
                 } catch (e) {
                   fallbackReasons.push('identity_solo_reswap_failed');
@@ -2644,6 +2668,49 @@ Output ONLY the prompt.`;
         // First-dream cascade — see comment in the dual branch above.
         if (!swapSuccessSingle && strict_face_swap) {
           throw new Error('face_swap_failed:single');
+        }
+        // Nightly: solo swap failed, or the swapped face is WAY below the identity
+        // floor (0.15 — a stranger, e.g. the 0.024 "tiffany" partner) → pure-scene.
+        if (!swapSuccessSingle && !strict_face_swap) swapUnusable = true;
+        if (swapSuccessSingle && soloSimBest !== null && soloSimBest < 0.15) {
+          swapUnusable = true;
+          fallbackReasons.push(`identity_floor_solo:${soloSimBest}<0.15`);
+        }
+      }
+    }
+
+    // ── Pure-scene fallback (DREAM_CAST_HARDENING_PLAN.md) ──
+    // The swap is UNUSABLE (no usable face / a stranger). Rather than ship a
+    // render full of random people posing as the user, re-render the SAME place +
+    // medium as a beautiful EMPTY scene. Live kill-switch: pure_scene_on_swap_fail.
+    // strict (onboarding first-dream) already hard-fails to its own cascade above.
+    if (swapUnusable && !strict_face_swap && sceneFallbackPrompt) {
+      const scfg = await fetchEngineConfig(supabase);
+      if (scfg.pureSceneOnSwapFail) {
+        try {
+          const scene = await generateImage(
+            'flux-dev',
+            sceneFallbackPrompt,
+            undefined,
+            {
+              replicateToken: REPLICATE_TOKEN,
+              openaiKey: Deno.env.get('OPENAI_API_KEY'),
+              geminiKey: Deno.env.get('GEMINI_API_KEY'),
+              xaiKey: Deno.env.get('XAI_API_KEY'),
+            },
+            undefined,
+            'jpg'
+          );
+          tempUrl = scene.url;
+          if (scene.predictionId) replicatePredictionId = scene.predictionId;
+          sceneFallbackApplied = true;
+          logAxes.faceSwapResult = 'pure-scene-fallback'; // → face_swap_mode = null
+          fallbackReasons.push('pure_scene_fallback');
+          console.log('[nightly-dreams] swap unusable → shipped pure-scene fallback');
+        } catch (e) {
+          // Re-render failed → fall through to the old ship-the-unswapped behavior.
+          fallbackReasons.push(`pure_scene_fallback_failed:${(e as Error).message}`);
+          console.warn('[nightly-dreams] scene fallback render failed:', (e as Error).message);
         }
       }
     }
@@ -2910,7 +2977,7 @@ Output ONLY the prompt.`;
           image_url_display: displayUrl,
           thumbhash,
           caption,
-          ai_prompt: finalPrompt,
+          ai_prompt: sceneFallbackApplied ? sceneFallbackPrompt : finalPrompt,
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
           // Which AI model rendered this — drives the model badge on
