@@ -148,9 +148,10 @@ Deno.serve(async (req: Request) => {
       console.log(`[describe-photo] traits: ${physicalSummary}`);
     }
 
-    // Cast-photo swap-suitability (DREAM_CAST_HARDENING_PLAN.md Lever A). LOG-ONLY:
-    // the same YuNet+ArcFace that gate the real swap judge the source photo, so we
-    // calibrate thresholds against real uploads before flipping the client to block.
+    // Cast-photo swap-suitability GATE (DREAM_CAST_HARDENING_PLAN.md Lever A). The
+    // same YuNet+ArcFace that gate the real swap judge the source photo here, so an
+    // unusable photo is rejected BEFORE it can enter the recipe. Unambiguous
+    // failures 422 (below); borderline verdicts stay log-only for calibration.
     // Pets aren't face-swapped this way — skip. Fail-open (null on Fly outage).
     let castQuality = null;
     if (role !== 'pet') {
@@ -159,6 +160,23 @@ Deno.serve(async (req: Request) => {
         console.log(
           `[describe-photo] cast_quality role=${role} suitable=${castQuality.suitable} reason=${castQuality.reason} faces=${castQuality.faceCount}/${castQuality.significantFaces} bbox=${castQuality.bboxFrac} embeddable=${castQuality.embeddable} frontal=${castQuality.frontalScore} gender=${castQuality.gender}`
         );
+        // Server-authoritative UPLOAD GATE (DREAM_CAST_HARDENING_PLAN.md, Lever A).
+        // Reject only the UNAMBIGUOUS failures — no face, a group photo, or a face
+        // the swap embedder can't read — with a 422 the client turns into a
+        // reason-specific re-pick alert. Borderline verdicts (face_too_small /
+        // low_confidence / not_frontal) stay log-only for now (calibration), so a
+        // slightly-off but usable photo still gets through. Fail-open: a Fly outage
+        // returns castQuality=null and never blocks a legit upload.
+        const BLOCK_REASONS = ['no_face', 'multiple_faces', 'not_embeddable'];
+        if (!castQuality.suitable && BLOCK_REASONS.indexOf(castQuality.reason) !== -1) {
+          console.log(
+            `[describe-photo] cast upload REJECTED role=${role} reason=${castQuality.reason}`
+          );
+          return new Response(
+            JSON.stringify({ error: 'cast_unsuitable', reason: castQuality.reason }),
+            { status: 422, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
       }
     }
 

@@ -20,6 +20,7 @@ import { hasAiConsent } from '@/lib/aiConsent';
 import { showAiConsent } from '@/components/AiConsentSheet';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
+import { castRejectCopy } from '@/lib/castRejectCopy';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
 import { verticalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
@@ -452,6 +453,22 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         if (__DEV__) console.warn(`[DreamCast] describe-photo ${descRes.status}, retrying once...`);
         await new Promise((r) => setTimeout(r, 1500));
         descRes = await describeOnce();
+      }
+      // 422 = server upload gate rejected the photo (group shot / no face /
+      // unreadable). Roll back the store entry + orphaned file, show reason copy.
+      if (descRes.status === 422) {
+        const body = await descRes.json().catch(() => ({}) as { reason?: string });
+        removeCastMember(role);
+        supabase.storage
+          .from(CAST_BUCKET)
+          .remove([path])
+          .catch((e) => {
+            if (__DEV__) console.warn('[DreamCast] storage cleanup failed', e);
+          });
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        const copy = castRejectCopy(body.reason);
+        showAlert(copy.title, copy.body, [{ text: 'OK' }]);
+        return;
       }
       if (!descRes.ok) throw new Error(`describe-photo failed: ${descRes.status}`);
       const descData = await descRes.json();

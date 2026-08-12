@@ -26,11 +26,15 @@ export interface CastPhotoResult {
   physical_summary?: string;
 }
 
-/** A distinct error type so callers can show the friendly "not recognized" copy. */
+/** A distinct error type so callers can show the friendly "not recognized" copy.
+ *  `reason` (from the server 422 gate: no_face | multiple_faces | not_embeddable)
+ *  drives reason-specific copy via lib/castRejectCopy; absent = generic. */
 export class CastNotRecognizedError extends Error {
-  constructor() {
-    super('unrecognized');
+  reason?: string;
+  constructor(reason?: string) {
+    super(reason ?? 'unrecognized');
     this.name = 'CastNotRecognizedError';
+    this.reason = reason;
   }
 }
 
@@ -114,6 +118,13 @@ export async function pickUploadDescribeCast(
   if (!descRes.ok && descRes.status >= 500) {
     await new Promise((r) => setTimeout(r, 1500));
     descRes = await describeOnce();
+  }
+  // 422 = the server upload gate rejected the photo (group shot / no face /
+  // unreadable). Carry the reason so the caller shows reason-specific copy.
+  if (descRes.status === 422) {
+    cleanup();
+    const body = await descRes.json().catch(() => ({}) as { reason?: string });
+    throw new CastNotRecognizedError(body.reason);
   }
   if (!descRes.ok) {
     cleanup();

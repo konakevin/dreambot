@@ -24,6 +24,7 @@ import {
   CastNotRecognizedError,
   type CastPhotoResult,
 } from '@/lib/castUpload';
+import { castRejectCopy } from '@/lib/castRejectCopy';
 import { saveVibeProfile } from '@/lib/saveVibeProfile';
 import { newPartnerId } from '@/lib/dreamCastRoster';
 import { showAlert } from '@/components/CustomAlert';
@@ -138,11 +139,8 @@ export function DreamCastRoster() {
     } catch (err) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       if (err instanceof CastNotRecognizedError) {
-        showAlert(
-          'Photo not recognized',
-          "We couldn't detect a clear face. Use a well-lit photo where the face is clearly visible.",
-          [{ text: 'OK' }]
-        );
+        const copy = castRejectCopy(err.reason);
+        showAlert(copy.title, copy.body, [{ text: 'OK' }]);
       } else {
         if (__DEV__) console.error('[roster] upload failed:', err);
         showAlert(
