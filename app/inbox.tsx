@@ -131,6 +131,8 @@ function iconForGroup(g: InboxGroup): IconSpec {
       return { name: 'diamond', color: colors.accent };
     case 'welcome_gift':
       return { name: 'gift', color: colors.accent };
+    case 'cast_photo':
+      return { name: 'person-circle', color: colors.accent };
     case 'sparkle_gift':
       return g.subtype === 'thanks'
         ? { name: 'heart', color: colors.accent }
@@ -291,6 +293,20 @@ function getGroupText(g: InboxGroup): {
       return {
         subject: 'Welcome to DreamBot 🌙',
         subtext: 'Tap to see how it works and grab your welcome gift.',
+        isAggregable: false,
+      };
+
+    case 'cast_photo':
+      // A dream-cast face (self or partner/friend) couldn't be read, so they've
+      // been sitting out the dreams. Fixed title by subtype; the full "who + how
+      // to fix" copy (with the relationship word baked in) rides in `body`. Tap
+      // routes to /settings/dream-cast (system type → no expand).
+      return {
+        subject:
+          g.subtype === 'self'
+            ? 'Your dream face needs a new photo'
+            : 'A dream face needs a new photo',
+        subtext: capSubtext(g.body),
         isAggregable: false,
       };
 
@@ -466,7 +482,10 @@ function GroupRow({
     !!subtext &&
     !(isAggregable && group.actorCount > 1) &&
     group.type !== 'dream_failed' &&
-    !DREAMBOT_SYSTEM_TYPES.has(group.type);
+    // cast_photo is a system type but its body is a full two-sentence message —
+    // it MUST stay expandable (left-zone tap toggles) even though other system
+    // types route on tap. Its "go fix it" action rides the right-side CTA arrow.
+    (!DREAMBOT_SYSTEM_TYPES.has(group.type) || group.type === 'cast_photo');
   // "New since last inbox view" — drives the pip overlay on the icon
   // tile. Migration 223 swapped per-row seen_at into a time-window flag
   // off `users.last_inbox_view_at` so the inbox is reliably empty-of-pips
@@ -494,6 +513,11 @@ function GroupRow({
     group.type === 'trial_reminder' ||
     group.type === 'pro_reminder' ||
     group.type === 'basic_reminder';
+  // Rows that show a tappable "go" arrow on the right (routes) INSTEAD of a
+  // timestamp: expiry reminders → /subscribe, cast_photo → the Dream Cast roster.
+  // For cast_photo this is the ONLY route affordance — the left zone expands the
+  // message rather than navigating, so the fix-it action lives here.
+  const showCtaArrow = isReminder || group.type === 'cast_photo';
 
   return (
     <ReanimatedSwipeable
@@ -628,7 +652,7 @@ function GroupRow({
           </TouchableOpacity>
         )}
 
-        {isReminder ? (
+        {showCtaArrow ? (
           <TouchableOpacity
             style={styles.ctaArrow}
             onPress={() => (selectMode ? onToggleSelect() : onPress())}

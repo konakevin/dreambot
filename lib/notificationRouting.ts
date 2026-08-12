@@ -91,6 +91,15 @@ export function computeNotificationRoute(data: NotificationRouteData): string | 
     return '/welcome-gift';
   }
 
+  // Cast-photo issue (DREAM_CAST_HARDENING_PLAN.md): a dream-cast face (self or
+  // partner/friend) couldn't be read, so they've been sitting out the dreams.
+  // Route straight to the Dream Cast roster so the fix — re-upload a clear solo
+  // selfie — is one tap away. Carries no uploadId/actorId, so this must precede
+  // the upload-based routing below.
+  if (data.type === 'cast_photo') {
+    return '/settings/dream-cast';
+  }
+
   // Admin-only content report → the moderation queue (where the admin acts on
   // it), NOT the reported post. Carries uploadId/commentId for context, so this
   // must precede the upload-based routing below.

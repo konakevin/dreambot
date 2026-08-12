@@ -27,6 +27,7 @@ export const DREAMBOT_SYSTEM_TYPES: ReadonlySet<string> = new Set([
   'pro_reminder',
   'basic_reminder',
   'welcome_gift', // the onboarding "Welcome to DreamBot" ping
+  'cast_photo', // "your dream face needs a new photo" — authored by DreamBot itself
 ]);
 
 /**

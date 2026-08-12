@@ -28,6 +28,12 @@ import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { buildSceneFallbackPrompt } from '../_shared/sceneFallbackPrompt.ts';
+import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
+import {
+  planCastPhotoNotify,
+  castPhotoDedupId,
+  type CastCandidate,
+} from '../_shared/castPhotoNotify.ts';
 import { pickActiveDualAction } from '../_shared/pools/dual_actions_active.ts';
 import { pickActiveSingleAction } from '../_shared/pools/single_actions_active.ts';
 import {
@@ -336,6 +342,10 @@ Deno.serve(async (req) => {
   let faceSwapSources:
     | Array<{ role: string; sourceUrl: string; gender: 'male' | 'female' | null | undefined }>
     | undefined;
+  // Cast members (with role + relationship + storage_path) captured at source-
+  // assignment time for the cast-photo auto-notify — selectedCast/castPick are
+  // block-scoped and out of scope by the swap-result point (CAPTURE, not reach).
+  let castNotifyMembers: DreamCastMember[] = [];
   let finalPrompt: string = '';
   // Hoisted embodied-medium flag so the post-try GPT-image-2 prefix step
   // can skip its canvas-illustration prefix (which fights LEGO / pixels /
@@ -2155,6 +2165,7 @@ Output ONLY the prompt.`;
           { role: s.role, sourceUrl: s.thumb_url, gender: s.gender },
           { role: p.role, sourceUrl: p.thumb_url, gender: p.gender },
         ];
+        castNotifyMembers = [s, p];
         console.log(`[nightly-dreams] Dual face swap: ${s.role}+${p.role} -> ${nightlyMedium.key}`);
       }
     } else if (
@@ -2166,6 +2177,7 @@ Output ONLY the prompt.`;
     ) {
       faceSwapSource = castPick.thumb_url;
       faceSwapGender = resolveCastGender(castPick as DreamCastMember);
+      castNotifyMembers = [castPick as DreamCastMember];
       console.log(`[nightly-dreams] Nightly face swap: ${castPick.role} -> ${nightlyMedium.key}`);
     }
 
@@ -2715,6 +2727,65 @@ Output ONLY the prompt.`;
           fallbackReasons.push(`pure_scene_fallback_failed:${(e as Error).message}`);
           console.warn('[nightly-dreams] scene fallback render failed:', (e as Error).message);
         }
+      }
+    }
+
+    // ── Auto-notify: a cast photo couldn't be read (DREAM_CAST_HARDENING_PLAN.md) ──
+    // The swap was unusable. Re-probe the actual cast SOURCE photos with the swap's
+    // OWN /analyze detector: whichever is CONFIRMED bad gets a one-time "your dream
+    // face needs a new photo" nudge (deduped per photo via a stable reference_id).
+    // If both probe fine — a transient/compositional miss, not a bad photo — stay
+    // quiet; never nag a good photo. Best-effort: wrapped so it can never break the
+    // render. strict (onboarding first-dream) is left alone by design.
+    if (swapUnusable && !strict_face_swap) {
+      try {
+        const candidates: CastCandidate[] = [];
+        for (const m of castNotifyMembers) {
+          if (m.role === 'pet') continue;
+          const url = m.thumb_url;
+          if (!url || !url.startsWith('http')) continue;
+          const q = await analyzeCastPhoto(url);
+          candidates.push({
+            role: m.role,
+            relationship: m.relationship ?? null,
+            storagePath: m.storage_path ?? null,
+            suitable: q ? q.suitable : null, // null (Fly outage) → not a culprit
+          });
+        }
+        const plan = planCastPhotoNotify(candidates);
+        if (plan) {
+          const ref = plan.storagePath ? await castPhotoDedupId(plan.storagePath) : null;
+          let already = false;
+          if (ref) {
+            const { data: dupe } = await supabase
+              .from('notifications')
+              .select('id')
+              .eq('recipient_id', userId)
+              .eq('type', 'cast_photo')
+              .eq('reference_id', ref)
+              .limit(1);
+            already = !!(dupe && dupe.length > 0);
+          }
+          if (already) {
+            console.log('[nightly-dreams] cast-photo already nudged for this photo — skip');
+          } else {
+            const { error: notifyErr } = await supabase.from('notifications').insert({
+              recipient_id: userId,
+              actor_id: userId, // system notification → self (DreamBot mascot avatar)
+              type: 'cast_photo',
+              subtype: plan.subtype,
+              body: plan.body,
+              reference_id: ref,
+            });
+            if (notifyErr) {
+              console.warn('[nightly-dreams] cast-photo notify insert failed:', notifyErr.message);
+            } else {
+              console.log(`[nightly-dreams] cast-photo nudge → ${plan.subtype}`);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[nightly-dreams] cast-photo notify skipped:', (e as Error).message);
       }
     }
 

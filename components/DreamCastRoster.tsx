@@ -37,6 +37,12 @@ const RELATIONSHIPS: { key: 'friend' | 'partner'; label: string }[] = [
   { key: 'partner', label: '❤️ Partner' },
 ];
 
+// Stable empty-array reference for the partner_library selector. Defaulting with
+// `?? []` INSIDE the Zustand selector mints a new array every render, so
+// useSyncExternalStore sees the snapshot "change" each time → "getSnapshot should
+// be cached" → infinite render loop. Default to this constant OUTSIDE the selector.
+const EMPTY_PARTNERS: DreamPartner[] = [];
+
 /** Resolves a private cast photo to a signed URL for the 48×48 thumbnail. A
  *  `uriOverride` (a just-picked LOCAL image) takes precedence so the photo shows
  *  instantly during the upload+analyze, before the signed URL exists. */
@@ -85,7 +91,7 @@ function CastThumb({
 export function DreamCastRoster() {
   const user = useAuthStore((st) => st.user);
   const self = useOnboardingStore((st) => st.profile.dream_cast.find((m) => m.role === 'self'));
-  const partners = useOnboardingStore((st) => st.profile.partner_library ?? []);
+  const partners = useOnboardingStore((st) => st.profile.partner_library) ?? EMPTY_PARTNERS;
   const activeId = useOnboardingStore((st) => st.profile.active_partner_id);
   const setCastMember = useOnboardingStore((st) => st.setCastMember);
   const removeCastMember = useOnboardingStore((st) => st.removeCastMember);

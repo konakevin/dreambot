@@ -45,6 +45,7 @@ export type NotificationType =
   | 'basic_reminder' // Basic-tier expiry pings (cancelled but still in paid period), migration 385
   | 'welcome_gift' // Onboarding welcome ping (mig 223) — routes to /welcome-gift
   | 'sparkle_gift' // Gift Sparkles (mig 334) — 'received' → /giftUnwrap, 'thanks' → profile
+  | 'cast_photo' // Dream-cast face unreadable (mig 435) — subtype 'self' | 'partner'; → /settings/dream-cast
   | 'comment'; // legacy rows kept queryable
 
 export type NotificationCategory =

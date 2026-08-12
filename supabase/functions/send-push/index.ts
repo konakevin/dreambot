@@ -187,6 +187,18 @@ function getNotificationContent(
         return { title: `${actorName} loved your gift ✨`, body: '' };
       }
       return { title: `🎁 ${actorName} gifted you sparkles`, body: body ?? 'Tap to unwrap' };
+    case 'cast_photo':
+      // A dream-cast face couldn't be read (DREAM_CAST_HARDENING_PLAN.md). Fixed
+      // title by subtype ('self' vs the partner/friend variant); the stored
+      // `body` is the full warm message (relationship word baked in) — surface it
+      // verbatim as the push body so the banner reads the same as the inbox.
+      return {
+        title:
+          subtype === 'self'
+            ? 'Your dream face needs a new photo'
+            : 'A dream face needs a new photo',
+        body: body ?? '',
+      };
     case 'report':
       // Admin-only: a user filed a content report. Sent to every admin so they
       // can act within 24h (App Store 1.2). Routes to the admin Reports screen.
