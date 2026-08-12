@@ -6,6 +6,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 
 const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
 
@@ -147,8 +148,28 @@ Deno.serve(async (req: Request) => {
       console.log(`[describe-photo] traits: ${physicalSummary}`);
     }
 
+    // Cast-photo swap-suitability (DREAM_CAST_HARDENING_PLAN.md Lever A). LOG-ONLY:
+    // the same YuNet+ArcFace that gate the real swap judge the source photo, so we
+    // calibrate thresholds against real uploads before flipping the client to block.
+    // Pets aren't face-swapped this way — skip. Fail-open (null on Fly outage).
+    let castQuality = null;
+    if (role !== 'pet') {
+      castQuality = await analyzeCastPhoto(image_url);
+      if (castQuality) {
+        console.log(
+          `[describe-photo] cast_quality role=${role} suitable=${castQuality.suitable} reason=${castQuality.reason} faces=${castQuality.faceCount}/${castQuality.significantFaces} bbox=${castQuality.bboxFrac} embeddable=${castQuality.embeddable} frontal=${castQuality.frontalScore} gender=${castQuality.gender}`
+        );
+      }
+    }
+
     return new Response(
-      JSON.stringify({ description, gender, age, physical_summary: physicalSummary || null }),
+      JSON.stringify({
+        description,
+        gender,
+        age,
+        physical_summary: physicalSummary || null,
+        cast_quality: castQuality,
+      }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
