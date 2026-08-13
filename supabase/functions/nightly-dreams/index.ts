@@ -1402,6 +1402,15 @@ Deno.serve(async (req) => {
     // dream). Safe to swap post-roll: scenario rolls only happen on face-swap
     // renders and only face-swap-capable natural mediums are honored, so the
     // eligibility flags computed earlier stay truthful.
+    // medium_ban may hold a COMMA-SEPARATED list (Operation Sweet Dreams —
+    // fantastical scenes ban EVERY photo-real-adjacent medium, not just
+    // photography). Parse once; a legacy single key parses to a 1-element array.
+    const bannedMediums = dualSceneMediumBan
+      ? dualSceneMediumBan
+          .split(',')
+          .map((k) => k.trim())
+          .filter(Boolean)
+      : [];
     if (dualSceneMediumKey && !force_medium && dualSceneMediumKey !== nightlyMedium.key) {
       try {
         const forced = await resolveMediumFromDb(
@@ -1442,26 +1451,28 @@ Deno.serve(async (req) => {
       } catch (_e) {
         // keep the rolled medium
       }
-    } else if (dualSceneMediumBan && !force_medium && dualSceneMediumBan === nightlyMedium.key) {
-      // Scenario-banned medium (migration 355): the roll landed on a medium
-      // this scenario reads badly in (e.g. fantastical buckets + photography
-      // → creepy photoreal yetis/giant props). Re-roll from the face-swap
-      // pool minus the banned key; any problem keeps the rolled medium
-      // (fail-open — a bad medium_ban can't break a dream).
-      // Exclude ONLY the banned key — adding recentMediums could shrink the
+    } else if (bannedMediums.length && !force_medium && bannedMediums.includes(nightlyMedium.key)) {
+      // Scenario-banned medium (migration 355 + Operation Sweet Dreams): the
+      // roll landed on a medium this scenario reads badly in (e.g. fantastical
+      // buckets + any photo-real-adjacent medium → creepy photoreal
+      // dragons/giant props). Re-roll from the face-swap pool minus ALL the
+      // banned keys; any problem keeps the rolled medium (fail-open — a bad
+      // medium_ban can't break a dream).
+      // Exclude ONLY the banned keys — adding recentMediums could shrink the
       // pool under filterRecent's ≥2 floor, which falls back to the FULL pool
-      // and could re-serve the banned medium. A possible recency repeat beats
-      // shipping the banned medium.
+      // and could re-serve a banned medium. A possible recency repeat beats
+      // shipping a banned medium. (The face-swap pool has ~12 mediums, so
+      // excluding the 6 photo-adjacent still leaves a healthy painterly set.)
       try {
         const rerolled = await resolveMediumFromDb(
           'dream_eligible_face_swap',
-          [dualSceneMediumBan],
+          bannedMediums,
           undefined,
           firstDreamAllow
         );
         if (
           rerolled &&
-          rerolled.key !== dualSceneMediumBan &&
+          !bannedMediums.includes(rerolled.key) &&
           rerolled.faceSwaps &&
           rerolled.characterRenderMode === 'natural'
         ) {

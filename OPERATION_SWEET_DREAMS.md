@@ -149,6 +149,47 @@ heads, creatures/scale/weapons kept low or in the background, never over a face.
 
 ---
 
+## Medium bans (photo-real-adjacent) — DONE 2026-08-13
+
+Fantastical scenes render badly in photo-real and photo-adjacent mediums. The scene face-swap roll
+draws from 8 scene-eligible mediums; the 6 photo-adjacent ones are now banned from fantastical pools:
+**photography, film_noir (Noir), vintage_film (Vintage), double_exposure (Overlay), heirloom
+(Heirloom), glamour (Glamour)**. Left for fantasy: canvas + illustration on the direct roll, and the
+re-roll reaches the wider painterly set (comics, pencil, pop_art, watercolor).
+
+- **Engine change (deployed):** `medium_ban` now accepts a COMMA-SEPARATED list. `nightly-dreams`
+  parses it and re-rolls out of the whole list (`bannedMediums.includes(...)`); a legacy single key
+  still parses to a 1-element array (backward compatible). Fail-open preserved. The face-swap pool has
+  ~12 mediums, so excluding 6 still leaves a healthy painterly set (above filterRecent's floor).
+- **Generators:** shared `PHOTO_ADJACENT_BAN` constant; fantastical buckets carry it.
+- **Which themes ban:** fantastical (mounts, companion, epic_arsenal, underwater, celestial, cozy_magic,
+  mythic_legend, winter_wonder, magical_girl_f, warrior_soldier_m) + the 5 existing (fantasy_hero,
+  superhero, giant_critter, fantastical_silly/fantastical, giant_scale/absurd_giant). Real-world themes
+  keep photography: tropical_adventure, sports_glory, street_cool, stage_and_fame, adorable_swarm,
+  hunting_m, fishing_m, extreme_sports_m, combat_sports_m, princess_f, ballerina_f, girly_cute_f.
+- Existing DB rows for the 5 old fantasy categories get a scoped UPDATE to the full CSV.
+
+## Gendered solo pools (single dreams only)
+
+The solo roll already routes by cast gender (`nightly-dreams:1337-1349` →
+`singleScenarioCandidates(pools, pool, g)` unions `any ∪ own-gender`), and `single_scenarios` has a
+`gender` column. So gendered pools are pure seeding, ZERO engine change. The 13 shared themes stay
+`gender='any'` (both genders get them); gendered categories layer on top.
+
+| Gender | Category | Type | Flavor |
+|---|---|---|---|
+| female | princess_f | elegant | fairytale princess, gowns, tiaras |
+| female | ballerina_f | elegant | ballet stage, tutu, spotlight |
+| female | girly_cute_f | goofy | pink/pastel/fluffy/kawaii |
+| female | magical_girl_f | active | sparkly magical-girl heroine (bans photo) |
+| male | extreme_sports_m | active | motocross, big-wave, downhill MTB |
+| male | combat_sports_m | active | boxing, MMA, muay thai |
+| male | warrior_soldier_m | active | spartan, gladiator, knight, soldier (bans photo) |
+| male | hunting_m | active | camo, duck blind, bow (keeps photo) |
+| male | fishing_m | active | deep-sea, fly fishing, the big catch (keeps photo) |
+
+Dual dreams (two people) don't gender-route, so they keep only the 13 `any` themes.
+
 ## Seeding process (per-theme)
 
 Uses the canonical generators, which set `pool` + `category` (scoped-deletable per the hard rule)
@@ -183,5 +224,9 @@ Reweight (`active` 30 -> 50, `plain` 40 -> 20) is applied last, once the new con
 
 ## Iteration log
 - **2026-08-13** — Program opened. Audited the roll + pools. Fixed the loader 1000-row truncation
-  (prereq) and redeployed nightly-dreams. Drafted all 13 theme specs + reweight proposal. Awaiting
-  Kevin's creative sign-off on the descs before generation.
+  (prereq) and redeployed nightly-dreams. Drafted all 13 theme specs + reweight proposal.
+- **2026-08-13** — Kevin approved all 13 + added: (a) multi-medium photo-adjacent bans on fantastical
+  pools, (b) gendered solo pools. Shipped the multi-ban engine change (deployed). Authored all buckets
+  into both generators (13 dual themes + 13 solo `any` + 9 gendered solo), validated via dry-run
+  (quality excellent, swap-safe). Next: DB-update the 5 existing bans, generate MVP-25, proximity scan,
+  render samples cast on Kevin for grading.

@@ -40,6 +40,14 @@ const PER = parseInt(arg('--per', '6'), 10); // entries per bucket
 const DRY = args.includes('--dry-run');
 const BUCKET_FILTER = arg('--buckets', null); // 'sample' or csv of keys
 
+// Operation Sweet Dreams: fantastical scenes ban EVERY photo-real-adjacent
+// medium (photoreal dragons/magic/creatures read as creepy CGI, and noir/
+// vintage/heirloom/overlay/glamour render semi-real styles badly). Stored as a
+// CSV in medium_ban; nightly-dreams parses it and re-rolls out of the whole
+// list into the painterly/illustrated face-swap mediums.
+const PHOTO_ADJACENT_BAN =
+  'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
+
 const ELEGANT_BUCKETS = [
   {
     key: 'victorian',
@@ -81,6 +89,16 @@ const ELEGANT_BUCKETS = [
     label: 'Pretty city at night',
     desc: 'Lovely evening cityscapes, any era — a pretty lamplit street at night, café terraces, stone bridges over a river, plazas with fountains. Dressed up.',
   },
+  {
+    key: 'street_cool',
+    label: 'Cool modern street style',
+    desc: 'Effortlessly COOL modern street style — the couple looking striking in standout fashion: a neon-lit city crosswalk at night, a graffiti-art alley, a rooftop at golden hour, a chic café strip, or a sleek subway platform. Bold streetwear, designer jackets, statement outfits, sunglasses pushed up (never over the eyes). Confident and editorial.',
+  },
+  {
+    key: 'stage_and_fame',
+    label: 'Living the dream (fame)',
+    desc: 'Living-the-dream FAME — the couple as stars: on a red carpet under flashing bulbs, a magazine cover shoot, a stadium stage under spotlights with a crowd beyond, a glossy talk-show set, or a movie premiere. Glamorous designer gowns, sharp suits, statement looks. Dazzling and aspirational.',
+  },
 ];
 
 const GOOFY_BUCKETS = [
@@ -96,7 +114,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'giant_scale',
-    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
+    mediumBan: PHOTO_ADJACENT_BAN, // photo-real-adjacent mediums read creepy for fantastical content
     label: 'Giant / oversized props',
     desc: 'Comically OVERSIZED props, normal clothes — perched on a giant rubber duck, beside a donut taller than them, on a giant slice of pizza, holding a colossal ice-cream cone, on an enormous beanbag.',
   },
@@ -107,7 +125,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'fantastical_silly',
-    mediumBan: 'photography', // migration 355: photoreal reads creepy for this content
+    mediumBan: PHOTO_ADJACENT_BAN, // photo-real-adjacent mediums read creepy for fantastical content
     label: 'Fantastical & silly',
     desc: 'Light-hearted fantasy/sci-fi comedy, readable — taking a selfie with a friendly cartoonish alien, a tiny dragon perched nearby, a goofy robot butler serving them, a friendly yeti leaning in, riding a slow cartoon dinosaur.',
   },
@@ -143,6 +161,11 @@ const GOOFY_BUCKETS = [
     label: 'Out and about (classic fun outings)',
     desc: 'A wholesome classic FUN OUTING, normal everyday clothes — at the amusement park with a ferris wheel behind them, sharing cotton candy at the county fair midway, on a picnic blanket with a wicker basket in a sunny park, a beach day with striped umbrellas and sandcastles, at the aquarium in front of a glowing floor-to-ceiling fish tank, at a pumpkin patch with wheelbarrows of pumpkins, apple picking in an orchard with baskets, at the zoo by the giraffe enclosure, a museum trip beside dinosaur skeletons, at a farmers market with armfuls of flowers and produce, mini golf by the windmill hole, a drive-in movie leaning on a classic car. Joyful, sunny, postcard-fun.',
   },
+  {
+    key: 'adorable_swarm',
+    label: 'Adorable baby-animal swarm',
+    desc: 'Joyfully mobbed by ADORABLE baby animals, normal clothes — knee-deep in a tumble of golden puppies, under a pile of fluffy ducklings and chicks, in a sunny meadow surrounded by piglets, kittens spilling out of a basket, or bunnies hopping all around them. The overwhelming cuteness is the whole point. The animals stay low, around and below the couple, and NEVER come up over their faces.',
+  },
 ];
 
 // ACTIVE pool = COOL / EPIC / ADVENTURE / FANTASY scenes (NIGHTLY_FUN_SCENARIOS_PLAN.md).
@@ -163,7 +186,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'fantasy_hero',
-    mediumBan: 'photography',
+    mediumBan: PHOTO_ADJACENT_BAN,
     label: 'Epic fantasy heroes',
     desc: 'An EPIC FANTASY / sword-and-sorcery scene — the couple as heroes of a magical realm: warriors at a great castle gate, a ranger and a mage on a cliff above an enchanted glowing valley, elven archers in a luminous forest, or adventurers in a crystal cavern (any dragon or beast kept LARGE in the far background, never near their faces). Fantasy armor, flowing cloaks, leather and rune-etched gear. Painterly and grand.',
   },
@@ -179,7 +202,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'superhero',
-    mediumBan: 'photography',
+    mediumBan: PHOTO_ADJACENT_BAN,
     label: 'Comic-book superheroes',
     desc: 'A COMIC-BOOK SUPERHERO scene — the couple as caped heroes: a dramatic rooftop stance over a city at dusk, a heroic two-person landing on a cracked street, or a bold duo pose against an explosive comic-panel sky. Vivid hero suits with chest emblems and capes, wrist gauntlets; a slim domino mask ONLY if the eyes and full face stay clearly visible (never a full cowl or helmet). Dynamic and heroic.',
   },
@@ -195,9 +218,67 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'giant_critter',
-    mediumBan: 'photography',
+    mediumBan: PHOTO_ADJACENT_BAN,
     label: 'Giant animal companions',
     desc: 'A whimsical GIANT-ANIMAL companion scene — the couple in the foreground with one adorable OVERSIZED friendly creature filling the background behind them: a house-sized fluffy corgi, a gentle rainbow unicorn, a cuddly baby dragon, or a colossal soft house-cat. The couple stay clearly in front (the giant animal is the delightful backdrop, never covering their faces). Cozy cheerful casual clothes. Charming and funny.',
+  },
+  {
+    key: 'mounts_and_riding',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Magical mounts & riding',
+    desc: 'A MAGICAL-MOUNT riding scene — the couple riding side by side on wondrous steeds across a sweeping vista: a giant fluffy corgi, horses through an enchanted valley, a gentle unicorn, a great elk, or a feathered raptor. Reins or a lead rope in hand; rolling hills, misty peaks, or blossom fields behind. Riding leathers, cloaks, adventure clothes. The mounts stay calm and side by side so both faces stay large and clear. Joyful and epic.',
+  },
+  {
+    key: 'companion_creatures',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Fantasy companion creatures',
+    desc: 'A FANTASY-COMPANION scene — the couple with their own wondrous pet creature beside them: a small dragon perched on a forearm, a glowing fox familiar, a baby griffin, or a tiny phoenix. Cozy-adventurer clothes; a magical glade, a cliff overlook, or a rune-lit study. The creature stays small and beside or below them, never covering a face; both people foreground with big clear faces. Warm and wondrous.',
+  },
+  {
+    key: 'epic_arsenal',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Epic weapons & arsenal',
+    desc: 'An EPIC-ARSENAL hero scene — the couple wielding a colossal glowing weapon between or beside them: a massive rune-etched greatsword planted in the ground, twin plasma blades, an enormous warhammer, a glowing longbow, or a sci-fi cannon at rest. Fantasy or sci-fi armor; a battlefield ridge, a shattered temple, or a neon hangar behind. Weapons held at chest level or lower, never over a face. Bold and powerful.',
+  },
+  {
+    key: 'tropical_adventure',
+    label: 'Tropical adventure',
+    desc: 'A TROPICAL-ADVENTURE scene — the couple mid-adventure in a lush paradise: clinging to a leaning coconut palm, wading a turquoise lagoon toward a waterfall, paddling an outrigger canoe, or on a rope bridge over a jungle gorge. Bright island and explorer clothes; palms, waterfalls, and reefs behind. Sun-drenched and exhilarating.',
+  },
+  {
+    key: 'underwater_wonders',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Undersea wonders',
+    desc: 'An UNDERSEA-WONDER scene — the couple as merfolk or free-divers gliding through a sunlit reef, alongside a gentle whale, above a sunken temple of glowing coral, or in a light-streaked kelp forest. Flowing merfolk tails or sleek dive suits (NO scuba masks over the face). Rays of light and fish behind; big clear faces toward the viewer. Serene and dazzling.',
+  },
+  {
+    key: 'celestial_dream',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Celestial dream',
+    desc: 'A CELESTIAL-DREAM scene — the couple among the stars: perched on a glowing crescent moon, on a floating sky-island under the aurora, catching falling stars in a lantern, or on a cloud terrace among constellations. Dreamy flowing celestial clothes; galaxies, comets, and soft starlight around them. Awe-inspiring and gorgeous.',
+  },
+  {
+    key: 'sports_glory',
+    label: 'Sports glory (peak feat)',
+    desc: 'A SPORTS-GLORY hero moment — the couple at the peak of an epic athletic feat: cresting a giant surf wave, mid slam-dunk under stadium lights, breaking a marathon finish tape, hoisting a trophy in a roaring arena, or carving a powder run. Jerseys and athletic gear; crowds, banners, and spray behind. Triumphant and electric.',
+  },
+  {
+    key: 'cozy_magic',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Cozy magic',
+    desc: "A COZY-MAGIC scene — the couple as gentle spellweavers: stirring a glowing cauldron in a candlelit apothecary, reading a floating storybook in an enchanted library, tending luminous plants in a witch's greenhouse, or brewing potions among drifting sparks. Soft wizard robes or charmed cardigans; a warm magical glow, floating motes, and spellbooks around them. Warm, whimsical, enchanting.",
+  },
+  {
+    key: 'mythic_legend',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Mythic legends',
+    desc: 'A MYTHIC-LEGEND scene — the couple as figures of ancient myth: on marble Olympus among clouds and laurel, in a Norse hall of runes and firelight, on an Egyptian throne dais of gold, or before a temple of a jade dragon. Draped godly robes, laurels, golden regalia; columns, braziers, and divine light behind. Epic and painterly.',
+  },
+  {
+    key: 'winter_wonder',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Winter wonderland',
+    desc: 'A WINTER-WONDER scene — the couple in a magical frozen world: riding a sleigh pulled by a great white bear, before a glittering ice palace, skating a frozen aurora lake, or in a glowing snow-globe village. Cozy fur-trimmed cloaks and mittens; northern lights, snow crystals, and lantern light around them. Enchanting and luminous.',
   },
 ];
 
