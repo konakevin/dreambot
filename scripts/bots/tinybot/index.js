@@ -33,8 +33,12 @@ module.exports = {
   // 'animation' dropped 2026-08-06 (Kevin): its DB flux_fragment is a face-swap
   // CHARACTER medium ("Disney Pixar character … a bearded adult man, rendered
   // large in the foreground") that force-injected a person into scene renders.
-  // Monitoring the rest before touching storybook/handcrafted (same failure mode).
-  mediums: ['photography', 'claymation', 'storybook', 'handcrafted', 'render'],
+  // 'storybook' + 'handcrafted' dropped 2026-08-12 (Kevin) for the SAME reason:
+  // both are face-swap CHARACTER mediums ("cartoon character of the person … a
+  // bearded adult man, rendered large in the foreground"). Removed from TinyBot's
+  // roll ONLY — they stay valid app face-swap mediums in the DB. Seeds were clean;
+  // the medium was the culprit. Left: photography / claymation / render.
+  mediums: ['photography', 'claymation', 'render'],
 
   // Banned (2026-06-01 Kevin): flux-2-flex.
   useModelPicker: true,
