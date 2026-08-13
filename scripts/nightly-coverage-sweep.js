@@ -18,6 +18,7 @@ const { createClient } = require('@supabase/supabase-js');
 const { isDreamEligible } = require('./lib/nightlyEligibility');
 const { nightlyDelivery } = require('./lib/nightlyTimezone');
 const { fetchEngineConfig } = require('./lib/engineConfig');
+const { classifyCoverageStatus, isSystemicGap } = require('./lib/nightlyCoverage');
 
 // A user is "coverage-due" once it's >= this local hour (their nightly fires at 4am
 // local, renders in seconds-minutes, so by 8am a healthy user is long done). The gap
@@ -127,18 +128,12 @@ function chunk(arr, n) {
     for (const r of data || []) byDedup.set(r.dedup_key, r.status);
   }
 
-  const IN_FLIGHT = new Set(['queued', 'in_progress']);
   const covered = [];
   const inflight = [];
-  const missing = []; // no job at all
+  const missing = []; // no job at all → insert
   const failed = []; // dead_letter / failed → reset
-  for (const d of due) {
-    const st = byDedup.get(d.dedup);
-    if (st === 'completed') covered.push(d);
-    else if (st == null) missing.push(d);
-    else if (IN_FLIGHT.has(st)) inflight.push(d);
-    else failed.push(d); // dead_letter, failed, nsfw, etc.
-  }
+  const bucket = { covered, in_flight: inflight, missing, failed };
+  for (const d of due) bucket[classifyCoverageStatus(byDedup.get(d.dedup))].push(d);
 
   const gaps = missing.length + failed.length;
   const gapRate = gaps / due.length;
@@ -175,7 +170,7 @@ function chunk(arr, n) {
   }
 
   // Alert loud on a SYSTEMIC gap (outage), not on routine self-healed one-offs.
-  if (gapRate > ALERT_GAP_RATE && due.length >= 10) {
+  if (isSystemicGap(gaps, due.length, ALERT_GAP_RATE)) {
     console.error(
       `🚨 NIGHTLY COVERAGE ALERT: ${(gapRate * 100).toFixed(1)}% of ${due.length} due users had no dream ` +
         `(> ${(ALERT_GAP_RATE * 100).toFixed(0)}% threshold). Re-enqueued, but investigate — likely a render/worker/provider issue.`

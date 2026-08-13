@@ -26,6 +26,34 @@ const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
 const MAX_ATTEMPTS_NIGHTLY = 8;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 
+// After this many prior nightly failures, force a people-free pure_scene of the
+// user's place (inherently SFW) instead of another character roll — the L4 floor
+// for a user whose character rolls RELIABLY trip the filter (L3's re-rolls all
+// fail). Renders successfully → completes → the user still gets a dream, not a loop.
+export const SAFE_SCENE_AFTER_ATTEMPTS = 3;
+
+/**
+ * Terminal-failure decision (L3). Nightly re-rolls a fresh dream every attempt, so
+ * `terminal` (NSFW / bad scene) is recoverable by a plain retry — nightly NEVER
+ * dead-letters early, only after the raised cap. Create honors `terminal` (a fixed
+ * prompt re-fails). Pure + exported so the invariant is unit-tested.
+ */
+export function computeNightlyIsDead(
+  source: string | null | undefined,
+  nextAttempt: number,
+  terminal: boolean
+): boolean {
+  const isNightly = source === 'nightly';
+  const maxAttempts = isNightly ? MAX_ATTEMPTS_NIGHTLY : MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+  return (terminal && !isNightly) || nextAttempt >= maxAttempts;
+}
+
+/** L4: a nightly that's already failed >= SAFE_SCENE_AFTER_ATTEMPTS times degrades
+ *  to a guaranteed-SFW pure scene. Pure + exported for the render + tests. */
+export function shouldForceSafeScene(attemptCount: number | null | undefined): boolean {
+  return (attemptCount ?? 0) >= SAFE_SCENE_AFTER_ATTEMPTS;
+}
+
 // ── dream_failed notification — shared shape across every fail site ──
 // Keep the copy LIGHT and non-judgey, and consistent across push + in-app
 // toast + inbox. Two outcomes, two behaviors in the client:
@@ -173,13 +201,9 @@ export async function failQueueJob(
     .eq('id', jobId)
     .single();
   const nextAttempt = (job?.attempt_count ?? 0) + 1;
-  // Nightly (source==='nightly') re-rolls a brand-new dream on every attempt, so a
-  // "terminal" error is recoverable by a plain retry — never dead-letter it early;
-  // retry up to the raised nightly cap. Create keeps terminal-NSFW (re-running the
-  // identical prompt just re-fails). See NIGHTLY_DREAM_GUARANTEE_PLAN.md (L3).
-  const isNightly = job?.source === 'nightly';
-  const maxAttempts = isNightly ? MAX_ATTEMPTS_NIGHTLY : MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
-  const isDead = (terminal && !isNightly) || nextAttempt >= maxAttempts;
+  // L3 (NIGHTLY_DREAM_GUARANTEE_PLAN.md): nightly retries (re-rolls) instead of
+  // dead-lettering; Create honors terminal. Decision extracted + unit-tested.
+  const isDead = computeNightlyIsDead(job?.source, nextAttempt, terminal);
 
   if (!isDead) {
     // Exponential backoff: created_at into the future so the claim RPC's

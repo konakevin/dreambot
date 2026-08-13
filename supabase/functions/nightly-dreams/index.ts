@@ -86,7 +86,7 @@ import {
 import { decodeImage, type DecodedImage } from '../_shared/imageCodec.ts';
 import { computeThumbhash } from '../_shared/thumbhashGen.ts';
 import { insertGenerationLog, asJsonbObject } from '../_shared/logging.ts';
-import { markStage } from '../_shared/dreamQueueLifecycle.ts';
+import { markStage, shouldForceSafeScene } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { pickSpecialLighting } from '../_shared/pools/dual_scenarios.ts';
@@ -495,6 +495,26 @@ Deno.serve(async (req) => {
     console.log(
       `[nightly-dreams] chaos pre-roll | chaosValue=${chaosValue.toFixed(2)} tier=${chaosTier} type=${preRolledType ?? 'force_medium'} mediumToken=${preRolledMediumToken} cast=${preRolledCastRole ?? 'random'} composition=${preRolledComposition}`
     );
+
+    // ── L4 safe-scene floor (NIGHTLY_DREAM_GUARANTEE_PLAN.md) ──
+    // A nightly that has already failed several times is most likely a character
+    // roll that RELIABLY trips the NSFW filter (L3's re-rolls keep failing). On a
+    // late retry, force a people-free pure_scene of the user's own place — inherently
+    // SFW — so they ALWAYS get a beautiful dream instead of looping to dead-letter.
+    if (queueJobId) {
+      const { data: qj } = await supabase
+        .from('dream_queue')
+        .select('attempt_count')
+        .eq('id', queueJobId)
+        .single();
+      if (shouldForceSafeScene(qj ? qj.attempt_count : null)) {
+        preRolledComposition = 'pure_scene';
+        preRolledCastRole = null;
+        console.log(
+          `[nightly-dreams] L4 safe-scene floor: attempt_count=${qj?.attempt_count} → force pure_scene (guaranteed-SFW)`
+        );
+      }
+    }
 
     // Pick from the curated dream-eligible pool — NOT from the user's
     // stored art_styles/aesthetics. Migration 160 added is_dream_eligible

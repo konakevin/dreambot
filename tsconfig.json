@@ -32,6 +32,8 @@
     "__tests__/lib/cleanMedium.test.ts",
     "__tests__/lib/notify.test.ts",
     "__tests__/lib/castPhotoNotify.test.ts",
+    "__tests__/lib/nightlyGuarantee.test.ts",
+    "__tests__/lib/nightlyCoverage.test.ts",
     "__tests__/lib/notifyActivityGate.test.ts",
     "__tests__/lib/notifySiblingGate.test.ts",
     "__tests__/lib/notifyViewGate.test.ts",
