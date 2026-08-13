@@ -51,6 +51,36 @@ const FALLBACK: DualScenarioPools = {
   active: [],
 };
 
+// Page through one pool+select fully — PostgREST silently caps a single query
+// at 1000 rows, and the active pool blew past that (Operation Sweet Dreams,
+// 2026-08-13), so an un-paginated fetch dropped ~30% of active scenarios and
+// left newly-seeded scenes unreachable. Returns { error } so the column ladder
+// below can fall to a lesser select if a column doesn't exist yet.
+async function fetchAllRows(
+  supabase: SupabaseClient,
+  select: string,
+  pool: string
+): Promise<{ rows: Record<string, unknown>[]; error: unknown }> {
+  const PAGE = 1000;
+  const rows: Record<string, unknown>[] = [];
+  let from = 0;
+  for (;;) {
+    const res = await supabase
+      .from('dual_scenarios')
+      .select(select)
+      .eq('pool', pool)
+      .eq('disabled', false)
+      .range(from, from + PAGE - 1)
+      .returns<Record<string, unknown>[]>();
+    if (res.error) return { rows: [], error: res.error };
+    const page = res.data ?? [];
+    rows.push(...page);
+    if (page.length < PAGE) break;
+    from += PAGE;
+  }
+  return { rows, error: null };
+}
+
 // One pool's rows with pose_pool, degrading to scene+attire only if the
 // column doesn't exist yet (deploy-order safety: this code may reach prod
 // before migration 353 is applied — that must NOT knock all scenarios back
@@ -59,30 +89,17 @@ async function fetchPool(supabase: SupabaseClient, pool: string): Promise<DualSc
   // Column ladder (deploy-order safety — newer optional columns may not exist
   // yet in prod): full select → without medium_key (354) → without pose_pool
   // (353). A missing column must never knock scenarios back to the code
-  // fallback.
+  // fallback. Each rung pages through the full pool (fetchAllRows).
   let rows: Record<string, unknown>[] = [];
-  const full = await supabase
-    .from('dual_scenarios')
-    .select('scene,attire,pose_pool,medium_key,medium_ban')
-    .eq('pool', pool)
-    .eq('disabled', false);
-  if (!full.error) {
-    rows = full.data ?? [];
-  } else {
-    const withPose = await supabase
-      .from('dual_scenarios')
-      .select('scene,attire,pose_pool')
-      .eq('pool', pool)
-      .eq('disabled', false);
-    if (!withPose.error) {
-      rows = withPose.data ?? [];
-    } else {
-      const plain = await supabase
-        .from('dual_scenarios')
-        .select('scene,attire')
-        .eq('pool', pool)
-        .eq('disabled', false);
-      rows = plain.data ?? [];
+  for (const select of [
+    'scene,attire,pose_pool,medium_key,medium_ban',
+    'scene,attire,pose_pool',
+    'scene,attire',
+  ]) {
+    const res = await fetchAllRows(supabase, select, pool);
+    if (!res.error) {
+      rows = res.rows;
+      break;
     }
   }
   return rows.map((r) => ({

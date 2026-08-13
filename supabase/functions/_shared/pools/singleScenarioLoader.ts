@@ -39,40 +39,53 @@ let cache: Loaded | null = null;
 
 const empty = (): Loaded['goofy'] => ({ any: [], male: [], female: [] });
 
+// Page through one pool fully — PostgREST silently caps a single query at 1000
+// rows, and the active pool blew past that (Operation Sweet Dreams,
+// 2026-08-13), so an un-paginated fetch dropped ~30% of active scenarios and
+// left newly-seeded scenes unreachable. Column ladder (deploy-order safety):
+// full select → without medium_key (354) → without pose_pool (353). A missing
+// column must never empty the pools; each rung pages with .range().
+async function fetchPoolRows(
+  supabase: SupabaseClient,
+  pool: string
+): Promise<Record<string, unknown>[]> {
+  const PAGE = 1000;
+  for (const select of [
+    'scene,attire,gender,pose_pool,medium_key,medium_ban',
+    'scene,attire,gender,pose_pool',
+    'scene,attire,gender',
+  ]) {
+    const rows: Record<string, unknown>[] = [];
+    let from = 0;
+    let ok = true;
+    for (;;) {
+      const res = await supabase
+        .from('single_scenarios')
+        .select(select)
+        .eq('pool', pool)
+        .eq('disabled', false)
+        .range(from, from + PAGE - 1)
+        .returns<Record<string, unknown>[]>();
+      if (res.error) {
+        ok = false;
+        break;
+      }
+      const page = res.data ?? [];
+      rows.push(...page);
+      if (page.length < PAGE) break;
+      from += PAGE;
+    }
+    if (ok) return rows;
+  }
+  return [];
+}
+
 export async function loadSingleScenarios(supabase: SupabaseClient): Promise<Loaded> {
   if (cache) return cache;
   const out: Loaded = { goofy: empty(), elegant: empty(), active: empty() };
   try {
-    // Per-pool queries (each well under the 1000-row cap at ~500).
     for (const pool of ['goofy', 'elegant', 'active'] as const) {
-      // Column ladder (deploy-order safety — newer optional columns may not
-      // exist yet in prod): full select → without medium_key (354) → without
-      // pose_pool (353). A missing column must never empty the pools.
-      let rows: Record<string, unknown>[] = [];
-      const full = await supabase
-        .from('single_scenarios')
-        .select('scene,attire,gender,pose_pool,medium_key,medium_ban')
-        .eq('pool', pool)
-        .eq('disabled', false);
-      if (!full.error) {
-        rows = full.data ?? [];
-      } else {
-        const withPose = await supabase
-          .from('single_scenarios')
-          .select('scene,attire,gender,pose_pool')
-          .eq('pool', pool)
-          .eq('disabled', false);
-        if (!withPose.error) {
-          rows = withPose.data ?? [];
-        } else {
-          const plain = await supabase
-            .from('single_scenarios')
-            .select('scene,attire,gender')
-            .eq('pool', pool)
-            .eq('disabled', false);
-          rows = plain.data ?? [];
-        }
-      }
+      const rows = await fetchPoolRows(supabase, pool);
       for (const r of rows) {
         const g = (r.gender as 'any' | 'male' | 'female') ?? 'any';
         out[pool][g].push({
