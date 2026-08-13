@@ -1336,10 +1336,16 @@ Deno.serve(async (req) => {
         const pools = await loadSingleScenarios(supabase);
         const g = castGender === 'male' || castGender === 'female' ? castGender : null;
         const splitCfg = await fetchEngineConfig(supabase);
+        // Gendered-solo lean (Operation Sweet Dreams): a solo dream of a KNOWN
+        // gender skews toward the gendered glam (female) / cool (male) pools by
+        // widening the elegant + active windows (half the boost each), shrinking
+        // plain-location. gender-neutral casts are unaffected (gLean = 0).
+        const gLean = g ? splitCfg.singleGenderedBoostPct / 100 : 0;
         const goofyCut = splitCfg.singleSceneGoofyPct / 100;
-        const elegantCut = goofyCut + splitCfg.singleSceneElegantPct / 100;
+        const elegantCut = goofyCut + splitCfg.singleSceneElegantPct / 100 + gLean / 2;
         const activeCut =
-          elegantCut + (pools.active.any.length >= 10 ? splitCfg.singleSceneActivePct / 100 : 0);
+          elegantCut +
+          (pools.active.any.length >= 10 ? splitCfg.singleSceneActivePct / 100 + gLean / 2 : 0);
         const roll = Math.random();
         const pickSolo = async (pool: 'goofy' | 'elegant' | 'active') => {
           const candidates = await filterUnseen(

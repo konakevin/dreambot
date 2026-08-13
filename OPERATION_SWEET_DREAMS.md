@@ -228,5 +228,45 @@ Reweight (`active` 30 -> 50, `plain` 40 -> 20) is applied last, once the new con
 - **2026-08-13** — Kevin approved all 13 + added: (a) multi-medium photo-adjacent bans on fantastical
   pools, (b) gendered solo pools. Shipped the multi-ban engine change (deployed). Authored all buckets
   into both generators (13 dual themes + 13 solo `any` + 9 gendered solo), validated via dry-run
-  (quality excellent, swap-safe). Next: DB-update the 5 existing bans, generate MVP-25, proximity scan,
-  render samples cast on Kevin for grading.
+  (quality excellent, swap-safe).
+- **2026-08-13** — MVP-25 GENERATED: 875 rows across 35 buckets (dual 300, single 550), all correct
+  pool/gender/ban. Active pools now 1,676 dual / 1,826 single (over the old 1000 cap — loader fix
+  load-bearing). Dual proximity scan: 0 violations. Upgraded 885 existing fantasy rows to the full ban.
+  Fired 12 sample renders cast on Kevin (6 dual, 3 self/male, 3 +1/female). RESULTS: medium ban 0/6
+  violations (fantastical → illustration/pencil/watercolor/canvas; real-world kept photo); gender
+  routing correct (female bucket → +1 female face, male → self male face); dual swaps clean, faces on
+  correct bodies. Two minor tuning nits: underwater picked up a dive mask (desc says none); epic_arsenal
+  weapons rendered normal-scale not "colossal." Awaiting Kevin's grade before scaling 25 → ~100/theme +
+  the active 30 → 50 reweight.
+- **2026-08-13** — Kevin hearted the dual adorable_swarm render (pop_art / grok-imagine-image): a
+  cast-less generic woman, not his wife. Root-caused via `ai_generation_log.fallback_reasons`: the
+  `pop_art` medium's Ben-Day-dot stylization broke the face-swap identity match — self reached 0.712 on
+  rerender but the +1 stuck at 0.116 (needs 0.35, floor 0.15) → dual_degrade_single_refused_gender →
+  dual_degrade_cascade → pure_scene_fallback (both cast dropped). NOT a seed/proximity issue (the other
+  5 duals in painterly mediums nailed both faces). FIX: set `pop_art.face_swaps=false` (DB, no deploy) so
+  cast dreams never roll it — it was leaking in via the face-swap pool despite `is_scene_eligible=false`.
+  Re-ran adorable_swarm dual x2 → both clean (film_noir + heirloom mediums, both faces correct). Watch
+  `comics` (halftone) but it passed solo (0.577). Face-swap pool now 11 mediums.
+- **2026-08-13** — GIRLY-GLAM wing (Kevin hearted the magical_girl render, wanted a whole world): 12
+  female-cast categories (magical_girl, princess, fairy_enchantress, ice_queen, star_princess, mermaid,
+  flower_fairy, angel, unicorn, coquette, ballroom, pop_princess), each anchored on the hearted recipe
+  (wand/prop + effect-burst + lavish gown). LOCKED to the magic medium set illustration/canvas/watercolor
+  (`GLAM_MEDIUM_BAN` — natural mediums keep her real face + the glow; embodied anime/fairytale/kawaii
+  would lose her likeness). MVP-25 → showcase on wife's +1 face: 10/10 locked to magic set, Kevin loves
+  them. Scaling all 12 → 100.
+- **2026-08-13** — MALE "cool" wing: 12 male-cast categories (secret_agent, race_driver, rockstar,
+  fighter_pilot, gunslinger, dragon_rider, mech_pilot, king_emperor, samurai_ninja, street_racer,
+  detective_noir, survivalist). Medium lock = NON-PHOTOREAL (`COOL_MEDIUM_BAN = PHOTO_ADJACENT_BAN`;
+  Kevin: "painterly = anything non photo-real", so illustration/canvas/watercolor + comics + pencil, ban
+  only the 6 photoreal). MVP-25 generating → render on self for grading.
+- **2026-08-13** — `extreme_sports` (gender=any, single + dual): shared adrenaline pool both genders pull
+  (surf, snowboard, climb, motox, ski, skydive, bungee...), non-photoreal lock. Overlaps the older
+  `extreme_sports_m` (candidate to retire).
+- **2026-08-13** — Gendered-solo LEAN wired + deployed: `single_gendered_boost_pct` (default 15) widens
+  the elegant+active windows (half each) for KNOWN-gender solos → female skews glam, male skews cool,
+  plain-location shrinks. Modest ("a bit, not too much"). engineConfig.ts + nightly-dreams roll.
+- **2026-08-13** — Scaling the original 13 shared themes (dual+single) + old gendered to 100. Dedup
+  audit at MVP-25: 0 exact dups, 1 near-dup across the glam pools — generator's cross-run `seen`-set
+  dedup works. Re-audit due at 100.
+- **STILL PARKED:** the reweight (active 30→50, plain 40→20) — the master exposure switch. Flip LAST,
+  after male/extreme grading + the scale + dedup re-audit.

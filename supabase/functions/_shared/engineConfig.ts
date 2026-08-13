@@ -63,6 +63,11 @@ export interface EngineConfig {
   singleSceneGoofyPct: number;
   singleSceneElegantPct: number;
   singleSceneActivePct: number;
+  /** Gendered-solo lean (Operation Sweet Dreams): for a solo dream of a KNOWN
+   *  gender, widen the elegant + active windows (where the gendered glam/cool
+   *  pools live) by this pct, split half/half, at the expense of plain-location.
+   *  Modest by default; 0 = off. */
+  singleGenderedBoostPct: number;
   /** When a face swap is UNUSABLE (dual cascade / solo failed / identity far below
    *  the floor), re-render the dream as a pure EMPTY scene instead of shipping a
    *  render with random strangers as the user (DREAM_CAST_HARDENING_PLAN.md). */
@@ -114,6 +119,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneGoofyPct: 20,
   singleSceneElegantPct: 20,
   singleSceneActivePct: 0,
+  singleGenderedBoostPct: 15,
   singleCompositionExpandedPct: 0,
   locationActionPct: 0,
   pureSceneOnSwapFail: true,
@@ -200,6 +206,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     singleSceneActivePct: Number(
       data.single_scene_active_pct ?? DEFAULT_ENGINE_CONFIG.singleSceneActivePct
+    ),
+    singleGenderedBoostPct: Number(
+      data.single_gendered_boost_pct ?? DEFAULT_ENGINE_CONFIG.singleGenderedBoostPct
     ),
     singleCompositionExpandedPct: Number(
       data.single_composition_expanded_pct ?? DEFAULT_ENGINE_CONFIG.singleCompositionExpandedPct

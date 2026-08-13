@@ -51,6 +51,24 @@ const COUNT_OVERRIDE = arg('--count', null) ? parseInt(arg('--count', null), 10)
 const PHOTO_ADJACENT_BAN =
   'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
 
+// Operation Sweet Dreams — girly-glam "magic" family (2026-08-13, Kevin): LOCK
+// these female-cast dreams to the painterly-magic mediums that keep her real
+// face AND render the over-the-top glow/sparkle/wand effects (illustration —
+// the hearted look — + canvas + watercolor). Bans everything else in the
+// face-swap pool: the 6 photo-adjacent (flat/photoreal) PLUS comics (halftone)
+// + pencil (no glow). NOT anime/fairytale/kawaii — those are EMBODIED (draw a
+// generic character, lose her likeness). Leaves illustration/canvas/watercolor.
+const GLAM_MEDIUM_BAN =
+  'photography,film_noir,vintage_film,double_exposure,heirloom,glamour,comics,pencil';
+
+// Male "cool" family (2026-08-13, Kevin): bans only the PHOTO-REAL mediums —
+// Kevin: "by painterly I just mean anything non photo-real." Non-photoreal
+// styles (illustration/canvas/watercolor + comics + pencil) produce funner, more
+// creative scenes for these epic/cool male fantasies, so keep all of them;
+// exclude only the flat photoreal set (photography/noir/vintage/overlay/heirloom/
+// glamour).
+const COOL_MEDIUM_BAN = PHOTO_ADJACENT_BAN;
+
 // count = entries for that bucket. Goofy ~500 (mostly 'any'); elegant ~500 (even M/F).
 const GOOFY_BUCKETS = [
   {
@@ -237,6 +255,7 @@ const ELEGANT_BUCKETS = [
   },
   {
     key: 'princess_f',
+    mediumBan: GLAM_MEDIUM_BAN,
     gender: 'female',
     count: 25,
     label: 'Fairytale princess (her)',
@@ -244,10 +263,35 @@ const ELEGANT_BUCKETS = [
   },
   {
     key: 'ballerina_f',
+    mediumBan: GLAM_MEDIUM_BAN,
     gender: 'female',
     count: 25,
     label: 'Ballerina (her)',
     desc: 'A BALLERINA for HER — tutu and pointe-shoe elegance under a spotlight; a grand theatre stage, a sunlit rehearsal studio with barres and mirrors, a backstage of curtains and roses, or a snow-lit stage set. Graceful and luminous.',
+  },
+  {
+    key: 'coquette_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Coquette soft glam (her)',
+    desc: 'COQUETTE SOFT GLAM for HER — dreamy ultra-feminine coquette: surrounded by roses, bows, pearls and drifting rose petals at a vintage vanity or a rosy boudoir, in a lace-and-ribbon corset gown with satin gloves and a pearl choker, soft pink glow and sparkle bokeh all around. Delicate, romantic, over-the-top pretty.',
+  },
+  {
+    key: 'ballroom_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Enchanted ballroom (her)',
+    desc: 'An ENCHANTED BALLROOM for HER — a Cinderella-ball moment: in a grand candlelit ballroom under a glittering chandelier, wearing a sweeping sparkling ballgown and elbow gloves and a jeweled tiara, with magical dancing lights and drifting golden sparkles all around her. Glamorous, romantic, dazzling.',
+  },
+  {
+    key: 'pop_princess_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Glam pop princess (her)',
+    desc: 'A GLAM POP PRINCESS for HER — a dazzling stage-diva moment: on a sparkling stage under spotlights with a glitter-cannon burst and confetti raining down, wearing a bedazzled sequin gown and a jeweled crown, streamers and beams of colored light all around. Fun, sparkly, over-the-top glam.',
   },
 ];
 
@@ -401,7 +445,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'magical_girl_f',
-    mediumBan: PHOTO_ADJACENT_BAN,
+    mediumBan: GLAM_MEDIUM_BAN,
     gender: 'female',
     count: 25,
     label: 'Magical-girl heroine (her)',
@@ -442,6 +486,166 @@ const ACTIVE_BUCKETS = [
     count: 25,
     label: 'Fishing (him)',
     desc: 'FISHING for HIM — a proud catch moment: hoisting a big fish on a deep-sea charter deck, fly-casting mid-stream in a mountain river, on a bass boat at golden hour, or on a pier with a bent rod. Waders, a fishing vest, a ball cap. Rugged, sunny, satisfying.',
+  },
+  {
+    key: 'fairy_enchantress_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Fairy enchantress (her)',
+    desc: 'A FAIRY ENCHANTRESS for HER — an ethereal fairy in a glowing enchanted forest, raising a glowing flower wand at chest level as pixie dust and fireflies swirl outward around her. Iridescent butterfly wings, a flower crown, a gown of petals and dew; shafts of golden light through the canopy. Over-the-top sparkle and glow.',
+  },
+  {
+    key: 'ice_queen_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Ice / snow queen (her)',
+    desc: 'An ICE / SNOW QUEEN for HER — a radiant frost queen before a glittering ice palace, lifting a crystal scepter at chest level as snowflakes and frost magic spiral outward. A crown of ice, a shimmering crystal-blue gown with a frosted cape, aurora light overhead. Dazzling, icy, magical.',
+  },
+  {
+    key: 'star_princess_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Celestial star princess (her)',
+    desc: 'A CELESTIAL STAR PRINCESS for HER — a cosmic princess on a cloud terrace among the constellations, raising a glowing star wand at chest level as comet trails and stardust spiral around her. A crown of moons and stars, a deep-galaxy gown shimmering with starlight, the aurora above. Awe-inspiring cosmic glow.',
+  },
+  {
+    key: 'mermaid_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Mermaid princess (her)',
+    desc: 'A MERMAID PRINCESS for HER — a radiant mermaid in a bioluminescent undersea palace, holding a glowing pearl wand at chest level as bubbles and ribbons of light drift around her. A pearlescent shimmering tail below, a sea-foam gown of shells and pearls, a coral crown. Face clear and forward, dreamy underwater glow.',
+  },
+  {
+    key: 'flower_fairy_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Flower / spring fairy (her)',
+    desc: 'A FLOWER / SPRING FAIRY for HER — a spring fairy in a blooming garden, lifting a blossoming wand at chest level as petals and butterflies swirl up around her. A gown of layered flower petals, a crown of roses, glowing blossoms and soft golden light. Fresh, lush, radiant.',
+  },
+  {
+    key: 'angel_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Celestial angel (her)',
+    desc: 'An ANGEL for HER — a celestial angel bathed in heavenly light, holding a glowing golden harp or feather at chest level as soft light rays and drifting feathers surround her. Great feathered wings, a flowing white-and-gold gown, a radiant halo, clouds and golden glow. Serene and divine.',
+  },
+  {
+    key: 'unicorn_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Unicorn rainbow princess (her)',
+    desc: 'A UNICORN PRINCESS for HER — a pastel dream beside a gentle rainbow-maned unicorn in a candy-cloud land, raising a sparkling wand at chest level as rainbow light and floating hearts swirl around her. A pastel gown with a jeweled tiara, cotton-candy clouds. Cute, magical, over-the-top sweet. The unicorn stays beside her, never over her face.',
+  },
+  {
+    key: 'secret_agent_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Secret agent (him)',
+    desc: 'A SECRET AGENT for HIM — a suave spy in action: adjusting a cufflink in a tuxedo at a glittering casino, a silenced pistol held at chest level in a neon-lit corridor, or leaning by a sleek sports car at night. A sharp tuxedo or tactical suit, an earpiece. Cool, sleek, cinematic.',
+  },
+  {
+    key: 'race_driver_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Race driver (him)',
+    desc: 'A RACE DRIVER for HIM — a motorsport hero: gripping the wheel in a Formula cockpit, spraying champagne on the winners podium, or helmet under one arm beside a gleaming race car in the pit lane. A colorful racing suit with sponsor patches. Fast, bold, triumphant.',
+  },
+  {
+    key: 'rockstar_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Rockstar (him)',
+    desc: 'A ROCKSTAR for HIM — a stadium guitar god mid-riff: shredding an electric guitar under blazing stage lights with pyro bursts, gripping a mic at a roaring arena, or backstage with the guitar slung low. A leather jacket, band tee, shades pushed up. Electric and loud.',
+  },
+  {
+    key: 'fighter_pilot_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Fighter pilot (him)',
+    desc: 'A FIGHTER PILOT for HIM — a top-gun ace: in the cockpit gripping the stick, helmet under one arm on the sunlit tarmac beside a fighter jet, or on the carrier deck amid wind and steam. A flight suit with patches, aviators. Heroic, high-octane, cool.',
+  },
+  {
+    key: 'gunslinger_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Wild-west gunslinger (him)',
+    desc: 'A GUNSLINGER for HIM — a wild-west hero: hand resting on a holstered revolver at high noon on a dusty main street, in a lantern-lit saloon dealing cards, or riding up to a frontier town. A duster coat, hat pushed back, a bandana. Rugged, cinematic, iconic.',
+  },
+  {
+    key: 'dragon_rider_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Dragon rider (him)',
+    desc: 'A DRAGON RIDER for HIM — an epic fantasy warrior with his dragon: gripping the reins astride a great dragon on a cliff, standing before a colossal dragon curling behind him, or raising a rune-blade as the dragon looms. Fantasy armor and a cloak; the dragon kept large behind him, never over his face. Grand and powerful.',
+  },
+  {
+    key: 'mech_pilot_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Mech pilot (him)',
+    desc: 'A MECH PILOT for HIM — a giant-robot ace: in a glowing mech cockpit gripping the controls, standing on the shoulder of a towering battle-mech, or beside its massive leg in a hangar. A sleek pilot suit with a helmet held. Colossal, futuristic, epic.',
+  },
+  {
+    key: 'king_emperor_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'King / emperor (him)',
+    desc: 'A KING / EMPEROR for HIM — regal power: on a grand throne with a jeweled crown and scepter, before a banner-draped hall of guards, or on a castle rampart in royal robes. An ornate crown, fur-trimmed robes, a scepter or sword at rest. Commanding, majestic, larger-than-life.',
+  },
+  {
+    key: 'samurai_ninja_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Samurai / ninja (him)',
+    desc: 'A SAMURAI / NINJA for HIM — a blade master: drawing a katana amid falling cherry blossoms, in a torch-lit dojo in a kenjutsu stance, or a shadow ninja on a neon Edo rooftop. Ornate samurai armor or dark ninja garb, face clear (no mask over the eyes). A katana held at chest level. Disciplined, striking, epic.',
+  },
+  {
+    key: 'street_racer_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Street racer (him)',
+    desc: 'A STREET RACER for HIM — cool car culture: leaning on the hood of a neon-lit tuner in a night garage, one hand on the wheel of a muscle car amid drift smoke, or under the raised hood with a wrench. A racing jacket, fingerless gloves. Sleek, gritty, stylish.',
+  },
+  {
+    key: 'detective_noir_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Noir detective (him)',
+    desc: 'A NOIR DETECTIVE for HIM — a moody mystery hero: in a trench coat and fedora under a rain-slick neon streetlight, examining a clue at a cluttered desk lamp, or leaning in a shadowed doorway. A rumpled coat, a loosened tie. Rainy, cinematic, mysterious.',
+  },
+  {
+    key: 'survivalist_m',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'male',
+    count: 25,
+    label: 'Wilderness survivalist (him)',
+    desc: 'A SURVIVALIST for HIM — a rugged wilderness hero: splitting wood with an axe at a mountain camp, cresting a windswept ridge with a loaded pack, or crouched by a campfire under alpine peaks. Weathered outdoor gear, a knife at the belt. Rugged, epic, wild.',
+  },
+  {
+    key: 'extreme_sports',
+    mediumBan: COOL_MEDIUM_BAN,
+    gender: 'any',
+    count: 25,
+    label: 'Extreme sports (any)',
+    desc: 'EXTREME SPORTS — a heart-pounding adrenaline moment: dropping into a giant surf wave, carving deep powder on a snowboard, scaling a sheer rock-climbing wall, launching a motocross jump, mid-freefall in a skydive, whitewater kayaking a rapid, or leaping off a bungee platform. Dynamic sports gear; any helmet or goggles pushed UP off the face (face clearly visible). Gritty, exhilarating, cool.',
   },
 ];
 

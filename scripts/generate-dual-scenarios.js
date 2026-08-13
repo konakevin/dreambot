@@ -280,6 +280,12 @@ const ACTIVE_BUCKETS = [
     label: 'Winter wonderland',
     desc: 'A WINTER-WONDER scene — the couple in a magical frozen world: riding a sleigh pulled by a great white bear, before a glittering ice palace, skating a frozen aurora lake, or in a glowing snow-globe village. Cozy fur-trimmed cloaks and mittens; northern lights, snow crystals, and lantern light around them. Enchanting and luminous.',
   },
+  {
+    key: 'extreme_sports',
+    mediumBan: PHOTO_ADJACENT_BAN,
+    label: 'Extreme sports',
+    desc: 'EXTREME SPORTS for the couple — a heart-pounding adrenaline moment together: side by side dropping into a surf wave, carving powder on snowboards a lane apart, on a tandem skydive, scaling a climbing wall with a clear gap between them, or launching motocross jumps together. Dynamic sports gear; any helmet or goggles pushed UP off the face. Gritty and exhilarating.',
+  },
 ];
 
 async function genBatch(pool, bucket, n, banList) {
