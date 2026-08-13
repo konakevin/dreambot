@@ -1,6 +1,11 @@
 # Nightly Dream Guarantee — Hardening Plan
 
-**Status:** SPEC (not built). Authored 2026-08-13 after the "michele" incident.
+**Status:** SHIPPED — L2, L3, L4, L5, L6 built + deployed + unit-tested (2026-08-13,
+after the "michele" incident). L1 (in-render re-roll) DEFERRED — a ~1-min gain not
+worth restructuring the 2,900-line render. L7 (base-rate steering) DECLINED by Kevin —
+won't risk the quality/feel of nightly dreams. The five shipped layers make a paid
+customer missing a nightly effectively impossible; L7's job (fewer flags reaching the
+nets) is a nice-to-have the nets already absorb.
 **Goal (non-negotiable):** every eligible Pro/trial user gets a beautiful nightly
 dream, every night. A paid customer NEVER wakes up to nothing.
 

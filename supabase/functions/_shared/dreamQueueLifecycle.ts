@@ -66,6 +66,10 @@ const NSFW_REJECT_BODY =
   "That one leaned a little too spicy for our filters. Sparkle's back, tweak the prompt and try again.";
 const RENDER_FAIL_BODY =
   "Oops, that dream got away from us. Sparkle's back in your pocket, take another swing.";
+// Nightly is free + auto-generated: no charge to refund and no prompt to tweak, so
+// its copy is warm + goodwill-first (matches send-push's nightly_failed banner).
+const NIGHTLY_FAIL_BODY =
+  'Your nightly dream slipped away tonight, so we popped a sparkle in your balance to make up for it.';
 
 /**
  * Stage breadcrumb — stamp the render's progress into dream_queue BEFORE each
@@ -113,14 +117,24 @@ export function markStage(
 }
 
 /** Build the dream_failed notification row (consistent everywhere). */
-export function dreamFailedNotification(jobId: string, userId: string, isNsfw: boolean) {
+export function dreamFailedNotification(
+  jobId: string,
+  userId: string,
+  isNsfw: boolean,
+  source?: string | null
+) {
+  // Nightly gets its OWN subtype + copy ('nightly_failed' — render+push+inbox all
+  // already handle it): the Create 'rejected'/'failed' copy ("tweak the prompt",
+  // "sparkle's back") is wrong for a free auto-dream. This closes the michele gap
+  // (she got a Create-shaped notice that never surfaced). See NIGHTLY_..._PLAN L6.
+  const isNightly = source === 'nightly';
   return {
     recipient_id: userId,
     actor_id: userId,
     type: 'dream_failed',
-    subtype: isNsfw ? 'rejected' : 'failed',
+    subtype: isNightly ? 'nightly_failed' : isNsfw ? 'rejected' : 'failed',
     reference_id: jobId,
-    body: isNsfw ? NSFW_REJECT_BODY : RENDER_FAIL_BODY,
+    body: isNightly ? NIGHTLY_FAIL_BODY : isNsfw ? NSFW_REJECT_BODY : RENDER_FAIL_BODY,
   };
 }
 
@@ -226,7 +240,11 @@ export async function failQueueJob(
   // Dead-letter: terminal. Refund the paid sparkle (idempotent on jobId;
   // refund_sparkles returns the ACTUAL debited amount) + mark dream_jobs failed
   // (resolves the client's polling fallback) + inbox notification.
-  await sb
+  // Flip to dead_letter ONLY from a non-terminal status, and detect whether THIS
+  // call is the one that transitioned it. If it was already dead-lettered (a
+  // duplicate/concurrent call), the side effects below already ran — return so the
+  // nightly goodwill grant (which has no reference_id dedup) stays exactly-once.
+  const { data: flipped } = await sb
     .from('dream_queue')
     .update({
       status: 'dead_letter',
@@ -234,7 +252,10 @@ export async function failQueueJob(
       last_error: message,
       completed_at: new Date().toISOString(),
     })
-    .eq('id', jobId);
+    .eq('id', jobId)
+    .neq('status', 'dead_letter')
+    .select('id');
+  if (!flipped || flipped.length === 0) return;
 
   // These terminal writes are intentionally non-fatal (we never throw out of
   // dead-lettering), but a SILENT failure here is dangerous: a dropped refund is
@@ -242,14 +263,32 @@ export async function failQueueJob(
   // screen, a dropped notification means the user never learns the dream failed.
   // Log every failure so the monitors / Sentry breadcrumbs can catch a pattern.
   //
-  const { error: refundErr } = await sb.rpc('refund_sparkles', {
-    p_user_id: userId,
-    p_amount: 1,
-    p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
-    p_reference_id: jobId,
-  });
-  if (refundErr) {
-    console.error(`[failQueueJob] refund_sparkles FAILED for job ${jobId}:`, refundErr.message);
+  const isNightly = job?.source === 'nightly';
+  if (isNightly) {
+    // Nightly is FREE (nothing to refund) — credit a GOODWILL sparkle so a rare
+    // total miss still feels handled + generous (L6). grant_sparkles has no
+    // reference_id, but the exactly-once dead-letter flip above keeps it single.
+    const { error: gwErr } = await sb.rpc('grant_sparkles', {
+      p_user_id: userId,
+      p_amount: 1,
+      p_reason: `goodwill:nightly_dead_letter:${jobId}`,
+    });
+    if (gwErr) {
+      console.error(
+        `[failQueueJob] goodwill grant FAILED for nightly job ${jobId}:`,
+        gwErr.message
+      );
+    }
+  } else {
+    const { error: refundErr } = await sb.rpc('refund_sparkles', {
+      p_user_id: userId,
+      p_amount: 1,
+      p_reason: `refund:queue_dead_letter:${isNsfw ? 'nsfw' : 'exhausted'}`,
+      p_reference_id: jobId,
+    });
+    if (refundErr) {
+      console.error(`[failQueueJob] refund_sparkles FAILED for job ${jobId}:`, refundErr.message);
+    }
   }
   const { error: jobsErr } = await sb
     .from('dream_jobs')
@@ -267,7 +306,7 @@ export async function failQueueJob(
   }
   const { error: notifyErr } = await sb
     .from('notifications')
-    .insert(dreamFailedNotification(jobId, userId, isNsfw));
+    .insert(dreamFailedNotification(jobId, userId, isNsfw, job?.source));
   if (notifyErr) {
     console.error(
       `[failQueueJob] failure notification FAILED for job ${jobId}:`,

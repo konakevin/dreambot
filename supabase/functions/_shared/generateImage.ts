@@ -109,6 +109,24 @@ function failoverModelFor(msg: string, mode: string, inputImage: string | undefi
   return failedGoogleOrOpenAI ? 'black-forest-labs/flux-1.1-pro' : 'google/gemini-2-image';
 }
 
+/** Cross-provider failover target for an NSFW flag (NIGHTLY_DREAM_GUARANTEE_PLAN.md
+ *  L2). A DIFFERENT provider's safety filter is far less likely to false-flag the
+ *  SAME image, so pick an equivalent model on another provider based on what failed:
+ *  Gemini flagged → try Flux; anything else (Flux / OpenAI / xAI) → try Gemini.
+ *  Unlike failoverModelFor(), keyed off the FAILED MODEL (the NSFW error text is
+ *  generic and doesn't name the provider). Returns '' if no cross-provider move. */
+export function nsfwFailoverModel(
+  failedModel: string | undefined,
+  mode: string,
+  inputImage: string | undefined
+): string {
+  const isEdit = mode === 'flux-kontext' && !!inputImage;
+  const failedIsGemini = failedModel != null && isGeminiModel(failedModel);
+  if (isEdit)
+    return failedIsGemini ? 'black-forest-labs/flux-kontext-pro' : 'google/gemini-2-image';
+  return failedIsGemini ? 'black-forest-labs/flux-1.1-pro' : 'google/gemini-2-image';
+}
+
 /** Does the credentials object carry the key the fallback model needs? */
 function canRunModel(model: string, creds: GenerateImageCredentials): boolean {
   if (isOpenAIModel(model)) return !!creds.openaiKey;
@@ -137,17 +155,20 @@ export async function generateImage(
     );
   } catch (err) {
     const msg = (err as Error).message || '';
+    const isNsfw = msg.startsWith('NSFW_CONTENT');
     const billing = isBillingFailure(msg);
     const exhausted429 = isExhausted429(msg);
     const pollFail = isPollTransportFailure(msg);
-    if (!billing && !exhausted429 && !pollFail && !isSubmitPhaseFailure(msg)) throw err;
+    // NSFW joins the set worth a cross-provider move (L2): a DIFFERENT provider's
+    // safety filter rarely false-flags the same image.
+    if (!billing && !exhausted429 && !pollFail && !isSubmitPhaseFailure(msg) && !isNsfw) throw err;
 
     // Transient (503 spike / 500 blip): one same-model retry after a short
     // backoff — capacity spikes often clear in seconds. Skipped for billing
     // caps (same provider = same cap), exhausted 429s (already retried), and
     // poll-transport failures (the same model's poll is throttled → retrying it
     // just re-throttles; go straight to the cross-provider fallback).
-    if (!billing && !exhausted429 && !pollFail) {
+    if (!billing && !exhausted429 && !pollFail && !isNsfw) {
       await new Promise((r) => setTimeout(r, jitter(FAILOVER_BACKOFF_MS)));
       try {
         const retried = await generateWithNsfwRetries(
@@ -170,9 +191,13 @@ export async function generateImage(
     // Cross-provider fallback: one attempt on an equivalent model. Guarded so
     // it can't loop (fallback == the model that just failed → rethrow) and
     // can't dispatch to a provider we hold no key for.
-    const fbModel = failoverModelFor(msg, mode, inputImage);
-    if (fbModel === modelOverride || !canRunModel(fbModel, creds)) throw err;
-    console.warn(`[generateImage] provider failover → ${fbModel} after: ${msg.slice(0, 140)}`);
+    const fbModel = isNsfw
+      ? nsfwFailoverModel(modelOverride, mode, inputImage)
+      : failoverModelFor(msg, mode, inputImage);
+    if (!fbModel || fbModel === modelOverride || !canRunModel(fbModel, creds)) throw err;
+    console.warn(
+      `[generateImage] ${isNsfw ? 'NSFW' : 'provider'} failover → ${fbModel} after: ${msg.slice(0, 140)}`
+    );
     const fb = await generateWithNsfwRetries(
       mode,
       prompt,
@@ -181,7 +206,10 @@ export async function generateImage(
       fbModel,
       outputFormat
     );
-    return { ...fb, failover: `provider_failover:${fbModel}:${msg.slice(0, 80)}` };
+    return {
+      ...fb,
+      failover: `${isNsfw ? 'nsfw_failover' : 'provider_failover'}:${fbModel}:${msg.slice(0, 80)}`,
+    };
   }
 }
 
