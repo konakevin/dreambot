@@ -42,8 +42,9 @@ export async function generateLocationActionBeat(
   // Relaxed 2026-08-13 (Kevin): the held PROP is now OPTIONAL — only when it
   // genuinely fits the place. The old "name a concrete prop held in a hand"
   // mandate forced arbitrary objects (e.g. a wool spinning wheel + fleece at a
-  // Yellowstone thermal pool). A natural hands-free gesture is the default.
-  const prompt = `You caption a face-swap portrait PHOTO taken at a specific place. Invent ONE natural action or relaxed posture that fits this EXACT place, so the photo feels characterful instead of just standing stiffly.
+  // Yellowstone thermal pool). FULL freedom on the action itself (lively or
+  // calm, any gesture) so it never gets boring — just no forced random prop.
+  const prompt = `You caption a face-swap portrait PHOTO taken at a specific place. Invent ONE action or moment that fits this EXACT place, so the photo feels dynamic and characterful instead of just standing. You have full creative freedom — it can be lively and energetic OR calm and natural, any action or gesture at all, as long as it genuinely fits THIS place and feels real there.
 
 PLACE: "${place}"
 
@@ -52,12 +53,12 @@ The photo shows ${who}, from the WAIST UP, ${dual ? 'each' : 'the person'} turne
 HARD RULES — the photo is destroyed if you break any:
 - Waist-up framing. EVERY hand, prop, and gesture stays at CHEST LEVEL OR LOWER. Nothing at, near, or above the head.
 - Feet planted, near-stationary. No walking, running, jumping, climbing, or moving through the scene.
-- Prefer a natural GESTURE or posture that fits this place (a hand resting on a railing, rock, or fence; hands tucked in pockets; a forearm leaned on a ledge; arms relaxed at the sides). Add a held PROP only if an object genuinely and obviously belongs in a hand at THIS exact place. If nothing naturally belongs, do NOT invent one — use a hands-free gesture. A forced or random prop ruins the photo.
+- A held PROP is OPTIONAL: include one ONLY if an object genuinely and obviously belongs in a hand at THIS place (a cocktail at a bar, a book in a library, an oar in a rowboat). If nothing naturally fits, do NOT invent a random object — a hands-free action or gesture is great. A forced or arbitrary prop ruins the photo.
 - NEVER mention the face, eyes, head, hair, expression, a mask/helmet/hood/goggles, the camera, or a lens.
 ${dual ? '- Give EACH person their own small beat. Keep a clear gap between them — they do NOT touch, hug, kiss, lean together, or face each other.' : ''}
 
 Write ONLY the action phrase, 8-20 words, present-tense gerund style like a photo caption, comma-friendly. No place description, no sentence, no quotes.
-STYLE examples (invent your own, do NOT reuse) — mostly hands-free, a prop ONLY where it truly fits: "one hand resting on a weathered wooden railing, the other loose at the side" · "hands tucked into jacket pockets, shoulders squared to the water" · "a forearm leaned on a mossy stone parapet, weight on one hip" · "cradling a fresh-picked coconut at a beach, a machete tucked at the belt"`;
+STYLE examples (invent your own, do NOT reuse) — energetic OR calm, prop ONLY where it truly fits: "clapping along to the live music, shoulders loose and swaying" · "trailing fingertips through tall meadow grass at hip height" · "leaning a forearm on the harbor railing, jacket open in the wind" · "cracking open a fresh coconut on the sand, a machete tucked at the belt"`;
 
   try {
     const result = await callSonnet(prompt, anthropicKey, 90);
