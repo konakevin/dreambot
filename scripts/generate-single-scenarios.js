@@ -669,16 +669,16 @@ async function genBatch(pool, bucket, n, banList) {
     pool === 'elegant'
       ? `Each entry is a PRETTY, tasteful, DRESSED-UP solo photo of ${subj}. CATEGORY: ${bucket.desc}`
       : isActive
-        ? `Each entry is a COOL / EXCITING / FANTASTICAL solo photo of ${subj} caught MID-ACTION doing something with a HANDHELD PROP — an adventure/fantasy/sci-fi/heroic scene, genuinely dynamic and full of character, yet READABLE and composed as a clear solo portrait where the person dominates. CATEGORY: ${bucket.desc}`
+        ? `Each entry is a COOL / EXCITING / FANTASTICAL solo photo of ${subj} in a genuinely dynamic, characterful moment — an adventure/fantasy/sci-fi/heroic scene, READABLE and composed as a clear solo portrait where the person dominates. CATEGORY: ${bucket.desc}`
         : `Each entry is a RANDOM FUNNY / oddball solo photo of ${subj} — genuinely amusing but READABLE (the joke reads instantly). CATEGORY: ${bucket.desc}`;
   // ACTIVE pool: the pose FOLLOWS the scene text, so the scene MUST give the
   // person a dynamic beat + a handheld prop — escapes stiff stand-and-pose while
   // staying swap-safe (face big + toward camera, never covered by the prop).
   const sceneRule = isActive
-    ? `- scene: 12-26 words — WHERE ${subj} is + a DYNAMIC action they are doing WITH A HANDHELD PROP (face still toward the viewer). Give an active beat + a prop in hand, e.g. raising a spyglass toward the horizon, hoisting a tankard, one hand on the ship's wheel, drawing a cutlass, unrolling a treasure map. Keep the hand/prop at chest level or lower. Do NOT describe gaze or which way they face.`
+    ? `- scene: 12-26 words — WHERE ${subj} is + a DYNAMIC action or striking pose (face toward the viewer). You have FULL FREEDOM with objects: include and embellish with a held prop whenever the scene naturally calls for one (a knight's sword, a musician's guitar, a surfer's board), OR use a prop-free dynamic pose/gesture (a bold stance, arms crossed, a fist raised, weight shifted mid-motion) when that reads stronger — let the SCENE decide what belongs. The ONLY thing to avoid is forcing a RANDOM object into a hand that doesn't call for one. Keep any hand/prop at chest level or lower. Do NOT describe gaze or which way they face.`
     : `- scene: 10-22 words — WHERE ${subj} is + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe pose, gaze, or which way they face (framing is locked elsewhere).`;
   const activeRule = isActive
-    ? `\n- ${subj} is MID-ACTION with a handheld prop, BUT the face stays LARGE and toward the camera and is NEVER covered by a prop (no spyglass up to the eye, no pipe in the mouth, no hand/prop over the face); the prop stays at chest level or lower.`
+    ? `\n- ${subj} is in a dynamic moment, BUT the face stays LARGE and toward the camera and is NEVER covered (no hand or prop over the face); any prop stays at chest level or lower.`
     : '';
   const msg = await client.messages.create({
     model: SONNET,

@@ -297,17 +297,17 @@ async function genBatch(pool, bucket, n, banList) {
     pool === 'elegant'
       ? `Each entry is a PRETTY, romantic, tasteful DRESSED-UP couple photo. CATEGORY: ${bucket.desc}`
       : isActive
-        ? `Each entry is a COOL / EXCITING / FANTASTICAL couple photo where BOTH people are caught MID-ACTION doing something with a HANDHELD PROP — an adventure/fantasy/sci-fi/heroic scene, genuinely dynamic and full of character, yet READABLE and composed as a clear couple portrait where the two people dominate. CATEGORY: ${bucket.desc}`
+        ? `Each entry is a COOL / EXCITING / FANTASTICAL couple photo where BOTH people are in a genuinely dynamic, characterful moment — an adventure/fantasy/sci-fi/heroic scene, READABLE and composed as a clear couple portrait where the two people dominate. CATEGORY: ${bucket.desc}`
         : `Each entry is a RANDOM FUNNY / oddball couple photo — genuinely amusing, with a sense of humor, but READABLE (a viewer instantly gets the joke; never so random it's incoherent). CATEGORY: ${bucket.desc}`;
   // ACTIVE pool: the pose FOLLOWS the scene text (the engine renders "caught
   // mid-action exactly as the scene describes"), so the scene MUST give each
   // person a dynamic beat + a handheld prop — that's how we escape stiff
   // stand-and-pose while staying swap-safe (face stays big + toward camera).
   const sceneRule = isActive
-    ? `- scene: 12-26 words — WHERE they are + a DYNAMIC action EACH person is doing WITH A HANDHELD PROP (both faces still toward the viewer). Give each an active beat + a prop in hand, e.g. raising a spyglass toward the horizon, hoisting a tankard, one hand on the ship's wheel, drawing a cutlass, unrolling a map between them. Keep hands/props at chest level or lower. Do NOT describe kissing, embracing, or facing each other.`
+    ? `- scene: 12-26 words — WHERE they are + a DYNAMIC action or striking pose for EACH person (both faces toward the viewer). You have FULL FREEDOM with objects: include and embellish with held props whenever the scene naturally calls for them, OR use prop-free dynamic poses/gestures (a bold stance, a fist raised, weight shifted mid-motion) when those read stronger — let the SCENE decide what belongs. The ONLY thing to avoid is forcing a RANDOM object into every hand. Keep any hands/props at chest level or lower. Do NOT describe kissing, embracing, or facing each other.`
     : `- scene: 10-22 words — WHERE they are + the fun/pretty situation. Describe the SETTING and any props/animals/elements. Do NOT describe poses, embracing, kissing, holding, or which way they face (framing is locked elsewhere).`;
   const activeRule = isActive
-    ? `\n- Both people are MID-ACTION with a handheld prop, BUT each face stays LARGE and toward the camera and is NEVER covered by a prop (no spyglass up to the eye, no pipe in the mouth, no hand/prop over the face); props stay at chest level or lower.`
+    ? `\n- Both people are in a dynamic moment, BUT each face stays LARGE and toward the camera and is NEVER covered (no hand or prop over the face); any props stay at chest level or lower.`
     : '';
   const msg = await client.messages.create({
     model: SONNET,
