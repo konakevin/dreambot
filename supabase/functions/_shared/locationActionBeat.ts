@@ -39,7 +39,11 @@ export async function generateLocationActionBeat(
 
   const dual = castCount === 2;
   const who = dual ? 'a couple, side by side' : 'one person';
-  const prompt = `You caption a face-swap portrait PHOTO taken at a specific place. Invent ONE lively action that fits this EXACT place, so the photo feels dynamic and characterful instead of just standing.
+  // Relaxed 2026-08-13 (Kevin): the held PROP is now OPTIONAL — only when it
+  // genuinely fits the place. The old "name a concrete prop held in a hand"
+  // mandate forced arbitrary objects (e.g. a wool spinning wheel + fleece at a
+  // Yellowstone thermal pool). A natural hands-free gesture is the default.
+  const prompt = `You caption a face-swap portrait PHOTO taken at a specific place. Invent ONE natural action or relaxed posture that fits this EXACT place, so the photo feels characterful instead of just standing stiffly.
 
 PLACE: "${place}"
 
@@ -48,12 +52,12 @@ The photo shows ${who}, from the WAIST UP, ${dual ? 'each' : 'the person'} turne
 HARD RULES — the photo is destroyed if you break any:
 - Waist-up framing. EVERY hand, prop, and gesture stays at CHEST LEVEL OR LOWER. Nothing at, near, or above the head.
 - Feet planted, near-stationary. No walking, running, jumping, climbing, or moving through the scene.
-- Name a CONCRETE prop or gesture that truly belongs at this place, held in a hand.
+- Prefer a natural GESTURE or posture that fits this place (a hand resting on a railing, rock, or fence; hands tucked in pockets; a forearm leaned on a ledge; arms relaxed at the sides). Add a held PROP only if an object genuinely and obviously belongs in a hand at THIS exact place. If nothing naturally belongs, do NOT invent one — use a hands-free gesture. A forced or random prop ruins the photo.
 - NEVER mention the face, eyes, head, hair, expression, a mask/helmet/hood/goggles, the camera, or a lens.
 ${dual ? '- Give EACH person their own small beat. Keep a clear gap between them — they do NOT touch, hug, kiss, lean together, or face each other.' : ''}
 
 Write ONLY the action phrase, 8-20 words, present-tense gerund style like a photo caption, comma-friendly. No place description, no sentence, no quotes.
-STYLE examples (invent your own, do NOT reuse): "raising a brass lantern to inspect a mooring post, other hand on a coiled rope" · "cradling a fresh-picked coconut, a machete tucked at the belt" · "one hand steadying an easel, the other lifting a loaded paintbrush"`;
+STYLE examples (invent your own, do NOT reuse) — mostly hands-free, a prop ONLY where it truly fits: "one hand resting on a weathered wooden railing, the other loose at the side" · "hands tucked into jacket pockets, shoulders squared to the water" · "a forearm leaned on a mossy stone parapet, weight on one hip" · "cradling a fresh-picked coconut at a beach, a machete tucked at the belt"`;
 
   try {
     const result = await callSonnet(prompt, anthropicKey, 90);
