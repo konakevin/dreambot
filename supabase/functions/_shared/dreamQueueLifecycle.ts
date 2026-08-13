@@ -17,6 +17,13 @@ import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.
 import { captureServer } from './posthogCapture.ts';
 
 const MAX_ATTEMPTS_BEFORE_DEAD_LETTER = 5;
+// Nightly gets a HIGHER cap AND never honors `terminal` (NIGHTLY_DREAM_GUARANTEE_PLAN.md
+// L3): unlike a Create dream (fixed user prompt → same failure every time), a nightly
+// brief is RE-ROLLED from scratch on every attempt (empty payload → fresh rollDream), so
+// an NSFW flag / bad scene / missing cast source is recoverable by simply retrying — the
+// next roll is a different place/scene/pose and almost never re-trips. A paying customer
+// must never miss a nightly, so we retry hard before ever dead-lettering.
+const MAX_ATTEMPTS_NIGHTLY = 8;
 const BACKOFF_MS = [60_000, 300_000, 1_800_000, 7_200_000]; // 1m, 5m, 30m, 2h
 
 // ── dream_failed notification — shared shape across every fail site ──
@@ -166,7 +173,13 @@ export async function failQueueJob(
     .eq('id', jobId)
     .single();
   const nextAttempt = (job?.attempt_count ?? 0) + 1;
-  const isDead = terminal || nextAttempt >= MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+  // Nightly (source==='nightly') re-rolls a brand-new dream on every attempt, so a
+  // "terminal" error is recoverable by a plain retry — never dead-letter it early;
+  // retry up to the raised nightly cap. Create keeps terminal-NSFW (re-running the
+  // identical prompt just re-fails). See NIGHTLY_DREAM_GUARANTEE_PLAN.md (L3).
+  const isNightly = job?.source === 'nightly';
+  const maxAttempts = isNightly ? MAX_ATTEMPTS_NIGHTLY : MAX_ATTEMPTS_BEFORE_DEAD_LETTER;
+  const isDead = (terminal && !isNightly) || nextAttempt >= maxAttempts;
 
   if (!isDead) {
     // Exponential backoff: created_at into the future so the claim RPC's
