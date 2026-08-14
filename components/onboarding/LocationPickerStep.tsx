@@ -253,7 +253,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           </GradientTitle>
         )}
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Places you love, or anywhere you’d love to go.
+          Pick the places you love. We’ll weave them through your dreams.
         </Text>
       </View>
 
