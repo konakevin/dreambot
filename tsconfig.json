@@ -18,6 +18,8 @@
     "__tests__/lib/sanitize.test.ts",
     "__tests__/lib/sanitizeUserText.test.ts",
     "__tests__/lib/dreamAlgorithm.test.ts",
+    "__tests__/lib/sceneTypeRoll.test.ts",
+    "__tests__/lib/nightlyComposition.test.ts",
     "__tests__/lib/modelPicker.test.ts",
     "__tests__/lib/promptCompiler.test.ts",
     "__tests__/lib/dualActionDetector.test.ts",

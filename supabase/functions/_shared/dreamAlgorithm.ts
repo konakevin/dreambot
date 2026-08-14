@@ -119,18 +119,20 @@ export function rollDream(
     } else if (medium.faceSwaps) {
       const selfMember = findRole('self');
       const plusOne = findRole('plus_one');
-      if (selfMember && plusOne && Math.random() < 0.4) {
-        // 40% dual face swap when both self + plus_one exist (Kevin, 2026-08-13:
-        // 40/30/30 dual/self/+1). The 60% solo then splits 50/50 → 30% each.
+      if (selfMember && plusOne && Math.random() < 0.25) {
+        // Internal fallback split — DEAD for nightly (which forces the cast role
+        // via chaosTier's rollNightlyDreamType: the live 40/30/30 dual/self/+1
+        // lever). This only fires if rollDream is ever called with no forced
+        // cast role, which no production caller does (create/first-dream/nightly
+        // all force it). Left at the historical 25/67 to avoid implying it's live.
         castMembers = [selfMember, plusOne];
       } else {
-        // Single face swap: 50% self / 50% +1 of the solo remainder → 30/30 of
-        // the whole. Pets not supported (2026-06-07).
+        // Single face swap (67% self, 33% +1). Pets not supported (2026-06-07).
         const selfM = findRole('self');
         const plus1 = findRole('plus_one');
         let pick: CastMember | undefined;
         if (selfM && plus1) {
-          pick = Math.random() < 0.5 ? selfM : plus1;
+          pick = Math.random() < 0.67 ? selfM : plus1;
         } else {
           pick = selfM || plus1;
         }

@@ -27,6 +27,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
+import { sceneTypeCuts } from '../_shared/sceneTypeRoll.ts';
 import { buildSceneFallbackPrompt } from '../_shared/sceneFallbackPrompt.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 import {
@@ -1287,10 +1288,14 @@ Deno.serve(async (req) => {
       } else if (isDualFaceSwap) {
         const pools = await loadDualScenarios(supabase);
         const splitCfg = await fetchEngineConfig(supabase);
-        const goofyCut = splitCfg.dualSceneGoofyPct / 100;
-        const elegantCut = goofyCut + splitCfg.dualSceneElegantPct / 100;
-        const activeCut =
-          elegantCut + (pools.active.length >= 10 ? splitCfg.dualSceneActivePct / 100 : 0);
+        const { goofyCut, elegantCut, activeCut } = sceneTypeCuts(
+          {
+            goofy: splitCfg.dualSceneGoofyPct,
+            elegant: splitCfg.dualSceneElegantPct,
+            active: splitCfg.dualSceneActivePct,
+          },
+          { activeEnabled: pools.active.length >= 10 }
+        );
         const roll = Math.random();
         // Shuffle-bag (mig 349): filter each pool to this user's UNSEEN
         // entries before picking; record what was served. Fail-open.
@@ -1336,16 +1341,21 @@ Deno.serve(async (req) => {
         const pools = await loadSingleScenarios(supabase);
         const g = castGender === 'male' || castGender === 'female' ? castGender : null;
         const splitCfg = await fetchEngineConfig(supabase);
-        // Gendered-solo lean (Operation Sweet Dreams): a solo dream of a KNOWN
-        // gender skews toward the gendered glam (female) / cool (male) pools by
-        // widening the elegant + active windows (half the boost each), shrinking
-        // plain-location. gender-neutral casts are unaffected (gLean = 0).
-        const gLean = g ? splitCfg.singleGenderedBoostPct / 100 : 0;
-        const goofyCut = splitCfg.singleSceneGoofyPct / 100;
-        const elegantCut = goofyCut + splitCfg.singleSceneElegantPct / 100 + gLean / 2;
-        const activeCut =
-          elegantCut +
-          (pools.active.any.length >= 10 ? splitCfg.singleSceneActivePct / 100 + gLean / 2 : 0);
+        // Gendered-solo lean (Operation Sweet Dreams): when > 0, a solo dream of
+        // a KNOWN gender widens elegant + active (half the boost each) at the
+        // expense of plain. Currently 0 (Kevin, 2026-08-13) → solos roll the SAME
+        // split as dual. Tunable via single_gendered_boost_pct.
+        const { goofyCut, elegantCut, activeCut } = sceneTypeCuts(
+          {
+            goofy: splitCfg.singleSceneGoofyPct,
+            elegant: splitCfg.singleSceneElegantPct,
+            active: splitCfg.singleSceneActivePct,
+          },
+          {
+            genderedBoostPct: g ? splitCfg.singleGenderedBoostPct : 0,
+            activeEnabled: pools.active.any.length >= 10,
+          }
+        );
         const roll = Math.random();
         const pickSolo = async (pool: 'goofy' | 'elegant' | 'active') => {
           const candidates = await filterUnseen(

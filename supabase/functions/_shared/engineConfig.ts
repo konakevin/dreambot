@@ -119,7 +119,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneGoofyPct: 20,
   singleSceneElegantPct: 20,
   singleSceneActivePct: 0,
-  singleGenderedBoostPct: 15,
+  singleGenderedBoostPct: 0,
   singleCompositionExpandedPct: 0,
   locationActionPct: 0,
   pureSceneOnSwapFail: true,

@@ -55,7 +55,7 @@ describe('rollDream', () => {
     }
   });
 
-  it('face-swap medium picks 1 or 2 cast members (dual 25%)', () => {
+  it('face-swap medium picks 1 or 2 cast members', () => {
     for (let i = 0; i < 50; i++) {
       const result = rollDream(ALL_CAST, FACE_SWAP);
       if (result.castMembers.length > 0) {
