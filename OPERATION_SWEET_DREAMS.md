@@ -268,5 +268,17 @@ Reweight (`active` 30 -> 50, `plain` 40 -> 20) is applied last, once the new con
 - **2026-08-13** — Scaling the original 13 shared themes (dual+single) + old gendered to 100. Dedup
   audit at MVP-25: 0 exact dups, 1 near-dup across the glam pools — generator's cross-run `seen`-set
   dedup works. Re-audit due at 100.
-- **STILL PARKED:** the reweight (active 30→50, plain 40→20) — the master exposure switch. Flip LAST,
-  after male/extreme grading + the scale + dedup re-audit.
+- **2026-08-13** — PROP FIX + EPIC RESEED. The active-scenario DNA mandated a handheld prop every
+  frame ("object after object" in renders) — separate from the location-beat fix. Freed it up: model now
+  places/embellishes objects only when the scene calls for one, prop-free dynamic poses otherwise; the
+  ONLY ban is a forced RANDOM object. LEFT the 526 legacy recreational alone (never had the mandate;
+  already prop-light — verified in data). Scoped-deleted 2,400 single + 1,175 dual epic rows, reseeding
+  all 65 epic/fantasy categories at 100 through the freedom prompt. Reseed job hit a ~30-min background
+  kill limit TWICE (deletes-then-inserts-at-end, so epic pools went empty mid-run; /tmp backups were
+  stale) → recovered by running in short parallel sub-jobs, each < kill limit, idempotent-resume by
+  querying which categories were < 100. FINAL: single 45/45 at 100, dual 19/20 (winter_wonder topping
+  60→100). Composition set 40/30/30. Gendered lean deployed (15).
+- **STILL PARKED:** the reweight — final value **40/30** (active 40, plain-location 30; goofy/elegant
+  stay 15). Kevin revised 45/25 → 40/30. Dual + single `*_scene_active_pct` = 40. The master exposure
+  switch. Flip LAST, after the QA render pass + grading + dedup re-audit (so we never amplify ungraded
+  content). Gendered lean (15) then further skews solos toward glam/cool.

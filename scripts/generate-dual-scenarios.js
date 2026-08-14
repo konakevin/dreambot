@@ -226,7 +226,7 @@ const ACTIVE_BUCKETS = [
     key: 'mounts_and_riding',
     mediumBan: PHOTO_ADJACENT_BAN,
     label: 'Magical mounts & riding',
-    desc: 'A MAGICAL-MOUNT riding scene — the couple riding side by side on wondrous steeds across a sweeping vista: a giant fluffy corgi, horses through an enchanted valley, a gentle unicorn, a great elk, or a feathered raptor. Reins or a lead rope in hand; rolling hills, misty peaks, or blossom fields behind. Riding leathers, cloaks, adventure clothes. The mounts stay calm and side by side so both faces stay large and clear. Joyful and epic.',
+    desc: 'A MAGICAL-MOUNT riding scene — the couple SEATED ASTRIDE, riding side by side ON the backs of wondrous steeds (each mounted on their own animal, NOT standing beside them) across a sweeping vista: a giant fluffy corgi, horses through an enchanted valley, a gentle unicorn, a great elk, or a feathered raptor. Reins in hand; rolling hills, misty peaks, or blossom fields behind. Riding leathers, cloaks, adventure clothes. The mounts stay calm and side by side so both faces stay large and clear. Joyful and epic.',
   },
   {
     key: 'companion_creatures',

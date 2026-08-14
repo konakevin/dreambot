@@ -161,6 +161,7 @@ const GOOFY_BUCKETS = [
   },
   {
     key: 'girly_cute_f',
+    mediumBan: GLAM_MEDIUM_BAN,
     gender: 'female',
     count: 25,
     label: 'Cute pink fluffy fun (her)',
@@ -260,14 +261,6 @@ const ELEGANT_BUCKETS = [
     count: 25,
     label: 'Fairytale princess (her)',
     desc: 'A fairytale PRINCESS for HER — a flowing ballgown and a delicate tiara; a castle balcony at golden hour, a grand palace staircase, a rose-garden courtyard, a royal ballroom, or a carriage arrival. Graceful, storybook, radiant.',
-  },
-  {
-    key: 'ballerina_f',
-    mediumBan: GLAM_MEDIUM_BAN,
-    gender: 'female',
-    count: 25,
-    label: 'Ballerina (her)',
-    desc: 'A BALLERINA for HER — tutu and pointe-shoe elegance under a spotlight; a grand theatre stage, a sunlit rehearsal studio with barres and mirrors, a backstage of curtains and roses, or a snow-lit stage set. Graceful and luminous.',
   },
   {
     key: 'coquette_f',
@@ -371,7 +364,7 @@ const ACTIVE_BUCKETS = [
     gender: 'any',
     count: 25,
     label: 'Magical mounts & riding',
-    desc: 'A MAGICAL-MOUNT riding scene — the person riding a wondrous steed across a sweeping vista: a giant fluffy corgi, a horse through an enchanted valley, a gentle unicorn, a great elk, or a feathered raptor. Reins or a lead rope in hand; rolling hills, misty peaks, or blossom fields behind. Riding leathers, a cloak, adventure clothes. Joyful and epic.',
+    desc: 'A MAGICAL-MOUNT riding scene — the person SEATED ASTRIDE, riding ON the back of a wondrous steed (mounted on it, NOT standing beside it) across a sweeping vista: a giant fluffy corgi, a horse through an enchanted valley, a gentle unicorn, a great elk, or a feathered raptor. Reins in hand; rolling hills, misty peaks, or blossom fields behind. Riding leathers, a cloak, adventure clothes. Joyful and epic.',
   },
   {
     key: 'companion_creatures',
@@ -453,6 +446,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'extreme_sports_m',
+    mediumBan: COOL_MEDIUM_BAN,
     gender: 'male',
     count: 25,
     label: 'Extreme sports (him)',
@@ -460,6 +454,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'combat_sports_m',
+    mediumBan: COOL_MEDIUM_BAN,
     gender: 'male',
     count: 25,
     label: 'Combat sports (him)',
@@ -475,6 +470,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'hunting_m',
+    mediumBan: COOL_MEDIUM_BAN,
     gender: 'male',
     count: 25,
     label: 'Hunting (him)',
@@ -482,6 +478,7 @@ const ACTIVE_BUCKETS = [
   },
   {
     key: 'fishing_m',
+    mediumBan: COOL_MEDIUM_BAN,
     gender: 'male',
     count: 25,
     label: 'Fishing (him)',
@@ -517,7 +514,7 @@ const ACTIVE_BUCKETS = [
     gender: 'female',
     count: 25,
     label: 'Mermaid princess (her)',
-    desc: 'A MERMAID PRINCESS for HER — a radiant mermaid in a bioluminescent undersea palace, holding a glowing pearl wand at chest level as bubbles and ribbons of light drift around her. A pearlescent shimmering tail below, a sea-foam gown of shells and pearls, a coral crown. Face clear and forward, dreamy underwater glow.',
+    desc: 'A MERMAID PRINCESS for HER — UNMISTAKABLY a mermaid: her iridescent scaled fish TAIL clearly visible and prominent below the waist (a tail, never legs), a seashell-and-pearl bodice, a coral crown, long flowing hair. In a bioluminescent undersea palace with towering coral columns, glowing jellyfish, and bubbles drifting around her. Dreamy underwater glow. Face clear and forward.',
   },
   {
     key: 'flower_fairy_f',
@@ -542,6 +539,14 @@ const ACTIVE_BUCKETS = [
     count: 25,
     label: 'Unicorn rainbow princess (her)',
     desc: 'A UNICORN PRINCESS for HER — a pastel dream beside a gentle rainbow-maned unicorn in a candy-cloud land, raising a sparkling wand at chest level as rainbow light and floating hearts swirl around her. A pastel gown with a jeweled tiara, cotton-candy clouds. Cute, magical, over-the-top sweet. The unicorn stays beside her, never over her face.',
+  },
+  {
+    key: 'ballerina_f',
+    mediumBan: GLAM_MEDIUM_BAN,
+    gender: 'female',
+    count: 25,
+    label: 'Ballerina (her)',
+    desc: 'A BALLERINA for HER — a classical ballet dancer in a full white or pastel TUTU and pointe shoes, caught mid-graceful-pose (arms extended in a soft port de bras, a poised arabesque), on a grand theatre ballet stage under a spotlight with velvet curtains and roses, or in a sunlit mirrored rehearsal studio. UNMISTAKABLY a ballerina, elegant and luminous.',
   },
   {
     key: 'secret_agent_m',
