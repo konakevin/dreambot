@@ -151,8 +151,16 @@ website.
   Vercel integration can silently disconnect (it did 2026-05-28 → 20-day frozen site) — if pushes stop
   deploying, `npx vercel git connect` then `npx vercel --prod`, verify with `npx vercel ls`. Don't
   `npm audit fix --force` (tries to downgrade Next catastrophically).
-- **Domain / email** — DNS/nameservers at **Wix** (point the domain at Vercel; add records in Wix →
-  Domains → DNS). `support@dreambotapp.com` = **ImprovMX** free forwarding → Gmail (MX/SPF in Wix DNS).
+- **Domain / email** — registrar + DNS/nameservers at **Porkbun** (moved off Wix; nameservers
+  `*.ns.porkbun.com`; add/edit records in Porkbun → dreambotapp.com → DNS Records). Apex `A 76.76.21.21`
+  + `www CNAME cname.vercel-dns.com` point at Vercel. `support@dreambotapp.com` = **ImprovMX** free
+  forwarding → Gmail (`MX mx1/mx2.improvmx.com` + `SPF include:spf.improvmx.com`). **DKIM + DMARC not yet
+  set** (SPF only) — outbound-from-domain auth is partial. ImprovMX DKIM value is per-account (grab from
+  the ImprovMX dashboard, not a static target). App signup/verification emails are sent by **Supabase
+  Auth** (sender/SMTP configured in the Supabase dashboard, NOT this repo) — to send those *from*
+  dreambotapp.com you configure custom SMTP in Supabase + that provider's DKIM; ImprovMX DKIM does not
+  cover them. (⚠️ A stale Cloudflare "domain removed" email refers to an abandoned onboarding — nameservers
+  point at Porkbun, so it's a no-op; ignore.)
 
 Tie-together: **App (RN/Expo, distributed via App Store Connect) ↔ Supabase (all data/auth/storage/edge) ;
 payments App → RevenueCat → Apple → RC webhook → Supabase edge ; Website (Vercel) reads the same Supabase
