@@ -41,7 +41,7 @@ import { minRefreshHold } from '@/lib/minRefresh';
 import { useRefreshGap } from '@/hooks/useRefreshGap';
 import { avatarUrl } from '@/lib/imageUrl';
 import { useChangeAvatar } from '@/hooks/useChangeAvatar';
-import type { DreamsFilter } from '@/hooks/useMyDreams';
+import { useMyDreams, type DreamsFilter } from '@/hooks/useMyDreams';
 import { Toast } from '@/components/Toast';
 import { showAlert } from '@/components/CustomAlert';
 import { useBulkDeletePosts, useBulkMakePrivate } from '@/hooks/useDeletePost';
@@ -75,8 +75,31 @@ export default function ProfileScreen() {
   const [gridSelectedIds, setGridSelectedIds] = useState<Set<string>>(new Set());
   const { galleryMaxImages } = useEngineConfig();
   // Selection is uncapped (users over-select to bulk-DELETE), but an album
-  // caps at galleryMaxImages — so Post disables past the cap and says why.
-  const overGalleryCap = gridSelectedIds.size > galleryMaxImages;
+  // caps at galleryMaxImages — so Post disables past the cap and says why
+  // (eligibleOverCap, below).
+  // Post eligibility for the Dreams album: only UNPOSTED dreams (is_public ===
+  // false) can be composed into a post. We read PostGrid's OWN dreams query
+  // (same ['my-dreams', uid, filter] key → deduped, no extra fetch) to learn
+  // each loaded dream's posted state, so the Post pill can live on the default
+  // All view (mig 306 made All the default) and Private view — scoped to just
+  // the unposted subset of the selection — instead of vanishing unless the user
+  // first switches to the Private filter. Posted-only dreams stay excluded (no
+  // silent re-posting of already-live dreams). (2026-08-17)
+  const myDreamsForEligibility = useMyDreams(dreamsFilter);
+  const unpostedDreamIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const page of myDreamsForEligibility.data?.pages ?? []) {
+      for (const row of page.rows) {
+        if (row.is_public === false) ids.add(row.id);
+      }
+    }
+    return ids;
+  }, [myDreamsForEligibility.data]);
+  const eligiblePostIds = useMemo(
+    () => [...gridSelectedIds].filter((id) => unpostedDreamIds.has(id)),
+    [gridSelectedIds, unpostedDreamIds]
+  );
+  const eligibleOverCap = eligiblePostIds.length > galleryMaxImages;
   const bulkDelete = useBulkDeletePosts();
   const bulkPrivate = useBulkMakePrivate();
   const bulkUnsave = useBulkUnsave();
@@ -192,14 +215,16 @@ export default function ProfileScreen() {
       ]
     );
   }, [gridSelectedIds, bulkPrivate, exitGridSelection]);
-  // Compose a post from the selected dreams (order = tap order; Set preserves
-  // insertion order). 1 → single post, 2+ → gallery, decided in the compose flow.
+  // Compose a post from the selected dreams — only the UNPOSTED (eligible) ones,
+  // in tap order (Set + filter both preserve insertion order). 1 → single post,
+  // 2+ → gallery, decided in the compose flow. On a mixed All-view selection the
+  // already-posted tiles are silently skipped (the button count reflects this).
   const handleBulkPost = useCallback(() => {
-    const ids = [...gridSelectedIds];
+    const ids = eligiblePostIds;
     if (ids.length === 0 || ids.length > galleryMaxImages) return;
     exitGridSelection();
     nav.push(`/post/new?ids=${ids.join(',')}`);
-  }, [gridSelectedIds, galleryMaxImages, exitGridSelection]);
+  }, [eligiblePostIds, galleryMaxImages, exitGridSelection]);
   // Unsave / unrepost are reversible, but confirm anyway (same ceremony as
   // delete / make-private) so a mis-tap on a big selection isn't instant.
   const handleBulkUnsave = useCallback(() => {
@@ -856,9 +881,9 @@ export default function ProfileScreen() {
         {/* Selection chrome — the count + Done live in the grid's own filter
             row (the subheader above the grid); the ACTION ROW floats at the
             bottom — the Gmail-toolbar shape (Kevin 2026-07-10). Posts album:
-            [Make Private][Delete]; Dreams album: [Post][Delete] on the Private
-            view (only unposted dreams are eligible to post), [Delete] only on
-            the All + Posted views. */}
+            [Make Private][Delete]; Dreams album: [Post][Delete] on the All +
+            Private views (Post scoped to the unposted, still-eligible subset),
+            [Delete] only on the Posted view. */}
         {gridSelecting && (
           <View
             style={[
@@ -867,27 +892,29 @@ export default function ProfileScreen() {
             ]}
           >
             <View style={styles.selectionActionsRow}>
-              {/* Post the selected dreams — 1 → single, 2+ → gallery. Only on the
-                  Private view: those are the only eligible (unposted) dreams, so
-                  posting an album is unambiguous there. On All/Posted the grid is
-                  a mix of already-live dreams, so bulk-Post is deliberately not
-                  offered — compose a new post via ＋ instead. (Kevin 2026-07-27.) */}
-              {activeTab === 'dreams' && dreamsFilter === 'private' && (
+              {/* Post the selected dreams — 1 → single, 2+ → gallery. Shown on the
+                  All + Private views (hidden on Posted, and whenever nothing in
+                  view is unposted); scoped to the UNPOSTED subset of the selection,
+                  since already-live dreams aren't re-posted here (compose a new one
+                  via ＋ instead). The count reflects eligible tiles, so a mixed
+                  All-view selection posts only the unposted ones. (Kevin 2026-07-27;
+                  Post restored to the default All view 2026-08-17.) */}
+              {activeTab === 'dreams' && dreamsFilter !== 'posted' && unpostedDreamIds.size > 0 && (
                 <TouchableOpacity
                   style={[
                     styles.actionPill,
                     styles.postPill,
-                    (gridSelectedIds.size === 0 || overGalleryCap) && styles.actionPillDisabled,
+                    (eligiblePostIds.length === 0 || eligibleOverCap) && styles.actionPillDisabled,
                   ]}
                   onPress={handleBulkPost}
-                  disabled={gridSelectedIds.size === 0 || overGalleryCap}
+                  disabled={eligiblePostIds.length === 0 || eligibleOverCap}
                   activeOpacity={0.85}
                 >
                   <Ionicons name="duplicate-outline" size={16} color="#FFFFFF" />
                   <Text style={styles.actionPillText}>
-                    {overGalleryCap
+                    {eligibleOverCap
                       ? `${galleryMaxImages} max`
-                      : `Post${gridSelectedIds.size > 0 ? ` (${gridSelectedIds.size})` : ''}`}
+                      : `Post${eligiblePostIds.length > 0 ? ` (${eligiblePostIds.length})` : ''}`}
                   </Text>
                 </TouchableOpacity>
               )}
