@@ -174,7 +174,7 @@ export function GalleryNav({
         style={styles.navSlot}
       >
         <Animated.View style={leftStyle}>
-          <Ionicons name="chevron-back" size={fontScale(24)} color="#FFFFFF" />
+          <Ionicons name="chevron-back" size={fontScale(26)} color="#FFFFFF" />
         </Animated.View>
       </Pressable>
       <View style={styles.navDots}>
@@ -199,7 +199,7 @@ export function GalleryNav({
         style={styles.navSlot}
       >
         <Animated.View style={rightStyle}>
-          <Ionicons name="chevron-forward" size={fontScale(24)} color="#FFFFFF" />
+          <Ionicons name="chevron-forward" size={fontScale(26)} color="#FFFFFF" />
         </Animated.View>
       </Pressable>
     </View>
@@ -215,12 +215,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: OVERLAY_PILL_ACTIVE_BG,
     borderRadius: 999,
-    height: verticalScale(37),
-    paddingHorizontal: horizontalScale(5),
+    // Taller + chunkier capsule for a more tactile tap target (Kevin 2026-08-17).
+    height: verticalScale(46),
+    paddingHorizontal: horizontalScale(6),
   },
   // Fixed-width chevron slot — always present so the indicator stays centered.
   navSlot: {
-    width: horizontalScale(35),
+    width: horizontalScale(42),
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
