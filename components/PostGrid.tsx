@@ -93,9 +93,6 @@ interface PostGridProps {
     selectedIds: ReadonlySet<string>;
     onToggle: (id: string) => void;
     onEnter: (id: string) => void;
-    /** Present-but-NOT-selectable tiles (e.g. already-posted dreams in the
-     *  Dreams album) — PostTile dims + locks them so they can't join a new post. */
-    ineligibleIds?: ReadonlySet<string>;
   };
   /** Extra bottom padding beyond the tab-bar clearance — the profile tab passes
    *  the render-dock height so the last row clears the dock. Omitted (0) on the
@@ -705,7 +702,6 @@ export function PostGrid({
                 selActive={selection?.active ?? false}
                 selSelected={selection ? selection.selectedIds.has(item.id) : false}
                 selOrder={selectionOrder.get(item.id) ?? null}
-                selIneligible={selection?.ineligibleIds?.has(item.id) ?? false}
                 onSelectToggle={selection?.onToggle}
                 onSelectEnter={selection?.onEnter}
               />

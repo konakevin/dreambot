@@ -100,20 +100,6 @@ export default function ProfileScreen() {
     [gridSelectedIds, unpostedDreamIds]
   );
   const eligibleOverCap = eligiblePostIds.length > galleryMaxImages;
-  // Posted dreams (is_public === true) shown in the Dreams album are INELIGIBLE
-  // for Select: they can't be composed into a new post, so PostTile dims + locks
-  // them (delete a live dream from the Posts album instead). Only the Dreams
-  // album gates this — Posts/Saved/Reposts select everything. (2026-08-17)
-  const ineligibleSelectIds = useMemo(() => {
-    const ids = new Set<string>();
-    if (activeTab !== 'dreams') return ids;
-    for (const page of myDreamsForEligibility.data?.pages ?? []) {
-      for (const row of page.rows) {
-        if (row.is_public === true) ids.add(row.id);
-      }
-    }
-    return ids;
-  }, [activeTab, myDreamsForEligibility.data]);
   const bulkDelete = useBulkDeletePosts();
   const bulkPrivate = useBulkMakePrivate();
   const bulkUnsave = useBulkUnsave();
@@ -127,31 +113,22 @@ export default function ProfileScreen() {
   useEffect(() => {
     exitGridSelection();
   }, [activeTab, exitGridSelection]);
-  const enterGridSelection = useCallback(
-    (id: string) => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      setGridSelecting(true);
-      // Long-pressing a posted (ineligible) dream can still open select mode, but
-      // it's never pre-picked — you pick eligible tiles from there.
-      setGridSelectedIds(ineligibleSelectIds.has(id) ? new Set() : new Set([id]));
-    },
-    [ineligibleSelectIds]
-  );
-  const toggleGridSelected = useCallback(
-    (id: string) => {
-      if (ineligibleSelectIds.has(id)) return; // posted dreams aren't selectable here
-      setGridSelectedIds((prev) => {
-        const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
-        // Deselecting the last tile keeps you IN select mode at "0 selected" so you
-        // can pick a different first image (Kevin 2026-07-11). Only the Cancel
-        // button above the grid exits — the bottom action pills disable at 0.
-        return next;
-      });
-    },
-    [ineligibleSelectIds]
-  );
+  const enterGridSelection = useCallback((id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setGridSelecting(true);
+    setGridSelectedIds(new Set([id]));
+  }, []);
+  const toggleGridSelected = useCallback((id: string) => {
+    setGridSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      // Deselecting the last tile keeps you IN select mode at "0 selected" so you
+      // can pick a different first image (Kevin 2026-07-11). Only the Cancel
+      // button above the grid exits — the bottom action pills disable at 0.
+      return next;
+    });
+  }, []);
   // Reference-stable selection object for PostGrid: only a NEW identity when the
   // active tab, mode, or selected set actually changes — NOT on every render.
   // A fresh object each render defeated PostTile's memo and janked select-mode
@@ -167,17 +144,9 @@ export default function ProfileScreen() {
             selectedIds: gridSelectedIds,
             onToggle: toggleGridSelected,
             onEnter: enterGridSelection,
-            ineligibleIds: ineligibleSelectIds,
           }
         : undefined,
-    [
-      activeTab,
-      gridSelecting,
-      gridSelectedIds,
-      toggleGridSelected,
-      enterGridSelection,
-      ineligibleSelectIds,
-    ]
+    [activeTab, gridSelecting, gridSelectedIds, toggleGridSelected, enterGridSelection]
   );
   const handleBulkDelete = useCallback(async () => {
     const count = gridSelectedIds.size;
