@@ -56,6 +56,10 @@ interface PostTileProps {
   selOrder?: number | null;
   onSelectToggle?: (id: string) => void;
   onSelectEnter?: (id: string) => void;
+  /** Selection-INELIGIBLE tile (e.g. an already-posted dream in the Dreams
+   *  album): dimmed + locked + non-tappable while selActive, so it can't be
+   *  composed into a new post. Delete a live dream from the Posts album. */
+  selIneligible?: boolean;
 }
 
 export const PostTile = memo(function PostTile({
@@ -72,6 +76,7 @@ export const PostTile = memo(function PostTile({
   selOrder = null,
   onSelectToggle,
   onSelectEnter,
+  selIneligible = false,
 }: PostTileProps) {
   const { mutate: deletePost } = useDeletePost();
   const { mutate: dissolveAlbum } = useDissolveAlbum();
@@ -87,6 +92,11 @@ export const PostTile = memo(function PostTile({
   async function handlePress() {
     // Selection mode: tap TOGGLES instead of navigating.
     if (selActive) {
+      // Ineligible tiles (already-posted dreams) can't be selected here.
+      if (selIneligible) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        return;
+      }
       Haptics.selectionAsync();
       onSelectToggle?.(item.id);
       return;
@@ -132,6 +142,10 @@ export const PostTile = memo(function PostTile({
   function handleLongPress() {
     // Selection mode: long-press toggles too (no nested modes).
     if (selActive) {
+      if (selIneligible) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        return;
+      }
       Haptics.selectionAsync();
       onSelectToggle?.(item.id);
       return;
@@ -216,23 +230,31 @@ export const PostTile = memo(function PostTile({
       )}
       {/* Multi-select state — selected tiles get a dim + accent ring + filled
           check; unselected show an empty circle so the mode is unmistakable. */}
-      {selActive && (
-        <View
-          pointerEvents="none"
-          style={[styles.selectOverlay, selSelected && styles.selectOverlaySelected]}
-        >
-          <View style={[styles.selectBadge, selSelected && styles.selectBadgeOn]}>
-            {selSelected &&
-              (selOrder != null ? (
-                <Text allowFontScaling={false} style={styles.selectBadgeNum}>
-                  {selOrder}
-                </Text>
-              ) : (
-                <Ionicons name="checkmark" size={13} color="#000000" />
-              ))}
+      {selActive &&
+        (selIneligible ? (
+          // Already-posted dreams: dimmed + locked, not selectable in this album.
+          <View pointerEvents="none" style={[styles.selectOverlay, styles.selectOverlayDisabled]}>
+            <View style={styles.selectBadgeDisabled}>
+              <Ionicons name="lock-closed" size={12} color="rgba(255,255,255,0.85)" />
+            </View>
           </View>
-        </View>
-      )}
+        ) : (
+          <View
+            pointerEvents="none"
+            style={[styles.selectOverlay, selSelected && styles.selectOverlaySelected]}
+          >
+            <View style={[styles.selectBadge, selSelected && styles.selectBadgeOn]}>
+              {selSelected &&
+                (selOrder != null ? (
+                  <Text allowFontScaling={false} style={styles.selectBadgeNum}>
+                    {selOrder}
+                  </Text>
+                ) : (
+                  <Ionicons name="checkmark" size={13} color="#000000" />
+                ))}
+            </View>
+          </View>
+        ))}
       {actionsOpen && (
         <Modal
           transparent
@@ -473,5 +495,23 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(12),
     fontWeight: '800',
+  },
+  // Ineligible-for-select tile (already-posted dream): grayed out so it reads as
+  // non-selectable, with a lock badge where the pick circle would be.
+  selectOverlayDisabled: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  selectBadgeDisabled: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.4)',
   },
 });
