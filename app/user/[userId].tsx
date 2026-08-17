@@ -658,14 +658,6 @@ export default function PublicProfileScreen() {
                 highlightPostId={viewedPost}
                 onScrollProgress={handleScrollProgress}
                 scrollToTopToken={scrollToTopBump}
-                // Dark-launch: lets the supreme admin see this bot's hidden shadow
-                // renders at the top of the grid (admin-only; hidden from everyone
-                // else via the get_shadow_feed RPC gate). See BOT_DARK_LAUNCH_PLAN.md.
-                shadowAuthor={
-                  profile
-                    ? { username: profile.username, avatar_url: profile.avatar_url ?? null }
-                    : undefined
-                }
               />
             ) : (
               <ScrollView
