@@ -87,10 +87,11 @@ function AuthInitializer() {
       const fragParams = fragment ? new URLSearchParams(fragment) : null;
 
       // Password-recovery deep link (redirectTo: dreambot://reset-password).
-      // The recovery email carries a session (?code= for PKCE, #access_token
-      // for implicit) just like an OAuth callback — so we establish the session
-      // the same way, then route to the set-new-password screen instead of the
-      // feed. Detect it by the redirect path or an explicit type=recovery.
+      // The recovery email carries a credential — a `token_hash` (the recovery
+      // email template, preferred), a `?code=` (PKCE), or `#access_token`
+      // (implicit) — just like an OAuth callback. We establish the session, then
+      // route to the set-new-password screen instead of the feed. Detect it by
+      // the redirect path or an explicit type=recovery.
       const isRecovery =
         path === 'reset-password' ||
         parsed.queryParams?.type === 'recovery' ||
@@ -101,6 +102,16 @@ function AuthInitializer() {
         const { router } = await import('expo-router');
         router.replace('/reset-password');
         return true;
+      }
+
+      // token_hash flow (recovery email template): a one-time hash verifyOtp
+      // exchanges for a session with NO PKCE verifier — works regardless of which
+      // device/build started the reset. Same mechanism the web fallback uses.
+      const rawTokenHash = parsed.queryParams?.token_hash ?? fragParams?.get('token_hash');
+      if (typeof rawTokenHash === 'string' && rawTokenHash.length > 0) {
+        await supabase.auth.verifyOtp({ token_hash: rawTokenHash, type: 'recovery' });
+        await goToResetIfRecovery();
+        return;
       }
 
       // PKCE flow: Supabase redirects with ?code=xxx in the query string
