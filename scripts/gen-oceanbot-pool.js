@@ -896,6 +896,508 @@ NEVER use negation. NEVER name modern cinema terms (dolly / dutch tilt / etc —
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // KELP-FOREST path-bespoke pools (3) — Stage J1
+  // The GREEN giant-kelp cathedral (3rd register: reef / abyss / kelp).
+  // Hero-mandated (dullness law). Kelp = columns/fronds (no architecture
+  // enumeration). camera_framing AUDITED (zero hero-dissolve).
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  kelp_forest_scene: {
+    format: 'simple',
+    theme: `KELP FOREST SCENES for OceanBot's kelp-forest path — the GREEN giant-kelp cathedral ecosystem (the third register alongside bright reef and dark abyss). NatGeo / BBC-Blue-Planet register. Each entry is ONE specific kelp-forest moment with a readable ANIMAL hero (or a monumental kelp-architecture moment), 20-28 words. Kelp structure + animal + moment ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ MANDATORY REGISTER — a REAL temperate giant-kelp / bull-kelp forest (California Channel Islands, Pacific Northwest, Tasmania, South Africa's Great African Seaforest, Chile). Giant-kelp columns rising to a sunlit surface canopy, fronds streaming in the surge, holdfasts gripping rocky reef, green-gold god-ray light.
+
+⚠️ EVERY ENTRY HAS A READABLE HERO — a NAMED animal doing something specific, OR a monumental kelp-architecture moment (a single column rising the full height, the sunlit canopy from below). NEVER "fuzzy green water" or empty kelp with no subject.
+
+⚠️ KELP IS KELP — giant-kelp columns, stalks, streaming fronds, surface canopy, holdfasts. NEVER "cathedral nave / temple pillars / columned hall" (architecture enumeration renders a building, not a living forest).
+
+⚠️ NO SHIPS. NO PEOPLE. NO SCUBA GEAR.
+
+✓ VARIETY MANDATE — distribute across kelp-forest categories:
+  A. SEA OTTER moment (otter wrapping a pup in fronds to rest / cracking an urchin on its chest / rafting at the canopy)
+  B. SEAL / SEA-LION play (harbor seal weaving between columns / California sea lion spiraling up through god-rays / pup twisting)
+  C. GARIBALDI / KELP FISH (bright orange garibaldi flashing among the stalks / kelp bass hanging in the shafts / senorita cleaning)
+  D. SHARK / RAY pass (leopard shark gliding the sand channel below / bat ray cruising beyond the fronds / soupfin shark passing)
+  E. SCHOOL through columns (blacksmith / jack-mackerel / sardine school streaming between the stalks in the shafts)
+  F. CANOPY-FROM-BELOW (looking up the columns to the sunlit surface canopy, god-rays lancing down through the fronds)
+  G. HOLDFAST FLOOR (purple urchins, sunflower sea stars, abalone on the rocky reef at the kelp base, an otter foraging)
+  H. MONUMENTAL COLUMN (a single towering giant-kelp column rising the full frame, fish orbiting, the scale of the forest)
+  I. FILTERED UNDERSTORY (dim green understory with a hero animal lit by a single shaft breaking through)
+  J. SURFACE-CANOPY RAFT (sea otters rafting at the floating canopy seen from just below, sun blazing on the surface)
+
+Each entry: ONE kelp-structure anchor + ONE named animal hero (or the monumental-kelp moment) + ONE light or motion detail. FAVOR active dramatic behavior over passive cruising.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Sea otter wrapping its pup in a giant-kelp frond at the surface canopy, sun blazing behind them, columns dropping into green depth below.',
+      'California sea lion spiraling upward through a shaft of god-ray light between giant-kelp columns, bubble-trail streaming from its whiskers.',
+      'Bright orange garibaldi flashing among towering kelp stalks, green-gold light dappling its flanks, holdfast-covered reef below.',
+      'Leopard shark gliding low across a sand channel at the kelp base, columns rising on both sides, dappled light moving over its spotted back.',
+      'Blacksmith school streaming in a dense river between giant-kelp columns, god-rays lancing through their ranks in gin-clear temperate water.',
+      'Harbor seal weaving in a lazy corkscrew around a single towering kelp column, fronds streaming, sunlit canopy shimmering far above.',
+      'Looking straight up the giant-kelp columns to the sunlit surface canopy, god-rays fanning down through the streaming fronds into green depth.',
+      'Sea otter foraging on the holdfast floor among purple urchins and a sunflower star, cracking an urchin against a rock on its chest.',
+      'A single colossal giant-kelp column rising the full height of the frame, a kelp-bass hanging motionless beside it, fish orbiting in the shafts.',
+      'Bat ray cruising slow beyond a curtain of streaming fronds, its wingtips brushing the kelp, silhouette dark against the green-gold water.',
+      'Sunflower sea star sprawled across the rocky reef at the kelp base, abalone tucked in a crevice, dappled light shifting over the holdfasts.',
+      'Sea lions pinwheeling together through a bright god-ray gap in the canopy, bubble-trails spiraling, columns framing the play on both sides.',
+      'Kelp bass hanging motionless in a green shaft deep in the understory, a single beam of light breaking through the canopy onto its flank.',
+      'Sea otters rafting at the floating surface canopy seen from just below, the sun a blazing disc on the rippling surface, columns dropping away.',
+      'Jack-mackerel school parting around a towering kelp column in the god-rays, a soupfin shark cutting through the far ranks in the green haze.',
+    ],
+    instructions: `Each entry is ONE specific kelp-forest moment, 20-28 words. Format: "kelp-structure anchor + named animal hero (or monumental-kelp moment) + light/motion detail." Vary across the categories above. FAVOR active dramatic behavior (foraging, wrapping, spiraling, hunting, mass schooling) over passive gliding/hovering. For bottom-resting fish write "resting on its splayed pectoral fins," NEVER "perched." NEVER ships / boats / people / scuba gear. NEVER architecture-enumeration for the kelp. NEVER negation. Output a NUMBERED list (1. ... 2. ...), one entry per line, no internal newlines.`,
+  },
+
+  kelp_forest_canopy_light: {
+    format: 'simple',
+    theme: `CANOPY LIGHT for OceanBot's kelp-forest path — the MONEY-SHOT light signature of the giant-kelp cathedral. Each entry is ONE specific light-through-kelp effect, 14-22 words. Green-gold god-rays and sunlit-canopy shimmer.
+
+✓ VARIETY across light categories:
+  A. GOD-RAY SHAFTS lancing down through canopy gaps into the green understory
+  B. SURFACE-CANOPY SHIMMER from below, sun rippling across the floating fronds
+  C. GREEN-GOLD GRADIENT from bright sunlit canopy fading to dim blue-green understory depth
+  D. DUST-OF-PLANKTON catching the shafts, particles drifting glinting in the green light
+  E. DAPPLED-FLOOR mosaic of light moving across the rocky reef and holdfasts
+  F. BACKLIT FRONDS glowing translucent gold-green as the sun passes behind them
+  G. SILHOUETTE SHAFT — a bright god-ray column a hero animal can be cut dark against
+
+Each names the specific light-through-kelp effect. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'God-ray shafts lancing down through gaps in the surface canopy, fanning into the dim green understory',
+      'Sunlit surface canopy shimmering from below, the sun rippling gold across the floating fronds',
+      'Green-gold gradient from the bright sunlit canopy fading down into dim blue-green understory depth',
+      'Motes of plankton glinting as they drift through a broad shaft of green-gold light',
+      'A dappled mosaic of light shifting slowly across the rocky reef and kelp holdfasts below',
+      'Giant-kelp fronds backlit translucent gold-green as the sun passes behind the canopy',
+      'A single bright god-ray column blazing through the columns, everything around it dim green',
+      'Shafts of sun raking through the streaming fronds, the water thick with drifting green light',
+      'Surface light fracturing into a hundred moving shafts across the tops of the kelp columns',
+      'Warm green-gold glow filling the mid-water, columns fading to silhouette in the bright haze',
+    ],
+    instructions: `Each entry 14-22 words, ONE specific canopy/god-ray light effect for a giant-kelp forest. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  kelp_forest_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's kelp-forest path — the explicit composition mandate (THE LAW). Each entry is ONE specific camera angle, 14-22 words. AUDITED SET: every framing keeps a readable animal (or monumental kelp form) AND the forest structure clearly in frame — ZERO macro / extreme-close / detail-dissolve.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing/angle as THE LAW. Without this mandate, Flux defaults to a generic mid-shot regardless of the rest of the brief.
+
+✓ VARIETY across framing categories (all keep the hero + forest readable):
+  A. LOW-ANGLE UP-THE-COLUMNS toward the sunlit canopy, hero animal clear in mid-frame
+  B. WIDE ENVIRONMENTAL establishing the forest depth, the hero one clear element among the columns
+  C. OVER-THE-ANIMAL following shot, camera behind an otter/seal with the forest opening ahead
+  D. SIDE-PROFILE of the hero against a god-ray column, full animal parallel to camera
+  E. THROUGH-THE-FRONDS framing, streaming kelp across the foreground with the hero clear beyond
+  F. CANOPY-FROM-BELOW wide up-shot, columns converging toward the bright rippling surface
+  G. UNDERSTORY WIDE, the hero lit by a single shaft, rocky floor and holdfasts visible
+
+Every framing keeps a readable animal or monumental kelp column as the clear subject. NEVER modern cinema terms. NEVER negation.`,
+    touchpoints: [
+      'LOW-ANGLE looking up the giant-kelp columns toward the sunlit canopy, a sea otter clear in the mid-frame',
+      'WIDE ENVIRONMENTAL establishing the full depth of the kelp forest, a sea lion one bright element among the columns',
+      'OVER-THE-OTTER following framing, camera behind the otter as the forest opens into god-rays ahead',
+      'SIDE-PROFILE of a leopard shark against a bright god-ray column, full animal parallel to the camera',
+      'THROUGH-THE-FRONDS framing, streaming kelp across the foreground, a garibaldi flashing clear beyond',
+      'CANOPY-FROM-BELOW wide up-shot, the columns converging toward the bright rippling surface canopy',
+      'UNDERSTORY WIDE framing, a harbor seal lit by a single shaft, holdfasts and rocky floor visible below',
+      'LOW WIDE along the sand channel at the kelp base, a bat ray cruising between the rising columns',
+      'THREE-QUARTER WIDE on a sea lion spiralling up through a canopy god-ray gap, columns framing both sides',
+      'WIDE SILHOUETTE framing, a shark cut dark against a bright shaft with the kelp columns all around',
+    ],
+    instructions: `Each entry 14-22 words, an explicit camera framing that keeps the animal (or monumental kelp form) + the forest structure clearly readable. NEVER a macro / extreme-close / detail shot that dissolves the hero. NEVER modern cinema terms. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // FEEDING-FRENZY path-bespoke pools (4) — Stage J2
+  // Sardine-run / bait-ball spectacle. ENGAGEMENT-POOL LAW: every hero
+  // entry NAMES 2-4 actors + their interaction (solo-hero BANNED). PG
+  // nature-doc: feeding not gore (no blood clouds). camera_framing AUDITED.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  feeding_frenzy_event: {
+    format: 'simple',
+    theme: `FEEDING FRENZY EVENTS for OceanBot's feeding-frenzy path — the open-ocean sardine-run / bait-ball spectacle, peak NatGeo action. Each entry is ONE multi-actor feeding beat, 22-30 words. This is the HERO pool and carries the render.
+
+⚠️ ENGAGEMENT-POOL LAW (non-negotiable) — every entry NAMES 2-4 DISTINCT ACTORS (predator species) AND their interaction AROUND THE BAIT MASS. NEVER a solo hero. A minimum of TWO predator species visible plus the bait-ball / bait-mass itself. Motion everywhere, but ONE readable focal predator anchors the eye.
+
+⚠️ PG NATURE-DOC — this is FEEDING, not gore. Predators lunging, herding, slashing, corralling; the silver bait mass reacting. NO blood clouds, NO wounds, NO viscera.
+
+⚠️ REAL open-ocean species — sardines/anchovies (the bait), common dolphins, bottlenose dolphins, striped marlin, sailfish, yellowfin tuna, bronze whaler / dusky / blue / mako sharks, Cape gannets (plunge-diving), Cape fur seals, Bryde's whale (lunge finale), cormorants. Real sardine-run / bait-ball ecosystems (South Africa Wild Coast, Baja, Pacific).
+
+⚠️ NO ships, NO people, NO scuba gear.
+
+✓ VARIETY MANDATE — distribute across frenzy categories:
+  A. DOLPHIN-HERD + GANNET-RAIN (common dolphins corral the ball from below while Cape gannets plunge-dive through it in bubble-trails)
+  B. MARLIN/SAILFISH SLASH (striped marlin lit up neon, slashing bills through the sphere while tuna hold the edges)
+  C. SHARK-RISE (bronze whaler sharks rising into the ball from beneath as dolphins compress it from the sides)
+  D. WHALE-LUNGE FINALE (a Bryde's whale erupting up through the remnant ball, gannets and dolphins scattering off its rostrum)
+  E. SEAL + BIRD DRIVE (Cape fur seals and cormorants driving anchovies up to the surface where gannets hit them)
+  F. TUNA-BLITZ (a wall of yellowfin tuna blitzing the bait mass, water boiling silver, birds working above)
+  G. MIXED-ARMADA (dolphins + sharks + gannets + tuna all on one ball at once, chaos with one focal predator)
+  H. SPLIT-BALL (the sphere torn into two swirling masses, predators driving between them)
+
+Each entry: NAME 2-4 predators + their action + the bait mass state + a light/motion detail. ONE focal predator readable in the chaos.
+
+DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Common dolphins corral a silver sardine ball from below while Cape gannets plunge-dive through it in streaming bubble-trails, one dolphin surging open-mouthed through the center.',
+      'A striped marlin lit electric-neon slashes its bill through the bait sphere while yellowfin tuna blitz the edges and gannets rain down from above.',
+      'Bronze whaler sharks rise into the anchovy ball from beneath as common dolphins compress it from the sides, gannets streaking down through the sun-shafts.',
+      'A Bryde\'s whale erupts up through the remnant of the bait-ball, dolphins and gannets scattering off its rostrum, a curtain of silver fish raining around it.',
+      'Cape fur seals and cormorants drive an anchovy shoal up to the surface where a squadron of gannets hits the water, dolphins arriving beneath.',
+      'A wall of yellowfin tuna blitzes the sardine mass, the water boiling silver, a single tuna banking through the center as gannets work the surface above.',
+      'Dolphins, bronze whalers, tuna and gannets all converge on one shrinking bait-ball at once, a lone dolphin the readable focal point mid-lunge.',
+      'The bait-ball torn into two swirling silver masses, a striped marlin driving between them, tuna flanking and gannets diving into both halves.',
+      'Common dolphins spiral a tight sardine sphere upward in a silver tornado while sharks cut in from the deep and gannets plunge through the top.',
+      'A blue shark and two dolphins carve into an anchovy ball together, the fish flashing into a hollow shell around them, sun-shafts lancing down.',
+      'Sailfish raise their sails and slash in a coordinated pack at a sardine sphere, tuna holding the perimeter, silver scales glittering loose in the blue.',
+      'Cape gannets hit the bait mass like arrows, dolphins surging up beneath, a mako shark accelerating through the raining fish in a shaft of light.',
+      'A dusky shark rockets up into the center of the ball as dolphins peel it open and gannets pepper the surface, one focal dolphin mid-turn.',
+      'Yellowfin tuna and common dolphins pincer a bait-ball from both sides, the sphere collapsing into a silver ribbon, gannets diving through the gap.',
+      'A mixed armada of dolphins and bronze whalers works a boiling sardine mass near the surface, gannets raining, one shark rising as the focal hero.',
+    ],
+    instructions: `Each entry is ONE multi-actor feeding beat, 22-30 words. NAME 2-4 predator species + their interaction + the bait-ball state + one light/motion detail. NEVER a solo hero (engagement-pool law) — minimum TWO predator species + the bait mass. ONE focal predator readable. PG: feeding not gore, NO blood/wounds/viscera. NEVER ships/people/scuba. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  feeding_frenzy_bait_ball_state: {
+    format: 'simple',
+    theme: `BAIT-BALL STATE for OceanBot's feeding-frenzy path — the MONEY-SHOT state of the silver bait mass. Each entry is ONE specific bait-ball form/behavior, 12-20 words.
+
+✓ VARIETY across bait-ball states:
+  A. TIGHT SILVER SPHERE — a dense flashing globe of sardines, mirror-bright, wheeling as one
+  B. SPLIT VORTEX — the ball torn into two swirling masses spiralling apart
+  C. RAINING SCALES — a glittering curtain of loose silver scales sifting down through the blue
+  D. TORN HOLLOW — a hole punched through the ball, predators visible inside the silver shell
+  E. SILVER TORNADO — the shoal drawn up into a spinning column toward the surface
+  F. COLLAPSING RIBBON — the sphere stretched into a flowing ribbon as it flees
+  G. SURFACE-BOIL — the mass driven to the surface, water frothing silver and white
+
+Each names the specific bait-mass state, mirror-bright and dynamic. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'A dense mirror-bright sphere of sardines wheeling as one, flanks flashing silver in the sun-shafts',
+      'The bait-ball torn into two swirling silver masses spiralling apart in the blue',
+      'A glittering curtain of loose scales sifting down through the water like silver snow',
+      'A hole punched clean through the shoal, the silver shell hollow and predators wheeling inside',
+      'The sardine mass drawn up into a spinning silver tornado reaching toward the bright surface',
+      'The sphere stretched into a flowing silver ribbon as the shoal streams away',
+      'The bait mass driven to the surface, the water frothing silver and white with panic',
+      'A tight flashing globe compressed to its smallest, mirror-flanks strobing in the light',
+      'The shoal folding around a predator into a bright hollow bowl of silver',
+      'Loose silver scales hanging suspended in a shaft of light after the strike',
+    ],
+    instructions: `Each entry 12-20 words, ONE specific bait-ball state (sphere / split / raining-scales / torn / tornado / ribbon / surface-boil). Mirror-bright, dynamic. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  feeding_frenzy_water_column_light: {
+    format: 'simple',
+    theme: `WATER-COLUMN LIGHT for OceanBot's feeding-frenzy path — the open-blue-water light on the action. Each entry is ONE specific light condition, 12-20 words. Bright open ocean near the surface.
+
+✓ VARIETY across light categories:
+  A. SURFACE SUN-SHAFTS lancing down into clear blue open water
+  B. SILVER-FLASH light bouncing off the bait mass, scattering across the predators
+  C. BACKLIT BUBBLE-CURTAIN from plunging gannets, light streaming through the trails
+  D. BRIGHT BLUE-WATER CLARITY, endless open ocean, high visibility
+  E. DAPPLED SURFACE seen from below, the boiling surface bright against the deep blue
+  F. GOLDEN LOW-SUN raking through the upper water column
+  G. HIGH-CONTRAST shafts and shadow as predators pass through the beams
+
+Each names the specific open-water light condition. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Surface sun-shafts lancing straight down into clear blue open water over the action',
+      'Silver flash bouncing off the wheeling bait mass, scattering light across the predators',
+      'Backlit bubble-curtains from plunging gannets, light streaming through the rising trails',
+      'Bright endless blue-water clarity, high visibility to the deep, the action sharp',
+      'The boiling surface dappled bright from below against the darker open-blue deep',
+      'Golden low-angle sun raking through the upper water column, warming the silver',
+      'High-contrast light shafts and shadow as predators cut through the beams',
+      'Sun glittering through a haze of loose scales suspended in the blue',
+      'A bright surface ceiling of rippled light over the frenzy, deep blue below',
+      'Shafts of light fracturing across the tornado of fish reaching for the surface',
+    ],
+    instructions: `Each entry 12-20 words, ONE specific open-water light condition. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  feeding_frenzy_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's feeding-frenzy path — the explicit composition mandate (THE LAW). Each entry is ONE specific camera angle, 14-22 words. AUDITED SET: every framing keeps the bait mass AND a readable focal predator in frame — ZERO macro / detail-dissolve.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing as THE LAW. Without it, Flux defaults to a generic mid-shot.
+
+✓ VARIETY across framing categories (all keep bait-ball + focal predator readable):
+  A. WIDE ENVIRONMENTAL of the whole frenzy, bait-ball centered, predators converging from all sides
+  B. BELOW-THE-BALL looking up, the silver sphere against the bright surface, predators rising into it
+  C. SIDE-PROFILE of the focal predator's lunge, full animal parallel to camera, bait mass behind
+  D. THROUGH-THE-BUBBLE-CURTAIN framing, gannet trails foreground, the ball and predators clear beyond
+  E. OVER-THE-PREDATOR following the focal dolphin/shark toward the ball
+  F. HIGH-ANGLE down onto the surface boil, predators and birds working the silver mass
+  G. WIDE SILHOUETTE of predators cut dark against a bright sun-shaft with the bait mass
+
+Every framing keeps the bait mass + one readable focal predator as the clear subject. NEVER a macro / extreme-close / detail shot. NEVER modern cinema terms. NEVER negation.`,
+    touchpoints: [
+      'WIDE ENVIRONMENTAL of the whole frenzy, the silver bait-ball centered, predators converging from every side',
+      'BELOW-THE-BALL looking up, the silver sphere bright against the rippled surface, dolphins rising into it',
+      'SIDE-PROFILE of a shark\'s lunge, full animal parallel to camera, the bait mass swirling behind',
+      'THROUGH-THE-BUBBLE-CURTAIN framing, gannet dive-trails across the foreground, the ball and predators clear beyond',
+      'OVER-THE-DOLPHIN following framing, camera behind the focal dolphin driving toward the sphere',
+      'HIGH-ANGLE down onto the surface boil, dolphins and gannets working the frothing silver mass',
+      'WIDE SILHOUETTE of tuna cut dark against a bright surface sun-shaft, the bait mass beside them',
+      'LOW WIDE beneath the action, predators and bait-ball framed against the bright surface ceiling',
+      'THREE-QUARTER WIDE on a whale lunging up through the ball, gannets and dolphins scattering in frame',
+      'WIDE of the split bait-ball, a marlin driving between the two silver masses, tuna flanking',
+    ],
+    instructions: `Each entry 14-22 words, an explicit camera framing that keeps the bait mass + one readable focal predator clearly in frame. NEVER a macro / extreme-close / detail shot. NEVER modern cinema terms. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // LIGHTHOUSE-STORMS path-bespoke pools (4) — Stage J3 (ABOVE water)
+  // Jean-Guichard register: a lighthouse taking a monster wave, keeper's
+  // light glowing through spray. ~75% storm / ~25% calm-after. The LIGHT
+  // STAYS LIT (emotional core). NO keeper figure (unstated-figure law).
+  // Tower reads weathered-real, no fantasy. camera_framing AUDITED.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  lighthouse_scenes: {
+    format: 'simple',
+    theme: `LIGHTHOUSE SCENES for OceanBot's lighthouse-storms path — a real weathered lighthouse against the sea, Jean-Guichard storm-photography register. Each entry is ONE specific tower + sea-state + moment, 20-28 words. Tower + sea + light ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ THE LIGHT STAYS LIT — the lantern-room beam is ALWAYS glowing (warm gold against the grey fury) — the emotional core of every render.
+
+⚠️ NO KEEPER FIGURE, NO PEOPLE at the door or windows — the tower stands ALONE against the sea (uninhabited; the light itself is the character).
+
+⚠️ WEATHERED-REAL — a real granite / stone / cast-iron / brick lighthouse (Brittany, Cornwall, Oregon, Maine, Scotland, Portugal). Barnacled base, storm-scoured stone, iron gallery-rail, glass lantern room. NO fantasy, NO castle, NO ships as the subject.
+
+⚠️ ~75% STORM, ~25% CALM-AFTER (serene dawn/dusk aftermath, glassy sea, gulls).
+
+✓ VARIETY MANDATE — distribute across categories:
+  A. WAVE-WRAP — a monster wave curling around the whole tower, only the lantern room clear above the white chaos
+  B. BASE-DETONATION — a wave exploding white up the tower's base, spray climbing half its height
+  C. SPRAY-OVER-LANTERN — spray flung clean over the lantern room, the beam cutting through the mist
+  D. ROCK-STACK FURY — the tower on a sea-stack, breakers detonating on the rocks all around
+  E. BEAM-THROUGH-STORM — the golden beam lancing out across a black torn sea under lightning
+  F. LONG-SWELL SIEGE — huge grey swells marching at the tower, one about to break, the light steady
+  G. CALM DAWN AFTERMATH — glassy pastel sea, the tower serene, gulls wheeling, the light still faintly lit
+  H. DUSK-AFTER — the storm passing, warm last light on wet stone, a rainbow in the departing squall
+
+Each entry: tower + specific sea-state + the lit beam + one atmospheric detail. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'A monster wave curls white around the entire granite tower, only the glowing lantern room clear above the churning chaos, gold beam cutting the grey.',
+      'A wave detonates in an explosion of white up the lighthouse base, spray climbing half the tower\'s height, the warm beam steady above.',
+      'Spray flung clean over the lantern room, the golden beam lancing through the drifting mist, black swells heaving beyond the storm-scoured stone.',
+      'A stone lighthouse on a sea-stack, breakers detonating on the rocks all around it, the lit lantern glowing warm against a bruised sky.',
+      'The golden beam lances out across a black torn sea under a fork of lightning, the weathered tower streaming with rain.',
+      'Huge grey swells march at the tower under a low storm sky, one rearing to break, the lantern burning steady and warm.',
+      'Glassy pastel dawn after the storm, the serene tower mirrored in the calm, gulls wheeling, the light still faintly aglow.',
+      'The squall departing at dusk, warm last light on the wet stone, a faint rainbow in the trailing rain, the beam just kindling.',
+      'A towering wave wraps the cast-iron gallery, the keeper\'s light blazing gold through a wall of white spray and wind-torn foam.',
+      'The lighthouse half-swallowed by an exploding breaker, the lantern room a warm gold star above the seething white water.',
+      'A weathered Breton granite tower on a low reef, three lines of breakers rolling in, the lit beam sweeping across the grey.',
+      'Serene blue-hour calm, the tower dark against the last glow, its beam beginning to turn, the sea flat and silver.',
+    ],
+    instructions: `Each entry is ONE tower + sea-state + moment, 20-28 words. The lantern beam is ALWAYS lit (warm gold). NO keeper / people. Weathered-real lighthouse, no fantasy. ~75% storm / ~25% calm-after. NEVER a ship as the subject. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lighthouse_wave_impact: {
+    format: 'simple',
+    theme: `WAVE IMPACT for OceanBot's lighthouse-storms path — the MONEY-SHOT of the wave hitting the tower. Each entry is ONE specific impact moment, 12-20 words.
+
+✓ VARIETY across impact states:
+  A. THE WRAP — a wave curling clean around the tower, white water enveloping the base
+  B. THE DETONATION — a breaker exploding vertically up the stone in a white column
+  C. SPRAY-OVER-TOP — foam flung clean over the lantern room
+  D. THE COLUMN — a solid pillar of white water climbing the tower's full height
+  E. THE FAN — spray fanning out sideways off the tower in the wind
+  F. THE SIEGE-LINE — the wave an instant before impact, wall of grey-green rearing at the base
+  G. THE AFTERMATH-CASCADE — sheets of white water sluicing back down the stone after the hit
+
+Each names the specific wave-impact moment, powerful and dynamic. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'A wave curling clean around the tower base, white water enveloping the stone in a churning collar',
+      'A breaker exploding vertically up the lighthouse in a towering white column of spray',
+      'Foam flung clean over the lantern room, drifting across the glowing glass',
+      'A solid pillar of white water climbing the tower\'s full height beside the light',
+      'Spray fanning out sideways off the tower, torn to mist by the gale',
+      'A wall of grey-green sea rearing at the base an instant before it detonates',
+      'Sheets of white water sluicing back down the storm-scoured stone after the strike',
+      'The wave wrapping the gallery rail, a ring of white exploding around the lantern',
+      'A great arc of spray bursting above the tower, backlit gold by the beam',
+      'The base lost entirely in a boiling white detonation, the lit tower rising clear above',
+    ],
+    instructions: `Each entry 12-20 words, ONE specific wave-impact moment on the tower. Powerful, dynamic. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lighthouse_storm_sky: {
+    format: 'simple',
+    theme: `STORM SKY for OceanBot's lighthouse-storms path — the sky/weather behind the tower. Each entry is ONE specific sky condition, 12-20 words. Mostly furious storm, some calm-after.
+
+✓ VARIETY across sky categories:
+  A. BLACK STORM-WALL — a bruised black cloud-wall towering over the sea
+  B. LIGHTNING — a fork of lightning splitting the dark sky behind the tower
+  C. TORN GREY RACK — fast-moving ragged grey cloud, wind-driven, breaking light
+  D. BREAK-IN-THE-CLOUD — a single shaft of gold breaking through onto the tower
+  E. CALM PASTEL DAWN — soft pink-and-lilac dawn sky, storm departed
+  F. RAINBOW-IN-SQUALL — a rainbow arcing through the trailing rain of a passing storm
+  G. BLUE-HOUR CLEAR — deep clear blue-hour sky, first stars, sea calming
+
+Each names the specific sky condition. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'A bruised black storm-wall towering over the heaving sea behind the tower',
+      'A fork of lightning splitting the dark sky behind the lit lantern room',
+      'Fast ragged grey cloud racing overhead, wind-driven, a thin break of light beyond',
+      'A single shaft of gold breaking through the storm cloud onto the wet tower',
+      'A soft pink-and-lilac dawn sky, the storm departed, the sea gone calm',
+      'A rainbow arcing through the trailing rain of a passing squall behind the tower',
+      'Deep clear blue-hour sky with the first stars, the sea settling to silver',
+      'Low copper storm-light under a heavy ceiling of cloud, rain sheeting across',
+      'A wild sky of torn cloud and wind-blown spray, gulls scattered before the gale',
+      'The storm\'s trailing edge glowing bronze at dusk over a still-heaving sea',
+    ],
+    instructions: `Each entry 12-20 words, ONE specific storm or calm-after sky condition. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  lighthouse_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's lighthouse-storms path — the explicit composition mandate (THE LAW). Each entry is ONE specific camera angle, 14-22 words. AUDITED SET: every framing keeps the WHOLE TOWER + the sea-state readable — ZERO macro / detail-dissolve.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing as THE LAW. Without it, Flux defaults to a generic mid-shot.
+
+✓ VARIETY across framing categories (all keep the whole tower + wave readable):
+  A. WIDE ENVIRONMENTAL of the tower and the full wave, sea and sky around it
+  B. LOW-ANGLE UP at the tower from near the waterline, wave rearing at the base
+  C. AERIAL THREE-QUARTER above and beside the tower, wave-wrap seen from height
+  D. SIDE-PROFILE of the tower and a breaking wave, both full in the frame
+  E. DISTANT-LONG establishing shot, the small tower against a vast furious sea
+  F. THROUGH-THE-SPRAY framing, wind-torn foam foreground, the lit tower clear beyond
+  G. HEAD-ON toward the lantern beam cutting toward camera through the storm
+
+Every framing keeps the whole lighthouse + the sea-state as the clear subject. NEVER a macro / extreme-close of a single detail. NEVER modern cinema terms. NEVER negation.`,
+    touchpoints: [
+      'WIDE ENVIRONMENTAL of the tower and the full monster wave, grey sea and storm sky around it',
+      'LOW-ANGLE UP at the lighthouse from near the waterline, the wave rearing at its base',
+      'AERIAL THREE-QUARTER above and beside the tower, the wave-wrap seen from height',
+      'SIDE-PROFILE of the tower and a breaking wave, both full and clear in the frame',
+      'DISTANT-LONG establishing shot, the small lit tower against a vast furious sea',
+      'THROUGH-THE-SPRAY framing, wind-torn foam across the foreground, the lit tower clear beyond',
+      'HEAD-ON toward the lantern beam lancing toward camera through the driving storm',
+      'WIDE LOW from a wet rock shelf, breakers detonating between camera and the tower',
+      'HIGH THREE-QUARTER at dawn, the serene tower and glassy sea laid out below',
+      'WIDE SILHOUETTE of the tower against a lightning-lit sky, sea heaving at its foot',
+    ],
+    instructions: `Each entry 14-22 words, an explicit camera framing that keeps the WHOLE tower + the sea-state clearly in frame. NEVER a macro / extreme-close of a single detail. NEVER modern cinema terms. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // SEA-CAVES path-bespoke pools (3) — Stage J4
+  // Blue-Grotto register: cathedral sea-cave light beams, hidden lagoons,
+  // glowing turquoise water-windows, ceiling shafts. Serene counterpart to
+  // coastal-power. The "glowing water" is REAL (sunlight through a submerged
+  // entrance lights the pool electric blue) — phrased physically, never biolum.
+  // A monumental formation OR a creature anchors every entry. camera AUDITED.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  sea_cave_scenes: {
+    format: 'simple',
+    theme: `SEA-CAVE SCENES for OceanBot's sea-caves path — the Blue-Grotto / cathedral sea-cave register. Each entry is ONE specific cave + water + light moment, 20-28 words. Cave architecture + water + light-event ALL BAKED INTO THE ENTRY — this is the HERO pool.
+
+⚠️ THE "GLOWING WATER" IS REAL PHYSICS — sunlight entering through a submerged entrance below the waterline lights the pool electric turquoise-blue from beneath. Phrase it physically (light entering below the surface). NEVER bioluminescence, NEVER magic glow.
+
+⚠️ EVERY ENTRY HAS A READABLE HERO — a MONUMENTAL rock formation (a great arch, a ceiling oculus, a cathedral chamber) OR a creature (a seal resting on a ledge, rays gliding through the beam, a shoal in the shaft). Never empty fuzzy water.
+
+⚠️ REAL sea-caves — Capri Blue Grotto, Algarve Benagil, Scottish Fingal's Cave basalt, Croatian/Greek grottoes, California/Oregon sea-caves. Wet rock, barnacle line, turquoise water, shafts of daylight.
+
+⚠️ NO ships, NO people, NO scuba gear.
+
+✓ VARIETY MANDATE — distribute across categories:
+  A. BLUE-GROTTO GLOW — a submerged entrance lighting the whole pool electric turquoise from below, cave dark above
+  B. CEILING OCULUS — a round hole in the cave roof dropping a single shaft into a still pool (Benagil register)
+  C. CATHEDRAL CHAMBER — a vast basalt/limestone cavern, columns and vaulted rock, daylight from a far arch
+  D. SWIM-THROUGH ARCH — a rock tunnel with bright turquoise light at the far opening, dark walls framing it
+  E. SEAL ON A LEDGE — a seal hauled out on a wet rock shelf in the beam, glowing water below
+  F. RAYS IN THE SHAFT — bat rays / eagle rays gliding through a column of daylight in the chamber
+  G. HIDDEN LAGOON — a secret beach/lagoon behind a rock arch, turquoise water, daylight pouring in
+  H. STALACTITE GROTTO — a low grotto hung with mineral formations over a glowing pool
+  I. BLOWHOLE CAVERN — a tall chimney cave with light and mist falling from above onto the water
+
+Each entry: cave-formation anchor + water state + the light source + (a creature if rolled). DO write positively. NEVER negation.`,
+    touchpoints: [
+      'A submerged entrance lights the whole grotto pool electric turquoise from below, the vaulted rock above lost in cool shadow, water impossibly clear.',
+      'A round oculus in the cave roof drops a single bright shaft onto a still emerald pool, wet limestone walls curving up into dark.',
+      'A vast basalt cathedral chamber of hexagonal columns, daylight pouring through a far sea-arch onto glowing turquoise water below.',
+      'A rock swim-through tunnel, dark barnacled walls framing a blaze of turquoise light at the far opening, the water lit from beyond.',
+      'A grey seal hauled out on a wet rock ledge in a shaft of daylight, the pool below it glowing electric blue from the submerged mouth.',
+      'Two bat rays glide slowly through a column of daylight in a limestone chamber, their shadows sweeping the sunlit sand below.',
+      'A hidden lagoon behind a great rock arch, a crescent of pale sand and turquoise water, daylight pouring through the opening.',
+      'A low grotto hung with dripping stalactites over a still glowing pool, a single shaft catching the mineral formations.',
+      'A tall blowhole chimney cave, light and fine mist falling together from the opening far above onto the churning turquoise water.',
+      'The Blue-Grotto entrance seen from within, a low bright slot at the waterline flooding the dark chamber with electric-blue light.',
+      'A cormorant resting on a rock shelf deep in a sea-cave, the turquoise pool below lit from the submerged entrance.',
+      'A cathedral cavern with a shaft of gold daylight from a roof-crack striking the emerald pool, columns receding into cool dark.',
+    ],
+    instructions: `Each entry is ONE sea-cave + water + light moment, 20-28 words. Cave-formation anchor + water state + light source + (a creature if rolled). The glowing water is REAL sunlight through a submerged/other opening — NEVER bioluminescence or magic. Monumental formation OR creature anchors every entry. NEVER ships/people/scuba. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  sea_cave_light_window: {
+    format: 'simple',
+    theme: `LIGHT WINDOW for OceanBot's sea-caves path — the MONEY-SHOT light event of the sea-cave. Each entry is ONE specific real-light effect, 12-20 words. All are REAL daylight physics (never bioluminescence/magic).
+
+✓ VARIETY across light categories:
+  A. SUBMERGED-ENTRANCE GLOW — sunlight entering below the waterline lighting the pool electric turquoise
+  B. CEILING SHAFT — a single beam dropping through a roof oculus onto the water
+  C. FAR-ARCH DAYLIGHT — bright daylight flooding in through a distant sea-arch opening
+  D. TURQUOISE WATER-WINDOW — the whole pool glowing blue-green, lit from the submerged mouth
+  E. GOD-BEAM IN MIST — a shaft of light made solid by cave mist/spray
+  F. REFLECTED CAUSTICS — rippling light reflected up onto the cave ceiling from the pool
+  G. SLOT-OF-LIGHT — a bright narrow gap flooding one wall while the rest stays dark
+
+Each names the specific real-daylight effect. DO write positively. NEVER negation.`,
+    touchpoints: [
+      'Sunlight entering below the waterline lights the whole pool electric turquoise from beneath',
+      'A single bright beam drops through a roof oculus onto the still emerald water',
+      'Bright daylight floods in through a distant sea-arch, glowing across the chamber',
+      'The whole pool glowing blue-green, lit from the submerged cave mouth below',
+      'A shaft of daylight made solid by drifting cave mist, striking the water',
+      'Rippling caustics reflected up from the pool onto the vaulted cave ceiling',
+      'A narrow slot of bright light flooding one wet wall while the rest stays cool dark',
+      'The turquoise glow rising from the submerged entrance, silhouetting the cave mouth',
+      'Gold roof-crack light striking the emerald pool in a single clean column',
+      'Electric-blue light fanning up the cavern walls from the sunlit underwater opening',
+    ],
+    instructions: `Each entry 12-20 words, ONE specific REAL-daylight effect in a sea-cave (submerged-entrance glow / ceiling shaft / far-arch / caustics). NEVER bioluminescence or magic. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  sea_cave_camera_framing: {
+    format: 'simple',
+    theme: `CAMERA FRAMING for OceanBot's sea-caves path — the explicit composition mandate (THE LAW). Each entry is ONE specific camera angle, 14-22 words. AUDITED SET: every framing keeps the cave FORMATION (or creature) + the light event readable — ZERO macro / detail-dissolve.
+
+⚠️ EXPLICIT CAMERA LANGUAGE — every entry NAMES the framing as THE LAW. Without it, Flux defaults to a generic mid-shot.
+
+✓ VARIETY across framing categories (all keep the cave + light readable):
+  A. WIDE CHAMBER establishing the whole cavern, the light event and pool centered
+  B. FROM-THE-WATER looking toward the glowing entrance/arch, cave walls framing it
+  C. LOW-ANGLE UP at the ceiling oculus/shaft, the beam dropping toward camera
+  D. THROUGH-THE-ARCH framing, dark rock foreground, the bright lit chamber beyond
+  E. SIDE-WIDE of a seal/ray in the beam, the formation and glowing water around it
+  F. HALF-UNDERWATER split, the turquoise glow below and the cave vault above
+  G. DEEP-PERSPECTIVE down the length of a tunnel toward the bright opening
+
+Every framing keeps the cave formation (or creature) + the light event as the clear subject. NEVER a macro / extreme-close of a single detail. NEVER modern cinema terms. NEVER negation.`,
+    touchpoints: [
+      'WIDE CHAMBER establishing the whole cavern, the glowing pool and light shaft centered',
+      'FROM-THE-WATER looking toward the bright turquoise entrance, dark cave walls framing it',
+      'LOW-ANGLE UP at the ceiling oculus, the single beam dropping toward camera onto the pool',
+      'THROUGH-THE-ARCH framing, dark barnacled rock foreground, the bright lit chamber beyond',
+      'SIDE-WIDE of a seal on a ledge in the beam, the formation and glowing water around it',
+      'HALF-UNDERWATER split framing, the turquoise glow below the surface and the cave vault above',
+      'DEEP-PERSPECTIVE down the length of the tunnel toward the blazing turquoise opening',
+      'WIDE LOW across the glowing pool toward the cathedral columns and far daylight arch',
+      'THREE-QUARTER WIDE of rays gliding through the ceiling shaft, sunlit sand below',
+      'WIDE SILHOUETTE of the cave mouth from within, the bright water-window flooding the dark',
+    ],
+    instructions: `Each entry 14-22 words, an explicit camera framing that keeps the cave formation (or creature) + the light event clearly in frame. NEVER a macro / extreme-close of a single detail. NEVER modern cinema terms. NEVER negation. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // GHOST-SHIP path-bespoke pools (2)
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   //

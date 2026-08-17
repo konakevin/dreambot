@@ -45,6 +45,11 @@ const pathBuilders = {
   'flower-arrangement': require('./paths/flower-arrangement'),
   'desert-bloom': require('./paths/desert-bloom'),
   reclaim: require('./paths/reclaim'),
+  'water-garden': require('./paths/water-garden'), // Stage A1 (SHADOW)
+  'flower-fields': require('./paths/flower-fields'), // Stage A2 (SHADOW)
+  'moon-garden': require('./paths/moon-garden'), // Stage A3 (SHADOW)
+  'rain-garden': require('./paths/rain-garden'), // Stage A4 (SHADOW)
+  'great-blossom-tree': require('./paths/great-blossom-tree'), // Stage A5 (SHADOW)
 };
 
 module.exports = {
@@ -86,6 +91,8 @@ module.exports = {
   // sky. The SETTING, scale-prover + bans live in the pool + Sonnet template — NOT
   // here (no biome, no "deer", no negation in the prefix).
   promptPrefixReplaceByPath: {
+    'great-blossom-tree':
+      'a single colossal ancient flowering tree, towering high in full bloom against open sky',
     'jack-and-the-giant-flower':
       'a single colossal flower on a giant flowering vine-stem, towering high against open sky',
   },
@@ -146,7 +153,19 @@ module.exports = {
     'flower-arrangement',
     'desert-bloom',
     'reclaim',
+    // Stage A — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — chaos + polish already skip these; config unchanged).
+    'water-garden',
+    'flower-fields',
+    'moon-garden',
+    'rain-garden',
+    'great-blossom-tree',
   ],
+
+  // DARK-LAUNCH shadow paths (BOT_DARK_LAUNCH_PLAN.md + mig 376) — NOT in the
+  // live paths[] rotation; render only via `iter-bot --mode <path> --post`
+  // (shadow: hidden, admin-only). Promote = move the string into paths[].
+  shadowPaths: [], // Stage A paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -158,7 +177,7 @@ module.exports = {
     // ornate arrangement; its own whimsy layer supplies the controlled "pop".
     // hanging-flowers skips chaos for the MVP — protect the overhead-canopy
     // walkway composition while validating (2026-06-22; revisit after sign-off).
-    skipPaths: ['flower-arrangement', 'hanging-flowers'],
+    skipPaths: ['flower-arrangement', 'hanging-flowers', 'water-garden', 'flower-fields', 'moon-garden', 'rain-garden', 'great-blossom-tree'],
     allowSubjectChaosPaths: [
       'landscape',
       'cozy',
@@ -206,6 +225,11 @@ module.exports = {
       'flower-arrangement',
       'desert-bloom',
       'reclaim',
+      'water-garden',
+      'flower-fields',
+      'moon-garden',
+      'rain-garden',
+      'great-blossom-tree',
     ],
   },
 
@@ -232,6 +256,11 @@ module.exports = {
       'flower-arrangement': 'scene',
       'desert-bloom': 'scene',
       reclaim: 'scene',
+      'water-garden': 'scene',
+      'flower-fields': 'scene',
+      'moon-garden': 'scene',
+      'rain-garden': 'scene',
+      'great-blossom-tree': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
@@ -297,6 +326,29 @@ module.exports = {
         mixedLush: 1.2,
       };
     }
+    // moon-garden (Stage A3): hard-favor WHITE / pale night-bloomer themes and
+    // suppress saturated color, so the roster is moonflower/white-jasmine/white-
+    // wisteria territory. Light is moon + starlight (handled in the template).
+    if (path === 'moon-garden') {
+      themeBias = {
+        white: 6,
+        blushWhite: 5,
+        whiteBlue: 4,
+        blue: 0.3,
+        purple: 0.3,
+        nightshade: 0.5,
+        bluePurple: 0.3,
+        pink: 0.2,
+        purpleGold: 0.1,
+        coralCreamPeach: 0.15,
+        red: 0.05,
+        orange: 0.05,
+        yellow: 0.05,
+        sunset: 0.02,
+        rainbow: 0.05,
+        mixedLush: 0.1,
+      };
+    }
     const fc = flowerEngine.roll({ biome, themeBias, picker });
     // region kept ONLY for legacy compose.js paths (e.g. cozy) that still build
     // their own roster; axis paths now use fc.palette + fc.roster.
@@ -340,12 +392,34 @@ This MUST be a lush, beautiful FLOWER scene. Flowers are the unmistakable HERO a
     // the installation.
     const HANGING_FLOWERS_MANDATE = `━━━ BLOOMBOT BAR — COMPOSED HANGING-FLOWER WALKWAY (NON-NEGOTIABLE, READ FIRST) ━━━
 This is an ELEGANT, COMPOSED, well-DESIGNED scene: a scenic walkway beneath hanging flowers that look DELIBERATELY ARRANGED by a florist / garden designer — NOT an overgrown random jumble. The hanging flowers are still the abundant, lush HERO overhead, but they are CURATED and COHESIVE, arranged in one of two ways: (a) DISCRETE hanging PIECES — flower chandeliers / hanging baskets / suspended bloom-orbs / pendant flower-lanterns / garland swags — spaced with clear RHYTHM at intentional, even intervals; OR (b) a CLEAN, COHESIVE cascade of ONE dominant flowering species forming a tidy curtain / tunnel / arch. COMPOSITION OVER DENSITY: clear structure and balance, breathing room and NEGATIVE SPACE around and between the hanging pieces, a clean architectural or soft-sky backdrop visible between them, and a strong focal WALKWAY leading the eye into depth. Each hanging piece is full and lush, but the overall arrangement is restrained, intentional and gorgeous — like a high-end garden installation or a magazine-worthy designed floral walkway. ❌ NEVER a "spammy", busy, chaotic wall of mixed flowers hanging down all over the top of the frame; NEVER many different flower types tangled together overhead; NEVER packing every inch — let the design breathe.`;
+    // water-garden needs a COMPOSITION-OVER-DENSITY bar with a MIRROR: the still
+    // dark water doubles the blooms, so the "flowers fill 60%+" LUSH bar would
+    // pack the frame and lose the reflection. The hero is the doubled bloom
+    // color in the glass-still water — real + reflected halves both crisp.
+    const WATER_GARDEN_MANDATE = `━━━ BLOOMBOT BAR — STILL-WATER MIRROR FLOWER GARDEN (NON-NEGOTIABLE, READ FIRST) ━━━
+This is a mirror-calm lotus/lily pond where DEAD-STILL dark water DOUBLES the blooms in a flawless reflection. The flowers are the abundant HERO, but the composition is COMPOSED, not frame-packed: a broad band of GLASS-STILL water (a perfect unbroken mirror) holds the doubled bloom color, and the real flowers crowd the surface + banks above their crisp reflection. The reflection is the WOW — real and reflected blooms meet at a razor-clean waterline. REQUIRED: a visibly STILL mirror surface (never ripples, waves, or turbulence) with a clear reflected image; abundant water-lilies / lotus / floating blooms on the water + dense bank planting framing it. NOT a frame-filling wall of flowers with no water showing, NOT a macro — the still water and its doubled blooms MUST read. NEVER boats, docks, jetties, bridges, fountains, statues, or a person. Crisp, painterly, serene, magazine-cover composition.`;
+    // moon-garden needs a NIGHT bar: abundant PALE white blooms luminous against
+    // deep-blue DARK, moon+starlight only — the opposite of LUSH_HERO's
+    // "jewel-toned blooms + saturated sky" (which would fight the pale/dark
+    // night register).
+    const MOON_GARDEN_MANDATE = `━━━ BLOOMBOT BAR — MOONLIT NIGHT GARDEN (NON-NEGOTIABLE, READ FIRST) ━━━
+This is a NIGHT garden lit ONLY by the moon and stars. Abundant PALE, white, luminous-pale night-blooms are the unmistakable HERO and FILL the frame — but they are SILVERED and MOONLIT, glowing softly with reflected moonlight (never self-glowing, never bioluminescent, never neon). The palette is COOL — silver, white, pale, deep-blue shadow — NOT jewel-toned, NOT saturated day-color. The sky is a deep moonlit blue-black night sky (moon + stars), NOT a bright saturated day-sky. Pack the frame with pale night-flowers luminous against the deep-blue dark, a clear focal bloom-hero up front and receding layers of pale bloom behind. There are NO lamps, lanterns, string-lights, candles, torches, or any electric/fire light anywhere — the ONLY light is the moon. Serene, cool, luminous, magazine-cover composition. NEVER a person.`;
+    // great-blossom-tree: ONE colossal flowering TREE (like jack's giant flower)
+    // — open sky + a dwarfed root world, scale via CONTRAST not frame-packing.
+    const GREAT_TREE_MANDATE = `━━━ BLOOMBOT BAR — ONE COLOSSAL FLOWERING TREE (NON-NEGOTIABLE, READ FIRST) ━━━
+This is a SINGLE enormous ancient flowering tree (a giant cherry / wisteria / magnolia / jacaranda) in full bloom, as monumental as a cathedral, dominating the frame through SCALE. Its blooming crown towers high; the BLOOMS (not leaves) carry the color across the whole canopy. REQUIRED: OPEN SKY around and above the crown, and a small, normal-scale, natural world at its base (a tiny meadow / pool / stream / bluebell carpet) so the tree reads GIANT by contrast. It is ONE living, glorious, healthy flowering tree — NEVER dead, bare, spooky, gnarled-menacing, or winter. NOT a frame-filling wall of flowers, NOT a bloom-tunnel, NOT a macro — there MUST be open sky and a tiny dwarfed world. NEVER a person, NEVER a building or treehouse. Crisp, painterly, awe-inducing, with real negative space and open sky.`;
     const heroMandate =
       path === 'jack-and-the-giant-flower'
         ? GIANT_FLOWER_MANDATE
         : path === 'hanging-flowers'
           ? HANGING_FLOWERS_MANDATE
-          : LUSH_HERO_MANDATE;
+          : path === 'water-garden'
+            ? WATER_GARDEN_MANDATE
+            : path === 'moon-garden'
+              ? MOON_GARDEN_MANDATE
+              : path === 'great-blossom-tree'
+                ? GREAT_TREE_MANDATE
+                : LUSH_HERO_MANDATE;
     // Bot-wide "Medium Looks" override — the rolled look register sets the
     // rendering medium for THIS render. Leads the brief so Sonnet opens its
     // Flux prompt with these tokens (the medium is the leading CLIP anchor).

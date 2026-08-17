@@ -115,6 +115,25 @@ module.exports = {
   PIXELBOT_JRPG_COMBAT_MONSTER_ENEMY: loadIfExists('pixelbot_jrpg_combat_monster_enemy'),
   PIXELBOT_JRPG_COMBAT_PARTY_ENGAGEMENT: loadIfExists('pixelbot_jrpg_combat_party_engagement'),
   PIXELBOT_JRPG_COMBAT_SPELL_EFFECT: loadIfExists('pixelbot_jrpg_combat_spell_effect'),
+  // ─── pixel-overworld axis-system pools (Stage K3, SHADOW) ───
+  PIXELBOT_PIXEL_OVERWORLD_MAP_REGION: loadIfExists('pixelbot_pixel_overworld_map_region'),
+  PIXELBOT_PIXEL_OVERWORLD_MAP_FEATURES: loadIfExists('pixelbot_pixel_overworld_map_features'),
+  PIXELBOT_PIXEL_OVERWORLD_TRAVELER_SPRITE: loadIfExists(
+    'pixelbot_pixel_overworld_traveler_sprite'
+  ),
+  PIXELBOT_PIXEL_OVERWORLD_MAP_EVENT: loadIfExists('pixelbot_pixel_overworld_map_event'),
+  // ─── retro-racing axis-system pools (Stage K2, SHADOW) ───
+  PIXELBOT_RETRO_RACING_ROUTE_SCENE: loadIfExists('pixelbot_retro_racing_route_scene'),
+  PIXELBOT_RETRO_RACING_HORIZON_BANDS: loadIfExists('pixelbot_retro_racing_horizon_bands'),
+  PIXELBOT_RETRO_RACING_RACE_MOMENT: loadIfExists('pixelbot_retro_racing_race_moment'),
+  PIXELBOT_RETRO_RACING_ROADSIDE_DETAIL: loadIfExists('pixelbot_retro_racing_roadside_detail'),
+  // ─── pixel-item-shop axis-system pools (Stage K1, SHADOW) ───
+  PIXELBOT_PIXEL_ITEM_SHOP_SHOP_LOCALE: loadIfExists('pixelbot_pixel_item_shop_shop_locale'),
+  PIXELBOT_PIXEL_ITEM_SHOP_SHELF_DENSITY: loadIfExists('pixelbot_pixel_item_shop_shelf_density'),
+  PIXELBOT_PIXEL_ITEM_SHOP_KEEPER_CUSTOMER_LIFE: loadIfExists(
+    'pixelbot_pixel_item_shop_keeper_customer_life'
+  ),
+  PIXELBOT_PIXEL_ITEM_SHOP_COZY_PHENOMENON: loadIfExists('pixelbot_pixel_item_shop_cozy_phenomenon'),
   // ─── pixel-horror axis-system pools (2026-05-20) ───
   PIXELBOT_PIXEL_HORROR_GOTHIC_SETTING: loadIfExists('pixelbot_pixel_horror_gothic_setting'),
   PIXELBOT_PIXEL_HORROR_CLASSIC_ENEMY: loadIfExists('pixelbot_pixel_horror_classic_enemy'),

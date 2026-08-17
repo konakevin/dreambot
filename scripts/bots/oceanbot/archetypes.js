@@ -113,7 +113,7 @@ module.exports = {
 
   OCEANBOT_SEATURTLE_SCAPE: {
     description:
-      'Sea turtles across the full life-and-habitat span — adults gliding through reefs, kelp forests, open ocean with sharks / rays / fish-shoals; resting on coral; surfacing for breath; pulling up on tropical beach; nesting mothers digging in moonlit sand; hatchlings emerging from sand and rushing to the surf; juveniles in their first open-ocean dive. Naturalistic NatGeo / BBC Blue Planet register. All 7 real species (green / loggerhead / hawksbill / leatherback / olive ridley / Kemp\'s ridley / flatback). NO ships, NO people, NO diving gear. Same lean 2-path-slot shape.',
+      "Sea turtles across the full life-and-habitat span — adults gliding through reefs, kelp forests, open ocean with sharks / rays / fish-shoals; resting on coral; surfacing for breath; pulling up on tropical beach; nesting mothers digging in moonlit sand; hatchlings emerging from sand and rushing to the surf; juveniles in their first open-ocean dive. Naturalistic NatGeo / BBC Blue Planet register. All 7 real species (green / loggerhead / hawksbill / leatherback / olive ridley / Kemp's ridley / flatback). NO ships, NO people, NO diving gear. Same lean 2-path-slot shape.",
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
@@ -155,7 +155,7 @@ module.exports = {
 
   OCEANBOT_COASTAL_POWER: {
     description:
-      'Heavy swells and waves crashing against the shore — cliff faces, sea-stacks, jagged coastal rocks, reefs at breaker line, lighthouses engulfed in spray, AND shorebreak (heavy waves curling onto sand). Epic shots showcasing mother nature\'s power across DIFFERENT atmospheric registers — sunsets / storm fronts / golden hour / dawn / aurora-coast / hurricane sky / rainbow-after-squall / blue-hour / night-lightning. Iconic coasts (Big Sur / Cliffs of Moher / Cape Disappointment / Nazaré / Cape Horn / Reynisfjara / Portland Head / Lands End). NO ships, NO people, NO surfers. 3 path-bespoke slots (scene + weather/sky + camera framing) for the atmospheric range Kevin called out.',
+      "Heavy swells and waves crashing against the shore — cliff faces, sea-stacks, jagged coastal rocks, reefs at breaker line, lighthouses engulfed in spray, AND shorebreak (heavy waves curling onto sand). Epic shots showcasing mother nature's power across DIFFERENT atmospheric registers — sunsets / storm fronts / golden hour / dawn / aurora-coast / hurricane sky / rainbow-after-squall / blue-hour / night-lightning. Iconic coasts (Big Sur / Cliffs of Moher / Cape Disappointment / Nazaré / Cape Horn / Reynisfjara / Portland Head / Lands End). NO ships, NO people, NO surfers. 3 path-bespoke slots (scene + weather/sky + camera framing) for the atmospheric range Kevin called out.",
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
@@ -236,6 +236,48 @@ module.exports = {
       // ship) PLUS the kraken-specific KRAKEN_CREATURE_BLOCK that locks
       // the 4-creature whitelist and the embodiment rule.
       path: ['kraken_scene', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_KELP_FOREST: {
+    description:
+      'The GREEN giant-kelp cathedral ecosystem (third register alongside bright reef and dark abyss). God-rays through giant-kelp columns, sea otters wrapping pups in fronds, sea lions spiralling up the shafts, garibaldi flashing, sunlit canopy from below. NatGeo / BBC-Blue-Planet register. Hero-mandated (dullness law): every render has a readable animal or monumental-kelp hero. Kelp = columns/fronds (no architecture enumeration). camera_framing AUDITED (zero hero-dissolve). Lean 3-path-slot: kelp_scene (hero) + canopy_light (money-shot) + camera_framing.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['kelp_scene', 'canopy_light', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_LIGHTHOUSE_STORMS: {
+    description:
+      "ABOVE-WATER Jean-Guichard register — a real weathered lighthouse taking a monster wave, the keeper's light glowing warm through the spray. ~75% storm / ~25% calm-after. The LIGHT STAYS LIT (the emotional core). NO keeper figure / people (unstated-figure law — the tower stands alone). Weathered-real tower, no fantasy, no ship-as-subject. camera_framing AUDITED (whole tower + sea readable). Lean 4-path-slot: lighthouse_scene (hero) + wave_impact (money-shot) + storm_sky + camera_framing.",
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['lighthouse_scene', 'wave_impact', 'storm_sky', 'camera_framing'],
+    },
+    pickN: {},
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  OCEANBOT_SEA_CAVES: {
+    description:
+      'Blue-Grotto register — cathedral sea-cave light beams, hidden lagoons, glowing turquoise water-windows, ceiling shafts. Serene counterpart to coastal-power. The "glowing water" is REAL daylight physics (sunlight through a submerged entrance lights the pool electric blue) — never bioluminescence/magic. Every entry anchored by a monumental rock formation OR a creature (seal/rays). NatGeo register. camera_framing AUDITED. Lean 3-path-slot: cave_scene (hero) + light_window (money-shot) + camera_framing.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['cave_scene', 'light_window', 'camera_framing'],
     },
     pickN: {},
     conditionalLayer: null,

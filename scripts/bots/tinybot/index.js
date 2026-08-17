@@ -24,7 +24,17 @@ const pathBuilders = {
   'tiny-beach': require('./paths/tiny-beach'),
   'tiny-food-world': require('./paths/tiny-food-world'),
   'tiny-vehicles': require('./paths/tiny-vehicles'),
+  // Stage N (SHADOW, dark-launch) — festival/village scene paths. Renderable
+  // ONLY by explicit --mode; never auto-posted publicly (see shadowPaths).
+  'tiny-winter-village': require('./paths/tiny-winter-village'),
+  'tiny-night-market': require('./paths/tiny-night-market'),
+  'tiny-carnival': require('./paths/tiny-carnival'),
 };
+
+// Dark-launch set — reachable only via explicit --path/--mode; posts hidden
+// (is_public=false, shadow=true), visible only to the supreme admin via
+// get_shadow_feed. Going live = move a string into `paths` below.
+const TINY_SHADOW_PATHS = ['tiny-winter-village', 'tiny-night-market', 'tiny-carnival'];
 
 module.exports = {
   username: 'tinybot',
@@ -79,7 +89,17 @@ module.exports = {
     'tiny-beach',
     'tiny-food-world',
     'tiny-vehicles',
+    // Stage N — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — TINY_SHADOW_PATHS const KEPT so these stay in
+    // allowSubjectChaosPaths (chaos-able, as in shadow); polish ON (unchanged)).
+    'tiny-winter-village',
+    'tiny-night-market',
+    'tiny-carnival',
   ],
+
+  // Stage N paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
+  // TINY_SHADOW_PATHS const retained — still drives allowSubjectChaosPaths below).
+  shadowPaths: [],
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -104,6 +124,7 @@ module.exports = {
       'tiny-beach',
       'tiny-food-world',
       'tiny-vehicles',
+      ...TINY_SHADOW_PATHS,
     ],
   },
   twoPassPolish: {
@@ -132,6 +153,9 @@ module.exports = {
       'tiny-beach': 'scene',
       'tiny-food-world': 'scene',
       'tiny-vehicles': 'scene',
+      'tiny-winter-village': 'scene',
+      'tiny-night-market': 'scene',
+      'tiny-carnival': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

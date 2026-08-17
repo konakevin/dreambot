@@ -73,7 +73,17 @@ const pathBuilders = {
   'food-county-fair': require('./paths/food-county-fair'),
   'food-birthday-party': require('./paths/food-birthday-party'),
   'food-outings': require('./paths/food-outings'),
+  // Stage P (SHADOW, dark-launch) — function-form kawaii-food paths. Renderable
+  // ONLY by explicit --mode; never auto-posted publicly (see shadowPaths).
+  'kawaii-drinks': require('./paths/kawaii-drinks'),
+  'holiday-sweets': require('./paths/holiday-sweets'),
+  'food-village': require('./paths/food-village'),
 };
+
+// Dark-launch set — reachable only via explicit --path/--mode; posts hidden
+// (is_public=false, shadow=true), visible only to the supreme admin via
+// get_shadow_feed. Going live = move a string into `paths` below.
+const YUM_SHADOW_PATHS = ['kawaii-drinks', 'holiday-sweets', 'food-village'];
 
 module.exports = {
   username: 'YumBot',
@@ -133,6 +143,11 @@ module.exports = {
     'food-county-fair': 'yumbot_food_character',
     'food-birthday-party': 'yumbot_food_character',
     'food-outings': 'yumbot_food_character',
+    // Stage P (SHADOW) — faces-baked-into-food, so the neutral medium (kawaii
+    // anchor prefix + "every face is a food, no humans" suffix).
+    'kawaii-drinks': 'yumbot_food_neutral',
+    'holiday-sweets': 'yumbot_food_neutral',
+    'food-village': 'yumbot_food_neutral',
   },
 
   // Per-medium prompt prefix override (engine line 1314) — REPLACES the
@@ -237,6 +252,12 @@ module.exports = {
     'food-county-fair',
     'food-birthday-party',
     'food-outings',
+    // Stage P — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — chaos+sensory disabled bot-wide, medium (yumbot_food_neutral)
+    // + model (flux-1.1-pro-ultra) preserved; reworked kawaii-drinks pools intact).
+    'kawaii-drinks',
+    'holiday-sweets',
+    'food-village',
   ],
 
   // floral-garden-cup + floral-garden-scene are SISTER paths at 0.5 each —
@@ -270,7 +291,16 @@ module.exports = {
     'food-county-fair': 'black-forest-labs/flux-1.1-pro-ultra',
     'food-birthday-party': 'black-forest-labs/flux-1.1-pro-ultra',
     'food-outings': 'black-forest-labs/flux-1.1-pro-ultra',
+    // Stage P (SHADOW) — detailed kawaii-food scenes + food-villages; ultra for
+    // coherence (the look register still leads the treatment).
+    'kawaii-drinks': 'black-forest-labs/flux-1.1-pro-ultra',
+    'holiday-sweets': 'black-forest-labs/flux-1.1-pro-ultra',
+    'food-village': 'black-forest-labs/flux-1.1-pro-ultra',
   },
+
+  // Dark-launch scene paths (Stage P) — excluded from `paths`/cycle so the
+  // dispatcher never auto-posts them; reachable only via explicit --mode.
+  shadowPaths: [], // Stage P paths promoted to live rotation 2026-08-16
 
   chaos: { enabled: false, skipPaths: [], allowSubjectChaosPaths: [] },
   twoPassPolish: {

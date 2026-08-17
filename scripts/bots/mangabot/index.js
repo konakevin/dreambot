@@ -34,7 +34,15 @@ const pathBuilders = {
   'space-opera': require('./paths/space-opera'),
   // SDXL-aesthetic revival path (Phase 2.19, 2026-05-30):
   'ghibli-painterly': require('./paths/ghibli-painterly'),
+  'anime-rain': require('./paths/anime-rain'), // Stage I1 SHADOW
+  'anime-trains': require('./paths/anime-trains'), // Stage I2 SHADOW
+  'winter-anime': require('./paths/winter-anime'), // Stage I3 SHADOW
+  'night-touge': require('./paths/night-touge'), // Stage I4 SHADOW
 };
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const MANGA_SHADOW_PATHS = ['anime-rain', 'anime-trains', 'winter-anime', 'night-touge'];
 
 module.exports = {
   username: 'mangabot',
@@ -98,6 +106,10 @@ module.exports = {
     'rooftop-sunsets': 'mangabot_anime_neutral',
     'cherry-blossom-romance': 'mangabot_anime_neutral',
     'space-opera': 'mangabot_anime_neutral',
+    'anime-rain': 'mangabot_anime_neutral', // Stage I1 SHADOW (look-enabled)
+    'anime-trains': 'mangabot_anime_neutral', // Stage I2 SHADOW (look-enabled)
+    'winter-anime': 'mangabot_anime_neutral', // Stage I3 SHADOW (look-enabled)
+    'night-touge': 'mangabot_anime_neutral', // Stage I4 SHADOW (look-enabled)
   },
 
   promptPrefixByMedium: {
@@ -175,7 +187,19 @@ module.exports = {
     'cherry-blossom-romance',
     'space-opera',
     'ghibli-painterly',
+    // Stage I — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — MANGA_SHADOW_PATHS const KEPT (drives polish-skip), not in
+    // allowSubjectChaosPaths (chaos off), medium (mangabot_anime_neutral) + sensory
+    // pathContext + look-register preserved).
+    'anime-rain',
+    'anime-trains',
+    'winter-anime',
+    'night-touge',
   ],
+
+  // Stage I paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
+  // MANGA_SHADOW_PATHS const retained — still drives twoPassPolish.skipPaths).
+  shadowPaths: [],
 
   // ghibli-painterly: locked to SDXL. The 2026-05-30 bake-off conclusion was
   // wrong — flux-1.1-pro renders this aesthetic too tight / illustrated, losing
@@ -244,6 +268,7 @@ module.exports = {
       'mythological-creature',
       'space-opera',
       'ghibli-painterly',
+      ...MANGA_SHADOW_PATHS, // anime-rain (SHADOW) — scene path, polish OFF
     ],
     polishedWordsByPath: {
       // Character-rich paths need extra word budget for archetype + outfit + setting + vista
@@ -287,6 +312,10 @@ module.exports = {
       // Creature-coded
       'mythological-creature': 'creature',
       // Scene-coded (no specific gender for sensory anchors)
+      'anime-rain': 'scene', // Stage I1 SHADOW
+      'anime-trains': 'scene', // Stage I2 SHADOW
+      'winter-anime': 'scene', // Stage I3 SHADOW
+      'night-touge': 'scene', // Stage I4 SHADOW
       'anime-village': 'scene',
       'neo-tokyo': 'scene',
       'isekai-fantasy': 'scene',

@@ -1675,4 +1675,190 @@ CRITICAL — Architecture-as-structural-hero + bloom-as-distributed-mass + AWE-N
 
 Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, starting with the composition mode + the ruin.`;
   },
+
+  BLOOMBOT_WATER_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { water_body, water_flora, reflection, bank_planting, water_life } = slots;
+    const banks = (Array.isArray(bank_planting) ? bank_planting : [bank_planting]).filter(Boolean).join('; ');
+    const lifeSection = water_life
+      ? `\n━━━ WATER LIFE (small, distant, secondary — never steals from the blooms) ━━━\n${water_life}\n`
+      : '';
+    return `You are a fine-art floral painter writing a STILL-WATER FLOWER-GARDEN scene description. A mirror-calm lotus/lily pond where the dead-still dark water DOUBLES the blooms in a flawless reflection — the flowers are the hero in BOTH the real and the reflected halves.
+
+━━━ ZERO HUMANS — NEVER, UNDER ANY CIRCUMSTANCES ━━━
+No human figure anywhere, no lone silhouette at the water's edge or the vanishing point. No boats, docks, jetties, bridges, fountains, or statues. The garden is uninhabited — only flowers, water, and (if named) one small distant creature.
+
+━━━ THE WATER (mirror-still, the stage) ━━━
+${water_body}
+The surface is GLASS-STILL — a perfect unbroken mirror, dark-toned so it doubles the bloom color above it.
+
+━━━ THE WATER FLORA (the blooms on the water) ━━━
+${water_flora}
+
+━━━ REFLECTION — THE MONEY-SHOT ━━━
+${reflection}
+The real blooms and their reflection meet at a razor-clean waterline; the doubled color is the wow of the image.
+
+━━━ BANK PLANTING (dense edge blooms framing the pond) ━━━
+${banks}
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+${lifeSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, opening with the still mirror-water and its doubled blooms.`;
+  },
+
+  BLOOMBOT_FLOWER_FIELDS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { field_geometry, crop_bloom, vantage, field_backdrop, field_event } = slots;
+    const eventSection = field_event
+      ? `\n━━━ ATMOSPHERIC EVENT ━━━\n${field_event}\n`
+      : '';
+    return `You are a fine-art landscape photographer writing a CULTIVATED FLOWER-FIELD scene description. A planted mega-field where the GEOMETRIC PATTERN of blocked color reads instantly — tulip stripes, lavender rows, a sunflower sea — flowers filling the frame to the horizon. This is lush TEMPERATE cultivated farmland with green foliage — the fertile flower-farming country of Holland / the Skagit Valley / Provence.
+
+━━━ ZERO HUMANS + NO FARM STRUCTURES — NEVER ━━━
+No human figure anywhere; no lone silhouette walking into the light at the vanishing point (the rows lead to an EMPTY horizon). NO tractors, farm machinery, greenhouses, barns, farmhouses, silos, windmills, fences, power lines, or roads. NO desert or cacti — this is green temperate farmland. Pure planted field + temperate nature only.
+
+━━━ FIELD GEOMETRY — THE MONEY-SHOT (reads in one second) ━━━
+${field_geometry}
+The cultivated pattern is the differentiator from a wild meadow — blocked, ordered, deliberate.
+
+━━━ THE CROP BLOOM (the field flower as a uniform mass) ━━━
+${crop_bloom}
+
+━━━ VANTAGE (camera position showing the geometry) ━━━
+${vantage}
+
+━━━ BACKDROP (pure-nature horizon) ━━━
+${field_backdrop}
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+
+━━━ LIGHTING ━━━
+${sharedDNA.lighting}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, opening with the field geometry + the crop filling the frame.`;
+  },
+
+  BLOOMBOT_MOON_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { garden_setting, night_bloom, moonlight_effect, night_sky, night_life } = slots;
+    const lifeSection = night_life
+      ? `\n━━━ NIGHT LIFE (small, secondary, real) ━━━\n${night_life}\n`
+      : '';
+    return `You are a fine-art floral painter writing a MOONLIT NIGHT-GARDEN scene description. A garden of pale WHITE night-bloomers under the moon — luminous-pale flowers against a deep-blue darkness, the ONLY light the moon and stars.
+
+━━━ NIGHT REGISTER — MOON + STARLIGHT ONLY ━━━
+This is NIGHT. The ONLY light is the moon and the stars — cool, silver, soft. There are NO lamps, lanterns, string-lights, candles, torches, or any electric or fire light anywhere. The pale blooms are MOONLIT and SILVERED, catching the moon — never self-glowing, never bioluminescent. The sky is a deep moonlit blue-black, NOT a saturated day-sky.
+
+━━━ ZERO HUMANS ━━━
+No human figure anywhere, no lone silhouette in the garden or at the vanishing point. Only flowers, moonlight, and (if named) one small nocturnal creature.
+
+━━━ THE NIGHT GARDEN (the setting) ━━━
+${garden_setting}
+
+━━━ THE NIGHT BLOOMS (pale, abundant, the hero) ━━━
+${night_bloom}
+Abundant pale night-flowers fill the frame as the clear hero, luminous-pale against the deep-blue dark.
+
+━━━ MOONLIGHT EFFECT — THE MONEY-SHOT ━━━
+${moonlight_effect}
+
+━━━ NIGHT SKY ━━━
+${night_sky}
+
+━━━ COLOR PALETTE — STRICT (pale/white, cool-silver) ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+${lifeSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, opening with the moonlit pale blooms against the deep-blue night.`;
+  },
+
+  BLOOMBOT_RAIN_GARDEN: ({ slots, sharedDNA, vibeDirective }) => {
+    const { garden_scene, rain_state, wet_detail, storm_light, storm_event } = slots;
+    const wet = (Array.isArray(wet_detail) ? wet_detail : [wet_detail]).filter(Boolean).join('; ');
+    const eventSection = storm_event
+      ? `\n━━━ STORM EVENT ━━━\n${storm_event}\n`
+      : '';
+    return `You are a fine-art floral painter writing a RAIN-DRENCHED FLOWER-GARDEN scene description. A lush garden in the rain — abundant blooms glossy and heavy with wet, their color DEEPENED and saturated by the water, the rain clearly VISIBLE.
+
+━━━ RAIN IS VISIBLE + COLOR IS SATURATED ━━━
+The rain must be plainly seen — streaks, rods, droplets, splash-rings, dripping petals. The wet DEEPENS and enriches every color to a glossy, saturated glow — rain NEVER grays or flattens the color. No umbrellas, no people, no buildings (natural stone edging only).
+
+━━━ THE GARDEN (rain-soaked blooms, the hero) ━━━
+${garden_scene}
+Abundant rain-drenched blooms fill the frame as the clear hero, glossy and deep-colored with wet.
+
+━━━ RAIN STATE — THE MONEY-SHOT (clearly visible rain) ━━━
+${rain_state}
+
+━━━ WET DETAIL (close jewelled evidence of rain) ━━━
+${wet}
+
+━━━ STORM LIGHT ━━━
+${storm_light}
+
+━━━ COLOR PALETTE — STRICT (deepened + saturated by wet) ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, opening with the rain-drenched saturated blooms + the visible rain.`;
+  },
+
+  BLOOMBOT_GREAT_BLOSSOM_TREE: ({ slots, sharedDNA, vibeDirective }) => {
+    const { tree_form, bloom_canopy, root_world, season_light, canopy_event } = slots;
+    const eventSection = canopy_event
+      ? `\n━━━ CANOPY EVENT (tiny/secondary) ━━━\n${canopy_event}\n`
+      : '';
+    return `You are a fine-art painter writing a scene of ONE COLOSSAL FLOWERING TREE — a single ancient tree in full bloom, as monumental as a cathedral, towering against open sky above a tiny dwarfed world at its roots. Scale through CONTRAST, not frame-packing.
+
+━━━ THE GIANT + OPEN SKY + A DWARFED WORLD (READ FIRST) ━━━
+ONE enormous flowering tree dominates through SCALE — its blooming crown towering high. REQUIRED: open sky around and above the crown, and a small, normal-scale natural world at its base for contrast (a tiny meadow / pool / stream). The tree must read GIANT because the ground world is tiny beneath it. NOT a frame-filling wall of flowers, NOT a macro, NOT a tunnel — there MUST be open sky and a dwarfed world. It is ONE living, glorious, healthy flowering tree — NEVER dead, bare, spooky, or menacing. The BLOOMS (not leaves) carry the color. NO people, NO buildings/treehouses.
+
+━━━ THE TREE (its named silhouette + bloom) ━━━
+${tree_form}
+
+━━━ BLOOM CANOPY — THE MONEY-SHOT ━━━
+${bloom_canopy}
+
+━━━ THE DWARFED ROOT WORLD (small, for scale) ━━━
+${root_world}
+
+━━━ SEASON LIGHT ━━━
+${season_light}
+
+━━━ COLOR PALETTE — STRICT ━━━
+${sharedDNA.palette}
+
+━━━ FLOWER SPECIES — STRICT ━━━
+${sharedDNA.roster}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY 85-115 words. Comma-separated phrases. NO preamble, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose, opening with the colossal flowering tree towering against open sky above its dwarfed world.`;
+  },
 };

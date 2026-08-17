@@ -179,7 +179,14 @@ module.exports = {
     slots: {
       universal: ['lighting', 'atmosphere'],
       bot: [],
-      path: ['composition', 'structure', 'architectural_detail', 'inner_light', 'moonscape', 'sky_layer'],
+      path: [
+        'composition',
+        'structure',
+        'architectural_detail',
+        'inner_light',
+        'moonscape',
+        'sky_layer',
+      ],
     },
     pickN: { architectural_detail: 3 },
     // bats/crows show ~85% of the time (Kevin wants strong ambience).
@@ -218,7 +225,7 @@ module.exports = {
 
   GOTHBOT_THE_FROST_GARDEN: {
     description:
-      'PATH-BESPOKE — GothBot the-frost-garden path (2026-06-10 NEW). A CURSED FROZEN gothic GARDEN / CONSERVATORY is the hero — black-rose courts, frozen fountains, weeping statuary, derelict glass greenhouses, dead orchards, frost-glazed arbors, hedge mazes. Softer painterly scene register (anime medium). FROST/ICE is the signature money-shot. Mournful, beautiful, still. Crimson-Peak / Sleepy-Hollow / Pan\'s-Labyrinth / gothic-fairy-tale lineage. NO CHARACTERS as subject (tiny scale-prover accent only). 5 path-bespoke axes (garden / flora pickN:2 / frost_feature / statuary / light_sky) + 60%-gated accent (dark garden wildlife or tiny distant figure). universal:[] — the path self-lights via light_sky (the bot LIGHTING/ATMOSPHERES are castle-weather-coded).',
+      "PATH-BESPOKE — GothBot the-frost-garden path (2026-06-10 NEW). A CURSED FROZEN gothic GARDEN / CONSERVATORY is the hero — black-rose courts, frozen fountains, weeping statuary, derelict glass greenhouses, dead orchards, frost-glazed arbors, hedge mazes. Softer painterly scene register (anime medium). FROST/ICE is the signature money-shot. Mournful, beautiful, still. Crimson-Peak / Sleepy-Hollow / Pan's-Labyrinth / gothic-fairy-tale lineage. NO CHARACTERS as subject (tiny scale-prover accent only). 5 path-bespoke axes (garden / flora pickN:2 / frost_feature / statuary / light_sky) + 60%-gated accent (dark garden wildlife or tiny distant figure). universal:[] — the path self-lights via light_sky (the bot LIGHTING/ATMOSPHERES are castle-weather-coded).",
     slots: {
       universal: [],
       bot: [],

@@ -224,4 +224,14 @@ module.exports = {
   // scripts/bots/brickbot/seeds/extract-lego-landscapes-locations.js
   // (writes to all three bots' seed dirs).
   TOYBOT_TOY_LANDSCAPES_LOCATIONS: load('toybot_toy_landscapes_locations'),
+
+  // Stage O (SHADOW) — physical-toy-MATERIAL world paths, each function-form
+  // with a bespoke SCENE pool (the world) + a bespoke PIECES pool (the toy cast,
+  // ~55%/~45% 1-2 pieces mid-action).
+  TOYBOT_BOARD_GAME_SCENES: load('toybot_board_game_scenes'),
+  TOYBOT_BOARD_GAME_PIECES: load('toybot_board_game_pieces'),
+  TOYBOT_WOODEN_TOY_SCENES: load('toybot_wooden_toy_scenes'),
+  TOYBOT_WOODEN_TOY_PIECES: load('toybot_wooden_toy_pieces'),
+  TOYBOT_TIN_TOY_SCENES: load('toybot_tin_toy_scenes'),
+  TOYBOT_TIN_TOY_PIECES: load('toybot_tin_toy_pieces'),
 };

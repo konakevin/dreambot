@@ -4872,6 +4872,683 @@ Each entry must:
     ],
     instructions: `Each entry is ONE pirate weather/environmental drama event, 20-40 words. Format: "DRAMA NAME CAPS — brick-parts + visual-impact". Output as a NUMBERED list (1. ... 2. ... 3. ...). One entry per line, NO internal newlines. STRICT BANS: NEVER specify time-of-day or lighting color cast (no "golden-hour storm" — that's the lighting axis); NEVER lock crew/scene reaction language (no "crew screaming in panic" — that's minifig_action); environmental EVENT only.`,
   },
+
+  // ═══════════════════ LEGO-CITY (Stage B1) ═══════════════════
+  // Modern LEGO City life. Register ~85% LEGO City heritage. Anti-photoreal
+  // brick mandate (asphalt/glass/water = BRICK PARTS). No real brand logos/text.
+  brickbot_lego_city_scene_type: {
+    format: 'simple',
+    theme: `LEGO CITY SCENE TYPE for BrickBot's lego-city path — the narrative STAGE/SETTING of a modern LEGO City diorama. Each entry 20-40 words: STAGE + situation only (NO camera framing, NO minifig verbs, NO vehicles-as-hero, NO lighting). Modern LEGO City life.
+
+VARIETY MANDATE — distribute across: fire-station callout, construction site, busy modular downtown street, harbor docks, police station/chase, street market, city square/park, hospital/clinic, transit/tram station, garbage-collection/utility, pizzeria/shop row, rooftop scene.
+
+STRICT BANS: NO real brand logos, NO real place names, NO text on signs; the setting is generic LEGO City.`,
+    touchpoints: [
+      'FIRE-STATION CALLOUT — the modular fire station, bay doors open, the whole crew scrambling to a call, the alarm-light spinning, a diorama of controlled urgency',
+      'CONSTRUCTION SITE — a downtown building site mid-build, a bare brick-skeleton tower, stacked pallets and skips, the plot fenced with hazard-striped brick barriers',
+      'MODULAR DOWNTOWN STREET — a busy row of modular LEGO buildings along a studded street, shopfronts and apartments above, city life spilling onto the sidewalk',
+      'HARBOR DOCKS — the city harbor, a quay of brick-built cranes and containers, a small boat at the dock, gulls and crates on the studded wharf',
+      'POLICE CHASE — a police scene through the city streets, a getaway underway between the buildings, barriers and cones scattered across the intersection',
+      'STREET MARKET — a bustling brick market street, stalls and awnings crowded together, crates of brick-fruit, the square packed with market life',
+      'CITY SQUARE PARK — a small brick city park between the buildings, benches and brick-trees, a fountain of trans-blue studs, a calm pocket downtown',
+    ],
+    instructions: `Each entry is ONE LEGO City stage/setting, 20-40 words. Format: "SCENE NAME CAPS — the setting + situation". STAGE only. NO camera terms, NO minifig verbs, NO lighting, NO brand logos/text. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_minifig_action: {
+    format: 'simple',
+    theme: `LEGO CITY MINIFIG ACTION for BrickBot's lego-city path — the verb-led story beat the minifigs are caught mid-doing. Each entry 15-30 words OPENING with a mid-X verb (story-tension in every entry). Minifigs only (tiny LEGO figures), never real humans.
+
+VARIETY MANDATE — mid-rescue / mid-pour (concrete) / mid-market-haggle / mid-arrest / mid-hose-blast / mid-crane-signal / mid-delivery / mid-repair / mid-crossing / mid-photo / mid-sweep / mid-load. Vary poses (climbing, reaching, running, leaning, carrying, pointing) — never all standing front-facing.
+
+BANS: NO real humans; NO camera terms; NO vehicles-as-subject.`,
+    touchpoints: [
+      'Mid-rescue — a firefighter minifig halfway up a brick ladder reaching for a stranded cat minifig-companion on a modular rooftop ledge',
+      'Mid-pour — a construction-worker minifig tipping a brick cement-mixer chute, another below spreading the grey plate-slab, mid-job',
+      'Mid-haggle — a market-vendor minifig leaning across a stall handing a brick-crate to a shopper minifig mid-exchange, coins on the counter',
+      'Mid-arrest — a police minifig reaching to cuff a crook minifig against a squad-car door, both mid-motion at the intersection',
+      'Mid-hose-blast — two firefighter minifigs braced behind a brick hose-reel, the trans-blue stud water-jet arcing toward a smoking window',
+      'Mid-signal — a crane-operator minifig leaning from the cab signalling to a ground crew minifig guiding a swinging brick load',
+      'Mid-sweep — a street-cleaner minifig pushing a brick broom-cart across the studded plaza while a pigeon minifig-bird scatters',
+    ],
+    instructions: `Each entry is ONE mid-X minifig beat, 15-30 words, OPENING with a mid-verb, with story-tension. Vary poses. Minifigs only. NO real humans, NO camera terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_build_technique: {
+    format: 'simple',
+    theme: `LEGO CITY BUILD TECHNIQUE for BrickBot's lego-city path — the MOC construction distinguisher that makes it read as an expert LEGO City build. Each entry 15-30 words.
+
+VARIETY MANDATE — modular-building facade with detachable floors + lit interiors; SNOT (studs-not-on-top) smooth sidewalks + road plates; greebled rooftops (AC units, vents, pipes in small parts); brick-built street furniture (hydrants, lamps, benches, bins); trans-plate windows + shop glazing; cheese-slope curbs + tile crossings; brick foliage (plant-element trees, plate hedges); parts-built vehicles.
+
+BANS: anti-photoreal — asphalt/glass/water/concrete are all BRICK PARTS (road plates / trans-plates / brick-slabs), never real materials. NO camera terms.`,
+    touchpoints: [
+      'Modular-building facades with removable floors revealing lit brick interiors, classic Modular-Buildings ornate brickwork above the shopfronts',
+      'SNOT-built smooth sidewalks and studded road-plates, tile crosswalks and cheese-slope curbs edging the street',
+      'Greebled rooftops packed with small-part AC units, vents and pipe-runs, a brick water-tank and antenna clutter',
+      'Brick-built street furniture — plate benches, brick hydrants, lamp-post lamps with trans-clear studs, tile-lid bins',
+      'Trans-plate shop windows and glazed apartment fronts, the glass all coloured trans-plates set behind brick mullions',
+      'Brick foliage — plant-element street trees in tile planters, plate-and-slope hedges edging the little park',
+      'Parts-built city vehicles with visible studs and connection seams, sloped brick bodywork, trans-clear light bricks',
+    ],
+    instructions: `Each entry is ONE build-technique, 15-30 words. Anti-photoreal: name asphalt/glass/water as BRICK PARTS. NO camera terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_camera_framing: {
+    format: 'simple',
+    theme: `LEGO CITY CAMERA FRAMING for BrickBot's lego-city path — the MANDATORY DRIVING framing (city-specific, drives the composition, overrides Flux's centered-front-facing default). Each entry 14-24 words: a specific city angle.
+
+VARIETY MANDATE — street-level-down-the-modular-row (receding facades) / low-worm's-eye up a tower / high-overhead-intersection / over-the-firetruck-shoulder toward the blaze / through-a-shop-window into the street / crane-cab-POV looking down at the load / harbor-waterline-low / rooftop-across-to-the-skyline / market-stall-corridor receding.
+
+BANS: NO generic "medium shot / wide shot" without city anchoring; every entry references city scenery. NEVER "one clear focal figure".`,
+    touchpoints: [
+      'STREET-LEVEL DOWN THE MODULAR ROW — camera low in the studded street, the facades receding to a vanishing point down the block',
+      "WORM'S-EYE UP THE TOWER — camera at curb-level looking straight up the construction tower, the crane leaning across the sky",
+      'HIGH-OVERHEAD INTERSECTION — top-down over the crossroads, the road-plates and vehicles laid out like a city map below',
+      'OVER-THE-FIRETRUCK-SHOULDER — framed past the brick fire-truck toward the smoking modular building, hose-line leading the eye',
+      'THROUGH-A-SHOP-WINDOW — camera inside a lit brick interior looking out the trans-plate window into the busy street beyond',
+      'CRANE-CAB-POV — from the crane operator height looking down the jib at the swinging brick load over the site',
+      'HARBOR-WATERLINE-LOW — camera just above the trans-blue stud water at the dock, cranes and containers towering above',
+    ],
+    instructions: `Each entry is ONE mandatory city camera framing, 14-24 words, city-anchored. NO generic terms, NEVER "one clear focal figure". Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_vehicle_class: {
+    format: 'simple',
+    theme: `LEGO CITY VEHICLE CLASS for BrickBot's lego-city path — the vehicle silhouette OR a no-vehicle street focus. ~50% a City vehicle, ~50% no-vehicle (street/pedestrian scene). Each entry 12-24 words.
+
+VARIETY — fire engine / ladder truck / police cruiser / crane truck / cement mixer / city tram / garbage truck / ambulance / harbor boat / delivery van / tow truck / street-sweeper; AND no-vehicle entries: pedestrian street focus / market-stall focus / plaza-crowd focus / construction-worker focus (each with an implied mid-X tension).
+
+BANS: parts-built brick vehicles only (visible studs); NO real brand logos.`,
+    touchpoints: [
+      'A brick-built fire engine, red slope bodywork and trans-clear light bricks, ladder folded on top, studs visible along the chassis',
+      'A LEGO City crane truck with a Technic-built extending jib and outrigger legs planted on the road-plate',
+      'A yellow brick cement-mixer truck, the rotating drum a barrel-piece, chute swung out over fresh grey plate',
+      'A City tram on studded rails threading the modular street, trans-plate windows down its length',
+      'NO-VEHICLE — a pedestrian street focus, minifigs crossing the tile crosswalk mid-stride, no vehicle in frame',
+      'NO-VEHICLE — a market-stall focus, the awninged stalls and crates the whole subject, mid-market-rush',
+      'A police cruiser, black-and-white brick bodywork, light-bar of trans-red-and-blue studs, door open mid-response',
+    ],
+    instructions: `Each entry is ONE City vehicle OR a no-vehicle street focus (~50/50), 12-24 words. Brick vehicles only. NO brand logos. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_register: {
+    format: 'simple',
+    theme: `LEGO CITY REGISTER for BrickBot's lego-city path — the era/faction/theme lock, ~85% iconic LEGO City heritage + ~15% Modular-Buildings AFOL. Each entry 12-24 words.
+
+VARIETY — ~85% City heritage: LEGO City Fire / City Police / City Construction / City Harbor / Octan fuel / City Square / City Hospital / City Transit / City Airport-adjacent / classic Town heritage. ~15%: Modular Buildings AFOL register (ornate Café Corner / Green Grocer / Assembly Square detailed brickwork).
+
+BANS: NEVER Star Wars / Harry Potter / hard-SF; NO real brand logos.`,
+    touchpoints: [
+      'LEGO City Fire register — classic red-and-white fire-service livery, the modern City Fire theme',
+      'LEGO City Police register — black-white-and-blue City Police theme, modern precinct look',
+      'LEGO City Construction register — yellow-and-black hazard-striped construction theme',
+      'LEGO City Harbor register — the dockside/coast-guard City Harbor theme in blue and white',
+      'Octan fuel register — the classic Octan green-white-and-red City service branding, generic',
+      'Modular Buildings AFOL register — ornate Café-Corner / Assembly-Square detailed brickwork, collector-grade facades',
+      'Classic LEGO Town heritage register — retro 1980s-90s Town look, simpler bright bricks',
+    ],
+    instructions: `Each entry is ONE register lock, 12-24 words, ~85% City heritage / ~15% Modular AFOL. NEVER Star Wars/hard-SF, NO brand logos. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_scene_props: {
+    format: 'simple',
+    theme: `LEGO CITY SCENE PROPS for BrickBot's lego-city path — small diorama fill details (this axis picks TWO per render). Each entry 10-22 words: one brick-built prop.
+
+VARIETY — traffic cones + barriers / hydrant + hose-reel / market crates + awning / brick street-food cart / trans-clear traffic light / bus-stop shelter / brick pigeon or dog minifig-pet / lamp-post + banner / newspaper box + bin / potted plant-element trees / manhole tile + puddle-trans-plate / mailbox + bench.
+
+BANS: NO real brand logos or readable text; brick parts only.`,
+    touchpoints: [
+      'A cluster of orange brick traffic cones and a hazard-striped barrier across the lane',
+      'A red brick hydrant with a coiled hose-reel beside it on the studded sidewalk',
+      'Stacked market crates of brick-fruit under a striped plate awning',
+      'A trans-clear traffic light on a brick post glowing red over the crossing',
+      'A brick bus-stop shelter with a trans-plate roof and a tiny timetable tile',
+      'A plant-element street tree in a tile planter box beside a plate bench',
+      'A brick pigeon-bird and a minifig-dog on a leash at the curb',
+    ],
+    instructions: `Each entry is ONE brick city prop, 10-22 words. NO brand logos/text, brick parts only. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_lighting: {
+    format: 'simple',
+    theme: `LEGO CITY LIGHTING for BrickBot's lego-city path — the light/time-of-day (axis-clean: light only, no scene/camera). Each entry 12-24 words.
+
+VARIETY — bright clean midday toy-photography light; warm golden-hour raking down the street; blue-hour dusk with lit brick interiors glowing; overcast soft even; night street lit by lamp-post trans-studs + window light; dawn low warm; dramatic side-light casting long minifig shadows; wet-look after-rain sheen on the road-plates.
+
+BANS: light only; no scene content, no camera terms.`,
+    touchpoints: [
+      'Bright clean midday toy-photography light, crisp and even across the diorama',
+      'Warm golden-hour light raking low down the modular street, long shadows on the road-plates',
+      'Blue-hour dusk, the sky deep blue, lit brick interiors and window-lights glowing warm',
+      'Soft overcast light, even and shadowless, colours calm and clean',
+      'Night street lit by lamp-post trans-clear studs and glowing shop windows against the dark',
+      'Low warm dawn light just catching the rooftops, the street still in cool shadow',
+      'Dramatic hard side-light casting long minifig shadows across the studded plaza',
+    ],
+    instructions: `Each entry is ONE lighting/time-of-day, 12-24 words, light only. No scene/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_palette: {
+    format: 'simple',
+    theme: `LEGO CITY PALETTE for BrickBot's lego-city path — the color story (axis-clean: color only). Each entry 12-24 words.
+
+VARIETY — City-Fire red-white-and-silver; City-Police black-white-and-trans-blue; Construction yellow-black-and-grey; Harbor blue-white-and-sand; bright primary Town mix; muted urban greys with pops of trans-color; warm brick-brown-and-tan Modular; Octan green-white-and-red.
+
+BANS: color/material palette only; no scene, no lighting-time.`,
+    touchpoints: [
+      'City-Fire palette — bright red, white and silver, with trans-clear and trans-red accents',
+      'City-Police palette — black, white and trans-blue, cool and high-contrast',
+      'Construction palette — safety yellow, black hazard-stripe and concrete grey',
+      'Harbor palette — deep blue, white and sandy tan, with trans-blue water studs',
+      'Bright primary Town palette — red, yellow, blue and green bricks in a cheerful mix',
+      'Muted urban grey palette — greys and browns with sharp pops of trans-color signage',
+      'Warm Modular palette — brick-brown, tan and cream ornate facades with green trim',
+    ],
+    instructions: `Each entry is ONE palette, 12-24 words, color only. No scene/lighting. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_city_city_event: {
+    format: 'simple',
+    theme: `LEGO CITY EVENT for BrickBot's lego-city path — a gated (~50%) environmental drama moment. Each entry 15-30 words: brick-parts + visual impact.
+
+VARIETY — fireworks over city hall (trans-stud bursts); a burst hydrant spraying a trans-blue stud fountain; a crane load swinging mid-air; a parade banner-and-confetti (small round plates); a power-flicker with one lit block; steam venting from a brick manhole; market balloons (trans studs on strings); a helicopter minifig-craft passing over.
+
+BANS: environmental EVENT only; no lighting-color-cast, no minifig-reaction language.`,
+    touchpoints: [
+      'FIREWORKS OVER CITY HALL — trans-color stud bursts blooming in the night sky above the brick city-hall dome',
+      'BURST HYDRANT — a fountain of trans-blue studs jetting up from a knocked hydrant, spreading a plate-puddle across the road',
+      'CRANE LOAD MID-SWING — a heavy brick load swinging out over the site on the crane cable, casting a shadow on the plaza',
+      'PARADE CONFETTI — a shower of small round-plate confetti drifting over a banner-strung street, festive brick bunting',
+      'MANHOLE STEAM — a plume of white steam venting up from a brick manhole-tile in the middle of the street',
+      'MARKET BALLOONS — a bunch of trans-color stud balloons on brick strings bobbing above the market stalls',
+      'HELICOPTER PASS — a brick city helicopter passing low over the rooftops, rotor a clear-plate blur',
+    ],
+    instructions: `Each entry is ONE environmental event, 15-30 words, brick-parts + impact. Event only; no lighting-cast, no minifig reactions. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // lego-trains (Stage B2, SHADOW) — LEGO trains through all-brick worlds.
+  // Bespoke rail stack: train_consist / trackwork(MONEY) / route_biome /
+  // station_life / camera_framing(MANDATORY) / build_technique / lighting /
+  // palette + gated rail_event. Unmistakably BRICK (studded rolling stock,
+  // brick terrain) — NEVER HO-scale model-railroad realism. Never Star Wars.
+  // ─────────────────────────────────────────────────────────────────────────
+  brickbot_lego_trains_train_consist: {
+    format: 'simple',
+    theme: `LEGO TRAIN CONSIST for BrickBot's lego-trains path — the HERO: the locomotive era + its cars, the star of the scene. Each entry 18-34 words: engine type + consist. Unmistakably a BRICK-BUILT train (visible studs on the rolling stock, plate-and-brick bodywork), NEVER HO-scale/model-railroad realism.
+
+VARIETY MANDATE — distribute across eras/types: chunky classic City diesel + freight cars; a green Emerald-Night-style steam express with tender + passenger coaches; a bright cargo train with hopper + tanker + flatbed-crate wagons; a sleek modern high-speed passenger set; a little industrial shunter + short cut of wagons; a red-and-yellow classic Town train; a snow-plow engine; a maintenance/crane wagon consist.
+
+BANS: NO real railway brand names; NO readable text; brick-built rolling stock only (studs visible).`,
+    touchpoints: [
+      'A chunky classic LEGO City diesel locomotive in blue and yellow, hauling a short cut of brick freight wagons, studs visible along every roof',
+      'A green Emerald-Night-style steam express, brass-trimmed boiler and a coal tender, pulling ornate passenger coaches with trans-plate windows',
+      'A bright cargo train — a boxy engine hauling a hopper wagon, a tanker barrel-wagon and a flatbed stacked with brick crates',
+      'A sleek modern high-speed passenger set, smooth sloped-brick nose and a ribbon of trans-plate windows down the studded carriages',
+      'A stubby industrial shunter engine nudging two short wagons along a yard siding, buffers and couplings all brick parts',
+      'A red-and-yellow classic Town train, simple bright bricks, a boxy loco and a single passenger car, retro 1980s LEGO charm',
+      'A rugged snow-plow engine, a brick plow-wedge bolted to the front, pushing through drifts on a mountain line',
+    ],
+    instructions: `Each entry is ONE locomotive + consist, 18-34 words. Brick-built rolling stock (studs visible), NEVER HO-scale realism. NO real brand names/text. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_trackwork: {
+    format: 'simple',
+    theme: `LEGO TRAIN TRACKWORK for BrickBot's lego-trains path — the MONEY-SHOT: the show-stopping brick-built track structure the train is crossing. Each entry 16-30 words. This is the axis that makes the MOC jaw-dropping.
+
+VARIETY MANDATE — a towering studded stone-brick viaduct over a valley; a sweeping horseshoe curve hugging a mountainside; a brick drawbridge/bascule raised over a trans-blue channel; a spiral helix climbing a brick mountain; a busy yard-ladder of points and sidings; a girder truss-bridge over a gorge; a level-crossing with brick gates; a tunnel mouth cut into a brick cliff.
+
+BANS: brick-built track structures only (studded stone-brick, plate decking); anti-photoreal — no real stone/steel. NO camera terms.`,
+    touchpoints: [
+      'A towering studded stone-brick viaduct striding across a valley on tall arched piers, the train threading its parapet high above the ground',
+      'A sweeping horseshoe curve of track hugging a stepped brick mountainside, the whole consist bending through the bend in one shot',
+      'A brick bascule drawbridge raised mid-lift over a trans-blue-stud channel, the track split and canted as a boat passes below',
+      'A spiral helix of track climbing a brick mountain in stacked loops, the line crossing over itself on plate-decked ledges',
+      'A busy classification yard-ladder, a fan of points and sidings in studded track spreading between the platforms',
+      'A grey girder truss-bridge of brick beams spanning a rocky gorge, the train crossing between the lattice sides',
+      'A tunnel mouth cut into a sheer brick cliff, arched stone-brick portal, the track vanishing into the dark rock',
+    ],
+    instructions: `Each entry is ONE brick trackwork structure (money-shot), 16-30 words. Brick parts only, anti-photoreal. NO camera terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_route_biome: {
+    format: 'simple',
+    theme: `LEGO TRAIN ROUTE BIOME for BrickBot's lego-trains path — the all-brick landscape the line runs through (scenery only). Each entry 16-30 words. Every natural element is a BRICK PART (slope-brick hills, plant-element trees, trans-plate water), never real terrain.
+
+VARIETY MANDATE — an alpine mountain pass of grey slope-brick peaks; a green rolling countryside of plate-fields and brick hedgerows; a pine forest of plant-element conifers; a coastal cliff line above a trans-blue-stud sea; a desert of tan-slope dunes and brick cacti; a snowy white-brick winterscape; a river valley with a plate-water river; an industrial edge-of-town with brick warehouses.
+
+BANS: scenery only (no train, no minifigs, no camera); anti-photoreal brick terrain only.`,
+    touchpoints: [
+      'An alpine pass of grey slope-brick peaks and snow-tile caps, the line clinging to a shelf cut into the brick mountainside',
+      'Green rolling countryside of plate-fields in patchwork greens, brick hedgerows and plant-element trees dotting the hills',
+      'A dense pine forest of tall plant-element conifers crowding a brick cutting, the track a corridor through the green',
+      'A coastal cliff line of tan slope-brick above a trans-blue-stud sea, the track running the clifftop edge',
+      'A tan desert of sloped brick dunes and little brick cacti, heat-shimmer over the studded sand-plates',
+      'A white-brick winterscape, snow-plate drifts banked against the track, frosted plant-element trees under a pale sky',
+      'A river valley with a broad trans-blue plate-water river, brick banks and a plate-arched road bridge in the distance',
+    ],
+    instructions: `Each entry is ONE brick route biome (scenery only), 16-30 words. Anti-photoreal brick terrain. No train/minifigs/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_station_life: {
+    format: 'simple',
+    theme: `LEGO TRAIN STATION LIFE for BrickBot's lego-trains path — the verb-led minifig platform/crossing story beat. Each entry 15-28 words OPENING with a mid-X verb (story-tension in every entry). Minifigs only (tiny LEGO figures), never real humans.
+
+VARIETY MANDATE — mid-boarding a coach / mid-wave from the platform / mid-loading brick freight / mid-crossing as gates drop / mid-signal (a signaller minifig throwing a lever) / mid-luggage-cart push / mid-conductor-checking-watch / mid-photo of the passing express / mid-repair on the track. Vary poses (reaching, leaning, running, carrying, pointing) — never all standing front-facing.
+
+BANS: NO real humans; NO camera terms; the TRAIN is not the subject here (minifig beat only).`,
+    touchpoints: [
+      'Mid-boarding — a passenger minifig stepping up into a coach doorway, suitcase in hand, another leaning out to help from inside',
+      'Mid-load — two dockhand minifigs swinging a brick crate up onto a flatbed wagon, backs bent mid-lift on the studded platform',
+      'Mid-crossing — a minifig cyclist braking as the brick crossing-gates drop, red trans-studs flashing, the express approaching',
+      'Mid-signal — a signaller minifig leaning hard on a brick lever in the signal box, throwing the points for the incoming train',
+      'Mid-wave — a small minifig on the platform waving up at a passenger leaning from a carriage window as the train pulls out',
+      'Mid-push — a porter minifig shoving a brick luggage-cart stacked with cases along the platform edge',
+      'Mid-check — a conductor minifig frozen mid-stride glancing at a pocket-watch tile, whistle raised, coach doors closing behind',
+    ],
+    instructions: `Each entry is ONE mid-X minifig station beat, 15-28 words, OPENING with a mid-verb, story-tension. Vary poses. Minifigs only. NO real humans, NO camera terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_camera_framing: {
+    format: 'simple',
+    theme: `LEGO TRAIN CAMERA FRAMING for BrickBot's lego-trains path — the MANDATORY DRIVING framing (rail-specific, drives the composition, overrides Flux's centered-front-facing default). Each entry 14-24 words: a specific rail angle.
+
+VARIETY MANDATE — low trackside as the train thunders past (3/4 nose) / high sweeping aerial along the viaduct / down-the-rails vanishing-point telephoto / over-the-engineer's-shoulder from the cab / platform-level along the coaches / low worm's-eye under the bridge looking up / across-the-valley long shot of the whole viaduct / tunnel-mouth framing the emerging engine.
+
+BANS: NO generic "medium shot / wide shot" without rail anchoring; every entry references the train/track. NEVER "one clear focal figure".`,
+    touchpoints: [
+      "LOW TRACKSIDE PASS — camera down at rail level as the locomotive thunders past in three-quarter view, wagons receding behind",
+      'HIGH AERIAL ALONG THE VIADUCT — sweeping down the length of the brick viaduct, the train a ribbon crossing the arches',
+      'DOWN-THE-RAILS TELEPHOTO — compressed vanishing-point shot straight down the studded track toward the approaching engine',
+      "OVER-THE-ENGINEER'S-SHOULDER — from inside the brick cab looking forward down the line over the boiler",
+      'ACROSS-THE-VALLEY LONG SHOT — the whole viaduct and train framed small against the brick mountains, an epic establishing view',
+      "WORM'S-EYE UNDER THE BRIDGE — camera below the truss looking up as the train crosses the girders overhead",
+      'PLATFORM-LEVEL ALONG THE COACHES — camera at platform height running the line of carriage doors as passengers board',
+    ],
+    instructions: `Each entry is ONE mandatory rail camera framing, 14-24 words, rail-anchored. NO generic terms, NEVER "one clear focal figure". Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_build_technique: {
+    format: 'simple',
+    theme: `LEGO TRAIN BUILD TECHNIQUE for BrickBot's lego-trains path — the MOC construction distinguisher that makes it read as an expert brick railway build. Each entry 15-30 words.
+
+VARIETY MANDATE — studded track on plate-built sleepers + ballast-tile bed; SNOT-smooth loco bodywork with sloped nose; brick-built valve-gear and connecting rods on the driving wheels; ornate stone-brick viaduct arches; greebled cab interiors + boiler detail; trans-plate carriage windows in brick frames; plant-element and slope-brick scenery integrated with the line; parts-built signals, gates and lamps.
+
+BANS: anti-photoreal — track/stone/water are all BRICK PARTS (studded rails / stone-brick / trans-plates), never real materials. NO camera terms.`,
+    touchpoints: [
+      'Studded LEGO track on plate-built sleepers set in a ballast-tile bed, the rails clearly brick elements not model-railway metal',
+      'A SNOT-smooth locomotive body with a sloped-brick nose and tile-clad flanks, hiding the studs for a sleek express look',
+      'Brick-built valve-gear and connecting rods linking the driving wheels, Technic pins giving the steam engine real mechanism',
+      'Ornate stone-brick viaduct arches, each pier stepped and textured with masonry-profile bricks and cheese-slope coping',
+      'A greebled cab interior — brick throttle levers, a round gauge-tile boiler face and coal piled in the tender',
+      'Trans-plate carriage windows set in neat brick frames, a ribbon of glazing running the length of each coach',
+      'Parts-built lineside signals and crossing-gates, trans-red-and-green stud lamps on brick posts beside the track',
+    ],
+    instructions: `Each entry is ONE build-technique, 15-30 words. Anti-photoreal: name track/stone/water as BRICK PARTS. NO camera terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_lighting: {
+    format: 'simple',
+    theme: `LEGO TRAIN LIGHTING for BrickBot's lego-trains path — the light/time-of-day (axis-clean: light only, no scene/camera). Each entry 12-24 words.
+
+VARIETY — bright clean midday toy-photography light; warm golden-hour raking along the coaches; blue-hour dusk with lit carriage windows and a glowing cab; misty morning haze over the valley; overcast soft even; night mail-run lit by lamp-studs and headlamp glow; low warm dawn on the mountain line; crisp cold snow-bright winter light.
+
+BANS: light only; no scene content, no camera terms.`,
+    touchpoints: [
+      'Bright clean midday toy-photography light, crisp and even along the whole train',
+      'Warm golden-hour light raking low along the coaches, long shadows thrown across the ballast',
+      'Blue-hour dusk, deep blue sky, lit carriage windows and a glowing cab firebox against the gloom',
+      'Soft misty morning haze filling the valley, the viaduct fading into pale grey depth',
+      'Soft overcast light, even and shadowless, brick colours calm and clean',
+      'Night mail-run, the line lit by lamp-post trans-studs and the loco headlamp glow on the rails',
+      'Crisp cold snow-bright winter light, hard blue shadows on the white-plate drifts',
+    ],
+    instructions: `Each entry is ONE lighting/time-of-day, 12-24 words, light only. No scene/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_palette: {
+    format: 'simple',
+    theme: `LEGO TRAIN PALETTE for BrickBot's lego-trains path — the color story (axis-clean: color only). Each entry 12-24 words.
+
+VARIETY — Emerald-Night dark-green-black-and-brass; classic City blue-yellow-and-grey; bright Town red-yellow-and-blue; cargo orange-black-and-steel-grey; alpine grey-white-and-pine-green; coastal blue-sand-and-white; autumn brown-amber-and-rust; snowy white-grey-and-trans-blue.
+
+BANS: color/material palette only; no scene, no lighting-time.`,
+    touchpoints: [
+      'Emerald-Night palette — deep bottle-green, black and polished brass, rich and ornate',
+      'Classic City palette — bright blue, yellow and grey, clean and cheerful',
+      'Bright Town palette — red, yellow and blue bricks in a simple retro mix',
+      'Cargo palette — safety orange, black and steel-grey, industrial and bold',
+      'Alpine palette — cool grey stone, white snow-tile and pine-green scenery',
+      'Autumn palette — brown, amber and rust foliage against grey stone-brick',
+      'Snowy palette — white and pale grey with trans-blue ice and cool shadow',
+    ],
+    instructions: `Each entry is ONE palette, 12-24 words, color only. No scene/lighting. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_lego_trains_rail_event: {
+    format: 'simple',
+    theme: `LEGO TRAIN RAIL EVENT for BrickBot's lego-trains path — a gated (~50%) environmental drama moment. Each entry 15-30 words: brick-parts + visual impact.
+
+VARIETY — a steam plume billowing from the funnel (white cloud-slope pieces); crossing-gates dropping with trans-red flashing studs; a mail-bag snatched on the fly at a lineside post; a signal arm swinging to clear; sparks (trans-orange studs) off the wheels on a curve; a plume of snow thrown up by the plow; a water-tower filling the tender mid-stop; a whistle-blast steam-puff at the tunnel mouth.
+
+BANS: environmental EVENT only; no lighting-color-cast, no minifig-reaction language.`,
+    touchpoints: [
+      'STEAM PLUME — a great billow of white cloud-slope steam rolling back from the funnel over the coaches',
+      'GATES DROPPING — the brick level-crossing gates swinging down, trans-red stud lamps flashing across the road',
+      'MAIL SNATCH — a mail-bag whipped off a lineside post onto the speeding train, the pouch caught mid-air',
+      'SIGNAL CLEARING — a brick semaphore signal-arm swinging up to clear, trans-green stud lamp lit for the run',
+      'WHEEL SPARKS — a shower of trans-orange stud sparks flung from the driving wheels braking into a curve',
+      'SNOW PLUME — a fan of white snow-plate spray thrown high off the plow as the engine bursts a drift',
+      'WATER STOP — the swung arm of a brick water-tower filling the tender, a trickle of trans-blue studs spilling',
+    ],
+    instructions: `Each entry is ONE environmental rail event, 15-30 words, brick-parts + impact. Event only; no lighting-cast, no minifig reactions. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // haunted-brick (Stage B3, SHADOW) — LEGO Creator Haunted-House register.
+  // Spooky-FUN brick manor, glow-ghost minifigs, jack-o-lantern stalls, full-moon
+  // bats. CUTE-spooky, NEVER horror (Scooby-Doo fun: bright accents, smiling
+  // ghosts). Standard stack + gated apparition. Keep tilt-shift (intimate/tabletop).
+  // GothBot owns REAL gothic — this stays playful. Never "nightmare before christmas".
+  // ─────────────────────────────────────────────────────────────────────────
+  brickbot_haunted_brick_scene_type: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK SCENE TYPE for BrickBot's haunted-brick path — the narrative STAGE of a spooky-FUN LEGO Halloween diorama. Each entry 20-40 words: STAGE + situation only (NO camera framing, NO minifig verbs, NO lighting). LEGO Creator Haunted House / Hidden Side tier — CUTE-spooky, playful, NEVER horror or gore.
+
+VARIETY MANDATE — crooked haunted manor exterior; a friendly-spooky graveyard-lite (rounded cartoon tombstones); a pumpkin patch with jack-o-lantern stalls; a haunted fairground/carnival; a witch's cottage; a cobwebbed clocktower; a trick-or-treat village street; a haunted-house porch mid-party.
+
+STRICT BANS: NO gore, NO real horror, NO blood, NO realistic corpses; NO real brand logos, NO text. Bright playful Halloween, smiling monsters.`,
+    touchpoints: [
+      'CROOKED HAUNTED MANOR — a tall wonky brick mansion with crooked towers and shuttered windows, cobweb-element trim, a friendly-spooky silhouette against the moon',
+      'FRIENDLY GRAVEYARD — a little brick graveyard of rounded cartoon tombstones and a crooked iron-brick fence, a smiling ghost drifting between the stones',
+      'PUMPKIN PATCH — a field of brick jack-o-lanterns and a little stall of Halloween treats, hay-bale bricks and a scarecrow minifig on a post',
+      'HAUNTED FAIRGROUND — a spooky-fun carnival, a crooked brick ghost-train ride and a wonky Ferris wheel, bunting and pumpkin-lanterns strung between',
+      "WITCH'S COTTAGE — a lopsided brick cottage with a bubbling cauldron out front, herb-element garden and a broom leaning by the crooked door",
+      'TRICK-OR-TREAT STREET — a row of little brick houses decked in Halloween decorations, carved pumpkins on every studded step, candy bowls at the doors',
+      'COBWEBBED CLOCKTOWER — a leaning brick clocktower wrapped in cobweb-elements, bats circling the cracked clock-face, a spooky-fun landmark',
+    ],
+    instructions: `Each entry is ONE spooky-FUN Halloween stage, 20-40 words. STAGE only. NO camera terms, NO minifig verbs, NO lighting, NO gore/horror, NO brand logos/text. FORMAT (MANDATORY — match the examples exactly): EVERY entry MUST open with a SHORT ALL-CAPS SUBJECT NAME, then " — " (space-emdash-space), then the description. E.g. "HAUNTED SCHOOLHOUSE — a wonky little brick schoolhouse…". Never a plain sentence without the caps header. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_minifig_action: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK MINIFIG ACTION for BrickBot's haunted-brick path — the verb-led spooky-FUN story beat. Each entry 15-30 words OPENING with a mid-X verb (story-tension). Minifigs only (tiny LEGO figures incl. friendly monster minifigs — smiling ghost, vampire, witch, skeleton), never real humans, never scary/gore.
+
+VARIETY MANDATE — mid-trick-or-treat / mid-pumpkin-carve / mid-ghost-chase (playful) / mid-broom-flight / mid-cauldron-stir / mid-candy-grab / mid-spooked-jump (comic fright) / mid-decorating / mid-hayride. Vary poses (reaching, running, leaning, floating, carrying) — never all standing front-facing.
+
+BANS: NO real humans; NO camera terms; NO gore/genuine horror — comic spookiness only (wide eyes, smiles).`,
+    touchpoints: [
+      'Mid-trick-or-treat — a costumed kid minifig reaching up with a candy-bucket to a witch minifig leaning out the crooked cottage door',
+      'Mid-carve — a minifig kneeling over a big brick pumpkin mid-carve, a toothy grin already cut, scooped brick-pulp piled beside',
+      'Mid-ghost-chase — a smiling trans-white ghost minifig floating after two giggling kid minifigs who scramble away across the studded lawn',
+      'Mid-stir — a green witch minifig leaning over a bubbling brick cauldron stirring with a broom, trans-green trans-stud bubbles rising',
+      'Mid-jump — a minifig comically leaping back with wide printed eyes as a friendly skeleton minifig pops up from behind a tombstone',
+      'Mid-decorate — a minifig on a brick ladder stringing pumpkin-lanterns along the crooked manor porch, another handing bats up',
+      'Mid-broom-flight — a witch minifig perched on a brick broomstick swooping low over the pumpkin patch, cape trailing',
+    ],
+    instructions: `Each entry is ONE mid-X spooky-fun minifig beat, 15-30 words, OPENING with a mid-verb, story-tension. Vary poses. Minifigs (incl. friendly monsters) only. NO real humans, NO camera terms, NO gore. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_build_technique: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK BUILD TECHNIQUE for BrickBot's haunted-brick path — the MOC construction distinguisher that makes it read as an expert LEGO Creator Haunted-House build. Each entry 15-30 words.
+
+VARIETY MANDATE — deliberately crooked/warped brick walls (SNOT-tilted sections); cobweb-elements strung in corners; glow-in-dark and trans-neon-green window glazing; brick-built gnarled trees with bare plant-element branches; jack-o-lantern brick heads with trans-orange glow bricks inside; crooked picket-fence brick sections; greebled cobweb-and-candle detailing; removable manor roof revealing lit spooky interior.
+
+BANS: anti-photoreal — everything is BRICK PARTS (crooked brick walls, trans-plate windows, plant-element trees), never real materials. NO camera terms. NO gore.`,
+    touchpoints: [
+      'Deliberately crooked SNOT-tilted brick walls leaning at wonky angles, the whole manor built off-kilter for a friendly-spooky look',
+      'Cobweb-elements strung across every corner and eave, trans-white spider-web pieces catching the light',
+      'Trans-neon-green and glow-in-dark window glazing set in crooked brick frames, an eerie playful glow from within',
+      'Brick-built gnarled trees with bare plant-element branches clawing at the sky, a friendly bat-piece perched on a limb',
+      'Jack-o-lantern brick heads with trans-orange glow-bricks glowing inside the carved grins, lined along the studded wall',
+      'Crooked brick picket-fence sections leaning every which way, a rusty-brown iron-brick gate hanging off its hinge',
+      'A removable manor roof lifting to reveal a lit brick interior — cobwebbed staircase, candle-tiles, a cozy spooky den',
+    ],
+    instructions: `Each entry is ONE build-technique, 15-30 words. Anti-photoreal: everything BRICK PARTS. NO camera terms, NO gore. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_camera_framing: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK CAMERA FRAMING for BrickBot's haunted-brick path — the MANDATORY DRIVING framing (haunt-specific, drives composition, overrides Flux's centered-front-facing default). Each entry 14-24 words: a specific angle. Keep it intimate/tabletop (this path KEEPS tilt-shift, no wide deep-focus).
+
+VARIETY MANDATE — low up-at-the-crooked-manor against the moon / over-a-tombstone-shoulder into the graveyard / through-the-crooked-doorway into the lit interior / down-onto the pumpkin-patch from above / worm's-eye up the gnarled tree / porch-level along the trick-or-treaters / peeking-through-cobwebs at the scene / close-in on the cauldron.
+
+BANS: NO generic "medium shot / wide shot" without haunt anchoring; every entry references the spooky scene. NEVER "one clear focal figure".`,
+    touchpoints: [
+      'LOW UP-AT-THE-MANOR — camera at lawn-level looking up the crooked brick mansion silhouetted against a big brick moon',
+      'OVER-A-TOMBSTONE-SHOULDER — framed past a rounded brick tombstone into the graveyard where a ghost minifig drifts',
+      'THROUGH-THE-CROOKED-DOORWAY — camera outside looking in through the wonky manor door at the lit cobwebbed interior',
+      'DOWN-ONTO-THE-PUMPKIN-PATCH — top-down over the field of brick jack-o-lanterns laid out in glowing rows',
+      "WORM'S-EYE UP THE GNARLED TREE — from the roots looking up the bare brick branches, bats and moon above",
+      'PORCH-LEVEL TRICK-OR-TREAT — camera low along the studded porch steps as costumed minifigs line up at the door',
+      'PEEKING-THROUGH-COBWEBS — framed past trans-white cobweb-elements in the foreground into the spooky scene beyond',
+    ],
+    instructions: `Each entry is ONE mandatory haunt camera framing, 14-24 words, haunt-anchored. NO generic terms, NEVER "one clear focal figure". Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_subject_focus: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK SUBJECT FOCUS for BrickBot's haunted-brick path — the hero the frame is built around: a haunted STRUCTURE, OR a no-structure focus (graveyard/patch/prop cluster). Each entry 12-24 words.
+
+VARIETY — ~55% a haunted structure (crooked manor / witch's cottage / ghost-train ride / cobwebbed clocktower / haunted mill); ~45% no-structure: a pumpkin-patch focus / graveyard focus / cauldron-and-witch focus / trick-or-treat-crowd focus (each with implied spooky-fun tension).
+
+BANS: brick-built only (visible studs); NO gore/horror; NO real brand logos.`,
+    touchpoints: [
+      'The crooked haunted manor as hero — the whole wonky brick mansion filling the frame, towers and cobwebs and glowing windows',
+      "A witch's brick cottage as hero — lopsided walls, a smoking chimney and a cauldron out front, the star of the shot",
+      'A brick ghost-train fairground ride as hero — the crooked tunnel-mouth and painted-brick spooks, the whole ride the subject',
+      'NO-STRUCTURE — a pumpkin-patch focus, rows of glowing brick jack-o-lanterns the whole subject, no building in frame',
+      'NO-STRUCTURE — a graveyard focus, cartoon brick tombstones and a drifting ghost minifig the subject, mid-haunt',
+      'NO-STRUCTURE — a cauldron-and-witch focus, the bubbling brick cauldron and green witch minifig filling the frame',
+      'A cobwebbed brick clocktower as hero — the leaning tower wrapped in webs, bats circling the cracked face',
+    ],
+    instructions: `Each entry is ONE haunted structure OR a no-structure focus (~55/45), 12-24 words. Brick only. NO gore, NO brand logos. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_register: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK REGISTER for BrickBot's haunted-brick path — the theme/heritage lock, iconic playful-LEGO Halloween. Each entry 12-24 words.
+
+VARIETY — LEGO Creator Haunted House (10273) fairground-spooky register; Hidden Side augmented-ghost playful register; Monster Fighters cartoon-monster register; classic LEGO Halloween seasonal (BrickHeadz pumpkin/witch) register; Scooby-Doo-style cartoon-haunt register (bright, comic, NEVER scary).
+
+BANS: CUTE-spooky ONLY — NEVER real gothic horror (GothBot owns that), NEVER gore; NO real brand logos; ABSOLUTELY NEVER reference "nightmare before christmas".`,
+    touchpoints: [
+      'LEGO Creator Haunted House (10273) register — the fairground ghost-train spooky-fun look, crooked and cheerful',
+      'Hidden Side register — playful augmented-ghost Halloween, bright colors and friendly cartoon spooks',
+      'Monster Fighters register — cartoon-monster theme, smiling vampires and skeletons, comic-book spooky',
+      'Classic LEGO Halloween seasonal register — pumpkins, witches and bats in bright bricks, cheerful holiday spook',
+      'Scooby-Doo cartoon-haunt register — comic haunted-mansion vibes, goofy not scary, bright and fun',
+      'BrickHeadz-style chunky Halloween register — big-headed friendly witch and pumpkin characters, toy-cute',
+      'Playful trick-or-treat register — a wholesome neighborhood-Halloween look, decorated brick houses, candy and costumes',
+    ],
+    instructions: `Each entry is ONE register lock, 12-24 words, playful LEGO Halloween. NEVER gothic-horror/gore, NEVER "nightmare before christmas", NO brand logos. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_scene_props: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK SCENE PROPS for BrickBot's haunted-brick path — small diorama fill details (picks TWO per render). Each entry 10-22 words: one brick-built spooky-fun prop.
+
+VARIETY — a carved brick jack-o-lantern with glow-brick / a cobweb-element in a corner / a rounded cartoon tombstone / a bubbling brick cauldron / a candy bowl of trans-stud sweets / a brick bat on a wire / a scarecrow minifig / a broomstick leaning / a candle-tile flicker / a black-cat minifig-pet / hay-bale bricks / a string of pumpkin-lanterns.
+
+BANS: NO gore/horror props; NO real brand logos or readable text; brick parts only; playful only.`,
+    touchpoints: [
+      'A carved brick jack-o-lantern with a trans-orange glow-brick grinning inside',
+      'A trans-white cobweb-element strung across a crooked corner with a friendly brick spider',
+      'A rounded cartoon brick tombstone tilting in the studded lawn',
+      'A bubbling brick cauldron with trans-green trans-stud bubbles rising off the top',
+      'A brick candy bowl heaped with trans-color stud sweets on the porch step',
+      'A black-cat minifig-pet arching its back on a brick garden wall',
+      'A string of little pumpkin-lanterns swagged between two crooked brick posts',
+    ],
+    instructions: `Each entry is ONE brick spooky-fun prop, 10-22 words. NO gore, NO brand logos/text, brick parts only. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_lighting: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK LIGHTING for BrickBot's haunted-brick path — the light/time-of-day (axis-clean: light only, no scene/camera). Each entry 12-24 words. Spooky-FUN, never grim.
+
+VARIETY — big full-moon blue night with warm window-glow; jack-o-lantern trans-orange glow lighting the scene; eerie playful trans-green witch-light; warm golden dusk on Halloween evening; misty low ground-fog with backlight; candle-tile warm flicker; cool moonlit silver with long friendly shadows; party-lantern warm strings of light.
+
+BANS: light only; no scene content, no camera terms; keep it PLAYFUL not grim.`,
+    touchpoints: [
+      'Big full-moon blue night, a huge brick moon behind the manor, warm glowing windows below',
+      'Jack-o-lantern glow, trans-orange light spilling up from carved pumpkins across the studded scene',
+      'Eerie playful trans-green witch-light casting a fun spooky glow over the cauldron',
+      'Warm golden Halloween dusk, the last orange light raking low across the pumpkin patch',
+      'Misty low ground-fog lit from behind, friendly silhouettes glowing in the haze',
+      'Warm candle-tile flicker inside the manor, cozy amber light through crooked windows',
+      'Cool silver moonlight, long playful minifig shadows stretched across the lawn',
+    ],
+    instructions: `Each entry is ONE lighting/time-of-day, 12-24 words, light only, playful. No scene/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_palette: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK PALETTE for BrickBot's haunted-brick path — the color story (axis-clean: color only). Each entry 12-24 words. Bright playful Halloween, never muddy-grim.
+
+VARIETY — classic Halloween orange-black-and-purple; witch green-black-and-trans-green; moonlit blue-silver-and-warm-window-amber; pumpkin-orange-and-warm-brown; spooky-purple-and-trans-neon-green; candy-bright multicolor trick-or-treat; misty grey-blue with trans-orange pops; cobweb-white-and-charcoal with bright accents.
+
+BANS: color/material palette only; no scene, no lighting-time; keep it BRIGHT and playful.`,
+    touchpoints: [
+      'Classic Halloween palette — bright pumpkin-orange, black and royal purple, cheerful and spooky',
+      'Witch palette — bright green, black and trans-green glow, playful and vivid',
+      'Moonlit palette — cool blue and silver with warm amber window-glow accents',
+      'Pumpkin palette — warm orange and brown with black-brick trim, cozy autumn',
+      'Spooky-neon palette — deep purple with trans-neon-green and trans-orange pops',
+      'Candy-bright palette — a multicolor trick-or-treat mix of cheerful bright bricks',
+      'Cobweb palette — cobweb-white and charcoal grey lifted by bright orange accents',
+    ],
+    instructions: `Each entry is ONE palette, 12-24 words, color only, bright/playful. No scene/lighting. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_haunted_brick_apparition: {
+    format: 'simple',
+    theme: `HAUNTED-BRICK APPARITION for BrickBot's haunted-brick path — a gated (~50%) spooky-FUN supernatural moment rendered in brick/trans elements. Each entry 15-30 words: brick-parts + playful visual impact. NEVER scary/gore — smiling friendly spooks.
+
+VARIETY — a trans-white smiling ghost minifig drifting up from a tombstone; glow-in-dark elements pulsing in the dark; a swarm of brick bats lifting off the tower; trans-green cauldron-smoke curling into a friendly face; a glowing jack-o-lantern grin flaring bright; a ghostly trans-plate figure floating a window; will-o-wisp trans-stud lights bobbing over the patch; a comic BOO puff of trans-white parts.
+
+BANS: apparition EVENT only; PLAYFUL not scary; no lighting-color-cast, no minifig-reaction language.`,
+    touchpoints: [
+      'FRIENDLY GHOST — a smiling trans-white ghost minifig drifting up out of a tombstone, arms raised in a comic boo',
+      'GLOW PULSE — glow-in-dark brick elements across the manor pulsing bright against the night',
+      'BAT SWARM — a cloud of little brick bats lifting off the clocktower in a friendly flurry',
+      'CAULDRON SMOKE — trans-green trans-stud smoke curling up from the cauldron into a goofy grinning face',
+      'PUMPKIN FLARE — a carved brick jack-o-lantern grin flaring bright trans-orange, lighting the porch',
+      'WINDOW GHOST — a trans-plate ghostly figure floating past a crooked lit window, waving',
+      'WILL-O-WISPS — a bobbing trail of trans-stud wisp-lights drifting over the dark pumpkin patch',
+    ],
+    instructions: `Each entry is ONE playful apparition event, 15-30 words, brick/trans parts + fun impact. Event only; PLAYFUL not scary; no lighting-cast, no minifig reactions. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // micro-skyline (Stage B4, SHADOW) — LEGO Architecture Skylines microscale.
+  // Whole city skylines / famous-city silhouettes / harbor panoramas at micro-
+  // build scale (1 stud = a building floor). LEAN landscape shape: NO minifigs,
+  // NO register (a skyline has no faction). Keep tilt-shift (micro = model-on-a-
+  // table = right). Anti-photoreal: every element a BRICK PART. NEVER real cities
+  // by name / no real logos / no text.
+  // ─────────────────────────────────────────────────────────────────────────
+  brickbot_micro_skyline_skyline_subject: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE SUBJECT for BrickBot's micro-skyline path — the HERO: the microscale city/skyline the build depicts (1 stud = a building floor). Each entry 20-38 words: the skyline type + geography/silhouette. NO minifigs (they'd break the scale). Generic invented skylines, NEVER named real cities.
+
+VARIETY MANDATE — a dense downtown high-rise cluster; a harbor waterfront skyline with a signature tower; a hillside city cascading down to a bay; a river city split by a micro-bridge; a spread of famous-silhouette landmarks (invented tower / dome / spire / arch); a desert boomtown of stepped towers; a coastal resort skyline; a twin-tower financial district; a cathedral-and-old-town micro silhouette; a futuristic spire cluster.
+
+STRICT BANS: NO minifigs (scale-breaking); NO real city names, NO real landmark names, NO real brand logos, NO text.`,
+    touchpoints: [
+      'A dense downtown cluster of microscale skyscrapers packed shoulder to shoulder, a signature tallest spire rising off-center above the pack',
+      'A harbor waterfront skyline, a row of micro high-rises along a trans-blue-stud bay with a single landmark tower anchoring the view',
+      'A hillside city cascading in micro-tiers down a slope to a little bay, stepped rooflines climbing the brick hillside',
+      'A river city split by a trans-blue-stud river and a micro arch-bridge, low old-town on one bank, tall towers on the other',
+      'A cluster of famous-silhouette micro landmarks — an invented spire, a domed hall and a stepped ziggurat tower grouped like a postcard',
+      'A twin-tower financial district, two matched micro skyscrapers rising above a tight grid of smaller brick blocks',
+      'A cathedral-and-old-town micro silhouette, a tall spired hall over a huddle of little pitched-roof brick buildings',
+    ],
+    instructions: `Each entry is ONE microscale skyline subject, 20-38 words. NO minifigs, NO real city/landmark names, NO logos/text. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_micro_technique: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE TECHNIQUE for BrickBot's micro-skyline path — the MONEY-SHOT: the microscale build cleverness that makes it read as an expert LEGO Architecture skyline. Each entry 15-30 words. This axis is the wow.
+
+VARIETY MANDATE — 1×1-plate and cheese-slope windows tiling the towers; SNOT-built textured facades in micro; cheese-slope and tile roofs; trans-blue plates for rivers/bays; jumper-plate half-offset streets; 1×1-round-plate domes and antenna spires; grille-tile and profile-brick architectural detailing; forced-perspective depth with smaller builds behind.
+
+BANS: anti-photoreal — every element is a BRICK PART (1×1 plates, cheese-slopes, tiles, trans-plates), never real glass/stone/water. NO camera terms. NO minifigs.`,
+    touchpoints: [
+      'Micro tower facades tiled with 1×1 plates and cheese-slopes as windows, whole skyscrapers built stud-by-stud in miniature',
+      'SNOT-built textured micro facades, sideways bricks giving the little towers crisp architectural relief',
+      'Cheese-slope and tile roofs stepping across the micro rooftops, each building capped with clever slope-work',
+      'A trans-blue-plate river winding between the blocks, the water a single sweep of translucent plates',
+      'Jumper-plate half-offset streets threading the micro grid, giving the tiny blocks realistic spacing',
+      '1×1-round-plate domes and antenna-spire tips crowning the landmark towers, delicate micro detailing',
+      'Forced-perspective depth — smaller, simpler micro builds set behind the front row to fake a receding cityscape',
+    ],
+    instructions: `Each entry is ONE micro build-technique (money-shot), 15-30 words. Anti-photoreal brick parts only. NO camera terms, NO minifigs. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_water_or_green: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE WATER-OR-GREEN for BrickBot's micro-skyline path — the water/greenery band framing the skyline (scenery only). Each entry 14-28 words. Every element a BRICK PART.
+
+VARIETY MANDATE — a trans-blue-stud harbor with micro boats; a trans-plate river band with a micro bridge; a green micro park of plant-element trees; a waterfront promenade of tan tile; a reflecting bay of trans-clear-and-blue plates; a tree-lined micro boulevard; a rocky slope-brick coastline; a micro marina of tiny masted boats.
+
+BANS: scenery only (no towers-as-subject, no minifigs, no camera); anti-photoreal brick parts.`,
+    touchpoints: [
+      'A trans-blue-stud harbor spread across the foreground, a few micro boats the size of single plates dotting the water',
+      'A trans-plate river band curving past the towers, crossed by a slim micro arch-bridge',
+      'A green micro park of plant-element trees and plate lawns tucked between the brick blocks',
+      'A waterfront promenade of tan tile edging the trans-blue bay, micro lamp-dots along the rail',
+      'A reflecting bay of trans-clear-and-trans-blue plates mirroring the skyline above',
+      'A tree-lined micro boulevard, rows of tiny plant-element trees down a tile avenue',
+      'A rocky slope-brick coastline stepping down to a trans-blue-stud sea',
+    ],
+    instructions: `Each entry is ONE water/green band (scenery only), 14-28 words. Anti-photoreal brick parts. No towers-subject/minifigs/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_camera_framing: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE CAMERA FRAMING for BrickBot's micro-skyline path — the MANDATORY DRIVING framing (skyline-specific, drives composition). Each entry 14-24 words. Keep it a TABLETOP-MINIATURE tilt-shift feel (micro reads as a model on a table).
+
+VARIETY MANDATE — low across-the-water at the skyline (classic postcard) / high three-quarter aerial over the micro-city / straight-on elevation of the skyline row / down-the-boulevard between the towers / dramatic low worm's-eye up the tallest spire / diagonal across the grid / over-the-park toward the towers / dusk silhouette long-shot.
+
+BANS: NO generic "medium shot" without skyline anchoring; every entry references the micro-city. NEVER "one clear focal figure" (there are no figures).`,
+    touchpoints: [
+      'LOW ACROSS-THE-WATER — camera just above the trans-blue bay looking at the skyline mirrored below, classic postcard framing',
+      'HIGH THREE-QUARTER AERIAL — looking down over the micro-city at an angle, the whole grid and towers laid out',
+      'STRAIGHT-ON ELEVATION — the skyline row shot flat-on like an architectural portrait, towers stepping left to right',
+      'DOWN-THE-BOULEVARD — camera low in a micro avenue looking down the canyon of tiny towers to a vanishing point',
+      "WORM'S-EYE UP THE SPIRE — from the base looking straight up the tallest micro tower against the sky",
+      'DIAGONAL-ACROSS-THE-GRID — a raking diagonal over the blocks, long tilt-shift focus band across the city',
+      'OVER-THE-PARK — framed past the green micro park foreground toward the tower cluster behind',
+    ],
+    instructions: `Each entry is ONE mandatory skyline camera framing, 14-24 words, skyline-anchored, tabletop-tilt-shift. NO generic terms. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_lighting: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE LIGHTING for BrickBot's micro-skyline path — the light/time-of-day (axis-clean: light only, no scene/camera). Each entry 12-24 words.
+
+VARIETY — bright clean midday toy-photography light; warm golden-hour raking across the towers; blue-hour dusk with lit micro-windows glowing; dawn mist rising off the bay; overcast soft even; night skyline lit by tiny trans-stud window-lights; dramatic side-light casting long tower shadows; sunset silhouette with a glowing sky behind.
+
+BANS: light only; no scene content, no camera terms.`,
+    touchpoints: [
+      'Bright clean midday toy-photography light, crisp and even across the micro-city',
+      'Warm golden-hour light raking low across the towers, long shadows down the micro grid',
+      'Blue-hour dusk, deep blue sky, tiny lit micro-windows glowing warm across the skyline',
+      'Dawn mist rising off the trans-blue bay, the far towers softening into pale haze',
+      'Soft overcast light, even and shadowless, brick colours calm and clean',
+      'Night skyline lit by dots of trans-stud window-light against the dark, the city sparkling small',
+      'Sunset silhouette, the micro towers dark against a glowing warm-plate sky',
+    ],
+    instructions: `Each entry is ONE lighting/time-of-day, 12-24 words, light only. No scene/camera. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_palette: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE PALETTE for BrickBot's micro-skyline path — the color story (axis-clean: color only). Each entry 12-24 words.
+
+VARIETY — LEGO Architecture tan-white-and-grey monochrome; cool steel-blue-and-glass city; warm sandstone-and-terracotta old-town; sunset orange-pink-and-purple sky over dark towers; crisp white-and-trans-blue harbor; muted grey business-district with trans-color window pops; green-and-tan garden-city; night black-and-trans-yellow window-light.
+
+BANS: color/material palette only; no scene, no lighting-time.`,
+    touchpoints: [
+      'LEGO Architecture palette — tan, white and light grey monochrome, the signature Skylines collector look',
+      'Steel-city palette — cool blue-grey and trans-blue glass, sleek and modern',
+      'Old-town palette — warm sandstone, terracotta and cream, mellow and historic',
+      'Sunset-sky palette — orange, pink and purple sky behind dark silhouette towers',
+      'Harbor palette — crisp white and trans-blue water with sandy tan promenade',
+      'Business-district palette — muted greys with sharp pops of trans-color windows',
+      'Night palette — black towers speckled with trans-yellow and trans-white window-light',
+    ],
+    instructions: `Each entry is ONE palette, 12-24 words, color only. No scene/lighting. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+  brickbot_micro_skyline_sky_event: {
+    format: 'simple',
+    theme: `MICRO-SKYLINE SKY EVENT for BrickBot's micro-skyline path — a gated (~50%) environmental sky/atmosphere moment above the skyline. Each entry 15-28 words: brick-parts + visual impact. NO minifigs.
+
+VARIETY — trans-stud fireworks bursting over the towers; a micro hot-air-balloon drifting past; a brick blimp/airship crossing the sky; a flock of tiny bird-plates wheeling over the bay; low trans-white cloud-slope banks around the tallest spire; a rainbow of trans-plate arcs after rain; a micro plane trailing a plate-banner; searchlight trans-clear beams sweeping up from the city.
+
+BANS: sky/atmosphere EVENT only; no lighting-color-cast, no minifigs.`,
+    touchpoints: [
+      'FIREWORKS — trans-color stud bursts blooming in the night sky above the micro skyline',
+      'HOT-AIR-BALLOON — a little brick hot-air balloon drifting past the towers, basket a single stud',
+      'AIRSHIP — a micro brick blimp crossing slowly above the city, dwarfed by the tallest spire',
+      'BIRD-FLOCK — a scatter of tiny bird-plates wheeling over the trans-blue bay',
+      'CLOUD-BANK — low trans-white cloud-slope banks wreathing the top of the tallest micro tower',
+      'RAINBOW — a trans-plate rainbow arcing over the skyline after a shower',
+      'SEARCHLIGHTS — trans-clear searchlight beams sweeping up from between the micro towers',
+    ],
+    instructions: `Each entry is ONE sky/atmosphere event, 15-28 words, brick-parts + impact. Event only; no lighting-cast, no minifigs. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

@@ -87,6 +87,90 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  FAEBOT_GOBLIN_MARKET: {
+    description:
+      'PATH-BESPOKE — FaeBot goblin-market (Stage F1). The iconic fae NIGHT MARKET: lantern-lit stalls of impossible wares (bottled starlight, caged wisps), palm-sized fae merchants + shoppers, critter customers, market lanes under great roots. Clone of fairy-swarm crowd machinery — the shared market EVENT is the hero (≥6 figures, no single centered merchant); market_wares is the money-shot (the one impossible thing for sale). Painterly-real Froud/Vess register, full faces/hair (kodama ban), warm-lantern vs blue-dusk contrast. 6 always axes (market_event + merchant_troupe + market_setting + market_wares + critter_guests + lighting) + magical_flavor gated 0.5. In twoPassPolish.skipPaths (polish strips the crowd-composition mandate) + nudityCheck paths + promptPrefixByPath plural crowd anchor.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'market_event',
+        'merchant_troupe',
+        'market_setting',
+        'market_wares',
+        'critter_guests',
+        'lighting',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_flavor', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_GOBLIN_MARKET_STALL: {
+    description:
+      'PATH-BESPOKE — FaeBot goblin-market-stall (Stage F1 sibling). The INTIMATE vignette of the fae night market: pulled in CLOSE on ONE stall, 6-10 big winged fae (a merchant + shoppers) filling foreground + midground, the wonder-ware as hero, the rest of the market a soft glowing haze behind. Every fae large enough to render full wings + pointed ears (the fairy-swarm intimate-scale answer to the modern-human deep-crowd backfill on the grand goblin-market path). 6 always axes (stall_event + merchant_troupe + stall_setting + market_wares + critter_guests + lighting) + magical_flavor gated 0.5. Full-bespoke pools. In twoPassPolish.skipPaths + nudityCheck + promptPrefixByPath (close-crowd anchor).',
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'stall_event',
+        'merchant_troupe',
+        'stall_setting',
+        'market_wares',
+        'critter_guests',
+        'lighting',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_flavor', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_GOBLIN_MARKET_LANE: {
+    description:
+      'PATH-BESPOKE — FaeBot goblin-market-lane (Stage F1 sibling, HYBRID). A crisp FOREGROUND of 4-6 big winged fae at a near stall + the GRAND night-market lane behind them dissolved into soft warm painterly HAZE (lantern-bokeh, glowing depth, distant figures as impressionistic suggestions). Keeps goblin-market grandeur while the soft-haze depth removes the sharp modern-human crowd. 6 always axes (lane_event + lane_troupe + lane_setting + lane_wares + critter_guests + lighting) + magical_flavor gated 0.5. Covered fae garments (coverage lesson). Full-bespoke pools. In twoPassPolish.skipPaths + nudityCheck + promptPrefixByPath.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['lane_event', 'lane_troupe', 'lane_setting', 'lane_wares', 'critter_guests', 'lighting'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'magical_flavor', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_FROST_COURT: {
+    description:
+      'PATH-BESPOKE — FaeBot frost-court (Stage F2). Winter fae, ALIVE + sparkling (NOT GothBot dead frost) — ice-crystal fae in silver-birch forests, frost-lace wings, frost-flower gardens, aurora. Warm-spirited despite the cold; anti-Elsa (fae anatomy leads, no named-IP likeness). Full beautiful faces (kodama-safe), covered fae winter garb (coverage lesson). 6 always axes (frost_fae + winter_wood + frost_artistry money-shot + winter_light + candid_action + foreground_anchor) + companion gated 0.4 (winter critters). Full-bespoke. In twoPassPolish.skipPaths + nudityCheck + promptPrefixByPath.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['frost_fae', 'winter_wood', 'frost_artistry', 'winter_light', 'candid_action', 'foreground_anchor'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'companion', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  FAEBOT_SPIRIT_BEASTS: {
+    description:
+      'PATH-BESPOKE — FaeBot spirit-beasts (Stage F3). Enchanted ANIMALS as heroes (white stag w/ blossoming antlers, moss-backed bear, ember-tail fox, luminous owl). NOT beast-men. THE KODAMA LAW: real animal anatomy carries it (never anthropomorphized, never a face-graft); exactly ONE magical element per beast (restraint = believability); body-plan-anchored on real animals Flux knows. 6 always axes (spirit_beast + candid_action + beast_domain + magical_tell money-shot + lighting + weather) + witness gated 0.25 (a tiny distant fae). Full-bespoke. In twoPassPolish.skipPaths. NOTE: animal-hero is new ground — flag Kevin at verdict.',
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['spirit_beast', 'candid_action', 'beast_domain', 'magical_tell', 'lighting', 'weather'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'witness', gate: 0.25 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   FAEBOT_TINY_FAE: {
     description:
       'PATH-BESPOKE — FaeBot tiny-fae (2026-05-21 axis-system migration). Palm-sized winged fae (3-8 inches tall) at MACRO perspective in the enchanted forest. THE PATH IDENTITY is the scale_anchor_companion — every render includes a normal-sized forest creature (fox / deer / fawn / robin / squirrel / hedgehog / owl / etc.) that DRAMATICALLY DWARFS her. Without this scale-proof, Flux defaults to regular-sized fairy. Painterly-real (Brian Froud + Charles Vess lineage). 10 axes (9 always-on + 1 gated botanical_accent). IMPORTANT: tiny-fae is in twoPassPolish.skipPaths because Haiku polish strips dwarfing language. Pool entries use strong dwarfing positions (perched on a single feature / under looming face / fits inside a paw).',

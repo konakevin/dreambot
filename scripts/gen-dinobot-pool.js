@@ -929,6 +929,529 @@ ABSOLUTELY BANNED:
 - NO cheerful-summer-blue
 
 Output: ONE sky per line. No numbering. No quotes.`,
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // dino-nights (Stage D1, SHADOW) — the nocturnal Mesozoic. Moonlit watering
+  // holes, hunts by starlight, pre-dawn mist, Milky Way over sauropod silhouettes.
+  // First NIGHT register on DinoBot. LAND STAYS VISIBLY LIT (moonlight REVEALS,
+  // never black-silhouette minimalism); eyes catch light naturally NEVER glow;
+  // real night sky/light only. night_light REPLACES the universal lighting slot.
+  // ══════════════════════════════════════════════════════════════════════════
+  dinobot_dino_nights_night_scene: `Generate NOCTURNAL MESOZOIC SCENE descriptions for DinoBot's dino-nights path — the HERO. Each is ONE comma-separated line, 25-45 words: a specific dinosaur (or two) + a nocturnal behavior + a night setting. Photoreal living animals at night, the moonlit/starlit Mesozoic 66+ million years before humans.
+
+Variety mandate — spread WIDELY across species body-plans AND nocturnal behaviors:
+- ~18% Sauropod (Brachiosaurus / Diplodocus / Argentinosaurus / Mamenchisaurus) — drinking / moving slowly / silhouetted necks against the night sky at a moonlit water's edge
+- ~16% Theropod predator (Tyrannosaurus / Allosaurus / Giganotosaurus / Ceratosaurus) — stalking / patrolling / lapping water, low and quiet in the dark
+- ~14% Small feathered coelurosaur / troodontid / raptor pack (Velociraptor / Troodon / Deinonychus) — hunting by starlight, big night-adapted eyes catching the moon
+- ~12% Ceratopsian (Triceratops / Styracosaurus / Centrosaurus) — an adult and a juvenile settling / drinking / alert at a night waterhole
+- ~10% Hadrosaur (a duck-billed hadrosaur like Parasaurolophus — broad flat toothless beak) — a nocturnal gathering wading a moonlit shallows
+- ~10% Stegosaur / ankylosaur (Stegosaurus / Ankylosaurus) — plated/armored back rimlit by the moon, resting or moving through mist
+- ~8% Pterosaur (Pteranodon / Quetzalcoatlus) roosting on a night crag or gliding across the star-field, one wing catching moonlight
+- ~7% Marine reptile at a moonlit coast (Mosasaurus / Elasmosaurus) breaching / surfacing in phosphor-free real starlight
+- ~5% Two species sharing a night waterhole at wary distance (a peaceful truce beat)
+
+EVERY entry: SPECIES (body-plan clear) + NOCTURNAL BEHAVIOR (verb, mid-action, candid) + NIGHT SETTING. The animal is REVEALED by moonlight/starlight, not a pure black silhouette. Eyes may catch the moon naturally.
+
+GOOD examples:
+- A colossal Brachiosaurus lowering its long neck to drink at a moonlit lake, the still water mirroring the Milky Way, its wet hide sheened silver by the full moon
+- A lone Tyrannosaurus rex moving low through a misty fern-plain under a gibbous moon, breath fogging, its eye catching a cold pinpoint of moonlight
+- A pack of feathered Troodon hunting across a starlit floodplain, their large night-adapted eyes reflecting the moon, feathers rimlit silver
+- An adult Triceratops and its juvenile drinking at a moonlit waterhole, frills edge-lit by the low moon, ferns silvered around them
+- A Stegosaurus moving through waist-high pre-dawn mist, its back plates catching the first cold blue light, the plain still dark below
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no fire / no torches / no tents / no fences / no tools
+- NO modern animals; NO cattle / mammal words (herd/bull/cow/calf/grazing/savanna) — use gathering / adult / juvenile / feeding / fern-plain / floodplain
+- NO glowing-fantasy eyes / no bioluminescence / no magic light — eyes only CATCH real moonlight
+- NO pure-black-silhouette-only scene (the moon must REVEAL the animal + land); cinematic-silhouette owns silhouettes
+- NO gore / no kill-shot / no combat-carnage
+- NO modern-city night / no artificial light of any kind
+- NO duplicate-style entries
+
+Output: ONE nocturnal scene per line. No numbering. No quotes.`,
+
+  dinobot_dino_nights_night_light: `Generate NIGHT LIGHT-SOURCE descriptions for DinoBot's dino-nights path — the MONEY-SHOT axis (this REPLACES the daytime lighting slot; it defines the ONLY light in the frame). Each is ONE comma-separated line, 12-24 words: a real, physically-plausible nocturnal light source + how it falls on the scene. REAL light only.
+
+Variety mandate — rotate widely across real night light:
+- ~22% Full-moon flood — bright cold silver light REVEALING the whole landscape, crisp moon-shadows
+- ~16% Gibbous / half-moon raking low — long soft moon-shadows, the plain half-lit
+- ~14% Milky Way + dense starfield as the main light — faint silver star-glow on hide and water, land dimly readable
+- ~12% Pre-dawn blue hour — the eastern sky paling cold blue, the land emerging from dark, no sun yet
+- ~10% Moonrise / moonset low on the horizon — a huge low moon, warm-amber near the horizon, long light
+- ~8% Thin crescent + bright stars — mostly starlight, a sliver moon, delicate low light
+- ~7% Moonlight through thin cloud — soft diffused silver, gentle contrast, haloed moon
+- ~6% Late-dusk afterglow — the last deep-indigo light in the west, first stars out, land still faintly lit
+- ~5% Bright moon reflected off water / wet ground as a second soft light source
+
+EVERY entry: THE LIGHT SOURCE + its QUALITY (cold/warm, soft/crisp) + that it REVEALS the land (never total darkness). Real astronomy only.
+
+GOOD examples:
+- Bright full-moon flood, cold silver light revealing the whole fern-plain in crisp detail, sharp moon-shadows
+- The Milky Way arching bright overhead, faint silver star-glow catching wet hide and still water, the land dimly readable
+- Pre-dawn blue hour, the eastern sky paling to cold cobalt, the plain emerging softly from the dark
+- A huge low moon at moonrise, warm amber near the horizon casting long light across the shallows
+- A thin crescent moon among brilliant stars, delicate low starlight silvering the mist
+
+ABSOLUTELY BANNED:
+- NO artificial light (no fire / torches / lamps / cities / lightning as the main light)
+- NO bioluminescence / no glowing plants / no magic light / no aurora (aurora is polar-dinos' axis)
+- NO daylight / no sun / no bright-blue-sky
+- NO pure blackness — the light must REVEAL the scene
+- NO duplicate-style entries
+
+Output: ONE night light-source per line. No numbering. No quotes.`,
+
+  dinobot_dino_nights_night_biome: `Generate NIGHT BIOME / SETTING descriptions for DinoBot's dino-nights path. Each is ONE comma-separated line, 18-32 words: a Mesozoic landscape SETTING at night (no animals — the setting only). The land is REVEALED by moon/starlight, never pure black.
+
+Variety mandate — rotate widely across Mesozoic biomes, all night-coded:
+- ~18% Moonlit watering hole / lake edge — still water mirroring the sky, silvered reeds and horsetails
+- ~14% Misty fern-plain at night — low ground-fog under the moon, cycads and tree-ferns as dark shapes
+- ~12% Pre-dawn floodplain — braided channels catching the paling sky, silt-flats emerging from dark
+- ~12% Conifer / araucaria forest edge under the moon — tall silhouetted trunks, moon-shafts through the canopy
+- ~10% Moonlit coastline / tidal flat — wet sand reflecting the moon, distant surf, sea-cliffs
+- ~10% Volcanic plain at night — dark basalt, a distant volcano's faint glow on the horizon (not erupting-dramatic)
+- ~8% Cretaceous river delta at night — wide dark water, cycad-palms, a low mist
+- ~8% Highland ridge / crag under the stars — bare rock rimlit by the moon, the Milky Way above
+- ~8% Redwood / cycad grove clearing — moonlight pooling in a forest opening, fireflies-free, dew silvered
+
+EVERY entry: THE SETTING + night atmosphere + how moon/starlight REVEALS it. Cretaceous predates grasses — NO grasslands/savanna/lawns.
+
+GOOD examples:
+- A wide moonlit watering hole, the still black water mirroring the Milky Way, silvered horsetails and reeds fringing the silent shore
+- A misty fern-plain under a full moon, low ground-fog glowing softly, dark cycads and tree-ferns rising from the silver haze
+- A pre-dawn floodplain of braided channels catching the paling cobalt sky, silt-flats emerging from the retreating dark
+- A towering araucaria forest edge under the moon, moon-shafts falling between silhouetted trunks onto the fern floor
+- A moonlit tidal flat, wet sand mirroring the low moon, distant surf pale against dark sea-cliffs
+
+ABSOLUTELY BANNED:
+- NO humans / no structures / no artificial light / no roads / no fences
+- NO grasslands / savanna / lawns / meadows-of-grass (Cretaceous predates grasses) — use fern-plain / floodplain / cycad-plain
+- NO modern-analog flora (no acacia / baobab / oak-lawns) — use araucaria / cycad / tree-fern / horsetail / ginkgo
+- NO glowing plants / bioluminescence / aurora
+- NO pure blackness — moon/starlight must reveal the land
+- NO duplicate-style entries
+
+Output: ONE night setting per line. No numbering. No quotes.`,
+
+  dinobot_dino_nights_surprise_element: `Generate SMALL NIGHT-ACCENT descriptions for DinoBot's dino-nights path. Each is ONE comma-separated line, 15-30 words: a small secondary nocturnal accent adding depth. The element is SMALL (2-5% of frame), midground or foreground edge.
+
+Variety mandate — rotate widely, all night-coded:
+- ~18% Small night-life (a Meganeura-like giant insect, a moth-swarm, a scuttling small dinosaur) catching moonlight
+- ~14% Reflection of the moon / stars in still water at the foreground edge
+- ~12% A distant second dinosaur silhouette at deep midground, revealed by the moon on a ridge
+- ~12% Bioluminescence-free real detail: dew-silvered spiderweb / frost-rimmed fern / wet-sheened rock catching moonlight
+- ~10% A roosting pterosaur folded on a night crag, one wing edge-lit
+- ~10% Small tracks / a footprint pooled with moon-reflecting rainwater in foreground mud
+- ~8% A shooting-star or faint satellite-free meteor point in the star-field (not a big phenomenon)
+- ~8% Drifting low mist curling through the foreground, catching the moon
+- ~8% A juvenile dinosaur half-hidden in silvered ferns at the foreground edge, eye catching the moon
+
+EVERY entry: THE ACCENT + POSITION (foreground edge / midground / distant) + ONE detail (catching moonlight / mid-action).
+
+GOOD examples:
+- A giant Meganeura-like dragonfly hovering at the foreground edge, gossamer wings catching a cold glint of moonlight
+- The full moon mirrored in a still foreground pool, doubling the silver light across the dark water
+- A distant sauropod silhouette on a far midground ridge, its long neck revealed against the star-field
+- A dew-silvered spiderweb strung between foreground horsetails, each droplet holding a pinpoint of moonlight
+- A roosting Pteranodon folded on a night crag at midground, one leathery wing edge-lit by the low moon
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no tools / no artificial light
+- NO modern animals; NO cattle/mammal words
+- NO glowing-fantasy / bioluminescence / magic light
+- NO gore / no kill-shot / no carrion
+- NO duplicate-style entries
+
+Output: ONE night-accent per line. No numbering. No quotes.`,
+
+  dinobot_dino_nights_night_phenomenon: `Generate NIGHT PHENOMENON descriptions for DinoBot's dino-nights path — the 0.8-gated atmospheric wonder (fires on ~80% of renders). Each is ONE comma-separated line, 15-30 words: a real, physically-plausible night-sky or atmospheric phenomenon over the Mesozoic scene. Real astronomy/atmosphere only.
+
+Variety mandate — rotate widely:
+- ~20% A bright meteor / shooting-star streak across the star-field
+- ~16% The Milky Way blazing in exceptional clarity, arching over the scene
+- ~12% A moonbow (lunar rainbow) in the mist near a moonlit waterfall / spray
+- ~12% A mist inversion — a sea of low fog filling the valley, dinosaur backs and treetops rising above it in the moonlight
+- ~10% A lunar halo / 22-degree ring around the moon through thin ice-cloud
+- ~10% A meteor shower — several faint streaks radiating across the sky
+- ~8% Noctilucent-free real high cloud catching the last afterglow / earthshine on a crescent moon
+- ~7% A comet low on the horizon with a faint real tail (no ribbon-fantasy)
+- ~5% Distant heat-lightning flickering silently far off (illuminating clouds, not the main light)
+
+EVERY entry: THE PHENOMENON + where it sits + its subtle effect on the scene. Grounded-photographic, never sci-fi.
+
+GOOD examples:
+- A brilliant meteor streaking low across the star-field above the sauropod's neck, a brief silver scratch on the night
+- The Milky Way blazing overhead in rare clarity, its dust-lanes mirrored in the still black waterhole below
+- A faint moonbow arcing through the spray of a moonlit waterfall, delicate silver-grey against the dark
+- A mist inversion filling the valley, only the tallest araucaria crowns and a sauropod's neck rising above the moonlit fog-sea
+- A soft lunar halo ringing the full moon through thin high ice-cloud, the plain evenly silvered below
+
+ABSOLUTELY BANNED:
+- NO sci-fi (no nebulas up close / no orbital / no spacecraft / no alien skies)
+- NO aurora (that is polar-dinos' axis)
+- NO glowing-fantasy / bioluminescence / magic
+- NO humans / no artificial light
+- NO ribbon-tail-comet fantasy / no cartoon shooting-stars
+- NO duplicate-style entries
+
+Output: ONE night phenomenon per line. No numbering. No quotes.`,
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // storm-season (Stage D2, SHADOW) — dinosaurs in DRAMATIC weather. Rain
+  // sheeting off a tyrannosaur, lightning over a fleeing gathering, monsoon-
+  // flooded fern-plains, dust-storm walls. Jurassic-Park-in-the-rain register.
+  // WET-WORLD cranked; animals REACT (mid-flee / hunkered / drinking the flood),
+  // never posed; grounded ban doubly enforced (wind+rain invite floaty poses);
+  // lightning = ONE physically-lit fork (never sci-fi); clouds are soft/moist
+  // (cloud-vocab law: no discs/hovering). storm_light REPLACES universal lighting.
+  // ══════════════════════════════════════════════════════════════════════════
+  dinobot_storm_season_storm_scene: `Generate DRAMATIC-WEATHER SCENE descriptions for DinoBot's storm-season path — the HERO. Each is ONE comma-separated line, 25-45 words: a specific dinosaur (or two) REACTING to violent weather, in a Mesozoic setting. Photoreal living animals in a real storm, 66+ million years before humans. Jurassic-Park-in-the-rain drama.
+
+Variety mandate — spread WIDELY across species body-plans AND storm-reactions:
+- ~18% Large theropod (Tyrannosaurus / Giganotosaurus / Allosaurus) — rain sheeting off its soaked hide, head lowered against the downpour, water streaming from its jaw
+- ~15% Sauropod (Brachiosaurus / Argentinosaurus / a long-necked sauropod like Brachiosaurus) — standing firm in the deluge, neck arced, the storm dwarfed by its scale
+- ~14% A gathering fleeing (adults + juveniles mid-flight) across a fern-plain as lightning breaks — running low, spray kicking up
+- ~12% Ceratopsian (Triceratops / a horned ceratopsian like Triceratops) — hunkered down, frill lowered into the wind, rain beading on its horns
+- ~10% Hadrosaur (a duck-billed hadrosaur like Parasaurolophus, broad flat toothless beak) — a gathering wading a rising monsoon flood, drinking the floodwater
+- ~10% Stegosaur / ankylosaur (Stegosaurus / an armored ankylosaur like Ankylosaurus) — plated/armored back streaming with rain, planted against the gale
+- ~8% A dust-storm wall bearing down — dinosaurs turning to face or flee the advancing ochre wall
+- ~7% Pterosaur (a pterosaur like Pteranodon, leathery wings) — struggling against the wind, wings half-folded, hunkered on a crag out of the gale
+- ~6% Two species sharing shelter under a mega-conifer / cliff overhang as the storm rages
+
+EVERY entry: SPECIES (body-plan clear) + a STORM-REACTION behavior (verb, mid-action: fleeing / hunkering / drinking-the-flood / bracing / sheltering) + the weather + setting. At least one foot firmly PLANTED (grounded, never floating).
+
+GOOD examples:
+- A Tyrannosaurus rex standing in a torrential downpour, rain sheeting off its soaked hide, head lowered against the storm, water streaming from its jaws, feet planted in churned mud
+- A gathering of adults and juveniles fleeing low across a flooded fern-plain as a fork of lightning splits the bruised sky behind them, spray kicking from their feet
+- A horned ceratopsian like Triceratops hunkered against a howling gale, frill turned into the wind, rain beading and running off its horns and scaly hide
+- A long-necked sauropod like Brachiosaurus standing firm in a monsoon deluge, neck arced against the grey curtains of rain, dwarfing the storm
+- An armored ankylosaur like Ankylosaurus planted low against a bearing dust-storm wall, ochre grit streaming over its fused-plate armor
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no tools / no vehicles / no shelters-built
+- NO modern animals; NO cattle/mammal words (herd/bull/cow/calf/grazing/savanna) — use gathering / adults / juveniles / feeding / fern-plain
+- NO gore / no kill-shot / no combat-carnage / no lightning-struck-burning-animal
+- NO grasslands / savanna (Cretaceous predates grasses); NO modern flora (name araucaria / cycad / tree-fern instead)
+- NO floating / no mid-leap-hover — feet planted, storm-braced
+- NO sci-fi lightning / no glowing animals
+- NO duplicate-style entries
+
+Output: ONE storm scene per line. No numbering. No quotes.`,
+
+  dinobot_storm_season_weather_drama: `Generate WEATHER-DRAMA descriptions for DinoBot's storm-season path — the MONEY-SHOT axis (the show-stopping weather element). Each is ONE comma-separated line, 12-26 words: a specific, physically-real dramatic weather feature rendered vividly.
+
+Variety mandate — rotate widely across REAL violent weather:
+- ~22% A sheeting rain-curtain / wall of grey rain marching across the plain
+- ~18% ONE physically-lit fork of lightning splitting the bruised sky (a single real bolt, briefly lighting the land)
+- ~14% A towering wall of ochre dust bearing down (a real haboob dust-storm front)
+- ~12% Hail-flattened ferns / hail bouncing off soaked hide
+- ~10% A monsoon flood surging across the fern-plain, brown water rising
+- ~8% Wind-driven spray + bent tree-ferns lashing in the gale
+- ~8% A low churning shelf-cloud / soft moist billowing storm-front rolling in
+- ~8% Steam and mist rising off warm ground as cold rain hits
+
+EVERY entry: THE WEATHER FEATURE + its physical drama (marching / splitting / bearing-down / surging). Clouds are SOFT, MOIST, BILLOWING, feathered — real storm clouds, never rigid.
+
+GOOD examples:
+- A sheeting curtain of grey rain marching across the fern-plain, swallowing the far treeline
+- One brilliant fork of lightning splitting the bruised violet sky, briefly lighting the drenched land below
+- A towering ochre wall of dust bearing down across the plain, the leading edge boiling and churning
+- Hail bouncing and rattling off soaked hide, ferns flattened flat under the icy barrage
+- A brown monsoon flood surging across the low fern-plain, the water visibly rising over the silt
+
+ABSOLUTELY BANNED:
+- NO sci-fi lightning (no multiple electric-blue bolts, no glowing sky-energy, no aurora)
+- NO rigid/disc/metallic/hovering cloud shapes — clouds are soft, moist, billowing
+- NO tornado-on-a-modern-farm / no modern storm-chasing cues
+- NO humans / no structures
+- NO duplicate-style entries
+
+Output: ONE weather-drama per line. No numbering. No quotes.`,
+
+  dinobot_storm_season_storm_light: `Generate STORM LIGHT descriptions for DinoBot's storm-season path — the light axis (this REPLACES the daytime lighting slot; it defines the storm's light). Each is ONE comma-separated line, 12-24 words: a real, physically-plausible storm light quality.
+
+Variety mandate — rotate widely across real storm light:
+- ~22% Bruised storm-light — heavy violet-grey overcast, the land dim and desaturated under the cell
+- ~18% A shaft of break-light — one gap in the storm letting a beam of gold rake the drenched plain
+- ~16% Lightning-lit instant — the whole scene briefly flash-lit blue-white by a fork of lightning
+- ~12% Pre-storm ochre light — an eerie yellow-green glow before the cell hits
+- ~10% Rain-grey flat light — even, silvery, wet, low-contrast under solid cloud
+- ~10% Dark-base underlit — the storm's dark belly with a bright horizon-band beneath it
+- ~6% Post-storm clearing — the last rain lit gold by a low breaking sun, a rainbow-free wet shine
+- ~6% Dust-storm amber gloom — the sun a dim disc through the ochre haze
+
+EVERY entry: THE LIGHT QUALITY + its color + how it falls on the wet scene. Real weather light only.
+
+GOOD examples:
+- Bruised violet-grey storm-light, the whole plain dim and desaturated beneath the towering cell
+- A single shaft of gold break-light raking through a gap in the storm across the drenched fern-plain
+- The scene briefly flash-lit stark blue-white by a fork of lightning, every raindrop caught mid-fall
+- An eerie yellow-green pre-storm glow tinting the still air before the cell hits
+- The storm's dark belly overhead with a bright silver horizon-band glowing beneath it
+
+ABSOLUTELY BANNED:
+- NO sci-fi glow / no neon / no aurora / no bioluminescence
+- NO cheerful blue sky / no calm sunshine
+- NO artificial light
+- NO duplicate-style entries
+
+Output: ONE storm light per line. No numbering. No quotes.`,
+
+  dinobot_storm_season_storm_biome: `Generate STORM-BIOME / SETTING descriptions for DinoBot's storm-season path. Each is ONE comma-separated line, 18-32 words: a Mesozoic landscape SETTING under violent weather (no animals — the setting only). Wet, dramatic, primordial.
+
+Variety mandate — rotate widely across Mesozoic biomes, all storm-coded:
+- ~18% A wide fern-plain under a monsoon deluge, channels flooding, silt churning
+- ~14% A floodplain river bursting its banks, brown water surging over the flats
+- ~12% An open cycad-plain lashed by wind and rain, tree-ferns bent flat
+- ~12% A volcanic plain under a bruised sky, rain hissing on dark basalt
+- ~10% A mega-conifer forest edge in the gale, araucaria crowns thrashing
+- ~10% A coastal flat under a bearing storm, surf and rain merging
+- ~8% A canyon / gorge channeling a flash-flood torrent
+- ~8% A dust-storm-swept ochre plain, visibility collapsing in the haze
+- ~8% A ridge / escarpment silhouetted against a wall of advancing rain
+
+EVERY entry: THE SETTING + the storm-battered atmosphere. Cretaceous predates grasses — fern-plain / floodplain / cycad-plain only.
+
+GOOD examples:
+- A wide fern-plain under a monsoon deluge, its shallow channels overflowing, silt churning brown across the flooding ground
+- A floodplain river bursting its banks, brown water surging over the silt-flats, drowned tree-ferns bending in the current
+- An open cycad-plain lashed by wind-driven rain, squat cycads and tree-ferns bent flat under the gale
+- A volcanic plain of dark basalt under a bruised violet sky, cold rain hissing and steaming on the warm rock
+- A mega-conifer forest edge in the storm, tall araucaria crowns thrashing against the grey deluge
+
+ABSOLUTELY BANNED:
+- NO humans / no structures / no roads / no artificial light
+- NO grasslands / savanna / lawns (Cretaceous predates grasses); NO modern flora (no acacia / oak / palm / pine) — araucaria / cycad / tree-fern / horsetail / ginkgo
+- NO calm sunny weather
+- NO duplicate-style entries
+
+Output: ONE storm setting per line. No numbering. No quotes.`,
+
+  dinobot_storm_season_surprise_element: `Generate SMALL STORM-ACCENT descriptions for DinoBot's storm-season path. Each is ONE comma-separated line, 15-30 words: a small secondary storm detail adding drama. SMALL (2-5% of frame), midground or foreground edge.
+
+Variety mandate — rotate widely, all storm-coded:
+- ~18% A pterosaur struggling in the wind at midground, wings half-folded against the gale
+- ~14% A splash-crown / big raindrop impacts on a foreground flood-puddle
+- ~12% A distant second dinosaur silhouette braced against the storm on a far ridge
+- ~12% Bent-flat tree-ferns / a wind-stripped branch tumbling across the foreground
+- ~10% Steam rising off warm foreground rock as cold rain hits
+- ~10% A juvenile sheltering under an adult's flank / body at midground
+- ~8% Floating debris on a rising flood at the foreground edge (logs, fern-mats)
+- ~8% A foreground footprint filling fast with rainwater
+- ~8% Wind-torn spray whipping off the crest of a flood-wave
+
+EVERY entry: THE ACCENT + POSITION (foreground edge / midground / distant) + ONE storm-detail.
+
+GOOD examples:
+- A pterosaur struggling against the crosswind at midground, leathery wings half-folded, fighting to stay aloft
+- Big raindrop impacts throwing splash-crowns across a foreground flood-puddle, ripples colliding
+- A distant sauropod silhouette braced against the deluge on a far ridge, neck bowed into the wind
+- A juvenile sheltering tight under an adult's flank at midground, both streaming with rain
+- Steam rising in wisps off warm foreground basalt as the cold rain strikes it
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no tools
+- NO modern animals; NO cattle/mammal words
+- NO gore / no kill-shot / no drowned-corpse
+- NO sci-fi / no glowing
+- NO duplicate-style entries
+
+Output: ONE storm-accent per line. No numbering. No quotes.`,
+
+  dinobot_storm_season_peak_event: `Generate PEAK STORM-EVENT descriptions for DinoBot's storm-season path — the 0.8-gated climactic moment (fires on ~80% of renders). Each is ONE comma-separated line, 15-30 words: a single dramatic real weather climax. Physically real, never sci-fi.
+
+Variety mandate — rotate widely:
+- ~26% The strike-moment — ONE brilliant physically-lit fork of lightning hitting a distant ridge/tree, thunder implied
+- ~18% A flash-flood surge — a wall of brown water rushing down a channel, spray flying
+- ~14% The dust-wall arrival — the ochre front sweeping over, everything greying out
+- ~12% A break in the storm — one shaft of gold light punching through onto the drenched hero
+- ~10% Hail-burst — a sudden white barrage bouncing off ground and hide
+- ~8% A downburst — a violent column of rain and wind flattening the ferns in a spreading ring
+- ~6% A waterspout-free real gustnado of dust spinning briefly across the plain
+- ~6% The wall-cloud lowering — a dark rotating shelf dropping over the plain
+
+EVERY entry: THE PEAK EVENT + where it sits + its dramatic effect. Lightning is ONE real fork, physically lit. Clouds soft/moist.
+
+GOOD examples:
+- One brilliant fork of lightning striking a distant araucaria on the ridge, the whole plain flash-lit blue-white for an instant
+- A wall of brown flash-flood water rushing down the canyon channel, spray flying off the churning front
+- The ochre dust-wall sweeping over the scene, the far plain greying out to nothing behind the leading edge
+- A single shaft of gold break-light punching through the storm onto the drenched hero at center
+- A sudden hail-burst bouncing white off the ground and the soaked hide, ferns hammered flat
+
+ABSOLUTELY BANNED:
+- NO sci-fi (no multiple electric bolts / no glowing energy / no aurora)
+- NO rigid/disc/hovering cloud shapes — soft, moist, billowing
+- NO gore / no lightning-struck-burning-animal
+- NO humans / no structures
+- NO duplicate-style entries
+
+Output: ONE peak event per line. No numbering. No quotes.`,
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // polar-dinos (Stage D3, SHADOW) — real paleo-accuracy showcase. Polar-latitude
+  // dinosaurs (Nanuqsaurus, Leaellynasaura, Edmontosaurus at high latitude),
+  // snow-dusted feathers/hide, aurora skies, ice-edge coasts, months-long dusk.
+  // ENTIRELY NEW palette (the bot is all-warm). SPECIES_ANCHOR load-bearing (obscure
+  // genera). Feathering = INSULATION, described POSITIVELY (the coat), never negated.
+  // Mesozoic-lock: never Arctic-today (no polar bears, no modern spruce) — cold-hardy
+  // primordial flora. polar_light REPLACES universal lighting. Aurora allowed HERE only.
+  // ══════════════════════════════════════════════════════════════════════════
+  dinobot_polar_dinos_polar_scene: `Generate POLAR-DINOSAUR SCENE descriptions for DinoBot's polar-dinos path — the HERO. Each is ONE comma-separated line, 25-45 words: a specific polar-latitude dinosaur + a cold-adapted behavior + a snowy/icy Mesozoic-polar setting. Photoreal living animals in the deep-time polar world, 66+ million years before humans. Real paleo-accuracy showcase.
+
+For less-famous genera, LEAD with the body-plan + a famous look-alike (SPECIES_ANCHOR). Describe warm insulating coats POSITIVELY — a dense shaggy coat of downy proto-feathers / filament-fuzz dusted with frost, or thick cold-hardy scaly hide.
+
+Variety mandate — spread WIDELY across polar species + cold behaviors:
+- ~18% Nanuqsaurus (a small tyrannosaur like a T-rex, with a shaggy insulating coat of proto-feathers) — patrolling a snow-dusted plain, breath fogging
+- ~16% Leaellynasaura (a small slender ornithopod like a big-eyed Hypsilophodon, downy filament coat, large dark eyes for the polar dusk) — a small group foraging under snow-laden tree-ferns
+- ~14% Edmontosaurus at high latitude (a duck-billed hadrosaur like Parasaurolophus, broad flat toothless beak, frost on its hide) — a gathering crossing a frozen floodplain
+- ~12% Pachyrhinosaurus (a horned ceratopsian like Triceratops with a bony nasal boss instead of a horn) — an adult and juvenile pushing through snow
+- ~12% A feathered dromaeosaur / troodontid (a feathered raptor like Velociraptor with a thick winter coat) — hunting across the snow at polar dusk
+- ~10% An ankylosaur (a low-slung armored ankylosaur like Ankylosaurus) — plodding across a frozen lagoon edge, armor rimed with frost
+- ~8% A small huddled group sheltering from wind-driven snow behind an ice ridge
+- ~6% A sauropod (a long-necked sauropod like Brachiosaurus) at high latitude browsing snow-dusted araucaria
+- ~4% Two species sharing a sheltered snowy hollow at wary distance
+
+EVERY entry: SPECIES (body-plan + look-alike for obscure genera) + a COLD-ADAPTED behavior (verb, candid) + a snowy/icy polar setting. Feathering/coat described positively as insulation. At least one foot planted (grounded).
+
+GOOD examples:
+- A Nanuqsaurus (a small tyrannosaur like a T-rex) with a shaggy insulating coat of proto-feathers patrolling a snow-dusted fern-plain at polar dusk, its breath fogging in the cold
+- A small group of Leaellynasaura (slender ornithopods like big-eyed Hypsilophodon, downy filament coats) foraging under snow-laden tree-ferns, their large dark eyes wide in the low blue light
+- A gathering of Edmontosaurus (duck-billed hadrosaurs like Parasaurolophus, broad flat toothless beaks) crossing a frozen floodplain, frost whitening their hides, breath steaming
+- A Pachyrhinosaurus (a horned ceratopsian like Triceratops with a bony nasal boss) and its juvenile pushing through fresh snow toward a wind-scoured ridge
+- A feathered raptor like Velociraptor in a thick winter coat, crouched mid-stalk across a moonlit snowfield, frost on its plumage
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no tools / no shelters-built
+- NO modern Arctic animals (NO polar bears / seals / penguins / walruses / reindeer); NO cattle/mammal words (herd/bull/cow/calf/grazing/savanna) — use gathering / adults / juveniles / feeding
+- NO modern spruce/pine/fir forest / no modern tundra-moss-only — use snow-dusted araucaria, cold-hardy cycads, tree-ferns, ginkgo, horsetails
+- NO glowing-fantasy eyes / no bioluminescence / no magic
+- NO gore / no kill-shot / no frozen-carcass
+- NO duplicate-style entries
+
+Output: ONE polar scene per line. No numbering. No quotes.`,
+
+  dinobot_polar_dinos_ice_feature: `Generate POLAR ICE-FEATURE descriptions for DinoBot's polar-dinos path — the MONEY-SHOT axis (the show-stopping ice/snow feature). Each is ONE comma-separated line, 14-28 words: a specific, real polar ice or snow formation rendered vividly.
+
+Variety mandate — rotate widely across real polar features:
+- ~22% A towering blue glacier face / calving ice-cliff at the edge of the scene
+- ~16% A frozen lagoon / ice-sheeted lake, cracked and mirror-smooth
+- ~14% Snow-laden araucaria / cycads bowed under heavy fresh snow
+- ~12% A sea-ice edge / pack-ice shelf meeting a dark cold ocean
+- ~10% Wind-carved sastrugi ridges / drifted snow dunes across the plain
+- ~8% Hanging icicles / frozen waterfall on a dark rock face
+- ~8% A frost-rimed fern-plain, every frond edged white
+- ~6% Blue crevasses / ice caves glowing with refracted cold light
+- ~4% Frozen braided river channels threading a white floodplain
+
+EVERY entry: THE ICE FEATURE + its real physical detail (blue glacial ice / cracked lagoon / snow-laden boughs). Cold, real, grounded-photographic.
+
+GOOD examples:
+- A towering blue glacier face rising at the scene's edge, deep glacial ice glowing pale cyan, a fresh calving scar bright white
+- A frozen lagoon of cracked mirror-ice stretching to the dark treeline, snow feathered across its surface
+- Snow-laden araucaria boughs bowed heavy under fresh powder, clumps sliding off in the cold wind
+- A sea-ice edge of jumbled pack-ice meeting a slate-dark cold ocean, spray freezing on the floes
+- Wind-carved sastrugi ridges of hard-packed snow rippling across the polar plain
+
+ABSOLUTELY BANNED:
+- NO modern Arctic infrastructure (no research stations / no ships / no snowmobiles)
+- NO polar bears / penguins / seals
+- NO sci-fi / no glowing-magic ice
+- NO humans
+- NO duplicate-style entries
+
+Output: ONE ice feature per line. No numbering. No quotes.`,
+
+  dinobot_polar_dinos_polar_light: `Generate POLAR LIGHT descriptions for DinoBot's polar-dinos path — the light axis (this REPLACES the daytime lighting slot). Each is ONE comma-separated line, 12-26 words: a real, physically-plausible polar light quality. The polar Mesozoic had real long-dusk light and real auroras.
+
+Variety mandate — rotate widely across real polar light:
+- ~24% A green aurora rippling overhead (real polar aurora — allowed on THIS path, curtains of green-and-teal light over the snow)
+- ~18% Low-angle polar sun — a pale gold sun skimming the horizon, long blue shadows on snow
+- ~16% Blue twilight / months-long dusk — deep cobalt-and-lilac polar gloaming, snow glowing faintly
+- ~12% Overcast snow-light — flat, soft, silvery-white, shadowless
+- ~10% Pink-and-peach polar alpenglow on snow and ice
+- ~8% A pale low midnight-sun glow near the horizon
+- ~6% Moonlit polar night — cold silver moonlight on snow, stars sharp
+- ~6% A rare crisp clear cold sun, hard blue shadows, sparkling snow
+
+EVERY entry: THE POLAR LIGHT + its color + how it falls on snow/ice. Cool palette (the bot's first). Aurora is real here.
+
+GOOD examples:
+- A green aurora rippling in slow curtains overhead, its teal light shimmering across the snowfield below
+- A pale gold polar sun skimming low along the horizon, throwing long cold-blue shadows across the drifted snow
+- Deep blue polar twilight, the months-long dusk glowing cobalt and lilac, the snow faintly luminous
+- Flat soft overcast snow-light, silvery and shadowless, the whole scene calm and pale
+- Pink-and-peach alpenglow washing the glacier face and the snow-dusted plain
+
+ABSOLUTELY BANNED:
+- NO warm tropical sun / no golden-jungle light (this path is COOL)
+- NO sci-fi glow / no neon / no bioluminescence (aurora is the ONLY sky-glow, and it is real)
+- NO artificial light
+- NO duplicate-style entries
+
+Output: ONE polar light per line. No numbering. No quotes.`,
+
+  dinobot_polar_dinos_surprise_element: `Generate SMALL POLAR-ACCENT descriptions for DinoBot's polar-dinos path. Each is ONE comma-separated line, 15-30 words: a small secondary cold-world detail adding depth. SMALL (2-5% of frame), midground or foreground edge.
+
+Variety mandate — rotate widely, all polar-coded:
+- ~18% A distant second polar dinosaur silhouette on a snowy ridge
+- ~14% Breath-fog / steam rising from the animal or the ground in the cold
+- ~12% A small feathered polar creature / early bird-like theropod on a frosted branch
+- ~12% Fresh three-clawed dinosaur tracks pressed into deep snow
+- ~10% Icicles / frost crystals catching the low light on a foreground frond
+- ~10% Wind-lofted snow / spindrift streaming off a ridge crest
+- ~8% A snow-dusted cycad or araucaria bough in the foreground
+- ~8% A frozen-over puddle / thin ice cracking underfoot
+- ~8% Drifting snowflakes catching the polar light in the foreground
+
+EVERY entry: THE ACCENT + POSITION (foreground edge / midground / distant) + ONE cold-detail.
+
+GOOD examples:
+- A distant Nanuqsaurus silhouette cresting a snowy ridge at deep midground, breath fogging against the twilight
+- Plumes of breath-fog streaming from the animal's nostrils into the freezing air
+- Fresh three-clawed tracks pressed deep into the powder snow across the foreground, already softening with drift
+- Frost crystals fringing a foreground tree-fern frond, each edge glittering in the low polar light
+- Wind-lofted spindrift streaming off the crest of a snow ridge behind the hero
+
+ABSOLUTELY BANNED:
+- NO humans / no human-trace / no tools
+- NO modern Arctic animals (polar bears / seals / penguins)
+- NO cattle/mammal words
+- NO gore / no frozen-carcass
+- NO sci-fi / no glowing (aurora only, in the sky)
+- NO duplicate-style entries
+
+Output: ONE polar-accent per line. No numbering. No quotes.`,
+
+  dinobot_polar_dinos_polar_phenomenon: `Generate POLAR PHENOMENON descriptions for DinoBot's polar-dinos path — the 0.8-gated wonder (fires on ~80% of renders). Each is ONE comma-separated line, 15-30 words: a real, physically-plausible polar atmospheric or celestial phenomenon. Real science only.
+
+Variety mandate — rotate widely:
+- ~26% A brilliant green-and-teal aurora blazing in full curtains across the polar sky
+- ~14% A blowing-snow ground-blizzard sweeping low across the plain
+- ~12% A sun-dog / 22-degree halo around the low pale sun through ice-crystal haze
+- ~12% Light pillars rising from the horizon through diamond-dust ice crystals
+- ~10% A pastel nacreous / mother-of-pearl polar-stratospheric cloud glowing at dusk
+- ~10% Sea-smoke / frost-fog rolling off open dark water into the cold air
+- ~8% Diamond-dust sparkling in the air, the whole scene glittering
+- ~8% Fresh heavy snowfall in big slow flakes blanketing the scene
+
+EVERY entry: THE PHENOMENON + where it sits + its effect on the cold scene. Aurora / sun-dogs / light-pillars are all REAL polar science.
+
+GOOD examples:
+- A brilliant green-and-teal aurora blazing in vast rippling curtains across the polar sky, its light dancing on the snowfield
+- A blowing-snow ground-blizzard streaming low and fast across the plain, the hero's legs vanishing into the white
+- A bright sun-dog flanking the low pale sun, a 22-degree halo ringing it through the ice-crystal haze
+- Vertical light-pillars rising from the horizon through drifting diamond-dust, cold and still
+- Sea-smoke rolling in ghostly sheets off the dark open water into the freezing air
+
+ABSOLUTELY BANNED:
+- NO sci-fi (no nebulas up close / no orbital / no spacecraft)
+- NO warm tropical weather
+- NO glowing-fantasy / bioluminescence / magic (aurora + sun-dogs + light-pillars are REAL, keep them physical)
+- NO humans / no artificial light
+- NO duplicate-style entries
+
+Output: ONE polar phenomenon per line. No numbering. No quotes.`,
 };
 
 const RECIPE = RECIPES[POOL];

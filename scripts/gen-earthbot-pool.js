@@ -2769,6 +2769,154 @@ Vary the LIGHT quality interacting with water: midday sun-sparkle, golden-hour a
     instructions: `Output ONLY a numbered list of {COUNT} great-waterfall entries. Each 30-55 words, single line. Format: "named fall + character + camera angle + water-motion + setting + lighting". NO preamble.`,
   },
 
+  // WINTER-WONDER (Stage E1) — EPIC_VISTA clone, bespoke subject only.
+  // Deep winter as its own path; the ice-feature money-shot baked into each
+  // entry. Ice = REAL matter (never "crystal"/fantasy). Cold palette + warm
+  // alpenglow counterpoint. No ski infrastructure.
+  winter_wonder_subject: {
+    format: 'simple',
+    theme: `PURE DEEP-WINTER landscape scenes for EarthBot's winter-wonder path. THE FROZEN LANDSCAPE IS THE HERO — real Earth in deep winter, a clean true-to-life nature photograph. Each entry 30-55 words. The snow-and-ice grandeur + a hero ice-feature the whole show.
+
+🎯 THE WINTER SCENE IS THE HERO:
+  • The frozen subject fills 55-70% of the frame; snow/ice scale + a hero ice-feature is the wow
+  • CAMERA VARIETY: wide vista of the snow-peaks / low-angle up a frozen waterfall / into a blue ice cave / across a bubble-ice lake / down a rime-forest
+  • ICE AS REAL MATTER: wind-sculpted sastrugi, dense blue glacial ice, rime feathering, pressure-ridge hummocks, methane-bubble ice — described physically, NEVER as "crystal" or fantasy.
+
+❄️ ICONIC REAL WINTER PLACES + a HERO ICE-FEATURE (mix across the set):
+  A. HOKKAIDO — rime-frosted "snow-monster" trees on Zaō / drift ice on the Sea of Okhotsk
+  B. LAPLAND — tykky snow-laden spruces bowed under white, polar-twilight blue
+  C. DOLOMITES / ALPS — hoarfrost-furred peaks catching pink alpenglow at dawn
+  D. LAKE BAIKAL — turquoise methane-bubble ice and shattered ice hummocks, clear to the deep
+  E. YOSEMITE / ROCKIES — a frozen waterfall column of blue ice on a granite cliff
+  F. ICELAND — inside a glacier blue-ice cave, ribbed walls glowing electric blue
+  G. PATAGONIA / ALASKA — a glacier's seracs and blue crevasse ice under snow peaks
+  H. JAPAN / SIBERIA — a rime-white forest under diamond-dust air, hoarfrost on every branch
+  I. ARCTIC PLAIN — wind-carved sastrugi ridges marching to snow mountains
+  J. FROZEN LAKE — pressure ridges and clear black ice under a low winter sun
+  K. SNOW PEAK — a rime-crusted summit at alpenglow above a cloud inversion
+
+🚫 BANS: ZERO humans, ZERO ski lifts / lodges / cabins / fences / groomed pistes / ski tracks / footprints, ZERO buildings / roads, ZERO sci-fi/fantasy/glowing/"crystal-magic", ZERO photographer names, ZERO negation phrases.
+
+✅ EVERY ENTRY: the named/identifiable winter place + a HERO ice-feature (blue ice cave / frozen fall / rime trees / bubble ice / sastrugi / seracs) + camera angle + the cold-palette light (a warm alpenglow / low-sun counterpoint welcome) + real texture.`,
+    touchpoints: [
+      'Zaō in Hokkaido, an army of rime-frosted "snow-monster" trees furred thick with white ice marching up the slope, wide vista at blue-hour dusk, cold indigo snow with a faint pink glow on the far ridge',
+      'A blue-ice cave inside a Vatnajökull glacier in Iceland, ribbed translucent walls glowing electric cobalt, low-angle looking out the mouth to the white glacier beyond, cold blue light deepening into the ice',
+      'Lake Baikal turquoise methane-bubble ice and shattered turquoise hummocks stretching to distant snow mountains, low-angle across the clear black ice, hard winter sun raking low, frozen bubbles suspended deep below',
+      'A frozen waterfall of dense blue ice on a granite cliff in Yosemite winter, low-angle from the snow-buried plunge base looking up the full ribbed column, snow-laden pines flanking, cold overcast with a warm rim of dawn',
+      'Tykky snow-laden spruces in Finnish Lapland bowed under heavy white loads, a still forest of white sculptures, wide low-sun vista, long blue shadows on untouched snow, faint gold polar twilight',
+      'Wind-carved sastrugi ridges of hard white snow marching across an arctic plain toward a rime-lit peak, low-angle raking the sculpted ripples, hard sidelight, diamond-dust sparkling in the cold air',
+      'A rime-white forest under diamond-dust air, every branch furred with hoarfrost feathers, a low winter sun burning through the frozen mist, cold pastel palette, breath-fog stillness',
+      'A rime-crusted Dolomites summit catching deep pink alpenglow above a sea-of-clouds inversion, wide vista from a snow ridge, warm summit glow against cold blue valley shadow, wind-blown snow plume off the peak',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} deep-winter landscape entries. Each 30-55 words, single line. Format: "named winter place + hero ice-feature + camera angle + cold-palette lighting + real texture". Ice described physically (sastrugi/blue-ice/rime/bubble-ice), NEVER "crystal" or fantasy. NO preamble.`,
+  },
+
+  // NORTH-WILD (Stage E2) — EPIC_VISTA clone, bespoke subject only. Alaska /
+  // Yukon / Canadian Rockies / boreal north. Aurora ALLOWED (grounded photo).
+  // Wildlife ONLY as postage-stamp distant scale-provers. No lodge/canoe/dock.
+  north_wild_subject: {
+    format: 'simple',
+    theme: `PURE NORTH-AMERICAN WILD-NORTH landscape scenes for EarthBot's north-wild path. THE RAW NORTHERN WILDERNESS IS THE HERO — Alaska, Yukon, Canadian Rockies, the boreal north, real Earth. Each entry 30-55 words. A clean true-to-life nature photograph, the scale + light the whole show.
+
+🎯 THE NORTHERN SCENE IS THE HERO:
+  • The subject fills 55-70% of the frame; the raw wilderness scale is the wow
+  • CAMERA VARIETY: wide massif vista / low over a glacial lake shore / down a braided river valley / up a fjord wall / aerial over a glacier
+  • REAL MATTER: turquoise glacier-flour lakes, braided silt rivers, tundra tussock, taiga spruce, granite spires, blue glacier ice.
+
+🏔️ ICONIC REAL NORTHERN PLACES (mix across the set):
+  A. MORAINE LAKE / PEYTO / LAKE LOUISE — glacier-flour turquoise lakes under the Rockies' Valley-of-the-Ten-Peaks
+  B. DENALI / ALASKA RANGE — the great white massif over tundra and taiga
+  C. KLUANE / WRANGELL–ST.ELIAS — vast icefields and braided glacier rivers
+  D. TOMBSTONE TERRITORIAL — jagged black granite spires over autumn-red tundra
+  E. ATHABASCA / COLUMBIA ICEFIELD — a blue crevassed glacier tongue between peaks
+  F. NAHANNI / COASTAL FJORDS — deep river canyons and misty coastal fjord walls
+  G. BROOKS RANGE / ARCTIC — treeless arctic tundra rolling to distant peaks
+  H. BOREAL TAIGA — endless black-spruce forest and muskeg under a big sky
+  I. AURORA NIGHT — green aurora arcing over a spruce silhouette or a still lake
+  J. AUTUMN TUNDRA — blazing red-and-gold tundra under first-snow peaks
+  K. FOG INVERSION / MIDNIGHT SUN — a valley cloud-sea at alpenglow, or low midnight sun over the range
+
+🐻 WILDLIFE (optional, ~15%): a grizzly / moose / caribou / Dall sheep ONLY as a TINY distant postage-stamp scale-prover far in the scene — never close, never the subject.
+
+🚫 BANS: ZERO humans, ZERO lodges / cabins / canoes / kayaks / docks / boardwalks / fences / roads / trails / ski infrastructure, ZERO buildings, ZERO sci-fi/fantasy/glowing (except REAL aurora), ZERO photographer names, ZERO negation phrases.
+
+✅ EVERY ENTRY: the named/identifiable northern place + its character + camera angle + a real light moment (alpenglow / fog inversion / aurora / midnight sun / golden autumn) + real texture.`,
+    touchpoints: [
+      'Moraine Lake in Banff, glacier-flour turquoise water still beneath the jagged Valley-of-the-Ten-Peaks, wide low vista from the rockslide shore, larch-gold shoreline, first golden light striking the summits',
+      'The Denali massif rising vast and white over rolling tundra and taiga in the Alaska Range, wide vista, a braided silt river threading the foreground flats, cold clear dawn with pink alpenglow on the summit snow',
+      'Tombstone Territorial jagged black-granite spires over blazing red-and-gold autumn tundra, wide Yukon vista, low cloud snagging the peaks, soft overcast raking the tundra colour',
+      'The Athabasca Glacier blue crevassed tongue spilling between grey peaks in the Columbia Icefield, aerial three-quarter over the ice, meltwater braids below, flat bright overcast on the blue ice',
+      'Green aurora arcing in curtains over a black-spruce silhouette and a still boreal lake in the Yukon, wide night vista, faint airglow, stars behind the aurora, the ribbon mirrored in the calm water',
+      'A Kluane icefield of braided glacier rivers spreading silt-grey across a vast valley below white peaks, aerial vista, the river fanning in silver threads, cold sidelight, a tiny distant moose on the flats for scale',
+      'Arctic tundra of the Brooks Range rolling treeless to distant snow peaks under a big pale sky, wide vista, tussock and dwarf-birch red in the foreground, low arctic sun, a caribou band a distant speck',
+      'A valley cloud-inversion filling a Rockies basin at dawn, granite peaks islanded above the sea of fog, wide vista from a ridge, warm alpenglow on the summits over cold grey cloud',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} wild-north landscape entries. Each 30-55 words, single line. Format: "named northern place + character + camera angle + real light moment + texture". Aurora allowed (real, grounded). Wildlife ONLY as a tiny distant scale-prover (~15% of entries). NEVER lodges/canoes/docks/roads/humans. NO preamble.`,
+  },
+
+  // STORM-EARTH (Stage E3) — EPIC_VISTA clone; the STORM STRUCTURE is the hero
+  // over EMPTY wilderness. CLOUD-VOCABULARY LAW (2026-07-02 UFO purge): real
+  // meteorology names only; NEVER disc/plate/saucer/lens/lenticular/metallic/
+  // hovering/mothership. No tornado-hitting-towns, no chaser vehicles.
+  storm_earth_subject: {
+    format: 'simple',
+    theme: `PURE SEVERE-WEATHER landscape scenes for EarthBot's storm-earth path. THE STORM STRUCTURE IS THE HERO — a real severe-weather spectacle towering over empty wild land, a clean true-to-life storm photograph. Each entry 30-55 words. The colossal moist-cloud architecture + its scale the whole show.
+
+🌩️ THE STORM IS THE HERO:
+  • The storm structure fills 55-75% of the frame; its scale + menace is the wow
+  • It towers over EMPTY WILDERNESS ONLY — open plains, prairie, badlands, desert, wheat sea, flat scrubland. NEVER a town, farm, or road below.
+  • CAMERA VARIETY: wide low from the plain looking up at the mesocyclone / storm advancing across the horizon / under the shelf cloud / distant supercell across a golden field
+
+⛈️ REAL METEOROLOGY (name the actual structure — mix across the set):
+  A. SUPERCELL MESOCYCLONE — a rotating supercell with a striated updraft tower over the Great Plains
+  B. SHELF CLOUD / GUST FRONT — a low arcing shelf cloud advancing like a wall across the prairie
+  C. MAMMATUS FIELD — a ceiling of pouched mammatus lit copper under a departing storm at sunset
+  D. WALL CLOUD — a lowered rotating wall cloud beneath a dark rain-free base
+  E. ROLL CLOUD — a long tube of roll cloud stretching the horizon ahead of the storm
+  F. ANVIL + LIGHTNING — a towering cumulonimbus anvil with lightning forking to the plain
+  G. HABOOB / DUST WALL — a monsoon dust wall rolling across the desert ahead of the outflow
+  H. RAIN-SHAFT + SUN — dark rain curtains falling from the base with sunlight breaking beneath
+  I. GREEN-BLACK CORE — the ominous green-tinged core of a hail-heavy supercell over wheat
+  J. STORM-LIGHT PRAIRIE — low golden storm-light raking a prairie under a black cloud ceiling
+
+🚫 BANS: ZERO humans, ZERO towns/farms/buildings/roads/vehicles/storm-chaser trucks/power lines, ZERO tornado hitting anything built (empty wilderness only), ZERO UFO/disc/plate/saucer/lens/lenticular/metallic/hovering/mothership vocabulary (describe cloud as moist layered cloud), ZERO sci-fi/fantasy/glowing, ZERO photographer names, ZERO negation phrases.
+
+✅ EVERY ENTRY: the named real storm structure (supercell/shelf cloud/mammatus/wall cloud/roll cloud/anvil/haboob) + the empty land it towers over + camera angle + storm-light + one motion beat (advancing / rotating / lightning-forking / dust-rolling).`,
+    touchpoints: [
+      'A colossal rotating supercell with a striated corkscrew updraft tower over the empty Great Plains, wide low from the golden grass looking up, a lowered wall cloud beneath the dark base, storm-light gilding the field',
+      'A low arcing shelf cloud advancing like a grey-blue wall across an empty prairie, wide horizon framing, dust and grass bending ahead of the gust front, a bright band of light beneath the leading edge',
+      'A vast ceiling of pouched mammatus cloud lit deep copper-orange under a departing storm at sunset, wide up-shot over empty wheat stubble, the sky a field of hanging lobes, warm underlight',
+      'A towering cumulonimbus anvil over the badlands with a bright fork of lightning striking the empty plain, wide distant framing, dark rain core to one side, sunlit clay hoodoos far below',
+      'A long horizontal roll cloud tube stretching the full horizon ahead of an approaching storm over flat scrubland, wide panoramic framing, smooth layered cloud, moody grey-green light',
+      'A monsoon haboob dust wall rolling across the Sonoran desert ahead of the storm outflow, wide low framing, saguaro silhouettes tiny at the base, brown dust curtain against a bruised sky',
+      'Dark rain-shaft curtains falling from a storm base with a shaft of sunlight breaking beneath onto an empty green plain, wide framing, a faint rainbow in the rain, dramatic split light',
+      'The ominous green-black core of a hail-heavy supercell churning over an empty golden wheat sea, wide low vista, the updraft base flat and dark, an eerie green tinge under the cloud',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} severe-weather entries. Each 30-55 words, single line. Format: "named real storm structure + empty land + camera angle + storm-light + motion beat". Real meteorology names only (supercell/mesocyclone/shelf cloud/wall cloud/mammatus/roll cloud/anvil/haboob). NEVER disc/plate/saucer/lens/lenticular/metallic/hovering. NEVER towns/roads/vehicles/humans. NO preamble.`,
+  },
+
+  storm_earth_sky: {
+    format: 'simple',
+    theme: `STORM SKY LAYER for EarthBot's storm-earth path — the overhead severe-weather sky. Each entry 12-24 words, a real meteorological sky described as moist layered cloud. ALWAYS stormy (this path has no clear skies).
+
+✓ VARIETY: striated rotating updraft; a wall of shelf cloud; a ceiling of copper mammatus lobes; a towering anvil spreading; torn racing storm-rack; a green-tinged hail core; forking lightning in the dark base; rain-curtains with a light-break beneath; a low tube of roll cloud; a bruised purple-black wall.
+
+🚫 CLOUD-VOCABULARY LAW: NEVER disc / plate / saucer / lens / lenticular / metallic / chrome / hovering / mothership / UFO. Describe cloud as moist layered cloud, striations, lobes, curtains. NO negation phrases.`,
+    touchpoints: [
+      'A striated rotating supercell updraft tower corkscrewing up into a dark flat base',
+      'A ceiling of pouched copper-orange mammatus lobes hanging heavy under a departing storm',
+      'A towering cumulonimbus anvil spreading grey across the whole sky, lightning in its base',
+      'A bruised purple-black storm wall advancing, a bright band of light along its leading edge',
+      'Torn grey-green storm cloud racing overhead, ragged and fast, a hail-core tinge beneath',
+      'A long low tube of roll cloud stretched the full width of the sky ahead of the storm',
+      'Dark rain-curtains falling from a flat storm base with a shaft of gold breaking beneath',
+      'A green-tinged churning core of moist layered cloud, ominous and heavy over the plain',
+      'A low arcing shelf cloud like a grey wall filling the sky, dust lifting beneath it',
+      'Forking lightning splitting a near-black storm base under a spreading anvil',
+    ],
+    instructions: `Output ONLY a numbered list of {COUNT} stormy sky entries. Each 12-24 words, single line, real moist-cloud meteorology. NEVER disc/plate/saucer/lens/lenticular/metallic/hovering/UFO. NO preamble.`,
+  },
+
   wetlands_wild_subject: {
     format: 'simple',
     theme: `PURE WILD-WETLAND scenes for EarthBot's wetlands-wild path — INLAND freshwater wetlands, deltas, swamps, lily lagoons, mangrove channels. THE WETLAND IS THE HERO. Each entry 30-55 words. A clean true-to-life nature photograph. Lush, watery, alive — NOT a dry vista, NOT an ocean coast.

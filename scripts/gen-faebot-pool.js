@@ -159,6 +159,564 @@ EXAMPLES (3):
   },
 
   // ════════════════════════════════════════════════════════
+  // GOBLIN-MARKET PATH (Stage F1). Clone of fairy-swarm crowd
+  // machinery retargeted to a fae NIGHT MARKET: lantern-lit
+  // stalls of impossible wares, fae merchants + shoppers,
+  // critter customers, market lanes under great roots. The
+  // EVENT is the hero (≥6 figures); market_wares is the
+  // money-shot. All the fairy-swarm laws hold (FOREST-CRAFT,
+  // modern-noun ban, kodama/full-faces, no age/gender nouns).
+  // ════════════════════════════════════════════════════════
+
+  faebot_goblin_market_event: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET EVENT — the SHARED MARKET HAPPENING a whole crowd of palm-sized fae at a night-market is engaged in together. Each entry 25-45 words, OPENING WITH AN ACTIVE VERB, naming ONE common market moment that AT LEAST SIX fae are visibly taking part in (merchants AND shoppers), with 2-3 distinct little sub-actions distributed among them. NEVER pose language ("standing", "posing"), NEVER a lone merchant.
+
+FOREST-CRAFT LAW (non-negotiable): every stall, ware, coin, scale, and sign is FAE-MADE FROM FOREST MATERIALS — twig, leaf, petal, acorn, birch-bark, spider-silk, snail-shell, dew, bottled light. This is a TIMELESS enchanted-forest bazaar, never a modern market. Before using ANY market noun, test it: "what is the most famous image of this noun?" If the answer is modern or human-scale (a cashier, a cash register, a price-tag, a farmers-market, a storefront, a food-truck, a checkout line), DO NOT use it — recast the same bustle as fae-craft (bartering acorns for bottled starlight, weighing seeds on a leaf-scale, a merchant crying wares from a mushroom-stall). Coins are polished seeds, dew-pearls, or carved nutshells — never modern money.
+
+VARIETY MANDATE — ~24 distinct market beats: haggling over a glowing jar of bottled fireflies, buyer and seller leaning across the stall while onlookers weigh in; a stall mobbed for the last moon-plums, fae jostling and reaching as the merchant hands them down; lighting the first lantern of the night-market, a cupped flame passed stall to stall up a living chain; weighing a pinch of dream-dust on a twig-and-acorn balance-scale while a queue waits; unrolling a bolt of spider-silk cloth across two stalls for a crowd to feel; a merchant crying wares from atop a mushroom-cap, fae gathering below; trading a basket of dew-pearls for a caged will-o-wisp, seed-coins changing hands; a potion-seller demonstrating a bubbling philtre, colored smoke drawing a crowd; ladling hot berry-cordial from an acorn cauldron into thimble-cups down a line; setting out a fresh tray of candied rose-petals as buyers crowd in; a trinket-peddler spilling a tray of beetle-shell buttons for pickers to sort; two merchants bartering a snail across the lane while their customers wait; hoisting a new leaf-awning over a stall as helpers haul the guy-lines; a fortune-teller reading a dew-drop for a hushed little audience; hawking bundled herbs from a barrow of woven twigs; a crowd bidding on a rare luminous mushroom held aloft; children-fae pressed at a sweets-stall of honey-drops and sugared violets; a tailor-stall fitting a shopper in petal-silk while others browse the bolts; unpacking a beetle-cart delivery of acorns as porters carry them off; a spice-seller measuring glowing pollen into folded-leaf packets; a lantern-maker hanging his glowing wares in a row for buyers to point at; a baker-fae sliding seed-cakes off a bark-paddle to a reaching crowd; auctioning a bottled thunderstorm, the crowd craning as it flickers in the jar; a swarm at a music-box stall as a played acorn spins out a forest reel.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE shared market happening in 25-45 words — OPEN with an active verb, name the common ware/stall/moment, distribute 2-3 sub-actions among the crowd (merchants AND shoppers). At least six fae implied. Every noun passes the forest-craft test (no market object whose famous image is modern). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Haggling over a glowing jar of bottled fireflies, a merchant leaning from her mushroom-stall while the buyer counts polished-seed coins and two onlookers lean in to judge the bargain.
+2. Lighting the first lantern of the night-market, a cupped flame passed stall to stall up a living chain of fae, dew-lanterns flickering awake down the whole root-arched lane.
+3. Mobbing a stall for the last of the moon-plums, fae jostling and reaching with thimble-baskets while the harried merchant hands the glowing fruit down over their heads.`,
+  },
+
+  faebot_goblin_market_troupe: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET TROUPE — WHO the market fae are: a group-level description of a crowd of palm-sized fae MERCHANTS and SHOPPERS. Each entry 30-50 words sketching 2-3 DISTINCT leads (a merchant + shoppers, each with different wings + hair + dress colors + a market role) plus the varied crowd behind. Painterly-real Froud/Vess register. EVERY fae has a full beautiful face, real eyes, real hair — NEVER bald, NEVER dot-eyed, NEVER faceless, NEVER a head fused into bark. Slender elegant proportions, NEVER chibi/anime/Disney. EVERY fae ALSO has VISIBLE gossamer or insect WINGS (dragonfly / moth / petal / lacewing / beetle-shell) and delicately POINTED EARS — merchants and shoppers alike, so the whole crowd reads as fae folk through and through. Any fae carrying goods uses a fae-craft acorn-cup basket, woven-leaf satchel, or snail-shell pannier held in hand or slung on the back.
+
+Roles ride on the market: a potion-seller, a trinket-peddler, a fruit-merchant, a lantern-maker, a fortune-teller, a tailor, a spice-seller, a baker, a curio-dealer, plus browsing shoppers, hagglers, and errand-runners. Diversify within the fae's OWN aesthetic (wing type, wood-tone or petal-tone skin, hair) — never real-world ethnicity.
+
+VARIETY MANDATE — ~22 distinct troupes varying: wing types (dragonfly-clear / luna-moth green / beetle-shell iridescent / petal-wings / lacewing gold / moth-dusty); hair (silver braids, chestnut curls, moss-green waves, marigold crop, black sleek, strawberry plaits); dress palettes (petal-pinks, leaf-greens, acorn-browns, bluebell-blues, mushroom-creams, berry-reds, ink-dark trader-cloaks); market roles (merchant, peddler, shopper, haggler, crier, porter); mixed builds (willowy, round-cheeked, wiry, matronly, spry silver-haired elders — conveyed physically, never with age words); moods (shrewd, jolly, mischievous, harried, curious, sing-song hawking).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE troupe in 30-50 words — sketch 2-3 distinct leads (a merchant + shoppers; wings + hair + dress + role each different) + the varied crowd behind. Full faces, real eyes and hair on all. NO age words (young/old/elderly), no "woman/man/girl/boy" nouns — they are fae/fairies. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A shrewd potion-seller with beetle-shell wings, silver braids and an ink-dark trader-cloak leans from her stall toward a round-cheeked shopper in bluebell-blue with dragonfly wings and a chestnut crop, a wiry porter in acorn-brown hauling a basket behind, the lane-crowd a flutter of mismatched petal-colors.
+2. A jolly fruit-merchant with luna-moth-green wings and marigold hair calls his wares beside a mischievous peddler in berry-red with lacewing-gold wings juggling trinkets, a matronly shopper in mushroom-cream with moth-dusty wings inspecting a plum, the market bustling behind in dusk tones.
+3. A sing-song lantern-maker with petal-wings and strawberry plaits hangs glowing jars while a hushed fortune-teller in ivory layers with frost-pale lacewings and black sleek hair reads a dew-drop for a leaning shopper, errand-runners darting through the crowd behind.`,
+  },
+
+  faebot_goblin_market_setting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET SETTING — the tiny hidden FOREST BAZAAR where the night-market sprawls, rendered at fairy-furniture scale. Each entry 25-45 words: the market venue + 2-3 fae-scale furnishings/props that prove palm-size (mushroom-cap stalls, acorn-cup measures, leaf awnings, snail-shell kiosks, dew-lantern strings).
+
+VARIETY MANDATE — ~22 distinct market settings: a lane of mushroom-cap stalls winding under an arch of great tree-roots; rows of stalls tucked into the knot-holes of one colossal trunk, ladders and rope-lifts between tiers; a bridge-market strung across a mossy brook, stalls railed with twig-balustrades; a hollow-log arcade lined with booths and hung with lanterns; a toadstool-ring plaza of open stalls around a central pebble stage; a bramble-arch gateway market draped in berry-lantern bunting; a streamside wharf-market with walnut-shell boats unloading crates; a root-cellar undercroft of stalls lit by glow-worm strings; a stepped-moss terrace bazaar climbing a boulder in tiers; a bark-shelf market built along a fallen log; a fern-canopy souk with awnings of leaf and cobweb; a snail-shell kiosk row on a branch; a spider-silk tent-bazaar shimmering between fern stems; a market spilling around the base of a giant flower, petals as awnings; a lantern-lit dell of stalls under drooping foxgloves; a stump-top market ringed with bracket-fungus balconies. The market FLOOR is soft moss, packed earth, a mushroom-gill boardwalk, or a broad curling leaf — fae-scale ground underfoot; a passing fae is dwarfed by a foxglove bell or toadstool. Each names the market layout + the fae-scale floor + 2-3 fae-scale props proving palm-size.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny forest-market venue in 25-45 words with 2-3 fae-scale furnishings proving palm-size (mushroom stalls / acorn measures / leaf awnings / dew-lanterns). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A lane of red-capped mushroom stalls winding beneath an arch of great tree-roots, dew-lanterns strung overhead between the roots, acorn-cup measures and leaf-awnings at every booth.
+2. A bridge-market strung across a mossy brook on a fallen twig-span, stalls railed with balustrades of woven bark, snail-shell kiosks at each end and lanterns reflected in the water below.
+3. Rows of stalls tucked into the knot-holes of one colossal trunk, rope-lifts and root-ladders climbing between the tiers, each booth a lit doorway hung with glowing wares.`,
+  },
+
+  faebot_goblin_market_wares: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET WARES — the MONEY-SHOT: the ONE impossible, wondrous thing for sale that makes the whole market magical — a single hero-ware displayed on a stall for the crowd to marvel at. Each entry 15-30 words: name the impossible ware + how it is displayed/contained at fae scale (in a jar, on a shelf, hung on a hook, on a velvet-moss cushion). Every ware is FAE-MADE or FAE-CAUGHT of forest/dream stuff — never a modern manufactured object.
+
+VARIETY MANDATE — ~22 distinct impossible wares: a jar of bottled starlight glowing on the shelf; a caged will-o-wisp bobbing behind glass; a bottled thunderstorm flickering in a corked flask; a jar labelled "last night's dreams," swirling faintly; a single caught moonbeam coiled in a bell-jar; a row of bottled birdsong, each vial trilling softly; a folded-leaf packet of glowing pollen that lifts off the tray; a snail-shell that whispers the sea; a spool of woven moonlight-thread; a candle burning with cold blue fae-fire; a mushroom showing tomorrow's weather on its cap; a bouquet of everlasting frost-flowers under a glass dome; a bottled aurora rippling green; a caged singing cricket wearing a tiny crown; a corked vial of laughter, shaking; a mirror-berry reflecting your fondest wish; a lantern holding a captured sunset; a jar of fireflies arranged like a constellation; a seed said to grow a door to anywhere; a phial of tears that heal; a music-box acorn playing a forest reel; a chess-set of carved beetle-shell that moves its own pieces.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE impossible hero-ware for sale in 15-30 words — name the wonder + how it's displayed/contained at fae scale. Fae-made or fae-caught, never modern-manufactured. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A jar of bottled starlight on the top shelf, its glow pulsing softly, a hand-lettered birch-bark tag tied at the neck.
+2. A caged will-o-wisp bobbing behind a curved-glass front, drifting from bar to bar as shoppers press close to watch.
+3. A corked flask holding a tiny live thunderstorm, lightning flickering inside the glass, set on a velvet-moss cushion at the stall's center.`,
+  },
+
+  faebot_goblin_market_critter_guests: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET CRITTER GUESTS — 1-2 WHOLE, complete, adorable forest critters at the night-market among the fae, as customers, helpers, or mounts. Each entry 20-35 words: the critter(s), whole head + body, peacefully part of market life (browsing, carrying, minding a stall, dozing). Sweet storybook register — never looming, never scary.
+
+VARIETY MANDATE — ~20 distinct market critters: a hedgehog browsing a sweets-stall, quills bristling with tiny parcels; a dormouse minding a nut-stall, whiskers twitching; a robin ferrying a fae shopper down the lane; a chipmunk cheeks-full at a seed-stall; a snail whose shell serves as a kiosk counter; a beetle harnessed to a twig-cart of acorns; a hedgehog porter with lanterns hung on its quills; a squirrel handing wares down from an upper stall; a mole surfacing politely under a booth; a toad in a moss cap acting as market-warden; a bumblebee hovering at a flower-stall like a customer; a wren perched atop the tallest lantern-pole; a rabbit with a pannier of herbs on its back; an owl fledgling blinking from a knot-hole booth; a ladybug procession crossing a stall counter; a frog weighing berries on a lily-pad scale; a field-mouse haggling with cheeks full; a fox threading politely through the lane; a shrew waiter balancing a berry tray; a duck and duckling paddling up to a wharf-stall.`,
+    touchpoints: [],
+    instructions: `Each entry is 1-2 whole complete critters in market life, 20-35 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A hedgehog browsing a sweets-stall, whole and bright-eyed, tiny parcels of honey-drops already balanced on its quills as a fae merchant adds one more.
+2. A beetle harnessed to a twig-cart heaped with acorns, whole and glossy-shelled, plodding down the market lane while a porter-fae walks alongside.
+3. A dormouse minding a nut-stall, whole and round and velvet-furred, paws folded on the counter as shoppers lean in to choose.`,
+  },
+
+  faebot_goblin_market_lighting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET LIGHTING — how the fae night-market is lit. The market's signature is a WARM-LANTERN vs COOL-BLUE-DUSK contrast: pools of warm amber lantern-light and glowing wares against the cool blue twilight of the forest. Each entry 18-32 words: the time/sky + how the market glows from within. Mostly dusk-to-night (the market's home register), a few golden-hour and misty-dawn openings for variety.
+
+VARIETY MANDATE — ~22 entries, weighted toward night-market dusk/night with some spread:
+  • BLUE TWILIGHT — violet-blue dusk over the forest, the market's first warm lanterns and glowing wares flickering awake against the cool shadow
+  • DEEP LANTERN-LIT NIGHT — indigo starlit dark, the whole bazaar aglow with hanging dew-lanterns, glowing jars, firefly-strings and bioluminescent stall-signs, warm light pooling on the lane
+  • BOTTLED-GLOW — the brightest light comes from the wares themselves (bottled starlight, caged wisps, glowing potions) casting colored light on nearby faces
+  • MOONLIT — a low full moon silvering the roots overhead while warm lanterns hold the stalls in amber
+  • FOGGY NIGHT-MARKET — soft mist between the stalls, lantern-halos glowing, the far booths dissolving into blue haze
+  • GOLDEN-HOUR OPENING — low honey-gold sun slanting through the trees as the market sets up, first lanterns not yet needed
+  • MISTY DAWN CLOSE — pale pink first light, a few lanterns still burning, the last stalls packing up in the cool
+Each names the TIME + sky + how the market glows (warm lanterns + glowing wares against cool dusk/night).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lighting mood in 18-32 words — time + sky + how the market glows (warm lanterns + bottled-glow wares against cool blue dusk/night). Weighted to dusk/night. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. DEEP LANTERN-LIT NIGHT — an indigo starlit dark over the roots, the whole bazaar aglow with hanging dew-lanterns and glowing jars, warm amber light pooling along the lane against the cool shadow.
+2. BLUE TWILIGHT — a violet-blue dusk settles through the forest as the market's first lanterns flicker awake, glowing wares warming against the cool blue gloom.
+3. BOTTLED-GLOW — the brightest light spills from the wares themselves, a shelf of bottled starlight and caged wisps throwing colored glow across the merchant's face and the leaning crowd.
+4. FOGGY NIGHT-MARKET — soft mist drifts between the stalls, every lantern wearing a glowing halo, the farthest booths dissolving into cool blue haze.`,
+  },
+
+  faebot_goblin_market_magical_flavor: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET MAGICAL FLAVOR — ONE enchanted market phenomenon woven into the scene, fires ~50%. Each entry 12-25 words. A supernatural accent at the market's own tiny scale — never epic, never scary, always wondrous.
+
+VARIETY MANDATE — ~22 gentle market enchantments: a levitating balance-scale weighing moonlight in the air; seed-coins that chime a note as they change hands; a merchant's pipe-smoke shaping into little images of the ware he sells; a stall-sign rewriting itself in glowing letters; a swarm of leaf-tags fluttering like moths between stalls; a potion demonstration blooming a puff of colored star-smoke over the crowd; a carpet of fallen lantern-light lying like spilled gold on the lane; wares that hum or glow brighter as a buyer nears; a fortune-teller's dew-drop projecting a tiny moving scene; a will-o-wisp escaped from its jar, chased by laughing fae; motes of glowing pollen drifting up from an opened packet; a floating lantern following its owner down the lane; a spilled jar of bottled birdsong filling the air with visible notes; a mirror-berry flashing each passerby's wish above the stall; a self-stirring cauldron of cordial trailing sweet steam-shapes; a shelf of bottled weather flickering tiny storms and auroras in a row; a trail of glowing footprints where a wisp-buyer walked; a merchant conjuring change from thin air in a sparkle; a caged singing cricket keeping the market's rhythm; fireflies arranging themselves into a glowing sign of light above a stall.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle enchanted market phenomenon in 12-25 words, at fae scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A levitating balance-scale hangs in the air above a stall, weighing a coil of captured moonlight against a pinch of dream-dust.
+2. A merchant's pipe-smoke curls up and shapes itself into little glowing images of the potions he's selling.
+3. A will-o-wisp escaped from its jar drifts over the stalls, a knot of laughing fae chasing it down the lane.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // GOBLIN-MARKET-STALL PATH — the INTIMATE vignette. Same fae
+  // night-market, pulled in CLOSE on ONE stall: 6-10 big winged
+  // fae filling foreground + midground, the wonder-ware as hero,
+  // the rest of the market a soft glowing haze behind. Every fae
+  // large enough to render full wings + pointed ears (the
+  // fairy-swarm intimate-scale fix for the modern-human backfill).
+  // ════════════════════════════════════════════════════════
+
+  faebot_goblin_market_stall_event: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL EVENT — the CLOSE-UP moment at ONE fae market stall: a small knot of 6-10 palm-sized fae (one merchant + a few shoppers) all engaged in the SAME exchange, seen up close. Each entry 25-45 words, OPENING WITH AN ACTIVE VERB, naming the one exchange and 2-3 distinct little sub-actions among the gathered fae. Intimate, close, no distant crowd.
+
+FOREST-CRAFT LAW (non-negotiable): every stall, ware, coin, scale, and sign is FAE-MADE FROM FOREST MATERIALS — twig, leaf, petal, acorn, birch-bark, spider-silk, snail-shell, dew, bottled light. Coins are polished seeds or dew-pearls. A timeless enchanted-forest bazaar. Test every market noun: if its most famous image is modern or human-scale (cashier, register, price-tag, farmers-market, storefront, checkout), recast it as fae-craft.
+
+VARIETY MANDATE — ~24 distinct close-stall moments: a merchant leaning down to hand a glowing jar to a reaching shopper while two others crane in; weighing a pinch of dream-dust on a twig balance-scale as a small queue watches; a potion-seller demonstrating a bubbling philtre, a puff of colored smoke drawing the little crowd close; ladling berry-cordial into thimble-cups passed hand to hand; a shopper haggling nose-to-nose with the merchant while friends judge the bargain; unwrapping a fresh tray of candied rose-petals as buyers press in; a trinket-peddler tipping a tray of beetle-shell buttons for pickers to sort; a lantern-maker lifting a glowing jar down off its hook for a buyer to inspect; counting polished-seed coins into a merchant's cupped hands; a fortune-teller bent over a dew-drop for two hushed shoppers; a fruit-merchant stacking moon-plums as a shopper reaches up; a baker sliding a seed-cake off a bark-paddle to an eager fae; a tailor pinning petal-silk on a shopper at the stall's edge; a spice-seller folding glowing pollen into a leaf-packet while a buyer sniffs; two fae leaning over the counter debating a caged wisp; a merchant polishing a bottled star with a leaf-cloth as buyers admire; a shopper lifting a glowing mushroom to the light to check it; passing a shared jar around the stall for a taste; a peddler juggling trinkets to draw the knot of fae closer; a merchant wrapping a purchase in a folded leaf and twine.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE close-up stall exchange in 25-45 words — OPEN with an active verb, name the ware/moment, 2-3 sub-actions among 6-10 gathered fae. Intimate and close, no distant crowd. Every noun passes the forest-craft test. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Leaning down from her mushroom-cap stall, a merchant hands a glowing firefly-jar to a reaching shopper while two more crane over the counter and one counts polished-seed coins into her palm.
+2. Demonstrating a bubbling philtre at the stall, a potion-seller lets a puff of colored star-smoke bloom over the little crowd, six fae pressing in close, one clapping, one reaching for a sample-thimble.
+3. Weighing a pinch of dream-dust on a twig-and-acorn balance-scale, a merchant tips the pan while a small queue of fae leans in to watch the glowing motes settle.`,
+  },
+
+  faebot_goblin_market_stall_troupe: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL TROUPE — WHO the close knot of fae are: 6-10 palm-sized fae at ONE stall, rendered LARGE and close. Each entry 30-50 words sketching the merchant + 3-5 DISTINCT shoppers pressed close, each with different wings + hair + dress colors + a role. Painterly-real Froud/Vess register. EVERY fae has a full beautiful face, real eyes, real hair, VISIBLE gossamer or insect WINGS (dragonfly / moth / petal / lacewing / beetle-shell), and delicately POINTED EARS — merchant and shoppers alike, all big in frame. Slender elegant proportions, NEVER chibi/anime/Disney.
+
+Because the shot is CLOSE, every fae is large enough to show full wings, ears, and expression — lean into that. COVERAGE: every fae is modestly and prettily dressed in fae-craft garments — petal-silk bodices, layered leaf-dresses, woven-grass wraps, flowing gossamer gowns, moss-velvet tunics — that cover the body; the register is elegant, enchanting, and wholesome, sweet storybook charm. Diversify within the fae's OWN aesthetic (wing type, wood-tone or petal-tone skin, hair). Any fae carrying goods uses a fae-craft acorn-cup basket, woven-leaf satchel, or snail-shell pannier.
+
+VARIETY MANDATE — ~22 distinct close troupes varying: the merchant's role (potion-seller, trinket-peddler, fruit-merchant, lantern-maker, fortune-teller, tailor, spice-seller, baker, curio-dealer); wing types; hair (silver braids, chestnut curls, moss-green waves, marigold crop, black sleek, strawberry plaits); dress palettes (petal-pinks, leaf-greens, acorn-browns, bluebell-blues, mushroom-creams, berry-reds, ink-dark trader-cloaks); shopper moods (eager, haggling, curious, delighted, sceptical, sleepy); builds (willowy, round-cheeked, wiry, matronly, spry silver-haired elders — physical signs only, never age words).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE close knot in 30-50 words — the merchant + 3-5 distinct shoppers pressed close (wings + hair + dress + role each different), all LARGE in frame with visible wings + pointed ears + full faces, each fully and modestly clothed in pretty fae-craft petal-silk/leaf/gossamer garments that cover. NO age words (young/old/elderly), no "woman/man/girl/boy" nouns — they are fae/fairies. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A shrewd potion-seller with beetle-shell wings, silver braids and a high-necked ink-dark leaf-dress leans over her counter toward a round-cheeked shopper in a layered bluebell-silk gown with clear dragonfly wings and a chestnut crop, two more fae crowding close — one in an acorn-brown moss-velvet tunic with lacewing-gold wings, one in a berry-red petal bodice-and-skirt with moth-dusty wings, all pointed-eared and bright-eyed.
+2. A jolly fruit-merchant with luna-moth-green wings and marigold hair in a leaf-wrap apron-dress stacks moon-plums as three shoppers press in: a matronly fae in a mushroom-cream gown with petal-wings, a wiry one in a woven-grass tunic with dragonfly wings reaching up, a strawberry-plaited fae in a rose-silk dress cradling an acorn basket, every ear delicately pointed.
+3. A sing-song lantern-maker with petal-wings and black sleek hair in a flowing ivory-gossamer robe lifts a glowing jar down for a delighted shopper in a layered lilac gown with frost-pale lacewings, two friends leaning in beside them in amber and violet leaf-dresses, faces lit warm and close.`,
+  },
+
+  faebot_goblin_market_stall_setting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL SETTING — ONE fae market stall (or the close corner of two), seen UP CLOSE and filling much of the frame at fae-furniture scale. Each entry 25-45 words: the single stall + 2-3 fae-scale furnishings/props that prove palm-size (a mushroom-cap roof, an acorn-cup measure, a leaf awning, a snail-shell till, dew-lantern strings). The rest of the market is only a soft glowing haze behind.
+
+VARIETY MANDATE — ~22 distinct single stalls, up close: a red-capped mushroom stall with an acorn-shelf of glowing jars; a hollowed-log booth hung with lanterns and bundled herbs; a bark-plank counter under a curling-leaf awning; a snail-shell kiosk with wares on its whorl; a toadstool-topped potion stall lined with dewdrop-vials; a woven-twig fruit-barrow heaped with berries; a spider-silk-draped curio stall glinting with trinkets; a birch-bark tailor's booth hung with petal-silk bolts; a lantern-maker's stall aglow with hanging jars; a flower-stall built in an upturned foxglove; a baker's bark-oven booth with seed-cakes cooling; a fortune-teller's nook under a mushroom cap with a dew-drop on a stand; an acorn-cap tea stall with thimble-cups steaming; a moss-topped counter of bottled wonders. Each names the ONE stall + 2-3 fae-scale props proving palm-size, close and detailed, the market behind it a warm blur.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE single fae market stall seen up close in 25-45 words, filling the frame, with 2-3 fae-scale furnishings proving palm-size; the wider market only a soft glow behind. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A red-capped mushroom stall up close, its gills the awning, an acorn-shelf behind the counter crowded with glowing jars, a snail-shell till and a dew-lantern hung at the corner, the market a warm blur beyond.
+2. A hollowed-log booth filling the frame, bundled herbs and lanterns hanging from its lip, a bark-plank counter worn smooth, acorn-cup measures in a row, soft haze of other stalls glowing behind.
+3. A spider-silk-draped curio stall glinting with beetle-shell trinkets and bottled wonders on a moss-topped counter, a curling-leaf awning overhead, the deeper market dissolving into lantern-light behind.`,
+  },
+
+  faebot_goblin_market_stall_wares: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL WARES — the MONEY-SHOT, HERO of the close vignette: the ONE impossible, wondrous thing for sale, PROMINENT on the counter for the little crowd to marvel at. Each entry 15-30 words: name the impossible ware + how it's displayed at fae scale (in a jar, under a glass dome, on a velvet-moss cushion, hung on a hook). Since the shot is close, the ware is a clear hero the eye lands on. Fae-made or fae-caught, never modern-manufactured.
+
+VARIETY MANDATE — ~22 distinct impossible hero-wares: a jar of bottled starlight pulsing on the counter; a caged will-o-wisp bobbing behind curved glass; a corked flask holding a tiny live thunderstorm; a bell-jar with a coiled caught moonbeam; a row of bottled birdsong trilling softly; a folded-leaf packet of glowing pollen lifting off the tray; a snail-shell that whispers the sea on a moss cushion; a spool of woven moonlight-thread; a candle burning cold blue fae-fire; a mushroom showing tomorrow's weather on its cap; frost-flowers everlasting under a glass dome; a bottled aurora rippling green; a caged singing cricket in a tiny crown; a corked vial of laughter shaking; a mirror-berry reflecting your fondest wish; a lantern holding a captured sunset; a jar of fireflies arranged like a constellation; a wish-seed said to grow a door anywhere; a phial of healing tears; a music-box acorn playing a forest reel; a self-moving chess-set of carved beetle-shell.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE impossible hero-ware displayed prominently on the counter in 15-30 words. Fae-made or fae-caught, never modern-manufactured. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A jar of bottled starlight front and center on the counter, its glow pulsing softly, a birch-bark price-tag tied at the neck.
+2. A caged will-o-wisp bobbing behind curved glass at the stall's heart, drifting bar to bar as the gathered fae press close.
+3. A corked flask holding a tiny live thunderstorm set on a velvet-moss cushion, lightning flickering inside as shoppers lean in.`,
+  },
+
+  faebot_goblin_market_stall_critter_guests: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL CRITTER GUESTS — 1 WHOLE, complete, adorable forest critter AT the stall among the close knot of fae — a customer, helper, or the merchant's companion. Each entry 20-35 words: the critter, whole head + body, up close and peacefully part of the stall (browsing, minding the counter, dozing, being handed a treat). Sweet storybook register, never looming or scary.
+
+VARIETY MANDATE — ~20 distinct close critters: a hedgehog browsing the counter, quills bristling with tiny parcels; a dormouse minding the till, paws folded; a robin perched on the awning eyeing the wares; a chipmunk cheeks-full at a seed-stall; a snail whose shell is the counter itself; a beetle harnessed to a twig-cart of goods at the stall's edge; a squirrel handing a nut down from the shelf; a toad in a moss cap at the stall doorway; a bumblebee hovering at a flower-stall like a customer; a wren tugging a ribbon on the counter; a rabbit with a pannier waiting to be loaded; an owl fledgling blinking from a knot-hole shelf; a ladybug crossing the counter; a frog weighing a berry on a lily-pad scale; a field-mouse haggling cheeks-full; a fox nosing politely at a fruit-tray; a shrew balancing a berry on a tray.`,
+    touchpoints: [],
+    instructions: `Each entry is 1 whole complete critter at the stall up close, 20-35 words, peacefully part of the scene. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A hedgehog browsing the counter up close, whole and bright-eyed, a tiny parcel of honey-drops already balanced on its quills as the merchant adds another.
+2. A dormouse minding the till, whole and round and velvet-furred, paws folded on the mushroom-cap counter as shoppers lean in over its head.
+3. A robin perched on the leaf-awning right above the wares, whole and red-breasted, head cocked at a glowing jar below.`,
+  },
+
+  faebot_goblin_market_stall_lighting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL LIGHTING — how the ONE stall is lit up close: warm lantern-light and glowing wares pooling on the counter and the gathered fae faces, against the cool blue dusk of the market haze behind. Each entry 18-32 words: the time/sky feel + how the stall glows, keeping every close face warmly lit and readable. Mostly dusk-to-night, a few golden-hour openings.
+
+VARIETY MANDATE — ~22 entries, weighted to intimate warm-stall light: a dew-lantern hung at the corner throwing amber across the counter and faces; the bottled wares themselves the brightest source, casting colored glow on the nearest fae; a single glowing jar lifted, lighting the merchant's face from below; warm lantern-pool on the counter with cool blue market-haze behind; a shaft of moonlight through the leaves catching the stall while lanterns hold the rest; foggy dusk softening the market behind to a glow while the stall stays warm and clear; a firefly-string over the awning dappling the wares; golden-hour setup light slanting warm across the counter; a candle of blue fae-fire tinting the near faces cool-bright; lantern-halos in light mist wrapping the stall. Each names the light source + how it warms the close faces + the cool soft market behind.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE intimate stall-lighting mood in 18-32 words — the warm light source + how it lights the close faces + the cool soft market-haze behind. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A dew-lantern hung at the stall's corner throws warm amber across the counter and the gathered faces, the deeper market dissolving into cool blue haze behind them.
+2. The bottled wares are the brightest thing here, a shelf of starlight-jars and caged wisps casting colored glow across the merchant and the leaning shoppers.
+3. A single glowing jar lifted off its hook lights the merchant's face warm from below, lantern-light pooling on the counter, blue dusk soft beyond.`,
+  },
+
+  faebot_goblin_market_stall_magical_flavor: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-STALL MAGICAL FLAVOR — ONE enchanted accent at the close stall, fires ~50%. Each entry 12-25 words. A small supernatural touch at fae scale, right at the counter — never epic, never scary, always wondrous.
+
+VARIETY MANDATE — ~22 gentle close-stall enchantments: a levitating balance-scale weighing moonlight above the counter; seed-coins chiming a note as they change hands; the merchant's pipe-smoke shaping into little images of the ware; a stall-sign rewriting itself in glowing letters; a price-tag of leaves fluttering like a moth; a potion demo blooming colored star-smoke over the counter; wares humming or glowing brighter as a buyer nears; a fortune-teller's dew-drop projecting a tiny moving scene; a wisp escaped from its jar circling the stall; motes of glowing pollen drifting up from an opened packet; a floating lantern nudging closer to light a purchase; a spilled vial of birdsong filling the air with visible notes above the counter; a mirror-berry flashing a shopper's wish; a self-stirring thimble of cordial trailing sweet steam-shapes; a shelf-row of bottled weather flickering tiny storms; a merchant conjuring change from thin air in a sparkle; a caged cricket keeping the beat.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle enchanted accent at the close stall in 12-25 words, fae scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A levitating balance-scale hovers just above the counter, weighing a coil of captured moonlight against a pinch of dream-dust.
+2. The merchant's pipe-smoke curls up and shapes itself into little glowing images of the potion he's selling.
+3. A will-o-wisp escaped from its jar circles the stall, and a shopper laughs and reaches for it.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // GOBLIN-MARKET-LANE PATH — the HYBRID. A crisp FOREGROUND of
+  // 4-6 big winged fae at a stall, and the GRAND market lane
+  // stretching behind them dissolved into soft warm painterly
+  // HAZE (lantern bokeh, glowing depth, distant figures as
+  // impressionistic suggestions). Keeps goblin-market's grandeur
+  // while the soft-haze depth removes the sharp modern-human crowd.
+  // ════════════════════════════════════════════════════════
+
+  faebot_goblin_market_lane_event: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE EVENT — a FOREGROUND fae market moment anchoring the eye, with the grand night-market lane bustling softly behind. Each entry 25-45 words, OPENING WITH AN ACTIVE VERB: a close exchange among 4-6 fae at a foreground stall (the sharp, detailed hero action), while the wider market glows and bustles as soft depth beyond them. Intimate hero moment + grand backdrop.
+
+FOREST-CRAFT LAW (non-negotiable): every stall, ware, coin, and sign is FAE-MADE FROM FOREST MATERIALS — twig, leaf, petal, acorn, birch-bark, spider-silk, snail-shell, dew, bottled light. Coins are polished seeds or dew-pearls. Test every market noun: if its most famous image is modern (cashier, register, price-tag, farmers-market, storefront, checkout), recast it as fae-craft.
+
+VARIETY MANDATE — ~24 distinct foreground moments (grand market behind): a merchant leaning from her foreground stall handing a glowing jar to a reaching shopper, lantern-lit stalls receding behind; a potion demo blooming colored smoke over a foreground knot of fae, the market a warm blur beyond; weighing dream-dust on a foreground balance-scale as the lane bustles softly behind; a shopper haggling at the near stall while the deep market glows; lifting a caged wisp down for a foreground buyer, distant lanterns bokeh-soft; ladling cordial into thimble-cups at the front stall; a trinket-peddler spilling beetle-shell buttons for foreground pickers; a lantern-maker hanging a glowing jar at the near booth; counting seed-coins into a merchant's hands up front; a fortune-teller bent over a dew-drop for two foreground fae; stacking moon-plums as a near shopper reaches; a baker sliding a seed-cake to a foreground fae; a tailor pinning petal-silk on a near shopper; a spice-seller folding pollen into a leaf-packet up front; two fae debating a bottled star at the near stall; unwrapping candied rose-petals for a foreground buyer; polishing a glowing ware at the front counter; a shopper lifting a luminous mushroom to the light up close; passing a shared taste at the near stall; a peddler drawing a foreground knot closer with a trick.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE foreground fae market moment in 25-45 words — OPEN with an active verb, 4-6 fae at a near stall as the sharp hero action, the grand market glowing softly behind. Every noun passes the forest-craft test. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Leaning from her foreground mushroom-stall, a merchant hands a glowing firefly-jar to a reaching shopper as two more crane in, the lantern-lit market lane receding into soft warm haze behind them.
+2. Demonstrating a bubbling philtre at the near stall, a potion-seller lets colored star-smoke bloom over a knot of four fae, the deep bazaar a glowing blur of stalls and lanterns beyond.
+3. Weighing dream-dust on a twig balance-scale at the foreground counter, a merchant tips the pan while three fae watch close, the grand market bustling softly into the misty depth.`,
+  },
+
+  faebot_goblin_market_lane_troupe: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE TROUPE — the crisp FOREGROUND knot: 4-6 palm-sized fae at the near stall, rendered LARGE and detailed (the sharp heroes), with a sense of more fae as soft glowing figures in the market haze behind. Each entry 30-50 words sketching the merchant + 3-4 DISTINCT foreground shoppers, each with different wings + hair + dress + role. Painterly-real Froud/Vess register. EVERY foreground fae has a full beautiful face, real eyes, real hair, VISIBLE gossamer or insect WINGS (dragonfly / moth / petal / lacewing / beetle-shell), and delicately POINTED EARS. COVERAGE: every fae is modestly and prettily dressed in fae-craft garments with HIGH or gentle NECKLINES and COVERED SHOULDERS — layered leaf-dresses, flowing petal-silk gowns, woven-grass wraps, moss-velvet tunics, gossamer robes with sleeves — softly draped and fully covering, elegant and wholesome, sweet storybook charm. Slender elegant proportions, NEVER chibi/anime/Disney. Diversify within the fae's OWN aesthetic; distant fae stay soft glowing suggestions, never sharp.
+
+VARIETY MANDATE — ~22 distinct foreground troupes varying: merchant role (potion-seller, trinket-peddler, fruit-merchant, lantern-maker, fortune-teller, tailor, spice-seller, baker, curio-dealer); wing types; hair; dress palettes (petal-pinks, leaf-greens, acorn-browns, bluebell-blues, mushroom-creams, berry-reds, ink-dark trader-cloaks); moods (eager, haggling, curious, delighted, sceptical); builds (willowy, round-cheeked, wiry, matronly, spry silver-haired elders — physical signs only, never age words).`,
+    touchpoints: [],
+    instructions: `Each entry is ONE foreground knot in 30-50 words — the merchant + 3-4 distinct shoppers up close (wings + hair + dress + role each different), all LARGE with visible wings + pointed ears + full beautiful faces, each fully and modestly clothed in a HIGH-NECKED, covered-shoulder fae-craft gown or dress; distant fae are soft glowing suggestions. NO age words, no "woman/man/girl/boy" nouns. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A shrewd potion-seller with beetle-shell wings, silver braids and a high-necked long-sleeved ink-dark leaf-gown leans over her foreground counter toward a round-cheeked shopper in a layered high-collared bluebell-silk dress with dragonfly wings, two more fae close by in covered acorn-brown moss-velvet robes and a sleeved berry-red gown, all pointed-eared; soft glowing fae drift in the market haze behind.
+2. A jolly fruit-merchant with luna-moth-green wings and marigold hair in a full leaf-wrap apron-gown stacks moon-plums as three foreground shoppers press in — a high-necked mushroom-cream gown with petal-wings, a sleeved woven-grass tunic-dress with dragonfly wings, a covered rose-silk gown cradling an acorn basket — the grand market a warm blur beyond.
+3. A sing-song lantern-maker with petal-wings and black sleek hair in a flowing high-collared ivory-gossamer robe lifts a glowing jar for a foreground shopper in a modest lilac gown with lacewings, two friends leaning in beside them in sleeved amber and violet leaf-dresses, the bazaar glowing soft behind.`,
+  },
+
+  faebot_goblin_market_lane_setting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE SETTING — the GRAND fae night-market lane as the backdrop behind the foreground stall, described as SOFT, WARM, GLOWING PAINTERLY DEPTH. Each entry 25-45 words: a foreground stall or two (crisp, close) + the wider market lane receding behind it, DISSOLVING into lantern-bokeh, glowing haze, and soft impressionistic stalls, so the depth reads atmospheric and dreamy rather than a sharp crowded street. This soft depth is the whole point — the grandeur without hard detail.
+
+VARIETY MANDATE — ~22 distinct grand-lane backdrops: a near mushroom-stall with the root-arched market lane glowing soft behind; a foreground bark-counter and the bazaar dissolving into warm lantern-haze; a close potion-booth with rows of hazy stalls receding under great roots; a bridge-market stall up front, the far span a blur of lantern-light over misty water; a near fruit-barrow and the deep lane a soft glow of dissolving booths; a foreground lantern-stall against a bokeh field of hanging lights; a snail-shell kiosk close with the market a warm painterly haze beyond; a near flower-stall and the grand bazaar melting into glowing dusk; a foreground tea-booth with soft stalls receding into mist; a close curio-stall against a dreamy lantern-blur; a near baker's booth and the lane dissolving into warm depth; a foreground tailor-stall with the bazaar a soft luminous suggestion behind. Each names the crisp foreground stall + the grand market softening into glowing haze.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE crisp foreground fae stall + the GRAND market lane behind it dissolving into soft warm lantern-haze / bokeh / glowing depth, 25-45 words. The depth is dreamy and impressionistic, never a sharp crowded street. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A red-capped mushroom-stall crisp in the foreground, and behind it the root-arched market lane recedes into a soft warm haze of dissolving stalls and hanging dew-lanterns glowing in the mist.
+2. A foreground bark-counter of glowing jars, the grand bazaar beyond melting into lantern-bokeh, distant booths and roofs only warm painterly suggestions in the dusk.
+3. A near bridge-market stall railed in woven bark, the far span a soft blur of lantern-light and glowing wares reflected in misty water below.`,
+  },
+
+  faebot_goblin_market_lane_wares: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE WARES — the MONEY-SHOT hero ware, PROMINENT on the foreground stall for the near fae to marvel at, sharp and glowing against the soft market haze behind. Each entry 15-30 words: name the impossible ware + how it's displayed at fae scale (in a jar, under a glass dome, on a moss cushion, hung on a hook). Fae-made or fae-caught, never modern-manufactured.
+
+VARIETY MANDATE — ~22 distinct impossible hero-wares: a jar of bottled starlight pulsing on the foreground counter; a caged will-o-wisp bobbing behind curved glass; a corked flask holding a tiny live thunderstorm; a bell-jar with a coiled caught moonbeam; a row of bottled birdsong trilling; a folded-leaf packet of glowing pollen lifting off the tray; a snail-shell whispering the sea on a moss cushion; a spool of woven moonlight-thread; a candle of cold blue fae-fire; a mushroom showing tomorrow's weather on its cap; everlasting frost-flowers under a glass dome; a bottled aurora rippling green; a caged singing cricket in a crown; a corked vial of laughter shaking; a mirror-berry reflecting a wish; a lantern holding a captured sunset; a jar of fireflies like a constellation; a wish-seed said to grow a door anywhere; a phial of healing tears; a music-box acorn playing a reel; a self-moving beetle-shell chess-set.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE impossible hero-ware displayed prominently on the foreground counter in 15-30 words, sharp against the soft market haze. Fae-made/caught, never modern. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A jar of bottled starlight front and center on the foreground counter, its glow pulsing softly against the warm market haze behind.
+2. A caged will-o-wisp bobbing behind curved glass at the near stall's heart, drifting bar to bar as the foreground fae press close.
+3. A corked flask holding a tiny live thunderstorm on a moss cushion up front, lightning flickering as shoppers lean in.`,
+  },
+
+  faebot_goblin_market_lane_critter_guests: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE CRITTER GUESTS — 1 WHOLE, complete, adorable forest critter in the FOREGROUND at the near stall among the fae — a customer, helper, or companion, crisp and close. Each entry 20-35 words: the critter, whole head + body, peacefully part of the foreground stall. Sweet storybook register, never looming or scary.
+
+VARIETY MANDATE — ~20 distinct foreground critters: a hedgehog browsing the near counter, quills bristling with parcels; a dormouse minding the front till; a robin on the foreground awning; a chipmunk cheeks-full at the near stall; a snail as the counter itself; a beetle harnessed to a twig-cart up front; a squirrel handing a nut down at the near booth; a toad in a moss cap at the foreground doorway; a bumblebee hovering at the near flower-stall; a wren tugging a ribbon on the front counter; a rabbit with a pannier at the near stall; an owl fledgling on a foreground shelf; a ladybug crossing the near counter; a frog on a lily-pad scale up front; a field-mouse haggling cheeks-full; a fox nosing a foreground fruit-tray; a shrew with a berry-tray.`,
+    touchpoints: [],
+    instructions: `Each entry is 1 whole complete critter in the foreground at the near stall, 20-35 words, peacefully part of the scene. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A hedgehog browsing the foreground counter, whole and bright-eyed, a tiny parcel of honey-drops balanced on its quills as the merchant adds another.
+2. A dormouse minding the front till, whole and round and velvet-furred, paws folded on the near counter as shoppers lean in.
+3. A robin perched on the foreground leaf-awning, whole and red-breasted, head cocked at a glowing jar below.`,
+  },
+
+  faebot_goblin_market_lane_lighting: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE LIGHTING — warm lantern-light on the crisp foreground stall + fae faces, with the grand market behind glowing as a soft warm HAZE against cool blue dusk. Each entry 18-32 words: the near light source (crisp, warm) + how the deep lane glows soft and dreamy behind. Mostly dusk-to-night.
+
+VARIETY MANDATE — ~22 entries: a dew-lantern at the foreground stall throwing warm amber on near faces, the deep lane a soft glow of dissolving lanterns; the foreground wares brightest, casting colored glow on the near fae, the bazaar hazy-warm behind; a shaft of moonlight on the front stall while the far market glows soft; warm foreground lantern-pool against a bokeh field of distant lights; foggy depth softening the far lane to a glow while the near stall stays warm and clear; a firefly-string over the near awning, the deep market a dreamy blur; golden-hour setup light on the foreground, far stalls warm-hazed; a candle of blue fae-fire on the near faces, cool dusk depth behind; lantern-halos in mist wrapping the whole lane, foreground crisp. Each names the crisp warm near light + the soft glowing hazy depth.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE lighting mood in 18-32 words — crisp warm foreground light on near fae + the grand market glowing soft/hazy behind against cool dusk. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A dew-lantern at the foreground stall throws warm amber across the near faces, the deep market lane a soft glow of dissolving lanterns in the blue dusk behind.
+2. The foreground wares are brightest, a shelf of starlight-jars casting colored glow on the near fae, the grand bazaar a warm hazy blur beyond.
+3. A shaft of moonlight catches the front stall crisp and clear while the far lane melts into soft glowing lantern-mist.`,
+  },
+
+  faebot_goblin_market_lane_magical_flavor: {
+    format: 'simple',
+    theme: `FAEBOT GOBLIN-MARKET-LANE MAGICAL FLAVOR — ONE enchanted accent at the foreground stall, fires ~50%. Each entry 12-25 words. A small supernatural touch at fae scale, crisp in the near frame against the soft market haze — never epic, never scary, always wondrous.
+
+VARIETY MANDATE — ~22 gentle accents: a levitating balance-scale weighing moonlight above the near counter; seed-coins chiming as they change hands up front; the merchant's pipe-smoke shaping into images of the ware; a foreground stall-sign rewriting itself in glowing letters; a leaf price-tag fluttering like a moth at the near stall; a potion demo blooming star-smoke over the foreground fae; near wares glowing brighter as a buyer approaches; a fortune-teller's dew-drop projecting a tiny scene up front; a wisp escaped from its jar circling the near stall; glowing pollen drifting up from a foreground packet; a floating lantern nudging closer to light the near purchase; a spilled vial of birdsong filling the foreground air with visible notes; a mirror-berry flashing a near shopper's wish; a self-stirring thimble trailing sweet steam-shapes; a shelf of bottled weather flickering tiny storms up front; a merchant conjuring change in a foreground sparkle; a caged cricket keeping the market's beat.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gentle enchanted accent at the foreground stall in 12-25 words, fae scale. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A levitating balance-scale hovers above the foreground counter, weighing a coil of captured moonlight against a pinch of dream-dust.
+2. The merchant's pipe-smoke curls up at the near stall and shapes itself into little glowing images of the potion he sells.
+3. A will-o-wisp escaped from its jar circles the foreground stall, and a near shopper laughs and reaches for it.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // FROST-COURT PATH (Stage F2). Winter fae, ALIVE + sparkling
+  // (NOT GothBot's dead frost) — ice-crystal fae in silver-birch
+  // forests, frost-lace wings, frost-flower gardens, aurora.
+  // Warm-spirited despite the cold; anti-Elsa (fae anatomy leads).
+  // Covered fae garb (the coverage lesson). Full beautiful faces.
+  // ════════════════════════════════════════════════════════
+
+  faebot_frost_court_fae: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT FAE — the hero WINTER FAE: an ice-crystal fae of the frost court, ALIVE and warm-spirited, sparkling with life (NEVER cursed, dead, frozen, or mournful). Each entry 30-50 words leading with the fae's frost lineage + 2-3 frost-crystal features, then their covered winter garb. FAE ANATOMY LEADS: delicately POINTED EARS and frost-lace / ice-crystal / rime-dusted WINGS, a FULL beautiful face with real warm eyes, rosy life in the cheeks, and real hair (hoarfrost-silver, frost-blue, snow-white, or winter-berry auburn). ONE magical frost element (a breath that sparkles, frost-flowers in the hair, ice-lace at the fingertips). COVERAGE: dressed in modest, pretty fae-craft WINTER garments with a HIGH NECKLINE and COVERED SHOULDERS (sleeves, a shawl, or a fur-trimmed cloak over the shoulders) — high-necked frost-silk gowns, snow-petal cloaks, layered sleeved leaf-and-rime dresses, sleeved gossamer robes with fur-soft trim — fully covering, elegant, wholesome. Deeply PAINTERLY oil-brushwork Froud/Vess/Manchess register (NOT glossy digital anime), slender elegant proportions, NEVER chibi/anime/Disney, NEVER a named cartoon likeness (the fae's own frost anatomy leads).
+
+VARIETY MANDATE — ~22 distinct frost fae varying: frost lineage (birch-sprite, snow-blossom fae, aurora-fae, hoarfrost sylph, ice-lace fairy, winter-berry fae, glacier-sprite); wing types (frost-lace, crystal-veined, rime-dusted glass, snow-petal); hair colors; garment palettes (frost-white, ice-blue, silver, pale-gold, winter-berry red, evergreen); warm-spirited moods (merry, serene, playful, tender, wondering — always alive and kindly). Diversify within the fae's OWN winter aesthetic, never real-world ethnicity.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE winter frost fae in 30-50 words — lead with lineage + frost-crystal features + pointed ears + frost-lace wings + a full warm beautiful face, ONE magical frost element, dressed in a modest winter fae garment with a HIGH NECKLINE and COVERED SHOULDERS (sleeves, a shawl, or a fur-trimmed cloak). ALIVE and warm-spirited, never dead/cursed/mournful. Deeply painterly oil register, never glossy anime. NO age words, no "woman/man/girl/boy" nouns, no named cartoon likeness. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A birch-sprite of the frost court with frost-lace wings and delicately pointed ears, hoarfrost-silver hair braided with ice-flowers, a warm bright face rosy with life, breath sparkling in the cold air, wrapped in a high-necked long-sleeved frost-white gown with fur-soft trim.
+2. An aurora-fae with crystal-veined wings shimmering green-violet, snow-white hair and warm amber eyes, pointed ears rimed with tiny frost-crystals, ice-lace glittering at her fingertips, robed in a layered high-collared ice-blue gown beneath a sleeved snow-petal cloak.
+3. A winter-berry fae with rime-dusted glass wings and auburn hair strung with frost-berries, warm merry eyes and pointed ears, a dusting of frost-sparkle on rosy cheeks, in a modest long-sleeved evergreen leaf-and-rime dress with a high neck and soft white trim.`,
+  },
+
+  faebot_frost_court_wood: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT WOOD — the winter FOREST setting the frost fae stands in: silver-birch groves, frozen waterfalls, snow-hollows, frost-flower gardens, aurora through bare branches. Each entry 25-45 words. ALIVE and enchanted, sparkling with winter beauty — never bleak, dead, or desolate; warm glints of life in the cold.
+
+VARIETY MANDATE — ~22 distinct winter woods: a silver-birch grove hung with frost-crystals; a frozen waterfall in blue-white columns; a snow-hollow ringed with rime-ferns; a frost-flower garden blooming on the snow; a glade under aurora through bare branches; a frozen pool like dark glass; a snow-laden evergreen hollow with glowing berries; an ice-draped root-cave mouth; a birch avenue under a low gold winter sun; a rime-white meadow starred with ice-blossoms; a frozen stream winding through snow-banks; a hoarfrost thicket sparkling silver; a snow-dusted mushroom ring; a moonlit clearing of glittering drifts; a bramble arch iced in crystal. Each names the winter place + its sparkling frost detail + a warm living glint.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alive, sparkling winter-forest place in 25-45 words with frost detail + a warm living glint (never bleak/dead). Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A silver-birch grove hung with frost-crystals that catch the light, snow soft underfoot, frost-flowers blooming pink and white along a fallen log, the air glittering with drifting ice-motes.
+2. A frozen waterfall stilled into blue-white columns of ice, a dark glassy pool at its foot ringed with rime-ferns, warm gold light breaking through the bare branches above.
+3. A snow-hollow ringed with rime-white ferns and glowing winter berries, a low gold sun gilding the drifts, the whole clearing sparkling and alive with quiet winter magic.`,
+  },
+
+  faebot_frost_court_artistry: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT ARTISTRY — the MONEY-SHOT frost detail: the one exquisite ice-artistry signature that makes the scene magical. Each entry 15-30 words: frost-flowers blooming on bark, delicate ice-lace on twigs, breath crystallizing into sparkling patterns, feathered rime on a leaf-edge, a snowflake caught mid-air. Close, jewel-like, alive.
+
+VARIETY MANDATE — ~20 distinct frost artistries: frost-flowers blooming across dark bark; ice-lace feathering a bare twig; breath-sparkle crystallizing in the air; a spiderweb strung with frozen dew-diamonds; rime feathering every leaf-edge silver; a single perfect snowflake caught spinning; frost-ferns etched on a frozen pool; ice-crystals fringing a berry cluster; a frozen droplet holding a tiny trapped light; hoarfrost spikes rimming a mushroom cap; a swirl of frost-glyphs blooming under a fae's touch; icicle-chimes catching the light; crystalline frost-blossoms opening on the snow. Each names the frost artistry, close and jewel-bright.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE close, jewel-bright frost-artistry detail in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Frost-flowers blooming in delicate white whorls across the dark birch bark, each petal a blade of glittering ice.
+2. The fae's breath crystallizing in the cold air into a drifting lace of tiny sparkling frost-stars.
+3. A spiderweb strung with frozen dew turned to a net of diamonds, catching the low gold light.`,
+  },
+
+  faebot_frost_court_light: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT LIGHT — the winter LIGHTING + sky. Each entry 18-32 words: aurora, low gold winter sun, blue-hour dusk, moonlit snow-glow, pale rose dawn. Always luminous and alive with warm glints against the cold blues, never bleak or grey-dead.
+
+VARIETY MANDATE — ~20 entries across: AURORA — green-violet curtains rippling through bare branches over the snow; LOW GOLD SUN — a warm honey-gold winter sun raking long light across the drifts; BLUE-HOUR — deep periwinkle dusk with the first warm glimmer of fae-light; MOONLIT SNOW — a bright moon silvering the crystalline snow, everything softly aglow; PALE ROSE DAWN — first pink light warming the frost; STARLIT FROST — a clear cold star-field over glittering snow with drifting motes. Each names the light + how it warms the cold scene.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE winter lighting mood in 18-32 words — luminous, warm glints against cold blues, never bleak/grey. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. AURORA — green-and-violet curtains of light ripple through the bare birch branches and shimmer across the snow, the whole grove glowing softly from above.
+2. LOW GOLD SUN — a warm honey-gold winter sun rakes long light across the sparkling drifts, gilding the frost-crystals and warming the blue shadows.
+3. BLUE-HOUR — a deep periwinkle dusk settles over the snow as the first warm fae-lights glimmer awake among the birches.`,
+  },
+
+  faebot_frost_court_action: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT ACTION — the candid WINTER BEAT the frost fae is caught in, ALIVE and joyful. Each entry 20-40 words opening with an active verb. Warm-spirited winter life, never posed, never mournful.
+
+VARIETY MANDATE — ~20 distinct beats: coaxing a frost-flower to bloom open with a touch; skating a frozen pool on ice-lace wings; gathering rime-berries into a bark basket; breathing a sparkling frost-pattern into the air; painting ice-lace onto a twig with a fingertip; catching drifting snowflakes; gliding low over the glassy pool; warming tiny hands at a glowing fae-lantern; tending a garden of frost-blossoms; leading a snow-hare through the drifts; dancing a slow winter reel among the birches; stringing frozen dew-diamonds into a garland; peeking from a snow-hollow; sledding a curled-leaf down a drift; lighting the first winter lantern. Each is one alive, warm-spirited winter action.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE alive, warm-spirited winter beat in 20-40 words, opening with an active verb, never posed/mournful. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Coaxing a frost-flower to bloom open with a gentle fingertip, the ice-petals unfurling in a sparkle as the fae leans close, breath glittering in the cold.
+2. Skating across a frozen pool on ice-lace wings, arms out and face bright with joy, a spray of glittering frost trailing behind.
+3. Gathering rime-frosted berries into a bark basket, warm-cheeked and merry, a snow-hare watching from the drift beside her.`,
+  },
+
+  faebot_frost_court_foreground: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT FOREGROUND — a foreground anchor detail framing the winter scene. Each entry 12-25 words: frost-ferns, ice-crystals, a rime-berry cluster, a snow-dusted mushroom, a frozen seed-head, a curl of frost-lace.
+
+VARIETY MANDATE — ~18 distinct anchors: a spray of frost-ferns rimed silver; a cluster of ice-crystals catching light; a snow-dusted mushroom cap; a rime-white seed-head; a frozen berry-cluster glowing red; a curl of ice-lace on a bent grass-blade; a snow-laden evergreen sprig; a frozen dew-drop on a twig; a drift-edge scalloped by wind; a hoarfrost thistle; icicle fringe on a low branch; a snow-crystal fan. Each is one close frozen foreground detail.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE close frozen foreground anchor in 12-25 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A spray of frost-ferns rimed in silver arcing across the lower frame, each frond edged with tiny ice-teeth.
+2. A cluster of red winter berries sheathed in clear ice, glowing warm against the blue snow.
+3. A snow-dusted mushroom cap fringed with hoarfrost spikes in the near foreground.`,
+  },
+
+  faebot_frost_court_companion: {
+    format: 'simple',
+    theme: `FAEBOT FROST-COURT COMPANION — 1 WHOLE, adorable WINTER CRITTER with the frost fae, fires ~40%. Each entry 15-30 words: the critter, whole head + body, gentle and alive. Sweet storybook register, never looming or scary.
+
+VARIETY MANDATE — ~18 distinct winter critters: an ermine white as snow with a black tail-tip; a snow-owl fledgling blinking on a branch; a small white stag with frost on its antlers; an arctic fox curled in the drift; a snow-hare mid-hop; a robin puffed against the cold on a rime-twig; a bullfinch on a berry-branch; a dormouse peeking from a snow-hollow; a red squirrel in winter coat; a fawn in a snowy thicket; a pine-marten on a birch limb; a flock of tiny snow-buntings. Each is 1 whole gentle winter critter beside the fae.`,
+    touchpoints: [],
+    instructions: `Each entry is 1 whole gentle winter critter beside the fae, 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. An ermine white as fresh snow with a jet black tail-tip, whole and bright-eyed, perched up on its hind legs beside the fae.
+2. A snow-owl fledgling blinking on a rimed branch, whole and round and soft, its feathers dusted with frost.
+3. A small white stag with a delicate frost-crusted rack of antlers, whole and serene, standing among the birches.`,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SPIRIT-BEASTS PATH (Stage F3). Enchanted ANIMALS as heroes
+  // (white stag w/ blossoming antlers, moss-backed bear, ember-
+  // tail fox, luminous owl). NOT beast-men. THE KODAMA LAW: real
+  // animal anatomy carries it (never anthropomorphized, never a
+  // face-graft); ONE magical element per beast (restraint =
+  // believability). Body-plan-anchored (Flux knows real animals).
+  // ════════════════════════════════════════════════════════
+
+  faebot_spirit_beasts_beast: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS BEAST — the hero is a CUTE, SOFT, ENDEARING little forest SPIRIT-ANIMAL: a REAL small woodland creature (accurate animal anatomy) with big soft dark eyes and an adorable, gentle, storybook charm, carrying exactly ONE luminous magical element and an air of the SACRED — it reads as a true spirit animal, not just an animal. Each entry 25-45 words: name the cute real creature + its real body + soft endearing quality (big gentle eyes, small graceful frame, downy fur/feathers), then the ONE glowing supernatural feature + a breath of otherworldly, spirit-animal presence.
+
+SPECIES MANDATE — ONLY cute, soft, gentle woodland creatures. USE: spotted fawns, roe deer, gentle does, red foxes and fox kits, bunnies and hares, red squirrels, little songbirds (robins, wrens, bluebirds), owls and owlets, hedgehogs, dormice, and pine martens/stoats. NEVER big/heavy/fierce animals — NO bears, elk, moose, wolves, horses, boars, lynx, big cats, koi, tortoises, herons, or any large or predatory beast. If in doubt, choose a fawn, fox kit, bunny, or squirrel. Every creature is small, soft, and adorable.
+
+THE KODAMA LAW (non-negotiable): a REAL animal, never anthropomorphized, never standing like a person, never a human or doll face grafted on, never a beast-man — a true four-legged (or winged) creature. ONE magical element ONLY (restraint = believability), rendered LUMINOUS and beautiful, plus a soft sacred spirit-glow about the creature.
+
+VARIETY MANDATE — ~22 distinct CUTE spirit beasts, each a real small creature + ONE magical feature: a spotted fawn wearing a little crown of wildflowers; a fawn with soft blossoms opening along tiny nub-antlers; a roe deer whose short antlers are grown over with living oak leaves; a moon-white doe with faint constellations drifting across her coat; a red fox with a brush tail glowing softly from within like warm coals; a fox kit whose tail trails a wake of drifting petals; a silver fox furred with pale frost-flowers; a snow hare with a coat dusted in tiny glowing stars; a hare with long ears lit softly by inner moonlight; a red squirrel with a tail of drifting autumn light; a squirrel cradling a single glowing acorn; a hedgehog whose spines are set with tiny luminous mushrooms; a dormouse with a curl of soft light at its tail-tip; a little owlet with faintly glowing feather-tips; a great grey owl with galaxy-patterned wings; a robin trailing a thin ribbon of light as it flies; a wren with a softly glowing throat as it sings; a bluebird leaving a faint shimmer in the air behind it; a pine marten with eyes glowing warm amber like paper lanterns; an ermine in white winter coat rimmed with frost-crystal; a bunny with a dandelion-seed glow drifting from its fur; a baby deer with dew-diamond whiskers and a single flower at its crown. Each names the REAL cute creature + accurate anatomy + ONE glowing magical element + soft spirit-animal aura.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE cute, soft, small forest creature (accurate animal anatomy, big gentle eyes, adorable) + exactly ONE luminous magical element + a breath of sacred spirit-animal presence, in 25-45 words. ONLY cute/soft species (fawns, foxes, bunnies, squirrels, birds, owls, hedgehogs, dormice, pine martens) — NEVER bears/elk/moose/wolves/horses/big beasts. NEVER anthropomorphized, never a face-graft, never a beast-man — a true animal. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A spotted fawn with the true delicate anatomy of a real baby deer, big soft dark eyes and downy dappled coat, a little crown of pale wildflowers resting between its ears, standing gentle in the shallows with a soft sacred glow about it, the one touch of magic on an otherwise real animal.
+2. A red fox kit, an ordinary fox cub in every soft line of its small body and bright eyes, its fluffy brush tail glowing warmly from within like banked coals, sitting alert among the ferns with a quiet otherworldly presence.
+3. A little red squirrel, real in every tuft of fur and bright dark eye, its bushy tail trailing a soft drift of glowing autumn light, perched on a mossy branch, a gentle woodland spirit in miniature.`,
+  },
+
+  faebot_spirit_beasts_domain: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS DOMAIN — the enchanted FOREST PLACE the spirit beast belongs to, its home ground. Each entry 25-45 words: a mossy glade, a still moon-pool, an ancient root-cathedral, a fern hollow, a birch avenue. Deep, lush, painterly, alive with quiet magic.
+
+VARIETY MANDATE — ~22 distinct domains: a still moon-pool ringed with ferns; a mossy glade shafted with light; an ancient root-cathedral of arching tree-roots; a fern hollow deep in green shade; a birch avenue in silver light; a mist-filled ravine with hanging gardens; a clearing of giant toadstools; a mossy waterfall grotto; a wildflower meadow at the forest edge; a snow-dusted evergreen hollow; a bramble tunnel opening on a glade; a fallen-giant log bridging a stream; a bluebell carpet under old oaks; a rocky glen with a trickling spring; a firefly-lit thicket at dusk; a sunlit fern-bank above a brook. Each names the forest domain + its depth + a touch of quiet magic.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE enchanted forest domain in 25-45 words with depth + quiet magic. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A still moon-pool ringed with tall ferns and mossy stones, the dark water holding a perfect mirror of the trees, soft light drifting down through the high canopy.
+2. An ancient root-cathedral where the arching roots of a giant tree vault overhead like a green nave, shafts of gold light falling through gaps in the moss.
+3. A fern hollow deep in green forest shade, layered fronds glowing where the light touches them, a soft carpet of moss underfoot.`,
+  },
+
+  faebot_spirit_beasts_tell: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS TELL — the MONEY-SHOT supernatural SIGNATURE, the one magical detail that marks the beast as a spirit. Each entry 15-30 words, close and jewel-bright: antler-blossoms opening, mist curling from its paws, a mane of drifting fireflies, petals falling from its coat, eyes like soft lanterns, a trail of light.
+
+VARIETY MANDATE — ~20 distinct tells: cherry-blossoms opening along its antlers; soft mist curling up from each paw-print; a mane sparked with drifting fireflies; petals shedding from its coat as it moves; eyes glowing like warm soft lanterns; a faint trail of light where its tail sweeps; moss and tiny flowers blooming in its wake; frost-flowers forming on its fur; constellations glimmering in its dark coat; its breath blooming into drifting light-motes; dew-diamonds strung along its whiskers; a soft halo of pollen-glow around it; leaves swirling up in its wake; its antlers strung with hanging dewlight. Each names the ONE close, jewel-bright magical signature.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE close, jewel-bright supernatural signature in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Pale cherry-blossoms slowly opening along the length of its antlers, a few petals drifting loose on the still air.
+2. Soft silver mist curling up from each paw as it steps, a trail of fading fog left behind on the moss.
+3. A mane threaded with drifting fireflies, their tiny lights rising and falling as the beast breathes.`,
+  },
+
+  faebot_spirit_beasts_action: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS ACTION — the candid ANIMAL BEAT, true to real animal behavior. Each entry 20-40 words opening with an active verb. Real animal movement, never posed like a person, never anthropomorphized.
+
+VARIETY MANDATE — ~20 distinct beats: drinking at a still moon-pool, head lowered; stepping through shallow water, ripples spreading; shaking mist from its coat mid-stride; grazing a patch of glowing moss; standing alert with ears pricked, listening; curled asleep in a bed of ferns; leaping a fallen log mid-bound; nuzzling a cub or fawn; wading a shallow stream; shaking off falling snow; scenting the air, muzzle raised; padding low through the ferns; settling to rest under a great root; turning its head to look back over its flank; bounding across a moonlit clearing. Each is one true, candid animal action.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE candid, true-to-life animal beat in 20-40 words, opening with an active verb, never anthropomorphized. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Drinking at the still moon-pool, its head lowered to the dark water, ripples spreading out from its muzzle across the perfect reflection.
+2. Standing alert in the ferns with ears pricked and one forefoot lifted, head turned to listen, every line of it poised and real.
+3. Curled asleep in a deep bed of ferns, flank rising and falling slowly, dappled light moving over its coat.`,
+  },
+
+  faebot_spirit_beasts_lighting: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS LIGHTING — the forest LIGHT on the scene. Each entry 18-32 words: dappled canopy light, low gold dawn, moonlight through trees, blue-hour, godrays through mist. Soft, painterly, atmospheric.
+
+VARIETY MANDATE — ~18 entries: dappled gold light falling through the high canopy; a low warm dawn gilding the mist; cool moonlight silvering the clearing; deep blue-hour dusk with the first fireflies; god-rays lancing through drifting fog; soft overcast forest light, green and even; late-gold sun raking low through the trunks; a shaft of light spotlighting the beast in the gloom; starlight over a clearing; pale first light through frost. Each names the light + its mood on the forest.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE forest lighting mood in 18-32 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Dappled gold light falling in soft coins through the high canopy, drifting slowly across the moss and the beast's flank.
+2. God-rays lancing down through drifting fog between the great trunks, the beast half-lit at the edge of the beams.
+3. Cool moonlight silvering the clearing, the beast pale and luminous against the deep blue shadows of the trees.`,
+  },
+
+  faebot_spirit_beasts_weather: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS WEATHER — the ATMOSPHERE / air of the scene. Each entry 15-30 words: drifting mist, falling petals, softly falling snow, floating spores, a gentle drizzle, still dew-heavy air.
+
+VARIETY MANDATE — ~18 entries: low mist pooling among the roots; cherry-petals drifting on the air; soft snow falling straight and slow; luminous spores floating up from the moss; a fine gentle drizzle beading the ferns; still dew-heavy dawn air; drifting seed-fluff catching the light; autumn leaves spiralling down; a faint ground-fog glowing in the light; midges dancing in a sunbeam; frost-sparkle hanging in the cold; blossom-snow sifting through the canopy. Each names the one atmospheric layer.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE atmospheric layer in 15-30 words. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. Low silver mist pooling among the roots and curling around the beast's legs, softening the far trees to shapes.
+2. Cherry-petals drifting slowly across the clearing on the still air, settling on the moss and the water.
+3. Soft snow falling straight and slow through the trees, dusting the beast's back and the ferns white.`,
+  },
+
+  faebot_spirit_beasts_witness: {
+    format: 'simple',
+    theme: `FAEBOT SPIRIT-BEASTS WITNESS — a TINY fae observing the spirit beast from a distance, fires ~25%. Each entry 12-25 words: a small palm-sized winged fae, far off and small, watching quietly — never the hero, never close, just a tiny reverent onlooker at the edge.
+
+VARIETY MANDATE — ~16 witnesses: a tiny fae peeking from behind a fern; a small winged fae perched on a distant branch watching; a palm-sized fae sitting on a mushroom at the clearing's edge; a little fae hovering far off, hands clasped; a tiny fae half-hidden in the bluebells; a small fae on a mossy stone in the distance; a wee fae peering from a knot-hole; a tiny fae drifting at the treeline. Each is one small, distant, reverent fae witness.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny, distant, palm-sized winged fae quietly watching from the edge, 12-25 words — never close, never the hero. Output a NUMBERED list.
+
+EXAMPLES (3):
+1. A tiny palm-sized winged fae peeking from behind a fern at the clearing's edge, watching the great beast with wide eyes.
+2. A small winged fae perched far off on a mossy branch, hands clasped, gazing quietly across at the spirit beast.
+3. A wee fae half-hidden among distant bluebells, only its glow and gossamer wings giving it away.`,
+  },
+
+  // ════════════════════════════════════════════════════════
   // FAE-NATURAL-VILLAGE PATH (2026-06-10). Clone of wilds-
   // village but dwellings made of ORGANIC EARTHY nature stuff
   // (wood / mushrooms / giant flowers / logs / woven branches).

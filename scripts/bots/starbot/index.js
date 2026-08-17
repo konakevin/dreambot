@@ -45,7 +45,14 @@ const pathBuilders = {
   'post-apoc-rust-tech': require('./paths/post-apoc-rust-tech'),
   'alien-biomechs': require('./paths/alien-biomechs'),
   'killer-cyborgs-male': require('./paths/killer-cyborgs-male'),
+  'event-horizon': require('./paths/event-horizon'), // Stage L1 SHADOW
+  'gas-giant-skies': require('./paths/gas-giant-skies'), // Stage L2 SHADOW
+  'first-contact': require('./paths/first-contact'), // Stage L3 SHADOW
 };
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const STAR_SHADOW_PATHS = ['event-horizon', 'gas-giant-skies', 'first-contact'];
 
 module.exports = {
   username: 'starbot',
@@ -179,6 +186,9 @@ module.exports = {
     // 2026-06-21 (Kevin: 1.1-pro allowed anywhere ultra is, overrides the
     // prior "redundant with Ultra" exclusion).
     'cosmic-vista': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    'event-horizon': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'], // Stage L1 SHADOW
+    'gas-giant-skies': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'], // Stage L2 SHADOW
+    'first-contact': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'], // Stage L3 SHADOW
     // alien-landscape / alien-city / megastructure — Nano Banana + Flux 2 Pro
     // both removed 2026-06-21 (fleet-wide Banana ban + StarBot Flux-2-Pro ban).
     // Now flux-1.1-pro-ultra + flux-1.1-pro.
@@ -447,11 +457,21 @@ module.exports = {
     'post-apoc-rust-tech',
     'alien-biomechs',
     'killer-cyborgs-male',
+    // Stage L — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — chaos + polish OFF via STAR_SHADOW_PATHS in both skip lists;
+    // modelByPath (flux-1.1) preserved).
+    'event-horizon',
+    'gas-giant-skies',
+    'first-contact',
     // 8 franchise paths (aliens / dune / guardians / halo / mass-effect /
+    // NOTE: former shadow paths (event-horizon etc.) now promoted into paths[] above.
     // star-trek / starcraft / starwars) all DELETED 2026-05-14. Multiple
     // migration attempts produced "hallway" renders that Kevin rejected;
     // path/archetype/template/pool artifacts removed from repo.
   ],
+
+  // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
+  shadowPaths: [], // Stage L paths promoted to live 2026-08-16 (STAR_SHADOW_PATHS const kept — drives chaos+polish OFF skip lists)
 
   // Path weights.
   // Flattened to EQUAL distribution — all active paths weight 1 (Kevin 2026-05-23).
@@ -476,6 +496,7 @@ module.exports = {
       'cockpit-view',
       'ship-graveyard',
       'terraforming',
+      ...STAR_SHADOW_PATHS, // event-horizon (SHADOW) — protect hero composition
     ],
     allowSubjectChaosPaths: [
       'cosmic-vista',
@@ -529,6 +550,7 @@ module.exports = {
       // (axis-system paths). The other 6 moved paths kept polish ON. ───
       'post-apoc-rust-tech',
       'alien-biomechs',
+      ...STAR_SHADOW_PATHS, // event-horizon (SHADOW) — self-lit scene, polish OFF
     ],
     conceptWords: 150,
     polishedWords: '65-90',
@@ -621,6 +643,9 @@ module.exports = {
     enabled: true,
     requiredChannels: ['lightcolor'],
     pathContext: {
+      'event-horizon': 'spacewalk', // Stage L1 SHADOW — airless void (lightcolor-only)
+      'gas-giant-skies': 'scene', // Stage L2 SHADOW
+      'first-contact': 'scene', // Stage L3 SHADOW
       'female-explorer': 'explorer-female',
       'male-explorer': 'explorer-male',
       'cosmic-vista': 'scene',

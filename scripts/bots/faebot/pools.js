@@ -127,6 +127,51 @@ module.exports = {
   FAEBOT_FAIRY_SWARM_SPOT: loadIfExists('faebot_fairy_swarm_spot'),
   FAEBOT_FAIRY_SWARM_CRITTER_GUESTS: loadIfExists('faebot_fairy_swarm_critter_guests'),
   FAEBOT_FAIRY_SWARM_FLORA: loadIfExists('faebot_fairy_swarm_flora'),
+
+  // goblin-market (Stage F1) — fae night-market crowd path (clone of fairy-swarm)
+  FAEBOT_GOBLIN_MARKET_EVENT: loadIfExists('faebot_goblin_market_event'),
+  FAEBOT_GOBLIN_MARKET_TROUPE: loadIfExists('faebot_goblin_market_troupe'),
+  FAEBOT_GOBLIN_MARKET_SETTING: loadIfExists('faebot_goblin_market_setting'),
+  FAEBOT_GOBLIN_MARKET_WARES: loadIfExists('faebot_goblin_market_wares'),
+  FAEBOT_GOBLIN_MARKET_CRITTER_GUESTS: loadIfExists('faebot_goblin_market_critter_guests'),
+  FAEBOT_GOBLIN_MARKET_LIGHTING: loadIfExists('faebot_goblin_market_lighting'),
+  FAEBOT_GOBLIN_MARKET_MAGICAL_FLAVOR: loadIfExists('faebot_goblin_market_magical_flavor'),
+
+  // goblin-market-stall (Stage F1 sibling) — intimate close-up vignette
+  FAEBOT_GOBLIN_MARKET_STALL_EVENT: loadIfExists('faebot_goblin_market_stall_event'),
+  FAEBOT_GOBLIN_MARKET_STALL_TROUPE: loadIfExists('faebot_goblin_market_stall_troupe'),
+  FAEBOT_GOBLIN_MARKET_STALL_SETTING: loadIfExists('faebot_goblin_market_stall_setting'),
+  FAEBOT_GOBLIN_MARKET_STALL_WARES: loadIfExists('faebot_goblin_market_stall_wares'),
+  FAEBOT_GOBLIN_MARKET_STALL_CRITTER_GUESTS: loadIfExists('faebot_goblin_market_stall_critter_guests'),
+  FAEBOT_GOBLIN_MARKET_STALL_LIGHTING: loadIfExists('faebot_goblin_market_stall_lighting'),
+  FAEBOT_GOBLIN_MARKET_STALL_MAGICAL_FLAVOR: loadIfExists('faebot_goblin_market_stall_magical_flavor'),
+
+  // goblin-market-lane (Stage F1 sibling) — hybrid: crisp foreground + hazy grand depth
+  FAEBOT_GOBLIN_MARKET_LANE_EVENT: loadIfExists('faebot_goblin_market_lane_event'),
+  FAEBOT_GOBLIN_MARKET_LANE_TROUPE: loadIfExists('faebot_goblin_market_lane_troupe'),
+  FAEBOT_GOBLIN_MARKET_LANE_SETTING: loadIfExists('faebot_goblin_market_lane_setting'),
+  FAEBOT_GOBLIN_MARKET_LANE_WARES: loadIfExists('faebot_goblin_market_lane_wares'),
+  FAEBOT_GOBLIN_MARKET_LANE_CRITTER_GUESTS: loadIfExists('faebot_goblin_market_lane_critter_guests'),
+  FAEBOT_GOBLIN_MARKET_LANE_LIGHTING: loadIfExists('faebot_goblin_market_lane_lighting'),
+  FAEBOT_GOBLIN_MARKET_LANE_MAGICAL_FLAVOR: loadIfExists('faebot_goblin_market_lane_magical_flavor'),
+
+  // frost-court (Stage F2) — winter frost fae, alive + sparkling
+  FAEBOT_FROST_COURT_FAE: loadIfExists('faebot_frost_court_fae'),
+  FAEBOT_FROST_COURT_WOOD: loadIfExists('faebot_frost_court_wood'),
+  FAEBOT_FROST_COURT_ARTISTRY: loadIfExists('faebot_frost_court_artistry'),
+  FAEBOT_FROST_COURT_LIGHT: loadIfExists('faebot_frost_court_light'),
+  FAEBOT_FROST_COURT_ACTION: loadIfExists('faebot_frost_court_action'),
+  FAEBOT_FROST_COURT_FOREGROUND: loadIfExists('faebot_frost_court_foreground'),
+  FAEBOT_FROST_COURT_COMPANION: loadIfExists('faebot_frost_court_companion'),
+
+  // spirit-beasts (Stage F3) — enchanted real animals as heroes
+  FAEBOT_SPIRIT_BEASTS_BEAST: loadIfExists('faebot_spirit_beasts_beast'),
+  FAEBOT_SPIRIT_BEASTS_DOMAIN: loadIfExists('faebot_spirit_beasts_domain'),
+  FAEBOT_SPIRIT_BEASTS_TELL: loadIfExists('faebot_spirit_beasts_tell'),
+  FAEBOT_SPIRIT_BEASTS_ACTION: loadIfExists('faebot_spirit_beasts_action'),
+  FAEBOT_SPIRIT_BEASTS_LIGHTING: loadIfExists('faebot_spirit_beasts_lighting'),
+  FAEBOT_SPIRIT_BEASTS_WEATHER: loadIfExists('faebot_spirit_beasts_weather'),
+  FAEBOT_SPIRIT_BEASTS_WITNESS: loadIfExists('faebot_spirit_beasts_witness'),
   FAEBOT_TINY_FAE_CREATURE: loadIfExists('faebot_tiny_fae_creature'),
   FAEBOT_TINY_FAE_SCALE_ANCHOR_COMPANION: loadIfExists('faebot_tiny_fae_scale_anchor_companion'),
   FAEBOT_TINY_FAE_MACRO_PERCH: loadIfExists('faebot_tiny_fae_macro_perch'),

@@ -1343,6 +1343,208 @@ CRITICAL — the OPENING tokens establish the SPECIFIC composition + "translucen
 Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
   },
 
+  FIRST_CONTACT: ({ slots, sharedDNA, vibeDirective }) => {
+    const { arrival_form, contact_stage, witness_scale, earth_setting, event_light, response_detail } =
+      slots;
+
+    const responseSection = response_detail
+      ? `
+━━━ RESPONSE DETAIL — a tiny human-response beat (small + distant, awe not conflict) ━━━
+${response_detail}
+
+Place this SMALL and distant — a thread of tiny lights, a lone drone-speck. NEVER weapons, NEVER conflict.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping FIRST-CONTACT arrival vista for StarBot — a colossal, enigmatic alien ship hanging silent over a timeless landscape at dawn, tiny human witnesses far below dwarfed to specks (Arrival / Denis Villeneuve register). The kind of awe-struck image people set as a wallpaper. Same universe as our cosmic vistas. Output wraps with style prefix + suffix.
+
+━━━ THE ARRIVAL IS THE HERO — ABSOLUTE FIRST RULE ━━━
+A colossal, smooth, enigmatic alien ship hangs monumental over the landscape, dwarfing everything. This is quiet, suspended AWE at first contact — NEVER an invasion, NEVER destruction, NEVER weapons-fire, NEVER a battle. The whole image is the SCALE CONTRAST between the immense silent visitor and the tiny human world below.
+
+⚠️ THE VISITOR is colossal, smooth, and enigmatic — a monolith, a slowly-turning ring, a matte-black sphere, a seed-pod fleet — described by its FEATURES and monumental form. NEVER a cliché "flying saucer" with lights. Silent, still, awe-inspiring.
+
+⚠️ THE WITNESSES are TINY, DISTANT, FACELESS silhouettes at civilization scale — a road of stopped cars' headlights, a field of upturned specks, a small town's lights. NEVER a close-up face. Their smallness against the ship is the emotional core.
+
+⚠️ TIMELESS — no logos, no brand names, no readable text, no specific tech-era markers. Could be any time.
+
+━━━ THE ARRIVAL FORM (the hero — the colossal visitor) ━━━
+${arrival_form}
+
+Render this monumental, smooth, enigmatic form dominating the sky over the landscape — the unmistakable subject.
+
+━━━ THE CONTACT STAGE (the suspended moment) ━━━
+${contact_stage}
+
+The quiet beat the whole image captures — a shadow crossing, a beam touching down, a silent hover at dawn. Suspended, awe-struck.
+
+━━━ THE WITNESSES — THE MONEY-SHOT (tiny, distant, faceless — the scale anchor) ━━━
+${witness_scale}
+
+Render the human witnesses TINY and far below, dwarfed to specks. Their smallness against the immense arrival is the whole point. NO faces.
+
+━━━ THE SETTING (a timeless Earth-like landscape) ━━━
+${earth_setting}
+
+━━━ EVENT LIGHT (self-lit — the light of the encounter, sets the mood) ━━━
+${event_light}
+${responseSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide landscape, the colossal arrival dominating the upper frame over a low horizon, tiny faceless witnesses far below for scale, dawn/pre-dawn light. Deep atmospheric perspective. Quiet, monumental, awe-struck, wallpaper-worthy. NEVER destruction, weapons, or a battle — this is silent awe. NEVER a close-up witness face. NEVER a cliché flying-saucer.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a breathtaking first-contact vista, a colossal enigmatic alien ship hanging silent and monumental over a timeless landscape at dawn — the arrival leads], [the arrival form's monumental smooth shape], [the suspended contact moment — shadow crossing / beam / silent hover], [tiny faceless witnesses far below for scale — a road of car-lights / a field of specks], [the timeless earth-like setting], [the awe-light of the encounter], [palette and hushed awestruck mood]
+
+CRITICAL — quiet AWE, never invasion/destruction/weapons. Witnesses TINY, distant, faceless. The visitor is enigmatic + monumental, NEVER a cliché flying-saucer. Timeless, unbranded, no text. Render the EXACT slot-pool details above.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  GAS_GIANT_SKIES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { cloudscape, float_presence, storm_titan, atmo_light, sky_above, atmo_event } = slots;
+
+    const eventSection = atmo_event
+      ? `
+━━━ ATMOSPHERIC EVENT — a dramatic beat (a secondary wonder; the cloudscape stays the hero) ━━━
+${atmo_event}
+
+Place this as a secondary drama in the sky — the continental cloudscape remains the subject.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping vista from INSIDE a gas giant's atmosphere for StarBot — continental-scale cloud formations in every direction, a tiny floating city dwarfed by the sky, an Earth-sized storm on the horizon. The kind of awe-at-the-sky image people set as a wallpaper. Same universe as our cosmic vistas. Output wraps with style prefix + suffix.
+
+━━━ THE CLOUDSCAPE IS THE HERO — ABSOLUTE FIRST RULE ━━━
+This is deep INSIDE a Jupiter-scale atmosphere — nothing but CLOUD, vapor, air, and light in every direction, at continental scale. The billowing cloud formations fill the frame. This is awe at an alien SKY-OCEAN of cloud. NEVER a normal landscape, NEVER the view from space, NEVER a surface.
+
+⚠️⚠️ CLOUD-VOCABULARY LAW — EVERYTHING IS SOFT BILLOWING CLOUD AND VAPOR ⚠️⚠️
+NEVER render rock, land, cliffs, canyons, valleys, or mountains — this is pure atmosphere. The formations are cloud-walls, thunderhead ranges, billowing cloud-terraces, and hazy cloud-decks; gaps are soft "openings between cloud banks", not chasms of rock. Everything is moist, soft-edged, feathered vapor. Any floating structure is described by its FEATURES (gasbags, tethers, gantries, lights) — NEVER a rigid disc, plate, dome, saucer, or metallic hovering object.
+
+━━━ THE CLOUDSCAPE (the hero — continental cloud formations) ━━━
+${cloudscape}
+
+Render these billowing cloud-walls and thunderhead ranges at overwhelming continental scale, filling most of the frame with soft moist vapor and layered depth.
+
+━━━ THE STORM TITAN — THE MONEY-SHOT (the colossal storm / lightning) ━━━
+${storm_titan}
+
+Render this colossal storm-eye or lightning as the dramatic focal beat on the horizon or below the deck — a titanic weather event dwarfing everything.
+
+━━━ THE FLOAT PRESENCE (a TINY scale-prover in the vast sky) ━━━
+${float_presence}
+
+Place this floating structure SMALL — a speck dwarfed by the continental clouds. Described by features (gasbags/tethers/lights), NEVER a rigid disc. It proves the immense scale; the sky is still the hero.
+
+━━━ ATMOSPHERE LIGHT (self-lit — the atmosphere's own depth-light, sets the mood) ━━━
+${atmo_light}
+
+This is the light of the whole image — how color falls through the cloud depth, amber tops and methane-blue shadowed gaps, or lightning-glow from below.
+
+━━━ THE SKY ABOVE (the thin high upper sky) ━━━
+${sky_above}
+${eventSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide vista from inside the atmosphere, continental cloud formations filling the frame at layered depth, the colossal storm on the horizon, a tiny floating city for scale, the thin upper sky at the top. Deep atmospheric perspective through the vapor. Breathtaking, awe-inspiring, wallpaper-worthy. NEVER rock/cliffs/canyons/mountains — it is ALL cloud. NEVER a rigid disc/saucer for the float presence.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — a breathtaking vista from inside a gas giant's atmosphere, continental cloud-walls and thunderhead ranges filling the sky — the cloudscape leads], [the cloud formations at continental scale, layered depth, soft billowing vapor], [the colossal storm-eye or lightning on the horizon / below the deck], [a tiny floating harvester-city or balloon-outpost for scale, described by features not as a disc], [the atmosphere's depth-light, amber tops and methane-blue shadowed gaps], [the thin high upper sky], [palette and awestruck mood]
+
+CRITICAL — it is ALL soft billowing CLOUD and vapor. NEVER write "canyon", "cliff", "valley", "mountain", or "wall of rock" (they render solid rock). NEVER write "disc", "saucer", "dome", or "metallic hovering" for the float presence (renders a UFO). Render the EXACT slot-pool details above.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
+  EVENT_HORIZON: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      hole_presentation,
+      lensing_effect,
+      witness_scale,
+      disk_light,
+      space_backdrop,
+      infall_event,
+    } = slots;
+
+    const infallSection = infall_event
+      ? `
+━━━ INFALL EVENT — a dramatic beat (a secondary wonder, the hole stays the hero) ━━━
+${infall_event}
+
+Place this as a secondary drama — the black hole and its blazing disk remain the subject.
+
+`
+      : '';
+
+    return `You are a sci-fi concept-art painter writing a jaw-dropping BLACK-HOLE vista for StarBot — a black hole with a blazing accretion disk seen up close, gravitational lensing warping the starfield around it, the kind of physically-inspired grandeur people set as their wallpaper (Interstellar / Gargantua register). Same universe as our cosmic vistas. Output wraps with style prefix + suffix.
+
+━━━ THE BLACK HOLE + DISK IS THE HERO — ABSOLUTE FIRST RULE ━━━
+A black hole with a blazing accretion disk dominates the frame — a perfect dark central sphere ringed by a wall of superheated glowing gas. The disk is the ONLY light source; everything else is lit by it or lost in black. This is grand, physically-inspired awe. NEVER a cartoon "vortex" or "whirlpool" — it is a black hole with an accretion disk.
+
+⚠️ THE CENTRAL SPHERE IS A FEATURELESS PITCH-BLACK VOID — the event horizon is a perfectly round hole of PURE BLACK with NO surface, NO texture, NO planet-limb shading, NO grey gradient, NO atmosphere, NO reflected light. It is an absence of light — a flat black circle that swallows everything. It must NEVER look like a dark planet or a shaded moon.
+
+⚠️ THE LENSING WRAPS THE DISK — the accretion disk's far side is gravitationally lensed UP and OVER the top of the black circle AND down UNDER the bottom, so a blazing halo of the disk appears to arc completely around the black sphere (the classic Interstellar/Gargantua halo). Always render this over-the-top-and-under wrapping arc.
+
+━━━ THE PRESENTATION (the hero — disk structure + angle + the dark sphere) ━━━
+${hole_presentation}
+
+Render the accretion disk's structure and the perfect black central sphere in breathtaking detail — it is the unmistakable subject.
+
+━━━ THE LENSING — THE MONEY-SHOT (the effect that makes it unmistakable) ━━━
+${lensing_effect}
+
+The gravitational lensing bends the background starfield and the disk's far side around the sphere. Render this warping clearly — it is what sells the black hole.
+
+━━━ THE WITNESS (a TINY scale-prover, dwarfed by the disk) ━━━
+${witness_scale}
+
+Place this silhouette MINUSCULE against the immense disk — a dark speck rimmed in disk-light. It proves the colossal scale. It is TINY; the black hole is still the hero. NEVER a dominating ship.
+
+━━━ THE DISK LIGHT (self-lit — the only light in the void) ━━━
+${disk_light}
+
+This is the sole illumination — the disk's color and intensity gradient set the entire mood, casting a hard rim on the witness and the sphere's edge against total black.
+
+━━━ THE SPACE BACKDROP (before lensing warps it) ━━━
+${space_backdrop}
+${infallSection}
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+Cinematic wide vista, the black hole with its blazing accretion disk large and central-to-off-center, the disk lensed around the dark sphere, the warped starfield behind. The witness a tiny dark speck for scale. Deep atmospheric black. Breathtaking, physically-inspired, wallpaper-worthy. NEVER a cartoon whirlpool, NEVER a small planet in empty black — the disk is HUGE, blazing, and the only light.
+
+━━━ STRUCTURE (write the prompt in this exact order) ━━━
+[OPENING — "a black hole with a blazing accretion disk" large in the frame, the disk lensed around a perfect dark sphere — the black hole leads], [the disk structure + angle + dark central sphere in detail], [the gravitational lensing warping the starfield into an Einstein ring / the disk wrapping the sphere], [a tiny dark witness silhouette rimmed in disk-light for scale], [the disk-light color gradient, the only light in the void], [the deep-space backdrop], [palette and awestruck mood]
+
+CRITICAL — the OPENING tokens establish "[a black hole with a blazing accretion disk, lensed around a dark sphere]". NEVER write "vortex", "whirlpool", or "hole in space" (they render as cartoon water-swirls). The disk is the ONLY light. The witness is TINY. Render the EXACT slot-pool details above — DO NOT substitute a generic planet-in-black-space.
+
+Output ONLY the raw 90-120 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ or ### markers, NO **bold labels**. Just the phrases, starting immediately with the scene content.`;
+  },
+
   IMPOSSIBLE_SKY: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       ringed_giant,

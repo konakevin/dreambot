@@ -513,6 +513,51 @@ JEWEL MANDATE — the crystals are colossal and translucent, the light fractures
     anchorScaleRange: null,
   },
 
+  FIRST_CONTACT: {
+    description: `PATH-BESPOKE — StarBot first-contact path (Stage L3, SHADOW). The arrival EVENT (Arrival / Villeneuve register) — a colossal alien ship hanging over a landscape/city-lights plain, a beam of light on a clearing, silhouetted witnesses at civilization scale. Self-lit (event_light). 5 bespoke slots + 1 conditional response (30%-gated). HARD RULES: AWE not invasion (NO destruction, NO weapons-fire); witnesses are DISTANT faceless silhouettes; the SCALE CONTRAST is the whole shot; timeless (no logos, no readable tech era). Arrival-form monumental + enigmatic, never a "flying saucer" (describe by FEATURE). starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['arrival_form', 'contact_stage', 'witness_scale', 'earth_setting', 'event_light'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'response_detail', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  GAS_GIANT_SKIES: {
+    description: `PATH-BESPOKE — StarBot gas-giant-skies path (Stage L2, SHADOW). INSIDE a gas giant's atmosphere — continental-scale cloud formations, floating harvester platforms/cities, an Earth-sized storm on the horizon, lightning below the cloud deck. Self-lit (atmo_light is the atmosphere's own depth-light). 5 bespoke slots + 1 conditional atmo event (35%-gated). CRITICAL VOCABULARY LAW: cloud-native vocabulary ONLY — NEVER canyon/cliff/valley/mountain (render ROCK) → cloud-walls, "gaps between cloud banks", thunderhead ranges; float structures described by FEATURE (gasbags/tethers), NEVER disc/plate/dome/metallic-hovering (UFO). Lives IN the weather (impossible-sky looks UP from a surface, orbital-descent DOWN from space). starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: ['cloudscape', 'float_presence', 'storm_titan', 'atmo_light', 'sky_above'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'atmo_event', gate: 0.35 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  EVENT_HORIZON: {
+    description: `PATH-BESPOKE — StarBot event-horizon path (Stage L1, SHADOW). The black-hole close-pass: a black hole with a blazing accretion disk (Interstellar/Gargantua register), gravitational lensing warping the starfield into an Einstein ring, a tiny ship silhouette against the glow. Self-lit — the DISK is the only light in the void. 5 bespoke slots + 1 conditional infall event (35%-gated). LITERALIZATION LAW: always "a black hole with a blazing accretion disk", NEVER "vortex/whirlpool/hole"; "ring" is safe. The ship stays TINY (scale-prover). Photoreal cinematic on the bot default starbot_hyperreal medium.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'hole_presentation',
+        'lensing_effect',
+        'witness_scale',
+        'disk_light',
+        'space_backdrop',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'infall_event', gate: 0.35 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   IMPOSSIBLE_SKY: {
     description: `PATH-BESPOKE — StarBot impossible-sky path (2026-06-09, new). The WALLPAPER money-shot: a colossal ringed gas giant hanging ENORMOUS over the horizon of an alien world, its rings slicing across the entire sky at a dramatic tilt, moons strung along the ring-plane, aurora and a distant sun — all mirrored in the alien land or sea below. The scene is grounded (a thin foreground anchor) but the SKY is the entire show — the kind of image people set as a wallpaper.
 

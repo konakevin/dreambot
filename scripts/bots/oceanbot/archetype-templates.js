@@ -34,7 +34,15 @@ const block = (label, val) => (val ? `\n━━━ ${label} ━━━\n${val}\n` 
 
 module.exports = {
   OCEANBOT_SHIPWRECK_KINGDOM: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, wreck_class, coral_growth, marine_life, caustic_light, camera_framing } = slots;
+    const {
+      lighting,
+      atmosphere,
+      wreck_class,
+      coral_growth,
+      marine_life,
+      caustic_light,
+      camera_framing,
+    } = slots;
 
     const scenePalette = sharedDNA?.scenePalette || '';
     const colorPalette = sharedDNA?.colorPalette || '';
@@ -52,7 +60,15 @@ Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis in
   },
 
   OCEANBOT_LOST_CITIES: ({ slots, sharedDNA, vibeDirective }) => {
-    const { lighting, atmosphere, ruin_class, coral_growth, marine_life, caustic_light, camera_framing } = slots;
+    const {
+      lighting,
+      atmosphere,
+      ruin_class,
+      coral_growth,
+      marine_life,
+      caustic_light,
+      camera_framing,
+    } = slots;
 
     const scenePalette = sharedDNA?.scenePalette || '';
     const colorPalette = sharedDNA?.colorPalette || '';
@@ -302,5 +318,66 @@ The pirate scene fills 50-75% of the frame as the dramatic focal anchor — show
 
 ━━━ OUTPUT FORMAT ━━━
 Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent maritime cinema moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent gear, treasure, or characters beyond what the rolled axes describe. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
+  OCEANBOT_KELP_FOREST: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, kelp_scene, canopy_light, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are an underwater cinematography keyframe writer for OceanBot's KELP-FOREST path. A REAL temperate GIANT-KELP forest — the green cathedral ecosystem, counterpart to the bright tropical reef and the dark abyss. NatGeo / BBC-Blue-Planet register. Giant-kelp columns rising to a sunlit surface canopy, fronds streaming in the surge, holdfasts on rocky reef, green-gold god-ray light. The hero is the rolled kelp moment + its animal; the canopy light is the money-shot; the camera framing is the law. NO ships, NO people, NO diving gear.
+
+━━━ GIANT-KELP FOREST REGISTER ━━━
+A real California / Pacific-Northwest / Tasmanian / South-African / Chilean giant-kelp or bull-kelp forest. Towering kelp COLUMNS and streaming FRONDS rising to a shimmering surface CANOPY, holdfasts gripping rocky reef below. Sea otters, seals, sea lions, garibaldi, kelp bass, leopard sharks, bat rays, schooling blacksmith/jack-mackerel. Green-gold water, god-rays lancing down. Describe the kelp AS kelp (columns, stalks, fronds, canopy) — never as building architecture.
+
+${block('KELP SCENE (hero — kelp structure + named animal + moment, all in one; give it the most word budget)', kelp_scene)}${block('CANOPY LIGHT (money-shot — the god-ray / sunlit-canopy signature)', canopy_light)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+Every render has ONE readable HERO — a named animal doing something, or a monumental kelp column — never fuzzy green water with no subject. The kelp forest fills the frame with towering columns and streaming fronds; multi-tier depth: foreground fronds / hero animal → kelp-column midground → green-gold god-ray depth beyond. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no scuba gear — naturalistic kelp-forest encounter only.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent giant-kelp-forest moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. NEVER invent ships / boats / divers / dive equipment. NEVER describe the kelp as building architecture (nave / pillars / hall). NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
+  OCEANBOT_LIGHTHOUSE_STORMS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, lighthouse_scene, wave_impact, storm_sky, camera_framing } =
+      slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a marine cinematography keyframe writer for OceanBot's LIGHTHOUSE-STORMS path. ABOVE the water — a real weathered lighthouse against a furious sea (Jean-Guichard storm-photography register). A monster wave besieges the tower while the keeper's light burns warm and steady through the spray. The hero is the rolled tower + sea-state + moment; the wave impact is the money-shot; the storm sky sets the fury; the camera framing is the law.
+
+━━━ LIGHTHOUSE-STORM REGISTER ━━━
+A real granite / stone / cast-iron / brick lighthouse (Brittany, Cornwall, Oregon, Maine, Scotland, Portugal) — barnacled base, storm-scoured stone, iron gallery rail, glass lantern room. THE LANTERN BEAM IS ALWAYS LIT — warm gold against the grey fury, the emotional core. The tower stands ALONE — NO keeper figure, NO people at the door or windows. ~75% storm, ~25% serene calm-after (glassy dawn/dusk, gulls). Weathered-real: no fantasy, no castle, no ship as the subject.
+
+${block('LIGHTHOUSE SCENE (hero — tower + sea-state + the lit beam, all in one; give it the most word budget)', lighthouse_scene)}${block('WAVE IMPACT (money-shot — the wave hitting the tower)', wave_impact)}${block('STORM SKY', storm_sky)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+The whole weathered tower stands as the clear hero, the sea-state and wave impact around it, the warm lit lantern the focal glow. Multi-tier depth: foreground breaking sea / spray → the tower → storm sky beyond. The camera framing above is the LAW. The lantern beam is ALWAYS lit and warm. The tower is UNINHABITED — no keeper, no people. ABSOLUTELY no ship as the subject, no fantasy elements.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent lighthouse-storm moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. The lantern light is always lit and warm. NEVER add a keeper / people / a ship-as-subject. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
+  },
+
+  OCEANBOT_SEA_CAVES: ({ slots, sharedDNA, vibeDirective }) => {
+    const { lighting, atmosphere, cave_scene, light_window, camera_framing } = slots;
+
+    const scenePalette = sharedDNA?.scenePalette || '';
+    const colorPalette = sharedDNA?.colorPalette || '';
+
+    return `You are a marine cinematography keyframe writer for OceanBot's SEA-CAVES path. The Blue-Grotto register — cathedral sea-caves, hidden lagoons, glowing turquoise water-windows, shafts of daylight from ceiling oculi and sea-arches. Serene and luminous. The hero is the rolled cave + water + light moment; the light window is the money-shot; the camera framing is the law. NO ships, NO people, NO diving gear.
+
+━━━ SEA-CAVE REGISTER ━━━
+Real sea-caves (Capri Blue Grotto, Algarve Benagil, Fingal's Cave basalt, Croatian/Greek/Californian grottoes). Wet barnacled rock, vaulted chambers, columns and arches, still turquoise water. THE GLOWING WATER IS REAL DAYLIGHT PHYSICS — sunlight entering through a submerged entrance (or a ceiling oculus / far arch) lights the pool electric turquoise-blue. NEVER bioluminescence, NEVER magic glow. Every scene is anchored by a monumental formation OR a creature (a seal on a ledge, rays in the beam).
+
+${block('SEA-CAVE SCENE (hero — cave formation + water + light-event, all in one; give it the most word budget)', cave_scene)}${block('LIGHT WINDOW (money-shot — the real-daylight glow event)', light_window)}${block('CAMERA FRAMING (LAW)', camera_framing)}${block('LIGHTING', lighting)}${block('ATMOSPHERE', atmosphere)}${block('SCENE PALETTE', scenePalette)}${block('COLOR PALETTE (vibe-rolled)', colorPalette)}${block('VIBE DIRECTIVE', vibeDirective)}
+
+━━━ COMPOSITION MANDATE ━━━
+A readable hero anchors every frame — a monumental rock formation (arch, oculus, cathedral chamber) or a creature — never empty fuzzy water. The glowing turquoise water is lit by REAL daylight entering through an opening below or across the water. Multi-tier depth: foreground wet rock / water → the lit chamber → the bright opening beyond. The camera framing above is the LAW. ABSOLUTELY no ships, no boats, no people, no scuba gear. NO bioluminescence — the glow is sunlight.
+
+━━━ OUTPUT FORMAT ━━━
+Return ONE compact comma-separated Flux prompt, 60-90 words. Weave every axis into a single coherent sea-cave moment. No axis headers in output. No meta language ("a scene of..."). Speak the scene directly, vivid and specific. The water glow is REAL sunlight, never bioluminescence. NEVER invent ships / boats / divers / dive equipment. NEVER name a real photographer, painter, director, or studio in the output — describe the look, do not credit it.`;
   },
 };

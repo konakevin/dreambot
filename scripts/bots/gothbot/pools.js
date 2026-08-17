@@ -174,7 +174,9 @@ module.exports = {
   GOTHBOT_CASTLE_MOONSCAPE_INNER_LIGHT: loadOptional('gothbot_castle_moonscape_inner_light'),
   GOTHBOT_CASTLE_MOONSCAPE_MOON: loadOptional('gothbot_castle_moonscape_moon'),
   GOTHBOT_CASTLE_MOONSCAPE_SKY: loadOptional('gothbot_castle_moonscape_sky'),
-  GOTHBOT_CASTLE_MOONSCAPE_ACCENT_CREATURE: loadOptional('gothbot_castle_moonscape_accent_creature'),
+  GOTHBOT_CASTLE_MOONSCAPE_ACCENT_CREATURE: loadOptional(
+    'gothbot_castle_moonscape_accent_creature'
+  ),
   // ─── gothic-architecture path (2026-05-15, bespoke axis migration with STRUCTURE-IS-HERO)
   GOTHBOT_GOTHIC_ARCHITECTURE_STRUCTURE: load('gothbot_gothic_architecture_structure'),
   GOTHBOT_GOTHIC_ARCHITECTURE_DETAIL: load('gothbot_gothic_architecture_detail'),

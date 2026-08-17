@@ -93,6 +93,9 @@ const pathBuilders = {
   'australian-outback': require('./paths/australian-outback'), // axis-system (2026-06-01 activation)
   'european-wilderness': require('./paths/european-wilderness'), // axis-system (2026-06-01 activation)
   'great-waterfalls': require('./paths/great-waterfalls'), // NEW 2026-06-18 (EPIC_VISTA clone)
+  'winter-wonder': require('./paths/winter-wonder'), // Stage E1 (EPIC_VISTA clone, SHADOW)
+  'north-wild': require('./paths/north-wild'), // Stage E2 (EPIC_VISTA clone, SHADOW)
+  'storm-earth': require('./paths/storm-earth'), // Stage E3 (EPIC_VISTA clone + storm sky, SHADOW)
   'wetlands-wild': require('./paths/wetlands-wild'), // NEW 2026-06-18 (EPIC_VISTA clone)
   'night-landscapes': require('./paths/night-landscapes'), // NEW 2026-06-24 (pretty landscape + night sky)
   // Beach paths
@@ -131,6 +134,12 @@ const EARTH_PATHS = [
   // NEW 2026-06-24 — pretty landscape + night sky. Bespoke NIGHT prefix (below),
   // EARTH_SUFFIX (uninhabited-landscape no-humans anchor).
   'night-landscapes',
+  // Stage E — promoted to live rotation 2026-08-16 (scaled to production;
+  // faithful xerox — they inherit EARTH_PREFIX/SUFFIX/'earth-scene' sensory via
+  // the EARTH_PATHS spreads, identical to their shadow config; chaos+polish off).
+  'winter-wonder',
+  'north-wild',
+  'storm-earth',
 ];
 
 const BEACH_PATHS = [
@@ -145,6 +154,17 @@ const BEACH_PATHS = [
 ];
 
 const ALL_PATHS = [...EARTH_PATHS, ...BEACH_PATHS];
+
+// DARK-LAUNCH shadow paths (BOT_DARK_LAUNCH_PLAN.md + migration 376). These are
+// NOT in ALL_PATHS/paths[] (the dispatcher never auto-posts them) but ARE treated
+// as EARTH paths for the prefix/suffix/palette/skip-polish wiring below, so shadow
+// QA renders with the real fine-art-photo prefix + uninhabited suffix. They render
+// only via `iter-bot --mode <path> --post` (shadow: hidden, admin-only). Promote =
+// move the string into EARTH_PATHS.
+// Stage E paths promoted into EARTH_PATHS (live) 2026-08-16 — emptied here so
+// they're no longer shadow. (They now get EARTH_PREFIX/SUFFIX/sensory via the
+// EARTH_PATHS byPath spreads instead of the EARTH_SHADOW_PATHS spreads.)
+const EARTH_SHADOW_PATHS = [];
 
 // Source bot prefixes/suffixes — applied per path via promptPrefixByPath /
 // promptSuffixByPath so each path renders with its regional anchor + the
@@ -285,6 +305,7 @@ module.exports = {
   // applied to that path's render, identical to source bot behavior.
   promptPrefixByPath: {
     ...byPath(EARTH_PATHS, EARTH_PREFIX),
+    ...byPath(EARTH_SHADOW_PATHS, EARTH_PREFIX),
     ...byPath(BEACH_PATHS, BEACH_PREFIX),
     // Iceland-raw: bespoke prefix to anchor Iceland from token 0 (the
     // generic EARTH_PREFIX's "landscape photography" + medium's atmospheric
@@ -312,6 +333,7 @@ module.exports = {
   // brief block, doesn't rely on Flux suffix).
   promptSuffixByPath: {
     ...byPath(EARTH_PATHS, EARTH_SUFFIX),
+    ...byPath(EARTH_SHADOW_PATHS, EARTH_SUFFIX),
     ...byPath(BEACH_PATHS, BEACH_SUFFIX),
   },
 
@@ -321,6 +343,7 @@ module.exports = {
   vibes: TRAVEL_VIBES,
 
   paths: ALL_PATHS,
+  shadowPaths: EARTH_SHADOW_PATHS,
   // Per-path weights produce a 70/30 earth/beach split across the shuffle-bag
   // cycle (2026-05-22). Each earth path gets 7 slots per cycle, each beach
   // path gets 3 → total 8×7 + 8×3 = 80 slots per cycle, 56/24 = 70/30 share.
@@ -381,6 +404,7 @@ module.exports = {
     polishedWordsByPath: {},
     preservePhrasesByPath: {},
     skipPaths: [
+      ...EARTH_SHADOW_PATHS,
       'epic-vista',
       'national-parks',
       'deep-forest',
@@ -424,6 +448,7 @@ module.exports = {
     requiredChannels: ['lightcolor'],
     pathContext: {
       ...byPath(EARTH_PATHS, 'earth-scene'),
+      ...byPath(EARTH_SHADOW_PATHS, 'earth-scene'),
       ...byPath(BEACH_PATHS, 'beach-scene'),
     },
     poolsByContextAndChannel: {
@@ -433,7 +458,7 @@ module.exports = {
   },
 
   rollSharedDNA({ vibeKey, path, picker }) {
-    if (EARTH_PATHS.includes(path)) {
+    if (EARTH_PATHS.includes(path) || EARTH_SHADOW_PATHS.includes(path)) {
       // EarthBot's rollSharedDNA: scenePalette + colorPalette
       return {
         scenePalette: picker.pickWithRecency(earthPools.SCENE_PALETTES, 'scene_palette'),

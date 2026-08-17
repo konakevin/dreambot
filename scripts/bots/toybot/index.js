@@ -50,7 +50,19 @@ const pathBuilders = {
   // accents. Pool mirrors BrickBot's lego-landscapes + PixelBot's
   // pixel-landscapes (shared extraction from location_iconic_spots).
   'toy-landscapes': require('./paths/toy-landscapes'),
+  // Stage O (SHADOW, dark-launch) — physical-toy-MATERIAL world paths.
+  // Function-form, self-contained. Renderable ONLY by explicit --mode; never
+  // auto-posted publicly (see shadowPaths). Locked to bespoke tin/wood/board
+  // mediums (mediumStyles) + flux-1.1 (modelByPath).
+  'board-game-world': require('./paths/board-game-world'),
+  'wooden-toy-land': require('./paths/wooden-toy-land'),
+  'tin-toy-parade': require('./paths/tin-toy-parade'),
 };
+
+// Dark-launch set — reachable only via explicit --path/--mode; posts hidden
+// (is_public=false, shadow=true), visible only to the supreme admin via
+// get_shadow_feed. Going live = move a string into `paths` below.
+const TOY_SHADOW_PATHS = ['board-game-world', 'wooden-toy-land', 'tin-toy-parade'];
 
 module.exports = {
   username: 'toybot',
@@ -66,10 +78,7 @@ module.exports = {
   // per-path overrides remain. Rotation per render is 50/50 across the two
   // remaining Pro variants.
   useModelPicker: true,
-  allowedModels: [
-    'black-forest-labs/flux-1.1-pro',
-    'black-forest-labs/flux-1.1-pro-ultra',
-  ],
+  allowedModels: ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
 
   // Per-path model rotation (2026-06-06). toy-landscapes rotates across
   // gpt-image-2 + the two bot-wide Pro variants (flux-1.1-pro + ultra).
@@ -79,6 +88,19 @@ module.exports = {
   // Other ToyBot paths still rotate the 2-model whitelist above.
   modelByPath: {
     'toy-landscapes': {
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
+    // Stage O (SHADOW) — physical-toy dioramas on flux-1.1 (proven for toy macro).
+    'board-game-world': {
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
+    'wooden-toy-land': {
+      'black-forest-labs/flux-1.1-pro': 100,
+      'black-forest-labs/flux-1.1-pro-ultra': 100,
+    },
+    'tin-toy-parade': {
       'black-forest-labs/flux-1.1-pro': 100,
       'black-forest-labs/flux-1.1-pro-ultra': 100,
     },
@@ -106,6 +128,10 @@ module.exports = {
     'toybox-chaos': 'toybox_chaos_mixed',
     'space-saga-figures': 'space_saga_figures',
     'toy-landscapes': 'handcrafted',
+    // Stage O (SHADOW) — bespoke bot-local mediums (defined in mediumStyles below).
+    'board-game-world': 'board_game_diorama',
+    'wooden-toy-land': 'wooden_toy_diorama',
+    'tin-toy-parade': 'tin_toy_diorama',
     // monster-boss-battle rotates across the full toy-medium roster so the
     // boss + heroes can land in any toy world (vinyl Funko vs kaiju, action
     // figures vs demon lord, mechs vs alien overlord, etc.)
@@ -223,6 +249,14 @@ module.exports = {
     // scene). No base/diorama/tabletop words here (negative-prompt-leak).
     tabletop_minis:
       'hand-painted tabletop-miniature figures, Games-Workshop / Reaper / WizKids collector paint quality, visible brush-strokes and drybrushed metallic highlights, macro miniature photography, shallow depth of field',
+    // Stage O (SHADOW) — physical-toy-MATERIAL look locks. Positive material
+    // anchors carry the register (no negation chains — negative-prompt-leak).
+    board_game_diorama:
+      'a real printed BOARD GAME come to life, glossy die-cut cardboard board with painted illustrated spaces and printed borders, a clear winding path, real wooden meeples and plastic pawns and pewter figures and tumbling dice as pieces, scattered cards and a spinner and a sand-timer, warm hobby-table lighting, tilt-shift macro tabletop photography, tactile printed-cardboard texture, shallow depth of field',
+    wooden_toy_diorama:
+      'heirloom HAND-CARVED WOODEN toys, solid painted wood with visible woodgrain and turned-lathe rounded forms, soft matte painted color, gently rounded edges, occasional natural unpainted beech and maple, Waldorf / Grimm’s / Ostheimer / Brio wooden-toy aesthetic, warm natural wood tones, cozy hobby-table lighting, tilt-shift macro toy photography, tactile wood texture, shallow depth of field',
+    tin_toy_diorama:
+      'vintage 1950s LITHOGRAPHED PRESSED-TIN wind-up toys, colorful printed-on detail (rivets, faces, dials, clothes printed on the metal), pressed-tin panels with tab-and-slot seams, clockwork wind-up keys, slight patina and tiny scratches, warm enamel sheen, Masudaya / Yonezawa tin-toy register, nostalgic warm studio lighting, tilt-shift macro collectible photography, tactile reflective tin, shallow depth of field',
   },
 
   // Per-medium prompt injection — ToyBot's dialect for each toy medium.
@@ -572,6 +606,10 @@ module.exports = {
     ],
   },
 
+  // Dark-launch scene paths (Stage O) — excluded from `paths`/cycle below so the
+  // dispatcher never auto-posts them; reachable only via explicit --mode.
+  shadowPaths: [], // Stage O paths promoted to live rotation 2026-08-16 (TOY_SHADOW_PATHS const retained for reference)
+
   paths: [
     'claymation',
     'vinyl',
@@ -595,6 +633,12 @@ module.exports = {
     'toy-blockbuster',
     'giant-toys',
     'toy-landscapes',
+    // Stage O — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — already in chaos.skipPaths + sensory skipPaths (both off),
+    // modelByPath (flux-1.1) + mediumByPath (bespoke look) preserved).
+    'board-game-world',
+    'wooden-toy-land',
+    'tin-toy-parade',
   ],
 
   // toy-blockbuster is the flagship — weighted to exactly 25% of all renders.
@@ -619,6 +663,11 @@ module.exports = {
       'toy-blockbuster',
       'giant-toys',
       'toy-landscapes',
+      // Stage O (SHADOW) — curated material-look dioramas; chaos would scramble
+      // the printed-cardboard / carved-wood / pressed-tin register.
+      'board-game-world',
+      'wooden-toy-land',
+      'tin-toy-parade',
     ],
     allowSubjectChaosPaths: [
       'claymation',
@@ -684,6 +733,11 @@ module.exports = {
       'toy-blockbuster',
       'giant-toys',
       'toy-landscapes',
+      // Stage O (SHADOW) — self-contained prompts already carry their own
+      // atmosphere; skip sensory injection to keep the material look clean.
+      'board-game-world',
+      'wooden-toy-land',
+      'tin-toy-parade',
     ],
     requiredChannels: ['lightcolor'],
     pathContext: {

@@ -108,6 +108,27 @@ module.exports = {
   CRYSTALLINE_WORLD_EVENT: load('crystalline_world_event'),
 
   // ─── impossible-sky path (2026-06-09, NEW) — ringed giant over a horizon. ───
+  // event-horizon (Stage L1, SHADOW — black-hole close-pass)
+  EVENT_HORIZON_HOLE_PRESENTATION: load('event_horizon_hole_presentation'),
+  EVENT_HORIZON_LENSING_EFFECT: load('event_horizon_lensing_effect'),
+  EVENT_HORIZON_WITNESS_SCALE: load('event_horizon_witness_scale'),
+  EVENT_HORIZON_DISK_LIGHT: load('event_horizon_disk_light'),
+  EVENT_HORIZON_SPACE_BACKDROP: load('event_horizon_space_backdrop'),
+  EVENT_HORIZON_INFALL_EVENT: load('event_horizon_infall_event'),
+  // gas-giant-skies (Stage L2, SHADOW — inside a gas giant's atmosphere)
+  GAS_GIANT_SKIES_CLOUDSCAPE: load('gas_giant_skies_cloudscape'),
+  GAS_GIANT_SKIES_FLOAT_PRESENCE: load('gas_giant_skies_float_presence'),
+  GAS_GIANT_SKIES_STORM_TITAN: load('gas_giant_skies_storm_titan'),
+  GAS_GIANT_SKIES_ATMO_LIGHT: load('gas_giant_skies_atmo_light'),
+  GAS_GIANT_SKIES_SKY_ABOVE: load('gas_giant_skies_sky_above'),
+  GAS_GIANT_SKIES_ATMO_EVENT: load('gas_giant_skies_atmo_event'),
+  // first-contact (Stage L3, SHADOW — the arrival event, Arrival register)
+  FIRST_CONTACT_ARRIVAL_FORM: load('first_contact_arrival_form'),
+  FIRST_CONTACT_CONTACT_STAGE: load('first_contact_contact_stage'),
+  FIRST_CONTACT_WITNESS_SCALE: load('first_contact_witness_scale'),
+  FIRST_CONTACT_EARTH_SETTING: load('first_contact_earth_setting'),
+  FIRST_CONTACT_EVENT_LIGHT: load('first_contact_event_light'),
+  FIRST_CONTACT_RESPONSE_DETAIL: load('first_contact_response_detail'),
   IMPOSSIBLE_SKY_RINGED_GIANT: load('impossible_sky_ringed_giant'),
   IMPOSSIBLE_SKY_COMPANIONS: load('impossible_sky_companions'),
   IMPOSSIBLE_SKY_FOREGROUND: load('impossible_sky_foreground'),

@@ -108,6 +108,96 @@ Wide cinematic establishing shot, the sky wrapping the vessel. No text/words/wat
 ${TAIL}`;
   },
 
+  STEAMBOT_SKYDOCK_HARBOR: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, harbor_vista, dock_activity, mooring_light, crowd_texture, departure_event } =
+      slots;
+    const departureLine = departure_event
+      ? `A dramatic send-off in the scene (awe + occasion): ${departure_event}.\n`
+      : '';
+
+    return `Write ONE Victorian steampunk AIRSHIP-HARBOR scene for SteamBot — a busy sky-PORT where airships are DOCKED at rest and the platforms bustle with life (NOT ships in flight — this is the place they arrive and depart). The HARBOR ARCHITECTURE and the DOCKED FLEET are the heroes. Environment-dominant; people appear only as small, distant, fully-clothed figures dotting the platforms — background texture, never a foreground crowd or portraits.
+
+THE HARBOR VISTA: ${harbor_vista}. Render the airship PORT in gorgeous brass, iron and timber — gantry-towers, mooring masts, gangways, cargo-derricks — with dirigibles MOORED at rest at every level. Real depth: a working foreground platform, the docked fleet and gantries filling the midground, the harbor receding into atmosphere.
+
+THE DOCK ACTIVITY: ${dock_activity}. Render SEVERAL things happening at once so the harbor reads alive and busy — casting-off, craning cargo, winching, gangways lowered — a working port mid-bustle, never a static postcard. Machinery and ships carry the action.
+
+DISTANT LIFE: ${crowd_texture}. Keep the people TINY and far-off — a light scatter of small, fully-clothed Victorian figures along the distant platforms and gangways, dwarfed by the great ships. Just enough to feel lived-in; the architecture stays the subject.
+${departureLine}Light: ${mooring_light}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
+Wide cinematic establishing shot, the whole busy sky-harbor readable — docked ships, bustling platforms, lamplit fog. No text/words/watermarks.
+
+${TAIL}`;
+  },
+
+  STEAMBOT_CLOCKTOWER_HEART: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, mechanism_hall, gear_choreography, face_light, scale_prover, hour_event } =
+      slots;
+    const scaleLine = scale_prover
+      ? `A tiny element for scale, dwarfed by the gears (never the focus): ${scale_prover}.\n`
+      : '';
+    const hourLine = hour_event
+      ? `THE HOUR STRIKES — a moment of dramatic motion: ${hour_event}.\n`
+      : '';
+
+    return `Write ONE scene from INSIDE a cathedral-scale clock mechanism for SteamBot — the giant working heart of a great tower-clock (Hugo / clockwork-cathedral register). The colossal brass-and-iron mechanism is the hero. Environment-dominant; any figure is tiny and incidental, no face.
+
+THE MECHANISM HALL: ${mechanism_hall}. Render it as a REAL precision machine at cathedral scale — colossal interlocking brass and iron cog-wheels, driveshafts, a swinging pendulum, an escapement — unmistakably BUILT and mechanical, never merely decorative gears. Real depth: a tactile foreground cog, the great works filling the midground, the mechanism receding into shadow.
+
+THE GEAR CHOREOGRAPHY (money-shot): ${gear_choreography}. Render this ONE clear moment of mechanical motion — a tooth engaging, the escapement's tick, the pendulum's arc — legible and precise, the machine caught mid-motion.
+${scaleLine}${hourLine}Light: ${face_light}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
+Wide or medium cinematic interior establishing shot, the colossal mechanism and the glowing dial both readable. No text/words/watermarks.
+
+${TAIL}`;
+  },
+
+  STEAMBOT_CELESTIAL_OBSERVATORY: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      observatory_space,
+      great_instrument,
+      sky_through_dome,
+      brass_detail,
+      astronomer_presence,
+    } = slots;
+    const details = (Array.isArray(brass_detail) ? brass_detail : [brass_detail]).filter(Boolean);
+    const detailLine = details.length ? `Populate the space with: ${details.join('; ')}.\n` : '';
+    const astronomerLine = astronomer_presence
+      ? `A tiny astronomer for scale, from behind, no face (never the focus): ${astronomer_presence}.\n`
+      : '';
+
+    return `Write ONE Victorian steampunk ASTRONOMY-OBSERVATORY scene for SteamBot — a grand brass observatory interior open to the cold night sky (H.G.-Wells / Victorian-astronomy register). The colossal brass instrument and the warm gaslit interior are the heroes; the cold real night sky beyond is the contrast. Environment-dominant; any figure is tiny and incidental, no face.
+
+THE SPACE: ${observatory_space}. Render it in gorgeous brass, iron, gaslight and warm wood, with real depth — a tactile foreground, the great instrument commanding the midground, the dome or terrace opening to the night beyond.
+
+THE GREAT INSTRUMENT: ${great_instrument}. This colossal brass astronomical machine fills 30-50% of the frame — riveted brass, gears, graduated dials — unmistakably a real precision instrument, aimed at the sky.
+
+THE SKY THROUGH THE DOME (money-shot): ${sky_through_dome}. ⚠️ The great dome is CRACKED OPEN — a slit or opening in the roof reveals the actual COLD NIGHT SKY beyond, a black starry night with the moon / a comet / aurora / the star-field clearly visible through the gap. NEVER a closed glass dome, NEVER a bright daylit skylight, NEVER a plain light-beam — it must open to a real dark starry Victorian-EARTH night (no fantasy planets, no alien worlds). The warm gaslit interior glows against that cold dark night sky.
+${detailLine}${astronomerLine}Light: ${lighting}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
+Wide or medium cinematic interior establishing shot, the instrument and the night sky both readable. No text/words/watermarks.
+
+${TAIL}`;
+  },
+
+  STEAMBOT_NAUTILUS_DEPTHS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, submersible, deep_encounter, porthole_glow, depth_light, leviathan_shadow } =
+      slots;
+    const leviathanLine = leviathan_shadow
+      ? `At the very edge of the light, a colossal creature silhouette (awe, never gore): ${leviathan_shadow}.\n`
+      : '';
+
+    return `Write ONE underwater steampunk scene for SteamBot — an ornate brass Victorian submarine gliding through the deep dark ocean (20,000-Leagues / Captain-Nemo register). The BRASS MACHINE and the OCEAN DEPTH are co-heroes, equally present. Environment-dominant; any figures are tiny and incidental, never the focus, and no crew faces.
+
+THE SUBMARINE: ${submersible}. Render it as gorgeous riveted Victorian engineering — brass, copper, iron, rivets, portholes, fins, propeller-screws — and CRUCIALLY the brass reads as BRASS underwater, catching specular highlights and the porthole-glow, never a dull dark shape. It glides through the deep, the ocean filling the frame around it.
+
+THE DEEP ENCOUNTER: ${deep_encounter}. This is the co-hero the vessel passes — fantastical, painterly, Victorian-steampunk wonder, NEVER a nature-documentary. Real depth: the encounter and the sub woven together, the deep receding into gloom.
+
+THE PORTHOLE GLOW (money-shot): ${porthole_glow}. The warm lamplight of the sub spilling into the cold deep — the warm-vs-cold contrast that defines the frame.
+${leviathanLine}Light: ${depth_light}. Atmosphere: ${atmosphere}. Palette: ${sharedDNA.scenePalette}. Mood: ${vibeDirective.slice(0, 120)}.
+Wide or medium cinematic underwater establishing shot, the ocean depth and the brass sub both readable. No text/words/watermarks.
+
+${TAIL}`;
+  },
+
   STEAMBOT_STEAMPUNK_HYBRID: ({ slots, sharedDNA, vibeDirective }) => {
     const { lighting, atmosphere, hybrid_world, surprise_element } = slots;
     const surpriseLine = surprise_element

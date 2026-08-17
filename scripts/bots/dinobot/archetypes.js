@@ -13,6 +13,48 @@
  */
 
 module.exports = {
+  DINOBOT_DINO_NIGHTS: {
+    description:
+      'PATH-BESPOKE — DinoBot dino-nights path (Stage D1, SHADOW). The NOCTURNAL Mesozoic — moonlit watering holes, hunts by starlight, pre-dawn mist, Milky Way over sauropod silhouettes. First NIGHT register on the bot. The DINOSAUR doing a candid nocturnal behavior is the HERO, REVEALED by moonlight (land stays visibly lit, never black-silhouette). night_light REPLACES the universal lighting slot (moonlight/starlight is the only light). Eyes catch light naturally, never glow-fantasy. 4 path axes (night_scene / night_light / night_biome / surprise_element) + 80%-gated night_phenomenon + universal atmosphere (NO universal lighting).',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['night_scene', 'night_light', 'night_biome', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'night_phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DINOBOT_POLAR_DINOS: {
+    description:
+      'PATH-BESPOKE — DinoBot polar-dinos path (Stage D3, SHADOW). Real paleo-accuracy showcase — polar-latitude dinosaurs (Nanuqsaurus, Leaellynasaura, Edmontosaurus at high latitude), snow-dusted feathers/hide, aurora skies, ice-edge coasts, months-long dusk. ENTIRELY NEW cool palette (the bot is all-warm). SPECIES_ANCHOR load-bearing (obscure genera). Feathering = INSULATION, described POSITIVELY (the coat), never negated. Mesozoic-lock: never Arctic-today (no polar bears/seals/penguins, no modern spruce) — cold-hardy primordial flora. polar_light REPLACES the universal lighting slot; aurora allowed HERE only. 4 path axes (polar_scene / ice_feature / polar_light / surprise_element) + 80%-gated polar_phenomenon + universal atmosphere.',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['polar_scene', 'ice_feature', 'polar_light', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'polar_phenomenon', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  DINOBOT_STORM_SEASON: {
+    description:
+      'PATH-BESPOKE — DinoBot storm-season path (Stage D2, SHADOW). Dinosaurs in DRAMATIC weather — rain sheeting off a tyrannosaur, lightning over a fleeing gathering, monsoon-flooded fern-plains, dust-storm walls. Jurassic-Park-in-the-rain register. WET-WORLD cranked; animals REACT to weather (mid-flee / hunkered / drinking the flood), never posed; grounded ban doubly enforced (wind+rain invite floaty poses); lightning = ONE physically-lit fork (never sci-fi); clouds soft/moist (cloud-vocab law). storm_light REPLACES the universal lighting slot. 5 path axes (storm_scene / weather_drama / storm_light / storm_biome / surprise_element) + 80%-gated peak_event + universal atmosphere (NO universal lighting).',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['storm_scene', 'weather_drama', 'storm_light', 'storm_biome', 'surprise_element'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'peak_event', gate: 0.8 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   DINOBOT_PALEO_LANDSCAPE: {
     description:
       'PATH-BESPOKE — DinoBot paleo-landscape path (2026-05-17 axis-system migration from legacy function-form). PURE PREHISTORIC LANDSCAPE — Mesozoic / Jurassic / Cretaceous IMAX-scale ancient world vistas. NO dinosaurs as primary subject (only tiny distant silhouettes via surprise_element). The PRIMORDIAL WORLD itself is the hero — mega-flora, alien Earth, lush, alive. Avatar Pandora × Skull Island × Land-of-the-Lost overgrown jungle cinematics. Reuses PREHISTORIC_SETTINGS (200) as biome. 5 path-bespoke axes (biome / megaflora / phenomenon 80%-gated / surprise_element / sky_layer) + universal lighting + atmosphere.',

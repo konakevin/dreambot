@@ -83,6 +83,25 @@ module.exports = {
   DINOBOT_DINO_ACTION_SURPRISE_ELEMENT: load('dinobot_dino_action_surprise_element'),
   // Extinction-event path-bespoke pool (added 2026-05-17 — axis-system migration)
   DINOBOT_EXTINCTION_EVENT_SURPRISE_ELEMENT: load('dinobot_extinction_event_surprise_element'),
+  // dino-nights path-bespoke pools (Stage D1, SHADOW — nocturnal Mesozoic)
+  DINOBOT_DINO_NIGHTS_NIGHT_SCENE: load('dinobot_dino_nights_night_scene'),
+  DINOBOT_DINO_NIGHTS_NIGHT_LIGHT: load('dinobot_dino_nights_night_light'),
+  DINOBOT_DINO_NIGHTS_NIGHT_BIOME: load('dinobot_dino_nights_night_biome'),
+  DINOBOT_DINO_NIGHTS_SURPRISE_ELEMENT: load('dinobot_dino_nights_surprise_element'),
+  DINOBOT_DINO_NIGHTS_NIGHT_PHENOMENON: load('dinobot_dino_nights_night_phenomenon'),
+  // storm-season path-bespoke pools (Stage D2, SHADOW — dinosaurs in dramatic weather)
+  DINOBOT_STORM_SEASON_STORM_SCENE: load('dinobot_storm_season_storm_scene'),
+  DINOBOT_STORM_SEASON_WEATHER_DRAMA: load('dinobot_storm_season_weather_drama'),
+  DINOBOT_STORM_SEASON_STORM_LIGHT: load('dinobot_storm_season_storm_light'),
+  DINOBOT_STORM_SEASON_STORM_BIOME: load('dinobot_storm_season_storm_biome'),
+  DINOBOT_STORM_SEASON_SURPRISE_ELEMENT: load('dinobot_storm_season_surprise_element'),
+  DINOBOT_STORM_SEASON_PEAK_EVENT: load('dinobot_storm_season_peak_event'),
+  // polar-dinos path-bespoke pools (Stage D3, SHADOW — polar-latitude paleo showcase)
+  DINOBOT_POLAR_DINOS_POLAR_SCENE: load('dinobot_polar_dinos_polar_scene'),
+  DINOBOT_POLAR_DINOS_ICE_FEATURE: load('dinobot_polar_dinos_ice_feature'),
+  DINOBOT_POLAR_DINOS_POLAR_LIGHT: load('dinobot_polar_dinos_polar_light'),
+  DINOBOT_POLAR_DINOS_SURPRISE_ELEMENT: load('dinobot_polar_dinos_surprise_element'),
+  DINOBOT_POLAR_DINOS_POLAR_PHENOMENON: load('dinobot_polar_dinos_polar_phenomenon'),
   VIBE_COLOR,
 
   SENSORY_POOLS: {

@@ -828,6 +828,270 @@ EXAMPLES (4):
   // wallpaper money-shot — the SKY is the whole show.
   // ════════════════════════════════════════════════════════
 
+  // ─── event-horizon (Stage L1, SHADOW) — black-hole close-pass, Interstellar register ───
+  event_horizon_hole_presentation: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON PRESENTATION — the black hole itself and how its blazing accretion disk is presented (the hero of the frame). Each entry 25-45 words. Physically-inspired grandeur (Interstellar / Gargantua register), NEVER a cartoon whirlpool.
+
+⚠️ Always lead with "a black hole with a blazing accretion disk" — the disk of superheated gas is the visible subject; the black hole is a perfect dark sphere at its center. NEVER call it a "vortex", "whirlpool", or "hole in space".
+
+VARIETY MANDATE — ~25 distinct presentations: an edge-on black hole whose accretion disk is lensed into a bright halo arcing OVER and UNDER the dark sphere; a face-on spiral disk of glowing gas winding into the central shadow; a steeply-tilted disk with a bright forward edge Doppler-brightened; a polar jet shooting a thin bright beam from the pole; a thin razor disk seen almost edge-on as a blazing line bisected by the dark sphere; a broad turbulent disk with visible spiral density waves; a young hot disk blazing blue-white; a fading disk glowing sullen red. Each MUST name the DISK structure + angle + the perfect dark central sphere.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE black-hole-with-accretion-disk presentation, 25-45 words, comma-separated prose. Lead with "a black hole with a blazing accretion disk". Name disk structure + angle + the dark central sphere. NEVER "vortex/whirlpool/hole". Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A black hole with a blazing accretion disk seen edge-on, the disk of white-gold superheated gas lensed into a luminous halo arcing both over and under the perfect black sphere at the center, its forward edge Doppler-brightened.
+2. A black hole with a blazing accretion disk viewed face-on, glowing amber gas winding in tight spiral density-waves toward the pitch-dark central shadow that swallows all light.
+3. A black hole with a blazing accretion disk tilted steeply, a broad turbulent ring of orange-and-red plasma, a thin bright polar jet lancing straight out from one pole into the dark.
+4. A black hole with a blazing accretion disk seen almost edge-on, a razor-thin blazing line of white-hot gas bisected by the round black shadow, faint outer bands cooling to deep crimson.`,
+  },
+  event_horizon_lensing_effect: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON LENSING — the MONEY-SHOT: the gravitational-lensing distortion of the starfield and disk around the black hole (the effect that makes it unmistakable). Each entry 15-30 words. Physically-inspired, never cartoon.
+
+VARIETY MANDATE — the warped starfield bent into an Einstein ring around the dark sphere; the accretion disk's far side lensed up over the top so the disk appears to wrap the sphere; a bright thin photon-ring circling just outside the shadow; the starfield smeared into concentric arcs near the edge; a doubled image of a background nebula bent around both sides; stars streaking into curved lines at the rim; the galaxy band distorted into a warped arc behind the hole.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gravitational-lensing effect in 15-30 words. Physically-inspired. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The background starfield bent into a perfect glowing Einstein ring around the dark sphere, stars smeared into fine concentric arcs at the rim.
+2. The accretion disk's far side lensed up and over the top of the black sphere, so the blazing disk appears to wrap completely around it.
+3. A bright razor-thin photon ring circling just outside the black shadow, the last light to escape orbiting the hole.
+4. A background nebula doubled and bent around both sides of the sphere, its colored gas streaked into curved mirrored arcs.`,
+  },
+  event_horizon_witness_scale: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON WITNESS — the TINY human-made silhouette that proves the colossal scale (the scale-prover). Each entry 12-24 words. The witness is minuscule against the disk — NEVER a hero.
+
+VARIETY MANDATE — a tiny ship silhouette crossing before the blazing disk; a small ring-station glinting at the frame edge; a lone probe with a dish, a dark speck; a slender survey vessel edge-on; a tiny lander drifting near the photon ring; a small fleet of dark specks strung across the glow; a habitat-ring far off catching disk-light; a single spacewalker-sized dot for scale. It is ALWAYS tiny and dark against the immense disk.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE tiny witness silhouette in 12-24 words, minuscule against the disk. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A tiny dark ship silhouette crossing before the blazing accretion disk, a single speck dwarfed by the immense wall of glowing gas.
+2. A small survey vessel edge-on at the frame's edge, its hull rimmed in gold disk-light, minuscule against the black sphere.
+3. A lone probe with a dish antenna, a dark dot drifting near the bright photon ring, utterly tiny in the scene.
+4. A distant habitat-ring glinting faintly, a thin bright circle far off catching the disk's white-gold glow, dwarfed by the hole.`,
+  },
+  event_horizon_disk_light: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON DISK LIGHT — the light of the accretion disk, which is the ONLY light source in the airless void (self-lit). Each entry 12-24 words. Color + intensity gradient across the disk.
+
+VARIETY MANDATE — blazing white-gold at the inner edge cooling to amber then deep red at the outer rim; a blue-white hot inner ring fading to orange; a Doppler-brightened forward edge blindingly white, the receding edge dimmed red; sullen crimson embers of a cooling disk; a fierce yellow-orange furnace glow; the disk-light casting a hard rim of gold on the dark witness and the sphere's silhouette; the only illumination is this disk against total black.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE disk-light description in 12-24 words, the only light in the void. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Blazing white-gold at the inner edge cooling through amber to deep smoldering red at the outer rim, the sole light in the black void.
+2. A Doppler-brightened forward edge blindingly white-blue, the receding edge dimmed to sullen red, a stark asymmetric glow.
+3. A fierce yellow-orange furnace light pouring off the disk, throwing a hard gold rim along the dark witness silhouette.
+4. The cooling disk glows in embered crimson and ash-orange, its dim light barely lifting the pitch-black surrounding void.`,
+  },
+  event_horizon_space_backdrop: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON BACKDROP — the deep-space backdrop the black hole sits against (before lensing warps it). Each entry 12-24 words. Deep, dark, real astronomy.
+
+VARIETY MANDATE — a dense star-field with faint nebula haze; the bright dusty band of the galaxy core; a distant colored nebula in teal and magenta; a scatter of bright foreground stars with diffraction spikes; the pure black of intergalactic void with sparse stars; a far globular cluster; a faint second galaxy as a smudge; a cold blue-and-violet gas cloud drifting behind.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE deep-space backdrop in 12-24 words. Real astronomy, deep and dark. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A dense field of stars behind, threaded with faint teal-and-magenta nebula haze that the hole's gravity will bend into arcs.
+2. The bright dusty band of the galaxy core arching across the backdrop, dark dust-lanes and thousands of stars.
+3. The near-pure black of intergalactic void, only a sparse scatter of cold white stars and one distant galaxy-smudge.
+4. A cold violet-and-blue gas cloud drifting far behind, dim and vast, a few bright foreground stars with sharp diffraction spikes.`,
+  },
+  event_horizon_infall_event: {
+    format: 'simple',
+    theme: `STARBOT EVENT-HORIZON INFALL EVENT — a gated (~35%) dramatic infall moment. Each entry 15-30 words. Physically-inspired, never cartoon.
+
+VARIETY MANDATE — a nearby star being shredded into a glowing stream of gas spiraling onto the disk (tidal disruption); a bright plume of gas arcing from a companion star toward the hole; a flare erupting off the inner disk edge; a jet suddenly brightening; a knot of hot gas plunging over the edge and vanishing; a spiral stream of stellar debris feeding the outer disk.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE infall event in 15-30 words. Physically-inspired. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A nearby star shredded into a long glowing stream of white-gold gas spiraling down and feeding onto the outer accretion disk.
+2. A bright arcing plume of hot gas drawn off a companion star, bridging across the void toward the blazing disk.
+3. A sudden flare erupting off the inner disk edge, a brilliant white burst just outside the black shadow.
+4. A knot of superheated gas plunging over the edge of the disk and vanishing into the dark sphere, its last light stretched thin.`,
+  },
+
+  // ─── first-contact (Stage L3, SHADOW) — the arrival EVENT (Arrival register) ───
+  first_contact_arrival_form: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT ARRIVAL FORM — the colossal alien visitor hanging over the landscape (the hero of the frame). Each entry 25-45 words. Enigmatic, monumental, AWE not menace (Arrival / Denis Villeneuve register). NEVER a weapon, NEVER destruction.
+
+VARIETY MANDATE — ~25 distinct visitors: a smooth monolithic black shard standing on end, impossibly tall; a vast dark ring slowly turning end-over-end above the plain; a smooth curved lens-shape hanging silent (describe by FEATURE — a smooth dark curved hull, NOT a "flying saucer"); a fleet of dark seed-pod shapes descending in formation; a colossal segmented arc bridging the horizon; a great matte-black sphere resting just above the ground; a towering fluted spire lowered from the sky; a slowly-rotating dark torus; a vast dark whale-like leviathan-ship drifting; a cluster of tall obsidian slabs. Each MUST be colossal, smooth/enigmatic, and monumental against the sky — silent arrival, never attack.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal alien arrival-form in 25-45 words, monumental + enigmatic, awe not menace. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A smooth monolithic black shard stands impossibly tall on the plain, its matte surface swallowing the light, tapering into low cloud, silent and enigmatic and utterly still.
+2. A vast dark ring turns slowly end-over-end high above the landscape, its smooth featureless hull catching a thin rim of dawn light, monumental and calm.
+3. A fleet of dark seed-pod shapes descends in a slow silent formation from the clouds, each a smooth curved hull, spreading across the sky above the plain.
+4. A colossal matte-black sphere rests just above the ground, dwarfing the horizon, its dark curved surface faintly mirroring the land and sky, silent and immense.`,
+  },
+  first_contact_contact_stage: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT STAGE — the MOMENT of the encounter (the beat the whole image captures). Each entry 15-30 words. Quiet, suspended, awe — never violence.
+
+VARIETY MANDATE — the visitor's vast shadow first crossing the land at dawn; a single beam of soft light lowering to touch a clearing; the silent hover at first light, nothing yet happening; a slow descent through parting clouds; the moment the ship's underside lights kindle one by one; a low resonant glow pulsing across the hull; the ship settling to a silent stop above the field; dawn breaking behind the arrival; the first faint response-light glimmering on the hull.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE contact-moment in 15-30 words, quiet + suspended + awe. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. The visitor's vast shadow crosses the land for the first time at dawn, a slow band of dimness sweeping over the plain as the world holds its breath.
+2. A single beam of soft white light lowers from the dark hull to touch a clearing below, calm and deliberate, dust drifting up in its glow.
+3. The colossal form hovers in silent stillness at first light, nothing yet happening, the whole landscape suspended in the enormity of its presence.
+4. The ship descends slowly through parting clouds, its underside lights kindling one by one, a low resonant glow spreading across the dark hull.`,
+  },
+  first_contact_witness_scale: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT WITNESS SCALE — the MONEY-SHOT: the human-scale witnesses far below that prove the overwhelming scale (the emotional anchor). Each entry 15-30 words. Witnesses are DISTANT silhouettes, NO faces, at civilization scale.
+
+VARIETY MANDATE — a long road of stopped cars, their headlights strung across the plain toward the ship; a distant field of tiny upturned silhouettes standing motionless; a small town's lights below the colossal form; a lone figure silhouetted on a ridge far off; a scatter of tiny figures on a rooftop looking up; a highway frozen with tiny vehicles and lights; a crowd as a faint dark mass at the horizon; a single distant farmhouse with its porch light on beneath the arrival. ALWAYS tiny, distant, faceless — the scale contrast is everything.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE human-scale witness beat in 15-30 words, tiny + distant + faceless, proving the scale. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A long road of stopped cars strings its headlights across the dark plain toward the colossal form, each vehicle a tiny bright point beneath the immense hull.
+2. A distant field of tiny upturned silhouettes stands motionless at the horizon, a faint dark scatter of witnesses dwarfed to specks by the arrival above.
+3. A small town's warm lights glimmer far below the visitor, its little grid of streets tiny and fragile beneath the overwhelming dark shape.
+4. A lone figure stands silhouetted on a far ridge, a single dark speck against the dawn, gazing up at the monumental form filling the sky.`,
+  },
+  first_contact_earth_setting: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT SETTING — the timeless Earth-like landscape the arrival hangs over. Each entry 15-30 words. Timeless, no logos, no readable tech era, no destruction.
+
+VARIETY MANDATE — a vast open plain of grass under a wide sky; a misty river valley with a small town; a coastline with the ship over the water; a mountain-ringed basin at dawn; a wheat-field prairie stretching flat; a lake mirroring the arrival; a distant city-glow on the horizon; rolling farmland with hedgerows; a high desert mesa plain; a foggy moor at first light. Timeless and quiet, real-Earth-like but unbranded.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE timeless Earth-like setting in 15-30 words, quiet + unbranded. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A vast open plain of pale grass stretches flat to the horizon under a wide dawn sky, timeless and quiet beneath the arrival.
+2. A misty river valley cradles a small town, its lights glimmering along the water, hills rolling away into soft dawn fog.
+3. A long coastline curves away below the visitor, the ship hanging over the dark water, waves catching the first pale light.
+4. A distant city-glow rims the horizon of a wide dark plain, its faint amber halo tiny beneath the colossal form above.`,
+  },
+  first_contact_event_light: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT EVENT LIGHT — the light of the encounter (self-lit; sets the whole mood). Each entry 12-24 words. Awe-light, never fire/destruction.
+
+VARIETY MANDATE — the cold pre-dawn blue with the ship a darker shape against it; a soft glow kindling along the ship's underside; a single shaft of white light touching down; the warm amber of a low sun behind the arrival; an eerie teal glow suffusing the mist below; the ship's dark hull rimmed in dawn gold; a diffuse silver overcast light; the last stars fading as light grows behind the visitor; a soft pulsing luminescence on the hull.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE event-light description in 12-24 words, awe not destruction. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Cold pre-dawn blue fills the sky, the colossal ship a darker shape against it, its underside just beginning to glow a soft white.
+2. A single shaft of white light lowers from the dark hull to touch the land, its glow catching drifting dust and low mist.
+3. The low sun rises warm and amber behind the arrival, rimming its dark silhouette in gold, long shadows reaching across the plain.
+4. An eerie teal luminescence suffuses the mist below the visitor, the hull pulsing with a slow soft glow against the fading stars.`,
+  },
+  first_contact_response_detail: {
+    format: 'simple',
+    theme: `STARBOT FIRST-CONTACT RESPONSE DETAIL — a gated (~30%) small human-response beat. Each entry 12-24 words. Tiny, distant, awe/wonder — NEVER weapons-fire or destruction.
+
+VARIETY MANDATE — thin searchlight beams sweeping up toward the ship from far below; a lone drone rising as a tiny speck toward the hull; a helicopter's tiny light circling at a distance; a line of tiny vehicle-lights converging on the site; a flare rising softly in the distance; a small aircraft's contrail curving up; a cluster of tiny lights gathering on a far ridge; a distant beacon blinking in answer.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE small response detail in 12-24 words, tiny + awe, never weapons. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Thin searchlight beams sweep slowly up toward the colossal ship from far below, pale fingers of light against the dark hull.
+2. A lone drone rises as a tiny speck toward the vast hull, a single blinking light climbing into the enormity above.
+3. A line of tiny vehicle-lights converges along a dark road toward the arrival site, a thread of bright points crossing the plain.
+4. A small aircraft's contrail curves softly up toward the visitor, a thin white line drawn across the pale dawn sky.`,
+  },
+
+  // ─── gas-giant-skies (Stage L2, SHADOW) — INSIDE a gas giant's atmosphere ───
+  gas_giant_skies_cloudscape: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT CLOUDSCAPE — the continental-scale cloud formation INSIDE a gas giant's atmosphere (the hero of the frame). Each entry 30-50 words. This is deep inside a Jupiter/Saturn-scale atmosphere — nothing but cloud, air, and light in every direction.
+
+⚠️ CLOUD-NATIVE VOCABULARY ONLY — everything is made of CLOUD and vapor. NEVER use "canyon", "cliff", "valley", "mountain", "wall of rock", or any terrestrial rock/land noun (they render solid ROCK). Instead say: banded cloud-walls, towering thunderhead ranges, cloud-banks, soft cloud-chasms as "gaps between cloud banks", billowing cloud-terraces, hazy cloud-decks descending into darker depths, curdled cloud-ranges. Everything is soft, moist, billowing vapor.
+
+VARIETY MANDATE — ~25 distinct cloudscapes: vast banded cloud-walls in amber and cream stretching to the horizon; a towering range of thunderheads glowing from within; a clearing shaft opening down through layered cloud-decks to a dark deep haze below; curling ammonia-cream bands sculpted by titanic winds; a churning zone of billowing cloud-terraces stepping down into shadow; feathered cirrus-veils high over deeper cloud-banks; a broad soft gap between two cloud-banks revealing depth; rose-and-gold cloud-ranges backlit by a hidden sun. Each MUST be pure billowing CLOUD, continental in scale, no rock nouns.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE gas-giant cloudscape in 30-50 words, comma-separated prose, CLOUD-NATIVE vocabulary only (NEVER canyon/cliff/valley/mountain/rock — those render solid rock). Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Vast banded cloud-walls of amber and cream tower to the horizon inside the gas giant, sculpted by titanic winds into billowing terraces that step softly down through hazy decks into a darker deep below.
+2. A towering range of glowing thunderheads climbs through the atmosphere, their cauliflower crowns lit from within by deep lightning, soft gaps between the cloud-banks opening to reveal layered depth and haze.
+3. A great clearing shaft opens straight down through layered cloud-decks, each level a softer rose-and-ochre band, fading into a dark hazy deep far below, all pure billowing vapor.
+4. Curdled ammonia-cream cloud-ranges roll to the horizon in feathered bands, high cirrus-veils drifting above deeper churning cloud-banks, everything soft and moist and continental in scale.`,
+  },
+  gas_giant_skies_float_presence: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT FLOAT PRESENCE — the small human-made presence floating in the gas giant's sky (a scale-prover, small against the immense clouds). Each entry 15-30 words. Described by FEATURE, never as a rigid geometric object.
+
+⚠️ NEVER call it a "disc", "plate", "dome", "saucer", or "metallic hovering object" (those render a UFO). Describe it as a floating harvester city, a tethered balloon-outpost, a fleet of skimmer craft, a lattice gas-refinery hanging under great gasbags, an airship caravan — with FEATURES (gasbags, tethers, gantries, running lights, ballonets). It is ALWAYS small against the sky.
+
+VARIETY MANDATE — a floating harvester-city slung beneath a cluster of vast gasbags; a lone balloon-outpost tethered in the clouds, lights glowing; a fleet of small skimmer craft banking through a cloud-gap; a lattice refinery hanging under swollen envelopes with hanging gantries; an airship caravan strung along a cloud-band; a solitary observation gondola drifting; a ring of tethered harvesting balloons; a slender skyhook platform under a canopy of balloons. Small, feature-rich, never a rigid disc.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE floating presence in 15-30 words, small against the sky, described by FEATURES (gasbags/tethers/gantries/lights) — NEVER a disc/plate/dome/saucer/metallic-hovering-object. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A floating harvester-city slung beneath a cluster of vast striped gasbags, its gantries and running lights tiny against the towering cloud-walls behind.
+2. A lone balloon-outpost tethered in the drifting clouds, warm lights glowing along its gondola, dwarfed by the immense banded sky.
+3. A fleet of small skimmer craft banks in formation through a gap between cloud-banks, trailing thin vapor, minuscule against the thunderhead range.
+4. A lattice gas-refinery hangs under swollen envelopes, hanging gantries and pipe-runs catching the amber light, a speck beneath the continental clouds.`,
+  },
+  gas_giant_skies_storm_titan: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT STORM TITAN — the MONEY-SHOT: the colossal storm on the horizon or the lightning below the cloud deck. Each entry 15-30 words. Pure atmosphere, cloud-native vocabulary.
+
+VARIETY MANDATE — an Earth-sized storm-eye filling the horizon, a vast slow spiral of cloud-bands winding into a dark center; a great cyclonic oval like a titanic ruddy storm; sheets of lightning flickering deep below a dark cloud-deck; a wall of churning storm-cloud advancing across the sky; a towering supercell thunderhead dwarfing everything; a curtain of rain-vapor falling between cloud-banks; a lightning-lit chasm of cloud glowing from within; a horizon-spanning band of storm rolling in.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE colossal storm or lightning beat in 15-30 words, cloud-native vocabulary. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. An Earth-sized storm-eye fills the horizon, a vast slow spiral of cream-and-rust cloud-bands winding into a dark central well, dwarfing everything.
+2. Sheets of lightning flicker deep below a dark churning cloud-deck, each flash lighting the underside of the clouds a sudden electric blue.
+3. A titanic ruddy cyclone rolls along the horizon, a great oval eye ringed by towering thunderhead-walls, ancient and slow and colossal.
+4. A wall of churning storm-cloud advances across the sky, its leading edge boiling, lightning threading its dark base, a curtain of rain-vapor falling beneath.`,
+  },
+  gas_giant_skies_atmo_light: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT ATMOSPHERE LIGHT — the depth-lighting of the atmosphere (self-lit; this sets the whole mood). Each entry 12-24 words. Color + how light falls through the cloud depth.
+
+VARIETY MANDATE — warm amber-and-gold light raking across the cloud-tops from a hidden low sun; rose-and-peach dawn glow suffusing the bands; deep methane-blue shadow pooling in the cloud-gaps; a shaft of gold breaking down through a clearing; the eerie under-lit glow of lightning from below; a hazy ochre depth fading to darkness; a high thin sunlit haze over shadowed deeper decks; a bruised violet storm-light; a soft green-gold glow diffusing through the vapor.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE atmosphere-light description in 12-24 words, self-lit, color + depth. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. Warm amber-and-gold light rakes low across the cloud-tops from a hidden sun, deep methane-blue shadow pooling in the gaps between the banks.
+2. A rose-and-peach dawn glow suffuses the banded clouds, fading to a hazy ochre depth that sinks into darkness far below.
+3. A single shaft of gold breaks down through a clearing in the cloud-decks, lighting the vapor in glowing layers toward the dark deep.
+4. The underside of the cloud-deck glows an eerie electric blue, lit from below by deep lightning, the tops still washed in fading gold.`,
+  },
+  gas_giant_skies_sky_above: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT SKY ABOVE — the high thin upper sky above the main cloud-decks. Each entry 10-20 words. Thin, high, atmospheric.
+
+VARIETY MANDATE — a thin high haze fading to deep space-black at the zenith; a pale moon glowing softly through the upper haze; a faint ring-arc of the planet's rings seen edge-on high above; wispy high cirrus catching the last light; a second small moon low over the cloud-tops; the sun a soft bright smear through thick haze; a violet upper atmosphere darkening to the void; faint stars pricking through the thinning air.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE high upper-sky element in 10-20 words. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A thin high haze fades to deep space-black at the zenith, a pale moon glowing softly through the upper atmosphere.
+2. A faint edge-on arc of the planet's rings hangs high above the cloud-tops, a thin bright line across the hazy sky.
+3. Wispy high cirrus catches the last gold light far above the churning cloud-banks, the air thinning toward violet.
+4. The sun is a soft bright smear through thick upper haze, a second small moon low and pale over the distant cloud-tops.`,
+  },
+  gas_giant_skies_atmo_event: {
+    format: 'simple',
+    theme: `STARBOT GAS-GIANT ATMO EVENT — a gated (~35%) dramatic atmospheric beat. Each entry 15-30 words. Cloud-native vocabulary, no rigid objects on clouds.
+
+VARIETY MANDATE — a colossal lightning bolt forking down between two cloud-walls; a sudden clearing shaft opening to reveal the deep dark below; a vortex of vapor spinning up off a cloud-band (say "a spinning column of vapor"); a huge shadow of an unseen moon sweeping across the cloud-tops; a burst of glowing aurora high in the thin upper air; a wall of rain-vapor sweeping across; the harvester-fleet scattering before an advancing storm; a great updraft plume boiling upward.`,
+    touchpoints: [],
+    instructions: `Each entry is ONE atmospheric event in 15-30 words, cloud-native vocabulary. Output a NUMBERED list.
+
+EXAMPLES (4):
+1. A colossal lightning bolt forks down between two towering cloud-walls, lighting the whole sky electric blue for an instant.
+2. A sudden clearing shaft opens through the cloud-decks, revealing the vast dark hazy deep far below, layered bands sinking into shadow.
+3. The huge shadow of an unseen moon sweeps slowly across the sunlit cloud-tops, a vast band of dimness racing over the vapor.
+4. A curtain of aurora shimmers green-and-violet high in the thin upper air, faint above the churning golden cloud-banks below.`,
+  },
+
   impossible_sky_ringed_giant: {
     format: 'simple',
     theme: `STARBOT IMPOSSIBLE-SKY RINGED GIANT — the colossal ringed gas giant that hangs ENORMOUS over an alien horizon and dominates the sky. This is the hero of the whole image. Each entry 30-50 words.

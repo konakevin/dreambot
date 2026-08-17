@@ -33,6 +33,12 @@ const PATHS = [
   'forest',
   'landscape',
   'lego-landscapes',
+  // Stage B — promoted to live rotation 2026-08-16 (scaled to production;
+  // faithful xerox of the approved shadow renders). Axis-system paths → also in
+  // SKIP_LEGACY_PER_PATH below + chaos.skipPaths (chaos was off in shadow).
+  'lego-city',
+  'lego-trains',
+  'haunted-brick',
 ];
 
 const toFile = (p) => p.replace(/-/g, '_');
@@ -41,7 +47,12 @@ const PER_PATH = {};
 // Paths whose pools live entirely under top-level UPPER_SNAKE pools below
 // (no legacy {path}_scenes / _lighting / _palette JSONs). These newer paths
 // build their briefs from bespoke axis pools, not the legacy triplet.
-const SKIP_LEGACY_PER_PATH = new Set(['lego-landscapes']);
+const SKIP_LEGACY_PER_PATH = new Set([
+  'lego-landscapes',
+  'lego-city',
+  'lego-trains',
+  'haunted-brick',
+]);
 for (const p of PATHS) {
   if (SKIP_LEGACY_PER_PATH.has(p)) continue;
   const f = toFile(p);
@@ -216,6 +227,41 @@ const AXIS_POOLS = {
   BRICKBOT_SPACE_LIGHTING: load('brickbot_space_lighting'),
   BRICKBOT_SPACE_PALETTE: load('brickbot_space_palette'),
   BRICKBOT_SPACE_COSMIC_PHENOMENON: load('brickbot_space_cosmic_phenomenon'),
+
+  // lego-city (Stage B1, SHADOW) — modern LEGO City life
+  BRICKBOT_LEGO_CITY_SCENE_TYPE: load('brickbot_lego_city_scene_type'),
+  BRICKBOT_LEGO_CITY_MINIFIG_ACTION: load('brickbot_lego_city_minifig_action'),
+  BRICKBOT_LEGO_CITY_BUILD_TECHNIQUE: load('brickbot_lego_city_build_technique'),
+  BRICKBOT_LEGO_CITY_CAMERA_FRAMING: load('brickbot_lego_city_camera_framing'),
+  BRICKBOT_LEGO_CITY_VEHICLE_CLASS: load('brickbot_lego_city_vehicle_class'),
+  BRICKBOT_LEGO_CITY_REGISTER: load('brickbot_lego_city_register'),
+  BRICKBOT_LEGO_CITY_SCENE_PROPS: load('brickbot_lego_city_scene_props'),
+  BRICKBOT_LEGO_CITY_LIGHTING: load('brickbot_lego_city_lighting'),
+  BRICKBOT_LEGO_CITY_PALETTE: load('brickbot_lego_city_palette'),
+  BRICKBOT_LEGO_CITY_CITY_EVENT: load('brickbot_lego_city_city_event'),
+
+  // lego-trains (Stage B2, SHADOW) — LEGO trains through all-brick worlds
+  BRICKBOT_LEGO_TRAINS_TRAIN_CONSIST: load('brickbot_lego_trains_train_consist'),
+  BRICKBOT_LEGO_TRAINS_TRACKWORK: load('brickbot_lego_trains_trackwork'),
+  BRICKBOT_LEGO_TRAINS_ROUTE_BIOME: load('brickbot_lego_trains_route_biome'),
+  BRICKBOT_LEGO_TRAINS_STATION_LIFE: load('brickbot_lego_trains_station_life'),
+  BRICKBOT_LEGO_TRAINS_CAMERA_FRAMING: load('brickbot_lego_trains_camera_framing'),
+  BRICKBOT_LEGO_TRAINS_BUILD_TECHNIQUE: load('brickbot_lego_trains_build_technique'),
+  BRICKBOT_LEGO_TRAINS_LIGHTING: load('brickbot_lego_trains_lighting'),
+  BRICKBOT_LEGO_TRAINS_PALETTE: load('brickbot_lego_trains_palette'),
+  BRICKBOT_LEGO_TRAINS_RAIL_EVENT: load('brickbot_lego_trains_rail_event'),
+
+  // haunted-brick (Stage B3, SHADOW) — LEGO Creator Haunted-House spooky-fun
+  BRICKBOT_HAUNTED_BRICK_SCENE_TYPE: load('brickbot_haunted_brick_scene_type'),
+  BRICKBOT_HAUNTED_BRICK_MINIFIG_ACTION: load('brickbot_haunted_brick_minifig_action'),
+  BRICKBOT_HAUNTED_BRICK_BUILD_TECHNIQUE: load('brickbot_haunted_brick_build_technique'),
+  BRICKBOT_HAUNTED_BRICK_CAMERA_FRAMING: load('brickbot_haunted_brick_camera_framing'),
+  BRICKBOT_HAUNTED_BRICK_SUBJECT_FOCUS: load('brickbot_haunted_brick_subject_focus'),
+  BRICKBOT_HAUNTED_BRICK_REGISTER: load('brickbot_haunted_brick_register'),
+  BRICKBOT_HAUNTED_BRICK_SCENE_PROPS: load('brickbot_haunted_brick_scene_props'),
+  BRICKBOT_HAUNTED_BRICK_LIGHTING: load('brickbot_haunted_brick_lighting'),
+  BRICKBOT_HAUNTED_BRICK_PALETTE: load('brickbot_haunted_brick_palette'),
+  BRICKBOT_HAUNTED_BRICK_APPARITION: load('brickbot_haunted_brick_apparition'),
 
   // pirates path — first BrickBot axis migration (2026-05-22)
   BRICKBOT_PIRATES_SCENE_TYPE: load('brickbot_pirates_scene_type'),

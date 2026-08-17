@@ -24,7 +24,14 @@ const pathBuilders = {
   'dino-cozy': require('./paths/dino-cozy'),
   'dino-pack': require('./paths/dino-pack'),
   'aerial-perspectives': require('./paths/aerial-perspectives'),
+  'dino-nights': require('./paths/dino-nights'), // Stage D1 SHADOW
+  'storm-season': require('./paths/storm-season'), // Stage D2 SHADOW
+  'polar-dinos': require('./paths/polar-dinos'), // Stage D3 SHADOW
 };
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const DINO_SHADOW_PATHS = ['dino-nights', 'storm-season', 'polar-dinos'];
 
 module.exports = {
   username: 'dinobot',
@@ -158,7 +165,16 @@ module.exports = {
     'dino-cozy',
     'dino-pack',
     'aerial-perspectives',
+    // Stage D — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — not in allowSubjectChaosPaths (chaos off), polish off via
+    // DINO_SHADOW_PATHS in skipPaths; config unchanged).
+    'dino-nights',
+    'storm-season',
+    'polar-dinos',
   ],
+
+  // Dark-launched paths — renderable on demand, hidden from public + rotation.
+  shadowPaths: [], // Stage D paths promoted to live 2026-08-16 (DINO_SHADOW_PATHS const kept — drives polish-OFF skip)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -201,6 +217,7 @@ module.exports = {
       'dino-portrait',
       'dino-action',
       'extinction-event',
+      ...DINO_SHADOW_PATHS,
     ],
   },
   sensoryAnchors: {

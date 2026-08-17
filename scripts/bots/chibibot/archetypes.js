@@ -321,6 +321,28 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  CHIBIBOT_SKY_VILLAGE: {
+    description:
+      'PATH-BESPOKE — ChibiBot sky-village path (Stage H3, SHADOW). The 7th village: a whimsical CLOUD-KINGDOM. SETTING-AS-HERO sky village (cottages on cloud-tufts, rainbow bridges, balloon docks, star-lamp posts, floating grassy islands, cloud-castles), a SOLO chibi creature as a small 8-15% scale-prover. Clouds-as-ground read soft-solid-whimsical (storybook dream-physics is fine on this bot); NO airplanes/tech/rockets. BIRD/FANTASY/ANY resident. Studio Ghibli Castle-in-the-Sky / Kiki storybook. 10 axes (same shape as the other villages).',
+    slots: {
+      universal: ['lighting', 'atmosphere', 'weather'],
+      bot: [],
+      path: [
+        'creature',
+        'resident_activity',
+        'village',
+        'village_detail',
+        'time_of_day',
+        'surprise_element',
+        'phenomenon',
+      ],
+    },
+    pickN: { village_detail: 3 },
+    conditionalLayer: null,
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   CHIBIBOT_SUNNY_VILLAGE: {
     description:
       'PATH-BESPOKE — ChibiBot sunny-village path (2026-05-19 full-bespoke). SETTING-AS-HERO Mediterranean / sun-drenched village. Bougainvillea-clad cottages, Mediterranean white-cottages on cliffs, terracotta-roof clusters, cliff-side villages (Santorini), desert-oasis hamlets, sun-bleached pueblos, fishing-port cottages, orchard-grove villages, mosaic-tile villages, palm-fringed hamlets, Tuscan olive-grove villages. Architecture + golden-hour atmosphere are hero; LAND/BIRD peripheral resident (+ ANY wildcard). Studio Ghibli / Kiki-Delivery-Service / Porco-Rosso / Luca / Spirited-Away. 10 axes.',

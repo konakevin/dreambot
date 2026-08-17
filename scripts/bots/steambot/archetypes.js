@@ -59,6 +59,62 @@ module.exports = {
     anchorScaleRange: null,
   },
 
+  STEAMBOT_SKYDOCK_HARBOR: {
+    description:
+      'PATH-BESPOKE — SteamBot skydock-harbor path (Stage M4, SHADOW). The airship PORT — docked fleets at brass gantry-towers, cargo cranes swinging crates, departure crowds on platforms, lamplit fog through the moorings. Ships at REST + human bustle (airship-skies is in-flight; THIS is the PLACE). dock_activity is verb-led MULTI-ACTOR (engagement-pool law); crowd_texture is a living MASS (spectacle law, never itemized). mooring_light is the scene light (replaces universal lighting). 4 path axes (harbor_vista / dock_activity / mooring_light / crowd_texture) + universal atmosphere + 40%-gated departure_event. Render style from the per-render LOOK.',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['harbor_vista', 'dock_activity', 'mooring_light', 'crowd_texture'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'departure_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_CLOCKTOWER_HEART: {
+    description:
+      'PATH-BESPOKE — SteamBot clocktower-heart path (Stage M3, SHADOW). Inside a cathedral-scale clock (Hugo register) — giant brass gears in slow motion, pendulum arcs, light through the translucent clock face, catwalks and ladders for scale. Gears read MECHANICAL not decorative (unmistakably built precision machine); AVOID "canyon" (rock prior) → gear hall. gear_choreography is the MONEY-SHOT (one readable motion); face_light is the scene light (glowing dial, replaces universal lighting). 4 path axes (mechanism_hall / gear_choreography / face_light / scale_prover) + universal atmosphere + 35%-gated hour_event. Render style from the per-render LOOK.',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['mechanism_hall', 'gear_choreography', 'face_light', 'scale_prover'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'hour_event', gate: 0.35 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_CELESTIAL_OBSERVATORY: {
+    description:
+      'PATH-BESPOKE — SteamBot celestial-observatory path (Stage M2, SHADOW). Victorian astronomy — colossal brass telescope domes open to the night, orrery rooms with slow-spinning planet-models, star-chart tables under gaslight, a comet through the dome slit. Interior warmth vs cold night-sky contrast. REAL night sky through the slit (Victorian EARTH, NO fantasy planets). sky_through_dome is the MONEY-SHOT; the great_instrument fills 30-50%. 4 path axes (observatory_space / great_instrument / sky_through_dome / brass_detail pickN:2) + universal lighting/atmosphere + 40%-gated astronomer_presence. Render style from the per-render LOOK.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: ['observatory_space', 'great_instrument', 'sky_through_dome', 'brass_detail'],
+    },
+    pickN: { brass_detail: 2 },
+    conditionalLayer: { slot: 'astronomer_presence', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  STEAMBOT_NAUTILUS_DEPTHS: {
+    description:
+      'PATH-BESPOKE — SteamBot nautilus-depths path (Stage M1, SHADOW). 20,000-Leagues underwater steampunk — an ornate brass Victorian submarine gliding the deep past glowing jellyfish swarms, drowned brass ruins, biolum reefs; porthole light spilling into dark water. Brass reads BRASS underwater (specular); the ocean depth is co-hero; steampunk MACHINE-in-sea, NEVER NatGeo sealife (fantastical-Victorian). porthole_glow is the MONEY-SHOT (warm-vs-cold); depth_light is the scene light (replaces universal lighting). 4 path axes (submersible / deep_encounter / porthole_glow / depth_light) + universal atmosphere + 40%-gated leviathan_shadow. Render style from the per-render LOOK.',
+    slots: {
+      universal: ['atmosphere'],
+      bot: [],
+      path: ['submersible', 'deep_encounter', 'porthole_glow', 'depth_light'],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'leviathan_shadow', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   STEAMBOT_STEAMPUNK_HYBRID: {
     description:
       'PATH-BESPOKE — SteamBot steampunk-hybrid path (revived 2026-06-30). STEAMPUNK x another GENRE collision — gothic-horror / wild-west / rain-noir / underwater / arctic / fantasy / volcanic-desert-jungle. BOTH genres EQUALLY visible: the partner genre as prominent as the brass + gears, fused into one impossible place. Environment-dominant world scenes; figures incidental, never focal. The bot VARIETY lane. 1 path-bespoke hero (hybrid_world) + 40%-gated surprise + universal lighting + atmosphere. Render style comes from the per-render LOOK.',

@@ -226,4 +226,54 @@ module.exports = {
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BLOOMBOT_WATER_GARDEN: {
+    description:
+      'PATH-BESPOKE — BloomBot water-garden (Stage A1). Lotus/lily ponds, floating flower rafts, bloom-ringed springs; mirror-still dark water DOUBLING the bloom color. Scene-as-hero. 4 path axes (water_body / water_flora / reflection money-shot / bank_planting pickN 2) + 30%-gated water_life. Template reads sharedDNA.palette/roster/lighting. Bespoke WATER_GARDEN_MANDATE (composition-over-density, still mirror, flowers hero in both halves). No boats/docks/bridges.',
+    slots: { universal: [], bot: [], path: ['water_body', 'water_flora', 'reflection', 'bank_planting'] },
+    pickN: { bank_planting: 2 },
+    conditionalLayer: { slot: 'water_life', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_FLOWER_FIELDS: {
+    description:
+      'PATH-BESPOKE — BloomBot flower-fields (Stage A2). The cultivated mega-field — tulip stripes, lavender rows, sunflower seas, poppy hills. GEOMETRY is the differentiator (reads in 1s). 4 path axes (field_geometry money-shot / crop_bloom / vantage / field_backdrop) + 35%-gated field_event. Rides default LUSH_HERO_MANDATE (edge-to-edge field). No humans/tractors/greenhouses/windmills/barns; vanishing-point comps get the no-lone-figure ban. Template reads sharedDNA.palette/roster/lighting.',
+    slots: { universal: [], bot: [], path: ['field_geometry', 'crop_bloom', 'vantage', 'field_backdrop'] },
+    pickN: {},
+    conditionalLayer: { slot: 'field_event', gate: 0.35 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_MOON_GARDEN: {
+    description:
+      "PATH-BESPOKE — BloomBot moon-garden (Stage A3). BloomBot's first NIGHT register — a moonlit garden of pale white night-bloomers (moonflower/night-jasmine/white-wisteria), cool-silver palette. 4 path axes (garden_setting / night_bloom / moonlight_effect money-shot / night_sky) + 30%-gated night_life. Light is MOON + starlight ONLY (the template uses moonlight_effect + night_sky, NOT the daytime lighting pool). Bespoke MOON_GARDEN_MANDATE (pale blooms luminous against deep-blue dark, never jewel-toned/saturated). themeBias forces white/pale (rollSharedDNA). Blooms 'moonlit/silvered', never 'glowing'.",
+    slots: { universal: [], bot: [], path: ['garden_setting', 'night_bloom', 'moonlight_effect', 'night_sky'] },
+    pickN: {},
+    conditionalLayer: { slot: 'night_life', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_RAIN_GARDEN: {
+    description:
+      'PATH-BESPOKE — BloomBot rain-garden (Stage A4). Storm-light drenched blooms — saturated WET color, visible rain, droplets, petals on wet stone. 4 path axes (garden_scene / rain_state money-shot / wet_detail pickN 2 / storm_light) + 30%-gated storm_event. Rides default LUSH_HERO_MANDATE (wet blooms fill the frame). Template uses storm_light for light (NOT the sunny lighting pool). Rain always VISIBLE; rain DEEPENS color (never grays). No umbrellas/figures.',
+    slots: { universal: [], bot: [], path: ['garden_scene', 'rain_state', 'wet_detail', 'storm_light'] },
+    pickN: { wet_detail: 2 },
+    conditionalLayer: { slot: 'storm_event', gate: 0.3 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BLOOMBOT_GREAT_BLOSSOM_TREE: {
+    description:
+      'PATH-BESPOKE — BloomBot great-blossom-tree (Stage A5, spectacle). ONE colossal ancient flowering tree as monumental hero (wisteria/magnolia/sakura-giant). Jack-and-the-giant-flower energy at TREE scale — a dwarfed world at its roots, OPEN SKY, scale via CONTRAST not frame-packing. 4 path axes (tree_form / bloom_canopy money-shot / root_world / season_light) + 35%-gated canopy_event. Bespoke GREAT_TREE_MANDATE + promptPrefixReplaceByPath (like jack). Living tree never dead/spooky; petals (not leaves) carry the color. Names the silhouette per entry.',
+    slots: { universal: [], bot: [], path: ['tree_form', 'bloom_canopy', 'root_world', 'season_light'] },
+    pickN: {},
+    conditionalLayer: { slot: 'canopy_event', gate: 0.35 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

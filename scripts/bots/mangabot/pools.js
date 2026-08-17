@@ -357,6 +357,42 @@ module.exports = {
   ANIME_VILLAGE_SURPRISE_ELEMENT: load('anime_village_surprise_element'),
   ANIME_VILLAGE_DRAMA: load('anime_village_drama'),
 
+  // anime-rain SCENE-led pools (Stage I1, SHADOW — Garden-of-Words register)
+  ANIME_RAIN_RAIN_SCENE: load('anime_rain_rain_scene'),
+  ANIME_RAIN_RAIN_PLAY: load('anime_rain_rain_play'),
+  ANIME_RAIN_WATER_REFLECTION: load('anime_rain_water_reflection'),
+  ANIME_RAIN_WEATHER_AIR: load('anime_rain_weather_air'),
+  ANIME_RAIN_CAMERA_FRAMING: load('anime_rain_camera_framing'),
+  ANIME_RAIN_EMOTIONAL_DNA: load('anime_rain_emotional_dna'),
+  ANIME_RAIN_FIGURE_MOMENT: load('anime_rain_figure_moment'),
+
+  // anime-trains SCENE-led pools (Stage I2, SHADOW — the anime train motif)
+  ANIME_TRAINS_TRAIN_SCENE: load('anime_trains_train_scene'),
+  ANIME_TRAINS_LIGHT_MOMENT: load('anime_trains_light_moment'),
+  ANIME_TRAINS_SEASON_AIR: load('anime_trains_season_air'),
+  ANIME_TRAINS_LANDSCAPE_BEYOND: load('anime_trains_landscape_beyond'),
+  ANIME_TRAINS_CAMERA_FRAMING: load('anime_trains_camera_framing'),
+  ANIME_TRAINS_EMOTIONAL_DNA: load('anime_trains_emotional_dna'),
+  ANIME_TRAINS_PASSENGER_GLIMPSE: load('anime_trains_passenger_glimpse'),
+
+  // winter-anime SCENE-led pools (Stage I3, SHADOW — snow-country, warm-vs-cold)
+  WINTER_ANIME_WINTER_SCENE: load('winter_anime_winter_scene'),
+  WINTER_ANIME_SNOW_STATE: load('winter_anime_snow_state'),
+  WINTER_ANIME_WARM_GLOW: load('winter_anime_warm_glow'),
+  WINTER_ANIME_WEATHER_AIR: load('winter_anime_weather_air'),
+  WINTER_ANIME_CAMERA_FRAMING: load('winter_anime_camera_framing'),
+  WINTER_ANIME_EMOTIONAL_DNA: load('winter_anime_emotional_dna'),
+  WINTER_ANIME_FIGURE_MOMENT: load('winter_anime_figure_moment'),
+
+  // night-touge SCENE-led pools (Stage I4, SHADOW — Initial-D lineage, first vehicle path)
+  NIGHT_TOUGE_TOUGE_SCENE: load('night_touge_touge_scene'),
+  NIGHT_TOUGE_HERO_CAR: load('night_touge_hero_car'),
+  NIGHT_TOUGE_MOTION_SIGNATURE: load('night_touge_motion_signature'),
+  NIGHT_TOUGE_NIGHT_LIGHT: load('night_touge_night_light'),
+  NIGHT_TOUGE_CAMERA_FRAMING: load('night_touge_camera_framing'),
+  NIGHT_TOUGE_EMOTIONAL_DNA: load('night_touge_emotional_dna'),
+  NIGHT_TOUGE_STREET_DETAIL: load('night_touge_street_detail'),
+
   VIBE_COLOR,
 
   SENSORY_POOLS: {

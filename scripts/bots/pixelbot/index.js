@@ -29,7 +29,14 @@ const pathBuilders = {
   'classic-jrpg': require('./paths/classic-jrpg'),
   'epic-vista': require('./paths/epic-vista'),
   'pixel-landscapes': require('./paths/pixel-landscapes'),
+  'pixel-item-shop': require('./paths/pixel-item-shop'), // Stage K1 SHADOW
+  'retro-racing': require('./paths/retro-racing'), // Stage K2 SHADOW
+  'pixel-overworld': require('./paths/pixel-overworld'), // Stage K3 SHADOW
 };
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const PIXEL_SHADOW_PATHS = ['pixel-item-shop', 'retro-racing', 'pixel-overworld'];
 
 // Per-path vibe lock — each genre prefers a tight subset of vibes for
 // scene-cohesion. Engine respects this when rolling vibe per render.
@@ -45,6 +52,9 @@ const vibesByPath = {
   'classic-jrpg': ['nostalgic', 'enchanted', 'whimsical', 'epic'],
   'epic-vista': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
   'pixel-landscapes': ['epic', 'ethereal', 'cinematic', 'nostalgic'],
+  'pixel-item-shop': ['nostalgic', 'whimsical', 'enchanted'], // Stage K1 SHADOW (cozy interior)
+  'retro-racing': ['nostalgic', 'cinematic', 'epic', 'voltage'], // Stage K2 SHADOW
+  'pixel-overworld': ['nostalgic', 'enchanted', 'epic'], // Stage K3 SHADOW
 };
 
 const allVibes = Array.from(new Set(Object.values(vibesByPath).flat()));
@@ -94,7 +104,16 @@ module.exports = {
     'classic-jrpg',
     'epic-vista',
     'pixel-landscapes',
+    // Stage K — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — not in allowSubjectChaosPaths (chaos off), polish applies
+    // as in shadow, vibesByPath + global promptPrefix preserved).
+    'pixel-item-shop',
+    'retro-racing',
+    'pixel-overworld',
   ],
+
+  // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
+  shadowPaths: [], // Stage K paths promoted to live rotation 2026-08-16
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.

@@ -67,6 +67,30 @@ module.exports = {
   LIGHTING: load('lighting'),
   SCENE_PALETTES: load('scene_palettes'),
   STEAMBOT_LOOK_REGISTER: load('steambot_look_register'),
+  // nautilus-depths (Stage M1, SHADOW — underwater steampunk)
+  NAUTILUS_DEPTHS_SUBMERSIBLE: load('nautilus_depths_submersible'),
+  NAUTILUS_DEPTHS_DEEP_ENCOUNTER: load('nautilus_depths_deep_encounter'),
+  NAUTILUS_DEPTHS_PORTHOLE_GLOW: load('nautilus_depths_porthole_glow'),
+  NAUTILUS_DEPTHS_DEPTH_LIGHT: load('nautilus_depths_depth_light'),
+  NAUTILUS_DEPTHS_LEVIATHAN_SHADOW: load('nautilus_depths_leviathan_shadow'),
+  // celestial-observatory (Stage M2, SHADOW — Victorian astronomy)
+  CELESTIAL_OBSERVATORY_SPACE: load('celestial_observatory_space'),
+  CELESTIAL_OBSERVATORY_INSTRUMENT: load('celestial_observatory_instrument'),
+  CELESTIAL_OBSERVATORY_SKY_THROUGH_DOME: load('celestial_observatory_sky_through_dome'),
+  CELESTIAL_OBSERVATORY_BRASS_DETAIL: load('celestial_observatory_brass_detail'),
+  CELESTIAL_OBSERVATORY_ASTRONOMER: load('celestial_observatory_astronomer'),
+  // clocktower-heart (Stage M3, SHADOW — inside a cathedral-scale clock)
+  CLOCKTOWER_HEART_MECHANISM_HALL: load('clocktower_heart_mechanism_hall'),
+  CLOCKTOWER_HEART_GEAR_CHOREOGRAPHY: load('clocktower_heart_gear_choreography'),
+  CLOCKTOWER_HEART_FACE_LIGHT: load('clocktower_heart_face_light'),
+  CLOCKTOWER_HEART_SCALE_PROVER: load('clocktower_heart_scale_prover'),
+  CLOCKTOWER_HEART_HOUR_EVENT: load('clocktower_heart_hour_event'),
+  // skydock-harbor (Stage M4, SHADOW — the airship port)
+  SKYDOCK_HARBOR_VISTA: load('skydock_harbor_vista'),
+  SKYDOCK_HARBOR_DOCK_ACTIVITY: load('skydock_harbor_dock_activity'),
+  SKYDOCK_HARBOR_MOORING_LIGHT: load('skydock_harbor_mooring_light'),
+  SKYDOCK_HARBOR_CROWD_TEXTURE: load('skydock_harbor_crowd_texture'),
+  SKYDOCK_HARBOR_DEPARTURE_EVENT: load('skydock_harbor_departure_event'),
   STEAMBOT_HYBRID_WORLDS: load('steambot_hybrid_worlds'),
   // Slot-pool DNA for sexy-steampunk-woman path (mirrors GothBot pattern)
   STEAMPUNK_WOMEN_ARCHETYPES: load('steampunk_women_archetypes'),

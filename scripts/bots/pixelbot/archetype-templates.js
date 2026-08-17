@@ -11,6 +11,208 @@
  */
 
 module.exports = {
+  PIXELBOT_PIXEL_OVERWORLD: ({ slots, sharedDNA, vibeDirective }) => {
+    const { map_region, map_features, traveler_sprite, map_event } = slots;
+
+    const features = Array.isArray(map_features) ? map_features : [map_features];
+    const featureBlock = features
+      .filter(Boolean)
+      .map((f, i) => `${i + 1}. ${f}`)
+      .join('\n');
+
+    const eventSection = map_event
+      ? `\n\n━━━ MAP EVENT ━━━\n${map_event}\n\nA small dramatic accent on the tile-map.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART JRPG WORLD-MAP SCREEN for PixelBot. The frame must read INSTANTLY as the overworld map screen of a classic 16-bit RPG — a straight top-down view of a tile-world you sail and walk across.
+
+Genre lineage: Final Fantasy / Dragon Quest / Chrono Trigger / Secret of Mana overworld maps — chunky repeating terrain tiles, tiny landmark icons, a small party/ship sprite crossing the world.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+STRAIGHT TOP-DOWN WORLD-MAP VIEW — looking straight down at the tile-world from directly above, like the overworld map SCREEN. The chunky repeating terrain TILE-GRID must read clearly (grass / forest / mountain / desert / sea tiles).
+🚫 NEVER a 3/4 town-view, NEVER a side-parallax landscape, NEVER a first-person view, NEVER a character portrait, NEVER a horizon/sky (this is looking straight DOWN at the map).
+
+━━━ MANDATORY ELEMENTS (every render) ━━━
+1. THE MAP REGION — the top-down tile-continent geography filling the frame, chunky terrain tiles clearly readable.
+2. THE MAP FEATURES — small landmark icons dotting the map (walled towns / towers / bridges / ports).
+3. THE TRAVELER SPRITE — a TINY map-scale party/ship/airship sprite crossing the tiles (never a portrait).
+
+━━━ THE MAP REGION (top-down tile geography) ━━━
+${map_region}
+
+━━━ MAP FEATURES (small landmark icons — render both) ━━━
+${featureBlock}
+
+━━━ THE TRAVELER SPRITE (tiny, map-scale) ━━━
+${traveler_sprite}
+${eventSection}
+
+━━━ HARD MANDATES (every render) ━━━
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era. Chunky repeating terrain tiles, visible pixel grid. NEVER smooth illustration, NEVER 3D, NEVER photoreal.
+2. **NO TEXT / UI / MENUS / MAP-LABELS / PLACE-NAMES / GRID-NUMBERS** — the map is pictorial only.
+3. **NO IP REFERENCES** — no specific game maps / logos / franchises.
+4. **STRAIGHT TOP-DOWN MAP SCREEN** — looking straight down, tile-grid reads, no horizon/sky, no 3/4 view.
+5. **RICH SATURATED MAP PALETTE** — green grass, deep-blue sea, brown mountains, sandy desert, forest-green clusters.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal
+  • NO text / UI / menus / map-labels / place-names
+  • NO IP references
+  • NO 3/4 town-view / NO side-parallax / NO horizon-sky / NO first-person / NO portrait
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+Straight top-down world-map view (overworld map screen).
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit JRPG world-map pixel-art, STRAIGHT top-down map-screen view], [the tile-continent geography (archipelago / twin continents / inland sea / etc.) with chunky readable terrain tiles], [two small landmark icons — walled town / tower / bridge / port], [a tiny map-scale party/ship/airship sprite crossing the tiles]${map_event ? ', [a small map event — storm-cloud tiles / glowing dungeon / cloud-shadows]' : ''}, [chunky 16-bit terrain tile-grid + saturated map palette (green grass / blue sea / brown mountains)]
+
+CRITICAL — CLASSIC JRPG WORLD-MAP SCREEN (straight top-down, tile-grid reads). PIXEL ART ONLY. NO text/UI/labels anywhere. All 3 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_RETRO_RACING: ({ slots, sharedDNA, vibeDirective }) => {
+    const { route_scene, horizon_bands, race_moment, roadside_detail } = slots;
+
+    const roadsideSection = roadside_detail
+      ? `\n\n━━━ ROADSIDE DETAIL ━━━\n${roadside_detail}\n\nA small roadside element flicking past to ground the route.`
+      : '';
+
+    return `You are writing a 16-bit RETRO ARCADE RACING gameplay screenshot for PixelBot — a pixel sports car blasting down an open highway at sunset. The frame must read INSTANTLY as a classic 16-bit arcade racer. Sun-drenched, nostalgic, exhilarating.
+
+Genre lineage: OutRun / Rad Racer / Top Gear / Lotus / Rush'n arcade racers — the SUNSET-ARCADE look, dithered horizon bands, palm parallax. NOTE: this is 16-bit PIXEL ART arcade, NOT an anime-cel night scene (that is a different bot); this register is a SUNSET/day arcade racer.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+Pick ONE per render:
+  - BEHIND-THE-CAR CHASE VIEW (the genre signature) — camera low behind the car, the road stretching to the dithered horizon, car in the lower-center
+  - SIDE-PROFILE — the car sliced flat side-on, scenery scrolling behind in parallax
+🚫 NEVER first-person cockpit, NEVER a static-vista painting, NEVER a car portrait, NEVER an interior.
+
+━━━ MANDATORY ELEMENTS (every render) ━━━
+1. THE PIXEL SPORTS CAR — a low sleek pixel coupe (red/white/blue), MORPHOLOGICAL only (never a real make/model), mid-race-action.
+2. THE ROUTE + SETTING — the highway through its beautiful setting (coast / mountains / desert / beach).
+3. THE HORIZON BANDS (money-shot) — the iconic dithered sunset gradient sky + parallax scenery layers.
+
+━━━ THE ROUTE SCENE (the setting) ━━━
+${route_scene}
+
+━━━ HORIZON BANDS — MONEY-SHOT (dithered sunset gradient + parallax) ━━━
+${horizon_bands}
+
+━━━ RACE MOMENT (the car mid-action) ━━━
+${race_moment}
+${roadsideSection}
+
+━━━ HARD MANDATES (every render) ━━━
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-arcade. Chunky dithered pixel grid. NEVER smooth illustration, NEVER 3D, NEVER photoreal, NEVER anime-cel.
+2. **NO TEXT / SIGNAGE / BILLBOARDS-WITH-TEXT / LABELS / PLATES** — everything pictorial.
+3. **NO IP REFERENCES / NO REAL CAR MODELS** — the car is a generic morphological coupe.
+4. **NO UI ELEMENTS** — no speedometer, lap-counter, HUD, menus.
+5. **DITHERED SUNSET-ARCADE PALETTE** — warm orange / pink / purple sky bands, glinting highlights, chunky sun disc.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal / NO anime-cel
+  • NO readable text / signage / billboards / plates / labels
+  • NO IP references / NO real car models
+  • NO UI / HUD / speedometer
+  • NO first-person cockpit / NO car portrait / NO crash
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit arcade-racing pixel-art with camera (behind-the-car chase view or side-profile)], [the pixel sports coupe mid-race-action], [the route + setting (coast / mountains / desert / beach)], [the dithered sunset horizon bands + palm/mountain parallax]${roadside_detail ? ', [a roadside detail flicking past — palms / checkpoint arch / guardrails]' : ''}, [chunky dithered 16-bit pixel grid + warm sunset-arcade palette (orange / pink / purple bands)]
+
+CRITICAL — 16-bit SUNSET-ARCADE RACER (OutRun-style, NOT anime-cel night). PIXEL ART ONLY. Car MORPHOLOGICAL, NO text/plates anywhere. All 3 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
+  PIXELBOT_PIXEL_ITEM_SHOP: ({ slots, sharedDNA, vibeDirective }) => {
+    const { shop_locale, shelf_density, keeper_customer_life, cozy_phenomenon } = slots;
+
+    const cozySection = cozy_phenomenon
+      ? `\n\n━━━ COZY ATMOSPHERIC ACCENT ━━━\n${cozy_phenomenon}\n\nA small cozy accent warming the shop.`
+      : '';
+
+    return `You are writing a 16-bit RETRO PIXEL ART COZY RPG SHOP INTERIOR gameplay screenshot for PixelBot. The frame must read INSTANTLY as the beloved item-shop / tavern / forge / library interior from a classic 16-bit RPG. Warm, cozy, inviting — "I want to shop here." NOT an action scene, NOT a portrait.
+
+Genre lineage: Moonlighter / Recettear item-shops, cozy SNES-RPG taverns and inns, blacksmith forges, magic libraries, general stores. Chunky sprite craft, dithered warm palette.
+
+━━━ ABSOLUTE CAMERA + COMPOSITION LOCK (NON-NEGOTIABLE) ━━━
+Pick ONE per render:
+  - INTERIOR SIDE-VIEW — the shop sliced flat like a stage, counter + shelves along the back wall, sprites standing on the floor
+  - 3/4 ISOMETRIC — angled-down on the shop floor, counter + shelves + sprites in cozy iso depth
+🚫 NEVER first-person, NEVER a static-vista painting, NEVER a character portrait, NEVER an exterior street view.
+
+━━━ MANDATORY ELEMENTS (every render) ━━━
+1. THE SHOP INTERIOR — the cozy room, its counter/shelves/hearth layout, filling the frame as the stage.
+2. THE WARES (money-shot) — countable, readable PICTORIAL wares packed on shelves/racks/counters (potion bottles / hanging swords / bread stacks / gems / tomes) — pictorial objects, NEVER text or price-tags.
+3. THE SHOPKEEPER + CUSTOMER — a shopkeeper sprite and an adventurer customer mid-exchange (small chunky sprites, never a portrait).
+
+━━━ THE SHOP LOCALE (the stage) ━━━
+${shop_locale}
+
+━━━ THE WARES — MONEY-SHOT (countable, readable, PICTORIAL) ━━━
+${shelf_density}
+
+━━━ KEEPER + CUSTOMER (mid-exchange) ━━━
+${keeper_customer_life}
+${cozySection}
+
+━━━ HARD MANDATES (every render) ━━━
+1. **PIXEL-ART REGISTER ONLY** — 16-bit / SNES-era. NEVER smooth illustration, NEVER 3D, NEVER photoreal.
+2. **NO TEXT / SIGNAGE / PRICE-TAGS / LABELS** — every ware is a pictorial pixel object; NO readable letters/numbers anywhere.
+3. **NO IP REFERENCES** — no specific game characters / logos / franchises.
+4. **NO UI ELEMENTS** — no health bars, dialogue boxes, menus, speech bubbles.
+5. **CHUNKY 16-BIT PIXEL GRID** — visible pixel grid on every surface.
+6. **WARM COZY PALETTE** — candle-amber, wood-brown, warm hearth-orange, soft shadow; inviting shop glow.
+
+🚫 ABSOLUTE BANS:
+  • NO smooth illustration / NO 3D / NO photoreal
+  • NO readable text / signage / price-tags / labels / speech bubbles
+  • NO IP references
+  • NO UI / HUD / menus
+  • NO first-person / NO portrait / NO exterior
+
+━━━ SCENE-WIDE PIXEL PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ CAMERA PERSPECTIVE ━━━
+${sharedDNA.pixelPerspective}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 200)}
+
+━━━ STRUCTURE — write in this exact order ━━━
+[16-bit cozy-shop pixel-art interior with camera (side-view or 3/4-iso)], [the specific shop locale (potion-shop / tavern / forge / library) filling the frame], [the countable pictorial wares packed on shelves/racks], [the shopkeeper + adventurer customer sprites mid-exchange]${cozy_phenomenon ? ', [a cozy atmospheric accent — hearth-flicker / cat on the counter / rain on the window]' : ''}, [chunky 16-bit pixel grid + warm cozy palette (candle-amber / wood-brown / hearth-orange)]
+
+CRITICAL — COZY 16-BIT SHOP INTERIOR (NOT an action scene). PIXEL ART ONLY. Wares PICTORIAL, NO TEXT anywhere. All 3 mandatory elements present.
+
+Output ONLY 70-95 words. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers, NO **bold labels**, NO bullets. Just the prose.`;
+  },
+
   PIXELBOT_PIXEL_HORROR: ({ slots, sharedDNA, vibeDirective }) => {
     const { gothic_setting, classic_enemy, hero_action, gothic_props } = slots;
 

@@ -3283,6 +3283,495 @@ Channel: Planet Earth slow-motion drama + Storm-chaser cinematography + BBC natu
     ],
     instructions: `Each entry is ONE specific dramatic atmospheric / wildlife / geologic / hydrologic / celestial PHENOMENON, 25-50 words. Format: "PHENOMENON NAME CAPS — primary visible drama + secondary detail + position in frame". Vary across the 10 categories above. Each phenomenon is the "stop-the-scroll wow moment" but doesn't replace the bloom-carpet. NO humans, NO vehicles, NO architecture, NO surreal physics. Output as a NUMBERED list (1. ... 2. ... 3. ...), one entry per line. NO internal newlines within an entry.`,
   },
+
+  // ══════════════════ WATER-GARDEN (Stage A1) ══════════════════
+  // Lotus/lily ponds, floating flower rafts, bloom-ringed springs — mirror-
+  // still dark water DOUBLING the bloom color. Scene-as-hero. Water surface
+  // visibly STILL; flowers hero in BOTH real + reflected halves. No boats/docks.
+  bloombot_water_garden_water_body: {
+    format: 'simple',
+    theme: `STILL-WATER BODY for the BloomBot water-garden path — the mirror-calm water that DOUBLES the blooms. Each entry describes ONE specific still-water setting, 30-55 words. The water surface is GLASS-STILL (a perfect mirror), dark and deep-toned so it doubles the flower color above it.
+
+⚠️ THE BAR: a real, recognizable still-water garden setting — a lotus pond, a lily-pool, a bloom-ringed spring, a flooded water-garden, a calm canal, a dark tarn margin — with the surface DEAD CALM and mirror-reflective. The water is the STAGE for the flowers, not the subject.
+
+⚠️ WATER-BODY CATEGORIES — distribute the entries roughly: ~6 LOTUS/LILY POND (dark still pond) · ~4 SPRING/POOL (clear bloom-ringed spring) · ~4 FLOODED GARDEN (calm sheet of water among planting) · ~3 CALM CANAL (still reflecting channel) · ~4 TARN/LAKE MARGIN (mirror-still shallows) · ~4 STEPPED/TERRACED water pools.
+
+🚫 STRICT BANS: NO boats, docks, jetties, bridges, fountains, statues, buildings; NO ripples/waves/turbulence (the water is STILL); NO humans/animals (separate axis); NO naming flower colors (the engine sets color).`,
+    touchpoints: [
+      'DARK LOTUS POND — a broad still pond of near-black water, glass-calm and mirror-perfect, fringed with lotus pads, the dark surface doubling the bloom-mass above in a flawless reflection, deep and serene',
+      'BLOOM-RINGED SPRING — a clear turquoise-dark spring pool encircled by dense bank blooms, the still surface a perfect mirror ringed with flowers, water so calm it reads as glass',
+      'FLOODED WATER-GARDEN — a calm sheet of shallow flood-water spread among dense garden planting, the still surface doubling the flowers standing in and around it, mirror-smooth to the edges',
+      'CALM REFLECTING CANAL — a narrow still canal of dark water running between deep flower banks, the glassy channel doubling the blooms on both sides into a corridor of reflected color',
+      'MIRROR TARN MARGIN — the dead-calm shallows at the margin of a dark mountain tarn, the mirror surface doubling a shoreline crowded with blooms, utterly still',
+      'STEPPED WATER POOLS — a series of calm terraced pools stepping down through a bloom garden, each a still mirror doubling the flowers above it, water like polished glass',
+    ],
+    instructions: `Each entry is ONE still-water setting, 30-55 words. Format: "WATER TYPE CAPS — the setting + the GLASS-STILL mirror surface + that it doubles the blooms". Surface is always dead-calm/mirror. NO boats/docks/bridges/fountains, NO ripples, NO humans, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_water_garden_water_flora: {
+    format: 'simple',
+    theme: `WATER FLORA for the BloomBot water-garden path — the flowers ON and IN the water. Each entry describes ONE aquatic-bloom arrangement, 25-45 words. Water lilies, lotus, floating-heart, water hawthorn, floating flower rafts — the blooms that sit on the still surface.
+
+⚠️ THE BAR: abundant aquatic blooms as the HERO on the water — lily pads crowded with open flowers, lotus rising on stems, floating flower rafts drifting, a carpet of floating blooms. Engine-species-agnostic phrasing (do NOT name colors — the engine sets them).
+
+⚠️ CATEGORIES: ~7 WATER-LILY (pads + open cup-blooms), ~5 LOTUS (raised stems + broad leaves + seed-pods), ~4 FLOATING RAFTS (drifting mats of bloom), ~4 FLOATING-HEART/HAWTHORN (small surface blooms), ~5 MIXED aquatic bloom-carpet.
+
+🚫 BANS: NO color names; NO boats/koi/wildlife (separate axes); NO humans.`,
+    touchpoints: [
+      'WATER-LILY CROWD — a dense raft of round green lily pads crowding the still surface, dozens of open cup-shaped lily blooms raised just above the water, doubled perfectly in the mirror below',
+      'LOTUS RISING — tall lotus stems lifting broad blooms and parasol leaves a foot above the pond, ribbed seed-pods among them, the whole stand reflected in the glassy dark water',
+      'FLOATING FLOWER RAFT — a drifting mat of floating blooms and leaves spread across the calm water like a carpet, edges trailing into the mirror reflection',
+      'FLOATING-HEART SCATTER — a scatter of small five-petalled floating-heart blooms dotting the still surface among heart-shaped leaves, delicate against the dark mirror',
+      'MIXED AQUATIC CARPET — a lush mixed carpet of water lilies, lotus and floating blooms crowding the surface edge to edge, a floating garden doubled in the still water',
+      'WATER-HAWTHORN DRIFT — forked spikes of fragrant water-hawthorn blooms lying along the surface among strap leaves, delicate and abundant on the mirror-calm pond',
+    ],
+    instructions: `Each entry is ONE aquatic-bloom arrangement, 25-45 words. Format: "FLORA TYPE CAPS — the blooms on the water + abundance + that they double in the reflection". NO flower color names, NO wildlife/boats/humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_water_garden_reflection: {
+    format: 'simple',
+    theme: `REFLECTION (MONEY-SHOT) for the BloomBot water-garden path — WHAT the mirror-still water doubles. Each entry 18-32 words: the specific reflected element that makes the shot. The reflection is the wow — the still water doubling something beautiful.
+
+✓ VARIETY: ~6 DOUBLED BLOOMS (the flower-mass mirrored flawlessly), ~4 DOUBLED SKY (dawn/dusk/blue sky mirrored under the blooms), ~4 DOUBLED CANOPY (overhanging blossom branches mirrored), ~4 DOUBLED LIGHT (lantern-glow / golden light / moon-path on the water — REAL light only), ~4 SYMMETRY (a flawless top-bottom mirror where real and reflected blooms meet at the waterline).
+
+🚫 BANS: NO color names; the light is real (sun/sky/moon), never magic-glow; NO humans/boats.`,
+    touchpoints: [
+      'DOUBLED BLOOM-MASS — the entire overflowing bloom-mass mirrored flawlessly in the dark still water below, real and reflected flowers meeting at a razor waterline into perfect symmetry',
+      'DOUBLED DAWN SKY — a soft dawn sky mirrored in the glassy pond beneath the floating blooms, the water holding both the flowers and the doubled sky-glow',
+      'DOUBLED BLOSSOM CANOPY — overhanging blossom branches mirrored in the still water below, a doubled canopy arching above and below the waterline',
+      'DOUBLED GOLDEN LIGHT — low golden light raking across the mirror-calm surface, doubling the warm glow and the blooms into a shimmering symmetry',
+      'FLAWLESS SYMMETRY — a perfect top-bottom mirror where the real bloom-bank and its reflection meet at the glass waterline, near-indistinguishable',
+      'DOUBLED MOON-PATH — a silver moon-path lying across the dead-calm water among the pale blooms, the reflection unbroken and still',
+    ],
+    instructions: `Each entry is ONE reflected element (MONEY-SHOT), 18-32 words. Format: "REFLECTION TYPE CAPS — what the still water doubles". Light is always real. NO color names, NO humans/boats. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_water_garden_bank_planting: {
+    format: 'simple',
+    theme: `BANK PLANTING for the BloomBot water-garden path — the dense flower planting crowding the WATER'S EDGE. Each entry 18-32 words: one band of bank blooms framing the pond (this axis picks TWO per render for a layered edge).
+
+✓ VARIETY: irises + rushes at the waterline; a bank of hydrangeas leaning over the water; drifts of primula and marsh-marigold; weeping wisteria trailing to the surface; a wall of azaleas mirrored; ferns and moss with bloom-spikes; cascading nasturtium over a stone lip (natural stone only); a reed-fringe threaded with blooms; overhanging blossom boughs; a tiered bank of mixed cottage blooms.
+
+🚫 BANS: NO color names; NO built structures (natural stone edge OK); NO humans.`,
+    touchpoints: [
+      'WATERLINE IRISES — a dense stand of tall iris and rushes crowding the very edge of the still water, blades and blooms doubling sharply in the mirror below',
+      'LEANING HYDRANGEA BANK — a heavy bank of mophead hydrangeas leaning out over the pond, the round bloom-heads hanging above their own reflection',
+      'TRAILING WISTERIA — long wisteria racemes weeping from an overhanging bough down almost to the still surface, trailing tips doubled in the water',
+      'AZALEA WALL — a solid wall of azalea bloom banked along the shore, mirrored as a second wall of color beneath the waterline',
+      'MARSH-MARIGOLD DRIFT — a low drift of marsh-marigold and primula spilling to the water among fresh green leaves at the pond edge',
+      'CASCADING NASTURTIUM — nasturtium tumbling over a natural mossy stone lip to the water, round leaves and blooms doubled in the calm below',
+    ],
+    instructions: `Each entry is ONE band of edge planting, 18-32 words. Format: "PLANTING TYPE CAPS — the bank blooms at the water's edge + doubling". NO color names, NO built structures (natural stone OK), NO humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_water_garden_water_life: {
+    format: 'simple',
+    theme: `WATER LIFE for the BloomBot water-garden path — a gated (~30%) fauna co-star, small and at a distance (the flower-friends precedent). Each entry 15-28 words: ONE gentle water creature adding life without stealing from the blooms.
+
+✓ VARIETY: a flash of orange koi gliding just under the surface; a dragonfly hovering over a lily; a damselfly on a bud; a heron standing still at the far margin; a moorhen threading the lilies; a frog on a pad; a kingfisher poised on a reed; a turtle basking on a half-submerged stone; ducklings trailing a line; a water-strider dimpling the calm.
+
+🚫 BANS: creature is small / distant / secondary — never the subject; NO humans; NO color names for flowers.`,
+    touchpoints: [
+      'KOI FLASH — a single orange koi gliding just beneath the glassy surface among the lily pads, a soft flash of color under the doubled blooms',
+      'HOVERING DRAGONFLY — a slim dragonfly hovering above an open lily bloom, wings caught in the light, tiny against the still water',
+      'DISTANT HERON — a grey heron standing motionless at the far bloom-fringed margin, small and still, a quiet sentinel beyond the flowers',
+      'MOORHEN THREADING — a moorhen threading quietly between the lily pads, leaving the faintest wake on the otherwise mirror-still water',
+      'BASKING TURTLE — a small turtle basking on a half-submerged natural stone at the pond edge among the blooms, still and sunlit',
+      'KINGFISHER POISED — a jewel-bright kingfisher poised on a reed-tip over the water, tiny and vivid at the bloom-fringed edge',
+    ],
+    instructions: `Each entry is ONE small, distant, secondary water creature, 15-28 words. Format: "CREATURE CAPS — the gentle creature + that it stays small/secondary to the blooms". NO humans, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ══════════════════ FLOWER-FIELDS (Stage A2) ══════════════════
+  // The cultivated mega-field — tulip stripes, lavender rows, sunflower seas,
+  // poppy hills. GEOMETRY is the differentiator vs the wild landscape carpet.
+  // Reads in 1s. No humans/tractors/greenhouses/windmills/barns.
+  bloombot_flower_fields_geometry: {
+    format: 'simple',
+    theme: `FIELD GEOMETRY (MONEY-SHOT) for the BloomBot flower-fields path — the CULTIVATED PATTERN that must read in one second. Each entry 18-32 words: the specific geometric arrangement of a planted flower mega-field. This is what makes it a FIELD, not a wild meadow.
+
+✓ VARIETY: ~6 COLOR STRIPES (broad parallel bands of blocked color marching across the land, Keukenhof/tulip-field style), ~5 ROWS-TO-VANISHING-POINT (dead-straight furrow rows converging to a single point on the horizon), ~4 CONTOUR WAVES (rows following the curves of rolling hills in flowing bands), ~4 PATCHWORK QUILT (a mosaic of differently-colored rectangular plots seen from height), ~4 SINGLE-CROP SEA (one uniform crop filling the whole frame to the horizon), ~2 RADIAL/CURVED (rows sweeping in an arc or spiral).
+
+🚫 BANS: NO flower color names (engine sets color); NO humans/tractors/greenhouses/windmills/barns/fences; the pattern is the point.`,
+    touchpoints: [
+      'BLOCKED COLOR STRIPES — broad dead-straight parallel bands of blocked flower-color marching across the flat land to the horizon, each stripe a solid ribbon of one bloom, Keukenhof-style precision',
+      'ROWS TO THE VANISHING POINT — perfectly straight planted furrow-rows converging to a single point on the far horizon, the ordered lines pulling the eye deep into the field',
+      'CONTOUR WAVES — flowing rows of bloom following the curves of rolling hills in flowing colored bands, the pattern rippling over the land like contour lines',
+      'PATCHWORK QUILT — a mosaic of differently-colored rectangular flower-plots stitched across the countryside seen from height, a living quilt of blocked color',
+      'SINGLE-CROP SEA — one uniform flower crop filling the entire frame edge to edge to the far horizon, an unbroken sea of a single bloom rolling in the wind',
+      'SWEEPING ARC ROWS — planted rows sweeping in a broad curving arc across the field, the ordered lines bending gracefully toward the horizon',
+    ],
+    instructions: `Each entry is ONE field geometry (MONEY-SHOT), 18-32 words. Format: "GEOMETRY CAPS — the cultivated pattern that reads in one second". NO color names, NO humans/machines/buildings/windmills. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_flower_fields_crop_bloom: {
+    format: 'simple',
+    theme: `CROP BLOOM for the BloomBot flower-fields path — the field-scale flower crop filling the planting. Each entry 20-38 words: ONE cultivated field-flower crop as a mass, engine-species-agnostic phrasing (do NOT name colors — the engine sets them).
+
+⚠️ THE BAR: a real cultivated field crop grown at mega-scale — tulips, lavender, sunflowers, poppies, ranunculus, daffodils, hyacinths, cosmos, dahlias, canola-adjacent bloom, chamomile — as an ABUNDANT uniform mass, every head part of the pattern.
+
+⚠️ CATEGORIES: ~6 TULIP/HYACINTH (dense low blocked heads), ~4 LAVENDER/HERB (fragrant purple-grey rows of spikes), ~5 SUNFLOWER (tall heads all facing one way), ~4 POPPY/COSMOS (delicate tall wind-moving field), ~3 RANUNCULUS/DAHLIA (dense layered cut-flower rows), ~3 MIXED-BLOCK crop.
+
+🚫 BANS: NO color names; NO humans/machines; the crop is a uniform mass, not a wild scatter.`,
+    touchpoints: [
+      'TULIP BLOCKS — dense low tulip heads packed shoulder to shoulder in solid blocks, every cup-bloom upright and uniform, a manicured carpet of a single crop',
+      'LAVENDER ROWS — long fragrant rows of lavender spikes marching in grey-green corduroy lines, the tufted flower-heads humming with uniform texture',
+      'SUNFLOWER FIELD — tall sunflower stalks in ranks with every broad head turned the same way toward the light, a disciplined army of round blooms',
+      'POPPY SEA — a delicate tall field of poppies nodding and rippling in the wind, thousands of silk-petalled heads on wiry stems catching the light',
+      'RANUNCULUS ROWS — dense layered ranunculus in tight cut-flower rows, the many-petalled blooms packed in a lush uniform stand',
+      'COSMOS DRIFT — a tall airy field of cosmos on fine stems swaying together, a soft cloud of daisy-form blooms filling the planting',
+    ],
+    instructions: `Each entry is ONE field-scale crop bloom, 20-38 words. Format: "CROP CAPS — the uniform flower-crop mass + its field texture". NO color names, NO humans/machines. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_flower_fields_vantage: {
+    format: 'simple',
+    theme: `VANTAGE for the BloomBot flower-fields path — the camera position that shows the geometry. Each entry 15-28 words.
+
+✓ VARIETY: ground-level down a furrow between two rows (immersive, rows racing away); low-angle just above the bloom-tops (a sea of heads receding); hilltop overlook (the whole patterned field spread below); low aerial / drone (the pattern read from above); three-quarter oblique (pattern + big sky). All keep the geometric pattern legible.
+
+🚫 BANS: NO humans; NO "lone figure walking into the light" at the vanishing point (the rows lead to an EMPTY horizon).`,
+    touchpoints: [
+      'DOWN-THE-FURROW — ground-level looking straight down a furrow between two rows, the ordered lines racing away to the empty horizon',
+      'ABOVE-THE-TOPS — low-angle just above the bloom-tops, a sea of flower-heads receding in ranks to the far edge of the field',
+      'HILLTOP OVERLOOK — from a rise looking down over the whole patterned field spread below, the geometry laid out to the horizon',
+      'LOW AERIAL — a low drone view over the field, the planting pattern read cleanly from above as blocks and bands of color',
+      'OBLIQUE + BIG SKY — a three-quarter oblique angle catching both the field pattern and a vast open sky above the empty horizon',
+      'ROWS CONVERGING — a straight-on view of the rows converging to a single vanishing point on a clean empty horizon',
+    ],
+    instructions: `Each entry is ONE camera vantage, 15-28 words. Format: "VANTAGE CAPS — the camera position + that the geometry reads". Horizon stays EMPTY (no lone figure). NO humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_flower_fields_backdrop: {
+    format: 'simple',
+    theme: `FIELD BACKDROP for the BloomBot flower-fields path — the pure-NATURE horizon behind the field (positively crowding out Flux's windmill/barn tulip-field prior). Each entry 15-28 words: what lies beyond the planted field.
+
+✓ VARIETY: snow-capped mountains rising beyond the rows (Skagit/alpine); a distant sea or lake edge; a big open sky with soft clouds; rolling green hills; a dark forest treeline; a soft golden-hour haze; a line of poplars/cypress; a distant patchwork of more fields.
+
+🚫 BANS: NO windmills, barns, greenhouses, farmhouses, silos, power lines, roads, vehicles, humans. Pure nature or more fields only.`,
+    touchpoints: [
+      'SNOW PEAKS BEYOND — a range of snow-capped mountains rising blue beyond the far edge of the flower rows, grounding the field in real geography',
+      'DISTANT SEA — a thin bright line of distant sea beyond the planting, the field running to a soft coastal horizon',
+      'BIG OPEN SKY — a vast open sky of soft drifting clouds above the field, the horizon low and clean, the planting meeting pure air',
+      'ROLLING GREEN HILLS — soft rolling green hills folding away behind the field, more open country beyond the last row',
+      'FOREST TREELINE — a dark distant forest treeline closing the far edge of the field under a clear sky',
+      'POPLAR LINE — a tall thin line of poplars marking the far boundary of the field against the sky, classic and clean',
+    ],
+    instructions: `Each entry is ONE natural backdrop, 15-28 words. Format: "BACKDROP CAPS — the pure-nature horizon beyond the field". NO windmills/barns/buildings/roads/humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_flower_fields_event: {
+    format: 'simple',
+    theme: `FIELD EVENT for the BloomBot flower-fields path — a gated (~35%) atmospheric moment over the field. Each entry 15-28 words: ONE beautiful transient event that lifts the shot without breaking the geometry.
+
+✓ VARIETY: a drift of loose petals blowing across the rows on the wind; low morning mist lying between the furrows; golden-hour rim-light firing every bloom-edge; a passing shower with a rainbow over the field; a flock of birds lifting off the far rows; long blue shadows raking across the pattern at dawn; a hot-air of pollen-haze glowing in backlight; dew sheeting the whole field silver at first light.
+
+🚫 BANS: NO humans/vehicles/balloons-with-baskets (a distant balloon is fine only if tiny + no basket detail — safer to skip); NO buildings.`,
+    touchpoints: [
+      'PETAL WIND-DRIFT — a drift of loose petals lifting and blowing across the ordered rows on a gust, a scatter of color in the air above the pattern',
+      'MIST BETWEEN ROWS — low morning mist lying in the furrows between the planted rows, the geometry emerging from soft ground-fog',
+      'GOLDEN RIM-LIGHT — low golden-hour light firing every bloom-edge along the rows into a glowing outline, the whole field rimmed in warm light',
+      'RAINBOW SHOWER — a passing shower trailing across the far field with a soft rainbow arcing over the planting, sunlit rows beneath',
+      'BIRDS LIFTING — a flock of small birds lifting off the far rows in a scatter, tiny against the big sky over the field',
+      'DAWN SHADOWS — long blue dawn shadows raking across the flower pattern from a low sun, the rows striped in light and shade',
+    ],
+    instructions: `Each entry is ONE atmospheric field event, 15-28 words. Format: "EVENT CAPS — the transient moment over the field". NO humans/vehicles/buildings. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ══════════════════ MOON-GARDEN (Stage A3) ══════════════════
+  // BloomBot's first NIGHT register — a moonlit garden of white/silver
+  // night-bloomers, fireflies, cool-silver palette. Light is MOON + starlight
+  // ONLY (never lamps/lanterns/electricity). Blooms luminous-PALE against
+  // deep-blue dark. "moonlit / silvered / catching the moon", never "glowing".
+  bloombot_moon_garden_setting: {
+    format: 'simple',
+    theme: `MOONLIT GARDEN SETTING for the BloomBot moon-garden path — the night garden the white blooms fill. Each entry 25-45 words: a real garden setting at night under the moon, the planting dense with pale night-bloomers.
+
+⚠️ THE BAR: a beautiful real garden at night — a walled white-garden, a pergola of pale climbers, a reflecting-pool garden, a woodland glade, a terraced night border, an arbor path — everything bathed in cool moonlight, the pale flowers luminous against deep-blue darkness.
+
+⚠️ CATEGORIES: ~5 WHITE WALLED GARDEN, ~4 PALE-CLIMBER PERGOLA/ARBOR, ~4 REFLECTING-POOL GARDEN (moon on still water), ~4 WOODLAND GLADE, ~4 TERRACED NIGHT BORDER, ~4 ARBOR/TRELLIS PATH.
+
+🚫 STRICT BANS: NO lamps, lanterns, string-lights, candles, torches, or any electric/fire light (the ONLY light is the moon + stars); NO humans; NO flower color names (engine sets them, biased white).`,
+    touchpoints: [
+      'MOONLIT WHITE GARDEN — a walled night garden packed with pale night-blooms, box hedges edging the beds, everything washed cool silver by a high moon against the deep-blue dark',
+      'PALE-CLIMBER PERGOLA — a long pergola dripping with pale night-climbing blooms, moonlight filtering through the vine-roof onto a soft path below, the flowers luminous in the dark',
+      'MOON REFLECTING-POOL — a still garden pool holding the moon among pale water-blooms, the night border crowded with silver-lit flowers doubled in the calm dark water',
+      'WOODLAND NIGHT GLADE — a small clearing in dark woodland filled with pale night-bloomers catching a shaft of moonlight through the canopy, soft and luminous against the black trees',
+      'TERRACED NIGHT BORDER — a deep terraced border of pale blooms stepping down through the dark garden, each tier silvered by the moon against deep-blue shadow',
+      'MOONLIT ARBOR PATH — a trellised arbor path smothered in pale climbing blooms arching overhead, moonlight raking through onto the flowers, the tunnel luminous in the night',
+    ],
+    instructions: `Each entry is ONE moonlit garden setting, 25-45 words. Format: "SETTING CAPS — the night garden + that moonlight washes the pale blooms". Light is MOON + stars ONLY (never lamps/lanterns/candles). NO humans, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_moon_garden_night_bloom: {
+    format: 'simple',
+    theme: `NIGHT BLOOM for the BloomBot moon-garden path — the white / pale night-flowering plants filling the garden. Each entry 20-38 words: an abundant mass of pale night-bloomers, engine-species-agnostic phrasing (the palette is biased white — do NOT name colors).
+
+⚠️ THE BAR: real white / pale night-blooming flowers as an abundant HERO mass — moonflower, night-blooming jasmine, white wisteria, evening primrose, white nicotiana, gardenia, white foxglove, angel's-trumpet, white cosmos, pale roses — luminous-pale, catching the moon.
+
+⚠️ CATEGORIES: ~5 MOONFLOWER/TRUMPET (big pale night-opening blooms), ~4 CLIMBING JASMINE/WISTERIA (pale cascades), ~4 SPIRE (foxglove/nicotiana pale spikes), ~4 CUP/ROSE (pale open blooms), ~4 MIXED pale-bloom bank.
+
+🚫 BANS: NO color names; NO "glowing"/bioluminescent (phrase as "moonlit"/"silvered"/"luminous-pale"/"catching the moon"); NO humans.`,
+    touchpoints: [
+      'MOONFLOWER MASS — big pale trumpet moonflowers unfurled open to the night in an abundant tangle, their broad faces catching the moon, luminous-pale against the dark foliage',
+      "ANGEL'S-TRUMPET CASCADE — long pendulous pale angel's-trumpet blooms hanging in a heavy cascade, each silvered by moonlight, a wall of pale night-flower against the black garden",
+      'PALE WISTERIA DRIP — long pale wisteria racemes dripping from an arbor, each cluster luminous-pale in the moonlight, a curtain of soft night-bloom',
+      'WHITE FOXGLOVE SPIRES — tall pale foxglove and nicotiana spires standing luminous in the moonlight, a vertical stand of pale night-bloom against deep-blue dark',
+      'PALE ROSE BANK — a heavy bank of pale open roses and gardenia catching the moon, the cupped blooms silver-lit and abundant in the night border',
+      'MIXED NIGHT-BLOOM — a lush mixed bank of moonflower, white cosmos and evening primrose crowding the bed, all pale and luminous under the high moon',
+    ],
+    instructions: `Each entry is ONE pale night-bloom mass, 20-38 words. Format: "BLOOM CAPS — the abundant pale night-flowers + that they catch the moon". NO color names, NO "glowing", NO humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_moon_garden_moonlight_effect: {
+    format: 'simple',
+    theme: `MOONLIGHT EFFECT (MONEY-SHOT) for the BloomBot moon-garden path — the specific way the moon lights the scene. Each entry 15-28 words: the wow of moonlight on the pale blooms.
+
+✓ VARIETY: silvered petal-edges rimmed with cool moonlight; a moon-path lying across still garden water; pale blooms luminous-white against deep-blue dark; a shaft of moonlight spotlighting one bloom-mass through the canopy; long blue moon-shadows across the beds; the moon caught low and huge behind the garden; dewy petals holding tiny moon-sparks; cool blue-silver wash over the whole garden.
+
+🚫 BANS: light is MOON only (never lamp/fire/electric); phrase as moonlit/silvered, never "glowing"/magic.`,
+    touchpoints: [
+      'SILVERED EDGES — every pale petal rimmed with a fine line of cool moonlight, the blooms edge-lit silver against the deep-blue dark',
+      'MOON-PATH ON WATER — a bright silver moon-path lying across the still garden pool among the pale water-blooms, the reflection unbroken',
+      'LUMINOUS-PALE AGAINST DARK — the pale blooms standing out luminous-white against the near-black foliage and deep-blue night behind',
+      'MOON-SHAFT SPOTLIGHT — a single shaft of moonlight breaking through the canopy to spotlight one mass of pale blooms in the dark garden',
+      'LOW HUGE MOON — a low huge moon hanging just behind the garden, silhouetting the dark hedges and back-lighting the pale night-bloom',
+      'DEW MOON-SPARKS — dew on the pale petals holding tiny points of caught moonlight, the flowers beaded with cool silver sparks',
+    ],
+    instructions: `Each entry is ONE moonlight effect (MONEY-SHOT), 15-28 words. Format: "EFFECT CAPS — how the moon lights the pale blooms". Moon only, never "glowing". NO humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_moon_garden_night_sky: {
+    format: 'simple',
+    theme: `NIGHT SKY for the BloomBot moon-garden path — the real night sky above the garden. Each entry 15-28 words: a real, grounded night sky (moon phases + stars), never fantasy.
+
+✓ VARIETY: a full moon high and bright; a low huge harvest moon; a crescent moon with bright stars; a gibbous moon behind thin cloud; a deep star-field over the dark garden; the Milky Way arching above; a clear moonlit blue-black sky; soft moonlit clouds drifting.
+
+🚫 BANS: real sky only — NO multiple moons, NO planets/rings, NO aurora, NO nebulae-over-a-garden, NO fantasy; NO lamps on the ground.`,
+    touchpoints: [
+      'FULL MOON HIGH — a bright full moon riding high in a clear blue-black sky, flooding the garden with cool even light',
+      'LOW HARVEST MOON — a huge low golden-white moon just above the dark hedges, dominating the night sky behind the garden',
+      'CRESCENT + STARS — a fine crescent moon with a scatter of bright stars across a deep clear night sky over the garden',
+      'GIBBOUS THROUGH CLOUD — a gibbous moon glowing softly behind thin drifting cloud, a diffuse silver light over the beds',
+      'DEEP STAR-FIELD — a deep dark sky thick with stars above the moonlit garden, the blooms pale beneath the vast night',
+      'MILKY WAY ARCH — the Milky Way arching faintly across the clear dark sky above the moonlit garden, a real star-band overhead',
+    ],
+    instructions: `Each entry is ONE real night sky, 15-28 words. Format: "SKY CAPS — the real moon/stars above the garden". Real sky only (no multi-moons/aurora/fantasy). NO humans. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_moon_garden_night_life: {
+    format: 'simple',
+    theme: `NIGHT LIFE for the BloomBot moon-garden path — a gated (~30%) gentle nocturnal creature. Each entry 15-28 words: ONE small night creature adding life without breaking the moonlit calm.
+
+✓ VARIETY: a drift of fireflies pulsing over the pale blooms; a luna moth on a moonflower; a white moth at a pale trumpet; a small owl silhouette on a branch against the moon; a hedgehog among the night border; a bat crossing the moon; a nightingale on a stem; a fox slipping through the dark garden; a cricket-lit stillness; a toad by the pool.
+
+🚫 BANS: creature is small/secondary; NO humans; fireflies pulse (real), never a magic glow on the flowers.`,
+    touchpoints: [
+      'FIREFLY DRIFT — a scatter of fireflies pulsing tiny cool-green points over the pale blooms in the dark garden, real and delicate',
+      'LUNA MOTH — a pale green luna moth resting on an open moonflower, its long tails soft in the moonlight, a jewel of the night garden',
+      'OWL SILHOUETTE — a small owl perched in silhouette on a dark branch against the bright moon, still and watchful above the pale beds',
+      'WHITE MOTH AT TRUMPET — a white moth hovering at a pale night-trumpet bloom, wings blurred in the moonlight, tiny against the flower',
+      'BAT CROSSING MOON — a single bat crossing the bright disc of the moon above the dark garden, a fleeting silhouette',
+      'NIGHTINGALE ON STEM — a small nightingale perched on a pale bloom-stem in the moonlight, throat lifted, tiny and still in the night border',
+    ],
+    instructions: `Each entry is ONE small nocturnal creature, 15-28 words. Format: "CREATURE CAPS — the gentle night creature, small/secondary". NO humans, NO flower color names, NO magic glow. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ══════════════════ RAIN-GARDEN (Stage A4) ══════════════════
+  // Storm-light drenched blooms — saturated WET color, droplets, petals on wet
+  // stone. Rain must be VISIBLE (streaks/droplets/splash-rings). Rain intensifies
+  // color, never grays out. No umbrellas/figures.
+  bloombot_rain_garden_scene: {
+    format: 'simple',
+    theme: `RAIN-GARDEN SCENE for the BloomBot rain-garden path — a lush flower garden in the rain, the blooms drenched and saturated. Each entry 25-45 words: the garden setting with rain-wet flowers as the abundant hero.
+
+⚠️ THE BAR: a beautiful real garden being rained on — a cottage border, a rose arbor, a hydrangea bank, a peony bed, a mixed perennial garden, a woodland flower path — the blooms heavy and glossy with rain, color deepened and saturated by the wet.
+
+⚠️ CATEGORIES: ~5 COTTAGE BORDER, ~4 ROSE ARBOR/CLIMBER, ~4 HYDRANGEA BANK, ~4 PEONY/RANUNCULUS BED, ~4 MIXED PERENNIAL, ~4 WOODLAND FLOWER PATH.
+
+🚫 STRICT BANS: NO umbrellas, NO people, NO buildings (a natural stone edge OK); NO flower color names (engine sets them); the rain DEEPENS the color, never grays it out.`,
+    touchpoints: [
+      'DRENCHED COTTAGE BORDER — a deep cottage-garden border of rain-soaked blooms packed edge to edge, every petal glossy and heavy with wet, the color deepened rich and saturated by the rain',
+      'RAIN-WET ROSE ARBOR — a rose arbor dripping with rain-drenched open roses, water beading and running off the petals, the blooms deep-saturated and glossy under the storm-light',
+      'HYDRANGEA IN RAIN — a heavy bank of rain-soaked mophead hydrangeas, the big heads bowed and dripping, their color deepened and glowing wet against dark drenched leaves',
+      'DRENCHED PEONY BED — a bed of full peonies heavy with rain, petals cupping water, the blooms saturated and lush, bowing under the weight of the wet',
+      'WET MIXED PERENNIAL — a mixed perennial garden in the rain, spires and cups and daisies all glossy-wet and deep-colored, rain streaking through the abundant planting',
+      'RAINY WOODLAND PATH — a woodland flower path drenched by rain, ferns and blooms glossy and dripping, the wet deepening every color against the dark trees',
+    ],
+    instructions: `Each entry is ONE rain-drenched garden scene, 25-45 words. Format: "SCENE CAPS — the garden + rain-soaked saturated blooms". Rain DEEPENS color. NO umbrellas/people/buildings, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_rain_garden_rain_state: {
+    format: 'simple',
+    theme: `RAIN STATE (MONEY-SHOT) for the BloomBot rain-garden path — the specific VISIBLE rain. Each entry 15-28 words: the rain must be clearly seen. This is the wow.
+
+✓ VARIETY: fine misty drizzle veiling the blooms; a heavy downpour streaking the frame with visible rods of rain; a sudden shower with splash-rings on puddles; the just-after moment with every petal dripping; rain sheeting off a bloom-heavy branch; a downpour bouncing off the leaves in a spray; slow fat drops falling onto open blooms; a squall driving rain across the garden at an angle.
+
+🚫 BANS: rain is ALWAYS visible (streaks/droplets/splash/drip); NO umbrellas/people.`,
+    touchpoints: [
+      'MISTY DRIZZLE — a fine misty drizzle veiling the blooms in soft grey, every petal beaded with tiny droplets, the air itself hazed with wet',
+      'HEAVY DOWNPOUR — a heavy downpour streaking the whole frame with visible silver rods of rain, hammering the blooms, water flying off the petals',
+      'SPLASH-RING SHOWER — a sudden shower dimpling the puddles with splash-rings, droplets bouncing off the leaves, the blooms shivering under the rain',
+      'JUST-AFTER DRIP — the moment just after the rain, every petal and leaf hung with heavy dripping droplets, the whole garden jewelled with wet',
+      'SHEETING OFF BRANCH — rain sheeting in a silver curtain off a bloom-heavy branch, a waterfall of runoff pouring past the drenched flowers',
+      'ANGLED SQUALL — a squall driving rain across the garden at a sharp angle, visible slanting rods bending the blooms, spray lifting off the beds',
+    ],
+    instructions: `Each entry is ONE VISIBLE rain state (MONEY-SHOT), 15-28 words. Format: "RAIN CAPS — the clearly-visible rain". Rain always seen. NO umbrellas/people. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_rain_garden_wet_detail: {
+    format: 'simple',
+    theme: `WET DETAIL for the BloomBot rain-garden path — the close jewelled evidence of rain (this axis picks TWO per render). Each entry 15-28 words: one wet-detail element.
+
+✓ VARIETY: fat droplets jewelling a petal edge; a single drop hanging trembling from a petal-tip; rain-slick glossy leaves mirroring the sky; a puddle reflecting the blooms above; water pooled in a cupped bloom; droplets strung along a spider-thread between stems; runoff streaming down a stem; a petal knocked loose floating on a puddle; mist-beads furring a bud; wet-darkened rich soil between the flowers.
+
+🚫 BANS: NO flower color names; NO people.`,
+    touchpoints: [
+      'JEWELLED PETAL-EDGE — fat clear droplets strung along a petal edge like beads, each holding a tiny bright point of the grey sky',
+      'TREMBLING DROP — a single heavy drop hanging trembling from the very tip of a petal, about to fall, magnifying the bloom behind it',
+      'RAIN-SLICK LEAVES — broad glossy rain-slick leaves mirroring the pale storm-sky, water sheeting smoothly off their dark surfaces',
+      'PUDDLE REFLECTION — a small puddle among the beds holding a soft reflection of the drenched blooms above, dimpled by falling drops',
+      'WATER IN A CUPPED BLOOM — a pool of clear rainwater collected in the cup of an open bloom, brimming and trembling with each new drop',
+      'FLOATING PETAL — a single petal knocked loose by the rain floating on the skin of a puddle, spinning slowly in the runoff',
+    ],
+    instructions: `Each entry is ONE close wet-detail, 15-28 words. Format: "DETAIL CAPS — the jewelled evidence of rain". NO color names, NO people. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_rain_garden_storm_light: {
+    format: 'simple',
+    theme: `STORM LIGHT for the BloomBot rain-garden path — the dramatic wet-weather light. Each entry 15-28 words: the light quality of a rainy garden. Storm light makes wet color GLOW, never grey-flat.
+
+✓ VARIETY: a bruised dark storm-sky with a bright break-light spotlighting the wet blooms; soft silver overcast making colors deep and even; backlit rain glowing silver behind the flowers; a shaft of sun breaking through cloud onto the drenched garden; the eerie green-gold light before a storm; dark sky behind sunlit rain-bright blooms; low warm light under the storm's leading edge.
+
+🚫 BANS: wet color stays SATURATED and rich (never grey-flat/desaturated); NO lamps/people.`,
+    touchpoints: [
+      'BREAK-LIGHT SPOTLIGHT — a bruised dark storm-sky with a sudden bright break of light spotlighting the wet blooms, their color glowing rich against the gloom',
+      'SILVER OVERCAST — a soft even silver overcast deepening every wet color to a rich saturated glow, no harsh shadow, the drenched blooms luminous',
+      'BACKLIT RAIN — falling rain lit silver from behind the flowers, the drops glowing bright against the dark drenched garden',
+      'SUN-SHAFT ON WET — a shaft of sun breaking through the storm cloud to strike the drenched garden, the wet blooms flashing jewel-bright',
+      'PRE-STORM GREEN-GOLD — the eerie green-gold light before the storm breaks, charged and luminous over the deep-colored blooms',
+      'DARK-SKY BRIGHT BLOOMS — a near-black storm sky behind rain-bright sunlit blooms, maximum contrast, the flowers glowing against the dark',
+    ],
+    instructions: `Each entry is ONE storm-light condition, 15-28 words. Format: "LIGHT CAPS — the wet-weather light that makes color glow". Color stays saturated. NO lamps/people. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_rain_garden_storm_event: {
+    format: 'simple',
+    theme: `STORM EVENT for the BloomBot rain-garden path — a gated (~30%) transient storm moment. Each entry 15-28 words.
+
+✓ VARIETY: a distant fork of lightning behind the drenched garden; a rainbow arcing over the beds as the rain eases; a hail-scatter bouncing among the blooms; a wind-gust flattening the flowers in a wave; a rolling wall of dark cloud advancing; mist rising off the warm wet ground after the shower; a sun-shower with rain falling through bright light; a downpour easing to steam in a shaft of sun.
+
+🚫 BANS: NO people/umbrellas; distant lightning only (never striking a subject).`,
+    touchpoints: [
+      'DISTANT LIGHTNING — a distant fork of lightning splitting the dark sky behind the drenched garden, the wet blooms lit for an instant',
+      'RAINBOW OVER BEDS — a soft rainbow arcing over the flower beds as the rain eases, the drenched blooms glowing beneath the coloured arch',
+      'HAIL SCATTER — a scatter of small hailstones bouncing among the blooms and puddles, the flowers shivering under the sudden ice',
+      'WIND-GUST WAVE — a gust of storm-wind flattening the flowers in a rolling wave, petals and spray lifting off the beds',
+      'GROUND MIST RISING — mist rising off the warm wet ground after the shower, the drenched garden steaming softly in the returning light',
+      'SUN-SHOWER — rain still falling through a break of bright sun, each drop lit gold, the wet blooms flashing in the sun-shower',
+    ],
+    instructions: `Each entry is ONE transient storm event, 15-28 words. Format: "EVENT CAPS — the storm moment". Distant lightning only. NO people/umbrellas. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  // ══════════════════ GREAT-BLOSSOM-TREE (Stage A5) ══════════════════
+  // ONE colossal ancient flowering tree as monumental hero (wisteria/magnolia/
+  // sakura-giant). Jack-and-the-giant-flower energy at TREE scale — a dwarfed
+  // world at its roots, OPEN SKY, scale via CONTRAST not frame-packing. Living
+  // tree, never dead/spooky. Petals (not leaves) carry the color. Name the
+  // silhouette per entry (conical-collapse lesson).
+  bloombot_great_blossom_tree_form: {
+    format: 'simple',
+    theme: `GREAT BLOSSOM-TREE FORM for the BloomBot great-blossom-tree path — ONE colossal ancient flowering tree, the monumental hero. Each entry 25-45 words: the tree species + its NAMED overall SILHOUETTE/massing + its bloom character. NAME THE SILHOUETTE explicitly (so it doesn't collapse to a generic round tree).
+
+⚠️ THE BAR: a single, real, ENORMOUS flowering tree — as big as a cathedral — in full bloom, the blooms (not just leaves) carrying the color across the whole canopy. A LIVING, healthy, glorious tree.
+
+⚠️ SILHOUETTE — name it per entry: broad spreading dome / weeping cascade curtain / tall billowing column / wide flat umbrella / gnarled ancient spreading / arching fountain / layered tiered pagoda-form.
+
+⚠️ SPECIES: giant cherry-blossom (sakura), colossal wisteria tree, monumental magnolia, huge jacaranda, flame-tree, giant flowering dogwood, ancient plum, tabebuia, silk-floss, laburnum-arch tree.
+
+🚫 STRICT BANS: NEVER dead, bare, spooky, gnarled-menacing, or leaf-only (the BLOOMS carry the color); NO people; NO buildings/treehouses; NO flower color names (engine sets them); it is ONE tree (or a tight grove), never a forest.`,
+    touchpoints: [
+      'A colossal ancient cherry-blossom tree with a BROAD SPREADING DOME silhouette, every branch smothered in blossom so the whole crown is a single vast cloud of flower, trunk thick as a tower',
+      'A monumental wisteria tree in a WEEPING CASCADE form, long flower-racemes pouring down from the huge crown in a curtain to the ground, a waterfall of bloom around a massive trunk',
+      'An enormous magnolia in a WIDE FLAT UMBRELLA silhouette, giant goblet blooms covering the spreading horizontal branches, the whole tree a low broad cloud of flower',
+      'A giant jacaranda in a TALL BILLOWING COLUMN form, the towering crown a single mass of trumpet-blossom rising high against the sky, trunk lost in the flowering canopy',
+      'An ancient flame-tree in an ARCHING FOUNTAIN silhouette, branches spraying up and out in a dome of flower, the crown ablaze with blossom above a massive buttressed trunk',
+      'A layered TIERED pagoda-form flowering dogwood grown to colossal scale, each horizontal tier a shelf of blossom stacked up the huge tree, a wedding-cake of flower',
+    ],
+    instructions: `Each entry is ONE colossal flowering tree, 25-45 words. Format: "the tree + its NAMED silhouette + the blooms carrying the color". Living/glorious, never dead/spooky. NAME the silhouette. NO people/buildings, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_great_blossom_tree_canopy: {
+    format: 'simple',
+    theme: `BLOOM CANOPY (MONEY-SHOT) for the BloomBot great-blossom-tree path — the wow of the flowering canopy. Each entry 15-28 words: the signature canopy moment.
+
+✓ VARIETY: a blizzard of petals drifting down from the crown; long flower-racemes cascading in a curtain overhead; looking straight up into the blossom-canopy against the sky; petals carpeting the ground below in a drift of color; sunlight filtering through the flower-canopy in dappled light; a breeze sending a wave of petals off the crown; the canopy so dense it becomes a sky of flower; blossom mirrored in a still pool below.
+
+🚫 BANS: NO people; NO flower color names; the BLOOMS carry the show, not leaves.`,
+    touchpoints: [
+      'PETAL BLIZZARD — a blizzard of loose petals drifting and swirling down from the colossal crown, filling the air with falling flower',
+      'CASCADING CURTAIN — long flower-racemes pouring down from the canopy in a dense curtain overhead, a hanging wall of bloom',
+      'LOOK-UP CANOPY — looking straight up into the blossom-canopy, the whole sky replaced by a ceiling of flower against the light',
+      'PETAL-CARPET GROUND — the ground below the tree carpeted in a deep drift of fallen petals, a soft floor of color under the giant',
+      'DAPPLED CANOPY LIGHT — sunlight filtering through the dense flower-canopy in a shifting dapple of light and blossom-shadow',
+      'PETAL WAVE — a breeze rolling a wave of petals off the crown, a sweep of loose flower streaming sideways into the open air',
+    ],
+    instructions: `Each entry is ONE bloom-canopy moment (MONEY-SHOT), 15-28 words. Format: "CANOPY CAPS — the signature flowering-canopy wow". NO people, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_great_blossom_tree_root_world: {
+    format: 'simple',
+    theme: `ROOT WORLD for the BloomBot great-blossom-tree path — the tiny DWARFED world at the base of the colossal tree, for scale contrast. Each entry 20-38 words: a small, normal-scale natural setting beneath the giant, making the tree read ENORMOUS.
+
+⚠️ THE BAR: a modest, real, natural ground world at the tree's roots that is DWARFED by the giant above — a wildflower meadow, a still reflecting pool, a mossy clearing, a stream, a grassy knoll, a carpet of bluebells, a rolling green valley. The world is small; the tree is vast.
+
+🚫 STRICT BANS: NO people; NO buildings, shrines, benches, fences, paths, or structures (natural stone/rock OK); the ground world is small and natural, never busy.`,
+    touchpoints: [
+      'A small wildflower meadow spreading at the roots of the giant tree, the low blooms and grass tiny beneath the towering flowering crown, dwarfed by its scale',
+      'A still reflecting pool at the base of the colossal tree, mirroring the vast blossom-canopy above, the water small and calm beneath the giant',
+      'A mossy green clearing ringed with ferns at the foot of the enormous tree, soft and small under the immense flowering crown',
+      'A clear stream winding past the base of the giant tree over natural stones, tiny and bright beneath the towering canopy of bloom',
+      'A carpet of bluebells rolling away from the roots of the colossal tree across a gentle green slope, the low flowers dwarfed by the giant above',
+      'A grassy knoll falling away below the enormous flowering tree into a soft green valley, the whole small landscape dwarfed by the towering crown',
+    ],
+    instructions: `Each entry is ONE small dwarfed natural ground world, 20-38 words, that makes the tree read enormous. NO people/buildings/structures (natural stone OK). Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_great_blossom_tree_season_light: {
+    format: 'simple',
+    theme: `SEASON LIGHT for the BloomBot great-blossom-tree path — the light + season on the flowering giant. Each entry 15-28 words: the light quality (spring register, always alive and glorious).
+
+✓ VARIETY: soft pink spring dawn; warm golden-hour backlight firing the canopy; clear bright spring midday; misty morning with the tree emerging soft; low warm evening light gilding the blooms; dappled sun after a light spring shower; blue-hour with the pale canopy luminous; bright overcast making the bloom-color deep and even.
+
+🚫 BANS: living spring register (never autumn-dead/winter-bare); NO lamps/people.`,
+    touchpoints: [
+      'SPRING DAWN — a soft pink spring dawn washing over the flowering giant, the canopy catching the first warm light against a cool sky',
+      'GOLDEN BACKLIGHT — warm golden-hour light backlighting the blossom-canopy, every petal glowing translucent, the crown ablaze with light',
+      'BRIGHT SPRING MIDDAY — clear bright spring light on the tree, the bloom-color vivid and the sky a clean saturated blue behind the crown',
+      'MISTY MORNING — a soft misty spring morning, the colossal flowering tree emerging pale and vast from the drifting haze',
+      'GILDED EVENING — low warm evening light gilding the flowering crown, long soft shadows reaching across the dwarfed world below',
+      'AFTER-SHOWER DAPPLE — dappled sun breaking through after a light spring shower, the wet blossom glinting on the giant tree',
+    ],
+    instructions: `Each entry is ONE season/light condition, 15-28 words. Format: "LIGHT CAPS — the spring light on the flowering giant". Living spring register. NO lamps/people. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
+
+  bloombot_great_blossom_tree_canopy_event: {
+    format: 'simple',
+    theme: `CANOPY EVENT for the BloomBot great-blossom-tree path — a gated (~35%) transient moment at the giant tree. Each entry 15-28 words.
+
+✓ VARIETY: a flock of small birds wheeling around the flowering crown; a swirl of butterflies drifting through the blossom; a gust sending a great sweep of petals streaming off the canopy; petals falling on the still pool in spreading rings; a rainbow arcing behind the tree after a shower; fireflies rising at dusk beneath the crown; a single deer grazing tiny at the roots; a soft cloud passing behind the towering canopy.
+
+🚫 BANS: NO people; wildlife stays tiny/secondary; NO flower color names.`,
+    touchpoints: [
+      'BIRD FLOCK — a flock of small birds wheeling in a loose cloud around the flowering crown, tiny against the vast canopy of bloom',
+      'BUTTERFLY SWIRL — a drift of butterflies swirling up through the blossom of the giant tree, small bright flecks among the flowers',
+      'PETAL SWEEP — a gust sending a great sweep of petals streaming sideways off the canopy in a long ribbon of falling flower',
+      'PETALS ON POOL — fallen petals landing on the still pool below in slow spreading rings, dimpling the mirror of the canopy',
+      'RAINBOW BEHIND — a soft rainbow arcing behind the colossal flowering tree after a passing shower, the crown bright against it',
+      'DEER AT ROOTS — a single small deer grazing tiny at the roots of the giant tree, a speck of scale beneath the towering bloom',
+    ],
+    instructions: `Each entry is ONE transient canopy event, 15-28 words. Format: "EVENT CAPS — the moment at the giant tree". Wildlife tiny/secondary. NO people, NO flower color names. Output a NUMBERED list, one entry per line, no internal newlines.`,
+  },
 };
 
 const recipe = POOL_RECIPES[POOL];

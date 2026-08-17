@@ -196,6 +196,21 @@ module.exports = {
   CHIBIBOT_BIRTHDAY_PARTY_DETAIL: load('chibibot_birthday_party_detail'),
   CHIBIBOT_BIRTHDAY_PARTY_PROP: load('chibibot_birthday_party_prop'),
   CHIBIBOT_BIRTHDAY_PARTY_SURPRISE: load('chibibot_birthday_party_surprise'),
+  // creature-autumn-day (Stage H1, SHADOW — cozy golden-autumn outing)
+  CHIBIBOT_AUTUMN_DAY_ACTIVITY: load('chibibot_autumn_day_activity'),
+  CHIBIBOT_AUTUMN_DAY_DETAIL: load('chibibot_autumn_day_detail'),
+  CHIBIBOT_AUTUMN_DAY_PROP: load('chibibot_autumn_day_prop'),
+  CHIBIBOT_AUTUMN_DAY_SURPRISE: load('chibibot_autumn_day_surprise'),
+  // creature-lantern-festival (Stage H2, SHADOW — warm-lantern night festival)
+  CHIBIBOT_LANTERN_FESTIVAL_ACTIVITY: load('chibibot_lantern_festival_activity'),
+  CHIBIBOT_LANTERN_FESTIVAL_DETAIL: load('chibibot_lantern_festival_detail'),
+  CHIBIBOT_LANTERN_FESTIVAL_PROP: load('chibibot_lantern_festival_prop'),
+  CHIBIBOT_LANTERN_FESTIVAL_SURPRISE: load('chibibot_lantern_festival_surprise'),
+  // creature-school (Stage H4, SHADOW — cozy interior schoolroom)
+  CHIBIBOT_CREATURE_SCHOOL_ACTIVITY: load('chibibot_creature_school_activity'),
+  CHIBIBOT_CREATURE_SCHOOL_DETAIL: load('chibibot_creature_school_detail'),
+  CHIBIBOT_CREATURE_SCHOOL_PROP: load('chibibot_creature_school_prop'),
+  CHIBIBOT_CREATURE_SCHOOL_SURPRISE: load('chibibot_creature_school_surprise'),
 
   // Outdoor-adventure path-bespoke axes (2026-05-20 full-bespoke migration)
   OUTDOOR_ADVENTURE_ACTIVITIES: load('outdoor_adventure_activities'),
@@ -244,6 +259,13 @@ module.exports = {
   SUNNY_VILLAGE_TIME_OF_DAY: load('sunny_village_time_of_day'),
   SUNNY_VILLAGE_SURPRISE: load('sunny_village_surprise'),
   SUNNY_VILLAGE_PHENOMENA: load('sunny_village_phenomena'),
+  // sky-village (Stage H3, SHADOW — the 7th village: a whimsical cloud-kingdom)
+  SKY_VILLAGE_ACTIVITIES: load('sky_village_activities'),
+  SKY_VILLAGE_SETTINGS: load('sky_village_settings'),
+  SKY_VILLAGE_DETAILS: load('sky_village_details'),
+  SKY_VILLAGE_TIME_OF_DAY: load('sky_village_time_of_day'),
+  SKY_VILLAGE_SURPRISE: load('sky_village_surprise'),
+  SKY_VILLAGE_PHENOMENA: load('sky_village_phenomena'),
 
   // Twilight-village path-bespoke axes (2026-05-19 full-bespoke migration)
   TWILIGHT_VILLAGE_ACTIVITIES: load('twilight_village_activities'),

@@ -19,6 +19,13 @@ function load(name) {
 module.exports = {
   // epic-vista (2026-05-20 axis-system migration — first migrated path)
   EPIC_VISTA_SUBJECT: load('epic_vista_subject'),
+  // winter-wonder (Stage E1) — bespoke subject; reuses shared EPIC_VISTA modifiers
+  WINTER_WONDER_SUBJECT: load('winter_wonder_subject'),
+  // north-wild (Stage E2) — bespoke toponym-led subject; reuses shared modifiers
+  NORTH_WILD_SUBJECT: load('north_wild_subject'),
+  // storm-earth (Stage E3) — bespoke storm subject + bespoke storm-only sky
+  STORM_EARTH_SUBJECT: load('storm_earth_subject'),
+  STORM_EARTH_SKY: load('storm_earth_sky'),
   EPIC_VISTA_LIGHTING: load('epic_vista_lighting'),
   EPIC_VISTA_ATMOSPHERE: load('epic_vista_atmosphere'),
   EPIC_VISTA_HERO_FEATURE: load('epic_vista_hero_feature'),

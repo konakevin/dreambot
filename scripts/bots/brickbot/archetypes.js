@@ -534,4 +534,72 @@ Bending advantage over legacy: scene + weather are decoupled, so unique permutat
     framingModes: null,
     anchorScaleRange: null,
   },
+
+  BRICKBOT_LEGO_CITY: {
+    description: `PATH-BESPOKE — BrickBot lego-city (Stage B1). Modern LEGO City life MOC photography (fire-station callout / construction / modular downtown / harbor / police / market). 9 path slots + 1 conditional. register ~85% LEGO City heritage (Fire/Police/Construction/Harbor/Octan/Town) + ~15% Modular AFOL. vehicle_class ~50% City vehicle / ~50% no-vehicle street focus (each mid-X tension). Anti-photoreal: asphalt/glass/water = brick parts. WIDE establishing (deep-focus prefix). NEVER Star Wars/hard-SF, no brand logos/text.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'minifig_action',
+        'build_technique',
+        'camera_framing',
+        'vehicle_class',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'city_event', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BRICKBOT_LEGO_TRAINS: {
+    description: `PATH-BESPOKE — BrickBot lego-trains (Stage B2). LEGO trains through all-brick worlds MOC photography (steam/diesel/cargo/express on studded viaducts, yards, tunnels, crossings, stations). Bespoke rail stack: train_consist (HERO) + trackwork (MONEY-SHOT) + route_biome + station_life (mid-X minifig beat) + camera_framing (MANDATORY) + build_technique + lighting + palette + gated rail_event. Unmistakably BRICK (studded rolling stock, brick terrain) — NEVER HO-scale realism. WIDE establishing (deep-focus prefix). NEVER Star Wars/hard-SF, no brand names/text.`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'train_consist',
+        'trackwork',
+        'route_biome',
+        'station_life',
+        'camera_framing',
+        'build_technique',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'rail_event', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  BRICKBOT_HAUNTED_BRICK: {
+    description: `PATH-BESPOKE — BrickBot haunted-brick (Stage B3). LEGO Creator Haunted-House MOC photography (crooked manor / friendly graveyard / pumpkin patch / haunted fairground / witch's cottage). CUTE-spooky, NEVER horror/gore (Scooby-Doo fun: bright accents, smiling ghosts). 9 path slots + gated apparition. register = Creator Haunted House 10273 / Hidden Side / Monster Fighters heritage. subject_focus ~55% haunted structure / ~45% no-structure focus. Anti-photoreal: everything brick parts. KEEP tilt-shift (intimate/tabletop) — NO deep-focus prefix. NEVER real gothic (GothBot owns that), never "nightmare before christmas".`,
+    slots: {
+      universal: [],
+      bot: [],
+      path: [
+        'scene_type',
+        'minifig_action',
+        'build_technique',
+        'camera_framing',
+        'subject_focus',
+        'register',
+        'scene_props',
+        'lighting',
+        'palette',
+      ],
+    },
+    pickN: { scene_props: 2 },
+    conditionalLayer: { slot: 'apparition', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
 };

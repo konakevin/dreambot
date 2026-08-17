@@ -56,7 +56,21 @@ const pathBuilders = {
   'jungle-village': require('./paths/jungle-village'),
   'twilight-village': require('./paths/twilight-village'),
   'sunny-village': require('./paths/sunny-village'),
+  'creature-autumn-day': require('./paths/creature-autumn-day'), // Stage H1 SHADOW
+  'creature-lantern-festival': require('./paths/creature-lantern-festival'), // Stage H2 SHADOW
+  'creature-school': require('./paths/creature-school'), // Stage H4 SHADOW
+  'sky-village': require('./paths/sky-village'), // Stage H3 SHADOW
 };
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+// (In pathBuilders → auto look-enabled via CHIBI_LOOK_PATHS + auto chibibot_neutral.)
+const CHIBI_SHADOW_PATHS = [
+  'creature-autumn-day',
+  'creature-lantern-festival',
+  'creature-school',
+  'sky-village',
+];
 
 // All look-enabled paths = every path EXCEPT creature-world (which keeps its
 // hearted chibibot_creature recipe). Drives mediumByPath routing + the
@@ -221,7 +235,19 @@ module.exports = {
     'jungle-village',
     'twilight-village',
     'sunny-village',
+    // Stage H — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — CHIBI_SHADOW_PATHS const KEPT so these stay in
+    // allowSubjectChaosPaths + twoPassPolish.skipPaths; look/medium/model derived
+    // from pathBuilders membership, all preserved).
+    'creature-autumn-day',
+    'creature-lantern-festival',
+    'creature-school',
+    'sky-village',
   ],
+
+  // Stage H paths promoted to live rotation 2026-08-16 (shadowPaths emptied;
+  // CHIBI_SHADOW_PATHS const retained — still drives chaos-allow + polish-skip below).
+  shadowPaths: [],
 
   // Path weights — 2× indoor boost; everything else 1×.
   // Flat rotation (2026-05-26): equal weight per path — every path posts
@@ -269,6 +295,9 @@ module.exports = {
     'creature-snow-day': 'black-forest-labs/flux-1.1-pro-ultra',
     'creature-county-fair': 'black-forest-labs/flux-1.1-pro-ultra',
     'creature-birthday-party': 'black-forest-labs/flux-1.1-pro-ultra',
+    'creature-autumn-day': 'black-forest-labs/flux-1.1-pro-ultra', // Stage H1 SHADOW
+    'creature-lantern-festival': 'black-forest-labs/flux-1.1-pro-ultra', // Stage H2 SHADOW
+    'creature-school': 'black-forest-labs/flux-1.1-pro-ultra', // Stage H4 SHADOW
   },
 
   // Chaos layer — subject chaos OFF for creature-centric paths (don't
@@ -299,6 +328,7 @@ module.exports = {
       'creature-snow-day',
       'creature-county-fair',
       'creature-birthday-party',
+      ...CHIBI_SHADOW_PATHS, // creature-autumn-day (SHADOW) — outing, subject-chaos OK
     ],
   },
 
@@ -332,6 +362,7 @@ module.exports = {
       'creature-snow-day',
       'creature-county-fair',
       'creature-birthday-party',
+      ...CHIBI_SHADOW_PATHS, // creature-autumn-day (SHADOW) — outing skips polish
     ],
   },
 
@@ -361,6 +392,10 @@ module.exports = {
       'creature-snow-day': 'scene',
       'creature-county-fair': 'scene',
       'creature-birthday-party': 'scene',
+      'creature-autumn-day': 'scene', // Stage H1 SHADOW
+      'creature-lantern-festival': 'scene', // Stage H2 SHADOW
+      'creature-school': 'scene', // Stage H4 SHADOW
+      'sky-village': 'scene', // Stage H3 SHADOW
       'aquatic-village': 'scene',
       'jungle-village': 'scene',
       'arctic-village': 'scene',

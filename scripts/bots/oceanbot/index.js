@@ -45,6 +45,9 @@ const pathBuilders = {
   'deep-wonder': require('./paths/deep-wonder'),
   'whale-encounter': require('./paths/whale-encounter'),
   'reef-paradise': require('./paths/reef-paradise'),
+  'kelp-forest': require('./paths/kelp-forest'),
+  'lighthouse-storms': require('./paths/lighthouse-storms'),
+  'sea-caves': require('./paths/sea-caves'),
   'polar-seas': require('./paths/polar-seas'),
   'bioluminescent-night': require('./paths/bioluminescent-night'),
   // FUNCTION-FORM character path (not declarative archetype) — rich
@@ -241,10 +244,21 @@ module.exports = {
     'wild-sealife-camera',
     'tropical-fish-closeup',
     'coastal-power',
+    // Stage J — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — chaos off bot-wide, polish off via skipPaths; config kept).
+    'kelp-forest',
+    'lighthouse-storms',
+    'sea-caves',
   ],
 
   // Flat round-robin shuffle-bag (matches 2026-05-26 fleet flatten).
   cycleAllPaths: true,
+
+  // DARK-LAUNCH (BOT_DARK_LAUNCH_PLAN.md, migration 376). Paths here are NOT in
+  // the live `paths[]` rotation — the dispatcher never auto-posts them. They
+  // render ONLY via explicit `iter-bot --mode <path> --post` (shadow: hidden,
+  // admin-only). QA in isolation, then promote to history + move into `paths[]`.
+  shadowPaths: [], // Stage J paths promoted to live rotation 2026-08-16
 
   // Axis-system paths skip Haiku polish per [[feedback_axis_system_skip_polish]] —
   // polish strips the rolled camera_framing / bespoke axis text. All
@@ -262,6 +276,9 @@ module.exports = {
       'deep-wonder',
       'whale-encounter',
       'reef-paradise',
+      'kelp-forest',
+      'lighthouse-storms',
+      'sea-caves',
       'polar-seas',
       'bioluminescent-night',
       // mystical-mermaid: skip per the StarBot R1 lesson — Haiku

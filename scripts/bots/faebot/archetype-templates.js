@@ -285,6 +285,334 @@ ${lighting}
 Wide-enough framing to hold the whole gathering: fairies layered across foreground and midground, the venue holding them together, depth receding into the glowing forest. The eye lands on the shared event first, then wanders fairy to fairy discovering little stories. NO text, NO watermarks.`;
   },
 
+  FAEBOT_GOBLIN_MARKET: ({ slots }) => {
+    const {
+      market_event,
+      merchant_troupe,
+      market_setting,
+      market_wares,
+      critter_guests,
+      lighting,
+      magical_flavor,
+    } = slots;
+
+    const magicSection = magical_flavor
+      ? `
+
+━━━ MAGICAL FLAVOR (one enchanted market accent at their scale) ━━━
+${magical_flavor}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for a FAE NIGHT-MARKET painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene — write no negations (Sonnet echoing "never modern" into the prompt wastes tokens CLIP can't negate).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. THIS IS A BUSTLING MARKET CROWD SCENE. AT LEAST SIX palm-sized fae are visible simultaneously — more (up to a dozen or so) when the market calls for it — MANY distinct little merchants AND shoppers spread across foreground and midground, all part of the SAME market moment. NO single merchant centered alone. NEVER one fae with a blurred background.
+
+2. PALM-SIZED, ALWAYS. Every fae is 3-8 inches, DWARFED by the forest around them: a mushroom-cap is a whole market stall, a foxglove bell towers over a shopper, an acorn is a measuring-cup, a dew-drop is a lantern, a poppy-seed is a coin. The market floor is soft moss, packed earth, a mushroom-gill boardwalk, or a broad curling leaf — fae-scale ground underfoot.
+
+3. LEAN HARD INTO FAE: EVERY figure is unmistakably a winged fae — merchants AND shoppers, the nearest ones AND every small figure deep in the lane. Each one has VISIBLE gossamer or insect WINGS (dragonfly, moth, petal, lacewing, beetle-shell) and delicately POINTED EARS. The whole crowd is fae folk through and through — name every figure as a winged, pointed-eared fae so the fae nature saturates the frame.
+
+4. The 2-3 NEAREST fae have fully detailed, beautiful faces — real eyes, real hair, distinct from each other. Farther fae stay readable little winged figures with clear wings and faces.
+
+5. PAINTERLY-REAL oil-brushwork rendering in the painted-fantasy-novel-cover tradition — slender, elegant, realistic fae proportions.
+
+6. A TIMELESS FAE BAZAAR: every stall, ware, coin, sign, and garment is fae-made of twig, leaf, petal, acorn, bark, spider-silk, snail-shell, dew, and bottled light. Shoppers carry acorn-cup baskets, woven-leaf satchels, or snail-shell panniers held in hand or slung on the back; wares sit in dewdrop-vials, acorn-jars, and bark-flasks; coins are polished seeds and dew-pearls. Everything belongs to the enchanted forest's own storybook age.
+
+Open your prompt with the market crowd itself — many tiny fae mid-market-moment.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE MARKET MOMENT (the hero — what the whole market is doing) ━━━
+${market_event}
+
+Every fae in frame is part of THIS moment — selling, buying, haggling, carrying, crying wares, craning to look. The moment gives the scene its story.
+
+━━━ 2. THE MARKET FOLK (who they are — merchants + shoppers, varied little individuals) ━━━
+${merchant_troupe}
+
+No two fae alike: vary wings, hair, dress colors, market roles, and postures across the crowd exactly as described. They are a community of traders and shoppers, not copies.
+
+━━━ 3. THE MARKET (the tiny forest bazaar) ━━━
+${market_setting}
+
+A hidden night-market in the enchanted forest, rendered at THEIR scale — stalls of mushroom-cap and bark, lanes under great roots, everything fairy-furniture scale.
+
+━━━ 4. THE WONDER FOR SALE (the money-shot — one impossible ware on display) ━━━
+${market_wares}
+
+Give this hero-ware a clear, readable place in the frame — on a stall shelf, in a jar, under glass — something the crowd is drawn to and the eye can find.
+
+━━━ 5. CRITTER GUESTS (whole, complete, adorable) ━━━
+${critter_guests}
+
+Rendered as WHOLE recognizable animals (full head + body), part of market life among the fae — never looming, never scary, never a disembodied body part.
+
+━━━ 6. LIGHTING ━━━
+${lighting}
+
+⛑ Warm lantern-light and glowing wares pool against the cool blue dusk; every nearby face stays beautifully lit and readable.${magicSection}
+
+━━━ COMPOSITION ━━━
+Wide-enough framing to hold the whole bustling market: fae layered across foreground and midground, stalls and lanes holding them together, depth receding down the glowing lane into the forest. The eye lands on the market moment first, then wanders stall to stall discovering little stories and the wonder for sale. NO text, NO watermarks.`;
+  },
+
+  FAEBOT_GOBLIN_MARKET_STALL: ({ slots }) => {
+    const {
+      stall_event,
+      merchant_troupe,
+      stall_setting,
+      market_wares,
+      critter_guests,
+      lighting,
+      magical_flavor,
+    } = slots;
+
+    const magicSection = magical_flavor
+      ? `
+
+━━━ MAGICAL FLAVOR (one enchanted accent right at the stall) ━━━
+${magical_flavor}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for an INTIMATE, CLOSE-UP FAE MARKET-STALL painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. THIS IS A CLOSE, INTIMATE VIGNETTE OF ONE STALL. Pull in tight: 6-10 palm-sized fae — one merchant plus a few shoppers — fill the FOREGROUND and MIDGROUND, gathered around a single market stall. They are LARGE in the frame, close to the eye. The rest of the market is only a soft, warm, glowing HAZE behind them (lantern-blur, dissolving stalls), never a sharp deep crowd.
+
+2. BECAUSE EVERY FAE IS BIG AND CLOSE, render each one fully: VISIBLE gossamer or insect WINGS (dragonfly, moth, petal, lacewing, beetle-shell), delicately POINTED EARS, a full beautiful face with real eyes and real hair, distinct from the others. Lean hard into the fae nature — the whole close knot is winged, pointed-eared fae folk. Every fae is modestly and prettily dressed in fae-craft garments (petal-silk bodices, layered leaf-dresses, woven-grass wraps, flowing gossamer gowns, moss-velvet tunics) that cover the body — the register is elegant, wholesome, sweet storybook charm, warm and kindly.
+
+3. PALM-SIZED, ALWAYS. The stall proves it: a mushroom-cap is the roof, an acorn a measuring-cup, a dew-drop a lantern, a leaf the awning, a poppy-seed a coin. The fae are dwarfed by a foxglove bell leaning in.
+
+4. PAINTERLY-REAL oil-brushwork rendering in the painted-fantasy-novel-cover tradition — slender, elegant, realistic fae proportions.
+
+5. A TIMELESS FAE BAZAAR: every stall, ware, coin, and garment is fae-made of twig, leaf, petal, acorn, bark, spider-silk, snail-shell, dew, and bottled light. Shoppers carry acorn-cup baskets, woven-leaf satchels, or snail-shell panniers; coins are polished seeds and dew-pearls.
+
+Open your prompt with the close knot of winged fae at the stall.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE STALL MOMENT (the hero — the close exchange) ━━━
+${stall_event}
+
+Every fae in frame is part of THIS exchange — selling, buying, reaching, leaning in, admiring. Caught up close, mid-moment.
+
+━━━ 2. THE STALL FOLK (the close knot — merchant + shoppers) ━━━
+${merchant_troupe}
+
+No two fae alike: vary wings, hair, dress colors, and postures, all large and clear in the frame, wings and pointed ears visible on every one.
+
+━━━ 3. THE STALL (one booth, close, filling the frame) ━━━
+${stall_setting}
+
+One fae market stall up close at fairy-furniture scale, the wider market only a warm glowing blur behind it.
+
+━━━ 4. THE WONDER FOR SALE (the money-shot — hero of the counter) ━━━
+${market_wares}
+
+Give this ware pride of place on the counter, clearly the thing the little crowd is drawn to — the eye lands on it.
+
+━━━ 5. CRITTER GUEST (whole, complete, adorable) ━━━
+${critter_guests}
+
+Rendered as a WHOLE recognizable animal (full head + body), part of the stall among the fae — never looming, never a disembodied body part.
+
+━━━ 6. LIGHTING ━━━
+${lighting}
+
+⛑ Warm lantern-light and glowing wares pool on the counter and the close faces; the market behind stays a soft cool glow.${magicSection}
+
+━━━ COMPOSITION ━━━
+Close, intimate framing on the one stall: 6-10 winged fae large across foreground and midground, the stall and its hero-ware anchoring them, the deeper market a warm painterly haze behind. The eye lands on the exchange and the wonder for sale, then reads face to face. NO text, NO watermarks.`;
+  },
+
+  FAEBOT_GOBLIN_MARKET_LANE: ({ slots }) => {
+    const {
+      lane_event,
+      lane_troupe,
+      lane_setting,
+      lane_wares,
+      critter_guests,
+      lighting,
+      magical_flavor,
+    } = slots;
+
+    const magicSection = magical_flavor
+      ? `
+
+━━━ MAGICAL FLAVOR (one enchanted accent at the foreground stall) ━━━
+${magical_flavor}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for a FAE NIGHT-MARKET painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. A CRISP FOREGROUND, A GRAND HAZY DEPTH. 4-6 palm-sized fae are LARGE and sharply detailed in the FOREGROUND at a near market stall (the hero group). BEHIND them the grand fae night-market lane stretches away, DISSOLVED INTO SOFT WARM PAINTERLY HAZE — glowing lantern-bokeh, dissolving stalls, dreamy luminous depth. Every figure in that glowing depth is a soft WINGED-FAE silhouette — luminous, blurred, impressionistic, with hints of wings — part of the fae crowd, never a sharp figure. The grandeur lives in the glowing hazy depth; the sharp detail lives up front.
+
+2. THE FOREGROUND FAE ARE FULLY RENDERED: VISIBLE gossamer or insect WINGS (dragonfly, moth, petal, lacewing, beetle-shell), delicately POINTED EARS, full beautiful faces with real eyes and real hair, distinct from each other. Each fae has a full face and figure — fruit, flowers, and wares sit in the baskets and on the counter, never as a fae's head or body. They are unmistakably winged, pointed-eared fae folk. Every fae is modestly and prettily dressed in fae-craft garments with HIGH or gentle NECKLINES and COVERED SHOULDERS (layered leaf-dresses, flowing petal-silk gowns, woven-grass wraps, moss-velvet tunics, sleeved gossamer robes) — elegant, wholesome, sweet storybook charm, warm and kindly.
+
+3. PALM-SIZED, ALWAYS. The near stall proves it: a mushroom-cap is the roof, an acorn a measuring-cup, a dew-drop a lantern, a leaf the awning, a poppy-seed a coin.
+
+4. PAINTERLY-REAL oil-brushwork rendering in the painted-fantasy-novel-cover tradition — slender, elegant, realistic fae proportions.
+
+5. A TIMELESS FAE BAZAAR: every stall, ware, coin, and garment is fae-made of twig, leaf, petal, acorn, bark, spider-silk, snail-shell, dew, and bottled light. Shoppers carry acorn-cup baskets, woven-leaf satchels, or snail-shell panniers; coins are polished seeds and dew-pearls.
+
+Open your prompt with the crisp foreground knot of winged fae at the near stall.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE FOREGROUND MOMENT (the hero — the near exchange) ━━━
+${lane_event}
+
+The foreground fae are caught up close mid-exchange; the grand market glows and bustles softly behind them.
+
+━━━ 2. THE FOREGROUND FOLK (the crisp near knot — merchant + shoppers) ━━━
+${lane_troupe}
+
+The near 4-6 fae are large, detailed, wings and pointed ears clear; farther fae are soft glowing suggestions in the haze.
+
+━━━ 3. THE MARKET (crisp near stall + grand hazy lane behind) ━━━
+${lane_setting}
+
+The foreground stall is sharp and close; the wider bazaar dissolves into warm glowing painterly haze and lantern-bokeh.
+
+━━━ 4. THE WONDER FOR SALE (the money-shot — hero of the near counter) ━━━
+${lane_wares}
+
+Sharp and glowing on the foreground counter, clearly the thing the near fae are drawn to.
+
+━━━ 5. CRITTER GUEST (whole, complete, adorable) ━━━
+${critter_guests}
+
+A WHOLE recognizable animal (full head + body) in the foreground among the fae — never looming, never a disembodied body part.
+
+━━━ 6. LIGHTING ━━━
+${lighting}
+
+⛑ Warm lantern-light on the crisp near faces; the grand market glows soft and hazy behind against cool blue dusk.${magicSection}
+
+━━━ COMPOSITION ━━━
+A sharp foreground of 4-6 winged fae at a near stall with the hero-ware, and the grand fae night-market lane behind them dissolving into soft warm lantern-haze and glowing bokeh depth. The eye lands on the near exchange and the wonder for sale, then wanders into the dreamy glowing bazaar beyond. NO text, NO watermarks.`;
+  },
+
+  FAEBOT_SPIRIT_BEASTS: ({ slots }) => {
+    const { spirit_beast, beast_domain, magical_tell, candid_action, lighting, weather, witness } =
+      slots;
+
+    const witnessSection = witness
+      ? `
+
+━━━ TINY FAE WITNESS (small, distant, reverent — never the hero) ━━━
+${witness}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for an ENCHANTED SPIRIT-BEAST painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. THE HERO IS A REAL, CUTE, SOFT LITTLE ANIMAL. A true SMALL woodland creature with accurate, believable animal anatomy AND an adorable, gentle, endearing charm — a spotted fawn, a fox kit, a bunny, a red squirrel, a little songbird, an owlet — with big soft dark eyes, moving as a real animal does on four legs (or in flight). NEVER anthropomorphized, NEVER standing like a person, NEVER a human or doll face grafted on, NEVER a beast-man. ONLY cute/soft species — never a bear, elk, moose, wolf, horse, or any large or fierce beast. The creature's real, adorable anatomy carries the whole image.
+
+2. EXACTLY ONE MAGICAL ELEMENT, and it is PROMINENT and LUMINOUS — the clear eye-catching money-shot of the image (a flower crown, blossoming little antlers, a glowing ember tail, star-flecked coat, softly luminous eyes). ONE only — restraint is what makes it believable — but render that one element boldly, glowing and unmistakable. Everything else about the creature is real and natural.
+
+3. THE CREATURE IS AN ADORABLE SPIRIT-ANIMAL HERO — small, soft, and gentle, yet central in the frame and rendered large enough to fill it with loving detail (downy fur or feathers, big gentle eyes, soft breath). It carries a quiet SACRED, otherworldly presence — a true forest SPIRIT-ANIMAL, not merely a cute animal: a soft aura of enchantment about it, a breath of the numinous. Endearing and magical at once.
+
+4. PAINTERLY-REAL oil-brushwork rendering in the painted-fantasy-novel-cover tradition — rich, dreamy, atmospheric, luminous, magical. Soft enchanted light and drifting motes of glow in the air deepen the spirit-animal magic.
+
+Open your prompt with the real enchanted animal in its forest domain.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE SPIRIT BEAST (the real animal + its ONE magic) ━━━
+${spirit_beast}
+
+━━━ 2. WHAT IT IS DOING (true animal behavior) ━━━
+${candid_action}
+
+━━━ 3. ITS DOMAIN (the forest place) ━━━
+${beast_domain}
+
+━━━ 4. THE MAGICAL TELL (the money-shot signature) ━━━
+${magical_tell}
+
+Make this the one jewel-bright supernatural detail the eye discovers on an otherwise real animal.
+
+━━━ 5. LIGHTING ━━━
+${lighting}
+
+━━━ 6. WEATHER / ATMOSPHERE ━━━
+${weather}${witnessSection}
+
+━━━ COMPOSITION ━━━
+The adorable spirit-animal as the clear, central hero in its forest domain, rendered large enough to fill much of the frame with loving soft detail, its ONE magical tell a bold jewel-bright glowing detail, drifting motes of enchanted light and soft atmospheric depth, painterly-real oil-brushwork throughout. NO text, NO watermarks.`;
+  },
+
+  FAEBOT_FROST_COURT: ({ slots }) => {
+    const {
+      frost_fae,
+      winter_wood,
+      frost_artistry,
+      winter_light,
+      candid_action,
+      foreground_anchor,
+      companion,
+    } = slots;
+
+    const companionSection = companion
+      ? `
+
+━━━ WINTER COMPANION (one whole gentle critter) ━━━
+${companion}
+`
+      : '';
+
+    return `You are writing ONE Flux prompt for a WINTER FROST-FAE painting in the FaeBot painterly enchanted-forest universe (Brian Froud + Charles Vess + Greg Manchess + painted-fantasy-novel-cover lineage). Output ONLY the prompt — comma-separated phrases, 90-120 words, no preamble, no headers, no markers. Describe only what IS present in the scene.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+ABSOLUTE NON-NEGOTIABLE MANDATES — the FIRST visual elements in your prompt.
+
+1. ALIVE AND WARM-SPIRITED. This is a living, sparkling winter of joy and wonder — warm rosy life in the fae's face, warm glints of light through the cold blues. NEVER cursed, dead, frozen-lifeless, mournful, or bleak. Warmth and life win over the cold.
+
+2. THE FROST FAE IS THE HERO, fully rendered: delicately POINTED EARS, frost-lace / ice-crystal WINGS, a FULL beautiful face with real warm eyes and real hair. The fae's OWN frost anatomy leads — never a named cartoon or film likeness, just a true fae of the frost court. ONE magical frost element (breath-sparkle, frost-flowers in the hair, ice-lace fingertips).
+
+3. COVERED, PRETTY WINTER GARB with a HIGH NECKLINE and COVERED SHOULDERS — sleeves, a shawl, or a fur-trimmed cloak drawn over the shoulders: a modest high-necked frost-silk gown, a snow-petal cloak, a layered leaf-and-rime dress with sleeves, or a sleeved gossamer robe with fur-soft trim — fully covering, elegant, wholesome, sweet storybook charm.
+
+4. PAINTERLY-REAL oil-brushwork rendering in the painted-fantasy-novel-cover tradition — slender, elegant, realistic fae proportions.
+
+Open your prompt with the living, warm-spirited frost fae in her sparkling winter wood.
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━ 1. THE FROST FAE (the living hero) ━━━
+${frost_fae}
+
+━━━ 2. WHAT SHE IS DOING (candid, alive) ━━━
+${candid_action}
+
+━━━ 3. THE WINTER WOOD (her sparkling setting) ━━━
+${winter_wood}
+
+━━━ 4. FROST ARTISTRY (the money-shot detail) ━━━
+${frost_artistry}
+
+Make this exquisite ice-artistry a jewel-bright focal detail the eye discovers.
+
+━━━ 5. WINTER LIGHT ━━━
+${winter_light}
+
+⛑ Let the light warm the cold scene — warm glints against the frost-blues, luminous and alive.
+
+━━━ 6. FOREGROUND ANCHOR ━━━
+${foreground_anchor}${companionSection}
+
+━━━ COMPOSITION ━━━
+The living frost fae as the clear hero in her sparkling winter wood, the frost-artistry a jewel-bright detail, warm light glinting through the cold blues, a foreground frost-anchor framing the scene, receding into a soft luminous winter depth. Painterly-real oil-brushwork throughout. NO text, NO watermarks.`;
+  },
+
   FAEBOT_TINY_FAE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       creature,

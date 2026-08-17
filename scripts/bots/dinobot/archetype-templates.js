@@ -1606,4 +1606,222 @@ ${SPECIES_ANCHOR}
 
 Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
   },
+
+  DINOBOT_DINO_NIGHTS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, night_scene, night_light, night_biome, surprise_element, night_phenomenon } =
+      slots;
+
+    const phenomenonSection = night_phenomenon
+      ? `
+━━━ NIGHT PHENOMENON (mandatory — render visibly, subtle) ━━━
+${night_phenomenon}
+
+A real night-sky or atmospheric wonder as a secondary focal point — meteor / Milky Way / moonbow / mist inversion / lunar halo. Grounded-photographic, never sci-fi, never magic.
+
+`
+      : '';
+
+    return `You are an IMAX nature-documentary cinematographer shooting the NOCTURNAL Mesozoic for DinoBot — a photoreal night on prehistoric Earth 66+ million years before humans, lit ONLY by the moon and stars. Prehistoric-Planet "Night" episode × BBC Planet Earth after-dark × Walking-with-Dinosaurs. Photoreal cinematic 35mm night film still.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans. ZERO humans, no explorers, no distant silhouetted figures, nothing humanoid. ANY human is a CRITICAL FAILURE. No fire, no torches, no tents, no camps, no artificial light of ANY kind.
+
+⚠️ THE NIGHT LAW — THE LAND STAYS VISIBLY LIT (do NOT go black-silhouette-minimal):
+Moonlight and starlight REVEAL this world — the animal's hide, the ferns, the water, the land are all softly VISIBLE, rendered in cool silver/blue detail. This is a lit nocturne, NOT a black cut-out. (DinoBot's cinematic-silhouette path already owns pure silhouettes — this path does the opposite: moonlight shows the scene.) Real moonlit night only.
+• The animal's eyes are DARK, wet, and reptilian, holding only a tiny cold pinpoint of REFLECTED moonlight (the natural catch-light of a real animal photographed at night).
+• The only light in the whole frame is real astronomy — the moon, the stars, the Milky Way, or the pale pre-dawn sky. The night air is clean and clear.
+
+⚠️ MESOZOIC-LOCK — the world reads as the deep prehistoric past, a real Cretaceous/Jurassic night:
+• The ground is a fern-plain / floodplain / cycad-plain / bare volcanic rock (this is 66+ million years before grasses evolved, so the plains are ferns and low cycads, never turf).
+• The trees are tall araucaria (monkey-puzzle) conifers with whorled branches, squat barrel-trunked cycads, giant tree-ferns, horsetails, and golden ginkgo — the primordial flora.
+• Every animal is a photoreal dinosaur / pterosaur / marine reptile with scaly hide, bony frills, plated or armored backs, or insulating feathers. Describe them as adults and juveniles at a gathering / feeding / drinking (reptilian, never cattle-like).
+🚫 NO modern city / roads / structures / contrails / satellites; no people, no human trace.
+
+⚠️ GROUNDED + CANDID — every animal has at least one foot firmly planted (no floating, no mid-leap-hover); it is caught in a CANDID natural nocturnal behavior (drinking / stalking / moving / resting / wading), NEVER posing for the camera, NEVER a frontal open-mouth roar.
+
+🚫 NO cartoon / painted / watercolor / toy / CGI-plastic / video-game-render. ✓ Photoreal cinematic 35mm night still, ray-traced, hyperreal organic texture, PBR materials, real moonlight physics.
+
+━━━ THE NOCTURNAL SCENE — THE HERO (the dinosaur doing its night behavior) ━━━
+${night_scene}
+
+This is the star of the frame — a photoreal living animal at night, mid-behavior, revealed by moonlight. National-Geographic-after-dark candid, integrated into the night landscape.
+
+━━━ THE NIGHT LIGHT — THE MONEY-SHOT (the ONLY light source) ━━━
+${night_light}
+
+This defines the entire lighting of the frame — its color, direction, softness. It REVEALS the scene. Real night light only.
+
+━━━ THE NIGHT BIOME (the setting, softly moonlit) ━━━
+${night_biome}
+
+Multi-tier depth: tactile foreground (silvered ferns / wet rock / mud) → the biome body at midground → the dim prehistoric horizon → the night sky. The land is visible, not black.
+${phenomenonSection}━━━ SMALL NIGHT ACCENT (scale-prover, 2-5% of frame) ━━━
+${surprise_element}
+
+A small secondary nocturnal detail at midground or foreground edge. NEVER the focal subject.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE (bent COOL for night — silver / cobalt / deep indigo, not warm daytime) ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION + STRUCTURE (write the prompt in this order) ━━━
+[OPENING: name the DINOSAUR from the nocturnal scene doing its night behavior, in the moonlit night biome, revealed by the night light — dino + behavior + light together in the FIRST 30-40 words], [the night biome multi-tier around it], [the night phenomenon if rolled], [the small night accent], [atmospheric layer], [cool night palette + mood]. Front-load the lit dinosaur + moonlight so Flux never drops either into blackness.
+
+${SPECIES_ANCHOR}
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  DINOBOT_STORM_SEASON: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, storm_scene, weather_drama, storm_light, storm_biome, surprise_element, peak_event } =
+      slots;
+
+    const peakSection = peak_event
+      ? `
+━━━ PEAK STORM EVENT (mandatory — render as the dramatic climax) ━━━
+${peak_event}
+
+The storm's climactic moment as the dramatic focal beat — a single physically-lit lightning fork / flash-flood surge / dust-wall arrival / break-light shaft. Real weather only.
+
+`
+      : '';
+
+    return `You are an IMAX nature-documentary cinematographer shooting a violent STORM over the Mesozoic for DinoBot — a photoreal dramatic-weather moment on prehistoric Earth 66+ million years before humans. The Jurassic-Park-in-the-rain register × Prehistoric-Planet "Storm" × BBC Planet Earth extreme-weather. Photoreal cinematic 35mm storm film still.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans. ZERO humans, no explorers, no distant figures, nothing humanoid, no built shelters, no vehicles, no tools. ANY human is a CRITICAL FAILURE.
+
+⚠️ THE WET-WORLD LAW — this is the path's native register, crank it:
+The whole world is DRENCHED — rain sheets off soaked hide, water streams from jaws and frills, mud churns underfoot, puddles throw splash-crowns, spray flies, the air is thick with falling rain and mist. Every surface is wet and gleaming under the storm light. This is a REAL storm, physically soaking the scene.
+
+⚠️ THE ANIMALS REACT — never posed:
+Every dinosaur is caught REACTING to the weather — fleeing low across the flood, hunkered down with its frill into the wind, drinking the rising floodwater, bracing planted against the gale, sheltering a juvenile under its flank. A candid storm-survival moment, NEVER standing posed, NEVER an open-mouth roar-at-camera.
+
+⚠️ GROUNDED — DOUBLY ENFORCED (wind + rain tempt floaty poses):
+Every animal has at least one foot FIRMLY PLANTED in mud/water/rock, braced and weighted against the storm. NO floating, NO mid-leap-hover, NO wind-lofted bodies. Heavy, grounded, storm-braced.
+
+⚠️ LIGHTNING + CLOUDS — physically real, never sci-fi:
+Lightning is ONE brilliant physically-lit fork briefly illuminating the land — a single real bolt, not a web of electric-blue energy. The clouds are SOFT, MOIST, BILLOWING, feathered — a real churning storm-front, never rigid discs, never metallic, never hovering shapes.
+
+⚠️ MESOZOIC-LOCK — a real Cretaceous/Jurassic storm, never a modern one:
+• The ground is a fern-plain / floodplain / cycad-plain / bare volcanic rock (66+ million years before grasses — never turf).
+• The trees are tall araucaria (monkey-puzzle) conifers, squat cycads, giant tree-ferns, horsetails, ginkgo — the primordial flora, thrashing in the gale.
+• Every animal is a photoreal dinosaur / pterosaur with scaly hide, bony frills, plated or armored backs, or wet-matted feathers, described as adults and juveniles (reptilian, never cattle-like — never herd/bull/cow/calf/grazing/savanna; use gathering / adults / juveniles / feeding / fern-plain).
+
+🚫 NO cartoon / painted / watercolor / toy / CGI-plastic / video-game-render. 🚫 NO gore / no kill-shot / no lightning-struck-burning-animal. ✓ Photoreal cinematic 35mm storm still, ray-traced wet surfaces, hyperreal rain, PBR materials, real storm-light physics.
+
+━━━ THE STORM SCENE — THE HERO (the dinosaur reacting to the weather) ━━━
+${storm_scene}
+
+This is the star of the frame — a photoreal living animal caught mid-reaction in a real storm, drenched, braced, grounded. National-Geographic-extreme-weather candid.
+
+━━━ THE WEATHER DRAMA — THE MONEY-SHOT (render it big + vivid) ━━━
+${weather_drama}
+
+The show-stopping weather element — rain-curtain / one lightning fork / dust-wall / hail / monsoon-flood. Render it prominently.
+
+━━━ THE STORM LIGHT (the light of the storm — REPLACES normal lighting) ━━━
+${storm_light}
+
+Defines the frame's light — bruised overcast, break-light shaft, lightning-lit instant, ochre pre-storm gloom. Real storm light only.
+
+━━━ THE STORM BIOME (the drenched setting) ━━━
+${storm_biome}
+
+Multi-tier depth: tactile wet foreground (mud / splashing puddle / bent ferns) → the biome body at midground → the storm-shrouded horizon → the churning sky.
+${peakSection}━━━ SMALL STORM ACCENT (scale-prover, 2-5% of frame) ━━━
+${surprise_element}
+
+A small secondary storm detail at midground or foreground edge. NEVER the focal subject.
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SCENE-WIDE COLOR PALETTE (storm-bruised — violet-grey / slate / ochre / desaturated, wet gleam) ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION + STRUCTURE (write the prompt in this order) ━━━
+[OPENING: name the DINOSAUR from the storm scene REACTING to the weather, drenched and grounded, in the storm biome, under the weather drama — dino + reaction + weather together in the FIRST 30-40 words], [the weather drama big], [the peak event if rolled], [the storm biome multi-tier], [the small storm accent], [storm light + atmosphere], [bruised wet palette + mood]. Front-load the drenched reacting dinosaur + the dramatic weather so Flux renders both.
+
+${SPECIES_ANCHOR}
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
+
+  DINOBOT_POLAR_DINOS: ({ slots, sharedDNA, vibeDirective }) => {
+    const { atmosphere, polar_scene, ice_feature, polar_light, surprise_element, polar_phenomenon } =
+      slots;
+
+    const phenomenonSection = polar_phenomenon
+      ? `
+━━━ POLAR PHENOMENON (mandatory — render visibly) ━━━
+${polar_phenomenon}
+
+A real polar atmospheric or celestial wonder as a secondary focal point — a green aurora / sun-dog / light-pillars / diamond-dust / sea-smoke / heavy snowfall. Real polar science, never sci-fi, never magic.
+
+`
+      : '';
+
+    return `You are an IMAX nature-documentary cinematographer shooting the POLAR Mesozoic for DinoBot — a photoreal, paleo-accurate high-latitude world of snow and ice on prehistoric Earth 66+ million years before humans. Prehistoric-Planet "Ice Worlds" × BBC Frozen Planet × real paleontology. Photoreal cinematic 35mm film still. This is the bot's FIRST cool-palette path.
+
+⚠️⚠️⚠️ ABSOLUTE FIRST RULE — NO HUMANS, NO PEOPLE, NO HUMAN FIGURES ⚠️⚠️⚠️
+This is Earth 66+ million years BEFORE humans. ZERO humans, no explorers, no distant figures, nothing humanoid, no shelters, no vehicles, no tools. ANY human is a CRITICAL FAILURE.
+
+⚠️ THE COLD-WORLD PALETTE — cool, never warm (this OVERRIDES the bot's default warm look):
+The whole world is COLD — snow-white, glacial cyan, cobalt twilight, pale gold low-sun, silver. Snow blankets the ground, frost rimes every surface, breath fogs in the freezing air. This is emphatically NOT the bot's warm golden-bronze jungle — it is a snowy, icy, blue-hour polar world.
+
+⚠️ FEATHERS ARE INSULATION — describe the COAT positively (do NOT negate):
+The dinosaurs here are cold-adapted: the small and mid-size ones wear a dense, warm, shaggy insulating COAT of downy proto-feathers or filament-fuzz, often dusted with frost or fresh snow; the large ones have thick cold-hardy scaly hide whitened with frost. Describe the warm coat as a POSITIVE feature (a plush winter coat, downy filaments, frost on the plumage) — this is real paleo-accuracy, the showcase of the path.
+
+⚠️ MESOZOIC-LOCK + PALEO-ACCURACY — a real deep-time polar world, NEVER the modern Arctic:
+• The flora is snow-dusted araucaria (monkey-puzzle conifers), cold-hardy cycads, tree-ferns, ginkgo, and horsetails bowed under snow — the primordial polar flora. Never modern spruce/pine/fir forest, never bare modern tundra-moss.
+• Every animal is a photoreal polar dinosaur — for less-famous genera LEAD with the body-plan + a famous look-alike (Nanuqsaurus = a small tyrannosaur like a T-rex; Leaellynasaura = a small big-eyed ornithopod; Edmontosaurus = a duck-billed hadrosaur; Pachyrhinosaurus = a horned ceratopsian with a bony nasal boss). Adults and juveniles (reptilian, never cattle-like — never herd/bull/cow/calf/grazing).
+• The animal's eyes are dark, wet, and reptilian, holding only a small cold catch-light.
+🚫 NO modern Arctic animals — no polar bears, no seals, no penguins, no walruses, no reindeer, no mammoths. ONLY dinosaurs / pterosaurs.
+
+🚫 NO cartoon / painted / watercolor / toy / CGI-plastic / video-game-render. 🚫 NO gore / no frozen-carcass. ✓ Photoreal cinematic 35mm still, ray-traced snow + ice, hyperreal frost texture, PBR materials, real cold-light physics.
+
+━━━ THE POLAR SCENE — THE HERO (the polar dinosaur, cold-adapted) ━━━
+${polar_scene}
+
+The star of the frame — a photoreal polar dinosaur mid cold-behavior, its insulating coat or frost-rimed hide clear, integrated into the snowy landscape. National-Geographic-in-the-cold candid.
+
+━━━ THE ICE FEATURE — THE MONEY-SHOT (render it big + real) ━━━
+${ice_feature}
+
+The show-stopping ice/snow formation — blue glacier face / frozen lagoon / snow-laden boughs / sea-ice edge. Render it prominently, glacial-blue and real.
+
+━━━ THE POLAR LIGHT (the cold light — REPLACES normal lighting) ━━━
+${polar_light}
+
+Defines the frame's light — aurora / low polar sun / blue twilight / alpenglow. Cool palette. If it is an aurora, render real rippling green curtains (aurora is genuine polar science, allowed on this path).
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+${phenomenonSection}━━━ SMALL POLAR ACCENT (scale-prover, 2-5% of frame) ━━━
+${surprise_element}
+
+A small secondary cold detail at midground or foreground edge — breath-fog / tracks in snow / frost crystals. NEVER the focal subject.
+
+━━━ SCENE-WIDE COLOR PALETTE (bent COOL — snow-white / glacial cyan / cobalt / pale gold, never warm jungle) ━━━
+${sharedDNA.scenePalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION + STRUCTURE (write the prompt in this order) ━━━
+[OPENING: name the POLAR DINOSAUR (body-plan + look-alike for obscure genera) doing its cold behavior, its insulating coat / frost-rimed hide clear, in the snowy setting, under the polar light — dino + coat + cold together in the FIRST 30-40 words], [the ice feature big], [the polar phenomenon if rolled — aurora etc.], [snowy multi-tier depth], [the small polar accent], [polar light + atmosphere], [cool snow palette + mood]. Front-load the cold-adapted dinosaur + the snow/ice so Flux commits to the polar world.
+
+${SPECIES_ANCHOR}
+
+Output ONLY the raw 80-110 word scene description. Comma-separated phrases. NO preamble, NO titles, NO headers, NO ━━━ markers. Just the scene content.`;
+  },
 };

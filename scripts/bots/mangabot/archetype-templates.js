@@ -32,6 +32,272 @@ This is the AUTHORITY on rendering style for THIS render. It OVERRIDES any other
 }
 
 module.exports = {
+  MANGABOT_NIGHT_TOUGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      touge_scene,
+      hero_car,
+      motion_signature,
+      night_light,
+      camera_framing,
+      emotional_dna,
+      street_detail,
+    } = slots;
+    const detailSection = street_detail
+      ? `\n━━━ STREET DETAIL (a small grounding roadside note) ━━━\n${street_detail}\n`
+      : '';
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a NIGHT-TOUGE keyframe for MangaBot — a 90s Japanese mountain-pass / wangan night street-driving scene in the register of "Initial D". (That name is a register anchor for YOU — never write it in the output.)
+
+━━━ AESTHETIC LOCK — 90s NIGHT TOUGE ━━━
+A 90s-era Japanese sports car on a dark mountain pass or neon bay-shore highway at night, mid-drift or mid-corner. Sodium-lamp orange, dashboard glow, distant city-lights below, tire-smoke, headlight trails. SPEED READS — anime motion-lines and streaked lights are welcome. Cool, focused, nostalgic — NEVER a crash, NEVER danger-glamorized peril.
+
+⚠️ IT IS NIGHT — deep night sky, stars or dark clouds, artificial light (sodium lamps / neon / headlights) is the ONLY light. NEVER a sunset, NEVER golden-hour, NEVER daytime.
+⚠️ THE CAR IS EMPHATICALLY 80s-90s — a boxy, angular, retro Japanese sports-car silhouette with pop-up or round headlights, simple lines. NEVER a modern/sleek/aggressive-body-kit supercar, NEVER a contemporary car.
+⚠️ THE CAR IS IN MOTION — mid-drift, mid-corner, or speeding down the road with tire-smoke and streaked lights. NEVER parked, NEVER static, NEVER posed on a platform.
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+━━━ THE CAR IS NON-IP — SHAPE ONLY ━━━
+⚠️ The hero car is described by its SILHOUETTE and era only — NEVER a real make/model/brand, NO badges, NO legible license plates. A generic 90s Japanese sports-car shape.
+
+━━━ SCENE-LED COMPOSITION — THE CAR + ROAD + SPEED IS HERO ━━━
+The car in motion on the night road is the hero; NEVER a driver-face close-up or a static posed car. Deep depth, the pass/highway sweeping through the frame.
+
+━━━ THE TOUGE SCENE (the hero road/pass) ━━━
+${touge_scene}
+
+━━━ THE HERO CAR (shape only, non-IP) ━━━
+${hero_car}
+
+━━━ MOTION SIGNATURE — THE MONEY-SHOT (how the speed + drift reads) ━━━
+${motion_signature}
+
+━━━ NIGHT LIGHT ━━━
+${night_light}
+${detailSection}
+━━━ EMOTIONAL DNA (cool focus, night mood) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
+
+━━━ STRUCTURE ━━━
+[OPENING: the car mid-motion on the night pass/highway], [the non-IP car shape], [the motion-signature money-shot: drift + smoke + light-trails], [night light sources], [street detail if present], [camera_framing exactly], [sodium-orange + neon + dark palette + cool mood].
+
+CRITICAL: THE CAR + ROAD + SPEED is the HERO. Speed READS (motion-lines OK). Car is a NON-IP 90s shape — no real model/brand/plate. NO driver-face close-up, NO crash, NO legible text.
+
+Output ONLY the raw 90-120 word scene description. NO preamble.`;
+  },
+
+  MANGABOT_WINTER_ANIME: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      winter_scene,
+      snow_state,
+      warm_glow,
+      weather_air,
+      camera_framing,
+      emotional_dna,
+      figure_moment,
+    } = slots;
+    const figureSection = figure_moment
+      ? `\n━━━ FIGURE (SMALL, for scale — 5-15% of frame, engaged, NEVER a hero portrait) ━━━\n${figure_moment}\n`
+      : '';
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing a WINTER-ANIME keyframe for MangaBot — snow-country Japan in the register of "Erased" and "Laid-Back Camp" winter. (Those titles are register anchors for YOU — never write them in the output.)
+
+━━━ AESTHETIC LOCK — SNOW-COUNTRY, WARM-vs-COLD ━━━
+Fresh snow and cold blue-grey air, cut through by WARM light — glowing windows, red vending machines, paper lanterns, ice-lanterns, warm shop-signs. The warm-against-cold contrast is the soul of the frame. Cozy, hushed, nostalgic. NEVER grief.
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+${blocks.CULTURAL_RESPECT_BLOCK}
+⚠️ Torii and shrines are welcome as REVERENT snowy scenery (distant, respectful) — NEVER a close-up of anyone praying/worshipping.
+
+━━━ SCENE-LED COMPOSITION — THE SNOW + PLACE + WARM-GLOW IS HERO ━━━
+The snowy place fills the frame; any figure is a SMALL scale-prover (5-15%), never a close-up. Deep multi-tier depth, falling snow, atmospheric cold haze.
+
+━━━ THE WINTER SCENE (the hero place) ━━━
+${winter_scene}
+
+━━━ SNOW STATE — THE MONEY-SHOT (how the snow looks + moves) ━━━
+${snow_state}
+
+━━━ WARM GLOW (the warm-vs-cold light source) ━━━
+${warm_glow}
+
+━━━ WEATHER + AIR ━━━
+${weather_air}
+${figureSection}
+━━━ EMOTIONAL DNA (cozy, hushed mood) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
+
+━━━ STRUCTURE ━━━
+[OPENING: the snowy scene + place with the warm-glow source against the cold], [the snow-state money-shot], [warm-vs-cold light detail], [weather + cold air], [small figure if present, for scale], [camera_framing exactly], [cold-blue + warm-glow palette + cozy mood].
+
+CRITICAL: SNOW + PLACE + warm-glow is the HERO, warm-against-cold is the soul. Any figure is tiny, engaged, for scale — NEVER a hero portrait. Torii/shrine only as reverent scenery. NO legible text.
+
+Output ONLY the raw 90-120 word scene description. NO preamble.`;
+  },
+
+  MANGABOT_ANIME_TRAINS: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      train_scene,
+      light_moment,
+      season_air,
+      landscape_beyond,
+      camera_framing,
+      emotional_dna,
+      passenger_glimpse,
+    } = slots;
+    const passengerSection = passenger_glimpse
+      ? `\n━━━ PASSENGER GLIMPSE (SMALL, for scale — 5-15% of frame, engaged, NEVER a hero portrait) ━━━\n${passenger_glimpse}\n`
+      : '';
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing an ANIME-TRAINS keyframe for MangaBot — the classic anime train motif in the register of Makoto Shinkai's "5 Centimeters per Second" and quiet countryside Japan. (That title is a register anchor for YOU — never write it in the output.)
+
+━━━ AESTHETIC LOCK — QUIET COUNTRYSIDE ANIME TRAINS ━━━
+Real ordinary JR-style / rural single-car trains in a realistic Japanese landscape, at golden hour / blue dusk. Warm window-light vs cool sky, level-crossing signals, seaside curves, rice-field lines. Wistful, nostalgic, calm. ⚠️ This is REALISTIC Japan — NEVER a fantasy/impossible/floating train, NEVER a branded/IP livery (that impossible-worlds register belongs to a different bot; keep this one grounded and real).
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+${blocks.CULTURAL_RESPECT_BLOCK}
+
+━━━ SCENE-LED COMPOSITION — THE TRAIN + LANDSCAPE + LIGHT IS HERO ━━━
+The train scene + countryside + light fills the frame; any figure is a SMALL scale-prover (5-15%), never a close-up. Deep multi-tier depth, atmospheric distance haze.
+
+━━━ THE TRAIN SCENE (the hero) ━━━
+${train_scene}
+
+━━━ LIGHT MOMENT — THE MONEY-SHOT ━━━
+${light_moment}
+
+━━━ SEASON + AIR ━━━
+${season_air}
+
+━━━ LANDSCAPE BEYOND ━━━
+${landscape_beyond}
+${passengerSection}
+━━━ EMOTIONAL DNA (wistful, quiet mood) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
+
+━━━ STRUCTURE ━━━
+[OPENING: the train scene in its landscape under the light_moment], [the golden/dusk light detail], [season + air], [the countryside beyond], [small passenger figure if present, for scale], [camera_framing exactly], [warm-window-vs-cool-sky palette + wistful mood].
+
+CRITICAL: THE TRAIN + LANDSCAPE + LIGHT is the HERO. Any figure is tiny, engaged, for scale — NEVER a hero portrait. Real JR-style train, realistic Japan — NEVER a fantasy/impossible/floating train. NO legible text.
+
+Output ONLY the raw 90-120 word scene description. NO preamble.`;
+  },
+
+  MANGABOT_ANIME_RAIN: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      lighting,
+      atmosphere,
+      rain_scene,
+      rain_play,
+      water_reflection,
+      weather_air,
+      camera_framing,
+      emotional_dna,
+      figure_moment,
+    } = slots;
+    const figureSection = figure_moment
+      ? `\n━━━ FIGURE (SMALL, for scale — 5-15% of frame, engaged, NEVER a hero portrait) ━━━\n${figure_moment}\n`
+      : '';
+    return `${lookOverride(sharedDNA)}You are an anime concept-art painter writing an ANIME-RAIN keyframe for MangaBot — a rain-soaked Japanese scene in the register of Makoto Shinkai's "The Garden of Words" and the Japanese June rainy season (tsuyu). The RAIN is the HERO. (That title is a register anchor for YOU — never write it in the output.)
+
+━━━ AESTHETIC LOCK — GARDEN-OF-WORDS RAIN ━━━
+Lush, saturated greens and wet stone under a soft grey-silver overcast light. The rain is luminous and beautiful — beads, streaks, ripples, reflections everywhere. Quiet, tender, calm. NEVER sadness/tears (quiet beauty, not melodrama).
+
+${blocks.ANIME_ILLUSTRATION_BLOCK}
+
+${blocks.NO_NAMED_CHARACTERS_BLOCK}
+
+${blocks.NO_GENERIC_POSE_BLOCK}
+
+${blocks.CULTURAL_RESPECT_BLOCK}
+
+━━━ SCENE-LED COMPOSITION — THE RAIN + PLACE IS HERO ━━━
+The rain-soaked place fills the frame; any figure is a SMALL scale-prover (5-15%), never a close-up. Deep multi-tier depth, wet reflections, atmospheric rain-haze.
+
+━━━ THE RAIN SCENE (the hero place, rain woven through) ━━━
+${rain_scene}
+
+━━━ RAIN PLAY — THE MONEY-SHOT (how the rain catches light) ━━━
+${rain_play}
+
+━━━ WATER REFLECTION ━━━
+${water_reflection}
+
+━━━ WEATHER + AIR ━━━
+${weather_air}
+${figureSection}
+━━━ EMOTIONAL DNA (quiet mood) ━━━
+${emotional_dna}
+
+━━━ CAMERA FRAMING ━━━
+${camera_framing}
+
+${blocks.CAMERA_FRAMING_MANDATORY_BLOCK}
+
+━━━ LIGHTING ━━━ ${lighting}
+━━━ ATMOSPHERIC DETAIL ━━━ ${atmosphere}
+━━━ COLOR PALETTE ━━━ ${sharedDNA.scenePalette}
+━━━ SECONDARY LIGHTING ━━━ ${sharedDNA.colorPalette}
+━━━ MOOD ━━━ ${vibeDirective.slice(0, 150)}
+
+━━━ STRUCTURE ━━━
+[OPENING: the rain scene + place under the grey-silver rain-light], [the rain-play money-shot detail], [wet reflections], [weather/air haze], [small figure if present, for scale], [camera_framing exactly], [lush green + grey-silver palette + quiet mood].
+
+CRITICAL: THE RAIN is the HERO. Any figure is tiny, engaged, for scale — NEVER a hero portrait, NEVER back-to-camera cheese. Lush saturated greens + luminous rain + grey-silver light. NO sadness/tears. NO legible text.
+
+Output ONLY the raw 90-120 word scene description. NO preamble.`;
+  },
+
   MANGABOT_ISEKAI_FANTASY: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       scene_type,

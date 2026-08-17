@@ -13,6 +13,36 @@
  */
 
 module.exports = {
+  PIXELBOT_PIXEL_OVERWORLD: {
+    description:
+      'PATH-BESPOKE — PixelBot pixel-overworld path (Stage K3, SHADOW). The classic 16-bit JRPG WORLD-MAP screen — top-down tile continents, tiny walled towns, mountain ranges, forests as tile clusters, a ship sprite on tile sea, cloud shadows (Final Fantasy / Dragon Quest / Chrono Trigger overworld). Camera: STRAIGHT top-down world-map view (the map SCREEN, distinct from 3/4 town view + side parallax). map_features pickN:2. traveler_sprite is tiny map-scale. 3 path pools + 40%-gated map_event. Chunky repeating terrain TILE-GRID must read. NO UI/menus/labels/text.',
+    slots: { universal: [], bot: [], path: ['map_region', 'map_features', 'traveler_sprite'] },
+    pickN: { map_features: 2 },
+    conditionalLayer: { slot: 'map_event', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_RETRO_RACING: {
+    description:
+      'PATH-BESPOKE — PixelBot retro-racing path (Stage K2, SHADOW). 16-BIT ARCADE RACING (OutRun / Rad Racer / Top Gear) — a pixel sports car on a coastal highway at sunset, palm parallax, dithered horizon bands, mountain switchbacks, desert straights. horizon_bands is the MONEY-SHOT (dithered sunset gradient + parallax). Camera: behind-the-car chase view (genre signature) + occasional side-profile. Car MORPHOLOGICAL (low coupe), NO real models. 3 path pools + 40%-gated roadside_detail. 16-bit SUNSET ARCADE (NOT anime-cel night — that is MangaBot night-touge). NO text/signage.',
+    slots: { universal: [], bot: [], path: ['route_scene', 'horizon_bands', 'race_moment'] },
+    pickN: {},
+    conditionalLayer: { slot: 'roadside_detail', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  PIXELBOT_PIXEL_ITEM_SHOP: {
+    description:
+      'PATH-BESPOKE — PixelBot pixel-item-shop path (Stage K1, SHADOW). 16-BIT COZY RPG SHOP/TAVERN INTERIOR gameplay screenshot — Moonlighter / Recettear item-shops, cozy taverns/inns, blacksmith forges, magic libraries; shopkeeper sprite + adventurer customer. shelf_density is the MONEY-SHOT (countable readable PICTORIAL wares). Camera: interior side-view OR 3/4-iso, NEVER first-person. 3 path pools + 40%-gated cozy_phenomenon. NO text/signage/price-tags (pictorial only), NO IP names.',
+    slots: { universal: [], bot: [], path: ['shop_locale', 'shelf_density', 'keeper_customer_life'] },
+    pickN: {},
+    conditionalLayer: { slot: 'cozy_phenomenon', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   PIXELBOT_PIXEL_HORROR: {
     description:
       'PATH-BESPOKE — PixelBot pixel-horror path (2026-05-20 axis-system migration). 16-BIT GOTHIC-ACTION GAMEPLAY SCREENSHOTS — Castlevania / Ghosts n Goblins / Demon Crest / Splatterhouse / Rondo of Blood / Bloodstained pixel. CLASSIC gothic monster-slaying (NOT psychological horror). Camera flexibility per setting (side-view / 3/4-iso / top-down). Single-hero monster-slayer (genre-correct). 4 mandatory elements (gothic setting + classic enemy + hero knight-sprite + gothic-flavor props). 3 path-bespoke pools + 40%-gated props.',

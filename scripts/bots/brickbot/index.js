@@ -37,6 +37,9 @@ const pathBuilders = {
   forest: require('./paths/forest'),
   landscape: require('./paths/landscape'),
   'lego-landscapes': require('./paths/lego-landscapes'),
+  'lego-city': require('./paths/lego-city'), // Stage B1 SHADOW
+  'lego-trains': require('./paths/lego-trains'), // Stage B2 SHADOW
+  'haunted-brick': require('./paths/haunted-brick'), // Stage B3 SHADOW
 };
 
 module.exports = {
@@ -96,6 +99,15 @@ module.exports = {
     // (2026-05-27) — Kevin's hearted island renders used exactly this style block.
     'crazy-islands':
       'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge tack-sharp, expansive establishing shot, everything in crisp focus',
+    // lego-city (SHADOW): wide-establishing modern City MOC — deep-focus prefix so
+    // the whole build (downtown block, harbor, callout) reads front-to-back as LEGO,
+    // countering Flux's tilt-shift/diorama bias on street scenes.
+    'lego-city':
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
+    // lego-trains (SHADOW): wide-establishing rail MOC — deep-focus so the whole
+    // train + viaduct reads front-to-back as brick, countering tilt-shift/diorama bias.
+    'lego-trains':
+      'cinematic widescreen film frame, deep focus front-to-back, edge-to-edge sharpness, expansive establishing shot',
     // fantasy: NO deep-focus prefix — tilt-shift retained per playbook lesson 1
     // (Flux's "fantasy" training prior is heavily Hollywood-photoreal; tilt-shift
     // is the structural signal that "everything in frame is the LEGO model").
@@ -105,13 +117,20 @@ module.exports = {
 
   paths: pools.PATHS,
 
+  // Dark-launched paths — renderable via `iter-bot --mode <path> --post`
+  // (shadow posts, admin-only), NOT in live rotation until promoted into PATHS.
+  shadowPaths: [], // Stage B paths promoted to live rotation 2026-08-16
+
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
 
   chaos: {
     enabled: true,
-    skipPaths: [],
+    // Stage B shadow paths ran with chaos OFF (they weren't in allowSubjectChaosPaths
+    // = pools.PATHS while shadow). Now they're in PATHS, so skip them explicitly to
+    // preserve the exact approved-shadow behavior (XEROX — do not newly-apply chaos).
+    skipPaths: ['lego-city', 'lego-trains', 'haunted-brick'],
     allowSubjectChaosPaths: pools.PATHS,
   },
 
@@ -139,6 +158,9 @@ module.exports = {
       'girly',
       'lego-masters',
       'lego-landscapes',
+      'lego-city',
+      'lego-trains',
+      'haunted-brick',
     ],
   },
 

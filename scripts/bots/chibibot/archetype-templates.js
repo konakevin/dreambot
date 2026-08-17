@@ -1124,6 +1124,87 @@ WIDE ESTABLISHING SHOT, camera pulled WAY back — cottagecore-village fills 70-
 Open with: "[creature] [activity verb-phrase], [cottagecore-village] spanning behind, [biome lighting]..." then unfold. Output ONLY the raw Flux prompt, one flowing paragraph of comma-separated phrases, 90-120 words MAX — count them; a tight readable scene beats a crammed one. No labels, headers, or ━━━ markers.`;
   },
 
+  CHIBIBOT_SKY_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
+    const {
+      creature,
+      resident_activity,
+      village,
+      village_detail,
+      time_of_day,
+      surprise_element,
+      phenomenon,
+      lighting,
+      atmosphere,
+      weather,
+    } = slots;
+    const phenomenonFires = Math.random() < 0.6;
+    const detailList = Array.isArray(village_detail) ? village_detail : [village_detail];
+    const detailBlock = detailList
+      .filter(Boolean)
+      .map((d, i) => `${i + 1}. ${d}`)
+      .join('\n');
+    const phenomenonBlock = phenomenonFires
+      ? `\n\n━━━ ENVIRONMENTAL PHENOMENON (stack on top of everything else) ━━━\n${phenomenon}`
+      : '';
+
+    return `${lookOverride(sharedDNA)}You are writing a COZY SKY-VILLAGE scene for ChibiBot — a SOLO foreground creature doing a story-driven activity with a whimsical CLOUD-KINGDOM village spanning behind them. Studio Ghibli Castle-in-the-Sky / Kiki painterly storybook aesthetic. Viewer reaction: "I want to live in that cloud village." Output wraps with style prefix + suffix.
+
+CORE RULES: "I want to live in that village" wholesome longing. Modern Pixar CGI: painterly subsurface-scattering, painterly bokeh; chibi proportions. The creature is mid-action, never posing. NO humans of any kind — creatures only.
+
+━━━ ⚠ HARD RULE #1: THE CLOUD-VILLAGE + OPEN SKY FILL THE FRAME, THE CREATURE IS A TINY SPECK ━━━
+WIDE ESTABLISHING AERIAL SHOT, camera pulled WAY back high in the open sky — the cloud-kingdom architecture (cottages on cloud-tufts, rainbow bridges, balloon docks, star-lamp posts, floating grassy sky-islands, cloud-castles) plus the vast open sky and cloud-sea fill 80-90% of the frame across foreground/midground/background. The SOLO creature is a TINY speck (8-12% of frame at most), dwarfed by the enormous cloud-village and endless sky — the eye reads the WHOLE SKY-VILLAGE first, then discovers the tiny creature standing on a distant bridge or little island. ⚠️ HARD BAN — if the creature is large, close-up, chest-up, or centered as the hero, you have FAILED: it must be small and off-to-the-side, a scale-prover in a huge airy scene. Open with the creature + activity but keep it SMALL, THEN the vast cloud-village, e.g. "a tiny chibi cat-creature mid-step across a distant rope-and-plank rainbow bridge, dwarfed by cottages perched on billowing cloud-tufts cascading across an endless golden cloud-sea..."
+
+━━━ ⚠ HARD RULE #2: A KINGDOM FLOATING HIGH ABOVE AN ENDLESS CLOUD-SEA (never grounded) ━━━
+This whole world FLOATS in the open sky, high above an endless sea of clouds — a sky far above the ground, NOT a village on the earth. Cottages perch on billowing cloud-tufts and floating grassy sky-islands (with waterfalls spilling off their edges into the cloud-sea far below); rope-and-plank rainbow bridges link the floating islands across open air; tethered pastel balloons bob at little docks; star-lamp posts glow. Clouds read SOFT-SOLID and whimsical (storybook dream-physics — you can stand on a cloud here). NEVER a grounded village, NEVER a village on solid earth/hills/a forest floor — the ground is the CLOUD-SEA and open sky in every direction. NO airplanes, NO jets, NO rockets, NO modern tech. Bright, wondrous, dreamy — NEVER dark/stormy.
+
+━━━ THE FOREGROUND CREATURE ━━━
+${creature}
+
+━━━ THE CREATURE'S STORY ACTIVITY ━━━
+${resident_activity}
+
+━━━ THE SKY-VILLAGE (spans behind the creature) ━━━
+${village}
+
+━━━ THREE SKY-VILLAGE DETAILS (populate the village with lived-in richness) ━━━
+${detailBlock}
+
+━━━ VILLAGE DENSITY ━━━
+Densely lived-in, never a sparse postcard — many cloud-cottages at varying depths with evidence of routine (star-flower window-boxes, laundry between floating balconies, tethered balloons, lanterns strung between cottages), so the viewer keeps finding new details.
+
+━━━ CUTENESS AMPLIFICATION ━━━
+Stack cozy sky effects: golden light on billowing cloud-tops, drifting cloud-sheep, rainbow-bridge arcs, star-lamp glow, floating lanterns, waterfalls misting off island edges, tiny paper-birds wheeling, pastel balloons bobbing, star-flowers spilling from window-boxes.
+
+━━━ TIME OF DAY ━━━
+${time_of_day}
+
+━━━ WEATHER ━━━
+${weather}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ ATMOSPHERIC DETAIL ━━━
+${atmosphere}
+
+━━━ SURPRISE ELEMENT (second-tier detail) ━━━
+${surprise_element}${phenomenonBlock}
+
+━━━ SCENE-WIDE COLOR PALETTE ━━━
+${sharedDNA.scenePalette}
+
+━━━ SECONDARY LIGHTING VIBE ━━━
+${sharedDNA.colorPalette}
+
+━━━ MOOD CONTEXT ━━━
+${vibeDirective.slice(0, 150)}
+
+━━━ COMPOSITION ━━━
+WIDE ESTABLISHING SHOT, camera pulled WAY back — cloud-village fills 70-85% across foreground/midground/background, the creature a SMALL 8-15% scale-prover (not close-up, not centered portrait). Eye reads VILLAGE FIRST, then the tiny creature. Three village-details across the architecture, surprise element tucked in the deep midground.
+
+Open with: "[creature] [activity verb-phrase], [sky-village] spanning behind, [sky lighting]..." then unfold. Output ONLY the raw Flux prompt, one flowing paragraph of comma-separated phrases, 90-120 words MAX — count them; a tight readable scene beats a crammed one. No labels, headers, or ━━━ markers.`;
+  },
+
   CHIBIBOT_SUNNY_VILLAGE: ({ slots, sharedDNA, vibeDirective }) => {
     const {
       creature,

@@ -106,6 +106,41 @@ module.exports = {
   BLOOMBOT_FLOWER_ARRANGEMENT_WHIMSY: loadIfExists('bloombot_flower_arrangement_whimsy'),
   // ─── desert-bloom path (2026-05-19) — southwest desert + wildflower explosion ───
   BLOOMBOT_DESERT_BLOOM_DESERT_ANCHOR: loadIfExists('bloombot_desert_bloom_desert_anchor'),
+
+  // water-garden (Stage A1) — still-water mirror pond
+  BLOOMBOT_WATER_GARDEN_WATER_BODY: loadIfExists('bloombot_water_garden_water_body'),
+  BLOOMBOT_WATER_GARDEN_WATER_FLORA: loadIfExists('bloombot_water_garden_water_flora'),
+  BLOOMBOT_WATER_GARDEN_REFLECTION: loadIfExists('bloombot_water_garden_reflection'),
+  BLOOMBOT_WATER_GARDEN_BANK_PLANTING: loadIfExists('bloombot_water_garden_bank_planting'),
+  BLOOMBOT_WATER_GARDEN_WATER_LIFE: loadIfExists('bloombot_water_garden_water_life'),
+
+  // flower-fields (Stage A2) — cultivated geometric mega-field
+  BLOOMBOT_FLOWER_FIELDS_GEOMETRY: loadIfExists('bloombot_flower_fields_geometry'),
+  BLOOMBOT_FLOWER_FIELDS_CROP_BLOOM: loadIfExists('bloombot_flower_fields_crop_bloom'),
+  BLOOMBOT_FLOWER_FIELDS_VANTAGE: loadIfExists('bloombot_flower_fields_vantage'),
+  BLOOMBOT_FLOWER_FIELDS_BACKDROP: loadIfExists('bloombot_flower_fields_backdrop'),
+  BLOOMBOT_FLOWER_FIELDS_EVENT: loadIfExists('bloombot_flower_fields_event'),
+
+  // moon-garden (Stage A3) — moonlit night garden of pale bloomers
+  BLOOMBOT_MOON_GARDEN_SETTING: loadIfExists('bloombot_moon_garden_setting'),
+  BLOOMBOT_MOON_GARDEN_NIGHT_BLOOM: loadIfExists('bloombot_moon_garden_night_bloom'),
+  BLOOMBOT_MOON_GARDEN_MOONLIGHT_EFFECT: loadIfExists('bloombot_moon_garden_moonlight_effect'),
+  BLOOMBOT_MOON_GARDEN_NIGHT_SKY: loadIfExists('bloombot_moon_garden_night_sky'),
+  BLOOMBOT_MOON_GARDEN_NIGHT_LIFE: loadIfExists('bloombot_moon_garden_night_life'),
+
+  // rain-garden (Stage A4) — storm-drenched saturated blooms
+  BLOOMBOT_RAIN_GARDEN_SCENE: loadIfExists('bloombot_rain_garden_scene'),
+  BLOOMBOT_RAIN_GARDEN_RAIN_STATE: loadIfExists('bloombot_rain_garden_rain_state'),
+  BLOOMBOT_RAIN_GARDEN_WET_DETAIL: loadIfExists('bloombot_rain_garden_wet_detail'),
+  BLOOMBOT_RAIN_GARDEN_STORM_LIGHT: loadIfExists('bloombot_rain_garden_storm_light'),
+  BLOOMBOT_RAIN_GARDEN_STORM_EVENT: loadIfExists('bloombot_rain_garden_storm_event'),
+
+  // great-blossom-tree (Stage A5) — one colossal flowering tree
+  BLOOMBOT_GREAT_BLOSSOM_TREE_FORM: loadIfExists('bloombot_great_blossom_tree_form'),
+  BLOOMBOT_GREAT_BLOSSOM_TREE_CANOPY: loadIfExists('bloombot_great_blossom_tree_canopy'),
+  BLOOMBOT_GREAT_BLOSSOM_TREE_ROOT_WORLD: loadIfExists('bloombot_great_blossom_tree_root_world'),
+  BLOOMBOT_GREAT_BLOSSOM_TREE_SEASON_LIGHT: loadIfExists('bloombot_great_blossom_tree_season_light'),
+  BLOOMBOT_GREAT_BLOSSOM_TREE_CANOPY_EVENT: loadIfExists('bloombot_great_blossom_tree_canopy_event'),
   BLOOMBOT_DESERT_BLOOM_BLOOM_EXPLOSION: loadIfExists('bloombot_desert_bloom_bloom_explosion'),
   BLOOMBOT_DESERT_BLOOM_ATMOSPHERIC_MAGIC: loadIfExists('bloombot_desert_bloom_atmospheric_magic'),
   // desert-safe lighting subset (filters out rainstorm/snowstorm/ice/underwater/etc.)

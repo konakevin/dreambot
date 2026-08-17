@@ -55,6 +55,15 @@ module.exports = {
   TINY_JOURNEY_BEATS: load('tiny_journey_beats'),
   TINY_WORLDS: load('tiny_worlds'),
   TINY_CREW: load('tiny_crew'),
+  // Stage N (SHADOW) — festival/village scene paths, each SCENE + cute critter
+  // CAST (verb-led, cute-only allow-list). Scene = the layered constructed
+  // world; cast = warm life dropped in ~75%/~35%.
+  TINY_WINTER_VILLAGE: load('tiny_winter_village'),
+  TINY_WINTER_VILLAGE_CAST: load('tiny_winter_village_cast'),
+  TINY_NIGHT_MARKET: load('tiny_night_market'),
+  TINY_NIGHT_MARKET_CAST: load('tiny_night_market_cast'),
+  TINY_CARNIVAL: load('tiny_carnival'),
+  TINY_CARNIVAL_CAST: load('tiny_carnival_cast'),
   TILT_SHIFT_LIGHTING: load('tilt_shift_lighting'),
   ATMOSPHERES: load('atmospheres'),
   SCENE_PALETTES: load('scene_palettes'),

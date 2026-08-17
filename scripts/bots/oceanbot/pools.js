@@ -122,6 +122,22 @@ module.exports = {
   REEF_SCENES: load('reef_scenes'),
   REEF_CAMERA_FRAMING: load('reef_camera_framing'),
 
+  // ── kelp-forest path-bespoke pools (Stage J1 — green giant-kelp cathedral) ──
+  KELP_FOREST_SCENE: load('kelp_forest_scene'),
+  KELP_FOREST_CANOPY_LIGHT: load('kelp_forest_canopy_light'),
+  KELP_FOREST_CAMERA_FRAMING: load('kelp_forest_camera_framing'),
+
+  // ── lighthouse-storms path-bespoke pools (Stage J3 — above-water) ──
+  LIGHTHOUSE_SCENES: load('lighthouse_scenes'),
+  LIGHTHOUSE_WAVE_IMPACT: load('lighthouse_wave_impact'),
+  LIGHTHOUSE_STORM_SKY: load('lighthouse_storm_sky'),
+  LIGHTHOUSE_CAMERA_FRAMING: load('lighthouse_camera_framing'),
+
+  // ── sea-caves path-bespoke pools (Stage J4 — Blue-Grotto register) ──
+  SEA_CAVE_SCENES: load('sea_cave_scenes'),
+  SEA_CAVE_LIGHT_WINDOW: load('sea_cave_light_window'),
+  SEA_CAVE_CAMERA_FRAMING: load('sea_cave_camera_framing'),
+
   // ── polar-seas path-bespoke pools (9th path, 4th scenic — Arctic /
   // ── Antarctic ocean with ice formations + polar wildlife + aurora.
   // ── NO SHIPS, NO PEOPLE — those are covered by other paths.) ──

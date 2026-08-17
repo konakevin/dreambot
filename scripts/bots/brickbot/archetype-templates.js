@@ -1129,6 +1129,237 @@ ${vibeDirective.slice(0, 200)}
 Write 130-180 words. Single paragraph. Comma-separated phrase string. Lead with the subject_focus + scene + minifig action + camera framing, weave in the build technique + register + props + lighting + palette + woodland phenomenon (if fired). End with one phrase reinforcing AFOL convention-tier LEGO MOC diorama photography. NO preamble, NO ━━━ markers, NO **bold**, NO numbered output, NO "render as" trailer. Pure Flux-feed phrase string.`;
   },
 
+  BRICKBOT_LEGO_CITY: ({ slots, vibeDirective }) => {
+    const {
+      scene_type,
+      minifig_action,
+      build_technique,
+      camera_framing,
+      vehicle_class,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      city_event,
+    } = slots;
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+    const eventSection = city_event
+      ? `\n━━━ CITY EVENT (this render's environmental beat) ━━━\n${city_event}\n\nWeave this in as a SECONDARY focal point, rendered in brick parts (trans-stud fireworks / trans-blue stud water-spray / swinging brick load / round-plate confetti / brick-manhole steam). It AMPLIFIES the moment, never eclipses the scene + minifig action.\n`
+      : '';
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a MODERN LEGO CITY diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER, NOT OFFICIAL SET PHOTO ━━━
+This is a Bricklink AFOL champion's modern LEGO City diorama, photographed at a LEGO World convention — Brickworld Best-of-Show tier. NOT a stock photo from Lego.com, NOT a kid's playset. Obsessively detailed: every brick intentional, every minifig mid-action, every prop telling a city story. Visual canon: modern LEGO City (Fire / Police / Construction / Harbor / Octan / City Square) + the collector-grade Modular Buildings line (Café Corner, Green Grocer, Assembly Square) + the Bricklink City-MOC community. No real brand logos, no readable text, no licensed IP — generic LEGO City only. NEVER Star Wars, never hard-SF.
+
+━━━ EVERYTHING IS BRICK — INCLUDING THE STREET, GLASS, WATER + FOLIAGE ━━━
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), a tabletop convention display. Anti-photoreal is CRITICAL for a modern-city subject: asphalt = grey road-plates + tile, glass/windows = trans-clear + trans-color plates behind brick mullions, water = trans-blue studs/plates, concrete = grey brick-slabs, foliage = plant-elements + plate hedges, rooftops = greebled small parts. Never photoreal/CGI, no real humans: every figure is a tiny LEGO minifigure (firefighter / police / construction / civilian), molded-plastic.
+
+━━━ THE SCENE STAGE ━━━
+${scene_type}
+
+━━━ THE MINIFIG ACTION — STORY BEAT MANDATE (no posing) ━━━
+${minifig_action}
+
+A freeze-frame of a STORY HAPPENING — verbs, consequences, reactions (mid-rescue / mid-pour / mid-arrest / mid-market-rush). NEVER minifigs standing around. Render the cause + action + reaction in one frame.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render it visibly) ━━━
+${build_technique}
+
+Render the technique visibly — modular facades with lit interiors, SNOT sidewalks, greebled rooftops, brick street furniture. Viewers should clock the AFOL cleverness from across the room.
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply the exact position + orientation, even if Flux's "LEGO photography" prior wants to center a minifig front-facing. Override that bias hard.
+
+⚠️ MINIFIG POSE & ORIENTATION VARIETY MANDATE — fight the "minifig facing camera at center" default:
+  • OVER-SHOULDER → focal minifig from BEHIND, looking past them
+  • WORM'S-EYE / UPSHOT → minifigs from below, foreshortened
+  • OVERHEAD / DOWNSHOT / CRANE → top-down, minifigs from above
+  • SIDE-ON / PROFILE → figure in side-profile, NOT front-facing
+  • THROUGH-A-WINDOW / POV → framed past foreground, NOT a figure facing you
+  • WIDE / ESTABLISHING → ensemble of multiple minifigs at varied positions, NOT one centered figure
+  • RECEDING / DEEP-STREET → figures at midground/deep, NOT close-up dominant
+  • Avoid centered eye-level front-facing as the default — the Flux-bias trap.
+
+━━━ THE SUBJECT-CLASS (City vehicle OR no-vehicle street focus) ━━━
+${vehicle_class}
+
+⚠️ If the entry STARTS WITH "NO-VEHICLE (...)" — render the bracketed street focus as the SUBJECT with ZERO vehicles in frame; the minifig action is the subject, the camera framing dictates the composition. Otherwise the brick City vehicle is a hero element in the scene, parts-built with visible studs.
+
+━━━ THE REGISTER (era/theme lock) ━━━
+${register}
+
+━━━ SCENE PROPS (small diorama fill — render both) ━━━
+${propLines}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY the 130-180 word comma-separated Flux phrase-string. Single paragraph, no labels/markers. Open with the camera framing + the city scene.`;
+  },
+
+  BRICKBOT_LEGO_TRAINS: ({ slots, vibeDirective }) => {
+    const {
+      train_consist,
+      trackwork,
+      route_biome,
+      station_life,
+      camera_framing,
+      build_technique,
+      lighting,
+      palette,
+      rail_event,
+    } = slots;
+    const eventSection = rail_event
+      ? `\n━━━ RAIL EVENT (this render's environmental beat) ━━━\n${rail_event}\n\nWeave this in as a SECONDARY focal point, rendered in brick parts (white cloud-slope steam / trans-red flashing crossing studs / trans-orange spark studs / white snow-plate plume). It AMPLIFIES the moment, never eclipses the train + trackwork.\n`
+      : '';
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a LEGO TRAIN diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER, NOT OFFICIAL SET PHOTO ━━━
+This is a Bricklink AFOL champion's LEGO train layout, photographed at a LEGO World convention — Brickworld Best-of-Show tier. NOT a stock photo from Lego.com, NOT a kid's playset. Obsessively detailed: every brick intentional, the rolling stock and trackwork museum-grade, the whole layout telling a railway story. Visual canon: LEGO Trains + LEGO City rail (the Emerald Night steam express, City cargo/passenger trains, classic Town trains) + the Bricklink train-MOC community. No real railway brand names, no readable text, no licensed IP — generic LEGO trains only. NEVER Star Wars, never hard-SF, never real-world model-railroad realism.
+
+━━━ EVERYTHING IS BRICK — INCLUDING THE TRACK, TERRAIN, WATER + FOLIAGE ━━━
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), a tabletop convention display. Anti-photoreal is CRITICAL, and the ROLLING STOCK especially must read as brick, NEVER as an HO-scale metal model-railway: the train is studded plate-and-brick with visible seams. Track = studded LEGO rails on plate sleepers + ballast-tile, stone = stone-profile bricks, water = trans-blue studs/plates, foliage = plant-elements, snow = white plate/tile, mountains = grey slope-bricks. Never photoreal/CGI, no real humans: every figure is a tiny LEGO minifigure (passenger / conductor / signaller / dockhand), molded-plastic.
+
+━━━ THE TRAIN CONSIST — THE HERO (render it as the star) ━━━
+${train_consist}
+
+The locomotive and its cars are the STAR of the frame — brick-built, studs visible along the rolling stock. NEVER a smooth HO-scale metal model. Especially for a SLEEK MODERN / HIGH-SPEED consist: keep it emphatically brick — a studded roofline, visible plate seams down the flanks, tile-clad sloped-brick nose, molded-plastic sheen — a LEGO high-speed MOC, never a real photoreal bullet train.
+
+━━━ THE TRACKWORK — THE MONEY-SHOT (render it big + impressive) ━━━
+${trackwork}
+
+This is the show-stopping brick structure the train is crossing — render it as a jaw-dropping AFOL centerpiece (studded stone-brick viaduct / horseshoe curve / drawbridge / spiral helix / truss-bridge). Viewers should clock the engineering from across the room.
+
+━━━ THE ROUTE BIOME (the all-brick landscape it runs through) ━━━
+${route_biome}
+
+Every natural element is a brick part — slope-brick hills, plant-element trees, trans-plate water. The scenery frames the line, never photoreal terrain.
+
+━━━ THE STATION LIFE — MINIFIG STORY BEAT MANDATE (no posing) ━━━
+${station_life}
+
+A freeze-frame of a STORY HAPPENING — verbs, consequences (mid-boarding / mid-load / mid-crossing / mid-signal). NEVER minifigs standing around. If the camera is a wide train-hero shot, the minifig beat is a SECONDARY human touch on the platform.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render it visibly) ━━━
+${build_technique}
+
+Render the technique visibly — studded track on plate sleepers, SNOT-smooth loco bodywork, brick valve-gear, stone-brick arches, trans-plate carriage windows.
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply the exact position + orientation, even if Flux's "LEGO photography" prior wants to center a minifig front-facing. Override that bias hard. The TRAIN + TRACKWORK lead the frame; minifigs are supporting.
+
+⚠️ POSE & ORIENTATION VARIETY MANDATE — fight the "figure facing camera at center" default:
+  • LOW TRACKSIDE PASS → the locomotive in three-quarter view, wagons receding
+  • DOWN-THE-RAILS / TELEPHOTO → compressed vanishing-point along the track
+  • AERIAL / ACROSS-THE-VALLEY → the whole train + viaduct small in an epic landscape
+  • CAB POV / OVER-SHOULDER → forward down the line over the boiler
+  • WORM'S-EYE UNDER-BRIDGE → the train crossing the girders overhead
+  • PLATFORM-LEVEL → along the coach doors, minifigs at varied positions
+  • Avoid centered eye-level front-facing as the default — the Flux-bias trap.
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY the 130-180 word comma-separated Flux phrase-string. Single paragraph, no labels/markers. Open with the camera framing + the train crossing the trackwork.`;
+  },
+
+  BRICKBOT_HAUNTED_BRICK: ({ slots, vibeDirective }) => {
+    const {
+      scene_type,
+      minifig_action,
+      build_technique,
+      camera_framing,
+      subject_focus,
+      register,
+      scene_props,
+      lighting,
+      palette,
+      apparition,
+    } = slots;
+    const props = Array.isArray(scene_props) ? scene_props : [scene_props];
+    const propLines = props.map((p, i) => `  ${i + 1}. ${p}`).join('\n');
+    const eventSection = apparition
+      ? `\n━━━ APPARITION (this render's spooky-fun supernatural beat) ━━━\n${apparition}\n\nWeave this in as a SECONDARY focal point, rendered in brick + trans elements (trans-white smiling ghost / glow-brick pulse / brick bat-swarm / trans-green cauldron-smoke). PLAYFUL, never scary — it AMPLIFIES the fun, never eclipses the scene + minifig action.\n`
+      : '';
+    return `You are a LEGO MOC photographer + AFOL convention judge writing a SPOOKY-FUN LEGO HALLOWEEN diorama description for BrickBot. Output is a 130-180 word comma-separated phrase string for Flux. NO preamble, NO labels, NO bullets, NO ━━━ markers, NO **bold**, NO numbered output. Single paragraph.
+
+━━━ THE BAR — AFOL CONVENTION TIER, NOT OFFICIAL SET PHOTO ━━━
+This is a Bricklink AFOL champion's spooky-FUN LEGO Halloween diorama, photographed at a LEGO World convention — Brickworld Best-of-Show tier. NOT a stock photo from Lego.com, NOT a kid's playset. Obsessively detailed: every crooked brick intentional, every minifig mid-action, every prop telling a Halloween story. Visual canon: LEGO Creator Haunted House (10273) + Hidden Side + Monster Fighters + Scooby-Doo cartoon-haunt. No real brand logos, no readable text, no licensed IP — generic LEGO Halloween only. NEVER Star Wars, never hard-SF.
+
+━━━ CUTE-SPOOKY, NEVER HORROR — THE #1 RULE ━━━
+This is PLAYFUL Halloween: bright accents, smiling ghosts, comic frights, toy-cute monsters. ABSOLUTELY NO gore, NO blood, NO realistic corpses, NO genuine horror, NO grim darkness. GothBot owns real gothic; this path stays cheerful and fun (Scooby-Doo, not a horror film). Every monster minifig smiles.
+
+━━━ EVERYTHING IS BRICK — INCLUDING WALLS, GLASS, WEBS + TREES ━━━
+Every element is brick-built (visible studs on flat surfaces, molded plastic, connection seams), a tabletop convention display. Anti-photoreal is CRITICAL: walls = crooked SNOT-tilted brick, glass/windows = trans-neon-green + trans-color plates, cobwebs = trans-white web-elements, trees = plant-element branches, pumpkins = brick jack-o-lantern heads with trans-orange glow-bricks. Never photoreal/CGI, no real humans: every figure is a tiny LEGO minifigure (costumed kid / smiling ghost / green witch / friendly skeleton), molded-plastic.
+
+━━━ THE SCENE STAGE ━━━
+${scene_type}
+
+━━━ THE MINIFIG ACTION — STORY BEAT MANDATE (no posing) ━━━
+${minifig_action}
+
+A freeze-frame of a spooky-FUN STORY HAPPENING — verbs, comic reactions (mid-trick-or-treat / mid-carve / mid-ghost-chase / mid-spooked-jump). NEVER minifigs standing around. Render the cause + action + reaction in one frame.
+
+━━━ THE MOC BUILD TECHNIQUE — AFOL DISTINGUISHER (render it visibly) ━━━
+${build_technique}
+
+Render the technique visibly — crooked tilted walls, cobweb-elements, glow-brick windows, gnarled brick trees, carved jack-o-lanterns. Viewers should clock the AFOL cleverness from across the room.
+
+━━━ THE CAMERA FRAMING — MANDATORY DRIVING AXIS ━━━
+${camera_framing}
+
+⚠️ NON-NEGOTIABLE — the rolled camera angle DRIVES the composition. Apply the exact position + orientation, even if Flux's "LEGO photography" prior wants to center a minifig front-facing. Override that bias hard.
+
+⚠️ KEEP THE TILT-SHIFT / TABLETOP-MINIATURE LOOK — this is an intimate spooky diorama, NOT a wide deep-focus establishing shot; the miniature-model tilt-shift feel is the "everything is LEGO" signal here.
+
+⚠️ MINIFIG POSE & ORIENTATION VARIETY MANDATE — fight the "minifig facing camera at center" default:
+  • OVER-SHOULDER → focal minifig from BEHIND, looking past them
+  • WORM'S-EYE / UPSHOT → minifigs from below, foreshortened
+  • OVERHEAD / DOWNSHOT → top-down, minifigs from above
+  • SIDE-ON / PROFILE → figure in side-profile, NOT front-facing
+  • THROUGH-DOORWAY / COBWEBS → framed past foreground, NOT a figure facing you
+  • Avoid centered eye-level front-facing as the default — the Flux-bias trap.
+
+━━━ THE SUBJECT-CLASS (haunted structure OR no-structure focus) ━━━
+${subject_focus}
+
+⚠️ If the entry STARTS WITH "NO-STRUCTURE (...)" — render the bracketed focus (pumpkin-patch / graveyard / cauldron cluster) as the SUBJECT with no dominant building; the minifig action + camera framing dictate the composition. Otherwise the crooked brick haunted STRUCTURE is the hero element.
+
+━━━ THE REGISTER (theme/heritage lock) ━━━
+${register}
+
+━━━ SCENE PROPS (small diorama fill — render both) ━━━
+${propLines}
+
+━━━ LIGHTING ━━━
+${lighting}
+
+━━━ PALETTE ━━━
+${palette}
+${eventSection}
+━━━ MOOD ━━━
+${(vibeDirective || '').slice(0, 200)}
+
+Output ONLY the 130-180 word comma-separated Flux phrase-string. Single paragraph, no labels/markers. Open with the camera framing + the spooky-fun scene. Keep it CUTE-spooky, never scary.`;
+  },
+
   BRICKBOT_SPACE: ({ slots, vibeDirective }) => {
     const {
       scene_type,

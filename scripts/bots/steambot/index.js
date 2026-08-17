@@ -29,6 +29,10 @@ const pathBuilders = {
   'cozy-steampunk': require('./paths/cozy-steampunk'),
   'steampunk-labs': require('./paths/steampunk-labs'),
   'steampunk-hybrid': require('./paths/steampunk-hybrid'),
+  'nautilus-depths': require('./paths/nautilus-depths'), // Stage M1 SHADOW
+  'celestial-observatory': require('./paths/celestial-observatory'), // Stage M2 SHADOW
+  'clocktower-heart': require('./paths/clocktower-heart'), // Stage M3 SHADOW
+  'skydock-harbor': require('./paths/skydock-harbor'), // Stage M4 SHADOW
 };
 
 // THE SteamBot look — crisp + vivid + cinematic. NO "hyperreal" / "photoreal"
@@ -101,7 +105,15 @@ const STEAMBOT_LOOK_PATHS = new Set([
   'cozy-steampunk',
   'steampunk-labs',
   'steampunk-hybrid',
+  'nautilus-depths', // Stage M1 SHADOW
+  'celestial-observatory', // Stage M2 SHADOW
+  'clocktower-heart', // Stage M3 SHADOW
+  'skydock-harbor', // Stage M4 SHADOW
 ]);
+
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const STEAM_SHADOW_PATHS = ['nautilus-depths', 'celestial-observatory', 'clocktower-heart', 'skydock-harbor'];
 
 // Per-render LOOK override block, prepended to the brief in buildBrief. Strong
 // STYLE-AUTHORITY wording (MangaBot lesson) so it beats any baked style phrase
@@ -148,6 +160,10 @@ module.exports = {
     'steam-transport': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'steampunk-labs': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
     'cozy-steampunk': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'],
+    'nautilus-depths': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M1 SHADOW
+    'celestial-observatory': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M2 SHADOW
+    'clocktower-heart': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M3 SHADOW
+    'skydock-harbor': ['black-forest-labs/flux-1.1-pro', 'black-forest-labs/flux-1.1-pro-ultra'], // Stage M4 SHADOW
   },
 
   // SteamBot's custom medium keys. Bot-internal — do NOT exist in
@@ -272,7 +288,17 @@ module.exports = {
     'cozy-steampunk',
     'steampunk-labs',
     'steampunk-hybrid',
+    // Stage M — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — polish stays OFF via STEAM_SHADOW_PATHS in skipPaths,
+    // chaos already off (not in allowSubjectChaosPaths); look/medium/model kept).
+    'nautilus-depths',
+    'celestial-observatory',
+    'clocktower-heart',
+    'skydock-harbor',
   ],
+
+  // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
+  shadowPaths: [], // Stage M paths promoted to live 2026-08-16 (STEAM_SHADOW_PATHS const retained — still drives the polish-OFF skip list below)
 
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
@@ -312,6 +338,7 @@ module.exports = {
       'steam-transport',
       'cozy-steampunk',
       'steampunk-labs',
+      ...STEAM_SHADOW_PATHS, // nautilus-depths (SHADOW) — axis path, polish OFF
     ],
     polishedWordsByPath: {
       'sexy-steampunk-woman': '80-110',
@@ -467,6 +494,10 @@ module.exports = {
       'steampunk-spectacle': 'scene',
       'steam-transport': 'scene',
       'steampunk-labs': 'scene',
+      'nautilus-depths': 'scene', // Stage M1 SHADOW
+      'celestial-observatory': 'scene', // Stage M2 SHADOW
+      'clocktower-heart': 'scene', // Stage M3 SHADOW
+      'skydock-harbor': 'scene', // Stage M4 SHADOW
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },

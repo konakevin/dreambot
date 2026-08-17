@@ -100,6 +100,271 @@ THE BAR: each scene reads instantly as BOTH steampunk AND its partner genre, fus
   },
 
   // ═══════════════════════════════════════════════════════════
+  // nautilus-depths (Stage M1, SHADOW) — 20,000-Leagues underwater steampunk.
+  // Ornate brass submarine gliding the deep. Brass reads BRASS underwater (specular);
+  // ocean depth is co-hero; steampunk MACHINE-in-sea, NEVER NatGeo sealife.
+  // ═══════════════════════════════════════════════════════════
+  nautilus_depths_submersible: {
+    format: 'simple',
+    theme: `STEAMBOT NAUTILUS-DEPTHS SUBMERSIBLE — the ornate brass Victorian submarine that is the hero machine, gliding through deep dark water (20,000-Leagues / Nemo register). Each entry names ONE vessel with its distinct MASSING (silhouette + hull family). Riveted brass, copper, iron, portholes, fins, propeller-screws — gorgeous Victorian-industrial engineering. NOT a modern sub, NOT a fish.
+
+DISTRIBUTE across hull families: a great whale-shaped brass leviathan-sub with rows of glowing portholes; a spindle-hulled riveted iron submersible with fin-keels and a spinning bronze screw; an ornate galleon-inspired brass diving-vessel with a domed observation prow; a segmented copper deep-diver bristling with articulated arms and searchlights; a sleek riveted torpedo-hull with sweptback stabilizer fins; a squat bathysphere-tender with a spherical brass gondola slung beneath; a many-finned art-nouveau brass sub with scalloped plating; a barnacle-crusted veteran iron sub trailing bubbles.`,
+    touchpoints: [
+      'BRASS LEVIATHAN-SUB — a great whale-shaped riveted brass submarine glides through the deep, twin rows of warm-glowing portholes down its flank, a bronze screw turning slowly, fin-keels trailing bubbles.',
+      'ART-NOUVEAU DIVING-VESSEL — an ornate brass submersible with a domed glass observation prow and scalloped copper plating, searchlights fanning into the dark, rivet-seams catching cold light.',
+      'SEGMENTED DEEP-DIVER — a squat copper submarine bristling with articulated grappling-arms and gimbaled searchlights, a spherical brass gondola slung beneath its riveted belly.',
+    ],
+    instructions: `Each entry 22-35 words, ONE brass Victorian submarine with distinct massing. Brass/copper/iron/rivets/portholes. Gliding through deep water. NEVER a fish or modern sub. Format: "HULL-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  nautilus_depths_deep_encounter: {
+    format: 'simple',
+    theme: `STEAMBOT NAUTILUS-DEPTHS ENCOUNTER — what the brass submarine glides PAST in the deep (the co-hero of the frame, fantastical-Victorian, NOT a NatGeo nature-doc). Each entry 20-32 words. Wondrous, painterly, deep-sea steampunk.
+
+DISTRIBUTE across: a vast swarm of glowing jellyfish drifting like paper lanterns; the immense dark shadow of a passing whale far above; the drowned ruin of a brass sunken city with toppled columns and gaslit windows still lit; a bioluminescent coral reef pulsing blue and violet; a field of towering kelp-columns in the gloom; a sunken galleon wreck crusted in barnacles and treasure; a hydrothermal vent glowing red with drifting embers; a school of clockwork-brass mechanical fish; an ancient stone leviathan-statue half-buried in silt; a shipwreck graveyard of tilted masts.`,
+    touchpoints: [
+      'JELLYFISH LANTERN-SWARM — the brass sub glides through a vast drifting swarm of glowing bell-jellyfish, their trailing tendrils lit warm gold, hanging like paper lanterns in the teal-black deep.',
+      'DROWNED BRASS CITY — the submarine passes the drowned ruin of a sunken Victorian city, toppled brass columns and domed roofs, a few gaslit windows still eerily glowing in the silt-hazed gloom.',
+      'BIOLUM CORAL CATHEDRAL — a towering bioluminescent coral reef pulses blue and violet around the gliding vessel, glowing anemones and drifting motes lighting the ornate hull from below.',
+    ],
+    instructions: `Each entry 20-32 words, ONE fantastical deep encounter the sub passes. Wondrous, painterly, Victorian-steampunk — NEVER a NatGeo nature-doc. Format: "ENCOUNTER-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  nautilus_depths_porthole_glow: {
+    format: 'simple',
+    theme: `STEAMBOT NAUTILUS-DEPTHS PORTHOLE GLOW — the MONEY-SHOT: the warm lamplight of the submarine spilling out into the cold deep water (the warm-vs-cold contrast that defines the register). Each entry 12-22 words.
+
+DISTRIBUTE across: warm amber gaslight spilling from a row of brass portholes into the teal-black water; a single great searchlight cutting a cone of gold through the murk; warm interior light glowing through a domed observation window; lamp-glow catching drifting silt and bubbles gold against the dark; the sub's running-lights glowing warm along its riveted flank; a porthole's warm circle reflected wobbling in a jellyfish's bell; gold light raking the ornate brass hull against deep blue-black.`,
+    touchpoints: [
+      'PORTHOLE ROW GLOW — warm amber gaslight spills from a row of round brass portholes into the teal-black water, each circle of light catching drifting silt and bubbles gold against the dark.',
+      'SEARCHLIGHT CONE — a single great brass searchlight cuts a wide cone of warm gold through the murky deep, lighting drifting motes and the ornate hull against blue-black gloom.',
+    ],
+    instructions: `Each entry 12-22 words, ONE porthole/lamplight glow, warm-vs-cold contrast. Format: "GLOW-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  nautilus_depths_depth_light: {
+    format: 'simple',
+    theme: `STEAMBOT NAUTILUS-DEPTHS DEPTH LIGHT — the ambient light + color of the deep water (sets the whole mood; this is the light of the scene). Each entry 12-22 words.
+
+DISTRIBUTE across: deep teal-black gloom fading to total dark below; a faint blue-green sunlight filtering weakly from far above; the eerie blue of a bioluminescent glow suffusing the water; a green-tinged murk thick with drifting particles; the cold cathedral-blue of a great open depth; a warm-vs-cold gradient, gold near the sub fading to blue-black; a hazy silt-lit gloom; the near-black of the abyss with only the sub's glow.`,
+    touchpoints: [
+      'TEAL-BLACK GLOOM — deep teal-black water fading to total darkness below, a faint blue-green light filtering weakly from far above, drifting particles catching the last of it.',
+      'BIOLUM BLUE SUFFUSION — an eerie soft blue bioluminescent glow suffuses the deep water, silhouetting the ornate hull, drifting motes twinkling in the cold cathedral-blue depth.',
+    ],
+    instructions: `Each entry 12-22 words, ONE deep-water light/color, mood-setting. Format: "LIGHT-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  nautilus_depths_leviathan_shadow: {
+    format: 'simple',
+    theme: `STEAMBOT NAUTILUS-DEPTHS LEVIATHAN SHADOW — a gated (~40%) colossal creature silhouette at the edge of the light (the deep's menace). Each entry 15-26 words. Awe/menace, never gore.
+
+DISTRIBUTE across: a giant kraken's silhouette unfurling its tentacles at the edge of the searchlight; a colossal sea-serpent coiling out of the gloom; the vast dark shadow of a leviathan-whale passing overhead; a titanic anglerfish's lure glowing in the black; an enormous many-eyed abyssal beast half-lit; a giant squid's single great eye catching the porthole-glow; a huge dark tentacle reaching from below into the light's edge.`,
+    touchpoints: [
+      'KRAKEN AT THE LIGHT-EDGE — the silhouette of a colossal kraken unfurls its tentacles at the very edge of the searchlight-cone, half-lit and immense, the rest lost in the black deep.',
+      'PASSING LEVIATHAN — the vast dark shadow of a titanic whale-leviathan glides slowly overhead, dwarfing the brass sub, its bulk blotting out the faint light from above.',
+    ],
+    instructions: `Each entry 15-26 words, ONE colossal creature silhouette at the light's edge. Awe/menace, NEVER gore. Format: "SHADOW-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // celestial-observatory (Stage M2, SHADOW) — Victorian astronomy. Colossal brass
+  // telescope domes, orrery rooms, star-chart tables under gaslight, comet through
+  // the dome slit. Interior warmth vs cold night sky. REAL night sky (Victorian EARTH,
+  // no fantasy planets). Instrument fills 30-50%.
+  // ═══════════════════════════════════════════════════════════
+  celestial_observatory_space: {
+    format: 'simple',
+    theme: `STEAMBOT CELESTIAL-OBSERVATORY SPACE — the grand Victorian astronomy INTERIOR the scene is set in (the stage). Each entry 22-32 words. Brass, iron, gaslight, warm wood, star-charts. Interior warmth against the cold night beyond.
+
+DISTRIBUTE across: a colossal domed telescope hall, the dome slit cracked open to the night; a great orrery room with slow-spinning brass planet-models on curving armatures; a star-chart map-room of gaslit drafting-tables and celestial globes; a rooftop terrace array of many small brass telescopes under the open sky; a spiral-stair observatory tower with an instrument rising through the floors; a cluttered astronomer's study with brass instruments, charts pinned to the walls, a globe; a vaulted brass rotunda with a domed ceiling of painted constellations; a balcony gallery overlooking a great central telescope.`,
+    touchpoints: [
+      'DOMED TELESCOPE HALL — a colossal riveted brass dome hall, its curved slit cracked open to the cold starry night, gaslight glowing warm on the great instrument and the drafting-tables below.',
+      'ORRERY ROTUNDA — a great circular room of slow-turning brass planet-models on curving armatures, gaslit warm, a painted constellation-ceiling overhead, star-charts on the walls.',
+      'ROOFTOP TERRACE ARRAY — a stone rooftop terrace crowded with many small brass telescopes on tripods, astronomers-scale railings, the whole array open to a vast cold star-field above.',
+    ],
+    instructions: `Each entry 22-32 words, ONE Victorian astronomy interior/terrace. Brass/gaslight/charts, interior warmth vs cold night. Format: "SPACE-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  celestial_observatory_instrument: {
+    format: 'simple',
+    theme: `STEAMBOT CELESTIAL-OBSERVATORY INSTRUMENT — the hero MACHINE that fills 30-50% of the frame (a colossal brass astronomical instrument). Each entry 15-26 words. Gorgeous riveted brass engineering, gears, dials.
+
+DISTRIBUTE across: a colossal long brass refractor telescope on a great equatorial mount, aimed up through the dome slit; a room-filling orrery of brass planets on nested gear-driven armatures; a giant brass astrolabe-armillary sphere of concentric rings; a huge brass transit-circle with graduated dials; a towering reflector telescope in an iron cradle; a great celestial globe geared to slowly turn; a wall-sized brass star-clock of rotating dials; a massive sextant-arc instrument.`,
+    touchpoints: [
+      'GREAT BRASS REFRACTOR — a colossal long brass refractor telescope on a massive geared equatorial mount, its tube aimed up through the open dome slit, dials and counterweights gleaming.',
+      'ROOM-FILLING ORRERY — a great orrery of brass planets on nested gear-driven armatures fills the room, the sun-globe glowing at its heart, the planets caught mid-slow-orbit.',
+      'ARMILLARY SPHERE — a giant brass armillary of concentric graduated rings turns slowly on its axis, a small central earth-globe held in its heart, gears meshing below.',
+    ],
+    instructions: `Each entry 15-26 words, ONE colossal brass astronomical instrument (fills 30-50%). Riveted brass, gears, dials. Format: "INSTRUMENT-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  celestial_observatory_sky_through_dome: {
+    format: 'simple',
+    theme: `STEAMBOT CELESTIAL-OBSERVATORY SKY — the MONEY-SHOT: the REAL night sky seen through the dome slit / open terrace (Victorian EARTH — NO fantasy planets, NO alien worlds). Each entry 12-22 words. Cold night beyond the warm interior.
+
+DISTRIBUTE across: a bright comet with a long tail crossing the slit of night; a great full moon framed in the dome opening; green aurora rippling above the terrace; a dense field of stars and the milky band of the galaxy; a crescent moon and a bright planet low; a meteor streaking through the gap; a total eclipse's dark disc ringed with corona; the constellations sharp in a clear black sky; storm-clouds parting to reveal stars.`,
+    touchpoints: [
+      'COMET THROUGH THE SLIT — a bright comet trails its long tail across the slice of cold night sky framed by the open brass dome slit, stars sharp around it.',
+      'FRAMED FULL MOON — a great full moon hangs perfectly framed in the dome opening, its cratered face brilliant against the black, casting cold light down the instrument.',
+      'AURORA OVER THE TERRACE — green-and-violet aurora ripples across the vast cold star-field above the rooftop telescope array, the constellations bright behind it.',
+    ],
+    instructions: `Each entry 12-22 words, ONE REAL night-sky view through the dome/terrace. Victorian EARTH sky — NO fantasy planets/alien worlds. Format: "SKY-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  celestial_observatory_brass_detail: {
+    format: 'simple',
+    theme: `STEAMBOT CELESTIAL-OBSERVATORY BRASS DETAIL — a small supporting brass/astronomy detail that populates the scene (the template picks TWO). Each entry 8-16 words. Rich Victorian-astronomy texture.
+
+DISTRIBUTE across: gaslit drafting-tables strewn with rolled star-charts; a polished celestial globe on a brass stand; brass sextants and dividers on a felt table; a wall of dial-gauges and pressure-meters; a spiral brass stair winding up to the instrument; hanging brass orrery-models; a leather-bound star-atlas open on a lectern; a rack of eyepiece-lenses; a gaslamp on a swing-arm; a pendulum star-clock ticking; a telescope's counterweight and gear-train.`,
+    touchpoints: [
+      'gaslit drafting-table strewn with rolled star-charts and brass dividers',
+      'a polished celestial globe turning slowly on an ornate brass stand',
+      'a spiral brass stair winding up around the great instrument',
+      'a wall of glowing dial-gauges and graduated brass meters',
+    ],
+    instructions: `Each entry 8-16 words, ONE brass/astronomy supporting detail. Format: "detail description" (lowercase ok). Output as a NUMBERED list. NO internal newlines.`,
+  },
+  celestial_observatory_astronomer: {
+    format: 'simple',
+    theme: `STEAMBOT CELESTIAL-OBSERVATORY ASTRONOMER — a gated (~40%) small figure for scale + warmth (from behind, no face). Each entry 12-22 words. Tiny + incidental against the great instrument.
+
+DISTRIBUTE across: a small silhouetted astronomer bent to the eyepiece of the great telescope, seen from behind; a tiny figure on a spiral stair adjusting the instrument; a coated figure at a drafting-table poring over charts, back turned; a small figure on the terrace peering up through a small telescope; a silhouette pointing up at the sky slit; a figure winding the orrery's crank; two small figures conferring over a star-atlas.`,
+    touchpoints: [
+      'a small silhouetted astronomer bent to the eyepiece of the great telescope, seen from behind',
+      'a tiny coated figure on the spiral stair adjusting the instrument, back turned',
+      'a small figure at a gaslit drafting-table poring over star-charts, seen from behind',
+    ],
+    instructions: `Each entry 12-22 words, ONE small astronomer figure (from behind, no face), tiny for scale. Format: "figure description" (lowercase ok). Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // clocktower-heart (Stage M3, SHADOW) — inside a cathedral-scale clock (Hugo).
+  // Giant gears in slow motion, pendulum arcs, light through the translucent clock
+  // face, catwalks + ladders for scale. Gears read MECHANICAL not decorative.
+  // AVOID "canyon" (rock prior) — say "gear hall".
+  // ═══════════════════════════════════════════════════════════
+  clocktower_heart_mechanism_hall: {
+    format: 'simple',
+    theme: `STEAMBOT CLOCKTOWER-HEART MECHANISM HALL — the vast cathedral-scale interior space of a giant clock's mechanism (the stage). Each entry 22-32 words. Colossal brass-and-iron gears, pendulums, escapements — unmistakably a real precision machine, cathedral-huge. AVOID the word "canyon" (renders rock) — use "gear hall".
+
+DISTRIBUTE across: the gallery directly BEHIND the great translucent clock-face, giant gears meshing against the glowing dial; a towering gear hall of stacked interlocking cog-wheels rising into shadow; a deep pendulum well with the great pendulum swinging through it; a mainspring-and-escapement chamber with the anchor rocking; a bell-chamber above the works with the great bronze bells; a vertical shaft of driveshafts and bevel-gears; a brass-catwalk gallery threading between colossal cog-wheels; the tower's inner works seen from below, gears receding upward.`,
+    touchpoints: [
+      'BEHIND THE GREAT FACE — the gallery directly behind the giant translucent clock-face, colossal brass gears meshing against the glowing amber dial, the reversed hands sweeping across it.',
+      'TOWERING GEAR HALL — a cathedral-huge hall of stacked interlocking brass cog-wheels rising into shadow, driveshafts and bevel-gears threading between them, catwalks clinging to the iron frame.',
+      'PENDULUM WELL — a deep vertical well where the great brass pendulum swings its slow arc, the escapement ticking above, catwalks ringing the shaft into the gloom below.',
+    ],
+    instructions: `Each entry 22-32 words, ONE cathedral-scale clock-mechanism interior. Colossal brass/iron gears, real machine. AVOID "canyon". Format: "HALL-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  clocktower_heart_gear_choreography: {
+    format: 'simple',
+    theme: `STEAMBOT CLOCKTOWER-HEART GEAR CHOREOGRAPHY — the MONEY-SHOT: the ONE readable moment of mechanical motion (a clear, legible mechanical action). Each entry 12-22 words. Gears read MECHANICAL, precise, unmistakably built — never decorative.
+
+DISTRIBUTE across: a single great cog-tooth caught mid-engagement with the wheel beside it; the escapement's anchor rocking, releasing one tooth of the escape-wheel; the pendulum at the top of its arc, about to fall back; a driveshaft's bevel-gear turning a vertical shaft; the great hands sweeping a fraction across the dial; a mainspring uncoiling with tension; a chain of gears cascading motion from large to small; a governor's brass balls spinning out.`,
+    touchpoints: [
+      'TOOTH ENGAGING — a single great brass cog-tooth caught precisely mid-engagement with the wheel beside it, the exact instant of transmitted motion frozen.',
+      'ESCAPEMENT TICK — the escapement anchor rocks and releases one tooth of the great escape-wheel, the pendulum swinging past, the tick made visible.',
+      'GEAR CASCADE — motion cascades down a chain of meshing brass gears from a colossal slow wheel to a small fast one, the ratio readable.',
+    ],
+    instructions: `Each entry 12-22 words, ONE readable mechanical motion. Gears MECHANICAL not decorative. Format: "MOTION-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  clocktower_heart_face_light: {
+    format: 'simple',
+    theme: `STEAMBOT CLOCKTOWER-HEART FACE LIGHT — the glowing translucent clock-face as the light source (self-lit; sets the whole mood). Each entry 12-22 words. Warm light glowing THROUGH the great dial into the dark mechanism.
+
+DISTRIBUTE across: warm amber daylight glowing through the frosted-glass clock-face, throwing the shadows of the reversed hands across the gears; cold blue moonlight through the translucent dial at night; the great numerals glowing as silhouettes of light on the mechanism; gold light streaming through the dial's cracks into the dusty gear-hall; the dial glowing like a stained-glass rose-window over the works; shafts of light through the face catching drifting dust; the reversed hour-hand's long shadow raking the cog-wheels.`,
+    touchpoints: [
+      'AMBER DIAL-GLOW — warm amber daylight glows through the great frosted clock-face, throwing the long shadows of the reversed hands across the colossal gears behind it.',
+      'ROSE-WINDOW DIAL — the translucent clock-face glows like a stained-glass rose-window over the dark mechanism, its numerals shining through onto the meshing brass wheels.',
+      'MOONLIT DIAL — cold blue moonlight filters through the translucent dial at night, silvering the great gears and the swinging pendulum in the dark tower.',
+    ],
+    instructions: `Each entry 12-22 words, ONE clock-face light source (light through the dial). Format: "LIGHT-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  clocktower_heart_scale_prover: {
+    format: 'simple',
+    theme: `STEAMBOT CLOCKTOWER-HEART SCALE PROVER — a small element proving the colossal scale of the mechanism. Each entry 10-18 words. Tiny against the giant gears.
+
+DISTRIBUTE across: a brass catwalk with a tiny railing threading between the giant cog-wheels; a keeper's lantern glowing far below on a platform; a spiral iron ladder clinging to a colossal gear; a flock of pigeons roosting on a great cog; a tiny silhouetted keeper oiling a wheel, from behind; a rope-and-plank gantry across the pendulum well; a small door at the base of a wheel taller than a house; a bird flying through the gear-hall.`,
+    touchpoints: [
+      'a brass catwalk with a tiny railing threading between the giant cog-wheels',
+      "a keeper's lantern glowing far below on a platform beneath the great gears",
+      'a spiral iron ladder clinging to a cog-wheel taller than a house',
+      'a flock of pigeons roosting along the rim of a colossal brass gear',
+    ],
+    instructions: `Each entry 10-18 words, ONE scale-proving element (tiny against the gears). Format: "element description" (lowercase ok). Output as a NUMBERED list. NO internal newlines.`,
+  },
+  clocktower_heart_hour_event: {
+    format: 'simple',
+    theme: `STEAMBOT CLOCKTOWER-HEART HOUR EVENT — a gated (~35%) dramatic strike moment when the clock chimes the hour. Each entry 15-26 words. Everything in motion, awe.
+
+DISTRIBUTE across: the great bronze bells swinging and ringing as the hour strikes, the whole mechanism surging into motion; a procession of brass automaton-figures rolling out on a track to mark the hour; hammers falling on the bells in sequence; every gear in the hall turning at once as the strike-train releases; the pendulum and hands and bells all moving together; a burst of released steam as the mechanism strikes; the carillon of small bells cascading.`,
+    touchpoints: [
+      'THE BELLS STRIKE — the great bronze bells swing and ring as the hour strikes, hammers falling in sequence, the whole colossal mechanism surging into motion around them.',
+      'AUTOMATON PROCESSION — a procession of brass automaton-figures rolls out on a curving track to mark the hour, the strike-train turning every gear in the hall at once.',
+      'STRIKE SURGE — the strike-train releases and every wheel in the gear-hall turns at once, steam venting, the pendulum and hands and bells all moving together.',
+    ],
+    instructions: `Each entry 15-26 words, ONE hour-strike event, everything in motion, awe. Format: "EVENT-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // skydock-harbor (Stage M4, SHADOW) — the airship PORT (ships at rest + bustle).
+  // Docked fleets at brass gantry towers, cargo cranes, departure crowds, lamplit fog.
+  // airship-skies is in-flight; THIS is the PLACE. Crowd as a living MASS (spectacle law).
+  // ═══════════════════════════════════════════════════════════
+  skydock_harbor_vista: {
+    format: 'simple',
+    theme: `STEAMBOT SKYDOCK-HARBOR VISTA — the airship PORT architecture + fleet arrangement (the stage). Each entry 22-32 words. Docked airships at rest (NOT in flight) at brass gantry-towers, mooring masts, gangways, cargo derricks. A busy Victorian sky-harbor, the PLACE.
+
+DISTRIBUTE across: a great tiered dock of brass gantry-towers with airships moored at every level, gangways bridging to the gondolas; a cliff-edge sky-port with mooring masts, ships tethered nose-in over the drop; a cathedral-scale hangar-harbor with dirigibles docked in ranks under an iron roof; a stacked harbor of platforms and lifts serving a fleet of moored liners; a fog-wreathed quayside of tethered ships and swinging cargo-cranes; a grand terminal concourse with airships at the platforms like trains; a rooftop harbor over a Victorian city, ships moored to spires; a river-mouth sky-harbor of docks and derricks.`,
+    touchpoints: [
+      'TIERED GANTRY-DOCK — a great tiered sky-harbor of brass gantry-towers with airships moored at every level, gangways bridging out to their gondolas, cargo-derricks swinging between the masts.',
+      'CLIFF-EDGE SKY-PORT — a cliff-top airship port of tall mooring masts, dirigibles tethered nose-in over the drop, brass lifts and gangways threading down to the platforms below.',
+      'CATHEDRAL HANGAR-HARBOR — a cathedral-scale iron hangar-harbor with rows of docked dirigibles under a great arched roof, gantry-cranes and catwalks threading between their moored hulls.',
+    ],
+    instructions: `Each entry 22-32 words, ONE airship-PORT vista (ships at REST, docked). Brass gantries/masts/gangways/cranes. Format: "PORT-NAME-CAPS — description". Output as a NUMBERED list. NO internal newlines.`,
+  },
+  skydock_harbor_dock_activity: {
+    format: 'simple',
+    theme: `STEAMBOT SKYDOCK-HARBOR ACTIVITY — the verb-led MULTI-ACTOR bustle of the port (several things happening at once). Each entry 18-28 words, OPENING with an action. Multiple simultaneous beats so the harbor reads ALIVE and busy — never a static postcard.
+
+DISTRIBUTE across: a liner casting off as a cargo-net swings mid-air and dockhands haul lines; a crane lowering a crate to the deck while passengers file up a gangway; deckhands winching a ship nose to its mast as another lifts away behind; porters wheeling luggage-carts as a whistle blows and mooring-lines are cast; a fuel-gantry pumping as riggers scale the netting and a bell rings; cargo being craned aboard while a mechanic swings from a gondola on a rope; a busy quay of loading, casting-off, and arriving all at once.`,
+    touchpoints: [
+      'A liner casts off from its mast as a cargo-net swings across mid-air and dockhands below haul on the mooring-lines, all in motion at once.',
+      'A gantry-crane lowers a crate onto the deck while a stream of passengers files up the gangway and porters wheel luggage-carts along the quay behind.',
+      'Deckhands winch a dirigible nose-in to its mooring mast as another ship lifts away behind, riggers scaling the netting and a whistle blowing.',
+    ],
+    instructions: `Each entry 18-28 words, OPENING with an action, MULTIPLE simultaneous beats (alive + busy). Format: prose sentence. Output as a NUMBERED list. NO internal newlines.`,
+  },
+  skydock_harbor_mooring_light: {
+    format: 'simple',
+    theme: `STEAMBOT SKYDOCK-HARBOR MOORING LIGHT — the light + air of the port (lamps, fog, dawn/dusk; sets the whole mood). Each entry 12-22 words.
+
+DISTRIBUTE across: warm gaslamp-glow along the gantries through drifting harbor-fog; a golden dawn breaking over the moored fleet, mist in the docks; cool blue dusk with the ships' running-lights kindling; lamplit fog rolling through the mooring-masts; a low amber sunset silhouetting the docked airships; a rainy quay slick and lamp-reflecting; searchlight beams sweeping the fog over the harbor; the warm glow of a hundred gondola-windows at twilight.`,
+    touchpoints: [
+      'Warm gaslamp-glow strung along the brass gantries, drifting harbor-fog catching the light between the moored ships.',
+      'A golden dawn breaks over the moored fleet, low mist pooling in the docks, the airship hulls rimmed in soft gold.',
+      'Cool blue dusk settles over the sky-harbor, the ships’ running-lights kindling one by one, lamplight warm on the fog.',
+    ],
+    instructions: `Each entry 12-22 words, ONE mooring light/atmosphere (lamps/fog/dawn/dusk). Format: prose sentence. Output as a NUMBERED list. NO internal newlines.`,
+  },
+  skydock_harbor_crowd_texture: {
+    format: 'simple',
+    theme: `STEAMBOT SKYDOCK-HARBOR CROWD — the lively bustle of well-dressed Victorian travelers on the platforms (a textured whole that makes the port feel alive). Each entry 12-22 words. Everyone is fully dressed in period attire — long coats, top-hats, bonnets, greatcoats. Keep it wholesome and busy; describe the crowd as a lively throng, never a headcount.
+
+DISTRIBUTE across: a lively throng of well-dressed travelers and porters strolling the platform in long coats and top-hats; a cheerful crowd waving handkerchiefs from the quay at a departing ship; a bustling stream of passengers and dockhands filling the concourse; a busy gathering of onlookers along the railings; a swirl of luggage-carts, greatcoats, bonnets and parasols; a lively company of travelers small against the great ships; rows of waiting passengers in their Sunday best dwarfed by the moored hulls; a cheerful crowd thinning into the lamplit fog.`,
+    touchpoints: [
+      'a lively throng of well-dressed travelers and porters strolling the platform in long coats and top-hats, small against the moored ships',
+      'a cheerful crowd along the quay railings waving handkerchiefs up at a departing airship, all in Victorian coats and bonnets',
+      'a bustling company of passengers, luggage-carts and dockhands filling the lamplit concourse, dwarfed by the great hulls above',
+    ],
+    instructions: `Each entry 12-22 words, ONE lively well-dressed crowd (fully clothed Victorian attire; never a headcount). Wholesome + busy. Format: prose sentence. Output as a NUMBERED list. NO internal newlines.`,
+  },
+  skydock_harbor_departure_event: {
+    format: 'simple',
+    theme: `STEAMBOT SKYDOCK-HARBOR DEPARTURE EVENT — a gated (~40%) dramatic send-off moment. Each entry 15-26 words. Awe + occasion, the flagship leaving.
+
+DISTRIBUTE across: the great flagship lifting away from its mast, steam-whistle blowing, the crowd waving from below; a huge liner rising through the drifting fog as mooring-lines fall away; the whole fleet's whistles answering as a ship departs; a burst of released steam as the flagship casts off; a ship rising into a golden sunset, the harbor dwindling below it; a fireworks-free send-off of waving hats and steam and swinging lamps; the flagship turning slowly away over the docks.`,
+    touchpoints: [
+      'THE FLAGSHIP DEPARTS — the great flagship lifts slowly from its mooring-mast, steam-whistle blowing, mooring-lines falling away as the crowd waves from the platform below.',
+      'RISING THROUGH FOG — a huge liner rises through the drifting harbor-fog, its running-lights glowing, the docks and waving crowd dwindling beneath it.',
+      'SUNSET SEND-OFF — a ship rises into a golden sunset over the harbor, whistles answering across the fleet, the platforms and lamps dwindling below.',
+    ],
+    instructions: `Each entry 15-26 words, ONE departure/send-off event, awe + occasion. Format: "EVENT-NAME-CAPS — description" or prose. Output as a NUMBERED list. NO internal newlines.`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
   // AIRSHIP-FEMALE path (2026-05-23) — solo female air-officer mid-action
   // on a steampunk airship. Combat allowed. 4 female-bespoke pools + 7
   // shared with future airship-male sister (heritage/role/eyes/hair_color/

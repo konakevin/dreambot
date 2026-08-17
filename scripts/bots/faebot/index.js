@@ -32,6 +32,11 @@ const pathBuilders = {
   'fae-castle-village': require('./paths/fae-castle-village'),
   'fae-wilds-village': require('./paths/fae-wilds-village'),
   'fae-natural-village': require('./paths/fae-natural-village'),
+  'goblin-market': require('./paths/goblin-market'),
+  'goblin-market-stall': require('./paths/goblin-market-stall'),
+  'goblin-market-lane': require('./paths/goblin-market-lane'),
+  'frost-court': require('./paths/frost-court'),
+  'spirit-beasts': require('./paths/spirit-beasts'),
 };
 
 module.exports = {
@@ -84,6 +89,12 @@ module.exports = {
   promptPrefixByPath: {
     'fairy-swarm':
       'a lively gathering of many tiny palm-sized fairies together in one scene, a fairy crowd mid-story',
+    'goblin-market':
+      'a bustling fae night-market crowded with many tiny palm-sized fae merchants and shoppers, a market crowd mid-moment',
+    'goblin-market-stall':
+      'a close intimate view of one fae night-market stall, a small knot of tiny palm-sized winged fae gathered at the counter mid-exchange',
+    'goblin-market-lane':
+      'a crisp foreground of tiny palm-sized winged fae at a night-market stall with the grand fae bazaar glowing soft and hazy behind them',
   },
   promptSuffix: blocks.PROMPT_SUFFIX,
 
@@ -115,10 +126,27 @@ module.exports = {
     'fae-castle-village',
     'fae-wilds-village',
     'fae-natural-village',
+    // Stage F — promoted to live rotation 2026-08-16 (scaled to production;
+    // faithful xerox — chaos disabled bot-wide, polish already off for these,
+    // goblin-market prompt-prefixes preserved).
+    'goblin-market',
+    'goblin-market-stall',
+    'goblin-market-lane',
+    'frost-court',
+    'spirit-beasts',
   ],
   // Flat rotation (2026-05-26): equal weight per path — every path posts
   // once per cycle in randomized order via the cycleAllPaths shuffle-bag.
   cycleAllPaths: true,
+
+  // DARK-LAUNCH (BOT_DARK_LAUNCH_PLAN.md, migration 376). Paths here are NOT
+  // in the live `paths[]` rotation — the dispatcher never auto-posts them. They
+  // render ONLY via explicit `iter-bot --mode <path> --post`, and postAsBot
+  // flips is_public=false/is_posted=false/shadow=true so they stay hidden from
+  // every public surface. QA in isolation, grade the shadow renders, then
+  // promote them into history via scripts/promote-shadow-path.js and move the
+  // string into `paths[]`.
+  shadowPaths: [], // Stage F paths promoted to live rotation 2026-08-16
 
   // Picker on with the BOT_MODEL_TALLY 6-model lineup (2026-05-30):
   // Banana + GPT-2 + Flux 2 Pro + Flux 1.1 Pro + Flux 1.1 Pro Ultra + Flux 2 Max.
@@ -167,6 +195,11 @@ module.exports = {
       'tiny-fae',
       'fairy-swarm',
       'fae-court',
+      'goblin-market',
+      'goblin-market-stall',
+      'goblin-market-lane',
+      'frost-court',
+      'spirit-beasts',
     ],
   },
 
@@ -203,6 +236,16 @@ module.exports = {
       'fae-castle-village',
       'fae-wilds-village',
       'fae-natural-village',
+      // goblin-market: the crowd-composition mandate is load-bearing; polish strips it.
+      'goblin-market',
+      // goblin-market-stall: the intimate close-crowd composition is load-bearing.
+      'goblin-market-stall',
+      // goblin-market-lane: the hybrid foreground+hazy-depth composition is load-bearing.
+      'goblin-market-lane',
+      // frost-court: the alive/warm + covered + anti-Elsa mandates are load-bearing.
+      'frost-court',
+      // spirit-beasts: the kodama law (real animal anatomy, one magic element) is load-bearing.
+      'spirit-beasts',
     ],
   },
 

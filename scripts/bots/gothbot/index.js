@@ -39,6 +39,10 @@ const pathBuilders = {
   gargoyles: require('./paths/gargoyles'),
 };
 
+// Dark-launched (shadow) paths — renderable via `iter-bot --mode <path> --post`
+// (admin-only shadow posts), NOT in live rotation until promoted into `paths`.
+const GOTH_SHADOW_PATHS = [];
+
 // Looks system (2026-06-22) — paths that roll a per-render gothic LOOK (render
 // style varies within the gothic identity). buildBrief prepends GOTHBOT_LOOK_OVERRIDE
 // for these, and each is routed to the gothbot_neutral medium via mediumByPath.
@@ -69,6 +73,7 @@ const LOOK_ENABLED_PATHS = new Set([
   'the-sanctum',
   'castlevania-scene',
   'castle-moonscape',
+  ...GOTH_SHADOW_PATHS,
 ]);
 
 module.exports = {
@@ -608,6 +613,7 @@ module.exports = {
       'vampire-hunter-in-action',
       'goth-male-full-body-axis',
       'the-dark-prince',
+      ...GOTH_SHADOW_PATHS, // (shadow paths skip polish; none currently)
     ],
   },
 
@@ -673,6 +679,9 @@ module.exports = {
     // 'monster-prowl-victorian',
     // 'monster-prowl-inked',
   ],
+
+  // Dark-launched (shadow) paths — renderable on demand, hidden from public + rotation.
+  shadowPaths: GOTH_SHADOW_PATHS,
 
   // Flat rotation (2026-05-26 fleet-wide flatten): no pathWeights — every active
   // path gets an equal 1 slot/cycle via the cycleAllPaths shuffle-bag below, so

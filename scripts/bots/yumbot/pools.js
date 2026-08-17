@@ -291,5 +291,15 @@ module.exports = {
   YUMBOT_CARNIVAL_FOOD_DECOR: load('yumbot_carnival_food_decor'),
   YUMBOT_CARNIVAL_FOOD_ATMOSPHERIC_ACCENT: load('yumbot_carnival_food_atmospheric_accent'),
 
+  // Stage P (SHADOW) — function-form kawaii-food paths (scene + treats/residents).
+  YUMBOT_KAWAII_DRINKS_SCENES: load('yumbot_kawaii_drinks_scenes'),
+  YUMBOT_KAWAII_DRINKS_TREATS: load('yumbot_kawaii_drinks_treats'),
+  YUMBOT_KAWAII_DRINKS_MOMENT: load('yumbot_kawaii_drinks_moment'),
+  YUMBOT_KAWAII_DRINKS_DECOR: load('yumbot_kawaii_drinks_decor'),
+  YUMBOT_HOLIDAY_SWEETS_SCENES: load('yumbot_holiday_sweets_scenes'),
+  YUMBOT_HOLIDAY_SWEETS_TREATS: load('yumbot_holiday_sweets_treats'),
+  YUMBOT_FOOD_VILLAGE_SCENES: load('yumbot_food_village_scenes'),
+  YUMBOT_FOOD_VILLAGE_RESIDENTS: load('yumbot_food_village_residents'),
+
   VIBE_COLOR,
 };

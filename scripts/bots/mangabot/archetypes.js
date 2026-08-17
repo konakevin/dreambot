@@ -13,6 +13,90 @@
  */
 
 module.exports = {
+  MANGABOT_NIGHT_TOUGE: {
+    description:
+      'PATH-BESPOKE — MangaBot night-touge (Stage I4, SHADOW). Initial-D lineage — 90s-era Japanese sports cars drifting mountain passes at night, neon wangan highways, vending-machine glow pit stops, headlight trails through hairpins. FIRST vehicle path. hero_car = era-coded NON-IP MORPHOLOGICAL descriptions (never a real model/brand — decided non-IP, flag Kevin). motion_signature is the MONEY-SHOT (drift + tire-smoke + light-trails; speed READS, anime motion-lines OK). street_detail 40%-gated. camera_framing MANDATORY (motion/road-led, no driver-face close-up). Look-enabled (anime cel). NO crashes/danger-glamor, NO legible text.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'touge_scene',
+        'hero_car',
+        'motion_signature',
+        'night_light',
+        'camera_framing',
+        'emotional_dna',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'street_detail', gate: 0.4 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MANGABOT_WINTER_ANIME: {
+    description:
+      'PATH-BESPOKE — MangaBot winter-anime (Stage I3, SHADOW). Snow-country anime — first-snow streets, snow festivals with ice lanterns, kotatsu-window glow seen from outside, shrine torii in snowfall, breath-clouds under station lights. The WARM-vs-COLD contrast is the signature. snow_state is the MONEY-SHOT; warm_glow supplies the warm source. figure_moment 50%-gated. camera_framing MANDATORY. Torii/shrine allowed (reverent scenery, no worship close-ups). Look-enabled. Culture-coded (Erased / Laid-Back Camp register), role-only, cozy-not-grief.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'winter_scene',
+        'snow_state',
+        'warm_glow',
+        'weather_air',
+        'camera_framing',
+        'emotional_dna',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'figure_moment', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MANGABOT_ANIME_TRAINS: {
+    description:
+      'PATH-BESPOKE — MangaBot anime-trains (Stage I2, SHADOW). THE anime train motif — countryside single-car trains at golden hour, level-crossing moments, train interiors with sunset windows, seaside track curves (5cm/sec + Spirited-Away sea-train lineage). Real JR-style rolling stock, NO IP liveries, NO fantasy/impossible trains (ZERO overlap with DreamBot dream-express, which is impossible-worlds). light_moment is the MONEY-SHOT. passenger_glimpse 50%-gated (single small engaged figure). camera_framing MANDATORY. Look-enabled. Culture-coded, role-only, wistful-not-grief.',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'train_scene',
+        'light_moment',
+        'season_air',
+        'landscape_beyond',
+        'camera_framing',
+        'emotional_dna',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'passenger_glimpse', gate: 0.5 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
+  MANGABOT_ANIME_RAIN: {
+    description:
+      'PATH-BESPOKE — MangaBot anime-rain (Stage I1, SHADOW). The Garden-of-Words register — rain-soaked shrine steps, shared-umbrella moments, puddle reflections, hydrangeas in June rain (tsuyu), rain on train windows. The RAIN is the HERO (lush saturated greens + grey-silver light). rain_play is the MONEY-SHOT (how rain catches light). figure_moment is 60%-gated (a SMALL engaged umbrella figure for scale, never a hero portrait). camera_framing MANDATORY (anti-hero-portrait). Look-enabled (mangabot_anime_neutral). Culture-coded, role-only, no sadness-porn (quiet beauty).',
+    slots: {
+      universal: ['lighting', 'atmosphere'],
+      bot: [],
+      path: [
+        'rain_scene',
+        'rain_play',
+        'water_reflection',
+        'weather_air',
+        'camera_framing',
+        'emotional_dna',
+      ],
+    },
+    pickN: {},
+    conditionalLayer: { slot: 'figure_moment', gate: 0.6 },
+    framingModes: null,
+    anchorScaleRange: null,
+  },
+
   MANGABOT_ISEKAI_FANTASY: {
     description:
       'PATH-BESPOKE — MangaBot isekai-fantasy (2026-05-22 axis-system migration). Anime isekai canon — Sword Art Online / Re:Zero / Konosuba / Overlord / Frieren / Mushoku Tensei / Slime / Restaurant of Another World / Log Horizon / Tate no Yuusha. Painterly anime cel-shaded register with anime-isekai-coded settings, characters, magic, creatures. NOT Western Witcher / Skyrim / D&D. 14 path-bespoke axes designed around anime-isekai-specific content.',
