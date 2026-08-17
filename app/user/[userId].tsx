@@ -434,8 +434,10 @@ export default function PublicProfileScreen() {
       />
       {/* Posts / Reposts icon toggle — shown on every profile (not blocked).
           Reposts are viewable even on private accounts we don't follow, so the
-          toggle stays available even when the Posts album itself is locked. */}
-      {activeTab === 'posts' && !isBlocked && (
+          toggle stays available even when the Posts album itself is locked.
+          Bots never repost (autoposters), so hide the toggle entirely for them —
+          there's nothing to switch to, and it keeps the reposts album unreachable. */}
+      {activeTab === 'posts' && !isBlocked && !isBot && (
         <View style={styles.gridToggleRow}>
           {(
             [
@@ -656,6 +658,14 @@ export default function PublicProfileScreen() {
                 highlightPostId={viewedPost}
                 onScrollProgress={handleScrollProgress}
                 scrollToTopToken={scrollToTopBump}
+                // Dark-launch: lets the supreme admin see this bot's hidden shadow
+                // renders at the top of the grid (admin-only; hidden from everyone
+                // else via the get_shadow_feed RPC gate). See BOT_DARK_LAUNCH_PLAN.md.
+                shadowAuthor={
+                  profile
+                    ? { username: profile.username, avatar_url: profile.avatar_url ?? null }
+                    : undefined
+                }
               />
             ) : (
               <ScrollView
