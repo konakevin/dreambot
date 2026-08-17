@@ -47,13 +47,15 @@ export default function SignupScreen() {
     });
     setLoading(false);
     // Which branch runs depends on the Supabase Auth "Confirm email" setting
-    // (mailer_autoconfirm). As of 2026-06-19 confirmation is REQUIRED
-    // (mailer_autoconfirm=false), so signUp() returns NO session and the
-    // check-your-email branch is the live production path — this is also our
-    // first line of defense against free-first-dream farming (an account can't
-    // reach onboarding until a real inbox confirms it). The has-session branch
-    // is the fallback if the dashboard ever flips autoconfirm back on; keep both
-    // so the flow is correct either way.
+    // (mailer_autoconfirm). Verified 2026-08-17: autoconfirm is currently ON
+    // (mailer_autoconfirm=true), so signUp() returns a live session and the
+    // has-session branch is the production path. Email verification is OFF by
+    // choice: nearly all signups are Apple/Google OAuth (inherently verified),
+    // and anti-farming is handled by DeviceCheck, not email confirmation. The
+    // awaiting-confirmation branch below is a DORMANT fallback that only runs if
+    // the dashboard flips autoconfirm back off (which would also require the
+    // Confirm-signup email + a working confirm landing to be built first). Keep
+    // both branches so the flow stays correct either way.
     if (error) {
       showAlert('Sign up failed', error.message);
     } else if (data.session) {
