@@ -314,7 +314,12 @@ export default function NewPostScreen() {
         {/* Absolutely centered so the title sits at the true screen center
             regardless of the (unequal-width) Back / Post buttons flanking it. */}
         <View style={styles.headerTitle} pointerEvents="none">
-          <GradientTitle>{step === 'compose' ? 'New Post' : 'Select images'}</GradientTitle>
+          {/* size 20 (below the 24 nav default) so the longer "Select Images"
+              clears the flanking Cancel / Next (N) buttons instead of crowding
+              them (Kevin 2026-08-17). */}
+          <GradientTitle size={20}>
+            {step === 'compose' ? 'New Post' : 'Select Images'}
+          </GradientTitle>
         </View>
         {step === 'select' ? (
           <TouchableOpacity
