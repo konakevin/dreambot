@@ -196,6 +196,15 @@ export const PostTile = memo(function PostTile({
           <Text style={styles.newBadgeText}>New</Text>
         </View>
       )}
+      {/* Dark-launch SHADOW badge — admin-only tiles (uploads.shadow=true,
+          hidden from every public surface). Distinct purple so it's unmistakable
+          against the accent "New"/"Pin" pills. See BOT_DARK_LAUNCH_PLAN.md. */}
+      {item.shadow && (
+        <View style={styles.shadowBadge} pointerEvents="none">
+          <Ionicons name="eye-off" size={9} color="#FFFFFF" />
+          <Text style={styles.shadowBadgeText}>SHADOW</Text>
+        </View>
+      )}
       {/* "Public" badge on PUBLIC dreams (Dreams album) — tiles stay full
           contrast; only the live ones carry the badge. On-brand dark pill +
           icon + text, matching the model / "Just viewed" badges. */}
@@ -407,6 +416,28 @@ const styles = StyleSheet.create({
     fontSize: fontScale(10),
     fontWeight: '800',
     letterSpacing: 0.3,
+  },
+  shadowBadge: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: 7,
+    paddingVertical: verticalScale(2.5),
+    borderRadius: 999,
+    backgroundColor: '#7C4DFF',
+    shadowColor: '#000',
+    shadowOpacity: 0.35,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  shadowBadgeText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(9),
+    fontWeight: '800',
+    letterSpacing: 0.4,
   },
   // Multi-select overlays — accent ring + dim on selected tiles; the badge
   // circle top-right flips from hollow (unselected) to accent-filled + check.

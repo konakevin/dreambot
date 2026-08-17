@@ -12,6 +12,7 @@ import { useFavoritePosts } from '@/hooks/useFavoritePosts';
 import { useUserReposts } from '@/hooks/useUserReposts';
 import { usePublicProfilePosts, loadPublicProfilePostsUntil } from '@/hooks/usePublicProfilePosts';
 import { useHashtagPosts } from '@/hooks/useHashtagPosts';
+import { useShadowPosts } from '@/hooks/useShadowPosts';
 import { useMyDreams } from '@/hooks/useMyDreams';
 import { useAuthStore } from '@/store/auth';
 import { PostTile } from '@/components/PostTile';
@@ -101,6 +102,11 @@ interface PostGridProps {
    *  the own Dreams tab. Each becomes a PendingDreamTile that flows with the
    *  finished tiles and is replaced by the finished tile on completion. */
   pendingDreams?: InFlightDream[];
+  /** Author (username/avatar) for dark-launch SHADOW tiles on a `user` grid. When
+   *  provided AND the viewer is the supreme admin, this bot's hidden shadow
+   *  renders are prepended to the grid (SHADOW-badged, admin-only). The pushed
+   *  user-profile screen passes the bot's profile here. See BOT_DARK_LAUNCH_PLAN.md. */
+  shadowAuthor?: { username: string; avatar_url: string | null };
 }
 
 export function PostGrid({
@@ -116,6 +122,7 @@ export function PostGrid({
   selection,
   extraBottomInset = 0,
   pendingDreams = [],
+  shadowAuthor,
 }: PostGridProps) {
   const listRef = useRef<FlashListRef<GridItem>>(null);
   // Selection order (1-based) from the selected-ids Set's insertion order —
@@ -201,6 +208,9 @@ export function PostGrid({
   // query stale + triggers refetch atomically, the documented pattern.
   const queryClient = useQueryClient();
   const authUserId = useAuthStore((s) => s.user?.id);
+  // Dark-launch: on a bot's `user` grid, the supreme admin sees this bot's hidden
+  // shadow renders prepended (admin-only; the RPC returns [] to everyone else).
+  const shadowQuery = useShadowPosts(userId, authUserId, shadowAuthor, isUser);
   const activeQueryKey = useMemo(() => {
     if (isOwn_) return ['userPosts', authUserId];
     if (isSaved) return ['favoritePosts', authUserId];
@@ -242,10 +252,13 @@ export function PostGrid({
     }
   }, [queryClient, activeQueryKey, onRefreshExtra]);
 
-  const posts: DreamPostItem[] = useMemo(
-    () => activeQuery.data?.pages.flatMap((p) => p.rows) ?? [],
-    [activeQuery.data]
-  );
+  const posts: DreamPostItem[] = useMemo(() => {
+    const base = activeQuery.data?.pages.flatMap((p) => p.rows) ?? [];
+    // Prepend the admin-only shadow tiles so they sit at the top of the bot's
+    // grid for review. Empty for every non-admin (RPC + hook both gate).
+    const shadow = shadowQuery.data ?? [];
+    return shadow.length > 0 ? [...shadow, ...base] : base;
+  }, [activeQuery.data, shadowQuery.data]);
 
   // Recently-finished dreams (completion beat). Only the Dreams grid (non-posted
   // filter) tracks renders, so only it consumes these. Each lingers ~1.7s so its

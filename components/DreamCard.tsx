@@ -140,6 +140,11 @@ export interface DreamPostItem {
   face_swap_mode?: string | null;
   is_public?: boolean;
   posted_at?: string | null;
+  /** Dark-launch marker (migration 376). TRUE only on shadow renders surfaced to
+   * the supreme admin via get_shadow_feed (uploads.shadow=true, is_public=false).
+   * Set client-side in useShadowPosts; drives the SHADOW tile badge. Never on a
+   * public row. See BOT_DARK_LAUNCH_PLAN.md. */
+  shadow?: boolean;
   /** Owner-witnessed marker (migration 399). Set when the owner saw/posted this
    * dream; gates the album "New" pill so their own dreams don't show as new. */
   owner_seen_at?: string | null;
