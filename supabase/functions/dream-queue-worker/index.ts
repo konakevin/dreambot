@@ -202,11 +202,18 @@ Deno.serve(async (req) => {
     const staleCutoff = new Date(Date.now() - STALE_THRESHOLD_MIN * 60 * 1000).toISOString();
     // Pull the migration-272 breadcrumbs so we can report WHERE the dead isolate
     // died — current_stage/model survived the kill on this row.
+    // Bounded + ordered: in_progress is held to ~50 by the per-weight caps, so
+    // staleRows is realistically tiny — but pin an explicit oldest-first bound
+    // (index-backed by idx_dream_queue_stale) so the read can never silently hit
+    // PostgREST's implicit 1000-row cap in a compound-failure pileup, and any
+    // overflow drains deterministically (oldest first) over subsequent ticks.
     const { data: staleRows } = await supabase
       .from('dream_queue')
       .select('id, current_stage, model, source, user_id, attempt_count')
       .eq('status', 'in_progress')
-      .lt('started_at', staleCutoff);
+      .lt('started_at', staleCutoff)
+      .order('started_at', { ascending: true })
+      .limit(500);
     for (const row of staleRows ?? []) {
       const { nextAttempt, dead } = decideStaleRecovery(
         row.attempt_count,
