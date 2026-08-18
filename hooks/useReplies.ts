@@ -1,19 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type { Comment } from '@/hooks/useComments';
+import type { Database } from '@/types/database';
 
-function mapRow(row: Record<string, unknown>): Comment {
+// Generated get_replies RETURN row — mapping from this (not a Record<string,unknown>
+// cast) makes a dropped client-read column a tsc error, same lock as useComments.
+// (get_replies has no reply_count — a reply has no nested replies — so it's 0 here.)
+type GetRepliesRow = Database['public']['Functions']['get_replies']['Returns'][number];
+
+function mapRow(row: GetRepliesRow): Comment {
   return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    username: row.username as string,
-    avatarUrl: (row.avatar_url as string | null) ?? null,
-    body: row.body as string,
-    likeCount: row.like_count as number,
+    id: row.id,
+    userId: row.user_id,
+    username: row.username,
+    avatarUrl: row.avatar_url ?? null,
+    body: row.body,
+    likeCount: row.like_count,
     replyCount: 0,
-    createdAt: row.created_at as string,
-    isLiked: row.is_liked as boolean,
-    parentId: (row.parent_id as string | undefined) ?? undefined,
+    createdAt: row.created_at,
+    isLiked: row.is_liked,
+    parentId: row.parent_id ?? undefined,
   };
 }
 

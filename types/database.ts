@@ -3852,6 +3852,7 @@ export type Database = {
           body: string;
           created_at: string;
           id: string;
+          is_liked: boolean;
           like_count: number;
           parent_id: string;
           reply_count: number;

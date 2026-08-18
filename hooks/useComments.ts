@@ -1,5 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/database';
+
+// The generated RETURN row shape of the get_comments RPC. Mapping from THIS
+// (instead of a Record<string,unknown> cast) is the compile-time lock for the
+// 2026-08-18 is_liked regression: if a future migration drops a column the client
+// reads, `row.<col>` becomes a tsc error here — not a silent runtime `undefined`.
+// Keep types/database.ts regenerated after get_comments migrations so this holds.
+type GetCommentsRow = Database['public']['Functions']['get_comments']['Returns'][number];
 
 export interface Comment {
   id: string;
@@ -16,18 +24,18 @@ export interface Comment {
 
 const PAGE_SIZE = 20;
 
-function mapRow(row: Record<string, unknown>): Comment {
+function mapRow(row: GetCommentsRow): Comment {
   return {
-    id: row.id as string,
-    userId: row.user_id as string,
-    username: row.username as string,
-    avatarUrl: (row.avatar_url as string | null) ?? null,
-    body: row.body as string,
-    likeCount: row.like_count as number,
-    replyCount: row.reply_count as number,
-    createdAt: row.created_at as string,
-    isLiked: row.is_liked as boolean,
-    parentId: (row.parent_id as string | undefined) ?? undefined,
+    id: row.id,
+    userId: row.user_id,
+    username: row.username,
+    avatarUrl: row.avatar_url ?? null,
+    body: row.body,
+    likeCount: row.like_count,
+    replyCount: row.reply_count,
+    createdAt: row.created_at,
+    isLiked: row.is_liked,
+    parentId: row.parent_id ?? undefined,
   };
 }
 
