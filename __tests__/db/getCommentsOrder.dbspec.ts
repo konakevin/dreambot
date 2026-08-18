@@ -18,6 +18,8 @@ const pool: Pool = makePool();
 let db: PoolClient;
 
 const AUTHOR = '00000000-0000-0000-0000-00000000a003';
+const VIEWER = '00000000-0000-0000-0000-00000000a099';
+const OTHER = '00000000-0000-0000-0000-00000000a098';
 const UPLOAD = '00000000-0000-0000-0000-00000000b001';
 const PARENT = '00000000-0000-0000-0000-00000000c010';
 
@@ -31,6 +33,15 @@ async function replyBodies(): Promise<string[]> {
   await db.query("SELECT set_config('test.uid', $1, false)", [AUTHOR]);
   const { rows } = await db.query('SELECT body FROM public.get_replies($1, 50)', [PARENT]);
   return rows.map((r) => r.body as string);
+}
+
+// Returns get_comments rows (body + is_liked) as seen by `viewer`.
+async function commentsAsViewer(viewer: string): Promise<{ body: string; is_liked: boolean }[]> {
+  await db.query("SELECT set_config('test.uid', $1, false)", [viewer]);
+  const { rows } = await db.query('SELECT body, is_liked FROM public.get_comments($1, 50, 0)', [
+    UPLOAD,
+  ]);
+  return rows.map((r) => ({ body: r.body as string, is_liked: r.is_liked as boolean }));
 }
 
 beforeAll(async () => {
@@ -65,11 +76,13 @@ beforeAll(async () => {
   await db.query('DROP FUNCTION IF EXISTS public.get_comments(uuid, integer, integer) CASCADE');
   await db.query('DROP FUNCTION IF EXISTS public.get_replies(uuid, integer) CASCADE');
 
-  // get_comments from 379 (ASC), get_replies from 317 (ASC).
+  // get_comments from 436 (ASC + is_liked restored — supersedes 379), get_replies
+  // from 317 (ASC). 436 is a DROP + plain CREATE, so the start marker is
+  // `CREATE FUNCTION` (not `CREATE OR REPLACE`).
   await db.query(
     extract(
-      migrationSql('379_get_comments_oldest_first.sql'),
-      'CREATE OR REPLACE FUNCTION public.get_comments',
+      migrationSql('436_get_comments_restore_is_liked.sql'),
+      'CREATE FUNCTION public.get_comments',
       '$$;'
     )
   );
@@ -121,4 +134,46 @@ it('get_replies returns replies OLDEST first (matches the parent thread order)',
     [UPLOAD, AUTHOR, PARENT]
   );
   expect(await replyBodies()).toEqual(['reply A', 'reply B', 'reply C']);
+});
+
+// ── is_liked regression lock (the 2026-08-18 bug) ──────────────────────────────
+// Migration 317 silently dropped is_liked from get_comments (carried forward by
+// 379); the heart never reflected a prior-session like. 436 restored it. These
+// pin the per-viewer like state so a future rewrite can't drop it unnoticed.
+it('get_comments returns is_liked=true ONLY for comments the viewer liked', async () => {
+  const liked = '00000000-0000-0000-0000-00000000c001';
+  const notLiked = '00000000-0000-0000-0000-00000000c002';
+  await db.query(
+    `INSERT INTO public.comments (id, upload_id, user_id, parent_id, body, created_at) VALUES
+       ($1, $3, $5, NULL, 'liked-one',  now() - interval '2 min'),
+       ($2, $3, $5, NULL, 'not-liked',  now() - interval '1 min')`,
+    [liked, notLiked, UPLOAD, null, AUTHOR]
+  );
+  // VIEWER liked only the first comment.
+  await db.query(`INSERT INTO public.comment_likes (comment_id, user_id) VALUES ($1, $2)`, [
+    liked,
+    VIEWER,
+  ]);
+
+  const asViewer = await commentsAsViewer(VIEWER);
+  expect(asViewer).toEqual([
+    { body: 'liked-one', is_liked: true },
+    { body: 'not-liked', is_liked: false },
+  ]);
+});
+
+it("get_comments is_liked is per-viewer — another user's like does NOT set mine", async () => {
+  const c = '00000000-0000-0000-0000-00000000c003';
+  await db.query(
+    `INSERT INTO public.comments (id, upload_id, user_id, parent_id, body) VALUES ($1, $2, $3, NULL, 'shared')`,
+    [c, UPLOAD, AUTHOR]
+  );
+  // OTHER liked it; VIEWER did not.
+  await db.query(`INSERT INTO public.comment_likes (comment_id, user_id) VALUES ($1, $2)`, [
+    c,
+    OTHER,
+  ]);
+
+  expect(await commentsAsViewer(VIEWER)).toEqual([{ body: 'shared', is_liked: false }]);
+  expect(await commentsAsViewer(OTHER)).toEqual([{ body: 'shared', is_liked: true }]);
 });
