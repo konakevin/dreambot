@@ -145,9 +145,9 @@ it('get_comments returns is_liked=true ONLY for comments the viewer liked', asyn
   const notLiked = '00000000-0000-0000-0000-00000000c002';
   await db.query(
     `INSERT INTO public.comments (id, upload_id, user_id, parent_id, body, created_at) VALUES
-       ($1, $3, $5, NULL, 'liked-one',  now() - interval '2 min'),
-       ($2, $3, $5, NULL, 'not-liked',  now() - interval '1 min')`,
-    [liked, notLiked, UPLOAD, null, AUTHOR]
+       ($1, $3, $4, NULL, 'liked-one',  now() - interval '2 min'),
+       ($2, $3, $4, NULL, 'not-liked',  now() - interval '1 min')`,
+    [liked, notLiked, UPLOAD, AUTHOR]
   );
   // VIEWER liked only the first comment.
   await db.query(`INSERT INTO public.comment_likes (comment_id, user_id) VALUES ($1, $2)`, [
