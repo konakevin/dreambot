@@ -83,7 +83,9 @@ cast into one of their places. Free (no charge).
   `_shared/dreamQueueLifecycle.ts`) — retry/backoff/dead-letter + refund + notify.
 - **Worker invocation = pg_cron every minute + per-enqueue kick (fast path, uses `waitUntil`) + a GitHub
   Actions `x-worker-sync` backstop** (`dream-queue-sync.yml`, every 5 min, held-connection loop) that
-  drains even when `waitUntil` is down. `RENDER_TIMEOUT_MS` 120s (under the 150s gateway idle ceiling).
+  drains even when `waitUntil` is down. `RENDER_TIMEOUT_MS` = 140s for create/DLT
+  (`dispatchers/create.ts`) + 120s for first-dream (`dispatchers/first_dream.ts`, shorter because it
+  runs a multi-tier cascade) — both under the 150s gateway idle ceiling.
 - **PER-WEIGHT concurrency caps are the anti-546 lever**, enforced ATOMICALLY inside
   `claim_dream_queue_jobs_by_weight` (migration 275, per-weight advisory lock — no overshoot under
   concurrent invokers). `weight` set at enqueue (face-swap-likely = heavy, plain text + restyle = light);

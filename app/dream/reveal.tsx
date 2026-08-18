@@ -134,18 +134,18 @@ export default function DreamRevealScreen() {
   const dreamBadge = badgeParts.join(' · ');
 
   async function handlePost() {
-    if (!user || saving) return;
+    if (!user || !result || saving) return;
     setSaving(true);
     try {
       // Save as private first, then route to New Post screen for description + publish
       const { uploadId } = await saveDream({
         userId: user.id,
-        tempImageUrl: result!.imageUrl,
-        prompt: result!.prompt,
-        aiConcept: result!.aiConcept,
-        dreamMedium: result!.resolvedMedium,
-        dreamVibe: result!.resolvedVibe,
-        existingUploadId: result!.uploadId ?? undefined,
+        tempImageUrl: result.imageUrl,
+        prompt: result.prompt,
+        aiConcept: result.aiConcept,
+        dreamMedium: result.resolvedMedium,
+        dreamVibe: result.resolvedVibe,
+        existingUploadId: result.uploadId ?? undefined,
       });
 
       queryClient.invalidateQueries({ queryKey: ['my-dreams'] });
@@ -164,18 +164,18 @@ export default function DreamRevealScreen() {
   // private draft at generation, or we insert one here as a fallback). Skipping
   // just dismisses without posting publicly; nothing is lost.
   async function handleSkip() {
-    if (!user || saving) return;
+    if (!user || !result || saving) return;
     setSaving(true);
     try {
       // Edge Function already created a private draft — only insert if no existing upload
-      if (!result!.uploadId) {
+      if (!result.uploadId) {
         await saveDream({
           userId: user.id,
-          tempImageUrl: result!.imageUrl,
-          prompt: result!.prompt,
-          aiConcept: result!.aiConcept,
-          dreamMedium: result!.resolvedMedium,
-          dreamVibe: result!.resolvedVibe,
+          tempImageUrl: result.imageUrl,
+          prompt: result.prompt,
+          aiConcept: result.aiConcept,
+          dreamMedium: result.resolvedMedium,
+          dreamVibe: result.resolvedVibe,
         });
       }
 

@@ -200,7 +200,7 @@ export default function CommentsScreen() {
               renderItem={({ item }) => (
                 <CommentRow
                   comment={item}
-                  uploadId={uploadId!}
+                  uploadId={uploadId}
                   postOwnerId={postOwnerId}
                   onReply={handleReply}
                   expandedCommentId={expandedCommentId}

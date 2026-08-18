@@ -173,7 +173,7 @@ export default function SharePostScreen() {
     trackPostShared({ recipient_count: selected.size });
 
     sendShare(
-      { uploadId: uploadId!, receiverIds: Array.from(selected) },
+      { uploadId, receiverIds: Array.from(selected) },
       {
         onSuccess: () => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -208,7 +208,7 @@ export default function SharePostScreen() {
     // we render the alert (avoids a flash of the alert under the sheet).
     setTimeout(() => {
       openDownloadSheet({
-        id: uploadId!,
+        id: uploadId,
         imageUrl,
         imageUrlHq: imageUrlHq ?? null,
         faceSwapMode: faceSwapMode ?? null,
