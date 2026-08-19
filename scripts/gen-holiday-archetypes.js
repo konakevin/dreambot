@@ -94,6 +94,103 @@ const ARCHETYPES = {
       'a slightly-too-big white lab coat over a rumpled shirt and skinny tie, rubber gloves, brass goggles pushed up onto the forehead',
       'a retro laboratory crackling with Tesla coils, bubbling green-and-violet beakers, jars of glowing goo, a chalkboard'
     ),
+    // ── additive scene-forward categories (2026-08-19, Kevin) ──────────────────
+    trick_or_treating: A(
+      'photography',
+      'photography',
+      'cozy hooded coats (hoods down), warm scarves, candy pails',
+      'a decorated neighborhood street at dusk, glowing jack-o-lanterns on every porch, warm-lit windows, orange string lights, drifting leaves, a low harvest moon'
+    ),
+    halloween_party: A(
+      'photography',
+      'canvas',
+      'festive party outfits with playful light costume accents, cozy layers',
+      'a lively home Halloween party at night, orange-and-purple string lights, carved pumpkins, cobweb garlands, warm candlelit glow, a decorated mantel'
+    ),
+    decorated_neighborhood: A(
+      'photography',
+      'photography',
+      'cozy autumn coats and scarves',
+      'a cute suburban street draped in playful Halloween decor, inflatable ghosts, posed skeletons, glowing pumpkins, string lights, fiery trees at dusk'
+    ),
+    pumpkin_carving: A(
+      'heirloom',
+      'heirloom',
+      'cozy sweaters and aprons',
+      'a candlelit rustic porch strewn with carved pumpkins, scattered seeds, glowing lanterns, an autumn wreath, warm amber light, fiery foliage'
+    ),
+    fall_festival: A(
+      'canvas',
+      'canvas',
+      'cozy flannel, scarves, beanies',
+      'a festive fall harvest festival at dusk, a mountain of pumpkins, hay bales, warm string lights, game booths, a glowing ferris wheel, a harvest moon'
+    ),
+    haunted_hayride: A(
+      'heirloom',
+      'heirloom',
+      'flannel, corduroy, a cozy blanket over the shoulders',
+      'a lantern-lit wagon hayride through a misty farm at night, towering cornstalks, glowing jack-o-lanterns along the trail, a huge harvest moon'
+    ),
+    cozy_porch: A(
+      'photography',
+      'heirloom',
+      'chunky knit sweaters, a plaid blanket',
+      'a beautiful porch framed by fiery Halloween-colored trees and bushes, carved pumpkins on the steps, an autumn wreath, warm lantern light at golden hour'
+    ),
+    canyon_fall_hike: A(
+      'photography',
+      'canvas',
+      'cozy hiking layers, flannel, a light pack',
+      'a canyon trail ablaze with red, orange, and gold autumn trees, a winding leaf-strewn path, warm low sun, distant glowing ridges, a river below'
+    ),
+    movie_night: A(
+      'heirloom',
+      'heirloom',
+      'cozy pajamas and oversized sweaters, a blanket',
+      'a cozy living room decked for Halloween, glowing jack-o-lanterns, cobweb garlands, a candy bowl, warm firelight, a soft spooky glow, a black cat'
+    ),
+    enchanted_pumpkin_patch: A(
+      'canvas',
+      'canvas',
+      'cozy fall coats and scarves',
+      'a magical night pumpkin patch, hundreds of glowing carved jack-o-lanterns, drifting paper lanterns, fireflies, silver mist, a huge harvest moon'
+    ),
+    haunted_mansion: A(
+      'gothic_painted',
+      'illustration',
+      'elegant gothic attire or cozy fall coats',
+      'a towering haunted Victorian mansion under a full moon, jack-o-lanterns strewn across the overgrown yard, black cats, wheeling bats, a wrought-iron gate, drifting fog'
+    ),
+    jack_o_lantern_festival: A(
+      'gothic_painted',
+      'illustration',
+      'cozy fall or light gothic attire',
+      'a hillside sea of thousands of glowing carved jack-o-lanterns at night, lantern-lit winding paths, warm orange glow, drifting embers, a huge harvest moon'
+    ),
+    gothic_masquerade_ball: A(
+      'painted_gothic_fantasy',
+      'illustration',
+      'opulent masquerade ballgown and tux, ornate feathered masks HELD in hand (never worn), long gloves',
+      'a grand candlelit gothic ballroom, dripping crystal chandeliers, tall arched windows spilling moonlight, deep-red velvet drapes, a carved staircase'
+    ),
+    midnight_carriage: A(
+      'gothic_oil_garden',
+      'illustration',
+      'elegant gothic formalwear, flowing cloaks',
+      'a black horse-drawn carriage on a foggy cobblestone road, gothic wrought-iron lanterns, bare twisted trees, drifting mist, a huge full moon overhead'
+    ),
+    gothic_glam_editorial: A(
+      'glamour',
+      'illustration',
+      'haute-couture gothic gowns and sharp suits, dramatic black-and-crimson, opulent jewels',
+      'a hyper-stylized saturated gothic-glam editorial set, dramatic spotlights, black orchids and roses, deep jewel-toned drapes, opulent maximalist décor'
+    ),
+    gothic_greenhouse: A(
+      'gothic_oil_garden',
+      'canvas',
+      'elegant gothic attire, velvet and lace',
+      'an overgrown moonlit gothic conservatory, black roses, hanging lanterns, cracked glass panes, tangled ivy, jewel-toned light, a mossy stone fountain'
+    ),
   },
   fall: {
     corn_maze: A(
@@ -227,7 +324,7 @@ async function seed(holiday, arch, def, table, extra, prompt) {
   const kind = arg('kind', 'cast'); // dual | single | scene | cast(=dual+single) | all
   const set = ARCHETYPES[holiday];
   if (!set) throw new Error(`unknown holiday "${holiday}"`);
-  const arches = archArg === 'all' ? Object.keys(set) : [archArg];
+  const arches = archArg === 'all' ? Object.keys(set) : archArg.split(',').map((s) => s.trim());
   let total = 0;
   for (const arch of arches) {
     const def = set[arch];

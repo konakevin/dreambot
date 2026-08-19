@@ -1457,7 +1457,7 @@ Deno.serve(async (req) => {
           );
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'goofy'; // costume+scene uses the default couple pose (heads apart)
+          dualSceneKind = 'elegant'; // refined partner pose — NO playful thumbs-up/props on holiday
           dualScenePosePool = s.posePool ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
@@ -1569,7 +1569,7 @@ Deno.serve(async (req) => {
           const s = pool[Math.floor(Math.random() * pool.length)];
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
-          dualSceneKind = 'goofy';
+          dualSceneKind = 'elegant'; // refined solo pose — NO playful/active props on holiday
           dualScenePosePool = s.posePool ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
