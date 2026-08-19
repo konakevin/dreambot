@@ -170,8 +170,8 @@ const ARCHETYPES = {
     gothic_masquerade_ball: A(
       'painted_gothic_fantasy',
       'illustration',
-      'opulent masquerade ballgown and tux, ornate feathered masks HELD in hand (never worn), long gloves',
-      'a grand candlelit gothic ballroom, dripping crystal chandeliers, tall arched windows spilling moonlight, deep-red velvet drapes, a carved staircase'
+      'opulent gothic evening formalwear — a sharp velvet tailcoat with a jeweled brocade waistcoat and high cravat, or a sweeping jeweled ballgown, with long satin gloves',
+      'a grand candlelit gothic ballroom, dripping crystal chandeliers, tall arched windows spilling moonlight, deep-red velvet drapes, a carved staircase, jack-o-lanterns glowing along the balustrade'
     ),
     midnight_carriage: A(
       'gothic_oil_garden',

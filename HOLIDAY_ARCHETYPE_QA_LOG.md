@@ -30,10 +30,10 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 | 16 | cozy_porch | photography | 1 | 4.7 | ✅ PASS | R1 all PHOTOGRAPHIC + warm 4.7 — couple1 refined partner pose (fix working) topiary+jack-o-lantern path; self nailed the porch (white pumpkins+brass lanterns); plus1 cozy sweater+string lights+steaming mug |
 | 17 | canyon_fall_hike | photography | 1 | 4.57 | ✅ PASS | R1 — couple1 4.6 leaf-strewn trail refined pose; self 4.7 canyon walls+jack-o-lanterns+ravens; plus1 4.4 red-canyon+black cats but recurring feather-boa+velvet reads fancier than a hike. **NOTE: white feather boa recurs on SOLO renders (glamour pool = Glamour-Shots retro aesthetic nudges boas); harmless, not chasing** |
 | 18 | movie_night | photography | 2 | 4.65 | ✅ PASS | R1 plus1 rendered a plunging glam blazer (glamour-solo pool pulls glam attire onto cozy archetypes — intermittent ~1/8 female solos); re-rolled R2 → cozy sweater+plaid-pj plus1 4.7, velvet-pajama couple 4.7, smoking-jacket self 4.6. **KNOWN WART: glamour-solo occasionally over-glams cozy female solos (no clean no-DDL fix; flag for Kevin)** |
-| 19 | enchanted_pumpkin_patch | canvas | — | — | ⬜ pending | |
-| 20 | haunted_mansion | gothic_painted | — | — | ⬜ pending | |
-| 21 | jack_o_lantern_festival | gothic_painted | — | — | ⬜ pending | |
-| 22 | gothic_masquerade_ball | painted_gothic_fantasy | — | — | ⬜ pending | |
+| 19 | enchanted_pumpkin_patch | canvas | 1 | 4.7 | ✅ PASS | R1 all magical — couple1 4.7 stone bridge + floating pumpkin-lights; self 4.6 magic swirls + gnarled tree + moon; plus1 4.8 stunning impasto floating paper lanterns + pumpkin cart |
+| 20 | haunted_mansion | gothic_painted | 1 | 4.57 | ✅ PASS | R1 — couple1 4.7 elegant gothic pair (tux+leaf-lace gown) on mansion steps, bats+gargoyles; self 4.5 emerald velvet frock coat+cravat (recurring boa); plus1 4.5 velvet+jewels. (self needed 3-retry re-fire on sustained WORKER_RESOURCE_LIMIT) |
+| 21 | jack_o_lantern_festival | gothic_painted | 1 | 4.63 | ✅ PASS | R1 — couple1 4.7 gothic Victorian pair + hillside sea of jack-o-lanterns; self 4.4 tight close-up bust (plain shirt, less interesting); plus1 4.8 full-body on winding pumpkin-lit path, magical |
+| 22 | gothic_masquerade_ball | painted_gothic_fantasy | 2 | 4.63 | ✅ PASS | R1 pre-fix: costume named "masks" → ALL 14 single rows lint-dropped (§6.1 face-occlusion); **removed masks from costume+scene** (masquerade reads via ballroom). R1 self also casual-bomber (gendered gown-lead). **R2 fix: lead costume with velvet tailcoat+cravat** → male formal; plus1 4.8 gown, self 4.4 formal. Both fixes held |
 | 23 | midnight_carriage | gothic_oil_garden | — | — | ⬜ pending | |
 | 24 | gothic_glam_editorial | glamour | — | — | ⬜ pending | |
 | 25 | gothic_greenhouse | gothic_oil_garden | — | — | ⬜ pending | |
