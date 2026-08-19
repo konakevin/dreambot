@@ -5,6 +5,8 @@ import {
   resolveActiveHolidays,
   combineHolidayPct,
   pickWeightedHoliday,
+  mapHolidayCatalogRow,
+  localDateInTz,
   type HolidayCatalogRow,
 } from '@engine/holidayWindow';
 import { sceneTypeCuts, rollSceneType } from '@engine/sceneTypeRoll';
@@ -231,6 +233,53 @@ describe('combineHolidayPct + pickWeightedHoliday', () => {
     expect(pickWeightedHoliday(actives, 0.1).key).toBe('fall'); // 0.1*40=4 < 10
     expect(pickWeightedHoliday(actives, 0.5).key).toBe('halloween'); // 0.5*40=20, past 10
     expect(pickWeightedHoliday(actives, 0.99).key).toBe('halloween');
+  });
+});
+
+describe('localDateInTz (H2 — user-local date, never server UTC)', () => {
+  it('a late-tz user on Halloween night is still Oct 31 locally', () => {
+    // Oct 31 23:00 UTC. In +14 (Kiritimati) it is already Nov 1; in -7 (LA) still Oct 31.
+    const instant = new Date(Date.UTC(2026, 9, 31, 23, 0, 0));
+    expect(localDateInTz(instant, 'Pacific/Kiritimati')).toEqual({ year: 2026, month: 11, day: 1 });
+    expect(localDateInTz(instant, 'America/Los_Angeles')).toEqual({
+      year: 2026,
+      month: 10,
+      day: 31,
+    });
+  });
+  it('defaults to UTC when tz is missing', () => {
+    const instant = new Date(Date.UTC(2026, 9, 31, 12, 0, 0));
+    expect(localDateInTz(instant, null)).toEqual({ year: 2026, month: 10, day: 31 });
+  });
+});
+
+describe('mapHolidayCatalogRow (DB snake_case → catalog)', () => {
+  it('maps a fall (flat) row', () => {
+    const row = mapHolidayCatalogRow({
+      key: 'fall',
+      display_name: 'Fall',
+      emoji: '🍂',
+      ramp_style: 'flat',
+      peak_rule: 'fixed',
+      peak_month: 10,
+      peak_day: 7,
+      window_days: 36,
+      ramp_start_pct: 10,
+      peak_pct: 10,
+      peak_lead_days: 0,
+      final_pct: 10,
+      final_days: 0,
+      sort_order: 0,
+    });
+    expect(row.rampStyle).toBe('flat');
+    expect(row.peakMonth).toBe(10);
+    expect(row.windowDays).toBe(36);
+    expect(row.peakPct).toBe(10);
+  });
+  it('defaults ramp_style to ramp', () => {
+    expect(mapHolidayCatalogRow({ key: 'x', peak_rule: 'fixed', window_days: 5 }).rampStyle).toBe(
+      'ramp'
+    );
   });
 });
 

@@ -615,7 +615,14 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
 - [x] Migration `437` **applied** (dark). Migration `438` (ramp_style + Fall season + gentle pcts) **written — needs applying** + types regen.
 - [x] `_shared/engineConfig.ts` — `holidaysEnabled` master switch (default false).
 - [x] `scripts/lib/holidayPoolLint.js` + `scripts/scan-holiday-pools.js` (T2) + **15 unit tests green**; scanner verified against live tables.
-- [x] `_shared/pools/holidayScenarioLoader.ts` — category-filtered cast + scene-only loaders (Deno-clean). *(uncommitted; lands with the render pass)*
-- [ ] nightly-dreams render branch (Path 1 + Path 2) using the multi-active model + N2 guard + T1 behavioral test.
+- [x] `_shared/pools/holidayScenarioLoader.ts` — category-filtered cast + scene-only loaders (Deno-clean).
+- [x] `_shared/holidayWindow.ts` glue: `mapHolidayCatalogRow` + `localDateInTz` (H2), unit-tested.
+- [x] **nightly-dreams Path 1 (cast: dual + solo)** — active-holiday compute (local date, opt-out, master
+  switch, `force_holiday_scene` QA), multi-active combined cut + weighted pick, N2 empty-pool fall-through.
+  Deno-clean; dark-safe (empty when disabled). *(deployed)*
+- [ ] **nightly-dreams Path 2 (pure-scene / scene-only)** — inject a `holiday_scenes` row on the pure-scene
+  path through the postcard brief + `force_holiday_scene`. (Next: map the pure-scene assembly.)
+- [ ] `uploads.holiday` marker stamp (holidayCategory → the insert) + N3 feed threading + holiday bot message.
+- [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
-- [ ] `settings/holidays.tsx` opt-out UX + holiday bot message + `uploads.holiday` marker threading (N3).
+- [ ] `settings/holidays.tsx` opt-out UX.

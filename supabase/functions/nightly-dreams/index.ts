@@ -28,6 +28,19 @@ import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { sceneTypeCuts } from '../_shared/sceneTypeRoll.ts';
+import {
+  resolveActiveHolidays,
+  combineHolidayPct,
+  pickWeightedHoliday,
+  mapHolidayCatalogRow,
+  localDateInTz,
+  type ActiveHoliday,
+} from '../_shared/holidayWindow.ts';
+import {
+  loadHolidayDual,
+  loadHolidaySingle,
+  holidaySingleCandidates,
+} from '../_shared/pools/holidayScenarioLoader.ts';
 import { buildSceneFallbackPrompt } from '../_shared/sceneFallbackPrompt.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 import {
@@ -161,6 +174,10 @@ Deno.serve(async (req) => {
 
   let userId: string;
   let vibe_profile: VibeProfile | undefined;
+  // Per-user holiday opt-outs (HOLIDAY_DREAMS_PLAN.md §3.6) — array of disabled
+  // holiday keys; absent/empty = all holidays on. Only the worker/nightly path
+  // rolls holidays (first-dream sets force_place → Roll B is skipped).
+  let holidayOptouts: string[] = [];
 
   if (isWorkerCall) {
     userId = (body.user_id as string) || '';
@@ -172,11 +189,15 @@ Deno.serve(async (req) => {
     }
     const { data: recipeRow } = await supabase
       .from('user_recipes')
-      .select('recipe')
+      .select('recipe, holiday_optouts')
       .eq('user_id', userId)
       .single();
     const recipe = (recipeRow as { recipe?: unknown } | null)?.recipe;
     vibe_profile = recipe && typeof recipe === 'object' ? (recipe as VibeProfile) : undefined;
+    const optRaw = (recipeRow as { holiday_optouts?: unknown } | null)?.holiday_optouts;
+    if (Array.isArray(optRaw)) {
+      holidayOptouts = optRaw.filter((x): x is string => typeof x === 'string');
+    }
   } else {
     const supabaseUser: SupabaseClient = createClient(
       supabaseUrl,
@@ -268,6 +289,11 @@ Deno.serve(async (req) => {
   // scenario table by category directly; applies to dual or solo per cast.
   const force_scene_category =
     typeof body.force_scene_category === 'string' ? body.force_scene_category : null;
+  // Holiday Dreams QA: force a holiday season regardless of the date. On the
+  // cast paths it draws that holiday's pool='holiday' rows; on the pure-scene
+  // path it draws its holiday_scenes rows. Test-only.
+  const force_holiday_scene =
+    typeof body.force_holiday_scene === 'string' ? body.force_holiday_scene : null;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -1244,6 +1270,59 @@ Deno.serve(async (req) => {
     // instead of a rolled pose (a playful thumbs-up would fight the go-kart).
     let dualActiveScene = false;
     let soloActiveScene = false;
+    // ── Holiday Dreams (HOLIDAY_DREAMS_PLAN.md) — the season(s) active for THIS
+    // user's LOCAL date (H2), gated by the master switch + per-user opt-out.
+    // Several can be active at once (Fall + Halloween overlap in early Oct); the
+    // roll below sums their pcts and picks one weighted by pct. `holidayCategory`
+    // is set on a holiday hit for the uploads marker + bot message.
+    let holidayCategory: string | null = null;
+    let activeHolidays: ActiveHoliday[] = [];
+    try {
+      if (force_holiday_scene) {
+        // QA: force one season at full strength, ignoring date + is_active + opt-out.
+        const { data: fr } = await supabase
+          .from('holidays')
+          .select('*')
+          .eq('key', force_holiday_scene)
+          .single();
+        if (fr) {
+          const c = mapHolidayCatalogRow(fr as Record<string, unknown>);
+          activeHolidays = [
+            {
+              key: c.key,
+              displayName: c.displayName,
+              emoji: c.emoji,
+              holidayPct: 100,
+              daysUntilPeak: 0,
+            },
+          ];
+        }
+      } else {
+        const holCfg = await fetchEngineConfig(supabase);
+        if (holCfg.holidaysEnabled) {
+          const { data: tzRow } = await supabase
+            .from('users')
+            .select('timezone')
+            .eq('id', userId)
+            .single();
+          const userTz = (tzRow as { timezone?: string | null } | null)?.timezone ?? null;
+          const localDate = localDateInTz(new Date(), userTz);
+          const { data: catRows } = await supabase
+            .from('holidays')
+            .select('*')
+            .eq('is_active', true);
+          if (catRows && catRows.length) {
+            const catalog = catRows.map((r) => mapHolidayCatalogRow(r as Record<string, unknown>));
+            const optouts = new Set(holidayOptouts);
+            activeHolidays = resolveActiveHolidays(localDate, catalog).filter(
+              (h) => !optouts.has(h.key)
+            );
+          }
+        }
+      }
+    } catch (_holErr) {
+      activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
+    }
     // A MANDATED location (force_place) suppresses the goofy/elegant special-scene
     // roll entirely. force_place is set ONLY by the onboarding FIRST DREAM, which
     // must put the user in the place they JUST picked — the "here's you in YOUR
@@ -1288,18 +1367,48 @@ Deno.serve(async (req) => {
       } else if (isDualFaceSwap) {
         const pools = await loadDualScenarios(supabase);
         const splitCfg = await fetchEngineConfig(supabase);
-        const { goofyCut, elegantCut, activeCut } = sceneTypeCuts(
+        // Holiday (HOLIDAY_DREAMS_PLAN.md §3.4 Path 1): load each active season's
+        // dual pool; only seasons with >=1 usable row contribute (N2 empty-pool
+        // fall-through). The combined pct feeds the renormalized cut (§3.3a).
+        const holDualPools = await Promise.all(
+          activeHolidays.map(async (h) => ({ h, rows: await loadHolidayDual(supabase, h.key) }))
+        );
+        const usableHol = holDualPools.filter((x) => x.rows.length > 0).map((x) => x.h);
+        const holidayPct = combineHolidayPct(usableHol);
+        const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           {
             goofy: splitCfg.dualSceneGoofyPct,
             elegant: splitCfg.dualSceneElegantPct,
             active: splitCfg.dualSceneActivePct,
           },
-          { activeEnabled: pools.active.length >= 10 }
+          { activeEnabled: pools.active.length >= 10, holidayPct }
         );
         const roll = Math.random();
         // Shuffle-bag (mig 349): filter each pool to this user's UNSEEN
         // entries before picking; record what was served. Fail-open.
-        if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
+        if (
+          usableHol.length > 0 &&
+          !force_playful &&
+          !force_elegant &&
+          !force_active &&
+          roll < holidayCut
+        ) {
+          // Holiday won: pick one active season weighted by pct, draw its costume+scene.
+          const chosen = pickWeightedHoliday(usableHol, Math.random());
+          const rows = holDualPools.find((x) => x.h.key === chosen.key)!.rows;
+          const s = pickDualScenario(
+            await filterUnseen(supabase, userId, `holiday:${chosen.key}`, rows, (x) => x.scene)
+          );
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+          dualSceneKind = 'goofy'; // costume+scene uses the default couple pose (heads apart)
+          dualScenePosePool = s.posePool ?? null;
+          dualSceneMediumKey = s.mediumKey ?? null;
+          dualSceneMediumBan = s.mediumBan ?? null;
+          holidayCategory = chosen.key;
+          fallbackReasons.push(`holiday:${chosen.key}`);
+          recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
+        } else if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
           const s = pickDualScenario(
             await filterUnseen(supabase, userId, 'dual_scn_goofy', pools.goofy, (x) => x.scene)
           );
@@ -1345,7 +1454,17 @@ Deno.serve(async (req) => {
         // a KNOWN gender widens elegant + active (half the boost each) at the
         // expense of plain. Currently 0 (Kevin, 2026-08-13) → solos roll the SAME
         // split as dual. Tunable via single_gendered_boost_pct.
-        const { goofyCut, elegantCut, activeCut } = sceneTypeCuts(
+        // Holiday (Path 1, solo): candidates = each active season's single pool for
+        // this gender (any ∪ gender). Only seasons with >=1 candidate contribute (N2).
+        const holSinglePools = await Promise.all(
+          activeHolidays.map(async (h) => ({
+            h,
+            rows: holidaySingleCandidates(await loadHolidaySingle(supabase, h.key), g ?? 'any'),
+          }))
+        );
+        const usableHolSolo = holSinglePools.filter((x) => x.rows.length > 0).map((x) => x.h);
+        const holidayPct = combineHolidayPct(usableHolSolo);
+        const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
           {
             goofy: splitCfg.singleSceneGoofyPct,
             elegant: splitCfg.singleSceneElegantPct,
@@ -1354,6 +1473,7 @@ Deno.serve(async (req) => {
           {
             genderedBoostPct: g ? splitCfg.singleGenderedBoostPct : 0,
             activeEnabled: pools.active.any.length >= 10,
+            holidayPct,
           }
         );
         const roll = Math.random();
@@ -1371,6 +1491,33 @@ Deno.serve(async (req) => {
           return s;
         };
         if (
+          usableHolSolo.length > 0 &&
+          !force_single_playful &&
+          !force_single_elegant &&
+          !force_single_active &&
+          roll < holidayCut
+        ) {
+          const chosen = pickWeightedHoliday(usableHolSolo, Math.random());
+          const rows = holSinglePools.find((x) => x.h.key === chosen.key)!.rows;
+          const unseen = await filterUnseen(
+            supabase,
+            userId,
+            `holiday:${chosen.key}`,
+            rows,
+            (x) => x.scene
+          );
+          const pool = unseen.length ? unseen : rows; // fail-open if all seen
+          const s = pool[Math.floor(Math.random() * pool.length)];
+          dualSpecialScene = s.scene;
+          dualSpecialWardrobe = s.attire;
+          dualSceneKind = 'goofy';
+          dualScenePosePool = s.posePool ?? null;
+          dualSceneMediumKey = s.mediumKey ?? null;
+          dualSceneMediumBan = s.mediumBan ?? null;
+          holidayCategory = chosen.key;
+          fallbackReasons.push(`holiday:${chosen.key}`);
+          recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
+        } else if (
           force_single_playful ||
           (!force_single_elegant && !force_single_active && roll < goofyCut)
         ) {

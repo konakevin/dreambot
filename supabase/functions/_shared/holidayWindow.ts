@@ -171,6 +171,40 @@ export function resolveActiveHolidays(
   return active.map(({ sortOrder: _sortOrder, ...h }) => h);
 }
 
+/** Map a `holidays` DB row (snake_case) to the catalog shape. */
+export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalogRow {
+  return {
+    key: r.key as string,
+    displayName: (r.display_name as string) ?? '',
+    emoji: (r.emoji as string) ?? '',
+    rampStyle: (r.ramp_style as string) === 'flat' ? 'flat' : 'ramp',
+    peakRule: ((r.peak_rule as PeakRule) ?? 'fixed') as PeakRule,
+    peakMonth: (r.peak_month as number | null) ?? null,
+    peakDay: (r.peak_day as number | null) ?? null,
+    peakNth: (r.peak_nth as number | null) ?? null,
+    peakWeekday: (r.peak_weekday as number | null) ?? null,
+    windowDays: Number(r.window_days ?? 0),
+    rampStartPct: Number(r.ramp_start_pct ?? 0),
+    peakPct: Number(r.peak_pct ?? 0),
+    peakLeadDays: Number(r.peak_lead_days ?? 0),
+    finalPct: Number(r.final_pct ?? 0),
+    finalDays: Number(r.final_days ?? 0),
+    sortOrder: Number(r.sort_order ?? 0),
+  };
+}
+
+/** The user's local calendar date for an instant + IANA tz (H2 — never server UTC). */
+export function localDateInTz(now: Date, tz: string | null | undefined): CalendarDate {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz || 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now);
+  const get = (t: string) => Number(parts.find((p) => p.type === t)?.value);
+  return { year: get('year'), month: get('month'), day: get('day') };
+}
+
 /** Combined holiday cut for the scene-type roll: sum of active pcts, capped 0-100. */
 export function combineHolidayPct(actives: ActiveHoliday[]): number {
   const total = actives.reduce((sum, h) => sum + h.holidayPct, 0);

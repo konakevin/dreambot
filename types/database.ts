@@ -2077,6 +2077,7 @@ export type Database = {
           peak_rule: string;
           peak_weekday: number | null;
           ramp_start_pct: number;
+          ramp_style: string;
           sort_order: number;
           window_days: number;
         };
@@ -2096,6 +2097,7 @@ export type Database = {
           peak_rule?: string;
           peak_weekday?: number | null;
           ramp_start_pct?: number;
+          ramp_style?: string;
           sort_order?: number;
           window_days: number;
         };
@@ -2115,6 +2117,7 @@ export type Database = {
           peak_rule?: string;
           peak_weekday?: number | null;
           ramp_start_pct?: number;
+          ramp_style?: string;
           sort_order?: number;
           window_days?: number;
         };
