@@ -85,7 +85,7 @@ const ARCHETYPES = {
     cat_burglar: A(
       'vampire_portrait',
       'illustration',
-      'a sleek matte-black catsuit, a slim belt, a soft cat-ear headband, elbow-length gloves',
+      'a sleek fitted all-black heist outfit, a high-neck top, a slim utility belt, black gloves',
       'a moonlit city rooftop, a glowing skylight, bats wheeling past a huge low harvest moon, string-lit water towers'
     ),
     mad_scientist: A(
