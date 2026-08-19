@@ -297,6 +297,9 @@ Deno.serve(async (req) => {
   // path it draws its holiday_scenes rows. Test-only.
   const force_holiday_scene =
     typeof body.force_holiday_scene === 'string' ? body.force_holiday_scene : null;
+  // QA: force the pure-scene (no-cast) composition even for a user who HAS a cast
+  // photo — the only way to exercise Path 2 (scene-only holiday) on such an account.
+  const force_pure_scene = body.force_pure_scene === true;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -679,9 +682,16 @@ Deno.serve(async (req) => {
     // Roll the dream algorithm. force_medium short-circuits the chaos
     // pre-roll, so only thread forced cast/composition when we actually
     // pre-rolled a dream type.
-    const effectiveCastRole =
-      preRolledType != null && force_cast_role === undefined ? preRolledCastRole : force_cast_role;
-    const effectiveComposition = preRolledType != null ? preRolledComposition : null;
+    const effectiveCastRole = force_pure_scene
+      ? null // QA: no cast → forces the pure-scene path
+      : preRolledType != null && force_cast_role === undefined
+        ? preRolledCastRole
+        : force_cast_role;
+    const effectiveComposition = force_pure_scene
+      ? 'pure_scene' // QA: rollDream honors an explicit forceComposition
+      : preRolledType != null
+        ? preRolledComposition
+        : null;
     // Stage breadcrumb — pre-render (roll + cast describe + scene + Sonnet brief).
     markStage(supabase, queueJobId, 'resolve');
     const dreamRoll = rollDream(

@@ -44,11 +44,13 @@ const SURFACES = [
         const today = new Date().toISOString().slice(0, 10);
         await sb.from('ai_generation_budget').delete().eq('user_id', USER_ID).eq('date', today);
 
-        const body = {
-          user_id: USER_ID,
-          force_holiday_scene: season,
-          force_cast_role: surf.cast, // 'dual' | 'self' | null
-        };
+        // scene-only (surf.cast === null): force_pure_scene forces the no-cast
+        // composition even for a user WITH a cast photo (Path 2). Cast surfaces
+        // use force_cast_role 'dual' | 'self' (Path 1).
+        const body =
+          surf.cast === null
+            ? { user_id: USER_ID, force_holiday_scene: season, force_pure_scene: true }
+            : { user_id: USER_ID, force_holiday_scene: season, force_cast_role: surf.cast };
         const t0 = Date.now();
         let data;
         try {
