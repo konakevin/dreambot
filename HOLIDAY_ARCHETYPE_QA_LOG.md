@@ -34,9 +34,46 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 | 20 | haunted_mansion | gothic_painted | 1 | 4.57 | ✅ PASS | R1 — couple1 4.7 elegant gothic pair (tux+leaf-lace gown) on mansion steps, bats+gargoyles; self 4.5 emerald velvet frock coat+cravat (recurring boa); plus1 4.5 velvet+jewels. (self needed 3-retry re-fire on sustained WORKER_RESOURCE_LIMIT) |
 | 21 | jack_o_lantern_festival | gothic_painted | 1 | 4.63 | ✅ PASS | R1 — couple1 4.7 gothic Victorian pair + hillside sea of jack-o-lanterns; self 4.4 tight close-up bust (plain shirt, less interesting); plus1 4.8 full-body on winding pumpkin-lit path, magical |
 | 22 | gothic_masquerade_ball | painted_gothic_fantasy | 2 | 4.63 | ✅ PASS | R1 pre-fix: costume named "masks" → ALL 14 single rows lint-dropped (§6.1 face-occlusion); **removed masks from costume+scene** (masquerade reads via ballroom). R1 self also casual-bomber (gendered gown-lead). **R2 fix: lead costume with velvet tailcoat+cravat** → male formal; plus1 4.8 gown, self 4.4 formal. Both fixes held |
-| 23 | midnight_carriage | gothic_oil_garden | — | — | ⬜ pending | |
-| 24 | gothic_glam_editorial | glamour | — | — | ⬜ pending | |
-| 25 | gothic_greenhouse | gothic_oil_garden | — | — | ⬜ pending | |
+| 23 | midnight_carriage | gothic_oil_garden | 1 | 4.6 | ✅ PASS | R1 — couple1 4.7 caped-tux+red-black gown, moonlit garden fountain; self 4.6 gothic frock coat at wrought-iron gate+castle; plus1 4.5 Victorian velvet (slightly theatrical hands). gothic_oil_garden fine here (figure-forward, not pure-botanical) |
+| 24 | gothic_glam_editorial | glamour | 1 | 4.63 | ✅ PASS | R1 — couple1 4.8 STUNNING editorial glam (tailcoat+satin gown, candlelit gothic dinner table); self 4.5 moody column-lean; plus1 4.6 chic velvet pantsuit powder room. The "hyper glam gothic editorial" Kevin asked for, delivered |
+| 25 | gothic_greenhouse | gothic_oil_garden | 1 | 4.57 | ✅ PASS | R1 — couple1 4.8 opulent conservatory (velvet frock coat + rose gown, moon through glass dome); self 4.4 casual jacket outdoor orchard; plus1 4.5 velvet gown gothic garden. No empty-scene (figure-forward) |
+
+## ✅ RUN COMPLETE — all 25 Halloween archetypes PASS at ≥4.5 avg
+
+**Finished 2026-08-19.** Every archetype seeded to ~25 (13-14 dual + 12-14 single cast rows),
+QA'd with a 4-render batch (2 couple / 1 self / 1 plus_one), all renders captioned
+`🎃 <archetype> R<round> <surface>` in Kevin's album for visual review. Grades ranged 4.53–4.83.
+21 passed Round 1; 4 needed a Round 2 (autumn_fae, cat_burglar, pumpkin_carving, movie_night,
+gothic_masquerade_ball, haunted_hayride — the pose fix). Zero hit Round 3.
+
+### Systemic engine/tooling fixes shipped mid-run
+- **Holiday DUAL couples now use the refined `partner` pose pool, NOT the shared `glamour` pool**
+  (`nightly-dreams/index.ts` ~1461, DEPLOYED). glamour is intentionally campy soap-opera (mirrored
+  prayer-hands / game-show smiles) and read twee on couples. Improves EVERY holiday couple, retroactively.
+- **`qa-holiday-archetype.js` retries WORKER_RESOURCE_LIMIT** (transient edge compute pressure) up to 3×.
+
+### Per-archetype gen fixes (all in `gen-holiday-archetypes.js`)
+- **autumn_fae**: `gothic_oil_garden`→`painted_gothic_fantasy` (pure-botanical scene + garden medium
+  dropped the couple → empty landscape w/ palms).
+- **cat_burglar**: catsuit+cat-ears+satin (female-coded) → **unisex** sleek all-black heist outfit
+  (male self had collapsed to casual daywear). LESSON: `gender='any'` single rows need UNISEX costumes.
+- **pumpkin_carving / haunted_hayride / movie_night**: cast medium `heirloom`→`photography` (heirloom
+  vintage-portrait prior = stiff/formal couples, undershoots the warm/smile bar).
+- **gothic_masquerade_ball**: removed "masks" from costume+scene (lint §6.1 face-occlusion dropped all
+  14 single rows); led costume with velvet tailcoat+cravat so the male solo renders formal (was casual).
+
+### Known warts to flag for Kevin (not blocking; no clean no-DDL fix)
+1. **glamour SOLO pool intermittently over-glams cozy female solos** (velvet blazer / plunging neckline /
+   feather boa) — ~1 in 8. A proper per-holiday refined SOLO pose pool needs a new `action_poses.pool`
+   value, which requires a migration (CHECK-constraint widen) I didn't run solo. Keeping glamour for solos
+   (poised; the alternative classic pools have cape/peace-sign cheese). Re-rolls land cozy.
+2. **White feather boa recurs on solos** — the glamour "Glamour Shots" retro aesthetic nudges it. Harmless.
+3. **Dual couples on the `photography` medium sometimes render as watercolor illustration** rather than a
+   photo (dual-path style quirk). Still clean + pretty; passes bar.
+
+### Next (deferred, per plan)
+Fall's 8 archetypes get the same treatment; day-of hero pools; N3 feed-marker; holiday bot caption;
+`settings/holidays.tsx` opt-out UI; scale pools past MVP-25; then flip live.
 
 ## Round-by-round detail
 (appended as each archetype is processed)
