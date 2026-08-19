@@ -300,6 +300,10 @@ Deno.serve(async (req) => {
   // QA: force the pure-scene (no-cast) composition even for a user who HAS a cast
   // photo — the only way to exercise Path 2 (scene-only holiday) on such an account.
   const force_pure_scene = body.force_pure_scene === true;
+  // QA: restrict the holiday draw to a single archetype (sub_theme) so we can grade
+  // one archetype in isolation (vampire / witch / corn_maze / …). Null = mixed.
+  const force_holiday_sub_theme =
+    typeof body.force_holiday_sub_theme === 'string' ? body.force_holiday_sub_theme : null;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -1347,7 +1351,10 @@ Deno.serve(async (req) => {
     if (composition === 'pure_scene' && activeHolidays.length > 0) {
       try {
         const holScenePools = await Promise.all(
-          activeHolidays.map(async (h) => ({ h, rows: await loadHolidayScenes(supabase, h.key) }))
+          activeHolidays.map(async (h) => ({
+            h,
+            rows: await loadHolidayScenes(supabase, h.key, force_holiday_sub_theme),
+          }))
         );
         const usable = holScenePools.filter((x) => x.rows.length > 0).map((x) => x.h);
         const pct = combineHolidayPct(usable);
@@ -1417,7 +1424,10 @@ Deno.serve(async (req) => {
         // dual pool; only seasons with >=1 usable row contribute (N2 empty-pool
         // fall-through). The combined pct feeds the renormalized cut (§3.3a).
         const holDualPools = await Promise.all(
-          activeHolidays.map(async (h) => ({ h, rows: await loadHolidayDual(supabase, h.key) }))
+          activeHolidays.map(async (h) => ({
+            h,
+            rows: await loadHolidayDual(supabase, h.key, force_holiday_sub_theme),
+          }))
         );
         const usableHol = holDualPools.filter((x) => x.rows.length > 0).map((x) => x.h);
         const holidayPct = combineHolidayPct(usableHol);
@@ -1505,7 +1515,10 @@ Deno.serve(async (req) => {
         const holSinglePools = await Promise.all(
           activeHolidays.map(async (h) => ({
             h,
-            rows: holidaySingleCandidates(await loadHolidaySingle(supabase, h.key), g ?? 'any'),
+            rows: holidaySingleCandidates(
+              await loadHolidaySingle(supabase, h.key, force_holiday_sub_theme),
+              g ?? 'any'
+            ),
           }))
         );
         const usableHolSolo = holSinglePools.filter((x) => x.rows.length > 0).map((x) => x.h);

@@ -54,12 +54,15 @@ async function fetchAll(
   return { rows, error: null };
 }
 
-/** Cast dual holiday rows for the active holiday `category`. Empty = caller falls through. */
+/** Cast dual holiday rows for the active holiday `category`. `subTheme` (QA only)
+ *  restricts to one archetype. Empty = caller falls through. */
 export async function loadHolidayDual(
   supabase: SupabaseClient,
-  category: string
+  category: string,
+  subTheme?: string | null
 ): Promise<DualScenario[]> {
-  const cached = dualCache.get(category);
+  const cacheKey = subTheme ? `${category}:${subTheme}` : category;
+  const cached = dualCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
   for (const select of ['scene,attire,pose_pool,medium_key,medium_ban', 'scene,attire']) {
@@ -67,6 +70,7 @@ export async function loadHolidayDual(
       pool: 'holiday',
       category,
       disabled: false,
+      ...(subTheme ? { sub_theme: subTheme } : {}),
     });
     if (!res.error) {
       rows = res.rows;
@@ -80,16 +84,19 @@ export async function loadHolidayDual(
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
   }));
-  dualCache.set(category, out);
+  dualCache.set(cacheKey, out);
   return out;
 }
 
-/** Cast single holiday rows, binned by gender ('any' applies to everyone). */
+/** Cast single holiday rows, binned by gender ('any' applies to everyone).
+ *  `subTheme` (QA only) restricts to one archetype. */
 export async function loadHolidaySingle(
   supabase: SupabaseClient,
-  category: string
+  category: string,
+  subTheme?: string | null
 ): Promise<HolidaySinglePools> {
-  const cached = singleCache.get(category);
+  const cacheKey = subTheme ? `${category}:${subTheme}` : category;
+  const cached = singleCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
   for (const select of [
@@ -100,6 +107,7 @@ export async function loadHolidaySingle(
       pool: 'holiday',
       category,
       disabled: false,
+      ...(subTheme ? { sub_theme: subTheme } : {}),
     });
     if (!res.error) {
       rows = res.rows;
@@ -119,7 +127,7 @@ export async function loadHolidaySingle(
     };
     (pools[gender] ?? pools.any).push(row);
   }
-  singleCache.set(category, pools);
+  singleCache.set(cacheKey, pools);
   return pools;
 }
 
@@ -132,16 +140,23 @@ export function holidaySingleCandidates(
   return [...pools.any, ...pools[gender]];
 }
 
-/** Scene-only holiday rows (Path 2) for the active holiday. Empty = caller falls through. */
+/** Scene-only holiday rows (Path 2) for the active holiday. `subTheme` (QA only)
+ *  restricts to one archetype. Empty = caller falls through. */
 export async function loadHolidayScenes(
   supabase: SupabaseClient,
-  holiday: string
+  holiday: string,
+  subTheme?: string | null
 ): Promise<HolidayScene[]> {
-  const cached = sceneCache.get(holiday);
+  const cacheKey = subTheme ? `${holiday}:${subTheme}` : holiday;
+  const cached = sceneCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
   for (const select of ['scene,tone,medium_key,medium_ban', 'scene']) {
-    const res = await fetchAll(supabase, 'holiday_scenes', select, { holiday, disabled: false });
+    const res = await fetchAll(supabase, 'holiday_scenes', select, {
+      holiday,
+      disabled: false,
+      ...(subTheme ? { sub_theme: subTheme } : {}),
+    });
     if (!res.error) {
       rows = res.rows;
       break;
@@ -153,7 +168,7 @@ export async function loadHolidayScenes(
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
   }));
-  sceneCache.set(holiday, out);
+  sceneCache.set(cacheKey, out);
   return out;
 }
 
