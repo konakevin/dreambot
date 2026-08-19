@@ -629,3 +629,43 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
 - [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
 - [ ] `settings/holidays.tsx` opt-out UX.
+
+---
+
+## 13. The day-of "hero" dream (guaranteed crescendo) — migration 439
+
+The gentle in-season echo builds toward a **guaranteed grand dream on the holiday itself**. On the
+day (`daysUntilPeak === 0`), every non-opted-out user gets a **hero** dream — the payoff.
+
+### Mechanic
+- Hero rows live in the SAME pools/categories, flagged **`day_of=true`** (migration 439). The everyday
+  in-season nights draw `day_of=false`; the day itself draws `day_of=true` exclusively.
+- **Guarantee:** when an active holiday has `daysUntilPeak === 0` AND its day-of pool is non-empty, the
+  render forces that holiday to **100%** for the roll (overriding the gentle `final_pct`) and draws the
+  hero pool. Opted-out users are untouched (they get a normal dream). Empty day-of pool → falls back to
+  the everyday holiday rows (N2 still applies), never a broken render.
+- Because the enqueuer fires per-user on their LOCAL day and the render computes the local date (H2), the
+  hero lands on each person's real holiday night.
+
+### Bespoke, not one-concept-for-all
+~6–8 **hero concepts** per holiday, each personalized so no two feel identical. The biggest personalizer
+is free: **it's their face** (and their plus-one). Then rotating axes:
+1. **Cast** — them (+ plus-one) as the star.
+2. **Role within the concept** — guest of honor / mysterious stranger / host / performer.
+3. **Palette + time** — blood-moon crimson / emerald-and-gold / silver-frost / violet-twilight.
+4. **Signature flourish** — a raven, a black cat, a candelabra, a held mask, a goblet, drifting lanterns.
+5. **Medium** — rotating the gothic/painterly registers.
+
+~6 concepts × 4 roles × 4 palettes × 6 flourishes = hundreds of distinct grand dreams. No-cast users get
+the scene-only hero (a truly cinematic version).
+
+**Halloween heroes:** the Grand Masquerade Ball · the Witches' Midnight Coven · the Haunted-Manor Feast ·
+the Moonlit Graveyard Gala · the Vampire Court · an old-castle Halloween ball.
+**Christmas / NYE / Easter / 4th:** Christmas-Morning-by-the-tree · the Grand Christmas Feast / the
+Midnight Countdown · the Champagne Gala / Spring-Garden Sunday · the Grand Egg-Hunt / the Fireworks Finale.
+
+### Build steps
+1. Migration 439 (`day_of` column + partial indexes). **[written — needs applying]**
+2. Loaders take a `dayOf` param; the render detects the day-of holiday and guarantees + draws the hero pool.
+3. `gen-holiday-pools.js` gains `*-dayof` pools (grander concepts, same face-swap safety + lint gate).
+4. QA on the peak day via a date-override (or a `force_day_of` QA flag) so we can render heroes off-season.
