@@ -80,6 +80,9 @@ export interface EngineConfig {
   /** Stage 5c: % of solo face-swap renders using an expanded composition
    *  preset (three-quarter / environmental-wide). 0 = classic waist-up only. */
   singleCompositionExpandedPct: number;
+  /** Holiday Dreams master kill switch (HOLIDAY_DREAMS_PLAN.md). When false the
+   *  whole holiday layer is inert regardless of the date/catalog. Starts false. */
+  holidaysEnabled: boolean;
 }
 
 // Defaults = the values currently hardcoded in code (behavior unchanged pre-edit).
@@ -123,6 +126,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleCompositionExpandedPct: 0,
   locationActionPct: 0,
   pureSceneOnSwapFail: true,
+  holidaysEnabled: false,
 };
 
 let cached: EngineConfig | null = null;
@@ -216,6 +220,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     locationActionPct: Number(data.location_action_pct ?? DEFAULT_ENGINE_CONFIG.locationActionPct),
     pureSceneOnSwapFail:
       (data.pure_scene_on_swap_fail ?? DEFAULT_ENGINE_CONFIG.pureSceneOnSwapFail) !== false,
+    holidaysEnabled: (data.holidays_enabled ?? DEFAULT_ENGINE_CONFIG.holidaysEnabled) === true,
     newScenePriceStandard: Number(
       data.new_scene_price_standard ?? DEFAULT_ENGINE_CONFIG.newScenePriceStandard
     ),

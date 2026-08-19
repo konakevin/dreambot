@@ -1624,8 +1624,10 @@ export type Database = {
           gift_max_per_send: number;
           gift_message_max_len: number;
           gifting_enabled: boolean;
+          holidays_enabled: boolean;
           id: number;
           latest_app_version: string | null;
+          location_action_pct: number;
           max_inflight_dreams_per_user: number;
           max_pinned_posts: number;
           min_app_version: string | null;
@@ -1699,8 +1701,10 @@ export type Database = {
           gift_max_per_send?: number;
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
+          holidays_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
+          location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
@@ -1774,8 +1778,10 @@ export type Database = {
           gift_max_per_send?: number;
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
+          holidays_enabled?: boolean;
           id?: number;
           latest_app_version?: string | null;
+          location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
           max_pinned_posts?: number;
           min_app_version?: string | null;
@@ -2020,6 +2026,99 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      holiday_scenes: {
+        Row: {
+          created_at: string;
+          disabled: boolean;
+          holiday: string;
+          id: string;
+          medium_ban: string | null;
+          medium_key: string | null;
+          scene: string;
+          tone: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          disabled?: boolean;
+          holiday: string;
+          id?: string;
+          medium_ban?: string | null;
+          medium_key?: string | null;
+          scene: string;
+          tone?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          disabled?: boolean;
+          holiday?: string;
+          id?: string;
+          medium_ban?: string | null;
+          medium_key?: string | null;
+          scene?: string;
+          tone?: string | null;
+        };
+        Relationships: [];
+      };
+      holidays: {
+        Row: {
+          created_at: string;
+          display_name: string;
+          emoji: string;
+          final_days: number;
+          final_pct: number;
+          is_active: boolean;
+          key: string;
+          peak_day: number | null;
+          peak_lead_days: number;
+          peak_month: number | null;
+          peak_nth: number | null;
+          peak_pct: number;
+          peak_rule: string;
+          peak_weekday: number | null;
+          ramp_start_pct: number;
+          sort_order: number;
+          window_days: number;
+        };
+        Insert: {
+          created_at?: string;
+          display_name: string;
+          emoji: string;
+          final_days?: number;
+          final_pct?: number;
+          is_active?: boolean;
+          key: string;
+          peak_day?: number | null;
+          peak_lead_days?: number;
+          peak_month?: number | null;
+          peak_nth?: number | null;
+          peak_pct?: number;
+          peak_rule?: string;
+          peak_weekday?: number | null;
+          ramp_start_pct?: number;
+          sort_order?: number;
+          window_days: number;
+        };
+        Update: {
+          created_at?: string;
+          display_name?: string;
+          emoji?: string;
+          final_days?: number;
+          final_pct?: number;
+          is_active?: boolean;
+          key?: string;
+          peak_day?: number | null;
+          peak_lead_days?: number;
+          peak_month?: number | null;
+          peak_nth?: number | null;
+          peak_pct?: number;
+          peak_rule?: string;
+          peak_weekday?: number | null;
+          ramp_start_pct?: number;
+          sort_order?: number;
+          window_days?: number;
+        };
+        Relationships: [];
       };
       image_models: {
         Row: {
@@ -3064,6 +3163,7 @@ export type Database = {
           face_swap_mode: string | null;
           flux_seed: number | null;
           height: number | null;
+          holiday: string | null;
           id: string;
           image_url: string;
           image_url_display: string | null;
@@ -3114,6 +3214,7 @@ export type Database = {
           face_swap_mode?: string | null;
           flux_seed?: number | null;
           height?: number | null;
+          holiday?: string | null;
           id?: string;
           image_url: string;
           image_url_display?: string | null;
@@ -3164,6 +3265,7 @@ export type Database = {
           face_swap_mode?: string | null;
           flux_seed?: number | null;
           height?: number | null;
+          holiday?: string | null;
           id?: string;
           image_url?: string;
           image_url_display?: string | null;
@@ -3358,6 +3460,7 @@ export type Database = {
         Row: {
           ai_enabled: boolean;
           created_at: string;
+          holiday_optouts: Json;
           onboarding_completed: boolean;
           recipe: Json;
           updated_at: string;
@@ -3366,6 +3469,7 @@ export type Database = {
         Insert: {
           ai_enabled?: boolean;
           created_at?: string;
+          holiday_optouts?: Json;
           onboarding_completed?: boolean;
           recipe?: Json;
           updated_at?: string;
@@ -3374,6 +3478,7 @@ export type Database = {
         Update: {
           ai_enabled?: boolean;
           created_at?: string;
+          holiday_optouts?: Json;
           onboarding_completed?: boolean;
           recipe?: Json;
           updated_at?: string;
@@ -4119,6 +4224,7 @@ export type Database = {
           face_swap_mode: string | null;
           flux_seed: number | null;
           height: number | null;
+          holiday: string | null;
           id: string;
           image_url: string;
           image_url_display: string | null;
