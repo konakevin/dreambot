@@ -620,9 +620,12 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
 - [x] **nightly-dreams Path 1 (cast: dual + solo)** — active-holiday compute (local date, opt-out, master
   switch, `force_holiday_scene` QA), multi-active combined cut + weighted pick, N2 empty-pool fall-through.
   Deno-clean; dark-safe (empty when disabled). *(deployed)*
-- [ ] **nightly-dreams Path 2 (pure-scene / scene-only)** — inject a `holiday_scenes` row on the pure-scene
-  path through the postcard brief + `force_holiday_scene`. (Next: map the pure-scene assembly.)
-- [ ] `uploads.holiday` marker stamp (holidayCategory → the insert) + N3 feed threading + holiday bot message.
+- [x] **nightly-dreams Path 2 (pure-scene / scene-only)** — a pure-scene nightly rolls the active seasons'
+  `holiday_scenes` (N2), and on a hit builds a locked-subject holiday brief with the row's pinned medium
+  (`resolveMediumFromDb`). Deno-clean, dark-safe. *(deployed)*
+- [x] `uploads.holiday` marker stamped on the main insert (both paths → `holidayCategory`).
+- [ ] N3: thread `uploads.holiday` through `get_feed` + `mapPost` so the tile shows the emoji.
+- [ ] Holiday-aware bot message (Haiku caption).
 - [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
 - [ ] `settings/holidays.tsx` opt-out UX.

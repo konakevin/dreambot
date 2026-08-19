@@ -40,6 +40,9 @@ import {
   loadHolidayDual,
   loadHolidaySingle,
   holidaySingleCandidates,
+  loadHolidayScenes,
+  pickHoliday,
+  type HolidayScene,
 } from '../_shared/pools/holidayScenarioLoader.ts';
 import { buildSceneFallbackPrompt } from '../_shared/sceneFallbackPrompt.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
@@ -354,6 +357,9 @@ Deno.serve(async (req) => {
   // the try block + the picked medium's allowed_models to intersect with
   // engine_config.scene_eligible_models.
   let resolvedComposition: 'character' | 'epic_tiny' | 'pure_scene' | undefined;
+  // The holiday season this dream belongs to (Path 1 cast OR Path 2 scene-only),
+  // or null. Declared at handler scope so it reaches the uploads insert (§5 marker).
+  let holidayCategory: string | null = null;
   let resolvedMediumAllowedModels: string[] = [];
   // Per-medium scene-eligible model override (mig 214). NULL → fall back to
   // engine_config.scene_eligible_models global. Captured for the post-try gate.
@@ -1275,7 +1281,6 @@ Deno.serve(async (req) => {
     // Several can be active at once (Fall + Halloween overlap in early Oct); the
     // roll below sums their pcts and picks one weighted by pct. `holidayCategory`
     // is set on a holiday hit for the uploads marker + bot message.
-    let holidayCategory: string | null = null;
     let activeHolidays: ActiveHoliday[] = [];
     try {
       if (force_holiday_scene) {
@@ -1322,6 +1327,37 @@ Deno.serve(async (req) => {
       }
     } catch (_holErr) {
       activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
+    }
+    // Holiday Path 2 (HOLIDAY_DREAMS_PLAN.md §3.4): a PURE-SCENE nightly can become
+    // a scene-only holiday (no-cast users + the sprinkle). Roll among the active
+    // seasons' holiday_scenes pools (N2: only non-empty ones contribute); on a hit
+    // this render is a festive standalone scene with its own pinned medium.
+    let holidayScene: HolidayScene | null = null;
+    let holidaySceneMediumFragment: string | null = null;
+    if (composition === 'pure_scene' && activeHolidays.length > 0) {
+      try {
+        const holScenePools = await Promise.all(
+          activeHolidays.map(async (h) => ({ h, rows: await loadHolidayScenes(supabase, h.key) }))
+        );
+        const usable = holScenePools.filter((x) => x.rows.length > 0).map((x) => x.h);
+        const pct = combineHolidayPct(usable);
+        if (usable.length > 0 && Math.random() * 100 < pct) {
+          const chosen = pickWeightedHoliday(usable, Math.random());
+          holidayScene = pickHoliday(holScenePools.find((x) => x.h.key === chosen.key)!.rows);
+          holidayCategory = chosen.key;
+          fallbackReasons.push(`holiday_scene:${chosen.key}`);
+          if (holidayScene.mediumKey) {
+            try {
+              const m = await resolveMediumFromDb(holidayScene.mediumKey);
+              if (m?.fluxFragment) holidaySceneMediumFragment = m.fluxFragment;
+            } catch (_mErr) {
+              /* unknown medium key → fall to the rolled medium */
+            }
+          }
+        }
+      } catch (_p2Err) {
+        holidayScene = null; // N2: fall through to a normal postcard
+      }
     }
     // A MANDATED location (force_place) suppresses the goofy/elegant special-scene
     // roll entirely. force_place is set ONLY by the onboarding FIRST DREAM, which
@@ -2128,6 +2164,40 @@ Output ONLY the prompt.`;
         engine: 'nightly-cast-epic',
         nightlyPath,
         castRoles: selectedCast.map((m) => m.role),
+        composition,
+        chaosTier: chaosTierOuter,
+        dreamType: preRolledType,
+      };
+    } else if (holidayScene) {
+      // ── Holiday scene-only (Path 2) — the holiday_scenes row IS the locked
+      // subject; its own light/time carry the atmosphere; its pinned medium wins. ──
+      const holMediumFragment = holidaySceneMediumFragment ?? baseMedium.fluxFragment;
+      nightlyBrief = `You are composing a dreamlike, festive POSTCARD scene. Write a Flux AI prompt (55-80 words, comma-separated).
+
+━━━ THE SCENE (LOCKED — NON-NEGOTIABLE) ━━━
+${holidayScene.scene}
+
+Render EXACTLY this scene, richly and immersively — it fills the frame. Its OWN light, time of day, and weather are the truth: do not override them, do not swap in a different place, do not add competing subjects.
+
+MEDIUM: ${holMediumFragment}
+
+MOOD (tone only — do NOT let mood pull in new subjects):
+${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
+
+ENHANCING LANGUAGE (mandatory): a DEFINED light source named explicitly, LAYERED depth (foreground / midground / background), SATURATED color, DENSE detail on every surface.
+
+HARD BANS: NO people as the subject (tiny distant silhouettes at most), NO text, NO words, NO letters, NO watermarks, NO real brand or place names.
+
+End with: no text, no words, no letters, no watermarks, hyper detailed, masterwork composition.
+Output ONLY the prompt.`;
+      logAxes = {
+        medium: holidaySceneMediumFragment
+          ? `holiday:${holidayScene.mediumKey}`
+          : nightlyMedium.key,
+        vibe: nightlyVibe.key,
+        engine: 'nightly-holiday-scene',
+        holiday: holidayCategory,
+        tone: holidayScene.tone ?? null,
         composition,
         chaosTier: chaosTierOuter,
         dreamType: preRolledType,
@@ -3251,6 +3321,8 @@ Output ONLY the prompt.`;
           ai_prompt: sceneFallbackApplied ? sceneFallbackPrompt : finalPrompt,
           dream_medium: resolvedMediumKey ?? null,
           dream_vibe: resolvedVibeKey ?? null,
+          holiday: holidayCategory, // 🎃 marker (§5) — the season this dream belongs to, or null
+
           // Which AI model rendered this — drives the model badge on
           // DreamCard (migration 211, 2026-05-30).
           model: pickedModel || null,
