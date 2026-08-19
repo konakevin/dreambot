@@ -114,7 +114,7 @@ const ARCHETYPES = {
       'a cute suburban street draped in playful Halloween decor, inflatable ghosts, posed skeletons, glowing pumpkins, string lights, fiery trees at dusk'
     ),
     pumpkin_carving: A(
-      'heirloom',
+      'photography',
       'heirloom',
       'cozy sweaters and aprons',
       'a candlelit rustic porch strewn with carved pumpkins, scattered seeds, glowing lanterns, an autumn wreath, warm amber light, fiery foliage'
@@ -126,7 +126,7 @@ const ARCHETYPES = {
       'a festive fall harvest festival at dusk, a mountain of pumpkins, hay bales, warm string lights, game booths, a glowing ferris wheel, a harvest moon'
     ),
     haunted_hayride: A(
-      'heirloom',
+      'photography',
       'heirloom',
       'flannel, corduroy, a cozy blanket over the shoulders',
       'a lantern-lit wagon hayride through a misty farm at night, towering cornstalks, glowing jack-o-lanterns along the trail, a huge harvest moon'
@@ -144,7 +144,7 @@ const ARCHETYPES = {
       'a canyon trail ablaze with red, orange, and gold autumn trees, a winding leaf-strewn path, warm low sun, distant glowing ridges, a river below'
     ),
     movie_night: A(
-      'heirloom',
+      'photography',
       'heirloom',
       'cozy pajamas and oversized sweaters, a blanket',
       'a cozy living room decked for Halloween, glowing jack-o-lanterns, cobweb garlands, a candy bowl, warm firelight, a soft spooky glow, a black cat'

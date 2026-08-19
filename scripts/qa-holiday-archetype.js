@@ -34,20 +34,30 @@ const SURFACES = [
       .eq('user_id', U)
       .eq('date', new Date().toISOString().slice(0, 10));
     let d;
-    try {
-      const res = await fetch(`${SB}/functions/v1/nightly-dreams`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${W}` },
-        body: JSON.stringify({
-          user_id: U,
-          force_holiday_scene: HOLIDAY,
-          force_holiday_sub_theme: ARCH,
-          force_cast_role: cast,
-        }),
-      });
-      d = await res.json();
-    } catch (e) {
-      console.log(`  ✗ ${label}: ${e.message}`);
+    // The edge fn intermittently returns WORKER_RESOURCE_LIMIT (transient compute
+    // pressure, not a content problem) — retry a couple times before giving up.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch(`${SB}/functions/v1/nightly-dreams`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${W}` },
+          body: JSON.stringify({
+            user_id: U,
+            force_holiday_scene: HOLIDAY,
+            force_holiday_sub_theme: ARCH,
+            force_cast_role: cast,
+          }),
+        });
+        d = await res.json();
+      } catch (e) {
+        d = { error: e.message };
+      }
+      if (d && d.upload_id) break;
+      if (d && d.code === 'WORKER_RESOURCE_LIMIT' && attempt < 2) continue;
+      break;
+    }
+    if (!d) {
+      console.log(`  ✗ ${label}: no response`);
       continue;
     }
     if (!d.upload_id) {
