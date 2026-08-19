@@ -13,7 +13,7 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 | # | Archetype | Medium | Rounds | Final grade | Status | Notes |
 |---|---|---|---|---|---|---|
 | 1 | vampire | gothic_painted | 2 | 4.6 | ✅ PASS | R1 avg 4.25 (thumbs-up + bunnies); **systemic fix: holiday pose 'goofy'→'elegant'**; R2 5/5/3.5/5 (self rock-cairn variance) |
-| 2 | witch | painted_gothic_fantasy | — | — | ⬜ pending | |
+| 2 | witch | painted_gothic_fantasy | 2 | 4.6 | ✅ PASS | R1 solo peace-signs; **2nd systemic fix: holiday pose_pool→'glamour'** (refined, no gestures); R2 all 4.5-5 |
 | 3 | monster_hunter | gothic_oil_garden | — | — | ⬜ pending | |
 | 4 | reaper | vampire_portrait | — | — | ⬜ pending | |
 | 5 | ghost_glam | painted_gothic_fantasy | — | — | ⬜ pending | |
