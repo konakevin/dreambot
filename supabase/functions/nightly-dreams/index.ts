@@ -1458,7 +1458,10 @@ Deno.serve(async (req) => {
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
           dualSceneKind = 'elegant'; // refined partner pose — NO playful thumbs-up/props on holiday
-          dualScenePosePool = s.posePool ?? 'glamour'; // refined glamour poses, never peace-signs/gestures
+          // Couples use the refined 'partner' pool (via elegant+wardrobe fall-through),
+          // NOT the shared 'glamour' pool — glamour is intentionally campy soap-opera
+          // (mirrored prayer-hands / game-show smiles) and reads twee on holiday couples.
+          dualScenePosePool = s.posePool ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;

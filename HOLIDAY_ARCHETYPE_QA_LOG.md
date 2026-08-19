@@ -25,8 +25,8 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 | 11 | halloween_party | photography | 1 | 4.67 | ✅ PASS | R1 all PHOTOGRAPHIC + clean — couple1 4.6 candlelit grand staircase; self 4.7 velvet blazer by fireplace; plus1 4.7 ghost pendant lights cozy room (retry-once fix stopped the WORKER_RESOURCE_LIMIT dance) |
 | 12 | decorated_neighborhood | photography | 1 | 4.7 | ✅ PASS | R1 all PHOTOGRAPHIC + clean 4.7 — couple1 jack-o-lantern arch + moon; self inflatable ghosts + porch; plus1 giant reaper inflatables + skeletons, purple sunset. Natural + festive |
 | 13 | pumpkin_carving | photography | 2 | 4.73 | ✅ PASS | R1 heirloom couples STIFF (prayer-hands / arms-crossed "American Gothic", undershoots warm/smile bar); **fix: cast medium heirloom→photography** (scene stays heirloom); R2 natural warm smiling couples 4.7-4.8. **LESSON: heirloom = stiff couple poses; preemptively switched haunted_hayride + movie_night to photography** |
-| 14 | fall_festival | canvas | — | — | ⬜ pending | |
-| 15 | haunted_hayride | heirloom | — | — | ⬜ pending | |
+| 14 | fall_festival | canvas | 1 | 4.53 | ✅ PASS | R1 clean — couple1 4.4 canvas ring-toss booth + pumpkin lights; self 4.6 oil-painting festival + hay bales; plus1 4.6 glowing ferris wheel dusk. (recurring harmless white feather-boa festival prop) |
+| 15 | haunted_hayride | photography | 2 | 4.68 | ✅ PASS | R1 couple1 twee mirrored prayer-hands → traced to shared **'glamour' pose pool (intentionally campy soap-opera)** wrongly pinned on holiday couples. **SYSTEMIC FIX: holiday DUAL branch drops glamour default → refined 'partner' pool** (deployed); R2 couples natural + warm 4.7-4.8. Improves ALL holiday couples retroactively. (solo keeps glamour — solo poses fine) |
 | 16 | cozy_porch | photography | — | — | ⬜ pending | |
 | 17 | canyon_fall_hike | photography | — | — | ⬜ pending | |
 | 18 | movie_night | heirloom | — | — | ⬜ pending | |
