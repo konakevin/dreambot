@@ -30,19 +30,17 @@ const arg = (n, d) => {
 const DRY = process.argv.includes('--dry');
 const N = parseInt(arg('n', '14'), 10);
 
-// Gothic/painted face-swap mediums for Halloween cast (rotate for variety); cozy
-// photoreal for Fall cast; painterly/photoreal scene-eligible for scene-only.
+// VIBRANT painterly-gothic face-swap mediums for Halloween cast (rich color, oil
+// drama — NOT washed-out b&w). Warm painterly + some photoreal for Fall.
 const HALLOWEEN_CAST_MEDIA = [
   'gothic_painted',
   'vampire_portrait',
   'painted_gothic_fantasy',
   'gothic_oil_garden',
-  'film_noir',
-  'old_west',
 ];
-const FALL_CAST_MEDIUM = 'photography';
-const FALL_SCENE_MEDIA = ['photography', 'canvas'];
-const HALLOWEEN_SCENE_MEDIA = ['illustration', 'canvas', 'film_noir'];
+const FALL_CAST_MEDIA = ['canvas', 'heirloom', 'photography']; // warm painterly + a little photoreal
+const FALL_SCENE_MEDIA = ['canvas', 'illustration', 'photography']; // scene-eligible, painterly + photo
+const HALLOWEEN_SCENE_MEDIA = ['illustration', 'canvas']; // scene-eligible, colorful painterly gothic
 const pickRot = (arr, i) => arr[i % arr.length];
 
 // ── meta-prompts ──────────────────────────────────────────────────────────────
@@ -58,13 +56,14 @@ const POOLS = {
   'fall-dual': {
     table: 'dual_scenarios',
     key: { pool: 'holiday', category: 'fall' },
-    medium: (i) => ({ medium_key: FALL_CAST_MEDIUM }),
+    medium: (i) => ({ medium_key: pickRot(FALL_CAST_MEDIA, i) }),
     prompt: (
       n
     ) => `Generate ${n} DISTINCT cozy-AUTUMN couple scenarios for a dreamy nightly-photo app — "you two, on the most perfect fall afternoon." Real cozy fall clothes (NO costume). Warm, nostalgic, pretty: corn mazes, leaf piles, pumpkin farms, apple orchards, fiery maple groves, cabin porches, bonfires, trick-or-treat streets.
 
 Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 - attire: cozy autumn clothing for BOTH (sweaters, flannels, scarves, beanies, corduroy) — gender-neutral or paired.
+- MAKE EVERY SETTING FEEL LIKE MAGICAL SPOOKY-SEASON, not a plain stock photo: carved jack-o-lanterns, warm string lights, a glowing harvest moon, golden-hour light, drifting leaves + embers, dreamy festive atmosphere, rich saturated fall color. Pack the 12-26 words with wonder.
 ${CAST_RULES}
 ${DUAL_EXTRA}
 Vary the setting across all ${n}. Output ONLY the JSON array.`,
@@ -72,13 +71,14 @@ Vary the setting across all ${n}. Output ONLY the JSON array.`,
   'fall-single': {
     table: 'single_scenarios',
     key: { pool: 'holiday', category: 'fall' },
-    medium: (i) => ({ medium_key: FALL_CAST_MEDIUM, gender: 'any' }),
+    medium: (i) => ({ medium_key: pickRot(FALL_CAST_MEDIA, i), gender: 'any' }),
     prompt: (
       n
     ) => `Generate ${n} DISTINCT cozy-AUTUMN solo scenarios for a dreamy nightly-photo app — "you, on the most perfect fall afternoon." Real cozy fall clothes (NO costume). Warm, nostalgic, pretty: corn mazes, leaf piles, pumpkin farms, apple orchards, fiery maple groves, cabin porches, bonfires.
 
 Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 - attire: cozy autumn clothing (sweater, flannel, scarf, beanie, corduroy coat).
+- MAKE EVERY SETTING FEEL LIKE MAGICAL SPOOKY-SEASON, not a plain stock photo: carved jack-o-lanterns, warm string lights, a glowing harvest moon, golden-hour light, drifting leaves + embers, dreamy festive atmosphere, rich saturated fall color. Pack the 12-26 words with wonder.
 ${CAST_RULES}
 Vary the setting across all ${n}. Output ONLY the JSON array.`,
   },
@@ -92,6 +92,7 @@ Vary the setting across all ${n}. Output ONLY the JSON array.`,
 
 Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 - attire: the costume as clothing for BOTH (cape + high collar, frock coat, flowing witch robes, leather monster-hunter coat) — gender-neutral or paired. NEVER a mask/fangs/face-paint/hood-over-face.
+- MAKE EVERY SETTING DRAMATIC + UNMISTAKABLY HALLOWEEN: glowing carved jack-o-lanterns, a huge full moon, candlelight, drifting fog, rich moody color (deep crimson / violet / emerald), cinematic wow. Pack the 12-26 words with iconic spooky-beautiful detail.
 ${CAST_RULES}
 ${DUAL_EXTRA}
 Vary the costume + gothic setting across all ${n}. Output ONLY the JSON array.`,
@@ -106,6 +107,7 @@ Vary the costume + gothic setting across all ${n}. Output ONLY the JSON array.`,
 
 Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 - attire: the costume as clothing (cape + high collar, flowing witch robes, leather coat, ornate robe with hood DOWN). NEVER a mask/fangs/face-paint/hood-over-face.
+- MAKE EVERY SETTING DRAMATIC + UNMISTAKABLY HALLOWEEN: glowing carved jack-o-lanterns, a huge full moon, candlelight, drifting fog, rich moody color (deep crimson / violet / emerald), cinematic wow. Pack the 12-26 words with iconic spooky-beautiful detail.
 ${CAST_RULES}
 Vary the costume + gothic setting across all ${n}. Output ONLY the JSON array.`,
   },
