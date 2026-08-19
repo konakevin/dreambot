@@ -11,11 +11,15 @@
 // the ramp is never evaluated outside a window).
 
 export type PeakRule = 'fixed' | 'nth_weekday' | 'easter';
+export type RampStyle = 'ramp' | 'flat';
 
 export interface HolidayCatalogRow {
   key: string;
   displayName: string;
   emoji: string;
+  /** 'ramp' = climbs to a peak day (Halloween). 'flat' = a steady low ambient
+   *  presence across the window, no ramp (the Fall season). Default 'ramp'. */
+  rampStyle?: RampStyle;
   peakRule: PeakRule;
   peakMonth?: number | null; // 1-12 (fixed / nth_weekday)
   peakDay?: number | null; // 1-31 (fixed)
@@ -110,6 +114,9 @@ export function resolvePeak(row: HolidayCatalogRow, year: number): CalendarDate 
  * collapses (M1).
  */
 export function rampPct(row: HolidayCatalogRow, daysUntil: number): number {
+  // Flat seasons (Fall): a constant ambient level across the whole window, no ramp,
+  // no final surge. `peakPct` is the flat level; the other knobs are ignored.
+  if (row.rampStyle === 'flat') return clampPct(row.peakPct);
   const w = row.windowDays;
   const peakLead = Math.min(row.peakLeadDays, w); // short-window clamp
   const finalSpan = Math.min(row.finalDays, w + 1); // last N days incl. peak
@@ -127,39 +134,60 @@ function clampPct(n: number): number {
 }
 
 /**
- * The active holiday for a user-local date, or null. Tests each row's peak in
- * BOTH `year` and `year+1` (N4: the Dec→Jan New Year's window). On overlap
- * (N1: Easter can open inside St. Patrick's), prefers the SOONER upcoming peak,
- * tie-broken by sortOrder. Pass only is_active rows.
+ * ALL seasons/holidays active on a user-local date (may be several — Fall and
+ * Halloween overlap in early October by design). Each carries its own pct; the
+ * render sums them (capped) and picks one weighted by pct, so overlapping windows
+ * MIX rather than one winning. Tests each row's peak in BOTH `year` and `year+1`
+ * (N4). Returns [] when nothing is in season. Pass only is_active rows.
  */
-export function resolveActiveHoliday(
+export function resolveActiveHolidays(
   today: CalendarDate,
   rows: HolidayCatalogRow[]
-): ActiveHoliday | null {
+): ActiveHoliday[] {
   const todaySerial = toSerial(today);
-  const candidates: Array<{ row: HolidayCatalogRow; peakSerial: number; daysUntil: number }> = [];
+  const active: Array<ActiveHoliday & { sortOrder: number }> = [];
 
   for (const row of rows) {
     for (const year of [today.year, today.year + 1]) {
-      const peak = resolvePeak(row, year);
-      const peakSerial = toSerial(peak);
+      const peakSerial = toSerial(resolvePeak(row, year));
       const openSerial = peakSerial - row.windowDays;
       if (todaySerial >= openSerial && todaySerial <= peakSerial) {
-        candidates.push({ row, peakSerial, daysUntil: peakSerial - todaySerial });
-        break; // this row's active window found; don't double-count year+1
+        const daysUntil = peakSerial - todaySerial;
+        active.push({
+          key: row.key,
+          displayName: row.displayName,
+          emoji: row.emoji,
+          holidayPct: rampPct(row, daysUntil),
+          daysUntilPeak: daysUntil,
+          sortOrder: row.sortOrder,
+        });
+        break; // found this row's active window; don't double-count year+1
       }
     }
   }
 
-  if (candidates.length === 0) return null;
-  // Sooner peak wins; tie-break sortOrder (deterministic — L3/N1).
-  candidates.sort((a, b) => a.peakSerial - b.peakSerial || a.row.sortOrder - b.row.sortOrder);
-  const { row, daysUntil } = candidates[0];
-  return {
-    key: row.key,
-    displayName: row.displayName,
-    emoji: row.emoji,
-    holidayPct: rampPct(row, daysUntil),
-    daysUntilPeak: daysUntil,
-  };
+  // Deterministic order (sooner peak first, tie-break sortOrder) for stable mixing.
+  active.sort((a, b) => a.daysUntilPeak - b.daysUntilPeak || a.sortOrder - b.sortOrder);
+  return active.map(({ sortOrder: _sortOrder, ...h }) => h);
+}
+
+/** Combined holiday cut for the scene-type roll: sum of active pcts, capped 0-100. */
+export function combineHolidayPct(actives: ActiveHoliday[]): number {
+  const total = actives.reduce((sum, h) => sum + h.holidayPct, 0);
+  return Math.max(0, Math.min(100, Math.round(total)));
+}
+
+/**
+ * Pick ONE active holiday weighted by its pct (so a mix skews toward whichever is
+ * stronger today). `roll` is [0,1). Assumes actives is non-empty with total pct > 0.
+ */
+export function pickWeightedHoliday(actives: ActiveHoliday[], roll: number): ActiveHoliday {
+  const total = actives.reduce((sum, h) => sum + h.holidayPct, 0);
+  let acc = 0;
+  const target = roll * total;
+  for (const h of actives) {
+    acc += h.holidayPct;
+    if (target < acc) return h;
+  }
+  return actives[actives.length - 1]; // fp guard
 }

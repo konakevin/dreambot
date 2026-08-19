@@ -22,7 +22,10 @@ sexy (tasteful) · funny · nostalgic · pretty**.
 
 | Decision | Choice |
 |---|---|
-| Intensity / ramp | **~30% at window open → 80% the week before → 100% the final 3 days** (ending on the holiday) |
+| Intensity | **Gentle background echo, NOT a takeover** (2026-08-18 pivot — don't wear people out). Fall ~10% flat; Halloween ramps ~6% → ~25%, a small nudge to ~35% on the night. All catalog-tunable. |
+| Two kinds of window | **Ramped holidays** climb to a peak day (Halloween, Christmas). **Flat seasons** hold a steady low level, no ramp (Fall = all September). `ramp_style` column. |
+| Overlap + mix | Windows **may overlap**; multiple active seasons **mix**, weighted by pct (early Oct = Fall + Halloween blended). Replaces the old "one active, soonest-peak wins." |
+| Fall vs Halloween | Halloween is split: **Fall season** (`category='fall'`, cozy-autumn, Sept 1–Oct 7, flat) + **Halloween** (`category='halloween'`, costumed spooky, Oct 1–31, ramped). |
 | Scope | Holiday themes **face-swap** nightlies (cast-in-costume) AND **pure-scene** nightlies (scene-only atmosphere); embodied/dream-art stay normal |
 | Who gets what | Cast users: mostly cast-in-costume + a sprinkle of scene-only holiday. No-cast users: scene-only holiday. **Everyone gets the season.** |
 | Couples | **Yes** — cast the user + their plus-one as a costumed pair (dual pools, head-apart, proximity-scanned) |
@@ -67,36 +70,43 @@ holiday's category** — only Halloween rows fire during the Halloween window. N
 `loadHolidayScenarios(supabase, category)` → `pool='holiday' AND category=<activeHoliday> AND disabled=false`,
 paginated + isolate-cached like the existing loaders, MVP-array fallback if a holiday has < 10 rows.
 
-### 3.3 The ramp (this is where "ramp to the day" lives)
-Other pools use a fixed `engine_config` percentage. Holiday's percentage is **computed from the active
-holiday's window position** — a piecewise curve that climbs, plateaus, then takes over completely:
+### 3.3 The two window kinds (gentle background echo — 2026-08-18)
+Each season's percentage is **computed from its window position** by `holidayWindow.ts`. There are two
+kinds, chosen per-row by `ramp_style`:
 
+**Flat seasons (`ramp_style='flat'`, e.g. Fall)** — a constant low ambient level across the whole window,
+no ramp, no surge. `peak_pct` is the flat level; the ramp knobs are ignored. The "peak" date is just the
+window END. Fall = a steady **~10%** from Sept 1 → Oct 7.
+
+**Ramped holidays (`ramp_style='ramp'`, e.g. Halloween, Christmas)** — climb gently to a modest peak on the
+day, with a small nudge on the day itself. Deliberately gentle now (was 30/80/100; the pivot dropped it to
+a background echo):
 ```
-daysUntil = holidayDay - today            (0 on the holiday itself)
-
-if today is before the window opens:        holiday_pct = 0
-elif daysUntil <= final_days - 1 (last 3):  holiday_pct = 100   ← full takeover, ends ON the holiday
-elif daysUntil <= peak_lead_days (last wk): holiday_pct = 80    ← plateau
-else (early window):                        linear ramp from ramp_start_pct (~30)
-                                            up to 80, reaching 80 at the week-before mark
+daysUntil = peak - today            (0 on the peak day)
+if before the window opens:                 pct = 0
+elif daysUntil <= final_days - 1:           pct = final_pct   ← small nudge on the day
+elif daysUntil <= peak_lead_days:           pct = peak_pct    ← gentle plateau
+else (early window):                        linear ramp_start_pct → peak_pct
 ```
 
-Concretely for **Halloween** (`peak_rule='fixed'`, peak 10/31, `window_days=46` → opens 09-15,
-`ramp_start_pct=30`, `peak_pct=80`, `peak_lead_days=7`, `final_pct=100`, `final_days=3`):
+Concretely for **Halloween** (`ramp`, peak 10/31, `window_days=30` → opens **Oct 1**, `ramp_start=6`,
+`peak_pct=25`, `peak_lead=7`, `final_pct=35`, `final_days=1`):
 
 | Dates | holiday_pct |
 |---|---|
-| Sep 15 → ~Oct 24 (early window) | linear **30% → 80%** |
-| Oct 24 → Oct 28 (the week before) | **80%** plateau |
-| **Oct 29, 30, 31** (last 3 days, ending on Halloween) | **100%** of face-swap + pure-scene nightlies are Halloween |
-| Nov 1+ | 0% (window closed) |
+| Oct 1 → ~Oct 24 (early window) | linear **6% → 25%** |
+| Oct 24 → Oct 30 (plateau) | **25%** |
+| **Oct 31** (the night) | **35%** — a small nudge, not a takeover |
+| Nov 1+ | 0% |
 
-- Outside every window: no active holiday → `holiday_pct = 0` (feature invisibly dormant).
-- All five knobs (`ramp_start_pct`, `peak_pct`, `peak_lead_days`, `final_pct`, `final_days`) live per-row
-  in the `holidays` catalog table, live-tunable, no deploy.
+- Outside every window → `pct = 0` (dormant). All knobs live per-row in the catalog, live-tunable, no deploy.
+- **Overlap + mix:** `resolveActiveHolidays` returns EVERY season active today; the render **sums** their
+  pcts (`combineHolidayPct`, capped) for the roll and **picks one weighted by pct** (`pickWeightedHoliday`)
+  when holiday fires. So early October blends Fall + Halloween: e.g. Oct 3 ≈ Fall 10% + Halloween ~8% =
+  ~18% holiday, of which fall/halloween are drawn in proportion.
 
-`holiday_pct` is holiday's cut of the **face-swap** scene-type roll (§3.4); the remainder is the normal
-mix. So on Oct 30 every face-swap nightly is a Halloween dream; on Oct 1 roughly 1 in 5 is.
+`holiday_pct` (the combined total) is holiday's cut of the **face-swap** scene-type roll (§3.4), renormalized
+in (§3.3a). A gentle echo — most nights are still the user's normal dream.
 
 #### 3.3a Composing the holiday cut — RENORMALIZE, do not prepend an absolute cut
 ⚠️ **The naïve implementation is wrong and fails silently.** `_shared/sceneTypeRoll.ts` builds *absolute*
@@ -127,7 +137,8 @@ Holiday hooks into two existing paths, both gated by the same `holiday_pct` ramp
 scene" dreams), `holiday_pct` is holiday's cut, taken **first**; the remainder splits across
 goofy/elegant/active/plain. On a holiday hit it draws from the **cast** holiday pool
 (`dual_scenarios`/`single_scenarios`, `pool='holiday'`) → `attire` (costume) + `scene` through the slot
-pipeline. At `holiday_pct=100` (final 3 days) **every face-swap nightly is a costumed holiday dream.**
+pipeline. At the gentle peak (~25-35%) a costumed holiday dream is a frequent-but-not-dominant guest in
+the face-swap rotation — a background echo, never a takeover.
 
 **Path 2 — pure-scene dreams (scene-only atmosphere).** When a nightly is a pure-scene type (a no-cast
 user's dream, or a cast user's occasional non-face-swap nightly), `holiday_pct` also applies: on a holiday
@@ -145,24 +156,22 @@ on `isDualFaceSwap || isSingleHumanFaceSwap`), so it cannot QA scene-only holida
 Result:
 - **Self-only cast users** → mostly costumed holiday dreams, with a natural **sprinkle** of scene-only
   holiday (whenever Roll A lands them on a pure-scene nightly during the window).
-- **Cast users WITH a plus-one** → costumed **couple** holidays, essentially no scene-only sprinkle: live
-  `face_swap_share_with_plus_one=1.0` means a plus-one user gets ~zero pure-scene nightlies, so at peak
-  they're 100% costumed couples (which is the goal). (Corrects an earlier overstatement that "all cast
-  users" get the sprinkle.)
+- **Cast users WITH a plus-one** → costumed **couple** holidays when holiday fires, essentially no
+  scene-only sprinkle: live `face_swap_share_with_plus_one=1.0` means a plus-one user gets ~zero pure-scene
+  nightlies. (Corrects an earlier overstatement that "all cast users" get the sprinkle.)
 - **No-cast users** → scene-only holiday dreams (their nightlies are pure-scene anyway).
-- **Embodied / dream-art** nightly types stay normal, so the feed keeps some non-holiday texture even at peak.
+- **Embodied / dream-art** nightly types stay normal. With the gentle pcts, most nights are the user's
+  normal dream regardless — the holiday is a recurring garnish, not the meal.
 
 Path 1 genuinely reuses the slot pipeline (a small branch in the existing Roll B). Path 2 is a new,
 well-contained branch on the pure-scene path (§ above). Neither needs a pre-roll or a rewrite of the
 type roll — but Path 2 is real new code, not a toggle.
 
-> **Conscious product tradeoff (M6): for the window, "a dream of *your* places" recedes.** A holiday cast
-> dream's `scene` *replaces* the user's saved location (that's the point — you're in a gothic ballroom, not
-> your kitchen). So across a 46-day ramp reaching 100%, a user's own places progressively drop out of their
-> nightlies. Their *face* stays personalized (the bigger hook), and the cozy/fall cluster keeps it from
-> being all graveyards — but this is a real, weeks-long change to what "nightly" is. Calling it out as a
-> deliberate decision, not a silent side effect. (If we ever want to preserve place identity, a subset of
-> holiday scenes could be phrased to drop into the user's location — a later refinement, not v1.)
+> **Product note (M6), now mild:** a holiday cast dream's `scene` replaces the user's saved location
+> (you're in a gothic ballroom, not your kitchen). With the gentle pcts this only touches a minority of
+> nights, so "a dream of your places" mostly stays intact — the concern that motivated M6 is largely
+> defused by the background-echo pacing. (A subset of holiday scenes could still be phrased to drop into
+> the user's own location later, if we want.)
 
 #### 3.4b Fault-tolerance guards (fail to a normal nightly, never to a broken render)
 - **Window-membership is the OUTER gate (N5).** The ramp math only runs when the user-local date is inside
@@ -185,18 +194,19 @@ CREATE TABLE public.holidays (
   key            text PRIMARY KEY,          -- 'halloween'  (== scenario category)
   display_name   text NOT NULL,             -- 'Halloween'
   emoji          text NOT NULL,             -- '🎃'
+  ramp_style     text NOT NULL DEFAULT 'ramp',   -- 'ramp' (peaks on a day) | 'flat' (steady season, no ramp)
   peak_rule      text NOT NULL DEFAULT 'fixed',  -- 'fixed' | 'nth_weekday' | 'easter'
-  peak_month     int,                       -- fixed/nth_weekday: month of the peak (NULL for easter)
-  peak_day       int,                       -- fixed: day-of-month of the peak (e.g. 31)
+  peak_month     int,                       -- fixed/nth_weekday: month of the peak (or flat window END)
+  peak_day       int,                       -- fixed: day-of-month (or flat window END, e.g. Fall 10/7)
   peak_nth       int,                       -- nth_weekday: which occurrence (Thanksgiving = 4)
   peak_weekday   int,                       -- nth_weekday: 0=Sun..6=Sat (Thanksgiving = 4 = Thu)
-  window_days    int NOT NULL,              -- days BEFORE the peak the window opens (Halloween = 46)
-  ramp_start_pct int NOT NULL DEFAULT 30,   -- % at window open
-  peak_pct       int NOT NULL DEFAULT 80,   -- plateau %
-  peak_lead_days int NOT NULL DEFAULT 7,    -- reach & hold the plateau this many days before the peak
-  final_pct      int NOT NULL DEFAULT 100,  -- full-takeover %
-  final_days     int NOT NULL DEFAULT 3,    -- last N days (incl. the peak) at final_pct
-  is_active      boolean NOT NULL DEFAULT true,  -- per-holiday kill switch
+  window_days    int NOT NULL,              -- days BEFORE the peak/end the window opens (Halloween = 30)
+  ramp_start_pct int NOT NULL DEFAULT 6,    -- % at window open (ramp only)
+  peak_pct       int NOT NULL DEFAULT 25,   -- ramp: plateau %.  flat: the constant ambient level.
+  peak_lead_days int NOT NULL DEFAULT 7,    -- ramp: reach & hold the plateau this many days before the peak
+  final_pct      int NOT NULL DEFAULT 35,   -- ramp: small nudge on the day
+  final_days     int NOT NULL DEFAULT 1,    -- ramp: last N days (incl. the peak) at final_pct
+  is_active      boolean NOT NULL DEFAULT false, -- per-holiday gate; flip on at each launch
   sort_order     int NOT NULL DEFAULT 0,
   created_at     timestamptz DEFAULT now()
 );
@@ -227,12 +237,11 @@ their own knobs in the catalog (NYE: `window_days=5, ramp_start_pct=60, peak_lea
 than switching to window-fractions — the per-holiday knobs + clamp give short windows a sane curve without
 losing the crisp "exactly the last 3 days" for Halloween/Christmas.)
 
-- **Determinism + overlap priority (L3 / N1):** windows *can* overlap once floating holidays exist — with
-  `window_days=14`, **Easter 2027 opens Mar 14, inside St. Patrick's (Mar 10–17).** `holidayWindow.ts` must
-  resolve this deterministically: when two windows are both active, **prefer the one with the sooner
-  upcoming peak** (St. Patrick's Mar 17 before Easter Mar 28 → St. Patrick's wins until it ends, then
-  Easter takes over), tie-break on `sort_order`. This keeps the transition clean and never renders an
-  ambiguous/blended holiday. (Doesn't affect Halloween; decide before Easter ships.)
+- **Overlap = MIX (revised 2026-08-18, supersedes N1's soonest-wins):** windows overlap **by design** now
+  (Fall × Halloween in early October; also Easter × St. Patrick's in some years). `resolveActiveHolidays`
+  returns EVERY active season; the render sums their pcts and picks one **weighted by pct** per holiday
+  roll, so overlapping windows blend rather than one winning. Deterministic order (sooner peak first,
+  tie-break `sort_order`) only affects display, not correctness.
 - **Year + year+1 resolution (N4):** to find the active window near a year boundary, the peak resolver must
   test **both the current year's and next year's** peak (New Year's peak 1/1 with `window_days=5` is active
   from Dec 27 — on Dec 28 the *relevant* peak is next January's, not this one). `holidayWindow.ts` resolves
@@ -375,11 +384,17 @@ The dreamer's real face gets swapped in. A holiday row breaks the swap unless it
 
 ---
 
-## 8. Halloween pool spec 🎃
+## 8. Fall + Halloween pool spec 🍂🎃
+
+**Split into two seasons (2026-08-18):** the costumed spooky sub-themes below (§8a) are the **Halloween**
+season (`category='halloween'`, Oct, ramped); the cozy-autumn cluster (§8b) is the **Fall** season
+(`category='fall'`, Sept→early-Oct, flat). Scene-only (§8c) likewise splits `holiday='fall'` (cozy autumn)
+vs `holiday='halloween'` (spooky). Their windows overlap in early October → a blended mix.
 
 **Tone legend:** 🎀 pretty · 🕯️ cozy · 😱 scary · 💋 sexy-tasteful · 😂 funny · 📼 nostalgic
 Each sub-theme is authored for **solo** (`single_scenarios`) and **dual** (`dual_scenarios`, heads-apart).
-All `pool='holiday'`, `category='halloween'`.
+
+### 8a. Halloween season (costumed) — `category='halloween'`
 
 | # | Sub-theme | Tones | Attire (costume = clothing only) | Scene (pure environment) |
 |---|---|---|---|---|
@@ -465,21 +480,25 @@ photoreal-friendly; haunted/witch/awe scenes painterly-cinematic — my call).
 
 ## 9. Holiday roadmap (recurring; peak-rule + window_days model, §3.5)
 
-Each holiday is one `holidays` catalog row: a **peak rule** (fixed / nth_weekday / easter), the number of
-**days before the peak** the window opens, and its own ramp knobs (short windows tune their own so the
-ramp doesn't collapse, §3.5). Long-window holidays inherit the defaults (`ramp_start 30 / peak 80 /
-peak_lead 7 / final 3`).
+Each season is one `holidays` catalog row: a `ramp_style` (**flat** ambient season vs **ramp** to a peak
+day), a **peak rule** (fixed / nth_weekday / easter), the **days before the peak/end** the window opens,
+and its own gentle pcts (a background echo — §3.3). Windows may overlap and mix (§3.4). All start
+`is_active=false`; flip on at each launch.
 
-| Key | Name | 😀 | peak_rule | Peak | window_days | Short-window knobs | Tone lean & bespoke hooks |
-|---|---|---|---|---|---|---|---|
-| `halloween` | Halloween | 🎃 | fixed | 10/31 | 46 | defaults | the 20 sub-themes above |
-| `christmas` | Christmas | 🎄 | fixed | 12/25 | 24 | defaults | **say it loud:** Santa, reindeer & sleigh, elf in the workshop, decorated tree & stockings, snow-globe village, caroler, ugly-sweater party, cocoa by the fire, gift-wrap chaos, Nutcracker soldier, ice-skating, Mrs. Claus glam |
-| `thanksgiving` | Thanksgiving | 🦃 | **nth_weekday** (4th Thu Nov) | ~11/26 | 12 | `ramp_start 50, peak_lead 4, final 2` | harvest-table feast, cozy autumn plaid, pilgrim-nostalgic, pie-baking funny, golden-hour gratitude, football-tailgate |
-| `new_years` | New Year's | 🎉 | fixed | 1/1 | 5 | `ramp_start 60, peak_lead 2, final 1` | black-tie gala, confetti & fireworks rooftop, champagne toast, sequin-glam countdown, midnight ballroom |
-| `valentines` | Valentine's | 💘 | fixed | 2/14 | 7 | `ramp_start 50, peak_lead 3, final 1` | rose-petal dinner, cupid glam, candy-heart pastel, vintage valentine, love-letter cozy, masquerade romance (mask held, not worn) |
-| `st_patricks` | St. Patrick's | ☘️ | fixed | 3/17 | 7 | `ramp_start 50, peak_lead 3, final 1` | emerald finery, leprechaun-dapper, rainbow-and-gold, cozy Irish pub, misty green hills, festive parade |
-| `easter` | Easter | 🐰 | **easter** (computus) | floats Mar 22–Apr 25 | 14 | `ramp_start 40, peak_lead 4, final 2` | pastel spring-Sunday best, bunny-ear headband (no mask), flower-crown, egg-hunt garden, meadow picnic, chick-yellow whimsy |
-| `july_4th` | 4th of July | 🎆 | fixed | 7/4 | 7 | `ramp_start 50, peak_lead 3, final 1` | red-white-blue glam, firework night sky, backyard BBQ, boardwalk-Americana retro, sparkler cozy, small-town parade |
+| Key | Name | 😀 | style | peak_rule | Peak/end | window_days | pcts | Tone lean & bespoke hooks |
+|---|---|---|---|---|---|---|---|---|
+| `fall` | Fall | 🍂 | **flat** | fixed | 10/7 (end) | 36 (→ Sep 1) | flat **10** | the cozy-autumn cluster (§8b): corn maze, leaf pile, maple grove, pumpkin farm, apple orchard, cabin porch, bonfire, trick-or-treat |
+| `halloween` | Halloween | 🎃 | ramp | fixed | 10/31 | 30 (→ Oct 1) | `6→25`, 35 on the night | the costumed spooky sub-themes (§8a): vampire, glamour witch, ghost-glam, monster-hunter, reaper, cat-burglar, mad scientist, harvest royalty |
+| `christmas` | Christmas | 🎄 | ramp | fixed | 12/25 | 24 | `6→25`, 35 | **say it loud:** Santa, reindeer & sleigh, elf in the workshop, decorated tree & stockings, snow-globe village, caroler, ugly-sweater party, cocoa by the fire, Nutcracker, ice-skating, Mrs. Claus glam |
+| `thanksgiving` | Thanksgiving | 🦃 | ramp | **nth_weekday** (4th Thu Nov) | ~11/26 | 12 | `6→25`, 35 | harvest-table feast, cozy autumn plaid, pilgrim-nostalgic, pie-baking funny, golden-hour gratitude, football-tailgate |
+| `new_years` | New Year's | 🎉 | ramp | fixed | 1/1 | 5 | `15→25`, 35 | black-tie gala, confetti & fireworks rooftop, champagne toast, sequin-glam countdown, midnight ballroom |
+| `valentines` | Valentine's | 💘 | ramp | fixed | 2/14 | 7 | `6→25`, 35 | rose-petal dinner, cupid glam, candy-heart pastel, vintage valentine, love-letter cozy, masquerade romance (mask held, not worn) |
+| `st_patricks` | St. Patrick's | ☘️ | ramp | fixed | 3/17 | 7 | `6→25`, 35 | emerald finery, leprechaun-dapper, rainbow-and-gold, cozy Irish pub, misty green hills, festive parade |
+| `easter` | Easter | 🐰 | ramp | **easter** (computus) | floats Mar 22–Apr 25 | 14 | `6→25`, 35 | pastel spring-Sunday best, bunny-ear headband (no mask), flower-crown, egg-hunt garden, meadow picnic, chick-yellow whimsy |
+| `july_4th` | 4th of July | 🎆 | ramp | fixed | 7/4 | 7 | `6→25`, 35 | red-white-blue glam, firework night sky, backyard BBQ, boardwalk-Americana retro, sparkler cozy, small-town parade |
+
+The future "Winter" or "Spring" ambient seasons can mirror Fall (flat) around Christmas / Easter the same
+way Fall wraps Halloween. All pcts are one-line catalog-tunable — start gentle, dial to taste.
 
 **Floating peaks are handled by the `peak_rule` (M1):** Thanksgiving resolves the real 4th-Thursday each
 year (not a hardcoded 11/27); Easter runs the computus (2027 Mar 28, 2028 Apr 16, 2029 Apr 1) — an
@@ -589,12 +608,14 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
   **T3** fault-path tests · **T4** capacity dry-run (§10b).
 
 ### Build progress
-- [x] `_shared/holidayWindow.ts` — peak resolution (fixed/nth_weekday/easter computus), window membership
-  (year + year+1), ramp, short-window clamp, overlap = soonest-peak wins. **32 unit tests green.**
+- [x] `_shared/holidayWindow.ts` — peak resolution (fixed/nth_weekday/easter computus), **flat vs ramp**
+  styles, window membership (year + year+1), short-window clamp, **multi-active overlap + weighted mix**
+  (`resolveActiveHolidays` / `combineHolidayPct` / `pickWeightedHoliday`). **24 unit tests green.**
 - [x] `_shared/sceneTypeRoll.ts` — renormalized holiday cut (§3.3a), backward-compatible (`holidayPct` default 0).
-- [x] Migration `437_holiday_dreams.sql` **applied** (dark: `holidays_enabled=false`, catalog `is_active=false`); types regenerated.
+- [x] Migration `437` **applied** (dark). Migration `438` (ramp_style + Fall season + gentle pcts) **written — needs applying** + types regen.
 - [x] `_shared/engineConfig.ts` — `holidaysEnabled` master switch (default false).
 - [x] `scripts/lib/holidayPoolLint.js` + `scripts/scan-holiday-pools.js` (T2) + **15 unit tests green**; scanner verified against live tables.
-- [ ] Loaders (`holidayScenarioLoader.ts`) + nightly-dreams render branch (Path 1 + Path 2) + N2 guard + T1 behavioral test.
-- [ ] Halloween seed generator (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
+- [x] `_shared/pools/holidayScenarioLoader.ts` — category-filtered cast + scene-only loaders (Deno-clean). *(uncommitted; lands with the render pass)*
+- [ ] nightly-dreams render branch (Path 1 + Path 2) using the multi-active model + N2 guard + T1 behavioral test.
+- [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
 - [ ] `settings/holidays.tsx` opt-out UX + holiday bot message + `uploads.holiday` marker threading (N3).
