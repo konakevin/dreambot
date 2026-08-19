@@ -34,8 +34,10 @@ const GENDERED_GARMENT =
   /\b(?:gown|gowns|dress|dresses|corset|bodice|skirt|blouse|frock coat|tuxedo)\b/i;
 const PAIRED_ATTIRE = /\b(?:he|she|his|her|him|matching|paired|each|both|one\s+in|the\s+other)\b/i;
 
-const SCENE_MIN_WORDS = 25;
-const SCENE_MAX_WORDS = 40;
+// Aligned to the LIVE goofy/elegant/active scene lengths (~10-26 words); the slot
+// pipeline adds framing/identity around this, so a 40-word scene shrinks the faces.
+const SCENE_MIN_WORDS = 10;
+const SCENE_MAX_WORDS = 30;
 
 function wordCount(s) {
   return String(s || '')

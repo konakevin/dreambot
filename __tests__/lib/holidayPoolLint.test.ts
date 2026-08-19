@@ -12,14 +12,14 @@ const GOOD_SINGLE = {
   attire:
     'a floor-length black opera cape with a high stand-up collar, deep-crimson silk lining, sharp Victorian formalwear, an onyx brooch at the throat',
   scene:
-    'a candlelit gothic manor ballroom, dripping candelabra, a cobwebbed crystal chandelier overhead, tall arched windows spilling pale moonlight, deep blood-red velvet drapes, worn marble underfoot, a grand carved staircase, wrought-iron sconces flickering warm amber light',
+    'a candlelit gothic manor ballroom, dripping candelabra, a cobwebbed crystal chandelier, tall arched windows spilling moonlight, deep blood-red velvet drapes, a grand carved staircase',
   medium_key: 'dreambot_pulp',
 };
 
 describe('lintHolidayRow — clean rows pass', () => {
   it('a well-formed single cast row has no errors', () => {
-    expect(wordCount(GOOD_SINGLE.scene)).toBeGreaterThanOrEqual(25);
-    expect(wordCount(GOOD_SINGLE.scene)).toBeLessThanOrEqual(40);
+    expect(wordCount(GOOD_SINGLE.scene)).toBeGreaterThanOrEqual(10);
+    expect(wordCount(GOOD_SINGLE.scene)).toBeLessThanOrEqual(30);
     const { errors, warnings } = lintHolidayRow(GOOD_SINGLE);
     expect(errors).toEqual([]);
     expect(warnings).toEqual([]);
