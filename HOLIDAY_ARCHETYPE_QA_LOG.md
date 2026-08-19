@@ -14,10 +14,10 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 |---|---|---|---|---|---|---|
 | 1 | vampire | gothic_painted | 2 | 4.6 | ✅ PASS | R1 avg 4.25 (thumbs-up + bunnies); **systemic fix: holiday pose 'goofy'→'elegant'**; R2 5/5/3.5/5 (self rock-cairn variance) |
 | 2 | witch | painted_gothic_fantasy | 2 | 4.6 | ✅ PASS | R1 solo peace-signs; **2nd systemic fix: holiday pose_pool→'glamour'** (refined, no gestures); R2 all 4.5-5 |
-| 3 | monster_hunter | gothic_oil_garden | — | — | ⬜ pending | |
-| 4 | reaper | vampire_portrait | — | — | ⬜ pending | |
-| 5 | ghost_glam | painted_gothic_fantasy | — | — | ⬜ pending | |
-| 6 | autumn_fae | gothic_oil_garden | — | — | ⬜ pending | |
+| 3 | monster_hunter | gothic_oil_garden | 1 | 4.55 | ✅ PASS | R1 clean (pose fixes live) — leather-coat Van Helsing couple + huntress, gothic streets/fountains, refined poses |
+| 4 | reaper | vampire_portrait | 1 | 4.67 | ✅ PASS | R1 clean — couple1 5/5 blood-moon graveyard + skull-button coat, refined; self poised arms-crossed on throne w/ jack-o-lanterns; plus1 poised hands-folded gothic-comic |
+| 5 | ghost_glam | painted_gothic_fantasy | 1 | 4.83 | ✅ PASS | R1 clean — couple1 5/5 back-to-back gothic-glam painted purple moon; self gothic cathedral (comic); plus1 5/5 ethereal tattered gown teal moonlit graveyard |
+| 6 | autumn_fae | painted_gothic_fantasy | 2 | 4.65 | ✅ PASS | R1 couple1 EMPTY landscape+palms (gothic_oil_garden pure-botanical scene dropped couple); **fix: medium gothic_oil_garden→painted_gothic_fantasy** (portrait-dominant); R2 all figures foregrounded, couple2 5/5 greenhouse+fae silhouette |
 | 7 | harvest_royalty | gothic_painted | — | — | ⬜ pending | |
 | 8 | cat_burglar | vampire_portrait | — | — | ⬜ pending | |
 | 9 | mad_scientist | gothic_painted | — | — | ⬜ pending | |

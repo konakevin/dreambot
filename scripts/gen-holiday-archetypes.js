@@ -71,7 +71,7 @@ const ARCHETYPES = {
       'a moonlit fog-drenched graveyard, leaning headstones, a wrought-iron gate, drifting will-o-wisps'
     ),
     autumn_fae: A(
-      'gothic_oil_garden',
+      'painted_gothic_fantasy',
       'illustration',
       'a gown of deep-plum and black petals, gossamer dark wings, a thorn-and-berry crown resting back off the brow',
       'a moonlit haunted rose garden, black roses, a cracked fountain, glowing fireflies, jack-o-lanterns'
