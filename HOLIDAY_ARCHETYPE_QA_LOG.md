@@ -27,9 +27,9 @@ not cheesy/uncanny/generic · fun / smile-worthy. Cap 3 rounds, then take the be
 | 13 | pumpkin_carving | photography | 2 | 4.73 | ✅ PASS | R1 heirloom couples STIFF (prayer-hands / arms-crossed "American Gothic", undershoots warm/smile bar); **fix: cast medium heirloom→photography** (scene stays heirloom); R2 natural warm smiling couples 4.7-4.8. **LESSON: heirloom = stiff couple poses; preemptively switched haunted_hayride + movie_night to photography** |
 | 14 | fall_festival | canvas | 1 | 4.53 | ✅ PASS | R1 clean — couple1 4.4 canvas ring-toss booth + pumpkin lights; self 4.6 oil-painting festival + hay bales; plus1 4.6 glowing ferris wheel dusk. (recurring harmless white feather-boa festival prop) |
 | 15 | haunted_hayride | photography | 2 | 4.68 | ✅ PASS | R1 couple1 twee mirrored prayer-hands → traced to shared **'glamour' pose pool (intentionally campy soap-opera)** wrongly pinned on holiday couples. **SYSTEMIC FIX: holiday DUAL branch drops glamour default → refined 'partner' pool** (deployed); R2 couples natural + warm 4.7-4.8. Improves ALL holiday couples retroactively. (solo keeps glamour — solo poses fine) |
-| 16 | cozy_porch | photography | — | — | ⬜ pending | |
-| 17 | canyon_fall_hike | photography | — | — | ⬜ pending | |
-| 18 | movie_night | heirloom | — | — | ⬜ pending | |
+| 16 | cozy_porch | photography | 1 | 4.7 | ✅ PASS | R1 all PHOTOGRAPHIC + warm 4.7 — couple1 refined partner pose (fix working) topiary+jack-o-lantern path; self nailed the porch (white pumpkins+brass lanterns); plus1 cozy sweater+string lights+steaming mug |
+| 17 | canyon_fall_hike | photography | 1 | 4.57 | ✅ PASS | R1 — couple1 4.6 leaf-strewn trail refined pose; self 4.7 canyon walls+jack-o-lanterns+ravens; plus1 4.4 red-canyon+black cats but recurring feather-boa+velvet reads fancier than a hike. **NOTE: white feather boa recurs on SOLO renders (glamour pool = Glamour-Shots retro aesthetic nudges boas); harmless, not chasing** |
+| 18 | movie_night | photography | 2 | 4.65 | ✅ PASS | R1 plus1 rendered a plunging glam blazer (glamour-solo pool pulls glam attire onto cozy archetypes — intermittent ~1/8 female solos); re-rolled R2 → cozy sweater+plaid-pj plus1 4.7, velvet-pajama couple 4.7, smoking-jacket self 4.6. **KNOWN WART: glamour-solo occasionally over-glams cozy female solos (no clean no-DDL fix; flag for Kevin)** |
 | 19 | enchanted_pumpkin_patch | canvas | — | — | ⬜ pending | |
 | 20 | haunted_mansion | gothic_painted | — | — | ⬜ pending | |
 | 21 | jack_o_lantern_festival | gothic_painted | — | — | ⬜ pending | |
