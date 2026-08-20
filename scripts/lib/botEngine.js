@@ -586,11 +586,14 @@ async function createPicker({ botName, sb }) {
         value: p.value,
       }));
       // Plain insert (bot_dedup has no unique constraint — it tolerates repeat
-      // (bot_name,axis,value) rows across cycles, pruned by picked_at). A
-      // multi-row insert is one atomic statement, so a retry after a FAILED
-      // attempt can't double-insert; the only dup risk is a retry after a
-      // silently-dropped success, which just adds a redundant recency row
-      // (benign — recency filtering + 30-day prune absorb it).
+      // (bot_name,axis,value) rows across cycles; an axis's rows are cleared on its
+      // exhaustion-reset above, and retired-bag buildup is swept by the stale-bag
+      // cron prune_activity_logs, migration 442 — NOT a blind picked_at time-prune,
+      // which would reset active cycles, see migration 123). A multi-row insert is
+      // one atomic statement, so a retry after a FAILED attempt can't double-insert;
+      // the only dup risk is a retry after a silently-dropped success, which just
+      // adds a redundant recency row (benign — recency filtering + the exhaustion
+      // reset absorb it).
       await withRetry(
         async () => {
           const { error: insErr } = await sb.from('bot_dedup').insert(rows);
