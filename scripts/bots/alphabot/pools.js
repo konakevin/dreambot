@@ -27,6 +27,26 @@ const VIBE_COLOR = {
 };
 
 module.exports = {
+  // DreamBot Stage C candidates (sandbox, function-form) — scene + sky per path.
+  ALPHABOT_POCKET_PLANETS_SCENE: load('alphabot_pocket_planets_scene'),
+  ALPHABOT_POCKET_PLANETS_SKY: load('alphabot_pocket_planets_sky'),
+  ALPHABOT_CLOUD_HARBOR_SCENE: load('alphabot_cloud_harbor_scene'),
+  ALPHABOT_CLOUD_HARBOR_SKY: load('alphabot_cloud_harbor_sky'),
+  ALPHABOT_DREAMSCAPE_NOCTURNE_SCENE: load('alphabot_dreamscape_nocturne_scene'),
+  ALPHABOT_DREAMSCAPE_NOCTURNE_SKY: load('alphabot_dreamscape_nocturne_sky'),
+
+  // Sky-World dream candidates (2026-08-17) — spun from Kevin's saved cloud-harbor /
+  // dream-orchard renders: whimsical fantastical dream-places you'd want to visit
+  // (NO flying whales). Scene + sky per path.
+  ALPHABOT_LANTERN_SKY_SCENE: load('alphabot_lantern_sky_scene'),
+  ALPHABOT_LANTERN_SKY_SKY: load('alphabot_lantern_sky_sky'),
+  ALPHABOT_SKY_BAZAAR_SCENE: load('alphabot_sky_bazaar_scene'),
+  ALPHABOT_SKY_BAZAAR_SKY: load('alphabot_sky_bazaar_sky'),
+  ALPHABOT_DREAM_ORCHARD_SCENE: load('alphabot_dream_orchard_scene'),
+  ALPHABOT_DREAM_ORCHARD_SKY: load('alphabot_dream_orchard_sky'),
+  ALPHABOT_STARLIGHT_CARNIVAL_SCENE: load('alphabot_starlight_carnival_scene'),
+  ALPHABOT_STARLIGHT_CARNIVAL_SKY: load('alphabot_starlight_carnival_sky'),
+
   // Bot-wide "look register" (2026-06-07) — 12 cute film/storybook rendering
   // styles rolled per render via rollSharedDNA on look-enabled paths, so the
   // same path renders in a different animation look each time (Pixar / Disney

@@ -60,6 +60,15 @@ const pathBuilders = {
   'jungle-village': require('./paths/jungle-village'),
   'twilight-village': require('./paths/twilight-village'),
   'sunny-village': require('./paths/sunny-village'),
+  // ── DreamBot Stage C candidates (2026-08-16, sandbox MVP-25, function-form) ──
+  'pocket-planets': require('./paths/pocket-planets'),
+  'cloud-harbor': require('./paths/cloud-harbor'),
+  'dreamscape-nocturne': require('./paths/dreamscape-nocturne'),
+  'lantern-sky': require('./paths/lantern-sky'),
+  // (dream-express removed 2026-08-17 — Kevin cut the train path)
+  'sky-bazaar': require('./paths/sky-bazaar'),
+  'dream-orchard': require('./paths/dream-orchard'),
+  'starlight-carnival': require('./paths/starlight-carnival'),
 };
 
 // Look-enabled paths — same derivation DreamBot used (bubble exclusions moot
@@ -76,7 +85,15 @@ const CHIBI_LOOK_PATHS = Object.keys(pathBuilders).filter(
     p !== 'hidden-conservatory' &&
     p !== 'botanical' &&
     p !== 'pulp-femme' &&
-    p !== 'pulp-hero'
+    p !== 'pulp-hero' &&
+    // Stage C dream candidates own their inline cosmic-dream look (function-form).
+    p !== 'pocket-planets' &&
+    p !== 'cloud-harbor' &&
+    p !== 'dreamscape-nocturne' &&
+    p !== 'lantern-sky' &&
+    p !== 'sky-bazaar' &&
+    p !== 'dream-orchard' &&
+    p !== 'starlight-carnival'
 );
 
 module.exports = {
@@ -103,6 +120,10 @@ module.exports = {
     dreambot_conservatory: blocks.CONSERVATORY_MEDIUM,
     dreambot_botanical: blocks.BOTANICAL_MEDIUM,
     dreambot_pulp: blocks.PULP_MEDIUM,
+    // Stage C dream candidates — minimal anchor (the function-form paths inline
+    // their full look; this just reinforces the painterly-dream register).
+    dreambot_cosmic_dream:
+      'luminous painterly dream-illustration, storybook-cosmic wonder, dreamy soft light, richly detailed, deep atmospheric depth, magical and serene',
   },
 
   cleanMediumByModel: {},
@@ -119,6 +140,13 @@ module.exports = {
     botanical: 'dreambot_botanical',
     'pulp-femme': 'dreambot_pulp',
     'pulp-hero': 'dreambot_pulp',
+    'pocket-planets': 'dreambot_cosmic_dream',
+    'cloud-harbor': 'dreambot_cosmic_dream',
+    'dreamscape-nocturne': 'dreambot_cosmic_dream',
+    'lantern-sky': 'dreambot_cosmic_dream',
+    'sky-bazaar': 'dreambot_cosmic_dream',
+    'dream-orchard': 'dreambot_cosmic_dream',
+    'starlight-carnival': 'dreambot_cosmic_dream',
   },
 
   promptPrefix: blocks.PROMPT_PREFIX,
@@ -145,6 +173,8 @@ module.exports = {
     dreambot_botanical:
       'a gorgeous dreamlike storybook botanical scene, lush foliage or trees as the hero, fine-art nature photography, soft enchanted nostalgic light, rich and varied color, an impossibly pretty place you would want to wander through, dreamy serene and beautiful',
     chibibot_neutral: 'cute chibi',
+    dreambot_cosmic_dream:
+      'a breathtaking luminous painterly dream-illustration, storybook-cosmic wonder, dreamy and magical, rich saturated color, deep atmospheric depth',
   },
 
   promptSuffixByMedium: {
@@ -182,6 +212,13 @@ module.exports = {
     'botanical',
     'pulp-femme',
     'pulp-hero',
+    'pocket-planets',
+    'cloud-harbor',
+    'dreamscape-nocturne',
+    'lantern-sky',
+    'sky-bazaar',
+    'dream-orchard',
+    'starlight-carnival',
   ],
 
   cycleAllPaths: true,
@@ -216,6 +253,13 @@ module.exports = {
     botanical: 'black-forest-labs/flux-1.1-pro-ultra',
     'pulp-femme': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
     'pulp-hero': ['black-forest-labs/flux-1.1-pro-ultra', 'black-forest-labs/flux-1.1-pro'],
+    'pocket-planets': 'black-forest-labs/flux-1.1-pro-ultra',
+    'cloud-harbor': 'black-forest-labs/flux-1.1-pro-ultra',
+    'dreamscape-nocturne': 'black-forest-labs/flux-1.1-pro-ultra',
+    'lantern-sky': 'black-forest-labs/flux-1.1-pro-ultra',
+    'sky-bazaar': 'black-forest-labs/flux-1.1-pro-ultra',
+    'dream-orchard': 'black-forest-labs/flux-1.1-pro-ultra',
+    'starlight-carnival': 'black-forest-labs/flux-1.1-pro-ultra',
   },
 
   chaos: {
@@ -231,6 +275,13 @@ module.exports = {
       'botanical',
       'pulp-femme',
       'pulp-hero',
+      'pocket-planets',
+      'cloud-harbor',
+      'dreamscape-nocturne',
+      'lantern-sky',
+      'sky-bazaar',
+      'dream-orchard',
+      'starlight-carnival',
     ],
     allowSubjectChaosPaths: [
       'cozy-landscape',
@@ -279,6 +330,13 @@ module.exports = {
       'outdoor-adventure',
       'creature-portrait',
       'creature-world',
+      'pocket-planets',
+      'cloud-harbor',
+      'dreamscape-nocturne',
+      'lantern-sky',
+      'sky-bazaar',
+      'dream-orchard',
+      'starlight-carnival',
     ],
   },
 
@@ -303,6 +361,13 @@ module.exports = {
       'cozy-interior': 'scene',
       'cottagecore-village': 'scene',
       'rainy-interior': 'scene',
+      'pocket-planets': 'scene',
+      'cloud-harbor': 'scene',
+      'dreamscape-nocturne': 'scene',
+      'lantern-sky': 'scene',
+      'sky-bazaar': 'scene',
+      'dream-orchard': 'scene',
+      'starlight-carnival': 'scene',
     },
     poolsByContextAndChannel: pools.SENSORY_POOLS,
   },
