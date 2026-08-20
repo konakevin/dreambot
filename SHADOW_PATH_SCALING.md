@@ -51,7 +51,7 @@ The live path MUST render EXACTLY as it did in the approved shadow test batches.
 | TinyBot | tiny-winter-village · tiny-night-market · tiny-carnival | 🚀 LIVE |
 | ToyBot | board-game-world · wooden-toy-land · tin-toy-parade | 🚀 LIVE |
 | YumBot | kawaii-drinks · holiday-sweets · food-village | 🚀 LIVE |
-| AlphaBot | (DreamBot Stage C: pocket-planets · dream-express · cloud-harbor · dreamscape-nocturne) | ⬜ |
+| AlphaBot | (DreamBot Stage C: pocket-planets · dream-express · cloud-harbor · dreamscape-nocturne) | 🟡 BUILT — MVP-25, QA batch posted (awaiting Kevin's grade) |
 
 ## Per-bot log
 (appended as each bot completes)
@@ -91,7 +91,10 @@ LIVE: BloomBot(5) · BrickBot(3) · DinoBot(3) · ChibiBot(4) · EarthBot(3) · 
 MangaBot(4) · OceanBot(3) · PixelBot(3) · StarBot(3) · SteamBot(4) · TinyBot(3) · ToyBot(3) ·
 YumBot(3).
 
-REMAINING: AlphaBot build (DreamBot Stage C: pocket-planets · dream-express · cloud-harbor ·
-dreamscape-nocturne) — MVP-25 in the private sandbox, NOT public.
+14-bot scaling + go-live: COMMITTED + PUSHED (151a0cee). Test renders folded into feeds
+(134 deleted-path renders removed, 360 keepers backdated/dripped; 0 hidden shadow renders left).
 
-NOT YET COMMITTED — all 14 bots' scaling + go-live edits are on the working tree.
+AlphaBot DreamBot Stage C (pocket-planets · dream-express · cloud-harbor · dreamscape-nocturne):
+BUILT at MVP-25 (8 pools @25, function-form paths, dreambot_cosmic_dream medium + flux-1.1-pro-ultra,
+excluded from chibi look, chaos+polish skipped). 6-render QA batch posted to AlphaBot's private
+profile — awaiting Kevin's grade. NOT YET COMMITTED (AlphaBot Stage C files on working tree).
