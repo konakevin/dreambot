@@ -40,7 +40,6 @@ The 25 entries cover these cute-kawaii visual treatments — write at least 1-2 
 - KAWAII MARKER + INK CARTOON (clean bold lines, flat fill colors)
 - KAWAII STICKER / FOIL HOLOGRAPHIC (Lisa-Frank shimmer, glossy stickers)
 - KAWAII WOODBLOCK PRINT (ukiyo-e-influenced, simple flat planes)
-- KAWAII NEEDLEFELT PLUSHIE (soft fuzzy wool, hand-shaped)
 - KAWAII PAPER-DIORAMA (cardstock layers, shadow-box depth)
 - KAWAII STAINED-GLASS (leaded sections, jewel-tone translucency)
 - KAWAII LINOCUT BLOCK PRINT (chunky carved-line texture, soft ink wash)
