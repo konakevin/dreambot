@@ -1,0 +1,36 @@
+name: Log Retention Monitor
+
+# The log/dedup cleanup itself is automated by pg_cron INSIDE Postgres (daily jobs
+# from migrations 274/332/349/372/441/442) — nothing here runs the prunes. pg_cron
+# is reliable but SILENT on failure, so this monitor is the fail-loud backstop: it
+# reads each append-only log table once a day and fails the run (→ GitHub failure
+# email) if any table's data has aged past its retention window (a prune stopped) or
+# a self-managed table (bot_dedup) has ballooned. Mirrors db-health-monitor et al.
+# See scripts/check-log-retention.js.
+
+on:
+  schedule:
+    - cron: '0 12 * * *' # daily at 12:00 UTC — hours after the 04:xx prunes run
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Check log retention
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/check-log-retention.js
