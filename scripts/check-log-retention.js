@@ -55,9 +55,11 @@ const AGE_CHECKS = [
 
 // COUNT checks: self-managed / stale-bag tables where oldest-row age is NOT a valid
 // signal (an active bag legitimately holds rows older than the window). Instead alert
-// when the table balloons — the stale-bag prune (mig 442) has stopped. The ceiling is
-// set well above the healthy active-bag steady state and well below the pre-prune 222k.
-const COUNT_CHECKS = [{ table: 'bot_dedup', ceiling: 80000, mig: '442 (stale-bag)' }];
+// when the table balloons — the dedup + stale-bag prune (mig 442/443) has stopped.
+// Post-cleanup steady state is ~87k (one row per distinct (bot,axis,value) in active
+// bags, fully deduplicated); 150k leaves headroom for organic fleet/pool growth while
+// still catching a regression back toward the pre-prune 222k bloat.
+const COUNT_CHECKS = [{ table: 'bot_dedup', ceiling: 150000, mig: '442/443' }];
 
 const DAY = 86400000;
 
