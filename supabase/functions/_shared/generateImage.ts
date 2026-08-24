@@ -440,8 +440,15 @@ async function generateImageOnce(
   const data = await res.json();
   if (!data.id) throw new Error('No prediction ID');
 
-  // Poll for result
-  const maxPolls = mode === 'flux-kontext' ? 30 : 60;
+  // Poll for result. Non-kontext budget = 73 × 1500ms ≈ 110s (was 60 × 1500 =
+  // 90s). During the nightly drain burst, provider renders reach p90≈86s and
+  // tip over a 90s budget → `Generation timed out` → a whole-job retry (the
+  // ~11% nightly retry / sunnysteph att=3 tail, root-caused 2026-08-24 — it was
+  // provider render time, NOT Fly dual-swap saturation). 110s absorbs that tail
+  // while staying under the tightest dispatcher ceiling (first-dream 120s, so it
+  // still times out gracefully with cross-provider failover before a hard kill;
+  // nightly/create allow 140s).
+  const maxPolls = mode === 'flux-kontext' ? 30 : 73;
   const intervalMs = mode === 'flux-kontext' ? 2000 : 1500;
 
   // A throttled/5xx poll GET is Replicate erroring OUR polls — NOT the prediction
