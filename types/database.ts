@@ -6,31 +6,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
-  graphql_public: {
-    Tables: {
-      [_ in never]: never;
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json;
-          operationName?: string;
-          query?: string;
-          variables?: Json;
-        };
-        Returns: Json;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
   public: {
     Tables: {
       action_poses: {
@@ -1528,6 +1503,7 @@ export type Database = {
           attire: string;
           category: string | null;
           created_at: string;
+          day_of: boolean;
           disabled: boolean;
           id: string;
           medium_ban: string | null;
@@ -1535,11 +1511,13 @@ export type Database = {
           pool: string;
           pose_pool: string | null;
           scene: string;
+          sub_theme: string | null;
         };
         Insert: {
           attire: string;
           category?: string | null;
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           id?: string;
           medium_ban?: string | null;
@@ -1547,11 +1525,13 @@ export type Database = {
           pool: string;
           pose_pool?: string | null;
           scene: string;
+          sub_theme?: string | null;
         };
         Update: {
           attire?: string;
           category?: string | null;
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           id?: string;
           medium_ban?: string | null;
@@ -1559,6 +1539,7 @@ export type Database = {
           pool?: string;
           pose_pool?: string | null;
           scene?: string;
+          sub_theme?: string | null;
         };
         Relationships: [];
       };
@@ -2030,32 +2011,38 @@ export type Database = {
       holiday_scenes: {
         Row: {
           created_at: string;
+          day_of: boolean;
           disabled: boolean;
           holiday: string;
           id: string;
           medium_ban: string | null;
           medium_key: string | null;
           scene: string;
+          sub_theme: string | null;
           tone: string | null;
         };
         Insert: {
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           holiday: string;
           id?: string;
           medium_ban?: string | null;
           medium_key?: string | null;
           scene: string;
+          sub_theme?: string | null;
           tone?: string | null;
         };
         Update: {
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           holiday?: string;
           id?: string;
           medium_ban?: string | null;
           medium_key?: string | null;
           scene?: string;
+          sub_theme?: string | null;
           tone?: string | null;
         };
         Relationships: [];
@@ -2203,6 +2190,7 @@ export type Database = {
       };
       location_cards: {
         Row: {
+          admin_only: boolean;
           architecture: string[];
           atmosphere: string[];
           biome: string | null;
@@ -2228,6 +2216,7 @@ export type Database = {
           visual_palette: string[];
         };
         Insert: {
+          admin_only?: boolean;
           architecture?: string[];
           atmosphere?: string[];
           biome?: string | null;
@@ -2253,6 +2242,7 @@ export type Database = {
           visual_palette?: string[];
         };
         Update: {
+          admin_only?: boolean;
           architecture?: string[];
           atmosphere?: string[];
           biome?: string | null;
@@ -2988,6 +2978,7 @@ export type Database = {
           attire: string;
           category: string | null;
           created_at: string;
+          day_of: boolean;
           disabled: boolean;
           gender: string;
           id: string;
@@ -2996,11 +2987,13 @@ export type Database = {
           pool: string;
           pose_pool: string | null;
           scene: string;
+          sub_theme: string | null;
         };
         Insert: {
           attire: string;
           category?: string | null;
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           gender?: string;
           id?: string;
@@ -3009,11 +3002,13 @@ export type Database = {
           pool: string;
           pose_pool?: string | null;
           scene: string;
+          sub_theme?: string | null;
         };
         Update: {
           attire?: string;
           category?: string | null;
           created_at?: string;
+          day_of?: boolean;
           disabled?: boolean;
           gender?: string;
           id?: string;
@@ -3022,6 +3017,7 @@ export type Database = {
           pool?: string;
           pose_pool?: string | null;
           scene?: string;
+          sub_theme?: string | null;
         };
         Relationships: [];
       };
@@ -4359,8 +4355,8 @@ export type Database = {
         Returns: string;
       };
       pin_post: { Args: { p_upload_id: string }; Returns: undefined };
-      prune_observability_logs: {
-        Args: { p_days?: number };
+      prune_activity_logs: {
+        Args: never;
         Returns: {
           deleted: number;
           table_name: string;
@@ -4564,9 +4560,6 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       vote_type: ['rad', 'bad', 'skip'],

@@ -15,8 +15,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image as ExpoImage } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { useOnboardingStore } from '@/store/onboarding';
+import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
-import { verticalScale, fontScale } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { TitleText } from '@/components/TitleText';
@@ -50,6 +51,7 @@ const PLACEHOLDER_GRADIENT: [string, string] = [colors.surface, colors.backgroun
 interface LocationItem {
   key: string;
   label: string;
+  adminOnly?: boolean;
 }
 
 type LocationTier = 'real' | 'imagined';
@@ -172,6 +174,14 @@ function LocationTile({
         {item.label}
       </Text>
 
+      {/* Dark-launch marker — only admins ever receive admin_only cards, so this
+          badge only appears for them (QA aid; mig 444). */}
+      {item.adminOnly && (
+        <View style={s.adminBadge}>
+          <Text style={s.adminBadgeText}>ADMIN</Text>
+        </View>
+      )}
+
       {selected && (
         <View style={s.heartBadge}>
           <Ionicons name="heart" size={14} color={colors.accent} />
@@ -186,6 +196,8 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   const toggleLocation = useOnboardingStore((st) => st.toggleLocation);
   const toggleAllLocations = useOnboardingStore((st) => st.toggleAllLocations);
   const isEditing = useOnboardingStore((st) => st.isEditing);
+  // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
+  const isAdmin = useAuthStore((st) => st.isAdmin);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   const [sections, setSections] = useState<LocationSection[]>([]);
@@ -197,40 +209,45 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   // sort by picker_sort_order. Section icons + titles + descriptions
   // come from SECTION_META; the location list itself is fully DB-driven.
   useEffect(() => {
-    supabase
+    let query = supabase
       .from('location_cards')
-      .select('name, display_name, picker_category, picker_sort_order, thumbnail_url')
+      .select('name, display_name, picker_category, picker_sort_order, thumbnail_url, admin_only')
       // is_approved removed 2026-06-06 (Architect audit): vestigial column,
       // 54% of cards had is_approved=false and were silently invisible to
       // onboarding. picker_category NOT NULL is the real visibility gate.
-      .not('picker_category', 'is', null)
-      .order('picker_sort_order')
-      .then(({ data }) => {
-        if (!data) return;
-        const thumbMap = new Map<string, string>();
-        const byCategory = new Map<string, LocationItem[]>();
-        for (const row of data) {
-          if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
-          if (!row.picker_category) continue;
-          const items = byCategory.get(row.picker_category) ?? [];
-          items.push({ key: row.name, label: row.display_name ?? row.name });
-          byCategory.set(row.picker_category, items);
-        }
-        // Build section list in the order defined by SECTION_META
-        const built: LocationSection[] = SECTION_META.filter((m) => byCategory.has(m.id)).map(
-          (m) => ({
-            id: m.id,
-            title: m.title,
-            icon: m.icon,
-            description: m.description,
-            tier: m.tier,
-            items: byCategory.get(m.id) ?? [],
-          })
-        );
-        setSections(built);
-        setThumbnails(thumbMap);
-      });
-  }, []);
+      .not('picker_category', 'is', null);
+    // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
+    if (!isAdmin) query = query.eq('admin_only', false);
+    query.order('picker_sort_order').then(({ data }) => {
+      if (!data) return;
+      const thumbMap = new Map<string, string>();
+      const byCategory = new Map<string, LocationItem[]>();
+      for (const row of data) {
+        if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
+        if (!row.picker_category) continue;
+        const items = byCategory.get(row.picker_category) ?? [];
+        items.push({
+          key: row.name,
+          label: row.display_name ?? row.name,
+          adminOnly: !!row.admin_only,
+        });
+        byCategory.set(row.picker_category, items);
+      }
+      // Build section list in the order defined by SECTION_META
+      const built: LocationSection[] = SECTION_META.filter((m) => byCategory.has(m.id)).map(
+        (m) => ({
+          id: m.id,
+          title: m.title,
+          icon: m.icon,
+          description: m.description,
+          tier: m.tier,
+          items: byCategory.get(m.id) ?? [],
+        })
+      );
+      setSections(built);
+      setThumbnails(thumbMap);
+    });
+  }, [isAdmin]);
 
   const handleToggle = useCallback(
     (key: string) => {
@@ -489,6 +506,23 @@ const s = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.8)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
+  },
+  adminBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    paddingHorizontal: horizontalScale(6),
+    paddingVertical: verticalScale(2),
+    borderRadius: 6,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.accent,
+  },
+  adminBadgeText: {
+    fontSize: fontScale(9),
+    fontWeight: '800',
+    letterSpacing: 0.8,
+    color: colors.accent,
   },
   heartBadge: {
     position: 'absolute',
