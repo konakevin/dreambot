@@ -392,7 +392,13 @@ export async function resolveMediumFromDb(
   // re-roll triggered by pure_scene composition. Keeps embodied as a
   // scene-only artistic register, never the user's body.
   if (key === 'dream_eligible') {
-    let eligible = mediums.filter((m) => m.isDreamEligible && m.characterRenderMode !== 'embodied');
+    // is_scene_only mediums (scene-treatment looks like watercolor/gouache that
+    // only make sense on a place, never a person) are excluded here — this pool
+    // feeds character/Dream-Me + create "Surprise Me" (via the delegate below).
+    // They enter ONLY through dream_eligible_scene / _scene_natural.
+    let eligible = mediums.filter(
+      (m) => m.isDreamEligible && m.characterRenderMode !== 'embodied' && !m.isSceneOnly
+    );
     // DreamSmart model constraint (create Surprise Me only). Roll just the
     // mediums the chosen model renders well; widen back to the full eligible
     // pool if none match, so the user always gets a dream.
