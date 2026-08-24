@@ -14,7 +14,7 @@
  */
 
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import type { VibeProfile, DreamCastMember } from '../_shared/vibeProfile.ts';
+import type { VibeProfile, DreamCastMember, MoodAxes } from '../_shared/vibeProfile.ts';
 import {
   resolveMediumFromDb,
   resolveVibeFromDb,
@@ -78,7 +78,7 @@ import { distillStyle } from '../_shared/styleDistiller.ts';
 import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPricing.ts';
 import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
-import { applyVibeGenderModifier } from '../_shared/promptCompiler.ts';
+import { applyVibeGenderModifier, moodAtmosphere } from '../_shared/promptCompiler.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -239,6 +239,12 @@ Deno.serve(async (req) => {
   const force_cast_role: string | null | undefined =
     'force_cast_role' in body ? (body.force_cast_role as string | null) : undefined;
   const force_medium = (body.force_medium as string) || undefined;
+  // QA-only (worker-token gated): override the dreamer's mood sliders to test
+  // the mood → scene-atmosphere mapping without mutating a real profile.
+  const force_moods =
+    body.force_moods && typeof body.force_moods === 'object'
+      ? (body.force_moods as MoodAxes)
+      : undefined;
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
@@ -609,12 +615,13 @@ Deno.serve(async (req) => {
 
     // Step 1: Pick a mood-weighted scene template from 6,200+ Sonnet-generated DB templates
     const seeds = nightlyProfile.dream_seeds ?? { characters: [], places: [] };
-    const moods = nightlyProfile.moods ?? {
-      peaceful_chaotic: 0.5,
-      cute_terrifying: 0.3,
-      minimal_maximal: 0.5,
-      realistic_surreal: 0.5,
-    };
+    const moods = force_moods ??
+      nightlyProfile.moods ?? {
+        peaceful_chaotic: 0.5,
+        cute_terrifying: 0.3,
+        minimal_maximal: 0.5,
+        realistic_surreal: 0.5,
+      };
     let dreamSubject: string;
 
     // Check if we'll inject a cast member — decided before template selection
@@ -2302,7 +2309,11 @@ ENHANCING LANGUAGE (mandatory):
 ATMOSPHERIC RULE — WEATHER is the SOLE source of truth for atmosphere. Render exactly what the rolled WEATHER specifies. Do not add fog/mist/haze/god-rays/particles unless WEATHER asks. Do not strip them if it does.
 
 MOOD (tone only — do NOT let mood pull in new subjects):
-${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}
+${applyVibeGenderModifier(nightlyVibe.key, nightlyVibe.directive, castGender ?? null)}${
+        moodAtmosphere(moods)
+          ? `\nDREAMER'S MOOD (shape LIGHT, COLOR, and ATMOSPHERE to this feeling — never add new subjects): ${moodAtmosphere(moods)}`
+          : ''
+      }
 ${avoidList}
 
 ABSOLUTELY BANNED:
@@ -2323,6 +2334,7 @@ Output ONLY the prompt.`;
         time: timeAxis.split(' — ')[0],
         weather: weatherAxis.split(',')[0],
         phenomenon_included: includePhenomenon,
+        dreamer_mood: moodAtmosphere(moods) || null,
         composition,
         chaosTier: chaosTierOuter,
         dreamType: preRolledType,

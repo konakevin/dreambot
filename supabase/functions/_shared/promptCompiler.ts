@@ -10,6 +10,7 @@
  */
 
 import type { ResolvedCastMember } from './castResolver.ts';
+import type { MoodAxes } from './vibeProfile.ts';
 import { buildDualBrief } from './dualBriefBuilder.ts';
 import { buildSingleBrief } from './singleBriefBuilder.ts';
 
@@ -344,6 +345,48 @@ export function applyVibeGenderModifier(
     directive +
     "\n\nGENDER NOTE: Make HER the coquette centerpiece. Dewy glowing skin, flowing glossy hair with soft ribbons and bows, delicate feminine accessories catching the light, soft luxurious fabrics in blush and cream, lips soft and perfect, eyes sparkling. She looks like every girl's dream Pinterest board come to life. The scene matches her energy: drenched in soft pink and champagne tones, warm honey light, dreamy romantic glow, iridescent shimmer. Pretty dial to 11."
   );
+}
+
+// ── Dreamer Mood → Scene Atmosphere ──
+
+/**
+ * Translates the four Vibe-Profile mood sliders into a short atmosphere/tone
+ * clause for a SCENE brief (light, color, mood — never new subjects). Only
+ * emits a phrase for a slider that leans clearly off-center, so a neutral
+ * profile stays quiet and the medium/axes carry the register on their own.
+ *
+ * The Grounded↔Surreal register is GATED: photoreal-cinematic is the default;
+ * a dreamlike/surreal register only engages when the dreamer leans surreal —
+ * and even then it expresses through atmosphere + palette ONLY, never added
+ * objects (the pure-scene brief's HARD BANS keep the locked subject intact).
+ *
+ * Richness (Spare↔Lush) never pushes toward "empty" — the scene stays
+ * eye-popping; spare reads as clean/refined composition, not bare.
+ */
+export function moodAtmosphere(moods: MoodAxes | null | undefined): string {
+  if (!moods) return '';
+  const pc = moods.peaceful_chaotic;
+  const ct = moods.cute_terrifying;
+  const mm = moods.minimal_maximal;
+  const rs = moods.realistic_surreal;
+  const parts: string[] = [];
+  // Calm ↔ Wild — energy
+  if (pc <= 0.35) parts.push('serene and tranquil, a hushed and still calm');
+  else if (pc >= 0.65) parts.push('charged with dramatic, dynamic energy');
+  // Cozy ↔ Eerie — emotional tone
+  if (ct <= 0.35) parts.push('warm, inviting, and gently comforting');
+  else if (ct >= 0.65) parts.push('moody, haunting, and quietly ominous');
+  // Spare ↔ Lush — richness (never bare)
+  if (mm <= 0.35) parts.push('clean and refined, an elegant uncluttered composition');
+  else if (mm >= 0.65) parts.push('lush, opulent, and richly layered');
+  // Grounded ↔ Surreal — register (GATED; default photoreal-cinematic stays quiet)
+  if (rs >= 0.6)
+    parts.push(
+      'dreamlike and ethereal, bathed in otherworldly light and luminous impossible color — surreal in atmosphere and palette ONLY, never added objects or figures'
+    );
+  else if (rs <= 0.4) parts.push('grounded and true to life, naturalistic and believable');
+  if (parts.length === 0) return '';
+  return parts.join('; ') + '.';
 }
 
 // ── Main Export ──

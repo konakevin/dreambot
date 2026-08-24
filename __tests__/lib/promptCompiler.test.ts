@@ -10,6 +10,7 @@ import {
   postProcessPrompt,
   sanitizeUserPrompt,
   deriveFocalAnchor,
+  moodAtmosphere,
 } from '@engine/promptCompiler';
 import type { CompilerInput, CompilerOutput } from '@engine/promptCompiler';
 import type { ResolvedCastMember } from '@engine/castResolver';
@@ -282,5 +283,65 @@ describe('deriveFocalAnchor', () => {
   it('returns generic scene anchor when no cast and no object', () => {
     const result = deriveFocalAnchor([], {});
     expect(result).toContain('single dominant visual subject');
+  });
+});
+
+// ── moodAtmosphere (scene-only nightly L3) ──
+
+describe('moodAtmosphere', () => {
+  const NEUTRAL = {
+    peaceful_chaotic: 0.5,
+    cute_terrifying: 0.5,
+    minimal_maximal: 0.5,
+    realistic_surreal: 0.5,
+  };
+
+  it('is empty for null/undefined and a fully-neutral profile', () => {
+    expect(moodAtmosphere(null)).toBe('');
+    expect(moodAtmosphere(undefined)).toBe('');
+    expect(moodAtmosphere(NEUTRAL)).toBe('');
+  });
+
+  it('maps calm vs wild energy', () => {
+    expect(moodAtmosphere({ ...NEUTRAL, peaceful_chaotic: 0.1 })).toMatch(/serene|tranquil/i);
+    expect(moodAtmosphere({ ...NEUTRAL, peaceful_chaotic: 0.9 })).toMatch(/dramatic|dynamic/i);
+  });
+
+  it('maps cozy vs eerie tone', () => {
+    expect(moodAtmosphere({ ...NEUTRAL, cute_terrifying: 0.1 })).toMatch(/warm|inviting/i);
+    expect(moodAtmosphere({ ...NEUTRAL, cute_terrifying: 0.9 })).toMatch(/moody|ominous|haunting/i);
+  });
+
+  it('spare reads as refined, never bare/empty (keeps the scene eye-popping)', () => {
+    const spare = moodAtmosphere({ ...NEUTRAL, minimal_maximal: 0.1 });
+    expect(spare).toMatch(/clean|refined|elegant/i);
+    expect(spare).not.toMatch(/\b(empty|bare|barren|sparse)\b/i);
+  });
+
+  it('GATES the surreal register: photoreal by default, dreamlike only when surreal', () => {
+    // default register slider stays quiet (photoreal-cinematic default)
+    expect(moodAtmosphere({ ...NEUTRAL, realistic_surreal: 0.5 })).toBe('');
+    // leaning surreal engages the dreamlike register — but atmosphere/palette ONLY
+    const surreal = moodAtmosphere({ ...NEUTRAL, realistic_surreal: 0.85 });
+    expect(surreal).toMatch(/dreamlike|ethereal|otherworldly/i);
+    expect(surreal).toMatch(/atmosphere and palette ONLY|never added objects/i);
+    // leaning grounded stays naturalistic
+    expect(moodAtmosphere({ ...NEUTRAL, realistic_surreal: 0.15 })).toMatch(
+      /grounded|naturalistic/i
+    );
+  });
+
+  it('combines multiple off-center sliders into one clause', () => {
+    const out = moodAtmosphere({
+      peaceful_chaotic: 0.1,
+      cute_terrifying: 0.9,
+      minimal_maximal: 0.9,
+      realistic_surreal: 0.9,
+    });
+    expect(out).toMatch(/serene/i);
+    expect(out).toMatch(/ominous|moody|haunting/i);
+    expect(out).toMatch(/lush|opulent/i);
+    expect(out).toMatch(/dreamlike|ethereal/i);
+    expect(out.endsWith('.')).toBe(true);
   });
 });
