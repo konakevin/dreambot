@@ -184,7 +184,11 @@ const WARDROBE = {
       console.log(`  ✗ ${name}: not found (${readErr?.message || 'no row'})`);
       continue;
     }
-    const bc = { ...(data.biome_config || {}), WARDROBE: wb };
+    // imagined:true marks the card as a fantasy/sci-fi/imagined world so the engine
+    // bans photo-adjacent mediums (medium affinity). Precise per-card — real gothic
+    // cities (Prague/London) share the gothic_historic biome but are NOT marked, so
+    // they keep photography.
+    const bc = { ...(data.biome_config || {}), WARDROBE: wb, imagined: true };
     const { error } = await sb.from('location_cards').update({ biome_config: bc }).eq('name', name);
     console.log(`  ${error ? '✗ ' + error.message : '✓ set'} ${name} (${wb.length})`);
   }

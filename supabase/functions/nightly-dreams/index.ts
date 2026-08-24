@@ -1153,6 +1153,11 @@ Deno.serve(async (req) => {
     // the shared biomeAxes lookup so atmospheres feel recognizable to
     // travelers who have been to that specific place.
     let bespokeBiome: ReturnType<typeof getBiomeConfig> | null = null;
+    // Medium affinity: imagined worlds (biome_config.imagined=true, set on the
+    // fantasy/sci-fi/gothic-fantasy/aquatic-fantasy cards) ban photo-adjacent
+    // mediums (see the ban block below). Real locations — even those sharing a
+    // biome like gothic_historic (Prague/London) — are NOT marked and keep photography.
+    let imaginedLocation = false;
     if (userPlace) {
       // pure_scene quality filter (2026-06-04): the location_iconic_spots
       // pool was originally curated for "real recognizable landmark" — which
@@ -1237,6 +1242,17 @@ Deno.serve(async (req) => {
       if (isValidBiomeConfig(cfg)) {
         bespokeBiome = cfg; // isValidBiomeConfig is a type guard → cfg is BiomeConfig here
       }
+      // Imagined-world marker (biome_config.imagined) → medium affinity ban below.
+      // Fallback: the three unambiguously-imagined biomes (no real location uses
+      // them) also count, so a new imagined card is covered even before it's marked.
+      if (cfg && typeof cfg === 'object' && !Array.isArray(cfg)) {
+        imaginedLocation = (cfg as Record<string, unknown>).imagined === true;
+      }
+      imaginedLocation =
+        imaginedLocation ||
+        biomeKey === 'fantasy_imagined' ||
+        biomeKey === 'scifi_cosmic' ||
+        biomeKey === 'aquatic_underwater';
     }
     // Backfill-at-runtime: no stored biome → derive a coherent biome from the
     // location's tags rather than silently defaulting to tropical_coastal (the
@@ -1677,7 +1693,7 @@ Deno.serve(async (req) => {
     // Scoped to face-swap renders (scene-only cinematic stays untouched).
     const IMAGINED_BIOME_MEDIUM_BAN =
       'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
-    const imaginedBiome = biomeKey === 'fantasy_imagined' || biomeKey === 'scifi_cosmic';
+    const imaginedBiome = imaginedLocation;
     const bannedMediums = [
       ...(dualSceneMediumBan ? dualSceneMediumBan.split(',') : []),
       ...(imaginedBiome && preRolledComposition !== 'pure_scene'
