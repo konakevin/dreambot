@@ -79,6 +79,7 @@ import { getCostCents, getSparkleCost, loadModelCosts } from '../_shared/modelPr
 import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier, moodAtmosphere } from '../_shared/promptCompiler.ts';
+import { rollSceneAweBeat } from '../_shared/sceneAweBeat.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -245,6 +246,14 @@ Deno.serve(async (req) => {
     body.force_moods && typeof body.force_moods === 'object'
       ? (body.force_moods as MoodAxes)
       : undefined;
+  // QA-only (worker-token gated): force the pure-scene awe/moment beat — a
+  // string forces that exact beat, `true` forces the roll on.
+  const force_awe_beat: string | boolean | undefined =
+    typeof body.force_awe_beat === 'string'
+      ? (body.force_awe_beat as string)
+      : body.force_awe_beat === true
+        ? true
+        : undefined;
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
@@ -2260,6 +2269,24 @@ Output ONLY the prompt.`;
       const phenomenonLine = includePhenomenon
         ? `\n- ATMOSPHERIC PHENOMENON: ${phenomenaAxis}`
         : '';
+      // L4 awe/moment beat — a rare "the scene is HAPPENING" spectacle. Shares
+      // the single-extra budget with PHENOMENON (never both, so the scene never
+      // stacks into a collage — the 2026-06-03 failure above), skipped for
+      // intimate scenes, and rendered as a BACKGROUND accent so the locked
+      // subject stays the hero.
+      let aweBeat: string | null = null;
+      if (typeof force_awe_beat === 'string') {
+        aweBeat = force_awe_beat;
+      } else {
+        const wantAwe =
+          force_awe_beat === true ||
+          (!includePhenomenon && !isIntimateScene && Math.random() < 0.3);
+        if (wantAwe)
+          aweBeat = rollSceneAweBeat(timeAxis, weatherAxis, isIntimateScene, Math.random);
+      }
+      const aweBeatLine = aweBeat
+        ? `\n- AWE MOMENT (one transient spectacle rendered as a BACKGROUND accent in the sky or distance — heightens the moment, but the LOCKED SUBJECT stays dominant; integrate with the established TIME + WEATHER, never override them; NO people, NO animals, NO narrative): ${aweBeat}`
+        : '';
       nightlyBrief = `You are a cinematographer composing a POSTCARD of ${userPlace || 'the location'}. Write a Flux AI prompt (50-75 words, comma-separated).
 
 ━━━ THE SUBJECT (LOCKED — NON-NEGOTIABLE) ━━━
@@ -2291,7 +2318,7 @@ SUBJECT FRAMING: ${subjectRule}
 VARIATION AXES (alter LIGHT, ATMOSPHERE, and CAMERA ONLY — never the subject):
 - TIME: ${timeAxis}
 - WEATHER: ${weatherAxis}
-- CAMERA: ${cameraAxis}${phenomenonLine}
+- CAMERA: ${cameraAxis}${phenomenonLine}${aweBeatLine}
 
 NO ADDITIONS (HARD BANS — these have polluted past renders):
 - NO figures, people, characters, lone travelers, hooded silhouettes, animals — the landscape IS the subject, no actors inside it
@@ -2334,6 +2361,7 @@ Output ONLY the prompt.`;
         time: timeAxis.split(' — ')[0],
         weather: weatherAxis.split(',')[0],
         phenomenon_included: includePhenomenon,
+        awe_beat: aweBeat || null,
         dreamer_mood: moodAtmosphere(moods) || null,
         composition,
         chaosTier: chaosTierOuter,
