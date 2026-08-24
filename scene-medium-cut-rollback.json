@@ -1,0 +1,46 @@
+[
+  {
+    "key": "handcrafted",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "glamour",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "vintage_film",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "double_exposure",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "film_noir",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "canvas",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "heirloom",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "illustration",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "photography",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "lego",
+    "is_scene_eligible": true
+  },
+  {
+    "key": "pixels",
+    "is_scene_eligible": true
+  }
+]
