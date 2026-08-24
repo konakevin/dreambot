@@ -21,7 +21,11 @@ const arg = (n, d) => {
   return i >= 0 ? process.argv[i + 1] : d;
 };
 const LOC = arg('location');
-const CAST_MEDIUM = arg('cast-medium', 'photography');
+// Cast default = canvas (painterly), NOT photography. Photography renders the
+// sharp-subject-on-plain-backdrop "bad photoshop / AI slop" look and is banned in
+// nightly anyway ([[feedback_no_photography_in_nightly]]); painterly mediums render
+// subject + scene as ONE coherent image (Kevin 2026-08-24). Scene-only keeps cinematic.
+const CAST_MEDIUM = arg('cast-medium', 'canvas');
 const SCENE_MEDIUM = arg('scene-medium', 'cinematic');
 if (!LOC) {
   console.error('--location required');

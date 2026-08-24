@@ -1667,12 +1667,25 @@ Deno.serve(async (req) => {
     // medium_ban may hold a COMMA-SEPARATED list (Operation Sweet Dreams —
     // fantastical scenes ban EVERY photo-real-adjacent medium, not just
     // photography). Parse once; a legacy single key parses to a 1-element array.
-    const bannedMediums = dualSceneMediumBan
-      ? dualSceneMediumBan
-          .split(',')
-          .map((k) => k.trim())
-          .filter(Boolean)
-      : [];
+    // Medium affinity by setting (Kevin 2026-08-24): IMAGINED biomes (fantasy /
+    // sci-fi) render as "bad photoshop / AI slop" under photo-real mediums — a
+    // photoreal person in a dwarven hall reads composited onto a plain set. Ban the
+    // photo-adjacent set for those biomes so the roll lands on a PAINTERLY medium
+    // (canvas etc.) that renders subject + scene as ONE coherent image. REAL biomes
+    // keep photography — it coheres for plausible settings (Kevin's hearted forest
+    // shots were photography). Reuses the Operation Sweet Dreams ban list + re-roll.
+    // Scoped to face-swap renders (scene-only cinematic stays untouched).
+    const IMAGINED_BIOME_MEDIUM_BAN =
+      'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
+    const imaginedBiome = biomeKey === 'fantasy_imagined' || biomeKey === 'scifi_cosmic';
+    const bannedMediums = [
+      ...(dualSceneMediumBan ? dualSceneMediumBan.split(',') : []),
+      ...(imaginedBiome && preRolledComposition !== 'pure_scene'
+        ? IMAGINED_BIOME_MEDIUM_BAN.split(',')
+        : []),
+    ]
+      .map((k) => k.trim())
+      .filter(Boolean);
     if (dualSceneMediumKey && !force_medium && dualSceneMediumKey !== nightlyMedium.key) {
       try {
         const forced = await resolveMediumFromDb(
