@@ -26,6 +26,7 @@ import { dispatchFirstDreamJob } from './dispatchers/first_dream.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
 import { dreamFailedNotification } from '../_shared/dreamQueueLifecycle.ts';
 import { captureRenderError } from '../_shared/sentry.ts';
+import { insertGenerationLog } from '../_shared/logging.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { jitter } from '../_shared/jitter.ts';
 import { decideStaleRecovery } from '../_shared/staleRecovery.ts';
@@ -267,6 +268,40 @@ Deno.serve(async (req) => {
         model: row.model,
         source: row.source,
         weight: undefined,
+      });
+      // DURABLE hard-kill record (2026-08-23). A hard kill skips the render's own
+      // ai_generation_log write, and the transient dream_queue breadcrumbs
+      // (current_stage/last_error) are OVERWRITTEN once a later attempt succeeds —
+      // so after an eventual success the DB kept ZERO record of why the earlier
+      // attempts died (the sunnysteph investigation: attempt_count=3, forced
+      // safe-scene, but no logged reason). Persist one row PER hard-killed attempt
+      // to ai_generation_log so the death stage/model/attempt survive in the DB
+      // (queryable: status='failed' + fallback_reasons @> '{hard_kill...}'), not
+      // just Sentry. Fire-and-forget (never throws).
+      await insertGenerationLog(supabase, {
+        user_id: row.user_id,
+        job_id: row.id,
+        recipe_snapshot: {},
+        rolled_axes: {
+          stale_recovery: true,
+          death_stage: row.current_stage ?? 'unknown',
+          attempt: nextAttempt,
+        },
+        enhanced_prompt: '',
+        model_used: row.model ?? 'unknown',
+        cost_cents: 0,
+        status: 'failed',
+        sonnet_brief: null,
+        sonnet_raw_response: null,
+        vision_description: null,
+        fallback_reasons: [
+          `hard_kill:stage=${row.current_stage ?? 'unknown'}`,
+          `attempt:${nextAttempt}/${MAX_ATTEMPTS_BEFORE_DEAD_LETTER}`,
+          dead ? 'dead_lettered' : 're_queued',
+          `source:${row.source}`,
+        ],
+        replicate_prediction_id: null,
+        error_message: staleMsg,
       });
       // Exhausted → the user still owes a refund (their dream died with no
       // terminal state). isNsfw=false: a dead isolate isn't a safety rejection.
