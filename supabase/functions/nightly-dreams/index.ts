@@ -2317,7 +2317,7 @@ Output ONLY the prompt.`;
       const seasonLine = seasonSignal
         ? `\n\nSEASON — render the LOCKED SUBJECT in this season; foliage, ground cover, and seasonal color reflect it, while WEATHER stays the source of sky and precipitation: ${seasonSignal}`
         : '';
-      nightlyBrief = `You are a cinematographer composing a POSTCARD of ${userPlace || 'the location'}. Write a Flux AI prompt (50-75 words, comma-separated).
+      nightlyBrief = `You are a cinematographer capturing the most beautiful, wallpaper-worthy view of ${userPlace || 'the location'} — an aspirational moment from a dream trip, the kind of image that makes someone long to be there. Compose the SAME locked subject below at its most inviting; do NOT add anything to the scene. Write a Flux AI prompt (50-75 words, comma-separated).
 
 ━━━ THE SUBJECT (LOCKED — NON-NEGOTIABLE) ━━━
 The render IS: ${iconicAnchor || userPlace || 'the location'}
