@@ -10,6 +10,19 @@ selects the location in-app and creates a real dream in it, then grades the rend
 **Columns:** Recipe (6/6 phrase-arrays) · Thumb (tile image) · Depth (iconic/location spots) ·
 Render (test dream made) · Grade (visual QA) · Status: ⬜ dark / 🔎 in-QA / ✅ ready / 🟢 live.
 
+### QA render recipe (validated 2026-08-24)
+`node scripts/qa-location.js --location "<name>" [--cast-medium photography --scene-medium cinematic]`
+- **Cast** (self / plus_one): pin a vivid FACE-SWAP + dream-eligible medium. `photography` validated for
+  sci-fi (clean face, vivid, on-theme). Avoid `heirloom`/`vintage_film` (sepia = cheese) and scene-only
+  mediums (`cinematic`/`real_astro` drop the character).
+- **Scene-only**: `cinematic` (or `real_astro`) → stunning wallpaper-grade worlds.
+- **Held props are natural-only now** (mig-free code fix to `actions_faceswap.ts`, deployed 2026-08-24):
+  dropped 8 arbitrary "holding a glowing orb/artifact/energy core/map/guitar/helmet" poses. Props now only
+  appear when the scene motivates them (e.g. netting a sample from an alien pool, a holo-device in a
+  cyberpunk street) — natural + enhancing, per Kevin's rule.
+- **TODO (pin at launch):** the QA forces the medium; production users still pick freely. Before flip-live,
+  give imagined locations a medium affinity so users can't pair "dragon's lair" with sepia (engine feature).
+
 ---
 
 ## Live already (not dark — surfaced in Phase 0)
@@ -33,8 +46,8 @@ recipe-only ones.
 ### Sci-Fi & Space (new section)
 | # | Location | Recipe | Thumb | Depth | Render | Grade | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | alien planet | 6/6 | ✅ | 100 | ⬜ | — | ⬜ dark |
-| 2 | cyberpunk megacity | 6/6 | ✅ | 100 | ⬜ | — | ⬜ dark |
+| 1 | alien planet | 6/6 | ✅ | 100 | ✅ | 4.5 | ✅ ready | cast: netting an alien pool (natural); scene: multi-moon bioluminescent world |
+| 2 | cyberpunk megacity | 6/6 | ✅ | 100 | ✅ | 4.75 | ✅ ready | cast: holo-device in neon rain; scene 5/5 Blade-Runner cityscape |
 | 3 | mars colony | 6/6 | ✅ | 87 | ⬜ | — | ⬜ dark |
 | 4 | space station | 6/6 | ✅ | 59 | ⬜ | — | ⬜ dark |
 | 5 | sci-fi worlds (umbrella) | 0/6 | ✅ | 259 | ⬜ | — | ⬜ dark |
