@@ -529,32 +529,45 @@ export function assembleCharacterPrompt(
     // body (and vice-versa) on the single-cast nightly path.
     const genderLock = m.castGender ? genderLockShout(m.castGender) : '';
 
-    // Single anchor — positive phrasing, no L/R
+    // Single anchor — positive phrasing, no L/R. Relaxed 2026-08-24 (Kevin): the
+    // old triple-hammered "frontal portrait, face to camera" was defensive
+    // scaffolding from before the swap safety guards existed; it forced a stiff,
+    // camera-locked "cardboard cutout" look. The swap only needs a face that is
+    // clearly VISIBLE, LARGE and roughly toward camera — a natural three-quarter
+    // angle satisfies that (proven by Kevin's hearted Create renders). So frame it
+    // as a candid, cinematic subject instead of a posed ID-photo.
     const singleAnchor =
-      'ONE person alone in the scene, the only person in the image, frontal portrait, the character is looking out at the camera in three-quarter view, face turned toward the viewer';
+      'ONE person alone in the scene, the only person in the image, the clear subject of a candid cinematic photograph, face clearly visible and turned naturally toward the viewer at an easy three-quarter angle';
 
     // Framing — single doesn't need the L/R clear-gap line. Stage 5c presets
     // trade face size for composition freedom; the classic waist-up stays the
     // default. Face-priority language is load-bearing in both presets — the
     // swap needs a big readable frontal face (Hard Rule: never let the scene
     // shrink the subject).
+    // Face-priority lines (visible / large / unobstructed) are KEPT — the swap
+    // needs them (Hard Rule: never let the scene shrink the subject). Only the
+    // rigid "frontal portrait, face to the camera" line is replaced with candid +
+    // scene-integration + cinematic-lighting language so the person is genuinely
+    // PRESENT in the world and lit BY it, not a stamped-on cutout (Kevin 2026-08-24).
+    const integrationLine =
+      'a candid cinematic moment, the subject naturally lit by the scene itself (rim light and ambient colour spilling from the environment onto them), genuinely present and belonging in the world, an unforced editorial photograph rather than a stiff posed portrait, filmic colour grade, gentle shallow depth of field';
     const framingBlock = (
       input.soloComposition === 'three_quarter'
         ? [
             'shown from the knees up in a three-quarter length composition, fully visible',
             'face large, unobstructed and clearly visible to the viewer',
-            'frontal composition, face turned to the camera',
+            integrationLine,
           ]
         : input.soloComposition === 'enviro_wide'
           ? [
               'full figure visible, standing prominent in the foreground third of a sweeping environment',
               'the person is the unmistakable subject, face large enough to read clearly',
-              'face unobstructed, frontal, turned to the camera',
+              integrationLine,
             ]
           : [
               'shown from the waist up, fully visible',
               'face unobstructed and clearly visible to the viewer',
-              'frontal portrait composition, face turned to the camera',
+              integrationLine,
             ]
     ).join(', ');
 
@@ -592,8 +605,13 @@ export function assembleCharacterPrompt(
   // positions 2-3 (glamour's "romantic soft-focus portrait", a user's "sexy
   // companion", etc.). The dual face-swap can only place both faces when the two
   // HEADS render clearly apart; heads-touching → the detector can't split them.
+  // Softened 2026-08-24 (Kevin) — LIGHTLY. Dual is fragile: the detector must find
+  // TWO faces to split them, so both faces MUST stay turned toward the camera
+  // (a first over-relax turned them to profile → no_dual_split(faces=1) → dual
+  // reject). So we keep "faces toward the camera" firm and only drop the stiff
+  // "portrait" register. Head-gap / each-head-own-side KEPT verbatim (load-bearing).
   const dualAnchor =
-    'TWO people, side by side with a clear gap between their two heads, both characters looking out at the camera, frontal couple portrait, both faces turned toward the viewer, each head on its own side of the frame, three-quarter view to camera';
+    'TWO people, side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
 
   // Framing — includes L/R head-gap + same-height constraints for crop pipeline.
   // The head-gap clause is the load-bearing dual-swap constraint (Kevin
@@ -602,10 +620,13 @@ export function assembleCharacterPrompt(
   // their heads / not cheek to cheek / heads on separate sides"), not the old
   // weaker "clear gap between them". Same-height is KEPT (the crop pipeline needs
   // it) but the gap is now the dominant instruction, not "heads at the same level".
+  // Face-priority + head-gap + same-height are KEPT verbatim (all load-bearing for
+  // the dual crop/split). Only the rigid "frontal portrait composition" line is
+  // swapped for the candid cinematic-integration line (2026-08-24).
   const framingBlock = [
     'both shown from the waist up, fully visible',
-    'both faces unobstructed and clearly visible to the viewer',
-    'frontal portrait composition, both faces turned to the camera',
+    'both faces unobstructed, clearly visible and turned toward the camera, easy to read',
+    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
     'both at the same vertical height, heads at the same level',
   ].join(', ');

@@ -1,5 +1,14 @@
 # Location Expansion — QA Checklist
 
+> ⏸️ **PAUSED 2026-08-24** to fix a systemic engine issue first: nightly CAST renders have a
+> "cardboard cutout" look (rigid frontal-portrait framing + modern default wardrobe + no cinematic
+> scene-integration) vs. Kevin's hearted Create renders (candid/editorial, on-setting wardrobe, lit by
+> the scene). Root cause + plan captured in this session; fix the `characterSlotPrompt.ts` composition
+> (relax the over-rigid frontal framing now that swap safety guards exist; add cinematic lighting;
+> populate `biome_config.WARDROBE` per location). RESUME location expansion after the engine upgrade.
+> Sci-Fi cluster already validated (alien planet/cyberpunk/mars ✅, space station scene ✅/wardrobe⚠️).
+
+
 Tracks each new/revived location through dark-launch QA. Nothing flips live until the whole set is
 validated, then one batch flip: `UPDATE location_cards SET admin_only = false WHERE admin_only = true;`
 
