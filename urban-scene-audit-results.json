@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-08-24T06:12:48",
+  "judged": 1433,
+  "demoteCount": 36,
+  "flooredLocations": [],
+  "demotions": [
+    {
+      "id": "9b22b142-b764-49c7-a715-d8d650da5bfa",
+      "location_key": "amsterdam",
+      "spot_text": "EYE Film Museum angular white cantilevered building on the north IJ riverbank mirrored in harbor water"
+    },
+    {
+      "id": "89aa794c-9ded-4cda-9d26-e5b41148c97c",
+      "location_key": "amsterdam",
+      "spot_text": "Scheepvaarthuis ornate Amsterdam School shipping building corner tower rising above the Prins Hendrikkade canal"
+    },
+    {
+      "id": "359f41b0-f46e-4d7e-9988-2a961d60f4f1",
+      "location_key": "amsterdam",
+      "spot_text": "NEMO Science Museum green copper ship-shaped building"
+    },
+    {
+      "id": "530f8c91-c75f-44be-aa87-a16543ea9e99",
+      "location_key": "barcelona",
+      "spot_text": "Torre Agbar Torre Glòries bullet-shaped tower reflecting light at dusk"
+    },
+    {
+      "id": "078c69e3-a924-4547-aa3c-f396cc122f84",
+      "location_key": "barcelona",
+      "spot_text": "Torre Agbar Jean Nouvel bullet-shaped tower"
+    },
+    {
+      "id": "f2a1dddf-c49d-49e9-9bb2-f9f3868d3739",
+      "location_key": "barcelona",
+      "spot_text": "W Hotel Barcelona sail-shaped tower on beach"
+    },
+    {
+      "id": "01511d05-d6bc-4f39-870e-5111b61d430e",
+      "location_key": "china",
+      "spot_text": "Shanghai World Financial Center bottle opener tower"
+    },
+    {
+      "id": "58eff953-f45c-4b7e-ac2d-df01e307a003",
+      "location_key": "china",
+      "spot_text": "Shanghai Tower twisted glass facade"
+    },
+    {
+      "id": "241baee5-92be-477b-8a13-84dd24d843e2",
+      "location_key": "dubai",
+      "spot_text": "Dubai International Financial Centre Gate Building arch framing the twin towers beyond"
+    },
+    {
+      "id": "60a7dec7-f577-4ec0-9d06-2a881ec3682b",
+      "location_key": "dubai",
+      "spot_text": "Index Tower slender glass spire reflected perfectly in the still surface of the DIFC fountain pool"
+    },
+    {
+      "id": "550b3251-85a7-45e3-8e27-9f1f6c39b6a2",
+      "location_key": "dubai",
+      "spot_text": "Cayan Tower twisted residential spire"
+    },
+    {
+      "id": "0f90f3d4-ea20-4277-b207-1dc9c2583ecd",
+      "location_key": "hong kong",
+      "spot_text": "Jardine House circular-windowed facade reflected in Chater Road puddles"
+    },
+    {
+      "id": "939a044a-09ea-4d95-bac0-b69539e5a6d8",
+      "location_key": "hong kong",
+      "spot_text": "International Finance Centre twin towers Central"
+    },
+    {
+      "id": "73062a0e-9b3a-4e1b-8334-ef20cbba2122",
+      "location_key": "hong kong",
+      "spot_text": "Bank of China Tower glass and steel facade"
+    },
+    {
+      "id": "2da8571c-7536-4285-b671-7f52a2869e59",
+      "location_key": "hong kong",
+      "spot_text": "International Commerce Centre tower at West Kowloon"
+    },
+    {
+      "id": "fd2e4aab-649a-4937-bb62-4f292ef6a73e",
+      "location_key": "las vegas",
+      "spot_text": "ARIA Resort glass tower curve facade reflecting the sky from the CityCenter plaza below"
+    },
+    {
+      "id": "281f90d0-0b68-4309-9580-5c34f57d2ef9",
+      "location_key": "las vegas",
+      "spot_text": "Mandalay Bay gold glass tower facade reflected in the resort pool complex from the south"
+    },
+    {
+      "id": "be3f5829-d8dd-4c9e-a9f7-67fb98f14884",
+      "location_key": "london",
+      "spot_text": "The Shard glass pyramid skyscraper"
+    },
+    {
+      "id": "3176b53f-3227-45cb-8ec4-50454d25dcab",
+      "location_key": "london",
+      "spot_text": "30 St Mary Axe Gherkin tower framed by surrounding City of London glass canyons"
+    },
+    {
+      "id": "ff26962f-0144-45a6-835a-2c8d9da44200",
+      "location_key": "london",
+      "spot_text": "The Gherkin glass bullet skyscraper"
+    },
+    {
+      "id": "63ddc4bb-bf1d-41e8-9ab6-910e1b862f85",
+      "location_key": "new york city",
+      "spot_text": "Winter Garden Atrium palm trees beneath vaulted glass at Brookfield Place"
+    },
+    {
+      "id": "de4e93a4-18c8-4ff4-a099-8c676c601b33",
+      "location_key": "new york city",
+      "spot_text": "The Oculus transportation hub ribbed exterior"
+    },
+    {
+      "id": "460a4e94-5b2c-4b36-861c-f547085ee23b",
+      "location_key": "paris",
+      "spot_text": "Grande Arche de la Défense modern cubic arch"
+    },
+    {
+      "id": "c18fa84e-0dcf-425b-8f62-850686ff3a02",
+      "location_key": "prague",
+      "spot_text": "Nusle Bridge vast concrete viaduct arching above wooded valley"
+    },
+    {
+      "id": "18b30812-25a4-4a1f-8424-dcfb1fe7f4c4",
+      "location_key": "san francisco",
+      "spot_text": "Salesforce Tower and Millennium Tower cluster mirrored in Salesforce Transit Center rooftop garden pool"
+    },
+    {
+      "id": "c6407cea-8872-4157-8e06-df5c32431602",
+      "location_key": "seoul",
+      "spot_text": "Noryangjin Fish Market vaulted iron-truss hall interior with rows of illuminated tanks"
+    },
+    {
+      "id": "af3df008-6c52-42d4-9e8e-31ce4d9b0013",
+      "location_key": "seoul",
+      "spot_text": "Seoul City Hall modern wave facade"
+    },
+    {
+      "id": "e981f792-b1d8-44c8-be1d-14fa995b9ad3",
+      "location_key": "seoul",
+      "spot_text": "63 Building golden glass tower"
+    },
+    {
+      "id": "7ca8ccf2-83df-4309-b55f-dd813a06195c",
+      "location_key": "seoul",
+      "spot_text": "COEX Mall Starfield Library bookshelves"
+    },
+    {
+      "id": "72d29b1d-5847-494e-860c-be08da2d8349",
+      "location_key": "seoul",
+      "spot_text": "Lotte World Tower glass skyscraper"
+    },
+    {
+      "id": "392b4b4d-db31-4eb4-a027-6bf4b1bd1beb",
+      "location_key": "tokyo",
+      "spot_text": "Roppongi Hills Mori Tower and plaza"
+    },
+    {
+      "id": "7316820c-d7bf-45a7-af2b-5cc53260dbf4",
+      "location_key": "tokyo",
+      "spot_text": "DiverCity Tokyo Plaza Gundam statue plaza"
+    },
+    {
+      "id": "7aae42bf-b55d-481a-9ed2-7910d68be0ac",
+      "location_key": "tokyo",
+      "spot_text": "Shiodome Caretta building glass canyon reflecting the surrounding towers at dusk"
+    },
+    {
+      "id": "dab0b69b-9b70-486a-804a-43cc68ffdc33",
+      "location_key": "tokyo",
+      "spot_text": "Palette Town Ferris Wheel observation wheel"
+    },
+    {
+      "id": "b65eedac-8d86-4d87-9571-1fc39232ff85",
+      "location_key": "tokyo",
+      "spot_text": "Tokyo Metropolitan Government Building twin towers"
+    },
+    {
+      "id": "52454e50-074b-4406-8681-f98312c99bda",
+      "location_key": "venice",
+      "spot_text": "Molino Stucky converted mill exterior"
+    }
+  ]
+}
