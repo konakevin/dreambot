@@ -80,6 +80,7 @@ import { nightlyModelPool, pickFromPool } from '../_shared/nightlyModelPool.ts';
 import { buildRecipe } from '../_shared/recipeBuilder.ts';
 import { applyVibeGenderModifier, moodAtmosphere } from '../_shared/promptCompiler.ts';
 import { rollSceneAweBeat } from '../_shared/sceneAweBeat.ts';
+import { sceneSeasonSignal, seasonForMonth } from '../_shared/sceneSeason.ts';
 import { sanitizePrompt } from '../_shared/sanitize.ts';
 import { timingSafeEqual } from '../_shared/timingSafe.ts';
 import { generateImage } from '../_shared/generateImage.ts';
@@ -254,6 +255,14 @@ Deno.serve(async (req) => {
       : body.force_awe_beat === true
         ? true
         : undefined;
+  // QA-only (worker-token gated): override the month (1-12) used for the
+  // pure-scene season signal so we can test all four seasons off-date.
+  const force_season_month =
+    typeof body.force_season_month === 'number' &&
+    body.force_season_month >= 1 &&
+    body.force_season_month <= 12
+      ? Math.floor(body.force_season_month)
+      : undefined;
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
@@ -2287,6 +2296,15 @@ Output ONLY the prompt.`;
       const aweBeatLine = aweBeat
         ? `\n- AWE MOMENT (one transient spectacle rendered as a BACKGROUND accent in the sky or distance — heightens the moment, but the LOCKED SUBJECT stays dominant; integrate with the established TIME + WEATHER, never override them; NO people, NO animals, NO narrative): ${aweBeat}`
         : '';
+      // L5 season signal — the dreamer's place in its CURRENT season (climate-
+      // gated by biome; northern-hemisphere month mapping). Always-on for a
+      // seasonal biome (not rolled). Holidays take their own brief branch above,
+      // so this only colors an ordinary postcard. force_season_month is QA-only.
+      const seasonMonth = force_season_month ?? parseInt(today.slice(5, 7), 10);
+      const seasonSignal = sceneSeasonSignal(biomeKey, seasonMonth);
+      const seasonLine = seasonSignal
+        ? `\n\nSEASON — render the LOCKED SUBJECT in this season; foliage, ground cover, and seasonal color reflect it, while WEATHER stays the source of sky and precipitation: ${seasonSignal}`
+        : '';
       nightlyBrief = `You are a cinematographer composing a POSTCARD of ${userPlace || 'the location'}. Write a Flux AI prompt (50-75 words, comma-separated).
 
 ━━━ THE SUBJECT (LOCKED — NON-NEGOTIABLE) ━━━
@@ -2313,7 +2331,7 @@ ZERO photoreal nouns. ZERO photoreal atmospheric language. EVERY element describ
 `
     : ''
 }
-SUBJECT FRAMING: ${subjectRule}
+SUBJECT FRAMING: ${subjectRule}${seasonLine}
 
 VARIATION AXES (alter LIGHT, ATMOSPHERE, and CAMERA ONLY — never the subject):
 - TIME: ${timeAxis}
@@ -2362,6 +2380,7 @@ Output ONLY the prompt.`;
         weather: weatherAxis.split(',')[0],
         phenomenon_included: includePhenomenon,
         awe_beat: aweBeat || null,
+        season: seasonSignal ? `${seasonForMonth(seasonMonth)}:${biomeKey}` : null,
         dreamer_mood: moodAtmosphere(moods) || null,
         composition,
         chaosTier: chaosTierOuter,

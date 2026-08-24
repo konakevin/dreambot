@@ -24,6 +24,7 @@
     "__tests__/lib/modelPicker.test.ts",
     "__tests__/lib/promptCompiler.test.ts",
     "__tests__/lib/sceneAweBeat.test.ts",
+    "__tests__/lib/sceneSeason.test.ts",
     "__tests__/lib/dualActionDetector.test.ts",
     "__tests__/lib/classicPoolPickers.test.ts",
     "__tests__/lib/expressionRule.test.ts",
