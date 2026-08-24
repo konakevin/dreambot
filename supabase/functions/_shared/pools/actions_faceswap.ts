@@ -42,9 +42,9 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['holding', 'mysterious'],
   },
   {
-    text: 'holding a glowing artifact at chest height, eyes visible and facing camera',
+    text: 'standing tall with quiet confidence, chin slightly lifted, eyes visible and facing camera',
     weight: 8,
-    tags: ['holding', 'dramatic'],
+    tags: ['standing', 'dramatic'],
   },
   {
     text: 'turning mid-step as if someone called their name, face turned toward the viewer',
@@ -62,7 +62,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['standing', 'calm'],
   },
   {
-    text: 'walking through a crowded market holding a small object close, glancing toward the camera',
+    text: 'walking through a crowded market, weaving between the stalls, glancing toward the camera',
     weight: 7,
     tags: ['walking', 'mysterious'],
   },
@@ -107,7 +107,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['holding', 'mysterious'],
   },
   {
-    text: 'holding a torn map at chest height, glancing toward the camera',
+    text: 'pausing to get their bearings, one hand raised at chest height, glancing toward the camera',
     weight: 7,
     tags: ['holding', 'mysterious'],
   },
@@ -187,7 +187,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['casting', 'dramatic'],
   },
   {
-    text: 'holding a glowing spell orb between palms at chest height, looking toward the camera',
+    text: 'raising both open palms at chest height in a slow, wondering gesture, looking toward the camera',
     weight: 8,
     tags: ['casting', 'mysterious'],
   },
@@ -282,7 +282,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['walking', 'calm'],
   },
   {
-    text: 'holding a guitar low near the waist while looking toward the camera',
+    text: 'standing relaxed with a hand resting at the hip, looking toward the camera',
     weight: 7,
     tags: ['holding', 'calm'],
   },
@@ -367,7 +367,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['walking', 'dramatic'],
   },
   {
-    text: 'holding a futuristic helmet under one arm while glancing toward the camera',
+    text: 'standing at ease with one arm tucked casually at the side, glancing toward the camera',
     weight: 6,
     tags: ['holding', 'dramatic'],
   },
@@ -377,9 +377,9 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['walking', 'dramatic'],
   },
   {
-    text: 'holding a glowing energy core at chest height, face turned toward the viewer',
+    text: 'pressing one hand to the chest, weight settled and calm, face turned toward the viewer',
     weight: 8,
-    tags: ['holding', 'dramatic'],
+    tags: ['standing', 'dramatic'],
   },
   {
     text: 'standing under flickering fluorescent lights, head turned toward the camera',
@@ -447,7 +447,7 @@ export const ACTIONS_FACESWAP: Entry[] = [
     tags: ['walking', 'dramatic'],
   },
   {
-    text: 'standing in the center of the scene holding an object low, face turned toward the viewer',
+    text: 'standing in the center of the scene, hands relaxed at the sides, face turned toward the viewer',
     weight: 6,
     tags: ['holding', 'calm'],
   },
