@@ -476,6 +476,12 @@ Deno.serve(async (req) => {
     const recentVibes = (recentLogs ?? [])
       .map((l) => (l.rolled_axes as Record<string, unknown>)?.vibe)
       .filter((v): v is string => typeof v === 'string' && v.length > 0);
+    // L6 variety: the specific pure-scene anchor (spot_text) the user last got,
+    // so the picker doesn't roll the same view two nights running (the biggest
+    // "same-y" driver, especially for users with only a place or two).
+    const recentAnchors = (recentLogs ?? [])
+      .map((l) => (l.rolled_axes as Record<string, unknown>)?.anchor)
+      .filter((a): a is string => typeof a === 'string' && a.length > 0);
     const profilePlaces = nightlyProfile.dream_seeds?.places ?? [];
     const recentPlaces = (recentLogs ?? [])
       .map((l) => {
@@ -1202,7 +1208,13 @@ Deno.serve(async (req) => {
           .maybeSingle(),
       ]);
       if (spots && spots.length > 0) {
-        const picked = spots[Math.floor(Math.random() * spots.length)];
+        // L6 variety: prefer an anchor the user hasn't gotten recently. Fall
+        // back to the full pool if de-duping would starve it (mirrors
+        // filterRecent's >=2 rule — small/thin location pools).
+        const recentAnchorSet = new Set(recentAnchors);
+        const freshSpots = spots.filter((s) => !recentAnchorSet.has(s.spot_text));
+        const anchorPool = freshSpots.length >= 2 ? freshSpots : spots;
+        const picked = anchorPool[Math.floor(Math.random() * anchorPool.length)];
         iconicAnchor = picked.spot_text;
         // Spot scale = how the brief should frame this anchor. Classified
         // by Sonnet via scripts/classify-iconic-spots.js → 'wide' (vast
