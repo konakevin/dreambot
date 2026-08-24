@@ -549,8 +549,13 @@ export function assembleCharacterPrompt(
     // rigid "frontal portrait, face to the camera" line is replaced with candid +
     // scene-integration + cinematic-lighting language so the person is genuinely
     // PRESENT in the world and lit BY it, not a stamped-on cutout (Kevin 2026-08-24).
+    // NOT a "must look away / must be doing something" rule (Kevin 2026-08-24): the
+    // subject looking toward the camera is good and desirable — his hearted refs do
+    // exactly that. The fix is killing the STIFFNESS + integrating the LIGHTING, not
+    // avoiding the lens. So: relaxed + scene-lit + photoreal, comfortable looking at
+    // the camera OR gently off, never a stiff over-posed studio portrait.
     const integrationLine =
-      'a candid cinematic moment, the subject naturally lit by the scene itself (rim light and ambient colour spilling from the environment onto them), genuinely present and belonging in the world, an unforced editorial photograph rather than a stiff posed portrait, filmic colour grade, gentle shallow depth of field';
+      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, gentle shallow depth of field';
     const framingBlock = (
       input.soloComposition === 'three_quarter'
         ? [

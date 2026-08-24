@@ -41,8 +41,15 @@ async function render(role, medium, pureScene, label) {
     force_place: LOC,
     force_medium: medium,
   };
-  if (pureScene) body.force_pure_scene = true;
-  else body.force_cast_role = role;
+  if (pureScene) {
+    body.force_pure_scene = true;
+  } else {
+    body.force_cast_role = role;
+    // Don't FORCE an action beat (Kevin 2026-08-24): forcing it made every render
+    // "doing something / looking away." We want natural characters within their
+    // environment — sometimes an action, sometimes just looking at the camera. Let
+    // the engine's normal location_action_pct mix decide, same as production.
+  }
   for (let attempt = 0; attempt < 3; attempt++) {
     await sb
       .from('ai_generation_budget')
