@@ -52,13 +52,23 @@ interface LocationItem {
   label: string;
 }
 
+type LocationTier = 'real' | 'imagined';
+
 interface LocationSection {
   id: string;
   title: string;
   icon: keyof typeof Ionicons.glyphMap;
   description: string;
+  tier: LocationTier;
   items: LocationItem[];
 }
+
+// Tier banners split the picker into real Earth places vs imagined worlds
+// (Operation Dream Location Expansion, 2026-08-24). Order = real first.
+const TIER_META: { id: LocationTier; title: string }[] = [
+  { id: 'real', title: 'Real Places' },
+  { id: 'imagined', title: 'Imagined Worlds' },
+];
 
 // Section metadata (icons / titles / descriptions / order) lives in code
 // since it's pure UI presentation. The LIST OF LOCATIONS in each section
@@ -70,25 +80,42 @@ interface SectionMeta {
   title: string;
   icon: keyof typeof Ionicons.glyphMap;
   description: string;
+  tier: LocationTier;
 }
+// The LIST of locations in each section is DB-driven (location_cards.picker_category);
+// this only defines section presentation + which tier a category belongs to. A section
+// with no cards in the DB simply doesn't render, so a new imagined category can be added
+// here ahead of its cards (Operation Dream Location Expansion).
 const SECTION_META: SectionMeta[] = [
+  // ── Real Places ──────────────────────────────────────────────
   {
     id: 'iconic_cities',
     title: 'Cities & Countries',
     icon: 'globe-outline',
     description: 'Famous cities and country-wide destinations',
+    tier: 'real',
   },
   {
     id: 'tropical',
     title: 'Tropical Escapes',
     icon: 'sunny-outline',
     description: 'Crystal waters and island paradise',
+    tier: 'real',
   },
   {
     id: 'epic_nature',
     title: 'Epic Nature',
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
+    tier: 'real',
+  },
+  // ── Imagined Worlds ──────────────────────────────────────────
+  {
+    id: 'fantasy_worlds',
+    title: 'Fantasy Worlds',
+    icon: 'sparkles-outline',
+    description: 'Enchanted realms and dreamlike kingdoms',
+    tier: 'imagined',
   },
 ];
 
@@ -196,6 +223,7 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
             title: m.title,
             icon: m.icon,
             description: m.description,
+            tier: m.tier,
             items: byCategory.get(m.id) ?? [],
           })
         );
@@ -222,6 +250,70 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
       return next;
     });
   }, []);
+
+  const renderSection = (section: LocationSection) => {
+    const isExpanded = expandedSections.has(section.id);
+    const visibleItems =
+      isExpanded || section.items.length <= TILES_COLLAPSED
+        ? section.items
+        : section.items.slice(0, TILES_COLLAPSED);
+    const hasMore = section.items.length > TILES_COLLAPSED;
+    const sectionKeys = section.items.map((i) => i.key);
+    const selectedInSection = sectionKeys.filter((k) => places.includes(k)).length;
+    const allInSectionSelected = selectedInSection === section.items.length;
+
+    return (
+      <View key={section.id} style={s.section}>
+        <View style={s.sectionHeaderText}>
+          <View style={s.sectionTitleRow}>
+            <Ionicons name={section.icon} size={18} color={colors.accent} />
+            <Text style={s.sectionTitle}>{section.title}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                toggleAllLocations(sectionKeys);
+              }}
+              activeOpacity={0.7}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              style={s.selectAllBtn}
+            >
+              <Text style={s.selectAllText}>
+                {allInSectionSelected ? 'Deselect all' : 'Select all'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={s.sectionDesc}>{section.description}</Text>
+          <Text style={[s.sectionBadge, selectedInSection === 0 && s.sectionBadgeHidden]}>
+            {selectedInSection} selected
+          </Text>
+        </View>
+
+        <View style={s.tileGrid}>
+          {visibleItems.map((item) => (
+            <LocationTile
+              key={item.key}
+              item={item}
+              selected={places.includes(item.key)}
+              thumbnailUrl={thumbnails.get(item.key)}
+              onToggle={() => handleToggle(item.key)}
+            />
+          ))}
+        </View>
+
+        {hasMore && (
+          <TouchableOpacity
+            style={s.seeMoreBtn}
+            onPress={() => toggleExpand(section.id)}
+            activeOpacity={0.7}
+          >
+            <Text style={s.seeMoreText}>
+              {isExpanded ? 'Show less' : `Show all ${section.items.length}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={shared.root}>
@@ -261,66 +353,16 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
         showsVerticalScrollIndicator={false}
       >
-        {sections.map((section) => {
-          const isExpanded = expandedSections.has(section.id);
-          const visibleItems =
-            isExpanded || section.items.length <= TILES_COLLAPSED
-              ? section.items
-              : section.items.slice(0, TILES_COLLAPSED);
-          const hasMore = section.items.length > TILES_COLLAPSED;
-          const sectionKeys = section.items.map((i) => i.key);
-          const selectedInSection = sectionKeys.filter((k) => places.includes(k)).length;
-          const allInSectionSelected = selectedInSection === section.items.length;
-
+        {TIER_META.map((tier) => {
+          const tierSections = sections.filter((sec) => sec.tier === tier.id);
+          if (tierSections.length === 0) return null;
           return (
-            <View key={section.id} style={s.section}>
-              <View style={s.sectionHeaderText}>
-                <View style={s.sectionTitleRow}>
-                  <Ionicons name={section.icon} size={18} color={colors.accent} />
-                  <Text style={s.sectionTitle}>{section.title}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      toggleAllLocations(sectionKeys);
-                    }}
-                    activeOpacity={0.7}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    style={s.selectAllBtn}
-                  >
-                    <Text style={s.selectAllText}>
-                      {allInSectionSelected ? 'Deselect all' : 'Select all'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={s.sectionDesc}>{section.description}</Text>
-                <Text style={[s.sectionBadge, selectedInSection === 0 && s.sectionBadgeHidden]}>
-                  {selectedInSection} selected
-                </Text>
+            <View key={tier.id}>
+              <View style={s.tierBanner}>
+                <Text style={s.tierTitle}>{tier.title}</Text>
+                <View style={s.tierRule} />
               </View>
-
-              <View style={s.tileGrid}>
-                {visibleItems.map((item) => (
-                  <LocationTile
-                    key={item.key}
-                    item={item}
-                    selected={places.includes(item.key)}
-                    thumbnailUrl={thumbnails.get(item.key)}
-                    onToggle={() => handleToggle(item.key)}
-                  />
-                ))}
-              </View>
-
-              {hasMore && (
-                <TouchableOpacity
-                  style={s.seeMoreBtn}
-                  onPress={() => toggleExpand(section.id)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.seeMoreText}>
-                    {isExpanded ? 'Show less' : `Show all ${section.items.length}`}
-                  </Text>
-                </TouchableOpacity>
-              )}
+              {tierSections.map(renderSection)}
             </View>
           );
         })}
@@ -354,6 +396,29 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(14),
     backgroundColor: colors.background,
+  },
+
+  // Tier banner ("Real Places" / "Imagined Worlds") that groups the sections
+  // under it (Operation Dream Location Expansion).
+  tierBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: verticalScale(14),
+    marginTop: verticalScale(4),
+  },
+  tierTitle: {
+    fontSize: fontScale(13),
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    color: colors.subtleOnDark,
+  },
+  tierRule: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.subtleOnDark,
+    opacity: 0.3,
   },
 
   section: { marginBottom: verticalScale(28) },
