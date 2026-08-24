@@ -5,10 +5,18 @@
  * could anchor a pure_scene render (no human subject, just the
  * landscape/cityscape)?" boolean.
  *
+ * ⚠️ 2026-08-23 — the S-tier AUTO-PASS below was the ROOT CAUSE of the pure-scene
+ * "arbitrary anchor" pollution (sunnysteph investigation): it marked ~2,658 tier-S
+ * spots eligible WITHOUT any Sonnet check, letting ~893 placeless generic essence
+ * cards + obscure micro-landmarks (Oudemanhuispoort) into the pool. FIXED: S-tier
+ * now also goes through the Sonnet rubric (no auto-pass). For a STRICT, LOCATION-
+ * AWARE re-audit (the canonical tool that judges "recognizable postcard of THIS
+ * location?"), use scripts/reaudit-pure-scene-spots.js — run it after any new
+ * pure-scene spot seeding so generic/obscure entries can't re-pollute.
+ *
  * Backfill strategy:
- *   • S-tier → true   (known postcard-grade — auto-marked without Sonnet)
  *   • B-tier → false  (known mundane "concrete ditch" type — auto-marked)
- *   • A-tier → Sonnet  (mixed bag — Sunset Boulevard yes, Petersen no)
+ *   • S + A-tier → Sonnet  (both judged; S is NO LONGER auto-passed — see above)
  *
  * Only classifies rows belonging to LIVE locations (is_approved=true +
  * picker_category NOT NULL on location_cards). Skips the ~800 spots
@@ -101,18 +109,21 @@ async function classifyBatch(spots) {
   const liveSpots = all.filter((s) => liveSet.has(s.location_key));
   console.log(`Total active spots in live locations: ${liveSpots.length}`);
 
-  // Auto-mark S + B (no Sonnet needed)
-  const sTier = liveSpots.filter(
-    (s) => s.quality_tier === 'S' && (RECLASSIFY || s.pure_scene_eligible !== true),
-  );
+  // Auto-mark B only (mundane). S + A BOTH go through Sonnet — the old S auto-pass
+  // was the 2026-08-23 pollution root cause (see header). NOTE: this script's rubric
+  // is location-UNAWARE; scripts/reaudit-pure-scene-spots.js is the canonical STRICT,
+  // location-aware re-audit — prefer it for a clean pass.
+  const sTier = [];
   const bTier = liveSpots.filter(
     (s) => s.quality_tier === 'B' && (RECLASSIFY || s.pure_scene_eligible !== false),
   );
   const aTier = liveSpots.filter(
-    (s) => s.quality_tier === 'A' && (RECLASSIFY || s.pure_scene_eligible === null),
+    (s) =>
+      (s.quality_tier === 'A' || s.quality_tier === 'S') &&
+      (RECLASSIFY || s.pure_scene_eligible === null),
   );
   console.log(
-    `Auto-mark: S=${sTier.length} → true, B=${bTier.length} → false. Sonnet pass: A=${aTier.length}.`,
+    `Auto-mark: B=${bTier.length} → false. Sonnet pass (S+A): ${aTier.length}.`,
   );
 
   if (DRY_RUN) {
