@@ -183,6 +183,23 @@ export async function completeQueueJob(
         },
         { dedupKey: `dream_created:${jobId}` }
       );
+      // AUTHORITATIVE first_dream_generated — the onboarding reveal (RevealStep)
+      // only fired this client-side if the user stayed on the reveal screen
+      // through the 30-140s render, so it missed ~half of real first dreams and
+      // made the install→first-dream funnel look broken. Emit it server-side
+      // here (client emit removed) so the count matches the DB. dedup by jobId.
+      if (job.source === 'first_dream') {
+        await captureServer(
+          job.user_id,
+          'first_dream_generated',
+          {
+            medium: up?.dream_medium ?? null,
+            vibe: up?.dream_vibe ?? null,
+            model: up?.model ?? null,
+          },
+          { dedupKey: `first_dream_generated:${jobId}` }
+        );
+      }
     }
   } catch (e) {
     console.warn(`[completeQueueJob] dream_created emit skipped: ${(e as Error).message}`);
