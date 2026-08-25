@@ -1,100 +1,177 @@
-# Operation Expand Dreams — BUILD MANIFEST & TRACKER
+# Operation Expand Dreams — MASTER IMPLEMENTATION PLAN
 
-The execution tracker for building out **all** remaining location categories. Companion to the strategy
-doc `OPERATION_DREAM_LOCATION_EXPANSION.md` and the QA tracker `LOCATION_EXPANSION_CHECKLIST.md`.
+<!-- ============================================================================ -->
+## ▶ RESUME HERE (read first on any new session / after compaction)
 
-**Kickoff:** 2026-08-24, Kevin said "all of it." Autonomous build; make every call; post QA renders to
-Kevin's private Dreams album; keep this tracker current.
+**ACTIVE: autonomous OVERNIGHT run** (Kevin went to bed 2026-08-24; see
+[[project_expand_dreams_autonomous_run]]). Task: seed + QA **every new location category**, then it's ready
+for Kevin's review tomorrow.
+
+**THE RULES (do not violate):**
+1. Per category: seed a QA-size batch → **up to 3 QA rounds, stop early if the test batch averages ≥4.5/5.**
+2. **Post every test render to Kevin's PRIVATE Dreams album** (uid `eab700d8-f11a-4f47-a3a1-addda6fb67ec`)
+   via `qa-location.js`. Grade each render myself (download + view) vs the integration+cinema bar.
+3. **DO NOT GO LIVE. Everything stays `admin_only=true` dark. Never set `admin_only=false` in this run.**
+4. Full quality per location (autonomous ≠ rushed). Can't reach 4.5 in 3 rounds → 🚩 Return-to, move on.
+5. Keep this doc's progress board + per-location tables current as each item moves.
+
+**HOW TO RESUME (post-compaction procedure):**
+1. Read this block + the Progress board below to see which category is in flight.
+2. Check in-flight background jobs / query DB for seed state:
+   `node -e` on `location_cards` (biome_config present?) + `location_iconic_spots` per `location_key`.
+3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
+   grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
+
+**⏱ LIVE STATE (update this line as work moves):**
+> 2026-08-24 night: Through Time — slice (egypt/japan/1920s speakeasy) ✅ passed R2. Remaining 9
+> (victorian london, ancient rome, viking longhouse, medieval village, renaissance venice, pirate cove,
+> ancient greece, silk road, 1950s americana): recipes ~7/9 done, `seed-category.mjs` chained to auto-run
+> when all 9 recipes exist, then QA. NEXT after Through Time: Old West (build from scratch).
+<!-- ============================================================================ -->
+
+**THE single source of truth for all remaining Operation Expand Dreams work.** Following this doc top to
+bottom = complete implementation. Update it as every item moves.
+
+- **Why** (strategy, category rationale, ~90 ideas): `OPERATION_DREAM_LOCATION_EXPANSION.md`
+- **How** (the 10/10 seed authoring pipeline + rules): `LOCATION_SEED_PLAYBOOK.md`
+- **What + status** (this doc). *(`LOCATION_EXPANSION_CHECKLIST.md` is now SUPERSEDED by this doc.)*
+- **Working mode:** autonomous, no per-category approval gates, FULL quality bar per location
+  ([[project_expand_dreams_autonomous_run]]).
+
+---
+
+## ✅ Definition of DONE (per location, then per category)
+A location is DONE when ALL are true:
+1. **Recipe** authored (`generate-full-location-card.js`).
+2. **Seeded** to the playbook bar (`seed-category.mjs`): valid `biome_config` + WARDROBE, ≥15 curated
+   cast spots (medium/intimate), recognizable scene spots (wide/medium), imagined flag correct.
+3. **QA ≥4.5** across cast (self+plus_one) + scene, over ≤3 rounds — OR flagged 🚩 Return-to.
+4. **Thumbnail** set (`thumbnail_url`).
+A category is DONE when all its locations are DONE, its **`SECTION_META` entry exists** in
+`LocationPickerStep.tsx`, and it's **flipped live** (`admin_only=false`) — or its failures are on Return-to.
+
+---
+
+## 📊 Progress board (update every move)
+Status: ⬜ not started · 🔨 seeding · 🔎 QA · ✅ passed (≥4.5, dark) · 🟢 live · 🚩 return-to
+
+| Category | picker_category | SECTION_META | # | Status |
+|---|---|---|---|---|
+| Cities & Countries | iconic_cities | ✅ | 26 | 🟢 live |
+| Epic Nature | epic_nature | ✅ | 16 | 🟢 live |
+| Tropical Escapes | tropical | ✅ | 6 | 🟢 live |
+| Fantasy Worlds | fantasy_worlds | ✅ | 7 | 🟢 live |
+| High Fantasy | high_fantasy | ✅ | 9 | 🔎 QA (slice ~4.5) |
+| Sci-Fi & Space | scifi_space | ✅ | 5 | 🔎 QA (2 ✅) |
+| Gothic & Haunted | gothic_haunted | ✅ | 4 | 🔎 QA |
+| Whimsical & Fun | whimsical_fun | ✅ | 3→9 | 🔎 QA + expand |
+| **Through Time** | through_time | ❌ **TODO** | 12 | 🔨 (slice ✅, 9 seeding) |
+| Old West | old_west | ❌ TODO | 8 | ⬜ |
+| Heroes & Adventure | heroes_adventure | ❌ TODO | 9 | ⬜ |
+| Landmarks & Wonders | landmarks_wonders | ❌ TODO (real tier) | 8 | ⬜ |
+
+---
+
+## Work breakdown (per-location status)
+Cols: R=recipe · S=seeded · Q=QA grade · T=thumb · St=status(⬜/🔎/✅/🚩)
+
+### High Fantasy (`high_fantasy`) — dark, finish QA + flip
+| Location | R | S | Q | T | St |
+|---|---|---|---|---|---|
+| ancient elven city | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| dwarven fortress | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| dragons keep | ✅ | ✅ | ~4.5 (thin scene DNA) | ✅ | 🔎 |
+| crystal caverns | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| enchanted forest | ✅ | ✅ | — | ✅ | ⬜ |
+| floating sky islands | ✅ | ✅ | — | ✅ | ⬜ |
+| underwater city atlantis | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| mermaid lagoon | ✅ | ✅ | ~4.5 | ❌ | 🔎 |
+| high fantasy (umbrella) | ✅ | ✅ | ⚠️ goofy scene | ✅ | 🔎 |
+
+### Sci-Fi & Space (`scifi_space`)
+| alien planet | ✅ | ✅ | 4.5 | ✅ | ✅ |
+| cyberpunk megacity | ✅ | ✅ | 4.75 | ✅ | ✅ |
+| mars colony | ✅ | ✅ | — | ✅ | ⬜ |
+| space station | ✅ | ✅ | — | ✅ | ⬜ |
+| sci-fi worlds (umbrella) | ✅ | ✅ | — | ✅ | ⬜ |
+
+### Gothic & Haunted (`gothic_haunted`)
+| transylvania | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| haunted cathedral | ✅ | ✅ | — | ✅ | ⬜ |
+| haunted castle | ✅ | ✅ | — | ❌ | ⬜ |
+| gothic realm (umbrella) | ✅ | ✅ | — | ✅ | ⬜ |
+
+### Whimsical & Fun (`whimsical_fun`) — 3 seeded + build 6
+| princess garden castle | ✅ | ✅ | ~4.5 | ✅ | 🔎 |
+| rose garden palace | ✅ | ✅ | ~4.5 | ❌ | 🔎 |
+| fairy cottage | ✅ | ✅ | — | ✅ | ⬜ |
+| kawaii candy land | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| unicorn meadow | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| cottagecore cottage | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| pastel dreamscape | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| fairy tea party | ⬜ | ⬜ | — | ⬜ | ⬜ |
+| enchanted toy shop | ⬜ | ⬜ | — | ⬜ | ⬜ |
+
+### Through Time (`through_time`) — imagined=false (photography OK)
+| ancient egypt | ✅ | ✅ | 4.5 (R2) | ✅ | ✅ |
+| feudal japan | ✅ | ✅ | 4.5 (R2) | ✅ | ✅ |
+| 1920s speakeasy | ✅ | ✅ | 4.0 (garbled signage) | ✅ | 🔎 |
+| victorian london | ✅ | 🔨 | — | ⬜ | 🔨 |
+| ancient rome | ✅ | 🔨 | — | ⬜ | 🔨 |
+| viking longhouse | ✅ | 🔨 | — | ⬜ | 🔨 |
+| medieval village | ✅ | 🔨 | — | ⬜ | 🔨 |
+| renaissance venice | 🔨 | 🔨 | — | ⬜ | 🔨 |
+| pirate cove | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| ancient greece | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| silk road | ⬜ | 🔨 | — | ⬜ | 🔨 |
+| 1950s americana | ⬜ | 🔨 | — | ⬜ | 🔨 |
+
+### Old West (`old_west`) — build from scratch, imagined=false
+frontier town · saloon interior · desert canyon standoff · gold rush camp · cattle ranch golden hour ·
+steam train depot · monument valley trail · border cantina — all ⬜
+
+### Heroes & Adventure (`heroes_adventure`) — build, imagined=false (real-ish, some imagined)
+superhero city rooftop · spy lair secret hq · epic battlefield · mountain summit expedition ·
+race track garage · deep-sea research sub · jungle temple expedition · carrier flight deck ·
+gladiator arena — all ⬜
+
+### Landmarks & Wonders (`landmarks_wonders`) — REAL tier, nightly-eligible, revive graveyard
+taj mahal · petra · machu picchu · great wall of china · angkor wat · christ the redeemer ·
+sahara dunes · northern lights glacier — all ⬜
+
+---
+
+## Cross-cutting tasks (don't forget these)
+- [ ] **SECTION_META entries** in `components/onboarding/LocationPickerStep.tsx` for the new categories:
+      `through_time`, `old_west`, `heroes_adventure`, `landmarks_wonders` (real tier). *(The 4 imagined
+      ones — high_fantasy/scifi_space/gothic_haunted/whimsical_fun — are already added.)*
+- [ ] **Thumbnails** for cards missing them: haunted castle, mermaid lagoon, rose garden palace + every
+      new build (`generate-location-thumbnails.js`).
+- [ ] **Flip live** per section (`UPDATE location_cards SET admin_only=false WHERE picker_category='…'`)
+      once the section clears 4.5.
+- [ ] **Landmarks nightly-eligibility** — real landmarks may enter nightly (unlike imagined); verify.
+- [ ] Watch: profile-face on action beats (monitor at scale; nudge only if frequent).
+
+## 🚩 Return-to (couldn't hit 4.5 after 3 rounds)
+_(none yet)_
+
+---
+
+## Per-category loop (the process I follow)
+1. `generate-full-location-card.js "<loc>" ...` (recipes).
+2. `seed-category.mjs <picker_category> <imagined> <sortStart> "loc=biome" ...` (full seed).
+3. `generate-location-thumbnails.js` for the new locs.
+4. 3-round QA: `qa-location.js --location "<loc>"` → post to Kevin's Dreams album → grade each render vs
+   the integration+cinema 4.5 bar → fix the SPECIFIC cause → re-render. Cap 3 rounds → else 🚩 Return-to.
+5. Add `SECTION_META` entry if new category. Flip `admin_only=false` when the section passes.
+6. Update this doc + move to next category. No approval gate.
 
 ## Locked decisions (2026-08-24)
-- **Target ~120 locations (broad).**
-- **Nightly scope = Create-first.** Imagined/new worlds are Create-only; they do NOT enter nightly
-  auto-dreams yet (avoids per-world face-swap QA blowup). Real Landmarks may join nightly like existing
-  real places. Nightly-per-world is a later, per-world decision.
-- **Labels** as below (tweakable). **Neutral section names** — no gender labels in UI.
-- **Revive graveyard recipes** where they exist (cheapest quality/hour); build new otherwise.
-- **Sequencing:** prove the full pipeline on ONE fresh category (Through Time) → dark → QA → flip live,
-  THEN batch the remaining categories. **One category fully finished before the next** (Kevin, 2026-08-24).
-- **QA-SIZED POOLS FIRST (Kevin, 2026-08-24 — our "seed 25 to test, scale after sign-off" rule):**
-  - **Phase A (QA seed, small):** recipe + biome config + wardrobe + a SHALLOW starter spot pool + quick
-    thumbnail. QA-render (cast self + scene) to Kevin's private Dreams album; iterate to the bar.
-  - **Phase B (scale, after sign-off):** top up depth to the full ~50-spot floor, finalize thumbnails,
-    flip `admin_only=false` live.
-  - First loop of a new category = a **representative 2-3 location slice** to prove recipe/biome/wardrobe/
-    medium, THEN complete the rest of the category, THEN Phase B.
-
-## Per-location pipeline (8 steps)
-1. `node scripts/generate-full-location-card.js "<name>"` — recipe (6 phrase-arrays + tags)
-2. set `biome` (from tags) → `node scripts/gen-location-biome-configs.js --only "<name>" --apply` — axes
-   (TIME/WEATHER/CAMERA/PHENOMENA/BANS/SUBJECT_RULE) so `isValidBiomeConfig` passes
-3. wardrobe pool (`set-imagined-wardrobe.js` pattern or `gen-location-wardrobe.js`)
-4. `node scripts/gen-iconic-spots-50.js --location "<name>"` — 50 depth pillars
-5. `node scripts/classify-iconic-spots.js` — tag pure_scene / character eligible + quality_tier
-6. `node scripts/generate-location-thumbnails.js "<name>"` — tile image
-7. set `picker_category = '<section>'` + `admin_only = true` (dark launch to admins)
-8. QA: `node scripts/qa-location.js --location "<name>"` → grade → flip `admin_only=false` per section
-
----
-
-## Category roster (build targets)
-
-### ✅ Already live (55): iconic_cities 26 · epic_nature 16 · tropical 6 · fantasy_worlds 7
-
-### 🏗 Dark, QA in progress (21): high_fantasy 9 · scifi_space 5 · gothic_haunted 4 · whimsical_fun 3
-(See LOCATION_EXPANSION_CHECKLIST.md for per-card grades. Finish QA → flip live.)
-
-### 🔨 TO BUILD
-
-**Through Time** (`through_time`, imagined tier) — historical eras. Photography allowed (no imagined ban).
-1. ancient egypt ★rev · 2. ancient rome ★rev · 3. victorian london ★rev · 4. feudal japan ·
-5. viking longhouse · 6. medieval village market · 7. renaissance venice · 8. 1920s speakeasy ·
-9. golden-age pirate cove · 10. ancient greece · 11. silk road caravanserai · 12. 1950s americana
-
-**Old West** (`old_west`, imagined tier) — build-from-scratch.
-1. frontier town · 2. saloon interior · 3. desert canyon standoff · 4. gold rush camp ·
-5. cattle ranch golden hour · 6. steam train depot · 7. monument valley trail · 8. border cantina
-
-**Heroes & Adventure** (`heroes_adventure`, imagined tier) — action/rugged, male-leaning.
-1. superhero city rooftop · 2. spy lair secret hq · 3. epic battlefield · 4. mountain summit expedition ·
-5. race track garage · 6. deep-sea research sub · 7. jungle temple expedition · 8. carrier flight deck ·
-9. gladiator arena
-
-**Whimsical & Fun — expand** (`whimsical_fun`, add to existing 3) — kawaii/cute. Painterly (imagined ban).
-1. kawaii candy land · 2. unicorn meadow · 3. cottagecore cottage · 4. pastel dreamscape ·
-5. fairy tea party · 6. enchanted toy shop
-
-**Landmarks & Wonders** (`landmarks_wonders`, REAL tier — new SECTION_META entry) — nightly-eligible.
-1. taj mahal ★rev · 2. petra ★rev · 3. machu picchu ★rev · 4. great wall of china ★rev ·
-5. angkor wat ★rev · 6. christ the redeemer · 7. sahara dunes · 8. northern lights glacier
-
-★rev = revive/refresh from the 50-card graveyard (recipe head-start).
-
-**Total new/revived: ~43** → live target ≈ 119 (~120 broad). ✓
-
----
+- Target ~120 (broad). Nightly scope = Create-first (imagined Create-only; real Landmarks may go nightly).
+- Neutral section labels (tweakable), no gender in UI. Revive graveyard recipes where they exist.
+- Autonomous, full quality bar per location, flag failures rather than stall.
 
 ## Build log
-| Date | Category | Step | Status |
-|---|---|---|---|
-| 2026-08-24 | Through Time (slice: egypt/feudal japan/1920s speakeasy) | recipes | ✅ done (prefill bug fixed) |
-| 2026-08-24 | Through Time slice | biome_config + wardrobe + 100 iconic anchors/loc + grade | ✅ done |
-| 2026-08-24 | Through Time slice | curation-gate bug: global steps skipped new cards (is_approved unset) | ✅ fixed → set is_approved=true, re-running scale+pure-scene classify |
-| 2026-08-24 | Through Time slice | Round 1 QA renders | ⏳ next |
-
-**Lesson captured in LOCATION_SEED_PLAYBOOK.md:** set `is_approved=true` + `picker_category` right after
-the recipe step, BEFORE any global curation script, or they skip the new location.
-
-| 2026-08-24 | Through Time slice | Round 1 QA (9 renders) | 5/6 cast @4.5+; 1 cast misfire (egypt_plus1) + weak scenes |
-| 2026-08-24 | ENGINE fix (all nightly) | dropped `enviro_wide` from solo-cast composition roll | ✅ deployed — enviro_wide shrank faces < identity floor → pure_scene_fallback |
-| 2026-08-24 | Through Time slice | eligibility rules: wide→not-cast, intimate→not-scene | ✅ applied |
-| 2026-08-24 | Through Time slice | Round 2 QA | ✅ misfire fixed (person back), egypt scene now Avenue of Sphinxes; Kevin: "looks good, keep going" |
-| 2026-08-24 | Through Time (remaining 9) | recipes + `seed-category.mjs` (reusable seeder) | 🔨 running |
-
-**Reusable seeder: `scripts/seed-category.mjs`** — runs the whole pipeline for a category with all lessons
-baked in (early gate columns, biome/wardrobe/spots/grade, wide→not-cast + intimate→not-scene eligibility).
-Usage: `node scripts/seed-category.mjs <picker_category> <imagined> <sortStart> "loc=biome" ...` (recipes
-must exist first).
-
-**Engine wins this session (help production too):** dropped `enviro_wide` from the solo-cast composition
-roll (was silently converting ~10% of cast nightlies to scene-only); wardrobe burgundy fix; medium
-affinity for imagined worlds.
+| 2026-08-24 | Slice (egypt/japan/speakeasy) | seed → R1 (5/6 cast @4.5, 1 misfire) → engine fix (dropped enviro_wide) + eligibility rules → R2 ✅ | Kevin: "looks good, keep going" |
+| 2026-08-24 | Engine (prod) | dropped enviro_wide from solo-cast comp (was silently scene-only-ing ~10% of cast nightlies); wardrobe de-burgundy; imagined medium affinity | committed 615cd7b2 |
+| 2026-08-24 | Through Time (9) | recipes + seed-category.mjs | 🔨 running |

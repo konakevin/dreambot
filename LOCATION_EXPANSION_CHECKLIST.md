@@ -1,5 +1,9 @@
 # Location Expansion — QA Checklist
 
+> ⛔ **SUPERSEDED 2026-08-24 by `OPERATION_EXPAND_BUILD.md`** — that is now THE single master
+> implementation plan + progress tracker for all remaining Operation Expand Dreams work. This file is kept
+> only for the QA render-recipe notes below; per-location status lives in the master doc.
+
 > **Status 2026-08-24 (reconciled to the live DB).** The systemic engine-quality blocker that paused this
 > project is **FIXED** (cardboard framing relaxed in `characterSlotPrompt`, wardrobe pools on all 61 cards +
 > confirmed applied, imagined→painterly medium affinity, held-props natural-only, burgundy root-caused +
