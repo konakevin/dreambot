@@ -332,6 +332,11 @@ Deno.serve(async (req) => {
   // QA: force the pure-scene (no-cast) composition even for a user who HAS a cast
   // photo — the only way to exercise Path 2 (scene-only holiday) on such an account.
   const force_pure_scene = body.force_pure_scene === true;
+  // DRY RUN: exercise the full roll → recipe → Sonnet brief → prompt-assembly
+  // pipeline for a location and RETURN the assembled prompt WITHOUT rendering
+  // (no Flux, no face swap, no upload, no log). Used to smoke-test every location
+  // pre-go-live so a broken card can never produce a "dead dream" in production.
+  const dry_run = body.dry_run === true;
   // QA: restrict the holiday draw to a single archetype (sub_theme) so we can grade
   // one archetype in isolation (vampire / witch / corn_maze / …). Null = mixed.
   const force_holiday_sub_theme =
@@ -2605,6 +2610,22 @@ Output ONLY the prompt.`;
 
   // ── Post-pipeline: sanitize, generate, face swap, persist ──────────────
   finalPrompt = sanitizePrompt(finalPrompt);
+
+  // DRY RUN short-circuit: the full prompt is assembled + sanitized. Return it
+  // (plus any degradation breadcrumbs) WITHOUT rendering — the pre-go-live
+  // "dead dream" smoke test asserts every location yields a real, non-empty
+  // prompt here. No side effects past this point (render/swap/upload/log).
+  if (dry_run) {
+    return new Response(
+      JSON.stringify({
+        dry_run: true,
+        finalPrompt,
+        promptLength: finalPrompt ? finalPrompt.length : 0,
+        fallbackReasons: fallbackReasons ?? [],
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 
   // Force any bare "cave" reference to "lava cave" — generic caves drift
   // toward dungeon/temple aesthetics. Lava caves anchor back to volcanic

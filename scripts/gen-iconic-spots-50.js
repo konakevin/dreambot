@@ -58,6 +58,12 @@ const SB_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SB_URL, KEY);
 
 function metaPrompt(loc, count, biome, subRegions, mustInclude) {
+  // --fictional forces the INVENT prompt for thematic/fictional locations that
+  // have a real-world biome (a pirate cove, a western saloon, a rose palace) but
+  // are NOT real geographic places. Without it the real-location prompt demands
+  // real landmarks → Sonnet correctly refuses to hallucinate → the refusal prose
+  // gets parsed as spots. (2026-08-25)
+  if (has('fictional')) return fantasyMetaPrompt(loc, count, subRegions, mustInclude);
   if (biome === 'fantasy_imagined') return fantasyMetaPrompt(loc, count, subRegions, mustInclude);
   if (biome === 'scifi_cosmic') return scifiMetaPrompt(loc, count, subRegions, mustInclude);
   return realLocationMetaPrompt(loc, count, subRegions, mustInclude);
@@ -245,17 +251,48 @@ async function callSonnet(prompt) {
   console.log(
     `Generating ${COUNT} iconic spots for "${LOCATION}" (biome: ${biome}, ${subRegions.length} sub_regions, ${mustInclude.length} must_include)${DRY ? ' (dry-run)' : ''}...`
   );
-  const t0 = Date.now();
-  const text = await callSonnet(metaPrompt(LOCATION, COUNT, biome, subRegions, mustInclude));
-  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+  // Junk filter: drop Sonnet refusal/meta lines (markdown tables/bold, questions,
+  // list-item clarifications, "which do you want", real-world-referent asks). A real
+  // landmark phrase never contains these — this is the belt that GUARANTEES refusal
+  // prose can never be inserted as a spot. (2026-08-25)
+  const JUNK =
+    /\||\*\*|\?\s*$|would you like|proceed with|\bclarify\b|i need to|tell me the|you might mean|not a recognized|anime,? manhwa|webtoon|^\s*-\s+(a |an |your |specific)|author\/title|worldbuilding|^\s*option [abcd]\b/i;
+  const parseLines = (text) =>
+    text
+      .split('\n')
+      .map((l) =>
+        l
+          .replace(/^\s*\`{3,}\s*$/, '')
+          .replace(/^\d+[\.\)]\s*/, '')
+          .replace(/^[-•]\s*/, '')
+          .trim()
+      )
+      .filter((l) => l.length > 3 && l.length < 120 && !l.startsWith('`') && !JUNK.test(l));
 
-  const lines = text
-    .split('\n')
-    .map((l) =>
-      l.replace(/^\s*\`{3,}\s*$/, '').replace(/^\d+[\.\)]\s*/, '').replace(/^[-•]\s*/, '').trim()
-    )
-    .filter((l) => l.length > 3 && l.length < 120 && !l.startsWith('`'));
-  console.log(`✓ Sonnet returned ${lines.length} entries in ${elapsed}s`);
+  // Self-healing generation: if the biome-routed prompt yields too few valid lines
+  // (a fictional/thematic location on a REAL-world biome — a pirate cove, a saloon,
+  // a rose palace — makes Sonnet correctly REFUSE to list "real" landmarks → the
+  // refusal is junk-filtered away → near-empty), auto-retry ONCE with the INVENT
+  // prompt. This is what --fictional forces manually; the retry makes it automatic so
+  // no one has to know a card is fictional in advance. (2026-08-25)
+  const t0 = Date.now();
+  let usedFictional = has('fictional');
+  let lines = parseLines(
+    await callSonnet(metaPrompt(LOCATION, COUNT, biome, subRegions, mustInclude))
+  );
+  if (lines.length < COUNT * 0.4 && !usedFictional) {
+    console.log(
+      `⚠️  only ${lines.length}/${COUNT} valid entries (likely a real-landmark REFUSAL on a fictional/thematic location) — auto-retrying with the INVENT prompt...`
+    );
+    usedFictional = true;
+    lines = parseLines(
+      await callSonnet(fantasyMetaPrompt(LOCATION, COUNT, subRegions, mustInclude))
+    );
+  }
+  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+  console.log(
+    `✓ Sonnet returned ${lines.length} entries in ${elapsed}s${usedFictional ? ' (invent mode)' : ''}`
+  );
 
   // Show all entries in dry-run, sample of 10 in real-run
   if (DRY) {
