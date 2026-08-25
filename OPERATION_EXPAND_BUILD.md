@@ -29,7 +29,15 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
-**⏱ LIVE STATE (update this line as work moves):**
+**⏱ LIVE STATE (2026-08-25, overnight run in progress — update as work moves):**
+> DONE (all DARK, in Kevin's album for review): **Through Time** ✅ (9 @4.5+) · **Wild West** ✅ (8,
+> recalibrated gritty-authentic even-mix + couples) · **Heroes** ✅ (7/9 good; 🚩superhero=IP, 🚩race
+> garage=thin) · **Whimsical expand** ✅ (5/6; 🚩kawaii candy land=off-concept garden). **NOW: Landmarks &
+> Wonders** — recipes generating (job bfskvyt6e; 8 graveyard revives) → seed(real/grounded, imagined=false,
+> nightly-eligible) → render. **REMAINING after Landmarks:** finish dark High Fantasy(9)/Sci-Fi(5)/Gothic(4)
+> QA (seeded earlier, need QA renders) + Wild West nature-expansion (Return-to). Seeder = QA-25 spots,
+> register-aware wardrobe. Renders slow earlier tonight (better now). See 🚩 Return-to list below.
+> --- older ---
 > 2026-08-25 early: **Through Time ✅ DONE R1** (all 4.5+, dark). **WILD WEST (renamed from old_west)** in
 > heavy iteration: Kevin wants Red Dead/Tombstone — first wardrobe elevation over-fashioned it (fringe
 > dresses/turquoise/no hats = "costumes, didn't believe them"). RECALIBRATED to gritty-authentic EVEN-MIX
@@ -167,7 +175,18 @@ sahara dunes · northern lights glacier — all ⬜
 - [ ] Watch: profile-face on action beats (monitor at scale; nudge only if frequent).
 
 ## 🚩 Return-to (couldn't hit 4.5 after 3 rounds)
-_(none yet)_
+- **Heroes › superhero city rooftop** — HARD FAIL: recipe/fusions are IP-magnetic (rendered a **Batman
+  logo + "GOTHAM"** on a jet-ski) + off-concept (jet-ski on water, not a rooftop) + beachwear not heroic.
+  Needs a no-IP recipe rework (strip named-hero refs, re-anchor to a caped-vigilante rooftop silhouette) OR
+  replace the location. Do NOT ship until IP is gone.
+- **Heroes › race track garage** — very thin pool (5 active) + weak recipe; likely needs a richer recipe.
+- **Whimsical › kawaii candy land** — recipe came out as a generic garden (mood-neutral recipe stripped the
+  "candy"); rendered a gardener in overalls in a weird tube-garden, not a sweets/gumdrop candy land. Needs a
+  candy-specific recipe + cute wardrobe. (unicorn meadow ✅ on-concept, so it's kawaii-specific.)
+- **Wild West raw-nature/activity expansion** (deferred): wild frontier, mountain wilderness, outlaw camp,
+  burlesque hall, wild west shootout. [[project_wild_west_red_dead_vision]]
+- **1920s speakeasy** (Through Time) — 4.0, garbled signage.
+- Wide-vista couples (canyon, etc.) — dual `no_split`→scene fallback risk; re-roll.
 
 ---
 
