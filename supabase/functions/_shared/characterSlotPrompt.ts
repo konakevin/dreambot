@@ -615,8 +615,16 @@ export function assembleCharacterPrompt(
   // (a first over-relax turned them to profile → no_dual_split(faces=1) → dual
   // reject). So we keep "faces toward the camera" firm and only drop the stiff
   // "portrait" register. Head-gap / each-head-own-side KEPT verbatim (load-bearing).
+  // Composition counter-pull (2026-08-25): the front-loaded genderLock face-realism
+  // block ("realistic human face … true-to-life") can push Flux into an extreme
+  // two-giant-heads close-up (foreheads cropped, scene lost — the hearted-failure),
+  // especially on stylized mediums + ultra models. We pull the framing OUT with an
+  // explicit ENVIRONMENTAL TWO-SHOT / not-a-close-up instruction placed early — while
+  // KEEPING every bit of the load-bearing swap-safety verbatim (clear gap between
+  // heads, each head on its own side, faces toward camera, three-quarter). This does
+  // NOT touch aspect (stays 9:16 phone-portrait) or the gender-safe genderLock.
   const dualAnchor =
-    'TWO people, side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
+    'an ENVIRONMENTAL TWO-SHOT of two people together, shown from at least the waist up with the setting clearly visible around and above them at a natural editorial distance, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two stand side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
 
   // Framing — includes L/R head-gap + same-height constraints for crop pipeline.
   // The head-gap clause is the load-bearing dual-swap constraint (Kevin

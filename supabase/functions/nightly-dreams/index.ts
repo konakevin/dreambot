@@ -126,7 +126,15 @@ import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts'
 // Models nightly must never render. flux-2-dev over-smooths under the nightly
 // slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
 // pick (face-swap + scene) and the downstream ban-gate backstop share one list.
-const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set(['black-forest-labs/flux-2-dev']);
+const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
+  'black-forest-labs/flux-2-dev',
+  // TEMPORARILY DISABLED from nightly (Kevin, 2026-08-25): gpt-image-2 renders
+  // WIDE images that don't fit the app's portrait dimensions (seen on solos AND
+  // couple/dual dreams across mediums), and it's slow (150s IDLE_TIMEOUTs). Global
+  // ban covers the general rotation; the lego/pixels pins below are also unpinned.
+  // Re-enable when the wide-aspect behavior is resolved.
+  'openai/gpt-image-2',
+]);
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
@@ -2684,8 +2692,12 @@ Output ONLY the prompt.`;
   // 16-bit-screenshot read. Create-screen renders still use the medium's
   // full allowed_models pool.
   const NIGHTLY_PINNED_MODELS_BY_MEDIUM: Record<string, string> = {
-    lego: 'openai/gpt-image-2',
-    pixels: 'openai/gpt-image-2',
+    // TEMPORARILY UNPINNED (Kevin, 2026-08-25): gpt-image-2 disabled from nightly
+    // (wide-aspect + slow) — see NIGHTLY_BANNED_MODELS. lego/pixels fall back to
+    // their normal allowed_models pool minus the ban. Restore these pins when
+    // gpt-image-2 is re-enabled.
+    // lego: 'openai/gpt-image-2',
+    // pixels: 'openai/gpt-image-2',
   };
   const perMediumBans =
     NIGHTLY_BANNED_MODELS_BY_MEDIUM[resolvedMediumKey || ''] || new Set<string>();
