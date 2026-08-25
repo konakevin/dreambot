@@ -21,6 +21,23 @@ const sb = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Retry transient Anthropic errors (500 api_error, 429, 529 overloaded) so a
+// long batch run doesn't die on a blip. Exponential backoff, up to 5 tries.
+async function createMsg(params, tries = 5) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await client.messages.create(params);
+    } catch (e) {
+      const status = e && e.status;
+      const retryable = status === 500 || status === 429 || status === 529 || status === 503;
+      if (!retryable || i === tries - 1) throw e;
+      const waitMs = 2000 * Math.pow(2, i);
+      console.log(`  (transient ${status}; retry ${i + 1}/${tries - 1} in ${waitMs}ms)`);
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+  }
+}
+
 const LOCATION_FUSION_COUNTS = { realistic: 50, fantasy: 50, scifi: 50 };
 
 const BANNED_PHRASES = [
@@ -47,7 +64,7 @@ function validate(text) {
 async function generateBaseCard(name) {
   console.log(`  Generating base card...`);
 
-  const msg = await client.messages.create({
+  const msg = await createMsg({
     model: SONNET,
     max_tokens: 3000,
     messages: [{
@@ -104,7 +121,7 @@ async function generateAnchors(name, genre, count) {
     scifi: 'futuristic, sci-fi, technological, awe-inspiring',
   };
 
-  const msg = await client.messages.create({
+  const msg = await createMsg({
     model: SONNET,
     max_tokens: 2500,
     messages: [{
@@ -135,7 +152,7 @@ async function expandAnchors(name, genre, anchors) {
     const batch = anchors.slice(i, i + batchSize);
     const anchorList = batch.map((a, idx) => `${idx + 1}. ${a}`).join('\n');
 
-    const msg = await client.messages.create({
+    const msg = await createMsg({
       model: SONNET,
       max_tokens: 2500,
       messages: [{

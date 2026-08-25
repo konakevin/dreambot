@@ -159,6 +159,13 @@ _(none yet)_
 
 ---
 
+## ⚙️ Ops constraint (learned 2026-08-24)
+Background jobs get **killed at ~30 min**. So: generate recipes in batches of **≤5 locations**, render QA
+in batches of **≤4-5 locations** (~15-20 min each). Seeds (`seed-category.mjs`) for ~8-9 locations run
+~15 min and complete fine as one job. **Do NOT use chained `until`-wait loops** — if the upstream job is
+killed, the waiter hangs until it's killed too. Instead: kick a batch, wait for ITS completion
+notification, then start the next stage as its own job.
+
 ## Per-category loop (the process I follow)
 1. `generate-full-location-card.js "<loc>" ...` (recipes).
 2. `seed-category.mjs <picker_category> <imagined> <sortStart> "loc=biome" ...` (full seed).
