@@ -33,9 +33,13 @@ if (!LOC) {
 }
 
 // [role, medium, pure_scene, label]
+// 'dual' → force_cast_role='dual' → a COUPLE (self + plus_one) dual face-swap
+// render (dreamAlgorithm.ts rollDream: forceCastRole==='dual' → [self, plus_one]).
+// Couple's scenes are core (the hearted dual-swap references) — QA every location.
 const SURFACES = [
   ['self', CAST_MEDIUM, false, 'self'],
   ['plus_one', CAST_MEDIUM, false, 'plus1'],
+  ['dual', CAST_MEDIUM, false, 'couple'],
   [null, SCENE_MEDIUM, true, 'scene'],
 ];
 

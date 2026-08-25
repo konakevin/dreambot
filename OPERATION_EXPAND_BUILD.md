@@ -14,6 +14,13 @@ for Kevin's review tomorrow.
 3. **DO NOT GO LIVE. Everything stays `admin_only=true` dark. Never set `admin_only=false` in this run.**
 4. Full quality per location (autonomous ≠ rushed). Can't reach 4.5 in 3 rounds → 🚩 Return-to, move on.
 5. Keep this doc's progress board + per-location tables current as each item moves.
+6. ★ **SET-DRESSER + COSTUME-DESIGNER mantra** ([[feedback_dream_shoot_set_dresser_costume_designer]]):
+   every shot = a composed masterpiece; cool/fun/sexy/interesting/cute/pretty/beautiful/rugged/badass,
+   NEVER plain/pedestrian/frumpy. Wardrobe = dream-wear (generator elevated). Discerning artistic eye:
+   backgrounds must look great AND naturally weave the swapped hero into the scene (not a cutout).
+7. ★ **`qa-location.js` now renders 4 surfaces: self, plus_one, COUPLE (dual face-swap), scene.** Couples
+   (dual self+plus_one) are core — QA them for every location (`force_cast_role:'dual'`).
+8. Wild West = Red Dead vision ([[project_wild_west_red_dead_vision]]); renamed old_west→wild_west.
 
 **HOW TO RESUME (post-compaction procedure):**
 1. Read this block + the Progress board below to see which category is in flight.
@@ -23,12 +30,17 @@ for Kevin's review tomorrow.
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
 **⏱ LIVE STATE (update this line as work moves):**
-> 2026-08-24 night: **Through Time ✅ DONE R1** — all 9 new locs 4.5+ (victorian london, ancient rome,
-> viking, medieval, renaissance venice, pirate cove, ancient greece, silk road, 1950s americana) + slice;
-> only 1920s speakeasy borderline 4.0 (garbled signage). All cast swaps clean, zero fallback. Dark.
-> **NOW: Old West** — recipes done, seed chained (job bc3ndyi3j) → then QA. QUEUE after: Heroes &
-> Adventure → Whimsical & Fun expand → Landmarks & Wonders → finish dark High Fantasy/Sci-Fi/Gothic QA.
-> Cleanup pass at end: 1920s speakeasy signage.
+> 2026-08-25 early: **Through Time ✅ DONE R1** (all 4.5+, dark). **WILD WEST (renamed from old_west)** in
+> heavy iteration: Kevin wants Red Dead/Tombstone — first wardrobe elevation over-fashioned it (fringe
+> dresses/turquoise/no hats = "costumes, didn't believe them"). RECALIBRATED to gritty-authentic EVEN-MIX
+> (½ weathered real gear + ½ sexy-authentic; saloon=full burlesque glam; hats FREQUENT not mandatory) —
+> hand-authored pools on the 8. **Validated:** frontier couple now gritty-authentic, on horseback, hats,
+> believable town ✅; settings believable ✅. Canyon couple = dual no_split→scene fallback (wide-vista
+> dual limit). Couples ADDED to qa-location (4th surface). NOW: re-rendering rest of WW (gold rush+cattle
+> job bnqxxoid5) → then ADD wild-nature/activity locs (wild frontier, mountain wilderness, outlaw camp,
+> burlesque hall, shootout) → then Heroes → Whimsical expand → Landmarks → finish dark HF/SciFi/Gothic.
+> ⚠️ REGISTER LESSON: for gritty-real worlds (WW, Heroes, Landmarks, real) author AUTHENTIC-cool wardrobe,
+> NOT fantasy-fashion (only fantasy/kawaii/gothic get fantastical). [[feedback_dream_shoot_set_dresser_costume_designer]]
 <!-- ============================================================================ -->
 
 **THE single source of truth for all remaining Operation Expand Dreams work.** Following this doc top to
