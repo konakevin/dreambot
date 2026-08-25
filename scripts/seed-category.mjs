@@ -78,10 +78,11 @@ for (const { name } of LOCS) {
   run(`node scripts/gen-location-wardrobe.js --location "${name}"`);
 }
 
-// 3. iconic anchors (100/loc)
+// 3. iconic anchors — QA-SIZE (~25/loc, Kevin's "seed 25 to test" rule). Scale to
+// full depth (100+) only after sign-off. Enough for a test batch; keeps prep lean.
 for (const { name } of LOCS) {
-  console.log(`=== iconic spots: ${name} ===`);
-  run(`node scripts/gen-iconic-spots-50.js --location "${name}"`);
+  console.log(`=== iconic spots (QA 25): ${name} ===`);
+  run(`node scripts/gen-iconic-spots-50.js --location "${name}" --count 25`);
 }
 
 // 4. scale-classify (global; only touches new unclassified) + grade (per loc)
