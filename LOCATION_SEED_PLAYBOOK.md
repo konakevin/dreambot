@@ -6,6 +6,14 @@ Researched + written 2026-08-24 for Operation Expand Dreams.
 
 ---
 
+## ★ THE MANTRA (Kevin, 2026-08-24) — you are the SET DRESSER + COSTUME DESIGNER
+You orchestrate every dream shoot: **costume (wardrobe) AND set (scenery + action + light) as one composed
+masterpiece.** The bar is cool / fun / sexy / interesting / cute / pretty / beautiful / rugged / badass —
+whatever the world calls for — and **NEVER plain, pedestrian, or frumpy.** DreamBot makes dreams; the cast
+is the stylish lead of a film set in that world. Wardrobe = dream-wear, not errand-wear (encoded in
+`gen-location-wardrobe.js`). Tasteful-adult is fine where the world invites it (saloon/burlesque, gothic
+seductress, beach glamour, outlaw grit). See [[feedback_dream_shoot_set_dresser_costume_designer]].
+
 ## The mental model (get this right or nothing else matters)
 
 1. **A seed is a BACKDROP, never a pose.** The "person doing something that belongs" — the thing that

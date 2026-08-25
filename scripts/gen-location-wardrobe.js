@@ -60,11 +60,13 @@ const sb = createClient(SB_URL, KEY);
 
 function buildPrompt(loc, flavor, picker, biome) {
   const soul = flavor.soul ? `\nLocation soul: ${flavor.soul}` : '';
-  return `Author an 8-entry WARDROBE pool for "${loc}" — location-specific clothing anchors that an AI image generator will pick from when rendering characters AT THIS LOCATION.
+  return `Author an 8-entry WARDROBE pool for "${loc}" — striking, DREAM-WORTHY outfit anchors an AI image generator picks from when casting a person AT THIS LOCATION.
 
-The pool's job: when a user's cast (self, plus_one, etc.) is rendered at "${loc}", their clothing should feel ON-LOCATION — not generic casual wear.
+This is a DREAM image generator. The cast should look like the COOLEST, most exciting version of themselves — the hero or heroine of a stylish film set in this world. The bar is: COOL, SEXY, FUN, a little FANTASTIC. Think a costume designer dressing the lead, NOT a tourist packing practical clothes for a trip. Elevate every ordinary garment into its most cinematic, head-turning version.
 
-Without this pool: characters at Fairy Cottage render in flannel + jeans (generic outdoor). Characters at Gothic Realm render in modern streetwear. Characters at Tokyo render in linen-shirt-and-chinos resort defaults. ALL wrong for location identity.
+NEVER plain, practical, frumpy, dowdy, or pedestrian. No errand-wear, no domestic/farmhand looks, no "sensible" travel outfits. If a person could wear it to run to the grocery store, it's WRONG — make it the version that belongs on a movie poster for "${loc}".
+
+Still unmistakably ON-LOCATION: the dream-glam must fit THIS world (a Wild West gunslinger or saloon showgirl, a Tokyo neon-street icon, a gothic vampire noble) — location identity AND dream-glamour, together.
 
 ━━━ LOCATION CONTEXT ━━━
 Name: ${loc}
@@ -81,56 +83,39 @@ Return ONLY this JSON object (no preamble, no markdown):
 }
 
 ━━━ WARDROBE ENTRY RULES ━━━
-- Each entry describes a complete outfit STYLE (not a single garment).
-- Range across formality — include some casual, some elevated, some signature-to-location.
-- Each entry must feel ON-BRAND for THIS location's identity. A traveler going to "${loc}" would actually wear something like this. A photographer shooting tourism for "${loc}" would dress models in these outfits.
-- WORK FOR BOTH genders (men AND women). Sonnet will adapt the cut for the character's gender, so phrase like "linen tunic with leather belt" (works either way) NOT "embroidered floral dress" (locked feminine).
+- Each entry describes a complete, striking outfit STYLE with a flattering SILHOUETTE + a signature element.
+- COOL / SEXY / FUN / a bit FANTASTIC on EVERY entry. Form-fitting, dramatic, alluring, confident, head-turning where the world allows it. It's fine to lean glamorous or a little adult (tasteful) when the location invites it (saloon showgirl, gothic seductress, beach glamour). Guns, leather, corsets, capes, jewelry — signature drama is good.
+- Do NOT range down into "casual/practical/sensible." Range across MOODS (rugged-cool, sultry-elegant, playful-bold, heroic-dramatic) — but every entry stays exciting.
+- Each entry must feel ON-BRAND for THIS location's identity — dream-glam that belongs at "${loc}".
+- WORK FOR BOTH genders (men AND women). Sonnet adapts the cut, so phrase so it reads sexy/striking on a woman AND cool/heroic on a man — e.g. "fitted fringed leather with a low-slung gun belt and tall boots" (sultry cowgirl OR rugged gunslinger). Avoid anything that locks dowdy (no aprons, shawls, sensible layers).
 - NO single-color statements. Be specific about fabric, texture, silhouette, or one signature element.
 
-━━━ GOOD EXAMPLES (study these — match this bar) ━━━
+━━━ GOOD EXAMPLES (study these — match this COOL/SEXY/FANTASTIC bar) ━━━
 
-For Fairy Cottage:
-- "earthtoned linen tunic with leather belt, soft moccasin boots, optional embroidered cloak"
-- "flowing gauze layered dress in dusty sage or lavender, leaf-and-vine accent"
-- "rustic peasant blouse with full skirt, wildflower-embroidered apron, woven straw hat"
-- "fitted velvet doublet or vest, soft suede breeches, knee-high leather boots"
+For Wild West (outlaw / gunslinger / saloon):
+- "form-fitting fringed suede with a low-slung twin-holster gun belt, tall worn boots, a wide hat tipped low"
+- "a sleek black leather duster over fitted dark clothes, silver-buckled belt, a rifle slung across the back"
+- "saloon-showgirl glamour: a laced satin corset-bodice with ruffled skirt and a feather in the hair, OR a sharp gambler's brocade waistcoat, string tie, and pocket revolver"
 
-For Gothic Realm:
-- "Victorian black frock coat with high collar and cravat, tailored trousers, polished oxfords"
-- "long mourning dress with lace cuffs and high collar, pleated bustle, button boots"
-- "tweed Sherlock-style cape and deerstalker, wool trousers, leather brogues"
-- "ornate brocade waistcoat over crisp white shirt, dark trousers, silver pocket watch chain"
+For Gothic Realm (dark, seductive):
+- "sleek Victorian gothic: a fitted high-collar tailcoat OR a corseted black-lace gown, velvet choker, polished boots"
+- "a dramatic hooded cloak over fitted leather, silver clasps, a slender blade at the hip"
 
-For Tokyo:
-- "summer cotton yukata with bold geometric or floral print, soft obi belt, zori sandals"
-- "harajuku layered street style: oversized hoodie, pleated skirt or distressed jeans, platform shoes"
-- "minimal Japanese fashion: black turtleneck, wide-leg cropped trousers, white sneakers"
-- "salaryman uniform: charcoal slim suit, white shirt, dark tie, leather briefcase"
+For Tokyo (neon-cool):
+- "neon cyber-street style: a cropped techwear jacket, holographic accents, sleek platform boots"
+- "sharp minimalist black: tailored asymmetric coat, fitted trousers, statement silver jewelry"
 
-For Yosemite:
-- "vintage REI down parka in faded crimson, wool beanie, hiking pants, broken-in trail boots"
-- "denim shirt over thermal henley, canvas Carhartt pants, leather work boots"
-- "moss-green Patagonia fleece, technical hiking shorts, low-cut Salomon trail runners"
+For Hawaii (sun-glam):
+- "sun-kissed resort glamour: a silky sarong or an open linen shirt over swimwear, layered gold jewelry, barefoot on the sand"
 
-For Iceland:
-- "wool Icelandic lopapeysa sweater with traditional yoke pattern, dark trousers, hiking boots"
-- "weatherproof parka over fleece base layer, gaiters, insulated waterproof boots"
-- "structured trench coat in olive or charcoal over neutral knitwear, leather Chelsea boots"
-
-For Hawaii:
-- "lightweight aloha shirt with bold tropical floral print, linen shorts, leather sandals"
-- "flowing tropical maxi dress in coral or hibiscus print, woven sun hat, beaded jewelry"
-- "casual surf wear: rashguard, board shorts, slip-on sneakers, mirrored sunglasses"
-
-━━━ BAD EXAMPLES (DO NOT WRITE LIKE THIS) ━━━
-- "casual outfit" (too vague, no location anchor)
-- "fancy dress" (too vague)
-- "Hawaiian shirt" (single garment, no full outfit)
-- "winter clothes" (too generic, doesn't anchor to THIS location)
-- "outdoor adventure gear" (works for any nature location — be MORE SPECIFIC)
+━━━ BAD EXAMPLES (DO NOT WRITE LIKE THIS — these are FRUMPY/PEDESTRIAN, the exact thing we're killing) ━━━
+- "a plain button shirt with suspenders and trousers, a basket" (farmhand/domestic — DEAD boring)
+- "practical hiking gear / REI parka / Carhartt work pants" (errand-wear, zero dream)
+- "a modest long dress with an apron and shawl" (frumpy, dowdy)
+- "casual outfit / fancy dress / winter clothes" (vague AND pedestrian)
 
 ━━━ FINAL RULE ━━━
-A photographer outfitting a model for a tourism shoot of "${loc}" would pick from this pool. A traveler shopping for their trip would consider these styles. If your entry could work equally well at any random location, IT'S WRONG. Each entry must scream "${loc}".
+A costume designer dressing the STAR of a dream set at "${loc}" picks from this pool. If an entry is something a real person would practically throw on for errands, IT'S WRONG. Every entry must be the coolest, sexiest, most exciting version that still unmistakably belongs at "${loc}".
 
 Return ONLY the JSON object. No preamble, no markdown, no commentary.`;
 }
