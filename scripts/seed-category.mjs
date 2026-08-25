@@ -96,13 +96,25 @@ for (const { name } of LOCS) {
 console.log('=== pure-scene eligible ===');
 run('node scripts/classify-pure-scene-eligible.js');
 
-// 6. Apply eligibility RULES per location (the baked-in lessons)
+// 6. Apply eligibility RULES per location (the baked-in lessons) — self-healing
 for (const { name } of LOCS) {
-  // cast pool = active & NON-wide (skew medium/intimate; no tiny-cutout / statue-avenue)
-  await sb.from('location_iconic_spots').update({ character_eligible: true }).eq('location_key', name).eq('is_active', true).in('spot_kind', ['medium', 'intimate']);
-  await sb.from('location_iconic_spots').update({ character_eligible: false }).eq('location_key', name).eq('spot_kind', 'wide');
+  // cast pool = active & NON-wide (skew medium/intimate; no tiny-cutout / statue-avenue).
+  // Apply + verify + re-apply once (a single update occasionally no-ops → char_eligible null).
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await sb.from('location_iconic_spots').update({ character_eligible: true }).eq('location_key', name).eq('is_active', true).in('spot_kind', ['medium', 'intimate']);
+    await sb.from('location_iconic_spots').update({ character_eligible: false }).eq('location_key', name).eq('spot_kind', 'wide');
+    const { data: chk } = await sb.from('location_iconic_spots').select('id').eq('location_key', name).eq('is_active', true).in('spot_kind', ['medium', 'intimate']).is('character_eligible', null);
+    if (!chk || chk.length === 0) break;
+  }
   // scene pool = recognizable wide/medium (drop ambiguous intimate close-ups)
   await sb.from('location_iconic_spots').update({ pure_scene_eligible: false }).eq('location_key', name).eq('is_active', true).eq('spot_kind', 'intimate');
+  // scene FLOOR: interior/vista-thin locations can end with an empty scene pool
+  // (strict classifier). If <8, seed pure_scene from active wide+medium exteriors.
+  const { data: sc } = await sb.from('location_iconic_spots').select('id').eq('location_key', name).eq('is_active', true).eq('pure_scene_eligible', true);
+  if ((sc || []).length < 8) {
+    await sb.from('location_iconic_spots').update({ pure_scene_eligible: true }).eq('location_key', name).eq('is_active', true).in('spot_kind', ['wide', 'medium']);
+    await sb.from('location_iconic_spots').update({ pure_scene_eligible: false }).eq('location_key', name).eq('is_active', true).eq('spot_kind', 'intimate');
+  }
 }
 
 // 7. Verify

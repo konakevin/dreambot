@@ -23,10 +23,12 @@ for Kevin's review tomorrow.
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
 **⏱ LIVE STATE (update this line as work moves):**
-> 2026-08-24 night: Through Time — slice (egypt/japan/1920s speakeasy) ✅ passed R2. Remaining 9
-> (victorian london, ancient rome, viking longhouse, medieval village, renaissance venice, pirate cove,
-> ancient greece, silk road, 1950s americana): recipes ~7/9 done, `seed-category.mjs` chained to auto-run
-> when all 9 recipes exist, then QA. NEXT after Through Time: Old West (build from scratch).
+> 2026-08-24 night: **Through Time ✅ DONE R1** — all 9 new locs 4.5+ (victorian london, ancient rome,
+> viking, medieval, renaissance venice, pirate cove, ancient greece, silk road, 1950s americana) + slice;
+> only 1920s speakeasy borderline 4.0 (garbled signage). All cast swaps clean, zero fallback. Dark.
+> **NOW: Old West** — recipes done, seed chained (job bc3ndyi3j) → then QA. QUEUE after: Heroes &
+> Adventure → Whimsical & Fun expand → Landmarks & Wonders → finish dark High Fantasy/Sci-Fi/Gothic QA.
+> Cleanup pass at end: 1920s speakeasy signage.
 <!-- ============================================================================ -->
 
 **THE single source of truth for all remaining Operation Expand Dreams work.** Following this doc top to
@@ -65,8 +67,8 @@ Status: ⬜ not started · 🔨 seeding · 🔎 QA · ✅ passed (≥4.5, dark) 
 | Sci-Fi & Space | scifi_space | ✅ | 5 | 🔎 QA (2 ✅) |
 | Gothic & Haunted | gothic_haunted | ✅ | 4 | 🔎 QA |
 | Whimsical & Fun | whimsical_fun | ✅ | 3→9 | 🔎 QA + expand |
-| **Through Time** | through_time | ❌ **TODO** | 12 | 🔨 (slice ✅, 9 seeding) |
-| Old West | old_west | ❌ TODO | 8 | ⬜ |
+| **Through Time** | through_time | ❌ TODO | 12 | ✅ passed R1 (dark) — all 4.5+ except 1920s speakeasy 4.0 |
+| Old West | old_west | ❌ TODO | 8 | 🔨 seeding |
 | Heroes & Adventure | heroes_adventure | ❌ TODO | 9 | ⬜ |
 | Landmarks & Wonders | landmarks_wonders | ❌ TODO (real tier) | 8 | ⬜ |
 
