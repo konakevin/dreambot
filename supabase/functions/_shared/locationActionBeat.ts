@@ -24,6 +24,14 @@ import { callSonnet } from './llm.ts';
 const UNSAFE_WORDS =
   /\b(face|faces|eyes?|eyebrows?|gaze|gazing|smil\w*|lips|mouth|cheeks?|jaw|forehead|helmet|mask|masked|hood|hoods|goggles|visor|balaclava|veil|spyglass to (?:the |one'?s )?eye|pipe in (?:the |his |her )?mouth|selfie|camera|lens|kiss\w*|hug\w*|embrac\w*|cheek to cheek)\b/i;
 
+// Over-energetic / above-the-head actions read GOOFY under a face-swap (a leap or
+// arms-thrown-overhead breaks the grounded, waist-up, professional-cinematic bar
+// and can shrink/tilt the face). The prompt already forbids these, but Sonnet
+// occasionally slips one through ("leaping with arms raised in triumph"), so we
+// net them here too → drop the beat → grounded classic pose. (2026-08-24)
+const TOO_ENERGETIC =
+  /\b(jump\w*|leap\w*|leaping|soar\w*|airborne|mid-?air|sprint\w*|arms? (?:raised|up|aloft|overhead|thrown)|(?:raise[sd]?|raising|throw\w*|fling\w*) (?:both )?(?:arms|hands)|hands? (?:aloft|overhead|raised)|overhead|triumphant\w*|celebrat\w*|fist ?pump\w*|punch\w* the air|leaping|bound\w* (?:up|over))\b/i;
+
 /**
  * Author a short, swap-safe action phrase that naturally fits `location`.
  * Returns null on any failure or safety-filter hit (caller falls back to the
@@ -71,6 +79,7 @@ STYLE examples (invent your own, do NOT reuse) — energetic OR calm, prop ONLY 
       .trim();
     if (!beat || beat.length < 6) return null;
     if (UNSAFE_WORDS.test(beat)) return null;
+    if (TOO_ENERGETIC.test(beat)) return null;
     return beat;
   } catch (_e) {
     return null;
