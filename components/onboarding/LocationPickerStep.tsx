@@ -119,13 +119,9 @@ const SECTION_META: SectionMeta[] = [
     tier: 'real',
   },
   // ── Imagined Worlds ──────────────────────────────────────────
-  {
-    id: 'fantasy_worlds',
-    title: 'Fantasy Worlds',
-    icon: 'sparkles-outline',
-    description: 'Enchanted realms and dreamlike kingdoms',
-    tier: 'imagined',
-  },
+  // (fantasy_worlds dissolved 2026-08-25 — it mixed real places (Paris Café,
+  // Cherry Blossoms, Japanese Garden) with fantasy; cards redistributed to
+  // coherent sections.)
   {
     id: 'high_fantasy',
     title: 'High Fantasy',
@@ -418,7 +414,8 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           </GradientTitle>
         )}
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Pick the places you love. We’ll weave them through your dreams.
+          Real-world escapes, fairy-tale realms, faraway planets. Pick your favorites and we’ll
+          weave you right into the dream. ✨
         </Text>
       </View>
 

@@ -29,6 +29,30 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
+**⏱ FINALIZATION STATUS v4 (2026-08-25) — sanity sweep found under-built graveyard cards:**
+> BLOCKERS to fix before go-live (all were surfaced/QA-rendered but never fully seeded):
+> - **7 with ZERO spots** (need gen-iconic-spots 100 + classify + eligibility): space station, transylvania,
+>   haunted cathedral, haunted castle, rose palace, cloud kingdom, fairy tale kingdom.
+> - **rose palace/cloud kingdom/fairy tale kingdom** ALSO need: is_approved=true + WARDROBE (gen-location-
+>   wardrobe) [biome_config exists].
+> - **wizard academy**: is_approved=true + classify (100 vista spots) [has spots + wardrobe].
+> - sci-fi worlds/gothic realm: OK (only umbrella recipe.visuals=0 warn — backfill later, non-blocking).
+> FIX = set is_approved on the 4 moved fantasy cards; gen wardrobe for the 3; gen spots for the 7; classify+
+> grade-skip+eligibility; re-sanity. THEN picker-verify + Kevin visual pass + GO LIVE (flip admin_only=false
+> on ALL new-category cards; Kevin wants ALL live).
+
+**⏱ FINALIZATION STATUS v3 (2026-08-25):** ✅ Scaled+gated: TT/WildWest/Heroes/Whimsical/Landmarks.
+✅ display_name (46) + THUMBNAILS done (dups parisian cafe + cherry blossom temple HIDDEN; 1920s speakeasy
+regen). ✅ GROUPING RESHUFFLE: dissolved incoherent `fantasy_worlds` — paris cafe→iconic_cities, cherry
+blossoms+japanese garden→epic_nature (live); wizard academy→high_fantasy, rose palace/cloud kingdom/fairy
+tale kingdom→whimsical_fun, ancient wonders→landmarks_wonders. SECTION_META: removed fantasy_worlds. ✅
+Selector subtitle copy updated (whimsy, real+imagined, no em dash). 🔨 dark-18 curation running (classify+
+reactivate+eligibility, +wizard academy). REMAINING: (1) curate the 3 moved fantasy cards rose palace/cloud
+kingdom/fairy tale kingdom (uncurated, from old fantasy_worlds) + verify thumbnails; (2) picker-query verify
++ full sanity sweep ALL sections; (3) Kevin VISUAL PASS (asked: visual-pass-first vs flip-when-ready —
+AWAITING answer); (4) GO LIVE = flip admin_only=false on ALL new-category cards. KEVIN WANTS ALL NEW
+CATEGORIES LIVE (dark is only temp staging).
+
 **⏱ FINALIZATION STATUS v2 (2026-08-25):** ✅ Scaled+gated: Through Time, Wild West, Heroes, Whimsical,
 **Landmarks** (all production, sane, DARK). ✅ display_name set on 46 new cards. ✅ SECTION_META wired.
 🔨 THUMBNAILS generating for ~46 new locs (job; generate-location-thumbnails.js now has a recipe-based
