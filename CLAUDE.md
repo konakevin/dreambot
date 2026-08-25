@@ -206,6 +206,16 @@ for the public feed + serves deep-link share targets.**
 
 ## Hard rules (no exceptions)
 
+- **THROTTLE heavy render/seed workloads — the DB connection pool is the shared ceiling.** Producing
+  renders (each edge-fn render holds a Postgres connection 20-150s) or bulk-seeding while the pool is tight
+  takes the WHOLE APP non-responsive — a recurring incident (root cause + plan: `DB_CONNECTION_SATURATION_PLAN.md`).
+  On Small compute the pool idles at ~56/90, leaving only ~34 of burst headroom. So for ANY batch of renders
+  or heavy DB work: **cap concurrency ≤3**, and **gate on connection headroom first** —
+  `const { waitForHeadroom } = require('./lib/poolHeadroom'); await waitForHeadroom({ min: 25, label });`
+  (or `node scripts/check-pool-headroom.js`, exit 1 = tight). Prefer routing bulk renders through the
+  `dream_queue` (per-weight concurrency caps) over direct `nightly-dreams`/`generate-dream` calls, and avoid
+  the top-of-hour (`:00`) + ~08:00 UTC windows where the crons + nightly already peak. QA render tooling
+  (`qa-bot-model-matrix.js`) is already headroom-gated; new heavy scripts must do the same.
 - **NEVER unscoped deletes on `bot_seeds` / `nightly_seeds`.** Scope by category prefix; `SELECT category,
 count(*) GROUP BY category` first. (The April 2026 incident wiped both with one unscoped delete.)
 - **NEVER `git add -A` / `git add .`** — explicit paths only (shared working tree).

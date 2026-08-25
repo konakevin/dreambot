@@ -16,7 +16,7 @@ name: Display Variant Backfill
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # every 10 minutes
+    - cron: '3,13,23,33,43,53 * * * *' # every 10 minutes — offset off :00 to de-conflict the top-of-hour DB burst
   workflow_dispatch:
 
 concurrency:

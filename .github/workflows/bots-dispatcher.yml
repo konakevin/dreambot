@@ -8,7 +8,7 @@ name: Bots Dispatcher (DB-driven)
 
 on:
   schedule:
-    - cron: '*/15 * * * *'   # every 15 min, UTC
+    - cron: '7,22,37,52 * * * *'   # every 15 min, UTC — offset OFF :00 to de-conflict the top-of-hour DB burst (DB_CONNECTION_SATURATION_PLAN.md)
   workflow_dispatch:
     inputs:
       dry_run:

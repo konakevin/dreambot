@@ -6,7 +6,7 @@ name: Upscale Stuck-Job Sweep
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # every 10 minutes
+    - cron: '8,18,28,38,48,58 * * * *' # every 10 minutes — offset off :00 to de-conflict the top-of-hour DB burst
   workflow_dispatch:
 
 concurrency:

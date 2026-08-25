@@ -36,6 +36,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { waitForHeadroom } = require('./lib/poolHeadroom');
 
 function arg(name, fallback) {
   const i = process.argv.indexOf('--' + name);
@@ -238,8 +239,19 @@ td.empty{background:#1A1A2E;color:#444;text-align:center;padding:30px 0;font-siz
 }
 
 (async () => {
-  console.log('Firing renders in parallel (one process per model)...');
-  await Promise.all(MODELS.map(runModelSerial));
+  // Throttle: cap concurrent model processes and wait for DB connection headroom
+  // before each batch, so a matrix run can't saturate the pool + take the app
+  // non-responsive (see DB_CONNECTION_SATURATION_PLAN.md). Override the cap with
+  // MATRIX_CONCURRENCY, or bypass the guard with SKIP_POOL_GUARD=1.
+  const MATRIX_CONCURRENCY = parseInt(process.env.MATRIX_CONCURRENCY || '3', 10);
+  console.log(`Firing renders (≤${MATRIX_CONCURRENCY} model processes at a time, headroom-gated)...`);
+  for (let i = 0; i < MODELS.length; i += MATRIX_CONCURRENCY) {
+    const batch = MODELS.slice(i, i + MATRIX_CONCURRENCY);
+    if (!process.env.SKIP_POOL_GUARD) {
+      await waitForHeadroom({ min: 25, label: `matrix (models ${i + 1}-${i + batch.length}/${MODELS.length})` });
+    }
+    await Promise.all(batch.map(runModelSerial));
+  }
   console.log('\nAll renders done. Building HTML matrix...\n');
   await buildHtml();
 })().catch((e) => {
