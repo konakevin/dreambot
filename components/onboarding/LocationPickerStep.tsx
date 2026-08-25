@@ -119,6 +119,34 @@ const SECTION_META: SectionMeta[] = [
     description: 'Enchanted realms and dreamlike kingdoms',
     tier: 'imagined',
   },
+  {
+    id: 'high_fantasy',
+    title: 'High Fantasy',
+    icon: 'flame-outline',
+    description: 'Elven cities, dragon keeps, and epic realms',
+    tier: 'imagined',
+  },
+  {
+    id: 'scifi_space',
+    title: 'Sci-Fi & Space',
+    icon: 'planet-outline',
+    description: 'Neon megacities, alien worlds, and the stars',
+    tier: 'imagined',
+  },
+  {
+    id: 'gothic_haunted',
+    title: 'Gothic & Haunted',
+    icon: 'moon-outline',
+    description: 'Candlelit castles, fog, and beautiful gloom',
+    tier: 'imagined',
+  },
+  {
+    id: 'whimsical_fun',
+    title: 'Whimsical & Fun',
+    icon: 'flower-outline',
+    description: 'Fairy-tale castles, gardens, and sweet escapes',
+    tier: 'imagined',
+  },
 ];
 
 interface Props {

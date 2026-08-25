@@ -73,16 +73,19 @@ CRITICAL RULES:
 - Every phrase must be something a camera can see or a microphone can hear
 - Each phrase max 10 words
 - No duplicates within any field
-- No metaphors, no cliches`
-    }, {
-      role: 'assistant',
-      content: '{'
+- No metaphors, no cliches
+
+Return ONLY the JSON object — no markdown fences, no prose before or after.`
     }],
   });
 
-  const raw = '{' + msg.content[0].text;
-  const lastBrace = raw.lastIndexOf('}');
-  const cleaned = lastBrace > 0 ? raw.slice(0, lastBrace + 1) : raw;
+  // NOTE: claude-sonnet-4-6 does not support assistant-message prefill, so we
+  // parse the JSON span out of the full response instead of prefilling '{'.
+  const text = msg.content[0].text;
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  const cleaned =
+    firstBrace >= 0 && lastBrace > firstBrace ? text.slice(firstBrace, lastBrace + 1) : text;
 
   try {
     return JSON.parse(cleaned);

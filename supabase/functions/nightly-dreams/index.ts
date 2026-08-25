@@ -1991,7 +1991,14 @@ Deno.serve(async (req) => {
                       cfg.singleCompositionExpandedPct > 0 &&
                       Math.random() * 100 < cfg.singleCompositionExpandedPct
                     ) {
-                      const preset = Math.random() < 0.5 ? 'three_quarter' : 'enviro_wide';
+                      // enviro_wide reliably shrinks the face below the swap's
+                      // identity floor (observed identity_sim ~0.13 < 0.15 → tiny
+                      // faces / multi_face → pure_scene_fallback: the cast render
+                      // silently becomes scene-only). three_quarter keeps the
+                      // expanded-composition variety while holding a swap-safe
+                      // face size (identity ~0.7). enviro_wide stays reachable via
+                      // the explicit force_solo_comp test hook only. (2026-08-24)
+                      const preset = 'three_quarter';
                       fallbackReasons.push(`solo_comp:${preset}`);
                       return preset as 'three_quarter' | 'enviro_wide';
                     }
