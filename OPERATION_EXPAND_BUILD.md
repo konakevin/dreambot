@@ -29,6 +29,19 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
+**⏱ FINALIZATION STATUS (2026-08-25, live):**
+> ✅ SCALED + sanity-gated (production, sane, still DARK): Through Time (9), Wild West (8), Heroes (9),
+> Whimsical (6 — fairy tea party was all-B'd by grader → reactivated). Landmarks (8) SCALING now (job
+> b7czuvjfk). ✅ SECTION_META wired for all sections. ✅ Nightly-eligible = automatic (no flag).
+> ⚠️ **DARK HF(9)/SciFi(5)/Gothic(4) = 18 locs NOT production-ready** (sanity gate caught it): were set up
+> pre-seed-category, `is_approved` was false (NOW SET true), spots uncurated — many active=0, umbrella cards
+> (sci-fi worlds/high fantasy/gothic realm) stuck at spot_kind='vista' + NO recipe arrays (visuals=0).
+> TODO: run `scale-pools.mjs` on the 18 to curate (classify vista→scale, grade, eligibility); REACTIVATE
+> any the grader all-B's (imagined-location grader over-rejection — see fairy tea party); GENERATE recipe
+> arrays for the 3 umbrella cards (generate-full-location-card) OR treat them as umbrella-only.
+> ⚠️ sanity-check-pools.mjs: active=0 currently prints as warn — should be FATAL (minor script tweak).
+> **GO-LIVE (flip admin_only=false) only AFTER all pass the sanity gate.**
+
 **⏱ FINALIZATION / GO-LIVE (Kevin APPROVED all renders 2026-08-25 — "seed to production, ready to switch live, work in nightly"):**
 > Phase B now running. Decisions: superhero IP = LEAVE for now (remove later if a problem); ALL new
 > locations NIGHTLY-ELIGIBLE (work like any other place at night); scale everything then ONE batch go-live
