@@ -106,7 +106,23 @@ const LOCATION_PROMPTS = {
 };
 
 async function generateThumbnail(locationKey) {
-  const prompt = LOCATION_PROMPTS[locationKey];
+  let prompt = LOCATION_PROMPTS[locationKey];
+  if (!prompt) {
+    // Fallback for locations not in the hardcoded map (all the new categories):
+    // build a wide establishing-shot prompt from the card's own recipe.
+    const { data: card } = await sb
+      .from('location_cards')
+      .select('display_name, cinematic_phrases, visual_palette')
+      .eq('name', locationKey)
+      .maybeSingle();
+    const nm = (card && card.display_name) || locationKey;
+    const bits = card
+      ? [...(card.cinematic_phrases || []).slice(0, 3), ...(card.visual_palette || []).slice(0, 3)]
+      : [];
+    prompt = bits.length
+      ? `${nm}: ${bits.join(', ')}, sweeping establishing landscape shot, cinematic wide shot, dramatic light, no people`
+      : `${nm}, a beautiful sweeping establishing landscape shot, cinematic wide shot, dramatic light, no people`;
+  }
   if (!prompt) {
     console.error(`  ❌ No prompt for "${locationKey}"`);
     return null;
@@ -221,8 +237,9 @@ async function processLocation(locationKey) {
     const { data: rows } = await sb
       .from('location_cards')
       .select('name')
-      .is('thumbnail_url', null);
-    const names = (rows || []).map(r => r.name).filter(n => LOCATION_PROMPTS[n]);
+      .is('thumbnail_url', null)
+      .not('picker_category', 'is', null); // only picker-visible cards; fallback prompt handles unmapped
+    const names = (rows || []).map(r => r.name);
     console.log(`${names.length} locations missing thumbnails...`);
     for (const name of names) {
       await processLocation(name);

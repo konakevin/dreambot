@@ -29,6 +29,15 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
+**⏱ FINALIZATION STATUS v2 (2026-08-25):** ✅ Scaled+gated: Through Time, Wild West, Heroes, Whimsical,
+**Landmarks** (all production, sane, DARK). ✅ display_name set on 46 new cards. ✅ SECTION_META wired.
+🔨 THUMBNAILS generating for ~46 new locs (job; generate-location-thumbnails.js now has a recipe-based
+fallback + --missing includes unmapped). REMAINING: (1) curate dark 18 (classify vista→scale + reactivate +
+eligibility; skip grade to avoid imagined-nuke; backfill recipes for 3 umbrella cards later); (2) picker-
+query verification (run the picker's exact select as admin, confirm each section returns label+thumbnail+
+tier); (3) final sanity sweep ALL. THEN Kevin does the VISUAL PASS (onboarding/Settings as admin, cards
+still dark) → THEN flip admin_only=false to GO LIVE. **Do NOT flip before Kevin's visual pass (his call).**
+
 **⏱ FINALIZATION STATUS (2026-08-25, live):**
 > ✅ SCALED + sanity-gated (production, sane, still DARK): Through Time (9), Wild West (8), Heroes (9),
 > Whimsical (6 — fairy tea party was all-B'd by grader → reactivated). Landmarks (8) SCALING now (job
