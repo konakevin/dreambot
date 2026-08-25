@@ -29,7 +29,16 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
-**⏱ LIVE STATE — OVERNIGHT RUN ESSENTIALLY COMPLETE (2026-08-25):**
+**⏱ FINALIZATION / GO-LIVE (Kevin APPROVED all renders 2026-08-25 — "seed to production, ready to switch live, work in nightly"):**
+> Phase B now running. Decisions: superhero IP = LEAVE for now (remove later if a problem); ALL new
+> locations NIGHTLY-ELIGIBLE (work like any other place at night); scale everything then ONE batch go-live
+> flip. STEPS: (1) scale QA-25 spot pools → ~100 + re-curate for ~40 locs (Through Time 9, Wild West 8,
+> Heroes 9, Whimsical 6, Landmarks 8) via `scripts/scale-pools.mjs`; (2) add SECTION_META for through_time,
+> wild_west, heroes_adventure, landmarks_wonders (imagined 4 already in); (3) confirm nightly-eligible;
+> (4) flip `admin_only=false` per section (GO LIVE). Caption bug FIXED (nightly caption no longer the raw
+> prompt). Dual giant-heads FIXED (framing counter-pull, 9:16 kept). gpt-image-2 BANNED from nightly.
+
+**⏱ (prior) OVERNIGHT RUN COMPLETE (2026-08-25):**
 > ALL categories seeded + QA-rendered to Kevin's album, ALL DARK (`admin_only=true`, nothing live):
 > **Through Time** ✅ (9 @4.5+) · **Wild West** ✅ (8, recalibrated gritty-authentic even-mix + couples) ·
 > **Heroes** ✅ (7/9) · **Whimsical expand** ✅ (5/6) · **Landmarks & Wonders** ✅ (8) · dark **High

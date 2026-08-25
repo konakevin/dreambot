@@ -3420,7 +3420,11 @@ Output ONLY the prompt.`;
 
     // Draft upload + budget upsert in parallel
     let uploadId: string | undefined;
-    const caption = finalPrompt.length > 200 ? finalPrompt.slice(0, 197) + '...' : finalPrompt;
+    // Caption must NOT be the raw Flux prompt (2026-08-25 fix). The card displays
+    // `description`; the dreamer-facing dream text is `bot_message` (set by the
+    // dispatcher). caption only pre-fills the post-to-feed sheet — the raw prompt
+    // there was the bug. Leave it null so the sheet pre-fills clean.
+    const caption: string | null = null;
     // Display variant: DEFER the heavy full-res JPEG encode out of this cramped
     // isolate — it was the last in-isolate 546 hot-spot. For the face-swap path
     // we already decoded the output for the dup-detect hash, so compute the CHEAP
