@@ -111,6 +111,13 @@ const SECTION_META: SectionMeta[] = [
     description: 'Mountains, canyons, and wild landscapes',
     tier: 'real',
   },
+  {
+    id: 'landmarks_wonders',
+    title: 'Landmarks & Wonders',
+    icon: 'star-outline',
+    description: 'The world’s great monuments and natural wonders',
+    tier: 'real',
+  },
   // ── Imagined Worlds ──────────────────────────────────────────
   {
     id: 'fantasy_worlds',
@@ -145,6 +152,27 @@ const SECTION_META: SectionMeta[] = [
     title: 'Whimsical & Fun',
     icon: 'flower-outline',
     description: 'Fairy-tale castles, gardens, and sweet escapes',
+    tier: 'imagined',
+  },
+  {
+    id: 'wild_west',
+    title: 'Wild West',
+    icon: 'trail-sign-outline',
+    description: 'Outlaws, saloons, and the rugged frontier',
+    tier: 'imagined',
+  },
+  {
+    id: 'through_time',
+    title: 'Through Time',
+    icon: 'hourglass-outline',
+    description: 'Ancient empires and bygone eras',
+    tier: 'imagined',
+  },
+  {
+    id: 'heroes_adventure',
+    title: 'Heroes & Adventure',
+    icon: 'flash-outline',
+    description: 'Epic quests, daring feats, and bold action',
     tier: 'imagined',
   },
 ];
