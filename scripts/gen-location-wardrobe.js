@@ -58,9 +58,33 @@ const FORCE = has('force'); // overwrite existing WARDROBE
 const SB_URL = 'https://jimftynwrinwenonjrlj.supabase.co';
 const sb = createClient(SB_URL, KEY);
 
+// Grounded/real worlds: the "cool" is AUTHENTICITY + attitude + fit, NOT fantasy
+// fashion-costume (the Wild West over-fashion lesson, 2026-08-24). Fantastical
+// worlds welcome full glam. Register keys off picker_category + biome.
+const GROUNDED_CATS = new Set([
+  'wild_west', 'through_time', 'heroes_adventure', 'landmarks_wonders',
+  'iconic_cities', 'tropical', 'epic_nature',
+]);
+const FANTASTICAL_BIOMES = new Set([
+  'fantasy_imagined', 'scifi_cosmic', 'gothic_historic', 'aquatic_underwater',
+]);
+function registerNote(picker, biome) {
+  // Category wins: a grounded category (Heroes, Wild West, real places) stays
+  // authentic even on a shared "fantastical" biome (e.g. deep-sea sub on
+  // aquatic_underwater). Only fall back to biome when the category is unknown.
+  const fantasticalCat = ['fantasy_worlds', 'high_fantasy', 'scifi_space', 'gothic_haunted', 'whimsical_fun'].includes(picker);
+  if (GROUNDED_CATS.has(picker)) {
+    return `\n\n★ REGISTER = GROUNDED / REAL WORLD. The cool comes from AUTHENTICITY + ATTITUDE + FIT — real, believable, weathered gear worn well (a gunslinger's oilskin duster, a mountaineer's cool technical kit, an aviator's flight suit, an explorer's rugged khakis). Sexy = fitted/alluring cut + confidence, NOT fashion pieces. DO NOT turn it into a theatrical fantasy costume (no boutique fringe-and-turquoise, no cosplay). Believable + badass + alluring.`;
+  }
+  if (fantasticalCat || FANTASTICAL_BIOMES.has(biome)) {
+    return `\n\n★ REGISTER = FANTASTICAL / IMAGINED WORLD. Fantastical, glamorous, dramatic wardrobe is welcome and encouraged — lean fully into the fantasy (elven silks, gothic seduction, neon cyberwear, kawaii sweetness). Go bold.`;
+  }
+  return '';
+}
+
 function buildPrompt(loc, flavor, picker, biome) {
   const soul = flavor.soul ? `\nLocation soul: ${flavor.soul}` : '';
-  return `Author an 8-entry WARDROBE pool for "${loc}" — striking, DREAM-WORTHY outfit anchors an AI image generator picks from when casting a person AT THIS LOCATION.
+  return `Author an 8-entry WARDROBE pool for "${loc}" — striking, DREAM-WORTHY outfit anchors an AI image generator picks from when casting a person AT THIS LOCATION.${registerNote(picker, biome)}
 
 This is a DREAM image generator. The cast should look like the COOLEST, most exciting version of themselves — the hero or heroine of a stylish film set in this world. The bar is: COOL, SEXY, FUN, a little FANTASTIC. Think a costume designer dressing the lead, NOT a tourist packing practical clothes for a trip. Elevate every ordinary garment into its most cinematic, head-turning version.
 
