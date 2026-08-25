@@ -29,14 +29,17 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
-**⏱ LIVE STATE (2026-08-25, overnight run in progress — update as work moves):**
-> DONE (all DARK, in Kevin's album for review): **Through Time** ✅ (9 @4.5+) · **Wild West** ✅ (8,
-> recalibrated gritty-authentic even-mix + couples) · **Heroes** ✅ (7/9 good; 🚩superhero=IP, 🚩race
-> garage=thin) · **Whimsical expand** ✅ (5/6; 🚩kawaii candy land=off-concept garden). **NOW: Landmarks &
-> Wonders** — recipes generating (job bfskvyt6e; 8 graveyard revives) → seed(real/grounded, imagined=false,
-> nightly-eligible) → render. **REMAINING after Landmarks:** finish dark High Fantasy(9)/Sci-Fi(5)/Gothic(4)
-> QA (seeded earlier, need QA renders) + Wild West nature-expansion (Return-to). Seeder = QA-25 spots,
-> register-aware wardrobe. Renders slow earlier tonight (better now). See 🚩 Return-to list below.
+**⏱ LIVE STATE — OVERNIGHT RUN ESSENTIALLY COMPLETE (2026-08-25):**
+> ALL categories seeded + QA-rendered to Kevin's album, ALL DARK (`admin_only=true`, nothing live):
+> **Through Time** ✅ (9 @4.5+) · **Wild West** ✅ (8, recalibrated gritty-authentic even-mix + couples) ·
+> **Heroes** ✅ (7/9) · **Whimsical expand** ✅ (5/6) · **Landmarks & Wonders** ✅ (8) · dark **High
+> Fantasy** ✅ (9, wardrobe refreshed + re-rendered) · **Sci-Fi** ✅ (5) · **Gothic** ✅ (4). Couples (dual
+> face-swap) added as a 4th QA surface across the board. Register-aware wardrobe (grounded=authentic vs
+> fantastical=glam) validated. Seeder = QA-25 spots (scale to ~100+ post sign-off).
+> **AWAITING KEVIN'S REVIEW.** Then per section: fix 🚩 Return-to items, scale spot pools to production, add
+> SECTION_META for through_time/wild_west/old_west→wild_west/heroes_adventure/landmarks_wonders, flip live.
+> **REMAINING BUILD:** Wild West raw-nature/activity expansion (Return-to). Renders killed frequently late
+> in the run (infra) → some locations have partial surfaces; re-roll/complete as needed.
 > --- older ---
 > 2026-08-25 early: **Through Time ✅ DONE R1** (all 4.5+, dark). **WILD WEST (renamed from old_west)** in
 > heavy iteration: Kevin wants Red Dead/Tombstone — first wardrobe elevation over-fashioned it (fringe
