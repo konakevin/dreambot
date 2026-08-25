@@ -29,6 +29,21 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
+**⏱ FINALIZATION STATUS v5 (2026-08-25) — CONTENT-QUALITY audit found LOTS of empty spot pools:**
+> Kevin: "no rush, TOP QUALITY, don't slap it on." Wardrobe for rose palace/cloud kingdom/fairy tale kingdom
+> = TOP QUALITY ✅. BUT 16 cards have <20 active iconic spots (graveyard revives that never got spot pools —
+> they render off biome_config alone, NOT set up like Tokyo's 180). **12 at ZERO:** dragons keep, alien
+> planet, mermaid lagoon, floating sky islands, rose garden palace, ancient elven city, cyberpunk megacity,
+> mars colony, underwater city atlantis, enchanted forest, dwarven fortress, crystal caverns. **Thin:** rose
+> palace(8), haunted cathedral(6), fairy cottage(9), race track garage(18).
+> ALSO: sci-fi spot generator emits **IP** — space station(12) + sci-fi worlds(20) have Babylon 5/Halo/Blade
+> Runner/Mass Effect/Star Trek spots. FIX SEQUENCE: (1) add NO-IP guard to gen-iconic-spots-50 scifi/fantasy
+> prompts; (2) delete existing IP-named spots; (3) gen 100 spots for all 16 thin/empty (scale-pools.mjs) +
+> classify + eligibility (skip grade for imagined → reactivate); (4) QA-RENDER a sample of each + grade with
+> dream-shoot eye (NOT just structural sanity); (5) re-sanity ALL; (6) picker-verify; (7) Kevin visual pass;
+> (8) GO LIVE. Nightly-eligible=auto. SECTION_META done. Thumbnails done. Grouping reshuffled (fantasy_worlds
+> dissolved). Selector copy updated. DO NOT go live until all 16 have real spot pools + QA-verified renders.
+
 **⏱ FINALIZATION STATUS v4 (2026-08-25) — sanity sweep found under-built graveyard cards:**
 > BLOCKERS to fix before go-live (all were surfaced/QA-rendered but never fully seeded):
 > - **7 with ZERO spots** (need gen-iconic-spots 100 + classify + eligibility): space station, transylvania,

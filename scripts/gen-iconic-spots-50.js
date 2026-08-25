@@ -81,57 +81,47 @@ function hintsBlock(subRegions, mustInclude) {
 }
 
 function fantasyMetaPrompt(loc, count, subRegions, mustInclude) {
-  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — the recognizable named locations that fans of this fictional place would immediately know.${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
+  return `INVENT ${count} evocative, ORIGINAL fantasy landmarks for a GENERIC imagined "${loc}" world (this is NOT a specific franchise — it is an original dreamscape, not a named book/film/game).${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
 
-These are PURE LOCATION PILLARS used as scene anchors for AI image generation. The user picked "${loc}" because they love it (the source material — book / film / game / mythology). Each pillar must be a SPECIFIC NAMED LOCATION from THAT canon.
+These are PURE LOCATION PILLARS used as scene anchors for AI image generation. Each is a SPECIFIC, vividly-imagined fantasy feature you INVENT — original coinages evoking the essence of "${loc}", never borrowed from an existing franchise.
 
 ━━━ HARD REQUIREMENTS ━━━
-- Each entry names a SPECIFIC FICTIONAL LANDMARK from "${loc}" canon (e.g., for "hogwarts": Great Hall, Forbidden Forest, Astronomy Tower, Quidditch Pitch, Black Lake, Hogsmeade, Whomping Willow, Owlery, Greenhouses, Boathouse, Hogwarts Express bridge, Chamber of Secrets entrance, Room of Requirement entrance, Dumbledore's office tower, Gryffindor Common Room entrance, etc.)
+- Each entry is a SPECIFIC, evocative INVENTED landmark that fits "${loc}" (a distinctive spire, hall, bridge, grove, cavern, gate, ruin, waterfall, etc.) — give it an original descriptive name/feature
 - 4-12 words long
-- Outdoor / exterior view of the named landmark (so it can be rendered as a scene, not an interior shot)
-- For interior-iconic places (Great Hall, Common Rooms): describe an EXTERIOR-VIEW or APPROACH-VIEW (e.g., "Great Hall stained glass windows lit from within at twilight" instead of "inside the Great Hall")
-- These are FICTIONAL — so "no hallucinations" does NOT apply; the canonical fictional landmarks ARE the source of truth
+- Outdoor / exterior view (so it renders as a scene, not an interior shot); recast interiors as an approach/exterior view
+- Span distinct KINDS of features (towers, forests, water, ruins, halls, bridges, peaks) for variety
 
-━━━ HARD BANS (still apply) ━━━
-- NO TIME OF DAY ("at sunset" / "at golden hour") — those are axes
-- NO WEATHER (no "stormy" / "snowy" baked into pillar)
-- NO LIGHT/COLOR DESCRIPTIONS (no "glowing" / "moonlit" — those are axes)
-- NO PEOPLE / NO CHARACTERS in pillar text
-- NO REAL-WORLD locations leaking in — every entry must be from "${loc}" canon, not from real Earth places that look similar
-- NO GENERIC TERMS — "the magical castle" is wrong; it must be "Hogwarts Astronomy Tower" or similar named feature
+━━━ HARD BANS ━━━
+- NO TIME OF DAY / NO WEATHER / NO LIGHT/COLOR words (those are axes)
+- NO PEOPLE / NO CHARACTERS
+- NO REAL-WORLD places
+- ❌ NO REAL FRANCHISE / IP — invent ORIGINAL names. NEVER use Hogwarts, Lord of the Rings (Rivendell, Minas Tirith, Mordor, Gondor), Game of Thrones (Winterfell, King's Landing), Narnia, Elder Scrolls, Warcraft, etc. If a name comes from an existing book/film/game, it is WRONG. Coin your own.
+- NO GENERIC TERMS — "the magical castle" is wrong; make it a specific invented feature ("the Shattered Spire of the old kings", "the Moonwell terraces", "the Glasswing bridge over the chasm")
 
-━━━ EXAMPLE — what GREAT looks like for "hogwarts" ━━━
-- Hogwarts Castle towering against rocky cliff
-- Forbidden Forest dark canopy at the school's edge
-- Astronomy Tower silhouetted above the castle
-- Black Lake reflecting the castle towers
-- Quidditch Pitch with circular goal hoops
-- Hogwarts Express crossing the Glenfinnan Viaduct
-- Hogsmeade village with snow-covered cottages
-- Whomping Willow ancient gnarled tree
-- Owlery turret high above the school
-- Greenhouses with crystalline glass roofs
-- Boathouse cove below the castle cliffs
-- Hagrid's Hut in the forest clearing
-...etc
+━━━ EXAMPLE — what GREAT looks like (all ORIGINAL, no IP) ━━━
+- Colossal silver-birch spires laced with vine bridges
+- The Sunken Colonnade half-drowned in a still lagoon
+- A cliff-carved dragon gate above the mist
+- Terraced moonwell gardens descending a canyon wall
+- The Glasswing bridge arcing over a bottomless chasm
+- Ancient rune-etched menhirs on a heather moor
+- A waterfall plunging past a cliffside citadel
+- Crystal cavern mouth glittering on the mountainside
 
-(Notice: each names a SPECIFIC canonical Hogwarts landmark. None are real-world places.)
-
-━━━ EXAMPLE — what BAD looks like (would all be REJECTED) ━━━
-- "Diamond Head volcanic crater" (real-world Hawaii — wrong canon)
-- "ancient stone castle on a hill" (generic — not named)
+━━━ EXAMPLE — what BAD looks like (REJECTED) ━━━
+- "Rivendell elven valley" (IP — Lord of the Rings)
+- "Hogwarts Astronomy Tower" (IP)
+- "ancient stone castle on a hill" (generic — not specific/evocative)
 - "magical glowing tower at sunset" (light + time baked in)
-- "the Great Hall interior with floating candles" (interior + light)
-- "wizard hangout spot" (generic and silly)
 
 ━━━ OUTPUT ━━━
-Return EXACTLY ${count} entries, one per line, no numbering, no commentary. Just ${count} canonical fictional landmark strings from "${loc}".`;
+Return EXACTLY ${count} entries, one per line, no numbering, no commentary.`;
 }
 
 function scifiMetaPrompt(loc, count, subRegions, mustInclude) {
-  return `Generate the TOP ${count} most ICONIC FICTIONAL LANDMARKS within "${loc}" — recognizable named sci-fi locations from canon (book / film / game / world-building lore).${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
+  return `INVENT ${count} evocative, ORIGINAL sci-fi landmarks for a GENERIC imagined "${loc}" world (this is NOT a specific franchise — it is an original dreamscape).${flavorBlock(loc)}${hintsBlock(subRegions, mustInclude)}
 
-These are PURE LOCATION PILLARS for AI image generation. Each must be a SPECIFIC NAMED feature within the fictional sci-fi world.
+These are PURE LOCATION PILLARS for AI image generation. Each is a SPECIFIC, vividly-described sci-fi feature you INVENT — original coinages, never borrowed from an existing franchise.
 
 ━━━ HARD REQUIREMENTS ━━━
 - Names a SPECIFIC sci-fi landmark, structure, or natural feature from this fictional setting
@@ -146,6 +136,7 @@ These are PURE LOCATION PILLARS for AI image generation. Each must be a SPECIFIC
 - NO PEOPLE
 - NO REAL-WORLD locations
 - NO FANTASY-MAGIC elements (no spell circles, magical aura — this is sci-fi, tech and physics-bending only)
+- ❌ NO REAL FRANCHISE / IP — INVENT ORIGINAL names. NEVER use Star Wars, Star Trek (Terok Nor, Bajor, Enterprise, Deep Space Nine), Halo (Forerunner), Mass Effect (Citadel), Babylon 5, Blade Runner (Tyrell), Dune (Arrakis), The Expanse, Stargate, Gundam, etc. If a name comes from an existing book/film/game, it is WRONG. Coin your own.
 
 ━━━ EXAMPLE — what GREAT looks like for "alien planet" ━━━
 - Crimson sandstone arches under twin-moon sky
