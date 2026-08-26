@@ -68,103 +68,81 @@ interface SectionMeta {
   icon: keyof typeof Ionicons.glyphMap;
   description: string;
   tier: LocationTier;
+  /** picker_category values this fat section aggregates (2026-08-25 Kevin: 12
+   *  fine-grained categories folded into 8 broad ones — 4 per tab — so browsing
+   *  is a quick scan, not a wall of menus. The DB picker_category stays granular;
+   *  this UI just groups them). */
+  categories: string[];
 }
-// The LIST of locations in each section is DB-driven (location_cards.picker_category);
-// this only defines section presentation + which tier a category belongs to. A section
-// with no cards in the DB simply doesn't render, so a new imagined category can be added
-// here ahead of its cards (Operation Dream Location Expansion).
+// Section presentation + grouping lives in code; the LIST of locations is DB-driven
+// (location_cards.picker_category). A section with no cards simply doesn't render.
+// 8 broad sections, 4 per tab — see the `categories` field for the fold-in.
 const SECTION_META: SectionMeta[] = [
-  // ── Real World ───────────────────────────────────────────────
+  // ── Real World (4) ───────────────────────────────────────────
   {
-    id: 'iconic_cities',
-    title: 'Cities',
+    id: 'cities_landmarks',
+    title: 'Cities & Landmarks',
     icon: 'business-outline',
-    description: 'Famous cities and skylines around the world',
+    description: 'Iconic cities, skylines, and the world’s great monuments',
     tier: 'real',
+    categories: ['iconic_cities', 'landmarks_wonders'],
   },
   {
-    id: 'countries_cultures',
-    title: 'Countries & Cultures',
+    id: 'around_the_world',
+    title: 'Around the World',
     icon: 'earth-outline',
-    description: 'Countrywide escapes and rich cultures',
+    description: 'Countrywide escapes and island paradise',
     tier: 'real',
+    categories: ['countries_cultures', 'tropical'],
   },
   {
-    id: 'tropical',
-    title: 'Tropical Escapes',
-    icon: 'sunny-outline',
-    description: 'Crystal waters and island paradise',
-    tier: 'real',
-  },
-  {
-    id: 'epic_nature',
-    title: 'Epic Nature',
+    id: 'nature',
+    title: 'Nature',
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
     tier: 'real',
+    categories: ['epic_nature'],
   },
   {
-    id: 'landmarks_wonders',
-    title: 'Landmarks & Wonders',
-    icon: 'star-outline',
-    description: 'The world’s great monuments and natural wonders',
-    tier: 'real',
-  },
-  {
-    // Through Time = real places in the past (Ancient Rome, Feudal Japan, …), so
-    // it lives under Real World, not Dream Worlds (2026-08-25 Kevin). Keeps the
-    // two worlds symmetric at 6 categories each.
-    id: 'through_time',
-    title: 'Through Time',
+    id: 'eras',
+    title: 'Eras',
     icon: 'hourglass-outline',
     description: 'Ancient empires and bygone eras',
     tier: 'real',
+    categories: ['through_time'],
   },
-  // ── Dream Worlds ─────────────────────────────────────────────
-  // (fantasy_worlds dissolved 2026-08-25 — it mixed real places (Paris Café,
-  // Cherry Blossoms, Japanese Garden) with fantasy; cards redistributed to
-  // coherent sections.)
+  // ── Dream Worlds (4) ─────────────────────────────────────────
   {
-    id: 'high_fantasy',
-    title: 'High Fantasy',
+    id: 'fantasy',
+    title: 'Fantasy',
     icon: 'flame-outline',
-    description: 'Elven cities, dragon keeps, and epic realms',
+    description: 'Elven cities, dragon keeps, and candlelit castles',
     tier: 'imagined',
+    categories: ['high_fantasy', 'gothic_haunted'],
   },
   {
-    id: 'scifi_space',
-    title: 'Sci-Fi & Space',
-    icon: 'planet-outline',
-    description: 'Neon megacities, alien worlds, and the stars',
-    tier: 'imagined',
-  },
-  {
-    id: 'gothic_haunted',
-    title: 'Gothic & Haunted',
-    icon: 'moon-outline',
-    description: 'Candlelit castles, fog, and beautiful gloom',
-    tier: 'imagined',
-  },
-  {
-    id: 'whimsical_fun',
-    title: 'Whimsical & Fun',
+    id: 'whimsical',
+    title: 'Whimsical',
     icon: 'flower-outline',
     description: 'Fairy-tale castles, gardens, and sweet escapes',
     tier: 'imagined',
+    categories: ['whimsical_fun'],
   },
   {
-    id: 'wild_west',
-    title: 'Wild West',
-    icon: 'trail-sign-outline',
-    description: 'Outlaws, saloons, and the rugged frontier',
+    id: 'scifi',
+    title: 'Sci-Fi',
+    icon: 'planet-outline',
+    description: 'Neon megacities, alien worlds, and the stars',
     tier: 'imagined',
+    categories: ['scifi_space'],
   },
   {
-    id: 'heroes_adventure',
-    title: 'Heroes & Adventure',
+    id: 'adventure',
+    title: 'Adventure',
     icon: 'flash-outline',
-    description: 'Epic quests, daring feats, and bold action',
+    description: 'Frontier outlaws, bold quests, and daring feats',
     tier: 'imagined',
+    categories: ['wild_west', 'heroes_adventure'],
   },
 ];
 
@@ -281,16 +259,17 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         });
         byCategory.set(row.picker_category, items);
       }
-      const built: LocationSection[] = SECTION_META.filter((m) => byCategory.has(m.id)).map(
-        (m) => ({
-          id: m.id,
-          title: m.title,
-          icon: m.icon,
-          description: m.description,
-          tier: m.tier,
-          items: byCategory.get(m.id) ?? [],
-        })
-      );
+      // Each fat section aggregates the cards from all its picker_categories
+      // (2026-08-25: 12 categories folded into 8 broad ones). Within a section,
+      // cards keep their per-category order (concatenated in `categories` order).
+      const built: LocationSection[] = SECTION_META.map((m) => ({
+        id: m.id,
+        title: m.title,
+        icon: m.icon,
+        description: m.description,
+        tier: m.tier,
+        items: m.categories.flatMap((c) => byCategory.get(c) ?? []),
+      })).filter((sec) => sec.items.length > 0);
       setSections(built);
       setThumbnails(thumbMap);
     });
@@ -321,63 +300,76 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
     }
   }, [places, toggleAllLocations]);
 
-  // Level 1 + 2 — segmented world tabs over a grid of category cards.
+  // Level 1 + 2 — two world TABS (both labels always visible, active one carries
+  // a bright gradient underline that connects into the content pane below) over a
+  // grid of category cards. The pane makes it read as "this tab's contents," so
+  // the second tab is obviously discoverable (Kevin 2026-08-25: a tester missed
+  // the Dream Worlds tab entirely with the old segmented-pill look).
   const renderBrowse = () => (
     <>
-      <View style={s.tabBar}>
+      <View style={s.tabRow}>
         {TIER_META.map((tier) => {
           const on = activeTier === tier.id;
           return (
             <TouchableOpacity
               key={tier.id}
-              style={[s.tabItem, !on && s.tabItemInactive]}
-              activeOpacity={0.85}
+              style={s.tab}
+              activeOpacity={0.7}
               onPress={() => {
                 if (activeTier === tier.id) return;
                 Haptics.selectionAsync();
                 setActiveTier(tier.id);
               }}
             >
-              {on && (
+              <Text style={[s.tabLabel, on && s.tabLabelActive]}>{tier.title}</Text>
+              {on ? (
                 <LinearGradient
                   colors={BRAND_GRADIENT}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
-                  style={StyleSheet.absoluteFillObject}
+                  style={s.tabUnderline}
                 />
+              ) : (
+                <View style={s.tabUnderlineIdle} />
               )}
-              <Text style={[s.tabText, on ? s.tabTextOn : s.tabTextOff]}>{tier.title}</Text>
             </TouchableOpacity>
           );
         })}
       </View>
 
-      {/* Running total across BOTH worlds + a start-over. In Settings this is the
-          only place the grand total shows (no onboarding footer there). */}
-      <View style={s.summaryBar}>
-        <Text style={s.summaryText}>
-          <Text style={s.summaryCount}>{places.length}</Text>{' '}
-          {places.length === 1 ? 'place' : 'places'} selected
-        </Text>
-        {places.length > 0 && (
-          <TouchableOpacity
-            onPress={confirmReset}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            activeOpacity={0.7}
-          >
-            <Text style={s.resetText}>Reset</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <ScrollView
-        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={s.catGrid}>
-          {sections.filter((sec) => sec.tier === activeTier).map(renderCategoryCard)}
+      {/* The content pane — visually tied to the active tab via the shared top
+          edge, so switching tabs clearly swaps this panel's contents. */}
+      <View style={s.pane}>
+        {/* Running total across BOTH worlds + a start-over. In Settings this is
+            the only place the grand total shows (no onboarding footer there). */}
+        <View style={s.summaryBar}>
+          <Text style={s.summaryText}>
+            <Text style={s.summaryCount}>{places.length}</Text>{' '}
+            {places.length === 1 ? 'place' : 'places'} selected
+          </Text>
+          {places.length > 0 && (
+            <TouchableOpacity
+              onPress={confirmReset}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.7}
+            >
+              <Text style={s.resetText}>Reset</Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </ScrollView>
+
+        <ScrollView
+          contentContainerStyle={[
+            s.scrollContent,
+            isEditing && { paddingBottom: verticalScale(20) },
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={s.catGrid}>
+            {sections.filter((sec) => sec.tier === activeTier).map(renderCategoryCard)}
+          </View>
+        </ScrollView>
+      </View>
     </>
   );
 
@@ -465,9 +457,6 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
             <Text style={s.detailTitle} numberOfLines={1}>
               {section.title}
             </Text>
-            <Text style={s.detailDesc} numberOfLines={1}>
-              {section.description}
-            </Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -525,9 +514,6 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
             Where do you want to dream?
           </GradientTitle>
         )}
-        <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Choose the places you’d love to dream about.
-        </Text>
       </View>
 
       {openSection ? renderDetail(openSection) : renderBrowse()}
@@ -568,33 +554,41 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
   },
 
-  // Level 1 — world tabs (segmented control).
-  tabBar: {
+  // Level 1 — world TABS. Both labels always visible (equal size), the active one
+  // brightens to white and carries a gradient underline that sits on the pane's
+  // top edge — the classic connected-tab look, so the second tab can't be missed.
+  tabRow: {
     flexDirection: 'row',
-    gap: 4,
     marginHorizontal: TILE_PADDING,
-    marginBottom: verticalScale(4),
-    padding: 4,
-    borderRadius: 999,
-    backgroundColor: colors.surface,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.accentBorder,
   },
-  tabItem: {
+  tab: {
     flex: 1,
-    height: verticalScale(38),
-    borderRadius: 999,
-    overflow: 'hidden',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: verticalScale(6),
   },
-  // The inactive segment stays a visible, tappable chip (subtle raised fill +
-  // legible text) so users see there's a second world to switch to, rather than
-  // reading as dead space (2026-08-25 Kevin).
-  tabItemInactive: { backgroundColor: 'rgba(255,255,255,0.08)' },
-  tabText: { fontSize: fontScale(14), fontWeight: '700' },
-  tabTextOff: { color: 'rgba(255,255,255,0.92)' },
-  tabTextOn: { color: '#08080F' },
+  tabLabel: {
+    fontSize: fontScale(16),
+    fontWeight: '800',
+    color: 'rgba(255,255,255,0.5)',
+    marginBottom: verticalScale(9),
+  },
+  tabLabelActive: { color: '#FFFFFF' },
+  tabUnderline: {
+    height: verticalScale(3),
+    alignSelf: 'stretch',
+    marginHorizontal: horizontalScale(18),
+    borderRadius: 999,
+  },
+  tabUnderlineIdle: { height: verticalScale(3), backgroundColor: 'transparent' },
+  // The content pane — its top edge lines up under the tab row, and the active
+  // tab's underline lands on it, tying the two together.
+  pane: {
+    flex: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.02)',
+    paddingTop: verticalScale(6),
+  },
 
   // Running total across BOTH worlds + a start-over control.
   summaryBar: {

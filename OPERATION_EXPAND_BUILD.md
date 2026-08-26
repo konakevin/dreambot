@@ -40,11 +40,14 @@ PLAN.md` (⭐ top block) + mock `scratchpad/picker-grouping.html`.
   "always touching a rock" repetition was the POSE (fixed globally), not the spot pools. So the tool reports
   candidates for human review; `--write` is gated to ONE explicit `--location` and only right for a genuine
   static-PROP bloat (Viking rune stones — already fixed). No fleet-wide thinning.
-- **Phase 2 — SEED THE ~15 EMPTY CARDS (go-live blocker — 0 spots today):** cyberpunk megacity, mars colony,
-  space station, ancient elven city, enchanted forest, dwarven fortress, underwater city atlantis, crystal
-  caverns, mermaid lagoon, floating sky islands, cloud kingdom, fairy tea party, pastel dreamscape, enchanted
-  toy shop, mountain summit, border cantina. **Prove on 2 (cyberpunk megacity + ancient elven city) at 25 spots
-  → Kevin sign-off → scale the rest.** Full playbook pipeline per card + dedup gate + QA rounds to ≥4.5.
+- **Phase 2 — ~~SEED EMPTIES~~ CANCELLED (premise was false):** the "15 empty cards" was a **1000-row-cap
+  artifact** in the status query (`.limit(20000)` still returns only 1000 rows → 0 counted for everything past
+  them). Paginated re-check: **ALL 112 picker cards have ≥15 curated spots (90–340 each), 19,362 active spots
+  total, 0 thin, 0 empty.** The overnight run genuinely seeded everything. → Phase 2 becomes **RE-QA under the
+  new bar:** the overnight QA grades PREDATE this session's pose/wardrobe/model fixes, so spot-check a
+  representative slice per category (esp. cast couples) to confirm the fixes lifted quality fleet-wide (not just
+  Viking); fix card-specific misses. (Minor: `border cantina` has 38 uncurated NULL-eligibility spots + 85
+  inactive — curate.)
 - **Phase 3 — finish consolidations:** Through Time 3 (1920s speakeasy→Roaring 20s, pirate cove→Age of Pirates,
   medieval village→Medieval Times), Wild West 8→5 (Frontier Town merge), Gothic (Cursed Cathedral→Haunted
   Castle; Transylvania empty), Heroes→6 broaden. (Broaden = relax SUBJECT_RULE + EXPAND spots, never rename-only.)
@@ -415,6 +418,7 @@ notification, then start the next stage as its own job.
 - Autonomous, full quality bar per location, flag failures rather than stall.
 
 ## Build log
+| 2026-08-26 | Through Time broaden (3) | Pirate Cove→**Age of Pirates**, 1920s Speakeasy→**Roaring 20s**, Medieval Village→**Medieval Times**: broadened SUBJECT_RULE + 6 sub_regions each, rebalanced narrow pools (pirate 200 cove-rocks→40), gen'd broad spots. GOTCHA: `--fictional` on REAL eras (1920s/medieval) invented FANTASY names ("Feldrith St", "Sablegate Spires") → deleted + regen'd with REAL prompt (Savoy Ballroom, Mont-Saint-Michel). Pirate keeps --fictional (genre). Curated: scale-classify + eligibility. Pools 145/201/206 active. **QA DONE (✅ all 3):** Roaring 20s 4.6–4.7 out of the box (tux+gown glam, Traymore Hotel, moody speakeasy). Age of Pirates + Medieval R1 had OFF-REGISTER wardrobe (pirate→blue sundress; medieval→Victorian/peasant) → **elevated WARDROBE pools** (pirate→swashbuckler tricorn/corset/sash; medieval→knights & nobles armor/gowns) → **R2: pirate couple 4.5, medieval couple 4.6, medieval self 4.3.** LESSON: broadening a card MUST re-theme its `biome_config.WARDROBE` to the new register, not just SUBJECT_RULE+spots. All dark (admin_only). | ✅ done |
 | 2026-08-24 | Slice (egypt/japan/speakeasy) | seed → R1 (5/6 cast @4.5, 1 misfire) → engine fix (dropped enviro_wide) + eligibility rules → R2 ✅ | Kevin: "looks good, keep going" |
 | 2026-08-24 | Engine (prod) | dropped enviro_wide from solo-cast comp (was silently scene-only-ing ~10% of cast nightlies); wardrobe de-burgundy; imagined medium affinity | committed 615cd7b2 |
 | 2026-08-24 | Through Time (9) | recipes + seed-category.mjs | 🔨 running |

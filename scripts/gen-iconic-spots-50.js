@@ -50,6 +50,11 @@ const flag = (n, fb) => {
 };
 const has = (n) => args.includes('--' + n);
 const LOCATION = flag('location', 'hawaii');
+// --theme overrides the CONCEPT used in the Sonnet prompt while --location stays
+// the DB key (fetch card + insert location_key). Lets a generalized card whose key
+// is still the old narrow name (e.g. "viking longhouse") seed BROAD content for a
+// new theme ("the Viking Age …"). Defaults to LOCATION. (2026-08-25 consolidation)
+const THEME = flag('theme', LOCATION);
 // Default count comes from per-location flavor; --count CLI flag overrides.
 const FLAVOR_COUNT = getFlavor(LOCATION).count;
 const COUNT = parseInt(flag('count', String(FLAVOR_COUNT)), 10);
@@ -278,7 +283,7 @@ async function callSonnet(prompt) {
   const t0 = Date.now();
   let usedFictional = has('fictional');
   let lines = parseLines(
-    await callSonnet(metaPrompt(LOCATION, COUNT, biome, subRegions, mustInclude))
+    await callSonnet(metaPrompt(THEME, COUNT, biome, subRegions, mustInclude))
   );
   if (lines.length < COUNT * 0.4 && !usedFictional) {
     console.log(
@@ -286,7 +291,7 @@ async function callSonnet(prompt) {
     );
     usedFictional = true;
     lines = parseLines(
-      await callSonnet(fantasyMetaPrompt(LOCATION, COUNT, subRegions, mustInclude))
+      await callSonnet(fantasyMetaPrompt(THEME, COUNT, subRegions, mustInclude))
     );
   }
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
