@@ -385,6 +385,13 @@ const TRANSIENT_REPLICATE_ERRORS = [
 const MAX_PRIMARY_ATTEMPTS = 3;
 const BACKOFF_MS = [2_000, 4_000]; // before primary attempt 2, attempt 3
 const MIN_FALLBACK_TIME_MS = 15_000; // skip remaining fallbacks if budget below this
+// Cap any SINGLE primary attempt so a cold/hung primary (e.g. cdingram timing
+// out at ~100s on a Replicate cold-start) can't consume the whole budget and
+// starve the fallback chain — which is exactly what it's there for. With a 45s
+// cap, a wedged primary fails fast and yan-ops/pikachupichu25 still get a run.
+// (2026-08-26: cdingram went cold on Replicate → ALL couple swaps degraded to
+// scene because fallbacks were skipped for "-8241ms budget remaining".)
+const PRIMARY_ATTEMPT_CAP_MS = 45_000;
 
 function isTransientReplicateError(msg: string): boolean {
   return TRANSIENT_REPLICATE_ERRORS.some((sig) => msg.includes(sig));
@@ -466,6 +473,8 @@ export async function faceSwap(
         try {
           const remaining = deadline - Date.now();
           if (remaining <= 0) throw new Error(`Face swap deadline exceeded (${primary.name})`);
+          // Cap the primary so it can't eat the whole budget and starve fallbacks.
+          const primaryWait = Math.min(remaining, PRIMARY_ATTEMPT_CAP_MS);
           const url = await faceSwapOnce(
             effectiveSource,
             httpsTarget,
@@ -473,7 +482,7 @@ export async function faceSwap(
             supabase,
             userId,
             primary,
-            remaining
+            primaryWait
           );
           if (attempt > 1)
             console.log(`[faceSwap] primary recovered on attempt ${attempt}/${maxPrimaryAttempts}`);
