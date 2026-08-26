@@ -134,6 +134,12 @@ const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   // ban covers the general rotation; the lego/pixels pins below are also unpinned.
   // Re-enable when the wide-aspect behavior is resolved.
   'openai/gpt-image-2',
+  // BANNED from nightly (Kevin, 2026-08-26): flux-2-pro renders read cheesy /
+  // AI-slop on cast dreams (over-impasto on painterly mediums, plasticky on
+  // others). Rip it fully out of the rotation.
+  'black-forest-labs/flux-2-pro',
+  // BANNED from nightly (Kevin, 2026-08-26): gemini-2-image, same call.
+  'google/gemini-2-image',
 ]);
 
 Deno.serve(async (req) => {
@@ -1001,12 +1007,12 @@ Deno.serve(async (req) => {
         fallbackReasons.push('single_ultra_clamped_to_pro');
       }
       // Dual-swap flex clamp: flux-2-flex fails the dual split ~25% of the time
-      // (2× the pool average) → clamp to flux-2-pro, a reliable painterly sibling
-      // (~9%). Left in rotation for scene/solo, where it renders fine. (2026-08-25,
-      // Kevin — measured from ai_generation_log dual fallback_reasons.)
+      // (2× the pool average) → clamp to flux-1.1-pro, a reliable dual sibling
+      // (~14%). (flux-2-pro was the original clamp target but is now nightly-banned
+      // for cheesy cast output, so we retarget to 1.1-pro. 2026-08-26, Kevin.)
       if (isDualFaceSwap && m === 'black-forest-labs/flux-2-flex') {
-        m = 'black-forest-labs/flux-2-pro';
-        fallbackReasons.push('dual_flex_clamped_to_pro');
+        m = 'black-forest-labs/flux-1.1-pro';
+        fallbackReasons.push('dual_flex_clamped_to_1.1pro');
       }
       return m;
     };
