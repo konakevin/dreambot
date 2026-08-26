@@ -59,29 +59,18 @@ export const DUAL_ACTIONS_COMPANION: string[] = [
   'both in an open area, one bending to touch the ground, the other standing straight with relaxed shoulders',
   'one balancing on a log or beam, the other standing on solid ground with arms at their sides',
   'both standing at different elevations, one step higher with hand on railing, the other below with crossed arms',
-  'one standing while sharpening a tool on a stone, the other beside them wiping their hands',
   'one perching on a fence post, the other standing beside the fence with hands in back pockets',
-  'one standing while threading something through a loop, the other nearby tapping their fingers on their leg',
   'both near exercise equipment, one using it, the other standing beside it with water bottle',
-  'one standing while peeling fruit with a knife, the other beside them holding a plate',
   'one standing while applying something to their skin, the other nearby holding a tube or bottle',
   'one sitting on a blanket with arms relaxed at sides, the other sitting cross-legged beside the blanket',
   'both near a fountain or water feature, one trailing fingers in water, the other standing dry',
-  'both near a statue or monument, one touching its base, the other standing back respectfully',
   'one digging in soil with a small shovel, the other standing beside them holding seeds',
   'one standing while testing the weight of an object, the other beside them with arms relaxed',
   'both near a rope swing, one testing the knot strength, the other standing back with hands on hips',
-  'one standing while threading a needle, the other beside them holding a spool of thread',
   'both near a wooden crate, one prying it open with a crowbar, the other standing ready with gloves',
   'one standing while holding something hot out to cool in their hands, the other nearby fanning themselves with a hat held low',
   'both near a wooden post, one hammering a nail into it, the other standing back with arms crossed',
-  'one standing while polishing something shiny with a rag, the other beside them holding cleaning supplies',
-  'one standing while filing the edge of a metal tool, the other beside them testing its sharpness carefully',
-  'one standing while pressing flowers between book pages, the other beside them selecting specimens',
-  'one standing while lacing up tall boots, the other beside them brushing mud off their own shoes',
-  'one standing while folding a letter, the other beside them melting wax for a seal',
   'both near a tall ladder, one holding it steady, the other standing back with hands ready to help',
-  'one standing while measuring fabric with a ruler, the other beside them marking measurements with chalk',
   'both near a pulley system, one pulling the rope, the other standing ready with outstretched arms',
   'one standing while balancing a stick on their finger, the other beside them clapping encouragement',
   'one standing while binding pages together, the other beside them holding the finished sections',
@@ -89,10 +78,6 @@ export const DUAL_ACTIONS_COMPANION: string[] = [
   'both near a wooden lever, one preparing to push it, the other standing ready to catch the result',
   'one standing while testing the flexibility of a thin branch, the other beside them holding similar twigs',
   'both near a rope and pulley, one threading the rope, the other standing back ensuring it runs smoothly',
-  'one standing while practicing hand shadows, the other beside them positioning a light source',
-  'one standing while practicing whistling bird calls, the other beside them standing still and listening',
-  'one standing while practicing origami folds, the other beside them smoothing out practice papers',
-  'one standing while practicing card shuffling, the other beside them ready to help gather any dropped cards',
   'both standing in an open space, one with hands clasped in front, the other with thumbs hooked in belt loops',
   'both positioned around a pillar, one touching it with fingertips, the other standing away with arms down',
   'both near a post, one leaning sideways against it, the other standing perpendicular with hands at sides',
@@ -280,48 +265,92 @@ export const DUAL_ACTIONS_PLAYFUL: string[] = [
   'both planting hands on hips like proud heroes surveying the horizon but heads turned to camera, gap between them',
 ];
 
+// DYNAMIC pool — cinematic, powerful, energetic stances for HERO-grade cast
+// renders. Same hard swap rules as every other pool: the two HEADS stay clearly
+// apart (a gap between them), faces are set forward by the brief, body language
+// ONLY, NO contact / lean-into / lift / dip / cheek-to-cheek. Unlike COMPANION,
+// motion is allowed — but ONLY camera-facing motion (turning toward the camera,
+// striding forward, leaning into wind) so faces stay frontal for the swap; never
+// walking away, turning to profile, or one behind the other. Scene-NEUTRAL and
+// prop-free on purpose: the wardrobe + setting carry the theme, so a wide power
+// stance reads as a warlord in Viking gear and a hero on a rooftop. This is the
+// pool that kills the "posed costume-rental photo" look. (2026-08-25, Kevin)
+export const DUAL_ACTIONS_DYNAMIC: string[] = [
+  'both planted in a wide, grounded power stance squared to the camera, shoulders back and chins raised, arms crossed with quiet authority, a clear gap between their heads',
+  'one with a boot planted up on a raised rock or ledge and a forearm resting across the knee, the other standing tall beside them with hands on hips, heads kept well apart',
+  'both leaning back with easy confidence, arms loosely folded and mid-laugh with faces to the camera, a clear gap between them',
+  'both standing with feet planted wide and fists loosely clenched at their sides like they own the ground, chests out, heads clearly apart',
+  'one throwing an arm out in a broad sweeping gesture across the view while the other stands firm with arms crossed, both faces to the camera, a gap between their heads',
+  'both windswept and leaning slightly into a strong gust, cloaks and hair streaming to one side, jaws set and eyes forward, a clear gap between their heads',
+  'both mid-turn toward the camera as if just called, weight shifting onto the back foot, arms swinging naturally out to their own sides, heads apart',
+  'one with a single fist raised high in triumph, the other with both arms flung wide in victory, both facing forward, a clear gap between their heads',
+  'both with arms spread wide and open as if taking in a vast view, chests lifted, faces to the camera, heads kept well apart',
+  'one standing with weight cocked to one hip and a hand raised in a confident beckon, the other with arms crossed and chin up, heads apart',
+  'both squared to the camera with arms folded and feet set, radiating calm command, a clear gap between their heads',
+  'one with hands on hips and elbows out, the other with arms crossed and a boot forward, both squared off and commanding, a gap between their heads',
+  'both raising open hands toward the sky as if calling down the storm, chests lifted, faces forward, a clear gap between their heads',
+  'one leaning forward with fists set on a rail or ledge glaring boldly ahead, the other standing tall beside them with arms crossed, heads clearly apart',
+  'both striding forward toward the camera side by side with a wide gap between them, confident purposeful gait, arms swinging, heads clearly apart',
+  'one flinging an arm skyward in a rallying cry, the other with a fist pressed to the chest, both fierce and forward, heads clearly apart',
+  'both standing broad and still like carved warrior statues, arms crossed and jaws set, faces to the camera, a clear gap between them',
+  'one gesturing grandly outward with an open hand presenting the scene, the other standing proud with hands clasped behind the back, heads apart',
+  'both mid-cheer with arms thrown up and mouths open in a shout of triumph, a clear gap between their heads',
+  'one arm raised and flexed in a triumphant strongman pose, the other with hands on hips and a fierce grin, heads kept apart',
+  'both bracing low with weight set and arms out as if against motion, eyes blazing forward, a clear gap between their heads',
+  'one striking a confident contrapposto with a hand on the hip, the other mirrored on the opposite hip, both proud and forward, heads apart',
+  'both throwing their heads back mid-laugh with hands on their own hips, joyful and open, a clear gap between their heads',
+  'one with an arm extended pointing boldly off to the side, the other tracking the gesture with a firm confident stance, heads apart',
+  'both planted with legs apart and hands clasped in front at the waist like commanders at ease, chests out, a clear gap between them',
+  'one leaning a shoulder back in a cocky half-turn to the camera, the other standing straight and proud, a clear gap between them',
+  'both standing tall with one arm raised overhead in a bold hail to the camera, feet planted wide, heads clearly apart',
+  'one pressing a fist into an open palm in front of the chest, the other with arms crossed high, both resolute and facing forward, a gap between their heads',
+  'both crouched in low athletic ready stances with hands braced on the knees, chins up and eyes locked to the camera, a clear gap between their heads',
+  'one with both arms raised wide and fists clenched in exultation, the other pumping a single fist, both triumphant and forward, heads apart',
+];
+
 /**
  * Pick a dual action seed based on the plus_one's relationship.
- * 18% PLAYFUL (fun/goofy) for everyone. Otherwise: partner/significant_other →
- * 30% romantic / 70% companion; everyone else → companion.
+ *
+ * Default nightly roll (no forcePool): 15% PLAYFUL (fun/goofy) + 40% DYNAMIC
+ * (hero-grade cinematic) + 45% CLASSIC (chore-pruned). Within the classic slice,
+ * partner/significant_other → 30% romantic / 70% companion; everyone else →
+ * companion. Additive: dynamic joins the rotation strongly without erasing the
+ * good existing poses; cast dreams read epic, not like a posed costume photo.
  *
  * `forcePool` overrides the relationship roll — used by QA + by CREATE (which
  * forces partner/companion so a user's specific prompt never gets a random goofy
- * pose). Nightly uses the default, which includes the 18% playful mix.
+ * or heroic pose).
  */
 export interface DualActionPools {
   companion: string[];
   partner: string[];
   playful: string[];
+  dynamic: string[];
 }
 
 export function pickDualAction(
   relationship: string | undefined,
-  forcePool?: 'partner' | 'companion' | 'playful',
+  forcePool?: 'partner' | 'companion' | 'playful' | 'dynamic',
   // DB-loadable arrays (POSE_POOLS_DB_MIGRATION_PLAN.md). Default = the code
-  // arrays — omitting `pools` is byte-identical to the pre-DB behavior. The
-  // DISTRIBUTION below never moves to the DB.
+  // arrays. The DISTRIBUTION below never moves to the DB.
   pools: DualActionPools = {
     companion: DUAL_ACTIONS_COMPANION,
     partner: DUAL_ACTIONS_PARTNER,
     playful: DUAL_ACTIONS_PLAYFUL,
+    dynamic: DUAL_ACTIONS_DYNAMIC,
   }
 ): string {
-  if (forcePool === 'playful') {
-    return pools.playful[Math.floor(Math.random() * pools.playful.length)];
-  }
-  if (forcePool === 'partner') {
-    return pools.partner[Math.floor(Math.random() * pools.partner.length)];
-  }
-  if (forcePool === 'companion') {
-    return pools.companion[Math.floor(Math.random() * pools.companion.length)];
-  }
-  if (Math.random() < 0.18) {
-    return pools.playful[Math.floor(Math.random() * pools.playful.length)];
-  }
+  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  if (forcePool === 'playful') return pick(pools.playful);
+  if (forcePool === 'partner') return pick(pools.partner);
+  if (forcePool === 'companion') return pick(pools.companion);
+  if (forcePool === 'dynamic') return pick(pools.dynamic);
+
+  const r = Math.random();
+  if (r < 0.15) return pick(pools.playful); // 15% fun/goofy
+  if (r < 0.55) return pick(pools.dynamic); // 40% hero-grade cinematic
+  // 45% CLASSIC slice (pruned of chores): partners get a 30/70 romantic/companion split.
   const isPartner = relationship === 'partner' || relationship === 'significant_other';
-  if (isPartner && Math.random() < 0.3) {
-    return pools.partner[Math.floor(Math.random() * pools.partner.length)];
-  }
-  return pools.companion[Math.floor(Math.random() * pools.companion.length)];
+  if (isPartner && Math.random() < 0.3) return pick(pools.partner);
+  return pick(pools.companion);
 }

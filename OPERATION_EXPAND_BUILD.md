@@ -3,7 +3,65 @@
 <!-- ============================================================================ -->
 ## ▶ RESUME HERE (read first on any new session / after compaction)
 
-**ACTIVE: autonomous OVERNIGHT run** (Kevin went to bed 2026-08-24; see
+<!-- ============================================================================ -->
+### ⭐ CURRENT STATE v10 (2026-08-25 PM) — QUALITY RESET + 4+4 IA locked; resuming seed expansion under the NEW bar
+This block supersedes the older ACTIVE/FINALIZATION blocks below (kept for history). Read it first.
+
+**WHY A RESET:** A Viking quality deep-dive with Kevin surfaced SYSTEMIC quality bugs that the overnight
+"✅ passed" renders (v1–v9) predate. So those grades are stale — re-verify each card under the NEW bar as we
+touch it. All fixes are GLOBAL (shipped + deployed; **COMMIT PENDING** — Phase 0):
+- **Poses** — new `dynamic` hero-grade swap-safe pool + gentle prune of chore/farm poses + additive reweight
+  (dual 15/40/45 playful/dynamic/classic · solo 40/30/30). Files: `_shared/pools/{dual_actions,single_actions,
+  actionPoseLoader}.ts`; DB `action_poses` pools `dynamic`/`dynamic_solo` (migration **446** pending dashboard
+  apply — code fallback already works). Killed the "monument-touching" companion pose.
+- **Wardrobe** — costume-designer directive in `characterSlotPrompt.ts` (anchored branch): "dress each to look
+  their best, never frumpy/villager/drab." Lifts EVERY location's cast wardrobe.
+- **Model** — `flux-2-flex` clamped → `flux-2-pro` on DUAL swaps (25%→9% fail) in `nightly-dreams`.
+  `flux-1.1-pro-ultra` KEPT (12.9%, normal — it was one bad render, not a bad model).
+- **Spot dedup** — the "always touching a rock" bug = near-duplicate CONCEPT bloat (Viking had 25% stone
+  spots). NEW REQUIRED STEP: semantic-dedup every pool so no one concept exceeds ~8%. Viking fixed (26 stone
+  spots → 5). The gen script does NOT semantically dedup — build an automated sweep (Phase 1).
+- Test `classicPoolPickers.test.ts` updated; jest + deno typecheck green.
+- **Viking Age = the re-QA'd template** (rock rooted out, dynamic poses, de-frumped wardrobe → epic longship
+  renders). Use it as the quality reference.
+
+**4+4 IA LOCKED (Kevin):** picker collapses 12 categories → **8 (4 per tab)**. Spec: `LOCATION_CONSOLIDATION_
+PLAN.md` (⭐ top block) + mock `scratchpad/picker-grouping.html`.
+- Real World: **Cities & Landmarks · Around the World · Nature · Eras**
+- Dream Worlds: **Fantasy** (High Fantasy + Gothic) · **Whimsical** · **Sci-Fi** · **Adventure** (Wild West +
+  Heroes-broadened-to-6)
+
+**THE PLAN (current roadmap — supersedes the overnight ACTIVE block):**
+- **Phase 0 — protect shipped work:** commit the quality files (list at bottom of this block) + apply mig 446 +
+  delete temp scripts.
+- **Phase 1 — dedup sweep:** build one automated semantic-dedup tool; run across ALL existing pools; it becomes
+  the QC gate for every new seed batch.
+- **Phase 2 — SEED THE ~15 EMPTY CARDS (go-live blocker — 0 spots today):** cyberpunk megacity, mars colony,
+  space station, ancient elven city, enchanted forest, dwarven fortress, underwater city atlantis, crystal
+  caverns, mermaid lagoon, floating sky islands, cloud kingdom, fairy tea party, pastel dreamscape, enchanted
+  toy shop, mountain summit, border cantina. **Prove on 2 (cyberpunk megacity + ancient elven city) at 25 spots
+  → Kevin sign-off → scale the rest.** Full playbook pipeline per card + dedup gate + QA rounds to ≥4.5.
+- **Phase 3 — finish consolidations:** Through Time 3 (1920s speakeasy→Roaring 20s, pirate cove→Age of Pirates,
+  medieval village→Medieval Times), Wild West 8→5 (Frontier Town merge), Gothic (Cursed Cathedral→Haunted
+  Castle; Transylvania empty), Heroes→6 broaden. (Broaden = relax SUBJECT_RULE + EXPAND spots, never rename-only.)
+- **Phase 4 — apply 4+4 grouping:** remap `picker_category` on every card to the 8 buckets + update
+  `LocationPickerStep.tsx` SECTION_META to the 8.
+- **Phase 5 — QA sweep + go-live:** re-verify every visible card under the new bar → flip `admin_only=false` →
+  ship picker UI. (Also revert the announcement dev-hacks + `audience='all'` before any release.)
+- Critical path: Phase 1 → 2 → 4 → live. Phase 3 parallel to 2. Phase 0 = now.
+
+**IMMEDIATE NEXT:** awaiting Kevin's go on Phase 0 (commit) + Phase 2 proof (cyberpunk megacity + ancient elven
+city). Nothing flips live before Kevin's visual pass.
+
+**PHASE-0 COMMIT SET (uncommitted, tested+deployed):** `supabase/functions/_shared/pools/{dual_actions,
+single_actions,actionPoseLoader}.ts` · `supabase/functions/_shared/characterSlotPrompt.ts` ·
+`supabase/functions/nightly-dreams/index.ts` · `__tests__/lib/classicPoolPickers.test.ts` ·
+`supabase/migrations/446_dynamic_pose_pool.sql` · `LOCATION_CONSOLIDATION_PLAN.md` · `OPERATION_EXPAND_BUILD.md`.
+NOT in this commit (separate efforts, carry dev-hacks): announcement files, `LocationPickerStep.tsx` redesign.
+Temp `scripts/_tmp-*.js` = delete, never commit.
+<!-- ============================================================================ -->
+
+**ACTIVE (HISTORICAL — overnight run 2026-08-24; see v10 above for current):** autonomous run (see
 [[project_expand_dreams_autonomous_run]]). Task: seed + QA **every new location category**, then it's ready
 for Kevin's review tomorrow.
 

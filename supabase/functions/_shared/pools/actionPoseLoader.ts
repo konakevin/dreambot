@@ -13,9 +13,15 @@ import {
   DUAL_ACTIONS_COMPANION,
   DUAL_ACTIONS_PARTNER,
   DUAL_ACTIONS_PLAYFUL,
+  DUAL_ACTIONS_DYNAMIC,
   type DualActionPools,
 } from './dual_actions.ts';
-import { CANDID_ACTIONS, PORTRAIT_ACTIONS, type SingleActionPools } from './single_actions.ts';
+import {
+  CANDID_ACTIONS,
+  PORTRAIT_ACTIONS,
+  DYNAMIC_ACTIONS,
+  type SingleActionPools,
+} from './single_actions.ts';
 
 export interface LoadedActionPoses {
   dual: ActiveDualAction[];
@@ -44,9 +50,14 @@ const CLASSIC_CODE: Record<string, string[]> = {
   companion: DUAL_ACTIONS_COMPANION,
   partner: DUAL_ACTIONS_PARTNER,
   playful: DUAL_ACTIONS_PLAYFUL,
+  dynamic: DUAL_ACTIONS_DYNAMIC,
   candid: CANDID_ACTIONS,
   portrait: PORTRAIT_ACTIONS,
+  dynamic_solo: DYNAMIC_ACTIONS,
 };
+
+// Solo pools (fetched with cast_type='solo'); everything else = dual.
+const SOLO_POOLS = new Set(['candid', 'portrait', 'dynamic_solo']);
 
 // Bespoke pools fetched for BOTH cast types (scenario pose_pool values).
 const BESPOKE_POOL_KEYS = ['glamour'];
@@ -60,7 +71,7 @@ export async function loadClassicPools(supabase: SupabaseClient): Promise<Loaded
   try {
     // One query PER pool — each far under PostgREST's silent 1000-row cap.
     for (const pool of Object.keys(CLASSIC_CODE)) {
-      const castType = pool === 'candid' || pool === 'portrait' ? 'solo' : 'dual';
+      const castType = SOLO_POOLS.has(pool) ? 'solo' : 'dual';
       const { data, error } = await supabase
         .from('action_poses')
         .select('text')
@@ -89,8 +100,13 @@ export async function loadClassicPools(supabase: SupabaseClient): Promise<Loaded
     // any failure → whatever already resolved + code arrays for the rest
   }
   classicCache = {
-    dual: { companion: out.companion, partner: out.partner, playful: out.playful },
-    single: { candid: out.candid, portrait: out.portrait },
+    dual: {
+      companion: out.companion,
+      partner: out.partner,
+      playful: out.playful,
+      dynamic: out.dynamic,
+    },
+    single: { candid: out.candid, portrait: out.portrait, dynamic: out.dynamic_solo },
     bespoke,
   };
   return classicCache;

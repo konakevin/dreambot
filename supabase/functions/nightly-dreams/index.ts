@@ -284,9 +284,10 @@ Deno.serve(async (req) => {
   // persisted yet when the first dream renders).
   const force_place = (body.force_place as string) || undefined;
   const force_dual_pool =
-    (body.force_dual_pool as 'partner' | 'companion' | undefined) || undefined;
+    (body.force_dual_pool as 'partner' | 'companion' | 'playful' | 'dynamic' | undefined) ||
+    undefined;
   const force_single_pool =
-    (body.force_single_pool as 'portrait' | 'candid' | undefined) || undefined;
+    (body.force_single_pool as 'portrait' | 'candid' | 'dynamic' | undefined) || undefined;
   // Force scene cluster picking from a specific sub-pool: 'activity' or
   // 'spot'. Default (undefined) blends both.
   const force_cluster_kind = (body.force_cluster_kind as 'activity' | 'spot' | null) || undefined;
@@ -998,6 +999,14 @@ Deno.serve(async (req) => {
       if (isSingleHumanFaceSwap && m === 'black-forest-labs/flux-1.1-pro-ultra') {
         m = 'black-forest-labs/flux-1.1-pro';
         fallbackReasons.push('single_ultra_clamped_to_pro');
+      }
+      // Dual-swap flex clamp: flux-2-flex fails the dual split ~25% of the time
+      // (2× the pool average) → clamp to flux-2-pro, a reliable painterly sibling
+      // (~9%). Left in rotation for scene/solo, where it renders fine. (2026-08-25,
+      // Kevin — measured from ai_generation_log dual fallback_reasons.)
+      if (isDualFaceSwap && m === 'black-forest-labs/flux-2-flex') {
+        m = 'black-forest-labs/flux-2-pro';
+        fallbackReasons.push('dual_flex_clamped_to_pro');
       }
       return m;
     };

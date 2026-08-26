@@ -67,7 +67,6 @@ export const CANDID_ACTIONS: string[] = [
   'cartwheeling across open field with legs and arms making perfect wheel',
   'pirouetting with arms gracefully curved and one leg extended behind',
   'crouching behind large mushroom with one hand braced on the cap, conspiratorial grin',
-  'sitting in field braiding flower stems with tongue poking out concentratedly',
   'perched on picnic table with feet on bench and sandwich halfway eaten',
   'standing in shallow creek with pants cuffed and hands cupped catching water',
   'lying on stomach reading book propped on elbows in grass',
@@ -78,7 +77,6 @@ export const CANDID_ACTIONS: string[] = [
   'sitting on dock with legs swinging over water and fishing line cast',
   'leaning over bridge railing dropping leaves into current below playfully',
   'standing with arms akimbo surveying garden beds with satisfied expression',
-  'kneeling transplanting seedlings with dirt-covered hands working gently in soil',
   'hunched over sketchbook with pencil moving quickly across page in concentration',
   'sitting cross-legged sorting through collection of interesting rocks and minerals',
   'standing on ladder picking apples with basket hooked over one arm',
@@ -88,25 +86,18 @@ export const CANDID_ACTIONS: string[] = [
   'standing in wheat field with hands running through grain stalks thoughtfully',
   'crouched photographing butterfly with camera held steady and body perfectly still',
   'sitting on hay bale with legs dangling and hands gripping edge',
-  'kneeling beside garden bed pulling weeds with sleeves rolled up determinedly',
-  'sitting on porch step shelling peas into bowl with methodical movements',
   'standing at easel with palette in one hand and brush poised',
   'crouched beside tide pool with net poised and ready, peering intently into the water',
-  'sitting on fallen tree whittling stick with pocket knife and careful strokes',
   'standing with arms full of firewood walking toward cabin with steady pace',
   'kneeling beside stream filling water bottle with clear mountain water',
   'sitting on rock sorting through backpack contents spread on ground systematically',
   'standing at cliff edge with journal open writing with wind ruffling pages',
   'crouched building sandcastle with bucket and shovel working on turret details',
   'sitting in hammock with drink in hand and book balanced on stomach',
-  'standing with metal detector sweeping sand in methodical search pattern',
-  'kneeling beside vegetable garden harvesting tomatoes into wicker basket carefully',
   'sitting on porch swing with feet tucked up and mug steaming',
   'standing with arms spread feeling ocean breeze with peaceful expression',
   'crouched beside pond feeding ducks with bread crumbs scattered from hand',
   'sitting on tailgate with guitar across lap and fingers finding chords',
-  'kneeling beside flower bed deadheading roses with small scissors precisely',
-  'sitting on bench with crossword puzzle and pen poised over the page in thought',
   'crouched beside creek skipping stones with careful sidearm throwing motion',
   'sitting on museum steps with guidebook open and finger tracing map',
   'standing at overlook with camera raised capturing panoramic mountain view',
@@ -126,84 +117,34 @@ export const CANDID_ACTIONS: string[] = [
   'standing at telescope adjusting focus knobs to see distant celestial objects',
   'crouched beside herb garden pinching basil leaves and inhaling fresh scent',
   'sitting on a stump with a harmonica resting in one hand, relaxed and content',
-  'standing at loom working threads with shuttle moving in rhythmic pattern',
   'kneeling beside flower pressing petals into book with careful gentle pressure',
   'sitting on diving board with legs swinging over pool water below',
-  'standing at pottery wheel shaping clay with hands covered in slip',
   'sitting on porch rocker with cat purring in lap and hand stroking',
   'standing at grape arbor reaching up to test ripeness of hanging clusters',
   'kneeling beside strawberry patch selecting perfect berries for small basket',
-  'sitting on dock with crab net ready to scoop catch from water',
-  'standing at beehive wearing protective gear and holding smoker carefully',
-  'crouched beside fossil embedded in rock using small brush cleaning sediment',
   'sitting on tree swing with rope wound around wrist and feet barely touching',
-  'standing at blacksmith anvil with hammer raised ready to shape glowing metal',
   'kneeling beside injured bird with gentle hands offering water from cupped palm',
-  'sitting on porch with corn ears in lap removing kernels methodically',
-  'standing at river with fly fishing rod casting line in graceful arc',
   'crouched beside mushroom patch identifying edible varieties with field guide reference',
-  'sitting on milk stool with bucket positioned for morning dairy cow routine',
-  'standing at spinning wheel with fiber feeding through fingers into growing thread',
   'kneeling beside newly planted tree watering roots with old watering can',
-  'standing at honey extractor turning handle while golden liquid flows into jars',
   'crouched beside rabbit hutch offering fresh lettuce leaves through wire mesh',
-  'sitting on boat dock with crab trap rope in hands checking morning catch',
-  'standing at cider press turning wheel to extract juice from crushed apples',
-  'kneeling beside chicken coop collecting warm eggs in basket lined with cloth',
-  'sitting on hay wagon with reins in hands guiding gentle draft horses',
-  'standing at maple tree with tap and bucket collecting sweet sap',
-  'crouched beside compost pile turning decomposing materials with pitchfork efficiently',
-  'sitting on porch with butter churn between knees working cream into solid',
-  'standing at sheep pen with shears ready for annual wool harvest',
-  'kneeling beside bee box with smoker calming hive before honey collection',
   'sitting on tractor seat with hands on steering wheel surveying planted fields',
-  'standing at grain silo operating auger to move harvested wheat into storage',
-  'crouched beside duck pond collecting eggs hidden in tall grass around edges',
   'sitting on barn beam with rope and pulley system raising hay bales',
   'standing at outdoor kitchen with cast iron pot stirring hearty stew',
-  'kneeling beside herb spiral harvesting sage and rosemary for evening meal',
-  'sitting on milk house steps with separator parts cleaning before next use',
-  'standing at root cellar organizing preserved vegetables in wooden crates systematically',
   'crouched beside cold frame checking winter vegetables for readiness and quality',
   'sitting on front porch with wool in lap spinning fiber into yarn',
-  'standing at smokehouse checking ham and bacon curing in aromatic cedar smoke',
-  'kneeling beside rain barrel positioning downspout to catch precious roof water',
   'sitting on chopping block with axe across knees taking break from splitting',
   'standing at outdoor oven with long paddle retrieving fresh baked bread loaves',
-  'crouched beside medicinal herb garden harvesting echinacea flowers for winter tea',
-  'sitting on well cover with bucket and rope drawing cold water up',
   'standing at fence line with wire stretchers repairing winter damage efficiently',
-  'kneeling beside fruit trees grafting new varieties onto established root stock',
   'sitting on wagon tongue with harness in hands preparing horses for field',
-  'standing at granary with scoop measuring grain portions for animal feed',
-  'crouched beside maple syrup boiler tending fire to maintain proper cooking temperature',
-  'sitting on milking stool with warm bucket positioned collecting morning dairy production',
-  'standing at tool shed with whetstone sharpening blades for upcoming harvest season',
   'kneeling beside seed bed transplanting tender seedlings with careful root protection',
-  'sitting on porch step with account ledger recording farm expenses and income',
   'standing at weather station checking instruments and recording daily atmospheric conditions',
-  'crouched beside irrigation ditch adjusting water flow to different field sections',
-  'sitting on combine seat with controls ready to begin harvesting mature grain',
-  'standing at produce stand arranging fresh vegetables in attractive display baskets',
   'kneeling beside grape vines pruning excess growth to concentrate fruit development',
-  'sitting on hay mower with reins guiding horses through tall grass meadow',
-  'standing at sausage grinder with meat mixture ready for casing and preservation',
   'crouched beside fish pond checking water quality and feeding ornamental carp',
-  'sitting on dairy truck with clipboard recording delivery quantities and customer orders',
-  'standing at canning station with jars and lids preparing seasonal vegetable preservation',
   'kneeling beside flower beds collecting seed pods for next year planting season',
-  'sitting on threshing floor with flail separating grain kernels from wheat stalks',
-  'standing at cream separator with handle turning to divide milk into components',
   'crouched beside rabbit warren checking breeding pairs and counting new baby rabbits',
-  'sitting on hay rake with horses pulling equipment across recently cut grass',
   'standing at outdoor market with scales weighing produce for customer purchase transactions',
   'kneeling beside fruit trees with ladder positioned for efficient apple and pear',
   'sitting on wagon bench with market goods loaded for weekly town selling',
-  'standing at grain elevator with conveyor belt moving harvested crops to storage',
-  'crouched beside beehives with veil and gloves checking colony health and production',
-  'sitting on tractor with cultivator attached preparing soil for spring planting season',
-  'standing at farmers market with cash box making change for satisfied customers',
-  'kneeling beside greenhouse benches transplanting seedlings into larger growing containers systematically',
 ];
 
 export const PORTRAIT_ACTIONS: string[] = [
@@ -369,26 +310,70 @@ export const PORTRAIT_ACTIONS: string[] = [
   'sitting on a wooden step with both feet on lower level, hands on upper step',
 ];
 
+// DYNAMIC pool — cinematic, powerful, energetic SOLO stances for hero-grade
+// renders. Face stays forward for the swap; body language ONLY, prop-free and
+// scene-neutral so the wardrobe + setting carry the theme. Always paired with an
+// epic backdrop (needsEpicBackdrop = true) — the pose and the scenery both sell
+// the moment. This is the pool that kills the "posed for a costume photo" look.
+// (2026-08-25, Kevin)
+export const DYNAMIC_ACTIONS: string[] = [
+  'standing in a wide, grounded power stance with arms crossed and chin raised, squared to the camera, radiating quiet command',
+  'one boot planted up on a rock with a forearm resting across the knee, leaning toward the camera with an easy confident grin',
+  'arms flung wide overhead in triumph, head back mid-shout of victory',
+  'windswept and leaning into a strong gust, cloak and hair streaming to one side, jaw set and eyes forward',
+  'standing tall with fists loosely clenched at the sides and shoulders squared, chest out, owning the frame',
+  'a single fist raised high in triumph, the other hand on the hip, fierce grin to the camera',
+  'mid-turn toward the camera as if just called, weight on the back foot, coat swinging',
+  'arms spread wide and open as if taking in a vast view, chest lifted, face to the camera',
+  'one hand raised in a bold hail to the camera, feet planted wide, commanding presence',
+  'standing with weight cocked to one hip and a confident half-smirk, thumbs hooked in the belt',
+  'both arms flexed in a triumphant strongman pose with a broad grin to the camera',
+  'flinging an arm skyward in a rallying cry, chest out, fierce and forward',
+  'crouched in a low athletic ready stance with a hand braced on the knee, chin up and eyes locked to the camera',
+  'leaning forward with fists set on a ledge, glaring boldly ahead at the camera',
+  'arms folded high across the chest with a slight swagger, jaw set, unshakeable',
+  'one arm thrown wide presenting the scene with a showman flourish, proud stance',
+  'standing broad and still like a carved hero, arms crossed and gaze steady to the camera',
+  'raising open hands toward the sky as if calling down the storm, chest lifted, face forward',
+  'hands on hips with elbows out and boots planted wide, a triumphant grin to the camera',
+  'mid-laugh with head tilted back and hands on the hips, open and joyful, radiant',
+  'striding forward toward the camera with a confident purposeful gait, arms swinging',
+  'pressing a fist into an open palm at the chest, resolute and squared to the camera',
+  'a hand pressed to the chest and the other arm sweeping out in an inspired heroic flourish',
+  'weight low and knees bent bracing as if against motion, arms out, eyes blazing forward',
+  'chin lifted and arms crossed, a slow confident smile spreading, utterly self-assured',
+  'one fist raised to the sky and the other planted on the hip, a champion victory stance',
+  'leaning a shoulder back in a cocky half-turn to the camera, hands loose and ready',
+  'arms raised wide and triumphant with fists clenched, head high in exultation',
+  'standing tall at the edge of a height with the wind pulling at the clothes, arms folded, gaze to the camera',
+  'one hand raised palm-out in a bold command to the camera, feet set wide, unflinching',
+];
+
 export interface SingleActionPools {
   candid: string[];
   portrait: string[];
+  dynamic: string[];
 }
 
 export function pickSingleAction(
-  forcePool?: 'portrait' | 'candid',
-  // DB-loadable arrays; default = code arrays (byte-identical when omitted).
-  // needsEpicBackdrop stays derived from POOL membership — never a DB column.
-  pools: SingleActionPools = { candid: CANDID_ACTIONS, portrait: PORTRAIT_ACTIONS }
-): SingleAction {
-  const isPortrait = forcePool ? forcePool === 'portrait' : Math.random() < 0.5;
-  if (isPortrait) {
-    return {
-      pose: pools.portrait[Math.floor(Math.random() * pools.portrait.length)],
-      needsEpicBackdrop: true,
-    };
+  forcePool?: 'portrait' | 'candid' | 'dynamic',
+  // DB-loadable arrays; default = code arrays. needsEpicBackdrop stays derived
+  // from POOL membership — never a DB column. Default nightly roll: 40% dynamic
+  // + 30% portrait + 30% candid, so solo cast dreams read hero-grade while the
+  // (chore-pruned) classic pools keep real presence.
+  pools: SingleActionPools = {
+    candid: CANDID_ACTIONS,
+    portrait: PORTRAIT_ACTIONS,
+    dynamic: DYNAMIC_ACTIONS,
   }
-  return {
-    pose: pools.candid[Math.floor(Math.random() * pools.candid.length)],
-    needsEpicBackdrop: false,
-  };
+): SingleAction {
+  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  if (forcePool === 'dynamic') return { pose: pick(pools.dynamic), needsEpicBackdrop: true };
+  if (forcePool === 'portrait') return { pose: pick(pools.portrait), needsEpicBackdrop: true };
+  if (forcePool === 'candid') return { pose: pick(pools.candid), needsEpicBackdrop: false };
+
+  const r = Math.random();
+  if (r < 0.4) return { pose: pick(pools.dynamic), needsEpicBackdrop: true }; // 40% hero-grade
+  if (r < 0.7) return { pose: pick(pools.portrait), needsEpicBackdrop: true }; // 30% portrait
+  return { pose: pick(pools.candid), needsEpicBackdrop: false }; // 30% candid (pruned of chores)
 }
