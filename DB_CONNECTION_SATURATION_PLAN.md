@@ -203,12 +203,15 @@ restores burst headroom; simplest and most reliable. **Recommended as the primar
 the direct-connection gain is modest at +30; if the baseline keeps creeping, pair with T2.2/T2.3. But the
 +2 GB RAM + CPU is a real capacity bump on its own, and $45/mo is trivial against app-down incidents.)
 
-**T2.2 — Put direct-connection consumers on the Supavisor transaction pooler (port 6543).**
-The app + scripts already go through PostgREST (itself a pool), so they're partially insulated — but any
-consumer that opens a **direct** Postgres connection (session mode) should move to the **transaction-mode
-pooler**, where short queries share a tiny connection set instead of each pinning a backend. Audit which
-paths use direct connections (edge functions, any agent using a connection string, `db-direct-probe.js`) and
-move them. Reduces the non-PostgREST footprint under load.
+**T2.2 — ~~Supavisor transaction pooler~~ — AUDITED, DOES NOT APPLY (2026-08-26).**
+A full connection audit (repo-wide code sweep + live `db_health_log.connections[]` by user/app/addr) proved
+**100% of our code — app, every `scripts/*.js`, all 16 edge functions, the busy agent — connects through
+PostgREST** (the `authenticator → postgrest` connections). The ONLY direct-Postgres connector in the repo is
+`scripts/db-direct-probe.js`, a hand-run diagnostic (never in prod/crons); `ci.yml:5432` is the CI local
+container. Everything else on the box is Supabase-managed (Realtime as `supabase_admin` on an external host —
+this is what the "external IPv6 clients" in §3/§10 actually are, NOT our code; plus pgbouncer/pg_cron/pg_net/
+Storage/exporter). **Supavisor pools DIRECT connections; we make none — routing to it is a no-op.** The
+equivalent lever for our all-PostgREST setup is **T2.3 (cap PostgREST's `db-pool`)**, not a separate pooler.
 
 **T2.3 — Cap PostgREST's pool (`db-pool`) so it can't starve the others.**
 PostgREST scales to ~31+ under load; if its `db-pool` max is set high relative to `max_connections` minus
@@ -274,6 +277,9 @@ prevent reaching this.
 Peak by_application (08:00): `postgrest:28, (unknown):8, realtime_*:~13, Storage:4, pg_cron:4, pg_net:1,
 exporter:1`.
 Peak by_client_addr (08:00): `::1:36 (internal), (local):8, 127.0.0.1:3, 2 external IPv6 clients @ 6 each`.
+**Correction (2026-08-26 audit):** those "external IPv6 clients" are **Supabase Realtime** (`realtime_connect`
+/ `realtime_subscription_manager*` as DB user `supabase_admin`, on a separate host) — NOT our code and NOT
+the busy agent. Our entire load is the internal `authenticator → postgrest` connections. See T2.2.
 
 Forensics source: `db_health_log` (migration 372/381), queried live 2026-08-25. Monitor:
 `scripts/check-db-health.js` + `.github/workflows/db-health-monitor.yml`.
