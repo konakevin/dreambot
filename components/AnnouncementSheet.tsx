@@ -3,29 +3,30 @@
  * (migration 333, ANNOUNCEMENTS_PLAN.md). Content (title, body, optional hero
  * image, optional CTA route) comes entirely from the announcements row, so
  * every future announcement is a dashboard INSERT — this component never
- * changes. Mirrors the intro-sheet conventions (pageSheet Modal, GradientTitle,
- * GradientButton CTA).
+ * changes.
+ *
+ * 2026-08-25: redesigned from a full-screen page into a centered OVERLAY card
+ * over a semitransparent mask, so the feed stays visible behind it (feels like
+ * a moment on top of the app, not a takeover). Title sits above the hero image.
  *
  * Seen semantics: BOTH the CTA and dismiss mark seen (an announcement shows
  * once, period). markSeen is called by the parent via onClose.
  */
 
-import { View, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import * as nav from '@/lib/navigate';
 import type { Announcement } from '@/hooks/useAnnouncement';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { GradientTitle } from '@/components/GradientTitle';
 import { GradientButton } from '@/components/GradientButton';
-import { ResponsiveContainer } from '@/components/ResponsiveContainer';
 
 interface Props {
   announcement: Announcement;
-  /** Fired on ANY dismissal (CTA or "Not now") — parent marks seen. */
+  /** Fired on ANY dismissal (CTA, "Not now", or backdrop tap) — parent marks seen. */
   onClose: () => void;
 }
 
@@ -40,80 +41,83 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
   };
 
   return (
-    <Modal visible presentationStyle="fullScreen" animationType="slide" onRequestClose={onClose}>
-      <SafeAreaView style={s.root} edges={['top', 'bottom']}>
-        <ResponsiveContainer style={{ flex: 1 }}>
-          <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-            <GradientTitle size={26} align="center">
-              {announcement.title}
-            </GradientTitle>
-            {announcement.image_url ? (
-              <Image
-                source={{ uri: announcement.image_url }}
-                style={s.hero}
-                contentFit="cover"
-                cachePolicy="memory-disk"
-              />
-            ) : (
-              <Text style={s.heroEmoji}>✨</Text>
-            )}
-            <Text style={s.body}>{announcement.body}</Text>
-          </ScrollView>
-          <View style={s.footer}>
-            {announcement.cta_label && announcement.cta_route ? (
-              <>
-                <GradientButton label={announcement.cta_label} onPress={handleCta} />
-                <TouchableOpacity onPress={onClose} hitSlop={10} style={s.dismiss}>
-                  <Text style={s.dismissText}>Not now</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <GradientButton label="Got it" onPress={onClose} />
-            )}
-          </View>
-        </ResponsiveContainer>
-      </SafeAreaView>
+    <Modal visible transparent animationType="fade" statusBarTranslucent onRequestClose={() => {}}>
+      {/* Semitransparent mask over the feed. Dismiss is the "Not now" / CTA button
+          ONLY — tapping outside the card does nothing (Kevin 2026-08-25). */}
+      <View style={s.overlay}>
+        <View style={s.card}>
+          <GradientTitle size={22} align="center">
+            {announcement.title}
+          </GradientTitle>
+
+          {announcement.image_url ? (
+            <Image
+              source={{ uri: announcement.image_url }}
+              style={s.hero}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+            />
+          ) : (
+            <Text style={s.heroEmoji}>✨</Text>
+          )}
+
+          <Text style={s.body}>{announcement.body}</Text>
+
+          {announcement.cta_label && announcement.cta_route ? (
+            <>
+              <GradientButton label={announcement.cta_label} onPress={handleCta} />
+              <TouchableOpacity onPress={onClose} hitSlop={10} style={s.dismiss}>
+                <Text style={s.dismissText}>Not now</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <GradientButton label="Got it" onPress={onClose} />
+          )}
+        </View>
+      </View>
     </Modal>
   );
 }
 
 const s = StyleSheet.create({
-  root: {
+  overlay: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.72)',
     alignItems: 'center',
-    paddingHorizontal: 28,
-    paddingVertical: verticalScale(24),
-    gap: verticalScale(16),
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  card: {
+    width: '100%',
+    maxWidth: 400,
+    backgroundColor: colors.card,
+    borderRadius: 24,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    paddingHorizontal: 22,
+    paddingTop: verticalScale(22),
+    paddingBottom: verticalScale(16),
+    gap: verticalScale(14),
   },
   hero: {
     width: '100%',
     aspectRatio: 4 / 3,
     borderRadius: 16,
-    backgroundColor: colors.card,
+    backgroundColor: colors.surface,
   },
   heroEmoji: {
-    fontSize: fontScale(56),
+    fontSize: fontScale(52),
     textAlign: 'center',
   },
   body: {
     color: 'rgba(255,255,255,0.92)',
-    fontSize: fontScale(16),
-    lineHeight: fontScale(24),
+    fontSize: fontScale(15),
+    lineHeight: fontScale(22),
     textAlign: 'center',
-  },
-  footer: {
-    paddingHorizontal: 28,
-    paddingBottom: verticalScale(8),
-    gap: verticalScale(12),
   },
   dismiss: {
     alignItems: 'center',
-    paddingVertical: verticalScale(6),
+    paddingVertical: verticalScale(4),
   },
   dismissText: {
     color: colors.textSecondary,

@@ -197,6 +197,16 @@ export default function HomeScreen() {
   // mount below so the first switch is usually already cached.
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useDreamFeed(activeTab);
+  // Hold any announcement until the feed has loaded + painted, so it never pops
+  // over a blank/warming feed — it should land ON TOP of the visible app, not
+  // replace the loading screen (Kevin 2026-08-25).
+  const [feedReady, setFeedReady] = useState(false);
+  useEffect(() => {
+    if (isLoading) return;
+    // Just long enough for the feed to paint its first frame, then show.
+    const t = setTimeout(() => setFeedReady(true), 200);
+    return () => clearTimeout(t);
+  }, [isLoading]);
   const pinnedPost = useFeedStore((s) => s.pinnedPost);
   const setPinnedPost = useFeedStore((s) => s.setPinnedPost);
   const pendingPostId = useFeedStore((s) => s.pendingPostId);
@@ -414,7 +424,7 @@ export default function HomeScreen() {
       {/* DB-driven announcement takeover (migration 333) — highest-priority
           unseen active row, max one per session. Yields to the username nudge
           so two sheets can't stack. */}
-      {announcement && !showUsernameNudge && (
+      {announcement && !showUsernameNudge && feedReady && (
         <AnnouncementSheet
           announcement={announcement}
           onClose={() => markAnnouncementSeen(announcement.id)}

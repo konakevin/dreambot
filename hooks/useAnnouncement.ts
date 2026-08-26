@@ -44,6 +44,7 @@ export function useAnnouncement() {
   const { data: announcement = null } = useQuery({
     queryKey: ['announcement', user?.id],
     queryFn: async (): Promise<Announcement | null> => {
+      // At most one announcement per app session (module latch).
       if (shownThisSession) return null;
       // RLS already scopes to active rows inside the live window.
       const [{ data: rows, error }, { data: seen }] = await Promise.all([
@@ -73,6 +74,7 @@ export function useAnnouncement() {
       shownThisSession = true;
       qc.setQueryData(['announcement', user?.id], null);
       if (!user) return;
+      // Persist "seen" so the announcement never re-shows for this account.
       supabase
         .from('announcement_seen')
         .insert({ user_id: user.id, announcement_id: id })
