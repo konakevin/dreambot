@@ -27,10 +27,29 @@ const isValidBiomeConfig = (bc) =>
   bc && Array.isArray(bc.TIME) && Array.isArray(bc.WEATHER) && Array.isArray(bc.CAMERA) &&
   Array.isArray(bc.PHENOMENA) && Array.isArray(bc.BANS) && typeof bc.SUBJECT_RULE === 'string';
 
+// Retry a PostgREST read a few times — under a large sequential sweep the shared
+// connection pool can transiently return null on a burst (pool saturation, not a
+// data problem). Without this the gate false-alarms on whichever card lands first.
+async function readWithRetry(fn, tries = 3) {
+  for (let i = 0; i < tries; i++) {
+    const { data, error } = await fn();
+    if (!error && data != null) return data;
+    if (i < tries - 1) await new Promise((r) => setTimeout(r, 250 * (i + 1)));
+  }
+  return null;
+}
+
 async function inspect(name) {
-  const { data: c } = await sb.from('location_cards').select('*').eq('name', name).maybeSingle();
+  const c = await readWithRetry(() =>
+    sb.from('location_cards').select('*').eq('name', name).maybeSingle(),
+  );
   if (!c) return { name, fatal: ['card MISSING'] };
-  const { data: spots } = await sb.from('location_iconic_spots').select('spot_kind,quality_tier,is_active,character_eligible,pure_scene_eligible').eq('location_key', name);
+  const spots = await readWithRetry(() =>
+    sb
+      .from('location_iconic_spots')
+      .select('spot_kind,quality_tier,is_active,character_eligible,pure_scene_eligible')
+      .eq('location_key', name),
+  );
   const active = (spots || []).filter((s) => s.is_active);
   const kinds = {}; for (const s of active) kinds[s.spot_kind] = (kinds[s.spot_kind] || 0) + 1;
   const bc = c.biome_config || {};

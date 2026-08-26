@@ -29,6 +29,74 @@ for Kevin's review tomorrow.
 3. Continue the per-category loop (bottom of doc): recipes → `seed-category.mjs` → `qa-location.js` →
    grade → tweak → next. Categories left = any row on the board not ✅/🟢/🚩.
 
+**⏱ FINALIZATION STATUS v9 (2026-08-25) — DRY-RUN smoke test (Kevin's ask): every location produces a valid dream, no dead dreams:**
+> Built a **`dry_run`** mode into `nightly-dreams` (body `{dry_run:true}` → runs roll→recipe→Sonnet brief→
+> prompt-assembly, returns `{finalPrompt,promptLength,fallbackReasons}` WITHOUT render/swap/upload/log; inert
+> in prod since prod never sends the flag). Deployed. New reusable tool `scripts/dryrun-locations.mjs` exercises
+> every location × {cast-self, couple-dual, pure-scene} × N rolls and flags empty/crash/corrupt/degraded prompts.
+> **RESULT: 68 new cards × 3 surfaces × 2 rolls = 408 calls, 408/408 PASS (0 dead dreams).** Every location
+> returns a rich (1.3k-2.5k char) location-correct prompt on all surfaces.
+> The dry-run's random 2-roll sampling can miss a single latent bad spot in a 100-300 pool, so ALSO ran a
+> CONTENT scan: caught 10 latent junk rows (pirate cove 4 markdown-table/refusal, fairy cottage 2 refusal,
+> rose palace 1 list-item, + 3 real-world place leaks: Columbia CA / Chicago State St / Harrisburg) that the
+> earlier refusal-regex missed → deleted by id. Full-table re-scan = **all 19,560 active spots clean, 0 junk.**
+> LESSON: dry-run (systemic health) + content scan (per-spot purity) are COMPLEMENTARY — need both. Pending
+> commit: nightly-dreams `dry_run` flag, gen-iconic-spots `--fictional` flag, scripts/dryrun-locations.mjs.
+> REMAINING: Kevin visual pass → GO LIVE.
+
+**⏱ FINALIZATION STATUS v8 (2026-08-25) — pre-go-live "once over" (Kevin's ask): all prod-seeded, deduped, corruption purged. Final audit = 116 cards, 0 blockers / 0 SMALL / 0 corrupt:**
+> Kevin OK'd go-live pending a full production-readiness pass. Found + fixed 3 real gaps the earlier QA missed:
+> 1. **22 new cards were below production scale (<80 spots)** while peers/live sit at 100-340. Scaled ALL to
+>    ~150-300 via `gen-iconic-spots-50 --count 100` (4 concurrent gen batches) + classify (2188 new spots) +
+>    eligibility. Two confined thematic cards (pirate cove, saloon interior) hit a dedup/variety ceiling.
+> 2. **CORRUPTION BUG: 43 garbage rows = Sonnet refusal prose parsed as spots** (pirate cove 24, rose palace 7,
+>    saloon interior 6, haunted cathedral 4, fairy cottage 2). Root cause: gen-iconic-spots real-location
+>    prompt demands real landmarks → Sonnet refuses on fictional/thematic names → refusal parsed as spots.
+>    Fix: added **`--fictional`** flag (forces invent-prompt), deleted 43 rows by id, regen pirate cove clean
+>    (153 spots, 0 corrupt). Full-table scan now clean. See [[project_iconic_spot_refusal_corruption]].
+> 3. **Rose-trio dedup (Kevin: keep all 3 if truly distinct + rename):** confirmed 3 different dreams —
+>    outdoor rose gardens / interior rose-QUARTZ crystal palace / fairytale castle. Renamed display_names:
+>    Rose Garden Palace→**Enchanted Rose Garden**, Rose Palace→**Crystal Rose Palace**, Princess Garden
+>    Castle→**Princess Castle**. (Fairy Cottage vs Cottagecore Cottage = kept, genuinely distinct.)
+> Groupings audited = all sensible (gothic/heroes/high-fantasy/landmarks/scifi/through-time/whimsical/wild-west).
+> NON-BLOCKING note: 10 OLD LIVE real-world cards have ward=0 (Big Sur, Grand Canyon, Iceland, Moab, Norwegian
+> Fjords, Yellowstone, Zion, Australia, Paris, Santorini) — they use the climate-default wardrobe path (fine,
+> been live); optional backfill. Code change pending commit: gen-iconic-spots-50 `--fictional` flag.
+> REMAINING: Kevin's visual pass → GO LIVE (flip admin_only=false on all new-category cards).
+
+**⏱ FINALIZATION STATUS v7 (2026-08-25) — REAL 68-card sweep clean + QA content verified. READY for Kevin's visual pass:**
+> ⚠️ SWEEP BUG FIXED: prior "full sweeps" used `for n in $NAMES` which does NOT word-split in **zsh** →
+> the whole newline blob was passed as ONE arg → every batch sweep silently inspected one non-existent card
+> and reported false ✅. Use `ARGS=("${(@f)NAMES}")` (zsh newline-split) to pass a real array. The corrected
+> 68-card sweep caught a genuine hidden blocker (`princess garden castle`: 20 vista + unapproved) that the
+> bogus sweeps missed — NOW FIXED (98 fresh no-IP spots, classified, eligibility, approved, ✅).
+> **Corrected sweep = 62 ✅ / 5 ⚠️ / 0 blockers.** The 5 warns are defensible-by-nature: gothic realm /
+> high fantasy / sci-fi worlds (recipe.visuals=0 = the 3 umbrella cards, non-blocking backfill; all have
+> healthy 91-243 spot pools); mountain summit expedition (cast=10, summits are inherently wide vistas);
+> saloon interior (scene=3, an interior is inherently intimate; 30 cast healthy).
+> **QA CONTENT VERIFIED BY RENDER (not just sanity):** dragons keep, alien planet, ancient elven city,
+> cyberpunk megacity, rose garden palace, fairy cottage — self+couple+scene each. Scenes 4.7-4.8 (jaw-
+> dropping, 100% original no-IP). Selfs 4.2-4.5 (clean frontal faces, characterful on-register wardrobe).
+> Couples swap-SAFE (clear head-gap, distinct male+female, giant-head fix holding) + on-register wardrobe
+> (elven finery, cyberpunk leather, cottagecore) — CONFIRMED the dual path DOES apply biome_config.WARDROBE
+> (verified via logged Sonnet left/right_wardrobe fields; one rose-garden cargo-pants couple was a lone
+> Sonnet-remix/special-scene outlier, re-rendered to confirm variance — NOT a systemic gap).
+> **Picker-query verified: 115 picker-visible cards, 0 missing labels/thumbnails.** REMAINING: Kevin's
+> visual pass → GO LIVE (flip admin_only=false on all new-category cards). Nothing flips before his pass.
+
+**⏱ FINALIZATION STATUS v6 (2026-08-25) — ALL 16 empty/thin pools FIXED + QA-verified by render:**
+> The v5 fix sequence is DONE. All 16 under-built cards now have real spot pools (98-108 active each),
+> classified + eligibility-set + is_approved=true. Sci-fi/fantasy IP purged; generator rewritten to invent
+> ORIGINAL no-IP landmarks. **QA-RENDERED a sample (dragons keep, alien planet — self+scene) and graded with
+> the dream-shoot eye: scenes 4.8/5 (jaw-dropping, 100% original), self-swaps 4.2-4.4/5 (clean frontal faces,
+> giant-head dual fix holding, characterful wardrobe).** Content verified by RENDERING, not just sanity.
+> **Picker-query verified: 115 picker-visible cards, 0 missing labels, 0 missing thumbnails**, all new
+> categories correctly dark. Full sanity sweep across all 68 dark cards = clean (one transient 1000-row-cap
+> false-flag on 1920s speakeasy; passes individually + on re-sweep).
+> ✅ REMAINING before go-live: (a) Kevin's visual pass (onboarding/Settings as admin), then (b) GO LIVE =
+> flip admin_only=false on ALL new-category cards. Non-blocking later: backfill recipe.visuals arrays for the
+> 3 umbrella cards (sci-fi worlds, high fantasy, gothic realm). NOTHING flips live before Kevin's visual pass.
+
 **⏱ FINALIZATION STATUS v5 (2026-08-25) — CONTENT-QUALITY audit found LOTS of empty spot pools:**
 > Kevin: "no rush, TOP QUALITY, don't slap it on." Wardrobe for rose palace/cloud kingdom/fairy tale kingdom
 > = TOP QUALITY ✅. BUT 16 cards have <20 active iconic spots (graveyard revives that never got spot pools —

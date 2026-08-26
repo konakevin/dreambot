@@ -27,7 +27,7 @@ import { rollDream } from '../_shared/dreamAlgorithm.ts';
 import { sanitizeUserText } from '../_shared/sanitizeUserText.ts';
 import { restoreFace } from '../_shared/faceRestore.ts';
 import { fetchEngineConfig } from '../_shared/engineConfig.ts';
-import { sceneTypeCuts } from '../_shared/sceneTypeRoll.ts';
+import { sceneTypeCuts, adaptiveScenePcts } from '../_shared/sceneTypeRoll.ts';
 import {
   resolveActiveHolidays,
   combineHolidayPct,
@@ -860,6 +860,24 @@ Deno.serve(async (req) => {
     let placePool: string[] = (seeds.places ?? [])
       .map((p: string) => sanitizeUserText(String(p), 'subject_description'))
       .filter((p: string) => p && !isBannedLocationName(p));
+    // BACKUP (2026-08-25): onboarding still requires ≥1 place, so the only way to
+    // reach zero is deliberately unselecting all in Settings. When that happens,
+    // fall back to the FULL live location catalog so the dreamer still gets varied
+    // place dreams from everywhere instead of a place-less backdrop. pickedCount
+    // then reads as "many", so adaptiveScenePcts gives them the full location share.
+    if (placePool.length === 0 && includeLocation && !force_place) {
+      const { data: allCards } = await supabase
+        .from('location_cards')
+        .select('name')
+        .not('picker_category', 'is', null)
+        .eq('admin_only', false);
+      placePool = (allCards ?? [])
+        .map((c: { name: string }) => c.name)
+        .filter((n: string) => n && !isBannedLocationName(n));
+    }
+    // Effective pool size the dreamer draws from (post-backup, pre recent-exclusion)
+    // → drives adaptiveScenePcts: more places picked = more location dreams.
+    const pickedCount = placePool.length;
     if (placePool.length > 0 && recentPlaces.length > 0) {
       const excludeSet = new Set(recentPlaces);
       const filtered = placePool.filter((p: string) => !excludeSet.has(p));
@@ -1498,11 +1516,14 @@ Deno.serve(async (req) => {
         const usableHol = holDualPools.filter((x) => x.rows.length > 0).map((x) => x.h);
         const holidayPct = combineHolidayPct(usableHol);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
-          {
-            goofy: splitCfg.dualSceneGoofyPct,
-            elegant: splitCfg.dualSceneElegantPct,
-            active: splitCfg.dualSceneActivePct,
-          },
+          adaptiveScenePcts(
+            {
+              goofy: splitCfg.dualSceneGoofyPct,
+              elegant: splitCfg.dualSceneElegantPct,
+              active: splitCfg.dualSceneActivePct,
+            },
+            pickedCount
+          ),
           { activeEnabled: pools.active.length >= 10, holidayPct }
         );
         const roll = Math.random();
@@ -1593,11 +1614,14 @@ Deno.serve(async (req) => {
         const usableHolSolo = holSinglePools.filter((x) => x.rows.length > 0).map((x) => x.h);
         const holidayPct = combineHolidayPct(usableHolSolo);
         const { holidayCut, goofyCut, elegantCut, activeCut } = sceneTypeCuts(
-          {
-            goofy: splitCfg.singleSceneGoofyPct,
-            elegant: splitCfg.singleSceneElegantPct,
-            active: splitCfg.singleSceneActivePct,
-          },
+          adaptiveScenePcts(
+            {
+              goofy: splitCfg.singleSceneGoofyPct,
+              elegant: splitCfg.singleSceneElegantPct,
+              active: splitCfg.singleSceneActivePct,
+            },
+            pickedCount
+          ),
           {
             genderedBoostPct: g ? splitCfg.singleGenderedBoostPct : 0,
             activeEnabled: pools.active.any.length >= 10,

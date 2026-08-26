@@ -186,6 +186,7 @@ export type Database = {
           cta_label: string | null;
           cta_route: string | null;
           ends_at: string | null;
+          existing_users_only: boolean;
           id: string;
           image_url: string | null;
           is_active: boolean;
@@ -202,6 +203,7 @@ export type Database = {
           cta_label?: string | null;
           cta_route?: string | null;
           ends_at?: string | null;
+          existing_users_only?: boolean;
           id: string;
           image_url?: string | null;
           is_active?: boolean;
@@ -218,6 +220,7 @@ export type Database = {
           cta_label?: string | null;
           cta_route?: string | null;
           ends_at?: string | null;
+          existing_users_only?: boolean;
           id?: string;
           image_url?: string | null;
           is_active?: boolean;
@@ -3625,6 +3628,7 @@ export type Database = {
     };
     Functions: {
       accept_invite: { Args: { p_game_id: string }; Returns: Json };
+      account_created_before: { Args: { ts: string }; Returns: boolean };
       admin_ban_user: { Args: { p_user_id: string }; Returns: undefined };
       admin_db_connections: {
         Args: never;

@@ -44,6 +44,9 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
       <SafeAreaView style={s.root} edges={['top', 'bottom']}>
         <ResponsiveContainer style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+            <GradientTitle size={26} align="center">
+              {announcement.title}
+            </GradientTitle>
             {announcement.image_url ? (
               <Image
                 source={{ uri: announcement.image_url }}
@@ -54,9 +57,6 @@ export function AnnouncementSheet({ announcement, onClose }: Props) {
             ) : (
               <Text style={s.heroEmoji}>✨</Text>
             )}
-            <GradientTitle size={26} align="center">
-              {announcement.title}
-            </GradientTitle>
             <Text style={s.body}>{announcement.body}</Text>
           </ScrollView>
           <View style={s.footer}>

@@ -1,14 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  LayoutAnimation,
-  UIManager,
-  Platform,
-} from 'react-native';
+import { View, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,33 +10,27 @@ import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
-import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
+import { GradientTitle, TITLE_SIZE, BRAND_GRADIENT } from '@/components/GradientTitle';
 import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { supabase } from '@/lib/supabase';
-
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
 
 const MIN_REQUIRED = 1;
 // Effectively uncapped (2026-06-18, Kevin) — high practical bound only, since the
 // picker is a plain ScrollView (not virtualized). Nothing downstream limits
 // location count. See store/onboarding.ts MAX_LOCATIONS.
 const MAX_ONBOARDING = 100;
-const TILES_COLLAPSED = 4;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
 const TILE_PADDING = 20;
-// Two tiles per row, edge-to-edge across the content area. (Used to leave
-// room for a colored "section rail" on the left; removed 2026-06-03 in the
-// brand-color cleanup.)
+// Two tiles per row, edge-to-edge across the content area.
 const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - TILE_GAP) / 2);
 const TILE_HEIGHT = verticalScale(110);
+const CAT_CARD_HEIGHT = verticalScale(118);
 
 // Neutral dark gradient used as a tile placeholder when a location has no
-// thumbnail URL — same surface→deeper drop used elsewhere in the app, so
-// no per-section color coding.
+// thumbnail URL.
 const PLACEHOLDER_GRADIENT: [string, string] = [colors.surface, colors.background];
 
 interface LocationItem {
@@ -65,11 +50,11 @@ interface LocationSection {
   items: LocationItem[];
 }
 
-// Tier banners split the picker into real Earth places vs imagined worlds
-// (Operation Dream Location Expansion, 2026-08-24). Order = real first.
+// Level 1 of the picker: two "worlds" the user chooses between (a segmented
+// control), so they never wade through 100+ places at once. Real first.
 const TIER_META: { id: LocationTier; title: string }[] = [
-  { id: 'real', title: 'Real Places' },
-  { id: 'imagined', title: 'Imagined Worlds' },
+  { id: 'real', title: 'Real World' },
+  { id: 'imagined', title: 'Dream Worlds' },
 ];
 
 // Section metadata (icons / titles / descriptions / order) lives in code
@@ -89,12 +74,19 @@ interface SectionMeta {
 // with no cards in the DB simply doesn't render, so a new imagined category can be added
 // here ahead of its cards (Operation Dream Location Expansion).
 const SECTION_META: SectionMeta[] = [
-  // ── Real Places ──────────────────────────────────────────────
+  // ── Real World ───────────────────────────────────────────────
   {
     id: 'iconic_cities',
-    title: 'Cities & Countries',
-    icon: 'globe-outline',
-    description: 'Famous cities and country-wide destinations',
+    title: 'Cities',
+    icon: 'business-outline',
+    description: 'Famous cities and skylines around the world',
+    tier: 'real',
+  },
+  {
+    id: 'countries_cultures',
+    title: 'Countries & Cultures',
+    icon: 'earth-outline',
+    description: 'Countrywide escapes and rich cultures',
     tier: 'real',
   },
   {
@@ -118,7 +110,17 @@ const SECTION_META: SectionMeta[] = [
     description: 'The world’s great monuments and natural wonders',
     tier: 'real',
   },
-  // ── Imagined Worlds ──────────────────────────────────────────
+  {
+    // Through Time = real places in the past (Ancient Rome, Feudal Japan, …), so
+    // it lives under Real World, not Dream Worlds (2026-08-25 Kevin). Keeps the
+    // two worlds symmetric at 6 categories each.
+    id: 'through_time',
+    title: 'Through Time',
+    icon: 'hourglass-outline',
+    description: 'Ancient empires and bygone eras',
+    tier: 'real',
+  },
+  // ── Dream Worlds ─────────────────────────────────────────────
   // (fantasy_worlds dissolved 2026-08-25 — it mixed real places (Paris Café,
   // Cherry Blossoms, Japanese Garden) with fantasy; cards redistributed to
   // coherent sections.)
@@ -155,13 +157,6 @@ const SECTION_META: SectionMeta[] = [
     title: 'Wild West',
     icon: 'trail-sign-outline',
     description: 'Outlaws, saloons, and the rugged frontier',
-    tier: 'imagined',
-  },
-  {
-    id: 'through_time',
-    title: 'Through Time',
-    icon: 'hourglass-outline',
-    description: 'Ancient empires and bygone eras',
     tier: 'imagined',
   },
   {
@@ -220,14 +215,12 @@ function LocationTile({
 
       {/* numberOfLines={1}: the label is bottom-anchored inside a fixed-height,
           overflow:hidden tile. Without a line cap, OS "Larger Text" (or a long
-          name) wraps it upward and the top lines clip against the tile edge.
-          One line + tail-ellipsis bounds the growth. */}
+          name) wraps it upward and the top lines clip against the tile edge. */}
       <Text style={s.tileLabel} numberOfLines={1} ellipsizeMode="tail">
         {item.label}
       </Text>
 
-      {/* Dark-launch marker — only admins ever receive admin_only cards, so this
-          badge only appears for them (QA aid; mig 444). */}
+      {/* Dark-launch marker — only admins ever receive admin_only cards (mig 444). */}
       {item.adminOnly && (
         <View style={s.adminBadge}>
           <Text style={s.adminBadgeText}>ADMIN</Text>
@@ -250,9 +243,13 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
   const isEditing = useOnboardingStore((st) => st.isEditing);
   // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
   const isAdmin = useAuthStore((st) => st.isAdmin);
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   const [sections, setSections] = useState<LocationSection[]>([]);
+  // Level 1 — which world's categories are shown. Level 3 — which category is
+  // drilled into (null = the category-browse grid).
+  const [activeTier, setActiveTier] = useState<LocationTier>('real');
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [resetVisible, setResetVisible] = useState(false);
 
   const canProceed = places.length >= MIN_REQUIRED;
   const atMax = places.length >= MAX_ONBOARDING;
@@ -264,9 +261,8 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
     let query = supabase
       .from('location_cards')
       .select('name, display_name, picker_category, picker_sort_order, thumbnail_url, admin_only')
-      // is_approved removed 2026-06-06 (Architect audit): vestigial column,
-      // 54% of cards had is_approved=false and were silently invisible to
-      // onboarding. picker_category NOT NULL is the real visibility gate.
+      // is_approved removed 2026-06-06 (Architect audit): vestigial column.
+      // picker_category NOT NULL is the real visibility gate.
       .not('picker_category', 'is', null);
     // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
     if (!isAdmin) query = query.eq('admin_only', false);
@@ -285,7 +281,6 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
         });
         byCategory.set(row.picker_category, items);
       }
-      // Build section list in the order defined by SECTION_META
       const built: LocationSection[] = SECTION_META.filter((m) => byCategory.has(m.id)).map(
         (m) => ({
           id: m.id,
@@ -310,55 +305,184 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
     [places, atMax, toggleLocation]
   );
 
-  const toggleExpand = useCallback((sectionId: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedSections((prev) => {
-      const next = new Set(prev);
-      if (next.has(sectionId)) next.delete(sectionId);
-      else next.add(sectionId);
-      return next;
-    });
-  }, []);
+  const selectedInSection = useCallback(
+    (section: LocationSection) => section.items.filter((i) => places.includes(i.key)).length,
+    [places]
+  );
 
-  const renderSection = (section: LocationSection) => {
-    const isExpanded = expandedSections.has(section.id);
-    const visibleItems =
-      isExpanded || section.items.length <= TILES_COLLAPSED
-        ? section.items
-        : section.items.slice(0, TILES_COLLAPSED);
-    const hasMore = section.items.length > TILES_COLLAPSED;
-    const sectionKeys = section.items.map((i) => i.key);
-    const selectedInSection = sectionKeys.filter((k) => places.includes(k)).length;
-    const allInSectionSelected = selectedInSection === section.items.length;
+  const confirmReset = useCallback(() => {
+    if (places.length > 0) setResetVisible(true);
+  }, [places.length]);
+  const doReset = useCallback(() => {
+    setResetVisible(false);
+    if (places.length > 0) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      toggleAllLocations([...places]);
+    }
+  }, [places, toggleAllLocations]);
 
-    return (
-      <View key={section.id} style={s.section}>
-        <View style={s.sectionHeaderText}>
-          <View style={s.sectionTitleRow}>
-            <Ionicons name={section.icon} size={18} color={colors.accent} />
-            <Text style={s.sectionTitle}>{section.title}</Text>
+  // Level 1 + 2 — segmented world tabs over a grid of category cards.
+  const renderBrowse = () => (
+    <>
+      <View style={s.tabBar}>
+        {TIER_META.map((tier) => {
+          const on = activeTier === tier.id;
+          return (
             <TouchableOpacity
+              key={tier.id}
+              style={[s.tabItem, !on && s.tabItemInactive]}
+              activeOpacity={0.85}
               onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                toggleAllLocations(sectionKeys);
+                if (activeTier === tier.id) return;
+                Haptics.selectionAsync();
+                setActiveTier(tier.id);
               }}
-              activeOpacity={0.7}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              style={s.selectAllBtn}
             >
-              <Text style={s.selectAllText}>
-                {allInSectionSelected ? 'Deselect all' : 'Select all'}
-              </Text>
+              {on && (
+                <LinearGradient
+                  colors={BRAND_GRADIENT}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={StyleSheet.absoluteFillObject}
+                />
+              )}
+              <Text style={[s.tabText, on ? s.tabTextOn : s.tabTextOff]}>{tier.title}</Text>
             </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {/* Running total across BOTH worlds + a start-over. In Settings this is the
+          only place the grand total shows (no onboarding footer there). */}
+      <View style={s.summaryBar}>
+        <Text style={s.summaryText}>
+          <Text style={s.summaryCount}>{places.length}</Text>{' '}
+          {places.length === 1 ? 'place' : 'places'} selected
+        </Text>
+        {places.length > 0 && (
+          <TouchableOpacity
+            onPress={confirmReset}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            activeOpacity={0.7}
+          >
+            <Text style={s.resetText}>Reset</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      <ScrollView
+        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={s.catGrid}>
+          {sections.filter((sec) => sec.tier === activeTier).map(renderCategoryCard)}
+        </View>
+      </ScrollView>
+    </>
+  );
+
+  const renderCategoryCard = (section: LocationSection) => {
+    const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
+    const picks = selectedInSection(section);
+    return (
+      <TouchableOpacity
+        key={section.id}
+        style={[s.catCard, picks > 0 && s.catCardSelected]}
+        activeOpacity={0.85}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          setOpenCategory(section.id);
+        }}
+      >
+        {repThumb ? (
+          <ExpoImage
+            source={{ uri: repThumb }}
+            style={[StyleSheet.absoluteFillObject, s.catImg]}
+            contentFit="cover"
+            transition={200}
+          />
+        ) : (
+          <LinearGradient
+            colors={PLACEHOLDER_GRADIENT}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFillObject}
+          />
+        )}
+        <LinearGradient
+          colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.82)']}
+          style={StyleSheet.absoluteFillObject}
+        />
+
+        {picks > 0 && (
+          <View style={s.catPickBadge}>
+            <Ionicons name="heart" size={12} color="#08210E" />
+            <Text style={s.catPickText}>{picks}</Text>
           </View>
-          <Text style={s.sectionDesc}>{section.description}</Text>
-          <Text style={[s.sectionBadge, selectedInSection === 0 && s.sectionBadgeHidden]}>
-            {selectedInSection} selected
+        )}
+
+        <View style={s.catBody}>
+          <Text style={s.catTitle} numberOfLines={1}>
+            {section.title}
+          </Text>
+          <Text style={s.catMeta}>
+            {section.items.length} {section.items.length === 1 ? 'place' : 'places'}
           </Text>
         </View>
 
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color="rgba(255,255,255,0.85)"
+          style={s.catChev}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  // Level 3 — one category, all its places, focused.
+  const renderDetail = (section: LocationSection) => {
+    const sectionKeys = section.items.map((i) => i.key);
+    const allSelected = sectionKeys.every((k) => places.includes(k));
+    return (
+      <ScrollView
+        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={s.detailHeader}>
+          <TouchableOpacity
+            style={s.backBtn}
+            activeOpacity={0.7}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setOpenCategory(null);
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+          <View style={s.detailTitleWrap}>
+            <Text style={s.detailTitle} numberOfLines={1}>
+              {section.title}
+            </Text>
+            <Text style={s.detailDesc} numberOfLines={1}>
+              {section.description}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              toggleAllLocations(sectionKeys);
+            }}
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={s.selectAllText}>{allSelected ? 'Deselect all' : 'Select all'}</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={s.tileGrid}>
-          {visibleItems.map((item) => (
+          {section.items.map((item) => (
             <LocationTile
               key={item.key}
               item={item}
@@ -368,30 +492,18 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
             />
           ))}
         </View>
-
-        {hasMore && (
-          <TouchableOpacity
-            style={s.seeMoreBtn}
-            onPress={() => toggleExpand(section.id)}
-            activeOpacity={0.7}
-          >
-            <Text style={s.seeMoreText}>
-              {isExpanded ? 'Show less' : `Show all ${section.items.length}`}
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      </ScrollView>
     );
   };
 
+  const openSection = openCategory ? sections.find((sec) => sec.id === openCategory) : null;
+
   return (
     <View style={shared.root}>
-      {/* Sticky header — sits outside the ScrollView so the location grid
-          scrolls underneath it (matches BotSelectorStep's pattern). */}
+      {/* Sticky header — sits outside the ScrollView so the grid scrolls under it. */}
       <View style={s.stickyHeader}>
-        {/* In Settings the gradient wordmark is the "Locations" nav-bar title
-            (app/settings/locations.tsx), so demote this to plain text; onboarding
-            (isEditing=false) keeps the gradient hero. Mirrors the Dream Cast screen. */}
+        {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
+            plain text; onboarding keeps the gradient hero. */}
         {isEditing ? (
           <TitleText
             size={18}
@@ -414,29 +526,11 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           </GradientTitle>
         )}
         <Text style={[shared.heroSubtitle, { textAlign: 'center' }]}>
-          Real-world escapes, fairy-tale realms, faraway planets. Pick your favorites and we’ll
-          weave you right into the dream. ✨
+          Choose the places you’d love to dream about.
         </Text>
       </View>
 
-      <ScrollView
-        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
-        showsVerticalScrollIndicator={false}
-      >
-        {TIER_META.map((tier) => {
-          const tierSections = sections.filter((sec) => sec.tier === tier.id);
-          if (tierSections.length === 0) return null;
-          return (
-            <View key={tier.id}>
-              <View style={s.tierBanner}>
-                <Text style={s.tierTitle}>{tier.title}</Text>
-                <View style={s.tierRule} />
-              </View>
-              {tierSections.map(renderSection)}
-            </View>
-          );
-        })}
-      </ScrollView>
+      {openSection ? renderDetail(openSection) : renderBrowse()}
 
       {!isEditing && (
         <OnboardingFooter
@@ -447,73 +541,157 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           counterMet={canProceed}
         />
       )}
+
+      <ConfirmDialog
+        visible={resetVisible}
+        title="Start over?"
+        message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}.`}
+        confirmLabel="Reset"
+        onConfirm={doReset}
+        onCancel={() => setResetVisible(false)}
+      />
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  // paddingBottom was 150 (reservation for the old absolute footer); the
-  // footer is now in-flow so a small bottom buffer is all that's needed.
   scrollContent: {
     paddingTop: verticalScale(12),
     paddingBottom: verticalScale(16),
     paddingHorizontal: TILE_PADDING,
   },
 
-  // Sticky header that sits above the ScrollView (matches BotSelectorStep).
   stickyHeader: {
     paddingHorizontal: TILE_PADDING,
     paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(14),
+    paddingBottom: verticalScale(12),
     backgroundColor: colors.background,
   },
 
-  // Tier banner ("Real Places" / "Imagined Worlds") that groups the sections
-  // under it (Operation Dream Location Expansion).
-  tierBanner: {
+  // Level 1 — world tabs (segmented control).
+  tabBar: {
+    flexDirection: 'row',
+    gap: 4,
+    marginHorizontal: TILE_PADDING,
+    marginBottom: verticalScale(4),
+    padding: 4,
+    borderRadius: 999,
+    backgroundColor: colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.accentBorder,
+  },
+  tabItem: {
+    flex: 1,
+    height: verticalScale(38),
+    borderRadius: 999,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // The inactive segment stays a visible, tappable chip (subtle raised fill +
+  // legible text) so users see there's a second world to switch to, rather than
+  // reading as dead space (2026-08-25 Kevin).
+  tabItemInactive: { backgroundColor: 'rgba(255,255,255,0.08)' },
+  tabText: { fontSize: fontScale(14), fontWeight: '700' },
+  tabTextOff: { color: 'rgba(255,255,255,0.92)' },
+  tabTextOn: { color: '#08080F' },
+
+  // Running total across BOTH worlds + a start-over control.
+  summaryBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: TILE_PADDING,
+    marginTop: verticalScale(8),
+    marginBottom: verticalScale(2),
+  },
+  summaryText: { fontSize: fontScale(13), fontWeight: '600', color: colors.subtleOnDark },
+  summaryCount: { color: '#5EEAD4', fontWeight: '800' },
+  resetText: { fontSize: fontScale(13), fontWeight: '700', color: colors.accent },
+
+  // Level 2 — category cards.
+  catGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: TILE_GAP,
+  },
+  catCard: {
+    width: TILE_WIDTH,
+    height: CAT_CARD_HEIGHT,
+    borderRadius: 18,
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: colors.accentBorder,
+  },
+  // A category with picks glows teal — scannable at a glance in the grid.
+  catCardSelected: {
+    borderColor: '#5EEAD4',
+    shadowColor: '#5EEAD4',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.45,
+    shadowRadius: 9,
+    elevation: 6,
+  },
+  catImg: { opacity: 0.62 },
+  catBody: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 12,
+  },
+  catTitle: {
+    fontSize: fontScale(15),
+    fontWeight: '800',
+    color: '#FFFFFF',
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  catMeta: {
+    fontSize: fontScale(12),
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: verticalScale(1),
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  catPickBadge: {
+    position: 'absolute',
+    top: 9,
+    right: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(3),
+    borderRadius: 999,
+    backgroundColor: '#5EEAD4',
+  },
+  catPickText: { fontSize: fontScale(12), fontWeight: '800', color: '#08210E' },
+  catChev: { position: 'absolute', bottom: 12, right: 12 },
+
+  // Level 3 — category detail header.
+  detailHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     marginBottom: verticalScale(14),
-    marginTop: verticalScale(4),
   },
-  tierTitle: {
-    fontSize: fontScale(13),
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-    color: colors.subtleOnDark,
-  },
-  tierRule: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.subtleOnDark,
-    opacity: 0.3,
-  },
-
-  section: { marginBottom: verticalScale(28) },
-  sectionHeaderText: { marginBottom: verticalScale(10) },
-  sectionTitleRow: {
-    flexDirection: 'row',
+  backBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 10,
     alignItems: 'center',
-    gap: 8,
-    marginBottom: verticalScale(3),
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.accentBorder,
   },
-  sectionTitle: { fontSize: fontScale(19), fontWeight: '700', color: '#FFFFFF' },
-  sectionDesc: { fontSize: fontScale(14), color: colors.subtleOnDark, lineHeight: fontScale(20) },
-  sectionBadge: {
-    fontSize: fontScale(12),
-    fontWeight: '600',
-    color: colors.accent,
-    marginTop: verticalScale(4),
-    // minHeight (not a hard height) reserves the row so layout doesn't jump when
-    // 0 are selected, but still lets the line grow under OS "Larger Text" instead
-    // of clipping the glyphs.
-    minHeight: 18,
-  },
-  sectionBadgeHidden: { opacity: 0 },
+  detailTitleWrap: { flex: 1, minWidth: 0 },
+  detailTitle: { fontSize: fontScale(18), fontWeight: '800', color: '#FFFFFF' },
+  detailDesc: { fontSize: fontScale(13), color: colors.subtleOnDark, marginTop: verticalScale(1) },
 
-  selectAllBtn: { marginLeft: 'auto', paddingVertical: verticalScale(2) },
   selectAllText: {
     fontSize: fontScale(13),
     fontWeight: '600',
@@ -588,7 +766,4 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  seeMoreBtn: { paddingTop: verticalScale(10), paddingBottom: verticalScale(4) },
-  seeMoreText: { fontSize: fontScale(14), fontWeight: '500', color: colors.accent },
 });
