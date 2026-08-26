@@ -34,8 +34,12 @@ PLAN.md` (⭐ top block) + mock `scratchpad/picker-grouping.html`.
 **THE PLAN (current roadmap — supersedes the overnight ACTIVE block):**
 - **Phase 0 — protect shipped work:** commit the quality files (list at bottom of this block) + apply mig 446 +
   delete temp scripts.
-- **Phase 1 — dedup sweep:** build one automated semantic-dedup tool; run across ALL existing pools; it becomes
-  the QC gate for every new seed batch.
+- **Phase 1 — dedup sweep:** ✅ DONE (revised). Built `scripts/dedup-spot-pools.mjs` as a **DIAGNOSTIC
+  FLAGGER**, NOT a mass auto-thinner. LESSON: raw token frequency AND a Haiku judge both OVER-flag legitimate
+  dominant themes (called Hawaii beaches / Bora Bora lagoons "bloat" — would gut good pools). The systemic
+  "always touching a rock" repetition was the POSE (fixed globally), not the spot pools. So the tool reports
+  candidates for human review; `--write` is gated to ONE explicit `--location` and only right for a genuine
+  static-PROP bloat (Viking rune stones — already fixed). No fleet-wide thinning.
 - **Phase 2 — SEED THE ~15 EMPTY CARDS (go-live blocker — 0 spots today):** cyberpunk megacity, mars colony,
   space station, ancient elven city, enchanted forest, dwarven fortress, underwater city atlantis, crystal
   caverns, mermaid lagoon, floating sky islands, cloud kingdom, fairy tea party, pastel dreamscape, enchanted
