@@ -196,10 +196,12 @@ amplification. (Pure `.yml` edits.)
 
 ### Tier 2 — Structural headroom (the real fix; needs your infra decision)
 
-**T2.1 — Bump compute Small → Medium (highest-confidence fix).**
-Medium raises `max_connections` substantially (~90 → ~200+) and adds CPU. This directly restores headroom so
-normal bursts (agents, crons, traffic) never approach the ceiling. Costs money; simplest and most reliable.
-**Recommended as the primary structural fix.**
+**T2.1 — Bump compute Small → Medium (highest-confidence fix). +$45/mo (~$15 → ~$60).**
+Medium: **90 → 120 direct connections** (headroom ~34 → ~64, nearly double), **2 GB → 4 GB RAM**, more CPU
+(so renders/queries finish faster → connections release sooner), and pooler clients 400 → 600. Directly
+restores burst headroom; simplest and most reliable. **Recommended as the primary structural fix.** (Note:
+the direct-connection gain is modest at +30; if the baseline keeps creeping, pair with T2.2/T2.3. But the
++2 GB RAM + CPU is a real capacity bump on its own, and $45/mo is trivial against app-down incidents.)
 
 **T2.2 — Put direct-connection consumers on the Supavisor transaction pooler (port 6543).**
 The app + scripts already go through PostgREST (itself a pool), so they're partially insulated — but any
