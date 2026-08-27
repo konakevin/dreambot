@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
   title: string;
   message: string;
   confirmLabel?: string;
+  cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -18,6 +19,7 @@ export function ConfirmDialog({
   title,
   message,
   confirmLabel = 'Delete',
+  cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -39,7 +41,7 @@ export function ConfirmDialog({
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel} activeOpacity={0.7}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={styles.cancelText}>{cancelLabel}</Text>
           </TouchableOpacity>
         </TouchableOpacity>
       </TouchableOpacity>

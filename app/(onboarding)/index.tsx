@@ -38,7 +38,9 @@ type StepComponent = (props: {
   // initialNumToRender), so a step must NOT run "I'm here now" side-effects on
   // mount — e.g. RevealStep kicking off the first dream. It gates on isActive.
   isActive?: boolean;
-}) => React.JSX.Element;
+  // Returns ReactNode (not strictly JSX.Element) so a forwardRef step component
+  // (LocationPickerStep) is assignable here too.
+}) => React.ReactNode;
 
 interface StepConfig {
   key: string;

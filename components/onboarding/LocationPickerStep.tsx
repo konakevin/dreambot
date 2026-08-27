@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,13 +50,6 @@ interface LocationSection {
   items: LocationItem[];
 }
 
-// Level 1 of the picker: two "worlds" the user chooses between (a segmented
-// control), so they never wade through 100+ places at once. Real first.
-const TIER_META: { id: LocationTier; title: string }[] = [
-  { id: 'real', title: 'Real World' },
-  { id: 'imagined', title: 'Dream Worlds' },
-];
-
 // Section metadata (icons / titles / descriptions / order) lives in code
 // since it's pure UI presentation. The LIST OF LOCATIONS in each section
 // comes from location_cards.picker_category in the DB. Adding a new
@@ -76,79 +69,118 @@ interface SectionMeta {
 }
 // Section presentation + grouping lives in code; the LIST of locations is DB-driven
 // (location_cards.picker_category). A section with no cards simply doesn't render.
-// 8 broad sections, 4 per tab — see the `categories` field for the fold-in.
+// 11 sections rendered on ONE page under two labeled worlds (no tabs) — 5 Real,
+// 6 Dream. Most map 1:1 to a picker_category; "Around the World" fuses cities +
+// countries + the single World Wonders card. See LOCATION_REORG_PLAN.md.
 const SECTION_META: SectionMeta[] = [
-  // ── Real World (4) ───────────────────────────────────────────
-  {
-    id: 'cities_landmarks',
-    title: 'Cities & Landmarks',
-    icon: 'business-outline',
-    description: 'Iconic cities, skylines, and the world’s great monuments',
-    tier: 'real',
-    categories: ['iconic_cities', 'landmarks_wonders'],
-  },
+  // ── Real World (5) ───────────────────────────────────────────
   {
     id: 'around_the_world',
     title: 'Around the World',
     icon: 'earth-outline',
-    description: 'Countrywide escapes and island paradise',
+    description: 'Cities, countries, and the world’s great wonders',
     tier: 'real',
-    categories: ['countries_cultures', 'tropical'],
+    categories: ['iconic_cities', 'countries_cultures', 'landmarks_wonders'],
+  },
+  {
+    id: 'tropical_escapes',
+    title: 'Tropical Escapes',
+    icon: 'sunny-outline',
+    description: 'Turquoise lagoons and island paradise',
+    tier: 'real',
+    categories: ['tropical'],
+  },
+  {
+    id: 'beach_towns',
+    title: 'Beach Towns',
+    icon: 'umbrella-outline',
+    description: 'Boardwalks, beach houses, and sunset shores',
+    tier: 'real',
+    categories: ['beach_towns'],
   },
   {
     id: 'nature',
-    title: 'Nature',
+    title: 'Nature & Wild',
     icon: 'leaf-outline',
     description: 'Mountains, canyons, and wild landscapes',
     tier: 'real',
     categories: ['epic_nature'],
   },
   {
-    id: 'eras',
-    title: 'Eras',
+    id: 'through_time',
+    title: 'Through Time',
     icon: 'hourglass-outline',
     description: 'Ancient empires and bygone eras',
     tier: 'real',
     categories: ['through_time'],
   },
-  // ── Dream Worlds (4) ─────────────────────────────────────────
+  // ── Dream Worlds (6) ─────────────────────────────────────────
   {
     id: 'fantasy',
     title: 'Fantasy',
-    icon: 'flame-outline',
+    icon: 'sparkles-outline',
     description: 'Elven cities, dragon keeps, and candlelit castles',
     tier: 'imagined',
-    categories: ['high_fantasy', 'gothic_haunted'],
+    categories: ['high_fantasy'],
+  },
+  {
+    id: 'gothic',
+    title: 'Gothic & Haunted',
+    icon: 'moon-outline',
+    description: 'Vampire castles, foggy graveyards, haunted halls',
+    tier: 'imagined',
+    categories: ['gothic_haunted'],
   },
   {
     id: 'whimsical',
     title: 'Whimsical',
     icon: 'flower-outline',
-    description: 'Fairy-tale castles, gardens, and sweet escapes',
+    description: 'Fairy-tale castles, candy lands, and sweet escapes',
     tier: 'imagined',
     categories: ['whimsical_fun'],
   },
   {
     id: 'scifi',
-    title: 'Sci-Fi',
+    title: 'Sci-Fi & Space',
     icon: 'planet-outline',
     description: 'Neon megacities, alien worlds, and the stars',
     tier: 'imagined',
     categories: ['scifi_space'],
   },
   {
-    id: 'adventure',
-    title: 'Adventure',
-    icon: 'flash-outline',
-    description: 'Frontier outlaws, bold quests, and daring feats',
+    id: 'wild_west',
+    title: 'Wild West',
+    icon: 'flame-outline',
+    description: 'Frontier towns, saloons, and desert standoffs',
     tier: 'imagined',
-    categories: ['wild_west', 'heroes_adventure'],
+    categories: ['wild_west'],
+  },
+  {
+    id: 'heroes',
+    title: 'Heroes & Adventure',
+    icon: 'flash-outline',
+    description: 'Rooftops, spy lairs, and daring feats',
+    tier: 'imagined',
+    categories: ['heroes_adventure'],
   },
 ];
 
 interface Props {
   onNext: () => void;
   onBack: () => void;
+  /** When true (settings route), the drill-in detail view does NOT render its own
+   *  inner back button — the host's top header chevron is the single back, made
+   *  context-aware via the imperative `goBack()` handle below. Onboarding leaves
+   *  this off and keeps the inner back. */
+  hideDetailBack?: boolean;
+}
+
+/** Imperative handle so a host header's back chevron routes through the picker. */
+export interface LocationPickerHandle {
+  /** Handle a host back-press. Pops the drill-in detail first (→ category grid);
+   *  else if leaving with ZERO places selected, shows a gentle confirm and only
+   *  runs onLeave if confirmed; otherwise runs onLeave immediately. */
+  handleBack: (onLeave: () => void) => void;
 }
 
 function LocationTile({
@@ -214,150 +246,251 @@ function LocationTile({
   );
 }
 
-export function LocationPickerStep({ onNext, onBack }: Props) {
-  const places = useOnboardingStore((st) => st.profile.dream_seeds.places);
-  const toggleLocation = useOnboardingStore((st) => st.toggleLocation);
-  const toggleAllLocations = useOnboardingStore((st) => st.toggleAllLocations);
-  const isEditing = useOnboardingStore((st) => st.isEditing);
-  // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
-  const isAdmin = useAuthStore((st) => st.isAdmin);
-  const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
-  const [sections, setSections] = useState<LocationSection[]>([]);
-  // Level 1 — which world's categories are shown. Level 3 — which category is
-  // drilled into (null = the category-browse grid).
-  const [activeTier, setActiveTier] = useState<LocationTier>('real');
-  const [openCategory, setOpenCategory] = useState<string | null>(null);
-  const [resetVisible, setResetVisible] = useState(false);
+export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
+  function LocationPickerStep({ onNext, onBack, hideDetailBack }: Props, ref) {
+    const places = useOnboardingStore((st) => st.profile.dream_seeds.places);
+    const toggleLocation = useOnboardingStore((st) => st.toggleLocation);
+    const toggleAllLocations = useOnboardingStore((st) => st.toggleAllLocations);
+    const isEditing = useOnboardingStore((st) => st.isEditing);
+    // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
+    const isAdmin = useAuthStore((st) => st.isAdmin);
+    const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
+    const [sections, setSections] = useState<LocationSection[]>([]);
+    // Level 3 — which category is drilled into (null = the two-section browse grid).
+    const [openCategory, setOpenCategory] = useState<string | null>(null);
+    const [resetVisible, setResetVisible] = useState(false);
+    // Gentle "leaving with nothing picked?" confirm — stashes the host's leave
+    // action until they confirm.
+    const [leaveVisible, setLeaveVisible] = useState(false);
+    const leaveActionRef = useRef<(() => void) | null>(null);
 
-  const canProceed = places.length >= MIN_REQUIRED;
-  const atMax = places.length >= MAX_ONBOARDING;
+    // A host header's back chevron routes through here: pop the drill-in detail
+    // first (→ category grid); else if they're leaving with ZERO places, nudge
+    // before letting them go; else leave straight away.
+    useImperativeHandle(
+      ref,
+      () => ({
+        handleBack: (onLeave) => {
+          if (openCategory) {
+            setOpenCategory(null);
+            return;
+          }
+          if (places.length === 0) {
+            leaveActionRef.current = onLeave;
+            setLeaveVisible(true);
+            return;
+          }
+          onLeave();
+        },
+      }),
+      [openCategory, places.length]
+    );
 
-  // Load locations from DB (location_cards). Group by picker_category,
-  // sort by picker_sort_order. Section icons + titles + descriptions
-  // come from SECTION_META; the location list itself is fully DB-driven.
-  useEffect(() => {
-    let query = supabase
-      .from('location_cards')
-      .select('name, display_name, picker_category, picker_sort_order, thumbnail_url, admin_only')
-      // is_approved removed 2026-06-06 (Architect audit): vestigial column.
-      // picker_category NOT NULL is the real visibility gate.
-      .not('picker_category', 'is', null);
-    // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
-    if (!isAdmin) query = query.eq('admin_only', false);
-    query.order('picker_sort_order').then(({ data }) => {
-      if (!data) return;
-      const thumbMap = new Map<string, string>();
-      const byCategory = new Map<string, LocationItem[]>();
-      for (const row of data) {
-        if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
-        if (!row.picker_category) continue;
-        const items = byCategory.get(row.picker_category) ?? [];
-        items.push({
-          key: row.name,
-          label: row.display_name ?? row.name,
-          adminOnly: !!row.admin_only,
-        });
-        byCategory.set(row.picker_category, items);
+    const canProceed = places.length >= MIN_REQUIRED;
+    const atMax = places.length >= MAX_ONBOARDING;
+
+    // Load locations from DB (location_cards). Group by picker_category,
+    // sort by picker_sort_order. Section icons + titles + descriptions
+    // come from SECTION_META; the location list itself is fully DB-driven.
+    useEffect(() => {
+      let query = supabase
+        .from('location_cards')
+        .select('name, display_name, picker_category, picker_sort_order, thumbnail_url, admin_only')
+        // is_approved removed 2026-06-06 (Architect audit): vestigial column.
+        // picker_category NOT NULL is the real visibility gate.
+        .not('picker_category', 'is', null);
+      // Dark launch (mig 444): non-admins never see admin_only cards; admins see all.
+      if (!isAdmin) query = query.eq('admin_only', false);
+      query.order('picker_sort_order').then(({ data }) => {
+        if (!data) return;
+        const thumbMap = new Map<string, string>();
+        const byCategory = new Map<string, LocationItem[]>();
+        for (const row of data) {
+          if (row.thumbnail_url) thumbMap.set(row.name, row.thumbnail_url);
+          if (!row.picker_category) continue;
+          const items = byCategory.get(row.picker_category) ?? [];
+          items.push({
+            key: row.name,
+            label: row.display_name ?? row.name,
+            adminOnly: !!row.admin_only,
+          });
+          byCategory.set(row.picker_category, items);
+        }
+        // Each fat section aggregates the cards from all its picker_categories
+        // (2026-08-25: 12 categories folded into 8 broad ones). Within a section,
+        // cards keep their per-category order (concatenated in `categories` order).
+        const built: LocationSection[] = SECTION_META.map((m) => ({
+          id: m.id,
+          title: m.title,
+          icon: m.icon,
+          description: m.description,
+          tier: m.tier,
+          items: m.categories.flatMap((c) => byCategory.get(c) ?? []),
+        })).filter((sec) => sec.items.length > 0);
+        setSections(built);
+        setThumbnails(thumbMap);
+      });
+    }, [isAdmin]);
+
+    const handleToggle = useCallback(
+      (key: string) => {
+        if (!places.includes(key) && atMax) return;
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleLocation(key);
+      },
+      [places, atMax, toggleLocation]
+    );
+
+    const selectedInSection = useCallback(
+      (section: LocationSection) => section.items.filter((i) => places.includes(i.key)).length,
+      [places]
+    );
+
+    const confirmReset = useCallback(() => {
+      if (places.length > 0) setResetVisible(true);
+    }, [places.length]);
+    const doReset = useCallback(() => {
+      setResetVisible(false);
+      if (places.length > 0) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        toggleAllLocations([...places]);
       }
-      // Each fat section aggregates the cards from all its picker_categories
-      // (2026-08-25: 12 categories folded into 8 broad ones). Within a section,
-      // cards keep their per-category order (concatenated in `categories` order).
-      const built: LocationSection[] = SECTION_META.map((m) => ({
-        id: m.id,
-        title: m.title,
-        icon: m.icon,
-        description: m.description,
-        tier: m.tier,
-        items: m.categories.flatMap((c) => byCategory.get(c) ?? []),
-      })).filter((sec) => sec.items.length > 0);
-      setSections(built);
-      setThumbnails(thumbMap);
-    });
-  }, [isAdmin]);
+    }, [places, toggleAllLocations]);
 
-  const handleToggle = useCallback(
-    (key: string) => {
-      if (!places.includes(key) && atMax) return;
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      toggleLocation(key);
-    },
-    [places, atMax, toggleLocation]
-  );
-
-  const selectedInSection = useCallback(
-    (section: LocationSection) => section.items.filter((i) => places.includes(i.key)).length,
-    [places]
-  );
-
-  const confirmReset = useCallback(() => {
-    if (places.length > 0) setResetVisible(true);
-  }, [places.length]);
-  const doReset = useCallback(() => {
-    setResetVisible(false);
-    if (places.length > 0) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      toggleAllLocations([...places]);
-    }
-  }, [places, toggleAllLocations]);
-
-  // Level 1 + 2 — two world TABS (both labels always visible, active one carries
-  // a bright gradient underline that connects into the content pane below) over a
-  // grid of category cards. The pane makes it read as "this tab's contents," so
-  // the second tab is obviously discoverable (Kevin 2026-08-25: a tester missed
-  // the Dream Worlds tab entirely with the old segmented-pill look).
-  const renderBrowse = () => (
-    <>
-      <View style={s.tabRow}>
-        {TIER_META.map((tier) => {
-          const on = activeTier === tier.id;
-          return (
-            <TouchableOpacity
-              key={tier.id}
-              style={s.tab}
-              activeOpacity={0.7}
-              onPress={() => {
-                if (activeTier === tier.id) return;
-                Haptics.selectionAsync();
-                setActiveTier(tier.id);
-              }}
-            >
-              <Text style={[s.tabLabel, on && s.tabLabelActive]}>{tier.title}</Text>
-              {on ? (
-                <LinearGradient
-                  colors={BRAND_GRADIENT}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={s.tabUnderline}
-                />
-              ) : (
-                <View style={s.tabUnderlineIdle} />
-              )}
-            </TouchableOpacity>
-          );
-        })}
+    // Section eyebrow — Real World gets a neutral label + hairline; Dream Worlds
+    // gets a brand-gradient rule so the imagined half reads visibly distinct.
+    const renderSectionHeader = (label: string, dream: boolean) => (
+      <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
+        <Text style={[s.sectionLabel, dream ? s.sectionLabelDream : s.sectionLabelReal]}>
+          {label}
+        </Text>
+        {dream ? (
+          <LinearGradient
+            colors={BRAND_GRADIENT}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={s.sectionRule}
+          />
+        ) : (
+          <View style={[s.sectionRule, s.sectionRuleReal]} />
+        )}
       </View>
+    );
 
-      {/* The content pane — visually tied to the active tab via the shared top
-          edge, so switching tabs clearly swaps this panel's contents. */}
-      <View style={s.pane}>
-        {/* Running total across BOTH worlds + a start-over. In Settings this is
-            the only place the grand total shows (no onboarding footer there). */}
-        <View style={s.summaryBar}>
-          <Text style={s.summaryText}>
-            <Text style={s.summaryCount}>{places.length}</Text>{' '}
-            {places.length === 1 ? 'place' : 'places'} selected
-          </Text>
-          {places.length > 0 && (
-            <TouchableOpacity
-              onPress={confirmReset}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              activeOpacity={0.7}
-            >
-              <Text style={s.resetText}>Reset</Text>
-            </TouchableOpacity>
-          )}
+    // Level 1 — the whole picker on ONE page (no tabs): a global running total, then
+    // two labeled sections (Real World / Dream Worlds) stacked in a single scroll, so
+    // the second world can't be missed and the total is obviously global.
+    const renderBrowse = () => {
+      const realSections = sections.filter((sec) => sec.tier === 'real');
+      const dreamSections = sections.filter((sec) => sec.tier === 'imagined');
+      return (
+        <View style={s.browse}>
+          {/* Global running total (across both worlds) + a start-over BUTTON. */}
+          <View style={s.summaryBar}>
+            <Text style={s.summaryText}>
+              <Text style={s.summaryCount}>{places.length}</Text>{' '}
+              {places.length === 1 ? 'place' : 'places'} selected
+            </Text>
+            {places.length > 0 && (
+              <TouchableOpacity
+                style={s.resetBtn}
+                onPress={confirmReset}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                activeOpacity={0.8}
+              >
+                <Text style={s.resetBtnText}>Reset</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <ScrollView
+            contentContainerStyle={[
+              s.scrollContent,
+              isEditing && { paddingBottom: verticalScale(20) },
+            ]}
+            showsVerticalScrollIndicator={false}
+          >
+            {realSections.length > 0 && (
+              <>
+                {renderSectionHeader('REAL WORLD', false)}
+                <View style={s.catGrid}>{realSections.map(renderCategoryCard)}</View>
+              </>
+            )}
+            {dreamSections.length > 0 && (
+              <>
+                {renderSectionHeader('DREAM WORLDS', true)}
+                <View style={s.catGrid}>{dreamSections.map(renderCategoryCard)}</View>
+              </>
+            )}
+          </ScrollView>
         </View>
+      );
+    };
 
+    const renderCategoryCard = (section: LocationSection) => {
+      const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
+      const picks = selectedInSection(section);
+      return (
+        <TouchableOpacity
+          key={section.id}
+          style={s.catCard}
+          activeOpacity={0.85}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setOpenCategory(section.id);
+          }}
+        >
+          {repThumb ? (
+            <ExpoImage
+              source={{ uri: repThumb }}
+              style={[StyleSheet.absoluteFillObject, s.catImg]}
+              contentFit="cover"
+              transition={200}
+            />
+          ) : (
+            <LinearGradient
+              colors={PLACEHOLDER_GRADIENT}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFillObject}
+            />
+          )}
+          <LinearGradient
+            colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.82)']}
+            style={StyleSheet.absoluteFillObject}
+          />
+
+          {picks > 0 && (
+            <View style={s.catPickBadge}>
+              <Ionicons name="heart" size={12} color="#08210E" />
+              <Text style={s.catPickText}>{picks}</Text>
+            </View>
+          )}
+
+          <View style={s.catBody}>
+            <Text style={s.catTitle} numberOfLines={1}>
+              {section.title}
+            </Text>
+            <Text style={s.catMeta}>
+              {section.items.length} {section.items.length === 1 ? 'place' : 'places'}
+            </Text>
+          </View>
+
+          <Ionicons
+            name="chevron-forward"
+            size={18}
+            color="rgba(255,255,255,0.85)"
+            style={s.catChev}
+          />
+        </TouchableOpacity>
+      );
+    };
+
+    // Level 3 — one category, all its places, focused.
+    const renderDetail = (section: LocationSection) => {
+      const sectionKeys = section.items.map((i) => i.key);
+      const allSelected = sectionKeys.every((k) => places.includes(k));
+      return (
         <ScrollView
           contentContainerStyle={[
             s.scrollContent,
@@ -365,180 +498,130 @@ export function LocationPickerStep({ onNext, onBack }: Props) {
           ]}
           showsVerticalScrollIndicator={false}
         >
-          <View style={s.catGrid}>
-            {sections.filter((sec) => sec.tier === activeTier).map(renderCategoryCard)}
+          <View style={s.detailHeader}>
+            {!hideDetailBack && (
+              <TouchableOpacity
+                style={s.backBtn}
+                activeOpacity={0.7}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setOpenCategory(null);
+                }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
+            <View style={s.detailTitleWrap}>
+              <Text style={s.detailTitle} numberOfLines={1}>
+                {section.title}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={s.pillBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                toggleAllLocations(sectionKeys);
+              }}
+              activeOpacity={0.8}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text style={s.pillBtnText}>{allSelected ? 'Deselect all' : 'Select all'}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={s.tileGrid}>
+            {section.items.map((item) => (
+              <LocationTile
+                key={item.key}
+                item={item}
+                selected={places.includes(item.key)}
+                thumbnailUrl={thumbnails.get(item.key)}
+                onToggle={() => handleToggle(item.key)}
+              />
+            ))}
           </View>
         </ScrollView>
-      </View>
-    </>
-  );
+      );
+    };
 
-  const renderCategoryCard = (section: LocationSection) => {
-    const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
-    const picks = selectedInSection(section);
+    const openSection = openCategory ? sections.find((sec) => sec.id === openCategory) : null;
+
     return (
-      <TouchableOpacity
-        key={section.id}
-        style={[s.catCard, picks > 0 && s.catCardSelected]}
-        activeOpacity={0.85}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          setOpenCategory(section.id);
-        }}
-      >
-        {repThumb ? (
-          <ExpoImage
-            source={{ uri: repThumb }}
-            style={[StyleSheet.absoluteFillObject, s.catImg]}
-            contentFit="cover"
-            transition={200}
-          />
-        ) : (
-          <LinearGradient
-            colors={PLACEHOLDER_GRADIENT}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={StyleSheet.absoluteFillObject}
-          />
-        )}
-        <LinearGradient
-          colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.82)']}
-          style={StyleSheet.absoluteFillObject}
-        />
-
-        {picks > 0 && (
-          <View style={s.catPickBadge}>
-            <Ionicons name="heart" size={12} color="#08210E" />
-            <Text style={s.catPickText}>{picks}</Text>
-          </View>
-        )}
-
-        <View style={s.catBody}>
-          <Text style={s.catTitle} numberOfLines={1}>
-            {section.title}
-          </Text>
-          <Text style={s.catMeta}>
-            {section.items.length} {section.items.length === 1 ? 'place' : 'places'}
-          </Text>
-        </View>
-
-        <Ionicons
-          name="chevron-forward"
-          size={18}
-          color="rgba(255,255,255,0.85)"
-          style={s.catChev}
-        />
-      </TouchableOpacity>
-    );
-  };
-
-  // Level 3 — one category, all its places, focused.
-  const renderDetail = (section: LocationSection) => {
-    const sectionKeys = section.items.map((i) => i.key);
-    const allSelected = sectionKeys.every((k) => places.includes(k));
-    return (
-      <ScrollView
-        contentContainerStyle={[s.scrollContent, isEditing && { paddingBottom: verticalScale(20) }]}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={s.detailHeader}>
-          <TouchableOpacity
-            style={s.backBtn}
-            activeOpacity={0.7}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setOpenCategory(null);
-            }}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-          <View style={s.detailTitleWrap}>
-            <Text style={s.detailTitle} numberOfLines={1}>
-              {section.title}
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              toggleAllLocations(sectionKeys);
-            }}
-            activeOpacity={0.7}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Text style={s.selectAllText}>{allSelected ? 'Deselect all' : 'Select all'}</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={s.tileGrid}>
-          {section.items.map((item) => (
-            <LocationTile
-              key={item.key}
-              item={item}
-              selected={places.includes(item.key)}
-              thumbnailUrl={thumbnails.get(item.key)}
-              onToggle={() => handleToggle(item.key)}
-            />
-          ))}
-        </View>
-      </ScrollView>
-    );
-  };
-
-  const openSection = openCategory ? sections.find((sec) => sec.id === openCategory) : null;
-
-  return (
-    <View style={shared.root}>
-      {/* Sticky header — sits outside the ScrollView so the grid scrolls under it. */}
-      <View style={s.stickyHeader}>
-        {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
+      <View style={shared.root}>
+        {/* Sticky header — sits outside the ScrollView so the grid scrolls under it.
+          Hidden while drilled into a category so that view's own header owns the top
+          (avoids a stacked second prompt above the category name). */}
+        {!openSection && (
+          <View style={s.stickyHeader}>
+            {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
             plain text; onboarding keeps the gradient hero. */}
-        {isEditing ? (
-          <TitleText
-            size={18}
-            color={colors.bodyOnDark}
-            numberOfLines={2}
-            align="center"
-            style={{ marginBottom: verticalScale(6), maxWidth: SCREEN_WIDTH - TILE_PADDING * 2 }}
-          >
-            Where do you want to dream?
-          </TitleText>
-        ) : (
-          <GradientTitle
-            size={TITLE_SIZE.page}
-            numberOfLines={2}
-            align="center"
-            maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
-            style={{ marginBottom: verticalScale(6) }}
-          >
-            Where do you want to dream?
-          </GradientTitle>
+            {isEditing ? (
+              <TitleText
+                size={18}
+                color={colors.bodyOnDark}
+                numberOfLines={2}
+                align="center"
+                style={{
+                  marginBottom: verticalScale(6),
+                  maxWidth: SCREEN_WIDTH - TILE_PADDING * 2,
+                }}
+              >
+                Where do you want to dream?
+              </TitleText>
+            ) : (
+              <GradientTitle
+                size={TITLE_SIZE.page}
+                numberOfLines={2}
+                align="center"
+                maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
+                style={{ marginBottom: verticalScale(6) }}
+              >
+                Where do you want to dream?
+              </GradientTitle>
+            )}
+          </View>
         )}
-      </View>
 
-      {openSection ? renderDetail(openSection) : renderBrowse()}
+        {openSection ? renderDetail(openSection) : renderBrowse()}
 
-      {!isEditing && (
-        <OnboardingFooter
-          onNext={onNext}
-          onBack={onBack}
-          disabled={!canProceed}
-          counter={places.length > 0 ? `${places.length} selected` : 'None selected'}
-          counterMet={canProceed}
+        {!isEditing && (
+          <OnboardingFooter
+            onNext={onNext}
+            onBack={onBack}
+            disabled={!canProceed}
+            counter={places.length > 0 ? `${places.length} selected` : 'None selected'}
+            counterMet={canProceed}
+          />
+        )}
+
+        <ConfirmDialog
+          visible={resetVisible}
+          title="Start over?"
+          message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}.`}
+          confirmLabel="Reset"
+          onConfirm={doReset}
+          onCancel={() => setResetVisible(false)}
         />
-      )}
 
-      <ConfirmDialog
-        visible={resetVisible}
-        title="Start over?"
-        message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}.`}
-        confirmLabel="Reset"
-        onConfirm={doReset}
-        onCancel={() => setResetVisible(false)}
-      />
-    </View>
-  );
-}
+        <ConfirmDialog
+          visible={leaveVisible}
+          title="Leave without any places?"
+          message="Your dreams are way more fun with places to dream about. Pick at least one and your nightly dreams get a whole lot more interesting."
+          confirmLabel="Leave anyway"
+          cancelLabel="Keep choosing"
+          onConfirm={() => {
+            setLeaveVisible(false);
+            const go = leaveActionRef.current;
+            leaveActionRef.current = null;
+            go?.();
+          }}
+          onCancel={() => setLeaveVisible(false)}
+        />
+      </View>
+    );
+  }
+);
 
 const s = StyleSheet.create({
   scrollContent: {
@@ -554,54 +637,48 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
   },
 
-  // Level 1 — world TABS. Both labels always visible (equal size), the active one
-  // brightens to white and carries a gradient underline that sits on the pane's
-  // top edge — the classic connected-tab look, so the second tab can't be missed.
-  tabRow: {
-    flexDirection: 'row',
-    marginHorizontal: TILE_PADDING,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: verticalScale(6),
-  },
-  tabLabel: {
-    fontSize: fontScale(16),
-    fontWeight: '800',
-    color: 'rgba(255,255,255,0.5)',
-    marginBottom: verticalScale(9),
-  },
-  tabLabelActive: { color: '#FFFFFF' },
-  tabUnderline: {
-    height: verticalScale(3),
-    alignSelf: 'stretch',
-    marginHorizontal: horizontalScale(18),
-    borderRadius: 999,
-  },
-  tabUnderlineIdle: { height: verticalScale(3), backgroundColor: 'transparent' },
-  // The content pane — its top edge lines up under the tab row, and the active
-  // tab's underline lands on it, tying the two together.
-  pane: {
-    flex: 1,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(255,255,255,0.12)',
-    backgroundColor: 'rgba(255,255,255,0.02)',
-    paddingTop: verticalScale(6),
-  },
+  browse: { flex: 1 },
 
-  // Running total across BOTH worlds + a start-over control.
+  // Global running total (across BOTH worlds) + a start-over BUTTON, above the tabs
+  // so it reads as the overall selection, not the active tab's count.
   summaryBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: TILE_PADDING,
-    marginTop: verticalScale(8),
-    marginBottom: verticalScale(2),
+    marginTop: verticalScale(6),
+    marginBottom: verticalScale(12),
   },
-  summaryText: { fontSize: fontScale(13), fontWeight: '600', color: colors.subtleOnDark },
+  summaryText: { fontSize: fontScale(13.5), fontWeight: '600', color: colors.subtleOnDark },
   summaryCount: { color: '#5EEAD4', fontWeight: '800' },
-  resetText: { fontSize: fontScale(13), fontWeight: '700', color: colors.accent },
+  // Reset — a real (muted) button so it doesn't blend into the background.
+  resetBtn: {
+    paddingHorizontal: horizontalScale(14),
+    paddingVertical: verticalScale(6),
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,255,255,0.07)',
+  },
+  resetBtnText: { fontSize: fontScale(12.5), fontWeight: '700', color: colors.bodyOnDark },
+
+  // Level 1 — section eyebrow header. An uppercase letter-spaced label + a rule
+  // that runs to the edge. Real World = neutral; Dream Worlds = brand-gradient rule
+  // + brighter label, with extra top space, so the two worlds read as distinct.
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(10),
+    marginHorizontal: TILE_PADDING,
+    marginTop: verticalScale(4),
+    marginBottom: verticalScale(12),
+  },
+  sectionHeaderDream: { marginTop: verticalScale(22) },
+  sectionLabel: { fontSize: fontScale(12), fontWeight: '800', letterSpacing: 1.5 },
+  sectionLabelReal: { color: 'rgba(255,255,255,0.55)' },
+  sectionLabelDream: { color: '#C4B5FD' },
+  sectionRule: { flex: 1, height: 2, borderRadius: 999 },
+  sectionRuleReal: { backgroundColor: 'rgba(255,255,255,0.12)' },
 
   // Level 2 — category cards.
   catGrid: {
@@ -616,15 +693,6 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1.5,
     borderColor: colors.accentBorder,
-  },
-  // A category with picks glows teal — scannable at a glance in the grid.
-  catCardSelected: {
-    borderColor: '#5EEAD4',
-    shadowColor: '#5EEAD4',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.45,
-    shadowRadius: 9,
-    elevation: 6,
   },
   catImg: { opacity: 0.62 },
   catBody: {
@@ -686,11 +754,16 @@ const s = StyleSheet.create({
   detailTitle: { fontSize: fontScale(18), fontWeight: '800', color: '#FFFFFF' },
   detailDesc: { fontSize: fontScale(13), color: colors.subtleOnDark, marginTop: verticalScale(1) },
 
-  selectAllText: {
-    fontSize: fontScale(13),
-    fontWeight: '600',
-    color: colors.accent,
+  // Select all / Deselect all — a real (accent) button, not blend-in text.
+  pillBtn: {
+    paddingHorizontal: horizontalScale(14),
+    paddingVertical: verticalScale(6),
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.55)',
+    backgroundColor: 'rgba(167,139,250,0.16)',
   },
+  pillBtnText: { fontSize: fontScale(12.5), fontWeight: '700', color: '#C4B5FD' },
 
   tileGrid: {
     flexDirection: 'row',

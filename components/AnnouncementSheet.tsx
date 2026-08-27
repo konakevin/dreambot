@@ -14,6 +14,7 @@
  */
 
 import { View, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 import { Text } from '@/components/AppText';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
@@ -30,14 +31,38 @@ interface Props {
   onClose: () => void;
 }
 
+// The Settings screen each deep-linkable sub-page lives UNDER. A feed
+// announcement deep-link seats this parent as the back target (its Locations /
+// Dream Cast / Mood row is then one tap away). Sub-pages not listed just seat
+// the Profile tab.
+const SETTINGS_PARENT: Record<string, string> = {
+  '/settings/locations': '/settings/edit-profile',
+  '/settings/dream-cast': '/settings/edit-profile',
+  '/settings/mood': '/settings/edit-profile',
+};
+
 export function AnnouncementSheet({ announcement, onClose }: Props) {
   const handleCta = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onClose();
-    if (announcement.cta_route) {
-      // Let the modal dismiss settle before pushing the target route.
-      setTimeout(() => nav.push(announcement.cta_route as string), 250);
-    }
+    const route = announcement.cta_route;
+    if (!route) return;
+    // Let the modal dismiss settle before pushing the target route.
+    setTimeout(() => {
+      // A Settings deep-link from the feed (announcement) would leave "back"
+      // stranded on the FEED. Seat the natural parent chain underneath so back
+      // walks the SAME path the user would tap in — Profile → Edit Profile →
+      // (this page) — landing them on the screen the page lives under, one tap
+      // from re-entering it. router directly (not the debounced nav.*) so the
+      // seats + push aren't collapsed by the cooldown, and it also fixes the
+      // native edge-swipe the header override can't intercept (lib/navigate.ts).
+      if (route.startsWith('/settings/')) {
+        router.navigate('/(tabs)/profile' as never);
+        const parent = SETTINGS_PARENT[route];
+        if (parent) router.push(parent as never);
+      }
+      nav.push(route);
+    }, 250);
   };
 
   return (
