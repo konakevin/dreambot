@@ -145,6 +145,17 @@ drops any unsafe beat → classic-pose fallback (fail-safe).
 
 ## Progress
 
+- [~] **`rich_famous` — "Lifestyles of the Rich and Famous"** (2026-08-26, Kevin): NEW bucket in the
+      **ELEGANT** pool. Cool/MODERN aspirational luxury (real-badge supercars — Ferrari/Lambo/McLaren/
+      Porsche/Rolls/Bentley/Aston/G-Wagon; superyacht decks; Amalfi/Mykonos infinity villas; private-jet
+      airstairs; glass penthouses; modern beach houses). NOT gaudy/old-money. Seeded **25 dual + 25 single**
+      (`--pool elegant --per 25 --buckets rich_famous`), proximity scan 0 violations. QA R1: Amalfi
+      infinity-pool couple 4.7 (nails it), watercolor jet 4.0; **film_noir FAILED** (B&W 1940s town, no cast
+      — vintage prior overrode modern luxury) → set **`medium_ban`** on all 50 rows for the era-clash
+      mediums (film_noir/vintage_film/heirloom/old_west/ukiyo_e/ancient_epic/maritime_oil*/gothic*/steampunk/
+      8bit/star_oil). R2 verifying. Then: Kevin sign-off → scale to 100/100 (elegant pool is already
+      live-pct'd, so it rotates in on scale). LESSON: modern-luxury bucket needs the vintage/period mediums
+      banned even though the global medium×theme restriction was scrapped.
 - [x] Phase 0: dynamic-pose samples (found biome-pool coverage gap → built Option B)
 - [x] **Option B**: generative location-fit actions (built, QA'd 3/3, dark at pct 0)
 - [x] `swashbuckler` (seed 25 dual+single, QA'd — action authoring fix landed)
@@ -209,6 +220,43 @@ themed-only.
 3. **POST-SEED HOOK (HARD RULE):** `node scripts/scan-dual-faceswap-proximity.js` must exit 0
    before shipping any dual pool — reword flagged couple poses (see the CLAUDE.md rule).
 4. Scale after sign-off (see below), then it's live at the current `active_pct`.
+
+## Lifestyles of the Rich & Famous (`rich_famous`) — LIVE-READY, admin-gated (2026-08-26)
+
+A modern-luxury general-purpose bucket ("lifestyles of the rich and famous"): exotic supercars
+(real badges — Ferrari / Lamborghini / McLaren / Porsche 911 / Rolls / Bentley / Aston / G-Wagon),
+superyachts, Amalfi / Mykonos / Malibu infinity-pool villas, private-jet airstairs, glass
+penthouses. Cool, never gaudy or "cheesy luxury." 25 dual + 25 single seeded (QA size).
+
+Two lessons baked in — both are reusable patterns for any REAL-WORLD-MODERN bucket:
+
+1. **Per-pool MEDIUM ban.** The nightly cast medium pool skews painterly/vintage; those drift a
+   supercar into a whimsical mountain scene or a 1940s town. `medium_ban` right-sized to leave
+   only the clean-modern renderers: **comics, photography, illustration**
+   (`glamour,double_exposure,canvas,watercolor,pencil,film_noir,vintage_film,heirloom` banned).
+   Verified: 12/12 QA renders rolled only the 3 allowed mediums; luxury reads clean (Porsche on
+   wet neon cobblestone 4.7, Lambo Urus + rosé in Joshua Tree 4.6). This is the "medium
+   restriction per pool" optimization — apply it to any bucket whose subject is medium-sensitive.
+
+2. **SINGLE bucket → `pool='active'`, DUAL → `pool='elegant'`.** The dual pool draws a clean
+   partner pose; the SINGLE elegant path layers the default CANDID pool, which has domestic beats
+   (feeding ducks / pigeons / carp) that render absurd on a superyacht. Fix: the luxury scenes
+   already bake in the stance ("leaning on the hood", "on the bow", "standing at the rail"), so
+   the SINGLE rows live in the **active** pool — `soloActiveScene=true` makes the scene text drive
+   the pose ("caught mid-action... face toward the camera"), no candid layered. Re-render: 6/6
+   solo now show confident scene-locked luxury stances (penthouse sofa + whiskey 4.7, Dubai rail
+   4.6, jet airstair 4.5), zero domestic poses. **Rule of thumb:** a bucket whose scenes carry
+   their own stance belongs in `active`; a bucket that wants a separate posed look stays `elegant`.
+
+Gen-script wiring: `rich_famous` is in **ACTIVE_BUCKETS** in `generate-single-scenarios.js` and in
+the dual script's normal bucket list (`generate-dual-scenarios.js`), both with the `mediumBan`
+above. Scale (post sign-off): `--pool active --buckets rich_famous` (single) + `--buckets
+rich_famous` (dual), `--per 75`.
+
+**GO-LIVE requires `engine_config.single_scene_active_pct > 0`** (the active SOLO branch is
+currently dark; dual active is already live). Set it alongside enabling the bucket, or single
+rich_famous never surfaces in solo rotation. Whole bucket is `admin_only`/dark until Kevin signs
+off + it's scaled 25→~100.
 
 **To SCALE a bucket to production size** — seed **per-bucket, ONE process at a time**:
 ```

@@ -254,6 +254,11 @@ const ELEGANT_BUCKETS = [
     label: 'Living the dream (fame)',
     desc: 'Living-the-dream FAME — the person as a star: on a red carpet under flashing bulbs, a magazine cover shoot, a stadium stage under spotlights with a crowd beyond, a glossy talk-show set, or a movie premiere. A glamorous gown or a sharp suit, a statement look. Dazzling and aspirational.',
   },
+  // NOTE: 'rich_famous' moved to ACTIVE_BUCKETS (2026-08-26) — the modern-luxury
+  // scenes embed a confident stance ("leaning on the hood", "on the bow"), so the
+  // ACTIVE pool's scene-drives-the-pose behavior is the right fit. Layering the
+  // default candid solo pool on top produced absurd domestic beats (feeding ducks
+  // on a superyacht). See ACTIVE_BUCKETS below.
   {
     key: 'princess_f',
     mediumBan: GLAM_MEDIUM_BAN,
@@ -292,6 +297,20 @@ const ELEGANT_BUCKETS = [
 // dual active buckets; NIGHTLY_FUN_SCENARIOS_PLAN.md). Gender-neutral (costume works for
 // any gender). Dark until we enable single_scene_active_pct, so isolated for QA.
 const ACTIVE_BUCKETS = [
+  {
+    // Real-world MODERN luxury (not fantasy) — the active DNA is fantasy-leaning,
+    // but the desc pins it hard to real, cool, never-gaudy luxury. Scene-drives-
+    // the-pose fits: the stance is baked into the scene ("leaning on the hood",
+    // "on the bow"), so no candid pool is layered. Ban painterly/vintage/fantasy
+    // mediums that drift the supercar/yacht (2026-08-26 QA: comics/photography/
+    // illustration render luxury clean; canvas/watercolor/etc drift it).
+    key: 'rich_famous',
+    gender: 'any',
+    count: 25,
+    label: 'Lifestyles of the rich & famous',
+    mediumBan: 'glamour,double_exposure,canvas,watercolor,pencil,film_noir,vintage_film,heirloom',
+    desc: 'Lifestyles of the RICH AND FAMOUS — sleek, MODERN, aspirational REAL-WORLD luxury (NOT fantasy/sci-fi), always COOL and never gaudy or old-money-stuffy: leaning against or perched on the hood of an exotic supercar (a Ferrari, Lamborghini, McLaren, Porsche 911, Rolls-Royce, Bentley, Aston Martin, or matte-black G-Wagon — real iconic cars, badges welcome); the sundeck or bow of a gleaming white superyacht at golden hour; an infinity-pool clifftop villa over an Amalfi / Mykonos / Malibu sea; the airstair of a private jet on the tarmac; standing at the glass wall of a floor-to-ceiling penthouse above a glittering city skyline; a chic ultra-modern beach house. Each scene bakes in a confident stance (leaning, perched, standing at the rail, one hand in a pocket) — never a random handheld prop. Effortlessly expensive designer attire — tailored linen and silk, a crisp resort look or a sleek dress, statement sunglasses pushed up on the head (never over the eyes), fine watches and jewelry. Relaxed, confident, living the dream — waist-up, faces to camera.',
+  },
   {
     key: 'swashbuckler',
     gender: 'any',

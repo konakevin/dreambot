@@ -99,6 +99,16 @@ const ELEGANT_BUCKETS = [
     label: 'Living the dream (fame)',
     desc: 'Living-the-dream FAME — the couple as stars: on a red carpet under flashing bulbs, a magazine cover shoot, a stadium stage under spotlights with a crowd beyond, a glossy talk-show set, or a movie premiere. Glamorous designer gowns, sharp suits, statement looks. Dazzling and aspirational.',
   },
+  {
+    key: 'rich_famous',
+    label: 'Lifestyles of the rich & famous',
+    // Modern real luxury needs a clean photoreal/editorial register — ban the
+    // painterly/vintage/fantasy mediums that drift a supercar into a whimsical
+    // waterfall or a 1940s B&W town (2026-08-26 QA). Leaves the clean-modern
+    // renderers: comics, photography, illustration (verified to hold luxury).
+    mediumBan: "glamour,double_exposure,canvas,watercolor,pencil,film_noir,vintage_film,heirloom",
+    desc: 'Lifestyles of the RICH AND FAMOUS — sleek, MODERN, aspirational luxury, always COOL and never gaudy or old-money-stuffy: leaning against or perched on the hood of an exotic supercar (a Ferrari, Lamborghini, McLaren, Porsche 911, Rolls-Royce, Bentley, Aston Martin, or matte-black G-Wagon — real iconic cars, badges welcome); the sundeck or bow of a gleaming white superyacht at golden hour; an infinity-pool clifftop villa over an Amalfi / Mykonos / Malibu sea; the airstair of a private jet on the tarmac; a floor-to-ceiling-glass penthouse suite above a glittering city skyline; a chic ultra-modern beach house. Effortlessly expensive designer attire — tailored linen and silk, a crisp resort look or a sleek dress, statement sunglasses pushed up on the head (never over the eyes), fine watches and jewelry. The couple relaxed, confident, living the dream — waist-up, side by side, faces to camera.',
+  },
 ];
 
 const GOOFY_BUCKETS = [
