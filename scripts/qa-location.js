@@ -27,6 +27,11 @@ const LOC = arg('location');
 // subject + scene as ONE coherent image (Kevin 2026-08-24). Scene-only keeps cinematic.
 const CAST_MEDIUM = arg('cast-medium', 'canvas');
 const SCENE_MEDIUM = arg('scene-medium', 'cinematic');
+// Scene-only pure-scene surface is NOT a priority for new location pools (Kevin
+// 2026-08-27): users with no locations get EXISTING scene pools, so we don't seed
+// or QA scene-only for new pools. --no-scene skips that render (saves a render +
+// DB connection). New location pools are graded on the 3 CAST surfaces only.
+const NO_SCENE = process.argv.includes('--no-scene');
 if (!LOC) {
   console.error('--location required');
   process.exit(1);
@@ -41,7 +46,7 @@ const SURFACES = [
   ['plus_one', CAST_MEDIUM, false, 'plus1'],
   ['dual', CAST_MEDIUM, false, 'couple'],
   [null, SCENE_MEDIUM, true, 'scene'],
-];
+].filter(([, , pure]) => !(NO_SCENE && pure));
 
 async function render(role, medium, pureScene, label) {
   const body = {

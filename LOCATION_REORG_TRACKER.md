@@ -15,20 +15,41 @@
 
 ## ▶ NEXT ACTION
 **SEEDING RUN IN PROGRESS (autonomous, Kevin 2026-08-27).** Grinding category-by-
-category to ≥4.5, everything `admin_only` dark. Currently: **Myrtle Beach pipeline
-shakedown** (recipe → seed → QA self+couple → grade) to validate tooling before
-scaling to the other 40. Beach Towns batch is first once the shakedown passes.
-UI de-tab + reorg is a parallel/after task (independent of seeding).
+category to ≥4.5, everything `admin_only` dark. Phase 1 UI+reorg = DONE + committed
+(`c5f92b0d`). ⛔ NO per-location medium narrowing — every card `imagined=false`,
+all nightly mediums fire (Kevin). **Scene-only surface is NOT a priority (Kevin
+2026-08-27)** — new location pools graded on the 3 CAST surfaces (self/plus1/couple)
+only; render with `qa-location.js --location "<x>" --no-scene`.
 
-**Last updated:** 2026-08-27 (seeding run started; dream-shoot skill + playbook loaded)
+**Beach Towns: 5/9 PASS (dark).** ✅ Myrtle Beach 4.7 · Outer Banks 4.7 · Key West 4.6
+· Cape Cod ~4.4 · Santa Monica 4.53. **Next: seed the 4 remaining** — Coney Island,
+30A, Malibu, The Hamptons (recipes generating, job `b4z5fgzeh`). Pipeline per new
+town below. Then Tropical Escapes → Countries → the rest.
+
+### 🔧 New beach-town pipeline (per town)
+1. `seed-category.mjs beach_towns false <sortStart> "<town>=<biome>"` → biome_config + wardrobe + 25 spots + gate cols (admin_only).
+2. Apply a template to override SUBJECT_RULE + Americana wardrobe + town spots:
+   - **generic candy-cottage town** (30A) → `_tmp-beachtown.mjs "<town>" "<SUBJECT_RULE>" "<hints>"`
+   - **specific-identity town** (Coney Island boardwalk/coaster, Malibu cliffs/PCH, Hamptons shingle) → `_tmp-iconictown.mjs "<town>" "<SUBJECT_RULE>" "<register brief>"`
+3. `_tmp-sunnyaxes.mjs "<town>"` → hard-set bright TIME/WEATHER (REQUIRED — recipe TIME axis is night/fog-dominant).
+4. `qa-location.js --location "<town>" --no-scene` → download + grade 3 cast surfaces to ≥4.5.
+
+### ⚠️ Beach-town render LESSONS (learned Myrtle→Santa Monica)
+- **Recipe TIME axis is DARK-dominant** (pre-dawn marine layer / June Gloom / blue hour / post-sunset / late-night) → scenes AND cast renders roll dark/foggy. ALWAYS run `_tmp-sunnyaxes.mjs` (hard-sets 4 bright TIME + 3 bright WEATHER + strips dark PHENOMENA).
+- **The word "glamour" (or glam/editorial/chic) in SUBJECT_RULE → fashion costumes** (open blazers over bare chest, epaulette shirts). Keep SUBJECT_RULE positive-casual; describe the PLACE, let the Americana WARDROBE pool carry the outfits. NO negation (it leaks).
+- **Spots with "safety barrier" / "bluff edge / overlook" → barbed-wire fences + scrubby rural fields.** Avoid; use pier decks, promenades, porches, bungalow corners, boardwalks.
+- **Lifeguard-tower spots + open-shirt wardrobe → Baywatch beefcake.** Skip lifeguard towers for iconic-place towns.
+- Specific iconic places (SM pier, Malibu) are NOT generic-cottage towns — use `_tmp-iconictown.mjs` with a real register brief, not the candy-cottage template.
+
+**Last updated:** 2026-08-27 (5/9 beach towns PASS; scene-only deprioritized; sunny-axes + iconic-town templates added; 4 remaining towns' recipes generating)
 
 ---
 
 ## Phase status
 | Phase | Status | Notes |
 |---|---|---|
-| **1 — UI + Reorg** | ⬜ not started | de-tab, 11-category SECTION_META, DB reclassify |
-| **2 — Seeding (41 cards)** | ⬜ not started | per-card table below |
+| **1 — UI + Reorg** | ✅ DONE | committed `c5f92b0d`; DB reclassify applied; de-tab + 11-cat SECTION_META live in code |
+| **2 — Seeding (41 cards)** | 🔨 in progress | Myrtle Beach shakedown first; per-card table below |
 | **3 — Go-live** | ⬜ not started | flip `admin_only=false` per category after sign-off + build |
 
 ---
@@ -100,13 +121,37 @@ UI de-tab + reorg is a parallel/after task (independent of seeding).
 | Tahiti | ⬜ | | jade lagoons, volcanic peaks, black sand |
 
 ### 🏝️ Beach Towns (9) — SEED FIRST (new category)
+> ⭐ **BEACH TOWNS TEMPLATE (learned on Myrtle Beach R1→R2, from Kevin's favorited refs):**
+> Beach towns = the CHARMING DREAM version, NOT the literal resort strip.
+> - **SUBJECT** = candy-colored pastel raised beach cottages (teal/coral/yellow/mint),
+>   palm-lined sandy lanes, hibiscus/bougainvillea, striped-awning boardwalk shops,
+>   fishing piers, wide sunny beach + sea-oat dunes. Feature colorful beach houses +
+>   the beach. Do NOT emphasize high-rise resort towers.
+> - **WARDROBE** = casual-cute Americana (Hawaiian/camp shirts, denim rompers,
+>   sundresses, cutoffs+tee). NOT exotic beach-glam gowns / shirtless-tiny-shorts.
+> - **WEATHER/PHENOMENA** = sunny + golden + pastel-sunset dominant; NO storms,
+>   waterspouts, thunderheads.
+> - **Spots** = hand-curate cottage/beach scene-types (the auto-gen pulls resort
+>   landmarks + brand names like "Hard Rock Cafe" → IP leak; scrub brands).
+> - Refs: Kevin's 2 favorited Myrtle Beach dreams (colorful cottages, palm lanes,
+>   casual wardrobe) — the target look for the whole category.
+
+> **Reusable Americana WARDROBE pool** (paste into each beach town's biome_config.WARDROBE):
+> sundress (floral/gingham) + straw hat + sandals · tropical camp/Hawaiian shirt + shorts +
+> sneakers · denim romper/overall-shorts + striped tee + tote · cutoffs + knotted gingham top +
+> fedora · gauze cover-up over tasteful swimsuit + floppy hat · pastel camp-collar shirt + linen
+> shorts + boat shoes · flowy sundress/linen jumpsuit + gold jewelry · graphic tee + cuffed denim.
+> **Axes:** filter WEATHER/PHENOMENA to drop `thunderstorm|nor'easter|hurricane|squall|waterspout|
+> thunderhead|foam surge|post-storm|heat pillar`; add sunny + pastel-sunset. **Spots:** hand-curate
+> cottage/beach scene-types; scrub brand names (Hard Rock, Ripley's, SkyWheel→generic).
+
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Myrtle Beach | ⬜ | | boardwalk, SkyWheel, pastel cottages, pier, beach houses |
-| Outer Banks | ⬜ | | stilt houses, dunes, lighthouses, wild horses |
-| Cape Cod | ⬜ | | grey-shingle cottages, lighthouses, lobster shacks |
-| Key West | ⬜ | | pastel conch houses, Duval St, sunset pier |
-| Santa Monica | ⬜ | | pier + Ferris wheel, boardwalk, palms |
+| Myrtle Beach | ✅ 4.7 (dark) | R2: self 4.6 / plus1 4.8 / couple 4.7 / scene 4.8 | LOCKED TEMPLATE. cottage-dream + Americana wardrobe + sunny. 20 spots/16 cast (QA size; scale to 100 post-signoff) |
+| Outer Banks | ✅ 4.7 (dark) | R1: self 4.6 / couple 4.7 / scene 4.8 | teal surf shack, coral cottage porch, stilt cottage + rainbow. PASS R1 |
+| Key West | ✅ 4.6 (dark) | R1: self 4.7 / couple 4.6 / scene 4.8 / plus1 4.0 | coral conch cottage + bougainvillea, turquoise dock, sunset marina. PASS. (plus1 rolled an awkward squat-on-surfboard pose — pose-pool, not location) |
+| Cape Cod | ✅ ~4.4 (dark) | R2: self 4.7 / couple 4.3 / scene 3.8 | R2 re-theme (sunnier, grey-shingle+lighthouse+marsh) worked. Self is a distinctly-Cape-Cod knockout; cast surfaces avg 4.5. PASS. (scene surface occasionally rolls a moody dusk aerial — acceptable variety) |
+| Santa Monica | ✅ 4.53 (dark) | R3 cast-only: self 4.4 / plus1 4.7 / couple 4.5 | R1 FAIL (Baywatch beefcake + decor-wall). R2 partial (pier showed but "glamour" word → blazer/editorial costumes; barbed-wire "safety barrier" spot). R3 fix: dropped "glamour" from SUBJECT_RULE (positive casual, no negation), reworded barbed-wire spot, sunny-axes. PASS — all cast surfaces casual/sunny/on-place. |
 | Coney Island | ⬜ | | retro boardwalk, coaster, Americana |
 | 30A / Seaside | ⬜ | | candy-colored beach town, cruisers, picket fences |
 | Malibu | ⬜ | | glass beach houses, surf, cliffs, sunset |
