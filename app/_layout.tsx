@@ -832,7 +832,14 @@ function BootFeedPrewarm() {
   useEffect(() => {
     if (!initialized || !user || didPrewarm.current) return;
     didPrewarm.current = true;
-    void prefetchDreamFeed(queryClient, 'forYou', user.id, useFeedStore.getState().feedSeed);
+    const uid = user.id;
+    // Defer past the initial render + navigation animations so the prefetch's
+    // request + response processing never competes with the cold-start render
+    // (App-Hang guard — the JS thread is busiest during first paint).
+    const task = InteractionManager.runAfterInteractions(() => {
+      void prefetchDreamFeed(queryClient, 'forYou', uid, useFeedStore.getState().feedSeed);
+    });
+    return () => task.cancel();
   }, [initialized, user]);
   return null;
 }
