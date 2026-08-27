@@ -21,10 +21,15 @@ all nightly mediums fire (Kevin). **Scene-only surface is NOT a priority (Kevin
 2026-08-27)** — new location pools graded on the 3 CAST surfaces (self/plus1/couple)
 only; render with `qa-location.js --location "<x>" --no-scene`.
 
-**Beach Towns: 5/9 PASS (dark).** ✅ Myrtle Beach 4.7 · Outer Banks 4.7 · Key West 4.6
-· Cape Cod ~4.4 · Santa Monica 4.53. **Next: seed the 4 remaining** — Coney Island,
-30A, Malibu, The Hamptons (recipes generating, job `b4z5fgzeh`). Pipeline per new
-town below. Then Tropical Escapes → Countries → the rest.
+**✅ BEACH TOWNS COMPLETE — 9/9 seeded + graded, all `admin_only` dark.**
+Myrtle Beach 4.7 · Outer Banks 4.7 · Key West 4.6 · Santa Monica 4.53 · 30A 4.5 ·
+Cape Cod ~4.4 · Coney Island ~4.4 · The Hamptons ~4.4 · Malibu ~4.2 (🚩Return-to).
+**NEXT: Tropical Escapes (4)** — Amalfi Coast, Fiji, Cancún, Tahiti (recipes
+generating, job `bx77mtfrg`). These are EXOTIC tropical, NOT Americana — keep
+seed-category's register-aware resort wardrobe (NO beach-town template), only
+apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
+"glamour"). Then Countries (11) → World Wonders+Sydney → Gothic → Sci-Fi/Wild West
+→ Everest/Dinosaurs.
 
 ### 🔧 New beach-town pipeline (per town)
 1. `seed-category.mjs beach_towns false <sortStart> "<town>=<biome>"` → biome_config + wardrobe + 25 spots + gate cols (admin_only).
@@ -152,10 +157,17 @@ town below. Then Tropical Escapes → Countries → the rest.
 | Key West | ✅ 4.6 (dark) | R1: self 4.7 / couple 4.6 / scene 4.8 / plus1 4.0 | coral conch cottage + bougainvillea, turquoise dock, sunset marina. PASS. (plus1 rolled an awkward squat-on-surfboard pose — pose-pool, not location) |
 | Cape Cod | ✅ ~4.4 (dark) | R2: self 4.7 / couple 4.3 / scene 3.8 | R2 re-theme (sunnier, grey-shingle+lighthouse+marsh) worked. Self is a distinctly-Cape-Cod knockout; cast surfaces avg 4.5. PASS. (scene surface occasionally rolls a moody dusk aerial — acceptable variety) |
 | Santa Monica | ✅ 4.53 (dark) | R3 cast-only: self 4.4 / plus1 4.7 / couple 4.5 | R1 FAIL (Baywatch beefcake + decor-wall). R2 partial (pier showed but "glamour" word → blazer/editorial costumes; barbed-wire "safety barrier" spot). R3 fix: dropped "glamour" from SUBJECT_RULE (positive casual, no negation), reworded barbed-wire spot, sunny-axes. PASS — all cast surfaces casual/sunny/on-place. |
-| Coney Island | ⬜ | | retro boardwalk, coaster, Americana |
-| 30A / Seaside | ⬜ | | candy-colored beach town, cruisers, picket fences |
-| Malibu | ⬜ | | glass beach houses, surf, cliffs, sunset |
-| The Hamptons | ⬜ | | grey-shingle estates, hedgerows, dunes |
+| Coney Island | ✅ ~4.4 (dark) | R1 cast: self 4.2 / plus1 4.6 / couple 4.3 | iconic-template. Vintage carousel + arcade skee-ball. Distinctly Coney. (self drifted mild vintage vest+suspenders from the carousel setting; carousel rolled twice — acceptable) |
+| 30A / Seaside | ✅ 4.5 (dark) | R1 cast: self 4.6 / plus1 4.5 / couple 4.4 | candy-cottage template. Boardwalk-over-dunes, surf shack, pastel cottage + white picket. Americana wardrobe, sunny. PASS |
+| Malibu | ✅ ~4.2 (dark) 🚩Return-to | R1: self 4.6 / plus1 4.2 / couple 3.8 · R2: self 4.5 / plus1 4.0 / couple 3.7 | iconic-template. Self is a reliable knockout (beach seafood-shack, bluff coast). BUT the couple + plus1 surfaces drift SHIRTLESS / rugged-utility across BOTH rounds — Malibu's surf-culture prior is strong + stochastic; no clean fix. Soft-pass on self+plus1; 🚩 flag for Kevin to decide on the couple. |
+| The Hamptons | ✅ ~4.4 (dark) | R1 cast: self 4.6 / plus1 4.5 / couple 4.1 | iconic-template. Rose-arbor picket + dune grass; sunflower farm stand. Coastal-preppy casual. PASS. (couple rolled a farmer's work apron on male — mild costume drift) |
+
+> ⚠️ **Couple-surface costume drift (cross-town, minor):** on painterly mediums the dual/couple
+> render tends to invent "character" wardrobe for the MALE — shirtless (Malibu), work apron
+> (Hamptons), vest+suspenders (Coney carousel), epaulettes (SM R2). The Americana wardrobe pool
+> is fully-clothed casual, so this is stochastic Flux medium-drift, NOT a pool bug (self/plus1 stay
+> true). No clean fix without medium-narrowing (banned) or negation (leaks). A re-roll usually clears
+> it. Flag for Kevin's final pass; not a per-town blocker.
 
 ### ⛰️ Nature & Wild (1) · ⏳ Through Time (1)
 | Card | Status | QA avg | Notes |
@@ -196,6 +208,15 @@ town below. Then Tropical Escapes → Countries → the rest.
 ---
 
 ## Change Log
+- **2026-08-27 (session 2)** — BEACH TOWNS COMPLETE (9/9, dark). Batch 1 (Myrtle/OBX/
+  Key West/Cape Cod/Santa Monica) + batch 2 (Coney Island/30A/Malibu/Hamptons) seeded,
+  templated, graded on CAST surfaces only (scene-only deprioritized per Kevin). Built
+  `_tmp-iconictown.mjs` (specific-identity towns) + `_tmp-sunnyaxes.mjs` (bright TIME/
+  WEATHER — recipe axis is dark-dominant). Root-caused + fixed: Santa Monica "glamour"→
+  editorial-costume + barbed-wire "safety barrier" spot (R3 pass 4.53). Added
+  `qa-location.js --no-scene`. Recorded couple-surface male-costume drift (shirtless/
+  apron/vest) as a cross-town minor. Malibu 🚩Return-to (surf-shirtless prior, 2 rounds).
+  Committed the durable bits (tracker + qa-location flag). NEXT: Tropical Escapes.
 - **2026-08-27** — Plan (`LOCATION_REORG_PLAN.md`) + this tracker created. Taxonomy
   decided: 11 categories, no tabs, beaches split, landmarks→World Wonders, overlap
   OK. 41 net-new cards scoped. Picker UX polish (badge-only, buttons, single
