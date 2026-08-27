@@ -27,10 +27,12 @@ const POSE_POOLS = {
     ['companion', 'dual_actions.ts', 'DUAL_ACTIONS_COMPANION'],
     ['partner', 'dual_actions.ts', 'DUAL_ACTIONS_PARTNER'],
     ['playful', 'dual_actions.ts', 'DUAL_ACTIONS_PLAYFUL'],
+    ['dynamic', 'dual_actions.ts', 'DUAL_ACTIONS_DYNAMIC'],
   ],
   solo: [
     ['candid', 'single_actions.ts', 'CANDID_ACTIONS'],
     ['portrait', 'single_actions.ts', 'PORTRAIT_ACTIONS'],
+    ['dynamic_solo', 'single_actions.ts', 'DYNAMIC_ACTIONS'],
   ],
 };
 

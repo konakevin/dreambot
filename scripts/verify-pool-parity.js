@@ -54,8 +54,10 @@ function diffSets(codeArr, dbArr, label) {
     ['dual', 'companion', 'dual_actions.ts', 'DUAL_ACTIONS_COMPANION'],
     ['dual', 'partner', 'dual_actions.ts', 'DUAL_ACTIONS_PARTNER'],
     ['dual', 'playful', 'dual_actions.ts', 'DUAL_ACTIONS_PLAYFUL'],
+    ['dual', 'dynamic', 'dual_actions.ts', 'DUAL_ACTIONS_DYNAMIC'],
     ['solo', 'candid', 'single_actions.ts', 'CANDID_ACTIONS'],
     ['solo', 'portrait', 'single_actions.ts', 'PORTRAIT_ACTIONS'],
+    ['solo', 'dynamic_solo', 'single_actions.ts', 'DYNAMIC_ACTIONS'],
   ];
   for (const [castType, pool, file, name] of POOLS) {
     const { data } = await sb
