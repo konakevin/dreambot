@@ -132,6 +132,26 @@ export function extractHair(physicalSummary: string | null | undefined): string 
   return hairParts.join(', ');
 }
 
+// Pull JUST the skin-tone / complexion clause out of physical_summary. Skin
+// tone is RACE-CRITICAL and MUST reach the prompt: the face swap only refines
+// the FACE — the neck/arms/chest/hands are ALWAYS Flux-generated and never
+// swapped, so with no skin descriptor a strong location ethnicity prior ("fiji"
+// → Pacific Islander, "egypt", "brazil", "japan") fills in the WRONG race, and
+// a low-fidelity or shirtless render can't be corrected by the swap. The cast
+// description must OVERRIDE the character's race (Kevin, 2026-08-27: a white
+// cast rendered Polynesian in a Fiji couple dream because extractHair dropped
+// the "warm peachy-tan skin" clause, leaving nothing to counter the prior).
+// We include ONLY the skin clause here, NOT eye color / face shape — those are
+// the tokens that (per extractHair's note) pull renders toward Disney-princess /
+// stock-photo archetypes. Skin tone does not.
+export function extractSkin(physicalSummary: string | null | undefined): string | null {
+  if (!physicalSummary) return null;
+  const parts = physicalSummary.split(/[,;]/).map((p) => p.trim());
+  const skinParts = parts.filter((p) => /\bskin\b|complexion|-skinned|\btoned\b/i.test(p));
+  if (skinParts.length === 0) return null;
+  return skinParts.join(', ');
+}
+
 // Pull the build word from physical_summary. Constrained to the SAME three
 // buckets the describer now emits — thin / athletic / average — so no one ever
 // gets a heavy/unkind body label. Any other (legacy) word like "curvy" or
@@ -204,6 +224,7 @@ type ResolvedIdentity = {
   castGender: CastGender | null;
   age: string | null; // "38 years old" or "mid-30s"
   build: string | null;
+  skin: string | null; // skin-tone / complexion clause — race-critical, always kept
   identity: string; // hair / facial-hair string
 };
 
@@ -216,8 +237,9 @@ export function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
   const age =
     typeof member.age === 'number' ? `${member.age} years old` : extractAge(member.promptDesc);
   const build = extractBuild(member.physicalSummary);
+  const skin = extractSkin(member.physicalSummary);
   const identity = extractHair(member.physicalSummary) || extractIdentityPhrase(member.promptDesc);
-  return { gender, castGender, age, build, identity };
+  return { gender, castGender, age, build, skin, identity };
 }
 
 function stripIdentity(s: string): string {
@@ -234,8 +256,12 @@ function stripIdentity(s: string): string {
 function buildIdentityBlock(prefix: string, resolved: ResolvedIdentity, wardrobe: string): string {
   const ageAxis = resolved.age ? `, ${resolved.age}` : '';
   const buildAxis = resolved.build ? `, ${resolved.build} build` : '';
+  // Skin tone sits right in the identity block so it anchors the (never-swapped)
+  // body skin to the cast member's actual complexion and overrides any location
+  // ethnicity prior. Race must never be inferred from the setting.
+  const skinAxis = resolved.skin ? `, ${resolved.skin}` : '';
   const cleanIdentity = stripIdentity(resolved.identity);
-  return `${prefix}: a ${resolved.gender}${ageAxis}${buildAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
+  return `${prefix}: a ${resolved.gender}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
 // ── Slot brief construction ─────────────────────────────────────────────
