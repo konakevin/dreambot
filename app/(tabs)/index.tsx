@@ -178,12 +178,13 @@ export default function HomeScreen() {
     // prefetch is a large fan-out (all-bots + one page per bot) that must never
     // block the first paint.
     const handle = InteractionManager.runAfterInteractions(() => {
-      // "All bots" mixed feed (selectedBotId = null)
+      // Prewarm ONLY the "All bots" mixed feed (1 RPC) so the Bots tab is warm.
+      // The per-bot fan-out (one get_feed per ~20 bots) was REMOVED from cold
+      // start (2026-08-27): it fired ~20 concurrent get_feed RPCs DURING the
+      // primary feed load — spiking the connection pool, jamming the JS thread,
+      // and dragging the forYou fetch ~800ms slower — and it's redundant, because
+      // bots.tsx already prewarms each bot when the Bots tab is actually open.
       prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, null);
-      // Each individual bot's first page + first 5 images
-      for (const bot of botUsers) {
-        prefetchDreamFeed(queryClient, 'bots', user.id, feedSeed, bot.id);
-      }
     });
     return () => handle.cancel();
   }, [user, feedSeed, queryClient, botUsers]);
