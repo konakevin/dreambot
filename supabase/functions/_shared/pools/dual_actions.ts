@@ -64,7 +64,6 @@ export const DUAL_ACTIONS_COMPANION: string[] = [
   'one standing while applying something to their skin, the other nearby holding a tube or bottle',
   'one sitting on a blanket with arms relaxed at sides, the other sitting cross-legged beside the blanket',
   'both near a fountain or water feature, one trailing fingers in water, the other standing dry',
-  'one digging in soil with a small shovel, the other standing beside them holding seeds',
   'one standing while testing the weight of an object, the other beside them with arms relaxed',
   'both near a rope swing, one testing the knot strength, the other standing back with hands on hips',
   'both near a wooden crate, one prying it open with a crowbar, the other standing ready with gloves',
