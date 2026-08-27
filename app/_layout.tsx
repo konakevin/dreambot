@@ -50,6 +50,7 @@ import { UpscaleModalHost, UpscaleModal } from '@/components/UpscaleOverlay';
 import { EditDescriptionModalHost } from '@/components/EditDescriptionModal';
 
 import { queryClient, persistOptions } from '@/lib/queryClient';
+import { prefetchDreamFeed } from '@/hooks/useDreamFeed';
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { ForceUpdateGate } from '@/components/ForceUpdateGate';
 import { SCREEN_PRESETS } from '@/constants/navigationPresets';
@@ -814,6 +815,28 @@ function AnalyticsIdentity() {
   return null;
 }
 
+// Boot-time forYou feed prewarm. The feed is deliberately NOT persisted (fresh
+// per-launch ordering — the cold-open model), so the mounted feed screen fires
+// get_feed (~1.2s warm, more on a cold first request) as the launch spinner.
+// Kicking off the SAME prefetch the feed screen makes on mount (index.tsx) the
+// instant the session restores overlaps that RPC with the splash / font-load /
+// navigation, so the feed screen mounts onto a warm cache (staleTime 15min) and
+// the cold-open spinner is largely gone. Fire-and-forget; never blocks render.
+// The key MUST stay byte-identical to the mounted key (tab 'forYou', user.id,
+// launch feedSeed, store feedShuffle, botUserId null) — this is the exact call
+// at app/(tabs)/index.tsx, just earlier. Runs once per launch.
+function BootFeedPrewarm() {
+  const initialized = useAuthStore((s) => s.initialized);
+  const user = useAuthStore((s) => s.user);
+  const didPrewarm = useRef(false);
+  useEffect(() => {
+    if (!initialized || !user || didPrewarm.current) return;
+    didPrewarm.current = true;
+    void prefetchDreamFeed(queryClient, 'forYou', user.id, useFeedStore.getState().feedSeed);
+  }, [initialized, user]);
+  return null;
+}
+
 function RootLayout() {
   const [fontsLoaded] = useFonts({
     ...Ionicons.font,
@@ -850,6 +873,7 @@ function RootLayout() {
                     <AvatarConfirmProvider>
                       <AuthInitializer />
                       <AnalyticsIdentity />
+                      <BootFeedPrewarm />
                       <ScreenTracker />
                       <PushRegistrar />
                       <TimezoneSync />
