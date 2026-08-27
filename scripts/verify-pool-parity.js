@@ -15,12 +15,30 @@ const sb = createClient(
 );
 const D = 'supabase/functions/_shared/pools/';
 
+/** A DB row is malformed if it's a delimiter fragment or too short (2026-08-27). */
+function isMalformed(t) {
+  if (typeof t !== 'string') return true;
+  const s = t.trim();
+  return s.length < 10 || s.includes('\n') || /",\s*"/.test(s) || /^["',\s]+$/.test(s);
+}
+
 function diffSets(codeArr, dbArr, label) {
+  // (1) Malformed-row guard — set-comparison alone is blind to DUPLICATE garbage
+  //     (N identical junk rows collapse to one set element). Check rows directly.
+  const junk = dbArr.filter(isMalformed);
+  if (junk.length) {
+    console.error(`✗ ${label}: ${junk.length} MALFORMED DB rows (e.g. ${JSON.stringify(junk[0])})`);
+    return false;
+  }
+  // (2) Count guard — multiplicity, not just membership.
+  if (dbArr.length !== codeArr.length) {
+    console.error(`✗ ${label}: DB has ${dbArr.length} rows, code has ${codeArr.length}`);
+  }
   const code = new Set(codeArr.map(norm));
   const db = new Set(dbArr.map(norm));
   const missing = [...code].filter((x) => !db.has(x));
   const extra = [...db].filter((x) => !code.has(x));
-  if (missing.length || extra.length) {
+  if (missing.length || extra.length || dbArr.length !== codeArr.length) {
     console.error(`✗ ${label}: ${missing.length} missing from DB, ${extra.length} extra in DB`);
     for (const m of missing.slice(0, 3)) console.error(`   missing: ${m.slice(0, 70)}`);
     for (const e of extra.slice(0, 3)) console.error(`   extra:   ${e.slice(0, 70)}`);

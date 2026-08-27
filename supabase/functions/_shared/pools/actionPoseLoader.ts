@@ -30,6 +30,23 @@ export interface LoadedActionPoses {
 
 let cache: LoadedActionPoses | null = null;
 
+/**
+ * Load-time garbage guard (defense in depth, 2026-08-27). A malformed row — a
+ * delimiter fragment (`",\n  "`), an empty/near-empty string, or one carrying a
+ * newline — must NEVER reach a render as a "pose", no matter how it got into the
+ * DB. We filter these out BEFORE the supersede floor is applied, so a pool that
+ * is mostly garbage falls back to its clean code array instead of serving junk.
+ * (The reseed fixes the data; this makes the pipeline robust to bad data.)
+ */
+function isWellFormedPose(text: unknown): boolean {
+  if (typeof text !== 'string') return false;
+  const t = text.trim();
+  if (t.length < 10) return false;
+  if (t.indexOf('\n') !== -1) return false;
+  if (/",\s*"/.test(t)) return false;
+  return true;
+}
+
 // ── CLASSIC pools (POSE_POOLS_DB_MIGRATION_PLAN.md) ─────────────────────────
 // DB rows (action_poses with pool=companion/partner/playful/candid/portrait)
 // supersede a code array ONLY when that pool loads >= 80% of the code array's
@@ -80,8 +97,11 @@ export async function loadClassicPools(supabase: SupabaseClient): Promise<Loaded
         .eq('disabled', false)
         .limit(1000);
       if (error || !data) continue; // this pool stays on its code array
+      // Drop malformed rows BEFORE the floor test, so a mostly-garbage pool
+      // fails the floor and falls back to its clean code array (never serves junk).
+      const clean = data.map((r) => r.text as string).filter(isWellFormedPose);
       const floor = Math.floor(CLASSIC_CODE[pool].length * 0.8);
-      if (data.length >= floor) out[pool] = data.map((r) => r.text as string);
+      if (clean.length >= floor) out[pool] = clean;
     }
     for (const pool of BESPOKE_POOL_KEYS) {
       for (const castType of ['dual', 'solo'] as const) {
@@ -93,7 +113,7 @@ export async function loadClassicPools(supabase: SupabaseClient): Promise<Loaded
           .eq('disabled', false)
           .limit(1000);
         if (error || !data) continue; // absent pool = feature off
-        bespoke[castType][pool] = data.map((r) => r.text as string);
+        bespoke[castType][pool] = data.map((r) => r.text as string).filter(isWellFormedPose);
       }
     }
   } catch (_e) {
@@ -126,14 +146,14 @@ export async function loadActionPoses(supabase: SupabaseClient): Promise<LoadedA
       .limit(2000);
     if (data) {
       const dual = data
-        .filter((r) => r.cast_type === 'dual')
+        .filter((r) => r.cast_type === 'dual' && isWellFormedPose(r.text))
         .map((r) => ({
           text: r.text as string,
           biomes: (r.biomes as string[] | null) ?? undefined,
           weight: Number(r.weight ?? 1),
         }));
       const solo = data
-        .filter((r) => r.cast_type === 'solo')
+        .filter((r) => r.cast_type === 'solo' && isWellFormedPose(r.text))
         .map((r) => ({
           text: r.text as string,
           biomes: (r.biomes as string[] | null) ?? undefined,

@@ -17,6 +17,18 @@ let cache: SceneClusterRecords | null = null;
 const codeTotal = (rec: Record<string, string[]>) =>
   Object.values(rec).reduce((s, a) => s + a.length, 0);
 
+/** Load-time garbage guard (2026-08-27) — a delimiter fragment / newline / empty
+ *  string must never reach a render as a scene spot. Filtered before the floor
+ *  test so a mostly-garbage kind falls back to its clean code record. */
+function isWellFormedSpot(text: unknown): boolean {
+  if (typeof text !== 'string') return false;
+  const t = text.trim();
+  if (t.length < 6) return false;
+  if (t.indexOf('\n') !== -1) return false;
+  if (/",\s*"/.test(t)) return false;
+  return true;
+}
+
 export async function loadLocationSpots(supabase: SupabaseClient): Promise<SceneClusterRecords> {
   if (cache) return cache;
   const out: SceneClusterRecords = {
@@ -34,9 +46,12 @@ export async function loadLocationSpots(supabase: SupabaseClient): Promise<Scene
       if (error || !data) continue;
       const codeRec = kind === 'spot' ? SCENE_CLUSTERS_SPOTS : SCENE_CLUSTERS_ACTIVITIES;
       const floor = Math.floor(codeTotal(codeRec) * 0.8);
-      if (data.length < floor) continue; // half-loaded kind = no kind (I1/I6)
+      // Drop malformed rows before the floor test — a mostly-garbage kind then
+      // fails the floor and serves from the clean code record.
+      const clean = data.filter((r) => isWellFormedSpot(r.text));
+      if (clean.length < floor) continue; // half-loaded kind = no kind (I1/I6)
       const rec: Record<string, string[]> = {};
-      for (const r of data) {
+      for (const r of clean) {
         (rec[(r.location_key as string).toLowerCase()] ??= []).push(r.text as string);
       }
       if (kind === 'spot') out.spots = rec;
