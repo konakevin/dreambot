@@ -1016,12 +1016,22 @@ Deno.serve(async (req) => {
         bans: NIGHTLY_BANNED_MODELS,
       });
       let m = pickFromPool(pool);
-      // Single-swap Ultra clamp: Ultra renders at 4MP; the single-cast swap
-      // providers downscale it until the face is undetectable → hard-fail. Dual
-      // is left on Ultra — nightly's dual swap runs on Fly (face-swap-dual, 2GB).
-      if (isSingleHumanFaceSwap && m === 'black-forest-labs/flux-1.1-pro-ultra') {
+      // Ultra clamp (single AND dual): Ultra renders at 4MP. Single-swap providers
+      // downscale it until the face is undetectable; and the DUAL detector fails to
+      // split its oversized faces ~50% of the time (8/16 faceless Aug 27-28 vs 10%
+      // on flux-1.1-pro), while Ultra's slow multi-attempt render starves the
+      // solo-degrade budget → pure-scene-fallback (Kevin's 2026-08-28 "Faanui Bay in
+      // noir" nightly went scene-only this way). The 2026-06-01 "dual is safe on
+      // Fly's 2GB" assumption held for MEMORY but NOT for split reliability, so clamp
+      // both paths to the reliable 1.1-pro sibling.
+      if (
+        (isSingleHumanFaceSwap || isDualFaceSwap) &&
+        m === 'black-forest-labs/flux-1.1-pro-ultra'
+      ) {
         m = 'black-forest-labs/flux-1.1-pro';
-        fallbackReasons.push('single_ultra_clamped_to_pro');
+        fallbackReasons.push(
+          isDualFaceSwap ? 'dual_ultra_clamped_to_pro' : 'single_ultra_clamped_to_pro'
+        );
       }
       // Dual-swap flex clamp: flux-2-flex fails the dual split ~25% of the time
       // (2× the pool average) → clamp to flux-1.1-pro, a reliable dual sibling
