@@ -145,6 +145,15 @@ const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   'black-forest-labs/flux-2-pro',
   // BANNED from nightly (Kevin, 2026-08-26): gemini-2-image, same call.
   'google/gemini-2-image',
+  // BANNED from nightly (Kevin, 2026-08-28): flux-1.1-pro-ultra. Its 4MP output
+  // defeats the dual face-swap detector ~50% of the time (8/16 faceless Aug 27-28
+  // vs 10% on flux-1.1-pro) AND starves the solo-degrade budget → scene-only cast
+  // dreams (Kevin's "Faanui Bay in noir" nightly). It's 0% faceless on non-swap
+  // nightlies, but the quality edge over 1.1-pro is marginal and it keeps breaking
+  // the "is Ultra safe here" assumption, so it's out of nightly wholesale. (The
+  // downstream single/dual Ultra→pro clamp remains a backstop if this is ever
+  // re-enabled for non-swap.)
+  'black-forest-labs/flux-1.1-pro-ultra',
 ]);
 
 Deno.serve(async (req) => {
