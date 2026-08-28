@@ -131,12 +131,18 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 > drift is the SCENE recoloring the body + adding local dress, not a swap failure; clean cast spots + the
 > skin-tone fix + modern wardrobe together keep the couple on-race and fashionable. If a location still
 > can't hold after 5 rounds/issue → SHELF it and continue (Kevin 2026-08-27).
-| Spain | ⬜ | | Alhambra, Gaudí, flamenco, Seville, coast |
-| Ireland | ⬜ | | Cliffs of Moher, castles, emerald hills, pubs |
-| Germany | ⬜ | | Neuschwanstein, Bavaria, Black Forest, markets |
-| Vietnam | ⬜ | | Ha Long Bay, Hoi An lanterns, rice terraces |
-| Brazil | ⬜ | | Amazon, Iguazu, Carnival, rainforest |
-| Scotland | ⬜ | | Highlands, lochs, clifftop castles, tartan |
+| Spain | ✅ ~4.55 (dark) | couple 4.6 / self 4.5 | tapas terrace + Andalusian lane, modern-fashionable, correct race. PASS |
+| Ireland | ✅ ~4.3 (dark) | self 4.6 (waterfall, waxed jacket) / couple 4.0 | correct race, cool; couple a touch formal-tweed but plausible. PASS |
+| Germany | ✅ ~4.6 (dark) | couple 4.6 (Marienplatz + map) | classic modern tourist couple, correct race. PASS |
+| Vietnam | ✅ 4.47 (dark) | self 4.5 / plus1 4.5 / couple 4.4 | STRONG PRIOR — passed R1, NO ethnic drift (all white), mandarin-collar/parasol = tasteful local flair. PASS |
+| Brazil | ✅ ~4.5 (dark) | self 4.6 (street-art bomber) / couple 4.5 (Selarón Steps) | strong-ish prior — correct race, cool + fashionable. PASS |
+| Scotland | ✅ ~4.55 (dark) | self 4.5 (plein-air) / couple 4.6 (Highlands + map) | correct race, stylish, no tartan-costume. PASS |
+
+> ✅✅✅ **ALL 11 COUNTRIES PASS (dark).** Batch 1 (Japan/Italy/Egypt/Greece/France) + batch 2
+> (Spain/Ireland/Germany/Vietnam/Brazil/Scotland). The ethnic-drift fix (race skin-tone in prompt +
+> cast-spot hygiene baked into `_tmp-country.mjs` + modern-day-traveler framing) works AUTOMATICALLY on
+> strong priors — Vietnam + Brazil passed R1 with no drift + tasteful local flair. Kevin's bar met:
+> your real fashionable selves on vacation, correct race, no cheesy stereotypes.
 
 ### 🌍 Around the World — City + Wonders (2)
 | Card | Status | QA avg | Notes |
