@@ -147,8 +147,8 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ### 🌍 Around the World — City + Wonders (2)
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Sydney | ⬜ | | Opera House, Harbour Bridge, Bondi, skyline |
-| World Wonders | ⬜ | | Phase-1 structural; spots = 8 wonders |
+| Sydney | ✅ ~4.55 (dark) | self 4.6 / couple 4.5 | country template — Darling Harbour, modern-cool, correct race. PASS |
+| World Wonders | ⬜ | | Phase-1 structural (repurpose Ancient Wonders card); spots = 8 wonders. TODO |
 
 ### 🏖️ Tropical Escapes (4) — IN PROGRESS (PAUSED for the race bug 2026-08-27)
 > 🧩 **Tropical template (`_tmp-tropicaltown.mjs`):** exotic tropical ≠ Americana. seed-category's
@@ -223,7 +223,7 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ### ⛰️ Nature & Wild (1) · ⏳ Through Time (1)
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Mount Everest / Himalayas | ⬜ | | snow peaks, prayer flags, glaciers, base camp |
+| Mount Everest / Himalayas | ✅ ~4.5 (dark) | self 4.5 / couple 4.6 | BESPOKE alpine treatment (not country template): mountaineering wardrobe (down jackets/trekking, NOT linen) + bright-snow axes + base-camp/village/bridge cast spots. Correct race, epic. PASS |
 | Prehistoric (Dinosaurs) | ⬜ | | primeval jungle, volcanic valleys, dinosaurs |
 
 ### 🦇 Gothic & Haunted (7)
