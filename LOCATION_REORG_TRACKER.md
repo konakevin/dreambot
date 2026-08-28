@@ -148,7 +148,7 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
 | Sydney | ✅ ~4.55 (dark) | self 4.6 / couple 4.5 | country template — Darling Harbour, modern-cool, correct race. PASS |
-| World Wonders | ⬜ | | Phase-1 structural (repurpose Ancient Wonders card); spots = 8 wonders. TODO |
+| World Wonders | ✅ ALREADY BUILT + LIVE | sample: self 4.7 / couple 4.6 | The `ancient wonders` card IS this — LIVE (admin=false), 309 spots/251 cast covering Machu Picchu/Petra/Pyramids/Colosseum/Angkor/Taj/Great Wall + hundreds more. 6 single-landmark cards ALREADY dissolved (pc=null). Renders great: fashionable explorer couple, CORRECT RACE, cast well-integrated (old "MASSIVE" SUBJECT doesn't hurt — cast spots frame at human scale). NO seeding needed. Only open nit: display-name "Ancient Wonders"→"World Wonders" + SECTION_META placement = Phase-1 code cosmetic for Kevin. |
 
 ### 🏖️ Tropical Escapes (4) — IN PROGRESS (PAUSED for the race bug 2026-08-27)
 > 🧩 **Tropical template (`_tmp-tropicaltown.mjs`):** exotic tropical ≠ Americana. seed-category's
