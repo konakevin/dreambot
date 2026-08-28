@@ -134,9 +134,14 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
 | Amalfi Coast | ✅ 4.6 (dark) | self 4.6 / plus1 4.5 / couple 4.7 | resort template. Chic believable linen; distinctly Amalfi. PASS |
-| Fiji | ⏸️ R2 pending (race fix) | self 3.9 / plus1 4.5 / couple 3.5 | bare-chest + RACE BUG (rendered Polynesian). Re-render after skin-tone fix + clothed-context spots |
-| Cancún | ⏸️ rendered, ungraded | | download+grade after race fix; beach-heavy |
-| Tahiti | ⏸️ rendered, ungraded | | download+grade after race fix; beach-heavy |
+| Fiji | ✅ 4.57 (dark) | R2: self 4.5 / plus1 4.6 / couple 4.6 | after race fix + canvas fix + clothed-context spots (decks/docks/terraces): all DRESSED, correct race, clean. PASS |
+| Tahiti | ✅ 4.6 (dark) | R2: self 4.5 / plus1 4.7 / couple 4.6 | clothed-context spots + resort wardrobe: bungalow deck, tiki pavilion; all dressed, correct race. PASS |
+| Cancún | ✅ 4.47 (dark) | R3: self 4.4 / plus1 4.6 / couple 4.4 | R3 fix (demoted clifftop cast spot + tightened wardrobe to closed tops) worked: all dressed, correct race, clothed-context. PASS |
+
+> ✅ **TROPICAL ESCAPES COMPLETE 4/4** (Amalfi 4.6 · Fiji 4.57 · Tahiti 4.6 · Cancún 4.47), all dark.
+> Validated the full fixed pipeline: race skin-tone fix + clean canvas medium + clothed-context cast
+> spots (decks/docks/terraces/bars/lanes, NOT open sand) + believable resort wardrobe. Beach-heavy
+> tropicals need the clothed-context spot bias + closed-top wardrobe to avoid shirtless drift.
 
 ### 🏝️ Beach Towns (9) — SEED FIRST (new category)
 > ⭐ **BEACH TOWNS TEMPLATE (learned on Myrtle Beach R1→R2, from Kevin's favorited refs):**
