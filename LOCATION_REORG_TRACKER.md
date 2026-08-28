@@ -54,7 +54,7 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Phase | Status | Notes |
 |---|---|---|
 | **1 — UI + Reorg** | ✅ DONE | committed `c5f92b0d`; DB reclassify applied; de-tab + 11-cat SECTION_META live in code |
-| **2 — Seeding (41 cards)** | 🔨 in progress | Myrtle Beach shakedown first; per-card table below |
+| **2 — Seeding (41 cards)** | ✅ ALL 41 SEEDED + QA'd (dark) | every card passes ≥~4.2 on cast surfaces; per-card table below. Awaiting Kevin's grading pass + spot-scale-to-100 |
 | **3 — Go-live** | ⬜ not started | flip `admin_only=false` per category after sign-off + build |
 
 ---
@@ -224,7 +224,7 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
 | Mount Everest / Himalayas | ✅ ~4.5 (dark) | self 4.5 / couple 4.6 | BESPOKE alpine treatment (not country template): mountaineering wardrobe (down jackets/trekking, NOT linen) + bright-snow axes + base-camp/village/bridge cast spots. Correct race, epic. PASS |
-| Prehistoric (Dinosaurs) | ⬜ | | primeval jungle, volcanic valleys, dinosaurs |
+| Prehistoric (Dinosaurs) | ✅ ~4.2 (dark) 🚩minor | self 4.4 (explorer @ arch) / couple 3.9 (waterfall-pool → swimsuit) | fantasy template (bright axes), explorer wardrobe, correct race. Couple rolled a jungle-waterfall swim spot → swimsuit register; a clothed-context spot nudge would tighten. Soft-pass |
 
 ### 🦇 Gothic & Haunted (7) — ✅ ALL PASS (dark)
 > 🧩 **Fantasy template (`_tmp-fantasy.mjs`, mood=dark):** character-in-the-world — Sonnet-gen
@@ -261,9 +261,9 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Moon Base | ✅ ~4.4 (dark) | self 4.6 / couple 4.2 | sleek flight-suit self (hydroponics bay) is great; couple wardrobe upgraded to sleek (was beige). PASS |
 | Starship Bridge | ✅ ~4.6 (dark) | canvas: self 4.7 / couple 4.6 | UPGRADED for Kevin — epic viewscreen+fleet SUBJECT, sleek command wardrobe, captain's-chair hero spots. Command-couple w/ fleet behind = heroic-cool. PASS (cinematic = killer bg but tiny cast) |
 | Robot City | ✅ ~4.4 (dark) | self 4.7 / couple 4.0 | neon-plaza cyberpunk techwear self is killer; couple correct race but male rolled half-cyborg chrome-head (android prior). Minor; re-roll clears. PASS |
-| Saloon | ⬜ | | swinging doors, poker, piano, gunslingers |
-| Outlaw Hideout | ⬜ | | canyon camp, wanted posters, campfire |
-| Railroad Town | ⬜ | | steam depot, frontier main street |
+| Saloon | ✅ ~4.4 (dark) | self 4.6 / couple 4.3 | Red Dead gunslinger register — worn vest/neckerchief at the piano; correct race, authentic (not costume). PASS |
+| Outlaw Hideout | ✅ ~4.6 (dark) | self 4.7 / couple 4.5 | canyon camp, weathered dusters/buckskin, map — authentic frontier-outlaw (Red Dead vision); correct race. PASS |
+| Railroad Town | ✅ ~4.5 (dark) | couple 4.6 | joyful couple at a depot platform beside a vintage train; correct race, charming boomtown. PASS |
 
 ---
 
