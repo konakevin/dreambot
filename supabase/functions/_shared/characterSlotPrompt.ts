@@ -689,6 +689,59 @@ export function assembleCharacterPrompt(
   return parts.join(', ');
 }
 
+/**
+ * Build a SOLO fallback prompt from a completed DUAL render, for when the dual
+ * face-swap fails every retry and the couple can't be delivered.
+ *
+ * The bug this fixes: the old fallback re-rendered the COUPLE prompt (which says
+ * "MAN on the LEFT, WOMAN on the RIGHT ...") with a "one person" phrase glued on
+ * the front. A prefix can't override a prompt whose whole body describes two
+ * people, so Flux kept rendering a couple → the solo-swap guard saw a
+ * wrong-gender partner face and refused → the cast dream degraded to a FACELESS
+ * pure-scene (root-caused 2026-08-27: 8 of 10 faceless nightlies died here).
+ *
+ * This instead re-assembles self's ALREADY-COMPUTED wardrobe + the shared
+ * scene/mood/props as a genuine SINGLE-character prompt (self only, partner
+ * dropped). Flux renders one clean person of self's gender, the guard passes, and
+ * self always lands — a cast dream never degrades to a faceless scene. It reuses
+ * the single-cast branch of assembleCharacterPrompt (self's shouted gender lock,
+ * "ONE person alone in the scene", swap-safe face size), so it can never emit the
+ * L/R couple framing. Deterministic — no Sonnet call; the dual build already
+ * produced every field this needs.
+ *
+ * @param selfIndex which side of the dual is self: 0 = LEFT, 1 = RIGHT. Picks
+ *   self's wardrobe and drops the partner entirely.
+ */
+export function assembleSoloFallbackFromDual(
+  dualSlots: DualSlots,
+  dualInput: CharacterSlotPipelineInput,
+  selfIndex: 0 | 1
+): string {
+  const selfMember = dualInput.cast[selfIndex];
+  if (!selfMember) {
+    throw new Error(`assembleSoloFallbackFromDual: selfIndex ${selfIndex} out of range`);
+  }
+  const singleSlots: SingleSlots = {
+    scene_description: dualSlots.scene_description,
+    wardrobe: selfIndex === 0 ? dualSlots.left_wardrobe : dualSlots.right_wardrobe,
+    mood: dualSlots.mood,
+    props: dualSlots.props,
+  };
+  return assembleCharacterPrompt(singleSlots, {
+    ...dualInput,
+    cast: [selfMember],
+    // The dual ACTION describes a COUPLE pose ("both ... a clear gap between
+    // their heads") — meaningless and confusing for a solo render, so drop it;
+    // the single anchor + framing block already position the lone subject.
+    action: null,
+    // three_quarter is the proven swap-safe solo preset (2026-08-24): it holds a
+    // big-enough, readable face for the identity gate. Never enviro_wide here —
+    // that shrinks the face below the swap floor (the very failure we're recovering
+    // from).
+    soloComposition: 'three_quarter',
+  });
+}
+
 // ── Main pipeline entry point ──────────────────────────────────────────
 
 export async function runCharacterSlotPipeline(

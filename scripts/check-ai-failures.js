@@ -87,6 +87,28 @@ async function countSince(since, extra) {
   }
 
   let alarm = false;
+
+  // ── Silent faceless-cast degrade (2026-08-27) ─────────────────────────────
+  // A cast dream whose face-swap fails every retry can COMPLETE (status ok) with
+  // a FACELESS scene — the person the user built a Vibe Profile to see is erased.
+  // This is a silent QUALITY failure the status-based checks above miss entirely
+  // (it's how Michele's watercolor nightly shipped an empty beach: root-caused
+  // 2026-08-27). Post-fix, dual failures degrade to a solo self render, so this
+  // should be ~0 — treat any meaningful count as a regression, not noise.
+  const FACELESS_ABS_ALARM = parseInt(getKey('FACELESS_CAST_ABS_ALARM') || '6', 10);
+  const faceless = await countSince(since, (q) =>
+    q.eq('status', 'completed').contains('fallback_reasons', ['pure_scene_fallback'])
+  );
+  console.log(
+    `faceless cast degrades (completed w/ pure_scene_fallback, last ${WINDOW_HOURS}h): ${faceless}`
+  );
+  if (faceless >= FACELESS_ABS_ALARM) {
+    console.error(
+      `::error::${faceless} cast dreams silently degraded to a FACELESS scene in the last ${WINDOW_HOURS}h (>= ${FACELESS_ABS_ALARM}) — the dual→solo fallback is failing. Inspect solo_fallback:* / dual_degrade_cascade in ai_generation_log.fallback_reasons.`
+    );
+    alarm = true;
+  }
+
   if (total >= MIN_SAMPLE && rate >= RATE_ALARM) {
     console.error(
       `::error::render failure rate ${(rate * 100).toFixed(1)}% over last ${WINDOW_HOURS}h (${failed}/${total}, >= ${(RATE_ALARM * 100).toFixed(0)}%) — pipeline degraded.`

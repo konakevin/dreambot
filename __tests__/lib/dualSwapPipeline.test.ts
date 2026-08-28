@@ -266,6 +266,50 @@ describe('identity enforcement (Stage 8c)', () => {
       expect(deps.rerender).not.toHaveBeenCalled();
     })
   );
+
+  // ── IDENTITY_DEGRADE_FLOOR (0.15) — the exact Michele 2026-08-27 path ────────
+  // A best sub-threshold dual BELOW 0.15 is a WRONG-person face (a watercolor
+  // self-face ArcFace-scored 0.057, then -0.069). It must NOT ship the dual and
+  // must NOT go faceless: degrade to a self-only single.
+  it(
+    'catastrophic identity (best < 0.15 floor) NON-STRICT → degrades to SINGLE, never ships the stranger dual',
+    withDeno('0.35', async () => {
+      const dispatchDual = jest.fn().mockResolvedValue({
+        swappedUrl: 'STRANGER.jpg',
+        faceCount: 2,
+        identity: { left: 0.44, right: 0.057, ms: 900 }, // min 0.057 < 0.15 floor
+      });
+      const deps = makeDeps({ dispatchDual });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 2 });
+      expect(r.outcome).toBe('single');
+      expect(r.url).toBe('SINGLE.jpg');
+      expect(r.reasons.some((x) => x.startsWith('identity_degrade_floor:'))).toBe(true);
+      expect(r.url).not.toBe('STRANGER.jpg'); // never ship the wrong person
+      expect(deps.singleSwap).toHaveBeenCalledWith('self.jpg', expect.any(String));
+    })
+  );
+
+  it(
+    'catastrophic identity + singleSwap REFUSES → cascade (the OLD faceless path; now prevented upstream by a real solo re-render)',
+    withDeno('0.35', async () => {
+      // This is the branch that shipped Michele a faceless beach: the degrade
+      // single swap re-rendered the COUPLE prompt, the guard saw a wrong-gender
+      // partner and returned null → cascade. The nightly caller now feeds a
+      // genuine SOLO prompt (assembleSoloFallbackFromDual), so this null path is
+      // no longer reached in practice — but the pipeline still fails SAFE here.
+      const dispatchDual = jest.fn().mockResolvedValue({
+        swappedUrl: 'STRANGER.jpg',
+        faceCount: 2,
+        identity: { left: 0.44, right: 0.057, ms: 900 },
+      });
+      const singleSwap = jest.fn().mockResolvedValue(null); // guard refused
+      const deps = makeDeps({ dispatchDual, singleSwap });
+      const r = await genderSafeDualSwap('render.jpg', deps, { strict: false, maxRerenders: 0 });
+      expect(r.outcome).toBe('cascade');
+      expect(r.reasons).toContain('dual_degrade_single_refused_gender');
+      expect(r.url).not.toBe('STRANGER.jpg');
+    })
+  );
 });
 
 // ── #2 — PROACTIVE Haiku gender routing (2026-08-05, sunnysteph) ─────────────

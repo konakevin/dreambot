@@ -116,7 +116,12 @@ import {
   singleScenarioCandidates,
 } from '../_shared/pools/singleScenarioLoader.ts';
 import { pickDualCompositionPath } from '../_shared/pools/dual_composition.ts';
-import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
+import {
+  runCharacterSlotPipeline,
+  assembleSoloFallbackFromDual,
+  type CharacterSlotPipelineInput,
+  type DualSlots,
+} from '../_shared/characterSlotPrompt.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
@@ -431,6 +436,18 @@ Deno.serve(async (req) => {
   // block-scoped and out of scope by the swap-result point (CAPTURE, not reach).
   let castNotifyMembers: DreamCastMember[] = [];
   let finalPrompt: string = '';
+  // Hoisted DUAL solo-fallback context. When a dual face-swap fails every retry,
+  // the recovery re-renders self ALONE using assembleSoloFallbackFromDual (a
+  // genuine single-character prompt built from self's already-computed
+  // wardrobe + the shared scene) instead of the old couple-prompt-with-prefix
+  // that kept rendering two people → faceless. Captured after the slot pipeline
+  // builds the dual; null on the freeform-brief path (falls back to the legacy
+  // prefix). See _shared/characterSlotPrompt.ts (root-caused 2026-08-27).
+  let soloFallbackCtx: {
+    dualSlots: DualSlots;
+    input: CharacterSlotPipelineInput;
+    selfIndex: 0 | 1;
+  } | null = null;
   // Hoisted embodied-medium flag so the post-try GPT-image-2 prefix step
   // can skip its canvas-illustration prefix (which fights LEGO / pixels /
   // handcrafted directives — their own medium fragment is the CLIP anchor).
@@ -1992,79 +2009,93 @@ Deno.serve(async (req) => {
         } else {
           action = activeSinglePose ?? locationAction ?? singleAction ?? null;
         }
-        const slotResult = await runCharacterSlotPipeline(
-          {
-            cast: resolvedCast.map((rc, i) => ({
-              role: rc.role,
-              promptDesc: rc.promptDesc,
-              age: (selectedCast[i] as DreamCastMember).age ?? null,
-              physicalSummary: (selectedCast[i] as DreamCastMember).physical_summary ?? null,
-              // Pass the explicit gender through so the slot pipeline locks the
-              // body's sex to the cast photo (fixes male-face-on-female-body).
-              gender: (selectedCast[i] as DreamCastMember).gender ?? null,
-            })),
-            // Special scene (goofy/elegant) overrides the location + swaps the biome
-            // axes for a LIGHTING-quality axis (varies the look; a goofy/indoor scene
-            // shouldn't fight "blizzard at midnight"). wardrobeAnchor: goofy → null
-            // (normal clothes); elegant → the dressed-up attire; location → biome.
-            iconicAnchor: dualSpecialScene ?? iconicAnchor,
-            userPlace: dualSpecialScene ?? userPlace ?? null,
-            timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
-            weatherAxis: dualSpecialScene ? '' : weatherAxis,
-            phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
-            wardrobeAnchor: dualSpecialScene
-              ? dualSpecialWardrobe
-              : bespokeBiome &&
-                  Array.isArray(bespokeBiome.WARDROBE) &&
-                  bespokeBiome.WARDROBE.length > 0
-                ? pickAxis(bespokeBiome.WARDROBE)
-                : null,
-            mediumFluxFragment: baseMedium.fluxFragment,
-            // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
-            // human face despite a stylized scene — the kawaii big-eyes fix);
-            // matches dualBriefBuilder + the create path. Falls back to normal.
-            vibeDirective: applyVibeGenderModifier(
-              nightlyVibe.key,
-              nightlyVibe.faceSwapDirective ?? nightlyVibe.directive,
-              castGender ?? null
-            ),
-            avoidList,
-            action,
-            // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
-            // with singleCompositionExpandedPct probability; classic waist-up
-            // otherwise. Identity gates (restore + post-swap verify) backstop
-            // the smaller faces.
-            soloComposition:
-              selectedCast.length === 1
-                ? (force_solo_comp ??
-                  (await (async () => {
-                    const cfg = await fetchEngineConfig(supabase);
-                    if (
-                      cfg.singleCompositionExpandedPct > 0 &&
-                      Math.random() * 100 < cfg.singleCompositionExpandedPct
-                    ) {
-                      // enviro_wide reliably shrinks the face below the swap's
-                      // identity floor (observed identity_sim ~0.13 < 0.15 → tiny
-                      // faces / multi_face → pure_scene_fallback: the cast render
-                      // silently becomes scene-only). three_quarter keeps the
-                      // expanded-composition variety while holding a swap-safe
-                      // face size (identity ~0.7). enviro_wide stays reachable via
-                      // the explicit force_solo_comp test hook only. (2026-08-24)
-                      const preset = 'three_quarter';
-                      fallbackReasons.push(`solo_comp:${preset}`);
-                      return preset as 'three_quarter' | 'enviro_wide';
-                    }
-                    return null;
-                  })()))
-                : null,
-          },
-          ANTHROPIC_KEY!
-        );
+        // Captured into a named var (not passed inline) so a later dual-swap
+        // failure can rebuild a SOLO prompt for self from the very same input.
+        const slotInput: CharacterSlotPipelineInput = {
+          cast: resolvedCast.map((rc, i) => ({
+            role: rc.role,
+            promptDesc: rc.promptDesc,
+            age: (selectedCast[i] as DreamCastMember).age ?? null,
+            physicalSummary: (selectedCast[i] as DreamCastMember).physical_summary ?? null,
+            // Pass the explicit gender through so the slot pipeline locks the
+            // body's sex to the cast photo (fixes male-face-on-female-body).
+            gender: (selectedCast[i] as DreamCastMember).gender ?? null,
+          })),
+          // Special scene (goofy/elegant) overrides the location + swaps the biome
+          // axes for a LIGHTING-quality axis (varies the look; a goofy/indoor scene
+          // shouldn't fight "blizzard at midnight"). wardrobeAnchor: goofy → null
+          // (normal clothes); elegant → the dressed-up attire; location → biome.
+          iconicAnchor: dualSpecialScene ?? iconicAnchor,
+          userPlace: dualSpecialScene ?? userPlace ?? null,
+          timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
+          weatherAxis: dualSpecialScene ? '' : weatherAxis,
+          phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
+          wardrobeAnchor: dualSpecialScene
+            ? dualSpecialWardrobe
+            : bespokeBiome &&
+                Array.isArray(bespokeBiome.WARDROBE) &&
+                bespokeBiome.WARDROBE.length > 0
+              ? pickAxis(bespokeBiome.WARDROBE)
+              : null,
+          mediumFluxFragment: baseMedium.fluxFragment,
+          // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
+          // human face despite a stylized scene — the kawaii big-eyes fix);
+          // matches dualBriefBuilder + the create path. Falls back to normal.
+          vibeDirective: applyVibeGenderModifier(
+            nightlyVibe.key,
+            nightlyVibe.faceSwapDirective ?? nightlyVibe.directive,
+            castGender ?? null
+          ),
+          avoidList,
+          action,
+          // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
+          // with singleCompositionExpandedPct probability; classic waist-up
+          // otherwise. Identity gates (restore + post-swap verify) backstop
+          // the smaller faces.
+          soloComposition:
+            selectedCast.length === 1
+              ? (force_solo_comp ??
+                (await (async () => {
+                  const cfg = await fetchEngineConfig(supabase);
+                  if (
+                    cfg.singleCompositionExpandedPct > 0 &&
+                    Math.random() * 100 < cfg.singleCompositionExpandedPct
+                  ) {
+                    // enviro_wide reliably shrinks the face below the swap's
+                    // identity floor (observed identity_sim ~0.13 < 0.15 → tiny
+                    // faces / multi_face → pure_scene_fallback: the cast render
+                    // silently becomes scene-only). three_quarter keeps the
+                    // expanded-composition variety while holding a swap-safe
+                    // face size (identity ~0.7). enviro_wide stays reachable via
+                    // the explicit force_solo_comp test hook only. (2026-08-24)
+                    const preset = 'three_quarter';
+                    fallbackReasons.push(`solo_comp:${preset}`);
+                    return preset as 'three_quarter' | 'enviro_wide';
+                  }
+                  return null;
+                })()))
+              : null,
+        };
+        const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY!);
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
         finalPrompt = slotResult.assembledPrompt;
         slotPipelineFallbacks = slotResult.fallbackReasons;
         slotPipelineHandled = true;
+        // For a DUAL cast, capture self's side + the built dual slots so that if
+        // the dual face-swap later fails every retry, the recovery re-renders
+        // self ALONE (a real single-character prompt) instead of the couple
+        // prompt — guaranteeing a cast dream never ships faceless. Only when the
+        // slots are genuinely dual ('left_wardrobe' present); the freeform-brief
+        // path leaves soloFallbackCtx null and uses the legacy prefix.
+        if (isDualFaceSwap && 'left_wardrobe' in slotResult.slots) {
+          const selfIdx = resolvedCast.findIndex((rc) => rc.role === 'self');
+          soloFallbackCtx = {
+            dualSlots: slotResult.slots as DualSlots,
+            input: slotInput,
+            selfIndex: selfIdx === 1 ? 1 : 0,
+          };
+        }
         console.log(
           `[nightly-dreams] character slot pipeline (${selectedCast.length}-cast): retries=${slotResult.retries} fallbacks=${slotResult.fallbackReasons.length}`
         );
@@ -2946,9 +2977,26 @@ Output ONLY the prompt.`;
                 castGender: selfGender,
                 replicateToken: REPLICATE_TOKEN,
                 rerender: async () => {
+                  // Rebuild a GENUINE solo prompt for self (partner dropped) from
+                  // the dual's own slots. This replaces the old couple-prompt +
+                  // "exactly one person" prefix, which kept rendering two people
+                  // (the prefix can't override a couple prompt's L/R body) → the
+                  // guard saw a wrong-gender partner face and refused → faceless.
+                  // Falls back to the legacy prefix only on the freeform-brief
+                  // path (soloFallbackCtx null). (root-caused 2026-08-27)
+                  const soloPrompt = soloFallbackCtx
+                    ? assembleSoloFallbackFromDual(
+                        soloFallbackCtx.dualSlots,
+                        soloFallbackCtx.input,
+                        soloFallbackCtx.selfIndex
+                      )
+                    : `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`;
+                  fallbackReasons.push(
+                    soloFallbackCtx ? 'solo_fallback:rebuilt_solo' : 'solo_fallback:legacy_prefix'
+                  );
                   const rr = await generateImage(
                     'flux-dev',
-                    `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+                    soloPrompt,
                     undefined,
                     {
                       replicateToken: REPLICATE_TOKEN,

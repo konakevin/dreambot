@@ -44,7 +44,12 @@ import {
   deriveFocalAnchor,
   applyVibeGenderModifier,
 } from '../_shared/promptCompiler.ts';
-import { runCharacterSlotPipeline } from '../_shared/characterSlotPrompt.ts';
+import {
+  runCharacterSlotPipeline,
+  assembleSoloFallbackFromDual,
+  type CharacterSlotPipelineInput,
+  type DualSlots,
+} from '../_shared/characterSlotPrompt.ts';
 import { pickDualAction } from '../_shared/pools/dual_actions.ts';
 import { loadClassicPools } from '../_shared/pools/actionPoseLoader.ts';
 import { HAIKU } from '../_shared/models.ts';
@@ -609,6 +614,17 @@ async function handleRequest(req: Request): Promise<Response> {
   // Initialized to '' (not just declared) so the failure-logging path in the
   // outer catch can safely read it even if the throw happened before assignment.
   let finalPrompt = '';
+  // Hoisted DUAL solo-fallback context (paid Create path). When a dual face-swap
+  // fails every retry, the recovery re-renders self ALONE via
+  // assembleSoloFallbackFromDual (a genuine single-character prompt) instead of
+  // the couple-prompt-with-prefix that kept rendering two people → faceless.
+  // Captured after the dual slot pipeline; null on the freeform-brief path.
+  // See _shared/characterSlotPrompt.ts (root-caused 2026-08-27).
+  let soloFallbackCtx: {
+    dualSlots: DualSlots;
+    input: CharacterSlotPipelineInput;
+    selfIndex: 0 | 1;
+  } | null = null;
 
   let logAxes: Record<string, unknown> = {};
   let conceptJson: Record<string, unknown> | null = null;
@@ -1356,64 +1372,75 @@ Output ONLY the prompt.`;
             // scene/wardrobe/mood/props → two clean large faces → reliable swap.
             // Falls back to the legacy buildDualBrief output on any error.
             try {
-              const slotResult = await runCharacterSlotPipeline(
-                {
-                  cast: resolvedCast.map((rc) => {
-                    const src = castMembers.find((m: DreamCastMember) => m.role === rc.role);
-                    return {
-                      role: rc.role,
-                      promptDesc: rc.promptDesc,
-                      age: src?.age ?? null,
-                      physicalSummary: src?.physical_summary ?? null,
-                      gender: src?.gender ?? null,
-                    };
-                  }),
-                  iconicAnchor: null,
-                  userPlace: cleanedPrompt || null,
-                  timeAxis: '',
-                  weatherAxis: '',
-                  phenomenaAxis: '',
-                  // Pass the user's scene as a wardrobe hint too so a themed request
-                  // ("as superheroes") reaches the wardrobe slot, not just the scene.
-                  wardrobeAnchor: cleanedPrompt || null,
-                  mediumFluxFragment: medium.fluxFragment ?? medium.key,
-                  // On the face-swap slot path, prefer the vibe's FACE-SWAP
-                  // directive (kawaii etc. carry a "render the human face
-                  // realistically despite the stylized scene" rule) — matches
-                  // dualBriefBuilder. Falls back to the normal directive.
-                  vibeDirective: applyVibeGenderModifier(
-                    vibe.key,
-                    vibe.faceSwapDirective ?? vibe.directive ?? '',
-                    null
-                  ),
-                  avoidList: vibeProfile?.avoid?.join(', ') ?? '',
-                  // Create: NEUTRAL pose only — force the relationship-appropriate
-                  // partner/companion pool (NOT the 18% playful roll). Create is the
-                  // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
-                  // injected onto someone's serious request. (Goofy/elegant scenes are
-                  // nightly-only and never touch the user's Create prompt either.)
-                  action: await (async () => {
-                    const rel = String(
-                      castMembers.find((m: DreamCastMember) => m.role === 'plus_one')
-                        ?.relationship ?? ''
-                    );
-                    const pool =
-                      rel === 'partner' || rel === 'significant_other' ? 'partner' : 'companion';
-                    // PAID path: belt on top of the loader's own fallback —
-                    // even a thrown loader must not touch a Create dream (I4).
-                    try {
-                      return pickDualAction(rel, pool, (await loadClassicPools(supabase)).dual);
-                    } catch (_e) {
-                      return pickDualAction(rel, pool);
-                    }
-                  })(),
-                },
-                ANTHROPIC_KEY!
-              );
+              // Named var (not inline) so a later dual-swap failure can rebuild a
+              // SOLO prompt for self from the same input.
+              const slotInput: CharacterSlotPipelineInput = {
+                cast: resolvedCast.map((rc) => {
+                  const src = castMembers.find((m: DreamCastMember) => m.role === rc.role);
+                  return {
+                    role: rc.role,
+                    promptDesc: rc.promptDesc,
+                    age: src?.age ?? null,
+                    physicalSummary: src?.physical_summary ?? null,
+                    gender: src?.gender ?? null,
+                  };
+                }),
+                iconicAnchor: null,
+                userPlace: cleanedPrompt || null,
+                timeAxis: '',
+                weatherAxis: '',
+                phenomenaAxis: '',
+                // Pass the user's scene as a wardrobe hint too so a themed request
+                // ("as superheroes") reaches the wardrobe slot, not just the scene.
+                wardrobeAnchor: cleanedPrompt || null,
+                mediumFluxFragment: medium.fluxFragment ?? medium.key,
+                // On the face-swap slot path, prefer the vibe's FACE-SWAP
+                // directive (kawaii etc. carry a "render the human face
+                // realistically despite the stylized scene" rule) — matches
+                // dualBriefBuilder. Falls back to the normal directive.
+                vibeDirective: applyVibeGenderModifier(
+                  vibe.key,
+                  vibe.faceSwapDirective ?? vibe.directive ?? '',
+                  null
+                ),
+                avoidList: vibeProfile?.avoid?.join(', ') ?? '',
+                // Create: NEUTRAL pose only — force the relationship-appropriate
+                // partner/companion pool (NOT the 18% playful roll). Create is the
+                // user's OWN prompt, so we tread lightly: no goofy thumbs-up poses
+                // injected onto someone's serious request. (Goofy/elegant scenes are
+                // nightly-only and never touch the user's Create prompt either.)
+                action: await (async () => {
+                  const rel = String(
+                    castMembers.find((m: DreamCastMember) => m.role === 'plus_one')?.relationship ??
+                      ''
+                  );
+                  const pool =
+                    rel === 'partner' || rel === 'significant_other' ? 'partner' : 'companion';
+                  // PAID path: belt on top of the loader's own fallback —
+                  // even a thrown loader must not touch a Create dream (I4).
+                  try {
+                    return pickDualAction(rel, pool, (await loadClassicPools(supabase)).dual);
+                  } catch (_e) {
+                    return pickDualAction(rel, pool);
+                  }
+                })(),
+              };
+              const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY!);
               sonnetBrief = slotResult.briefUsed;
               sonnetRawResponse = slotResult.rawResponse;
               finalPrompt = slotResult.assembledPrompt;
               fallbackReasons.push(...slotResult.fallbackReasons);
+              // Capture self's side + the dual slots so a dual-swap failure can
+              // re-render self ALONE (never a faceless couple). Only when the
+              // slots are genuinely dual ('left_wardrobe' present).
+              if ('left_wardrobe' in slotResult.slots) {
+                const selfIdx = resolvedCast.findIndex((rc) => rc.role === 'self');
+                soloFallbackCtx = {
+                  dualSlots: slotResult.slots as DualSlots,
+                  input: slotInput,
+                  selfIndex: selfIdx === 1 ? 1 : 0,
+                };
+              }
               console.log(
                 `[generate-dream] dual slot pipeline: retries=${slotResult.retries} fallbacks=${slotResult.fallbackReasons.length}`
               );
@@ -1834,9 +1861,23 @@ Output ONLY the prompt.`;
                 castGender: selfGender,
                 replicateToken: REPLICATE_TOKEN,
                 rerender: async () => {
+                  // Rebuild a GENUINE solo prompt for self (partner dropped) from
+                  // the dual's own slots — replaces the couple-prompt + prefix
+                  // that kept rendering two people → guard refused → faceless.
+                  // Legacy prefix only on the freeform-brief path (ctx null).
+                  const soloPrompt = soloFallbackCtx
+                    ? assembleSoloFallbackFromDual(
+                        soloFallbackCtx.dualSlots,
+                        soloFallbackCtx.input,
+                        soloFallbackCtx.selfIndex
+                      )
+                    : `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`;
+                  fallbackReasons.push(
+                    soloFallbackCtx ? 'solo_fallback:rebuilt_solo' : 'solo_fallback:legacy_prefix'
+                  );
                   const rr = await generateImage(
                     effectiveMode,
-                    `exactly one person, a solo portrait of a single ${soloNoun} alone, ${finalPrompt}`,
+                    soloPrompt,
                     effectiveInputImage,
                     {
                       replicateToken: REPLICATE_TOKEN,
