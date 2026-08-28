@@ -249,12 +249,18 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Catacombs | ✅ ~4.4 (dark) | self 4.6 / R2 couple 4.4 (after figure-demote) | R1 couple PERSONLESS (skull carvings = decoy faces). Fixed same lever. PASS |
 | Ghost Town | ✅ ~4.4 (dark) | self 4.6 / couple 4.1 | golden western axes; rugged frontier character, correct race. PASS |
 
-### 🚀 Sci-Fi & Space (3) · 🤠 Wild West (3)
+### 🚀 Sci-Fi & Space (3) — ✅ ALL PASS (dark) · 🤠 Wild West (3)
+> 🧩 Fantasy template (neon axes). ⚠️ **Sci-fi RETRO-BEIGE drift:** the default sci-fi wardrobe rolled
+> dated Star-Trek-TOS beige jumpsuits on the couple. Kevin wants Aliens/Expanse/Star Wars/Trek COOL.
+> FIX = sleek-modern wardrobe pool (fitted flight suits, glowing accent seams, command tunics) + an
+> epic SUBJECT (massive viewscreen w/ planet/nebula/fleet, captain's chair) + hero cast spots. Big
+> improvement. NOTE: `cinematic` medium makes GORGEOUS elaborate ship interiors but shrinks the cast
+> too small — keep CANVAS for the cast surfaces (sharp modern subject + on-race).
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Moon Base | ⬜ | | lunar surface, domes, Earthrise, rovers |
-| Starship Bridge | ⬜ | | command deck, viewscreen, consoles |
-| Robot City | ⬜ | | android metropolis, chrome towers, neon |
+| Moon Base | ✅ ~4.4 (dark) | self 4.6 / couple 4.2 | sleek flight-suit self (hydroponics bay) is great; couple wardrobe upgraded to sleek (was beige). PASS |
+| Starship Bridge | ✅ ~4.6 (dark) | canvas: self 4.7 / couple 4.6 | UPGRADED for Kevin — epic viewscreen+fleet SUBJECT, sleek command wardrobe, captain's-chair hero spots. Command-couple w/ fleet behind = heroic-cool. PASS (cinematic = killer bg but tiny cast) |
+| Robot City | ✅ ~4.4 (dark) | self 4.7 / couple 4.0 | neon-plaza cyberpunk techwear self is killer; couple correct race but male rolled half-cyborg chrome-head (android prior). Minor; re-roll clears. PASS |
 | Saloon | ⬜ | | swinging doors, poker, piano, gunslingers |
 | Outlaw Hideout | ⬜ | | canyon camp, wanted posters, campfire |
 | Railroad Town | ⬜ | | steam depot, frontier main street |
