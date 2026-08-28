@@ -226,16 +226,28 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Mount Everest / Himalayas | ✅ ~4.5 (dark) | self 4.5 / couple 4.6 | BESPOKE alpine treatment (not country template): mountaineering wardrobe (down jackets/trekking, NOT linen) + bright-snow axes + base-camp/village/bridge cast spots. Correct race, epic. PASS |
 | Prehistoric (Dinosaurs) | ⬜ | | primeval jungle, volcanic valleys, dinosaurs |
 
-### 🦇 Gothic & Haunted (7)
+### 🦇 Gothic & Haunted (7) — ✅ ALL PASS (dark)
+> 🧩 **Fantasy template (`_tmp-fantasy.mjs`, mood=dark):** character-in-the-world — Sonnet-gen
+> thematic-elegant wardrobe (gothic-Victorian eveningwear, vampire couture, witch-craft) + moody
+> candlelit/moonlit axes + thematic cast spots. Race locked by the skin-tone fix.
+> ⚠️⚠️ **DECOY-FACE LESSON (big one):** the dual/couple surface went PERSONLESS on Foggy Graveyard +
+> Catacombs. Forensics: `degrade_solo_multi_face(faces=5/3/2)` — statues, stone angels, gargoyles,
+> ossuary SKULLS, and portraits in the scene are counted as extra FACES by the dual detector → it
+> can't isolate the couple → degrades to solo → fails → personless pure-scene. FIX = demote
+> figure-heavy cast spots (statue/angel/gargoyle/skull/ossuary/portrait/effigy/sarcophagus/bust/niche)
+> to SCENE-ONLY; cast the couple only at figure-FREE foregrounds (a gravel path, a gate, a plain
+> tunnel, a crypt doorway). Re-render → both couples came back with the real cast, correct race. This
+> is the DARK-scene analog of the country cast-spot hygiene; applies to any figure-populated location.
+
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Haunted Mansion | ⬜ | | decaying manor, cobwebs, candlelight, portraits |
-| Vampire Castle | ⬜ | | cliff castle, blood moon, crypts, bats |
-| Foggy Graveyard | ⬜ | | misty tombstones, iron gates, gnarled trees |
-| Gothic Cathedral | ⬜ | | vaulted stone, stained glass, gargoyles |
-| Witch's Cottage | ⬜ | | twisted woods, cauldron, lanterns, ravens |
-| Catacombs | ⬜ | | bone tunnels, torchlight, arches |
-| Ghost Town | ⬜ | | abandoned frontier buildings, dust, moonlight |
+| Haunted Mansion | ✅ ~4.5 (dark) | self 4.5 / couple 4.4 | candlelit gothic character; correct race, elegant Victorian. PASS |
+| Vampire Castle | ✅ 4.63 (dark) | self 4.6 / plus1 4.6 / couple 4.7 | STUNNING — star-embroidered coat + midnight gown in a candlelit library; correct race. PASS |
+| Foggy Graveyard | ✅ ~4.5 (dark) | R2 couple 4.7 (after figure-demote) | R1 couple PERSONLESS (stone angels = decoy faces). Fixed by demoting figure spots → velvet-corset + caped-coat couple, correct race. PASS |
+| Gothic Cathedral | ✅ ~4.4 (dark) | self 4.7 / couple 4.0 | gargoyle-parapet self is gorgeous; couple correct race (a touch casual in cloister). PASS |
+| Witch's Cottage | ✅ ~4.6 (dark) | plus1 4.7 / couple 4.6 | full witch look (velvet, feathered hat, crystals); correct race, characterful. PASS |
+| Catacombs | ✅ ~4.4 (dark) | self 4.6 / R2 couple 4.4 (after figure-demote) | R1 couple PERSONLESS (skull carvings = decoy faces). Fixed same lever. PASS |
+| Ghost Town | ✅ ~4.4 (dark) | self 4.6 / couple 4.1 | golden western axes; rugged frontier character, correct race. PASS |
 
 ### 🚀 Sci-Fi & Space (3) · 🤠 Wild West (3)
 | Card | Status | QA avg | Notes |
