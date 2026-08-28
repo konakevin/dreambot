@@ -156,6 +156,18 @@ const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   'black-forest-labs/flux-1.1-pro-ultra',
 ]);
 
+// Render-budget split (Kevin 2026-08-28): a failed DUAL swap must ALWAYS leave
+// room for the solo fallback to finish — a cast dream never cascades to a faceless
+// pure-scene on budget. Total 140s (under the 150s gateway idle ceiling). The DUAL
+// phase is capped at 140 − RESERVE so the degrade (solo render + swap) has a
+// guaranteed window; the per-phase re-render reserves fit each phase in its slice.
+// Root cause: Kevin's "Faanui Bay in noir" nightly — a 67s dual swap pushed the
+// solo guard past its (then-shared) 75s cutoff → recover_budget_exhausted → scene.
+const RENDER_DEADLINE_MS = 140_000;
+const SOLO_FALLBACK_RESERVE_MS = 50_000;
+const DUAL_RECOVER_MS = 40_000; // dual re-render reserve (within the dual phase)
+const SOLO_RECOVER_MS = 40_000; // solo-fallback re-render reserve (fits the 50s window)
+
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
   const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
@@ -2953,6 +2965,11 @@ Output ONLY the prompt.`;
       const s1 = faceSwapSources[1];
       const selfSrc = faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl;
       const selfGender = faceSwapSources.find((s) => s.role === 'self')?.gender ?? null;
+      // Reserve a solo-fallback window: the DUAL phase (swap + re-renders) must
+      // finish by dualDeadlineMs, so the degrade solo render+swap always has
+      // SOLO_FALLBACK_RESERVE_MS left to run to completion (never scene-only).
+      const renderDeadlineMs = t0 + RENDER_DEADLINE_MS;
+      const dualDeadlineMs = renderDeadlineMs - SOLO_FALLBACK_RESERVE_MS;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -2964,7 +2981,7 @@ Output ONLY the prompt.`;
               REPLICATE_TOKEN,
               supabase,
               userId,
-              t0 + 140_000,
+              dualDeadlineMs,
               false,
               { left: s0.gender, right: s1.gender },
               queueJobId,
@@ -3032,7 +3049,15 @@ Output ONLY the prompt.`;
                 },
                 log: (m) => console.log(`[nightly-dreams] degrade-guard: ${m}`),
               },
-              { maxRerenders: 1, mediumKey: resolvedMediumKey, deadlineMs: t0 + 140_000 }
+              {
+                maxRerenders: 1,
+                mediumKey: resolvedMediumKey,
+                // FULL render deadline + a SHORT reserve: this is the last-resort
+                // solo fallback, guaranteed its reserved window by the shortened
+                // dual phase above — it must fire, not settle to a scene.
+                deadlineMs: renderDeadlineMs,
+                recoverBudgetMs: SOLO_RECOVER_MS,
+              }
             );
             fallbackReasons.push(...guard.reasons.map((r) => `degrade_${r}`));
             if (!guard.safe) return null;
@@ -3068,7 +3093,11 @@ Output ONLY the prompt.`;
           selfSource: selfSrc,
           log: (m) => console.log(`[nightly-dreams] ${m}`),
         },
-        { strict: strict_face_swap, deadlineMs: t0 + 140_000 }
+        {
+          strict: strict_face_swap,
+          deadlineMs: dualDeadlineMs,
+          recoverBudgetMs: DUAL_RECOVER_MS,
+        }
       );
       tempUrl = result.url;
       if (result.predictionId) replicatePredictionId = result.predictionId;

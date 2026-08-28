@@ -151,11 +151,21 @@ export async function genderSafeDualSwap(
      * its cascade still re-renders a solo self scene.
      */
     degradeToSingle?: boolean;
+    /**
+     * How much wall-clock (ms) to keep in reserve before this deadline for a
+     * re-render. Defaults to RECOVER_BUDGET_MS. Callers that reserve a SEPARATE
+     * downstream solo-fallback window (nightly/create) pass their own SHORTER
+     * dual re-render reserve here + a shortened deadlineMs, so the dual phase
+     * degrades early enough to leave the solo fallback guaranteed room to finish
+     * → a cast dream never cascades to pure-scene on budget (Kevin 2026-08-28).
+     */
+    recoverBudgetMs?: number;
   }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
   const reasons: string[] = [];
   const maxRerenders = opts.maxRerenders ?? 2;
+  const recoverBudgetMs = opts.recoverBudgetMs ?? RECOVER_BUDGET_MS;
   let target = renderUrl;
   let predictionId: string | null = null;
   let faceCount = 2;
@@ -165,7 +175,7 @@ export async function genderSafeDualSwap(
 
   const haveBudget = (): boolean => {
     if (!opts.deadlineMs) return true;
-    const ok = Date.now() + RECOVER_BUDGET_MS <= opts.deadlineMs;
+    const ok = Date.now() + recoverBudgetMs <= opts.deadlineMs;
     if (!ok) {
       log('recover budget exhausted — degrading instead of re-rendering');
       reasons.push('recover_budget_exhausted');

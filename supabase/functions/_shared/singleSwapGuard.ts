@@ -209,18 +209,29 @@ export function soloIdentityThreshold(): number | null {
 export async function ensureSoloSwapTarget(
   renderUrl: string,
   deps: SoloSwapGuardDeps,
-  opts: { maxRerenders?: number; deadlineMs?: number; mediumKey?: string } = {}
+  opts: {
+    maxRerenders?: number;
+    deadlineMs?: number;
+    mediumKey?: string;
+    // ms to keep in reserve before deadlineMs for a solo re-render. Default
+    // RECOVER_BUDGET_MS. When this guard IS the last-resort solo fallback for a
+    // failed dual (nightly/create degrade), the caller passes a SHORTER reserve so
+    // the fallback still fires in its guaranteed window instead of settling to an
+    // unswapped scene (Kevin 2026-08-28 "never fall back to pure scene").
+    recoverBudgetMs?: number;
+  } = {}
 ): Promise<SoloSwapGuardResult> {
   const log = deps.log ?? (() => {});
   const reasons: string[] = [];
   const maxRerenders = opts.maxRerenders ?? 2;
+  const recoverBudgetMs = opts.recoverBudgetMs ?? RECOVER_BUDGET_MS;
   let target = renderUrl;
   let predictionId: string | null = null;
   let last: Verdict = { kind: 'hard', reason: 'solo_probe_not_run', faceCount: null };
 
   const haveBudget = (): boolean => {
     if (!opts.deadlineMs) return true;
-    const ok = Date.now() + RECOVER_BUDGET_MS <= opts.deadlineMs;
+    const ok = Date.now() + recoverBudgetMs <= opts.deadlineMs;
     if (!ok) {
       log('solo recover budget exhausted — settling instead of re-rendering');
       reasons.push('solo_recover_budget_exhausted');

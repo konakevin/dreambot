@@ -166,6 +166,15 @@ interface RequestBody {
   persist?: boolean;
 }
 
+// Render-budget split (Kevin 2026-08-28): reserve a window so a failed DUAL swap
+// always leaves room for the solo degrade to finish, instead of cascading to a
+// scene / refund on exhausted budget. Mirrors nightly-dreams. Total 140s (under
+// the 150s gateway); dual phase capped at 140 − RESERVE.
+const RENDER_DEADLINE_MS = 140_000;
+const SOLO_FALLBACK_RESERVE_MS = 50_000;
+const DUAL_RECOVER_MS = 40_000;
+const SOLO_RECOVER_MS = 40_000;
+
 // The full request handler. Wrapped (below) so the render survives the client
 // disconnecting — a user who taps "Queue This" and then backgrounds/kills the
 // app must still get their dream rendered, persisted, and notified.
@@ -1818,6 +1827,11 @@ Output ONLY the prompt.`;
       const s0 = faceSwapSources[0];
       const s1 = faceSwapSources[1];
       const selfGender = genderFromLock(faceSwapSources.find((s) => s.role === 'self')?.genderLock);
+      // Reserve a solo-fallback window (see module consts): the DUAL phase must
+      // finish by dualDeadlineMs so the degrade solo render+swap has a guaranteed
+      // window — self-only never loses to a budget-starved scene/refund.
+      const renderDeadlineMs = t0 + RENDER_DEADLINE_MS;
+      const dualDeadlineMs = renderDeadlineMs - SOLO_FALLBACK_RESERVE_MS;
       const result = await genderSafeDualSwap(
         tempUrl,
         {
@@ -1829,7 +1843,7 @@ Output ONLY the prompt.`;
               REPLICATE_TOKEN,
               supabase,
               userId,
-              t0 + 140_000,
+              dualDeadlineMs,
               false,
               { left: genderFromLock(s0.genderLock), right: genderFromLock(s1.genderLock) },
               jobId,
@@ -1891,7 +1905,13 @@ Output ONLY the prompt.`;
                 },
                 log: (m) => console.log(`[generate-dream] degrade-guard: ${m}`),
               },
-              { maxRerenders: 1, mediumKey: resolvedMediumKey, deadlineMs: t0 + 140_000 }
+              {
+                maxRerenders: 1,
+                mediumKey: resolvedMediumKey,
+                // FULL deadline + short reserve: the guaranteed solo fallback.
+                deadlineMs: renderDeadlineMs,
+                recoverBudgetMs: SOLO_RECOVER_MS,
+              }
             );
             fallbackReasons.push(...guard.reasons.map((r) => `degrade_${r}`));
             if (!guard.safe) return null;
@@ -1920,7 +1940,12 @@ Output ONLY the prompt.`;
           selfSource: faceSwapSources.find((s) => s.role === 'self')?.sourceUrl ?? s0.sourceUrl,
           log: (m) => console.log(`[generate-dream] ${m}`),
         },
-        { strict: true, deadlineMs: t0 + 140_000, degradeToSingle: true }
+        {
+          strict: true,
+          deadlineMs: dualDeadlineMs,
+          recoverBudgetMs: DUAL_RECOVER_MS,
+          degradeToSingle: true,
+        }
       );
       tempUrl = result.url;
       if (result.predictionId) replicatePredictionId = result.predictionId;

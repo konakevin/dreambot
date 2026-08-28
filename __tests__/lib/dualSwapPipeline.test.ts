@@ -146,6 +146,38 @@ it('non-strict, dual fails AND single fails → cascade', async () => {
   expect(r.outcome).toBe('cascade');
 });
 
+// ── recoverBudgetMs — the solo-fallback reservation (Kevin 2026-08-28) ────────
+// Callers that reserve a downstream solo-fallback window pass a SHORTER dual
+// re-render reserve so the dual phase degrades early enough to leave the solo
+// room. These lock that the reserve is honored.
+it('DEFAULT 85s reserve skips the re-render when only ~50s remain → degrades early', async () => {
+  const dispatchDual = jest.fn().mockResolvedValue({ swappedUrl: null, faceCount: 1 });
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, {
+    strict: false,
+    deadlineMs: Date.now() + 50_000, // < the default 85s reserve
+  });
+  expect(deps.rerender).not.toHaveBeenCalled();
+  expect(r.reasons).toContain('recover_budget_exhausted');
+  expect(r.outcome).toBe('single'); // degrades (leaving the reserved solo window)
+});
+
+it('a SHORTER recoverBudgetMs lets the dual re-render inside the same ~50s window', async () => {
+  const dispatchDual = jest
+    .fn()
+    .mockResolvedValueOnce({ swappedUrl: null, faceCount: 1 }) // attempt 0 fails
+    .mockResolvedValueOnce({ swappedUrl: 'OK.jpg', faceCount: 2 }); // re-render succeeds
+  const deps = makeDeps({ dispatchDual });
+  const r = await genderSafeDualSwap('render.jpg', deps, {
+    strict: false,
+    deadlineMs: Date.now() + 50_000,
+    recoverBudgetMs: 30_000, // 30s reserve fits inside the 50s window → re-render allowed
+  });
+  expect(deps.rerender).toHaveBeenCalledTimes(1);
+  expect(r.outcome).toBe('dual');
+  expect(r.url).toBe('OK.jpg');
+});
+
 // ── Stage 8c — identity enforcement (IDENTITY_MIN_SIM) ──────────────────────
 // The pipeline reads the threshold from Deno.env, which doesn't exist under
 // jest → identityThreshold() returns null → these tests exercise the SHADOW
