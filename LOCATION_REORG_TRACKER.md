@@ -117,13 +117,26 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Sydney | ⬜ | | Opera House, Harbour Bridge, Bondi, skyline |
 | World Wonders | ⬜ | | Phase-1 structural; spots = 8 wonders |
 
-### 🏖️ Tropical Escapes (4)
+### 🏖️ Tropical Escapes (4) — IN PROGRESS (PAUSED for the race bug 2026-08-27)
+> 🧩 **Tropical template (`_tmp-tropicaltown.mjs`):** exotic tropical ≠ Americana. seed-category's
+> gen-location-wardrobe produced SEXUALIZED costume ("bare chest", "speargun", "reef knife on thigh",
+> "resort-noir glamour") AND a scene-amplifying SUBJECT_RULE ("rendered MASSIVE and dominant"). The
+> template replaces both with believable elevated RESORT wardrobe + a place-rich NON-amplifying
+> SUBJECT_RULE, regenerates ~20 cast-friendly spots, then run `_tmp-sunnyaxes.mjs`. Worked great on Amalfi.
+>
+> ⏸️ **PINNED — RESUME HERE after the race bug fix (Kevin 2026-08-27):**
+> - **Amalfi Coast ✅ 4.6** (self 4.6 / plus1 4.5 / couple 4.7) — resort wardrobe + non-amplify SUBJECT nailed it. European prior = stayed on-race.
+> - **Fiji ~4.0, needs R2:** self 3.9 (linen shirt open over BARE CHEST — dropped the tee), plus1 4.5 (hibiscus village path + volcanic peak, lovely), couple 3.5 (SHIRTLESS male + the RACE BUG — rendered as Polynesian; this is the bookmarked dream that triggered the race investigation).
+> - **Cancún + Tahiti:** rendered (job `bkhpfruy7`) but NOT yet graded — downloaded pending. Both beach-heavy → expect same shirtless + race issues.
+> - **PATTERN:** beach-dominant tropicals (Fiji, Malibu) push SHIRTLESS males; village/harbor registers (Amalfi, 30A) hold wardrobe. LEVER = bias cast SPOTS to clothed resort contexts (bungalow deck, dock, village lane, pool terrace) NOT open sand. Do a coordinated R2 for Fiji + Cancún + Tahiti after the race fix: reword their cast spots toward clothed-context foregrounds, re-render, grade.
+> - The race fix (skin tone in the cast identity block) ALSO helps here (bodies render on-race even when shirtless), so re-render tropicals AFTER deploying the fix.
+
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
-| Amalfi Coast | ⬜ | | Positano cliffs, pastel villages, boats |
-| Fiji | ⬜ | | overwater bungalows, coral lagoons |
-| Cancún | ⬜ | | turquoise Caribbean, cenotes, beach clubs |
-| Tahiti | ⬜ | | jade lagoons, volcanic peaks, black sand |
+| Amalfi Coast | ✅ 4.6 (dark) | self 4.6 / plus1 4.5 / couple 4.7 | resort template. Chic believable linen; distinctly Amalfi. PASS |
+| Fiji | ⏸️ R2 pending (race fix) | self 3.9 / plus1 4.5 / couple 3.5 | bare-chest + RACE BUG (rendered Polynesian). Re-render after skin-tone fix + clothed-context spots |
+| Cancún | ⏸️ rendered, ungraded | | download+grade after race fix; beach-heavy |
+| Tahiti | ⏸️ rendered, ungraded | | download+grade after race fix; beach-heavy |
 
 ### 🏝️ Beach Towns (9) — SEED FIRST (new category)
 > ⭐ **BEACH TOWNS TEMPLATE (learned on Myrtle Beach R1→R2, from Kevin's favorited refs):**
@@ -208,6 +221,22 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ---
 
 ## Change Log
+- **2026-08-27 (session 2, mid-run BUGS surfaced by Kevin during tropical QA)** —
+  Two pipeline bugs found + fixed while grading Fiji (both committed / applied):
+  1. **RACE not piped to prompt (CRITICAL, committed).** Kevin's white cast rendered
+     Polynesian in a Fiji couple. Root cause: `extractHair()` dropped the skin-tone
+     clause from `physical_summary`, so the identity block had NO complexion → the
+     "fiji" location prior filled in the wrong race (the swap only refines the FACE,
+     never neck/arms/body). Fix: `extractSkin()` threads complexion into every
+     identity block (solo + dual). Verified in prompt + pixels; 12 unit tests
+     (`__tests__/lib/castSkinTone.test.ts`). Deployed nightly-dreams + generate-dream
+     + first-dream-render. **INVARIANT: cast description always overrides location race.**
+  2. **`canvas` medium chunky + face-swap-hostile (applied to DB).** Its `flux_fragment`
+     had "heavy brushstrokes / palette knife marks / impasto ridges / canvas weave" →
+     buried faces (dual detector failed `no_dual_split`, flailed, cropped chunky mosaic)
+     esp. on flux-1.1-pro-ultra. Fix: rewrote `flux_fragment` (dropped chunky terms) +
+     set `face_swap_flux_fragment` + `face_swap_directive` (clean glazed oil, readable
+     faces, positive wording — no "impasto" to leak). Verifying on canvas+1.1-pro-ultra.
 - **2026-08-27 (session 2)** — BEACH TOWNS COMPLETE (9/9, dark). Batch 1 (Myrtle/OBX/
   Key West/Cape Cod/Santa Monica) + batch 2 (Coney Island/30A/Malibu/Hamptons) seeded,
   templated, graded on CAST surfaces only (scene-only deprioritized per Kevin). Built

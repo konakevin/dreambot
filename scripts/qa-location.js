@@ -32,6 +32,9 @@ const SCENE_MEDIUM = arg('scene-medium', 'cinematic');
 // or QA scene-only for new pools. --no-scene skips that render (saves a render +
 // DB connection). New location pools are graded on the 3 CAST surfaces only.
 const NO_SCENE = process.argv.includes('--no-scene');
+// Optional: pin the render model (nightly-dreams force_model). Used to reproduce
+// a specific model's failure (e.g. --model black-forest-labs/flux-1.1-pro-ultra).
+const FORCE_MODEL = arg('model');
 if (!LOC) {
   console.error('--location required');
   process.exit(1);
@@ -54,6 +57,7 @@ async function render(role, medium, pureScene, label) {
     force_place: LOC,
     force_medium: medium,
   };
+  if (FORCE_MODEL) body.force_model = FORCE_MODEL;
   if (pureScene) {
     body.force_pure_scene = true;
   } else {
