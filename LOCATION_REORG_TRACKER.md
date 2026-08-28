@@ -113,19 +113,24 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 | Card | Status | QA avg | Notes |
 |---|---|---|---|
 | Japan | ✅ 4.63 (dark) | self 4.7 / plus1 4.6 / couple 4.6 | RACE FIX VALIDATED on a strong prior — cast renders WHITE in Japan. Kimono at temples (tasteful), travel-casual at gardens. PASS |
-| Italy | 🚩 Return-to (self/plus1 pass) | R1: self 4.0 / plus1 4.7 / couple 4.1 · R2: self 3.0 (Roman toga) / couple 3.3 (period-peasant) | self+plus1 fine; COUPLE surface period-costumes (toga/peasant) across 2 rounds even after dropping "Renaissance" + modern-day framing. "ancient"+Italy+painterly = classical attire. Dual-swap + extreme cultural prior. See ⚠️ below. |
-| Egypt | 🚩 Return-to (self/plus1 pass) | R1: self 4.3 / plus1 4.5 / couple 3.5 · R2: self 4.5 (modern corniche, correct race) / couple 2.5 (Egyptian people + hijab) | self+plus1 correct-race + modern; COUPLE race-drifts to local Egyptian/Muslim-presenting people (hijab) across 2 rounds. Dual-swap degrades on extreme prior → invents locals despite skin descriptor. See ⚠️ below. |
+| Italy | ✅ 4.53 (dark) | R3: self 4.4 / plus1 4.6 / couple 4.6 | FIXED by spot hygiene — demoted ancient/religious cast spots (Roman Forum, Pompeii, medieval portico, monastery). Now modern-fashionable vacation couple in living-modern Italy (Amalfi, village lanes, Como), correct race, NO toga. PASS |
+| Egypt | ✅ ~4.3 (dark) | R4: self 4.3 / plus1 4.4 / couple 4.2 | SOLVED via spot hygiene — demoted mosque + ALL temple-interior cast spots; cast only at pyramids viewpoint / oasis / Nile / corniche. ETHNIC DRIFT FIXED (all clearly white, no hijab), no cheesy stereotype. Mild desert-traveler linen flavor = within Kevin's "tasteful local flair OK" leeway. PASS |
 | Greece | ✅ 4.63 (dark) | self 4.6 / plus1 4.7 / couple 4.6 | modern-elegant travel wear, correct race, no costume. PASS |
 | France | ✅ 4.63 (dark) | self 4.6 / plus1 4.6 / couple 4.7 | modern-day framing worked: sharp modern-elegant (Paris passage, Seine, cafe), correct race. PASS |
 
-> ⚠️⚠️ **COUPLE-SURFACE DRIFT on strong-cultural-prior countries (OPEN — flagged to Kevin 2026-08-27).**
-> self + plus1 render correctly (race fix holds, modern wear), but the DUAL/couple surface degrades on
-> extreme cultural priors: Italy → period/classical costume (toga, Edwardian, peasant); Egypt → local
-> Egyptian/Muslim people (hijab), overriding the cast identity + skin descriptor. Re-rolls (2 rounds each)
-> do NOT fix it — it's tied to dual-swap reliability: when the swap degrades on a strong prior, Flux's
-> invented people win. Greece/Japan/France don't hit it (weaker/European prior). Likely recurs on Vietnam,
-> Brazil, India. NEEDS a decision: accept self+plus1 and flag couples, OR invest in dual-swap strengthening
-> for strong-prior couples (raise identity gate / better base-render race anchoring on the couple path).
+> ✅✅ **CULTURAL-PRIOR DRIFT — LARGELY SOLVED by CAST-SPOT HYGIENE (Kevin's target: no ethnic drift + no
+> cheesy stereotypes like toga/turban/hijab; tasteful local flair IS welcome; vacation photos of the
+> couple as their real fashionable selves).** The costume/native drift is driven by the CAST SPOT, not the
+> location per se: religious-interior + ancient-monument-interior cast spots induce local/period costume
+> (Italy Roman Forum → toga; Egypt mosque → hijab; Egypt temples → goddess/adventurer). FIX = demote those
+> to SCENE-ONLY (wide establishing shots keep the iconic landmarks); cast the couple only at MODERN,
+> LIVING, tourist-friendly foregrounds (village lanes, cafe terraces, promenades, landmark VIEWPOINTS,
+> resort terraces). This fixed Italy (toga gone → modern fashionable couple, correct race). Baked into
+> `_tmp-country.mjs` spot-gen brief so future countries are clean by default. Egypt (extreme prior) is the
+> stress test — R4 applies the same lever. Diagnosis nuance: the face swap SUCCEEDS (identity ~0.6) — the
+> drift is the SCENE recoloring the body + adding local dress, not a swap failure; clean cast spots + the
+> skin-tone fix + modern wardrobe together keep the couple on-race and fashionable. If a location still
+> can't hold after 5 rounds/issue → SHELF it and continue (Kevin 2026-08-27).
 | Spain | ⬜ | | Alhambra, Gaudí, flamenco, Seville, coast |
 | Ireland | ⬜ | | Cliffs of Moher, castles, emerald hills, pubs |
 | Germany | ⬜ | | Neuschwanstein, Bavaria, Black Forest, markets |
