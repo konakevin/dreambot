@@ -10,7 +10,9 @@ import { useAuthStore } from '@/store/auth';
 import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale } from '@/lib/responsive';
 import { onboardingStyles as shared } from './sharedStyles';
+import MaskedView from '@react-native-masked-view/masked-view';
 import { GradientTitle, TITLE_SIZE, BRAND_GRADIENT } from '@/components/GradientTitle';
+import { displayFontFamily } from '@/constants/fonts';
 import { TitleText } from '@/components/TitleText';
 import { OnboardingFooter } from './OnboardingFooter';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
@@ -264,20 +266,31 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       });
     }, [isAdmin]);
 
-    // Section eyebrow — a bold rainbow-gradient LABEL + a matching rainbow rule. Same
-    // gradient across both, so the text flows into the line as one cohesive flourish
-    // (not two competing rainbows). Bigger label so it doesn't read thin (Kevin 2026-08-29).
+    // Section eyebrow — a CENTERED "———— REAL WORLD ————" divider where ONE brand
+    // gradient sweeps continuously across the left rule, the text, and the right rule
+    // as a single unit (Kevin 2026-08-29). Done with a MaskedView: the gradient fills
+    // the full row and shows through the mask (two flex lines + the label glyphs).
     const renderSectionHeader = (label: string, dream: boolean) => (
       <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
-        <GradientTitle size={15} weight={800} uppercase letterSpacing={1.6} align="left">
-          {label}
-        </GradientTitle>
-        <LinearGradient
-          colors={BRAND_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={s.sectionRule}
-        />
+        <MaskedView
+          style={s.sectionMask}
+          maskElement={
+            <View style={s.sectionMaskRow}>
+              <View style={s.sectionMaskLine} />
+              <Text style={s.sectionMaskLabel} numberOfLines={1}>
+                {label}
+              </Text>
+              <View style={s.sectionMaskLine} />
+            </View>
+          }
+        >
+          <LinearGradient
+            colors={BRAND_GRADIENT}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={StyleSheet.absoluteFill}
+          />
+        </MaskedView>
       </View>
     );
 
@@ -505,15 +518,24 @@ const s = StyleSheet.create({
   // that runs to the edge. Real World = neutral; Dream Worlds = brand-gradient rule
   // + brighter label, with extra top space, so the two worlds read as distinct.
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: horizontalScale(10),
     marginHorizontal: TILE_PADDING,
     marginTop: verticalScale(4),
     marginBottom: verticalScale(12),
   },
   sectionHeaderDream: { marginTop: verticalScale(24) },
-  sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.9 },
+  // Centered "——— LABEL ———" divider — one gradient (behind) shows through this
+  // mask (two flex rules + the label glyphs), so it reads as a single unit.
+  sectionMask: { width: SCREEN_WIDTH - TILE_PADDING * 2, height: fontScale(24) },
+  sectionMaskRow: { flex: 1, flexDirection: 'row', alignItems: 'center' },
+  sectionMaskLine: { flex: 1, height: 2, borderRadius: 999, backgroundColor: '#FFFFFF' },
+  sectionMaskLabel: {
+    color: '#FFFFFF',
+    fontFamily: displayFontFamily(800),
+    fontSize: fontScale(13.5),
+    letterSpacing: 1.8,
+    textTransform: 'uppercase',
+    marginHorizontal: horizontalScale(12),
+  },
 
   // Level 2 — category cards.
   catGrid: {
