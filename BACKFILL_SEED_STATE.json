@@ -1,0 +1,555 @@
+{
+  "processed": {
+    "marthas vineyard": {
+      "category": "beach_towns",
+      "active": 63,
+      "cast": 51,
+      "scene": 43,
+      "purged": 0,
+      "flagged": false,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788075755869.png"
+    },
+    "hanalei": {
+      "category": "beach_towns",
+      "active": 82,
+      "cast": 36,
+      "scene": 65,
+      "purged": 0,
+      "flagged": false,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788075796333.png"
+    },
+    "the hamptons": {
+      "category": "beach_towns",
+      "active": 62,
+      "cast": 36,
+      "scene": 53,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076082739.png",
+      "flagged": false
+    },
+    "santa cruz california": {
+      "category": "beach_towns",
+      "active": 69,
+      "cast": 51,
+      "scene": 58,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076142533.png",
+      "flagged": false
+    },
+    "newport rhode island": {
+      "category": "beach_towns",
+      "active": 99,
+      "cast": 66,
+      "scene": 76,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076190863.png",
+      "flagged": false
+    },
+    "myrtle beach": {
+      "category": "beach_towns",
+      "active": 76,
+      "cast": 62,
+      "scene": 50,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076430195.png",
+      "flagged": false
+    },
+    "nantucket": {
+      "category": "beach_towns",
+      "active": 77,
+      "cast": 40,
+      "scene": 59,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076462839.png",
+      "flagged": false
+    },
+    "haleiwa": {
+      "category": "beach_towns",
+      "active": 60,
+      "cast": 48,
+      "scene": 49,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076508149.png",
+      "flagged": false
+    },
+    "palm beach florida": {
+      "category": "beach_towns",
+      "active": 47,
+      "cast": 39,
+      "scene": 38,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076744772.png",
+      "flagged": false
+    },
+    "key west": {
+      "category": "beach_towns",
+      "active": 66,
+      "cast": 59,
+      "scene": 39,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076784146.png",
+      "flagged": false
+    },
+    "south beach miami": {
+      "category": "beach_towns",
+      "active": 100,
+      "cast": 72,
+      "scene": 70,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788076832801.png",
+      "flagged": false
+    },
+    "lahaina": {
+      "category": "beach_towns",
+      "active": 83,
+      "cast": 66,
+      "scene": 70,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077310455.png",
+      "flagged": false
+    },
+    "30a": {
+      "category": "beach_towns",
+      "active": 90,
+      "cast": 62,
+      "scene": 60,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077343897.png",
+      "flagged": false
+    },
+    "santa monica": {
+      "category": "beach_towns",
+      "active": 88,
+      "cast": 53,
+      "scene": 56,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077392920.png",
+      "flagged": false
+    },
+    "cape cod": {
+      "category": "beach_towns",
+      "active": 72,
+      "cast": 42,
+      "scene": 61,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077628027.png",
+      "flagged": false
+    },
+    "laguna beach": {
+      "category": "beach_towns",
+      "active": 77,
+      "cast": 59,
+      "scene": 55,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077662655.png",
+      "flagged": false
+    },
+    "carmel-by-the-sea": {
+      "category": "beach_towns",
+      "active": 90,
+      "cast": 67,
+      "scene": 73,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077698800.png",
+      "flagged": false
+    },
+    "coney island": {
+      "category": "beach_towns",
+      "active": 36,
+      "cast": 25,
+      "scene": 29,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788077944026.png",
+      "flagged": false
+    },
+    "outer banks": {
+      "category": "beach_towns",
+      "active": 47,
+      "cast": 37,
+      "scene": 41,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078000740.png",
+      "flagged": false
+    },
+    "malibu": {
+      "category": "beach_towns",
+      "active": 85,
+      "cast": 56,
+      "scene": 61,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078038772.png",
+      "flagged": false
+    },
+    "amalfi coast": {
+      "category": "coastal_escapes",
+      "active": 87,
+      "cast": 56,
+      "scene": 64,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078319005.png",
+      "flagged": false
+    },
+    "collioure france": {
+      "category": "coastal_escapes",
+      "active": 58,
+      "cast": 39,
+      "scene": 48,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078366204.png",
+      "flagged": false
+    },
+    "cascais portugal": {
+      "category": "coastal_escapes",
+      "active": 77,
+      "cast": 57,
+      "scene": 58,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078397414.png",
+      "flagged": false
+    },
+    "st ives cornwall": {
+      "category": "coastal_escapes",
+      "active": 82,
+      "cast": 46,
+      "scene": 55,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078662268.png",
+      "flagged": false
+    },
+    "ireland": {
+      "category": "countries_cultures",
+      "active": 108,
+      "cast": 41,
+      "scene": 97,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078699451.png",
+      "flagged": false
+    },
+    "scotland": {
+      "category": "countries_cultures",
+      "active": 114,
+      "cast": 59,
+      "scene": 109,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788078767547.png",
+      "flagged": false
+    },
+    "vietnam": {
+      "category": "countries_cultures",
+      "active": 111,
+      "cast": 50,
+      "scene": 87,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079112166.png",
+      "flagged": false
+    },
+    "spain": {
+      "category": "countries_cultures",
+      "active": 133,
+      "cast": 74,
+      "scene": 118,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079156932.png",
+      "flagged": false
+    },
+    "brazil": {
+      "category": "countries_cultures",
+      "active": 107,
+      "cast": 56,
+      "scene": 92,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079203044.png",
+      "flagged": false
+    },
+    "japan": {
+      "category": "countries_cultures",
+      "active": 120,
+      "cast": 78,
+      "scene": 93,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079506456.png",
+      "flagged": false
+    },
+    "germany": {
+      "category": "countries_cultures",
+      "active": 117,
+      "cast": 74,
+      "scene": 99,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079550904.png",
+      "flagged": false
+    },
+    "france": {
+      "category": "countries_cultures",
+      "active": 120,
+      "cast": 71,
+      "scene": 107,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079617642.png",
+      "flagged": false
+    },
+    "egypt": {
+      "category": "countries_cultures",
+      "active": 93,
+      "cast": 58,
+      "scene": 70,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079898324.png",
+      "flagged": false
+    },
+    "italy": {
+      "category": "countries_cultures",
+      "active": 145,
+      "cast": 104,
+      "scene": 127,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079942831.png",
+      "flagged": false
+    },
+    "greece": {
+      "category": "countries_cultures",
+      "active": 110,
+      "cast": 78,
+      "scene": 80,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788079990189.png",
+      "flagged": false
+    },
+    "mount everest": {
+      "category": "epic_nature",
+      "active": 106,
+      "cast": 47,
+      "scene": 90,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080257605.png",
+      "flagged": false
+    },
+    "foggy graveyard": {
+      "category": "gothic_haunted",
+      "active": 93,
+      "cast": 84,
+      "scene": 37,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080326547.png",
+      "flagged": false
+    },
+    "vampire castle": {
+      "category": "gothic_haunted",
+      "active": 85,
+      "cast": 43,
+      "scene": 68,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080362288.png",
+      "flagged": false
+    },
+    "witch's cottage": {
+      "category": "gothic_haunted",
+      "active": 105,
+      "cast": 95,
+      "scene": 22,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080618929.png",
+      "flagged": false
+    },
+    "ghost town": {
+      "category": "gothic_haunted",
+      "active": 64,
+      "cast": 38,
+      "scene": 41,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080653346.png",
+      "flagged": false
+    },
+    "catacombs": {
+      "category": "gothic_haunted",
+      "active": 36,
+      "cast": 29,
+      "scene": 14,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080938265.png",
+      "flagged": false
+    },
+    "gothic cathedral": {
+      "category": "gothic_haunted",
+      "active": 122,
+      "cast": 110,
+      "scene": 83,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080975743.png",
+      "flagged": false
+    },
+    "haunted mansion": {
+      "category": "gothic_haunted",
+      "active": 80,
+      "cast": 70,
+      "scene": 27,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081184968.png",
+      "flagged": false
+    },
+    "superyacht": {
+      "category": "high_life",
+      "active": 115,
+      "cast": 73,
+      "scene": 102,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081250377.png",
+      "flagged": false
+    },
+    "grand estate": {
+      "category": "high_life",
+      "active": 53,
+      "cast": 41,
+      "scene": 35,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081439823.png",
+      "flagged": false
+    },
+    "vineyard estate": {
+      "category": "high_life",
+      "active": 88,
+      "cast": 47,
+      "scene": 67,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081475786.png",
+      "flagged": false
+    },
+    "private jet": {
+      "category": "high_life",
+      "active": 23,
+      "cast": 23,
+      "scene": 19,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081694643.png",
+      "flagged": false
+    },
+    "alpine chalet": {
+      "category": "high_life",
+      "active": 93,
+      "cast": 22,
+      "scene": 86,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081735775.png",
+      "flagged": false
+    },
+    "red carpet": {
+      "category": "high_life",
+      "active": 101,
+      "cast": 87,
+      "scene": 52,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081937689.png",
+      "flagged": false
+    },
+    "monte carlo": {
+      "category": "high_life",
+      "active": 90,
+      "cast": 61,
+      "scene": 54,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081976212.png",
+      "flagged": false
+    },
+    "sky penthouse": {
+      "category": "high_life",
+      "active": 79,
+      "cast": 36,
+      "scene": 18,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788082214667.png",
+      "flagged": false
+    },
+    "sydney": {
+      "category": "iconic_cities",
+      "active": 91,
+      "cast": 68,
+      "scene": 75,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788082254512.png",
+      "flagged": false
+    },
+    "moon base": {
+      "category": "scifi_space",
+      "active": 94,
+      "cast": 60,
+      "scene": 58,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788082463410.png",
+      "flagged": false
+    },
+    "prehistoric": {
+      "category": "through_time",
+      "active": 108,
+      "cast": 83,
+      "scene": 32,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788082723871.png",
+      "flagged": false
+    },
+    "tahiti": {
+      "category": "tropical",
+      "active": 126,
+      "cast": 63,
+      "scene": 97,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788082764206.png",
+      "flagged": false
+    },
+    "cancun": {
+      "category": "tropical",
+      "active": 54,
+      "cast": 39,
+      "scene": 36,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083003291.png",
+      "flagged": false
+    },
+    "fiji": {
+      "category": "tropical",
+      "active": 94,
+      "cast": 49,
+      "scene": 67,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083040299.png",
+      "flagged": false
+    },
+    "railroad town": {
+      "category": "wild_west",
+      "active": 66,
+      "cast": 23,
+      "scene": 41,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083247080.png",
+      "flagged": false
+    },
+    "outlaw hideout": {
+      "category": "wild_west",
+      "active": 86,
+      "cast": 39,
+      "scene": 51,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083286521.png",
+      "flagged": false
+    },
+    "saloon": {
+      "category": "wild_west",
+      "active": 94,
+      "cast": 84,
+      "scene": 33,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083426762.png",
+      "flagged": false
+    },
+    "starship bridge": {
+      "category": "scifi_space",
+      "active": 68,
+      "cast": 56,
+      "scene": 27,
+      "purged": 0,
+      "dualUrl": "https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788083653354.png",
+      "flagged": false
+    }
+  },
+  "phaseB": false,
+  "startedAt": "1970-01-01"
+}
