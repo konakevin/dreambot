@@ -21,7 +21,7 @@ export const NIGHTLY_INFO: InfoStepConfig = {
   // \n forces a balanced two-line break — the natural wrap strands "sleep"
   // alone on line two.
   headline: 'DreamBot dreams\nwhile you sleep',
-  body: 'Every night while you sleep, DreamBot paints you a new dream — set in the places you love, and some nights, somewhere wonderfully unexpected.',
+  body: 'Every night while you sleep, DreamBot paints you a new dream, set in the places you love, and some nights, somewhere wonderfully unexpected.',
   // The "up next" transition lives in the footnote slot so it reads as its
   // own quiet line under the paragraph instead of bulking up the body.
   footnote: 'Up next: choose where you’ll dream',
