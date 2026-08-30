@@ -75,9 +75,9 @@ const SECTION_META: SectionMeta[] = [
     id: 'around_the_world',
     title: 'World Traveler',
     icon: 'earth-outline',
-    description: 'Cities, countries, and the world’s great wonders',
+    description: 'Cities, countries, coasts, and the world’s great wonders',
     tier: 'real',
-    categories: ['iconic_cities', 'countries_cultures', 'landmarks_wonders'],
+    categories: ['iconic_cities', 'countries_cultures', 'landmarks_wonders', 'coastal_escapes'],
   },
   {
     id: 'tropical_escapes',

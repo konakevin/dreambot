@@ -91,9 +91,8 @@ export function BotSelectorStep({ onNext, onBack, nextLabel = 'See my first drea
           {TITLE_TEXT}
         </GradientTitle>
         <Text style={s.subtitle}>
-          Welcome to the neighborhood. Every bot lives in its own dreamy little corner: flowers,
-          dragons, deep space, tiny villages. Follow your favorites and their dreams will drift into
-          your feed.
+          Flowers, dragons, deep space, tiny villages. Follow the Bots you like and their dreams
+          drift into your feed.
         </Text>
       </View>
 

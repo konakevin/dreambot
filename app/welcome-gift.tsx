@@ -117,7 +117,7 @@ export default function WelcomeGiftScreen() {
         {/* Gradient wordmark hero — matches onboarding's brand treatment. */}
         <Text style={s.eyebrow}>You&rsquo;re in</Text>
         <GradientTitle size={38} weight={700} letterSpacing={-0.5}>
-          Welcome ✨
+          Welcome
         </GradientTitle>
         <Text style={s.lede}>Two ways to dream, both free to start</Text>
 
@@ -134,10 +134,8 @@ export default function WelcomeGiftScreen() {
             </View>
           </View>
           <Text style={s.cardBody}>
-            While you sleep, DreamBot paints you a fresh dream, set in your favorite places and
-            starring your Dream Cast. Wake up to a new one every morning.
+            A fresh dream waiting each morning. Free during your trial, then yours on Basic or Pro.
           </Text>
-          <Text style={s.cardFoot}>Then keep them going on any plan</Text>
         </View>
 
         {/* Pillar 2 — Sparkles (dream on your own). Quieter card. */}
@@ -150,10 +148,9 @@ export default function WelcomeGiftScreen() {
             </View>
           </View>
           <Text style={s.cardBody}>
-            For dreaming on your own, anytime. Turn words into pictures, reimagine a photo, or cast
-            yourself somewhere new.
+            Sparkles are what you spend to make your own daydreams, anytime, in Create. Turn words
+            into pictures, reimagine a photo, or cast yourself somewhere new.
           </Text>
-          <Text style={s.cardFoot}>Spend them on the Create screen</Text>
         </View>
       </ScrollView>
 
@@ -305,17 +302,6 @@ const s = StyleSheet.create({
     fontSize: fontScale(14),
     lineHeight: fontScale(20),
   },
-  // Plain, non-tappable caption (not a link) — this screen keeps the user put
-  // until "Go to feed" (Kevin 2026-07-18). Dim so it reads as a quiet footnote,
-  // not the old purple link.
-  cardFoot: {
-    color: colors.subtleOnDark,
-    fontSize: fontScale(13),
-    fontWeight: '600',
-    lineHeight: fontScale(18),
-    marginTop: verticalScale(10),
-  },
-
   ctaWrap: {
     position: 'absolute',
     left: 0,

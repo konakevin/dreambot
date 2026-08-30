@@ -5,8 +5,8 @@
  * profile and kicks the free first dream off IN THE BACKGROUND, then sends the
  * user to "Meet the bots" while it renders. The reveal step awaits the stashed
  * jobId. This is the point of no return — going back past it (to change
- * places/cast/vibe) is disabled from here on; the copy reassures the user they
- * can still change everything later from their profile.
+ * places/cast/vibe) is disabled from here on; the footnote points ahead to
+ * "meet the bots" (the next screen), matching the other onboarding steps.
  */
 
 import { useRef } from 'react';
@@ -155,17 +155,15 @@ export function SaveContinueStep({ onNext, onBack }: Props) {
         <Text style={s.eyebrow}>last step</Text>
 
         <GradientTitle size={TITLE_SIZE.page} weight={800} maxWidth={340} numberOfLines={0}>
-          You&apos;re all set
+          You&apos;ve got neighbors
         </GradientTitle>
 
         <Text style={s.body}>
-          DreamBot is ready to generate your first dream. Before we finish, meet our cast of Bots
-          and see what they&apos;re dreaming up.
+          Your dream world doesn&apos;t sit empty. A whole neighborhood of Bots lives next door,
+          each off in a little world of its own.
         </Text>
 
-        <Text style={s.reassure}>
-          You can change your places, cast, and vibe anytime from your profile
-        </Text>
+        <Text style={s.reassure}>Up next: meet the bots</Text>
       </ScrollView>
 
       {/* Short label — "Save & continue" overflowed the half-width Next pill
