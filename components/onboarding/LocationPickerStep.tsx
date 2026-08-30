@@ -276,36 +276,20 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       }
     }, [places, toggleAllLocations]);
 
-    // Section eyebrow — poppy + differentiated (Kevin 2026-08-29): each world gets a
-    // tinted PILL CHIP (icon + label in its own accent) so the two read distinct and
-    // colorful. Real World = teal "earth" (grounded); Dream Worlds = brand-pink
-    // "sparkles" (imagined), followed by its accent rule.
-    const renderSectionHeader = (label: string, dream: boolean) => {
-      const accent = dream ? '#F9A8D4' : '#5EEAD4';
-      const icon: keyof typeof Ionicons.glyphMap = dream ? 'sparkles' : 'earth';
-      return (
-        <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
-          <View
-            style={[
-              s.sectionPill,
-              {
-                backgroundColor: dream ? 'rgba(249,168,212,0.14)' : 'rgba(94,234,212,0.13)',
-                borderColor: dream ? 'rgba(249,168,212,0.5)' : 'rgba(94,234,212,0.45)',
-              },
-            ]}
-          >
-            <Ionicons name={icon} size={fontScale(13)} color={accent} />
-            <Text style={[s.sectionLabel, { color: accent }]}>{label}</Text>
-          </View>
-          <LinearGradient
-            colors={dream ? BRAND_GRADIENT : ['#5EEAD4', '#2DD4BF', 'rgba(45,212,191,0)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={s.sectionRule}
-          />
-        </View>
-      );
-    };
+    // Section eyebrow — a clean uppercase label + the rainbow brand-gradient rule on
+    // BOTH worlds (Kevin likes the gradient line; no pill chips). A touch more top
+    // space above Dream Worlds is the only separation.
+    const renderSectionHeader = (label: string, dream: boolean) => (
+      <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
+        <Text style={s.sectionLabel}>{label}</Text>
+        <LinearGradient
+          colors={BRAND_GRADIENT}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={s.sectionRule}
+        />
+      </View>
+    );
 
     // Level 1 — the whole picker on ONE page (no tabs): a global running total, then
     // two labeled sections (Real World / Dream Worlds) stacked in a single scroll, so
@@ -538,20 +522,11 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
   },
   sectionHeaderDream: { marginTop: verticalScale(24) },
-  // Poppy tinted pill chip holding the icon + label (colour set inline per world).
-  sectionPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: horizontalScale(6),
-    paddingHorizontal: horizontalScale(11),
-    paddingVertical: verticalScale(5),
-    borderRadius: 999,
-    borderWidth: 1,
-  },
   sectionLabel: {
     fontSize: fontScale(12.5),
     fontWeight: '800',
-    letterSpacing: 1.4,
+    letterSpacing: 1.6,
+    color: 'rgba(255,255,255,0.72)',
   },
   sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.85 },
 
@@ -570,18 +545,13 @@ const s = StyleSheet.create({
     borderColor: colors.accentBorder,
   },
   catImg: { opacity: 0.62 },
-  // Whole-category selected: bright teal border + a matching check badge.
-  // Selected = brand-PINK border + a soft pink glow (Kevin 2026-08-29: more color).
+  // Whole-category selected: a clean brand-PURPLE border, no glow (Kevin 2026-08-29:
+  // pink+glow read too busy — calm purple outline from the logo palette).
   catCardSelected: {
-    borderColor: '#F9A8D4',
+    borderColor: '#A78BFA',
     borderWidth: 2.5,
-    shadowColor: '#F9A8D4',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.55,
-    shadowRadius: 9,
-    elevation: 7,
   },
-  // Check badge stays GREEN (teal) — a bright contrast to the pink border (Kevin).
+  // Check badge stays GREEN (teal) — a bright contrast to the purple border (Kevin).
   catSelectedBadge: {
     position: 'absolute',
     top: 9,
