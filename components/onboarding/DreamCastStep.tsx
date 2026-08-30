@@ -77,7 +77,7 @@ const SLOTS: SlotConfig[] = [
     role: 'plus_one',
     label: 'Your +1',
     icon: 'heart',
-    tip: 'A friend, partner, or someone you love',
+    tip: '',
   },
 ];
 
