@@ -260,7 +260,7 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 |---|---|---|---|
 | Moon Base | ✅ ~4.4 (dark) | self 4.6 / couple 4.2 | sleek flight-suit self (hydroponics bay) is great; couple wardrobe upgraded to sleek (was beige). PASS |
 | Starship Bridge | ✅ ~4.6 (dark) | canvas: self 4.7 / couple 4.6 | UPGRADED for Kevin — epic viewscreen+fleet SUBJECT, sleek command wardrobe, captain's-chair hero spots. Command-couple w/ fleet behind = heroic-cool. PASS (cinematic = killer bg but tiny cast) |
-| Robot City | ✅ ~4.4 (dark) | self 4.7 / couple 4.0 | neon-plaza cyberpunk techwear self is killer; couple correct race but male rolled half-cyborg chrome-head (android prior). Minor; re-roll clears. PASS |
+| Robot City | ✅ ~4.5 (dark) RETOOLED | R2: couple 4.6 (clean human) / self 4.6 | Kevin 2026-08-29: kill the half-cyborg cast look. Fixed the SUBJECT (was "android metropolis...machines among crowds" → first-noun bled onto people). Now leads with HUMAN cast + robots/drones as ENVIRONMENT only; +3 background-robot SCENE spots. Round 1 = clean human couple, correct race, fashionable. (Minor: one roll still tinted the male armored/bluish under cold neon — no longer chrome-cyborg.) PASS |
 | Saloon | ✅ ~4.4 (dark) | self 4.6 / couple 4.3 | Red Dead gunslinger register — worn vest/neckerchief at the piano; correct race, authentic (not costume). PASS |
 | Outlaw Hideout | ✅ ~4.6 (dark) | self 4.7 / couple 4.5 | canyon camp, weathered dusters/buckskin, map — authentic frontier-outlaw (Red Dead vision); correct race. PASS |
 | Railroad Town | ✅ ~4.5 (dark) | couple 4.6 | joyful couple at a depot platform beside a vintage train; correct race, charming boomtown. PASS |

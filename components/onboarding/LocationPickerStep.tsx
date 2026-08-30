@@ -598,7 +598,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
         <ConfirmDialog
           visible={resetVisible}
           title="Start over?"
-          message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}.`}
+          message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}`}
           confirmLabel="Reset"
           onConfirm={doReset}
           onCancel={() => setResetVisible(false)}
