@@ -17,16 +17,11 @@ import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { supabase } from '@/lib/supabase';
 
 const MIN_REQUIRED = 1;
-// Effectively uncapped (2026-06-18, Kevin) — high practical bound only, since the
-// picker is a plain ScrollView (not virtualized). Nothing downstream limits
-// location count. See store/onboarding.ts MAX_LOCATIONS.
-const MAX_ONBOARDING = 100;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TILE_GAP = 10;
 const TILE_PADDING = 20;
 // Two tiles per row, edge-to-edge across the content area.
 const TILE_WIDTH = Math.floor((SCREEN_WIDTH - TILE_PADDING * 2 - TILE_GAP) / 2);
-const TILE_HEIGHT = verticalScale(110);
 const CAT_CARD_HEIGHT = verticalScale(118);
 
 // Neutral dark gradient used as a tile placeholder when a location has no
@@ -176,113 +171,37 @@ const SECTION_META: SectionMeta[] = [
 interface Props {
   onNext: () => void;
   onBack: () => void;
-  /** When true (settings route), the drill-in detail view does NOT render its own
-   *  inner back button — the host's top header chevron is the single back, made
-   *  context-aware via the imperative `goBack()` handle below. Onboarding leaves
-   *  this off and keeps the inner back. */
-  hideDetailBack?: boolean;
 }
 
 /** Imperative handle so a host header's back chevron routes through the picker. */
 export interface LocationPickerHandle {
-  /** Handle a host back-press. Pops the drill-in detail first (→ category grid);
-   *  else if leaving with ZERO places selected, shows a gentle confirm and only
-   *  runs onLeave if confirmed; otherwise runs onLeave immediately. */
+  /** Handle a host back-press. If leaving with ZERO places selected, shows a gentle
+   *  confirm and only runs onLeave if confirmed; otherwise runs onLeave immediately. */
   handleBack: (onLeave: () => void) => void;
 }
 
-function LocationTile({
-  item,
-  selected,
-  thumbnailUrl,
-  onToggle,
-}: {
-  item: LocationItem;
-  selected: boolean;
-  thumbnailUrl: string | undefined;
-  onToggle: () => void;
-}) {
-  return (
-    <TouchableOpacity
-      style={[
-        s.tile,
-        selected && s.tileSelected,
-        selected && s.tileSelectedShadow,
-        { transform: [{ scale: selected ? 1.03 : 1 }] },
-      ]}
-      onPress={onToggle}
-      activeOpacity={0.8}
-    >
-      {thumbnailUrl ? (
-        <ExpoImage
-          source={{ uri: thumbnailUrl }}
-          style={StyleSheet.absoluteFillObject}
-          contentFit="cover"
-          transition={200}
-        />
-      ) : (
-        <LinearGradient
-          colors={PLACEHOLDER_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={StyleSheet.absoluteFillObject}
-        />
-      )}
-
-      <LinearGradient colors={['transparent', 'rgba(0,0,0,0.7)']} style={s.tileOverlay} />
-
-      {/* numberOfLines={1}: the label is bottom-anchored inside a fixed-height,
-          overflow:hidden tile. Without a line cap, OS "Larger Text" (or a long
-          name) wraps it upward and the top lines clip against the tile edge. */}
-      <Text style={s.tileLabel} numberOfLines={1} ellipsizeMode="tail">
-        {item.label}
-      </Text>
-
-      {/* Dark-launch marker — only admins ever receive admin_only cards (mig 444). */}
-      {item.adminOnly && (
-        <View style={s.adminBadge}>
-          <Text style={s.adminBadgeText}>ADMIN</Text>
-        </View>
-      )}
-
-      {selected && (
-        <View style={s.heartBadge}>
-          <Ionicons name="heart" size={14} color={colors.accent} />
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-}
-
 export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
-  function LocationPickerStep({ onNext, onBack, hideDetailBack }: Props, ref) {
+  function LocationPickerStep({ onNext, onBack }: Props, ref) {
     const places = useOnboardingStore((st) => st.profile.dream_seeds.places);
-    const toggleLocation = useOnboardingStore((st) => st.toggleLocation);
     const toggleAllLocations = useOnboardingStore((st) => st.toggleAllLocations);
     const isEditing = useOnboardingStore((st) => st.isEditing);
     // Dark-launch gate (mig 444): admins see admin_only cards for QA; regular users don't.
     const isAdmin = useAuthStore((st) => st.isAdmin);
     const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
     const [sections, setSections] = useState<LocationSection[]>([]);
-    // Level 3 — which category is drilled into (null = the two-section browse grid).
-    const [openCategory, setOpenCategory] = useState<string | null>(null);
     const [resetVisible, setResetVisible] = useState(false);
     // Gentle "leaving with nothing picked?" confirm — stashes the host's leave
     // action until they confirm.
     const [leaveVisible, setLeaveVisible] = useState(false);
     const leaveActionRef = useRef<(() => void) | null>(null);
 
-    // A host header's back chevron routes through here: pop the drill-in detail
-    // first (→ category grid); else if they're leaving with ZERO places, nudge
-    // before letting them go; else leave straight away.
+    // A host header's back chevron routes through here: if they're leaving with
+    // ZERO places, nudge before letting them go; else leave straight away. (No more
+    // drill-in to pop — the picker is a single tile grid now.)
     useImperativeHandle(
       ref,
       () => ({
         handleBack: (onLeave) => {
-          if (openCategory) {
-            setOpenCategory(null);
-            return;
-          }
           if (places.length === 0) {
             leaveActionRef.current = onLeave;
             setLeaveVisible(true);
@@ -291,11 +210,10 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           onLeave();
         },
       }),
-      [openCategory, places.length]
+      [places.length]
     );
 
     const canProceed = places.length >= MIN_REQUIRED;
-    const atMax = places.length >= MAX_ONBOARDING;
 
     // Load locations from DB (location_cards). Group by picker_category,
     // sort by picker_sort_order. Section icons + titles + descriptions
@@ -339,20 +257,6 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
         setThumbnails(thumbMap);
       });
     }, [isAdmin]);
-
-    const handleToggle = useCallback(
-      (key: string) => {
-        if (!places.includes(key) && atMax) return;
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        toggleLocation(key);
-      },
-      [places, atMax, toggleLocation]
-    );
-
-    const selectedInSection = useCallback(
-      (section: LocationSection) => section.items.filter((i) => places.includes(i.key)).length,
-      [places]
-    );
 
     const confirmReset = useCallback(() => {
       if (places.length > 0) setResetVisible(true);
@@ -431,17 +335,23 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       );
     };
 
+    // A category tile IS the selection unit (2026-08-29 Kevin): tapping it selects
+    // the WHOLE category (every location inside), tapping again clears it — no more
+    // drill-in. Selected = every location in the category is picked; shown with a
+    // highlighted border + a check badge (no count). A short description stands in
+    // for the removed "N places" so users know what's inside without exploring.
     const renderCategoryCard = (section: LocationSection) => {
       const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
-      const picks = selectedInSection(section);
+      const sectionKeys = section.items.map((i) => i.key);
+      const selected = sectionKeys.length > 0 && sectionKeys.every((k) => places.includes(k));
       return (
         <TouchableOpacity
           key={section.id}
-          style={s.catCard}
+          style={[s.catCard, selected && s.catCardSelected]}
           activeOpacity={0.85}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            setOpenCategory(section.id);
+            toggleAllLocations(sectionKeys);
           }}
         >
           {repThumb ? (
@@ -464,10 +374,9 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             style={StyleSheet.absoluteFillObject}
           />
 
-          {picks > 0 && (
-            <View style={s.catPickBadge}>
-              <Ionicons name="heart" size={12} color="#08210E" />
-              <Text style={s.catPickText}>{picks}</Text>
+          {selected && (
+            <View style={s.catSelectedBadge}>
+              <Ionicons name="checkmark-sharp" size={15} color="#08210E" />
             </View>
           )}
 
@@ -475,119 +384,47 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             <Text style={s.catTitle} numberOfLines={1}>
               {section.title}
             </Text>
-            <Text style={s.catMeta}>
-              {section.items.length} {section.items.length === 1 ? 'place' : 'places'}
+            <Text style={s.catDesc} numberOfLines={2}>
+              {section.description}
             </Text>
           </View>
-
-          <Ionicons
-            name="chevron-forward"
-            size={18}
-            color="rgba(255,255,255,0.85)"
-            style={s.catChev}
-          />
         </TouchableOpacity>
       );
     };
 
-    // Level 3 — one category, all its places, focused.
-    const renderDetail = (section: LocationSection) => {
-      const sectionKeys = section.items.map((i) => i.key);
-      const allSelected = sectionKeys.every((k) => places.includes(k));
-      return (
-        <ScrollView
-          contentContainerStyle={[
-            s.scrollContent,
-            isEditing && { paddingBottom: verticalScale(20) },
-          ]}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={s.detailHeader}>
-            {!hideDetailBack && (
-              <TouchableOpacity
-                style={s.backBtn}
-                activeOpacity={0.7}
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  setOpenCategory(null);
-                }}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
-              </TouchableOpacity>
-            )}
-            <View style={s.detailTitleWrap}>
-              <Text style={s.detailTitle} numberOfLines={1}>
-                {section.title}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={s.pillBtn}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                toggleAllLocations(sectionKeys);
-              }}
-              activeOpacity={0.8}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={s.pillBtnText}>{allSelected ? 'Deselect all' : 'Select all'}</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={s.tileGrid}>
-            {section.items.map((item) => (
-              <LocationTile
-                key={item.key}
-                item={item}
-                selected={places.includes(item.key)}
-                thumbnailUrl={thumbnails.get(item.key)}
-                onToggle={() => handleToggle(item.key)}
-              />
-            ))}
-          </View>
-        </ScrollView>
-      );
-    };
-
-    const openSection = openCategory ? sections.find((sec) => sec.id === openCategory) : null;
-
     return (
       <View style={shared.root}>
-        {/* Sticky header — sits outside the ScrollView so the grid scrolls under it.
-          Hidden while drilled into a category so that view's own header owns the top
-          (avoids a stacked second prompt above the category name). */}
-        {!openSection && (
-          <View style={s.stickyHeader}>
-            {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
+        {/* Sticky header — sits outside the ScrollView so the grid scrolls under it. */}
+        <View style={s.stickyHeader}>
+          {/* In Settings the gradient wordmark is the nav-bar title, so demote this to
             plain text; onboarding keeps the gradient hero. */}
-            {isEditing ? (
-              <TitleText
-                size={18}
-                color={colors.bodyOnDark}
-                numberOfLines={2}
-                align="center"
-                style={{
-                  marginBottom: verticalScale(6),
-                  maxWidth: SCREEN_WIDTH - TILE_PADDING * 2,
-                }}
-              >
-                Where do you want to dream?
-              </TitleText>
-            ) : (
-              <GradientTitle
-                size={TITLE_SIZE.page}
-                numberOfLines={2}
-                align="center"
-                maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
-                style={{ marginBottom: verticalScale(6) }}
-              >
-                Where do you want to dream?
-              </GradientTitle>
-            )}
-          </View>
-        )}
+          {isEditing ? (
+            <TitleText
+              size={18}
+              color={colors.bodyOnDark}
+              numberOfLines={2}
+              align="center"
+              style={{
+                marginBottom: verticalScale(6),
+                maxWidth: SCREEN_WIDTH - TILE_PADDING * 2,
+              }}
+            >
+              Where do you want to dream?
+            </TitleText>
+          ) : (
+            <GradientTitle
+              size={TITLE_SIZE.page}
+              numberOfLines={2}
+              align="center"
+              maxWidth={SCREEN_WIDTH - TILE_PADDING * 2}
+              style={{ marginBottom: verticalScale(6) }}
+            >
+              Where do you want to dream?
+            </GradientTitle>
+          )}
+        </View>
 
-        {openSection ? renderDetail(openSection) : renderBrowse()}
+        {renderBrowse()}
 
         {!isEditing && (
           <OnboardingFooter
@@ -704,6 +541,31 @@ const s = StyleSheet.create({
     borderColor: colors.accentBorder,
   },
   catImg: { opacity: 0.62 },
+  // Whole-category selected: bright teal border + a matching check badge.
+  catCardSelected: {
+    borderColor: '#5EEAD4',
+    borderWidth: 2.5,
+  },
+  catSelectedBadge: {
+    position: 'absolute',
+    top: 9,
+    right: 9,
+    width: 24,
+    height: 24,
+    borderRadius: 999,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#5EEAD4',
+  },
+  catDesc: {
+    fontSize: fontScale(11.5),
+    color: 'rgba(255,255,255,0.82)',
+    marginTop: verticalScale(2),
+    lineHeight: fontScale(15),
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
   catBody: {
     position: 'absolute',
     left: 0,
@@ -718,128 +580,5 @@ const s = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.7)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
-  },
-  catMeta: {
-    fontSize: fontScale(12),
-    color: 'rgba(255,255,255,0.85)',
-    marginTop: verticalScale(1),
-    textShadowColor: 'rgba(0,0,0,0.7)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
-  catPickBadge: {
-    position: 'absolute',
-    top: 9,
-    right: 9,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: horizontalScale(8),
-    paddingVertical: verticalScale(3),
-    borderRadius: 999,
-    backgroundColor: '#5EEAD4',
-  },
-  catPickText: { fontSize: fontScale(12), fontWeight: '800', color: '#08210E' },
-  catChev: { position: 'absolute', bottom: 12, right: 12 },
-
-  // Level 3 — category detail header.
-  detailHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: verticalScale(14),
-  },
-  backBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.accentBorder,
-  },
-  detailTitleWrap: { flex: 1, minWidth: 0 },
-  detailTitle: { fontSize: fontScale(18), fontWeight: '800', color: '#FFFFFF' },
-  detailDesc: { fontSize: fontScale(13), color: colors.subtleOnDark, marginTop: verticalScale(1) },
-
-  // Select all / Deselect all — a real (accent) button, not blend-in text.
-  pillBtn: {
-    paddingHorizontal: horizontalScale(14),
-    paddingVertical: verticalScale(6),
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.55)',
-    backgroundColor: 'rgba(167,139,250,0.16)',
-  },
-  pillBtnText: { fontSize: fontScale(12.5), fontWeight: '700', color: '#C4B5FD' },
-
-  tileGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: TILE_GAP,
-  },
-
-  tile: {
-    width: TILE_WIDTH,
-    height: TILE_HEIGHT,
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  tileSelected: {
-    borderColor: colors.accent,
-    shadowColor: colors.accent,
-  },
-  tileSelectedShadow: {
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  tileOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-  },
-  tileLabel: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    fontSize: fontScale(13),
-    fontWeight: '600',
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0,0,0,0.8)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
-  adminBadge: {
-    position: 'absolute',
-    top: 8,
-    left: 8,
-    paddingHorizontal: horizontalScale(6),
-    paddingVertical: verticalScale(2),
-    borderRadius: 6,
-    backgroundColor: 'rgba(0,0,0,0.65)',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.accent,
-  },
-  adminBadgeText: {
-    fontSize: fontScale(9),
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    color: colors.accent,
-  },
-  heartBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

@@ -14,8 +14,12 @@ const MAX_SEEDS_PER_CATEGORY = 10;
 // no downstream reason — persistence is an unbounded JSONB string array and every
 // engine (nightly / scene / first-dream) random-picks ONE place from it. The only
 // constraint is UI scroll perf (the picker is a plain ScrollView), so we keep a
-// high practical bound rather than truly infinite.
-const MAX_LOCATIONS = 100;
+// high practical bound rather than truly infinite. Raised 100→300 on 2026-08-29
+// when the picker moved to tile-level (whole-category) selection: a single tap can
+// add ~38 locations (Around the World), so several tiles could silently hit a
+// 100-cap and make a just-tapped tile read as unselected. 300 clears every
+// category selected at once.
+const MAX_LOCATIONS = 300;
 
 type SeedCategory = keyof DreamSeeds;
 

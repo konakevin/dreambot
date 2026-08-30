@@ -40,7 +40,6 @@ export default function LocationPickerStepSettings() {
       </View>
       <LocationPickerStep
         ref={pickerRef}
-        hideDetailBack
         onNext={() => router.back()}
         onBack={() => router.back()}
       />
