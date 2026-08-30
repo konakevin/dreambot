@@ -69,11 +69,11 @@ interface SectionMeta {
 }
 // Section presentation + grouping lives in code; the LIST of locations is DB-driven
 // (location_cards.picker_category). A section with no cards simply doesn't render.
-// 11 sections rendered on ONE page under two labeled worlds (no tabs) — 5 Real,
+// 12 sections rendered on ONE page under two labeled worlds (no tabs) — 6 Real,
 // 6 Dream. Most map 1:1 to a picker_category; "Around the World" fuses cities +
 // countries + the single World Wonders card. See LOCATION_REORG_PLAN.md.
 const SECTION_META: SectionMeta[] = [
-  // ── Real World (5) ───────────────────────────────────────────
+  // ── Real World (6) ───────────────────────────────────────────
   {
     id: 'around_the_world',
     title: 'Around the World',
@@ -113,6 +113,14 @@ const SECTION_META: SectionMeta[] = [
     description: 'Ancient empires and bygone eras',
     tier: 'real',
     categories: ['through_time'],
+  },
+  {
+    id: 'high_life',
+    title: 'The High Life',
+    icon: 'diamond-outline',
+    description: 'Superyachts, penthouses, red carpets, and champagne',
+    tier: 'real',
+    categories: ['high_life'],
   },
   // ── Dream Worlds (6) ─────────────────────────────────────────
   {
