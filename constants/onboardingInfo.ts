@@ -16,7 +16,7 @@ import type { InfoStepConfig } from '@/components/onboarding/InfoStep';
 //  components/FeedIntroGate.tsx.)
 
 export const NIGHTLY_INFO: InfoStepConfig = {
-  eyebrow: 'the nightly thing',
+  eyebrow: 'nightly dreams',
   customMascot: require('@/assets/images/onboarding/mascot-nightly.png'),
   // \n forces a balanced two-line break — the natural wrap strands "sleep"
   // alone on line two.
