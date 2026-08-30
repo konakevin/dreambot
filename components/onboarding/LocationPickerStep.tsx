@@ -447,9 +447,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           )}
           {/* Onboarding-only gentle intro under the title (Kevin 2026-08-29). */}
           {!isEditing && (
-            <Text style={s.headerSubtitle}>
-              Pick the places you’d love your dreams to take you.
-            </Text>
+            <Text style={s.headerSubtitle}>Pick the places you’d love your dreams to take you</Text>
           )}
         </View>
 
