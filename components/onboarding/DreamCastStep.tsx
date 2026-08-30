@@ -22,7 +22,7 @@ import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { castRejectCopy } from '@/lib/castRejectCopy';
 import { colors, MEDIUM_BADGE } from '@/constants/theme';
-import { verticalScale, fontScale, screen } from '@/lib/responsive';
+import { verticalScale, horizontalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
 import { OnboardingFooter } from './OnboardingFooter';
@@ -643,9 +643,11 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
             the ONE place onboarding names the feature — "Dream Cast" is used
             cold in the Create tutorial + Settings, so it must be taught here. */}
         {!settingsCopy && (
-          <Text style={s.funPart}>Your Dream Cast is optional, but trust us, it’s pure magic.</Text>
+          <Text style={s.funPart}>
+            Your Dream Cast is optional, but trust us, this is where the magic happens.
+          </Text>
         )}
-        <View style={{ height: verticalScale(16) }} />
+        <View style={{ height: verticalScale(18) }} />
         {innerSlots}
       </ScrollView>
 
@@ -679,13 +681,17 @@ const s = StyleSheet.create({
     textAlign: 'center',
     marginTop: verticalScale(4),
   },
+  // The "where the magic happens" nudge gets room to breathe on its own so it reads
+  // as a friendly shout to upload a photo (Kevin 2026-08-29), not a buried caption.
   funPart: {
     color: colors.accentLight,
-    fontSize: fontScale(14),
-    fontWeight: '600',
-    lineHeight: fontScale(20),
+    fontSize: fontScale(15),
+    fontWeight: '700',
+    lineHeight: fontScale(21),
     textAlign: 'center',
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(18),
+    marginBottom: verticalScale(4),
+    paddingHorizontal: horizontalScale(8),
   },
   encourageText: {
     color: colors.textPrimary,
