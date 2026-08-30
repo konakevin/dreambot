@@ -21,7 +21,7 @@ import { showAiConsent } from '@/components/AiConsentSheet';
 import { useAuthStore } from '@/store/auth';
 import { showAlert } from '@/components/CustomAlert';
 import { castRejectCopy } from '@/lib/castRejectCopy';
-import { colors, MEDIUM_BADGE } from '@/constants/theme';
+import { colors } from '@/constants/theme';
 import { verticalScale, horizontalScale, fontScale, screen } from '@/lib/responsive';
 import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { onboardingStyles as shared } from './sharedStyles';
@@ -70,7 +70,7 @@ const SLOTS: SlotConfig[] = [
     role: 'self',
     label: 'You',
     icon: 'person',
-    // No tip — the header + FACE badge already say this is the face in your dreams.
+    // No tip — the header already says this is the face in your dreams.
     tip: '',
   },
   {
@@ -175,26 +175,6 @@ function CastSlot({
           color={colors.accent}
         />
         <Text style={s.slotLabel}>{config.label}</Text>
-        <View
-          style={{
-            paddingHorizontal: 5,
-            paddingVertical: verticalScale(1),
-            borderRadius: 5,
-            backgroundColor: MEDIUM_BADGE.face.bg,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: fontScale(8),
-              fontWeight: '700',
-              color: MEDIUM_BADGE.face.color,
-              textTransform: 'uppercase',
-              letterSpacing: 0.5,
-            }}
-          >
-            face
-          </Text>
-        </View>
       </View>
       {config.tip ? <Text style={s.slotTip}>{config.tip}</Text> : null}
 
