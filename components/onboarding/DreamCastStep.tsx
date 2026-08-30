@@ -70,13 +70,14 @@ const SLOTS: SlotConfig[] = [
     role: 'self',
     label: 'You',
     icon: 'person',
-    tip: 'This is the face that stars in your dreams',
+    // No tip — the header + FACE badge already say this is the face in your dreams.
+    tip: '',
   },
   {
     role: 'plus_one',
     label: 'Your +1',
     icon: 'heart',
-    tip: 'Bring a friend, partner, or favorite person along for the ride',
+    tip: 'A friend, partner, or someone you love',
   },
 ];
 
@@ -195,7 +196,7 @@ function CastSlot({
           </Text>
         </View>
       </View>
-      <Text style={s.slotTip}>{config.tip}</Text>
+      {config.tip ? <Text style={s.slotTip}>{config.tip}</Text> : null}
 
       {member ? (
         <>
@@ -613,18 +614,6 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           publicly. Dreams stay private unless you share them.
         </Text>
       </View>
-      {/* Gentle heads-up, only while the "You" slot is empty (onboarding only) —
-          without a self photo every dream renders scene-only. Reassure + warn,
-          never nag: it disappears the moment they upload. */}
-      {!embedded && !settingsCopy && !getMember('self') && (
-        <View style={s.nudgeRow}>
-          <Ionicons name="image-outline" size={14} color={colors.accentLight} />
-          <Text style={s.nudgeText}>
-            Without a photo, your dreams still arrive every night as beautiful scenes, you just
-            won’t be in them
-          </Text>
-        </View>
-      )}
     </>
   );
 
