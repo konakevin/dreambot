@@ -71,7 +71,7 @@ const SECTION_META: SectionMeta[] = [
   // ── Real World (6) ───────────────────────────────────────────
   {
     id: 'around_the_world',
-    title: 'Around the World',
+    title: 'World Traveler',
     icon: 'earth-outline',
     description: 'Cities, countries, and the world’s great wonders',
     tier: 'real',
