@@ -363,7 +363,9 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           {repThumb ? (
             <ExpoImage
               source={{ uri: repThumb }}
-              style={[StyleSheet.absoluteFillObject, s.catImg]}
+              // Selected tiles read brighter, unselected recede — the CONTRAST (not a
+              // loud border) draws the eye, so a screen full of picks stays calm.
+              style={[StyleSheet.absoluteFillObject, { opacity: selected ? 0.92 : 0.5 }]}
               contentFit="cover"
               transition={200}
             />
@@ -544,11 +546,11 @@ const s = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.accentBorder,
   },
-  catImg: { opacity: 0.62 },
-  // Whole-category selected: a clean teal-green border (matches the check badge).
+  // Whole-category selected: a THIN refined teal border (the brightened tile does
+  // the heavy lifting, so the border can be light — calmer than a thick outline).
   catCardSelected: {
     borderColor: '#5EEAD4',
-    borderWidth: 2.5,
+    borderWidth: 1.5,
   },
   // Check badge — teal green, matching the selected border.
   catSelectedBadge: {
