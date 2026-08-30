@@ -283,6 +283,31 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ---
 
 ## Change Log
+- **2026-08-29 (UX overhaul + expansion, Kevin live session)**
+  - **Picker → tile-level selection (committed).** Removed drill-in entirely. Tapping a
+    category tile selects the WHOLE category (all locations → `dream_seeds.places` via
+    `toggleAllLocations`); tap again clears. Removed "N places" count + heart-count badge +
+    LocationTile; added selected teal border + check badge + description subtitle.
+    `MAX_LOCATIONS` 100→300 (a tap can add ~38). Nightly plumbing confirmed: selecting a
+    tile enables every sub-location for nightly; deselecting removes them.
+  - **UI polish (committed):** uniform pro section headers (REAL WORLD + DREAM WORLDS
+    share gradient rule); prominent teal "N places selected" count; reset-dialog period
+    removed; Beach Towns thumbnails generated (all 9).
+  - **6th Real World category = "The High Life"** (committed SECTION_META, `high_life` pc).
+    8 cards building: Superyacht, Grand Estate, Sky Penthouse, Private Jet, Red Carpet,
+    Monte Carlo, Alpine Chalet, Vineyard Estate. Template=`_tmp-luxury.mjs` (glam wardrobe).
+  - **Beach Towns +14** (recipes generating): Hawaii (Haleiwa/Lahaina/Hanalei), California
+    (Laguna/Carmel/Santa Cruz), New England (Nantucket/Martha's Vineyard/Newport RI),
+    European (St Ives/Cascais/Collioure), Florida (South Beach/Palm Beach). 30a→display
+    "Seaside". Riviera glam (Cannes/StTropez/Nice) → deferred to High Life idea (Monte Carlo
+    covers it). QUALITY BAR (Kevin): real named landmarks + true architecture + bespoke
+    fun/charm per town — baked into `_tmp-iconictown.mjs` spot brief.
+  - **Robot City retooled:** SUBJECT now human cast + robots-as-environment (was
+    "android metropolis" → cyborg drift). Verified clean human couple.
+  - **Naming TBD:** Around the World → "Cities & Culture"? (Kevin leaning yes); optional
+    "Through Time"→"Ancient Worlds", "Whimsical"→"Storybook".
+  - **PENDING:** seed+template+QA the 14 beach towns + 8 High Life once recipes land.
+
 - **2026-08-27 (session 2, mid-run BUGS surfaced by Kevin during tropical QA)** —
   Two pipeline bugs found + fixed while grading Fiji (both committed / applied):
   1. **RACE not piped to prompt (CRITICAL, committed).** Kevin's white cast rendered
