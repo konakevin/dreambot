@@ -307,12 +307,19 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       const allSelected = allKeys.length > 0 && allKeys.every((k) => places.includes(k));
       return (
         <View style={s.browse}>
-          {/* Global running total (categories across both worlds) + a Select all/none toggle. */}
+          {/* Running total + Select all/none toggle. In onboarding the footer already
+              shows "N selected", so hide the count here (Kevin 2026-08-29) — an empty
+              spacer keeps the toggle right-aligned. Settings has no footer, so it keeps
+              the count. */}
           <View style={s.summaryBar}>
-            <Text style={s.summaryText}>
-              <Text style={s.summaryCount}>{selectedCategoryCount}</Text>{' '}
-              {selectedCategoryCount === 1 ? 'category' : 'categories'} selected
-            </Text>
+            {isEditing ? (
+              <Text style={s.summaryText}>
+                <Text style={s.summaryCount}>{selectedCategoryCount}</Text>{' '}
+                {selectedCategoryCount === 1 ? 'category' : 'categories'} selected
+              </Text>
+            ) : (
+              <View />
+            )}
             {allKeys.length > 0 && (
               <TouchableOpacity
                 style={s.resetBtn}
@@ -438,6 +445,12 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
               Where do you want to dream?
             </GradientTitle>
           )}
+          {/* Onboarding-only gentle intro under the title (Kevin 2026-08-29). */}
+          {!isEditing && (
+            <Text style={s.headerSubtitle}>
+              Pick the places you’d love your dreams to take you. Choose as many as you like.
+            </Text>
+          )}
         </View>
 
         {renderBrowse()}
@@ -485,6 +498,13 @@ const s = StyleSheet.create({
     paddingTop: verticalScale(8),
     paddingBottom: verticalScale(12),
     backgroundColor: colors.background,
+  },
+  headerSubtitle: {
+    fontSize: fontScale(14),
+    lineHeight: fontScale(20),
+    color: colors.subtleOnDark,
+    textAlign: 'center',
+    marginTop: verticalScale(2),
   },
 
   browse: { flex: 1 },
