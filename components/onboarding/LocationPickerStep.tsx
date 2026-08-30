@@ -113,7 +113,7 @@ const SECTION_META: SectionMeta[] = [
   },
   {
     id: 'high_life',
-    title: 'The High Life',
+    title: 'Jet Set',
     icon: 'diamond-outline',
     description: 'Superyachts, penthouses, red carpets, and champagne',
     tier: 'real',
