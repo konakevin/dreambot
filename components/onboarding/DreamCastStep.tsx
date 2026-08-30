@@ -243,7 +243,10 @@ function CastSlot({
           {/* Relationship picker for +1 */}
           {showRelationship && (
             <View style={s.relSection}>
-              <Text style={s.relLabel}>This is my...</Text>
+              <View style={s.relLabelRow}>
+                <Text style={s.relLabel}>This is my...</Text>
+                {!member.relationship && <Text style={s.relRequired}>(Choose one)</Text>}
+              </View>
               <View style={s.relRow}>
                 {RELATIONSHIPS.map((rel) => {
                   const active = member.relationship === rel.key;
@@ -291,6 +294,11 @@ function CastSlot({
 export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy = false }: Props) {
   const isEditing = useOnboardingStore((s) => s.isEditing);
   const dreamCast = useOnboardingStore((s) => s.profile.dream_cast);
+  // Required gate (Kevin 2026-08-29): if a +1 photo is uploaded but no Friend/Partner
+  // is chosen, block Next until they pick (an inline "(Choose one)" nudge shows on the
+  // slot). Only applies while a +1 exists without a relationship.
+  const plusOneMember = dreamCast.find((m) => m.role === 'plus_one');
+  const plusOneNeedsRelationship = !!plusOneMember && !plusOneMember.relationship;
   const setCastMember = useOnboardingStore((s) => s.setCastMember);
   const removeCastMember = useOnboardingStore((s) => s.removeCastMember);
   const beginCastUpload = useOnboardingStore((s) => s.beginCastUpload);
@@ -659,7 +667,8 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
           // While a cast photo is uploading/describing, lock BOTH buttons —
           // advancing (or backing out) mid-process aborts the in-flight
           // upload + describe-photo call and leaves a half-broken cast member.
-          disabled={uploading !== null}
+          // Also lock Next until a +1 with a photo has a relationship chosen.
+          disabled={uploading !== null || plusOneNeedsRelationship}
           disabledLabel={uploading !== null ? 'Analyzing…' : undefined}
           backDisabled={uploading !== null}
         />
@@ -832,11 +841,22 @@ const s = StyleSheet.create({
   },
   // Brighter + bigger so the Friend/Partner choice doesn't get glossed over — the
   // unselected pill in particular reads as a clear, tappable option (Kevin 2026-08-29).
+  relLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(8),
+    marginBottom: verticalScale(10),
+  },
   relLabel: {
     color: colors.bodyOnDark,
     fontSize: fontScale(14.5),
     fontWeight: '700',
-    marginBottom: verticalScale(10),
+  },
+  // Inline required nudge — draws the eye until they pick (disappears on choice).
+  relRequired: {
+    color: '#4ADE80',
+    fontSize: fontScale(13),
+    fontWeight: '700',
   },
   relRow: {
     flexDirection: 'row',
