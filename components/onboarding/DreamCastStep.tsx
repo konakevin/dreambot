@@ -429,12 +429,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
       }
 
       // Show the photo immediately (spinner stays on until describe completes).
-      // plus_one always carries a relationship — default to 'friend' (the
-      // engine's own fallback) so the user doesn't have to actively select one.
-      // They can switch via the pill row below if Partner fits better.
+      // Do NOT silently pre-select a +1 relationship (Kevin 2026-08-29): leave it unset
+      // so both pills start neutral and the Friend/Partner choice is EXPLICIT — the user
+      // consciously picks instead of it being masked by a backend default (a pre-picked
+      // "Friend" got glossed over). If skipped, the engine treats null as platonic.
       const existing = getMember(role);
-      const plusOneRel: CastRelationship | undefined =
-        role === 'plus_one' ? (existing?.relationship ?? 'friend') : existing?.relationship;
+      const plusOneRel: CastRelationship | undefined = existing?.relationship;
       setCastMember({
         role,
         storage_path: path,
@@ -493,12 +493,12 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         return;
       }
 
-      // Re-read current member from store (user may have set relationship
-      // while describe was running). plus_one keeps the 'friend' default
-      // applied on upload above unless the user changed it.
+      // Re-read current member from store (user may have set relationship while
+      // describe was running). Do NOT re-apply a 'friend' default — keep it unset until
+      // the user explicitly picks, so the pill row stays an open choice (engine treats
+      // a null +1 relationship as platonic, so a skip is safe).
       const current = useOnboardingStore.getState().profile.dream_cast.find((m) => m.role === role);
-      const plusOneRelFinal: CastRelationship | undefined =
-        role === 'plus_one' ? (current?.relationship ?? 'friend') : current?.relationship;
+      const plusOneRelFinal: CastRelationship | undefined = current?.relationship;
       setCastMember({
         role,
         storage_path: path,
@@ -830,33 +830,35 @@ const s = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
+  // Brighter + bigger so the Friend/Partner choice doesn't get glossed over — the
+  // unselected pill in particular reads as a clear, tappable option (Kevin 2026-08-29).
   relLabel: {
-    color: colors.subtleOnDark,
-    fontSize: fontScale(13),
-    fontWeight: '600',
-    marginBottom: verticalScale(8),
+    color: colors.bodyOnDark,
+    fontSize: fontScale(14.5),
+    fontWeight: '700',
+    marginBottom: verticalScale(10),
   },
   relRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
+    gap: horizontalScale(8),
   },
   relPill: {
-    paddingHorizontal: 12,
-    paddingVertical: verticalScale(7),
-    borderRadius: 16,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
+    paddingHorizontal: horizontalScale(18),
+    paddingVertical: verticalScale(9),
+    borderRadius: 999,
+    backgroundColor: colors.surface,
+    borderWidth: 1.5,
+    borderColor: colors.accentBorder,
   },
   relPillActive: {
     backgroundColor: colors.accent,
     borderColor: colors.accent,
   },
   relPillText: {
-    color: colors.subtleOnDark,
-    fontSize: fontScale(13),
-    fontWeight: '600',
+    color: colors.bodyOnDark,
+    fontSize: fontScale(14),
+    fontWeight: '700',
   },
   relPillTextActive: {
     color: '#FFFFFF',
