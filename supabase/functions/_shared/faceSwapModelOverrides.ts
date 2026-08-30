@@ -37,8 +37,18 @@
 
 // Shared style anchors — subject-agnostic so the same string works for
 // single-character and dual-character face-swap renders.
-const FRAG_WATERCOLOR_INK_STORYBOOK =
-  'watercolor and ink fairy tale book illustration, painted on textured watercolor paper, visible brushstrokes and ink linework, hand-painted character art, golden warm watercolor palette, classic illustrated storybook page, 2D illustration artwork, painted fairy tale scene';
+//
+// 2026-08-30 — rewritten FACE-SWAP-FRIENDLY (Kevin). The old fragment ("fairy tale
+// book illustration / hand-painted CHARACTER ART / classic illustrated STORYBOOK
+// page / 2D illustration artwork / painted fairy tale scene") made flux-1.1-pro
+// render big cartoon storybook eyes; the dual swap then pasted real faces onto those
+// stylized eye sockets and mangled the eye region (the broken-eyes first-dream couple
+// render). This slipped through the SAME cartoon-eye fix already applied to
+// FRAG_ADULT_CARTOON below (2026-06-22). Now keeps the watercolor + ink LOOK but
+// drops all storybook/2D/character-art language and POSITIVELY reinforces realistic
+// human eye size + proportions so the swap lands cleanly.
+const FRAG_WATERCOLOR_INK =
+  'loose watercolor and ink painting with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, transparent pigment washes on textured watercolor paper, soft feathered bleeding edges, visible brushstrokes and fine ink linework, golden warm watercolor palette, naturalistic mature features, painterly portrait realism';
 
 const FRAG_CRISP_ORNATE_ILLUSTRATION =
   'crisp ink illustration with bold confident linework, richly saturated jewel-tone colors, ornate decorative details, intricate line art, masterwork hand-drawn artwork, gallery-quality illustration print, polished editorial illustration style, vibrant fine art drawing, sharply rendered detailed illustration';
@@ -67,7 +77,7 @@ export type FaceSwapModelOverrideEntry = {
 export const FACE_SWAP_MODEL_OVERRIDES: Record<string, FaceSwapModelOverrideEntry[]> = {
   'black-forest-labs/flux-1.1-pro': [
     // 4-way rotation. flux-1.1-pro renders all 4 well; users get variety.
-    { fragment: FRAG_WATERCOLOR_INK_STORYBOOK },
+    { fragment: FRAG_WATERCOLOR_INK },
     { fragment: FRAG_CRISP_ORNATE_ILLUSTRATION },
     { fragment: FRAG_POLISHED_DIGITAL_RENDER },
     // 'epic' vibe is banned — empirically triggers chibi/big-eye renders

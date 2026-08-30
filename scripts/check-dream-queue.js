@@ -36,12 +36,16 @@ const SUPABASE_URL = getKey('SUPABASE_URL') || 'https://jimftynwrinwenonjrlj.sup
 const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
 const STUCK_MIN = parseInt(getKey('QUEUE_STUCK_MIN') || '60', 10);
 const DEAD_LETTER_ALARM = parseInt(getKey('QUEUE_DEAD_LETTER_ALARM') || '10', 10);
+// First-dream cast degradation alarm — the first dream is the one-shot impression,
+// so a couple dropping to solo (dual failed) or a face dropping to a scene (single
+// failed) is a quality miss. Some baseline dual misses are expected (~14%), so we
+// alarm past a threshold rather than on every one; tune down to 1 to page on each.
+const FIRST_DREAM_DEGRADE_ALARM = parseInt(getKey('FIRST_DREAM_DEGRADE_ALARM') || '3', 10);
 // The owner/dev account — its dreams are dev/test batches (model-matrix QA,
 // medium tests), NOT real-user traffic. Excluded from the "renders failing
 // systemically" dead-letter signal so a dev test session can't page us; the
 // stuck-queue / worker-liveness alarms are unaffected. Override via env.
-const OWNER_USER_ID =
-  getKey('MONITOR_EXCLUDE_USER_ID') || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
+const OWNER_USER_ID = getKey('MONITOR_EXCLUDE_USER_ID') || 'eab700d8-f11a-4f47-a3a1-addda6fb67ec';
 
 if (!SUPABASE_KEY) {
   console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
@@ -109,6 +113,44 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
     alarm = true;
   }
 
+  // First-dream cast degradation — the first dream is the one-shot impression, so a
+  // user whose couple render dropped to solo (dual failed), or whose face dropped to
+  // a faceless scene (single failed), is a quality miss we want to catch. A
+  // first_dream job stores its tier cascade (payload.tiers) + the tier it LANDED on
+  // (payload.tier_index); it degraded when the landed tier's cast role differs from
+  // the BEST (index-0) tier's role. self→self_retry is the SAME role (a successful
+  // face landing on the retry), so it does NOT count. Excludes the owner/dev account.
+  // Every case is logged (cause lives in ai_generation_log.fallback_reasons); the
+  // alarm only trips past FIRST_DREAM_DEGRADE_ALARM so a baseline dual miss can't page.
+  const { data: fdJobs } = await sb
+    .from('dream_queue')
+    .select('id, user_id, payload')
+    .eq('source', 'first_dream')
+    .eq('status', 'completed')
+    .neq('user_id', OWNER_USER_ID)
+    .gte('completed_at', dayAgo);
+  const fdDegraded = [];
+  for (const j of fdJobs || []) {
+    const tiers = Array.isArray(j.payload && j.payload.tiers) ? j.payload.tiers : [];
+    const idx = (j.payload && j.payload.tier_index) || 0;
+    if (tiers.length === 0 || !tiers[idx] || !tiers[0]) continue;
+    const bestRole = (tiers[0].body && tiers[0].body.force_cast_role) ?? null;
+    const landedRole = (tiers[idx].body && tiers[idx].body.force_cast_role) ?? null;
+    if (landedRole !== bestRole) {
+      fdDegraded.push({ id: j.id, best: bestRole, landed: landedRole, tier: tiers[idx].name });
+    }
+  }
+  console.log(`first_dream cast degradations (last 24h, excl. dev): ${fdDegraded.length}`);
+  for (const d of fdDegraded.slice(0, 10)) {
+    console.log(`  job ${d.id}: best=${d.best} → landed=${d.landed || 'scene'} (tier '${d.tier}')`);
+  }
+  if (fdDegraded.length >= FIRST_DREAM_DEGRADE_ALARM) {
+    console.error(
+      `::error::${fdDegraded.length} first-dream cast degradations in the last 24h (>= ${FIRST_DREAM_DEGRADE_ALARM}) — couples dropping to solo / faces dropping to scene on the one-shot first impression. See ai_generation_log.fallback_reasons for the cause.`
+    );
+    alarm = true;
+  }
+
   // Worker liveness — catch a full stall FASTER than the 60-min stuck check: if
   // DUE jobs are queued but the worker hasn't claimed anything recently, the
   // drain has stopped (e.g. waitUntil dropped AND the GH sync backstop failing).
@@ -128,7 +170,9 @@ const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
       .limit(1);
     const lastMs = lastClaim?.[0]?.started_at ? new Date(lastClaim[0].started_at).getTime() : 0;
     const ageMin = lastMs ? Math.round((Date.now() - lastMs) / 60_000) : Infinity;
-    console.log(`due-queued=${dueQueued}, last worker claim ${lastMs ? ageMin + 'min ago' : 'never'}`);
+    console.log(
+      `due-queued=${dueQueued}, last worker claim ${lastMs ? ageMin + 'min ago' : 'never'}`
+    );
     if (Date.now() - lastMs > WORKER_LIVENESS_MIN * 60_000) {
       console.error(
         `::error::${dueQueued} jobs DUE+queued but no worker claim in >${WORKER_LIVENESS_MIN}min — queue STALLED (waitUntil down + GH sync backstop failing?).`

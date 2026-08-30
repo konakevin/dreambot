@@ -23,20 +23,27 @@ const names = (cast: CastMemberLike[], place?: string) =>
   buildFirstDreamTiers(cast, place).map((t) => t.name);
 
 describe('buildFirstDreamTiers — cascade shape by cast', () => {
-  it('self + plus_one (both with storage_path) → dual, self, scene', () => {
-    expect(names([withPath('self'), withPath('plus_one')])).toEqual(['dual', 'self', 'scene']);
+  it('self + plus_one (both with storage_path) → dual, self, self_retry, scene', () => {
+    // One couple attempt, then TWO self attempts before the faceless scene fallback
+    // (a solo swap can miss a given composition; landing the user's face beats scene).
+    expect(names([withPath('self'), withPath('plus_one')])).toEqual([
+      'dual',
+      'self',
+      'self_retry',
+      'scene',
+    ]);
   });
 
-  it('self only → self, scene', () => {
-    expect(names([withPath('self')])).toEqual(['self', 'scene']);
+  it('self only → self, self_retry, scene', () => {
+    expect(names([withPath('self')])).toEqual(['self', 'self_retry', 'scene']);
   });
 
-  it('plus_one only → plus_one, scene', () => {
-    expect(names([withPath('plus_one')])).toEqual(['plus_one', 'scene']);
+  it('plus_one only → plus_one, plus_one_retry, scene', () => {
+    expect(names([withPath('plus_one')])).toEqual(['plus_one', 'plus_one_retry', 'scene']);
   });
 
-  it('pet only → pet, scene', () => {
-    expect(names([withPath('pet')])).toEqual(['pet', 'scene']);
+  it('pet only → pet, pet_retry, scene', () => {
+    expect(names([withPath('pet')])).toEqual(['pet', 'pet_retry', 'scene']);
   });
 
   it('EMPTY cast → scene only (intended — no cast uploaded)', () => {
@@ -52,11 +59,20 @@ describe('buildFirstDreamTiers — cascade shape by cast', () => {
   });
 
   it('legacy public http thumb_url counts as usable', () => {
-    expect(names([withHttp('self'), withHttp('plus_one')])).toEqual(['dual', 'self', 'scene']);
+    expect(names([withHttp('self'), withHttp('plus_one')])).toEqual([
+      'dual',
+      'self',
+      'self_retry',
+      'scene',
+    ]);
   });
 
-  it('one usable + one not → degrades to the single usable member', () => {
-    expect(names([withPath('self'), { role: 'plus_one' }])).toEqual(['self', 'scene']);
+  it('one usable + one not → degrades to the single usable member (with its retry)', () => {
+    expect(names([withPath('self'), { role: 'plus_one' }])).toEqual([
+      'self',
+      'self_retry',
+      'scene',
+    ]);
   });
 
   it('face-swap tiers carry the face-swap flags; scene tier is force_cast_role:null', () => {

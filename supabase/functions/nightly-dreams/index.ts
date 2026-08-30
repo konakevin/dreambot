@@ -3733,7 +3733,13 @@ Output ONLY the prompt.`;
       sonnet_brief: null,
       sonnet_raw_response: null,
       vision_description: null,
-      fallback_reasons: [`nightly_error:${errMsg.slice(0, 200)}`],
+      // Carry the granular face-swap reasons accumulated BEFORE the throw
+      // (no_dual_split / faces=1 / gender / identity_sim / *_clamped_to_pro). The
+      // strict first-dream hard-fail throws `face_swap_failed:dual|single`, which
+      // used to DISCARD these — leaving only the terse top-level error, so a
+      // dropped dual/single was undiagnosable in the DB. This row is the failure's
+      // only DB trace, so record both. (Kevin 2026-08-30.)
+      fallback_reasons: [...fallbackReasons, `nightly_error:${errMsg.slice(0, 200)}`],
       replicate_prediction_id: null,
     });
 

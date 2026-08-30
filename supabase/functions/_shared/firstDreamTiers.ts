@@ -9,11 +9,15 @@
  * orchestrator advances `tier_index` and re-queues on a cascadeable failure, so
  * each tier renders in its OWN isolate (bounded < 150s wall-clock).
  *
- * Tiers, in order (each a fresh, safer fallback):
+ * Tiers, in order (each a fresh isolate → a re-rolled medium/model/pose):
  *   1. dual swap (self + plus_one) →
  *   2. single self swap →
- *   3. single plus_one / pet swap →
+ *   3. single self swap, RETRIED (a fresh roll — a solo swap can miss on a given
+ *      composition, and the user's own face beats a faceless scene) →
  *   4. scene-only render (no cast — works even with zero cast photos)
+ *
+ * Single-only casts (self / plus_one / pet, no partner) get the same two swap
+ * attempts before the scene fallback.
  *
  * The user never sees a face-swap/NSFW failure — those are shame-free retries
  * that resolve transparently. Only when ALL tiers fail does the client surface
@@ -56,30 +60,35 @@ export function buildFirstDreamTiers(cast: CastMemberLike[], place?: string): Fi
   const list: CastMemberLike[] = Array.isArray(cast) ? cast : [];
   const tiers: FirstDreamTier[] = [];
 
+  // A single face-swap tier body: force this cast role on the strict (no-degrade)
+  // face-swap path, so a miss cascades to the next tier instead of shipping a
+  // wrong/absent face.
+  const swapBody = (role: string) => ({
+    force_cast_role: role,
+    force_face_swap_eligible: true,
+    strict_face_swap: true,
+  });
+
   if (usable(list, 'self') && usable(list, 'plus_one')) {
-    tiers.push({
-      name: 'dual',
-      body: { force_cast_role: 'dual', force_face_swap_eligible: true, strict_face_swap: true },
-    });
-    tiers.push({
-      name: 'self',
-      body: { force_cast_role: 'self', force_face_swap_eligible: true, strict_face_swap: true },
-    });
+    // ONE dual (couple) attempt, then TWO single-self attempts before the faceless
+    // scene fallback (Kevin 2026-08-30). Landing the user's OWN face in their first
+    // dream beats a faceless scene, and a solo swap can miss on a given composition
+    // (the solo-swap guard rejects an invented 2nd person / wrong gender), so give
+    // it a second, fresh-rolled shot. Each tier is its own isolate → a different
+    // medium/model/pose, so the retry is a genuine second chance, not a re-run.
+    tiers.push({ name: 'dual', body: swapBody('dual') });
+    tiers.push({ name: 'self', body: swapBody('self') });
+    tiers.push({ name: 'self_retry', body: swapBody('self') });
   } else if (usable(list, 'self')) {
-    tiers.push({
-      name: 'self',
-      body: { force_cast_role: 'self', force_face_swap_eligible: true, strict_face_swap: true },
-    });
+    // No partner — two self attempts before scene (same reasoning).
+    tiers.push({ name: 'self', body: swapBody('self') });
+    tiers.push({ name: 'self_retry', body: swapBody('self') });
   } else if (usable(list, 'plus_one')) {
-    tiers.push({
-      name: 'plus_one',
-      body: { force_cast_role: 'plus_one', force_face_swap_eligible: true, strict_face_swap: true },
-    });
+    tiers.push({ name: 'plus_one', body: swapBody('plus_one') });
+    tiers.push({ name: 'plus_one_retry', body: swapBody('plus_one') });
   } else if (usable(list, 'pet')) {
-    tiers.push({
-      name: 'pet',
-      body: { force_cast_role: 'pet', force_face_swap_eligible: true, strict_face_swap: true },
-    });
+    tiers.push({ name: 'pet', body: swapBody('pet') });
+    tiers.push({ name: 'pet_retry', body: swapBody('pet') });
   }
 
   // Final tier — explicit null force_cast_role → rollDream lands on
