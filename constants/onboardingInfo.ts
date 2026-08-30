@@ -32,7 +32,7 @@ export const CAST_INFO: InfoStepConfig = {
   customMascot: require('@/assets/images/onboarding/mascot-cast.png'),
   // \n forces a balanced break — the natural wrap strands "postcards?" alone.
   headline: 'Want to be in the\ndream postcards?',
-  body: 'Just a selfie and you’re in. You’ll find yourself painted right into the dream, a quiet little surprise waiting in the morning.',
+  body: 'Just a selfie and you’re in. You’ll find yourself painted right into your dreams, a quiet little surprise waiting when you wake.',
   footnote: 'Up next: upload a selfie of you and a dream partner',
 };
 
