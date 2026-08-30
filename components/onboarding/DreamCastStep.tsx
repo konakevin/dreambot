@@ -643,7 +643,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
             the ONE place onboarding names the feature — "Dream Cast" is used
             cold in the Create tutorial + Settings, so it must be taught here. */}
         {!settingsCopy && (
-          <Text style={s.funPart}>Your Dream Cast is optional, but that’s the fun part!</Text>
+          <Text style={s.funPart}>Your Dream Cast is optional, but trust us, it’s pure magic.</Text>
         )}
         <View style={{ height: verticalScale(16) }} />
         {innerSlots}
