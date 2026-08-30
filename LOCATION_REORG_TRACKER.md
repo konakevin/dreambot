@@ -306,7 +306,17 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
     "android metropolis" → cyborg drift). Verified clean human couple.
   - **Naming TBD:** Around the World → "Cities & Culture"? (Kevin leaning yes); optional
     "Through Time"→"Ancient Worlds", "Whimsical"→"Storybook".
-  - **PENDING:** seed+template+QA the 14 beach towns + 8 High Life once recipes land.
+  - **✅ DONE — 14 beach towns + 8 High Life seeded, templated (bespoke real-landmark
+    briefs), sunny-axed, thumbnails generated, display-names set, all `admin_only` dark.**
+    Representative QA sample all pass: Palm Beach ~4.6 (nailed the real Green's Pharmacy
+    landmark!), Monte Carlo ~4.75 (belle-epoque casino + yacht harbor, glam), South Beach
+    ~4.4. Correct race throughout, no goofy props (prop fix holding), bespoke landmarks
+    landing. Remaining towns use the same validated pipeline → left for Kevin's in-app
+    grading pass. Renders posted to Kevin's private album.
+  - **✅ GOOFY-PROP ENGINE FIX shipped** (`characterSlotPrompt.ts`): killed the whimsical/
+    novelty prop class (the giant-mushroom incident) — props prefer empty + tasteful-only,
+    scene stays believable, action-object concretizer must pick a fitting object. Improves
+    ALL nightly cast renders. Deployed + verified 3 rounds clean. See [[project_nightly_held_object_arbitrary_audit]].
 
 - **2026-08-27 (session 2, mid-run BUGS surfaced by Kevin during tropical QA)** —
   Two pipeline bugs found + fixed while grading Fiji (both committed / applied):
