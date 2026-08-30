@@ -28,12 +28,12 @@ export const NIGHTLY_INFO: InfoStepConfig = {
 };
 
 export const CAST_INFO: InfoStepConfig = {
-  eyebrow: 'the fun part',
+  eyebrow: 'cast yourself',
   customMascot: require('@/assets/images/onboarding/mascot-cast.png'),
   // \n forces a balanced break — the natural wrap strands "postcards?" alone.
   headline: 'Want to be in the\ndream postcards?',
-  body: 'Most nights you’ll find yourself painted right into the dream. A quiet little surprise waiting in the morning, no prompting needed.',
-  footnote: 'Up next: cast yourself and a favorite person in your dreams',
+  body: 'A single photo of you is all it takes. You’ll find yourself painted right into the dream, a quiet little surprise waiting in the morning.',
+  footnote: 'Up next: upload a selfie of you and a dream partner',
 };
 
 export const MOOD_INFO: InfoStepConfig = {
