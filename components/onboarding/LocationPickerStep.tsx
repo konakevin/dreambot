@@ -160,7 +160,7 @@ const SECTION_META: SectionMeta[] = [
   },
   {
     id: 'heroes',
-    title: 'Heroes & Adventure',
+    title: 'Heroes',
     icon: 'flash-outline',
     description: 'Rooftops, spy lairs, and daring feats',
     tier: 'imagined',
@@ -214,6 +214,13 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     );
 
     const canProceed = places.length >= MIN_REQUIRED;
+    // Count SELECTED CATEGORIES, not individual places (2026-08-29 Kevin): a tap
+    // selects a whole category, so "91 places" read as confusing — "4 categories"
+    // matches what the user actually did. A category counts when every location in
+    // it is picked.
+    const selectedCategoryCount = sections.filter(
+      (sec) => sec.items.length > 0 && sec.items.every((i) => places.includes(i.key))
+    ).length;
 
     // Load locations from DB (location_cards). Group by picker_category,
     // sort by picker_sort_order. Section icons + titles + descriptions
@@ -269,21 +276,36 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       }
     }, [places, toggleAllLocations]);
 
-    // Section eyebrow — both worlds share ONE uniform, professional treatment:
-    // an uppercase letter-spaced label + the brand-gradient rule. Real World and
-    // Dream Worlds look equally designed (Kevin 2026-08-29). The only difference is
-    // a touch more top space above Dream Worlds so the two groups still read apart.
-    const renderSectionHeader = (label: string, dream: boolean) => (
-      <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
-        <Text style={s.sectionLabel}>{label}</Text>
-        <LinearGradient
-          colors={BRAND_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={s.sectionRule}
-        />
-      </View>
-    );
+    // Section eyebrow — poppy + differentiated (Kevin 2026-08-29): each world gets a
+    // tinted PILL CHIP (icon + label in its own accent) so the two read distinct and
+    // colorful. Real World = teal "earth" (grounded); Dream Worlds = brand-pink
+    // "sparkles" (imagined), followed by its accent rule.
+    const renderSectionHeader = (label: string, dream: boolean) => {
+      const accent = dream ? '#F9A8D4' : '#5EEAD4';
+      const icon: keyof typeof Ionicons.glyphMap = dream ? 'sparkles' : 'earth';
+      return (
+        <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
+          <View
+            style={[
+              s.sectionPill,
+              {
+                backgroundColor: dream ? 'rgba(249,168,212,0.14)' : 'rgba(94,234,212,0.13)',
+                borderColor: dream ? 'rgba(249,168,212,0.5)' : 'rgba(94,234,212,0.45)',
+              },
+            ]}
+          >
+            <Ionicons name={icon} size={fontScale(13)} color={accent} />
+            <Text style={[s.sectionLabel, { color: accent }]}>{label}</Text>
+          </View>
+          <LinearGradient
+            colors={dream ? BRAND_GRADIENT : ['#5EEAD4', '#2DD4BF', 'rgba(45,212,191,0)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={s.sectionRule}
+          />
+        </View>
+      );
+    };
 
     // Level 1 — the whole picker on ONE page (no tabs): a global running total, then
     // two labeled sections (Real World / Dream Worlds) stacked in a single scroll, so
@@ -293,11 +315,11 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       const dreamSections = sections.filter((sec) => sec.tier === 'imagined');
       return (
         <View style={s.browse}>
-          {/* Global running total (across both worlds) + a start-over BUTTON. */}
+          {/* Global running total (categories across both worlds) + a start-over BUTTON. */}
           <View style={s.summaryBar}>
             <Text style={s.summaryText}>
-              <Text style={s.summaryCount}>{places.length}</Text>{' '}
-              {places.length === 1 ? 'place' : 'places'} selected
+              <Text style={s.summaryCount}>{selectedCategoryCount}</Text>{' '}
+              {selectedCategoryCount === 1 ? 'category' : 'categories'} selected
             </Text>
             {places.length > 0 && (
               <TouchableOpacity
@@ -338,8 +360,8 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // A category tile IS the selection unit (2026-08-29 Kevin): tapping it selects
     // the WHOLE category (every location inside), tapping again clears it — no more
     // drill-in. Selected = every location in the category is picked; shown with a
-    // highlighted border + a check badge (no count). A short description stands in
-    // for the removed "N places" so users know what's inside without exploring.
+    // brand-pink highlighted border + a check badge. Title only — no subtitle
+    // (the title is descriptive enough, Kevin 2026-08-29).
     const renderCategoryCard = (section: LocationSection) => {
       const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
       const sectionKeys = section.items.map((i) => i.key);
@@ -383,9 +405,6 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
           <View style={s.catBody}>
             <Text style={s.catTitle} numberOfLines={1}>
               {section.title}
-            </Text>
-            <Text style={s.catDesc} numberOfLines={2}>
-              {section.description}
             </Text>
           </View>
         </TouchableOpacity>
@@ -431,7 +450,9 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             onNext={onNext}
             onBack={onBack}
             disabled={!canProceed}
-            counter={places.length > 0 ? `${places.length} selected` : 'None selected'}
+            counter={
+              selectedCategoryCount > 0 ? `${selectedCategoryCount} selected` : 'None selected'
+            }
             counterMet={canProceed}
           />
         )}
@@ -517,12 +538,20 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
   },
   sectionHeaderDream: { marginTop: verticalScale(24) },
-  // One uniform label + gradient rule for both worlds (professional + on-brand).
+  // Poppy tinted pill chip holding the icon + label (colour set inline per world).
+  sectionPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: horizontalScale(6),
+    paddingHorizontal: horizontalScale(11),
+    paddingVertical: verticalScale(5),
+    borderRadius: 999,
+    borderWidth: 1,
+  },
   sectionLabel: {
     fontSize: fontScale(12.5),
     fontWeight: '800',
-    letterSpacing: 1.6,
-    color: 'rgba(255,255,255,0.72)',
+    letterSpacing: 1.4,
   },
   sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.85 },
 
@@ -542,10 +571,17 @@ const s = StyleSheet.create({
   },
   catImg: { opacity: 0.62 },
   // Whole-category selected: bright teal border + a matching check badge.
+  // Selected = brand-PINK border + a soft pink glow (Kevin 2026-08-29: more color).
   catCardSelected: {
-    borderColor: '#5EEAD4',
+    borderColor: '#F9A8D4',
     borderWidth: 2.5,
+    shadowColor: '#F9A8D4',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.55,
+    shadowRadius: 9,
+    elevation: 7,
   },
+  // Check badge stays GREEN (teal) — a bright contrast to the pink border (Kevin).
   catSelectedBadge: {
     position: 'absolute',
     top: 9,
@@ -556,15 +592,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#5EEAD4',
-  },
-  catDesc: {
-    fontSize: fontScale(11.5),
-    color: 'rgba(255,255,255,0.82)',
-    marginTop: verticalScale(2),
-    lineHeight: fontScale(15),
-    textShadowColor: 'rgba(0,0,0,0.7)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
   },
   catBody: {
     position: 'absolute',
