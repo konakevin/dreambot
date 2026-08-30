@@ -27,12 +27,12 @@ export const onboardingStyles = StyleSheet.create({
   },
 
   selectedCount: {
-    fontSize: fontScale(13),
-    fontWeight: '600',
-    color: colors.subtleOnDark,
+    fontSize: fontScale(14),
+    fontWeight: '700',
+    color: colors.bodyOnDark,
     textAlign: 'center',
   },
-  selectedCountMet: { color: '#4ADE80' },
+  selectedCountMet: { color: '#4ADE80', fontWeight: '600' },
 
   footer: {
     padding: verticalScale(16),

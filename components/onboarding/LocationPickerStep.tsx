@@ -459,7 +459,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
             onBack={onBack}
             disabled={!canProceed}
             counter={
-              selectedCategoryCount > 0 ? `${selectedCategoryCount} selected` : 'None selected'
+              selectedCategoryCount > 0 ? `${selectedCategoryCount} selected` : 'Pick at least 1'
             }
             counterMet={canProceed}
           />
