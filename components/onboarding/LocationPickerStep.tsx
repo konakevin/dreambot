@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '@/components/AppText';
 import { Ionicons } from '@expo/vector-icons';
@@ -189,7 +189,6 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     const isAdmin = useAuthStore((st) => st.isAdmin);
     const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
     const [sections, setSections] = useState<LocationSection[]>([]);
-    const [resetVisible, setResetVisible] = useState(false);
     // Gentle "leaving with nothing picked?" confirm — stashes the host's leave
     // action until they confirm.
     const [leaveVisible, setLeaveVisible] = useState(false);
@@ -265,23 +264,14 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       });
     }, [isAdmin]);
 
-    const confirmReset = useCallback(() => {
-      if (places.length > 0) setResetVisible(true);
-    }, [places.length]);
-    const doReset = useCallback(() => {
-      setResetVisible(false);
-      if (places.length > 0) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        toggleAllLocations([...places]);
-      }
-    }, [places, toggleAllLocations]);
-
-    // Section eyebrow — a clean uppercase label + the rainbow brand-gradient rule on
-    // BOTH worlds (Kevin likes the gradient line; no pill chips). A touch more top
-    // space above Dream Worlds is the only separation.
+    // Section eyebrow — a bold rainbow-gradient LABEL + a matching rainbow rule. Same
+    // gradient across both, so the text flows into the line as one cohesive flourish
+    // (not two competing rainbows). Bigger label so it doesn't read thin (Kevin 2026-08-29).
     const renderSectionHeader = (label: string, dream: boolean) => (
       <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
-        <Text style={s.sectionLabel}>{label}</Text>
+        <GradientTitle size={15} weight={800} uppercase letterSpacing={1.6} align="left">
+          {label}
+        </GradientTitle>
         <LinearGradient
           colors={BRAND_GRADIENT}
           start={{ x: 0, y: 0 }}
@@ -297,22 +287,30 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     const renderBrowse = () => {
       const realSections = sections.filter((sec) => sec.tier === 'real');
       const dreamSections = sections.filter((sec) => sec.tier === 'imagined');
+      // One toggle covers both bulk cases (Kevin 2026-08-29): when everything is
+      // picked it says "Select none" and clears; otherwise "Select all" and fills.
+      // toggleAllLocations(allKeys) already does both directions in one call.
+      const allKeys = sections.flatMap((sec) => sec.items.map((i) => i.key));
+      const allSelected = allKeys.length > 0 && allKeys.every((k) => places.includes(k));
       return (
         <View style={s.browse}>
-          {/* Global running total (categories across both worlds) + a start-over BUTTON. */}
+          {/* Global running total (categories across both worlds) + a Select all/none toggle. */}
           <View style={s.summaryBar}>
             <Text style={s.summaryText}>
               <Text style={s.summaryCount}>{selectedCategoryCount}</Text>{' '}
               {selectedCategoryCount === 1 ? 'category' : 'categories'} selected
             </Text>
-            {places.length > 0 && (
+            {allKeys.length > 0 && (
               <TouchableOpacity
                 style={s.resetBtn}
-                onPress={confirmReset}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  toggleAllLocations(allKeys);
+                }}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 activeOpacity={0.8}
               >
-                <Text style={s.resetBtnText}>Reset</Text>
+                <Text style={s.resetBtnText}>{allSelected ? 'Select none' : 'Select all'}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -444,15 +442,6 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
         )}
 
         <ConfirmDialog
-          visible={resetVisible}
-          title="Start over?"
-          message={`This clears all ${places.length} selected place${places.length === 1 ? '' : 's'}`}
-          confirmLabel="Reset"
-          onConfirm={doReset}
-          onCancel={() => setResetVisible(false)}
-        />
-
-        <ConfirmDialog
           visible={leaveVisible}
           title="Leave without any places?"
           message="Your dreams are way more fun with places to dream about. Pick at least one and your nightly dreams get a whole lot more interesting."
@@ -524,13 +513,7 @@ const s = StyleSheet.create({
     marginBottom: verticalScale(12),
   },
   sectionHeaderDream: { marginTop: verticalScale(24) },
-  sectionLabel: {
-    fontSize: fontScale(12.5),
-    fontWeight: '800',
-    letterSpacing: 1.6,
-    color: 'rgba(255,255,255,0.72)',
-  },
-  sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.85 },
+  sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.9 },
 
   // Level 2 — category cards.
   catGrid: {
