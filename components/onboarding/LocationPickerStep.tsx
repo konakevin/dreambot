@@ -517,15 +517,18 @@ const s = StyleSheet.create({
   // Level 1 — section eyebrow header. An uppercase letter-spaced label + a rule
   // that runs to the edge. Real World = neutral; Dream Worlds = brand-gradient rule
   // + brighter label, with extra top space, so the two worlds read as distinct.
+  // No marginHorizontal — the header lives inside the ScrollView's already-padded
+  // content (scrollContent), so it aligns with the grid; a second margin would
+  // double-inset it and push the fixed-width mask off-center.
   sectionHeader: {
-    marginHorizontal: TILE_PADDING,
     marginTop: verticalScale(4),
     marginBottom: verticalScale(12),
   },
   sectionHeaderDream: { marginTop: verticalScale(24) },
   // Centered "——— LABEL ———" divider — one gradient (behind) shows through this
-  // mask (two flex rules + the label glyphs), so it reads as a single unit.
-  sectionMask: { width: SCREEN_WIDTH - TILE_PADDING * 2, height: fontScale(24) },
+  // mask (two flex rules + the label glyphs), so it reads as a single unit. Fills
+  // the padded content width so the two lines stay symmetric and the label centers.
+  sectionMask: { width: '100%', height: fontScale(24) },
   sectionMaskRow: { flex: 1, flexDirection: 'row', alignItems: 'center' },
   sectionMaskLine: { flex: 1, height: 2, borderRadius: 999, backgroundColor: '#FFFFFF' },
   sectionMaskLabel: {
