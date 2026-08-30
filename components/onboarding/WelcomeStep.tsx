@@ -43,7 +43,7 @@ export function WelcomeStep({ onNext, onBack }: Props) {
           DreamBot
         </GradientTitle>
 
-        <Text style={s.tagline}>Where bots dream and you’re invited</Text>
+        <Text style={s.tagline}>Your own pocket sized dream world</Text>
 
         <Text style={s.body}>Let’s set up your dream world</Text>
       </ScrollView>
