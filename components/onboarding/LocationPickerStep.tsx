@@ -344,7 +344,7 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
     // A category tile IS the selection unit (2026-08-29 Kevin): tapping it selects
     // the WHOLE category (every location inside), tapping again clears it — no more
     // drill-in. Selected = every location in the category is picked; shown with a
-    // brand-pink highlighted border + a check badge. Title only — no subtitle
+    // teal-green highlighted border + a check badge. Title only — no subtitle
     // (the title is descriptive enough, Kevin 2026-08-29).
     const renderCategoryCard = (section: LocationSection) => {
       const repThumb = section.items.map((i) => thumbnails.get(i.key)).find(Boolean);
@@ -545,13 +545,12 @@ const s = StyleSheet.create({
     borderColor: colors.accentBorder,
   },
   catImg: { opacity: 0.62 },
-  // Whole-category selected: a clean brand-PURPLE border, no glow (Kevin 2026-08-29:
-  // pink+glow read too busy — calm purple outline from the logo palette).
+  // Whole-category selected: a clean teal-green border (matches the check badge).
   catCardSelected: {
-    borderColor: '#A78BFA',
+    borderColor: '#5EEAD4',
     borderWidth: 2.5,
   },
-  // Check badge stays GREEN (teal) — a bright contrast to the purple border (Kevin).
+  // Check badge — teal green, matching the selected border.
   catSelectedBadge: {
     position: 'absolute',
     top: 9,
