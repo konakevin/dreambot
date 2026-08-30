@@ -58,7 +58,7 @@ function NightlyInfoStep(p: Parameters<StepComponent>[0]) {
   return (
     <InfoStep
       {...NIGHTLY_INFO}
-      body={`${NIGHTLY_INFO.body} Your first ${proTrialDays} days of nightly dreams are on us.`}
+      body={`${NIGHTLY_INFO.body}\n\nYour first ${proTrialDays} nights are free to wander. When they’re up, the journey is yours to continue whenever you’re ready.`}
       {...p}
     />
   );
