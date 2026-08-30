@@ -23,7 +23,9 @@ export function useAlbumPosts(albumIds: string[], currentId: string) {
         const { data, error } = await supabase
           .from('uploads')
           .select(POST_SELECT)
-          .in('id', albumIds);
+          .in('id', albumIds)
+          // Hide quarantined bad renders even inside an album (migration 449).
+          .is('quarantined_at', null);
         if (error) throw error;
 
         const orderMap = new Map(albumIds.map((id, i) => [id, i]));

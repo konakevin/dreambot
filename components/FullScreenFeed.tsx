@@ -26,7 +26,7 @@ import { useFavoriteIds } from '@/hooks/useFavoriteIds';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
 import { useToggleLike } from '@/hooks/useToggleLike';
-import { useDeletePost } from '@/hooks/useDeletePost';
+import { useDeletePost, useQuarantinePost } from '@/hooks/useDeletePost';
 import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
@@ -418,6 +418,7 @@ export function FullScreenFeed({
   const { data: likeIds = new Set<string>() } = useLikeIds();
   const { mutate: toggleLike } = useToggleLike();
   const { mutate: deletePost } = useDeletePost();
+  const { mutate: quarantinePost } = useQuarantinePost();
   const [likesPost, setLikesPost] = useState<DreamPostItem | null>(null);
   const [commentPost, setCommentPost] = useState<DreamPostItem | null>(null);
 
@@ -436,11 +437,14 @@ export function FullScreenFeed({
   // Admin instant-delete is a hard delete (row + storage files) with no undo.
   // No confirm on purpose (Kevin 2026-07-01) — he bulk-prunes bot test renders
   // from the feed and the dialog was friction on every tap.
+  // Admin one-tap red X: quarantine as a bad render (soft — hides everywhere but
+  // keeps the row + metadata for pool analysis), NOT a hard delete. Same instant,
+  // no-confirm UX. (migration 449)
   const handleAdminDelete = useCallback(
     (uploadId: string) => {
-      deletePost(uploadId);
+      quarantinePost(uploadId);
     },
-    [deletePost]
+    [quarantinePost]
   );
 
   const handleDelete = useCallback(

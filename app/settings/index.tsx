@@ -330,11 +330,11 @@ export default function SettingsScreen() {
               <View style={styles.row}>
                 <Ionicons name="close-circle-outline" size={20} color={colors.accent} />
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.rowLabel}>One-tap delete button</Text>
+                  <Text style={styles.rowLabel}>One-tap bad-render flag</Text>
                   <Text style={styles.rowDesc}>
                     {showAdminDelete
-                      ? 'Red X visible above heart. Single tap deletes (no confirm).'
-                      : 'Hidden. Enable for bulk cleanup.'}
+                      ? 'Red X above heart. Single tap quarantines it as a bad render (hidden everywhere, no confirm).'
+                      : 'Hidden. Enable to flag bad renders.'}
                   </Text>
                 </View>
                 <Switch

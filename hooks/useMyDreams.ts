@@ -32,7 +32,10 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
         .from('uploads')
         .select(POST_SELECT)
         .eq('user_id', userId)
-        .eq('album_ref_count', 0);
+        .eq('album_ref_count', 0)
+        // Quarantined bad renders (admin-flagged) are hidden from every surface,
+        // including the owner's own private album (migration 449).
+        .is('quarantined_at', null);
       // 'private' = unposted (not live on the feed); 'posted' = live on the feed.
       if (filter === 'private') query = query.eq('is_public', false);
       else if (filter === 'posted') query = query.eq('is_public', true);

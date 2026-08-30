@@ -21,6 +21,8 @@ export async function fetchPost(id: string): Promise<PostDetail> {
       'id, image_url, image_url_hq, width, height, caption, categories, created_at, user_id, comment_count, users(username, avatar_url)'
     )
     .eq('id', id)
+    // Quarantined bad renders 404 even on a direct open (migration 449).
+    .is('quarantined_at', null)
     .single();
   if (error) throw error;
   return data as PostDetail;

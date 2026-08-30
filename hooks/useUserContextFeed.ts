@@ -43,6 +43,9 @@ export function useUserContextFeed(currentId: string, enabled = true) {
           .from('uploads')
           .select(POST_SELECT)
           .eq('id', currentId)
+          // Quarantined bad renders are unreachable even by direct id (migration
+          // 449) — falls through to get_shared_post, which also excludes them.
+          .is('quarantined_at', null)
           .single();
 
         // RLS-blocked target = a PRIVATE dream shared by direct link, opened

@@ -1,4 +1,9 @@
-import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  type InfiniteData,
+  type QueryClient,
+} from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/auth';
@@ -168,49 +173,65 @@ export function useDissolveAlbum() {
   });
 }
 
+// Shared optimistic removal — a flagged/deleted post must vanish from every feed,
+// grid and album cache the same way whether it's hard-deleted or quarantined.
+// Returns a ctx the mutation's onError rolls back on failure.
+type RemovalCtx = { snapshots: Map<string, unknown>; restoreSnapshots: () => void };
+
+async function applyOptimisticRemoval(qc: QueryClient, uploadId: string): Promise<RemovalCtx> {
+  const snapshots = new Map<string, unknown>();
+
+  for (const prefix of INFINITE_QUERY_KEYS) {
+    const queries = qc.getQueryCache().findAll({ queryKey: [prefix] });
+    for (const query of queries) {
+      await qc.cancelQueries({ queryKey: query.queryKey });
+      const prev = qc.getQueryData<InfiniteData<AnyPage>>(query.queryKey);
+      if (prev) {
+        snapshots.set(JSON.stringify(query.queryKey), prev);
+        qc.setQueryData<InfiniteData<AnyPage>>(query.queryKey, {
+          ...prev,
+          pages: removeUploadFromPages(prev.pages, uploadId) as AnyPage[],
+        });
+      }
+    }
+  }
+
+  // Album posts use flat arrays (useQuery, not useInfiniteQuery)
+  const albumQueries = qc.getQueryCache().findAll({ queryKey: ['albumPosts'] });
+  for (const query of albumQueries) {
+    await qc.cancelQueries({ queryKey: query.queryKey });
+    const prev = qc.getQueryData<DreamPostItem[]>(query.queryKey);
+    if (prev) {
+      snapshots.set(JSON.stringify(query.queryKey), prev);
+      qc.setQueryData<DreamPostItem[]>(
+        query.queryKey,
+        prev.filter((p) => p.id !== uploadId)
+      );
+    }
+  }
+
+  // Zustand snapshots (pinned self-post + album viewer) the caches miss.
+  const restoreSnapshots = prunePostFromSnapshots(new Set([uploadId]));
+
+  return { snapshots, restoreSnapshots };
+}
+
+function restoreOptimisticRemoval(qc: QueryClient, ctx: RemovalCtx | undefined): void {
+  if (ctx?.snapshots) {
+    for (const [keyStr, data] of ctx.snapshots) {
+      qc.setQueryData(JSON.parse(keyStr), data);
+    }
+  }
+  ctx?.restoreSnapshots?.();
+}
+
 export function useDeletePost() {
   const qc = useQueryClient();
   const isAdmin = useAuthStore((s) => s.isAdmin);
 
   return useMutation({
     mutationFn: (uploadId: string) => deleteUploadRow(uploadId, isAdmin),
-    onMutate: async (uploadId: string) => {
-      const snapshots = new Map<string, unknown>();
-
-      for (const prefix of INFINITE_QUERY_KEYS) {
-        const queries = qc.getQueryCache().findAll({ queryKey: [prefix] });
-        for (const query of queries) {
-          await qc.cancelQueries({ queryKey: query.queryKey });
-          const prev = qc.getQueryData<InfiniteData<AnyPage>>(query.queryKey);
-          if (prev) {
-            snapshots.set(JSON.stringify(query.queryKey), prev);
-            qc.setQueryData<InfiniteData<AnyPage>>(query.queryKey, {
-              ...prev,
-              pages: removeUploadFromPages(prev.pages, uploadId) as AnyPage[],
-            });
-          }
-        }
-      }
-
-      // Album posts use flat arrays (useQuery, not useInfiniteQuery)
-      const albumQueries = qc.getQueryCache().findAll({ queryKey: ['albumPosts'] });
-      for (const query of albumQueries) {
-        await qc.cancelQueries({ queryKey: query.queryKey });
-        const prev = qc.getQueryData<DreamPostItem[]>(query.queryKey);
-        if (prev) {
-          snapshots.set(JSON.stringify(query.queryKey), prev);
-          qc.setQueryData<DreamPostItem[]>(
-            query.queryKey,
-            prev.filter((p) => p.id !== uploadId)
-          );
-        }
-      }
-
-      // Zustand snapshots (pinned self-post + album viewer) the caches miss.
-      const restoreSnapshots = prunePostFromSnapshots(new Set([uploadId]));
-
-      return { snapshots, restoreSnapshots };
-    },
+    onMutate: (uploadId: string) => applyOptimisticRemoval(qc, uploadId),
     onSuccess: () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Toast.show('Dream deleted', 'checkmark-circle');
@@ -218,12 +239,42 @@ export function useDeletePost() {
     onError: (_err, _vars, ctx) => {
       if (__DEV__) console.error('[useDeletePost] Error:', _err);
       Toast.show('Failed to delete dream', 'close-circle');
-      if (ctx?.snapshots) {
-        for (const [keyStr, data] of ctx.snapshots) {
-          qc.setQueryData(JSON.parse(keyStr), data);
-        }
-      }
-      ctx?.restoreSnapshots?.();
+      restoreOptimisticRemoval(qc, ctx);
+    },
+  });
+}
+
+/**
+ * Quarantine a render as a "bad render" (the admin one-tap red X). Same
+ * instant-vanish UX as delete, but the row + image + all metadata SURVIVE — the
+ * admin RPC just flips is_public off + stamps quarantined_at, so it drops out of
+ * every surface while pooling into the bad-render set for later pool-quality
+ * analysis. No storage deletion, no counter changes. (migration 449)
+ */
+async function quarantineUploadRow(uploadId: string): Promise<void> {
+  // admin_quarantine_upload is not in the generated RPC types yet (same pattern
+  // as admin_delete_upload) — regenerate types after 449 to drop the casts.
+  const { error } = await supabase.rpc(
+    'admin_quarantine_upload' as never,
+    { p_upload_id: uploadId } as never
+  );
+  if (error) throw error;
+}
+
+export function useQuarantinePost() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: (uploadId: string) => quarantineUploadRow(uploadId),
+    onMutate: (uploadId: string) => applyOptimisticRemoval(qc, uploadId),
+    onSuccess: () => {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show('Flagged as bad render', 'checkmark-circle');
+    },
+    onError: (_err, _vars, ctx) => {
+      if (__DEV__) console.error('[useQuarantinePost] Error:', _err);
+      Toast.show('Failed to flag render', 'close-circle');
+      restoreOptimisticRemoval(qc, ctx);
     },
   });
 }
