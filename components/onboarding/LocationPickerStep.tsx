@@ -357,23 +357,19 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       }
     }, [places, toggleAllLocations]);
 
-    // Section eyebrow — Real World gets a neutral label + hairline; Dream Worlds
-    // gets a brand-gradient rule so the imagined half reads visibly distinct.
+    // Section eyebrow — both worlds share ONE uniform, professional treatment:
+    // an uppercase letter-spaced label + the brand-gradient rule. Real World and
+    // Dream Worlds look equally designed (Kevin 2026-08-29). The only difference is
+    // a touch more top space above Dream Worlds so the two groups still read apart.
     const renderSectionHeader = (label: string, dream: boolean) => (
       <View style={[s.sectionHeader, dream && s.sectionHeaderDream]}>
-        <Text style={[s.sectionLabel, dream ? s.sectionLabelDream : s.sectionLabelReal]}>
-          {label}
-        </Text>
-        {dream ? (
-          <LinearGradient
-            colors={BRAND_GRADIENT}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={s.sectionRule}
-          />
-        ) : (
-          <View style={[s.sectionRule, s.sectionRuleReal]} />
-        )}
+        <Text style={s.sectionLabel}>{label}</Text>
+        <LinearGradient
+          colors={BRAND_GRADIENT}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={s.sectionRule}
+        />
       </View>
     );
 
@@ -649,8 +645,10 @@ const s = StyleSheet.create({
     marginTop: verticalScale(6),
     marginBottom: verticalScale(12),
   },
-  summaryText: { fontSize: fontScale(13.5), fontWeight: '600', color: colors.subtleOnDark },
-  summaryCount: { color: '#5EEAD4', fontWeight: '800' },
+  // Summary — bigger + brighter so the running total reads clearly (Kevin 2026-08-29:
+  // the old dim grey "hid up there"). The count is a bold teal focal number.
+  summaryText: { fontSize: fontScale(15.5), fontWeight: '600', color: colors.bodyOnDark },
+  summaryCount: { fontSize: fontScale(17), color: '#5EEAD4', fontWeight: '900' },
   // Reset — a real (muted) button so it doesn't blend into the background.
   resetBtn: {
     paddingHorizontal: horizontalScale(14),
@@ -673,12 +671,15 @@ const s = StyleSheet.create({
     marginTop: verticalScale(4),
     marginBottom: verticalScale(12),
   },
-  sectionHeaderDream: { marginTop: verticalScale(22) },
-  sectionLabel: { fontSize: fontScale(12), fontWeight: '800', letterSpacing: 1.5 },
-  sectionLabelReal: { color: 'rgba(255,255,255,0.55)' },
-  sectionLabelDream: { color: '#C4B5FD' },
-  sectionRule: { flex: 1, height: 2, borderRadius: 999 },
-  sectionRuleReal: { backgroundColor: 'rgba(255,255,255,0.12)' },
+  sectionHeaderDream: { marginTop: verticalScale(24) },
+  // One uniform label + gradient rule for both worlds (professional + on-brand).
+  sectionLabel: {
+    fontSize: fontScale(12.5),
+    fontWeight: '800',
+    letterSpacing: 1.6,
+    color: 'rgba(255,255,255,0.72)',
+  },
+  sectionRule: { flex: 1, height: 2, borderRadius: 999, opacity: 0.85 },
 
   // Level 2 — category cards.
   catGrid: {
