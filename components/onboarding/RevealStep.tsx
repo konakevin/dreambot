@@ -435,7 +435,7 @@ export function RevealStep({ onBack, isActive = false }: Props) {
   if (phase === 'booting' || (phase === 'generating' && dreams.length === 0)) {
     return (
       <View style={s.loadingContainer}>
-        <MagicalLoadingStage subtext="DreamBot is busy painting your very first dream, hang tight!" />
+        <MagicalLoadingStage subtext="DreamBot is conjuring your very first dream, hang tight!" />
       </View>
     );
   }
