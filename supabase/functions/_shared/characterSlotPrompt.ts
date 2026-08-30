@@ -305,7 +305,11 @@ Write scene_description as a place where this action makes sense. If the action 
 an object, prop, or creature, DECIDE what it concretely is AT THIS LOCATION and name it
 in scene_description or props — never leave a noun like "giant"/"monster"/"someone"
 ambiguous for the image model to guess at (an ambiguous "sleeping giant" at a zoo
-renders as a literal colossal beast). Keep it environment-only: no people, no pose.`
+renders as a literal colossal beast). ALWAYS choose a TASTEFUL, believable object that
+truly belongs in this exact place and register — never a whimsical, novelty, oversized,
+comic, or out-of-place oddity (never a giant mushroom, a random sculpture, an absurd
+prop). If nothing tasteful fits, pick a plain natural feature of the place instead. Keep
+it environment-only: no people, no pose.`
       : ''
   }`;
 
@@ -329,6 +333,9 @@ FIELDS YOU OWN:
 
 scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
+  Keep it a BELIEVABLE, elegant, real version of the place — no whimsical, novelty,
+  oversized, comic, or surreal invented oddities (no giant mushrooms, no absurd
+  sculptures) unless the location itself is explicitly fantastical.
   Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.
 
 wardrobe (8-15 words)
@@ -339,8 +346,12 @@ wardrobe (8-15 words)
 mood (1-3 short phrases)
   Emotional tone. Examples: "warm reverent calm", "playful golden afternoon", "quiet awe".
 
-props (0-10 words, can be empty string "")
-  Optional environmental object(s) near the character. Empty string if none.
+props (0-10 words — STRONGLY PREFER an empty string "")
+  Usually leave EMPTY. Only if a prop genuinely elevates the shot, a single TASTEFUL,
+  believable object that naturally belongs in this exact place and register (a champagne
+  flute at a gala, a surfboard at a beach, a lantern in an alley). NEVER whimsical,
+  novelty, oversized, comic, organic-oddity, or out-of-place objects (never a giant
+  mushroom, an absurd sculpture, a random creature). When in doubt, empty string.
 
 ${forbiddenList}
 
@@ -371,6 +382,9 @@ FIELDS YOU OWN:
 
 scene_description (25-40 words)
   The environment ONLY. Iconic features of the location, light, weather, atmosphere.
+  Keep it a BELIEVABLE, elegant, real version of the place — no whimsical, novelty,
+  oversized, comic, or surreal invented oddities (no giant mushrooms, no absurd
+  sculptures) unless the location itself is explicitly fantastical.
   Do NOT mention people, characters, camera, framing, faces, eyes, pose, or distance.
 
 left_wardrobe (8-15 words)
@@ -386,8 +400,12 @@ right_wardrobe (8-15 words)
 mood (1-3 short phrases)
   Emotional tone. Examples: "warm reverent calm", "playful golden afternoon", "quiet awe".
 
-props (0-10 words, can be empty string "")
-  Optional environmental object(s) between or near the pair. Empty string if none.
+props (0-10 words — STRONGLY PREFER an empty string "")
+  Usually leave EMPTY. Only if a prop genuinely elevates the shot, a single TASTEFUL,
+  believable object that naturally belongs in this exact place and register (a champagne
+  flute at a gala, a surfboard at a beach). NEVER whimsical, novelty, oversized, comic,
+  organic-oddity, or out-of-place objects (never a giant mushroom, an absurd sculpture,
+  a random creature). When in doubt, empty string.
 
 ${forbiddenList}
 
