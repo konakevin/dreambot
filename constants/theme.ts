@@ -22,6 +22,8 @@ export const colors = {
   error: '#E8485F',
   success: '#4CAA64',
   warning: '#FFB800',
+  // Bright green for inline required/help prompts ("(Choose one)", "Pick at least 1").
+  prompt: '#4ADE80',
 
   // Text
   textPrimary: '#FFFFFF',

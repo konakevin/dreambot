@@ -176,97 +176,99 @@ function CastSlot({
         />
         <Text style={s.slotLabel}>{config.label}</Text>
       </View>
-      {config.tip ? <Text style={s.slotTip}>{config.tip}</Text> : null}
+      <View style={s.slotContent}>
+        {config.tip ? <Text style={s.slotTip}>{config.tip}</Text> : null}
 
-      {member ? (
-        <>
-          <View style={s.uploadedRow}>
-            <View>
-              <Image
-                source={displayUri ? { uri: displayUri } : undefined}
-                style={s.thumb}
-                contentFit="cover"
-              />
-              {isUploading && (
-                <View style={s.thumbSpinner}>
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+        {member ? (
+          <>
+            <View style={s.uploadedRow}>
+              <View>
+                <Image
+                  source={displayUri ? { uri: displayUri } : undefined}
+                  style={s.thumb}
+                  contentFit="cover"
+                />
+                {isUploading && (
+                  <View style={s.thumbSpinner}>
+                    <ActivityIndicator size="small" color="#FFFFFF" />
+                  </View>
+                )}
+              </View>
+              <View style={s.uploadedInfo}>
+                {isUploading ? (
+                  <Text style={s.uploadedCheck}>Analyzing...</Text>
+                ) : isComplete ? (
+                  <Text style={s.uploadedCheck}>Ready for dreams</Text>
+                ) : (
+                  <>
+                    <Text style={[s.uploadedCheck, { color: colors.like }]}>
+                      Couldn&apos;t analyze this photo
+                    </Text>
+                    <Text style={[s.slotTip, { marginTop: verticalScale(4) }]}>
+                      Tap the X to try again, or try a different photo.
+                    </Text>
+                  </>
+                )}
+              </View>
+              {!isUploading && (
+                <TouchableOpacity
+                  onPress={() => onRemove(config.role)}
+                  hitSlop={8}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Relationship picker for +1 */}
+            {showRelationship && (
+              <View style={s.relSection}>
+                <View style={s.relLabelRow}>
+                  <Text style={s.relLabel}>This is my...</Text>
+                  {!member.relationship && <Text style={s.relRequired}>(Choose one)</Text>}
                 </View>
-              )}
-            </View>
-            <View style={s.uploadedInfo}>
-              {isUploading ? (
-                <Text style={s.uploadedCheck}>Analyzing...</Text>
-              ) : isComplete ? (
-                <Text style={s.uploadedCheck}>Ready for dreams</Text>
-              ) : (
-                <>
-                  <Text style={[s.uploadedCheck, { color: colors.like }]}>
-                    Couldn&apos;t analyze this photo
-                  </Text>
-                  <Text style={[s.slotTip, { marginTop: verticalScale(4) }]}>
-                    Tap the X to try again, or try a different photo.
-                  </Text>
-                </>
-              )}
-            </View>
-            {!isUploading && (
-              <TouchableOpacity
-                onPress={() => onRemove(config.role)}
-                hitSlop={8}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="close-circle" size={22} color={colors.textSecondary} />
-              </TouchableOpacity>
+                <View style={s.relRow}>
+                  {RELATIONSHIPS.map((rel) => {
+                    const active = member.relationship === rel.key;
+                    return (
+                      <TouchableOpacity
+                        key={rel.key}
+                        style={[s.relPill, active && s.relPillActive]}
+                        onPress={() => {
+                          onRelationship(rel.key);
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        }}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={[s.relPillText, active && s.relPillTextActive]}>
+                          {rel.label}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </View>
             )}
-          </View>
-
-          {/* Relationship picker for +1 */}
-          {showRelationship && (
-            <View style={s.relSection}>
-              <View style={s.relLabelRow}>
-                <Text style={s.relLabel}>This is my...</Text>
-                {!member.relationship && <Text style={s.relRequired}>(Choose one)</Text>}
-              </View>
-              <View style={s.relRow}>
-                {RELATIONSHIPS.map((rel) => {
-                  const active = member.relationship === rel.key;
-                  return (
-                    <TouchableOpacity
-                      key={rel.key}
-                      style={[s.relPill, active && s.relPillActive]}
-                      onPress={() => {
-                        onRelationship(rel.key);
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={[s.relPillText, active && s.relPillTextActive]}>
-                        {rel.label}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </View>
-          )}
-        </>
-      ) : (
-        <TouchableOpacity
-          style={[s.uploadButton, anyUploading && !isUploading ? { opacity: 0.4 } : null]}
-          onPress={() => onUpload(config.role)}
-          disabled={anyUploading}
-          activeOpacity={0.7}
-        >
-          {isUploading ? (
-            <ActivityIndicator size="small" color={colors.accent} />
-          ) : (
-            <>
-              <Ionicons name="camera" size={18} color={colors.accent} />
-              <Text style={s.uploadButtonText}>Upload Photo</Text>
-            </>
-          )}
-        </TouchableOpacity>
-      )}
+          </>
+        ) : (
+          <TouchableOpacity
+            style={[s.uploadButton, anyUploading && !isUploading ? { opacity: 0.4 } : null]}
+            onPress={() => onUpload(config.role)}
+            disabled={anyUploading}
+            activeOpacity={0.7}
+          >
+            {isUploading ? (
+              <ActivityIndicator size="small" color={colors.accent} />
+            ) : (
+              <>
+                <Ionicons name="camera" size={18} color={colors.accent} />
+                <Text style={s.uploadButtonText}>Upload Photo</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }
@@ -744,19 +746,29 @@ const s = StyleSheet.create({
     lineHeight: fontScale(17),
   },
 
+  // The slot is a card with its own title-bar header (divided from the content pane
+  // below) so the photo preview reads as its own section (Kevin 2026-08-29).
   slotCard: {
     backgroundColor: colors.surface,
     borderRadius: 14,
-    padding: verticalScale(16),
     marginBottom: verticalScale(12),
     borderWidth: 1,
     borderColor: colors.border,
+    overflow: 'hidden',
   },
   slotHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: verticalScale(4),
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(12),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    backgroundColor: 'rgba(255,255,255,0.02)',
+  },
+  slotContent: {
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(14),
   },
   slotLabel: {
     color: colors.textPrimary,
@@ -834,7 +846,7 @@ const s = StyleSheet.create({
   },
   // Inline required nudge — draws the eye until they pick (disappears on choice).
   relRequired: {
-    color: '#4ADE80',
+    color: colors.prompt,
     fontSize: fontScale(13),
     fontWeight: '700',
   },

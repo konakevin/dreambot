@@ -45,7 +45,7 @@ export function WelcomeStep({ onNext, onBack }: Props) {
 
         <Text style={s.tagline}>Your own pocket sized dream world</Text>
 
-        <Text style={s.body}>Let’s set up your dream world</Text>
+        <Text style={s.body}>Let’s get started</Text>
       </ScrollView>
 
       {/* First step — no previous screen to go back to. */}

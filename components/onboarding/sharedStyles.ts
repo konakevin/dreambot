@@ -26,13 +26,15 @@ export const onboardingStyles = StyleSheet.create({
     lineHeight: fontScale(22),
   },
 
+  // "Pick at least 1" / "N selected" — the shared bright-green prompt color (matches
+  // the cast step's "(Choose one)" nudge). One source of truth: colors.prompt.
   selectedCount: {
     fontSize: fontScale(14),
     fontWeight: '700',
-    color: colors.bodyOnDark,
+    color: colors.prompt,
     textAlign: 'center',
   },
-  selectedCountMet: { color: '#4ADE80', fontWeight: '600' },
+  selectedCountMet: { color: colors.prompt },
 
   footer: {
     padding: verticalScale(16),
