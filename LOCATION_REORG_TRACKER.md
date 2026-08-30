@@ -79,17 +79,17 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ## Picker UX improvements (log)
 | Improvement | Status | Deployed |
 |---|---|---|
-| Selected state = badge only (removed teal glow/outline) | ✅ done | ⬜ uncommitted |
-| Reset + Select-all → real button styling | ✅ done | ⬜ uncommitted |
-| Single context-aware back chevron (`handleBack` handle) | ✅ done | ⬜ uncommitted |
-| Leave-with-zero-places gentle confirm | ✅ done | ⬜ uncommitted |
-| Announcement → seat Profile→Edit Profile chain on back | ✅ done | ⬜ uncommitted |
-| Segmented tab control | ⚠️ superseded | replaced by de-tab two-section (Phase 1) |
-| **De-tab → two labeled sections** | ⬜ todo | Phase 1 |
-| Category reorg 4→11 | ⬜ todo | Phase 1 |
+| Selected state = badge only (removed teal glow/outline) | ✅ done | ✅ committed `c5f92b0d` (ships next build) |
+| Reset + Select-all → real button styling | ✅ done | ✅ committed `c5f92b0d` |
+| Single context-aware back chevron (`handleBack` handle) | ✅ done | ✅ committed `c5f92b0d` |
+| Leave-with-zero-places gentle confirm | ✅ done | ✅ committed `c5f92b0d` |
+| Announcement → seat Profile→Edit Profile chain on back | ✅ done | ✅ committed `c5f92b0d` |
+| **De-tab → two labeled sections (REAL WORLD / DREAM WORLDS)** | ✅ done | ✅ committed `c5f92b0d` |
+| Category reorg 4→11 | ✅ done | ✅ committed `c5f92b0d` |
 
-> ⚠️ All picker/announcement UX work above is CODE-COMPLETE but UNCOMMITTED +
-> undeployed as of 2026-08-27. Files: `components/onboarding/LocationPickerStep.tsx`,
+> ✅ All picker/announcement UX work is COMMITTED (`c5f92b0d`). It is in `main` but
+> NOT yet in a shipped App Store build (last release was 1.0.16). It ships the next
+> time a client build is cut. Files: `components/onboarding/LocationPickerStep.tsx`,
 > `app/settings/locations.tsx`, `components/ConfirmDialog.tsx`, `components/AnnouncementSheet.tsx`.
 
 ---
@@ -270,9 +270,15 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ## Phase 3 — Prod deployment log
 | What | Committed | admin_only flipped (LIVE) | Client build |
 |---|---|---|---|
-| De-tab UI + reorg | ⬜ | n/a | ⬜ |
+| De-tab UI + reorg + picker UX polish | ✅ `c5f92b0d` | n/a | ⬜ NOT in a shipped build (last release 1.0.16; UI ships next build) |
+| 41 seed pools (all categories) | ✅ (data, not code) | ⬜ ALL still `admin_only=true` DARK | n/a |
+| Pipeline fixes (race/canvas/spot-hygiene) | ✅ committed + edge-deployed | ✅ LIVE (edge fns) | n/a — server-side |
 | Reclassifications (Santorini/NL/Sahara/Wonders) | ⬜ | ⬜ | ⬜ |
-| (per seeded category, added as they complete) | | | |
+
+> **Go-live gate (needs Kevin):** (1) your grading pass on the 41 dark cards →
+> (2) scale approved cards' spots 20→100+ → (3) "Ancient Wonders"→"World Wonders"
+> display rename + confirm SECTION_META placement → (4) flip `admin_only=false` on
+> approved cards → (5) cut a client build so the de-tab picker UI ships.
 
 ---
 
