@@ -644,7 +644,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
             cold in the Create tutorial + Settings, so it must be taught here. */}
         {!settingsCopy && (
           <Text style={s.funPart}>
-            Your Dream Cast is optional, but trust us, this is where the magic happens.
+            Your Dream Cast is optional, but trust us, this is where the magic happens ✨
           </Text>
         )}
         <View style={{ height: verticalScale(18) }} />
