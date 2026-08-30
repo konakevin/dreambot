@@ -2139,6 +2139,28 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Seed-source stamp (2026-08-30): capture WHICH scene pool / scenario / pose
+    // pool / location produced this render, so a quarantined "bad render"
+    // (migration 449) can be grouped by its origin — surfacing a seed pool or a
+    // specific scenario that repeatedly renders junk. Spread into every logAxes
+    // path below. All vars are in scope here (declared before this branch).
+    const seedSource = {
+      // Which scene bucket/pool: holiday:<season> / active / goofy / elegant /
+      // scenario (other special) / location (plain location, no scenario).
+      kind: holidayCategory
+        ? `holiday:${holidayCategory}`
+        : dualActiveScene
+          ? 'active'
+          : (dualSceneKind ?? (dualSpecialScene ? 'scenario' : 'location')),
+      // The scenario seed text (truncated) — the per-seed identifier for grouping.
+      scene: dualSpecialScene ? dualSpecialScene.slice(0, 160) : null,
+      // The pose pool (the seed-pool-level pose identifier); the exact pose text
+      // stays recoverable from enhanced_prompt + fallback_reasons.
+      posePool: dualScenePosePool,
+      location: iconicAnchor ?? userPlace ?? null,
+      biome: biomeKey,
+    };
+
     if (composition === 'character') {
       if (faceSwapEligible) {
         const faceLockPhrase = isDualFaceSwap
@@ -2327,6 +2349,7 @@ Output ONLY the prompt.`;
         medium: nightlyMedium.key,
         vibe: nightlyVibe.key,
         engine: 'nightly-cast-character',
+        seedSource,
         nightlyPath,
         castRoles: selectedCast.map((m) => m.role),
         composition,
@@ -2375,6 +2398,7 @@ Output ONLY the prompt.`;
         medium: nightlyMedium.key,
         vibe: nightlyVibe.key,
         engine: 'nightly-cast-epic',
+        seedSource,
         nightlyPath,
         castRoles: selectedCast.map((m) => m.role),
         composition,
@@ -2409,6 +2433,7 @@ Output ONLY the prompt.`;
           : nightlyMedium.key,
         vibe: nightlyVibe.key,
         engine: 'nightly-holiday-scene',
+        seedSource,
         holiday: holidayCategory,
         tone: holidayScene.tone ?? null,
         composition,
@@ -2535,6 +2560,7 @@ Output ONLY the prompt.`;
         medium: nightlyMedium.key,
         vibe: nightlyVibe.key,
         engine: 'nightly-pure-scene',
+        seedSource,
         biome: biomeKey || null,
         anchor: iconicAnchor || null,
         anchor_scale: iconicAnchorScale || null,
