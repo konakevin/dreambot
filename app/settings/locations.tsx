@@ -21,16 +21,24 @@ export default function LocationPickerStepSettings() {
   useAutoSaveProfile();
 
   // The leave-nudge (zero places selected) is wired to the header chevron, but the
-  // full-screen swipe-back would pop past it. So when nothing is selected, disable
-  // the gesture — the only way out is the guarded chevron; re-enable it once they've
-  // picked at least one. Mirrors settings/dream-cast's conditional gestureEnabled.
+  // swipe-back would pop past it. Disabling ONLY this screen's gesture isn't enough:
+  // the settings group is a root MODAL_SWIPEABLE card, so with the inner gesture off
+  // the parent's full-screen swipe takes over and dismisses to the feed (the same
+  // mechanism settings/index relies on). So while nothing is selected, disable BOTH
+  // this screen's gesture AND the parent settings-modal's — leaving the guarded
+  // chevron as the only way out. Restore the parent's swipe on leave so the rest of
+  // settings keeps it. Re-enables the moment they've picked at least one.
   const navigation = useNavigation();
   const placeCount = useOnboardingStore((st) => st.profile.dream_seeds.places.length);
   useEffect(() => {
-    navigation.setOptions({
-      gestureEnabled: placeCount > 0,
-      fullScreenGestureEnabled: placeCount > 0,
-    });
+    const enabled = placeCount > 0;
+    navigation.setOptions({ gestureEnabled: enabled, fullScreenGestureEnabled: enabled });
+    navigation
+      .getParent()
+      ?.setOptions({ gestureEnabled: enabled, fullScreenGestureEnabled: enabled });
+    return () => {
+      navigation.getParent()?.setOptions({ gestureEnabled: true, fullScreenGestureEnabled: true });
+    };
   }, [placeCount, navigation]);
 
   // ONE back chevron (consistent with every other settings sub-page). Routed
