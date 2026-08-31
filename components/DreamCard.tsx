@@ -1026,10 +1026,9 @@ const s = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    // The bright neon aqua at the far-right of the brand gradient (BRAND_GRADIENT[2],
-    // the bright end of the "Create"/wordmark titles) — this is the quarantine "bad
-    // render" flag, not a destructive delete (mig 449).
-    backgroundColor: '#5EEAD4',
+    // The DreamBot CTA purple (colors.accent) — this is the quarantine "bad render"
+    // flag, not a destructive delete (mig 449).
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
