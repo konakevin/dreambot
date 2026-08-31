@@ -914,9 +914,20 @@ Deno.serve(async (req) => {
     // keys (sanitize is identity for those), but a tampered client can write
     // arbitrary text into user_recipes.recipe.dream_seeds.places, and userPlace
     // flows into the Sonnet brief. Neutralizes injection / control / zero-width.
+    // ORPHAN GUARD (2026-08-31): only keep saved places that still resolve to a real
+    // picker card. Legacy freeform strings ("a tropical beach at sunset") and cards
+    // pulled from the picker (picker_category=null, e.g. robot city) would otherwise
+    // be rolled as a `userPlace`, fail the card lookup, and degrade to a place-less
+    // render. Backstops the client-side selection migration for any not-yet-migrated
+    // user. Cheap (~160-row set, cast/scene rolls hit the DB anyway).
+    const { data: validCardRows } = await supabase
+      .from('location_cards')
+      .select('name')
+      .not('picker_category', 'is', null);
+    const validCardNames = new Set((validCardRows ?? []).map((c: { name: string }) => c.name));
     let placePool: string[] = (seeds.places ?? [])
       .map((p: string) => sanitizeUserText(String(p), 'subject_description'))
-      .filter((p: string) => p && !isBannedLocationName(p));
+      .filter((p: string) => p && !isBannedLocationName(p) && validCardNames.has(p));
     // BACKUP (2026-08-25): onboarding still requires ≥1 place, so the only way to
     // reach zero is deliberately unselecting all in Settings. When that happens,
     // fall back to the FULL live location catalog so the dreamer still gets varied
