@@ -1026,7 +1026,9 @@ const s = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E53935',
+    // Bright ocean/turquoise (was red) — this is the quarantine "bad render" flag,
+    // not a destructive delete (migration 449).
+    backgroundColor: '#06B6D4',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
