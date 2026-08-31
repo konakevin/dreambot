@@ -154,6 +154,8 @@ const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   // downstream single/dual Ultra→pro clamp remains a backstop if this is ever
   // re-enabled for non-swap.)
   'black-forest-labs/flux-1.1-pro-ultra',
+  // BANNED from nightly (Kevin, 2026-08-31): xai/grok-imagine-image.
+  'xai/grok-imagine-image',
 ]);
 
 // Render-budget split (Kevin 2026-08-28): a failed DUAL swap must ALWAYS leave
