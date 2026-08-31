@@ -1026,9 +1026,10 @@ const s = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    // The blue from the DreamBot logo's "Bot" gradient (theme.gradients.bot[1]) —
-    // this is the quarantine "bad render" flag, not a destructive delete (mig 449).
-    backgroundColor: '#6699EE',
+    // The bright neon aqua at the far-right of the brand gradient (BRAND_GRADIENT[2],
+    // the bright end of the "Create"/wordmark titles) — this is the quarantine "bad
+    // render" flag, not a destructive delete (mig 449).
+    backgroundColor: '#5EEAD4',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
