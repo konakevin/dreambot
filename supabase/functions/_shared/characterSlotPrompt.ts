@@ -253,6 +253,37 @@ function stripIdentity(s: string): string {
     .trim();
 }
 
+// Map the extracted skin clause to a strong tone adjective that gets attached to
+// the SUBJECT NOUN ("a fair-skinned man"). A trailing descriptor alone (", light
+// peachy skin tone") is regularly steamrolled by a heavy stylistic prior — the
+// face-swap medium overrides (jewel-tone ornate illustration, painted concept
+// art; faceSwapModelOverrides.ts) carry a strong race prior, and it rendered a
+// white cast member with dark skin (Kevin, michele's nightly 2026-08-31: partner
+// race-swapped despite ", light peachy skin tone" in the prompt). Attaching the
+// tone to the subject noun early is the proven counter (feedback_ethnicity_noun_
+// beats_visual_descriptors): a noun-adjacent skin token beats a late descriptor
+// when a stylistic medium fights it. The never-swapped body skin (neck/arms/
+// hands) must be locked here — the swap only refines the face.
+export function skinToneAdjective(skin: string | null | undefined): string | null {
+  if (!skin) return null;
+  const s = skin.toLowerCase();
+  if (/\b(ebony|espresso|mahogany|umber|very dark|deepest)\b/.test(s)) return 'dark-skinned';
+  if (/\bdark\b/.test(s)) return 'dark-skinned';
+  if (/\bdeep\b/.test(s) && /\b(brown|skin|tone|complexion)\b/.test(s) && !/\bolive\b/.test(s))
+    return 'dark-skinned';
+  if (/\b(light[ -]brown|caramel|tawny|bronze)\b/.test(s)) return 'tan-skinned';
+  if (/\bolive\b/.test(s)) return 'olive-skinned';
+  if (/\b(brown|chestnut|cocoa|mocha|copper)\b/.test(s)) return 'brown-skinned';
+  if (/\b(tan|golden|sun[ -]?kissed|medium)\b/.test(s)) return 'tan-skinned';
+  if (
+    /\b(fair|light|pale|porcelain|ivory|peach|peachy|rosy|cream|creamy|alabaster|milky|freckl)\b/.test(
+      s
+    )
+  )
+    return 'fair-skinned';
+  return null;
+}
+
 function buildIdentityBlock(prefix: string, resolved: ResolvedIdentity, wardrobe: string): string {
   const ageAxis = resolved.age ? `, ${resolved.age}` : '';
   const buildAxis = resolved.build ? `, ${resolved.build} build` : '';
@@ -260,8 +291,12 @@ function buildIdentityBlock(prefix: string, resolved: ResolvedIdentity, wardrobe
   // body skin to the cast member's actual complexion and overrides any location
   // ethnicity prior. Race must never be inferred from the setting.
   const skinAxis = resolved.skin ? `, ${resolved.skin}` : '';
+  // AND lock the tone onto the subject noun itself ("a fair-skinned man"), the
+  // strongest position for it to survive a heavy face-swap medium prior.
+  const toneAdj = skinToneAdjective(resolved.skin);
+  const subject = toneAdj ? `${toneAdj} ${resolved.gender}` : resolved.gender;
   const cleanIdentity = stripIdentity(resolved.identity);
-  return `${prefix}: a ${resolved.gender}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
+  return `${prefix}: a ${subject}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
 // ── Slot brief construction ─────────────────────────────────────────────

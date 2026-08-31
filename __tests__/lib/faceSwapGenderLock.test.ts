@@ -15,7 +15,11 @@
 jest.mock('@engine/llm', () => ({ callSonnet: jest.fn() }));
 
 import { resolveCastForPrompt } from '@engine/castResolver';
-import { resolveIdentity, assembleCharacterPrompt } from '@engine/characterSlotPrompt';
+import {
+  resolveIdentity,
+  assembleCharacterPrompt,
+  skinToneAdjective,
+} from '@engine/characterSlotPrompt';
 
 // ── castResolver (create flow) ─────────────────────────────────────────────
 describe('castResolver.resolveCastForPrompt — gender lock', () => {
@@ -156,5 +160,56 @@ describe('characterSlotPrompt.assembleCharacterPrompt — single-cast shouted lo
     expect(out).not.toMatch(/FEMALE woman/);
     // The identity block also reads "a man", not "a woman".
     expect(out).toContain('CHARACTER: a man');
+  });
+});
+
+// ── Skin-tone race lock (michele partner race-swapped to dark, 2026-08-31) ──
+// A trailing ", light peachy skin tone" descriptor was steamrolled by the
+// jewel-tone illustration face-swap override; the fix attaches the tone to the
+// subject noun ("a fair-skinned man") where a heavy medium prior can't drop it.
+describe('characterSlotPrompt.skinToneAdjective — race lock', () => {
+  it('maps describer skin vocabulary to a noun-attached tone adjective', () => {
+    expect(skinToneAdjective('light peachy skin tone')).toBe('fair-skinned');
+    expect(skinToneAdjective('fair peachy skin tone')).toBe('fair-skinned');
+    expect(skinToneAdjective('pale porcelain skin')).toBe('fair-skinned');
+    expect(skinToneAdjective('warm olive skin')).toBe('olive-skinned');
+    expect(skinToneAdjective('light brown skin')).toBe('tan-skinned');
+    expect(skinToneAdjective('warm brown skin')).toBe('brown-skinned');
+    expect(skinToneAdjective('deep brown skin')).toBe('dark-skinned');
+    expect(skinToneAdjective('rich ebony skin')).toBe('dark-skinned');
+    expect(skinToneAdjective(null)).toBeNull();
+    expect(skinToneAdjective('')).toBeNull();
+  });
+
+  it('locks the tone onto the subject noun in the assembled prompt', () => {
+    const out = assembleCharacterPrompt(
+      {
+        scene_description: 'a Milanese rooftop',
+        wardrobe: 'silk suit',
+        mood: 'elegant',
+        props: 'champagne',
+      },
+      {
+        cast: [
+          {
+            role: 'self',
+            promptDesc: 'a man, 64, White-blonde hair',
+            physicalSummary: 'clean-shaven, White-blonde hair, light peachy skin tone, average',
+            gender: 'male',
+            age: 64,
+          },
+        ],
+        iconicAnchor: 'Milan',
+        userPlace: null,
+        timeAxis: 'golden hour',
+        weatherAxis: 'clear',
+        phenomenaAxis: '',
+        mediumFluxFragment: 'crisp ink illustration with jewel-tone colors',
+        vibeDirective: 'elegant',
+        avoidList: '',
+        action: null,
+      }
+    );
+    expect(out).toContain('fair-skinned man');
   });
 });
