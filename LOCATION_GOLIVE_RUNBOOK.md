@@ -85,22 +85,29 @@ their nightly dreams draw from the expanded categories immediately.
 
 ## Step 4 — Fire the announcement
 The "We redecorated ✨" sheet (id `80e7b01c-30bd-4780-a1c3-ba74e549fda6`) is already
-configured: `is_active = true`, `audience = all`, `existing_users_only = true`, and
-**`min_build = 47`** (set 2026-08-31 to stop it leaking on 1.0.16). So it will only
-surface on the 1.0.17 build — nothing to change here at go-live *except* the seen-reset
-below.
+`is_active = true`, `audience = all`, `existing_users_only = true`, **`min_build = 47`**
+(set 2026-08-31 to stop it leaking on 1.0.16). Two things MUST happen at go-live:
 
-**Reset seen state so EVERY user gets it fresh on 1.0.17.** `announcement_seen` is
+**4a. Reset `starts_at` to the go-live moment.** The RLS gate for `existing_users_only`
+is `users.created_at < starts_at`. `starts_at` is frozen at 2026-08-27, so anyone who
+signed up between then and go-live (all on the OLD picker) would be wrongly excluded.
+Bumping it to `now()` makes "existing users" = everyone who existed before the flip;
+brand-new post-go-live signups (who onboard with the new picker) correctly don't see it.
+```sql
+UPDATE announcements
+SET starts_at = now()
+WHERE id = '80e7b01c-30bd-4780-a1c3-ba74e549fda6';
+```
+
+**4b. Reset seen state so EVERY eligible user gets it fresh.** `announcement_seen` is
 permanent (first view writes a row, it never re-shows). ~57 users saw it early while
-`min_build` was null; wipe all seen rows so they — and everyone — get it once on the
-new build:
+`min_build` was null; wipe all seen rows so they — and everyone — get it once on 1.0.17:
 ```sql
 DELETE FROM announcement_seen
 WHERE announcement_id = '80e7b01c-30bd-4780-a1c3-ba74e549fda6';
 ```
-> Do this AT go-live (after Steps 1-3), not before — otherwise a still-1.0.16 user
-> could re-see it, except `min_build = 47` now prevents that, so timing is safe either
-> way. Running it at go-live is cleanest.
+> Run 4a + 4b together at go-live (after Steps 1-3). `min_build = 47` already prevents
+> any 1.0.16 user from seeing it, so there's no premature-exposure risk in between.
 
 To re-preview on your own account only (instead of the full wipe):
 ```sql
@@ -137,5 +144,5 @@ WHERE announcement_id = '80e7b01c-30bd-4780-a1c3-ba74e549fda6'
 1. `min_app_version = '1.0.17'` (force update)  →
 2. flip 115 cards `admin_only = false` (picker_category NOT NULL only)  →
 3. `migrate-user-locations.mjs --write`  →
-4. reset `announcement_seen` for the "We redecorated" sheet (already min_build 47 + active) so all users get it fresh  →
+4. announcement: `starts_at = now()` + wipe `announcement_seen` (already min_build 47 + active) so all pre-flip users get it fresh  →
 5. verify 0 dark cards + idempotent re-run.
