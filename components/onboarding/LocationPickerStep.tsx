@@ -492,8 +492,8 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
 
         <ConfirmDialog
           visible={leaveVisible}
-          title="Leave without any places?"
-          message="Your dreams are way more fun with places to dream about. Pick at least one and your nightly dreams get a whole lot more interesting."
+          title="Leave without any favorites?"
+          message="Your dreams are more fun with some of your favorite locations as the setting."
           confirmLabel="Leave anyway"
           cancelLabel="Keep choosing"
           onConfirm={() => {
