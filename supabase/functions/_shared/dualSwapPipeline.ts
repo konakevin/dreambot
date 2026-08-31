@@ -109,9 +109,14 @@ const RECOVER_BUDGET_MS = 85_000;
 // stranger's face). Shipping it is the "wife's face is someone else" failure, so
 // a best this bad degrades to a self-only swap instead of shipping (Kevin
 // 2026-07-24: chose self-only over shipping-broken). A best in [floor, threshold)
-// still ships — a weak-but-present dual beats dropping the +1. Well below the
-// 0.35 enforcement threshold so genuinely-weak likenesses aren't over-degraded.
-const IDENTITY_DEGRADE_FLOOR = 0.15;
+// still ships — a weak-but-present dual beats dropping the +1.
+// 2026-08-31 (Kevin): RAISED 0.15 → 0.25. Cheek-to-cheek couple renders (the model
+// ignoring the head-gap framing) mis-crop the L/R split, so one face lands at ~0.16-0.18
+// sim — a STRANGER, but it cleared the old 0.15 floor and shipped as a "weak dual"
+// (the wife-on-the-man + generic-partner failure). Successful duals score 0.5-0.75 and
+// these misfires score ~0.16-0.18 — a clean bimodal gap — so 0.25 degrades the strangers
+// to a clean solo-of-self without over-degrading any genuinely-weak-but-correct couple.
+const IDENTITY_DEGRADE_FLOOR = 0.25;
 
 /**
  * Stage 8c (2026-07-09): identity enforcement threshold. When the secret is a
