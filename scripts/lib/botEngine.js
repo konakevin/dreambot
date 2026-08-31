@@ -759,10 +759,7 @@ async function getRecentPaths(sb, botName, limit = 5) {
 // (treat the bag as full → the live branch falls back to resolvePath anyway via
 // its try/catch, so a transient blip never blocks a post).
 async function getPathCycleUsed(sb, botName) {
-  const { data, error } = await sb
-    .from('bot_path_cycle')
-    .select('path')
-    .eq('bot_name', botName);
+  const { data, error } = await sb.from('bot_path_cycle').select('path').eq('bot_name', botName);
   if (error) {
     console.warn(`  ⚠️ path-cycle read failed: ${error.message}`);
     return [];
@@ -782,10 +779,7 @@ async function commitPathCycle(sb, botName, st) {
   if (st.didReset) {
     await withRetry(
       async () => {
-        const { error } = await sb
-          .from('bot_path_cycle')
-          .delete()
-          .eq('bot_name', botName);
+        const { error } = await sb.from('bot_path_cycle').delete().eq('bot_name', botName);
         if (error) throw error;
       },
       { label: `path-cycle reset(${botName})` }
@@ -860,6 +854,7 @@ async function postAsBot({
   recipe,
   fluxSeed,
   model,
+  path = null,
   shadow = false,
 }) {
   const bytes = fs.readFileSync(localPath);
@@ -951,6 +946,10 @@ async function postAsBot({
       recipe: recipe || null,
       flux_seed: fluxSeed ?? null,
       model: model || null,
+      // Durable render-provenance (migration 450): the bot's rendering PATH is its
+      // seed pool, so a quarantined bad bot render (mig 449) can be grouped by
+      // "this bot path keeps producing junk" — same tracking as nightly.
+      seed_source: { source: 'bot', bot: username, path: path || null },
       // Only reference the `shadow` column when actually shadowing. This keeps
       // NORMAL bot inserts working even before migration 376 is applied (an
       // unknown column would fail the PostgREST insert). Shadow renders only
@@ -1738,7 +1737,9 @@ async function runBot(opts) {
       const userId = await lookupBotUserId(sb, bot.username);
       const caption = bot.caption ? bot.caption({ sharedDNA, path: resolvedPath }) : null;
       if (isShadowPath) {
-        console.log(`  🕶️  SHADOW render (${resolvedPath}) — hidden from public, admin-only review`);
+        console.log(
+          `  🕶️  SHADOW render (${resolvedPath}) — hidden from public, admin-only review`
+        );
       }
       imageUrl = await postAsBot({
         sb,
@@ -1752,6 +1753,7 @@ async function runBot(opts) {
         recipe,
         fluxSeed: null,
         model: renderModel,
+        path: resolvedPath,
         shadow: isShadowPath,
       });
 

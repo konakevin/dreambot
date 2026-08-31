@@ -1,0 +1,37 @@
+-- 450_uploads_seed_source.sql (2026-08-30)
+--
+-- Durable render-provenance for the bad-render pool (migration 449). A small jsonb
+-- on the UPLOAD capturing WHICH seed pool / scenario / bot path produced the render.
+--
+-- Two retention tiers, split by lifetime so durable data and prunable data never
+-- fight:
+--   ai_generation_log     — full detail (prompts, rolled_axes, fallback_reasons),
+--                           ROLLING N-day prune (migration 274) → disk-bounded.
+--   uploads.seed_source   — tiny provenance summary, PERMANENT (lives with the
+--                           upload) → the canonical source for bad-render analysis.
+--
+-- Because pool forensics live durably on the upload, the detailed logs can be
+-- pruned as aggressively as we like without ever losing bad-render trends. A
+-- quarantined render (mig 449) stays fully analyzable forever.
+--
+-- Shape (uniform across render types; dream_medium + model already live on the
+-- upload so they are NOT duplicated here):
+--   { "source":"nightly"|"bot", "kind":"active|goofy|holiday:fall|location|<botpath>",
+--     "scene":"<scenario text|null>", "posePool":"<pool|null>",
+--     "location":"<place|null>", "biome":"<biome|null>",
+--     "bot":"<name|null>", "path":"<botpath|null>" }
+--
+-- NOT granted to anon/authenticated — service-role (edge fns, bot runner, ops
+-- analysis) bypasses column grants, so this stays invisible to the app.
+--
+-- Analysis (durable, join-free):
+--   SELECT seed_source->>'source' AS src, seed_source->>'kind' AS pool,
+--          seed_source->>'scene'  AS seed, seed_source->>'path' AS bot_path,
+--          dream_medium, model, count(*)
+--   FROM public.uploads
+--   WHERE quarantined_at IS NOT NULL
+--   GROUP BY 1,2,3,4,5,6 ORDER BY count(*) DESC;
+--
+-- Run in the Supabase dashboard SQL editor.
+
+ALTER TABLE public.uploads ADD COLUMN IF NOT EXISTS seed_source jsonb;

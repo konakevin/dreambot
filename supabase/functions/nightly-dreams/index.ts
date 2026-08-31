@@ -439,6 +439,16 @@ Deno.serve(async (req) => {
   // The holiday season this dream belongs to (Path 1 cast OR Path 2 scene-only),
   // or null. Declared at handler scope so it reaches the uploads insert (§5 marker).
   let holidayCategory: string | null = null;
+  // Durable seed-source provenance (migration 450). Declared at handler scope so it
+  // reaches BOTH the rolled_axes logAxes AND the uploads insert. Assigned once the
+  // scene/pool is resolved (before the composition branch).
+  let seedSource: {
+    kind: string;
+    scene: string | null;
+    posePool: string | null;
+    location: string | null;
+    biome: string | null;
+  } | null = null;
   let resolvedMediumAllowedModels: string[] = [];
   // Per-medium scene-eligible model override (mig 214). NULL → fall back to
   // engine_config.scene_eligible_models global. Captured for the post-try gate.
@@ -2146,7 +2156,7 @@ Deno.serve(async (req) => {
     // (migration 449) can be grouped by its origin — surfacing a seed pool or a
     // specific scenario that repeatedly renders junk. Spread into every logAxes
     // path below. All vars are in scope here (declared before this branch).
-    const seedSource = {
+    seedSource = {
       // Which scene bucket/pool: holiday:<season> / active / goofy / elegant /
       // scenario (other special) / location (plain location, no scenario).
       kind: holidayCategory
@@ -3659,6 +3669,11 @@ Output ONLY the prompt.`;
           // DreamCard (migration 211, 2026-05-30).
           model: pickedModel || null,
           face_swap_mode: faceSwapMode,
+          // Durable render-provenance (migration 450): which seed pool / scenario /
+          // location produced this dream, so a quarantined bad render (mig 449)
+          // stays analyzable forever — independent of the 30-day ai_generation_log
+          // prune. dream_medium + model are already columns, not duplicated here.
+          seed_source: seedSource ? { source: 'nightly', ...seedSource } : null,
           is_ai_generated: true,
           is_public: false,
           width: 768,
