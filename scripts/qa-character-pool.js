@@ -47,6 +47,14 @@ if (!ANTHROPIC_KEY || !SB_KEY) {
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const PASS1_ONLY = args.includes('--pass1-only');
+// --only "a,b,c" → SCOPED mode: skip pass 1 entirely (its Phase-4 lowercase+cutoff
+// heuristic misfires on freshly-generated spots) and run ONLY the Sonnet KEEP/DROP
+// pass on the listed locations. Used to polish a backfilled subset without re-QAing
+// (or damaging) the whole DB. No flag → unchanged global behavior.
+const ONLY = (() => {
+  const i = args.indexOf('--only');
+  return i >= 0 && args[i + 1] ? args[i + 1].split(',').map((s) => s.trim()).filter(Boolean) : [];
+})();
 const BATCH_SIZE = 100;
 const sb = createClient(SB_URL, SB_KEY);
 const anthropic = new Anthropic({ apiKey: ANTHROPIC_KEY });
@@ -137,13 +145,13 @@ async function pass1() {
 
 async function pass2() {
   console.log('\n=== PASS 2: Sonnet character QA on remaining true entries ===');
-  const { data: live } = await sb
+  let liveQ = sb
     .from('location_cards')
     .select('name, biome')
     .eq('is_approved', true)
-    .not('picker_category', 'is', null)
-    .order('name')
-    .range(0, 200);
+    .not('picker_category', 'is', null);
+  if (ONLY.length) liveQ = liveQ.in('name', ONLY); // scoped subset
+  const { data: live } = await liveQ.order('name').range(0, 200);
 
   let totalEval = 0, totalKeep = 0, totalDrop = 0;
   for (const loc of live) {
@@ -198,6 +206,13 @@ async function pass2() {
 }
 
 (async () => {
+  if (ONLY.length) {
+    // Scoped polish: pass 2 (Sonnet KEEP/DROP) only, on the listed cards. Skip pass 1
+    // — its Phase-4 heuristic would wrongly flag fresh backfilled spots.
+    console.log(`=== SCOPED to ${ONLY.length} card(s): pass 2 only ===`);
+    await pass2();
+    return;
+  }
   await pass1();
   if (PASS1_ONLY) return;
   await pass2();

@@ -41,6 +41,12 @@ const fsp = require('fs');
 const args = process.argv.slice(2);
 const WRITE = args.includes('--write');
 const SAMPLE = args.includes('--sample');
+// --only "a,b,c" → restrict the re-audit to these locations (scoped polish of a
+// backfilled subset). No flag → all live locations, unchanged.
+const ONLY = (() => {
+  const i = args.indexOf('--only');
+  return i >= 0 && args[i + 1] ? args[i + 1].split(',').map((s) => s.trim()).filter(Boolean) : [];
+})();
 const APPLY_FROM = args.includes('--apply-from') ? args[args.indexOf('--apply-from') + 1] : null;
 const DRY_RUN = !WRITE && !APPLY_FROM; // default safe: dry-run unless --write/--apply-from is explicit
 const BATCH_SIZE = 50;
@@ -182,6 +188,7 @@ async function applyDemotions(ids) {
   }
   let spots = all.filter((s) => liveSet.has(s.location_key));
   if (SAMPLE) spots = spots.filter((s) => SAMPLE_LOCATIONS.includes(s.location_key));
+  if (ONLY.length) spots = spots.filter((s) => ONLY.includes(s.location_key)); // scoped subset
 
   // Group by location so Sonnet judges with the place in context
   const byLoc = {};
