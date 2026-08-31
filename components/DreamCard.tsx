@@ -1026,9 +1026,9 @@ const s = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    // Bright ocean/turquoise (was red) — this is the quarantine "bad render" flag,
-    // not a destructive delete (migration 449).
-    backgroundColor: '#06B6D4',
+    // The blue from the DreamBot logo's "Bot" gradient (theme.gradients.bot[1]) —
+    // this is the quarantine "bad render" flag, not a destructive delete (mig 449).
+    backgroundColor: '#6699EE',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,

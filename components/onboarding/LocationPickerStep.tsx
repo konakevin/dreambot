@@ -266,6 +266,31 @@ export const LocationPickerStep = forwardRef<LocationPickerHandle, Props>(
       });
     }, [isAdmin]);
 
+    // MIGRATION to the tile = WHOLE-SECTION paradigm (2026-08-31, Kevin). Legacy users
+    // saved a SUBSET of a category; the new picker is all-or-nothing, so a partial pick
+    // can't be represented and its tile would read unselected. On first load, round any
+    // PARTIALLY-selected section (some but not all of its cards selected) up to the full
+    // section, so the tile reads selected and nightly draws the whole category. The
+    // store auto-save persists it. This is the single source of truth for the migration:
+    // it reuses the picker's own SECTION_META + live card list, so it can NEVER disagree
+    // with what lights up a tile. Self-idempotent — a full section has nothing to round
+    // up and the UI can't create new partials, so it no-ops on every later view. Only
+    // touches LIVE sections (non-admins only load admin_only=false cards), so it respects
+    // go-live automatically: a still-dark section isn't in `sections` and is left alone.
+    const normalizedRef = useRef(false);
+    useEffect(() => {
+      if (normalizedRef.current || sections.length === 0) return;
+      normalizedRef.current = true;
+      for (const sec of sections) {
+        const keys = sec.items.map((i) => i.key);
+        if (keys.length === 0) continue;
+        const current = useOnboardingStore.getState().profile.dream_seeds.places;
+        const hasAny = keys.some((k) => current.includes(k));
+        const hasAll = keys.every((k) => current.includes(k));
+        if (hasAny && !hasAll) toggleAllLocations(keys); // complete the partial → full
+      }
+    }, [sections, toggleAllLocations]);
+
     // Section eyebrow — a CENTERED "———— REAL WORLD ————" divider where ONE brand
     // gradient sweeps continuously across the left rule, the text, and the right rule
     // as a single unit (Kevin 2026-08-29). Done with a MaskedView: the gradient fills
