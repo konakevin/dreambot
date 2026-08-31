@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { verticalScale } from '@/lib/responsive';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import {
   LocationPickerStep,
@@ -19,6 +19,19 @@ export default function LocationPickerStepSettings() {
     useOnboardingStore.getState().setIsEditing(true);
   }, []);
   useAutoSaveProfile();
+
+  // The leave-nudge (zero places selected) is wired to the header chevron, but the
+  // full-screen swipe-back would pop past it. So when nothing is selected, disable
+  // the gesture — the only way out is the guarded chevron; re-enable it once they've
+  // picked at least one. Mirrors settings/dream-cast's conditional gestureEnabled.
+  const navigation = useNavigation();
+  const placeCount = useOnboardingStore((st) => st.profile.dream_seeds.places.length);
+  useEffect(() => {
+    navigation.setOptions({
+      gestureEnabled: placeCount > 0,
+      fullScreenGestureEnabled: placeCount > 0,
+    });
+  }, [placeCount, navigation]);
 
   // ONE back chevron (consistent with every other settings sub-page). Routed
   // through the picker: it pops the drill-in category first, and nudges if the
