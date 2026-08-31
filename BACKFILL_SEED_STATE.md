@@ -14,7 +14,7 @@
 - Everything stays admin_only=dark. cast>=15 / scene>=8 / active>=60 or FLAG.
 - SHIP GATE: every pool scaled + its dual validation render OK (review in the album).
 
-## Progress — 64 processed, 0 remaining, phaseB=false
+## Progress — 64 processed, 0 remaining, phaseB=true
 
 | card | category | active | cast | scene | dual | status |
 |---|---|---|---|---|---|---|
@@ -83,4 +83,4 @@
 | vineyard estate | high_life | 88 | 46 | 67 | [view](https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788081475786.png) | ✅ |
 | witch's cottage | gothic_haunted | 105 | 91 | 22 | [view](https://jimftynwrinwenonjrlj.supabase.co/storage/v1/object/public/uploads/eab700d8-f11a-4f47-a3a1-addda6fb67ec/1788080618929.png) | ✅ |
 
-## ✅ All cards scaled — run `--phase-b` for the final global QA polish.
+## ✅✅ DONE 100% (all scaled + Phase B complete).

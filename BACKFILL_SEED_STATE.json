@@ -577,6 +577,6 @@
       "flagged": false
     }
   },
-  "phaseB": false,
+  "phaseB": true,
   "startedAt": "1970-01-01"
 }

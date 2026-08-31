@@ -1,1853 +1,1384 @@
 {
-  "generatedAt": "2026-08-24T04:38:50",
-  "judged": 5091,
-  "demoteCount": 369,
-  "flooredLocations": [],
+  "generatedAt": "2026-08-31T06:11:25",
+  "judged": 14764,
+  "demoteCount": 268,
+  "flooredLocations": [
+    {
+      "location": "london",
+      "total": 16,
+      "wouldDemote": 0
+    },
+    {
+      "location": "los angeles",
+      "total": 14,
+      "wouldDemote": 10
+    },
+    {
+      "location": "pirate cove",
+      "total": 2,
+      "wouldDemote": 0
+    },
+    {
+      "location": "prague",
+      "total": 15,
+      "wouldDemote": 0
+    },
+    {
+      "location": "private jet",
+      "total": 19,
+      "wouldDemote": 0
+    },
+    {
+      "location": "race track garage",
+      "total": 11,
+      "wouldDemote": 0
+    },
+    {
+      "location": "sky penthouse",
+      "total": 18,
+      "wouldDemote": 4
+    }
+  ],
   "demotions": [
     {
-      "id": "981b893a-d623-428b-964b-93dda9caa416",
-      "location_key": "african safari",
-      "spot_text": "single dead acacia skeleton bleached bone-white standing in scorched brown grassland under a searing white midday sky"
+      "id": "63f71db9-8482-455a-ab73-36f72d994dca",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Art Deco gargoyle parapets of the Aldwick Tower"
     },
     {
-      "id": "649c2980-37cc-40a7-9eb1-aed3d28d7ac4",
-      "location_key": "african safari",
-      "spot_text": "blue-hour view of a dry sandy riverbed winding between dark vegetation walls under a deep cobalt and silver sky"
+      "id": "359c411a-5b8b-4622-87c4-424681a2d1be",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Ironwork canopy of the Blackthorn Grand Theater portico"
     },
     {
-      "id": "ddcff5ce-742e-44e6-b009-053ec19adb1f",
-      "location_key": "african safari",
-      "spot_text": "medium composition of a dry sandy lugga cutting through grassland with exposed white sand winding between grass banks under late afternoon light"
+      "id": "7d897fae-dcad-4449-bc91-89df7fa58e8a",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Tessellated marble forecourt of the Vellantio Hotel"
     },
     {
-      "id": "5ce6143c-d132-4d12-98c3-f9c2bf402987",
-      "location_key": "african safari",
-      "spot_text": "intimate detail of peeling papery bark on a fever tree with bright lime-yellow underbark revealed in long strips"
+      "id": "640a5d3f-7f6b-4f5e-9ca4-39006cad019a",
+      "location_key": "1920s speakeasy",
+      "spot_text": "Chevron-etched granite pylons of the Ostavo Bank facade"
     },
     {
-      "id": "82d670e0-a327-4545-96d7-916abef7f0cc",
+      "id": "6626f142-0155-40e5-bbd7-ab6de8beba49",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Art Deco sunburst gate of the Falcrest Grand Promenade"
+    },
+    {
+      "id": "9893ecca-32f4-4a3f-a2bc-1738d20dfbf8",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Elevated bridge-deck garden connecting the Marchpane twin towers"
+    },
+    {
+      "id": "3b93ab95-2337-464f-bc0a-831a2c872ba2",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Sunburst pavement mosaic forecourt of the Mirador Casino"
+    },
+    {
+      "id": "3db1278b-9274-4068-824f-0618fbde1cfe",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Fluted granite pillar row of the Crandall Supper Pavilion portico"
+    },
+    {
+      "id": "a4a5b79a-da17-48cc-9898-582c19f1adaf",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Illuminated tower sign crown of the Ostavo Supper Dome"
+    },
+    {
+      "id": "759bd293-82b3-42b0-809f-42ad72352b49",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Zigzag iron footbridge over the Feldrith Street trolley trench"
+    },
+    {
+      "id": "843a107f-52a5-44af-a684-09a1082450a3",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Cobblestone fan plaza at the junction of Carvello and Grand"
+    },
+    {
+      "id": "404b95a4-8451-4b95-bcec-1b44119d1549",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Hammered-copper canopy of the Solenne Casino grand approach"
+    },
+    {
+      "id": "a3732415-da2e-4320-a60a-d5f7abbc4134",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Stone-arched rail viaduct crossing the Greymere river bend"
+    },
+    {
+      "id": "5dad33a3-f55f-48c2-a15a-7d4f1e636790",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Billboard-clad facade wall of the Osterian block facing Carvello"
+    },
+    {
+      "id": "9ac308a5-4b04-4a9a-b473-a069012220c1",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Stepped granite embankment wall of the Brackwater promenade"
+    },
+    {
+      "id": "26aa3024-b9f5-463c-a608-9d286ab90d5b",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Crumbling brick perimeter wall of the Crandall rail yard"
+    },
+    {
+      "id": "3f8ba1c7-63d9-45fb-a070-e7592ff7c628",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Collapsing timber jetty reaching into Dravenmore Harbor"
+    },
+    {
+      "id": "53b3aca5-9e29-4a2e-bba3-522e86e76f4b",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Riveted barge hull beached at the Greyhollow Tidal Flat"
+    },
+    {
+      "id": "56332769-0533-427d-8d77-45f69a3d103d",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Riveted steel drawbridge of the Carrow dry-dock gate"
+    },
+    {
+      "id": "66bd8101-6574-4e8e-98db-69464c6e7ae9",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Chevron terrazzo staircase descending the Halverton Club exterior"
+    },
+    {
+      "id": "81b01edb-c457-48b9-833c-bce5f55515b0",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Broken derrick arm silhouetted over the Dunmouth Slip"
+    },
+    {
+      "id": "88957e66-2fe2-4b85-a27b-72935fe41cd3",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Obsidian Marquee facade of the Velour Grand Hotel"
+    },
+    {
+      "id": "8fc45188-f4d5-42ee-b389-03b336863adf",
+      "location_key": "1920s speakeasy",
+      "spot_text": "Rusted freighter crane leaning over the Brackwater loading dock"
+    },
+    {
+      "id": "a7f1d513-7899-4c9f-bdb4-b0d07cca85a0",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Carmine Neon Archway spanning Crestfall Avenue"
+    },
+    {
+      "id": "3f8ba1c7-63d9-45fb-a070-e7592ff7c628",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Collapsing timber jetty reaching into Dravenmore Harbor"
+    },
+    {
+      "id": "53b3aca5-9e29-4a2e-bba3-522e86e76f4b",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Riveted barge hull beached at the Greyhollow Tidal Flat"
+    },
+    {
+      "id": "56332769-0533-427d-8d77-45f69a3d103d",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Riveted steel drawbridge of the Carrow dry-dock gate"
+    },
+    {
+      "id": "66bd8101-6574-4e8e-98db-69464c6e7ae9",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Chevron terrazzo staircase descending the Halverton Club exterior"
+    },
+    {
+      "id": "81b01edb-c457-48b9-833c-bce5f55515b0",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Broken derrick arm silhouetted over the Dunmouth Slip"
+    },
+    {
+      "id": "88957e66-2fe2-4b85-a27b-72935fe41cd3",
+      "location_key": "1920s speakeasy",
+      "spot_text": "The Obsidian Marquee facade of the Velour Grand Hotel"
+    },
+    {
+      "id": "7f6504ad-6590-418a-868b-0147fcdab94a",
       "location_key": "amazon rainforest",
-      "spot_text": "Manaus port harbor iron floating dock at river's edge"
+      "spot_text": "a single giant lily pad floating on still black water with condensation droplets pooled at its center"
     },
     {
-      "id": "477d643d-11b6-4e86-a084-e18ec554f598",
+      "id": "8f45cb4f-225a-43c5-baab-a5b20fdaea89",
       "location_key": "amazon rainforest",
-      "spot_text": "close view of luminous fungi clusters glowing faintly on a rotting log in the deep understory darkness"
+      "spot_text": "Heliconia and bromeliads dense understorey close-up in dappled shaft of Amazon forest light"
     },
     {
-      "id": "736f8738-1d6f-41ae-9d30-bf2ebb7a688f",
+      "id": "995dc73b-6eb8-4917-aa57-76a09b1a22ac",
       "location_key": "amazon rainforest",
-      "spot_text": "dark storm advancing over the canopy edge with lightning flickering inside purple clouds above the treetops"
+      "spot_text": "Amazon forest floor leaf-litter close-up with luminous fungi colonies on a mossy fallen log"
     },
     {
-      "id": "a448d845-2fbb-4460-89e8-a10ef3d21cc6",
-      "location_key": "amsterdam",
-      "spot_text": "Oudemanhuispoort covered book-market arcade with its stone owl gateway and barrel-vaulted passage at dusk"
+      "id": "7b03bf8d-8991-4389-98f0-4e9516a04995",
+      "location_key": "amazon rainforest",
+      "spot_text": "Poison dart frog vivid blue skin on mossy rainforest floor leaf litter closeup"
     },
     {
-      "id": "07617e29-4c2a-4d56-9dd7-e1fe1013fae5",
+      "id": "67872f0c-440c-445c-9e43-78d9cde9c057",
+      "location_key": "amazon rainforest",
+      "spot_text": "dark tunnel of overhanging branches and vines above a narrow jungle stream glowing with green filtered light"
+    },
+    {
+      "id": "c9993619-b4a8-4d5c-9400-0cc594d4a794",
+      "location_key": "amazon rainforest",
+      "spot_text": "medium view of a giant strangler fig wrapped around a host trunk with roots cascading to the forest floor"
+    },
+    {
+      "id": "f1f4a625-db11-41c2-8bc9-9518f03ece89",
+      "location_key": "amazon rainforest",
+      "spot_text": "medium view of a mossy fallen giant log crossing a dark jungle stream with ferns erupting from every crack"
+    },
+    {
+      "id": "f4d5ded5-b5dc-4e9c-b1f3-a3a9461ff5e4",
+      "location_key": "amazon rainforest",
+      "spot_text": "post-rain forest interior with every surface dripping and a pale shaft of sunlight cutting through the steam"
+    },
+    {
+      "id": "c014d11a-1302-4194-adec-6f716e75c483",
+      "location_key": "amazon rainforest",
+      "spot_text": "dense tangle of heliconia leaves and red flower bracts glowing in a single shaft of afternoon sunlight"
+    },
+    {
+      "id": "d27b3cc3-d4c7-4055-8e99-175009cba72b",
+      "location_key": "amazon rainforest",
+      "spot_text": "hanging lianas looping in curtains from a cathedral-height canopy with soft diffused light filtering through fog"
+    },
+    {
+      "id": "e4328418-9a34-415b-be77-7c5a275d69c1",
+      "location_key": "amazon rainforest",
+      "spot_text": "Heliconia flower cluster crimson and gold bloom against dark understory"
+    },
+    {
+      "id": "2d09fe4e-341a-427f-9b4b-80c0978f0f8c",
+      "location_key": "ancient egypt",
+      "spot_text": "Medinet el-Fayum ancient Crocodilopolis site"
+    },
+    {
+      "id": "7f644003-302b-4794-9d45-33e4d8a22070",
+      "location_key": "ancient egypt",
+      "spot_text": "Avaris ancient Hyksos capital mound at Tell el-Dab'a"
+    },
+    {
+      "id": "8135c44a-d2d5-4896-a243-3e91a1d2c8d9",
+      "location_key": "ancient egypt",
+      "spot_text": "Naukratis ancient Greek trading post mounds in Delta"
+    },
+    {
+      "id": "c8384777-5b42-4819-a710-cf4436c203c2",
+      "location_key": "ancient egypt",
+      "spot_text": "Pelusium ancient fortress mound on Sinai border"
+    },
+    {
+      "id": "ac297f98-a1de-4115-9348-e8bac898f361",
       "location_key": "ancient wonders",
-      "spot_text": "dense scrub oak and wild sage engulfing low stone walls across a misty hillside at dawn"
+      "spot_text": "stormy dusk light raking across a plateau of eroded stone walls casting dramatic long shadows"
     },
     {
-      "id": "0d91f11b-3279-43af-bf98-09a0f18974e2",
+      "id": "bb6a7a1c-55c1-4099-91a2-434adbca974b",
       "location_key": "ancient wonders",
-      "spot_text": "monochrome dawn mist settling over a plateau of evenly spaced low stone foundations fading to white"
+      "spot_text": "collapsed stone vault framing a circle of pale winter sky above frost-covered rubble"
     },
     {
-      "id": "337451f9-2f8e-4e77-ac5e-b26e35fe649e",
+      "id": "f5962569-48e5-4f77-a36a-060bae800a0f",
       "location_key": "ancient wonders",
-      "spot_text": "close-up of cracked ashlar stonework with tiny ferns pushing through the joints after spring rain"
+      "spot_text": "ethereal morning fog threading between standing stone columns on a flat valley plain at first light"
     },
     {
-      "id": "345d5cfd-cb59-43ff-ac63-2b865f27d50c",
+      "id": "2255dc11-1b8c-4f0c-8b6e-f7db17d29ccd",
       "location_key": "ancient wonders",
-      "spot_text": "intimate detail of a carved stone frieze fragment with acanthus leaves covered in glistening dew drops"
+      "spot_text": "wide panorama of a storm-cleared sky with dramatic crepuscular rays falling over a field of crumbling stone arches"
     },
     {
-      "id": "40318f69-c8c7-4c47-816a-5ff9e8293fb9",
+      "id": "229239be-e08b-41ab-99af-fdcf432c993a",
       "location_key": "ancient wonders",
-      "spot_text": "frost-dusted stone foundations glittering in the first pale winter light across a silent hillside"
+      "spot_text": "wide vista of ruined terrace walls cascading down a steep hillside to a glittering distant sea at dusk"
     },
     {
-      "id": "440d5c8d-6419-4e70-9eff-514b8db824c8",
+      "id": "39edf83d-a252-4af9-b93c-34d6e6a5f5a8",
       "location_key": "ancient wonders",
-      "spot_text": "fog-filled valley below a ridge of crumbling stone retaining walls in the blue hour before sunrise"
+      "spot_text": "blue-hour panorama of stone ruins under a deep indigo sky with Venus rising above the horizon"
     },
     {
-      "id": "7ea71489-ec81-49fe-9090-466082f1b628",
+      "id": "3b7b7aaf-cf1c-4d20-ae3a-6b174a08ee65",
       "location_key": "ancient wonders",
-      "spot_text": "autumn mist pooling in a valley between ridges of ruined stone retaining terraces in soft diffuse light"
+      "spot_text": "tiered stone terraces descending a hillside covered in wild thyme and drought-hardy shrubs beneath a deep blue summer sky"
     },
     {
-      "id": "80c48ebb-b351-413b-9699-fdafa2dbef3b",
+      "id": "3e27f6f3-f0f5-413a-ae9d-5db185c8ff08",
       "location_key": "ancient wonders",
-      "spot_text": "medium composition of layered broken stone steps descending into a hollow filled with shadow and golden autumn ferns"
+      "spot_text": "wide view of broken column stumps casting long shadows across ochre dust at sunset"
     },
     {
-      "id": "90c246a1-41b7-4826-bfa4-f24826c27fc3",
+      "id": "4a746532-ee06-4657-8040-36a1f34cd7d5",
       "location_key": "ancient wonders",
-      "spot_text": "winter snowfall dusting a wide field of ancient stone foundations in muted blue-grey tones"
+      "spot_text": "wide panorama of layered stone terraces cut into a hillside glowing deep amber in late afternoon light"
     },
     {
-      "id": "91eb000b-1072-44c8-af60-30cd9fd94c0a",
+      "id": "4a8e1d70-8282-41d9-8d70-d7db80873438",
       "location_key": "ancient wonders",
-      "spot_text": "close detail of spiraling carved capital half-buried in crumbling red soil with dry grass blades"
+      "spot_text": "weathered carved stone blocks draped in dry grass tufts under a blazing midday sun with heat-haze rising"
     },
     {
-      "id": "988b0f22-ca76-4ec9-ad32-a0a7af66baba",
-      "location_key": "ancient wonders",
-      "spot_text": "intimate close-up of carved geometric relief on a fractured sandstone block overgrown with golden lichen"
-    },
-    {
-      "id": "9fe7d771-b6a2-49e9-96ea-12160a7baaa1",
-      "location_key": "ancient wonders",
-      "spot_text": "intimate detail of hand-chiseled inscription on weathered limestone block covered in pale grey lichen"
-    },
-    {
-      "id": "b2b59353-e6c8-4843-9f9b-3188fbabeb39",
-      "location_key": "ancient wonders",
-      "spot_text": "close-up of rough-quarried limestone block edges with bright orange and grey lichen colonies in morning sidelight"
-    },
-    {
-      "id": "c23b27c3-077f-494b-bddd-8d2e9a82bd5b",
-      "location_key": "ancient wonders",
-      "spot_text": "moss-patched marble slabs half-buried in red clay earth under a stormy pewter sky"
-    },
-    {
-      "id": "cb8906db-6af1-423b-977e-d5e243a3f7e2",
-      "location_key": "ancient wonders",
-      "spot_text": "close detail of carved stone channel worn smooth by millennia with dried lichen and tiny succulent rosettes"
-    },
-    {
-      "id": "ef47d7b9-e275-4f5e-9894-f1cd450004b0",
-      "location_key": "ancient wonders",
-      "spot_text": "autumn-gold grasses swaying around a cluster of half-collapsed stone piers under moody overcast light"
-    },
-    {
-      "id": "b315ab07-a749-4b0d-9048-4c20304f26bc",
-      "location_key": "ancient wonders",
-      "spot_text": "medium view of a single tall broken column reflected in a still rainwater pool surrounded by dry grasses"
-    },
-    {
-      "id": "a27bcf3a-d82c-4faa-b00a-9f45f1b831a4",
-      "location_key": "ancient wonders",
-      "spot_text": "single fractured marble column drum resting in a meadow of wild lavender at golden hour"
-    },
-    {
-      "id": "d7118f60-2dac-4ab4-a833-4d3a61ef47ae",
-      "location_key": "ancient wonders",
-      "spot_text": "ancient paved road of worn limestone slabs disappearing into dense Mediterranean scrubland under noon sun"
-    },
-    {
-      "id": "4bc9cda0-eaf4-4568-8bd5-c097c65e305f",
-      "location_key": "ancient wonders",
-      "spot_text": "medium view of dry-stone retaining wall draped in cascading wild capers under harsh midday sun"
-    },
-    {
-      "id": "a07f3182-3c6f-4f3a-9cc3-fc884ccd0107",
+      "id": "004abd3e-ed4a-4532-ad86-0eec167df6da",
       "location_key": "australia",
-      "spot_text": "dramatic wide view of a tropical coast lashed by monsoon rain, grey sheets of rain obscuring the horizon"
+      "spot_text": "close view of salt-tolerant samphire and succulent ground cover on a coastal mudflat, vivid greens and reds in warm afternoon light"
     },
     {
-      "id": "c3a2c3c8-a2b5-48bb-b4d9-084579ae8872",
+      "id": "3467429a-b9cb-4cc8-91bc-8ce41c8f41d7",
       "location_key": "australia",
-      "spot_text": "tropical storm approaching over open water, purple-black wall of cloud trailing grey rain curtains above a whitening sea"
+      "spot_text": "wide view of a tidal creek winding through flat coastal plains toward the sea, silver water threading through dark green scrub"
     },
     {
-      "id": "c4674e40-ba85-4332-9466-599e3ed822a3",
+      "id": "54d95683-2470-49d7-a190-9d26f70d278d",
+      "location_key": "australia",
+      "spot_text": "thunderstorm cell lit by lightning over a tropical bay at night, forked bolts illuminating a boiling sky and trembling sea below"
+    },
+    {
+      "id": "87e022b2-3bee-4df9-bb45-7bd7fbb1188d",
+      "location_key": "australia",
+      "spot_text": "wide moonlit view of a fringing reef with white water breaking on the outer rim, lagoon behind silver and perfectly calm"
+    },
+    {
+      "id": "967e8c8f-981f-4929-a2aa-2f7db97b155a",
+      "location_key": "australia",
+      "spot_text": "monsoon-swollen river cutting through coastal scrub to the sea, brown floodwater plunging across a sandy bar into blue-green ocean"
+    },
+    {
+      "id": "b80e7cab-1169-40dd-bc84-4953a66ff654",
+      "location_key": "australia",
+      "spot_text": "intimate detail of a sea turtle track in fine damp sand leading from surf to dune, the predawn light raking across the impressions"
+    },
+    {
+      "id": "cf430cd8-7789-4db4-a370-017a0f47d0f1",
+      "location_key": "australia",
+      "spot_text": "golden hour light on a shallow sandbar exposed at low tide, water pooled in shallow channels glowing amber and rose"
+    },
+    {
+      "id": "d4b295df-ce55-4ddb-a20d-b28b633c11ab",
+      "location_key": "australia",
+      "spot_text": "towering cumulonimbus clouds boiling over the open Coral Sea, reflecting in the dark glassy water below"
+    },
+    {
+      "id": "e83e7ce7-7f2b-4f07-94e0-c376292c5e6b",
+      "location_key": "australia",
+      "spot_text": "close detail of the fluted silver bark of a large paperbark tree at the forest edge, lichen-covered and fissured in abstract patterns"
+    },
+    {
+      "id": "e8bfab46-0da4-4162-bc04-d36862a590b5",
+      "location_key": "australia",
+      "spot_text": "sweeping vista of a river delta emptying into tropical coastal shallows, braided channels glinting copper in late afternoon light"
+    },
+    {
+      "id": "503f2c53-04b6-4f1a-91d5-ac98f46699b4",
+      "location_key": "australia",
+      "spot_text": "mangrove forest canopy stretching to the horizon under a dramatic storm-lit sky, silver light breaking through anvil clouds"
+    },
+    {
+      "id": "962de2a0-185b-43fd-b5ce-a0a67e20b77c",
+      "location_key": "australia",
+      "spot_text": "dense wall of mangrove prop roots descending into dark amber water at blue hour, roots tangled like cathedral arches"
+    },
+    {
+      "id": "dd9a1297-b0e3-4c7b-977b-9303d594d413",
+      "location_key": "australia",
+      "spot_text": "pandanus palms silhouetted against a molten orange and pink sunset sky above a glassy tidal flat"
+    },
+    {
+      "id": "bc7061a3-11bf-45f0-b52e-1fc3b81c0285",
       "location_key": "bali",
-      "spot_text": "close-up of rain hitting the broad glossy surface of a taro leaf sending concentric ripples across standing water"
+      "spot_text": "after-rain jungle floor scattered with fallen frangipani blossoms on dark volcanic soil between exposed tree roots"
     },
     {
-      "id": "7c272845-8b56-48c6-a577-2f874f3aa436",
+      "id": "e02c6801-7681-45ff-a428-4c7d4f99fa59",
       "location_key": "bali",
-      "spot_text": "close detail of a dragonfly resting motionless on a rice stem above mirrored water in the still blue-hour light"
+      "spot_text": "thick morning mist rolling through a valley of coconut palms and jungle ferns seen from a high jungle ridge at sunrise"
     },
     {
-      "id": "0dbcba20-09e5-4963-b608-92419b7e467d",
-      "location_key": "bali",
-      "spot_text": "stormy sky with cumulonimbus towers building over a wide expanse of dark jungle stretching to the sea on the horizon"
-    },
-    {
-      "id": "131eb1c0-3786-40aa-be94-00056c6dca7c",
-      "location_key": "bali",
-      "spot_text": "wide stormy panorama of jungle-covered hills with low grey clouds tearing across the ridgeline and rain curtains sweeping the valley"
-    },
-    {
-      "id": "3b410a74-7adc-4c8f-b666-a2d2582c7568",
-      "location_key": "bali",
-      "spot_text": "narrow irrigation channel lined with moss-covered stone walls disappearing into a tunnel of overhanging banana leaves at dawn"
-    },
-    {
-      "id": "e8bded62-1e54-4c99-9145-1a649e352167",
-      "location_key": "big sur cliffs",
-      "spot_text": "morning sea fog rolling in over the cliff edge like a slow-motion waterfall obscuring the base of the rock walls in soft grey"
-    },
-    {
-      "id": "241de567-baf2-4750-a515-2a53e665d0e3",
+      "id": "7f91376d-9d67-4c72-aa31-79e0bc3158fc",
       "location_key": "bora bora tahiti",
-      "spot_text": "intimate close-up of a tidal pool trapped in coral rock filled with clear seawater and tiny coral fragments at noon"
+      "spot_text": "wide stormy seascape with dark green waves swelling beyond the reef crest under a bruised purple and charcoal sky"
     },
     {
-      "id": "31689225-da0e-46a8-a6dd-8a5cb2acb346",
+      "id": "b44abf47-32d7-4569-9e75-57e99861e370",
       "location_key": "bora bora tahiti",
-      "spot_text": "close view of a pandanus leaf fan catching direct tropical sun with deep green veins and translucent yellow margins"
+      "spot_text": "medium view of a dense coconut grove interior dappled with filtered midday light and fallen fronds on the sand floor"
     },
     {
-      "id": "43cbe980-5aa3-454c-af00-270a8582928b",
-      "location_key": "bora bora tahiti",
-      "spot_text": "macro detail of a bleached coral skeleton on white sand with warm late-afternoon shadows pooling in its crevices"
-    },
-    {
-      "id": "b4a0d3f5-40a6-4118-8e03-acbf137534ff",
-      "location_key": "bora bora tahiti",
-      "spot_text": "intimate macro of a sea-smoothed piece of branching coral half-buried in white sand with shallow water rippling over it"
-    },
-    {
-      "id": "c36f873d-df78-469f-b0ae-b694384c8ef8",
-      "location_key": "bora bora tahiti",
-      "spot_text": "close view of a shallow lagoon bottom where sand ripples form perfect parallel ridges under moving water with sunlight caustics above"
-    },
-    {
-      "id": "d495a667-0a55-4202-86c9-cdcbfdcd7da1",
-      "location_key": "bora bora tahiti",
-      "spot_text": "close detail of a coconut palm trunk texture with barnacles and salt crust catching raking dawn light"
-    },
-    {
-      "id": "da4b6644-bee3-4b9f-9a37-cb7141095827",
-      "location_key": "bora bora tahiti",
-      "spot_text": "intimate shot of wet coral gravel on the reef flat with shallow water magnifying each stone under sharp midday light"
-    },
-    {
-      "id": "97e03908-d877-4ad2-bb5f-b333783a09b3",
-      "location_key": "bora bora tahiti",
-      "spot_text": "medium view of a rain-drenched coconut grove after a tropical squall with every leaf and trunk surface gleaming wet"
-    },
-    {
-      "id": "b387e640-1f05-4c92-b6c5-65639fd2d968",
-      "location_key": "bora bora tahiti",
-      "spot_text": "medium view of a coral rubble beach berm built by wave action with each piece of bleached coral catching blue-hour light"
-    },
-    {
-      "id": "d309bd1b-4821-4b30-afbc-d3473f84cb28",
-      "location_key": "bora bora tahiti",
-      "spot_text": "medium composition of a dense stand of pandanus trees with their stilt roots tangled and the canopy glowing backlit green at dusk"
-    },
-    {
-      "id": "0a450619-3121-424b-91a0-f4bd14272042",
+      "id": "0788ab0d-4165-43e0-ae83-02eac3296b8b",
       "location_key": "canadian rockies",
-      "spot_text": "close detail of emerald green alpine moss cushion studded with tiny white flowers growing in a crack between frost-shattered rocks"
+      "spot_text": "winter snowfall in a mature subalpine forest, thick white curtain of falling snow reducing visibility, dark tree trunks dissolving into grey-white at short distance"
     },
     {
-      "id": "31990818-337e-4a7a-b963-b73387143235",
+      "id": "1e47ef43-b995-4eb1-8151-5bda5c7ca5b0",
       "location_key": "canadian rockies",
-      "spot_text": "close detail of permafrost-heaved ground pattern on an alpine plateau, polygonal cracks filled with dark organic soil contrasting pale frost-bleached sedge tufts"
+      "spot_text": "fresh overnight snowfall on a subalpine forest, every spruce bough loaded with thick white powder, soft grey diffuse morning light"
     },
     {
-      "id": "31b67796-f7db-402e-b479-2e3ea619b6bd",
+      "id": "a8ea64ff-4795-42a1-a06b-54a6c4f95fa8",
       "location_key": "canadian rockies",
-      "spot_text": "close detail of grey limestone rock face cross-hatched with ancient fossil impressions and orange lichen patches, shallow depth of field"
+      "spot_text": "steep scree slope of rust-orange and pale grey broken rock descending from a summit ridge into shadow, scale suggested only by size of distant trees below"
     },
     {
-      "id": "5a2bff45-a6e7-4ec6-998e-e1f64635bfc2",
+      "id": "0244eb8a-09e6-4a66-a351-5074e5200f09",
       "location_key": "canadian rockies",
-      "spot_text": "close detail of wind-polished quartzite pebbles in a glacially smoothed streambed, water flowing clear and fast over perfect oval stones in shades of grey and rust"
+      "spot_text": "single weathered dead spruce standing bleached silver on an open rocky knoll, orange and gold living forest behind, deep blue autumn sky above"
     },
     {
-      "id": "bb0df4f4-e035-430a-b6ef-5a80d2a1153d",
+      "id": "39ec3451-4936-4630-a6b9-29dbea3f3692",
       "location_key": "canadian rockies",
-      "spot_text": "close-up of freshly fractured quartzite showing sparkling crystalline interior, surrounded by weathered grey rock surface dotted with black lichen"
+      "spot_text": "open alpine tundra plateau stretching to the edge of a dramatic escarpment, low afternoon sun casting long shadows across wind-scoured grasses and sedges"
     },
     {
-      "id": "d3f434ac-e1cd-42a8-be37-e6f7811d32c1",
+      "id": "d8504182-83c8-4666-9e2a-beb4bb9cb97e",
       "location_key": "canadian rockies",
-      "spot_text": "intimate view of ice crystal formations along the frozen edge of a mountain stream, thin clear ice over dark water with trapped air bubbles below"
+      "spot_text": "dramatic overcast spring scene of avalanche debris field with broken mature conifers splayed down a steep mountainside, grey sky above, patches of dense old snow"
     },
     {
-      "id": "682af454-8c16-4ce4-bb95-3da7df8fcc28",
+      "id": "39ec3451-4936-4630-a6b9-29dbea3f3692",
       "location_key": "canadian rockies",
-      "spot_text": "close detail of wind-formed snow sastrugi on an exposed alpine snowfield, sharp parallel ridges casting thin blade shadows in low raking light"
+      "spot_text": "open alpine tundra plateau stretching to the edge of a dramatic escarpment, low afternoon sun casting long shadows across wind-scoured grasses and sedges"
     },
     {
-      "id": "f63e4edb-d4e7-4f4a-a2b9-cb877219fc69",
+      "id": "d8504182-83c8-4666-9e2a-beb4bb9cb97e",
       "location_key": "canadian rockies",
-      "spot_text": "lone gnarled subalpine fir bent by prevailing winds on an exposed rocky ridge, storm clouds massing behind, monochromatic grey-green palette"
+      "spot_text": "dramatic overcast spring scene of avalanche debris field with broken mature conifers splayed down a steep mountainside, grey sky above, patches of dense old snow"
     },
     {
-      "id": "ccf2924e-76c7-4546-b85a-e1aec501ba66",
-      "location_key": "caribbean islands",
-      "spot_text": "intimate macro detail of a sea fan coral colony washed ashore with its intricate purple lattice glistening wet on white sand"
+      "id": "3b48471a-9470-4fb4-9b9e-42c97f2fe41e",
+      "location_key": "cape cod",
+      "spot_text": "White clapboard lighthouse perched on grassy coastal bluff"
     },
     {
-      "id": "f1b0cecd-3355-445b-8ab5-150a904893f3",
-      "location_key": "caribbean islands",
-      "spot_text": "dusk scene of cumulus clouds stacked above the ocean with their undersides lit vivid orange and reflected in the glassy nearshore water"
+      "id": "391cf5d6-3aac-40f1-bc82-6e364fbbdbd4",
+      "location_key": "cape cod",
+      "spot_text": "Weathered fishing pier extending over turquoise harbor water"
     },
     {
-      "id": "9dbdc213-8e6b-45a0-a271-5992670a318d",
-      "location_key": "caribbean islands",
-      "spot_text": "medium shot of a gnarled buttonwood tree at the coastal edge with its wind-sculpted canopy leaning inland above a coral rubble shore at blue hour"
+      "id": "3e832b6e-dfe3-4ae1-ad56-a8688d8889e7",
+      "location_key": "cape cod",
+      "spot_text": "Row of pastel beach cottages along shell-lined coastal lane"
     },
     {
-      "id": "69399f20-dbb2-4980-969a-6ea6c2fd4f3d",
+      "id": "8d96469a-d97f-463c-acd0-d973e98d0298",
+      "location_key": "cape cod",
+      "spot_text": "Candy-colored beach cottage row along shoreline drive"
+    },
+    {
+      "id": "1974f703-6e8d-4a4c-b5b5-bf5e1c05ba91",
+      "location_key": "carrier flight deck",
+      "spot_text": "Flight deck with yellow shirt director near bow"
+    },
+    {
+      "id": "78936eae-693d-46c1-a8a1-12ae6c3e715d",
+      "location_key": "carrier flight deck",
+      "spot_text": "CIWS Phalanx mount on sponson above waterline hull"
+    },
+    {
+      "id": "d563919d-d5be-479e-8e72-f5cbd175394c",
+      "location_key": "carrier flight deck",
+      "spot_text": "SPS-49 long range radar antenna on island mast top"
+    },
+    {
+      "id": "e06be25b-65f0-4274-b0f9-3970f3feacf9",
+      "location_key": "carrier flight deck",
+      "spot_text": "Fresnel lens stabilized optical landing system on sponson"
+    },
+    {
+      "id": "3d301ede-fb99-4759-b91f-964de2d0149c",
+      "location_key": "carrier flight deck",
+      "spot_text": "Mast top with SPS-48 3D air search radar rotating"
+    },
+    {
+      "id": "2848ad58-083f-4c87-9630-6de7ce450945",
+      "location_key": "carrier flight deck",
+      "spot_text": "Island structure with IFF antenna above radar mast"
+    },
+    {
+      "id": "ceebf239-668f-4642-af53-c92e2e60421a",
+      "location_key": "carrier flight deck",
+      "spot_text": "RADAR picket antenna array on island forward face"
+    },
+    {
+      "id": "f3333ef8-e89c-4420-9e8b-303e17bef062",
+      "location_key": "carrier flight deck",
+      "spot_text": "Carrier island with SRBOC chaff launcher mount visible"
+    },
+    {
+      "id": "50d4c5dc-1449-4a76-9e63-261a72a77fa1",
+      "location_key": "cattle ranch",
+      "spot_text": "Kimberley Bungle Bungle Range beehive domes Western Australia"
+    },
+    {
+      "id": "d0f57bfb-6d5f-4756-83e0-5befc078c1c9",
+      "location_key": "cattle ranch",
+      "spot_text": "Australian Outback Kata Tjuta domed rock group Northern Territory"
+    },
+    {
+      "id": "5d355de1-2f6e-4a5f-8442-0f3ca5f42b8a",
       "location_key": "costa rica",
-      "spot_text": "tree trunk completely wrapped in climbing philodendron, heart-shaped leaves catching filtered green canopy light"
+      "spot_text": "layers of misty jungle ridgelines receding in atmospheric haze at blue hour, deepening shades of blue-green to grey"
     },
     {
-      "id": "7a544d5c-4d0a-4a5d-96e0-29e691a8f96c",
+      "id": "ada96368-fd13-44b2-b606-f0811c908a04",
       "location_key": "costa rica",
-      "spot_text": "intimate detail of condensation droplets beading on a broad tropical leaf at dawn, each drop refracting a tiny upside-down jungle world"
+      "spot_text": "thunderstorm approaching over an endless jungle canopy, bruised purple clouds churning above the green expanse"
     },
     {
-      "id": "952739ab-98c8-4f01-95c5-daba66539ec4",
+      "id": "affc3a7e-725a-4abc-a8df-2d4906874741",
       "location_key": "costa rica",
-      "spot_text": "intimate detail of a web of fine white fungal mycelium threading through dark decomposing wood on the forest floor"
+      "spot_text": "mist-shrouded jungle canopy rolling across steep ridgelines at dawn, layers of green dissolving into pale blue fog"
     },
     {
-      "id": "983edc95-0134-4624-bbcc-5e1fbf3ec406",
+      "id": "59beb7fb-d512-44b1-9ad5-fc5a6ce7aff1",
       "location_key": "costa rica",
-      "spot_text": "thick layer of leaf litter and decaying logs on the forest floor, luminous fungi and delicate ferns emerging from the rot"
+      "spot_text": "wide flooded lowland jungle under blue hour light, standing water mirroring a violet and indigo sky"
     },
     {
-      "id": "99357424-79cc-4993-afb2-1d59362a0bcf",
+      "id": "cac60cec-f697-4760-8fbc-3a9cae67f279",
       "location_key": "costa rica",
-      "spot_text": "close detail of tree bark completely colonized by layered mosses, lichens, and tiny ferns in green and amber tones"
+      "spot_text": "vast wetland marsh at golden hour, still black water reflecting fire-orange sky through silhouetted mangrove tangles"
     },
     {
-      "id": "9a5a1bec-da8f-4a0a-874a-c0fac5cfd984",
+      "id": "f5f7e833-eae4-49ad-a7a5-1cfc96312519",
       "location_key": "costa rica",
-      "spot_text": "a curtain of hanging orchids and bromeliads draped over a mossy branch in cool misty forest light"
+      "spot_text": "expansive wetland at dawn, shallow water alive with reflected pink and amber clouds, great egret silhouette distant and still"
     },
     {
-      "id": "a4663c84-bfc1-4c53-a066-c18f41d2565a",
+      "id": "cac60cec-f697-4760-8fbc-3a9cae67f279",
       "location_key": "costa rica",
-      "spot_text": "close detail of a wild orchid cluster blooming from a mossy epiphyte-covered branch in cool diffused morning light"
+      "spot_text": "vast wetland marsh at golden hour, still black water reflecting fire-orange sky through silhouetted mangrove tangles"
     },
     {
-      "id": "a7e040db-8085-478b-8fdb-10207bcccf57",
+      "id": "f5f7e833-eae4-49ad-a7a5-1cfc96312519",
       "location_key": "costa rica",
-      "spot_text": "still jungle pond at dawn completely covered in floating ferns and duckweed, pale mist hovering just above the surface"
+      "spot_text": "expansive wetland at dawn, shallow water alive with reflected pink and amber clouds, great egret silhouette distant and still"
     },
     {
-      "id": "a8417118-1db4-469d-aa72-762c1b862969",
-      "location_key": "costa rica",
-      "spot_text": "close view of a massive bromeliad rosette filled with trapped rainwater, sky reflected in its tiny green pool"
+      "id": "3a28fafe-b2e5-4eb4-be66-8b9fe353b31d",
+      "location_key": "deep sea research sub",
+      "spot_text": "Georges Bank deep flank sediment slope"
     },
     {
-      "id": "af9e5b07-fc8e-47e4-a6c6-b984b82bf3ad",
-      "location_key": "costa rica",
-      "spot_text": "a dense curtain of hanging vines and lianas falling from unseen canopy heights into a blue-shadowed forest interior"
+      "id": "044cca86-13e8-4127-b8d2-0cf876276a98",
+      "location_key": "deep sea research sub",
+      "spot_text": "Skagerrak deep basin anoxic sediment plain"
     },
     {
-      "id": "e52a0105-7cc6-4c5a-b1da-0a16cb4cf98c",
-      "location_key": "costa rica",
-      "spot_text": "still black-water pool reflecting the perfect symmetry of overhanging heliconia and fern fronds in early morning calm"
+      "id": "19a0b51c-9e2d-4aea-b2da-f72575fca722",
+      "location_key": "deep sea research sub",
+      "spot_text": "Rockall Trough abyssal plain sediment basin"
     },
     {
-      "id": "f0eda04b-f3fb-4c40-9abf-c9424e3cd8ca",
-      "location_key": "costa rica",
-      "spot_text": "tangled mass of aerial roots descending from a strangler fig into dark creek water at dusk"
+      "id": "da7838b8-177b-46e0-ad03-0721392bc4c0",
+      "location_key": "deep sea research sub",
+      "spot_text": "Celtic Deep trough anoxic sediment plain"
     },
     {
-      "id": "f818ba08-35a8-4437-862c-281fa2f30785",
-      "location_key": "costa rica",
-      "spot_text": "intimate detail of luminous green moss and liverwort carpeting a wet forest boulder beside a trickling stream"
+      "id": "4662f71f-64f3-486f-b304-e67d8db55621",
+      "location_key": "deep sea research sub",
+      "spot_text": "Ligurian Basin deepwater muddy canyon floor"
     },
     {
-      "id": "7829d151-380d-4af8-b59f-813ed2862e73",
-      "location_key": "costa rica",
-      "spot_text": "brooding overcast panorama of lowland jungle swamp, dark tannin-stained water threading through dense root tangles"
+      "id": "21287644-43e5-4406-9bf7-11afcb306e0e",
+      "location_key": "deep sea research sub",
+      "spot_text": "Matapan Deep hadal zone sediment plain"
     },
     {
-      "id": "d37c087a-1656-4c29-ad13-c683dc52238b",
-      "location_key": "costa rica",
-      "spot_text": "moonlit river winding through silent jungle, pale silver light rippling across slow dark current under a canopy of stars"
+      "id": "63e7f830-bce9-4dc9-aab4-c9e52e14ecad",
+      "location_key": "deep sea research sub",
+      "spot_text": "Hellenic Trench deep inner trench floor"
     },
     {
-      "id": "494d56c2-7110-4dba-abd7-0c8dea8f4ff4",
-      "location_key": "costa rica",
-      "spot_text": "moss-covered fallen giant spanning a dark jungle stream, thick ferns and bromeliads crowding every surface"
+      "id": "3a28fafe-b2e5-4eb4-be66-8b9fe353b31d",
+      "location_key": "deep sea research sub",
+      "spot_text": "Georges Bank deep flank sediment slope"
     },
     {
-      "id": "5b8af1b8-9087-4eda-9efe-847669f2ce4b",
-      "location_key": "costa rica",
-      "spot_text": "dark jungle stream winding through fern-covered banks with shafts of golden light penetrating at sharp angles"
+      "id": "044cca86-13e8-4127-b8d2-0cf876276a98",
+      "location_key": "deep sea research sub",
+      "spot_text": "Skagerrak deep basin anoxic sediment plain"
     },
     {
-      "id": "437be802-6b54-477c-aeb5-826115132cef",
-      "location_key": "costa rica",
-      "spot_text": "close detail of a massive cecropia leaf dotted with silver raindrops after a heavy downpour, veins glowing with backlight"
+      "id": "19a0b51c-9e2d-4aea-b2da-f72575fca722",
+      "location_key": "deep sea research sub",
+      "spot_text": "Rockall Trough abyssal plain sediment basin"
     },
     {
-      "id": "93ff6ec5-f9f2-48a9-917f-bdf7523c9b54",
-      "location_key": "costa rica",
-      "spot_text": "lone tree fern arching over a dark mirror-calm stream, fronds backlit in pale golden morning light"
+      "id": "da7838b8-177b-46e0-ad03-0721392bc4c0",
+      "location_key": "deep sea research sub",
+      "spot_text": "Celtic Deep trough anoxic sediment plain"
     },
     {
-      "id": "3291c54a-2659-4970-92a1-2adec1cb59fb",
-      "location_key": "costa rica",
-      "spot_text": "medium view of a jungle creek framed by towering tree ferns, water catching cold blue-hour light between dark banks"
+      "id": "4662f71f-64f3-486f-b304-e67d8db55621",
+      "location_key": "deep sea research sub",
+      "spot_text": "Ligurian Basin deepwater muddy canyon floor"
     },
     {
-      "id": "86de8906-1a40-487e-b56b-dcaaebddf5fc",
-      "location_key": "costa rica",
-      "spot_text": "single giant water lily pad floating on dark still water, surface beaded with perfect spheres of rainwater"
-    },
-    {
-      "id": "79fa11db-503c-4828-9d5b-f0cda29a5c9e",
-      "location_key": "costa rica",
-      "spot_text": "medium view of a jungle canopy gap opening to dramatic storm clouds building above, framed by silhouetted branches"
-    },
-    {
-      "id": "08de7444-aaef-4769-b13d-075647d2a713",
-      "location_key": "costa rica",
-      "spot_text": "close composition of overlapping monstera and philodendron leaves in deep shadow, one shaft of light isolating a single brilliant green lobe"
-    },
-    {
-      "id": "5b08ce51-0758-4a49-ae45-88c4925ba30f",
+      "id": "0299b43a-5dba-48c2-8767-716a7263a0bb",
       "location_key": "dubai",
-      "spot_text": "close detail of wind-sculpted sand ripples in fine reddish-orange grains with crisp micro-shadow definition"
+      "spot_text": "IMG Worlds of Adventure dome exterior glowing at twilight across the desert plain"
     },
     {
-      "id": "7f0b1e50-89e2-4dcf-a51e-8ff0664658f3",
-      "location_key": "dubai",
-      "spot_text": "tangled mangrove aerial root close-up with green algae coating and dark tidal water pooling around bases"
+      "id": "fbe00708-32d2-4d78-83a2-ee821f0e8d39",
+      "location_key": "egypt",
+      "spot_text": "Golden Sahara sand dunes stretching to the horizon"
     },
     {
-      "id": "80c0545a-06e4-496b-a0a7-845765220e2f",
-      "location_key": "dubai",
-      "spot_text": "tidal creek mouth at sunrise with water the colour of rose gold and distant mangroves silhouetted against pale sky"
+      "id": "e5c9b2e7-3a86-45a3-88e3-8cb84f5a7309",
+      "location_key": "egypt",
+      "spot_text": "Great Sand Sea dune fields extending to horizon"
     },
     {
-      "id": "863242d9-ca08-40ba-af9a-320d34c24466",
-      "location_key": "dubai",
-      "spot_text": "close detail of dried mud polygon cracks on a sabkha surface with fine white salt efflorescence edging each crack"
+      "id": "dd23ba6b-98e3-4b77-899e-bed5ebef26ac",
+      "location_key": "enchanted forest",
+      "spot_text": "Pollen-dust basin where a dried lake exposes pale cracked earth"
     },
     {
-      "id": "8f73e2e5-3338-4d29-97a3-95d862fc2f61",
-      "location_key": "dubai",
-      "spot_text": "date palm fronds backlit against a saturated amber sky with golden dust haze on the horizon at dusk"
+      "id": "8f0141d9-5f93-44dd-bbfd-86933decf4ad",
+      "location_key": "enchanted forest",
+      "spot_text": "The Ferngate natural dip between two forested ridgelines forming a threshold"
     },
     {
-      "id": "a5869593-944a-45d7-8a5a-4441a346c1a2",
-      "location_key": "dubai",
-      "spot_text": "fine sand particles suspended in hazy shamal air turning the low sun into a diffuse peach orb at midday"
+      "id": "4b735446-7120-4306-9d1c-651c2a74615d",
+      "location_key": "enchanted forest",
+      "spot_text": "The Spinewall ruined palisade reduced to a row of jagged stubs"
     },
     {
-      "id": "ae8b306b-af9d-4a74-84d5-352893b67ced",
-      "location_key": "dubai",
-      "spot_text": "still coastal inlet at blue hour with mangrove silhouettes mirrored perfectly in indigo water"
+      "id": "dd23ba6b-98e3-4b77-899e-bed5ebef26ac",
+      "location_key": "enchanted forest",
+      "spot_text": "Pollen-dust basin where a dried lake exposes pale cracked earth"
     },
     {
-      "id": "e8649a4d-20eb-449f-82da-6bb1199f720a",
-      "location_key": "dubai",
-      "spot_text": "vast gravel desert reg plain with scattered black ironstone pebbles under a dramatic storm-grey sky"
+      "id": "9d62ba9f-b756-4b06-9060-6c145d5e0514",
+      "location_key": "enchanted toy shop",
+      "spot_text": "Toy Anvil Rock geological toy-shaped boulder"
     },
     {
-      "id": "eb36b166-d8ba-4dd3-b5cb-0c021deb9544",
-      "location_key": "dubai",
-      "spot_text": "Persian Gulf at golden hour with small dark wavelets catching specular highlights across a vast shimmering expanse"
+      "id": "515c9f3d-7b3b-4d19-abca-ac2875859926",
+      "location_key": "enchanted toy shop",
+      "spot_text": "Giant Abacus Arch at the counting-room corridor"
     },
     {
-      "id": "f0a7c016-965c-4708-ae6d-064ad01b8e4a",
-      "location_key": "dubai",
-      "spot_text": "desert scrubland under a brilliant Milky Way arc with faint zodiacal light glowing above the western horizon"
+      "id": "9ccde855-2f29-495c-8259-862dd2a78146",
+      "location_key": "epic battlefield",
+      "spot_text": "Salem Church brick exterior with earthwork surroundings"
     },
     {
-      "id": "19419cf3-f15f-4309-9cd6-b9bbc1727ead",
-      "location_key": "dubai",
-      "spot_text": "wind-rippled sand surface inscribed with parallel shamal ridges stretching to a bleached horizon"
+      "id": "dd1ef55b-e518-4a01-b8f5-c8d772bc517e",
+      "location_key": "epic battlefield",
+      "spot_text": "Big Black River Bridge earthwork fortifications"
     },
     {
-      "id": "844a0177-de69-44c0-9a4f-27ae1541ca5e",
-      "location_key": "dubai",
-      "spot_text": "wide sabkha pan with polygonal salt cracks patterned across the foreground under a stormy pearl-grey sky"
+      "id": "9ad9beb0-450c-452a-a000-458fec0ddf07",
+      "location_key": "epic battlefield",
+      "spot_text": "Breymann Redoubt earthwork remnants"
     },
     {
-      "id": "9d9746b7-221f-4955-993f-385553ece9c7",
-      "location_key": "dubai",
-      "spot_text": "salt-crusted sabkha flat extending to the horizon under a hazy blue-hour sky with faint Venus visible"
+      "id": "72196a86-cb82-4e5b-96a0-5a31227cb158",
+      "location_key": "epic battlefield",
+      "spot_text": "Third Louisiana Redan mine crater depression"
     },
     {
-      "id": "ac9895e5-c16d-4616-853a-53f50108e623",
-      "location_key": "dubai",
-      "spot_text": "mangrove pneumatophore field at low tide with dark wet mud and silvery tidal pools catching dawn light"
+      "id": "af9d22c4-f435-45a8-a536-aeece219f4e2",
+      "location_key": "epic battlefield",
+      "spot_text": "North Woods treeline above the Cornfield"
     },
     {
-      "id": "15dcca4d-f678-441a-888a-dbf8a2e8d6f6",
-      "location_key": "dubai",
-      "spot_text": "close detail of dried salt crust hexagonal pattern with pale pink sky reflection caught in shallow brine puddles"
+      "id": "f6f1c8b0-153c-4dc7-ba90-1c5ab307e561",
+      "location_key": "epic battlefield",
+      "spot_text": "Prospect Hill artillery ridge south end"
     },
     {
-      "id": "1656c770-3168-4154-bc44-4d75b0826f73",
-      "location_key": "dubai",
-      "spot_text": "tide-exposed mudflat with intricate crab-burrow textures glistening under a soft diffuse overcast morning light"
+      "id": "707b2cf4-7c50-4958-8991-aac2832f049c",
+      "location_key": "epic battlefield",
+      "spot_text": "New Market battlefield Hall of Valor exterior grounds"
     },
     {
-      "id": "2a783034-1d2b-4de6-b3f0-d164ed920cb1",
-      "location_key": "dubai",
-      "spot_text": "salt flat at sunrise with thin water film reflecting pink and gold clouds across a perfectly level surface"
+      "id": "b4da1469-cbfd-4ef7-af16-26c0161f86ee",
+      "location_key": "fairy cottage",
+      "spot_text": "Harry Potter (Hogwarts, Forbidden Forest, etc.)"
     },
     {
-      "id": "7b575415-da10-4729-9bac-2f80d93d689d",
+      "id": "0cab87ab-ff3b-48aa-a030-b0751611ea3d",
+      "location_key": "fairy cottage",
+      "spot_text": "Lord of the Rings (Rivendell, Minas Tirith, etc.)"
+    },
+    {
+      "id": "b573bb8b-b324-4784-ad0a-e06d73ed4ffa",
+      "location_key": "fairy cottage",
+      "spot_text": "The Ironbell Gate wound with climbing forget-me-nots"
+    },
+    {
+      "id": "094c9abe-5b64-4d99-82bf-258ba692d91a",
+      "location_key": "fairy cottage",
+      "spot_text": "The Whimblewick Arch draped in cascading wisteria"
+    },
+    {
+      "id": "e39fe40b-d1e6-4f5e-a073-202f9a30d8a3",
+      "location_key": "fairy cottage",
+      "spot_text": "The Pebbleback Bridge arching over the garden ditch stream"
+    },
+    {
+      "id": "5cfd2217-e448-40e1-b433-7909f5a7469f",
+      "location_key": "fairy cottage",
+      "spot_text": "The Thornveil Door carved with running foxes and oak leaves"
+    },
+    {
+      "id": "2230a4d2-34ce-4e7a-ab24-bb38ae699fa7",
+      "location_key": "fairy cottage",
+      "spot_text": "Narnia (Cair Paravel, Lantern Waste, etc.)"
+    },
+    {
+      "id": "2d61b950-42c4-435e-b351-d48fadc9b78f",
+      "location_key": "fairy cottage",
+      "spot_text": "The Cloverholm Clearing ringed with bobbing ox-eye daisies"
+    },
+    {
+      "id": "d5cfd131-e046-4ff2-ab55-cb5232adc3c1",
+      "location_key": "fairy cottage",
+      "spot_text": "The Tanglepip Orchard of gnarled miniature apple trees"
+    },
+    {
+      "id": "db4cd5b0-cbde-4560-82e0-b316b6812d05",
+      "location_key": "fairy cottage",
+      "spot_text": "The Bramblecroft Berry Arch of gooseberry and blackcurrant"
+    },
+    {
+      "id": "11cec4cc-670e-4c10-b5c0-cd99502faf41",
+      "location_key": "fairy cottage",
+      "spot_text": "The Mossvault Well with a hazel-wood winding handle"
+    },
+    {
+      "id": "fd977a51-5601-4a1e-af4c-743d930b3b25",
+      "location_key": "fairy cottage",
+      "spot_text": "The Mossgate Hedge trimmed into the shape of a rounded doorway"
+    },
+    {
+      "id": "c829af07-f210-474d-8df1-19c58dc113a8",
+      "location_key": "fairy cottage",
+      "spot_text": "The Wychwood Archway of two bent hazels lashed at the crown"
+    },
+    {
+      "id": "1a5debff-e1b0-4985-92e7-c53c954d61b8",
+      "location_key": "fairy cottage",
+      "spot_text": "The Velvetmoor Patch of clover knee-deep and humming"
+    },
+    {
+      "id": "b4da1469-cbfd-4ef7-af16-26c0161f86ee",
+      "location_key": "fairy cottage",
+      "spot_text": "Harry Potter (Hogwarts, Forbidden Forest, etc.)"
+    },
+    {
+      "id": "0cab87ab-ff3b-48aa-a030-b0751611ea3d",
+      "location_key": "fairy cottage",
+      "spot_text": "Lord of the Rings (Rivendell, Minas Tirith, etc.)"
+    },
+    {
+      "id": "b573bb8b-b324-4784-ad0a-e06d73ed4ffa",
+      "location_key": "fairy cottage",
+      "spot_text": "The Ironbell Gate wound with climbing forget-me-nots"
+    },
+    {
+      "id": "094c9abe-5b64-4d99-82bf-258ba692d91a",
+      "location_key": "fairy cottage",
+      "spot_text": "The Whimblewick Arch draped in cascading wisteria"
+    },
+    {
+      "id": "e39fe40b-d1e6-4f5e-a073-202f9a30d8a3",
+      "location_key": "fairy cottage",
+      "spot_text": "The Pebbleback Bridge arching over the garden ditch stream"
+    },
+    {
+      "id": "5cfd2217-e448-40e1-b433-7909f5a7469f",
+      "location_key": "fairy cottage",
+      "spot_text": "The Thornveil Door carved with running foxes and oak leaves"
+    },
+    {
+      "id": "2230a4d2-34ce-4e7a-ab24-bb38ae699fa7",
+      "location_key": "fairy cottage",
+      "spot_text": "Narnia (Cair Paravel, Lantern Waste, etc.)"
+    },
+    {
+      "id": "2d61b950-42c4-435e-b351-d48fadc9b78f",
+      "location_key": "fairy cottage",
+      "spot_text": "The Cloverholm Clearing ringed with bobbing ox-eye daisies"
+    },
+    {
+      "id": "f9998927-f928-4419-a226-aaf042b9cfd8",
+      "location_key": "fiji",
+      "spot_text": "White-sand beach fringed with leaning coconut palms"
+    },
+    {
+      "id": "f55e6c28-7cfe-4cbb-a811-57fec88436ea",
+      "location_key": "fiji",
+      "spot_text": "Lush green volcanic peaks rising behind the shoreline"
+    },
+    {
+      "id": "40c3d727-51b4-4c1a-a825-d8a90712eb5f",
+      "location_key": "fiji",
+      "spot_text": "Thatched overwater bungalow deck with turquoise lagoon below"
+    },
+    {
+      "id": "c826fbf7-5b34-49af-93c4-64de7518067b",
+      "location_key": "fiji",
+      "spot_text": "Long wooden jetty extending over coral reef waters"
+    },
+    {
+      "id": "906fcb3d-78d1-4e86-91dd-4c62f2407a59",
+      "location_key": "floating sky islands",
+      "spot_text": "Ancient rune-etched menhirs on a heather moor"
+    },
+    {
+      "id": "906fcb3d-78d1-4e86-91dd-4c62f2407a59",
+      "location_key": "floating sky islands",
+      "spot_text": "Ancient rune-etched menhirs on a heather moor"
+    },
+    {
+      "id": "d8a195e7-6948-4ed1-b775-690afeab1114",
+      "location_key": "frontier town",
+      "spot_text": "Cornwall Iron Furnace exterior stack and grounds"
+    },
+    {
+      "id": "e453a45b-c19b-4d19-ba27-3a23805624c4",
+      "location_key": "frontier town",
+      "spot_text": "Lackawanna Coal Mine rail approach track exterior"
+    },
+    {
+      "id": "d0416f72-d8e2-4375-b252-735a2c7cda35",
+      "location_key": "frontier town",
+      "spot_text": "Coatesville Lukens Historic District water tower exterior"
+    },
+    {
+      "id": "d23dbbb1-8718-4c27-bb77-52c805ea8356",
+      "location_key": "frontier town",
+      "spot_text": "Sight and Sound Theatres exterior marquee and grounds"
+    },
+    {
+      "id": "d3141b64-0a6a-4f34-bbe8-5d0c3bc33924",
+      "location_key": "frontier town",
+      "spot_text": "Washington Boro Susquehanna wetlands river access point"
+    },
+    {
+      "id": "d508243b-69cd-46cd-ab98-b3efc3769f31",
+      "location_key": "frontier town",
+      "spot_text": "Strasburg freight house historic loading dock exterior"
+    },
+    {
+      "id": "7f9e7184-6885-467c-86e1-4b48cf21950c",
       "location_key": "grand canyon",
-      "spot_text": "intimate macro view of iron concretion spheres — small hematite nodules — clustered in a shallow sandstone depression, their deep rusty-red orbs set in pale buff stone"
+      "spot_text": "medium shot of a dry desert wash cutting through red rock, its sandy bed flanked by low rabbitbrush in dusty gold and scattered boulders worn smooth"
     },
     {
-      "id": "67398a8b-d80a-421f-915b-6ceca6080d89",
+      "id": "7f9e7184-6885-467c-86e1-4b48cf21950c",
       "location_key": "grand canyon",
-      "spot_text": "medium view of a canyon ledge with a dense colony of barrel cacti casting short midday shadows on pale cream sandstone"
+      "spot_text": "medium shot of a dry desert wash cutting through red rock, its sandy bed flanked by low rabbitbrush in dusty gold and scattered boulders worn smooth"
     },
     {
-      "id": "34d5c04e-f59a-40e1-b040-76998c1240d5",
-      "location_key": "grand canyon",
-      "spot_text": "intimate view of dried mud cracks on a canyon floor pan forming a mosaic of earth-toned polygons baking under harsh midday light"
+      "id": "80fd4830-a351-4eab-9fa1-7f3eddc8069d",
+      "location_key": "haunted castle",
+      "spot_text": "Turda Salt Mine exterior landscape above ancient salt karst"
     },
     {
-      "id": "4c1dd76f-18c7-4ce6-9b15-5a02b808cb90",
-      "location_key": "grand canyon",
-      "spot_text": "intimate close-up of cross-bedded sandstone surface with sweeping diagonal lines in contrasting layers of cream and iron-red"
+      "id": "d9030bfc-ce9e-4681-b128-5fd2cfcc1af8",
+      "location_key": "haunted castle",
+      "spot_text": "Murighiol Roman fortress exterior ruins at wetland edge"
     },
     {
-      "id": "96856cf4-17f0-445d-b0d8-61bd50e4d72a",
-      "location_key": "grand canyon",
-      "spot_text": "close detail of wind-rippled sand drifted against a red rock face, the fine crescent shapes casting tiny shadows in raking afternoon light"
+      "id": "6c65f677-04ad-45f5-9a71-1b46bdcaf622",
+      "location_key": "haunted castle",
+      "spot_text": "Orăștie medieval town walls and fortification remains"
     },
     {
-      "id": "b822ad6d-4ef1-41eb-89d5-0bef7f6e3328",
-      "location_key": "grand canyon",
-      "spot_text": "close-up of lichen colonies in rust, sage-green, and charcoal spreading across a horizontal sandstone ledge, the texture almost lunar"
+      "id": "da72f2f6-fbb9-46ec-ae38-ec98064546c5",
+      "location_key": "haunted castle",
+      "spot_text": "Babadagului Plateau limestone escarpment above Dobruja plains"
     },
     {
-      "id": "b02699dd-f22b-4585-8091-7388b3dc4304",
-      "location_key": "hawaii",
-      "spot_text": "intimate close-up of a single red hibiscus blossom beaded with rain droplets on a dark waxy leaf"
+      "id": "f498f8c3-ed30-418e-97bc-1dd39dbc3a86",
+      "location_key": "haunted castle",
+      "spot_text": "Hangman's Elm beside the cathedral south wall"
     },
     {
-      "id": "56c152d1-08f9-4a2f-ae61-639a85d4a561",
-      "location_key": "hawaii",
-      "spot_text": "tidal pool at low tide filled with purple sea urchins and jade-green algae in warm afternoon sidelight"
+      "id": "e3f43b98-64e2-4b7e-8712-a67b381f3d0b",
+      "location_key": "haunted castle",
+      "spot_text": "Graveyard of the Nameless behind the chancel wall"
     },
     {
-      "id": "efe66bc2-3f0b-4476-8efd-a7c024114fe9",
-      "location_key": "hong kong",
-      "spot_text": "Ngong Ping 360 cable car terminal station"
+      "id": "85f695e7-af06-4bfc-99f3-d52597e495cb",
+      "location_key": "haunted castle",
+      "spot_text": "The Witch's Pillar standing stone in the north yard"
     },
     {
-      "id": "f8034ae7-e283-4802-83b6-357187592938",
+      "id": "8f8df7da-1d57-40bd-b60a-beef63ec45cb",
+      "location_key": "haunted castle",
+      "spot_text": "The Crumbling Baptistery cupola at the south porch"
+    },
+    {
+      "id": "99fdc732-72a9-4f51-9b0b-d412f49b1107",
+      "location_key": "haunted castle",
+      "spot_text": "The Midnight Spire lightning-struck east tower peak"
+    },
+    {
+      "id": "854560ea-4568-4fb3-a4c6-f28a222e1852",
+      "location_key": "haunted castle",
+      "spot_text": "Raven Gate iron arch at the south cemetery entrance"
+    },
+    {
+      "id": "b2a9629c-7267-41c8-9788-9625cdeb1dc0",
+      "location_key": "haunted castle",
+      "spot_text": "The Groanstone megalith standing in the north meadow"
+    },
+    {
+      "id": "e943cc27-f128-4f7a-80dc-febd5bd2f484",
+      "location_key": "haunted castle",
+      "spot_text": "Corpse Road flagstones leading through the west churchyard"
+    },
+    {
+      "id": "a4f5e9ca-f47b-4f18-b11f-8e6ce0fc1b46",
+      "location_key": "haunted castle",
+      "spot_text": "The Severed Angel statue at the crossing exterior garden"
+    },
+    {
+      "id": "95814933-40da-49bb-bbf2-79dff81c5238",
+      "location_key": "haunted castle",
+      "spot_text": "Thornbrier Rampart overgrown wall at the cloister south end"
+    },
+    {
+      "id": "f0d581c7-053b-4a6f-a62d-7f6ec68351e9",
+      "location_key": "haunted castle",
+      "spot_text": "Widow's Weeping Wall along the north nave exterior"
+    },
+    {
+      "id": "fc64a183-c8b4-458a-a5e0-21a6b7e0c261",
+      "location_key": "haunted castle",
+      "spot_text": "The Forsaken Pulpit standing alone in the ruined nave"
+    },
+    {
+      "id": "ecf5c5e2-df57-46a6-b46b-51a7c9c207db",
+      "location_key": "haunted castle",
+      "spot_text": "Gallows Bridge crossing the moat outside the west door"
+    },
+    {
+      "id": "cd323bc2-9ac0-456d-a259-f243ed8394c9",
+      "location_key": "haunted castle",
+      "spot_text": "Wraith Walk along the collapsed nave colonnade"
+    },
+    {
+      "id": "8cae240a-97e6-41d7-8aa5-01ff88adc0e2",
+      "location_key": "haunted castle",
+      "spot_text": "The Sepulchre of the Red Cardinal"
+    },
+    {
+      "id": "a8ca32ba-2d4b-42d7-825f-05b7311abd03",
+      "location_key": "haunted castle",
+      "spot_text": "The Iron Crow Weathervane atop the northeast turret"
+    },
+    {
+      "id": "fa757c3c-d8a0-48c2-ae01-c23ae0a6edd1",
+      "location_key": "haunted castle",
+      "spot_text": "The Shrieking Chimney shaft above the ruined sacristy"
+    },
+    {
+      "id": "c75baac1-3a3a-4558-9012-879df4f2a904",
+      "location_key": "haunted castle",
+      "spot_text": "The Colossus Bell fallen in the north yard grass"
+    },
+    {
+      "id": "b37bf464-aa81-40e4-b13c-bf8c4324583d",
+      "location_key": "haunted castle",
+      "spot_text": "Penitent's Path flagstone walkway to the west door"
+    },
+    {
+      "id": "fb56a9b5-58e8-4aef-9eeb-940dd68c42b6",
+      "location_key": "haunted castle",
+      "spot_text": "Obsidian Font Plinth at the ruined baptistery exterior"
+    },
+    {
+      "id": "f6906084-dbad-4c96-bd4b-15d74d9b0072",
+      "location_key": "haunted castle",
+      "spot_text": "Plague Doctor's Memorial stone at the south meadow edge"
+    },
+    {
+      "id": "ab216c73-b90b-4c8b-acff-18f390730b67",
+      "location_key": "haunted castle",
+      "spot_text": "Chapel of Tears exterior ruins in the north transept yard"
+    },
+    {
+      "id": "d4128975-aaa8-4dca-9127-a8578b90de23",
+      "location_key": "haunted castle",
+      "spot_text": "The Forsaken Bell Tower of the west facade twin spires"
+    },
+    {
+      "id": "cbab80c5-335a-4146-aa16-733ea1faacf9",
+      "location_key": "haunted castle",
+      "spot_text": "Crows' Roost Rampart on the east clerestory parapet"
+    },
+    {
+      "id": "8a814252-a0e2-4f96-b45b-be2ac0654038",
+      "location_key": "haunted castle",
+      "spot_text": "The Lichfield Gate stone arch at the cemetery north end"
+    },
+    {
+      "id": "a3956045-2f78-4378-948b-bd4915f5cd67",
+      "location_key": "haunted castle",
+      "spot_text": "Martyrs' Chains mounted on the north transept exterior"
+    },
+    {
+      "id": "e4506997-c126-4e54-8109-52e800c26ed1",
+      "location_key": "haunted castle",
+      "spot_text": "The Demon Door carved portal on the north porch exterior"
+    },
+    {
+      "id": "f417b83c-5274-47ca-988b-3f9617a57750",
+      "location_key": "haunted castle",
+      "spot_text": "Weeping Stones terrace at the choir's east exterior"
+    },
+    {
+      "id": "a8231b4e-6e04-40ef-909a-c4298e75c9ab",
+      "location_key": "haunted castle",
+      "spot_text": "Crumbling Treasury Tower on the southeast corner"
+    },
+    {
+      "id": "a75c722a-5a35-4407-ac08-ff814e12a68b",
+      "location_key": "haunted castle",
+      "spot_text": "The Fractured Lantern Tower above the main crossing"
+    },
+    {
+      "id": "c0e79bd4-0da9-4233-ac80-e438ecb066f3",
+      "location_key": "haunted castle",
+      "spot_text": "Moss Cathedral Ruin annex to the north of the nave"
+    },
+    {
+      "id": "cc0fd06b-dba6-469d-a9f9-87f9b31ce4a0",
+      "location_key": "haunted castle",
+      "spot_text": "The Broken Covenant Stone at the forecourt center"
+    },
+    {
+      "id": "d1b0e709-fad4-4213-a8b4-76c3f002f0bb",
+      "location_key": "haunted castle",
+      "spot_text": "Devil's Doorway carved arch on the north transept exterior"
+    },
+    {
+      "id": "8d3834f3-b733-438b-ad6d-4761f7802a5c",
+      "location_key": "haunted castle",
+      "spot_text": "The Weeping Wall Cascade of the east apse exterior"
+    },
+    {
+      "id": "a0b9467c-8f88-4cf0-b81e-826e0cb35fec",
+      "location_key": "haunted castle",
+      "spot_text": "The Siren Pinnacle carved atop the south transept gable"
+    },
+    {
+      "id": "46e6fb1d-d6a3-4040-a4b6-8265a5aa45ed",
+      "location_key": "high fantasy",
+      "spot_text": "Crystal Sea reflecting sacred shard"
+    },
+    {
+      "id": "57b73de7-1553-4121-9efc-c0f85a317303",
       "location_key": "iceland",
-      "spot_text": "close detail of vivid emerald moss clinging to rugged lava rock surface glistening with condensed mist droplets"
+      "spot_text": "close detail of geothermal mineral-stained soil in vivid sulphur yellow and iron orange at the lip of a steaming fissure"
     },
     {
-      "id": "4c89f590-1009-466c-8651-45b0e2b83baa",
+      "id": "70ed4a77-be98-4efe-982b-728dd47ff907",
       "location_key": "iceland",
-      "spot_text": "intimate detail of lichen colonies in shades of mustard grey and rust covering the pitted surface of ancient lava rock"
+      "spot_text": "close view of the fractured edge of a lava tube opening with layers of hardened flow visible in cross-section in warm side light"
     },
     {
-      "id": "50ccea08-7247-444c-a889-2ec30ad96e2f",
+      "id": "896efb40-52c2-4b64-8489-ab8a4bece381",
       "location_key": "iceland",
-      "spot_text": "close-up of silica mineral deposits ringing a geothermal pool in concentric bands of white cream and pale orange"
+      "spot_text": "close view of glacial ice bubble patterns trapped in a translucent slab of blue ice on black volcanic sand"
     },
     {
-      "id": "1a304774-ef2d-4d2e-b666-4c0ea7b4dd2e",
+      "id": "e1ec74ad-2d07-4174-9a1a-a4d0dd1cf75d",
+      "location_key": "iceland",
+      "spot_text": "intimate macro view of tiny arctic wildflowers pushing through cracks in black lava rock under soft summer overcast light"
+    },
+    {
+      "id": "e5001ac5-be0a-4caa-ab98-8f53a4ab43d6",
+      "location_key": "iceland",
+      "spot_text": "lone eroded volcanic boulder perched on a moss-green hillside above a steam-filled valley in soft diffused morning light"
+    },
+    {
+      "id": "9d096a91-cdef-4816-89f2-df9519bebb07",
       "location_key": "india",
-      "spot_text": "wide riverine floodplain after monsoon recession with waterlogged soil reflecting a dramatic clouded sky"
+      "spot_text": "Lotus Temple white petal-shaped Baháʼí house Delhi"
     },
     {
-      "id": "2a1eb94f-1eab-4fbf-bce8-1c6fd93ab5d0",
+      "id": "1c5554c9-55de-4292-96b7-6aa06979a047",
       "location_key": "india",
-      "spot_text": "monsoon sky over flat plains with multiple lightning traces descending from towering cumulonimbus columns"
+      "spot_text": "river ghats stone steps descending to muddy green water at dawn with mist hovering at surface level"
     },
     {
-      "id": "2f5df734-0b21-47b1-9e67-a040e37de484",
-      "location_key": "india",
-      "spot_text": "layered ridge after ridge of dry jungle hills fading to pale lavender in early morning atmospheric haze"
-    },
-    {
-      "id": "75a6bcd8-8925-4639-84ee-d2bbe74ff02b",
-      "location_key": "india",
-      "spot_text": "river estuary at golden hour with mangrove fringe casting long reflections on incoming tidal water"
-    },
-    {
-      "id": "94d7d233-662d-444a-9b9d-8730362dca97",
-      "location_key": "india",
-      "spot_text": "wide-angle view of a jungle stream tumbling over mossy boulders in dappled monsoon-season light"
-    },
-    {
-      "id": "c0dca4b5-1a31-48b4-a176-e9584ab71bf5",
-      "location_key": "india",
-      "spot_text": "vast open sky over flat semi-arid scrubland with a single solitary acacia silhouetted under a full moon"
-    },
-    {
-      "id": "c2208a0b-dfed-4fb6-8bef-7a616c1a62ba",
-      "location_key": "india",
-      "spot_text": "medium view of a lone palm silhouetted against a vivid coral-and-gold sunset sky over a flat water body"
-    },
-    {
-      "id": "cf41e265-fbf1-4500-94ff-3c6cd55ee15b",
-      "location_key": "india",
-      "spot_text": "panoramic sunset over a vast wetland with layers of pink heron-silhouette reeds and a mirror-flat foreground"
-    },
-    {
-      "id": "e6c063b0-f053-447e-9730-c32af9f74100",
-      "location_key": "india",
-      "spot_text": "sun-scorched grassland at midday with bleached yellow grass bending in a dry wind under a white sky"
-    },
-    {
-      "id": "f726def4-6ee5-4f9f-b990-54281b7c6afb",
-      "location_key": "india",
-      "spot_text": "close detail of cracked red laterite soil patterned like a mosaic after the first dry-season weeks"
-    },
-    {
-      "id": "9ac96469-8dc1-4fe6-931d-98998b8fe20c",
-      "location_key": "india",
-      "spot_text": "close detail of sun-dried mud tiles curling at their edges in a drained seasonal marsh bed"
-    },
-    {
-      "id": "a78c71d7-b97d-4a6d-8a72-d7701c28cbc8",
-      "location_key": "india",
-      "spot_text": "stormy pre-monsoon sky with greenish light over a parched cracked-earth expanse and a wall of approaching cloud"
-    },
-    {
-      "id": "b9b6b80d-1697-4ac7-985c-56e08fba3bcf",
-      "location_key": "india",
-      "spot_text": "medium composition of a gnarled old tamarind tree on a low hill against a full-moon lit night sky"
-    },
-    {
-      "id": "d4a75574-a1ec-4271-a897-81a213880072",
-      "location_key": "india",
-      "spot_text": "towering monsoon cloudscape over a flat treeless plain with rain curtains backlit by breaking sunlight"
-    },
-    {
-      "id": "d5a02d4b-d172-4110-8311-520849e3e36c",
-      "location_key": "india",
-      "spot_text": "dramatic backlit silhouette of a cluster of dry thorny trees against a vivid magenta post-sunset sky"
-    },
-    {
-      "id": "16748fcc-fd05-4abc-ad32-b8032b3a363d",
-      "location_key": "india",
-      "spot_text": "close-up of tangled aerial roots descending from a large banyan tree into cracked dry earth"
-    },
-    {
-      "id": "19509e58-1656-4288-9dbf-a5d884d2edb5",
-      "location_key": "india",
-      "spot_text": "close-up of peeling bark on a dry-season flame-of-the-forest branch with papery texture in warm light"
-    },
-    {
-      "id": "52a06207-4654-4708-b94a-04ac28a8fae7",
-      "location_key": "india",
-      "spot_text": "intimate detail of yellow and orange fallen leaves collecting in a shallow still puddle on red earth after rain"
-    },
-    {
-      "id": "139d82d0-c526-4bc2-841f-16c0a0113b6c",
+      "id": "22667446-b7e5-4ed4-8268-a17c16f9498b",
       "location_key": "las vegas",
-      "spot_text": "moonlit desert basin with soft silver light on pale scrub and jet-black shadows under each bush"
+      "spot_text": "after-rain desert gleam with wet sand reflecting pink clouds and mist clinging to mountain slopes"
     },
     {
-      "id": "277c2d35-5d5a-4df2-b7d4-c94f367a54b2",
+      "id": "3910e8e9-b656-4d4f-b0ca-73f347bc36ae",
       "location_key": "las vegas",
-      "spot_text": "after-storm desert with clearing clouds casting dramatic light shafts onto glistening wet rock faces"
+      "spot_text": "blue hour stillness over a dry desert lake bed with mirror-flat surface reflecting fading pink sky"
     },
     {
-      "id": "29c9fb99-1d79-4088-a936-2e4932aa2148",
+      "id": "97eab925-05c9-4572-8def-c29280a211ba",
       "location_key": "las vegas",
-      "spot_text": "wide view of desert mountain range reflected faintly in a shallow ephemeral rain pool on flat clay"
+      "spot_text": "spring wildflower burst of desert poppies and purple phacelia carpeting sandy bajada below rocky hills"
     },
     {
-      "id": "36197695-6a94-45e0-816d-d001cb9e1297",
+      "id": "beff91b3-7586-4c48-9ca4-79ddfd0f54e9",
       "location_key": "las vegas",
-      "spot_text": "misty dawn over a desert valley with thin ground fog pooling between dark rocky hills"
+      "spot_text": "dramatic thunderstorm cell towering over flat desert basin with curtains of distant rain and lightning"
     },
     {
-      "id": "3f5fc863-69c7-4301-b56d-ee43202c7ca3",
+      "id": "fa6f26bb-ab61-4ce1-b643-320c8b1a28dd",
       "location_key": "las vegas",
-      "spot_text": "layered desert mesa edges at sunset glowing rose and apricot above deep purple canyon shadow"
+      "spot_text": "sparse Joshua tree silhouettes against a vivid tangerine and magenta sunset sky"
     },
     {
-      "id": "757a2fd8-2442-4a08-b0ea-f7ddd87f2574",
-      "location_key": "las vegas",
-      "spot_text": "eroded sandstone cliff face glowing ember-red in last light with deep shadow pooling in undercutting"
-    },
-    {
-      "id": "7822187a-4bf5-4369-a6da-8f11bcd8300d",
-      "location_key": "las vegas",
-      "spot_text": "starlit desert sky with dense Milky Way arc over low silhouetted rocky hills and scrubby foreground"
-    },
-    {
-      "id": "7d4e3c53-df75-4499-9ae2-45714cea30e0",
-      "location_key": "las vegas",
-      "spot_text": "fog bank spilling through a desert mountain pass at dawn bathing the valley below in soft white"
-    },
-    {
-      "id": "7e989bbd-2e74-4e2f-be43-5e92e6b6a416",
-      "location_key": "las vegas",
-      "spot_text": "dramatic desert thunderhead backlit by setting sun casting god-rays across the flat basin below"
-    },
-    {
-      "id": "a64f7bdb-f5d0-4b3a-a6d2-c1ea7f070d4c",
-      "location_key": "las vegas",
-      "spot_text": "winter snow dusting rocky desert slopes above the snowline with clear cold blue sky"
-    },
-    {
-      "id": "0dd84480-ad30-4054-b632-2548d550dd03",
-      "location_key": "las vegas",
-      "spot_text": "monsoon storm rolling over desert peaks with anvil clouds and sheets of rain backlit by setting sun"
-    },
-    {
-      "id": "d7b75666-efd5-4711-a237-1eba47f065ae",
-      "location_key": "los angeles",
-      "spot_text": "intimate detail of dried chamise stalks and papery seed husks glowing translucent in low backlit afternoon sun"
-    },
-    {
-      "id": "148800ae-bbc8-4105-9c79-54684b202958",
-      "location_key": "los angeles",
-      "spot_text": "rugged eroded sandstone coastal cliffs banded in ochre and rust under flat overcast midday light"
-    },
-    {
-      "id": "ad24fa27-0866-437e-b492-16f39f1f275c",
-      "location_key": "los angeles",
-      "spot_text": "close detail of prickly pear cactus pads beaded with morning dew against a soft out-of-focus coastal sage background"
-    },
-    {
-      "id": "86c10439-7c7a-44b1-90b5-a4313478ef24",
-      "location_key": "los angeles",
-      "spot_text": "intimate view of tidal pool with sea anemones and orange starfish visible through perfectly clear shallow water at low tide"
-    },
-    {
-      "id": "f18180e3-4ad4-4775-a755-da0f5c88ab76",
-      "location_key": "los angeles",
-      "spot_text": "kelp forest at the water surface viewed from above at midday light casting dark wavering shadows on pale sand below"
-    },
-    {
-      "id": "f4da6f2a-002d-45a9-a860-79be10a0385f",
-      "location_key": "los angeles",
-      "spot_text": "medium view of a stilted great blue heron silhouette against a rose-gold tidal flat at low-tide golden hour"
-    },
-    {
-      "id": "6fe5a39c-3fb4-4e50-9cdc-f37350921b9a",
-      "location_key": "los angeles",
-      "spot_text": "ancient sandstone boulder field on a dry hillside draped with silver-green lichen under flat winter overcast light"
-    },
-    {
-      "id": "00a1211f-5232-4ece-be68-7b8de2c77fc5",
-      "location_key": "los angeles",
-      "spot_text": "intimate macro of a sand verbena cluster in soft pink bloom pressed low against windswept coastal dune sand"
-    },
-    {
-      "id": "858b6765-075e-47bd-ba34-ee6a473e9676",
-      "location_key": "los angeles",
-      "spot_text": "medium shot of a gnarled manzanita shrub with polished mahogany bark glowing warmly in late afternoon sidelight"
-    },
-    {
-      "id": "99216636-57cd-480f-8268-5c1a15224160",
-      "location_key": "los angeles",
-      "spot_text": "intimate close-up of sun-cracked clay soil at the base of a spiky yucca plant in warm afternoon light"
-    },
-    {
-      "id": "21f77c91-1fa7-4f86-a908-d06d5ce1873e",
-      "location_key": "los angeles",
-      "spot_text": "sweeping vista of coastal sage scrub plateau stretching unbroken to a hazy blue-gray Pacific horizon under summer heat"
-    },
-    {
-      "id": "b0aaf069-932b-4771-8ba8-56ae859e4b31",
-      "location_key": "los angeles",
-      "spot_text": "intimate detail of overlapping succulent rosettes in dusty green and burgundy growing from a cracked sandstone ledge"
-    },
-    {
-      "id": "d19e18d7-95e4-4da7-ba07-23ea95c04dc3",
-      "location_key": "los angeles",
-      "spot_text": "wide panorama of dry chaparral mountain ridges layered into blue atmospheric haze under a bleached midday summer sky"
-    },
-    {
-      "id": "00010890-f618-4b73-90b8-565055f9726e",
-      "location_key": "los angeles",
-      "spot_text": "close detail of dry arroyo gravel studded with purple sage blossoms and a distant blurred ridge fading into haze"
-    },
-    {
-      "id": "983fa927-dc40-4597-b930-b536ee995505",
-      "location_key": "los angeles",
-      "spot_text": "medium composition of a dry creek bed with rounded boulders and rustling sycamore leaves in copper autumn tones"
-    },
-    {
-      "id": "8e792f7e-00f8-486f-9e11-34c99ca44487",
-      "location_key": "los angeles",
-      "spot_text": "close detail of sea foam lace dissolving across dark wet sand as a retreating wave pulls back under cool morning overcast"
-    },
-    {
-      "id": "107274b0-2be9-4551-9acb-27319096f5b4",
-      "location_key": "los angeles",
-      "spot_text": "Pink's Hot Dogs vintage stand"
-    },
-    {
-      "id": "83fe1ea5-326c-4720-ab77-f35c7a63376b",
+      "id": "73642eae-1810-41ec-8ba2-af314a6407b9",
       "location_key": "maldives",
-      "spot_text": "intimate view of barnacle-encrusted coral rock in the intertidal zone glistening with wet salt spray in side light"
+      "spot_text": "close detail of sunlight refracting through inches of clear lagoon water onto a sandy bottom in shifting geometric patterns"
     },
     {
-      "id": "d530e060-ee55-4c84-afae-12be8cd19248",
+      "id": "7aae462a-20d2-4ad8-8b8b-c5df711b20dc",
       "location_key": "maldives",
-      "spot_text": "close detail of delicate coral rubble textures in pale pink and white scattered across a wet sandbar"
+      "spot_text": "close-up of soft ripple patterns pressed into wet white sand at low tide under golden-hour light"
     },
     {
-      "id": "fe5a50c5-f69c-40ee-91c6-dbdbc98169dc",
+      "id": "aa3a9c3f-e670-4f09-990e-9ca6781eed90",
       "location_key": "maldives",
-      "spot_text": "intimate view of wave foam retreating over fine white sand leaving lacy translucent edges in warm light"
+      "spot_text": "wide pre-dawn view of a dark lagoon with deep violet sky fading to rose on the horizon above still black water"
     },
     {
-      "id": "c6e45289-2b83-4895-bbad-fb30718470ca",
-      "location_key": "maldives",
-      "spot_text": "Male skyline waterfront seen across the harbor channel from the car ferry terminal"
-    },
-    {
-      "id": "051ff5bb-86dd-46cb-b57f-5c3800e7e01b",
+      "id": "41176129-9500-46f0-847f-e0649d54cf04",
       "location_key": "mexico",
-      "spot_text": "intimate composition of fallen palm fronds and sea glass on damp sand after an overnight storm"
+      "spot_text": "mangrove forest canopy stretching to a flat calm estuary at dawn, mist rising from still water"
     },
     {
-      "id": "1365fea5-7ca4-4d84-acb8-748e318f5339",
+      "id": "a757fb90-0b55-4051-bc23-5bf039b14803",
       "location_key": "mexico",
-      "spot_text": "intimate view of tropical shore grasses and wildflowers at the edge of windswept white sand dunes"
+      "spot_text": "lone coconut palm silhouetted against a saturated coral and magenta sunset sky over open water"
     },
     {
-      "id": "2a7c4d5c-d3eb-4c6c-97cc-11b726b7f6f9",
+      "id": "85af50dc-4543-4911-95e8-775016053378",
       "location_key": "mexico",
-      "spot_text": "close detail of tropical tide-line debris — dried sea grass, small shells, translucent crab carapace"
+      "spot_text": "medium shot of a rocky tide pool reflective at golden hour, jungle rising steeply behind"
     },
     {
-      "id": "36511ee0-8346-45a6-9136-e40b222c70fd",
+      "id": "ce17f4fc-7c8f-437e-9ba7-4f703d88faef",
       "location_key": "mexico",
-      "spot_text": "moonlit open ocean from a rocky tropical shore, silver path of light on softly heaving swells"
+      "spot_text": "wide shot of a tropical headland wrapped in mist after heavy rain, jungle dripping with moisture"
     },
     {
-      "id": "486c4c8c-fd0d-43dd-bf45-9078aee5f8da",
+      "id": "d8a3270b-856d-42a5-88d0-e5c490bffcdb",
       "location_key": "mexico",
-      "spot_text": "wide vista of an open bay at low tide, vast sand flats shimmering under midday heat haze"
+      "spot_text": "ethereal mist drifting over a tropical coastal lagoon at dawn, herons distant against soft grey light"
     },
     {
-      "id": "49780e14-7d8b-45e3-91f2-4fcea5dda4b2",
-      "location_key": "mexico",
-      "spot_text": "wide-angle vista of a long straight beach at dawn, first light painting the horizon in amber and pink"
+      "id": "7abb1481-42d4-4a94-86fa-ffc901b74c24",
+      "location_key": "moab arches",
+      "spot_text": "intimate shot of tiny crimson cryptobiotic soil crust patterns and lichen patches on a flat sandstone surface"
     },
     {
-      "id": "74894803-1143-4645-97d0-a82f7fab1871",
-      "location_key": "mexico",
-      "spot_text": "intimate close-up of sun-bleached driftwood grain with a sliver of turquoise sea visible in the background"
-    },
-    {
-      "id": "7c9e2e86-99e6-4f18-bae0-e823f0b8be09",
-      "location_key": "mexico",
-      "spot_text": "wide vista of a river estuary at low tide, vast mudflats patterned with meandering water channels"
-    },
-    {
-      "id": "ad03acb8-1cf4-402e-a268-a9201a34f261",
-      "location_key": "mexico",
-      "spot_text": "wide shot of a tropical beach under a fast-moving squall, dark rain curtain over the distant horizon"
-    },
-    {
-      "id": "c71a6687-a3b5-48bb-85a3-054ac881ca52",
-      "location_key": "mexico",
-      "spot_text": "close detail of wet volcanic rock encrusted with barnacles and sea moss at the waterline"
-    },
-    {
-      "id": "c720fe09-a66b-4417-991f-82583ca812b0",
-      "location_key": "mexico",
-      "spot_text": "intimate view of sunlight filtering through shallow clear water onto a ribbed sandy seafloor"
-    },
-    {
-      "id": "121c85ab-741b-4624-8ae6-fc7ab979dd6d",
-      "location_key": "mexico",
-      "spot_text": "blue hour beach with pale violet sky reflected in the mirror surface of retreating waves"
-    },
-    {
-      "id": "419875df-407f-459a-bc22-02829ddb7507",
-      "location_key": "mexico",
-      "spot_text": "intimate close-up of a tide pool filled with anemones, sea urchins, and trapped turquoise water"
-    },
-    {
-      "id": "ad3bd18c-e8f7-4682-bf8f-928390a1ce93",
-      "location_key": "mexico",
-      "spot_text": "layered composition of sea grass flats, reef line, and distant open ocean under a towering cumulus sky"
-    },
-    {
-      "id": "b5c6b104-5142-46ab-b8e5-fe83fa73cf4b",
-      "location_key": "mexico",
-      "spot_text": "moonlit beach with silver reflections stretching across wet sand at low tide, palms rustling in silhouette"
-    },
-    {
-      "id": "d900aecb-7194-466f-ba38-32ed8dbc9e80",
-      "location_key": "mexico",
-      "spot_text": "intimate detail of bleached coral and iridescent shells scattered across a sunlit sandy flat"
-    },
-    {
-      "id": "f0e2d60b-2bdb-405d-bcbd-3329a21c5ea5",
-      "location_key": "mexico",
-      "spot_text": "dramatic storm clouds building over an open tropical sea, dark swells rolling toward a sandy shore"
-    },
-    {
-      "id": "b0c7b40c-0819-4d8b-8e5d-b74d93117f51",
-      "location_key": "mexico",
-      "spot_text": "medium shot of a solitary weathered driftwood trunk on a jungle-edge beach under an overcast sky"
-    },
-    {
-      "id": "12c05537-62b3-4e61-b6fc-10bc3ed6fef2",
-      "location_key": "miami",
-      "spot_text": "tangled mangrove roots at extreme close range, barnacles and oysters clustered on the lower trunk, a thin film of tidal water reflecting the overcast sky above"
-    },
-    {
-      "id": "234d94c0-e7a8-4119-b844-49caf1fd5849",
-      "location_key": "miami",
-      "spot_text": "panoramic view of a thunderstorm over the open Atlantic at sunset, lightning visible within the distant cloud mass, the foreground sea lit orange and gold"
-    },
-    {
-      "id": "236c281b-77b8-4e6b-80e8-085850333611",
-      "location_key": "miami",
-      "spot_text": "wall of tropical storm clouds advancing over open ocean, a curtain of rain visible at the horizon, sunlight breaking through a gap and casting a single silver column on dark water"
-    },
-    {
-      "id": "256aab67-2b06-44bc-b00d-41a837f2cb5b",
-      "location_key": "miami",
-      "spot_text": "close view of a red mangrove propagule hanging from a branch, its torpedo shape perfectly mirrored in the still tidal water below"
-    },
-    {
-      "id": "44c3a20b-93bd-4ebb-a1ae-81110179aa9a",
-      "location_key": "miami",
-      "spot_text": "wide-angle view of a beach during a summer squall, heavy rain visible as a grey curtain over the sea, the foreground sand still dry and golden"
-    },
-    {
-      "id": "62955300-87e0-48aa-b076-64c7de158ce1",
-      "location_key": "miami",
-      "spot_text": "dense tropical hardwood hammock interior at midday, shafts of white light breaking through the canopy onto a litter of fallen leaves and exposed limestone"
-    },
-    {
-      "id": "67ddadf4-d331-47cc-b916-fdf65426dcd6",
-      "location_key": "miami",
-      "spot_text": "single tall palm bending dramatically in a storm wind against a churning grey-green sea, its fronds streaming horizontal"
-    },
-    {
-      "id": "76866306-4504-4e11-af57-19f741a29346",
-      "location_key": "miami",
-      "spot_text": "moonlit panorama of a calm tropical bay, the full moon laying a rippling silver road across still black water to the horizon"
-    },
-    {
-      "id": "7c3f0647-373c-4690-83c1-00c93ed0e5d0",
-      "location_key": "miami",
-      "spot_text": "close detail of a strangler fig's aerial roots cascading down a tropical hardwood trunk in a coastal hammock, draped in pale lichen"
-    },
-    {
-      "id": "85828295-6991-4978-a5a5-c9ddae9b8d5d",
-      "location_key": "miami",
-      "spot_text": "close-up of sea grape leaves in afternoon light, their round waxy surfaces glowing translucent green and amber against a bright coastal sky"
-    },
-    {
-      "id": "b6cf8b7c-618c-47f6-9d74-d91c99bdcd0b",
-      "location_key": "miami",
-      "spot_text": "intimate detail of a ghost crab burrow opening in dry white beach sand, the hole surrounded by perfectly symmetrical pellets of excavated sand in raking afternoon sidelight"
-    },
-    {
-      "id": "c9ea0041-c1cd-4639-b8a7-a1313dca96ab",
-      "location_key": "miami",
-      "spot_text": "wide estuary at dawn with morning mist drifting low over the water, the mangrove shoreline dissolving into soft grey-white haze"
-    },
-    {
-      "id": "56dfc5ac-c2e8-4015-b56c-29a12ec54140",
-      "location_key": "miami",
-      "spot_text": "close detail of a cluster of white mangrove flowers among oval grey-green leaves, morning dew still clinging to petals in soft diffused light"
-    },
-    {
-      "id": "615f93d5-bcf0-4f99-92a7-71cbb9c20316",
-      "location_key": "miami",
-      "spot_text": "stormy panorama of an empty tropical beach, dark clouds pressing low, the sea green-grey and agitated, white foam running far up the sand"
-    },
-    {
-      "id": "84c7de7b-e40d-4297-9049-d55881b30ef2",
+      "id": "2917b357-d20c-4be4-b6b1-04c0decf1d85",
       "location_key": "morocco",
-      "spot_text": "intimate detail of wind-sculpted sandstone surface pocked with honeycomb weathering patterns in warm amber light"
+      "spot_text": "eroded badlands of fluted clay columns in deep reds and oranges beneath a stormy bruised sky"
     },
     {
-      "id": "a54ad028-c152-4233-8f68-41bfb7d99544",
+      "id": "ce32c4a7-0b55-4ad5-a8f3-a6402fe1fa0d",
       "location_key": "morocco",
-      "spot_text": "dried riverbed of smooth pale stones winding through ochre desert scrubland toward distant sandstone ridges"
+      "spot_text": "eroded mud tower hoodoos rising from a dry valley floor in deep terracotta under a stormy amber sky"
     },
     {
-      "id": "bc4769fa-5e35-443b-bd42-6a98386cb1ef",
+      "id": "7fd62ca8-1aed-4f13-9ba0-898de6a31fd8",
       "location_key": "morocco",
-      "spot_text": "layered sedimentary canyon walls in bands of crimson amber and cream glowing in low morning light"
+      "spot_text": "dramatic storm light breaking through dark clouds over a vast stony desert reg plain"
     },
     {
-      "id": "f88d91ef-20c5-4c1b-80e3-453e80aefcf1",
+      "id": "1e1552af-73d6-4a2a-a710-9db482701b39",
       "location_key": "morocco",
-      "spot_text": "wide blue-hour panorama of a dry lakebed surrounded by concentric rings of cracked mud and distant escarpments"
+      "spot_text": "soft pink dawn light washing across a gentle sand dune field with delicate wind lines still undisturbed"
     },
     {
-      "id": "0cb85202-a430-409d-a1e7-d150bc914644",
+      "id": "8b93e99b-590b-463c-8d83-268dd6e0fe53",
       "location_key": "morocco",
-      "spot_text": "panoramic view of a rocky hammada plateau fractured into geometric slabs beneath a cloudless cobalt sky"
+      "spot_text": "wide golden-hour view of a gravel desert plain with scattered black basalt boulders casting long geometric shadows"
     },
     {
-      "id": "c56cd018-9691-4c80-9c40-d1b951d6964a",
+      "id": "8e9a2fb7-b878-4c86-9242-2c84779e67ab",
       "location_key": "morocco",
-      "spot_text": "intimate close-up of wind-carved ripple patterns in fine rust-colored sand at golden hour"
+      "spot_text": "after-rain desert scene with shallow ephemeral puddles mirroring a dramatic clearing sky over dark wet gravel"
     },
     {
-      "id": "5d251aae-aea3-4b82-9d4c-7195dda78982",
-      "location_key": "morocco",
-      "spot_text": "wide expanse of flat salt crust cracked into polygonal tiles reflecting pale blue sky at dawn"
-    },
-    {
-      "id": "185780c9-9f85-46a7-a0e3-8a7aefde4f00",
-      "location_key": "morocco",
-      "spot_text": "solitary desert acacia casting a long shadow across terracotta sand under harsh midday sun"
-    },
-    {
-      "id": "9015410f-3283-4bf2-91f3-f0746424b8ec",
-      "location_key": "morocco",
-      "spot_text": "sweeping panorama of gravel desert plain dotted with sparse silver-green scrub rolling to a distant purple mountain range"
-    },
-    {
-      "id": "324a43a6-d28c-42d9-bfb6-7c5865820775",
-      "location_key": "morocco",
-      "spot_text": "canyon mouth opening onto a vast rocky desert plain layered in atmospheric haze toward a distant range"
-    },
-    {
-      "id": "f7ab8e19-9935-48c2-9e16-9a9ff8e2e1ec",
-      "location_key": "morocco",
-      "spot_text": "close detail of peeling desert varnish and quartz crystals embedded in dark basalt under sharp midday light"
-    },
-    {
-      "id": "1d85b789-5ce9-4682-a6f3-ad58bf6993e3",
-      "location_key": "morocco",
-      "spot_text": "close-up of desert varnish coating a boulder face in deep bronze and black streaks in sharp morning light"
-    },
-    {
-      "id": "536052f2-d8f0-4ec9-ba05-cdabf945f232",
-      "location_key": "morocco",
-      "spot_text": "solitary column of desert dust devil spinning across an open stony plain under a white-hot midday sun"
-    },
-    {
-      "id": "78a9a50d-2ed1-4e1e-9bfe-2015f4b17f47",
-      "location_key": "morocco",
-      "spot_text": "towering anvil thunderhead building over a rocky desert plateau with dramatic shafts of rain in the distance"
-    },
-    {
-      "id": "a0912437-6033-49d7-a5f3-ebe510244548",
-      "location_key": "morocco",
-      "spot_text": "intimate pebble mosaic of multicolored stones on a flat desert reg surface glowing in low golden light"
-    },
-    {
-      "id": "b642fd87-3698-4c12-b43c-49c60d045369",
-      "location_key": "morocco",
-      "spot_text": "close study of desert rose crystal formation of selenite clusters half-buried in rust-colored sandy earth"
-    },
-    {
-      "id": "cf3d2706-5f5c-4374-966b-3dc576ae9a84",
-      "location_key": "morocco",
-      "spot_text": "stormy grey sky pressing down over a vast dark hammada plain with a single bolt of distant lightning"
-    },
-    {
-      "id": "9c55a95f-6e36-4d47-bca1-a4e6c1a1272b",
-      "location_key": "new york city",
-      "spot_text": "wide spring dawn over a broad river with mist columns rising from the water and pink light bleeding across the entire horizon"
-    },
-    {
-      "id": "9eb3ae9c-6bcc-4318-8597-ca456a7cac6f",
-      "location_key": "new york city",
-      "spot_text": "wide moonrise over a calm harbor bay with the full moon track shimmering across still dark water toward a low wooded shore"
-    },
-    {
-      "id": "a4d574c9-18f5-44b5-932e-bc0242e152c2",
-      "location_key": "new york city",
-      "spot_text": "wide first-snow panorama of a gentle hillside park with smooth unbroken white cover and dark tree trunks in geometric pattern"
-    },
-    {
-      "id": "da7c2f1d-aac6-4d0b-85c1-b5e1e509c58d",
-      "location_key": "new york city",
-      "spot_text": "wide golden-hour salt meadow with wind rippling through copper cordgrass in waves and a vast streaked amber sky above"
-    },
-    {
-      "id": "ef812a30-7817-47fb-9ba3-f693a685bcbf",
-      "location_key": "new york city",
-      "spot_text": "medium a small cascade of amber-stained water over mossy sandstone in a narrow wooded ravine lit by a single shaft of sunlight"
-    },
-    {
-      "id": "f81bb23d-e580-4d00-a6bc-75ed47d67919",
-      "location_key": "new york city",
-      "spot_text": "medium bare willow branches arching low over a frozen pond surface with fine snow dusted over the ice in wind-formed ripple patterns"
-    },
-    {
-      "id": "04972cef-2a3b-470a-93f0-d46a53ab1830",
-      "location_key": "new york city",
-      "spot_text": "intimate silver birch bark peeling in translucent papery layers against soft green lichen and the blurred dark forest behind"
-    },
-    {
-      "id": "2392cf54-3e9f-488c-b608-ffcc0b3eca67",
-      "location_key": "new york city",
-      "spot_text": "intimate freshwater tide pool filled with fallen leaves, caught debris, and sky reflection shimmering in the dark water surface"
-    },
-    {
-      "id": "44593c7c-7f2c-4b22-8d14-111e6bc40247",
-      "location_key": "new york city",
-      "spot_text": "wide late-autumn panorama of a river bend with bare gray trees reflecting perfectly in a glassy low-water surface"
-    },
-    {
-      "id": "4a8c18ba-6152-4f6d-bc96-b5c9264065d1",
-      "location_key": "new york city",
-      "spot_text": "wide panoramic autumn forest canopy from a high ridge looking across a sea of red, orange and gold treetops under sharp blue sky"
-    },
-    {
-      "id": "4af783eb-3198-4cd5-8d5d-95bc9895daa7",
-      "location_key": "new york city",
-      "spot_text": "intimate a cluster of red winterberries on bare thorny branches dusted with fresh snow against a diffuse white sky"
-    },
-    {
-      "id": "525c0239-b1ea-47bf-9c99-2e9635ca57cf",
-      "location_key": "new york city",
-      "spot_text": "medium a dense thicket of autumn sumac flaming in deep burgundy and orange against a gray overcast sky at the edge of a meadow"
-    },
-    {
-      "id": "69667697-f377-46d3-95bf-492261f41575",
-      "location_key": "new york city",
-      "spot_text": "medium a smooth glacially rounded granite outcrop at a park hilltop with wind-bent grass tufts and panoramic valley mist below"
-    },
-    {
-      "id": "f6dcdda8-3f00-458d-8bb7-2f44447fb95c",
-      "location_key": "new zealand",
-      "spot_text": "turbulent fast-moving cloud spilling over a mountain pass like a slow waterfall of white mist into the valley below at midday"
-    },
-    {
-      "id": "fcb75a49-87e4-47ee-83eb-79882bf98a27",
-      "location_key": "new zealand",
-      "spot_text": "wide blue-hour panorama of an alpine snowfield where every surface is rendered in deep cobalt and indigo under the last twilight glow"
-    },
-    {
-      "id": "fe4602a4-8502-4bc3-a156-d430faca2a63",
-      "location_key": "new zealand",
-      "spot_text": "high-contrast summer midday scene of bright white cumulus towers building above a dark green subalpine scrub basin with one glinting tarn"
-    },
-    {
-      "id": "41b783cb-dda3-4010-8022-39b951c364a8",
-      "location_key": "new zealand",
-      "spot_text": "intimate close-up of silver-grey lichen crusting a fractured schist boulder with frost crystals caught in raking morning light"
-    },
-    {
-      "id": "1e924109-1692-4f0d-871f-4e5ed358ef43",
-      "location_key": "new zealand",
-      "spot_text": "autumn-gold tussock grassland rippling in gusts across an exposed high plateau under fast-moving dramatic cloud shadows"
-    },
-    {
-      "id": "9d67f56b-ab59-4176-803b-86d9a37d0e06",
-      "location_key": "new zealand",
-      "spot_text": "medium composition of a subalpine stream cascading over mossy green boulders through a narrow rocky channel into a pool at blue hour"
-    },
-    {
-      "id": "8c75ffa2-83ac-4dec-8e06-9d29c9acfa85",
-      "location_key": "new zealand",
-      "spot_text": "close-up of cracked and peeling bark on a mountain beech trunk covered in emerald moss and silver-white lichen rosettes"
-    },
-    {
-      "id": "84b3d2e3-d38c-4ce8-80ad-c91b0b484c73",
-      "location_key": "new zealand",
-      "spot_text": "spring thaw scene with rivulets of snowmelt threading bright silver lines down a dark hillside of awakening tussock grass at dawn"
-    },
-    {
-      "id": "a9926db6-1a0c-4f97-8af4-1040526720e5",
-      "location_key": "new zealand",
-      "spot_text": "moody grey overcast scene of rolling alpine tundra under flat diffused light with subtle green, ochre and rust tones in the grasses"
-    },
-    {
-      "id": "6f113644-10e0-4834-b1fa-130ce1931116",
-      "location_key": "new zealand",
-      "spot_text": "intimate view of tiny alpine cushion plants growing in a rock crevice with traces of snow still lodged in the shaded corners"
-    },
-    {
-      "id": "afb40fff-ff0e-42dc-be2e-f3b488b08ec2",
-      "location_key": "new zealand",
-      "spot_text": "medium view of a mountain stream in autumn light with golden tussock blades overhanging and reflections shimmering in moving water"
-    },
-    {
-      "id": "67ad7bd7-0369-4f03-a01b-defcc03c2c37",
-      "location_key": "new zealand",
-      "spot_text": "intimate frost pattern on a flat schist surface at dawn with delicate needle ice crystals arranged in radiating feather formations"
-    },
-    {
-      "id": "eed39dce-3c74-4eda-a0e4-5cd66ab63de8",
-      "location_key": "new zealand",
-      "spot_text": "intimate macro of ice-edged tarn grasses at dawn with frost riming each blade against a soft-focus reflection of orange sky"
-    },
-    {
-      "id": "91a1d053-41c3-4520-9805-63c2b705e4c0",
-      "location_key": "new zealand",
-      "spot_text": "single weathered mountain beech tree clinging to a rocky knoll above a sea of cloud filling the valley below at dawn"
-    },
-    {
-      "id": "b68d8fea-5bfb-4872-9c91-a880e5bd603d",
-      "location_key": "new zealand",
-      "spot_text": "storm light breaking through cloud over a steep cirque wall where meltwater streams fan down dark grey rock faces in white ribbons"
-    },
-    {
-      "id": "46301afc-2d97-4d01-b874-68d1a3a6e825",
-      "location_key": "new zealand",
-      "spot_text": "pre-dawn blue hour silence over a still glacial tarn reflecting the last stars above jagged dark silhouettes of alpine ridges"
-    },
-    {
-      "id": "ffc1df5e-9d4a-49e6-b771-2243bb42103c",
-      "location_key": "new zealand",
-      "spot_text": "wide autumn panorama of an alpine valley floor carpeted in red and gold tussock with snow dusting the dark rock peaks above"
-    },
-    {
-      "id": "eeb349a5-69ac-4a67-a370-e9eb65821752",
-      "location_key": "new zealand",
-      "spot_text": "post-storm scene with fresh snow on dark rocks and the sun breaking through in a single golden beam across a wet alpine basin"
-    },
-    {
-      "id": "0f5a617a-27f0-443a-8601-88dce34f6f3f",
-      "location_key": "new zealand",
-      "spot_text": "stormy coastal-alpine scene with low cloud racing over dark ridge crests and white mist tendrils dissolving into wind-scoured rock"
-    },
-    {
-      "id": "7f72c572-ce71-4f1f-a40d-3a835015445c",
-      "location_key": "new zealand",
-      "spot_text": "medium silhouette of a lone wind-sculpted mountain beech against a fiery orange and red sunset sky on an exposed ridge"
-    },
-    {
-      "id": "02cdec8f-26b2-43a6-a7f3-92f8df6f7577",
-      "location_key": "new zealand",
-      "spot_text": "wide stormy panorama of a mountain range under a dark olive-grey sky with single shaft of white sunlight illuminating a distant snowfield"
-    },
-    {
-      "id": "1e0219f2-3270-47d3-b26c-a2428fe18898",
-      "location_key": "new zealand",
-      "spot_text": "wide panorama of a remote alpine valley after fresh snowfall with every surface white and only dark rock outcrops breaking the silence"
-    },
-    {
-      "id": "430c1d46-72ad-4ea1-bc19-2b221cfdb42c",
-      "location_key": "new zealand",
-      "spot_text": "close-up of wind-sculpted snow crust on a high alpine ridge with tiny ice feathers catching oblique sunset gold light"
-    },
-    {
-      "id": "62a7937b-782d-4d08-b2ad-d42f20cf9708",
-      "location_key": "new zealand",
-      "spot_text": "ethereal morning fog pooling in a high mountain basin with only the topmost peaks emerging as dark islands above the white sea"
-    },
-    {
-      "id": "9d06b65f-4203-4676-8e29-72bf38d2b05f",
-      "location_key": "new zealand",
-      "spot_text": "medium composition of wind-pruned snow tussock clumps casting long amber shadows across a frost-white high plateau at early morning"
-    },
-    {
-      "id": "aa423282-be9d-4346-a51f-cafce18935cc",
-      "location_key": "new zealand",
-      "spot_text": "winter sunrise turning a vast alpine snowscape from cold blue to warm peach with long violet shadows cast by every snow wave"
-    },
-    {
-      "id": "b3efafd7-c77e-461d-a333-f9b3c4c31d27",
-      "location_key": "new zealand",
-      "spot_text": "wide aerial-perspective landscape of an alpine plateau with dozens of small tarns glinting like scattered mirrors under afternoon cloud"
-    },
-    {
-      "id": "f093ac37-0836-482b-b518-b6d5d8127af3",
-      "location_key": "new zealand",
-      "spot_text": "autumn dawn over a subalpine tarn with bronze and copper tussock reflected mirror-perfect in glassy still water under pink sky"
-    },
-    {
-      "id": "2f66f180-c7bf-4ead-bc33-2a8b4984bc16",
+      "id": "374bd103-ed25-46d3-8bfb-0f8dee232f92",
       "location_key": "norwegian fjords",
-      "spot_text": "medium view of tall reed grass at a small fjord delta, bent uniformly by constant valley wind under grey autumn sky"
+      "spot_text": "single gnarled birch tree clinging to a rocky ledge halfway up a cliff face, autumn leaves blazing orange against grey stone"
     },
     {
-      "id": "461fc136-1352-4f1f-b40f-ce9d68e080a9",
+      "id": "4c5b4139-8ad5-40f5-ac9b-c18550c90bcf",
       "location_key": "norwegian fjords",
-      "spot_text": "medium autumn scene of a steep scree slope with scattered dwarf birch in yellow and copper tones above the waterline"
+      "spot_text": "wide foggy morning view down the fjord with only the nearest cliff edges visible, everything beyond dissolved in white mist"
     },
     {
-      "id": "b95e4be0-948a-4752-adb4-368d7b3aacc3",
-      "location_key": "norwegian fjords",
-      "spot_text": "close detail of bright green moss and lichen crusting a wet boulder at the water's edge, droplets catching diffuse light"
-    },
-    {
-      "id": "f9103b7c-82f0-448b-bf23-09d85ae75b0f",
-      "location_key": "norwegian fjords",
-      "spot_text": "medium silhouette composition of a dead silver birch snag on a rocky ridge crest against a pale yellow-green sunset sky"
-    },
-    {
-      "id": "968ca35b-c07b-4aa6-b121-6d5941c6689b",
-      "location_key": "norwegian fjords",
-      "spot_text": "close detail of barnacle-encrusted tidal rocks exposed at low tide with dark kelp draped between them"
-    },
-    {
-      "id": "1d093847-3a0f-49b8-ba4a-0e7962e1a055",
-      "location_key": "norwegian fjords",
-      "spot_text": "close macro detail of water beading on the waxy surface of crowberry leaves growing in a cliff-side crevice"
-    },
-    {
-      "id": "1728daf6-2b3e-4b5b-8fbf-765b4c47628a",
-      "location_key": "norwegian fjords",
-      "spot_text": "intimate view of a tiny mountain stream carving a channel through peat and heather on the high fell above the fjord"
-    },
-    {
-      "id": "06dddab5-8992-46a1-aa52-a252baaa3cc9",
-      "location_key": "norwegian fjords",
-      "spot_text": "close detail of ancient striated glacial grooves running diagonally across a smooth exposed rock face above the waterline"
-    },
-    {
-      "id": "a8b599d2-c461-4c89-9eab-5a93641a582a",
-      "location_key": "paris",
-      "spot_text": "Marché d'Aligre covered market iron-and-glass canopy with decorative wrought-iron framing inside"
-    },
-    {
-      "id": "31bdcc08-4da5-4a8c-86da-1c3ea8c952eb",
-      "location_key": "patagonia",
-      "spot_text": "close detail of fractured granite boulder surface encrusted in bright orange and sage-green lichen, frost crystals filling every crack at cold dawn light"
-    },
-    {
-      "id": "8252b223-41dd-47d3-9ef4-0932559b30eb",
-      "location_key": "patagonia",
-      "spot_text": "autumn beech forest canopy viewed from below, overlapping leaves in gold, copper and pale yellow against a cold clear blue sky"
-    },
-    {
-      "id": "c7bff19b-4749-4fe0-886a-afc1d41525e8",
-      "location_key": "patagonia",
-      "spot_text": "close detail of compressed ancient peat layers exposed in a streambank cut, bands of dark brown, amber and black recording centuries of slow growth"
-    },
-    {
-      "id": "e9ba79b5-18a4-456b-8723-c5aaae4fce08",
-      "location_key": "patagonia",
-      "spot_text": "intimate view of peat bog surface with sphagnum moss in vivid chartreuse and burgundy, tiny water droplets clinging to each strand in still morning frost"
-    },
-    {
-      "id": "05af493c-ef52-4af7-b120-d34f5388a70f",
-      "location_key": "patagonia",
-      "spot_text": "intimate view of windswept cushion plants packed tight against exposed rocky ground, tiny yellow flowers trembling in gusts, frost still lingering in sheltered pockets"
-    },
-    {
-      "id": "c6c14d38-be69-4ff1-80b1-daa62a6c66d4",
-      "location_key": "redwood forest",
-      "spot_text": "intimate detail of decomposing redwood wood reduced to soft red fibrous material threaded through with white mycelium networks"
-    },
-    {
-      "id": "338e8add-1a35-483c-a508-2c05ad0e3208",
+      "id": "55963945-118b-4cab-a00c-bdcdde9053ea",
       "location_key": "rio de janeiro",
-      "spot_text": "close detail of coral-pink bougainvillea cascading over a lichen-covered granite face in harsh noon light"
+      "spot_text": "sunlit gap in the rainforest canopy revealing a cascade of flowering bromeliads on mossy rock"
     },
     {
-      "id": "0db6b7c3-3f88-4421-a02f-e843bfd06651",
+      "id": "ba086757-842f-472a-ad3d-98d78ff163bf",
       "location_key": "rio de janeiro",
-      "spot_text": "ancient twisted sea-grape tree contorted by salt wind on a windswept rocky shoreline at blue hour"
+      "spot_text": "starlit sky arching over a darkened tropical bay with faint bioluminescence at the wave break"
     },
     {
-      "id": "32f83dee-8ac7-47b7-9499-800956d4c3c0",
-      "location_key": "rio de janeiro",
-      "spot_text": "close detail of exposed granite bedrock veined with quartz on a coastal bluff above crashing waves"
-    },
-    {
-      "id": "99154f9e-776e-4fea-b45d-b5764206734d",
-      "location_key": "rio de janeiro",
-      "spot_text": "close-up of giant elephant-ear leaves beaded with raindrops in deep jungle shadow"
-    },
-    {
-      "id": "d55c34b2-4ce4-4108-9e04-fb282566b1e0",
-      "location_key": "rio de janeiro",
-      "spot_text": "white foam rushing over flat black granite shelves at low tide in warm amber morning light"
-    },
-    {
-      "id": "2f3b97fa-06a8-4c6a-8ba1-45188d053864",
-      "location_key": "rio de janeiro",
-      "spot_text": "close detail of a weathered granite boulder face streaked with orange lichen and dark moisture"
-    },
-    {
-      "id": "5294eb8d-22c0-4713-935a-d2313fdbde1d",
-      "location_key": "rio de janeiro",
-      "spot_text": "intimate view of thick strangler fig roots gripping a mossy boulder in dense coastal rainforest"
-    },
-    {
-      "id": "c15a3990-b0d6-4b2b-929c-b6296e218cae",
-      "location_key": "rio de janeiro",
-      "spot_text": "after-rain jungle scene with mist rising from canopy and silver water droplets on every leaf surface"
-    },
-    {
-      "id": "870bc90d-3bd9-4077-a9e1-d79d32a7fa5b",
-      "location_key": "rio de janeiro",
-      "spot_text": "intimate macro of a starfish resting in a shallow clear tide pool reflecting green jungle overhead"
-    },
-    {
-      "id": "63634e93-ea23-44ec-9ec5-3cb91455e452",
-      "location_key": "rome",
-      "spot_text": "frost-silvered wild grass tufts growing between broken travertine fragments on a cold winter morning"
-    },
-    {
-      "id": "69d46f7d-b190-4e57-bcdd-d2d11516eba1",
-      "location_key": "rome",
-      "spot_text": "single weathered cypress standing against a burnt-orange sunset sky above undulating ancient terrain"
-    },
-    {
-      "id": "b8f0f042-16a4-48f1-9b4d-ee33381991a5",
-      "location_key": "rome",
-      "spot_text": "wide winter panorama of bare rolling hills dotted with isolated stone pines under flat grey light"
-    },
-    {
-      "id": "d270b905-97fe-479f-b509-ff55b3fd514e",
-      "location_key": "rome",
-      "spot_text": "dramatic backlit silhouette of jagged broken wall top against a blood-red afterglow sky at dusk"
-    },
-    {
-      "id": "e8384bad-f45d-4105-be2c-a6fe7879f9e5",
-      "location_key": "rome",
-      "spot_text": "golden hour light raking across a wide field of pale stone rubble and wild rosemary scrub"
-    },
-    {
-      "id": "37f976bd-44ad-44f6-8b6b-5b3df4d0f229",
-      "location_key": "rome",
-      "spot_text": "wide panorama of seven rounded hills draped in silver-green olive and dark cypress under golden hour"
-    },
-    {
-      "id": "66f76ad8-3798-4a02-ab79-419423cb0235",
-      "location_key": "rome",
-      "spot_text": "ethereal dawn mist pooling in a low valley between ancient earthworks and scattered stone pines"
-    },
-    {
-      "id": "e099c667-4335-4c34-84af-20b380e75ac8",
-      "location_key": "rome",
-      "spot_text": "vibrant spring meadow of tall wild grasses and purple vetch rippling in wind across ancient terrain"
-    },
-    {
-      "id": "cbc37807-b56c-40a1-b4c6-2d84825d9775",
-      "location_key": "rome",
-      "spot_text": "intimate detail of crumbling brick edge colonized by bright-green moss after autumn rain"
-    },
-    {
-      "id": "fd77a427-d4ce-440c-b2be-89def486d381",
-      "location_key": "rome",
-      "spot_text": "starlit sky blazing with the Milky Way arc above a dark silhouetted ridge of cypress trees"
-    },
-    {
-      "id": "729a58b7-9a7f-4d46-a38e-6f7310d5434e",
-      "location_key": "rome",
-      "spot_text": "wide misty panorama of hillside terraces of wild olive and scrub oak fading to pale distance"
-    },
-    {
-      "id": "597bcfbd-8690-48ce-8efd-5fb7e38bb94d",
-      "location_key": "rome",
-      "spot_text": "golden afternoon sunbeams cutting through ilex canopy onto a dappled floor of leaf litter and stone"
-    },
-    {
-      "id": "9bcef91c-a7a8-4b89-af75-1d2b2fd8cd33",
-      "location_key": "rome",
-      "spot_text": "wide blue hour landscape of undulating terrain with dark cypress columns rising into a fading pink sky"
-    },
-    {
-      "id": "2ae17a3a-6728-4f70-8231-d078f7c3467f",
-      "location_key": "rome",
-      "spot_text": "wild lavender in full summer bloom spreading across rocky ancient hillside under high clear midday sun"
-    },
-    {
-      "id": "509e99bf-de5c-4abd-9f9f-e568bb1dc279",
-      "location_key": "rome",
-      "spot_text": "panoramic view of umbrella pine forest canopy seen from above at golden hour in warm amber haze"
-    },
-    {
-      "id": "4a2d4cf4-2917-435d-82ff-3577e010ba94",
-      "location_key": "rome",
-      "spot_text": "tangled roots of an ancient ilex tree gripping crumbled stone blocks at dawn light"
-    },
-    {
-      "id": "09ba6b92-c20d-4ce7-b6ee-60a15b0d580c",
-      "location_key": "rome",
-      "spot_text": "moss-carpeted ancient stone steps disappearing into shadowed ilex grove at blue hour"
-    },
-    {
-      "id": "59157668-78b2-4d96-a684-9795377a2d7b",
-      "location_key": "rome",
-      "spot_text": "wild fennel and yellow oxalis cascading over collapsed travertine blocks in spring bloom"
-    },
-    {
-      "id": "60a8abca-c9f0-4d2f-abaa-c74c01dc15a6",
-      "location_key": "rome",
-      "spot_text": "fractured marble slabs half-buried in rust-red earth beneath a storm-bruised sky"
-    },
-    {
-      "id": "76e97cc5-395e-4d7e-9295-9dbde987cb6a",
-      "location_key": "rome",
-      "spot_text": "terracotta-colored broken wall fragments scattered across sun-baked earth under midday heat-haze"
-    },
-    {
-      "id": "aba313c1-5f6b-4665-ad48-58c16e60adee",
-      "location_key": "rome",
-      "spot_text": "panoramic ridge of cypress silhouettes against a violet dusk sky layered with thin cirrus"
-    },
-    {
-      "id": "b0aedef7-66b6-4a67-9389-71bf4978ea45",
-      "location_key": "rome",
-      "spot_text": "sun-bleached stone columns half-swallowed by sprawling umbrella pine canopy at golden hour"
-    },
-    {
-      "id": "cdcefd92-2ea4-4ba8-bc42-9fb055df2a0c",
-      "location_key": "rome",
-      "spot_text": "wide expanse of silvery olive groves rolling across gentle hills to a hazy amber horizon at sunset"
-    },
-    {
-      "id": "9128628d-c9ce-46ac-b64f-8e074230e926",
-      "location_key": "rome",
-      "spot_text": "autumn-golden ilex grove canopy filtering warm afternoon light onto a carpet of fallen leaves"
-    },
-    {
-      "id": "49d20ad9-587a-4772-a1b8-b60d87fba0b1",
-      "location_key": "rome",
-      "spot_text": "close detail of old travertine block face with deep water-worn grooves and iron-oxide staining"
-    },
-    {
-      "id": "1a9955ed-094e-4f02-9ea1-e16a64e9996e",
-      "location_key": "rome",
-      "spot_text": "thin winter snow dusting a wide archaeological plain of pale stone and dormant scrub under flat light"
-    },
-    {
-      "id": "8a593c31-4e77-4991-921f-de16025e6db7",
-      "location_key": "rome",
-      "spot_text": "spring dawn mist drifting through a corridor of tall cypress trees over soft dew-covered grass"
-    },
-    {
-      "id": "28b8f0f9-a792-4ac8-ab52-51baa11ff81b",
-      "location_key": "rome",
-      "spot_text": "intimate macro of bright-orange stonecrop succulents rooted in a crack of weathered grey stone"
-    },
-    {
-      "id": "3b54893e-9d2e-4944-88d8-38511f218d48",
-      "location_key": "rome",
-      "spot_text": "wide summer panorama of heat-shimmering hillside covered in wild broom in full yellow bloom"
-    },
-    {
-      "id": "7181b307-c1df-4c91-ae1f-29c07ae067f0",
-      "location_key": "rome",
-      "spot_text": "close detail of fallen column drum resting in long grass with dew drops caught in golden dawn light"
-    },
-    {
-      "id": "3e0ec8b6-9257-47e6-bcf3-18e0a806f4dd",
-      "location_key": "rome",
-      "spot_text": "wild fig tree roots prying apart ancient stone blocks in a dappled midday woodland setting"
-    },
-    {
-      "id": "e141597f-d29c-449d-b067-b4444cfd8371",
-      "location_key": "rome",
-      "spot_text": "close detail of rain-washed travertine edge revealing crystalline fossil textures in soft overcast light"
-    },
-    {
-      "id": "972565c2-7c74-47ad-b796-5761597f881e",
-      "location_key": "san francisco",
-      "spot_text": "coastal scrubland at sunrise with dewy coyote brush sparkling and a band of rose-gold light on the horizon"
-    },
-    {
-      "id": "a0561579-bf9a-4145-ba01-7dfe10b10a9c",
-      "location_key": "san francisco",
-      "spot_text": "wide coastal meadow in spring bloom with patches of orange poppies and blue lupine under a clear sky"
-    },
-    {
-      "id": "a864ec9d-be1e-4c01-9b45-55c895946092",
-      "location_key": "san francisco",
-      "spot_text": "intimate view of wind-pruned coyote brush draped in fog droplets backlit by diffuse morning sun"
-    },
-    {
-      "id": "dd08c9fa-f9d7-41a1-9f8b-e3df38636c57",
-      "location_key": "san francisco",
-      "spot_text": "single sculpted Monterey cypress on a fog-blanketed bluff at dawn with muted teal and grey tones"
-    },
-    {
-      "id": "40d46ec7-0d8e-4c00-a4cb-0eadd300ebdf",
-      "location_key": "san francisco",
-      "spot_text": "close-up of storm-wet serpentine rock face streaked green and rust with creeping moss and dripping water"
-    },
-    {
-      "id": "5da65aca-0e91-4e4b-aff8-911dec1e9bb1",
-      "location_key": "san francisco",
-      "spot_text": "dense eucalyptus grove on a fog-drenched hillside with shafts of diffuse morning light filtering through pale trunks"
-    },
-    {
-      "id": "8f920708-c31b-4aa5-96b9-2133b0f4870e",
-      "location_key": "san francisco",
-      "spot_text": "eucalyptus canopy tunnel on a fog-laced hillside trail with cool grey-green light filtering through high branches"
-    },
-    {
-      "id": "a418727e-ca82-4408-9233-8a2778db15a4",
-      "location_key": "san francisco",
-      "spot_text": "intimate detail of lichen-covered serpentine outcrop on a dry hillside glowing rust and gold in afternoon sun"
-    },
-    {
-      "id": "d1d9f690-7043-4b69-9b95-4538fd3b05f4",
-      "location_key": "san francisco",
-      "spot_text": "coastal dune hollow at dawn with fine mist pooling among native dune scrub and pale sand"
-    },
-    {
-      "id": "409785e0-9dba-415d-8d18-f7f2ee98da84",
-      "location_key": "san francisco",
-      "spot_text": "close-up of coastal bluff edge with crumbling ochre sandstone and wild iceplant rosettes above churning surf"
-    },
-    {
-      "id": "6ca01776-49c9-4f56-97d2-e1b002c2430e",
-      "location_key": "san francisco",
-      "spot_text": "intimate detail of dried sea rocket seedpods on a sandy bluff edge with ocean blur behind"
-    },
-    {
-      "id": "6de68080-5e60-45c6-8206-19abc12e6d28",
-      "location_key": "san francisco",
-      "spot_text": "eucalyptus grove in winter rain with dark saturated bark and luminous jade-green understorey"
-    },
-    {
-      "id": "34cfb04f-d6bf-4382-b962-2f662c188b0c",
-      "location_key": "san francisco",
-      "spot_text": "autumn hillside of eucalyptus with peeling cream and cinnamon bark glowing in low-angle afternoon light"
-    },
-    {
-      "id": "69935be1-f1dd-49b9-a87d-ad032c645e7e",
-      "location_key": "san francisco",
-      "spot_text": "close detail of dried fennel stalks against a bokeh of silver bay water at dusk"
-    },
-    {
-      "id": "140c2cc8-d525-46d2-9b01-860005809388",
+      "id": "dd023686-76df-4f4b-85d7-44734faba1f8",
       "location_key": "santorini",
-      "spot_text": "storm-lit sea panorama with white foam lines streaking across dark-green churned water toward a basalt headland under a charcoal sky"
+      "spot_text": "rolling scrub-covered volcanic hillside at dawn with long cool shadows and dew-misted grey-green foliage stretching to a pale sea"
     },
     {
-      "id": "78d56e4d-5bd4-4414-b02e-967685b6c4cf",
+      "id": "0cbac8b6-b9c9-48c1-b010-12776ac3fae1",
       "location_key": "santorini",
-      "spot_text": "wide coastal dusk panorama with a warm amber and crimson sky reflected in still tidal pools on a dark rock shelf below"
+      "spot_text": "panoramic layered view of multiple volcanic ridge profiles receding into summer haze above a glittering sea under a washed-out sky"
     },
     {
-      "id": "f919e410-927e-415e-b8f9-1dc481d9b5cb",
+      "id": "0b8eea23-df38-4fd5-9f16-e297e899eeb0",
       "location_key": "santorini",
-      "spot_text": "dramatic storm panorama with black clouds over open sea and a single shaft of golden light illuminating pale rock bluffs"
+      "spot_text": "windswept rocky coastal ridge at golden hour with dry grasses bending in unison and a vast glowing sea panorama behind"
     },
     {
-      "id": "5675073f-02f6-4077-af93-7e666a001357",
-      "location_key": "santorini",
-      "spot_text": "intimate close-up of dry lichen-crusted volcanic stone with orange and grey crusts glowing in low raking morning light"
+      "id": "0760a59a-7e76-495b-bb85-92272e3a8317",
+      "location_key": "spy lair",
+      "spot_text": "Cooling tower venting steam over arctic tundra"
     },
     {
-      "id": "fa2788a2-1089-4c29-a286-6f77fcf1be70",
-      "location_key": "santorini",
-      "spot_text": "intimate view of a tidal rock pool filled with clear sea water reflecting a small rectangle of blue sky above dark volcanic stone"
+      "id": "c7668358-d6a3-426a-b630-16fa7bbc73f9",
+      "location_key": "spy lair",
+      "spot_text": "Sonar array submerged off black sand coastline"
     },
     {
-      "id": "fabbcd0c-4280-4654-90be-0ceb2380fef2",
-      "location_key": "santorini",
-      "spot_text": "intimate macro view of silver-leaved lavender cotton and grey lichen on ancient volcanic rock surface in warm afternoon side-light"
+      "id": "49b632f1-4caf-4735-8ebf-5d849a5903f4",
+      "location_key": "spy lair",
+      "spot_text": "Concealed missile silo beneath rotating desert platform"
     },
     {
-      "id": "be2b9509-97f0-45e5-b54a-c4b4ecd259a5",
-      "location_key": "santorini",
-      "spot_text": "Athinios Port ferry terminal carved into the towering caldera cliffs below Fira"
+      "id": "c85df916-7577-4b87-bbea-48092befc92e",
+      "location_key": "spy lair",
+      "spot_text": "Perimeter electrified fence crossing tropical ridge line"
     },
     {
-      "id": "8a99cf90-4985-4ad8-9870-c44ae8425ccc",
-      "location_key": "santorini",
-      "spot_text": "close detail of sea-smoothed dark volcanic pebbles with rivulets of clear foam threading between them in soft diffused light"
+      "id": "fc85bb85-38cc-4189-8add-62740bca67d4",
+      "location_key": "spy lair",
+      "spot_text": "Mountain ridge antenna farm disguised as forest"
     },
     {
-      "id": "34615bc0-ff4a-474f-9c1b-ca39c99e3a6c",
-      "location_key": "santorini",
-      "spot_text": "close detail of papery dried oregano stems and tiny white blossoms on sun-cracked volcanic soil in warm amber afternoon light"
+      "id": "53696eb7-09f5-4657-8410-9e65584bc1a8",
+      "location_key": "spy lair",
+      "spot_text": "Concealed fuel depot beneath alpine snowfield surface"
     },
     {
-      "id": "9f46cf41-c752-446a-850f-8a113e49908e",
-      "location_key": "santorini",
-      "spot_text": "intimate detail of crystallised sea salt dried in pale geometric patterns on dark flat coastal rock in harsh noon sun"
+      "id": "83feac64-e23d-4491-87d1-8b40eb5b6d67",
+      "location_key": "spy lair",
+      "spot_text": "Concealed airfield beneath Amazonian floodplain grassland"
     },
     {
-      "id": "8fef0a90-1fa4-478a-8b13-4212c69de95a",
-      "location_key": "swiss alps",
-      "spot_text": "intimate view of deep hoarfrost feathers coating every stem and blade in a high alpine hollow at blue pre-dawn light"
+      "id": "b6c0704d-4309-4713-a673-623c855877a6",
+      "location_key": "tahiti",
+      "spot_text": "Traditional carved wooden canoe on pristine beach sand"
     },
     {
-      "id": "aee68464-dcdd-4a52-962f-e0c487d51242",
-      "location_key": "swiss alps",
-      "spot_text": "intimate autumn scene of a single bright yellow alpine grass clump trembling at the edge of a grey scree slope"
+      "id": "43722809-64c3-4bd8-8ba7-4365ee07160e",
+      "location_key": "tahiti",
+      "spot_text": "Pristine coastline curve with black and white sand meeting"
     },
     {
-      "id": "d4b33b7b-0ada-4d74-aac8-6bd9dcf41597",
-      "location_key": "swiss alps",
-      "spot_text": "intimate frost-covered spider-web strand strung between two dwarf willow stems backlit by low winter sun"
-    },
-    {
-      "id": "f85ee4a2-2801-4039-a5e5-0b3220dce837",
-      "location_key": "swiss alps",
-      "spot_text": "close detail of ice crystal formations melting on a dark granite surface in warm early-morning sunlight"
-    },
-    {
-      "id": "47c859dd-8bb0-4cef-ad54-1ced56cb05af",
-      "location_key": "swiss alps",
-      "spot_text": "intimate frost-rimed lichen colonies spreading across a weathered granite boulder in pale morning light"
-    },
-    {
-      "id": "05b1ba44-d676-4c27-9ee3-55096d7837ac",
-      "location_key": "swiss alps",
-      "spot_text": "close detail of fresh powder snow crystals piled in delicate ridges on a dark lichen-encrusted rock surface"
-    },
-    {
-      "id": "1eff190f-cebe-4e4c-9016-3cc37c26ae0c",
-      "location_key": "swiss alps",
-      "spot_text": "close detail of a weathered granite slab covered in concentric orange and grey lichen rings in harsh midday sun"
-    },
-    {
-      "id": "4b77eced-08f2-4696-a0cd-059171a63b28",
-      "location_key": "swiss alps",
-      "spot_text": "intimate macro view of a meltwater rivulet threading through moss and tiny alpine flowers in bright midday light"
-    },
-    {
-      "id": "53a632de-7666-47c0-ac72-a9ca404557e8",
-      "location_key": "swiss alps",
-      "spot_text": "intimate after-rain scene of water droplets beading on the waxy leaves of dwarf alpine rhododendron in flat light"
-    },
-    {
-      "id": "61ae485d-d333-49f5-8483-807d876a2957",
-      "location_key": "swiss alps",
-      "spot_text": "intimate close-up of alpine ice forming translucent needle crystals overnight on a still puddle in a rocky hollow"
-    },
-    {
-      "id": "7783dfae-334a-4c8e-814b-aebb03bed5b7",
-      "location_key": "swiss alps",
-      "spot_text": "close detail of layered sedimentary rock strata in a cliff face painted in ochre amber and rust in afternoon light"
-    },
-    {
-      "id": "8a9350ed-220e-496d-aaba-f40b247b18fa",
-      "location_key": "swiss alps",
-      "spot_text": "intimate close-up of wind-polished quartz veins running through dark schist bedrock glistening after rain"
-    },
-    {
-      "id": "925f4184-ca67-4c10-9f38-9dfd85d014d7",
-      "location_key": "swiss alps",
-      "spot_text": "intimate view of a cluster of tiny white rock-cress flowers wedged in a granite crack at the edge of a snowfield"
-    },
-    {
-      "id": "36986450-0ff1-4480-825f-2817529d475f",
+      "id": "0952c11f-7fbc-49be-be72-b44e266ec2a3",
       "location_key": "thailand",
-      "spot_text": "wide coastal panorama at blue hour with a glowing horizon stripe beneath heavy monsoon clouds"
+      "spot_text": "monsoon-drenched jungle hillside trailing waterfalls down mossy rock faces to the sea"
     },
     {
-      "id": "1299c4de-453f-4071-a97d-de2e032630aa",
+      "id": "39154dc1-c735-449a-bc0e-c4d3041ece32",
       "location_key": "thailand",
-      "spot_text": "tight medium view of a mossy jungle stream winding through buttress roots toward glinting sea beyond"
+      "spot_text": "aerial-perspective view of a sinuous river delta threading through dense tropical jungle to coastal shallows"
     },
     {
-      "id": "5a08566d-70fa-4984-9562-d1da41c5b605",
+      "id": "83dc5d93-da07-466c-97c8-f3499a111ce4",
       "location_key": "thailand",
-      "spot_text": "sea fog drifting through a gap between two densely forested island silhouettes at dawn"
+      "spot_text": "tidal estuary at blue hour with mirror-still water reflecting deep indigo sky and silhouetted mangroves"
     },
     {
-      "id": "a838a693-3563-4824-a7f2-d3f07440f3f4",
-      "location_key": "thailand",
-      "spot_text": "medium composition of a tide-carved sandstone shelf leading in a natural line toward a distant island silhouette"
+      "id": "15e87c95-7b70-4bec-b756-cfa68c3d258e",
+      "location_key": "vineyard estate",
+      "spot_text": "Undulating vine rows stretching to mountain horizon"
     },
     {
-      "id": "f8fbb713-7324-494b-bba8-f5752e194621",
-      "location_key": "thailand",
-      "spot_text": "medium view of a rocky headland wrapped in jungle and battered by white surf under stormy clouds"
+      "id": "3f529927-3b8c-47d8-85e1-eed8dfd0d25a",
+      "location_key": "vineyard estate",
+      "spot_text": "Aerial perspective of geometric vineyard patterns"
     },
     {
-      "id": "0b1ea2b7-cf28-4213-9d24-b28f9fb64083",
-      "location_key": "tokyo",
-      "spot_text": "wide sweeping view of foggy cedar forest canopy stretching to distant hills under a blue-grey dawn sky"
+      "id": "a61d8776-cf6f-44ba-bdb3-284aecf0b1a4",
+      "location_key": "vineyard estate",
+      "spot_text": "Estate grounds encompassing villa and vine terraces"
     },
     {
-      "id": "0ee9aa75-49f8-43d0-a323-bc9c585c8888",
-      "location_key": "tokyo",
-      "spot_text": "intimate frozen puddle ice pattern edged by brown fallen leaves and forest debris in winter stillness"
+      "id": "a6dcc250-34fc-4255-acca-5654fd5bd42e",
+      "location_key": "vineyard estate",
+      "spot_text": "Valley vista showcasing orderly vine row geometry"
     },
     {
-      "id": "52249c8e-54e2-4435-821a-a4d8772cf03a",
-      "location_key": "tokyo",
-      "spot_text": "wide coastal bluff above a grey choppy sea under a fast-moving stormy sky with torn cloud edges"
+      "id": "503732e0-8c93-4f50-8ad9-8d7c94eea1c5",
+      "location_key": "vineyard estate",
+      "spot_text": "Stone villa terrace arranged for alfresco feast"
     },
     {
-      "id": "78f3c6f4-e503-4f4c-ad26-6254b85fe3c1",
-      "location_key": "tokyo",
-      "spot_text": "medium rocky riverbed in low summer water with clear shallow flow over smooth dark stones in harsh midday light"
+      "id": "0edd98d7-d724-429d-9b97-961be46aeeea",
+      "location_key": "vineyard estate",
+      "spot_text": "Oak barrel wine cellar with flickering candlelight"
     },
     {
-      "id": "893c1466-6c40-4376-a6f5-d448ab37e9b9",
-      "location_key": "tokyo",
-      "spot_text": "wide autumn hillside reflecting in a perfectly still reservoir under cloudless golden-hour light"
+      "id": "f05d741a-d125-4c71-aa58-12bba55ea3a9",
+      "location_key": "vineyard estate",
+      "spot_text": "Cypress-lined cobblestone estate driveway entrance"
     },
     {
-      "id": "9c3a388a-4bef-4a8b-8d89-5ebba1d802dd",
-      "location_key": "tokyo",
-      "spot_text": "medium view of a cascading tiered stream over mossy boulders in a narrow shaded gorge in deep summer green"
+      "id": "a2d27017-0cf8-4b97-a35a-0b2e42a7a6f8",
+      "location_key": "vineyard estate",
+      "spot_text": "Covered tasting terrace overlooking vineyard landscape"
     },
     {
-      "id": "b43916da-69e2-49c4-9ee0-7b38823bce0d",
-      "location_key": "tokyo",
-      "spot_text": "wide panoramic dawn view of mist-filled valley between dark cedar-forested ridges under a pale peach sky"
+      "id": "c88402af-4a7a-4bab-a947-f6bc2bf04db8",
+      "location_key": "vineyard estate",
+      "spot_text": "Stone courtyard centered around ornate fountain"
     },
     {
-      "id": "b6b82ca1-7f9a-4bc4-934c-d697c803f7d8",
-      "location_key": "tokyo",
-      "spot_text": "wide panoramic winter landscape of snow-dusted forested hills fading to white haze at the horizon under a pale silver sky"
+      "id": "8699c1c4-f02d-4d86-a2f2-d68b5634344b",
+      "location_key": "vineyard estate",
+      "spot_text": "Grapevine-draped pergola with wrought iron details"
     },
     {
-      "id": "c1223010-9cc3-4370-89c1-af9ae0c1ccea",
-      "location_key": "tokyo",
-      "spot_text": "intimate tight cluster of pine needles beaded with mist droplets against a soft grey out-of-focus background"
+      "id": "b56dec00-75e5-434e-84f1-2940656e452a",
+      "location_key": "vineyard estate",
+      "spot_text": "Villa facade with carved stone archways"
     },
     {
-      "id": "f0bc2626-84c2-4caf-ae86-d74fe8993ad8",
-      "location_key": "tokyo",
-      "spot_text": "medium forest glade floor covered in a carpet of wood sorrel glowing vivid green in soft summer light"
-    },
-    {
-      "id": "7e06bbe8-4a4a-4204-8a1a-37fce5545b25",
-      "location_key": "turkey",
-      "spot_text": "wide panorama of undulating Anatolian plateau stretching to distant purple ridgelines under a vast cloudless summer sky"
-    },
-    {
-      "id": "fedb67f4-1c5f-4cd8-adb3-68e8faa8196e",
-      "location_key": "turkey",
-      "spot_text": "terraced hillside of ancient olive groves silver-leafed in a stiff breeze under a cobalt summer sky"
-    },
-    {
-      "id": "673dc17a-81b5-485d-b44a-462eb7fa8d2d",
+      "id": "5cb52990-a566-4a3a-841d-f817fee9f9d1",
       "location_key": "yellowstone",
-      "spot_text": "dramatic close-up of an active fumarole venting white steam from an orange sulfur-stained vent hole in fractured volcanic rock under stormy overcast sky"
+      "spot_text": "intimate detail of iron-oxide streaked rock face beside a fumarole vent stained in vivid bands of crimson rust ochre and charcoal black"
     },
     {
-      "id": "edbab325-b538-4e39-8b9c-e5c14cbc71bd",
+      "id": "6e583ab4-b522-48bf-b11d-af7e38777ca4",
       "location_key": "yellowstone",
-      "spot_text": "medium autumn composition of a winding thermal stream edged with rust-red and gold sedge grasses under soft overcast diffuse light"
+      "spot_text": "intimate detail of a cracked dry thermal mud flat with polygonal patterns in warm umber and cream tones under harsh midday light"
     },
     {
-      "id": "6684a170-475d-4c32-9308-816c92520942",
+      "id": "83157673-b9db-4a9d-91af-223ba3ca256d",
       "location_key": "yellowstone",
-      "spot_text": "intimate detail of ice forming intricate lace patterns at the cold edge of a warm thermal spring outlet where steam meets freezing winter air"
+      "spot_text": "intimate macro of travertine mineral formations with delicate layered ripple texture in ivory cream and pale sand tones wet and glistening"
     },
     {
-      "id": "5c84716c-6962-4c85-b706-23f261baa269",
+      "id": "c9af9654-1ddb-4c0e-a0fd-f2b18113f691",
       "location_key": "yellowstone",
-      "spot_text": "intimate close-up of brilliantly colored microbial mat ringing a hot spring edge in concentric bands of rust orange amber and deep green"
+      "spot_text": "intimate close-up of silica sinter ripple formations at a spring margin with droplets of mineral-rich water beading on the pale chalky surface in cool morning light"
     },
     {
-      "id": "943c452d-4863-4060-9dec-a901c8d2e0a4",
+      "id": "0cddf0c0-066c-4842-b936-c48f50f19bbd",
       "location_key": "yosemite",
-      "spot_text": "textured close-up of quartz crystals and iron streaks across a polished granite slab damp with morning dew"
-    },
-    {
-      "id": "99d81389-0b67-4ac6-bb97-13a6fcaf1085",
-      "location_key": "yosemite",
-      "spot_text": "close-up of a small alpine plant wedged into a granite crack with tiny purple flowers backlit by late afternoon sun"
-    },
-    {
-      "id": "3c6a35c1-30ec-405a-abcf-cff2556900fc",
-      "location_key": "yosemite",
-      "spot_text": "intimate close-up of lichen-encrusted granite surface in rust orange and pale grey textures under diffused morning light"
-    },
-    {
-      "id": "2bfd1790-01dd-4ca7-b2ae-6f27f982b0ff",
-      "location_key": "yosemite",
-      "spot_text": "medium view looking up through the canopy of towering ponderosa pines to a narrow strip of pale blue sky and a passing hawk"
-    },
-    {
-      "id": "235a08c3-5a5b-4183-91b8-6a6d7519a65f",
-      "location_key": "yosemite",
-      "spot_text": "wide winter panorama of a snow-blanketed glacial valley hemmed by pure white peaks under a pale grey overcast"
-    },
-    {
-      "id": "8f076d1c-f5b8-4779-b5c0-a48b37d76581",
-      "location_key": "zion national park",
-      "spot_text": "intimate macro detail of ancient cryptobiotic soil crust in dark knobby patterns against the pale sandy desert floor"
+      "spot_text": "stormy midday scene of dark granite peaks half-shrouded in churning grey clouds with a single sunlit meadow patch below"
     }
   ]
 }
