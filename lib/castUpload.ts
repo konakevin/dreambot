@@ -24,6 +24,7 @@ export interface CastPhotoResult {
   gender?: 'male' | 'female';
   age?: number;
   physical_summary?: string;
+  ethnicity?: string;
 }
 
 /** A distinct error type so callers can show the friendly "not recognized" copy.
@@ -142,5 +143,6 @@ export async function pickUploadDescribeCast(
     ...(d.gender ? { gender: d.gender } : {}),
     ...(typeof d.age === 'number' ? { age: d.age } : {}),
     ...(d.physical_summary ? { physical_summary: d.physical_summary } : {}),
+    ...(d.ethnicity ? { ethnicity: d.ethnicity } : {}),
   };
 }

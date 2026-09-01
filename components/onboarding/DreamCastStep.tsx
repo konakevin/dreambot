@@ -496,6 +496,7 @@ export function DreamCastStep({ onNext, onBack, embedded = false, settingsCopy =
         ...(descData.gender ? { gender: descData.gender } : {}),
         ...(typeof descData.age === 'number' ? { age: descData.age } : {}),
         ...(descData.physical_summary ? { physical_summary: descData.physical_summary } : {}),
+        ...(descData.ethnicity ? { ethnicity: descData.ethnicity } : {}),
         ...(plusOneRelFinal ? { relationship: plusOneRelFinal } : {}),
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);

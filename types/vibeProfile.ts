@@ -63,6 +63,8 @@ export interface DreamPartner {
   gender?: 'male' | 'female';
   age?: number;
   physical_summary?: string;
+  /** Broad race bucket (render anchor only) — White/Black/East Asian/South Asian/Hispanic-Latino/Middle Eastern. */
+  ethnicity?: string;
   relationship: 'partner' | 'friend';
 }
 
@@ -87,6 +89,9 @@ export interface DreamCastMember {
   age?: number;
   /** Concise physical traits summary from Haiku vision — hair, skin, build, eyes. Used for trait enforcement in prompts. */
   physical_summary?: string;
+  /** Broad race bucket from a focused vision read (White/Black/East Asian/South
+   * Asian/Hispanic-Latino/Middle Eastern) — render race anchor only, never shown. */
+  ethnicity?: string;
   /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
   relationship?: CastRelationship;
 }

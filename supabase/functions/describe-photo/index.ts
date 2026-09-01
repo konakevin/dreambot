@@ -5,7 +5,13 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { describeWithVision, VISION_PROMPTS, classifyEthnicity } from '../_shared/vision.ts';
+import {
+  describeWithVision,
+  VISION_PROMPTS,
+  classifyEthnicity,
+  classifyHairColor,
+  replaceHairColorInSummary,
+} from '../_shared/vision.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 
 const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
@@ -186,12 +192,22 @@ Deno.serve(async (req: Request) => {
     // uncertain/refusal → null → skin-tone fallback. (RACE_FIDELITY_PLAN.md)
     const ethnicity = role === 'pet' ? null : await classifyEthnicity(image_url);
 
+    // Focused HAIR-COLOR read — the combined describe above is unreliable on hair
+    // color (mislabeled a dirty-blonde/greying man "chestnut brown"); a focused
+    // single-trait read is accurate. Correct the physical_summary's color so the
+    // render anchors the TRUE color. Null-safe → keep the combined color on failure.
+    let correctedSummary = physicalSummary;
+    if (role !== 'pet' && physicalSummary) {
+      const hairColor = await classifyHairColor(image_url);
+      if (hairColor) correctedSummary = replaceHairColorInSummary(physicalSummary, hairColor);
+    }
+
     return new Response(
       JSON.stringify({
         description,
         gender,
         age,
-        physical_summary: physicalSummary || null,
+        physical_summary: correctedSummary || null,
         ethnicity,
         cast_quality: castQuality,
       }),

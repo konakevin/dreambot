@@ -36,6 +36,7 @@ function partnerToPlusOne(p: DreamPartner): DreamCastMember {
     ...(p.gender ? { gender: p.gender } : {}),
     ...(typeof p.age === 'number' ? { age: p.age } : {}),
     ...(p.physical_summary ? { physical_summary: p.physical_summary } : {}),
+    ...(p.ethnicity ? { ethnicity: p.ethnicity } : {}),
     relationship: p.relationship,
   };
 }
@@ -77,6 +78,7 @@ export function migrateLegacyPlusOne(profile: VibeProfile): VibeProfile {
     ...(plusOne.gender ? { gender: plusOne.gender } : {}),
     ...(typeof plusOne.age === 'number' ? { age: plusOne.age } : {}),
     ...(plusOne.physical_summary ? { physical_summary: plusOne.physical_summary } : {}),
+    ...(plusOne.ethnicity ? { ethnicity: plusOne.ethnicity } : {}),
     relationship: plusOne.relationship === 'partner' ? 'partner' : 'friend',
   };
   // Rebuild the plus_one mirror from the (mapped) partner so the two agree.

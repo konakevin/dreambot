@@ -165,6 +165,7 @@ export function DreamCastRoster() {
         ...(r.gender ? { gender: r.gender } : {}),
         ...(typeof r.age === 'number' ? { age: r.age } : {}),
         ...(r.physical_summary ? { physical_summary: r.physical_summary } : {}),
+        ...(r.ethnicity ? { ethnicity: r.ethnicity } : {}),
       })
     );
 
@@ -185,6 +186,7 @@ export function DreamCastRoster() {
         ...(r.gender ? { gender: r.gender } : {}),
         ...(typeof r.age === 'number' ? { age: r.age } : {}),
         ...(r.physical_summary ? { physical_summary: r.physical_summary } : {}),
+        ...(r.ethnicity ? { ethnicity: r.ethnicity } : {}),
         relationship: 'friend',
       })
     );
@@ -200,6 +202,7 @@ export function DreamCastRoster() {
         gender: r.gender,
         age: r.age,
         physical_summary: r.physical_summary,
+        ethnicity: r.ethnicity,
       });
       removeCastFile(old).catch(() => {}); // clean up the replaced file
     });

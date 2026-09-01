@@ -52,6 +52,7 @@ async function describeCastPhotos(cast: DreamCastMember[]): Promise<DreamCastMem
           ...(data.gender ? { gender: data.gender } : {}),
           ...(typeof data.age === 'number' ? { age: data.age } : {}),
           ...(data.physical_summary ? { physical_summary: data.physical_summary } : {}),
+          ...(data.ethnicity ? { ethnicity: data.ethnicity } : {}),
         };
       } catch (err) {
         if (__DEV__) console.warn(`[firstDreamKickoff] describe ${member.role} failed:`, err);

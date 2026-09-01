@@ -195,6 +195,73 @@ export async function classifyEthnicity(imageInput: string): Promise<CastEthnici
 }
 
 /**
+ * Focused HAIR-COLOR read — a single-trait vision call, far more accurate than
+ * the combined describe. The combined describe mislabeled a dirty-blonde/greying
+ * man "chestnut brown"; a FOCUSED read on the same photo got "light blonde/gray"
+ * (Kevin, sunnysteph +1, 2026-09-01 — focused beats combined, same as ethnicity).
+ * Returns a short color phrase or null. NULL-SAFE. Runs once at upload + backfill.
+ */
+export async function classifyHairColor(imageInput: string): Promise<string | null> {
+  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  if (!anthropicKey) return null;
+  try {
+    let imageContent: Record<string, unknown>;
+    if (imageInput.startsWith('data:')) {
+      const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
+      if (!match) return null;
+      imageContent = {
+        type: 'image',
+        source: { type: 'base64', media_type: match[1], data: match[2] },
+      };
+    } else {
+      imageContent = { type: 'image', source: { type: 'url', url: imageInput } };
+    }
+    const prompt =
+      "In 2 to 4 words, what is this person's natural hair color (say 'greying' or 'salt-and-pepper' if grey is present)? Reply with only the color words, nothing else.";
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: HAIKU,
+        max_tokens: 20,
+        messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const txt =
+      data.content && data.content[0] && data.content[0].type === 'text'
+        ? String(data.content[0].text).trim()
+        : '';
+    // Guard: a short color phrase only — reject refusals / sentences.
+    if (!txt || txt.length > 40 || /(cannot|can't|unable|sorry|not able)/i.test(txt)) return null;
+    return sanitizeUserText(txt, 'vision').toLowerCase();
+  } catch (_e) {
+    return null;
+  }
+}
+
+/**
+ * Swap the (often-wrong) combined-describe hair color in a physical_summary for
+ * the focused, accurate one — keeping cut/style so everything downstream
+ * (extractHair + the render color anchor) works on corrected data.
+ */
+export function replaceHairColorInSummary(summary: string, color: string): string {
+  if (!summary || !color) return summary;
+  const parts = summary.split(',');
+  const idx = parts.findIndex(
+    (p) => /\bhair\b/i.test(p) && !/\b(beard|mustache|moustache|stubble|sideburns)\b/i.test(p)
+  );
+  if (idx === -1) return `${color} hair, ${summary}`;
+  parts[idx] = parts[idx].replace(/^(\s*).*?\bhair\b/i, `$1${color} hair`);
+  return parts.join(',');
+}
+
+/**
  * Classify the apparent gender of the LEFT and RIGHT person in a two-person
  * render. Used by the dual face-swap pipeline to route each cast member's face
  * onto the body of the matching gender.
@@ -325,7 +392,7 @@ export const VISION_PROMPTS = {
    *  for resemblance. Returns a prose description, then AGE: and TRAITS: lines;
    *  the upload path keeps only the prose via stripCastMeta(). */
   castPerson:
-    'Your response MUST BEGIN with a HEADER LINE and nothing before it, in EXACTLY this format: the gender ("Male" or "Female"), a comma, then the build (exactly ONE of "thin", "athletic", or "average"). Examples: "Female, average" or "Male, athletic". Commit to the GENDER and the BUILD on this first line — they are the two most important calls, so decide them FIRST. BUILD RULE (critical, honor it exactly): use ONLY thin / athletic / average. Anyone who is not clearly thin or clearly athletic is "average". NEVER output any other size or shape word anywhere (NO curvy, full-figured, soft, stocky, petite, heavy, heavyset, plus, plus-size, overweight, busty, chubby, large, big) — "average" covers everyone else, so no one is ever given a heavy or unkind label. Then describe them for an AI artist creating a flattering stylized character — focus on the FACE and HAIR. Include: exact age estimate, face shape, eye color, hair (exact color like sandy brown or chestnut, length, texture, style — and ALWAYS the CUT: if they have bangs/fringe say so explicitly (e.g. "with soft wispy bangs"), and say how the hair is worn (loose, ponytail, bun, braids, half-up). If there are no bangs, describe the hairline positively (e.g. "center-parted", "swept back from the forehead") — never write "no bangs"), skin tone, any distinguishing features (glasses, freckles, jewelry, tattoos). Do NOT describe clothing or accessories that change — the art generator will dress them in the scene style. Do NOT describe body size or shape again in the prose — the header build word is the ONLY body descriptor allowed. For facial hair be EXTREMELY precise: clean-shaven, light stubble, heavy stubble, short trimmed beard, medium beard, or full long beard — do NOT exaggerate length or thickness, stubble is NOT a beard. Skip unflattering details (under-eye bags, dark circles, blemishes, wrinkles) — describe their best version. 3 sentences max. Be EXTREMELY specific — the more detail, the better the resemblance.\n\nAfter the description, add a NEW LINE starting with "AGE:" followed by your best numeric age estimate as an integer only (no words, no qualifiers, no range). Example: "AGE: 34". Lean YOUNGER if uncertain — image gen drifts older by default.\n\nAfter the AGE line, add a NEW LINE starting with "TRAITS:" followed by a single concise sentence listing ONLY the non-negotiable physical traits: hair color, length, and cut (include bangs/fringe if present — e.g. "shoulder-length auburn hair with bangs"), facial hair (if any), skin tone, approximate age, build (ONLY one of: thin/athletic/average), and eye color. Example: "TRAITS: Short dark brown hair, full beard, olive skin, mid-30s, athletic build, brown eyes." This line must be factual and compact — no adjectives beyond what\'s needed to identify the trait. IMPORTANT: never use negative phrasing like "no facial hair" or "no glasses" — AI generators interpret negatives as positives. If a trait is absent, simply omit it. For clean-shaven MALE faces, say "clean-shaven" instead of "no beard." For females, do NOT mention facial hair at all. Output ONLY the description, AGE line, and TRAITS line.',
+    'Your response MUST BEGIN with a HEADER LINE and nothing before it, in EXACTLY this format: the gender ("Male" or "Female"), a comma, then the build (exactly ONE of "thin", "athletic", or "average"). Examples: "Female, average" or "Male, athletic". Commit to the GENDER and the BUILD on this first line — they are the two most important calls, so decide them FIRST. BUILD RULE (critical, honor it exactly): use ONLY thin / athletic / average. Anyone who is not clearly thin or clearly athletic is "average". NEVER output any other size or shape word anywhere (NO curvy, full-figured, soft, stocky, petite, heavy, heavyset, plus, plus-size, overweight, busty, chubby, large, big) — "average" covers everyone else, so no one is ever given a heavy or unkind label. Then describe them for an AI artist creating a flattering stylized character — focus on the FACE and HAIR. Include: exact age estimate, face shape, eye color, hair (exact color like sandy brown or chestnut, length, texture, style — and ALWAYS the CUT: if they have bangs/fringe say so explicitly (e.g. "with soft wispy bangs"), and say how the hair is worn (loose, ponytail, bun, braids, half-up). If there are no bangs, describe the hairline positively (e.g. "center-parted", "swept back from the forehead") — never write "no bangs"), skin tone, any distinguishing features (glasses, freckles, jewelry, tattoos). Do NOT describe clothing or accessories that change — the art generator will dress them in the scene style. Do NOT describe body size or shape again in the prose — the header build word is the ONLY body descriptor allowed. For facial hair be EXTREMELY precise: clean-shaven, light stubble, heavy stubble, short trimmed beard, medium beard, or full long beard — do NOT exaggerate length or thickness, stubble is NOT a beard. Skip unflattering details (under-eye bags, dark circles, blemishes, wrinkles) — describe their best version. 3 sentences max. Be EXTREMELY specific — the more detail, the better the resemblance.\n\nAfter the description, add a NEW LINE starting with "AGE:" followed by your best numeric age estimate as an integer only (no words, no qualifiers, no range). Example: "AGE: 34". Estimate their TRUE age as accurately as you can — do NOT lean younger (the model already tends to under-read age, so an honest estimate lands closest to reality).\n\nAfter the AGE line, add a NEW LINE starting with "TRAITS:" followed by a single concise sentence listing ONLY the non-negotiable physical traits: hair color, length, and cut (include bangs/fringe if present — e.g. "shoulder-length auburn hair with bangs"), facial hair (if any), skin tone, approximate age, build (ONLY one of: thin/athletic/average), and eye color. Example: "TRAITS: Short dark brown hair, full beard, olive skin, mid-30s, athletic build, brown eyes." This line must be factual and compact — no adjectives beyond what\'s needed to identify the trait. IMPORTANT: never use negative phrasing like "no facial hair" or "no glasses" — AI generators interpret negatives as positives. If a trait is absent, simply omit it. For clean-shaven MALE faces, say "clean-shaven" instead of "no beard." For females, do NOT mention facial hair at all. Output ONLY the description, AGE line, and TRAITS line.',
 
   /** Pet description for dream cast */
   castPet:
