@@ -87,18 +87,20 @@ watercolor/glamour/pencil by rate. Kevin's cast (mixed-gender couple + painterly
 sits squarely in the failure zone.
 
 ### Fixes
-- **P1a — Slot-based fallback on painterly mediums (highest leverage, moderate effort).** On mediums
-  where the gender read is known-unreliable, DON'T trust the flip-prone read — align source→side
-  with the front-load slot placement (`buildDualGenderFront`, `dualSideOrder.ts:40`). A positional
-  assignment can't flip *both* faces the way a bad read can.
-- **P1b — Post-swap gender-consistency check (closes the invisibility).** After the swap, re-read
-  the two output figures' apparent gender and assert each matches the *cast gender of the source
-  routed there*. A mismatch → re-render/degrade. This is the ONLY signal that distinguishes "right
-  face, wrong body" from success — without it we can't even measure the true rate.
-- **P1c — Cross-check the Haiku override vs cast composition before trusting it.** For a mixed
-  cast, require the pre-read to agree with the intended side; disagreement → positional fallback.
-- **P2 — Harden/restrict dual on the worst painterly mediums:** force a stronger frontal
-  gender-lock render, or bias the medium roll away from dual on androgynous-prone styles.
+- **~~P1a — Slot-based fallback on painterly mediums.~~ REJECTED (Kevin, 2026-09-01).** The premise
+  that the render reliably honors "man on the LEFT, woman on the RIGHT" is FALSE — Flux/Sonnet DO
+  swap the characters' positions (observed before). So a slot/positional assignment would mis-route
+  in a *different* way. Do NOT trust the front-load placement as ground truth. This is also *why* the
+  pipeline went gender-read-driven in the first place.
+- **P1b — Post-swap gender-consistency check (THE fix). ** After the swap, re-read the two OUTPUT
+  figures' gender — now carrying the REAL pasted faces, which are far easier to gender-read than the
+  androgynous painted base — and assert each matches the cast gender of the source routed there. If
+  flipped → SWAP the assignment and re-run (not just degrade); if still wrong → degrade. This both
+  closes the invisibility (it's the only signal that catches "right face, wrong body") AND self-heals
+  by re-routing. Key: verify on the swapped OUTPUT, not the pre-swap painted render.
+- **P2 — Harden the base render on the worst painterly mediums:** push for frontal, unambiguous
+  secondary-sex-characteristic figures so the read is reliable, or bias the medium roll away from
+  dual on androgynous-prone styles. Complements P1b (fewer flips to catch).
 
 The same bad read also drives the solo-degrade guard (`degrade_solo_multi_face(...read=X/Y)`,
 ~29 fires/6 days), so fixing the read/consistency check helps both paths.
@@ -109,8 +111,7 @@ The same bad read also drives the solo-degrade guard (`degrade_solo_multi_face(.
 | Pri | Fix | Effort | Impact |
 |---|---|---|---|
 | **P0** | Make `photography` dual-ineligible on the nightly cast path (enforce existing ban) | Low | Degrade 15.8% → ~9.6% |
-| **P1a** | Slot-based face→body assignment on painterly mediums (don't trust flip-prone read) | Med | Kills the silent gender-swap |
-| **P1b** | Post-swap gender-consistency check (re-read output vs routed cast gender) | Med | Makes the bug catchable + measurable |
+| **P1** | Post-swap gender-consistency check + re-route on flip (read the OUTPUT's real faces, not the painted base). Slot-based assignment REJECTED — positions aren't reliable. | Med | Catches + self-heals the silent gender-swap |
 | **P2** | Bigger/frontal faces on watercolor/film_noir duals; medium-two-shot not enviro-wide | Med | Cuts the next tranche of degrades |
 
 ## What's NOT the cause (ruled out)
