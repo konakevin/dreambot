@@ -2642,10 +2642,20 @@ Output ONLY the prompt.`;
     // dominance → Flux renders the landscape and shrinks/drops the drawn hero (the
     // person isn't pasted in afterward). The embodied brief already carries the place
     // as a subordinate backdrop clause, so skip the prepend entirely here.
+    //
+    // RACE FIX (2026-09-01, RACE_FIDELITY_PLAN.md #2): ALL character renders (cast
+    // face-swap, dual + single) skip the front-load too. Leading with a COUNTRY noun
+    // ("set in china / japan / jamaica,") is a dominant first-noun ETHNICITY prior —
+    // it renders the cast as LOCALS (Chinese/Japanese/etc.) regardless of their actual
+    // race, and the swap then inherits the wrong-race body (sunnysteph's white +1
+    // rendered East Asian in a China scene). The slot prompt already carries the
+    // SPECIFIC spot ("Tianzifang shikumen alleyway art district") for scene fidelity —
+    // a place name, far weaker as a race prior than the bare country noun.
     if (
       includeLocation &&
       effectiveUserPlace &&
       !isEmbodiedMedium &&
+      resolvedComposition !== 'character' &&
       !finalPrompt.toLowerCase().includes(effectiveUserPlace.toLowerCase())
     ) {
       finalPrompt = `set in ${effectiveUserPlace}, ` + finalPrompt;
