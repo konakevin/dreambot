@@ -58,6 +58,11 @@ export interface DreamCastMember {
   age?: number;
   /** Concise physical traits summary from Haiku vision — hair, skin, build, eyes. Used for trait enforcement in prompts. */
   physical_summary?: string;
+  /** Broad race bucket from classifyEthnicity (White / Black / East Asian / South
+   * Asian / Hispanic-Latino / Middle Eastern), captured once at photo upload. Used
+   * ONLY as a render anchor so a location prior can't override the cast's real race
+   * (RACE_FIDELITY_PLAN.md). Absent/null → skin-tone fallback. Never shown to users. */
+  ethnicity?: string;
   /** Relationship to the user — only for plus_one role. Affects dream context (romantic vs platonic). */
   relationship?: CastRelationship;
 }

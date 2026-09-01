@@ -2089,6 +2089,9 @@ Deno.serve(async (req) => {
             // Pass the explicit gender through so the slot pipeline locks the
             // body's sex to the cast photo (fixes male-face-on-female-body).
             gender: (selectedCast[i] as DreamCastMember).gender ?? null,
+            // Broad race bucket → the slot pipeline's race anchor, so a location
+            // prior ("set in china") can't override the cast's real race.
+            ethnicity: (selectedCast[i] as DreamCastMember).ethnicity ?? null,
           })),
           // Special scene (goofy/elegant) overrides the location + swaps the biome
           // axes for a LIGHTING-quality axis (varies the look; a goofy/indoor scene

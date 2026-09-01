@@ -43,6 +43,11 @@ export type CastSlotMember = {
    * inferring gender from promptDesc. Pass it through so the body renders the
    * correct sex and the face-swap lands a male face on a male body. */
   gender?: 'male' | 'female' | null;
+  /** Broad race bucket from classifyEthnicity (White / Black / East Asian /
+   * South Asian / Hispanic-Latino / Middle Eastern), or null when unread. Used
+   * as the strongest cast RACE anchor to beat a location ethnicity prior
+   * ("set in china" → local). Null → fall back to skin-tone. (RACE_FIDELITY_PLAN.md) */
+  ethnicity?: string | null;
 };
 
 export type SingleSlots = {
@@ -235,8 +240,26 @@ type ResolvedIdentity = {
   age: string | null; // "38 years old" or "mid-30s"
   build: string | null;
   skin: string | null; // skin-tone / complexion clause — race-critical, always kept
+  ethnicity: string | null; // broad race bucket (strongest race anchor) or null
   identity: string; // hair / facial-hair string
 };
+
+// Map a race bucket to its prompt adjective (Hispanic/Latino → "Hispanic" to
+// avoid the slash + gendered Latino/Latina). null for unknown → no anchor.
+function ethnicityAdjective(e: string | null): string | null {
+  switch (e) {
+    case 'White':
+    case 'Black':
+    case 'East Asian':
+    case 'South Asian':
+    case 'Middle Eastern':
+      return e;
+    case 'Hispanic/Latino':
+      return 'Hispanic';
+    default:
+      return null;
+  }
+}
 
 export function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
   // Explicit gender (from describe-photo) is authoritative; fall back to prose.
@@ -248,8 +271,9 @@ export function resolveIdentity(member: CastSlotMember): ResolvedIdentity {
     typeof member.age === 'number' ? `${member.age} years old` : extractAge(member.promptDesc);
   const build = extractBuild(member.physicalSummary);
   const skin = extractSkin(member.physicalSummary);
+  const ethnicity = member.ethnicity ?? null;
   const identity = extractHair(member.physicalSummary) || extractIdentityPhrase(member.promptDesc);
-  return { gender, castGender, age, build, skin, identity };
+  return { gender, castGender, age, build, skin, ethnicity, identity };
 }
 
 function stripIdentity(s: string): string {
@@ -308,10 +332,15 @@ function buildIdentityBlock(
   // body skin to the cast member's actual complexion and overrides any location
   // ethnicity prior. Race must never be inferred from the setting.
   const skinAxis = resolved.skin ? `, ${resolved.skin}` : '';
-  // AND lock the tone onto the subject noun itself ("a fair-skinned man"), the
-  // strongest position for it to survive a heavy face-swap medium prior.
-  const toneAdj = skinToneAdjective(resolved.skin);
-  const subject = toneAdj ? `${toneAdj} ${resolved.gender}` : resolved.gender;
+  // RACE ANCHOR on the subject noun. A broad ETHNICITY bucket ("a White man",
+  // "an East Asian woman") is the STRONGEST counter to a location ethnicity prior
+  // ("set in china" → local) — it beats a skin-tone descriptor (RACE_FIDELITY_PLAN.md
+  // + feedback_ethnicity_noun_beats_visual_descriptors). Prefer it when present;
+  // otherwise fall back to the skin-tone adjective ("fair-skinned"). Ethnicity WINS
+  // over tone: a mis-captured "warm medium" skin read must not fight a "White" anchor.
+  const ethnicityAdj = ethnicityAdjective(resolved.ethnicity);
+  const raceAnchor = ethnicityAdj ?? skinToneAdjective(resolved.skin);
+  const subject = raceAnchor ? `${raceAnchor} ${resolved.gender}` : resolved.gender;
   // NIGHTLY female-hair variation: re-style a FEMALE's hair (color/length/bangs
   // preserved) so she isn't pigeonholed to one static hairdo every night. Gated
   // to female + a caller-supplied pct (nightly only). Male hair is untouched.

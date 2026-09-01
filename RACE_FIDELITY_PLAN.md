@@ -50,9 +50,16 @@ person; broad buckets are what a vision model can call reliably, they avoid ster
 and a wrong fine read makes it worse. It's an **internal render anchor only** — never
 shown to users, never stored as a "label" surfaced anywhere.
 
-Closed set (model picks ONE, or returns null → fall back to skin-tone-only, never guess):
-**White · Black · East Asian · South Asian · Southeast Asian · Hispanic/Latino ·
-Middle Eastern · Pacific Islander.**
+**Closed set — FINALIZED 2026-09-01 after a Haiku accuracy probe** (24 real Pexels
+portraits, verified by eye; probe: `scratchpad/race-probe.mjs`). Findings: White / Black /
+East Asian / South Asian classified 3/3; **zero refusals** (justification-free closed-set
+prompt works on Haiku); the low raw score was mostly Pexels mislabels (a Black man in a
+keffiyeh that "Middle Eastern" search returned → Haiku correctly said Black). The ONE real
+limitation: **Southeast Asian is reliably confused with East Asian** (3/3), so it folds in —
+matching Kevin's instinct. South Asian stays separate (reliably distinct). Final 6 buckets:
+
+> **White · Black · East Asian** (absorbs Southeast Asian + Pacific Islander) **· South Asian ·
+> Hispanic/Latino · Middle Eastern** — model returns one of these or **null → skin-tone-only**.
 
 ### Build steps
 1. **`describe-photo`**: add an ethnicity read constrained to the closed set above.

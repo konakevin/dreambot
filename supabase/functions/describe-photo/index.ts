@@ -5,7 +5,7 @@
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
-import { describeWithVision, VISION_PROMPTS } from '../_shared/vision.ts';
+import { describeWithVision, VISION_PROMPTS, classifyEthnicity } from '../_shared/vision.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 
 const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
@@ -180,12 +180,19 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // Broad race bucket — captured ONCE here at upload, stored on the cast member
+    // (client persists it into dream_cast), read at render time as the race anchor
+    // so a location prior can't override the cast's real race. Null-safe: any
+    // uncertain/refusal → null → skin-tone fallback. (RACE_FIDELITY_PLAN.md)
+    const ethnicity = role === 'pet' ? null : await classifyEthnicity(image_url);
+
     return new Response(
       JSON.stringify({
         description,
         gender,
         age,
         physical_summary: physicalSummary || null,
+        ethnicity,
         cast_quality: castQuality,
       }),
       {

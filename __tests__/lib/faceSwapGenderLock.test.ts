@@ -260,3 +260,133 @@ describe('characterSlotPrompt — female-only hair variation', () => {
     expect(out).toContain('short brown hair, wearing');
   });
 });
+
+// ── Race/ethnicity anchor (RACE_FIDELITY_PLAN.md) ───────────────────────────
+// The cast's broad race bucket must lead the subject noun so it beats a location
+// ethnicity prior ("set in china" → local). Ethnicity WINS over a (possibly
+// mis-captured) skin-tone read; null ethnicity falls back to skin tone (no regression).
+describe('characterSlotPrompt — race/ethnicity anchor', () => {
+  const slots = {
+    scene_description: 'a Tianzifang alleyway',
+    wardrobe: 'a jacket',
+    mood: 'candid',
+    props: 'a map',
+  };
+  const inputWith = (member: Record<string, unknown>) => ({
+    cast: [member],
+    iconicAnchor: 'Tianzifang shikumen alleyway',
+    userPlace: null,
+    timeAxis: 'day',
+    weatherAxis: 'clear',
+    phenomenaAxis: '',
+    mediumFluxFragment: 'comic-book illustration',
+    vibeDirective: 'candid',
+    avoidList: '',
+    action: null,
+  });
+
+  it('ethnicity anchor leads the subject noun and BEATS a mis-captured skin tone', () => {
+    // The exact bug: white +1 the describer read as "warm medium" → rendered Asian.
+    const out = assembleCharacterPrompt(
+      slots,
+      inputWith({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'chestnut brown hair, warm medium skin tone, athletic build',
+        ethnicity: 'White',
+      })
+    );
+    expect(out).toContain('a White man');
+    expect(out).not.toContain('tan-skinned man'); // tone adjective must be suppressed by the ethnicity anchor
+  });
+
+  it('each bucket renders its adjective on the subject noun', () => {
+    const b = (eth: string) =>
+      assembleCharacterPrompt(
+        slots,
+        inputWith({
+          role: 'self',
+          promptDesc: 'a woman',
+          gender: 'female',
+          physicalSummary: 'dark hair, medium skin tone, average build',
+          ethnicity: eth,
+        })
+      );
+    expect(b('Black')).toContain('a Black woman');
+    expect(b('East Asian')).toContain('a East Asian woman');
+    expect(b('South Asian')).toContain('a South Asian woman');
+    expect(b('Middle Eastern')).toContain('a Middle Eastern woman');
+    expect(b('Hispanic/Latino')).toContain('a Hispanic woman'); // slash + gendered term normalized
+  });
+
+  it('null ethnicity falls back to the skin-tone anchor (no regression)', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inputWith({
+        role: 'self',
+        promptDesc: 'a woman',
+        gender: 'female',
+        physicalSummary: 'blonde hair, fair peachy skin tone, average build',
+        ethnicity: null,
+      })
+    );
+    expect(out).toContain('a fair-skinned woman');
+  });
+
+  it('unrecognized ethnicity → no bad anchor, falls back to skin tone', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inputWith({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'brown hair, olive skin, average build',
+        ethnicity: 'Klingon',
+      })
+    );
+    expect(out).not.toContain('a Klingon');
+    expect(out).toContain('a olive-skinned man');
+  });
+
+  it('applies the anchor to BOTH people in a dual render', () => {
+    const out = assembleCharacterPrompt(
+      {
+        scene_description: 'a Kyoto lane',
+        left_wardrobe: 'a kimono',
+        right_wardrobe: 'a jacket',
+        mood: 'candid',
+        props: 'lanterns',
+      },
+      {
+        cast: [
+          {
+            role: 'self',
+            promptDesc: 'a woman',
+            gender: 'female',
+            physicalSummary: 'braided hair, deep brown skin, average',
+            ethnicity: 'Black',
+          },
+          {
+            role: 'plus_one',
+            promptDesc: 'a man',
+            gender: 'male',
+            physicalSummary: 'chestnut hair, warm medium skin, athletic',
+            ethnicity: 'White',
+          },
+        ],
+        iconicAnchor: 'Kyoto',
+        userPlace: null,
+        timeAxis: 'day',
+        weatherAxis: 'clear',
+        phenomenaAxis: '',
+        mediumFluxFragment: 'comic-book illustration',
+        vibeDirective: 'candid',
+        avoidList: '',
+        action: null,
+      }
+    );
+    expect(out).toContain('a Black woman');
+    expect(out).toContain('a White man');
+  });
+});

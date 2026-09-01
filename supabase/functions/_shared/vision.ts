@@ -122,6 +122,79 @@ export async function describeWithVision(
 }
 
 /**
+ * Broad race/appearance buckets for the cast, used ONLY as a render anchor to
+ * stop a location prior from overriding the cast's actual race (RACE_FIDELITY_PLAN.md).
+ * FINALIZED after a Haiku accuracy probe (2026-09-01): these 6 classify reliably;
+ * Southeast Asian + Pacific Islander are deliberately NOT offered because Haiku
+ * conflates them with East Asian — so those faces land on 'East Asian', which is
+ * the intended merge. Never surfaced to users; internal render anchor only.
+ */
+export const CAST_ETHNICITY_BUCKETS = [
+  'White',
+  'Black',
+  'East Asian',
+  'South Asian',
+  'Hispanic/Latino',
+  'Middle Eastern',
+] as const;
+export type CastEthnicity = (typeof CAST_ETHNICITY_BUCKETS)[number];
+
+/**
+ * Read a cast photo's broad race bucket (one of CAST_ETHNICITY_BUCKETS) or null
+ * when unsure. NULL-SAFE by contract: any refusal / uncertain / off-list / API
+ * error → null, and the caller falls back to skin-tone-only (never guesses).
+ * Runs ONCE at cast-photo upload (describe-photo) + the backfill — never per render.
+ * Justification-FREE closed-set prompt (Haiku refuses "justified" probes).
+ */
+export async function classifyEthnicity(imageInput: string): Promise<CastEthnicity | null> {
+  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  if (!anthropicKey) return null;
+  try {
+    let imageContent: Record<string, unknown>;
+    if (imageInput.startsWith('data:')) {
+      const match = imageInput.match(/^data:(image\/\w+);base64,(.+)$/);
+      if (!match) return null;
+      imageContent = {
+        type: 'image',
+        source: { type: 'base64', media_type: match[1], data: match[2] },
+      };
+    } else {
+      imageContent = { type: 'image', source: { type: 'url', url: imageInput } };
+    }
+    const prompt =
+      "Which single option best matches this person's broad appearance? Choose EXACTLY one and reply with only that option, nothing else:\n" +
+      CAST_ETHNICITY_BUCKETS.join(', ') +
+      ', Uncertain.';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: HAIKU,
+        max_tokens: 30,
+        messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
+      }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const txt =
+      data.content && data.content[0] && data.content[0].type === 'text'
+        ? String(data.content[0].text).toLowerCase()
+        : '';
+    // Longest-first match so "South Asian" isn't shadowed by "Asian" etc.
+    const hit = [...CAST_ETHNICITY_BUCKETS]
+      .sort((a, b) => b.length - a.length)
+      .find((b) => txt.includes(b.toLowerCase()));
+    return hit ?? null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+/**
  * Classify the apparent gender of the LEFT and RIGHT person in a two-person
  * render. Used by the dual face-swap pipeline to route each cast member's face
  * onto the body of the matching gender.
