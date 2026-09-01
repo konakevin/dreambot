@@ -56,6 +56,45 @@ them) · South Asian · Hispanic/Latino · Middle Eastern. Else null → skin-to
 local). Hair color mostly held; sunnysteph's +1 drifted dark-brown on one roll. ~3/15
 degraded to a clean solo (normal dual variance). Matrix artifact was published for review.
 
+## Update 2026-09-01 — traveler wardrobe + face-swap medium cleanup
+
+Three more fixes shipped after the first verification found the worst-case
+(sunnysteph × China dual) still drifting:
+
+| Fix | Where | Effect |
+|---|---|---|
+| **Traveler wardrobe rule** — cast are VISITORS, never in real-culture ethnic dress (kimono/hanfu/mandarin/sari…) | `characterSlotPrompt.ts` `buildSlotBrief`, gated by `realWorldLocation` | stops "white +1 in a hanfu reads Chinese" |
+| **Suppress the location wardrobe ANCHOR on real-world locations** (the biome `WARDROBE` was feeding traditional dress as "on-location attire"; kept only for fantasy/imagined worlds) | `nightly-dreams` slotInput (`imaginedLocation` gate) | removes the ethnic-dress SOURCE that fought the rule |
+| **Rewrote `FRAG_CRISP_ORNATE_ILLUSTRATION` face-swap-friendly** — added the lifelike-adult-face clause the other 3 styles carry, dropped "ornate decorative details / jewel-tone" (which dressed the cast in brocade AND stylized the face toward the location's ethnicity) | `faceSwapModelOverrides.ts` | the LAST race-drift vector; keeps the ink look, kills the drift |
+| **Bald-guard** — never render bald when the cast photo has hair | `characterSlotPrompt.ts` `buildIdentityBlock` | greying/faded short cuts no longer drift bald |
+| Tests: bald-guard (3) + traveler-rule (3) | `__tests__/lib/faceSwapGenderLock.test.ts` | locks the above |
+
+**Verification (2026-09-01, round 2).** Ornate-only stress test (5× China dual, medium
+pinned): the rewritten medium corrected the FACE race the OLD ornate rendered East
+Asian. Broad matrix (10 dual renders across China/Japan/India/Egypt/Morocco, normal
+rotation): **10/10 read the correct white couple, 0 local-race swaps, 0 ethnic dress.**
+The original bug cases (white +1 in Japan/India) now clearly read as themselves. One
+soft spot: India+comic drifts skin warm/tan (not a race swap).
+
+**Two issues surfaced that are NOT race/medium (separate work):**
+1. **Giant-Buddha-statue swap — FIXED 2026-09-01.** Some iconic spots depict a
+   COLOSSAL human/deity FACE (giant Buddha, Sphinx, moai, Christ the Redeemer, Mount
+   Rushmore, cliff-carved face); Flux renders the huge face, the face-swap detector
+   grabs the STATUE, and the cast gets pasted onto the monument (degrades to solo).
+   Fix: `_shared/monumentalFaceSpot.ts` `isMonumentalFaceSpot()` — a self-healing
+   text detector (named monuments + carved-face phrasing both word orders + deity
+   nouns + scale-gated generic statues). `nightly-dreams` anchor selection filters
+   these OUT of CAST (face-swap) pools while keeping them eligible for pure_scene.
+   Self-healing (covers future-seeded spots — no stale data migration). Verified:
+   caught all 8 China Buddha/statue spots of 225 (no starvation), 6/6 China dual
+   re-renders got safe anchors + clean dual + correct race, and "Chengdu GIANT Panda
+   Base" was correctly NOT flagged (no over-exclusion). Tests:
+   `__tests__/lib/monumentalFaceSpot.test.ts` (31 — landmines flagged, ordinary spots
+   not). Forensics: `fallbackReasons` gets `monument_face_spots_filtered:N`.
+2. **Robes on ancient-China ink scenes** — the ink medium on an ancient-mountain-
+   scholar scene robes the figures despite the suppressed anchor (the "ancient ink
+   painting" prior). Intermittent; medium+scene interaction, not the cast anchor.
+
 ## Known remaining / future levers (if bad renders persist)
 1. **Hair-color still drifts intermittently.** Same Flux-adherence fight as race. Options,
    in rough order of effort: (a) strengthen the hair anchor further (repeat the color in

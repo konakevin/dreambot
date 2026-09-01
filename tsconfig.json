@@ -67,6 +67,7 @@
     "__tests__/lib/classifyFailure.test.ts",
     "__tests__/lib/smartDream.test.ts",
     "__tests__/lib/dreamSmartModel.test.ts",
-    "__tests__/lib/dualSoloFallback.test.ts"
+    "__tests__/lib/dualSoloFallback.test.ts",
+    "__tests__/lib/monumentalFaceSpot.test.ts"
   ]
 }

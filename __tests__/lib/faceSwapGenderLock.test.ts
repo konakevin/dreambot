@@ -19,6 +19,7 @@ import {
   resolveIdentity,
   assembleCharacterPrompt,
   skinToneAdjective,
+  buildSlotBrief,
 } from '@engine/characterSlotPrompt';
 
 // ── castResolver (create flow) ─────────────────────────────────────────────
@@ -427,7 +428,7 @@ describe('characterSlotPrompt — hair-color anchor', () => {
         ethnicity: 'White',
       })
     );
-    expect(out).toContain('a White man with chestnut brown hair'); // early anchor, right after race
+    expect(out).toContain('a White man with a full head of chestnut brown hair'); // early anchor, right after race
     expect(out).toContain('warm medium skin tone'); // skin clause still present
   });
 
@@ -442,7 +443,7 @@ describe('characterSlotPrompt — hair-color anchor', () => {
         ethnicity: 'East Asian',
       })
     );
-    expect(out).toContain('with black hair');
+    expect(out).toContain('with a full head of black hair');
     expect(out).not.toContain('not black');
   });
 
@@ -459,5 +460,122 @@ describe('characterSlotPrompt — hair-color anchor', () => {
     );
     expect(out).toContain('CHARACTER: a'); // still builds cleanly
     expect(out).not.toContain('with  hair');
+  });
+});
+
+// ── BALD-GUARD: never render bald when the cast photo has hair ─────────────
+// Kevin, 2026-09-01: sunnysteph's +1 had "salt and pepper hair, tapered faded
+// sides" but rendered BALD under the stylized dual — short/greying/faded cuts
+// drift to bald. The guard forces "a full head of <color> hair" whenever a hair
+// color is present AND the description doesn't actually say bald.
+describe('characterSlotPrompt — bald-guard (has hair → never bald)', () => {
+  const slots = {
+    scene_description: 'a city wall',
+    wardrobe: 'a jacket',
+    mood: 'candid',
+    props: '',
+  };
+  const inp = (m: Record<string, unknown>) => ({
+    cast: [m],
+    iconicAnchor: 'Shanghai',
+    userPlace: null,
+    timeAxis: 'day',
+    weatherAxis: 'clear',
+    phenomenaAxis: '',
+    mediumFluxFragment: 'comic-book illustration',
+    vibeDirective: 'candid',
+    avoidList: '',
+    action: null,
+  });
+
+  it('a greying/faded short cut is forced to a FULL HEAD of hair', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'plus_one',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'salt and pepper hair, tapered faded sides, fair skin, average build',
+        ethnicity: 'White',
+      })
+    );
+    expect(out).toContain('with a full head of salt and pepper hair');
+    expect(out).not.toMatch(/\bbald\b/i);
+  });
+
+  it('a genuinely bald cast member is NOT given hair (guard respects "bald")', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'bald head, brown stubble, tan skin, athletic build',
+        ethnicity: 'White',
+      })
+    );
+    // "brown" would match a color, but the bald-guard suppresses the full-head
+    // anchor when the description says bald — we must not fabricate hair.
+    expect(out).not.toContain('a full head of');
+  });
+
+  it('a receding hairline is NOT forced to a full head', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'receding brown hairline, fair skin, average build',
+        ethnicity: 'White',
+      })
+    );
+    expect(out).not.toContain('a full head of');
+  });
+});
+
+// ── TRAVELER wardrobe rule: no real-world ethnic dress on real places ──────
+// Kevin, 2026-09-01: a white +1 in a hanfu reads Chinese. On REAL-WORLD
+// locations the cast are visitors and must wear contemporary travel clothes;
+// the rule (and the suppressed cultural anchor) enforce this. Fantasy/imagined
+// dream worlds keep their in-world attire, so the rule is suppressed there.
+describe('characterSlotPrompt.buildSlotBrief — traveler wardrobe rule', () => {
+  const baseInput = (over: Record<string, unknown>) => ({
+    cast: [
+      {
+        role: 'self',
+        promptDesc: 'a woman',
+        gender: 'female' as const,
+        physicalSummary: 'brown hair, fair skin, average build',
+        ethnicity: 'White',
+      },
+    ],
+    iconicAnchor: 'the Bund, Shanghai',
+    userPlace: 'China',
+    timeAxis: 'golden hour',
+    weatherAxis: 'clear',
+    phenomenaAxis: '',
+    mediumFluxFragment: 'editorial photograph',
+    vibeDirective: 'warm cinematic',
+    avoidList: '',
+    action: null,
+    ...over,
+  });
+
+  it('real-world location → traveler rule present, forbids ethnic dress', () => {
+    const brief = buildSlotBrief(baseInput({ realWorldLocation: true }));
+    expect(brief).toContain('VISITORS/travelers');
+    expect(brief).toMatch(/kimono, hanfu/);
+  });
+
+  it('undefined realWorldLocation defaults to real-world (rule ON — safe default)', () => {
+    const brief = buildSlotBrief(baseInput({}));
+    expect(brief).toContain('VISITORS/travelers');
+  });
+
+  it('fantasy/imagined dream world → traveler rule suppressed (keep in-world attire)', () => {
+    const brief = buildSlotBrief(baseInput({ realWorldLocation: false }));
+    expect(brief).not.toContain('VISITORS/travelers');
+    expect(brief).not.toMatch(/kimono, hanfu/);
   });
 });

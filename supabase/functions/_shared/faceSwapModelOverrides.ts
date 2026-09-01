@@ -50,8 +50,22 @@
 const FRAG_WATERCOLOR_INK =
   'loose watercolor and ink painting with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, transparent pigment washes on textured watercolor paper, soft feathered bleeding edges, visible brushstrokes and fine ink linework, golden warm watercolor palette, naturalistic mature features, painterly portrait realism';
 
+// 2026-09-01 — rewritten FACE-SWAP-FRIENDLY (Kevin). The old fragment ("richly
+// saturated jewel-tone colors, ornate decorative details ... vibrant fine art
+// drawing") was the last remaining RACE-FIDELITY vector on cast renders in
+// ethnicity-loaded locations (RACE_FIDELITY_PLAN.md — the sunnysteph China 5x
+// verification: the ONLY 2/5 misses were both this medium). It failed two ways:
+// (a) "ornate decorative details / jewel-tone" pushed ornate BROCADE / ethnic-
+// pattern CLOTHING onto the cast (a white cast in a gold-brocade blazer reads
+// Chinese), and (b) it had NO realistic-face reinforcement (unlike the other three
+// styles), so the swap harmonized toward the location's ethnicity. This rewrite
+// KEEPS the crisp-ink illustration LOOK the users like, but (1) adds the same
+// lifelike-adult-face clause the other three carry, and (2) drops the ornate-
+// decoration / jewel-tone language that dressed the cast in ethnic garb. Describe
+// the ART MEDIUM (ink linework, clean illustration), never decorative ornamentation
+// Flux will apply to the clothing.
 const FRAG_CRISP_ORNATE_ILLUSTRATION =
-  'crisp ink illustration with bold confident linework, richly saturated jewel-tone colors, ornate decorative details, intricate line art, masterwork hand-drawn artwork, gallery-quality illustration print, polished editorial illustration style, vibrant fine art drawing, sharply rendered detailed illustration';
+  'crisp ink illustration with bold confident linework and lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, clean intricate line art, rich saturated color, masterwork hand-drawn editorial illustration, naturalistic mature features, illustrated portrait realism, gallery-quality detailed drawing';
 
 const FRAG_POLISHED_DIGITAL_RENDER =
   'polished digital painting, professional concept art, high-quality digital artwork, smooth painterly surfaces with crisp detail, vibrant saturated colors, masterful digital art, fine art digital painting, polished digital rendering';
@@ -76,7 +90,9 @@ export type FaceSwapModelOverrideEntry = {
 
 export const FACE_SWAP_MODEL_OVERRIDES: Record<string, FaceSwapModelOverrideEntry[]> = {
   'black-forest-labs/flux-1.1-pro': [
-    // 4-way rotation. flux-1.1-pro renders all 4 well; users get variety.
+    // 4-way rotation of realism-reinforced styles. flux-1.1-pro renders all well;
+    // users get variety. (The ornate-ink style was rewritten face-swap-friendly
+    // 2026-09-01 — see its tombstone — not removed.)
     { fragment: FRAG_WATERCOLOR_INK },
     { fragment: FRAG_CRISP_ORNATE_ILLUSTRATION },
     { fragment: FRAG_POLISHED_DIGITAL_RENDER },

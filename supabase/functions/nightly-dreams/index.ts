@@ -127,6 +127,7 @@ import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
 import { applyFaceSwapOverride } from '../_shared/faceSwapFluxOverrides.ts';
 import { pickFaceSwapModelOverride } from '../_shared/faceSwapModelOverrides.ts';
+import { isMonumentalFaceSpot } from '../_shared/monumentalFaceSpot.ts';
 
 // Models nightly must never render. flux-2-dev over-smooths under the nightly
 // slot pipeline (banned 2026-06-01). Module-scoped so BOTH the DreamSmart pool
@@ -1334,12 +1335,32 @@ Deno.serve(async (req) => {
           .maybeSingle(),
       ]);
       if (spots && spots.length > 0) {
+        // CAST FACE-SWAP SAFETY: drop spots that depict a MONUMENTAL human/deity
+        // FACE (giant Buddha, Sphinx, moai, Christ the Redeemer, cliff-carved
+        // face…). Flux renders the colossal face, the face-swap detector grabs
+        // the STATUE'S face, and the cast gets pasted onto the monument (root-
+        // caused 2026-09-01 on Longmen Grottoes' "giant Vairocana Buddha carved
+        // … face"; RACE_FIDELITY_PLAN.md). These stay eligible for pure_scene
+        // (no face to protect); only cast paths filter them. Fall back to the
+        // full pool if the filter would starve it (thin location).
+        let castSpots = spots;
+        if (composition !== 'pure_scene') {
+          const safe = spots.filter((s) => !isMonumentalFaceSpot(s.spot_text));
+          if (safe.length >= 1) {
+            if (safe.length < spots.length) {
+              fallbackReasons.push(`monument_face_spots_filtered:${spots.length - safe.length}`);
+            }
+            castSpots = safe;
+          } else {
+            fallbackReasons.push('monument_face_spot_pool_starved');
+          }
+        }
         // L6 variety: prefer an anchor the user hasn't gotten recently. Fall
         // back to the full pool if de-duping would starve it (mirrors
         // filterRecent's >=2 rule — small/thin location pools).
         const recentAnchorSet = new Set(recentAnchors);
-        const freshSpots = spots.filter((s) => !recentAnchorSet.has(s.spot_text));
-        const anchorPool = freshSpots.length >= 2 ? freshSpots : spots;
+        const freshSpots = castSpots.filter((s) => !recentAnchorSet.has(s.spot_text));
+        const anchorPool = freshSpots.length >= 2 ? freshSpots : castSpots;
         const picked = anchorPool[Math.floor(Math.random() * anchorPool.length)];
         iconicAnchor = picked.spot_text;
         // Spot scale = how the brief should frame this anchor. Classified
@@ -2102,13 +2123,26 @@ Deno.serve(async (req) => {
           timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
           weatherAxis: dualSpecialScene ? '' : weatherAxis,
           phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
+          // On a REAL-WORLD location the biome's WARDROBE anchor is often the
+          // traditional/national dress of that culture (China → hanfu/mandarin
+          // jacket, Japan → kimono) — feeding it to Sonnet as "on-location attire"
+          // dressed a white cast in ethnic dress so they READ as that ethnicity
+          // (the race-swap bug). SUPPRESS the anchor on real-world locations
+          // (imaginedLocation === false) so the generic contemporary-travel
+          // guidance + traveler rule take over; KEEP it only for fantasy/imagined
+          // dream worlds (elf robes, spacesuits belong there). The special-scene
+          // wardrobe (goofy/elegant register) is location-independent → unaffected.
           wardrobeAnchor: dualSpecialScene
             ? dualSpecialWardrobe
-            : bespokeBiome &&
+            : imaginedLocation &&
+                bespokeBiome &&
                 Array.isArray(bespokeBiome.WARDROBE) &&
                 bespokeBiome.WARDROBE.length > 0
               ? pickAxis(bespokeBiome.WARDROBE)
               : null,
+          // Real-world → traveler wardrobe rule ON (no ethnic dress); fantasy/
+          // imagined dream world → OFF (keep in-world attire).
+          realWorldLocation: !imaginedLocation,
           mediumFluxFragment: baseMedium.fluxFragment,
           // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
           // human face despite a stylized scene — the kawaii big-eyes fix);

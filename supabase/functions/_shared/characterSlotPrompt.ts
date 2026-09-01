@@ -82,6 +82,16 @@ export interface CharacterSlotPipelineInput {
    * characters render in on-location attire (fairy-tale tunics at Fairy Cottage,
    * yukata at Tokyo, etc.). If null, falls back to the generic mood randomizer. */
   wardrobeAnchor?: string | null;
+  /** Whether the location is a REAL-WORLD place (not a fantasy/imagined dream
+   * world). Drives the TRAVELER wardrobe rule: on real places the cast are
+   * VISITORS and must wear contemporary travel clothes, never the traditional/
+   * national/ethnic dress of that culture (a white cast in a hanfu reads Chinese —
+   * a major vector in the race-swap bug). Fantasy/imagined worlds keep their
+   * in-world attire, so the rule is suppressed there. Undefined → treated as
+   * real-world (the safe default: the rule only ever bans REAL-culture dress, which
+   * fantasy worlds don't use). Set explicitly by nightly-dreams from
+   * `!imaginedLocation`. (RACE_FIDELITY_PLAN.md) */
+  realWorldLocation?: boolean;
   // Medium + tone
   mediumFluxFragment: string;
   vibeDirective: string;
@@ -369,14 +379,19 @@ function buildIdentityBlock(
   // HAIR-COLOR anchor: restate the color EARLY on the subject so it survives the
   // scene/medium prior (full character preservation — the person, in the scene).
   // The full hair clause still follows for cut/style; the early color is the lever.
+  // BALD-GUARD (Kevin, 2026-09-01): NEVER render someone bald when their cast photo
+  // has hair — short/greying/faded cuts drift to bald under a stylized render (his
+  // +1 came out bald). If they have a hair color (i.e. they have hair) and aren't
+  // described bald, force "a full head of ... hair". Positive only.
   const hairColor = extractHairColor(identitySource);
-  const colorAnchor = hairColor ? ` with ${hairColor} hair` : '';
+  const isBald = /\b(bald|balding|shaved head|hairless|receding)\b/i.test(identitySource);
+  const colorAnchor = hairColor && !isBald ? ` with a full head of ${hairColor} hair` : '';
   return `${prefix}: a ${subject}${colorAnchor}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
 // ── Slot brief construction ─────────────────────────────────────────────
 
-function buildSlotBrief(input: CharacterSlotPipelineInput): string {
+export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
   const wardrobeMood = WARDROBE_MOODS[Math.floor(Math.random() * WARDROBE_MOODS.length)];
 
@@ -386,9 +401,25 @@ function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   // creative latitude to adapt for the character; the anchor just keeps
   // the wardrobe on-vibe for the location. When no anchor is provided,
   // fall back to the legacy climate-guess behavior.
-  const climateGuidance = input.wardrobeAnchor
-    ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
-    : `wardrobe MUST be what real people actually wear at ${location} given its climate, setting, and cultural context — but dressed to look their BEST: flattering, stylish, and distinctive, never dowdy or drab. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate and flattering. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`;
+  // TRAVELER wardrobe rule (2026-09-01, RACE_FIDELITY_PLAN.md): the cast are
+  // VISITORS, not locals. Dressing them in the traditional/national/ethnic dress
+  // of a real-world place (kimono in Japan, mandarin jacket in China, sari in
+  // India) makes even a fair-skinned cast member READ as that ethnicity — it was
+  // a major vector in the "white +1 looks Chinese" bug. Force contemporary travel
+  // wear on real-world locations; themed FANTASY / imagined dream worlds keep
+  // their in-world attire, so the rule is SUPPRESSED there (realWorldLocation ===
+  // false). Undefined → treated as real-world (safe default; the rule only bans
+  // real-culture dress anyway). The location wardrobe ANCHOR is ALSO suppressed
+  // upstream on real-world locations (nightly-dreams) so it can't fight this rule.
+  const isRealWorld = input.realWorldLocation !== false;
+  const travelerRule = isRealWorld
+    ? ' The cast are VISITORS/travelers here, NOT locals — dress them in flattering, stylish CONTEMPORARY clothes they would actually travel in, and NEVER in the traditional, national, or ethnic dress of a real-world culture (no kimono, hanfu, mandarin/Mao jacket, sari, kurta, dirndl, lederhosen, keffiyeh, cheongsam, qipao, etc.). A tourist visiting Japan wears their own clothes, not a kimono.'
+    : '';
+  const climateGuidance =
+    (input.wardrobeAnchor
+      ? `WARDROBE — you are the COSTUME DESIGNER dressing the hero and heroine of a film shot at "${location}". Dress EACH character to look striking and their absolute best: flattering, cool, and distinctive, in pieces true to the period / setting / cultural register of "${location}". One on-location inspiration to draw from: "${input.wardrobeAnchor}". Adapt it into something bold and attractive for each character — flattering silhouette, rich materials, standout details, styled hair — or invent something equally on-location and eye-catching. NEVER plain, dowdy, mundane, frumpy, drab, or merely "historically accurate" — this is a DREAM, so make the outfit sing while staying true to the setting. Avoid generic "linen shirt + chinos" defaults.`
+      : `wardrobe MUST be flattering, stylish, contemporary clothing suited to ${location}'s climate and setting — distinctive, never dowdy or drab. A tropical beach, an alpine village, a desert ruin, a modern city, and an arctic glacier all call for different wardrobe. WARDROBE MOOD for this render: ${wardrobeMood}. Lean into this style while keeping it climate-appropriate and flattering. Bring distinctive pieces, colors, and silhouettes — avoid the same "linen shirt + chinos" default every render.`) +
+    travelerRule;
 
   const forbiddenList = `━━━ FORBIDDEN IN ANY FIELD — your output will be rejected if you violate ━━━
 - Camera / lens / framing: close-up, wide shot, medium shot, low angle, 85mm, depth of field, fisheye
