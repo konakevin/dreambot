@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+/**
+ * Subscription sparkle reconciliation backstop.
+ *
+ * Monthly sparkle bundles are granted by the revenuecat-webhook on each RENEWAL.
+ * If RevenueCat ever drops a RENEWAL webhook (delivery failure that exhausts its
+ * retries), that subscriber silently misses that cycle's sparkles and nothing
+ * catches it. This job is that safety net: for each ACTIVE MONTHLY subscriber who
+ * has NOT received a bundle grant in their current billing cycle, it grants the
+ * configured monthly bundle. Yearly subs already got 12x up front → skipped.
+ *
+ * Idempotent per user-per-cycle: the grant reason is
+ *   sub_reconcile:<tier>:<userId>:<cycleStartDate>
+ * so re-running (or a late webhook arriving after) never double-grants — it also
+ * checks for any real webhook grant since the cycle start and skips if present.
+ *
+ * Monthly-vs-yearly detection: the users.<tier>_subscription_period stamp (mig 452),
+ * with a fallback to inferring from the last bundle grant amount (12x = yearly) for
+ * subs that predate the stamp. Indeterminate (no stamp AND no prior grant) → logged
+ * for manual review, never auto-granted (avoids over-granting an edge/admin sub).
+ *
+ * Fail-loud: every reconcile grant emits a ::warning:: (a dropped webhook worth
+ * knowing about). Run daily via .github/workflows/subscription-sparkle-reconcile.yml.
+ *
+ *   node scripts/reconcile-subscription-sparkles.js            # live
+ *   node scripts/reconcile-subscription-sparkles.js --dry-run  # report only
+ */
+require('dotenv').config({ path: '.env.local' });
+const { createClient } = require('@supabase/supabase-js');
+const { waitForHeadroom } = require('./lib/poolHeadroom');
+
+const getKey = (n) => process.env[n];
+const SUPABASE_URL = getKey('SUPABASE_URL') || 'https://jimftynwrinwenonjrlj.supabase.co';
+const SUPABASE_KEY = getKey('SUPABASE_SERVICE_ROLE_KEY');
+const DRY_RUN = process.argv.includes('--dry-run');
+
+if (!SUPABASE_KEY) {
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
+const sb = createClient(SUPABASE_URL.trim(), SUPABASE_KEY.trim());
+
+const TIERS = [
+  {
+    name: 'pro',
+    flagColumn: 'pro_subscription',
+    expiresColumn: 'pro_subscription_expires_at',
+    periodColumn: 'pro_subscription_period',
+    bundleColumn: 'pro_monthly_sparkle_bundle',
+    reasonPrefix: 'pro_bundle',
+    fallbackBundle: 75,
+  },
+  {
+    name: 'basic',
+    flagColumn: 'basic_subscription',
+    expiresColumn: 'basic_subscription_expires_at',
+    periodColumn: 'basic_subscription_period',
+    bundleColumn: 'basic_monthly_sparkle_bundle',
+    reasonPrefix: 'basic_bundle',
+    fallbackBundle: 20,
+  },
+];
+
+// cycleStart = one month before the current expiry (a monthly sub's cycle runs
+// [expiry - 1 month, expiry]). A grant should land once inside that window.
+function monthlyCycleStart(expiresAt) {
+  const d = new Date(expiresAt);
+  d.setMonth(d.getMonth() - 1);
+  return d;
+}
+
+async function main() {
+  const nowIso = new Date().toISOString();
+  const { data: cfgRows } = await sb.from('engine_config').select('*').limit(1);
+  const cfg = cfgRows && cfgRows[0] ? cfgRows[0] : {};
+
+  let checked = 0;
+  let granted = 0;
+  let indeterminate = 0;
+
+  for (const tier of TIERS) {
+    const monthlyBundle = Number(cfg[tier.bundleColumn]) || tier.fallbackBundle;
+
+    // Active paid subs on this tier (paginated — PostgREST caps at 1000).
+    let subs = [];
+    for (let off = 0; off < 5000; off += 1000) {
+      const { data, error } = await sb
+        .from('users')
+        .select(`id, ${tier.expiresColumn}, ${tier.periodColumn}`)
+        .eq(tier.flagColumn, true)
+        .gt(tier.expiresColumn, nowIso)
+        .order('id', { ascending: true })
+        .range(off, off + 999);
+      if (error) {
+        console.error(`[reconcile] ${tier.name} user query failed:`, error.message);
+        break;
+      }
+      subs = subs.concat(data || []);
+      if (!data || data.length < 1000) break;
+    }
+
+    for (const u of subs) {
+      checked++;
+      const expiresAt = u[tier.expiresColumn];
+
+      // Last real bundle grant (webhook) for this user+tier.
+      const { data: lastRows } = await sb
+        .from('sparkle_transactions')
+        .select('amount, created_at')
+        .eq('user_id', u.id)
+        .like('reason', `${tier.reasonPrefix}:%`)
+        .order('created_at', { ascending: false })
+        .limit(1);
+      const lastGrant = lastRows && lastRows[0] ? lastRows[0] : null;
+
+      // Determine period: stamp first, else infer from the last grant amount.
+      let period = u[tier.periodColumn];
+      if (!period && lastGrant) {
+        period = Number(lastGrant.amount) >= monthlyBundle * 12 ? 'yearly' : 'monthly';
+      }
+
+      if (period === 'yearly') continue; // got 12x up front — not owed monthly
+      if (!period && !lastGrant) {
+        // Can't tell monthly vs yearly and no grant history (typically a trial or
+        // admin-set flag, or a pre-stamp sub) — don't guess/over-grant. Plain log,
+        // NOT a ::warning:: — this isn't a dropped-webhook problem, and warning on
+        // it daily would be alarm noise. Real paid subs carry the period stamp now.
+        indeterminate++;
+        console.log(
+          `[reconcile] ${tier.name} sub ${u.id} active with no period stamp and no prior grant — indeterminate, skipped.`
+        );
+        continue;
+      }
+
+      // Monthly: has a bundle grant landed in the current cycle?
+      const cycleStart = monthlyCycleStart(expiresAt);
+      if (lastGrant && new Date(lastGrant.created_at) >= cycleStart) continue; // covered
+
+      // MISSING this cycle's grant. Idempotent per user-per-cycle.
+      const cycleKey = cycleStart.toISOString().slice(0, 10);
+      const reconcileReason = `sub_reconcile:${tier.name}:${u.id}:${cycleKey}`;
+      const { data: already } = await sb
+        .from('sparkle_transactions')
+        .select('id')
+        .eq('reason', reconcileReason)
+        .limit(1);
+      if (already && already.length > 0) continue; // already reconciled this cycle
+
+      console.warn(
+        `::warning:: [reconcile] MISSING monthly ${tier.name} bundle for ${u.id} (cycle ${cycleKey}) — a RENEWAL webhook was dropped. ${DRY_RUN ? '[dry-run, would grant ' + monthlyBundle + ']' : 'granting ' + monthlyBundle}`
+      );
+      granted++;
+      if (!DRY_RUN) {
+        await waitForHeadroom({ min: 25, label: 'reconcile-sparkles' });
+        const { error } = await sb.rpc('grant_sparkles', {
+          p_user_id: u.id,
+          p_amount: monthlyBundle,
+          p_reason: reconcileReason,
+        });
+        if (error) {
+          granted--;
+          console.error(`[reconcile] grant_sparkles failed for ${u.id}:`, error.message);
+        }
+      }
+    }
+  }
+
+  console.log(
+    `[reconcile] checked ${checked} active subs — ${DRY_RUN ? 'WOULD grant' : 'granted'} ${granted} missing bundle(s), ${indeterminate} indeterminate.`
+  );
+  // Non-zero grants on a live run is a signal (dropped webhooks), but not a failure.
+}
+
+main().catch((e) => {
+  console.error('::error:: reconcile-subscription-sparkles crashed:', e.message);
+  process.exit(1);
+});

@@ -1,0 +1,37 @@
+name: Subscription Sparkle Reconcile
+
+# Backstop for monthly sparkle bundles. The revenuecat-webhook grants a subscriber's
+# monthly bundle on each RENEWAL; if RevenueCat ever drops that webhook, the sub
+# silently misses that cycle's sparkles. This grants any MISSING monthly bundle for
+# active MONTHLY subscribers (yearly already gets 12x up front → skipped). Idempotent
+# per user-per-cycle. See scripts/reconcile-subscription-sparkles.js.
+#
+# A late/dropped GitHub schedule is harmless here: the per-cycle dedup means a missing
+# grant is simply caught on the next successful run.
+
+on:
+  schedule:
+    - cron: '40 9 * * *' # daily at 09:40 UTC (offset from the other crons)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Reconcile subscription sparkles
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/reconcile-subscription-sparkles.js

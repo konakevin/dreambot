@@ -97,6 +97,10 @@ interface TierConfig {
   bundleReasonPrefix: 'pro_bundle' | 'basic_bundle';
   bundleColumn: 'pro_monthly_sparkle_bundle' | 'basic_monthly_sparkle_bundle';
   bundleFallback: number;
+  // 'monthly' | 'yearly' stamped on the user so the sparkle-reconcile backstop
+  // (scripts/reconcile-subscription-sparkles.js) knows a yearly sub already got
+  // its 12x up front and must NOT be re-granted monthly (migration 452).
+  periodColumn: 'pro_subscription_period' | 'basic_subscription_period';
 }
 
 const SUBSCRIPTION_TIERS: TierConfig[] = [
@@ -111,6 +115,7 @@ const SUBSCRIPTION_TIERS: TierConfig[] = [
     bundleReasonPrefix: 'pro_bundle',
     bundleColumn: 'pro_monthly_sparkle_bundle',
     bundleFallback: FALLBACK_PRO_MONTHLY_SPARKLE_BUNDLE,
+    periodColumn: 'pro_subscription_period',
   },
   {
     name: 'basic',
@@ -123,6 +128,7 @@ const SUBSCRIPTION_TIERS: TierConfig[] = [
     bundleReasonPrefix: 'basic_bundle',
     bundleColumn: 'basic_monthly_sparkle_bundle',
     bundleFallback: FALLBACK_BASIC_MONTHLY_SPARKLE_BUNDLE,
+    periodColumn: 'basic_subscription_period',
   },
 ];
 
@@ -417,6 +423,9 @@ Deno.serve(async (req) => {
         const updates: Record<string, any> = {
           [tier.flagColumn]: true,
           [tier.expiresColumn]: expiresAt,
+          // Stamp the billing period so the reconcile backstop can tell monthly
+          // (needs a per-cycle grant) from yearly (already got 12x up front).
+          [tier.periodColumn]: productId === tier.yearlyProduct ? 'yearly' : 'monthly',
         };
         if (tier.willRenewColumn) updates[tier.willRenewColumn] = true;
         for (const other of SUBSCRIPTION_TIERS) {
