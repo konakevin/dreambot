@@ -51,7 +51,13 @@ interface Plan {
   key: 'basic' | 'pro';
   name: string;
   tiers: ProPlanTier[];
-  perks: readonly { icon: string; title: string; sub: string; note?: string }[];
+  perks: readonly {
+    icon: string;
+    title: string;
+    titleYearly?: string;
+    sub: string;
+    note?: string;
+  }[];
   highlight: boolean;
   badge?: string;
   /** Dreamy tier motif (moon for Basic's nightly dream, sparkles for Pro). */
@@ -301,7 +307,7 @@ export default function SubscribeScreen() {
                         <View key={perk.title} style={s.cardPerkRow}>
                           <Ionicons name="checkmark-circle" size={16} color={ACCENT} />
                           <Text style={s.cardPerkText}>
-                            {perk.title}
+                            {period === 'year' && perk.titleYearly ? perk.titleYearly : perk.title}
                             {perk.note ? <Text style={s.cardPerkNote}> {perk.note}</Text> : null}
                           </Text>
                         </View>

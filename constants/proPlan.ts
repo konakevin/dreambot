@@ -66,6 +66,9 @@ export const PRO_PERKS = [
   {
     icon: 'sparkles',
     title: `${PRO_SPARKLE_BUNDLE} bonus sparkles every month`,
+    // Yearly grants the whole year (12x) up front, so the paywall shows the
+    // accurate yearly figure when the annual period is selected.
+    titleYearly: `${PRO_YEARLY_SPARKLE_BUNDLE} bonus sparkles a year`,
     sub: 'Spend on any model: Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
   },
   {

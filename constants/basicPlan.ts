@@ -46,6 +46,8 @@ export const BASIC_PERKS = [
   {
     icon: 'sparkles',
     title: `${BASIC_SPARKLE_BUNDLE} bonus sparkles every month`,
+    // Yearly grants the whole year (12x) up front — show the accurate figure.
+    titleYearly: `${BASIC_YEARLY_SPARKLE_BUNDLE} bonus sparkles a year`,
     sub: 'Spend on any model to create your own dreams. Refills automatically with each renewal.',
   },
   {
