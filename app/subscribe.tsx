@@ -377,6 +377,13 @@ export default function SubscribeScreen() {
         {/* Fixed footer — auto-renew disclosure + required legal links stay
             visible regardless of scroll position (App Store 3.1.2). */}
         <View style={[s.footer, { paddingBottom: verticalScale(12) + insets.bottom }]}>
+          {/* Human reassurance — the calm answer to "am I locked in?", above the
+              required legal disclosure below. Now truthful: Settings has a
+              one-tap Manage Subscription → Apple's cancel sheet. */}
+          <View style={s.reassure}>
+            <Ionicons name="shield-checkmark-outline" size={fontScale(14)} color={ACCENT} />
+            <Text style={s.reassureText}>Cancel anytime, right from the app.</Text>
+          </View>
           <TouchableOpacity
             onPress={() => restore()}
             disabled={restoring}
@@ -606,6 +613,18 @@ const s = StyleSheet.create({
   },
   ctaTextLit: {
     color: '#FFFFFF',
+  },
+  reassure: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: fontScale(6),
+    marginBottom: verticalScale(8),
+  },
+  reassureText: {
+    fontSize: fontScale(12.5),
+    color: colors.textSecondary,
+    fontWeight: '600',
   },
   footerRestore: {
     alignItems: 'center',
