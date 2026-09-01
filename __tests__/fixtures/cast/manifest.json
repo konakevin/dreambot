@@ -1,0 +1,569 @@
+[
+  {
+    "id": "c02",
+    "file": "c02.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "grey",
+      "isGrey": true,
+      "gender": "M",
+      "age": 60,
+      "ageRange": [
+        54,
+        66
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7322073,
+      "page": "https://www.pexels.com/photo/close-up-photo-of-an-elderly-man-7322073/",
+      "photographer": "Alena Darmel"
+    }
+  },
+  {
+    "id": "c05",
+    "file": "c05.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "blonde",
+      "isGrey": false,
+      "gender": "F",
+      "age": 30,
+      "ageRange": [
+        24,
+        36
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 16961217,
+      "page": "https://www.pexels.com/photo/blonde-woman-portrait-16961217/",
+      "photographer": "Alina  Rossoshanska"
+    }
+  },
+  {
+    "id": "c06",
+    "file": "c06.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "blonde",
+      "isGrey": false,
+      "gender": "F",
+      "age": 22,
+      "ageRange": [
+        16,
+        28
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7894408,
+      "page": "https://www.pexels.com/photo/blonde-woman-with-long-hair-7894408/",
+      "photographer": "MART  PRODUCTION"
+    }
+  },
+  {
+    "id": "c07",
+    "file": "c07.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "auburn",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 13355737,
+      "page": "https://www.pexels.com/photo/close-up-of-a-beautiful-woman-with-hands-on-face-13355737/",
+      "photographer": "Daniel Duarte"
+    }
+  },
+  {
+    "id": "c08",
+    "file": "c08.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "red",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 458718,
+      "page": "https://www.pexels.com/photo/woman-in-blond-hair-458718/",
+      "photographer": "Pixabay"
+    }
+  },
+  {
+    "id": "c09",
+    "file": "c09.jpg",
+    "truth": {
+      "ethnicity": "Black",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 30,
+      "ageRange": [
+        24,
+        36
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7859839,
+      "page": "https://www.pexels.com/photo/photo-of-a-man-7859839/",
+      "photographer": "cottonbro studio"
+    }
+  },
+  {
+    "id": "c14",
+    "file": "c14.jpg",
+    "truth": {
+      "ethnicity": "East Asian",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 45,
+      "ageRange": [
+        39,
+        51
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7417185,
+      "page": "https://www.pexels.com/photo/close-up-photo-of-a-man-in-red-top-7417185/",
+      "photographer": "Kampus Production"
+    }
+  },
+  {
+    "id": "c16",
+    "file": "c16.jpg",
+    "truth": {
+      "ethnicity": "East Asian",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 22,
+      "ageRange": [
+        16,
+        28
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 18369315,
+      "page": "https://www.pexels.com/photo/young-woman-holding-branch-of-red-berries-18369315/",
+      "photographer": "Lap Dinh Quoc"
+    }
+  },
+  {
+    "id": "c17",
+    "file": "c17.jpg",
+    "truth": {
+      "ethnicity": "South Asian",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 35,
+      "ageRange": [
+        29,
+        41
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 12327289,
+      "page": "https://www.pexels.com/photo/portrait-of-a-man-with-a-beard-12327289/",
+      "photographer": "Nishant Aneja"
+    }
+  },
+  {
+    "id": "c18",
+    "file": "c18.jpg",
+    "truth": {
+      "ethnicity": "South Asian",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 55,
+      "ageRange": [
+        49,
+        61
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 34685880,
+      "page": "https://www.pexels.com/photo/smiling-mustached-man-in-delhi-street-scene-34685880/",
+      "photographer": "Pete Miller Portraits"
+    }
+  },
+  {
+    "id": "c19",
+    "file": "c19.jpg",
+    "truth": {
+      "ethnicity": "South Asian",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 50,
+      "ageRange": [
+        44,
+        56
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 35152012,
+      "page": "https://www.pexels.com/photo/portrait-of-a-woman-in-traditional-attire-35152012/",
+      "photographer": "Ashok  Gajjar"
+    }
+  },
+  {
+    "id": "c23",
+    "file": "c23.jpg",
+    "truth": {
+      "ethnicity": "Hispanic/Latino",
+      "hairFamily": "brown",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 13781166,
+      "page": "https://www.pexels.com/photo/smiling-face-of-woman-13781166/",
+      "photographer": "Raul Albright"
+    }
+  },
+  {
+    "id": "c24",
+    "file": "c24.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 60,
+      "ageRange": [
+        54,
+        66
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 28347429,
+      "page": "https://www.pexels.com/photo/madre-eres-mi-mejor-inspiracion-28347429/",
+      "photographer": "Diego Llajaruna Gonzales"
+    }
+  },
+  {
+    "id": "c28",
+    "file": "c28.jpg",
+    "truth": {
+      "ethnicity": "Middle Eastern",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 35,
+      "ageRange": [
+        29,
+        41
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 9587135,
+      "page": "https://www.pexels.com/photo/a-close-up-shot-of-a-man-with-white-headscarf-9587135/",
+      "photographer": "Khabbab Abdelmaqsoud"
+    }
+  },
+  {
+    "id": "c29",
+    "file": "c29.jpg",
+    "truth": {
+      "ethnicity": "Middle Eastern",
+      "hairFamily": "grey",
+      "isGrey": true,
+      "gender": "M",
+      "age": 65,
+      "ageRange": [
+        59,
+        71
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 16317902,
+      "page": "https://www.pexels.com/photo/portrait-of-old-man-with-moustache-on-black-background-16317902/",
+      "photographer": "Meyra"
+    }
+  },
+  {
+    "id": "c33",
+    "file": "c33.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "grey",
+      "isGrey": true,
+      "gender": "M",
+      "age": 55,
+      "ageRange": [
+        49,
+        61
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7322319,
+      "page": "https://www.pexels.com/photo/elderly-man-in-gray-long-sleeves-7322319/",
+      "photographer": "Alena Darmel"
+    }
+  },
+  {
+    "id": "c34",
+    "file": "c34.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "grey",
+      "isGrey": true,
+      "gender": "M",
+      "age": 55,
+      "ageRange": [
+        49,
+        61
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7322307,
+      "page": "https://www.pexels.com/photo/elderly-man-in-gray-long-sleeves-7322307/",
+      "photographer": "Alena Darmel"
+    }
+  },
+  {
+    "id": "c36",
+    "file": "c36.jpg",
+    "truth": {
+      "ethnicity": "White",
+      "hairFamily": "bald",
+      "isGrey": false,
+      "gender": "M",
+      "age": 55,
+      "ageRange": [
+        49,
+        61
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 8727473,
+      "page": "https://www.pexels.com/photo/an-elderly-man-with-an-angry-facial-expression-8727473/",
+      "photographer": "Tima Miroshnichenko"
+    }
+  },
+  {
+    "id": "c37",
+    "file": "c37.jpg",
+    "truth": {
+      "ethnicity": "Black",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 35,
+      "ageRange": [
+        29,
+        41
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7432863,
+      "page": "https://www.pexels.com/photo/a-man-in-striped-shirt-smiling-7432863/",
+      "photographer": "August de Richelieu"
+    }
+  },
+  {
+    "id": "c39",
+    "file": "c39.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "M",
+      "age": 30,
+      "ageRange": [
+        24,
+        36
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 7561905,
+      "page": "https://www.pexels.com/photo/grayscale-portrait-of-a-man-smiling-7561905/",
+      "photographer": "VAZHNIK"
+    }
+  },
+  {
+    "id": "c40",
+    "file": "c40.jpg",
+    "truth": {
+      "ethnicity": "Black",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 11215202,
+      "page": "https://www.pexels.com/photo/portrait-of-a-afro-haired-woman-smiling-11215202/",
+      "photographer": "El gringo photo"
+    }
+  },
+  {
+    "id": "c41",
+    "file": "c41.jpg",
+    "truth": {
+      "ethnicity": "Black",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 9592569,
+      "page": "https://www.pexels.com/photo/grayscale-photo-of-smiling-woman-with-dreadlocks-9592569/",
+      "photographer": "Estelle Umaes"
+    }
+  },
+  {
+    "id": "c42",
+    "file": "c42.jpg",
+    "truth": {
+      "ethnicity": "Black",
+      "hairFamily": "black",
+      "isGrey": false,
+      "gender": "F",
+      "age": 22,
+      "ageRange": [
+        16,
+        28
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 16152597,
+      "page": "https://www.pexels.com/photo/portrait-of-a-woman-smiling-16152597/",
+      "photographer": "Korede  Adenola"
+    }
+  },
+  {
+    "id": "c43",
+    "file": "c43.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "brown",
+      "isGrey": false,
+      "gender": "M",
+      "age": 30,
+      "ageRange": [
+        24,
+        36
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 38536479,
+      "page": "https://www.pexels.com/photo/confident-man-smiling-in-casual-attire-38536479/",
+      "photographer": "Karl Forterre"
+    }
+  },
+  {
+    "id": "c45",
+    "file": "c45.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "brown",
+      "isGrey": false,
+      "gender": "F",
+      "age": 35,
+      "ageRange": [
+        29,
+        41
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 20233027,
+      "page": "https://www.pexels.com/photo/portrait-of-smiling-woman-20233027/",
+      "photographer": "Noemí Jiménez"
+    }
+  },
+  {
+    "id": "c49",
+    "file": "c49.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "brown",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 38386658,
+      "page": "https://www.pexels.com/photo/portrait-of-a-woman-in-a-rust-colored-top-38386658/",
+      "photographer": "Tony Zohari"
+    }
+  },
+  {
+    "id": "c50",
+    "file": "c50.jpg",
+    "truth": {
+      "ethnicity": null,
+      "hairFamily": "brown",
+      "isGrey": false,
+      "gender": "F",
+      "age": 25,
+      "ageRange": [
+        19,
+        31
+      ]
+    },
+    "source": {
+      "provider": "pexels",
+      "pexels_id": 36178677,
+      "page": "https://www.pexels.com/photo/smiling-woman-with-long-hair-against-black-background-36178677/",
+      "photographer": "Hatice Kesnik"
+    }
+  }
+]

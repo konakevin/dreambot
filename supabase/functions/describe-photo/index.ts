@@ -13,6 +13,7 @@ import {
   replaceHairColorInSummary,
 } from '../_shared/vision.ts';
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
+import { HAIKU, SONNET } from '../_shared/models.ts';
 
 const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
 
@@ -72,7 +73,17 @@ Deno.serve(async (req: Request) => {
     }
 
     const prompt = role === 'pet' ? VISION_PROMPTS.castPet : VISION_PROMPTS.castPerson;
-    const rawDescription = await describeWithVision(image_url, prompt, REPLICATE_TOKEN, 400);
+    // Human cast → SONNET (once-per-upload; far better age accuracy + prose for the
+    // face-swap brief; eval: scripts/eval-cast-scanner.mjs). Pets stay on HAIKU.
+    const castModel = role === 'pet' ? HAIKU : SONNET;
+    const rawDescription = await describeWithVision(
+      image_url,
+      prompt,
+      REPLICATE_TOKEN,
+      400,
+      undefined,
+      castModel
+    );
 
     // Split the AGE: and TRAITS: sections from the description. These labels USED
     // to sit on their own lines, but _shared/sanitizeUserText (run on the vision

@@ -5,7 +5,7 @@
  * System prompt establishes art-generation context to prevent refusals.
  */
 
-import { HAIKU } from './models.ts';
+import { HAIKU, SONNET } from './models.ts';
 import { sanitizeUserText } from './sanitizeUserText.ts';
 import { jitter } from './jitter.ts';
 import { RETRY_DELAYS_MS, RETRYABLE_STATUSES } from './llm.ts';
@@ -41,7 +41,13 @@ export async function describeWithVision(
   prompt: string,
   _replicateToken: string,
   maxTokens: number = 200,
-  systemPrompt: string = SYSTEM_PROMPT
+  systemPrompt: string = SYSTEM_PROMPT,
+  // Model override. Default HAIKU (cheap) for per-render analysis probes. The
+  // CAST-PHOTO scan passes SONNET: on a labeled 27-image eval Sonnet cut age error
+  // (MAE 4.3y→3.1y, within±5y 62%→88%) and lifted ethnicity (82%→91%) vs Haiku —
+  // and the cast scan runs ONCE per upload, so the cost is trivial. (Cast-scanner
+  // accuracy work, 2026-09-01; eval: scripts/eval-cast-scanner.mjs.)
+  model: string = HAIKU
 ): Promise<string> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
   if (!anthropicKey) throw new Error('Missing ANTHROPIC_API_KEY');
@@ -72,7 +78,7 @@ export async function describeWithVision(
   }
 
   const body = JSON.stringify({
-    model: HAIKU,
+    model,
     max_tokens: maxTokens,
     system: systemPrompt,
     messages: [
@@ -173,7 +179,9 @@ export async function classifyEthnicity(imageInput: string): Promise<CastEthnici
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: HAIKU,
+        // SONNET: cast ethnicity read is once-per-upload; Sonnet scored 91% vs
+        // Haiku's 82% on the labeled eval (scripts/eval-cast-scanner.mjs).
+        model: SONNET,
         max_tokens: 30,
         messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
       }),
@@ -194,12 +202,25 @@ export async function classifyEthnicity(imageInput: string): Promise<CastEthnici
   }
 }
 
+// De-biased hair-color prompt (2026-09-01). The old wording PRIMED grey ("say
+// 'greying' or 'salt-and-pepper' if grey is present") and produced a grey FALSE-
+// POSITIVE on ~40% of non-grey heads (blonde AND black read "salt-and-pepper") —
+// the fleet over-greying / over-aging bug. This neutral wording scored 0/22 grey
+// false-positives + 96% family on the labeled corpus. Exported so a unit test can
+// LOCK the de-bias (no leading grey suggestion) — the config-coupled-alarm pattern.
+// __tests__/lib/castScannerPrompts.test.ts + scripts/eval-cast-scanner.mjs.
+export const HAIR_COLOR_PROMPT =
+  "What is this person's natural hair color? Answer in 2 to 4 words using plain color terms (black, dark brown, brown, light brown, blonde, red, auburn, grey, white). Report grey, greying, or salt-and-pepper ONLY if the hair is clearly and mostly grey or white — natural highlights, warm lighting, or a few stray strands are NOT grey. If the person is bald or shaved, answer 'bald'. Reply with only the color words, nothing else.";
+
 /**
- * Focused HAIR-COLOR read — a single-trait vision call, far more accurate than
- * the combined describe. The combined describe mislabeled a dirty-blonde/greying
- * man "chestnut brown"; a FOCUSED read on the same photo got "light blonde/gray"
- * (Kevin, sunnysteph +1, 2026-09-01 — focused beats combined, same as ethnicity).
- * Returns a short color phrase or null. NULL-SAFE. Runs once at upload + backfill.
+ * Focused HAIR-COLOR read — a single-trait Sonnet vision call that returns one
+ * clean color phrase, which replaceHairColorInSummary injects into the summary.
+ * IT IS ONLY AS GOOD AS ITS PROMPT: the original wording PRIMED grey and produced
+ * a fleet-wide over-greying (blonde/black → "salt-and-pepper"); the earlier note
+ * here ("focused beats combined") over-generalized from one biased read. The prompt
+ * below is de-biased and validated on a labeled corpus (0/21 grey false-positives,
+ * 88% family). Returns a short color phrase or null. NULL-SAFE. Runs once at upload
+ * + backfill — never per render. (scripts/eval-cast-scanner.mjs, RACE_FIDELITY_PLAN.md)
  */
 export async function classifyHairColor(imageInput: string): Promise<string | null> {
   const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
@@ -216,8 +237,7 @@ export async function classifyHairColor(imageInput: string): Promise<string | nu
     } else {
       imageContent = { type: 'image', source: { type: 'url', url: imageInput } };
     }
-    const prompt =
-      "In 2 to 4 words, what is this person's natural hair color (say 'greying' or 'salt-and-pepper' if grey is present)? Reply with only the color words, nothing else.";
+    const prompt = HAIR_COLOR_PROMPT;
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -226,7 +246,9 @@ export async function classifyHairColor(imageInput: string): Promise<string | nu
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: HAIKU,
+        // SONNET + de-biased prompt: 88% hair-family accuracy, 0 grey false-positives
+        // (vs Haiku+biased 46% / 10-of-21). Once-per-upload, so cost is trivial.
+        model: SONNET,
         max_tokens: 20,
         messages: [{ role: 'user', content: [imageContent, { type: 'text', text: prompt }] }],
       }),

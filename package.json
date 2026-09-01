@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "typecheck:deno": "sh scripts/check-deno.sh",
     "scan:dual-proximity": "node scripts/scan-dual-faceswap-proximity.js",
+    "eval:cast": "node scripts/eval-cast-scanner.mjs",
     "check": "npm run format:check && npm run scan:dual-proximity && npm run lint && npm run typecheck && npm run typecheck:deno && npm run test -- --silent",
     "fix": "npm run format && npm run lint -- --fix",
     "prepare": "husky"
