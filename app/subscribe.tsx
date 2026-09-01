@@ -326,9 +326,15 @@ export default function SubscribeScreen() {
                           </View>
                         </TouchableOpacity>
                       ) : (
-                        <View style={[s.cta, s.ctaDisabled]}>
-                          <Text style={[s.ctaText, { color: colors.textMuted }]}>Current plan</Text>
-                        </View>
+                        // Active & renewing — tappable so it opens Apple's manage/
+                        // cancel sheet, instead of a dead "Current plan" button.
+                        <TouchableOpacity onPress={handleManage} activeOpacity={0.85}>
+                          <View style={[s.cta, s.ctaDisabled]}>
+                            <Text style={[s.ctaText, { color: colors.textMuted }]}>
+                              Current plan · Manage
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
                       )
                     ) : (
                       <TouchableOpacity

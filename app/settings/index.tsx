@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 import { useAuthStore } from '@/store/auth';
 import { usePublicProfile } from '@/hooks/usePublicProfile';
 import { useSubscriptionStatus } from '@/hooks/useSubscriptionStatus';
+import { openManageSubscriptions } from '@/lib/revenuecat';
 import { useUsernameStatus } from '@/hooks/useUsernameStatus';
 import { useConfirmSurpriseDream } from '@/hooks/useConfirmSurpriseDream';
 import { UsernameNudge } from '@/components/UsernameNudge';
@@ -531,6 +532,18 @@ export default function SettingsScreen() {
             }
             onPress={() => nav.push('/subscribe')}
           />
+          {/* Direct one-tap to Apple's manage/cancel sheet (StoreKit
+              showManageSubscriptions) — cancellation lives in Apple's billing, and
+              "Manage plan" above only opens the in-app paywall. Only actual Apple
+              subscribers see this (trial Pro is app-granted, nothing to cancel). */}
+          {(isPaidPro || isBasic) && (
+            <SettingsRow
+              icon="card-outline"
+              dividerColor="rgba(167,139,250,0.22)"
+              label="Manage Subscription"
+              onPress={() => void openManageSubscriptions()}
+            />
+          )}
           <SettingsRow
             icon="sparkles"
             dividerColor="rgba(167,139,250,0.22)"
