@@ -34,7 +34,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
-import { GradientTitle, TITLE_SIZE } from '@/components/GradientTitle';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
 import { PRO_PERKS, PRO_TIERS, type ProPlanTier } from '@/constants/proPlan';
@@ -192,19 +191,13 @@ export default function SubscribeScreen() {
   }
 
   return (
-    <ScreenLayout header="back" title="Plans">
+    <ScreenLayout header="back" title="Choose a plan">
       <View style={{ flex: 1 }}>
         <ScrollView
           style={s.scrollView}
           contentContainerStyle={s.scroll}
           showsVerticalScrollIndicator={false}
         >
-          <View style={s.hero}>
-            <GradientTitle size={TITLE_SIZE.page} weight={700}>
-              Choose a plan
-            </GradientTitle>
-          </View>
-
           {/* Trial countdown banner */}
           {isOnTrial && daysLeft !== null && (
             <View style={s.trialBanner}>
@@ -421,12 +414,9 @@ const s = StyleSheet.create({
   scroll: {
     paddingHorizontal: verticalScale(20),
     paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(12),
-  },
-  hero: {
-    alignItems: 'center',
-    marginTop: verticalScale(2),
-    marginBottom: verticalScale(8),
+    // Breathing room so the last plan card's CTA scrolls clear of the fixed
+    // footer instead of jamming against it (the truncation fix).
+    paddingBottom: verticalScale(28),
   },
   trialBanner: {
     flexDirection: 'row',
