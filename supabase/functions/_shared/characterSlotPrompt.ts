@@ -318,6 +318,21 @@ export function skinToneAdjective(skin: string | null | undefined): string | nul
   return null;
 }
 
+// Pull the primary HAIR COLOR out of the hair clause so it can be anchored EARLY
+// on the subject ("a White man with chestnut-brown hair, ..."). Hair color, like
+// race, drifts to a dark default under a scene/medium prior when it's only a
+// buried mid-clause token (Kevin: sunnysteph's chestnut-haired +1 rendered black
+// in a China dual). An early positive restatement holds it (verified). Positive
+// only — never a negation ("not black" leaks into Flux). Returns null when no
+// color word (bald / color-less clause) → no anchor.
+function extractHairColor(hairStr: string | null): string | null {
+  if (!hairStr) return null;
+  const m = hairStr.match(
+    /\b(jet[- ]?black|salt[- ]and[- ]pepper|dark brown|light brown|dirty blonde|dirty blond|strawberry blonde|ash blonde|platinum blonde|chestnut(?:[- ]brown)?|auburn|mahogany|copper|ginger|brunette|blonde|blond|brown|red|black|grey|gray|silver|white|sandy|honey|caramel|raven|golden)\b/i
+  );
+  return m ? m[1].toLowerCase() : null;
+}
+
 type HairVariationOpts = { pct: number; register: HairSceneRegister | null };
 
 function buildIdentityBlock(
@@ -351,7 +366,12 @@ function buildIdentityBlock(
       resolved.identity;
   }
   const cleanIdentity = stripIdentity(identitySource);
-  return `${prefix}: a ${subject}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
+  // HAIR-COLOR anchor: restate the color EARLY on the subject so it survives the
+  // scene/medium prior (full character preservation — the person, in the scene).
+  // The full hair clause still follows for cut/style; the early color is the lever.
+  const hairColor = extractHairColor(identitySource);
+  const colorAnchor = hairColor ? ` with ${hairColor} hair` : '';
+  return `${prefix}: a ${subject}${colorAnchor}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
 // ── Slot brief construction ─────────────────────────────────────────────

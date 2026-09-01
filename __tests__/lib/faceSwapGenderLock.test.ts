@@ -299,6 +299,8 @@ describe('characterSlotPrompt — race/ethnicity anchor', () => {
     );
     expect(out).toContain('a White man');
     expect(out).not.toContain('tan-skinned man'); // tone adjective must be suppressed by the ethnicity anchor
+    // ...but the full skin-tone CLAUSE is still passed alongside the race (Kevin).
+    expect(out).toContain('warm medium skin tone');
   });
 
   it('each bucket renders its adjective on the subject noun', () => {
@@ -388,5 +390,74 @@ describe('characterSlotPrompt — race/ethnicity anchor', () => {
     );
     expect(out).toContain('a Black woman');
     expect(out).toContain('a White man');
+  });
+});
+
+// ── Hair-color anchor (full character preservation, RACE_FIDELITY_PLAN.md) ──
+// Hair color drifts dark under a scene/medium prior when it's only a buried
+// token; restating it early on the subject holds it. Positive-only (no negations).
+describe('characterSlotPrompt — hair-color anchor', () => {
+  const slots = {
+    scene_description: "a Xi'an city wall",
+    wardrobe: 'a jacket',
+    mood: 'candid',
+    props: 'a map',
+  };
+  const inp = (m: Record<string, unknown>) => ({
+    cast: [m],
+    iconicAnchor: "Xi'an",
+    userPlace: null,
+    timeAxis: 'day',
+    weatherAxis: 'clear',
+    phenomenaAxis: '',
+    mediumFluxFragment: 'comic-book illustration',
+    vibeDirective: 'candid',
+    avoidList: '',
+    action: null,
+  });
+
+  it('restates the hair color early on the subject noun', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'chestnut brown hair swept back, warm medium skin tone, athletic build',
+        ethnicity: 'White',
+      })
+    );
+    expect(out).toContain('a White man with chestnut brown hair'); // early anchor, right after race
+    expect(out).toContain('warm medium skin tone'); // skin clause still present
+  });
+
+  it('black-haired cast anchors "black hair" positively (no negation leak)', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'self',
+        promptDesc: 'a woman',
+        gender: 'female',
+        physicalSummary: 'black hair, fair skin, average build',
+        ethnicity: 'East Asian',
+      })
+    );
+    expect(out).toContain('with black hair');
+    expect(out).not.toContain('not black');
+  });
+
+  it('no color word → no hair anchor (no crash)', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inp({
+        role: 'self',
+        promptDesc: 'a man',
+        gender: 'male',
+        physicalSummary: 'bald, olive skin, average build',
+        ethnicity: null,
+      })
+    );
+    expect(out).toContain('CHARACTER: a'); // still builds cleanly
+    expect(out).not.toContain('with  hair');
   });
 });
