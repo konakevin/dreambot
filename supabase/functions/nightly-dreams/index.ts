@@ -308,6 +308,10 @@ Deno.serve(async (req) => {
   const force_vibe = (body.force_vibe as string) || undefined;
   const force_nightly_path = (body.force_nightly_path as string) || undefined;
   const force_model = (body.force_model as string) || undefined;
+  // QA hook for female-hair variation: force the % (bypasses engine_config so it
+  // can be tested before the config column is live / at 100 to see the range).
+  const force_female_hair_pct =
+    typeof body.force_female_hair_pct === 'number' ? body.force_female_hair_pct : undefined;
   // First-dream onboarding flag (set on every first-dream cascade tier). Used to
   // ban gpt-image-2 (too slow for the onboarding loading screen) — see the model
   // gate below. Nightlies never set this, so their lego/pixels gpt pins stand.
@@ -2113,7 +2117,7 @@ Deno.serve(async (req) => {
           ),
           avoidList,
           action,
-          femaleHairVariationPct: hairCfg.femaleHairVariationPct,
+          femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
           // with singleCompositionExpandedPct probability; classic waist-up
