@@ -1,90 +1,90 @@
-# Race Fidelity Plan — stop the location from overriding cast race (2026-09-01)
+# Race & Character Fidelity — status of record (2026-09-01)
 
-## The bug
-When the cast is placed in an ethnicity-loaded location (China, Japan, Jamaica, Egypt…),
-the BASE character render draws the people as **locals** (Asian, Black, etc.), and the
-face swap then inherits the wrong-race body/features. These are *vacation* photos of the
-real person in that place — they must render as **themselves**, never as a local.
+**The goal:** a cast member placed in ANY location renders as *themselves* — right
+race, skin tone, hair color, likeness — with only the scene/location changing. A
+"vacation photo of the real person in that place," never a local of that place.
 
-Confirmed on sunnysteph's 2026-09-01 nightly: a China scene ("Tianzifang shikumen
-alleyway"), her white +1 rendered clearly **East Asian**. Prompt evidence:
-`set in china, … RIGHT side of frame: a tan-skinned man, …, warm medium skin tone,
-chestnut brown hair, dark brown eyes`.
-
-## Root cause (two inputs, neither in the seed pools)
-1. **Front-loaded country noun.** `nightly-dreams/index.ts:~2651` prepends `set in
-   ${place},` as CLIP's deliberate first-noun. On a cast render that makes the COUNTRY
-   the highest-weighted token → Flux builds the base people's *facial features* as local.
-2. **No ethnicity anchor on the cast.** `describe-photo` captures skin *tone* + hair only,
-   never race. For a tanned white guy it recorded "warm medium skin tone" → my
-   `skinToneAdjective` locked "a **tan-skinned** man" — which, under a China prior,
-   *reinforces* the wrong race. A skin-tone word can't beat a country noun
-   (`feedback_ethnicity_noun_beats_visual_descriptors`: the noun wins).
-
-**Scope: this is fixable entirely upstream — `describe-photo` + `characterSlotPrompt.ts`
-+ the front-load line. ZERO seed-pool edits.** Seed pools carry poses/scenes/wardrobe,
-not race.
+**Status: SHIPPED and live. Race is solid; hair color is much better but still drifts
+intermittently (see "Known remaining").** Pick this doc up if bad race/hair renders
+persist. Related: `DUAL_SWAP_QUALITY_INVESTIGATION.md` (degrade rate + gender-swap).
 
 ---
 
-## Fix #2 — stop feeding the prior (SHIPPED 2026-09-01, low risk)
-Skip the `set in <country>` front-load for ALL character renders (cast face-swap, dual +
-single) — extends the pattern already used for embodied Dream Art. The slot prompt still
-carries the **specific spot** ("Tianzifang shikumen alleyway art district") for scene
-fidelity — a place name is a far weaker race prior than the bare country noun.
-`nightly-dreams/index.ts` front-load guard: added `resolvedComposition !== 'character'`.
-No new data, mirrors a proven skip. Removes the dominant lever.
+## The bug (what users saw)
+Cast placed in an ethnicity-loaded location (China, Japan, Jamaica, Egypt, India…)
+rendered as **locals** (Asian, etc.), and the face swap inherited the wrong-race
+body/features. Confirmed: sunnysteph's white +1 rendered East Asian in a China scene;
+his chestnut→ black hair; he didn't read as himself.
 
-Follow-up parity: check the Create/new_scene path for the same country front-load.
+## Root causes (all found + addressed)
+1. **Front-loaded country noun.** Nightly prepended `set in <country>,` as CLIP's
+   first token — on a cast render the COUNTRY became the dominant token and Flux built
+   local facial features. (`nightly-dreams/index.ts` front-load guard.)
+2. **Skin-tone-only anchor.** The cast carried only a skin *tone* descriptor, no race —
+   tone can't beat a country noun (`feedback_ethnicity_noun_beats_visual_descriptors`).
+3. **The combined describe is unreliable on traits.** describe-photo's one-shot mega-
+   prompt mislabeled a dirty-blonde/greying man "chestnut brown hair." A FOCUSED single-
+   trait read on the same photo got "light blonde/gray." **Focused ≫ combined** — the
+   single biggest lesson here. Age also reads ~10 yrs young (model bias).
+4. **Intermittent Flux adherence.** Even with the right tokens, race/hair drift is
+   PROBABILISTIC, not deterministic — worse on dual rolls. Anchoring reduces it; nothing
+   makes it a hard guarantee short of a post-render verify+reroll (see future work).
 
----
+## What shipped
+| Fix | Where | Effect |
+|---|---|---|
+| Drop country front-load on cast renders | `nightly-dreams` front-load guard (`resolvedComposition !== 'character'`) | stops feeding the local-race prior |
+| **Ethnicity anchor** on the subject noun ("a White man") | `_shared/characterSlotPrompt.ts` `buildIdentityBlock` + `ethnicityAdjective` | beats the location prior; the core fix |
+| **`classifyEthnicity`** (focused, closed 6-bucket, null-safe) | `_shared/vision.ts` | reliable race read (probe below) |
+| **Hair-color anchor** ("…with chestnut brown hair", early, positive) | `characterSlotPrompt.ts` `extractHairColor` | restates color early so it survives |
+| **`classifyHairColor`** + `replaceHairColorInSummary` (focused read fixes the summary) | `_shared/vision.ts` + `describe-photo` | corrects the unreliable combined-describe color |
+| Age: dropped the "lean younger" bias | `_shared/vision.ts` VISION_PROMPTS | stops compounding the model's young read |
+| Skin clause kept ALONGSIDE the race anchor | `buildIdentityBlock` | tone + race both carried |
+| Client persists `ethnicity` on new casts | `DreamCastStep`, `DreamCastRoster`, `castUpload`, `firstDreamKickoff`, `dreamCastRoster`, `types/vibeProfile` | new uploads carry it |
+| describe-photo captures ethnicity + focused hair at upload | `describe-photo/index.ts` | new casts accurate |
+| Fleet backfill: ethnicity + hair color | `scripts/backfill-cast-ethnicity.mjs`, `scripts/backfill-cast-haircolor.mjs` | existing casts fixed (ran: 48 hairs / 27 users) |
+| 31 slot-prompt unit tests | `__tests__/lib/faceSwapGenderLock.test.ts` | locks: race anchor beats mis-captured skin, skin kept, hair color anchored, positive-only, both dual slots |
 
-## Fix #1 — give the cast a race anchor (TO BUILD, the robust counter)
-Capture a **broad** race/appearance bucket for each cast member and lead the subject with
-it ("a White man …") so it out-weights the location prior everywhere.
+**Ethnicity buckets (FINALIZED via a Haiku accuracy probe, `scratchpad/race-probe.mjs`):**
+White · Black · East Asian (absorbs Southeast Asian + Pacific Islander — Haiku conflates
+them) · South Asian · Hispanic/Latino · Middle Eastern. Else null → skin-tone fallback.
+0 refusals with the justification-free closed-set prompt.
 
-### Vagueness rule (Kevin, 2026-09-01) — CRITICAL
-Use **broad, general** buckets only. NEVER fine-grained ("Hawaiian native", "Sicilian",
-"Han Chinese"). Rationale: we only need to *counter* the local prior, not classify a
-person; broad buckets are what a vision model can call reliably, they avoid stereotyping,
-and a wrong fine read makes it worse. It's an **internal render anchor only** — never
-shown to users, never stored as a "label" surfaced anywhere.
+## Verification (2026-09-01 render matrix)
+15 dual renders — you + your +1 across 10 ethnic locations + sunnysteph ×5 China.
+**Race held on every couple** (India/Caribbean/Japan/Shanghai — all rendered white, not
+local). Hair color mostly held; sunnysteph's +1 drifted dark-brown on one roll. ~3/15
+degraded to a clean solo (normal dual variance). Matrix artifact was published for review.
 
-**Closed set — FINALIZED 2026-09-01 after a Haiku accuracy probe** (24 real Pexels
-portraits, verified by eye; probe: `scratchpad/race-probe.mjs`). Findings: White / Black /
-East Asian / South Asian classified 3/3; **zero refusals** (justification-free closed-set
-prompt works on Haiku); the low raw score was mostly Pexels mislabels (a Black man in a
-keffiyeh that "Middle Eastern" search returned → Haiku correctly said Black). The ONE real
-limitation: **Southeast Asian is reliably confused with East Asian** (3/3), so it folds in —
-matching Kevin's instinct. South Asian stays separate (reliably distinct). Final 6 buckets:
+## Known remaining / future levers (if bad renders persist)
+1. **Hair-color still drifts intermittently.** Same Flux-adherence fight as race. Options,
+   in rough order of effort: (a) strengthen the hair anchor further (repeat the color in
+   the framing block, not just the subject); (b) a **post-render trait verify + re-roll** —
+   read the OUTPUT's hair color and re-render if it doesn't match the cast (the robust,
+   expensive fix; parallels the gender-consistency idea in the dual investigation);
+   (c) medium-aware — some mediums (flat-ink comic) crush hair to dark; bias cast renders
+   away from them or add a per-medium hair emphasis.
+2. **Age reads ~10 yrs young** (model limitation, even focused). Could add a small upward
+   correction offset when storing, or accept it.
+3. **Create-path parity.** generate-dream uses `characterSlotPrompt` so the anchors apply
+   once its cast carries ethnicity/hair, but it hasn't been render-verified; confirm it has
+   no country front-load of its own.
+4. **Extend focused reads to more traits.** The combined describe is weak generally; the
+   focused-read pattern (proven for ethnicity + hair) could also cover eye color, beard, etc.
+5. **Dual degrade ~16–20%** is a separate issue — see `DUAL_SWAP_QUALITY_INVESTIGATION.md`
+   (photography-medium ban + the silent gender-swap post-swap check).
 
-> **White · Black · East Asian** (absorbs Southeast Asian + Pacific Islander) **· South Asian ·
-> Hispanic/Latino · Middle Eastern** — model returns one of these or **null → skin-tone-only**.
+## Mental model for whoever picks this up
+- The **face swap** is the reliable identity carrier (ArcFace on the real photo). Hair,
+  skin, build come from the **base render** (prompt-driven) and are made reliable by
+  ANCHORING, never guaranteed.
+- **Focused single-trait vision reads beat the combined mega-describe** — every time we
+  tested it (ethnicity, hair). When a stored trait looks wrong, re-read it focused before
+  blaming the render.
+- Drift is probabilistic. The only true guarantee is render → verify-against-cast → re-roll.
 
-### Build steps
-1. **`describe-photo`**: add an ethnicity read constrained to the closed set above.
-   - Justification-FREE prompt (Haiku refuses "justified" probes —
-     `project_haiku_refuses_justified_vision_probes`). Ask factually, closed-choice,
-     allow "uncertain".
-   - Store on the cast member (e.g. `ethnicity` field alongside `physical_summary`).
-2. **`characterSlotPrompt.ts`**: when present, lead the subject noun with the bucket
-   ("a White man" / "an East Asian woman") — front position, ahead of/attached to the
-   gender noun, so it beats the location prior. Keep the skin-tone clause as secondary.
-   When null → current skin-tone-only behavior (no regression).
-3. **Backfill**: re-run the ethnicity read on existing cast photos to populate the field
-   (one-time; new casts get it at upload). Throttled / headroom-gated.
-4. **QA**: render dual + single on the worst offenders (China, Japan, Jamaica, Egypt,
-   India) on a white cast AND a non-white cast; confirm each renders as their real race,
-   not the local. Only then rely on it.
-
-### Risk
-The ethnicity read is the sensitive part — must be accurate (wrong read worsens it) and
-refusal-safe. That's why it's staged AFTER #2 (which already removes the dominant prior)
-and gated behind a null-safe fallback + QA before the backfill runs for everyone.
-
----
-
-## Order
-1. ✅ #2 front-load skip (shipped) — removes the dominant prior immediately.
-2. QA #2 alone on foreign-location duals — it may be enough for many cases.
-3. Build #1 (ethnicity capture + anchor + backfill) as the robust counter for the rest.
+## How to resume
+- Backfill again: `node scripts/backfill-cast-ethnicity.mjs --write` / `backfill-cast-haircolor.mjs --write` (resumable).
+- Accuracy probe: `scratchpad/race-probe.mjs` (Pexels + Haiku confusion matrix).
+- Prompt logic + tests: `_shared/characterSlotPrompt.ts` + `__tests__/lib/faceSwapGenderLock.test.ts`.
+- Vision reads: `_shared/vision.ts` (`classifyEthnicity`, `classifyHairColor`, `replaceHairColorInSummary`).
