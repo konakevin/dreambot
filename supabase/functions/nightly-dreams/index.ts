@@ -2063,6 +2063,17 @@ Deno.serve(async (req) => {
         } else {
           action = activeSinglePose ?? locationAction ?? singleAction ?? null;
         }
+        // Female-hairstyle variation (2026-08-31): re-style a FEMALE cast
+        // member's hair per engine_config.female_hair_variation_pct, biased to
+        // the scene register — elegant scenes → updos/glam, active → ponytails/
+        // braids, everything else → relaxed. Nightly-only (Create never sets it).
+        const hairCfg = await fetchEngineConfig(supabase);
+        const sceneRegister: 'elegant' | 'active' | 'casual' =
+          dualSceneKind === 'elegant'
+            ? 'elegant'
+            : soloActiveScene || !!activePose || !!activeSinglePose
+              ? 'active'
+              : 'casual';
         // Captured into a named var (not passed inline) so a later dual-swap
         // failure can rebuild a SOLO prompt for self from the very same input.
         const slotInput: CharacterSlotPipelineInput = {
@@ -2102,6 +2113,8 @@ Deno.serve(async (req) => {
           ),
           avoidList,
           action,
+          femaleHairVariationPct: hairCfg.femaleHairVariationPct,
+          sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
           // with singleCompositionExpandedPct probability; classic waist-up
           // otherwise. Identity gates (restore + post-swap verify) backstop

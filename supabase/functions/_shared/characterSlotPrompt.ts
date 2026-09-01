@@ -26,6 +26,7 @@
 
 import { callSonnet } from './llm.ts';
 import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
+import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -88,6 +89,15 @@ export interface CharacterSlotPipelineInput {
    *  Stage-8 identity gates (restore + post-swap verify) are what make the
    *  smaller-face presets safe to ship. */
   soloComposition?: 'three_quarter' | 'enviro_wide' | null;
+  /** NIGHTLY female-hairstyle variation (2026-08-31). When > 0, a FEMALE cast
+   *  member's hair is re-styled with this % chance (preserving color/length/
+   *  bangs/coily texture). Only the nightly path sets this; Create leaves it
+   *  unset, so variation never fires there. Read from
+   *  engine_config.female_hair_variation_pct. */
+  femaleHairVariationPct?: number | null;
+  /** Scene register for the hair-style bias (elegant → updos/glam, active →
+   *  ponytails/braids). Derived from the rolled nightly scene kind. */
+  sceneRegister?: HairSceneRegister | null;
 }
 
 export interface CharacterSlotPipelineResult {
@@ -284,7 +294,14 @@ export function skinToneAdjective(skin: string | null | undefined): string | nul
   return null;
 }
 
-function buildIdentityBlock(prefix: string, resolved: ResolvedIdentity, wardrobe: string): string {
+type HairVariationOpts = { pct: number; register: HairSceneRegister | null };
+
+function buildIdentityBlock(
+  prefix: string,
+  resolved: ResolvedIdentity,
+  wardrobe: string,
+  hairOpts?: HairVariationOpts
+): string {
   const ageAxis = resolved.age ? `, ${resolved.age}` : '';
   const buildAxis = resolved.build ? `, ${resolved.build} build` : '';
   // Skin tone sits right in the identity block so it anchors the (never-swapped)
@@ -295,7 +312,16 @@ function buildIdentityBlock(prefix: string, resolved: ResolvedIdentity, wardrobe
   // strongest position for it to survive a heavy face-swap medium prior.
   const toneAdj = skinToneAdjective(resolved.skin);
   const subject = toneAdj ? `${toneAdj} ${resolved.gender}` : resolved.gender;
-  const cleanIdentity = stripIdentity(resolved.identity);
+  // NIGHTLY female-hair variation: re-style a FEMALE's hair (color/length/bangs
+  // preserved) so she isn't pigeonholed to one static hairdo every night. Gated
+  // to female + a caller-supplied pct (nightly only). Male hair is untouched.
+  let identitySource = resolved.identity;
+  if (hairOpts && resolved.castGender === 'female') {
+    identitySource =
+      varyFemaleHair(resolved.identity, { pct: hairOpts.pct, register: hairOpts.register }) ??
+      resolved.identity;
+  }
+  const cleanIdentity = stripIdentity(identitySource);
   return `${prefix}: a ${subject}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
@@ -596,12 +622,16 @@ export function assembleCharacterPrompt(
 ): string {
   const location = input.iconicAnchor || input.userPlace || '';
   const mediumSignal = (input.mediumFluxFragment || '').trim();
+  // Female-hair variation opts (nightly only — Create leaves the pct unset).
+  const hairOpts: HairVariationOpts | undefined = input.femaleHairVariationPct
+    ? { pct: input.femaleHairVariationPct, register: input.sceneRegister ?? null }
+    : undefined;
 
   // Cast-count branches
   if (input.cast.length === 1) {
     const m = resolveIdentity(input.cast[0]);
     const wardrobe = (slots as SingleSlots).wardrobe;
-    const identityBlock = buildIdentityBlock('CHARACTER', m, wardrobe);
+    const identityBlock = buildIdentityBlock('CHARACTER', m, wardrobe, hairOpts);
 
     // Gender lock SHOUTED at position 1 — non-negotiable, mirrors the dual
     // path. This is what stops a male cast photo from rendering on a female
@@ -677,8 +707,18 @@ export function assembleCharacterPrompt(
   const left = resolveIdentity(input.cast[0]);
   const right = resolveIdentity(input.cast[1]);
   const dualSlots = slots as DualSlots;
-  const leftBlock = buildIdentityBlock('LEFT side of frame', left, dualSlots.left_wardrobe);
-  const rightBlock = buildIdentityBlock('RIGHT side of frame', right, dualSlots.right_wardrobe);
+  const leftBlock = buildIdentityBlock(
+    'LEFT side of frame',
+    left,
+    dualSlots.left_wardrobe,
+    hairOpts
+  );
+  const rightBlock = buildIdentityBlock(
+    'RIGHT side of frame',
+    right,
+    dualSlots.right_wardrobe,
+    hairOpts
+  );
 
   // Gender lock SHOUTED at position 1. Non-negotiable for dual.
   const genderLock = `${left.gender.toUpperCase()} on the LEFT, ${right.gender.toUpperCase()} on the RIGHT`;

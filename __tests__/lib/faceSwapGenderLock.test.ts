@@ -213,3 +213,50 @@ describe('characterSlotPrompt.skinToneAdjective — race lock', () => {
     expect(out).toContain('fair-skinned man');
   });
 });
+
+// ── Female-only hair variation gating (nightly) ─────────────────────────────
+// The hair re-styling must fire for FEMALE cast only; male hair stays static.
+describe('characterSlotPrompt — female-only hair variation', () => {
+  const slots = {
+    scene_description: 'a rooftop',
+    wardrobe: 'a gown',
+    mood: 'elegant',
+    props: 'champagne',
+  };
+  const inputFor = (gender: 'male' | 'female', hair: string) => ({
+    cast: [
+      {
+        role: 'self',
+        promptDesc: `a ${gender === 'male' ? 'man' : 'woman'}`,
+        physicalSummary: hair,
+        gender,
+      },
+    ],
+    iconicAnchor: 'Milan',
+    userPlace: null,
+    timeAxis: 'golden hour',
+    weatherAxis: 'clear',
+    phenomenaAxis: '',
+    mediumFluxFragment: 'editorial photo',
+    vibeDirective: 'elegant',
+    avoidList: '',
+    action: null,
+    femaleHairVariationPct: 100, // always vary (nightly path)
+    sceneRegister: 'elegant' as const,
+  });
+
+  it('FEMALE cast → hair is re-styled (not the static clause)', () => {
+    const out = assembleCharacterPrompt(
+      slots,
+      inputFor('female', 'long blonde hair, average build')
+    );
+    // varied → a styling verb follows the hair, so "long blonde hair, wearing" never appears
+    expect(out).not.toContain('long blonde hair, wearing');
+    expect(out).toMatch(/long blonde hair (worn|in|styled|swept|half-up|gathered|tucked|with)/);
+  });
+
+  it('MALE cast → hair untouched even with pct=100', () => {
+    const out = assembleCharacterPrompt(slots, inputFor('male', 'short brown hair, average build'));
+    expect(out).toContain('short brown hair, wearing');
+  });
+});

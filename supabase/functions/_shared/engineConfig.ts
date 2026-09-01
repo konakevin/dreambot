@@ -80,6 +80,11 @@ export interface EngineConfig {
   /** Stage 5c: % of solo face-swap renders using an expanded composition
    *  preset (three-quarter / environmental-wide). 0 = classic waist-up only. */
   singleCompositionExpandedPct: number;
+  /** NIGHTLY female-hairstyle variation (2026-08-31): % chance a FEMALE cast
+   *  member's hair is re-styled (color/length/bangs/coily texture preserved,
+   *  scene-biased) instead of her static photo hairdo. 0 = always her own look.
+   *  Kevin: 50. Nightly-only; the paid Create path never applies it. */
+  femaleHairVariationPct: number;
   /** Holiday Dreams master kill switch (HOLIDAY_DREAMS_PLAN.md). When false the
    *  whole holiday layer is inert regardless of the date/catalog. Starts false. */
   holidaysEnabled: boolean;
@@ -124,6 +129,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleSceneActivePct: 0,
   singleGenderedBoostPct: 0,
   singleCompositionExpandedPct: 0,
+  femaleHairVariationPct: 0,
   locationActionPct: 0,
   pureSceneOnSwapFail: true,
   holidaysEnabled: false,
@@ -216,6 +222,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     singleCompositionExpandedPct: Number(
       data.single_composition_expanded_pct ?? DEFAULT_ENGINE_CONFIG.singleCompositionExpandedPct
+    ),
+    femaleHairVariationPct: Number(
+      data.female_hair_variation_pct ?? DEFAULT_ENGINE_CONFIG.femaleHairVariationPct
     ),
     locationActionPct: Number(data.location_action_pct ?? DEFAULT_ENGINE_CONFIG.locationActionPct),
     pureSceneOnSwapFail:
