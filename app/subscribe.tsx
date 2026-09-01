@@ -382,7 +382,7 @@ export default function SubscribeScreen() {
               one-tap Manage Subscription → Apple's cancel sheet. */}
           <View style={s.reassure}>
             <Ionicons name="shield-checkmark-outline" size={fontScale(14)} color={ACCENT} />
-            <Text style={s.reassureText}>Cancel anytime, right from the app.</Text>
+            <Text style={s.reassureText}>No commitment. Cancel anytime in Settings.</Text>
           </View>
           <TouchableOpacity
             onPress={() => restore()}
