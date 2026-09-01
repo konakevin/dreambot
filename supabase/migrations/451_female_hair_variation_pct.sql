@@ -12,8 +12,8 @@
 -- Read by _shared/engineConfig.ts → threaded into the nightly slot pipeline
 -- (_shared/characterSlotPrompt.ts → _shared/femaleHairVariation.ts).
 --
--- Ships at 0 (inert) so the deploy changes nothing; flip to 50 (Kevin's target)
--- after QA sign-off:  UPDATE public.engine_config SET female_hair_variation_pct = 50;
+-- Ships at 0 (inert) so the deploy changes nothing; flip to 75 (Kevin's target,
+-- 2026-08-31) after QA:  UPDATE public.engine_config SET female_hair_variation_pct = 75;
 --
 -- Run in the Supabase dashboard SQL editor.
 
