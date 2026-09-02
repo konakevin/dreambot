@@ -213,6 +213,20 @@ invention like wingsuit dives). Both generators now make that line POOL-AWARE:
 active buckets get the action mandate + the grounded-action guard (no mid-air).
 Keep Sonnet as the seeding model. The scrub below remains as the backstop.
 
+**FIRST-EXAMPLE ANCHORING (a general authoring law, learned 3x on 2026-09-02):**
+models anchor HARD on the first item of any example list in a static prompt — a
+hue list made every pop-art render blue-red; "(gripping, launching, ...)" made
+23% of solo seeds LEAD with "Gripping" and put grip/hold in 32-41% of all seeds
+(Kevin: "repeated renders of me holding an object"). NEVER bake a favored example
+first; put VARIATION IN CODE (roll a verb-family/palette per row and instruct
+around it). Companion fix: the swap-envelope (face big + toward camera + waist-up
++ prop at chest) resolves cheapest to a HUNCHED lean-in presenting an object —
+both generators now mandate UPRIGHT OPEN posture (chest open, tall or whole-body
+motion, props the exception not the default, leading verb never reused >2x per
+batch), and airborne leaps get grounded to launch stances (face-shrink trap).
+Post-fix: grip/hold 0% across all 4 buckets, verb spread healthy, 4/4 proof
+renders upright + dynamic.
+
 **MANDATORY BACKSTOP — the ACTION SCRUB (post-seed AND post-scale).** Sonnet's
 authoring leans static: at scale, 106/300 fresh solo seeds led with standing/
 leaning/perched and 30 more buried passivity mid-sentence ("watching fireworks"),
