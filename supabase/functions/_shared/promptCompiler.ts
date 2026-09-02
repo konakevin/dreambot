@@ -503,6 +503,7 @@ OUTPUT FORMAT: comma-separated danbooru tags, NOT natural language sentences.
 CHARACTER TAGS ARE MANDATORY whenever a CHARACTER section is present — encode each person as danbooru tags, NEVER as "solo figure" or "person":
 - FIRST a count + gender tag that MATCHES the GENDER lock exactly (1boy, 1girl, 1other; two people: "1boy, 1girl", "2girls", etc.). NEVER default to a girl when the gender says male.
 - THEN their appearance, pulled from the CHARACTER traits: hair color + length, facial hair if any (beard / stubble / goatee / mustache), eye color, approximate age, build. These likeness tags MUST appear.
+SCENE TAGS ARE MANDATORY when the user's prompt names elements — encode EVERY animal, pet, object, and place the user asked for as its own tag (cat, dog, bird, book, guitar, couch, television, …). The user's named elements are sacred: never omit, swap, or generalize one (a named cat is "cat", never dropped or turned into a different animal).
 Include a framing tag (randomly pick ONE: full_body, upper_body, cowboy_shot, or wide_shot).
 Start with: ${medium.fluxFragment}
 End with: masterpiece, best quality, detailed background, no text, no watermark, single image, no collage, no split screen

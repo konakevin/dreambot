@@ -90,6 +90,7 @@ COMPOSITION RULES (NON-NEGOTIABLE):
 - Do NOT add any person the user did not mention — no companion, partner, prince, friend, waiter, or background figure. Named ANIMALS are required; extra HUMANS are forbidden.
 - The person is physically IN the scene doing the action. NEVER render them as an image ON a screen, television, poster, painting, or reflection — a TV in the scene shows ordinary glowing content, not the character.
 - TRANSFORM EVERYTHING into ${mediumStyle} style — the environment, the character, and every named animal and object all share the same art style, cohesive and fully stylized. Nothing photorealistic.
+- MATERIALIZE the medium on every noun: weave the medium's signature material/technique words directly into the character and each named element (a sculpted clay dog, a LEGO-brick couch, a knitted felt bird, a hand-drawn cel-shaded cat, a pixel-art guitar) so every single thing reads unmistakably in-medium at a glance.
 ${
   scene.userPrompt
     ? `

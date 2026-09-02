@@ -136,6 +136,25 @@ describe("brief contract — the user's words win", () => {
     expect(out.sonnetBrief).toContain('TRANSFORM EVERYTHING');
   });
 
+  it('materializes the medium on every noun (style-strength: clay dog, LEGO couch…)', () => {
+    expect(out.sonnetBrief).toContain('MATERIALIZE the medium on every noun');
+  });
+
+  it("anime tag path makes the user's named elements mandatory as tags", () => {
+    const animeOut = compilePrompt(
+      input({
+        medium: {
+          key: 'anime',
+          directive: 'Anime.',
+          fluxFragment: 'anime illustration',
+          characterRenderMode: 'embodied',
+          faceSwaps: false,
+        },
+      })
+    );
+    expect(animeOut.sonnetBrief).toContain('SCENE TAGS ARE MANDATORY');
+  });
+
   it('no face-swap machinery: no swap source, no face lock append', () => {
     expect(out.faceSwapSource).toBeNull();
     expect(out.postProcess.appendFaceLock).toBe(false);
