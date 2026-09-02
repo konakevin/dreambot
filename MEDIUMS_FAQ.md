@@ -6,14 +6,14 @@ A medium is an art style (anime, photography, gothic, lego, etc.). The `dream_me
 
 ## Classification Flags
 
-| Flag | Meaning | Examples |
-|------|---------|----------|
-| `is_scene_only` | Pure environment, no people | canvas, watercolor, vaporwave, pixels |
-| `is_character_only` | Always forces character composition | claymation, lego, vinyl |
-| `face_swaps` | Face-swap composite works on this style | photography, pencil, neon, shimmer, twilight, surreal, comics |
-| `character_render_mode` | How characters are represented | `natural` (real human) or `embodied` (medium-native avatar) |
-| `nightly_skip` | Re-rolled if picked for nightly dreams | watercolor |
-| `is_public` | Shown in user-facing UI | Most mediums; some are bot-only |
+| Flag                    | Meaning                                 | Examples                                                      |
+| ----------------------- | --------------------------------------- | ------------------------------------------------------------- |
+| `is_scene_only`         | Pure environment, no people             | canvas, watercolor, vaporwave, pixels                         |
+| `is_character_only`     | Always forces character composition     | claymation, lego, vinyl                                       |
+| `face_swaps`            | Face-swap composite works on this style | photography, pencil, neon, shimmer, twilight, surreal, comics |
+| `character_render_mode` | How characters are represented          | `natural` (real human) or `embodied` (medium-native avatar)   |
+| `nightly_skip`          | Re-rolled if picked for nightly dreams  | watercolor                                                    |
+| `is_public`             | Shown in user-facing UI                 | Most mediums; some are bot-only                               |
 
 ## Where Medium Keys Are Referenced (THE DEPENDENCY MAP)
 
@@ -21,35 +21,36 @@ A medium is an art style (anime, photography, gothic, lego, etc.). The `dream_me
 
 ### Critical (will break visibly)
 
-| File | What It Does | What Breaks |
-|------|-------------|-------------|
-| `dream_mediums` DB table | Source of truth | Everything |
-| `uploads.dream_medium` column | Every existing post stores its medium key | Old posts show wrong/missing medium |
-| `user_recipes.recipe.art_styles` | Every user's saved medium preferences (JSONB array) | User's nightly dreams pick from dead keys → random fallback |
-| `photoPrompts.ts` → `MEDIUM_CONFIGS` | Per-medium photo restyle prompts (19 entries) | Photo restyle falls to generic 1-liner, gender identity lost |
-| `renderEntity.ts` → `CHARACTER_TEMPLATES` | Per-medium character templates for embodied rendering | Nightly cast renders as generic "stylized figure" |
-| `dreamAlgorithm.ts` → 3 hardcoded Sets | `SCENE_ONLY_MEDIUMS`, `CHARACTER_MEDIUMS`, `NIGHTLY_SKIP_MEDIUMS` | Wrong composition (character rendered as pure scene or vice versa) |
-| `generate-bot-dreams.js` → `BOTS` | Hardcoded medium lists per bot | Bot posts fail silently |
+| File                                      | What It Does                                                      | What Breaks                                                        |
+| ----------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `dream_mediums` DB table                  | Source of truth                                                   | Everything                                                         |
+| `uploads.dream_medium` column             | Every existing post stores its medium key                         | Old posts show wrong/missing medium                                |
+| `user_recipes.recipe.art_styles`          | Every user's saved medium preferences (JSONB array)               | User's nightly dreams pick from dead keys → random fallback        |
+| `photoPrompts.ts` → `MEDIUM_CONFIGS`      | Per-medium photo restyle prompts (19 entries)                     | Photo restyle falls to generic 1-liner, gender identity lost       |
+| `renderEntity.ts` → `CHARACTER_TEMPLATES` | Per-medium character templates for embodied rendering             | Nightly cast renders as generic "stylized figure"                  |
+| `dreamAlgorithm.ts` → 3 hardcoded Sets    | `SCENE_ONLY_MEDIUMS`, `CHARACTER_MEDIUMS`, `NIGHTLY_SKIP_MEDIUMS` | Wrong composition (character rendered as pure scene or vice versa) |
+| `generate-bot-dreams.js` → `BOTS`         | Hardcoded medium lists per bot                                    | Bot posts fail silently                                            |
 
 ### Also Referenced (auto-adapts from DB)
 
-| File | What It Does | Impact |
-|------|-------------|--------|
-| `dreamStyles.ts` → `resolveMediumFromDb()` | Resolves key to full medium object | Auto-adapts (reads from DB) |
-| `hooks/useDreamStyles.ts` | Client fetches mediums for UI picker | Auto-adapts (reads from DB) |
-| `nightly-dreams.js` | Nightly cron fetches mediums from DB | Auto-adapts (reads from DB) |
+| File                                       | What It Does                         | Impact                      |
+| ------------------------------------------ | ------------------------------------ | --------------------------- |
+| `dreamStyles.ts` → `resolveMediumFromDb()` | Resolves key to full medium object   | Auto-adapts (reads from DB) |
+| `hooks/useDreamStyles.ts`                  | Client fetches mediums for UI picker | Auto-adapts (reads from DB) |
+| `nightly-dreams.js`                        | Nightly cron fetches mediums from DB | Auto-adapts (reads from DB) |
 
 ## The Three Hardcoded Sets (TECH DEBT)
 
 These Sets in `dreamAlgorithm.ts` MUST mirror the DB columns but are maintained separately:
 
 ```typescript
-SCENE_ONLY_MEDIUMS = Set(['canvas', 'watercolor', 'vaporwave', 'pixels'])
-CHARACTER_MEDIUMS = Set(['claymation', 'lego', 'vinyl'])
-NIGHTLY_SKIP_MEDIUMS = Set(['watercolor'])
+SCENE_ONLY_MEDIUMS = Set(['canvas', 'watercolor', 'vaporwave', 'pixels']);
+CHARACTER_MEDIUMS = Set(['claymation', 'lego', 'vinyl']);
+NIGHTLY_SKIP_MEDIUMS = Set(['watercolor']);
 ```
 
 They exist in **TWO locations** that must stay in sync:
+
 1. `supabase/functions/_shared/dreamAlgorithm.ts` (Edge Function)
 2. `lib/dreamAlgorithm.ts` (client copy)
 
@@ -101,23 +102,29 @@ Legacy mismatches caused the big rename of April 2026. Never create a medium whe
 ## Common Pitfalls
 
 ### 1. Missing photoPrompts.ts entry
+
 The photo restyle path falls through to a generic 1-liner that ignores the directive. Gender identity is NOT preserved — Flux defaults to "young woman in dress" regardless of subject. The Twilight bug of April 2026 went unnoticed for weeks.
 
 ### 2. Stale user art_styles
+
 When mediums are renamed, ALL user profiles must have their `art_styles` JSONB arrays updated. If not, 50%+ of nightly dreams may fall back to random medium selection because the saved keys no longer match active mediums.
 
 ### 3. Hardcoded Sets out of sync
+
 Adding `is_scene_only=true` in the DB but forgetting `SCENE_ONLY_MEDIUMS` in dreamAlgorithm.ts means the nightly dream algorithm will try to render characters in a scene-only medium.
 
 ### 4. Edge Function caching
+
 After deploying, the Edge Function may serve stale code. Always `supabase functions delete generate-dream` THEN `supabase functions deploy generate-dream --no-verify-jwt`.
 
 ### 5. Duplicate MEDIUM_CONFIGS keys
+
 Duplicate keys in a TypeScript Record silently let the LATER definition win. This caused Claymation to render as Sack Boy and Neon to render as cyberpunk in April 2026. Always grep the file for the key after adding.
 
 ## Two Render Modes
 
 ### Natural (`character_render_mode = 'natural'`)
+
 - Character is rendered as a real human
 - Full character description sent to Sonnet
 - Face-lock system active (if `face_swaps = true`)
@@ -125,6 +132,7 @@ Duplicate keys in a TypeScript Record silently let the LATER definition win. Thi
 - Examples: photography, pencil, comics, neon, shimmer, twilight, surreal
 
 ### Embodied (`character_render_mode = 'embodied'`)
+
 - NO face lock, NO face swap — the user's LIKENESS is described into the prompt instead
 - `castResolver` passes the full cast description to Sonnet; the medium's `directive` ("TRANSFORM EVERYTHING into this style") + Sonnet do the stylization. (Historical note: the old `buildRenderEntity()` / `CHARACTER_TEMPLATES` trait-templating is dead — the description now goes straight to Sonnet, which is better at translating traits into medium-native terms.)
 - Relationship gating still applies: a non-partner +1 is posed platonically (ported into `buildCharacterBlock` so embodied dual matches the face-swap dual gate)
@@ -134,12 +142,45 @@ Duplicate keys in a TypeScript Record silently let the LATER definition win. Thi
 
 ## File Quick Reference
 
-| File | What to update |
-|------|---------------|
-| `dream_mediums` table | Key, directive, flux_fragment, all flags |
-| `supabase/functions/_shared/photoPrompts.ts` | `MEDIUM_CONFIGS` entry for photo restyle |
-| `supabase/functions/_shared/renderEntity.ts` | `CHARACTER_TEMPLATES` for embodied mediums |
-| `supabase/functions/_shared/dreamAlgorithm.ts` | Hardcoded classification Sets |
-| `lib/dreamAlgorithm.ts` | Mirror of above (must match) |
-| `scripts/generate-bot-dreams.js` | Bot medium arrays |
-| `CLAUDE.md` | Documentation if adding new flags/steps |
+| File                                           | What to update                             |
+| ---------------------------------------------- | ------------------------------------------ |
+| `dream_mediums` table                          | Key, directive, flux_fragment, all flags   |
+| `supabase/functions/_shared/photoPrompts.ts`   | `MEDIUM_CONFIGS` entry for photo restyle   |
+| `supabase/functions/_shared/renderEntity.ts`   | `CHARACTER_TEMPLATES` for embodied mediums |
+| `supabase/functions/_shared/dreamAlgorithm.ts` | Hardcoded classification Sets              |
+| `lib/dreamAlgorithm.ts`                        | Mirror of above (must match)               |
+| `scripts/generate-bot-dreams.js`               | Bot medium arrays                          |
+| `CLAUDE.md`                                    | Documentation if adding new flags/steps    |
+
+## Pop Art (pop_art) — Real Face medium, finalized 2026-09-02
+
+**Category:** `face_swaps = true` (Real Face section). It was stranded in Dream Art
+with the flag off while `character_render_mode='natural'` still swapped on the
+create path — worst of both: swapped faces users couldn't find under Real Face.
+
+**The look (v7, converged over 7 live iterations with Kevin grading in-app):**
+
+- `flux_fragment`: premium pop-art illustration, crisp clean outlines, Ben-Day
+  halftone dot shading for depth and texture, rich saturated retro palette,
+  expressive lighting, detailed textured environment with layered depth, playful
+  visual energy, vintage print-inspired poster texture
+- `face_swap_flux_fragment`: same + lifelike adult face with realistic human
+  proportions and true-to-life eyes at natural size and spacing, natural
+  recognizable skin unified by the scene light, a fine outline settling the face
+  into the illustration
+
+**Taste lessons (do NOT re-learn these by re-tinkering):**
+
+1. RICH beats FLAT — "flat high-contrast fills / simplified forms" reads CHEAP.
+   Kevin's winners were detailed, textured, layered.
+2. Fragment hue words steer the whole fleet: "warm cinematic light" → all-amber;
+   an enumerated hue list ("electric blue, hot pink…") → everything blue-red
+   (models anchor on the first-listed hues). "Expressive lighting" is the
+   hue-neutral phrasing that unlocks per-render palette variety.
+3. Don't drift into COMIC vocabulary ("bold ink outlines", graphic-novel
+   language) — the comics medium already owns that; pop_art is PRINT ("crisp
+   clean outlines", halftone, poster texture). Heavy-ink worlds also make the
+   swapped face read grafted-on.
+4. The old swap override ("keep face photographic, pop-art on clothing/background
+   NOT the face") manufactured the spliced-face look — the whole scene must share
+   the style, with the face integrated by light + a fine outline.
