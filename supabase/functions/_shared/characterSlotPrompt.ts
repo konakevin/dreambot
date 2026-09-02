@@ -27,6 +27,7 @@
 import { callSonnet } from './llm.ts';
 import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
 import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts';
+import { buildSceneHook } from './sceneHook.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -702,6 +703,14 @@ export function assembleCharacterPrompt(
 ): string {
   const location = input.iconicAnchor || input.userPlace || '';
   const mediumSignal = (input.mediumFluxFragment || '').trim();
+  // Early scene hook — the scene's 1-2 most distinctive clauses ride the early
+  // "set at" slot (see buildSceneHook). Same for single + dual.
+  const sceneHook = buildSceneHook(slots.scene_description, location);
+  const setAt = location
+    ? `set at ${location}${sceneHook ? ` — ${sceneHook}` : ''}`
+    : sceneHook
+      ? `set in ${sceneHook}`
+      : '';
   // Female-hair variation opts (nightly only — Create leaves the pct unset).
   const hairOpts: HairVariationOpts | undefined = input.femaleHairVariationPct
     ? { pct: input.femaleHairVariationPct, register: input.sceneRegister ?? null }
@@ -743,8 +752,17 @@ export function assembleCharacterPrompt(
     // exactly that. The fix is killing the STIFFNESS + integrating the LIGHTING, not
     // avoiding the lens. So: relaxed + scene-lit + photoreal, comfortable looking at
     // the camera OR gently off, never a stiff over-posed studio portrait.
+    // 2026-09-02 background-drowning fix, round 2 (Kevin: do NOT homogenize
+    // framing — 3/4 portraits are welcome; the ask is more background DETAIL at
+    // whatever framing rolls). So the framing presets keep their original
+    // variety, and the integration line gains a DETAIL-not-size cue: whatever
+    // slice of setting is visible must be specific and crisp, never a blank
+    // wall / empty sky (the hearted failure). Detail language is safe under the
+    // 2026-06-19 hard rule — the footgun was SIZE/dominance cues ("fills the
+    // background"), never detail. "gentle shallow depth of field" (a literal
+    // background-blur instruction) stays deleted.
     const integrationLine =
-      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, gentle shallow depth of field';
+      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, natural environmental depth, whatever slice of the setting is visible behind them rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the subject, any visible sky alive with colour, cloud form, or weather — never flat white';
     const framingBlock = (
       input.soloComposition === 'three_quarter'
         ? [
@@ -765,15 +783,22 @@ export function assembleCharacterPrompt(
             ]
     ).join(', ');
 
+    // 2026-09-02 background-drowning fix: on SINGLES the scene_description moves
+    // ONE slot earlier — ahead of the framing block, still AFTER the identity
+    // block (race/hair anchors keep their early position). The 2026-06-19
+    // scene-position incident was DUAL-specific (no_dual_split when the couple
+    // shrank); singles are backstopped by the identity gate + restore + post-swap
+    // verify. Dual ordering is untouched. Verify identity_sim in
+    // ai_generation_log when touching this.
     const parts = [
       genderLock,
       mediumSignal,
-      location ? `set at ${location}` : '',
+      setAt,
       singleAnchor,
       input.action || '',
       identityBlock,
-      framingBlock,
       slots.scene_description,
+      framingBlock,
       slots.mood,
       slots.props,
       'foreground midground background stacked top to bottom, layered depth',
@@ -838,15 +863,21 @@ export function assembleCharacterPrompt(
   const framingBlock = [
     'both shown from the waist up, fully visible',
     'both faces unobstructed, clearly visible and turned toward the camera, easy to read',
-    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade',
+    // Detail-not-size background cue (2026-09-02): the visible setting must be
+    // specific and recognizable, never a blank sky/wall. SIZE/dominance cues
+    // remain forbidden (2026-06-19 hard rule) — this asks for DETAIL only.
+    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, whatever slice of the setting is visible around them rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
     'both at the same vertical height, heads at the same level',
   ].join(', ');
 
+  // 2026-09-02 background-drowning fix: dual gets ONLY the early scene hook in
+  // the set-at slot (L1). Part ordering + all framing language stay untouched —
+  // the 2026-06-19 hard rule (scene stays behind the framing block on duals).
   const parts = [
     genderLock,
     mediumSignal,
-    location ? `set at ${location}` : '',
+    setAt,
     dualAnchor,
     input.action || '',
     leftBlock,
