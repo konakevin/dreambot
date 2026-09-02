@@ -761,26 +761,32 @@ export function assembleCharacterPrompt(
     // 2026-06-19 hard rule — the footgun was SIZE/dominance cues ("fills the
     // background"), never detail. "gentle shallow depth of field" (a literal
     // background-blur instruction) stays deleted.
+    // 2026-09-02 zoom-regression fix (Kevin, 20-night sim: "repeated zoomed-in
+    // shots... we want the characters WITHIN the world — the closest should be
+    // about a 3/4 body view with a lot of scene showing"). Root cause: the
+    // integration line said "whatever SLICE of the setting is visible behind
+    // them" — phrasing that LICENSES a sliver of background, which Flux
+    // satisfies cheapest with a face-filling close-up plus one crisp sliver.
+    // Replacement demands BREADTH positively (setting sweeping around them,
+    // ground to sky). Still detail-not-dominance — the 2026-06-19 rule stands.
+    // Framing floor rises with Kevin's explicit minimum: knees-up three-quarter
+    // (was waist-up). A 3/4-length face is ~15-20% of frame height — squarely
+    // inside the healthy swap band, and the giant-face guard floors the other
+    // extreme.
     const integrationLine =
-      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, natural environmental depth, whatever slice of the setting is visible behind them rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the subject, any visible sky alive with colour, cloud form, or weather — never flat white';
+      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the subject, any visible sky alive with colour, cloud form, or weather — never flat white';
     const framingBlock = (
-      input.soloComposition === 'three_quarter'
+      input.soloComposition === 'enviro_wide'
         ? [
-            'shown from the knees up in a three-quarter length composition, fully visible',
-            'face large, unobstructed and clearly visible to the viewer',
+            'full figure visible, standing prominent in the foreground third of a sweeping environment',
+            'the person is the unmistakable subject, face large enough to read clearly',
             integrationLine,
           ]
-        : input.soloComposition === 'enviro_wide'
-          ? [
-              'full figure visible, standing prominent in the foreground third of a sweeping environment',
-              'the person is the unmistakable subject, face large enough to read clearly',
-              integrationLine,
-            ]
-          : [
-              'shown from the waist up, fully visible',
-              'face unobstructed and clearly visible to the viewer',
-              integrationLine,
-            ]
+        : [
+            'shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
+            'face unobstructed and clearly visible to the viewer',
+            integrationLine,
+          ]
     ).join(', ');
 
     // 2026-09-02 background-drowning fix: on SINGLES the scene_description moves
@@ -848,7 +854,7 @@ export function assembleCharacterPrompt(
   // heads, each head on its own side, faces toward camera, three-quarter). This does
   // NOT touch aspect (stays 9:16 phone-portrait) or the gender-safe genderLock.
   const dualAnchor =
-    'an ENVIRONMENTAL TWO-SHOT of two people together, shown from at least the waist up with the setting clearly visible around and above them at a natural editorial distance, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two stand side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
+    'an ENVIRONMENTAL TWO-SHOT of two people together, shown from at least mid-thigh in a three-quarter length composition with the setting sweeping clearly around and above them at a natural editorial distance, NOT a tight face close-up — their faces are a normal-sized part of the frame, never filling it; the two stand side by side with a clear gap between their two heads, both facing toward the camera in a natural, unforced three-quarter view, each face clearly visible and turned toward the viewer, each head on its own side of the frame';
 
   // Framing — includes L/R head-gap + same-height constraints for crop pipeline.
   // The head-gap clause is the load-bearing dual-swap constraint (Kevin
@@ -861,12 +867,12 @@ export function assembleCharacterPrompt(
   // the dual crop/split). Only the rigid "frontal portrait composition" line is
   // swapped for the candid cinematic-integration line (2026-08-24).
   const framingBlock = [
-    'both shown from the waist up, fully visible',
+    'both shown from the knees up in a three-quarter length composition, fully visible, generous open space around them showing the scene',
     'both faces unobstructed, clearly visible and turned toward the camera, easy to read',
     // Detail-not-size background cue (2026-09-02): the visible setting must be
     // specific and recognizable, never a blank sky/wall. SIZE/dominance cues
     // remain forbidden (2026-06-19 hard rule) — this asks for DETAIL only.
-    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, whatever slice of the setting is visible around them rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
+    'naturally lit by the scene with soft rim light and ambient colour from the environment, an editorial cinematic photograph feel rather than a stiff studio couple portrait, filmic colour grade, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the couple, any visible sky alive with colour, cloud form, or weather — never flat white',
     'a clear gap between their two heads, faces apart and not touching, each head on its own side of the frame, not cheek to cheek, heads not leaning together',
     'both at the same vertical height, heads at the same level',
   ].join(', ');
