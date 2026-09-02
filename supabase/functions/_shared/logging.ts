@@ -48,6 +48,13 @@ export interface GenerationLogEntry {
    *  rows carried no detail at all (2026-07-09 dreamer2927 investigation).
    *  Callers pass the raw error sliced to ~500 chars. */
   error_message?: string | null;
+  /** Caller-generated UUID for the row (2026-09-02): lets the nightly backfill
+   *  upload_id onto EXACTLY this row after the uploads insert returns — the
+   *  log row is created in parallel with storage persist, before the upload
+   *  exists. Without it, direct-invoke renders (no job_id) left upload_id
+   *  permanently null and forensics couldn't join log ↔ upload. */
+  id?: string;
+  upload_id?: string | null;
 }
 
 /**

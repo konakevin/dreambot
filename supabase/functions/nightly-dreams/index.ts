@@ -3633,12 +3633,17 @@ Output ONLY the prompt.`;
 
     // Persist to Storage + log in parallel
     timings.total = Date.now() - t0;
+    // Pre-generated log-row id so upload_id can be backfilled onto exactly
+    // this row once the uploads insert returns (audit find: upload_id was
+    // never set — forensics couldn't join log ↔ upload on job-less renders).
+    const genLogId = crypto.randomUUID();
     const persistPromise = outBuf
       ? persistBufferToStorage(outBuf, userId, supabase)
       : persistToStorage(tempUrl, userId, supabase);
     const [persistedUrl] = await Promise.all([
       persistPromise,
       insertGenerationLog(supabase, {
+        id: genLogId,
         user_id: userId,
         job_id: queueJobId,
         recipe_snapshot: asJsonbObject(vibe_profile),
@@ -3789,6 +3794,19 @@ Output ONLY the prompt.`;
         ),
     ]);
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
+    // Backfill the log ↔ upload join key (fire-and-forget WITH a logged catch,
+    // per the hard rule on silent RPCs).
+    if (uploadId) {
+      supabase
+        .from('ai_generation_log')
+        .update({ upload_id: uploadId })
+        .eq('id', genLogId)
+        .then(
+          () => {},
+          (e: unknown) =>
+            console.warn('[nightly-dreams] upload_id backfill failed:', (e as Error)?.message)
+        );
+    }
     if (uploadResult.error) {
       console.error('[nightly-dreams] Failed to create draft upload:', uploadResult.error.message);
     }
