@@ -194,6 +194,38 @@ themed-only.
 
 ---
 
+
+## Dreamy-action buckets (2026-09-02, Kevin: "fun, dynamic, cool, dreamy, lush")
+
+Four new active-pool buckets, LIVE at ~100 dual + ~100 single each (Kevin QA'd 3/3
+solo renders per pool; static-seed problem root-caused + fixed):
+- `sky_romance` — balloons over valleys, ferris crest, seaplane docks, paraglide landings
+- `wild_rides` — horseback surf gallop, husky sleds, camel dunes, vespas, retro convertibles
+- `water_bliss` — waterfall plunge pools, turtle snorkels, lantern canoes, snowy hot springs
+- `glow_nights` — floating-lantern skies, rooftop fireworks, bioluminescent shores, night carnivals
+
+**NEW MANDATORY STEP — the ACTION SCRUB (post-seed AND post-scale).** Sonnet's
+authoring leans static: at scale, 106/300 fresh solo seeds led with standing/
+leaning/perched and 30 more buried passivity mid-sentence ("watching fireworks"),
+which renders as the exact standing-around Kevin flagged. After EVERY seeding run:
+1. Leading-verb scan+reword (solo): scenes must LEAD with a physical mid-action verb.
+2. Anywhere-passivity scan+reword (solo + dual): no sit/seated/watching/gazing/admiring
+   anywhere. (Watch false positives: "sit-on-top kayak" is action.)
+3. Rewrites must keep the face-forward + dual head-gap language; proximity scan after.
+4. Wide-action trap: reword any "leap off / mid-air across a valley" beat to a
+   held-at-the-edge launch pose (mid-air wide shots shrink faces below swap floor).
+Culture-specific festival seeds (Diwali, Obon) drift into ethnic costume + rendered
+text — disable on sight; keep festivals generic ("floating-lantern night").
+
+Also fixed engine-side: `force_scene_category` now implies a face-swap CAST
+composition (commit c00d82b7) — before, ~1/3 of forced-bucket QA renders rolled
+pure_scene and emitted unpopulated landscapes.
+
+Scale-run gotchas re-confirmed: background seeding jobs die ~30min (chunk per
+bucket); a "dead-looking" chunk can still insert (verify by COUNT, not by log) —
+we over-scaled water_bliss to 175 that way; trimmed by disabling newest-75 (never
+delete). Near-dupe pass after scale: ~9 dupes disabled via 60-char scene key.
+
 ## Playbook — adding or tuning fun scenarios (for future agents)
 
 **Where things live**
