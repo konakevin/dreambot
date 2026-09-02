@@ -44,7 +44,10 @@ async function fetchAll(
   for (;;) {
     let q = supabase.from(table).select(select);
     for (const [col, val] of Object.entries(filters)) q = q.eq(col, val);
-    const res = await q.range(from, from + PAGE - 1).returns<Record<string, unknown>[]>();
+    const res = await q
+      .order('id', { ascending: true })
+      .range(from, from + PAGE - 1)
+      .returns<Record<string, unknown>[]>();
     if (res.error) return { rows: [], error: res.error };
     const page = res.data ?? [];
     rows.push(...page);

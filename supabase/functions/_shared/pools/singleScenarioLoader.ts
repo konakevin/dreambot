@@ -64,6 +64,7 @@ async function fetchPoolRows(
         .select(select)
         .eq('pool', pool)
         .eq('disabled', false)
+        .order('id', { ascending: true })
         .range(from, from + PAGE - 1)
         .returns<Record<string, unknown>[]>();
       if (res.error) {
