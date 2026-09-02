@@ -387,7 +387,43 @@ function buildIdentityBlock(
   const hairColor = extractHairColor(identitySource);
   const isBald = /\b(bald|balding|shaved head|hairless|receding)\b/i.test(identitySource);
   const colorAnchor = hairColor && !isBald ? ` with a full head of ${hairColor} hair` : '';
-  return `${prefix}: a ${subject}${colorAnchor}${ageAxis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
+  // SENIOR ANCHOR (2026-09-02, the Michele bug): a 74yo white-haired +1 rendered
+  // as a ~40yo with a thick brown quiff — the prompt was CORRECT ("full head of
+  // white hair, 74 years old") but age/hair arrived as TRAILING modifiers, and
+  // stylized mediums' young-attractive-couple prior steamrolled them (identity
+  // sank to 0.327). Same physics as the race fix: NOUN-form beats descriptors.
+  // For 55+ cast the age + hair colour move INTO the subject noun ("an older
+  // white-haired White man") and the age axis gains positive emphasis. Applies
+  // to every consumer (nightly, create, first-dream) — a young render of an
+  // older user is an identity failure, not a flattering choice.
+  const ageNum = (() => {
+    const m = (resolved.age || '').match(/\d+/);
+    return m ? parseInt(m[0], 10) : null;
+  })();
+  const isSenior = ageNum !== null && ageNum >= 55;
+  // FLATTERING-ALWAYS (Kevin): the anchor must carry IDENTITY (their real age
+  // and hair, recognizably them) while staying aspirational — "distinguished
+  // silver-haired gentleman", never "old". No wrinkle/age-line language.
+  const grace = resolved.castGender === 'female' ? 'elegant' : 'distinguished';
+  const seniorSubject =
+    isSenior && hairColor && !isBald
+      ? `${grace} older ${hairColor}-haired ${subject}`
+      : isSenior
+        ? `${grace} older ${subject}`
+        : subject;
+  // Clean-shaven guard for senior males: the "older white-haired" prior gifts a
+  // sage/Santa beard; "clean-shaven" alone is negation-shaped and loses. State
+  // it positively when the description says clean-shaven (3/3 repro renders
+  // grew a white beard without this).
+  const cleanShaven =
+    resolved.castGender === 'male' && /clean[- ]shaven/i.test(identitySource)
+      ? ', freshly shaven with a smooth bare face'
+      : '';
+  const ageEmphasis =
+    (isSenior && resolved.age
+      ? `, truly ${resolved.age} and aging ${resolved.castGender === 'female' ? 'gracefully' : 'handsomely'}`
+      : ageAxis) + cleanShaven;
+  return `${prefix}: ${/^[aeiou]/i.test(seniorSubject) ? 'an' : 'a'} ${seniorSubject}${colorAnchor}${ageEmphasis}${buildAxis}${skinAxis}, ${cleanIdentity}, wearing ${wardrobe}`;
 }
 
 // ── Slot brief construction ─────────────────────────────────────────────
@@ -832,7 +868,18 @@ export function assembleCharacterPrompt(
   );
 
   // Gender lock SHOUTED at position 1. Non-negotiable for dual.
-  const genderLock = `${left.gender.toUpperCase()} on the LEFT, ${right.gender.toUpperCase()} on the RIGHT`;
+  // SENIOR ECHO in the position-1 lock (2026-09-02, Michele bug round 2): the
+  // mid-prompt identity anchor alone moved a 74yo from rendering ~40 to ~50 —
+  // not enough. Position-1 tokens are what Flux obeys most (first-noun law), so
+  // a compact age/hair echo rides the lock itself for 55+ cast:
+  // "SILVER-HAIRED OLDER MAN on the RIGHT". Flattering register, no age-line talk.
+  const seniorEcho = (m: ResolvedIdentity): string => {
+    const a = (m.age || '').match(/\d+/);
+    if (!a || parseInt(a[0], 10) < 55) return '';
+    const hc = extractHairColor(m.identity);
+    return hc ? `${hc.toUpperCase()}-HAIRED OLDER ` : 'OLDER ';
+  };
+  const genderLock = `${seniorEcho(left)}${left.gender.toUpperCase()} on the LEFT, ${seniorEcho(right)}${right.gender.toUpperCase()} on the RIGHT`;
 
   // Dual anchor — positive phrasing. Head separation stated EARLY (this lands at
   // assembly position 4, ahead of the framing block) so it can counter the

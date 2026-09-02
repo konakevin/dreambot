@@ -317,7 +317,7 @@ describe('characterSlotPrompt — race/ethnicity anchor', () => {
         })
       );
     expect(b('Black')).toContain('a Black woman');
-    expect(b('East Asian')).toContain('a East Asian woman');
+    expect(b('East Asian')).toContain('an East Asian woman');
     expect(b('South Asian')).toContain('a South Asian woman');
     expect(b('Middle Eastern')).toContain('a Middle Eastern woman');
     expect(b('Hispanic/Latino')).toContain('a Hispanic woman'); // slash + gendered term normalized
@@ -349,7 +349,7 @@ describe('characterSlotPrompt — race/ethnicity anchor', () => {
       })
     );
     expect(out).not.toContain('a Klingon');
-    expect(out).toContain('a olive-skinned man');
+    expect(out).toContain('an olive-skinned man');
   });
 
   it('applies the anchor to BOTH people in a dual render', () => {
