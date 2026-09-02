@@ -874,10 +874,15 @@ export async function dualFaceSwap(
     try {
       const faces = await detectFacesWithGender(imgData, W, H);
       faceCount = faces.length;
-      const split = planDualSplit(faces, W);
+      const split = planDualSplit(faces, W, { H });
       if (!split.ok) {
-        // <2 faces → there's no second face to swap; must re-render.
-        if (split.reason === 'lt2_faces' || !split.leftBox || !split.rightBox) {
+        // ONLY 'overlap' may fall through to the per-face composite path.
+        // lt2_faces → no second face to swap. giant_face / face_clipped
+        // (2026-09-02) → the BASE composition is broken (a face too large for
+        // the frame or hanging off its edge); compositing onto it pastes the
+        // ~128px swap output at a massive upscale = the pixelated-smear
+        // corruption that shipped with every gate green. All must re-render.
+        if (split.reason !== 'overlap' || !split.leftBox || !split.rightBox) {
           console.log(
             `[dualFaceSwap] no clean split (${split.reason}, faces=${faceCount}) — re-render`
           );

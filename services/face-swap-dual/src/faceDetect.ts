@@ -174,5 +174,5 @@ export async function detectAndPlanSplit(
   opts?: { scoreThreshold?: number; minGapFrac?: number; overlapFrac?: number; modelUrl?: URL }
 ): Promise<{ faces: FaceBox[]; split: DualSplit }> {
   const faces = await detectFaces(rgba, W, H, opts);
-  return { faces, split: planDualSplit(faces, W, opts) };
+  return { faces, split: planDualSplit(faces, W, { ...opts, H }) };
 }

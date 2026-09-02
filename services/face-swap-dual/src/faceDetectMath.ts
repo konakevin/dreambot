@@ -167,13 +167,51 @@ export function resizeRGBA(
  */
 export interface DualSplit {
   ok: boolean;
-  reason: 'ok' | 'lt2_faces' | 'overlap'; // overlap = faces too close / x-overlapping
+  // overlap = faces too close / x-overlapping (→ per-face composite path)
+  // giant_face = a chosen face absurdly large for the frame (→ re-render)
+  // face_clipped = a chosen face hangs off the frame edge (→ re-render)
+  reason: 'ok' | 'lt2_faces' | 'overlap' | 'giant_face' | 'face_clipped';
   faceCount: number;
   splitX: number; // boundary; left crop = [0, splitX+overlap], right = [splitX-overlap, W]
   overlap: number;
   leftIsFirstBox: boolean; // true if the lower-x face is boxes[0]
   leftBox?: FaceBox;
   rightBox?: FaceBox;
+}
+
+// ── Broken-composition guards (2026-09-02) ─────────────────────────────────
+// Root-caused from a live corrupted render (Great Wall dual): Flux violated the
+// framing brief and drew one face ~55% of frame height, half off the left edge.
+// Detection found 2 faces, the gap check read 'overlap', and the per-face
+// composite path swapped it — pasting the ~128px swap-model output onto a
+// ~700px face = a giant pixelated smear, while every downstream gate passed
+// (identity 0.674 — it WAS the right person's face — face_restore ok). A face
+// this large (or hanging off the frame) means the BASE COMPOSITION is broken;
+// no swap path can produce an acceptable result. Only correct move: re-render.
+
+/** A chosen face taller than this fraction of frame height = broken composition.
+ * Calibration: healthy duals run ~0.15-0.30 of frame height; the corrupted
+ * render was ~0.55. The swap model outputs ~128px — above ~0.4×H the paste
+ * upscale turns visibly mushy even when everything else succeeds. */
+export const GIANT_FACE_MAX_HFRAC = 0.4;
+
+/** Max fraction of a face box allowed to hang outside the frame (per axis,
+ * measured against the box's own size). A face meaningfully cut by the frame
+ * edge can't be cleanly swapped or restored. */
+export const FACE_CLIP_MAX_FRAC = 0.15;
+
+/** True when the face is absurdly large for the frame (GIANT_FACE_MAX_HFRAC). */
+export function isGiantFace(face: FaceBox, H: number): boolean {
+  return H > 0 && face.h > GIANT_FACE_MAX_HFRAC * H;
+}
+
+/** True when more than FACE_CLIP_MAX_FRAC of the box hangs outside the frame
+ * on either axis. */
+export function isClippedFace(face: FaceBox, W: number, H: number): boolean {
+  if (face.w <= 0 || face.h <= 0) return false;
+  const overX = Math.max(0, -face.x) + Math.max(0, face.x + face.w - W);
+  const overY = Math.max(0, -face.y) + Math.max(0, face.y + face.h - H);
+  return overX / face.w > FACE_CLIP_MAX_FRAC || overY / face.h > FACE_CLIP_MAX_FRAC;
 }
 
 /**
@@ -248,7 +286,7 @@ export function compositeFaceMasked(
 export function planDualSplit(
   boxes: FaceBox[],
   W: number,
-  opts: { minGapFrac?: number; overlapFrac?: number } = {}
+  opts: { minGapFrac?: number; overlapFrac?: number; H?: number } = {}
 ): DualSplit {
   // minGap == overlapFrac so a clean split always affords an overlap ≥ the
   // stitch blend half-width (≈2% of W) — narrower gaps read as 'overlap' → re-render.
@@ -268,6 +306,37 @@ export function planDualSplit(
   const [a, b] = [...boxes].sort((p, q) => q.w * q.h - p.w * p.h).slice(0, 2);
   const faceL = a.x <= b.x ? a : b;
   const faceR = a.x <= b.x ? b : a;
+  // Broken-composition guards — BEFORE the gap logic, because a giant/clipped
+  // face makes the gap read 'overlap' and mis-routes the render into the
+  // per-face composite path (the corrupted-paste bug). H is optional for
+  // backward compatibility; without it these guards are inert (clip check
+  // still applies horizontally via W).
+  const H = opts.H ?? 0;
+  if (H > 0 && (isGiantFace(faceL, H) || isGiantFace(faceR, H))) {
+    return {
+      ok: false,
+      reason: 'giant_face',
+      faceCount: boxes.length,
+      splitX: 0,
+      overlap: 0,
+      leftIsFirstBox: faceL === a,
+      leftBox: faceL,
+      rightBox: faceR,
+    };
+  }
+  const clipH = H > 0 ? H : Number.MAX_SAFE_INTEGER; // no vertical clip check without H
+  if (isClippedFace(faceL, W, clipH) || isClippedFace(faceR, W, clipH)) {
+    return {
+      ok: false,
+      reason: 'face_clipped',
+      faceCount: boxes.length,
+      splitX: 0,
+      overlap: 0,
+      leftIsFirstBox: faceL === a,
+      leftBox: faceL,
+      rightBox: faceR,
+    };
+  }
   const gap = faceR.x - (faceL.x + faceL.w);
   if (gap < minGap) {
     return {

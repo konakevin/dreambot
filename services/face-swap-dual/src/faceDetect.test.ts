@@ -17,6 +17,8 @@ import {
   planDualSplit,
   faceCropBox,
   compositeFaceMasked,
+  isGiantFace,
+  isClippedFace,
   type FaceBox,
   type YuNetHeads,
 } from './faceDetectMath.ts';
@@ -94,6 +96,104 @@ Deno.test('planDualSplit — <2 faces and overlapping faces both refuse (→ re-
   );
   assertEquals(o.reason, 'overlap');
   assert(!o.ok);
+});
+
+// ── Broken-composition guards (2026-09-02, corrupted-paste bug) ────────────
+// A live render shipped a giant pixelated half-face with EVERY gate green:
+// Flux drew one face ~55% of frame height, half off the left edge; the gap
+// check read 'overlap' → the per-face composite path pasted a ~128px swap
+// output onto a ~700px face. These lock the guards that force a re-render.
+// Coverage is deliberately SIDE-AGNOSTIC: left-giant, right-giant, both-giant.
+
+const NORMAL_FACE: FaceBox = { x: 460, y: 420, w: 200, h: 260, score: 0.92 };
+const GIANT_LEFT: FaceBox = { x: -180, y: 60, w: 520, h: 740, score: 0.95 };
+
+Deno.test('planDualSplit — giant LEFT face (>40% of frame height) refuses → re-render', () => {
+  const p = planDualSplit([GIANT_LEFT, NORMAL_FACE], 768, { H: 1344 });
+  assert(!p.ok);
+  assertEquals(p.reason, 'giant_face');
+});
+
+Deno.test('planDualSplit — giant RIGHT face refuses too (side-agnostic)', () => {
+  // Mirror geometry: normal face on the left, giant face on the right.
+  const giantRight: FaceBox = { x: 420, y: 60, w: 520, h: 740, score: 0.95 };
+  const normalLeft: FaceBox = { x: 90, y: 420, w: 200, h: 260, score: 0.92 };
+  const p = planDualSplit([normalLeft, giantRight], 768, { H: 1344 });
+  assert(!p.ok);
+  assertEquals(p.reason, 'giant_face');
+});
+
+Deno.test('planDualSplit — BOTH faces giant refuses', () => {
+  const p = planDualSplit(
+    [
+      { x: -60, y: 80, w: 400, h: 700, score: 0.95 },
+      { x: 420, y: 90, w: 400, h: 720, score: 0.94 },
+    ],
+    768,
+    { H: 1344 }
+  );
+  assert(!p.ok);
+  assertEquals(p.reason, 'giant_face');
+});
+
+Deno.test('planDualSplit — face hanging off the frame edge refuses → re-render', () => {
+  // Left face 35% of frame height (not giant) but 40% off the left edge.
+  const p = planDualSplit([{ x: -120, y: 200, w: 300, h: 470, score: 0.95 }, NORMAL_FACE], 768, {
+    H: 1344,
+  });
+  assert(!p.ok);
+  assertEquals(p.reason, 'face_clipped');
+});
+
+Deno.test('planDualSplit — healthy couple with H provided still splits ok', () => {
+  // ~19% of frame height each, fully in frame, clean gap.
+  const p = planDualSplit(
+    [
+      { x: 80, y: 400, w: 190, h: 250, score: 0.9 },
+      { x: 480, y: 420, w: 190, h: 250, score: 0.9 },
+    ],
+    768,
+    { H: 1344 }
+  );
+  assert(p.ok);
+  assertEquals(p.reason, 'ok');
+});
+
+Deno.test(
+  'planDualSplit — without H: giant guard inert, horizontal clip guard still active',
+  () => {
+    // No H → the height-based giant guard can't run, but GIANT_LEFT is 35% off
+    // the left edge, and the HORIZONTAL clip check only needs W → face_clipped.
+    const p = planDualSplit([GIANT_LEFT, NORMAL_FACE], 768);
+    assertEquals(p.reason, 'face_clipped');
+    // A giant-but-fully-in-frame pair without H falls back to pure gap math
+    // (gap 20px < minGap ~31px → 'overlap', the pre-guard behavior).
+    const inFrame = planDualSplit(
+      [
+        { x: 10, y: 60, w: 400, h: 740, score: 0.95 },
+        { x: 430, y: 420, w: 200, h: 260, score: 0.92 },
+      ],
+      768
+    );
+    assertEquals(inFrame.reason, 'overlap'); // old behavior preserved
+  }
+);
+
+Deno.test('isGiantFace / isClippedFace — thresholds, all edges', () => {
+  const H = 1000,
+    W = 800;
+  assert(isGiantFace({ x: 0, y: 0, w: 300, h: 401, score: 1 }, H)); // 40.1% > 40%
+  assert(!isGiantFace({ x: 0, y: 0, w: 300, h: 399, score: 1 }, H));
+  // 20% of width off the LEFT edge > 15% cap
+  assert(isClippedFace({ x: -40, y: 100, w: 200, h: 200, score: 1 }, W, H));
+  // 20% off the RIGHT edge
+  assert(isClippedFace({ x: W - 160, y: 100, w: 200, h: 200, score: 1 }, W, H));
+  // 20% off the BOTTOM edge
+  assert(isClippedFace({ x: 100, y: H - 160, w: 200, h: 200, score: 1 }, W, H));
+  // 10% off-frame ≤ 15% cap — fine (faces near edges are normal)
+  assert(!isClippedFace({ x: -20, y: 100, w: 200, h: 200, score: 1 }, W, H));
+  // fully in frame
+  assert(!isClippedFace({ x: 100, y: 100, w: 200, h: 200, score: 1 }, W, H));
 });
 
 Deno.test('faceCropBox — square, centered on the face, clamped inside the image', () => {
