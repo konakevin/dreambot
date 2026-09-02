@@ -65,3 +65,7 @@ scripts/out/
 # Local App Store build artifacts (eas build --local output; ~35 MB, never commit)
 build-*.ipa
 *.ipa
+
+# cast-scanner tooling artifacts
+scripts/.cast-reprocess-backup/
+scripts/.eval-cast-results.json
