@@ -185,6 +185,26 @@ const GOOFY_BUCKETS = [
 // photography (photoreal dragons/aliens/giant animals read as creepy CGI, not whimsical).
 const ACTIVE_BUCKETS = [
   {
+    key: 'sky_romance',
+    label: 'Dreamy skies',
+    desc: 'A DREAMY AIRBORNE moment — the couple in a hot-air balloon wicker basket drifting over lush green valleys at sunrise, side by side at the crest of a giant ferris wheel at dusk, arriving on a seaplane dock over turquoise water, or bundled in a tandem paraglide harness moments after landing on a golden-hour ridge (canopy draped behind). Stylish relaxed travel wear, wind in the hair, faces clear and bright with wonder; the vast beautiful landscape spread out around them. Breathtaking, romantic, lush.',
+  },
+  {
+    key: 'wild_rides',
+    label: 'Wild rides',
+    desc: 'A THRILLING RIDE mid-motion — the couple on horseback galloping side by side through shallow surf, mushing a husky sled team across sparkling snow, riding a camel caravan over golden dunes at sunset, cruising a vintage vespa (one driving, one in a sidecar) down a Mediterranean coastal road, or in a cherry-red retro convertible on a neon evening strip. Motion in manes, spray, scarves and hair; both faces forward and clear, joy and adrenaline. Cinematic, fun, alive.',
+  },
+  {
+    key: 'water_bliss',
+    label: 'Water bliss',
+    desc: 'A LUSH WATER paradise — the couple waist-deep in a turquoise waterfall plunge pool with mist and hanging vines, snorkel masks pushed UP on foreheads (faces fully clear) beside a surfacing sea turtle, paddling a lantern-lit wooden canoe on a glassy twilight lake, or soaking in a steaming natural hot spring while snow falls softly around them. Water drops sparkling, skin glowing, tropical or alpine splendor all around. Serene, gorgeous, dreamlike.',
+  },
+  {
+    key: 'glow_nights',
+    label: 'Glowing nights',
+    desc: 'A MAGICAL NIGHT of lights — the couple releasing a glowing paper lantern into a sky already full of them over a river, watching fireworks burst above a city rooftop terrace, walking a shoreline that glows electric-blue with bioluminescence, or laughing between the lit rides of a night carnival midway with cotton candy. Warm light on both faces (never silhouetted), sparkling bokeh, wonder and celebration. Enchanting, vivid, unforgettable.',
+  },
+  {
     key: 'swashbuckler',
     label: 'Swashbuckling pirates',
     desc: 'A swashbuckling PIRATE adventure — the couple as pirates aboard a tall-ship galleon at sea, on a treasure-island cove with an open chest of gold, or in a lantern-lit dockside tavern. Tricorn hats worn back (faces clear), long coats, sashes, a cutlass at the hip; ship rigging, tattered sails, a parrot or treasure in the background. Rugged and cinematic.',

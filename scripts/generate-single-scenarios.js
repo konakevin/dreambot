@@ -298,6 +298,34 @@ const ELEGANT_BUCKETS = [
 // any gender). Dark until we enable single_scene_active_pct, so isolated for QA.
 const ACTIVE_BUCKETS = [
   {
+    key: 'sky_romance',
+    gender: 'any',
+    count: 25,
+    label: 'Dreamy skies',
+    desc: 'A DREAMY AIRBORNE moment — the person in a hot-air balloon wicker basket drifting over lush green valleys at sunrise, at the crest of a giant ferris wheel at dusk, stepping onto a seaplane dock over turquoise water, or in a tandem paraglide harness moments after landing on a golden-hour ridge (canopy draped behind). Stylish relaxed travel wear, wind in the hair, face clear and bright with wonder; the vast beautiful landscape spread out around them. Breathtaking, romantic, lush.',
+  },
+  {
+    key: 'wild_rides',
+    gender: 'any',
+    count: 25,
+    label: 'Wild rides',
+    desc: 'A THRILLING RIDE mid-motion — the person on horseback galloping through shallow surf, mushing a husky sled team across sparkling snow, riding a camel over golden dunes at sunset, cruising a vintage vespa down a Mediterranean coastal road, or at the wheel of a cherry-red retro convertible on a neon evening strip. Motion in mane, spray, scarf and hair; face forward and clear, joy and adrenaline. Cinematic, fun, alive.',
+  },
+  {
+    key: 'water_bliss',
+    gender: 'any',
+    count: 25,
+    label: 'Water bliss',
+    desc: 'A LUSH WATER paradise — the person waist-deep in a turquoise waterfall plunge pool with mist and hanging vines, snorkel mask pushed UP on the forehead (face fully clear) beside a surfacing sea turtle, paddling a lantern-lit wooden canoe on a glassy twilight lake, or soaking in a steaming natural hot spring while snow falls softly around. Water drops sparkling, skin glowing, tropical or alpine splendor all around. Serene, gorgeous, dreamlike.',
+  },
+  {
+    key: 'glow_nights',
+    gender: 'any',
+    count: 25,
+    label: 'Glowing nights',
+    desc: 'A MAGICAL NIGHT of lights — the person releasing a glowing paper lantern into a sky already full of them over a river, watching fireworks burst above a city rooftop terrace, walking a shoreline glowing electric-blue with bioluminescence, or grinning between the lit rides of a night carnival midway with cotton candy. Warm light on the face (never silhouetted), sparkling bokeh, wonder and celebration. Enchanting, vivid, unforgettable.',
+  },
+  {
     // Real-world MODERN luxury (not fantasy) — the active DNA is fantasy-leaning,
     // but the desc pins it hard to real, cool, never-gaudy luxury. Scene-drives-
     // the-pose fits: the stance is baked into the scene ("leaning on the hood",

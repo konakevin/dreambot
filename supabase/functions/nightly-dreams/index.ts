@@ -335,7 +335,7 @@ Deno.serve(async (req) => {
   // user is reliably cast into the scene via face swap. Fully gated — the
   // normal nightly queue path never sets this, so its dream_eligible roll is
   // untouched. Ignored when force_medium is also set (explicit wins).
-  const force_face_swap_eligible = body.force_face_swap_eligible === true;
+  const force_face_swap_eligible_raw = body.force_face_swap_eligible === true;
   // QA: force a special scene path — goofy (force_playful) or dressed-up elegant
   // (force_elegant) — instead of the random 20%/20%/60% mix. The _single_ variants
   // force the SOLO special pools (single_scenarios) on a single-cast face swap.
@@ -364,6 +364,12 @@ Deno.serve(async (req) => {
   // scenario table by category directly; applies to dual or solo per cast.
   const force_scene_category =
     typeof body.force_scene_category === 'string' ? body.force_scene_category : null;
+  // force_scene_category is by definition a CAST-scenario force (the scenario
+  // pools are face-swap content) — but the showcase cascade could still roll a
+  // pure_scene / dream-art composition, which silently SKIPS the forced bucket
+  // and renders an unpopulated scene (4/12 faceless QA renders, 2026-09-02).
+  // Forcing a bucket therefore implies forcing a face-swap-eligible cast render.
+  const force_face_swap_eligible = force_face_swap_eligible_raw || force_scene_category !== null;
   // Holiday Dreams QA: force a holiday season regardless of the date. On the
   // cast paths it draws that holiday's pool='holiday' rows; on the pure-scene
   // path it draws its holiday_scenes rows. Test-only.
@@ -636,6 +642,13 @@ Deno.serve(async (req) => {
       preRolledMediumToken = inputs.mediumToken;
       preRolledCastRole = inputs.forceCastRole;
       preRolledComposition = inputs.forceComposition;
+    }
+    // A forced scenario bucket must render as a CHARACTER composition — a rolled
+    // pure_scene would skip the bucket block downstream (gated on
+    // isDualFaceSwap/isSingleHumanFaceSwap) and emit an unpopulated scene.
+    if (force_scene_category && preRolledComposition === 'pure_scene') {
+      preRolledComposition = 'character';
+      preRolledCastRole = force_cast_role ?? preRolledCastRole ?? 'self';
     }
     console.log(
       `[nightly-dreams] chaos pre-roll | chaosValue=${chaosValue.toFixed(2)} tier=${chaosTier} type=${preRolledType ?? 'force_medium'} mediumToken=${preRolledMediumToken} cast=${preRolledCastRole ?? 'random'} composition=${preRolledComposition}`
