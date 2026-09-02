@@ -13,6 +13,7 @@ import type { ResolvedCastMember } from './castResolver.ts';
 import type { MoodAxes } from './vibeProfile.ts';
 import { buildDualBrief } from './dualBriefBuilder.ts';
 import { buildSingleBrief } from './singleBriefBuilder.ts';
+import { buildEmbodiedSingleBrief } from './embodiedSingleBriefBuilder.ts';
 
 // ── Public Types ──
 
@@ -106,7 +107,18 @@ export function deriveFocalAnchor(
   cast: ResolvedCastMember[],
   scene: CompilerInput['scene']
 ): string {
-  if (cast.length === 1) return 'the main character';
+  if (cast.length === 1) {
+    // Self-insert: if the user typed a scene, the focal subject is the person
+    // AS THE USER DESCRIBED THEM — including every companion, pet, animal, and
+    // object they named. Returning a bare "the main character" here (combined with
+    // the "ONE dominant subject / no competing subjects" rule below) made the
+    // compiler DROP the user's named companions — e.g. "me on the couch with my
+    // bichon + shih tzu" rendered as just the woman, no dogs (Kevin, 2026-09-02).
+    if (scene.userPrompt && scene.userPrompt.trim()) {
+      return `the main character shown EXACTLY as the user described — "${scene.userPrompt.trim()}" — the person TOGETHER WITH every companion, pet, animal, and object the user named, all rendered prominently in one shot`;
+    }
+    return 'the main character';
+  }
   if (cast.length > 1) return 'the interaction between the characters';
   if (scene.objectDirective) return 'the scene object';
   // When the user typed a prompt, PIN it as the literal focal subject so the
@@ -118,6 +130,15 @@ export function deriveFocalAnchor(
     return `EXACTLY what the user described — "${scene.userPrompt.trim()}" — rendered literally and prominently as the unmistakable main subject`;
   }
   return 'a single dominant visual subject that defines the scene';
+}
+
+// ── Output-format capability ──
+// Anime compiles to danbooru TAGS instead of prose (Flux's T5 encoder handles
+// tags well; a deliberate separate design). Any brief builder that writes prose
+// must not claim a tag-format medium. Single source of truth for that check —
+// if another tag-format medium is ever added, extend it HERE only.
+export function usesTagFormat(medium: Pick<CompilerInput['medium'], 'key'>): boolean {
+  return medium.key === 'anime';
 }
 
 // ── Medium Directive Summarizer ──
@@ -155,7 +176,7 @@ function buildSceneBlock(scene: CompilerInput['scene']): string {
 
   if (scene.userPrompt) {
     parts.push(
-      `THE SUBJECT — render this LITERALLY and prominently; it is the entire point of the image, never omit it, never swap it for something else, never demote it to a background detail: ${scene.userPrompt}`
+      `THE SUBJECT — render this LITERALLY and COMPLETELY; it is the entire point of the image. Depict EVERY element the user named — each person, animal, pet, and object — and the EXACT action described, all present together in the frame. Never omit, swap, or demote any named element to a background detail, and if the user names an animal/pet render that exact animal WITH them (not a picture of it, not a toy): ${scene.userPrompt}`
     );
   }
   if (scene.sceneExpansion) {
@@ -416,6 +437,25 @@ export function compilePrompt(input: CompilerInput): CompilerOutput {
     return buildSingleBrief(input);
   }
 
+  // ── ISOLATED EMBODIED SINGLE PATH ── (2026-09-02, prompt-fidelity fix)
+  // Dream-art (embodied) single-cast renders with a USER PROMPT get the same
+  // sacred-user-prompt treatment face-swap singles already have. The generic
+  // path below is character-dominant and unpredictably DROPS the user's named
+  // companions/objects ("me with my bichon + shih tzu" → just the woman;
+  // controlled test: face-swap kept book/bird/cat, this path dropped bird+cat).
+  // The builder's contract is "honor a typed prompt" — promptless surprise
+  // dreams have nothing to honor and keep the generic invent-a-scene flow.
+  // Tag-format mediums (anime → danbooru tags) can't take a prose brief.
+  const hasUserPrompt = !!scene.userPrompt && scene.userPrompt.trim().length > 0;
+  if (
+    cast.length === 1 &&
+    medium.characterRenderMode === 'embodied' &&
+    !usesTagFormat(medium) &&
+    hasUserPrompt
+  ) {
+    return buildEmbodiedSingleBrief(input);
+  }
+
   const mediumStyle = medium.key.replace(/_/g, ' ');
   const hasCast = cast.length > 0 && composition.type !== 'pure_scene';
 
@@ -455,7 +495,7 @@ Recast the user's subject INTO this exact format and scale. If the reference rea
 
   // Engine-specific output format instructions
   // Anime uses danbooru tag format — Flux handles tags well via T5 encoder
-  const useTagFormat = medium.key === 'anime';
+  const useTagFormat = usesTagFormat(medium);
   const formatHeader = useTagFormat
     ? `You are an anime character designer. Write danbooru-style tags for an anime image.
 
@@ -490,9 +530,9 @@ ${sceneBlock}
 ═══ FOCAL ANCHOR (MANDATORY) ═══
 There must be exactly ONE dominant visual subject: ${composition.focalAnchor}
 - This is the first thing the eye sees.
-- Everything else supports or frames it.
-- Do NOT introduce competing subjects of equal importance.
-- If multiple interesting elements exist, subordinate all but one to background role.
+- Everything the user explicitly named (people, pets, animals, objects, the stated action) is PART of this subject and MUST all appear together — NEVER drop, shrink, or demote a companion or pet the user asked for; a person "with their two dogs" means the person AND both dogs clearly in frame.
+- Do NOT introduce NEW competing subjects the user did not mention.
+- Subordinate only INVENTED background atmosphere to a supporting role — never the user's own named elements or action.
 
 ${scene.objectDirective ? `═══ SCENE OBJECT (MUST APPEAR) ═══\n${scene.objectDirective}\n\n` : ''}${characterBlock ? `═══ CHARACTER ═══\n${characterBlock}\n\n` : ''}${hasCast && scene.userPrompt ? `═══ USER INTENT — EXPRESSION & POSE ═══\nIf the user prompt specifies a facial EXPRESSION (scared, angry, sad, surprised, joyful, smirking, sultry, etc.), translate it to physical face description (eyes / brows / mouth) early in the prompt. This OVERRIDES the default "warm / facing camera" cues.\n\nIf the user prompt specifies an ACTION (walking, running, dancing, hiking, jumping, sitting, reading, fighting, etc.), render the character MID-ACTION with documentary candid framing — NOT a posed studio shot. Body mechanics, weight transfer, motion blur where appropriate, captured from a tracking 3/4 angle. This OVERRIDES the default "standing, medium shot facing camera" framing. Face must remain partially visible (3/4 toward camera, eyes visible) — no full back views.\n\nIf the user prompt specifies a HAND GESTURE (shaka, peace sign, thumbs up, middle finger / flipping off / the bird, rock on, ok sign, fist, point, wave, salute, prayer hands, fingers crossed, etc.), spell out the FINGER GEOMETRY explicitly in the prompt — Flux defaults "shaka" to a wave unless you describe which fingers are extended and which are curled. Example: shaka = "thumb and pinky extended outward, three middle fingers curled into palm." Middle finger / the bird is allowed. OVERRIDES default "hands at sides" framing.\n\nIf the user specified none of expression/action/hand-gesture, default to a natural pose appropriate to the scene's mood.\n\n` : ''}═══ CAMERA ═══
 ${cameraBlock}

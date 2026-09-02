@@ -191,11 +191,18 @@ function cleanSelfReferences(prompt: string, relWords: string, petWords: string)
   // user's adjective is rendering intent ("my sexy wife" → "a sexy companion",
   // not just "a companion").
   const CLEAN_PLUS_ONE = new RegExp(`\\bmy\\s+((?:\\w+\\s+){0,2})(?:${relWords})\\b`, 'gi');
-  const CLEAN_PET = new RegExp(`\\bmy\\s+((?:\\w+\\s+){0,2})(?:${petWords})\\b`, 'gi');
+  // Pet species is CAPTURED and kept ("my fluffy cat" → "a fluffy cat", never
+  // "a fluffy pet"). The old species-erasing replacement assumed a pet cast
+  // member's description would fill the gap — but a user with NO pet in their
+  // cast lost the species entirely and Flux rendered an ambiguous "fluffy pet"
+  // blob (2026-09-02 prompt-fidelity fix: "cuddling my fluffy cat" dropped the
+  // cat on every dream-art medium). When a cast pet DOES exist its description
+  // still drives the look; the species word only ever agrees with it.
+  const CLEAN_PET = new RegExp(`\\bmy\\s+((?:\\w+\\s+){0,2})(${petWords})\\b`, 'gi');
   const cleaned = prompt
     // Relationship words first (before generic "my" replacement)
     .replace(CLEAN_PLUS_ONE, 'a $1companion')
-    .replace(CLEAN_PET, 'a $1pet')
+    .replace(CLEAN_PET, 'a $1$2')
     // Standalone "+1 / plus one" jargon (no "my") — same guard as detection;
     // without this the raw "+1" token would leak into the image prompt.
     .replace(/(^|[^\w])(?:\+\s?1|plus[\s-]?(?:one|1))(?!\w)/gi, '$1a companion')

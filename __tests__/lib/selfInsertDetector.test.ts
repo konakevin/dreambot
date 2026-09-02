@@ -370,10 +370,21 @@ describe('detectSelfInsert', () => {
     expect(result.cleanedPrompt).not.toMatch(/\bpartner\b/i);
   });
 
-  it('cleans "my dog" to "a pet"', () => {
+  // 2026-09-02 prompt-fidelity fix: the species word is KEPT, never erased to a
+  // generic "pet". A user with NO pet cast member used to lose the species
+  // entirely ("cuddling my fluffy cat" → "a fluffy pet" → no cat rendered on any
+  // dream-art medium). Only the possessive is neutralized.
+  it('cleans "my dog" to "a dog" (species preserved, possessive removed)', () => {
     const result = detectSelfInsert('my dog at the park');
-    expect(result.cleanedPrompt).toContain('a pet');
-    expect(result.cleanedPrompt).not.toMatch(/\bdog\b/i);
+    expect(result.cleanedPrompt).toContain('a dog');
+    expect(result.cleanedPrompt).not.toMatch(/\bmy\b/i);
+  });
+
+  it('keeps the descriptor AND species: "my fluffy cat" → "a fluffy cat"', () => {
+    const result = detectSelfInsert('me on the couch cuddling my fluffy cat');
+    expect(result.cleanedPrompt).toContain('a fluffy cat');
+    expect(result.cleanedPrompt).not.toMatch(/\bpet\b/i);
+    expect(result.cleanedPrompt).not.toMatch(/\bmy\b/i);
   });
 
   it('cleans a standalone "+1" to "a companion" (no raw token leaks to the model)', () => {
