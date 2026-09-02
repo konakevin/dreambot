@@ -204,7 +204,16 @@ solo renders per pool; static-seed problem root-caused + fixed):
 - `water_bliss` — waterfall plunge pools, turtle snorkels, lantern canoes, snowy hot springs
 - `glow_nights` — floating-lantern skies, rooftop fireworks, bioluminescent shores, night carnivals
 
-**NEW MANDATORY STEP — the ACTION SCRUB (post-seed AND post-scale).** Sonnet's
+**ROOT CAUSE FIXED AT THE SOURCE (2026-09-02):** the authoring prompt's
+"Keep it SIMPLE... not a busy action tableau" line (written for the goofy/elegant
+PORTRAIT pools) was actively fighting the active-pool action rule — a 4-cell A/B
+(model x prompt, 10 seeds each) measured Sonnet+old-prompt at 6/10 static-lead vs
+0/10 with the action-first line; Haiku was NOT better (drier prose + off-spec
+invention like wingsuit dives). Both generators now make that line POOL-AWARE:
+active buckets get the action mandate + the grounded-action guard (no mid-air).
+Keep Sonnet as the seeding model. The scrub below remains as the backstop.
+
+**MANDATORY BACKSTOP — the ACTION SCRUB (post-seed AND post-scale).** Sonnet's
 authoring leans static: at scale, 106/300 fresh solo seeds led with standing/
 leaning/perched and 30 more buried passivity mid-sentence ("watching fireworks"),
 which renders as the exact standing-around Kevin flagged. After EVERY seeding run:

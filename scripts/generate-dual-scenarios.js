@@ -354,7 +354,7 @@ ${sceneRule}
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP couple PORTRAIT, so the two people must dominate the frame with big clear faces):
 - The COUPLE are the ONLY two prominent people and the clear FOREGROUND subjects, read as a normal couple photo (think waist-up, both faces large). NO other prominent people in the shot.${activeRule}
 - Any animals, creatures, or background characters stay in the BACKGROUND or off to the side — they must NEVER come between the two people or crowd/cover their faces.
-- Keep it SIMPLE enough to read as a couple photo: the fun is the recognizable SETTING/situation, not a busy action tableau that shrinks the couple. One clear fun idea per scene.
+- ${isActive ? `LEAD the scene with a dynamic physical MID-ACTION verb — both people actively DOING something side by side (gripping, launching, paddling, hoisting, cheering arms-up). NEVER standing, sitting, leaning, watching, gazing, or admiring — anywhere in the sentence. Keep the action HELD and grounded (no mid-air leaps or free-fall — a launch-grip at the edge, never an airborne wide shot that shrinks the couple). One clear action per scene, a clear gap between their two heads.` : `Keep it SIMPLE enough to read as a couple photo: the fun is the recognizable SETTING/situation, not a busy action tableau that shrinks the couple. One clear fun idea per scene.`}
 - Both FACES fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats pulled over the eyes. Hats/headwear are fine ONLY if the face is clearly visible.
 - No children/minors. Tasteful (no lingerie/nudity).
 - Vary the setting, era, and elements across the ${n} — minimal overlap.${ban}

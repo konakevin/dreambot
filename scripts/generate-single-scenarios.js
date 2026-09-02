@@ -747,7 +747,7 @@ ${sceneRule}
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP solo PORTRAIT, so the person must dominate the frame with a big clear face):
 - ${subj.toUpperCase ? subj : subj} is the ONLY prominent person and the clear FOREGROUND subject, read as a normal solo portrait (waist-up, big face). NO other prominent people.${activeRule}
 - Any animals/creatures/background characters stay in the BACKGROUND or to the side — NEVER crowding or covering the face.
-- Keep it SIMPLE: the fun is the recognizable SETTING/situation, not a busy action tableau. One clear idea per scene.
+- ${isActive ? `LEAD the scene with a dynamic physical MID-ACTION verb — the person actively DOING something with their body (gripping, launching, paddling, hoisting, laughing mid-spin). NEVER standing, sitting, leaning, watching, gazing, or admiring — anywhere in the sentence. Keep the action HELD and grounded (no mid-air leaps, wingsuits, or free-fall — a launch-grip at the edge, never an airborne wide shot). One clear action per scene.` : `Keep it SIMPLE: the fun is the recognizable SETTING/situation, not a busy action tableau. One clear idea per scene.`}
 - Face fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats over the eyes.
 - No children/minors. Tasteful (no lingerie/nudity).
 - Vary the setting, era, and elements across the ${n} — minimal overlap.${ban}
