@@ -27,6 +27,13 @@ export interface ProPlanTier {
  *  revenuecat-webhook. 75 chosen to beat OpenArt Basic ($9.99 → 87 standard
  *  renders) on a comparable price while preserving healthy margin across
  *  the 1-2-3 sparkle tiers. */
+// ── Plan DISPLAY names (single source of truth — Kevin 2026-09-04) ──
+// Display-only: product IDs / entitlement keys are unchanged. Change these two
+// constants and every screen (paywall, gates, home empty-state, upsells)
+// follows. basic tier = "Dreamer", pro tier = "Dreamer+".
+export const PLAN_NAME_BASIC = 'Dreamer';
+export const PLAN_NAME_PRO = 'Dreamer+';
+
 export const PRO_SPARKLE_BUNDLE = 75;
 
 /** Bundled sparkles granted on each successful Pro INITIAL_PURCHASE + RENEWAL

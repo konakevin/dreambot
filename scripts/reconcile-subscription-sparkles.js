@@ -146,9 +146,13 @@ async function main() {
         .limit(1);
       if (already && already.length > 0) continue; // already reconciled this cycle
 
-      console.warn(
-        `::warning:: [reconcile] MISSING monthly ${tier.name} bundle for ${u.id} (cycle ${cycleKey}) — a RENEWAL webhook was dropped. ${DRY_RUN ? '[dry-run, would grant ' + monthlyBundle + ']' : 'granting ' + monthlyBundle}`
-      );
+      // Under the 2026-09-04 drip, a monthly grant for a YEARLY sub is the
+      // EXPECTED path (months 2-12) — plain log. The ::warning:: remains for
+      // monthly subs, where a reconcile grant means a RENEWAL webhook dropped.
+      const isYearlyDrip = u[tier.periodColumn] === 'yearly';
+      const msg = `[reconcile] ${isYearlyDrip ? 'yearly DRIP grant' : 'MISSING monthly bundle (dropped RENEWAL webhook)'} for ${tier.name} ${u.id} (cycle ${cycleKey}) ${DRY_RUN ? '[dry-run, would grant ' + monthlyBundle + ']' : 'granting ' + monthlyBundle}`;
+      if (isYearlyDrip) console.log(msg);
+      else console.warn(`::warning:: ${msg}`);
       granted++;
       if (!DRY_RUN) {
         await waitForHeadroom({ min: 25, label: 'reconcile-sparkles' });

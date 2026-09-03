@@ -1,3 +1,4 @@
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 /**
  * premiumGate — the single, consistent "you need sparkles / a subscription to do
  * this" gate, callable from anywhere (hook or plain callback) like showAlert.
@@ -72,7 +73,7 @@ export function gateContent(reason: GateReason): GateContent {
       return {
         icon: 'arrow-down-circle',
         title: 'HD downloads are Premium',
-        body: 'Save full-resolution, watermark-free images, included with Basic and Pro.',
+        body: `Save full-resolution, watermark-free images, included with ${PLAN_NAME_BASIC} and ${PLAN_NAME_PRO}.`,
         buttons: [
           { label: 'See Plans', route: '/subscribe', variant: 'primary' },
           { label: 'Not now', variant: 'secondary' },
@@ -89,7 +90,7 @@ export function gateContent(reason: GateReason): GateContent {
         buttons:
           reason.tier === 'basic'
             ? [
-                { label: 'Upgrade to Pro', route: '/subscribe', variant: 'primary' },
+                { label: `Upgrade to ${PLAN_NAME_PRO}`, route: '/subscribe', variant: 'primary' },
                 { label: 'Got it', variant: 'secondary' },
               ]
             : [{ label: 'Got it', variant: 'primary' }],
@@ -98,7 +99,7 @@ export function gateContent(reason: GateReason): GateContent {
       return {
         icon: 'moon',
         title: 'Nightly dreams are Premium',
-        body: 'Get a personalized dream every morning, included with Basic and Pro.',
+        body: `Get a personalized dream every morning, included with ${PLAN_NAME_BASIC} and ${PLAN_NAME_PRO}.`,
         buttons: [
           { label: 'See Plans', route: '/subscribe', variant: 'primary' },
           { label: 'Not now', variant: 'secondary' },

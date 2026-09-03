@@ -37,7 +37,13 @@ import { type PurchasesPackage } from 'react-native-purchases';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { Toast } from '@/components/Toast';
 import { colors } from '@/constants/theme';
-import { PRO_PERKS, PRO_TIERS, type ProPlanTier } from '@/constants/proPlan';
+import {
+  PLAN_NAME_BASIC,
+  PLAN_NAME_PRO,
+  PRO_PERKS,
+  PRO_TIERS,
+  type ProPlanTier,
+} from '@/constants/proPlan';
 import { BASIC_PERKS, BASIC_TIERS } from '@/constants/basicPlan';
 import { useProPackages, usePurchasePro, useRestorePurchases } from '@/hooks/useSparkles';
 import { useSubscriptionStatus } from '@/hooks/useSubscriptionStatus';
@@ -82,7 +88,7 @@ const ACCENT = colors.accent;
 const PLANS: Plan[] = [
   {
     key: 'basic',
-    name: 'DreamBot Dreamer',
+    name: `DreamBot ${PLAN_NAME_BASIC}`,
     tiers: BASIC_TIERS,
     perks: BASIC_PERKS,
     highlight: false,
@@ -92,7 +98,7 @@ const PLANS: Plan[] = [
   },
   {
     key: 'pro',
-    name: 'DreamBot Dreamer+',
+    name: `DreamBot ${PLAN_NAME_PRO}`,
     tiers: PRO_TIERS,
     perks: PRO_PERKS,
     highlight: true,
@@ -192,7 +198,7 @@ export default function SubscribeScreen() {
     if (purchasingPlan === plan.key) return <ActivityIndicator color="#fff" />;
     const label =
       plan.key === 'pro' && isBasic
-        ? 'Upgrade to Dreamer+'
+        ? `Upgrade to ${PLAN_NAME_PRO}`
         : `Get ${plan.name.replace('DreamBot ', '')}`;
     return <Text style={[s.ctaText, s.ctaTextLit]}>{label}</Text>;
   }

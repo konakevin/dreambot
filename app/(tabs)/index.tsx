@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 import { View, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
 import { Text } from '@/components/AppText';
 import type { VerticalPagerHandle } from '@/components/VerticalPager';
@@ -67,7 +68,7 @@ function EmptyFeed({ tab }: { tab: FeedTab }) {
       title: 'Your feed is warming up',
       sub: isDreamEligible
         ? 'Your nightly dreams will land here every morning. Check back tomorrow.'
-        : 'Get a personalized dream delivered every morning with Basic or Pro.',
+        : `Get a personalized dream delivered every morning with ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO}.`,
     },
     following: {
       icon: 'people-outline',

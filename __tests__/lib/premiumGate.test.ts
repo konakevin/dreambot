@@ -5,6 +5,7 @@
  * GUIDES the user to the right flow.
  */
 
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 import {
   gateContent,
   showPremiumGate,
@@ -40,7 +41,7 @@ describe('gateContent — subscription gates route to /subscribe and say "Premiu
   it('hd_premium', () => {
     const c = gateContent({ kind: 'hd_premium' });
     expect(c.title).toBe('HD downloads are Premium');
-    expect(c.body).toContain('Basic and Pro');
+    expect(c.body).toContain(`${PLAN_NAME_BASIC} and ${PLAN_NAME_PRO}`);
     expect(c.buttons[0]).toEqual({ label: 'See Plans', route: '/subscribe', variant: 'primary' });
   });
 
@@ -64,7 +65,7 @@ describe('gateContent — hd_cap (a paying user hit their monthly cap)', () => {
     expect(c.body).toContain('all 20');
     expect(c.body).toContain('Resets July 1.');
     expect(c.buttons[0]).toEqual({
-      label: 'Upgrade to Pro',
+      label: `Upgrade to ${PLAN_NAME_PRO}`,
       route: '/subscribe',
       variant: 'primary',
     });
