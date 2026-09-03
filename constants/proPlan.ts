@@ -107,8 +107,11 @@ export const PRO_TIERS: ProPlanTier[] = [
     productId: 'com.konakevin.radorbad.pro.yearly',
     packageId: '$rc_annual',
     label: 'Yearly',
-    displayPrice: '$79.99',
+    // $79.99→$99.99 (2026-09-04 tier P&L — yearly was underwater at heavy use).
+    // ASC price change is Kevin-side; StoreKit drives the live figure, this is
+    // the offline fallback. Build ships only after ASC is switched.
+    displayPrice: '$99.99',
     period: 'year',
-    savingsBadge: 'Save 33%',
+    savingsBadge: 'Save 17%',
   },
 ];

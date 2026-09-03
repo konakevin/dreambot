@@ -254,7 +254,7 @@ export default function SubscribeScreen() {
                     end={{ x: 1, y: 1 }}
                     style={s.toggleSaveBadge}
                   >
-                    <Text style={s.toggleSaveText}>Save 33%</Text>
+                    <Text style={s.toggleSaveText}>Save up to 33%</Text>
                   </LinearGradient>
                 )}
               </TouchableOpacity>
