@@ -161,17 +161,16 @@ const NIGHTLY_BANNED_MODELS: ReadonlySet<string> = new Set([
   'xai/grok-imagine-image',
 ]);
 
-// Render-budget split (Kevin 2026-08-28): a failed DUAL swap must ALWAYS leave
-// room for the solo fallback to finish — a cast dream never cascades to a faceless
-// pure-scene on budget. Total 140s (under the 150s gateway idle ceiling). The DUAL
-// phase is capped at 140 − RESERVE so the degrade (solo render + swap) has a
-// guaranteed window; the per-phase re-render reserves fit each phase in its slice.
-// Root cause: Kevin's "Faanui Bay in noir" nightly — a 67s dual swap pushed the
+// Render-budget split — shared with generate-dream via _shared/renderBudgets.ts
+// so the two pipelines can never drift (audit 2026-09-03 M3). Root cause of the
+// contract: Kevin's "Faanui Bay in noir" nightly — a 67s dual swap pushed the
 // solo guard past its (then-shared) 75s cutoff → recover_budget_exhausted → scene.
-const RENDER_DEADLINE_MS = 140_000;
-const SOLO_FALLBACK_RESERVE_MS = 50_000;
-const DUAL_RECOVER_MS = 40_000; // dual re-render reserve (within the dual phase)
-const SOLO_RECOVER_MS = 40_000; // solo-fallback re-render reserve (fits the 50s window)
+import {
+  RENDER_DEADLINE_MS,
+  SOLO_FALLBACK_RESERVE_MS,
+  DUAL_RECOVER_MS,
+  SOLO_RECOVER_MS,
+} from '../_shared/renderBudgets.ts';
 
 Deno.serve(async (req) => {
   const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');

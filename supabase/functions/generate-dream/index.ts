@@ -166,14 +166,14 @@ interface RequestBody {
   persist?: boolean;
 }
 
-// Render-budget split (Kevin 2026-08-28): reserve a window so a failed DUAL swap
-// always leaves room for the solo degrade to finish, instead of cascading to a
-// scene / refund on exhausted budget. Mirrors nightly-dreams. Total 140s (under
-// the 150s gateway); dual phase capped at 140 − RESERVE.
-const RENDER_DEADLINE_MS = 140_000;
-const SOLO_FALLBACK_RESERVE_MS = 50_000;
-const DUAL_RECOVER_MS = 40_000;
-const SOLO_RECOVER_MS = 40_000;
+// Render-budget split — shared with nightly-dreams via _shared/renderBudgets.ts
+// so the two pipelines can never drift (audit 2026-09-03 M3).
+import {
+  RENDER_DEADLINE_MS,
+  SOLO_FALLBACK_RESERVE_MS,
+  DUAL_RECOVER_MS,
+  SOLO_RECOVER_MS,
+} from '../_shared/renderBudgets.ts';
 
 // The full request handler. Wrapped (below) so the render survives the client
 // disconnecting — a user who taps "Queue This" and then backgrounds/kills the
