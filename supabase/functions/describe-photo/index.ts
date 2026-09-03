@@ -15,7 +15,9 @@ import {
 import { analyzeCastPhoto } from '../_shared/analyzeCastPhoto.ts';
 import { HAIKU, SONNET } from '../_shared/models.ts';
 
-const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN')!;
+// No `!`: a missing env must fail the REQUEST with a clear 500, not assert at
+// module scope (audit 2026-09-03 M6).
+const REPLICATE_TOKEN = Deno.env.get('REPLICATE_API_TOKEN');
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -28,6 +30,11 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    if (!REPLICATE_TOKEN) {
+      return new Response(JSON.stringify({ error: 'Missing REPLICATE_API_TOKEN' }), {
+        status: 500,
+      });
+    }
     // Auth check
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;

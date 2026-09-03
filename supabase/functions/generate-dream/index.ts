@@ -207,6 +207,14 @@ async function handleRequest(req: Request): Promise<Response> {
       { status: 500 }
     );
   }
+  // Required on every render path (Sonnet briefs). Fail LOUD up front instead of a
+  // mid-render `ANTHROPIC_KEY` crash (audit 2026-09-03 M6).
+  if (!ANTHROPIC_KEY) {
+    return new Response(
+      JSON.stringify({ error: 'Server misconfigured: missing ANTHROPIC_API_KEY' }),
+      { status: 500 }
+    );
+  }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -1434,7 +1442,7 @@ Output ONLY the prompt.`;
                   }
                 })(),
               };
-              const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY!);
+              const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY);
               sonnetBrief = slotResult.briefUsed;
               sonnetRawResponse = slotResult.rawResponse;
               finalPrompt = slotResult.assembledPrompt;

@@ -182,6 +182,14 @@ Deno.serve(async (req) => {
       headers: { 'Content-Type': 'application/json' },
     });
   }
+  // Required on every render path (Sonnet briefs). Fail LOUD up front instead of a
+  // mid-render `ANTHROPIC_KEY` crash (audit 2026-09-03 M6).
+  if (!ANTHROPIC_KEY) {
+    return new Response(JSON.stringify({ error: 'Missing ANTHROPIC_API_KEY' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -2052,7 +2060,7 @@ Deno.serve(async (req) => {
             locationAction = await generateLocationActionBeat(
               iconicAnchor || userPlace || '',
               selectedCast.length === 2 ? 2 : 1,
-              ANTHROPIC_KEY!
+              ANTHROPIC_KEY
             );
             if (locationAction) fallbackReasons.push('location_action');
           }
@@ -2201,7 +2209,7 @@ Deno.serve(async (req) => {
                 })()))
               : null,
         };
-        const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY!);
+        const slotResult = await runCharacterSlotPipeline(slotInput, ANTHROPIC_KEY);
         sonnetBrief = slotResult.briefUsed;
         sonnetRawResponse = slotResult.rawResponse;
         finalPrompt = slotResult.assembledPrompt;
