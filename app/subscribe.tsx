@@ -92,7 +92,7 @@ const PLANS: Plan[] = [
   },
   {
     key: 'pro',
-    name: 'DreamBot Pro',
+    name: 'DreamBot Dreamer+',
     tiers: PRO_TIERS,
     perks: PRO_PERKS,
     highlight: true,
@@ -192,7 +192,7 @@ export default function SubscribeScreen() {
     if (purchasingPlan === plan.key) return <ActivityIndicator color="#fff" />;
     const label =
       plan.key === 'pro' && isBasic
-        ? 'Upgrade to Pro'
+        ? 'Upgrade to Dreamer+'
         : `Get ${plan.name.replace('DreamBot ', '')}`;
     return <Text style={[s.ctaText, s.ctaTextLit]}>{label}</Text>;
   }
@@ -344,10 +344,13 @@ export default function SubscribeScreen() {
                       // lower tiers lose their CTA and defer to the platform's
                       // Manage sheet (Apple handles downgrades at period end).
                       <TouchableOpacity onPress={handleManage} activeOpacity={0.85}>
-                        <View style={[s.cta, s.ctaDisabled]}>
-                          <Text style={[s.ctaText, { color: colors.textMuted }]}>
-                            Already included with Pro · switch plans in Manage
-                          </Text>
+                        <View style={[s.cta, s.ctaDisabled, s.ctaIncluded]}>
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={fontScale(15)}
+                            color={colors.textMuted}
+                          />
+                          <Text style={[s.ctaText, s.ctaIncludedText]}>Included with Dreamer+</Text>
                         </View>
                       </TouchableOpacity>
                     ) : (
@@ -491,6 +494,19 @@ const s = StyleSheet.create({
   toggleBtnActive: {
     backgroundColor: colors.accent,
     borderColor: colors.accent,
+  },
+  ctaIncluded: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: verticalScale(6),
+    paddingVertical: verticalScale(14),
+    paddingHorizontal: verticalScale(16),
+  },
+  ctaIncludedText: {
+    color: colors.textMuted,
+    fontSize: fontScale(14),
+    textAlign: 'center',
   },
   toggleText: {
     fontSize: fontScale(14),
