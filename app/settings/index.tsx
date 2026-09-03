@@ -30,7 +30,7 @@ import { isVibeProfile } from '@/types/vibeProfile';
 import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useSparkleBalance } from '@/hooks/useSparkles';
-import { useAdminShowDeleteButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
+import { useAdminShowQuarantineButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
 
 function SettingsRow({
   icon,
@@ -93,7 +93,7 @@ export default function SettingsScreen() {
   const [isPublic, setIsPublic] = useState(false);
   const [allowReposts, setAllowReposts] = useState(true);
   const [allowDownloads, setAllowDownloads] = useState(true);
-  const [showAdminDelete, setShowAdminDelete] = useAdminShowDeleteButton();
+  const [showAdminQuarantine, setShowAdminQuarantine] = useAdminShowQuarantineButton();
   const isSuperAdmin = useAuthStore((s) => s.isSuperAdmin);
   const [showModelBadge, setShowModelBadge] = useAdminShowModelBadge();
   const { confirm: confirmSurprise, setConfirm: setConfirmSurprise } = useConfirmSurpriseDream();
@@ -330,15 +330,15 @@ export default function SettingsScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={styles.rowLabel}>One-tap bad-render flag</Text>
                   <Text style={styles.rowDesc}>
-                    {showAdminDelete
+                    {showAdminQuarantine
                       ? 'Red X above heart. Single tap quarantines it as a bad render (hidden everywhere, no confirm).'
                       : 'Hidden. Enable to flag bad renders.'}
                   </Text>
                 </View>
                 <Switch
-                  value={showAdminDelete}
+                  value={showAdminQuarantine}
                   onValueChange={(val) => {
-                    setShowAdminDelete(val);
+                    setShowAdminQuarantine(val);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   trackColor={{ false: colors.border, true: colors.accent }}

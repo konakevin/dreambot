@@ -6,7 +6,7 @@
  * admins/supreme-admins flip them ON from Settings → ADMIN when they need them.
  *
  * Prefs:
- *  - showAdminDeleteButton — the one-tap-delete red X on fullscreen cards (admin)
+ *  - showAdminQuarantineButton — the one-tap-delete red X on fullscreen cards (admin)
  *  - showModelBadge        — the AI model chip on cards (supreme-admin only)
  */
 import { create } from 'zustand';
@@ -17,7 +17,7 @@ const KEY_SHOW_ADMIN_DELETE = 'admin.showDeleteButton';
 const KEY_SHOW_MODEL_BADGE = 'admin.showModelBadge';
 
 interface AdminPrefsState {
-  showAdminDeleteButton: boolean;
+  showAdminQuarantineButton: boolean;
   showModelBadge: boolean;
   hydrated: boolean;
   setShowAdminDeleteButton: (next: boolean) => void;
@@ -26,11 +26,11 @@ interface AdminPrefsState {
 }
 
 const useAdminPrefsStore = create<AdminPrefsState>((set) => ({
-  showAdminDeleteButton: false,
+  showAdminQuarantineButton: false,
   showModelBadge: false,
   hydrated: false,
   setShowAdminDeleteButton: (next) => {
-    set({ showAdminDeleteButton: next });
+    set({ showAdminQuarantineButton: next });
     AsyncStorage.setItem(KEY_SHOW_ADMIN_DELETE, next ? '1' : '0').catch((e) => {
       if (__DEV__) console.warn('[adminPrefs] persist failed', e);
     });
@@ -47,7 +47,11 @@ const useAdminPrefsStore = create<AdminPrefsState>((set) => ({
         AsyncStorage.getItem(KEY_SHOW_ADMIN_DELETE),
         AsyncStorage.getItem(KEY_SHOW_MODEL_BADGE),
       ]);
-      set({ showAdminDeleteButton: del === '1', showModelBadge: badge === '1', hydrated: true });
+      set({
+        showAdminQuarantineButton: del === '1',
+        showModelBadge: badge === '1',
+        hydrated: true,
+      });
     } catch {
       set({ hydrated: true });
     }
@@ -55,10 +59,10 @@ const useAdminPrefsStore = create<AdminPrefsState>((set) => ({
 }));
 
 /**
- * Returns [showAdminDeleteButton, setter]. Triggers AsyncStorage hydration on first use.
+ * Returns [showAdminQuarantineButton, setter]. Triggers AsyncStorage hydration on first use.
  */
-export function useAdminShowDeleteButton(): [boolean, (next: boolean) => void] {
-  const value = useAdminPrefsStore((s) => s.showAdminDeleteButton);
+export function useAdminShowQuarantineButton(): [boolean, (next: boolean) => void] {
+  const value = useAdminPrefsStore((s) => s.showAdminQuarantineButton);
   const hydrated = useAdminPrefsStore((s) => s.hydrated);
   const setter = useAdminPrefsStore((s) => s.setShowAdminDeleteButton);
   const hydrate = useAdminPrefsStore((s) => s.hydrate);

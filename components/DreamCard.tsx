@@ -173,7 +173,7 @@ interface Props {
   disableSwipeToProfile?: boolean;
   onDelete?: () => void;
   /** Admin-only one-tap delete (no confirm). Rendered as a red X above the heart. */
-  onAdminDeleteImmediate?: () => void;
+  onAdminQuarantineImmediate?: () => void;
   /** Launch "Dream Like This" from this post (the color-wand side button). */
   onDreamLikeThis?: () => void;
   onLikesPress?: () => void;
@@ -211,7 +211,7 @@ export const DreamCard = memo(function DreamCard({
   onToggleSave,
   disableSwipeToProfile,
   onDelete,
-  onAdminDeleteImmediate,
+  onAdminQuarantineImmediate,
   onDreamLikeThis,
   onLikesPress,
   showVisibilityToggle,
@@ -734,14 +734,14 @@ export const DreamCard = memo(function DreamCard({
                   )}
                 </TouchableOpacity>
               )}
-              {onAdminDeleteImmediate && (
+              {onAdminQuarantineImmediate && (
                 <TouchableOpacity
                   style={ui.sideButton}
-                  onPress={onAdminDeleteImmediate}
+                  onPress={onAdminQuarantineImmediate}
                   activeOpacity={0.7}
                   accessibilityLabel="Admin: delete this post immediately"
                 >
-                  <View style={s.adminDeleteCircle}>
+                  <View style={s.adminQuarantineCircle}>
                     <Ionicons name="close" size={22} color="#FFFFFF" />
                   </View>
                 </TouchableOpacity>
@@ -1022,7 +1022,7 @@ const s = StyleSheet.create({
     marginTop: verticalScale(-40),
     marginLeft: -40,
   },
-  adminDeleteCircle: {
+  adminQuarantineCircle: {
     width: 32,
     height: 32,
     borderRadius: 16,

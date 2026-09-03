@@ -27,7 +27,7 @@ import { useToggleFavorite } from '@/hooks/useToggleFavorite';
 import { useLikeIds } from '@/hooks/useLikeIds';
 import { useToggleLike } from '@/hooks/useToggleLike';
 import { useDeletePost, useQuarantinePost } from '@/hooks/useDeletePost';
-import { useAdminShowDeleteButton } from '@/lib/adminPrefs';
+import { useAdminShowQuarantineButton } from '@/lib/adminPrefs';
 import { useAuthStore } from '@/store/auth';
 import { useAlbumStore } from '@/store/album';
 import { useCommentDrafts } from '@/store/commentDrafts';
@@ -114,14 +114,14 @@ type FeedCardProps = {
   disableSwipeToProfile?: boolean;
   userId?: string;
   isAdmin: boolean;
-  showAdminDelete: boolean;
+  showAdminQuarantine: boolean;
   showVisibilityToggle?: boolean;
   toggleLike: (vars: { uploadId: string; currentlyLiked: boolean }) => void;
   toggleFavorite: (vars: { uploadId: string; currentlyFavorited: boolean }) => void;
   onComment: (post: DreamPostItem) => void;
   onLikesPress: (post: DreamPostItem) => void;
   onDelete: (id: string) => void;
-  onAdminDelete: (id: string) => void;
+  onAdminQuarantine: (id: string) => void;
   onTogglePosted?: (id: string) => void;
   onHudToggle?: (visible: boolean) => void;
   showBottomScrim?: boolean;
@@ -137,14 +137,14 @@ const FeedCard = memo(function FeedCard({
   disableSwipeToProfile,
   userId,
   isAdmin,
-  showAdminDelete,
+  showAdminQuarantine,
   showVisibilityToggle,
   toggleLike,
   toggleFavorite,
   onComment,
   onLikesPress,
   onDelete,
-  onAdminDelete,
+  onAdminQuarantine,
   onTogglePosted,
   onHudToggle,
   showBottomScrim,
@@ -169,7 +169,9 @@ const FeedCard = memo(function FeedCard({
       }}
       disableSwipeToProfile={disableSwipeToProfile}
       onDelete={canDelete ? () => onDelete(item.id) : undefined}
-      onAdminDeleteImmediate={isAdmin && showAdminDelete ? () => onAdminDelete(item.id) : undefined}
+      onAdminQuarantineImmediate={
+        isAdmin && showAdminQuarantine ? () => onAdminQuarantine(item.id) : undefined
+      }
       // DLT is hidden from the UI for now (DLT_ENABLED=false): passing undefined
       // here removes BOTH the card's color-wand button and the long-press
       // "Dream like this" item (both gate on this callback). Code/route intact.
@@ -412,7 +414,7 @@ export function FullScreenFeed({
 
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin);
-  const [showAdminDelete] = useAdminShowDeleteButton();
+  const [showAdminQuarantine] = useAdminShowQuarantineButton();
   const { data: favoriteIds = new Set<string>() } = useFavoriteIds();
   const { mutate: toggleFavorite } = useToggleFavorite();
   const { data: likeIds = new Set<string>() } = useLikeIds();
@@ -440,7 +442,7 @@ export function FullScreenFeed({
   // Admin one-tap red X: quarantine as a bad render (soft — hides everywhere but
   // keeps the row + metadata for pool analysis), NOT a hard delete. Same instant,
   // no-confirm UX. (migration 449)
-  const handleAdminDelete = useCallback(
+  const handleAdminQuarantine = useCallback(
     (uploadId: string) => {
       quarantinePost(uploadId);
     },
@@ -568,7 +570,7 @@ export function FullScreenFeed({
         disableSwipeToProfile={disableSwipeToProfile}
         userId={user?.id}
         isAdmin={isAdmin}
-        showAdminDelete={showAdminDelete}
+        showAdminQuarantine={showAdminQuarantine}
         showVisibilityToggle={showVisibilityToggle}
         toggleLike={toggleLike}
         toggleFavorite={toggleFavorite}
@@ -586,7 +588,7 @@ export function FullScreenFeed({
           onHudToggle?.(false);
         }}
         onDelete={handleDelete}
-        onAdminDelete={handleAdminDelete}
+        onAdminQuarantine={handleAdminQuarantine}
         onTogglePosted={onTogglePosted}
         onHudToggle={onHudToggle}
         showBottomScrim={showBottomScrim}
@@ -601,12 +603,12 @@ export function FullScreenFeed({
       disableSwipeToProfile,
       user?.id,
       isAdmin,
-      showAdminDelete,
+      showAdminQuarantine,
       showVisibilityToggle,
       toggleLike,
       toggleFavorite,
       handleDelete,
-      handleAdminDelete,
+      handleAdminQuarantine,
       onTogglePosted,
       onHudToggle,
       showBottomScrim,
