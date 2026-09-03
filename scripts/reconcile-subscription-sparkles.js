@@ -61,13 +61,11 @@ const TIERS = [
   },
 ];
 
-// cycleStart = one month before the current expiry (a monthly sub's cycle runs
-// [expiry - 1 month, expiry]). A grant should land once inside that window.
-function monthlyCycleStart(expiresAt) {
-  const d = new Date(expiresAt);
-  d.setMonth(d.getMonth() - 1);
-  return d;
-}
+// All decision logic (cycle math, period inference, grant/skip) lives in the
+// pure, unit-tested module — this script is a thin I/O shell around it.
+// (Audit 2026-09-03 H2; the extraction also fixed a month-end setMonth rollover
+// bug that could have double-granted subs with month-end expiry dates.)
+const { decideReconcile } = require('./lib/subscriptionReconcile');
 
 async function main() {
   const nowIso = new Date().toISOString();
@@ -113,32 +111,30 @@ async function main() {
         .limit(1);
       const lastGrant = lastRows && lastRows[0] ? lastRows[0] : null;
 
-      // Determine period: stamp first, else infer from the last grant amount.
-      let period = u[tier.periodColumn];
-      if (!period && lastGrant) {
-        period = Number(lastGrant.amount) >= monthlyBundle * 12 ? 'yearly' : 'monthly';
-      }
+      // Pure decision (period inference, yearly/indeterminate skips, cycle
+      // coverage) — see scripts/lib/subscriptionReconcile.js + its jest suite.
+      const { action, cycleKey, reconcileReason } = decideReconcile({
+        tierName: tier.name,
+        userId: u.id,
+        periodStamp: u[tier.periodColumn],
+        lastGrant,
+        monthlyBundle,
+        expiresAt,
+      });
 
-      if (period === 'yearly') continue; // got 12x up front — not owed monthly
-      if (!period && !lastGrant) {
-        // Can't tell monthly vs yearly and no grant history (typically a trial or
-        // admin-set flag, or a pre-stamp sub) — don't guess/over-grant. Plain log,
-        // NOT a ::warning:: — this isn't a dropped-webhook problem, and warning on
-        // it daily would be alarm noise. Real paid subs carry the period stamp now.
+      if (action === 'skip_yearly') continue; // got 12x up front — not owed monthly
+      if (action === 'skip_indeterminate') {
+        // No stamp AND no grant history (trial / admin flag / pre-stamp sub) —
+        // don't guess/over-grant. Plain log, NOT a ::warning:: (alarm noise).
         indeterminate++;
         console.log(
           `[reconcile] ${tier.name} sub ${u.id} active with no period stamp and no prior grant — indeterminate, skipped.`
         );
         continue;
       }
+      if (action === 'skip_covered') continue; // a grant already landed this cycle
 
-      // Monthly: has a bundle grant landed in the current cycle?
-      const cycleStart = monthlyCycleStart(expiresAt);
-      if (lastGrant && new Date(lastGrant.created_at) >= cycleStart) continue; // covered
-
-      // MISSING this cycle's grant. Idempotent per user-per-cycle.
-      const cycleKey = cycleStart.toISOString().slice(0, 10);
-      const reconcileReason = `sub_reconcile:${tier.name}:${u.id}:${cycleKey}`;
+      // action === 'grant': MISSING this cycle's bundle. Idempotent per user-per-cycle.
       const { data: already } = await sb
         .from('sparkle_transactions')
         .select('id')
