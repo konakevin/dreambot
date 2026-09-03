@@ -13,7 +13,7 @@ sections + git log `77c51204..f88bce24` for the full failure-mode education).
 
 ---
 
-## 1. ⬜ Render-time quality gate ⭐ (raises the FLOOR — build first)
+## 1. 🟡 Render-time quality gate ⭐ — LIVE in enforce mode 2026-09-03; REVIEW DUE 2026-09-10 (fleet telemetry: fail rate, cleared_after, shipped_unresolved, judge cost)
 
 **Problem.** Every nightly ships sight-unseen. The Tiffany camel render (sunglasses fused
 across her and the camel, extreme zoom) and the Michele render (74yo +1 rendered as a

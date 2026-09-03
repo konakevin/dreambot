@@ -123,6 +123,7 @@ import {
   type DualSlots,
 } from '../_shared/characterSlotPrompt.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
+import { assessRenderQuality } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
@@ -3630,6 +3631,97 @@ Output ONLY the prompt.`;
       }
       observability.outputPhash = outPhash;
       observability.preStoragetUrl = tempUrl;
+    }
+
+    // ── Render QUALITY GATE (NIGHTLY_IMPRESS_PLAN §1 — LIVE 2026-09-03) ──
+    // BROKEN-only Sonnet vision check of the final output (pixel-corrupted
+    // face, accessory fused across person+animal, extra/duplicated anatomy —
+    // NOTHING else; taste is out of scope by contract, giant creatures
+    // whitelisted; calibrated 0/30 false positives on the labeled corpus, see
+    // _shared/qualityGate.ts + scripts/eval-quality-gate.ts). Modes via
+    // engine_config.quality_gate_mode: off | shadow (telemetry only) |
+    // enforce (fail → deadline-guarded re-SWAP retries reusing the dup-detect
+    // machinery, re-gate, ship first pass; exhausted → ship the ORIGINAL
+    // output + 'unresolved' telemetry — a flagged dream beats no dream).
+    // FAIL-OPEN on judge errors. Cast renders only (pure scenes can't have
+    // the defect class).
+    if ((faceSwapSource || faceSwapSources) && !sceneFallbackApplied) {
+      try {
+        const gateCfg = await fetchEngineConfig(supabase);
+        const gateMode = gateCfg.qualityGateMode;
+        if (gateMode === 'shadow' || gateMode === 'enforce') {
+          const GATE_MAX_ELAPSED_MS = 100_000;
+          const firstUrl = tempUrl;
+          let verdict = await assessRenderQuality(tempUrl);
+          if (verdict === null) fallbackReasons.push('quality_gate:error');
+          else if (verdict.pass) fallbackReasons.push(`quality_gate:${gateMode}:pass`);
+          else {
+            fallbackReasons.push(`quality_gate:${gateMode}:fail:${verdict.flags.join('+')}`);
+            if (gateMode === 'enforce') {
+              let cleared = false;
+              for (let ga = 0; ga < gateCfg.qualityGateMaxRetries; ga++) {
+                if (Date.now() - t0 > GATE_MAX_ELAPSED_MS) {
+                  fallbackReasons.push('quality_gate:skipped_deadline');
+                  break;
+                }
+                try {
+                  if (faceSwapSources && faceSwapSources.length === 2) {
+                    const r = await dispatchDualFaceSwap(
+                      faceSwapSources[0].sourceUrl,
+                      faceSwapSources[1].sourceUrl,
+                      genResult.url,
+                      REPLICATE_TOKEN,
+                      supabase,
+                      userId,
+                      t0 + 140_000,
+                      true,
+                      { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
+                      queueJobId
+                    );
+                    tempUrl = r.swappedUrl ?? tempUrl;
+                  } else if (faceSwapSource) {
+                    tempUrl = await faceSwap(
+                      faceSwapSource,
+                      genResult.url,
+                      REPLICATE_TOKEN,
+                      supabase,
+                      userId,
+                      {
+                        skipPrimary: true,
+                      }
+                    );
+                  }
+                } catch (e) {
+                  fallbackReasons.push(
+                    `quality_gate:retry_error:${(e as Error).message.slice(0, 60)}`
+                  );
+                  break;
+                }
+                verdict = await assessRenderQuality(tempUrl);
+                if (verdict === null || verdict.pass) {
+                  cleared = true;
+                  fallbackReasons.push(`quality_gate:cleared_after:${ga + 1}`);
+                  break;
+                }
+              }
+              if (!cleared && verdict && !verdict.pass) {
+                // Ship the ORIGINAL first output (what would have shipped
+                // pre-gate) — never a worse retry, never nothing.
+                tempUrl = firstUrl;
+                fallbackReasons.push('quality_gate:shipped_unresolved');
+              }
+              if (tempUrl !== firstUrl) {
+                // Buffers/hashes belong to the pre-retry output — drop them so
+                // persist + thumbhash re-derive from the new tempUrl.
+                outBuf = null;
+                decodedOut = null;
+              }
+            }
+          }
+        }
+      } catch (_e) {
+        fallbackReasons.push('quality_gate:error');
+      }
     }
 
     // Stage breadcrumb — storage upload + persist.

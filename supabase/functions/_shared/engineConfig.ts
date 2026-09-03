@@ -21,6 +21,12 @@ export interface EngineConfig {
   photoPreprocessWidth: number;
   photoPreprocessQuality: number;
   nightlyMaxJobs: number;
+  // Render quality gate (NIGHTLY_IMPRESS_PLAN §1, migration 453):
+  // 'off' | 'shadow' (judge + telemetry only) | 'enforce' (fail → re-swap
+  // retries, ship-first-pass, ship-original on exhaustion). Live-tunable —
+  // set 'off' to kill judge cost instantly.
+  qualityGateMode: string;
+  qualityGateMaxRetries: number;
   selfRefRegex: string | null;
   relationshipRegex: string | null;
   // Cast-detection word lists (migration 256) — the single live source the
@@ -99,6 +105,8 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   photoPreprocessWidth: 1024,
   photoPreprocessQuality: 0.8,
   nightlyMaxJobs: 5000,
+  qualityGateMode: 'enforce',
+  qualityGateMaxRetries: 2,
   selfRefRegex: null,
   relationshipRegex: null,
   relationshipWords: DEFAULT_RELATIONSHIP_WORDS,
@@ -169,6 +177,10 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.photo_preprocess_quality ?? DEFAULT_ENGINE_CONFIG.photoPreprocessQuality
     ),
     nightlyMaxJobs: Number(data.nightly_max_jobs ?? DEFAULT_ENGINE_CONFIG.nightlyMaxJobs),
+    qualityGateMode: String(data.quality_gate_mode ?? DEFAULT_ENGINE_CONFIG.qualityGateMode),
+    qualityGateMaxRetries: Number(
+      data.quality_gate_max_retries ?? DEFAULT_ENGINE_CONFIG.qualityGateMaxRetries
+    ),
     selfRefRegex: (data.self_ref_regex as string | null) ?? DEFAULT_ENGINE_CONFIG.selfRefRegex,
     relationshipRegex:
       (data.relationship_regex as string | null) ?? DEFAULT_ENGINE_CONFIG.relationshipRegex,
