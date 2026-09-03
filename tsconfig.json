@@ -71,6 +71,8 @@
     "__tests__/lib/monumentalFaceSpot.test.ts",
     "__tests__/lib/castScannerPrompts.test.ts",
     "__tests__/lib/embodiedSingleBrief.test.ts",
-    "__tests__/lib/sceneHook.test.ts"
+    "__tests__/lib/sceneHook.test.ts",
+    "__tests__/lib/qualityGate.test.ts",
+    "scripts/eval-quality-gate.ts"
   ]
 }
