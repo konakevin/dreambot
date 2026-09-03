@@ -283,6 +283,8 @@ apply `_tmp-sunnyaxes.mjs` + verify/positive-rewrite SUBJECT_RULE (drop any
 ---
 
 ## Change Log
+
+| 2026-09-03 | Housekeeping | Deleted 4 never-seeded stub cards (fairy tale kingdom, rose palace, gothic realm, cottagecore cottage — 0 spots each). Tagged the 10 dissolved-card tombstones `picker_category=__dissolved` (wonders x6, wild-west interiors x3, haunted cathedral) so audits stop reading them as unshipped content. robot city stays the only true holdout. | ✅ |
 - **2026-08-29 (UX overhaul + expansion, Kevin live session)**
   - **Picker → tile-level selection (committed).** Removed drill-in entirely. Tapping a
     category tile selects the WHOLE category (all locations → `dream_seeds.places` via
