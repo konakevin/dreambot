@@ -75,6 +75,12 @@ export interface CharacterSlotPipelineInput {
   // Scene anchors
   iconicAnchor: string | null;
   userPlace: string | null;
+  /** When a SCENARIO replaces the location, the full seed text rides
+   * iconicAnchor (Sonnet's brief needs the whole scenario) but the assembled
+   * prompt's early "set at" slot uses THIS dieted setting clause instead —
+   * keeping pose/creature choreography out of the highest-attention window
+   * (2026-09-03 camel-render diagnosis). Null → set at iconicAnchor/userPlace. */
+  setAtOverride?: string | null;
   timeAxis: string;
   weatherAxis: string;
   phenomenaAxis: string;
@@ -737,7 +743,7 @@ export function assembleCharacterPrompt(
   slots: CharacterSlots,
   input: CharacterSlotPipelineInput
 ): string {
-  const location = input.iconicAnchor || input.userPlace || '';
+  const location = input.setAtOverride || input.iconicAnchor || input.userPlace || '';
   const mediumSignal = (input.mediumFluxFragment || '').trim();
   // Early scene hook — the scene's 1-2 most distinctive clauses ride the early
   // "set at" slot (see buildSceneHook). Same for single + dual.

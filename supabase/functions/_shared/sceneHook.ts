@@ -102,3 +102,21 @@ export function buildSceneHook(sceneDescription: string, location: string): stri
     .filter((c) => !hasDominanceCue(c));
   return capWords(clauses.slice(0, MAX_HOOK_CLAUSES).join(', '));
 }
+
+/**
+ * The SETTING clause of a scenario seed — for the early "set at" slot when a
+ * scenario replaces the user's location (2026-09-03, the Tiffany camel render).
+ * Scenario seeds embed creature + pose choreography ("a colossal camel behind
+ * them; she holds sunglasses..."); planting the WHOLE seed in the early slot
+ * floods the highest-attention window with people/prop tokens and pulls the
+ * composition portrait-ward. Sonnet still receives the full seed via the brief;
+ * only the assembled prompt's "set at" gets this diet: first sentence, first
+ * comma-clause, capped at 12 words.
+ */
+export function settingClauseOf(scene: string): string {
+  if (!scene) return '';
+  const sentence = scene.split(/[;.]/)[0] ?? '';
+  const clause = sentence.split(',')[0] ?? '';
+  const words = clause.trim().split(/\s+/);
+  return words.slice(0, 12).join(' ').trim();
+}

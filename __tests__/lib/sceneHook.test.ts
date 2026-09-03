@@ -169,3 +169,27 @@ describe('buildSceneHook — end to end on the real failure cases', () => {
     expect(hook).toBe('golden mist over rice terraces, distant thunder');
   });
 });
+
+import { settingClauseOf } from '@engine/sceneHook';
+
+describe('settingClauseOf — scenario set-at diet (the Tiffany camel render)', () => {
+  it('takes only the setting from a choreography-heavy seed', () => {
+    expect(
+      settingClauseOf(
+        'Desert dunes at sunrise, a colossal friendly camel sitting behind them absolutely enormous smiling; she holds sunglasses at chest height grinning wide, he stands one fist low at hip smirking bold at camera.'
+      )
+    ).toBe('Desert dunes at sunrise');
+  });
+  it('keeps a compact setting clause whole', () => {
+    expect(
+      settingClauseOf('Rooftop terrace above a glittering city skyline, fireworks overhead')
+    ).toBe('Rooftop terrace above a glittering city skyline');
+  });
+  it('caps at 12 words', () => {
+    const long = Array.from({ length: 20 }, (_, i) => `w${i}`).join(' ');
+    expect(settingClauseOf(long).split(' ')).toHaveLength(12);
+  });
+  it('empty → empty', () => {
+    expect(settingClauseOf('')).toBe('');
+  });
+});

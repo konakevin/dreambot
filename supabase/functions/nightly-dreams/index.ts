@@ -122,6 +122,7 @@ import {
   type CharacterSlotPipelineInput,
   type DualSlots,
 } from '../_shared/characterSlotPrompt.ts';
+import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
 import { pickSingleAction } from '../_shared/pools/single_actions.ts';
 import { pickSceneCluster } from '../_shared/pools/scene_clusters.ts';
@@ -2133,6 +2134,9 @@ Deno.serve(async (req) => {
           // (normal clothes); elegant → the dressed-up attire; location → biome.
           iconicAnchor: dualSpecialScene ?? iconicAnchor,
           userPlace: dualSpecialScene ?? userPlace ?? null,
+          // Scenario "set at" diet: full seed → Sonnet brief; only the SETTING
+          // clause → the assembled prompt's early slot (camel-render fix).
+          setAtOverride: dualSpecialScene ? settingClauseOf(dualSpecialScene) : null,
           timeAxis: dualSpecialScene ? (dualSpecialLighting ?? '') : timeAxis,
           weatherAxis: dualSpecialScene ? '' : weatherAxis,
           phenomenaAxis: dualSpecialScene ? '' : phenomenaAxis,
