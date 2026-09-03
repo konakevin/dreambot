@@ -1,5 +1,6 @@
 /**
- * Subscribe screen — the Free / Basic / Pro paywall.
+ * Subscribe screen — the Free / Dreamer / Pro paywall. ('Dreamer' is the
+ * DISPLAY name of the basic tier — product IDs remain *.basic.*.)
  *
  * One offering ("subscriptions") feeds this screen with all four packages
  * (Basic + Pro × monthly + yearly). The user picks a billing period, then a
@@ -7,7 +8,7 @@
  * The revenuecat-webhook authoritatively flips the entitlement + grants the
  * tier's sparkle bundle — this screen just kicks off StoreKit + refreshes state.
  *
- * Basic = nightly dreams + a light sparkle/HD allowance ($4.99/mo). Pro =
+ * Dreamer = nightly dreams ONLY ($4.99/mo) — the whole pitch is one perfect perk. Pro =
  * everything bigger ($9.99/mo). Replaces the old single-tier proStore screen.
  */
 
@@ -81,7 +82,7 @@ const ACCENT = colors.accent;
 const PLANS: Plan[] = [
   {
     key: 'basic',
-    name: 'DreamBot Basic',
+    name: 'DreamBot Dreamer',
     tiers: BASIC_TIERS,
     perks: BASIC_PERKS,
     highlight: false,
@@ -335,6 +336,20 @@ export default function SubscribeScreen() {
                           </View>
                         </TouchableOpacity>
                       )
+                    ) : plan.key === 'basic' && isPaidPro ? (
+                      // TIER-STATE (Kevin 2026-09-04): a Pro subscriber must not
+                      // see a "Get Dreamer" buy button for a LOWER tier — the
+                      // industry-standard treatment (Duolingo/Discord/iCloud+):
+                      // current tier says Current, higher tiers say Upgrade,
+                      // lower tiers lose their CTA and defer to the platform's
+                      // Manage sheet (Apple handles downgrades at period end).
+                      <TouchableOpacity onPress={handleManage} activeOpacity={0.85}>
+                        <View style={[s.cta, s.ctaDisabled]}>
+                          <Text style={[s.ctaText, { color: colors.textMuted }]}>
+                            Already included with Pro · switch plans in Manage
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     ) : (
                       <TouchableOpacity
                         onPress={() => handleSubscribe(plan)}
@@ -379,10 +394,7 @@ export default function SubscribeScreen() {
           {/* Human reassurance — the calm answer to "am I locked in?", above the
               required legal disclosure below. Now truthful: Settings has a
               one-tap Manage Subscription → Apple's cancel sheet. */}
-          <View style={s.reassure}>
-            <Ionicons name="shield-checkmark-outline" size={fontScale(14)} color={ACCENT} />
-            <Text style={s.reassureText}>No commitment. Cancel anytime in Settings.</Text>
-          </View>
+
           <TouchableOpacity
             onPress={() => restore()}
             disabled={restoring}
@@ -469,17 +481,21 @@ const s = StyleSheet.create({
     paddingVertical: verticalScale(10),
     borderRadius: verticalScale(9),
     gap: verticalScale(6),
-    // Subtle fill so the INACTIVE segment reads as a real button (and the
-    // "Save 33%" badge sits inside it instead of floating in empty space).
-    backgroundColor: colors.card,
+    // The inactive segment must read as a TAPPABLE peer of the active one, not
+    // fade into the sheet (Kevin 2026-09-04): a lighter translucent fill + a
+    // hairline edge lift it off the card background.
+    backgroundColor: colors.overlayWhite,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.16)',
   },
   toggleBtnActive: {
     backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   toggleText: {
     fontSize: fontScale(14),
     fontWeight: '700',
-    color: colors.textMuted,
+    color: colors.bodyOnDark,
   },
   toggleTextActive: {
     color: '#000',

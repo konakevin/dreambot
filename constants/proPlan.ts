@@ -52,7 +52,9 @@ export const PRO_NIGHTLY_DREAMS_PER_MONTH = 30;
  *  upscales per month — ~100 ≈ 3/day, plenty for real use, and caps worst-case
  *  cost at ~$2-3/user/mo at 2x HD. (Was 500/4K — far too expensive per maxed
  *  user.) Keep in sync with HQ_CAP_PER_MONTH in upscale-image. */
-export const PRO_HQ_DOWNLOADS_PER_MONTH = 100;
+// 100→75 (2026-09-04 tier P&L): trims worst-case perk cost ~63¢/mo; almost no
+// user approached 100. Server mirror: engine_config.pro_hd_downloads_per_month.
+export const PRO_HQ_DOWNLOADS_PER_MONTH = 75;
 
 /** Pro perk list — surface in the Get Pro screen + any "what is Pro?" copy.
  *  Order MATCHES BASIC_PERKS (nightly dream → sparkles → HD) so the two paywall
@@ -68,12 +70,14 @@ export const PRO_PERKS = [
     title: `${PRO_SPARKLE_BUNDLE} bonus sparkles every month`,
     // Yearly grants the whole year (12x) up front, so the paywall shows the
     // accurate yearly figure when the annual period is selected.
-    titleYearly: `${PRO_YEARLY_SPARKLE_BUNDLE} bonus sparkles a year`,
+    // DRIP (2026-09-04): yearly subs now receive the bundle MONTHLY (75/mo) —
+    // no more 900-up-front lump (refund/burn exposure). Copy matches.
+    titleYearly: `${PRO_SPARKLE_BUNDLE} bonus sparkles every month`,
     sub: 'Spend on any model: Flux 2, GPT Image 1, Nano Banana Pro, and more. Refills automatically with each renewal.',
   },
   {
     icon: 'download-outline',
-    title: '100 HD downloads a month',
+    title: `${PRO_HQ_DOWNLOADS_PER_MONTH} HD downloads a month`,
     note: '(cast photo dreams not supported)',
     sub: 'Save any dream (yours, bots, or other creators) to your photos in crisp HD.',
   },

@@ -59,7 +59,18 @@ function decideReconcile({ tierName, userId, periodStamp, lastGrant, monthlyBund
   const period = inferPeriod({ periodStamp, lastGrant, monthlyBundle });
 
   if (period === 'yearly') {
-    return { action: 'skip_yearly', cycleKey, reconcileReason: null };
+    // DRIP (2026-09-04): yearly subs now receive the monthly bundle each month —
+    // the webhook grants 1x at purchase/renewal and THIS reconcile is the drip
+    // engine for months 2-12. LEGACY yearly subs who already got the 12x lump
+    // are provisioned for their whole year: skip until their next renewal
+    // re-enters them at 1x.
+    if (lastGrant && Number(lastGrant.amount) >= monthlyBundle * 12) {
+      return { action: 'skip_yearly', cycleKey, reconcileReason: null };
+    }
+    if (lastGrant && new Date(lastGrant.created_at) >= cycleStart) {
+      return { action: 'skip_covered', cycleKey, reconcileReason: null };
+    }
+    return { action: 'grant', cycleKey, reconcileReason };
   }
   if (period === null) {
     return { action: 'skip_indeterminate', cycleKey, reconcileReason: null };

@@ -23,14 +23,22 @@ import type { ProPlanTier } from './proPlan';
 
 /** Bundled sparkles granted on each Basic INITIAL_PURCHASE + RENEWAL (monthly).
  *  Server source of truth: engine_config.basic_monthly_sparkle_bundle (20). */
-export const BASIC_SPARKLE_BUNDLE = 20;
+// DREAMER pivot (Kevin, 2026-09-04): the $4.99 tier is now DREAMS-ONLY —
+// display name "DreamBot Dreamer" (product IDs unchanged: still *.basic.*).
+// Sparkles + HD moved to Pro-exclusive: the tier's whole story is "a new dream
+// every night", and it is profitable at ANY utilization in BOTH periods
+// (monthly +$1.90 worst, yearly +$0.49 worst — see the 2026-09-03 tier P&L).
+// Server mirrors: engine_config.basic_monthly_sparkle_bundle=0,
+// basic_hd_downloads_per_month=0 (HD of one's OWN dreams stays free/uncapped
+// by the upscale-image own-dream exemption).
+export const BASIC_SPARKLE_BUNDLE = 0;
 
 /** Yearly Basic grants 12x the monthly bundle up front (240). */
 export const BASIC_YEARLY_SPARKLE_BUNDLE = BASIC_SPARKLE_BUNDLE * 12;
 
 /** Monthly HD-download cap for Basic. Server source of truth:
  *  engine_config.basic_hd_downloads_per_month (20). Pro = 100. */
-export const BASIC_HQ_DOWNLOADS_PER_MONTH = 20;
+export const BASIC_HQ_DOWNLOADS_PER_MONTH = 0;
 
 /** Nightly dreams — Basic gets the same every-night cadence as Pro (it's the
  *  core reason to subscribe). Gating lives in is_dream_eligible() / the cron. */
@@ -41,20 +49,7 @@ export const BASIC_PERKS = [
   {
     icon: 'moon',
     title: 'A new dream every night',
-    sub: 'Personalized AI dreams generated for you while you sleep, every single night.',
-  },
-  {
-    icon: 'sparkles',
-    title: `${BASIC_SPARKLE_BUNDLE} bonus sparkles every month`,
-    // Yearly grants the whole year (12x) up front — show the accurate figure.
-    titleYearly: `${BASIC_YEARLY_SPARKLE_BUNDLE} bonus sparkles a year`,
-    sub: 'Spend on any model to create your own dreams. Refills automatically with each renewal.',
-  },
-  {
-    icon: 'download-outline',
-    title: `${BASIC_HQ_DOWNLOADS_PER_MONTH} HD downloads a month`,
-    note: '(cast photo dreams not supported)',
-    sub: 'Save your favorite dreams to your photos in crisp HD.',
+    sub: 'A personalized AI dream, starring you, generated while you sleep — every single night. That is the whole plan, and it is magic.',
   },
 ] as const;
 

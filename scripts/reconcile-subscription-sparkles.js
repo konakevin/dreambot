@@ -77,7 +77,11 @@ async function main() {
   let indeterminate = 0;
 
   for (const tier of TIERS) {
-    const monthlyBundle = Number(cfg[tier.bundleColumn]) || tier.fallbackBundle;
+    // Nullish (not falsy) fallback: Dreamer's bundle is a REAL 0 (dreams-only
+    // tier, 2026-09-04) — `|| fallback` would resurrect the old 20-sparkle grant.
+    const monthlyBundle =
+      cfg[tier.bundleColumn] != null ? Number(cfg[tier.bundleColumn]) : tier.fallbackBundle;
+    if (!(monthlyBundle > 0)) continue; // dreams-only tier: nothing to reconcile
 
     // Active paid subs on this tier (paginated — PostgREST caps at 1000).
     let subs = [];
@@ -122,7 +126,7 @@ async function main() {
         expiresAt,
       });
 
-      if (action === 'skip_yearly') continue; // got 12x up front — not owed monthly
+      if (action === 'skip_yearly') continue; // legacy 12x-up-front — provisioned for the year
       if (action === 'skip_indeterminate') {
         // No stamp AND no grant history (trial / admin flag / pre-stamp sub) —
         // don't guess/over-grant. Plain log, NOT a ::warning:: (alarm noise).

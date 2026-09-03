@@ -136,10 +136,13 @@ function resolveTier(productId: string): TierConfig | undefined {
   return SUBSCRIPTION_TIERS.find((t) => t.products.has(productId));
 }
 
-/** The sparkle grant for a subscription product. Yearly subscribers receive
- *  12× the monthly bundle in one lump sum at each billing cycle. */
+/** The sparkle grant for a subscription product. DRIP (2026-09-04): yearly
+ *  subscribers receive 1× the monthly bundle at purchase/renewal — months 2-12
+ *  are dripped by scripts/reconcile-subscription-sparkles.js (kills the
+ *  900-up-front burn-and-refund exposure). Legacy 12× lumps are honored by the
+ *  reconcile's skip until next renewal. */
 function bundleSize(tier: TierConfig, productId: string, monthly: number): number {
-  return productId === tier.yearlyProduct ? monthly * 12 : monthly;
+  return monthly;
 }
 
 // Subscription events that should trigger the bundled-sparkle grant.
@@ -439,9 +442,8 @@ Deno.serve(async (req) => {
         }
 
         // Grant the bundled sparkles on INITIAL_PURCHASE + each RENEWAL.
-        // Monthly subscribers get the configured monthly bundle per billing
-        // cycle; yearly subscribers get 12× in one lump sum per yearly cycle
-        // (engine_config.<tier>_monthly_sparkle_bundle).
+        // Every subscriber gets the configured MONTHLY bundle per grant event;
+        // yearly subs are topped up monthly by the reconcile drip (2026-09-04).
         // Idempotent on transactionId — if the same event is delivered
         // twice, the second grant is skipped.
         let sparklesGranted = 0;

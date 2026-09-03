@@ -94,10 +94,11 @@ describe('decideReconcile — the grant/skip matrix', () => {
     expiresAt: '2026-09-20T00:00:00Z', // cycle start 2026-08-20
   };
 
-  it('yearly (stamped) → skip_yearly, never a reason', () => {
+  it('yearly (stamped, no grant history) → GRANT under the 2026-09-04 drip (was skip_yearly pre-drip)', () => {
     const r = decideReconcile({ ...base, periodStamp: 'yearly', lastGrant: null });
-    expect(r.action).toBe('skip_yearly');
-    expect(r.reconcileReason).toBeNull();
+    expect(r.action).toBe('grant');
+    // Drip grants are idempotent per cycle — the reason key is REQUIRED now.
+    expect(r.reconcileReason).toMatch(/^sub_reconcile:/);
   });
 
   it('indeterminate (no stamp, no history) → skip_indeterminate, NEVER auto-grants', () => {
@@ -161,5 +162,37 @@ describe('decideReconcile — the grant/skip matrix', () => {
     });
     expect(r.action).toBe('grant');
     expect(r.reconcileReason).toBe('sub_reconcile:basic:user-3:2026-08-10');
+  });
+});
+
+describe('decideReconcile — yearly DRIP (2026-09-04)', () => {
+  const base = {
+    tierName: 'pro',
+    userId: 'u1',
+    periodStamp: 'yearly',
+    monthlyBundle: 75,
+    expiresAt: '2027-06-15T00:00:00Z',
+  };
+  it('legacy 12x lump → still skip_yearly (provisioned for the year)', () => {
+    const r = decideReconcile({
+      ...base,
+      lastGrant: { amount: 900, created_at: '2026-06-15T00:00:00Z' },
+    });
+    expect(r.action).toBe('skip_yearly');
+  });
+  it('dripped 1x grant inside the current cycle → skip_covered', () => {
+    const cs = monthlyCycleStart(base.expiresAt);
+    const r = decideReconcile({
+      ...base,
+      lastGrant: { amount: 75, created_at: new Date(cs.getTime() + 3600_000).toISOString() },
+    });
+    expect(r.action).toBe('skip_covered');
+  });
+  it('dripped 1x grant from a PAST cycle → grant (the drip fires)', () => {
+    const r = decideReconcile({
+      ...base,
+      lastGrant: { amount: 75, created_at: '2026-01-02T00:00:00Z' },
+    });
+    expect(r.action).toBe('grant');
   });
 });
