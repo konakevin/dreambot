@@ -1953,6 +1953,8 @@ Output ONLY the prompt.`;
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
           degradeToSingle: true,
+          // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
+          identityDegradeFloor: (await fetchEngineConfig(supabase)).identityDegradeFloor,
         }
       );
       tempUrl = result.url;

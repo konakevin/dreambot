@@ -3235,6 +3235,8 @@ Output ONLY the prompt.`;
           strict: strict_face_swap,
           deadlineMs: dualDeadlineMs,
           recoverBudgetMs: DUAL_RECOVER_MS,
+          // Live-tunable wrong-person floor (engine_config, audit L3; cached fetch).
+          identityDegradeFloor: (await fetchEngineConfig(supabase)).identityDegradeFloor,
         }
       );
       tempUrl = result.url;

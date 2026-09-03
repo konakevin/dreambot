@@ -165,12 +165,17 @@ export async function genderSafeDualSwap(
      * → a cast dream never cascades to pure-scene on budget (Kevin 2026-08-28).
      */
     recoverBudgetMs?: number;
+    /** Override the wrong-person floor (engine_config.identity_degrade_floor,
+     *  audit 2026-09-03 L3). Defaults to the hardcoded IDENTITY_DEGRADE_FLOOR so
+     *  existing callers/tests are unchanged. */
+    identityDegradeFloor?: number;
   }
 ): Promise<DualSwapOutcome> {
   const log = deps.log ?? (() => {});
   const reasons: string[] = [];
   const maxRerenders = opts.maxRerenders ?? 2;
   const recoverBudgetMs = opts.recoverBudgetMs ?? RECOVER_BUDGET_MS;
+  const identityDegradeFloor = opts.identityDegradeFloor ?? IDENTITY_DEGRADE_FLOOR;
   let target = renderUrl;
   let predictionId: string | null = null;
   let faceCount = 2;
@@ -301,7 +306,7 @@ export async function genderSafeDualSwap(
   // Stage 8c: a WEAK sub-threshold dual (floor ≤ min < threshold) in hand still
   // beats every degrade — both faces are PRESENT and gender-routed; that miss is
   // a likeness-quality miss, not a safety failure.
-  if (best && best.minSim >= IDENTITY_DEGRADE_FLOOR) {
+  if (best && best.minSim >= identityDegradeFloor) {
     reasons.push(`identity_shipped_best:${best.minSim}(attempt ${best.attempt})`);
     log(`identity enforcement exhausted — shipping best dual (min=${best.minSim})`);
     return { url: best.url, outcome: 'dual', faceCount: best.faceCount, predictionId, reasons };
@@ -309,7 +314,7 @@ export async function genderSafeDualSwap(
   // A CATASTROPHIC best (min < floor) is the WRONG person on one side, not a weak
   // likeness — do NOT ship it. Fall through to the self-only degrade (Kevin
   // 2026-07-24: the "wife's face is a stranger" render should degrade, not ship).
-  if (best) reasons.push(`identity_degrade_floor:${best.minSim}<${IDENTITY_DEGRADE_FLOOR}`);
+  if (best) reasons.push(`identity_degrade_floor:${best.minSim}<${identityDegradeFloor}`);
 
   // Degrade to a gender-safe self-only swap (self placed, +1 dropped to a generic
   // figure) instead of shipping a wrong face. Non-strict callers (nightly) always

@@ -56,6 +56,10 @@ export interface EngineConfig {
   faceRestoreEnabled: boolean;
   faceRestoreCreateEnabled: boolean;
   faceRestoreFidelity: number;
+  /** Sub-floor duals are the WRONG person and degrade to solo-of-self instead of
+   *  shipping (dualSwapPipeline). Live-tunable (audit 2026-09-03 L3; Kevin raised
+   *  0.15 -> 0.25 by hand on 2026-08-31, this makes the next tune a dashboard flip). */
+  identityDegradeFloor: number;
   /** Phase A (ACTION_POSE_EXPANSION_PLAN.md): % of plain-location dual dreams
    *  that try the biome-tagged ACTIVE pose pool. 0 = off (default). */
   dualActionPosePct: number;
@@ -127,6 +131,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   faceRestoreEnabled: false,
   faceRestoreCreateEnabled: false,
   faceRestoreFidelity: 0.9,
+  identityDegradeFloor: 0.25,
   dualActionPosePct: 0,
   dualSceneGoofyPct: 20,
   dualSceneElegantPct: 20,
@@ -208,6 +213,9 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
     ),
     faceRestoreFidelity: Number(
       data.face_restore_fidelity ?? DEFAULT_ENGINE_CONFIG.faceRestoreFidelity
+    ),
+    identityDegradeFloor: Number(
+      data.identity_degrade_floor ?? DEFAULT_ENGINE_CONFIG.identityDegradeFloor
     ),
     dualActionPosePct: Number(data.dual_action_pose_pct ?? DEFAULT_ENGINE_CONFIG.dualActionPosePct),
     dualSceneGoofyPct: Number(data.dual_scene_goofy_pct ?? DEFAULT_ENGINE_CONFIG.dualSceneGoofyPct),
