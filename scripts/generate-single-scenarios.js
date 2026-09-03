@@ -48,8 +48,7 @@ const COUNT_OVERRIDE = arg('--count', null) ? parseInt(arg('--count', null), 10)
 // medium (photoreal dragons/magic/creatures read as creepy CGI; noir/vintage/
 // heirloom/overlay/glamour render semi-real styles badly). CSV in medium_ban;
 // nightly-dreams parses it and re-rolls into the painterly face-swap mediums.
-const PHOTO_ADJACENT_BAN =
-  'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
+const PHOTO_ADJACENT_BAN = 'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
 
 // Operation Sweet Dreams — girly-glam "magic" family (2026-08-13, Kevin): LOCK
 // these female-cast dreams to the painterly-magic mediums that keep her real
@@ -505,7 +504,7 @@ const ACTIVE_BUCKETS = [
     gender: 'male',
     count: 25,
     label: 'Combat sports (him)',
-    desc: 'COMBAT SPORTS for HIM — a fighter\'s moment: gloves up in a boxing ring corner under the lights, in an MMA cage with a raised fist, a muay-thai clinch stance, or arms raised in victory in the ring. Boxing gloves, hand wraps, trunks, a title belt over the shoulder. Bold and triumphant.',
+    desc: "COMBAT SPORTS for HIM — a fighter's moment: gloves up in a boxing ring corner under the lights, in an MMA cage with a raised fist, a muay-thai clinch stance, or arms raised in victory in the ring. Boxing gloves, hand wraps, trunks, a title belt over the shoulder. Bold and triumphant.",
   },
   {
     key: 'warrior_soldier_m',
@@ -746,7 +745,7 @@ ${sceneRule}
 
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP solo PORTRAIT, so the person must dominate the frame with a big clear face):
 - ${subj.toUpperCase ? subj : subj} is the ONLY prominent person and the clear FOREGROUND subject, read as a normal solo portrait (waist-up, big face). NO other prominent people.${activeRule}
-- Any animals/creatures/background characters stay in the BACKGROUND or to the side — NEVER crowding or covering the face.
+- Any animals/creatures/background characters stay in the BACKGROUND or to the side — NEVER crowding or covering the face. LARGE creatures/objects may be impressively big but always sit a comfortable distance away, fully visible, never crowding, looming directly over, or touching the person. Wearable accessories (sunglasses, hats) are WORN properly by the person or omitted — never held near an animal.
 - ${isActive ? `LEAD the scene with a dynamic physical MID-ACTION verb — the person actively DOING something with their body (gripping, launching, paddling, hoisting, laughing mid-spin). NEVER standing, sitting, leaning, watching, gazing, or admiring — anywhere in the sentence. Keep the action HELD and grounded (no mid-air leaps, wingsuits, or free-fall — a launch-grip at the edge, never an airborne wide shot). One clear action per scene. UPRIGHT OPEN posture — chest open, standing tall or in confident whole-body motion, never hunched/crouched/bent toward the camera, and never simply presenting a held object at chest level (prefer whole-body energy; props are the exception, not the default). Vary the leading action verb across the batch — never reuse one verb more than twice.` : `Keep it SIMPLE: the fun is the recognizable SETTING/situation, not a busy action tableau. One clear idea per scene.`}
 - Face fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats over the eyes.
 - No children/minors. Tasteful (no lingerie/nudity).

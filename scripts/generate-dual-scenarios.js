@@ -45,8 +45,7 @@ const BUCKET_FILTER = arg('--buckets', null); // 'sample' or csv of keys
 // vintage/heirloom/overlay/glamour render semi-real styles badly). Stored as a
 // CSV in medium_ban; nightly-dreams parses it and re-rolls out of the whole
 // list into the painterly/illustrated face-swap mediums.
-const PHOTO_ADJACENT_BAN =
-  'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
+const PHOTO_ADJACENT_BAN = 'photography,film_noir,vintage_film,double_exposure,heirloom,glamour';
 
 const ELEGANT_BUCKETS = [
   {
@@ -106,7 +105,7 @@ const ELEGANT_BUCKETS = [
     // painterly/vintage/fantasy mediums that drift a supercar into a whimsical
     // waterfall or a 1940s B&W town (2026-08-26 QA). Leaves the clean-modern
     // renderers: comics, photography, illustration (verified to hold luxury).
-    mediumBan: "glamour,double_exposure,canvas,watercolor,pencil,film_noir,vintage_film,heirloom",
+    mediumBan: 'glamour,double_exposure,canvas,watercolor,pencil,film_noir,vintage_film,heirloom',
     desc: 'Lifestyles of the RICH AND FAMOUS — sleek, MODERN, aspirational luxury, always COOL and never gaudy or old-money-stuffy: leaning against or perched on the hood of an exotic supercar (a Ferrari, Lamborghini, McLaren, Porsche 911, Rolls-Royce, Bentley, Aston Martin, or matte-black G-Wagon — real iconic cars, badges welcome); the sundeck or bow of a gleaming white superyacht at golden hour; an infinity-pool clifftop villa over an Amalfi / Mykonos / Malibu sea; the airstair of a private jet on the tarmac; a floor-to-ceiling-glass penthouse suite above a glittering city skyline; a chic ultra-modern beach house. Effortlessly expensive designer attire — tailored linen and silk, a crisp resort look or a sleek dress, statement sunglasses pushed up on the head (never over the eyes), fine watches and jewelry. The couple relaxed, confident, living the dream — waist-up, side by side, faces to camera.',
   },
 ];
@@ -353,7 +352,7 @@ ${sceneRule}
 
 HARD RULES (a render is rejected if violated — this is a FACE-SWAP couple PORTRAIT, so the two people must dominate the frame with big clear faces):
 - The COUPLE are the ONLY two prominent people and the clear FOREGROUND subjects, read as a normal couple photo (think waist-up, both faces large). NO other prominent people in the shot.${activeRule}
-- Any animals, creatures, or background characters stay in the BACKGROUND or off to the side — they must NEVER come between the two people or crowd/cover their faces.
+- Any animals, creatures, or background characters stay in the BACKGROUND or off to the side — they must NEVER come between the two people or crowd/cover their faces. LARGE creatures/objects may be impressively big but always sit a comfortable distance away, fully visible, never crowding, looming directly over, or touching the couple. Wearable accessories (sunglasses, hats) are WORN properly by a person or omitted — never held near an animal.
 - ${isActive ? `LEAD the scene with a dynamic physical MID-ACTION verb — both people actively DOING something side by side (gripping, launching, paddling, hoisting, cheering arms-up). NEVER standing, sitting, leaning, watching, gazing, or admiring — anywhere in the sentence. Keep the action HELD and grounded (no mid-air leaps or free-fall — a launch-grip at the edge, never an airborne wide shot that shrinks the couple). One clear action per scene, a clear gap between their two heads. UPRIGHT OPEN posture for both — chest open, tall or in confident whole-body motion, never hunched/crouched/bent toward the camera, never both simply presenting a held object (props the exception, not the default). Vary the leading action verb across the batch — never reuse one verb more than twice.` : `Keep it SIMPLE enough to read as a couple photo: the fun is the recognizable SETTING/situation, not a busy action tableau that shrinks the couple. One clear fun idea per scene.`}
 - Both FACES fully visible — NO masks, helmets, full hoods, veils, heavy face paint, or hats pulled over the eyes. Hats/headwear are fine ONLY if the face is clearly visible.
 - No children/minors. Tasteful (no lingerie/nudity).
