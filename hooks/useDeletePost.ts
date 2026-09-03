@@ -102,10 +102,7 @@ async function deleteUploadRow(uploadId: string, isAdmin: boolean): Promise<void
   const isReferenceGallery = sourceIds.length > 0;
 
   if (isAdmin) {
-    const { error } = await supabase.rpc(
-      'admin_delete_upload' as never,
-      { p_upload_id: uploadId } as never
-    );
+    const { error } = await supabase.rpc('admin_delete_upload', { p_upload_id: uploadId });
     if (error) throw error;
   } else {
     const { error } = await supabase.from('uploads').delete().eq('id', uploadId);
@@ -252,12 +249,7 @@ export function useDeletePost() {
  * analysis. No storage deletion, no counter changes. (migration 449)
  */
 async function quarantineUploadRow(uploadId: string): Promise<void> {
-  // admin_quarantine_upload is not in the generated RPC types yet (same pattern
-  // as admin_delete_upload) — regenerate types after 449 to drop the casts.
-  const { error } = await supabase.rpc(
-    'admin_quarantine_upload' as never,
-    { p_upload_id: uploadId } as never
-  );
+  const { error } = await supabase.rpc('admin_quarantine_upload', { p_upload_id: uploadId });
   if (error) throw error;
 }
 

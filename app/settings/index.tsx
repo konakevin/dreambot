@@ -246,11 +246,8 @@ export default function SettingsScreen() {
                     // uploads rows — otherwise the image files orphan in
                     // the bucket forever. RPC returns both base and HQ
                     // (Pro variant) paths for every upload the user owns.
-                    // Cast to `never` because the generated types are
-                    // stale until codegen runs against the live schema
-                    // (same pattern useDeletePost uses for admin_delete_upload).
-                    const { data: pathsRaw } = await supabase.rpc('list_my_upload_paths' as never);
-                    const paths = (pathsRaw as string[] | null) ?? [];
+                    const { data: pathsRaw } = await supabase.rpc('list_my_upload_paths');
+                    const paths = pathsRaw ?? [];
                     if (paths.length > 0) {
                       // Batch by 100 to stay well under Storage API limits.
                       for (let i = 0; i < paths.length; i += 100) {

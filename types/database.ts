@@ -4,7 +4,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.4';
+    PostgrestVersion: '14.5';
   };
   public: {
     Tables: {
@@ -1601,6 +1601,7 @@ export type Database = {
           face_swap_self_rate: number;
           face_swap_share: number;
           face_swap_share_with_plus_one: number;
+          female_hair_variation_pct: number;
           first_dream_ip_max: number;
           first_dream_ip_window_hours: number;
           gallery_max_images: number;
@@ -1678,6 +1679,7 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
           gallery_max_images?: number;
@@ -1755,6 +1757,7 @@ export type Database = {
           face_swap_self_rate?: number;
           face_swap_share?: number;
           face_swap_share_with_plus_one?: number;
+          female_hair_variation_pct?: number;
           first_dream_ip_max?: number;
           first_dream_ip_window_hours?: number;
           gallery_max_images?: number;
@@ -3187,11 +3190,14 @@ export type Database = {
           owner_seen_at: string | null;
           pinned_at: string | null;
           posted_at: string | null;
+          quarantine_reason: string | null;
+          quarantined_at: string | null;
           recipe: Json | null;
           recipe_id: string | null;
           repost_count: number;
           save_count: number;
           search_tsv: unknown;
+          seed_source: Json | null;
           shadow: boolean;
           share_count: number;
           style_summary: string | null;
@@ -3238,11 +3244,14 @@ export type Database = {
           owner_seen_at?: string | null;
           pinned_at?: string | null;
           posted_at?: string | null;
+          quarantine_reason?: string | null;
+          quarantined_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
           repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
+          seed_source?: Json | null;
           shadow?: boolean;
           share_count?: number;
           style_summary?: string | null;
@@ -3289,11 +3298,14 @@ export type Database = {
           owner_seen_at?: string | null;
           pinned_at?: string | null;
           posted_at?: string | null;
+          quarantine_reason?: string | null;
+          quarantined_at?: string | null;
           recipe?: Json | null;
           recipe_id?: string | null;
           repost_count?: number;
           save_count?: number;
           search_tsv?: unknown;
+          seed_source?: Json | null;
           shadow?: boolean;
           share_count?: number;
           style_summary?: string | null;
@@ -3505,6 +3517,7 @@ export type Database = {
           banned_by: string | null;
           basic_subscription: boolean;
           basic_subscription_expires_at: string | null;
+          basic_subscription_period: string | null;
           basic_subscription_will_renew: boolean;
           bio: string | null;
           confirm_surprise_dream: boolean;
@@ -3526,6 +3539,7 @@ export type Database = {
           pro_mode_flux_model: string;
           pro_subscription: boolean;
           pro_subscription_expires_at: string | null;
+          pro_subscription_period: string | null;
           pro_subscription_will_renew: boolean;
           pro_trial_started_at: string | null;
           sparkle_balance: number;
@@ -3541,6 +3555,7 @@ export type Database = {
           banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
+          basic_subscription_period?: string | null;
           basic_subscription_will_renew?: boolean;
           bio?: string | null;
           confirm_surprise_dream?: boolean;
@@ -3562,6 +3577,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_subscription_period?: string | null;
           pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
@@ -3577,6 +3593,7 @@ export type Database = {
           banned_by?: string | null;
           basic_subscription?: boolean;
           basic_subscription_expires_at?: string | null;
+          basic_subscription_period?: string | null;
           basic_subscription_will_renew?: boolean;
           bio?: string | null;
           confirm_surprise_dream?: boolean;
@@ -3598,6 +3615,7 @@ export type Database = {
           pro_mode_flux_model?: string;
           pro_subscription?: boolean;
           pro_subscription_expires_at?: string | null;
+          pro_subscription_period?: string | null;
           pro_subscription_will_renew?: boolean;
           pro_trial_started_at?: string | null;
           sparkle_balance?: number;
@@ -3671,6 +3689,10 @@ export type Database = {
           upload_id: string;
           upload_image_url: string;
         }[];
+      };
+      admin_quarantine_upload: {
+        Args: { p_reason?: string; p_upload_id: string };
+        Returns: undefined;
       };
       admin_resolve_report: {
         Args: { p_report_id: string; p_status: string };
@@ -3911,6 +3933,14 @@ export type Database = {
           p_user_id: string;
         };
         Returns: Json;
+      };
+      enqueue_nightly_dreams: {
+        Args: { p_dry_run?: boolean };
+        Returns: {
+          r_dedup_key: string;
+          r_outcome: string;
+          r_user_id: string;
+        }[];
       };
       ensure_dream_generated_notification: {
         Args: { p_body: string; p_upload_id: string; p_user_id: string };
@@ -4249,11 +4279,14 @@ export type Database = {
           owner_seen_at: string | null;
           pinned_at: string | null;
           posted_at: string | null;
+          quarantine_reason: string | null;
+          quarantined_at: string | null;
           recipe: Json | null;
           recipe_id: string | null;
           repost_count: number;
           save_count: number;
           search_tsv: unknown;
+          seed_source: Json | null;
           shadow: boolean;
           share_count: number;
           style_summary: string | null;
