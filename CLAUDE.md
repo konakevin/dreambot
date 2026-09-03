@@ -309,7 +309,7 @@ public.uploads TO authenticated;` in the same migration, or the client read/upda
 - **Bots:** `BOT_SCENE_QUALITY_PLAYBOOK.md` (canonical brain), `BOTS.md`, `BOT_MODEL_TALLY.md`,
   `BOT_AXIS_REFACTOR_PLAN.md`, `BOT_PREFIX_NEED_TO_REVIEW_AND_FIX.md`.
 - **Engine + scaling:** `QUEUE_WORKERS_REFACTOR.md` (queue status of record + Fly scale runbook),
-  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
+  `NIGHTLY_DREAM_ENGINE.md`, `NIGHTLY_IMPRESS_PLAN.md` (always-impress backlog: quality gate, legendary dreams, holidays, weather, pets, taste, arcs — each handoff-ready), `NIGHTLY_SEED_POOL_QA.md`, `NIGHTLY_FUN_SCENARIOS_PLAN.md` (fun/fantasy
   scenario buckets + Option B location-fit actions — LIVE, playbook for adding/scaling/tuning),
   `V4_HARDENING_PLAN.md`.
 - **Services / money:** `SPARKLE_PAYMENTS_SETUP.md`, `PRO_SUBSCRIPTION_SETUP.md`,
