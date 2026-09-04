@@ -39,9 +39,21 @@ export function useMyDreams(filter: DreamsFilter = 'all') {
       // 'private' = unposted (not live on the feed); 'posted' = live on the feed.
       if (filter === 'private') query = query.eq('is_public', false);
       else if (filter === 'posted') query = query.eq('is_public', true);
-      const { data, error } = await query
-        .order('created_at', { ascending: false })
-        .range(offset, offset + PAGE_SIZE - 1);
+      // 'posted' must sort the same way the public profile album does
+      // (pinned_at DESC, posted_at DESC — see useUserPosts.ts /
+      // usePublicProfilePosts.ts) so a post's rank here matches its rank
+      // there; created_at is generation time, not publish time, and a
+      // dream made private then posted later should jump to the top of
+      // "Posted" the same way it jumps to the top of the public album
+      // (Kevin 2026-09-04). 'all' and 'private' keep created_at — most
+      // private rows have no posted_at to sort by.
+      query =
+        filter === 'posted'
+          ? query
+              .order('pinned_at', { ascending: false, nullsFirst: false })
+              .order('posted_at', { ascending: false, nullsFirst: false })
+          : query.order('created_at', { ascending: false });
+      const { data, error } = await query.range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const rows = castRows(data).map((row) => ({
         ...mapToDreamPost(row),

@@ -784,7 +784,7 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Dreams album: a slim right-aligned All / Posted / Private segmented
+      {/* Dreams album: a slim right-aligned All / Public / Private segmented
           filter. The other albums show no subheader — the icons speak for
           themselves. While MULTI-SELECTING, this row (the grid's own chrome,
           sitting directly on the grid) BECOMES the selection bar — count on
@@ -799,7 +799,7 @@ export default function ProfileScreen() {
           <View style={styles.segmented}>
             {(['all', 'posted', 'private'] as const).map((f) => {
               const active = dreamsFilter === f;
-              const label = f === 'all' ? 'All' : f === 'posted' ? 'Posted' : 'Private';
+              const label = f === 'all' ? 'All' : f === 'posted' ? 'Public' : 'Private';
               return (
                 <TouchableOpacity
                   key={f}
