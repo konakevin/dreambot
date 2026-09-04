@@ -1904,7 +1904,11 @@ Deno.serve(async (req) => {
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
           dualSceneKind = 'elegant'; // refined solo pose — NO playful/active props on holiday
-          dualScenePosePool = s.posePool ?? 'glamour'; // refined glamour poses, never peace-signs/gestures
+          // Kevin 2026-09-04: NO forced glamour pool on holiday solos — it produced
+          // person-first portraits (feather boa, "me in a scarf + pumpkins in the
+          // bokeh"). Same default as every other elegant solo scene (proved today:
+          // full-body, scene-integrated). A row can still opt into a pool.
+          dualScenePosePool = s.posePool ?? null;
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;
