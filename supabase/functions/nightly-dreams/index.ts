@@ -104,7 +104,7 @@ import { dispatchDualFaceSwap } from '../_shared/dualSwapDispatch.ts';
 import { classifyDualGenders } from '../_shared/vision.ts';
 import { hydrateCastSources } from '../_shared/castPhotoUrl.ts';
 import { orderDualSides, shouldFlipDualSide } from '../_shared/dualSideOrder.ts';
-import { genderSafeDualSwap } from '../_shared/dualSwapPipeline.ts';
+import { genderSafeDualSwap, identityThreshold } from '../_shared/dualSwapPipeline.ts';
 import {
   aHashFromDecoded,
   hammingDistance,
@@ -3844,8 +3844,28 @@ Output ONLY the prompt.`;
                       { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
                       queueJobId
                     );
-                    // Never adopt an unswapped base: null swappedUrl = attempt failed.
-                    tempUrl = r.swappedUrl ?? tempUrl;
+                    // A gate re-swap is a BARE dispatch — it must pass the same
+                    // identity bar as the main pipeline or it is a failed attempt.
+                    // 2026-09-04 (Kevin's hearted cozy_porch couple): the pipeline
+                    // had correctly degraded to a SOLO of self, the gate flagged
+                    // that solo 'broken', and this re-swap on the ORIGINAL couple
+                    // base shipped an unverified swap — a stranger as the wife.
+                    const dualThr = identityThreshold();
+                    const idL = r.identity ? r.identity.left : null;
+                    const idR = r.identity ? r.identity.right : null;
+                    const verified =
+                      !!r.swappedUrl &&
+                      (dualThr === null ||
+                        (idL !== null && idR !== null && idL >= dualThr && idR >= dualThr));
+                    if (verified) {
+                      tempUrl = r.swappedUrl as string;
+                      fallbackReasons.push(`quality_gate:reswap_identity:L${idL}/R${idR}`);
+                    } else {
+                      fallbackReasons.push(
+                        `quality_gate:reswap_rejected:${r.swappedUrl ? `L${idL}/R${idR}` : 'no_split'}`
+                      );
+                      break; // ship the pipeline's own verdict (firstUrl), never an unverified swap
+                    }
                   } else if (faceSwapSource) {
                     const candidate = await faceSwap(
                       faceSwapSource,

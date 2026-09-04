@@ -126,7 +126,7 @@ const IDENTITY_DEGRADE_FLOOR = 0.25;
  * face-swap mediums on production prompts (identity-calibration + identity-
  * stylized benches). typeof guard: this module also runs under jest.
  */
-function identityThreshold(): number | null {
+export function identityThreshold(): number | null {
   if (typeof Deno === 'undefined') return null;
   const raw = Deno.env.get('IDENTITY_MIN_SIM');
   if (!raw) return null;
