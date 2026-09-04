@@ -3688,6 +3688,18 @@ Output ONLY the prompt.`;
                 }
                 try {
                   const needsRerender = verdict.flags.includes('profile');
+                  if (needsRerender && faceSwapSources && faceSwapSources.length === 2) {
+                    // DUAL + profile: NO retry (hotfix 2026-09-04). The retry
+                    // path below runs a bare dispatch with none of the main
+                    // path's verification (genderSafeDualSwap: split check,
+                    // identity gate, gender-safe degrade) — a re-rendered couple
+                    // whose heads overlapped came back with swappedUrl null and
+                    // the unswapped base SHIPPED (Kevin's hearted canyon render:
+                    // "the face isn't my wife"). Until the retry reuses the
+                    // verified pipeline, a verified profile swap beats strangers.
+                    fallbackReasons.push('quality_gate:profile_dual_noretry');
+                    break;
+                  }
                   if (needsRerender) {
                     const rr = await generateImage(
                       'flux-dev',
@@ -3720,9 +3732,10 @@ Output ONLY the prompt.`;
                       { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
                       queueJobId
                     );
-                    tempUrl = r.swappedUrl ?? (needsRerender ? gateBase : tempUrl);
+                    // Never adopt an unswapped base: null swappedUrl = attempt failed.
+                    tempUrl = r.swappedUrl ?? tempUrl;
                   } else if (faceSwapSource) {
-                    tempUrl = await faceSwap(
+                    const candidate = await faceSwap(
                       faceSwapSource,
                       gateBase,
                       REPLICATE_TOKEN,
@@ -3732,6 +3745,22 @@ Output ONLY the prompt.`;
                         skipPrimary: !needsRerender,
                       }
                     );
+                    if (needsRerender) {
+                      // A fresh render + swap skipped the main path's solo
+                      // identity gate — apply it here; a weak likeness is a
+                      // failed attempt, never a shipped one.
+                      const soloThr = soloIdentityThreshold();
+                      const v =
+                        soloThr !== null
+                          ? await verifySoloIdentity(candidate, faceSwapSource)
+                          : null;
+                      if (v && soloThr !== null && v.sim < soloThr) {
+                        fallbackReasons.push(`quality_gate:rerender_identity_reject:${v.sim}`);
+                        continue;
+                      }
+                      if (v) fallbackReasons.push(`quality_gate:rerender_identity:${v.sim}`);
+                    }
+                    tempUrl = candidate;
                   }
                 } catch (e) {
                   fallbackReasons.push(
