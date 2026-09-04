@@ -1609,6 +1609,7 @@ export type Database = {
           gift_max_per_send: number;
           gift_message_max_len: number;
           gifting_enabled: boolean;
+          holiday_postcard_scope: string;
           holidays_enabled: boolean;
           id: number;
           identity_degrade_floor: number;
@@ -1690,6 +1691,7 @@ export type Database = {
           gift_max_per_send?: number;
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
+          holiday_postcard_scope?: string;
           holidays_enabled?: boolean;
           id?: number;
           identity_degrade_floor?: number;
@@ -1771,6 +1773,7 @@ export type Database = {
           gift_max_per_send?: number;
           gift_message_max_len?: number;
           gifting_enabled?: boolean;
+          holiday_postcard_scope?: string;
           holidays_enabled?: boolean;
           id?: number;
           identity_degrade_floor?: number;
@@ -2023,6 +2026,62 @@ export type Database = {
           },
         ];
       };
+      holiday_hero_prompts: {
+        Row: {
+          attire: string;
+          axes: Json;
+          created_at: string;
+          disabled: boolean;
+          holiday: string;
+          id: string;
+          medium_ban: string | null;
+          medium_key: string | null;
+          notes: string | null;
+          pose_pool: string | null;
+          register: string;
+          scene: string;
+          surface: string;
+        };
+        Insert: {
+          attire: string;
+          axes?: Json;
+          created_at?: string;
+          disabled?: boolean;
+          holiday: string;
+          id?: string;
+          medium_ban?: string | null;
+          medium_key?: string | null;
+          notes?: string | null;
+          pose_pool?: string | null;
+          register?: string;
+          scene: string;
+          surface: string;
+        };
+        Update: {
+          attire?: string;
+          axes?: Json;
+          created_at?: string;
+          disabled?: boolean;
+          holiday?: string;
+          id?: string;
+          medium_ban?: string | null;
+          medium_key?: string | null;
+          notes?: string | null;
+          pose_pool?: string | null;
+          register?: string;
+          scene?: string;
+          surface?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'holiday_hero_prompts_holiday_fkey';
+            columns: ['holiday'];
+            isOneToOne: false;
+            referencedRelation: 'holidays';
+            referencedColumns: ['key'];
+          },
+        ];
+      };
       holiday_scenes: {
         Row: {
           created_at: string;
@@ -2078,6 +2137,11 @@ export type Database = {
           peak_pct: number;
           peak_rule: string;
           peak_weekday: number | null;
+          postcard_anchor: string;
+          postcard_margin_pct: number;
+          postcard_overlay_url: string | null;
+          postcard_scrim: boolean;
+          postcard_width_pct: number;
           ramp_start_pct: number;
           ramp_style: string;
           sort_order: number;
@@ -2100,6 +2164,11 @@ export type Database = {
           peak_pct?: number;
           peak_rule?: string;
           peak_weekday?: number | null;
+          postcard_anchor?: string;
+          postcard_margin_pct?: number;
+          postcard_overlay_url?: string | null;
+          postcard_scrim?: boolean;
+          postcard_width_pct?: number;
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;
@@ -2122,6 +2191,11 @@ export type Database = {
           peak_pct?: number;
           peak_rule?: string;
           peak_weekday?: number | null;
+          postcard_anchor?: string;
+          postcard_margin_pct?: number;
+          postcard_overlay_url?: string | null;
+          postcard_scrim?: boolean;
+          postcard_width_pct?: number;
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;

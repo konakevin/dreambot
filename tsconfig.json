@@ -20,6 +20,8 @@
     "__tests__/lib/dreamAlgorithm.test.ts",
     "__tests__/lib/sceneTypeRoll.test.ts",
     "__tests__/lib/holidayWindow.test.ts",
+    "__tests__/lib/holidayHero.test.ts",
+    "__tests__/lib/postcardComposite.test.ts",
     "__tests__/lib/nightlyComposition.test.ts",
     "__tests__/lib/modelPicker.test.ts",
     "__tests__/lib/promptCompiler.test.ts",

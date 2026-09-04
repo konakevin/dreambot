@@ -72,12 +72,13 @@ describe('lintHolidayRow — §6.2 scene rules', () => {
   });
 });
 
-describe('lintHolidayRow — §6.7 medium must be pinned', () => {
-  it('errors when neither medium_key nor medium_ban is set', () => {
+describe('lintHolidayRow — §6.7 RETIRED: medium pin is optional (Kevin 2026-09-04)', () => {
+  it('an unpinned row is clean — holiday rolls the same nightly mediums as every pool', () => {
     const { errors } = lintHolidayRow({ ...GOOD_SINGLE, medium_key: undefined });
-    expect(errors.some((e: string) => /medium not pinned/.test(e))).toBe(true);
+    expect(errors.some((e: string) => /medium not pinned/.test(e))).toBe(false);
+    expect(errors).toEqual([]);
   });
-  it('medium_ban alone satisfies the rule', () => {
+  it('a medium_ban alone is still accepted (QA-proven broken combos only)', () => {
     const { errors } = lintHolidayRow({
       ...GOOD_SINGLE,
       medium_key: undefined,

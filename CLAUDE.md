@@ -186,10 +186,10 @@ for the public feed + serves deep-link share targets.**
   target is staged in the same commit. (2026-06-18: committed `settings/index.tsx`'s `resetSparkleIntro`
   import while `SparkleIntroSheet.tsx` stayed untracked → broke `main` silently.)
 - **Deploy edge functions.** `supabase functions deploy <name> --no-verify-jwt` — ALWAYS `--no-verify-jwt`,
-  deploy immediately after editing. Active (16): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
+  deploy immediately after editing. Active (17): `generate-dream`, `nightly-dreams`, `dream-queue-worker`,
   `enqueue-dream`, `first-dream-render`, `face-swap-dual`, `restyle-photo`, `describe-photo`,
   `classify-photo`, `extract-style`, `audit-cast-photos`, `revenuecat-webhook`, `send-push`,
-  `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`.
+  `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`, `holiday-postcard`.
 - **Migrations** — apply with `node scripts/apply-migration.mjs <NNN>` (posts the file to the Management
   API SQL endpoint = the dashboard SQL editor: all-or-nothing, ledger-guarded against double-apply;
   `--dry-run` first for destructive DDL; NEVER `supabase db push`). Repo files stay the source of truth.

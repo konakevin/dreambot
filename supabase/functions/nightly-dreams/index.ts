@@ -37,6 +37,16 @@ import {
   type ActiveHoliday,
 } from '../_shared/holidayWindow.ts';
 import {
+  fillHeroTemplate,
+  heroSeed,
+  heroSurface,
+  pickHeroRegister,
+  pickHeroRow,
+  type HolidayHeroRow,
+} from '../_shared/holidayHero.ts';
+import { loadHolidayHeroes } from '../_shared/pools/holidayHeroLoader.ts';
+import { dispatchHolidayPostcard } from '../_shared/holidayPostcardDispatch.ts';
+import {
   loadHolidayDual,
   loadHolidaySingle,
   holidaySingleCandidates,
@@ -396,6 +406,15 @@ Deno.serve(async (req) => {
   // one archetype in isolation (vampire / witch / corn_maze / …). Null = mixed.
   const force_holiday_sub_theme =
     typeof body.force_holiday_sub_theme === 'string' ? body.force_holiday_sub_theme : null;
+  // Day-of HERO QA (mig 457): render the hero off-season. `force_day_of` = holiday key;
+  // `force_hero_register` = 'cozy' | 'eerie' (else the profile slider decides);
+  // `force_hero_seed` varies the axes so a QA matrix can walk the variants.
+  const force_day_of = typeof body.force_day_of === 'string' ? body.force_day_of : null;
+  const force_hero_register =
+    body.force_hero_register === 'cozy' || body.force_hero_register === 'eerie'
+      ? body.force_hero_register
+      : null;
+  const force_hero_seed = typeof body.force_hero_seed === 'string' ? body.force_hero_seed : null;
   // First-dream cascade flag — set by RevealStep.tsx. When true:
   //   • face-swap exhaustion throws { error: 'face_swap_failed',
   //     swap_kind: 'dual' | 'single' } at 422 instead of soft-falling to the
@@ -459,6 +478,17 @@ Deno.serve(async (req) => {
   // The holiday season this dream belongs to (Path 1 cast OR Path 2 scene-only),
   // or null. Declared at handler scope so it reaches the uploads insert (§5 marker).
   let holidayCategory: string | null = null;
+  // Holiday seasons active for this user's LOCAL date. Hoisted to handler scope and
+  // computed ABOVE the chaos pre-roll (2026-09-04) so the day-of HERO can force a
+  // cast render; the scenario roll + Path 2 read it later.
+  let activeHolidays: ActiveHoliday[] = [];
+  // Day-of HERO (HOLIDAY_DREAMS_PLAN.md §13, mig 457): the holiday peaking TODAY (or
+  // force_day_of), its authored recipes, the user's local year (hero seed), and whether
+  // this render became a hero (reaches the response + the postcard step).
+  let dayOfHoliday: ActiveHoliday | null = null;
+  let heroRows: HolidayHeroRow[] = [];
+  let heroApplied = false;
+  let localYear = new Date().getUTCFullYear();
   // Durable seed-source provenance (migration 450). Declared at handler scope so it
   // reaches BOTH the rolled_axes logAxes AND the uploads insert. Assigned once the
   // scene/pool is resolved (before the composition branch).
@@ -613,6 +643,76 @@ Deno.serve(async (req) => {
     const hasSelf = describedCastForRoll.some((m: DreamCastMember) => m.role === 'self');
     const hasPlusOne = describedCastForRoll.some((m: DreamCastMember) => m.role === 'plus_one');
 
+    // ── Holiday Dreams (HOLIDAY_DREAMS_PLAN.md) — the season(s) active for THIS user's
+    // LOCAL date (H2), gated by the master switch + per-user opt-out. Several can be
+    // active at once (Fall × Halloween × Thanksgiving overlap by design); the scenario
+    // roll sums their pcts and picks one weighted by pct. `holidayCategory` is set on a
+    // holiday hit for the uploads marker. Computed here, above the chaos pre-roll, so
+    // the day-of HERO below can force a cast render.
+    try {
+      const forcedKey = force_day_of ?? force_holiday_scene;
+      if (forcedKey) {
+        // QA: force one season at full strength, ignoring date + is_active + opt-out.
+        const { data: fr } = await supabase
+          .from('holidays')
+          .select('*')
+          .eq('key', forcedKey)
+          .single();
+        if (fr) {
+          const c = mapHolidayCatalogRow(fr as Record<string, unknown>);
+          activeHolidays = [
+            {
+              key: c.key,
+              displayName: c.displayName,
+              emoji: c.emoji,
+              holidayPct: 100,
+              daysUntilPeak: 0,
+            },
+          ];
+        }
+      } else {
+        const holCfg = await fetchEngineConfig(supabase);
+        if (holCfg.holidaysEnabled) {
+          const { data: tzRow } = await supabase
+            .from('users')
+            .select('timezone')
+            .eq('id', userId)
+            .single();
+          const userTz = (tzRow as { timezone?: string | null } | null)?.timezone ?? null;
+          const localDate = localDateInTz(new Date(), userTz);
+          localYear = localDate.year;
+          const { data: catRows } = await supabase
+            .from('holidays')
+            .select('*')
+            .eq('is_active', true);
+          if (catRows && catRows.length) {
+            const catalog = catRows.map((r) => mapHolidayCatalogRow(r as Record<string, unknown>));
+            const optouts = new Set(holidayOptouts);
+            activeHolidays = resolveActiveHolidays(localDate, catalog).filter(
+              (h) => !optouts.has(h.key)
+            );
+          }
+        }
+      }
+    } catch (_holErr) {
+      activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
+    }
+    // Day-of HERO (§13, mig 457): the holiday whose peak is TODAY. Never via the
+    // archetype-QA flag force_holiday_scene (it fakes daysUntilPeak=0 too). The hero
+    // recipes load here; the pre-roll + scenario block consume them. No recipes
+    // authored → the everyday holiday pool still applies (never a broken render).
+    try {
+      dayOfHoliday = force_day_of
+        ? (activeHolidays.find((h) => h.key === force_day_of) ?? null)
+        : force_holiday_scene
+          ? null
+          : (activeHolidays.find((h) => h.daysUntilPeak === 0) ?? null);
+      if (dayOfHoliday)
+        heroRows = await loadHolidayHeroes(supabase, dayOfHoliday.key, Boolean(force_day_of));
+    } catch (_heroErr) {
+      heroRows = [];
+    }
+
     let preRolledType: NightlyDreamType | null = null;
     let preRolledMediumToken: string;
     let preRolledCastRole: string | null = null;
@@ -651,6 +751,27 @@ Deno.serve(async (req) => {
       preRolledMediumToken = inputs.mediumToken;
       preRolledCastRole = inputs.forceCastRole;
       preRolledComposition = inputs.forceComposition;
+    }
+    // Day-of HERO: force a CAST render — the couple if they have a +1, else themselves —
+    // on a face-swap medium (Kevin 2026-09-04). Explicit QA forces (force_medium /
+    // force_cast_role) still win; a user with no self photo keeps their roll and gets
+    // the scene-only hero via Path 2 instead.
+    if (dayOfHoliday && heroRows.length > 0 && hasSelf && !force_medium) {
+      // A QA-supplied force_cast_role picks WHO is cast; the hero still pins the
+      // face-swap medium + character composition (the cascade could otherwise roll a
+      // Dream-Art / embodied type and skip the hero block entirely).
+      const wanted = force_cast_role ?? (hasPlusOne ? 'dual' : 'self');
+      preRolledType =
+        wanted === 'dual'
+          ? 'face_swap_dual'
+          : wanted === 'plus_one'
+            ? 'face_swap_plus_one'
+            : 'face_swap_self';
+      const inputs = mapDreamTypeToInputs(preRolledType, chaosTier, chaosCfg);
+      preRolledMediumToken = inputs.mediumToken;
+      preRolledCastRole = inputs.forceCastRole;
+      preRolledComposition = inputs.forceComposition;
+      fallbackReasons.push(`holiday_hero_preroll:${dayOfHoliday.key}:${preRolledType}`);
     }
     // A forced scenario bucket must render as a CHARACTER composition — a rolled
     // pure_scene would skip the bucket block downstream (gated on
@@ -1512,53 +1633,8 @@ Deno.serve(async (req) => {
     // Several can be active at once (Fall + Halloween overlap in early Oct); the
     // roll below sums their pcts and picks one weighted by pct. `holidayCategory`
     // is set on a holiday hit for the uploads marker + bot message.
-    let activeHolidays: ActiveHoliday[] = [];
-    try {
-      if (force_holiday_scene) {
-        // QA: force one season at full strength, ignoring date + is_active + opt-out.
-        const { data: fr } = await supabase
-          .from('holidays')
-          .select('*')
-          .eq('key', force_holiday_scene)
-          .single();
-        if (fr) {
-          const c = mapHolidayCatalogRow(fr as Record<string, unknown>);
-          activeHolidays = [
-            {
-              key: c.key,
-              displayName: c.displayName,
-              emoji: c.emoji,
-              holidayPct: 100,
-              daysUntilPeak: 0,
-            },
-          ];
-        }
-      } else {
-        const holCfg = await fetchEngineConfig(supabase);
-        if (holCfg.holidaysEnabled) {
-          const { data: tzRow } = await supabase
-            .from('users')
-            .select('timezone')
-            .eq('id', userId)
-            .single();
-          const userTz = (tzRow as { timezone?: string | null } | null)?.timezone ?? null;
-          const localDate = localDateInTz(new Date(), userTz);
-          const { data: catRows } = await supabase
-            .from('holidays')
-            .select('*')
-            .eq('is_active', true);
-          if (catRows && catRows.length) {
-            const catalog = catRows.map((r) => mapHolidayCatalogRow(r as Record<string, unknown>));
-            const optouts = new Set(holidayOptouts);
-            activeHolidays = resolveActiveHolidays(localDate, catalog).filter(
-              (h) => !optouts.has(h.key)
-            );
-          }
-        }
-      }
-    } catch (_holErr) {
-      activeHolidays = []; // fail to a normal nightly, never a broken render (N2)
-    }
+    // activeHolidays was computed ABOVE the chaos pre-roll (hoisted 2026-09-04 for the
+    // day-of HERO); nothing to do here.
     // Holiday Path 2 (HOLIDAY_DREAMS_PLAN.md §3.4): a PURE-SCENE nightly can become
     // a scene-only holiday (no-cast users + the sprinkle). Roll among the active
     // seasons' holiday_scenes pools (N2: only non-empty ones contribute); on a hit
@@ -1574,9 +1650,14 @@ Deno.serve(async (req) => {
           }))
         );
         const usable = holScenePools.filter((x) => x.rows.length > 0).map((x) => x.h);
-        const pct = combineHolidayPct(usable);
+        // Day-of (§13): the scene-only hero — a no-cast user's holiday dream is
+        // guaranteed (100%) and drawn from the day-of holiday itself.
+        const dayOfKey = dayOfHoliday ? dayOfHoliday.key : null;
+        const dayOfUsable = dayOfKey ? (usable.find((h) => h.key === dayOfKey) ?? null) : null;
+        const pct = dayOfUsable ? 100 : combineHolidayPct(usable);
         if (usable.length > 0 && Math.random() * 100 < pct) {
-          const chosen = pickWeightedHoliday(usable, Math.random());
+          const chosen = dayOfUsable ?? pickWeightedHoliday(usable, Math.random());
+          if (dayOfUsable) heroApplied = true;
           holidayScene = pickHoliday(holScenePools.find((x) => x.h.key === chosen.key)!.rows);
           holidayCategory = chosen.key;
           fallbackReasons.push(`holiday_scene:${chosen.key}`);
@@ -1630,6 +1711,33 @@ Deno.serve(async (req) => {
             dualSceneKind = (s.pool as string) === 'elegant' ? 'elegant' : 'goofy';
           }
           fallbackReasons.push(`forced_scene_category:${force_scene_category}:${s.pool}`);
+        }
+      }
+      // Day-of HERO (§13, mig 457): ONE honed recipe per surface × register, its axes
+      // filled per user by hash. Bypasses the roll + shuffle-bag — it's THE dream of
+      // the day. Register = the profile's Cute↔Terrifying slider (or a QA force).
+      if (!dualSpecialScene && dayOfHoliday && (isDualFaceSwap || isSingleHumanFaceSwap)) {
+        const surface = heroSurface(isDualFaceSwap, castGender ?? null);
+        const register =
+          force_hero_register ?? pickHeroRegister(nightlyProfile.moods?.cute_terrifying);
+        const heroRow = pickHeroRow(heroRows, surface, register);
+        if (heroRow) {
+          const seed = force_hero_seed ?? heroSeed(userId, dayOfHoliday.key, localYear);
+          const filled = fillHeroTemplate(heroRow, seed);
+          dualSpecialScene = filled.scene;
+          dualSpecialWardrobe = filled.attire;
+          dualSceneKind = 'elegant'; // refined poses: couples → 'partner', solos → glamour
+          dualScenePosePool = heroRow.posePool ?? (isDualFaceSwap ? null : 'glamour');
+          dualSceneMediumKey = heroRow.mediumKey ?? null;
+          dualSceneMediumBan = heroRow.mediumBan ?? null;
+          holidayCategory = dayOfHoliday.key;
+          heroApplied = true;
+          const picks = Object.entries(filled.picks)
+            .map(([k, v]) => `${k}=${v}`)
+            .join('|');
+          fallbackReasons.push(
+            `holiday_hero:${dayOfHoliday.key}:${surface}:${heroRow.register}:${picks}`
+          );
         }
       }
       if (dualSpecialScene) {
@@ -3829,6 +3937,23 @@ Output ONLY the prompt.`;
     imageUrl = persistedUrl;
     lap('persist-done');
 
+    // Holiday POSTCARD (mig 459): decorative "Happy Halloween" lettering composited onto
+    // the persisted render by the SEPARATE holiday-postcard fn (never pixel work in this
+    // isolate). Scope = engine_config.holiday_postcard_scope: day-of heroes by default,
+    // or every in-season holiday dream. Best-effort: any failure keeps the clean image.
+    if (holidayCategory) {
+      try {
+        const pcScope = (await fetchEngineConfig(supabase)).holidayPostcardScope;
+        if (pcScope === 'window' || (pcScope === 'day_of' && heroApplied)) {
+          const pc = await dispatchHolidayPostcard(imageUrl, holidayCategory);
+          fallbackReasons.push(pc.reason);
+          lap('postcard');
+        }
+      } catch (_pcErr) {
+        fallbackReasons.push('postcard:fail:threw');
+      }
+    }
+
     // QA dry-run (Dream Generator Test screen) — skip the uploads insert,
     // budget upsert, recipe build, distillation and ai_generation_log so test
     // runs don't pollute the user's album or burn budget. Returns the rendered
@@ -3967,9 +4092,11 @@ Output ONLY the prompt.`;
     // 3 days had upload_id null, so forensics couldn't join log ↔ upload. It's
     // one tiny UPDATE (~20ms); awaiting it is the fix. Still catches + warns.
     if (uploadId) {
+      // Also re-stamp fallback_reasons: the log row was inserted in parallel with
+      // persist, BEFORE the holiday postcard step pushed its outcome (mig 459).
       await supabase
         .from('ai_generation_log')
-        .update({ upload_id: uploadId })
+        .update({ upload_id: uploadId, fallback_reasons: fallbackReasons })
         .eq('id', genLogId)
         .then(
           () => {},
@@ -4023,6 +4150,7 @@ Output ONLY the prompt.`;
         image_url: imageUrl,
         upload_id: uploadId ?? null,
         prompt_used: finalPrompt,
+        hero: heroApplied,
         resolved_medium: resolvedMediumKey ?? null,
         resolved_vibe: resolvedVibeKey ?? null,
       }),

@@ -191,6 +191,30 @@ const ARCHETYPES = {
       'elegant gothic attire, velvet and lace',
       'an overgrown moonlit gothic conservatory, black roses, hanging lanterns, cracked glass panes, tangled ivy, jewel-toned light, a mossy stone fountain'
     ),
+    // ── Kevin's 2026-09-04 brainstorm (movie-VIBE inspired, IP-free; Halloween is the HERO) ──
+    witch_sisters_cottage: A(null, null, 'flowing velvet witch robes in emerald, plum and rust with corseted bodices, wide-brim pointed hats tilted back off the face, tarnished silver charms', 'a candlelit crooked cottage crammed with spell books, a bubbling green cauldron, a black cat on the mantel, three broomsticks by the door, dripping candles on every surface, dried herbs and a glowing spellbook, jack-o-lanterns in every window'),
+    salem_town_night: A(null, null, 'cozy wool coats, plaid scarves, knit beanies, leather boots', 'a New England town square on All Hallows Eve, a white church steeple, cobblestones lined with hundreds of glowing jack-o-lanterns, hay bales, a roaring bonfire, candy stalls under string lights, fiery maples, a huge harvest moon'),
+    black_cat_alley: A(null, null, 'a long black wool coat, a striped scarf, fingerless gloves', 'a lantern-lit cobblestone alley at night with dozens of black cats perched on ledges, steps and barrels, glowing green cat-eyes in every shadow, carved pumpkins on the stoops, fog curling low'),
+    afterlife_waiting_room: A(null, null, 'a black-and-white striped suit with a black tie, or a black lace dress with a wide-brim hat tilted back', 'a surreal netherworld waiting room with mint-green walls, a black-and-white striped floor, take-a-number ticket dispensers, flickering fluorescent tubes, potted dead plants, striped drapes, a sandworm desert glimpsed through the window'),
+    striped_suit_haunting: A(null, null, 'a black-and-white striped suit, or a black lace gothic dress with fishnet gloves', 'a dusty attic of a haunted house with a sprawling miniature model town on a table, black-and-white striped drapes, floating candlesticks, a striped desert glowing beyond the window, cobwebs and a levitating chair'),
+    halloween_town_square: A(null, null, 'a pinstriped patchwork suit, or a rag-doll patchwork dress with mismatched stitching', 'a whimsical crooked gothic town square, a spiral hill curling under an enormous full moon, pumpkin-headed scarecrows, a fountain of glowing green water, crooked spires, singing jack-o-lanterns lining the walls, bats across the sky'),
+    pumpkin_king_patch: A(null, null, 'a corduroy jacket, a knit scarf, a wool blanket over the shoulders', 'a vast night pumpkin patch under a giant amber moon, a single lantern on a plaid blanket, rows of pumpkins fading into mist, one colossal pumpkin looming at the far end, fireflies, a weathered fence'),
+    suburban_halloween_chaos: A(null, null, 'a puffer vest over plaid flannel, a knit beanie, sneakers', 'a suburban cul-de-sac on Halloween night, toilet paper streaming from the trees, an egged mailbox, a bicycle with a basket of candy, inflatable ghosts, foam tombstones, glowing porch pumpkins on every house, porch lights blazing'),
+    haunted_house_attraction: A(null, null, 'a denim jacket, a graphic tee, a canvas bag of candy', 'the entrance of a suburban haunted-house attraction at night, strobe lights flashing through fog, a ticket booth draped in cobwebs, animatronic ghouls in the doorway, a hearse parked on the lawn, orange and purple floodlights'),
+    corn_maze_torchlight: A(null, null, 'flannel, a chunky knit scarf, a denim jacket, a slouchy beanie', 'a night corn maze lit by torches, towering dry cornstalks, scarecrows on posts, a hay-bale tower, lanterns marking the path, a rising harvest moon, mist between the rows'),
+    friendly_ghost_manor: A(null, null, 'a cozy cardigan and jeans, or a soft plaid dress with a cardigan', 'a grand haunted manor foyer with playful translucent ghosts drifting up the staircase, floating candlesticks, a swaying chandelier, sheet-ghost shapes peeking from doorways, dusty gilt portraits, moonlight through tall windows'),
+    macabre_family_mansion: A(null, null, 'a black pinstripe suit with a red boutonniere, or a floor-length black velvet gown with sheer sleeves', 'a gothic mansion foyer in black velvet and dark wood, a carnivorous plant in a brass pot, a grand staircase, candelabra dripping wax, a suit of armor, cobwebbed chandeliers, a raven on the banister'),
+    graveyard_picnic: A(null, null, 'a black velvet blazer over a crisp shirt, or a black lace midi dress with a cardigan', 'a moonlit graveyard picnic with a checkered blanket spread between mossy tombstones, a candelabra on a crypt, a wicker basket and wine, ankle-high fog, a raven on a headstone, jack-o-lanterns on the graves'),
+    witchy_victorian_house: A(null, null, 'a long flowing bohemian dress with a shawl, or a linen shirt with a wool vest', 'a Victorian witch house kitchen with herbs hanging from the beams, a spellbook open on the counter, midnight cocktails on a copper tray, a moonlit conservatory of belladonna and nightshade, candles in every window'),
+    undead_wedding: A(null, null, 'a tattered ivory wedding gown with a crown of dead roses, and a faded black tailcoat with a wilted boutonniere', 'a blue-lit crypt chapel wedding with a skeletal band on the altar steps, black roses down the aisle, a thousand candles, cobwebbed pews, a moon through a broken rose window'),
+    headless_hollow_bridge: A(null, null, 'a long wool riding coat, a waistcoat, tall boots', 'an autumn covered bridge in thick fog, a jack-o-lantern glowing on the railing, a distant headless rider silhouette on the far bank, twisted trees, a blood-orange moon, fallen leaves on the planks'),
+    haunted_amusement_park: A(null, null, 'a turtleneck and corduroy, an ascot, a groovy seventies jacket', 'an abandoned carnival at night with a dead Ferris wheel, a funhouse of cracked mirrors, a sheet-ghost fleeing between booths, a flower-painted van parked by the gate, flashlight beams in fog, popcorn stands glowing'),
+    skeleton_dance_hall: A(null, null, 'a vintage tuxedo with tails, or a flapper-style fringe dress', 'a grand dance hall full of dancing skeletons, a bone xylophone band on stage, jack-o-lantern stage lights, a mirrored ball, cobwebbed balconies, purple and orange spotlights'),
+    pumpkin_spice_cafe: A(null, null, 'an oversized knit sweater, a scarf, a beanie', 'a cozy Halloween cafe with pumpkin displays on every shelf, spider-web latte art on the counter, black-cat cookies in the case, string lights, a wreath of autumn leaves, fogged windows, a glowing pumpkin in the doorway'),
+    jack_o_lantern_overload: A(null, null, 'a cozy flannel, a puffer vest, a knit scarf', 'a suburban front yard buried under hundreds of glowing carved jack-o-lanterns, pumpkins stacked up the porch steps and along the roofline, on every windowsill and fence post, a pumpkin-filled wheelbarrow, orange glow everywhere'),
+    candy_store_frenzy: A(null, null, 'a colorful cardigan over a striped tee, or a polka-dot dress', 'a Halloween candy shop with floor-to-ceiling jars of candy, a giant candy bowl on the counter, candy-corn garlands, glowing pumpkins in the window, string lights, a gumball machine'),
+    werewolf_moon_forest: A(null, null, 'a torn plaid shirt with rolled sleeves, jeans, hiking boots', 'a moonlit pine forest under a silver full moon, howling wolf silhouettes on a distant ridge, fog on the forest floor, twisted branches, a lantern-lit trail'),
+    monster_garage_band: A(null, null, 'a leather jacket with band patches, a striped tee, ripped jeans', 'a suburban garage band rehearsal with a mummy on drums, a swamp creature on bass, a witch on keys, amps stacked high, a jack-o-lantern drum kit, string lights, cobwebbed rafters'),
   },
   fall: {
     corn_maze: A(
@@ -250,7 +274,7 @@ function castPrompt(holiday, arch, def, n, dual) {
     : '';
   const punch =
     holiday === 'halloween'
-      ? 'DRAMATIC + UNMISTAKABLY HALLOWEEN — glowing jack-o-lanterns, a huge moon, candlelight, fog, rich crimson/violet/emerald, cinematic wow'
+      ? 'DRAMATIC + UNMISTAKABLY HALLOWEEN, and HALLOWEEN IS THE HERO of the frame (Kevin 2026-09-04): ABUNDANCE — dozens or hundreds of glowing jack-o-lanterns, decorations on every surface, a huge moon, candlelight, fog, rich crimson/violet/emerald, cinematic wow; NEVER a plain place with a hint of Halloween'
       : 'MAGICAL SPOOKY-SEASON, not a stock photo — carved pumpkins, warm string lights, a harvest moon, golden-hour glow, dreamy festive wonder';
   return `Generate ${n} DISTINCT ${holiday.toUpperCase()} "${arch}" ${dual ? 'COUPLE' : 'SOLO'} scenarios for a dreamy nightly face-swap photo app. Every entry is this ONE archetype — vary the pose-free SETTING + details, not the archetype.
 
@@ -258,7 +282,7 @@ ARCHETYPE: ${arch}. Costume inspiration: ${def.costume}. Setting family: ${def.s
 
 Output ONLY a JSON array of ${n} objects: {"scene":"...","attire":"..."}
 - attire: 6-16 words, the costume as CLOTHING ONLY — NEVER a mask, hood-over-face, face paint, fangs, prosthetic, veil, or sunglasses (the swap needs a clear frontal face).${pair}
-- scene: 12-26 words, PURE ENVIRONMENT (WHERE they are + atmosphere). NO people/pose/camera/face/eye/pronoun words. Make every setting ${punch}. Pack the words with iconic detail.
+- scene: 14-26 words — HARD MAXIMUM 28 words (longer entries are discarded) — PURE ENVIRONMENT (WHERE they are + atmosphere), dense concrete nouns, no filler adjectives. NO people/pose/camera/face/eye/pronoun words — for carved pumpkins say "carved grins" or "glowing cutouts", never "faces"/"eyes" (the linter drops the row). Make every setting ${punch}. Pack the words with iconic detail.
 - No children/minors. Tasteful. Vary across all ${n}.
 Output ONLY the JSON array.`;
 }
@@ -295,21 +319,31 @@ async function sonnetRows(prompt) {
 }
 
 async function seed(holiday, arch, def, table, extra, prompt) {
-  const raw = (await sonnetRows(prompt)).filter((o) => o && o.scene);
+  // Top-up loop (2026-09-04): lint-dropped rows are REPLACED (up to 3 Sonnet
+  // rounds) so a pool lands at N clean rows instead of N-minus-drops; near-dupes
+  // (normalized scene) across rounds are skipped.
   const rows = [];
+  const seen = new Set();
   let dropped = 0;
-  raw.forEach((o, i) => {
-    const row = { sub_theme: arch, scene: o.scene, ...extra };
-    if (o.attire) row.attire = o.attire;
-    const { errors, warnings } = lintHolidayRow({ ...row, table });
-    warnings.forEach((w) => console.warn(`   ⚠ ${holiday}/${arch}/${table}[${i}]: ${w}`));
-    if (errors.length) {
-      dropped++;
-      console.warn(`   ✖ drop ${holiday}/${arch}[${i}]: ${errors[0]}`);
-      return;
-    }
-    rows.push(row);
-  });
+  for (let round = 0; round < 3 && rows.length < N; round++) {
+    const raw = (await sonnetRows(prompt)).filter((o) => o && o.scene);
+    raw.forEach((o, i) => {
+      const row = { sub_theme: arch, scene: o.scene, ...extra };
+      if (o.attire) row.attire = o.attire;
+      const { errors, warnings } = lintHolidayRow({ ...row, table });
+      warnings.forEach((w) => console.warn(`   ⚠ ${holiday}/${arch}/${table}[${i}]: ${w}`));
+      if (errors.length) {
+        dropped++;
+        console.warn(`   ✖ drop ${holiday}/${arch}[${i}]: ${errors[0]}`);
+        return;
+      }
+      const key = String(o.scene).toLowerCase().replace(/[^a-z0-9 ]/g, '').trim().slice(0, 60);
+      if (seen.has(key)) return;
+      seen.add(key);
+      if (rows.length < N) rows.push(row);
+    });
+    if (round > 0) console.log(`   ↻ top-up round ${round + 1}: ${rows.length}/${N} clean`);
+  }
   console.log(`  ${holiday}/${arch} → ${table}: ${rows.length} clean, ${dropped} dropped`);
   if (rows.length && !DRY) {
     const { error } = await sb.from(table).insert(rows);

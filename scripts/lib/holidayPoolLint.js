@@ -67,10 +67,9 @@ function lintHolidayRow(row) {
   const isSceneOnly = table === 'holiday_scenes';
   const isDual = table === 'dual_scenarios';
 
-  // §6.7 — every holiday row pins its medium register (cast AND scene-only).
-  if (!row.medium_key && !row.medium_ban) {
-    errors.push('medium not pinned (set medium_key or medium_ban) — §6.7');
-  }
+  // §6.7 RETIRED (Kevin 2026-09-04): holiday rows roll the same nightly mediums as
+  // every other pool — medium_key/medium_ban are OPTIONAL (a ban is still allowed
+  // for a QA-proven broken combo). No error when unpinned.
 
   if (isSceneOnly) {
     // Scene-only rows have no face to protect: skip the face/size/attire rules.

@@ -627,101 +627,73 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
   `holiday_scenes` (N2), and on a hit builds a locked-subject holiday brief with the row's pinned medium
   (`resolveMediumFromDb`). Deno-clean, dark-safe. *(deployed)*
 - [x] `uploads.holiday` marker stamped on the main insert (both paths → `holidayCategory`).
+- [x] **Explicit season start** (mig 456): Fall = Sept 15 → Thanksgiving Day; overlapping seasons mix.
+  38 window tests incl. a two-year day-by-day sweep ("no Christmas in July"); `scripts/check-holiday-windows.mjs`
+  sweeps the LIVE catalog through the production math (exit 1 on any out-of-window eligibility).
+- [x] **Day-of HERO** (mig 457/458 + render integration + `scripts/qa-holiday-hero.js` + diversity gate) — §13.
+- [x] **POSTCARD overlay** (mig 459 + `holiday-postcard` fn + artwork generator) — §14.
+- [ ] Eerie COUPLE hero: the +1 identity gate (mig 455 floor, newer than the Aug-19 QA) fails on the painterly
+  gothic recipe (~85% → degrades to a solo). A/B in progress (photography vs face-free painted settings).
 - [ ] N3: thread `uploads.holiday` through `get_feed` + `mapPost` so the tile shows the emoji.
 - [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
 
 ---
 
-## 13. The day-of "hero" dream (guaranteed crescendo) — migration 439
+## 13. The day-of "hero" dream — BUILT 2026-09-04 (migrations 457/458, no pools)
 
-The gentle in-season echo builds toward a **guaranteed grand dream on the holiday itself**. On the
-day (`daysUntilPeak === 0`), every non-opted-out user gets a **hero** dream — the payoff.
+Kevin's call (2026-09-04): **no day-of seed pools.** On the holiday itself every nightly user gets ONE
+guaranteed, grand, on-brand hero dream — **the couple if they have a +1, else themselves** — built from
+a single curated, honed recipe per surface, personalized so no two are clones.
 
-### Mechanic
-- Hero rows live in the SAME pools/categories, flagged **`day_of=true`** (migration 439). The everyday
-  in-season nights draw `day_of=false`; the day itself draws `day_of=true` exclusively.
-- **Guarantee:** when an active holiday has `daysUntilPeak === 0` AND its day-of pool is non-empty, the
-  render forces that holiday to **100%** for the roll (overriding the gentle `final_pct`) and draws the
-  hero pool. Opted-out users are untouched (they get a normal dream). Empty day-of pool → falls back to
-  the everyday holiday rows (N2 still applies), never a broken render.
-- Because the enqueuer fires per-user on their LOCAL day and the render computes the local date (H2), the
-  hero lands on each person's real holiday night.
+### Mechanic (live in `nightly-dreams`)
+- `holiday_hero_prompts` (mig 457): one row per `(holiday, surface ∈ couple|male|female, register ∈
+  cozy|eerie|default)` with `attire`, `scene`, a pinned face-swap-safe `medium_key`, `pose_pool`, and an
+  `axes` JSON of placeholder → candidate phrases. Halloween's 6 rows = mig 458 (re-runnable, tune → `--force`).
+- **Three personalizers, in order of visual weight:** (1) their face(s); (2) the **register** from the
+  Vibe Profile Cute↔Terrifying slider (`moods.cute_terrifying` < 0.5 → cozy, else eerie); (3) **axes**
+  `{setting}` (6) · `{attire}` (4) · `{palette}` (4, DECOR colour, never light on faces) · `{flourish}` (6) ·
+  `{time}` (3), each picked by `fnv1a+fmix32(userId:holiday:year:axis) % n` — stable per user, evenly
+  spread, different next year. 1728 combos per row; 500 users → 438 distinct heroes, 94% of the prompt
+  text varies (`scripts/simulate-holiday-hero.mjs` is the gate; it exits 1 on a pigeonhole).
+- **Render flow:** `activeHolidays` is computed ABOVE the chaos pre-roll; if a holiday has
+  `daysUntilPeak === 0` and hero rows exist and the user has a self photo, the pre-roll is forced to
+  `face_swap_dual` (with a +1) or `face_swap_self`; the scenario block then injects the filled recipe
+  (bypassing the roll + shuffle-bag) with `dualSceneKind='elegant'` (couples → refined `partner` poses,
+  solos → `glamour`). No-cast users get the **scene-only hero**: Path 2 fires at 100% from the day-of
+  holiday. Any missing piece falls through to the everyday holiday pool — never a broken render.
+  Forensics: `fallback_reasons` carries `holiday_hero_preroll:…` + `holiday_hero:<key>:<surface>:<register>:<axis picks>`.
+- **QA off-season:** `force_day_of=<key>` (+ `force_hero_register`, `force_hero_seed`);
+  `scripts/qa-holiday-hero.js` renders surfaces × registers × seeds to Kevin's album captioned
+  `🎃 HERO <surface> <register> s<n> R<round>` and asserts the response's `hero: true`.
 
-### Bespoke, not one-concept-for-all
-~6–8 **hero concepts** per holiday, each personalized so no two feel identical. The biggest personalizer
-is free: **it's their face** (and their plus-one). Then rotating axes:
-1. **Cast** — them (+ plus-one) as the star.
-2. **Role within the concept** — guest of honor / mysterious stranger / host / performer.
-3. **Palette + time** — blood-moon crimson / emerald-and-gold / silver-frost / violet-twilight.
-4. **Signature flourish** — a raven, a black cat, a candelabra, a held mask, a goblet, drifting lanterns.
-5. **Medium** — rotating the gothic/painterly registers.
+### Recipe rules (learned the hard way, 2026-09-04)
+- **Scene = PURE ENVIRONMENT.** A "the couple standing side by side … as the guests of honor" clause made
+  8/9 couple heroes fail the +1 identity gate (Flux adds figures the dual detector latches onto). v3 dropped
+  it (and the `role` axis); cozy couples went 0/3 → 4/4.
+- Every `{setting}` LEADS with its Halloween noun (CLIP first-noun lock) — "A ring of floating candles
+  around a glowing green cauldron in a moonlit clearing", not "A moonlit clearing …".
+- Attire = clothing only, nothing at the jawline (hats only "tilted back off the face"); no negations.
+- Mediums: cozy → `photography` (passes cleanly); eerie → `painted_gothic_fantasy` (`gothic_painted`
+  rendered a torn-edge watercolor and lost the wardrobe).
 
-~6 concepts × 4 roles × 4 palettes × 6 flourishes = hundreds of distinct grand dreams. No-cast users get
-the scene-only hero (a truly cinematic version).
+## 14. The holiday POSTCARD overlay — BUILT 2026-09-04 (migration 459)
 
-**Halloween heroes:** the Grand Masquerade Ball · the Witches' Midnight Coven · the Haunted-Manor Feast ·
-the Moonlit Graveyard Gala · the Vampire Court · an old-castle Halloween ball.
-**Christmas / NYE / Easter / 4th:** Christmas-Morning-by-the-tree · the Grand Christmas Feast / the
-Midnight Countdown · the Champagne Gala / Spring-Garden Sunday · the Grand Egg-Hunt / the Fireworks Finale.
-
-### Build steps
-1. Migration 439 (`day_of` column + partial indexes). **[written — needs applying]**
-2. Loaders take a `dayOf` param; the render detects the day-of holiday and guarantees + draws the hero pool.
-3. `gen-holiday-pools.js` gains `*-dayof` pools (grander concepts, same face-swap safety + lint gate).
-4. QA on the peak day via a date-override (or a `force_day_of` QA flag) so we can render heroes off-season.
-
-## Kevin's direction — 2026-09-04 (read before ANY Halloween seed/hero/QA work)
-
-- **Halloween must be the HERO of every seed and every render.** A render that is "mostly me in
-  whatever clothing with a hint of Halloween in the back" is a FAIL, whatever the face quality.
-  Rejected examples: tight head-and-shoulders portraits in a scarf/jacket with pumpkins blurred in
-  the background (the 2026-09-04 "cozy" hero QA renders).
-- **"Cozy" means the neighborhood at Halloween time:** fall colors, Halloween decorations in the
-  yard, pumpkin patches — and NOT-necessarily-realistic scenes: a couple standing in their yard with
-  TONS of jack-o-lanterns all over the porch and lawn. Abundance and the holiday itself carry the
-  frame; the person is IN it, not in front of a bokeh hint of it.
-- **No medium pinning.** Holiday rows roll the same nightly-eligible mediums as every other pool
-  (`medium_key` nulled on dual/single scenarios, `holiday_scenes`, `holiday_hero_prompts`
-  2026-09-04; rollback ledger in the session scratchpad). Halloween is an ordinary pool gated only
-  by its date window. The generators no longer write `medium_key` (fixed 2026-09-04).
-- **Pool QA protocol:** a matrix of every `sub_theme` (25 today) × {solo, couple}, one fixed medium,
-  captioned `🎃 matrix <sub_theme> <solo|couple>` in Kevin's album + an HTML page; Kevin grades which
-  pools make the cut. First matrix run 2026-09-04 (photography).
-
-### Brainstorm — new Halloween sub-pools (Kevin + agent, 2026-09-04; movie-VIBE inspired, IP-free)
-
-Rules for every pool below: Halloween is the HERO (abundance: dozens/hundreds of lanterns, decorations,
-fog, moon); the person is IN the scene doing something the scene implies (no glamour/portrait posing);
-no film titles, character names, or trademarked props in seed text — capture the register; couples
-side by side with a clear head gap; solos get a stance from the scene, not a layered pose pool.
-
-| key | register | the vibe (inspiration) | what the frame is full of |
-|---|---|---|---|
-| `witch_sisters_cottage` | witchy-cozy-funny | three-witches Salem cottage energy | candlelit cottage crammed with spell books, bubbling cauldron, black cat, broomsticks, dripping candles, a glowing green potion |
-| `salem_town_night` | cozy-festive | New England town on All Hallows' Eve | cobblestone square, church steeple, lantern-lit crowd in costume, hay bales, a bonfire, candy stalls |
-| `black_cat_alley` | witchy-cozy | the black-cat familiar | a lantern-lit alley with dozens of black cats on ledges, steps and barrels, one on the person's shoulder |
-| `afterlife_waiting_room` | campy-macabre | ghost-with-the-most bureaucracy | numbered-ticket netherworld lobby, striped wallpaper, shrunken-head clerk in the background, black-and-white stripes everywhere |
-| `striped_suit_haunting` | campy-macabre | the trickster ghost's haunted house | attic with a miniature town model, floating dinner party, sandworm dunes out the window |
-| `halloween_town_square` | whimsical-gothic | stop-motion Halloween village | crooked houses, spiral hill under an enormous full moon, pumpkin-headed scarecrows, a fountain of green ooze, singing jack-o-lanterns |
-| `pumpkin_king_patch` | whimsical-sincere | the pumpkin patch vigil | a vast night pumpkin patch, one blanket + lantern, sincere wonder, a giant pumpkin looming |
-| `suburban_halloween_chaos` | goofy-cozy | small-town Halloween night comedy | egged mailbox, toilet-papered trees, bike with a candy basket, a thermos, cul-de-sac in full decoration |
-| `haunted_house_attraction` | goofy-scary | the walkthrough haunted house line | strobe-lit foyer, fog machine, costumed actors lurking in doorways, a ticket booth, screaming friends in the background |
-| `corn_maze_torchlight` | cozy-eerie | the night corn maze | torch-lit maze walls, scarecrows on posts, a hay-bale tower, a lost-lantern glow |
-| `friendly_ghost_manor` | cozy-whimsical | the friendly haunted manor | grand foyer with translucent playful ghosts, floating candlesticks, a chandelier swaying, sheet-ghost silhouettes |
-| `macabre_family_mansion` | elegant-deadpan | the elegant macabre family | black-velvet foyer, carnivorous plant, a torture-rack sofa, candelabra, a pet lion rug, deadpan elegance |
-| `graveyard_picnic` | deadpan-cozy | picnic among the tombstones | checkered blanket, wine, candelabra on a crypt, fog at ankle height, a raven on a headstone |
-| `witchy_victorian_house` | romantic-cozy | the practical-magic house | herb-hung kitchen, midnight cocktails, a garden of belladonna, a spellbook open on the counter |
-| `undead_wedding` | romantic-macabre | the underworld wedding | blue-lit crypt chapel, skeletal band, tattered veil, black roses, candle-lit aisle (couple pool gold) |
-| `headless_hollow_bridge` | eerie | the covered-bridge legend | autumn fog, a covered bridge, a distant headless rider silhouette, a jack-o-lantern held aloft |
-| `haunted_amusement_park` | goofy-mystery | the abandoned carnival mystery | dead Ferris wheel, funhouse mirrors, a sheet-ghost fleeing, a groovy flower-painted van, flashlights |
-| `skeleton_dance_hall` | goofy-whimsical | the skeleton jamboree | a dance hall of dancing skeletons, a bone xylophone band, pumpkin lanterns as stage lights |
-| `pumpkin_spice_cafe` | cozy | the Halloween bakery/café | pumpkin displays, spider-web latte art, black-cat cookies, a chalkboard menu, string lights |
-| `jack_o_lantern_overload` | cozy-surreal | the yard with TOO MANY pumpkins | a porch, lawn and roofline buried under hundreds of carved jack-o-lanterns, every step glowing |
-| `candy_store_frenzy` | goofy-cozy | the Halloween candy shop | floor-to-ceiling candy, a giant candy bowl, costumed shoppers in the background |
-| `werewolf_moon_forest` | eerie-costume | the full-moon forest | a silver moon, torn-shirt costume, howling silhouettes on a ridge, fog |
-| `monster_garage_band` | goofy | the monster-mash rehearsal | garage band of classic monsters (generic mummy/creature/witch), amps, a jack-o-lantern drum kit |
-
-Seeding protocol: pick pools with Kevin → MVP-25 (dual + single) per pool → matrix render (1 solo + 1
-couple, fixed medium) → Kevin grades → scale to ~100 the ones that make the cut. Halloween-hero bar
-applies to every seed; the proximity scan + action scrub run after every seeding.
+Decorative "Happy Halloween" / "Merry Christmas" lettering composited onto the render so it lands like
+a holiday postcard — Kevin's "wow" feature for everyone who gets a nightly.
+- **Artwork:** `scripts/gen-holiday-postcard.mjs --holiday <key> --variants 3` → GPT Image (transparent
+  PNG, ornate lettering + ornaments), trimmed, previewed on a real render; `--set <png> [--width 70
+  --margin 4 --anchor bottom]` uploads to `uploads/assets/holiday/` and points `holidays.postcard_overlay_url`
+  (+ `postcard_anchor/width_pct/margin_pct/scrim`) at it — all dashboard-tunable. Halloween: 3 variants
+  uploaded (ornate gothic = LIVE, playful retro, elegant script); switching = one UPDATE.
+- **Compositing:** the `holiday-postcard` Edge Function (its OWN isolate — never pixel work in the render):
+  jsquash decode → `_shared/postcardComposite.ts` (bilinear resize to `width_pct`, smoothstep scrim band,
+  straight-alpha blend; 10 unit tests) → JPEG q92 → storage upsert to the SAME object path (image_url
+  unchanged; uploads are drafted before the client sees them). ~2.2 s. Auth = service-role key (the
+  render) or the queue worker token (QA: `gen-holiday-postcard.mjs --test <url>` runs it on a COPY).
+- **Hook:** nightly-dreams calls it right after persist; `engine_config.holiday_postcard_scope` =
+  `off | day_of (default — the hero only) | window (every in-season holiday dream)`. Best-effort: any
+  failure keeps the clean image; the outcome is re-stamped into `fallback_reasons` (`postcard:<key>:ok:<ms>`).
+- **Pool sizing (Kevin 2026-09-04):** holiday pools seed at **25** (MVP) and, once a pool survives the
+  matrix, scale to a **50 cap** — never 100. Holidays are in rotation for a short window, so 50 × the
+  number of pools is plenty. Nothing scales until Kevin has graded the matrix.

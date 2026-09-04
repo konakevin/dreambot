@@ -77,3 +77,25 @@ scale pools past MVP-25; then flip live.
 
 ## Round-by-round detail
 (appended as each archetype is processed)
+
+## Day-of HERO QA (2026-09-04) — mechanism + recipes (mig 457/458), postcard (mig 459)
+
+Harness: `node scripts/qa-holiday-hero.js --surface <dual|self|plus_one> --register <cozy|eerie> --seeds N --round R`
+→ Kevin's album, captions `🎃 HERO <surface> <register> s<n> R<round>`; asserts the response's `hero: true`.
+Diversity gate: `node scripts/simulate-holiday-hero.mjs` (500 users → 438 distinct heroes / row, 94% of text varies).
+
+| Surface | Register | Recipe | Renders | Swap pass | Quality | Notes |
+|---|---|---|---|---|---|---|
+| self | cozy | v1 | 2 | 2/2 | 4.5 | photographic porch, lights, bats, jack-o-lanterns; wardrobe drifted blazer+scarf (fine) |
+| plus_one | cozy | v1 | 2 | 2/2 | 4.7 | velvet dress + witch hat tilted back, candy cauldron — the cozy bar |
+| self | eerie | v1 gothic_painted | 2 | 2/2 | 3.5 | torn-edge watercolor, beige cloak — wardrobe + scene lost → medium → painted_gothic_fantasy (v2) |
+| plus_one | eerie | v1 | 2 | 2/2 | 4.2 | pretty forest + gown but the coven props vanished → v2 settings lead with the Halloween noun |
+| couple | eerie | v1/v2 (people clause) | 7 | 1/7 | — | +1 identity ≈ 0 on one side → `dual_degrade_single` → solo fallback |
+| couple | cozy | v2 (people clause) | 3 | 0/3 | — | same failure |
+| couple | cozy | **v3 pure-env** | 4 | **4/4** | 4.8 | pumpkin patch / porch / living room; identity 0.63-0.78 both sides; postcard lands |
+| couple | eerie | v3 pure-env | 1 | 0/1 | — | still fails on the woman's side → A/B (photography vs face-free painted) |
+| self | cozy | v3 + POSTCARD | 1 | 1/1 | 4.8 | living-room hero + "Happy Halloween" composited in-render (`postcard:halloween:ok:2121ms`) |
+
+**Lessons:** scene = PURE ENVIRONMENT (no people/role clause) · lead every setting with its Halloween
+noun · palette = décor colour, not light · no DDL on `holidays` mid-sample (PostgREST schema reload
+blanked the forced-holiday lookup for ~5 min and 3 renders silently skipped the hero).
