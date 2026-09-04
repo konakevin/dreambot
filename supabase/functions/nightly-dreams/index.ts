@@ -3655,9 +3655,13 @@ Output ONLY the prompt.`;
     // whitelisted; calibrated 0/30 false positives on the labeled corpus, see
     // _shared/qualityGate.ts + scripts/eval-quality-gate.ts). Modes via
     // engine_config.quality_gate_mode: off | shadow (telemetry only) |
-    // enforce (fail → deadline-guarded re-SWAP retries reusing the dup-detect
-    // machinery, re-gate, ship first pass; exhausted → ship the ORIGINAL
-    // output + 'unresolved' telemetry — a flagged dream beats no dream).
+    // enforce (fail → deadline-guarded retries, re-gate, ship first pass;
+    // exhausted → ship the ORIGINAL output + 'unresolved' telemetry — a flagged
+    // dream beats no dream). Retry KIND follows the flag: 'broken' → re-SWAP on
+    // the same base render (yan-ops canned-output escape, reuses the dup-detect
+    // machinery); 'profile' (2026-09-04, Kevin: "no side profiles") → a fresh
+    // RENDER + swap, because the base image itself is side-on and no swap can
+    // fix that.
     // FAIL-OPEN on judge errors. Cast renders only (pure scenes can't have
     // the defect class).
     if ((faceSwapSource || faceSwapSources) && !sceneFallbackApplied) {
@@ -3674,35 +3678,58 @@ Output ONLY the prompt.`;
             fallbackReasons.push(`quality_gate:${gateMode}:fail:${verdict.flags.join('+')}`);
             if (gateMode === 'enforce') {
               let cleared = false;
+              // The base render the retries swap onto; replaced by a fresh
+              // generation when the verdict is 'profile'.
+              let gateBase = genResult.url;
               for (let ga = 0; ga < gateCfg.qualityGateMaxRetries; ga++) {
                 if (Date.now() - t0 > GATE_MAX_ELAPSED_MS) {
                   fallbackReasons.push('quality_gate:skipped_deadline');
                   break;
                 }
                 try {
+                  const needsRerender = verdict.flags.includes('profile');
+                  if (needsRerender) {
+                    const rr = await generateImage(
+                      'flux-dev',
+                      finalPrompt,
+                      undefined,
+                      {
+                        replicateToken: REPLICATE_TOKEN,
+                        openaiKey: Deno.env.get('OPENAI_API_KEY'),
+                        geminiKey: Deno.env.get('GEMINI_API_KEY'),
+                        xaiKey: Deno.env.get('XAI_API_KEY'),
+                      },
+                      pickedModel,
+                      isDualFaceSwap ? 'jpg' : 'png'
+                    );
+                    gateBase = rr.url;
+                    replicatePredictionId = rr.predictionId;
+                    observability.replicateRawUrl = rr.url;
+                    fallbackReasons.push(`quality_gate:rerender:${ga + 1}`);
+                  }
                   if (faceSwapSources && faceSwapSources.length === 2) {
                     const r = await dispatchDualFaceSwap(
                       faceSwapSources[0].sourceUrl,
                       faceSwapSources[1].sourceUrl,
-                      genResult.url,
+                      gateBase,
                       REPLICATE_TOKEN,
                       supabase,
                       userId,
                       t0 + 140_000,
-                      true,
+                      !needsRerender, // skipPrimary only for the canned-output (broken) escape
                       { left: faceSwapSources[0].gender, right: faceSwapSources[1].gender },
                       queueJobId
                     );
-                    tempUrl = r.swappedUrl ?? tempUrl;
+                    tempUrl = r.swappedUrl ?? (needsRerender ? gateBase : tempUrl);
                   } else if (faceSwapSource) {
                     tempUrl = await faceSwap(
                       faceSwapSource,
-                      genResult.url,
+                      gateBase,
                       REPLICATE_TOKEN,
                       supabase,
                       userId,
                       {
-                        skipPrimary: true,
+                        skipPrimary: !needsRerender,
                       }
                     );
                   }
@@ -3905,10 +3932,13 @@ Output ONLY the prompt.`;
         ),
     ]);
     uploadId = uploadResult.data && uploadResult.data.id ? uploadResult.data.id : undefined;
-    // Backfill the log ↔ upload join key (fire-and-forget WITH a logged catch,
-    // per the hard rule on silent RPCs).
+    // Backfill the log ↔ upload join key. AWAITED (2026-09-04): as a
+    // fire-and-forget it raced the Response return and the isolate dropped the
+    // in-flight request most of the time — ~85% of dual nightly log rows over
+    // 3 days had upload_id null, so forensics couldn't join log ↔ upload. It's
+    // one tiny UPDATE (~20ms); awaiting it is the fix. Still catches + warns.
     if (uploadId) {
-      supabase
+      await supabase
         .from('ai_generation_log')
         .update({ upload_id: uploadId })
         .eq('id', genLogId)

@@ -25,7 +25,12 @@ const GOOD = [
   'good-mrepro-2',
   'good-pop-v7cafe-1',
 ];
-const BROKEN = ['broken-corrupt-face', 'broken-fused-glasses', 'broken-split-pane'];
+const BROKEN = [
+  'broken-corrupt-face',
+  'broken-fused-glasses',
+  'broken-split-pane',
+  'broken-profile-faces',
+];
 async function judge(file: string): Promise<string> {
   const bytes = await Deno.readFile(S + file + '.jpg');
   let bin = '';
@@ -43,8 +48,9 @@ async function judge(file: string): Promise<string> {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: Deno.env.get('GATE_MODEL') || 'claude-haiku-4-5-20251001',
-        max_tokens: 16,
+        // Default = the PRODUCTION judge (SONNET in _shared/qualityGate.ts); GATE_MODEL overrides for A/B.
+        model: Deno.env.get('GATE_MODEL') || 'claude-sonnet-4-6',
+        max_tokens: 24,
         messages: [
           {
             role: 'user',

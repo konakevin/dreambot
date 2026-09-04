@@ -1,10 +1,15 @@
 /**
- * Render-time quality gate (NIGHTLY_IMPRESS_PLAN.md item 1) — BROKEN-ONLY.
+ * Render-time quality gate (NIGHTLY_IMPRESS_PLAN.md item 1) — BROKEN + PROFILE.
  *
- * One cheap Haiku vision read of the FINISHED render (post-swap, pre-ship)
- * answering exactly ONE question: is this image blatantly BROKEN? Extra or
- * malformed limbs, duplicated/melted faces or hands, an object fused across a
- * person and an animal, or wildly impossible scale. NOTHING ELSE.
+ * One cheap vision read of the FINISHED render (post-swap, pre-ship)
+ * answering exactly TWO closed questions: (1) is this image blatantly BROKEN?
+ * Extra or malformed limbs, duplicated/melted faces or hands, an object fused
+ * across a person and an animal, or wildly impossible scale. (2) PROFILE — is
+ * the cast shown in a strict SIDE view (one eye / turned away)? Added
+ * 2026-09-04 on Kevin's call ("no side profiles, I hate that view") after a
+ * couple render shipped both faces side-on with a correct frontal prompt; the
+ * face swap can't place a likeness on a profile. Three-quarter views with both
+ * eyes visible are NOT profile (conservative carve-out). NOTHING ELSE.
  *
  * ██ SCOPE IS DELIBERATELY NARROW (Kevin, 2026-09-03) ██
  * Taste is SUBJECTIVE and Haiku must never judge it: composition, framing,
@@ -32,7 +37,7 @@ import { SONNET } from './models.ts';
 export interface QualityVerdict {
   /** false = blatantly broken per the single BROKEN check. */
   pass: boolean;
-  /** Machine-readable telemetry labels (currently just ['broken'] on fail). */
+  /** Machine-readable telemetry labels: 'broken' and/or 'profile' on fail. */
   flags: string[];
   raw: string;
 }
@@ -45,19 +50,30 @@ export interface QualityVerdict {
  */
 export function buildGatePrompt(): string {
   return (
-    'Look at this image. Answer with ONLY one line in exactly this format and nothing else:\n' +
+    'Look at this image. Answer with ONLY two lines in exactly this format and nothing else:\n' +
     'BROKEN: yes or no\n' +
-    'Answer yes ONLY if you can see one of these specific defects: a face or body region that is heavily pixelated, smeared, or corrupted compared to the rest of the image; a pair of glasses or other accessory resting on two different heads at the same time; an accessory floating on an animal that belongs on the person; a person with an extra or missing limb or a duplicated face; or the image split into mismatched disconnected panels. ' +
-    'Stylized or painterly art, unusual composition, tight or wide framing, plain settings, imperfect small details, and GIANT or oversized animals, creatures, or objects (intentional fantasy) are all NORMAL and are NOT broken. If you are unsure, answer no.'
+    'PROFILE: yes or no\n' +
+    'Answer BROKEN yes ONLY if you can see one of these specific defects: a face or body region that is heavily pixelated, smeared, or corrupted compared to the rest of the image; a pair of glasses or other accessory resting on two different heads at the same time; an accessory floating on an animal that belongs on the person; a person with an extra or missing limb or a duplicated face; or the image split into mismatched disconnected panels. ' +
+    'Stylized or painterly art, unusual composition, tight or wide framing, plain settings, imperfect small details, and GIANT or oversized animals, creatures, or objects (intentional fantasy) are all NORMAL and are NOT broken. ' +
+    'Answer PROFILE yes ONLY if the main person, or both people of a couple, is shown in a strict side view where only one eye is visible or the face is turned away from the camera; a three-quarter or frontal view with both eyes visible is NOT a profile, and a single side-on person in a couple where the other faces the camera is NOT a profile. ' +
+    'If you are unsure, answer no for that line.'
   );
 }
 
-/** Parse the labeled reply. Missing/garbled label → null (fail-open). */
+/** Parse the labeled reply. Missing/garbled BROKEN label → null (fail-open).
+ *  PROFILE is optional: absent/garbled → treated as "no" (never fail-closed
+ *  on a half-answer). Flags: 'broken' (re-SWAP can clear it) and/or 'profile'
+ *  (needs a fresh RENDER — the base image itself is side-on). */
 export function parseGateResponse(raw: string): QualityVerdict | null {
   const m = (raw || '').match(/\bBROKEN\s*:\s*(yes|no)\b/i);
   if (!m) return null;
   const broken = m[1].toLowerCase() === 'yes';
-  return { pass: !broken, flags: broken ? ['broken'] : [], raw: (raw || '').slice(0, 200) };
+  const pm = (raw || '').match(/\bPROFILE\s*:\s*(yes|no)\b/i);
+  const profile = pm ? pm[1].toLowerCase() === 'yes' : false;
+  const flags: string[] = [];
+  if (broken) flags.push('broken');
+  if (profile) flags.push('profile');
+  return { pass: flags.length === 0, flags, raw: (raw || '').slice(0, 200) };
 }
 
 /**
@@ -81,7 +97,7 @@ export async function assessRenderQuality(imageUrl: string): Promise<QualityVerd
         // accepted miss is panel-layout weirdness — deliberately NOT chased (would
         // false-flag legit comics-medium renders).
         model: SONNET,
-        max_tokens: 16,
+        max_tokens: 24,
         messages: [
           {
             role: 'user',

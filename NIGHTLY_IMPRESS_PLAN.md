@@ -13,7 +13,16 @@ sections + git log `77c51204..f88bce24` for the full failure-mode education).
 
 ---
 
-## 1. 🟡 Render-time quality gate ⭐ — LIVE in enforce mode 2026-09-03; REVIEW DUE 2026-09-10 (fleet telemetry: fail rate, cleared_after, shipped_unresolved, judge cost)
+## 1. ✅ Render-time quality gate ⭐ — LIVE (enforce) since 2026-09-03 · PROFILE check added 2026-09-04
+
+**State (2026-09-04).** Two closed questions now: BROKEN (re-SWAP retries) + PROFILE (Kevin: "no side
+profiles, I hate that view" — strict side view / turned away; three-quarter views exempt) → a
+PROFILE fail triggers a FRESH RENDER + swap (a re-swap can't fix a side-on base image). Calibrated
+with the production judge (Sonnet): 8/8 good pass (0 false positives), 4/4 broken caught incl. the
+new `broken-profile-faces` fixture (the old_hollywood QA render). `scripts/eval-quality-gate.ts`
+now defaults to the prod judge. Telemetry stamps: `quality_gate:enforce:fail:profile`,
+`quality_gate:rerender:N`, `cleared_after:N`, `shipped_unresolved`. Worth a look at fleet
+telemetry after a week of enforce (fail rate by flag, retries, judge cost) — no date, just a note.
 
 **Problem.** Every nightly ships sight-unseen. The Tiffany camel render (sunglasses fused
 across her and the camel, extreme zoom) and the Michele render (74yo +1 rendered as a
@@ -21,6 +30,7 @@ across her and the camel, extreme zoom) and the Michele render (74yo +1 rendered
 fixes kill known slop classes; the gate catches the unknown ones.
 
 **Design (agreed with Kevin).**
+
 - After render+swap, before notify/upload-finalize: one Haiku vision call grading the
   image on hard checks: expected face count present + faces a sane size (not filling
   frame, not tiny), background/setting visible, no fused/malformed props or limbs, no
@@ -151,13 +161,16 @@ clothes", seed attire only as "inspiration") whenever `realWorldLocation` is tru
 passed `!imaginedLocation` even for authored scenes; dual path keeps attire verbatim so only
 solos drifted. Fix: `realWorldLocation: dualSpecialScene ? false : !imaginedLocation`
 (nightly-dreams, deployed 2026-09-04) — re-renders: burgundy velvet bustle gown + greatcoat/
-cravat, both 5/5. **Open/optional:** pre-2026-09-04 goofy/elegant rows still carry posture
-words (dual goofy 249/926, single goofy 509/1021, elegant ~5%) — a dry scrub is staged, NOT
-applied (no render failure attributable to it yet; Kevin's call). Forensics gap: 4 of 17 QA
-renders (solo, pencil/illustration/vintage_film mediums) logged `ai_generation_log.upload_id
-= null` — the forensics join misses them. C (thin location topics) NOT started.
+cravat, both 5/5. **Also done (Kevin's calls, 2026-09-04 pm):** pre-existing goofy/elegant rows scrubbed too
+(583 rewrites applied; 64 over-condensed rewrites skipped, originals kept; proximity scan 0).
+Forensics gap ROOT-CAUSED + FIXED: the `ai_generation_log.upload_id` backfill was a
+fire-and-forget UPDATE issued right before the Response — the isolate dropped it most of
+the time (~85% of dual nightly log rows over 3 days had upload_id null, not just 4/17); now
+awaited. Historical null rows NOT repaired (30-day retention makes it moot soon). The 11
+`scripts/_tmp-*` leftovers deleted. C (thin location topics) NOT started.
 
 **Original scope:**
+
 - Pose pools below par: `action_poses` glamour=32, dynamic=30, dynamic_solo=30,
   playful=56 → expand each to ~100 via the pose generators (check
   `scripts/generate-*pose*` / POSE_POOLS_DB_MIGRATION_PLAN.md); swap-safe envelope +

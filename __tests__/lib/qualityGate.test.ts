@@ -22,14 +22,20 @@ describe('buildGatePrompt — scope + bias locks', () => {
   it('never smuggles taste vocabulary into scope', () => {
     // These words may only appear in the NORMAL/whitelist sentence, never as
     // defect criteria — cheap proxy: the defect sentence is the "Answer yes" one.
-    const defectSentence = p.split('Answer yes ONLY')[1].split('.')[0];
+    const defectSentence = p.split('Answer BROKEN yes ONLY')[1].split('.')[0];
+    const profileSentence = p.split('Answer PROFILE yes ONLY')[1].split('.')[0];
     for (const w of ['beautiful', 'quality', 'boring', 'background', 'composition', 'aesthetic']) {
       expect(defectSentence.toLowerCase()).not.toContain(w);
+      expect(profileSentence.toLowerCase()).not.toContain(w);
     }
   });
-  it('asks exactly one closed-set question', () => {
+  it('asks exactly two closed-set questions (BROKEN + PROFILE), nothing else', () => {
     expect(p).toContain('BROKEN: yes or no');
-    expect(p).not.toMatch(/FACES|FACESIZE|CREATURE/);
+    expect(p).toContain('PROFILE: yes or no');
+    expect(p).not.toMatch(/FACES:|FACESIZE|CREATURE/);
+  });
+  it('PROFILE carves out three-quarter views (conservative — Kevin: only strict side views)', () => {
+    expect(p).toMatch(/three-quarter or frontal view with both eyes visible is NOT a profile/);
   });
 });
 
@@ -43,6 +49,14 @@ describe('parseGateResponse', () => {
   });
   it('tolerates case + surrounding chatter', () => {
     expect(parseGateResponse('Sure!\nbroken:  NO\nthanks')?.pass).toBe(true);
+  });
+  it('PROFILE yes → fail with profile flag; missing PROFILE line → treated as no', () => {
+    expect(parseGateResponse('BROKEN: no\nPROFILE: yes')).toEqual(
+      expect.objectContaining({ pass: false, flags: ['profile'] })
+    );
+    expect(parseGateResponse('BROKEN: yes\nPROFILE: yes')?.flags).toEqual(['broken', 'profile']);
+    expect(parseGateResponse('BROKEN: no')?.pass).toBe(true);
+    expect(parseGateResponse('BROKEN: no\nPROFILE: maybe')?.pass).toBe(true);
   });
   it('garbled / refusal / empty → null (fail-open)', () => {
     expect(parseGateResponse('I cannot analyze this image')).toBeNull();
