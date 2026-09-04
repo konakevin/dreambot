@@ -58,6 +58,7 @@ import { FollowUserRow } from '@/components/FollowUserRow';
 import type { FollowUser } from '@/hooks/useFollowersList';
 
 type Tab = 'posts' | 'saved' | 'dreams' | 'reposts' | 'followers' | 'following';
+type SavedFilter = 'bookmarked' | 'hearted';
 
 export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user);
@@ -65,6 +66,11 @@ export default function ProfileScreen() {
   // Dreams album filter (segmented control on the right of the subheader):
   // All / Posted (live on feed) / Private (unposted). Persisted per migration 306.
   const [dreamsFilter, setDreamsFilter] = useState<DreamsFilter>('all');
+  // Saved album sub-filter — same segmented-control shape as Dreams, folding
+  // "Hearted" into the existing Saved icon instead of a 5th tabRow icon
+  // (Kevin 2026-09-04). 'bookmarked' stays the default so nothing changes
+  // for anyone who never taps over to Hearted.
+  const [savedFilter, setSavedFilter] = useState<SavedFilter>('bookmarked');
 
   // ── Grid multi-select (bulk edit: Posts + Dreams albums, 2026-07-10) ──────
   // Entered via the tile long-press sheet's "Select" row; tap toggles tiles;
@@ -108,10 +114,12 @@ export default function ProfileScreen() {
     setGridSelectedIds(new Set());
   }, []);
   // Any tab change exits the mode (covers posts↔dreams too — a selection
-  // must never silently carry across albums).
+  // must never silently carry across albums). savedFilter is included too —
+  // Bookmarked↔Hearted swaps the grid's contents just like an album change,
+  // and Hearted doesn't support multi-select yet (no bulk-unlike action).
   useEffect(() => {
     exitGridSelection();
-  }, [activeTab, exitGridSelection]);
+  }, [activeTab, savedFilter, exitGridSelection]);
   const enterGridSelection = useCallback((id: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setGridSelecting(true);
@@ -136,7 +144,9 @@ export default function ProfileScreen() {
     () =>
       activeTab === 'dreams' ||
       activeTab === 'posts' ||
-      activeTab === 'saved' ||
+      // Hearted has no bulk action yet (bulk-unsave only applies to bookmarks),
+      // so multi-select stays off there until one exists.
+      (activeTab === 'saved' && savedFilter === 'bookmarked') ||
       activeTab === 'reposts'
         ? {
             active: gridSelecting,
@@ -145,7 +155,7 @@ export default function ProfileScreen() {
             onEnter: enterGridSelection,
           }
         : undefined,
-    [activeTab, gridSelecting, gridSelectedIds, toggleGridSelected, enterGridSelection]
+    [activeTab, savedFilter, gridSelecting, gridSelectedIds, toggleGridSelected, enterGridSelection]
   );
   const handleBulkDelete = useCallback(async () => {
     const count = gridSelectedIds.size;
@@ -396,7 +406,10 @@ export default function ProfileScreen() {
   // to 'all' so the next visit starts fresh.
   const bottomNavTab = useFeedStore((s) => s.activeTab);
   useEffect(() => {
-    if (bottomNavTab !== 'profile') setDreamsFilter('all');
+    if (bottomNavTab !== 'profile') {
+      setDreamsFilter('all');
+      setSavedFilter('bookmarked');
+    }
   }, [bottomNavTab]);
 
   // Switch the Dreams filter (in-memory only — see the reset effect above).
@@ -407,6 +420,16 @@ export default function ProfileScreen() {
       setDreamsFilter(next);
     },
     [dreamsFilter]
+  );
+
+  // Switch the Saved filter (Bookmarked/Hearted) — same shape as Dreams'.
+  const applySavedFilter = useCallback(
+    (next: SavedFilter) => {
+      if (next === savedFilter) return;
+      Haptics.selectionAsync();
+      setSavedFilter(next);
+    },
+    [savedFilter]
   );
 
   // Reset to posts tab only when profile tab icon is re-tapped — UNLESS the
@@ -817,6 +840,31 @@ export default function ProfileScreen() {
         </View>
       )}
 
+      {/* Saved album: the same segmented shape as Dreams, folding "Hearted" in
+          beside "Bookmarked" instead of a 5th tabRow icon (Kevin 2026-09-04). */}
+      {activeTab === 'saved' && !gridSelecting && (
+        <View style={styles.dreamsFilterRow}>
+          <View style={styles.segmented}>
+            {(['bookmarked', 'hearted'] as const).map((f) => {
+              const active = savedFilter === f;
+              const label = f === 'bookmarked' ? 'Bookmarked' : 'Hearted';
+              return (
+                <TouchableOpacity
+                  key={f}
+                  style={[styles.segment, active && styles.segmentActive]}
+                  onPress={() => applySavedFilter(f)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+                    {label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      )}
+
       {/* Section heading for the followers/following sub-views — repeats
           the active tab + count so you can tell which list you're looking
           at when the two sets are nearly identical. */}
@@ -843,13 +891,16 @@ export default function ProfileScreen() {
   ) {
     const sourceMap = {
       posts: { type: 'own' as const },
-      saved: { type: 'saved' as const },
+      saved: savedFilter === 'hearted' ? { type: 'liked' as const } : { type: 'saved' as const },
       dreams: { type: 'dreams' as const, dreamsFilter },
       reposts: { type: 'reposts' as const, userId: user?.id ?? '' },
     };
     const emptyMap = {
       posts: 'No posts yet.\nDreams you post as public will show up here',
-      saved: 'Bookmark dreams you love. They live here.',
+      saved:
+        savedFilter === 'hearted'
+          ? 'Heart dreams you love. They live here.'
+          : 'Bookmark dreams you love. They live here.',
       dreams: 'No dreams yet',
       reposts: 'Dreams you repost will show up here.',
     };
@@ -962,8 +1013,9 @@ export default function ProfileScreen() {
                   )}
                 </TouchableOpacity>
               )}
-              {/* Saved album → bulk unsave (reversible). */}
-              {activeTab === 'saved' && (
+              {/* Saved album → bulk unsave (reversible). Bookmarked view only —
+                  Hearted has no bulk-unlike action yet. */}
+              {activeTab === 'saved' && savedFilter === 'bookmarked' && (
                 <TouchableOpacity
                   style={[
                     styles.actionPill,

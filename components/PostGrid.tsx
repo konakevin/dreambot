@@ -9,6 +9,7 @@ import { Image as ExpoImage } from 'expo-image';
 import { useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useUserPosts } from '@/hooks/useUserPosts';
 import { useFavoritePosts } from '@/hooks/useFavoritePosts';
+import { useLikedPosts } from '@/hooks/useLikedPosts';
 import { useUserReposts } from '@/hooks/useUserReposts';
 import { usePublicProfilePosts, loadPublicProfilePostsUntil } from '@/hooks/usePublicProfilePosts';
 import { useHashtagPosts } from '@/hooks/useHashtagPosts';
@@ -34,6 +35,7 @@ import type { DreamsFilter } from '@/hooks/useMyDreams';
 export type PostGridSource =
   | { type: 'own' }
   | { type: 'saved' }
+  | { type: 'liked' }
   | { type: 'dreams'; dreamsFilter?: DreamsFilter }
   | { type: 'reposts'; userId: string }
   | { type: 'user'; userId: string }
@@ -53,8 +55,8 @@ const isPending = (item: GridItem): item is PendingSlot => 'pending' in item;
  * PostTile stamps `albumSource` = the grid's source on tap. A currentPostId left
  * by a notification/inbox open (which set albumSource=null) or by a DIFFERENT
  * grid must never light this grid's badge / auto-scroll (the leak audited
- * 2026-07-26). For user/hashtag/reposts the id must match too; own/saved/dreams
- * are singletons so the type alone identifies the grid.
+ * 2026-07-26). For user/hashtag/reposts the id must match too; own/saved/
+ * liked/dreams are singletons so the type alone identifies the grid.
  */
 function sameSource(a: PostGridSource | null, b: PostGridSource): boolean {
   if (!a || a.type !== b.type) return false;
@@ -157,6 +159,7 @@ export function PostGrid({
 
   const isOwn_ = source.type === 'own';
   const isSaved = source.type === 'saved';
+  const isLiked = source.type === 'liked';
   const isDreams = source.type === 'dreams';
   const isUser = source.type === 'user';
   const isReposts = source.type === 'reposts';
@@ -174,9 +177,10 @@ export function PostGrid({
   // own-profile tabs makes them inactive-but-enabled, which refetchType:'all'
   // DOES refresh. Still disabled on other users' profiles + hashtag views (no
   // waste there); `my-dreams` is already always-enabled for the same reason.
-  const isOwnProfile = isOwn_ || isSaved || isDreams || isReposts;
+  const isOwnProfile = isOwn_ || isSaved || isLiked || isDreams || isReposts;
   const ownQuery = useUserPosts(isOwnProfile);
   const savedQuery = useFavoritePosts(isOwnProfile);
+  const likedQuery = useLikedPosts(isOwnProfile);
   const userQuery = usePublicProfilePosts(userId, isUser);
   const dreamsQuery = useMyDreams(dreamsFilter);
   const repostsQuery = useUserReposts(userId, isReposts);
@@ -186,13 +190,15 @@ export function PostGrid({
     ? ownQuery
     : isSaved
       ? savedQuery
-      : isDreams
-        ? dreamsQuery
-        : isReposts
-          ? repostsQuery
-          : isHashtag
-            ? hashtagQuery
-            : userQuery;
+      : isLiked
+        ? likedQuery
+        : isDreams
+          ? dreamsQuery
+          : isReposts
+            ? repostsQuery
+            : isHashtag
+              ? hashtagQuery
+              : userQuery;
 
   // Pull-to-refresh on an infinite query refetches EVERY loaded page in
   // sequence (TanStack Query v5 removed the per-page `refetchPage` opt).
@@ -214,6 +220,7 @@ export function PostGrid({
   const activeQueryKey = useMemo(() => {
     if (isOwn_) return ['userPosts', authUserId];
     if (isSaved) return ['favoritePosts', authUserId];
+    if (isLiked) return ['likedPosts', authUserId];
     // Dreams key MUST include the filter — useMyDreams keys on
     // ['my-dreams', userId, filter]. A 2-segment key here still prefix-matches
     // for invalidateQueries, but the setQueryData page-1 trim below is an EXACT
@@ -223,7 +230,18 @@ export function PostGrid({
     if (isReposts) return ['userReposts', userId];
     if (isHashtag) return ['hashtagPosts', hashtag];
     return ['publicProfilePosts', userId];
-  }, [isOwn_, isSaved, isDreams, isReposts, isHashtag, hashtag, userId, authUserId, dreamsFilter]);
+  }, [
+    isOwn_,
+    isSaved,
+    isLiked,
+    isDreams,
+    isReposts,
+    isHashtag,
+    hashtag,
+    userId,
+    authUserId,
+    dreamsFilter,
+  ]);
   // Spinner state owned LOCALLY so the RefreshControl reflects ONLY a
   // user-initiated pull — never a programmatic refetch. Binding `refreshing` to
   // activeQuery.isRefetching (the old way) meant any background refetch (screen
