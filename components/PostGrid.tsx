@@ -504,7 +504,13 @@ export function PostGrid({
   // a swallowed FlashList miss can't leave the user stranded at the top with the
   // pill already gone.
   useEffect(() => {
-    if (!jumpPending || highlightIndex < 0) return;
+    // Same containerHeight gate as Step 2's silent auto-anchor below — a grid
+    // that hasn't been laid out yet (onLayout not fired: fresh profile mount,
+    // still animating in) has no real viewport for scrollToIndex to target,
+    // so scrollToHighlightRowReliable's retry loop can exhaust itself before
+    // layout ever lands. Wait for containerHeight, then scroll (Kevin
+    // 2026-09-04: "Just viewed" jump reported flaky on cold profile landings).
+    if (!jumpPending || highlightIndex < 0 || containerHeight === 0) return;
     setJumpPending(false);
     const gridIndex = highlightIndex + pendingCountRef.current;
     void scrollToHighlightRowReliable(gridIndex).then((landed) => {
@@ -512,7 +518,7 @@ export function PostGrid({
       // Not landed (deeper than the retry window) → leave the badge so the user
       // can tap again rather than being silently left at the top.
     });
-  }, [jumpPending, highlightIndex, scrollToHighlightRowReliable]);
+  }, [jumpPending, highlightIndex, containerHeight, scrollToHighlightRowReliable]);
 
   // Auto-anchor on focus enter. The hard case is when the user scrolled past
   // the grid's first page (PAGE_SIZE=18) in detail view: highlightPostId is
@@ -578,7 +584,7 @@ export function PostGrid({
     !badgeTapped &&
     !scrolledAway &&
     (highlightIndex === -1
-      ? !activeQuery.isLoading
+      ? !activeQuery.isLoading && containerHeight > 0
       : containerHeight > 0 && highlightIndex + pendingCount > maxVisibleIndex);
 
   const scrollToHighlight = useCallback(() => {
