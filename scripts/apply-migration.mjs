@@ -259,7 +259,7 @@ async function main() {
   }
 
   console.log(
-    '\nNext: `supabase gen types typescript --linked > types/database.ts` if the schema changed · deploy any edge fn reading the new shape · smoke-test new RPCs.'
+    '\nNext: `supabase gen types typescript --linked --schema public > types/database.ts && npx prettier --write types/database.ts` if the schema changed · deploy any edge fn reading the new shape · smoke-test new RPCs.'
   );
 }
 

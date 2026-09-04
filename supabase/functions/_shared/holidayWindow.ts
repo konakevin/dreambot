@@ -3,12 +3,15 @@
 // unit-testable and deterministic. The render passes the USER'S LOCAL date (§3.5,
 // H2) so a late-timezone user still gets the holiday ON the holiday.
 //
-// A holiday's window is [peak - windowDays, peak]. The peak is resolved per-year
-// from a rule (fixed date / nth-weekday / Easter computus), so floating holidays
-// (Easter, Thanksgiving) and the New Year's year-wrap all fall out of real date
-// arithmetic (§3.5, M1/N4). The ramp climbs from rampStartPct → peakPct (reached
-// peakLeadDays out), holds, then jumps to finalPct for the final finalDays (N5:
-// the ramp is never evaluated outside a window).
+// A holiday's window is [peak - windowDays, peak], OR [explicit start, peak] when the
+// catalog row pins `startMonth`/`startDay` (seasons like Fall = Sept 15 → Thanksgiving
+// Day, migration 456 — a fixed start against a floating end). The peak is resolved
+// per-year from a rule (fixed date / nth-weekday / Easter computus), so floating
+// holidays (Easter, Thanksgiving) and the New Year's year-wrap all fall out of real
+// date arithmetic (§3.5, M1/N4). Windows may OVERLAP (Fall × Halloween × Thanksgiving);
+// the render mixes every active season — nothing here ever prefers one. The ramp
+// climbs from rampStartPct → peakPct (reached peakLeadDays out), holds, then jumps
+// to finalPct for the final finalDays (N5: never evaluated outside a window).
 
 export type PeakRule = 'fixed' | 'nth_weekday' | 'easter';
 export type RampStyle = 'ramp' | 'flat';
@@ -25,7 +28,12 @@ export interface HolidayCatalogRow {
   peakDay?: number | null; // 1-31 (fixed)
   peakNth?: number | null; // nth_weekday, e.g. 4 = fourth
   peakWeekday?: number | null; // nth_weekday, 0=Sun .. 6=Sat
-  windowDays: number; // days before the peak the window opens
+  windowDays: number; // days before the peak the window opens (informational when start* is set)
+  /** Optional explicit window START (migration 456). When set, the window is
+   *  [start, peak] and `windowDays` is ignored. A start later in the calendar
+   *  than the peak (Dec 26 → Jan 1) resolves to the previous year. */
+  startMonth?: number | null;
+  startDay?: number | null;
   rampStartPct: number;
   peakPct: number;
   peakLeadDays: number;
@@ -134,6 +142,26 @@ function clampPct(n: number): number {
 }
 
 /**
+ * The [open, peak] day-serial bounds of a row's window for the year its PEAK falls
+ * in. Explicit start (migration 456) wins over the relative `windowDays` model.
+ */
+export function windowBounds(
+  row: HolidayCatalogRow,
+  peakYear: number
+): { openSerial: number; peakSerial: number } {
+  const peakSerial = toSerial(resolvePeak(row, peakYear));
+  if (row.startMonth != null && row.startDay != null) {
+    let openSerial = toSerial({ year: peakYear, month: row.startMonth, day: row.startDay });
+    if (openSerial > peakSerial) {
+      // Start is later in the calendar than the peak → it belongs to the prior year.
+      openSerial = toSerial({ year: peakYear - 1, month: row.startMonth, day: row.startDay });
+    }
+    return { openSerial, peakSerial };
+  }
+  return { openSerial: peakSerial - row.windowDays, peakSerial };
+}
+
+/**
  * ALL seasons/holidays active on a user-local date (may be several — Fall and
  * Halloween overlap in early October by design). Each carries its own pct; the
  * render sums them (capped) and picks one weighted by pct, so overlapping windows
@@ -149,15 +177,17 @@ export function resolveActiveHolidays(
 
   for (const row of rows) {
     for (const year of [today.year, today.year + 1]) {
-      const peakSerial = toSerial(resolvePeak(row, year));
-      const openSerial = peakSerial - row.windowDays;
+      const { openSerial, peakSerial } = windowBounds(row, year);
       if (todaySerial >= openSerial && todaySerial <= peakSerial) {
         const daysUntil = peakSerial - todaySerial;
+        // The ramp is shaped over the EFFECTIVE window length (explicit-start
+        // seasons may be longer/shorter than `windowDays`).
+        const effective = { ...row, windowDays: peakSerial - openSerial };
         active.push({
           key: row.key,
           displayName: row.displayName,
           emoji: row.emoji,
-          holidayPct: rampPct(row, daysUntil),
+          holidayPct: rampPct(effective, daysUntil),
           daysUntilPeak: daysUntil,
           sortOrder: row.sortOrder,
         });
@@ -184,6 +214,8 @@ export function mapHolidayCatalogRow(r: Record<string, unknown>): HolidayCatalog
     peakNth: (r.peak_nth as number | null) ?? null,
     peakWeekday: (r.peak_weekday as number | null) ?? null,
     windowDays: Number(r.window_days ?? 0),
+    startMonth: r.start_month == null ? null : Number(r.start_month),
+    startDay: r.start_day == null ? null : Number(r.start_day),
     rampStartPct: Number(r.ramp_start_pct ?? 0),
     peakPct: Number(r.peak_pct ?? 0),
     peakLeadDays: Number(r.peak_lead_days ?? 0),

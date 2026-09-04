@@ -324,8 +324,8 @@ Add `holiday_optouts jsonb NOT NULL DEFAULT '[]'` to **`user_recipes`** (array o
 ---
 
 ## 5. Delight touches (pure joy, no upsell)
-- **Holiday-aware bot message.** The Haiku nightly caption gets a holiday-flavored prompt during the
-  window ("🎃 spun you a little Halloween nightmare…"). One extra branch in the message generator.
+- ~~Holiday-aware bot message~~ — **CUT 2026-09-04 (Kevin): not needed.** The Haiku inbox title stays
+  place-only for holiday dreams too.
 - **A subtle 🎃 marker** on the dream so the dreamer knows it's a special. **Storage (L4):** the render
   already writes an `ai_generation_log` / `uploads` row — stamp the holiday key on the dream (a
   `holiday text` column on `uploads`, or a `metadata.holiday` field if we use a JSONB blob there), then the
@@ -374,6 +374,9 @@ The dreamer's real face gets swapped in. A holiday row breaks the swap unless it
 ---
 
 ## 7. Opt-out UX + onboarding
+> **CUT 2026-09-04 (Kevin): no opt-out screen.** The storage column + render-side skip stay (harmless,
+> default `[]` = everyone in); no UI ships. Don't re-propose.
+
 - **New screen `app/settings/holidays.tsx`**, mirroring `app/settings/notifications.tsx`: one toggle per
   holiday from the `holidays` catalog (ordered by `sort_order`, with emoji + display name). Enabled =
   key NOT in `holiday_optouts`. Writes `user_recipes.holiday_optouts`.
@@ -517,8 +520,8 @@ after the foundation ships.
 2. **Halloween MVP-25** — seed 25 cast rows across the 20 sub-themes + 25 scene-only rows; QA the cast path
    via `force_scene_category='halloween'` and the scene-only path via `force_holiday_scene='halloween'`
    (solo + dual), run the proximity scan, grade in-app on AlphaBot / a test user. Fix wording, re-roll.
-3. **Scale + opt-out UX** — grow cast to ~160 / scene-only to ~80; build `settings/holidays.tsx`; wire the
-   holiday-aware bot message + the `uploads.holiday` 🎃 marker.
+3. **Scale** — grow cast to ~160 / scene-only to ~80; wire the
+   `uploads.holiday` 🎃 marker.
 4. **Capacity pre-check (M5)** — the holiday peak is a **synchronized spike**: every Pro user, the same
    final 3 days, at 100%, skewed toward **heavy dual face-swaps** (couples). The heavy path is capped at
    `dream_queue_max_concurrent_heavy` (10) and bottlenecked on the Fly.io `face-swap-dual` service. Before
@@ -625,10 +628,8 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
   (`resolveMediumFromDb`). Deno-clean, dark-safe. *(deployed)*
 - [x] `uploads.holiday` marker stamped on the main insert (both paths → `holidayCategory`).
 - [ ] N3: thread `uploads.holiday` through `get_feed` + `mapPost` so the tile shows the emoji.
-- [ ] Holiday-aware bot message (Haiku caption).
 - [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
-- [ ] `settings/holidays.tsx` opt-out UX.
 
 ---
 

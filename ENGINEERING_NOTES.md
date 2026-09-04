@@ -9,7 +9,8 @@ relevant section only when doing that kind of work.
 
 ### After adding / changing a Supabase table, column, or RPC
 
-1. **Regenerate types** — `supabase gen types typescript --linked 2>/dev/null > types/database.ts`.
+1. **Regenerate types** — `supabase gen types typescript --linked --schema public 2>/dev/null > types/database.ts`
+   then `npx prettier --write types/database.ts` (without `--schema public` the CLI adds a `graphql_public` block).
 2. **UPDATE policies on user-writable tables:** verify `WITH CHECK` OR an UPDATE trigger freezes
    sensitive columns. Postgres does NOT require `WITH CHECK` on UPDATE — you must remember.
    Reference: `migrations/108_uploads_rls_lockdown.sql` `freeze_upload_columns_on_update`.

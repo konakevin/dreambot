@@ -1611,6 +1611,7 @@ export type Database = {
           gifting_enabled: boolean;
           holidays_enabled: boolean;
           id: number;
+          identity_degrade_floor: number;
           latest_app_version: string | null;
           location_action_pct: number;
           max_inflight_dreams_per_user: number;
@@ -1630,6 +1631,8 @@ export type Database = {
           pro_monthly_sparkle_bundle: number;
           pro_trial_days: number;
           prompt_max_length: number;
+          quality_gate_max_retries: number;
+          quality_gate_mode: string;
           relationship_regex: string | null;
           relationship_words: string;
           scene_eligible_models: string[];
@@ -1689,6 +1692,7 @@ export type Database = {
           gifting_enabled?: boolean;
           holidays_enabled?: boolean;
           id?: number;
+          identity_degrade_floor?: number;
           latest_app_version?: string | null;
           location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
@@ -1708,6 +1712,8 @@ export type Database = {
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
+          quality_gate_max_retries?: number;
+          quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
           scene_eligible_models?: string[];
@@ -1767,6 +1773,7 @@ export type Database = {
           gifting_enabled?: boolean;
           holidays_enabled?: boolean;
           id?: number;
+          identity_degrade_floor?: number;
           latest_app_version?: string | null;
           location_action_pct?: number;
           max_inflight_dreams_per_user?: number;
@@ -1786,6 +1793,8 @@ export type Database = {
           pro_monthly_sparkle_bundle?: number;
           pro_trial_days?: number;
           prompt_max_length?: number;
+          quality_gate_max_retries?: number;
+          quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
           scene_eligible_models?: string[];
@@ -2072,6 +2081,8 @@ export type Database = {
           ramp_start_pct: number;
           ramp_style: string;
           sort_order: number;
+          start_day: number | null;
+          start_month: number | null;
           window_days: number;
         };
         Insert: {
@@ -2092,6 +2103,8 @@ export type Database = {
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;
+          start_day?: number | null;
+          start_month?: number | null;
           window_days: number;
         };
         Update: {
@@ -2112,6 +2125,8 @@ export type Database = {
           ramp_start_pct?: number;
           ramp_style?: string;
           sort_order?: number;
+          start_day?: number | null;
+          start_month?: number | null;
           window_days?: number;
         };
         Relationships: [];

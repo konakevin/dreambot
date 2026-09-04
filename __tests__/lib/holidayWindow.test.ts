@@ -7,6 +7,7 @@ import {
   pickWeightedHoliday,
   mapHolidayCatalogRow,
   localDateInTz,
+  windowBounds,
   type HolidayCatalogRow,
 } from '@engine/holidayWindow';
 import { sceneTypeCuts, rollSceneType } from '@engine/sceneTypeRoll';
@@ -17,10 +18,14 @@ const FALL: HolidayCatalogRow = {
   displayName: 'Fall',
   emoji: '🍂',
   rampStyle: 'flat',
-  peakRule: 'fixed',
-  peakMonth: 10,
-  peakDay: 7, // window END (flat seasons have no real peak); window = Sept 1 → Oct 7
-  windowDays: 36,
+  // Migration 456: explicit start Sept 15 → peak = Thanksgiving Day (4th Thu of Nov).
+  peakRule: 'nth_weekday',
+  peakMonth: 11,
+  peakNth: 4,
+  peakWeekday: 4,
+  startMonth: 9,
+  startDay: 15,
+  windowDays: 72, // informational — the explicit start wins
   rampStartPct: 10,
   peakPct: 10, // the flat ambient level
   peakLeadDays: 0,
@@ -108,6 +113,34 @@ const EASTER: HolidayCatalogRow = {
   sortOrder: 7,
 };
 const ALL = [FALL, HALLOWEEN, NYE, THANKSGIVING, ST_PATRICKS, EASTER];
+// The rest of the live catalog (migration 437/438 values) — used by the gating sweep.
+const ramped = (
+  key: string,
+  peakMonth: number,
+  peakDay: number,
+  windowDays: number,
+  peakLeadDays: number,
+  sortOrder: number
+): HolidayCatalogRow => ({
+  key,
+  displayName: key,
+  emoji: '',
+  rampStyle: 'ramp',
+  peakRule: 'fixed',
+  peakMonth,
+  peakDay,
+  windowDays,
+  rampStartPct: 6,
+  peakPct: 25,
+  peakLeadDays,
+  finalPct: 35,
+  finalDays: 1,
+  sortOrder,
+});
+const CHRISTMAS = ramped('christmas', 12, 25, 24, 7, 2);
+const VALENTINES = ramped('valentines', 2, 14, 7, 3, 5);
+const JULY_4TH = ramped('july_4th', 7, 4, 7, 3, 8);
+const FULL_CATALOG = [...ALL, CHRISTMAS, VALENTINES, JULY_4TH];
 
 describe('easterSunday (computus)', () => {
   it('matches known Gregorian Easter dates', () => {
@@ -169,14 +202,14 @@ describe('rampPct — short ramped window does NOT collapse (M1)', () => {
 });
 
 describe('resolveActiveHolidays', () => {
-  it('Halloween alone is active mid-October', () => {
+  it('mid-October = Halloween ramping INSIDE the Fall season (both active, mig 456)', () => {
     const a = resolveActiveHolidays({ year: 2026, month: 10, day: 15 }, ALL);
-    expect(a.map((h) => h.key)).toEqual(['halloween']);
-    expect(a[0].daysUntilPeak).toBe(16);
+    expect(a.map((h) => h.key).sort()).toEqual(['fall', 'halloween']);
+    expect(a.find((h) => h.key === 'halloween')!.daysUntilPeak).toBe(16);
   });
   it('returns [] outside every window', () => {
     expect(resolveActiveHolidays({ year: 2026, month: 8, day: 1 }, ALL)).toEqual([]);
-    expect(resolveActiveHolidays({ year: 2026, month: 11, day: 10 }, ALL)).toEqual([]);
+    expect(resolveActiveHolidays({ year: 2026, month: 12, day: 5 }, ALL)).toEqual([]);
   });
   it('the day AFTER the peak closes the ramped window', () => {
     expect(resolveActiveHolidays({ year: 2026, month: 11, day: 1 }, [HALLOWEEN])).toEqual([]);
@@ -280,6 +313,161 @@ describe('mapHolidayCatalogRow (DB snake_case → catalog)', () => {
     expect(mapHolidayCatalogRow({ key: 'x', peak_rule: 'fixed', window_days: 5 }).rampStyle).toBe(
       'ramp'
     );
+  });
+  it('maps the explicit start columns (mig 456) and leaves them null when absent', () => {
+    const withStart = mapHolidayCatalogRow({
+      key: 'fall',
+      peak_rule: 'nth_weekday',
+      window_days: 72,
+      start_month: 9,
+      start_day: 15,
+    });
+    expect(withStart.startMonth).toBe(9);
+    expect(withStart.startDay).toBe(15);
+    const without = mapHolidayCatalogRow({ key: 'x', peak_rule: 'fixed', window_days: 5 });
+    expect(without.startMonth).toBeNull();
+    expect(without.startDay).toBeNull();
+  });
+});
+
+// ── Window gating: seed pools engage ONLY inside their window (Kevin 2026-09-04) ──
+// "Don't need Christmas posts showing in July." Every holiday's pool must be
+// eligible on exactly its window days and on no other day of the year.
+describe('window gating — pools engage only inside their window', () => {
+  const keysOn = (y: number, m: number, d: number, rows = FULL_CATALOG) =>
+    resolveActiveHolidays({ year: y, month: m, day: d }, rows)
+      .map((h) => h.key)
+      .sort();
+  const find = (y: number, m: number, d: number, key: string) =>
+    resolveActiveHolidays({ year: y, month: m, day: d }, FULL_CATALOG).find((h) => h.key === key);
+
+  it('Fall opens on Sept 15 exactly (explicit start), not the day before', () => {
+    expect(keysOn(2026, 9, 14)).toEqual([]);
+    expect(keysOn(2026, 9, 15)).toEqual(['fall']);
+    expect(keysOn(2027, 9, 14)).toEqual([]);
+    expect(keysOn(2027, 9, 15)).toEqual(['fall']);
+  });
+
+  it('Fall runs through Thanksgiving DAY and closes the day after (floating end)', () => {
+    // 2026: Thanksgiving = Nov 26; 2027: Nov 25.
+    expect(find(2026, 11, 26, 'fall')?.daysUntilPeak).toBe(0);
+    expect(keysOn(2026, 11, 27)).toEqual([]);
+    expect(find(2027, 11, 25, 'fall')?.daysUntilPeak).toBe(0);
+    expect(keysOn(2027, 11, 26)).toEqual([]);
+  });
+
+  it('Fall is a flat 10% on every day of its window, first to last', () => {
+    for (const [m, d] of [
+      [9, 15],
+      [10, 1],
+      [10, 31],
+      [11, 10],
+      [11, 26],
+    ]) {
+      expect(find(2026, m, d, 'fall')?.holidayPct).toBe(10);
+    }
+  });
+
+  it('Halloween is Oct 1-31 only: closed Sept 30, ramp start Oct 1, nudge Oct 31, closed Nov 1', () => {
+    expect(find(2026, 9, 30, 'halloween')).toBeUndefined();
+    expect(find(2026, 10, 1, 'halloween')?.holidayPct).toBe(6);
+    const night = find(2026, 10, 31, 'halloween');
+    expect(night?.daysUntilPeak).toBe(0);
+    expect(night?.holidayPct).toBe(35);
+    expect(find(2026, 11, 1, 'halloween')).toBeUndefined();
+  });
+
+  it('NO Christmas in July (or November): the window is Dec 1-25 only', () => {
+    expect(keysOn(2026, 7, 15)).toEqual([]);
+    expect(find(2026, 11, 30, 'christmas')).toBeUndefined();
+    expect(find(2026, 12, 1, 'christmas')?.holidayPct).toBe(6);
+    expect(find(2026, 12, 25, 'christmas')?.daysUntilPeak).toBe(0);
+    expect(find(2026, 12, 26, 'christmas')).toBeUndefined();
+  });
+
+  it('overlaps are eligible TOGETHER: late Nov = Fall + Thanksgiving; Oct = Fall + Halloween', () => {
+    expect(keysOn(2026, 11, 20)).toEqual(['fall', 'thanksgiving']);
+    expect(keysOn(2026, 10, 20)).toEqual(['fall', 'halloween']);
+  });
+
+  it('an explicit start later in the calendar than the peak wraps to the prior year', () => {
+    const nyeWeek: HolidayCatalogRow = {
+      ...NYE,
+      key: 'nye_week',
+      startMonth: 12,
+      startDay: 26,
+      windowDays: 0,
+    };
+    const on = (y: number, m: number, d: number) =>
+      resolveActiveHolidays({ year: y, month: m, day: d }, [nyeWeek]).map((h) => h.key);
+    expect(on(2026, 12, 25)).toEqual([]);
+    expect(on(2026, 12, 26)).toEqual(['nye_week']);
+    expect(on(2027, 1, 1)).toEqual(['nye_week']);
+    expect(on(2027, 1, 2)).toEqual([]);
+  });
+
+  it('windowBounds: Fall 2026 = Sept 15 → Nov 26', () => {
+    const { openSerial, peakSerial } = windowBounds(FALL, 2026);
+    const day = (m: number, d: number) => Math.floor(Date.UTC(2026, m - 1, d) / 86_400_000);
+    expect(openSerial).toBe(day(9, 15));
+    expect(peakSerial).toBe(day(11, 26));
+  });
+
+  it('two-year sweep: no holiday is ever active outside its allowed months, and each is active for exactly its window length', () => {
+    const allowedMonths: Record<string, number[]> = {
+      fall: [9, 10, 11],
+      halloween: [10],
+      thanksgiving: [11],
+      christmas: [12],
+      new_years: [12, 1],
+      valentines: [2],
+      st_patricks: [3],
+      easter: [3, 4],
+      july_4th: [6, 7],
+    };
+    const expectedDaysPerYear: Record<string, (year: number) => number> = {
+      fall: (y) => {
+        const { openSerial, peakSerial } = windowBounds(FALL, y);
+        return peakSerial - openSerial + 1;
+      },
+      halloween: () => 31,
+      thanksgiving: () => 13,
+      christmas: () => 25,
+      new_years: () => 6,
+      valentines: () => 8,
+      st_patricks: () => 8,
+      easter: () => 15,
+      july_4th: () => 8,
+    };
+    const counts: Record<string, Record<number, number>> = {};
+    const violations: string[] = [];
+    for (const year of [2026, 2027]) {
+      for (let m = 1; m <= 12; m++) {
+        for (let d = 1; d <= 31; d++) {
+          const probe = new Date(Date.UTC(year, m - 1, d));
+          if (probe.getUTCMonth() + 1 !== m) continue; // skip invalid dates (Feb 30)
+          for (const h of resolveActiveHolidays({ year, month: m, day: d }, FULL_CATALOG)) {
+            if (!allowedMonths[h.key].includes(m))
+              violations.push(`${h.key} active on ${year}-${m}-${d}`);
+            counts[h.key] ??= {};
+            // Attribute New Year's Dec days to the coming year so each window counts once.
+            const bucket = h.key === 'new_years' && m === 12 ? year + 1 : year;
+            counts[h.key][bucket] = (counts[h.key][bucket] ?? 0) + 1;
+          }
+        }
+      }
+    }
+    expect(violations).toEqual([]);
+    for (const key of Object.keys(allowedMonths)) {
+      for (const year of [2026, 2027]) {
+        if (key === 'new_years' && year === 2026) continue; // Dec-2025 half not swept
+        expect({ key, year, days: counts[key]?.[year] ?? 0 }).toEqual({
+          key,
+          year,
+          days: expectedDaysPerYear[key](year),
+        });
+      }
+    }
   });
 });
 

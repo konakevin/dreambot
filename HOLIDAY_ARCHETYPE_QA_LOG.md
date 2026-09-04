@@ -72,8 +72,8 @@ gothic_masquerade_ball, haunted_hayride — the pose fix). Zero hit Round 3.
    photo (dual-path style quirk). Still clean + pretty; passes bar.
 
 ### Next (deferred, per plan)
-Fall's 8 archetypes get the same treatment; day-of hero pools; N3 feed-marker; holiday bot caption;
-`settings/holidays.tsx` opt-out UI; scale pools past MVP-25; then flip live.
+Fall's 8 archetypes get the same treatment; day-of hero pools; N3 feed-marker;
+scale pools past MVP-25; then flip live.
 
 ## Round-by-round detail
 (appended as each archetype is processed)
