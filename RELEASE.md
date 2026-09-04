@@ -94,6 +94,11 @@ Then finish in ASC exactly as with a cloud build (§4), bump the update gate (§
 and log it in `RELEASES.md` (§ How to add a row).
 
 Notes / gotchas for the local path:
+- **Verify embedded env keys with `grep -a` (2026-09-04).** The Hermes bytecode
+  bundle makes plain `grep`/`strings` miss embedded literals — a false "PostHog
+  key missing" scare nearly blocked 1.1.0. The reliable check:
+  `unzip -p build-X.ipa Payload/DreamBot.app/main.jsbundle | grep -ac "phc_"`
+  (and compare against the previous shipped IPA as a control when in doubt).
 - **The FB URL scheme (root-caused + fixed 2026-07-20; know why it took 5 builds).**
   `FACEBOOK_APP_ID` / `FACEBOOK_CLIENT_TOKEN` were EAS **secret** env vars,
   referenced in `eas.json` as `"$FACEBOOK_APP_ID"`. Two problems stacked:
