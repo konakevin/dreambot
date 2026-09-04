@@ -93,8 +93,18 @@ Diversity gate: `node scripts/simulate-holiday-hero.mjs` (500 users → 438 dist
 | couple | eerie | v1/v2 (people clause) | 7 | 1/7 | — | +1 identity ≈ 0 on one side → `dual_degrade_single` → solo fallback |
 | couple | cozy | v2 (people clause) | 3 | 0/3 | — | same failure |
 | couple | cozy | **v3 pure-env** | 4 | **4/4** | 4.8 | pumpkin patch / porch / living room; identity 0.63-0.78 both sides; postcard lands |
-| couple | eerie | v3 pure-env | 1 | 0/1 | — | still fails on the woman's side → A/B (photography vs face-free painted) |
+| couple | eerie | v3 pure-env, painted | 1 | 0/1 | — | still fails on the woman's side → A/B below |
+| couple | eerie | A/B: same scenes on **photography** | 3 | **3/3** first attempt | 4.9 | ballroom staircase, crimson gown + tailcoat, both faces clean → **v4 medium** |
+| couple | eerie | A/B: painted, face-free settings | 3 | 1/3 (the pass needed a re-render) | — | painterly dual swaps are flaky under the identity gate regardless of scene faces |
+| self | eerie | v3 painted | 2 | 2/2 | 4.0 | castle hall watercolor but wardrobe collapsed to a plain waistcoat → v4 photography |
+| self | eerie | **v4 photography** | 2 | 2/2 | 4.8 | castle courtyard, blood moon, jack-o-lanterns, violet garlands, three-piece suit + cane — the recipe exactly |
+| plus_one | eerie | v3 painted | 2 | 2/2 | 4.7 | crimson velvet gown + choker in a gothic conservatory — keeps painterly (v4) |
 | self | cozy | v3 + POSTCARD | 1 | 1/1 | 4.8 | living-room hero + "Happy Halloween" composited in-render (`postcard:halloween:ok:2121ms`) |
+
+**Everyday archetype regression check (same session, current identity gate):** gothic_masquerade_ball 1/2,
+vampire 2/2, ghost_glam 0/1 couples passed → **3/5 painterly couple swaps survive the mig-455 identity floor**
+(the Aug-19 QA predates it). The everyday Halloween couple pools need the same photography/medium review
+before scaling — open item in HOLIDAY_DREAMS_PLAN.md §12.
 
 **Lessons:** scene = PURE ENVIRONMENT (no people/role clause) · lead every setting with its Halloween
 noun · palette = décor colour, not light · no DDL on `holidays` mid-sample (PostgREST schema reload

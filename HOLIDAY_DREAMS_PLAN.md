@@ -632,8 +632,12 @@ embodied / dream-art nightly types too, for total immersion. Not needed for a gr
   sweeps the LIVE catalog through the production math (exit 1 on any out-of-window eligibility).
 - [x] **Day-of HERO** (mig 457/458 + render integration + `scripts/qa-holiday-hero.js` + diversity gate) — §13.
 - [x] **POSTCARD overlay** (mig 459 + `holiday-postcard` fn + artwork generator) — §14.
-- [ ] Eerie COUPLE hero: the +1 identity gate (mig 455 floor, newer than the Aug-19 QA) fails on the painterly
-  gothic recipe (~85% → degrades to a solo). A/B in progress (photography vs face-free painted settings).
+- [x] Eerie COUPLE hero: A/B proved the medium, not the scene — painterly dual swaps fail the +1 identity
+  gate (mig 455 floor, newer than the Aug-19 QA) ~85% of the time; the same scenes on photography passed
+  3/3. v4: couple (both registers) + male eerie = photography; female eerie stays painterly.
+- [ ] **Everyday Halloween COUPLE pools under the identity gate:** regression check 3/5 painterly couples
+  survive (masquerade 1/2, vampire 2/2, ghost_glam 0/1) → degrade to solo. Review the 25 archetypes' couple
+  mediums (photography passes cleanly) or the gate floor BEFORE scaling past MVP.
 - [ ] N3: thread `uploads.holiday` through `get_feed` + `mapPost` so the tile shows the emoji.
 - [ ] T1 behavioral test of the render branches (roll + loaders stubbed).
 - [ ] Fall + Halloween seed generators (Sonnet-authored, lint-gated) → MVP-25 (cast + scene-only) → QA on a test user.
