@@ -840,24 +840,39 @@ export default function ProfileScreen() {
         </View>
       )}
 
-      {/* Saved album: the same segmented shape as Dreams, folding "Hearted" in
-          beside "Bookmarked" instead of a 5th tabRow icon (Kevin 2026-09-04). */}
+      {/* Saved album: the same segmented PILL as Dreams, but icons instead of
+          text — Bookmarked/Hearted map onto icons already used elsewhere on
+          this exact screen (the tabRow's bookmark above, the post-card heart),
+          unlike Dreams' All/Public/Private which have no good icon equivalent
+          (Kevin 2026-09-04). */}
       {activeTab === 'saved' && !gridSelecting && (
         <View style={styles.dreamsFilterRow}>
           <View style={styles.segmented}>
-            {(['bookmarked', 'hearted'] as const).map((f) => {
-              const active = savedFilter === f;
-              const label = f === 'bookmarked' ? 'Bookmarked' : 'Hearted';
+            {(
+              [
+                {
+                  key: 'bookmarked',
+                  label: 'Bookmarked',
+                  icon: 'bookmark-outline',
+                  activeIcon: 'bookmark',
+                },
+                { key: 'hearted', label: 'Hearted', icon: 'heart-outline', activeIcon: 'heart' },
+              ] as const
+            ).map((f) => {
+              const active = savedFilter === f.key;
               return (
                 <TouchableOpacity
-                  key={f}
-                  style={[styles.segment, active && styles.segmentActive]}
-                  onPress={() => applySavedFilter(f)}
+                  key={f.key}
+                  style={[styles.segment, styles.iconSegment, active && styles.segmentActive]}
+                  onPress={() => applySavedFilter(f.key)}
                   activeOpacity={0.8}
+                  accessibilityLabel={f.label}
                 >
-                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                    {label}
-                  </Text>
+                  <Ionicons
+                    name={active ? f.activeIcon : f.icon}
+                    size={20}
+                    color={active ? '#A78BFA' : colors.textSecondary}
+                  />
                 </TouchableOpacity>
               );
             })}
@@ -1277,6 +1292,15 @@ const styles = StyleSheet.create({
   segmentActive: {
     backgroundColor: 'rgba(167,139,250,0.18)',
     borderColor: 'rgba(167,139,250,0.55)',
+  },
+  // Icon-only segment (Saved's Bookmarked/Hearted) — no minWidth:64 text
+  // reservation, but sized for a real ~44pt tap target (Apple HIG minimum),
+  // not just shrunk to fit the icon (Kevin 2026-09-04: felt too narrow next
+  // to the tabRow's much taller icon buttons above it).
+  iconSegment: {
+    minWidth: 0,
+    paddingHorizontal: 14,
+    paddingVertical: verticalScale(11),
   },
   segmentText: {
     color: colors.textSecondary,
