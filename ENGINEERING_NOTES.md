@@ -19,9 +19,16 @@ relevant section only when doing that kind of work.
 
 ### After adding a migration file
 
-1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions (highest prefix is currently 275).
+1. `ls supabase/migrations/ | grep ^NNN` for prefix collisions (highest prefix is currently 455).
 2. `npx jest __tests__/lib/migrations.test.ts` enforces unique numeric prefixes.
-3. Run via the Supabase dashboard SQL editor (DDL can't go through the JS client).
+3. **Apply it: `node scripts/apply-migration.mjs NNN`** (prefix or path; `--dry-run` first for anything
+   destructive). Posts the file to the Management API SQL endpoint — identical to pasting it into the
+   dashboard SQL editor: runs as `postgres`, whole file = ONE implicit transaction (all-or-nothing;
+   `CREATE INDEX CONCURRENTLY` can't run there — split it out and run with `--no-record`). On success
+   the prefix is recorded in `supabase_migrations.schema_migrations` as a double-apply guard (`--force`
+   overrides). Auth = the Supabase CLI keychain token (or `SUPABASE_ACCESS_TOKEN`). **NEVER
+   `supabase db push`** — the CLI history was empty until 2026-09-04 (427 files pasted by hand), so
+   push would try to replay everything from 001. The repo directory stays the source of truth.
 4. Follow-ups to an existing number use `NNNa_`, `NNNb_`.
 
 ### After adding a medium to `dream_mediums`

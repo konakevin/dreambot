@@ -134,8 +134,8 @@ website.
 
 - **Supabase** — Postgres (data + RLS), Auth (email + Google + Apple + Facebook OAuth — `AUTH_PROVIDERS.md`),
   Storage (`uploads` bucket), Realtime (the loading screen + feed), **Edge Functions** (all generation +
-  webhooks), **pg_cron** (the queue worker + log retention). Migrations run by hand in the dashboard SQL
-  editor; edge fns deploy via CLI (see ops).
+  webhooks), **pg_cron** (the queue worker + log retention). Migrations apply via
+  `scripts/apply-migration.mjs` (Management API; see ops); edge fns deploy via CLI (see ops).
 - **App Store Connect** — the iOS app + all IAP products. Sparkle packs (`com.konakevin.radorbad.sparkles.*_v2`)
   and the Pro auto-renewing subscription (`com.konakevin.dreambot.pro.monthly` / `.pro.yearly`) are defined
   here, then mirrored in RevenueCat as offerings/packages. Pro entitlement = `'pro'`, offering = `'pro'`
@@ -190,7 +190,9 @@ for the public feed + serves deep-link share targets.**
   `enqueue-dream`, `first-dream-render`, `face-swap-dual`, `restyle-photo`, `describe-photo`,
   `classify-photo`, `extract-style`, `audit-cast-photos`, `revenuecat-webhook`, `send-push`,
   `refund-self-moderation`, `refund-stuck-jobs`, `upscale-image`.
-- **Migrations** run by hand in the Supabase dashboard SQL editor (DDL can't go through the JS client).
+- **Migrations** — apply with `node scripts/apply-migration.mjs <NNN>` (posts the file to the Management
+  API SQL endpoint = the dashboard SQL editor: all-or-nothing, ledger-guarded against double-apply;
+  `--dry-run` first for destructive DDL; NEVER `supabase db push`). Repo files stay the source of truth.
   Checklist + prefix rules: `ENGINEERING_NOTES.md`.
 - **Node scripts.** `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && node <script>`. Nightly
   locally: `node scripts/nightly-dreams.js` (reads `.env.local`).
