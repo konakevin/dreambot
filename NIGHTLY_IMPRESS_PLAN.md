@@ -11,6 +11,16 @@ sections + git log `77c51204..f88bce24` for the full failure-mode education).
 
 **Priority order (Kevin-endorsed): #1 → #2 → the rest as appetite allows.**
 
+## 0. ⭐⭐ TOP PRIORITY (Kevin, 2026-09-04): "Nailed Looks" research — frozen, proven model × medium × vibe looks for nightly
+
+Kevin: "the relentless pursuit to drill down and find the ideal looks we can create for a fun, varied
+set of styles for nightly dreams — model, medium, vibe … a system similar to the bots' 'looks' …
+deliver consistently really high quality 'nailed' styles/looks in nightly. It's a top priority."
+Charter: `NIGHTLY_NAILED_LOOKS_RESEARCH.md` (phases, gate, guardrails). Instance #1 (the day-of
+Halloween hero look): `HALLOWEEN_SIGNATURE_LOOK_PLAN.md`. Key finding already in hand: the MODEL is
+the first-order couple-swap reliability lever (flux-1.1-pro degrades 10-23% of couples on painterly
+mediums; flex/gemini/gpt show 0% in small samples) — so every frozen look pins its model.
+
 ---
 
 ## 1. ✅ Render-time quality gate ⭐ — LIVE (enforce) since 2026-09-03 · PROFILE check added 2026-09-04
