@@ -338,7 +338,7 @@ async function seed(holiday, arch, def, table, extra, prompt) {
         arch,
         def,
         'dual_scenarios',
-        { pool: 'holiday', category: holiday, medium_key: def.castMedium },
+        { pool: 'holiday', category: holiday }, // no medium pin (Kevin 2026-09-04)
         castPrompt(holiday, arch, def, N, true)
       );
     }
@@ -348,7 +348,7 @@ async function seed(holiday, arch, def, table, extra, prompt) {
         arch,
         def,
         'single_scenarios',
-        { pool: 'holiday', category: holiday, gender: 'any', medium_key: def.castMedium },
+        { pool: 'holiday', category: holiday, gender: 'any' }, // no medium pin
         castPrompt(holiday, arch, def, N, false)
       );
     }
@@ -358,7 +358,7 @@ async function seed(holiday, arch, def, table, extra, prompt) {
         arch,
         def,
         'holiday_scenes',
-        { holiday, medium_key: def.sceneMedium },
+        { holiday }, // no medium pin (Kevin 2026-09-04)
         scenePrompt(holiday, arch, def, N)
       );
     }

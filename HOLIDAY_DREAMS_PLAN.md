@@ -670,3 +670,21 @@ Midnight Countdown · the Champagne Gala / Spring-Garden Sunday · the Grand Egg
 2. Loaders take a `dayOf` param; the render detects the day-of holiday and guarantees + draws the hero pool.
 3. `gen-holiday-pools.js` gains `*-dayof` pools (grander concepts, same face-swap safety + lint gate).
 4. QA on the peak day via a date-override (or a `force_day_of` QA flag) so we can render heroes off-season.
+
+## Kevin's direction — 2026-09-04 (read before ANY Halloween seed/hero/QA work)
+
+- **Halloween must be the HERO of every seed and every render.** A render that is "mostly me in
+  whatever clothing with a hint of Halloween in the back" is a FAIL, whatever the face quality.
+  Rejected examples: tight head-and-shoulders portraits in a scarf/jacket with pumpkins blurred in
+  the background (the 2026-09-04 "cozy" hero QA renders).
+- **"Cozy" means the neighborhood at Halloween time:** fall colors, Halloween decorations in the
+  yard, pumpkin patches — and NOT-necessarily-realistic scenes: a couple standing in their yard with
+  TONS of jack-o-lanterns all over the porch and lawn. Abundance and the holiday itself carry the
+  frame; the person is IN it, not in front of a bokeh hint of it.
+- **No medium pinning.** Holiday rows roll the same nightly-eligible mediums as every other pool
+  (`medium_key` nulled on dual/single scenarios, `holiday_scenes`, `holiday_hero_prompts`
+  2026-09-04; rollback ledger in the session scratchpad). Halloween is an ordinary pool gated only
+  by its date window. The generators no longer write `medium_key` (fixed 2026-09-04).
+- **Pool QA protocol:** a matrix of every `sub_theme` (25 today) × {solo, couple}, one fixed medium,
+  captioned `🎃 matrix <sub_theme> <solo|couple>` in Kevin's album + an HTML page; Kevin grades which
+  pools make the cut. First matrix run 2026-09-04 (photography).

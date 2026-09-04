@@ -32,16 +32,6 @@ const N = parseInt(arg('n', '14'), 10);
 
 // VIBRANT painterly-gothic face-swap mediums for Halloween cast (rich color, oil
 // drama — NOT washed-out b&w). Warm painterly + some photoreal for Fall.
-const HALLOWEEN_CAST_MEDIA = [
-  'gothic_painted',
-  'vampire_portrait',
-  'painted_gothic_fantasy',
-  'gothic_oil_garden',
-];
-const FALL_CAST_MEDIA = ['canvas', 'heirloom', 'photography']; // warm painterly + a little photoreal
-const FALL_SCENE_MEDIA = ['canvas', 'illustration', 'photography']; // scene-eligible, painterly + photo
-const HALLOWEEN_SCENE_MEDIA = ['illustration', 'canvas']; // scene-eligible, colorful painterly gothic
-const pickRot = (arr, i) => arr[i % arr.length];
 
 // ── meta-prompts ──────────────────────────────────────────────────────────────
 const CAST_RULES = `HARD RULES (a render is REJECTED if violated — this is a FACE-SWAP portrait, the person/couple must dominate with big clear faces):
@@ -56,7 +46,7 @@ const POOLS = {
   'fall-dual': {
     table: 'dual_scenarios',
     key: { pool: 'holiday', category: 'fall' },
-    medium: (i) => ({ medium_key: pickRot(FALL_CAST_MEDIA, i) }),
+    medium: () => ({}), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT cozy-AUTUMN couple scenarios for a dreamy nightly-photo app — "you two, on the most perfect fall afternoon." Real cozy fall clothes (NO costume). Warm, nostalgic, pretty: corn mazes, leaf piles, pumpkin farms, apple orchards, fiery maple groves, cabin porches, bonfires, trick-or-treat streets.
@@ -71,7 +61,7 @@ Vary the setting across all ${n}. Output ONLY the JSON array.`,
   'fall-single': {
     table: 'single_scenarios',
     key: { pool: 'holiday', category: 'fall' },
-    medium: (i) => ({ medium_key: pickRot(FALL_CAST_MEDIA, i), gender: 'any' }),
+    medium: () => ({ gender: 'any' }), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT cozy-AUTUMN solo scenarios for a dreamy nightly-photo app — "you, on the most perfect fall afternoon." Real cozy fall clothes (NO costume). Warm, nostalgic, pretty: corn mazes, leaf piles, pumpkin farms, apple orchards, fiery maple groves, cabin porches, bonfires.
@@ -85,7 +75,7 @@ Vary the setting across all ${n}. Output ONLY the JSON array.`,
   'halloween-dual': {
     table: 'dual_scenarios',
     key: { pool: 'holiday', category: 'halloween' },
-    medium: (i) => ({ medium_key: pickRot(HALLOWEEN_CAST_MEDIA, i) }),
+    medium: () => ({}), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT HALLOWEEN costumed-COUPLE scenarios for a dreamy nightly-photo app — gothic, spooky-glam, and fun. Lean GOTHIC (GothBot-adjacent): old castles and castle ruins, candlelit gothic manors, moonlit crypts and cathedrals, fog-drowned villages, haunted rose gardens, gothic landscapes, graveyards. Costume archetypes: vampire aristocrats, glamour witches, ghost-glam, Van Helsing monster-hunters, elegant grim reapers, autumn-fae, harvest royalty. Costume = CLOTHING ONLY.
@@ -100,7 +90,7 @@ Vary the costume + gothic setting across all ${n}. Output ONLY the JSON array.`,
   'halloween-single': {
     table: 'single_scenarios',
     key: { pool: 'holiday', category: 'halloween' },
-    medium: (i) => ({ medium_key: pickRot(HALLOWEEN_CAST_MEDIA, i), gender: 'any' }),
+    medium: () => ({ gender: 'any' }), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT HALLOWEEN costumed-SOLO scenarios for a dreamy nightly-photo app — gothic, spooky-glam, and fun. Lean GOTHIC: old castles and castle ruins, candlelit gothic manors, moonlit crypts and cathedrals, fog-drowned villages, haunted rose gardens, gothic landscapes, graveyards. Archetypes: vampire aristocrat, glamour witch, ghost-glam, Van Helsing monster-hunter, elegant grim reaper (hood DOWN), autumn-fae, harvest royalty, retro mad scientist, cat-burglar.
@@ -114,7 +104,7 @@ Vary the costume + gothic setting across all ${n}. Output ONLY the JSON array.`,
   'fall-scene': {
     table: 'holiday_scenes',
     key: { holiday: 'fall' },
-    medium: (i) => ({ medium_key: pickRot(FALL_SCENE_MEDIA, i) }),
+    medium: () => ({}), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT rich, standalone AUTUMN scenes (NO people) for a dreamy nightly wallpaper — cozy, nostalgic, breathtakingly pretty fall. Corn mazes at dusk, golden pumpkin farms, fiery maple forests, misty apple orchards, cabin porches with jack-o-lanterns, small-town Main Streets in fall, bonfire fields, leaf-strewn park paths, harvest moons over valleys.
@@ -126,7 +116,7 @@ Vary the setting across all ${n}. Output ONLY the JSON array.`,
   'halloween-scene': {
     table: 'holiday_scenes',
     key: { holiday: 'halloween' },
-    medium: (i) => ({ medium_key: pickRot(HALLOWEEN_SCENE_MEDIA, i) }),
+    medium: () => ({}), // no medium pin (Kevin 2026-09-04): rolls like every pool
     prompt: (
       n
     ) => `Generate ${n} DISTINCT rich, standalone HALLOWEEN scenes (NO people) for a dreamy nightly wallpaper — gothic, spooky-beautiful, awe not gore. Lean GOTHIC: old castles and cliff-top castle ruins, gothic landscapes and misty moorlands, haunted Victorian manors under a full moon, moonlit fog graveyards, candlelit witch cottages, gothic cathedrals and crypts, jack-o-lantern festivals, spooky lantern-lit forests, abandoned carnivals under a blood moon, haunted lighthouses in a storm.

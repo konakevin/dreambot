@@ -6,7 +6,8 @@
  *
  * DB-ONLY — no code fallback. An empty result is expected (unseeded / fully-culled
  * holiday) and the CALLER must fall through to the normal roll (N2, §3.4b), never
- * render a broken dream. Every holiday row pins its own medium (§6.7).
+ * render a broken dream. medium_key is OPTIONAL and normally NULL (Kevin 2026-09-04:
+ * holiday rows roll the same nightly mediums as every other pool; null = the rolled medium).
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { DualScenario } from './dualScenarioLoader.ts';

@@ -21,7 +21,13 @@ PROFILE fail triggers a FRESH RENDER + swap (a re-swap can't fix a side-on base 
 with the production judge (Sonnet): 8/8 good pass (0 false positives), 4/4 broken caught incl. the
 new `broken-profile-faces` fixture (the old_hollywood QA render). `scripts/eval-quality-gate.ts`
 now defaults to the prod judge. Telemetry stamps: `quality_gate:enforce:fail:profile`,
-`quality_gate:rerender:N`, `cleared_after:N`, `shipped_unresolved`. Worth a look at fleet
+`quality_gate:rerender:N`, `cleared_after:N`, `shipped_unresolved`, `profile_dual_noretry`.
+**HOTFIX 2026-09-04 (3722d04b):** the PROFILE re-render re-ran the couple swap with a bare
+dispatch (no split check / identity gate / gender-safe degrade) and once shipped an UNSWAPPED
+re-render (Kevin's hearted canyon couple). Now: dual + profile → no retry (verified swap ships,
+stamped); solo re-render → identity-gated; null swappedUrl = failed attempt. **FOLLOW-UP:** make
+the retry run `genderSafeDualSwap` (the main path's verified pipeline) so couples can re-render
+on profile too. Worth a look at fleet
 telemetry after a week of enforce (fail rate by flag, retries, judge cost) — no date, just a note.
 
 **Problem.** Every nightly ships sight-unseen. The Tiffany camel render (sunglasses fused
@@ -88,7 +94,10 @@ check `select * from holidays`). **Rules:** dark by default; action scrub + prox
 scan post-seed; culture-specific festival wording banned (Diwali/Obon lesson — generic
 "floating-lantern night" style only); no rendered TEXT on clothing.
 **QA.** Per-bucket 8-10 renders via `force_holiday_scene` QA flag, Kevin grades in
-Preview or his album.
+Preview or his album. **Kevin 2026-09-04: Halloween must be the HERO of every seed/render (no
+"me in a scarf + pumpkins in the bokeh"); cozy = decorated neighborhoods, pumpkin patches, yards
+with TONS of jack-o-lanterns; NO medium pinning (rolls like every pool). Full direction + the
+sub_theme matrix protocol: `HOLIDAY_DREAMS_PLAN.md` (bottom).**
 
 ## 4. ⬜ Season/weather awareness
 
