@@ -320,7 +320,12 @@ for b in bucketA bucketB; do
   node scripts/generate-single-scenarios.js --pool active --buckets "$b" --per 50 2>&1 | grep inserted
 done
 ```
-`--per N` = N NEW rows (append-safe, dedups vs existing). We run ~100/bucket. **Do NOT** run a
+`--per N` = N NEW rows (append-safe, dedups vs existing) — in BOTH generators, for EVERY pool
+(goofy/elegant/active) since the 2026-09-04 fix. Before that, `generate-single-scenarios.js`
+silently ignored `--per` outside the active pool and appended each bucket's full built-in
+`count` → six goofy singles over-scaled to 110-180 in one top-off run. A no-flag run still
+appends the built-in count (first-seed size), so **always verify by COUNT per bucket after
+each run**, and trim over-scale by disabling the newest rows (never delete). We run ~100/bucket. **Do NOT** run a
 big `--per 150` across all buckets concurrently — that HANGS on Sonnet rate-limits (0% CPU,
 insert-is-at-end so a hang loses the whole run). Gotchas that bit us: `for b in $VAR` does NOT
 word-split in zsh (use a literal list); and `.select('category')` hits the PostgREST 1000-row

@@ -17,8 +17,15 @@
  *
  * Usage:
  *   node scripts/generate-single-scenarios.js --pool both --dry-run --buckets sample
- *   node scripts/generate-single-scenarios.js --pool goofy
- *   node scripts/generate-single-scenarios.js --pool elegant
+ *   node scripts/generate-single-scenarios.js --pool goofy              # first seed: each bucket's built-in count
+ *   node scripts/generate-single-scenarios.js --pool elegant --buckets gardens_f --per 50   # top-off: +50 NEW rows
+ *
+ * `--per N` = N NEW rows for EVERY selected bucket, in EVERY pool (goofy/elegant/active) —
+ * append-safe (dedups vs existing rows), same semantics as generate-dual-scenarios.js.
+ * (`--count N` is a legacy alias.) With no flag, each bucket APPENDS its full built-in
+ * `count` (the initial seed size) — so a no-flag re-run DOUBLES a seeded bucket. Always
+ * verify by COUNT per bucket after a run. History: until 2026-09-04 `--per` was silently
+ * ignored outside the active pool, which over-scaled six goofy buckets to 110-180.
  */
 const { SONNET } = require('./lib/models');
 require('dotenv').config({ path: '.env.local' });
@@ -40,9 +47,16 @@ const arg = (k, d) => {
 const POOL = arg('--pool', 'both');
 const DRY = args.includes('--dry-run');
 const BUCKET_FILTER = arg('--buckets', null);
-// Optional per-bucket count override (applies to every selected bucket) —
-// used for append runs, e.g. --count 60 to scale a 25-bucket to 85.
-const COUNT_OVERRIDE = arg('--count', null) ? parseInt(arg('--count', null), 10) : null;
+// Optional per-bucket target override (applies to EVERY selected bucket, every pool):
+// `--per N` (canonical, mirrors generate-dual-scenarios.js) or `--count N` (legacy alias)
+// = N NEW rows appended per bucket. A malformed value fails loudly — a silently-ignored
+// flag is exactly how the 2026-09-04 over-scale happened.
+const PER_RAW = arg('--per', null) ?? arg('--count', null);
+const PER_OVERRIDE = PER_RAW == null ? null : parseInt(PER_RAW, 10);
+if (PER_RAW != null && (!Number.isInteger(PER_OVERRIDE) || PER_OVERRIDE < 1)) {
+  console.error(`❌ --per/--count must be a positive integer (got ${JSON.stringify(PER_RAW)})`);
+  process.exit(1);
+}
 
 // Operation Sweet Dreams: fantastical scenes ban EVERY photo-real-adjacent
 // medium (photoreal dragons/magic/creatures read as creepy CGI; noir/vintage/
@@ -700,15 +714,6 @@ const ACTIVE_BUCKETS = [
   },
 ];
 
-// Production scale-up: `--per N` raises the ACTIVE-bucket target above the MVP
-// default of 25 (append-safe — dedups against existing rows). Non-active buckets
-// keep their own per-bucket `count`.
-const ACTIVE_PER = (() => {
-  const i = process.argv.indexOf('--per');
-  return i >= 0 ? parseInt(process.argv[i + 1], 10) : null;
-})();
-if (ACTIVE_PER) ACTIVE_BUCKETS.forEach((b) => (b.count = ACTIVE_PER));
-
 async function genBatch(pool, bucket, n, banList) {
   const ban = banList.length
     ? `\n\nDo NOT repeat or closely echo these already-used scenes: ${banList.slice(-40).join(' | ')}`
@@ -791,7 +796,8 @@ Output ONLY the JSON array, no markdown, no commentary.`,
     const all = [];
     const seen = new Set();
     for (const bucket of buckets) {
-      const target = DRY ? Math.min(bucket.count, 6) : (COUNT_OVERRIDE ?? bucket.count);
+      const want = PER_OVERRIDE ?? bucket.count;
+      const target = DRY ? Math.min(want, 6) : want;
       // Cross-run append safety: dedup + ban against what's ALREADY seeded.
       const { data: existingRows } = await supabase
         .from('single_scenarios')
@@ -808,7 +814,9 @@ Output ONLY the JSON array, no markdown, no commentary.`,
         )
       );
       if (existingScenes.length) console.log(`  (${existingScenes.length} existing — appending)`);
-      console.log(`\n=== ${pool}/${bucket.key} [${bucket.gender}] (${bucket.label}) ===`);
+      console.log(
+        `\n=== ${pool}/${bucket.key} [${bucket.gender}] (${bucket.label}) → +${target} new ===`
+      );
       const got = [];
       let tries = 0;
       while (got.length < target && tries < 7) {

@@ -131,7 +131,24 @@ on client but service-role readable; likes may live in a reactions table — che
 watercolor/train/library/surf) — verify bias shows in 20-roll distribution vs control,
 and that non-favorites still appear.
 
-## 7. ⬜ Content depth quick wins (one seeding afternoon)
+## 7. 🟡 Content depth quick wins — A ✅ · B 33/41 (over-scale to trim) · C ⬜ (state as of 2026-09-04)
+
+**State.** A (pose pools) DONE + QA'd: glamour 139 (99 dual + 40 solo), dynamic 100,
+dynamic_solo 100, playful 100. B (goofy/elegant top-off): all 20 DUAL buckets at 100 ✅;
+single goofy/elegant ran, then the runner died mid single-elegant. Still at 50 → 100:
+`gardens_f, gardens_m, victorian_f, victorian_m, modern_f, modern_m, cute_chic_f, gatsby_m`
+(run `generate-single-scenarios.js --pool elegant --buckets <k> --per 50`, one at a time).
+**Over-scale to TRIM (disable newest, never delete):** the runner passed `--per` to the
+single generator, which until 2026-09-04 ignored it outside the active pool and appended
+each bucket's full built-in count → single goofy `time_travel`/`fun_activities` 180,
+`animal_mayhem`/`absurd_giant` 170, `fantastical` 120, `decade_eras`/`out_and_about`/
+`surreal_absurd`/`glamour_shot_retro` 110 (target 100 each); `guy_fun`/`girly_fun` 90 (+10).
+Picks are uniform over rows, so oversized buckets are over-weighted. Fixed in the script
+(`--per` now = N new rows, every pool, loud on garbage). **QA still owed on the 2026-09-04
+rows:** proximity scan ✅ 0 violations; near-dupes by 60-char key: single goofy 10 groups
+(12 extra), dual elegant 3 (5), dual goofy 2 (2) → disable the newer; action scrub NOT run
+(regex flags 177/600 single-goofy rows but many are legit gags — pigeon sits, not the
+person — judgment pass, not bulk reword); 4-render viewed spot check.
 
 - Pose pools below par: `action_poses` glamour=32, dynamic=30, dynamic_solo=30,
   playful=56 → expand each to ~100 via the pose generators (check
@@ -140,7 +157,8 @@ and that non-favorites still appear.
 - Goofy/elegant categories at 69-85 (dual goofy: out_and_about 85, decade_eras 85,
   glamour_shot_retro 85, surreal_absurd 85, time_travel 70, animal_mayhem 70,
   fantastical_silly 70, fun_activities 70, party_carnival 70, giant_scale 70,
-  absurd_everyday 69; dual elegant: most at 70) → top to 100 (`--per` delta, per-bucket
+  absurd_everyday 69; dual elegant: most at 70) → top to 100 (`--per` = N NEW rows in BOTH
+  generators, every pool; verify by COUNT after each bucket; per-bucket
   sequential, action scrub + near-dupe pass + proximity scan after — see the
   MANDATORY BACKSTOP section in NIGHTLY_FUN_SCENARIOS_PLAN.md).
 - Thin location topics: coastal_escapes (5 locs), high_life (8), scifi_space (7) →
