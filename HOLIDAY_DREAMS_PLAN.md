@@ -688,3 +688,40 @@ Midnight Countdown · the Champagne Gala / Spring-Garden Sunday · the Grand Egg
 - **Pool QA protocol:** a matrix of every `sub_theme` (25 today) × {solo, couple}, one fixed medium,
   captioned `🎃 matrix <sub_theme> <solo|couple>` in Kevin's album + an HTML page; Kevin grades which
   pools make the cut. First matrix run 2026-09-04 (photography).
+
+### Brainstorm — new Halloween sub-pools (Kevin + agent, 2026-09-04; movie-VIBE inspired, IP-free)
+
+Rules for every pool below: Halloween is the HERO (abundance: dozens/hundreds of lanterns, decorations,
+fog, moon); the person is IN the scene doing something the scene implies (no glamour/portrait posing);
+no film titles, character names, or trademarked props in seed text — capture the register; couples
+side by side with a clear head gap; solos get a stance from the scene, not a layered pose pool.
+
+| key | register | the vibe (inspiration) | what the frame is full of |
+|---|---|---|---|
+| `witch_sisters_cottage` | witchy-cozy-funny | three-witches Salem cottage energy | candlelit cottage crammed with spell books, bubbling cauldron, black cat, broomsticks, dripping candles, a glowing green potion |
+| `salem_town_night` | cozy-festive | New England town on All Hallows' Eve | cobblestone square, church steeple, lantern-lit crowd in costume, hay bales, a bonfire, candy stalls |
+| `black_cat_alley` | witchy-cozy | the black-cat familiar | a lantern-lit alley with dozens of black cats on ledges, steps and barrels, one on the person's shoulder |
+| `afterlife_waiting_room` | campy-macabre | ghost-with-the-most bureaucracy | numbered-ticket netherworld lobby, striped wallpaper, shrunken-head clerk in the background, black-and-white stripes everywhere |
+| `striped_suit_haunting` | campy-macabre | the trickster ghost's haunted house | attic with a miniature town model, floating dinner party, sandworm dunes out the window |
+| `halloween_town_square` | whimsical-gothic | stop-motion Halloween village | crooked houses, spiral hill under an enormous full moon, pumpkin-headed scarecrows, a fountain of green ooze, singing jack-o-lanterns |
+| `pumpkin_king_patch` | whimsical-sincere | the pumpkin patch vigil | a vast night pumpkin patch, one blanket + lantern, sincere wonder, a giant pumpkin looming |
+| `suburban_halloween_chaos` | goofy-cozy | small-town Halloween night comedy | egged mailbox, toilet-papered trees, bike with a candy basket, a thermos, cul-de-sac in full decoration |
+| `haunted_house_attraction` | goofy-scary | the walkthrough haunted house line | strobe-lit foyer, fog machine, costumed actors lurking in doorways, a ticket booth, screaming friends in the background |
+| `corn_maze_torchlight` | cozy-eerie | the night corn maze | torch-lit maze walls, scarecrows on posts, a hay-bale tower, a lost-lantern glow |
+| `friendly_ghost_manor` | cozy-whimsical | the friendly haunted manor | grand foyer with translucent playful ghosts, floating candlesticks, a chandelier swaying, sheet-ghost silhouettes |
+| `macabre_family_mansion` | elegant-deadpan | the elegant macabre family | black-velvet foyer, carnivorous plant, a torture-rack sofa, candelabra, a pet lion rug, deadpan elegance |
+| `graveyard_picnic` | deadpan-cozy | picnic among the tombstones | checkered blanket, wine, candelabra on a crypt, fog at ankle height, a raven on a headstone |
+| `witchy_victorian_house` | romantic-cozy | the practical-magic house | herb-hung kitchen, midnight cocktails, a garden of belladonna, a spellbook open on the counter |
+| `undead_wedding` | romantic-macabre | the underworld wedding | blue-lit crypt chapel, skeletal band, tattered veil, black roses, candle-lit aisle (couple pool gold) |
+| `headless_hollow_bridge` | eerie | the covered-bridge legend | autumn fog, a covered bridge, a distant headless rider silhouette, a jack-o-lantern held aloft |
+| `haunted_amusement_park` | goofy-mystery | the abandoned carnival mystery | dead Ferris wheel, funhouse mirrors, a sheet-ghost fleeing, a groovy flower-painted van, flashlights |
+| `skeleton_dance_hall` | goofy-whimsical | the skeleton jamboree | a dance hall of dancing skeletons, a bone xylophone band, pumpkin lanterns as stage lights |
+| `pumpkin_spice_cafe` | cozy | the Halloween bakery/café | pumpkin displays, spider-web latte art, black-cat cookies, a chalkboard menu, string lights |
+| `jack_o_lantern_overload` | cozy-surreal | the yard with TOO MANY pumpkins | a porch, lawn and roofline buried under hundreds of carved jack-o-lanterns, every step glowing |
+| `candy_store_frenzy` | goofy-cozy | the Halloween candy shop | floor-to-ceiling candy, a giant candy bowl, costumed shoppers in the background |
+| `werewolf_moon_forest` | eerie-costume | the full-moon forest | a silver moon, torn-shirt costume, howling silhouettes on a ridge, fog |
+| `monster_garage_band` | goofy | the monster-mash rehearsal | garage band of classic monsters (generic mummy/creature/witch), amps, a jack-o-lantern drum kit |
+
+Seeding protocol: pick pools with Kevin → MVP-25 (dual + single) per pool → matrix render (1 solo + 1
+couple, fixed medium) → Kevin grades → scale to ~100 the ones that make the cut. Halloween-hero bar
+applies to every seed; the proximity scan + action scrub run after every seeding.
