@@ -2166,8 +2166,14 @@ Deno.serve(async (req) => {
               ? pickAxis(bespokeBiome.WARDROBE)
               : null,
           // Real-world → traveler wardrobe rule ON (no ethnic dress); fantasy/
-          // imagined dream world → OFF (keep in-world attire).
-          realWorldLocation: !imaginedLocation,
+          // imagined dream world → OFF (keep in-world attire). A SPECIAL SCENE
+          // (goofy/elegant/active/holiday) replaces the location with an authored
+          // scene + attire, so the rule must be OFF there too — with it on, Sonnet
+          // was told "contemporary travel clothes" AND handed the seed's Victorian
+          // bustle gown as mere "inspiration", and shipped a modern blazer
+          // (2026-09-04 QA: victorian_f/victorian_m solos rendered modern; the
+          // dual path keeps attire verbatim and was unaffected).
+          realWorldLocation: dualSpecialScene ? false : !imaginedLocation,
           mediumFluxFragment: baseMedium.fluxFragment,
           // Prefer the vibe's FACE-SWAP directive on the swap path (realistic
           // human face despite a stylized scene — the kawaii big-eyes fix);

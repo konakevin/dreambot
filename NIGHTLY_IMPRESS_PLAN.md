@@ -131,25 +131,33 @@ on client but service-role readable; likes may live in a reactions table — che
 watercolor/train/library/surf) — verify bias shows in 20-roll distribution vs control,
 and that non-favorites still appear.
 
-## 7. 🟡 Content depth quick wins — A ✅ · B 33/41 (over-scale to trim) · C ⬜ (state as of 2026-09-04)
+## 7. 🟡 Content depth quick wins — A ✅ · B ✅ (41/41, QA'd 2026-09-04) · C ⬜
 
-**State.** A (pose pools) DONE + QA'd: glamour 139 (99 dual + 40 solo), dynamic 100,
-dynamic_solo 100, playful 100. B (goofy/elegant top-off): all 20 DUAL buckets at 100 ✅;
-single goofy/elegant ran, then the runner died mid single-elegant. Still at 50 → 100:
-`gardens_f, gardens_m, victorian_f, victorian_m, modern_f, modern_m, cute_chic_f, gatsby_m`
-(run `generate-single-scenarios.js --pool elegant --buckets <k> --per 50`, one at a time).
-**Over-scale to TRIM (disable newest, never delete):** the runner passed `--per` to the
-single generator, which until 2026-09-04 ignored it outside the active pool and appended
-each bucket's full built-in count → single goofy `time_travel`/`fun_activities` 180,
-`animal_mayhem`/`absurd_giant` 170, `fantastical` 120, `decade_eras`/`out_and_about`/
-`surreal_absurd`/`glamour_shot_retro` 110 (target 100 each); `guy_fun`/`girly_fun` 90 (+10).
-Picks are uniform over rows, so oversized buckets are over-weighted. Fixed in the script
-(`--per` now = N new rows, every pool, loud on garbage). **QA still owed on the 2026-09-04
-rows:** proximity scan ✅ 0 violations; near-dupes by 60-char key: single goofy 10 groups
-(12 extra), dual elegant 3 (5), dual goofy 2 (2) → disable the newer; action scrub NOT run
-(regex flags 177/600 single-goofy rows but many are legit gags — pigeon sits, not the
-person — judgment pass, not bulk reword); 4-render viewed spot check.
+**State (2026-09-04).** A (pose pools) DONE: glamour 139 (99 dual + 40 solo), dynamic 100,
+dynamic_solo 100, playful 100. B (goofy/elegant top-off) DONE: every dual bucket at 100, every
+single elegant bucket at 100, single goofy 90-180 (Kevin: no trimming — "more the merrier";
+100 is just a round number). ~1,640 new scenes since 2026-09-03. QA done on the new rows:
+proximity scan 0 violations; near-dupe pass (60-char key, oldest kept, newer DISABLED never
+deleted) 53 rows; pose-language scrub (authoring rule "no pose/gaze language — framing is
+layered downstream"): 52 dual + 273 single-goofy rewrites, single-elegant clean; 17 forced-
+bucket renders VIEWED (Kevin's private Dreams album): 15 graded 3.5-5, the beanbag seed
+(giant_scale, June row) reworded after costing 2 swap attempts, ONE render-side failure
+(old_hollywood dual rendered both in profile despite a correct frontal prompt — identity
+0.37/0.48 cleared the floor, and the BROKEN-only gate has no profile check → candidate
+extra gate check). **Engine bug found + FIXED by this QA:** solo special scenes rendered in
+MODERN clothes (victorian_f "bustle gown" seed → "dusty rose blazer" in the prompt) because
+`characterSlotPrompt.ts` appends the real-world TRAVELER wardrobe rule ("contemporary travel
+clothes", seed attire only as "inspiration") whenever `realWorldLocation` is true, and nightly
+passed `!imaginedLocation` even for authored scenes; dual path keeps attire verbatim so only
+solos drifted. Fix: `realWorldLocation: dualSpecialScene ? false : !imaginedLocation`
+(nightly-dreams, deployed 2026-09-04) — re-renders: burgundy velvet bustle gown + greatcoat/
+cravat, both 5/5. **Open/optional:** pre-2026-09-04 goofy/elegant rows still carry posture
+words (dual goofy 249/926, single goofy 509/1021, elegant ~5%) — a dry scrub is staged, NOT
+applied (no render failure attributable to it yet; Kevin's call). Forensics gap: 4 of 17 QA
+renders (solo, pencil/illustration/vintage_film mediums) logged `ai_generation_log.upload_id
+= null` — the forensics join misses them. C (thin location topics) NOT started.
 
+**Original scope:**
 - Pose pools below par: `action_poses` glamour=32, dynamic=30, dynamic_solo=30,
   playful=56 → expand each to ~100 via the pose generators (check
   `scripts/generate-*pose*` / POSE_POOLS_DB_MIGRATION_PLAN.md); swap-safe envelope +

@@ -343,6 +343,16 @@ get an Option B action. `disabled=true where pool='active' and category='<key>'`
 live variety; `--bucket <k>` forces one bucket; `--locfit` forces Option B; `--pose` forces the
 biome pose pool.
 
+**Solo special scenes + the TRAVELER wardrobe rule (fixed 2026-09-04).** `characterSlotPrompt.ts`
+appends a real-world "VISITORS/travelers — contemporary travel clothes, never national dress" rule
+whenever `realWorldLocation` is true, and offers the seed `attire` only as "inspiration to adapt".
+Nightly passed `realWorldLocation: !imaginedLocation` even when a goofy/elegant/active/holiday
+scene had replaced the location, so every SOLO period scene (victorian_f/m, gatsby, dapper…) was
+re-dressed modern by Sonnet (bustle gown → "dusty rose tailored blazer"); the DUAL path keeps
+attire verbatim and was fine. Fix: `realWorldLocation: dualSpecialScene ? false : !imaginedLocation`.
+When QA'ing attire, read `ai_generation_log.enhanced_prompt` ("wearing …") and `sonnet_brief`
+(contains "VISITORS/travelers" iff the rule fired) — don't eyeball the render alone.
+
 **Swap-safety is non-negotiable** — every couple pose needs a clear gap between heads (dual swap
 can't split touching faces), props at chest level or lower, faces never occluded. The generation
 prompt + `locationActionBeat.ts` word-filter enforce this; the proximity scan is the backstop.
