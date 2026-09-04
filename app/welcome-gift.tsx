@@ -43,6 +43,7 @@ import { useEngineConfig } from '@/hooks/useEngineConfig';
 import { colors } from '@/constants/theme';
 import { GradientTitle } from '@/components/GradientTitle';
 import { verticalScale, verticalScaleClamped, fontScale } from '@/lib/responsive';
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 
 // 5 rotating painter mascots (same set the loading screen uses). Pick
 // one stable per mount via useMemo — different each visit. Local require
@@ -123,8 +124,9 @@ export default function WelcomeGiftScreen() {
 
         {/* Pillar 1 — Nightly Dreams (the flagship). Accent-bordered so it reads
             as the headline feature, with the free-trial term on the pill + a
-            quiet footnote so the user knows it's a trial that continues on Pro.
-            {proTrialDays} is engine_config-driven (same window the gates read). */}
+            quiet footnote so the user knows it's a trial that continues on a
+            paid plan. {proTrialDays} is engine_config-driven (same window the
+            gates read). */}
         <View style={s.nightlyCard}>
           <View style={s.cardHead}>
             <Text style={s.cardEmoji}>🌙</Text>
@@ -134,7 +136,7 @@ export default function WelcomeGiftScreen() {
             </View>
           </View>
           <Text style={s.cardBody}>
-            A fresh dream waiting each morning. Free during your trial, then yours on Basic or Pro.
+            {`A fresh dream waiting each morning. Free during your trial, then yours on ${PLAN_NAME_BASIC} or ${PLAN_NAME_PRO}.`}
           </Text>
         </View>
 

@@ -31,6 +31,7 @@ import { colors } from '@/constants/theme';
 import { verticalScale, fontScale } from '@/lib/responsive';
 import { useSparkleBalance } from '@/hooks/useSparkles';
 import { useAdminShowQuarantineButton, useAdminShowModelBadge } from '@/lib/adminPrefs';
+import { PLAN_NAME_BASIC, PLAN_NAME_PRO } from '@/constants/proPlan';
 
 function SettingsRow({
   icon,
@@ -522,9 +523,9 @@ export default function SettingsScreen() {
               autoRenewOff ? (
                 <Text style={styles.autoRenewOff}>Auto-renew off</Text>
               ) : isPaidPro ? (
-                <Text style={styles.trailingSummary}>Pro</Text>
+                <Text style={styles.trailingSummary}>{PLAN_NAME_PRO}</Text>
               ) : isBasic ? (
-                <Text style={styles.trailingSummary}>Basic</Text>
+                <Text style={styles.trailingSummary}>{PLAN_NAME_BASIC}</Text>
               ) : null
             }
             onPress={() => nav.push('/subscribe')}

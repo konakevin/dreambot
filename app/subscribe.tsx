@@ -356,7 +356,9 @@ export default function SubscribeScreen() {
                             size={fontScale(15)}
                             color={colors.textMuted}
                           />
-                          <Text style={[s.ctaText, s.ctaIncludedText]}>Included with Dreamer+</Text>
+                          <Text style={[s.ctaText, s.ctaIncludedText]}>
+                            {`Included with ${PLAN_NAME_PRO}`}
+                          </Text>
                         </View>
                       </TouchableOpacity>
                     ) : (
