@@ -36,7 +36,7 @@ module.exports = {
   expo: {
     name: 'DreamBot',
     slug: 'dreambot',
-    version: '1.0.17',
+    version: '1.1.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'dreambot',
