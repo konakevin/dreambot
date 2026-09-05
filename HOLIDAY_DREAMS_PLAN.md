@@ -744,3 +744,14 @@ the linter, scrub existing rows, and draw pools with EQUAL AIRTIME (pick the poo
   seed up to 50 only after the matrix sign-off. Projected pre-trim dual counts from the relabel:
   neighborhood 127, party 126, gothic manor 125, graveyard 103, pumpkin patch 102, witch 88,
   comedy 50, attractions 50, mad lab 51, town square 25.
+- **Implementation (2026-09-05, commit 5d3554ba):** taxonomy = `scripts/lib/halloweenPools.js` (single
+  source of truth; engine mirror `_shared/holidayPools.ts`, parity-tested). Share = **70 per table**,
+  per sub = ceil(70 / subs) — always round up (Kevin). Seeding: `node scripts/gen-holiday-archetypes.js
+  --holiday halloween --pool <main|all> --to-share --kind cast` tops every sub up to its share with the
+  pool's palette + objects; the linter drops pumpkin/jack-o-lantern rows outside the 4 lantern pools.
+  Draw: `pickHoliday()` picks a MAIN pool uniformly, then a row (equal airtime). Eerie + new pools
+  were RESEEDED fresh (old rows disabled after the new ones landed; ledgers in the session
+  scratchpad); lantern pools were deduped + trimmed to share (newest kept), then topped up.
+- **FOLLOW-UP (Kevin asked to be reminded):** the scene-only "postcard" holiday rows (`holiday_scenes`,
+  14 for all of Halloween) are still one loose pile, not organized by the 14 pools. Decide whether to
+  author ~10 empty-scene rows per pool so no-people Halloween dreams also land in the 14 worlds.

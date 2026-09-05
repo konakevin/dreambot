@@ -215,6 +215,13 @@ more campy sci-fi / humor scenes in nightly generally — a general goofy/active
 `space_age_lounge` (atomic-age optimism), `alien_tourists` (deadpan aliens sightseeing). Same
 rules as every bucket: MVP-25 → QA → sign-off → scale; face-swap safe; no IP names.
 
+## 3b. ⬜ FOLLOW-UP (Kevin 2026-09-05, "remind me"): Halloween scene-only "postcard" rows per pool
+
+The no-people holiday path (`holiday_scenes`) still has one loose pile of 14 Halloween scenes, not the
+14-pool structure the cast rows now use. Decide: author ~10 empty-scene rows per pool (same palette +
+objects, no people) so a no-people Halloween dream lands in one of the 14 worlds with equal airtime.
+Generator already supports it (`--kind scene`); needs a pool-aware pass + the lantern rule.
+
 ## 8. ⬜ Multi-night story arcs (most ambitious — spec before building)
 
 **Concept.** 2-3 connected dreams over consecutive nights (same world, escalating:
