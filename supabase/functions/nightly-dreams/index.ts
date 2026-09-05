@@ -1726,8 +1726,12 @@ Deno.serve(async (req) => {
           const filled = fillHeroTemplate(heroRow, seed);
           dualSpecialScene = filled.scene;
           dualSpecialWardrobe = filled.attire;
-          dualSceneKind = 'elegant'; // refined poses: couples → 'partner', solos → glamour
-          dualScenePosePool = heroRow.posePool ?? (isDualFaceSwap ? null : 'glamour');
+          dualSceneKind = 'elegant'; // refined poses: couples → 'partner'
+          // Kevin 2026-09-04/05: NO forced glamour pool on hero solos either — the
+          // "me in a scarf + pumpkins in the bokeh" hero QA renders were this
+          // portrait pool at work. Same default as every other elegant solo scene;
+          // a hero row can still opt into a pool via pose_pool.
+          dualScenePosePool = heroRow.posePool ?? null;
           dualSceneMediumKey = heroRow.mediumKey ?? null;
           dualSceneMediumBan = heroRow.mediumBan ?? null;
           holidayCategory = dayOfHoliday.key;
