@@ -151,3 +151,24 @@ describe('lintHolidayRow — per-pool lantern rule (Kevin 2026-09-05)', () => {
     expect(errors.some((e: string) => /non-lantern pool/.test(e))).toBe(false);
   });
 });
+
+describe('lintHolidayRow — franchise vocabulary ban (Kevin 2026-09-05)', () => {
+  it('drops a seed that names a franchise device or character', () => {
+    const { errors } = lintHolidayRow({
+      ...GOOD_SINGLE,
+      sub_theme: 'ghost_hunting_crew',
+      scene:
+        'Brick firehouse garage at night, proton pack charging stations glowing amber, coiled cables over brass poles, fog on the floor',
+    });
+    expect(errors.some((e: string) => /franchise/.test(e))).toBe(true);
+  });
+  it('allows the vibe without the name', () => {
+    const { errors } = lintHolidayRow({
+      ...GOOD_SINGLE,
+      sub_theme: 'ghost_hunting_crew',
+      scene:
+        'Brick firehouse garage at night, glowing gadget packs on charging racks, coiled cables over brass poles, fog on the floor',
+    });
+    expect(errors.some((e: string) => /franchise/.test(e))).toBe(false);
+  });
+});

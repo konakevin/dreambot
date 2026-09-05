@@ -17,6 +17,9 @@
 const { VIOLATION, MITIGATED, ALLOW } = require('./posePoolLint');
 
 const TAX = require('./halloweenPools');
+// Franchise vocabulary (the seeds carry a VIBE, never a name — Kevin 2026-09-05). Extend as found.
+const IP_TERM =
+  /\b(?:proton packs?|ghostbusters?|ecto-?1|slimer|stay[- ]puft|beetlejuice|sandworms?|sanderson|hocus pocus|jack skellington|oogie|halloweentown|coraline|addams|casper|freddy|jason voorhees|michael myers|elvira|scooby|mystery machine)\b/i;
 const LANTERN_NOUN = /\b(?:pumpkins?|jack-?o-?-?lanterns?|jack o lanterns?|gourds?)\b/i;
 
 // §6.1 — attire must be CLOTHING ONLY; nothing that occludes/recolors the face.
@@ -78,6 +81,10 @@ function lintHolidayRow(row) {
   // signature objects ONLY in the pools that opt in (halloweenPools.js `lanterns`);
   // everywhere else they are the "lantern spam" that flattened 48 pools into one look.
   // Applies to halloween rows whose sub_theme maps to a known pool; unknown subs skip.
+  if (IP_TERM.test(`${row.scene || ''} ${row.attire || ''}`)) {
+    errors.push('franchise / character name in seed text — seeds carry the vibe, never the name');
+  }
+
   if (row.sub_theme) {
     const poolKey = TAX.POOL_OF_SUB[row.sub_theme];
     const pool = poolKey ? TAX.POOLS[poolKey] : null;
