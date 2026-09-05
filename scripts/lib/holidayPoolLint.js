@@ -16,6 +16,9 @@
  */
 const { VIOLATION, MITIGATED, ALLOW } = require('./posePoolLint');
 
+const TAX = require('./halloweenPools');
+const LANTERN_NOUN = /\b(?:pumpkins?|jack-?o-?-?lanterns?|jack o lanterns?|gourds?)\b/i;
+
 // §6.1 — attire must be CLOTHING ONLY; nothing that occludes/recolors the face.
 const FACE_OCCLUSION =
   /\b(?:mask|masked|domino mask|face[- ]?paint(?:ed)?|facepaint|painted face|fangs?|prosthetic|veil(?:ed)?|balaclava|niqab|burqa|full[- ]face|welding helmet|sunglasses|goggles over|hood(?:ed)?\s+up|hood\s+(?:over|covering)|hood\s+drawn)\b/i;
@@ -70,6 +73,23 @@ function lintHolidayRow(row) {
   // §6.7 RETIRED (Kevin 2026-09-04): holiday rows roll the same nightly mediums as
   // every other pool — medium_key/medium_ban are OPTIONAL (a ban is still allowed
   // for a QA-proven broken combo). No error when unpinned.
+
+  // Per-POOL lantern rule (Kevin 2026-09-05): jack-o-lanterns / pumpkins / gourds are
+  // signature objects ONLY in the pools that opt in (halloweenPools.js `lanterns`);
+  // everywhere else they are the "lantern spam" that flattened 48 pools into one look.
+  // Applies to halloween rows whose sub_theme maps to a known pool; unknown subs skip.
+  if (row.sub_theme) {
+    const poolKey = TAX.POOL_OF_SUB[row.sub_theme];
+    const pool = poolKey ? TAX.POOLS[poolKey] : null;
+    if (pool && !pool.lanterns) {
+      const txt = `${row.scene || ''} ${row.attire || ''}`;
+      if (LANTERN_NOUN.test(txt)) {
+        errors.push(
+          `pumpkin/jack-o-lantern in a non-lantern pool (${poolKey}) — see HOLIDAY_DREAMS_PLAN FINAL list`
+        );
+      }
+    }
+  }
 
   if (isSceneOnly) {
     // Scene-only rows have no face to protect: skip the face/size/attire rules.

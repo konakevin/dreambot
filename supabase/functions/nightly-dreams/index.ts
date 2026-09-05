@@ -1780,7 +1780,8 @@ Deno.serve(async (req) => {
           // Holiday won: pick one active season weighted by pct, draw its costume+scene.
           const chosen = pickWeightedHoliday(usableHol, Math.random());
           const rows = holDualPools.find((x) => x.h.key === chosen.key)!.rows;
-          const s = pickDualScenario(
+          // Equal-airtime draw across the holiday's MAIN pools (Kevin 2026-09-05).
+          const s = pickHoliday(
             await filterUnseen(supabase, userId, `holiday:${chosen.key}`, rows, (x) => x.scene)
           );
           dualSpecialScene = s.scene;
@@ -1900,7 +1901,7 @@ Deno.serve(async (req) => {
             (x) => x.scene
           );
           const pool = unseen.length ? unseen : rows; // fail-open if all seen
-          const s = pool[Math.floor(Math.random() * pool.length)];
+          const s = pickHoliday(pool); // equal-airtime across MAIN pools (Kevin 2026-09-05)
           dualSpecialScene = s.scene;
           dualSpecialWardrobe = s.attire;
           dualSceneKind = 'elegant'; // refined solo pose — NO playful/active props on holiday

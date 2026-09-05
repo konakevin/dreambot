@@ -11,9 +11,16 @@
  */
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.100.0';
 import type { DualScenario } from './dualScenarioLoader.ts';
+import { holidayPoolOf } from '../holidayPools.ts';
+
+/** Dual holiday row + its sub_theme (→ main pool via holidayPoolOf; equal-airtime draw). */
+export interface HolidayDualScenario extends DualScenario {
+  subTheme?: string | null;
+}
 
 export interface HolidaySingleScenario extends DualScenario {
   gender: 'any' | 'male' | 'female';
+  subTheme?: string | null;
 }
 export interface HolidaySinglePools {
   any: HolidaySingleScenario[];
@@ -22,12 +29,13 @@ export interface HolidaySinglePools {
 }
 export interface HolidayScene {
   scene: string;
+  subTheme?: string | null;
   tone?: string | null;
   mediumKey?: string | null;
   mediumBan?: string | null;
 }
 
-const dualCache = new Map<string, DualScenario[]>();
+const dualCache = new Map<string, HolidayDualScenario[]>();
 const singleCache = new Map<string, HolidaySinglePools>();
 const sceneCache = new Map<string, HolidayScene[]>();
 
@@ -64,12 +72,16 @@ export async function loadHolidayDual(
   supabase: SupabaseClient,
   category: string,
   subTheme?: string | null
-): Promise<DualScenario[]> {
+): Promise<HolidayDualScenario[]> {
   const cacheKey = subTheme ? `${category}:${subTheme}` : category;
   const cached = dualCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
-  for (const select of ['scene,attire,pose_pool,medium_key,medium_ban', 'scene,attire']) {
+  for (const select of [
+    'scene,attire,pose_pool,medium_key,medium_ban,sub_theme',
+    'scene,attire,pose_pool,medium_key,medium_ban',
+    'scene,attire',
+  ]) {
     const res = await fetchAll(supabase, 'dual_scenarios', select, {
       pool: 'holiday',
       category,
@@ -81,12 +93,13 @@ export async function loadHolidayDual(
       break;
     }
   }
-  const out: DualScenario[] = rows.map((r) => ({
+  const out: HolidayDualScenario[] = rows.map((r) => ({
     scene: r.scene as string,
     attire: r.attire as string,
     posePool: (r.pose_pool as string | null | undefined) ?? null,
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
+    subTheme: (r.sub_theme as string | null | undefined) ?? null,
   }));
   dualCache.set(cacheKey, out);
   return out;
@@ -104,6 +117,7 @@ export async function loadHolidaySingle(
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
   for (const select of [
+    'scene,attire,gender,pose_pool,medium_key,medium_ban,sub_theme',
     'scene,attire,gender,pose_pool,medium_key,medium_ban',
     'scene,attire,gender',
   ]) {
@@ -128,6 +142,7 @@ export async function loadHolidaySingle(
       posePool: (r.pose_pool as string | null | undefined) ?? null,
       mediumKey: (r.medium_key as string | null | undefined) ?? null,
       mediumBan: (r.medium_ban as string | null | undefined) ?? null,
+      subTheme: (r.sub_theme as string | null | undefined) ?? null,
     };
     (pools[gender] ?? pools.any).push(row);
   }
@@ -155,7 +170,11 @@ export async function loadHolidayScenes(
   const cached = sceneCache.get(cacheKey);
   if (cached) return cached;
   let rows: Record<string, unknown>[] = [];
-  for (const select of ['scene,tone,medium_key,medium_ban', 'scene']) {
+  for (const select of [
+    'scene,tone,medium_key,medium_ban,sub_theme',
+    'scene,tone,medium_key,medium_ban',
+    'scene',
+  ]) {
     const res = await fetchAll(supabase, 'holiday_scenes', select, {
       holiday,
       disabled: false,
@@ -168,6 +187,7 @@ export async function loadHolidayScenes(
   }
   const out: HolidayScene[] = rows.map((r) => ({
     scene: r.scene as string,
+    subTheme: (r.sub_theme as string | null | undefined) ?? null,
     tone: (r.tone as string | null | undefined) ?? null,
     mediumKey: (r.medium_key as string | null | undefined) ?? null,
     mediumBan: (r.medium_ban as string | null | undefined) ?? null,
@@ -176,7 +196,19 @@ export async function loadHolidayScenes(
   return out;
 }
 
-/** Uniform pick (shuffle-bag de-dup is applied by the caller, keyed holiday:<category>). */
-export function pickHoliday<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+/** EQUAL-AIRTIME pick (Kevin 2026-09-05): pick a MAIN pool uniformly (rows grouped by
+ *  holidayPoolOf(sub_theme)), then a row uniformly inside it — so a pool's row count never
+ *  sets its share of holiday dreams. Rows without a sub_theme form their own bucket.
+ *  Shuffle-bag de-dup is applied by the caller (keyed holiday:<category>) BEFORE this. */
+export function pickHoliday<T extends { subTheme?: string | null }>(arr: T[]): T {
+  const groups = new Map<string, T[]>();
+  for (const r of arr) {
+    const k = holidayPoolOf(r.subTheme);
+    const g = groups.get(k);
+    if (g) g.push(r);
+    else groups.set(k, [r]);
+  }
+  const keys = [...groups.keys()];
+  const bucket = groups.get(keys[Math.floor(Math.random() * keys.length)]) ?? arr;
+  return bucket[Math.floor(Math.random() * bucket.length)];
 }

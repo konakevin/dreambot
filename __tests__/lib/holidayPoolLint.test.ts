@@ -121,3 +121,33 @@ describe('lintHolidayRow — §6.6 dual mixed-gender attire warning', () => {
     expect(warnings).toEqual([]);
   });
 });
+
+describe('lintHolidayRow — per-pool lantern rule (Kevin 2026-09-05)', () => {
+  it('drops a pumpkin mention in a non-lantern pool (gothic_manor ← vampire)', () => {
+    const { errors } = lintHolidayRow({
+      ...GOOD_SINGLE,
+      sub_theme: 'vampire',
+      scene:
+        'Candlelit gothic ballroom, dripping candelabra, a row of glowing jack-o-lanterns along the balustrade, a huge full moon',
+    });
+    expect(errors.some((e: string) => /non-lantern pool \(gothic_manor\)/.test(e))).toBe(true);
+  });
+  it('allows pumpkins in a lantern pool (halloween_neighborhood ← cozy_porch)', () => {
+    const { errors } = lintHolidayRow({
+      ...GOOD_SINGLE,
+      sub_theme: 'cozy_porch',
+      scene:
+        'Wraparound porch stacked with carved pumpkins, string lights, crimson maple leaves across the floorboards, a wicker chair',
+    });
+    expect(errors.some((e: string) => /non-lantern pool/.test(e))).toBe(false);
+  });
+  it('unknown sub_theme skips the rule', () => {
+    const { errors } = lintHolidayRow({
+      ...GOOD_SINGLE,
+      sub_theme: 'mystery_pool',
+      scene:
+        'A porch with pumpkins and string lights, crimson maple leaves across the floorboards, a wicker chair',
+    });
+    expect(errors.some((e: string) => /non-lantern pool/.test(e))).toBe(false);
+  });
+});
