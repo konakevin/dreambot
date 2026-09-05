@@ -701,3 +701,46 @@ a holiday postcard — Kevin's "wow" feature for everyone who gets a nightly.
 - **Pool sizing (Kevin 2026-09-04):** holiday pools seed at **25** (MVP) and, once a pool survives the
   matrix, scale to a **50 cap** — never 100. Holidays are in rotation for a short window, so 50 × the
   number of pools is plenty. Nothing scales until Kevin has graded the matrix.
+
+## FINAL Halloween pool list — 14 pools (Kevin, 2026-09-05; supersedes the 48-pool sprawl)
+
+Why: the 2026-09-04 matrix showed heavy overlap (seven porch/yard pools) and jack-o-lanterns
+spammed into pools that should be purple/black/green. Fix = consolidate to 14 distinct worlds, give
+each its own PALETTE + SIGNATURE OBJECTS, allow jack-o-lanterns only where they belong, enforce it in
+the linter, scrub existing rows, and draw pools with EQUAL AIRTIME (pick the pool, then a row).
+
+| # | pool key | palette | signature objects | folds in (old sub_themes → relabelled) |
+|---|---|---|---|---|
+| 1 | `halloween_neighborhood` | orange/amber cozy | porches, cul-de-sacs, inflatables, yard skeletons, string lights, jack-o-lanterns | cozy_porch, decorated_neighborhood, trick_or_treating, pumpkin_carving, jack_o_lantern_overload, suburban_halloween_chaos, salem_town_night, + 80s flashlight suburbia |
+| 2 | `pumpkin_patch_night` | orange/amber | pumpkin fields, hayride wagon, corn-maze torches, harvest moon, scarecrows | enchanted_pumpkin_patch, jack_o_lantern_festival, pumpkin_king_patch, haunted_hayride, corn_maze_torchlight, fall_festival |
+| 3 | `witch_cottage` | purple/green | cauldron, spell books, black cats, brooms, candles, herbs | witch, witch_sisters_cottage, witchy_victorian_house, black_cat_alley, + cursed library |
+| 4 | `gothic_manor` | black/violet/candle | candelabra, ballroom, velvet, carriage, vampire aristocrat, undead wedding, greenhouse | haunted_mansion, vampire, midnight_carriage, gothic_masquerade_ball, gothic_glam_editorial, gothic_greenhouse, macabre_family_mansion, undead_wedding, + 1920s ghost hotel |
+| 5 | `haunted_graveyard` | blue/black/fog | tombstones, fog, ravens, blood moon, reaper, headless rider, translucent ghosts | reaper, ghost_glam, graveyard_picnic, headless_hollow_bridge, friendly_ghost_manor |
+| 6 | `halloween_town_square` | purple/green whimsy | crooked spires, spiral hill, green fountain, huge moon, pumpkin-headed scarecrows | halloween_town_square, + stop-motion whimsy-creepy |
+| 7 | `haunted_house_comedy` | b/w stripes, mint, green | striped suits, waiting room, floating dinner party, cobwebbed attic + model town (NO sandworms/desert) | afterlife_waiting_room, striped_suit_haunting |
+| 8 | `halloween_party` | orange/black party | costume party, disco ball, dance hall, candy, café, garage band | halloween_party, movie_night, skeleton_dance_hall, candy_store_frenzy, pumpkin_spice_cafe, monster_garage_band, + monster hotel lobby |
+| 9 | `haunted_attractions` | carnival red/strobe | haunted-house walkthrough, abandoned carnival, dark big top, haunted carousel, fortune booth | haunted_house_attraction, haunted_amusement_park, + dark carnival |
+| 10 | `mad_lab_and_monsters` | green glass/silver moon | bubbling lab, monster-hunter kit, werewolf moon forest | mad_scientist, monster_hunter, werewolf_moon_forest |
+| 11 | `ghost_hunting_crew` | tan/brick/slime green | jumpsuits, glowing gadget packs, firehouse HQ, haunted library, ghost trap | NEW |
+| 12 | `seance_parlor` | violet velvet/candle | crystal ball, tarot, spirit board, levitating table, drifting curtains | NEW |
+| 13 | `cute_halloween` | pastel orange/lilac | plush ghosts, cats in witch hats, candy-corn palette, tiny pumpkin cafés | NEW |
+| 14 | `ghost_pirate_ship` | moonlit silver/gold | galleon, torn sails, fog, cursed gold, skeleton crew | NEW |
+
+- **Killed:** `cat_burglar` (rows disabled). **Moved to Fall** (`category='fall'`): `canyon_fall_hike`,
+  `autumn_fae`, `harvest_royalty`.
+- **Jack-o-lanterns** allowed as a signature object ONLY in pools 1, 2, 8 (light) and 13; the linter
+  bans pumpkin/jack-o-lantern/gourd nouns in every other pool (`holidayPoolLint` per-pool ban list).
+- **Equal airtime:** the engine picks a `sub_theme` uniformly, then a row within it (holiday paths only),
+  so a pool's row count no longer sets its share.
+- **Palette** is part of each pool's setting family in the generator; the old blanket "crimson/violet/
+  emerald + hundreds of lanterns" punch is retired.
+- Existing rows are relabelled (ledger in the session scratchpad), then scrubbed: eerie-pool rows that
+  mention pumpkins are rewritten into the pool's own objects; pure lantern filler is disabled.
+- Production sizing unchanged: 25 to start, 50 cap per pool after the matrix.
+- **Even sizing (Kevin 2026-09-05):** every final pool targets **50 dual + 50 single**. Folded pools
+  above 50 are TRIMMED to 50 by disabling (never deleting) in this order: palette violators (pumpkin
+  nouns in eerie pools) → near-duplicates (60-char key) → proportional trim across the pool's
+  sub-pools so each fold keeps its share. Pools below 50 (the 4 new ones at 25, town square at 25)
+  seed up to 50 only after the matrix sign-off. Projected pre-trim dual counts from the relabel:
+  neighborhood 127, party 126, gothic manor 125, graveyard 103, pumpkin patch 102, witch 88,
+  comedy 50, attractions 50, mad lab 51, town square 25.

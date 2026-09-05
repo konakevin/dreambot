@@ -206,6 +206,15 @@ awaited. Historical null rows NOT repaired (30-day retention makes it moot soon)
   Also: `landmarks_wonders` display/name nit — "Ancient Wonders"→"World Wonders" +
   SECTION_META placement (client cosmetic, Kevin's call).
 
+## 8b. ⬜ Campy sci-fi / humor scenario bucket (Kevin, 2026-09-05 — "write that down for later")
+
+Kevin liked the campy-sci-fi ideas that fell out of the Halloween brainstorm (retro flying-saucer
+invasion, tin-foil UFOs, 50s creature-feature poster energy, "It Came From…" register) and wants
+more campy sci-fi / humor scenes in nightly generally — a general goofy/active bucket (or family):
+`saucer_invasion` (retro UFOs over a diner/suburb), `b_movie_poster` (lobby-card melodrama),
+`space_age_lounge` (atomic-age optimism), `alien_tourists` (deadpan aliens sightseeing). Same
+rules as every bucket: MVP-25 → QA → sign-off → scale; face-swap safe; no IP names.
+
 ## 8. ⬜ Multi-night story arcs (most ambitious — spec before building)
 
 **Concept.** 2-3 connected dreams over consecutive nights (same world, escalating:
