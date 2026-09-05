@@ -1636,6 +1636,7 @@ export type Database = {
           quality_gate_mode: string;
           relationship_regex: string | null;
           relationship_words: string;
+          scene_action_pct: number;
           scene_eligible_models: string[];
           scene_embodied_rate: number;
           scene_embodied_rate_high: number;
@@ -1718,6 +1719,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_pct?: number;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;
           scene_embodied_rate_high?: number;
@@ -1800,6 +1802,7 @@ export type Database = {
           quality_gate_mode?: string;
           relationship_regex?: string | null;
           relationship_words?: string;
+          scene_action_pct?: number;
           scene_eligible_models?: string[];
           scene_embodied_rate?: number;
           scene_embodied_rate_high?: number;
@@ -4150,6 +4153,8 @@ export type Database = {
           image_url_display: string;
           image_url_hq: string;
           like_count: number;
+          media: Json;
+          media_count: number;
           model: string;
           posted_at: string;
           repost_count: number;

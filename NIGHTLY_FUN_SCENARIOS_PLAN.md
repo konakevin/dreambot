@@ -261,7 +261,8 @@ delete). Near-dupe pass after scale: ~9 dupes disabled via 60-char scene key.
 - The roll that decides scenario vs location: `nightly-dreams/index.ts` ~line 1249+ (dual)
   / ~1291+ (solo). Composition roll (dual vs solo vs scene): `_shared/chaosTier.ts:rollNightlyDreamType`.
 - Tuning knobs: `engine_config` (`dual_scene_active_pct`, `single_scene_active_pct`,
-  `dual/single_scene_goofy_pct`, `..._elegant_pct`, `location_action_pct`), read live w/ 60s TTL.
+  `dual/single_scene_goofy_pct`, `..._elegant_pct`, `location_action_pct`, `scene_action_pct` —
+  scene-first authored actions for scenario rows, mig 461, SCENE_FIRST_ACTION_PLAN.md), read live w/ 60s TTL.
 
 **To add a NEW bucket** (do dual + single together):
 1. Add `{ key, label, desc, mediumBan? }` to `ACTIVE_BUCKETS` in BOTH scripts. The `desc` is

@@ -48,7 +48,7 @@
 // drops all storybook/2D/character-art language and POSITIVELY reinforces realistic
 // human eye size + proportions so the swap lands cleanly.
 const FRAG_WATERCOLOR_INK =
-  'loose watercolor and ink painting with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, transparent pigment washes on textured watercolor paper, soft feathered bleeding edges, visible brushstrokes and fine ink linework, golden warm watercolor palette, naturalistic mature features, painterly portrait realism';
+  'loose watercolor and ink painting with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, transparent pigment washes on textured watercolor paper, soft feathered bleeding edges, visible brushstrokes and fine ink linework, a luminous watercolor palette taking its colours from the scene, naturalistic mature features, painterly realism';
 
 // 2026-09-01 — rewritten FACE-SWAP-FRIENDLY (Kevin). The old fragment ("richly
 // saturated jewel-tone colors, ornate decorative details ... vibrant fine art
@@ -65,7 +65,7 @@ const FRAG_WATERCOLOR_INK =
 // the ART MEDIUM (ink linework, clean illustration), never decorative ornamentation
 // Flux will apply to the clothing.
 const FRAG_CRISP_ORNATE_ILLUSTRATION =
-  'crisp ink illustration with bold confident linework and lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, clean intricate line art, rich saturated color, masterwork hand-drawn editorial illustration, naturalistic mature features, illustrated portrait realism, gallery-quality detailed drawing';
+  'crisp ink illustration with bold confident linework and lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, clean intricate line art, rich saturated color, masterwork hand-drawn editorial illustration, naturalistic mature features, illustrated realism, gallery-quality detailed drawing';
 
 const FRAG_POLISHED_DIGITAL_RENDER =
   'polished digital painting, professional concept art, high-quality digital artwork, smooth painterly surfaces with crisp detail, vibrant saturated colors, masterful digital art, fine art digital painting, polished digital rendering';
@@ -78,7 +78,7 @@ const FRAG_POLISHED_DIGITAL_RENDER =
 // POSITIVELY reinforces realistic facial proportions + true-to-life eye size so
 // the swap lands cleanly, while keeping the bold inked-comic look.
 const FRAG_ADULT_CARTOON =
-  'grounded semi-realistic comic-book illustration, painted graphic-novel art with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, bold confident ink linework and rich saturated flat color, detailed hand-painted character art, naturalistic mature features, illustrated portrait realism';
+  'grounded semi-realistic comic-book illustration, painted graphic-novel art with lifelike adult faces, realistic human facial proportions with true-to-life eyes at natural size and spacing, bold confident ink linework and rich saturated flat color, detailed hand-painted character art, naturalistic mature features, illustrated realism';
 
 // Override entry — each curated fragment can opt-out specific vibes that
 // empirically push it into a bad failure mode (e.g. "epic" vibe + cartoon

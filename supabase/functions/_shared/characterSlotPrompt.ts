@@ -28,6 +28,7 @@ import { callSonnet } from './llm.ts';
 import { resolveCastGender, genderNoun, genderLockShout, type CastGender } from './genderLock.ts';
 import { varyFemaleHair, type HairSceneRegister } from './femaleHairVariation.ts';
 import { buildSceneHook } from './sceneHook.ts';
+import { normalizeActionBeat, depronounActionBeat, validateActionBeat } from './actionSafety.ts';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
@@ -56,6 +57,9 @@ export type SingleSlots = {
   wardrobe: string;
   mood: string;
   props: string;
+  /** Scene-first authored action beat (SCENE_FIRST_ACTION_PLAN.md). Only present when the
+   *  brief asked for it (`authorAction`) AND it passed the swap-safe validator. */
+  action?: string | null;
 };
 
 export type DualSlots = {
@@ -64,6 +68,8 @@ export type DualSlots = {
   right_wardrobe: string;
   mood: string;
   props: string;
+  /** Scene-first authored action beat — see SingleSlots.action. */
+  action?: string | null;
 };
 
 export type CharacterSlots = SingleSlots | DualSlots;
@@ -105,6 +111,14 @@ export interface CharacterSlotPipelineInput {
   avoidList: string;
   // Pose
   action: string | null;
+  /** SCENE-FIRST ACTION (2026-09-05, SCENE_FIRST_ACTION_PLAN.md). When set, Sonnet AUTHORS the
+   *  action beat FROM the scene in this same call (a new `action` slot) instead of being handed a
+   *  pre-rolled pool pose to build the scene around. `action` above then serves only as the
+   *  fallback when the authored beat fails the swap-safe validator. `register` names the
+   *  scene register for Sonnet (goofy / elegant / holiday:<pool>); `exemplars` are 3 pool poses
+   *  shown as STYLE examples only. Nightly-only — Create/DLT never set it, so with it unset every
+   *  code path here is byte-identical to before (locked by __tests__/lib/sceneFirstAction.test.ts). */
+  authorAction?: AuthorActionSpec | null;
   /** Stage 5c (2026-07-09): expanded SOLO composition preset. null/undefined =
    *  the classic waist-up frontal contract. Only meaningful for cast.length 1;
    *  gated upstream by engine_config.single_composition_expanded_pct. The
@@ -120,6 +134,11 @@ export interface CharacterSlotPipelineInput {
   /** Scene register for the hair-style bias (elegant → updos/glam, active →
    *  ponytails/braids). Derived from the rolled nightly scene kind. */
   sceneRegister?: HairSceneRegister | null;
+}
+
+export interface AuthorActionSpec {
+  register: string;
+  exemplars: string[];
 }
 
 export interface CharacterSlotPipelineResult {
@@ -434,6 +453,44 @@ function buildIdentityBlock(
 
 // ── Slot brief construction ─────────────────────────────────────────────
 
+/**
+ * Scene-first action field (SCENE_FIRST_ACTION_PLAN.md §2). Returned EMPTY when the caller did
+ * not ask for an authored action, so the brief is byte-identical to the pre-feature text.
+ * The envelope is Option B's (locationActionBeat.ts) — the only authored-action rules that have
+ * shipped swap-safely in production; the validator (actionSafety.ts) enforces them after.
+ */
+function buildActionFieldSpec(input: CharacterSlotPipelineInput): string {
+  const spec = input.authorAction;
+  if (!spec) return '';
+  const dual = input.cast.length === 2;
+  const exemplars = spec.exemplars
+    .slice(0, 3)
+    .map((e) => `"${e.replace(/"/g, '')}"`)
+    .join(' · ');
+  return `action (${dual ? '14-30 words, HARD LIMIT 32' : '8-20 words, HARD LIMIT 22'} — present-tense like a photo caption; YOU write it, it is not locked. REQUIRED: never omit this field)
+  ONE concrete, LIVELY moment that fits THIS EXACT scene and its named objects, in the
+  "${spec.register}" register: hands busy with the scene's own things (lifting, stirring, holding,
+  carving, pouring, handing, strumming, toasting…). Never merely standing, waiting, resting, pausing,
+  or contemplating. Hands, props and gestures stay at CHEST LEVEL OR LOWER; feet planted (no walking,
+  running, jumping, climbing). A held prop ONLY if it obviously belongs in a hand in this scene.
+  NEVER mention the head, chin, face, or where anyone looks, and no reading / studying / examining /
+  consulting (that turns the face down) — faces stay toward the camera by code.
+  Refer to people by role, never by pronoun.${
+    dual
+      ? `
+  Give EACH person their own small beat ("one …, the other …") with a clear gap between them —
+  they do NOT touch, hug, kiss, lean together, sit, or face each other.`
+      : ''
+  }${
+    exemplars
+      ? `
+  Style examples for this register (invent your own, do NOT reuse): ${exemplars}`
+      : ''
+  }
+
+`;
+}
+
 export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
   const location = input.iconicAnchor || input.userPlace || 'the location';
   const wardrobeMood = WARDROBE_MOODS[Math.floor(Math.random() * WARDROBE_MOODS.length)];
@@ -472,6 +529,9 @@ export function buildSlotBrief(input: CharacterSlotPipelineInput): string {
 - Face occlusion: helmet, mask, sunglasses, hood covering face, scarf over face
 - Bad framing: from behind, back view, rear view, side profile`;
 
+  const actionKey = input.authorAction ? ',\n  "action": "..."' : '';
+  const actionSpec = buildActionFieldSpec(input);
+
   const sharedScene = `LOCATION (scene_description MUST depict this): ${location}
 
 ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
@@ -480,7 +540,7 @@ ATMOSPHERIC CONDITIONS (weave into scene_description, do NOT contradict):
 - PHENOMENON: ${input.phenomenaAxis}
 
 VIBE (use for the mood field): ${input.vibeDirective}${
-    input.action
+    input.action && !input.authorAction
       ? `
 
 ACTION CONTEXT (read-only — the pose itself is LOCKED by code, never describe it):
@@ -501,14 +561,14 @@ it environment-only: no people, no pose.`
   if (input.cast.length === 1) {
     const m = resolveIdentity(input.cast[0]);
     const buildHint = m.build ? `, ${m.build} build` : '';
-    return `You are designing a one-person scene for AI image generation. You write FOUR fields. The framing, camera, faces, and character identity are LOCKED by code.
+    return `You are designing a one-person scene for AI image generation. You write ${input.authorAction ? 'FIVE' : 'FOUR'} fields. The framing, camera, faces, and character identity are LOCKED by code.
 
 Output ONLY this JSON object, no markdown, no commentary:
 {
   "scene_description": "...",
   "wardrobe": "...",
   "mood": "...",
-  "props": "..."
+  "props": "..."${actionKey}
 }
 
 ${sharedScene}
@@ -537,7 +597,7 @@ props (0-10 words — STRONGLY PREFER an empty string "")
   novelty, oversized, comic, organic-oddity, or out-of-place objects (never a giant
   mushroom, an absurd sculpture, a random creature). When in doubt, empty string.
 
-${forbiddenList}
+${actionSpec}${forbiddenList}
 
 ${input.avoidList}
 
@@ -549,7 +609,7 @@ Output ONLY the JSON object. Start with { and end with }. No commentary.`;
   const right = resolveIdentity(input.cast[1]);
   const leftBuildHint = left.build ? `, ${left.build} build` : '';
   const rightBuildHint = right.build ? `, ${right.build} build` : '';
-  return `You are designing a two-person scene for AI image generation. You write FIVE fields. The framing, camera, faces, and character identities are LOCKED by code.
+  return `You are designing a two-person scene for AI image generation. You write ${input.authorAction ? 'SIX' : 'FIVE'} fields. The framing, camera, faces, and character identities are LOCKED by code.
 
 Output ONLY this JSON object, no markdown, no commentary:
 {
@@ -557,7 +617,7 @@ Output ONLY this JSON object, no markdown, no commentary:
   "left_wardrobe": "...",
   "right_wardrobe": "...",
   "mood": "...",
-  "props": "..."
+  "props": "..."${actionKey}
 }
 
 ${sharedScene}
@@ -591,7 +651,7 @@ props (0-10 words — STRONGLY PREFER an empty string "")
   organic-oddity, or out-of-place objects (never a giant mushroom, an absurd sculpture,
   a random creature). When in doubt, empty string.
 
-${forbiddenList}
+${actionSpec}${forbiddenList}
 
 ${input.avoidList}
 
@@ -610,6 +670,10 @@ function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
       throw new Error(`missing or invalid slot: ${k}`);
     }
   }
+  const action =
+    typeof parsed.action === 'string'
+      ? depronounActionBeat(normalizeActionBeat(parsed.action))
+      : null;
   if (castCount === 1) {
     if (typeof parsed.wardrobe !== 'string' || parsed.wardrobe.length < 2) {
       throw new Error('missing or invalid slot: wardrobe');
@@ -619,6 +683,7 @@ function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
       wardrobe: String(parsed.wardrobe),
       mood: String(parsed.mood),
       props: typeof parsed.props === 'string' ? parsed.props : '',
+      ...(action ? { action } : {}),
     };
   }
   for (const k of ['left_wardrobe', 'right_wardrobe']) {
@@ -632,6 +697,7 @@ function parseSlotsJson(text: string, castCount: 1 | 2): CharacterSlots {
     right_wardrobe: String(parsed.right_wardrobe),
     mood: String(parsed.mood),
     props: typeof parsed.props === 'string' ? parsed.props : '',
+    ...(action ? { action } : {}),
   };
 }
 
@@ -816,7 +882,7 @@ export function assembleCharacterPrompt(
     // inside the healthy swap band, and the giant-face guard floors the other
     // extreme.
     const integrationLine =
-      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, never stiff or over-posed, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, never a blank wall or featureless sky behind the subject, any visible sky alive with colour, cloud form, or weather — never flat white';
+      'the subject naturally lit by the scene itself (soft rim light and ambient colour from the environment on them), a relaxed warm editorial photograph, comfortable and natural — looking toward the camera or gently off into the scene, at ease, photographic realism, filmic colour, the setting sweeping visibly around them from the ground at their feet to the sky above, every part of it rendered with crisp specific recognizable detail, the wall or sky behind the subject full of specific detail, any visible sky alive with colour, cloud form, or weather';
     const framingBlock = (
       input.soloComposition === 'enviro_wide'
         ? [
@@ -843,7 +909,7 @@ export function assembleCharacterPrompt(
       mediumSignal,
       setAt,
       singleAnchor,
-      input.action || '',
+      slots.action || input.action || '',
       identityBlock,
       slots.scene_description,
       framingBlock,
@@ -938,7 +1004,7 @@ export function assembleCharacterPrompt(
     mediumSignal,
     setAt,
     dualAnchor,
-    input.action || '',
+    slots.action || input.action || '',
     leftBlock,
     rightBlock,
     framingBlock,
@@ -1046,6 +1112,28 @@ export async function runCharacterSlotPipeline(
   if (!slots) {
     slots = fallbackSlots(input);
     fallbackReasons.push('character_slot_fallback_used');
+  }
+
+  // Scene-first action (SCENE_FIRST_ACTION_PLAN.md): the authored beat ships ONLY if it passes
+  // the swap-safe envelope; otherwise it is dropped and assembly falls back to `input.action`
+  // (today's pool pose). Never a retry — a bad beat must not cost a second Sonnet call.
+  if (input.authorAction) {
+    const beat = slots.action ?? null;
+    if (!beat) {
+      fallbackReasons.push('scene_action_fallback:missing');
+    } else {
+      const verdict = validateActionBeat(beat, castCount);
+      if (verdict.ok) {
+        fallbackReasons.push('scene_action');
+      } else {
+        fallbackReasons.push(`scene_action_fallback:${verdict.reason}`);
+        slots = { ...slots, action: null };
+      }
+    }
+  } else if (slots.action) {
+    // Not asked for → never honored (a hallucinated `action` key must not change the
+    // create / DLT prompt; assembly falls through to `input.action` exactly as before).
+    slots = { ...slots, action: null };
   }
 
   const assembledPrompt = assembleCharacterPrompt(slots, input);

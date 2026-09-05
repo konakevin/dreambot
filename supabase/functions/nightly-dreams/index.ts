@@ -131,7 +131,9 @@ import {
   assembleSoloFallbackFromDual,
   type CharacterSlotPipelineInput,
   type DualSlots,
+  type AuthorActionSpec,
 } from '../_shared/characterSlotPrompt.ts';
+import { holidayPoolOf } from '../_shared/holidayPools.ts';
 import { settingClauseOf } from '../_shared/sceneHook.ts';
 import { assessRenderQuality, assessSceneFallbackPeople } from '../_shared/qualityGate.ts';
 import { resolveCastGender } from '../_shared/genderLock.ts';
@@ -373,6 +375,9 @@ Deno.serve(async (req) => {
   // Test hook: force the generative LOCATION-fit action beat (Option B) on a
   // plain-location dream regardless of location_action_pct.
   const force_location_action = body.force_location_action === true;
+  // Scene-first action QA hook (SCENE_FIRST_ACTION_PLAN.md): author the beat from the scene
+  // regardless of engine_config.scene_action_pct.
+  const force_scene_action = body.force_scene_action === true;
   // Test hook: force an EXACT action/pose text (semantic-grounding QA — replay
   // a specific historical pose against the action-grounded brief).
   const force_action = typeof body.force_action === 'string' ? body.force_action : null;
@@ -496,6 +501,8 @@ Deno.serve(async (req) => {
     kind: string;
     scene: string | null;
     posePool: string | null;
+    /** Scene-first authored action beat that shipped (null = pool pose / not rolled). */
+    sceneAction?: string | null;
     location: string | null;
     biome: string | null;
   } | null = null;
@@ -1614,6 +1621,10 @@ Deno.serve(async (req) => {
     // attire string, so `dualSpecialWardrobe ?` mis-routed all goofy scenes to
     // the partner pose pool; found while wiring pose_pool, 2026-07-09).
     let dualSceneKind: 'goofy' | 'elegant' | null = null;
+    // Holiday row sub-theme → its MAIN pool names the scene-first action register.
+    let holidaySubTheme: string | null = null;
+    // The scene-first authored action that shipped (forensics: rolled_axes.seedSource).
+    let sceneActionText: string | null = null;
     // Bespoke pose pool named by the picked scenario row (migration 353) —
     // e.g. 'glamour'. Null = default pose behavior for the scene kind.
     let dualScenePosePool: string | null = null;
@@ -1798,6 +1809,7 @@ Deno.serve(async (req) => {
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;
+          holidaySubTheme = s.subTheme ?? null;
           fallbackReasons.push(`holiday:${chosen.key}`);
           recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
         } else if (force_playful || (!force_elegant && !force_active && roll < goofyCut)) {
@@ -1917,6 +1929,7 @@ Deno.serve(async (req) => {
           dualSceneMediumKey = s.mediumKey ?? null;
           dualSceneMediumBan = s.mediumBan ?? null;
           holidayCategory = chosen.key;
+          holidaySubTheme = s.subTheme ?? null;
           fallbackReasons.push(`holiday:${chosen.key}`);
           recordPick(supabase, userId, `holiday:${chosen.key}`, s.scene);
         } else if (
@@ -2235,6 +2248,44 @@ Deno.serve(async (req) => {
         } else {
           action = activeSinglePose ?? locationAction ?? singleAction ?? null;
         }
+        // ── Scene-first action (SCENE_FIRST_ACTION_PLAN.md, Kevin 2026-09-05) ──────────
+        // For SEEDED scenario rows the scene is the given and the pose above was rolled blind
+        // from a register pool (→ "leaning on a bridge railing" at a fountain). When this rolls,
+        // Sonnet authors the beat FROM the scene inside the slot call; the pool pose in `action`
+        // stays as the automatic fallback if the authored beat fails the swap-safe validator.
+        // Not for: active rows (the seed already carries the verb), rows naming a bespoke
+        // pose_pool (a curated pool chosen on purpose), or an explicit force_action.
+        let authorAction: AuthorActionSpec | null = null;
+        const sceneFirstEligible =
+          !!dualSpecialScene &&
+          !dualActiveScene &&
+          !soloActiveScene &&
+          !force_action &&
+          bespokePoses.length === 0;
+        if (sceneFirstEligible) {
+          const sfaCfg = await fetchEngineConfig(supabase);
+          const rollSfa =
+            force_scene_action ||
+            (sfaCfg.sceneActionPct > 0 && Math.random() * 100 < sfaCfg.sceneActionPct);
+          if (rollSfa) {
+            const register = holidayCategory
+              ? `holiday:${holidayCategory}${
+                  holidaySubTheme ? ` / ${holidayPoolOf(holidaySubTheme)}` : ''
+                }`
+              : dualSceneKind === 'goofy'
+                ? 'goofy / playful fun'
+                : 'elegant / refined';
+            const exemplarPool: string[] =
+              selectedCast.length === 2
+                ? dualSceneKind === 'goofy'
+                  ? classicPools.dual.playful
+                  : classicPools.dual.partner
+                : classicPools.single.candid;
+            const exemplars = [...exemplarPool].sort(() => Math.random() - 0.5).slice(0, 3);
+            authorAction = { register, exemplars };
+            fallbackReasons.push('scene_action_roll');
+          }
+        }
         // Female-hairstyle variation (2026-08-31): re-style a FEMALE cast
         // member's hair per engine_config.female_hair_variation_pct, biased to
         // the scene register — elegant scenes → updos/glam, active → ponytails/
@@ -2310,6 +2361,7 @@ Deno.serve(async (req) => {
           ),
           avoidList,
           action,
+          authorAction,
           femaleHairVariationPct: force_female_hair_pct ?? hairCfg.femaleHairVariationPct,
           sceneRegister,
           // Stage 5c: expanded solo compositions (three-quarter / enviro-wide)
@@ -2346,6 +2398,7 @@ Deno.serve(async (req) => {
         finalPrompt = slotResult.assembledPrompt;
         slotPipelineFallbacks = slotResult.fallbackReasons;
         slotPipelineHandled = true;
+        sceneActionText = slotResult.slots.action ?? null;
         // For a DUAL cast, capture self's side + the built dual slots so that if
         // the dual face-swap later fails every retry, the recovery re-renders
         // self ALONE (a real single-character prompt) instead of the couple
@@ -2390,6 +2443,7 @@ Deno.serve(async (req) => {
       // The pose pool (the seed-pool-level pose identifier); the exact pose text
       // stays recoverable from enhanced_prompt + fallback_reasons.
       posePool: dualScenePosePool,
+      sceneAction: sceneActionText,
       location: iconicAnchor ?? userPlace ?? null,
       biome: biomeKey,
     };

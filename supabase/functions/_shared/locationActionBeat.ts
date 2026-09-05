@@ -17,20 +17,19 @@
 // (0 = off) + a force_location_action QA flag.
 
 import { callSonnet } from './llm.ts';
+import { UNSAFE_WORDS, TOO_ENERGETIC } from './actionSafety.ts';
 
 // Words that would fight the downstream face-forward framing or occlude the face
 // if they leaked into the action string. If the model slips one in, we drop the
 // render's action (→ classic pose) rather than ship a swap-breaking beat.
-const UNSAFE_WORDS =
-  /\b(face|faces|eyes?|eyebrows?|gaze|gazing|smil\w*|lips|mouth|cheeks?|jaw|forehead|helmet|mask|masked|hood|hoods|goggles|visor|balaclava|veil|spyglass to (?:the |one'?s )?eye|pipe in (?:the |his |her )?mouth|selfie|camera|lens|kiss\w*|hug\w*|embrac\w*|cheek to cheek)\b/i;
+// (UNSAFE_WORDS now lives in actionSafety.ts — shared with scene-first actions.)
 
 // Over-energetic / above-the-head actions read GOOFY under a face-swap (a leap or
 // arms-thrown-overhead breaks the grounded, waist-up, professional-cinematic bar
 // and can shrink/tilt the face). The prompt already forbids these, but Sonnet
 // occasionally slips one through ("leaping with arms raised in triumph"), so we
 // net them here too → drop the beat → grounded classic pose. (2026-08-24)
-const TOO_ENERGETIC =
-  /\b(jump\w*|leap\w*|leaping|soar\w*|airborne|mid-?air|sprint\w*|arms? (?:raised|up|aloft|overhead|thrown)|(?:raise[sd]?|raising|throw\w*|fling\w*) (?:both )?(?:arms|hands)|hands? (?:aloft|overhead|raised)|overhead|triumphant\w*|celebrat\w*|fist ?pump\w*|punch\w* the air|leaping|bound\w* (?:up|over))\b/i;
+// (TOO_ENERGETIC now lives in actionSafety.ts.)
 
 /**
  * Author a short, swap-safe action phrase that naturally fits `location`.

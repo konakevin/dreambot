@@ -87,6 +87,11 @@ export interface EngineConfig {
    *  instead of a static pose. Covers EVERY place, not just biome-tagged poses.
    *  0 = off (default). Rolls only when the biome ACTIVE pose didn't fire. */
   locationActionPct: number;
+  /** Scene-first actions (SCENE_FIRST_ACTION_PLAN.md, 2026-09-05): % of nightly SCENARIO-row
+   *  cast renders (goofy / elegant / holiday / hero — not active rows, not rows naming a
+   *  pose_pool) whose action beat Sonnet AUTHORS from the scene inside the slot call, instead
+   *  of a pre-rolled pool pose. 0 = off (default). */
+  sceneActionPct: number;
   /** Stage 5c: % of solo face-swap renders using an expanded composition
    *  preset (three-quarter / environmental-wide). 0 = classic waist-up only. */
   singleCompositionExpandedPct: number;
@@ -147,6 +152,7 @@ export const DEFAULT_ENGINE_CONFIG: EngineConfig = {
   singleCompositionExpandedPct: 0,
   femaleHairVariationPct: 0,
   locationActionPct: 0,
+  sceneActionPct: 0,
   pureSceneOnSwapFail: true,
   holidaysEnabled: false,
   holidayPostcardScope: 'day_of',
@@ -251,6 +257,7 @@ export async function fetchEngineConfig(sb: SupabaseClient): Promise<EngineConfi
       data.female_hair_variation_pct ?? DEFAULT_ENGINE_CONFIG.femaleHairVariationPct
     ),
     locationActionPct: Number(data.location_action_pct ?? DEFAULT_ENGINE_CONFIG.locationActionPct),
+    sceneActionPct: Number(data.scene_action_pct ?? DEFAULT_ENGINE_CONFIG.sceneActionPct),
     pureSceneOnSwapFail:
       (data.pure_scene_on_swap_fail ?? DEFAULT_ENGINE_CONFIG.pureSceneOnSwapFail) !== false,
     holidaysEnabled: (data.holidays_enabled ?? DEFAULT_ENGINE_CONFIG.holidaysEnabled) === true,
