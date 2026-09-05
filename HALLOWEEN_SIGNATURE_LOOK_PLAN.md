@@ -47,6 +47,11 @@ combos already enabled in nightly are candidates. This doc is the plan; nothing 
 | canvas | flux-2-pro / gemini-2-image / gpt-image-2 | 8-9 each | 100% | 0% | mostly forced QA batches |
 | comics / illustration / pencil / vintage_film | grok-imagine | 8-14 each | 100% | 0% | mostly forced QA batches |
 
+Corroboration from the hero session (2026-09-05 handoff): couple heroes on painted_gothic_fantasy
+failed the +1 gate ~85% (woman's side near zero) and degraded to solo; the SAME scenes on photography
+passed 10/10 first swap; an A/B with face-free painterly settings still degraded → medium/model, not
+scene. The hero rows are pinned to photography as the INTERIM until this plan picks the frozen look.
+
 Read: **the model, not the medium, is the first-order reliability lever.** flux-1.1-pro (the
 natural workhorse) degrades 10-23% of couples on painterly mediums; the same mediums on flex /
 gemini / gpt-image-2 show zero degrades — but those samples are small and largely QA-forced, and

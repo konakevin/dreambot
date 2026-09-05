@@ -755,3 +755,34 @@ the linter, scrub existing rows, and draw pools with EQUAL AIRTIME (pick the poo
 - **FOLLOW-UP (Kevin asked to be reminded):** the scene-only "postcard" holiday rows (`holiday_scenes`,
   14 for all of Halloween) are still one loose pile, not organized by the 14 pools. Decide whether to
   author ~10 empty-scene rows per pool so no-people Halloween dreams also land in the 14 worlds.
+
+## Handoff reconciliation — 2026-09-05 (folding the hero/postcard session into the consolidation session)
+
+- **Medium pinning, reconciled.** Two directions from Kevin, both stand: (1) the Halloween POOLS roll
+  the same nightly mediums as every pool — no `medium_key` on pool rows (done 2026-09-04); (2) the
+  DAY-OF HERO is meant to be ONE master medium/vibe/model look that is guaranteed to perform
+  (`HALLOWEEN_SIGNATURE_LOOK_PLAN.md`). So the hero rows' pins are legitimate and stay as the INTERIM:
+  couples + cozy/male solos = photography (the hero QA: painterly couple heroes failed the +1 identity
+  gate ~85%, photography 10/10, A/B ruled out scene content), female eerie = painted_gothic_fantasy.
+  The signature-look experiment replaces these with the frozen look; until then do NOT null the hero pins.
+- **Hero solos no longer default to the glamour pose pool** (code + the 4 rows' explicit `pose_pool`
+  nulled, ledgered) — the scarf/bokeh portraits were that pool. Couples were already unaffected.
+- **Everyday couple pools vs painterly mediums** (3 of 5 painterly couples survived the gate in the
+  hero session; 6 of 23 degraded in the 2026-09-04 pool matrix, all painterly on flux-1.1-pro):
+  this is fleet-wide, not Halloween-specific → the MODEL is the lever (30-day data in
+  `HALLOWEEN_SIGNATURE_LOOK_PLAN.md` §2) → Round 1 of that plan decides it. Do not fix it with per-pool
+  medium bans (Kevin: Halloween is an ordinary pool).
+- **Windows (mig 456):** Fall = Sept 15 → Thanksgiving (flat 10%), Halloween = Oct 1 → 31 (ramp 6→25%,
+  day-of 35%). ⚠️ **Fall opens in 10 days** and its content is thin: only the 3 pools moved from
+  Halloween (canyon_fall_hike, autumn_fae, harvest_royalty — 37 dual / 39 single) are seeded; the 8
+  fall archetypes in the generator (corn_maze, pumpkin_farm, apple_orchard, maple_grove, cabin_porch,
+  bonfire, trick_or_treat, hayride) are UNSEEDED. Decide before any flip: seed Fall (same 70-share
+  discipline) or leave Fall inactive and open Halloween only.
+- **Still open from the hero session:** N3 feed marker (holiday emoji stamped on `uploads.holiday`,
+  not displayed); regression-lock tests for the hero + postcard; capacity check before Oct 31 (every
+  Pro user gets a guaranteed hero render + a postcard composite that night — Fly dual-swap ceiling,
+  heavy cap, DB pool); flip order = catalog `is_active` per holiday → `holidays_enabled`.
+- **Lessons kept:** hero scenes must be pure environment ("guests of honor" made Flux add figures →
+  8/9 couples failed); never run DDL on `holidays` mid-QA (PostgREST schema-cache blank ~5 min);
+  never chain `git add` + `git commit` in the shared tree.
+- Reference: §13 hero spec, §14 postcard spec, `HOLIDAY_ARCHETYPE_QA_LOG.md`.
